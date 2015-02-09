@@ -18,7 +18,8 @@ data = {
     {pid: 5, etype: 'dependent', eprops:{name: 'people in World'}},
     {pid: 6, etype: 'function', eprops:{ftype: 'multiply'}},
     {pid: 7, etype: 'dependent', eprops:{name: 'people in Universe'}},
-    {pid: 8, etype: 'estimate', eprops:{name: 'universe/person ratio', value: 200}}
+    {pid: 8, etype: 'estimate', eprops:{name: 'universe/person ratio', value: 200}},
+    {pid: 9, etype: 'estimate', eprops:{name: 'other thing', value: 2}}
   ],
   edges: [
     [2,4],
@@ -26,7 +27,8 @@ data = {
     [4,5],
     [5,6],
     [6,7],
-    [8,6]
+    [8,6],
+    [6,9]
   ]
 }
 Fgraph = new Egraph(data);
