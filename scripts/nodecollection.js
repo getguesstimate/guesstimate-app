@@ -51,10 +51,7 @@ function MakeDependent(node){
   },
   node.value = null
   node.propogate = function(){
-    console.log('working!')
-    //for (let e of node.outputs()){ console.log('hi') }
-    debugger;
-    node.outputs().forEach(function(e){console.log(e.id)})
+    node.outputs().forEach( e => console.log(e.id) )
   }
   node.updateValue = function(n){ node.value = n; node.propogate() }
 }
@@ -90,8 +87,21 @@ class Enode extends Backbone.Model{
   addOutputEdge(outputEdge){
     this.outputEdges.push(outputEdge)
   }
-  test() {
-    return 5;
+  toString(indent){
+    indent = indent || 0
+    console.log(this)
+    var pid = this.get('pid')
+    var etype = this.get('etype')
+    //display = this.display
+    //d
+    console.log(this)
+    var outputs = _.map(this.outputs(), function(e){return e.toString(indent + 1)})
+    var out_s = ""
+    if (outputs.length > 0){
+      var out_s = ' outputs => \n' + outputs.joint('\n')
+    }
+    sstring = (Array(indent*3).join('.')) + "([" + pid + etype + "]" + out_s + ")"
+    return sstring
   }
 }
 
