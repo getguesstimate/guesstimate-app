@@ -1,6 +1,7 @@
 'use strict';
 
 var Enodes = require('./enodes');
+var Eedges = require('./eedges');
 var Enode = require('./enode');
 
 class Counter {
@@ -14,8 +15,10 @@ class Counter {
 }
 
 class Egraph {
-  constructor(){
-    this.enodes = Enodes;
+  constructor(args){
+    this.enodes = Enodes.import(args.nodes);
+    this.edges = new Eedges(args.edges);
+    this.list = args.nodes;
   }
 }
 
