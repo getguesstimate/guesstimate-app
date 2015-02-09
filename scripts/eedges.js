@@ -1,9 +1,13 @@
 'use strict';
 
-var Enode = require('./enode');
 
-enodes = new Map;
+eedges = new Array
 
+class Eedges {
+  constructor(edges){
+    this.edges = edges
+  };
+}
 enodes.import = function(json_nodes){
   json_nodes.forEach(n => {
     node = new Enode(n)
@@ -13,5 +17,5 @@ enodes.import = function(json_nodes){
 }
 
 Enodes = enodes
+module.exports = Eedges;
 
-module.exports = Enodes;
