@@ -138,8 +138,8 @@ var maingraph = require('./estimate_graph');
 
     var ResultForm = React.createClass({
       handleChange: function(evt) {
-        form_values = $(evt.target.parentElement.childNodes).filter(":input")
-        values = {};
+        var form_values = $(evt.target.parentElement.childNodes).filter(":input");
+        var values = {};
         values[form_values[0].name] = form_values.val();
         FermActions.updateItem(this.props.node.id, values);
       },
@@ -158,8 +158,8 @@ var maingraph = require('./estimate_graph');
 
     var EstimateForm = React.createClass({
       handleChange: function(evt) {
-        form_values = $(evt.target.parentElement.childNodes).filter(":input")
-        values = {};
+        var form_values = $(evt.target.parentElement.childNodes).filter(":input")
+        var values = {};
         values[form_values[0].name] = form_values.val();
         FermActions.updateItem(this.props.node.id, values);
       },
@@ -192,8 +192,8 @@ var maingraph = require('./estimate_graph');
 
     var FunctionForm = React.createClass({
       handleChange: function(evt) {
-        form_values = $(evt.target.parentElement.childNodes).filter(":input")
-        values = {};
+        var form_values = $(evt.target.parentElement.childNodes).filter(":input")
+        var values = {};
         values[form_values[0].name] = form_values.val();
         FermActions.updateItem(this.props.node.id, values);
       },
