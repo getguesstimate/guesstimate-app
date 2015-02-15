@@ -27,7 +27,7 @@ var efunctions = {
 }
 
 function MakeFunction(node){
-  ftype = node.get('eprops').ftype
+  var ftype = node.get('eprops').ftype
   node.efunction = efunctions[ftype]
   node.dependent = function(){ return node.outputs()[0] }
   node.run = function(){
