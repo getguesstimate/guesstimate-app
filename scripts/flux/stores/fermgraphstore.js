@@ -28,7 +28,9 @@ var fermGraphStore = Reflux.createStore({
             value: '',
             type: 'estimate'
         };
-        this.updateNodes([newNode].concat(this.list));
+        debugger;
+        //this.updateNodes([newNode].concat(this.list));
+        this.updateGraph()
         FermActions.updateEditingNode(newNode.id)
     },
     addFunction: function() {
@@ -46,7 +48,9 @@ var fermGraphStore = Reflux.createStore({
             type: 'function',
             output: newResult.id
         };
-        this.updateNodes([newResult, newFun].concat(this.list));
+        debugger
+        //this.updateNodes([newResult, newFun].concat(this.list));
+        this.updateGraph()
         FermActions.updateEditingNode(newResult)
     },
     onAddNode: function(type) {
@@ -58,17 +62,15 @@ var fermGraphStore = Reflux.createStore({
     },
     onUpdateNodes: function(list){
         _.map(list, function(n){this._onUpdateNode(n.id, n)}, this)
-        this.updateNodes(this.list);
+        this.updateGraph();
     },
     onUpdateNode: function(nodeId, newValues) {
-        debugger;
         this._onUpdateNode(nodeId, newValues)
-        this.updateNodes(this.list);
+        this.updateGraph();
     },
-    updateNodes: function(list) {
-        localStorage.setNode(localStorageKey, JSON.stringify(list));
-        this.list = list;
-        this.trigger(list);
+    updateGraph: function(graph) {
+        //localStorage.setNode(localStorageKey, JSON.stringify(list));
+        this.trigger(this.graph);
     },
     _onUpdateNode: function(nodeId, newValues){
         var node = this.getNode(parseInt(nodeId));
@@ -81,7 +83,7 @@ var fermGraphStore = Reflux.createStore({
         var newNodes = (_.filter(this.list,function(node){
             return node.id!==nodeId;
         }));
-        this.updateNodes(newNodes);
+        this.updateGraph()
         FermActions.resetEditingNode()
     },
     getNode: function(nodeId){

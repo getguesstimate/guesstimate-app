@@ -55,7 +55,6 @@ var maingraph = require('./estimate_graph');
         }
       },
       componentWillUpdate: function() {
-        this.updateAllPositions();
       },
       componentDidMount: function() {
         var el = $('.maingraph')[0];
@@ -80,23 +79,24 @@ var maingraph = require('./estimate_graph');
     var EditorPane = React.createClass({
       render: function() {
 
-        var isEstimate = (this.props.node && this.props.node.type === 'estimate')
-        var isResult = (this.props.node && this.props.node.type === 'result')
-        var isFunction = (this.props.node && this.props.node.type === 'function')
         var form = ''
-        if (isEstimate){
-          form = <EstimateForm node={this.props.node}/>
-        }
-        else if (isResult){
-          form = <ResultForm node={this.props.node}/>
-        }
-        else if (isFunction){
-          form = <FunctionForm nodeList={this.props.nodeList} node={this.props.node}/>
-        }
-        if (form !== ''){
-          var divStyle = {left: this.props.node.renderedPosition.x - 85, top: this.props.node.renderedPosition.y + 20};
-          form = <div className="well wowo" style={divStyle}> {form} </div>
+        if (this.props.node){
+          var isEstimate = (this.props.node && this.props.node.get('etype') === 'estimate')
+          var isResult = (this.props.node && this.props.node.get('etype') === 'result')
+          var isFunction = (this.props.node && this.props.node.get('etype') === 'function')
+          var form = ''
+          if (isEstimate){
+            form = <EstimateForm node={this.props.node}/>
           }
+          else if (isResult){
+            form = <ResultForm node={this.props.node}/>
+          }
+          else if (isFunction){
+            form = <FunctionForm nodeList={this.props.nodeList} node={this.props.node}/>
+          }
+          var divStyle = {left: this.props.node.get('renderedPosition').x - 85, top: this.props.node.get('renderedPosition').y + 20};
+          form = <div className="well wowo" style={divStyle}> {form} </div>
+        }
         return (
           <div className="editorpane">
             {form}
