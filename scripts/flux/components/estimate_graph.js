@@ -1,4 +1,6 @@
 var cytoscape = require('cytoscape');
+// var cytoscape = require("imports?require=>false!cytoscape");
+    window.cytoscape = cytoscape;
 
 var maingraph = {};
 
