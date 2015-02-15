@@ -1,0 +1,40 @@
+.maingraph{
+  min-width: 500px;
+  min-height: 900px;
+}
+.editorpane{
+  margin-top: 1em;
+
+}
+.graphpane{
+  background-color: white;
+}
+body.body-override-bootstrap{
+  background-color: #eee;
+}
+
+.function-multiple-form{
+  min-height: 100px;
+}
+
+.bottom-panel-function .panel-title {
+  color: papayawhip;
+  font-size: 20px;
+}
+
+.bottom-panel-estimate .panel-title {
+  color: blanchedalmond;
+  font-size: 20px;
+}
+
+.bottom-panel-result .panel-title {
+  color: lavenderblush;
+  font-size: 20px;
+}
+
+.wowo{
+  z-index: 100;
+  left: 500px;
+  position: absolute;
+  width: 200px;
+}

@@ -1,16 +1,24 @@
 'use strict';
 
 var Backbone = require('backbone');
-var _ = require('underscore');
-var Button = require('react-bootstrap/Button');
-var $ = require('jquery');
+var _ = require('../../lodash.min');
+var ReactBootstrap = require('react-bootstrap');
 
+var Input = require('react-bootstrap/Input');
+var Button = require('react-bootstrap/Button');
+var ButtonToolbar = require('react-bootstrap/ButtonToolbar');
+var Row = require('react-bootstrap/Row');
+var Col = require('react-bootstrap/Col');
+
+var $ = require('jquery');
 var React = require('react');
 var Reflux = require('reflux');
 var FermActions = require('../actions');
 var fermListStore = require('../stores/fermliststore');
 var fermEditingStore = require('../stores/fermeditingstore');
 var maingraph = require('./estimate_graph');
+                  window.fermEditingStore = fermEditingStore;
+                  window.fermListStore = fermListStore;
 
     var NewButtonPane = React.createClass({
       newEstimate: function(){
@@ -195,8 +203,8 @@ var maingraph = require('./estimate_graph');
       render: function() {
         var node = this.props.node;
         var possibleInputNodes = _.filter(this.props.nodeList, function(n){
-          isNotFunction = (n.type !== 'function');
-          isNotNodeOutput = (n.id !== node.output);
+          var isNotFunction = (n.type !== 'function');
+          var isNotNodeOutput = (n.id !== node.output);
           return (isNotFunction && isNotNodeOutput);
         });
         var possibleInputs = _.map(possibleInputNodes, function(n){
@@ -240,8 +248,8 @@ var maingraph = require('./estimate_graph');
         addEventListener("keydown", this.handleThis);
       },
       getEditingNode: function(){
-        var id = this.state.editingNodeId;
-        var node = this.getItemById(this.state.list, id);
+        var id = this.state.editingNode;
+        var node = this.getItemById(id);
         return node;
       },
       addItem: function(type){

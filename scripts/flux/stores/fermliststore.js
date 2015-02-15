@@ -1,7 +1,7 @@
 var React = require('react');
 var Reflux = require('reflux');
 var FermActions = require('../actions');
-var _ = require('underscore');
+var _ = require('../../lodash.min');
 
 var todoCounter = 0,
     localStorageKey = "fermi";
