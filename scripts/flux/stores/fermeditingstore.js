@@ -5,10 +5,9 @@ var fermGraphStore = require('./fermgraphstore');
 var fermEditingStore = Reflux.createStore({
     listenables: [FermActions],
     getInitialState: function(){
-        this.editingNode = 3;
+        this.editingNode = null;
         return this.editingNode;
     },
-
     // Getters
     getEditingNodeId: function(){
         return this.editingNode;
