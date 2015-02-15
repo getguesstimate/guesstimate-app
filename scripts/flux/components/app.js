@@ -42,42 +42,10 @@ var maingraph = require('./estimate_graph');
         FermActions.addItem();
       },
       formatNodes: function() {
-        var functions_objects= {'multiplication': 'x', 'addition': '+'}
-        var nodes = _.map(this.props.graph.nodes, function(d){
-          var e = _.clone(d);
-          if (e['type'] === 'function'){
-            e['name'] = functions_objects[e['function']]
-          };
-          e['nodeId'] = e['id']
-          e['id'] = 'n' + e['id'] // Nodes need letters for cytoscape
-          e = _.pick(e, ['id', 'nodeId', 'name', 'value', 'type'])
-//-          positions =  d.position
-          //return {data: e, position: positions}
-          return {data: e}
-        })
-        return nodes
+        return this.props.graph.nodes.toCytoscape()
       },
       formatEdges: function() {
-        var functionNodes = _.where(this.props.graph.nodes, {type: 'function'})
-        var edges = []
-         _(functionNodes).forEach(function(node){
-            _(node.inputs).forEach(function(input){
-              var edge = {}
-              edge['id'] = node.id + '-' + input
-              edge['target'] =  'n' + node.id
-              edge['source'] = 'n' + input
-              edges.push({data:edge})
-            })
-            _([node.output]).forEach(function(output){
-              var edge = {}
-              edge['id'] = node.id + '-' + output
-              edge['target'] =  'n' + output
-              edge['source'] = 'n' + node.id
-              edges.push({data:edge})
-            })
-          })
-
-        return edges;
+        return this.props.graph.edges.toCytoscape()
       },
       updateAllPositions: function(){
         var oldLocations = _.map(this.props.graph.nodes, function(n){return {id: n.id, renderedPosition: n.renderedPosition}})
@@ -91,7 +59,10 @@ var maingraph = require('./estimate_graph');
       },
       componentDidMount: function() {
         var el = $('.maingraph')[0];
-        maingraph.create(el, this.formatNodes(), this.formatEdges(), this.props.updateEditingNode, this.updatePositions, this.updateAllPositions);
+        var nodes = this.formatNodes();
+        var edges = this.formatEdges();
+        debugger;
+        maingraph.create(el, nodes, edges, this.props.updateEditingNode, this.updatePositions, this.updateAllPositions);
         this.updateAllPositions();
       },
       componentDidUpdate: function(){

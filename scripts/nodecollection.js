@@ -59,8 +59,7 @@ function MakeDependent(node){
 class Enode extends Backbone.Model{
   defaults(){
     return {
-      foo: 'sillybar',
-      completed: 'false'
+      foo: 'sillybar'
     }
   }
   initialize(attributes){
@@ -89,12 +88,8 @@ class Enode extends Backbone.Model{
   }
   toString(indent){
     indent = indent || 0
-    console.log(this)
     var pid = this.get('pid')
     var etype = this.get('etype')
-    //display = this.display
-    //d
-    console.log(this)
     var outputs = _.map(this.outputs(), function(e){return e.toString(indent + 1)})
     var out_s = ""
     if (outputs.length > 0){
@@ -104,16 +99,12 @@ class Enode extends Backbone.Model{
     return sstring
   }
   toCytoscape() {
-        var e = _.clone(d);
-        if (e['type'] === 'function'){
-          e['name'] = functions_objects[e['function']]
-        };
-        e['nodeId'] = e['id']
-        e['id'] = 'n' + e['id'] // Nodes need letters for cytoscape
-        e = _.pick(e, ['id', 'nodeId', 'name', 'value', 'type'])
-        //-          positions =  d.position
-        //return {data: e, position: positions}
-        return {data: e};
+    var e = {}
+    e.nodeId = this.id
+    e.id = "n" + this.id // Nodes need letters for cytoscape
+    e.etype = this.attributes.etype
+    _.merge(e, this.attributes.eprops)
+    return {data: e};
   }
 }
 
@@ -123,9 +114,10 @@ var NodeCollection = Backbone.Collection.extend({
       this.graph = graph;
     },
     toCytoscape() {
-      var nodes = _.map(this.props.graph.nodes, function(d){
+      var nodes = _.map(this.models, function(d){
         return d.toCytoscape();
       });
+      return nodes;
     }
 });
 
