@@ -14,7 +14,7 @@ var $ = require('jquery');
 var React = require('react');
 var Reflux = require('reflux');
 var FermActions = require('../actions');
-var fermGraphStore = require('../stores/fermliststore');
+var fermGraphStore = require('../stores/fermgraphstore');
 var fermEditingStore = require('../stores/fermeditingstore');
 var maingraph = require('./estimate_graph');
                   window.fermEditingStore = fermEditingStore;
@@ -22,10 +22,10 @@ var maingraph = require('./estimate_graph');
 
     var NewButtonPane = React.createClass({
       newEstimate: function(){
-        this.props.addItem('estimate')
+        this.props.addNode('estimate')
       },
       newFunction: function(){
-        this.props.addItem('function')
+        this.props.addNode('function')
       },
       render: function() {
         return (
@@ -39,7 +39,7 @@ var maingraph = require('./estimate_graph');
 
     var GraphPane = React.createClass({
       handleClick: function() {
-        FermActions.addItem();
+        FermActions.addNode();
       },
       formatNodes: function() {
         return this.props.graph.nodes.toCytoscape()
@@ -48,10 +48,10 @@ var maingraph = require('./estimate_graph');
         return this.props.graph.edges.toCytoscape()
       },
       updateAllPositions: function(){
-        var oldLocations = _.map(this.props.graph.nodes, function(n){return {id: n.id, renderedPosition: n.renderedPosition}})
-        var newLocations = _.map(maingraph.cy.nodes(), function(n){return {id: n.graph.nodes().nodeId, renderedPosition: n.renderedPosition()}})
+        var oldLocations = _.map(this.props.graph.nodes.models, function(n){ return {id: n.id, renderedPosition: n.get('renderedPosition')}})
+        var newLocations = _.map(maingraph.cy.nodes(), function(n){return {id: n.data().nodeId, renderedPosition: n.renderedPosition()}})
         if (!_.isEqual(oldLocations, newLocations)) {
-          FermActions.updateList(newLocations);
+          FermActions.updateNodes(newLocations);
         }
       },
       componentWillUpdate: function() {
@@ -68,7 +68,7 @@ var maingraph = require('./estimate_graph');
         maingraph.update(this.formatNodes(), this.formatEdges());
       },
       updatePositions: function(id, position){
-        // FermActions.updateItem(id, {position:position});
+        // FermActions.updateNode(id, {position:position});
       },
       render: function() {
         return (
@@ -80,27 +80,27 @@ var maingraph = require('./estimate_graph');
     var EditorPane = React.createClass({
       render: function() {
 
-        var isEstimate = (this.props.item && this.props.item.type === 'estimate')
-        var isResult = (this.props.item && this.props.item.type === 'result')
-        var isFunction = (this.props.item && this.props.item.type === 'function')
+        var isEstimate = (this.props.node && this.props.node.type === 'estimate')
+        var isResult = (this.props.node && this.props.node.type === 'result')
+        var isFunction = (this.props.node && this.props.node.type === 'function')
         var form = ''
         if (isEstimate){
-          form = <EstimateForm node={this.props.item}/>
+          form = <EstimateForm node={this.props.node}/>
         }
         else if (isResult){
-          form = <ResultForm node={this.props.item}/>
+          form = <ResultForm node={this.props.node}/>
         }
         else if (isFunction){
-          form = <FunctionForm nodeList={this.props.nodeList} node={this.props.item}/>
+          form = <FunctionForm nodeList={this.props.nodeList} node={this.props.node}/>
         }
         if (form !== ''){
-          var divStyle = {left: this.props.item.renderedPosition.x - 85, top: this.props.item.renderedPosition.y + 20};
+          var divStyle = {left: this.props.node.renderedPosition.x - 85, top: this.props.node.renderedPosition.y + 20};
           form = <div className="well wowo" style={divStyle}> {form} </div>
           }
         return (
           <div className="editorpane">
             {form}
-            <NewButtonPane addItem={this.props.addItem}/>
+            <NewButtonPane addNode={this.props.addNode}/>
           </div>
         )
       }
@@ -111,10 +111,10 @@ var maingraph = require('./estimate_graph');
         var form_values = $(evt.target.parentElement.childNodes).filter(":input");
         var values = {};
         values[form_values[0].name] = form_values.val();
-        FermActions.updateItem(this.props.node.id, values);
+        FermActions.updateNode(this.props.node.id, values);
       },
       handleDestroy: function() {
-        FermActions.removeItem(this.props.node.id);
+        FermActions.removeNode(this.props.node.id);
       },
       render: function() {
         return (
@@ -131,7 +131,7 @@ var maingraph = require('./estimate_graph');
         var form_values = $(evt.target.parentElement.childNodes).filter(":input")
         var values = {};
         values[form_values[0].name] = form_values.val();
-        FermActions.updateItem(this.props.node.id, values);
+        FermActions.updateNode(this.props.node.id, values);
       },
       focusForm: function(){
         $(this.refs.name.getDOMNode()).find('input').focus()
@@ -146,7 +146,7 @@ var maingraph = require('./estimate_graph');
         }
       },
       handleDestroy: function() {
-        FermActions.removeItem(this.props.node.id);
+        FermActions.removeNode(this.props.node.id);
       },
       render: function() {
         return (
@@ -165,10 +165,10 @@ var maingraph = require('./estimate_graph');
         var form_values = $(evt.target.parentElement.childNodes).filter(":input")
         var values = {};
         values[form_values[0].name] = form_values.val();
-        FermActions.updateItem(this.props.node.id, values);
+        FermActions.updateNode(this.props.node.id, values);
       },
       handleDestroy: function() {
-        FermActions.removeItem(this.props.node.id);
+        FermActions.removeNode(this.props.node.id);
       },
       render: function() {
         var node = this.props.node;
@@ -200,12 +200,8 @@ var maingraph = require('./estimate_graph');
         Reflux.connect(fermGraphStore, "graph"),
         Reflux.connect(fermEditingStore, "editingNode")
       ],
-      getItemById: function(itemId){
-        if (itemId){
-          return _.find(this.state.list, function(item){
-            return item.id === itemId;
-          });
-        }
+      getNodeById: function(nodeId){
+        return this.state.graph.nodes.get(nodeId)
       },
       handleThis: function(e){
         switch (e.keyCode) {
@@ -219,29 +215,20 @@ var maingraph = require('./estimate_graph');
       },
       getEditingNode: function(){
         var id = this.state.editingNode;
-        var node = this.getItemById(id);
+        var node = this.getNodeById(id);
         return node;
       },
-      addItem: function(type){
-        FermActions.addItem(type)
+      addNode: function(type){
+        FermActions.addNode(type)
       },
       updateEditingNode: function(nodeId){
         FermActions.updateEditingNode(nodeId)
-      },
-      getDecorateList: function(){
-        var EditingNode = _.find(this.list, function(item){
-          return item.id === itemId;
-        });
-        var newList = (_.filter(this.list,function(item){
-            return item.id!==itemId;
-        }));
-        return newlist;
       },
       render: function() {
         return (
           <div>
               <GraphPane graph={this.state.graph} updateEditingNode={this.updateEditingNode}/>
-              <EditorPane nodeList={this.state.list} addItem={this.addItem} item={this.getEditingNode()}/>
+              <EditorPane graph={this.state.graph} addNode={this.addNode} node={this.getEditingNode()}/>
           </div>
         );
       }

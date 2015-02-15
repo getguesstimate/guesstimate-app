@@ -1,6 +1,6 @@
 var Reflux = require('reflux');
 var FermActions = require('../actions');
-var fermListStore = require('./fermliststore');
+var fermGraphStore = require('./fermgraphstore');
 
 var fermEditingStore = Reflux.createStore({
     listenables: [FermActions],
@@ -14,7 +14,7 @@ var fermEditingStore = Reflux.createStore({
         return this.editingNode;
     },
     getEditingNode: function(){
-        return fermListStore.getItem(this.editingNode);
+        return fermGraphStore.getItem(this.editingNode);
     },
 
     // Setters

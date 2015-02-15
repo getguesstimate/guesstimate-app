@@ -17,19 +17,19 @@ var todoCounter = 1,
 
 var fermGraphStore = Reflux.createStore({
     listenables: [FermActions],
-    getItems: function() {
+    getNodes: function() {
         return this.list;
     },
     addEstimate: function() {
-        var newItem = {
+        var newNode = {
             id: todoCounter++,
             created: new Date(),
             name: '',
             value: '',
             type: 'estimate'
         };
-        this.updateList([newItem].concat(this.list));
-        FermActions.updateEditingNode(newItem.id)
+        this.updateNodes([newNode].concat(this.list));
+        FermActions.updateEditingNode(newNode.id)
     },
     addFunction: function() {
         var newResult = {
@@ -46,49 +46,48 @@ var fermGraphStore = Reflux.createStore({
             type: 'function',
             output: newResult.id
         };
-        this.updateList([newResult, newFun].concat(this.list));
+        this.updateNodes([newResult, newFun].concat(this.list));
         FermActions.updateEditingNode(newResult)
     },
-    onAddItem: function(type) {
+    onAddNode: function(type) {
         if (type=="estimate"){
             this.addEstimate();
         } else {
             this.addFunction();
         }
     },
-    onUpdateList: function(list){
-        _.map(list, function(n){this._onUpdateItem(n.id, n)}, this)
-        this.updateList(this.list);
+    onUpdateNodes: function(list){
+        _.map(list, function(n){this._onUpdateNode(n.id, n)}, this)
+        this.updateNodes(this.list);
     },
-    onUpdateItem: function(itemId, newValues) {
-        this._onUpdateItem(itemId, newValues)
-        this.updateList(this.list);
+    onUpdateNode: function(nodeId, newValues) {
+        debugger;
+        this._onUpdateNode(nodeId, newValues)
+        this.updateNodes(this.list);
     },
-    updateList: function(list) {
-        localStorage.setItem(localStorageKey, JSON.stringify(list));
+    updateNodes: function(list) {
+        localStorage.setNode(localStorageKey, JSON.stringify(list));
         this.list = list;
         this.trigger(list);
     },
-    _onUpdateItem: function(itemId, newValues){
-        var item = this.getItem(parseInt(itemId));
-        if (!item) {
+    _onUpdateNode: function(nodeId, newValues){
+        var node = this.getNode(parseInt(nodeId));
+        if (!node) {
             return;
         };
-        item = _.merge(item, newValues)
+        node.set(newValues)
     },
-    onRemoveItem: function(itemId) {
-        var newList = (_.filter(this.list,function(item){
-            return item.id!==itemId;
+    onRemoveNode: function(nodeId) {
+        var newNodes = (_.filter(this.list,function(node){
+            return node.id!==nodeId;
         }));
-        this.updateList(newList);
+        this.updateNodes(newNodes);
         FermActions.resetEditingNode()
     },
-    getItem: function(itemId){
-        return _.find(this.list, function(item){
-            return item.id === itemId;
-        })
+    getNode: function(nodeId){
+      return this.graph.nodes.get(nodeId)
     },
-    getList: function(){
+    getNodes: function(){
         return this.list;
     },
     getInitialState: function() {
@@ -116,27 +115,27 @@ var fermGraphStore = Reflux.createStore({
       };
       this.graph = new Egraph(data);
 
-      // var loadedList = localStorage.getItem(localStorageKey);
-      // if (!loadedList) {
+      // var loadedNodes = localStorage.getNode(localStorageKey);
+      // if (!loadedNodes) {
       //     // If no list is in localstorage, start out with a default one
       //     this.list = [
       //         {
       //             id: todoCounter++,
       //             created: new Date(),
-      //             name: 'first item',
+      //             name: 'first node',
       //             mean: 0,
       //             type: 'estimate'
       //         },
       //         {
       //             id: todoCounter++,
       //             created: new Date(),
-      //             name: 'second item',
+      //             name: 'second node',
       //             mean: 0,
       //             type: 'estimate'
       //         }
       //     ];
       // } else {
-      //     this.list = JSON.parse(loadedList);
+      //     this.list = JSON.parse(loadedNodes);
       //     todoCounter = parseInt(_.max(this.list, 'id').id) + 1
       // }
       // return this.list;
