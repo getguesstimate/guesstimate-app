@@ -61,7 +61,6 @@ var maingraph = require('./estimate_graph');
         var el = $('.maingraph')[0];
         var nodes = this.formatNodes();
         var edges = this.formatEdges();
-        debugger;
         maingraph.create(el, nodes, edges, this.props.updateEditingNode, this.updatePositions, this.updateAllPositions);
         this.updateAllPositions();
       },
