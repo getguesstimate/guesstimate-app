@@ -3,7 +3,7 @@ var Reflux = require('reflux');
 var FermActions = require('../actions');
 var _ = require('../../lodash.min');
 
-var todoCounter = 0,
+var todoCounter = 1,
     localStorageKey = "fermi";
 
 var fermListStore = Reflux.createStore({
