@@ -7,8 +7,8 @@ var multiply = {
   name: 'multiplication',
   sign: '*',
   apply(inputs){
-    product = _.reduce(inputs, function(product, n) { return product * n; })
-    return product
+    var product = _.reduce(inputs, function(product, n) { return product * n; })
+    return product;
   }
 }
 
@@ -16,8 +16,8 @@ var add = {
   name: 'addition',
   sign: '+',
   apply(inputs){
-    sum = _.reduce(inputs, function(sum, n) { return sum + n; })
-    return sum
+    var sum = _.reduce(inputs, function(sum, n) { return sum + n; });
+    return sum;
   }
 }
 

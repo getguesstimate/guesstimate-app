@@ -2,41 +2,12 @@
 
 var React = require('react');
 var Reflux = require('reflux');
-var FermActions = require('./actions');
+var FermActions = require('./flux/actions');
 var fermListStore = require('./fermliststore');
+var fermEditingStore = require('./fermeditingstore');
 
-  var todoCounter = 0,
-  localStorageKey = "fermi";
-
-  global.fermEditingStore = Reflux.createStore({
-    listenables: [FermActions],
-    getInitialState: function(){
-      this.editingNode = 3;
-      return this.editingNode;
-    },
-
-    // Getters
-    getEditingNodeId: function(){
-      return this.editingNode;
-    },
-    getEditingNode: function(){
-      return fermListStore.getItem(this.editingNode)
-    },
-
-    // Setters
-    onUpdateEditingNode: function(id) {
-      this.updateEditingNode(id)
-    },
-    onResetEditingNode: function(id) {
-      this.updateEditingNode(null)
-    },
-
-    // Helpers
-    updateEditingNode: function(id) {
-      this.editingNode = id;
-      this.trigger(this.editingNode)
-    }
-  });
+var todoCounter = 0,
+    localStorageKey = "fermi";
 
 
 var App = React.createClass({
@@ -46,7 +17,7 @@ var App = React.createClass({
     ],
     render: function() {
         return (
-                <div>
+            <div>
                 Helloww!
             </div>
         );
