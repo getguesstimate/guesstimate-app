@@ -12,12 +12,30 @@ class Edge extends Backbone.Model{
     this.outputNode.addInputEdge(this)
     this.inputNode.addOutputEdge(this)
   };
+  inputId(){
+    return this.attributes[0]
+  };
+  outputId(){
+    return this.attributes[1]
+  };
+  toCytoscape(){
+    edge = {}
+    edge['id'] = this.inputId() + '-' + this.outputId()
+    edge['target'] =  'n' + this.outputId()
+    edge['source'] = 'n' + this.inputId()
+    return {data: edge}
+  };
 }
-
 var EdgeCollection = Backbone.Collection.extend({
     model: Edge,
     initialize(collection, graph){
       this.graph = graph
+    },
+    toCytoscape(){
+      var edges = _.map(this.models, function(d){
+        return d.toCytoscape();
+      });
+      return edges;
     }
 });
 
