@@ -38,11 +38,17 @@ function MakeFunction(node){
     inputValues = node.inputValues()
     return node.efunction.apply(inputValues)
   }
+  node.toCytoscapeName = function(){
+    return node.efunction.sign
+  }
 }
 
 function MakeEstimate(node){
   node.ttype = function(){
-    return 'estimat'
+    return 'estimate'
+  }
+  node.toCytoscapeName = function(){
+    return node.attributes.eprops.name
   }
 }
 function MakeDependent(node){
@@ -54,6 +60,9 @@ function MakeDependent(node){
     node.outputs().forEach( e => console.log(e.id) )
   }
   node.updateValue = function(n){ node.value = n; node.propogate() }
+  node.toCytoscapeName = function(){
+    return node.attributes.eprops.name
+  }
 }
 
 class Enode extends Backbone.Model{
@@ -104,6 +113,8 @@ class Enode extends Backbone.Model{
     e.id = "n" + this.id // Nodes need letters for cytoscape
     e.etype = this.attributes.etype
     _.merge(e, this.attributes.eprops)
+    _.merge(e, this.attributes.eprops)
+    e.name = this.toCytoscapeName()
     return {data: e};
   }
 }

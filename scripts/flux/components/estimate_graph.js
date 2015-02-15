@@ -17,7 +17,7 @@ maingraph.create = function(el, inputNodes, inputEdges, mainfun, updatefun, isCr
           'text-valign': 'center',
           'text-halign': 'center',
         })
-      .selector('node[type="function"]')
+      .selector('node[etype="function"]')
           .css({
             'background-color': '#fff',
             'color': '#8E3C3A',
@@ -27,7 +27,7 @@ maingraph.create = function(el, inputNodes, inputEdges, mainfun, updatefun, isCr
             'width': 40,
             'height': 40,
         })
-      .selector('node[type="estimate"]')
+      .selector('node[etype="estimate"]')
           .css({
             'width': 80,
             'font-weight': 'bold',
@@ -37,7 +37,7 @@ maingraph.create = function(el, inputNodes, inputEdges, mainfun, updatefun, isCr
             'text-outline-width': 4,
             'text-outline-color': '#fff'
         })
-      .selector('node[type="result"]')
+      .selector('node[etype="dependent"]')
           .css({
             'color': '#8E3C3A',
             'width': 80,
