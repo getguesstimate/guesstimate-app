@@ -10,7 +10,7 @@ class Egraph {
   }
 }
 
-data = {
+var data = {
   nodes: [
     {pid: 2, etype: 'estimate', eprops:{name: 'people in the Europe', value: 10}},
     {pid: 3, etype: 'estimate', eprops:{name: 'people in the US', value: 10}},
@@ -31,6 +31,6 @@ data = {
     [6,9]
   ]
 }
-Fgraph = new Egraph(data);
+var Fgraph = new Egraph(data);
 
 module.exports = Fgraph;
