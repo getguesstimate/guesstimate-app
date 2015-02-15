@@ -4,11 +4,11 @@ var React = require('react');
 var Reflux = require('reflux');
 
 var FermActions = Reflux.createActions([
-    "chooseItem",
-    "updateItem",
-    "removeItem",
-    "addItem",
-    "updateList",
+    "chooseNode",
+    "updateNode",
+    "removeNode",
+    "addNode",
+    "updateNodes",
     "addFunction",
     "addEstimate",
     "updateEditingNode",
