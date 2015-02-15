@@ -103,12 +103,29 @@ class Enode extends Backbone.Model{
     sstring = (Array(indent*3).join('.')) + "([" + pid + etype + "]" + out_s + ")"
     return sstring
   }
+  toCytoscape() {
+        var e = _.clone(d);
+        if (e['type'] === 'function'){
+          e['name'] = functions_objects[e['function']]
+        };
+        e['nodeId'] = e['id']
+        e['id'] = 'n' + e['id'] // Nodes need letters for cytoscape
+        e = _.pick(e, ['id', 'nodeId', 'name', 'value', 'type'])
+        //-          positions =  d.position
+        //return {data: e, position: positions}
+        return {data: e};
+  }
 }
 
 var NodeCollection = Backbone.Collection.extend({
     model: Enode,
     initialize(collection, graph){
-      this.graph = graph
+      this.graph = graph;
+    },
+    toCytoscape() {
+      var nodes = _.map(this.props.graph.nodes, function(d){
+        return d.toCytoscape();
+      });
     }
 });
 

@@ -3,10 +3,44 @@ var Reflux = require('reflux');
 var FermActions = require('../actions');
 var _ = require('../../lodash.min');
 
+var NodeCollection = require('../../nodecollection');
+var EdgeCollection = require('../../edgecollection');
+
+class Egraph {
+  constructor(args){
+    this.nodes = new NodeCollection(args.nodes, this);
+    this.edges = new EdgeCollection(args.edges, this);
+  }
+}
+
+var data = {
+  nodes: [
+    {pid: 2, etype: 'estimate', eprops:{name: 'people in the Europe', value: 10}},
+    {pid: 3, etype: 'estimate', eprops:{name: 'people in the US', value: 10}},
+    {pid: 4, etype: 'function', eprops:{ftype: 'add'}},
+    {pid: 5, etype: 'dependent', eprops:{name: 'people in World'}},
+    {pid: 6, etype: 'function', eprops:{ftype: 'multiply'}},
+    {pid: 7, etype: 'dependent', eprops:{name: 'people in Universe'}},
+    {pid: 8, etype: 'estimate', eprops:{name: 'universe/person ratio', value: 200}},
+    {pid: 9, etype: 'estimate', eprops:{name: 'other thing', value: 2}}
+  ],
+  edges: [
+    [2,4],
+    [3,4],
+    [4,5],
+    [5,6],
+    [6,7],
+    [8,6],
+    [6,9]
+  ]
+  };
+var Fgraph = new Egraph(data);
+
+module.exports = Fgraph;
 var todoCounter = 1,
     localStorageKey = "fermi";
 
-var fermListStore = Reflux.createStore({
+var fermGraphStore = Reflux.createStore({
     listenables: [FermActions],
     getItems: function() {
         return this.list;
@@ -83,31 +117,56 @@ var fermListStore = Reflux.createStore({
         return this.list;
     },
     getInitialState: function() {
-        var loadedList = localStorage.getItem(localStorageKey);
-        if (!loadedList) {
-            // If no list is in localstorage, start out with a default one
-            this.list = [
-                {
-                    id: todoCounter++,
-                    created: new Date(),
-                    name: 'first item',
-                    mean: 0,
-                    type: 'estimate'
-                },
-                {
-                    id: todoCounter++,
-                    created: new Date(),
-                    name: 'second item',
-                    mean: 0,
-                    type: 'estimate'
-                }
-            ];
-        } else {
-            this.list = JSON.parse(loadedList);
-            todoCounter = parseInt(_.max(this.list, 'id').id) + 1
-        }
-        return this.list;
+
+      var data = {
+        nodes: [
+          {pid: 2, etype: 'estimate', eprops:{name: 'people in the Europe', value: 10}},
+          {pid: 3, etype: 'estimate', eprops:{name: 'people in the US', value: 10}},
+          {pid: 4, etype: 'function', eprops:{ftype: 'add'}},
+          {pid: 5, etype: 'dependent', eprops:{name: 'people in World'}},
+          {pid: 6, etype: 'function', eprops:{ftype: 'multiply'}},
+          {pid: 7, etype: 'dependent', eprops:{name: 'people in Universe'}},
+          {pid: 8, etype: 'estimate', eprops:{name: 'universe/person ratio', value: 200}},
+          {pid: 9, etype: 'estimate', eprops:{name: 'other thing', value: 2}}
+        ],
+        edges: [
+          [2,4],
+          [3,4],
+          [4,5],
+          [5,6],
+          [6,7],
+          [8,6],
+          [6,9]
+        ]
+      };
+      this.graph = new Egraph(data);
+
+      // var loadedList = localStorage.getItem(localStorageKey);
+      // if (!loadedList) {
+      //     // If no list is in localstorage, start out with a default one
+      //     this.list = [
+      //         {
+      //             id: todoCounter++,
+      //             created: new Date(),
+      //             name: 'first item',
+      //             mean: 0,
+      //             type: 'estimate'
+      //         },
+      //         {
+      //             id: todoCounter++,
+      //             created: new Date(),
+      //             name: 'second item',
+      //             mean: 0,
+      //             type: 'estimate'
+      //         }
+      //     ];
+      // } else {
+      //     this.list = JSON.parse(loadedList);
+      //     todoCounter = parseInt(_.max(this.list, 'id').id) + 1
+      // }
+      // return this.list;
+          return this.graph;
     }
 })
 
-module.exports = fermListStore;
+module.exports = fermGraphStore;

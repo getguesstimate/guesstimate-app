@@ -14,11 +14,11 @@ var $ = require('jquery');
 var React = require('react');
 var Reflux = require('reflux');
 var FermActions = require('../actions');
-var fermListStore = require('../stores/fermliststore');
+var fermGraphStore = require('../stores/fermliststore');
 var fermEditingStore = require('../stores/fermeditingstore');
 var maingraph = require('./estimate_graph');
                   window.fermEditingStore = fermEditingStore;
-                  window.fermListStore = fermListStore;
+                  window.fermGraphStore = fermGraphStore;
 
     var NewButtonPane = React.createClass({
       newEstimate: function(){
@@ -43,7 +43,7 @@ var maingraph = require('./estimate_graph');
       },
       formatNodes: function() {
         var functions_objects= {'multiplication': 'x', 'addition': '+'}
-        var nodes = _.map(this.props.data, function(d){
+        var nodes = _.map(this.props.graph.nodes, function(d){
           var e = _.clone(d);
           if (e['type'] === 'function'){
             e['name'] = functions_objects[e['function']]
@@ -58,7 +58,7 @@ var maingraph = require('./estimate_graph');
         return nodes
       },
       formatEdges: function() {
-        var functionNodes = _.where(this.props.data, {type: 'function'})
+        var functionNodes = _.where(this.props.graph.nodes, {type: 'function'})
         var edges = []
          _(functionNodes).forEach(function(node){
             _(node.inputs).forEach(function(input){
@@ -80,8 +80,8 @@ var maingraph = require('./estimate_graph');
         return edges;
       },
       updateAllPositions: function(){
-        var oldLocations = _.map(this.props.data, function(n){return {id: n.id, renderedPosition: n.renderedPosition}})
-        var newLocations = _.map(maingraph.cy.nodes(), function(n){return {id: n.data().nodeId, renderedPosition: n.renderedPosition()}})
+        var oldLocations = _.map(this.props.graph.nodes, function(n){return {id: n.id, renderedPosition: n.renderedPosition}})
+        var newLocations = _.map(maingraph.cy.nodes(), function(n){return {id: n.graph.nodes().nodeId, renderedPosition: n.renderedPosition()}})
         if (!_.isEqual(oldLocations, newLocations)) {
           FermActions.updateList(newLocations);
         }
@@ -227,7 +227,7 @@ var maingraph = require('./estimate_graph');
 
     var App = React.createClass({
       mixins: [
-        Reflux.connect(fermListStore, "list"),
+        Reflux.connect(fermGraphStore, "graph"),
         Reflux.connect(fermEditingStore, "editingNode")
       ],
       getItemById: function(itemId){
@@ -270,7 +270,7 @@ var maingraph = require('./estimate_graph');
       render: function() {
         return (
           <div>
-              <GraphPane data={this.state.list} updateEditingNode={this.updateEditingNode}/>
+              <GraphPane graph={this.state.graph} updateEditingNode={this.updateEditingNode}/>
               <EditorPane nodeList={this.state.list} addItem={this.addItem} item={this.getEditingNode()}/>
           </div>
         );
