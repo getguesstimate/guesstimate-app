@@ -1,8 +1,8 @@
 'use strict';
 require(['lodash'], function(_) {});
 var React = require('react'),
-    App = require('./app');
+    App = require('./flux/components/app'),
     Fgraph = require('./fgraph');
-    Backbone = require("backbone");
+window.Fgraph = Fgraph;
 
 React.render(<App />, document.body);
