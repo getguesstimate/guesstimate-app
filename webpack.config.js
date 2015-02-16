@@ -7,6 +7,7 @@ module.exports = {
     'webpack/hot/only-dev-server',
     './scripts/index'
   ],
+  debug: true,
   output: {
     path: __dirname + '/scripts/',
     filename: 'bundle.js',
@@ -22,6 +23,7 @@ module.exports = {
   module: {
     loaders: [
       { test: /\.js$/, loaders: ['react-hot', 'jsx?harmony'], exclude: /node_modules/ },
+      { test: /\.css$/, loader: 'style-loader!css-loader' }
     ]
   }
 };

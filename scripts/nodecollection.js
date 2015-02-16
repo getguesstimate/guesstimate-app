@@ -7,8 +7,8 @@ var multiply = {
   name: 'multiplication',
   sign: '*',
   apply(inputs){
-    product = _.reduce(inputs, function(product, n) { return product * n; })
-    return product
+    var product = _.reduce(inputs, function(product, n) { return product * n; })
+    return product;
   }
 }
 
@@ -16,8 +16,8 @@ var add = {
   name: 'addition',
   sign: '+',
   apply(inputs){
-    sum = _.reduce(inputs, function(sum, n) { return sum + n; })
-    return sum
+    var sum = _.reduce(inputs, function(sum, n) { return sum + n; });
+    return sum;
   }
 }
 
@@ -27,7 +27,7 @@ var efunctions = {
 }
 
 function MakeFunction(node){
-  ftype = node.get('eprops').ftype
+  var ftype = node.get('eprops').ftype
   node.efunction = efunctions[ftype]
   node.dependent = function(){ return node.outputs()[0] }
   node.run = function(){
@@ -38,11 +38,17 @@ function MakeFunction(node){
     inputValues = node.inputValues()
     return node.efunction.apply(inputValues)
   }
+  node.toCytoscapeName = function(){
+    return node.efunction.sign
+  }
 }
 
 function MakeEstimate(node){
   node.ttype = function(){
-    return 'estimat'
+    return 'estimate'
+  }
+  node.toCytoscapeName = function(){
+    return node.attributes.eprops.name
   }
 }
 function MakeDependent(node){
@@ -54,13 +60,15 @@ function MakeDependent(node){
     node.outputs().forEach( e => console.log(e.id) )
   }
   node.updateValue = function(n){ node.value = n; node.propogate() }
+  node.toCytoscapeName = function(){
+    return node.attributes.eprops.name
+  }
 }
 
 class Enode extends Backbone.Model{
   defaults(){
     return {
-      foo: 'sillybar',
-      completed: 'false'
+      foo: 'sillybar'
     }
   }
   initialize(attributes){
@@ -89,12 +97,8 @@ class Enode extends Backbone.Model{
   }
   toString(indent){
     indent = indent || 0
-    console.log(this)
     var pid = this.get('pid')
     var etype = this.get('etype')
-    //display = this.display
-    //d
-    console.log(this)
     var outputs = _.map(this.outputs(), function(e){return e.toString(indent + 1)})
     var out_s = ""
     if (outputs.length > 0){
@@ -103,12 +107,28 @@ class Enode extends Backbone.Model{
     sstring = (Array(indent*3).join('.')) + "([" + pid + etype + "]" + out_s + ")"
     return sstring
   }
+  toCytoscape() {
+    var e = {}
+    e.nodeId = this.id
+    e.id = "n" + this.id // Nodes need letters for cytoscape
+    e.etype = this.attributes.etype
+    _.merge(e, this.attributes.eprops)
+    _.merge(e, this.attributes.eprops)
+    e.name = this.toCytoscapeName()
+    return {data: e};
+  }
 }
 
 var NodeCollection = Backbone.Collection.extend({
     model: Enode,
     initialize(collection, graph){
-      this.graph = graph
+      this.graph = graph;
+    },
+    toCytoscape() {
+      var nodes = _.map(this.models, function(d){
+        return d.toCytoscape();
+      });
+      return nodes;
     }
 });
 
