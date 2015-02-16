@@ -34,6 +34,10 @@
     "webpack-dev-server": "1.6.4"
   },
   "dependencies": {
+    "jsx-loader": "^0.12.2",
+    "react-hot-loader": "^1.1.1",
+    "webpack": "^1.5.1",
+    "webpack-dev-server": "1.6.4",
     "backbone": "1.1.2",
     "bootstrap": "3.3.2",
     "cytoscape": "2.3.8",
