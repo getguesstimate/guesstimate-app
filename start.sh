@@ -9,4 +9,4 @@ cd fermi-backend
 
 npm install
 
-node .
+npm start

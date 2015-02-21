@@ -19,7 +19,7 @@ class Edge extends Backbone.Model{
     return this.attributes[1]
   };
   toCytoscape(){
-    edge = {}
+    var edge = {}
     edge['id'] = this.inputId() + '-' + this.outputId()
     edge['target'] =  'n' + this.outputId()
     edge['source'] = 'n' + this.inputId()
