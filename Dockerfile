@@ -12,4 +12,9 @@ ADD start.sh /tmp/
 
 RUN chmod +x /tmp/start.sh
 
-CMD ./tmp/start.sh
+WORKDIR /tmp
+RUN git clone https://github.com/OAGr/fermi-backend.git
+WORKDIR /tmp/fermi-backend
+RUN npm install
+
+CMD npm start
