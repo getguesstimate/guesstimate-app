@@ -16,8 +16,10 @@ var Reflux = require('reflux');
 var FermActions = require('../actions');
 var fermGraphStore = require('../stores/fermgraphstore');
 var fermEditingStore = require('../stores/fermeditingstore');
+var fermLocationStore = require('../stores/locationstore');
 var maingraph = require('./estimate_graph');
 window.fermEditingStore = fermEditingStore;
+window.fermLocationStore = fermLocationStore;
 window.fermGraphStore = fermGraphStore;
 
     var NewButtonPane = React.createClass({
@@ -38,9 +40,9 @@ window.fermGraphStore = fermGraphStore;
     });
 
     var GraphPane = React.createClass({
-      handleClick: function() {
-        FermActions.addNode();
-      },
+      //handleClick: function() {
+        //FermActions.addNode();
+      //},
       formatNodes: function() {
         return this.props.graph.nodes.toCytoscape()
       },
@@ -48,23 +50,22 @@ window.fermGraphStore = fermGraphStore;
         return this.props.graph.edges.toCytoscape()
       },
       updateAllPositions: function(){
-        var oldLocations = _.map(this.props.graph.nodes.models, function(n){ return {id: n.id, renderedPosition: n.get('renderedPosition')}})
         var newLocations = _.map(maingraph.cy.nodes(), function(n){return {id: n.data().nodeId, renderedPosition: n.renderedPosition()}})
-        if (!_.isEqual(oldLocations, newLocations)) {
-          FermActions.updateNodes(newLocations);
+        if (!isNaN(newLocations[0].renderedPosition.x)){
+          FermActions.updateNodeLocations(newLocations);
         }
       },
       componentWillUpdate: function() {
+        maingraph.update(this.formatNodes(), this.formatEdges());
       },
       componentDidMount: function() {
         var el = $('.maingraph')[0];
         var nodes = this.formatNodes();
         var edges = this.formatEdges();
         maingraph.create(el, nodes, edges, this.props.updateEditingNode, this.updatePositions, this.updateAllPositions);
-        this.updateAllPositions();
       },
       componentDidUpdate: function(){
-        maingraph.update(this.formatNodes(), this.formatEdges());
+        this.updateAllPositions()
       },
       updatePositions: function(id, position){
         // FermActions.updateNode(id, {position:position});
@@ -77,8 +78,10 @@ window.fermGraphStore = fermGraphStore;
     });
 
     var EditorPane = React.createClass({
+      mixins: [
+        Reflux.connect(fermLocationStore, "nodeLocations")
+      ],
       render: function() {
-
         var form = ''
         if (this.props.node){
           var isEstimate = (this.props.node && this.props.node.get('nodeType') === 'estimate')
@@ -94,7 +97,8 @@ window.fermGraphStore = fermGraphStore;
           else if (isFunction){
             form = <FunctionForm graph={this.props.graph} node={this.props.node}/>
           }
-          var divStyle = {left: this.props.node.get('renderedPosition').x - 85, top: this.props.node.get('renderedPosition').y + 20};
+          var renderedPosition = _.where(this.state.nodeLocations, {'id':this.props.node.id})[0].renderedPosition
+          var divStyle = {left: renderedPosition.x - 85, top: renderedPosition.y + 20};
           form = <div className="well wowo" style={divStyle}> {form} </div>
         }
         return (

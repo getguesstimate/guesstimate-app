@@ -82,6 +82,10 @@ class Enode extends Backbone.Model{
     if (this.get('nodeType') === 'function'){ MakeFunction(this) }
     if (this.get('nodeType') === 'estimate'){ MakeEstimate(this) }
     if (this.get('nodeType') === 'dependent'){ MakeDependent(this) }
+    this.on('change:inputs', this.update);
+  }
+  update(){
+    this.get('inputs')
   }
   inputValues(){
     return _.map(this.inputs(), function(i){ return i.value})
@@ -128,6 +132,7 @@ class Enode extends Backbone.Model{
 
 var NodeCollection = Backbone.Collection.extend({
     model: Enode,
+    url: '/foo/bar',
     initialize(collection, graph){
       this.graph = graph;
     },

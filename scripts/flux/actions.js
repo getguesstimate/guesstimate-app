@@ -12,7 +12,8 @@ var FermActions = Reflux.createActions([
     "addFunction",
     "addEstimate",
     "updateEditingNode",
-    "resetEditingNode"
+    "resetEditingNode",
+    "updateNodeLocations"
 ]);
 
 module.exports = FermActions;
