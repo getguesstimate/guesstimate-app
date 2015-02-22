@@ -16,6 +16,7 @@ class Egraph {
     return _.difference(this.nodes.models, insideNodes)
   }
 }
+
 var todoCounter = 1,
     localStorageKey = "fermi";
 
@@ -25,66 +26,65 @@ var fermGraphStore = Reflux.createStore({
         return this.list;
     },
     addEstimate: function() {
-        var newNode = {
-            id: todoCounter++,
-            created: new Date(),
-            name: '',
-            value: '',
-            type: 'estimate'
-        };
-        FermActions.updateEditingNode(newNode.id)
+      var newNodeInfo = {
+          id: todoCounter++,
+          name: 'newNode',
+          nodeType: 'estimate'
+      };
+      var newNode = this.graph.nodes.create(newNodeInfo)
+      FermActions.updateEditingNode(newNode.id)
     },
     addFunction: function() {
-        var newResult = {
-            id: todoCounter++,
-            created: new Date(),
-            name: '',
-            value: '',
-            type: 'result'
-        };
-        var newFun = {
-            id: todoCounter++,
-            created: new Date(),
-            function: 'addition',
-            type: 'function',
-            output: newResult.id
-        };
-        //this.updateNodes([newResult, newFun].concat(this.list));
-        this.updateGraph()
-        FermActions.updateEditingNode(newResult)
+      var newResult = {
+          id: todoCounter++,
+          created: new Date(),
+          name: '',
+          value: '',
+          type: 'result'
+      };
+      var newFun = {
+          id: todoCounter++,
+          created: new Date(),
+          function: 'addition',
+          type: 'function',
+          output: newResult.id
+      };
+      //this.updateNodes([newResult, newFun].concat(this.list));
+      this.updateGraph()
+      FermActions.updateEditingNode(newResult)
     },
     onAddNode: function(type) {
-        if (type=="estimate"){
-            this.addEstimate();
-        } else {
-            this.addFunction();
-        }
+      if (type=="estimate"){
+          this.addEstimate();
+      } else {
+          this.addFunction();
+      }
     },
     onUpdateNodes: function(list){
-        _.map(list, function(n){this._onUpdateNode(n.id, n)}, this)
-        this.updateGraph();
+      _.map(list, function(n){this._onUpdateNode(n.id, n)}, this)
+      this.updateGraph();
     },
     onUpdateNode: function(nodeId, newValues) {
-        this._onUpdateNode(nodeId, newValues)
-        this.updateGraph();
+      this._onUpdateNode(nodeId, newValues)
+      this.updateGraph();
     },
     updateGraph: function(graph) {
-        //localStorage.setNode(localStorageKey, JSON.stringify(list));
-        this.trigger(this.graph);
+      //localStorage.setNode(localStorageKey, JSON.stringify(list));
+      this.trigger(this.graph);
     },
     _onUpdateNode: function(nodeId, newValues){
-        var node = this.getNode(parseInt(nodeId));
-        if (!node) {
-            return;
-        };
-        node.set(newValues)
+      var node = this.getNode(parseInt(nodeId));
+      if (!node) {
+          return;
+      };
+      node.set(newValues)
     },
     onRemoveNode: function(nodeId) {
-        var newNodes = (_.filter(this.list,function(node){
-            return node.id!==nodeId;
-        }));
-        this.updateGraph()
-        FermActions.resetEditingNode()
+      var newNodes = (_.filter(this.list,function(node){
+          return node.id!==nodeId;
+      }));
+      this.updateGraph()
+      FermActions.resetEditingNode()
     },
     getNode: function(nodeId){
       return this.graph.nodes.get(nodeId)
