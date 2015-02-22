@@ -1,6 +1,6 @@
-var cytoscape = require('cytoscape');
+//var cytoscape = require('cytoscape');
 // var cytoscape = require("imports?require=>false!cytoscape");
-    window.cytoscape = cytoscape;
+    //window.cytoscape = cytoscape;
 
 var maingraph = {};
 
@@ -17,7 +17,7 @@ maingraph.create = function(el, inputNodes, inputEdges, mainfun, updatefun, isCr
           'text-valign': 'center',
           'text-halign': 'center',
         })
-      .selector('node[etype="function"]')
+      .selector('node[nodeType="function"]')
           .css({
             'background-color': '#fff',
             'color': '#8E3C3A',
@@ -27,7 +27,7 @@ maingraph.create = function(el, inputNodes, inputEdges, mainfun, updatefun, isCr
             'width': 40,
             'height': 40,
         })
-      .selector('node[etype="estimate"]')
+      .selector('node[nodeType="estimate"]')
           .css({
             'width': 80,
             'font-weight': 'bold',
@@ -37,7 +37,7 @@ maingraph.create = function(el, inputNodes, inputEdges, mainfun, updatefun, isCr
             'text-outline-width': 4,
             'text-outline-color': '#fff'
         })
-      .selector('node[etype="dependent"]')
+      .selector('node[nodeType="dependent"]')
           .css({
             'color': '#8E3C3A',
             'width': 80,

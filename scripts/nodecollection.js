@@ -3,7 +3,7 @@
 var Backbone = require("backbone");
 require(['lodash'], function(_) {});
 
-var multiply = {
+var multiplication = {
   name: 'multiplication',
   sign: '*',
   apply(inputs){
@@ -12,7 +12,7 @@ var multiply = {
   }
 }
 
-var add = {
+var addition = {
   name: 'addition',
   sign: '+',
   apply(inputs){
@@ -22,13 +22,15 @@ var add = {
 }
 
 var efunctions = {
-  'mult': multiply,
-  'add': add
+  'multiplication': multiplication,
+  'addition': addition
 }
 
 function MakeFunction(node){
-  var ftype = node.get('eprops').ftype
-  node.efunction = efunctions[ftype]
+  node.efunction = function(){
+    var functionType = node.get('functionType')
+    return efunctions[functionType]
+  }
   node.dependent = function(){ return node.outputs()[0] }
   node.run = function(){
     result = node._run_math()
@@ -36,10 +38,10 @@ function MakeFunction(node){
   }
   node._run_math = function(){
     inputValues = node.inputValues()
-    return node.efunction.apply(inputValues)
+    return node.efunction().apply(inputValues)
   }
   node.toCytoscapeName = function(){
-    return node.efunction.sign
+    return node.efunction().sign
   }
 }
 
@@ -48,9 +50,10 @@ function MakeEstimate(node){
     return 'estimate'
   }
   node.toCytoscapeName = function(){
-    return node.attributes.eprops.name
+    return node.attributes.name
   }
 }
+
 function MakeDependent(node){
   node.cost = function(){
     return 'dep'
@@ -61,7 +64,7 @@ function MakeDependent(node){
   }
   node.updateValue = function(n){ node.value = n; node.propogate() }
   node.toCytoscapeName = function(){
-    return node.attributes.eprops.name
+    return node.attributes.name
   }
 }
 
@@ -76,12 +79,12 @@ class Enode extends Backbone.Model{
     this.inputEdges = [];
     this.outputEdges = [];
 
-    if (this.get('etype') === 'function'){ MakeFunction(this) }
-    if (this.get('etype') === 'estimate'){ MakeEstimate(this) }
-    if (this.get('etype') === 'dependent'){ MakeDependent(this) }
+    if (this.get('nodeType') === 'function'){ MakeFunction(this) }
+    if (this.get('nodeType') === 'estimate'){ MakeEstimate(this) }
+    if (this.get('nodeType') === 'dependent'){ MakeDependent(this) }
   }
   inputValues(){
-    return _.map(this.inputs(), function(i){ return i.get('eprops').value})
+    return _.map(this.inputs(), function(i){ return i.value})
   }
   outputs(){
     return _.map(this.outputEdges, function(e) {return e.outputNode})
@@ -98,22 +101,21 @@ class Enode extends Backbone.Model{
   toString(indent){
     indent = indent || 0
     var pid = this.get('pid')
-    var etype = this.get('etype')
+    var nodeType = this.get('nodeType')
     var outputs = _.map(this.outputs(), function(e){return e.toString(indent + 1)})
     var out_s = ""
     if (outputs.length > 0){
       var out_s = ' outputs => \n' + outputs.joint('\n')
     }
-    sstring = (Array(indent*3).join('.')) + "([" + pid + etype + "]" + out_s + ")"
+    sstring = (Array(indent*3).join('.')) + "([" + pid + nodeType + "]" + out_s + ")"
     return sstring
   }
   toCytoscape() {
     var e = {}
     e.nodeId = this.id
+    e.nodeType = this.attributes.nodeType
+    _.merge(e, this.attributes)
     e.id = "n" + this.id // Nodes need letters for cytoscape
-    e.etype = this.attributes.etype
-    _.merge(e, this.attributes.eprops)
-    _.merge(e, this.attributes.eprops)
     e.name = this.toCytoscapeName()
     return {data: e};
   }
