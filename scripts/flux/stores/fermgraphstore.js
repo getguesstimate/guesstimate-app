@@ -11,6 +11,10 @@ class Egraph {
     this.nodes = new NodeCollection(args.nodes, this);
     this.edges = new EdgeCollection(args.edges, this);
   }
+  outsideNodes(node){
+    var insideNodes = _.union(node, node.allOutputs())
+    return _.difference(this.nodes.models, insideNodes)
+  }
 }
 var todoCounter = 1,
     localStorageKey = "fermi";

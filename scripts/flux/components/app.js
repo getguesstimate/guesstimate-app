@@ -17,8 +17,8 @@ var FermActions = require('../actions');
 var fermGraphStore = require('../stores/fermgraphstore');
 var fermEditingStore = require('../stores/fermeditingstore');
 var maingraph = require('./estimate_graph');
-                  window.fermEditingStore = fermEditingStore;
-                  window.fermGraphStore = fermGraphStore;
+window.fermEditingStore = fermEditingStore;
+window.fermGraphStore = fermGraphStore;
 
     var NewButtonPane = React.createClass({
       newEstimate: function(){
@@ -82,7 +82,7 @@ var maingraph = require('./estimate_graph');
         var form = ''
         if (this.props.node){
           var isEstimate = (this.props.node && this.props.node.get('nodeType') === 'estimate')
-          var isResult = (this.props.node && this.props.node.get('nodeType') === 'result')
+          var isResult = (this.props.node && this.props.node.get('nodeType') === 'dependent')
           var isFunction = (this.props.node && this.props.node.get('nodeType') === 'function')
           var form = ''
           if (isEstimate){
@@ -117,9 +117,10 @@ var maingraph = require('./estimate_graph');
         FermActions.removeNode(this.props.node.id);
       },
       render: function() {
+        node = this.props.node
         return (
           <form>
-            <Input type="text" label="name" name="name" value={this.props.node.name} onChange={this.handleChange}/>
+            <Input type="text" label="name" name="name" value={node.get('name')} onChange={this.handleChange}/>
             <div className="btn btn-danger" onClick={this.handleDestroy}> Destroy </div>
           </form>
         );
@@ -172,11 +173,10 @@ var maingraph = require('./estimate_graph');
       },
       render: function() {
         var node = this.props.node;
-        var possibleInputNodes = _.filter(this.props.nodeList, function(n){
-          return (isNotFunction && isNotNodeOutput);
-        });
-        var possibleInputs = _.map(possibleInputNodes, function(n){
-          return <option value={n.id}>{n.id}--{n.name}{n.value}</option>
+        var currentInputs = _.map(node.inputs(), function(e){return e.id})
+        var outsideNodes = this.props.graph.outsideNodes(node)
+        var possibleInputs = _.map(outsideNodes, function(n){
+          return <option value={n.id}>{n.id}--{n.get('name')}{n.value}</option>
         });
         return (
           <form>
@@ -184,7 +184,7 @@ var maingraph = require('./estimate_graph');
                 <option value="addition">(+) Addition </option>
                 <option value="multiplication">(x) Multiplication </option>
             </Input>
-            <Input type="select" label='Multiple Select' multiple name="inputs" value={node.inputs} onChange={this.handleChange} className="function-multiple-form">
+            <Input type="select" label='Multiple Select' multiple name="inputs" value={currentInputs} onChange={this.handleChange} className="function-multiple-form">
               {possibleInputs}
             </Input>
           <div className="btn btn-danger" onClick={this.handleDestroy}> Destroy </div>
