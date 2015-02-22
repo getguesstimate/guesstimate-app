@@ -81,9 +81,9 @@ var maingraph = require('./estimate_graph');
 
         var form = ''
         if (this.props.node){
-          var isEstimate = (this.props.node && this.props.node.get('etype') === 'estimate')
-          var isResult = (this.props.node && this.props.node.get('etype') === 'result')
-          var isFunction = (this.props.node && this.props.node.get('etype') === 'function')
+          var isEstimate = (this.props.node && this.props.node.get('nodeType') === 'estimate')
+          var isResult = (this.props.node && this.props.node.get('nodeType') === 'result')
+          var isFunction = (this.props.node && this.props.node.get('nodeType') === 'function')
           var form = ''
           if (isEstimate){
             form = <EstimateForm node={this.props.node}/>
@@ -92,7 +92,7 @@ var maingraph = require('./estimate_graph');
             form = <ResultForm node={this.props.node}/>
           }
           else if (isFunction){
-            form = <FunctionForm nodeList={this.props.nodeList} node={this.props.node}/>
+            form = <FunctionForm graph={this.props.graph} node={this.props.node}/>
           }
           var divStyle = {left: this.props.node.get('renderedPosition').x - 85, top: this.props.node.get('renderedPosition').y + 20};
           form = <div className="well wowo" style={divStyle}> {form} </div>
@@ -135,7 +135,6 @@ var maingraph = require('./estimate_graph');
       },
       focusForm: function(){
         $(this.refs.name.getDOMNode()).find('input').focus()
-
       },
       componentDidMount: function(){
         this.focusForm()
@@ -149,11 +148,12 @@ var maingraph = require('./estimate_graph');
         FermActions.removeNode(this.props.node.id);
       },
       render: function() {
+        var node = this.props.node
         return (
           <form>
-            <Input key="foobar" ref="name" type="text" label="name" name="name" value={this.props.node.name} onChange={this.handleChange}/>
-            <Input type="text" label="value" name="value" defaultValue="0" value={this.props.node.value} onChange={this.handleChange}/>
-            <Input type="text" label="unit" name="unit" defaultValue="0" value={this.props.node.unit} onChange={this.handleChange}/>
+            <Input key="foobar" ref="name" type="text" label="name" name="name" value={node.get('name')} onChange={this.handleChange}/>
+            <Input type="text" label="value" name="value" defaultValue="0" value={node.get('value')} onChange={this.handleChange}/>
+            <Input type="text" label="unit" name="unit" defaultValue="0" value={node.get('unit')} onChange={this.handleChange}/>
           <div className="btn btn-danger" onClick={this.handleDestroy}> Destroy </div>
           </form>
         );
@@ -173,8 +173,6 @@ var maingraph = require('./estimate_graph');
       render: function() {
         var node = this.props.node;
         var possibleInputNodes = _.filter(this.props.nodeList, function(n){
-          var isNotFunction = (n.type !== 'function');
-          var isNotNodeOutput = (n.id !== node.output);
           return (isNotFunction && isNotNodeOutput);
         });
         var possibleInputs = _.map(possibleInputNodes, function(n){
@@ -182,11 +180,11 @@ var maingraph = require('./estimate_graph');
         });
         return (
           <form>
-            <Input type="select" label='Function' name="function" defaultValue="addition" value={this.props.node.function} onChange={this.handleChange}>
+            <Input type="select" label='Function' name="functionType" defaultValue="addition" value={node.get('functionType')} onChange={this.handleChange}>
                 <option value="addition">(+) Addition </option>
                 <option value="multiplication">(x) Multiplication </option>
             </Input>
-            <Input type="select" label='Multiple Select' multiple name="inputs" value={this.props.node.inputs} onChange={this.handleChange} className="function-multiple-form">
+            <Input type="select" label='Multiple Select' multiple name="inputs" value={node.inputs} onChange={this.handleChange} className="function-multiple-form">
               {possibleInputs}
             </Input>
           <div className="btn btn-danger" onClick={this.handleDestroy}> Destroy </div>

@@ -28,9 +28,6 @@ var fermGraphStore = Reflux.createStore({
             value: '',
             type: 'estimate'
         };
-        debugger;
-        //this.updateNodes([newNode].concat(this.list));
-        this.updateGraph()
         FermActions.updateEditingNode(newNode.id)
     },
     addFunction: function() {
@@ -48,7 +45,6 @@ var fermGraphStore = Reflux.createStore({
             type: 'function',
             output: newResult.id
         };
-        debugger
         //this.updateNodes([newResult, newFun].concat(this.list));
         this.updateGraph()
         FermActions.updateEditingNode(newResult)
@@ -96,14 +92,14 @@ var fermGraphStore = Reflux.createStore({
 
       var data = {
         nodes: [
-          {pid: 2, etype: 'estimate', eprops:{name: 'people in the Europe', value: 10}},
-          {pid: 3, etype: 'estimate', eprops:{name: 'people in the US', value: 10}},
-          {pid: 4, etype: 'function', eprops:{ftype: 'add'}},
-          {pid: 5, etype: 'dependent', eprops:{name: 'people in World'}},
-          {pid: 6, etype: 'function', eprops:{ftype: 'mult'}},
-          {pid: 7, etype: 'dependent', eprops:{name: 'people in Universe'}},
-          {pid: 8, etype: 'estimate', eprops:{name: 'universe/person ratio', value: 200}},
-          {pid: 9, etype: 'estimate', eprops:{name: 'other thing', value: 2}}
+          {pid: 2, nodeType: 'estimate', name: 'people in the Europe', value: 10},
+          {pid: 3, nodeType: 'estimate', name: 'people in the US', value: 10},
+          {pid: 4, nodeType: 'function', functionType: 'addition'},
+          {pid: 5, nodeType: 'dependent', name: 'people in World'},
+          {pid: 6, nodeType: 'function', functionType: 'multiplication'},
+          {pid: 7, nodeType: 'dependent', name: 'people in Universe'},
+          {pid: 8, nodeType: 'estimate', name: 'universe/person ratio', value: 200},
+          {pid: 9, nodeType: 'estimate', name: 'other thing', value: 2}
         ],
         edges: [
           [2,4],
