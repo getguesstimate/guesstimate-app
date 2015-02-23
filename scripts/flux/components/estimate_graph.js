@@ -92,11 +92,11 @@ maingraph.create = function(el, inputNodes, inputEdges, mainfun, updatefun, isCr
   });
 
 };
-maingraph.update = function(inputNodes, inputEdges){
+maingraph.update = function(inputNodes, inputEdges, callback){
   this.cy.load({
     nodes: inputNodes,
     edges: inputEdges
-  });
+  }, callback);
 }
 
 module.exports = maingraph;

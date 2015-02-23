@@ -21,6 +21,7 @@ var maingraph = require('./estimate_graph');
 window.fermEditingStore = fermEditingStore;
 window.fermLocationStore = fermLocationStore;
 window.fermGraphStore = fermGraphStore;
+window.maingraph = maingraph;
 
     var NewButtonPane = React.createClass({
       newEstimate: function(){
@@ -56,7 +57,7 @@ window.fermGraphStore = fermGraphStore;
         }
       },
       componentWillUpdate: function() {
-        maingraph.update(this.formatNodes(), this.formatEdges());
+        maingraph.update(this.formatNodes(), this.formatEdges(), this.updateAllPositions);
       },
       componentDidMount: function() {
         var el = $('.maingraph')[0];
@@ -65,7 +66,7 @@ window.fermGraphStore = fermGraphStore;
         maingraph.create(el, nodes, edges, this.props.updateEditingNode, this.updatePositions, this.updateAllPositions);
       },
       componentDidUpdate: function(){
-        this.updateAllPositions()
+        //this.updateAllPositions()
       },
       updatePositions: function(id, position){
         // FermActions.updateNode(id, {position:position});
