@@ -26,8 +26,10 @@ class Edge extends Backbone.Model{
     return {data: edge}
   };
 }
+
 var EdgeCollection = Backbone.Collection.extend({
     model: Edge,
+    url: '/foo/bar',
     initialize(collection, graph){
       this.graph = graph
     },
