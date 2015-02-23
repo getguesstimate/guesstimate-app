@@ -11,6 +11,7 @@ class Egraph {
     this.nodes = new NodeCollection(args.nodes, this);
     this.edges = new EdgeCollection(args.edges, this);
   }
+  // Used to find possible outputs for a function node
   outsideNodes(node){
     var insideNodes = _.union(node, node.allOutputs())
     return _.difference(this.nodes.models, insideNodes)
@@ -27,7 +28,7 @@ var fermGraphStore = Reflux.createStore({
     },
     addEstimate: function() {
       var newNodeInfo = {
-          id: todoCounter++,
+          pid: todoCounter++,
           name: 'newNode',
           nodeType: 'estimate'
       };
@@ -35,23 +36,22 @@ var fermGraphStore = Reflux.createStore({
       FermActions.updateEditingNode(newNode.id)
     },
     addFunction: function() {
-      var newResult = {
-          id: todoCounter++,
-          created: new Date(),
-          name: '',
-          value: '',
-          type: 'result'
-      };
-      var newFun = {
-          id: todoCounter++,
-          created: new Date(),
-          function: 'addition',
-          type: 'function',
-          output: newResult.id
+      //var newDependentInfo = {
+        //pid: todoCounter++,
+        //name: 'newNode',
+        //nodeType: 'dependent'
+        //name: '',
+        //value: ''
+      //};
+      var newFunctionInfo = {
+        pid: todoCounter++,
+        name: 'newNode',
+        nodeType: 'function'
       };
       //this.updateNodes([newResult, newFun].concat(this.list));
-      this.updateGraph()
-      FermActions.updateEditingNode(newResult)
+      //var newDependent = this.graph.nodes.create(newDependentInfo)
+      var newFunction = this.graph.nodes.create(newFunctionInfo)
+      FermActions.updateEditingNode(newFunction)
     },
     onAddNode: function(type) {
       if (type=="estimate"){
@@ -116,6 +116,7 @@ var fermGraphStore = Reflux.createStore({
         ]
       };
       this.graph = new Egraph(data);
+      todoCounter = parseInt(_.max(this.graph.nodes.models, 'id').id) + 1
 
       // var loadedNodes = localStorage.getNode(localStorageKey);
       // if (!loadedNodes) {
@@ -138,7 +139,6 @@ var fermGraphStore = Reflux.createStore({
       //     ];
       // } else {
       //     this.list = JSON.parse(loadedNodes);
-      //     todoCounter = parseInt(_.max(this.list, 'id').id) + 1
       // }
       // return this.list;
           return this.graph;

@@ -25,67 +25,23 @@ var efunctions = {
   'multiplication': multiplication,
   'addition': addition
 }
-
-function MakeFunction(node){
-  node.efunction = function(){
-    var functionType = node.get('functionType')
-    return efunctions[functionType]
-  }
-  node.dependent = function(){ return node.outputs()[0] }
-  node.run = function(){
-    result = node._run_math()
-    node.dependent().updateValue(result)
-  }
-  node._run_math = function(){
-    inputValues = node.inputValues()
-    return node.efunction().apply(inputValues)
-  }
-  node.toCytoscapeName = function(){
-    return node.efunction().sign
-  }
-}
-
-function MakeEstimate(node){
-  node.ttype = function(){
-    return 'estimate'
-  }
-  node.toCytoscapeName = function(){
-    return node.attributes.name
-  }
-}
-
-function MakeDependent(node){
-  node.cost = function(){
-    return 'dep'
-  },
-  node.value = null
-  node.propogate = function(){
-    node.outputs().forEach( e => console.log(e.id) )
-  }
-  node.updateValue = function(n){ node.value = n; node.propogate() }
-  node.toCytoscapeName = function(){
-    return node.attributes.name
-  }
-}
-
 class Enode extends Backbone.Model{
   defaults(){
     return {
       foo: 'sillybar'
     }
   }
+  setup(){
+  }
   initialize(attributes){
     this.id = attributes.pid;
     this.inputEdges = [];
     this.outputEdges = [];
 
-    if (this.get('nodeType') === 'function'){ MakeFunction(this) }
-    if (this.get('nodeType') === 'estimate'){ MakeEstimate(this) }
-    if (this.get('nodeType') === 'dependent'){ MakeDependent(this) }
-    this.on('change:inputs', this.update);
-  }
-  update(){
-    this.get('inputs')
+    //if (this.get('nodeType') === 'function'){ MakeFunction(this) }
+    //if (this.get('nodeType') === 'estimate'){ MakeEstimate(this) }
+    //if (this.get('nodeType') === 'dependent'){ MakeDependent(this) }
+    this.setup()
   }
   inputValues(){
     return _.map(this.inputs(), function(i){ return i.value})
@@ -130,8 +86,70 @@ class Enode extends Backbone.Model{
   }
 }
 
+class EstimateNode extends Enode{
+  ttype(){
+    return 'estimate'
+  }
+  toCytoscapeName(){
+    return this.attributes.name
+  }
+}
+
+  //node.value = null
+class DependentNode extends Enode{
+  cost(){
+    return 'dep'
+  }
+  propogate(){
+    this.outputs().forEach( e => console.log(e.id) )
+  }
+  updateValue(n){
+    this.value = n;
+    this.propogate()
+  }
+  toCytoscapeName(){
+    this.attributes.name
+  }
+}
+
+
+class FunctionNode extends Enode{
+  efunction(){
+    var functionType = this.get('functionType')
+    return efunctions[functionType]
+  }
+  dependent(){
+    return this.outputs()[0]
+  }
+  run(){
+    result = this._run_math()
+    this.dependent().updateValue(result)
+  }
+  run_math(){
+    inputValues = this.inputValues()
+    return this.efunction().apply(inputValues)
+  }
+  toCytoscapeName(){
+    return this.efunction().sign
+  }
+  setup(){
+    console.log('setting up')
+    //functionType: 'addition'
+  }
+}
 var NodeCollection = Backbone.Collection.extend({
-    model: Enode,
+    model: function(attrs, options) {
+      switch (attrs.nodeType){
+        case 'estimate':
+          return new EstimateNode(attrs, options)
+        case 'dependent':
+          return new DependentNode(attrs, options)
+        case 'function':
+          return new FunctionNode(attrs, options)
+        default:
+          return new Enode(attrs, options)
+      }
+    },
     url: '/foo/bar',
     initialize(collection, graph){
       this.graph = graph;
