@@ -25,6 +25,7 @@ var efunctions = {
   'multiplication': multiplication,
   'addition': addition
 }
+
 class Enode extends Backbone.Model{
   defaults(){
     return {
@@ -64,16 +65,15 @@ class Enode extends Backbone.Model{
     this.outputEdges.push(outputEdge)
   }
   toString(indent){
-    indent = indent || 0
-    var pid = this.get('pid')
-    var nodeType = this.get('nodeType')
-    var outputs = _.map(this.outputs(), function(e){return e.toString(indent + 1)})
-    var out_s = ""
-    if (outputs.length > 0){
-      var out_s = ' outputs => \n' + outputs.joint('\n')
-    }
-    sstring = (Array(indent*3).join('.')) + "([" + pid + nodeType + "]" + out_s + ")"
-    return sstring
+    //indent = indent || 0
+    //var pid = this.get('pid')
+    //var nodeType = this.get('nodeType')
+    //var outputs = _.map(this.outputs(), function(e){return e.toString(indent + 1)})
+    //var out_s = ""
+    //if (outputs.length > 0){ //var out_s = ' outputs => \n' + outputs.joint('\n')
+    //}
+    //sstring = (Array(indent*3).join('.')) + "([" + pid + nodeType + "]" + out_s + ")"
+    return 'test'
   }
   toCytoscape() {
     var e = {}
@@ -97,9 +97,6 @@ class EstimateNode extends Enode{
 
   //node.value = null
 class DependentNode extends Enode{
-  cost(){
-    return 'dep'
-  }
   propogate(){
     this.outputs().forEach( e => console.log(e.id) )
   }
@@ -108,12 +105,17 @@ class DependentNode extends Enode{
     this.propogate()
   }
   toCytoscapeName(){
-    this.attributes.name
+    return this.attributes.name
   }
 }
 
 
 class FunctionNode extends Enode{
+  defaults(){
+    return {
+      "functionType": 'addition'
+    }
+  }
   efunction(){
     var functionType = this.get('functionType')
     return efunctions[functionType]
@@ -133,10 +135,13 @@ class FunctionNode extends Enode{
     return this.efunction().sign
   }
   setup(){
-    console.log('setting up')
-    //functionType: 'addition'
+    //if (this.get('outputIds')){
+    //var inp = this.id
+    //var out = this.get('outputIds')
+    //var foo = this.collection.graph.edges.add({0:inp, 1:out})
   }
 }
+
 var NodeCollection = Backbone.Collection.extend({
     model: function(attrs, options) {
       switch (attrs.nodeType){

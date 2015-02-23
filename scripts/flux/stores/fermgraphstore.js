@@ -36,21 +36,28 @@ var fermGraphStore = Reflux.createStore({
       FermActions.updateEditingNode(newNode.id)
     },
     addFunction: function() {
-      //var newDependentInfo = {
-        //pid: todoCounter++,
-        //name: 'newNode',
-        //nodeType: 'dependent'
-        //name: '',
-        //value: ''
-      //};
+      var newDependentInfo = {
+        pid: todoCounter++,
+        name: 'newNode',
+        nodeType: 'dependent',
+        name: '',
+        value: ''
+      };
       var newFunctionInfo = {
         pid: todoCounter++,
         name: 'newNode',
-        nodeType: 'function'
+        nodeType: 'function',
+        outputIds: newDependentInfo.pid
       };
       //this.updateNodes([newResult, newFun].concat(this.list));
       //var newDependent = this.graph.nodes.create(newDependentInfo)
+      var newDependent = this.graph.nodes.create(newDependentInfo)
       var newFunction = this.graph.nodes.create(newFunctionInfo)
+      var newEdge = this.graph.edges.create({0:newFunction.id, 1: newDependent.id})
+      //if (this.get('outputIds')){
+      //var inp = this.id
+      //var out = this.get('outputIds')
+      //var foo = this.collection.graph.edges.add({0:inp, 1:out})
       FermActions.updateEditingNode(newFunction)
     },
     onAddNode: function(type) {
