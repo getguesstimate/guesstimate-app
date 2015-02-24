@@ -43,6 +43,12 @@ class group {
   nodeIds(){
     return _.map(this.nodes(), function(i){return i.id})
   }
+  createEdge(nodeId){
+    newObject = {}
+    newObject[this.goTo] = this.node.id
+    newObject[this.getFrom] = nodeId
+    return this._allEdges().create(newObject)
+  }
   _allEdges(){ return this.graph.edges }
 }
 
@@ -196,7 +202,7 @@ class FunctionNode extends Enode{
     shouldDelete = _.difference(oldInputs, newInputs)
     shouldDeleteEdges = this.inputs.getEdges(shouldDelete)
     _.map(shouldDeleteEdges, function(n){n.destroy()})
-    //_.map(shouldAdd, function(n){this.createInputEdge(n)}, this)
+    _.map(shouldAdd, function(n){this.inputs.createEdge(n)}, this)
   }
   setup(){
     this.on('change:inputs', function(f){ f.resetInputs() })
