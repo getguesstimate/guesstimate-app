@@ -178,7 +178,7 @@ window.maingraph = maingraph;
       },
       render: function() {
         var node = this.props.node;
-        var currentInputs = _.map(node.inputs(), function(e){return e.id})
+        var currentInputs = node.inputs.nodeIds()
         var outsideNodes = this.props.graph.outsideNodes(node)
         var possibleInputs = _.map(outsideNodes, function(n){
           return <option value={n.id}>{n.id}--{n.get('name')}{n.value}</option>
