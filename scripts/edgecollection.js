@@ -9,8 +9,8 @@ class Edge extends Backbone.Model{
   initialize(attributes){
     this.inputNode = this.collection.graph.nodes.get(attributes[0]);
     this.outputNode =  this.collection.graph.nodes.get(attributes[1]);
-    this.outputNode.addInputEdge(this)
-    this.inputNode.addOutputEdge(this)
+    //this.outputNode.addInputEdge(this)
+    //this.inputNode.addOutputEdge(this)
   };
   inputId(){
     return this.attributes[0]

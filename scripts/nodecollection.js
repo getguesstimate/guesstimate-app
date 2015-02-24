@@ -26,6 +26,48 @@ var efunctions = {
   'addition': addition
 }
 
+class group {
+  constructor(node, graph){
+    this.node = node
+    this.graph = graph
+  }
+  edges(){
+    return _.filter(this._allEdges().models, function(n){ return n.get(this.goTo) == this.node.id }, this)
+  }
+  getEdge(nodeId){
+    return _.find(this.edges(), function(n){ return n.get(this.getFrom) == nodeId }, this)
+  }
+  getEdges(nodeIds){
+    return _.map(nodeIds, function(nodeId){ return this.getEdge(nodeId) }, this)
+  }
+  nodeIds(){
+    return _.map(this.nodes(), function(i){return i.id})
+  }
+  _allEdges(){ return this.graph.edges }
+}
+
+class outputs extends group{
+  constructor(node, edges){
+    this.getFrom = 1
+    this.goTo = 0
+    super(node,edges)
+  }
+  nodes(){
+    return _.map(this.edges(), function(e){ return e.outputNode})
+  }
+}
+
+class inputs extends group{
+  constructor(node, edges){
+    this.getFrom = 0
+    this.goTo = 1
+    super(node,edges)
+  }
+  nodes(){
+    return _.map(this.edges(), function(e){ return e.inputNode})
+  }
+}
+
 class Enode extends Backbone.Model{
   defaults(){
     return {
@@ -36,54 +78,51 @@ class Enode extends Backbone.Model{
   }
   initialize(attributes){
     this.id = attributes.pid;
-    this.inputEdges = [];
-    this.outputEdges = [];
-
-    //if (this.get('nodeType') === 'function'){ MakeFunction(this) }
-    //if (this.get('nodeType') === 'estimate'){ MakeEstimate(this) }
-    //if (this.get('nodeType') === 'dependent'){ MakeDependent(this) }
+    this.outputs = new outputs(this, this.collection.graph)
+    this.inputs = new inputs(this, this.collection.graph)
     this.setup()
   }
-  inputValues(){
-    return _.map(this.inputs(), function(i){ return i.value})
+  inputEdges(){
+
   }
-  outputs(){
-    return _.map(this.outputEdges, function(e) {return e.outputNode})
-  }
-  allOutputs(){
-    var outputs = this.outputs()
-    var furtherOutputs = _.map(outputs, function(e){return e.allOutputs()})
-    return _.flatten([outputs, furtherOutputs])
-  }
-  inputs(){
-    return _.map(this.inputEdges, function(e) {return e.inputNode})
-  }
-  addInputEdge(inputEdge){
-    this.inputEdges.push(inputEdge)
-  }
-  addOutputEdge(outputEdge){
-    this.outputEdges.push(outputEdge)
-  }
-  toString(indent){
-    //indent = indent || 0
-    //var pid = this.get('pid')
-    //var nodeType = this.get('nodeType')
-    //var outputs = _.map(this.outputs(), function(e){return e.toString(indent + 1)})
-    //var out_s = ""
-    //if (outputs.length > 0){ //var out_s = ' outputs => \n' + outputs.joint('\n')
-    //}
-    //sstring = (Array(indent*3).join('.')) + "([" + pid + nodeType + "]" + out_s + ")"
-    return 'test'
-  }
-  toCytoscape() {
-    var e = {}
-    e.nodeId = this.id
-    e.nodeType = this.attributes.nodeType
-    _.merge(e, this.attributes)
-    e.id = "n" + this.id // Nodes need letters for cytoscape
-    e.name = this.toCytoscapeName()
-    return {data: e};
-  }
+  outputEdges(){
+
+}
+inputValues(){
+  return _.map(this.inputs.nodes(), function(i){ return i.value})
+}
+//outputs(){
+  //return _.map(this.outputEdges(), function(e) {return e.outputNode})
+//}
+allOutputs(){
+  var outputs = this.outputs.nodes()
+  //var furtherOutputs = _.map(outputs, function(e){return e.allOutputs()})
+  //return _.flatten([outputs, furtherOutputs])
+  return outputs
+}
+//inputs(){
+  //return _.map(this.inputEdges(), function(e) {return e.inputNode})
+//}
+toString(indent){
+  //indent = indent || 0
+  //var pid = this.get('pid')
+  //var nodeType = this.get('nodeType')
+  //var outputs = _.map(this.outputs(), function(e){return e.toString(indent + 1)})
+  //var out_s = ""
+  //if (outputs.length > 0){ //var out_s = ' outputs => \n' + outputs.joint('\n')
+  //}
+  //sstring = (Array(indent*3).join('.')) + "([" + pid + nodeType + "]" + out_s + ")"
+  return 'test'
+}
+toCytoscape() {
+  var e = {}
+  e.nodeId = this.id
+  e.nodeType = this.attributes.nodeType
+  _.merge(e, this.attributes)
+  e.id = "n" + this.id // Nodes need letters for cytoscape
+  e.name = this.toCytoscapeName()
+  return {data: e};
+}
 }
 
 class EstimateNode extends Enode{
@@ -98,7 +137,7 @@ class EstimateNode extends Enode{
   //node.value = null
 class DependentNode extends Enode{
   propogate(){
-    this.outputs().forEach( e => console.log(e.id) )
+    this.outputs.nodes().forEach( e => console.log(e.id) )
   }
   updateValue(n){
     this.value = n;
@@ -121,7 +160,7 @@ class FunctionNode extends Enode{
     return efunctions[functionType]
   }
   dependent(){
-    return this.outputs()[0]
+    return this.outputs.nodes()[0]
   }
   run(){
     result = this._run_math()
@@ -134,11 +173,33 @@ class FunctionNode extends Enode{
   toCytoscapeName(){
     return this.efunction().sign
   }
+  getEdges(direction, edgeIds){
+    if (direction === 'input'){
+      edges = this.inputEdges()
+      place = 0
+    }
+    else{
+      edges = this.outputEdges()
+      place = 1
+    }
+    return _.map(edgeIds, function(edgeId){
+       return _.find(edges, function(l){return l.get(place) == edgeId})
+    })
+  }
+  createInputEdge(toId){
+    this.collection.graph.edges.create({0:toId, 1: this.id})
+  }
+  resetInputs(){
+    newInputs = _.map(this.get('inputs'), function(n){return parseInt(n)})
+    oldInputs = this.inputs.nodeIds()
+    shouldAdd = _.difference(newInputs, oldInputs)
+    shouldDelete = _.difference(oldInputs, newInputs)
+    shouldDeleteEdges = this.inputs.getEdges(shouldDelete)
+    _.map(shouldDeleteEdges, function(n){n.destroy()})
+    //_.map(shouldAdd, function(n){this.createInputEdge(n)}, this)
+  }
   setup(){
-    //if (this.get('outputIds')){
-    //var inp = this.id
-    //var out = this.get('outputIds')
-    //var foo = this.collection.graph.edges.add({0:inp, 1:out})
+    this.on('change:inputs', function(f){ f.resetInputs() })
   }
 }
 
