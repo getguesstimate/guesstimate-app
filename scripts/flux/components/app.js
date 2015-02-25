@@ -41,9 +41,6 @@ window.maingraph = maingraph;
     });
 
     var GraphPane = React.createClass({
-      //handleClick: function() {
-        //FermActions.addNode();
-      //},
       formatNodes: function() {
         return this.props.graph.nodes.toCytoscape()
       },
@@ -53,7 +50,7 @@ window.maingraph = maingraph;
       updateAllPositions: function(){
         var newLocations = _.map(maingraph.cy.nodes(), function(n){return {id: n.data().nodeId, renderedPosition: n.renderedPosition()}})
         if (!isNaN(newLocations[0].renderedPosition.x)){
-          FermActions.updateNodeLocations(newLocations);
+          FermActions.updateAllNodeLocations(newLocations);
         }
       },
       componentWillUpdate: function() {
@@ -68,8 +65,8 @@ window.maingraph = maingraph;
       componentDidUpdate: function(){
         //this.updateAllPositions()
       },
-      updatePositions: function(id, position){
-        // FermActions.updateNode(id, {position:position});
+      updatePositions: function(objects){
+        FermActions.updateNodeLocations(objects);
       },
       render: function() {
         return (
