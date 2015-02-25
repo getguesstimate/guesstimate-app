@@ -3,12 +3,13 @@
     //window.cytoscape = cytoscape;
 
 var maingraph = {};
-
+var _ = require('../../lodash.min');
 
 maingraph.create = function(el, inputNodes, inputEdges, mainfun, updatefun, isCreated){
 
   this.cy = cytoscape({
     container: el,
+    userZoomingEnabled: false,
     style: cytoscape.stylesheet()
       .selector('node')
         .css({
@@ -74,18 +75,31 @@ maingraph.create = function(el, inputNodes, inputEdges, mainfun, updatefun, isCr
       avoidOverlap: true
     },
     ready: function(){
-      this.on('tap', 'node', function(event){
-        console.log('touched')
+      //this.on('tap', function(event){
+        //console.log(event)
+        //console.log('tap event')
+      //})
+      //this.on('tapstart', function(event){
+        //console.log(event)
+        //console.log('tap start')
+      //})
+      this.on('drag', function(event){
         id = event.cyTarget.data().nodeId;
-        if (id !== undefined) {
-          console.log('id is' + id)
-          mainfun(id)
+        position = event.cyTarget.renderedPosition()
+        object = {id: id, renderedPosition: position}
+        updatefun([object])
+      })
+      this.on('pan', function(event){
+        var newLocations = _.map(event.cy.nodes(), function(n){return {id: n.data().nodeId, renderedPosition: n.renderedPosition()}})
+        updatefun(newLocations)
+      })
+      this.on('cxttapend', function(event){
+        data = event.cyTarget.data()
+        if (data) {
+          mainfun(data.nodeId)
+        } else {
+          mainfun(null)
         }
-      });
-      this.on('free', 'node', function(event){
-        id = event.cyTarget.data().nodeId;
-        position = event.cyTarget.position()
-        updatefun(id, position)
       });
       isCreated();
     }

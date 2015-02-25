@@ -8,15 +8,19 @@ var fermLocationStore = Reflux.createStore({
     getNodeLocations: function() {
         return this.nodeLocations;
     },
+    getNodeLocation: function(id) {
+        return _.find(this.nodeLocations, function(n){return n.id == id});
+    },
     onUpdateNodeLocations: function(nodeLocations){
-      this.nodeLocations = nodeLocations
+      _.map(nodeLocations, function(n){
+        var item = this.getNodeLocation(n.id);
+        item.renderedPosition = n.renderedPosition;
+      }, this)
       this.trigger(this.nodeLocations)
     },
-    getNode: function(nodeId){
-      return this.graph.nodes.get(nodeId)
-    },
-    getNodes: function(){
-        return this.list;
+    onUpdateAllNodeLocations: function(nodeLocations){
+      this.nodeLocations = nodeLocations
+      this.trigger(this.nodeLocations)
     },
     getInitialState: function() {
       this.nodeLocations = []

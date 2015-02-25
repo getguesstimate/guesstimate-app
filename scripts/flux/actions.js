@@ -13,6 +13,7 @@ var FermActions = Reflux.createActions([
     "addEstimate",
     "updateEditingNode",
     "resetEditingNode",
+    "updateAllNodeLocations",
     "updateNodeLocations"
 ]);
 
