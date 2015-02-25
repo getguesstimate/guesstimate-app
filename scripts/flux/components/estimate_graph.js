@@ -55,6 +55,11 @@ maingraph.create = function(el, inputNodes, inputEdges, mainfun, updatefun, isCr
           'line-color': '#ddd',
           'target-arrow-color': '#666'
         })
+      .selector('edge[toType="dependent"]')
+        .css({
+          'line-color': '#994343',
+          'target-arrow-color': '#994343'
+        })
       .selector('.highlighted')
         .css({
           'background-color': '#61bffc',
