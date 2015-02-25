@@ -23,6 +23,7 @@ class Edge extends Backbone.Model{
     edge['id'] = this.inputId() + '-' + this.outputId()
     edge['target'] =  'n' + this.outputId()
     edge['source'] = 'n' + this.inputId()
+    edge['toType'] = this.outputNode.get('nodeType')
     return {data: edge}
   };
 }
