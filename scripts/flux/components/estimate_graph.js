@@ -48,6 +48,10 @@ maingraph.create = function(el, inputNodes, inputEdges, mainfun, updatefun, isCr
             'text-outline-width': 4,
             'text-outline-color': '#fff'
         })
+      .selector('node[name="Add Name"]')
+          .css({
+            'color': 'red',
+        })
       .selector('edge')
         .css({
           'target-arrow-shape': 'triangle',

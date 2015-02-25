@@ -29,7 +29,6 @@ var fermGraphStore = Reflux.createStore({
     addEstimate: function() {
       var newNodeInfo = {
           pid: todoCounter++,
-          name: 'newNode',
           nodeType: 'estimate'
       };
       var newNode = this.graph.nodes.create(newNodeInfo)
@@ -38,14 +37,12 @@ var fermGraphStore = Reflux.createStore({
     addFunction: function() {
       var newDependentInfo = {
         pid: todoCounter++,
-        name: 'newNode',
         nodeType: 'dependent',
         name: '',
         value: ''
       };
       var newFunctionInfo = {
         pid: todoCounter++,
-        name: 'newNode',
         nodeType: 'function',
         outputIds: newDependentInfo.pid
       };

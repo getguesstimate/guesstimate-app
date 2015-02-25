@@ -127,6 +127,7 @@ toCytoscape() {
   _.merge(e, this.attributes)
   e.id = "n" + this.id // Nodes need letters for cytoscape
   e.name = this.toCytoscapeName()
+  if (!e.name){ e.name = 'Add Name' }
   return {data: e};
 }
 }
