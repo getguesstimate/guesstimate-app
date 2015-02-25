@@ -97,7 +97,7 @@ window.maingraph = maingraph;
           }
           var renderedPosition = _.where(this.state.nodeLocations, {'id':this.props.node.id})[0].renderedPosition
           var divStyle = {left: renderedPosition.x - 85, top: renderedPosition.y + 20};
-          form = <div className="well wowo" style={divStyle}> {form} </div>
+          form = <div className="wowo" style={divStyle}> {form} </div>
         }
         return (
           <div className="editorpane">
