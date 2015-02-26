@@ -56,8 +56,7 @@ window.maingraph = maingraph;
       componentWillUpdate: function() {
         maingraph.update(this.formatNodes(), this.formatEdges(), this.updateAllPositions);
       },
-      componentDidMount: function() {
-        var el = $('.maingraph')[0];
+      componentDidMount: function() { var el = $('.maingraph')[0];
         var nodes = this.formatNodes();
         var edges = this.formatEdges();
         maingraph.create(el, nodes, edges, this.props.updateEditingNode, this.updatePositions, this.updateAllPositions);
@@ -75,6 +74,34 @@ window.maingraph = maingraph;
       }
     });
 
+    var SidePane = React.createClass({
+      render: function() {
+        var form = ''
+        if (this.props.node){
+          var isEstimate = (this.props.node && this.props.node.get('nodeType') === 'estimate')
+          var isResult = (this.props.node && this.props.node.get('nodeType') === 'dependent')
+          var isFunction = (this.props.node && this.props.node.get('nodeType') === 'function')
+          var form = ''
+          if (isEstimate){
+            form = <EstimateForm node={this.props.node} formType='large' />
+          }
+          else if (isResult){
+            form = <ResultForm node={this.props.node} formType='large'/>
+          }
+          else if (isFunction){
+            form = <FunctionForm graph={this.props.graph} node={this.props.node} formType='large'/>
+          }
+          form = <div className=""> {form} </div>
+        }
+        return (
+          <div className="sidePane">
+            {form}
+            <div className="btn btn-danger" onClick={this.handleDestroy}> Destroy </div>
+          </div>
+        )
+      }
+    });
+
     var EditorPane = React.createClass({
       mixins: [
         Reflux.connect(fermLocationStore, "nodeLocations")
@@ -87,13 +114,13 @@ window.maingraph = maingraph;
           var isFunction = (this.props.node && this.props.node.get('nodeType') === 'function')
           var form = ''
           if (isEstimate){
-            form = <EstimateForm node={this.props.node}/>
+            form = <EstimateForm node={this.props.node} formType='small' />
           }
           else if (isResult){
-            form = <ResultForm node={this.props.node}/>
+            form = <ResultForm node={this.props.node} formType='small'/>
           }
           else if (isFunction){
-            form = <FunctionForm graph={this.props.graph} node={this.props.node}/>
+            form = <FunctionForm graph={this.props.graph} node={this.props.node} formType='small'/>
           }
           var renderedPosition = _.where(this.state.nodeLocations, {'id':this.props.node.id})[0].renderedPosition
           var divStyle = {left: renderedPosition.x - 85, top: renderedPosition.y + 20};
@@ -108,34 +135,7 @@ window.maingraph = maingraph;
       }
     });
 
-    var ResultForm = React.createClass({
-      handleChange: function(evt) {
-        var form_values = $(evt.target.parentElement.childNodes).filter(":input");
-        var values = {};
-        values[form_values[0].name] = form_values.val();
-        FermActions.updateNode(this.props.node.id, values);
-      },
-      handleDestroy: function() {
-        FermActions.removeNode(this.props.node.id);
-      },
-      render: function() {
-        node = this.props.node
-        return (
-          <form>
-            <Input type="text" label="name" name="name" value={node.get('name')} onChange={this.handleChange}/>
-            <div className="btn btn-danger" onClick={this.handleDestroy}> Destroy </div>
-          </form>
-        );
-      }
-    });
-
-    var EstimateForm = React.createClass({
-      handleChange: function(evt) {
-        var form_values = $(evt.target.parentElement.childNodes).filter(":input")
-        var values = {};
-        values[form_values[0].name] = form_values.val();
-        FermActions.updateNode(this.props.node.id, values);
-      },
+    var BaseForm = {
       focusForm: function(){
         $(this.refs.name.getDOMNode()).find('input').focus()
       },
@@ -147,25 +147,8 @@ window.maingraph = maingraph;
           this.focusForm()
         }
       },
-      handleDestroy: function() {
-        FermActions.removeNode(this.props.node.id);
-      },
-      render: function() {
-        var node = this.props.node
-        return (
-          <form>
-            <Input key="foobar" ref="name" type="text" label="name" name="name" value={node.get('name')} onChange={this.handleChange}/>
-            <Input type="text" label="value" name="value" defaultValue="0" value={node.get('value')} onChange={this.handleChange}/>
-            <Input type="text" label="unit" name="unit" defaultValue="0" value={node.get('unit')} onChange={this.handleChange}/>
-          <div className="btn btn-danger" onClick={this.handleDestroy}> Destroy </div>
-          </form>
-        );
-      }
-    });
-
-    var FunctionForm = React.createClass({
       handleChange: function(evt) {
-        var form_values = $(evt.target.parentElement.childNodes).filter(":input")
+        var form_values = $(evt.target.parentElement.childNodes).filter(":input");
         var values = {};
         values[form_values[0].name] = form_values.val();
         FermActions.updateNode(this.props.node.id, values);
@@ -173,6 +156,52 @@ window.maingraph = maingraph;
       handleDestroy: function() {
         FermActions.removeNode(this.props.node.id);
       },
+    };
+
+    var ResultForm = React.createClass({
+      mixins: [
+        BaseForm
+      ],
+      render: function() {
+        node = this.props.node
+        return (
+          <form>
+            <Input type="text" label="name" name="name" value={node.get('name')} onChange={this.handleChange}/>
+          </form>
+        );
+      }
+    });
+
+    var EstimateForm = React.createClass({
+      mixins: [
+        BaseForm
+      ],
+      render: function() {
+        var node = this.props.node
+        var inputs = {
+          name:  <Input key="foobar" ref="name" type="text" label="name" name="name" value={node.get('name')} onChange={this.handleChange}/>,
+          value: <Input type="text" label="value" name="value" defaultValue="0" value={node.get('value')} onChange={this.handleChange}/>,
+          unit: <Input type="text" label="unit" name="unit" defaultValue="0" value={node.get('unit')} onChange={this.handleChange}/>
+        }
+        var choose = {
+          small: ['name'],
+          large: ['name', 'value', 'unit']
+        }
+        var formInputs = _.map(choose[this.props.formType], function(n){
+          return inputs[n]
+        });
+        return (
+          <form>
+            {formInputs}
+          </form>
+        );
+      }
+    });
+
+    var FunctionForm = React.createClass({
+      mixins: [
+        BaseForm
+      ],
       render: function() {
         var node = this.props.node;
         var currentInputs = node.inputs.nodeIds()
@@ -180,16 +209,27 @@ window.maingraph = maingraph;
         var possibleInputs = _.map(outsideNodes, function(n){
           return <option value={n.id}>{n.id}--{n.get('name')}{n.value}</option>
         });
-        return (
-          <form>
+        var inputs = {
+          selectFunction:
             <Input type="select" label='Function' name="functionType" defaultValue="addition" value={node.get('functionType')} onChange={this.handleChange}>
                 <option value="addition">(+) Addition </option>
                 <option value="multiplication">(x) Multiplication </option>
-            </Input>
+            </Input>,
+          selectInputs:
             <Input type="select" label='Multiple Select' multiple name="inputs" value={currentInputs} onChange={this.handleChange} className="function-multiple-form">
               {possibleInputs}
             </Input>
-          <div className="btn btn-danger" onClick={this.handleDestroy}> Destroy </div>
+        }
+        var choose = {
+          small: ['selectFunction'],
+          large: ['selectFunction', 'selectInputs']
+        }
+        var formInputs = _.map(choose[this.props.formType], function(n){
+          return inputs[n]
+        });
+        return (
+          <form>
+            {formInputs}
           </form>
         );
       }
@@ -226,9 +266,14 @@ window.maingraph = maingraph;
       },
       render: function() {
         return (
-          <div>
+          <div className="row">
+            <div className="col-sm-10">
               <GraphPane graph={this.state.graph} updateEditingNode={this.updateEditingNode}/>
               <EditorPane graph={this.state.graph} addNode={this.addNode} node={this.getEditingNode()}/>
+            </div>
+            <div className="col-sm-2">
+              <SidePane graph={this.state.graph} addNode={this.addNode} node={this.getEditingNode()}/>
+            </div>
           </div>
         );
       }
