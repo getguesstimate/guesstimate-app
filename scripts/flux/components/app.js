@@ -42,7 +42,12 @@ window.maingraph = maingraph;
 
     var GraphPane = React.createClass({
       formatNodes: function() {
-        return this.props.graph.nodes.toCytoscape()
+        var regular = this.props.graph.nodes.toCytoscape()
+        if (this.props.editingNode){
+          var editingCytoscapeNode = _.find(regular, function(f){return f.data.nodeId == this.props.editingNode.id}, this)
+          editingCytoscapeNode.data.editing = "true"
+        }
+        return regular
       },
       formatEdges: function() {
         return this.props.graph.edges.toCytoscape()
@@ -53,16 +58,13 @@ window.maingraph = maingraph;
           FermActions.updateAllNodeLocations(newLocations);
         }
       },
-      componentWillUpdate: function() {
-        maingraph.update(this.formatNodes(), this.formatEdges(), this.updateAllPositions);
-      },
       componentDidMount: function() { var el = $('.maingraph')[0];
         var nodes = this.formatNodes();
         var edges = this.formatEdges();
         maingraph.create(el, nodes, edges, this.props.updateEditingNode, this.updatePositions, this.updateAllPositions);
       },
       componentDidUpdate: function(){
-        //this.updateAllPositions()
+        maingraph.update(this.formatNodes(), this.formatEdges(), this.updateAllPositions);
       },
       updatePositions: function(objects){
         FermActions.updateNodeLocations(objects);
@@ -268,7 +270,7 @@ window.maingraph = maingraph;
         return (
           <div className="row">
             <div className="col-sm-10">
-              <GraphPane graph={this.state.graph} updateEditingNode={this.updateEditingNode}/>
+              <GraphPane graph={this.state.graph} editingNode={this.getEditingNode()} updateEditingNode={this.updateEditingNode}/>
               <EditorPane graph={this.state.graph} addNode={this.addNode} node={this.getEditingNode()}/>
             </div>
             <div className="col-sm-2">

@@ -13,6 +13,7 @@ maingraph.create = function(el, inputNodes, inputEdges, mainfun, updatefun, isCr
     style: cytoscape.stylesheet()
       .selector('node')
         .css({
+          'font-weight': 'normal',
           'content': 'data(name)',
           'font-size': 14,
           'text-valign': 'center',
@@ -51,6 +52,10 @@ maingraph.create = function(el, inputNodes, inputEdges, mainfun, updatefun, isCr
       .selector('node[name="Add Name"]')
           .css({
             'color': 'red',
+        })
+      .selector('node[editing="true"]')
+          .css({
+            'color': '#1E8AE2',
         })
       .selector('edge')
         .css({
@@ -116,10 +121,16 @@ maingraph.create = function(el, inputNodes, inputEdges, mainfun, updatefun, isCr
 
 };
 maingraph.update = function(inputNodes, inputEdges, callback){
-  this.cy.load({
-    nodes: inputNodes,
-    edges: inputEdges
-  }, callback);
+    oldData = this.cy.json()
+    oldNodes = _.map(oldData.elements.nodes, function(n){return n.data})
+    newNodes = _.map(inputNodes, function(n){return n.data})
+    oldEdges = _.map(oldData.elements.edges, function(n){return n.data})
+    newEdges = _.map(inputEdges, function(n){return n.data})
+    oldNodes = inputNodes
+  //this.cy.load({
+    //nodes: inputNodes,
+    //edges: inputEdges
+  //}, callback);
 }
 
 module.exports = maingraph;
