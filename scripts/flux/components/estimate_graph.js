@@ -5,6 +5,7 @@
 var maingraph = {};
 var _ = require('../../lodash.min');
 
+
 maingraph.create = function(el, inputNodes, inputEdges, mainfun, updatefun, isCreated){
 
   this.cy = cytoscape({
@@ -120,17 +121,41 @@ maingraph.create = function(el, inputNodes, inputEdges, mainfun, updatefun, isCr
   });
 
 };
+
+formatDiff = function(diff){
+  if (typeof diff === "undefined") {
+    return {changed: [], deleted: []}
+  }
+  else {
+    changedIds = _.select(Object.keys(diff), function(n){ return !isNaN(n)})
+    return {changed: changedIds, deleted: []}
+  }
+}
+
+updateCyto = function(data){
+  maingraph.cy.getElementById(data.id).data(data)
+}
+
+foobar = function(older, newer, differ){
+  diff = differ.diff(older, newer)
+  formatted = formatDiff(diff)
+  var [changedIds, deletedIds] = ['changed', 'deleted'].map( n => formatted[n] )
+  changedIds.map( n => updateCyto(newer[n]) )
+}
+
 maingraph.update = function(inputNodes, inputEdges, callback){
-    oldData = this.cy.json()
-    oldNodes = _.map(oldData.elements.nodes, function(n){return n.data})
-    newNodes = _.map(inputNodes, function(n){return n.data})
-    oldEdges = _.map(oldData.elements.edges, function(n){return n.data})
-    newEdges = _.map(inputEdges, function(n){return n.data})
-    oldNodes = inputNodes
-  //this.cy.load({
-    //nodes: inputNodes,
-    //edges: inputEdges
-  //}, callback);
+  jsondiffpatch = require('jsondiffpatch')
+  nodeDiffer = jsondiffpatch.create({objectHash(obj){return obj.nodeId}})
+  edgeDiffer = jsondiffpatch.create({objectHash(obj){return obj.id}})
+
+  getData = node => node.data
+  getAllData = nodes => nodes.map(getData)
+
+  oldData = this.cy.json()
+  var [oldNodes, oldEdges] = ['nodes', 'edges'].map( n => getAllData(oldData.elements[n]) )
+  var [newNodes, newEdges] = [inputNodes, inputEdges].map( n => getAllData(n) )
+  nodeChanges = foobar(oldNodes, newNodes, nodeDiffer)
+  edgeChanges = foobar(oldEdges, newEdges, edgeDiffer)
 }
 
 module.exports = maingraph;
