@@ -122,40 +122,105 @@ maingraph.create = function(el, inputNodes, inputEdges, mainfun, updatefun, isCr
 
 };
 
+isArray = (typeof Array.isArray === 'function') ?
+  // use native function
+  Array.isArray :
+  // use instanceof operator
+  function(a) {
+    return a instanceof Array;
+  };
+
+trimUnderscore = function(str) {
+  if (str.substr(0, 1) === '_') {
+    return str.slice(1);
+  }
+  return str;
+};
+
+getDeltaType = function(delta) {
+  if (typeof delta === 'undefined') {
+    return 'unchanged';
+  }
+  if (isArray(delta)) {
+    if (delta.length === 1) {
+      return 'added';
+    }
+    if (delta.length === 2) {
+      return 'modified';
+    }
+    if (delta.length === 3 && delta[2] === 0) {
+      return 'deleted';
+    }
+    if (delta.length === 3 && delta[2] === 2) {
+      //text change
+      return 'modified';
+    }
+  } else if (typeof delta === 'object') {
+    // used to be 'node'
+    return 'modified';
+  }
+  return 'unknown';
+};
+
 formatDiff = function(diff){
   if (typeof diff === "undefined") {
     return {changed: [], deleted: []}
   }
   else {
-    changedIds = _.select(Object.keys(diff), function(n){ return !isNaN(n)})
-    return {changed: changedIds, deleted: []}
+    Ids = _.select(Object.keys(diff), function(n){ return !isNaN(trimUnderscore(n))})
+    withType = Ids.map( n => getDeltaType(diff[n]) )
+
+    getAll = diffType => _.select(Ids, function(n){ return getDeltaType(diff[n]) == diffType })
+    getAllFormatted = all => getAll(all).map(f => trimUnderscore(f))
+
+    byType = {}
+    _.map(["added", "modified", "deleted"], function(n){ byType[n] = getAllFormatted(n) })
+    return byType
   }
 }
 
-updateCyto = function(data){
-  maingraph.cy.getElementById(data.id).data(data)
+
+cytoChange = function(action, data){
+  cy = maingraph.cy
+  actions = {
+    'modified': function(data){
+      element = cy.getElementById(data.id);
+      element.data(data)
+    },
+    'deleted': function(data){
+      element = cy.getElementById(data.id);
+      cy.remove(element)
+    },
+    'added': function(data){
+      cy.add({group:"edges", data: data})
+    }
+  }
+  actions[action](data)
 }
 
-foobar = function(older, newer, differ){
+//jsondiffpatch = require('jsondiffpatch')
+
+foobar = function(older, newer, diffKey){
+  differ = jsondiffpatch.create({objectHash(obj){return obj[diffKey]}})
   diff = differ.diff(older, newer)
   formatted = formatDiff(diff)
-  var [changedIds, deletedIds] = ['changed', 'deleted'].map( n => formatted[n] )
-  changedIds.map( n => updateCyto(newer[n]) )
+  formatted.modified.map( n => cytoChange('modified', newer[n]) )
+  formatted.added.map( n => cytoChange('added', newer[n]) )
+  formatted.deleted.map( n => cytoChange('deleted', older[n]) )
 }
 
 maingraph.update = function(inputNodes, inputEdges, callback){
-  jsondiffpatch = require('jsondiffpatch')
-  nodeDiffer = jsondiffpatch.create({objectHash(obj){return obj.nodeId}})
-  edgeDiffer = jsondiffpatch.create({objectHash(obj){return obj.id}})
+  newData = {elements:{nodes: inputNodes, edges: inputEdges}}
 
-  getData = node => node.data
-  getAllData = nodes => nodes.map(getData)
-
+  getAllData = nodes => nodes.map(node => node.data)
   oldData = this.cy.json()
-  var [oldNodes, oldEdges] = ['nodes', 'edges'].map( n => getAllData(oldData.elements[n]) )
-  var [newNodes, newEdges] = [inputNodes, inputEdges].map( n => getAllData(n) )
-  nodeChanges = foobar(oldNodes, newNodes, nodeDiffer)
-  edgeChanges = foobar(oldEdges, newEdges, edgeDiffer)
+
+  getTypeData = elementType => [oldData, newData].map( n => getAllData(n.elements[elementType]) )
+  var [oldNodes, newNodes] = getTypeData('nodes')
+  var [oldEdges, newEdges] = getTypeData('edges')
+
+  nodeChanges = foobar(oldNodes, newNodes, 'nodeId')
+  edgeChanges = foobar(oldEdges, newEdges, 'id')
 }
 
 module.exports = maingraph;
