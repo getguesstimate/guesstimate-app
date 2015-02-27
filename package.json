@@ -34,10 +34,6 @@
     "webpack-dev-server": "1.6.4"
   },
   "dependencies": {
-    "jsx-loader": "^0.12.2",
-    "react-hot-loader": "^1.1.1",
-    "webpack": "^1.5.1",
-    "webpack-dev-server": "1.6.4",
     "backbone": "1.1.2",
     "bootstrap": "3.3.2",
     "cytoscape": "2.3.8",
@@ -46,6 +42,7 @@
     "react": "^0.12.0",
     "react-bootstrap": "0.13.3",
     "react-router": "~0.11.6",
-    "reflux": "~0.2.3"
+    "reflux": "~0.2.3",
+    "jsondiffpatch": "~0.1.27"
   }
 }
