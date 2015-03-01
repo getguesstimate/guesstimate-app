@@ -124,9 +124,15 @@ window.maingraph = maingraph;
           else if (isFunction){
             form = <FunctionForm graph={this.props.graph} node={this.props.node} formType='small'/>
           }
-          var renderedPosition = _.where(this.state.nodeLocations, {'id':this.props.node.id})[0].renderedPosition
-          var divStyle = {left: renderedPosition.x - 85, top: renderedPosition.y + 20};
-          form = <div className="wowo" style={divStyle}> {form} </div>
+          var nodePosition = _.where(this.state.nodeLocations, {'id':this.props.node.id})
+          if (nodePosition.length > 0){
+            var renderedPosition = nodePosition[0].renderedPosition
+            var divStyle = {left: renderedPosition.x - 85, top: renderedPosition.y + 20};
+            form = <div className="wowo" style={divStyle}> {form} </div>
+          }
+          else {
+            form = 'foobar'
+          }
         }
         return (
           <div className="editorpane">
@@ -206,7 +212,8 @@ window.maingraph = maingraph;
       ],
       render: function() {
         var node = this.props.node;
-        var currentInputs = node.inputs.nodeIds()
+        //var currentInputs = node.inputs.nodeIds()
+        var currentInputs = [2,3]
         var outsideNodes = this.props.graph.outsideNodes(node)
         var possibleInputs = _.map(outsideNodes, function(n){
           return <option value={n.id}>{n.id}--{n.get('name')}{n.value}</option>

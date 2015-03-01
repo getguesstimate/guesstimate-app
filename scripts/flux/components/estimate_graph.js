@@ -4,13 +4,18 @@
 
 var maingraph = {};
 var _ = require('../../lodash.min');
-
+var mainLayout = {
+      name: 'breadthfirst',
+      directed: true,
+      padding: 10,
+      avoidOverlap: true
+    }
 
 maingraph.create = function(el, inputNodes, inputEdges, mainfun, updatefun, isCreated){
 
   this.cy = cytoscape({
     container: el,
-    userZoomingEnabled: false,
+    userZoomingEnabled: true,
     style: cytoscape.stylesheet()
       .selector('node')
         .css({
@@ -83,12 +88,7 @@ maingraph.create = function(el, inputNodes, inputEdges, mainfun, updatefun, isCr
         nodes: inputNodes,
         edges: inputEdges
       },
-    layout: {
-      name: 'breadthfirst',
-      directed: true,
-      padding: 10,
-      avoidOverlap: true
-    },
+    layout: _.clone(mainLayout),
     ready: function(){
       //this.on('tap', function(event){
         //console.log(event)
@@ -136,6 +136,9 @@ trimUnderscore = function(str) {
   }
   return str;
 };
+
+isNode = data => (data.id.substr(0,1) === 'n')
+isEdge = data => (data.source !== undefined)
 
 getDeltaType = function(delta) {
   if (typeof delta === 'undefined') {
@@ -185,6 +188,7 @@ cytoChange = function(action, data){
   actions = {
     'modified': function(data){
       element = cy.getElementById(data.id);
+      element.removeData()
       element.data(data)
     },
     'deleted': function(data){
@@ -192,7 +196,12 @@ cytoChange = function(action, data){
       cy.remove(element)
     },
     'added': function(data){
-      cy.add({group:"edges", data: data})
+      if (isNode(data)){
+        cy.add({group:"nodes", data: data, position: {x:1000, y:500}})
+      }
+      else if (isEdge(data)){
+        cy.add({group:"edges", data: data})
+      }
     }
   }
   actions[action](data)
@@ -203,10 +212,15 @@ cytoChange = function(action, data){
 foobar = function(older, newer, diffKey){
   differ = jsondiffpatch.create({objectHash(obj){return obj[diffKey]}})
   diff = differ.diff(older, newer)
-  formatted = formatDiff(diff)
-  formatted.modified.map( n => cytoChange('modified', newer[n]) )
-  formatted.added.map( n => cytoChange('added', newer[n]) )
-  formatted.deleted.map( n => cytoChange('deleted', older[n]) )
+  if (diff){
+    formatted = formatDiff(diff)
+    formatted.modified.map( n => cytoChange('modified', newer[n]) )
+    formatted.added.map( n => cytoChange('added', newer[n]) )
+    formatted.deleted.map( n => cytoChange('deleted', older[n]) )
+  }
+  if (isNode(older[0]) && (formatted.added.length > 0)){
+    //maingraph.cy.layout(_.clone(mainLayout))
+  }
 }
 
 maingraph.update = function(inputNodes, inputEdges, callback){
