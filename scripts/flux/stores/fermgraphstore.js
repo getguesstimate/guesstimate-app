@@ -12,6 +12,10 @@ class Egraph {
     this.edges = new EdgeCollection(args.edges, this);
   }
 
+  outsideMetrics(node){
+    var nodes = this.outsideNodes(node)
+    return _.select(nodes, function(n) {return (n.ttype() !== 'function')})
+  }
   // Used to find possible outputs for a function node
   outsideNodes(node){
     var insideNodes = _.union([node], node.allOutputs())
