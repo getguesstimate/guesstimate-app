@@ -235,6 +235,7 @@ maingraph.update = function(inputNodes, inputEdges, callback){
 
   nodeChanges = foobar(oldNodes, newNodes, 'nodeId')
   edgeChanges = foobar(oldEdges, newEdges, 'id')
+  callback()
 }
 
 module.exports = maingraph;
