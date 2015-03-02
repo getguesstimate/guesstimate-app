@@ -216,7 +216,7 @@ window.maingraph = maingraph;
           name:  <Input key="name" ref="name" type="text" label="name" name="name" value={node.get('name')} onChange={this.handleChange}/>
         }
         var choose = {
-          small: ['value', 'name'],
+          small: ['value', 'range', 'name'],
           large: ['value','range',  'name']
         }
         var formInputs = _.map(choose[this.props.formType], function(n){

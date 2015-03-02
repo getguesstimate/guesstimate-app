@@ -42,6 +42,7 @@ body.body-override-bootstrap{
   font-size: 1.5em;
 }
 .wowo form .form-control{
+  height: 2em;
   border: none;
   background: rgba(255,255,255,0.8);
   border-radius: 0;
