@@ -24,10 +24,12 @@ maingraph.create = function(el, inputNodes, inputEdges, mainfun, updatefun, isCr
           'font-size': 14,
           'text-valign': 'center',
           'text-halign': 'center',
+          'background-color': '#fff',
+          'text-outline-color': '#fff',
+          'text-outline-width': 4,
         })
       .selector('node[nodeType="function"]')
           .css({
-            'background-color': '#fff',
             'color': '#8E3C3A',
             'text-valign': 'center',
             'text-halign': 'center',
@@ -41,9 +43,6 @@ maingraph.create = function(el, inputNodes, inputEdges, mainfun, updatefun, isCr
             'font-weight': 'bold',
             'height': 25,
             'color': '#444',
-            'background-color': '#fff',
-            'text-outline-width': 4,
-            'text-outline-color': '#fff'
         })
       .selector('node[nodeType="dependent"]')
           .css({
@@ -51,13 +50,15 @@ maingraph.create = function(el, inputNodes, inputEdges, mainfun, updatefun, isCr
             'width': 80,
             'font-weight': 'bold',
             'height': 25,
-            'background-color': '#fff',
-            'text-outline-width': 4,
-            'text-outline-color': '#fff'
         })
       .selector('node[name="Add Name"]')
           .css({
             'color': 'red',
+        })
+      .selector('node:selected')
+        .css({
+          'text-outline-width': 2,
+          'text-outline-color': '#D5FCFF'
         })
       .selector('node[editing="true"]')
           .css({
@@ -74,14 +75,6 @@ maingraph.create = function(el, inputNodes, inputEdges, mainfun, updatefun, isCr
         .css({
           'line-color': '#994343',
           'target-arrow-color': '#994343'
-        })
-      .selector('.highlighted')
-        .css({
-          'background-color': '#61bffc',
-          'line-color': '#61bffc',
-          'target-arrow-color': '#61bffc',
-          'transition-property': 'background-color, line-color, target-arrow-color',
-          'transition-duration': '0.5s'
         }),
 
     elements: {
