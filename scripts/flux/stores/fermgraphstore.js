@@ -98,9 +98,6 @@ var fermGraphStore = Reflux.createStore({
     getNode: function(nodeId){
       return this.graph.nodes.get(nodeId)
     },
-    getNodes: function(){
-        return this.list;
-    },
     getInitialState: function() {
 
       var data = {

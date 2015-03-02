@@ -5,6 +5,18 @@ var _ = require('../../lodash.min');
 
 var fermLocationStore = Reflux.createStore({
     listenables: [FermActions],
+    _addNodeLocation: function(node) {
+      this.nodeLocations.push(node)
+    },
+    _updateNodeLocation: function(node){
+      var item = this.getNodeLocation(node.id);
+      if (item){
+        item.renderedPosition = node.renderedPosition;
+      }
+      else {
+        this._addNodeLocation(node)
+      }
+    },
     getNodeLocations: function() {
         return this.nodeLocations;
     },
@@ -12,10 +24,7 @@ var fermLocationStore = Reflux.createStore({
         return _.find(this.nodeLocations, function(n){return n.id == id});
     },
     onUpdateNodeLocations: function(nodeLocations){
-      _.map(nodeLocations, function(n){
-        var item = this.getNodeLocation(n.id);
-        item.renderedPosition = n.renderedPosition;
-      }, this)
+      _.map(nodeLocations, this._updateNodeLocation)
       this.trigger(this.nodeLocations)
     },
     onUpdateAllNodeLocations: function(nodeLocations){
