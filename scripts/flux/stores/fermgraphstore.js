@@ -87,6 +87,7 @@ var fermGraphStore = Reflux.createStore({
           return;
       };
       node.set(newValues)
+      node.propogate()
     },
     onRemoveNode: function(nodeId) {
       var node = this.graph.nodes.get(nodeId)
@@ -110,7 +111,6 @@ var fermGraphStore = Reflux.createStore({
           {pid: 6, nodeType: 'function', functionType: 'multiplication'},
           {pid: 7, nodeType: 'dependent', name: 'people in Universe'},
           {pid: 8, nodeType: 'estimate', name: 'universe/person ratio', value: 200},
-          {pid: 9, nodeType: 'estimate', name: 'other thing', value: 2}
         ],
         edges: [
           [2,4],
@@ -118,12 +118,13 @@ var fermGraphStore = Reflux.createStore({
           [4,5],
           [5,6],
           [6,7],
-          [8,6],
-          [6,9]
+          [8,6]
         ]
       };
       this.graph = new Egraph(data);
-      todoCounter = parseInt(_.max(this.graph.nodes.models, 'id').id) + 1
+      var dependents = this.graph.nodes.allOfTtype('dependent')
+      dependents.map(n => n.propogate())
+      var todoCounter = parseInt(_.max(this.graph.nodes.models, 'id').id) + 1
 
       // var loadedNodes = localStorage.getNode(localStorageKey);
       // if (!loadedNodes) {
