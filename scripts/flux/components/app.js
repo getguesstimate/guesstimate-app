@@ -216,8 +216,8 @@ window.maingraph = maingraph;
       render: function() {
         var node = this.props.node;
         var currentInputs = node.inputs.nodeIds()
-        var outsideNodes = this.props.graph.outsideNodes(node)
-        var possibleInputs = _.map(outsideNodes, function(n){
+        var outsideMetrics = this.props.graph.outsideMetrics(node)
+        var possibleInputs = _.map(outsideMetrics, function(n){
           return <option value={n.id} key={n.id}>{n.toCytoscapeName()}</option>
         });
         var inputs = {

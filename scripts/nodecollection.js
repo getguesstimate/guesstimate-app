@@ -5,7 +5,7 @@ require(['lodash'], function(_) {});
 
 var multiplication = {
   name: 'multiplication',
-  sign: '*',
+  sign: 'x',
   apply(inputs){
     var product = _.reduce(inputs, function(product, n) { return product * n; })
     return product;
@@ -116,7 +116,7 @@ class Enode extends Backbone.Model{
     //if (outputs.length > 0){ //var out_s = ' outputs => \n' + outputs.joint('\n')
     //}
     //sstring = (Array(indent*3).join('.')) + "([" + pid + nodeType + "]" + out_s + ")"
-    return 'test'
+    //return 'test'
   }
 toCytoscape() {
   var e = {}
@@ -131,9 +131,7 @@ toCytoscape() {
 }
 
 class EstimateNode extends Enode{
-  ttype(){
-    return 'estimate'
-  }
+  ttype(){ return 'estimate' }
   toCytoscapeName(){
     return this.attributes.name
   }
@@ -141,6 +139,7 @@ class EstimateNode extends Enode{
 
   //node.value = null
 class DependentNode extends Enode{
+  ttype(){ return 'dependent' }
   propogate(){
     this.outputs.nodes().forEach( e => console.log(e.id) )
   }
@@ -155,6 +154,7 @@ class DependentNode extends Enode{
 
 
 class FunctionNode extends Enode{
+  ttype(){ return 'function' }
   defaults(){
     return {
       "functionType": 'addition'
