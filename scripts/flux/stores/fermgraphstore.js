@@ -104,21 +104,27 @@ var fermGraphStore = Reflux.createStore({
 
       var data = {
         nodes: [
-          {pid: 2, nodeType: 'estimate', name: 'people in the Europe', value: 10},
-          {pid: 3, nodeType: 'estimate', name: 'people in the US', value: 10},
-          {pid: 4, nodeType: 'function', functionType: 'addition'},
-          {pid: 5, nodeType: 'dependent', name: 'people in World'},
-          {pid: 6, nodeType: 'function', functionType: 'multiplication'},
-          {pid: 7, nodeType: 'dependent', name: 'people in Universe'},
-          {pid: 8, nodeType: 'estimate', name: 'universe/person ratio', value: 200},
+          {pid: 1, nodeType: 'estimate', name: 'people in NYC', value: 10000000},
+          {pid: 2, nodeType: 'estimate', name: 'families per person', value: 0.3},
+          {pid: 3, nodeType: 'estimate', name: 'pianos per family', value: 0.1},
+          {pid: 4, nodeType: 'estimate', name: 'piano tuners per family', value: 0.001},
+          {pid: 5, nodeType: 'dependent', name: 'families in NYC'},
+          {pid: 6, nodeType: 'dependent', name: 'pianos in NYC'},
+          {pid: 7, nodeType: 'dependent', name: 'piano tuners in NYC'},
+          {pid: 8, nodeType: 'function', functionType: 'multiplication'},
+          {pid: 9, nodeType: 'function', functionType: 'multiplication'},
+          {pid: 10, nodeType: 'function', functionType: 'multiplication'},
         ],
         edges: [
-          [2,4],
-          [3,4],
-          [4,5],
-          [5,6],
-          [6,7],
-          [8,6]
+          [1,8],
+          [2,8],
+          [8,5],
+          [5,9],
+          [3,9],
+          [9,6],
+          [6,10],
+          [4,10],
+          [10,7],
         ]
       };
       this.graph = new Egraph(data);
