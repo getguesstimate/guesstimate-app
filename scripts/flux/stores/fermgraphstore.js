@@ -89,9 +89,10 @@ var fermGraphStore = Reflux.createStore({
       node.set(newValues)
     },
     onRemoveNode: function(nodeId) {
-      var newNodes = (_.filter(this.list,function(node){
-          return node.id!==nodeId;
-      }));
+      var node = this.graph.nodes.get(nodeId)
+      var edges = node.edges();
+      edges.map(e => e.destroy())
+      node.destroy()
       this.updateGraph()
       FermActions.resetEditingNode()
     },
