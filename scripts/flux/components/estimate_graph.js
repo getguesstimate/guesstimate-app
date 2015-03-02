@@ -202,7 +202,7 @@ cytoChange = function(action, data){
 
 //jsondiffpatch = require('jsondiffpatch')
 
-foobar = function(older, newer, diffKey){
+makeChanges = function(older, newer, diffKey){
   differ = jsondiffpatch.create({objectHash(obj){return obj[diffKey]}})
   diff = differ.diff(older, newer)
   if (diff){
@@ -211,23 +211,20 @@ foobar = function(older, newer, diffKey){
     formatted.added.map( n => cytoChange('added', newer[n]) )
     formatted.deleted.map( n => cytoChange('deleted', older[n]) )
   }
-  if (isNode(older[0]) && formatted && (formatted.added.length > 0)){
-    //maingraph.cy.layout(_.clone(mainLayout))
-  }
 }
 
 maingraph.update = function(inputNodes, inputEdges, callback){
   newData = {elements:{nodes: inputNodes, edges: inputEdges}}
-
-  getAllData = nodes => nodes.map(node => node.data)
   oldData = this.cy.json()
 
-  getTypeData = elementType => [oldData, newData].map( n => getAllData(n.elements[elementType]) )
+  getAllData = nodes => nodes.map(node => node.data)
+
+  getTypeData = elementType => [oldData, newData].map( n => getAllData(n.elements[elementType] || []) )
   var [oldNodes, newNodes] = getTypeData('nodes')
   var [oldEdges, newEdges] = getTypeData('edges')
 
-  nodeChanges = foobar(oldNodes, newNodes, 'nodeId')
-  edgeChanges = foobar(oldEdges, newEdges, 'id')
+  nodeChanges = makeChanges(oldNodes, newNodes, 'nodeId')
+  edgeChanges = makeChanges(oldEdges, newEdges, 'id')
   callback()
 }
 

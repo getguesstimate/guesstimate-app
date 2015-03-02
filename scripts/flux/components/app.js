@@ -98,7 +98,6 @@ window.maingraph = maingraph;
         return (
           <div className="sidePane">
             {form}
-            <div className="btn btn-danger" onClick={this.handleDestroy}> Destroy </div>
           </div>
         )
       }
@@ -166,7 +165,7 @@ window.maingraph = maingraph;
       },
       handleDestroy: function() {
         FermActions.removeNode(this.props.node.id);
-      },
+      }
     };
 
     var ResultForm = React.createClass({
@@ -178,6 +177,7 @@ window.maingraph = maingraph;
         return (
           <form>
             <Input type="text" label="name" name="name" value={node.get('name')} onChange={this.handleChange}/>
+            <div className="btn btn-danger" onClick={this.handleDestroy}> Destroy </div>
           </form>
         );
       }
@@ -204,6 +204,7 @@ window.maingraph = maingraph;
         return (
           <form>
             {formInputs}
+            <div className="btn btn-danger" onClick={this.handleDestroy}> Destroy </div>
           </form>
         );
       }
@@ -241,6 +242,7 @@ window.maingraph = maingraph;
         return (
           <form>
             {formInputs}
+            <div className="btn btn-danger" onClick={this.handleDestroy}> Destroy </div>
           </form>
         );
       }

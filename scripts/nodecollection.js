@@ -92,6 +92,9 @@ class Enode extends Backbone.Model{
   }
   outputEdges(){
   }
+  edges(){
+    return _.union(this.inputs.edges(), this.outputs.edges())
+  }
   inputValues(){
     return _.map(this.inputs.nodes(), function(i){ return i.value})
   }
