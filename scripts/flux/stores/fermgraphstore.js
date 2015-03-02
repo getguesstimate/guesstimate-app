@@ -104,7 +104,7 @@ var fermGraphStore = Reflux.createStore({
 
       var data = {
         nodes: [
-          {pid: 1, nodeType: 'estimate', name: 'people in NYC', value: 10000000},
+          {pid: 11, nodeType: 'estimate', name: 'people in NYC', value: 10000000},
           {pid: 2, nodeType: 'estimate', name: 'families per person', value: 0.3},
           {pid: 3, nodeType: 'estimate', name: 'pianos per family', value: 0.1},
           {pid: 4, nodeType: 'estimate', name: 'piano tuners per family', value: 0.001},
@@ -116,7 +116,7 @@ var fermGraphStore = Reflux.createStore({
           {pid: 10, nodeType: 'function', functionType: 'multiplication'},
         ],
         edges: [
-          [1,8],
+          [11,8],
           [2,8],
           [8,5],
           [5,9],
@@ -130,7 +130,7 @@ var fermGraphStore = Reflux.createStore({
       this.graph = new Egraph(data);
       var dependents = this.graph.nodes.allOfTtype('dependent')
       dependents.map(n => n.propogate())
-      var todoCounter = parseInt(_.max(this.graph.nodes.models, 'id').id) + 1
+      todoCounter = parseInt(_.max(this.graph.nodes.models, 'id').id) + 1
 
       // var loadedNodes = localStorage.getNode(localStorageKey);
       // if (!loadedNodes) {
