@@ -96,7 +96,7 @@ class Enode extends Backbone.Model{
     return _.union(this.inputs.edges(), this.outputs.edges())
   }
   inputValues(){
-    return _.map(this.inputs.nodes(), function(i){ return i.value})
+    return _.map(this.inputs.nodes(), function(i){ return i.get('value')})
   }
   //outputs(){
     //return _.map(this.outputEdges(), function(e) {return e.outputNode})
@@ -121,37 +121,48 @@ class Enode extends Backbone.Model{
     //sstring = (Array(indent*3).join('.')) + "([" + pid + nodeType + "]" + out_s + ")"
     //return 'test'
   }
-toCytoscape() {
-  var e = {}
-  e.nodeId = this.id
-  e.nodeType = this.attributes.nodeType
-  _.merge(e, this.attributes)
-  e.id = "n" + this.id // Nodes need letters for cytoscape
-  e.name = this.toCytoscapeName()
-  if (!e.name){ e.name = 'Add Name' }
-  return {data: e};
-}
+  toCytoscape() {
+    var e = {}
+    e.nodeId = this.id
+    e.nodeType = this.attributes.nodeType
+    _.merge(e, this.attributes)
+    e.id = "n" + this.id // Nodes need letters for cytoscape
+    e.name = this.toCytoscapeName()
+    if (!e.name){ e.name = 'Add Name' }
+    return {data: e};
+  }
+
+  toCytoscapeName(){
+    var name = this.get('name')
+    var value = this.get('value')
+    var totalName = undefined
+    if (value && name){
+      totalName = value + ' - ' + name
+    }
+    else if (value || name){
+      totalName = value || name
+    }
+    return totalName
+  }
 }
 
 class EstimateNode extends Enode{
   ttype(){ return 'estimate' }
-  toCytoscapeName(){
-    return this.attributes.name
+  propogate(){
+    this.outputs.nodes().map( e => e.propogate() )
   }
 }
 
   //node.value = null
 class DependentNode extends Enode{
   ttype(){ return 'dependent' }
+  inputFunction(){
+    return this.inputs.nodes()[0]
+  }
   propogate(){
-    this.outputs.nodes().forEach( e => console.log(e.id) )
-  }
-  updateValue(n){
-    this.value = n;
-    this.propogate()
-  }
-  toCytoscapeName(){
-    return this.attributes.name
+    var newValue = this.inputFunction().calculate_output()
+    this.set('value', newValue)
+    this.outputs.nodes().map( e => e.propogate() )
   }
 }
 
@@ -170,12 +181,15 @@ class FunctionNode extends Enode{
   dependent(){
     return this.outputs.nodes()[0]
   }
-  run(){
-    var result = this._run_math()
-    this.dependent().updateValue(result)
+  propogate(){
+    this.dependent().propogate()
   }
-  run_math(){
-    var inputValues = this.inputValues()
+  calculate_output(){
+    var clean = function(e){
+      if (e){ return parseFloat(e) }
+      else { return 0 }
+    }
+    var inputValues = this.inputValues().map(clean)
     return this.efunction().apply(inputValues)
   }
   toCytoscapeName(){
@@ -233,6 +247,9 @@ var NodeCollection = Backbone.Collection.extend({
         return d.toCytoscape();
       });
       return nodes;
+    },
+    allOfTtype(ttype){
+      return  _.select(this.models, function(n){ return n.ttype() === ttype} )
     }
 });
 

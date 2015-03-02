@@ -187,22 +187,42 @@ window.maingraph = maingraph;
       mixins: [
         BaseForm
       ],
+      getRange: function(){
+        var node = this.props.node
+        var value = node.get('value')
+        var range = {min: 0, max: 100}
+        if (value){
+          range.min = 0
+          range.max = parseInt(value * 5)
+        }
+        return range
+      },
+      getInitialState: function(){
+        return{
+          range: this.getRange()
+        }
+      },
+      componentWillUpdate: function(newProps){
+        if (newProps.node.id !== this.props.node.id){
+          this.setState({range: this.getRange()})
+        }
+      },
       render: function() {
         var node = this.props.node
         var inputs = {
-          name:  <Input key="name" ref="name" type="text" label="name" name="name" value={node.get('name')} onChange={this.handleChange}/>,
-          value: <Input key="value" type="text" label="value" name="value" defaultValue="0" value={node.get('value')} onChange={this.handleChange}/>,
-          unit: <Input key="unit" type="text" label="unit" name="unit" defaultValue="0" value={node.get('unit')} onChange={this.handleChange}/>
+          value: <Input key="value" type="number" label="value" name="value" defaultValue="0" value={node.get('value')} onChange={this.handleChange}/>,
+          range: <Input key="value-range" type="range" min={this.state.range.min} max={this.state.range.max} label="value" name="value" defaultValue="0" value={node.get('value')} onChange={this.handleChange}/>,
+          name:  <Input key="name" ref="name" type="text" label="name" name="name" value={node.get('name')} onChange={this.handleChange}/>
         }
         var choose = {
-          small: ['name'],
-          large: ['name', 'value', 'unit']
+          small: ['value', 'name'],
+          large: ['value','range',  'name']
         }
         var formInputs = _.map(choose[this.props.formType], function(n){
           return inputs[n]
         });
         return (
-          <form>
+          <form key={this.props.node.id}>
             {formInputs}
             <div className="btn btn-danger" onClick={this.handleDestroy}> Destroy </div>
           </form>
