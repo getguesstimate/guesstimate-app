@@ -44,7 +44,7 @@ class group {
     return _.map(this.nodes(), function(i){return i.id})
   }
   createEdge(nodeId){
-    newObject = {}
+    var newObject = {}
     newObject[this.goTo] = this.node.id
     newObject[this.getFrom] = nodeId
     return this._allEdges().create(newObject)
@@ -89,37 +89,35 @@ class Enode extends Backbone.Model{
     this.setup()
   }
   inputEdges(){
-
   }
   outputEdges(){
-
-}
-inputValues(){
-  return _.map(this.inputs.nodes(), function(i){ return i.value})
-}
-//outputs(){
-  //return _.map(this.outputEdges(), function(e) {return e.outputNode})
-//}
-allOutputs(){
-  var outputs = this.outputs.nodes()
-  //var furtherOutputs = _.map(outputs, function(e){return e.allOutputs()})
-  //return _.flatten([outputs, furtherOutputs])
-  return outputs
-}
-//inputs(){
-  //return _.map(this.inputEdges(), function(e) {return e.inputNode})
-//}
-toString(indent){
-  //indent = indent || 0
-  //var pid = this.get('pid')
-  //var nodeType = this.get('nodeType')
-  //var outputs = _.map(this.outputs(), function(e){return e.toString(indent + 1)})
-  //var out_s = ""
-  //if (outputs.length > 0){ //var out_s = ' outputs => \n' + outputs.joint('\n')
+  }
+  inputValues(){
+    return _.map(this.inputs.nodes(), function(i){ return i.value})
+  }
+  //outputs(){
+    //return _.map(this.outputEdges(), function(e) {return e.outputNode})
   //}
-  //sstring = (Array(indent*3).join('.')) + "([" + pid + nodeType + "]" + out_s + ")"
-  return 'test'
-}
+  allOutputs(){
+    var outputs = this.outputs.nodes()
+    //var furtherOutputs = _.map(outputs, function(e){return e.allOutputs()})
+    //return _.flatten([outputs, furtherOutputs])
+    return outputs
+  }
+  //inputs(){
+    //return _.map(this.inputEdges(), function(e) {return e.inputNode})
+  //}
+  toString(indent){
+    //indent = indent || 0
+    //var pid = this.get('pid')
+    //var nodeType = this.get('nodeType')
+    //var outputs = _.map(this.outputs(), function(e){return e.toString(indent + 1)})
+    //var out_s = ""
+    //if (outputs.length > 0){ //var out_s = ' outputs => \n' + outputs.joint('\n')
+    //}
+    //sstring = (Array(indent*3).join('.')) + "([" + pid + nodeType + "]" + out_s + ")"
+    return 'test'
+  }
 toCytoscape() {
   var e = {}
   e.nodeId = this.id
@@ -170,11 +168,11 @@ class FunctionNode extends Enode{
     return this.outputs.nodes()[0]
   }
   run(){
-    result = this._run_math()
+    var result = this._run_math()
     this.dependent().updateValue(result)
   }
   run_math(){
-    inputValues = this.inputValues()
+    var inputValues = this.inputValues()
     return this.efunction().apply(inputValues)
   }
   toCytoscapeName(){
@@ -182,12 +180,12 @@ class FunctionNode extends Enode{
   }
   getEdges(direction, edgeIds){
     if (direction === 'input'){
-      edges = this.inputEdges()
-      place = 0
+      var edges = this.inputEdges()
+      var place = 0
     }
     else{
-      edges = this.outputEdges()
-      place = 1
+      var edges = this.outputEdges()
+      var place = 1
     }
     return _.map(edgeIds, function(edgeId){
        return _.find(edges, function(l){return l.get(place) == edgeId})
@@ -197,11 +195,11 @@ class FunctionNode extends Enode{
     this.collection.graph.edges.create({0:toId, 1: this.id})
   }
   resetInputs(){
-    newInputs = _.map(this.get('inputs'), function(n){return parseInt(n)})
-    oldInputs = this.inputs.nodeIds()
-    shouldAdd = _.difference(newInputs, oldInputs)
-    shouldDelete = _.difference(oldInputs, newInputs)
-    shouldDeleteEdges = this.inputs.getEdges(shouldDelete)
+    var newInputs = _.map(this.get('inputs'), function(n){return parseInt(n)})
+    var oldInputs = this.inputs.nodeIds()
+    var shouldAdd = _.difference(newInputs, oldInputs)
+    var shouldDelete = _.difference(oldInputs, newInputs)
+    var shouldDeleteEdges = this.inputs.getEdges(shouldDelete)
     _.map(shouldDeleteEdges, function(n){n.destroy()})
     _.map(shouldAdd, function(n){this.inputs.createEdge(n)}, this)
   }

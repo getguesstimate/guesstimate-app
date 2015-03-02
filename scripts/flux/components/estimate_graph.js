@@ -218,7 +218,7 @@ foobar = function(older, newer, diffKey){
     formatted.added.map( n => cytoChange('added', newer[n]) )
     formatted.deleted.map( n => cytoChange('deleted', older[n]) )
   }
-  if (isNode(older[0]) && (formatted.added.length > 0)){
+  if (isNode(older[0]) && formatted && (formatted.added.length > 0)){
     //maingraph.cy.layout(_.clone(mainLayout))
   }
 }
