@@ -100,8 +100,8 @@ class Enode extends Backbone.Model{
   //}
   allOutputs(){
     var outputs = this.outputs.nodes()
-    //var furtherOutputs = _.map(outputs, function(e){return e.allOutputs()})
-    //return _.flatten([outputs, furtherOutputs])
+    var furtherOutputs = _.map(outputs, function(e){return e.allOutputs()})
+    return _.flatten([outputs, furtherOutputs])
     return outputs
   }
   //inputs(){

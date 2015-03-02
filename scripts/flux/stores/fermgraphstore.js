@@ -11,9 +11,10 @@ class Egraph {
     this.nodes = new NodeCollection(args.nodes, this);
     this.edges = new EdgeCollection(args.edges, this);
   }
+
   // Used to find possible outputs for a function node
   outsideNodes(node){
-    var insideNodes = _.union(node, node.allOutputs())
+    var insideNodes = _.union([node], node.allOutputs())
     return _.difference(this.nodes.models, insideNodes)
   }
 }
