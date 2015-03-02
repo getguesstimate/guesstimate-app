@@ -43,6 +43,7 @@
     "react-bootstrap": "0.13.3",
     "react-router": "~0.11.6",
     "reflux": "~0.2.3",
-    "jsondiffpatch": "~0.1.27"
+    "jsondiffpatch": "~0.1.27",
+    "numeral": "~1.4.5"
   }
 }

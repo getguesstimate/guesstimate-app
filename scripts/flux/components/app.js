@@ -193,7 +193,8 @@ window.maingraph = maingraph;
         var range = {min: 0, max: 100}
         if (value){
           range.min = 0
-          range.max = parseInt(value * 5)
+          range.max = parseFloat(value * 5)
+          range.step = parseFloat(value * 0.1)
         }
         return range
       },
@@ -211,7 +212,7 @@ window.maingraph = maingraph;
         var node = this.props.node
         var inputs = {
           value: <Input key="value" type="number" label="value" name="value" defaultValue="0" value={node.get('value')} onChange={this.handleChange}/>,
-          range: <Input key="value-range" type="range" min={this.state.range.min} max={this.state.range.max} label="value" name="value" defaultValue="0" value={node.get('value')} onChange={this.handleChange}/>,
+          range: <Input key="value-range" type="range" min="0"  max={this.state.range.max} step={this.state.range.step} label="value" name="value" defaultValue="0" value={node.get('value')} onChange={this.handleChange}/>,
           name:  <Input key="name" ref="name" type="text" label="name" name="name" value={node.get('name')} onChange={this.handleChange}/>
         }
         var choose = {

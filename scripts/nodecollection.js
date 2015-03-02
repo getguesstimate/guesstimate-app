@@ -1,6 +1,7 @@
 'use strict';
 
 var Backbone = require("backbone");
+var numeral = require("numeral");
 require(['lodash'], function(_) {});
 
 var multiplication = {
@@ -132,9 +133,18 @@ class Enode extends Backbone.Model{
     return {data: e};
   }
 
+  formatValue(){
+    var value = parseFloat(this.get('value'))
+    if (value > 10){
+      return numeral(value).format('0.0a')
+    }
+    else {
+      return value.toPrecision(2)
+    }
+  }
   toCytoscapeName(){
     var name = this.get('name')
-    var value = this.get('value')
+    var value = this.formatValue()
     var totalName = undefined
     if (value && name){
       totalName = value + ' - ' + name
