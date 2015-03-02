@@ -145,7 +145,10 @@ window.maingraph = maingraph;
 
     var BaseForm = {
       focusForm: function(){
-        $(this.refs.name.getDOMNode()).find('input').focus()
+        var name = $(this.refs.name)
+        if (name > 0){
+          $(name.getDOMNode()).find('input').focus()
+        }
       },
       componentDidMount: function(){
         this.focusForm()
@@ -171,7 +174,7 @@ window.maingraph = maingraph;
         BaseForm
       ],
       render: function() {
-        node = this.props.node
+        var node = this.props.node
         return (
           <form>
             <Input type="text" label="name" name="name" value={node.get('name')} onChange={this.handleChange}/>
@@ -187,9 +190,9 @@ window.maingraph = maingraph;
       render: function() {
         var node = this.props.node
         var inputs = {
-          name:  <Input key="foobar" ref="name" type="text" label="name" name="name" value={node.get('name')} onChange={this.handleChange}/>,
-          value: <Input type="text" label="value" name="value" defaultValue="0" value={node.get('value')} onChange={this.handleChange}/>,
-          unit: <Input type="text" label="unit" name="unit" defaultValue="0" value={node.get('unit')} onChange={this.handleChange}/>
+          name:  <Input key="name" ref="name" type="text" label="name" name="name" value={node.get('name')} onChange={this.handleChange}/>,
+          value: <Input key="value" type="text" label="value" name="value" defaultValue="0" value={node.get('value')} onChange={this.handleChange}/>,
+          unit: <Input key="unit" type="text" label="unit" name="unit" defaultValue="0" value={node.get('unit')} onChange={this.handleChange}/>
         }
         var choose = {
           small: ['name'],
@@ -212,20 +215,20 @@ window.maingraph = maingraph;
       ],
       render: function() {
         var node = this.props.node;
-        //var currentInputs = node.inputs.nodeIds()
-        var currentInputs = [2,3]
+        var currentInputs = node.inputs.nodeIds()
+        //var currentInputs = [2,3]
         var outsideNodes = this.props.graph.outsideNodes(node)
         var possibleInputs = _.map(outsideNodes, function(n){
-          return <option value={n.id}>{n.id}--{n.get('name')}{n.value}</option>
+          return <option value={n.id} key={n.id}>{n.id}--{n.get('name')}{n.value}</option>
         });
         var inputs = {
           selectFunction:
-            <Input type="select" label='Function' name="functionType" defaultValue="addition" value={node.get('functionType')} onChange={this.handleChange}>
+            <Input type="select" key='functionType' label='Function' name="functionType" defaultValue="addition" value={node.get('functionType')} onChange={this.handleChange}>
                 <option value="addition">(+) Addition </option>
                 <option value="multiplication">(x) Multiplication </option>
             </Input>,
           selectInputs:
-            <Input type="select" label='Multiple Select' multiple name="inputs" value={currentInputs} onChange={this.handleChange} className="function-multiple-form">
+            <Input type="select" label='Multiple Select' key='inputs' multiple name="inputs" value={currentInputs} onChange={this.handleChange} className="function-multiple-form">
               {possibleInputs}
             </Input>
         }
