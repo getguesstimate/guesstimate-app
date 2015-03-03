@@ -26,10 +26,16 @@ window.maingraph = maingraph;
         FermActions.updateAllNodeLocations(newLocations);
       }
     },
+    cytoscapeMounted: function(){
+      this.updateAllPositions()
+    },
     componentDidMount: function() { var el = $('.maingraph')[0];
-      var nodes = this.formatNodes();
-      var edges = this.formatEdges();
-      maingraph.create(el, nodes, edges, this.props.updateEditingNode, this.updatePositions, this.updateAllPositions);
+      var initialElements = {
+          nodes: this.formatNodes(),
+          edges: this.formatEdges()
+        }
+      var actions = { updateEditingNode: this.props.updateEditingNode, updatePositions: this.updatePositions, cytoscapeMounted: this.cytoscapeMounted }
+      maingraph.create(el, initialElements, actions);
     },
     componentDidUpdate: function(){
       maingraph.update(this.formatNodes(), this.formatEdges(), this.updateAllPositions);

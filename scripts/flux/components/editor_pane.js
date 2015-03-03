@@ -207,7 +207,7 @@ var NewButtonPane = React.createClass({
   },
   render: function() {
     return (
-      <div>
+      <div className="newButtons">
         <Button onClick={this.newEstimate}> New Estimate </Button>
         <Button onClick={this.newFunction}> New Function </Button>
       </div>

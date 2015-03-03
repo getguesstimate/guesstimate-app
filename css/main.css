@@ -52,3 +52,11 @@ body.body-override-bootstrap{
   background-color: rgba(217,247,255,0.8);
   box-shadow: none;
 }
+.newButtons{
+  position: absolute;
+  top: 0.5em;
+  left: 2em;
+}
+.newButtons .btn-default{
+  background-color: rgba(255,255,255, 0.6);
+}

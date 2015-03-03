@@ -11,11 +11,13 @@ var mainLayout = {
       avoidOverlap: true
     }
 
-maingraph.create = function(el, inputNodes, inputEdges, mainfun, updatefun, isCreated){
+maingraph.create = function(el, initialElements,  actions){
 
   this.cy = cytoscape({
     container: el,
     userZoomingEnabled: true,
+    maxZoom: 2,
+    minZoom: 0.5,
     style: cytoscape.stylesheet()
       .selector('node')
         .css({
@@ -55,11 +57,6 @@ maingraph.create = function(el, inputNodes, inputEdges, mainfun, updatefun, isCr
           .css({
             'color': 'red',
         })
-      .selector('node:selected')
-        .css({
-          'text-outline-width': 2,
-          'text-outline-color': '#D5FCFF'
-        })
       .selector('node[editing="true"]')
           .css({
             'color': '#1E8AE2',
@@ -77,10 +74,7 @@ maingraph.create = function(el, inputNodes, inputEdges, mainfun, updatefun, isCr
           'target-arrow-color': '#994343'
         }),
 
-    elements: {
-        nodes: inputNodes,
-        edges: inputEdges
-      },
+    elements: initialElements,
     layout: _.clone(mainLayout),
     ready: function(){
       //this.on('tap', function(event){
@@ -95,21 +89,21 @@ maingraph.create = function(el, inputNodes, inputEdges, mainfun, updatefun, isCr
         id = event.cyTarget.data().nodeId;
         position = event.cyTarget.renderedPosition()
         object = {id: id, renderedPosition: position}
-        updatefun([object])
+        actions.updatePositions([object])
       })
       this.on('pan', function(event){
         var newLocations = _.map(event.cy.nodes(), function(n){return {id: n.data().nodeId, renderedPosition: n.renderedPosition()}})
-        updatefun(newLocations)
+        actions.updatePositions(newLocations)
       })
-      this.on('cxttapend', function(event){
+      this.on('click', function(event){
         data = event.cyTarget.data()
         if (data) {
-          mainfun(data.nodeId)
+          actions.updateEditingNode(data.nodeId)
         } else {
-          mainfun(null)
+          actions.updateEditingNode(null)
         }
       });
-      isCreated();
+      actions.cytoscapeMounted();
     }
   });
 
