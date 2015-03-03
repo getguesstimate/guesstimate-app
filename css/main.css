@@ -32,7 +32,7 @@ body.body-override-bootstrap{
   font-size: 20px;
 }
 
-.wowo{
+.hover{
   z-index: 100;
   left: 500px;
   position: absolute;
@@ -41,14 +41,14 @@ body.body-override-bootstrap{
   background-color: rgba(180,180,180,0.1);
   font-size: 1.5em;
 }
-.wowo form .form-control{
+.hover form .form-control{
   height: 2em;
   border: none;
   background: rgba(255,255,255,0.8);
   border-radius: 0;
   font-size: 1em;
 }
-.wowo form .form-control:focus{
+.hover form .form-control:focus{
   background-color: rgba(217,247,255,0.8);
   box-shadow: none;
 }
