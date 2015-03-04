@@ -1,11 +1,33 @@
-.maingraph{
-  min-width: 500px;
-  min-height: 900px;
+.row.app{
+  height: 100%;
 }
-.editorpane{
-  margin-top: 1em;
 
+.maingraph {
+  height: 60%;
 }
+
+.sidepane{
+  height: 40%;
+  background-color: #eee;
+  padding: 1em
+}
+
+@media (min-width: 600px) {
+  .maingraph {
+    height: 100%;
+  }
+  .sidepane{
+    height: 100%;
+    padding-top: 6em;
+  }
+  .sidepane .nodeForm{
+    position: absolute;
+    top: 50%;
+    margin-top: -50%;
+    width: 80%;
+  }
+}
+
 .graphpane{
   background-color: white;
 }
@@ -17,19 +39,10 @@ body.body-override-bootstrap{
   min-height: 100px;
 }
 
-.bottom-panel-function .panel-title {
-  color: papayawhip;
-  font-size: 20px;
-}
-
-.bottom-panel-estimate .panel-title {
-  color: blanchedalmond;
-  font-size: 20px;
-}
-
-.bottom-panel-result .panel-title {
-  color: lavenderblush;
-  font-size: 20px;
+@media (max-width: 599px) {
+  .hover{
+    display: none
+  }
 }
 
 .hover{
@@ -39,16 +52,22 @@ body.body-override-bootstrap{
   margin:0;
   padding: 0;
   background-color: rgba(180,180,180,0.1);
+}
+
+.nodeForm {
   font-size: 1.5em;
 }
-.hover form .form-control{
+.nodeForm form .form-control.function-multiple-form{
+  height: 12em;
+}
+.nodeForm form .form-control{
   height: 2em;
   border: none;
   background: rgba(255,255,255,0.8);
   border-radius: 0;
   font-size: 1em;
 }
-.hover form .form-control:focus{
+.nodeForm form .form-control:focus{
   background-color: rgba(217,247,255,0.8);
   box-shadow: none;
 }
