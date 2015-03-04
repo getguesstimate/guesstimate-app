@@ -47,12 +47,12 @@ var App = React.createClass({
   },
   render: function() {
     return (
-      <div className="row">
-        <div className="col-sm-10">
+      <div className="row .app">
+        <div className="col-sm-9 col-md-10">
           <GraphPane graph={this.state.graph} editingNode={this.getEditingNode()} updateEditingNode={this.updateEditingNode}/>
           <EditorPane graph={this.state.graph} addNode={this.addNode} node={this.getEditingNode()}/>
         </div>
-        <div className="col-sm-2">
+        <div className="col-sm-3 col-md-2">
           <SidePane graph={this.state.graph} node={this.getEditingNode()}/>
         </div>
       </div>

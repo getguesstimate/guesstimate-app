@@ -95,7 +95,7 @@ maingraph.create = function(el, initialElements,  actions){
         var newLocations = _.map(event.cy.nodes(), function(n){return {id: n.data().nodeId, renderedPosition: n.renderedPosition()}})
         actions.updatePositions(newLocations)
       })
-      this.on('click', function(event){
+      this.on('tap', function(event){
         data = event.cyTarget.data()
         if (data) {
           actions.updateEditingNode(data.nodeId)
