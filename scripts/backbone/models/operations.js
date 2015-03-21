@@ -1,6 +1,7 @@
 'use strict';
 
 var operations = {
+
   'multiplication': {
     name: 'multiplication',
     sign: 'x',
@@ -9,6 +10,7 @@ var operations = {
       return product;
     }
   },
+
   'addition': {
     name: 'addition',
     sign: '+',

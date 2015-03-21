@@ -5,90 +5,104 @@ var numeral = require("numeral");
 require(['lodash'], function(_) {});
 
 class Group {
-  constructor(node, graph){
+
+  constructor(node, graph) {
     this.node = node
     this.graph = graph
   }
-  edges(){
+
+  edges() {
     return _.filter(this._allEdges().models, function(n){ return n.get(this.goTo) == this.node.id }, this)
   }
-  getEdge(nodeId){
+
+  getEdge(nodeId) {
     return _.find(this.edges(), function(n){ return n.get(this.getFrom) == nodeId }, this)
   }
-  getEdges(nodeIds){
+
+  getEdges(nodeIds) {
     return _.map(nodeIds, function(nodeId){ return this.getEdge(nodeId) }, this)
   }
-  nodeIds(){
+
+  nodeIds() {
     return _.map(this.nodes(), function(i){return i.id})
   }
-  createEdge(nodeId){
+
+  createEdge(nodeId) {
     var newObject = {}
     newObject[this.goTo] = this.node.id
     newObject[this.getFrom] = nodeId
     return this._allEdges().create(newObject)
   }
-  _allEdges(){ return this.graph.edges }
+
+  _allEdges() { return this.graph.edges }
 }
 
-class Outputs extends Group{
-  constructor(node, edges){
+class Outputs extends Group {
+
+  constructor(node, edges) {
     this.getFrom = 1
     this.goTo = 0
     super(node,edges)
   }
-  nodes(){
+
+  nodes() {
     return _.map(this.edges(), function(e){ return e.outputNode})
   }
 }
 
-class Inputs extends Group{
-  constructor(node, edges){
+class Inputs extends Group {
+
+  constructor(node, edges) {
     this.getFrom = 0
     this.goTo = 1
     super(node,edges)
   }
-  nodes(){
+
+  nodes() {
     return _.map(this.edges(), function(e){ return e.inputNode})
   }
 }
 
-class AbstractNode extends Backbone.Model{
-  defaults(){
+class AbstractNode extends Backbone.Model {
+
+  defaults() {
     return {
       foo: 'sillybar'
     }
   }
-  setup(){
+
+  setup() {
   }
-  initialize(attributes){
+
+  initialize(attributes) {
     this.id = attributes.pid;
     this.outputs = new Outputs(this, this.collection.graph)
     this.inputs = new Inputs(this, this.collection.graph)
     this.setup()
   }
-  inputEdges(){
+
+  inputEdges() {
   }
-  outputEdges(){
+
+  outputEdges() {
   }
-  edges(){
+
+  edges() {
     return _.union(this.inputs.edges(), this.outputs.edges())
   }
-  inputValues(){
+
+  inputValues() {
     return _.map(this.inputs.nodes(), function(i){ return i.get('value')})
   }
-  //outputs(){
-    //return _.map(this.outputEdges(), function(e) {return e.outputNode})
-  //}
-  allOutputs(){
+
+  allOutputs() {
     var outputs = this.outputs.nodes()
     var furtherOutputs = _.map(outputs, function(e){return e.allOutputs()})
     return _.flatten([outputs, furtherOutputs])
     return outputs
   }
-  //inputs(){
-    //return _.map(this.inputEdges(), function(e) {return e.inputNode})
-  //}
-  toString(indent){
+
+  toString(indent) {
     //indent = indent || 0
     //var pid = this.get('pid')
     //var nodeType = this.get('nodeType')
@@ -99,6 +113,7 @@ class AbstractNode extends Backbone.Model{
     //sstring = (Array(indent*3).join('.')) + "([" + pid + nodeType + "]" + out_s + ")"
     //return 'test'
   }
+
   toCytoscape() {
     var e = {}
     e.nodeId = this.id
@@ -110,7 +125,7 @@ class AbstractNode extends Backbone.Model{
     return {data: e};
   }
 
-  formatValue(){
+  formatValue() {
     var value = parseFloat(this.get('value'))
     if (value > 10){
       return numeral(value).format('0.0a')
@@ -119,14 +134,16 @@ class AbstractNode extends Backbone.Model{
       return value.toPrecision(2)
     }
   }
-  toCytoscapeName(){
+
+  toCytoscapeName() {
     var name = this.get('name')
     var value = this.formatValue()
     var totalName = undefined
-    if (value && name){
+
+    if (value && name) {
       totalName = value + ' - ' + name
     }
-    else if (value || name){
+    else if (value || name) {
       totalName = value || name
     }
     return totalName

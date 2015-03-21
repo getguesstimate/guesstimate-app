@@ -13,9 +13,11 @@ var FermActions = require('../actions');
 var fermLocationStore = require('../stores/locationstore');
 
 var EditorPane = React.createClass({
+
   mixins: [
     Reflux.connect(fermLocationStore, "nodeLocations")
   ],
+
   findHoverPosition: function() {
     var node = this.props.node
     if (node){
@@ -27,6 +29,7 @@ var EditorPane = React.createClass({
       }
     }
   },
+
   render: function() {
     var node = this.props.node
     if (this.props.node){
@@ -78,20 +81,24 @@ var BaseForm = {
       $(name.getDOMNode()).find('input').focus()
     }
   },
+
   componentDidMount: function(){
     this.focusForm()
   },
+
   componentDidUpdate: function(prevProps){
     if (prevProps.node.id !== this.props.node.id){
       this.focusForm()
     }
   },
+
   handleChange: function(evt) {
     var form_values = $(evt.target.parentElement.childNodes).filter(":input");
     var values = {};
     values[form_values[0].name] = form_values.val();
     FermActions.updateNode(this.props.node.id, values);
   },
+
   handleDestroy: function() {
     FermActions.removeNode(this.props.node.id);
   }
@@ -101,6 +108,7 @@ var ResultForm = React.createClass({
   mixins: [
     BaseForm
   ],
+
   render: function() {
     var node = this.props.node
     return (
@@ -116,6 +124,7 @@ var EstimateForm = React.createClass({
   mixins: [
     BaseForm
   ],
+
   getRange: function(){
     var node = this.props.node
     var value = node.get('value')
@@ -127,30 +136,37 @@ var EstimateForm = React.createClass({
     }
     return range
   },
+
   getInitialState: function(){
     return{
       range: this.getRange()
     }
   },
+
   componentWillUpdate: function(newProps){
     if (newProps.node.id !== this.props.node.id){
       this.setState({range: this.getRange()})
     }
   },
+
   render: function() {
     var node = this.props.node
+
     var inputs = {
       value: <Input key="value" type="number" label="value" name="value" defaultValue="0" value={node.get('value')} onChange={this.handleChange}/>,
       range: <Input key="value-range" type="range" min="0"  max={this.state.range.max} step={this.state.range.step} label="value" name="value" defaultValue="0" value={node.get('value')} onChange={this.handleChange}/>,
       name:  <Input key="name" ref="name" type="text" label="name" name="name" value={node.get('name')} onChange={this.handleChange}/>
     }
+
     var choose = {
       small: ['value', 'range', 'name'],
       large: ['value','range',  'name']
     }
+
     var formInputs = _.map(choose[this.props.formType], function(n){
       return inputs[n]
     });
+
     return (
       <form key={this.props.node.id}>
         {formInputs}
@@ -161,9 +177,11 @@ var EstimateForm = React.createClass({
 });
 
 var FunctionForm = React.createClass({
+
   mixins: [
     BaseForm
   ],
+
   render: function() {
     var node = this.props.node;
     var currentInputs = node.inputs.nodeIds()
@@ -171,6 +189,7 @@ var FunctionForm = React.createClass({
     var possibleInputs = _.map(outsideMetrics, function(n){
       return <option value={n.id} key={n.id}>{n.toCytoscapeName()}</option>
     });
+
     var inputs = {
       selectFunction:
         <Input type="select" key='functionType' label='Function' name="functionType" defaultValue="addition" value={node.get('functionType')} onChange={this.handleChange}>
@@ -182,13 +201,16 @@ var FunctionForm = React.createClass({
           {possibleInputs}
         </Input>
     }
+
     var choose = {
       small: ['selectFunction'],
       large: ['selectFunction', 'selectInputs']
     }
+
     var formInputs = _.map(choose[this.props.formType], function(n){
       return inputs[n]
     });
+
     return (
       <form>
         {formInputs}
@@ -199,12 +221,15 @@ var FunctionForm = React.createClass({
 });
 
 var NewButtonPane = React.createClass({
+
   newEstimate: function(){
     this.props.addNode('estimate')
   },
+
   newFunction: function(){
     this.props.addNode('function')
   },
+
   render: function() {
     return (
       <div className="newButtons">

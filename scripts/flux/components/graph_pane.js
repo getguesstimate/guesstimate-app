@@ -8,10 +8,10 @@ var FermActions = require('../actions');
 var maingraph = require('./estimate_graph');
 window.maingraph = maingraph;
 
-  var GraphPane = React.createClass({
+  var GraphPane = React.createClass( {
     formatNodes: function() {
       var regular = this.props.graph.nodes.toCytoscape()
-      if (this.props.editingNode){
+      if (this.props.editingNode) {
         var editingCytoscapeNode = _.find(regular, function(f){return f.data.nodeId == this.props.editingNode.id}, this)
         editingCytoscapeNode.data.editing = "true"
       }
@@ -20,13 +20,13 @@ window.maingraph = maingraph;
     formatEdges: function() {
       return this.props.graph.edges.toCytoscape()
     },
-    updateAllPositions: function(){
+    updateAllPositions: function() {
       var newLocations = _.map(maingraph.cy.nodes(), function(n){return {id: n.data().nodeId, renderedPosition: n.renderedPosition()}})
-      if (!isNaN(newLocations[0].renderedPosition.x)){
+      if (!isNaN(newLocations[0].renderedPosition.x)) {
         FermActions.updateAllNodeLocations(newLocations);
       }
     },
-    cytoscapeMounted: function(){
+    cytoscapeMounted: function() {
       this.updateAllPositions()
     },
     componentDidMount: function() { var el = $('.maingraph')[0];
@@ -37,10 +37,10 @@ window.maingraph = maingraph;
       var actions = { updateEditingNode: this.props.updateEditingNode, updatePositions: this.updatePositions, cytoscapeMounted: this.cytoscapeMounted }
       maingraph.create(el, initialElements, actions);
     },
-    componentDidUpdate: function(){
+    componentDidUpdate: function() {
       maingraph.update(this.formatNodes(), this.formatEdges(), this.updateAllPositions);
     },
-    updatePositions: function(objects){
+    updatePositions: function(objects) {
       FermActions.updateNodeLocations(objects);
     },
     render: function() {

@@ -17,34 +17,42 @@ window.fermLocationStore = fermLocationStore;
 window.fermGraphStore = fermGraphStore;
 
 var App = React.createClass({
+
   mixins: [
     Reflux.connect(fermGraphStore, "graph"),
     Reflux.connect(fermEditingStore, "editingNode")
   ],
-  getNodeById: function(nodeId){
+
+  getNodeById: function(nodeId) {
     return this.state.graph.nodes.get(nodeId)
   },
-  handleThis: function(e){
+
+  handleThis: function(e) {
     switch (e.keyCode) {
       case 68: // delete
       case 70:
       default:
     };
   },
-  componentDidMount: function(){
+
+  componentDidMount: function() {
     addEventListener("keydown", this.handleThis);
   },
-  getEditingNode: function(){
+
+  getEditingNode: function() {
     var id = this.state.editingNode;
     var node = this.getNodeById(id);
     return node;
   },
-  addNode: function(type){
+
+  addNode: function(type) {
     FermActions.addNode(type)
   },
-  updateEditingNode: function(nodeId){
+
+  updateEditingNode: function(nodeId) {
     FermActions.updateEditingNode(nodeId)
   },
+
   render: function() {
     return (
       <div className="row .app">
