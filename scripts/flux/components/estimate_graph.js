@@ -6,8 +6,7 @@ var maingraph = {};
 var _ = require('../../lodash.min');
 var mainLayout = {
       name: 'breadthfirst',
-      directed: true,
-      padding: 10,
+      directed: true, padding: 10,
       avoidOverlap: true
     }
 
@@ -76,7 +75,7 @@ maingraph.create = function(el, initialElements,  actions){
 
     elements: initialElements,
     layout: _.clone(mainLayout),
-    ready: function(){
+    ready: function() {
       //this.on('tap', function(event){
         //console.log(event)
         //console.log('tap event')
@@ -85,17 +84,17 @@ maingraph.create = function(el, initialElements,  actions){
         //console.log(event)
         //console.log('tap start')
       //})
-      this.on('drag', function(event){
+      this.on('drag', function(event) {
         id = event.cyTarget.data().nodeId;
         position = event.cyTarget.renderedPosition()
         object = {id: id, renderedPosition: position}
         actions.updatePositions([object])
       })
-      this.on('pan', function(event){
+      this.on('pan', function(event) {
         var newLocations = _.map(event.cy.nodes(), function(n){return {id: n.data().nodeId, renderedPosition: n.renderedPosition()}})
         actions.updatePositions(newLocations)
       })
-      this.on('tap', function(event){
+      this.on('tap', function(event) {
         data = event.cyTarget.data()
         if (data) {
           actions.updateEditingNode(data.nodeId)
@@ -152,7 +151,7 @@ getDeltaType = function(delta) {
   return 'unknown';
 };
 
-formatDiff = function(diff){
+formatDiff = function(diff) {
   if (typeof diff === "undefined") {
     return {changed: [], deleted: []}
   }
@@ -170,23 +169,23 @@ formatDiff = function(diff){
 }
 
 
-cytoChange = function(action, data){
+cytoChange = function(action, data) {
   cy = maingraph.cy
   actions = {
-    'modified': function(data){
+    'modified': function(data) {
       element = cy.getElementById(data.id);
       element.removeData()
       element.data(data)
     },
-    'deleted': function(data){
+    'deleted': function(data) {
       element = cy.getElementById(data.id);
       cy.remove(element)
     },
-    'added': function(data){
-      if (isNode(data)){
+    'added': function(data) {
+      if (isNode(data)) {
         cy.add({group:"nodes", data: data, position: {x:1000, y:500}})
       }
-      else if (isEdge(data)){
+      else if (isEdge(data)) {
         cy.add({group:"edges", data: data})
       }
     }
@@ -196,10 +195,10 @@ cytoChange = function(action, data){
 
 //jsondiffpatch = require('jsondiffpatch')
 
-makeChanges = function(older, newer, diffKey){
+makeChanges = function(older, newer, diffKey) {
   differ = jsondiffpatch.create({objectHash(obj){return obj[diffKey]}})
   diff = differ.diff(older, newer)
-  if (diff){
+  if (diff) {
     formatted = formatDiff(diff)
     formatted.modified.map( n => cytoChange('modified', newer[n]) )
     formatted.added.map( n => cytoChange('added', newer[n]) )
@@ -207,7 +206,7 @@ makeChanges = function(older, newer, diffKey){
   }
 }
 
-maingraph.update = function(inputNodes, inputEdges, callback){
+maingraph.update = function(inputNodes, inputEdges, callback) {
   newData = {elements:{nodes: inputNodes, edges: inputEdges}}
   oldData = this.cy.json()
 

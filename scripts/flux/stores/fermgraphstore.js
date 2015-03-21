@@ -3,8 +3,8 @@ var Reflux = require('reflux');
 var FermActions = require('../actions');
 var _ = require('../../lodash.min');
 
-var NodeCollection = require('../../nodecollection');
-var EdgeCollection = require('../../edgecollection');
+var NodeCollection = require('../../backbone/collections/nodecollection');
+var EdgeCollection = require('../../backbone/collections/edgecollection');
 
 class Egraph {
   constructor(args){
