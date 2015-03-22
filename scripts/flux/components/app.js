@@ -23,20 +23,12 @@ var App = React.createClass({
     Reflux.connect(fermEditingStore, "editingNode")
   ],
 
-  getNodeById: function(nodeId) {
-    return this.state.graph.nodes.get(nodeId)
-  },
-
-  handleThis: function(e) {
-    switch (e.keyCode) {
-      case 68: // delete
-      case 70:
-      default:
-    };
-  },
-
   componentDidMount: function() {
     addEventListener("keydown", this.handleThis);
+  },
+
+  getNodeById: function(nodeId) {
+    return this.state.graph.nodes.get(nodeId)
   },
 
   getEditingNode: function() {
