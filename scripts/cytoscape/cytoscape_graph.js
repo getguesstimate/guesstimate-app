@@ -1,16 +1,12 @@
-//var cytoscape = require('cytoscape');
-// var cytoscape = require("imports?require=>false!cytoscape");
-    //window.cytoscape = cytoscape;
-
-var maingraph = {};
-var _ = require('../../lodash.min');
+var cytoscape_graph = {};
+var _ = require('../lodash.min');
 var mainLayout = {
       name: 'breadthfirst',
       directed: true, padding: 10,
       avoidOverlap: true
     }
 
-maingraph.create = function(el, initialElements,  actions){
+cytoscape_graph.create = function(el, initialElements,  actions){
 
   this.cy = cytoscape({
     container: el,
@@ -76,14 +72,6 @@ maingraph.create = function(el, initialElements,  actions){
     elements: initialElements,
     layout: _.clone(mainLayout),
     ready: function() {
-      //this.on('tap', function(event){
-        //console.log(event)
-        //console.log('tap event')
-      //})
-      //this.on('tapstart', function(event){
-        //console.log(event)
-        //console.log('tap start')
-      //})
       this.on('drag', function(event) {
         id = event.cyTarget.data().nodeId;
         position = event.cyTarget.renderedPosition()
@@ -105,8 +93,22 @@ maingraph.create = function(el, initialElements,  actions){
       actions.cytoscapeMounted();
     }
   });
-
 };
+
+cytoscape_graph.update = function(inputNodes, inputEdges, callback) {
+  newData = {elements:{nodes: inputNodes, edges: inputEdges}}
+  oldData = this.cy.json()
+
+  getAllData = nodes => nodes.map(node => node.data)
+
+  getTypeData = elementType => [oldData, newData].map( n => getAllData(n.elements[elementType] || []) )
+  var [oldNodes, newNodes] = getTypeData('nodes')
+  var [oldEdges, newEdges] = getTypeData('edges')
+
+  nodeChanges = makeChanges(oldNodes, newNodes, 'nodeId')
+  edgeChanges = makeChanges(oldEdges, newEdges, 'id')
+  callback()
+}
 
 isArray = (typeof Array.isArray === 'function') ?
   // use native function
@@ -170,7 +172,7 @@ formatDiff = function(diff) {
 
 
 cytoChange = function(action, data) {
-  cy = maingraph.cy
+  cy = cytoscape_graph.cy
   actions = {
     'modified': function(data) {
       element = cy.getElementById(data.id);
@@ -193,8 +195,6 @@ cytoChange = function(action, data) {
   actions[action](data)
 }
 
-//jsondiffpatch = require('jsondiffpatch')
-
 makeChanges = function(older, newer, diffKey) {
   differ = jsondiffpatch.create({objectHash(obj){return obj[diffKey]}})
   diff = differ.diff(older, newer)
@@ -206,19 +206,4 @@ makeChanges = function(older, newer, diffKey) {
   }
 }
 
-maingraph.update = function(inputNodes, inputEdges, callback) {
-  newData = {elements:{nodes: inputNodes, edges: inputEdges}}
-  oldData = this.cy.json()
-
-  getAllData = nodes => nodes.map(node => node.data)
-
-  getTypeData = elementType => [oldData, newData].map( n => getAllData(n.elements[elementType] || []) )
-  var [oldNodes, newNodes] = getTypeData('nodes')
-  var [oldEdges, newEdges] = getTypeData('edges')
-
-  nodeChanges = makeChanges(oldNodes, newNodes, 'nodeId')
-  edgeChanges = makeChanges(oldEdges, newEdges, 'id')
-  callback()
-}
-
-module.exports = maingraph;
+module.exports = cytoscape_graph;

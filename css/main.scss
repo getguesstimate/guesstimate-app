@@ -2,7 +2,7 @@
   height: 100%;
 }
 
-.maingraph {
+.cytoscape_graph {
   height: 60%;
 }
 
@@ -13,7 +13,7 @@
 }
 
 @media (min-width: 600px) {
-  .maingraph {
+  .cytoscape_graph {
     height: 100%;
   }
   .sidepane{
@@ -56,26 +56,26 @@ body.body-override-bootstrap{
 
 .nodeForm {
   font-size: 1.5em;
-}
-.nodeForm form .form-control.function-multiple-form{
-  height: 12em;
-}
-.nodeForm form .form-control{
-  height: 2em;
-  border: none;
-  background: rgba(255,255,255,0.8);
-  border-radius: 0;
-  font-size: 1em;
-}
-.nodeForm form .form-control:focus{
-  background-color: rgba(217,247,255,0.8);
-  box-shadow: none;
+  form .form-control {
+    height: 2em;
+    border: none;
+    background: rgba(255,255,255,0.8);
+    border-radius: 0;
+    font-size: 1em;
+    &.function-multiple-form{
+      height: 12em;
+    }
+    &:focus{
+      background-color: rgba(217,247,255,0.8);
+      box-shadow: none;
+    }
+  }
 }
 .newButtons{
   position: absolute;
   top: 0.5em;
   left: 2em;
-}
-.newButtons .btn-default{
-  background-color: rgba(255,255,255, 0.6);
+  .newButtons .btn-default{
+    background-color: rgba(255,255,255, 0.6);
+  }
 }

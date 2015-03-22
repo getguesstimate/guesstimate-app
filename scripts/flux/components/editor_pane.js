@@ -18,7 +18,7 @@ var EditorPane = React.createClass({
     Reflux.connect(fermLocationStore, "nodeLocations")
   ],
 
-  findHoverPosition: function() {
+  findHoverPosition() {
     var node = this.props.node
     if (node){
       var nodePosition = _.where(this.state.nodeLocations, {'id':node.id})
@@ -30,7 +30,7 @@ var EditorPane = React.createClass({
     }
   },
 
-  render: function() {
+  render() {
     var node = this.props.node
     if (this.props.node){
       var hover_form = <div className="hover" style={this.findHoverPosition()}> <NodeForm graph={this.props.graph} node={this.props.node} formSize="small" /> </div>
@@ -48,7 +48,7 @@ var EditorPane = React.createClass({
 });
 
 var SidePane = React.createClass({
-  render: function() {
+  render() {
     return (
       <div className="sidePane">
         <NodeForm graph={this.props.graph} node={this.props.node} formSize="large" />
@@ -58,7 +58,7 @@ var SidePane = React.createClass({
 });
 
 var NodeForm = React.createClass({
-  render: function(){
+  render(){
     var formTypes = {
       'estimate': <EstimateForm node={this.props.node} formType={this.props.formSize} />,
       'dependent': <ResultForm node={this.props.node} formType={this.props.formSize}/>,
@@ -75,31 +75,31 @@ var NodeForm = React.createClass({
 })
 
 var BaseForm = {
-  focusForm: function(){
+  focusForm() {
     var name = $(this.refs.name)
     if (name > 0){
       $(name.getDOMNode()).find('input').focus()
     }
   },
 
-  componentDidMount: function(){
+  componentDidMount() {
     this.focusForm()
   },
 
-  componentDidUpdate: function(prevProps){
+  componentDidUpdate(prevProps){
     if (prevProps.node.id !== this.props.node.id){
       this.focusForm()
     }
   },
 
-  handleChange: function(evt) {
+  handleChange(evt) {
     var form_values = $(evt.target.parentElement.childNodes).filter(":input");
     var values = {};
     values[form_values[0].name] = form_values.val();
     FermActions.updateNode(this.props.node.id, values);
   },
 
-  handleDestroy: function() {
+  handleDestroy() {
     FermActions.removeNode(this.props.node.id);
   }
 };
@@ -109,7 +109,7 @@ var ResultForm = React.createClass({
     BaseForm
   ],
 
-  render: function() {
+  render() {
     var node = this.props.node
     return (
       <form>
@@ -125,7 +125,7 @@ var EstimateForm = React.createClass({
     BaseForm
   ],
 
-  getRange: function(){
+  getRange(){
     var node = this.props.node
     var value = node.get('value')
     var range = {min: 0, max: 100}
@@ -137,19 +137,19 @@ var EstimateForm = React.createClass({
     return range
   },
 
-  getInitialState: function(){
+  getInitialState(){
     return{
       range: this.getRange()
     }
   },
 
-  componentWillUpdate: function(newProps){
+  componentWillUpdate(newProps){
     if (newProps.node.id !== this.props.node.id){
       this.setState({range: this.getRange()})
     }
   },
 
-  render: function() {
+  render() {
     var node = this.props.node
 
     var inputs = {
@@ -182,7 +182,7 @@ var FunctionForm = React.createClass({
     BaseForm
   ],
 
-  render: function() {
+  render() {
     var node = this.props.node;
     var currentInputs = node.inputs.nodeIds()
     var outsideMetrics = this.props.graph.outsideMetrics(node)
@@ -222,15 +222,15 @@ var FunctionForm = React.createClass({
 
 var NewButtonPane = React.createClass({
 
-  newEstimate: function(){
+  newEstimate() {
     this.props.addNode('estimate')
   },
 
-  newFunction: function(){
+  newFunction() {
     this.props.addNode('function')
   },
 
-  render: function() {
+  render() {
     return (
       <div className="newButtons">
         <Button onClick={this.newEstimate}> New Estimate </Button>
