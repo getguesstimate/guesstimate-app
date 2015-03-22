@@ -1,7 +1,10 @@
 'use strict';
 
-var Backbone = require("backbone");
-var [EstimateNode, DependentNode, FunctionNode] = require("../models/node_types");
+var Backbone = require("backbone"),
+    EstimateNode = require("../models/estimate_node"),
+    DependentNode = require("../models/dependent_node"),
+    FunctionNode = require("../models/function_node");
+
 require(['lodash'], function(_) {});
 
 var NodeCollection = Backbone.Collection.extend({
@@ -20,8 +23,6 @@ var NodeCollection = Backbone.Collection.extend({
           return new DependentNode(attrs, options)
         case 'function':
           return new FunctionNode(attrs, options)
-        default:
-          return new Enode(attrs, options)
       }
     },
 

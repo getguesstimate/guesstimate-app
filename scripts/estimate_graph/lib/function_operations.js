@@ -1,6 +1,6 @@
 'use strict';
 
-var operations = {
+var functionOperations = {
 
   'multiplication': {
     name: 'multiplication',
@@ -21,4 +21,4 @@ var operations = {
   }
 }
 
-module.exports = operations;
+module.exports = functionOperations;

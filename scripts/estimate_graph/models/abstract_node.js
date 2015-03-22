@@ -4,60 +4,49 @@ var Backbone = require("backbone");
 var numeral = require("numeral");
 require(['lodash'], function(_) {});
 
-class Group {
-
+class AbstractGroup {
   constructor(node, graph) {
     this.node = node
     this.graph = graph
   }
-
   edges() {
     return _.filter(this._allEdges().models, function(n){ return n.get(this.goTo) == this.node.id }, this)
   }
-
   getEdge(nodeId) {
     return _.find(this.edges(), function(n){ return n.get(this.getFrom) == nodeId }, this)
   }
-
   getEdges(nodeIds) {
     return _.map(nodeIds, function(nodeId){ return this.getEdge(nodeId) }, this)
   }
-
   nodeIds() {
     return _.map(this.nodes(), function(i){return i.id})
   }
-
   createEdge(nodeId) {
     var newObject = {}
     newObject[this.goTo] = this.node.id
     newObject[this.getFrom] = nodeId
     return this._allEdges().create(newObject)
   }
-
   _allEdges() { return this.graph.edges }
 }
 
-class Outputs extends Group {
-
+class Outputs extends AbstractGroup {
   constructor(node, edges) {
     this.getFrom = 1
     this.goTo = 0
     super(node,edges)
   }
-
   nodes() {
     return _.map(this.edges(), function(e){ return e.outputNode})
   }
 }
 
-class Inputs extends Group {
-
+class Inputs extends AbstractGroup {
   constructor(node, edges) {
     this.getFrom = 0
     this.goTo = 1
     super(node,edges)
   }
-
   nodes() {
     return _.map(this.edges(), function(e){ return e.inputNode})
   }

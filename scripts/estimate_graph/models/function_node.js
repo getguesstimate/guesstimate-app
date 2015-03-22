@@ -1,34 +1,8 @@
 'use strict';
 
 var numeral = require("numeral");
-var operations = require("./operations");
+var functionOperations = require("../lib/function_operations");
 var AbstractNode = require("./abstract_node");
-
-class EstimateNode extends AbstractNode {
-
-  ttype() { return 'estimate' }
-
-  propogate() {
-    this.outputs.nodes().map( e => e.propogate() )
-  }
-}
-
-  //node.value = null
-class DependentNode extends AbstractNode {
-
-  ttype() { return 'dependent' }
-
-  inputFunction() {
-    return this.inputs.nodes()[0]
-  }
-
-  propogate() {
-    var newValue = this.inputFunction().calculate_output()
-    this.set('value', newValue)
-    this.outputs.nodes().map( e => e.propogate() )
-  }
-}
-
 
 class FunctionNode extends AbstractNode {
 
@@ -42,7 +16,7 @@ class FunctionNode extends AbstractNode {
 
   efunction() {
     var functionType = this.get('functionType')
-    return operations[functionType]
+    return functionOperations[functionType]
   }
 
   dependent() {
@@ -99,4 +73,4 @@ class FunctionNode extends AbstractNode {
   }
 }
 
-module.exports = [EstimateNode, DependentNode, FunctionNode]
+module.exports = FunctionNode
