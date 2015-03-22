@@ -1,40 +1,29 @@
 'use strict';
 
-var _ = require('../../lodash.min');
-var $ = require('jquery');
-var React = require('react');
-var Reflux = require('reflux');
-var FermActions = require('../actions');
-var fermGraphStore = require('../stores/fermgraphstore');
-var fermEditingStore = require('../stores/fermeditingstore');
-var fermLocationStore = require('../stores/locationstore');
+var _ = require('../../lodash.min'),
+  $ = require('jquery'),
+  React = require('react'),
+  Reflux = require('reflux'),
 
-var GraphPane = require('./graph_pane');
-var [EditorPane, SidePane] = require('./editor_pane');
+  FermActions = require('../actions'),
+  FermGraphStore = require('../stores/fermgraphstore'),
+  FermEditingStore = require('../stores/fermeditingstore'),
 
-window.fermEditingStore = fermEditingStore;
-window.fermLocationStore = fermLocationStore;
-window.fermGraphStore = fermGraphStore;
+  GraphPane = require('./graph_pane'),
+  EditorPane = require('./editor_pane'),
+  SidePane = require('./side_pane')
 
 var App = React.createClass({
 
   mixins: [
-    Reflux.connect(fermGraphStore, "graph"),
-    Reflux.connect(fermEditingStore, "editingNode")
+    Reflux.connect(FermGraphStore, "graph"),
+    Reflux.connect(FermEditingStore, "editingNode")
   ],
 
-  componentDidMount: function() {
-    addEventListener("keydown", this.handleThis);
-  },
-
-  getNodeById: function(nodeId) {
-    return this.state.graph.nodes.get(nodeId)
-  },
-
   getEditingNode: function() {
-    var id = this.state.editingNode;
-    var node = this.getNodeById(id);
-    return node;
+    var id = this.state.editingNode
+    var node = this.state.graph.nodes.get(id)
+    return node
   },
 
   addNode: function(type) {
