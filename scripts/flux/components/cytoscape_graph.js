@@ -1,8 +1,12 @@
+'use strict';
+
 var cytoscape_graph = {};
-var _ = require('../lodash.min');
+var _ = require('../../lodash.min');
 var React = require('react');
 var Reflux = require('reflux');
 var FermActions = require('../actions');
+var $ = require('jquery');
+
 var mainLayout = {
       name: 'breadthfirst',
       directed: true, padding: 10,
@@ -65,8 +69,8 @@ var cytoscapeStyle = cytoscape.stylesheet()
       'target-arrow-color': '#994343'
     })
 
-//pass in updateEditingNode,
 var CytoscapeGraph = React.createClass( {
+  //props: graph,, updateEditingNode, editingNOde
   handleReady(cytoscapeGraph){
     this.updateAllPositions(cytoscapeGraph)
   },
@@ -74,6 +78,17 @@ var CytoscapeGraph = React.createClass( {
     this.updateAllPositions(cytoscapeGraph)
   },
   updateAllPositions(cytoscapeGraph){
+  },
+  prepareEdges() {
+    return this.props.graph.edges.toCytoscape()
+  },
+  prepareNodes() {
+    var regular = this.props.graph.nodes.toCytoscape()
+    if (this.props.editingNode) {
+      var editingCytoscapeNode = _.find(regular, function(f){return f.data.nodeId == this.props.editingNode.id}, this)
+      editingCytoscapeNode.data.editing = "true"
+    }
+    return regular
   },
   makeConfig() {
     foo = {
@@ -83,8 +98,8 @@ var CytoscapeGraph = React.createClass( {
       minZoom: 0.5,
       style: cytoscapeStyle,
       elements: {
-        nodes: this.props.nodes,
-        edges: this.props.edges
+        nodes: this.prepareNodes(),
+        edges: this.prepareEdges()
       },
       layout: _.clone(mainLayout)
     }
@@ -92,11 +107,12 @@ var CytoscapeGraph = React.createClass( {
   },
   render(){
     return (
-      <CytoscapeGraph config={this.makeConfig()} nodes={this.formatNodes} edges={this.formatEdges} onDrag={this.handleDrag} onReady={this.handleReady} onChange={this.handleChange} onPan={this.handlePan} onTap={this.handleTap}/>
+      <Cytoscape config={this.makeConfig()} nodes={this.formatNodes} edges={this.formatEdges} onDrag={this.handleDrag} onReady={this.handleReady} onChange={this.handleChange} onPan={this.handlePan} onTap={this.handleTap}/>
     )
   }
 })
 
+//pass in updateEditingNode,
     //var newLocations = _.map(cytoscapeGraph.cy.nodes(), function(n){return {id: n.data().nodeId, renderedPosition: n.renderedPosition()}})
     //if (!isNaN(newLocations[0].renderedPosition.x)) {
       //FermActions.updateAllNodeLocations(newLocations);
@@ -119,6 +135,9 @@ var CytoscapeGraph = React.createClass( {
     //} else {
       //this.props.updateEditingNode(null)
     //}
+    //
+
+
 var Cytoscape = React.createClass( {
   getDefaultProps:function(){
     return {
@@ -126,17 +145,17 @@ var Cytoscape = React.createClass( {
       nodes: {},
       edges: {},
       onDrag: function(){},
-      onDrag: function(){},
       onTap: function(){},
       onReady: function(){ return this },
       onChange: function(){ return this },
     }
   },
-  componentWillMount() {
-    var cy = this.createCy()
-    this.setState({cy: cy})
+  componentDidMount() {
+    //var cy = this.createCy()
+    //this.setState({cy: cy})
   },
   prepareConfig(){
+    //foo = this
     defaults = {
       data: {
         nodes: this.props.nodes,
@@ -144,16 +163,18 @@ var Cytoscape = React.createClass( {
       },
       ready: function() {
         this.props.onReady()
-      }
+      }.bind(this)
     }
-    _.merge(defaults, this.props.config)
+    return _.merge(defaults, this.props.config)
   },
   createCy(){
     config = this.prepareConfig()
-    return cytoscape.cy(config)
+    return cytoscape(config)
   },
   render(){
-    return false
+    return (
+      <div>fooooooooooooooooooooooo</div>
+    )
   }
 })
 
@@ -268,4 +289,4 @@ makeChanges = function(older, newer, diffKey) {
   }
 }
 
-module.exports = cytoscape_graph;
+module.exports = CytoscapeGraph;
