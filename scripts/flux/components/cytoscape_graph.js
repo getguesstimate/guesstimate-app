@@ -107,7 +107,7 @@ var CytoscapeGraph = React.createClass( {
   },
   render(){
     return (
-      <Cytoscape config={this.makeConfig()} nodes={this.formatNodes} edges={this.formatEdges} onDrag={this.handleDrag} onReady={this.handleReady} onChange={this.handleChange} onPan={this.handlePan} onTap={this.handleTap}/>
+      <Cytoscape config={this.makeConfig()} nodes={this.prepareNodes()} edges={this.prepareEdges()} onDrag={this.handleDrag()} onReady={this.handleReady} onChange={this.handleChange} onPan={this.handlePan} onTap={this.handleTap}/>
     )
   }
 })
@@ -151,16 +151,12 @@ var Cytoscape = React.createClass( {
     }
   },
   componentDidMount() {
-    //var cy = this.createCy()
-    //this.setState({cy: cy})
+    var cy = this.createCy()
+    this.setState({cy: cy})
   },
   prepareConfig(){
     //foo = this
     defaults = {
-      data: {
-        nodes: this.props.nodes,
-        edges: this.props.edges
-      },
       ready: function() {
         this.props.onReady()
       }.bind(this)
