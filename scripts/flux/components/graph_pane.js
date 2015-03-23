@@ -15,7 +15,7 @@ class CytoscapeAdapter {
     this.updateEditingNode = updateEditingNode
     this.externalGraph = externalGraph
     this.editingNode = editingNode
-    this._cytoscapeInit()
+    this._cytoscapeWillMount()
   }
 
   cytoscapeDidMount() {
@@ -37,14 +37,14 @@ class CytoscapeAdapter {
     }
   }
 
-  _cytoscapeInit() {
+  _cytoscapeWillMount() {
     var initialElements = {
         nodes: this._cytoscapePrepareNodes(),
         edges: this._cytoscapePrepareEdges()
       }
-    var actions = { updateEditingNode: this.updateEditingNode, updatePositions: this.externalUpdatePositions, cytoscapeMounted: this.externalUpdateAllPositions }
+    var props = { updateEditingNode: this.updateEditingNode, updatePositions: this.externalUpdatePositions, cytoscapeMounted: this.externalUpdateAllPositions }
     var el = $('.cytoscape_graph')[0];
-    this.cytoscapeGraph.create(el, initialElements, actions);
+    this.cytoscapeGraph.create(el, initialElements, props);
   }
 
   _cytoscapePrepareEdges() {
