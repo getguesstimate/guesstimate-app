@@ -70,14 +70,36 @@ var cytoscapeStyle = cytoscape.stylesheet()
     })
 
 var CytoscapeGraph = React.createClass( {
-  //props: graph,, updateEditingNode, editingNOde
   handleReady(cytoscapeGraph){
+    this.setState({graph: cytoscapeGraph})
     this.updateAllPositions(cytoscapeGraph)
   },
   handleChange(cytoscapeGraph){
     this.updateAllPositions(cytoscapeGraph)
   },
-  updateAllPositions(cytoscapeGraph){
+  handleDrag(event){
+    id = event.cyTarget.data().nodeId;
+    position = event.cyTarget.renderedPosition()
+    object = {id: id, renderedPosition: position}
+    FermActions.updateNodeLocations([object])
+  },
+  handlePan(event){
+    var newLocations = _.map(event.cy.nodes(), function(n){return {id: n.data().nodeId, renderedPosition: n.renderedPosition()}})
+    FermActions.updateNodeLocations(objects);
+  },
+  handleTap(event){
+    data = event.cyTarget.data()
+    if (data) {
+      this.props.updateEditingNode(data.nodeId)
+    } else {
+      this.props.updateEditingNode(null)
+    }
+  },
+  updateAllPositions: function(){
+    var newLocations = _.map(this.state.graph.nodes(), function(n){return {id: n.data().nodeId, renderedPosition: n.renderedPosition()}})
+    if (!isNaN(newLocations[0].renderedPosition.x)){
+      FermActions.updateAllNodeLocations(newLocations);
+    }
   },
   prepareEdges() {
     return this.props.graph.edges.toCytoscape()
@@ -107,36 +129,10 @@ var CytoscapeGraph = React.createClass( {
   },
   render(){
     return (
-      <Cytoscape config={this.makeConfig()} nodes={this.prepareNodes()} edges={this.prepareEdges()} onDrag={this.handleDrag()} onReady={this.handleReady} onChange={this.handleChange} onPan={this.handlePan} onTap={this.handleTap}/>
+      <Cytoscape config={this.makeConfig()} nodes={this.prepareNodes()} edges={this.prepareEdges()} onDrag={this.handleDrag} onReady={this.handleReady} onChange={this.handleChange} onPan={this.handlePan} onTap={this.handleTap}/>
     )
   }
 })
-
-//pass in updateEditingNode,
-    //var newLocations = _.map(cytoscapeGraph.cy.nodes(), function(n){return {id: n.data().nodeId, renderedPosition: n.renderedPosition()}})
-    //if (!isNaN(newLocations[0].renderedPosition.x)) {
-      //FermActions.updateAllNodeLocations(newLocations);
-    //}
-  //}
-  //handleDrag(event) {
-    //id = event.cyTarget.data().nodeId;
-    //position = event.cyTarget.renderedPosition()
-    //object = {id: id, renderedPosition: position}
-    //FermActions.updateNodeLocations(objects)
-  //},
-  //handlePan(event) {
-    //var newLocations = _.map(event.cy.nodes(), function(n){return {id: n.data().nodeId, renderedPosition: n.renderedPosition()}})
-    //FermActions.updateNodeLocations(objects);
-  //},
-  //handleTap(event) {
-    //data = event.cyTarget.data()
-    //if (data) {
-      //this.props.updateEditingNode(data.nodeId)
-    //} else {
-      //this.props.updateEditingNode(null)
-    //}
-    //
-
 
 var Cytoscape = React.createClass( {
   getDefaultProps:function(){
@@ -144,10 +140,11 @@ var Cytoscape = React.createClass( {
       config: {},
       nodes: {},
       edges: {},
-      onDrag: function(){},
-      onTap: function(){},
+      onDrag: function(){ return this },
+      onTap: function(){ return this },
       onReady: function(){ return this },
       onChange: function(){ return this },
+      ready: function(){}
     }
   },
   componentDidMount() {
@@ -156,20 +153,33 @@ var Cytoscape = React.createClass( {
   },
   prepareConfig(){
     //foo = this
-    defaults = {
+    that = this
+    var defaults = {
       ready: function() {
-        this.props.onReady()
-      }.bind(this)
+        this.on('drag', function(e){
+          that.props.onDrag(e)
+        });
+        this.on('tap', function(e){
+          that.props.onTap(e)
+        });
+        this.on('pan', function(e){
+          that.props.onPan(e)
+        });
+        that.props.onReady(this)
+      }
     }
     return _.merge(defaults, this.props.config)
   },
   createCy(){
-    config = this.prepareConfig()
-    return cytoscape(config)
+    tthis = this
+    var config = this.prepareConfig()
+    config.container = $('.cytoscape_graph')[0]
+    var a = cytoscape(config)
+    return a
   },
   render(){
     return (
-      <div>fooooooooooooooooooooooo</div>
+      <div className="cytoscape_graph"></div>
     )
   }
 })
