@@ -149,10 +149,23 @@ var Cytoscape = React.createClass( {
   },
   componentDidMount() {
     var cy = this.createCy()
+    cytoscape_graph = cy
     this.setState({cy: cy})
   },
+  componentDidUpdate(oldData) {
+    newData = {elements:{nodes: this.props.nodes, edges: this.props.edges}}
+    oldData = this.state.cy.json()
+
+    getAllData = nodes => nodes.map(node => node.data)
+
+    getTypeData = elementType => [oldData, newData].map( n => getAllData(n.elements[elementType] || []) )
+    var [oldNodes, newNodes] = getTypeData('nodes')
+    var [oldEdges, newEdges] = getTypeData('edges')
+
+    nodeChanges = makeChanges(oldNodes, newNodes, 'nodeId')
+    edgeChanges = makeChanges(oldEdges, newEdges, 'id')
+  },
   prepareConfig(){
-    //foo = this
     that = this
     var defaults = {
       ready: function() {
@@ -184,20 +197,6 @@ var Cytoscape = React.createClass( {
   }
 })
 
-cytoscape_graph.update = function(inputNodes, inputEdges, callback) {
-  newData = {elements:{nodes: inputNodes, edges: inputEdges}}
-  oldData = this.cy.json()
-
-  getAllData = nodes => nodes.map(node => node.data)
-
-  getTypeData = elementType => [oldData, newData].map( n => getAllData(n.elements[elementType] || []) )
-  var [oldNodes, newNodes] = getTypeData('nodes')
-  var [oldEdges, newEdges] = getTypeData('edges')
-
-  nodeChanges = makeChanges(oldNodes, newNodes, 'nodeId')
-  edgeChanges = makeChanges(oldEdges, newEdges, 'id')
-  callback()
-}
 
 isArray = (typeof Array.isArray === 'function') ?
   // use native function
@@ -261,7 +260,7 @@ formatDiff = function(diff) {
 
 
 cytoChange = function(action, data) {
-  cy = cytoscape_graph.cy
+  cy = cytoscape_graph
   actions = {
     'modified': function(data) {
       element = cy.getElementById(data.id);
