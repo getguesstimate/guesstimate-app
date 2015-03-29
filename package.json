@@ -44,6 +44,9 @@
     "react-router": "~0.11.6",
     "reflux": "~0.2.3",
     "jsondiffpatch": "~0.1.27",
-    "numeral": "~1.4.5"
+    "numeral": "~1.4.5",
+    "express": "~4.0.0",
+    "mongoose": "~3.6.13",
+    "body-parser": "~1.0.1"
   }
 }
