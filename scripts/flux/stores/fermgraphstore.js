@@ -1,3 +1,5 @@
+'use strict';
+
 var React = require('react');
 var Reflux = require('reflux');
 var FermActions = require('../actions');
