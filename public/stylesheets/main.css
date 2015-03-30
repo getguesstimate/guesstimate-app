@@ -14,20 +14,18 @@
   padding: 1em
 }
 
-@media (min-width: 600px) {
-  .cytoscape_graph {
-    height: 100%;
-  }
-  .sidepane{
-    height: 100%;
-    padding-top: 6em;
-  }
-  .sidepane .nodeForm{
-    position: absolute;
-    top: 50%;
-    margin-top: -50%;
-    width: 80%;
-  }
+.cytoscape_graph {
+  height: 100%;
+}
+.sidepane{
+  height: 100%;
+  padding-top: 6em;
+}
+.sidepane .nodeForm{
+  position: absolute;
+  top: 50%;
+  margin-top: -50%;
+  width: 80%;
 }
 
 .graphpane{
@@ -56,23 +54,23 @@ body.body-override-bootstrap{
   background-color: rgba(180,180,180,0.1);
 }
 
-.nodeForm {
-  font-size: 1.5em;
-  form .form-control {
-    height: 2em;
-    border: none;
-    background: rgba(255,255,255,0.8);
-    border-radius: 0;
-    font-size: 1em;
-    &.function-multiple-form{
-      height: 12em;
-    }
-    &:focus{
-      background-color: rgba(217,247,255,0.8);
-      box-shadow: none;
-    }
-  }
-}
+/*.nodeForm {*/
+  /*font-size: 1.5em;*/
+  /*form .form-control {*/
+    /*height: 2em;*/
+    /*border: none;*/
+    /*background: rgba(255,255,255,0.8);*/
+    /*border-radius: 0;*/
+    /*font-size: 1em;*/
+    /*&.function-multiple-form{*/
+      /*height: 12em;*/
+    /*}*/
+    /*&:focus{*/
+      /*background-color: rgba(217,247,255,0.8);*/
+      /*box-shadow: none;*/
+    /*}*/
+  /*}*/
+/*}*/
 
 .newButtons{
   position: absolute;

@@ -8,10 +8,9 @@ var _ = require('../../lodash.min'),
   FermActions = require('../actions'),
   FermGraphStore = require('../stores/fermgraphstore'),
   FermEditingStore = require('../stores/fermeditingstore'),
-
-  GraphPane = require('./graph_pane'),
-  EditorPane = require('./editor_pane'),
-  SidePane = require('./side_pane')
+  GraphPane = require('./graph_pane.jsx'),
+  EditorPane = require('./editor_pane.jsx'),
+  SidePane = require('./side_pane.jsx')
 
 var App = React.createClass({
 

@@ -5,7 +5,7 @@ var Backbone = require("backbone"),
     DependentNode = require("../models/dependent_node"),
     FunctionNode = require("../models/function_node");
 
-require(['lodash'], function(_) {});
+var _ = require('lodash');
 
 var NodeCollection = Backbone.Collection.extend({
 

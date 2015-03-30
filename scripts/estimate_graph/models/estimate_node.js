@@ -1,6 +1,6 @@
 'use strict';
 
-var AbstractNode = require("./abstract_node");
+var AbstractNode = require('./abstract_node');
 
 class EstimateNode extends AbstractNode {
 

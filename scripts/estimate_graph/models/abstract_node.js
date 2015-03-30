@@ -2,7 +2,8 @@
 
 var Backbone = require("backbone");
 var numeral = require("numeral");
-require(['lodash'], function(_) {});
+var _ = require('lodash');
+//require(['lodash'], function(_) {});
 
 class AbstractGroup {
   constructor(node, graph) {
@@ -32,9 +33,9 @@ class AbstractGroup {
 
 class Outputs extends AbstractGroup {
   constructor(node, edges) {
+    super(node,edges)
     this.getFrom = 1
     this.goTo = 0
-    super(node,edges)
   }
   nodes() {
     return _.map(this.edges(), function(e){ return e.outputNode})
@@ -43,9 +44,9 @@ class Outputs extends AbstractGroup {
 
 class Inputs extends AbstractGroup {
   constructor(node, edges) {
+    super(node,edges)
     this.getFrom = 0
     this.goTo = 1
-    super(node,edges)
   }
   nodes() {
     return _.map(this.edges(), function(e){ return e.inputNode})
