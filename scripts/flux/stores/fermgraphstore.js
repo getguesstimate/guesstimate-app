@@ -4,7 +4,7 @@ var React = require('react');
 var Reflux = require('reflux');
 var FermActions = require('../actions');
 var _ = require('../../lodash.min');
-var EstimateGraph = require('../../estimate_graph/estimate_graph');
+var EstimateGraph = require('../../estimate_graph/estimate_graph.js');
 
 var nodeCounter = 1,
     localStorageKey = "fermi";
@@ -55,7 +55,6 @@ var fermGraphStore = Reflux.createStore({
       this.updateGraph();
     },
     updateGraph: function(graph) {
-      //localStorage.setNode(localStorageKey, JSON.stringify(list));
       this.trigger(this.graph);
     },
     _onUpdateNode: function(nodeId, newValues){
@@ -75,9 +74,11 @@ var fermGraphStore = Reflux.createStore({
       return this.graph.nodes.get(nodeId)
     },
     getInitialState: function() {
-      var graphData = localStorage.getItem(localStorageKey);
-      this.graph = new EstimateGraph(graphData);
-      nodeCounter = parseInt(_.max(this.graph.nodes.models, 'id').id) + 1
+      //var graphData = localStorage.getItem(localStorageKey);
+      this.graph = new EstimateGraph(false);
+      console.log(this.graph)
+      //nodeCounter = parseInt(_.max(this.graph.nodes.models, 'id').id) + 1
+      nodeCounter = 5;
       return this.graph;
     }
 })

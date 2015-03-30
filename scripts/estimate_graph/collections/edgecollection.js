@@ -2,6 +2,7 @@
 
 var Edge = require('../models/edge');
 var Backbone = require("backbone");
+var _ = require('lodash');
 
 var EdgeCollection = Backbone.Collection.extend( {
 

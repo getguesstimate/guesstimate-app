@@ -1,9 +1,12 @@
 'use strict';
 
 var cytoscape_graph = {};
-var _ = require('../../lodash.min');
+var cytoscape = require('cytoscape')
+var _ = require('lodash');
+
+var jsdom = require("jsdom");
+var $ = require('jquery')(require("jsdom").jsdom().parentWindow);
 var React = require('react');
-var $ = require('jquery');
 
 var Cytoscape = React.createClass( {
   getDefaultProps:function(){
@@ -68,7 +71,7 @@ var Cytoscape = React.createClass( {
   }
 })
 
-isArray = (typeof Array.isArray === 'function') ?
+var isArray = (typeof Array.isArray === 'function') ?
   // use native function
   Array.isArray :
   // use instanceof operator
@@ -76,17 +79,17 @@ isArray = (typeof Array.isArray === 'function') ?
     return a instanceof Array;
   };
 
-trimUnderscore = function(str) {
+var trimUnderscore = function(str) {
   if (str.substr(0, 1) === '_') {
     return str.slice(1);
   }
   return str;
 };
 
-isNode = data => (data.id.substr(0,1) === 'n')
-isEdge = data => (data.source !== undefined)
+var isNode = data => (data.id.substr(0,1) === 'n')
+var isEdge = data => (data.source !== undefined)
 
-getDeltaType = function(delta) {
+var getDeltaType = function(delta) {
   if (typeof delta === 'undefined') {
     return 'unchanged';
   }
@@ -111,7 +114,7 @@ getDeltaType = function(delta) {
   return 'unknown';
 };
 
-formatDiff = function(diff) {
+var formatDiff = function(diff) {
   if (typeof diff === "undefined") {
     return {changed: [], deleted: []}
   }
@@ -128,7 +131,7 @@ formatDiff = function(diff) {
   }
 }
 
-cytoChange = function(action, data) {
+var cytoChange = function(action, data) {
   cy = cytoscape_graph
   actions = {
     'modified': function(data) {
@@ -152,7 +155,7 @@ cytoChange = function(action, data) {
   actions[action](data)
 }
 
-makeChanges = function(older, newer, diffKey) {
+var makeChanges = function(older, newer, diffKey) {
   differ = jsondiffpatch.create({objectHash(obj){return obj[diffKey]}})
   diff = differ.diff(older, newer)
   if (diff) {

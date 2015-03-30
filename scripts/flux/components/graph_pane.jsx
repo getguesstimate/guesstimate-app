@@ -1,7 +1,10 @@
 'use strict';
 
-var _ = require('../../lodash.min');
-var $ = require('jquery');
+var _ = require('lodash');
+
+var cytoscape = require('cytoscape')
+var jsdom = require("jsdom");
+var $ = require('jquery')(require("jsdom").jsdom().parentWindow);
 var React = require('react');
 var Reflux = require('reflux');
 var FermActions = require('../actions');
@@ -51,7 +54,7 @@ var GraphPane = React.createClass( {
     return regular
   },
   makeConfig() {
-    foo = {
+    var foo = {
       container: $('.cytoscape_graph')[0],
       userZoomingEnabled: true,
       maxZoom: 2,
