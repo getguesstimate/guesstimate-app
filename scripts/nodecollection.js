@@ -55,9 +55,9 @@ class group {
 
 class outputs extends group{
   constructor(node, edges){
+    super(node,edges)
     this.getFrom = 1
     this.goTo = 0
-    super(node,edges)
   }
   nodes(){
     return _.map(this.edges(), function(e){ return e.outputNode})
@@ -66,9 +66,9 @@ class outputs extends group{
 
 class inputs extends group{
   constructor(node, edges){
+    super(node,edges)
     this.getFrom = 0
     this.goTo = 1
-    super(node,edges)
   }
   nodes(){
     return _.map(this.edges(), function(e){ return e.inputNode})

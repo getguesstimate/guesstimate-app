@@ -45,6 +45,7 @@ var App = React.createClass({
   updateEditingNode: function(nodeId){
     FermActions.updateEditingNode(nodeId)
   },
+
   render: function() {
     return (
       <div className="row .app">

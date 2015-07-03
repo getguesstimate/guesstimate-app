@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server",
-    "build": "webpack"
+    "build": "webpack",
+    "deploy": "surge -p public -d guestimate.surge.sh"
   },
   "repository": {
     "type": "git",
@@ -18,6 +19,16 @@
   "license": "MIT",
   "bugs": {
     "url": ""
+  },
+  "browser": {
+    "fs": false,
+    "child_process": false
+  },
+  "files": [
+    "node_modules/cytoscape/dist/cytoscape.min.js"
+  ],
+  "node": {
+    "child_process": "empty"
   },
   "homepage": "",
   "devDependencies": {},
@@ -34,7 +45,6 @@
     "backbone": "1.1.2",
     "bootstrap": "3.3.2",
     "css-loader": "^0.12.0",
-    "cytoscape": "2.3.8",
     "file-loader": "^0.8.1",
     "hjs-webpack": "^2.8.1",
     "jquery": "2.1.3",
