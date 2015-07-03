@@ -1,40 +1,27 @@
 .row.app{
+  width: 100%;
+}
+
+.sidePane{
   height: 900px;
-  width: 900px;
-}
-
-.maingraph {
-  height: 60%;
-}
-
-.sidepane{
-  height: 40%;
   background-color: #eee;
   padding: 1em
 }
 
-@media (min-width: 600px) {
-  .maingraph {
-    height: 900px;
-    width: 900px;
-  }
-  .sidepane{
-    height: 100%;
-    padding-top: 6em;
-  }
-  .sidepane .nodeForm{
-    position: absolute;
-    top: 50%;
-    margin-top: -50%;
-    width: 80%;
-  }
+.maingraph {
+  height: 900px;
+  width: 100%;
+}
+
+.sidepane .nodeForm{
+  position: absolute;
+  top: 50%;
+  margin-top: -50%;
+  width: 80%;
 }
 
 .graphpane{
   background-color: white;
-}
-body.body-override-bootstrap{
-  background-color: #eee;
 }
 
 .function-multiple-form{

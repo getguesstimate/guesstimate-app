@@ -1,5 +1,6 @@
 var cytoscape = require('cytoscape');
 var maingraph = {};
+var jsondiffpatch = require('jsondiffpatch')
 var _ = require('../../lodash.min');
 var mainLayout = {
       name: 'breadthfirst',
@@ -171,12 +172,12 @@ var cytoChange = function(action, data){
   var cy = maingraph.cy
   var actions = {
     'modified': function(data){
-      element = cy.getElementById(data.id);
+      var element = cy.getElementById(data.id);
       element.removeData()
       element.data(data)
     },
     'deleted': function(data){
-      element = cy.getElementById(data.id);
+      var element = cy.getElementById(data.id);
       cy.remove(element)
     },
     'added': function(data){
@@ -191,7 +192,6 @@ var cytoChange = function(action, data){
   actions[action](data)
 }
 
-//jsondiffpatch = require('jsondiffpatch')
 
 var makeChanges = function(older, newer, diffKey){
   var differ = jsondiffpatch.create({objectHash(obj){return obj[diffKey]}})
