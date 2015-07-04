@@ -6,15 +6,13 @@ import React from 'react'
 import Layout from './layouts/application'
 
 export default Router.extend({
-  renderPage (page, opts = {layout: true}) {
-    if (opts.layout){
-      page = (
-        <Layout>
-          {page}
-        </Layout>
-      )
-    }
-    React.render(page, document.body)
+  render (page, isFluid=false) {
+    var fullPage = (
+      <Layout isFluid={isFluid}>
+        {page}
+      </Layout>
+    )
+    React.render(fullPage, document.body)
   },
 
   routes: {
@@ -23,11 +21,11 @@ export default Router.extend({
   },
 
   home () {
-    this.renderPage(<HomePage/>)
+    this.render(<HomePage/>)
   },
 
   model () {
-    this.renderPage(<ModelPage/>)
+    this.render(<ModelPage/>, true)
   },
 })
 

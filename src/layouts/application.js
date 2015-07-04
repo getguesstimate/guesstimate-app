@@ -3,10 +3,12 @@ import DropdownButton from 'react-bootstrap/DropdownButton'
 import MenuItem from 'react-bootstrap/MenuItem'
 
 var Header = React.createClass({
+  displayName: 'Header',
   render: function() {
+    var containerClass = (this.props.isFluid === true) ? "container-fluid" : "container";
     return (
       <nav className="navbar navbar-default">
-        <div className="container">
+        <div className={containerClass}>
           <div className="navbar-header">
             <a className="navbar-brand" href="/">Guestimate</a>
           </div>
@@ -20,12 +22,13 @@ var Header = React.createClass({
     );
   }
 });
+
 export default React.createClass({
   displayName: 'Layout',
   render () {
     return (
       <div>
-          <Header/>
+          <Header isFluid={this.props.isFluid}/>
           {this.props.children}
       </div>
     )
