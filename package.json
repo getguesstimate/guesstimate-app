@@ -6,7 +6,9 @@
   "scripts": {
     "start": "webpack-dev-server",
     "build": "webpack",
-    "deploy": "surge -p public -d guestimate.surge.sh"
+    "deploy": "surge -p public -d guestimate.surge.sh",
+    "stage": "surge -p public -d guestimate-stage.surge.sh",
+    "stage!": "npm run build && npm run stage"
   },
   "repository": {
     "type": "git",
