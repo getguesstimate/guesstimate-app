@@ -2,10 +2,11 @@
 
 var cytoscape_graph = {};
 var cytoscape = require('cytoscape')
+var jsondiffpatch = require('jsondiffpatch')
 var _ = require('lodash');
 
 var jsdom = require("jsdom");
-var $ = require('jquery')(require("jsdom").jsdom().parentWindow);
+var $ = require('jquery')
 var React = require('react');
 
 var Cytoscape = React.createClass( {
@@ -23,24 +24,24 @@ var Cytoscape = React.createClass( {
   },
   componentDidMount() {
     var cy = this.createCy()
-    cytoscape_graph = cy
+    window.cytoscape_graph = cy
     this.setState({cy: cy})
   },
   componentDidUpdate(oldData) {
-    newData = {elements:{nodes: this.props.nodes, edges: this.props.edges}}
-    oldData = this.state.cy.json()
+    var newData = {elements:{nodes: this.props.nodes, edges: this.props.edges}}
+    var oldData = this.state.cy.json()
 
-    getAllData = nodes => nodes.map(node => node.data)
+    var getAllData = nodes => nodes.map(node => node.data)
 
-    getTypeData = elementType => [oldData, newData].map( n => getAllData(n.elements[elementType] || []) )
+    var getTypeData = elementType => [oldData, newData].map( n => getAllData(n.elements[elementType] || []) )
     var [oldNodes, newNodes] = getTypeData('nodes')
     var [oldEdges, newEdges] = getTypeData('edges')
 
-    nodeChanges = makeChanges(oldNodes, newNodes, 'nodeId')
-    edgeChanges = makeChanges(oldEdges, newEdges, 'id')
+    var nodeChanges = makeChanges(oldNodes, newNodes, 'nodeId')
+    var edgeChanges = makeChanges(oldEdges, newEdges, 'id')
   },
   prepareConfig(){
-    that = this
+    var that = this
     var defaults = {
       ready: function() {
         this.on('drag', function(e){
@@ -58,7 +59,7 @@ var Cytoscape = React.createClass( {
     return _.merge(defaults, this.props.config)
   },
   createCy(){
-    tthis = this
+    var tthis = this
     var config = this.prepareConfig()
     config.container = $('.cytoscape_graph')[0]
     var a = cytoscape(config)
@@ -119,28 +120,28 @@ var formatDiff = function(diff) {
     return {changed: [], deleted: []}
   }
   else {
-    Ids = _.select(Object.keys(diff), function(n){ return !isNaN(trimUnderscore(n))})
-    withType = Ids.map( n => getDeltaType(diff[n]) )
+    var Ids = _.select(Object.keys(diff), function(n){ return !isNaN(trimUnderscore(n))})
+    var withType = Ids.map( n => getDeltaType(diff[n]) )
 
-    getAll = diffType => _.select(Ids, function(n){ return getDeltaType(diff[n]) == diffType })
-    getAllFormatted = all => getAll(all).map(f => trimUnderscore(f))
+    var getAll = diffType => _.select(Ids, function(n){ return getDeltaType(diff[n]) == diffType })
+    var getAllFormatted = all => getAll(all).map(f => trimUnderscore(f))
 
-    byType = {}
+    var byType = {}
     _.map(["added", "modified", "deleted"], function(n){ byType[n] = getAllFormatted(n) })
     return byType
   }
 }
 
 var cytoChange = function(action, data) {
-  cy = cytoscape_graph
-  actions = {
+  var cy = window.cytoscape_graph
+  var actions = {
     'modified': function(data) {
-      element = cy.getElementById(data.id);
+      const element = cy.getElementById(data.id);
       element.removeData()
       element.data(data)
     },
     'deleted': function(data) {
-      element = cy.getElementById(data.id);
+      const element = cy.getElementById(data.id);
       cy.remove(element)
     },
     'added': function(data) {
@@ -156,10 +157,10 @@ var cytoChange = function(action, data) {
 }
 
 var makeChanges = function(older, newer, diffKey) {
-  differ = jsondiffpatch.create({objectHash(obj){return obj[diffKey]}})
-  diff = differ.diff(older, newer)
+  var differ = jsondiffpatch.create({objectHash(obj){return obj[diffKey]}})
+  var diff = differ.diff(older, newer)
   if (diff) {
-    formatted = formatDiff(diff)
+    var formatted = formatDiff(diff)
     formatted.modified.map( n => cytoChange('modified', newer[n]) )
     formatted.added.map( n => cytoChange('added', newer[n]) )
     formatted.deleted.map( n => cytoChange('deleted', older[n]) )

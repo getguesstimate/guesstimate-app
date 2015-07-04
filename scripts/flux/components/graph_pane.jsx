@@ -3,8 +3,7 @@
 var _ = require('lodash');
 
 var cytoscape = require('cytoscape')
-var jsdom = require("jsdom");
-var $ = require('jquery')(require("jsdom").jsdom().parentWindow);
+var $ = require('jquery')
 var React = require('react');
 var Reflux = require('reflux');
 var FermActions = require('../actions');
@@ -19,9 +18,9 @@ var GraphPane = React.createClass( {
     this.updateAllPositions(cytoscapeGraph)
   },
   handleDrag(event){
-    id = event.cyTarget.data().nodeId;
-    position = event.cyTarget.renderedPosition()
-    object = {id: id, renderedPosition: position}
+    var id = event.cyTarget.data().nodeId;
+    var position = event.cyTarget.renderedPosition()
+    var object = {id: id, renderedPosition: position}
     FermActions.updateNodeLocations([object])
   },
   handlePan(event){
@@ -29,7 +28,7 @@ var GraphPane = React.createClass( {
     FermActions.updateNodeLocations(objects);
   },
   handleTap(event){
-    data = event.cyTarget.data()
+    var data = event.cyTarget.data()
     if (data) {
       this.props.updateEditingNode(data.nodeId)
     } else {
