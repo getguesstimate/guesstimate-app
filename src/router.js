@@ -1,16 +1,21 @@
 import app from 'ampersand-app'
 import Router from 'ampersand-router'
-import PublicPage from './pages/public'
+import ModelPage from './pages/model'
+import HomePage from './pages/home'
 import React from 'react'
 
 export default Router.extend({
   routes: {
-    '': 'public',
-    'repos': 'repos'
+    '': 'home',
+    'model': 'model'
   },
 
-  public () {
-    React.render(<PublicPage/>, document.body)
+  home () {
+    React.render(<HomePage/>, document.body)
+  },
+
+  model () {
+    React.render(<ModelPage/>, document.body)
   },
 })
 
