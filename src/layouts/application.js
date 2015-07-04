@@ -1,6 +1,7 @@
 import React from 'react'
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import MenuItem from 'react-bootstrap/MenuItem'
+import NavHelper from '../components/nav-helper'
 
 var Header = React.createClass({
   displayName: 'Header',
@@ -27,10 +28,12 @@ export default React.createClass({
   displayName: 'Layout',
   render () {
     return (
-      <div>
-          <Header isFluid={this.props.isFluid}/>
-          {this.props.children}
-      </div>
+      <NavHelper>
+        <div>
+            <Header isFluid={this.props.isFluid}/>
+            {this.props.children}
+        </div>
+      </NavHelper>
     )
   }
 })
