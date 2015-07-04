@@ -1,29 +1,14 @@
-var webpack = require('webpack');
+var getConfig = require('hjs-webpack')
+var webpack = require('webpack')
 
-module.exports = {
-  devtool: 'eval',
-  entry: [
-    'webpack-dev-server/client?http://localhost:3000',
-    'webpack/hot/only-dev-server',
-    './scripts/index'
-  ],
-  debug: true,
-  output: {
-    path: __dirname + '/scripts/',
-    filename: 'bundle.js',
-    publicPath: '/scripts/'
-  },
-  plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin()
-  ],
-  resolve: {
-    extensions: ['', '.js']
-  },
-  module: {
-    loaders: [
-      { test: /\.js$/, loaders: ['react-hot', 'jsx?harmony'], exclude: /node_modules/ },
-      { test: /\.css$/, loader: 'style-loader!css-loader' }
-    ]
-  }
-};
+module.exports = getConfig({
+  in: 'src/app.js',
+  out: 'public',
+  clearBeforeBuild: true,
+  hostName: 'ozzie-Elitebook.local'
+});
+
+module.exports.node = {
+  child_process: 'empty'
+}
+

@@ -1,49 +1,73 @@
 {
-  "name": "react-hot-boilerplate",
-  "version": "1.0.0",
-  "description": "Boilerplate for ReactJS project with hot code reloading",
+  "name": "guestimate",
+  "version": "0.0.1",
+  "description": "Make, share, and evaluate estimates of things",
+  "main": "index.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "webpack-dev-server",
+    "build": "webpack",
+    "deploy": "surge -p public -d guestimate.surge.sh",
+    "stage": "surge -p public -d guestimate-stage.surge.sh",
+    "stage!": "npm run build && npm run stage"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/gaearon/react-hot-boilerplate.git"
   },
   "keywords": [
-    "react",
-    "reactjs",
-    "boilerplate",
-    "hot",
-    "hot",
-    "reload",
-    "hmr",
-    "live",
-    "edit",
     "webpack"
   ],
-  "author": "Dan Abramov <dan.abramov@me.com> (http://github.com/gaearon)",
+  "author": "Ozzie Gooen",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/gaearon/react-hot-boilerplate/issues"
+    "url": ""
   },
-  "homepage": "https://github.com/gaearon/react-hot-boilerplate",
-  "devDependencies": {
-    "jsx-loader": "^0.12.2",
-    "react-hot-loader": "^1.1.1",
-    "webpack": "^1.5.1",
-    "webpack-dev-server": "1.6.4"
+  "browser": {
+    "fs": false,
+    "child_process": false
   },
+  "files": [
+    "node_modules/cytoscape/dist/cytoscape.min.js"
+  ],
+  "node": {
+    "child_process": "empty"
+  },
+  "homepage": "",
+  "devDependencies": {},
   "dependencies": {
+    "ampersand-app": "^1.0.4",
+    "ampersand-model": "^5.0.3",
+    "ampersand-react-mixin": "^0.1.3",
+    "ampersand-rest-collection": "^4.0.0",
+    "ampersand-router": "^3.0.2",
+    "autoprefixer-stylus": "^0.5.0",
+    "babel": "^5.1.13",
+    "babel-core": "^5.1.13",
+    "babel-loader": "^5.0.0",
     "backbone": "1.1.2",
     "bootstrap": "3.3.2",
-    "cytoscape": "2.3.8",
+    "css-loader": "^0.12.0",
+    "file-loader": "^0.8.1",
+    "hjs-webpack": "^2.8.1",
     "jquery": "2.1.3",
-    "lodash": "^2.4.1",
-    "react": "^0.12.0",
-    "react-bootstrap": "0.13.3",
-    "react-router": "~0.11.6",
-    "reflux": "~0.2.3",
     "jsondiffpatch": "~0.1.27",
-    "numeral": "~1.4.5"
+    "local-links": "^1.4.0",
+    "lodash": "^2.4.1",
+    "node-uuid": "^1.4.3",
+    "numeral": "~1.4.5",
+    "octicons": "^2.2.0",
+    "qs": "^2.4.1",
+    "react": "^0.13.2",
+    "react-bootstrap": "0.13.3",
+    "react-hot-loader": "^1.2.5",
+    "reflux": "~0.2.8",
+    "standard": "^3.7.3",
+    "style-loader": "^0.12.1",
+    "stylus-loader": "^1.1.0",
+    "surge": "^0.11.1",
+    "url-loader": "^0.5.5",
+    "webpack": "^1.8.11",
+    "webpack-dev-server": "^1.8.2",
+    "xhr": "^2.0.1"
   }
 }
