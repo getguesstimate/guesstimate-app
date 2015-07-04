@@ -7,8 +7,7 @@ var functionOperations = {
     name: 'multiplication',
     sign: 'x',
     apply(inputs){
-      //var product = _.reduce(inputs, function(product, n) { return product * n; })
-      var product = 0;
+      var product = _.reduce(inputs, function(product, n) { return product * n; })
       return product;
     }
   },
@@ -17,8 +16,7 @@ var functionOperations = {
     name: 'addition',
     sign: '+',
     apply(inputs){
-      //var sum = _.reduce(inputs, function(sum, n) { return sum + n; });
-      var sum = 0;
+      var sum = _.reduce(inputs, function(sum, n) { return sum + n; });
       return sum;
     }
   }

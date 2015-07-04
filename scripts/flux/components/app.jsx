@@ -1,6 +1,6 @@
 'use strict';
 
-var _ = require('../../lodash.min'),
+var _ = require('lodash'),
   $ = require('jquery'),
   React = require('react'),
   Reflux = require('reflux'),
@@ -11,6 +11,8 @@ var _ = require('../../lodash.min'),
   GraphPane = require('./graph_pane.jsx'),
   EditorPane = require('./editor_pane.jsx'),
   SidePane = require('./side_pane.jsx')
+
+window.FermGraphStore = FermGraphStore
 
 var App = React.createClass({
 
@@ -31,6 +33,10 @@ var App = React.createClass({
 
   updateEditingNode: function(nodeId) {
     FermActions.updateEditingNode(nodeId)
+  },
+
+  componentWillMount: function() {
+    FermActions.graphReset(this.props.graphData)
   },
 
   render: function() {
