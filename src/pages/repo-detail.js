@@ -1,16 +1,13 @@
 import React from 'react'
+import App from '../../scripts/flux/components/app'
 
 export default React.createClass({
   displayName: 'RepoDetailPage',
 
   render () {
     const {repo} = this.props
-
     return (
-      <div>
-      <h1> This is awesome! {repo.name}</h1>
-      <p>foobar</p>
-      </div>
+      <App graphData = {repo.data} />
     )
   }
 })

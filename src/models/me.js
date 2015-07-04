@@ -3,7 +3,7 @@ import RepoCollection from './repo-collection'
 
 export default Model.extend({
   props: {
-    id: 'number'
+    id: 'number',
   },
 
   collections: {
