@@ -25,7 +25,7 @@ var GraphPane = React.createClass( {
   },
   handlePan(event){
     var newLocations = _.map(event.cy.nodes(), function(n){return {id: n.data().nodeId, renderedPosition: n.renderedPosition()}})
-    FermActions.updateNodeLocations(objects);
+    FermActions.updateNodeLocations(newLocations);
   },
   handleTap(event){
     var data = event.cyTarget.data()
