@@ -1,11 +1,11 @@
 'use strict';
 
-var React = require('react');
-var _ = require('../../lodash.min');
-var ReactBootstrap = require('react-bootstrap');
-var Input = require('react-bootstrap/Input');
-var $ = require('jquery');
-var FermActions = require('../actions');
+var React = require('react')
+var _ = require('lodash')
+var ReactBootstrap = require('react-bootstrap')
+var Input = require('react-bootstrap/Input')
+var $ = require('jquery')
+var FermActions = require('../actions')
 
 var NodeForm = React.createClass({
   render(){

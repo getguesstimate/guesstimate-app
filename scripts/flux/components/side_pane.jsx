@@ -13,4 +13,4 @@ var SidePane = React.createClass({
   }
 });
 
-module.exports = 'foo'
+module.exports = SidePane
