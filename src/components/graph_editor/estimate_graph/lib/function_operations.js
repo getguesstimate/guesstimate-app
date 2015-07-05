@@ -1,5 +1,5 @@
 'use strict';
-var _ = require('../../lodash.min');
+var _ = require('lodash');
 
 var functionOperations = {
 

@@ -1,4 +1,4 @@
-var _ = require('../lodash.min');
+var _ = require('lodash');
 var NodeCollection = require('./collections/nodecollection');
 var EdgeCollection = require('./collections/edgecollection');
 

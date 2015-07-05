@@ -3,10 +3,8 @@
 var Reflux = require('reflux');
 var React = require('react');
 var _ = require('lodash');
-var ReactBootstrap = require('react-bootstrap');
 var Button = require('react-bootstrap/Button');
 
-var FermActions = require('../actions');
 var fermLocationStore = require('../stores/locationstore');
 var NodeForm = require('./node_form.jsx');
 

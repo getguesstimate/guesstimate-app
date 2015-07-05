@@ -4,8 +4,7 @@ var webpack = require('webpack')
 module.exports = getConfig({
   in: 'src/app.js',
   out: 'public',
-  clearBeforeBuild: true,
-  hostName: 'ozzie-Elitebook.local'
+  clearBeforeBuild: true
 });
 
 module.exports.node = {

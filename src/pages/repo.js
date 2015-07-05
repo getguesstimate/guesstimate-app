@@ -1,5 +1,5 @@
 import React from 'react'
-import App from '../../scripts/flux/components/app'
+import GraphEditor from '../components/graph_editor/flux/components/graph_editor_base'
 
 export default React.createClass({
   displayName: 'ModelPage',
@@ -30,7 +30,7 @@ export default React.createClass({
       ]
     }
     return (
-      <App graphData = {data} />
+      <GraphEditor graphData = {data} />
     )
   }
 })
