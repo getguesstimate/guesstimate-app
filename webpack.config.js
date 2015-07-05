@@ -11,4 +11,3 @@ module.exports = getConfig({
 module.exports.node = {
   child_process: 'empty'
 }
-

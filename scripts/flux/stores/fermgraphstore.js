@@ -1,29 +1,12 @@
+'use strict';
+
 var React = require('react');
 var Reflux = require('reflux');
 var FermActions = require('../actions');
-var _ = require('../../lodash.min');
+var _ = require('lodash');
+var EstimateGraph = require('../../estimate_graph/estimate_graph.js');
 
-var NodeCollection = require('../../nodecollection');
-var EdgeCollection = require('../../edgecollection');
-
-class Egraph {
-  constructor(args){
-    this.nodes = new NodeCollection(args.nodes, this);
-    this.edges = new EdgeCollection(args.edges, this);
-  }
-
-  outsideMetrics(node){
-    var nodes = this.outsideNodes(node)
-    return _.select(nodes, function(n) {return (n.ttype() !== 'function')})
-  }
-  // Used to find possible outputs for a function node
-  outsideNodes(node){
-    var insideNodes = _.union([node], node.allOutputs())
-    return _.difference(this.nodes.models, insideNodes)
-  }
-}
-
-var todoCounter = 1,
+var nodeCounter = 1,
     localStorageKey = "fermi";
 
 var fermGraphStore = Reflux.createStore({
@@ -33,7 +16,7 @@ var fermGraphStore = Reflux.createStore({
     },
     addEstimate: function() {
       var newNodeInfo = {
-          pid: todoCounter++,
+          pid: nodeCounter++,
           nodeType: 'estimate'
       };
       var newNode = this.graph.nodes.create(newNodeInfo)
@@ -41,25 +24,19 @@ var fermGraphStore = Reflux.createStore({
     },
     addFunction: function() {
       var newDependentInfo = {
-        pid: todoCounter++,
+        pid: nodeCounter++,
         nodeType: 'dependent',
         name: '',
         value: ''
       };
       var newFunctionInfo = {
-        pid: todoCounter++,
+        pid: nodeCounter++,
         nodeType: 'function',
         outputIds: newDependentInfo.pid
       };
-      //this.updateNodes([newResult, newFun].concat(this.list));
-      //var newDependent = this.graph.nodes.create(newDependentInfo)
       var newDependent = this.graph.nodes.create(newDependentInfo)
       var newFunction = this.graph.nodes.create(newFunctionInfo)
       var newEdge = this.graph.edges.create({0:newFunction.id, 1: newDependent.id})
-      //if (this.get('outputIds')){
-      //var inp = this.id
-      //var out = this.get('outputIds')
-      //var foo = this.collection.graph.edges.add({0:inp, 1:out})
       FermActions.updateEditingNode(newFunction)
     },
     onAddNode: function(type) {
@@ -78,7 +55,6 @@ var fermGraphStore = Reflux.createStore({
       this.updateGraph();
     },
     updateGraph: function(graph) {
-      //localStorage.setNode(localStorageKey, JSON.stringify(list));
       this.trigger(this.graph);
     },
     _onUpdateNode: function(nodeId, newValues){
@@ -90,10 +66,7 @@ var fermGraphStore = Reflux.createStore({
       node.propogate()
     },
     onRemoveNode: function(nodeId) {
-      var node = this.graph.nodes.get(nodeId)
-      var edges = node.edges();
-      edges.map(e => e.destroy())
-      node.destroy()
+      this.graph.removeNode(nodeId)
       this.updateGraph()
       FermActions.resetEditingNode()
     },
@@ -101,61 +74,14 @@ var fermGraphStore = Reflux.createStore({
       return this.graph.nodes.get(nodeId)
     },
     getInitialState: function() {
-
-      var data = {
-        nodes: [
-          {pid: 11, nodeType: 'estimate', name: 'people in NYC', value: 10000000},
-          {pid: 2, nodeType: 'estimate', name: 'families per person', value: 0.3},
-          {pid: 3, nodeType: 'estimate', name: 'pianos per family', value: 0.1},
-          {pid: 4, nodeType: 'estimate', name: 'piano tuners per family', value: 0.001},
-          {pid: 5, nodeType: 'dependent', name: 'families in NYC'},
-          {pid: 6, nodeType: 'dependent', name: 'pianos in NYC'},
-          {pid: 7, nodeType: 'dependent', name: 'piano tuners in NYC'},
-          {pid: 8, nodeType: 'function', functionType: 'multiplication'},
-          {pid: 9, nodeType: 'function', functionType: 'multiplication'},
-          {pid: 10, nodeType: 'function', functionType: 'multiplication'},
-        ],
-        edges: [
-          [11,8],
-          [2,8],
-          [8,5],
-          [5,9],
-          [3,9],
-          [9,6],
-          [6,10],
-          [4,10],
-          [10,7],
-        ]
-      };
-      this.graph = new Egraph(data);
-      var dependents = this.graph.nodes.allOfTtype('dependent')
-      dependents.map(n => n.propogate())
-      todoCounter = parseInt(_.max(this.graph.nodes.models, 'id').id) + 1
-
-      // var loadedNodes = localStorage.getNode(localStorageKey);
-      // if (!loadedNodes) {
-      //     // If no list is in localstorage, start out with a default one
-      //     this.list = [
-      //         {
-      //             id: todoCounter++,
-      //             created: new Date(),
-      //             name: 'first node',
-      //             mean: 0,
-      //             type: 'estimate'
-      //         },
-      //         {
-      //             id: todoCounter++,
-      //             created: new Date(),
-      //             name: 'second node',
-      //             mean: 0,
-      //             type: 'estimate'
-      //         }
-      //     ];
-      // } else {
-      //     this.list = JSON.parse(loadedNodes);
-      // }
-      // return this.list;
-          return this.graph;
+      this.graph = new EstimateGraph(false);
+      nodeCounter = parseInt(_.max(this.graph.nodes.models, 'id').id) + 1
+      return this.graph;
+    },
+    onGraphReset: function(data) {
+      this.graph = new EstimateGraph(data);
+      nodeCounter = parseInt(_.max(this.graph.nodes.models, 'id').id) + 1
+      this.updateGraph()
     }
 })
 

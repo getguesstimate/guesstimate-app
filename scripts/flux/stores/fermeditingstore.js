@@ -1,3 +1,5 @@
+'use strict';
+
 var Reflux = require('reflux');
 var FermActions = require('../actions');
 var fermGraphStore = require('./fermgraphstore');

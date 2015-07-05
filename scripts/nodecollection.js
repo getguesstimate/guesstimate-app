@@ -2,7 +2,7 @@
 
 var Backbone = require("backbone");
 var numeral = require("numeral");
-require(['lodash'], function(_) {});
+var _ = require("lodash");
 
 var multiplication = {
   name: 'multiplication',
