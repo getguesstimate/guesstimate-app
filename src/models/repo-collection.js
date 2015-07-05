@@ -4,7 +4,7 @@ import Repo from './repo'
 export default Collection.extend({
   model: Repo,
 
-  initialize() {
+  initialize () {
     this.add([
       {
         name: 'people-in-nyc',

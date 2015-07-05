@@ -6,28 +6,28 @@ import fermGraphStore from './fermgraphstore'
 
 const fermEditingStore = Reflux.createStore({
     listenables: [FermActions],
-    getInitialState: function(){
+    getInitialState () {
         this.editingNode = null;
         return this.editingNode;
     },
     // Getters
-    getEditingNodeId: function(){
+    getEditingNodeId () {
         return this.editingNode;
     },
-    getEditingNode: function(){
+    getEditingNode () {
         return fermGraphStore.getItem(this.editingNode);
     },
 
     // Setters
-    onUpdateEditingNode: function(id) {
+    onUpdateEditingNode (id) {
         this.updateEditingNode(id);
     },
-    onResetEditingNode: function(id) {
+    onResetEditingNode (id) {
         this.updateEditingNode(null);
     },
 
     // Helpers
-    updateEditingNode: function(id) {
+    updateEditingNode (id) {
         this.editingNode = id;
         this.trigger(this.editingNode);
     }

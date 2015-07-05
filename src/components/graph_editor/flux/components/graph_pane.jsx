@@ -10,50 +10,50 @@ import FermActions from '../actions'
 import Cytoscape from './cytoscape_graph'
 
 const GraphPane = React.createClass( {
-  handleReady(cytoscapeGraph){
+  handleReady (cytoscapeGraph) {
     this.setState({graph: cytoscapeGraph})
     this.updateAllPositions(cytoscapeGraph)
   },
-  handleChange(cytoscapeGraph){
+  handleChange (cytoscapeGraph) {
     this.updateAllPositions(cytoscapeGraph)
   },
-  handleDrag(event){
+  handleDrag (event) {
     const id = event.cyTarget.data().nodeId;
     const position = event.cyTarget.renderedPosition()
     const object = {id: id, renderedPosition: position}
     FermActions.updateNodeLocations([object])
   },
-  handlePan(event){
-    var newLocations = _.map(event.cy.nodes(), function(n){return {id: n.data().nodeId, renderedPosition: n.renderedPosition()}})
+  handlePan (event) {
+    const newLocations = _.map(event.cy.nodes(), function(n){return {id: n.data().nodeId, renderedPosition: n.renderedPosition()}})
     FermActions.updateNodeLocations(newLocations);
   },
-  handleTap(event){
-    var data = event.cyTarget.data()
+  handleTap (event) {
+    const data = event.cyTarget.data()
     if (data) {
       this.props.updateEditingNode(data.nodeId)
     } else {
       this.props.updateEditingNode(null)
     }
   },
-  updateAllPositions(){
-    var newLocations = _.map(this.state.graph.nodes(), function(n){return {id: n.data().nodeId, renderedPosition: n.renderedPosition()}})
+  updateAllPositions () {
+    const newLocations = _.map(this.state.graph.nodes(), function(n){return {id: n.data().nodeId, renderedPosition: n.renderedPosition()}})
     if (!isNaN(newLocations[0].renderedPosition.x)){
       FermActions.updateAllNodeLocations(newLocations);
     }
   },
-  prepareEdges() {
+  prepareEdges () {
     return this.props.graph.edges.toCytoscape()
   },
-  prepareNodes() {
-    var regular = this.props.graph.nodes.toCytoscape()
+  prepareNodes () {
+    const regular = this.props.graph.nodes.toCytoscape()
     if (this.props.editingNode) {
-      var editingCytoscapeNode = _.find(regular, function(f){return f.data.nodeId == this.props.editingNode.id}, this)
+      const editingCytoscapeNode = _.find(regular, function(f){return f.data.nodeId == this.props.editingNode.id}, this)
       editingCytoscapeNode.data.editing = "true"
     }
     return regular
   },
-  makeConfig() {
-    var foo = {
+  makeConfig () {
+    return {
       container: $('.cytoscape_graph')[0],
       userZoomingEnabled: true,
       maxZoom: 2,
@@ -65,9 +65,8 @@ const GraphPane = React.createClass( {
       },
       layout: _.clone(mainLayout)
     }
-    return foo
   },
-  render(){
+  render () {
     return (
       <Cytoscape config={this.makeConfig()} nodes={this.prepareNodes()} edges={this.prepareEdges()} onDrag={this.handleDrag} onReady={this.handleReady} onChange={this.handleChange} onPan={this.handlePan} onTap={this.handleTap}/>
     )

@@ -7,11 +7,11 @@ import _ from 'lodash'
 
 var fermLocationStore = Reflux.createStore({
     listenables: [FermActions],
-    _addNodeLocation: function(node) {
+    _addNodeLocation (node) {
       this.nodeLocations.push(node)
     },
-    _updateNodeLocation: function(node){
-      var item = this.getNodeLocation(node.id);
+    _updateNodeLocation (node) {
+      let item = this.getNodeLocation(node.id);
       if (item){
         item.renderedPosition = node.renderedPosition;
       }
@@ -19,21 +19,21 @@ var fermLocationStore = Reflux.createStore({
         this._addNodeLocation(node)
       }
     },
-    getNodeLocations: function() {
+    getNodeLocations () {
         return this.nodeLocations;
     },
-    getNodeLocation: function(id) {
+    getNodeLocation (id) {
         return _.find(this.nodeLocations, function(n){return n.id == id});
     },
-    onUpdateNodeLocations: function(nodeLocations){
+    onUpdateNodeLocations (nodeLocations) {
       _.map(nodeLocations, this._updateNodeLocation)
       this.trigger(this.nodeLocations)
     },
-    onUpdateAllNodeLocations: function(nodeLocations){
+    onUpdateAllNodeLocations (nodeLocations) {
       this.nodeLocations = nodeLocations
       this.trigger(this.nodeLocations)
     },
-    getInitialState: function() {
+    getInitialState () {
       this.nodeLocations = []
     }
 })
