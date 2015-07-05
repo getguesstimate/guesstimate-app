@@ -18,9 +18,9 @@ var GraphPane = React.createClass( {
     this.updateAllPositions(cytoscapeGraph)
   },
   handleDrag(event){
-    var id = event.cyTarget.data().nodeId;
-    var position = event.cyTarget.renderedPosition()
-    var object = {id: id, renderedPosition: position}
+    const id = event.cyTarget.data().nodeId;
+    const position = event.cyTarget.renderedPosition()
+    const object = {id: id, renderedPosition: position}
     FermActions.updateNodeLocations([object])
   },
   handlePan(event){
@@ -35,7 +35,7 @@ var GraphPane = React.createClass( {
       this.props.updateEditingNode(null)
     }
   },
-  updateAllPositions: function(){
+  updateAllPositions(){
     var newLocations = _.map(this.state.graph.nodes(), function(n){return {id: n.data().nodeId, renderedPosition: n.renderedPosition()}})
     if (!isNaN(newLocations[0].renderedPosition.x)){
       FermActions.updateAllNodeLocations(newLocations);

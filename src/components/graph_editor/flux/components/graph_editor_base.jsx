@@ -14,7 +14,7 @@ var _ = require('lodash'),
 
 window.FermGraphStore = FermGraphStore
 
-var App = React.createClass({
+var GraphEditorBase = React.createClass({
 
   mixins: [
     Reflux.connect(FermGraphStore, "graph"),
@@ -54,4 +54,4 @@ var App = React.createClass({
   }
 });
 
-module.exports = App;
+module.exports = GraphEditorBase;

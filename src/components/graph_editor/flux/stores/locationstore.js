@@ -3,7 +3,7 @@
 var React = require('react');
 var Reflux = require('reflux');
 var FermActions = require('../actions');
-var _ = require('../../lodash.min');
+var _ = require('lodash');
 
 var fermLocationStore = Reflux.createStore({
     listenables: [FermActions],

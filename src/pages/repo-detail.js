@@ -1,5 +1,5 @@
 import React from 'react'
-import App from '../../scripts/flux/components/app'
+import GraphEditor from '../components/graph_editor/flux/components/graph_editor_base'
 
 export default React.createClass({
   displayName: 'RepoDetailPage',
@@ -7,7 +7,7 @@ export default React.createClass({
   render () {
     const {repo} = this.props
     return (
-      <App graphData = {repo.data} />
+      <GraphEditor graphData = {repo.data} />
     )
   }
 })
