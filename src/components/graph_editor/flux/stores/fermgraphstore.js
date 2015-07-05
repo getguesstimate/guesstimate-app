@@ -6,79 +6,78 @@ import FermActions from '../actions'
 import _ from 'lodash'
 import EstimateGraph from '../../estimate_graph/estimate_graph.js'
 
-var nodeCounter = 1,
-    localStorageKey = "fermi";
+let nodeCounter = 1
 
-var fermGraphStore = Reflux.createStore({
+const fermGraphStore = Reflux.createStore({
     listenables: [FermActions],
-    getNodes: function() {
+    getNodes () {
         return this.list;
     },
-    addEstimate: function() {
-      var newNodeInfo = {
+    addEstimate () {
+      const newNodeInfo = {
           pid: nodeCounter++,
           nodeType: 'estimate'
       };
-      var newNode = this.graph.nodes.create(newNodeInfo)
+      const newNode = this.graph.nodes.create(newNodeInfo)
       FermActions.updateEditingNode(newNode.id)
     },
-    addFunction: function() {
-      var newDependentInfo = {
+    addFunction () {
+      const newDependentInfo = {
         pid: nodeCounter++,
         nodeType: 'dependent',
         name: '',
         value: ''
       };
-      var newFunctionInfo = {
+      const newFunctionInfo = {
         pid: nodeCounter++,
         nodeType: 'function',
         outputIds: newDependentInfo.pid
       };
-      var newDependent = this.graph.nodes.create(newDependentInfo)
-      var newFunction = this.graph.nodes.create(newFunctionInfo)
-      var newEdge = this.graph.edges.create({0:newFunction.id, 1: newDependent.id})
+      const newDependent = this.graph.nodes.create(newDependentInfo)
+      const newFunction = this.graph.nodes.create(newFunctionInfo)
+      const newEdge = this.graph.edges.create({0:newFunction.id, 1: newDependent.id})
       FermActions.updateEditingNode(newFunction)
     },
-    onAddNode: function(type) {
+    onAddNode (type) {
       if (type=="estimate"){
           this.addEstimate();
       } else {
           this.addFunction();
       }
     },
-    onUpdateNodes: function(list){
+    onUpdateNodes (list) {
       _.map(list, function(n){this._onUpdateNode(n.id, n)}, this)
       this.updateGraph();
     },
-    onUpdateNode: function(nodeId, newValues) {
+    onUpdateNode (nodeId, newValues) {
       this._onUpdateNode(nodeId, newValues)
       this.updateGraph();
     },
-    updateGraph: function(graph) {
+    updateGraph (graph) {
       this.trigger(this.graph);
     },
-    _onUpdateNode: function(nodeId, newValues){
-      var node = this.getNode(parseInt(nodeId));
+    _onUpdateNode (nodeId, newValues) {
+      let node = this.getNode(parseInt(nodeId));
       if (!node) {
           return;
       };
       node.set(newValues)
       node.propogate()
     },
-    onRemoveNode: function(nodeId) {
+    onRemoveNode (nodeId) {
       this.graph.removeNode(nodeId)
       this.updateGraph()
       FermActions.resetEditingNode()
     },
-    getNode: function(nodeId){
+    getNode (nodeId) {
       return this.graph.nodes.get(nodeId)
     },
-    getInitialState: function() {
+    getInitialState () {
       this.graph = new EstimateGraph(false);
       nodeCounter = parseInt(_.max(this.graph.nodes.models, 'id').id) + 1
       return this.graph;
     },
-    onGraphReset: function(data) {
+    onGraphReset (data) {
       this.graph = new EstimateGraph(data);
       nodeCounter = parseInt(_.max(this.graph.nodes.models, 'id').id) + 1
       this.updateGraph()

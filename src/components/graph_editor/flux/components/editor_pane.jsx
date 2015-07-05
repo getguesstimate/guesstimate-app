@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 import Reflux from 'reflux'
 import React from 'react'
@@ -13,7 +13,7 @@ const EditorPane = React.createClass({
     Reflux.connect(fermLocationStore, "nodeLocations")
   ],
 
-  findHoverPosition() {
+  findHoverPosition () {
     var node = this.props.node
     if (node){
       var nodePosition = _.where(this.state.nodeLocations, {'id':node.id})
@@ -25,7 +25,7 @@ const EditorPane = React.createClass({
     }
   },
 
-  render() {
+  render () {
     var node = this.props.node
     if (this.props.node){
       var hover_form = <div className="hover" style={this.findHoverPosition()}> <NodeForm graph={this.props.graph} node={this.props.node} formSize="small" /> </div>
@@ -44,15 +44,15 @@ const EditorPane = React.createClass({
 
 var NewButtonPane = React.createClass({
 
-  newEstimate() {
+  newEstimate () {
     this.props.addNode('estimate')
   },
 
-  newFunction() {
+  newFunction () {
     this.props.addNode('function')
   },
 
-  render() {
+  render () {
     return (
       <div className="newButtons">
         <Button onClick={this.newEstimate}> New Estimate </Button>

@@ -3,10 +3,10 @@ import DropdownButton from 'react-bootstrap/DropdownButton'
 import MenuItem from 'react-bootstrap/MenuItem'
 import NavHelper from '../components/nav-helper'
 
-var Header = React.createClass({
+const Header = React.createClass({
   displayName: 'Header',
-  render: function() {
-    var containerClass = (this.props.isFluid === true) ? "container-fluid" : "container";
+  render () {
+    let containerClass = (this.props.isFluid === true) ? "container-fluid" : "container";
     return (
       <nav className="navbar navbar-default">
         <div className={containerClass}>
