@@ -1,9 +1,9 @@
 'use strict';
 
-var React = require('react');
-var NodeForm = require('./node_form.jsx');
+import React from 'react'
+import NodeForm from './node_form.jsx'
 
-var SidePane = React.createClass({
+const SidePane = React.createClass({
   render: function() {
     return (
       <div className="sidePane">

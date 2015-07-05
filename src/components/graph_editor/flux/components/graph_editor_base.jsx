@@ -1,45 +1,42 @@
 'use strict';
 
-var _ = require('lodash'),
-  $ = require('jquery'),
-  React = require('react'),
-  Reflux = require('reflux'),
-
-  FermActions = require('../actions'),
-  FermGraphStore = require('../stores/fermgraphstore'),
-  FermEditingStore = require('../stores/fermeditingstore'),
-  GraphPane = require('./graph_pane.jsx'),
-  EditorPane = require('./editor_pane.jsx'),
-  SidePane = require('./side_pane.jsx')
+import React from 'react'
+import Reflux from 'reflux'
+import FermActions from '../actions'
+import FermGraphStore from '../stores/fermgraphstore'
+import FermEditingStore from '../stores/fermeditingstore'
+import GraphPane from './graph_pane.jsx'
+import EditorPane from './editor_pane.jsx'
+import SidePane from './side_pane.jsx'
 
 window.FermGraphStore = FermGraphStore
 
-var GraphEditorBase = React.createClass({
+const GraphEditorBase = React.createClass({
 
   mixins: [
     Reflux.connect(FermGraphStore, "graph"),
     Reflux.connect(FermEditingStore, "editingNode")
   ],
 
-  getEditingNode: function() {
-    var id = this.state.editingNode
-    var node = this.state.graph.nodes.get(id)
+  getEditingNode () {
+    let id = this.state.editingNode
+    let node = this.state.graph.nodes.get(id)
     return node
   },
 
-  addNode: function(type) {
+  addNode (type) {
     FermActions.addNode(type)
   },
 
-  updateEditingNode: function(nodeId) {
+  updateEditingNode (nodeId) {
     FermActions.updateEditingNode(nodeId)
   },
 
-  componentWillMount: function() {
+  componentWillMount () {
     FermActions.graphReset(this.props.graphData)
   },
 
-  render: function() {
+  render () {
     return (
       <div className="row .app">
         <div className="col-sm-9 col-md-10">

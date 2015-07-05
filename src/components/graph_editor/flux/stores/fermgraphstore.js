@@ -1,10 +1,10 @@
 'use strict';
 
-var React = require('react');
-var Reflux = require('reflux');
-var FermActions = require('../actions');
-var _ = require('lodash');
-var EstimateGraph = require('../../estimate_graph/estimate_graph.js');
+import React from 'react'
+import Reflux from 'reflux'
+import FermActions from '../actions'
+import _ from 'lodash'
+import EstimateGraph from '../../estimate_graph/estimate_graph.js'
 
 var nodeCounter = 1,
     localStorageKey = "fermi";

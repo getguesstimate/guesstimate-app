@@ -1,14 +1,13 @@
 'use strict';
 
-var Reflux = require('reflux');
-var React = require('react');
-var _ = require('lodash');
-var Button = require('react-bootstrap/Button');
+import Reflux from 'reflux'
+import React from 'react'
+import _ from 'lodash'
+import Button from 'react-bootstrap/Button'
+import fermLocationStore from '../stores/locationstore'
+import NodeForm from './node_form.jsx'
 
-var fermLocationStore = require('../stores/locationstore');
-var NodeForm = require('./node_form.jsx');
-
-var EditorPane = React.createClass({
+const EditorPane = React.createClass({
 
   mixins: [
     Reflux.connect(fermLocationStore, "nodeLocations")

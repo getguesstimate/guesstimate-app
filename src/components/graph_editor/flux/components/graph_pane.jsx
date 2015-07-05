@@ -1,15 +1,15 @@
 'use strict';
 
-var _ = require('lodash');
+import _ from 'lodash'
 
-var cytoscape = require('cytoscape')
-var $ = require('jquery')
-var React = require('react');
-var Reflux = require('reflux');
-var FermActions = require('../actions');
-var Cytoscape = require('./cytoscape_graph');
+import cytoscape from 'cytoscape'
+import $ from 'jquery'
+import React from 'react'
+import Reflux from 'reflux'
+import FermActions from '../actions'
+import Cytoscape from './cytoscape_graph'
 
-var GraphPane = React.createClass( {
+const GraphPane = React.createClass( {
   handleReady(cytoscapeGraph){
     this.setState({graph: cytoscapeGraph})
     this.updateAllPositions(cytoscapeGraph)
@@ -74,13 +74,13 @@ var GraphPane = React.createClass( {
   }
 })
 
-var mainLayout = {
+const mainLayout = {
       name: 'breadthfirst',
       directed: true, padding: 10,
       avoidOverlap: true
     }
 
-var cytoscapeStyle = cytoscape.stylesheet()
+const cytoscapeStyle = cytoscape.stylesheet()
   .selector('node')
     .css({
       'font-weight': 'normal',
