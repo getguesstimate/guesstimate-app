@@ -1,9 +1,9 @@
 'use strict';
 
-var React = require('react');
-var Reflux = require('reflux');
+import React from 'react'
+import Reflux from 'reflux'
 
-var FermActions = Reflux.createActions([
+const FermActions = Reflux.createActions([
     "graphReset",
     "chooseNode",
     "updateNode",

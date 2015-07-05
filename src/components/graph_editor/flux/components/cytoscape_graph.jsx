@@ -1,15 +1,14 @@
 'use strict';
 
-var cytoscape_graph = {};
-var cytoscape = require('cytoscape')
-var jsondiffpatch = require('jsondiffpatch')
-var _ = require('lodash');
+import cytoscape from 'cytoscape'
+import jsondiffpatch from 'jsondiffpatch'
+import _ from 'lodash'
+import $ from 'jquery'
+import React from 'react'
 
-var jsdom = require("jsdom");
-var $ = require('jquery')
-var React = require('react');
+let cytoscape_graph = {}
 
-var Cytoscape = React.createClass( {
+const Cytoscape = React.createClass( {
   getDefaultProps:function(){
     return {
       config: {},

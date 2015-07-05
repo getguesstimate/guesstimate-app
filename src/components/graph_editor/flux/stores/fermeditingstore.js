@@ -1,10 +1,10 @@
 'use strict';
 
-var Reflux = require('reflux');
-var FermActions = require('../actions');
-var fermGraphStore = require('./fermgraphstore');
+import Reflux from 'reflux'
+import FermActions from '../actions'
+import fermGraphStore from './fermgraphstore'
 
-var fermEditingStore = Reflux.createStore({
+const fermEditingStore = Reflux.createStore({
     listenables: [FermActions],
     getInitialState: function(){
         this.editingNode = null;

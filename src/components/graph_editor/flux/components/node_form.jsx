@@ -1,11 +1,11 @@
 'use strict';
 
-var React = require('react')
-var _ = require('lodash')
-var ReactBootstrap = require('react-bootstrap')
-var Input = require('react-bootstrap/Input')
-var $ = require('jquery')
-var FermActions = require('../actions')
+import React from 'react'
+import _ from 'lodash'
+import ReactBootstrap from 'react-bootstrap'
+import Input from 'react-bootstrap/Input'
+import $ from 'jquery'
+import FermActions from '../actions'
 
 var NodeForm = React.createClass({
   render(){
@@ -125,6 +125,7 @@ var EstimateForm = React.createClass({
     );
   }
 });
+
 var FunctionForm = React.createClass({
 
   mixins: [
