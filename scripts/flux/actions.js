@@ -4,6 +4,7 @@ var React = require('react');
 var Reflux = require('reflux');
 
 var FermActions = Reflux.createActions([
+    "graphReset",
     "chooseNode",
     "updateNode",
     "removeNode",
