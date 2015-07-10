@@ -36,7 +36,7 @@ const EditorPane = React.createClass({
     return (
       <div className="editorpane">
         {hover_form}
-        <NewButtonPane addNode={this.props.addNode} saveGraph={this.props.saveGraph}/>
+        <NewButtonPane addNode={this.props.addNode} saveGraph={this.props.saveGraph} unsavedChanges={this.props.graph.unsavedChanges}/>
       </div>
     )
   }
@@ -53,11 +53,17 @@ var NewButtonPane = React.createClass({
   },
 
   render () {
+    if (this.props.unsavedChanges) {
+      var saver = <Button bsStyle='primary' onClick={this.props.saveGraph} > Save </Button>
+    }
+    else {
+      var saver = <Button disabled> Save </Button>
+    }
     return (
       <div className="newButtons">
         <Button onClick={this.newEstimate}> New Estimate </Button>
         <Button onClick={this.newFunction}> New Function </Button>
-        <Button onClick={this.props.saveGraph}> Save </Button>
+        {saver}
       </div>
     )
   }

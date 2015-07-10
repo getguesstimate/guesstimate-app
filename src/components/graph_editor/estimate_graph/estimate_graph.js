@@ -7,6 +7,7 @@ class EstimateGraph {
     var data = initialData || defaultData
     this.nodes = new NodeCollection(data.nodes, this);
     this.edges = new EdgeCollection(data.edges, this);
+    this.unsavedChanges = false
     this.propogate();
   }
   removeNode(nodeId){
