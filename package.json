@@ -38,6 +38,7 @@
     "body-parser": "~1.0.1",
     "bootstrap": "3.3.2",
     "css-loader": "^0.12.0",
+    "cytoscape": "2.4.2",
     "file-loader": "^0.8.1",
     "firebase": "^2.2.7",
     "hjs-webpack": "^2.8.1",
