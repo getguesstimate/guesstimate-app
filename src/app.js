@@ -10,10 +10,16 @@ window.app = app
 app.extend({
   init () {
     this.firebase = new Firebase("https://brilliant-inferno-9726.firebaseio.com/")
-    this.firebase.child('repos').on('value', (snapshot) => { this.allRepos = snapshot.val()})
-    this.me = new Me()
-    this.router = new Router()
-    this.router.history.start()
+    this.firebase.child('repos').on('value', (snapshot) => {
+      let val = snapshot.val()
+      if (!Array.isArray(val)) {
+        val = [val]
+      }
+      this.allRepos = _.map(val, function(n){return _.values(n)})[0]
+      this.me = new Me()
+      this.router = new Router()
+      this.router.history.start()
+    })
   }
 })
 
