@@ -77,8 +77,12 @@ const fermGraphStore = Reflux.createStore({
       nodeCounter = parseInt(_.max(this.graph.nodes.models, 'id').id) + 1
       return this.graph;
     },
+    onGraphSave () {
+      app.firebase.child('repos').set({'people-in-nyc': {name: 'people-in-nyc', data: {nodes: this.graph.nodes.toJSON(), edges: this.graph.edges.toJSON()}}})
+    },
     onGraphReset (data) {
       this.graph = new EstimateGraph(data);
+      window.graph = this.graph
       nodeCounter = parseInt(_.max(this.graph.nodes.models, 'id').id) + 1
       this.updateGraph()
     }
