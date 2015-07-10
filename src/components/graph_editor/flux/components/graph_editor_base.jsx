@@ -33,7 +33,6 @@ const GraphEditorBase = React.createClass({
   },
 
   saveGraph () {
-    console.log('saveing graph')
     FermActions.graphSave()
   },
 
