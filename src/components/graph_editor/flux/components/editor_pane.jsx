@@ -36,7 +36,7 @@ const EditorPane = React.createClass({
     return (
       <div className="editorpane">
         {hover_form}
-        <NewButtonPane addNode={this.props.addNode}/>
+        <NewButtonPane addNode={this.props.addNode} saveGraph={this.props.saveGraph}/>
       </div>
     )
   }
@@ -57,6 +57,7 @@ var NewButtonPane = React.createClass({
       <div className="newButtons">
         <Button onClick={this.newEstimate}> New Estimate </Button>
         <Button onClick={this.newFunction}> New Function </Button>
+        <Button onClick={this.props.saveGraph}> Save </Button>
       </div>
     )
   }

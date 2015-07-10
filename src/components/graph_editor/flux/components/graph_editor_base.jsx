@@ -32,6 +32,11 @@ const GraphEditorBase = React.createClass({
     FermActions.updateEditingNode(nodeId)
   },
 
+  saveGraph () {
+    console.log('saveing graph')
+    FermActions.graphSave()
+  },
+
   componentWillMount () {
     FermActions.graphReset(this.props.graphData)
   },
@@ -41,7 +46,7 @@ const GraphEditorBase = React.createClass({
       <div className="row .app">
         <div className="col-sm-9 col-md-10">
           <GraphPane graph={this.state.graph} editingNode={this.getEditingNode()} updateEditingNode={this.updateEditingNode}/>
-          <EditorPane graph={this.state.graph} addNode={this.addNode} node={this.getEditingNode()}/>
+          <EditorPane graph={this.state.graph} addNode={this.addNode} saveGraph={this.saveGraph} node={this.getEditingNode()}/>
         </div>
         <div className="col-sm-3 col-md-2">
           <SidePane graph={this.state.graph} node={this.getEditingNode()}/>
