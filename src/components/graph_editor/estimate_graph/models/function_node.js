@@ -19,6 +19,11 @@ class FunctionNode extends AbstractNode {
     return functionOperations[functionType]
   }
 
+  remove() {
+    this.dependent().remove()
+    super.remove()
+  }
+
   dependent() {
     return this.outputs.nodes()[0]
   }

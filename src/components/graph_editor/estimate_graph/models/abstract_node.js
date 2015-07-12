@@ -3,7 +3,6 @@
 var Backbone = require("backbone");
 var numeral = require("numeral");
 var _ = require('lodash');
-//require(['lodash'], function(_) {});
 
 class AbstractGroup {
   constructor(node, graph) {
@@ -69,6 +68,12 @@ class AbstractNode extends Backbone.Model {
     this.outputs = new Outputs(this, this.collection.graph)
     this.inputs = new Inputs(this, this.collection.graph)
     this.setup()
+  }
+
+  remove() {
+    var edges = this.edges();
+    edges.map(e => e.destroy())
+    this.destroy()
   }
 
   inputEdges() {

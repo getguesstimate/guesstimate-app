@@ -12,9 +12,7 @@ class EstimateGraph {
   }
   removeNode(nodeId){
     var node = this.nodes.get(nodeId)
-    var edges = node.edges();
-    edges.map(e => e.destroy())
-    node.destroy()
+    node.remove()
   }
   propogate(){
     var dependents = this.nodes.allOfTtype('dependent');
