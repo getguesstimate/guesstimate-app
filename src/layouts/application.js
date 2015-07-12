@@ -11,12 +11,11 @@ const Header = React.createClass({
       <nav className="navbar navbar-default">
         <div className={containerClass}>
           <div className="navbar-header">
-            <a className="navbar-brand" href="/">Guestimate</a>
+            <a className="navbar-brand" href="/">Guesstimate</a>
           </div>
           <ul className="nav navbar-nav">
           </ul>
           <ul className="nav navbar-nav navbar-right">
-            <li><a href="/model">Model</a></li>
           </ul>
         </div>{/* /.container-fluid */}
       </nav>

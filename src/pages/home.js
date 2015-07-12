@@ -10,15 +10,12 @@ export default React.createClass({
 
     return (
       <div className='container'>
-        <h1> Guestimate.  Guestimate all the things!</h1>
+        <h1> Guesstimate.  Guesstimate all the things!</h1>
 
-        <a href='/repo' className='btn btn-primary'>
-          See a model!
-        </a>
        {repos.models.map((repo) => {
             return (
               <div>
-                <a href={repo.appUrl}>{repo.name}</a>
+                <a href={repo.appUrl} className='btn btn-primary'>{repo.name}</a>
               </div>
             )
           })}
