@@ -6,6 +6,7 @@ import ReactBootstrap from 'react-bootstrap'
 import Input from 'react-bootstrap/Input'
 import $ from 'jquery'
 import FermActions from '../actions'
+import Icon from'react-fa'
 
 const NodeForm = React.createClass({
   render(){
@@ -65,7 +66,7 @@ const ResultForm = React.createClass({
     return (
       <form>
         <Input type="text" label="name" name="name" value={node.get('name')} onChange={this.handleChange}/>
-        <div className="btn btn-danger" onClick={this.handleDestroy}> Destroy </div>
+        <div className="btn btn-danger" onClick={this.handleDestroy}> Delete </div>
       </form>
     );
   }
@@ -105,13 +106,14 @@ const EstimateForm = React.createClass({
 
     const inputs = {
       value: <Input key="value" type="number" label="value" name="value" defaultValue="0" value={node.get('value')} onChange={this.handleChange}/>,
-      range: <Input key="value-range" type="range" min="0"  max={this.state.range.max} step={this.state.range.step} label="value" name="value" defaultValue="0" value={node.get('value')} onChange={this.handleChange}/>,
-      name:  <Input key="name" ref="name" type="text" label="name" name="name" value={node.get('name')} onChange={this.handleChange}/>
+      range: <Input key="value-range" type="range" min="0"  max={this.state.range.max} step={this.state.range.step} name="value" defaultValue="0" value={node.get('value')} onChange={this.handleChange}/>,
+      name:  <Input key="name" ref="name" type="text" label="name" name="name" value={node.get('name')} onChange={this.handleChange}/>,
+      deleteButton: <div className="btn btn-danger" onClick={this.handleDestroy}> Delete </div>
     }
 
     const choose = {
-      small: ['value', 'range', 'name'],
-      large: ['value','range',  'name']
+      small: ['name', 'value', 'range'],
+      large: ['name', 'value', 'range',  'deleteButton']
     }
 
     const formInputs = _.map(choose[this.props.formType], function(n){
@@ -121,7 +123,6 @@ const EstimateForm = React.createClass({
     return (
       <form key={this.props.node.id}>
         {formInputs}
-        <div className="btn btn-danger" onClick={this.handleDestroy}> Destroy </div>
       </form>
     );
   }
@@ -143,19 +144,21 @@ const FunctionForm = React.createClass({
 
     const inputs = {
       selectFunction:
-        <Input type="select" key='functionType' label='Function' name="functionType" defaultValue="addition" value={node.get('functionType')} onChange={this.handleChange}>
+        <Input type="select" key='functionType' name="functionType" defaultValue="addition" value={node.get('functionType')} onChange={this.handleChange}>
             <option value="addition">(+) Addition </option>
             <option value="multiplication">(x) Multiplication </option>
         </Input>,
       selectInputs:
         <Input type="select" label='Multiple Select' key='inputs' multiple name="inputs" value={currentInputs} onChange={this.handleChange} className="function-multiple-form">
           {possibleInputs}
-        </Input>
+        </Input>,
+      deleteButton:
+        <div className="btn btn-danger" onClick={this.handleDestroy}> Delete </div>
     }
 
     const choose = {
       small: ['selectFunction'],
-      large: ['selectFunction', 'selectInputs']
+      large: ['selectFunction', 'selectInputs', 'deleteButton']
     }
 
     const formInputs = _.map(choose[this.props.formType], function(n){
@@ -165,7 +168,6 @@ const FunctionForm = React.createClass({
     return (
       <form>
         {formInputs}
-        <div className="btn btn-danger" onClick={this.handleDestroy}> Destroy </div>
       </form>
     );
   }
