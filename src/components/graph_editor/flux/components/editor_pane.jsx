@@ -4,8 +4,10 @@ import Reflux from 'reflux'
 import React from 'react'
 import _ from 'lodash'
 import Button from 'react-bootstrap/Button'
+import ButtonToolbar from 'react-bootstrap/ButtonToolbar'
 import fermLocationStore from '../stores/locationstore'
 import NodeForm from './node_form.jsx'
+import Icon from'react-fa'
 
 const EditorPane = React.createClass({
 
@@ -19,7 +21,7 @@ const EditorPane = React.createClass({
       var nodePosition = _.where(this.state.nodeLocations, {'id':node.id})
       if (nodePosition.length > 0){
         var renderedPosition = nodePosition[0].renderedPosition
-        var hoverPosition = {left: renderedPosition.x - 85, top: renderedPosition.y + 20};
+        var hoverPosition = {left: renderedPosition.x - 100, top: renderedPosition.y + 20};
         return hoverPosition
       }
     }
@@ -55,16 +57,15 @@ var NewButtonPane = React.createClass({
   render () {
     if (this.props.unsavedChanges) {
       var saver = <Button bsStyle='primary' onClick={this.props.saveGraph} > Save </Button>
-    }
-    else {
+    } else {
       var saver = <Button disabled> Save </Button>
-    }
+    };
     return (
-      <div className="newButtons">
-        <Button onClick={this.newEstimate}> New Estimate </Button>
-        <Button onClick={this.newFunction}> New Function </Button>
+      <ButtonToolbar className="newButtons">
+        <Button onClick={this.newEstimate}> <Icon name='plus'/> Estimate </Button>
+        <Button onClick={this.newFunction}> <Icon name='plus'/> Function </Button>
         {saver}
-      </div>
+      </ButtonToolbar>
     )
   }
 });
