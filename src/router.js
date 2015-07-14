@@ -2,6 +2,7 @@ import app from 'ampersand-app'
 import Router from 'ampersand-router'
 import RepoPage from './pages/repo'
 import RepoDetailPage from './pages/repo-detail'
+import RepoNewPage from './pages/repo-new'
 import HomePage from './pages/home'
 import React from 'react'
 import Layout from './layouts/application'
@@ -19,7 +20,8 @@ export default Router.extend({
   routes: {
     '': 'home',
     'repo': 'repo',
-    'repo/:name': 'repoDetail'
+    'repo/new': 'repoNew',
+    'repo/:name': 'repoDetail',
   },
 
   home () {
@@ -28,6 +30,10 @@ export default Router.extend({
 
   repo () {
     this.render(<RepoPage/>, true)
+  },
+
+  repoNew () {
+    this.render(<RepoNewPage/>, false)
   },
 
   repoDetail (name) {

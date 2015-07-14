@@ -9,7 +9,7 @@ export default React.createClass({
     const {repos} = this.props
 
     return (
-      <div className='container'>
+      <div>
         <h1> Guesstimate.  Guesstimate all the things!</h1>
 
        {repos.models.map((repo) => {

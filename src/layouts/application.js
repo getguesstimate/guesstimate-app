@@ -2,6 +2,7 @@ import React from 'react'
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import MenuItem from 'react-bootstrap/MenuItem'
 import NavHelper from '../components/nav-helper'
+import Icon from'react-fa'
 
 const Header = React.createClass({
   displayName: 'Header',
@@ -11,11 +12,12 @@ const Header = React.createClass({
       <nav className="navbar navbar-default">
         <div className={containerClass}>
           <div className="navbar-header">
-            <a className="navbar-brand" href="/">Guesstimate</a>
+            <a className="navbar-brand" href="/">Guestimate</a>
           </div>
           <ul className="nav navbar-nav">
           </ul>
           <ul className="nav navbar-nav navbar-right">
+            <li><a href="/repo/new"><Icon name='plus'/></a></li>
           </ul>
         </div>{/* /.container-fluid */}
       </nav>
@@ -26,11 +28,15 @@ const Header = React.createClass({
 export default React.createClass({
   displayName: 'Layout',
   render () {
+    let body = this.props.children
+    if (!this.props.isFluid) {
+      body = <div className="container"> {body} </div>
+    }
     return (
       <NavHelper>
         <div>
             <Header isFluid={this.props.isFluid}/>
-            {this.props.children}
+            {body}
         </div>
       </NavHelper>
     )
