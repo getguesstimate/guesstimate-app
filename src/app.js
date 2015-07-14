@@ -15,7 +15,11 @@ app.extend({
       if (!Array.isArray(val)) {
         val = [val]
       }
-      this.allRepos = _.map(val, function(n){return _.values(n)})[0]
+      let repos = _.map(val[0], function(value, key) {
+        value.id = key
+        return value
+      })
+      this.allRepos = repos
       this.me = new Me()
       this.router = new Router()
       this.router.history.start()

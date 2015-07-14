@@ -3,8 +3,8 @@ var NodeCollection = require('./collections/nodecollection');
 var EdgeCollection = require('./collections/edgecollection');
 
 class EstimateGraph {
-  constructor(initialData){
-    var data = initialData || defaultData
+  constructor(repo){
+    var data = repo.data || defaultData
     this.nodes = new NodeCollection(data.nodes, this);
     this.edges = new EdgeCollection(data.edges, this);
     this.unsavedChanges = false

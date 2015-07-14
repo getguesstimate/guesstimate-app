@@ -37,7 +37,7 @@ const GraphEditorBase = React.createClass({
   },
 
   componentWillMount () {
-    FermActions.graphReset(this.props.graphData)
+    FermActions.graphReset(this.props.repo)
   },
 
   render () {
