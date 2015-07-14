@@ -7,7 +7,7 @@ export default React.createClass({
   render () {
     const {repo} = this.props
     return (
-      <GraphEditor graphData = {repo.data} />
+      <GraphEditor repo={repo} />
     )
   }
 })

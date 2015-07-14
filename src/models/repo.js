@@ -5,6 +5,7 @@ export default Model.extend({
     props: {
         name: 'string',
         data: 'hash',
+        id: 'string',
     },
     session: {
         signedIn: ['boolean', true, false],
