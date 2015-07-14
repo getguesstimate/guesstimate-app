@@ -37,7 +37,7 @@ const GraphPane = React.createClass( {
   },
   updateAllPositions () {
     const newLocations = _.map(this.state.graph.nodes(), function(n){return {id: n.data().nodeId, renderedPosition: n.renderedPosition()}})
-    if (!isNaN(newLocations[0].renderedPosition.x)){
+    if ((newLocations.length != 0) && (!isNaN(newLocations[0].renderedPosition.x))){
       FermActions.updateAllNodeLocations(newLocations);
     }
   },
