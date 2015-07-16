@@ -24,8 +24,7 @@ export default Collection.extend({
   create (name) {
     let repo = {name: name, data: {nodes: [], edges: []}}
     app.firebase.child('repos').push(repo)
-    let model = this.add(repo)
-    return model.appUrl
+    return ('/repo/' + name)
   },
 
   getByName (name) {
