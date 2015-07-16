@@ -52,9 +52,8 @@ export default React.createClass({
   onSubmit(e) {
     e.preventDefault()
     let repoName = this.state.value.name
-    let repo = {name: repoName, data: {nodes: [], edges: []}}
-    app.firebase.child('repos').push(repo)
-    window.location = repoName
+    let newUrl = app.me.repos.create(repoName)
+    app.router.history.navigate(newUrl)
   },
 
   render() {
