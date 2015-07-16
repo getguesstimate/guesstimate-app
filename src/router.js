@@ -1,9 +1,8 @@
 import app from 'ampersand-app'
 import Router from 'ampersand-router'
-import RepoPage from './pages/repo'
-import RepoDetailPage from './pages/repo-detail'
-import RepoNewPage from './pages/repo-new'
-import HomePage from './pages/home'
+import RepoShow from './views/repos/show'
+import RepoNew from './views/repos/new'
+import Home from './views/home'
 import React from 'react'
 import Layout from './layouts/application'
 
@@ -19,26 +18,20 @@ export default Router.extend({
 
   routes: {
     '': 'home',
-    'repo': 'repo',
     'repo/new': 'repoNew',
-    'repo/:name': 'repoDetail',
+    'repo/:name': 'repoShow',
   },
 
   home () {
-    this.render(<HomePage repos={app.me.repos}/>)
-  },
-
-  repo () {
-    this.render(<RepoPage/>, true)
+    this.render(<Home repos={app.me.repos}/>)
   },
 
   repoNew () {
-    this.render(<RepoNewPage/>, false)
+    this.render(<RepoNew/>, false)
   },
 
-  repoDetail (name) {
-    const repo = app.me.repos.getByName(name)
-    this.render(<RepoDetailPage repo={repo}/>, true)
+  repoShow (name) {
+    this.render(<RepoShow repo={name} repos={app.me.repos}/>, true)
   },
 })
 
