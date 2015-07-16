@@ -1,5 +1,20 @@
 import React from 'react'
 import ampersandMixin from 'ampersand-react-mixin'
+import Icon from'react-fa'
+
+const RepoItem = React.createClass({
+  delete () {
+    this.props.repo.destroy()
+  },
+  render () {
+    return (
+      <div>
+        <a href={this.props.repo.appUrl} >{this.props.repo.name}</a>
+        <span onClick={this.delete}><Icon name='times'/> </span>
+      </div>
+    )
+  }
+})
 
 export default React.createClass({
   mixins: [ampersandMixin],
@@ -14,9 +29,7 @@ export default React.createClass({
 
        {repos.models.map((repo) => {
             return (
-              <div>
-                <a href={repo.appUrl} className='btn btn-primary'>{repo.name}</a>
-              </div>
+              <RepoItem repo={repo}/>
             )
           })}
       </div>

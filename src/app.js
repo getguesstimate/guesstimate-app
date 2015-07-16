@@ -10,20 +10,9 @@ window.app = app
 app.extend({
   init () {
     this.firebase = new Firebase("https://brilliant-inferno-9726.firebaseio.com/")
-    this.firebase.child('repos').on('value', (snapshot) => {
-      let val = snapshot.val()
-      if (!Array.isArray(val)) {
-        val = [val]
-      }
-      let repos = _.map(val[0], function(value, key) {
-        value.id = key
-        return value
-      })
-      this.allRepos = repos
-      this.me = new Me()
-      this.router = new Router()
-      this.router.history.start()
-    })
+    this.me = new Me()
+    this.router = new Router()
+    this.router.history.start()
   }
 })
 
