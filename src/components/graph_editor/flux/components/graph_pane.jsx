@@ -56,8 +56,8 @@ const GraphPane = React.createClass( {
     return {
       container: $('.cytoscape_graph')[0],
       userZoomingEnabled: true,
-      maxZoom: 2,
-      minZoom: 0.5,
+      maxZoom: 1.5,
+      minZoom: 0.8,
       style: cytoscapeStyle,
       elements: {
         nodes: this.prepareNodes(),
@@ -74,9 +74,7 @@ const GraphPane = React.createClass( {
 })
 
 const mainLayout = {
-      name: 'breadthfirst',
-      directed: true, padding: 10,
-      avoidOverlap: true
+      name: 'preset'
     }
 
 const cytoscapeStyle = cytoscape.stylesheet()

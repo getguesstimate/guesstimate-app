@@ -55,9 +55,6 @@ class Inputs extends AbstractGroup {
 class AbstractNode extends Backbone.Model {
 
   defaults() {
-    return {
-      foo: 'sillybar'
-    }
   }
 
   setup() {
@@ -116,8 +113,11 @@ class AbstractNode extends Backbone.Model {
     _.merge(e, this.attributes)
     e.id = "n" + this.id // Nodes need letters for cytoscape
     e.name = this.toCytoscapeName()
+    let xx = Math.random() * 50
+    let yy = Math.random() * 50
+    e.position = { x: xx.toFixed(0), y: yy.toFixed(0) }
     if (!e.name){ e.name = 'Add Name' }
-    return {data: e};
+    return {data: e, position: e.position};
   }
 
   formatValue() {
