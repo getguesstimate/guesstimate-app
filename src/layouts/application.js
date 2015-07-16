@@ -11,14 +11,16 @@ const Header = React.createClass({
     return (
       <nav className="navbar navbar-default">
         <div className={containerClass}>
-          <div className="navbar-header">
-            <a className="navbar-brand" href="/">Guestimate</a>
+          <div className="row">
+            <div className="navbar-header col-xs-8">
+              <a className="navbar-brand" href="/">Guestimate</a>
+            </div>
+            <div className="col-xs-4">
+              <ul className="nav navbar-nav pull-right">
+              <li><a href="/repo/new"><Icon name='plus'/></a></li>
+              </ul>
+            </div>
           </div>
-          <ul className="nav navbar-nav">
-          </ul>
-          <ul className="nav navbar-nav navbar-right">
-            <li><a href="/repo/new"><Icon name='plus'/></a></li>
-          </ul>
         </div>{/* /.container-fluid */}
       </nav>
     );
