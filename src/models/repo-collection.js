@@ -17,10 +17,12 @@ export default Collection.extend({
       this.add(repos)
     })
   },
+
   destroy (repo) {
     app.firebase.child('repos').child(repo.id).set({})
     this.remove(repo)
   },
+
   create (name) {
     let repo = {name: name, data: {nodes: [], edges: []}}
     app.firebase.child('repos').push(repo)
