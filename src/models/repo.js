@@ -7,10 +7,13 @@ export default Model.extend({
         data: 'hash',
         id: 'string',
     },
-    session: {
-        signedIn: ['boolean', true, false],
-    },
     derived: {
+      destroy: {
+        deps: [],
+        fn: function() {
+          this.collection.destroy(this)
+        }
+      },
       appUrl: {
         deps: ['name'],
         fn: function () {
