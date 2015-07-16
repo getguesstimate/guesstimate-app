@@ -27,6 +27,12 @@ class EstimateGraph {
     var insideNodes = _.union([node], node.allOutputs())
     return _.difference(this.nodes.models, insideNodes)
   }
+  toJSON() {
+    return {
+      nodes: this.nodes.toJSON(),
+      edges: this.edges.toJSON()
+    }
+  }
 }
 
 var defaultData = {

@@ -14,11 +14,20 @@ export default Model.extend({
           this.collection.destroy(this)
         }
       },
+      update: {
+        deps: [],
+        fn: function() {
+        }
+      },
       appUrl: {
         deps: ['name'],
         fn: function () {
             return 'repo/' + this.name;
         }
       }
+    },
+    updateData: function(data) {
+      this.data = data
+      app.firebase.child('repos').child(this.id).set({name: this.name, data: data})
     }
 })

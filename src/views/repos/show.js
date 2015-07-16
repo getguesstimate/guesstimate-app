@@ -9,7 +9,7 @@ export default React.createClass({
   displayName: 'RepoDetailPage',
 
   render () {
-    let repo = <Icon name="spinner"/>
+    let repo = <Icon spin name="spinner"/>
     if (app.me.repos.models.length != 0) {
       let rep = app.me.repos.getByName(this.props.repo)
       repo = <GraphEditor repo={rep} />
