@@ -56,7 +56,7 @@ const fermGraphStore = Reflux.createStore({
     updateGraph (graph) {
       this.trigger(this.graph);
       this.graph.unsavedChanges = true
-    },
+  },
     _onUpdateNode (nodeId, newValues) {
       let node = this.getNode(parseInt(nodeId));
       if (!node) {
@@ -64,7 +64,7 @@ const fermGraphStore = Reflux.createStore({
       };
       node.set(newValues)
       node.propogate()
-    },
+  },
     onRemoveNode (nodeId) {
       this.graph.removeNode(nodeId)
       this.updateGraph()
@@ -80,13 +80,13 @@ const fermGraphStore = Reflux.createStore({
       return this.graph;
     },
     onGraphSave () {
-      app.firebase.child('repos').child(this.repo.id).set({name: this.repo.name, data: {nodes: this.graph.nodes.toJSON(), edges: this.graph.edges.toJSON()}})
+      this.model.updateData(this.graph.toJSON())
       this.graph.unsavedChanges = false
       this.trigger(this.graph)
     },
-    onGraphReset (repo) {
-      this.repo = repo
-      this.graph = new EstimateGraph(repo)
+    onGraphReset (model) {
+      this.model = model
+      this.graph = new EstimateGraph(model)
       window.graph = this.graph
 
       nodeCounter = (this.graph.nodes.models.length == 0) ? 1 : parseInt(_.max(this.graph.nodes.models, 'id').id) + 1
