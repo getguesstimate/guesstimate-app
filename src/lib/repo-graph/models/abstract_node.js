@@ -94,18 +94,6 @@ class AbstractNode extends Backbone.Model {
     return outputs
   }
 
-  toString(indent) {
-    //indent = indent || 0
-    //var pid = this.get('pid')
-    //var nodeType = this.get('nodeType')
-    //var outputs = _.map(this.outputs(), function(e){return e.toString(indent + 1)})
-    //var out_s = ""
-    //if (outputs.length > 0){ //var out_s = ' outputs => \n' + outputs.joint('\n')
-    //}
-    //sstring = (Array(indent*3).join('.')) + "([" + pid + nodeType + "]" + out_s + ")"
-    //return 'test'
-  }
-
   toCytoscape() {
     var e = {}
     e.nodeId = this.id
@@ -113,9 +101,13 @@ class AbstractNode extends Backbone.Model {
     _.merge(e, this.attributes)
     e.id = "n" + this.id // Nodes need letters for cytoscape
     e.name = this.toCytoscapeName()
-    let position = { x: (Math.random()*500), y: (Math.random()*500) }
+
+    if (e.position === undefined) {
+      e.position = { x: (Math.random()*50), y: (Math.random()*50) }
+    }
+
     if (!e.name){ e.name = 'Add Name' }
-    return {data: e, position: position};
+    return {data: e, position: e.position};
   }
 
   formatValue() {
