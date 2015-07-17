@@ -18,12 +18,13 @@ const GraphPane = React.createClass( {
   },
   handleDrag (event) {
     const id = event.cyTarget.data().nodeId;
-    const position = event.cyTarget.renderedPosition()
-    const object = {id: id, renderedPosition: position}
+    const renderedPosition = event.cyTarget.renderedPosition()
+    const position = event.cyTarget.position()
+    const object = {id: id, renderedPosition: renderedPosition, position: position}
     FermActions.updateNodeLocations([object])
   },
   handlePan (event) {
-    const newLocations = _.map(event.cy.nodes(), function(n){return {id: n.data().nodeId, renderedPosition: n.renderedPosition()}})
+    const newLocations = _.map(event.cy.nodes(), function(n){return {id: n.data().nodeId, renderedPosition: n.renderedPosition(), position: n.position()}})
     FermActions.updateNodeLocations(newLocations);
   },
   handleTap (event) {
@@ -35,7 +36,7 @@ const GraphPane = React.createClass( {
     }
   },
   updateAllPositions () {
-    const newLocations = _.map(this.state.graph.nodes(), function(n){return {id: n.data().nodeId, renderedPosition: n.renderedPosition()}})
+    const newLocations = _.map(this.state.graph.nodes(), function(n){return {id: n.data().nodeId, renderedPosition: n.renderedPosition(), position: n.position()}})
     if ((newLocations.length != 0) && (!isNaN(newLocations[0].renderedPosition.x))){
       FermActions.updateAllNodeLocations(newLocations);
     }
@@ -51,21 +52,19 @@ const GraphPane = React.createClass( {
       minZoom: 0.5,
       style: cytoscapeStyle,
       elements: this.prepareElements(),
-      layout: _.clone(mainLayout)
+      layout: { name: 'preset' }
     }
   },
   render () {
+    let graph = (<Cytoscape config={this.makeConfig()} elements={this.prepareElements()} onDrag={this.handleDrag} onReady={this.handleReady} onChange={this.handleChange} onPan={this.handlePan} onTap={this.handleTap}/>)
+    let isReady = (this.prepareElements().nodes.length !== 0)
     return (
-      <Cytoscape config={this.makeConfig()} elements={this.prepareElements()} onDrag={this.handleDrag} onReady={this.handleReady} onChange={this.handleChange} onPan={this.handlePan} onTap={this.handleTap}/>
+      <div>
+      {isReady ? graph : ''}
+      </div>
     )
   }
 })
-
-const mainLayout = {
-      name: 'breadthfirst',
-      directed: true, padding: 10,
-      avoidOverlap: true
-    }
 
 const cytoscapeStyle = cytoscape.stylesheet()
   .selector('node')
