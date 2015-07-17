@@ -113,11 +113,9 @@ class AbstractNode extends Backbone.Model {
     _.merge(e, this.attributes)
     e.id = "n" + this.id // Nodes need letters for cytoscape
     e.name = this.toCytoscapeName()
-    let xx = Math.random() * 50
-    let yy = Math.random() * 50
-    e.position = { x: xx.toFixed(0), y: yy.toFixed(0) }
+    let position = { x: (Math.random()*500), y: (Math.random()*500) }
     if (!e.name){ e.name = 'Add Name' }
-    return {data: e, position: e.position};
+    return {data: e, position: position};
   }
 
   formatValue() {
