@@ -2,12 +2,11 @@
 
 import _ from 'lodash'
 
-import cytoscape from 'cytoscape'
 import $ from 'jquery'
 import React from 'react'
 import Reflux from 'reflux'
 import FermActions from '../actions'
-import Cytoscape from './cytoscape_graph'
+import Cytoscape from 'lib/components/cytoscape'
 
 const GraphPane = React.createClass( {
   handleReady (cytoscapeGraph) {
@@ -41,16 +40,8 @@ const GraphPane = React.createClass( {
       FermActions.updateAllNodeLocations(newLocations);
     }
   },
-  prepareEdges () {
-    return this.props.graph.edges.toCytoscape()
-  },
-  prepareNodes () {
-    const regular = this.props.graph.nodes.toCytoscape()
-    if (this.props.editingNode) {
-      const editingCytoscapeNode = _.find(regular, function(f){return f.data.nodeId == this.props.editingNode.id}, this)
-      editingCytoscapeNode.data.editing = "true"
-    }
-    return regular
+  prepareElements () {
+    return this.props.graph.toCytoscape({editingNode: this.props.editingNode})
   },
   makeConfig () {
     return {
@@ -59,16 +50,13 @@ const GraphPane = React.createClass( {
       maxZoom: 2,
       minZoom: 0.5,
       style: cytoscapeStyle,
-      elements: {
-        nodes: this.prepareNodes(),
-        edges: this.prepareEdges()
-      },
+      elements: this.prepareElements(),
       layout: _.clone(mainLayout)
     }
   },
   render () {
     return (
-      <Cytoscape config={this.makeConfig()} nodes={this.prepareNodes()} edges={this.prepareEdges()} onDrag={this.handleDrag} onReady={this.handleReady} onChange={this.handleChange} onPan={this.handlePan} onTap={this.handleTap}/>
+      <Cytoscape config={this.makeConfig()} elements={this.prepareElements()} onDrag={this.handleDrag} onReady={this.handleReady} onChange={this.handleChange} onPan={this.handlePan} onTap={this.handleTap}/>
     )
   }
 })

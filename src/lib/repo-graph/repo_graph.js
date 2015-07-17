@@ -2,7 +2,7 @@ var _ = require('lodash');
 var NodeCollection = require('./collections/nodecollection');
 var EdgeCollection = require('./collections/edgecollection');
 
-class EstimateGraph {
+class RepoGraph {
   constructor(repo){
     var data = repo.data || defaultData
     this.nodes = new NodeCollection(data.nodes, this);
@@ -27,6 +27,14 @@ class EstimateGraph {
     var insideNodes = _.union([node], node.allOutputs())
     return _.difference(this.nodes.models, insideNodes)
   }
+  toCytoscape(params){
+    let asCytoscape = {nodes: this.nodes.toCytoscape(), edges: this.edges.toCytoscape()}
+    if (params.editingNode !== undefined) {
+      const editingCytoscapeNode = _.find(asCytoscape.nodes, function(f){return f.data.nodeId == params.editingNode.id}, this)
+      editingCytoscapeNode.data.editing = 'true'
+    }
+    return asCytoscape
+  }
   toJSON() {
     return {
       nodes: this.nodes.toJSON(),
@@ -42,4 +50,4 @@ var defaultData = {
   ]
 };
 
-module.exports = EstimateGraph;
+module.exports = RepoGraph;

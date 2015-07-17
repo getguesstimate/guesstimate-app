@@ -1,5 +1,5 @@
 import React from 'react'
-import GraphEditor from '../../components/graph_editor/flux/components/graph_editor_base'
+import GraphEditor from 'components/repo_editor/base'
 import ampersandMixin from 'ampersand-react-mixin'
 import Icon from'react-fa'
 
