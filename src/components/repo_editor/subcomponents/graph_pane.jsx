@@ -18,12 +18,13 @@ const GraphPane = React.createClass( {
   },
   handleDrag (event) {
     const id = event.cyTarget.data().nodeId;
-    const position = event.cyTarget.renderedPosition()
-    const object = {id: id, renderedPosition: position}
+    const renderedPosition = event.cyTarget.renderedPosition()
+    const position = event.cyTarget.position()
+    const object = {id: id, renderedPosition: renderedPosition, position: position}
     FermActions.updateNodeLocations([object])
   },
   handlePan (event) {
-    const newLocations = _.map(event.cy.nodes(), function(n){return {id: n.data().nodeId, renderedPosition: n.renderedPosition()}})
+    const newLocations = _.map(event.cy.nodes(), function(n){return {id: n.data().nodeId, renderedPosition: n.renderedPosition(), position: n.position()}})
     FermActions.updateNodeLocations(newLocations);
   },
   handleTap (event) {
@@ -35,7 +36,7 @@ const GraphPane = React.createClass( {
     }
   },
   updateAllPositions () {
-    const newLocations = _.map(this.state.graph.nodes(), function(n){return {id: n.data().nodeId, renderedPosition: n.renderedPosition()}})
+    const newLocations = _.map(this.state.graph.nodes(), function(n){return {id: n.data().nodeId, renderedPosition: n.renderedPosition(), position: n.position()}})
     if ((newLocations.length != 0) && (!isNaN(newLocations[0].renderedPosition.x))){
       FermActions.updateAllNodeLocations(newLocations);
     }
