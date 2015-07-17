@@ -1,5 +1,6 @@
 var getConfig = require('hjs-webpack')
 var webpack = require('webpack')
+var path = require('path');
 
 module.exports = getConfig({
   in: 'src/app.js',
@@ -10,3 +11,5 @@ module.exports = getConfig({
 module.exports.node = {
   child_process: 'empty'
 }
+
+module.exports.resolve.root = path.resolve('./src')

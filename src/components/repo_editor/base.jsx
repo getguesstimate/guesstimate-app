@@ -2,14 +2,14 @@
 
 import React from 'react'
 import Reflux from 'reflux'
-import FermActions from '../actions'
-import FermGraphStore from '../stores/fermgraphstore'
-import FermEditingStore from '../stores/fermeditingstore'
-import GraphPane from './graph_pane.jsx'
-import EditorPane from './editor_pane.jsx'
-import SidePane from './side_pane.jsx'
 
-window.FermGraphStore = FermGraphStore
+import FermActions from './actions'
+import FermGraphStore from './stores/fermgraphstore'
+import FermEditingStore from './stores/fermeditingstore'
+
+import GraphPane from './subcomponents/graph_pane.jsx'
+import EditorPane from './subcomponents/editor_pane.jsx'
+import SidePane from './subcomponents/side_pane.jsx'
 
 const GraphEditorBase = React.createClass({
 
