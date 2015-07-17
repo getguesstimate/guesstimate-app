@@ -12,8 +12,7 @@ const Cytoscape = React.createClass( {
   getDefaultProps:function(){
     return {
       config: {},
-      nodes: {},
-      edges: {},
+      elements: {nodes: [], edges: []},
       onDrag() { return this },
       onTap() { return this },
       onReady() { return this },
@@ -27,7 +26,7 @@ const Cytoscape = React.createClass( {
     this.setState({cy: cy})
   },
   componentDidUpdate() {
-    const newData = {elements:{nodes: this.props.nodes, edges: this.props.edges}}
+    const newData = {elements: this.props.elements}
     const oldData = this.state.cy.json()
 
     const getAllData = nodes => nodes.map(node => node.data)
