@@ -84,6 +84,12 @@ const fermGraphStore = Reflux.createStore({
       this.graph.unsavedChanges = false
       this.trigger(this.graph)
     },
+    onUpdateNodeLocations (nodeLocations) {
+      let location = nodeLocations[0]
+      debugger
+      this.graph.nodes.get(location.id).attributes.position = location.position
+      this.graph.unsavedChanges = true
+    },
     onGraphReset (model) {
       this.model = model
       this.graph = new EstimateGraph(model)
