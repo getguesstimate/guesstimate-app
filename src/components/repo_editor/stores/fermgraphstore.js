@@ -4,7 +4,7 @@ import React from 'react'
 import Reflux from 'reflux'
 import FermActions from '../actions'
 import _ from 'lodash'
-import EstimateGraph from '../../estimate_graph/estimate_graph.js'
+import EstimateGraph from 'lib/repo-graph/repo_graph.js'
 
 let nodeCounter = 1
 
