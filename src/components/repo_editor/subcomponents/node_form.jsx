@@ -66,7 +66,6 @@ const ResultForm = React.createClass({
     return (
       <form>
         <Input type="text" label="name" name="name" value={node.get('name')} onChange={this.handleChange}/>
-        <div className="btn btn-danger" onClick={this.handleDestroy}> Delete </div>
       </form>
     );
   }
