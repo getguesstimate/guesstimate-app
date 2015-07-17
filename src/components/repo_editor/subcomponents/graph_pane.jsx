@@ -47,23 +47,23 @@ const GraphPane = React.createClass( {
     return {
       container: $('.cytoscape_graph')[0],
       userZoomingEnabled: true,
-      maxZoom: 1.5,
-      minZoom: 0.8,
+      maxZoom: 2,
+      minZoom: 0.5,
       style: cytoscapeStyle,
       elements: this.prepareElements(),
-      layout: _.clone(mainLayout)
+      layout: { name: 'preset' }
     }
   },
   render () {
+    let graph = (<Cytoscape config={this.makeConfig()} elements={this.prepareElements()} onDrag={this.handleDrag} onReady={this.handleReady} onChange={this.handleChange} onPan={this.handlePan} onTap={this.handleTap}/>)
+    let isReady = (this.prepareElements().nodes.length !== 0)
     return (
-      <Cytoscape config={this.makeConfig()} elements={this.prepareElements()} onDrag={this.handleDrag} onReady={this.handleReady} onChange={this.handleChange} onPan={this.handlePan} onTap={this.handleTap}/>
+      <div>
+      {isReady ? graph : ''}
+      </div>
     )
   }
 })
-
-const mainLayout = {
-      name: 'preset'
-    }
 
 const cytoscapeStyle = cytoscape.stylesheet()
   .selector('node')
