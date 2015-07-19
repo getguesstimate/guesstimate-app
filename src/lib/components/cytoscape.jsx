@@ -58,12 +58,12 @@ const Cytoscape = React.createClass( {
   },
   createCy(){
     const config = this.prepareConfig()
-    config.container = $('.cytoscape_graph')[0]
+    config.container = $('.cytoscape-graph')[0]
     return cytoscape(config)
   },
   render(){
     return (
-      <div className="cytoscape_graph"></div>
+      <div className="cytoscape-graph"></div>
     )
   }
 })
@@ -142,7 +142,7 @@ const cytoChange = function(action, data) {
     },
     'added': function(data) {
       if (isNode(data)) {
-        cy.add({group:"nodes", data: data, position: {x:1000, y:500}})
+        cy.add({group:"nodes", data: data, position: {x:0, y:0}})
       }
       else if (isEdge(data)) {
         cy.add({group:"edges", data: data})

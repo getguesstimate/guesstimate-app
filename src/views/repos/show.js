@@ -15,7 +15,7 @@ export default React.createClass({
       repo = <GraphEditor repo={rep} />
     }
     return (
-      <div>
+      <div className='repo-page'>
         {repo}
       </div>
     )

@@ -36,10 +36,8 @@ export default React.createClass({
     }
     return (
       <NavHelper>
-        <div>
-            <Header isFluid={this.props.isFluid}/>
-            {body}
-        </div>
+        <Header isFluid={this.props.isFluid}/>
+        {body}
       </NavHelper>
     )
   }

@@ -8,8 +8,9 @@ import FermGraphStore from './stores/fermgraphstore'
 import FermEditingStore from './stores/fermeditingstore'
 
 import GraphPane from './subcomponents/graph_pane.jsx'
-import EditorPane from './subcomponents/editor_pane.jsx'
-import SidePane from './subcomponents/side_pane.jsx'
+import HoverPane from './subcomponents/hover_pane.jsx'
+import Header from './subcomponents/header.jsx'
+import NodeForm from './subcomponents/node_form.jsx'
 
 const GraphEditorBase = React.createClass({
 
@@ -42,13 +43,14 @@ const GraphEditorBase = React.createClass({
 
   render () {
     return (
-      <div className="row .app">
+      <div className="row repo-component">
         <div className="col-sm-9 col-md-10">
+          <Header addNode={this.addNode} saveGraph={this.saveGraph} unsavedChanges={this.state.graph.unsavedChanges}/>
           <GraphPane graph={this.state.graph} editingNode={this.getEditingNode()} updateEditingNode={this.updateEditingNode}/>
-          <EditorPane graph={this.state.graph} addNode={this.addNode} saveGraph={this.saveGraph} node={this.getEditingNode()}/>
+          <HoverPane graph={this.state.graph} node={this.getEditingNode()}/>
         </div>
-        <div className="col-sm-3 col-md-2">
-          <SidePane graph={this.state.graph} node={this.getEditingNode()}/>
+        <div className="col-sm-3 col-md-2 side-pane">
+          <NodeForm graph={this.state.graph} node={this.getEditingNode()} formSize="large" />
         </div>
       </div>
     );
