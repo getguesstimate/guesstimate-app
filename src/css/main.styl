@@ -1,65 +1,54 @@
-.row
-  &.app
+.repo-component
+  .cytoscape-graph
+    height: 900px
+
+  .side-pane
+    height 900px
+    background-color #eee
+    padding 1em
+
+  .maingraph
+    height 900px
     width 100%
 
-.cytoscape_graph
-  height: 900px
-
-.sidePane
-  height 900px
-  background-color #eee
-  padding 1em
-
-.maingraph
-  height 900px
-  width 100%
-
-.sidepane
-  .nodeForm
+  .hover
+    z-index 100
+    left 500px
     position absolute
-    top 50%
-    margin-top -50%
-    width 80%
+    margin 0
+    padding 0
+    background-color rgba(180,180,180,0.1)
 
-.graphpane
-  background-color white
+  .navbar.navbar-default
+    margin-bottom 0
+    margin 0
 
-.function-multiple-form
-  min-height 100px
+  .node-form
+    font-size 1.5em
+    form
+      text-align center
 
-.hover
-  z-index 100
-  left 500px
-  position absolute
-  margin 0
-  padding 0
-  background-color rgba(180,180,180,0.1)
-
-.navbar.navbar-default
-  margin-bottom 0
-  margin 0
-
-.nodeForm
-  font-size 1.5em
-  form
-    text-align center
-    .form-control
-      height 2em
-      border none
-      background rgba(255,255,255,0.8)
-      border-radius 0
-      font-size 1em
-      box-shadow none
-      &.function-multiple-form
-        height 12em
-      &:focus
-        background-color rgba(217,247,255,0.8)
+      .form-control
+        height 2em
+        border none
+        background rgba(255,255,255,0.8)
+        border-radius 0
+        font-size 1em
         box-shadow none
+        &.multiple-select
+          min-height 12em
+        &:focus
+          background-color rgba(217,247,255,0.8)
+          box-shadow none
 
-.newButtons
-  position absolute
-  top 0.5em
-  left 2em
-  .btn-default
-    background-color rgba(255,255,255, 0.6)
+      .multiple-select
+        min-height 100px
+
+  .header
+    z-index: 2
+    position absolute
+    top 0.5em
+    left 2em
+    .btn-default
+      background-color rgba(255,255,255, 0.6)
 

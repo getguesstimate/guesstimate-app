@@ -2,7 +2,6 @@
 
 import React from 'react'
 import _ from 'lodash'
-import ReactBootstrap from 'react-bootstrap'
 import Input from 'react-bootstrap/Input'
 import $ from 'jquery'
 import FermActions from '../actions'
@@ -21,7 +20,7 @@ const NodeForm = React.createClass({
     }
     else { form = '' }
     return (
-      <div className="nodeForm">{form}</div>
+      <div className="node-form">{form}</div>
     )
   }
 })
@@ -148,7 +147,7 @@ const FunctionForm = React.createClass({
             <option value="multiplication">(x) Multiplication </option>
         </Input>,
       selectInputs:
-        <Input type="select" label='Multiple Select' key='inputs' multiple name="inputs" value={currentInputs} onChange={this.handleChange} className="function-multiple-form">
+        <Input type="select" label='Multiple Select' key='inputs' multiple name="inputs" value={currentInputs} onChange={this.handleChange} className='multiple-select'>
           {possibleInputs}
         </Input>,
       deleteButton:
