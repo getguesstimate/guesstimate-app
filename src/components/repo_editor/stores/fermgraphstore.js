@@ -73,10 +73,8 @@ const fermGraphStore = Reflux.createStore({
     getNode (nodeId) {
       return this.graph.nodes.get(nodeId)
     },
-    //todo: Is this dead code?
     getInitialState () {
       this.graph = new EstimateGraph(false);
-      nodeCounter = parseInt(_.max(this.graph.nodes.models, 'id').id) + 1
       return this.graph;
     },
     onGraphSave () {
@@ -88,6 +86,7 @@ const fermGraphStore = Reflux.createStore({
       let location = nodeLocations[0]
       this.graph.nodes.get(location.id).attributes.position = location.position
       this.graph.unsavedChanges = true
+      this.trigger(this.graph)
     },
     onGraphReset (model) {
       this.model = model
@@ -95,7 +94,6 @@ const fermGraphStore = Reflux.createStore({
       window.graph = this.graph
 
       nodeCounter = (this.graph.nodes.models.length == 0) ? 1 : parseInt(_.max(this.graph.nodes.models, 'id').id) + 1
-
       this.graph.unsavedChanges = false
       this.trigger(this.graph);
     }
