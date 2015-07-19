@@ -25,6 +25,14 @@ const fermEditingStore = Reflux.createStore({
     onResetEditingNode (id) {
         this.updateEditingNode(null);
     },
+    onUpdateNodeLocations (nodeLocations) {
+      if (nodeLocations.length == 1) {
+        let newEditingNode = nodeLocations[0]
+        if (newEditingNode.id != this.editingNode){
+          this.onResetEditingNode(newEditingNode.id)
+        }
+      }
+    },
 
     // Helpers
     updateEditingNode (id) {
