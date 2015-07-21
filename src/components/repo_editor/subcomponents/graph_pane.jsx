@@ -56,12 +56,11 @@ const GraphPane = React.createClass( {
     }
   },
   render () {
-    let graph = (<Cytoscape config={this.makeConfig()} elements={this.prepareElements()} onDrag={this.handleDrag} onReady={this.handleReady} onChange={this.handleChange} onPan={this.handlePan} onTap={this.handleTap}/>)
-    let isReady = (this.prepareElements().nodes.length !== 0)
+    const graph = (<Cytoscape config={this.makeConfig()} elements={this.prepareElements()} onDrag={this.handleDrag} onReady={this.handleReady} onChange={this.handleChange} onPan={this.handlePan} onTap={this.handleTap}/>)
+    const isReady = (this.prepareElements().nodes.length !== 0)
+    const element = isReady ? graph : false
     return (
-      <div>
-      {isReady ? graph : ''}
-      </div>
+      element
     )
   }
 })

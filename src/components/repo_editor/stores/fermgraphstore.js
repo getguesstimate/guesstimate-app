@@ -78,6 +78,7 @@ const fermGraphStore = Reflux.createStore({
       return this.graph;
     },
     onGraphSave () {
+      debugger
       this.model.updateData(this.graph.toJSON())
       this.graph.unsavedChanges = false
       this.trigger(this.graph)
