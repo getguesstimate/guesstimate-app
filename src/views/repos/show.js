@@ -12,7 +12,7 @@ export default React.createClass({
     let repo = <Icon spin name="spinner"/>
     if (app.me.repos.models.length != 0) {
       let rep = app.me.repos.getByName(this.props.repo)
-      repo = <GraphEditor repo={rep} />
+      repo = <GraphEditor repo={rep} savable={true} />
     }
     return (
       <div className='repo-page'>

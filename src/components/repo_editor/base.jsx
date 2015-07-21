@@ -42,14 +42,17 @@ const GraphEditorBase = React.createClass({
   },
 
   render () {
+    let mainPaneClasses = this.props.savable ? "col-sm-9 col-md-10 main-pane" : "col-xs-12 main-pane"
+    let sidePaneClasses = this.props.savable ? "col-sm-3 col-md-2 side-pane" : "hidden side-pane"
+    let header = this.props.savable ? <Header addNode={this.addNode} saveGraph={this.saveGraph} unsavedChanges={this.state.graph.unsavedChanges} savable={this.props.savable}/> : null
     return (
       <div className="row repo-component">
-        <div className="col-sm-9 col-md-10">
-          <Header addNode={this.addNode} saveGraph={this.saveGraph} unsavedChanges={this.state.graph.unsavedChanges}/>
+        <div className={mainPaneClasses}>
+          {header}
           <GraphPane graph={this.state.graph} editingNode={this.getEditingNode()} updateEditingNode={this.updateEditingNode}/>
           <HoverPane graph={this.state.graph} node={this.getEditingNode()}/>
         </div>
-        <div className="col-sm-3 col-md-2 side-pane">
+        <div className={sidePaneClasses}>
           <NodeForm graph={this.state.graph} node={this.getEditingNode()} formSize="large" />
         </div>
       </div>

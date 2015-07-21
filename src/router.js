@@ -23,7 +23,7 @@ export default Router.extend({
   },
 
   home () {
-    this.render(<Home repos={app.me.repos}/>)
+    this.render(<Home repos={app.me.repos}/>, true)
   },
 
   repoNew () {

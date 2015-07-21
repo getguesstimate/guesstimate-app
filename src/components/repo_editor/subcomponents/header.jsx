@@ -21,11 +21,12 @@ var Header = React.createClass({
 
   render () {
     const unsaved = this.props.unsavedChanges
+    const saveButton = <Button bsStyle={unsaved ? 'primary' : null} disabled={!unsaved} onClick={this.props.saveGraph}> Save </Button>
     return (
       <ButtonToolbar className="header">
         <Button onClick={this.newEstimate}> <Icon name='plus'/> Estimate </Button>
         <Button onClick={this.newFunction}> <Icon name='plus'/> Function </Button>
-        <Button bsStyle={unsaved ? 'primary' : null} disabled={!unsaved} onClick={this.props.saveGraph}> Save </Button>
+        {this.props.savable ? saveButton : null}
       </ButtonToolbar>
     )
   }
