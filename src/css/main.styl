@@ -32,19 +32,35 @@ h1
     z-index 100
     left 500px
     position absolute
-    margin 0
-    padding 0
-    background-color rgba(180,180,180,0.1)
+    font-size: 0.9em
+    .triangle
+      width: 0
+      height: 0
+      border-left: 12px solid transparent
+      border-right: 12px solid transparent
+      border-bottom: 7px solid rgba(240,240,240,0.95)
+      margin: 0 auto
+    .node-form
+      margin 0
+      padding 0
+      background-color rgba(240,240,240,0.95)
+      border-radius: 0.25em
+
+    input
+      text-align: center
 
   .navbar.navbar-default
     margin-bottom 0
     margin 0
 
   .node-form
+    text-align center
     font-size 1.5em
     form
+      padding-bottom:1px
       text-align center
-
+      .form-group
+        margin-bottom: 6px
       .form-control
         height 2em
         border none
@@ -55,7 +71,7 @@ h1
         &.multiple-select
           min-height 12em
         &:focus
-          background-color rgba(217,247,255,0.8)
+          background-color rgba(200, 215, 230, 0.95)
           box-shadow none
 
       .multiple-select
