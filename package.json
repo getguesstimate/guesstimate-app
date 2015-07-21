@@ -6,8 +6,8 @@
   "scripts": {
     "start": "webpack-dev-server",
     "build": "webpack",
-    "deploy": "surge -p public -d guesstimate.surge.sh",
-    "stage": "surge -p public -d guestimate-stage.surge.sh",
+    "deploy": "surge -p public -d gaussian.io",
+    "stage": "surge -p public -d gaussian.surge.sh",
     "stage!": "npm run build && npm run stage"
   },
   "repository": {
