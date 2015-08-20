@@ -1,6 +1,5 @@
 import app from 'ampersand-app'
 import Router from './router'
-import bootstrap from "../node_modules/bootstrap/dist/css/bootstrap.css"
 import styles from './css/main.styl'
 import Me from './models/me'
 import Firebase from 'firebase'
