@@ -13,7 +13,7 @@ const Header = React.createClass({
         <div className={containerClass}>
           <div className="row">
             <div className="navbar-header col-xs-8">
-              <a className="navbar-brand" href="/">Gaussian.io</a>
+              <a className="navbar-brand" href="/">Guesstimate.io</a>
             </div>
             <div className="col-xs-4">
               <ul className="nav navbar-nav pull-right">
