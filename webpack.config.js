@@ -12,4 +12,5 @@ module.exports.node = {
   child_process: 'empty'
 }
 
+module.exports.devServer.host = '0.0.0.0'
 module.exports.resolve.root = path.resolve('./src')
