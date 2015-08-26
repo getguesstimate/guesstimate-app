@@ -1,11 +1,13 @@
 import React from 'react'
 import t from 'tcomb-form'
 import _ from 'lodash'
+import ButtonToolbar from 'react-bootstrap/ButtonToolbar'
 
 let Form = t.form.Form;
 
 let Repo = t.struct({
   name: t.Str,
+  description: t.Str
 });
 
 export default React.createClass({
@@ -52,11 +54,20 @@ export default React.createClass({
   onSubmit(e) {
     e.preventDefault()
     let repoName = this.state.value.name
-    let newUrl = app.me.repos.create(repoName)
+    let repoDescription = this.state.value.description
+    let newUrl = app.me.repos.create(repoName,repoDescription)
     app.router.history.navigate(newUrl)
   },
-
+  
+  onCancel(e){
+    window.history.back()
+  },
+  
   render() {
+    //console.log("Hello")
+    //console.log("printing fragment "+app.router.history.getFragment())
+    //console.log("routes are ")
+    //console.log(app.router.history)
     return (
       <form onSubmit={this.onSubmit}>
         <Form
@@ -65,7 +76,10 @@ export default React.createClass({
           value={this.state.value}
           onChange={this.onChange}
         />
+      <ButtonToolbar>
         <button type='submit' className='btn btn-primary' disabled={this.state.options.hasError}>Save</button>
+        <button type='button' onClick={this.onCancel} className="btn btn-default">Cancel</button>
+      </ButtonToolbar>
       </form>
     );
   }
