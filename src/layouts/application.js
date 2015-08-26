@@ -1,6 +1,7 @@
 import React from 'react'
 import DropdownButton from 'react-bootstrap/DropdownButton'
-import SplitButton from 'react-bootstrap/SplitButton' 
+import Button from 'react-bootstrap/Button'
+import ButtonGroup from 'react-bootstrap/ButtonGroup'
 import MenuItem from 'react-bootstrap/MenuItem'
 import NavHelper from '../components/nav-helper'
 import ampersandMixin from 'ampersand-react-mixin'
@@ -9,21 +10,24 @@ import Icon from'react-fa'
 const NavItem = React.createClass({
   render () {
     return (
-      <SplitButton title='Repo List' pullRight id='split-button-pull-right'>
-       {this.props.repos.models.map((repo) => {
-            return (
-              <MenuItem href={repo.appUrl} title={repo.description}>{repo.name}</MenuItem>
-            )
-        })}
-      </SplitButton>
+    <ButtonGroup>
+        <DropdownButton title='Example Repos' id='split-button-pull-right'>
+         {this.props.repos.models.map((repo) => {
+              return (
+                <MenuItem href={repo.appUrl} title={repo.description}>{repo.name}</MenuItem>
+              )
+          })}
+        </DropdownButton>
+        <Button href="/repo/new"><Icon name='plus'/></Button>
+      </ButtonGroup>
     )
   }
 })
 
 const Header = React.createClass({
   mixins: [ampersandMixin],
-  displayName: 'Header',  
-  render () { 
+  displayName: 'Header',
+  render () {
     let containerClass = (this.props.isFluid === true) ? "container-fluid" : "container";
     return (
       <nav className="navbar navbar-default">
@@ -37,12 +41,11 @@ const Header = React.createClass({
                 <NavItem repos={this.props.repos}/>
               </div>
               <ul className="nav navbar-nav pull-right">
-                <li><a href="/repo/new"><Icon name='plus'/></a></li>
               </ul>
             </div>
           </div>
         </div>{/* /.container-fluid */}
-      </nav>  
+      </nav>
     );
   }
 });
