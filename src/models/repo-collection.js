@@ -23,7 +23,7 @@ export default Collection.extend({
     this.remove(repo)
   },
 
-  create (name,description) {
+  create (name, description) {
     let repo = {name: name, description: description, data: {nodes: [], edges: []}}
     app.firebase.child('repos').push(repo)
     return ('/repo/' + name)
