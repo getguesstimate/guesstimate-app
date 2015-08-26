@@ -5,7 +5,6 @@ export default Model.extend({
     props: {
         name: 'string',
         data: 'hash',
-        description: 'string',
         id: 'string',
     },
     derived: {
@@ -23,12 +22,12 @@ export default Model.extend({
       appUrl: {
         deps: ['name'],
         fn: function () {
-            return '/repo/' + this.name;
+            return 'repo/' + this.name;
         }
       }
     },
     updateData: function(data) {
       this.data = data
-      app.firebase.child('repos').child(this.id).set({name: this.name, description:this.description, data: data})
+      app.firebase.child('repos').child(this.id).set({name: this.name, data: data})
     }
 })
