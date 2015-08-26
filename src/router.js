@@ -9,7 +9,7 @@ import Layout from './layouts/application'
 export default Router.extend({
   render (page, isFluid=false) {
     var fullPage = (
-      <Layout isFluid={isFluid}>
+      <Layout isFluid={isFluid} repos={app.me.repos}>
         {page}
       </Layout>
     )
@@ -34,4 +34,3 @@ export default Router.extend({
     this.render(<RepoShow repo={name} repos={app.me.repos}/>, true)
   },
 })
-
