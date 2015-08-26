@@ -14,9 +14,9 @@ module.exports.node = {
 
 if(process.env.NODE_ENV === 'development'){ 
 	module.exports.devServer.host = '0.0.0.0'
+	//uncomment to suppress log output
+	//module.exports.devServer.noInfo = true;
+	//module.exports.devServer.quiet=true;
 }
 
-//uncomment to suppress log output
-//module.exports.devServer.noInfo = true;
-//module.exports.devServer.quiet=true;
 module.exports.resolve.root = path.resolve('./src')
