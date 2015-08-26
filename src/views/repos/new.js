@@ -2,21 +2,26 @@ import React from 'react'
 import t from 'tcomb-form'
 import _ from 'lodash'
 
+import ButtonToolbar from 'react-bootstrap/ButtonToolbar'
+
 let Form = t.form.Form;
 
 let Repo = t.struct({
   name: t.Str,
+  description: t.Str
 });
 
 export default React.createClass({
-
   getInitialState() {
     return {
       options: {
         hasError: false,
         error: <i> Important Error!</i>,
       },
-      value: null,
+      value: {
+        name: "",
+        description: ""
+      },
     }
   },
 
@@ -42,18 +47,27 @@ export default React.createClass({
 
   errors(value) {
     let errors = []
-    let allRepos = _.map(app.allRepos, function(n) {return n.name})
+    let allRepos = _.map(app.me.repos.models, function(n) {return n.name})
     if (_.contains(allRepos, value.name)){
       errors.push('name not unique')
     }
     return errors
   },
 
+  ready() {
+    return this.state.value.name !== "" && this.state.value.description !== "";
+  },
+
   onSubmit(e) {
     e.preventDefault()
     let repoName = this.state.value.name
-    let newUrl = app.me.repos.create(repoName)
+    let repoDescription = this.state.value.description
+    let newUrl = app.me.repos.create(repoName,repoDescription)
     app.router.history.navigate(newUrl)
+  },
+
+  onCancel(e){
+    window.history.back()
   },
 
   render() {
@@ -65,7 +79,10 @@ export default React.createClass({
           value={this.state.value}
           onChange={this.onChange}
         />
-        <button type='submit' className='btn btn-primary' disabled={this.state.options.hasError}>Save</button>
+      <ButtonToolbar>
+        <button type='submit' className='btn btn-primary' disabled={this.state.options.hasError || !this.ready()}>Save</button>
+        <button type='button' onClick={this.onCancel} className="btn btn-default">Cancel</button>
+      </ButtonToolbar>
       </form>
     );
   }
