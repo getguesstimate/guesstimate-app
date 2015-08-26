@@ -64,10 +64,6 @@ export default React.createClass({
   },
   
   render() {
-    //console.log("Hello")
-    //console.log("printing fragment "+app.router.history.getFragment())
-    //console.log("routes are ")
-    //console.log(app.router.history)
     return (
       <form onSubmit={this.onSubmit}>
         <Form
