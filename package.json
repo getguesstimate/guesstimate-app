@@ -8,7 +8,6 @@
     "build": "webpack",
     "deploy": "surge -p public -d www.gaussian.io",
     "stage": "surge -p public -d gaussian.surge.sh",
-    "prestage!": "NODE_ENV=staging",
     "stage!": "npm run build && npm run stage"
   },
   "repository": {
