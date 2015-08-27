@@ -55,7 +55,7 @@
     "octicons": "^2.2.0",
     "qs": "^2.4.1",
     "react": "^0.13.3",
-    "react-bootstrap": "0.13.3",
+    "react-bootstrap": "0.25.0",
     "react-fa": "^3.4.0",
     "react-hot-loader": "^1.2.8",
     "reactfire": "^0.4.0",

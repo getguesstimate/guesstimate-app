@@ -2,7 +2,7 @@
 
 import React from 'react'
 import _ from 'lodash'
-import Input from 'react-bootstrap/Input'
+import Input from 'react-bootstrap/lib/Input'
 import $ from 'jquery'
 import FermActions from '../actions'
 import Icon from'react-fa'
