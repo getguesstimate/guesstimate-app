@@ -2,7 +2,7 @@ import React from 'react'
 import t from 'tcomb-form'
 import _ from 'lodash'
 
-import ButtonToolbar from 'react-bootstrap/ButtonToolbar'
+import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar'
 
 let Form = t.form.Form;
 
