@@ -2,32 +2,45 @@
 
 import React from 'react'
 import Reflux from 'reflux'
-import Page from 'lib/large/page'
-import Input from 'react-bootstrap/Input'
-import Tabs from 'react-bootstrap/Tabs'
-import Tab from 'react-bootstrap/Tab'
+import SpaceStore from './stores/spacestore.js'
+import Actions from './actions'
 
-let json = {
-  monteCarlo: {
-    samples: 10
-  },
-  metrics:
-    [
-      {id: '124', name: 'cats', guesstimates: [{ distribution: { type: 'point', value: 300 }, estimate: {value: 300} }] },
-      {id: '125', name: 'dogs', guesstimates: [{ distribution: { type: 'point', value: 500 }, estimate: {value: 500} }] },
-      {id: '126', name: 'animals', guesstimates: [{ distribution: {type: 'point', value: 40 }, funct: {inputs: ['124', '125'], function_type: 'addition'} }] },
-      {id: '127', name: 'humans', guesstimates: [{ distribution: {type: 'point', value: 500 }, estimate: {value: 500} }] },
-      {id: '128', name: 'beings', guesstimates: [{ distribution: {type: 'point', value: 40 }, funct: {inputs: ['126', '127'], function_type: 'addition'} }] }
-    ]
-};
+import Input from 'react-bootstrap/lib/Input'
+import Button from 'react-bootstrap/lib/Button'
+import Tabs from 'react-bootstrap/lib/Tabs'
+import Tab from 'react-bootstrap/lib/Tab'
+import Icon from'react-fa'
 
+
+const NormalEstimate = React.createClass({
+  render() {
+    return (
+    <div className="point-estimate">
+      Normal Estimate
+    </div>
+    )
+  }
+})
+
+const PointEstimate = React.createClass({
+  render() {
+    return (
+    <div className="point-estimate">
+      point estimate
+    </div>
+    )
+  }
+})
 
 const Estimate = React.createClass({
   //point, array, normal
   render() {
     return (
     <div className="estimate">
-      <p> Select Distribution Type </p>
+    <Tabs defaultActiveKey={1}>
+      <Tab eventKey={1} title=<Icon name='circle'/>><PointEstimate estimate={this.props.estimate}/></Tab>
+      <Tab eventKey={2} title=<Icon name='area-chart'/>><NormalEstimate estimate={this.props.estimate}/></Tab>
+    </Tabs>
     </div>
     )
   }
@@ -37,7 +50,10 @@ const Funct = React.createClass({
   render() {
     return (
     <div className="funct">
-      <h1> Functi </h1>
+      <Tabs defaultActiveKey={1}>
+        <Tab eventKey={1} title=<Icon name='plus'/>>Add Things</Tab>
+        <Tab eventKey={2} title=<Icon name='close'/>>Multiply Things</Tab>
+      </Tabs>
     </div>
     )
   }
@@ -72,6 +88,9 @@ const Guesstimate = React.createClass({
 })
 
 const MetricWidget = React.createClass({
+  propogate() {
+    Actions.metricPropogate(this.props.metric.id)
+  },
   render() {
     return (
     <div className="col-sm-3 metric">
@@ -79,18 +98,21 @@ const MetricWidget = React.createClass({
       <div className="node-form">
         <Distribution distribution={this.props.metric.distribution()}/>
         <Guesstimate guesstimate={this.props.metric.guesstimates[0]}/>
+        <Button bsSize='xsmall' onClick={this.propogate}>Propogate!</Button>
       </div>
     </div>
     )
   }
 })
 
-let page = new Page(json)
 const GraphEditorBase = React.createClass({
+  mixins: [
+    Reflux.connect(SpaceStore, "space"),
+  ],
   render () {
     return (
       <div className="row repo-component">
-         {page.metrics.map((metric) => {
+         {this.state.space.metrics.map((metric) => {
               return (
                 <MetricWidget metric={metric} key={metric.id}/>
               )
