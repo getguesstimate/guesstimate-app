@@ -24,6 +24,9 @@ module.exports = class Funct {
     return this.inputs.map(n => this.guesstimate.metric.page.metricIdToDistribution(n));
   }
 
+  _findInputMetrics() {
+    return this.inputs.map(n => this.guesstimate.metric.page.metricIdToMetric(n));
+  }
   _calculateDistribution(distributions, analyzeOptions = this._defaultAnalyzeOptions()) {
     let simulation = new Simulator({inputs: distributions, operation: this._functionType()});
     return simulation.run();
