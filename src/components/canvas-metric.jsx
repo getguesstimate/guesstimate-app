@@ -13,8 +13,8 @@ const MetricWidget = React.createClass({
     <div className="col-sm-3 metric">
       <h2>{this.props.metric.name}</h2>
       <div className="node-form">
-        <Distribution distribution={this.props.metric.distribution()}/>
-        <Guesstimate guesstimate={this.props.metric.guesstimates[0]}/>
+        <Distribution distribution={this.props.metric.distribution()} metricId={this.props.metric.id}/>
+        <Guesstimate guesstimate={this.props.metric.guesstimates[0]} metricId={this.props.metric.id}/>
         <Button bsSize='xsmall' onClick={this.propogate}>Propogate!</Button>
       </div>
     </div>

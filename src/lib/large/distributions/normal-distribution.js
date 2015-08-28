@@ -9,15 +9,17 @@ module.exports = class NormalDistribution extends BaseDistribution {
     this.type = 'normal';
     this.mean = options.mean;
     this.stdev = options.stdev;
-    this.stochator = new Stochator({
-      mean: this.mean,
-      stdev: this.stdev,
-      seed: options.seed
-    });
+    this.seed = options.seed;
   }
 
   sample() {
-    return this.stochator.next();
+    let stochator = new Stochator({
+      mean: this.mean,
+      stdev: this.stdev,
+      seed: this.seed
+    });
+
+    return stochator.next();
   }
 
   toJSON() {
