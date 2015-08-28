@@ -11,6 +11,7 @@ const SpaceActions = Reflux.createActions([
     "metricDestroy",
     "metricCreate",
     "metricPropogate",
+    "metricUpdateEstimate",
 
     "functionAdd",
     "estimateAdd",

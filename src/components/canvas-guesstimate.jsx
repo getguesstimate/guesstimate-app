@@ -6,9 +6,9 @@ const Guesstimate = React.createClass({
   type() {
     let guesstimate = this.props.guesstimate
     if (guesstimate.estimate !== undefined){
-       return <Estimate estimate={guesstimate.estimate}/>
+       return <Estimate estimate={guesstimate.estimate} metricId={this.props.metricId}/>
     } else if (guesstimate.funct !== undefined){
-       return <Funct funct={guesstimate.estimate}/>
+       return <Funct funct={guesstimate.funct} metricId={this.props.metricId}/>
     }
   },
   render() {
