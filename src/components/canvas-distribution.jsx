@@ -10,8 +10,15 @@ const ArrayDistribution = React.createClass({
     let value = this.props.distribution.value
     return (
     <div className="distribution">
-      <h2> {stats.mean(value).toFixed(2)} </h2>
-    <Histogram data={value} width={150} height={40}/>
+      <div className="row">
+      <div className="col-sm-6">
+        <h2 className='mean'> {stats.mean(value).toFixed(2)} </h2>
+        <h2 className='metric-name'>{this.props.metricName}</h2>
+      </div>
+      <div className="col-sm-6">
+        <Histogram data={value} width={100} height={60}/>
+      </div>
+      </div>
     <Table condensed hover>
       <tbody>
         <tr>
@@ -35,10 +42,11 @@ const ArrayDistribution = React.createClass({
 
 const PointDistribution = React.createClass({
   render() {
+    let value = this.props.distribution.value
     return (
     <div className="distribution">
-      <Icon name='circle'/>
-      {this.props.distribution.value}
+      <h2 className='mean'> {value} </h2>
+      <h2 className='metric-name'>{this.props.metricName}</h2>
     </div>
     )
   }
@@ -46,12 +54,19 @@ const PointDistribution = React.createClass({
 
 const NormalDistribution = React.createClass({
   render() {
+    let value = this.props.distribution.mean
     return (
     <div className="distribution">
-      <Icon name='area-chart'/>
-      {this.props.distribution.mean}
-      +-
-      {this.props.distribution.stdev}
+      <h2 className='mean'> {value} </h2>
+      <h2 className='metric-name'>{this.props.metricName}</h2>
+      <Table condensed hover>
+        <tbody>
+          <tr>
+            <td> std </td>
+            <td> {this.props.distribution.stdev} </td>
+          </tr>
+        </tbody>
+      </Table>
     </div>
     )
   }
@@ -61,16 +76,16 @@ const Distribution = React.createClass({
   type() {
     let type = this.props.distribution.type
     if (type == 'point'){
-      return <PointDistribution distribution={this.props.distribution}/>
+      return <PointDistribution {...this.props}/>
     } else if (type == 'normal'){
-      return <NormalDistribution distribution={this.props.distribution}/>
+      return <NormalDistribution {...this.props}/>
     } else if (type == 'array'){
-      return <ArrayDistribution distribution={this.props.distribution}/>
+      return <ArrayDistribution {...this.props}/>
     }
   },
   render() {
     return (
-    <div className="distribution">
+    <div>
       {this.type()}
     </div>
     )
