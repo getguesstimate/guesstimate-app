@@ -1,5 +1,5 @@
 import React from 'react'
-import GraphEditor from 'components/repo_editor2/base'
+import GraphEditor from 'components/canvas-space'
 import ampersandMixin from 'ampersand-react-mixin'
 import Icon from'react-fa'
 

@@ -1,6 +1,20 @@
 $icon-font-path = '../../node_modules/bootstrap-styl/fonts/'
 @import '../../node_modules/bootstrap-styl/stylus/bootstrap'
 
+.react-d3-histogram__bar rect
+  fill: steelblue;
+  shape-rendering: crispEdges;
+
+.react-d3-histogram__bar text
+  fill: none;
+
+.react-d3-histogram__tick text
+  font-size: 8px;
+
+.react-d3-histogram__x-axis path, .react-d3-histogram__x-axis line
+  fill: none;
+  shape-rendering: crispEdges;
+
 .metric
   background white
   border 1px solid #aaa
