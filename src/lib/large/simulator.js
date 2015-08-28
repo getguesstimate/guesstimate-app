@@ -8,7 +8,7 @@ module.exports = class Simulator {
   constructor(options) {
     this.inputs = options.inputs;
     this.operation = options.operation;
-    this.samples = options.samples || 500;
+    this.samples = options.samples || 20000;
   }
 
   run() {

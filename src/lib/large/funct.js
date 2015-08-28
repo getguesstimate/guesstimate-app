@@ -31,7 +31,7 @@ module.exports = class Funct {
 
   _defaultAnalyzeOptions() {
     return {
-      samples: 10
+      samples: 100
     };
   }
 

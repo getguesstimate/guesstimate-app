@@ -2,9 +2,9 @@
 
 import Reflux from 'reflux'
 
-const FermActions = Reflux.createActions([
-    "pageReset",
-    "pageSave",
+const SpaceActions = Reflux.createActions([
+    "spaceReset",
+    "spaceSave",
 
     "metricSelect",
     "metricUpdate",
@@ -19,4 +19,4 @@ const FermActions = Reflux.createActions([
     "pageLocationUpdate"
 ]);
 
-module.exports = FermActions;
+module.exports = SpaceActions;
