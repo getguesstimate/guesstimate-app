@@ -5,6 +5,15 @@ import Icon from'react-fa'
 import Input from 'react-bootstrap/lib/Input'
 import SpaceActions from '../actions/space-actions'
 import $ from 'jquery'
+import LazyInput from 'lazy-input'
+
+const NumberField = React.createClass({
+  render() {
+    return (
+      <LazyInput className="form-control" key={this.props.name} type="number" name={this.props.name} defaultValue="0"  onChange={this.props.onChange} value={this.props.value} />
+    )
+  }
+})
 
 const NormalEstimate = React.createClass({
 
@@ -20,8 +29,8 @@ const NormalEstimate = React.createClass({
     return (
     <div className="point-estimate">
       <form key={this.props.estimate.mean} onChange={this.handleChange}>
-        <Input key="mean" type="number" label="mean" name="mean" defaultValue="0" value={distribution.mean} />
-        <Input key="stdev" type="number" label="stdev" name="stdev" defaultValue="0" value={distribution.stdev} />
+        <NumberField name={"mean"} value={distribution.mean} onChange={this.handleChange}/>
+        <NumberField name={"stdev"} value={distribution.stdev} onChange={this.handleChange}/>
       </form>
     </div>
     )
@@ -41,7 +50,7 @@ const PointEstimate = React.createClass({
     return (
     <div className="point-estimate">
       <form key={this.props.estimate.value} onChange={this.handleChange}>
-        <Input key="value" type="number" label="value" name="value" defaultValue="0" value={distribution.value} />
+        <NumberField name={"value"} value={distribution.value} onChange={this.handleChange}/>
       </form>
     </div>
     )
