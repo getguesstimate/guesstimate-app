@@ -18,19 +18,32 @@ $icon-font-path = '../../node_modules/bootstrap-styl/fonts/'
 .react-d3-histogram
   height 100px
   margin-top -4px
+  margin-left: -50px
 
 .metric
   .nav > li > a
     padding 4px 8px
   .distribution
+    table
+      color: #666
     h2
       font-size: 25px;
     h2.mean
       color #3782c4
       margin-bottom 0.25em
+      margin-top 0.25em
+
+    &:focus
+      background blue
     h2.metric-name
       margin-top 0
+      #contenteditable:focus
+        outline none
 
+.refresh-calculation
+  position absolute
+  top 0
+  right 17px
 
 h1
   font-size 4em
@@ -54,6 +67,7 @@ h1
 .repo-component.row
   margin-right 0
   margin-left 0
+  padding-top 1em
 
 .repo-component
   background-color #eee

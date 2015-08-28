@@ -31,6 +31,11 @@ const SpaceStore = Reflux.createStore({
     metric.propagate()
     this.trigger(this.space)
   },
+  onMetricUpdate(metricId, values){
+    let metric = _.find(this.space.metrics, {id: metricId});
+    _.extend(metric, values)
+    this.trigger(this.space)
+  },
   onMetricPropogate(metricId) {
     let metric = _.find(this.space.metrics, {id: metricId});
     metric.propagate()
