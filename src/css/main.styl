@@ -15,12 +15,22 @@ $icon-font-path = '../../node_modules/bootstrap-styl/fonts/'
   fill: none;
   shape-rendering: crispEdges;
 
+.react-d3-histogram
+  height 100px
+  margin-top -4px
+
 .metric
   .nav > li > a
     padding 4px 8px
-  .distribution h2
-    color #3782c4
-    float right
+  .distribution
+    h2
+      font-size: 25px;
+    h2.mean
+      color #3782c4
+      margin-bottom 0.25em
+    h2.metric-name
+      margin-top 0
+
 
 h1
   font-size 4em
