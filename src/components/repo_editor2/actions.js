@@ -10,6 +10,7 @@ const FermActions = Reflux.createActions([
     "metricUpdate",
     "metricDestroy",
     "metricCreate",
+    "metricPropogate",
 
     "functionAdd",
     "estimateAdd",

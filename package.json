@@ -51,7 +51,7 @@
     "jsondiffpatch": "~0.1.27",
     "jsx-loader": "^0.13.2",
     "local-links": "^1.4.0",
-    "lodash": "^2.4.1",
+    "lodash": "^3.10.1",
     "node-uuid": "^1.4.3",
     "numeral": "~1.5.3",
     "octicons": "^2.2.0",
