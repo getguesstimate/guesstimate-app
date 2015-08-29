@@ -8,12 +8,13 @@ module.exports = class Simulator {
   constructor(options) {
     this.inputs = options.inputs;
     this.operation = options.operation;
-    this.samples = options.samples || 100;
+    this.samples = options.samples || 1000;
   }
 
   run() {
     const all_single = (_.every(this.inputs, 'type', 'point'));
-    return all_single ? this._runPoint() : this._runRegular();
+    const result = all_single ? this._runPoint() : this._runRegular();
+    return result;
   }
 
   _runPoint() {

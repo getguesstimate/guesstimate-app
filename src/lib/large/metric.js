@@ -34,6 +34,7 @@ module.exports = class Metric {
   _analyze() {
     const funct = this.guesstimates[0].funct;
     funct && funct.analyze();
+    app.trigger();
   }
 
   _outputs() {
