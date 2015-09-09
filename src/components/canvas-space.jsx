@@ -12,10 +12,10 @@ import Icon from'react-fa'
 import LazyInput from 'lazy-input'
 import Button from 'react-bootstrap/lib/Button'
 import $ from 'jquery'
+import _ from 'lodash'
 
 window.jquery = $
 //todo
-// change col/row to location
 // make hover a higher level component
 // convert to es6 classes
 // underscore non-regular functions
@@ -76,13 +76,13 @@ const Metric = React.createClass({
     this.setState({hover: true});
   },
   mouseOut () {
-      this.setState({hover: false});
+    this.setState({hover: false});
   },
   onRemove () {
     this.props.onRemove(this)
   },
   position () {
-    return {row: this.props.row, column: this.props.column}
+    return this.props.item.position
   },
   regularView() {
     return (
@@ -119,24 +119,24 @@ const Metric = React.createClass({
 
 const CanvasPage = React.createClass({
   getInitialState () {
-    return { items: [{column: 3, row: 3}], selected: {column:0, row:0}}
+    return { items: [{location: {column: 3, row: 3}}], selected: {column:0, row:0}}
   },
-  onAddItem (item) {
-    this.setState({items: [...this.state.items, item], selected: item})
-  },
-  onRemoveItem (item) {
-    let newItems = this.state.items.filter(function(i) { return (i.row != item.props.row || i.column != item.props.column)})
-    this.setState({items: newItems})
-  },
-  onMove (e) {
+  _handleSelect (e) {
     this.setState({selected: e})
+  },
+  _handleAddItem (location) {
+    this.setState({items: [...this.state.items, item], selected: {location: location}})
+  },
+  _handleRemoveItem (location) {
+    let newItems = this.state.items.filter(function(i) { return (_.isEqual(i.location, location)) })
+    this.setState({items: newItems})
   },
   render () {
     return (
       <div className="row repo-component">
-        <Grid selected={this.state.selected} onMove={this.onMove} onAddItem={this.onAddItem}>
+        <Grid selected={this.state.selected} onMove={this._handleSelect} onAddItem={this._handleAddItem}>
             {this.state.items.map((i) => {
-              return (<Metric row={i.row} column={i.column} onRemove={this.onRemoveItem} onSelect={this.onMove} key={i.row, i.column}/>)
+              return (<Metric item={i} onRemove={this._handleRemoveItem} onSelect={this._handleSelect} key={i.location}/>)
               })
             }
         </Grid>
