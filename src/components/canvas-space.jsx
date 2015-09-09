@@ -3,6 +3,7 @@
 import React from 'react'
 import Reflux from 'reflux'
 import SpaceStore from '../stores/spacestore.js'
+import Grid from './grid'
 
 import Input from 'react-bootstrap/lib/Input'
 import Tabs from 'react-bootstrap/lib/Tabs'
@@ -12,69 +13,7 @@ import LazyInput from 'lazy-input'
 import Button from 'react-bootstrap/lib/Button'
 import $ from 'jquery'
 
-const Item = React.createClass({
-  onClick() {
-    this.props.onClick({column: this.props.column, row: this.props.row})
-  },
-  render () {
-    return (
-      <div className='grid-element ' onClick={this.onClick}>
-      </div>
-    )
-  }
-})
-
-const Grid = React.createClass({
-  componentDidMount() {
-    document.addEventListener('keydown', this.handlePress, false)
-  },
-  onItemClicked(foo) {
-    this.props.onAddItem(foo)
-  },
-  handlePress(e) {
-    if (e.keyCode == '38') {
-      this.props.onMove({row: this.props.selected.row - 1, column: this.props.selected.column})
-    }
-    else if (e.keyCode == '40') {
-      this.props.onMove({row: this.props.selected.row + 1, column: this.props.selected.column})
-        // down arrow
-    }
-    else if (e.keyCode == '37') {
-      this.props.onMove({row: this.props.selected.row, column: this.props.selected.column - 1})
-       // left arrow
-    }
-    else if (e.keyCode == '39') {
-      this.props.onMove({row: this.props.selected.row, column: this.props.selected.column + 1})
-       // right arrow
-    };
-  },
-  column(y) {
-    return (
-     Array.apply(null, {length: 5}).map(Number.call, Number).map((x) => {
-        let item = this.props.children.filter(function(i) { return (i.props.row == y && i.props.column == x)})[0];
-        let isSelected = this.props.selected.row == y && this.props.selected.column == x
-        let show = (item && React.cloneElement(item, {isSelected: isSelected})) || <Item column={x} row={y} key={x,y} onClick={this.onItemClicked} isSelected={isSelected}/>
-        return ( <td><div className={"grid-element " + (isSelected ? 'selected' : '')} > {show} </div></td>)
-      })
-    )
-  },
-  render () {
-    const rows = 5;
-    const columns = 4;
-    return (
-      <div className='grid' onKeyPress={this.handlePress}>
-        <table>
-          {
-            Array.apply(null, {length: 5}).map(Number.call, Number).map((i) => {
-              return ( <tr> {this.column(i)} </tr>)
-            })
-          }
-        </table>
-      </div>
-    )
-  }
-});
-
+window.jquery = $
 const TextField = React.createClass({
   render() {
     return (
@@ -82,6 +21,60 @@ const TextField = React.createClass({
     )
   }
 });
+
+
+// const Foo = React.createClass({
+//   foo(e) {
+//     console.log('made it')
+//      e.stopPropagation();
+//   },
+//   render (){
+//     return(
+//     <div className='row'>
+//       <div className='col-sm-9' onKeyDown={this.foo}>
+//         <TextField name="name" value={this.props.name} onKeyDown={this.foo} onChange={this.props.onChange}/>
+//       </div>
+//       <div className='col-sm-3'>
+//         <Button bsStyle='danger' onClick={this.props.onRemove}> x </Button>
+//       </div>
+//     </div>
+//   )
+//   }
+// })
+
+const SelectedMetric = React.createClass({
+  handlePress(e) {
+    if (e.keyCode == '13') {
+      console.log('enter')
+    }
+    else if (e.keyCode == '8') {
+      e.preventDefault()
+      this.props.onRemove(this)
+    }
+    this.props.gridKeyPress(e)
+  },
+  componentDidMount: function(){
+    this.refs.foo.getDOMNode().focus();
+  },
+  handleFormPress(e) {
+    e.stopPropagation()
+  },
+  render () {
+    return (
+      <div className='exists' ref='foo' tabIndex='1' onKeyDown={this.handlePress}>
+        <div className='row'>
+          <div className='col-sm-9' onKeyDown={this.handleFormPress}>
+            <TextField name="name" value={this.props.name} onChange={this.props.onChange}/>
+          </div>
+          <div className='col-sm-3' onKeyDown={this.handleFormPress}>
+            <Button bsStyle='danger' onClick={this.props.onRemove}> x </Button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+})
+
 const Metric = React.createClass({
   getInitialState() {
     return { name: 'foobar', value: 'foooo', hover: false}
@@ -92,14 +85,17 @@ const Metric = React.createClass({
     values[form_values[0].name] = form_values.val();
     this.setState(values)
   },
-  mouseOver: function () {
+  mouseOver () {
     this.setState({hover: true});
   },
-  mouseOut: function () {
+  mouseOut () {
       this.setState({hover: false});
   },
   onRemove () {
     this.props.onRemove(this)
+  },
+  position () {
+    return {row: this.props.row, column: this.props.column}
   },
   regularView() {
     return (
@@ -112,20 +108,18 @@ const Metric = React.createClass({
   },
   editView() {
     return (
-        <div className='row'>
-          <div className='col-sm-9'>
-            <TextField name="name" value={this.state.name} onChange={this.handleChange}/>
-          </div>
-          <div className='col-sm-3'>
-            <Button bsStyle='danger' onClick={this.onRemove}> x </Button>
-          </div>
-        </div>
+      <SelectedMetric name={this.state.name} value={this.state.value} onRemove={this.onRemove} gridKeyPress={this.props.gridKeyPress} onChange={this.handleChange}/>
     )
+  },
+  mouseClick () {
+    if (!this.props.isSelected) {
+      this.props.onSelect(this.position())
+    }
   },
   render () {
     return (
-      <div className='grid-metric' onMouseEnter={this.mouseOver} onMouseLeave={this.mouseOut}>
-        {(this.state.hover || this.props.isSelected) ? this.editView() : this.regularView()}
+      <div className='grid-metric' onMouseDown={this.mouseClick} onMouseEnter={this.mouseOver} onMouseLeave={this.mouseOut}>
+        {this.props.isSelected ?  this.editView() : this.regularView()}
       </div>
     )
   }
@@ -136,7 +130,7 @@ const CanvasPage = React.createClass({
     return { items: [{column: 3, row: 3}], selected: {column:0, row:0}}
   },
   onAddItem (item) {
-    this.setState({items: [...this.state.items, item]})
+  this.setState({items: [...this.state.items, item], selected: item})
   },
   onRemoveItem (item) {
     let newItems = this.state.items.filter(function(i) { return (i.row != item.props.row || i.column != item.props.column)})
@@ -145,16 +139,12 @@ const CanvasPage = React.createClass({
   onMove (e) {
     this.setState({selected: e})
   },
-  foo (e) {
-    console.log('foo', e)
-  },
   render () {
-    console.log(this.state)
     return (
-      <div onKeyDown={this.foo} className="row repo-component">
-        <Grid onKeyDown={this.foo} selected={this.state.selected} onMove={this.onMove} onAddItem={this.onAddItem}>
+      <div className="row repo-component">
+        <Grid selected={this.state.selected} onMove={this.onMove} onAddItem={this.onAddItem}>
             {this.state.items.map((i) => {
-              return (<Metric row={i.row} column={i.column} onRemove={this.onRemoveItem} key={i.row, i.column}/>)
+              return (<Metric row={i.row} column={i.column} onRemove={this.onRemoveItem} onSelect={this.onMove} key={i.row, i.column}/>)
               })
             }
         </Grid>
