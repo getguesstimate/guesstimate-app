@@ -14,6 +14,13 @@ import Button from 'react-bootstrap/lib/Button'
 import $ from 'jquery'
 
 window.jquery = $
+//todo
+// change col/row to location
+// make hover a higher level component
+// convert to es6 classes
+// underscore non-regular functions
+// change select to focus
+
 const TextField = React.createClass({
   render() {
     return (
@@ -21,26 +28,6 @@ const TextField = React.createClass({
     )
   }
 });
-
-
-// const Foo = React.createClass({
-//   foo(e) {
-//     console.log('made it')
-//      e.stopPropagation();
-//   },
-//   render (){
-//     return(
-//     <div className='row'>
-//       <div className='col-sm-9' onKeyDown={this.foo}>
-//         <TextField name="name" value={this.props.name} onKeyDown={this.foo} onChange={this.props.onChange}/>
-//       </div>
-//       <div className='col-sm-3'>
-//         <Button bsStyle='danger' onClick={this.props.onRemove}> x </Button>
-//       </div>
-//     </div>
-//   )
-//   }
-// })
 
 const SelectedMetric = React.createClass({
   handlePress(e) {
@@ -108,7 +95,12 @@ const Metric = React.createClass({
   },
   editView() {
     return (
-      <SelectedMetric name={this.state.name} value={this.state.value} onRemove={this.onRemove} gridKeyPress={this.props.gridKeyPress} onChange={this.handleChange}/>
+      <SelectedMetric
+        name={this.state.name}
+        value={this.state.value}
+        onRemove={this.onRemove}
+        gridKeyPress={this.props.gridKeyPress}
+        onChange={this.handleChange}/>
     )
   },
   mouseClick () {
@@ -130,7 +122,7 @@ const CanvasPage = React.createClass({
     return { items: [{column: 3, row: 3}], selected: {column:0, row:0}}
   },
   onAddItem (item) {
-  this.setState({items: [...this.state.items, item], selected: item})
+    this.setState({items: [...this.state.items, item], selected: item})
   },
   onRemoveItem (item) {
     let newItems = this.state.items.filter(function(i) { return (i.row != item.props.row || i.column != item.props.column)})
