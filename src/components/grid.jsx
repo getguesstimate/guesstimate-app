@@ -1,18 +1,16 @@
 'use strict';
 
 import React from 'react'
-import {HotKeys} from 'react-hotkeys';
 
 const SelectedEmptyElement = React.createClass({
   onMove(e) {
-    console.log(e)
     this.props.gridKeyPress(e)
   },
   componentDidMount: function(){
     this.refs.foo.getDOMNode().focus();
   },
   onAddItem(foo) {
-    //this.props.onAddItem({column: this.props.column, row: this.props.row})
+    this.props.onAddItem({column: this.props.column, row: this.props.row})
   },
   render () {
     return (
@@ -23,20 +21,22 @@ const SelectedEmptyElement = React.createClass({
 
 const UnselectedEmptyElement = React.createClass({
   onMove(e) {
-    console.log(e)
     this.props.gridKeyPress(e)
   },
   onAddItem() {
     this.props.onAddItem({column: this.props.column, row: this.props.row})
   },
+  onSelectItem() {
+    this.props.onSelectItem({column: this.props.column, row: this.props.row})
+  },
   render () {
     return (
-      <div className='empty' tabIndex='1' onClick={this.onAddItem} onKeyDown={this.onMove}></div>
+      <div className='empty' tabIndex='1' onClick={this.onSelectItem} onKeyDown={this.onMove}></div>
     )
   }
 })
 
-const GridElement = React.createClass({
+const Cell = React.createClass({
   showItem () {
     return (React.cloneElement(this.props.item, {isSelected: this.props.isSelected, gridKeyPress: this.props.gridKeyPress}))
   },
@@ -49,7 +49,7 @@ const GridElement = React.createClass({
   },
   render () {
     let show = this.props.item ? this.showItem() : this.showBlank()
-    return (<div className={'grid-element ' + (this.props.isSelected ? 'selected' : '')}>{show}</div>)
+    return (<div className={'cell ' + (this.props.isSelected ? 'selected' : '')}>{show}</div>)
   }
 })
 
@@ -94,6 +94,9 @@ const Grid = React.createClass({
     console.log(newLocation)
     this.props.onMove(newLocation)
   },
+  handleSelect(location) {
+    this.props.onMove(location)
+  },
   keyPress(e) {
     // up arrow
     if (e.keyCode == '38') {
@@ -106,7 +109,7 @@ const Grid = React.createClass({
     }
     else if (e.keyCode == '9') {
       e.preventDefault()
-      this.move('down')
+      this.move('right')
         // down arrow
     }
     else if (e.keyCode == '37') {
@@ -126,7 +129,7 @@ const Grid = React.createClass({
         let isSelected = this.props.selected.row == y && this.props.selected.column == x
         let item = this.props.children.filter(function(i) { return (i.props.row == y && i.props.column == x)})[0];
         return (
-          <td> <GridElement gridKeyPress={this.keyPress} key={'grid-item',x,y} item={item} column={x} row={y} isSelected={isSelected} onAddItem={this.props.onAddItem}/></td>
+          <td> <Cell gridKeyPress={this.keyPress} key={'grid-item',x,y} item={item} column={x} row={y} isSelected={isSelected} onSelectItem={this.handleSelect} onAddItem={this.props.onAddItem}/></td>
         )
       })
     )
