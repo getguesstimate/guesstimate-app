@@ -28,121 +28,127 @@ class Mover {
   }
 }
 
-const SelectedEmptyElement = React.createClass({
-  onMove(e) {
-    this.props.gridKeyPress(e)
-  },
-  componentDidMount: function(){
+let navigationDirections = (keyCode) => {
+  // up arrow
+  if (keyCode == '38') {
+    return 'up'
+  }
+  // down arrow
+  else if (keyCode == '40') {
+    return 'down'
+  }
+  // tab
+  else if (keyCode == '9') {
+    return 'right'
+  }
+  // left arrow
+  else if (keyCode == '37') {
+    return 'left'
+  }
+  // right arrow
+  else if (keyCode == '39') {
+    return 'right'
+  };
+}
+
+class SelectedEmptyElement extends React.Component{
+  componentDidMount() {
     this.refs.selectedEmpty.getDOMNode().focus();
-  },
-  onAddItem(foo) {
+  }
+  _handleKeyPress(e) {
+    this.props.gridKeyPress(e)
+  }
+  _onAddItem() {
     this.props.onAddItem(this.props.location)
-  },
-  render () {
+  }
+  render() {
     return (
       <div
         ref='selectedEmpty'
-        className='empty'
         tabIndex='1'
-        inputAttributes={{autoFocus:true}}
-        onClick={this.onAddItem}
-        onKeyDown={this.onMove}></div>
+        onClick={this._onAddItem.bind(this)}
+        onKeyDown={this._handleKeyPress.bind(this)}/>
     )
   }
-})
+}
 
-const UnselectedEmptyElement = React.createClass({
-  onMove(e) {
-    this.props.gridKeyPress(e)
-  },
-  onAddItem() {
-    this.props.onAddItem(this.props.location)
-  },
-  onSelectItem() {
+class UnselectedEmptyElement extends React.Component{
+  _handleSelect () {
     this.props.onSelectItem(this.props.location)
+  }
+  render () {
+    return (
+      <div onClick={this._handleSelect.bind(this)}/>
+    )
+  }
+}
+
+const Cell = React.createClass({
+  _cellType () {
+    if (this.props.item) {
+      return React.cloneElement(this.props.item, {isSelected: this.props.isSelected, gridKeyPress: this.props.gridKeyPress})
+    } else if (this.props.isSelected) {
+      return <SelectedEmptyElement location={this.props.location} gridKeyPress={this.props.gridKeyPress} onAddItem={this.props.onAddItem} key={this.props.location}/>
+    } else {
+      return <UnselectedEmptyElement location={this.props.location} key={this.props.location}/>
+    }
+  },
+  _classes () {
+    let classes = 'cell'
+    classes += (this.props.isSelected ? ' selected' : ' unSelected')
+    classes += (this.props.item ? ' full' : ' empty')
+    return classes
   },
   render () {
     return (
-      <div className='empty' tabIndex='1' onClick={this.onSelectItem} onKeyDown={this.onMove}></div>
+      <div className={this._classes()}>
+        {this._cellType()}
+      </div>
     )
-  }
-})
-
-const Cell = React.createClass({
-  showItem () {
-    return (React.cloneElement(this.props.item, {isSelected: this.props.isSelected, gridKeyPress: this.props.gridKeyPress}))
-  },
-  showBlank () {
-    if (this.props.isSelected){
-      return (<SelectedEmptyElement {...this.props} autoFocus={true} key={this.props.location}/>)
-    } else {
-      return (<UnselectedEmptyElement {...this.props} key={this.props.location}/>)
-    }
-  },
-  render () {
-    let show = this.props.item ? this.showItem() : this.showBlank()
-    return (<div className={'cell ' + (this.props.isSelected ? 'selected' : '')}>{show}</div>)
   }
 })
 
 const Grid = React.createClass({
   getDefaultProps: function() {
     return {
-      columns: 5,
-      rows: 4
+      size: {
+        columns: 5,
+        rows: 4
+      }
     };
-  },
-  move(direction) {
-    let newLocation = new Mover({rows: this.props.rows, columns: this.props.columns}, Object.assign(this.props.selected))[direction]()
-    this.props.onMove(newLocation)
   },
   handleSelect(location) {
     this.props.onMove(location)
   },
   keyPress(e) {
-    // up arrow
-    if (e.keyCode == '38') {
-      this.move('up')
-    }
-    // down arrow
-    else if (e.keyCode == '40') {
+    let direction = navigationDirections(e.keyCode)
+    if (direction) {
       e.preventDefault()
-      this.move('down')
+      let newLocation = new Mover(this.props.size, this.props.selected)[direction]()
+      this.handleSelect(newLocation)
     }
-    else if (e.keyCode == '9') {
-      e.preventDefault()
-      this.move('right')
-        // down arrow
-    }
-    else if (e.keyCode == '37') {
-      this.move('left')
-       // left arrow
-    }
-    else if (e.keyCode == '39') {
-      this.move('right')
-       // right arrow
-    };
+  },
+  cell(location) {
+   let atThisLocation = (l) => _.isEqual(l, location)
+   let isSelected = atThisLocation(this.props.selected)
+   let item = this.props.children.filter(function(i) { return (atThisLocation(i.props.item.location)) })[0];
+   return (
+    <td>
+      <Cell
+        key={'grid-item', location.row, location.column}
+        location={location}
+        isSelected={isSelected}
+        item={item}
+        gridKeyPress={this.keyPress}
+        onSelectItem={this.handleSelect}
+        onAddItem={this.props.onAddItem}/>
+    </td>
+    )
   },
   row(row) {
     return (
-     upto(this.props.columns).map((column) => {
-       let location = {row: row, column: column}
-       let atThisLocation = (l) => _.isEqual(l, location)
-
-       let isSelected = atThisLocation(this.props.selected)
-       let item = this.props.children.filter(function(i) { return (atThisLocation(i.props.item.location)) })[0];
-       return (
-        <td>
-          <Cell
-            gridKeyPress={this.keyPress}
-            key={'grid-item',location}
-            item={item}
-            location={location}
-            isSelected={isSelected}
-            onSelectItem={this.handleSelect}
-            onAddItem={this.props.onAddItem}/>
-        </td>
-        )
+      upto(this.props.size.columns).map((column) => {
+        return(this.cell({row: row, column: column}))
       })
     )
   },
@@ -151,7 +157,7 @@ const Grid = React.createClass({
       <div className='grid' onKeyPress={this.handlePress}>
         <table>
           {
-            upto(this.props.rows).map((row) => {
+            upto(this.props.size.rows).map((row) => {
               return ( <tr> {this.row(row)} </tr>)
             })
           }
