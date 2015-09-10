@@ -1,6 +1,5 @@
 import React from 'react'
 import ampersandMixin from 'ampersand-react-mixin'
-import GraphEditor from 'components/repo_editor/base'
 import Icon from'react-fa'
 import Repo from '../models/repo'
 
@@ -35,8 +34,6 @@ export default React.createClass({
           <h1 className='text-center'> Estimate all the Things!</h1>
         </div>
 
-        <GraphEditor repo={defaultRepo} savable={false} />
-
         <div className='container text-center'>
           <h2> All Models </h2>
          {repos.models.map((repo) => {
@@ -49,4 +46,3 @@ export default React.createClass({
     )
   }
 })
-
