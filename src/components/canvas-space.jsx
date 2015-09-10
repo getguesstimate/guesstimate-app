@@ -3,7 +3,7 @@
 import React from 'react'
 import Reflux from 'reflux'
 import SpaceStore from '../stores/spacestore.js'
-import Grid from './grid'
+import Grid from './grid/grid'
 
 import Input from 'react-bootstrap/lib/Input'
 import Tabs from 'react-bootstrap/lib/Tabs'
@@ -14,13 +14,6 @@ import Button from 'react-bootstrap/lib/Button'
 import $ from 'jquery'
 import _ from 'lodash'
 
-window.jquery = $
-//todo
-// make hover a higher level component
-// convert to es6 classes
-// underscore non-regular functions
-// change select to focus
-
 const TextField = React.createClass({
   render() {
     return (
@@ -30,7 +23,13 @@ const TextField = React.createClass({
 });
 
 const SelectedMetric = React.createClass({
-  handlePress(e) {
+  _handleChange(evt) {
+    const form_values = $(evt.target.parentElement.childNodes).filter(":input");
+    let values = {};
+    values[form_values[0].name] = form_values.val();
+    this.props.handleChange(values)
+  },
+  _handlePress(e) {
     if (e.keyCode == '13') {
       console.log('enter')
     }
@@ -40,20 +39,17 @@ const SelectedMetric = React.createClass({
     }
     this.props.gridKeyPress(e)
   },
-  componentDidMount: function(){
-    this.refs.foo.getDOMNode().focus();
-  },
-  handleFormPress(e) {
+  _stopPropogation(e) {
     e.stopPropagation()
   },
   render () {
     return (
-      <div className='exists' ref='foo' tabIndex='1' onKeyDown={this.handlePress}>
+      <div className='metric grid-item-focus' tabIndex='0' onKeyDown={this._handlePress}>
         <div className='row'>
-          <div className='col-sm-9' onKeyDown={this.handleFormPress}>
-            <TextField name="name" value={this.props.name} onChange={this.props.onChange}/>
+          <div className='col-sm-9' onKeyDown={this.stopPropagation}>
+            <TextField name="name" value={this.props.name} onChange={this._handleChange}/>
           </div>
-          <div className='col-sm-3' onKeyDown={this.handleFormPress}>
+          <div className='col-sm-3' onKeyDown={this.stopPropagation}>
             <Button bsStyle='danger' onClick={this.props.onRemove}> x </Button>
           </div>
         </div>
@@ -62,15 +58,9 @@ const SelectedMetric = React.createClass({
   }
 })
 
-const Metric = React.createClass({
+const UnSelectedMetric = React.createClass({
   getInitialState() {
-    return { name: 'foobar', value: 'foooo', hover: false}
-  },
-  handleChange(evt) {
-    const form_values = $(evt.target.parentElement.childNodes).filter(":input");
-    let values = {};
-    values[form_values[0].name] = form_values.val();
-    this.setState(values)
+    return {hover: false}
   },
   mouseOver () {
     this.setState({hover: true});
@@ -78,19 +68,42 @@ const Metric = React.createClass({
   mouseOut () {
     this.setState({hover: false});
   },
+  mouseClick () {
+    if (!this.props.isSelected) {
+      this.props.onSelect(this.props.item.position())
+    }
+  },
+  render () {
+    return(
+      <div className='metric'
+         onMouseDown={this.mouseClick}
+         onMouseEnter={this.mouseOver}
+         onMouseLeave={this.mouseOut}>
+         {this.props.name}
+      </div>
+    )
+  }
+})
+
+const Metric = React.createClass({
+  getInitialState() {
+    return { name: 'foobar', value: 'foooo'}
+  },
+  handleChange(value) {
+    this.setState(values)
+  },
   onRemove () {
     this.props.onRemove(this)
   },
-  position () {
-    return this.props.item.position
-  },
   regularView() {
     return (
-      <div className='row'>
-        <div className='col-sm-10'>
-          {this.state.name}
-        </div>
-      </div>
+      <UnSelectedMetric
+        name={this.state.name}
+        value={this.state.value}
+        item={this.props.item}
+        isSelected={this.props.isSelected}
+        onSelect={this.props.onSelect}
+      />
     )
   },
   editView() {
@@ -99,21 +112,14 @@ const Metric = React.createClass({
         name={this.state.name}
         value={this.state.value}
         onRemove={this.onRemove}
+        onChange={this.handleChange}
         gridKeyPress={this.props.gridKeyPress}
-        onChange={this.handleChange}/>
+      />
     )
-  },
-  mouseClick () {
-    if (!this.props.isSelected) {
-      this.props.onSelect(this.position())
-    }
   },
   render () {
-    return (
-      <div className='grid-metric' onMouseDown={this.mouseClick} onMouseEnter={this.mouseOver} onMouseLeave={this.mouseOut}>
-        {this.props.isSelected ?  this.editView() : this.regularView()}
-      </div>
-    )
+    let metricType = this.props.isSelected ?  this.editView() : this.regularView()
+    return (metricType)
   }
 })
 

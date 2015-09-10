@@ -12,7 +12,7 @@ module.exports.node = {
   child_process: 'empty'
 }
 
-if(process.env.NODE_ENV === 'development'){ 
+if(process.env.NODE_ENV === 'development'){
 	module.exports.devServer.host = '0.0.0.0'
 	//uncomment to suppress log output
 	//module.exports.devServer.noInfo = true;
