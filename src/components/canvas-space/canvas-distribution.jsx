@@ -4,7 +4,7 @@ import Icon from'react-fa'
 import stats from 'stats-lite'
 import Histogram from 'react-d3-histogram'
 import Table from 'react-bootstrap/lib/table'
-import SpaceActions from '../actions/space-actions'
+import SpaceActions from '../../actions/space-actions'
 import Button from 'react-bootstrap/lib/Button'
 
 var ContentEditable = React.createClass({
