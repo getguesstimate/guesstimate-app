@@ -1,39 +1,6 @@
 $icon-font-path = '../../node_modules/bootstrap-styl/fonts/'
 @import '../../node_modules/bootstrap-styl/stylus/bootstrap'
 
-.grid
-  table
-    width: 100%
-    table-layout: fixed
-    tr
-      width 100%
-    td
-      padding 5px 10px;
-    .cell
-      border-radius: 3px
-      width: 100%;
-      height: 90px
-      &.empty
-        &:focus
-          background-color: #D6DCFF
-          outline none
-      .exists
-        height 100%
-        width 100%
-        outline:none;
-        &:focus
-          outline none
-          background-color #A7ADD2
-      &.selected
-        background-color: #CCE0E0;
-      &:hover
-        background-color: #ddd;
-
-  .grid-metric
-    height: 100%
-    border-radius: 3px
-    background-color #aaa
-
 .react-d3-histogram__bar rect
   fill: steelblue;
   shape-rendering: crispEdges;
@@ -53,6 +20,10 @@ $icon-font-path = '../../node_modules/bootstrap-styl/fonts/'
   margin-top -4px
   margin-left: -50px
 
+.grid-metric
+  height: 100%
+  border-radius: 3px
+  background-color #aaa
 .metric
   .nav > li > a
     padding 4px 8px
