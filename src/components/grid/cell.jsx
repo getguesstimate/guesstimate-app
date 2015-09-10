@@ -5,30 +5,7 @@ import $ from 'jquery'
 
 let GRID_ITEM_FOCUS_CLASS = '.grid-item-focus'
 
-class SelectedEmptyElement extends React.Component{
-  _onAddItem = () => {
-    this.props.onAddItem(this.props.location)
-  }
-  render = () => {
-    return (
-      <div
-        onClick={this._onAddItem}/>
-    )
-  }
-}
-
-class UnselectedEmptyElement extends React.Component{
-  _handleSelect = () => {
-    this.props.onSelectItem(this.props.location)
-  }
-  render = () => {
-    return (
-      <div onClick={this._handleSelect}/>
-    )
-  }
-}
-
-class Cell extends React.Component{
+class Cell extends React.Component {
   componentDidMount = () => {
     this._focus()
   }
@@ -49,18 +26,22 @@ class Cell extends React.Component{
   _handleKeyPress = (e) => {
     this.props.gridKeyPress(e)
   }
-  _handleSelect = () => {
-    this.props.onSelectItem(this.props.location)
+  _handleClick = () => {
+    console.log(this.props)
+    if (!this.props.isSelected) {
+      this.props.handleSelect(this.props.location)
+    } else {
+      if (!this.props.item) {
+        this.props.onAddItem(this.props.location)
+      }
+      this.props.handleSelect(this.props.location)
+    }
   }
   _cellType = () => {
     if (this.props.item) {
       return React.cloneElement(this.props.item, {isSelected: this.props.isSelected, gridKeyPress: this.props.gridKeyPress})
-    } else if (this.props.isSelected) {
-      return <SelectedEmptyElement key={this.props.location} location={this.props.location} gridKeyPress={this.props.gridKeyPress} onAddItem={this.props.onAddItem}/>
     } else {
-      return <UnselectedEmptyElement
-        key={this.props.location}
-        location={this.props.location}/>
+      return ('')
     }
   }
   _classes = () => {
@@ -71,7 +52,7 @@ class Cell extends React.Component{
   }
   render = () => {
     return (
-      <div tabIndex='0' onClick={this._handleSelect} onKeyDown={this._handleKeyPress} ref='foo' className={this._classes()}>
+      <div tabIndex='0' onClick={this._handleClick} onKeyDown={this._handleKeyPress} className={this._classes()}>
         {this._cellType()}
       </div>
     )

@@ -1,5 +1,5 @@
 import React from 'react'
-import SpaceCanvas from 'components/canvas-space'
+import SpaceCanvas from 'components/canvas-space/canvas-space'
 import ampersandMixin from 'ampersand-react-mixin'
 import Icon from'react-fa'
 

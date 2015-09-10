@@ -3,7 +3,7 @@ import Tabs from 'react-bootstrap/lib/Tabs'
 import Tab from 'react-bootstrap/lib/Tab'
 import Icon from'react-fa'
 import Input from 'react-bootstrap/lib/Input'
-import SpaceActions from '../actions/space-actions'
+import SpaceActions from '../../actions/space-actions'
 import $ from 'jquery'
 import LazyInput from 'lazy-input'
 
