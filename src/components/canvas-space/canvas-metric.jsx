@@ -12,7 +12,7 @@ import _ from 'lodash'
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { removeMetric } from '../../reducers/index';
+import { removeMetric, changeMetric } from '../../reducers/index';
 
 function mapDispatchToProps(dispatch) {
   return { actions: bindActionCreators(actionCreators, dispatch) };
@@ -34,7 +34,7 @@ const MetricWidget = React.createClass({
 const TextField = React.createClass({
   render() {
     return (
-      <LazyInput key={this.props.name} type="text" name={this.props.name} defaultValue="foo" onChange={this.props.onChange} value={this.props.value} />
+      <LazyInput key={this.props.name} type="text" name={this.props.name} defaultValue="" onChange={this.props.onChange} value={this.props.value} />
     )
   }
 });
@@ -62,7 +62,7 @@ const SelectedMetric = React.createClass({
       <div className='metric grid-item-focus' onKeyDown={this._handlePress} tabIndex='0'>
          <div className='row row1'>
           <div className='col-sm-9 median' >
-            <TextField name="value" value={this.props.value} onChange={this._handleChange}/>
+            <TextField name="value" value={this.props.item.value} onChange={this._handleChange}/>
           </div>
           <div className='col-sm-3'>
             <Button bsStyle='danger' onClick={this.props.onRemove}> x </Button>
@@ -70,7 +70,7 @@ const SelectedMetric = React.createClass({
          </div>
          <div className='row row2'>
            <div className='col-sm-9 name'>
-              <TextField name="name" value={this.props.name} onChange={this._handleChange}/>
+              <TextField name="name" value={this.props.item.name} onChange={this._handleChange}/>
            </div>
          </div>
       </div>
@@ -88,25 +88,19 @@ const UnSelectedMetric = React.createClass({
   mouseOut () {
     this.setState({hover: false});
   },
-  mouseClick () {
-    if (!this.props.isSelected) {
-      this.props.onSelect(this.props.item.position)
-    }
-  },
   render () {
     return(
       <div className='metric'
-         onMouseDown={this.mouseClick}
          onMouseEnter={this.mouseOver}
          onMouseLeave={this.mouseOut}>
          <div className='row row1'>
            <div className='col-sm-9 median'>
-             {this.props.value}
+             {this.props.item.value}
            </div>
          </div>
          <div className='row row2'>
            <div className='col-sm-9 name'>
-             {this.props.name}
+             {this.props.item.name}
            </div>
          </div>
       </div>
@@ -115,20 +109,15 @@ const UnSelectedMetric = React.createClass({
 })
 
 const Metric = React.createClass({
-  getInitialState() {
-    return { name: 'foobar', value: '800,000'}
-  },
   handleChange(values) {
-    this.setState(values)
+    this.props.dispatch(changeMetric(this.props.item.id, values))
   },
-  onRemove () {
-    this.props.dispatch(removeMetric(this.props.item))
+  handleRemove () {
+    this.props.dispatch(removeMetric(this.props.item.id))
   },
   regularView() {
     return (
       <UnSelectedMetric
-        name={this.state.name}
-        value={this.state.value}
         item={this.props.item}
         isSelected={this.props.isSelected}
         onSelect={this.props.onSelect}
@@ -138,10 +127,8 @@ const Metric = React.createClass({
   editView() {
     return (
       <SelectedMetric
-        name={this.state.name}
-        value={this.state.value}
         item={this.props.item}
-        onRemove={this.onRemove}
+        onRemove={this.handleRemove}
         handleChange={this.handleChange}
         gridKeyPress={this.props.gridKeyPress}
       />
