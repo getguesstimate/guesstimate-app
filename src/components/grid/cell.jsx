@@ -33,7 +33,6 @@ class Cell extends React.Component {
       if (!this.props.item) {
         this.props.onAddItem(this.props.location)
       }
-      this.props.handleSelect(this.props.location)
     }
   }
   _cellType = () => {

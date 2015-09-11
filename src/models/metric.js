@@ -10,6 +10,6 @@ export default State.extend({
       location: 'object'
     },
     initialize () {
-      this.id = uuid.v4()
+      this.id = this.id || uuid.v4()
     }
 });
