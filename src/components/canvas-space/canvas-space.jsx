@@ -7,23 +7,31 @@ import Input from 'react-bootstrap/lib/Input'
 import _ from 'lodash'
 import styles from './canvas-space.styl'
 
-import { createStore } from 'redux'
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { addToDo } from '../../actions/space.js'
+
+import * as actionCreators from '../../reducers/index'
+
+function mapDispatchToProps(dispatch) {
+  return { actions: bindActionCreators(actionCreators, dispatch) };
+}
+
+function mapStateToProps(state) {
+  return {
+    selected: state.selection,
+    items: state.metrics
+  }
+}
 
 class CanvasPage extends Component{
   _handleSelect = (e) => {
-    this.setState({selected: e})
+    this.props.actions.changeSelect(e)
   }
   _handleAddItem = (location) => {
-    this.setState({items: [...this.state.items, {location: location}], selected: {location: location}})
+    this.props.actions.addMetric(location)
   }
-  _handleRemoveItem = (item) => {
-    let newItems = this.state.items.filter(function(i) {
-      let isSame = (i.location.column == item.location.column) && (i.location.row == item.location.row)
-      return !isSame
-     })
-    this.setState({items: newItems})
+  _handleRemoveItem = (metric) => {
+    this.props.actions.removeMetric(metric)
   }
   render () {
     return (
@@ -36,20 +44,6 @@ class CanvasPage extends Component{
         </Grid>
       </div>
     );
-  }
-}
-
-// Which action creators does it want to receive by props?
-function mapDispatchToProps(dispatch) {
-  return {
-    addTodo: () => dispatch(addTodo())
-  };
-}
-
-function mapStateToProps(state) {
-  return {
-    selected: state.selection,
-    items: state.metrics
   }
 }
 module.exports = connect(mapStateToProps, mapDispatchToProps)(CanvasPage);

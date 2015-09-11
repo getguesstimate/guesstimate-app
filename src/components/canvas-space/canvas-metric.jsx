@@ -10,6 +10,14 @@ import $ from 'jquery'
 import Button from 'react-bootstrap/lib/Button'
 import _ from 'lodash'
 
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { removeMetric } from '../../reducers/index';
+
+function mapDispatchToProps(dispatch) {
+  return { actions: bindActionCreators(actionCreators, dispatch) };
+}
+
 const MetricWidget = React.createClass({
   render() {
     let footer = <Guesstimate guesstimate={this.props.metric.guesstimates[0]} metricId={this.props.metric.id}/>
@@ -40,21 +48,14 @@ const SelectedMetric = React.createClass({
   },
   _handlePress(e) {
     if (e.target === this.getDOMNode()) {
-      if (e.keyCode === '13') {
-        console.log('enter')
-      }
-      else if (e.keyCode == '8') {
+      if (e.keyCode == '8') {
         e.preventDefault()
-        console.log('removing')
         this.props.onRemove()
       }
       this.props.gridKeyPress(e)
     } else {
       e.stopPropagation()
     }
-  },
-  _foo(){
-    console.log('foo')
   },
   render () {
     return (
@@ -121,7 +122,7 @@ const Metric = React.createClass({
     this.setState(values)
   },
   onRemove () {
-    this.props.onRemove(this.props.item)
+    this.props.dispatch(removeMetric(this.props.item))
   },
   regularView() {
     return (
@@ -152,4 +153,4 @@ const Metric = React.createClass({
   }
 })
 
-module.exports = Metric;
+module.exports = connect()(Metric);
