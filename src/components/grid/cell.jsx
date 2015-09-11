@@ -27,7 +27,6 @@ class Cell extends React.Component {
     this.props.gridKeyPress(e)
   }
   _handleClick = () => {
-    console.log(this.props)
     if (!this.props.isSelected) {
       this.props.handleSelect(this.props.location)
     } else {
