@@ -33,8 +33,10 @@ class Models{
    return this.state.filter(function(i) {return i.id === id})[0]
   }
   add(values){
-    //let newModel = new metricModel(values)
-    let newModel = Object.assign({}, {id: 'ffff', name: '', value: ''}, values)
+    let existing = this.state.map((e) => e.id)
+    console.log(existing)
+    let newId = (Math.max(...existing) + 1).toString()
+    let newModel = Object.assign({}, {id: newId, name: '', value: ''}, values)
     this.state = [...this.state, newModel]
     return this
   }

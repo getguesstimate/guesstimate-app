@@ -8,6 +8,7 @@ import Icon from'react-fa'
 import LazyInput from 'lazy-input'
 import $ from 'jquery'
 import Button from 'react-bootstrap/lib/Button'
+import Input from 'react-bootstrap/lib/Input'
 import _ from 'lodash'
 
 import { connect } from 'react-redux';
@@ -18,32 +19,55 @@ function mapDispatchToProps(dispatch) {
   return { actions: bindActionCreators(actionCreators, dispatch) };
 }
 
-const MetricWidget = React.createClass({
-  render() {
-    let footer = <Guesstimate guesstimate={this.props.metric.guesstimates[0]} metricId={this.props.metric.id}/>
-    return (
-    <div className="col-sm-2 metric">
-      <Panel footer={footer}>
-        <Distribution distribution={this.props.metric.distribution()} metricId={this.props.metric.id} metricName={this.props.metric.name}/>
-      </Panel>
-    </div>
-    )
-  }
-})
+const BasicInput = React.createClass({
+  getInitialState() {
+    return {
+      value: this.props.value || ''
+    };
+  },
 
+  handleChange() {
+    this.setState({ value: this.refs.input.getValue()});
+  },
+
+  handleBlur(){
+    let values = {}
+    values[this.props.name] = this.state.value
+    this.props.onChange(values)
+  },
+
+  handleSubmit(e) {
+    if (e.keyCode === 13) {
+      this.handleBlur()
+    }
+  },
+
+  render() {
+    return (
+      <Input
+        tabIndex={10}
+        type='text'
+        placeholder={this.props.name}
+        name={this.props.name}
+        value={this.state.value}
+        ref='input'
+        onBlur={this.handleBlur}
+        onKeyDown={this.handleSubmit}
+        onChange={this.handleChange} />
+    );
+  }
+});
 const TextField = React.createClass({
   render() {
+    console.log(this.props.value)
     return (
-      <LazyInput key={this.props.name} type="text" name={this.props.name} defaultValue="" onChange={this.props.onChange} value={this.props.value} />
+     <LazyInput key={this.props.name} type="text" name={this.props.name} defaultValue="" onChange={this.props.onChange} value={this.props.value} />
     )
   }
 });
 
 const SelectedMetric = React.createClass({
-  _handleChange(evt) {
-    const form_values = $(evt.target.parentElement.childNodes).filter(":input");
-    let values = {};
-    values[form_values[0].name] = form_values.val();
+  _handleChange(values) {
     this.props.handleChange(values)
   },
   _handlePress(e) {
@@ -62,7 +86,7 @@ const SelectedMetric = React.createClass({
       <div className='metric grid-item-focus' onKeyDown={this._handlePress} tabIndex='0'>
          <div className='row row1'>
           <div className='col-sm-9 median' >
-            <TextField name="value" value={this.props.item.value} onChange={this._handleChange}/>
+            <BasicInput name="value" value={this.props.item.value} onChange={this._handleChange}/>
           </div>
           <div className='col-sm-3'>
             <Button bsStyle='danger' onClick={this.props.onRemove}> x </Button>
@@ -70,7 +94,7 @@ const SelectedMetric = React.createClass({
          </div>
          <div className='row row2'>
            <div className='col-sm-9 name'>
-              <TextField name="name" value={this.props.item.name} onChange={this._handleChange}/>
+              <BasicInput name="name" value={this.props.item.name} onChange={this._handleChange}/>
            </div>
          </div>
       </div>
@@ -88,18 +112,23 @@ const UnSelectedMetric = React.createClass({
   mouseOut () {
     this.setState({hover: false});
   },
+  mouseClick () {
+    //if (!this.props.isSelected) {
+      //this.props.onSelect(this.props.item.position)
+    //}
+  },
   render () {
     return(
       <div className='metric'
          onMouseEnter={this.mouseOver}
          onMouseLeave={this.mouseOut}>
          <div className='row row1'>
-           <div className='col-sm-9 median'>
+           <div className='col-sm-12 median'>
              {this.props.item.value}
            </div>
          </div>
          <div className='row row2'>
-           <div className='col-sm-9 name'>
+           <div className='col-sm-12 name'>
              {this.props.item.name}
            </div>
          </div>

@@ -13,8 +13,8 @@ const Grid = React.createClass({
   getDefaultProps: function() {
     return {
       size: {
-        columns: 5,
-        rows: 4
+        columns: 6,
+        rows: 20
       }
     };
   },
