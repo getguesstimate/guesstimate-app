@@ -37,7 +37,7 @@ class CanvasPage extends Component{
       <div className="canvas-space">
       <Grid selected={this.props.selected} handleSelect={this._handleSelect} onAddItem={this._handleAddItem}>
             {this.props.items.map((i) => {
-              return (<Metric item={i}  key={JSON.stringify(i)}/>)
+              return (<Metric item={i} key={JSON.stringify(i)}/>)
               })
             }
         </Grid>
