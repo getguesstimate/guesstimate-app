@@ -4,6 +4,7 @@ import Guesstimate from './canvas-guesstimate'
 import Distribution from './canvas-distribution'
 import Panel from 'react-bootstrap/lib/Panel'
 import Icon from'react-fa'
+import Popover from 'react-bootstrap/lib/Popover'
 
 import LazyInput from 'lazy-input'
 import $ from 'jquery'
@@ -14,6 +15,7 @@ import _ from 'lodash'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { removeMetric, changeMetric } from '../../reducers/index';
+window.jquery = $
 
 function mapDispatchToProps(dispatch) {
   return { actions: bindActionCreators(actionCreators, dispatch) };
@@ -66,6 +68,17 @@ const TextField = React.createClass({
   }
 });
 
+const Hover = React.createClass({
+  render () {
+    return(
+    <div className="hover" >
+      <div className='triangle'></div>
+      grrr
+    </div>
+    )
+  }
+})
+
 const SelectedMetric = React.createClass({
   _handleChange(values) {
     this.props.handleChange(values)
@@ -77,6 +90,7 @@ const SelectedMetric = React.createClass({
         this.props.onRemove()
       }
       this.props.gridKeyPress(e)
+      e.stopPropagation()
     } else {
       e.stopPropagation()
     }
@@ -89,7 +103,7 @@ const SelectedMetric = React.createClass({
             <BasicInput name="value" value={this.props.item.value} onChange={this._handleChange}/>
           </div>
           <div className='col-sm-3'>
-            <Button bsStyle='danger' onClick={this.props.onRemove}> x </Button>
+            <Button bsStyle='default' onClick={this.props.onRemove}> x </Button>
           </div>
          </div>
          <div className='row row2'>
@@ -97,6 +111,7 @@ const SelectedMetric = React.createClass({
               <BasicInput name="name" value={this.props.item.name} onChange={this._handleChange}/>
            </div>
          </div>
+         <Hover/>
       </div>
     )
   }
