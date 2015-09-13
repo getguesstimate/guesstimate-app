@@ -5,6 +5,9 @@ import Distribution from './canvas-distribution'
 import Panel from 'react-bootstrap/lib/Panel'
 import Icon from'react-fa'
 import Popover from 'react-bootstrap/lib/Popover'
+import addons from "react/addons";
+let {addons: {CSSTransitionGroup}} = addons;
+let ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
 import LazyInput from 'lazy-input'
 import $ from 'jquery'
@@ -111,7 +114,9 @@ const SelectedMetric = React.createClass({
               <BasicInput name="name" value={this.props.item.name} onChange={this._handleChange}/>
            </div>
          </div>
-         <Hover/>
+         <ReactCSSTransitionGroup transitionName="carousel" transitionAppear={true}>
+           <Hover/>
+         </ReactCSSTransitionGroup>
       </div>
     )
   }
