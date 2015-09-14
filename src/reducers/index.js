@@ -8,7 +8,8 @@ export function changeSelect(location) {
 }
 
 export function addMetric(location) {
-  return { type: 'ADD_METRIC', location};
+  let id = uuid.v1()
+  return { type: 'ADD_METRIC', location, id};
 }
 
 export function removeMetric(id) {
@@ -33,10 +34,7 @@ class Models{
    return this.state.filter(function(i) {return i.id === id})[0]
   }
   add(values){
-    let existing = this.state.map((e) => e.id)
-    console.log(existing)
-    let newId = (Math.max(...existing) + 1).toString()
-    let newModel = Object.assign({}, {id: newId, name: '', value: ''}, values)
+    let newModel = Object.assign({}, {name: '', value: ''}, values)
     this.state = [...this.state, newModel]
     return this
   }
@@ -49,7 +47,7 @@ class Models{
 export default function metrics(state = initialMetrics, action) {
   switch (action.type) {
   case 'ADD_METRIC':
-    return (new Models(state)).add({location: action.location}).state
+    return (new Models(state)).add({location: action.location, id: action.id}).state
   case 'REMOVE_METRIC':
     return (new Models(state)).remove(action.id).state
   case 'CHANGE_METRIC':
