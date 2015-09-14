@@ -27,6 +27,7 @@ class DistributionForm extends Component{
     return(
     <input type="text"
     ref='input'
+    placeholder={'value'}
     value={this.state.userInput}
     onFocus={this._handleFocus.bind(this)}
     onBlur={this._handleBlur.bind(this)}

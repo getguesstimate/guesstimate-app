@@ -15,11 +15,14 @@ const BasicInput = React.createClass({
     };
   },
 
-  handleChange(e) {
-    this.setState({ value: this.refs.input.getValue() })
+  handleChange() {
+    this.setState({ value: this.refs.input.getValue()});
+  },
+
+  handleBlur(){
     let values = {}
     values[this.props.name] = this.state.value
-    this.props.handleChange(values)
+    this.props.onChange(values)
   },
 
   handleSubmit(e) {
@@ -37,10 +40,9 @@ const BasicInput = React.createClass({
         name={this.props.name}
         value={this.state.value}
         ref='input'
-        onFocus={this.props.onFocus}
-        onBlur={this.props.onBlur}
-        onChange={this.handleChange}
-         />
+        onBlur={this.handleBlur}
+        onKeyDown={this.handleSubmit}
+        onChange={this.handleChange} />
     );
   }
 });
@@ -56,8 +58,6 @@ const Hover = React.createClass({
   }
 })
 
-            //<BasicInput name="value" value={this.props.item.value} onFocus={this.props.handleInputFocus} onBlur={this.handleInputBlur} handleChange={this.handleInputChange}/>
-            //<BasicInput name="name" value={this.props.item.name} onFocus={this.handleInputFocus} onBlur={this.handleInputBlur} handleChange={this.handleInputChange}/>
 let foo = React.createClass({
   _handlePress(e) {
     if (e.target === this.getDOMNode()) {
@@ -88,6 +88,7 @@ let foo = React.createClass({
          </div>
          <div className='row row2'>
            <div className='col-sm-9 name'>
+            <BasicInput name="name" value={this.props.item.name} onChange={this._handleChange}/>
            </div>
          </div>
          <ReactCSSTransitionGroup transitionName="carousel" transitionAppear={true}>
