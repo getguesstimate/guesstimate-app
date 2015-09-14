@@ -72,6 +72,7 @@
     "redux-devtools": "^2.1.0",
     "redux-thunk": "^0.1.0",
     "reflux": "~0.2.8",
+    "reselect": "^1.0.0",
     "standard": "^3.7.3",
     "stats-lite": "^1.0",
     "stochator": "^0.4.0",

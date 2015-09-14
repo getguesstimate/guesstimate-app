@@ -91,9 +91,6 @@ let foo = React.createClass({
             <BasicInput name="name" value={this.props.item.name} onChange={this._handleChange}/>
            </div>
          </div>
-         <ReactCSSTransitionGroup transitionName="carousel" transitionAppear={true}>
-           <Hover/>
-         </ReactCSSTransitionGroup>
       </div>
     )
   }

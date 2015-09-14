@@ -73,24 +73,10 @@ export default function distributionForm(state = {}, action) {
   }
 }
 
-export default function editorState(state = 'selecting', action) {
-  switch (action.type) {
-  case 'CREATE_DISTRIBUTION_FORM':
-    return new InputToGuesstimate(action.value).toEditorState()
-  case 'DESTROY_DISTRIBUTION_FORM':
-    return 'selecting'
-  case 'UPDATE_DISTRIBUTION_FORM':
-    return new InputToGuesstimate(action.value).toEditorState()
-  default:
-    return state
-  }
-}
-
 const rootReducer = combineReducers({
   metrics,
   selection,
-  distributionForm,
-  editorState
+  distributionForm
 });
 
 export default rootReducer;
