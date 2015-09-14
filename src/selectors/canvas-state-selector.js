@@ -7,7 +7,8 @@ let chooseCanvasState = (distributionForm) => {
     if (Object.keys(distributionForm).length === 0){
       return 'selecting';
     } else {
-      return new InputToGuesstimate(distributionForm.input).toCanvasState()
+      let foo = new InputToGuesstimate(distributionForm.input).toEditorState()
+      return foo
     }
 }
 

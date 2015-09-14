@@ -2,8 +2,6 @@ import React, {Component, PropTypes} from 'react';
 import { connect } from 'react-redux';
 import { createDistributionForm, destroyDistributionForm, updateDistributionForm } from '../../actions/distribution-form-actions'
 
-//this.props.dispatch(removeMetric(this.props.item.id))
-//
 class DistributionForm extends Component{
   constructor(props) {
     super(props);
@@ -13,7 +11,7 @@ class DistributionForm extends Component{
     this.props.dispatch(createDistributionForm(this._value()))
   }
   _handleBlur() {
-    this.props.dispatch(destroyDistributionForm('what'))
+    this.props.dispatch(destroyDistributionForm())
     this.props.onSubmit({value: this._value(), distribution: this.props.distributionForm.distribution})
   }
   _handleChange() {
