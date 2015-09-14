@@ -12,15 +12,18 @@ import { connect } from 'react-redux';
 
 import {addMetric} from '../../actions/metric-actions'
 import {changeSelect} from '../../actions/selection-actions'
+import { canvasStateSelector } from '../../selectors/editor-state-selector';
 
 function mapStateToProps(state) {
   return {
     selected: state.selection,
-    items: state.metrics
+    items: state.metrics,
   }
 }
 
-class CanvasPage extends Component{
+@connect(mapStateToProps)
+@connect(canvasStateSelector)
+export default class CanvasPage extends Component{
   _handleSelect = (e) => {
     if (!_.isEqual(this.props.selected, e)){
       this.props.dispatch(changeSelect(e))
@@ -30,6 +33,7 @@ class CanvasPage extends Component{
     this.props.dispatch(addMetric(location))
   }
   render () {
+    console.log(this.props)
     return (
       <div className="canvas-space">
       <Grid selected={this.props.selected} handleSelect={this._handleSelect} onAddItem={this._handleAddItem}>
@@ -42,4 +46,4 @@ class CanvasPage extends Component{
     );
   }
 }
-module.exports = connect(mapStateToProps)(CanvasPage);
+
