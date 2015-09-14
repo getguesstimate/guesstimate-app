@@ -1,26 +1,12 @@
 import { combineReducers } from 'redux';
 import metricModel from '../models/metric'
+import {addMetric, changeMetric} from '../actions/metric-actions.js'
+import { reducer as formReducer } from 'redux-form';
 import _ from 'lodash'
-var uuid = require('node-uuid')
 
 export function changeSelect(location) {
   return { type: 'CHANGE_SELECT', location };
 }
-
-export function addMetric(location) {
-  let id = uuid.v1()
-  return { type: 'ADD_METRIC', location, id};
-}
-
-export function removeMetric(id) {
-  return { type: 'REMOVE_METRIC', id};
-}
-
-export function changeMetric(id, values) {
-  return { type: 'CHANGE_METRIC', id, values };
-}
-
-let initialMetrics = [{id: '1', name: 'foobar', value: '39339', location: {column: 3, row: 3}}]
 
 class Models{
   constructor(state){
@@ -43,6 +29,8 @@ class Models{
     return this.remove(id).add(newItem)
   }
 }
+
+let initialMetrics = [{id: '1', name: 'foobar', value: '39339', location: {column: 3, row: 3}}]
 
 export default function metrics(state = initialMetrics, action) {
   switch (action.type) {
@@ -67,9 +55,24 @@ export default function selection(state = {column: 1, row: 1}, action) {
     return state
   }
 }
+
+export default function distributionForm(state = {}, action) {
+  switch (action.type) {
+  case 'CREATE_DISTRIBUTION_FORM':
+    return {input: action.value}
+  case 'DESTROY_DISTRIBUTION_FORM':
+    return {}
+  case 'UPDATE_DISTRIBUTION_FORM':
+    return {input: action.value}
+  default:
+    return state
+  }
+}
+
 const rootReducer = combineReducers({
   metrics,
-  selection
+  selection,
+  distributionForm
 });
 
 export default rootReducer;

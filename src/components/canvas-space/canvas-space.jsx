@@ -10,11 +10,8 @@ import styles from './canvas-space.styl'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import * as actionCreators from '../../reducers/index'
-
-function mapDispatchToProps(dispatch) {
-  return { actions: bindActionCreators(actionCreators, dispatch) };
-}
+import {addMetric} from '../../actions/metric-actions'
+import {changeSelect} from '../../actions/selection-actions'
 
 function mapStateToProps(state) {
   return {
@@ -26,11 +23,11 @@ function mapStateToProps(state) {
 class CanvasPage extends Component{
   _handleSelect = (e) => {
     if (!_.isEqual(this.props.selected, e)){
-      this.props.actions.changeSelect(e)
+      this.props.dispatch(changeSelect(e))
     }
   }
   _handleAddItem = (location) => {
-    this.props.actions.addMetric(location)
+    this.props.dispatch(addMetric(location))
   }
   render () {
     return (
@@ -45,4 +42,4 @@ class CanvasPage extends Component{
     );
   }
 }
-module.exports = connect(mapStateToProps, mapDispatchToProps)(CanvasPage);
+module.exports = connect(mapStateToProps)(CanvasPage);
