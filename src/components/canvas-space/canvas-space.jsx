@@ -10,9 +10,10 @@ import styles from './canvas-space.styl'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import {addMetric} from '../../actions/metric-actions'
-import {changeSelect} from '../../actions/selection-actions'
-import { canvasStateSelector } from '../../selectors/editor-state-selector';
+import { addMetric } from '../../actions/metric-actions'
+import { changeSelect } from '../../actions/selection-actions'
+import { addMetricInputToDistributionForm } from '../../actions/distribution-form-actions'
+import { canvasStateSelector } from '../../selectors/canvas-state-selector';
 
 function mapStateToProps(state) {
   return {
@@ -25,20 +26,27 @@ function mapStateToProps(state) {
 @connect(canvasStateSelector)
 export default class CanvasPage extends Component{
   _handleSelect = (e) => {
+    console.log(this.props.canvasState == 'function')
     if (!_.isEqual(this.props.selected, e)){
-      this.props.dispatch(changeSelect(e))
+        debugger
+      if (this.props.canvasState == 'function') {
+        console.log('trye')
+        this.props.dispatch(addMetricInputToEditingMetric(e))
+      } else {
+        console.log('false')
+        this.props.dispatch(changeSelect(e))
+      }
     }
   }
   _handleAddItem = (location) => {
     this.props.dispatch(addMetric(location))
   }
   render () {
-    console.log(this.props)
     return (
       <div className="canvas-space">
-      <Grid selected={this.props.selected} handleSelect={this._handleSelect} onAddItem={this._handleAddItem}>
+      <Grid selected={this.props.selected} handleSelect={this._handleSelect.bind(this)} onAddItem={this._handleAddItem}>
             {this.props.items.map((i) => {
-              return (<Metric item={i} key={JSON.stringify(i)}/>)
+              return (<Metric item={i} key={JSON.stringify(i)} canvasState={this.props.canvasState}/>)
               })
             }
         </Grid>

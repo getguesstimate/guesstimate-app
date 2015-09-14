@@ -21,6 +21,9 @@ const UnSelectedMetric = React.createClass({
       //this.props.onSelect(this.props.item.position)
     //}
   },
+  visibleId(){
+    return ('$' + this.props.item.id.substring(0,3).toUpperCase())
+  },
   render () {
     return(
       <div className='metric'
@@ -33,7 +36,7 @@ const UnSelectedMetric = React.createClass({
          </div>
          <div className='row row2'>
            <div className='col-sm-12 name'>
-             {this.props.item.name}
+           {this.props.canvasState == 'function' ? this.visibleId() : this.props.item.name}
            </div>
          </div>
       </div>
@@ -54,6 +57,7 @@ const Metric = React.createClass({
         item={this.props.item}
         isSelected={this.props.isSelected}
         onSelect={this.props.onSelect}
+        canvasState={this.props.canvasState}
       />
     )
   },

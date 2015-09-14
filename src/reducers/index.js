@@ -31,7 +31,11 @@ class Models{
   }
 }
 
-let initialMetrics = [{id: '1', name: 'foobar', value: '39339', location: {column: 3, row: 3}}]
+let initialMetrics = [
+  {id: '8933', name: 'cowboys', value: '100', location: {column: 3, row: 3}},
+  {id: 'sd8f', name: 'batmen', value: '1', location: {column: 1, row: 0}},
+  {id: 's18f3', name: 'police', value: '50', location: {column: 1, row: 2}}
+]
 
 export default function metrics(state = initialMetrics, action) {
   switch (action.type) {
@@ -65,9 +69,12 @@ export default function distributionForm(state = {}, action) {
     return {input: action.value, guesstimate}
   case 'DESTROY_DISTRIBUTION_FORM':
     return {}
+  return { type: 'ADD_METRIC_INPUT_TO_EDITING_METRIC', metric};
   case 'UPDATE_DISTRIBUTION_FORM':
     guesstimate = new InputToGuesstimate(action.value).toGuesstimate()
     return {input: action.value, guesstimate}
+  case 'ADD_METRIC_INPUT_TO_DISTRIBUTION_FORM':
+    return state
   default:
     return state
   }

@@ -9,3 +9,8 @@ export function destroyDistributionForm() {
 export function updateDistributionForm(value) {
   return { type: 'UPDATE_DISTRIBUTION_FORM', value };
 }
+
+export function addMetricInputToDistributionForm(metric) {
+  return { type: 'ADD_METRIC_INPUT_TO_DISTRIBUTION_FORM', metric};
+}
+

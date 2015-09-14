@@ -9,4 +9,3 @@ export function deselectEditingMetric(metricId) {
 export function changeEditingMetric(values) {
   return { type: 'CHANGE_EDITING_METRIC', values};
 }
-
