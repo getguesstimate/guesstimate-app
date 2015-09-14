@@ -3,6 +3,7 @@ import metricModel from '../models/metric'
 import {addMetric, changeMetric} from '../actions/metric-actions.js'
 import { reducer as formReducer } from 'redux-form';
 import _ from 'lodash'
+import InputToGuesstimate from '../lib/input-to-guesstimate'
 
 export function changeSelect(location) {
   return { type: 'CHANGE_SELECT', location };
@@ -56,14 +57,30 @@ export default function selection(state = {column: 1, row: 1}, action) {
   }
 }
 
+let guesstimate = null
 export default function distributionForm(state = {}, action) {
   switch (action.type) {
   case 'CREATE_DISTRIBUTION_FORM':
-    return {input: action.value}
+    guesstimate = new InputToGuesstimate(action.value).toGuesstimate()
+    return {input: action.value, guesstimate}
   case 'DESTROY_DISTRIBUTION_FORM':
     return {}
   case 'UPDATE_DISTRIBUTION_FORM':
-    return {input: action.value}
+    guesstimate = new InputToGuesstimate(action.value).toGuesstimate()
+    return {input: action.value, guesstimate}
+  default:
+    return state
+  }
+}
+
+export default function editorState(state = 'selecting', action) {
+  switch (action.type) {
+  case 'CREATE_DISTRIBUTION_FORM':
+    return new InputToGuesstimate(action.value).toEditorState()
+  case 'DESTROY_DISTRIBUTION_FORM':
+    return 'selecting'
+  case 'UPDATE_DISTRIBUTION_FORM':
+    return new InputToGuesstimate(action.value).toEditorState()
   default:
     return state
   }
@@ -72,7 +89,8 @@ export default function distributionForm(state = {}, action) {
 const rootReducer = combineReducers({
   metrics,
   selection,
-  distributionForm
+  distributionForm,
+  editorState
 });
 
 export default rootReducer;

@@ -14,7 +14,7 @@ class DistributionForm extends Component{
   }
   _handleBlur() {
     this.props.dispatch(destroyDistributionForm('what'))
-    this.props.onSubmit({value: this._value()})
+    this.props.onSubmit({value: this._value(), distribution: this.props.distributionForm.distribution})
   }
   _handleChange() {
     this.setState({userInput: this._value()});
@@ -36,4 +36,10 @@ class DistributionForm extends Component{
   }
 }
 
-module.exports = connect()(DistributionForm);
+function select(state) {
+  return {
+    distributionForm: state.distributionForm
+  }
+}
+
+module.exports = connect(select)(DistributionForm);
