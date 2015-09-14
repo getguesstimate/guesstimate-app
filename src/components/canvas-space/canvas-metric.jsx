@@ -62,6 +62,7 @@ const BasicInput = React.createClass({
     );
   }
 });
+
 const TextField = React.createClass({
   render() {
     console.log(this.props.value)
@@ -76,7 +77,7 @@ const Hover = React.createClass({
     return(
     <div className="hover" >
       <div className='triangle'></div>
-      grrr
+      <div className='hover-internal'> Foobar </div>
     </div>
     )
   }

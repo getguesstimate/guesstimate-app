@@ -1,9 +1,29 @@
 .carousel-appear
-  height: 0
+   max-height: 0;
+   overflow: hidden;
 
 .carousel-appear.carousel-appear-active
-  height: 200px
-  transition: height 2s
+  max-height: 400px
+  transition: max-height 0.5s
+
+.hover
+  left: 0;
+  top: 100%;
+  position: absolute;
+  width: 100%;
+  z-index 5
+  .triangle
+    width 0
+    height 0
+    border-left 12px solid transparent
+    border-right 12px solid transparent
+    border-bottom 7px solid #D0ECFD
+    margin 0 auto
+  .hover-internal
+    margin 0
+    padding 10px
+    background-color #D0ECFD
+    border-radius 0.25em
 
 .canvas-space
   -webkit-touch-callout: none;
@@ -21,13 +41,6 @@
     border-radius 2px
     padding 0.5em
     font-family: Lato-Light;
-    .hover
-      left: 0;
-      top: 100%;
-      position: absolute;
-      width: 100%;
-      background-color: #D8D8D8;
-
     .row1
       margin-bottom 0.25em
     .form-group
