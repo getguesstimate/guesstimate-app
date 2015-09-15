@@ -19,7 +19,7 @@ const BasicInput = React.createClass({
     this.setState({ value: this.refs.input.getValue()});
   },
 
-  handleBlur(){
+  handleBlur(e){
     let values = {}
     values[this.props.name] = this.state.value
     this.props.onChange(values)

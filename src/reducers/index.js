@@ -74,7 +74,8 @@ export default function distributionForm(state = {}, action) {
     guesstimate = new InputToGuesstimate(action.value).toGuesstimate()
     return {input: action.value, guesstimate}
   case 'ADD_METRIC_INPUT_TO_DISTRIBUTION_FORM':
-    return state
+    let newInput = state.input + action.metric.id
+    return Object.assign(state, {newInput: newInput})
   default:
     return state
   }

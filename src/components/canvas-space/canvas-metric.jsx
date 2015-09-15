@@ -28,6 +28,7 @@ const UnSelectedMetric = React.createClass({
     return(
       <div className='metric'
          onMouseEnter={this.mouseOver}
+         onMouseDown={this.mouseDown}
          onMouseLeave={this.mouseOut}>
          <div className='row row1'>
            <div className='col-sm-12 median'>
