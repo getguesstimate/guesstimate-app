@@ -26,9 +26,9 @@ class Cell extends React.Component {
   _handleKeyPress = (e) => {
     this.props.gridKeyPress(e)
   }
-  _handleClick = () => {
+  _handleClick = (e) => {
     if (!this.props.isSelected) {
-      this.props.handleSelect(this.props.location)
+      this.props.handleSelect(e, this.props.location, this.props.item)
     } else {
       if (!this.props.item) {
         this.props.onAddItem(this.props.location)
@@ -50,7 +50,7 @@ class Cell extends React.Component {
   }
   render = () => {
     return (
-      <div tabIndex='0' onClick={this._handleClick} onKeyDown={this._handleKeyPress} className={this._classes()}>
+      <div tabIndex='0' onMouseDown={this._handleClick} onKeyDown={this._handleKeyPress} className={this._classes()}>
         {this._cellType()}
       </div>
     )

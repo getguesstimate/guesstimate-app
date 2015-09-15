@@ -15,6 +15,8 @@ import { changeSelect } from '../../actions/selection-actions'
 import { addMetricInputToDistributionForm } from '../../actions/distribution-form-actions'
 import { canvasStateSelector } from '../../selectors/canvas-state-selector';
 
+import $ from 'jquery'
+
 function mapStateToProps(state) {
   return {
     selected: state.selection,
@@ -25,16 +27,13 @@ function mapStateToProps(state) {
 @connect(mapStateToProps)
 @connect(canvasStateSelector)
 export default class CanvasPage extends Component{
-  _handleSelect = (e) => {
-    console.log(this.props.canvasState == 'function')
-    if (!_.isEqual(this.props.selected, e)){
-        debugger
-      if (this.props.canvasState == 'function') {
-        console.log('trye')
-        this.props.dispatch(addMetricInputToEditingMetric(e))
+  _handleSelect = (event, location, item) => {
+    if (!_.isEqual(this.props.selected, location)){
+      if ((this.props.canvasState == 'function') && item) {
+        event.preventDefault()
+        $(window).trigger('functionMetricClicked', item.props.item)
       } else {
-        console.log('false')
-        this.props.dispatch(changeSelect(e))
+        this.props.dispatch(changeSelect(location))
       }
     }
   }
@@ -46,7 +45,7 @@ export default class CanvasPage extends Component{
       <div className="canvas-space">
       <Grid selected={this.props.selected} handleSelect={this._handleSelect.bind(this)} onAddItem={this._handleAddItem}>
             {this.props.items.map((i) => {
-              return (<Metric item={i} key={JSON.stringify(i)} canvasState={this.props.canvasState}/>)
+              return (<Metric item={i} key={JSON.stringify(i)} ref={i.id} canvasState={this.props.canvasState}/>)
               })
             }
         </Grid>
