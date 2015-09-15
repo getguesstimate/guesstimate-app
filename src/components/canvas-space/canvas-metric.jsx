@@ -1,6 +1,7 @@
 import React from 'react'
 
 import Button from 'react-bootstrap/lib/Button'
+import Label from 'react-bootstrap/lib/Label'
 import _ from 'lodash'
 import { connect } from 'react-redux';
 import { removeMetric, changeMetric } from '../../actions/metric-actions.js'
@@ -22,7 +23,7 @@ const UnSelectedMetric = React.createClass({
     //}
   },
   visibleId(){
-    return ('$' + this.props.item.id.substring(0,3).toUpperCase())
+    return this.props.item.readableId
   },
   render () {
     return(
@@ -36,8 +37,11 @@ const UnSelectedMetric = React.createClass({
            </div>
          </div>
          <div className='row row2'>
-           <div className='col-sm-12 name'>
-           {this.props.canvasState == 'function' ? this.visibleId() : this.props.item.name}
+           <div className='col-sm-8 name'>
+           {this.props.item.name}
+           </div>
+           <div className='col-sm-4 function-id'>
+             {this.props.canvasState == 'function' ? (<Label bsStyle="success">{this.visibleId()}</Label>) : ''}
            </div>
          </div>
       </div>

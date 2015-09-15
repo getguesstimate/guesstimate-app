@@ -15,17 +15,21 @@ const BasicInput = React.createClass({
     };
   },
 
-  handleChange() {
+  componentWillUnmount() {
+    this._handleBlur()
+  },
+
+  _handleChange() {
     this.setState({ value: this.refs.input.getValue()});
   },
 
-  handleBlur(e){
+  _handleBlur(){
     let values = {}
     values[this.props.name] = this.state.value
     this.props.onChange(values)
   },
 
-  handleSubmit(e) {
+  _handleSubmit(e) {
     if (e.keyCode === 13) {
       this.handleBlur()
     }
@@ -34,15 +38,15 @@ const BasicInput = React.createClass({
   render() {
     return (
       <Input
-        tabIndex={10}
+        tabIndex={2}
         type='text'
         placeholder={this.props.name}
         name={this.props.name}
         value={this.state.value}
         ref='input'
-        onBlur={this.handleBlur}
-        onKeyDown={this.handleSubmit}
-        onChange={this.handleChange} />
+        onBlur={this._handleBlur}
+        onKeyDown={this._handleSubmit}
+        onChange={this._handleChange} />
     );
   }
 });
