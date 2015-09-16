@@ -23,7 +23,7 @@ export default React.createClass({
     if (direction) {
       e.preventDefault()
       let newLocation = new DirectionToLocation(this.props.size, this.props.selected)[direction]()
-      this.props.handleSelect(newLocation)
+      this.props.handleSelect(e, newLocation)
     }
   },
   _cell(location) {
