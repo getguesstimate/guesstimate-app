@@ -5,7 +5,7 @@ import $ from 'jquery'
 
 let GRID_ITEM_FOCUS_CLASS = '.grid-item-focus'
 
-class Cell extends React.Component {
+export default class Cell extends React.Component {
   componentDidMount = () => {
     this._focus()
   }
@@ -35,7 +35,7 @@ class Cell extends React.Component {
       }
     }
   }
-  _cellType = () => {
+  _cellElement = () => {
     if (this.props.item) {
       return React.cloneElement(this.props.item, {isSelected: this.props.isSelected, gridKeyPress: this.props.gridKeyPress})
     } else {
@@ -51,10 +51,8 @@ class Cell extends React.Component {
   render = () => {
     return (
       <div tabIndex='0' onMouseDown={this._handleClick} onKeyDown={this._handleKeyPress} className={this._classes()}>
-        {this._cellType()}
+        {this._cellElement()}
       </div>
     )
   }
 }
-
-export default Cell
