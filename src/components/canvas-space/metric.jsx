@@ -5,9 +5,9 @@ import _ from 'lodash'
 
 import { connect } from 'react-redux';
 import { removeMetric, changeMetric } from '../../actions/metric-actions.js'
-import SelectedMetric from './selected-metric'
+import MetricSelected from './selected-metric'
 
-const UnSelectedMetric = React.createClass({
+const MetricUnselected = React.createClass({
   visibleId(){
     return ('$' + this.props.metric.id.substring(0,3).toUpperCase())
   },
@@ -44,7 +44,7 @@ const Metric = React.createClass({
   },
   regularView() {
     return (
-      <UnSelectedMetric
+      <MetricUnselected
         metric={this.props.metric}
         canvasState={this.props.canvasState}
       />
@@ -52,7 +52,7 @@ const Metric = React.createClass({
   },
   editView() {
     return (
-      <SelectedMetric
+      <MetricSelected
         metric={this.props.metric}
         onRemove={this.handleRemove}
         handleChange={this.handleChange}

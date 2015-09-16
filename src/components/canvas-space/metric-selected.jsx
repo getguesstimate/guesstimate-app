@@ -43,7 +43,7 @@ const BasicInput = React.createClass({
   }
 });
 
-let SelectedMetric = React.createClass({
+let MetricSelected = React.createClass({
   _handlePress(e) {
     if (e.target === this.getDOMNode()) {
       if (e.keyCode == '8') {
@@ -51,16 +51,13 @@ let SelectedMetric = React.createClass({
         this.props.onRemove()
       }
       this.props.gridKeyPress(e)
-      e.stopPropagation()
-    } else {
-      e.stopPropagation()
     }
+    e.stopPropagation()
   },
   _handleChange(values) {
     this.props.handleChange(values)
   },
   render () {
-    const distribution = 'hi there'
     return (
       <div className='metric grid-item-focus' onKeyDown={this._handlePress} tabIndex='0'>
          <div className='row row1'>
@@ -81,4 +78,4 @@ let SelectedMetric = React.createClass({
   }
 })
 
-export default SelectedMetric
+export default MetricSelected
