@@ -1,6 +1,7 @@
 'use strict';
 
 import React from 'react'
+import ReactDOM from 'react-dom'
 import $ from 'jquery'
 
 let GRID_ITEM_FOCUS_CLASS = '.grid-item-focus'
@@ -17,7 +18,7 @@ export default class Cell extends React.Component {
   _focus = () => {
     if (this.props.isSelected){
      if (!this.props.item) {
-       React.findDOMNode(this).focus()
+       ReactDOM.findDOMNode(this).focus()
      } else {
        $(GRID_ITEM_FOCUS_CLASS).focus();
      }

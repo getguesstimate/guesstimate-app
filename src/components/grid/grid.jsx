@@ -53,11 +53,13 @@ export default React.createClass({
     return (
       <div className='grid' onKeyPress={this.handlePress}>
         <table>
-          {
-            upto(this.props.size.rows).map((row) => {
-              return ( <tr key={row}> {this._row(row)} </tr>)
-            })
-          }
+          <tbody>
+            {
+              upto(this.props.size.rows).map((row) => {
+                return ( <tr key={row}> {this._row(row)} </tr>)
+              })
+            }
+          </tbody>
         </table>
       </div>
     )
