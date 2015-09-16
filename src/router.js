@@ -4,6 +4,7 @@ import RepoShow from './views/repos/show'
 import RepoNew from './views/repos/new'
 import Home from './views/home'
 import React from 'react'
+import ReactDOM from 'react-dom'
 import Layout from './layouts/application'
 
 import { Provider } from 'react-redux';
@@ -22,7 +23,7 @@ export default Router.extend({
         {page}
       </Layout>
     )
-    React.render(
+    ReactDOM.render(
       <div>
       <Provider store={store}>
         {() => <SpaceCanvas/>}

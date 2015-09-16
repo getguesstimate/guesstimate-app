@@ -1,9 +1,10 @@
 import React, {Component, PropTypes} from 'react';
+import ReactDOM from 'react-dom'
 import { connect } from 'react-redux';
 import { createDistributionForm, destroyDistributionForm, updateDistributionForm, addMetricInputToDistributionForm } from '../../actions/distribution-form-actions'
 import $ from 'jquery'
 
-class DistributionForm extends Component{
+class DistributionForm extends React.Component{
   constructor(props) {
     super(props);
     this.state = {userInput: this.props.value || ''};
@@ -32,7 +33,7 @@ class DistributionForm extends Component{
     this.props.dispatch(updateDistributionForm(this._value()))
   }
   _value() {
-    return React.findDOMNode(this.refs.input).value
+    return ReactDOM.findDOMNode(this.refs.input).value
   }
   render() {
     return(

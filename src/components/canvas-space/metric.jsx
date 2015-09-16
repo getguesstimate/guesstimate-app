@@ -5,7 +5,7 @@ import _ from 'lodash'
 
 import { connect } from 'react-redux';
 import { removeMetric, changeMetric } from '../../actions/metric-actions.js'
-import MetricSelected from './selected-metric'
+import MetricSelected from './metric-selected'
 
 const MetricUnselected = React.createClass({
   visibleId(){
