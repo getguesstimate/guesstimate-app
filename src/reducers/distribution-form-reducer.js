@@ -11,7 +11,6 @@ export default function distributionForm(state = {}, action) {
   return { type: 'ADD_METRIC_INPUT_TO_EDITING_METRIC', metric};
   case 'UPDATE_DISTRIBUTION_FORM':
     guesstimate = new InputToGuesstimate(action.value).toGuesstimate()
-    console.log(guesstimate)
     return {input: action.value, guesstimate}
   case 'ADD_METRIC_INPUT_TO_DISTRIBUTION_FORM':
     let newInput = state.input + action.metric.id

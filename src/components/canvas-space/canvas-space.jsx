@@ -28,7 +28,7 @@ export default class CanvasSpace extends Component{
     if (!_.isEqual(this.props.selected, location)){
       if ((this.props.canvasState == 'function') && item) {
         event.preventDefault()
-        $(window).trigger('functionMetricClicked', item.props.item)
+        $(window).trigger('functionMetricClicked', item.props.metric)
       } else {
         this.props.dispatch(changeSelect(location))
       }

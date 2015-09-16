@@ -31,7 +31,6 @@ export default React.createClass({
     // if validation fails, value will be null
     if (value) {
       // value here is an instance of Person
-      console.log(value);
     }
   },
 

@@ -2,6 +2,11 @@ var getConfig = require('hjs-webpack')
 var webpack = require('webpack')
 var path = require('path');
 
+var definePlugin = new webpack.DefinePlugin({
+  __DEV__: JSON.stringify(JSON.parse(process.env.BUILD_DEV || 'true')),
+});
+
+
 module.exports = getConfig({
   in: 'src/app.js',
   out: 'public',
@@ -20,3 +25,5 @@ if(process.env.NODE_ENV === 'development'){
 }
 
 module.exports.resolve.root = path.resolve('./src')
+
+module.exports.plugins = module.exports.plugins.concat(definePlugin)

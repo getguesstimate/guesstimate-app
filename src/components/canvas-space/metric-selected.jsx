@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from 'react';
+import ReactDOM from 'react-dom'
 import {connectReduxForm} from 'redux-form';
 
 import Button from 'react-bootstrap/lib/Button'
@@ -45,7 +46,7 @@ const BasicInput = React.createClass({
 
 let MetricSelected = React.createClass({
   _handlePress(e) {
-    if (e.target === this.getDOMNode()) {
+    if (e.target === ReactDOM.findDOMNode(this)) {
       if (e.keyCode == '8') {
         e.preventDefault()
         this.props.onRemove()

@@ -23,14 +23,17 @@ export default Router.extend({
         {page}
       </Layout>
     )
+    let debugpanel = (
+        <DebugPanel left top bottom>
+          <DevTools store={store} monitor={LogMonitor} />
+        </DebugPanel>
+    )
     ReactDOM.render(
       <div>
       <Provider store={store}>
         {() => <SpaceCanvas/>}
       </Provider>
-        <DebugPanel left top bottom>
-          <DevTools store={store} monitor={LogMonitor} />
-        </DebugPanel>
+      { __DEV__ ? 'foobar' : debugpanel}
       </div>,
       document.body)
   },
