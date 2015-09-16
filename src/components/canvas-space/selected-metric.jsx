@@ -1,12 +1,9 @@
 import React, {Component, PropTypes} from 'react';
+import {connectReduxForm} from 'redux-form';
 
 import Button from 'react-bootstrap/lib/Button'
-import addons from "react/addons";
 import Input from 'react-bootstrap/lib/Input'
-import Contact from './contact-form'
-import DistributionForm from './form'
-import {connectReduxForm} from 'redux-form';
-let ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+import GuesstimateForm from './guesstimate-form'
 
 const BasicInput = React.createClass({
   getInitialState() {
@@ -14,27 +11,22 @@ const BasicInput = React.createClass({
       value: this.props.value || ''
     };
   },
-
   componentWillUnmount() {
     this._handleBlur()
   },
-
   _handleChange() {
     this.setState({ value: this.refs.input.getValue()});
   },
-
   _handleBlur(){
     let values = {}
     values[this.props.name] = this.state.value
     this.props.onChange(values)
   },
-
   _handleSubmit(e) {
     if (e.keyCode === 13) {
       this.handleBlur()
     }
   },
-
   render() {
     return (
       <Input
@@ -51,18 +43,7 @@ const BasicInput = React.createClass({
   }
 });
 
-const Hover = React.createClass({
-  render () {
-    return(
-    <div className="hover" >
-      <div className='triangle'></div>
-      <div className='hover-internal'> Foobar </div>
-    </div>
-    )
-  }
-})
-
-let foo = React.createClass({
+let SelectedMetric = React.createClass({
   _handlePress(e) {
     if (e.target === this.getDOMNode()) {
       if (e.keyCode == '8') {
@@ -84,7 +65,7 @@ let foo = React.createClass({
       <div className='metric grid-item-focus' onKeyDown={this._handlePress} tabIndex='0'>
          <div className='row row1'>
           <div className='col-sm-9 median' >
-            <DistributionForm value={this.props.item.value} onSubmit={this._handleChange}/>
+            <GuesstimateForm value={this.props.metric.value} onSubmit={this._handleChange}/>
           </div>
           <div className='col-sm-3'>
             <Button bsStyle='default' onClick={this.props.onRemove}> x </Button>
@@ -92,7 +73,7 @@ let foo = React.createClass({
          </div>
          <div className='row row2'>
            <div className='col-sm-9 name'>
-            <BasicInput name="name" value={this.props.item.name} onChange={this._handleChange}/>
+            <BasicInput name="name" value={this.props.metric.name} onChange={this._handleChange}/>
            </div>
          </div>
       </div>
@@ -100,4 +81,4 @@ let foo = React.createClass({
   }
 })
 
-export default foo
+export default SelectedMetric

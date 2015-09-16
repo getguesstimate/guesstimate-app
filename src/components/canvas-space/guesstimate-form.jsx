@@ -22,7 +22,7 @@ class DistributionForm extends Component{
   _handleBlur() {
     $(window).off('functionClicked')
     this.props.dispatch(destroyDistributionForm())
-    this.props.onSubmit({value: this._value(), distribution: this.props.distributionForm.distribution})
+    this.props.onSubmit({value: this._value(), guesstimate: this.props.distributionForm.guesstimate})
   }
   _handleChange() {
     this.props.dispatch(updateDistributionForm(this._value()))

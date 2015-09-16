@@ -9,7 +9,7 @@ import {keycodeToDirection, DirectionToLocation} from './utils'
 
 let upto = (n) => Array.apply(null, {length: n}).map(Number.call, Number)
 
-const Grid = React.createClass({
+export default React.createClass({
   getDefaultProps: function() {
     return {
       size: {
@@ -18,7 +18,7 @@ const Grid = React.createClass({
       }
     };
   },
-  keyPress(e) {
+  _handleKeyPress(e) {
     let direction = keycodeToDirection(e.keyCode)
     if (direction) {
       e.preventDefault()
@@ -29,14 +29,14 @@ const Grid = React.createClass({
   _cell(location) {
    let atThisLocation = (l) => _.isEqual(l, location)
    let isSelected = atThisLocation(this.props.selected)
-   let item = this.props.children.filter(function(i) { return (atThisLocation(i.props.item.location)) })[0];
+   let item = this.props.children.filter(function(i) { return (atThisLocation(i.props.location)) })[0];
    return (
     <td key={'grid-item', location.row, location.column}>
       <Cell
         location={location}
         isSelected={isSelected}
         item={item}
-        gridKeyPress={this.keyPress}
+        gridKeyPress={this._handleKeyPress}
         handleSelect={this.props.handleSelect}
         onAddItem={this.props.onAddItem}/>
     </td>
@@ -63,5 +63,3 @@ const Grid = React.createClass({
     )
   }
 })
-
-module.exports = Grid
