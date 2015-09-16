@@ -21,7 +21,7 @@ class DistributionForm extends React.Component{
     this.props.dispatch(createDistributionForm(this._value()))
   }
   _handleBlur() {
-    $(window).off('functionClicked')
+    $(window).off('functionMetricClicked')
     this.props.dispatch(destroyDistributionForm())
     this.props.onSubmit({value: this._value(), guesstimate: this.props.distributionForm.guesstimate})
   }
