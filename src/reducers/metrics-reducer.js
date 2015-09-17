@@ -1,24 +1,4 @@
-class Metrics{
-  constructor(state){
-   this.state = _.cloneDeep(state)
-  }
-  remove(id){
-   this.state = this.state.filter(function(i) {return i.id !== id})
-   return this
-  }
-  get(id){
-   return this.state.filter(function(i) {return i.id === id})[0]
-  }
-  add(values){
-    let newModel = Object.assign({}, {name: '', value: ''}, values)
-    this.state = [...this.state, newModel]
-    return this
-  }
-  update(id, values){
-    let newItem = Object.assign({}, this.get(id), values)
-    return this.remove(id).add(newItem)
-  }
-}
+import Metrics from '../models/metrics'
 
 let initialMetrics = [
   {id: '238jd', readableId: 'CO', name: 'cowboys', value: '100/4', guesstimate: {estimate: {median: 100, stdev: 4}}, location: {column: 3, row: 3}},
