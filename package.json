@@ -4,7 +4,7 @@
   "description": "Make, share, and evaluate estimates of things",
   "main": "index.js",
   "scripts": {
-    "start": "BUILD_DEV=1 NODE_ENV=development webpack-dev-server",
+    "start": "NODE_ENV=development webpack-dev-server",
     "build": "webpack",
     "deploy": "surge -p public -d www.gaussian.io",
     "stage": "surge -p public -d gaussian-stage.surge.sh",

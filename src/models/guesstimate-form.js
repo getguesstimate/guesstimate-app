@@ -5,12 +5,12 @@ class EstimateForm{
     this.state = state;
   }
   isValid(){
-    return (this.toGuesstimate() !== false);
+    return (this.toDistribution() !== false);
   }
-  toGuesstimate(){
+  toDistribution(){
     if (this.state.includes('/')){
       let [median, stdev] = this.state.split('/').map((e) => parseFloat(e.trim()));
-      return {estimate: {median, stdev}};
+      return {median, stdev};
     } else {
       return false;
     }
@@ -18,31 +18,41 @@ class EstimateForm{
 }
 
 export default class GuesstimateForm{
-  constructor(state, metrics){
+  constructor(state, metrics = []){
     this.metrics = metrics;
     this.state = state;
-    this.funct = new FunctionForm(state, metrics);
-    this.estimate = new EstimateForm(state);
+    this.guesstimate = this._guesstimate();
   }
-  isFunction(){
+  toJSON(){
+    return ({
+      input: this.state,
+      isValid: this._isValid(),
+      distribution: this._toDistribution()
+    });
+  }
+  _isFunction(){
     return (this.state[0] === '=');
   }
-  isEstimate(){
-    return !this.isFunction();
+  _isEstimate(){
+    return !this._isFunction();
   }
-  toGuesstimate(){
-    if (this.isFunction()) {
-      return this.funct.toGuesstimate();
-    } else if (this.isEstimate) {
-      return this.estimate.toGuesstimate();
-    } else {
-      return {};
+  _guesstimate(){
+    if (this._isFunction()) {
+      return new FunctionForm(this.state, this.metrics);
+    } else if (this._isEstimate) {
+      return new EstimateForm(this.state);
     }
   }
+  _toDistribution(){
+    return this.guesstimate.toDistribution();
+  }
+  _isValid(){
+    return this.guesstimate.isValid();
+  }
   toEditorState(){
-    if (this.isFunction()){
+    if (this._isFunction()){
       return 'function';
-    } else if (this.isEstimate()){
+    } else if (this._isEstimate()){
       return 'estimate';
     } else {
       return 'editing';
