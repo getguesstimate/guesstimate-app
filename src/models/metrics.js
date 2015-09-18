@@ -1,67 +1,4 @@
-export default class InputToGuesstimate {
-  constructor(input){
-    this.input = input
-  }
-  toGuesstimate(){
-    if (this.isFunction()) {
-      return {funct: this.parseFunction()}
-    } else if (this.isEstimate()) {
-      return {estimate: this.parseEstimate()}
-    } else {
-      return {}
-    }
-  }
-  toEditorState(){
-    if (this.isFunction()){
-      return 'function'
-    } else if (this.isEstimate()){
-      return 'estimate'
-    } else {
-      return 'editing'
-    }
-  }
-  isFunction(){
-    return this.input[0] === '=';
-  }
-  parseFunction(){
-    return {textField: this.input}
-  }
-  isEstimate(){
-    return this.parseEstimate() !== false
-  }
-  parseEstimate(){
-    if (this.input.includes('/')){
-      let [median, stdev] = this.input.split('/').map((e) => e.trim());
-      return {median, stdev};
-    } else {
-      return false
-    }
-  }
-}
-
-class GuesstimateForm{
-  constructor(state){
-
-  }
-  distribution(){
-
-  }
-}
-
-class Metric{
-  constructor(state){
-  }
-  update(values){
-    this.state = Object.assign({}, this.state, values)
-    if (values.form.guesstimate){
-      this.updateGuesstimate(values.form.guesstimate);
-    }
-    return this
-  }
-  updateGuesstimate(guesstimateForm){
-    this.state.distribution = new GuesstimateForm(guesstimateForm).distribution()
-  }
-}
+import Metric from './metric.js';
 
 export default class Metrics{
   constructor(state){
@@ -82,6 +19,14 @@ export default class Metrics{
   update(id, values){
     let newItem = Object.assign({}, this.get(id), values)
     return this.remove(id).add(newItem)
+  }
+  recalculate(id=this.needsRecalculation().id){
+    let metric = this.get(id)
+    let inputs = updateThis.inputReadableIds.map((id) => this.get({readableId: id}))
+    inputs = this.state.filter
+  }
+  needsRecalculation(){
+    return this.state.filter((m) => {m.needsUpdate()})[0];
   }
 }
 

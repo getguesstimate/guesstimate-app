@@ -70,6 +70,7 @@
     "jsx-loader": "^0.13.2",
     "local-links": "^1.4.0",
     "lodash": "^3.10.1",
+    "mathjs": "^2.2.0",
     "node-uuid": "^1.4.3",
     "numeral": "~1.5.3",
     "qs": "^2.4.1",
