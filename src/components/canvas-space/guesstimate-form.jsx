@@ -23,10 +23,7 @@ class DistributionForm extends React.Component{
   _handleBlur() {
     $(window).off('functionMetricClicked')
     this.props.dispatch(destroyDistributionForm())
-    this.props.onSubmit({value: this._value(), guesstimate: this.props.distributionForm.guesstimate})
-  }
-  _handleChange() {
-    this.props.dispatch(updateDistributionForm(this._value()))
+    this.props.onSubmit({value: this._value(), distribution: this.props.distributionForm.distribution})
   }
   _handlePress(event) {
     this.setState({userInput: event.target.value});
@@ -36,7 +33,9 @@ class DistributionForm extends React.Component{
     return ReactDOM.findDOMNode(this.refs.input).value
   }
   render() {
+    let mean = _.get(this.props, 'distributionForm.distribution.mean')
     return(
+      <div>
     <input type="text"
       ref='input'
       placeholder={'value'}
@@ -45,6 +44,8 @@ class DistributionForm extends React.Component{
       onFocus={this._handleFocus.bind(this)}
       onChange={this._handlePress.bind(this)}
     />
+    {mean}
+    </div>
     )
   }
 }

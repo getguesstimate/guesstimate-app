@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import InputToGuesstimate from '../lib/input-to-guesstimate';
+import GuesstimateForm from '../models/guesstimate-form'
 
 const distributionFormSelector = state => state.distributionForm;
 
@@ -7,8 +7,7 @@ let chooseCanvasState = (distributionForm) => {
     if (Object.keys(distributionForm).length === 0){
       return 'selecting';
     } else {
-      let foo = new InputToGuesstimate(distributionForm.input).toEditorState()
-      return foo
+      return new GuesstimateForm(distributionForm.input).toEditorState();
     }
 }
 
