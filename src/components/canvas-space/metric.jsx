@@ -4,19 +4,17 @@ import Label from 'react-bootstrap/lib/Label'
 import _ from 'lodash'
 
 import { connect } from 'react-redux';
-import { removeMetric, changeMetric } from '../../actions/metric-actions.js'
-import MetricSelected from './metric-selected'
+import { removeMetric, changeMetricName } from '../../actions/metric-actions.js';
+import { changeGuesstimateInput } from '../../actions/guesstimate-actions.js';
+import MetricSelected from './metric-selected';
 
 const MetricUnselected = React.createClass({
-  visibleId(){
-    return ('$' + this.props.metric.id.substring(0,3).toUpperCase())
-  },
   render () {
     return(
       <div className='metric'>
          <div className='row row1'>
            <div className='col-sm-12 median'>
-             {this.props.metric.value}
+             {this.props.metric.guesstimate.distribution.mean}
            </div>
          </div>
          <div className='row row2'>
@@ -24,10 +22,10 @@ const MetricUnselected = React.createClass({
            {this.props.metric.name}
            </div>
            <div className='col-sm-2 median'>
-           {this.props.metric.distribution && this.props.metric.distribution.median}
+           {this.props.metric.guesstimate && this.props.metric.guesstimate.distribution.mean}
            </div>
            <div className='col-sm-2 function-id'>
-             {this.props.canvasState == 'function' ? (<Label bsStyle="success">{this.visibleId()}</Label>) : ''}
+             {this.props.canvasState == 'function' ? (<Label bsStyle="success">{this.props.metric.readableId}</Label>) : ''}
            </div>
          </div>
       </div>
@@ -36,11 +34,17 @@ const MetricUnselected = React.createClass({
 })
 
 const Metric = React.createClass({
-  handleChange(values) {
-    this.props.dispatch(changeMetric(this.props.metric.id, values))
+  handleNameChange(name) {
+    this.props.dispatch(changeMetricName(this._id(), name))
+  },
+  handleGuesstimateInputChange(input) {
+    this.props.dispatch(changeGuesstimateInput(this._id(), input))
   },
   handleRemove () {
-    this.props.dispatch(removeMetric(this.props.metric.id))
+    this.props.dispatch(removeMetric(this._id()))
+  },
+  _id(){
+    this.props.metric.id
   },
   regularView() {
     return (
@@ -55,8 +59,9 @@ const Metric = React.createClass({
       <MetricSelected
         metric={this.props.metric}
         onRemove={this.handleRemove}
-        handleChange={this.handleChange}
         gridKeyPress={this.props.gridKeyPress}
+        onNameChange={this.handleNameChange}
+        onGuesstimateInputChange={this.handleGuesstimateInputChange}
       />
     )
   },

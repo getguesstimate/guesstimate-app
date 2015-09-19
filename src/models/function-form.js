@@ -1,7 +1,7 @@
 import math from 'mathjs';
 
 let metricId = (m) => { return m.readableId };
-let metricMean = (m) => { return m.distribution.mean };
+let metricMean = (m) => { return m.guesstimate.distribution.mean };
 
 export function inputMetrics(str, metrics) {
   return metrics.filter((m) => { return str.includes(m.readableId)});
