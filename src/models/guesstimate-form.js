@@ -9,8 +9,8 @@ export class EstimateForm{
   }
   toDistribution(){
     if (this.state.includes('/')){
-      let [median, stdev] = this.state.split('/').map((e) => parseFloat(e.trim()));
-      return {median, stdev};
+      let [mean, stdev] = this.state.split('/').map((e) => parseFloat(e.trim()));
+      return {mean, stdev};
     } else {
       return false;
     }

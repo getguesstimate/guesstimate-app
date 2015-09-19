@@ -4,26 +4,45 @@ class Guesstimate {
   constructor(state, metrics = []){
     this.state = state;
     this.metric = metrics;
+    this.guesstimateForm = new GuesstimateForm(this.state.input, metrics);
+    return this;
   }
-  guesstimateForm(){
-    return new GuesstimateForm(this.state.input, metrics);
-  }
-  updateInput(){
-    this.state.distribution = this.guesstimateForm.distribution();
+  changeInput(input){
+    this.state = new GuesstimateForm(input, this.metrics).toJSON();
+    return this;
   }
   isValid(){
     return this.guesstimateForm.isValid();
   }
 }
 
-class Metric{
-  constructor(state, metrics = []){
+let validName = (m) => { return m.state.name.length < 3; };
+let validGuesstimate = (m) => { return m._guesstimate().isValid(); };
+
+export default class Metric{
+  static create(id, location){
+    return new this()._create(id, location);
+  }
+  constructor(state = {}, metrics = []){
     this.state = state;
     this.metrics = metrics;
+    return this;
   }
-  create(id, location){
-    this.state = {
-      id: id,
+  changeName(name){
+    this.state.name = name;
+    this._changeReadableId();
+    this._validate();
+  }
+  changeGuesstimateInput(input){
+    this.state.guesstimate = this._guesstimate().changeInput(input).state;
+  }
+  _create(id, location={row: null, column: null}){
+    this.state = Object.assign({}, this._defaults(), {id, location});
+    return this;
+  }
+  _defaults(){
+    return {
+      id: null,
       readableId: '',
       name: '',
       isValid: false,
@@ -31,26 +50,24 @@ class Metric{
         input: '',
         distribution: {}
       },
-      location
+      location: {row: null, column: null}
     };
   }
-  updateName(name){
-    this.state.name = name;
-    this._updateReadableId();
-    this.validate();
-  }
-  updateGuesstimateInput(input){
-    let guesstimate = new Guesstimate(this.state.guesstimate, this.metrics);
-  }
   _validate(){
-    this.state._isValid = this.isValid();
+    this.state._isValid = this._isValid();
   }
   _isValid(){
-    return true;
+    return validName(this);
   }
-  _updateReadableId(){
-    if (this.state.readableId === '' && (this.state.name.length > 3)){
-      this.state.readableId = this.state.name.substring(0,3).toUpperCase();
+  _guesstimate(){
+     return new Guesstimate(this.state.guesstimate, this.metrics);
+  }
+  _changeReadableId() {
+    if (this.state.readableId === '' && (this.state.name.length >= 3)){
+      this.state.readableId = this._createReadableId();
     }
+  }
+  _createReadableId(){
+    return this.state.name.substring(0,3).toUpperCase();
   }
 }
