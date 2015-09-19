@@ -12,7 +12,8 @@ export default class Metrics{
     return this.state.filter(function(i) {return i.id === id})[0]
   }
   add(values){
-    let newModel = Object.assign({}, {name: '', value: ''}, values)
+    //let newModel = Object.assign({}, {name: '', value: ''}, values)
+    let newModel = new Metric()
     this.state = [...this.state, newModel]
     return this
   }
