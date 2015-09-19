@@ -1,17 +1,15 @@
-import GuesstimateForm from './guesstimate-form.js';
+import AmpersandState from 'ampersand-state'
 
-class Guesstimate {
-  constructor(state, metrics = []){
-    this.state = state;
-    this.metric = metrics;
-    this.guesstimateForm = new GuesstimateForm(this.state.input, metrics);
-    return this;
+export default AmpersandState.extend({
+  props: {
+    metric: 'string',
+    input: ['string', true],
+    distribution: {
+      mean: 'number',
+      stdev: 'number'
+    }
+  },
+  toStore: function() {
+    return this.getAttributes({props: true});
   }
-  changeInput(input){
-    this.state = new GuesstimateForm(input, this.metrics).toJSON();
-    return this;
-  }
-  isValid(){
-    return this.guesstimateForm.isValid();
-  }
-}
+});

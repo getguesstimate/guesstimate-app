@@ -17,9 +17,10 @@ export function replaceReadableIdsWithMeans(str, metrics) {
 }
 
 export default class FunctionForm{
-  constructor(state, metrics = []){
+  constructor(state, metrics = [], guesstimates = []){
     this.state = state;
     this.metrics = metrics;
+    this.guesstimates = guesstimates;
   }
   isValid(){
     let isFunction = () => { return this.state[0] === '='; };

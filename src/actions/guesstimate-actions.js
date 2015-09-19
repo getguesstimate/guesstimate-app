@@ -1,3 +1,4 @@
-export function changeGuesstimateInput(metricId, input) {
-  return { type: 'CHANGE_GUESSTIMATE_INPUT', metricId, input };
+export function changeGuesstimate(id, values) {
+  console.log('action', id, values)
+  return { type: 'CHANGE_GUESSTIMATER', id, values };
 }
