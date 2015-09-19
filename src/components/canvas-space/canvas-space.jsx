@@ -11,7 +11,6 @@ import styles from './canvas-space.styl'
 import { connect } from 'react-redux';
 import { addMetric } from '../../actions/metric-actions'
 import { changeSelect } from '../../actions/selection-actions'
-import { addMetricInputToDistributionForm } from '../../actions/distribution-form-actions'
 import { canvasStateSelector } from '../../selectors/canvas-state-selector';
 
 function mapStateToProps(state) {

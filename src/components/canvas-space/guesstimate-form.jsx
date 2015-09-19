@@ -1,10 +1,10 @@
 import React, {Component, PropTypes} from 'react';
 import ReactDOM from 'react-dom'
 import { connect } from 'react-redux';
-import { createDistributionForm, destroyDistributionForm, updateDistributionForm, addMetricInputToDistributionForm } from '../../actions/distribution-form-actions'
+import { createGuesstimateForm, destroyGuesstimateForm, updateGuesstimateForm, addMetricInputToGuesstimateForm } from '../../actions/guesstimate-form-actions'
 import $ from 'jquery'
 
-class DistributionForm extends React.Component{
+class GuesstimateForm extends React.Component{
   constructor(props) {
     super(props);
     this.state = {userInput: this.props.value || ''};
@@ -18,22 +18,23 @@ class DistributionForm extends React.Component{
   }
   _handleFocus() {
     $(window).on('functionMetricClicked', (a, item) => {this._handleMetricClick(item)})
-    this.props.dispatch(createDistributionForm(this._value()))
+    this.props.dispatch(createGuesstimateForm(this._value()))
   }
   _handleBlur() {
     $(window).off('functionMetricClicked')
-    this.props.dispatch(destroyDistributionForm())
-    this.props.onSubmit({value: this._value(), distribution: this.props.distributionForm.distribution})
+    this.props.dispatch(destroyGuesstimateForm());
+    this.props.onSubmit(this._value());
   }
   _handlePress(event) {
-    this.setState({userInput: event.target.value});
-    this.props.dispatch(updateDistributionForm(this._value()))
+    let value = event.target.value;
+    this.setState({userInput: value});
+    this.props.dispatch(updateGuesstimateForm(value));
   }
   _value() {
     return ReactDOM.findDOMNode(this.refs.input).value
   }
   render() {
-    let mean = _.get(this.props, 'distributionForm.distribution.mean')
+    let mean = _.get(this.props, 'guesstimateForm.distribution.mean')
     return(
       <div>
     <input type="text"
@@ -52,8 +53,8 @@ class DistributionForm extends React.Component{
 
 function select(state) {
   return {
-    distributionForm: state.distributionForm
+    guesstimateForm: state.guesstimateForm
   }
 }
 
-module.exports = connect(select)(DistributionForm);
+module.exports = connect(select)(GuesstimateForm);

@@ -3,7 +3,7 @@ import { reducer as formReducer } from 'redux-form';
 import _ from 'lodash'
 
 import {addMetric, changeMetric} from '../actions/metric-actions.js'
-import distributionFormR from './distribution-form-reducer'
+import guesstimateFormR from './guesstimate-form-reducer'
 import selectionR from './selection-reducer'
 import metricsR from './metrics-reducer'
 
@@ -15,7 +15,7 @@ const rootReducer = function app(state = {}, action){
   return {
     metrics: metricsR(state.metrics, action),
     selection: selectionR(state.selection, action),
-    distributionForm: distributionFormR(state.distributionForm, state.metrics, action)
+    guesstimateForm: guesstimateFormR(state.guesstimateForm, state.metrics, action)
   };
 };
 export default rootReducer;
@@ -23,7 +23,7 @@ export default rootReducer;
 //const rootReducer = combineReducers({
   //metrics,
   //selection,
-  //distributionForm
+  //guesstimateForm
 //});
 //export default rootReducer;
 

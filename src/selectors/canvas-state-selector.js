@@ -1,21 +1,21 @@
 import { createSelector } from 'reselect';
-import GuesstimateForm from '../models/guesstimate-form'
+import GuesstimateForm from '../models/guesstimate-form';
 
-const distributionFormSelector = state => state.distributionForm;
+const guesstimateFormSelector = state => state.guesstimateForm;
 
-let chooseCanvasState = (distributionForm) => {
-    if (Object.keys(distributionForm).length === 0){
+let chooseCanvasState = (guesstimateForm) => {
+    if (Object.keys(guesstimateForm).length === 0){
       return 'selecting';
     } else {
-      return new GuesstimateForm(distributionForm.input).toEditorState();
+      return new GuesstimateForm(guesstimateForm.input).toEditorState();
     }
 }
 
 export const canvasStateSelector = createSelector(
-  distributionFormSelector,
-  (distributionForm) => {
+  guesstimateFormSelector,
+  (guesstimateForm) => {
     return {
-      canvasState: chooseCanvasState(distributionForm)
+      canvasState: chooseCanvasState(guesstimateForm)
     };
   }
 );

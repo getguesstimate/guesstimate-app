@@ -55,15 +55,12 @@ let MetricSelected = React.createClass({
     }
     e.stopPropagation()
   },
-  _handleChange(values) {
-    this.props.handleChange(values)
-  },
   render () {
     return (
       <div className='metric grid-item-focus' onKeyDown={this._handlePress} tabIndex='0'>
          <div className='row row1'>
           <div className='col-sm-9 median' >
-            <GuesstimateForm value={this.props.metric.value} onSubmit={this._handleChange}/>
+            <GuesstimateForm value={this.props.metric.guesstimate.input} onSubmit={this.props.onGuesstimateInputChange}/>
           </div>
           <div className='col-sm-3'>
             <Button bsStyle='default' onClick={this.props.onRemove}> x </Button>
@@ -71,7 +68,7 @@ let MetricSelected = React.createClass({
          </div>
          <div className='row row2'>
            <div className='col-sm-9 name'>
-            <BasicInput name="name" value={this.props.metric.name} onChange={this._handleChange}/>
+            <BasicInput name="name" value={this.props.metric.name} onChange={this.props.onNameChange}/>
            </div>
          </div>
       </div>
