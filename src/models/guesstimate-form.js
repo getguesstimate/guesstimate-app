@@ -1,6 +1,6 @@
 import FunctionForm from './function-form';
 
-class EstimateForm{
+export class EstimateForm{
   constructor(state){
     this.state = state;
   }

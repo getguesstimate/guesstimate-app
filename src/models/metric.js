@@ -21,7 +21,7 @@ class Metric{
     this.state = state;
     this.metrics = metrics;
   }
-  create(id){
+  create(id, location){
     this.state = {
       id: id,
       readableId: '',
@@ -30,7 +30,8 @@ class Metric{
       guesstimate: {
         input: '',
         distribution: {}
-      }
+      },
+      location
     };
   }
   updateName(name){
