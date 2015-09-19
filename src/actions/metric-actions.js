@@ -9,6 +9,6 @@ export function removeMetric(id) {
   return { type: 'REMOVE_METRIC', id};
 }
 
-export function changeMetricName(id, name) {
-  return { type: 'CHANGE_METRIC_NAME', id, name };
+export function changeMetric(id, values) {
+  return { type: 'CHANGE_METRIC', id, values };
 }

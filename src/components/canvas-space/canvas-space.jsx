@@ -17,6 +17,7 @@ function mapStateToProps(state) {
   return {
     selected: state.selection,
     metrics: state.metrics,
+    guesstimates: state.guesstimates,
   }
 }
 
@@ -37,12 +38,13 @@ export default class CanvasSpace extends Component{
     this.props.dispatch(addMetric(location))
   }
   render () {
+    let guesstimate = (m) => { return this.props.guesstimates.filter((g) => { return g.metric === m })[0]}
     return (
       <div className="canvas-space">
         <Grid selected={this.props.selected} handleSelect={this._handleSelect.bind(this)} onAddItem={this._handleAddMetric.bind(this)}>
           {
             this.props.metrics.map((m) => {
-              return (<Metric metric={m} key={m.id} location={m.location} canvasState={this.props.canvasState}/>)
+              return (<Metric metric={m} guesstimate={guesstimate(m.id)} key={m.id} location={m.location} canvasState={this.props.canvasState}/>)
             })
           }
         </Grid>

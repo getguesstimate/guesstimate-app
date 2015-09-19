@@ -18,9 +18,10 @@ export class EstimateForm{
 }
 
 export default class GuesstimateForm{
-  constructor(state, metrics = []){
+  constructor(state, metrics = [], guesstimates = []){
     this.metrics = metrics;
     this.state = state;
+    this.guesstimates = guesstimates;
     this.guesstimate = this._guesstimate();
   }
   toJSON(){
@@ -38,7 +39,7 @@ export default class GuesstimateForm{
   }
   _guesstimate(){
     if (this._isFunction()) {
-      return new FunctionForm(this.state, this.metrics);
+      return new FunctionForm(this.state, this.metrics, this.guesstimates);
     } else if (this._isEstimate) {
       return new EstimateForm(this.state);
     }

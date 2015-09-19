@@ -10,7 +10,7 @@ class GuesstimateForm extends React.Component{
     this.state = {userInput: this.props.value || ''};
   }
   componentWillUnmount() {
-    this._handleBlur()
+    this._submit()
   }
   _handleMetricClick(item){
     let newInput = this.state.userInput + item.readableId
@@ -21,11 +21,18 @@ class GuesstimateForm extends React.Component{
     this.props.dispatch(createGuesstimateForm(this._value()))
   }
   _handleBlur() {
+    this._submit()
+  }
+  _submit() {
     $(window).off('functionMetricClicked')
     this.props.dispatch(destroyGuesstimateForm());
-    this.props.onSubmit(this._value());
+    if (this.props.value !== this.state.userInput){
+      console.log('_submit', this.props.guesstimateForm )
+      this.props.onSubmit(this.props.guesstimateForm);
+    }
   }
   _handlePress(event) {
+    console.log('press', event)
     let value = event.target.value;
     this.setState({userInput: value});
     this.props.dispatch(updateGuesstimateForm(value));

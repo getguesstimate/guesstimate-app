@@ -5,13 +5,6 @@ let initialMetrics = [
     id: '238jd',
     readableId: 'CO',
     name: 'cowboys',
-    guesstimate: {
-      input: '= BA + PO + 2',
-      distribution: {
-        mean: 100,
-        stdev: 4
-      },
-    },
     location: {
       column: 3,
       row: 3
@@ -21,13 +14,6 @@ let initialMetrics = [
     id: '8sdjf8sjdf',
     readableId: 'BA',
     name: 'Batmen',
-    guesstimate: {
-      input: '32/3',
-      distribution: {
-        mean: 32,
-        stdev: 3
-      },
-    },
     location: {
       column: 1,
       row: 1
@@ -37,30 +23,21 @@ let initialMetrics = [
     id: '238ioji',
     readableId: 'PO',
     name: 'police',
-    guesstimate: {
-      input: '100/4',
-      distribution: {
-        mean: 100,
-        stdev: 4
-      },
-    },
     location: {
       column: 2,
       row: 2
     }
-  },
+  }
 ]
 
 export default function metrics(state = initialMetrics, action) {
   switch (action.type) {
   case 'ADD_METRIC':
-    return (new Metrics(state)).add({location: action.location, id: action.id}).state
+    return (new Metrics(state)).create({id: action.id, location: action.location}).state;
   case 'REMOVE_METRIC':
-    return (new Metrics(state)).remove(action.id).state
-  case 'CHANGE_METRIC_NAME':
-    return (new Metrics(state)).changeMetricName(action.id, action.name).state;
-  case 'CHANGE_GUESSTIMATE_INPUT':
-    return (new Metrics(state)).changeGuesstimateInput(action.id, action.input).state;
+    return (new Metrics(state)).remove(action.id).state;
+  case 'CHANGE_METRIC':
+    return (new Metrics(state)).change(action.id, action.values).state;
   default:
     return state
   }

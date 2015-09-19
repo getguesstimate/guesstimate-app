@@ -1,4 +1,3 @@
-import Guesstimate from './guesstimate.js';
 import AmpersandState from 'ampersand-state'
 
 let validName = (name) => { return name.length >= 3; };

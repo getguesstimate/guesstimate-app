@@ -12,14 +12,19 @@ export default class Metrics{
   get(id){
     return this.state.filter(function(i) {return i.id === id})[0]
   }
-  add(values){
+  create(values){
     let newModel = new Metric(values);
-    this.state = [...this.state, newModel]
-    return this
+    this._add(newModel.toStore());
+    return this;
   }
   change(id, values){
     let metric = new Metric(this.get(id));
-    return this.remove(id).add(metric.set(values).toStore());
+    this.remove(id)._add(metric.set(values).toStore());
+    return this;
+  }
+  _add(newModel){
+    this.state = [...this.state, newModel];
+    return this;
   }
 }
 
