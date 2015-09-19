@@ -58,7 +58,9 @@ export default function metrics(state = initialMetrics, action) {
   case 'REMOVE_METRIC':
     return (new Metrics(state)).remove(action.id).state
   case 'CHANGE_METRIC_NAME':
-    return (new Metrics(state)).update(action.id, {name: action.name}).state
+    return (new Metrics(state)).changeMetricName(action.id, action.name).state;
+  case 'CHANGE_GUESSTIMATE_INPUT':
+    return (new Metrics(state)).changeGuesstimateInput(action.id, action.input).state;
   default:
     return state
   }
