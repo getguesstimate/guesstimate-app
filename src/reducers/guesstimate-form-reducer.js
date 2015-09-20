@@ -4,7 +4,8 @@ export default function guesstimateForm(state = {}, metrics, guesstimates, actio
   let form = null
   switch (action.type) {
   case 'CREATE_GUESSTIMATE_FORM':
-    return {}
+    form = new GuesstimateForm(action.value, metrics, guesstimates);
+    return form.toJSON();
   case 'DESTROY_GUESSTIMATE_FORM':
     return {}
   return { type: 'ADD_METRIC_INPUT_TO_EDITING_METRIC', metric};

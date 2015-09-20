@@ -11,10 +11,10 @@ let initialGuesstimates = [
   },
   {
     metric: '8sdjf8sjddf',
-    input: '0.8/0.2',
+    input: '20/20',
     distribution: {
-      mean: 32,
-      stdev: 3
+      mean: 20,
+      stdev: 20
     },
   },
   {
@@ -27,7 +27,7 @@ let initialGuesstimates = [
   },
   {
     metric: '238iojib',
-    input: '32/3',
+    input: '=TPY*3',
     distribution: {
       mean: 32,
       stdev: 3

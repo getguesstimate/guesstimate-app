@@ -3,7 +3,7 @@ import Metrics from '../models/metrics'
 let initialMetrics = [
   {
     id: '238jdj',
-    readableId: 'CO',
+    readableId: 'PNYC',
     name: 'People in NYC',
     location: {
       column: 0,
@@ -12,7 +12,7 @@ let initialMetrics = [
   },
   {
     id: '8sdjf8sjddf',
-    readableId: 'BA',
+    readableId: 'PA',
     name: 'Percent Attending K-12',
     location: {
       column: 0,
@@ -21,7 +21,7 @@ let initialMetrics = [
   },
   {
     id: '238iojic',
-    readableId: 'PO',
+    readableId: 'TPY',
     name: 'Cost of a Teacher per Year',
     location: {
       column: 1,
@@ -30,7 +30,7 @@ let initialMetrics = [
   },
   {
     id: '238iojib',
-    readableId: 'PO',
+    readableId: 'SPT',
     name: 'Students per Teacher',
     location: {
       column: 0,
@@ -39,7 +39,7 @@ let initialMetrics = [
   },
   {
     id: '238iojia',
-    readableId: 'PO',
+    readableId: 'ASPY',
     name: 'Additional Spending per Student Year',
     location: {
       column: 1,
@@ -48,7 +48,7 @@ let initialMetrics = [
   },
   {
     id: '238iojid',
-    readableId: 'PO',
+    readableId: 'TSSY',
     name: 'Total Spending per Student Year',
     location: {
       column: 2,
@@ -57,7 +57,7 @@ let initialMetrics = [
   },
   {
     id: '238ioji3',
-    readableId: 'PO',
+    readableId: 'TSY',
     name: 'Total Spending per Year',
     location: {
       column: 2,

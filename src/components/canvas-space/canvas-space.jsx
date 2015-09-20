@@ -46,7 +46,6 @@ export default class CanvasSpace extends Component{
   render () {
     let guesstimate = (m) => { return this.props.guesstimates.filter((g) => { return g.metric === m })[0]}
     let size = this.size()
-    console.log(size)
     return (
       <div className="canvas-space">
         <Grid size={size} selected={this.props.selected} handleSelect={this._handleSelect.bind(this)} onAddItem={this._handleAddMetric.bind(this)}>
