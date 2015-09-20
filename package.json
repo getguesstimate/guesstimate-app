@@ -9,7 +9,7 @@
     "build": "webpack",
     "deploy": "surge -p public -d www.gaussian.io",
     "stage": "surge -p public -d gaussian-stage.surge.sh",
-    "stage!": "npm run build && npm run stage",
+    "stage!": "BUILD_DEV=0 npm run build && npm run stage",
     "test": "karma start karma.conf.js"
   },
   "repository": {
