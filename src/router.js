@@ -33,7 +33,7 @@ export default Router.extend({
       <Provider store={store}>
         {() => <SpaceCanvas/>}
       </Provider>
-      { __DEV__ ? 'foobar' : debugpanel}
+      {__DEV__ ? debugpanel : ''}
       </div>,
       document.body)
   },

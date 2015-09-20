@@ -15,8 +15,6 @@ const devStore = compose(
 const regularStore = compose(
   // Enables your middleware:
   applyMiddleware(thunk),
-  // Lets you write ?debug_session=<name> in address bar to persist debug sessions
-  persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/))
 )(createStore);
 
 export default function configureStore() {

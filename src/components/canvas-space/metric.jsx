@@ -10,6 +10,8 @@ import MetricSelected from './metric-selected';
 
 const MetricUnselected = React.createClass({
   render () {
+    console.log(this.props.guesstimate)
+    console.log(this.props.guesstimate.distribution.mean)
     return(
       <div className='metric'>
          <div className='row row1'>
