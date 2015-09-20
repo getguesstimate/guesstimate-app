@@ -14,7 +14,7 @@ export default React.createClass({
     return {
       size: {
         columns: 6,
-        rows: 20
+        rows: 8
       }
     };
   },

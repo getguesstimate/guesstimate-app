@@ -1,6 +1,10 @@
 $icon-font-path = '../../node_modules/bootstrap-styl/fonts/'
 @import '../../node_modules/bootstrap-styl/stylus/bootstrap'
 
+body
+  background: #EEEEEE
+  font-family: Lato;
+
 .react-d3-histogram__bar rect
   fill: steelblue;
   shape-rendering: crispEdges;
@@ -49,6 +53,12 @@ h1
 
 .navbar
   margin-bottom 0
+  border-radius 0
+  border none
+  background #CBCED5
+  .navbar-brand
+    font-family: Lato;
+    color #41444E
 
 .repo-component.row
   margin-right 0

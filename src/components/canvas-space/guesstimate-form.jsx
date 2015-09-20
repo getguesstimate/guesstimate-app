@@ -27,12 +27,10 @@ class GuesstimateForm extends React.Component{
     $(window).off('functionMetricClicked')
     this.props.dispatch(destroyGuesstimateForm());
     if (this.props.value !== this.state.userInput){
-      console.log('_submit', this.props.guesstimateForm )
       this.props.onSubmit(this.props.guesstimateForm);
     }
   }
   _handlePress(event) {
-    console.log('press', event)
     let value = event.target.value;
     this.setState({userInput: value});
     this.props.dispatch(updateGuesstimateForm(value));
@@ -41,17 +39,17 @@ class GuesstimateForm extends React.Component{
     return ReactDOM.findDOMNode(this.refs.input).value
   }
   render() {
-    let mean = _.get(this.props, 'guesstimateForm.distribution.mean')
+    let mean = _.get(this.props, 'guesstimateForm.distribution.mean') || this.props.guesstimate.mean
     return(
       <div>
-    <input type="text"
-      ref='input'
-      placeholder={'value'}
-      value={this.state.userInput}
-      onBlur={this._handleBlur.bind(this)}
-      onFocus={this._handleFocus.bind(this)}
-      onChange={this._handlePress.bind(this)}
-    />
+      <input type="text"
+        ref='input'
+        placeholder={'value'}
+        value={this.state.userInput}
+        onBlur={this._handleBlur.bind(this)}
+        onFocus={this._handleFocus.bind(this)}
+        onChange={this._handlePress.bind(this)}
+      />
     {mean}
     </div>
     )

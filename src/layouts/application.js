@@ -34,7 +34,7 @@ const Header = React.createClass({
         <div className={containerClass}>
           <div className="row">
             <div className="navbar-header col-xs-8">
-              <a className="navbar-brand" href="/">Guesstimate.io</a>
+              <a className="navbar-brand" href="/">Guesstimate</a>
             </div>
             <div className="col-xs-4">
               <div className="repo-list pull-right">

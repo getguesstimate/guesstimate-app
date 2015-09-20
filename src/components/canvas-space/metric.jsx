@@ -10,8 +10,6 @@ import MetricSelected from './metric-selected';
 
 const MetricUnselected = React.createClass({
   render () {
-    console.log(this.props.guesstimate)
-    console.log(this.props.guesstimate.distribution.mean)
     return(
       <div className='metric'>
          <div className='row row1'>
@@ -22,9 +20,6 @@ const MetricUnselected = React.createClass({
          <div className='row row2'>
            <div className='col-sm-8 name'>
            {this.props.metric.name}
-           </div>
-           <div className='col-sm-2 median'>
-           {this.props.guesstimate && this.props.guesstimate.distribution.mean}
            </div>
            <div className='col-sm-2 function-id'>
              {this.props.canvasState == 'function' ? (<Label bsStyle="success">{this.props.metric.readableId}</Label>) : ''}
@@ -40,7 +35,6 @@ const Metric = React.createClass({
     this.props.dispatch(changeMetric(this._id(), values))
   },
   handleChangeGuesstimate(values) {
-    console.log('handling change guesstimate?')
     this.props.dispatch(changeGuesstimate(this._id(), values))
   },
   handleRemoveMetric () {
@@ -63,6 +57,7 @@ const Metric = React.createClass({
       <MetricSelected
         metric={this.props.metric}
         guesstimate={this.props.guesstimate}
+        canvasState={this.props.canvasState}
         onRemoveMetric={this.handleRemoveMetric}
         gridKeyPress={this.props.gridKeyPress}
         onChangeMetric={this.handleChangeMetric}
