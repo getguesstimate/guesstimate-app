@@ -18,16 +18,16 @@ class MetricUnselected extends Component{
     )
     return(
       <div className='metric'>
-         <div className='row row1'>
-           <div className='col-sm-12 median'>
-             {this.props.guesstimate.distribution.mean}
-           </div>
-         </div>
          <div className='row'>
            <div className={this.props.canvasState == 'function' ? 'col-sm-8' : 'col-sm-12'}>
              {this.props.metric.name}
            </div>
            {this.props.canvasState == 'function' ? tag : ''}
+         </div>
+         <div className='row row1'>
+           <div className='col-sm-12 median'>
+             {this.props.guesstimate.distribution.mean}
+           </div>
          </div>
       </div>
     )
