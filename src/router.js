@@ -9,7 +9,6 @@ import Layout from './layouts/application'
 
 import { Provider } from 'react-redux';
 import todoApp from './reducers';
-import SpaceCanvas from 'components/canvas-space/canvas-space'
 import {createStore} from 'redux'
 import configureStore from './stores/configureStore.js'
 
@@ -31,7 +30,7 @@ export default Router.extend({
     ReactDOM.render(
       <div>
       <Provider store={store}>
-        {() => <SpaceCanvas/>}
+        {() => fullPage}
       </Provider>
       {__DEV__ ? debugpanel : ''}
       </div>,

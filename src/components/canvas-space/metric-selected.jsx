@@ -13,14 +13,12 @@ const BasicInput = React.createClass({
     };
   },
   componentWillUnmount() {
-    console.log('unmounting')
     this._handleSubmit();
   },
   _handleChange() {
     this.setState({ value: this.refs.input.getValue()});
   },
   _handleBlur(){
-    console.log('blurring')
     this._handleSubmit();
   },
   _handleSubmit(){
@@ -64,7 +62,7 @@ let MetricSelected = React.createClass({
       <div className='metric grid-item-focus' onKeyDown={this._handlePress} tabIndex='0'>
          <div className='row row1'>
           <div className='col-sm-9 median' >
-            <GuesstimateForm value={this.props.guesstimate.input} onSubmit={this.props.onChangeGuesstimate}/>
+            <GuesstimateForm value={this.props.guesstimate.input} guesstimate={this.props.guesstimate} onSubmit={this.props.onChangeGuesstimate}/>
           </div>
           <div className='col-sm-3'>
             <Button bsStyle='default' onClick={this.props.onRemoveMetric}> x </Button>

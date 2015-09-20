@@ -18,7 +18,6 @@ export default class Guesstimates{
   }
   change(metricId, values){
     let metric = new Guesstimate(this.get(metricId));
-    debugge
     this.remove(metricId)._add(metric.set(values).toStore());
     return this;
   }
