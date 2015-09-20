@@ -2,30 +2,66 @@ import Metrics from '../models/metrics'
 
 let initialMetrics = [
   {
-    id: '238jd',
+    id: '238jdj',
     readableId: 'CO',
-    name: 'cowboys',
+    name: 'People in NYC',
     location: {
-      column: 3,
-      row: 3
+      column: 0,
+      row: 0
     }
   },
   {
-    id: '8sdjf8sjdf',
+    id: '8sdjf8sjddf',
     readableId: 'BA',
-    name: 'Batmen',
+    name: 'Percent Attending K-12',
+    location: {
+      column: 0,
+      row: 1
+    }
+  },
+  {
+    id: '238iojic',
+    readableId: 'PO',
+    name: 'Cost of a Teacher per Year',
     location: {
       column: 1,
       row: 1
     }
   },
   {
-    id: '238ioji',
+    id: '238iojib',
     readableId: 'PO',
-    name: 'police',
+    name: 'Students per Teacher',
+    location: {
+      column: 0,
+      row: 2
+    }
+  },
+  {
+    id: '238iojia',
+    readableId: 'PO',
+    name: 'Additional Spending per Student Year',
+    location: {
+      column: 1,
+      row: 2
+    }
+  },
+  {
+    id: '238iojid',
+    readableId: 'PO',
+    name: 'Total Spending per Student Year',
     location: {
       column: 2,
       row: 2
+    }
+  },
+  {
+    id: '238ioji3',
+    readableId: 'PO',
+    name: 'Total Spending per Year',
+    location: {
+      column: 2,
+      row: 3
     }
   }
 ]
