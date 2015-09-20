@@ -1,7 +1,19 @@
 import math from 'mathjs';
+import _ from 'lodash'
 
 let metricId = (m) => { return m.readableId };
 let metricMean = (m) => { return m.guesstimate.distribution.mean };
+
+export function mGuesstimate(metric, guesstimates) {
+  return guesstimates.find(g => g.metric === metric.id);
+}
+
+export function deNormalize(metrics, guesstimates) {
+  return metrics.map( m => {
+    let foo = Object.assign({}, m, {guesstimate: mGuesstimate(m, guesstimates)})
+    return foo
+  })
+};
 
 export function inputMetrics(str, metrics) {
   return metrics.filter((m) => { return str.includes(m.readableId)});
@@ -11,7 +23,6 @@ export function replaceReadableIdsWithMeans(str, metrics) {
   let tmpStr = str;
   for (let metric of metrics) {
     tmpStr = tmpStr.replace(metricId(metric), metricMean(metric));
-    //console.log(tmpStr, metricId(metric), metricMean(metric))
   }
   return tmpStr;
 }
@@ -19,8 +30,7 @@ export function replaceReadableIdsWithMeans(str, metrics) {
 export default class FunctionForm{
   constructor(state, metrics = [], guesstimates = []){
     this.state = state;
-    this.metrics = metrics;
-    this.guesstimates = guesstimates;
+    this.metrics = deNormalize(metrics, guesstimates);
   }
   isValid(){
     let isFunction = () => { return this.state[0] === '='; };

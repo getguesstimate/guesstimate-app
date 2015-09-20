@@ -5,7 +5,7 @@ export default AmpersandState.extend({
     metric: 'string',
     input: ['string', true],
     distribution: {
-      mean: 'number',
+      mean: ['number', true, 0],
       stdev: 'number'
     }
   },

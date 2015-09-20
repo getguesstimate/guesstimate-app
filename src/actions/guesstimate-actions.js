@@ -1,4 +1,3 @@
 export function changeGuesstimate(id, values) {
-  console.log('action', id, values)
-  return { type: 'CHANGE_GUESSTIMATER', id, values };
+  return { type: 'CHANGE_GUESSTIMATE', id, values };
 }
