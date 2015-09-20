@@ -1,15 +1,21 @@
-import React from 'react'
+import React, {Component, PropTypes} from 'react'
 import Button from 'react-bootstrap/lib/Button'
 import Label from 'react-bootstrap/lib/Label'
 import _ from 'lodash'
+import ReactFitText from 'react-fittext'
 
 import { connect } from 'react-redux';
 import { removeMetric, changeMetric } from '../../actions/metric-actions.js';
 import { changeGuesstimate } from '../../actions/guesstimate-actions.js';
 import MetricSelected from './metric-selected';
 
-const MetricUnselected = React.createClass({
+class MetricUnselected extends Component{
   render () {
+    let tag = (
+     <div className='col-sm-2 function-id'>
+       {this.props.canvasState == 'function' ? (<Label bsStyle="success">{this.props.metric.readableId}</Label>) : ''}
+     </div>
+    )
     return(
       <div className='metric'>
          <div className='row row1'>
@@ -17,18 +23,16 @@ const MetricUnselected = React.createClass({
              {this.props.guesstimate.distribution.mean}
            </div>
          </div>
-         <div className='row row2'>
-           <div className='col-sm-8 name'>
-           {this.props.metric.name}
+         <div className='row'>
+           <div className={this.props.canvasState == 'function' ? 'col-sm-8' : 'col-sm-12'}>
+             {this.props.metric.name}
            </div>
-           <div className='col-sm-2 function-id'>
-             {this.props.canvasState == 'function' ? (<Label bsStyle="success">{this.props.metric.readableId}</Label>) : ''}
-           </div>
+           {this.props.canvasState == 'function' ? tag : ''}
          </div>
       </div>
     )
   }
-})
+}
 
 const Metric = React.createClass({
   handleChangeMetric(values) {
