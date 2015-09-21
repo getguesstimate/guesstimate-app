@@ -9,6 +9,11 @@ import { removeMetric, changeMetric } from '../../actions/metric-actions.js';
 import { changeGuesstimate } from '../../actions/guesstimate-actions.js';
 import MetricSelected from './metric-selected';
 import DistributionSummary from './distribution-summary'
+import GuesstimateForm from './guesstimate-form'
+import addons from "react/addons";
+let {addons: {CSSTransitionGroup}} = addons;
+let ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+
 
 class MetricUnselected extends Component{
   format(n){
@@ -32,7 +37,7 @@ class MetricUnselected extends Component{
            {this.props.canvasState == 'function' ? tag : ''}
          </div>
          <div className='row row1'>
-           <div className='col-sm-12 median'>
+           <div className='col-sm-12 mean'>
              <DistributionSummary distribution={this.props.guesstimate && this.props.guesstimate.distribution}/>
            </div>
          </div>
@@ -40,6 +45,21 @@ class MetricUnselected extends Component{
     )
   }
 }
+
+class EditingPane extends Component {
+  render() {
+    return (
+      <ReactCSSTransitionGroup transitionEnterTimeout={500} transitionName='carousel' transitionAppear={true}>
+      <div>
+        <div className='editing-section'>
+          <GuesstimateForm value={this.props.guesstimate.input} guesstimate={this.props.guesstimate} guesstimateForm={this.props.guesstimateForm} onSubmit={this.props.onChangeGuesstimate}/>
+          <p> Change to either a function or a distribution </p>
+        </div>
+        </div>
+      </ReactCSSTransitionGroup>
+    )
+  }
+};
 
 const Metric = React.createClass({
   handleChangeMetric(values) {
@@ -68,18 +88,29 @@ const Metric = React.createClass({
       <MetricSelected
         metric={this.props.metric}
         guesstimate={this.props.guesstimate}
+        guesstimateForm={this.props.guesstimateForm}
         canvasState={this.props.canvasState}
         onRemoveMetric={this.handleRemoveMetric}
         gridKeyPress={this.props.gridKeyPress}
         onChangeMetric={this.handleChangeMetric}
-        onChangeGuesstimate={this.handleChangeGuesstimate}
       />
     )
   },
   render () {
     let metricType = this.props.isSelected ?  this.editView() : this.regularView()
-    return (metricType)
+    return (
+      <div>
+      {metricType}
+      {this.props.isSelected ? <EditingPane onChangeGuesstimate={this.handleChangeGuesstimate} guesstimate={this.props.guesstimate} guesstimateForm={this.props.guesstimateForm}/> : ''}
+      </div>
+    )
   }
 })
 
-module.exports = connect()(Metric);
+function select(state) {
+  return {
+    guesstimateForm: state.guesstimateForm
+  }
+}
+
+module.exports = connect(select)(Metric);

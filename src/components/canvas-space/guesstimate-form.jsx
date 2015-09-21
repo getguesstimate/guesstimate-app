@@ -40,6 +40,7 @@ function insertAtCaret(areaId,text) {
     txtarea.scrollTop = scrollPos;
 }
 
+window.jquery = $
 class GuesstimateForm extends React.Component{
   constructor(props) {
     super(props);
@@ -47,6 +48,8 @@ class GuesstimateForm extends React.Component{
   }
   componentWillUnmount() {
     this._submit()
+  }
+  componentDidMount() {
   }
   _handleMetricClick(item){
     insertAtCaret('live-input', item.readableId)
@@ -78,39 +81,18 @@ class GuesstimateForm extends React.Component{
     return ReactDOM.findDOMNode(this.refs.input).value
   }
   render() {
-    let showDistribution = !_.isEmpty(this.props.guesstimateForm) ? this.props.guesstimateForm.distribution : this.props.guesstimate.distribution
-    if (this.props.guesstimateForm === undefined || this.props.guesstimateForm === null) {
-
-    }
     return(
-      <div>
-         <div className='row row1'>
-           <div className='col-sm-12 median'>
-           <DistributionSummary distribution={showDistribution}/>
-           </div>
-         </div>
-         <div className='row'>
-            <div className='col-sm-12 median' >
-              <input type="text"
-                id="live-input"
-                ref='input'
-                placeholder={'value'}
-                value={this.state.userInput}
-                onBlur={this._handleBlur.bind(this)}
-                onFocus={this._handleFocus.bind(this)}
-                onChange={this._handlePress.bind(this)}
-              />
-            </div>
-         </div>
-    </div>
+      <input type="text"
+        id="live-input"
+        ref='input'
+        placeholder={'value'}
+        value={this.state.userInput}
+        onBlur={this._handleBlur.bind(this)}
+        onFocus={this._handleFocus.bind(this)}
+        onChange={this._handlePress.bind(this)}
+      />
     )
   }
 }
 
-function select(state) {
-  return {
-    guesstimateForm: state.guesstimateForm
-  }
-}
-
-module.exports = connect(select)(GuesstimateForm);
+module.exports = connect()(GuesstimateForm);
