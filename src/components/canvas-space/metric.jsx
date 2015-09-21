@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { removeMetric, changeMetric } from '../../actions/metric-actions.js';
 import { changeGuesstimate } from '../../actions/guesstimate-actions.js';
 import MetricSelected from './metric-selected';
-import numeral from 'numeral'
+import DistributionSummary from './distribution-summary'
 
 class MetricUnselected extends Component{
   format(n){
@@ -26,18 +26,14 @@ class MetricUnselected extends Component{
     return(
       <div className='metric'>
          <div className='row'>
-           <div className={this.props.canvasState == 'function' ? 'col-sm-8' : 'col-sm-12'}>
+           <div className={this.props.canvasState == 'function' ? 'col-sm-8 name' : 'col-sm-12 name'}>
              {this.props.metric.name}
            </div>
            {this.props.canvasState == 'function' ? tag : ''}
          </div>
          <div className='row row1'>
            <div className='col-sm-12 median'>
-             {this.format(_.get(this, 'props.guesstimate.distribution.mean'))}
-             <span className='stdev'>
-               ±
-               {this.format(_.get(this, 'props.guesstimate.distribution.stdev'))}
-               </span>
+             <DistributionSummary distribution={this.props.guesstimate && this.props.guesstimate.distribution}/>
            </div>
          </div>
       </div>

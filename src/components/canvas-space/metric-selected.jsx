@@ -1,10 +1,11 @@
 import React, {Component, PropTypes} from 'react';
 import ReactDOM from 'react-dom'
 import {connectReduxForm} from 'redux-form';
-
 import Button from 'react-bootstrap/lib/Button'
 import Input from 'react-bootstrap/lib/Input'
 import GuesstimateForm from './guesstimate-form'
+import DistributionSummary from './distribution-summary'
+import $ from 'jquery'
 
 const BasicInput = React.createClass({
   getInitialState() {
@@ -65,11 +66,7 @@ let MetricSelected = React.createClass({
             <BasicInput name="name" value={this.props.metric.name} onChange={this.props.onChangeMetric}/>
            </div>
          </div>
-         <div className='row row1'>
-            <div className='col-sm-12 median' >
-              <GuesstimateForm value={this.props.guesstimate.input} guesstimate={this.props.guesstimate} onSubmit={this.props.onChangeGuesstimate}/>
-            </div>
-         </div>
+          <GuesstimateForm value={this.props.guesstimate.input} guesstimate={this.props.guesstimate} onSubmit={this.props.onChangeGuesstimate}/>
       </div>
     )
   }
