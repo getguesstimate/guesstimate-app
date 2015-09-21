@@ -28,11 +28,14 @@ export default class Cell extends React.Component {
     this.props.gridKeyPress(e)
   }
   _handleClick = (e) => {
-    if (!this.props.isSelected) {
-      this.props.handleSelect(e, this.props.location, this.props.item)
-    } else {
-      if (!this.props.item) {
-        this.props.onAddItem(this.props.location)
+    // must be left click
+    if (e.button === 0){
+      if (!this.props.isSelected) {
+        this.props.handleSelect(e, this.props.location, this.props.item)
+      } else {
+        if (!this.props.item) {
+          this.props.onAddItem(this.props.location)
+        }
       }
     }
   }

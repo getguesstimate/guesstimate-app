@@ -2,7 +2,9 @@ import React, {Component, PropTypes} from 'react';
 import ReactDOM from 'react-dom'
 import { connect } from 'react-redux';
 import { createGuesstimateForm, destroyGuesstimateForm, updateGuesstimateForm, addMetricInputToGuesstimateForm } from '../../actions/guesstimate-form-actions'
+import DistributionSummary from './distribution-summary'
 import $ from 'jquery'
+import _ from 'lodash'
 
 function insertAtCaret(areaId,text) {
     var txtarea = document.getElementById(areaId);
@@ -76,19 +78,30 @@ class GuesstimateForm extends React.Component{
     return ReactDOM.findDOMNode(this.refs.input).value
   }
   render() {
-    let mean = _.get(this.props, 'guesstimateForm.distribution.mean') || this.props.guesstimate.mean
+    let showDistribution = !_.isEmpty(this.props.guesstimateForm) ? this.props.guesstimateForm.distribution : this.props.guesstimate.distribution
+    if (this.props.guesstimateForm === undefined || this.props.guesstimateForm === null) {
+
+    }
     return(
       <div>
-      <input type="text"
-        id="live-input"
-        ref='input'
-        placeholder={'value'}
-        value={this.state.userInput}
-        onBlur={this._handleBlur.bind(this)}
-        onFocus={this._handleFocus.bind(this)}
-        onChange={this._handlePress.bind(this)}
-      />
-    {mean}
+         <div className='row row1'>
+           <div className='col-sm-12 median'>
+           <DistributionSummary distribution={showDistribution}/>
+           </div>
+         </div>
+         <div className='row'>
+            <div className='col-sm-12 median' >
+              <input type="text"
+                id="live-input"
+                ref='input'
+                placeholder={'value'}
+                value={this.state.userInput}
+                onBlur={this._handleBlur.bind(this)}
+                onFocus={this._handleFocus.bind(this)}
+                onChange={this._handlePress.bind(this)}
+              />
+            </div>
+         </div>
     </div>
     )
   }
