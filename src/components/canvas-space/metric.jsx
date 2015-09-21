@@ -12,8 +12,10 @@ import numeral from 'numeral'
 
 class MetricUnselected extends Component{
   format(n){
-    let value = parseFloat(n);
-    return numeral(value).format('0.0a')
+    if (n) {
+      let value = parseFloat(n);
+      return numeral(value).format('0.0a')
+    }
   }
   render () {
     let tag = (
@@ -31,10 +33,10 @@ class MetricUnselected extends Component{
          </div>
          <div className='row row1'>
            <div className='col-sm-12 median'>
-             {this.format(this.props.guesstimate.distribution.mean)}
+             {this.format(_.get(this, 'props.guesstimate.distribution.mean'))}
              <span className='stdev'>
                ±
-               {this.format(this.props.guesstimate.distribution.stdev)}
+               {this.format(_.get(this, 'props.guesstimate.distribution.stdev'))}
                </span>
            </div>
          </div>
