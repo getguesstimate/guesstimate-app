@@ -59,6 +59,7 @@ let MetricSelected = React.createClass({
     e.stopPropagation()
   },
   render () {
+    let showDistribution = !_.isEmpty(this.props.guesstimateForm) ? this.props.guesstimateForm : this.props.guesstimate
     return (
       <div className='metric grid-item-focus' onKeyDown={this._handlePress} tabIndex='0'>
          <div className='row row2'>
@@ -66,7 +67,11 @@ let MetricSelected = React.createClass({
             <BasicInput name="name" value={this.props.metric.name} onChange={this.props.onChangeMetric}/>
            </div>
          </div>
-          <GuesstimateForm value={this.props.guesstimate.input} guesstimate={this.props.guesstimate} onSubmit={this.props.onChangeGuesstimate}/>
+         <div className='row row1'>
+           <div className='col-sm-12 mean'>
+             <DistributionSummary distribution={showDistribution.distribution}/>
+           </div>
+         </div>
       </div>
     )
   }
