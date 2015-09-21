@@ -69,6 +69,7 @@
     "jquery": "2.1.4",
     "jsdom": "^3.0.0",
     "jsx-loader": "^0.13.2",
+    "lato-font": "^1.1.1",
     "local-links": "^1.4.0",
     "lodash": "^3.10.1",
     "mathjs": "^2.2.0",
