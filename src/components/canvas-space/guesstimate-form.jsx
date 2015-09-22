@@ -5,6 +5,7 @@ import { createGuesstimateForm, destroyGuesstimateForm, updateGuesstimateForm, a
 import DistributionSummary from './distribution-summary'
 import $ from 'jquery'
 import _ from 'lodash'
+import Icon from'react-fa'
 
 function insertAtCaret(areaId,text) {
     var txtarea = document.getElementById(areaId);
@@ -82,6 +83,7 @@ class GuesstimateForm extends React.Component{
   }
   render() {
     return(
+      <div>
       <input type="text"
         id="live-input"
         ref='input'
@@ -91,6 +93,7 @@ class GuesstimateForm extends React.Component{
         onFocus={this._handleFocus.bind(this)}
         onChange={this._handlePress.bind(this)}
       />
+      </div>
     )
   }
 }

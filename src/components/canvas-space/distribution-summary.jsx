@@ -9,14 +9,21 @@ class DistributionSummarySmall extends Component{
       return numeral(value).format('0a');
     }
   }
-  render () {
+  uncertainty() {
     return (
-      <div className="distribution-summary">
-     {this.format(_.get(this, 'props.distribution.mean'))}
      <span className='stdev'>
-       ±
+     {_.isUndefined(this, 'props.distribution.stdev') ? '' : '±'}
      {this.format(_.get(this, 'props.distribution.stdev'))}
      </span>
+    )
+  }
+  render () {
+    let stdev = this.props.distribution.stdev
+    let hasUncertainty = !_.isUndefined(stdev) && (stdev !== 0)
+    return (
+      <div className="distribution-summary">
+       {this.format(_.get(this, 'props.distribution.mean'))}
+       {hasUncertainty ? this.uncertainty() : '' }
      </div>
     )
   }

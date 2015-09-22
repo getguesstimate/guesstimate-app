@@ -15,7 +15,7 @@ export default React.createClass({
       <div className='container-fluid'>
         <div className='row'>
           <div className='col-sm-10'>
-            <h2> oagr/boston-pianao-population </h2>
+            <h2> oagr/boston-piano-population </h2>
           </div>
         </div>
       </div>
