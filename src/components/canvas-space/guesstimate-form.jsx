@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import ReactDOM from 'react-dom'
 import { connect } from 'react-redux';
-import { createGuesstimateForm, destroyGuesstimateForm, updateGuesstimateForm, addMetricInputToGuesstimateForm } from '../../actions/guesstimate-form-actions'
+import { createGuesstimateForm, destroyGuesstimateForm, updateGuesstimateForm, changeGuesstimateForm, addMetricInputToGuesstimateForm } from '../../actions/guesstimate-form-actions'
 import DistributionSummary from './distribution-summary'
 import $ from 'jquery'
 import _ from 'lodash'
@@ -76,7 +76,7 @@ class GuesstimateForm extends React.Component{
   }
   _changeInput(value=this._value()){
     this.setState({userInput: value});
-    this.props.dispatch(updateGuesstimateForm(value));
+    this.props.dispatch(changeGuesstimateForm(value));
   }
   _value() {
     return ReactDOM.findDOMNode(this.refs.input).value

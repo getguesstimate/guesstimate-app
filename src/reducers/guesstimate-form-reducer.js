@@ -10,8 +10,10 @@ export default function guesstimateForm(state = {}, metrics, guesstimates, actio
     return {}
   return { type: 'ADD_METRIC_INPUT_TO_EDITING_METRIC', metric};
   case 'UPDATE_GUESSTIMATE_FORM':
-    form = new GuesstimateForm(action.value, metrics, guesstimates);
+    form = new GuesstimateForm(action.value, metrics, guesstimates, 5);
     return form.toJSON();
+  case 'CHANGE_GUESSTIMATE_FORM':
+    return action.form;
   case 'ADD_METRIC_INPUT_TO_GUESSTIMATE_FORM':
     let newInput = state.input + action.metric.id;
     form = new GuesstimateForm(newInput, metrics, guesstimates);

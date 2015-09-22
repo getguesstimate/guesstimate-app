@@ -13,6 +13,7 @@ import GuesstimateForm from './guesstimate-form'
 import addons from "react/addons";
 let {addons: {CSSTransitionGroup}} = addons;
 let ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+import Histogram from './histogram'
 
 
 class MetricUnselected extends Component{
@@ -28,8 +29,13 @@ class MetricUnselected extends Component{
        {this.props.canvasState == 'function' ? (<Label bsStyle="success">{this.props.metric.readableId}</Label>) : ''}
      </div>
     )
+    let showDistribution = !_.isEmpty(this.props.guesstimateForm) ? this.props.guesstimateForm : this.props.guesstimate
+    let histogram = (
+      <Histogram data={showDistribution.distribution.samples} width={400} height={60}/>
+    )
     return(
       <div className='metric'>
+        {(showDistribution.distribution && showDistribution.distribution.samples) ? histogram : ''}
          <div className='row'>
            <div className={this.props.canvasState == 'function' ? 'col-sm-8 name' : 'col-sm-12 name'}>
              {this.props.metric.name}
