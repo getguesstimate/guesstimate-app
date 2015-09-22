@@ -2,6 +2,11 @@ var getConfig = require('hjs-webpack')
 var webpack = require('webpack')
 var path = require('path');
 
+var definePlugin = new webpack.DefinePlugin({
+  __DEV__: JSON.stringify(JSON.parse(process.env.BUILD_DEV || 'true')),
+});
+
+
 module.exports = getConfig({
   in: 'src/app.js',
   out: 'public',
@@ -12,7 +17,7 @@ module.exports.node = {
   child_process: 'empty'
 }
 
-if(process.env.NODE_ENV === 'development'){ 
+if(process.env.NODE_ENV === 'development'){
 	module.exports.devServer.host = '0.0.0.0'
 	//uncomment to suppress log output
 	//module.exports.devServer.noInfo = true;
@@ -20,3 +25,5 @@ if(process.env.NODE_ENV === 'development'){
 }
 
 module.exports.resolve.root = path.resolve('./src')
+
+module.exports.plugins = module.exports.plugins.concat(definePlugin)

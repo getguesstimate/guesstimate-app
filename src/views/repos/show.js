@@ -1,7 +1,7 @@
 import React from 'react'
-import GraphEditor from 'components/repo_editor/base'
 import ampersandMixin from 'ampersand-react-mixin'
 import Icon from'react-fa'
+import SpaceCanvas from 'components/canvas-space/canvas-space'
 
 export default React.createClass({
   mixins: [ampersandMixin],
@@ -10,13 +10,16 @@ export default React.createClass({
 
   render () {
     let repo = <Icon spin name="spinner"/>
-    if (app.me.repos.models.length != 0) {
-      let rep = app.me.repos.getByName(this.props.repo)
-      repo = <GraphEditor repo={rep} savable={true} key={this.props.repo} />
-    }
     return (
-      <div className='repo-page'>
-        {repo}
+      <div>
+      <div className='container-fluid'>
+        <div className='row'>
+          <div className='col-sm-10'>
+            <h2> oagr/boston-piano-population </h2>
+          </div>
+        </div>
+      </div>
+      <SpaceCanvas/>
       </div>
     )
   }
