@@ -10,9 +10,12 @@ class DistributionSummarySmall extends Component{
     }
   }
   uncertainty() {
+    console.log(this.props)
+    let distribution = this.props.distribution;
+    let hasStdev = distribution && distribution.stdev;
     return (
      <span className='stdev'>
-     {_.isUndefined(this, 'props.distribution.stdev') ? '' : '±'}
+     {hasStdev ? '±' : ''}
      {this.format(_.get(this, 'props.distribution.stdev'))}
      </span>
     )

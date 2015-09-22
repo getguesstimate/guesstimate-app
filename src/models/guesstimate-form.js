@@ -18,12 +18,14 @@ export class EstimateForm{
         let stdev = (high-mean)
         return {mean, stdev};
       } else {
-        return {mean: null, stdev:0}
+        return {mean: null, stdev:null, errors: ['Estimate: [low]->[high]: High must be greater than low. ']}
       }
     } else if (parseFloat(this.state.toString()).toString() === this.state){
       return {mean: this.state, stdev: 0};
+    } else if (this.state == ''){
+      return {mean: null, stdev: null};
     } else {
-      return {mean: null, stdev: 0}
+      return {mean: null, stdev:0, errors: ['Estimate: Could not parse. Use "/" or "->" symbols.']}
     }
   }
 }

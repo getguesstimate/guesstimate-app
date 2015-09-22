@@ -81,20 +81,29 @@ class GuesstimateForm extends React.Component{
   _value() {
     return ReactDOM.findDOMNode(this.refs.input).value
   }
+  _handleKeyDown(e) {
+    if ((e.which > 96) && (e.which < 123)){
+      e.preventDefault()
+    }
+  }
   render() {
+    let distribution = this.props.guesstimateForm.distribution;
+    let errors = distribution && distribution.errors;
+    let errorPane = <div className='errors'>{errors} </div>
     return(
-      <div>
-      <input type="text"
-        id="live-input"
-        ref='input'
-        placeholder={'value'}
-        value={this.state.userInput}
-        onBlur={this._handleBlur.bind(this)}
-        onFocus={this._handleFocus.bind(this)}
-        onChange={this._handlePress.bind(this)}
-      />
-      </div>
-    )
+      <div className='guesstimate-form'>
+        <input type="text"
+          id="live-input"
+          ref='input'
+          placeholder={'value'}
+          onKeyPress={this._handleKeyDown}
+          value={this.state.userInput}
+          onBlur={this._handleBlur.bind(this)}
+          onFocus={this._handleFocus.bind(this)}
+          onChange={this._handlePress.bind(this)}
+        />
+        {errors ? errorPane : ''}
+      </div>)
   }
 }
 
