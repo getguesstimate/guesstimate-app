@@ -10,19 +10,20 @@ export function mGuesstimate(metric, guesstimates) {
 
 export function deNormalize(metrics, guesstimates) {
   return metrics.map( m => {
-    let foo = Object.assign({}, m, {guesstimate: mGuesstimate(m, guesstimates)})
-    return foo
-  })
-};
+    return Object.assign({}, m, {guesstimate: mGuesstimate(m, guesstimates)});
+  });
+}
 
 export function inputMetrics(str, metrics) {
-  return metrics.filter((m) => { return str.includes(m.readableId)});
+  return metrics.filter((m) => { return str.includes(m.readableId); });
 }
 
 export function replaceReadableIdsWithMeans(str, metrics) {
   let tmpStr = str;
+  let re = null;
   for (let metric of metrics) {
-    tmpStr = tmpStr.replace(metricId(metric), metricMean(metric));
+    re = new RegExp(metricId(metric), 'g');
+    tmpStr = tmpStr.replace(re, metricMean(metric));
   }
   return tmpStr;
 }
@@ -41,16 +42,13 @@ export default class FunctionForm{
     return {funct: {textField: this.state}};
   }
   toDistribution(){
-    return {mean: this.calculate(), stdev: 0};
+    return this.calculate();
   }
   calculate(){
     try {
       return this._calculate();
     } catch (exception) {
-      if (exception.name !== 'SyntaxError'){
-        console.log('calculate unexpected exception', exception);
-      }
-      return false;
+    return {mean: null, stdev: null, errors: [exception.message]};
     }
   }
   _calculate(){
@@ -58,7 +56,7 @@ export default class FunctionForm{
     let shortened = shorten(this.state);
     let replaced = replaceReadableIdsWithMeans(shortened, this._inputs());
     let correct = math.eval(replaced);
-    return correct;
+    return {mean: correct, stdev: 0};
   }
   _inputs(){
     return inputMetrics(this.state, this.metrics);
