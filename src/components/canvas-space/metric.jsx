@@ -47,15 +47,23 @@ class MetricUnselected extends Component{
 }
 
 class EditingPane extends Component {
+  _handlePress(e) {
+    e.stopPropagation()
+  }
   render() {
     return (
       <ReactCSSTransitionGroup transitionEnterTimeout={500} transitionName='carousel' transitionAppear={true}>
-      <div>
-        <div className='editing-section'>
-          <GuesstimateForm value={this.props.guesstimate.input} guesstimate={this.props.guesstimate} guesstimateForm={this.props.guesstimateForm} onSubmit={this.props.onChangeGuesstimate}/>
-          <p> Change to either a function or a distribution </p>
+      <div className='editing-section'>
+        <div className='row'>
+          <div onKeyDown={this._handlePress} className='col-xs-12'>
+            <GuesstimateForm value={this.props.guesstimate.input} guesstimate={this.props.guesstimate} guesstimateForm={this.props.guesstimateForm} onSubmit={this.props.onChangeGuesstimate}/>
+          </div>
         </div>
+        <div className='row'>
+          <div className='col-xs-12'>
+          </div>
         </div>
+      </div>
       </ReactCSSTransitionGroup>
     )
   }

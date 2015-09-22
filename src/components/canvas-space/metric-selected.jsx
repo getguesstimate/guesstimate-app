@@ -63,7 +63,7 @@ let MetricSelected = React.createClass({
     return (
       <div className='metric grid-item-focus' onKeyDown={this._handlePress} tabIndex='0'>
          <div className='row row2'>
-           <div className='col-sm-9 name'>
+           <div className='col-sm-12 name'>
             <BasicInput name="name" value={this.props.metric.name} onChange={this.props.onChangeMetric}/>
            </div>
          </div>

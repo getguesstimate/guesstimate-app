@@ -11,8 +11,19 @@ export class EstimateForm{
     if (this.state.includes('/')){
       let [mean, stdev] = this.state.split('/').map((e) => parseFloat(e.trim()));
       return {mean, stdev};
+    } else if (this.state.includes('->')){
+      let [low, high] = this.state.split('->').map((e) => parseFloat(e.trim()));
+      if (parseFloat(high) > parseFloat(low)){
+        let mean = low + ((high - low) / 2)
+        let stdev = (high-mean)
+        return {mean, stdev};
+      } else {
+        return {mean: null, stdev:0}
+      }
+    } else if (parseFloat(this.state.toString()).toString() === this.state){
+      return {mean: this.state, stdev: 0};
     } else {
-      return false;
+      return {mean: null, stdev: 0}
     }
   }
 }

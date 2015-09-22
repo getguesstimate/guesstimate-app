@@ -3,7 +3,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import $ from 'jquery'
-
+import _ from 'lodash'
 let GRID_ITEM_FOCUS_CLASS = '.grid-item-focus'
 
 export default class Cell extends React.Component {
@@ -11,7 +11,7 @@ export default class Cell extends React.Component {
     this._focus()
   }
   componentDidUpdate = (prevProps, _) => {
-    if (prevProps.isSelected == false){
+    if (prevProps.isSelected == false || !this.props.item){
       this._focus()
     }
   }
