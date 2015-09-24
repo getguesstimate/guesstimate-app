@@ -7,23 +7,28 @@ var definePlugin = new webpack.DefinePlugin({
 });
 
 
-module.exports = getConfig({
+var cfg = getConfig({
   in: 'src/app.js',
   out: 'public',
   clearBeforeBuild: true,
 });
 
-module.exports.node = {
+cfg.node = {
   child_process: 'empty'
-}
+};
 
 if(process.env.NODE_ENV === 'development'){
-	module.exports.devServer.host = '0.0.0.0'
+	cfg.devServer.host = '0.0.0.0';
 	//uncomment to suppress log output
 	//module.exports.devServer.noInfo = true;
 	//module.exports.devServer.quiet=true;
 }
 
-module.exports.resolve.root = path.resolve('./src')
+cfg.resolve.root = path.resolve('./src');
+cfg.module.loaders.push({test: /\.ts$/, loader: 'webpack-typescript'});
+cfg.resolve.extensions.push('.ts');
+cfg.resolve.extensions.push('.tsx');
 
-module.exports.plugins = module.exports.plugins.concat(definePlugin)
+cfg.plugins = cfg.plugins.concat(definePlugin);
+
+module.exports = cfg;
