@@ -10,7 +10,6 @@ class DistributionSummarySmall extends Component{
     }
   }
   uncertainty() {
-    console.log(this.props)
     let distribution = this.props.distribution;
     let hasStdev = distribution && distribution.stdev;
     return (

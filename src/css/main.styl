@@ -6,8 +6,17 @@ body
   background: #EEEEEE;
   font-family: Lato;
 
+.react-d3-histogram
+  left: 0
+  right: 0
+  position: absolute
+  z-index: -1
+  height 100px
+  svg
+    width: 100%
+
 .react-d3-histogram__bar rect
-  fill: steelblue;
+  fill: #D8D8D8
   shape-rendering: crispEdges;
 
 .react-d3-histogram__bar text
@@ -19,11 +28,6 @@ body
 .react-d3-histogram__x-axis path, .react-d3-histogram__x-axis line
   fill: none;
   shape-rendering: crispEdges;
-
-.react-d3-histogram
-  height 100px
-  margin-top -4px
-  margin-left: -50px
 
 .grid-metric
   height: 100%

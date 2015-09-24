@@ -48,7 +48,8 @@
     "style-loader": "^0.12.3",
     "stylus-loader": "^1.2.1",
     "webpack": "^1.11.0",
-    "webpack-dev-server": "^1.10.1"
+    "webpack-dev-server": "^1.10.1",
+    "webpack-typescript": "^0.5.4"
   },
   "dependencies": {
     "ampersand-app": "^1.0.4",
@@ -61,6 +62,7 @@
     "body-parser": "~1.0.1",
     "bootstrap-styl": "3.3.1",
     "css-loader": "^0.18.0",
+    "d3": "^3.5.6",
     "extract-text-webpack-plugin": "^0.8.2",
     "file-loader": "^0.8.4",
     "firebase": "^2.2.7",
