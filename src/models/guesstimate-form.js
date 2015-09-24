@@ -1,4 +1,5 @@
 import FunctionForm from './function-form';
+import NormalDistribution from '../lib/large/distributions/normal-distribution'
 
 export class EstimateForm{
   constructor(state){
@@ -7,7 +8,16 @@ export class EstimateForm{
   isValid(){
     return (this.toDistribution() !== false);
   }
-  toDistribution(){
+  toDistribution(n=1){
+    let coords = this.toCoords();
+    if (coords.mean && coords.stdev) {
+      let foo = new NormalDistribution(coords)
+      let samples = foo.sample(n)
+      coords.samples = samples
+    }
+    return coords
+  }
+  toCoords(){
     if (this.state.includes('/')){
       let [mean, stdev] = this.state.split('/').map((e) => parseFloat(e.trim()));
       return {mean, stdev};
@@ -37,17 +47,18 @@ export class EstimateForm{
 }
 
 export default class GuesstimateForm{
-  constructor(state, metrics = [], guesstimates = []){
+  constructor(state, metrics = [], guesstimates = [], samples=0){
     this.metrics = metrics;
     this.state = state;
     this.guesstimates = guesstimates;
     this.guesstimate = this._guesstimate();
+    this.samples = samples;
   }
-  toJSON(){
+  toJSON(n=0){
     return ({
       input: this.state,
       isValid: this._isValid(),
-      distribution: this._toDistribution()
+      distribution: this._toDistribution(n)
     });
   }
   _isFunction(){
@@ -63,8 +74,8 @@ export default class GuesstimateForm{
       return new EstimateForm(this.state);
     }
   }
-  _toDistribution(){
-    return this.guesstimate.toDistribution();
+  _toDistribution(n=1){
+    return this.guesstimate.toDistribution(n);
   }
   _isValid(){
     return this.guesstimate.isValid();

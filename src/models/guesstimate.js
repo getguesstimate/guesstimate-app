@@ -6,7 +6,8 @@ export default AmpersandState.extend({
     input: ['string', true],
     distribution: {
       mean: ['number', true, 0],
-      stdev: 'number'
+      stdev: 'number',
+      samples: 'array'
     }
   },
   toStore: function() {
