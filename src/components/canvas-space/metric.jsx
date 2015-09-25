@@ -29,13 +29,15 @@ class MetricUnselected extends Component{
        {this.props.canvasState == 'function' ? (<Label bsStyle="success">{this.props.metric.readableId}</Label>) : ''}
      </div>
     )
-    let showDistribution = !_.isEmpty(this.props.guesstimateForm) ? this.props.guesstimateForm : this.props.guesstimate
+    //let showDistribution = !_.isEmpty(this.props.guesstimateForm) ? this.props.guesstimateForm : this.props.guesstimate
+    let values = this.props.metric.simulation ? this.props.metric.simulation.sample.values : null
+    //let showDistribution = this.props.metric.simulation ? this.props.metric
     let histogram = (
-      <Histogram data={showDistribution.distribution.samples} width={400} height={60}/>
+      <Histogram data={values} width={400} height={60}/>
     )
     return(
       <div className='metric'>
-        {(showDistribution.distribution && showDistribution.distribution.samples) ? histogram : ''}
+        {values ? histogram : ''}
          <div className='row'>
            <div className={this.props.canvasState == 'function' ? 'col-sm-8 name' : 'col-sm-12 name'}>
              {this.props.metric.name}
