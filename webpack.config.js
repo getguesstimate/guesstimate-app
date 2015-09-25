@@ -17,6 +17,7 @@ cfg.node = {
   child_process: 'empty'
 };
 
+cfg.entry = ['babel/polyfill'].concat(cfg.entry);
 if(process.env.NODE_ENV === 'development'){
 	cfg.devServer.host = '0.0.0.0';
 	//uncomment to suppress log output
