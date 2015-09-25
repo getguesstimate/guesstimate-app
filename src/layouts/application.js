@@ -6,7 +6,9 @@ import MenuItem from 'react-bootstrap/lib/MenuItem'
 import NavHelper from '../components/nav-helper'
 import ampersandMixin from 'ampersand-react-mixin'
 import Icon from'react-fa'
+import engine from '../lib/engine/engine'
 
+window.engine = engine
 const NavItem = React.createClass({
   render () {
     return (
