@@ -2,7 +2,7 @@ import * as sample from './sample';
 
 export function combine(simulations) {
   return {
-    metricId: simulations[0].metricId,
+    metric: simulations[0].metric,
     sample: sample.combine(simulations.map(s => s.sample))
   };
 }

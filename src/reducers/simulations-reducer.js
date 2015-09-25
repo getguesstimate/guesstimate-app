@@ -4,7 +4,7 @@ export default function simulations(state = [], action) {
   switch (action.type) {
   case 'UPDATE_SIMULATION':
     let sim = action.simulation;
-    let i = state.findIndex(y => y.metricId === sim.metricId);
+    let i = state.findIndex(y => y.metric === sim.metric);
     if (i !== -1) {
       return [
         ...state.slice(0, i),
