@@ -5,6 +5,7 @@ export default function simulations(state = [], action) {
   case 'UPDATE_SIMULATION':
     let sim = action.simulation;
     let i = state.findIndex(y => y.metric === sim.metric);
+    console.log('running reducer')
     if (i !== -1) {
       return [
         ...state.slice(0, i),

@@ -42,6 +42,7 @@ class MetricUnselected extends Component{
            <div className={this.props.canvasState == 'function' ? 'col-sm-8 name' : 'col-sm-12 name'}>
              {this.props.metric.name}
            </div>
+           {this.props.metric.simulation && this.props.metric.simulation.sample.values.slice(-1)[0]}
            {this.props.canvasState == 'function' ? tag : ''}
          </div>
          <div className='row row1'>
