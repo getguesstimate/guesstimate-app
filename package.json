@@ -58,6 +58,7 @@
     "ampersand-rest-collection": "^4.0.0",
     "ampersand-router": "^3.0.2",
     "ampersand-state": "^4.6.0",
+    "async": "^1.4.2",
     "autoprefixer-stylus": "^0.5.0",
     "body-parser": "~1.0.1",
     "bootstrap-styl": "3.3.1",

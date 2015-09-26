@@ -1,19 +1,10 @@
 import _ from 'lodash';
 import e from '../lib/engine/engine';
+import async from 'async'
 
 function runSimulation(guesstimate, dGraph, n ) {
   return e.guesstimate.sample(guesstimate, dGraph, n);
 }
-
-let foo = function(dispatch, getState, metricId, n) {
-  return new Promise(function(resolve, reject) {
-    setTimeout(function(){
-      _runSimulation(dispatch, getState, metricId, n)
-      resolve();
-    }, 0.01)
-  });
-};
-
 function gatherGuesstimates(dGraph){
   return dGraph.metrics.map(e => e.guesstimate);
 }
@@ -28,35 +19,49 @@ export function _runSimulation(dispatch, getState, metricId, n) {
   let guesstimate = dGraph.metrics.find(m => (m.id === metricId)).guesstimate;
   let simulation = runSimulation(guesstimate, dGraph, n);
   if (hasValues(simulation)) {
-    dispatch(addPartialSimulation(simulation));
+    console.log('dispatching')
+    dispatch(addPartialSimulation(simulation))
   }
 }
 
+function *cycle(items) {
+  let index = -1;
+  while(true) {
+    index = (index + 1) % items.length;
+    yield items[index];
+  }
+}
+
+function *run(dispatch, getState, metrics, n) {
+  let id = cycle(metrics)
+  while(true) {
+    _runSimulation(dispatch, getState, id.next().value, n);
+    yield;
+  }
+}
+function wat(n, doneCallback) {
+  console.log(n)
+  return doneCallback;
+}
+
 export function runSimulations(value, getState) {
-  let n = 3000;
+  let n = 50000;
   return (dispatch, getState) => {
+    let now = new Date;
     let metrics = getState().metrics;
-    foo(dispatch, getState, metrics[0].id, 20)
-    .then(() => foo(dispatch, getState, metrics[1].id, 20))
-    .then(() => foo(dispatch, getState, metrics[2].id, 20))
-    .then(() => foo(dispatch, getState, metrics[0].id, 20))
-    .then(() => foo(dispatch, getState, metrics[1].id, 20))
-    .then(() => foo(dispatch, getState, metrics[2].id, 20))
-    .then(() => foo(dispatch, getState, metrics[0].id, 20))
-    .then(() => foo(dispatch, getState, metrics[1].id, 20))
-    .then(() => foo(dispatch, getState, metrics[2].id, 20))
-    .then(() => foo(dispatch, getState, metrics[0].id, 20))
-    .then(() => foo(dispatch, getState, metrics[1].id, 20))
-    .then(() => foo(dispatch, getState, metrics[2].id, 20))
-    .then(() => foo(dispatch, getState, metrics[0].id, 500))
-    .then(() => foo(dispatch, getState, metrics[1].id, 500))
-    .then(() => foo(dispatch, getState, metrics[2].id, 500))
-    .then(() => foo(dispatch, getState, metrics[0].id, 500))
-    .then(() => foo(dispatch, getState, metrics[1].id, 500))
-    .then(() => foo(dispatch, getState, metrics[2].id, 500))
-    .then(() => foo(dispatch, getState, metrics[0].id, 500))
-    .then(() => foo(dispatch, getState, metrics[1].id, 500))
-    .then(() => foo(dispatch, getState, metrics[2].id, 500))
+    let metricIds = getState().metrics.map(n => n.id);
+    let rr = run(dispatch, getState, metricIds, 500);
+    //setTimeout(function(){
+    let foobar = (callback) => {
+      rr.next()
+      setTimeout(function(){
+        callback(null, 3),
+        10
+      })
+    }
+
+    let ary = new Array(40).fill(foobar)
+    async.series(ary);
   };
 }
 

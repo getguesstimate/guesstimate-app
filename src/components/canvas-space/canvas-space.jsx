@@ -50,6 +50,7 @@ export default class CanvasSpace extends Component{
     this.props.dispatch(runSimulations(33))
   }
   render () {
+    console.log('rendering')
     let dMetrics = e.graph.denormalize({metrics: this.props.metrics, guesstimates: this.props.guesstimates, simulations: this.props.simulations}).metrics
     let guesstimate = (m) => { return this.props.guesstimates.filter((g) => { return g.metric === m })[0]}
     let size = this.size()

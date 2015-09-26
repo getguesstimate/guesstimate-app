@@ -3,10 +3,10 @@ import Guesstimates from '../models/guesstimates.js'
 let initialGuesstimates = [
   {
     metric: '238jdj',
-    input: '5/1',
+    input: '50000/5000',
     distribution: {
-      mean: 5,
-      stdev: 1
+      mean: 500000,
+      stdev: 50000
     },
   },
   {
@@ -18,9 +18,9 @@ let initialGuesstimates = [
   },
   {
     metric: '238iojic',
-    input: '= 32',
+    input: '= PNYC + 32',
     distribution: {
-      input: '= 32'
+      input: '= PNYC + 32'
     },
   },
   {

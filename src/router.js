@@ -23,7 +23,7 @@ export default Router.extend({
       </Layout>
     )
     let debugpanel = (
-        <DebugPanel left top bottom>
+        <DebugPanel right top bottom>
           <DevTools store={store} monitor={LogMonitor} />
         </DebugPanel>
     )
