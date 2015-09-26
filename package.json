@@ -81,6 +81,7 @@
     "qs": "^2.4.1",
     "react": "^0.14.0-rc1",
     "react-bootstrap": "^0.25.100-react-pre.1",
+    "react-pure-render": "^1.0.2",
     "react-redux": "^2.1.1",
     "redux": "^2.0.0",
     "redux-thunk": "^0.1.0",

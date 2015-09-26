@@ -6,3 +6,7 @@ export function combine(simulations) {
     sample: sample.combine(simulations.map(s => s.sample))
   };
 }
+
+export function hasValues(simulation) {
+  return _.get(simulation, 'sample.values') && (simulation.sample.values.length > 0);
+}
