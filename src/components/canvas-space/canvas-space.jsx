@@ -11,13 +11,16 @@ import styles from './canvas-space.styl'
 import { connect } from 'react-redux';
 import { addMetric } from '../../actions/metric-actions'
 import { changeSelect } from '../../actions/selection-actions'
+import { runSimulations } from '../../actions/simulation-actions'
 import { canvasStateSelector } from '../../selectors/canvas-state-selector';
+import e from '../../lib/engine/engine'
 
 function mapStateToProps(state) {
   return {
     selected: state.selection,
     metrics: state.metrics,
     guesstimates: state.guesstimates,
+    simulations: state.simulations
   }
 }
 
@@ -43,14 +46,19 @@ export default class CanvasSpace extends Component{
     const height = Math.max(3, lowest_metric, selected) || 3;
     return {columns: 4, rows: height}
   }
+  testing() {
+    this.props.dispatch(runSimulations(33))
+  }
   render () {
+    let dMetrics = e.graph.denormalize({metrics: this.props.metrics, guesstimates: this.props.guesstimates, simulations: this.props.simulations}).metrics
     let guesstimate = (m) => { return this.props.guesstimates.filter((g) => { return g.metric === m })[0]}
     let size = this.size()
     return (
       <div className="canvas-space">
+        <div className='btn btn-large btn-primary' onClick={this.testing.bind(this)}> Foobar </div>
         <Grid size={size} selected={this.props.selected} handleSelect={this._handleSelect.bind(this)} onAddItem={this._handleAddMetric.bind(this)}>
           {
-            this.props.metrics.map((m) => {
+            dMetrics.map((m) => {
               return (<Metric metric={m} guesstimate={guesstimate(m.id)} key={m.id} location={m.location} canvasState={this.props.canvasState}/>)
             })
           }
