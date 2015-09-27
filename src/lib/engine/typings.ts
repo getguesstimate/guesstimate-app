@@ -1,3 +1,5 @@
+// This was here from when I tried ts.  Not just here for reference.
+
 export interface GridLocation {
   row: number,
   column: number

@@ -26,7 +26,6 @@ if(process.env.NODE_ENV === 'development'){
 }
 
 cfg.resolve.root = path.resolve('./src');
-cfg.module.loaders.push({test: /\.ts$/, loader: 'webpack-typescript'});
 cfg.resolve.extensions.push('.ts');
 cfg.resolve.extensions.push('.tsx');
 
