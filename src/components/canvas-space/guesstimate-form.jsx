@@ -41,7 +41,6 @@ function insertAtCaret(areaId,text) {
     txtarea.scrollTop = scrollPos;
 }
 
-window.jquery = $
 class GuesstimateForm extends React.Component{
   constructor(props) {
     super(props);
@@ -49,8 +48,6 @@ class GuesstimateForm extends React.Component{
   }
   componentWillUnmount() {
     this._submit()
-  }
-  componentDidMount() {
   }
   _handleMetricClick(item){
     insertAtCaret('live-input', item.readableId)
@@ -87,7 +84,7 @@ class GuesstimateForm extends React.Component{
     }
   }
   render() {
-    let distribution = this.props.guesstimateForm.distribution;
+    let distribution = this.props.guesstimateForm && this.props.guesstimateForm.distribution;
     let errors = distribution && distribution.errors;
     let errorPane = <div className='errors'>{errors} </div>
     return(
