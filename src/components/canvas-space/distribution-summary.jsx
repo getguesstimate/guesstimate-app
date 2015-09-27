@@ -1,45 +1,42 @@
 import React, {Component, PropTypes} from 'react';
 import numeral from 'numeral'
 import _ from 'lodash'
+import stats from 'stats-lite'
+
+function formatStat(n){
+  if (n) {
+    let value = parseFloat(n);
+    return numeral(value).format('0a');
+  }
+}
+
+const Uncertainty = ({stdev}) => (
+  <span className='stdev'> '±' {formatStat(stdev)} </span>
+)
 
 class DistributionSummarySmall extends Component{
-  format(n){
-    if (n) {
-      let value = parseFloat(n);
-      return numeral(value).format('0a');
-    }
-  }
-  uncertainty() {
-    let distribution = this.props.distribution;
-    let hasStdev = distribution && distribution.stdev;
-    return (
-     <span className='stdev'>
-     {hasStdev ? '±' : ''}
-     {this.format(_.get(this, 'props.distribution.stdev'))}
-     </span>
-    )
-  }
   render () {
-    let stdev = this.props.distribution.stdev
-    let hasUncertainty = !_.isUndefined(stdev) && (stdev !== 0)
+    let stats = this.props.stats;
     return (
       <div className="distribution-summary">
-       {this.format(_.get(this, 'props.distribution.mean'))}
-       {hasUncertainty ? this.uncertainty() : '' }
+       {formatStat(stats.mean)}
+       {_.has(stats, 'stdev') ? <Uncertainty stdev={this.props.stdev}/> : null }
      </div>
     )
   }
 }
 
 export default class DistributionSummary extends Component{
-  small() {
-    return (<DistributionSummarySmall distribution={this.props.distribution}/> )
+  show() {
+    return (<DistributionSummarySmall stats={this.stats()}/> )
+  }
+  stats(){
+    return _.get(this.props.simulation, 'stats') || false
   }
   render () {
-    let hasDistribution = !_.isEmpty(this.props.distribution)
     return (
       <div>
-      {hasDistribution ? this.small() : '' }
+      {this.stats() ? this.show() : '' }
       </div>
     )
   }
