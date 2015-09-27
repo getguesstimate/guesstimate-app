@@ -6,9 +6,7 @@ import MenuItem from 'react-bootstrap/lib/MenuItem'
 import NavHelper from '../components/nav-helper'
 import ampersandMixin from 'ampersand-react-mixin'
 import Icon from'react-fa'
-import engine from '../lib/engine/engine'
 
-window.engine = engine
 const NavItem = React.createClass({
   render () {
     return (
@@ -16,7 +14,7 @@ const NavItem = React.createClass({
         <DropdownButton title='Example Repos' id='split-button-pull-right'>
          {this.props.repos.models.map((repo) => {
               return (
-                <MenuItem href={repo.appUrl} title={repo.description}>{repo.name}</MenuItem>
+                <MenuItem href={repo.appUrl} kety={repo.appUrl} title={repo.description}>{repo.name}</MenuItem>
               )
           })}
         </DropdownButton>
