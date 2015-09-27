@@ -1,9 +1,9 @@
-import React, {Component, PropTypes} from 'react'
+import React, {Component, PropTypes, addons} from 'react'
+import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
+
 import Button from 'react-bootstrap/lib/Button'
 import Label from 'react-bootstrap/lib/Label'
 import _ from 'lodash'
-import ReactFitText from 'react-fittext'
-var PureRenderMixin = require('react/addons').addons.PureRenderMixin;
 
 import { connect } from 'react-redux';
 import { removeMetric, changeMetric } from '../../actions/metric-actions.js';
@@ -11,10 +11,7 @@ import { changeGuesstimate } from '../../actions/guesstimate-actions.js';
 import MetricSelected from './metric-selected';
 import DistributionSummary from './distribution-summary'
 import DistributionSummaryA from './distribution-summaryA'
-import GuesstimateForm from './guesstimate-form'
-import addons from "react/addons";
-let {addons: {CSSTransitionGroup}} = addons;
-let ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+import GuesstimateForm from './guesstimate-form';
 import Histogram from './histogram'
 import SimulationHistogram from './simulation-histogram.js'
 import stats from 'stats-lite'
@@ -85,7 +82,6 @@ class EditingPane extends Component {
 };
 
 const Metric = React.createClass({
-  mixins: [PureRenderMixin],
   _handlePress(e) {
     if (e.target === ReactDOM.findDOMNode(this)) {
       if (e.keyCode == '8') {

@@ -2,7 +2,7 @@ import _ from 'lodash';
 import e from '../lib/engine/engine';
 import async from 'async'
 
-export function _runSimulation(dispatch, getState, metricId, n) {
+function runSimulation(dispatch, getState, metricId, n) {
   const graph = e.graph.create(getState());
   const simulation = e.graph.runSimulation(graph, metricId, n);
   if (e.simulation.hasValues(simulation)) {
@@ -25,7 +25,7 @@ export function runSimulations(value, getState) {
         },
         function (callback) {
           count++;
-          _runSimulation(dispatch, getState, metricId.next().value, n);
+          runSimulation(dispatch, getState, metricId.next().value, n);
           _.delay(() => {callback(null)}, 1);
         },
         function (err) {
