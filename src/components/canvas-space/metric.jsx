@@ -1,21 +1,22 @@
 import React, {Component, PropTypes, addons} from 'react'
-import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
+import ReactDOM from 'react-dom'
+import { connect } from 'react-redux';
+import { removeMetric, changeMetric } from '../../actions/metric-actions.js';
+import { changeGuesstimate } from '../../actions/guesstimate-actions.js';
 
 import Button from 'react-bootstrap/lib/Button'
 import Label from 'react-bootstrap/lib/Label'
 import _ from 'lodash'
 
-import { connect } from 'react-redux';
-import { removeMetric, changeMetric } from '../../actions/metric-actions.js';
-import { changeGuesstimate } from '../../actions/guesstimate-actions.js';
-import MetricSelected from './metric-selected';
-import DistributionSummary from './distribution-summary'
-import GuesstimateForm from './guesstimate-form';
-import Histogram from './histogram'
-import SimulationHistogram from './simulation-histogram.js'
-import stats from 'stats-lite'
-import ReactDOM from 'react-dom'
 import shouldPureComponentUpdate from 'react-pure-render/function';
+
+import MetricSelected from './metric-selected';
+import MetricStatTable from './MetricStatTable';
+import MetricEditingPane from './MetricEditingPane.js';
+
+import DistributionSummary from './distribution-summary'
+import SimulationHistogram from './simulation-histogram.js'
+
 import ShowIf from '../utility/showIf';
 
 const MetricReadableId = ({canvasState, readableId}) => (
@@ -23,54 +24,6 @@ const MetricReadableId = ({canvasState, readableId}) => (
     {canvasState == 'function' ? (<Label bsStyle="success">{readableId}</Label>) : ''}
   </div>
 )
-
-@ShowIf
-class Stats extends Component {
-  render() {
-    let stats = this.props.stats
-    return (
-      <div>
-        <table className='important-stats'>
-          <tr>
-            <td> mean </td>
-            <td> {stats.mean.toFixed(2)} </td>
-          </tr>
-          <tr>
-            <td> std </td>
-            <td> {stats.stdev.toFixed(2)} </td>
-          </tr>
-          <tr>
-            <td> Samples </td>
-            <td> {stats.length} </td>
-          </tr>
-        </table>
-      </div>
-    )
-  }
-}
-
-class EditingPane extends Component {
-  _handlePress(e) {
-    e.stopPropagation()
-  }
-  render() {
-    return (
-      <ReactCSSTransitionGroup transitionEnterTimeout={500} transitionName='carousel' transitionAppear={true}>
-        <div className='editing-section'>
-          <div className='row'>
-            <div onKeyDown={this._handlePress} className='col-xs-12'>
-              <GuesstimateForm
-              value={this.props.guesstimate.input}
-              guesstimate={this.props.guesstimate}
-              guesstimateForm={this.props.guesstimateForm}
-              onSubmit={this.props.onChangeGuesstimate}/>
-            </div>
-          </div>
-        </div>
-      </ReactCSSTransitionGroup>
-    )
-  }
-};
 
 class Metric extends Component {
   static propTypes = {
@@ -85,7 +38,8 @@ class Metric extends Component {
       row: React.PropTypes.number,
       column: React.PropTypes.number
     }),
-    gridKeyPress: React.PropTypes.func.isRequired
+    gridKeyPress: React.PropTypes.func.isRequired,
+    guesstimateForm: React.PropTypes.object
   }
   _handlePress(e) {
     if (e.target === ReactDOM.findDOMNode(this)) {
@@ -111,10 +65,11 @@ class Metric extends Component {
   }
   render () {
     return(
+      <div>
       <div className={this.props.isSelected ? 'metric grid-item-focus' : 'metric'} onKeyDown={this._handlePress.bind(this)} tabIndex='0'>
         <SimulationHistogram simulation={this.props.metric.simulation}/>
          <div className='row'>
-         <Stats stats={_.get(this.props.metric, 'simulation.stats')} showIf={_.has(this.props.metric, 'simulation.stats')}/>
+         <MetricStatTable stats={_.get(this.props.metric, 'simulation.stats')} showIf={_.has(this.props.metric, 'simulation.stats') && this.props.isSelected}/>
            <div className={this.props.canvasState == 'function' ? 'col-sm-8 name' : 'col-sm-12 name'}>
              {this.props.metric.name}
            </div>
@@ -122,9 +77,15 @@ class Metric extends Component {
          </div>
          <div className='row row1'>
            <div className='col-sm-12 mean'>
-             <DistributionSummary simulation={this.props.metric.simulation}/>
+             <DistributionSummary
+             simulation={this.props.metric.simulation}
+             guesstimateForm={this.props.guesstimateForm}
+             onChangeGuesstimate={this.handleChangeGuesstimate.bind(this)}
+             />
            </div>
          </div>
+      </div>
+         <MetricEditingPane guesstimate={this.props.metric.guesstimate} showIf={this.props.isSelected}/>
       </div>
     )
   }
