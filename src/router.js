@@ -14,25 +14,27 @@ import configureStore from './stores/configureStore.js'
 
 import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react';
 
+const Debug = ({store, LogMonitor}) => (
+  <DebugPanel right top bottom>
+    <DevTools store={store} monitor={LogMonitor} />
+  </DebugPanel>
+);
+
+const FullPage = ({isFluid, page}) => (
+  <Layout isFluid={isFluid} repos={app.me.repos}>
+    {page}
+  </Layout>
+);
+
 export default Router.extend({
   render (page, isFluid=false) {
     let store = configureStore()
-    var fullPage = (
-      <Layout isFluid={isFluid} repos={app.me.repos}>
-        {page}
-      </Layout>
-    )
-    let debugpanel = (
-        <DebugPanel right top bottom>
-          <DevTools store={store} monitor={LogMonitor} />
-        </DebugPanel>
-    )
     ReactDOM.render(
       <div>
-      <Provider store={store}>
-        {() => fullPage}
-      </Provider>
-      {__DEV__ ? debugpanel : ''}
+        <Provider store={store}>
+          <FullPage isFluid={isFluid} page={page}/>
+        </Provider>
+        {__DEV__ ? <Debug/> : ''}
       </div>,
       document.body)
   },
