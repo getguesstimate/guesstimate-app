@@ -17,6 +17,7 @@ cfg.node = {
   child_process: 'empty'
 };
 
+cfg.entry = ['babel/polyfill'].concat(cfg.entry);
 if(process.env.NODE_ENV === 'development'){
 	cfg.devServer.host = '0.0.0.0';
 	//uncomment to suppress log output
@@ -25,7 +26,6 @@ if(process.env.NODE_ENV === 'development'){
 }
 
 cfg.resolve.root = path.resolve('./src');
-cfg.module.loaders.push({test: /\.ts$/, loader: 'webpack-typescript'});
 cfg.resolve.extensions.push('.ts');
 cfg.resolve.extensions.push('.tsx');
 

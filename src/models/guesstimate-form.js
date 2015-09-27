@@ -1,5 +1,5 @@
 import FunctionForm from './function-form';
-import NormalDistribution from '../lib/large/distributions/normal-distribution'
+import e from '../lib/engine/engine'
 
 export class EstimateForm{
   constructor(state){
@@ -11,9 +11,8 @@ export class EstimateForm{
   toDistribution(n=1){
     let coords = this.toCoords();
     if (coords.mean && coords.stdev) {
-      let foo = new NormalDistribution(coords)
-      let samples = foo.sample(n)
-      coords.samples = samples
+      let samples = e.guesstimate.dsample(n);
+      coords.samples = samples;
     }
     return coords
   }

@@ -64,8 +64,7 @@ let initialMetrics = [
       row: 3
     }
   }
-]
-
+];
 export default function metrics(state = initialMetrics, action) {
   switch (action.type) {
   case 'ADD_METRIC':
