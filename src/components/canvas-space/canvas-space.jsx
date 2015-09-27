@@ -40,6 +40,7 @@ export default class CanvasSpace extends Component{
   _handleAddMetric(location) {
     this.props.dispatch(addMetric(location))
   }
+  //todo: put this in grid instead
   size(){
     const lowest_metric = Math.max(...this.props.metrics.map(g => g.location.row)) + 2
     const selected = this.props.selected.row + 2
@@ -47,11 +48,10 @@ export default class CanvasSpace extends Component{
     return {columns: 4, rows: height}
   }
   testing() {
-    this.props.dispatch(runSimulations(33))
+    this.props.dispatch(runSimulations(null))
   }
   render () {
     let dMetrics = e.graph.denormalize({metrics: this.props.metrics, guesstimates: this.props.guesstimates, simulations: this.props.simulations}).metrics
-    let guesstimate = (m) => { return this.props.guesstimates.filter((g) => { return g.metric === m })[0]}
     let size = this.size()
     return (
       <div className="canvas-space">
@@ -59,7 +59,7 @@ export default class CanvasSpace extends Component{
         <Grid size={size} selected={this.props.selected} handleSelect={this._handleSelect.bind(this)} onAddItem={this._handleAddMetric.bind(this)}>
           {
             dMetrics.map((m) => {
-              return (<Metric metric={m} guesstimate={guesstimate(m.id)} key={m.id} location={m.location} canvasState={this.props.canvasState}/>)
+              return (<Metric metric={m} key={m.id} location={m.location} canvasState={this.props.canvasState}/>)
             })
           }
         </Grid>
