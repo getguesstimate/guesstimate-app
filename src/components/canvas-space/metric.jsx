@@ -1,46 +1,46 @@
-import React, {Component, PropTypes, addons} from 'react'
+import React, {Component, PropTypes} from 'react'
 import ReactDOM from 'react-dom'
 import { connect } from 'react-redux';
 import { removeMetric, changeMetric } from '../../actions/metric-actions.js';
 import { changeGuesstimate } from '../../actions/guesstimate-actions.js';
 
-import Button from 'react-bootstrap/lib/Button'
 import Label from 'react-bootstrap/lib/Label'
 import _ from 'lodash'
 
-import shouldPureComponentUpdate from 'react-pure-render/function';
-
-import MetricSelected from './metric-selected';
 import MetricStatTable from './MetricStatTable';
 import MetricEditingPane from './MetricEditingPane.js';
 
 import DistributionSummary from './distribution-summary'
 import SimulationHistogram from './simulation-histogram.js'
-
 import ShowIf from '../utility/showIf';
 
-const MetricReadableId = ({canvasState, readableId}) => (
+const MetricReadableIdd = ({canvasState, readableId}) => (
   <div className='col-sm-2 function-id'>
     {canvasState == 'function' ? (<Label bsStyle="success">{readableId}</Label>) : ''}
   </div>
 )
+const MetricReadableId = ShowIf(MetricReadableIdd)
 
 class Metric extends Component {
+  displayName: 'Metric'
   static propTypes = {
-    metric: React.PropTypes.object.isRequired,
-    canvasState: React.PropTypes.oneOf([
+    canvasState: PropTypes.oneOf([
       'selecting',
       'function',
       'estimate',
       'editing'
     ]).isRequired,
-    location: React.PropTypes.shape({
-      row: React.PropTypes.number,
-      column: React.PropTypes.number
+    dispatch: PropTypes.func,
+    gridKeyPress: PropTypes.func.isRequired,
+    guesstimateForm: PropTypes.object,
+    isSelected: PropTypes.bool,
+    location: PropTypes.shape({
+      row: PropTypes.number,
+      column: PropTypes.number
     }),
-    gridKeyPress: React.PropTypes.func.isRequired,
-    guesstimateForm: React.PropTypes.object
+    metric: PropTypes.object.isRequired,
   }
+
   _handlePress(e) {
     if (e.target === ReactDOM.findDOMNode(this)) {
       if (e.keyCode == '8') {
@@ -64,28 +64,44 @@ class Metric extends Component {
     return this.props.metric.id
   }
   render () {
+    const {isSelected, metric, canvasState, guesstimateForm} = this.props
     return(
       <div>
-      <div className={this.props.isSelected ? 'metric grid-item-focus' : 'metric'} onKeyDown={this._handlePress.bind(this)} tabIndex='0'>
-        <SimulationHistogram simulation={this.props.metric.simulation}/>
+      <div
+          className={isSelected ? 'metric grid-item-focus' : 'metric'}
+          onKeyDown={this._handlePress.bind(this)}
+          tabIndex='0'
+      >
+        <SimulationHistogram simulation={metric.simulation}/>
+         <MetricStatTable
+             showIf={_.has(metric, 'simulation.stats') && isSelected}
+             stats={_.get(metric, 'simulation.stats')}
+         />
          <div className='row'>
-         <MetricStatTable stats={_.get(this.props.metric, 'simulation.stats')} showIf={_.has(this.props.metric, 'simulation.stats') && this.props.isSelected}/>
-           <div className={this.props.canvasState == 'function' ? 'col-sm-8 name' : 'col-sm-12 name'}>
-             {this.props.metric.name}
-           </div>
-           {this.props.canvasState == 'function' ? <MetricReadableId canvasState={this.props.canvasState} readableId={this.props.metric.readableId}/> : false}
+         <div className={canvasState == 'function' ? 'col-sm-8 name' : 'col-sm-12 name'}>
+           {metric.name}
+         </div>
+         <MetricReadableId
+             {...canvasState}
+             readableId={metric.readableId}
+             showIf={canvasState === 'function'}
+         />
          </div>
          <div className='row row1'>
            <div className='col-sm-12 mean'>
              <DistributionSummary
-             simulation={this.props.metric.simulation}
-             guesstimateForm={this.props.guesstimateForm}
-             onChangeGuesstimate={this.handleChangeGuesstimate.bind(this)}
+                 guesstimateForm={guesstimateForm}
+                 onChangeGuesstimate={this.handleChangeGuesstimate.bind(this)}
+                 simulation={metric.simulation}
              />
            </div>
          </div>
       </div>
-         <MetricEditingPane guesstimate={this.props.metric.guesstimate} showIf={this.props.isSelected}/>
+         <MetricEditingPane
+             guesstimate={metric.guesstimate}
+             guesstimateForm={guesstimateForm}
+             showIf={isSelected}
+         />
       </div>
     )
   }

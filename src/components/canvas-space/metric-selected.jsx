@@ -8,6 +8,7 @@ import DistributionSummary from './distribution-summary'
 import Histogram from './histogram'
 import $ from 'jquery'
 
+// Note that this is now obsolete
 const BasicInput = React.createClass({
   getInitialState() {
     return {
