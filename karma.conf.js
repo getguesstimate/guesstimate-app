@@ -3,6 +3,7 @@ module.exports = function (config) {
     browsers: [ 'Chrome' ],
     // karma only needs to know about the test bundle
     files: [
+      'node_modules/babel-core/browser-polyfill.js',
       {
         pattern: 'tests.bundle.js',
         watched: true
