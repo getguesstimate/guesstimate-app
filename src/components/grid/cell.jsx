@@ -1,16 +1,14 @@
 'use strict';
-
 import React from 'react'
 import ReactDOM from 'react-dom'
 import $ from 'jquery'
-import _ from 'lodash'
 let GRID_ITEM_FOCUS_CLASS = '.grid-item-focus'
 
 export default class Cell extends React.Component {
   componentDidMount = () => {
     this._focus()
   }
-  componentDidUpdate = (prevProps, _) => {
+  componentDidUpdate = (prevProps) => {
     if (prevProps.isSelected == false || !this.props.item){
       this._focus()
     }
@@ -54,8 +52,13 @@ export default class Cell extends React.Component {
   }
   render = () => {
     return (
-      <div tabIndex='0' onMouseDown={this._handleClick} onKeyDown={this._handleKeyPress} className={this._classes()}>
-        {this._cellElement()}
+      <div
+          className={this._classes()}
+          onKeyDown={this._handleKeyPress}
+          onMouseDown={this._handleClick}
+          tabIndex='0'
+      >
+      {this._cellElement()}
       </div>
     )
   }

@@ -1,56 +1,25 @@
 import React, {Component, PropTypes} from 'react';
 import ReactDOM from 'react-dom'
 import { connect } from 'react-redux';
-import { createGuesstimateForm, destroyGuesstimateForm, updateGuesstimateForm, changeGuesstimateForm, addMetricInputToGuesstimateForm } from '../../actions/guesstimate-form-actions'
-import DistributionSummary from './distribution-summary'
+import { createGuesstimateForm, destroyGuesstimateForm, changeGuesstimateForm} from '../../actions/guesstimate-form-actions'
 import $ from 'jquery'
-import _ from 'lodash'
-import Icon from'react-fa'
+import insertAtCaret from '../../lib/jquery/insertAtCaret'
 
-function insertAtCaret(areaId,text) {
-    var txtarea = document.getElementById(areaId);
-    var scrollPos = txtarea.scrollTop;
-    var strPos = 0;
-    var br = ((txtarea.selectionStart || txtarea.selectionStart == '0') ?
-        "ff" : (document.selection ? "ie" : false ) );
-    if (br == "ie") {
-        txtarea.focus();
-        var range = document.selection.createRange();
-        range.moveStart ('character', -txtarea.value.length);
-        strPos = range.text.length;
-    }
-    else if (br == "ff") strPos = txtarea.selectionStart;
+class GuesstimateForm extends Component{
+  displayName: 'GuesstimateForm'
 
-    var front = (txtarea.value).substring(0,strPos);
-    var back = (txtarea.value).substring(strPos,txtarea.value.length);
-    txtarea.value=front+text+back;
-    strPos = strPos + text.length;
-    if (br == "ie") {
-        txtarea.focus();
-        var range = document.selection.createRange();
-        range.moveStart ('character', -txtarea.value.length);
-        range.moveStart ('character', strPos);
-        range.moveEnd ('character', 0);
-        range.select();
-    }
-    else if (br == "ff") {
-        txtarea.selectionStart = strPos;
-        txtarea.selectionEnd = strPos;
-        txtarea.focus();
-    }
-    txtarea.scrollTop = scrollPos;
-}
-
-window.jquery = $
-class GuesstimateForm extends React.Component{
-  constructor(props) {
-    super(props);
-    this.state = {userInput: this.props.value || ''};
+  static propTypes = {
+    dispatch: PropTypes.func,
+    guesstimate: PropTypes.object.isRequired,
+    guesstimateForm: PropTypes.object.isRequired,
+    onSubmit: PropTypes.func,
+    value: PropTypes.string
   }
+
+  state = {userInput: this.props.value || ''}
+
   componentWillUnmount() {
     this._submit()
-  }
-  componentDidMount() {
   }
   _handleMetricClick(item){
     insertAtCaret('live-input', item.readableId)
@@ -87,20 +56,21 @@ class GuesstimateForm extends React.Component{
     }
   }
   render() {
-    let distribution = this.props.guesstimateForm.distribution;
+    let distribution = this.props.guesstimateForm && this.props.guesstimateForm.distribution;
     let errors = distribution && distribution.errors;
     let errorPane = <div className='errors'>{errors} </div>
     return(
       <div className='guesstimate-form'>
-        <input type="text"
-          id="live-input"
-          ref='input'
-          placeholder={'value'}
-          onKeyPress={this._handleKeyDown}
-          value={this.state.userInput}
-          onBlur={this._handleBlur.bind(this)}
-          onFocus={this._handleFocus.bind(this)}
-          onChange={this._handlePress.bind(this)}
+        <input
+            id="live-input"
+            onBlur={this._handleBlur.bind(this)}
+            onChange={this._handlePress.bind(this)}
+            onFocus={this._handleFocus.bind(this)}
+            onKeyPress={this._handleKeyDown}
+            placeholder={'value'}
+            ref='input'
+            type="text"
+            value={this.state.userInput}
         />
         {errors ? errorPane : ''}
       </div>)

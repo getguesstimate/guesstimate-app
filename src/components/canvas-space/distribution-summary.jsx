@@ -1,46 +1,51 @@
 import React, {Component, PropTypes} from 'react';
 import numeral from 'numeral'
 import _ from 'lodash'
+import ShowIf from '../utility/showIf';
 
-class DistributionSummarySmall extends Component{
-  format(n){
-    if (n) {
-      let value = parseFloat(n);
-      return numeral(value).format('0a');
-    }
+function formatStat(n){
+  if (n) {
+    let value = parseFloat(n);
+    return numeral(value).format('0a');
   }
-  uncertainty() {
-    let distribution = this.props.distribution;
-    let hasStdev = distribution && distribution.stdev;
-    return (
-     <span className='stdev'>
-     {hasStdev ? '±' : ''}
-     {this.format(_.get(this, 'props.distribution.stdev'))}
-     </span>
-    )
+}
+
+const Uncertainty = ShowIf(({stdev}) => (
+  <span className='stdev'> {'±'} {formatStat(stdev)} </span>
+))
+
+@ShowIf
+class DistributionSummarySmall extends Component{
+  static propTypes = {
+    stats: PropTypes.object,
   }
   render () {
-    let stdev = this.props.distribution.stdev
-    let hasUncertainty = !_.isUndefined(stdev) && (stdev !== 0)
+    let stats = this.props.stats;
     return (
       <div className="distribution-summary">
-       {this.format(_.get(this, 'props.distribution.mean'))}
-       {hasUncertainty ? this.uncertainty() : '' }
-     </div>
+        {formatStat(stats.mean)}
+        <Uncertainty
+            showIf={_.has(stats, 'stdev')}
+            stdev={this.props.stats.stdev}
+        />
+      </div>
     )
   }
 }
 
 export default class DistributionSummary extends Component{
-  small() {
-    return (<DistributionSummarySmall distribution={this.props.distribution}/> )
+  static propTypes = {
+    simulation: PropTypes.object,
+  }
+  stats(){
+    return _.get(this.props.simulation, 'stats') || false
   }
   render () {
-    let hasDistribution = !_.isEmpty(this.props.distribution)
     return (
-      <div>
-      {hasDistribution ? this.small() : '' }
-      </div>
+      <DistributionSummarySmall
+          showIf={this.stats()}
+          stats={this.stats()}
+      />
     )
   }
 };

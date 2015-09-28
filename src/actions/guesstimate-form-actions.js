@@ -42,4 +42,3 @@ export function changeGuesstimateForm(value, getState) {
       .then((f) => dispatch(changeGuesstimateEnd(f)))
   };
 }
-
