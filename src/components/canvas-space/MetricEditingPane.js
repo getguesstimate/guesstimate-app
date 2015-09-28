@@ -8,7 +8,8 @@ export default class MetricEditingPane extends Component {
   static propTypes = {
     guesstimate: PropTypes.object.isRequired,
     guesstimateForm: PropTypes.object.isRequired,
-    onChangeGuesstimate: PropTypes.func
+    metricId: PropTypes.string.isRequired,
+    onChangeGuesstimate: PropTypes.func,
   }
   _handlePress(e) {
     e.stopPropagation()
@@ -29,6 +30,7 @@ export default class MetricEditingPane extends Component {
                 guesstimate={this.props.guesstimate}
                 guesstimateForm={this.props.guesstimateForm}
                 onSubmit={this.props.onChangeGuesstimate}
+                metricId={this.props.metricId}
                 value={this.props.guesstimate.input}
             />
             </div>

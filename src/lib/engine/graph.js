@@ -18,6 +18,15 @@ export function denormalize(graph){
   return {metrics};
 }
 
+// The bizarro graph is the version of the graph where a guesstimates input is
+// replaces its guesstimte
+export function toBizarroGraph(graph, guesstimateForm){
+  let bGraph = _.cloneDeep(graph)
+  bGraph.guesstimates = graph.guesstimates.filter((g) => (g.metric !== guesstimateForm.metric))
+  bGraph.guesstimates = bGraph.guesstimates.concat(guesstimateForm)
+  return bGraph
+}
+
 export function runSimulation(graph, metricId, n){
   return _dgraph.runSimulation(denormalize(graph), metricId, n);
 }

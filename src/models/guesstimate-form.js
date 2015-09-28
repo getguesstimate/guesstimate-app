@@ -46,18 +46,20 @@ export class EstimateForm{
 }
 
 export default class GuesstimateForm{
-  constructor(state, metrics = [], guesstimates = [], samples=0){
+  constructor(state, metrics = [], guesstimates = [], metricId=0){
+    this.metricId = metricId;
     this.metrics = metrics;
     this.state = state;
     this.guesstimates = guesstimates;
     this.guesstimate = this._guesstimate();
-    this.samples = samples;
+    this.samples = 0;
   }
   toJSON(n=0){
     return ({
       input: this.state,
       isValid: this._isValid(),
-      distribution: this._toDistribution(n)
+      distribution: this._toDistribution(n),
+      metric: this.metricId
     });
   }
   _isFunction(){

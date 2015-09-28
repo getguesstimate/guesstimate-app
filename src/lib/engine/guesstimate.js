@@ -1,45 +1,33 @@
-import _ from 'lodash'
-import Stochator from 'stochator';
-import * as functionDistribution from './functionDistribution.js';
+import * as eDistribution from './distribution.js';
+import * as functionInput from './functionInput.js';
+import * as estimateInput from './estimateInput.js';
 
+function toDistribution(guesstimate) {
+  let {input} = guesstimate;
+  if (isFunc(input)){
+    return functionInput.toDistribution(input)
+  } else if (isEstimate(input)){
+    return estimateInput.toDistribution(input)
+  }
+}
+
+function isFunc(input){
+  return (input[0] === '=');
+}
+
+function isEstimate(input){
+  return (!isFunc(input));
+}
+
+//This obviously could use some clean up.
 export function sample(guesstimate, dGraph, n=1){
-  let values = dsample(guesstimate.distribution, dGraph, n)
-  let foo = {
+  let _distribution = toDistribution(guesstimate)
+  let values = eDistribution.sample(_distribution, dGraph, n)
+  return {
     metric: guesstimate.metric,
     sample: {
       values: values.values,
       errors: []
     }
   };
-  return foo
-}
-
-function isNormal(distribution){
-  return (!_.isUndefined(distribution.mean) && !_.isUndefined(distribution.stdev));
-}
-
-function dsample(distribution, dGraph, n=1){
-  if (isNormal(distribution)){
-    return sampleNormal(distribution, n)
-  } else {
-    let values = functionDistribution.sample(distribution, dGraph, n);
-    return values;
-  }
-}
-
-function sampleNormal(distribution, n=1){
-    let stochator = new Stochator({
-      mean: distribution.mean,
-      stdev: distribution.stdev,
-      seed: 0,
-      min: 0
-    });
-    let now = new Date
-    let values = stochator.next(n).map(n => Math.floor(n));
-    //console.log('generating', (new Date) - now)
-    //console.log(values)
-    return {
-      values
-    }
-
 }
