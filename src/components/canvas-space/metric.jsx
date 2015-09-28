@@ -100,6 +100,8 @@ class Metric extends Component {
          <MetricEditingPane
              guesstimate={metric.guesstimate}
              guesstimateForm={guesstimateForm}
+             onChangeGuesstimate={this.handleChangeGuesstimate.bind(this)}
+              metricId={metric.id}
              showIf={isSelected}
          />
       </div>

@@ -1,4 +1,5 @@
 import GuesstimateForm from '../models/guesstimate-form'
+import {runMetricSimulations, runFormSimulations} from './simulation-actions.js'
 
 export function createGuesstimateForm(value) {
   return { type: 'CREATE_GUESSTIMATE_FORM', value };
@@ -21,7 +22,7 @@ export function sampleGuesstimateForm(value) {
 }
 
 let foo = function(form, n=10) {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function(resolve) {
     setTimeout(function(){
       let foobar = form.toJSON(n)
       resolve(foobar);
@@ -33,12 +34,21 @@ export function changeGuesstimateEnd(form) {
   return { type: 'CHANGE_GUESSTIMATE_FORM', form };
 }
 
-export function changeGuesstimateForm(value, getState) {
+export function changeGuesstimateForm(value, metricId) {
   return (dispatch, getState) => {
     let state = getState();
-    let form = new GuesstimateForm(value, state.metrics, state.guesstimates)
-    dispatch(changeGuesstimateEnd(form.toJSON(300)));
-    foo(form, 5000)
-      .then((f) => dispatch(changeGuesstimateEnd(f)))
+    let form = new GuesstimateForm(value, state.metrics, state.guesstimates, metricId);
+    dispatch(changeGuesstimateEnd(form.toJSON(1)));
+    dispatch(runFormSimulations(metricId));
   };
 }
+
+//export function changeGuesstimateForm(value) {
+  //return (dispatch, getState) => {
+    //let state = getState();
+    //let form = new GuesstimateForm(value, state.metrics, state.guesstimates)
+    //dispatch(changeGuesstimateEnd(form.toJSON(300)));
+    //foo(form, 5000)
+      //.then((f) => dispatch(changeGuesstimateEnd(f)))
+  //};
+//}

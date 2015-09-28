@@ -12,6 +12,7 @@ class GuesstimateForm extends Component{
     dispatch: PropTypes.func,
     guesstimate: PropTypes.object.isRequired,
     guesstimateForm: PropTypes.object.isRequired,
+    metricId: PropTypes.string.isRequired,
     onSubmit: PropTypes.func,
     value: PropTypes.string
   }
@@ -45,7 +46,7 @@ class GuesstimateForm extends Component{
   }
   _changeInput(value=this._value()){
     this.setState({userInput: value});
-    this.props.dispatch(changeGuesstimateForm(value));
+    this.props.dispatch(changeGuesstimateForm(value, this.props.metricId));
   }
   _value() {
     return ReactDOM.findDOMNode(this.refs.input).value

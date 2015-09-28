@@ -18,6 +18,7 @@ export function replaceReadableIdsWithSamples(str, metrics) {
   return tmpStr;
 }
 
+//should move somewhere else...
 export function inputMetricsReady(metrics){
   return _.every(metrics, (m) => !_.isUndefined(m.simulation));
 }
@@ -35,3 +36,6 @@ export function calculate(functionInput, dGraph){
   }
 }
 
+export function toDistribution(functionInput){
+  return {input: functionInput}
+}
