@@ -27,6 +27,22 @@ function mapStateToProps(state) {
 @connect(mapStateToProps)
 @connect(canvasStateSelector)
 export default class CanvasSpace extends Component{
+  static propTypes = {
+    canvasState: PropTypes.oneOf([
+      'selecting',
+      'function',
+      'estimate',
+      'editing'
+    ]),
+    dispatch: PropTypes.func,
+    guesstimateForm: PropTypes.object,
+    guesstimates: PropTypes.array,
+    isSelected: PropTypes.bool,
+    metrics: PropTypes.array.isRequired,
+    selected: PropTypes.object,
+    simulations: PropTypes.array,
+  }
+
   _handleSelect(event, location, item) {
     if (!_.isEqual(this.props.selected, location)){
       if ((this.props.canvasState == 'function') && item) {
@@ -42,26 +58,49 @@ export default class CanvasSpace extends Component{
   }
   //todo: put this in grid instead
   size(){
-    const lowest_metric = Math.max(...this.props.metrics.map(g => g.location.row)) + 2
+    const lowestMetric = Math.max(...this.props.metrics.map(g => g.location.row)) + 2
     const selected = this.props.selected.row + 2
-    const height = Math.max(3, lowest_metric, selected) || 3;
+    const height = Math.max(3, lowestMetric, selected) || 3;
     return {columns: 4, rows: height}
   }
   testing() {
     this.props.dispatch(runSimulations(null))
   }
+  dMetrics() {
+    const {metrics, guesstimates, simulations} = this.props
+    return e.graph.denormalize({metrics, guesstimates, simulations}).metrics
+  }
+  renderMetric(metric) {
+    const {location} = metric
+    return (
+      <Metric
+          canvasState={this.props.canvasState}
+          key={metric.id}
+          location={location}
+          metric={metric}
+      />
+    )
+  }
   render () {
-    let dMetrics = e.graph.denormalize({metrics: this.props.metrics, guesstimates: this.props.guesstimates, simulations: this.props.simulations}).metrics
-    let size = this.size()
+    const size = this.size()
+    const {selected} = this.props
     return (
       <div className="canvas-space">
-        <div className='btn btn-large btn-primary' onClick={this.testing.bind(this)}> Foobar </div>
-        <Grid size={size} selected={this.props.selected} handleSelect={this._handleSelect.bind(this)} onAddItem={this._handleAddMetric.bind(this)}>
-          {
-            dMetrics.map((m) => {
-              return (<Metric metric={m} key={m.id} location={m.location} canvasState={this.props.canvasState}/>)
-            })
-          }
+        <div
+            className='btn btn-large btn-primary'
+            onClick={this.testing.bind(this)}
+        >
+          {'Foobar'}
+        </div>
+        <Grid
+            handleSelect={this._handleSelect.bind(this)}
+            onAddItem={this._handleAddMetric.bind(this)}
+            selected={selected}
+            size={size}
+        >
+          {this.dMetrics().map((m) => {
+              return this.renderMetric(m)
+          })}
         </Grid>
       </div>
     );

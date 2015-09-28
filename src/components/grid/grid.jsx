@@ -1,6 +1,5 @@
 'use strict';
-
-import React from 'react'
+import React, {Component, PropTypes} from 'react'
 import _ from 'lodash'
 
 import styles from './grid.styl'
@@ -9,15 +8,24 @@ import {keycodeToDirection, DirectionToLocation} from './utils'
 
 let upto = (n) => Array.apply(null, {length: n}).map(Number.call, Number)
 
-export default React.createClass({
-  getDefaultProps: function() {
-    return {
-      size: {
-        columns: 6,
-        rows: 8
-      }
-    };
-  },
+export default class Grid extends Component{
+  displayName: 'Grid'
+
+  static propTypes = {
+    children: PropTypes.node,
+    handleSelect: PropTypes.func,
+    onAddItem: PropTypes.func,
+    selected: PropTypes.object,
+    size: PropTypes.object,
+  }
+
+  static defaultProps = {
+    size: {
+      columns: 6,
+      rows: 8
+    }
+  }
+
   _handleKeyPress(e) {
     let direction = keycodeToDirection(e.keyCode)
     if (direction) {
@@ -25,7 +33,7 @@ export default React.createClass({
       let newLocation = new DirectionToLocation(this.props.size, this.props.selected)[direction]()
       this.props.handleSelect(e, newLocation)
     }
-  },
+  }
   _cell(location) {
    let atThisLocation = (l) => _.isEqual(l, location)
    let isSelected = atThisLocation(this.props.selected)
@@ -33,25 +41,29 @@ export default React.createClass({
    return (
     <td key={'grid-item', location.row, location.column}>
       <Cell
-        location={location}
-        isSelected={isSelected}
-        item={item}
-        gridKeyPress={this._handleKeyPress}
-        handleSelect={this.props.handleSelect}
-        onAddItem={this.props.onAddItem}/>
+          gridKeyPress={this._handleKeyPress.bind(this)}
+          handleSelect={this.props.handleSelect}
+          isSelected={isSelected}
+          item={item}
+          location={location}
+          onAddItem={this.props.onAddItem}
+      />
     </td>
     )
-  },
+  }
   _row(row) {
     return (
       upto(this.props.size.columns).map((column) => {
         return(this._cell({row: row, column: column}))
       })
     )
-  },
+  }
   render() {
     return (
-      <div className='grid' onKeyPress={this.handlePress}>
+      <div
+          className='grid'
+          onKeyPress={this._handleKeyPress.bind(this)}
+      >
         <table>
           <tbody>
             {
@@ -64,4 +76,4 @@ export default React.createClass({
       </div>
     )
   }
-})
+}

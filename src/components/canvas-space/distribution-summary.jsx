@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import numeral from 'numeral'
 import _ from 'lodash'
-import stats from 'stats-lite'
+import ShowIf from '../utility/showIf';
 
 function formatStat(n){
   if (n) {
@@ -10,34 +10,42 @@ function formatStat(n){
   }
 }
 
-const Uncertainty = ({stdev}) => (
-  <span className='stdev'> '±' {formatStat(stdev)} </span>
-)
+const Uncertainty = ShowIf(({stdev}) => (
+  <span className='stdev'> {'±'} {formatStat(stdev)} </span>
+))
 
+@ShowIf
 class DistributionSummarySmall extends Component{
+  static propTypes = {
+    stats: PropTypes.object,
+  }
   render () {
     let stats = this.props.stats;
     return (
       <div className="distribution-summary">
-       {formatStat(stats.mean)}
-       {_.has(stats, 'stdev') ? <Uncertainty stdev={this.props.stdev}/> : null }
-     </div>
+        {formatStat(stats.mean)}
+        <Uncertainty
+            showIf={_.has(stats, 'stdev')}
+            stdev={this.props.stats.stdev}
+        />
+      </div>
     )
   }
 }
 
 export default class DistributionSummary extends Component{
-  show() {
-    return (<DistributionSummarySmall stats={this.stats()}/> )
+  static propTypes = {
+    simulation: PropTypes.object,
   }
   stats(){
     return _.get(this.props.simulation, 'stats') || false
   }
   render () {
     return (
-      <div>
-      {this.stats() ? this.show() : '' }
-      </div>
+      <DistributionSummarySmall
+          showIf={this.stats()}
+          stats={this.stats()}
+      />
     )
   }
 };
