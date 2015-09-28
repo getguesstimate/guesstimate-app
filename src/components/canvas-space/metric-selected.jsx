@@ -7,8 +7,8 @@ import GuesstimateForm from './guesstimate-form'
 import DistributionSummary from './distribution-summary'
 import Histogram from './histogram'
 import $ from 'jquery'
-import Dimensions from 'react-dimensions'
 
+// Note that this is now obsolete
 const BasicInput = React.createClass({
   getInitialState() {
     return {
