@@ -5,7 +5,6 @@ import * as functionInput from './functionInput.js';
 import * as estimateInput from './estimateInput.js';
 import type {Guesstimate, Distribution, DGraph} from './types.js'
 
-
 function toDistribution(guesstimate: Guesstimate): Distribution {
   let input = guesstimate.input;
   if (isFunc(input)){
@@ -17,6 +16,15 @@ function toDistribution(guesstimate: Guesstimate): Distribution {
 
 function isFunc(input: string): boolean {
   return (input[0] === '=');
+}
+
+export function inputMetrics(guesstimate: Guesstimate, dGraph: DGraph): Array<Object> {
+  if (!isFunc(guesstimate.input)){
+    return []
+  } else {
+    let result = functionInput.inputMetrics(guesstimate.input, dGraph)
+    return result || []
+  }
 }
 
 //Not used now, but may be later
