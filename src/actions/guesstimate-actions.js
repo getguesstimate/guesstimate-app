@@ -1,3 +1,3 @@
-export function changeGuesstimate(id, values) {
-  return { type: 'CHANGE_GUESSTIMATE', id, values };
+export function changeGuesstimate(metricId, values) {
+  return { type: 'CHANGE_GUESSTIMATE', metricId, values };
 }

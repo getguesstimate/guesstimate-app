@@ -1,23 +1,23 @@
-import GuesstimateForm from '../models/guesstimate-form'
+/* @flow soft */
+import type {Guesstimate, Metric} from '../lib/engine/types.js'
 
-export default function guesstimateForm(state = {}, metrics, guesstimates, action) {
-  let form = null
+export default function guesstimateForm(
+  state: Guesstimate = {},
+  metrics: Array<Metric>,
+  guesstimates: Array<Guesstimate>,
+  action: Object
+  ): Guesstimate {
+
   switch (action.type) {
   case 'CREATE_GUESSTIMATE_FORM':
-    form = new GuesstimateForm(action.value, metrics, guesstimates);
-    return form.toJSON();
+    return action.guesstimate;
   case 'DESTROY_GUESSTIMATE_FORM':
     return {}
-  return { type: 'ADD_METRIC_INPUT_TO_EDITING_METRIC', metric};
   case 'UPDATE_GUESSTIMATE_FORM':
-    form = new GuesstimateForm(action.value, metrics, guesstimates, 5);
-    return form.toJSON();
-  case 'CHANGE_GUESSTIMATE_FORM':
-    return action.form;
+    return action.guesstimate;
   case 'ADD_METRIC_INPUT_TO_GUESSTIMATE_FORM':
     let newInput = state.input + action.metric.id;
-    form = new GuesstimateForm(newInput, metrics, guesstimates);
-    return form.toJSON();
+    return {input: newInput, metric: state.metric}
   default:
     return state
   }

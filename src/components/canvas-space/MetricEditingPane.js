@@ -29,8 +29,8 @@ export default class MetricEditingPane extends Component {
             <GuesstimateForm
                 guesstimate={this.props.guesstimate}
                 guesstimateForm={this.props.guesstimateForm}
-                onSubmit={this.props.onChangeGuesstimate}
                 metricId={this.props.metricId}
+                onSubmit={this.props.onChangeGuesstimate}
                 value={this.props.guesstimate.input}
             />
             </div>

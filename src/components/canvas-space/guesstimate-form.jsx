@@ -28,7 +28,7 @@ class GuesstimateForm extends Component{
   }
   _handleFocus() {
     $(window).on('functionMetricClicked', (a, item) => {this._handleMetricClick(item)})
-    this.props.dispatch(createGuesstimateForm(this._value()))
+    this.props.dispatch(createGuesstimateForm({input: this._value(), metric: this.props.metricId}))
   }
   _handleBlur() {
     this._submit()
@@ -46,7 +46,7 @@ class GuesstimateForm extends Component{
   }
   _changeInput(value=this._value()){
     this.setState({userInput: value});
-    this.props.dispatch(changeGuesstimateForm(value, this.props.metricId));
+    this.props.dispatch(changeGuesstimateForm({input: value, metric: this.props.metricId}));
   }
   _value() {
     return ReactDOM.findDOMNode(this.refs.input).value

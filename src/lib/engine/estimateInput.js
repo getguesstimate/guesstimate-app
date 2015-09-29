@@ -22,7 +22,7 @@ export function toDistribution(input){
   } else if (input.includes('->')){
     let [low, high] = splitNumbersAt('->')
 
-    if (high < low){
+    if (high > low){
       let mean = low + ((high - low) / 2);
       let stdev = (high-mean);
       return {mean, stdev};
