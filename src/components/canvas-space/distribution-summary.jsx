@@ -25,7 +25,7 @@ class DistributionSummarySmall extends Component{
       <div className="distribution-summary">
         {formatStat(stats.mean)}
         <Uncertainty
-            showIf={_.has(stats, 'stdev')}
+            showIf={_.has(stats, 'stdev') && (stats.stdev !== 0)}
             stdev={this.props.stats.stdev}
         />
       </div>
