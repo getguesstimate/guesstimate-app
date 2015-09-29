@@ -34,17 +34,26 @@ function isRecentPropogation(propogationId: number, simulation: Simulation) {
   return !_.has(simulation, 'propogation') || (propogationId >= simulation.propogation)
 }
 
+function hasNoUncertainty(simulation: Simulation) {
+  const v = simulation.sample.values;
+  return (_.uniq(_.slice(v, 0, 5)).length === 1)
+}
+
 export class FormPropogation {
   dispatch: Function;
   getState: Function;
   metricId: string;
   id: number;
+  batchStep: integer;
+  batchSizes: Array<number>;
 
   constructor(dispatch: Function, getState: Function, metricId: string) {
     this.dispatch = dispatch
     this.getState = getState
     this.metricId = metricId
     this.id = Date.now()
+    this.batchSizes = [5, 500, 1500]
+    this.batchStep = 0
   }
 
   run(): void {
@@ -76,8 +85,8 @@ export class FormPropogation {
   }
 
   _step(): void {
-    let sampleLength = 500
-    this._simulate(sampleLength);
+    this._simulate(this.batchSizes[this.batchStep]);
+    this.batchStep++
   }
 
   _graph(): Graph {
@@ -94,8 +103,10 @@ export class FormPropogation {
 
     const hasErrors = e.simulation.hasErrors(simulation)
     const isObsolete = !isRecentPropogation(this.id, simulation)
-    const isComplete = e.simulation.values(simulation).length >= 1500
+    const isComplete = (this.batchStep > (this.batchSizes.length - 1))
+    const hasNoValues = (simulation.sample.values.length === 0)
+    const noUncertainty = hasNoUncertainty(simulation)
 
-    return (hasErrors || isObsolete || isComplete)
+    return (hasErrors || isObsolete || isComplete || hasNoValues || noUncertainty)
   }
 }
