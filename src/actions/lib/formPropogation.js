@@ -44,7 +44,7 @@ export class FormPropogation {
   getState: Function;
   metricId: string;
   id: number;
-  batchStep: integer;
+  batchStep: number;
   batchSizes: Array<number>;
 
   constructor(dispatch: Function, getState: Function, metricId: string) {

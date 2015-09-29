@@ -3,23 +3,13 @@ import ReactDOM from 'react-dom'
 import { connect } from 'react-redux';
 import { removeMetric, changeMetric } from '../../actions/metric-actions.js';
 import { changeGuesstimate } from '../../actions/guesstimate-actions.js';
-
-import Label from 'react-bootstrap/lib/Label'
 import _ from 'lodash'
 
 import MetricStatTable from './MetricStatTable';
 import MetricEditingPane from './MetricEditingPane.js';
-
 import DistributionSummary from './distribution-summary'
 import SimulationHistogram from './simulation-histogram.js'
-import ShowIf from '../utility/showIf';
-
-const MetricReadableIdd = ({canvasState, readableId}) => (
-  <div className='col-sm-2 function-id'>
-    {canvasState == 'function' ? (<Label bsStyle="success">{readableId}</Label>) : ''}
-  </div>
-)
-const MetricReadableId = ShowIf(MetricReadableIdd)
+import MetricHeader from './MetricHeader.js'
 
 class Metric extends Component {
   displayName: 'Metric'
@@ -65,6 +55,7 @@ class Metric extends Component {
   }
   render () {
     const {isSelected, metric, canvasState, guesstimateForm} = this.props
+    let anotherFunctionSelected = ((canvasState === 'function') && !isSelected)
     return(
       <div>
       <div
@@ -77,16 +68,11 @@ class Metric extends Component {
              showIf={_.has(metric, 'simulation.stats.mean') && isSelected}
              stats={_.get(metric, 'simulation.stats')}
          />
-         <div className='row'>
-         <div className={canvasState == 'function' ? 'col-sm-8 name' : 'col-sm-12 name'}>
-           {metric.name}
-         </div>
-         <MetricReadableId
-             {...canvasState}
-             readableId={metric.readableId}
-             showIf={canvasState === 'function'}
+         <MetricHeader
+             anotherFunctionSelected={anotherFunctionSelected}
+             metric={metric}
+             onChange={this.handleChangeMetric.bind(this)}
          />
-         </div>
          <div className='row row1'>
            <div className='col-sm-12 mean'>
              <DistributionSummary
@@ -96,13 +82,13 @@ class Metric extends Component {
            </div>
          </div>
       </div>
-         <MetricEditingPane
-             guesstimate={metric.guesstimate}
-             guesstimateForm={guesstimateForm}
-             metricId={metric.id}
-             onChangeGuesstimate={this.handleChangeGuesstimate.bind(this)}
-             showIf={isSelected}
-         />
+       <MetricEditingPane
+           guesstimate={metric.guesstimate}
+           guesstimateForm={guesstimateForm}
+           metricId={metric.id}
+           onChangeGuesstimate={this.handleChangeGuesstimate.bind(this)}
+           showIf={isSelected}
+       />
       </div>
     )
   }
