@@ -1,24 +1,17 @@
-import Guesstimate from './guesstimate';
-
 export default class Guesstimates{
   constructor(state){
     this.state = _.cloneDeep(state)
   }
   remove(metricId){
-    this.state = this.state.filter(function(i) {return i.metric !== metricId})
+    this.state = this.state.filter(i => i.metric !== metricId)
     return this;
   }
   get(metricId){
-    return this.state.filter(function(i) {return i.metric === metricId})[0];
+    return this.state.find(i => i.metric === metricId);
   }
-  create(metricId){
-    let newModel = new Guesstimate({metric: metricId});
-    this._add(newModel.toStore());
-    return this;
-  }
-  change(metricId, values){
-    let metric = new Guesstimate(this.get(metricId));
-    this.remove(metricId)._add(metric.set(values).toStore());
+  change(values){
+    this.remove(values.metricId)
+    this._add(values)
     return this;
   }
   _add(newModel){

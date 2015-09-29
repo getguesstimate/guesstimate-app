@@ -3,10 +3,7 @@
 import _ from 'lodash'
 import Stochator from 'stochator';
 import * as functionDistribution from './functionDistribution.js';
-
-type Distribution = {mean: number; stdev: number, input: string};
-type DGraph = {metrics: any};
-type Sample = {values?: Array<number>, errors?: Array<Object>};
+import type {Distribution, DGraph, Sample} from './types.js'
 
 export function sample(distribution: Distribution, dGraph: DGraph, n: number = 1): Sample {
   if (isNormal(distribution)){
@@ -22,12 +19,14 @@ function isNormal(distribution: Distribution): boolean{
 }
 
 function sampleNormal(distribution: Distribution, n: number = 1){
-  let stochator = new Stochator({
+  const stochator = new Stochator({
     mean: distribution.mean,
     stdev: distribution.stdev,
     seed: 0,
     min: 0
   });
   //This makes the outputs integers.  This could change, of course
-  return { values: stochator.next(n).map(n => Math.floor(n)) }
+  let results = stochator.next(n)
+  results = Array.isArray(results) ? results : [results]
+  return { values: results.map(n => Math.floor(n)) }
 }

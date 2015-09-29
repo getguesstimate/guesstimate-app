@@ -74,7 +74,7 @@ class Metric extends Component {
       >
         <SimulationHistogram simulation={metric.simulation}/>
          <MetricStatTable
-             showIf={_.has(metric, 'simulation.stats') && isSelected}
+             showIf={_.has(metric, 'simulation.stats.mean') && isSelected}
              stats={_.get(metric, 'simulation.stats')}
          />
          <div className='row'>
@@ -91,7 +91,6 @@ class Metric extends Component {
            <div className='col-sm-12 mean'>
              <DistributionSummary
                  guesstimateForm={guesstimateForm}
-                 onChangeGuesstimate={this.handleChangeGuesstimate.bind(this)}
                  simulation={metric.simulation}
              />
            </div>
@@ -100,8 +99,8 @@ class Metric extends Component {
          <MetricEditingPane
              guesstimate={metric.guesstimate}
              guesstimateForm={guesstimateForm}
+             metricId={metric.id}
              onChangeGuesstimate={this.handleChangeGuesstimate.bind(this)}
-              metricId={metric.id}
              showIf={isSelected}
          />
       </div>

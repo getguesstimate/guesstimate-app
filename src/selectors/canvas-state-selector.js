@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import GuesstimateForm from '../models/guesstimate-form';
+import e from '../lib/engine/engine'
 
 const guesstimateFormSelector = state => state.guesstimateForm;
 
@@ -7,7 +7,7 @@ let chooseCanvasState = (guesstimateForm) => {
     if (Object.keys(guesstimateForm).length === 0){
       return 'selecting';
     } else {
-      return new GuesstimateForm(guesstimateForm.input).toEditorState();
+      return e.guesstimate.toEditorState(guesstimateForm)
     }
 }
 

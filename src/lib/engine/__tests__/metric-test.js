@@ -16,7 +16,7 @@ describe('metric', () => {
     {metric: 'abc', data: [2,3,4]}
   ];
 
-  describe.only('denormalize', () => {
+  describe('denormalize', () => {
     it('works with guesstimates and simulations', () => {
       metric = {id: 'abc'};
       graph = {metrics: [metric], guesstimates, simulations};

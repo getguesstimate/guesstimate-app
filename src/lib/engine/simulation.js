@@ -8,5 +8,17 @@ export function combine(simulations) {
 }
 
 export function hasValues(simulation) {
-  return _.get(simulation, 'sample.values') && (simulation.sample.values.length > 0);
+  return (values(simulation).length > 0);
+}
+
+export function values(simulation) {
+  return _.get(simulation, 'sample.values') || []
+}
+
+export function hasErrors(simulation) {
+  return (errors(simulation).length > 0);
+}
+
+export function errors(simulation) {
+  return _.get(simulation, 'sample.errors') || []
 }
