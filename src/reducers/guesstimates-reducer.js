@@ -1,5 +1,3 @@
-import Guesstimates from '../models/guesstimates.js'
-
 let initialGuesstimates = [
   {
     metric: '238jdj',
@@ -34,11 +32,18 @@ let initialGuesstimates = [
 export default function guesstimates(state = initialGuesstimates, action) {
   switch (action.type) {
   case 'ADD_METRIC':
-    return (new Guesstimates(state)).change({metric: action.id}).state;
+    return [...state, {metric: action.id, input: ''}]
   case 'REMOVE_METRIC':
-    return (new Guesstimates(state)).remove(action.id).state;
+    return state.filter(y => y.metric !== action.id)
   case 'CHANGE_GUESSTIMATE':
-    return (new Guesstimates(state)).change(action.values).state;
+    const i = state.findIndex(y => y.metric === action.values.metric);
+    if (i !== -1) {
+      return [
+        ...state.slice(0, i),
+        action.values,
+        ...state.slice(i+1, state.length)
+      ];
+    }
   default:
     return state;
   }
