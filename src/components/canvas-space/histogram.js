@@ -1,5 +1,6 @@
 var React = require("react");
 var d3 = require("d3");
+import _ from 'lodash'
 
 function getYScale(data, height) {
   return d3.scale.linear().
@@ -35,7 +36,8 @@ export default class Histogram extends React.Component {
     var { top, right, bottom, left, data, width, height } = this.props;
 
     let xScale = getXScale(data, width);
-    let histogramDataFn = d3.layout.histogram().bins(xScale.ticks(80));
+    let bins = _.max(data) < 80 ? _.max(data) : 120
+    let histogramDataFn = d3.layout.histogram().bins(xScale.ticks(bins));
     let histogramData = histogramDataFn(data);
     let yScale = getYScale(histogramData, height);
 
@@ -127,7 +129,7 @@ export class Bar extends React.Component {
 
     return (
       <g className="react-d3-histogram__bar" transform={"translate(" + scaledX + "," + scaledY + ")"}>
-        <rect width={scaledDx } height={height - scaledY} />
+        <rect width={scaledDx} height={height - scaledY} />
       </g>
     );
   }
