@@ -127,7 +127,7 @@ export class Bar extends React.Component {
 
     return (
       <g className="react-d3-histogram__bar" transform={"translate(" + scaledX + "," + scaledY + ")"}>
-        <rect width={scaledDx - 1} height={height - scaledY} />
+        <rect width={scaledDx } height={height - scaledY} />
       </g>
     );
   }
