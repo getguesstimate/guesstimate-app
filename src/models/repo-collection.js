@@ -1,32 +1,32 @@
 import Collection from 'ampersand-rest-collection'
+import $ from 'jquery'
 import Repo from './repo'
 
+let rootUrl = 'http://guesstimate.herokuapp.com/'
 export default Collection.extend({
   model: Repo,
 
   initialize () {
-    app.firebase.child('repos').on('value', (snapshot) => {
-      let val = snapshot.val()
-      if (!Array.isArray(val)) {
-        val = [val]
-      }
-      let repos = _.map(val[0], function(value, key) {
-        value.id = key
-        return value
-      })
-      this.add(repos)
-    })
+    $.getJSON((rootUrl + 'spaces'), (data) => {
+      this.add(data)
+    }, 'json')
   },
 
   destroy (repo) {
-    app.firebase.child('repos').child(repo.id).set({})
-    this.remove(repo)
+    let request = $.ajax({
+      url: (rootUrl + 'spaces/' + repo.id),
+      method: 'DELETE'
+    })
+    request.done(() => { this.remove(repo) })
   },
 
   create (name, description) {
-    let repo = {name: name, description: description, data: {nodes: [], edges: []}}
-    app.firebase.child('repos').push(repo)
-    return ('/repo/' + name)
+    let request = $.ajax({
+      url: (rootUrl + 'spaces/'),
+      data: {space: {name, description}},
+      method: 'POST'
+    })
+    request.done(data => this.add(data))
   },
 
   getByName (name) {
