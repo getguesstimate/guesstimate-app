@@ -6,7 +6,7 @@ export default Model.extend({
         name: 'string',
         data: 'hash',
         description: 'string',
-        id: 'string',
+        id: 'number',
     },
     derived: {
       destroy: {
@@ -26,9 +26,5 @@ export default Model.extend({
             return '/repo/' + this.name;
         }
       }
-    },
-    updateData: function(data) {
-      this.data = data
-      app.firebase.child('repos').child(this.id).set({name: this.name, description:this.description, data: data})
     }
 })

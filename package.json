@@ -62,7 +62,6 @@
     "bootstrap-styl": "3.3.1",
     "d3": "^3.5.6",
     "extract-text-webpack-plugin": "^0.8.2",
-    "firebase": "^2.2.7",
     "font-awesome": "^4.4.0",
     "gen-uid": "^0.0.2",
     "jquery": "2.1.4",
