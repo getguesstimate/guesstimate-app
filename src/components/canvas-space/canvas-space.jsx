@@ -66,8 +66,7 @@ export default class CanvasSpace extends Component{
     return {columns: 4, rows: height}
   }
   testing() {
-    this.getSpace()
-    /*this.props.dispatch(runSimulations(null))*/
+    this.props.dispatch(runSimulations(null))
   }
   dMetrics() {
     const {metrics, guesstimates, simulations} = this.props
@@ -83,9 +82,6 @@ export default class CanvasSpace extends Component{
           metric={metric}
       />
     )
-  }
-  getSpace() {
-    this.props.dispatch(spaceActions.get({id: '234'}))
   }
   render () {
     const size = this.size()

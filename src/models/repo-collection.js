@@ -3,6 +3,7 @@ import $ from 'jquery'
 import Repo from './repo'
 
 let rootUrl = 'http://guesstimate.herokuapp.com/'
+
 export default Collection.extend({
   model: Repo,
 

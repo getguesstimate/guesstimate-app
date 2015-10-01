@@ -2,7 +2,7 @@ import app from 'ampersand-app'
 import Router from './router'
 import styles from './css/main.styl'
 import Me from './models/me'
-
+import * as spaceActions from './actions/space-actions.js'
 window.app = app
 
 app.extend({

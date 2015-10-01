@@ -10,33 +10,29 @@ function mapStateToProps(state) {
   }
 }
 
+@connect()
 class Space extends Component{
+  url() {
+    return '/repo/' + this.props.space.name;
+  }
+  destroy() {
+    this.props.dispatch(spaceActions.destroy(this.props.space.id))
+  }
   render() {
     return (
-      <div> {this.props.space.name} </div>
-    )
-  }
-}
-
-const RepoItem = React.createClass({
-  delete () {
-    this.props.repo.destroy()
-  },
-  render () {
-    return (
       <div>
-        <a href={this.props.repo.appUrl} >{this.props.repo.name}</a>
-        <span onClick={this.delete}><Icon name='times'/> </span>
+        <a href={this.url()}>{this.props.space.name}</a>
+        <span onClick={this.destroy.bind(this)}><Icon name='times'/> </span>
       </div>
     )
   }
-})
+}
 
 @connect(mapStateToProps)
 export default class Home extends Component{
   displayName: 'Home'
   getSpace() {
-    this.props.dispatch(spaceActions.get())
+    this.props.dispatch(spaceActions.fetch())
   }
   render () {
     const {spaces} = this.props
@@ -58,9 +54,3 @@ export default class Home extends Component{
     )
   }
 }
-
-         //{repos.models.map((repo) => {
-              //return (
-                //<RepoItem repo={repo}/>
-              //)
-            //})}

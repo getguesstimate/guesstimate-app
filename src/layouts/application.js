@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Component, PropTypes} from 'react'
 import DropdownButton from 'react-bootstrap/lib/DropdownButton'
 import Button from 'react-bootstrap/lib/Button'
 import ButtonGroup from 'react-bootstrap/lib/ButtonGroup'
@@ -6,6 +6,8 @@ import MenuItem from 'react-bootstrap/lib/MenuItem'
 import NavHelper from '../components/nav-helper'
 import ampersandMixin from 'ampersand-react-mixin'
 import Icon from'react-fa'
+import { connect } from 'react-redux';
+import * as spaceActions from '../actions/space-actions.js';
 
 const NavItem = React.createClass({
   render () {
@@ -50,8 +52,12 @@ const Header = React.createClass({
   }
 });
 
-export default React.createClass({
-  displayName: 'Layout',
+@connect()
+export default class extends Component{
+  displayName: 'Layout'
+  componentDidMount() {
+    this.props.dispatch(spaceActions.fetch())
+  }
   render () {
     let body = this.props.children
     if (!this.props.isFluid) {
@@ -64,4 +70,4 @@ export default React.createClass({
       </NavHelper>
     )
   }
-})
+}
