@@ -1,6 +1,8 @@
-import React from 'react'
+import React, {Component, PropTypes} from 'react'
 import t from 'tcomb-form'
 import _ from 'lodash'
+import * as spaceActions from '../../actions/space-actions.js'
+import { connect } from 'react-redux';
 
 import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar'
 
@@ -11,19 +13,18 @@ let Repo = t.struct({
   description: t.Str
 });
 
-export default React.createClass({
-  getInitialState() {
-    return {
-      options: {
-        hasError: false,
-        error: <i> Important Error!</i>,
-      },
-      value: {
-        name: "",
-        description: ""
-      },
-    }
-  },
+@connect()
+export default class ReactActionForm extends Component{
+ state = {
+    options: {
+      hasError: false,
+      error: <i> Important Error!</i>,
+    },
+    value: {
+      name: "",
+      description: ""
+    },
+  }
 
   save() {
     // call getValue() to get the values of the form
@@ -32,7 +33,7 @@ export default React.createClass({
     if (value) {
       // value here is an instance of Person
     }
-  },
+  }
 
   onChange(value) {
     let newOptions = this.state.options
@@ -42,7 +43,7 @@ export default React.createClass({
       error: <i> {errors.join('')} </i>,
     }
     this.setState({value: value, options:newOptions})
-  },
+  }
 
   errors(value) {
     let errors = []
@@ -51,32 +52,33 @@ export default React.createClass({
       errors.push('name not unique')
     }
     return errors
-  },
+  }
 
   ready() {
     return this.state.value.name !== "" && this.state.value.description !== "";
-  },
+  }
 
   onSubmit(e) {
     e.preventDefault()
     let repoName = this.state.value.name
     let repoDescription = this.state.value.description
     let newUrl = app.me.repos.create(repoName,repoDescription)
+    this.props.dispatch(spaceActions.create({name: repoName, description: repoDescription}))
     app.router.history.navigate(newUrl)
-  },
+  }
 
   onCancel(e){
     window.history.back()
-  },
+  }
 
   render() {
     return (
-      <form onSubmit={this.onSubmit}>
+      <form onSubmit={this.onSubmit.bind(this)}>
         <Form
           type={Repo}
           options={this.state.options}
           value={this.state.value}
-          onChange={this.onChange}
+          onChange={this.onChange.bind(this)}
         />
       <ButtonToolbar>
         <button type='submit' className='btn btn-primary' disabled={this.state.options.hasError || !this.ready()}>Save</button>
@@ -85,4 +87,4 @@ export default React.createClass({
       </form>
     );
   }
-});
+}
