@@ -1,7 +1,22 @@
-import React from 'react'
+import React, {Component, PropTypes} from 'react'
 import ampersandMixin from 'ampersand-react-mixin'
 import Icon from'react-fa'
-import Repo from '../models/repo'
+import { connect } from 'react-redux';
+import * as spaceActions from '../actions/space-actions.js';
+
+function mapStateToProps(state) {
+  return {
+    spaces: state.spaces
+  }
+}
+
+class Space extends Component{
+  render() {
+    return (
+      <div> {this.props.space.name} </div>
+    )
+  }
+}
 
 const RepoItem = React.createClass({
   delete () {
@@ -17,27 +32,35 @@ const RepoItem = React.createClass({
   }
 })
 
-export default React.createClass({
-  mixins: [ampersandMixin],
-  displayName: 'Home',
+@connect(mapStateToProps)
+export default class Home extends Component{
+  displayName: 'Home'
+  getSpace() {
+    this.props.dispatch(spaceActions.get())
+  }
   render () {
-    const {repos} = this.props
-
+    const {spaces} = this.props
     return (
       <div className='home-page'>
         <div className='container'>
           <h1 className='text-center'> Estimate all the Things!</h1>
         </div>
-
         <div className='container text-center'>
           <h2> All Models </h2>
-         {repos.models.map((repo) => {
-              return (
-                <RepoItem repo={repo}/>
-              )
-            })}
+          <btn onClick={this.getSpace.bind(this)}> Foobar </btn>
+          {spaces.asMutable().map((s) => {
+            return (
+              <Space space={s} key={s.id}/>
+            )
+          })}
         </div>
       </div>
     )
   }
-})
+}
+
+         //{repos.models.map((repo) => {
+              //return (
+                //<RepoItem repo={repo}/>
+              //)
+            //})}
