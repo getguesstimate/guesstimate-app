@@ -16,6 +16,7 @@ export function destroy(id) {
       url: (rootUrl + 'spaces/' + id),
       method: 'DELETE'
     })
+
     request.done(() => {
       const successAction = standardActionCreators.deleteSuccess({id: id});
       dispatch(successAction)

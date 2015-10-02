@@ -13,7 +13,7 @@ const NavItem = React.createClass({
   render () {
     return (
     <ButtonGroup>
-        <DropdownButton title='Example Repos' id='split-button-pull-right'>
+        <DropdownButton title='Example Guesstimates' id='split-button-pull-right'>
          {this.props.repos.models.map((repo) => {
               return (
                 <MenuItem href={repo.appUrl} kety={repo.appUrl} title={repo.description}>{repo.name}</MenuItem>

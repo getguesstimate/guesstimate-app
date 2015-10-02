@@ -42,7 +42,7 @@ export default Router.extend({
   routes: {
     '': 'home',
     'repo/new': 'repoNew',
-    'repo/:name': 'repoShow',
+    'repo/:id': 'repoShow',
   },
 
   home () {
@@ -53,7 +53,7 @@ export default Router.extend({
     this.render(<RepoNew/>, false)
   },
 
-  repoShow (name) {
-    this.render(<RepoShow repo={name} repos={app.me.repos}/>, true)
+  repoShow (id) {
+    this.render(<RepoShow spaceId={id}/>, true)
   },
 })

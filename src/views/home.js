@@ -1,8 +1,8 @@
 import React, {Component, PropTypes} from 'react'
-import ampersandMixin from 'ampersand-react-mixin'
 import Icon from'react-fa'
 import { connect } from 'react-redux';
 import * as spaceActions from '../actions/space-actions.js';
+import {ListGroup, ListGroupItem} from 'react-bootstrap/lib'
 
 function mapStateToProps(state) {
   return {
@@ -13,17 +13,13 @@ function mapStateToProps(state) {
 @connect()
 class Space extends Component{
   url() {
-    return '/repo/' + this.props.space.name;
-  }
-  destroy() {
-    this.props.dispatch(spaceActions.destroy(this.props.space.id))
+    return '/repo/' + this.props.space.id;
   }
   render() {
     return (
-      <div>
-        <a href={this.url()}>{this.props.space.name}</a>
-        <span onClick={this.destroy.bind(this)}><Icon name='times'/> </span>
-      </div>
+      <ListGroupItem header={this.props.space.name} href={this.url()}>
+        {this.props.space.description}
+      </ListGroupItem>
     )
   }
 }
@@ -31,9 +27,6 @@ class Space extends Component{
 @connect(mapStateToProps)
 export default class Home extends Component{
   displayName: 'Home'
-  getSpace() {
-    this.props.dispatch(spaceActions.fetch())
-  }
   render () {
     const {spaces} = this.props
     return (
@@ -41,14 +34,21 @@ export default class Home extends Component{
         <div className='container'>
           <h1 className='text-center'> Estimate all the Things!</h1>
         </div>
-        <div className='container text-center'>
-          <h2> All Models </h2>
-          <btn onClick={this.getSpace.bind(this)}> Foobar </btn>
-          {spaces.asMutable().map((s) => {
-            return (
-              <Space space={s} key={s.id}/>
-            )
-          })}
+        <div className='container'>
+        <div className='row'>
+          <div className='col-sm-6'>
+          </div>
+          <div className='col-md-6'>
+            <h2 className='text-center'> Boards </h2>
+            <ListGroup>
+              {spaces.asMutable().map((s) => {
+                return (
+                  <Space space={s} key={s.id}/>
+                )
+              })}
+            </ListGroup>
+          </div>
+        </div>
         </div>
       </div>
     )
