@@ -15,9 +15,9 @@ const NavItem = React.createClass({
     return (
     <ButtonGroup>
         <DropdownButton title='Example Guesstimates' id='split-button-pull-right'>
-         {this.props.repos.models.map((repo) => {
+         {this.props.spaces.asMutable().map((space) => {
               return (
-                <MenuItem href={Space.url(repo)} key={repo.id} title={repo.description}>{repo.name}</MenuItem>
+                <MenuItem href={Space.url(space)} key={space.id}>{space.name}</MenuItem>
               )
           })}
         </DropdownButton>
@@ -28,7 +28,6 @@ const NavItem = React.createClass({
 })
 
 const Header = React.createClass({
-  mixins: [ampersandMixin],
   displayName: 'Header',
   render () {
     let containerClass = (this.props.isFluid === true) ? "container-fluid" : "container";
@@ -41,7 +40,7 @@ const Header = React.createClass({
             </div>
             <div className="col-xs-4">
               <div className="repo-list pull-right">
-                <NavItem repos={this.props.repos}/>
+                <NavItem spaces={this.props.spaces}/>
               </div>
               <ul className="nav navbar-nav pull-right">
               </ul>
@@ -53,20 +52,28 @@ const Header = React.createClass({
   }
 });
 
-@connect()
+
+function mapStateToProps(state) {
+  return {
+    spaces: state.spaces
+  }
+}
+
+@connect(mapStateToProps)
 export default class extends Component{
   displayName: 'Layout'
   componentDidMount() {
     this.props.dispatch(spaceActions.fetch())
   }
   render () {
+    console.log(this.props)
     let body = this.props.children
     if (!this.props.isFluid) {
       body = <div className="container"> {body} </div>
     }
     return (
       <NavHelper>
-        <Header isFluid={this.props.isFluid} repos={this.props.repos}/>
+        <Header isFluid={this.props.isFluid} spaces={this.props.spaces}/>
         {body}
       </NavHelper>
     )
