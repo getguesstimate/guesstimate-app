@@ -41,8 +41,8 @@ export default Router.extend({
 
   routes: {
     '': 'home',
-    'repo/new': 'repoNew',
-    'repo/:id': 'repoShow',
+    'space/new': 'repoNew',
+    'space/:id': 'repoShow',
   },
 
   home () {
