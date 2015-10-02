@@ -2,7 +2,8 @@ import React, {Component, PropTypes} from 'react'
 import Icon from'react-fa'
 import { connect } from 'react-redux';
 import * as spaceActions from '../actions/space-actions.js';
-import {ListGroup, ListGroupItem} from 'react-bootstrap/lib'
+import {ListGroup, ListGroupItem} from 'react-bootstrap/lib';
+import * as Space from '../lib/engine/space';
 
 function mapStateToProps(state) {
   return {
@@ -11,14 +12,12 @@ function mapStateToProps(state) {
 }
 
 @connect()
-class Space extends Component{
-  url() {
-    return '/repo/' + this.props.space.id;
-  }
+class SpaceShow extends Component{
   render() {
+    const {space} = this.props
     return (
-      <ListGroupItem header={this.props.space.name} href={this.url()}>
-        {this.props.space.description}
+      <ListGroupItem header={space.name} href={Space.url(space)}>
+        {space.description}
       </ListGroupItem>
     )
   }
@@ -43,7 +42,7 @@ export default class Home extends Component{
             <ListGroup>
               {spaces.asMutable().map((s) => {
                 return (
-                  <Space space={s} key={s.id}/>
+                  <SpaceShow space={s} key={s.id}/>
                 )
               })}
             </ListGroup>

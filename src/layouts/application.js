@@ -8,6 +8,7 @@ import ampersandMixin from 'ampersand-react-mixin'
 import Icon from'react-fa'
 import { connect } from 'react-redux';
 import * as spaceActions from '../actions/space-actions.js';
+import * as Space from '../lib/engine/space';
 
 const NavItem = React.createClass({
   render () {
@@ -16,11 +17,11 @@ const NavItem = React.createClass({
         <DropdownButton title='Example Guesstimates' id='split-button-pull-right'>
          {this.props.repos.models.map((repo) => {
               return (
-                <MenuItem href={repo.appUrl} kety={repo.appUrl} title={repo.description}>{repo.name}</MenuItem>
+                <MenuItem href={Space.url(repo)} key={repo.id} title={repo.description}>{repo.name}</MenuItem>
               )
           })}
         </DropdownButton>
-        <Button href="/repo/new"><Icon name='plus'/></Button>
+        <Button href="/space/new"><Icon name='plus'/></Button>
       </ButtonGroup>
     )
   }
