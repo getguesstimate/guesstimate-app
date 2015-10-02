@@ -1,5 +1,3 @@
-import Metrics from '../models/metrics'
-
 let initialMetrics = [
   {
     id: '238jdj',
@@ -68,11 +66,18 @@ let initialMetrics = [
 export default function metrics(state = initialMetrics, action) {
   switch (action.type) {
   case 'ADD_METRIC':
-    return (new Metrics(state)).create({id: action.id, location: action.location}).state;
+    return [...state, action.item]
   case 'REMOVE_METRIC':
-    return (new Metrics(state)).remove(action.id).state;
+    return state.filter(y => y.id !== action.item.id)
   case 'CHANGE_METRIC':
-    return (new Metrics(state)).change(action.id, action.values).state;
+    const i = state.findIndex(y => y.id === action.item.id);
+    if (i !== -1) {
+      return [
+        ...state.slice(0, i),
+        action.item,
+        ...state.slice(i+1, state.length)
+      ];
+    }
   default:
     return state
   }

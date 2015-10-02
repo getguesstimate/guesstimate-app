@@ -1,7 +1,7 @@
 import app from 'ampersand-app'
 import Router from 'ampersand-router'
-import RepoShow from './views/repos/show'
-import RepoNew from './views/repos/new'
+import SpaceShow from './views/repos/show'
+import SpaceNew from './views/repos/new'
 import Home from './views/home'
 import React from 'react'
 import ReactDOM from 'react-dom'
@@ -21,7 +21,7 @@ const Debug = ({store, LogMonitor}) => (
 );
 
 const FullPage = ({isFluid, page}) => (
-  <Layout isFluid={isFluid} repos={app.me.repos}>
+  <Layout isFluid={isFluid}>
     {page}
   </Layout>
 );
@@ -41,19 +41,19 @@ export default Router.extend({
 
   routes: {
     '': 'home',
-    'repo/new': 'repoNew',
-    'repo/:name': 'repoShow',
+    'space/new': 'spaceNew',
+    'space/:id': 'spaceShow',
   },
 
   home () {
-    this.render(<Home repos={app.me.repos}/>, true)
+    this.render(<Home/>, true)
   },
 
-  repoNew () {
-    this.render(<RepoNew/>, false)
+  spaceNew () {
+    this.render(<SpaceNew/>, false)
   },
 
-  repoShow (name) {
-    this.render(<RepoShow repo={name} repos={app.me.repos}/>, true)
+  spaceShow (id) {
+    this.render(<SpaceShow spaceId={id}/>, true)
   },
 })

@@ -15,27 +15,32 @@ export default class MetricEditingPane extends Component {
     e.stopPropagation()
   }
   render() {
-    return (
-      <ReactCSSTransitionGroup
-          transitionEnterTimeout={500}
-          transitionName='carousel'
-      >
-        <div className='editing-section'>
-          <div className='row'>
-            <div
-                className='col-xs-12'
-                onKeyDown={this._handlePress}
-            >
-            <GuesstimateForm
-                guesstimate={this.props.guesstimate}
-                guesstimateForm={this.props.guesstimateForm}
-                metricId={this.props.metricId}
-                onSubmit={this.props.onChangeGuesstimate}
-                value={this.props.guesstimate.input}
-            />
-            </div>
+    let items = (
+      <div className='editing-section' key={this.props.metricId}>
+        <div className='row'>
+          <div
+              className='col-xs-12'
+              onKeyDown={this._handlePress}
+          >
+          <GuesstimateForm
+              guesstimate={this.props.guesstimate}
+              guesstimateForm={this.props.guesstimateForm}
+              metricId={this.props.metricId}
+              onSubmit={this.props.onChangeGuesstimate}
+              value={this.props.guesstimate.input}
+          />
           </div>
         </div>
+        </div>
+      )
+    return (
+      <ReactCSSTransitionGroup
+          transitionName='carousel'
+          transitionAppear={true}
+          transitionAppearTimeout={500}
+          transitionEnterTimeout={300}
+      >
+      {items}
       </ReactCSSTransitionGroup>
     )
   }

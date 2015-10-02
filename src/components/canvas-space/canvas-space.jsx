@@ -13,6 +13,7 @@ import { addMetric } from '../../actions/metric-actions'
 import { changeSelect } from '../../actions/selection-actions'
 import { runSimulations } from '../../actions/simulation-actions'
 import { canvasStateSelector } from '../../selectors/canvas-state-selector';
+import * as spaceActions  from '../../actions/space-actions';
 import e from '../../lib/engine/engine'
 
 function mapStateToProps(state) {
@@ -20,7 +21,8 @@ function mapStateToProps(state) {
     selected: state.selection,
     metrics: state.metrics,
     guesstimates: state.guesstimates,
-    simulations: state.simulations
+    simulations: state.simulations,
+    spaces: state.spaces
   }
 }
 
@@ -41,6 +43,9 @@ export default class CanvasSpace extends Component{
     metrics: PropTypes.array.isRequired,
     selected: PropTypes.object,
     simulations: PropTypes.array,
+  }
+  componentDidMount(){
+    this.props.dispatch(runSimulations(null))
   }
 
   _handleSelect(event, location, item) {
