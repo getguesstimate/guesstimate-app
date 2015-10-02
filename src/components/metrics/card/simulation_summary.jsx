@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import numeral from 'numeral'
 import _ from 'lodash'
-import ShowIf from '../utility/showIf';
+import ShowIf from 'gComponents/utility/showIf';
 
 function formatStat(n){
   if (n) {

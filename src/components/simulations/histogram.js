@@ -1,5 +1,5 @@
-import React, {Component, PropTypes} from 'react'
-import Histogram from './histogram'
+import React, {Component, PropTypes} from 'react';
+import Histogram from 'gComponents/lib/histogram';
 
 export default class SimulationHistogram extends Component{
   shouldComponentUpdate(nextProps, nextState) {
