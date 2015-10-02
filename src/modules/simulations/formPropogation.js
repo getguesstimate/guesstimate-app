@@ -3,9 +3,9 @@
 import _ from 'lodash';
 import async from 'async'
 
-import e from '../../lib/engine/engine';
+import e from 'gEngine/engine';
 import type {Simulation, Graph} from '../../lib/engine/types.js'
-import {addPartialSimulation, deleteSimulations} from '../simulation-actions.js'
+import {addPartialSimulation, deleteSimulations} from 'gModules/simulations/actions'
 
 export class Simulator {
   metricId: string;

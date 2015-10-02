@@ -1,9 +1,9 @@
 import React, {Component, PropTypes} from 'react'
 import Icon from'react-fa'
 import { connect } from 'react-redux';
-import * as spaceActions from '../actions/space-actions.js';
+import * as spaceActions from 'gModules/spaces/actions.js';
 import {ListGroup, ListGroupItem} from 'react-bootstrap/lib';
-import * as Space from '../lib/engine/space';
+import * as Space from 'gEngine/space';
 
 function mapStateToProps(state) {
   return {

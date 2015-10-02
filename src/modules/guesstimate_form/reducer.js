@@ -1,5 +1,5 @@
 /* @flow soft */
-import type {Guesstimate, Metric} from '../lib/engine/types.js'
+import type {Guesstimate, Metric} from '../../lib/engine/types.js'
 
 export default function guesstimateForm(
   state: Guesstimate = {},

@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import ReactDOM from 'react-dom'
 import { connect } from 'react-redux';
-import { createGuesstimateForm, destroyGuesstimateForm, changeGuesstimateForm} from '../../actions/guesstimate-form-actions'
+import { createGuesstimateForm, destroyGuesstimateForm, changeGuesstimateForm} from 'gModules/guesstimate_form/actions'
 import $ from 'jquery'
 import insertAtCaret from '../../lib/jquery/insertAtCaret'
 

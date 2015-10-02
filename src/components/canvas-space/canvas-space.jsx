@@ -9,11 +9,11 @@ import Metric from './metric'
 import styles from './canvas-space.styl'
 
 import { connect } from 'react-redux';
-import { addMetric } from '../../actions/metric-actions'
-import { changeSelect } from '../../actions/selection-actions'
-import { runSimulations } from '../../actions/simulation-actions'
+import { addMetric } from 'gModules/metrics/actions'
+import { changeSelect } from 'gModules/selection/actions'
+import { runSimulations } from 'gModules/simulations/actions'
+import * as spaceActions  from 'gModules/spaces/actions';
 import { canvasStateSelector } from '../../selectors/canvas-state-selector';
-import * as spaceActions  from '../../actions/space-actions';
 import e from '../../lib/engine/engine'
 
 function mapStateToProps(state) {

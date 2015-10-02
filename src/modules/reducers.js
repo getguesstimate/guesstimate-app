@@ -1,12 +1,8 @@
-import { combineReducers } from 'redux';
-import _ from 'lodash'
-
-import {addMetric, changeMetric} from '../actions/metric-actions.js'
-import guesstimateFormR from './guesstimate-form-reducer'
-import selectionR from './selection-reducer'
-import metricsR from './metrics-reducer'
-import guesstimatesR from './guesstimates-reducer'
-import simulationsR from './simulations-reducer'
+import guesstimateFormR from './guesstimate_form/reducer'
+import selectionR from './selection/reducer'
+import metricsR from './metrics/reducer'
+import guesstimatesR from './guesstimates/reducer'
+import simulationsR from './simulations/reducer'
 import reduxCrud from 'redux-crud';
 
 export function changeSelect(location) {
@@ -26,9 +22,3 @@ const rootReducer = function app(state = {}, action){
 
 export default rootReducer;
 
-//const rootReducer = combineReducers({
-  //metrics,
-  //selection,
-  //guesstimateForm
-//});
-//export default rootReducer;
