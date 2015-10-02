@@ -44,6 +44,9 @@ export default class CanvasSpace extends Component{
     selected: PropTypes.object,
     simulations: PropTypes.array,
   }
+  componentDidMount(){
+    this.props.dispatch(runSimulations(null))
+  }
 
   _handleSelect(event, location, item) {
     if (!_.isEqual(this.props.selected, location)){
