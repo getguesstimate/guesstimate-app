@@ -1,21 +1,25 @@
-import React from 'react'
-import ampersandMixin from 'ampersand-react-mixin'
-import Icon from'react-fa'
+import React, {Component, PropTypes} from 'react'
 import SpaceCanvas from 'components/canvas-space/canvas-space'
+import { connect } from 'react-redux';
 
-export default React.createClass({
-  mixins: [ampersandMixin],
+function mapStateToProps(state) {
+  return {
+    spaces: state.spaces
+  }
+}
 
-  displayName: 'RepoDetailPage',
-
+    //let repo = <Icon spin name="spinner"/>
+@connect(mapStateToProps)
+export default class repoShow extends Component {
+  displayName: 'RepoDetailPage'
   render () {
-    let repo = <Icon spin name="spinner"/>
+    const space = this.props.spaces.asMutable().find(s => (s.id.toString() === this.props.spaceId.toString()))
     return (
       <div>
       <div className='container-fluid'>
         <div className='row'>
           <div className='col-sm-10'>
-            <h2> oagr/boston-piano-population </h2>
+            <h2> {space ? space.name : ''} </h2>
           </div>
         </div>
       </div>
@@ -23,4 +27,4 @@ export default React.createClass({
       </div>
     )
   }
-})
+}

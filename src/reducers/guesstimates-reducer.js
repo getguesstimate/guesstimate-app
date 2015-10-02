@@ -32,9 +32,9 @@ let initialGuesstimates = [
 export default function guesstimates(state = initialGuesstimates, action) {
   switch (action.type) {
   case 'ADD_METRIC':
-    return [...state, {metric: action.id, input: ''}]
+    return [...state, {metric: action.item.id, input: ''}]
   case 'REMOVE_METRIC':
-    return state.filter(y => y.metric !== action.id)
+    return state.filter(y => y.metric !== action.item.id)
   case 'CHANGE_GUESSTIMATE':
     const i = state.findIndex(y => y.metric === action.values.metric);
     if (i !== -1) {
