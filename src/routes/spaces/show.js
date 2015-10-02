@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import SpaceCanvas from 'components/canvas-space/canvas-space'
+import SpaceCanvas from 'gComponents/spaces/canvas'
 import { connect } from 'react-redux';
 
 function mapStateToProps(state) {

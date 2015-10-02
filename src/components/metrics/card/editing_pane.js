@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react'
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
-import GuesstimateForm from './guesstimate-form';
-import ShowIf from '../utility/showIf';
+import GuesstimateForm from './guesstimate_form';
+import ShowIf from 'gComponents/utility/showIf';
 
 @ShowIf
 export default class MetricEditingPane extends Component {

@@ -2,7 +2,7 @@
 
 import React, {Component, PropTypes} from 'react';
 import Input from 'react-bootstrap/lib/Input'
-import ShowIf from '../utility/showIf';
+import ShowIf from 'gComponents/utility/showIf';
 
 const MetricReadableIdd = ({readableId}) => (
   <div className='col-sm-1 function-id'>
