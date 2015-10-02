@@ -8,7 +8,7 @@ var definePlugin = new webpack.DefinePlugin({
 
 
 var cfg = getConfig({
-  in: 'src/app.js',
+  in: 'src/routes/app.js',
   out: 'public',
   clearBeforeBuild: true,
 });
@@ -28,6 +28,11 @@ if(process.env.NODE_ENV === 'development'){
 cfg.resolve.root = path.resolve('./src');
 cfg.resolve.extensions.push('.ts');
 cfg.resolve.extensions.push('.tsx');
+cfg.resolve.alias = {
+  gComponents: path.resolve('./src/components'),
+  gEngine: path.resolve('./src/lib/engine'),
+  gModules: path.resolve('./src/modules')
+};
 
 cfg.plugins = cfg.plugins.concat(definePlugin);
 

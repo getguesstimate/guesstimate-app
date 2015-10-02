@@ -1,4 +1,4 @@
-import {runFormSimulations} from './simulation-actions.js'
+import {runFormSimulations} from 'gModules/simulations/actions.js'
 
 export function createGuesstimateForm(guesstimate) {
   return { type: 'CREATE_GUESSTIMATE_FORM', guesstimate };

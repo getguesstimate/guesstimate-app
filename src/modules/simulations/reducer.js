@@ -1,4 +1,4 @@
-import e from '../lib/engine/engine'
+import e from '../../lib/engine/engine'
 import stats from 'stats-lite'
 import _ from 'lodash'
 

@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react'
 import t from 'tcomb-form'
 import _ from 'lodash'
-import * as spaceActions from '../../actions/space-actions.js'
+import * as spaceActions from 'gModules/spaces/actions.js'
 import { connect } from 'react-redux';
 
 import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar'

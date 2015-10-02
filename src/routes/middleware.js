@@ -1,6 +1,6 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
-import rootReducer from '../reducers/index';
+import rootReducer from 'gModules/reducers.js';
 import { devTools, persistState } from 'redux-devtools';
 
 const devStore = compose(
@@ -22,8 +22,8 @@ export default function configureStore() {
 
   if (module.hot) {
     // Enable Webpack hot module replacement for reducers
-    module.hot.accept('../reducers', () => {
-      const nextReducer = require('../reducers');
+    module.hot.accept('gModules/reducers', () => {
+      const nextReducer = require('gModules/reducers');
       store.replaceReducer(nextReducer);
     });
   }

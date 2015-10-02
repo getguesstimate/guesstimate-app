@@ -1,8 +1,8 @@
 import React, {Component, PropTypes} from 'react'
 import ReactDOM from 'react-dom'
 import { connect } from 'react-redux';
-import { removeMetric, changeMetric } from '../../actions/metric-actions.js';
-import { changeGuesstimate } from '../../actions/guesstimate-actions.js';
+import { removeMetric, changeMetric } from 'gModules/metrics/actions.js';
+import { changeGuesstimate } from 'gModules/guesstimates/actions.js';
 import _ from 'lodash'
 
 import MetricStatTable from './MetricStatTable';

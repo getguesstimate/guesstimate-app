@@ -3,12 +3,12 @@ import DropdownButton from 'react-bootstrap/lib/DropdownButton'
 import Button from 'react-bootstrap/lib/Button'
 import ButtonGroup from 'react-bootstrap/lib/ButtonGroup'
 import MenuItem from 'react-bootstrap/lib/MenuItem'
-import NavHelper from '../components/nav-helper'
+import NavHelper from './application/nav-helper'
 import ampersandMixin from 'ampersand-react-mixin'
 import Icon from'react-fa'
 import { connect } from 'react-redux';
-import * as spaceActions from '../actions/space-actions.js';
-import * as Space from '../lib/engine/space';
+import * as spaceActions from 'gModules/spaces/actions.js';
+import * as Space from 'gEngine/space';
 
 const NavItem = React.createClass({
   render () {
