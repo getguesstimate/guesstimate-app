@@ -23,7 +23,7 @@ export default class repoShow extends Component {
           </div>
         </div>
       </div>
-      <SpaceCanvas/>
+      { space ? <SpaceCanvas spaceId={space.id}/> : ''}
       </div>
     )
   }
