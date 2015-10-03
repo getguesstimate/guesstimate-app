@@ -44,6 +44,10 @@ export default class CanvasSpace extends Component{
     metrics: PropTypes.array.isRequired,
     selected: PropTypes.object,
     simulations: PropTypes.array,
+    spaceId: PropTypes.oneOfType([
+        React.PropTypes.string,
+        React.PropTypes.number,
+    ])
   }
   componentDidMount(){
     this.props.dispatch(runSimulations(null))
@@ -73,8 +77,9 @@ export default class CanvasSpace extends Component{
     this.props.dispatch(runSimulations(null))
   }
   dMetrics() {
-    const {metrics, guesstimates, simulations} = this.props
-    return e.graph.denormalize({metrics, guesstimates, simulations}).metrics
+    let graph = _.pick(this.props, 'metrics', 'guesstimates', 'simulations')
+    graph = e.space.subset(graph, this.props.spaceId)
+    return e.graph.denormalize(graph).metrics
   }
   renderMetric(metric) {
     const {location} = metric
