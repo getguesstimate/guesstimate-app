@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 let initialMetrics = [
   {
     id: '238jdj',
@@ -63,8 +65,13 @@ let initialMetrics = [
     }
   }
 ];
-export default function metrics(state = initialMetrics, action) {
+
+export default function metrics(state = [], action) {
   switch (action.type) {
+  case 'SPACES_FETCH_SUCCESS':
+    let newMetrics = _.flatten(action.records.map(e => e.graph.metrics))
+    let foo = [...state, ...newMetrics]
+    return [...state, ...newMetrics]
   case 'ADD_METRIC':
     return [...state, action.item]
   case 'REMOVE_METRIC':

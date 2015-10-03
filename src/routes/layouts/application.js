@@ -66,7 +66,6 @@ export default class extends Component{
     this.props.dispatch(spaceActions.fetch())
   }
   render () {
-    console.log(this.props)
     let body = this.props.children
     if (!this.props.isFluid) {
       body = <div className="container"> {body} </div>

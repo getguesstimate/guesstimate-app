@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 let initialGuesstimates = [
   {
     metric: '238jdj',
@@ -29,8 +31,11 @@ let initialGuesstimates = [
   }
 ];
 
-export default function guesstimates(state = initialGuesstimates, action) {
+export default function guesstimates(state = [], action) {
   switch (action.type) {
+  case 'SPACES_FETCH_SUCCESS':
+    let newGuesstimates = _.flatten(action.records.map(e => e.graph.guesstimates))
+    return [...state, ...newGuesstimates]
   case 'ADD_METRIC':
     return [...state, {metric: action.item.id, input: ''}]
   case 'REMOVE_METRIC':

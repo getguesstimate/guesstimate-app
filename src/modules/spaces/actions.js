@@ -3,7 +3,7 @@ import $ from 'jquery'
 import cuid from 'cuid'
 let standardActionCreators = actionCreatorsFor('spaces');
 
-let rootUrl = 'http://guesstimate.herokuapp.com/'
+let rootUrl = 'http://localhost:4000/'
 
 //For some reason thie word delete won't work.
 //Maybe its a reserved word or something.
