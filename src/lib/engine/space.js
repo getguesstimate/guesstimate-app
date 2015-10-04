@@ -1,4 +1,5 @@
 import * as _graph from './graph';
+import * as _metric from './metric'
 
 export function url (space) {
   return ('/space/' + space.id)
@@ -9,12 +10,9 @@ export function subset(oGraph, spaceId){
 
   if (spaceId){
     graph.metrics = graph.metrics.filter(m => m.space === spaceId)
-    graph.guesstimates = graph.guesstimates.filter(m => !_.isUndefined(metric(graph, m.id)))
+    graph.guesstimates = _.flatten(graph.metrics.map(m => _metric.guesstimates(m, graph)))
   }
 
   return graph;
 }
 
-export function metric(graph, id){
-  return graph.metrics.find(m => (m.id === id));
-}
