@@ -35,11 +35,11 @@ engines:
 
 # Note: If the ratings key is not specified, this will result in a 0.0 GPA on your dashboard.
 
- ratings:
-   paths:
-   - src/**
-   - "**.js"
-   - "**.jsx"
+ratings:
+  paths:
+    - src/**
+    - "**.js"
+    - "**.jsx"
 
 # You can globally exclude files from being analyzed by any engine using the
 # exclude_paths key.
