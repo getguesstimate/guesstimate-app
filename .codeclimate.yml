@@ -1,5 +1,5 @@
 languages:
-   Ruby: true
-   JavaScript: true
-   Python: true
-   PHP: true
+  Ruby: false
+  JavaScript: true
+  Python: false
+  PHP: false
