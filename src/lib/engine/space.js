@@ -1,8 +1,13 @@
 import * as _graph from './graph';
-import * as _metric from './metric'
+import * as _metric from './metric';
+import _ from 'lodash';
 
 export function url (space) {
   return ('/space/' + space.id)
+}
+
+export function get(collection, id){
+  return collection.find(i => (i.id === id))
 }
 
 export function subset(oGraph, spaceId){
@@ -16,3 +21,11 @@ export function subset(oGraph, spaceId){
   return graph;
 }
 
+export function withGraph(space, graph){
+  return {...space, graph: subset(graph, space.id)}
+}
+
+export function toDgraph(spaceId, graph){
+  let _subset = subset(graph, spaceId)
+  return _graph.denormalize(_subset)
+}

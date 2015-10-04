@@ -10,5 +10,6 @@ export function removeMetric(id) {
 }
 
 export function changeMetric(item) {
+  console.log('changeMetric', item)
   return { type: 'CHANGE_METRIC', item };
 }

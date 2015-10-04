@@ -1,6 +1,7 @@
 import {actionCreatorsFor} from 'redux-crud';
 import $ from 'jquery'
 import cuid from 'cuid'
+import e from 'gEngine/engine'
 let standardActionCreators = actionCreatorsFor('spaces');
 
 let rootUrl = 'http://localhost:4000/'
@@ -46,12 +47,38 @@ export function create(object) {
 
     let request = $.ajax({
       url: (rootUrl + 'spaces/'),
-      data: {space: object},
-      method: 'POST'
+      data: JSON.stringify({space: object}),
+      method: 'POST',
+      dataType: 'json',
+      contentType: 'application/json'
     })
 
     request.done(data => {
       const action = standardActionCreators.createSuccess(data, cid)
+      dispatch(action)
+    })
+  }
+}
+
+export function update(spaceId) {
+  return function(dispatch, getState) {
+    let state = getState();
+    let space = e.space.get(state.spaces, spaceId)
+    space = e.space.withGraph(space, {metrics: state.metrics, guesstimates: state.guesstimates});
+
+    const action = standardActionCreators.updateStart(space);
+    dispatch(action)
+
+    let request = $.ajax({
+      url: (rootUrl + 'spaces/' + spaceId),
+      data: JSON.stringify({space}),
+      method: 'PUT',
+      dataType: 'json',
+      contentType: 'application/json'
+    })
+
+    request.done(data => {
+      const action = standardActionCreators.updateSuccess({id: spaceId})
       dispatch(action)
     })
   }

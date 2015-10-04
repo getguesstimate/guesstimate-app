@@ -44,7 +44,8 @@ class Metric extends Component {
     e.stopPropagation()
   }
   handleChangeMetric(values) {
-    this.props.dispatch(changeMetric(this._id(), values))
+    values.id = this._id()
+    this.props.dispatch(changeMetric(values))
   }
   handleChangeGuesstimate(values) {
     this.props.dispatch(changeGuesstimate(this._id(), values))

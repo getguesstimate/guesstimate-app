@@ -68,18 +68,17 @@ export default class CanvasSpace extends Component{
   }
   //todo: put this in grid instead
   size(){
-    const lowestMetric = Math.max(...this.props.metrics.map(g => g.location.row)) + 2
-    const selected = this.props.selected.row + 2
+    const lowestMetric = Math.max(...this.props.metrics.map(g => parseInt(g.location.row))) + 2
+    const selected = parseInt(this.props.selected.row) + 2
     const height = Math.max(3, lowestMetric, selected) || 3;
     return {columns: 4, rows: height}
   }
   testing() {
-    this.props.dispatch(runSimulations(null))
+    this.props.dispatch(spaceActions.update(this.props.spaceId))
   }
   dMetrics() {
     let graph = _.pick(this.props, 'metrics', 'guesstimates', 'simulations')
-    graph = e.space.subset(graph, this.props.spaceId)
-    return e.graph.denormalize(graph).metrics
+    return e.space.toDgraph(this.props.spaceId, graph).metrics
   }
   renderMetric(metric) {
     const {location} = metric
