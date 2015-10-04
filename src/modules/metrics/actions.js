@@ -1,8 +1,8 @@
 import uuid from 'node-uuid'
 
-export function addMetric(location) {
-  let id = uuid.v1()
-  return { type: 'ADD_METRIC', item: {location, id}};
+export function addMetric(item) {
+  item.id = uuid.v1()
+  return { type: 'ADD_METRIC', item};
 }
 
 export function removeMetric(id) {

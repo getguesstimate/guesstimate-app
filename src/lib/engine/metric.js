@@ -12,3 +12,7 @@ export function denormalize(metric, graph) {
   let simulation = findWithMetricId(graph.simulations);
   return Object.assign({}, metric, {guesstimate, simulation});
 }
+
+export function guesstimates(metric, graph) {
+  return graph.guesstimates.filter(g => (g.metric === metric.id))
+}

@@ -89,7 +89,7 @@ class Metric extends Component {
            guesstimateForm={guesstimateForm}
            metricId={metric.id}
            onChangeGuesstimate={this.handleChangeGuesstimate.bind(this)}
-           showIf={isSelected}
+           showIf={isSelected && !_.isUndefined(metric.guesstimate)}
        />
       </div>
     )
