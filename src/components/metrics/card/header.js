@@ -63,6 +63,10 @@ class MetricHeader extends Component {
     metric: PropTypes.object.isRequired,
     onChange: PropTypes.func.isRequired,
   }
+  handleNameChange(name) {
+    let {id} = this.props.metric;
+    this.props.onChange({name})
+  }
   render () {
     let {anotherFunctionSelected, metric} = this.props
     return (
@@ -70,7 +74,7 @@ class MetricHeader extends Component {
        <div className={anotherFunctionSelected ? 'col-sm-9 name' : 'col-sm-12 name'}>
          <BasicInput
              name={'name'}
-             onChange={this.props.onChange}
+             onChange={this.props.onChange.bind(this)}
              value={metric.name}
          />
        </div>

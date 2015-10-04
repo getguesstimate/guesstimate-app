@@ -81,7 +81,7 @@ export default function metrics(state = [], action) {
     if (i !== -1) {
       return [
         ...state.slice(0, i),
-        action.item,
+        Object.assign(state[i], action.item),
         ...state.slice(i+1, state.length)
       ];
     }
