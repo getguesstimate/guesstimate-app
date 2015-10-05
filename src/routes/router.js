@@ -14,7 +14,7 @@ import configureStore from './middleware'
 
 import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react';
 
-const Debug = ({store, LogMonitor}) => (
+const Debug = ({store}) => (
   <DebugPanel right top bottom>
     <DevTools store={store} monitor={LogMonitor} />
   </DebugPanel>
@@ -34,7 +34,7 @@ export default Router.extend({
         <Provider store={store}>
           <FullPage isFluid={isFluid} page={page}/>
         </Provider>
-        {__DEV__ ? <Debug/> : ''}
+        {__DEV__ ? <Debug store={store}/> : ''}
       </div>,
       document.body)
   },

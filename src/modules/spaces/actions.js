@@ -2,12 +2,12 @@ import {actionCreatorsFor} from 'redux-crud';
 import $ from 'jquery'
 import cuid from 'cuid'
 import e from 'gEngine/engine'
+import _ from 'lodash'
+import app from 'ampersand-app'
 let standardActionCreators = actionCreatorsFor('spaces');
 
 let rootUrl = 'http://localhost:4000/'
 
-//For some reason thie word delete won't work.
-//Maybe its a reserved word or something.
 export function destroy(id) {
   return function(dispatch) {
     const action = standardActionCreators.deleteStart({id: id});
@@ -39,11 +39,11 @@ export function fetch() {
 
 export function create(object) {
   return function(dispatch) {
+    dispatch({ type: 'redux-form/START_SUBMIT', form: 'contact' })
+
     const cid = cuid()
     object = Object.assign(object, {id: cid})
-
     const action = standardActionCreators.createStart(object);
-    dispatch(action)
 
     let request = $.ajax({
       url: (rootUrl + 'spaces/'),
@@ -56,6 +56,7 @@ export function create(object) {
     request.done(data => {
       const action = standardActionCreators.createSuccess(data, cid)
       dispatch(action)
+      app.router.history.navigate('/space/' + data.id)
     })
   }
 }

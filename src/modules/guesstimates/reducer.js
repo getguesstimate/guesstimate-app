@@ -34,7 +34,7 @@ let initialGuesstimates = [
 export default function guesstimates(state = [], action) {
   switch (action.type) {
   case 'SPACES_FETCH_SUCCESS':
-    let newGuesstimates = _.flatten(action.records.map(e => e.graph.guesstimates))
+    let newGuesstimates = _.flatten(action.records.map(e => _.get(e, 'graph.guesstimates'))).filter(e => e)
     return [...state, ...newGuesstimates]
   case 'ADD_METRIC':
     return [...state, {metric: action.item.id, input: ''}]
