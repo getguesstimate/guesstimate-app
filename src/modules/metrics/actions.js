@@ -10,6 +10,12 @@ export function removeMetric(id) {
 }
 
 export function changeMetric(item) {
-  console.log('changeMetric', item)
-  return { type: 'CHANGE_METRIC', item };
+  return (dispatch, getState) => {
+    let state = getState()
+    let metric = state.metrics.find(m => m.id === item.id)
+    if (!metric.readableId && item.name) {
+      item.readableId = 'WO8'
+    }
+    dispatch({ type: 'CHANGE_METRIC', item });
+  }
 }
