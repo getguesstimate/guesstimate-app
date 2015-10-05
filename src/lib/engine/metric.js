@@ -1,3 +1,5 @@
+export * from './metric/generate_readable_id.js'
+
 function findWithId(collection, id, property) {
   if (collection && id && property) {
     return collection.find(e => e[property] === id);
