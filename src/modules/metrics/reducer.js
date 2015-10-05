@@ -69,7 +69,7 @@ let initialMetrics = [
 export default function metrics(state = [], action) {
   switch (action.type) {
   case 'SPACES_FETCH_SUCCESS':
-    let newMetrics = _.flatten(action.records.map(e => e.graph.metrics))
+    let newMetrics = _.flatten(action.records.map(e => _.get(e, 'graph.metrics'))).filter(e => e)
     let foo = [...state, ...newMetrics]
     return [...state, ...newMetrics]
   case 'ADD_METRIC':

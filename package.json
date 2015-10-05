@@ -81,6 +81,7 @@
     "react-redux": "^3.0.0",
     "redux": "^3.0.2",
     "redux-crud": "^0.5.0",
+    "redux-form": "^2.0.0",
     "redux-thunk": "^1.0.0",
     "reselect": "^1.1.0",
     "standard": "^5.3.1",
