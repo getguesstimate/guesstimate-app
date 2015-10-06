@@ -1,11 +1,5 @@
-var getConfig = require('hjs-webpack')
-var webpack = require('webpack')
+var getConfig = require('./lib/hjs-webpack-own')
 var path = require('path');
-
-var definePlugin = new webpack.DefinePlugin({
-  __DEV__: JSON.stringify(JSON.parse(process.env.BUILD_DEV || 'true')),
-});
-
 
 var cfg = getConfig({
   in: 'src/routes/app.js',
@@ -13,11 +7,6 @@ var cfg = getConfig({
   clearBeforeBuild: true,
 });
 
-cfg.node = {
-  child_process: 'empty'
-};
-
-cfg.entry = ['babel/polyfill'].concat(cfg.entry);
 if(process.env.NODE_ENV === 'development'){
 	cfg.devServer.host = '0.0.0.0';
 	//uncomment to suppress log output
@@ -26,14 +15,10 @@ if(process.env.NODE_ENV === 'development'){
 }
 
 cfg.resolve.root = path.resolve('./src');
-cfg.resolve.extensions.push('.ts');
-cfg.resolve.extensions.push('.tsx');
 cfg.resolve.alias = {
   gComponents: path.resolve('./src/components'),
   gEngine: path.resolve('./src/lib/engine'),
   gModules: path.resolve('./src/modules')
 };
-
-cfg.plugins = cfg.plugins.concat(definePlugin);
 
 module.exports = cfg;
