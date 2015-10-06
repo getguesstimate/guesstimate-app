@@ -73,13 +73,11 @@ export function update(spaceId) {
     let request = $.ajax({
       url: (rootUrl + 'spaces/' + spaceId),
       data: JSON.stringify({space}),
-      method: 'PUT',
+      method: 'PATCH',
       dataType: 'json',
       contentType: 'application/json'
-    })
-
-    request.done(data => {
-      const action = standardActionCreators.updateSuccess({id: spaceId})
+    }).done((data) => {
+      const action = standardActionCreators.updateSuccess(data)
       dispatch(action)
     })
   }

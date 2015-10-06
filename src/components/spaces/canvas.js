@@ -8,6 +8,7 @@ import e from 'gEngine/engine'
 
 import Grid from 'gComponents/lib/grid/grid/'
 import Metric from 'gComponents/metrics/card'
+import SpaceHeader from './canvas/header.js'
 
 import { addMetric } from 'gModules/metrics/actions'
 import { changeSelect } from 'gModules/selection/actions'
@@ -16,6 +17,7 @@ import * as spaceActions  from 'gModules/spaces/actions';
 
 import styles from './canvas/canvas.styl'
 import { canvasStateSelector } from './canvas/canvas-state-selector';
+import { denormalizedSpaceSelector } from './denormalized-space-selector.js';
 
 function mapStateToProps(state) {
   return {
@@ -29,6 +31,7 @@ function mapStateToProps(state) {
 
 @connect(mapStateToProps)
 @connect(canvasStateSelector)
+@connect(denormalizedSpaceSelector)
 export default class CanvasSpace extends Component{
   static propTypes = {
     canvasState: PropTypes.oneOf([
@@ -50,7 +53,7 @@ export default class CanvasSpace extends Component{
     ])
   }
   componentDidMount(){
-    this.props.dispatch(runSimulations(null))
+    //this.props.dispatch(runSimulations(null))
   }
 
   _handleSelect(event, location, item) {
@@ -73,12 +76,11 @@ export default class CanvasSpace extends Component{
     const height = Math.max(3, lowestMetric, selected) || 3;
     return {columns: 4, rows: height}
   }
-  testing() {
+  handleSave() {
     this.props.dispatch(spaceActions.update(this.props.spaceId))
   }
-  dMetrics() {
-    let graph = _.pick(this.props, 'metrics', 'guesstimates', 'simulations')
-    return e.space.toDgraph(this.props.spaceId, graph).metrics
+  space() {
+    return this.props.spaces.find(e => e.id === this.props.spaceId)
   }
   renderMetric(metric) {
     const {location} = metric
@@ -94,21 +96,18 @@ export default class CanvasSpace extends Component{
   render () {
     const size = this.size()
     const {selected} = this.props
+    const space = this.space()
+    const {metrics} = this.props.denormalizedSpace
     return (
       <div className="canvas-space">
-        <div
-            className='btn btn-large btn-primary'
-            onClick={this.testing.bind(this)}
-        >
-          {'Foobar'}
-        </div>
+        <SpaceHeader space={space} onSave={this.handleSave.bind(this)}/>
         <Grid
             handleSelect={this._handleSelect.bind(this)}
             onAddItem={this._handleAddMetric.bind(this)}
             selected={selected}
             size={size}
         >
-          {this.dMetrics().map((m) => {
+          {metrics.map((m) => {
               return this.renderMetric(m)
           })}
         </Grid>
