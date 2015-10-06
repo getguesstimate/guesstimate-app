@@ -17,6 +17,7 @@ import * as spaceActions  from 'gModules/spaces/actions';
 
 import styles from './canvas/canvas.styl'
 import { canvasStateSelector } from './canvas/canvas-state-selector';
+import { denormalizedSpaceSelector } from './denormalized-space-selector.js';
 
 function mapStateToProps(state) {
   return {
@@ -30,6 +31,7 @@ function mapStateToProps(state) {
 
 @connect(mapStateToProps)
 @connect(canvasStateSelector)
+@connect(denormalizedSpaceSelector)
 export default class CanvasSpace extends Component{
   static propTypes = {
     canvasState: PropTypes.oneOf([
@@ -51,7 +53,7 @@ export default class CanvasSpace extends Component{
     ])
   }
   componentDidMount(){
-    this.props.dispatch(runSimulations(null))
+    //this.props.dispatch(runSimulations(null))
   }
 
   _handleSelect(event, location, item) {
@@ -77,10 +79,6 @@ export default class CanvasSpace extends Component{
   handleSave() {
     this.props.dispatch(spaceActions.update(this.props.spaceId))
   }
-  dMetrics() {
-    let graph = _.pick(this.props, 'metrics', 'guesstimates', 'simulations')
-    return e.space.toDgraph(this.props.spaceId, graph).metrics
-  }
   space() {
     return this.props.spaces.find(e => e.id === this.props.spaceId)
   }
@@ -99,6 +97,7 @@ export default class CanvasSpace extends Component{
     const size = this.size()
     const {selected} = this.props
     const space = this.space()
+    const {metrics} = this.props.denormalizedSpace
     return (
       <div className="canvas-space">
         <SpaceHeader space={space} onSave={this.handleSave.bind(this)}/>
@@ -108,7 +107,7 @@ export default class CanvasSpace extends Component{
             selected={selected}
             size={size}
         >
-          {this.dMetrics().map((m) => {
+          {metrics.map((m) => {
               return this.renderMetric(m)
           })}
         </Grid>
