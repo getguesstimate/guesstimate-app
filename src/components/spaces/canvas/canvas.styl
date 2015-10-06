@@ -1,0 +1,103 @@
+@import '../../../../node_modules/lato-font/css/lato-font.css';
+.carousel-appear
+  max-height: 0;
+  overflow: hidden;
+
+.carousel-appear.carousel-appear-active
+  max-height: 300px
+  transition: max-height 0.5s
+
+table.important-stats
+  position absolute
+  left 5px
+  font-size 10px
+  color #1B7DAA
+  width 110px
+  td
+    text-align left
+    padding 0
+
+.canvas-space
+  padding 1em 0.5em
+  background-color: white
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  ::selection
+    background-color: none
+  .inner-editor
+    input
+      text-align left
+  input
+    max-width 100%
+    padding 0
+    font-size inherit
+    height 1.4em
+    box-shadow none
+    border-radius 0px
+    border none
+    &:focus
+      text-align: left
+      border none
+      box-shadow none
+      outline none
+  .editing-section
+    margin-top 2px
+    background #ECECED
+    border-radius 2px
+    padding 0.5em
+    font-weight: 300
+    font-size: 1.25em
+    .guesstimate-form
+      input
+        width: 100%
+        color: #000
+        background-color: #D0D0D0
+        border-radius: 2px
+        padding 5px 5px
+        height 1.7em
+        &:focus
+          background-color:#C0E7FF
+      .errors
+        margin-top 8px
+        font-size 0.8em
+        color #666
+
+  .stdev
+    margin-left 0.25em
+    font-size 0.75em
+    color #aaa
+  .metric
+    cursor auto
+    z-index 0
+    text-align: center
+    font-size: 1.25em
+    position relative
+    min-height 90px
+    background #ECECED
+    border-radius 2px
+    padding 0.5em
+    font-weight: 300
+    input
+      text-align: center
+    .row1
+      margin-top 0.20em
+    .form-group
+      margin-bottom 0
+    .name input
+      background-color rgba(0,0,0,0)
+    &:focus
+      outline none
+      background-color: #D0ECFD
+    .name
+      color: #595F6F;
+    .mean
+      font-weight: 500
+      font-size: 1.5em
+      color: #595F6F;
+    .function-id
+      font-size: 1em
+      color blue
