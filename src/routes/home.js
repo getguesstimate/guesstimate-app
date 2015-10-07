@@ -13,33 +13,14 @@ function mapStateToProps(state) {
   }
 }
 
-class MetricShow extends Component{
-  render() {
-    const {metric} = this.props
-    return (
-      <a className='item'>
-        <div className='left floated content'>
-        <div className='ui label'>
-          34
-        </div>
-        </div>
-        <div className='content'>
-        <div className='header'>
-          {metric.name}
-        </div>
-        </div>
-      </a>
-    )
-  }
-}
-
 @connect(mapStateToProps)
 export default class Home extends Component{
   displayName: 'Home'
   render () {
     const {spaces, metrics} = this.props
+    let style = {paddingTop: '3em'}
     return (
-      <div className='wrap container-fluid'>
+      <div className='wrap container-fluid' style={style}>
         <h2 className='ui header'>
           <div className='content'>
             {'Collections'}

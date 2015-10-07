@@ -18,7 +18,7 @@ export default class repoShow extends Component {
     return (
     <div>
       <div className='hero-unit'>
-        <div className='container-fluid wrap'>
+        <div className='container-fluid'>
           <h1> {space ? space.name : ''} </h1>
         </div>
       </div>

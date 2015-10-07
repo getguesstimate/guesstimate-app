@@ -1,4 +1,5 @@
 @import './variables.css';
+@import './overrides.css';
 
 body {
   font-family: 'Open Sans', Helvetica, Arial, sans-serif;
