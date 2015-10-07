@@ -1,0 +1,13 @@
+@import './styles/variables.css';
+
+.hero-unit {
+  padding: 4em 1em 1.5em;
+  background-color: $blue-1;
+}
+
+.hero-unit h1 {
+  color: white;
+  font-size: 2em;
+  font-family: Lato;
+  font-weigth: 500;
+}

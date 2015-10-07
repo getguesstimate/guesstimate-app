@@ -6,7 +6,6 @@
   box-shadow: none;
   border-radius: 0;
   margin-bottom: 0;
-  border-bottom: none;
 }
 
 .ui.menu a {
@@ -16,3 +15,8 @@
 .ui.menu .item:before {
   background: none;
 }
+
+.ui.menu .item:first-of-type {
+  padding-left: 0
+}
+
