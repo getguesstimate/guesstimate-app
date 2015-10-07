@@ -1,0 +1,17 @@
+@import './styles/variables.css';
+
+.SpaceListItem {
+  border-radius: 4px;
+  transition: background .2s;
+  padding: 15px;
+}
+
+.SpaceListItem:hover {
+  background: $grey-1;
+}
+
+.SpaceListItem a h3 {
+  color: $black-1;
+  font-weight: normal;
+  margin-bottom: 0.5em;
+}

@@ -5,6 +5,7 @@ import * as spaceActions from 'gModules/spaces/actions.js';
 import {ListGroup, ListGroupItem} from 'react-bootstrap/lib';
 import css from '../../semantic/dist/semantic.css'
 import SpaceList from 'gComponents/spaces/list'
+import './main.css'
 
 function mapStateToProps(state) {
   return {
@@ -39,9 +40,20 @@ export default class Home extends Component{
   render () {
     const {spaces, metrics} = this.props
     return (
-      <div className='container'>
-        <h1 className='text-center'> Estimate all the Things!</h1>
-        <h2 className='text-center'> <Icon name='table'/> Boards </h2>
+      <div className='wrap container-fluid'>
+        <h2 className='ui header'>
+          <div className='content'>
+            {'Collections'}
+            <div className='sub header'>
+              {'Each can have several metrics.'}
+            </div>
+          </div>
+          <a href='/space/new' className='ui primary button right floated'>
+            {'New Collection'}
+          </a>
+        </h2>
+
+        <div className='ui divider'></div>
         <div className='spaceList'>
           <SpaceList spaces={spaces.asMutable()}/>
         </div>
