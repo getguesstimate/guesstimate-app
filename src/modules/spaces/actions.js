@@ -6,8 +6,8 @@ import _ from 'lodash'
 import app from 'ampersand-app'
 let standardActionCreators = actionCreatorsFor('spaces');
 
-//let rootUrl = 'http://localhost:4000/'
-let rootUrl = 'http://guesstimate.herokuapp.com/'
+let rootUrl = 'http://localhost:4000/'
+//let rootUrl = 'http://guesstimate.herokuapp.com/'
 
 export function destroy(id) {
   return function(dispatch) {

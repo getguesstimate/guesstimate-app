@@ -1,7 +1,7 @@
 @import './styles/variables.css';
 
 .hero-unit {
-  padding: 4em 1em 1.5em;
+  padding: 4em 0 1.5em;
   background-color: $blue-1;
 }
 

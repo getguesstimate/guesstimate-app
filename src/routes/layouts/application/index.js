@@ -1,11 +1,10 @@
 import '../../../../node_modules/flexboxgrid/css/flexboxgrid.min.css'
-import '../../../styles/theme.css'
 import '../../../../semantic/dist/semantic.css'
 //semantic js is dependent on jquery, which has trouble now
 import '../../../../semantic/dist/semantic.js'
+import '../../../styles/theme.css'
 
 import React, {Component, PropTypes} from 'react'
-import ampersandMixin from 'ampersand-react-mixin'
 import { connect } from 'react-redux';
 import * as spaceActions from 'gModules/spaces/actions.js';
 import * as Space from 'gEngine/space';

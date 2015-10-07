@@ -30,26 +30,26 @@ const Header = React.createClass({
     let containerClass = (this.props.isFluid === true) ? "container-fluid" : "container";
     return (
       <div className='PageHeader'>
-      <div className='container-fluid wrap'>
-        <div className="ui secondary menu">
-            <div className='header item'>
-              <a className="navbar-brand" href="/">
-                Guesstimate
-              </a>
-            </div>
-            <div className='right menu'>
-              <div className='item'>
-                <div className='ui left icon input'>
-                  <i className="search icon"></i>
-                  <input type='text' placeholder='Search'>
-                  </input>
+        <div className='container-fluid'>
+          <div className="ui secondary menu">
+              <div className='header item'>
+                <a className="navbar-brand" href="/">
+                  Guesstimate
+                </a>
+              </div>
+              <div className='right menu'>
+                <div className='item'>
+                  <div className='ui left icon input'>
+                    <i className="search icon"></i>
+                    <input type='text' placeholder='Search'>
+                    </input>
+                  </div>
+                </div>
+                <div className='item'>
+                  Sign In
                 </div>
               </div>
-              <div className='item'>
-                Sign In
-              </div>
-            </div>
-        </div>
+          </div>
         </div>
       </div>
     );
