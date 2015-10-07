@@ -6,6 +6,8 @@ import Home from './home'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Layout from './layouts/application'
+import '../../node_modules/flexboxgrid/css/flexboxgrid.min.css'
+import '../styles/theme.css'
 
 import { Provider } from 'react-redux';
 import todoApp from '../modules/reducers';
