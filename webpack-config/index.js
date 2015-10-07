@@ -1,3 +1,5 @@
+//Taken from hjs-webpack
+//
 var fs = require('fs')
 var path = require('path')
 var rimraf = require('rimraf')

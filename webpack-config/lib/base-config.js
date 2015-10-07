@@ -1,8 +1,8 @@
 var autoPrefixer = require('autoprefixer')
 var HtmlPlugin = require('./html-plugin')
+var atImport = require('postcss-import')
 var pick = require('lodash.pick')
 var webpack = require('webpack')
-
 var useDevVariable = new webpack.DefinePlugin({
   __DEV__: JSON.stringify(JSON.parse(process.env.BUILD_DEV || 'true')),
 });
@@ -57,8 +57,12 @@ module.exports = function getBaseConfig (spec) {
         }
       ]
     },
-    postcss: function() {
-      return [autoPrefixer]
-    }
+    postcss: [
+      atImport({
+        path: ['node_modules', './src']
+      }),
+      require('postcss-simple-vars'),
+      autoPrefixer()
+    ]
   }
 }

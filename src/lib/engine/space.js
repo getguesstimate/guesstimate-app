@@ -10,15 +10,14 @@ export function get(collection, id){
   return collection.find(i => (i.id === id))
 }
 
-export function subset(oGraph, spaceId){
-  let graph = _.cloneDeep(oGraph)
-
+export function subset(graph, spaceId){
   if (spaceId){
-    graph.metrics = graph.metrics.filter(m => m.space === spaceId)
-    graph.guesstimates = _.flatten(graph.metrics.map(m => _metric.guesstimates(m, graph)))
+    const metrics = graph.metrics.filter(m => m.space === spaceId);
+    const guesstimates = _.flatten(metrics.map(m => _metric.guesstimates(m, graph)));
+    return { metrics, guesstimates }
+  } else {
+    return graph
   }
-
-  return graph;
 }
 
 export function withGraph(space, graph){
@@ -26,6 +25,5 @@ export function withGraph(space, graph){
 }
 
 export function toDgraph(spaceId, graph){
-  let _subset = subset(graph, spaceId)
-  return _graph.denormalize(_subset)
+  return _graph.denormalize(subset(graph, spaceId))
 }

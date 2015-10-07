@@ -1,4 +1,5 @@
-var getConfig = require('./lib/hjs-webpack-own')
+var getConfig = require('./webpack-config')
+
 var path = require('path');
 
 var cfg = getConfig({
@@ -16,6 +17,7 @@ if(process.env.NODE_ENV === 'development'){
 
 cfg.resolve.root = path.resolve('./src');
 cfg.resolve.alias = {
+  node_modules: path.resolve('./src/components'),
   gComponents: path.resolve('./src/components'),
   gEngine: path.resolve('./src/lib/engine'),
   gModules: path.resolve('./src/modules')

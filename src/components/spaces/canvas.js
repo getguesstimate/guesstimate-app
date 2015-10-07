@@ -74,7 +74,7 @@ export default class CanvasSpace extends Component{
     const lowestMetric = !this.props.metrics.length ? 2 : Math.max(...this.props.metrics.map(g => parseInt(g.location.row))) + 2
     const selected = parseInt(this.props.selected.row) + 2
     const height = Math.max(3, lowestMetric, selected) || 3;
-    return {columns: 4, rows: height}
+    return {columns: 8, rows: height}
   }
   handleSave() {
     this.props.dispatch(spaceActions.update(this.props.spaceId))

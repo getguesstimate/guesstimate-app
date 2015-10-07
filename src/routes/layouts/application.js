@@ -27,27 +27,31 @@ const NavItem = React.createClass({
   }
 })
 
+        //<NavItem spaces={this.props.spaces}/>
 const Header = React.createClass({
   displayName: 'Header',
   render () {
     let containerClass = (this.props.isFluid === true) ? "container-fluid" : "container";
     return (
-      <nav className="navbar navbar-default">
-        <div className={containerClass}>
-          <div className="row">
-            <div className="navbar-header col-xs-8">
-              <a className="navbar-brand" href="/">Guesstimate</a>
-            </div>
-            <div className="col-xs-4">
-              <div className="repo-list pull-right">
-                <NavItem spaces={this.props.spaces}/>
-              </div>
-              <ul className="nav navbar-nav pull-right">
-              </ul>
+      <div className="ui menu">
+        <div className='header item'>
+          <a className="navbar-brand" href="/">
+            <Icon name='th'/>
+          </a>
+        </div>
+        <div className='right menu'>
+          <div className='item'>
+            <div className='ui left icon input'>
+              <i className="search icon"></i>
+              <input type='text' placeholder='Search'>
+              </input>
             </div>
           </div>
-        </div>{/* /.container-fluid */}
-      </nav>
+          <div className='item'>
+            Sign In
+          </div>
+        </div>
+      </div>
     );
   }
 });
@@ -68,7 +72,7 @@ export default class extends Component{
   render () {
     let body = this.props.children
     if (!this.props.isFluid) {
-      body = <div className="container"> {body} </div>
+      body = <div className="ui container"> {body} </div>
     }
     return (
       <NavHelper>
