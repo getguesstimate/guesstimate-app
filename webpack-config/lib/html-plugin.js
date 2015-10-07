@@ -18,6 +18,7 @@ function defaultHtml (incomingData) {
   add('<meta charset="' + data.charset + '"/>')
   if (data.metaViewport !== false) {
     add('<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>')
+
   }
   if (data.metaTags) {
     for (var key in data.metaTags) {
@@ -33,6 +34,7 @@ function defaultHtml (incomingData) {
   if (data.head) {
     add(data.head)
   }
+  //add('<script src="semantic/dist/semantic.min.js"></script>')
   add('</head>')
   add('<body>')
   add('<div id="root">')

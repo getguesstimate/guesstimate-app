@@ -12,6 +12,7 @@
 
 .SpaceListItem a h3 {
   color: $black-1;
-  font-weight: normal;
-  margin-bottom: 0.5em;
+  font-weight: 600;
+  font-family: Lato;
+  margin-bottom: 0.2em;
 }

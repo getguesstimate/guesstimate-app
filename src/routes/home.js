@@ -3,7 +3,6 @@ import Icon from'react-fa'
 import { connect } from 'react-redux';
 import * as spaceActions from 'gModules/spaces/actions.js';
 import {ListGroup, ListGroupItem} from 'react-bootstrap/lib';
-import css from '../../semantic/dist/semantic.css'
 import SpaceList from 'gComponents/spaces/list'
 import './main.css'
 
