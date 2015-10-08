@@ -40,6 +40,7 @@ export default class MetricEditingPane extends Component {
           transitionAppear={true}
           transitionAppearTimeout={500}
           transitionEnterTimeout={300}
+          transitionLeaveTimeout={300}
       >
       {items}
       </ReactCSSTransitionGroup>
