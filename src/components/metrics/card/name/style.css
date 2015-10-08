@@ -5,26 +5,10 @@
 }
 
 textarea.MetricName {
+  @mixin hover-input;
   font-weight: 500;
-  line-height: 1.3em;
-  resize: none;
-  background-color: rgba(255, 255, 255, 0.8);
-  padding: 0.4em 0.5em;
-  border: none;
-  outline: none;
-  transition: background-color .3s;
   width: 100%;
+  line-height: 1.3em;
+  padding: 0.2em;
 }
 
-textarea.MetricName:focus {
-  background-color: white;
-}
-
-textarea.MetricName:not(:focus):hover {
-  background-color: white;
-}
-
-textarea.MetricName:not(:focus) {
-  cursor: pointer;
-  background-color: rgba(0,0,0,0);
-}

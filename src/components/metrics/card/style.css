@@ -3,23 +3,22 @@
 .metric {
   cursor: auto;
   z-index: 0;
-  text-align: center;
   font-size: 1.25em;
   position: relative;
-  min-height: 90px;
-  background: #ECECED;
+  background: white;
   border-radius: 2px;
-  padding: 0.5em;
   font-weight: 300;
+  border: 2px solid rgba(255,255,255,1);
+  cursor: pointer;
 }
 
-.metric &:focus {
+.metric-container {
+  padding: 0.5em;
+}
+
+.metric:focus {
   outline: none;
-  background-color: #D0ECFD;
-}
-
-input {
-  text-align: center;
+  border-color: $blue-1;
 }
 
 .name input {
@@ -28,6 +27,7 @@ input {
 
 .row1{
   margin-top: 0.20em;
+  padding-left: 0.5em;
 }
 
 .form-group {
