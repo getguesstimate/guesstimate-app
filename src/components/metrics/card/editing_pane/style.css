@@ -1,14 +1,5 @@
 @import './styles/variables.css';
 
-.editing-section {
-  margin-top: 2px;
-  background: #ECECED;
-  border-radius: 2px;
-  padding: 0.5em;
-  font-weight: 300;
-  font-size: 1.25em;
-}
-
 .drop-appear {
   max-height: 0;
   overflow: hidden;
@@ -19,22 +10,18 @@
   transition: max-height 0.5s;
 }
 
-.guesstimate-form input {
-  width: 100%;
-  color: #000;
-  background-color: #D0D0D0;
-  border-radius: 2px;
-  padding: 5px 5px;
-  height: 1.7em;
+.editing-section {
+  border-top: 2px solid $grey-1;
+  background-color: white;
+  border-radius: 0 0 2px 2px;
 }
 
-.guesstimate-form input:focus {
-  background-color: #C0E7FF;
+.GuesstimateForm input {
+  @mixin hover-input;
 }
 
-.guesstimate-form .errors{
+.GuesstimateForm .errors{
   margin-top: 8px;
-  font-size: 0.8em;
   color: #666;
 }
 

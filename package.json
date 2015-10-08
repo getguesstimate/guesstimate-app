@@ -71,6 +71,7 @@
     "numeral": "~1.5.3",
     "postcss-import": "^7.0.0",
     "postcss-loader": "^0.6.0",
+    "precss": "^1.2.3",
     "qs": "^2.4.1",
     "react": "^0.14.0",
     "react-fa": "^4.0.0",

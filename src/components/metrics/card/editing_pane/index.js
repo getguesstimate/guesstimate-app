@@ -17,7 +17,7 @@ export default class MetricEditingPane extends Component {
   }
   render() {
     let items = (
-      <div className='editing-section' key={this.props.metricId}>
+      <div className='metric-container editing-section' key={this.props.metricId}>
         <div className='row'>
           <div
               className='col-xs-12'

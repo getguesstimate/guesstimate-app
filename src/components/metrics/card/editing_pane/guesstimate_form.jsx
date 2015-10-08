@@ -61,7 +61,7 @@ class GuesstimateForm extends Component{
     let errors = distribution && distribution.errors;
     let errorPane = <div className='errors'>{errors} </div>
     return(
-      <div className='guesstimate-form'>
+      <div className='GuesstimateForm'>
         <input
             id="live-input"
             onBlur={this._handleBlur.bind(this)}

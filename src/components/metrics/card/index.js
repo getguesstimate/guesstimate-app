@@ -60,28 +60,28 @@ class Metric extends Component {
     const {isSelected, metric, canvasState, guesstimateForm} = this.props
     let anotherFunctionSelected = ((canvasState === 'function') && !isSelected)
     return(
-      <div>
-        <div
-            className={isSelected ? 'metric grid-item-focus' : 'metric'}
-            onKeyDown={this._handlePress.bind(this)}
-            tabIndex='0'
-        >
-          <SimulationHistogram simulation={metric.simulation}/>
-          <StatTable
-              showIf={_.has(metric, 'simulation.stats.mean') && isSelected}
-              stats={_.get(metric, 'simulation.stats')}
-          />
-          <Header
-              anotherFunctionSelected={anotherFunctionSelected}
-              metric={metric}
-              onChange={this.handleChangeMetric.bind(this)}
-          />
-          <div className='row row1'>
-            <div className='col-sm-12 mean'>
-              <DistributionSummary
-                  guesstimateForm={guesstimateForm}
-                  simulation={metric.simulation}
-              />
+      <div
+          className={isSelected ? 'metric grid-item-focus' : 'metric'}
+          tabIndex='0'
+      >
+        <div className={'card-top'}>
+          <div
+              className={'metric-container'}
+              onKeyDown={this._handlePress.bind(this)}
+          >
+            <SimulationHistogram simulation={metric.simulation}/>
+            <Header
+                anotherFunctionSelected={anotherFunctionSelected}
+                metric={metric}
+                onChange={this.handleChangeMetric.bind(this)}
+            />
+            <div className='row row1'>
+              <div className='col-sm-12 mean'>
+                <DistributionSummary
+                    guesstimateForm={guesstimateForm}
+                    simulation={metric.simulation}
+                />
+              </div>
             </div>
           </div>
         </div>
