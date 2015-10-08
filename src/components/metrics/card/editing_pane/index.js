@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import GuesstimateForm from './guesstimate_form';
 import ShowIf from 'gComponents/utility/showIf';
+import './style.css'
 
 @ShowIf
 export default class MetricEditingPane extends Component {
@@ -35,7 +36,7 @@ export default class MetricEditingPane extends Component {
       )
     return (
       <ReactCSSTransitionGroup
-          transitionName='carousel'
+          transitionName='drop'
           transitionAppear={true}
           transitionAppearTimeout={500}
           transitionEnterTimeout={300}

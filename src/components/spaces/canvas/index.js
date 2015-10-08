@@ -8,16 +8,16 @@ import e from 'gEngine/engine'
 
 import Grid from 'gComponents/lib/grid/grid/'
 import Metric from 'gComponents/metrics/card'
-import SpaceHeader from './canvas/header.js'
 
 import { addMetric } from 'gModules/metrics/actions'
 import { changeSelect } from 'gModules/selection/actions'
 import { runSimulations } from 'gModules/simulations/actions'
 import * as spaceActions  from 'gModules/spaces/actions';
 
-import styles from './canvas/canvas.styl'
-import { canvasStateSelector } from './canvas/canvas-state-selector';
-import { denormalizedSpaceSelector } from './denormalized-space-selector.js';
+import './canvas.styl'
+import SpaceHeader from './header.js'
+import { canvasStateSelector } from './canvas-state-selector';
+import { denormalizedSpaceSelector } from '../denormalized-space-selector.js';
 
 function mapStateToProps(state) {
   return {
@@ -57,6 +57,8 @@ export default class CanvasSpace extends Component{
   }
 
   _handleSelect(event, location, item) {
+    console.log('handling select for item', item)
+    console.log('handlign select?')
     if (!_.isEqual(this.props.selected, location)){
       if ((this.props.canvasState == 'function') && item) {
         event.preventDefault()

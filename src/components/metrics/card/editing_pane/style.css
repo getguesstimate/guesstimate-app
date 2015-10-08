@@ -1,0 +1,46 @@
+@import './styles/variables.css';
+
+.editing-section {
+  margin-top: 2px;
+  background: #ECECED;
+  border-radius: 2px;
+  padding: 0.5em;
+  font-weight: 300;
+  font-size: 1.25em;
+}
+
+.drop-appear {
+  max-height: 0;
+  overflow: hidden;
+}
+
+.drop-appear.drop-appear-active{
+  max-height: 300px;
+  transition: max-height 0.5s;
+}
+
+.guesstimate-form input {
+  width: 100%;
+  color: #000;
+  background-color: #D0D0D0;
+  border-radius: 2px;
+  padding: 5px 5px;
+  height: 1.7em;
+}
+
+.guesstimate-form input:focus {
+  background-color: #C0E7FF;
+}
+
+.guesstimate-form .errors{
+  margin-top: 8px;
+  font-size: 0.8em;
+  color: #666;
+}
+
+.metric .ui.form textarea {
+  resize: none;
+  border: 0px solid $blue-1;
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 0.75em;
+}
