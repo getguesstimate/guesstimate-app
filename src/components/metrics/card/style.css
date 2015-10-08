@@ -1,3 +1,5 @@
+@import './styles/variables.css';
+
 .metric {
   cursor: auto;
   z-index: 0;
@@ -44,3 +46,4 @@ input {
   font-size: 1em;
   color: blue;
 }
+

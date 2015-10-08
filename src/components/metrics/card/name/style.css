@@ -1,0 +1,12 @@
+@import './styles/variables.css';
+
+.MetricName .MetricName--plain{
+  padding: 0.75em;
+}
+
+.MetricName .ui.form textarea {
+  resize: none;
+  border: 0px solid $blue-1;
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 0.75em;
+}

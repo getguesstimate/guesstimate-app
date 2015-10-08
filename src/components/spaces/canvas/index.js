@@ -57,8 +57,6 @@ export default class CanvasSpace extends Component{
   }
 
   _handleSelect(event, location, item) {
-    console.log('handling select for item', item)
-    console.log('handlign select?')
     if (!_.isEqual(this.props.selected, location)){
       if ((this.props.canvasState == 'function') && item) {
         event.preventDefault()
