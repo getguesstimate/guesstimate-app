@@ -4,9 +4,27 @@
   padding: 0.75em;
 }
 
-.MetricName .ui.form textarea {
+textarea.MetricName {
+  font-weight: 500;
+  line-height: 1.3em;
   resize: none;
-  border: 0px solid $blue-1;
-  background-color: rgba(255, 255, 255, 0.7);
-  padding: 0.75em;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 0.4em 0.5em;
+  border: none;
+  outline: none;
+  transition: background-color .3s;
+  width: 100%;
+}
+
+textarea.MetricName:focus {
+  background-color: white;
+}
+
+textarea.MetricName:not(:focus):hover {
+  background-color: white;
+}
+
+textarea.MetricName:not(:focus) {
+  cursor: pointer;
+  background-color: rgba(0,0,0,0);
 }
