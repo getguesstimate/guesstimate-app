@@ -75,6 +75,7 @@
     "react": "^0.14.0",
     "react-fa": "^4.0.0",
     "react-redux": "^3.0.0",
+    "react-textarea-autosize": "^3.0.0",
     "redux": "^3.0.2",
     "redux-crud": "^0.5.0",
     "redux-form": "^2.0.0",

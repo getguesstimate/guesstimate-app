@@ -5,13 +5,13 @@ import { removeMetric, changeMetric } from 'gModules/metrics/actions.js';
 import { changeGuesstimate } from 'gModules/guesstimates/actions.js';
 import _ from 'lodash'
 
-import StatTable from '../simulations/stat_table';
-import SimulationHistogram from '../simulations/histogram'
+import StatTable from 'gComponents/simulations/stat_table';
+import SimulationHistogram from 'gComponents/simulations/histogram'
 
-import EditingPane from './card/editing_pane';
-import DistributionSummary from './card/simulation_summary'
-import GuesstimateForm from './card/guesstimate_form'
-import Header from './card/header'
+import EditingPane from './editing_pane';
+import DistributionSummary from './simulation_summary'
+import Header from './header'
+import './style.css'
 
 class Metric extends Component {
   displayName: 'Metric'
@@ -61,37 +61,37 @@ class Metric extends Component {
     let anotherFunctionSelected = ((canvasState === 'function') && !isSelected)
     return(
       <div>
-      <div
-          className={isSelected ? 'metric grid-item-focus' : 'metric'}
-          onKeyDown={this._handlePress.bind(this)}
-          tabIndex='0'
-      >
-        <SimulationHistogram simulation={metric.simulation}/>
-         <StatTable
-             showIf={_.has(metric, 'simulation.stats.mean') && isSelected}
-             stats={_.get(metric, 'simulation.stats')}
+        <div
+            className={isSelected ? 'metric grid-item-focus' : 'metric'}
+            onKeyDown={this._handlePress.bind(this)}
+            tabIndex='0'
+        >
+          <SimulationHistogram simulation={metric.simulation}/>
+          <StatTable
+              showIf={_.has(metric, 'simulation.stats.mean') && isSelected}
+              stats={_.get(metric, 'simulation.stats')}
+          />
+          <Header
+              anotherFunctionSelected={anotherFunctionSelected}
+              metric={metric}
+              onChange={this.handleChangeMetric.bind(this)}
+          />
+          <div className='row row1'>
+            <div className='col-sm-12 mean'>
+              <DistributionSummary
+                  guesstimateForm={guesstimateForm}
+                  simulation={metric.simulation}
+              />
+            </div>
+          </div>
+        </div>
+         <EditingPane
+             guesstimate={metric.guesstimate}
+             guesstimateForm={guesstimateForm}
+             metricId={metric.id}
+             onChangeGuesstimate={this.handleChangeGuesstimate.bind(this)}
+             showIf={isSelected && !_.isUndefined(metric.guesstimate)}
          />
-         <Header
-             anotherFunctionSelected={anotherFunctionSelected}
-             metric={metric}
-             onChange={this.handleChangeMetric.bind(this)}
-         />
-         <div className='row row1'>
-           <div className='col-sm-12 mean'>
-             <DistributionSummary
-                 guesstimateForm={guesstimateForm}
-                 simulation={metric.simulation}
-             />
-           </div>
-         </div>
-      </div>
-       <EditingPane
-           guesstimate={metric.guesstimate}
-           guesstimateForm={guesstimateForm}
-           metricId={metric.id}
-           onChangeGuesstimate={this.handleChangeGuesstimate.bind(this)}
-           showIf={isSelected && !_.isUndefined(metric.guesstimate)}
-       />
       </div>
     )
   }
