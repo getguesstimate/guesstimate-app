@@ -1,5 +1,6 @@
 import * as _graph from './graph';
 import * as _metric from './metric';
+import * as _guesstimate from './guesstimate';
 import _ from 'lodash';
 
 export function url (space) {
@@ -14,7 +15,8 @@ export function subset(graph, spaceId){
   if (spaceId){
     const metrics = graph.metrics.filter(m => m.space === spaceId);
     const guesstimates = _.flatten(metrics.map(m => _metric.guesstimates(m, graph)));
-    return { metrics, guesstimates }
+    const simulations = _.flatten(guesstimates.map(g => _guesstimate.simulations(g, graph)));
+    return { metrics, guesstimates, simulations }
   } else {
     return graph
   }
