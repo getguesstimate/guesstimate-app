@@ -39,7 +39,7 @@ export default class Grid extends Component{
    let isSelected = atThisLocation(this.props.selected)
    let item = this.props.children.filter(function(i) { return (atThisLocation(i.props.location)) })[0];
    return (
-    <td key={'grid-item', location.row, location.column}>
+    <div className='Cell--container' key={'grid-item', location.row, location.column}>
       <Cell
           gridKeyPress={this._handleKeyPress.bind(this)}
           handleSelect={this.props.handleSelect}
@@ -48,7 +48,7 @@ export default class Grid extends Component{
           location={location}
           onAddItem={this.props.onAddItem}
       />
-    </td>
+    </div>
     )
   }
   _row(row) {
@@ -61,18 +61,14 @@ export default class Grid extends Component{
   render() {
     return (
       <div
-          className='grid'
+          className='Grid'
           onKeyPress={this._handleKeyPress.bind(this)}
       >
-        <table>
-          <tbody>
-            {
-              upto(this.props.size.rows).map((row) => {
-                return ( <tr key={row}> {this._row(row)} </tr>)
-              })
-            }
-          </tbody>
-        </table>
+        {
+          upto(this.props.size.rows).map((row) => {
+            return ( <div className='Row' key={row}> {this._row(row)} </div>)
+          })
+        }
       </div>
     )
   }
