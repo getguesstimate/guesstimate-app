@@ -10,6 +10,7 @@
   font-weight: 300;
   border: 2px solid rgba(255,255,255,1);
   cursor: pointer;
+  width: 100%;
 }
 
 .metric-container {
