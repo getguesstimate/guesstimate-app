@@ -1,0 +1,85 @@
+{
+  "name": "hjs-webpack",
+  "description": "Presets for setting up webpack with hotloading react and ES6(2015) using Babel.",
+  "version": "2.13.2",
+  "author": {
+    "name": "Henrik Joreteg",
+    "email": "henrik@andyet.net"
+  },
+  "bugs": {
+    "url": "https://github.com/henrikjoreteg/hjs-webpack/issues"
+  },
+  "dependencies": {
+    "extract-text-webpack-plugin": "0.8.2",
+    "find-root": "0.1.1",
+    "lodash.assign": "3.2.0",
+    "lodash.defaults": "3.1.2",
+    "lodash.pick": "3.1.0",
+    "rimraf": "2.4.3"
+  },
+  "devDependencies": {
+    "standard": "5.3.1"
+  },
+  "homepage": "https://github.com/henrikjoreteg/hjs-webpack",
+  "keywords": [
+    "config",
+    "human javascript",
+    "webpack"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "peerDependencies": {
+    "autoprefixer": "*",
+    "babel": "*",
+    "babel-loader": "*",
+    "css-loader": "*",
+    "json-loader": "*",
+    "postcss-loader": "*",
+    "react": "^0.14.0-rc1",
+    "react-hot-loader": "^1.3.0",
+    "style-loader": "*",
+    "stylus-loader": "*",
+    "url-loader": "*",
+    "webpack-dev-server": "*",
+    "yeticss": "*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/henrikjoreteg/hjs-webpack.git"
+  },
+  "scripts": {
+    "test": "standard"
+  },
+  "standard": {
+    "ignore": [
+      "examples/*/public/*",
+      "examples/*/node_modules/*"
+    ]
+  },
+  "gitHead": "9a4b907ebb1bbf916188e6ef9cb1bc8d6c872773",
+  "_id": "hjs-webpack@2.13.2",
+  "_shasum": "c651aa7b707db40531f829e53dd576e5424c6409",
+  "_from": "hjs-webpack@*",
+  "_npmVersion": "3.3.3",
+  "_nodeVersion": "4.1.0",
+  "_npmUser": {
+    "name": "henrikjoreteg",
+    "email": "henrik@joreteg.com"
+  },
+  "dist": {
+    "shasum": "c651aa7b707db40531f829e53dd576e5424c6409",
+    "tarball": "http://registry.npmjs.org/hjs-webpack/-/hjs-webpack-2.13.2.tgz"
+  },
+  "maintainers": [
+    {
+      "name": "henrikjoreteg",
+      "email": "henrik@andyet.net"
+    },
+    {
+      "name": "lukekarrys",
+      "email": "luke@lukekarrys.com"
+    }
+  ],
+  "directories": {},
+  "_resolved": "https://registry.npmjs.org/hjs-webpack/-/hjs-webpack-2.13.2.tgz"
+}

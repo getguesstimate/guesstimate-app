@@ -1,3 +1,5 @@
+export * from './metric/generate_readable_id.js'
+
 function findWithId(collection, id, property) {
   if (collection && id && property) {
     return collection.find(e => e[property] === id);
@@ -11,4 +13,8 @@ export function denormalize(metric, graph) {
   let guesstimate = findWithMetricId(graph.guesstimates);
   let simulation = findWithMetricId(graph.simulations);
   return Object.assign({}, metric, {guesstimate, simulation});
+}
+
+export function guesstimates(metric, graph) {
+  return graph.guesstimates.filter(g => (g.metric === metric.id))
 }
