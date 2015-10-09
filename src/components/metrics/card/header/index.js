@@ -4,7 +4,7 @@ import MetricName from '../name'
 import ShowIf from 'gComponents/utility/showIf'
 
 const MetricReadableIdd = ({readableId}) => (
-  <div className='col-sm-1 function-id'>
+  <div className='col-xs-1 function-id'>
     {readableId}
   </div>
 )
@@ -28,12 +28,12 @@ export default class MetricHeader extends Component {
     let {anotherFunctionSelected, metric} = this.props
     return (
      <div className='row'>
-       <div className={anotherFunctionSelected ? 'col-sm-9 name' : 'col-sm-12 name'}>
+       <div className={anotherFunctionSelected ? 'col-xs-9 name' : 'col-xs-12 name'}>
          <MetricName name={metric.name}
            onChange={this.props.onChange}
          />
       </div>
-       <div className={anotherFunctionSelected ? 'col-sm-0' : 'col-sm-3'}>
+       <div className={anotherFunctionSelected ? 'col-xs-0' : 'col-xs-3'}>
          <MetricReadableId
              readableId={metric.readableId}
              showIf={anotherFunctionSelected}

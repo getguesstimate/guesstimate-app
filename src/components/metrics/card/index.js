@@ -76,7 +76,7 @@ class Metric extends Component {
                 onChange={this.handleChangeMetric.bind(this)}
             />
             <div className='row row1'>
-              <div className='col-sm-12 mean'>
+              <div className='col-xs-12 mean'>
                 <DistributionSummary
                     guesstimateForm={guesstimateForm}
                     simulation={metric.simulation}
