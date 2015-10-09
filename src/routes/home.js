@@ -1,9 +1,9 @@
 import React, {Component, PropTypes} from 'react'
 import Icon from'react-fa'
 import { connect } from 'react-redux';
-import * as spaceActions from 'gModules/spaces/actions.js';
 import {ListGroup, ListGroupItem} from 'react-bootstrap/lib';
 import SpaceList from 'gComponents/spaces/list'
+import _ from 'lodash'
 import './main.css'
 
 function mapStateToProps(state) {
@@ -19,6 +19,7 @@ export default class Home extends Component{
   render () {
     const {spaces, metrics} = this.props
     let style = {paddingTop: '3em'}
+    const showSpaces = spaces.asMutable().filter(s => (_.isUndefined(s.deleted) || !s.deleted ))
     return (
       <div className='wrap container-fluid' style={style}>
         <h2 className='ui header'>
@@ -35,7 +36,7 @@ export default class Home extends Component{
 
         <div className='ui divider'></div>
         <div className='spaceList'>
-          <SpaceList spaces={spaces.asMutable()}/>
+          <SpaceList spaces={showSpaces}/>
         </div>
       </div>
     )

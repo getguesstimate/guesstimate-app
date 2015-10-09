@@ -1,9 +1,8 @@
 .react-d3-histogram {
-  left: 0;
-  right: 0;
+  bottom: -35px;
   position: absolute;;
   z-index: -1;
-  height: 100px;
+  left: -7px;
 }
 
 .react-d3-histogram svg {
@@ -11,12 +10,8 @@
 }
 
 .react-d3-histogram__bar rect {
-  fill: #DBE5EC;
+  fill: #EFF4F7;
   shape-rendering: crispEdges;
-}
-
-.metric:focus .react-d3-histogram__bar rect {
-  fill: #B9D2E4;
 }
 
 .react-d3-histogram__bar text {
