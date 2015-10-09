@@ -36,7 +36,7 @@ export default Router.extend({
         </Provider>
         {__DEV__ ? <Debug store={store}/> : ''}
       </div>,
-      document.body)
+      document.getElementById('root'))
   },
 
   routes: {

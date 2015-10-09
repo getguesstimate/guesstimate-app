@@ -1,0 +1,13 @@
+table.MetricStatTable {
+  position: absolute;
+  left: 5px;
+  font-size: 10px;
+  color: #1B7DAA;
+  width: 110px;
+}
+
+table.MetricStatTable td {
+  text-align: left;
+  padding: 0;
+}
+

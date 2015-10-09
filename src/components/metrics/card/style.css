@@ -1,0 +1,50 @@
+@import './styles/variables.css';
+
+.metric {
+  cursor: auto;
+  z-index: 0;
+  font-size: 1.25em;
+  position: relative;
+  background: white;
+  border-radius: 2px;
+  font-weight: 300;
+  border: 2px solid rgba(255,255,255,1);
+  cursor: pointer;
+  width: 100%;
+}
+
+.metric-container {
+  padding: 0.5em;
+}
+
+.metric:focus {
+  outline: none;
+  border-color: $blue-1;
+}
+
+.name input {
+  background-color: rgba(0,0,0,0);
+}
+
+.row1{
+  margin-top: 0.20em;
+  padding-left: 0.5em;
+}
+
+.form-group {
+  margin-bottom: 0;
+}
+.name {
+  color: #595F6F;
+}
+
+.mean {
+  font-weight: 500;
+  font-size: 1.5em;
+  color: #595F6F;
+}
+.function-id {
+  font-size: 1em;
+  color: blue;
+}
+

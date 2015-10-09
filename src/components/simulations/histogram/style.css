@@ -1,0 +1,38 @@
+.react-d3-histogram {
+  left: 0;
+  right: 0;
+  position: absolute;;
+  z-index: -1;
+  height: 100px;
+}
+
+.react-d3-histogram svg {
+  width: 100%;
+}
+
+.react-d3-histogram__bar rect {
+  fill: #DBE5EC;
+  shape-rendering: crispEdges;
+}
+
+.metric:focus .react-d3-histogram__bar rect {
+  fill: #B9D2E4;
+}
+
+.react-d3-histogram__bar text {
+  fill: none;
+}
+
+.react-d3-histogram__tick text {
+  font-size: 8px;
+  fill: none;
+}
+
+.metric:hover .react-d3-histogram__tick text {
+  fill: #aaa;
+}
+
+.react-d3-histogram__x-axis path, .react-d3-histogram__x-axis line {
+  fill: none;
+  shape-rendering: crispEdges;
+}

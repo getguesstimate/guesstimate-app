@@ -1,5 +1,4 @@
 import React, {Component, PropTypes} from 'react'
-import t from 'tcomb-form'
 import _ from 'lodash'
 import * as spaceActions from 'gModules/spaces/actions.js'
 import { connect } from 'react-redux';
@@ -23,17 +22,19 @@ class NewSpaceForm extends Component {
   render() {
     const { fields: {name, address, phone}, handleSubmit, submitting } = this.props;
     return (
-      <form onSubmit={handleSubmit}>
-        <label>Name</label>
-        <Input type="text" {...name}/>
-        {name.error && name.touched && <div>{name.error}</div>}
+      <div className='container' >
+        <form onSubmit={handleSubmit} className='ui form'>
+          <label>Name</label>
+          <Input type="text" {...name}/>
+          {name.error && name.touched && <div>{name.error}</div>}
 
-      <ButtonToolbar>
-        <button type='submit' className='btn btn-primary' onClick={handleSubmit} disabled={submitting}>
-          {!submitting ? 'Create' : 'Submitting'}
-        </button>
-      </ButtonToolbar>
-      </form>
+        <ButtonToolbar>
+          <button type='submit' className='ui button primary' onClick={handleSubmit} disabled={submitting}>
+            {!submitting ? 'Create' : 'Submitting'}
+          </button>
+        </ButtonToolbar>
+        </form>
+      </div>
     );
   }
 }

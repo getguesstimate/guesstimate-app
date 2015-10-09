@@ -1,4 +1,5 @@
 node_modules
+semantic/dist
 npm-debug.log
 .DS_Store
 /public
