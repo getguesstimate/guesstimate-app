@@ -64,24 +64,21 @@ class Metric extends Component {
           className={isSelected ? 'metric grid-item-focus' : 'metric'}
           tabIndex='0'
       >
-        <div className={'card-top'}>
-          <div
-              className={'metric-container'}
+        <div className={'card-top metric-container'}
               onKeyDown={this._handlePress.bind(this)}
-          >
-            <SimulationHistogram simulation={metric.simulation}/>
-            <Header
-                anotherFunctionSelected={anotherFunctionSelected}
-                metric={metric}
-                onChange={this.handleChangeMetric.bind(this)}
-            />
-            <div className='row row1'>
-              <div className='col-xs-12 mean'>
-                <DistributionSummary
-                    guesstimateForm={guesstimateForm}
-                    simulation={metric.simulation}
-                />
-              </div>
+        >
+          <SimulationHistogram simulation={metric.simulation}/>
+          <Header
+              anotherFunctionSelected={anotherFunctionSelected}
+              metric={metric}
+              onChange={this.handleChangeMetric.bind(this)}
+          />
+          <div className='row row1'>
+            <div className='col-xs-12 mean'>
+              <DistributionSummary
+                  guesstimateForm={guesstimateForm}
+                  simulation={metric.simulation}
+              />
             </div>
           </div>
         </div>
