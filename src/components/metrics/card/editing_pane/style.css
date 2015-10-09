@@ -1,0 +1,27 @@
+@import './styles/variables.css';
+
+.drop-appear {
+  max-height: 0;
+  overflow: hidden;
+}
+
+.drop-appear.drop-appear-active{
+  max-height: 300px;
+  transition: max-height 0.5s;
+}
+
+.editing-section {
+  border-top: 2px solid $grey-1;
+  background-color: white;
+  border-radius: 0 0 2px 2px;
+}
+
+.GuesstimateForm input {
+  @mixin hover-input;
+}
+
+.GuesstimateForm .errors{
+  margin-top: 8px;
+  color: #666;
+}
+

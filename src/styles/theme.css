@@ -1,0 +1,25 @@
+@import './variables.css';
+@import './overrides.css';
+
+body {
+  font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+}
+
+::-webkit-scrollbar {
+  height: 14px;
+  width: 6px;
+}
+
+::-webkit-scrollbar-thumb:horizontal {
+    background-color: $blue-1;
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:vertical {
+    background-color: $grey-4;
+    border-radius: 2px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: $grey-1;
+}
