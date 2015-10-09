@@ -1,0 +1,5 @@
+@import './styles/variables.css';
+
+.PageHeader{
+  border-bottom: 1px solid $grey-1;
+}

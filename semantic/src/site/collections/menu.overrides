@@ -1,0 +1,22 @@
+/*******************************
+         Site Overrides
+*******************************/
+
+.ui.menu {
+  box-shadow: none;
+  border-radius: 0;
+  margin-bottom: 0;
+}
+
+.ui.menu a {
+  color: @textColor;
+}
+
+.ui.menu .item:before {
+  background: none;
+}
+
+.ui.menu .item:first-of-type {
+  padding-left: 0
+}
+

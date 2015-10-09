@@ -3,23 +3,13 @@ import Icon from'react-fa'
 import { connect } from 'react-redux';
 import * as spaceActions from 'gModules/spaces/actions.js';
 import {ListGroup, ListGroupItem} from 'react-bootstrap/lib';
-import * as Space from 'gEngine/space';
+import SpaceList from 'gComponents/spaces/list'
+import './main.css'
 
 function mapStateToProps(state) {
   return {
-    spaces: state.spaces
-  }
-}
-
-@connect()
-class SpaceShow extends Component{
-  render() {
-    const {space} = this.props
-    return (
-      <ListGroupItem header={space.name} href={Space.url(space)}>
-        {space.description}
-      </ListGroupItem>
-    )
+    spaces: state.spaces,
+    metrics: state.metrics
   }
 }
 
@@ -27,27 +17,25 @@ class SpaceShow extends Component{
 export default class Home extends Component{
   displayName: 'Home'
   render () {
-    const {spaces} = this.props
+    const {spaces, metrics} = this.props
+    let style = {paddingTop: '3em'}
     return (
-      <div className='home-page'>
-        <div className='container'>
-          <h1 className='text-center'> Estimate all the Things!</h1>
-        </div>
-        <div className='container'>
-        <div className='row'>
-          <div className='col-sm-6'>
+      <div className='wrap container-fluid' style={style}>
+        <h2 className='ui header'>
+          <div className='content'>
+            {'Collections'}
+            <div className='sub header'>
+              {'Each can have several metrics.'}
+            </div>
           </div>
-          <div className='col-md-6'>
-            <h2 className='text-center'> Boards </h2>
-            <ListGroup>
-              {spaces.asMutable().map((s) => {
-                return (
-                  <SpaceShow space={s} key={s.id}/>
-                )
-              })}
-            </ListGroup>
-          </div>
-        </div>
+          <a href='/space/new' className='ui primary button right floated'>
+            {'New Collection'}
+          </a>
+        </h2>
+
+        <div className='ui divider'></div>
+        <div className='spaceList'>
+          <SpaceList spaces={spaces.asMutable()}/>
         </div>
       </div>
     )

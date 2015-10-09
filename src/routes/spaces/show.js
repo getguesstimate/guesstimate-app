@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react'
 import SpaceCanvas from 'gComponents/spaces/canvas'
 import { connect } from 'react-redux';
+import style from './style.css'
 
 function mapStateToProps(state) {
   return {
@@ -15,15 +16,13 @@ export default class repoShow extends Component {
   render () {
     const space = this.props.spaces.asMutable().find(s => (s.id.toString() === this.props.spaceId.toString()))
     return (
-      <div>
-      <div className='container-fluid'>
-        <div className='row'>
-          <div className='col-sm-10'>
-            <h2> {space ? space.name : ''} </h2>
-          </div>
+    <div>
+      <div className='hero-unit'>
+        <div className='container-fluid'>
+          <h1> {space ? space.name : ''} </h1>
         </div>
       </div>
-      { space ? <SpaceCanvas spaceId={space.id}/> : ''}
+      { space && <SpaceCanvas spaceId={space.id}/>}
       </div>
     )
   }
