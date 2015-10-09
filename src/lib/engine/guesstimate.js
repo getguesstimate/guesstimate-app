@@ -54,5 +54,5 @@ export function toEditorState(guesstimate: Guesstimate): string{
 }
 
 export function simulations(guesstimate, graph) {
-  return graph.simulations.filter(s => (s.metric === guesstimate.metric))
+  return graph.simulations && graph.simulations.filter(s => (s.metric === guesstimate.metric))
 }

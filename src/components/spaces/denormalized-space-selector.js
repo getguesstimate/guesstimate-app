@@ -10,8 +10,9 @@ export const denormalizedSpaceSelector = createSelector(
   spaceGraphSelector,
   spaceSelector,
   (graph, space) => {
+    const dSpace = space && Object.assign(space.asMutable(), e.space.toDgraph(space.id, graph))
     return {
-      denormalizedSpace: Object.assign(space.asMutable(), e.space.toDgraph(space.id, graph))
+      denormalizedSpace: dSpace
     };
   }
 );

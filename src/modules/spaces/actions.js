@@ -6,11 +6,13 @@ import _ from 'lodash'
 import app from 'ampersand-app'
 let standardActionCreators = actionCreatorsFor('spaces');
 
-//let rootUrl = 'http://localhost:4000/'
-let rootUrl = 'http://guesstimate.herokuapp.com/'
+let rootUrl = 'http://localhost:4000/'
+//let rootUrl = 'http://guesstimate.herokuapp.com/'
 
-export function destroy(id) {
+export function destroy(object) {
+  const id = object.id;
   return function(dispatch) {
+    app.router.history.navigate('/')
     const action = standardActionCreators.deleteStart({id: id});
     dispatch(action)
 
@@ -21,6 +23,7 @@ export function destroy(id) {
 
     request.done(() => {
       const successAction = standardActionCreators.deleteSuccess({id: id});
+      console.log(successAction)
       dispatch(successAction)
     })
   }
