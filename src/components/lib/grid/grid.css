@@ -1,0 +1,35 @@
+.GiantGrid {
+  overflow-x: auto;
+}
+
+.GiantRow{
+  display: flex;
+  align-items: stretch;
+  flex-direction: row;
+}
+
+.GiantCell--container{
+  min-width: 200px;
+  display: flex;
+  padding: 5px;
+  flex: 1;
+}
+
+.cell {
+  display: flex;
+  cursor: pointer;
+  border-radius: 3px;
+  width: 100%;
+  min-height: 90px;
+  border: 2px solid rgba(0,0,0,0);
+
+  &:focus {
+    outline: none;
+  }
+  &.empty:hover {
+    background-color: #ECF2F5;
+  }
+  &.empty:focus {
+    border-color: #6CAED1;
+  }
+}

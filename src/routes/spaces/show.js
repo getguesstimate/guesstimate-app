@@ -23,7 +23,6 @@ export default class repoShow extends Component {
         </div>
       </div>
       { space && <SpaceCanvas spaceId={space.id}/>}
-      <div className='ui divider'/>
       </div>
     )
   }
