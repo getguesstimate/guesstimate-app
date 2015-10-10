@@ -3,6 +3,7 @@ import selectionR from './selection/reducer'
 import metricsR from './metrics/reducer'
 import guesstimatesR from './guesstimates/reducer'
 import simulationsR from './simulations/reducer'
+import meR from './me/reducer'
 import reduxCrud from 'redux-crud';
 import {reducer as formReducer} from 'redux-form';
 
@@ -19,6 +20,7 @@ const rootReducer = function app(state = {}, action){
     simulations: simulationsR(state.simulations, action),
     spaces: reduxCrud.reducersFor('spaces')(state.spaces, action),
     form: formReducer(state.form, action),
+    me: meR(state.form, action),
   };
 };
 
