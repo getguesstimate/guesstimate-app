@@ -7,6 +7,7 @@ import '../../../styles/theme.css'
 import React, {Component, PropTypes} from 'react'
 import { connect } from 'react-redux';
 import * as spaceActions from 'gModules/spaces/actions.js';
+import * as meActions from 'gModules/me/actions.js';
 import * as Space from 'gEngine/space';
 import Header from '../header'
 import NavHelper from './nav-helper'
@@ -22,6 +23,7 @@ function mapStateToProps(state) {
 export default class extends Component{
   displayName: 'Layout'
   componentDidMount() {
+    this.props.dispatch(meActions.init())
     this.props.dispatch(spaceActions.fetch())
   }
   render () {

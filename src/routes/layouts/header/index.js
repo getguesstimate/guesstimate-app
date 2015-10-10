@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/lib/Button'
 import ButtonGroup from 'react-bootstrap/lib/ButtonGroup'
 import MenuItem from 'react-bootstrap/lib/MenuItem'
 import Icon from'react-fa'
+import Login from'../login'
 import './style.css'
 
 const NavItem = React.createClass({
@@ -22,7 +23,6 @@ const NavItem = React.createClass({
     )
   }
 })
-
 
 const Header = React.createClass({
   displayName: 'Header',
@@ -46,7 +46,7 @@ const Header = React.createClass({
                   </div>
                 </div>
                 <div className='item'>
-                  Sign In
+                  <Login/>
                 </div>
               </div>
           </div>

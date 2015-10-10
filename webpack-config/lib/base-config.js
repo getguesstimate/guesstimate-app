@@ -60,6 +60,15 @@ module.exports = function getBaseConfig (spec) {
         {
           test: /\.(jpe?g|png|gif)/,
           loader: 'url-loader?limit=' + spec.urlLoaderLimit
+        },
+        {
+          test: /\.ejs$/,
+          loader: 'ejs-compiled-loader'
+        },
+        {
+          test: /node_modules\/auth0-lock\/.*\.js$/,
+          test: /node_modules\/auth0-lock\/.*\.js$/,
+          loaders: ['transform/cacheable?brfs', 'transform/cacheable?packageify']
         }
       ]
     },
