@@ -26,6 +26,13 @@ export function withGraph(space, graph){
   return {...space, graph: subset(graph, space.id)}
 }
 
+function user(space, graph){
+  return graph.users.find(e => (e.id === space.user_id) )
+}
+
 export function toDgraph(spaceId, graph){
-  return _graph.denormalize(subset(graph, spaceId))
+  let dGraph = _graph.denormalize(subset(graph, spaceId))
+  const space = get(graph.spaces, spaceId)
+  dGraph.user = user(space, graph)
+  return dGraph
 }

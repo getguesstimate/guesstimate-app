@@ -16,3 +16,13 @@
   font-family: Lato;
   margin-bottom: 0.2em;
 }
+
+.SpaceListItem .user-tag {
+  float: right;
+  color: $grey-2;
+}
+
+.SpaceListItem .user-tag img{
+  width: 0.5em;
+  height: 0.5em;
+}

@@ -10,10 +10,19 @@ let SpaceListItem = ({space}) => (
   <div className='SpaceListItem'>
     <a href={Space.url(space)}>
     <div className='row'>
-      <div className='col-xs-12'>
+      <div className='col-xs-6'>
         <h3> {space.name} </h3>
       </div>
+        {space.user &&
+          <div className='col-xs-6'>
+            <div className='user-tag'>
+              <img className='ui avatar image' src={space.user.picture}/>
+              {space.user.name}
+            </div>
+          </div>
+        }
     </div>
+
     <div className='row'>
       <div className='col-xs-12'>
         {space.metrics.filter(m => !!m.name).map( m => {
