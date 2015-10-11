@@ -20,7 +20,7 @@ const rootReducer = function app(state = {}, action){
     simulations: simulationsR(state.simulations, action),
     spaces: reduxCrud.reducersFor('spaces')(state.spaces, action),
     form: formReducer(state.form, action),
-    me: meR(state.form, action),
+    me: meR(state.me, action),
   };
 };
 
