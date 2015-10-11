@@ -7,6 +7,7 @@ import '../../../styles/theme.css'
 import React, {Component, PropTypes} from 'react'
 import { connect } from 'react-redux';
 import * as spaceActions from 'gModules/spaces/actions.js';
+import * as userActions from 'gModules/users/actions.js';
 import * as meActions from 'gModules/me/actions.js';
 import * as Space from 'gEngine/space';
 import Header from '../header'
@@ -25,6 +26,7 @@ export default class extends Component{
   componentDidMount() {
     this.props.dispatch(meActions.init())
     this.props.dispatch(spaceActions.fetch())
+    this.props.dispatch(userActions.fetch())
   }
   render () {
     let body = this.props.children
