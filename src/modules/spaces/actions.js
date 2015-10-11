@@ -9,17 +9,35 @@ let standardActionCreators = actionCreatorsFor('spaces');
 let rootUrl = 'http://localhost:4000/'
 //let rootUrl = 'http://guesstimate.herokuapp.com/'
 
+const standards = (state) => {
+  return {
+    headers: { 'Authorization': 'Bearer ' + state.me.token },
+    method: 'GET',
+    dataType: 'json',
+    contentType: 'application/json'
+  }
+}
+
+const formattedRequest = ({requestParams, state}) => {
+  const params = Object.assign(standards(state), requestParams)
+  return $.ajax(params)
+}
+
 export function destroy(object) {
   const id = object.id;
-  return function(dispatch) {
+  return function(dispatch, getState) {
     app.router.history.navigate('/')
     const action = standardActionCreators.deleteStart({id: id});
     dispatch(action)
 
-    let request = $.ajax({
-      url: (rootUrl + 'spaces/' + id),
-      method: 'DELETE'
+    const request = formattedRequest({
+      state: getState(),
+      requestParams: {
+        url: (rootUrl + 'spaces/' + id),
+        method: 'DELETE'
+      }
     })
+
 
     request.done(() => {
       const successAction = standardActionCreators.deleteSuccess({id: id});
@@ -30,31 +48,40 @@ export function destroy(object) {
 }
 
 export function fetch() {
-  return function(dispatch) {
+  return function(dispatch, getState) {
     const action = standardActionCreators.fetchStart();
     dispatch(action)
 
-    $.getJSON((rootUrl + 'spaces'), (data) => {
+    const request = formattedRequest({
+      state: getState(),
+      requestParams: {
+        url: (rootUrl + 'spaces'),
+        method: 'GET',
+      }
+    })
+
+    request.done(data => {
       const action = standardActionCreators.fetchSuccess(data)
       dispatch(action)
-    }, 'json')
+    })
   }
 }
 
 export function create(object) {
-  return function(dispatch) {
+  return function(dispatch, getState) {
     dispatch({ type: 'redux-form/START_SUBMIT', form: 'contact' })
 
     const cid = cuid()
     object = Object.assign(object, {id: cid})
     const action = standardActionCreators.createStart(object);
 
-    let request = $.ajax({
-      url: (rootUrl + 'spaces/'),
-      data: JSON.stringify({space: object}),
-      method: 'POST',
-      dataType: 'json',
-      contentType: 'application/json'
+    const request = formattedRequest({
+      state: getState(),
+      requestParams: {
+        url: (rootUrl + 'spaces/'),
+        data: JSON.stringify({space: object}),
+        method: 'POST'
+      }
     })
 
     request.done(data => {
@@ -74,13 +101,16 @@ export function update(spaceId) {
     const action = standardActionCreators.updateStart(space);
     dispatch(action)
 
-    let request = $.ajax({
-      url: (rootUrl + 'spaces/' + spaceId),
-      data: JSON.stringify({space}),
-      method: 'PATCH',
-      dataType: 'json',
-      contentType: 'application/json'
-    }).done((data) => {
+    const request = formattedRequest({
+      state: getState(),
+      requestParams: {
+        url: (rootUrl + 'spaces/' + spaceId),
+        method: 'PATCH',
+        data: JSON.stringify({space})
+      }
+    })
+
+    request.done((data) => {
       const action = standardActionCreators.updateSuccess(data)
       dispatch(action)
     })

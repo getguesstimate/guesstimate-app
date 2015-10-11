@@ -1,14 +1,51 @@
 import Auth0Lock from 'auth0-lock'
+import {me} from 'gEngine/engine'
 
-export function createMe(profile, token) {
-  return { type: 'CREATE_ME', object: {profile, token}};
+const signXCallback = (dispatch) => (err, profile, token) => {
+  if (err) {
+    console.log("Error logging in", err)
+  } else {
+    dispatch(createMe(profile, token))
+  }
 }
 
+const signXlockAction = () => {
+  return () => {
+    return (dispatch) => lock['showSignin'](signXCallback(dispatch))
+  }
+}
+export const signIn = signXlockAction('showSignin')
+export const signUp = signXlockAction('showSignup')
+
+export const init = () => {
+  return (dispatch) => {
+
+    const meStorage = me.localStorage.get()
+    const token = meStorage && meStorage.token
+
+    if (token) {
+      lock.getProfile(token, (err, profile) => {
+        if (err) {
+          me.localStorage.clear()
+          console.log("Existing storage key no longer in service", err)
+        } else {
+          dispatch(createMe(profile, token))
+        }
+      })
+    }
+  }
+}
 export function logOut() {
-  localStorage.setItem('userToken', null);
+  me.localStorage.clear()
   return { type: 'DESTROY_ME' };
 }
 
+function createMe(profile, token) {
+  return function(dispatch, getState) {
+    dispatch({ type: 'CREATE_ME', object: {profile, token}});
+    me.localStorage.set({token: getState().me.token})
+  }
+}
 const Auth0Variables = {
   AUTH0_CLIENT_ID: 'By2xEUCPuGqeJZqAFMpBlgHRqpCZelj0',
   AUTH0_DOMAIN: 'guesstimate.auth0.com'
@@ -18,47 +55,3 @@ const lock = new Auth0Lock(
   Auth0Variables.AUTH0_CLIENT_ID,
   Auth0Variables.AUTH0_DOMAIN
 );
-
-export function signIn() {
-  return function(dispatch) {
-    lock.showSignin( (err, profile, token) => {
-      if (err) {
-        console.log("Error logging in")
-      } else {
-        // Save the JWT token.
-        localStorage.setItem('userToken', token);
-        dispatch(createMe(profile, token))
-      }
-    });
-  }
-}
-
-export function signUp() {
-  return function(dispatch) {
-    lock.showSignup( (err, profile, token) => {
-      if (err) {
-        console.log("Error logging in")
-      } else {
-        // Success calback
-        localStorage.setItem('userToken', token);
-        dispatch(createMe(profile, token))
-      }
-    });
-  }
-}
-
-
-export function init(profile, token) {
-  return function(dispatch) {
-    let token = localStorage.getItem('userToken')
-    if (!_.isUndefined(token)) {
-      lock.getProfile(token, (err, profile) => {
-        if (err) {
-          console.log("Error logging in")
-        } else {
-          dispatch(createMe(profile, token))
-        }
-      })
-    }
-  }
-}
