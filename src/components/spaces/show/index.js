@@ -6,6 +6,7 @@ import { denormalizedSpaceSelector } from '../denormalized-space-selector.js';
 import style from './style.css'
 import * as spaceActions from 'gModules/spaces/actions.js'
 import Icon from 'react-fa'
+import SpaceHeader from '../canvas/header.js'
 import _ from 'lodash'
 
 function mapStateToProps(state) {
@@ -18,6 +19,9 @@ function mapStateToProps(state) {
 @connect(denormalizedSpaceSelector)
 export default class CanvasShow extends Component {
   displayName: 'RepoDetailPage'
+  onSave() {
+    this.props.dispatch(spaceActions.update(parseInt(this.props.spaceId)))
+  }
   destroy() {
     this.props.dispatch(spaceActions.destroy(this.props.denormalizedSpace))
   }
@@ -33,13 +37,25 @@ export default class CanvasShow extends Component {
               <h1> {space ? space.name : ''} </h1>
             </div>
 
-            {space && space.ownedByMe &&
-              <div className='item'>
-                <StandardDropdownMenu toggleButton={<a> Settings </a>}>
+              <div className='item action'>
+              {space && space.ownedByMe &&
+                <StandardDropdownMenu toggleButton={<a><Icon name='cog'/> Settings </a>}>
                     <li key='1' onMouseDown={this.destroy.bind(this)}><button type='button'>Delete</button></li>
                 </StandardDropdownMenu>
+              }
+
+              {space && !space.busy &&
+                <a onClick={this.onSave.bind(this)}>
+                  <Icon name='save'/> {'Save'}
+                </a>
+              }
+
+              {space && !!space.busy &&
+                <a onClick={this.onSave.bind(this)}>
+                  {'saving...'}
+                </a>
+              }
               </div>
-            }
             <div className='right  menu'>
 
             {space && space.user &&

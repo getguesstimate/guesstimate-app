@@ -76,9 +76,6 @@ export default class CanvasSpace extends Component{
     const height = Math.max(3, lowestMetric, selected) || 3;
     return {columns: 6, rows: height}
   }
-  handleSave() {
-    this.props.dispatch(spaceActions.update(this.props.spaceId))
-  }
   space() {
     return this.props.spaces.find(e => e.id === this.props.spaceId)
   }
@@ -101,7 +98,6 @@ export default class CanvasSpace extends Component{
     return (
       <div className="canvas-space">
 
-        <SpaceHeader space={space} onSave={this.handleSave.bind(this)}/>
         <Grid
             handleSelect={this._handleSelect.bind(this)}
             onAddItem={this._handleAddMetric.bind(this)}
