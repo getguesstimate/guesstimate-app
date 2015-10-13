@@ -42,7 +42,7 @@ export default class Profile extends Component {
     this.props.dispatch(meActions.logOut())
   }
 
-  foo () {
+  profileDropdown () {
     const profile = this.props.me.profile
     return (
       <div>
@@ -61,7 +61,7 @@ export default class Profile extends Component {
 
       { isLoggedIn &&
         <div className='ui item'>
-          <StandardDropdownMenu toggleButton={this.foo()}>
+          <StandardDropdownMenu toggleButton={this.profileDropdown()}>
             <li key='1' onMouseDown={this.logOut.bind(this)}><a className='ui item'>Log Out</a></li>
           </StandardDropdownMenu>
         </div>
