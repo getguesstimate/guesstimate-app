@@ -1,24 +1,53 @@
 import Auth0Lock from 'auth0-lock'
 import {me} from 'gEngine/engine'
+import _ from 'lodash'
+import * as userActions from 'gModules/users/actions.js'
+
 
 const signXCallback = (dispatch) => (err, profile, token) => {
   if (err) {
     console.log("Error logging in", err)
   } else {
-    dispatch(createMe(profile, token))
+    if (!_.get(profile, 'user_metadata.guesstimateId')) {
+      const {name, username, picture, user_id} = profile
+      dispatch(userActions.create({name, username, picture, auth0_id: user_id}))
+    }
+
+    dispatch(auth0MeLoaded(profile, token))
   }
 }
 
-const signXlockAction = (action) => {
-  return () => {
-    return (dispatch) => lock[action]({
+export const signIn = () => {
+    return (dispatch, getState) => lock.showSignin({
       disableSignupAction: false,
       disableResetAction: false
-    }, signXCallback(dispatch))
-  }
+    }, (err, profile, token) => {
+      if (err) {
+        console.log("Error logging in", err)
+      } else {
+        dispatch(auth0MeLoaded(profile, token))
+        const {name, username, picture, user_id} = profile
+        dispatch(userActions.fetch({auth0_id: user_id}))
+      }
+    }
+  )
 }
-export const signIn = signXlockAction('showSignin')
-export const signUp = signXlockAction('showSignup')
+
+export const signUp = () => {
+    return (dispatch, getState) => lock.showSignup({
+      disableSignupAction: false,
+      disableResetAction: false
+    }, (err, profile, token) => {
+      if (err) {
+        console.log("Error logging in", err)
+      } else {
+        dispatch(auth0MeLoaded(profile, token))
+        const {name, username, picture, user_id} = profile
+        dispatch(userActions.create({name, username, picture, auth0_id: user_id}))
+      }
+    }
+  )
+}
 
 export const init = () => {
   return (dispatch) => {
@@ -30,25 +59,39 @@ export const init = () => {
       lock.getProfile(token, (err, profile) => {
         if (err) {
           me.localStorage.clear()
-          console.log("Existing storage key no longer in service", err)
         } else {
-          dispatch(createMe(profile, token))
+          dispatch(auth0MeLoaded(profile, token))
+          const {name, username, picture, user_id} = profile
+          dispatch(userActions.fetch({auth0_id: user_id}))
         }
       })
     }
   }
 }
+
+export function updateWithApiId(id) {
+  return { type: 'UpdateWithApiId' };
+}
+
 export function logOut() {
   me.localStorage.clear()
   return { type: 'DESTROY_ME' };
 }
 
-function createMe(profile, token) {
+function auth0MeLoaded(profile, token) {
   return function(dispatch, getState) {
-    dispatch({ type: 'CREATE_ME', object: {profile, token}});
-    me.localStorage.set({token: getState().me.token})
+    dispatch({ type: 'AUTH0_ME_LOADED', profile, token});
+    me.localStorage.set(getState().me)
   }
 }
+
+export function guesstimateMeLoaded(object) {
+  return function(dispatch, getState) {
+    dispatch({ type: 'GUESSTIMATE_ME_LOADED', id: object.id, profile: object})
+    me.localStorage.set(getState().me)
+  }
+}
+
 const Auth0Variables = {
   AUTH0_CLIENT_ID: 'By2xEUCPuGqeJZqAFMpBlgHRqpCZelj0',
   AUTH0_DOMAIN: 'guesstimate.auth0.com'

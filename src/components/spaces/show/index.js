@@ -1,12 +1,11 @@
 import React, {Component, PropTypes} from 'react'
 import SpaceCanvas from 'gComponents/spaces/canvas'
-import StandardDropdownMenu from 'gComponents/utility/standard-dropdown-menu'
 import { connect } from 'react-redux';
 import { denormalizedSpaceSelector } from '../denormalized-space-selector.js';
 import style from './style.css'
 import * as spaceActions from 'gModules/spaces/actions.js'
 import Icon from 'react-fa'
-import SpaceHeader from '../canvas/header.js'
+import CanvasShowHeader from './header.js'
 import _ from 'lodash'
 
 function mapStateToProps(state) {
@@ -37,27 +36,11 @@ export default class CanvasShow extends Component {
               <h1> {space ? space.name : ''} </h1>
             </div>
 
-              <div className='item action'>
-              {space && space.ownedByMe &&
-                <StandardDropdownMenu toggleButton={<a><Icon name='cog'/> Settings </a>}>
-                    <li key='1' onMouseDown={this.destroy.bind(this)}><button type='button'>Delete</button></li>
-                </StandardDropdownMenu>
-              }
+            {space && space.ownedByMe &&
+              <CanvasShowHeader space={space} onSave={this.onSave.bind(this)} onDestroy={this.destroy.bind(this)}/>
+            }
 
-              {space && !space.busy &&
-                <a onClick={this.onSave.bind(this)}>
-                  <Icon name='save'/> {'Save'}
-                </a>
-              }
-
-              {space && !!space.busy &&
-                <a onClick={this.onSave.bind(this)}>
-                  {'saving...'}
-                </a>
-              }
-              </div>
             <div className='right  menu'>
-
             {space && space.user &&
               <div>
                 <a className='ui image label'>
