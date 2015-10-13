@@ -4,7 +4,7 @@ import _ from 'lodash'
 
 const spaceGraphSelector = state => {return _.pick(state, 'spaces', 'metrics', 'guesstimates', 'simulations', 'users')};
 const spaceIdSelector = (state, props) => {return props.spaceId};
-const spaceSelector = (state, props) => {return state.spaces.find(s => s.id === props.spaceId)};
+const spaceSelector = (state, props) => {return state.spaces.find(s => s.id.toString() === props.spaceId.toString())};
 
 export const denormalizedSpaceSelector = createSelector(
   spaceGraphSelector,

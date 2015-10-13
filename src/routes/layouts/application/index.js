@@ -1,7 +1,6 @@
 import '../../../../node_modules/flexboxgrid/css/flexboxgrid.min.css'
 import '../../../../semantic/dist/semantic.css'
 //semantic js is dependent on jquery, which has trouble now
-import '../../../../semantic/dist/semantic.js'
 import '../../../styles/theme.css'
 
 import React, {Component, PropTypes} from 'react'

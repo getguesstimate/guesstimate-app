@@ -78,6 +78,7 @@
     "precss": "^1.2.3",
     "qs": "^2.4.1",
     "react": "^0.14.0",
+    "react-dd-menu": "^1.0.4",
     "react-fa": "^4.0.0",
     "react-redux": "^3.0.0",
     "react-textarea-autosize": "^3.0.0",

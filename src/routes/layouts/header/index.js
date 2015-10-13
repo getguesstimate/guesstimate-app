@@ -37,18 +37,7 @@ const Header = React.createClass({
                   Guesstimate
                 </a>
               </div>
-              <div className='right menu'>
-                <div className='item'>
-                  <div className='ui left icon input'>
-                    <i className="search icon"></i>
-                    <input type='text' placeholder='Search'>
-                    </input>
-                  </div>
-                </div>
-                <div className='item'>
-                  <Login/>
-                </div>
-              </div>
+              <Login/>
           </div>
         </div>
       </div>
