@@ -9,9 +9,12 @@ const signXCallback = (dispatch) => (err, profile, token) => {
   }
 }
 
-const signXlockAction = () => {
+const signXlockAction = (action) => {
   return () => {
-    return (dispatch) => lock['showSignin'](signXCallback(dispatch))
+    return (dispatch) => lock[action]({
+      disableSignupAction: false,
+      disableResetAction: false
+    }, signXCallback(dispatch))
   }
 }
 export const signIn = signXlockAction('showSignin')
