@@ -5,8 +5,10 @@ var pick = require('lodash.pick')
 var webpack = require('webpack')
 var jQuery = require('jquery')
 var precss = require('precss')
-var useDevVariable = new webpack.DefinePlugin({
+
+var useDevVariables = new webpack.DefinePlugin({
   __DEV__: JSON.stringify(JSON.parse(process.env.BUILD_DEV || 'true')),
+  __API_ENV__: JSON.stringify(process.env.API_ENV || 'development')
 });
 
 module.exports = function getBaseConfig (spec) {
@@ -34,7 +36,7 @@ module.exports = function getBaseConfig (spec) {
         'serveCustomHtmlInDev',
         'package'
       ])),
-      useDevVariable
+      useDevVariables
     ],
     module: {
       loaders: [

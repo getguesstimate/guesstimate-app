@@ -4,9 +4,9 @@
   "description": "Make, share, and evaluate estimates of things",
   "main": "index.js",
   "scripts": {
-    "dev": "BUILD_DEV=1 NODE_ENV=development webpack-dev-server",
-    "start": "BUILD_DEV=0 NODE_ENV=development webpack-dev-server",
-    "build": "webpack",
+    "dev": "BUILD_DEV=1 NODE_ENV=development API_ENV=development webpack-dev-server",
+    "start": "BUILD_DEV=0 NODE_ENV=development API_ENV=development webpack-dev-server",
+    "build": "API_ENV=production webpack",
     "deploy": "surge -p public -d www.gaussian.io",
     "stage": "surge -p public -d gaussian-stage.surge.sh",
     "stage!": "BUILD_DEV=0 npm run build && npm run stage",
@@ -53,6 +53,9 @@
     "webpack-dev-server": "^1.12.0",
     "packageify": "^0.2.2"
   },
+  "peerDependencies": {
+    "react-addons-css-transition-group": "^0.14.x"
+  },
   "dependencies": {
     "ampersand-app": "^1.0.4",
     "ampersand-router": "^3.0.2",
@@ -78,7 +81,7 @@
     "precss": "^1.2.3",
     "qs": "^2.4.1",
     "react": "^0.14.0",
-    "react-dd-menu": "^1.0.4",
+    "react-dd-menu": "git@github.com:mlaursen/react-dd-menu.git",
     "react-fa": "^4.0.0",
     "react-redux": "^3.0.0",
     "react-textarea-autosize": "^3.0.0",

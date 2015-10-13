@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { denormalizedSpaceSelector } from '../denormalized-space-selector.js';
 import style from './style.css'
 import * as spaceActions from 'gModules/spaces/actions.js'
-import '../../../../node_modules/react-dd-menu/dist/react-dd-menu.min.css'
 import Icon from 'react-fa'
 import _ from 'lodash'
 
@@ -20,11 +19,10 @@ function mapStateToProps(state) {
 export default class CanvasShow extends Component {
   displayName: 'RepoDetailPage'
   destroy() {
-    this.props.dispatch(spaceActions.destroy(this.space()))
+    this.props.dispatch(spaceActions.destroy(this.props.denormalizedSpace))
   }
   render () {
     const space = this.props.denormalizedSpace;
-    console.log(space && space.ownedByMe)
     return (
     <div>
       <div className='hero-unit'>
@@ -37,8 +35,8 @@ export default class CanvasShow extends Component {
 
             {space && space.ownedByMe &&
               <div className='item'>
-                <StandardDropdownMenu toggleButton={<a href=''> Settings </a>}>
-                    <li><a href='' onClick={this.destroy.bind(this)}> Delete </a></li>
+                <StandardDropdownMenu toggleButton={<a> Settings </a>}>
+                    <li key='1' onMouseDown={this.destroy.bind(this)}><a>Delete</a></li>
                 </StandardDropdownMenu>
               </div>
             }

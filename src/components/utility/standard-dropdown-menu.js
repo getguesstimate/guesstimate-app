@@ -15,6 +15,10 @@ export default class StandardDropdownMenu extends Component {
     this.setState({ isMenuOpen: false })
   }
 
+  click() {
+    console.log("you clicked omethign")
+  }
+
   wrappedToggleButton() {
     return (<span onClick={this.toggle.bind(this)}>{this.props.toggleButton}</span>)
   }
@@ -24,12 +28,11 @@ export default class StandardDropdownMenu extends Component {
       close: this.close.bind(this),
       toggle: this.wrappedToggleButton(),
       align: 'right',
-      children: this.props.children,
-      animate: false
+      animate: false,
+      children: this.props.children
     };
     return (
       <DropdownMenu {...menuOptions}/>
     );
   }
 }
-
