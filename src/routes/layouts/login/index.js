@@ -54,6 +54,10 @@ export default class Profile extends Component {
     )
 
   }
+  wow() {
+    console.log('lcickec')
+
+  }
   render () {
     const isLoggedIn = loggedIn(this.props.me)
     return (
@@ -62,9 +66,13 @@ export default class Profile extends Component {
       { isLoggedIn &&
         <div className='ui item'>
           <StandardDropdownMenu toggleButton={this.foo()}>
-            <li><a className={'ui item'} onClick={this.logOut.bind(this)}>Log Out</a></li>
+            <li onClick={this.wow.bind(this)}><a className={'ui item'} onClick={this.wow.bind(this)}>Log Out</a></li>
           </StandardDropdownMenu>
         </div>
+      }
+
+      { isLoggedIn &&
+        <a className={'ui item'} onClick={this.logOut.bind(this)}>Log Out</a>
       }
 
       { !isLoggedIn &&

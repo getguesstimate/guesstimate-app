@@ -26,13 +26,19 @@ export function withGraph(space, graph){
   return {...space, graph: subset(graph, space.id)}
 }
 
-function user(space, graph){
-  return graph.users.find(e => (e.id === space.user_id) )
+const sameIds = (u1, u2) => {
+  return u1 && u2 && (u1.toString() === u2.toString())
+}
+
+const user = (space, graph) => {
+  return graph.users.find(e => sameIds(e.id, space.user_id))
 }
 
 export function toDgraph(spaceId, graph){
   let dGraph = _graph.denormalize(subset(graph, spaceId))
   const space = get(graph.spaces, spaceId)
-  dGraph.user = user(space, graph)
+  const spaceUser = user(space, graph)
+  dGraph.user = spaceUser
+  dGraph.ownedByMe = sameIds(_.get(spaceUser, 'id'), _.get(graph, 'me.id'))
   return dGraph
 }
