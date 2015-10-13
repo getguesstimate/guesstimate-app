@@ -5,7 +5,6 @@ var pick = require('lodash.pick')
 var webpack = require('webpack')
 var jQuery = require('jquery')
 var precss = require('precss')
-
 var useDevVariable = new webpack.DefinePlugin({
   __DEV__: JSON.stringify(JSON.parse(process.env.BUILD_DEV || 'true')),
 });
@@ -29,9 +28,6 @@ module.exports = function getBaseConfig (spec) {
       ]
     },
     plugins: [
-      new webpack.ProvidePlugin({
-        jQuery: 'jquery'
-      }),
       new HtmlPlugin(pick(spec, [
         'html',
         'isDev',
@@ -72,6 +68,8 @@ module.exports = function getBaseConfig (spec) {
         }
       ]
     },
+
+
     postcss: [
       atImport({
         path: ['node_modules', './src']

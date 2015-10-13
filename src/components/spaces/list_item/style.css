@@ -22,7 +22,8 @@
   color: $grey-2;
 }
 
-.SpaceListItem .user-tag img{
-  width: 0.5em;
-  height: 0.5em;
+.SpaceListItem .user-tag .ui.avatar.image{
+  width: 1.3em;
+  height: 1.3em;
+  margin-right: 5px;
 }
