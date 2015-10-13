@@ -15,3 +15,17 @@
   font-family: Lato;
   font-weigth: 500;
 }
+
+.hero-unit .ui.menu .action a {
+  color: white;
+  background-color: rgba(255,255,255,0.2);
+  padding: 0.5em 0.95em;
+  border-radius: 3px;
+  font-weight: 300;
+  margin-right: 10px;
+}
+
+.hero-unit .ui.menu .action a:hover{
+  background-color: rgba(255,255,255,0.4);
+  cursor: pointer;
+}
