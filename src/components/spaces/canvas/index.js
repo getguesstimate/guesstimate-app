@@ -96,10 +96,11 @@ export default class CanvasSpace extends Component{
   render () {
     const size = this.size()
     const {selected} = this.props
-    const space = this.space()
-    const {metrics} = this.props.denormalizedSpace
+    const space = this.props.denormalizedSpace
+    const {metrics} = space
     return (
       <div className="canvas-space">
+
         <SpaceHeader space={space} onSave={this.handleSave.bind(this)}/>
         <Grid
             handleSelect={this._handleSelect.bind(this)}
