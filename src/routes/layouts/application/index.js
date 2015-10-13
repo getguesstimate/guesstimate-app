@@ -12,6 +12,7 @@ import * as Space from 'gEngine/space';
 import Header from '../header'
 import NavHelper from './nav-helper'
 import './style.css';
+import '../../../../node_modules/react-dd-menu/dist/react-dd-menu.css';
 
 function mapStateToProps(state) {
   return {

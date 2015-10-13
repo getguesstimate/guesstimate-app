@@ -6,8 +6,7 @@ import _ from 'lodash'
 import app from 'ampersand-app'
 let standardActionCreators = actionCreatorsFor('spaces');
 
-let rootUrl = 'http://localhost:4000/'
-//let rootUrl = 'http://guesstimate.herokuapp.com/'
+const rootUrl = (__API_ENV__ === 'development') ? 'http://localhost:4000/' : 'http://guesstimate.herokuapp.com/'
 
 const standards = (state) => {
   return {
