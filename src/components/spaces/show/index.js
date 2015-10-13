@@ -36,7 +36,7 @@ export default class CanvasShow extends Component {
             {space && space.ownedByMe &&
               <div className='item'>
                 <StandardDropdownMenu toggleButton={<a> Settings </a>}>
-                    <li key='1' onMouseDown={this.destroy.bind(this)}><a>Delete</a></li>
+                    <li key='1' onMouseDown={this.destroy.bind(this)}><button type='button'>Delete</button></li>
                 </StandardDropdownMenu>
               </div>
             }
