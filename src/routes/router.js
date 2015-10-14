@@ -1,6 +1,6 @@
 import app from 'ampersand-app'
 import Router from 'ampersand-router'
-import SpaceShow from './spaces/show'
+import SpaceShow from 'gComponents/spaces/show'
 import SpaceNew from './spaces/new'
 import Home from './home'
 import React from 'react'

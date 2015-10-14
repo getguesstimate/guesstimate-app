@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/lib/Button'
 import ButtonGroup from 'react-bootstrap/lib/ButtonGroup'
 import MenuItem from 'react-bootstrap/lib/MenuItem'
 import Icon from'react-fa'
+import Login from'../login'
 import './style.css'
 
 const NavItem = React.createClass({
@@ -23,7 +24,6 @@ const NavItem = React.createClass({
   }
 })
 
-
 const Header = React.createClass({
   displayName: 'Header',
   render () {
@@ -37,18 +37,7 @@ const Header = React.createClass({
                   Guesstimate
                 </a>
               </div>
-              <div className='right menu'>
-                <div className='item'>
-                  <div className='ui left icon input'>
-                    <i className="search icon"></i>
-                    <input type='text' placeholder='Search'>
-                    </input>
-                  </div>
-                </div>
-                <div className='item'>
-                  Sign In
-                </div>
-              </div>
+              <Login/>
           </div>
         </div>
       </div>

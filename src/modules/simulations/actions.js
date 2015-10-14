@@ -17,18 +17,18 @@ export function runFormSimulations(metricId) {
   }
 }
 
-export function deleteSimulations(metricId) {
-  return { type: 'DELETE_SIMULATION', metricId};
+export function deleteSimulations(metricIds) {
+  return {type: 'DELETE_SIMULATIONS', metricIds}
 }
 
-export function runSimulations(value, getState) {
-  let nn = 500;
+export function runSimulations(metrics) {
+  let nn = 800;
   return (dispatch, getState) => {
-    let metricIds = getState().metrics.map(n => n.id);
+    let metricIds = metrics.map(n => n.id);
     let metricId = e.array.cycle(metricIds);
 
     var count = 0;
-    let max = 10;
+    let max = metricIds.length * 2;
 
     async.during(
         function (callback) {
