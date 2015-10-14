@@ -5,11 +5,9 @@ import _ from 'lodash'
 import app from 'ampersand-app'
 import cuid from 'cuid'
 import * as meActions from 'gModules/me/actions.js'
+import {rootUrl} from 'servers/guesstimate-api/constants.js'
 
 let standardActionCreators = actionCreatorsFor('users');
-
-let rootUrl = 'http://localhost:4000/'
-//let rootUrl = 'http://guesstimate.herokuapp.com/'
 
 const standards = (state) => {
   return {
@@ -69,7 +67,6 @@ export function create(object) {
     })
 
     request.done(data => {
-      debugger
       const action = standardActionCreators.createSuccess(data, cid)
       dispatch(action)
       dispatch(meActions.guesstimateMeLoaded(data))

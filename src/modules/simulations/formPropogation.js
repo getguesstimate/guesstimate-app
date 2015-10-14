@@ -71,7 +71,7 @@ export class FormPropogation {
   }
 
   _reset(): void {
-    this.dispatch(deleteSimulations(this.metricId))
+    this.dispatch(deleteSimulations([this.metricId]))
   }
 
   _propogate(): void {

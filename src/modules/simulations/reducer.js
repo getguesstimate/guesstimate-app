@@ -22,8 +22,8 @@ function withStats(simulation){
 let sim = null;
 export default function simulations(state = [], action = null) {
   switch (action.type) {
-  case 'DELETE_SIMULATION':
-    return state.filter(y => y.metric !== action.metricId)
+  case 'DELETE_SIMULATIONS':
+    return state.filter(y => !_.includes(action.metricIds, y.metric))
   case 'UPDATE_SIMULATION':
     sim = action.simulation;
     const i = state.findIndex(y => y.metric === sim.metric);
