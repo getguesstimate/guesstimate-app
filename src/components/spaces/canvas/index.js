@@ -61,16 +61,10 @@ export default class CanvasSpace extends Component{
     this.props.dispatch(deleteSimulations(this.props.denormalizedSpace.metrics.map(m => m.id)))
   }
 
-  _handleSelect(event, location, item) {
-    if (!_.isEqual(this.props.selected, location)){
-      if ((this.props.canvasState == 'function') && item) {
-        event.preventDefault()
-        $(window).trigger('functionMetricClicked', item.props.metric)
-      } else {
-        this.props.dispatch(changeSelect(location))
-      }
-    }
+  _handleSelect(location) {
+    this.props.dispatch(changeSelect(location))
   }
+
   _handleAddMetric(location) {
     this.props.dispatch(addMetric({space: this.props.spaceId, location: location}))
   }
@@ -92,6 +86,7 @@ export default class CanvasSpace extends Component{
           key={metric.id}
           location={location}
           metric={metric}
+          handleSelect={this._handleSelect.bind(this)}
       />
     )
   }
