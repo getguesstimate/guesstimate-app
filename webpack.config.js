@@ -20,7 +20,8 @@ cfg.resolve.alias = {
   node_modules: path.resolve('./src/components'),
   gComponents: path.resolve('./src/components'),
   gEngine: path.resolve('./src/lib/engine'),
-  gModules: path.resolve('./src/modules')
+  gModules: path.resolve('./src/modules'),
+  servers: path.resolve('./src/server')
 };
 
 module.exports = cfg;

@@ -11,7 +11,7 @@ import Metric from 'gComponents/metrics/card'
 
 import { addMetric } from 'gModules/metrics/actions'
 import { changeSelect } from 'gModules/selection/actions'
-import { runSimulations } from 'gModules/simulations/actions'
+import { runSimulations, deleteSimulations } from 'gModules/simulations/actions'
 import * as spaceActions  from 'gModules/spaces/actions';
 
 import './canvas.styl'
@@ -52,8 +52,13 @@ export default class CanvasSpace extends Component{
         React.PropTypes.number,
     ])
   }
+
   componentDidMount(){
-    //this.props.dispatch(runSimulations(null))
+    this.props.dispatch(runSimulations(this.props.denormalizedSpace.metrics))
+  }
+
+  componentWillUnmount(){
+    this.props.dispatch(deleteSimulations(this.props.denormalizedSpace.metrics.map(m => m.id)))
   }
 
   _handleSelect(event, location, item) {
@@ -76,9 +81,6 @@ export default class CanvasSpace extends Component{
     const height = Math.max(3, lowestMetric, selected) || 3;
     return {columns: 6, rows: height}
   }
-  handleSave() {
-    this.props.dispatch(spaceActions.update(this.props.spaceId))
-  }
   space() {
     return this.props.spaces.find(e => e.id === this.props.spaceId)
   }
@@ -96,11 +98,11 @@ export default class CanvasSpace extends Component{
   render () {
     const size = this.size()
     const {selected} = this.props
-    const space = this.space()
-    const {metrics} = this.props.denormalizedSpace
+    const space = this.props.denormalizedSpace
+    const {metrics} = space
     return (
       <div className="canvas-space">
-        <SpaceHeader space={space} onSave={this.handleSave.bind(this)}/>
+
         <Grid
             handleSelect={this._handleSelect.bind(this)}
             onAddItem={this._handleAddMetric.bind(this)}

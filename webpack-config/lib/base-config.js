@@ -6,8 +6,9 @@ var webpack = require('webpack')
 var jQuery = require('jquery')
 var precss = require('precss')
 
-var useDevVariable = new webpack.DefinePlugin({
+var useDevVariables = new webpack.DefinePlugin({
   __DEV__: JSON.stringify(JSON.parse(process.env.BUILD_DEV || 'true')),
+  __API_ENV__: JSON.stringify(process.env.API_ENV || 'development')
 });
 
 module.exports = function getBaseConfig (spec) {
@@ -29,16 +30,13 @@ module.exports = function getBaseConfig (spec) {
       ]
     },
     plugins: [
-      new webpack.ProvidePlugin({
-        jQuery: 'jquery'
-      }),
       new HtmlPlugin(pick(spec, [
         'html',
         'isDev',
         'serveCustomHtmlInDev',
         'package'
       ])),
-      useDevVariable
+      useDevVariables
     ],
     module: {
       loaders: [
@@ -60,9 +58,20 @@ module.exports = function getBaseConfig (spec) {
         {
           test: /\.(jpe?g|png|gif)/,
           loader: 'url-loader?limit=' + spec.urlLoaderLimit
+        },
+        {
+          test: /\.ejs$/,
+          loader: 'ejs-compiled-loader'
+        },
+        {
+          test: /node_modules\/auth0-lock\/.*\.js$/,
+          test: /node_modules\/auth0-lock\/.*\.js$/,
+          loaders: ['transform/cacheable?brfs', 'transform/cacheable?packageify']
         }
       ]
     },
+
+
     postcss: [
       atImport({
         path: ['node_modules', './src']

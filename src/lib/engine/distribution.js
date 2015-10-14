@@ -28,5 +28,5 @@ function sampleNormal(distribution: Distribution, n: number = 1){
   //This makes the outputs integers.  This could change, of course
   let results = stochator.next(n)
   results = Array.isArray(results) ? results : [results]
-  return { values: results.map(n => Math.floor(n)) }
+  return { values: results.map(n => n) }
 }
