@@ -4,9 +4,9 @@ import cuid from 'cuid'
 import e from 'gEngine/engine'
 import _ from 'lodash'
 import app from 'ampersand-app'
+import {rootUrl} from 'servers/guesstimate-api/constants.js'
 let standardActionCreators = actionCreatorsFor('spaces');
 
-const rootUrl = (__API_ENV__ === 'development') ? 'http://localhost:4000/' : 'http://guesstimate.herokuapp.com/'
 
 const standards = (state) => {
   return {

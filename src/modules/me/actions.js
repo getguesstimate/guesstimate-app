@@ -2,7 +2,7 @@ import Auth0Lock from 'auth0-lock'
 import {me} from 'gEngine/engine'
 import _ from 'lodash'
 import * as userActions from 'gModules/users/actions.js'
-
+import * as auth0Constants from 'servers/auth0/constants.js'
 
 const signXCallback = (dispatch) => (err, profile, token) => {
   if (err) {
@@ -92,12 +92,7 @@ export function guesstimateMeLoaded(object) {
   }
 }
 
-const Auth0Variables = {
-  AUTH0_CLIENT_ID: 'By2xEUCPuGqeJZqAFMpBlgHRqpCZelj0',
-  AUTH0_DOMAIN: 'guesstimate.auth0.com'
-};
-
 const lock = new Auth0Lock(
-  Auth0Variables.AUTH0_CLIENT_ID,
-  Auth0Variables.AUTH0_DOMAIN
+  auth0Constants.variables.AUTH0_CLIENT_ID,
+  auth0Constants.variables.AUTH0_DOMAIN,
 );

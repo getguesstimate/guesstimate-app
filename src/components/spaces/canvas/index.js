@@ -11,7 +11,7 @@ import Metric from 'gComponents/metrics/card'
 
 import { addMetric } from 'gModules/metrics/actions'
 import { changeSelect } from 'gModules/selection/actions'
-import { runSimulations } from 'gModules/simulations/actions'
+import { runSimulations, deleteSimulations } from 'gModules/simulations/actions'
 import * as spaceActions  from 'gModules/spaces/actions';
 
 import './canvas.styl'
@@ -52,8 +52,13 @@ export default class CanvasSpace extends Component{
         React.PropTypes.number,
     ])
   }
+
   componentDidMount(){
-    //this.props.dispatch(runSimulations(null))
+    this.props.dispatch(runSimulations(this.props.denormalizedSpace.metrics))
+  }
+
+  componentWillUnmount(){
+    this.props.dispatch(deleteSimulations(this.props.denormalizedSpace.metrics.map(m => m.id)))
   }
 
   _handleSelect(event, location, item) {
