@@ -31,9 +31,10 @@ export default class Grid extends Component{
     if (direction) {
       e.preventDefault()
       let newLocation = new DirectionToLocation(this.props.size, this.props.selected)[direction]()
-      this.props.handleSelect(e, newLocation)
+      this.props.handleSelect(newLocation)
     }
   }
+
   _cell(location) {
    let atThisLocation = (l) => _.isEqual(l, location)
    let isSelected = atThisLocation(this.props.selected)

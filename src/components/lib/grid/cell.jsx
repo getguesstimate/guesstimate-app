@@ -1,63 +1,108 @@
 'use strict';
-import React from 'react'
+import React, {Component, PropTypes} from 'react'
 import ReactDOM from 'react-dom'
 import $ from 'jquery'
 let GRID_ITEM_FOCUS_CLASS = '.grid-item-focus'
 
-export default class Cell extends React.Component {
-  componentDidMount = () => {
-    this._focus()
+export default class EmptyCell extends React.Component {
+  static propTypes = {
+    isSelected: PropTypes.bool.isRequired,
+    gridKeyPress: PropTypes.func.isRequired,
+    handleSelect: PropTypes.func.isRequired,
+    onAddItem: PropTypes.func.isRequired,
+    location: PropTypes.shape({
+      row: PropTypes.number.isRequired,
+      column: PropTypes.number.isRequired
+    }).isRequired
   }
-  componentDidUpdate = (prevProps) => {
-    if (prevProps.isSelected == false || !this.props.item){
-      this._focus()
+
+
+  _handleKeyPress(e) {
+    if (e.keyCode == '13') { //enter
+      this.props.onAddItem(this.props.location)
     }
-  }
-  _focus = () => {
-    if (this.props.isSelected){
-     if (!this.props.item) {
-       ReactDOM.findDOMNode(this).focus()
-     } else {
-       $(GRID_ITEM_FOCUS_CLASS).focus();
-     }
+    if (e.keyCode == '8') { //delete
+      e.preventDefault()
     }
-  }
-  _handleKeyPress = (e) => {
     this.props.gridKeyPress(e)
   }
-  _handleClick = (e) => {
-    // must be left click
+
+  handleClick(e) {
     if (e.button === 0){
       if (!this.props.isSelected) {
-        this.props.handleSelect(e, this.props.location, this.props.item)
+        this.props.handleSelect(this.props.location)
       } else {
-        if (!this.props.item) {
-          this.props.onAddItem(this.props.location)
-        }
+        this.props.onAddItem(this.props.location)
       }
     }
   }
-  _cellElement = () => {
-    if (this.props.item) {
-      return React.cloneElement(this.props.item, {isSelected: this.props.isSelected, gridKeyPress: this.props.gridKeyPress})
-    } else {
-      return ('')
+
+  render() {
+    return (
+      <div
+          onKeyDown={this._handleKeyPress.bind(this)}
+          className={'cell--empty--inner grid-item-focus'}
+          onMouseDown={this.handleClick.bind(this)}
+          tabIndex='0'
+      />
+    )
+  }
+}
+
+export default class Cell extends React.Component {
+  static propTypes = {
+    item: PropTypes.object,
+    isSelected: PropTypes.bool.isRequired,
+    gridKeyPress: PropTypes.func.isRequired,
+    handleSelect: PropTypes.func.isRequired,
+    onAddItem: PropTypes.func.isRequired,
+    location: PropTypes.shape({
+      row: PropTypes.number.isRequired,
+      column: PropTypes.number.isRequired
+    }).isRequired
+  }
+
+  componentDidMount = () => {
+    if (this.props.isSelected){
+      this._focus()
     }
   }
+
+  componentDidUpdate = (prevProps) => {
+    const newlySelected = (this.props.isSelected && !prevProps.isSelected)
+    const changeInItem = (!!prevProps.item !== !!this.props.item)
+    if (newlySelected || changeInItem){
+      this._focus()
+    }
+  }
+
+  _focus = () => {
+     $('.selected .grid-item-focus').focus();
+  }
+
+  _cellElement = () => {
+    if (this.props.item) {
+      return React.cloneElement(
+        this.props.item,
+        {
+          isSelected: this.props.isSelected,
+          gridKeyPress: this.props.gridKeyPress
+        }
+      )
+    } else {
+      return (<EmptyCell {...this.props} />)
+    }
+  }
+
   _classes = () => {
     let classes = 'cell'
-    classes += (this.props.item ? ' full' : ' empty')
     classes += (this.props.isSelected ? ' selected' : ' nonSelected')
     return classes
   }
+
   render = () => {
     return (
-      <div
-          className={this._classes()}
-          onKeyDown={this._handleKeyPress}
-          onMouseDown={this._handleClick}
-          tabIndex='0'
-      >
+      <div className={this._classes()}>
       {this._cellElement()}
       </div>
     )

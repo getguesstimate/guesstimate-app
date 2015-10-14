@@ -11,6 +11,7 @@ import SimulationHistogram from 'gComponents/simulations/histogram'
 import EditingPane from './editing_pane';
 import DistributionSummary from './simulation_summary'
 import Header from './header'
+import $ from 'jquery'
 import './style.css'
 
 class Metric extends Component {
@@ -22,6 +23,7 @@ class Metric extends Component {
       'estimate',
       'editing'
     ]).isRequired,
+    changeSelect: PropTypes.func,
     dispatch: PropTypes.func,
     gridKeyPress: PropTypes.func.isRequired,
     guesstimateForm: PropTypes.object,
@@ -31,6 +33,17 @@ class Metric extends Component {
       column: PropTypes.number
     }),
     metric: PropTypes.object.isRequired,
+  }
+
+  _handleClick(event) {
+    if (!this.props.isSelected){
+      if (this.props.canvasState == 'function') {
+        event.preventDefault()
+        $(window).trigger('functionMetricClicked', this.props.metric)
+      } else {
+        this.props.handleSelect(this.props.location)
+      }
+    }
   }
 
   _handlePress(e) {
@@ -43,19 +56,24 @@ class Metric extends Component {
     }
     e.stopPropagation()
   }
+
   handleChangeMetric(values) {
     values.id = this._id()
     this.props.dispatch(changeMetric(values))
   }
+
   handleChangeGuesstimate(values) {
     this.props.dispatch(changeGuesstimate(this._id(), values))
   }
+
   handleRemoveMetric () {
     this.props.dispatch(removeMetric(this._id()))
   }
+
   _id(){
     return this.props.metric.id
   }
+
   render () {
     const {isSelected, metric, canvasState, guesstimateForm} = this.props
     let anotherFunctionSelected = ((canvasState === 'function') && !isSelected)
@@ -63,9 +81,11 @@ class Metric extends Component {
       <div
           className={isSelected ? 'metric grid-item-focus' : 'metric'}
           tabIndex='0'
+          onKeyDown={this._handlePress.bind(this)}
+          onMouseDown={this._handleClick.bind(this)}
+
       >
         <div className={'card-top metric-container'}
-              onKeyDown={this._handlePress.bind(this)}
         >
           <SimulationHistogram simulation={metric.simulation}/>
           <Header
