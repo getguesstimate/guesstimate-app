@@ -59,6 +59,7 @@ export default class Grid extends Component{
         location={location}
         onAddItem={this.props.onAddItem}
         key={'grid-item', location.row, location.column}
+        ref={item && item.props.metric.id}
     />
     )
   }
@@ -82,7 +83,42 @@ export default class Grid extends Component{
             return ( <div className='GiantRow' key={row}> {this._row(row, columnCount)} </div>)
           })
         }
+        {
+          this.props.edges.map((edge) => {
+            if (this.refs[edge.input] && this.refs[edge.output]) {
+              let bar =  {
+                input: this.refs[edge.input],
+                output: this.refs[edge.output]
+              }
+              return (<Edge input={bar.input} output={bar.output}/>)
+            }
+          })
+        }
       </div>
+    )
+  }
+}
+
+const dim = ({top,left,height,width}) => {
+  return {
+    top: top + (height/2),
+    left: left + (width/2)
+  }
+}
+
+class Edge extends Component{
+  displayName: 'Grid'
+  render() {
+    const input = dim(this.props.input.foo())
+    const output = dim(this.props.output.foo())
+    const points = `${input.left},${input.top} ${output.left},${output.top}`
+    return (
+        <svg height='1000' width='1000' className='edge'>
+        <polyline
+            points={points}
+            strokeWidth="5"
+            fill="none" />
+        </svg>
     )
   }
 }

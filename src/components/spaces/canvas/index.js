@@ -18,6 +18,8 @@ import './canvas.styl'
 import SpaceHeader from './header.js'
 import { canvasStateSelector } from './canvas-state-selector';
 import { denormalizedSpaceSelector } from '../denormalized-space-selector.js';
+import JSONTree from 'react-json-tree'
+
 
 function mapStateToProps(state) {
   return {
@@ -82,11 +84,11 @@ export default class CanvasSpace extends Component{
     return (
 
       <div className="canvas-space">
-
         <Grid
             handleSelect={this._handleSelect.bind(this)}
             onAddItem={this._handleAddMetric.bind(this)}
             selected={selected}
+            edges={space.edges}
         >
           {metrics.map((m) => {
               return this.renderMetric(m)

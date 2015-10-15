@@ -62,6 +62,21 @@ export default class Cell extends React.Component {
     }).isRequired
   }
 
+  foo() {
+    let foo = $(this.refs.dom)
+    if (foo.length) {
+      const position = foo.offset()
+      return {
+        top: position.top,
+        left: position.left,
+        height: foo.height(),
+        width: foo.width()
+      }
+    } else {
+      return {}
+    }
+  }
+
   componentDidMount = () => {
     if (this.props.isSelected){
       this._focus()
@@ -102,7 +117,7 @@ export default class Cell extends React.Component {
 
   render = () => {
     return (
-      <div className={this._classes()}>
+      <div className={this._classes()} ref='dom' >
       {this._cellElement()}
       </div>
     )

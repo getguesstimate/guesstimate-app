@@ -22,6 +22,7 @@ function metricInputs(metric, dGraph) {
 }
 
 export function dependencyMap(dGraph: DGraph): Array<Object>{
+  if (_.isUndefined(dGraph)) { return [] }
   let asLists = dGraph.metrics.map(m => metricInputs(m, dGraph))
   return _.flatten(asLists)
 }
