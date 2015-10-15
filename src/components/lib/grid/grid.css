@@ -31,8 +31,7 @@
 .GiantEmptyCell:hover {
   background-color: #ECF2F5;
 }
-
-.GiantEmptyCellfocus {
+.GiantEmptyCell:focus {
   outline: none;
   border: 2px solid #6CAED1;
 }
@@ -44,5 +43,5 @@ svg.edge {
 }
 
 svg.edge polyline{
-  stroke: #CBD6E2;
+  stroke: #A4B9D0;
 }
