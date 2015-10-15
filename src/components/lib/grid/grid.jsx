@@ -19,18 +19,12 @@ export default class Grid extends Component{
     size: PropTypes.object,
   }
 
-  static defaultProps = {
-    size: {
-      columns: 6,
-      rows: 8
-    }
-  }
-
   _handleKeyPress(e) {
     let direction = keycodeToDirection(e.keyCode)
     if (direction) {
       e.preventDefault()
-      let newLocation = new DirectionToLocation(this.props.size, this.props.selected)[direction]()
+      const size = ({columns: this._columnCount(), rows: this._rowCount()})
+      let newLocation = new DirectionToLocation(size, this.props.selected)[direction]()
       this.props.handleSelect(newLocation)
     }
   }
