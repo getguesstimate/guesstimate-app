@@ -8,30 +8,27 @@
   flex-direction: row;
 }
 
-.GiantCell--container{
+.GiantCell {
   min-width: 200px;
   display: flex;
   padding: 5px;
   flex: 1;
-}
-
-.cell {
-  display: flex;
-  cursor: pointer;
-  width: 100%;
   min-height: 90px;
 }
 
-.cell .cell--empty--inner {
+.GiantEmptyCell {
   width: 100%;
   border-radius: 3px;
+  display: flex;
+  cursor: pointer;
+  width: 100%;
 }
 
-.cell .cell--empty--inner:hover {
+.GiantEmptyCell:hover {
   background-color: #ECF2F5;
 }
 
-.cell .cell--empty--inner:focus {
+.GiantEmptyCellfocus {
   outline: none;
   border: 2px solid #6CAED1;
 }
