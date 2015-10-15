@@ -41,7 +41,7 @@ export default class EmptyCell extends React.Component {
     return (
       <div
           onKeyDown={this._handleKeyPress.bind(this)}
-          className={'cell--empty--inner grid-item-focus'}
+          className={'GiantEmptyCell grid-item-focus'}
           onMouseDown={this.handleClick.bind(this)}
           tabIndex='0'
       />
@@ -95,7 +95,7 @@ export default class Cell extends React.Component {
   }
 
   _classes = () => {
-    let classes = 'cell'
+    let classes = 'GiantCell'
     classes += (this.props.isSelected ? ' selected' : ' nonSelected')
     return classes
   }

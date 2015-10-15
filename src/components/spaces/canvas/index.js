@@ -22,10 +22,6 @@ import { denormalizedSpaceSelector } from '../denormalized-space-selector.js';
 function mapStateToProps(state) {
   return {
     selected: state.selection,
-    metrics: state.metrics,
-    guesstimates: state.guesstimates,
-    simulations: state.simulations,
-    spaces: state.spaces
   }
 }
 
@@ -42,11 +38,8 @@ export default class CanvasSpace extends Component{
     ]),
     dispatch: PropTypes.func,
     guesstimateForm: PropTypes.object,
-    guesstimates: PropTypes.array,
     isSelected: PropTypes.bool,
-    metrics: PropTypes.array.isRequired,
     selected: PropTypes.object,
-    simulations: PropTypes.array,
     spaceId: PropTypes.oneOfType([
         React.PropTypes.string,
         React.PropTypes.number,
@@ -68,16 +61,7 @@ export default class CanvasSpace extends Component{
   _handleAddMetric(location) {
     this.props.dispatch(addMetric({space: this.props.spaceId, location: location}))
   }
-  //todo: put this in grid instead
-  size(){
-    const lowestMetric = !this.props.metrics.length ? 2 : Math.max(...this.props.metrics.map(g => parseInt(g.location.row))) + 2
-    const selected = parseInt(this.props.selected.row) + 2
-    const height = Math.max(3, lowestMetric, selected) || 3;
-    return {columns: 6, rows: height}
-  }
-  space() {
-    return this.props.spaces.find(e => e.id === this.props.spaceId)
-  }
+
   renderMetric(metric) {
     const {location} = metric
     return (
@@ -90,19 +74,19 @@ export default class CanvasSpace extends Component{
       />
     )
   }
+
   render () {
-    const size = this.size()
     const {selected} = this.props
     const space = this.props.denormalizedSpace
     const {metrics} = space
     return (
+
       <div className="canvas-space">
 
         <Grid
             handleSelect={this._handleSelect.bind(this)}
             onAddItem={this._handleAddMetric.bind(this)}
             selected={selected}
-            size={size}
         >
           {metrics.map((m) => {
               return this.renderMetric(m)
