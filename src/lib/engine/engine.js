@@ -1,4 +1,5 @@
 import * as graph from './graph';
+import * as dgraph from './dgraph';
 import * as metric from './metric';
 import * as sample from './sample';
 import * as simulation from './simulation';
@@ -10,6 +11,7 @@ import * as me from './me';
 let Engine = {
   array,
   graph,
+  dgraph,
   metric,
   sample,
   simulation,
@@ -17,6 +19,7 @@ let Engine = {
   space,
   me
 };
+
 window.engine = Engine
 
 export default Engine;

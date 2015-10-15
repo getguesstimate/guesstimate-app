@@ -13,6 +13,7 @@ import DistributionSummary from './simulation_summary'
 import Header from './header'
 import $ from 'jquery'
 import './style.css'
+window.$ = $
 
 class Metric extends Component {
   displayName: 'Metric'
@@ -83,7 +84,7 @@ class Metric extends Component {
           tabIndex='0'
           onKeyDown={this._handlePress.bind(this)}
           onMouseDown={this._handleClick.bind(this)}
-
+          ref='dom'
       >
         <div className={'card-top metric-container'}
         >
