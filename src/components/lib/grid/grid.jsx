@@ -109,11 +109,13 @@ const dim = ({top,left,height,width}) => {
 class Edge extends Component{
   displayName: 'Grid'
   render() {
-    const input = dim(this.props.input.foo())
-    const output = dim(this.props.output.foo())
-    const points = `${input.left},${input.top} ${output.left},${output.top}`
+    const input = dim(this.props.input.getPosition())
+    const output = dim(this.props.output.getPosition())
+    const maxWidth = Math.max(input.left, output.left) + 10
+    const maxHeight = Math.max(input.top, output.top) + 10
+    const points = `${input.left},${input.top + 5} ${output.left},${output.top + 5}`
     return (
-        <svg height='1000' width='1000' className='edge'>
+        <svg height={maxHeight} width={maxWidth} className='edge'>
         <polyline
             points={points}
             strokeWidth="5"

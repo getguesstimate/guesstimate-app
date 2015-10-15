@@ -62,15 +62,15 @@ export default class Cell extends React.Component {
     }).isRequired
   }
 
-  foo() {
-    let foo = $(this.refs.dom)
-    if (foo.length) {
-      const position = foo.offset()
+  getPosition() {
+    let $el = $(this.refs.dom)
+    if ($el.length) {
+      const position = $el.position()
       return {
         top: position.top,
         left: position.left,
-        height: foo.height(),
-        width: foo.width()
+        height: $el.height(),
+        width: $el.width()
       }
     } else {
       return {}
