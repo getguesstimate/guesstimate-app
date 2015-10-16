@@ -22,7 +22,7 @@ export function deleteSimulations(metricIds) {
 }
 
 export function runSimulations(metrics) {
-  let nn = 1000;
+  let nn = 3000;
   return (dispatch, getState) => {
     let metricIds = metrics.map(n => n.id);
     let metricId = e.array.cycle(metricIds);

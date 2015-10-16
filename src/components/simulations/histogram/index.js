@@ -2,11 +2,12 @@ import React, {Component, PropTypes} from 'react';
 import Histogram from 'gComponents/lib/histogram';
 import Dimensions from 'gComponents/utility/react-dimensions';
 import './style.css'
+import _ from 'lodash'
 
 class SimulationHistogram extends Component{
   shouldComponentUpdate(nextProps, nextState) {
     return (
-      (nextProps.simulation !== this.props.simulation) ||
+      (_.get(nextProps, 'simulation.stats') !== _.get(this.props, 'simulation.stats')) ||
       (nextProps.containerWidth !== this.props.containerWidth)
     )
   }
