@@ -37,6 +37,11 @@ export default class DistributionSummary extends Component{
   static propTypes = {
     simulation: PropTypes.object,
   }
+
+  shouldComponentUpdate(newProps) {
+    return (_.get(this.props, 'simulation.stats') !== _.get(newProps, 'simulation.stats'))
+  }
+
   stats(){
     return _.get(this.props.simulation, 'stats') || false
   }

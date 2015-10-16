@@ -15,27 +15,33 @@ export default class MetricHeader extends Component {
 
   static propTypes = {
     anotherFunctionSelected: PropTypes.bool,
-    metric: PropTypes.object.isRequired,
+    name: PropTypes.string.isRequired,
+    readableId: PropTypes.string,
     onChange: PropTypes.func.isRequired,
   }
 
+  shouldComponentUpdate(nextProps) {
+    return ((nextProps.name !== this.props.name) ||
+            (nextProps.readableId !== this.props.readableId))
+  }
+
   handleNameChange(name) {
-    let {id} = this.props.metric;
     this.props.onChange({name})
   }
 
   render () {
-    let {anotherFunctionSelected, metric} = this.props
+    let {anotherFunctionSelected, name, readableId} = this.props
+    console.log('rendering header?')
     return (
      <div className='row'>
        <div className={anotherFunctionSelected ? 'col-xs-9 name' : 'col-xs-12 name'}>
-         <MetricName name={metric.name}
+         <MetricName name={name}
            onChange={this.props.onChange}
          />
       </div>
        <div className={anotherFunctionSelected ? 'col-xs-0' : 'col-xs-3'}>
          <MetricReadableId
-             readableId={metric.readableId}
+             readableId={readableId}
              showIf={anotherFunctionSelected}
          />
       </div>

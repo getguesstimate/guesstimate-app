@@ -91,7 +91,8 @@ class Metric extends Component {
           <SimulationHistogram simulation={metric.simulation}/>
           <Header
               anotherFunctionSelected={anotherFunctionSelected}
-              metric={metric}
+              name={metric.name}
+              readableId={metric.readableId}
               onChange={this.handleChangeMetric.bind(this)}
           />
           <div className='row row1'>
