@@ -11,6 +11,10 @@ export default class MetricName extends Component {
     this.props.onChange({name: this.refs.input.value})
   }
 
+  shouldComponentUpdate(nextProps) {
+    return (nextProps.name !== this.props.name)
+  }
+
   render() {
     return (
         <TextArea className='MetricName'

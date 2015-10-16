@@ -87,8 +87,8 @@ export default class Grid extends Component{
           this.props.edges.map((edge) => {
             if (this.refs[edge.input] && this.refs[edge.output]) {
               let bar =  {
-                input: this.refs[edge.input],
-                output: this.refs[edge.output]
+                input: this.refs[edge.input].getPosition(),
+                output: this.refs[edge.output].getPosition()
               }
               return (<Edge input={bar.input} output={bar.output}/>)
             }
@@ -107,10 +107,15 @@ const dim = ({top,left,height,width}) => {
 }
 
 class Edge extends Component{
-  displayName: 'Grid'
+  displayName: 'Edge'
+
+  shouldComponentUpdate(nextProps) {
+    return (this.props !== nextProps)
+  }
+
   render() {
-    const input = dim(this.props.input.getPosition())
-    const output = dim(this.props.output.getPosition())
+    const input = dim(this.props.input)
+    const output = dim(this.props.output)
     const maxWidth = Math.max(input.left, output.left) + 10
     const maxHeight = Math.max(input.top, output.top) + 10
     const points = `${input.left},${input.top + 5} ${output.left},${output.top + 5}`

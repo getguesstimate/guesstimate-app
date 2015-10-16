@@ -16,6 +16,9 @@ export default class EmptyCell extends React.Component {
     }).isRequired
   }
 
+  shouldComponentUpdate(nextProps) {
+    return false
+  }
 
   _handleKeyPress(e) {
     if (e.keyCode == '13') { //enter
