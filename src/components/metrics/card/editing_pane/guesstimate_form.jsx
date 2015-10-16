@@ -56,6 +56,12 @@ class GuesstimateForm extends Component{
       e.preventDefault()
     }
   }
+  _handleKeyUp(e) {
+    if (e.which === 27 || e.which === 13) {
+      e.preventDefault()
+      this.props.metricFocus()
+    }
+  }
   render() {
     let distribution = this.props.guesstimateForm && this.props.guesstimateForm.distribution;
     let errors = distribution && distribution.errors;
@@ -68,6 +74,7 @@ class GuesstimateForm extends Component{
             onChange={this._handlePress.bind(this)}
             onFocus={this._handleFocus.bind(this)}
             onKeyPress={this._handleKeyDown}
+            onKeyUp={this._handleKeyUp.bind(this)}
             placeholder={'value'}
             ref='input'
             type="text"

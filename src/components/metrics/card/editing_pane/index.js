@@ -29,6 +29,7 @@ export default class MetricEditingPane extends Component {
               metricId={this.props.metricId}
               onSubmit={this.props.onChangeGuesstimate}
               value={this.props.guesstimate.input}
+              metricFocus={this.props.metricFocus}
           />
           </div>
         </div>

@@ -75,6 +75,10 @@ class Metric extends Component {
     return this.props.metric.id
   }
 
+  focus() {
+    $(this.refs.dom).focus();
+  }
+
   render () {
     const {isSelected, metric, canvasState, guesstimateForm} = this.props
     let anotherFunctionSelected = ((canvasState === 'function') && !isSelected)
@@ -110,6 +114,7 @@ class Metric extends Component {
              metricId={metric.id}
              onChangeGuesstimate={this.handleChangeGuesstimate.bind(this)}
              showIf={isSelected && !_.isUndefined(metric.guesstimate)}
+             metricFocus={this.focus.bind(this)}
          />
       </div>
     )
