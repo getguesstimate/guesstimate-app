@@ -22,7 +22,7 @@ export function deleteSimulations(metricIds) {
 }
 
 export function runSimulations(metrics) {
-  let nn = 800;
+  let nn = 1000;
   return (dispatch, getState) => {
     let metricIds = metrics.map(n => n.id);
     let metricId = e.array.cycle(metricIds);
@@ -39,8 +39,6 @@ export function runSimulations(metrics) {
           runSimulation(dispatch, getState, metricId.next().value, nn);
           _.delay(() => {callback(null)}, 1);
         },
-        //function (err) {
-        //}
     );
   };
 }

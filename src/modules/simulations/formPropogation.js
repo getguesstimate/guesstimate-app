@@ -52,7 +52,7 @@ export class FormPropogation {
     this.getState = getState
     this.metricId = metricId
     this.id = Date.now()
-    this.batchSizes = [5, 500, 1500]
+    this.batchSizes = [50, 10000]
     this.batchStep = 0
   }
 

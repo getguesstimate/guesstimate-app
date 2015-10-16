@@ -18,22 +18,40 @@ export function replaceReadableIdsWithSamples(str, metrics) {
   return tmpStr;
 }
 
+export function inputToSample(metrics) {
+  return _.zipObject(metrics.map(m => {return [m.readableId, metricSample(m)]}))
+}
+
 //should move somewhere else...
 export function inputMetricsReady(metrics){
   return _.every(metrics, (m) => !_.isUndefined(m.simulation));
 }
 
-export function calculate(functionInput, dGraph){
-  let inputs = inputMetrics(functionInput, dGraph);
+let time = null
+
+const shorten = (str) => { return str.substring(1, str.length); };
+export function sample(functionInput, dGraph, n){
+  time = Date.now()
+  const shortened = shorten(functionInput);
+  const inputs = inputMetrics(functionInput, dGraph);
   if (inputMetricsReady(inputs)) {
-    let shorten = (str) => { return str.substring(1, str.length); };
-    let shortened = shorten(functionInput);
-    let replaced = replaceReadableIdsWithSamples(shortened, inputs);
-    let correct = math.eval(replaced);
-    return {values: correct};
+    //const results = Array(n).fill(null).map(n => oldFunctionCalculate(shortened, inputs))
+    const parsed = math.compile(shortened)
+    const results = Array(n).fill(null).map(n => newFunctionCalculate(parsed, inputs))
+    return results
   } else {
-    return {errors: ['Inputs do not have samples yet!']};
+    return [{errors: ['Inputs do not have samples yet!']}];
   }
+}
+
+//export function oldFunctionCalculate(shortened, inputs){
+  //let returnn = replaceReadableIdsWithSamples(shortened, inputs)
+  //return {values: math.eval(returnn)};
+//}
+
+export function newFunctionCalculate(parsed, inputs){
+  let returnn = inputToSample(inputs)
+  return {values: parsed.eval(returnn)};
 }
 
 export function toDistribution(functionInput){

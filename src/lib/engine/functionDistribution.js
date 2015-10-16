@@ -4,7 +4,7 @@ import * as functionInput from './functionInput';
 import * as dsample from './sample';
 
 export function sample(functionDistribution, dGraph, n){
-    let samples = Array.apply(null, {length: n}).map(n => calculate(functionDistribution, dGraph));
+    let samples = calculate(functionDistribution, dGraph, n);
     samples = dsample.combine(samples);
     samples.values = samples.values.filter(v => !_.isUndefined(v));
     return samples;
@@ -13,8 +13,8 @@ export function sample(functionDistribution, dGraph, n){
 export function calculate(functionDistribution, dGraph, n) {
   let value = null;
   try {
-    return functionInput.calculate(functionDistribution.input, dGraph);
+    return functionInput.sample(functionDistribution.input, dGraph, n);
   } catch (exception) {
-    return {errors: [exception.message]};
+    return [{errors: [exception.message]}];
   }
 }
