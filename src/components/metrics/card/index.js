@@ -58,6 +58,17 @@ class Metric extends Component {
     e.stopPropagation()
   }
 
+  componentDidUpdate(oldProps) {
+    if (!this.props.isSelected && this._isEmpty() && !this.refs.header.hasContent()){
+        this.handleRemoveMetric()
+    }
+  }
+
+  _isEmpty(){
+    const {metric} = this.props
+    return (!metric.name && !_.get(metric, 'guesstimate.input'))
+  }
+
   handleChangeMetric(values) {
     values.id = this._id()
     this.props.dispatch(changeMetric(values))
@@ -98,6 +109,7 @@ class Metric extends Component {
               name={metric.name}
               readableId={metric.readableId}
               onChange={this.handleChangeMetric.bind(this)}
+              ref='header'
           />
           <div className='row row1'>
             <div className='col-xs-12 mean'>

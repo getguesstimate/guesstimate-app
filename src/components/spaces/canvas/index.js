@@ -61,7 +61,7 @@ export default class CanvasSpace extends Component{
   }
 
   _handleAddMetric(location) {
-    this.props.dispatch(addMetric({space: this.props.spaceId, location: location}))
+    this.props.dispatch(addMetric({space: this.props.spaceId, location: location, isNew: true}))
   }
 
   renderMetric(metric) {

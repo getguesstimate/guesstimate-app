@@ -29,14 +29,18 @@ export default class MetricHeader extends Component {
     this.props.onChange({name})
   }
 
+  hasContent() {
+    return this.refs.name.hasContent()
+  }
+
   render () {
     let {anotherFunctionSelected, name, readableId} = this.props
-    console.log('rendering header?')
     return (
      <div className='row'>
        <div className={anotherFunctionSelected ? 'col-xs-9 name' : 'col-xs-12 name'}>
          <MetricName name={name}
            onChange={this.props.onChange}
+           ref='name'
          />
       </div>
        <div className={anotherFunctionSelected ? 'col-xs-0' : 'col-xs-3'}>
