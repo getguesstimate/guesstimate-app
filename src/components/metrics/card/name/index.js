@@ -7,21 +7,33 @@ import './style.css'
 export default class MetricName extends Component {
   displayName: 'MetricName'
 
+  state = {value: this.props.name}
+
   handleSubmit() {
-    this.props.onChange({name: this.refs.input.value})
+    if (this._hasChanged()){
+      console.log('changed name')
+      this.props.onChange({name: this.state.value})
+    }
   }
 
-  shouldComponentUpdate(nextProps) {
-    return (nextProps.name !== this.props.name)
+  _hasChanged() {
+    return (this.state.value !== this.props.name)
+  }
+
+  hasContent() {
+    return !_.isEmpty(this.state.value)
   }
 
   render() {
     return (
         <TextArea className='MetricName'
-            onBlur={this.handleSubmit.bind(this)}
             ref={'input'}
             tabIndex={2}
             defaultValue={this.props.name}
+            placeholder={'name'}
+            value={this.state.value}
+            onBlur={this.handleSubmit.bind(this)}
+            onChange={e => this.setState({value: e.target.value})}
           >
         </TextArea>
     )
