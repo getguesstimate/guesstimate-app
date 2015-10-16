@@ -41,7 +41,7 @@ export default class CanvasShow extends Component {
             }
 
             <div className='right  menu'>
-            {space && space.user &&
+            {space && space.user && !space.ownedByMe &&
               <div>
                 <a className='ui image label'>
                   <img  src={space.user.picture}/>
