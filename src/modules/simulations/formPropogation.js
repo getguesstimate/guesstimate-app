@@ -44,34 +44,34 @@ export class FormPropogation {
   getState: Function;
   metricId: string;
   id: number;
-  batchStep: number;
-  batchSizes: Array<number>;
+  currentStep: number;
+  steps: Array<any>;
+  // metricId, samples
 
   constructor(dispatch: Function, getState: Function, metricId: string) {
     this.dispatch = dispatch
     this.getState = getState
     this.metricId = metricId
     this.id = Date.now()
-    this.batchSizes = [50, 10000]
-    this.batchStep = 0
+    this.steps = this._steps(getState(), metricId)
+    this.currentStep = 0
   }
 
   run(): void {
     this._reset()
-    this._simulate(5) // An initial quick test.
     this._propogate()
   }
 
-  _simulate(n: number): void {
-    let simulator = new Simulator(this.metricId, this._graph(), this.id)
-    simulator.run(n)
+  _simulate(step: Object): void {
+    let simulator = new Simulator(step.metricId, this._graph(), this.id)
+    simulator.run(step.samples)
     if (simulator.simulation) {
       this.dispatch(simulator.toDispatch())
     }
   }
 
   _reset(): void {
-    this.dispatch(deleteSimulations([this.metricId]))
+    this._dependentIds().map(metricId => this.dispatch(deleteSimulations([metricId])))
   }
 
   _propogate(): void {
@@ -85,8 +85,8 @@ export class FormPropogation {
   }
 
   _step(): void {
-    this._simulate(this.batchSizes[this.batchStep]);
-    this.batchStep++
+    this._simulate(this.steps[this.currentStep]);
+    this.currentStep++
   }
 
   _graph(): Graph {
@@ -98,13 +98,29 @@ export class FormPropogation {
     return this.getState().simulations.find(s => s.metric === this.metricId)
   }
 
-  _shouldStop(): Boolean {
-    let simulation = this._savedSimulation()
+  _dependentIds() {
+    return this.dependencies.map(e => e[0])
+  }
 
+  _steps(state: Object, metricId: string): Array<Object> {
+    const batchSizes = [50, 5000]
+    this.dependencies = e.graph.dependencyTree(state, metricId)
+    const inOrder = _.sortBy(this.dependencies, function(n){return n[1]}).map(e => e[0])
+    const batches = batchSizes.map(samples => { return inOrder.map(metricId => {return {samples, metricId}} ) })
+    return _.flattenDeep(batches)
+  }
+
+  _shouldStop(): Boolean {
+    if (this.currentStep === 0) {
+      return false
+    }
+
+    let simulation = this._savedSimulation()
     const hasErrors = e.simulation.hasErrors(simulation)
-    const isObsolete = !isRecentPropogation(this.id, simulation)
-    const isComplete = (this.batchStep > (this.batchSizes.length - 1))
     const hasNoValues = (simulation.sample.values.length === 0)
+
+    const isObsolete = !isRecentPropogation(this.id, simulation)
+    const isComplete = (this.currentStep > (this.steps.length - 1))
     const noUncertainty = hasNoUncertainty(simulation)
 
     return (hasErrors || isObsolete || isComplete || hasNoValues || noUncertainty)
