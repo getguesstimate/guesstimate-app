@@ -13,7 +13,6 @@
         "react"
     ],
     "rules": {
-        "strict": 0,
         "quotes": 0,
         "no-unused-vars": 1,
         "camelcase": 1,

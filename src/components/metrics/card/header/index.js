@@ -16,8 +16,8 @@ export default class MetricHeader extends Component {
   static propTypes = {
     anotherFunctionSelected: PropTypes.bool,
     name: PropTypes.string.isRequired,
-    readableId: PropTypes.string,
     onChange: PropTypes.func.isRequired,
+    readableId: PropTypes.string,
   }
 
   shouldComponentUpdate(nextProps) {
@@ -39,8 +39,8 @@ export default class MetricHeader extends Component {
      <div className='row'>
        <div className={anotherFunctionSelected ? 'col-xs-9 name' : 'col-xs-12 name'}>
          <MetricName name={name}
-           onChange={this.props.onChange}
-           ref='name'
+             onChange={this.props.onChange}
+             ref='name'
          />
       </div>
        <div className={anotherFunctionSelected ? 'col-xs-0' : 'col-xs-3'}>

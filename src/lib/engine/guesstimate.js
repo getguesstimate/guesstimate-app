@@ -3,7 +3,7 @@
 import * as eDistribution from './distribution.js';
 import * as functionInput from './functionInput.js';
 import * as estimateInput from './estimateInput.js';
-import type {Guesstimate, Distribution, DGraph} from './types.js'
+import type {Guesstimate, Distribution, DGraph, Graph, Simulation} from './types.js'
 
 function toDistribution(guesstimate: Guesstimate): Distribution {
   let input = guesstimate.input;
@@ -53,6 +53,6 @@ export function toEditorState(guesstimate: Guesstimate): string{
   }
 }
 
-export function simulations(guesstimate, graph) {
+export function simulations(guesstimate: Guesstimate, graph:Graph) : Array<Simulation>{
   return graph.simulations && graph.simulations.filter(s => (s.metric === guesstimate.metric))
 }

@@ -2,11 +2,8 @@ import * as estimateInput from '../estimateInput.js';
 import {expect} from 'chai';
 
 describe('estimateInput', () => {
-  let metric = null;
-  let graph = null;
-  let result = null;
 
-  describe.only('#toDistribution', () => {
+  describe('#toDistribution', () => {
     let result = (input) => estimateInput.toDistribution(input);
 
     it('with /', () => {

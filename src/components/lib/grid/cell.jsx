@@ -1,22 +1,19 @@
-'use strict';
 import React, {Component, PropTypes} from 'react'
-import ReactDOM from 'react-dom'
 import $ from 'jquery'
-let GRID_ITEM_FOCUS_CLASS = '.grid-item-focus'
 
-export default class EmptyCell extends React.Component {
+export default class EmptyCell extends Component {
   static propTypes = {
-    isSelected: PropTypes.bool.isRequired,
     gridKeyPress: PropTypes.func.isRequired,
     handleSelect: PropTypes.func.isRequired,
-    onAddItem: PropTypes.func.isRequired,
+    isSelected: PropTypes.bool.isRequired,
     location: PropTypes.shape({
       row: PropTypes.number.isRequired,
       column: PropTypes.number.isRequired
-    }).isRequired
+    }).isRequired,
+    onAddItem: PropTypes.func.isRequired
   }
 
-  shouldComponentUpdate(nextProps) {
+  shouldComponentUpdate() {
     return false
   }
 
@@ -43,8 +40,8 @@ export default class EmptyCell extends React.Component {
   render() {
     return (
       <div
+          className={'GiantEmptyCl grid-item-focus'}
           onKeyDown={this._handleKeyPress.bind(this)}
-          className={'GiantEmptyCell grid-item-focus'}
           onMouseDown={this.handleClick.bind(this)}
           tabIndex='0'
       />
@@ -52,17 +49,17 @@ export default class EmptyCell extends React.Component {
   }
 }
 
-export default class Cell extends React.Component {
+export default class Cell extends Component {
   static propTypes = {
-    item: PropTypes.object,
-    isSelected: PropTypes.bool.isRequired,
     gridKeyPress: PropTypes.func.isRequired,
     handleSelect: PropTypes.func.isRequired,
-    onAddItem: PropTypes.func.isRequired,
+    isSelected: PropTypes.bool.isRequired,
+    item: PropTypes.object,
     location: PropTypes.shape({
       row: PropTypes.number.isRequired,
       column: PropTypes.number.isRequired
-    }).isRequired
+    }).isRequired,
+    onAddItem: PropTypes.func.isRequired
   }
 
   getPosition() {
@@ -120,7 +117,9 @@ export default class Cell extends React.Component {
 
   render = () => {
     return (
-      <div className={this._classes()} ref='dom' >
+      <div className={this._classes()}
+          ref='dom'
+      >
       {this._cellElement()}
       </div>
     )
