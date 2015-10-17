@@ -40,7 +40,7 @@ export default class EmptyCell extends Component {
   render() {
     return (
       <div
-          className={'GiantEmptyCl grid-item-focus'}
+          className={'GiantEmptyCell grid-item-focus'}
           onKeyDown={this._handleKeyPress.bind(this)}
           onMouseDown={this.handleClick.bind(this)}
           tabIndex='0'

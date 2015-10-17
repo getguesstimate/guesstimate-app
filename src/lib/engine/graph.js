@@ -1,6 +1,7 @@
 import * as _metric from './metric';
 import * as _dgraph from './dgraph';
 import _ from 'lodash';
+import BasicGraph from '../basic_graph/basic-graph.js'
 
 //export interface Graph {
   //metrics?: Metric[],
@@ -33,4 +34,11 @@ export function runSimulation(graph, metricId, n){
 
 export function metric(graph, id){
   return graph.metrics.find(m => (m.id === id));
+}
+
+export function dependencyTree(graph, startingMetricId) {
+  const edges = _dgraph.dependencyMap(graph)
+  const bGraph = new BasicGraph(graph.metrics.map(m => m.id), edges)
+  const tree = bGraph.subsetFrom(startingMetricId)
+  return tree.nodes.map(n => [n.id, n.maxDistanceFromRoot])
 }
