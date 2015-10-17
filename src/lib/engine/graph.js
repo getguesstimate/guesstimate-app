@@ -37,7 +37,8 @@ export function metric(graph, id){
 }
 
 export function dependencyTree(graph, startingMetricId) {
-  const edges = _dgraph.dependencyMap(graph)
+  const dGraph = denormalize(graph)
+  const edges = _dgraph.dependencyMap(dGraph)
   const bGraph = new BasicGraph(graph.metrics.map(m => m.id), edges)
   const tree = bGraph.subsetFrom(startingMetricId)
   return tree.nodes.map(n => [n.id, n.maxDistanceFromRoot])
