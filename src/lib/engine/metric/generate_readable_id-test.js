@@ -1,7 +1,7 @@
 import {generateReadableId} from './generate_readable_id.js';
 import {expect} from 'chai';
 
-describe.only('#generateReadableId', () => {
+describe('#generateReadableId', () => {
   let result = null;
 
   it('works with one word', () => {

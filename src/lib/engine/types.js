@@ -13,6 +13,16 @@ export type DGraph = {
   metrics: any
 };
 
+export type Graph = {
+  metrics: any,
+  simulations: any
+};
+
+export type Simulation = {
+  metric?: string,
+  sample?: Array<Sample>
+};
+
 export type Sample = {
   values?: any,
   errors?: any
