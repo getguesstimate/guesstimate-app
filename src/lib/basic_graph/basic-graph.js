@@ -7,6 +7,13 @@ export default class BasicGraph {
     this.edges = edges
   }
 
+  //TODO: If this is slow, filter edges as well
+  subsetFrom(id){
+    const itemSubset = [id, ...this.childrenIds(id, false)]
+    const edgeSubset = this.edges.filter(e => _.includes(itemSubset, e.input))
+    return new BasicGraph(itemSubset, edgeSubset)
+  }
+
   children(id, oneLevel=true) {
     return this.childrenIds(id).map(e => this.nodes.find(m => m.id === e))
   }

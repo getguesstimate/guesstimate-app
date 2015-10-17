@@ -1,4 +1,6 @@
-import {dependencyMap, dependencyOrder} from '../dgraph.js';
+import {dependencyMap} from '../dgraph.js';
+import {dependencyTree} from '../graph.js';
+
 import {expect} from 'chai';
 
 let metrics = [
@@ -50,10 +52,24 @@ describe('graph', () => {
     });
   });
 
-  describe('order', () => {
-    it('works', () => {
-      let result = ['A1', 'A2', 'A3', 'A4', 'A5']
-      expect(dependencyOrder(dGraph)).to.deep.equal(result);
+  describe('dependencyTree', () => {
+    it('for metric 0', () => {
+      let result = [
+        ['A1', 0],
+        ['A2', 1],
+        ['A3', 1],
+        ['A4', 2],
+        ['A5', 3]
+      ]
+      expect(dependencyTree(dGraph, 'A1')).to.deep.equal(result)
+    });
+
+    it('for metric 4', () => {
+      let result = [
+        ['A4', 0],
+        ['A5', 1]
+      ]
+      expect(dependencyTree(dGraph, 'A4')).to.deep.equal(result)
     });
   });
 });

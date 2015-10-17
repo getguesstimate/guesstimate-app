@@ -27,26 +27,3 @@ export function dependencyMap(dGraph: DGraph): Array<Object>{
   return _.flatten(asLists)
 }
 
-function hasNoOutputs(metricId, dependencyMap) {
-  return _.some(dependencyMap, (d) => (d.output === metricId))
-}
-
-function allNodes(dependencyMap) {
-  return _.uniq(_.flatten(dependencyMap.map(d => [d.input, d.output])))
-}
-
-function endNodes(dependencyMap) {
-  console.log('allnodes', allNodes(dependencyMap))
-  return allNodes(dependencyMap).filter(m => hasNoOutputs(m, dependencyMap))
-}
-
-function removeEndNodes(dependencyMap) {
-  let _endNodes = endNodes(dependencyMap)
-  let newDependencyMap = dependencyMap.filter(d => !_.includes(_endNodes, d.output))
-  let lastNode = null
-
-  if (newDependencyMap.length === 0) {
-    lastNode = dependencyMap[0].input
-  }
-  return {endNodes: _endNodes, dependencyMap: newDependencyMap, lastNode: lastNode}
-}
