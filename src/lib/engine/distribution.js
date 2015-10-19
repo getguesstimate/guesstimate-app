@@ -23,7 +23,7 @@ function sampleNormal(distribution: Distribution, n: number = 1){
     mean: distribution.mean,
     stdev: distribution.stdev,
     seed: 0,
-    min: 0
+    min: -99999999999999
   });
   //This makes the outputs integers.  This could change, of course
   let results = stochator.next(n)
