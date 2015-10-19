@@ -7,32 +7,25 @@ import _ from 'lodash'
 const PT = PropTypes
 class SimulationHistogram extends Component{
   static propTypes = {
-    metricCardView: PT.oneOf([
-      'normal',
-      'scientific',
-      'debugging',
-    ]).isRequired,
+    containerWidth: PT.number,
+    height: PT.number,
     simulation: PT.object,
-    containerWidth: PT.number
   }
 
   shouldComponentUpdate(nextProps) {
     return (
       (_.get(nextProps, 'simulation.stats') !== _.get(this.props, 'simulation.stats')) ||
       (nextProps.containerWidth !== this.props.containerWidth) ||
-      (nextProps.metricCardView !== this.props.metricCardView)
+      (nextProps.height !== this.props.height)
     )
   }
   values(){
     return this.props.simulation ? this.props.simulation.sample.values : false
   };
-  height() {
-    return ((this.props.metricCardView === 'normal') ? 30 : 80)
-  }
   histogram() {
     return (
       <Histogram data={this.values()}
-          height={this.height()}
+          height={this.props.height}
           width={this.props.containerWidth + 5}
       />
     )

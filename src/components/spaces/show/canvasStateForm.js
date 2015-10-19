@@ -10,11 +10,15 @@ function mapStateToProps(state) {
   }
 }
 
+String.prototype.capitalizeFirstLetter = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+}
+
 const Item = ({name, onSelect}) => (
   <li onMouseDown={onSelect} >
     <button
         data-card-view={name}
-        type='button'>{name}
+        type='button'>{name.capitalizeFirstLetter()}
     </button>
   </li>
 )
@@ -39,7 +43,7 @@ export default class CanvasStateForm extends Component {
   }
   render() {
     return (
-        <StandardDropdownMenu toggleButton={<a><Icon name='eye'/> {this.props.canvasState.metricCardView} </a>}>
+        <StandardDropdownMenu toggleButton={<a><Icon name='eye'/> {this.props.canvasState.metricCardView.capitalizeFirstLetter()} </a>}>
            {['normal', 'scientific', 'debugging'].map(e => {
              return (
                <Item

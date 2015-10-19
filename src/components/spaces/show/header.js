@@ -13,6 +13,8 @@ let SpaceHeader = ({space, onSave, onDestroy}) => (
       </StandardDropdownMenu>
     }
 
+    <CanvasStateForm/>
+
     {space.ownedByMe &&
       <a disabled={!!space.busy} onClick={onSave}>
         {'Save'}
@@ -24,7 +26,6 @@ let SpaceHeader = ({space, onSave, onDestroy}) => (
       </span>
     }
 
-    <CanvasStateForm/>
   </div>
 )
 export default SpaceHeader

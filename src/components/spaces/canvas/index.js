@@ -15,7 +15,6 @@ import { userActionSelector } from './canvas-state-selector';
 import { denormalizedSpaceSelector } from '../denormalized-space-selector.js';
 import JSONTree from 'react-json-tree'
 
-
 function mapStateToProps(state) {
   return {
     canvasState: state.canvasState,
@@ -87,9 +86,12 @@ export default class CanvasSpace extends Component{
     const {selected} = this.props
     const space = this.props.denormalizedSpace
     const {metrics} = space
+    const {metricCardView} = this.props.canvasState
     return (
-
       <div className="canvas-space">
+        {(metricCardView === 'debugging') &&
+          <JSONTree data={this.props}/>
+        }
         <Grid
             edges={space.edges}
             handleSelect={this._handleSelect.bind(this)}

@@ -1,5 +1,4 @@
 import React from 'react'
-import ShowIf from 'gComponents/utility/showIf';
 import './style.css'
 
 const MetricStatTable = ({stats}) => (
@@ -19,4 +18,4 @@ const MetricStatTable = ({stats}) => (
   </table>
 )
 
-export default ShowIf(MetricStatTable)
+export default MetricStatTable

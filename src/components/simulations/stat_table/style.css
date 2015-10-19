@@ -1,13 +1,15 @@
+@import './styles/variables.css';
+
 table.MetricStatTable {
-  position: absolute;
-  left: 5px;
+  float: right;
+  margin-top: 10px;
   font-size: 10px;
-  color: #1B7DAA;
+  color: $blue-1;
   width: 110px;
+  background-color: rgba(255,255,255,0.3);
 }
 
 table.MetricStatTable td {
   text-align: left;
   padding: 0;
 }
-

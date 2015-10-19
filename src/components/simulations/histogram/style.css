@@ -1,3 +1,5 @@
+@import './styles/variables.css';
+
 .react-d3-histogram {
   bottom: -35px;
   position: absolute;;
@@ -12,6 +14,10 @@
 .react-d3-histogram__bar rect {
   fill: #EFF4F7;
   shape-rendering: crispEdges;
+}
+
+.metric .scientific .react-d3-histogram__bar rect {
+  fill: $blue-1;
 }
 
 .react-d3-histogram__bar text {
