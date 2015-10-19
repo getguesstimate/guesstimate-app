@@ -16,9 +16,6 @@
   shape-rendering: crispEdges;
 }
 
-.metric .scientific .react-d3-histogram__bar rect {
-  fill: $blue-1;
-}
 
 .react-d3-histogram__bar text {
   fill: none;
@@ -27,6 +24,10 @@
 .react-d3-histogram__tick text {
   font-size: 8px;
   fill: none;
+}
+
+.metric .scientific .react-d3-histogram__tick text  {
+  fill: #aaa;
 }
 
 .metric:hover .react-d3-histogram__tick text {

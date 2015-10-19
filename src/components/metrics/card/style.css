@@ -42,13 +42,13 @@
   margin-bottom: 0;
 }
 .name {
-  color: #595F6F;
+  color: $grey-2;
 }
 
 .mean {
   font-weight: 500;
   font-size: 1.5em;
-  color: #595F6F;
+  color: $black-1;
 }
 .function-id {
   font-size: 1em;
