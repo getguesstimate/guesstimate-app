@@ -28,7 +28,7 @@ export default class StandardDropdownMenu extends Component {
       isOpen: this.state.isMenuOpen,
       close: this.close.bind(this),
       toggle: this.wrappedToggleButton(),
-      align: 'right',
+      align: 'left',
       animate: true,
       animAlign: 'center',
       children: this.props.children

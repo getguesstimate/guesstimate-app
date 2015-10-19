@@ -5,8 +5,7 @@ import { removeMetric, changeMetric } from 'gModules/metrics/actions.js';
 import { changeGuesstimate } from 'gModules/guesstimates/actions.js';
 import _ from 'lodash'
 
-import StatTable from 'gComponents/simulations/stat_table';
-import SimulationHistogram from 'gComponents/simulations/histogram'
+import Histogram from 'gComponents/simulations/histogram'
 
 import EditingPane from './editing_pane';
 import DistributionSummary from './simulation_summary'
@@ -15,30 +14,45 @@ import $ from 'jquery'
 import './style.css'
 window.$ = $
 
+const PT = PropTypes
 class Metric extends Component {
   displayName: 'Metric'
+
   static propTypes = {
-    canvasState: PropTypes.oneOf([
+    canvasState: PT.shape({
+      metricCardView: PT.oneOf([
+        'normal',
+        'scientific',
+        'debugging',
+      ]).isRequired,
+    }),
+    dispatch: PT.func.isRequired,
+    gridKeyPress: PT.func.isRequired,
+    guesstimateForm: PT.object.isRequired,
+    handleSelect: PT.func.isRequired,
+    isSelected: PT.bool.isRequired,
+    location: PT.shape({
+      row: PT.number,
+      column: PT.number
+    }),
+    metric: PT.object.isRequired,
+    userAction: PT.oneOf([
       'selecting',
       'function',
       'estimate',
       'editing'
-    ]).isRequired,
-    changeSelect: PropTypes.func,
-    dispatch: PropTypes.func,
-    gridKeyPress: PropTypes.func.isRequired,
-    guesstimateForm: PropTypes.object,
-    isSelected: PropTypes.bool,
-    location: PropTypes.shape({
-      row: PropTypes.number,
-      column: PropTypes.number
-    }),
-    metric: PropTypes.object.isRequired,
+    ]).isRequired
+  }
+
+  componentDidUpdate() {
+    if (!this.props.isSelected && this._isEmpty() && !this.refs.header.hasContent()){
+        this.handleRemoveMetric()
+    }
   }
 
   _handleClick(event) {
     if (!this.props.isSelected){
-      if (this.props.canvasState == 'function') {
+      if (this.props.userAction == 'function') {
         event.preventDefault()
         $(window).trigger('functionMetricClicked', this.props.metric)
       } else {
@@ -56,12 +70,6 @@ class Metric extends Component {
       this.props.gridKeyPress(e)
     }
     e.stopPropagation()
-  }
-
-  componentDidUpdate(oldProps) {
-    if (!this.props.isSelected && this._isEmpty() && !this.refs.header.hasContent()){
-        this.handleRemoveMetric()
-    }
   }
 
   _isEmpty(){
@@ -91,24 +99,27 @@ class Metric extends Component {
   }
 
   render () {
-    const {isSelected, metric, canvasState, guesstimateForm} = this.props
-    let anotherFunctionSelected = ((canvasState === 'function') && !isSelected)
+    const {isSelected, metric, guesstimateForm, userAction} = this.props
+    const {canvasState: {metricCardView}} = this.props
+
+    let anotherFunctionSelected = ((userAction === 'function') && !isSelected)
     return(
       <div
           className={isSelected ? 'metric grid-item-focus' : 'metric'}
-          tabIndex='0'
           onKeyDown={this._handlePress.bind(this)}
           onMouseDown={this._handleClick.bind(this)}
           ref='dom'
+          tabIndex='0'
       >
-        <div className={'card-top metric-container'}
-        >
-          <SimulationHistogram simulation={metric.simulation}/>
+        <div className={`card-top metric-container ${metricCardView}`}>
+          <Histogram metricCardView={metricCardView}
+              simulation={metric.simulation}
+          />
           <Header
               anotherFunctionSelected={anotherFunctionSelected}
               name={metric.name}
-              readableId={metric.readableId}
               onChange={this.handleChangeMetric.bind(this)}
+              readableId={metric.readableId}
               ref='header'
           />
           <div className='row row1'>
@@ -123,10 +134,10 @@ class Metric extends Component {
          <EditingPane
              guesstimate={metric.guesstimate}
              guesstimateForm={guesstimateForm}
+             metricFocus={this.focus.bind(this)}
              metricId={metric.id}
              onChangeGuesstimate={this.handleChangeGuesstimate.bind(this)}
              showIf={isSelected && !_.isUndefined(metric.guesstimate)}
-             metricFocus={this.focus.bind(this)}
          />
       </div>
     )

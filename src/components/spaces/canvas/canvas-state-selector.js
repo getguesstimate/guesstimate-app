@@ -11,11 +11,11 @@ let chooseCanvasState = (guesstimateForm) => {
     }
 }
 
-export const canvasStateSelector = createSelector(
+export const userActionSelector = createSelector(
   guesstimateFormSelector,
   (guesstimateForm) => {
     return {
-      canvasState: chooseCanvasState(guesstimateForm)
+      userAction: chooseCanvasState(guesstimateForm)
     };
   }
 );

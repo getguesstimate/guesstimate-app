@@ -1,23 +1,31 @@
 import React, {Component, PropTypes} from 'react'
-import SpaceCanvas from 'gComponents/spaces/canvas'
 import { connect } from 'react-redux';
-import { denormalizedSpaceSelector } from '../denormalized-space-selector.js';
-import style from './style.css'
+import './style.css'
+
+import SpaceCanvas from 'gComponents/spaces/canvas'
+import SpacesShowHeader from './header.js'
 import * as spaceActions from 'gModules/spaces/actions.js'
-import Icon from 'react-fa'
-import CanvasShowHeader from './header.js'
-import _ from 'lodash'
+import { denormalizedSpaceSelector } from '../denormalized-space-selector.js';
 
 function mapStateToProps(state) {
   return {
-    me: state.me,
+    me: state.me
   }
 }
 
+const PT = PropTypes
+
 @connect(mapStateToProps)
 @connect(denormalizedSpaceSelector)
-export default class CanvasShow extends Component {
+export default class SpacesShow extends Component {
   displayName: 'RepoDetailPage'
+
+  static propTypes = {
+    dispatch: PT.func.isRequired,
+    spaceId: PT.string,
+    denormalizedSpace: PT.object,
+  }
+
   onSave() {
     this.props.dispatch(spaceActions.update(parseInt(this.props.spaceId)))
   }
@@ -30,31 +38,33 @@ export default class CanvasShow extends Component {
     <div>
       <div className='hero-unit'>
         <div className='container-fluid'>
-          <div className='ui secondary menu'>
+          <div className='row'>
+            <div className='col-sm-8'>
 
-            <div className='item'>
-              <h1> {space ? space.name : ''} </h1>
+              {space &&
+                <SpacesShowHeader onDestroy={this.destroy.bind(this)}
+                    onSave={this.onSave.bind(this)}
+                    space={space}
+                />
+              }
             </div>
 
-            {space && space.ownedByMe &&
-              <CanvasShowHeader space={space} onSave={this.onSave.bind(this)} onDestroy={this.destroy.bind(this)}/>
-            }
+            <div className='col-sm-4'>
 
-            <div className='right  menu'>
-            {space && space.user && !space.ownedByMe &&
-              <div>
-                <a className='ui image label'>
-                  <img  src={space.user.picture}/>
-                  {space.user.name}
-                </a>
-              </div>
-            }
+              {space && space.user && !space.ownedByMe &&
+                <div>
+                  <a className='ui image label'>
+                    <img  src={space.user.picture}/>
+                    {space.user.name}
+                  </a>
+                </div>
+              }
 
             </div>
           </div>
         </div>
       </div>
-      { space && <SpaceCanvas spaceId={space.id}/>}
+      {space && <SpaceCanvas spaceId={space.id}/>}
       </div>
     )
   }
