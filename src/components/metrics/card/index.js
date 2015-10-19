@@ -1,18 +1,19 @@
 import React, {Component, PropTypes} from 'react'
 import ReactDOM from 'react-dom'
+import JSONTree from 'react-json-tree'
+import _ from 'lodash'
+
 import { connect } from 'react-redux';
 import { removeMetric, changeMetric } from 'gModules/metrics/actions.js';
 import { changeGuesstimate } from 'gModules/guesstimates/actions.js';
-import _ from 'lodash'
 
 import Histogram from 'gComponents/simulations/histogram'
-
+import StatTable from 'gComponents/simulations/stat_table'
 import EditingPane from './editing_pane';
 import DistributionSummary from './simulation_summary'
 import Header from './header'
 import $ from 'jquery'
 import './style.css'
-window.$ = $
 
 const PT = PropTypes
 class Metric extends Component {
@@ -112,7 +113,7 @@ class Metric extends Component {
           tabIndex='0'
       >
         <div className={`card-top metric-container ${metricCardView}`}>
-          <Histogram metricCardView={metricCardView}
+          <Histogram height={(metricCardView === 'scientific') ? 75 : 30}
               simulation={metric.simulation}
           />
           <Header
@@ -130,6 +131,13 @@ class Metric extends Component {
               />
             </div>
           </div>
+
+          {(metricCardView === 'debugging') &&
+            <JSONTree data={this.props}/>
+          }
+          {(metricCardView === 'scientific') && _.get(metric, 'simulation.stats') &&
+            <StatTable stats={metric.simulation.stats}/>
+          }
         </div>
          <EditingPane
              guesstimate={metric.guesstimate}
