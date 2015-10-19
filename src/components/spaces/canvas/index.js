@@ -1,10 +1,7 @@
 'use strict';
 
-import _ from 'lodash'
 import React, {Component, PropTypes} from 'react'
-import $ from 'jquery'
 import { connect } from 'react-redux';
-import e from 'gEngine/engine'
 
 import Grid from 'gComponents/lib/grid/grid/'
 import Metric from 'gComponents/metrics/card'
@@ -12,32 +9,34 @@ import Metric from 'gComponents/metrics/card'
 import { addMetric } from 'gModules/metrics/actions'
 import { changeSelect } from 'gModules/selection/actions'
 import { runSimulations, deleteSimulations } from 'gModules/simulations/actions'
-import * as spaceActions  from 'gModules/spaces/actions';
 
 import './canvas.styl'
-import SpaceHeader from './header.js'
-import { canvasStateSelector } from './canvas-state-selector';
+import { userActionSelector } from './canvas-state-selector';
 import { denormalizedSpaceSelector } from '../denormalized-space-selector.js';
 import JSONTree from 'react-json-tree'
 
 
 function mapStateToProps(state) {
   return {
+    canvasState: state.canvasState,
     selected: state.selection,
   }
 }
 
+const PT = PropTypes;
 @connect(mapStateToProps)
-@connect(canvasStateSelector)
+@connect(userActionSelector)
 @connect(denormalizedSpaceSelector)
 export default class CanvasSpace extends Component{
   static propTypes = {
-    canvasState: PropTypes.oneOf([
-      'selecting',
-      'function',
-      'estimate',
-      'editing'
-    ]),
+    canvasState: PT.shape({
+      metricCardView: PT.oneOf([
+        'normal',
+        'scientific',
+        'debugging',
+      ]).isRequired,
+    }),
+    denormalizedSpace: PropTypes.object,
     dispatch: PropTypes.func,
     guesstimateForm: PropTypes.object,
     isSelected: PropTypes.bool,
@@ -45,7 +44,13 @@ export default class CanvasSpace extends Component{
     spaceId: PropTypes.oneOfType([
         React.PropTypes.string,
         React.PropTypes.number,
-    ])
+    ]),
+    userAction: PropTypes.oneOf([
+      'selecting',
+      'function',
+      'estimate',
+      'editing'
+    ]),
   }
 
   componentDidMount(){
@@ -69,10 +74,11 @@ export default class CanvasSpace extends Component{
     return (
       <Metric
           canvasState={this.props.canvasState}
+          handleSelect={this._handleSelect.bind(this)}
           key={metric.id}
           location={location}
           metric={metric}
-          handleSelect={this._handleSelect.bind(this)}
+          userAction={this.props.userAction}
       />
     )
   }
@@ -85,10 +91,10 @@ export default class CanvasSpace extends Component{
 
       <div className="canvas-space">
         <Grid
+            edges={space.edges}
             handleSelect={this._handleSelect.bind(this)}
             onAddItem={this._handleAddMetric.bind(this)}
             selected={selected}
-            edges={space.edges}
         >
           {metrics.map((m) => {
               return this.renderMetric(m)

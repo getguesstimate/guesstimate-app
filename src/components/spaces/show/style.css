@@ -14,9 +14,11 @@
   font-size: 2em;
   font-family: Lato;
   font-weigth: 500;
+  float: left;
+  margin-right: 1em;
 }
 
-.hero-unit .ui.menu .action a {
+.hero-unit a {
   color: white;
   padding: 0.5em 0.95em;
   border-radius: 3px;
@@ -24,9 +26,11 @@
   margin-right: 10px;
   background-color: rgba(0,0,0,0);
   transition: background-color 0.3s;
+  float:left;
 }
 
-.hero-unit .ui.menu .action a:hover{
+.hero-unit a:hover{
+  color: white;
   background-color: rgba(255,255,255,0.3);
   cursor: pointer;
 }

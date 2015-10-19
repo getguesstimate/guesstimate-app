@@ -1,26 +1,30 @@
-import React, {Component, PropTypes} from 'react'
+import React from 'react'
+import CanvasStateForm from './canvasStateForm.js'
 import StandardDropdownMenu from 'gComponents/utility/standard-dropdown-menu'
 import Icon from 'react-fa'
 
-export default class CanvasShowHeader extends Component {
-  render() {
-    const {space} = this.props;
-    return (
-      <div className='item action'>
-        <StandardDropdownMenu toggleButton={<a><Icon name='cog'/> Settings </a>}>
-            <li key='1' onMouseDown={this.props.onDestroy}><button type='button'>Delete</button></li>
-        </StandardDropdownMenu>
+let SpaceHeader = ({space, onSave, onDestroy}) => (
+  <div className='header'>
+    <h1> {space ? space.name : ''} </h1>
 
-        {space.busy ?
-          <a> {'saving...'}  </a>
-          :
-          <a onClick={this.props.onSave}>
-            <Icon name='save'/> {'Save'}
-          </a>
-        }
+    {space.ownedByMe &&
+      <StandardDropdownMenu toggleButton={<a><Icon name='cog'/> Actions </a>}>
+          <li key='1' onMouseDown={onDestroy}><button type='button'>Delete</button></li>
+      </StandardDropdownMenu>
+    }
 
-      </div>
-    )
-  }
-}
+    {space.ownedByMe &&
+      <a disabled={!!space.busy} onClick={onSave}>
+        {'Save'}
+      </a>
+    }
+    {!!space.busy &&
+      <span className='save-message'>
+        {'saving...'}
+      </span>
+    }
 
+    <CanvasStateForm/>
+  </div>
+)
+export default SpaceHeader
