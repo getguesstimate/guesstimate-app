@@ -25,6 +25,7 @@ class Metric extends Component {
     canvasState: PT.shape({
       metricCardView: PT.oneOf([
         'normal',
+        'basic',
         'scientific',
         'debugging',
       ]).isRequired,
@@ -117,6 +118,11 @@ class Metric extends Component {
         >
 
         <div className={`card-top metric-container ${metricCardView}`}>
+          {(metricCardView !== 'basic') &&
+            <Histogram height={(metricCardView === 'scientific') ? 75 : 30}
+              simulation={metric.simulation}
+            />
+          }
           <Header
               anotherFunctionSelected={anotherFunctionSelected}
               name={metric.name}

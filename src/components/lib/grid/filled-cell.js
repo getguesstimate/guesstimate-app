@@ -42,9 +42,9 @@ export default class ItemCell extends Component {
   }
   render = () => {
     return this.props.connectDragSource(
-      <div>
-      {this.item()}
-    </div>
+      <div className='GiantFilledCell'>
+      {!this.props.isDragging && this.item()}
+      </div>
     )
   }
 }
