@@ -1,6 +1,21 @@
 import React, {Component, PropTypes} from 'react'
 import $ from 'jquery'
+import { DropTarget } from 'react-dnd';
 
+const squareTarget = {
+  drop(props) {
+    return {location: props.location}
+  }
+};
+
+function collect(connect, monitor) {
+  return {
+    connectDropTarget: connect.dropTarget(),
+    isOver: monitor.isOver()
+  };
+}
+
+@DropTarget('card', squareTarget, collect)
 export default class EmptyCell extends Component {
   static propTypes = {
     gridKeyPress: PropTypes.func.isRequired,
@@ -13,8 +28,8 @@ export default class EmptyCell extends Component {
     onAddItem: PropTypes.func.isRequired
   }
 
-  shouldComponentUpdate() {
-    return false
+  shouldComponentUpdate(nextProps) {
+    return (nextProps.isOver !== this.props.isOver)
   }
 
   _handleKeyPress(e) {
@@ -38,13 +53,18 @@ export default class EmptyCell extends Component {
   }
 
   render() {
-    return (
+    const {connectDropTarget, isOver} = this.props
+
+    let className = 'GiantEmptyCell grid-item-focus'
+    className += isOver ? ' IsOver' : ''
+    return connectDropTarget(
       <div
-          className={'GiantEmptyCell grid-item-focus'}
+          className={className}
           onKeyDown={this._handleKeyPress.bind(this)}
           onMouseDown={this.handleClick.bind(this)}
           tabIndex='0'
-      />
+          >
+      </div>
     )
   }
 }
