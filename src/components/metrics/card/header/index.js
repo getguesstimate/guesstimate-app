@@ -4,7 +4,7 @@ import MetricName from '../name'
 import ShowIf from 'gComponents/utility/showIf'
 
 const MetricReadableIdd = ({readableId}) => (
-  <div className='col-xs-1 function-id'>
+  <div className='ui label green tiny'>
     {readableId}
   </div>
 )
@@ -16,13 +16,14 @@ export default class MetricHeader extends Component {
   static propTypes = {
     anotherFunctionSelected: PropTypes.bool,
     name: PropTypes.string.isRequired,
-    onChange: PropTypes.func.isRequired,
     readableId: PropTypes.string,
+    onChange: PropTypes.func.isRequired,
   }
 
   shouldComponentUpdate(nextProps) {
     return ((nextProps.name !== this.props.name) ||
-            (nextProps.readableId !== this.props.readableId))
+            (nextProps.readableId !== this.props.readableId) ||
+            (nextProps.anotherFunctionSelected !== this.props.anotherFunctionSelected))
   }
 
   handleNameChange(name) {
@@ -37,13 +38,13 @@ export default class MetricHeader extends Component {
     let {anotherFunctionSelected, name, readableId} = this.props
     return (
      <div className='row'>
-       <div className={anotherFunctionSelected ? 'col-xs-9 name' : 'col-xs-12 name'}>
+       <div className='col-xs-12 name'>
          <MetricName name={name}
              onChange={this.props.onChange}
              ref='name'
          />
       </div>
-       <div className={anotherFunctionSelected ? 'col-xs-0' : 'col-xs-3'}>
+       <div className='col-xs-12 name'>
          <MetricReadableId
              readableId={readableId}
              showIf={anotherFunctionSelected}

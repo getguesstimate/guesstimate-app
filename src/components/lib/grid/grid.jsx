@@ -85,6 +85,7 @@ export default class Grid extends Component{
             return ( <div className='GiantRow' key={row}> {this._row(row, columnCount)} </div>)
           })
         }
+
       </div>
     )
   }
