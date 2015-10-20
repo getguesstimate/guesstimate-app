@@ -2,11 +2,12 @@
 
 import React, {Component, PropTypes} from 'react'
 import { connect } from 'react-redux';
+import _ from 'lodash'
 
 import Grid from 'gComponents/lib/grid/grid/'
 import Metric from 'gComponents/metrics/card'
 
-import { addMetric } from 'gModules/metrics/actions'
+import { changeMetric, addMetric } from 'gModules/metrics/actions'
 import { changeSelect } from 'gModules/selection/actions'
 import { runSimulations, deleteSimulations } from 'gModules/simulations/actions'
 
@@ -73,6 +74,13 @@ export default class CanvasSpace extends Component{
     this.props.dispatch(addMetric({space: this.props.spaceId, location: location, isNew: true}))
   }
 
+  _handleMoveMetric({prev, next}) {
+    const metric = this.props.denormalizedSpace.metrics.find(f => _.isEqual(f.location, prev))
+    this.props.dispatch(changeMetric({id: metric.id, location: next}))
+    this.props.dispatch(changeSelect(next))
+  }
+
+
   renderMetric(metric) {
     const {location} = metric
     return (
@@ -101,6 +109,7 @@ export default class CanvasSpace extends Component{
             edges={space.edges}
             handleSelect={this._handleSelect.bind(this)}
             onAddItem={this._handleAddMetric.bind(this)}
+            onMoveItem={this._handleMoveMetric.bind(this)}
             selected={selected}
         >
           {metrics.map((m) => {
