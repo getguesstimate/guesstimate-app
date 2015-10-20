@@ -13,9 +13,10 @@ export default class Grid extends Component{
 
   static propTypes = {
     children: PropTypes.node,
-    handleSelect: PropTypes.func,
-    onAddItem: PropTypes.func,
-    selected: PropTypes.object,
+    handleSelect: PropTypes.func.isRequired,
+    onAddItem: PropTypes.func.isRequired,
+    onMoveItem: PropTypes.func.isRequired,
+    selected: PropTypes.object.isRequired,
     size: PropTypes.object,
   }
 
@@ -58,6 +59,7 @@ export default class Grid extends Component{
         item={item}
         location={location}
         onAddItem={this.props.onAddItem}
+        onMoveItem={this.props.onMoveItem}
         key={'grid-item', location.row, location.column}
         ref={item && item.props.metric.id}
     />
@@ -83,22 +85,22 @@ export default class Grid extends Component{
             return ( <div className='GiantRow' key={row}> {this._row(row, columnCount)} </div>)
           })
         }
-        {
-          this.props.edges.map((edge) => {
-            if (this.refs[edge.input] && this.refs[edge.output]) {
-              let bar =  {
-                input: this.refs[edge.input].getPosition(),
-                output: this.refs[edge.output].getPosition()
-              }
-              return (<Edge input={bar.input} output={bar.output}/>)
-            }
-          })
-        }
       </div>
     )
   }
 }
 
+        //{
+          //this.props.edges.map((edge) => {
+            //if (this.refs[edge.input] && this.refs[edge.output]) {
+              //let bar =  {
+                //input: this.refs[edge.input].getPosition(),
+                //output: this.refs[edge.output].getPosition()
+              //}
+              //return (<Edge input={bar.input} output={bar.output}/>)
+            //}
+          //})
+        //}
 const dim = ({top,left,height,width}) => {
   return {
     top: top + (height/2),

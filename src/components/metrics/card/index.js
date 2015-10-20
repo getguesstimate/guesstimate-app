@@ -17,33 +17,7 @@ import $ from 'jquery'
 import './style.css'
 import {DragSource} from 'react-dnd'
 
-var knightSource = {
-  beginDrag: function (props) {
-    return {id: props.metric.id, dispatch: props.dispatch}
-  },
-  endDrag: function(props, monitor, component) {
-    if (monitor.didDrop()){
-      const item = monitor.getItem();
-      const dropResult = monitor.getDropResult()
-      item.dispatch(changeSelect(dropResult.location))
-      item.dispatch(changeMetric({id: item.id, location: dropResult.location}))
-    }
-  }
-};
-
-function collect(connect, monitor) {
-  return {
-    connectDragSource: connect.dragSource(),
-    isDragging: monitor.isDragging()
-  }
-}
-
 const PT = PropTypes
-
-@DragSource('card', knightSource, (connect, monitor) => ({
-  connectDragSource: connect.dragSource(),
-  isDragging: monitor.isDragging()
-}))
 class Metric extends Component {
   displayName: 'Metric'
 
@@ -72,6 +46,7 @@ class Metric extends Component {
       'editing'
     ]).isRequired
   }
+
   componentDidUpdate() {
     if (!this.props.isSelected && this._isEmpty() && !this.refs.header.hasContent()){
         this.handleRemoveMetric()
@@ -132,18 +107,13 @@ class Metric extends Component {
 
     const anotherFunctionSelected = ((userAction === 'function') && !isSelected)
 
-    const connectDragSource = this.props.connectDragSource;
-    const isDragging = this.props.isDragging;
-    return connectDragSource(
-      <div style={{
-        cursor: 'move'
-      }}
+    return (
+      <div
         className={isSelected ? 'metric grid-item-focus' : 'metric'}
         onKeyDown={this._handlePress.bind(this)}
         onMouseDown={this._handleClick.bind(this)}
         tabIndex='0'
-        className={'metric'}
-        tabIndex='0'
+        ref='dom'
         >
 
         <div className={`card-top metric-container ${metricCardView}`}>

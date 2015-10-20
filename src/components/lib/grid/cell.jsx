@@ -1,21 +1,9 @@
 import React, {Component, PropTypes} from 'react'
 import $ from 'jquery'
 import { DropTarget } from 'react-dnd';
+import ItemCell from './filled-cell.js';
 
-const squareTarget = {
-  drop(props) {
-    return {location: props.location}
-  }
-};
 
-function collect(connect, monitor) {
-  return {
-    connectDropTarget: connect.dropTarget(),
-    isOver: monitor.isOver()
-  };
-}
-
-@DropTarget('card', squareTarget, collect)
 export default class EmptyCell extends Component {
   static propTypes = {
     gridKeyPress: PropTypes.func.isRequired,
@@ -69,6 +57,20 @@ export default class EmptyCell extends Component {
   }
 }
 
+const squareTarget = {
+  drop(props) {
+    return {location: props.location}
+  }
+};
+
+function collect(connect, monitor) {
+  return {
+    connectDropTarget: connect.dropTarget(),
+    isOver: monitor.isOver()
+  };
+}
+
+@DropTarget('card', squareTarget, collect)
 export default class Cell extends Component {
   static propTypes = {
     gridKeyPress: PropTypes.func.isRequired,
@@ -79,7 +81,8 @@ export default class Cell extends Component {
       row: PropTypes.number.isRequired,
       column: PropTypes.number.isRequired
     }).isRequired,
-    onAddItem: PropTypes.func.isRequired
+    onAddItem: PropTypes.func.isRequired,
+    onMoveItem: PropTypes.func.isRequired
   }
 
   getPosition() {
@@ -117,13 +120,7 @@ export default class Cell extends Component {
 
   _cellElement = () => {
     if (this.props.item) {
-      return React.cloneElement(
-        this.props.item,
-        {
-          isSelected: this.props.isSelected,
-          gridKeyPress: this.props.gridKeyPress
-        }
-      )
+      return (<ItemCell {...this.props} />)
     } else {
       return (<EmptyCell {...this.props} />)
     }
