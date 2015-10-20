@@ -29,11 +29,16 @@
 }
 
 .GiantEmptyCell:hover {
-  background-color: #ECF2F5;
+  background-color: red;
 }
+
 .GiantEmptyCell:focus {
   outline: none;
   border: 2px solid #6CAED1;
+}
+
+.GiantEmptyCell.IsOver {
+  background-color: #ECF2F5;
 }
 
 svg.edge {

@@ -6,6 +6,7 @@ import _ from 'lodash'
 import { connect } from 'react-redux';
 import { removeMetric, changeMetric } from 'gModules/metrics/actions.js';
 import { changeGuesstimate } from 'gModules/guesstimates/actions.js';
+import { changeSelect } from 'gModules/selection/actions'
 
 import Histogram from 'gComponents/simulations/histogram'
 import StatTable from 'gComponents/simulations/stat_table'
@@ -14,8 +15,35 @@ import DistributionSummary from './simulation_summary'
 import Header from './header'
 import $ from 'jquery'
 import './style.css'
+import {DragSource} from 'react-dnd'
+
+var knightSource = {
+  beginDrag: function (props) {
+    return {id: props.metric.id, dispatch: props.dispatch}
+  },
+  endDrag: function(props, monitor, component) {
+    if (monitor.didDrop()){
+      const item = monitor.getItem();
+      const dropResult = monitor.getDropResult()
+      item.dispatch(changeSelect(dropResult.location))
+      item.dispatch(changeMetric({id: item.id, location: dropResult.location}))
+    }
+  }
+};
+
+function collect(connect, monitor) {
+  return {
+    connectDragSource: connect.dragSource(),
+    isDragging: monitor.isDragging()
+  }
+}
 
 const PT = PropTypes
+
+@DragSource('card', knightSource, (connect, monitor) => ({
+  connectDragSource: connect.dragSource(),
+  isDragging: monitor.isDragging()
+}))
 class Metric extends Component {
   displayName: 'Metric'
 
@@ -44,7 +72,6 @@ class Metric extends Component {
       'editing'
     ]).isRequired
   }
-
   componentDidUpdate() {
     if (!this.props.isSelected && this._isEmpty() && !this.refs.header.hasContent()){
         this.handleRemoveMetric()
@@ -99,23 +126,27 @@ class Metric extends Component {
     $(this.refs.dom).focus();
   }
 
-  render () {
+  render() {
     const {isSelected, metric, guesstimateForm, userAction} = this.props
     const {canvasState: {metricCardView}} = this.props
 
-    let anotherFunctionSelected = ((userAction === 'function') && !isSelected)
-    return(
-      <div
-          className={isSelected ? 'metric grid-item-focus' : 'metric'}
-          onKeyDown={this._handlePress.bind(this)}
-          onMouseDown={this._handleClick.bind(this)}
-          ref='dom'
-          tabIndex='0'
-      >
+    const anotherFunctionSelected = ((userAction === 'function') && !isSelected)
+
+    const connectDragSource = this.props.connectDragSource;
+    const isDragging = this.props.isDragging;
+    return connectDragSource(
+      <div style={{
+        cursor: 'move'
+      }}
+        className={isSelected ? 'metric grid-item-focus' : 'metric'}
+        onKeyDown={this._handlePress.bind(this)}
+        onMouseDown={this._handleClick.bind(this)}
+        tabIndex='0'
+        className={'metric'}
+        tabIndex='0'
+        >
+
         <div className={`card-top metric-container ${metricCardView}`}>
-          <Histogram height={(metricCardView === 'scientific') ? 75 : 30}
-              simulation={metric.simulation}
-          />
           <Header
               anotherFunctionSelected={anotherFunctionSelected}
               name={metric.name}
@@ -139,16 +170,16 @@ class Metric extends Component {
             <StatTable stats={metric.simulation.stats}/>
           }
         </div>
-         <EditingPane
+        <EditingPane
              guesstimate={metric.guesstimate}
              guesstimateForm={guesstimateForm}
              metricFocus={this.focus.bind(this)}
              metricId={metric.id}
              onChangeGuesstimate={this.handleChangeGuesstimate.bind(this)}
              showIf={isSelected && !_.isUndefined(metric.guesstimate)}
-         />
+        />
       </div>
-    )
+    );
   }
 }
 
