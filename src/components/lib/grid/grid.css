@@ -20,6 +20,11 @@
   z-index: 1;
 }
 
+.GiantFilledCell {
+  display: flex;
+  width: 100%;
+}
+
 .GiantEmptyCell {
   width: 100%;
   border-radius: 3px;
@@ -29,6 +34,7 @@
 }
 
 .GiantEmptyCell:hover {
+  background-color: #ECF2F5;
 }
 
 .GiantEmptyCell:focus {
@@ -37,7 +43,7 @@
 }
 
 .GiantEmptyCell.IsOver {
-  background-color: #ECF2F5;
+  background-color: $grey-4;
 }
 
 svg.edge {

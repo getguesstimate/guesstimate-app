@@ -1,5 +1,5 @@
 const initialState = {
-  metricCardView: 'normal'
+  metricCardView: 'basic'
 }
 
 export default function canvasState(state = initialState, action) {

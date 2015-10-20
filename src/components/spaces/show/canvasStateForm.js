@@ -30,6 +30,7 @@ export default class CanvasStateForm extends Component {
     canvasState: PT.shape({
       metricCardView: PT.oneOf([
         'normal',
+        'basic',
         'scientific',
         'debugging',
       ]).isRequired,
@@ -44,7 +45,7 @@ export default class CanvasStateForm extends Component {
   render() {
     return (
         <StandardDropdownMenu toggleButton={<a><Icon name='eye'/> {this.props.canvasState.metricCardView.capitalizeFirstLetter()} </a>}>
-           {['normal', 'scientific', 'debugging'].map(e => {
+           {['normal', 'basic', 'scientific', 'debugging'].map(e => {
              return (
                <Item
                    key={e}

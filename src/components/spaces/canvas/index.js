@@ -37,6 +37,7 @@ export default class CanvasSpace extends Component{
     canvasState: PT.shape({
       metricCardView: PT.oneOf([
         'normal',
+        'basic',
         'scientific',
         'debugging',
       ]).isRequired,

@@ -1,10 +1,10 @@
 @import './styles/variables.css';
 
 .react-d3-histogram {
-  bottom: -35px;
+  bottom: -33px;
   position: absolute;;
   z-index: -1;
-  left: -7px;
+  left: -5px;
 }
 
 .react-d3-histogram svg {

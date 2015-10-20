@@ -11,8 +11,7 @@
 }
 
 .editing-section {
-  border-top: 2px solid $grey-1;
-  background-color: white;
+  border-top: 1px solid #ddd;
   border-radius: 0 0 2px 2px;
 }
 
