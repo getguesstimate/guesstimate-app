@@ -36,7 +36,6 @@ export function inputMetrics(guesstimate: Guesstimate, dGraph: DGraph): Array<Ob
 export function sample(guesstimate: Guesstimate, dGraph: DGraph, n: number = 1): Object{
   let distribution = toDistribution(guesstimate)
   let _sample = eDistribution.sample(distribution, dGraph, n)
-  console.log(_sample)
   return {
     metric: guesstimate.metric,
     sample: _sample
