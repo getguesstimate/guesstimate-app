@@ -117,7 +117,7 @@ export class FormPropogation {
 
     let simulation = this._savedSimulation()
     const hasErrors = e.simulation.hasErrors(simulation)
-    const hasNoValues = (simulation.sample.values.length === 0)
+    const hasNoValues = (simulation.sample.values && simulation.sample.values.length === 0)
 
     const isObsolete = !isRecentPropogation(this.id, simulation)
     const isComplete = (this.currentStep > (this.steps.length - 1))
