@@ -129,6 +129,7 @@ class Metric extends Component {
               onChange={this.handleChangeMetric.bind(this)}
               readableId={metric.readableId}
               ref='header'
+              isSelected={isSelected}
           />
           <div className='row row1'>
             <div className='col-xs-12 mean'>
