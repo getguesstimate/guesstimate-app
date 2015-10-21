@@ -24,6 +24,10 @@ export default class MetricName extends Component {
     return !_.isEmpty(this.state.value)
   }
 
+  componentWillUnmount() {
+    this.handleSubmit()
+  }
+
   render() {
     return (
         <TextArea className='MetricName'

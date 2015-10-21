@@ -2,6 +2,7 @@
 import React, {Component, PropTypes} from 'react';
 import MetricName from '../name'
 import ShowIf from 'gComponents/utility/showIf'
+import _ from 'lodash'
 
 const MetricReadableIdd = ({readableId}) => (
   <div className='ui label green tiny'>
@@ -23,7 +24,8 @@ export default class MetricHeader extends Component {
   shouldComponentUpdate(nextProps) {
     return ((nextProps.name !== this.props.name) ||
             (nextProps.readableId !== this.props.readableId) ||
-            (nextProps.anotherFunctionSelected !== this.props.anotherFunctionSelected))
+            (nextProps.anotherFunctionSelected !== this.props.anotherFunctionSelected) ||
+            (nextProps.isSelected !== this.props.isSelected))
   }
 
   handleNameChange(name) {
@@ -35,15 +37,17 @@ export default class MetricHeader extends Component {
   }
 
   render () {
-    let {anotherFunctionSelected, name, readableId} = this.props
+    let {anotherFunctionSelected, name, readableId, isSelected} = this.props
     return (
      <div className='row'>
-       <div className='col-xs-12 name'>
-         <MetricName name={name}
-             onChange={this.props.onChange}
-             ref='name'
-         />
-      </div>
+       {(!_.isEmpty(name) || isSelected) &&
+         <div className='col-xs-12 name'>
+           <MetricName name={name}
+               onChange={this.props.onChange}
+               ref='name'
+           />
+        </div>
+       }
        <div className='col-xs-12 name'>
          <MetricReadableId
              readableId={readableId}
