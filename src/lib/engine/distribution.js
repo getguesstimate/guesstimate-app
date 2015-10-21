@@ -9,9 +9,10 @@ export function sample(distribution: Distribution, dGraph: DGraph, n: number = 1
   if (isNormal(distribution)){
     return sampleNormal(distribution, n)
   } else if (isFunction(distribution)){
-    console.log('isFunction')
     let values = functionDistribution.sample(distribution, dGraph, n);
     return values;
+  } else if (isSingleValue(distribution)){
+    return {values: [distribution.value]}
   } else {
     return {errors:['Empty']}
   }
@@ -24,6 +25,10 @@ export function isNormal(distribution: Distribution): boolean{
 export function isFunction(distribution: Distribution): boolean{
   const {input} = distribution;
   return (_.isString(input) && (input !== '') && (input[0] === '='));
+}
+
+export function isSingleValue(distribution: Distribution): boolean{
+  return (_.isNumber(distribution.value));
 }
 
 export function sampleNormal(distribution: Distribution, n: number = 1){
