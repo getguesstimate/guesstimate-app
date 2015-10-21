@@ -35,13 +35,11 @@ export function inputMetrics(guesstimate: Guesstimate, dGraph: DGraph): Array<Ob
 //This obviously could use some clean up.  Maybe, each sample includes the metric info.
 export function sample(guesstimate: Guesstimate, dGraph: DGraph, n: number = 1): Object{
   let distribution = toDistribution(guesstimate)
-  let values = eDistribution.sample(distribution, dGraph, n)
+  let _sample = eDistribution.sample(distribution, dGraph, n)
+  console.log(_sample)
   return {
     metric: guesstimate.metric,
-    sample: {
-      values: values.values,
-      errors: []
-    }
+    sample: _sample
   };
 }
 
