@@ -33,7 +33,7 @@ export default class MetricHeader extends Component {
   }
 
   hasContent() {
-    return this.refs.name.hasContent()
+    return this.refs.name && this.refs.name.hasContent()
   }
 
   render () {
