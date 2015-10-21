@@ -1,4 +1,12 @@
-export * from './metric/generate_readable_id.js'
+import uuid from 'node-uuid';
+import generateRandomReadableId from './metric/generate_random_readable_id.js'
+
+export function create(metricNames) {
+  return {
+    id: uuid.v1(),
+    readableId: generateRandomReadableId(metricNames)
+  }
+}
 
 function findWithId(collection, id, property) {
   if (collection && id && property) {

@@ -1,4 +1,4 @@
-import {denormalize} from '../metric';
+import {denormalize, create} from '../metric';
 import {expect} from 'chai';
 
 describe('metric', () => {
@@ -24,11 +24,20 @@ describe('metric', () => {
       expect(result.guesstimate).to.deep.equal(guesstimates[0]);
       expect(result.simulation).to.deep.equal(simulations[1]);
     });
+
     it('works with only guesstimates', () => {
       metric = {id: 'abc'};
       graph = {metrics: [metric], guesstimates};
       result = denormalize(metric, graph);
       expect(result.guesstimate).to.deep.equal(guesstimates[0]);
+    });
+  });
+
+  describe('create', () => {
+    it('generates uuid and readableId', () => {
+      metric = create([]);
+      expect(metric.id.length).to.equal(36);
+      expect(metric.readableId.length).to.equal(2);
     });
   });
 });
