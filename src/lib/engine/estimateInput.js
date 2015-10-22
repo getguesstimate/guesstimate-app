@@ -25,14 +25,14 @@ export function toDistribution(input){
     if (high > low){
       let mean = low + ((high - low) / 2);
       let stdev = (high-mean);
-      return {mean: parseFloat(mean), stdev: parseFloat(mean)};
+      return {mean, stdev};
 
     } else {
       return {mean: null, stdev:null, errors: ['Estimate: [low]->[high]: High must be greater than low. ']};
     }
 
   } else if (isPoint(input)){
-    return {value: parseFloat(input), stdev: 0};
+    return {value: input};
 
   } else if (input == ''){
     return {mean: null, stdev: null};
