@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import e from 'gEngine/engine';
 import async from 'async'
-import {FormPropogation} from './formPropogation'
+import {GraphPropagation} from '../../lib/propogation/graph-propogation.js'
 
 function runSimulation(dispatch, getState, metricId, n) {
   const graph = e.graph.create(getState());
@@ -13,7 +13,7 @@ function runSimulation(dispatch, getState, metricId, n) {
 
 export function runFormSimulations(metricId) {
   return (dispatch, getState) => {
-    (new FormPropogation(dispatch, getState, metricId)).run()
+    (new GraphPropagation(dispatch, getState, metricId)).run()
   }
 }
 
