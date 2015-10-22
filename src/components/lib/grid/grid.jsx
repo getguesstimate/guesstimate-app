@@ -10,7 +10,6 @@ import {keycodeToDirection, DirectionToLocation} from './utils'
 
 let upto = (n) => Array.apply(null, {length: n}).map(Number.call, Number)
 
-@Dimensions()
 export default class Grid extends Component{
   displayName: 'Grid'
 
@@ -76,18 +75,11 @@ export default class Grid extends Component{
     )
   }
 
-  _columnWidth() {
-    return (this.props.containerWidth / this._columnCount())
-  }
-
   render() {
     const rowCount = this._rowCount()
     const columnCount = this._columnCount()
 
-    const rowHeights = upto(rowCount).map(rowI => _.get(this.refs[`row-${rowI}`], 'offsetHeight'))
-    const columnWidth = this._columnWidth()
     const {edges} = this.props
-
     return (
       <div
           className='GiantGrid'
@@ -98,14 +90,49 @@ export default class Grid extends Component{
             return ( <div className='GiantRow' key={row} ref={`row-${row}`}> {this._row(row, columnCount)} </div>)
           })
         }
-        {_.get(rowHeights, 'length') && _.get(edges, 'length') && columnWidth &&
-          <Edges
-              columnWidth={columnWidth}
+          <EdgeContainer
               edges={this.props.edges}
-              rowHeights={rowHeights}
+              refs={this.refs}
+              rowCount={rowCount}
            />
-         }
       </div>
+    )
+  }
+}
+
+@Dimensions()
+class EdgeContainer extends Component {
+  displayName: 'EdgeContainer'
+
+  state = {
+    columnWidth: null
+  }
+
+  componentWillUpdate(newProps) {
+    if (newProps.containerWidth !== this.props.containerWidth){
+      this.getColumnWidth()
+    }
+  }
+
+  componentWillMount() {
+    this.getColumnWidth()
+  }
+
+  getColumnWidth() {
+    const width = $('.GiantCell') && $('.GiantCell')[0] && $('.GiantCell')[0].offsetWidth
+    this.setState({columnWidth: width})
+  }
+
+  render() {
+    const rowHeights = upto(this.props.rowCount).map(rowI => _.get(this.props.refs[`row-${rowI}`], 'offsetHeight'))
+    const edges = this.props.edges
+    const {columnWidth} = this.state
+    return (
+      <Edges
+          edges={this.props.edges}
+          rowHeights={rowHeights}
+          columnWidth={columnWidth}
+       />
     )
   }
 }
@@ -130,13 +157,14 @@ class Edges extends Component {
   }
 
   render() {
-    //const edges = this.props.edges.map(e => { return {input: this._pointCoords(e.input), output: this._pointCoords(e.output)} })
     return (
-      <div>
-        {this.props.edges.map(e => {
-          const coords = {input: this._pointCoords(e.input), output: this._pointCoords(e.output)}
-          return (<Edge edge={coords} key={JSON.stringify(e)}/>)
-        })}
+      <div className='GiantGrid--Arrows'>
+          {_.get(this.props.edges, 'length') && _.get(this.props.rowHeights, 'length') && this.props.columnWidth &&
+            this.props.edges.map(e => {
+              const coords = {input: this._pointCoords(e.input), output: this._pointCoords(e.output)}
+              return (<Edge edge={coords} key={JSON.stringify(e)}/>)
+            })
+          }
       </div>
     )
   }
