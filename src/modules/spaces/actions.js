@@ -95,7 +95,8 @@ export function update(spaceId) {
   return function(dispatch, getState) {
     let state = getState();
     let space = e.space.get(state.spaces, spaceId)
-    space = e.space.withGraph(space, {metrics: state.metrics, guesstimates: state.guesstimates});
+    space = e.space.withGraph(space, {metrics: state.metrics, guesstimates: state.guesstimates, simulations: state.simulations});
+    space.graph.simulations = space.graph.simulations.map(s => _.omit(s, 'sample'))
 
     const action = standardActionCreators.updateStart(space);
     dispatch(action)
