@@ -55,3 +55,7 @@ svg.edge {
 svg.edge polyline{
   stroke: #A4B9D0;
 }
+
+.GiantGrid--Arrows {
+   width: 100%;
+}
