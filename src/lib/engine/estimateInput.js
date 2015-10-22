@@ -32,7 +32,7 @@ export function toDistribution(input){
     }
 
   } else if (isPoint(input)){
-    return {value: input};
+    return {value: parseFloat(input)};
 
   } else if (input == ''){
     return {mean: null, stdev: null};
