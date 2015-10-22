@@ -101,13 +101,16 @@ export default class CanvasSpace extends Component{
     const space = this.props.denormalizedSpace
     const {metrics} = space
     const {metricCardView} = this.props.canvasState
+
+    const metricIdToLocation = (metricId) => metrics.find(m => m.id === metricId).location
+    const edges = space.edges.map(e => {return {input: metricIdToLocation(e.input), output: metricIdToLocation(e.output)}})
     return (
       <div className="canvas-space">
         {(metricCardView === 'debugging') &&
           <JSONTree data={this.props}/>
         }
         <Grid
-            edges={space.edges}
+            edges={edges}
             handleSelect={this._handleSelect.bind(this)}
             onAddItem={this._handleAddMetric.bind(this)}
             onMoveItem={this._handleMoveMetric.bind(this)}
