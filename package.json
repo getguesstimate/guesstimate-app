@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "BUILD_DEV=1 NODE_ENV=development API_ENV=production webpack-dev-server",
-    "start": "BUILD_DEV=0 NODE_ENV=development API_ENV=production webpack-dev-server",
+    "start": "BUILD_DEV=0 NODE_ENV=development API_ENV=development webpack-dev-server",
     "build": "BUILD_DEV=0 API_ENV=production webpack",
     "deploy": "surge -p public -d alpha.getguesstimate.com",
     "stage": "surge -p public -d guesstimate.surge.sh",
@@ -94,6 +94,7 @@
     "redux-form": "^2.0.0",
     "redux-thunk": "^1.0.0",
     "reselect": "^1.1.0",
+    "seamless-immutable": "^4.0.2",
     "standard": "^5.3.1",
     "stats-lite": "^1.0",
     "stochator": "^0.4.0",

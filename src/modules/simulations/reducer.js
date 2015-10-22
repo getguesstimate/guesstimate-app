@@ -22,6 +22,9 @@ function withStats(simulation){
 let sim = null;
 export default function simulations(state = [], action = null) {
   switch (action.type) {
+  case 'SPACES_FETCH_SUCCESS':
+    let newSimulations = _.flatten(action.records.map(e => _.get(e, 'graph.simulations'))).filter(e => e)
+    return [...state, ...newSimulations]
   case 'DELETE_SIMULATIONS':
     return state.filter(y => !_.includes(action.metricIds, y.metric))
   case 'UPDATE_SIMULATION':
