@@ -1,6 +1,8 @@
 'use strict';
 import React, {Component, PropTypes} from 'react'
 import _ from 'lodash'
+import $ from 'jquery'
+import Dimensions from 'gComponents/utility/react-dimensions';
 
 import styles from './grid.css'
 import Cell from './cell'
@@ -8,6 +10,7 @@ import {keycodeToDirection, DirectionToLocation} from './utils'
 
 let upto = (n) => Array.apply(null, {length: n}).map(Number.call, Number)
 
+@Dimensions()
 export default class Grid extends Component{
   displayName: 'Grid'
 
@@ -61,7 +64,7 @@ export default class Grid extends Component{
         onAddItem={this.props.onAddItem}
         onMoveItem={this.props.onMoveItem}
         key={'grid-item', location.row, location.column}
-        ref={item && item.props.metric.id}
+        ref={`cell-${location.row}-${location.column}`}
     />
     )
   }
@@ -72,9 +75,19 @@ export default class Grid extends Component{
       })
     )
   }
+
+  _columnWidth() {
+    return (this.props.containerWidth / this._columnCount())
+  }
+
   render() {
     const rowCount = this._rowCount()
     const columnCount = this._columnCount()
+
+    const rowHeights = upto(rowCount).map(rowI => _.get(this.refs[`row-${rowI}`], 'offsetHeight'))
+    const columnWidth = this._columnWidth()
+    const {edges} = this.props
+
     return (
       <div
           className='GiantGrid'
@@ -82,30 +95,50 @@ export default class Grid extends Component{
       >
         {
           upto(rowCount).map((row) => {
-            return ( <div className='GiantRow' key={row}> {this._row(row, columnCount)} </div>)
+            return ( <div className='GiantRow' key={row} ref={`row-${row}`}> {this._row(row, columnCount)} </div>)
           })
         }
-
+        {_.get(rowHeights, 'length') && _.get(edges, 'length') && columnWidth &&
+          <Edges
+              columnWidth={columnWidth}
+              edges={this.props.edges}
+              rowHeights={rowHeights}
+           />
+         }
       </div>
     )
   }
 }
 
-        //{
-          //this.props.edges.map((edge) => {
-            //if (this.refs[edge.input] && this.refs[edge.output]) {
-              //let bar =  {
-                //input: this.refs[edge.input].getPosition(),
-                //output: this.refs[edge.output].getPosition()
-              //}
-              //return (<Edge input={bar.input} output={bar.output}/>)
-            //}
-          //})
-        //}
-const dim = ({top,left,height,width}) => {
-  return {
-    top: top + (height/2),
-    left: left + (width/2)
+class Edges extends Component {
+  displayName: 'Edges'
+
+  _pointCoords({row, column}) {
+    return {y: this._rowY(row), x: this._columnX(column)}
+  }
+
+  _rowY(row) {
+    if ((row !== undefined) && this.props.rowHeights){
+      const above = upto(row+1).map(r => this.props.rowHeights[r]).reduce((a,b) => a + b)
+      const middle = (parseFloat(this.props.rowHeights[row])/2)
+      return above - middle
+    }
+  }
+
+  _columnX(column) {
+    return this.props.columnWidth && (column * this.props.columnWidth) + (this.props.columnWidth / 2)
+  }
+
+  render() {
+    //const edges = this.props.edges.map(e => { return {input: this._pointCoords(e.input), output: this._pointCoords(e.output)} })
+    return (
+      <div>
+        {this.props.edges.map(e => {
+          const coords = {input: this._pointCoords(e.input), output: this._pointCoords(e.output)}
+          return (<Edge edge={coords} key={JSON.stringify(e)}/>)
+        })}
+      </div>
+    )
   }
 }
 
@@ -113,15 +146,15 @@ class Edge extends Component{
   displayName: 'Edge'
 
   shouldComponentUpdate(nextProps) {
-    return (this.props !== nextProps)
+    return (!_.isEqual(this.props !== nextProps))
   }
 
   render() {
-    const input = dim(this.props.input)
-    const output = dim(this.props.output)
-    const maxWidth = Math.max(input.left, output.left) + 10
-    const maxHeight = Math.max(input.top, output.top) + 10
-    const points = `${input.left},${input.top + 5} ${output.left},${output.top + 5}`
+    const input = this.props.edge.input;
+    const output = this.props.edge.output;
+    const maxWidth = Math.max(input.x, output.x) + 10
+    const maxHeight = Math.max(input.y, output.y) + 10
+    const points = `${input.x},${input.y + 5} ${output.x},${output.y + 5}`
     return (
         <svg height={maxHeight} width={maxWidth} className='edge'>
         <polyline
