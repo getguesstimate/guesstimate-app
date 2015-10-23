@@ -52,10 +52,23 @@ svg.edge {
   z-index: 0;
 }
 
-svg.edge polyline{
-  stroke: #C2C8CF;
+svg.edge  path.basic-arrow {
+  stroke: #C4D3E5;
+  stroke-linecap:'round';
+  stroke-width: '5';
+  stroke-linejoin: 'round';
+  stroke-dasharray:'5,5';
 }
 
 .GiantGrid--Arrows {
    width: 100%;
+}
+.foobar {
+   fill: #000;
+   stroke: red;
+}
+
+.arrow {
+  stroke-width: 0;
+  fill: #C4D3E5;
 }
