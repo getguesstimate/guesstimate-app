@@ -80,6 +80,7 @@ export default class Grid extends Component{
     const columnCount = this._columnCount()
 
     const {edges} = this.props
+
     return (
       <div
           className='GiantGrid'
@@ -141,7 +142,7 @@ class EdgeContainer extends Component {
   }
 }
 
-const PADDING_WIDTH = 2
+const PADDING_WIDTH = 3
 
 class Edges extends Component {
   displayName: 'Edges'
@@ -163,8 +164,8 @@ class Edges extends Component {
 
   _columnX(column) {
     const {columnWidth} = this.props
-    let left = columnWidth && (column * columnWidth)
-    let right = left && (left + columnWidth)
+    let left = column * columnWidth
+    let right = left + columnWidth
     left += PADDING_WIDTH
     right -= PADDING_WIDTH
     return {left, right}
@@ -174,10 +175,19 @@ class Edges extends Component {
     return Object.assign(this._rowY(row), this._columnX(column))
   }
 
+  defs() {
+    return "<marker id=\"markerArrow\" markerWidth=\"3\" markerHeight=\"3\" \
+             refx=\"3\" refy=\"1.5\" orient=\"auto\"> \
+            <path d=\"M 0,0 V 3 L3,1.5 Z\" class=\"arrow\"/> \
+           </marker>";
+  }
+
   render() {
     return (
       <div className='GiantGrid--Arrows'>
         <svg height={this.props.containerHeight} width={this.props.containerWidth} className='edge'>
+          <defs dangerouslySetInnerHTML={{__html: this.defs()}}/>
+
           {_.get(this.props.edges, 'length') && _.get(this.props.rowHeights, 'length') && this.props.columnWidth &&
             this.props.edges.map(e => {
               const coords = {input: this._toRectangle(e.input), output: this._toRectangle(e.output)}
@@ -208,7 +218,7 @@ class Rectangle {
   rightPoint() { return {x: this.right, y: this._yMiddle()} }
 
   positionFrom(otherRectangle) {
-    const sameRow = (otherRectangle.top == this.top)
+    const sameRow = (Math.abs(otherRectangle.top - this.top) < 200)
     if (sameRow) {
       if (this.right > otherRectangle.right) {
         return 'ON_LEFT'
@@ -226,7 +236,6 @@ class Rectangle {
 
   showPosition(otherRectangle) {
     const positionFrom = this.positionFrom(otherRectangle)
-    console.log(positionFrom)
     switch (positionFrom) {
     case 'ON_LEFT':
       return this.leftPoint()
@@ -252,13 +261,28 @@ class Edge extends Component{
     //const points = `${input.left},${input.top} ${input.right},${input.top} ${input.right},${input.bottom} ${input.left},${input.bottom}`
     const inputPoints = (new Rectangle(input)).showPosition(output)
     const outputPoints = (new Rectangle(output)).showPosition(input)
-    const points = `${inputPoints.x},${inputPoints.y} ${outputPoints.x},${outputPoints.y}`
+    let points = null
+
+    points = `M${inputPoints.x},${inputPoints.y} L${outputPoints.x-2} ,${outputPoints.y-2}`
+
+    //if (inputPoints.y == outputPoints.y){
+      //points = `M${inputPoints.x},${inputPoints.y} L${outputPoints.x},${outputPoints.y}`
+    //} else {
+      //if (inputPoints.y > outputPoints.y) {
+        //points = `M${inputPoints.x},${inputPoints.y} L${inputPoints.x},${inputPoints.y - 2} L${outputPoints.x},${inputPoints.y - 2} L${outputPoints.x},${outputPoints.y}`
+      //} else {
+        //points = `M${inputPoints.x},${inputPoints.y} L${inputPoints.x},${inputPoints.y + 2} L${outputPoints.x},${inputPoints.y + 2} L${outputPoints.x},${outputPoints.y}`
+      //}
+    //}
 
     return (
-        <polyline
-            points={points}
-            strokeWidth="2"
-            fill="none" />
+        <path
+            className='basic-arrow'
+            d={points}
+            strokeWidth="3"
+            markerEnd='url(#markerArrow)'
+            fill="none"
+        />
     )
   }
 }
