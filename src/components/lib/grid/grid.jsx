@@ -100,6 +100,7 @@ export default class Grid extends Component{
   }
 }
 
+//Listens to events for changes to row heights and column width
 @Dimensions()
 class EdgeContainer extends Component {
   displayName: 'EdgeContainer'
@@ -127,15 +128,20 @@ class EdgeContainer extends Component {
     const rowHeights = upto(this.props.rowCount).map(rowI => _.get(this.props.refs[`row-${rowI}`], 'offsetHeight'))
     const edges = this.props.edges
     const {columnWidth} = this.state
+    const containerHeight = rowHeights && rowHeights.length && rowHeights.reduce((a,b) => a + b)
     return (
       <Edges
           edges={this.props.edges}
           rowHeights={rowHeights}
           columnWidth={columnWidth}
+          containerWidth={this.props.containerWidth}
+          containerHeight={containerHeight}
        />
     )
   }
 }
+
+const PADDING_WIDTH = 2
 
 class Edges extends Component {
   displayName: 'Edges'
@@ -146,27 +152,91 @@ class Edges extends Component {
 
   _rowY(row) {
     if ((row !== undefined) && this.props.rowHeights){
-      const above = upto(row+1).map(r => this.props.rowHeights[r]).reduce((a,b) => a + b)
-      const middle = (parseFloat(this.props.rowHeights[row])/2)
-      return above - middle
+      let rowHeights = [0, ...this.props.rowHeights]
+      let top = upto(row+1).map(r => rowHeights[r]).reduce((a,b) => a + b)
+      let bottom = top + this.props.rowHeights[row]
+      top += PADDING_WIDTH
+      bottom -= PADDING_WIDTH
+      return {top, bottom}
     }
   }
 
   _columnX(column) {
-    return this.props.columnWidth && (column * this.props.columnWidth) + (this.props.columnWidth / 2)
+    const {columnWidth} = this.props
+    let left = columnWidth && (column * columnWidth)
+    let right = left && (left + columnWidth)
+    left += PADDING_WIDTH
+    right -= PADDING_WIDTH
+    return {left, right}
+  }
+
+  _toRectangle({row, column}) {
+    return Object.assign(this._rowY(row), this._columnX(column))
   }
 
   render() {
     return (
       <div className='GiantGrid--Arrows'>
+        <svg height={this.props.containerHeight} width={this.props.containerWidth} className='edge'>
           {_.get(this.props.edges, 'length') && _.get(this.props.rowHeights, 'length') && this.props.columnWidth &&
             this.props.edges.map(e => {
-              const coords = {input: this._pointCoords(e.input), output: this._pointCoords(e.output)}
+              const coords = {input: this._toRectangle(e.input), output: this._toRectangle(e.output)}
               return (<Edge edge={coords} key={JSON.stringify(e)}/>)
             })
           }
+        </svg>
       </div>
     )
+  }
+}
+
+//const isVertical = dd
+class Rectangle {
+  constructor(locations){
+    this.left = locations.left
+    this.right = locations.right
+    this.top = locations.top
+    this.bottom = locations.bottom
+  }
+
+  _xMiddle() { return (this.left + ((this.right - this.left)/2)) }
+  _yMiddle() {  return (this.top + ((this.bottom - this.top)/2)) }
+
+  topPoint() { return {x: this._xMiddle(), y: this.top} }
+  bottomPoint() { return {x: this._xMiddle(), y: this.bottom} }
+  leftPoint() { return {x: this.left, y: this._yMiddle()} }
+  rightPoint() { return {x: this.right, y: this._yMiddle()} }
+
+  positionFrom(otherRectangle) {
+    const sameRow = (otherRectangle.top == this.top)
+    if (sameRow) {
+      if (this.right > otherRectangle.right) {
+        return 'ON_LEFT'
+      } else {
+        return 'ON_RIGHT'
+      }
+    } else {
+      if (this.top > otherRectangle.top) {
+        return 'ON_TOP'
+      } else {
+        return 'ON_BOTTOM'
+      }
+    }
+  }
+
+  showPosition(otherRectangle) {
+    const positionFrom = this.positionFrom(otherRectangle)
+    console.log(positionFrom)
+    switch (positionFrom) {
+    case 'ON_LEFT':
+      return this.leftPoint()
+    case 'ON_RIGHT':
+      return this.rightPoint()
+    case 'ON_TOP':
+      return this.topPoint()
+    case 'ON_BOTTOM':
+      return this.bottomPoint()
+    }
   }
 }
 
@@ -178,18 +248,17 @@ class Edge extends Component{
   }
 
   render() {
-    const input = this.props.edge.input;
-    const output = this.props.edge.output;
-    const maxWidth = Math.max(input.x, output.x) + 10
-    const maxHeight = Math.max(input.y, output.y) + 10
-    const points = `${input.x},${input.y + 5} ${output.x},${output.y + 5}`
+    const {input, output}  = this.props.edge;
+    //const points = `${input.left},${input.top} ${input.right},${input.top} ${input.right},${input.bottom} ${input.left},${input.bottom}`
+    const inputPoints = (new Rectangle(input)).showPosition(output)
+    const outputPoints = (new Rectangle(output)).showPosition(input)
+    const points = `${inputPoints.x},${inputPoints.y} ${outputPoints.x},${outputPoints.y}`
+
     return (
-        <svg height={maxHeight} width={maxWidth} className='edge'>
         <polyline
             points={points}
-            strokeWidth="5"
+            strokeWidth="2"
             fill="none" />
-        </svg>
     )
   }
 }
