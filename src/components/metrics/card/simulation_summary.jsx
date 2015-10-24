@@ -6,7 +6,7 @@ import ShowIf from 'gComponents/utility/showIf';
 function formatStat(n){
   if (n) {
     let value = parseFloat(n);
-    return numeral(value).format('0a');
+    return numeral(value).format('0.0a');
   }
 }
 
