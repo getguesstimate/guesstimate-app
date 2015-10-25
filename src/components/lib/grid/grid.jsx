@@ -1,7 +1,6 @@
 'use strict';
 import React, {Component, PropTypes} from 'react'
 import _ from 'lodash'
-import $ from 'jquery'
 
 import './grid.css'
 import Cell from './cell'
@@ -19,6 +18,7 @@ export default class Grid extends Component{
 
   static propTypes = {
     children: PropTypes.node,
+    edges: PropTypes.array.isRequired,
     handleSelect: PropTypes.func.isRequired,
     onAddItem: PropTypes.func.isRequired,
     onMoveItem: PropTypes.func.isRequired,
@@ -37,9 +37,9 @@ export default class Grid extends Component{
   }
 
   size(){
-    const lowestMetric = !this.props.children.length ? 2 : Math.max(...this.props.children.map(g => parseInt(g.location.row))) + 2
+    const lowestItem = !this.props.children.length ? 2 : Math.max(...this.props.children.map(g => parseInt(g.location.row))) + 2
     const selected = parseInt(this.props.selected.row) + 2
-    const height = Math.max(3, lowestMetric, selected) || 3;
+    const height = Math.max(3, lowestItem, selected) || 3;
     return {columns: 6, rows: height}
   }
 
@@ -91,14 +91,22 @@ export default class Grid extends Component{
       >
         {
           upto(rowCount).map((row) => {
-            return ( <div className='GiantRow' key={row} ref={`row-${row}`}> {this._row(row, columnCount)} </div>)
+            return (
+              <div
+                  className='GiantRow'
+                  key={row}
+                  ref={`row-${row}`}
+              >
+                {this._row(row, columnCount)}
+              </div>
+            )
           })
         }
-          <EdgeContainer
-              edges={edges}
-              refs={this.refs}
-              rowCount={rowCount}
-           />
+        <EdgeContainer
+            edges={edges}
+            refs={this.refs}
+            rowCount={rowCount}
+        />
       </div>
     )
   }
