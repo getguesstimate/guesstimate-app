@@ -41,11 +41,10 @@ export default class EmptyCell extends Component {
   }
 
   render() {
-    const {connectDropTarget, isOver} = this.props
+    const {connectDropTarget} = this.props
 
     let className = 'GiantEmptyCell grid-item-focus'
-    className += isOver ? ' IsOver' : ''
-    return connectDropTarget(
+    return (
       <div
           className={className}
           onKeyDown={this._handleKeyPress.bind(this)}
@@ -82,7 +81,9 @@ export default class Cell extends Component {
       column: PropTypes.number.isRequired
     }).isRequired,
     onAddItem: PropTypes.func.isRequired,
-    onMoveItem: PropTypes.func.isRequired
+    onMoveItem: PropTypes.func.isRequired,
+    connectDropTarget: PropTypes.func.isRequired,
+    isOver: PropTypes.bool.isRequired
   }
 
   getPosition() {
@@ -129,13 +130,13 @@ export default class Cell extends Component {
   _classes = () => {
     let classes = 'GiantCell'
     classes += (this.props.isSelected ? ' selected' : ' nonSelected')
+    classes += this.props.isOver ? ' IsOver' : ''
     return classes
   }
 
   render = () => {
-    return (
+    return this.props.connectDropTarget(
       <div className={this._classes()}
-          ref='dom'
       >
       {this._cellElement()}
       </div>

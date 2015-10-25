@@ -5,7 +5,7 @@ var cardSource = {
   beginDrag: function (props) {
     return {location: props.location}
   },
-  endDrag: function(props, monitor, component) {
+  endDrag: function(props, monitor) {
     if (monitor.didDrop()){
       const item = monitor.getItem();
       const dropResult = monitor.getDropResult()
@@ -33,17 +33,20 @@ export default class ItemCell extends Component {
 
   item() {
     return React.cloneElement(
-          this.props.item,
-          {
-            isSelected: this.props.isSelected,
-            gridKeyPress: this.props.gridKeyPress
-          }
-        )
+        this.props.item,
+        {
+          isSelected: this.props.isSelected,
+          gridKeyPress: this.props.gridKeyPress
+        }
+    )
   }
+
   render = () => {
+    let classes = 'GiantFilledCell'
+    classes += this.props.isDragging ? ' isDragging' : ''
     return this.props.connectDragSource(
-      <div className='GiantFilledCell'>
-      {!this.props.isDragging && this.item()}
+      <div className={classes}>
+        {!this.props.isDragging && this.item()}
       </div>
     )
   }
