@@ -42,8 +42,9 @@
   border: 2px solid #6CAED1;
 }
 
-.GiantEmptyCell.IsOver {
+.IsOver .GiantEmptyCell, .IsOver .isDragging {
   background-color: $grey-4;
+  border-radius: 3px;
 }
 
 svg.edge {
@@ -62,10 +63,6 @@ svg.edge  path.basic-arrow {
 
 .GiantGrid--Arrows {
    width: 100%;
-}
-.foobar {
-   fill: #000;
-   stroke: red;
 }
 
 .arrow {
