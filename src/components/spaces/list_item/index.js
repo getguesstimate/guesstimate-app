@@ -26,7 +26,7 @@ let SpaceListItem = ({space}) => (
     <div className='row'>
       <div className='col-xs-12'>
         {space.metrics.filter(m => !!m.name).map( m => {
-          return (<MetricLabel metric={m}/>)
+          return (<MetricLabel metric={m} key={m.id}/>)
         })}
       </div>
     </div>
