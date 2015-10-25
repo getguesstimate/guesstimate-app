@@ -16,10 +16,6 @@ import { userActionSelector } from './canvas-state-selector';
 import { denormalizedSpaceSelector } from '../denormalized-space-selector.js';
 import JSONTree from 'react-json-tree'
 
-import HTML5Backend from 'react-dnd-html5-backend';
-import { DragDropContext } from 'react-dnd';
-
-
 function mapStateToProps(state) {
   return {
     canvasState: state.canvasState,
@@ -28,7 +24,6 @@ function mapStateToProps(state) {
 }
 
 const PT = PropTypes;
-@DragDropContext(HTML5Backend)
 @connect(mapStateToProps)
 @connect(userActionSelector)
 @connect(denormalizedSpaceSelector)
