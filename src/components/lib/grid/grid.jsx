@@ -8,8 +8,12 @@ import styles from './grid.css'
 import Cell from './cell'
 import {keycodeToDirection, DirectionToLocation} from './utils'
 
+import HTML5Backend from 'react-dnd-html5-backend';
+import { DragDropContext } from 'react-dnd';
+
 let upto = (n) => Array.apply(null, {length: n}).map(Number.call, Number)
 
+@DragDropContext(HTML5Backend)
 export default class Grid extends Component{
   displayName: 'Grid'
 
