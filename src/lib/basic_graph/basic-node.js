@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 export default class BasicNode {
   constructor(id, graph) {
     this.id = id;

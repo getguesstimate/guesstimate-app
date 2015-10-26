@@ -1,12 +1,10 @@
 import React, {Component, PropTypes} from 'react'
 import ReactDOM from 'react-dom'
 import JSONTree from 'react-json-tree'
-import _ from 'lodash'
 
 import { connect } from 'react-redux';
 import { removeMetric, changeMetric } from 'gModules/metrics/actions.js';
 import { changeGuesstimate } from 'gModules/guesstimates/actions.js';
-import { changeSelect } from 'gModules/selection/actions'
 
 import Histogram from 'gComponents/simulations/histogram'
 import StatTable from 'gComponents/simulations/stat_table'
@@ -15,7 +13,6 @@ import DistributionSummary from './simulation_summary'
 import Header from './header'
 import $ from 'jquery'
 import './style.css'
-import {DragSource} from 'react-dnd'
 
 const PT = PropTypes
 class Metric extends Component {
@@ -110,26 +107,26 @@ class Metric extends Component {
 
     return (
       <div
-        className={isSelected ? 'metric grid-item-focus' : 'metric'}
-        onKeyDown={this._handlePress.bind(this)}
-        onMouseDown={this._handleClick.bind(this)}
-        tabIndex='0'
-        ref='dom'
-        >
+          className={isSelected ? 'metric grid-item-focus' : 'metric'}
+          ref='dom'
+          onKeyDown={this._handlePress.bind(this)}
+          onMouseDown={this._handleClick.bind(this)}
+          tabIndex='0'
+      >
 
         <div className={`card-top metric-container ${metricCardView}`}>
           {(metricCardView !== 'basic') &&
             <Histogram height={(metricCardView === 'scientific') ? 75 : 30}
-              simulation={metric.simulation}
+                simulation={metric.simulation}
             />
           }
           <Header
               anotherFunctionSelected={anotherFunctionSelected}
+              isSelected={isSelected}
               name={metric.name}
               onChange={this.handleChangeMetric.bind(this)}
               readableId={metric.readableId}
               ref='header'
-              isSelected={isSelected}
           />
           <div className='row row1'>
             <div className='col-xs-12 mean'>
@@ -148,12 +145,12 @@ class Metric extends Component {
           }
         </div>
         <EditingPane
-             guesstimate={metric.guesstimate}
-             guesstimateForm={guesstimateForm}
-             metricFocus={this.focus.bind(this)}
-             metricId={metric.id}
-             onChangeGuesstimate={this.handleChangeGuesstimate.bind(this)}
-             showIf={isSelected && !_.isUndefined(metric.guesstimate)}
+            guesstimate={metric.guesstimate}
+            guesstimateForm={guesstimateForm}
+            metricFocus={this.focus.bind(this)}
+            metricId={metric.id}
+            onChangeGuesstimate={this.handleChangeGuesstimate.bind(this)}
+            showIf={isSelected && !_.isUndefined(metric.guesstimate)}
         />
       </div>
     );

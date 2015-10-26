@@ -1,21 +1,7 @@
 import Auth0Lock from 'auth0-lock'
 import {me} from 'gEngine/engine'
-import _ from 'lodash'
 import * as userActions from 'gModules/users/actions.js'
 import * as auth0Constants from 'servers/auth0/constants.js'
-
-const signXCallback = (dispatch) => (err, profile, token) => {
-  if (err) {
-    console.log("Error logging in", err)
-  } else {
-    if (!_.get(profile, 'user_metadata.guesstimateId')) {
-      const {name, username, picture, user_id} = profile
-      dispatch(userActions.create({name, username, picture, auth0_id: user_id}))
-    }
-
-    dispatch(auth0MeLoaded(profile, token))
-  }
-}
 
 export const signIn = () => {
     return (dispatch, getState) => lock.showSignin({
@@ -69,7 +55,7 @@ export const init = () => {
   }
 }
 
-export function updateWithApiId(id) {
+export function updateWithApiId() {
   return { type: 'UpdateWithApiId' };
 }
 

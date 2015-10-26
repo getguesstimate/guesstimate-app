@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import math from 'mathjs';
 
 let metricSample = (m) =>  _.sample(m.simulation.sample.values);
@@ -26,8 +25,6 @@ export function inputToSample(metrics) {
 export function inputMetricsReady(metrics){
   return _.every(metrics, (m) => !_.isUndefined(m.simulation));
 }
-
-let time = null
 
 const shorten = (str) => { return str.substring(1, str.length); };
 export function sample(functionInput, dGraph, n){

@@ -2,7 +2,6 @@ import React, {Component, PropTypes} from 'react'
 import Icon from'react-fa'
 import { connect } from 'react-redux';
 import SpaceList from 'gComponents/spaces/list'
-import _ from 'lodash'
 import './main.css'
 
 function mapStateToProps(state) {

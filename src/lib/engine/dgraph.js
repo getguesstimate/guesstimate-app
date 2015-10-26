@@ -1,7 +1,4 @@
 /* @flow */
-
-import _ from 'lodash'
-
 import * as graph from './graph';
 import * as _guesstimate from './guesstimate';
 import type {DGraph, Sample} from './types.js'
@@ -9,8 +6,6 @@ import type {DGraph, Sample} from './types.js'
 //borrowing a function from the graph library
 const metric = graph.metric;
 
-// TODO
-// The guesstimate should denormalize if necessary
 export function runSimulation(dGraph:DGraph, metricId:string, n:number): Sample{
   let m = metric(dGraph, metricId);
   return _guesstimate.sample(m.guesstimate, dGraph, n);

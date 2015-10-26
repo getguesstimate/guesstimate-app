@@ -16,7 +16,10 @@ let SpaceListItem = ({space}) => (
         {space.user &&
           <div className='col-xs-6'>
             <div className='user-tag'>
-              <img className='ui avatar image' src={space.user.picture}/>
+              <img
+                  className='ui avatar image'
+                  src={space.user.picture}
+              />
               {space.user.name}
             </div>
           </div>

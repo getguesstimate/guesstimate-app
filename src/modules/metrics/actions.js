@@ -1,5 +1,4 @@
 import e from 'gEngine/engine';
-import uuid from 'node-uuid';
 
 export function addMetric(item) {
   return (dispatch, getState) => {
