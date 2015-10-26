@@ -1,7 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 import Icon from'react-fa'
 import { connect } from 'react-redux';
-import {ListGroup, ListGroupItem} from 'react-bootstrap/lib';
 import SpaceList from 'gComponents/spaces/list'
 import _ from 'lodash'
 import './main.css'

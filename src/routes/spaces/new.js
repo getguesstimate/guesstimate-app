@@ -3,7 +3,6 @@ import _ from 'lodash'
 import * as spaceActions from 'gModules/spaces/actions.js'
 import { connect } from 'react-redux';
 import {connectReduxForm} from 'redux-form';
-import {Input, ButtonToolbar} from 'react-bootstrap/lib'
 
 function validateContact(data) {
   const errors = {};
@@ -25,14 +24,12 @@ class NewSpaceForm extends Component {
       <div className='container' >
         <form onSubmit={handleSubmit} className='ui form'>
           <label>Name</label>
-          <Input type="text" {...name}/>
+          <input type="text" {...name}/>
           {name.error && name.touched && <div>{name.error}</div>}
 
-        <ButtonToolbar>
           <button type='submit' className='ui button primary' onClick={handleSubmit} disabled={submitting}>
             {!submitting ? 'Create' : 'Submitting'}
           </button>
-        </ButtonToolbar>
         </form>
       </div>
     );
