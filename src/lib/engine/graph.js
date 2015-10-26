@@ -1,14 +1,6 @@
 import * as _metric from './metric';
 import * as _dgraph from './dgraph';
-import _ from 'lodash';
 import BasicGraph from '../basic_graph/basic-graph.js'
-
-//export interface Graph {
-  //metrics?: Metric[],
-  //guesstimates?: Guesstimate[],
-  //simulations?: PartialSimulation[]
-//}
-//
 
 export function create(graphAttributes){
   return _.pick(graphAttributes, ['metrics', 'guesstimates', 'simulations']);

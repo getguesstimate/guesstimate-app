@@ -27,11 +27,6 @@ export function inputMetrics(guesstimate: Guesstimate, dGraph: DGraph): Array<Ob
   }
 }
 
-//Not used now, but may be later
-//function isEstimate(input: string): boolean {
-  //return (!isFunc(input));
-//}
-
 //This obviously could use some clean up.  Maybe, each sample includes the metric info.
 export function sample(guesstimate: Guesstimate, dGraph: DGraph, n: number = 1): Object{
   let distribution = toDistribution(guesstimate)

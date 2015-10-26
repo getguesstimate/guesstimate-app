@@ -1,7 +1,6 @@
 import * as _graph from './graph';
 import * as _metric from './metric';
 import * as _guesstimate from './guesstimate';
-import _ from 'lodash';
 
 export function url (space) {
   return ('/space/' + space.id)

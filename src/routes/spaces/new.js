@@ -1,5 +1,4 @@
 import React, {Component, PropTypes} from 'react'
-import _ from 'lodash'
 import * as spaceActions from 'gModules/spaces/actions.js'
 import { connect } from 'react-redux';
 import {connectReduxForm} from 'redux-form';

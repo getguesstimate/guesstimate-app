@@ -6,7 +6,10 @@ const SpaceList = ({spaces}) => (
   <div className='SpaceList'>
     {spaces.map((s) => {
       return (
-        <SpaceListItem spaceId={s.id} key={s.id}/>
+        <SpaceListItem
+            key={s.id}
+            spaceId={s.id}
+        />
       )
     })}
   </div>

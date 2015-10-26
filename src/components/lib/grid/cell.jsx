@@ -2,59 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import $ from 'jquery'
 import { DropTarget } from 'react-dnd';
 import ItemCell from './filled-cell.js';
-
-
-export default class EmptyCell extends Component {
-  static propTypes = {
-    gridKeyPress: PropTypes.func.isRequired,
-    handleSelect: PropTypes.func.isRequired,
-    isSelected: PropTypes.bool.isRequired,
-    location: PropTypes.shape({
-      row: PropTypes.number.isRequired,
-      column: PropTypes.number.isRequired
-    }).isRequired,
-    onAddItem: PropTypes.func.isRequired
-  }
-
-  shouldComponentUpdate(nextProps) {
-    return (nextProps.isOver !== this.props.isOver)
-  }
-
-  _handleKeyPress(e) {
-    if (e.keyCode == '13') { //enter
-      this.props.onAddItem(this.props.location)
-    }
-    if (e.keyCode == '8') { //delete
-      e.preventDefault()
-    }
-    this.props.gridKeyPress(e)
-  }
-
-  handleClick(e) {
-    if (e.button === 0){
-      if (!this.props.isSelected) {
-        this.props.handleSelect(this.props.location)
-      } else {
-        this.props.onAddItem(this.props.location)
-      }
-    }
-  }
-
-  render() {
-    const {connectDropTarget} = this.props
-
-    let className = 'GiantEmptyCell grid-item-focus'
-    return (
-      <div
-          className={className}
-          onKeyDown={this._handleKeyPress.bind(this)}
-          onMouseDown={this.handleClick.bind(this)}
-          tabIndex='0'
-          >
-      </div>
-    )
-  }
-}
+import EmptyCell from './cell-empty.js';
 
 const squareTarget = {
   drop(props) {
@@ -72,8 +20,10 @@ function collect(connect, monitor) {
 @DropTarget('card', squareTarget, collect)
 export default class Cell extends Component {
   static propTypes = {
+    connectDropTarget: PropTypes.func.isRequired,
     gridKeyPress: PropTypes.func.isRequired,
     handleSelect: PropTypes.func.isRequired,
+    isOver: PropTypes.bool.isRequired,
     isSelected: PropTypes.bool.isRequired,
     item: PropTypes.object,
     location: PropTypes.shape({
@@ -82,8 +32,6 @@ export default class Cell extends Component {
     }).isRequired,
     onAddItem: PropTypes.func.isRequired,
     onMoveItem: PropTypes.func.isRequired,
-    connectDropTarget: PropTypes.func.isRequired,
-    isOver: PropTypes.bool.isRequired
   }
 
   getPosition() {
@@ -136,9 +84,8 @@ export default class Cell extends Component {
 
   render = () => {
     return this.props.connectDropTarget(
-      <div className={this._classes()}
-      >
-      {this._cellElement()}
+      <div className={this._classes()}>
+        {this._cellElement()}
       </div>
     )
   }

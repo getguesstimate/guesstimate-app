@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 export default function metrics(state = [], action) {
   switch (action.type) {
   case 'SPACES_FETCH_SUCCESS':

@@ -1,15 +1,12 @@
 import {actionCreatorsFor} from 'redux-crud';
 import $ from 'jquery'
-import e from 'gEngine/engine'
-import _ from 'lodash'
-import app from 'ampersand-app'
 import cuid from 'cuid'
 import * as meActions from 'gModules/me/actions.js'
 import {rootUrl} from 'servers/guesstimate-api/constants.js'
 
 let standardActionCreators = actionCreatorsFor('users');
 
-const standards = (state) => {
+const standards = () => {
   return {
     dataType: 'json',
     contentType: 'application/json'
@@ -22,7 +19,6 @@ const formattedRequest = ({requestParams, state}) => {
 }
 
 export function fetch(params = {}) {
-  console.log('fetching with params', params)
   return function(dispatch, getState) {
     const action = standardActionCreators.fetchStart();
     dispatch(action)

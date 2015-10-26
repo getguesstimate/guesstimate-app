@@ -1,5 +1,4 @@
 import BasicNode from './basic-node.js'
-import _ from 'lodash';
 
 export default class BasicGraph {
   constructor(nodeIds, edges) {

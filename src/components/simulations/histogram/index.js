@@ -2,7 +2,6 @@ import React, {Component, PropTypes} from 'react';
 import Histogram from 'gComponents/lib/histogram';
 import Dimensions from 'gComponents/utility/react-dimensions';
 import './style.css'
-import _ from 'lodash'
 
 const PT = PropTypes
 class SimulationHistogram extends Component{

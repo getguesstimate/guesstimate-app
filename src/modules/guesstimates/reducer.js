@@ -1,36 +1,3 @@
-import _ from 'lodash';
-
-let initialGuesstimates = [
-  {
-    metric: '238jdj',
-    input: '5000/50'
-  },
-  {
-    metric: '8sdjf8sjddf',
-    input: '= PNYC '
-  },
-  {
-    metric: '238iojic',
-    input: '= PNYC + 32'
-  },
-  {
-    metric: '238iojib',
-    input: '=42'
-  },
-  {
-    metric: '238iojia',
-    input: '32/3'
-  },
-  {
-    metric: '238iojid',
-    input: '32/3'
-  },
-  {
-    metric: '238ioji3',
-    input: '32/3'
-  }
-];
-
 export default function guesstimates(state = [], action) {
   switch (action.type) {
   case 'SPACES_FETCH_SUCCESS':

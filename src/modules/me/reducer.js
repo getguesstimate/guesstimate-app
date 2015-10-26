@@ -1,7 +1,3 @@
-import _ from 'lodash'
-
-let newState = null
-
 export default function me(state = {}, action) {
   switch (action.type) {
   case 'AUTH0_ME_LOADED':
@@ -11,7 +7,7 @@ export default function me(state = {}, action) {
       loading: true
     }
   case 'GUESSTIMATE_ME_LOADED':
-    newState = {
+    const newState = {
       token: state.token,
       id: action.id,
       profile: action.profile,

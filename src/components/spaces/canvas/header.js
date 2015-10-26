@@ -8,7 +8,11 @@ let SpaceHeader = ({space, onSave}) => (
     </div>
 
     {space.ownedByMe &&
-      <button className='ui primary button' disabled={!!space.busy} onClick={onSave}>
+      <button
+          className='ui primary button'
+          disabled={!!space.busy}
+          onClick={onSave}
+      >
         {'Save'}
       </button>
     }

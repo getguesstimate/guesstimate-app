@@ -1,4 +1,3 @@
-import app from 'ampersand-app'
 import Router from 'ampersand-router'
 import SpaceShow from 'gComponents/spaces/show'
 import SpaceNew from './spaces/new'
@@ -8,8 +7,6 @@ import ReactDOM from 'react-dom'
 import Layout from './layouts/application'
 
 import { Provider } from 'react-redux';
-import todoApp from '../modules/reducers';
-import {createStore} from 'redux'
 import configureStore from './middleware'
 
 import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react';
