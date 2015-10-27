@@ -19,7 +19,7 @@ class SimulationHistogram extends Component{
     )
   }
   values(){
-    return this.props.simulation ? this.props.simulation.sample.values : false
+    return _.get(this.props, 'simulation.sample.values')
   };
   histogram() {
     return (
