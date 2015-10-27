@@ -33,7 +33,7 @@
   width: 100%;
 }
 
-.GiantEmptyCell:hover {
+.GiantCell.hovered .GiantEmptyCell {
   background-color: #ECF2F5;
 }
 
