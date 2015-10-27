@@ -56,6 +56,7 @@ export default class Edges extends Component {
     const showEdges = _.get(edges, 'length') && _.get(rowHeights, 'length') && columnWidth
     return (
       <div className='GiantGrid--Arrows'>
+      {(edges.length > 0) &&
         <svg
             className='edge'
             height={containerHeight}
@@ -70,6 +71,7 @@ export default class Edges extends Component {
             })
           }
         </svg>
+      }
       </div>
     )
   }
