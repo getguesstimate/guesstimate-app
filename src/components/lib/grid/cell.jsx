@@ -34,6 +34,10 @@ export default class Cell extends Component {
     onMoveItem: PropTypes.func.isRequired,
   }
 
+  state = {
+    hover: false
+  }
+
   getPosition() {
     let $el = $(this.refs.dom)
     if ($el.length) {
@@ -69,7 +73,8 @@ export default class Cell extends Component {
 
   _cellElement = () => {
     if (this.props.item) {
-      return (<ItemCell {...this.props} />)
+      // Then endDrag fixes a bug where the original dragging position is hovered.
+      return (<ItemCell onEndDrag={this.mouseOut.bind(this)} {...this.props}/>)
     } else {
       return (<EmptyCell {...this.props} />)
     }
@@ -79,12 +84,21 @@ export default class Cell extends Component {
     let classes = 'GiantCell'
     classes += (this.props.isSelected ? ' selected' : ' nonSelected')
     classes += this.props.isOver ? ' IsOver' : ''
+    classes += this.state.hover ? ' hovered' : ''
     return classes
+  }
+
+  mouseOver = () => {
+    this.setState({hover: true})
+  }
+
+  mouseOut = () => {
+    this.setState({hover: false})
   }
 
   render = () => {
     return this.props.connectDropTarget(
-      <div className={this._classes()}>
+      <div className={this._classes()} onMouseOver={this.mouseOver.bind(this)} onMouseOut={this.mouseOut.bind(this)}>
         {this._cellElement()}
       </div>
     )
