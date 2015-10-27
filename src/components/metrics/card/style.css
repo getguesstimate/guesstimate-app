@@ -16,11 +16,11 @@
   flex-direction: column;
 }
 
-.selected .metric:hover {
+.hovered .selected .metric {
   background-color: white;
 }
 
-.metric:hover {
+.hovered .metric {
   background-color: #EDEFF0;
 }
 
