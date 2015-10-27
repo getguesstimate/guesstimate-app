@@ -1,11 +1,12 @@
 const initialState = {
-  metricCardView: 'basic'
+  metricCardView: 'scientific',
+  edgeView: 'shown'
 }
 
 export default function canvasState(state = initialState, action) {
   switch (action.type) {
   case 'CHANGE_CANVAS_STATE':
-    return action.values
+    return Object.assign(state, action.values)
   default:
     return state
   }

@@ -6,7 +6,7 @@ import Icon from 'react-fa'
 
 function mapStateToProps(state) {
   return {
-    canvasState: state.canvasState
+    edgeView: state.canvasState.edgeView
   }
 }
 
@@ -17,7 +17,7 @@ String.prototype.capitalizeFirstLetter = function() {
 const Item = ({name, onSelect}) => (
   <li onMouseDown={onSelect} >
     <button
-        data-card-view={name}
+        data-edge-view={name}
         type='button'>{name.capitalizeFirstLetter()}
     </button>
   </li>
@@ -25,27 +25,23 @@ const Item = ({name, onSelect}) => (
 
 const PT = PropTypes
 @connect(mapStateToProps)
-export default class CanvasStateForm extends Component {
+export default class CanvasCardViewForm extends Component {
   static propTypes = {
-    canvasState: PT.shape({
-      metricCardView: PT.oneOf([
-        'normal',
-        'basic',
-        'scientific',
-        'debugging',
-      ]).isRequired,
-    }),
+    edgeView: PT.oneOf([
+      'hidden',
+      'visible',
+    ]).isRequired,
     dispatch: PropTypes.func
   }
 
   onSelect(e) {
-    const metricCardView = e.target.getAttribute('data-card-view')
-    this.props.dispatch(canvasStateActions.change({metricCardView}))
+    const edgeView = e.target.getAttribute('data-edge-view')
+    this.props.dispatch(canvasStateActions.change({edgeView}))
   }
   render() {
     return (
-        <StandardDropdownMenu toggleButton={<a><Icon name='eye'/> {this.props.canvasState.metricCardView.capitalizeFirstLetter()} </a>}>
-           {['normal', 'basic', 'scientific', 'debugging'].map(e => {
+        <StandardDropdownMenu toggleButton={<a><Icon name='arrows'/> {this.props.edgeView.capitalizeFirstLetter()} </a>}>
+           {['shown', 'hidden'].map(e => {
              return (
                <Item
                    key={e}

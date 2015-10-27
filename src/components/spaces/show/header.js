@@ -1,5 +1,6 @@
 import React from 'react'
-import CanvasStateForm from './canvasStateForm.js'
+import CanvasCardViewForm from './canvasCardViewForm.js'
+import CanvasEdgeViewForm from './canvasEdgeViewForm.js'
 import StandardDropdownMenu from 'gComponents/utility/standard-dropdown-menu'
 import Icon from 'react-fa'
 
@@ -13,7 +14,8 @@ let SpaceHeader = ({space, onSave, onDestroy}) => (
       </StandardDropdownMenu>
     }
 
-    <CanvasStateForm/>
+    <CanvasCardViewForm/>
+    <CanvasEdgeViewForm/>
 
     {space.ownedByMe &&
       <a disabled={!!space.busy} onClick={onSave}>
