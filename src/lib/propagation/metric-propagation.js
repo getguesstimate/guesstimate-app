@@ -7,8 +7,8 @@ import type {Simulation, Graph} from '../lib/engine/types.js'
 import {addPartialSimulation} from 'gModules/simulations/actions'
 import Simulator from './simulator'
 
-function isRecentPropagation(propogationId: number, simulation: Simulation) {
-  return !_.has(simulation, 'propogation') || (propogationId >= simulation.propogation)
+function isRecentPropagation(propagationId: number, simulation: Simulation) {
+  return !_.has(simulation, 'propagation') || (propagationId >= simulation.prapogation)
 }
 
 function hasNoUncertainty(simulation: Simulation) {
@@ -22,7 +22,7 @@ const isObsolete = (id, s) => !isRecentPropagation(id, s)
 
 export default class MetricPropagation {
   metricId: string;
-  propogationId: number;
+  propagationId: number;
   firstPass: boolean;
   remainingSimulations: Array<number>;
 
@@ -54,13 +54,13 @@ export default class MetricPropagation {
     const s = this._existingSimulation(graph)
     const isUncertain = !hasNoUncertainty(s)
     const hasRemainingSimulations = (this.remainingSimulations.length > 0)
-    const notObsolete = !isObsolete(this.propogationId, s)
+    const notObsolete = !isObsolete(this.propagationId, s)
 
     return (isUncertain && hasRemainingSimulations && notObsolete && !this.halted)
   }
 
   _simulate(sampleCount, graph, dispatch): void {
-    let simulator = new Simulator(this.metricId, graph, this.propogationId)
+    let simulator = new Simulator(this.metricId, graph, this.propagationId)
     let {simulation} = simulator.run(sampleCount)
     if (simulation) {
       dispatch(addPartialSimulation(simulation))

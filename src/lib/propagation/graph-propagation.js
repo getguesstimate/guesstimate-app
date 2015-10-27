@@ -6,10 +6,10 @@ import async from 'async'
 import e from 'gEngine/engine';
 import type {Simulation, Graph} from '../lib/engine/types.js'
 import {deleteSimulations} from 'gModules/simulations/actions'
-import MetricPropagation from './metric-propogation.js'
+import MetricPropagation from './metric-propagation.js'
 
-function isRecentPropagation(propogationId: number, simulation: Simulation) {
-  return !_.has(simulation, 'propogation') || (propogationId >= simulation.propogation)
+function isRecentPropagation(propagationId: number, simulation: Simulation) {
+  return !_.has(simulation, 'propagation') || (propagationId >= simulation.propagation)
 }
 
 function hasNoUncertainty(simulation: Simulation) {
@@ -34,7 +34,6 @@ export class GraphPropagation {
     this.id = Date.now()
 
     this.orderedMetricIds = this._orderedMetricIds(metricId)
-    console.log(this.orderedMetricIds)
     this.orderedMetricPropagations = this.orderedMetricIds.map(id => (new MetricPropagation(id, this.id)))
 
     this.currentStep = 0

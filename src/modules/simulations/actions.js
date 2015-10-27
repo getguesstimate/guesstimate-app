@@ -1,6 +1,6 @@
 import e from 'gEngine/engine';
 import async from 'async'
-import {GraphPropagation} from '../../lib/propogation/graph-propogation.js'
+import {GraphPropagation} from '../../lib/propagation/graph-propagation.js'
 
 function runSimulation(dispatch, getState, metricId, n) {
   const graph = e.graph.create(getState());
