@@ -3,7 +3,7 @@ import {PropTypes} from 'react';
 export default PropTypes.shape({
   edgeView: PT.oneOf([
     'normal',
-    'arrows',
+    'visible',
   ]).isRequired,
   metricCardView: PT.oneOf([
     'normal',

@@ -37,7 +37,7 @@ export default class CanvasSpace extends Component{
       ]).isRequired,
       edgeView: PT.oneOf([
         'hidden',
-        'shown',
+        'visible',
       ]).isRequired,
     }),
     denormalizedSpace: PropTypes.object,
@@ -95,7 +95,7 @@ export default class CanvasSpace extends Component{
   }
 
   showEdges() {
-    return (this.props.canvasState.edgeView === 'shown')
+    return (this.props.canvasState.edgeView === 'visible')
   }
 
   edges() {

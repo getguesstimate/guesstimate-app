@@ -20,6 +20,10 @@
   z-index: 1;
 }
 
+.showEdges .GiantCell {
+  padding: 15px;
+}
+
 .GiantFilledCell {
   display: flex;
   width: 100%;
@@ -54,7 +58,7 @@ svg.edge {
 }
 
 svg.edge  path.basic-arrow {
-  stroke: #C4D3E5;
+  stroke: $blue-1;
   stroke-linecap:'round';
   stroke-width: '5';
   stroke-linejoin: 'round';
@@ -67,5 +71,5 @@ svg.edge  path.basic-arrow {
 
 .arrow {
   stroke-width: 0;
-  fill: #C4D3E5;
+  fill: $blue-1;
 }

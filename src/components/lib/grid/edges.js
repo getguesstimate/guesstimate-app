@@ -46,7 +46,7 @@ export default class Edges extends Component {
 
   defs() {
     return "<marker id=\"markerArrow\" markerWidth=\"3\" markerHeight=\"3\" \
-             refx=\"3\" refy=\"1.5\" orient=\"auto\"> \
+             refx=\"2\" refy=\"1.5\" orient=\"auto\"> \
             <path d=\"M 0,0 V 3 L3,1.5 Z\" class=\"arrow\"/> \
            </marker>";
   }
