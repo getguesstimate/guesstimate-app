@@ -24,6 +24,7 @@ export default class Grid extends Component{
     onMoveItem: PropTypes.func.isRequired,
     selected: PropTypes.object.isRequired,
     size: PropTypes.object,
+    showEdges: PropTypes.bool
   }
 
   _handleKeyPress(e) {
@@ -82,7 +83,7 @@ export default class Grid extends Component{
   render() {
     const rowCount = this._rowCount()
     const columnCount = this._columnCount()
-    const {edges} = this.props
+    const {edges, showEdges} = this.props
 
     return (
       <div

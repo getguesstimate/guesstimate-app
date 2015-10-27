@@ -26,6 +26,10 @@ class Metric extends Component {
         'scientific',
         'debugging',
       ]).isRequired,
+      edgeView: PT.oneOf([
+        'hidden',
+        'shown',
+      ]).isRequired,
     }),
     dispatch: PT.func.isRequired,
     gridKeyPress: PT.func.isRequired,

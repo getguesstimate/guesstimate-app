@@ -35,6 +35,10 @@ export default class CanvasSpace extends Component{
         'scientific',
         'debugging',
       ]).isRequired,
+      edgeView: PT.oneOf([
+        'hidden',
+        'shown',
+      ]).isRequired,
     }),
     denormalizedSpace: PropTypes.object,
     dispatch: PropTypes.func,
@@ -90,16 +94,37 @@ export default class CanvasSpace extends Component{
     )
   }
 
+  showEdges() {
+    return (this.props.canvasState.edgeView === 'shown')
+  }
+
+  edges() {
+    let edges = []
+
+    if (this.showEdges()){
+      const space = this.props.denormalizedSpace
+      const {metrics} = space
+      const metricIdToLocation = (metricId) => metrics.find(m => m.id === metricId).location
+
+      edges = space.edges.map(e => {
+        return {input: metricIdToLocation(e.input), output: metricIdToLocation(e.output)}
+      })
+    }
+    return edges
+  }
+
   render () {
     const {selected} = this.props
-    const space = this.props.denormalizedSpace
-    const {metrics} = space
+    const {metrics} = this.props.denormalizedSpace
     const {metricCardView} = this.props.canvasState
 
-    const metricIdToLocation = (metricId) => metrics.find(m => m.id === metricId).location
-    const edges = space.edges.map(e => {return {input: metricIdToLocation(e.input), output: metricIdToLocation(e.output)}})
+    const edges = this.edges()
+    let className = 'canvas-space'
+
+    this.showEdges() ? className += ' showEdges' : ''
+
     return (
-      <div className="canvas-space">
+      <div className={className}>
         {(metricCardView === 'debugging') &&
           <JSONTree data={this.props}/>
         }
