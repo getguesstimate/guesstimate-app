@@ -41,7 +41,7 @@ export default class CanvasCardViewForm extends Component {
   render() {
     return (
         <StandardDropdownMenu toggleButton={<a><Icon name='arrows'/> {this.props.edgeView.capitalizeFirstLetter()} </a>}>
-           {['shown', 'hidden'].map(e => {
+           {['visible', 'hidden'].map(e => {
              return (
                <Item
                    key={e}

@@ -68,18 +68,16 @@ export default class Edge extends Component{
     const outputPoints = (new Rectangle(output)).showPosition(input)
     let points = null
 
-    //const points = `${input.left},${input.top} ${input.right},${input.top} ${input.right},${input.bottom} ${input.left},${input.bottom}`
-    points = `M${inputPoints.x},${inputPoints.y} L${outputPoints.x-2} ,${outputPoints.y-2}`
-
     //if (inputPoints.y == outputPoints.y){
       //points = `M${inputPoints.x},${inputPoints.y} L${outputPoints.x},${outputPoints.y}`
     //} else {
       //if (inputPoints.y > outputPoints.y) {
-        //points = `M${inputPoints.x},${inputPoints.y} L${inputPoints.x},${inputPoints.y - 2} L${outputPoints.x},${inputPoints.y - 2} L${outputPoints.x},${outputPoints.y}`
+        //points = `M${inputPoints.x},${inputPoints.y} L${inputPoints.x},${inputPoints.y - 8} L${outputPoints.x},${inputPoints.y - 8} L${outputPoints.x},${outputPoints.y}`
       //} else {
-        //points = `M${inputPoints.x},${inputPoints.y} L${inputPoints.x},${inputPoints.y + 2} L${outputPoints.x},${inputPoints.y + 2} L${outputPoints.x},${outputPoints.y}`
+        //points = `M${inputPoints.x},${inputPoints.y} L${inputPoints.x},${inputPoints.y + 8} L${outputPoints.x},${inputPoints.y + 8} L${outputPoints.x},${outputPoints.y}`
       //}
     //}
+    points = `M${inputPoints.x},${inputPoints.y} L${outputPoints.x-2} ,${outputPoints.y-2}`
 
     return (
         <path
