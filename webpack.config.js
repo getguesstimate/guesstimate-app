@@ -26,6 +26,7 @@ cfg.resolve.alias = {
   gComponents: path.resolve('./src/components'),
   gEngine: path.resolve('./src/lib/engine'),
   gModules: path.resolve('./src/modules'),
+  lib: path.resolve('./src/lib'),
   servers: path.resolve('./src/server')
 };
 
