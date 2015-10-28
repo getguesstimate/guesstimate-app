@@ -31,7 +31,7 @@ export default class MetricPropagation {
     this.propagationId = propagationId
 
     this.firstPass = true
-    this.remainingSimulations = [5, 500, 5000]
+    this.remainingSimulations = [500, 5000]
     this.halted = false
   }
 

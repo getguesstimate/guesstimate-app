@@ -58,7 +58,7 @@ export default class CanvasSpace extends Component{
   }
 
   componentDidMount(){
-    this.props.dispatch(runSimulations(this.props.denormalizedSpace.metrics))
+    this.props.dispatch(runSimulations({spaceId: this.props.denormalizedSpace.id}))
   }
 
   componentWillUnmount(){

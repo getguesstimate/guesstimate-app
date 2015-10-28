@@ -21,19 +21,18 @@ function hasNoUncertainty(simulation: Simulation) {
 export class GraphPropagation {
   dispatch: Function;
   getState: Function;
-  metricId: string;
+  graphFilters: object;
   id: number;
   currentStep: number;
   steps: Array<any>;
   // metricId, samples
 
-  constructor(dispatch: Function, getState: Function, metricId: string) {
+  constructor(dispatch: Function, getState: Function, graphFilters: object) {
     this.dispatch = dispatch
     this.getState = getState
-    this.metricId = metricId
     this.id = Date.now()
 
-    this.orderedMetricIds = this._orderedMetricIds(metricId)
+    this.orderedMetricIds = this._orderedMetricIds(graphFilters)
     this.orderedMetricPropagations = this.orderedMetricIds.map(id => (new MetricPropagation(id, this.id)))
 
     this.currentStep = 0
@@ -77,8 +76,8 @@ export class GraphPropagation {
     return e.graph.toBizarroGraph(e.graph.create(state), state.guesstimateForm);
   }
 
-  _orderedMetricIds(metricId: string): Array<Object> {
-    this.dependencies = e.graph.dependencyTree(this._graph(), metricId)
+  _orderedMetricIds(graphFilters: object): Array<Object> {
+    this.dependencies = e.graph.dependencyTree(this._graph(), graphFilters)
     const inOrder = _.sortBy(this.dependencies, function(n){return n[1]}).map(e => e[0])
     return inOrder
   }
