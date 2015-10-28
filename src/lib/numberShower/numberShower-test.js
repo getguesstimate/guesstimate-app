@@ -4,6 +4,7 @@ import numberShow from './numberShower.js'
 describe('NumberShow', () => {
   describe('#with two units of precision', () => {
     const examples = [
+      [0, {value: '0.0', symbol: undefined, power: undefined}],
       [-20, {value: '-20', symbol: undefined, power: undefined}],
       [-0.5, {value: '-0.50', symbol: undefined, power: undefined}],
 
