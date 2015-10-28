@@ -1,6 +1,6 @@
 var React = require("react");
 var d3 = require("d3");
-import _ from 'lodash'
+import numberShow from 'lib/numberShower/numberShower.js'
 
 function getYScale(data, height) {
   return d3.scale.linear().
@@ -40,15 +40,16 @@ export default class Histogram extends React.Component {
     let histogramDataFn = d3.layout.histogram().bins(xScale.ticks(bins));
     let histogramData = histogramDataFn(data);
     let yScale = getYScale(histogramData, height);
-
     return (
       <div className="react-d3-histogram">
-        <svg width={width + left + right} height={height + top + bottom}>
-          <g transform={"translate(" + left + "," + top + ")"}>
-            {histogramData.map((d, i) => <Bar data={d} xScale={xScale} yScale={yScale} height={height} key={i} />)}
-            <XAxis height={height} scale={xScale} />
-          </g>
-        </svg>
+        {top && right && bottom && left && width && height &&
+          <svg width={width + left + right} height={height + top + bottom}>
+            <g transform={"translate(" + left + "," + top + ")"}>
+              {histogramData.map((d, i) => <Bar data={d} xScale={xScale} yScale={yScale} height={height} key={i} />)}
+              <XAxis height={height} scale={xScale} />
+            </g>
+          </svg>
+        }
       </div>
     );
   }
@@ -79,10 +80,18 @@ class Tick extends React.Component {
     let { value, scale } = this.props;
     let textStyle = { textAnchor: "middle" };
 
+    let valueText = numberShow(value)
+    let text = _.isNumber(value) && valueText
+    text = `${text.value}`
+    text += valueText.symbol ? valueText.symbol : ''
+    text += valueText.power ? `e${valueText.power}` : ''
+    if (text === '0.0') { text = '0' }
     return (
       <g className="react-d3-histogram__tick" transform={"translate(" + scale(value) + ",0)"}>
         <line x2="0" y2="6"></line>
-        <text dy=".71em" y="-10" x="0" zindexstyle={textStyle}>{value}</text>
+        <text dy=".71em" y="-10" x="0" zindexstyle={textStyle}>
+          {text}
+        </text>
       </g>
     );
   }

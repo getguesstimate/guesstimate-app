@@ -102,7 +102,7 @@ class Metric extends Component {
   showSimulation() {
     const stats = _.get(this.props, 'metric.simulation.stats')
     if (stats && _.isNumber(stats.mean) && _.isNumber(stats.stdev) && _.isNumber(stats.length)) {
-      return (stats.stdev === 0 || (stats.length > 100))
+      return (stats.stdev === 0 || (stats.length > 5))
     } else {
       return false
     }
@@ -152,7 +152,7 @@ class Metric extends Component {
           {(metricCardView === 'debugging') &&
             <JSONTree data={this.props}/>
           }
-          {(metricCardView === 'scientific') && _.get(metric, 'simulation.stats') &&
+          {(metricCardView === 'scientific') && _.get(metric, 'simulation.stats') && showSimulation &&
             <StatTable stats={metric.simulation.stats}/>
           }
         </div>

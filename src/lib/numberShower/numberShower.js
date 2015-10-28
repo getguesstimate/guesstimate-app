@@ -47,6 +47,8 @@ class NumberShower {
   }
 
   evaluate(number) {
+    if (number === 0) { return {value: this.metricSystem(0,0)} }
+
     const order = orderOfMagnitude(number)
     if (order < -2) {
       return {value: this.metricSystem(number, order), power: order}

@@ -5,6 +5,7 @@
   position: absolute;;
   z-index: -1;
   left: -5px;
+  width: 100%;
 }
 
 .react-d3-histogram svg {
