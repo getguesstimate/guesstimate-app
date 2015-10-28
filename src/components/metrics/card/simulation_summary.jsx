@@ -33,9 +33,6 @@ class DistributionSummarySmall extends Component{
   static propTypes = {
     stats: PropTypes.object,
   }
-  stdev() {
-
-  }
   render () {
     let stats = this.props.stats;
     let {mean, stdev} = stats

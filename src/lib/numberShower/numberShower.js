@@ -1,5 +1,5 @@
-export default function numberShow(n) {
-  const ns = new NumberShower(n)
+export default function numberShow(n, p=2) {
+  const ns = new NumberShower(n, p)
   return ns.convert()
 }
 
@@ -26,24 +26,28 @@ function withXSigFigs(number, sigFigs){
 }
 
 class NumberShower {
-  constructor(number) {
+  constructor(number, precision=2) {
     this.number = number
+    this.precision = precision
   }
 
   convert() {
-    const firstNum = this.foo()
-    return firstNum
+    const number = Math.abs(this.number)
+    const response = this.evaluate(number)
+    if (this.number < 0) {
+      response.value = '-' + response.value
+    }
+    return response
   }
 
   metricSystem(number, order) {
     const newNumber = number / orderOfMagnitudeNum(order)
-    return `${withXSigFigs(newNumber, 2)}`
+    const precision = this.precision
+    return `${withXSigFigs(newNumber, precision)}`
   }
 
-  foo() {
-    const order = orderOfMagnitude(this.number)
-    const number = this.number
-
+  evaluate(number) {
+    const order = orderOfMagnitude(number)
     if (order < 3) {
       return {value: this.metricSystem(number, 0)}
     } else if (order < 6) {
