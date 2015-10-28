@@ -2,12 +2,19 @@ import e from '../../lib/engine/engine'
 import stats from 'stats-lite'
 import _ from 'lodash'
 
+function hasNoStdev(values) {
+  return (_.uniq(_.slice(values, 0, 5)).length === 1)
+}
+
 function sStats(simulation){
   if (_.has(simulation, 'sample.values') && (simulation.sample.values.length > 0)) {
     let values = simulation.sample.values;
+
+    //stats had bug where it would treat very tiny values (< 10^-10) as sometimes having a tiny stdev (<10^-30)
+    let stdev = hasNoStdev(values) ? 0 : stats.stdev(values)
     return {
       mean:  stats.mean(values),
-      stdev:  stats.stdev(values),
+      stdev:  stdev,
       length:  values.length
     };
   }
