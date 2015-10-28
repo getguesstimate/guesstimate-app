@@ -12,8 +12,10 @@ function isRecentPropagation(propagationId: number, simulation: Simulation) {
 }
 
 function hasNoUncertainty(simulation: Simulation) {
-  const v = simulation.sample.values;
-  return (_.uniq(_.slice(v, 0, 5)).length === 1)
+  if (_.has(simulation, 'sample.values')){
+    const v = simulation.sample.values;
+    return (_.uniq(_.slice(v, 0, 5)).length === 1)
+  } else { return false }
 }
 
 const hasSimulationErrors = (s) => e.simulation.hasErrors(s)
