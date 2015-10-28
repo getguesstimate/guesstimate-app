@@ -1,7 +1,7 @@
 import {sample, isNormal, isFunction, isSingleValue, sampleNormal}  from '../distribution.js';
 import {expect} from 'chai';
 
-describe.only('distribution', () => {
+describe('distribution', () => {
   describe('#isNormal', () => {
     const makeTest = (input, output) => {
       it(`works with ${JSON.stringify(input)}`, () => {
