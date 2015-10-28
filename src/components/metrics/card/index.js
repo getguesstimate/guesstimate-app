@@ -99,12 +99,22 @@ class Metric extends Component {
     $(this.refs.dom).focus();
   }
 
+  showSimulation() {
+    const stats = _.get(this.props, 'metric.simulation.stats')
+    if (stats && _.isNumber(stats.mean) && _.isNumber(stats.stdev) && _.isNumber(stats.length)) {
+      return (stats.stdev === 0 || (stats.length > 5))
+    } else {
+      return false
+    }
+  }
+
   render() {
     const {isSelected, metric, guesstimateForm, userAction} = this.props
     const {canvasState: {metricCardView}} = this.props
 
     const anotherFunctionSelected = ((userAction === 'function') && !isSelected)
 
+    const showSimulation = this.showSimulation()
     return (
       <div
           className={isSelected ? 'metric grid-item-focus' : 'metric'}
@@ -115,7 +125,7 @@ class Metric extends Component {
       >
 
         <div className={`card-top metric-container ${metricCardView}`}>
-          {(metricCardView !== 'basic') &&
+          {(metricCardView !== 'basic') && showSimulation &&
             <Histogram height={(metricCardView === 'scientific') ? 75 : 30}
                 simulation={metric.simulation}
             />
@@ -130,17 +140,19 @@ class Metric extends Component {
           />
           <div className='row row1'>
             <div className='col-xs-12 mean'>
-              <DistributionSummary
-                  guesstimateForm={guesstimateForm}
-                  simulation={metric.simulation}
-              />
+              {showSimulation &&
+                <DistributionSummary
+                    guesstimateForm={guesstimateForm}
+                    simulation={metric.simulation}
+                />
+              }
             </div>
           </div>
 
           {(metricCardView === 'debugging') &&
             <JSONTree data={this.props}/>
           }
-          {(metricCardView === 'scientific') && _.get(metric, 'simulation.stats') &&
+          {(metricCardView === 'scientific') && _.get(metric, 'simulation.stats') && showSimulation &&
             <StatTable stats={metric.simulation.stats}/>
           }
         </div>

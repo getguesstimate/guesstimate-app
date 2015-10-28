@@ -1,5 +1,5 @@
 function isPoint(input) {
- return parseFloat(input.toString()).toString() === input
+ return !isNaN(input.toString())
 }
 
 export function toDistribution(input){
