@@ -16,7 +16,7 @@
   flex-direction: column;
 }
 
-.hovered .selected .metric {
+.hovered.selected .metric {
   background-color: white;
 }
 
