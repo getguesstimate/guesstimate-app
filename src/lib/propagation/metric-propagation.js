@@ -12,8 +12,10 @@ function isRecentPropagation(propagationId: number, simulation: Simulation) {
 }
 
 function hasNoUncertainty(simulation: Simulation) {
-  const v = simulation.sample.values;
-  return (_.uniq(_.slice(v, 0, 5)).length === 1)
+  if (_.has(simulation, 'sample.values')){
+    const v = simulation.sample.values;
+    return (_.uniq(_.slice(v, 0, 5)).length === 1)
+  } else { return false }
 }
 
 const hasSimulationErrors = (s) => e.simulation.hasErrors(s)
@@ -31,15 +33,18 @@ export default class MetricPropagation {
     this.propagationId = propagationId
 
     this.firstPass = true
-    this.remainingSimulations = [5, 500, 5000]
+    this.remainingSimulations = [10, 5000]
+    this.stepNumber = 0
     this.halted = false
   }
 
   step(graph, dispatch) {
     if (this._needsMoreSamples(graph)) {
-      const sampleCount = this.remainingSimulations.shift()
+      const sampleCount = this.remainingSimulations[this.stepNumber]
       const simulation = this._simulate(sampleCount, graph, dispatch)
       const errors = this.errors(simulation)
+      this.stepNumber++
+
       if (errors[0]) { this.halted = true }
       return errors
     } else {
@@ -47,9 +52,8 @@ export default class MetricPropagation {
     }
   }
 
-
   _needsMoreSamples(graph) {
-    if (this.firstPass) { this.firstPass = false; return true }
+    if (this.stepNumber === 0) { return true }
 
     const s = this._existingSimulation(graph)
     const isUncertain = !hasNoUncertainty(s)

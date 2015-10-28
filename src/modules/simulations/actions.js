@@ -12,7 +12,7 @@ function runSimulation(dispatch, getState, metricId, n) {
 
 export function runFormSimulations(metricId) {
   return (dispatch, getState) => {
-    (new GraphPropagation(dispatch, getState, metricId)).run()
+    (new GraphPropagation(dispatch, getState, {metricId})).run()
   }
 }
 
@@ -20,25 +20,9 @@ export function deleteSimulations(metricIds) {
   return {type: 'DELETE_SIMULATIONS', metricIds}
 }
 
-export function runSimulations(metrics) {
-  let nn = 3000;
+export function runSimulations({spaceId}) {
   return (dispatch, getState) => {
-    let metricIds = metrics.map(n => n.id);
-    let metricId = e.array.cycle(metricIds);
-
-    var count = 0;
-    let max = metricIds.length * 2;
-
-    async.during(
-        function (callback) {
-          return callback(null, count < max);
-        },
-        function (callback) {
-          count++;
-          runSimulation(dispatch, getState, metricId.next().value, nn);
-          _.delay(() => {callback(null)}, 1);
-        },
-    );
+    (new GraphPropagation(dispatch, getState, {spaceId})).run()
   };
 }
 
