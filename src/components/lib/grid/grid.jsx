@@ -41,17 +41,17 @@ export default class Grid extends Component{
     const lowestItem = !this.props.children.length ? 2 : Math.max(...this.props.children.map(g => parseInt(g.location.row))) + 2
     const selected = parseInt(this.props.selected.row) + 2
     const height = Math.max(3, lowestItem, selected) || 3;
-    return {columns: 6, rows: height}
+    return {columns: 20, rows: height}
   }
 
   _rowCount() {
     const lowestItem = Math.max(...this.props.children.map(e => parseInt(e.props.location.row))) + 2
     const selected = parseInt(this.props.selected.row) + 2
-    return Math.max(8, lowestItem, selected) || 6;
+    return Math.max(20, lowestItem, selected) || 6;
   }
 
   _columnCount() {
-    return 6
+    return 15
   }
 
   _cell(location) {
