@@ -35,8 +35,10 @@ export default class extends Component{
     }
     return (
       <NavHelper>
+      <div className='Layout'>
         <Header isFluid={this.props.isFluid} spaces={this.props.spaces}/>
         {body}
+      </div>
       </NavHelper>
     )
   }

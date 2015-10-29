@@ -6,20 +6,26 @@ body {
 }
 
 ::-webkit-scrollbar {
-  height: 14px;
-  width: 6px;
+  height: 7px;
+  width: 7px;
 }
 
 ::-webkit-scrollbar-thumb:horizontal {
-    background-color: $blue-1;
-    border-radius: 6px;
+    background-color: $grey-1;
+    border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:vertical {
-    background-color: $grey-4;
-    border-radius: 2px;
+    background-color: $grey-1;
+    border-radius: 3px;
 }
 
 ::-webkit-scrollbar-track {
-    background-color: $grey-1;
+  border-radius: 10px;
 }
+
+::-webkit-scrollbar-track:corner {
+  background-color: black;
+}
+
+

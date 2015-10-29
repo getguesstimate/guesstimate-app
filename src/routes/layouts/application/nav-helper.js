@@ -16,7 +16,7 @@ export default React.createClass({
 
   render () {
     return (
-      <div {...this.props} onClick={this.onClick}>
+      <div className='navHelper' {...this.props} onClick={this.onClick}>
         {this.props.children}
       </div>
     )

@@ -23,16 +23,14 @@ const FullPage = ({isFluid, page}) => (
   </Layout>
 );
 
+        //{__DEV__ ? <Debug store={store}/> : ''}
 export default Router.extend({
   render (page, isFluid=false) {
     let store = configureStore()
     ReactDOM.render(
-      <div>
-        <Provider store={store}>
-          <FullPage isFluid={isFluid} page={page}/>
-        </Provider>
-        {__DEV__ ? <Debug store={store}/> : ''}
-      </div>,
+      <Provider store={store}>
+        <FullPage isFluid={isFluid} page={page}/>
+      </Provider>,
       document.getElementById('root'))
   },
 
