@@ -6,17 +6,17 @@ body {
 }
 
 ::-webkit-scrollbar {
-  height: 7px;
-  width: 7px;
+  height: 10px;
+  width: 10px;
 }
 
 ::-webkit-scrollbar-thumb:horizontal {
-    background-color: $grey-1;
+    background-color: $blue-1;
     border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:vertical {
-    background-color: $grey-1;
+    background-color: $blue-1;
     border-radius: 3px;
 }
 
