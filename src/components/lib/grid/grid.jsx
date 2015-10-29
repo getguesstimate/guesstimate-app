@@ -90,6 +90,18 @@ export default class Grid extends Component{
           className='GiantGrid'
           onKeyPress={this._handleKeyPress.bind(this)}
       >
+        <div className='GiantRow--Horizontal-Index'>
+          <span className='corner'></span>
+          {
+              upto(columnCount).map((column) => {
+                return (
+                    <div className='Element'>
+                      {column + 1}
+                    </div>
+                  )
+              })
+          }
+        </div>
         {
           upto(rowCount).map((row) => {
             return (
@@ -98,7 +110,10 @@ export default class Grid extends Component{
                   key={row}
                   ref={`row-${row}`}
               >
-                {this._row(row, columnCount)}
+              <div className='GiantRow--Vertical-Index'>
+                {row + 1}
+              </div>
+              {this._row(row, columnCount)}
               </div>
             )
           })
