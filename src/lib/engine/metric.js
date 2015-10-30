@@ -8,6 +8,10 @@ export function create(metricNames) {
   }
 }
 
+export function get(collection, id){
+  return collection.find(i => (i.id === id))
+}
+
 function findWithId(collection, id, property) {
   if (collection && id && property) {
     return collection.find(e => e[property] === id);

@@ -15,6 +15,8 @@ export function denormalize(graph){
 // The bizarro graph is the version of the graph where a guesstimates input is
 // replaces its guesstimte
 export function toBizarroGraph(graph, guesstimateForm){
+  if (!_.has(guesstimateForm, 'metric')) { return graph }
+  //Super slow!
   let bGraph = _.cloneDeep(graph)
   bGraph.guesstimates = graph.guesstimates.filter((g) => (g.metric !== guesstimateForm.metric))
   bGraph.guesstimates = bGraph.guesstimates.concat(guesstimateForm)
