@@ -1,6 +1,5 @@
 import React, {Component, PropTypes} from 'react';
 import TextArea from 'react-textarea-autosize';
-import ReactDOM from 'react-dom'
 import './style.css'
 
 export default class MetricName extends Component {
