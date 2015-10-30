@@ -19,7 +19,7 @@ export function sample(distribution: Distribution, dGraph: DGraph, n: number = 1
 }
 
 export function isNormal(distribution: Distribution): boolean{
-  return (_.isNumber(distribution.mean) && _.isNumber(distribution.stdev));
+  return (_.isFinite(distribution.mean) && _.isFinite(distribution.stdev));
 }
 
 export function isFunction(distribution: Distribution): boolean{
@@ -28,7 +28,7 @@ export function isFunction(distribution: Distribution): boolean{
 }
 
 export function isSingleValue(distribution: Distribution): boolean{
-  return (_.isNumber(distribution.value));
+  return (_.isFinite(distribution.value));
 }
 
 export function sampleNormal(distribution: Distribution, n: number = 1){

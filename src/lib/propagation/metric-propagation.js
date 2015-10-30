@@ -25,7 +25,7 @@ const hasNonNumberValues = (s) => {
   const values = _.get(s, 'sample.values')
   if (values && values.length) {
     const subset = _.slice(values, 0, 5)
-    return _.any(subset, v => !_.isNumber(v))
+    return _.any(subset, v => !_.isFinite(v))
   } else {
     return false
   }
