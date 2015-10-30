@@ -28,21 +28,31 @@ export function inputMetricsReady(metrics){
 
 const shorten = (str) => { return str.substring(1, str.length); };
 
+//{values: [], errors: []}
 export function sample(functionInput, dGraph, n){
   const shortened = shorten(functionInput);
   const inputs = inputMetrics(functionInput, dGraph);
-  if (inputMetricsReady(inputs)) {
-    const parsed = math.compile(shortened)
-    const results = Array(n).fill(null).map(n => newFunctionCalculate(parsed, inputs))
-    return results
-  } else {
-    return [{errors: ['Inputs do not have samples yet!']}];
+
+  if (!inputMetricsReady(inputs)) { return [{errors: ['Inputs do not have samples yet!']}]} ;
+
+  const parsed = math.compile(shortened)
+  let samples = []
+
+  for (let i = 0; i < n; i++) {
+    const newSample = newFunctionCalculate(parsed, inputs)
+    if (_.isNumber(newSample)) {
+      samples = samples.concat(newSample)
+    } else {
+      return [{errors: ['Invalid sample']}]
+    }
   }
+
+  return [{values: samples}]
 }
 
 export function newFunctionCalculate(parsed, inputs){
-  let returnn = inputToSample(inputs)
-  return {values: parsed.eval(returnn)};
+  const inputSamples = inputToSample(inputs)
+  return parsed.eval(inputSamples)
 }
 
 export function toDistribution(functionInput){
