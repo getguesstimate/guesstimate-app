@@ -21,6 +21,10 @@ function hasNoUncertainty(simulation: Simulation) {
 const hasSimulationErrors = (s) => e.simulation.hasErrors(s)
 const hasNoValues = (s) => (_.has(s, 'sample.values') && s.sample.values.length === 0)
 const isObsolete = (id, s) => !isRecentPropagation(id, s)
+const hasNonNumberValues = (s) => {
+  const values = _.get(s, 'sample.values')
+  return _.any(values, v => !_.isNumber(v))
+}
 
 export default class MetricPropagation {
   metricId: string;
@@ -81,6 +85,8 @@ export default class MetricPropagation {
       return (['SIMULATION_ERROR', e.simulation.errors(simulation) ])
     } else if (hasNoValues(simulation)) {
       return ['NO_VALUES', null]
+    } else if (hasNonNumberValues(simulation)) {
+      return ['NON_NUMBER_VALUES', null]
     } else {
        return [null, null]
     }
