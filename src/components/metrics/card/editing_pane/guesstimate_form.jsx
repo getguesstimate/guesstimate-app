@@ -51,11 +51,6 @@ class GuesstimateForm extends Component{
   _value() {
     return ReactDOM.findDOMNode(this.refs.input).value
   }
-  _handleKeyDown(e) {
-    if ((e.which > 96) && (e.which < 123)){
-      e.preventDefault()
-    }
-  }
   _handleKeyUp(e) {
     if (e.which === 27 || e.which === 13) {
       e.preventDefault()
@@ -73,7 +68,6 @@ class GuesstimateForm extends Component{
             onBlur={this._handleBlur.bind(this)}
             onChange={this._handlePress.bind(this)}
             onFocus={this._handleFocus.bind(this)}
-            onKeyPress={this._handleKeyDown}
             onKeyUp={this._handleKeyUp.bind(this)}
             placeholder={'value'}
             ref='input'
