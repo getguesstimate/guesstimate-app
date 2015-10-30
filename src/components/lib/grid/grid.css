@@ -1,16 +1,18 @@
 @import './styles/variables.css';
 
 .GiantGrid {
-  overflow: auto;
   position: relative;
 }
 
-.GiantRow{
+.GiantGrid-Container {
+  overflow: auto;
   display: flex;
-  align-items: stretch;
-  flex-direction: row;
+  flex-direction: column;
 }
 
+.GiantGrid-Horizontal-Motion {
+  display: flex;
+}
 
 .GiantRow--Horizontal-Index {
   width: 100%;
@@ -18,12 +20,6 @@
   display: flex;
   cursor: pointer;
   width: 100%;
-}
-
-.GiantRow--Horizontal-Index .corner {
-  min-width: 22px;
-  background-color: $blue-1;
-  flex: 1;
 }
 
 .GiantRow--Horizontal-Index .Element {
@@ -35,16 +31,31 @@
   background-color: $blue-1;
 }
 
+.GiantRow--Horizontal-Index .corner {
+  min-width: 22px;
+  background-color: $blue-1;
+  flex: 1;
+}
+
 .GiantRow--Vertical-Index {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  text-align: center;
   min-width: 22px;
   max-width: 22px;
+  background-color: $blue-1;
+}
+
+.GiantRow--Vertical-Index .Element {
   border-bottom: 1px solid $blue-2;
   color: $blue-2;
-  background-color: $blue-1;
+  justify-content: center;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.GiantRow{
+  display: flex;
+  align-items: stretch;
+  flex-direction: row;
 }
 
 .GiantCell {
