@@ -10,5 +10,6 @@ textarea.MetricName {
   width: 100%;
   line-height: 1.3em;
   font-size: 0.99em;
+  float: left;
 }
 
