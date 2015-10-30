@@ -12,6 +12,7 @@ export default class EdgeContainer extends Component {
 
   static propTypes = {
     containerWidth: PropTypes.number,
+    rowHeights: PropTypes.array.isRequired,
     edges: PropTypes.array.isRequired,
     refs: PropTypes.object.isRequired,
     rowCount: PropTypes.number.isRequired,
@@ -35,7 +36,7 @@ export default class EdgeContainer extends Component {
     const {edges, containerWidth} = this.props
     const {columnWidth} = this.state
 
-    const rowHeights = upto(this.props.rowCount).map(rowI => _.get(this.props.refs[`row-${rowI}`], 'offsetHeight'))
+    const rowHeights = this.props.rowHeights
     const containerHeight = _.get(rowHeights, 'length') && rowHeights.reduce((a,b) => a + b)
     return (
       <Edges
