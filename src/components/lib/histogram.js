@@ -81,7 +81,7 @@ class Tick extends React.Component {
     let textStyle = { textAnchor: "middle" };
 
     let valueText = numberShow(value)
-    let text = _.isNumber(value) && valueText
+    let text = _.isFinite(value) && valueText
     text = `${text.value}`
     text += valueText.symbol ? valueText.symbol : ''
     text += valueText.power ? `e${valueText.power}` : ''

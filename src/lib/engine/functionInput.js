@@ -40,7 +40,7 @@ export function sample(functionInput, dGraph, n){
 
   for (let i = 0; i < n; i++) {
     const newSample = newFunctionCalculate(parsed, inputs)
-    if (_.isNumber(newSample)) {
+    if (_.isFinite(newSample)) {
       samples = samples.concat(newSample)
     } else {
       return [{errors: ['Invalid sample']}]

@@ -26,7 +26,7 @@ export class LongestDistanceOrderer {
   }
   _nextLayer() {
     let lists = (Array.from(this.nodes).map(e => [e, maxDistance(this.edges, this.maxDistanceList, e)]))
-    return new Map(lists.filter((i) => _.isNumber(i[1])))
+    return new Map(lists.filter((i) => _.isFinite(i[1])))
   }
 }
 
@@ -54,7 +54,7 @@ function nodeDistances(nodes, maxDistanceList) {
 }
 
 function allNodesHaveDistances(nodes, maxDistanceList) {
-  return _.all(nodeDistances(nodes, maxDistanceList), _.isNumber)
+  return _.all(nodeDistances(nodes, maxDistanceList), _.isFinite)
 }
 
 export function maxDistance(edges, maxDistanceList, node) {
