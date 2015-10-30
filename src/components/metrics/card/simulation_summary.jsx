@@ -62,7 +62,7 @@ export default class DistributionSummary extends Component{
   render () {
     return (
       <DistributionSummarySmall
-          showIf={_.get(this.stats(), 'mean')}
+          showIf={_.isFinite(_.get(this.stats(), 'mean'))}
           stats={this.stats()}
       />
     )
