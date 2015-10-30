@@ -1,10 +1,12 @@
 'use strict';
 import React, {Component, PropTypes} from 'react'
-import _ from 'lodash'
 
 import './grid.css'
 import Cell from './cell'
 import EdgeContainer from './edge-container.js'
+import HorizontalIndex from './HorizontalIndex.js'
+import VerticalIndex from './VerticalIndex.js'
+
 import {keycodeToDirection, DirectionToLocation} from './utils'
 
 import HTML5Backend from 'react-dnd-html5-backend';
@@ -27,6 +29,8 @@ export default class Grid extends Component{
     showEdges: PropTypes.bool
   }
 
+  state = { rowHeights: [] }
+
   _handleKeyPress(e) {
     let direction = keycodeToDirection(e.keyCode)
     if (direction) {
@@ -41,17 +45,19 @@ export default class Grid extends Component{
     const lowestItem = !this.props.children.length ? 2 : Math.max(...this.props.children.map(g => parseInt(g.location.row))) + 2
     const selected = parseInt(this.props.selected.row) + 2
     const height = Math.max(3, lowestItem, selected) || 3;
-    return {columns: 20, rows: height}
+    return {columns: this._columnCount(), rows: height}
   }
 
   _rowCount() {
-    const lowestItem = Math.max(...this.props.children.map(e => parseInt(e.props.location.row))) + 2
-    const selected = parseInt(this.props.selected.row) + 2
+    const lowestItem = Math.max(...this.props.children.map(e => parseInt(e.props.location.row))) + 6
+    const selected = parseInt(this.props.selected.row) + 10
     return Math.max(20, lowestItem, selected) || 6;
   }
 
   _columnCount() {
-    return 15
+    const lowestItem = Math.max(...this.props.children.map(e => parseInt(e.props.location.column))) + 6
+    const selected = parseInt(this.props.selected.column) + 10
+    return Math.max(15, lowestItem, selected) || 6;
   }
 
   _cell(location) {
@@ -80,49 +86,51 @@ export default class Grid extends Component{
     )
   }
 
+  componentDidUpdate() {
+    const newHeights = upto(this._rowCount()).map(rowI => _.get(this.refs[`row-${rowI}`], 'offsetHeight'))
+    if (!_.isEqual(newHeights, this.state.rowHeights)){
+      this.setState({rowHeights: newHeights})
+    }
+  }
+
   render() {
     const rowCount = this._rowCount()
     const columnCount = this._columnCount()
-    const {edges, showEdges} = this.props
+    const {rowHeights} = this.state
+    const {edges} = this.props
 
     return (
       <div
-          className='GiantGrid'
-          onKeyPress={this._handleKeyPress.bind(this)}
+          className='GiantGrid-Container'
       >
-        <div className='GiantRow--Horizontal-Index'>
-          <span className='corner'></span>
-          {
-              upto(columnCount).map((column) => {
+        <HorizontalIndex columnCount={columnCount}/>
+        <div className='GiantGrid-Horizontal-Motion'>
+          <VerticalIndex rowHeights={rowHeights}/>
+          <div
+              className='GiantGrid'
+              onKeyPress={this._handleKeyPress.bind(this)}
+          >
+            {
+              upto(rowCount).map((row) => {
                 return (
-                    <div className='Element'>
-                      {column + 1}
-                    </div>
-                  )
+                  <div
+                      className='GiantRow'
+                      key={row}
+                      ref={`row-${row}`}
+                  >
+                  {this._row(row, columnCount)}
+                  </div>
+                )
               })
-          }
+            }
+            <EdgeContainer
+                edges={edges}
+                refs={this.refs}
+                rowCount={rowCount}
+                rowHeights={rowHeights}
+            />
+          </div>
         </div>
-        {
-          upto(rowCount).map((row) => {
-            return (
-              <div
-                  className='GiantRow'
-                  key={row}
-                  ref={`row-${row}`}
-              >
-              <div className='GiantRow--Vertical-Index'>
-                {row + 1}
-              </div>
-              {this._row(row, columnCount)}
-              </div>
-            )
-          })
-        }
-        <EdgeContainer
-            edges={edges}
-            refs={this.refs}
-            rowCount={rowCount}
-        />
       </div>
     )
   }
