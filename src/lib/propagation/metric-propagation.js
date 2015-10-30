@@ -23,7 +23,12 @@ const hasNoValues = (s) => (_.has(s, 'sample.values') && s.sample.values.length 
 const isObsolete = (id, s) => !isRecentPropagation(id, s)
 const hasNonNumberValues = (s) => {
   const values = _.get(s, 'sample.values')
-  return _.any(values, v => !_.isNumber(v))
+  if (values && values.length) {
+    const subset = _.slice(values, 0, 5)
+    return _.any(subset, v => !_.isNumber(v))
+  } else {
+    return false
+  }
 }
 
 export default class MetricPropagation {
@@ -45,12 +50,17 @@ export default class MetricPropagation {
   step(graph, dispatch) {
     if (this._needsMoreSamples(graph)) {
       const sampleCount = this.remainingSimulations[this.stepNumber]
-      const simulation = this._simulate(sampleCount, graph, dispatch)
-      const errors = this.errors(simulation)
-      this.stepNumber++
+      let simulation = this._simulate(sampleCount, graph, dispatch)
 
-      if (errors[0]) { this.halted = true }
-      return errors
+      if (simulation) {
+        const errors = this.errors(simulation)
+        this._dispatch(dispatch, simulation)
+
+        this.stepNumber++
+
+        if (errors[0]) { this.halted = true }
+        return errors
+      } else { return [null, null] }
     } else {
       return [null, null]
     }
@@ -68,12 +78,15 @@ export default class MetricPropagation {
   }
 
   _simulate(sampleCount, graph, dispatch): void {
-    let simulator = new Simulator(this.metricId, graph, this.propagationId)
-    let {simulation} = simulator.run(sampleCount)
+    const simulator = new Simulator(this.metricId, graph, this.propagationId)
+    const {simulation} = simulator.run(sampleCount)
+    return simulation
+  }
+
+  _dispatch(dispatch, simulation) {
     if (simulation) {
       dispatch(addPartialSimulation(simulation))
     }
-    return simulation
   }
 
   _existingSimulation(graph): Simulation {
