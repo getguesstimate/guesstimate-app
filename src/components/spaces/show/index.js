@@ -35,7 +35,7 @@ export default class SpacesShow extends Component {
   render () {
     const space = this.props.denormalizedSpace;
     return (
-    <div>
+    <div className='spaceShow'>
       <div className='hero-unit'>
         <div className='container-fluid'>
           <div className='row'>
