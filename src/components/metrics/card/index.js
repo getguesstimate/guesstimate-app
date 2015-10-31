@@ -137,7 +137,12 @@ class Metric extends Component {
           onMouseDown={this._handleClick.bind(this)}
           tabIndex='0'
       >
-        <MetricModal metric={metric} isOpen={this.state.modalIsOpen} closeModal={this.closeModal.bind(this)}/>
+      <MetricModal
+          metric={metric}
+          guesstimateForm={guesstimateForm}
+          isOpen={this.state.modalIsOpen}
+          closeModal={this.closeModal.bind(this)}
+      />
 
         <div className={`card-top metric-container ${metricCardView}`}>
           {(metricCardView !== 'basic') && showSimulation &&
@@ -171,7 +176,14 @@ class Metric extends Component {
             <StatTable stats={metric.simulation.stats}/>
           }
 
-          <span className='hover-toggle' onMouseDown={this.openModal.bind(this)} ref='modalLink' data-select='false'> <Icon name='expand'/></span>
+          <span
+              className='hover-toggle'
+              onMouseDown={this.openModal.bind(this)}
+              ref='modalLink'
+              data-select='false'
+          >
+            <Icon name='expand'/>
+          </span>
         </div>
         <EditingPane
             guesstimate={metric.guesstimate}

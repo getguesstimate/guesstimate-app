@@ -65,6 +65,23 @@
   padding-left: 0.5em;
 }
 
+.distribution-summary {
+  font-size: 1.6em;
+}
+
+.distribution-summary .mean {
+  font-weight: 500;
+  font-size: 1.5em;
+  color: $black-1;
+}
+
+.distribution-summary .stdev {
+  margin-left: 0.25em;
+  font-size: 0.75em;
+  color: #aaa;
+}
+
+
 .form-group {
   margin-bottom: 0;
 }
@@ -72,11 +89,6 @@
   color: $grey-2;
 }
 
-.mean {
-  font-weight: 500;
-  font-size: 1.5em;
-  color: $black-1;
-}
 .function-id {
   font-size: 1em;
   color: blue;
@@ -89,4 +101,12 @@
 .sampleValues {
   max-height: 500px;
   overflow: auto;
+  background-color: $grey-1;
+  padding: 3px 15px;
+  border-radius: 3px;
+}
+
+.sampleValues ul {
+   list-style-type: none;
+   padding: 0;
 }
