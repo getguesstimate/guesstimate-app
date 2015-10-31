@@ -8,6 +8,10 @@ import insertAtCaret from 'lib/jquery/insertAtCaret'
 class GuesstimateForm extends Component{
   displayName: 'GuesstimateForm'
 
+  componentWillMount() {
+    this._dispatchChange = _.throttle(this._dispatchChange, 300)
+  }
+
   static propTypes = {
     dispatch: PropTypes.func,
     guesstimate: PropTypes.object.isRequired,
@@ -46,6 +50,9 @@ class GuesstimateForm extends Component{
   }
   _changeInput(value=this._value()){
     this.setState({userInput: value});
+    this._dispatchChange(value)
+  }
+  _dispatchChange(value) {
     this.props.dispatch(changeGuesstimateForm({input: value, metric: this.props.metricId}));
   }
   _value() {
