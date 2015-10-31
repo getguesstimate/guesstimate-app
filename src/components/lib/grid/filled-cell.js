@@ -36,6 +36,7 @@ export default class ItemCell extends Component {
     return React.cloneElement(
         this.props.item,
         {
+          hovered: this.props.hover,
           isSelected: this.props.isSelected,
           gridKeyPress: this.props.gridKeyPress
         }

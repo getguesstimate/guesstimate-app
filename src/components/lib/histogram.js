@@ -29,14 +29,15 @@ export default class Histogram extends React.Component {
     top: 20,
     right: 5,
     bottom: 30,
-    left: 5
+    left: 5,
+    bins: 40
   };
 
   render() {
     var { top, right, bottom, left, data, width, height } = this.props;
 
     let xScale = getXScale(data, width);
-    let bins = 80
+    let bins = this.props.bins
     let histogramDataFn = d3.layout.histogram().bins(xScale.ticks(bins));
     let histogramData = histogramDataFn(data);
     let yScale = getYScale(histogramData, height);

@@ -7,10 +7,12 @@ import { removeMetric, changeMetric } from 'gModules/metrics/actions.js';
 import { changeGuesstimate } from 'gModules/guesstimates/actions.js';
 
 import Histogram from 'gComponents/simulations/histogram'
+import MetricModal from './modal.js'
 import StatTable from 'gComponents/simulations/stat_table'
 import EditingPane from './editing_pane';
 import DistributionSummary from './simulation_summary'
 import Header from './header'
+import Icon from 'react-fa'
 import $ from 'jquery'
 import './style.css'
 
@@ -45,14 +47,26 @@ class Metric extends Component {
     ]).isRequired
   }
 
+  state = {modalIsOpen: false};
+
   componentDidUpdate() {
     if (!this.props.isSelected && this._isEmpty() && !this.refs.header.hasContent()){
         this.handleRemoveMetric()
     }
   }
 
+  openModal() {
+     this.setState({modalIsOpen: true});
+  }
+
+  closeModal() {
+     this.setState({modalIsOpen: false});
+  }
+
   _handleClick(event) {
-    if (!this.props.isSelected){
+    const selectableEl = (event.target.parentElement.getAttribute('data-select') !== 'false')
+    const notYetSelected = !this.props.isSelected
+    if (selectableEl && notYetSelected){
       if (this.props.userAction == 'function') {
         event.preventDefault()
         $(window).trigger('functionMetricClicked', this.props.metric)
@@ -123,6 +137,7 @@ class Metric extends Component {
           onMouseDown={this._handleClick.bind(this)}
           tabIndex='0'
       >
+        <MetricModal metric={metric} isOpen={this.state.modalIsOpen} closeModal={this.closeModal.bind(this)}/>
 
         <div className={`card-top metric-container ${metricCardView}`}>
           {(metricCardView !== 'basic') && showSimulation &&
@@ -155,6 +170,8 @@ class Metric extends Component {
           {(metricCardView === 'scientific') && _.get(metric, 'simulation.stats') && showSimulation &&
             <StatTable stats={metric.simulation.stats}/>
           }
+
+          <span className='hover-toggle' onMouseDown={this.openModal.bind(this)} ref='modalLink' data-select='false'> <Icon name='expand'/></span>
         </div>
         <EditingPane
             guesstimate={metric.guesstimate}
