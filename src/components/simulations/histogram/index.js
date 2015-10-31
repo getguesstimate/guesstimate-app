@@ -5,11 +5,16 @@ import './style.css'
 
 const PT = PropTypes
 class SimulationHistogram extends Component{
+
   static propTypes = {
     containerWidth: PT.number,
     height: PT.number,
     simulation: PT.object,
   }
+
+  static defaultProps = {
+    bins: 40,
+  };
 
   shouldComponentUpdate(nextProps) {
     return (
@@ -26,6 +31,7 @@ class SimulationHistogram extends Component{
       <Histogram data={this.values()}
           height={this.props.height}
           width={this.props.containerWidth + 5}
+          bins={this.props.bins}
       />
     )
   };

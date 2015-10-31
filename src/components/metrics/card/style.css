@@ -1,6 +1,5 @@
 @import './styles/variables.css';
 
-
 .metric {
   background-color: rgba(255,255,255,1);
   border-bottom: 2px solid #ccc;
@@ -24,6 +23,21 @@
   background-color: #EDEFF0;
 }
 
+.metric .hover-toggle {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  color: $grey-2;
+  display: none;
+}
+
+.metric .hover-toggle:hover {
+  color: $black-2;
+}
+
+.hovered .metric .hover-toggle {
+  display: block
+}
 
 .metric .card-top{
   position: relative;
@@ -68,3 +82,11 @@
   color: blue;
 }
 
+.ReactModal__Overlay--after-open {
+   z-index: 5;
+}
+
+.sampleValues {
+  max-height: 500px;
+  overflow: auto;
+}

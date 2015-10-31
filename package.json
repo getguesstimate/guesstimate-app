@@ -94,6 +94,7 @@
     "react-dom": "^0.14.0",
     "react-fa": "^4.0.0",
     "react-json-tree": "^0.2.0",
+    "react-modal": "^0.6.1",
     "react-redux": "^4.0.0",
     "react-textarea-autosize": "^3.0.0",
     "redux": "^3.0.2",

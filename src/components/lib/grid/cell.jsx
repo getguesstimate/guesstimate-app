@@ -74,7 +74,7 @@ export default class Cell extends Component {
   _cellElement = () => {
     if (this.props.item) {
       // Then endDrag fixes a bug where the original dragging position is hovered.
-      return (<ItemCell onEndDrag={this.mouseOut.bind(this)} {...this.props}/>)
+      return (<ItemCell onEndDrag={this.mouseOut.bind(this)} {...this.props} hover={this.state.hover}/>)
     } else {
       return (<EmptyCell {...this.props} />)
     }
