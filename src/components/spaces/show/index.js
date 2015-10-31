@@ -39,7 +39,7 @@ export default class SpacesShow extends Component {
       <div className='hero-unit'>
         <div className='container-fluid'>
           <div className='row'>
-            <div className='col-sm-8'>
+            <div className='col-sm-10'>
 
               {space &&
                 <SpacesShowHeader onDestroy={this.destroy.bind(this)}
@@ -49,7 +49,7 @@ export default class SpacesShow extends Component {
               }
             </div>
 
-            <div className='col-sm-4'>
+            <div className='col-sm-2'>
 
               {space && space.user && !space.ownedByMe &&
                 <div>
