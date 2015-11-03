@@ -11,9 +11,9 @@ See [GetGuesstimate.com](http://alpha.getguesstimate.com/) to use.
 ##Create a Metric with a Guess
 ![create_guess](http://g.recordit.co/Ug32xX0o3l.gif)
 You can enter individual numbers or ranges.  There are a few ways of entering ranges.
-- ```30/5```: This means '30' with a 40% interval of 5 on each side (to be 90% total)
+- ```30/5```: This means '30' with a standard deviation of 5 on each side.
 - ```30+-5```: Same as above.
-- ```25->35```: A 90% confidence interval between 25 and 35.
+- ```25->35```: A 2-standard-distribution confidence interval between 25 and 35.
 
 Currently all ranges are converted into normal distributions.  
 
@@ -39,3 +39,12 @@ Arrows between metrics can be turned on or off.  They can be useful, but also ad
 ##Distribution View
 ![distributions](http://g.recordit.co/fkD7HJknPT.gif)
 Click on Metrics to see more information about their distributions.  The Distribution shows a large view of the Distribution, information about different percentiles, and a portion of the samples that make up the distribution.
+
+##Limitations
+There are many things that will be improved.  Some of the more important limitations include:  
+1. Normal distributions are the default for guesses, and flat distributions are possible using math.js ```=random(3,9)```.  Lognormal, power, and other kinds of distribution should be standard/possible.  
+2. Everything is public.    
+3. Only the creator of a collection is allowed to save edits to that collection.  
+4. The distribution view displays all negative samples as '0' for some reason.  
+5. Metrics can't be shared between collections.  
+6. Distributions are all +- 1 standard deviation.  Having everything be a 90% confidence interval would probably be better.
