@@ -75,11 +75,6 @@ export default class DistributionEditor extends Component {
       <div className='DistributionEditor'>
         <div className='row'>
           <div className='col-sm-12'>
-          {'Histogram goes here'}
-          </div>
-        </div>
-        <div className='row'>
-          <div className='col-sm-12'>
             <div className='four ui attached buttons'>
               {['point', 'normal', 'lognormal', 'uniform'].map(e => {
                 const isSelected = (e === this.state.distribution.type)

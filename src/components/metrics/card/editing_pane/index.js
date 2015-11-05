@@ -2,7 +2,9 @@ import React, {Component, PropTypes} from 'react'
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import GuesstimateForm from './guesstimate_form';
 import ShowIf from 'gComponents/utility/showIf';
+import Icon from 'react-fa'
 import './style.css'
+import DistributionModal from 'gComponents/distributions/editor/modal'
 
 @ShowIf
 export default class MetricEditingPane extends Component {
@@ -15,31 +17,23 @@ export default class MetricEditingPane extends Component {
   _handlePress(e) {
     e.stopPropagation()
   }
+
+  state = {modalIsOpen: false};
+
+  openModal() {
+     this.setState({modalIsOpen: true});
+  }
+
+  closeModal() {
+     this.setState({modalIsOpen: false});
+  }
+
   render() {
-    let items = (
-      <div className='metric-container editing-section' key={this.props.metricId}>
-        <div className='row'>
-          <div
-              className='col-xs-12'
-              onKeyDown={this._handlePress}
-          >
-          <GuesstimateForm
-              guesstimate={this.props.guesstimate}
-              guesstimateForm={this.props.guesstimateForm}
-              metricId={this.props.metricId}
-              onSubmit={this.props.onChangeGuesstimate}
-              value={this.props.guesstimate.input}
-              metricFocus={this.props.metricFocus}
-          />
-          </div>
-        </div>
-        </div>
-      )
     return (
       <div className='metric-container editing-section' key={this.props.metricId}>
         <div className='row'>
           <div
-              className='col-xs-12'
+              className='col-xs-8'
               onKeyDown={this._handlePress}
           >
           <GuesstimateForm
@@ -51,8 +45,23 @@ export default class MetricEditingPane extends Component {
               metricFocus={this.props.metricFocus}
           />
           </div>
+          <div className='col-xs-2'>
+            <div
+                  className='ui button tinyhover-toggle'
+                  onMouseDown={this.openModal.bind(this)}
+                  ref='modalLink'
+                  data-select='false'
+            >
+              <Icon name='bar-chart'/>
+            </div>
+          </div>
         </div>
-        </div>
+
+      <DistributionModal
+          isOpen={this.state.modalIsOpen}
+          closeModal={this.closeModal.bind(this)}
+      />
+    </div>
     )
   }
 };
