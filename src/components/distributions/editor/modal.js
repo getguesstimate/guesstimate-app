@@ -15,8 +15,8 @@ export default class DistributionEditorModal extends Component {
       content : {
         top                   : '20%',
         left                  : '20%',
-        right                  : '50%',
-        bottom                  : '60%',
+        right                  : '100%',
+        bottom                  : '100%',
         padding                  : '0',
         border                  : 'none',
         overflow: 'none',
@@ -31,7 +31,7 @@ export default class DistributionEditorModal extends Component {
         style={customStyles}
       >
       {isOpen &&
-        <Form/>
+        <Form close={closeModal}/>
       }
       </Modal>
     )
