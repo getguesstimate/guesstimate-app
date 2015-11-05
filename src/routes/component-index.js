@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import Icon from'react-fa'
 import { connect } from 'react-redux';
 import MetricCard from 'gComponents/metrics/card'
+import DistributionEditor from 'gComponents/distributions/editor'
 import JSONTree from 'react-json-tree'
 import './main.css'
 
@@ -58,6 +59,7 @@ export default class ComponentIndex extends Component{
     return (
       <div className='container-fluid full-width'>
       <ComponentEditor name='MetricCard' child={MetricCard} childProps={MetricCardProps}/>
+      <ComponentEditor name='DistributionEditor' child={DistributionEditor} childProps={{foo: 'bar'}}/>
       </div>
     )
   }
