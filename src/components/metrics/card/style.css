@@ -5,6 +5,7 @@
   border-bottom: 2px solid #ccc;
   border-radius: 3px;
   cursor: pointer;
+  max-width: 30em;
   white-space: normal;
   z-index: 0;
   font-size: 1.25em;

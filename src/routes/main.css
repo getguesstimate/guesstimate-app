@@ -1,5 +1,20 @@
 .wrap {
-  max-width: 1200px;
+  width: 1200px;
+}
+
+.ComponentEditor {
+  margin-top: 10px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #ddd;
+}
+
+.ComponentEditor .Component {
+  padding: 5px;
+  background-color: #ddd;
+}
+
+.container-fluid.full-width {
+  width: 100%;
 }
 
 body {
