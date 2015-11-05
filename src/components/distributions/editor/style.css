@@ -1,0 +1,29 @@
+@import './styles/variables.css';
+
+.RangeForm {
+  padding: 1em 1em;
+  background-color: $blue-1;
+  font-size: 1.25em;
+  border-radius: 0.25em;
+  margin: 1em;
+}
+
+.RangeForm .arrow {
+  text-align: center;
+}
+
+.RangeForm .arrow .fa {
+  font-size: 2.5em;
+  color: rgba(255,255,255,0.5);
+}
+
+.ui.form .RangeForm .field > input {
+  text-align: center;
+}
+
+.ui.form .RangeForm .field > label {
+  text-align:center;
+  margin-top: 0.3em;
+  font-weight: normal;
+  color: white;
+}
