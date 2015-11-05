@@ -64,6 +64,7 @@ class GuesstimateForm extends Component{
       this.props.metricFocus()
     }
   }
+  //right now errors live in the simulation, which is not present here.
   render() {
     let distribution = this.props.guesstimateForm && this.props.guesstimateForm.distribution;
     let errors = distribution && distribution.errors;
