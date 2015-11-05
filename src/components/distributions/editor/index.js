@@ -69,6 +69,10 @@ export default class DistributionEditor extends Component {
     this.setState(newDistribution)
   }
 
+  _close() {
+    this.props.close()
+  }
+
   render() {
     const distributionType = this.distributionType()
     return (
@@ -93,7 +97,7 @@ export default class DistributionEditor extends Component {
         <div className='row'>
           <div className='col-sm-12 actions'>
             <div className='ui button green large'>{'Save'}</div>
-            <div className='ui button large'><Icon name='close'/></div>
+            <div className='ui button large' onClick={this.props.close}><Icon name='close'/></div>
           </div>
         </div>
       </div>
