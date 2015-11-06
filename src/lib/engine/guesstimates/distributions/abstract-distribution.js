@@ -1,4 +1,4 @@
-export class AbstractDistribution {
+export default class AbstractDistribution {
   constructor(name, formatter, sampler) {
     this.name = name;
     this.formatter = formatter;
@@ -7,5 +7,8 @@ export class AbstractDistribution {
 
   isA(g) { return this.formatter.isA(g) }
   isValid(g, graph) { return this.formatter.isValid(g, graph) }
-  sample(g, graph) { return this.sampler.sample(g, graph) }
+  sample(g, n, graph) {
+    const formatted = this.formatter.format(g, graph)
+    return this.sampler.sample(formatted, n, graph)
+  }
 }

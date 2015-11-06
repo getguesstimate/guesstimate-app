@@ -1,6 +1,5 @@
-//import AbstractDistribution from './abstract-distribution.js'
-
-//export default Distribution = new AbstractDistribution('normal', Formatter, Sampler)
+import Stochator from 'stochator';
+import AbstractDistribution from './abstract-distribution.js'
 
 function isNumber(s) {
   return !!(s && !isNaN(s.toString()))
@@ -15,13 +14,20 @@ export var Formatter = {
 
 export var Sampler = {
   sample(formatted, n) {
-    return {values: [formatted.value]}
+    const stochator = new Stochator({
+      mean: formatted.low,
+      stdev: formatted.high,
+      seed: 0,
+      min: -99999999999999
+    });
+    let results = stochator.next(n)
+    results = Array.isArray(results) ? results : [results]
+    return { values: results.map(n => n) }
   }
 }
 
-
 const symbols = ['+-', '-+', '±', '->', ':']
-const relevantSymbol = (input) => {return symbols.find(e => (g.input.includes(e)))}
+const relevantSymbol = (input) => {return symbols.find(e => (input.includes(e)))}
 const splitNumbersAt = (input, symbol) => { return input.split(symbol).map((e) => parseFloat(e.trim())); }
 
 export var InputFormatter = {
@@ -35,7 +41,7 @@ export var InputFormatter = {
 
   isA(g) {
     if (!g.input) { return false }
-    return (symbols.filter(e => (g.input.includes(e))).length === 1)
+    return (this.inputSymbols(g.input).length >= 1)
   },
 
   format(g) {
@@ -45,7 +51,11 @@ export var InputFormatter = {
 
   _numbers(input) {
     const symbol = relevantSymbol(input)
-    const numbers = splitNumbersAt(input, symbol)
+    return splitNumbersAt(input, symbol)
+  },
+
+  inputSymbols(input) {
+    return symbols.filter(e => (input.includes(e)))
   }
 }
 
@@ -55,3 +65,5 @@ export var ManualFormatter = {
   isValid(g) { return (!!this.isA(g) && isNumber(g.low) && isNumber(g.high)) },
   format(g) { return {low: parseFloat(g.low), high: parseFloat(g.high)} }
 }
+
+export var Distribution = new AbstractDistribution('normal', Formatter, Sampler)
