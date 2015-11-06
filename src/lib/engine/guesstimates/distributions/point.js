@@ -1,15 +1,10 @@
+//import AbstractDistribution from './abstract-distribution.js'
+
+//export default var Distribution = new AbstractDistribution('point', Formatter, Sampler)
+
 function isNumber(s) {
   return !!(s && !isNaN(s.toString()))
 }
-
-//export var Main = {
-  //isA(g) {return Formatter.isA(g)},
-  //isValid(g) {return Formatter.isValid(g)},
-  //sample(g,n) {
-    //const formatted = Formatter.format(g)
-    //return Sampler.sample(formatted, n)
-  //}
-//}
 
 export var Formatter = {
   isA(g) { return this._relevantFormatter(g).isA(g) },
