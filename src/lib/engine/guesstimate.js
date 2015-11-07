@@ -4,45 +4,23 @@ import * as eDistribution from './distribution.js';
 import * as functionInput from './functionInput.js';
 import * as estimateInput from './estimateInput.js';
 import type {Guesstimate, Distribution, DGraph, Graph, Simulation} from './types.js'
+import {getStrategy} from './guesstimate-strategies/index.js'
 
-function toDistribution(guesstimate: Guesstimate): Distribution {
-  let input = guesstimate.input;
-  if (isFunc(input)){
-    return functionInput.toDistribution(input)
-  } else {
-    return estimateInput.toDistribution(input)
-  }
-}
-
-function isFunc(input: string): boolean {
-  return (input[0] === '=');
-}
-
-export function inputMetrics(guesstimate: Guesstimate, dGraph: DGraph): Array<Object> {
-  if (!isFunc(guesstimate.input)){
-    return []
-  } else {
-    let result = functionInput.inputMetrics(guesstimate.input, dGraph)
-    return result || []
-  }
-}
-
-//This obviously could use some clean up.  Maybe, each sample includes the metric info.
 export function sample(guesstimate: Guesstimate, dGraph: DGraph, n: number = 1): Object{
-  let distribution = toDistribution(guesstimate)
-  let _sample = eDistribution.sample(distribution, dGraph, n)
+  const strategy = getStrategy(guesstimate)
+  const _sample = strategy.sample(guesstimate, n, dGraph)
   return {
     metric: guesstimate.metric,
     sample: _sample
-  };
+  }
+}
+
+export function inputMetrics(guesstimate: Guesstimate, dGraph: DGraph): Array<Object> {
+  getStrategy(guesstimate).inputMetrics(guesstimate, dGraph)
 }
 
 export function toEditorState(guesstimate: Guesstimate): string{
-  if (isFunc(guesstimate.input)){
-    return 'function';
-  } else {
-    return 'estimate';
-  }
+  return (getStrategy(guesstimate).name === 'function') ? 'function': 'estimate'
 }
 
 export function simulations(guesstimate: Guesstimate, graph:Graph) : Array<Simulation>{
