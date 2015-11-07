@@ -2,7 +2,7 @@ import {Distribution, Formatter, Sampler} from './normal';
 import {expect} from 'chai';
 
 describe('Distribution', () => {
-  describe.only('#sample', () => {
+  describe('#sample', () => {
     it('works', () => {
       const sample = Distribution.sample({input: '8->1'}, 10)
       expect(sample.values.length).to.equal(10)
