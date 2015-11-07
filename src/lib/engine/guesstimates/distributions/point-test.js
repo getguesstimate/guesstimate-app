@@ -1,5 +1,15 @@
-import {Formatter, Sampler} from './point.js';
+import {Distribution, Formatter, Sampler} from './point.js';
 import {expect} from 'chai';
+
+describe.only('Distribution', () => {
+  describe('#sample', () => {
+    it('works', () => {
+      const sample = Distribution.sample({input: '5'}, 10)
+      expect(sample.values.length).to.equal(1)
+      expect(sample.values).to.deep.equal([5])
+    })
+  });
+})
 
 describe('Formatter', () => {
   describe('#isA', () => {

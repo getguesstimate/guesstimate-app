@@ -1,6 +1,4 @@
-//import AbstractDistribution from './abstract-distribution.js'
-
-//export default var Distribution = new AbstractDistribution('point', Formatter, Sampler)
+import AbstractDistribution from './abstract-distribution.js'
 
 function isNumber(s) {
   return !!(s && !isNaN(s.toString()))
@@ -14,7 +12,7 @@ export var Formatter = {
 }
 
 export var Sampler = {
-  sample(formatted, n) {
+  sample(formatted) {
     return {values: [formatted.value]}
   }
 }
@@ -33,3 +31,4 @@ export var ManualFormatter = {
   format(g) { return {value: parseFloat(g.value)} }
 }
 
+export var Distribution = new AbstractDistribution('point', Formatter, Sampler)
