@@ -1,7 +1,7 @@
 import {Distribution} from './index';
 import {expect} from 'chai';
 
-describe.only('Distribution', () => {
+describe('Distribution', () => {
   describe('#isA', () => {
     it('with point', () => {
       const foo = Distribution

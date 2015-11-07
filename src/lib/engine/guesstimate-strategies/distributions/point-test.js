@@ -1,7 +1,7 @@
 import {Distribution, Formatter, Sampler} from './point.js';
 import {expect} from 'chai';
 
-describe.only('Distribution', () => {
+describe('Distribution', () => {
   describe('#sample', () => {
     it('works', () => {
       const sample = Distribution.sample({input: '5'}, 10)

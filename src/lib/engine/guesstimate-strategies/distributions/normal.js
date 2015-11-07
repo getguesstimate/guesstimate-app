@@ -26,7 +26,7 @@ export var Sampler = {
   }
 }
 
-const symbols = ['+-', '-+', '±', '->', ':']
+const symbols = ['+-', '-+', '±', '->', ':', '/']
 const relevantSymbol = (input) => {return symbols.find(e => (input.includes(e)))}
 const splitNumbersAt = (input, symbol) => { return input.split(symbol).map((e) => parseFloat(e.trim())); }
 
@@ -40,7 +40,7 @@ export var InputFormatter = {
   },
 
   isA(g) {
-    if (!g.input) { return false }
+    if (!g || !g.input) { return false }
     return (this.inputSymbols(g.input).length >= 1)
   },
 

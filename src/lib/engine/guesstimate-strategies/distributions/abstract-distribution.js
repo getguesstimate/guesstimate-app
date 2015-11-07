@@ -11,4 +11,5 @@ export default class AbstractDistribution {
     const formatted = this.formatter.format(g, graph)
     return this.sampler.sample(formatted, n, graph)
   }
+  inputMetrics() { return [] }
 }
