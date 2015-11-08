@@ -16,7 +16,8 @@ export function sample(guesstimate: Guesstimate, dGraph: DGraph, n: number = 1):
 }
 
 export function inputMetrics(guesstimate: Guesstimate, dGraph: DGraph): Array<Object> {
-  getStrategy(guesstimate).inputMetrics(guesstimate, dGraph)
+  const strategy = getStrategy(guesstimate)
+  return strategy.inputMetrics(guesstimate, dGraph)
 }
 
 export function toEditorState(guesstimate: Guesstimate): string{

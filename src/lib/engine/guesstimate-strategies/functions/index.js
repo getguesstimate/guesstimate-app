@@ -20,6 +20,7 @@ class Simulator {
   }
 
   inputMetrics(g, graph) {
+    const results = inputMetrics(g.input, graph)
     return inputMetrics(g.input, graph)
   }
 
