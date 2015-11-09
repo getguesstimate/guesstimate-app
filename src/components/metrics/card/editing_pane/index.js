@@ -58,8 +58,9 @@ export default class MetricEditingPane extends Component {
         </div>
 
       <DistributionModal
-          isOpen={this.state.modalIsOpen}
           closeModal={this.closeModal.bind(this)}
+          guesstimate={this.props.guesstimate}
+          isOpen={this.state.modalIsOpen}
       />
     </div>
     )
