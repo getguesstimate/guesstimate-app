@@ -1,16 +1,12 @@
-import {Distribution as NormalDistribution} from './normal.js';
+import {Distribution as NormalDistribution} from './normal/index.js';
 import {Distribution as PointDistribution} from './point.js'
 
 export class _Distribution {
   type(g) {
-    const foo = NormalDistribution
-    if (NormalDistribution.isA(g)){
-      return NormalDistribution
-    } else if (PointDistribution.isA(g)){
-      return PointDistribution
-    } else {
-      return false
-    }
+    if (!g)                             { return false }
+    if (NormalDistribution.isA(g))      { return NormalDistribution }
+    else if (PointDistribution.isA(g))  { return PointDistribution }
+    else                                { return false }
   }
 
   isA(g) { return !!this.type(g) }

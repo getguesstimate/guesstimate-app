@@ -1,4 +1,4 @@
-import {Distribution, Formatter, Sampler} from './normal';
+import {Distribution} from './index';
 import {expect} from 'chai';
 
 describe('Distribution', () => {
@@ -26,12 +26,12 @@ describe('Formatter', () => {
 
     examples.map(e => () => {
       it(`works for guesstimate ${JSON.stringify(e[0])}`, () => {
-        expect(Formatter.isA(e[0])).to.equal(e[1])
+        expect(Distribution.formatter.isA(e[0])).to.equal(e[1])
       })
     }).map(e => e())
   });
 
-  describe('#isValid', () => {
+  describe('#hasErrors', () => {
     describe('#manualFormatter', () => {
       const examples = [
         [{distributionType: 'NormalDistribution', low: '3', high: '9'}, true],
@@ -42,7 +42,8 @@ describe('Formatter', () => {
 
       examples.map(e => () => {
         it(`works for guesstimate ${JSON.stringify(e[0])}`, () => {
-          expect(Formatter.isValid(e[0])).to.equal(e[1])
+          const noErrors = (Distribution.formatter.errors(e[0]).length === 0)
+          expect(noErrors).to.equal(e[1])
         })
       }).map(e => e())
     });
@@ -56,7 +57,8 @@ describe('Formatter', () => {
 
       examples.map(e => () => {
         it(`works for guesstimate ${JSON.stringify(e[0])}`, () => {
-          expect(Formatter.isValid(e[0])).to.equal(e[1])
+          const noErrors = (Distribution.formatter.errors(e[0]).length === 0)
+          expect(noErrors).to.equal(e[1])
         })
       }).map(e => e())
     });
@@ -70,7 +72,7 @@ describe('Formatter', () => {
 
       examples.map(e => () => {
         it(`works for guesstimate ${JSON.stringify(e[0])}`, () => {
-          expect(Formatter.format(e[0])).to.deep.equal(e[1])
+          expect(Distribution.formatter.format(e[0])).to.deep.equal(e[1])
         })
       }).map(e => e())
     });
@@ -84,7 +86,7 @@ describe('Formatter', () => {
 
       examples.map(e => () => {
         it(`works for guesstimate ${JSON.stringify(e[0])}`, () => {
-          expect(Formatter.format(e[0])).to.deep.equal(e[1])
+          expect(Distribution.formatter.format(e[0])).to.deep.equal(e[1])
         })
       }).map(e => e())
     });
@@ -101,12 +103,12 @@ describe('Sampler', () => {
 
     examples.map(e => () => {
       it(`guesstimate ${JSON.stringify(e[0])} with value count ${e[1]} has correct number of values`, () => {
-        const sample = Sampler.sample(e[0], e[1])
+        const sample = Distribution.sampler.sample(e[0], e[1])
         expect(sample.values.length).to.equal(e[1])
       })
 
       it(`guesstimate ${JSON.stringify(e[0])} with value count ${e[1]} has reasonable first value`, () => {
-        const sample = Sampler.sample(e[0], e[1])
+        const sample = Distribution.sampler.sample(e[0], e[1])
         expect(sample.values[0]).to.be.within(0, 30)
       })
     }).map(e => e())

@@ -6,8 +6,8 @@ function isNumber(s) {
 
 export var Formatter = {
   isA(g) { return this._relevantFormatter(g).isA(g) },
-  isValid(g) { return this._relevantFormatter(g).isValid(g) },
   format(g) { return this._relevantFormatter(g).format(g) },
+  errors(g) { return this._relevantFormatter(g).errors(g) },
   _relevantFormatter(g) { return (InputFormatter.isA(g) ? InputFormatter : ManualFormatter) },
 }
 
@@ -19,16 +19,28 @@ export var Sampler = {
 
 export var InputFormatter = {
   name: 'input',
-  isValid(g) { return (!!g.input && isNumber(g.input)) },
-  isA(g) { return this.isValid(g) },
-  format(g) { return {value: parseFloat(g.input)} }
+  isA(g) { return (!!g.input && isNumber(g.input)) },
+  format(g) { return {value: parseFloat(g.input)} },
+  errors(g) {
+    const errs = []
+    if (!g.input || !isNumber(g.input)) {
+      errs.push('Must have valid number')
+    }
+    return errs
+  }
 }
 
 export var ManualFormatter = {
   name: 'manual',
   isA(g) { return (g.distributionType === 'PointDistribution') },
-  isValid(g) { return (!!this.isA(g) && isNumber(g.value)) },
-  format(g) { return {value: parseFloat(g.value)} }
+  format(g) { return {value: parseFloat(g.value)} },
+  errors(g) {
+    const errs = []
+    if (!g.value || !isNumber(g.value)) {
+      errs.push('Must have valid number')
+    }
+    return errs
+  }
 }
 
 export var Distribution = new AbstractDistribution('point', Formatter, Sampler)
