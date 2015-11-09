@@ -29,7 +29,7 @@ describe('Formatter', () => {
     }).map(e => e())
   });
 
-  describe('#isValid', () => {
+  describe('#errors', () => {
     const examples = [
       [{distributionType: 'PointDistribution', value: '3'}, true],
       [{distributionType: 'PointDistribution', value: 3}, true],
@@ -44,7 +44,8 @@ describe('Formatter', () => {
 
     const itExamples = examples.map(e => () => {
       it(`works for guesstimate ${JSON.stringify(e[0])}`, () => {
-        expect(Formatter.isValid(e[0])).to.equal(e[1])
+        const noErrors = (Formatter.errors(e[0]).length === 0)
+        expect(noErrors).to.equal(e[1])
       })
     }).map(e => e())
   });
