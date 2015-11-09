@@ -53,13 +53,19 @@ const MetricCardProps = {
   isSelected: true
 }
 
+const DistributionEditorProps = {
+  guesstimate: {
+
+  }
+}
+
 export default class ComponentIndex extends Component{
   displayName: 'ComponentIndex'
   render () {
     return (
       <div className='container-fluid full-width'>
-      <ComponentEditor name='MetricCard' child={MetricCard} childProps={MetricCardProps}/>
-      <ComponentEditor name='DistributionEditor' child={DistributionEditor} childProps={{foo: 'bar'}}/>
+        <ComponentEditor name='MetricCard' child={MetricCard} childProps={MetricCardProps}/>
+        <ComponentEditor name='DistributionEditor' child={DistributionEditor} childProps={{foo: 'bar'}}/>
       </div>
     )
   }
