@@ -1,25 +1,25 @@
 @import './styles/variables.css';
 
-.DistributionEditor {
+.GuesstimateEditor {
   width: 500px;
   background-color: white;
   border-radius: 5px;
 }
 
-.DistributionEditor .ui.button{
+.GuesstimateEditor .ui.button{
   background-color: $grey-1;
 }
 
-.DistributionEditor .actions {
+.GuesstimateEditor .actions {
   padding: 1em 1.5em 0.5em;
 }
 
-.DistributionEditor .actions .button{
+.GuesstimateEditor .actions .button{
   float: right;
   margin-left: 1em;
 }
 
-.DistributionEditor .attached.buttons{
+.GuesstimateEditor .attached.buttons{
   padding: 0 1px;
 }
 

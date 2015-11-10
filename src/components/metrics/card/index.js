@@ -4,7 +4,7 @@ import JSONTree from 'react-json-tree'
 
 import { connect } from 'react-redux';
 import { removeMetric, changeMetric } from 'gModules/metrics/actions.js';
-import { changeGuesstimate } from 'gModules/guesstimates/actions.js';
+import { submitManualGuesstimate } from 'gModules/guesstimates/actions.js';
 
 import Histogram from 'gComponents/simulations/histogram'
 import MetricModal from './modal.js'
@@ -98,7 +98,9 @@ class Metric extends Component {
   }
 
   handleChangeGuesstimate(values) {
-    this.props.dispatch(changeGuesstimate(this._id(), values))
+    let guesstimate = values
+    guesstimate.metric = this.props.metric.id
+    this.props.dispatch(submitManualGuesstimate(this._id(), guesstimate))
   }
 
   handleRemoveMetric () {

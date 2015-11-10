@@ -1,12 +1,16 @@
 import React, {Component, PropTypes} from 'react'
-import Icon from'react-fa'
-import { connect } from 'react-redux';
 import MetricCard from 'gComponents/metrics/card'
 import DistributionEditor from 'gComponents/distributions/editor'
 import JSONTree from 'react-json-tree'
 import './main.css'
 
 export default class ComponentEditor extends Component {
+  static propTypes = {
+    child: PropTypes.object.isRequired,
+    childProps: PropTypes.object.isRequired,
+    name: PropTypes.string.isRequired,
+  }
+
   render() {
     return (
     <div className='row ComponentEditor'>
@@ -55,8 +59,11 @@ const MetricCardProps = {
 
 const DistributionEditorProps = {
   guesstimate: {
-
-  }
+    value: '34',
+    high: '100',
+    type: 'point',
+  },
+  onSubmit: function(g) { console.log(g) }
 }
 
 export default class ComponentIndex extends Component{
@@ -64,8 +71,16 @@ export default class ComponentIndex extends Component{
   render () {
     return (
       <div className='container-fluid full-width'>
-        <ComponentEditor name='MetricCard' child={MetricCard} childProps={MetricCardProps}/>
-        <ComponentEditor name='DistributionEditor' child={DistributionEditor} childProps={{foo: 'bar'}}/>
+        <ComponentEditor
+            child={MetricCard}
+            childProps={MetricCardProps}
+            name='MetricCard'
+        />
+        <ComponentEditor
+            child={DistributionEditor}
+            childProps={DistributionEditorProps}
+            name='DistributionEditor'
+        />
       </div>
     )
   }
