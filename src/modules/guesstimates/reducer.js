@@ -10,11 +10,13 @@ export default function guesstimates(state = [], action) {
   case 'CHANGE_GUESSTIMATE':
     const i = state.findIndex(y => y.metric === action.values.metric);
     if (i !== -1) {
-      return [
+      const newState = [
         ...state.slice(0, i),
         action.values,
         ...state.slice(i+1, state.length)
       ];
+      console.log('changing guesstimate state to', newState[i])
+      return newState
     }
   default:
     return state;

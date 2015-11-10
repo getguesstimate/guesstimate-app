@@ -6,7 +6,7 @@ const PT = PropTypes;
 
 export default class RangeForm extends Component {
   static propTypes = {
-    distributionType: PT.object.isRequired,
+    guesstimateType: PT.object.isRequired,
     onChange: PT.func.isRequired,
   }
 
@@ -19,7 +19,7 @@ export default class RangeForm extends Component {
     this.props.onChange(this.values())
   }
   render() {
-    const hasTails = (this.props.distributionType.name !== 'uniform')
+    const hasTails = (this.props.guesstimateType.name !== 'uniform')
     return (
       <div className='RangeForm' ref='el'>
         <div className='row primary'>
@@ -29,6 +29,7 @@ export default class RangeForm extends Component {
                   name='low'
                   onChange={this.onChange.bind(this)}
                   placeholder='low'
+                  defaultValue={this.props.guesstimate.low}
                   ref='low'
                   type='text'
               />
@@ -45,6 +46,7 @@ export default class RangeForm extends Component {
               <input
                   name='high'
                   onChange={this.onChange.bind(this)}
+                  defaultValue={this.props.guesstimate.high}
                   placeholder='high'
                   ref='high'
                   type='text'

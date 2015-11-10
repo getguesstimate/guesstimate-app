@@ -6,28 +6,31 @@ const PT = PropTypes;
 
 export default class ValueForm extends Component {
   static propTypes = {
-    distributionType: PT.object.isRequired,
+    guesstimateType: PT.object.isRequired,
+    guesstimate: PT.object.isRequired,
     onChange: PT.func.isRequired,
   }
 
   subForm() {
-    const type = (this.props.distributionType === 'point') ? PointForm : RangeForm
+    const type = (this.props.guesstimateType === 'point') ? PointForm : RangeForm
     return type
   }
   render() {
-    const isPoint = (this.props.distributionType.name === 'point')
+    const isPoint = (this.props.guesstimateType.name === 'point')
     return (
       <div className='ui form ValueForm'>
         {isPoint &&
           <PointForm
-              distributionType={this.props.distributionType}
+              guesstimate={this.props.guesstimate}
+              guesstimateType={this.props.guesstimateType}
               onChange={this.props.onChange}
               ref='subForm'
           />
         }
         {!isPoint &&
           <RangeForm
-              distributionType={this.props.distributionType}
+              guesstimate={this.props.guesstimate}
+              guesstimateType={this.props.guesstimateType}
               onChange={this.props.onChange}
               ref='subForm'
           />

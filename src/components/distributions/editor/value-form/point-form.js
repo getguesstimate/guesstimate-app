@@ -5,6 +5,7 @@ const PT = PropTypes;
 
 export default class PointForm extends Component {
   static propTypes = {
+    guesstimate: PT.object.isRequired,
     onChange: PT.func.isRequired,
     value: PT.number,
   }
@@ -26,6 +27,7 @@ export default class PointForm extends Component {
           <div className='col-sm-8'>
             <div className='field'>
               <input
+                  defaultValue={this.props.guesstimate.value}
                   name='value'
                   onChange={this.onChange.bind(this)}
                   placeholder='value'

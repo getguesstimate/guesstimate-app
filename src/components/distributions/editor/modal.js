@@ -23,15 +23,18 @@ export default class DistributionEditorModal extends Component {
         outline: 'none'
       }
     };
-    const {isOpen, closeModal} = this.props
+    const {isOpen, closeModal, onSubmit} = this.props
     return(
       <Modal
-        isOpen={isOpen}
-        onRequestClose={closeModal}
-        style={customStyles}
+          isOpen={isOpen}
+          onRequestClose={closeModal}
+          style={customStyles}
       >
       {isOpen &&
-        <Form close={closeModal}/>
+        <Form
+            close={closeModal}
+            onSubmit={onSubmit}
+        />
       }
       </Modal>
     )

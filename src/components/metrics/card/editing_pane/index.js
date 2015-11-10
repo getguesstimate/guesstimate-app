@@ -14,6 +14,7 @@ export default class MetricEditingPane extends Component {
     metricId: PropTypes.string.isRequired,
     onChangeGuesstimate: PropTypes.func,
   }
+
   _handlePress(e) {
     e.stopPropagation()
   }
@@ -26,6 +27,11 @@ export default class MetricEditingPane extends Component {
 
   closeModal() {
      this.setState({modalIsOpen: false});
+  }
+
+  submitModal(guesstimate) {
+    this.props.onChangeGuesstimate(guesstimate)
+    this.setState({modalIsOpen: false});
   }
 
   render() {
@@ -61,6 +67,7 @@ export default class MetricEditingPane extends Component {
           closeModal={this.closeModal.bind(this)}
           guesstimate={this.props.guesstimate}
           isOpen={this.state.modalIsOpen}
+          onSubmit={this.submitModal.bind(this)}
       />
     </div>
     )
