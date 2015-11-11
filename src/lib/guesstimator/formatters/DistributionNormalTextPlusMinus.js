@@ -1,11 +1,19 @@
-import {textMixin, isNumber} from './lib.js'
+import {normalTextMixin} from './lib.js'
 
 export const item = Object.assign(
-  textMixin,
+  {}, normalTextMixin,
   {
     guesstimateType: 'NORMAL',
     inputType: 'TEXT',
-    errors() { return [] },
-    _matchesText(text) { return isNumber(text) }
+    _symbols: ['+-', '-+', '±'],
+    format(g) {
+      const guesstimateType = this.guesstimateType
+      const [mean, stdev] = this._numbers(g.text)
+      return {
+        guesstimateType,
+        low: mean - stdev,
+        high: mean + stdev
+      }
+    }
   }
 )
