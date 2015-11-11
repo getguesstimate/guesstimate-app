@@ -1,7 +1,7 @@
 import {graphicalMixin} from './lib.js'
 
 export const item = Object.assign(
-  graphicalMixin,
+  {}, graphicalMixin,
   {
     guesstimateType: 'POINT',
     inputType: 'GRAPHICAL',

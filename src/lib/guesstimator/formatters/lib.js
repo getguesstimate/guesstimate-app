@@ -28,3 +28,24 @@ export const textMixin = {
     return !!(g.text && _.isString(g.text))
   }
 }
+
+export const normalTextMixin = Object.assign(
+  {}, textMixin,
+  {
+    errors(g) { return this._normalTextErrors(g.text) },
+    _matchesText(text) { return this._hasRelevantSymbol(text) },
+
+    _normalTextErrors(text) {
+      const errs = []
+      if (this._inputSymbols(text).length > 1) { errs.append('Must contain only 1 symbol') }
+      if (!_.all(this._numbers(text), (e) => isParseableNumber(e))) { errs.append('Not all numbers are parseable') }
+      return errs
+    },
+
+    _numbers(text) { return this._splitNumbersAt(text, this._relevantSymbol(text)) },
+    _inputSymbols(text) { return this._symbols.filter(e => (text.includes(e))) },
+    _splitNumbersAt(text, symbol) { return text.split(symbol).map((e) => parseNumber(e.trim())); },
+    _relevantSymbol(text) { return this._inputSymbols(text)[0] },
+    _hasRelevantSymbol(text) { return (this._inputSymbols(text).length > 0) }
+  }
+)
