@@ -1,3 +1,4 @@
+
 import Stochator from 'stochator';
 
 export var Sampler = {
