@@ -29,7 +29,7 @@ export function inputMetricsReady(metrics){
 export function metricGraphToInputs(text, dGraph) {
   const metrics = inputMetrics(text, dGraph)
   let inputs = {}
-  metrics.map(m => {inputs[m.readableId] = m.simulations.sample.values})
+  metrics.map(m => {inputs[m.readableId] = _.get(m, 'simulation.sample.values') })
   return inputs
 }
 

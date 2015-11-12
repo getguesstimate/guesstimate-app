@@ -17,8 +17,8 @@ describe("Function", () => {
   describe('#format', () => {
     const defaultGraph = {
       metrics: [
-        {readableId:'AB', simulations: {sample: {values: [3,4,5]}}},
-        {readableId:'CI', simulations: {sample: {values: [3,4,5]}}}
+        {readableId:'AB', simulation: {sample: {values: [3,4,5]}}},
+        {readableId:'CI', simulation: {sample: {values: [3,4,5]}}}
       ]
     }
 

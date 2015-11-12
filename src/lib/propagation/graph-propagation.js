@@ -46,7 +46,6 @@ export class GraphPropagation {
 
     this.currentStep = 0
     this.totalSteps = this.orderedMetricPropagations.length * 3
-    console.log(this.orderedMetricIds)
   }
 
   run(): void {
@@ -89,7 +88,6 @@ export class GraphPropagation {
       subset = e.graph.toBizarroGraph(subset, state.guesstimateForm);
     }
 
-    console.log('using subset', subset)
     return subset
   }
 

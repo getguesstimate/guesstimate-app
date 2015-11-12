@@ -3,7 +3,6 @@ import async from 'async'
 import {GraphPropagation} from '../../lib/propagation/graph-propagation.js'
 
 export function runMetricSimulations(metricId, useGuesstimateForm = false) {
-  console.log('running metric simulation')
   return (dispatch, getState) => {
     (new GraphPropagation(dispatch, getState, {metricId, useGuesstimateForm})).run()
   }
