@@ -14,7 +14,7 @@ describe("Function", () => {
     }).map(e => e())
   });
 
-  describe.only('#format', () => {
+  describe('#format', () => {
     const defaultGraph = {
       metrics: [
         {readableId:'AB', simulations: {sample: {values: [3,4,5]}}},
