@@ -6,11 +6,10 @@ import Icon from 'react-fa'
 import './style.css'
 
 const GuesstimateInformation = [
-  {name: 'PointDistribution', description: 'An estimate at one point', fields: ['value']},
-  {name: 'NormalDistribution', description: 'A normal Guesstimate', fields: ['low', 'height']},
-  {name: 'LognormalDistribution', description: 'A lognormal thing', fields: ['low', 'height']},
-  {name: 'UniformDistribution', description: 'A lognormal thing', fields: ['low', 'height']},
-  {name: 'PowerDistribution', description: 'A lognormal thing', fields: ['low', 'height']}
+  {name: 'POINT', description: 'An estimate at one point', fields: ['value']},
+  {name: 'NORMAL', description: 'A normal Guesstimate', fields: ['low', 'height']},
+  {name: 'LOGNORMAL', description: 'A lognormal thing', fields: ['low', 'height']},
+  {name: 'UNIFORM', description: 'A lognormal thing', fields: ['low', 'height']}
 ]
 
 const PT = PropTypes;
@@ -26,7 +25,7 @@ export default class GuesstimateEditor extends Component {
 
   state = {
     hoveredGuesstimate: null,
-    guesstimate: Object.assign({type: 'LognormalDistribution'}, this.props.guesstimate)
+    guesstimate: Object.assign({},{type: 'NORMAL'}, this.props.guesstimate)
   }
 
   hovered(e) {
@@ -55,7 +54,7 @@ export default class GuesstimateEditor extends Component {
 
   _onSubmit() {
     let guesstimate = this.state.guesstimate
-    guesstimate.distributionType = guesstimate.type
+    guesstimate.guesstimateType = guesstimate.type
     guesstimate.input = null
     this.props.onSubmit(guesstimate)
   }
@@ -67,7 +66,7 @@ export default class GuesstimateEditor extends Component {
         <div className='row'>
           <div className='col-sm-12'>
             <div className='four ui attached buttons'>
-              {['point', 'normal', 'lognormal', 'uniform'].map(e => {
+              {['POINT', 'NORMAL', 'LOGNORMAL', 'UNIFORM'].map(e => {
                 const isSelected = (e === this.state.guesstimate.type)
                 return (
                   <HoverButton

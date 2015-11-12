@@ -34,6 +34,7 @@ export default class DistributionEditorModal extends Component {
         <Form
             close={closeModal}
             onSubmit={onSubmit}
+            guesstimate={this.props.guesstimate}
         />
       }
       </Modal>

@@ -23,10 +23,27 @@ export const DistributionPoint = {
   sampler: DistributionPointSampler
 }
 
+export const DistributionLognormal = {
+  referenceName: 'LOGNORMAL',
+  types: ['DISTRIBUTION', 'LOGNORMAL'],
+  displayName: 'LogNormal',
+  sampler: DistributionNormalSampler
+}
+
+
+export const DistributionUniform = {
+  referenceName: 'UNIFORM',
+  types: ['DISTRIBUTION', 'UNIFORM'],
+  displayName: 'Uniform',
+  sampler: DistributionNormalSampler
+}
+
 export const types = [
   Funct,
   DistributionNormal,
-  DistributionPoint
+  DistributionPoint,
+  DistributionLognormal,
+  DistributionUniform
 ]
 
 export function find(referenceName) {

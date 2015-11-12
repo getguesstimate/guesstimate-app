@@ -12,11 +12,11 @@ export default class ValueForm extends Component {
   }
 
   subForm() {
-    const type = (this.props.guesstimateType === 'point') ? PointForm : RangeForm
+    const type = (this.props.guesstimateType === 'POINT') ? PointForm : RangeForm
     return type
   }
   render() {
-    const isPoint = (this.props.guesstimateType.name === 'point')
+    const isPoint = (this.props.guesstimateType.name === 'POINT')
     return (
       <div className='ui form ValueForm'>
         {isPoint &&
