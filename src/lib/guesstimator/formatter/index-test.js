@@ -3,7 +3,7 @@ import {formatters, _matchingFormatter, format} from './index.js'
 describe('formatter', () => {
   describe('#formatters', () => {
     it('holds all formatters', () => {
-      expect(formatters.length).to.equal(5)
+      expect(formatters.length).to.equal(6)
     })
   });
 
@@ -13,7 +13,8 @@ describe('formatter', () => {
       [{text: '34'}, 'DISTRIBUTION_POINT_TEXT'],
       [{guesstimateType: 'POINT'}, 'DISTRIBUTION_POINT_GRAPHICAL'],
       [{text: '34 -> 88'}, 'DISTRIBUTION_NORMAL_TEXT_UPTO'],
-      [{text: '34 +- 88'}, 'DISTRIBUTION_NORMAL_TEXT_PLUS_MINUS']
+      [{text: '34 +- 88'}, 'DISTRIBUTION_NORMAL_TEXT_PLUS_MINUS'],
+      [{guesstimateType: 'NORMAL', low: '3', high: '88'}, 'DISTRIBUTION_NORMAL_GRAPHICAL']
     ]
 
     const itExamples = examples.map(e => () => {
