@@ -1,10 +1,11 @@
 import {textMixin, isParseableNumber, parseNumber} from './lib.js'
 
 export const item = Object.assign(
-  textMixin,
+  {}, textMixin,
   {
     guesstimateType: 'FUNCTION',
     inputType: 'TEXT',
+    formatterName: 'FUNCTION',
     _matchesText(text) { return (text[0] === '=') },
 
     format(g) {

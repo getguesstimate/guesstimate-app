@@ -5,6 +5,7 @@ export const item = Object.assign(
   {
     guesstimateType: 'POINT',
     inputType: 'GRAPHICAL',
+    formatterName: 'DISTRIBUTION_POINT_GRAPHICAL',
     relevantNumbers: [
       {name: 'value', required: true}
     ]
