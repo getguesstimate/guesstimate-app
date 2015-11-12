@@ -34,7 +34,28 @@ export default class MetricEditingPane extends Component {
     this.setState({modalIsOpen: false});
   }
 
+  componentWillUnmount() {
+    const changedInput = (this.props.guesstimateForm.input !== this.props.guesstimate.input)
+    if (this.hasTextInput() && changedInput) {
+      this.props.onChangeGuesstimate(this.props.guesstimateForm)
+    }
+  }
+
+  resetGuesstimate() {
+    this.props.onChangeGuesstimate({})
+  }
+
+  hasTextInput() {
+    const input = this.props.guesstimate.input
+    return (_.isString(input) && input.length)
+  }
+
+  hasGraphicalInput() {
+    return !!this.props.guesstimate.guesstimateType
+  }
+
   render() {
+    const hasGraphicalInput = this.hasGraphicalInput()
     return (
       <div className='metric-container editing-section' key={this.props.metricId}>
         <div className='row'>
@@ -42,25 +63,48 @@ export default class MetricEditingPane extends Component {
               className='col-xs-8'
               onKeyDown={this._handlePress}
           >
-          <GuesstimateForm
-              guesstimate={this.props.guesstimate}
-              guesstimateForm={this.props.guesstimateForm}
-              metricId={this.props.metricId}
-              onSubmit={this.props.onChangeGuesstimate}
-              value={this.props.guesstimate.input}
-              metricFocus={this.props.metricFocus}
-          />
-          </div>
-          <div className='col-xs-2'>
+          {hasGraphicalInput &&
             <div
-                  className='ui button tinyhover-toggle'
+                  className='ui button tinyhover-toggle primary'
                   onMouseDown={this.openModal.bind(this)}
                   ref='modalLink'
                   data-select='false'
             >
               <Icon name='bar-chart'/>
             </div>
+          }
+          {hasGraphicalInput &&
+            <div
+                  className='ui button tinyhover-toggle'
+                  onMouseDown={this.resetGuesstimate.bind(this)}
+            >
+              <Icon name='close'/>
+            </div>
+          }
+          {!hasGraphicalInput &&
+            <GuesstimateForm
+                guesstimate={this.props.guesstimate}
+                guesstimateForm={this.props.guesstimateForm}
+                metricFocus={this.props.metricFocus}
+                metricId={this.props.metricId}
+                onSubmit={this.props.onChangeGuesstimate}
+                ref='form'
+                value={this.props.guesstimate.input}
+            />
+          }
           </div>
+          {!hasGraphicalInput &&
+            <div className='col-xs-2'>
+              <div
+                    className='ui button tinyhover-toggle'
+                    onMouseDown={this.openModal.bind(this)}
+                    ref='modalLink'
+                    data-select='false'
+              >
+                <Icon name='bar-chart'/>
+              </div>
+            </div>
+          }
         </div>
 
       <DistributionModal

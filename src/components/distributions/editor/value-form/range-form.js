@@ -19,7 +19,7 @@ export default class RangeForm extends Component {
     this.props.onChange(this.values())
   }
   render() {
-    const hasTails = (this.props.guesstimateType.name !== 'uniform')
+    const hasTails = (this.props.guesstimateType.name !== 'UNIFORM')
     return (
       <div className='RangeForm' ref='el'>
         <div className='row primary'>

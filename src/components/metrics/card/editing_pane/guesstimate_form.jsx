@@ -24,7 +24,7 @@ class GuesstimateForm extends Component{
   state = {userInput: this.props.value || ''}
 
   componentWillUnmount() {
-    this._submit()
+    this.props.dispatch(destroyGuesstimateForm());
   }
   _handleMetricClick(item){
     insertAtCaret('live-input', item.readableId)
@@ -35,14 +35,7 @@ class GuesstimateForm extends Component{
     this.props.dispatch(createGuesstimateForm({input: this._value(), metric: this.props.metricId}))
   }
   _handleBlur() {
-    this._submit()
-  }
-  _submit() {
     $(window).off('functionMetricClicked')
-    this.props.dispatch(destroyGuesstimateForm());
-    if (this.props.value !== this.state.userInput){
-      this.props.onSubmit(this.props.guesstimateForm);
-    }
   }
   _handlePress(event) {
     let value = event.target.value;
@@ -87,4 +80,4 @@ class GuesstimateForm extends Component{
   }
 }
 
-module.exports = connect()(GuesstimateForm);
+module.exports = connect(null, null, null, {withRef: true})(GuesstimateForm);
