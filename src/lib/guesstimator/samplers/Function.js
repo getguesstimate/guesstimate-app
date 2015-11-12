@@ -2,8 +2,12 @@ import math from 'mathjs';
 
 export var Sampler = {
   sample({text, inputs}, n) {
-    const compiled = math.compile(text)
-    return sample(compiled, inputs, n)
+    try {
+      const compiled = math.compile(text)
+      return sample(compiled, inputs, n)
+    } catch (exception) {
+      return [{errors: [exception.message]}];
+    }
   }
 }
 

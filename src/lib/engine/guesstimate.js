@@ -5,10 +5,21 @@ import * as functionInput from './functionInput.js';
 import * as estimateInput from './estimateInput.js';
 import type {Guesstimate, Distribution, DGraph, Graph, Simulation} from './types.js'
 import {getStrategy} from './guesstimate-strategies/index.js'
+import * as guesstimator from '../guesstimator/index.js'
 
 export function sample(guesstimate: Guesstimate, dGraph: DGraph, n: number = 1): Object{
-  const strategy = getStrategy(guesstimate)
-  const _sample = strategy.sample(guesstimate, n, dGraph)
+  let foo = guesstimate;
+  foo.text = foo.input
+  foo.graph = dGraph
+  const formattedInput = guesstimator.format(foo)
+
+  let _sample = null
+  if (formattedInput.guesstimateType === 'NONE') {
+    _sample = {errors: ['Invalid input']}
+  } else {
+    _sample = guesstimator.sample(formattedInput, n)
+  }
+
   return {
     metric: guesstimate.metric,
     sample: _sample
