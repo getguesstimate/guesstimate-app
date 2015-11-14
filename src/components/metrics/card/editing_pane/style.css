@@ -34,18 +34,16 @@
   display: inline-block;
   width: 23px;
   height: 23px;
-  background-color: #EAEAEA;
   text-align: center;
   border-radius: 29px;
   font-size: 1em;
-  margin-left: 4px;
-  color: #7B7B7B;
+  color: #999;
   padding-top: 2px;
 }
 
 .editing-section .remove-graphical-input:hover {
   background-color: red;
-  color: $black;
+  color: #333;
   background-color: #CACACA;
 }
 

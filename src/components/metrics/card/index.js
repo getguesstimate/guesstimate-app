@@ -51,7 +51,7 @@ class Metric extends Component {
 
   componentDidUpdate() {
     if (!this.props.isSelected && this._isEmpty() && !this.refs.header.hasContent()){
-        this.handleRemoveMetric()
+      this.handleRemoveMetric()
     }
   }
 
@@ -192,14 +192,15 @@ class Metric extends Component {
             <Icon name='expand'/>
           </span>
         </div>
-        <EditingPane
-            guesstimate={metric.guesstimate}
-            guesstimateForm={guesstimateForm}
-            metricFocus={this.focus.bind(this)}
-            metricId={metric.id}
-            onChangeGuesstimate={this.handleChangeGuesstimate.bind(this)}
-            showIf={isSelected && !_.isUndefined(metric.guesstimate)}
-        />
+        {isSelected && !_.isUndefined(metric.guesstimate) &&
+          <EditingPane
+              guesstimate={metric.guesstimate}
+              guesstimateForm={guesstimateForm}
+              metricFocus={this.focus.bind(this)}
+              metricId={metric.id}
+              onChangeGuesstimate={this.handleChangeGuesstimate.bind(this)}
+          />
+        }
       </div>
     );
   }
