@@ -124,6 +124,10 @@ class Metric extends Component {
     }
   }
 
+  showStatistics() {
+    return this.showSimulation() && (_.get(this.props, 'metric.simulation.stats').length > 1)
+  }
+
   render() {
     const {isSelected, metric, guesstimateForm, userAction} = this.props
     const {canvasState: {metricCardView}} = this.props
@@ -131,6 +135,7 @@ class Metric extends Component {
     const anotherFunctionSelected = ((userAction === 'function') && !isSelected)
 
     const showSimulation = this.showSimulation()
+    const showStatistics = this.showStatistics()
     return (
       <div
           className={isSelected ? 'metric grid-item-focus' : 'metric'}
@@ -174,7 +179,7 @@ class Metric extends Component {
           {(metricCardView === 'debugging') &&
             <JSONTree data={this.props}/>
           }
-          {(metricCardView === 'scientific') && _.get(metric, 'simulation.stats') && showSimulation &&
+          {(metricCardView === 'scientific') && showStatistics &&
             <StatTable stats={metric.simulation.stats}/>
           }
 

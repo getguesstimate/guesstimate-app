@@ -60,8 +60,9 @@ const MetricCardProps = {
 const DistributionEditorProps = {
   guesstimate: {
     value: '34',
+    low: '30',
     high: '100',
-    type: 'point',
+    type: 'POINT',
   },
   onSubmit: function(g) { console.log(g) }
 }
