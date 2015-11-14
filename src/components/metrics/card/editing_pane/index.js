@@ -1,12 +1,10 @@
 import React, {Component, PropTypes} from 'react'
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import GuesstimateForm from './guesstimate_form';
-import ShowIf from 'gComponents/utility/showIf';
 import Icon from 'react-fa'
 import './style.css'
 import DistributionModal from 'gComponents/distributions/editor/modal'
 
-@ShowIf
 export default class MetricEditingPane extends Component {
   static propTypes = {
     guesstimate: PropTypes.object.isRequired,
@@ -17,6 +15,13 @@ export default class MetricEditingPane extends Component {
 
   _handlePress(e) {
     e.stopPropagation()
+  }
+
+  componentWillUnmount() {
+    const changedInput = (this.props.guesstimateForm.input !== this.props.guesstimate.input)
+    if (this.hasTextInput() && changedInput) {
+      this.props.onChangeGuesstimate(this.props.guesstimateForm)
+    }
   }
 
   state = {modalIsOpen: false};
@@ -34,19 +39,12 @@ export default class MetricEditingPane extends Component {
     this.setState({modalIsOpen: false});
   }
 
-  componentWillUnmount() {
-    const changedInput = (this.props.guesstimateForm.input !== this.props.guesstimate.input)
-    if (this.hasTextInput() && changedInput) {
-      this.props.onChangeGuesstimate(this.props.guesstimateForm)
-    }
-  }
-
   resetGuesstimate() {
     this.props.onChangeGuesstimate({})
   }
 
   hasTextInput() {
-    const input = this.props.guesstimate.input
+    const input = this.props.guesstimateForm.input
     return (_.isString(input) && input.length)
   }
 
@@ -65,18 +63,18 @@ export default class MetricEditingPane extends Component {
           >
           {hasGraphicalInput &&
             <div
-                  className='ui button tinyhover-toggle primary'
-                  onMouseDown={this.openModal.bind(this)}
-                  ref='modalLink'
-                  data-select='false'
+                className='ui button tinyhover-toggle primary'
+                onMouseDown={this.openModal.bind(this)}
+                ref='modalLink'
+                data-select='false'
             >
               <Icon name='bar-chart'/>
             </div>
           }
           {hasGraphicalInput &&
             <div
-                  className='remove-graphical-input'
-                  onMouseDown={this.resetGuesstimate.bind(this)}
+                className='remove-graphical-input'
+                onMouseDown={this.resetGuesstimate.bind(this)}
             >
               <Icon name='close'/>
             </div>
