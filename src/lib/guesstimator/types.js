@@ -1,5 +1,6 @@
 import {Sampler as DistributionNormalSampler} from './samplers/DistributionNormal.js'
 import {Sampler as DistributionPointSampler} from './samplers/DistributionPoint.js'
+import {Sampler as DistributionUniformSampler} from './samplers/DistributionUniform.js'
 import {Sampler as FunctionSampler} from './samplers/Function.js'
 
 export const Funct = {
@@ -35,7 +36,7 @@ export const DistributionUniform = {
   referenceName: 'UNIFORM',
   types: ['DISTRIBUTION', 'UNIFORM'],
   displayName: 'Uniform',
-  sampler: DistributionNormalSampler
+  sampler: DistributionUniformSampler
 }
 
 export const types = [

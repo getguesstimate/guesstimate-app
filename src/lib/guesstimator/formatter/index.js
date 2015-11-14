@@ -4,6 +4,7 @@ import {item as DistributionNormalTextUpTo} from './formatters/DistributionNorma
 import {item as DistributionNormalTextPlusMinus} from './formatters/DistributionNormalTextPlusMinus.js'
 import {item as DistributionPointGraphical} from './formatters/DistributionPointGraphical.js'
 import {item as DistributionPointText} from './formatters/DistributionPointText.js'
+import {item as DistributionUniform} from './formatters/DistributionUniform.js'
 import {item as Null} from './formatters/Null.js'
 
 export const formatters = [
@@ -13,6 +14,7 @@ export const formatters = [
   DistributionNormalTextPlusMinus,
   DistributionPointGraphical,
   DistributionPointText,
+  DistributionUniform,
 ]
 
 export function _matchingFormatter(g) {
