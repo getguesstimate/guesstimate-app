@@ -93,13 +93,13 @@ export default class GuesstimateEditor extends Component {
         <div className='row'>
           <div className='col-sm-12 actions'>
             <div
-                className='ui button green large'
+                className='ui button green'
                 onClick={this._onSubmit.bind(this)}
             >
               {'Save'}
             </div>
             <div
-                className='ui button large'
+                className='ui button'
                 onClick={this.props.close}
             >
               <Icon name='close'/>

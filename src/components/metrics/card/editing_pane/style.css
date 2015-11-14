@@ -24,3 +24,28 @@
   color: #666;
 }
 
+.editing-section .ui.button.primary{
+  padding: 5px;
+  font-size: 1.2em;
+  border-radius: 4px;
+}
+
+.editing-section .remove-graphical-input{
+  display: inline-block;
+  width: 23px;
+  height: 23px;
+  background-color: #EAEAEA;
+  text-align: center;
+  border-radius: 29px;
+  font-size: 1em;
+  margin-left: 4px;
+  color: #7B7B7B;
+  padding-top: 2px;
+}
+
+.editing-section .remove-graphical-input:hover {
+  background-color: red;
+  color: $black;
+  background-color: #CACACA;
+}
+

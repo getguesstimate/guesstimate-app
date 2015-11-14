@@ -75,7 +75,7 @@ export default class MetricEditingPane extends Component {
           }
           {hasGraphicalInput &&
             <div
-                  className='ui button tinyhover-toggle'
+                  className='remove-graphical-input'
                   onMouseDown={this.resetGuesstimate.bind(this)}
             >
               <Icon name='close'/>
