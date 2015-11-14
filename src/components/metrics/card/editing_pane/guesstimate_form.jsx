@@ -40,6 +40,7 @@ class GuesstimateForm extends Component{
   _handlePress(event) {
     let value = event.target.value;
     this._changeInput(value);
+    event.stopPropagation()
   }
   _changeInput(value=this._value()){
     this.setState({userInput: value});
