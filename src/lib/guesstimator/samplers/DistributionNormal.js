@@ -5,12 +5,12 @@ export var Sampler = {
   sample(formatted, n) {
     const mean = (formatted.high - formatted.low)/2 + formatted.low
     const stdev = formatted.high - mean
-    const stochator = new Stochator({
-      mean,
-      stdev,
-      seed: 0,
-      min: -99999999999999
-    });
+    let inputs = {mean, stdev, seed: 'SEED'}
+
+    if (_.isFinite(formatted.minimum)){ inputs.min = formatted.minimum }
+    if (_.isFinite(formatted.maximum)){ inputs.max = formatted.maximum }
+
+    const stochator = new Stochator(inputs);
     let results = stochator.next(n)
     results = Array.isArray(results) ? results : [results]
 
