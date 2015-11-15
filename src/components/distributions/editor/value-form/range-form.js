@@ -58,48 +58,34 @@ export default class RangeForm extends Component {
           </div>
         </div>
 
-        <div className='row secondary'>
-          <div className='col-sm-4'>
-            <div className='field'>
-              <label> {'Precision'} </label>
-              <input
-                  name='precision'
-                  onChange={this.onChange.bind(this)}
-                  ref='precision'
-                  type='text'
-                  value='0.01'
-              />
-            </div>
+        {hasTails &&
+          <div className='row secondary'>
+
+              <div className='col-sm-4'>
+                <div className='field'>
+                  <label> {'Minimum'} </label>
+                  <input
+                      name='minimum'
+                      onChange={this.onChange.bind(this)}
+                      ref='minimum'
+                      type='text'
+                  />
+                </div>
+              </div>
+
+              <div className='col-sm-4'>
+                <div className='field'>
+                  <label> {'Maximum'} </label>
+                  <input
+                      name='maximum'
+                      onChange={this.onChange.bind(this)}
+                      ref='maximum'
+                      type='text'
+                  />
+                </div>
+              </div>
           </div>
-
-          {hasTails &&
-            <div className='col-sm-4'>
-              <div className='field'>
-                <label> {'Minimum'} </label>
-                <input
-                    name='minimum'
-                    onChange={this.onChange.bind(this)}
-                    ref='minimum'
-                    type='text'
-                />
-              </div>
-            </div>
-          }
-
-          {hasTails &&
-            <div className='col-sm-4'>
-              <div className='field'>
-                <label> {'Maximum'} </label>
-                <input
-                    name='maximum'
-                    onChange={this.onChange.bind(this)}
-                    ref='maximum'
-                    type='text'
-                />
-              </div>
-            </div>
-          }
-        </div>
+        }
       </div>
     )
   }
