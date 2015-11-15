@@ -65,6 +65,7 @@ export default class RangeForm extends Component {
                 <div className='field'>
                   <label> {'Minimum'} </label>
                   <input
+                      defaultValue={this.props.guesstimate.minimum}
                       name='minimum'
                       onChange={this.onChange.bind(this)}
                       ref='minimum'
@@ -77,6 +78,7 @@ export default class RangeForm extends Component {
                 <div className='field'>
                   <label> {'Maximum'} </label>
                   <input
+                      defaultValue={this.props.guesstimate.maximum}
                       name='maximum'
                       onChange={this.onChange.bind(this)}
                       ref='maximum'

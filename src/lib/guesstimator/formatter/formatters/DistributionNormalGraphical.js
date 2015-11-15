@@ -9,8 +9,8 @@ export const item = Object.assign(
     relevantNumbers: [
       {name: 'low', required: true},
       {name: 'high', required: true},
-      {name: 'min', required: false},
-      {name: 'max', required: false}
+      {name: 'minimum', required: false},
+      {name: 'maximum', required: false}
     ]
   }
 )
