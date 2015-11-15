@@ -10,7 +10,7 @@ export const item = Object.assign(
       {name: 'low', required: true},
       {name: 'high', required: true},
       {name: 'min', required: false},
-      {name: 'max', required: false},
+      {name: 'max', required: false}
     ]
   }
 )

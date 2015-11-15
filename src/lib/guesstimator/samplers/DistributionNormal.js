@@ -1,4 +1,5 @@
 import Stochator from 'stochator';
+import {withPrecision} from '../filters.js'
 
 export var Sampler = {
   sample(formatted, n) {
@@ -12,6 +13,7 @@ export var Sampler = {
     });
     let results = stochator.next(n)
     results = Array.isArray(results) ? results : [results]
+
     return { values: results.map(n => n) }
   }
 }
