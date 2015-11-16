@@ -24,6 +24,7 @@ class GuesstimateForm extends Component{
   state = {userInput: this.props.value || ''}
 
   componentWillUnmount() {
+    $(window).off('functionMetricClicked')
     this.props.dispatch(destroyGuesstimateForm());
   }
   _handleMetricClick(item){
