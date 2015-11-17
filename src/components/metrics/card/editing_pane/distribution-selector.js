@@ -10,7 +10,7 @@ export default class DistributionSelector extends Component{
 
   render() {
     return (
-      <div>
+      <div className='DistributionSelector'>
         <div
               className='ui button tinyhover-toggle'
               onMouseDown={() => {this._handleSubmit.bind(this)('NORMAL')}}
@@ -23,13 +23,6 @@ export default class DistributionSelector extends Component{
               onMouseDown={() => {this._handleSubmit.bind(this)('UNIFORM')}}
         >
           <Icon name='line-chart'/>
-        </div>
-
-        <div
-              className='ui button tinyhover-toggle'
-              onMouseDown={this._handleSubmit.bind(this)}
-        >
-          <Icon name='pie-chart'/>
         </div>
       </div>
     )
