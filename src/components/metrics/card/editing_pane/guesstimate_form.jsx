@@ -6,6 +6,7 @@ import $ from 'jquery'
 import Icon from 'react-fa'
 import insertAtCaret from 'lib/jquery/insertAtCaret'
 import DistributionSelector from './distribution-selector.js'
+import Image from 'assets/distribution-icons/normal.png'
 
 class GuesstimateForm extends Component{
   displayName: 'GuesstimateForm'
@@ -95,10 +96,11 @@ class GuesstimateForm extends Component{
                 value={this.state.userInput}
             />
             <div
-                  className='ui button tinyhover-toggle DistributionSelectorToggle'
+                  className='ui button tinyhover-toggle DistributionSelectorToggle DistributionIcon'
                   onMouseDown={() => {this.setState({showDistributionSelector: !showDistributionSelector})}}
             >
-              <Icon name={showDistributionSelector ? 'caret-down' : 'line-chart'}/>
+              {!showDistributionSelector && <img src={Image}/>}
+              {showDistributionSelector && <Icon name='caret-down'/>}
             </div>
           </div>
         </div>

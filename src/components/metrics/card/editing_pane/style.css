@@ -64,3 +64,14 @@
   float: right;
   margin-top: 0.4em;
 }
+
+.DistributionIcon img{
+  width: 22px;
+  opacity: 0.8;
+}
+
+.ui.button.DistributionIcon {
+  background-color: $grey-1;
+  padding-left: 2px;
+  padding-right: 2px;
+}
