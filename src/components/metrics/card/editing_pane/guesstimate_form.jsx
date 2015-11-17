@@ -23,7 +23,7 @@ class GuesstimateForm extends Component{
     value: PropTypes.string
   }
 
-  state = {userInput: this.props.value || ''}
+  state = {userInput: this.props.value || '', guesstimateType: 'UNIFORM'}
 
   componentWillUnmount() {
     $(window).off('functionMetricClicked')
@@ -45,12 +45,11 @@ class GuesstimateForm extends Component{
     this._changeInput(value);
     event.stopPropagation()
   }
-  _changeInput(value=this._value()){
-    this.setState({userInput: value});
-    this._dispatchChange(value)
+  _changeInput(userInput=this._value()){
+    this.setState({userInput}, () => {this._dispatchChange()})
   }
-  _dispatchChange(value) {
-    this.props.dispatch(changeGuesstimateForm({input: value, metric: this.props.metricId}));
+  _dispatchChange() {
+    this.props.dispatch(changeGuesstimateForm({input: this.state.userInput, metric: this.props.metricId, guesstimateType: this.state.guesstimateType}));
   }
   _value() {
     return ReactDOM.findDOMNode(this.refs.input).value
@@ -61,6 +60,9 @@ class GuesstimateForm extends Component{
       this.props.metricFocus()
     }
   }
+  _changeDistributionType(guesstimateType) {
+    this.setState({guesstimateType}, () => {this._dispatchChange()})
+  }
   //right now errors live in the simulation, which is not present here.
   render() {
     let distribution = this.props.guesstimateForm && this.props.guesstimateForm.distribution;
@@ -68,8 +70,8 @@ class GuesstimateForm extends Component{
     let errorPane = <div className='errors'>{errors} </div>
     return(
       <div className='GuesstimateForm'>
-        <div class='row'>
-          <div class='col-sm-12'>
+        <div className='row'>
+          <div className='col-sm-12'>
             <input
                 id="live-input"
                 onBlur={this._handleBlur.bind(this)}
@@ -83,9 +85,9 @@ class GuesstimateForm extends Component{
             />
           </div>
         </div>
-        <div class='row'>
-          <div class='col-sm-12'>
-            <DistributionSelector/>
+        <div className='row'>
+          <div className='col-sm-12'>
+            <DistributionSelector onSubmit={this._changeDistributionType.bind(this)}/>
           </div>
         </div>
       </div>)
