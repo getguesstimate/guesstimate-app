@@ -1,7 +1,6 @@
 import {item as Funct} from './formatters/Function.js'
 import {item as DistributionNormalGraphical} from './formatters/DistributionNormalGraphical.js'
-import {item as DistributionNormalTextUpTo} from './formatters/DistributionNormalTextUpTo.js'
-import {item as DistributionNormalTextPlusMinus} from './formatters/DistributionNormalTextPlusMinus.js'
+import {item as DistributionTextUpTo} from './formatters/DistributionTextUpTo.js'
 import {item as DistributionPointGraphical} from './formatters/DistributionPointGraphical.js'
 import {item as DistributionPointText} from './formatters/DistributionPointText.js'
 import {item as DistributionUniform} from './formatters/DistributionUniform.js'
@@ -10,8 +9,7 @@ import {item as Null} from './formatters/Null.js'
 export const formatters = [
   Funct,
   DistributionNormalGraphical,
-  DistributionNormalTextUpTo,
-  DistributionNormalTextPlusMinus,
+  DistributionTextUpTo,
   DistributionPointGraphical,
   DistributionPointText,
   DistributionUniform,
