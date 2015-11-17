@@ -33,8 +33,8 @@ export const normalTextMixin = Object.assign(
   {}, textMixin,
   {
     errors(g) { return this._normalTextErrors(g.text) },
+    guesstimateType(g) { return g.guesstimateType || 'NORMAL' },
     _matchesText(text) { return this._hasRelevantSymbol(text) },
-
     _normalTextErrors(text) {
       const errs = []
       if (this._inputSymbols(text).length > 1) { errs.append('Must contain only 1 symbol') }

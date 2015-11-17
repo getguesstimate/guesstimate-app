@@ -1,10 +1,12 @@
-import {item as formatter} from '../DistributionNormalTextUpTo.js'
+import {item as formatter} from '../DistributionTextUpTo.js'
 
-describe('DistributionNormalTextUpTo', () => {
+describe.only('DistributionTextUpTo', () => {
   describe('#matches', () => {
     const examples = [
       [{text: '8->10'}, true],
       [{text: '8:10'}, true],
+      [{text: '8:10', guesstimateType: 'NORMAL'}, true],
+      [{text: '8:10', guesstimateType: 'UNIFORM'}, true],
       [{text: ' 8 :10'}, true],
       [{text: '8:'}, true],
       [{text: '8'}, false],
@@ -20,6 +22,8 @@ describe('DistributionNormalTextUpTo', () => {
   describe('#format', () => {
     const examples = [
       [{text: '8:10'}, {guesstimateType: 'NORMAL', low: 8, high: 10}],
+      [{text: '8:10', guesstimateType: 'UNIFORM'}, {guesstimateType: 'UNIFORM', low: 8, high: 10}],
+      [{text: '8:10', guesstimateType: 'NORMAL'}, {guesstimateType: 'NORMAL', low: 8, high: 10}],
     ]
 
     examples.map(e => () => {
