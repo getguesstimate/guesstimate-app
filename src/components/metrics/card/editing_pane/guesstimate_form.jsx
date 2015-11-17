@@ -3,7 +3,9 @@ import ReactDOM from 'react-dom'
 import { connect } from 'react-redux';
 import { createGuesstimateForm, destroyGuesstimateForm, changeGuesstimateForm} from 'gModules/guesstimate_form/actions'
 import $ from 'jquery'
+import Icon from 'react-fa'
 import insertAtCaret from 'lib/jquery/insertAtCaret'
+import DistributionSelector from './distribution-selector.js'
 
 class GuesstimateForm extends Component{
   displayName: 'GuesstimateForm'
@@ -66,18 +68,26 @@ class GuesstimateForm extends Component{
     let errorPane = <div className='errors'>{errors} </div>
     return(
       <div className='GuesstimateForm'>
-        <input
-            id="live-input"
-            onBlur={this._handleBlur.bind(this)}
-            onChange={this._handlePress.bind(this)}
-            onFocus={this._handleFocus.bind(this)}
-            onKeyUp={this._handleKeyUp.bind(this)}
-            placeholder={'value'}
-            ref='input'
-            type="text"
-            value={this.state.userInput}
-        />
-        {errors ? errorPane : ''}
+        <div class='row'>
+          <div class='col-sm-12'>
+            <input
+                id="live-input"
+                onBlur={this._handleBlur.bind(this)}
+                onChange={this._handlePress.bind(this)}
+                onFocus={this._handleFocus.bind(this)}
+                onKeyUp={this._handleKeyUp.bind(this)}
+                placeholder={'value'}
+                ref='input'
+                type="text"
+                value={this.state.userInput}
+            />
+          </div>
+        </div>
+        <div class='row'>
+          <div class='col-sm-12'>
+            <DistributionSelector/>
+          </div>
+        </div>
       </div>)
   }
 }
