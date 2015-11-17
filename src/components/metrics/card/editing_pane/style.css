@@ -19,9 +19,19 @@
   @mixin hover-input;
 }
 
-.GuesstimateForm {
+.GuesstimateForm input{
   float: left;
   width: 75%;
+}
+
+.GuesstimateForm .DistributionSelectorToggle{
+  display: inline-block;
+  text-align: center;
+  border-radius: 29px;
+  font-size: 1em;
+  color: #999;
+  padding-top: 2px;
+  float: right;
 }
 
 .editing-section .startGraphical{
@@ -50,9 +60,7 @@
   padding-top: 2px;
 }
 
-.editing-section .remove-graphical-input:hover {
-  background-color: red;
-  color: #333;
-  background-color: #CACACA;
+.DistributionSelector {
+  float: right;
+  margin-top: 0.4em;
 }
-
