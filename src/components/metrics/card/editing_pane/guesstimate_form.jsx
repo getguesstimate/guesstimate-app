@@ -27,7 +27,7 @@ class GuesstimateForm extends Component{
 
   state = {
     userInput: this.props.value || '',
-    guesstimateType: this.props.guesstimate.guesstimateType || 'NORMAL',
+    distributionType: 'NORMAL',
     showDistributionSelector: false
   }
 
@@ -54,8 +54,29 @@ class GuesstimateForm extends Component{
   _changeInput(userInput=this._value()){
     this.setState({userInput}, () => {this._dispatchChange()})
   }
+
+  _guesstimateTypeName() {
+    if (this._isRangeDistribution()) { return this.state.distributionType }
+    else { return this._inputType() }
+  }
+
+  _guesstimateType() {
+    return guesstimator.find(this._guesstimateTypeName())
+  }
+
+  _inputType() {
+    const inputType = guesstimator.format({text: this.state.userInput}).guesstimateType
+    return guesstimator.find(inputType)
+  }
+
+  _isRangeDistribution() {
+    const type = this._inputType()
+    return (!!type.isRangeDistribution)
+  }
+
   _dispatchChange() {
-    const {userInput, guesstimateType} = this.state;
+    const {userInput} = this.state;
+    const guesstimateType = this._guesstimateTypeName();
     const {metricId} = this.props;
     this.props.dispatch(changeGuesstimateForm({
       input: userInput,
@@ -72,8 +93,8 @@ class GuesstimateForm extends Component{
       this.props.metricFocus()
     }
   }
-  _changeDistributionType(guesstimateType) {
-    this.setState({guesstimateType}, () => {this._dispatchChange()})
+  _changeDistributionType(distributionType) {
+    this.setState({distributionType}, () => {this._dispatchChange()})
     this.setState({showDistributionSelector: false})
   }
   //right now errors live in the simulation, which is not present here.
@@ -81,9 +102,10 @@ class GuesstimateForm extends Component{
     let distribution = this.props.guesstimateForm && this.props.guesstimateForm.distribution;
     let errors = distribution && distribution.errors;
     let errorPane = <div className='errors'>{errors} </div>
-    const guesstimateType = guesstimator.find(this.state.guesstimateType)
+    const guesstimateType = this._guesstimateType()
 
     const {showDistributionSelector} = this.state
+    const isRangeDistribution = this._isRangeDistribution()
     return(
       <div className='GuesstimateForm'>
         <div className='row'>
@@ -99,13 +121,15 @@ class GuesstimateForm extends Component{
                 type="text"
                 value={this.state.userInput}
             />
-            <div
-                  className='ui button tinyhover-toggle DistributionSelectorToggle DistributionIcon'
-                  onMouseDown={() => {this.setState({showDistributionSelector: !showDistributionSelector})}}
-            >
-              {!showDistributionSelector && <img src={guesstimateType.icon}/>}
-              {showDistributionSelector && <Icon name='caret-down'/>}
-            </div>
+            {isRangeDistribution &&
+              <div
+                    className='ui button tinyhover-toggle DistributionSelectorToggle DistributionIcon'
+                    onMouseDown={() => {this.setState({showDistributionSelector: !showDistributionSelector})}}
+              >
+                {!showDistributionSelector && <img src={guesstimateType.icon}/>}
+                {showDistributionSelector && <Icon name='caret-down'/>}
+              </div>
+            }
           </div>
         </div>
         {showDistributionSelector &&
