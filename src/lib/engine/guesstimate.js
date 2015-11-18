@@ -12,10 +12,14 @@ export function sample(guesstimate: Guesstimate, dGraph: DGraph, n: number = 1):
   foo.text = foo.input
   foo.graph = dGraph
   const formattedInput = guesstimator.format(foo)
+  const formatterErrors = guesstimator.errors(foo)
 
   let _sample = null
+
   if (formattedInput.guesstimateType === 'NONE') {
     _sample = {errors: ['Invalid input']}
+  } else if (formatterErrors.length){
+    _sample = {errors: formatterErrors}
   } else {
     _sample = guesstimator.sample(formattedInput, n)
   }
