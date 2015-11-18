@@ -16,11 +16,19 @@ export const Funct = {
   sampler: FunctionSampler
 }
 
+export const NoneGuesstimate = {
+  referenceName: 'NONE',
+  types: [],
+  displayName: 'NONE',
+  sampler: DistributionNormalSampler
+}
+
 export const DistributionNormal = {
   referenceName: 'NORMAL',
   types: ['DISTRIBUTION', 'NORMAL'],
   displayName: 'Normal',
   sampler: DistributionNormalSampler,
+  isRangeDistribution: true,
   icon: NormalIcon
 }
 
@@ -36,6 +44,7 @@ export const DistributionLognormal = {
   referenceName: 'LOGNORMAL',
   types: ['DISTRIBUTION', 'LOGNORMAL'],
   displayName: 'LogNormal',
+  isRangeDistribution: true,
   sampler: DistributionNormalSampler,
   icon: LogNormalIcon
 }
@@ -45,6 +54,7 @@ export const DistributionUniform = {
   referenceName: 'UNIFORM',
   types: ['DISTRIBUTION', 'UNIFORM'],
   displayName: 'Uniform',
+  isRangeDistribution: true,
   sampler: DistributionUniformSampler,
   icon: UniformIcon
 }
@@ -54,7 +64,8 @@ export const types = [
   DistributionNormal,
   DistributionPoint,
   DistributionLognormal,
-  DistributionUniform
+  DistributionUniform,
+  NoneGuesstimate
 ]
 
 export function find(referenceName) {
