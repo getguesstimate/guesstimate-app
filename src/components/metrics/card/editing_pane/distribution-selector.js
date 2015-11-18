@@ -14,13 +14,14 @@ class DistributionIcon extends Component{
     this.props.onSubmit(this.props.type)
   }
   render() {
-    const guesstimateType = guesstimator.find(this.props.type)
+    let classes = 'ui button tinyhover-toggle DistributionIcon'
+    classes += this.props.isSelected ? ' selected' : ''
     return (
       <div
-            className='ui button tinyhover-toggle DistributionIcon'
+            className={classes}
             onMouseDown={this._handleSubmit.bind(this)}
       >
-        <img src={guesstimateType.icon}/>
+        <img src={this.props.icon}/>
       </div>
     )
   }
@@ -28,11 +29,24 @@ class DistributionIcon extends Component{
 
 export default class DistributionSelector extends Component{
   render() {
+    const {selected} = this.props
     return (
       <div className='DistributionSelector'>
-        <DistributionIcon type={'NORMAL'} onSubmit={this.props.onSubmit}/>
-        <DistributionIcon type={'UNIFORM'} onSubmit={this.props.onSubmit}/>
-        <DistributionIcon type={'LOGNORMAL'} onSubmit={this.props.onSubmit}/>
+        <hr/>
+        <div className='DistributionList'>
+          {['NORMAL', 'UNIFORM', 'LOGNORMAL'].map(type => {
+            const isSelected = (selected === type)
+            const icon = guesstimator.find(type).icon
+            return (
+              <DistributionIcon
+                type={type}
+                onSubmit={this.props.onSubmit}
+                isSelected={isSelected}
+                icon={icon}
+              />
+            )
+          })}
+        </div>
       </div>
     )
   }
