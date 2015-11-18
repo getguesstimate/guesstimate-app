@@ -1,4 +1,4 @@
-export {format} from './formatter/index.js'
+export {format, errors} from './formatter/index.js'
 export {types} from './types.js'
 import {find} from './types.js'
 export {find} from './types.js'
