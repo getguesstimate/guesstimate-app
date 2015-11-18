@@ -1,15 +1,5 @@
 @import './styles/variables.css';
 
-.drop-appear {
-  max-height: 0;
-  overflow: hidden;
-}
-
-.drop-appear.drop-appear-active{
-  max-height: 300px;
-  transition: max-height 0.5s;
-}
-
 .editing-section {
   border-top: 1px solid #ddd;
   border-radius: 0 0 2px 2px;
@@ -22,42 +12,6 @@
 .GuesstimateForm input{
   float: left;
   width: 75%;
-}
-
-.GuesstimateForm .DistributionSelectorToggle{
-  display: inline-block;
-  text-align: center;
-  border-radius: 29px;
-  font-size: 1em;
-  color: #999;
-  padding-top: 2px;
-  float: right;
-}
-
-.editing-section .startGraphical{
-  float: right;
-}
-
-.GuesstimateForm .errors{
-  margin-top: 8px;
-  color: #666;
-}
-
-.editing-section .ui.button{
-  padding: 5px;
-  font-size: 1em;
-  border-radius: 4px;
-}
-
-.editing-section .remove-graphical-input{
-  display: inline-block;
-  width: 23px;
-  height: 23px;
-  text-align: center;
-  border-radius: 29px;
-  font-size: 1em;
-  color: #999;
-  padding-top: 2px;
 }
 
 .DistributionSelector {
@@ -73,6 +27,21 @@
   border-top: 1px solid $grey-1;
 }
 
+.GuesstimateForm .DistributionIcon.DistributionIcon{
+  font-size: 1em;
+  padding-top: 2px;
+  padding-left: 2px;
+  padding-right: 2px;
+  position: relative;
+  height: 26px;
+  width: 26px;
+  padding-top: 0;
+}
+
+.DistributionIcon.button.selected{
+  background-color: $blue-2;
+}
+
 .DistributionIcon img{
   width: 26px;
   opacity: 1;
@@ -83,20 +52,24 @@
   bottom: 0;
 }
 
-.ui.button.DistributionIcon.DistributionSelectorToggle:not(:hover) {
-  background-color: rgba(0,0,0,0);
+.DistributionIcon.DistributionSelectorToggle{
+  display: inline-block;
+  color: #999;
+  float: right;
+}
+
+.DistributionIcon.DistributionSelectorToggle {
   opacity: 0.6;
 }
 
-.ui.button.DistributionIcon {
-  padding-left: 2px;
-  padding-right: 2px;
-  position: relative;
-  height: 26px;
-  width: 26px;
-  padding-top: 0;
+.button.DistributionIcon.DistributionSelectorToggle:hover {
+  opacity: 1;
 }
 
-.ui.button.DistributionIcon.selected{
-  background-color: $blue-2;
+.button.DistributionIcon.DistributionSelectorToggle {
+  border-radius: 5px;
+}
+
+.button.DistributionIcon.DistributionSelectorToggle:hover {
+  background-color: $grey-1;
 }

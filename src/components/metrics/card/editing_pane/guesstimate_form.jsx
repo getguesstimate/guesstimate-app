@@ -91,8 +91,6 @@ class GuesstimateForm extends Component{
   render() {
     const guesstimateType = this._guesstimateType()
     let {showDistributionSelector} = this.state
-    const isRangeDistribution = this._isRangeDistribution()
-    const showIcon = guesstimateType && guesstimateType.icon
     return(
       <div className='GuesstimateForm'>
         <div className='row'>
@@ -102,21 +100,10 @@ class GuesstimateForm extends Component{
               metricFocus={this.props.metricFocus}
               onChange={this._changeInput.bind(this)}
             />
-            {showIcon && isRangeDistribution &&
-              <div
-                    className='ui button tinyhover-toggle DistributionSelectorToggle DistributionIcon'
-                    onMouseDown={() => {this.setState({showDistributionSelector: !showDistributionSelector})}}
-              >
-                <img src={guesstimateType.icon}/>
-              </div>
-            }
-            {showIcon && !isRangeDistribution &&
-              <div
-                    className='ui button DistributionSelectorToggle DistributionIcon'
-              >
-                <img src={guesstimateType.icon}/>
-              </div>
-            }
+            <GuesstimateTypeIcon
+              guesstimateType={guesstimateType}
+              toggleDistributionSelector={() => {this.setState({showDistributionSelector: !showDistributionSelector})}}
+            />
           </div>
         </div>
         {showDistributionSelector &&
@@ -130,6 +117,38 @@ class GuesstimateForm extends Component{
           </div>
         }
       </div>)
+  }
+}
+
+class GuesstimateTypeIcon extends Component{
+  displayName: 'GuesstimateTypeIcon'
+
+  _handleMouseDown() {
+    if (this.props.guesstimateType.isRangeDistribution){
+      this.props.toggleDistributionSelector()
+    }
+  }
+
+  render() {
+    const {guesstimateType} = this.props
+    const {isRangeDistribution, icon} = guesstimateType
+    const showIcon = guesstimateType && guesstimateType.icon
+
+    let className='DistributionSelectorToggle DistributionIcon'
+    className += isRangeDistribution ? ' button' : ''
+    console.log(className)
+    if (showIcon) {
+      return(
+        <div
+            className={className}
+            onMouseDown={this._handleMouseDown.bind(this)}
+        >
+          <img src={icon}/>
+        </div>
+      )
+    } else {
+      return (false)
+    }
   }
 }
 
