@@ -7,6 +7,7 @@ import Icon from 'react-fa'
 import insertAtCaret from 'lib/jquery/insertAtCaret'
 import DistributionSelector from './distribution-selector.js'
 import Image from 'assets/distribution-icons/normal.png'
+import * as guesstimator from 'lib/guesstimator/index.js'
 
 class GuesstimateForm extends Component{
   displayName: 'GuesstimateForm'
@@ -26,7 +27,7 @@ class GuesstimateForm extends Component{
 
   state = {
     userInput: this.props.value || '',
-    guesstimateType: 'UNIFORM',
+    guesstimateType: this.props.guesstimate.guesstimateType || 'NORMAL',
     showDistributionSelector: false
   }
 
@@ -73,13 +74,18 @@ class GuesstimateForm extends Component{
   }
   _changeDistributionType(guesstimateType) {
     this.setState({guesstimateType}, () => {this._dispatchChange()})
+    this.setState({showDistributionSelector: false})
   }
   //right now errors live in the simulation, which is not present here.
   render() {
     let distribution = this.props.guesstimateForm && this.props.guesstimateForm.distribution;
     let errors = distribution && distribution.errors;
     let errorPane = <div className='errors'>{errors} </div>
+    const guesstimateType = guesstimator.find(this.state.guesstimateType)
+
     const {showDistributionSelector} = this.state
+    console.log(this.props.guesstimate)
+    console.log(this.props.guesstimate.guesstimateType)
     return(
       <div className='GuesstimateForm'>
         <div className='row'>
@@ -99,7 +105,7 @@ class GuesstimateForm extends Component{
                   className='ui button tinyhover-toggle DistributionSelectorToggle DistributionIcon'
                   onMouseDown={() => {this.setState({showDistributionSelector: !showDistributionSelector})}}
             >
-              {!showDistributionSelector && <img src={Image}/>}
+              {!showDistributionSelector && <img src={guesstimateType.icon}/>}
               {showDistributionSelector && <Icon name='caret-down'/>}
             </div>
           </div>

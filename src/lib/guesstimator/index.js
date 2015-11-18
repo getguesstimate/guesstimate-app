@@ -1,6 +1,7 @@
 export {format} from './formatter/index.js'
 export {types} from './types.js'
 import {find} from './types.js'
+export {find} from './types.js'
 
 export function sample(input, n) {
   const guesstimateType = find(input.guesstimateType)
