@@ -3,6 +3,9 @@ import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import GuesstimateForm from './guesstimate_form';
 import './style.css'
 
+//At this point, MetricEditingPane doesn't seem very useful.
+//It should be removed unless future coder finds use for it.
+
 export default class MetricEditingPane extends Component {
   static propTypes = {
     guesstimate: PropTypes.object.isRequired,
