@@ -57,7 +57,7 @@ class GuesstimateForm extends Component{
 
   _guesstimateTypeName() {
     if (this._isRangeDistribution()) { return this.state.distributionType }
-    else { return this._inputType() }
+    else { return this._inputType().referenceName }
   }
 
   _guesstimateType() {
@@ -106,6 +106,7 @@ class GuesstimateForm extends Component{
 
     const {showDistributionSelector} = this.state
     const isRangeDistribution = this._isRangeDistribution()
+    const showIcon = guesstimateType && guesstimateType.icon
     return(
       <div className='GuesstimateForm'>
         <div className='row'>
@@ -121,13 +122,19 @@ class GuesstimateForm extends Component{
                 type="text"
                 value={this.state.userInput}
             />
-            {isRangeDistribution &&
+            {showIcon && isRangeDistribution &&
               <div
                     className='ui button tinyhover-toggle DistributionSelectorToggle DistributionIcon'
                     onMouseDown={() => {this.setState({showDistributionSelector: !showDistributionSelector})}}
               >
-                {!showDistributionSelector && <img src={guesstimateType.icon}/>}
-                {showDistributionSelector && <Icon name='caret-down'/>}
+                <img src={guesstimateType.icon}/>
+              </div>
+            }
+            {showIcon && !isRangeDistribution &&
+              <div
+                    className='ui button DistributionSelectorToggle DistributionIcon'
+              >
+                <img src={guesstimateType.icon}/>
               </div>
             }
           </div>
