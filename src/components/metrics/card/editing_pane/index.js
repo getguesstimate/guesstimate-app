@@ -15,16 +15,6 @@ export default class MetricEditingPane extends Component {
     onChangeGuesstimate: PropTypes.func.isRequired,
   }
 
-  componentWillUnmount() {
-    const guesstimates = [this.props.guesstimateForm, this.props.guesstimate]
-    const hasChanged = !_.isEqual(
-        ...guesstimates.map(e => _.pick(e, ['input', 'guesstimateType']))
-      )
-    if (hasChanged) {
-      this.props.onChangeGuesstimate(this.props.guesstimateForm)
-    }
-  }
-
   render() {
     return (
       <div className='metric-container editing-section' key={this.props.metricId}>
