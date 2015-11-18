@@ -62,12 +62,13 @@
   opacity: 0.6;
 }
 
-.button.DistributionIcon.DistributionSelectorToggle:hover {
-  opacity: 1;
+.button.DistributionIcon.DistributionSelectorToggle {
+  cursor: pointer;
+  border-radius: 5px;
 }
 
-.button.DistributionIcon.DistributionSelectorToggle {
-  border-radius: 5px;
+.button.DistributionIcon.DistributionSelectorToggle:hover {
+  opacity: 1;
 }
 
 .button.DistributionIcon.DistributionSelectorToggle:hover {

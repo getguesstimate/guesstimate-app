@@ -136,7 +136,6 @@ class GuesstimateTypeIcon extends Component{
 
     let className='DistributionSelectorToggle DistributionIcon'
     className += isRangeDistribution ? ' button' : ''
-    console.log(className)
     if (showIcon) {
       return(
         <div
