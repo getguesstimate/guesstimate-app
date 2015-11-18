@@ -1,6 +1,6 @@
 import {item as formatter} from '../DistributionTextUpTo.js'
 
-describe.only('DistributionTextUpTo', () => {
+describe('DistributionTextUpTo', () => {
   describe('#matches', () => {
     const examples = [
       [{text: '8->10'}, true],
@@ -29,6 +29,20 @@ describe.only('DistributionTextUpTo', () => {
     examples.map(e => () => {
       it(`guesstimate ${JSON.stringify(e[0])} converts to ${JSON.stringify(e[1])}`, () => {
         expect(formatter.format(e[0])).to.deep.equal(e[1])
+      })
+    }).map(e => e())
+  });
+
+  describe('#errors', () => {
+    const examples = [
+      [{text: '8->10', guesstimateType: 'NORMAL'}, false],
+      [{text: '8->7', guesstimateType: 'NORMAL'}, true],
+      [{text: '8->', guesstimateType: 'NORMAL'}, true],
+    ]
+
+    examples.map(e => () => {
+      it(`guesstimate ${JSON.stringify(e[0])} has errors ${JSON.stringify(e[1])}`, () => {
+        expect(formatter.errors(e[0]).length > 0).to.equal(e[1])
       })
     }).map(e => e())
   });
