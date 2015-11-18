@@ -4,10 +4,9 @@ import { connect } from 'react-redux';
 import { createGuesstimateForm, destroyGuesstimateForm, changeGuesstimateForm} from 'gModules/guesstimate_form/actions'
 import $ from 'jquery'
 import Icon from 'react-fa'
-import insertAtCaret from 'lib/jquery/insertAtCaret'
 import DistributionSelector from './distribution-selector.js'
-import Image from 'assets/distribution-icons/normal.png'
 import * as guesstimator from 'lib/guesstimator/index.js'
+import TextInput from './text-input.js'
 
 class GuesstimateForm extends Component{
   displayName: 'GuesstimateForm'
@@ -21,38 +20,28 @@ class GuesstimateForm extends Component{
     guesstimate: PropTypes.object.isRequired,
     guesstimateForm: PropTypes.object.isRequired,
     metricId: PropTypes.string.isRequired,
-    onSubmit: PropTypes.func,
-    value: PropTypes.string
+    metricFocus: PropTypes.func.isRequired,
+    onSubmit: PropTypes.func
   }
 
   state = {
-    userInput: this.props.value || '',
+    userInput: this.props.guesstimate.input || '',
     distributionType: 'NORMAL',
     showDistributionSelector: false
   }
 
   componentWillUnmount() {
-    $(window).off('functionMetricClicked')
     this.props.dispatch(destroyGuesstimateForm());
   }
-  _handleMetricClick(item){
-    insertAtCaret('live-input', item.readableId)
-    this._changeInput();
-  }
-  _handleFocus() {
-    $(window).on('functionMetricClicked', (a, item) => {this._handleMetricClick(item)})
-    this.props.dispatch(createGuesstimateForm({input: this._value(), metric: this.props.metricId}))
-  }
-  _handleBlur() {
-    $(window).off('functionMetricClicked')
-  }
-  _handlePress(event) {
-    let value = event.target.value;
-    this._changeInput(value);
-    event.stopPropagation()
-  }
-  _changeInput(userInput=this._value()){
-    this.setState({userInput}, () => {this._dispatchChange()})
+
+  componentWillMount() {
+    const {guesstimate} = this.props
+    this.props.dispatch(createGuesstimateForm(guesstimate))
+
+    const guesstimateType = guesstimator.find(guesstimate.guesstimateType)
+    if (guesstimateType.isRangeDistribution){
+      this.setState({distributionType: guesstimateType.referenceName})
+    }
   }
 
   _guesstimateTypeName() {
@@ -84,26 +73,19 @@ class GuesstimateForm extends Component{
       guesstimateType
     }));
   }
-  _value() {
-    return ReactDOM.findDOMNode(this.refs.input).value
-  }
-  _handleKeyUp(e) {
-    if (e.which === 27 || e.which === 13) {
-      e.preventDefault()
-      this.props.metricFocus()
-    }
-  }
+
   _changeDistributionType(distributionType) {
     this.setState({distributionType}, () => {this._dispatchChange()})
     this.setState({showDistributionSelector: false})
   }
+
+  _changeInput(userInput) {
+    this.setState({userInput}, () => {this._dispatchChange()})
+  }
+
   //right now errors live in the simulation, which is not present here.
   render() {
-    let distribution = this.props.guesstimateForm && this.props.guesstimateForm.distribution;
-    let errors = distribution && distribution.errors;
-    let errorPane = <div className='errors'>{errors} </div>
     const guesstimateType = this._guesstimateType()
-
     const {showDistributionSelector} = this.state
     const isRangeDistribution = this._isRangeDistribution()
     const showIcon = guesstimateType && guesstimateType.icon
@@ -111,16 +93,10 @@ class GuesstimateForm extends Component{
       <div className='GuesstimateForm'>
         <div className='row'>
           <div className='col-sm-12'>
-            <input
-                id="live-input"
-                onBlur={this._handleBlur.bind(this)}
-                onChange={this._handlePress.bind(this)}
-                onFocus={this._handleFocus.bind(this)}
-                onKeyUp={this._handleKeyUp.bind(this)}
-                placeholder={'value'}
-                ref='input'
-                type="text"
-                value={this.state.userInput}
+            <TextInput
+              value={this.state.userInput}
+              metricFocus={this.props.metricFocus}
+              onChange={this._changeInput.bind(this)}
             />
             {showIcon && isRangeDistribution &&
               <div
