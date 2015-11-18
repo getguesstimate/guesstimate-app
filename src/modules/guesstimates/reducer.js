@@ -15,7 +15,6 @@ export default function guesstimates(state = [], action) {
         action.values,
         ...state.slice(i+1, state.length)
       ];
-      console.log('changing guesstimate state to', newState[i])
       return newState
     }
   default:

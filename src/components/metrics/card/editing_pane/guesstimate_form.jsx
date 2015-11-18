@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import ReactDOM from 'react-dom'
 import { connect } from 'react-redux';
-import { createGuesstimateForm, destroyGuesstimateForm, changeGuesstimateForm} from 'gModules/guesstimate_form/actions'
+import { createGuesstimateForm, destroyGuesstimateForm, changeGuesstimateForm, saveGuesstimateForm} from 'gModules/guesstimate_form/actions'
 import $ from 'jquery'
 import Icon from 'react-fa'
 import DistributionSelector from './distribution-selector.js'
@@ -31,6 +31,7 @@ class GuesstimateForm extends Component{
   }
 
   componentWillUnmount() {
+    this.props.dispatch(saveGuesstimateForm());
     this.props.dispatch(destroyGuesstimateForm());
   }
 
