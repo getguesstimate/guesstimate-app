@@ -29,7 +29,11 @@ module.exports = function (config) {
       devtool: 'inline-source-map', //just do inline source maps instead of the default
       module: {
         loaders: [
-          { test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/ }
+          { test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/ },
+          {
+            test: /\.(jpe?g|png|gif)/,
+            loader: 'url-loader?limit=1000'
+          }
         ]
       }
     },

@@ -36,9 +36,10 @@ export const normalTextMixin = Object.assign(
     guesstimateType(g) { return g.guesstimateType || 'NORMAL' },
     _matchesText(text) { return this._hasRelevantSymbol(text) },
     _normalTextErrors(text) {
-      const errs = []
-      if (this._inputSymbols(text).length > 1) { errs.append('Must contain only 1 symbol') }
-      if (!_.all(this._numbers(text), (e) => isParseableNumber(e))) { errs.append('Not all numbers are parseable') }
+      let errs = []
+      if (this._inputSymbols(text).length > 1) { errs.push('Must contain only 1 symbol') }
+      if (!_.all(this._numbers(text), (e) => isParseableNumber(e))) { errs.push('Not all numbers are parseable') }
+      if (this._numbers(text)[0] >= this._numbers(text)[1]) { errs.push('Low -> High') }
       return errs
     },
 
