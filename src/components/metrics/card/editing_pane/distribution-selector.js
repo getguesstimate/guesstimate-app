@@ -30,8 +30,6 @@ export default class DistributionSelector extends Component{
       <div className='DistributionSelector'>
         <DistributionIcon type={'NORMAL'} image={NormalImage} onSubmit={this.props.onSubmit}/>
         <DistributionIcon type={'UNIFORM'} image={UniformImage} onSubmit={this.props.onSubmit}/>
-        <DistributionIcon type={'EXPONENTIAL'} image={ExponentialImage} onSubmit={this.props.onSubmit}/>
-        <DistributionIcon type={'POINT'} image={PointImage} onSubmit={this.props.onSubmit}/>
         <DistributionIcon type={'LOGNORMAL'} image={LogNormalImage} onSubmit={this.props.onSubmit}/>
       </div>
     )
