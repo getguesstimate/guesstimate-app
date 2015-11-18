@@ -8,12 +8,14 @@ import LogNormalIcon from 'assets/distribution-icons/lognormal.png'
 import ExponentialIcon from 'assets/distribution-icons/exponential.png'
 import PointIcon from 'assets/distribution-icons/point.png'
 import UniformIcon from 'assets/distribution-icons/uniform.png'
+import FunctionIcon from 'assets/distribution-icons/function.png'
 
 export const Funct = {
   referenceName: 'FUNCTION',
   types: ['FUNCTION'],
   displayName: 'Function',
-  sampler: FunctionSampler
+  sampler: FunctionSampler,
+  icon: FunctionIcon
 }
 
 export const NoneGuesstimate = {
