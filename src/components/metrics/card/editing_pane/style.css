@@ -62,7 +62,16 @@
 
 .DistributionSelector {
   float: right;
-  margin-top: 0.4em;
+  width: 100%;
+}
+
+.DistributionSelector .DistributionList{
+  float: right;
+}
+
+.DistributionSelector hr{
+  border: none;
+  border-top: 1px solid $grey-1;
 }
 
 .DistributionIcon img{
@@ -75,6 +84,11 @@
   bottom: 0;
 }
 
+.ui.button.DistributionIcon.DistributionSelectorToggle:not(:hover) {
+  background-color: rgba(0,0,0,0);
+  opacity: 0.6;
+}
+
 .ui.button.DistributionIcon {
   padding-left: 2px;
   padding-right: 2px;
@@ -82,4 +96,8 @@
   height: 26px;
   width: 26px;
   padding-top: 0;
+}
+
+.ui.button.DistributionIcon.selected{
+  background-color: $blue-2;
 }

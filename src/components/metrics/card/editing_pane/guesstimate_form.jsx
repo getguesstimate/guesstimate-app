@@ -84,8 +84,6 @@ class GuesstimateForm extends Component{
     const guesstimateType = guesstimator.find(this.state.guesstimateType)
 
     const {showDistributionSelector} = this.state
-    console.log(this.props.guesstimate)
-    console.log(this.props.guesstimate.guesstimateType)
     return(
       <div className='GuesstimateForm'>
         <div className='row'>
@@ -113,7 +111,10 @@ class GuesstimateForm extends Component{
         {showDistributionSelector &&
           <div className='row'>
             <div className='col-sm-12'>
-              <DistributionSelector onSubmit={this._changeDistributionType.bind(this)}/>
+              <DistributionSelector
+                onSubmit={this._changeDistributionType.bind(this)}
+                selected={this.state.guesstimateType}
+              />
             </div>
           </div>
         }
