@@ -72,6 +72,10 @@ class GuesstimateForm extends Component{
       metric: metricId,
       guesstimateType
     }));
+
+    if (this.state.showDistributionSelector && !this._isRangeDistribution()){
+      this.setState({showDistributionSelector: false})
+    }
   }
 
   _changeDistributionType(distributionType) {
@@ -86,7 +90,7 @@ class GuesstimateForm extends Component{
   //right now errors live in the simulation, which is not present here.
   render() {
     const guesstimateType = this._guesstimateType()
-    const {showDistributionSelector} = this.state
+    let {showDistributionSelector} = this.state
     const isRangeDistribution = this._isRangeDistribution()
     const showIcon = guesstimateType && guesstimateType.icon
     return(
