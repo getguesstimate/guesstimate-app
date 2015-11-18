@@ -66,12 +66,20 @@
 }
 
 .DistributionIcon img{
-  width: 22px;
-  opacity: 0.8;
+  width: 26px;
+  opacity: 1;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 4px;
+  bottom: 0;
 }
 
 .ui.button.DistributionIcon {
-  background-color: $grey-1;
   padding-left: 2px;
   padding-right: 2px;
+  position: relative;
+  height: 26px;
+  width: 26px;
+  padding-top: 0;
 }
