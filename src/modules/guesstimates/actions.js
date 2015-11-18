@@ -8,6 +8,6 @@ export function submitManualGuesstimate(metricId, guesstimate) {
 }
 
 export function changeGuesstimate(metricId, values) {
-  console.log('changing guesstimate')
-  return { type: 'CHANGE_GUESSTIMATE', metricId, values };
+  let relevantKeys = ['input', 'metric', 'guesstimateType']
+  return { type: 'CHANGE_GUESSTIMATE', metricId, values: _.pick(values, ...relevantKeys) };
 }

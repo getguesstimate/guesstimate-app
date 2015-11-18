@@ -71,5 +71,6 @@ export const types = [
 ]
 
 export function find(referenceName) {
-  return types.find(e => e.referenceName === referenceName)
+  const found = types.find(e => e.referenceName === referenceName)
+  return found || NoneGuesstimate
 }
