@@ -2,6 +2,7 @@ import Router from 'ampersand-router'
 import SpaceShow from 'gComponents/spaces/show'
 import SpaceNew from './spaces/new'
 import Home from './home'
+import ComponentIndex from './component-index'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Layout from './layouts/application'
@@ -38,6 +39,7 @@ export default Router.extend({
     '': 'home',
     'space/new': 'spaceNew',
     'space/:id': 'spaceShow',
+    'components': 'components',
   },
 
   home () {
@@ -50,5 +52,9 @@ export default Router.extend({
 
   spaceShow (id) {
     this.render(<SpaceShow spaceId={id}/>, true)
+  },
+
+  components () {
+    this.render(<ComponentIndex/>, true)
   },
 })

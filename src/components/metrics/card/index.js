@@ -4,7 +4,7 @@ import JSONTree from 'react-json-tree'
 
 import { connect } from 'react-redux';
 import { removeMetric, changeMetric } from 'gModules/metrics/actions.js';
-import { changeGuesstimate } from 'gModules/guesstimates/actions.js';
+import { submitManualGuesstimate } from 'gModules/guesstimates/actions.js';
 
 import Histogram from 'gComponents/simulations/histogram'
 import MetricModal from './modal.js'
@@ -51,7 +51,7 @@ class Metric extends Component {
 
   componentDidUpdate() {
     if (!this.props.isSelected && this._isEmpty() && !this.refs.header.hasContent()){
-        this.handleRemoveMetric()
+      this.handleRemoveMetric()
     }
   }
 
@@ -89,7 +89,7 @@ class Metric extends Component {
 
   _isEmpty(){
     const {metric} = this.props
-    return (!metric.name && !_.get(metric, 'guesstimate.input'))
+    return (!metric.name && !_.get(metric, 'guesstimate.input') && !_.get(metric, 'guesstimate.guesstimateType'))
   }
 
   handleChangeMetric(values) {
@@ -98,7 +98,9 @@ class Metric extends Component {
   }
 
   handleChangeGuesstimate(values) {
-    this.props.dispatch(changeGuesstimate(this._id(), values))
+    let guesstimate = values
+    guesstimate.metric = this.props.metric.id
+    this.props.dispatch(submitManualGuesstimate(this._id(), guesstimate))
   }
 
   handleRemoveMetric () {
@@ -122,6 +124,10 @@ class Metric extends Component {
     }
   }
 
+  showStatistics() {
+    return this.showSimulation() && (_.get(this.props, 'metric.simulation.stats').length > 1)
+  }
+
   render() {
     const {isSelected, metric, guesstimateForm, userAction} = this.props
     const {canvasState: {metricCardView}} = this.props
@@ -129,6 +135,7 @@ class Metric extends Component {
     const anotherFunctionSelected = ((userAction === 'function') && !isSelected)
 
     const showSimulation = this.showSimulation()
+    const showStatistics = this.showStatistics()
     return (
       <div
           className={isSelected ? 'metric grid-item-focus' : 'metric'}
@@ -172,7 +179,7 @@ class Metric extends Component {
           {(metricCardView === 'debugging') &&
             <JSONTree data={this.props}/>
           }
-          {(metricCardView === 'scientific') && _.get(metric, 'simulation.stats') && showSimulation &&
+          {(metricCardView === 'scientific') && showStatistics &&
             <StatTable stats={metric.simulation.stats}/>
           }
 
@@ -185,14 +192,15 @@ class Metric extends Component {
             <Icon name='expand'/>
           </span>
         </div>
-        <EditingPane
-            guesstimate={metric.guesstimate}
-            guesstimateForm={guesstimateForm}
-            metricFocus={this.focus.bind(this)}
-            metricId={metric.id}
-            onChangeGuesstimate={this.handleChangeGuesstimate.bind(this)}
-            showIf={isSelected && !_.isUndefined(metric.guesstimate)}
-        />
+        {isSelected && !_.isUndefined(metric.guesstimate) &&
+          <EditingPane
+              guesstimate={metric.guesstimate}
+              guesstimateForm={guesstimateForm}
+              metricFocus={this.focus.bind(this)}
+              metricId={metric.id}
+              onChangeGuesstimate={this.handleChangeGuesstimate.bind(this)}
+          />
+        }
       </div>
     );
   }

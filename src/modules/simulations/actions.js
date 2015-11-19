@@ -2,17 +2,15 @@ import e from 'gEngine/engine';
 import async from 'async'
 import {GraphPropagation} from '../../lib/propagation/graph-propagation.js'
 
-function runSimulation(dispatch, getState, metricId, n) {
-  const graph = e.graph.create(getState());
-  const simulation = e.graph.runSimulation(graph, metricId, n);
-  if (e.simulation.hasValues(simulation)) {
-    dispatch(addPartialSimulation(simulation));
+export function runMetricSimulations(metricId, useGuesstimateForm = false) {
+  return (dispatch, getState) => {
+    (new GraphPropagation(dispatch, getState, {metricId, useGuesstimateForm})).run()
   }
 }
 
 export function runFormSimulations(metricId) {
-  return (dispatch, getState) => {
-    (new GraphPropagation(dispatch, getState, {metricId})).run()
+  return (dispatch) => {
+    dispatch(runMetricSimulations(metricId, true));
   }
 }
 

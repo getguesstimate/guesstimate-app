@@ -6,7 +6,6 @@ export function get(){
   try {
     return JSON.parse(localStorage.getItem(varName))
   } catch(e) {
-    console.log(e)
     set(null)
     return null
   }

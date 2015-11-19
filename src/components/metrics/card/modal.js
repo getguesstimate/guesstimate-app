@@ -41,7 +41,6 @@ export default class MetricModal extends Component {
 
     const {isOpen, closeModal, metric} = this.props
     const sampleValues = _.get(metric, 'simulation.sample.values')
-    console.log('rendering Modal')
     return(
       <Modal
         isOpen={isOpen}

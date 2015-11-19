@@ -9,7 +9,6 @@ export default class MetricName extends Component {
 
   handleSubmit() {
     if (this._hasChanged()){
-      console.log('changed name')
       this.props.onChange({name: this.state.value})
     }
   }

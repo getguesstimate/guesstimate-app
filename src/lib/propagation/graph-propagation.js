@@ -39,6 +39,8 @@ export class GraphPropagation {
       this.spaceId = metric && metric.space
     }
 
+    this.useGuesstimateForm = graphFilters.useGuesstimateForm || false
+
     this.orderedMetricIds = this._orderedMetricIds(graphFilters)
     this.orderedMetricPropagations = this.orderedMetricIds.map(id => (new MetricPropagation(id, this.id)))
 
@@ -81,7 +83,12 @@ export class GraphPropagation {
   _graph(): Graph {
     const state = this.getState()
     let subset = e.space.subset(e.graph.create(state), this.spaceId)
-    return e.graph.toBizarroGraph(subset, state.guesstimateForm);
+
+    if (this.useGuesstimateForm) {
+      subset = e.graph.toBizarroGraph(subset, state.guesstimateForm);
+    }
+
+    return subset
   }
 
   _orderedMetricIds(graphFilters: object): Array<Object> {

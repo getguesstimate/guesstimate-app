@@ -1,9 +1,12 @@
 import React, {Component, PropTypes} from 'react';
 import ReactDOM from 'react-dom'
 import { connect } from 'react-redux';
-import { createGuesstimateForm, destroyGuesstimateForm, changeGuesstimateForm} from 'gModules/guesstimate_form/actions'
+import { createGuesstimateForm, destroyGuesstimateForm, changeGuesstimateForm, saveGuesstimateForm} from 'gModules/guesstimate_form/actions'
 import $ from 'jquery'
-import insertAtCaret from 'lib/jquery/insertAtCaret'
+import Icon from 'react-fa'
+import DistributionSelector from './distribution-selector.js'
+import * as guesstimator from 'lib/guesstimator/index.js'
+import TextInput from './text-input.js'
 
 class GuesstimateForm extends Component{
   displayName: 'GuesstimateForm'
@@ -17,73 +20,136 @@ class GuesstimateForm extends Component{
     guesstimate: PropTypes.object.isRequired,
     guesstimateForm: PropTypes.object.isRequired,
     metricId: PropTypes.string.isRequired,
-    onSubmit: PropTypes.func,
-    value: PropTypes.string
+    metricFocus: PropTypes.func.isRequired,
+    onSubmit: PropTypes.func
   }
 
-  state = {userInput: this.props.value || ''}
+  state = {
+    userInput: this.props.guesstimate.input || '',
+    distributionType: 'NORMAL',
+    showDistributionSelector: false
+  }
 
   componentWillUnmount() {
-    this._submit()
-  }
-  _handleMetricClick(item){
-    insertAtCaret('live-input', item.readableId)
-    this._changeInput();
-  }
-  _handleFocus() {
-    $(window).on('functionMetricClicked', (a, item) => {this._handleMetricClick(item)})
-    this.props.dispatch(createGuesstimateForm({input: this._value(), metric: this.props.metricId}))
-  }
-  _handleBlur() {
-    this._submit()
-  }
-  _submit() {
-    $(window).off('functionMetricClicked')
+    this.props.dispatch(saveGuesstimateForm());
     this.props.dispatch(destroyGuesstimateForm());
-    if (this.props.value !== this.state.userInput){
-      this.props.onSubmit(this.props.guesstimateForm);
+  }
+
+  componentWillMount() {
+    const {guesstimate} = this.props
+    this.props.dispatch(createGuesstimateForm(guesstimate))
+
+    const guesstimateType = guesstimator.find(guesstimate.guesstimateType)
+    if (guesstimateType.isRangeDistribution){
+      this.setState({distributionType: guesstimateType.referenceName})
     }
   }
-  _handlePress(event) {
-    let value = event.target.value;
-    this._changeInput(value);
+
+  _guesstimateTypeName() {
+    if (this._isRangeDistribution()) { return this.state.distributionType }
+    else { return this._inputType().referenceName }
   }
-  _changeInput(value=this._value()){
-    this.setState({userInput: value});
-    this._dispatchChange(value)
+
+  _guesstimateType() {
+    return guesstimator.find(this._guesstimateTypeName())
   }
-  _dispatchChange(value) {
-    this.props.dispatch(changeGuesstimateForm({input: value, metric: this.props.metricId}));
+
+  _inputType() {
+    const inputType = guesstimator.format({text: this.state.userInput}).guesstimateType
+    return guesstimator.find(inputType)
   }
-  _value() {
-    return ReactDOM.findDOMNode(this.refs.input).value
+
+  _isRangeDistribution() {
+    const type = this._inputType()
+    return (!!type.isRangeDistribution)
   }
-  _handleKeyUp(e) {
-    if (e.which === 27 || e.which === 13) {
-      e.preventDefault()
-      this.props.metricFocus()
+
+  _dispatchChange() {
+    const {userInput} = this.state;
+    const guesstimateType = this._guesstimateTypeName();
+    const {metricId} = this.props;
+    this.props.dispatch(changeGuesstimateForm({
+      input: userInput,
+      metric: metricId,
+      guesstimateType
+    }));
+
+    if (this.state.showDistributionSelector && !this._isRangeDistribution()){
+      this.setState({showDistributionSelector: false})
     }
   }
+
+  _changeDistributionType(distributionType) {
+    this.setState({distributionType}, () => {this._dispatchChange()})
+    this.setState({showDistributionSelector: false})
+  }
+
+  _changeInput(userInput) {
+    this.setState({userInput}, () => {this._dispatchChange()})
+  }
+
+  //right now errors live in the simulation, which is not present here.
   render() {
-    let distribution = this.props.guesstimateForm && this.props.guesstimateForm.distribution;
-    let errors = distribution && distribution.errors;
-    let errorPane = <div className='errors'>{errors} </div>
+    const guesstimateType = this._guesstimateType()
+    let {showDistributionSelector} = this.state
     return(
       <div className='GuesstimateForm'>
-        <input
-            id="live-input"
-            onBlur={this._handleBlur.bind(this)}
-            onChange={this._handlePress.bind(this)}
-            onFocus={this._handleFocus.bind(this)}
-            onKeyUp={this._handleKeyUp.bind(this)}
-            placeholder={'value'}
-            ref='input'
-            type="text"
-            value={this.state.userInput}
-        />
-        {errors ? errorPane : ''}
+        <div className='row'>
+          <div className='col-sm-12'>
+            <TextInput
+              value={this.state.userInput}
+              metricFocus={this.props.metricFocus}
+              onChange={this._changeInput.bind(this)}
+            />
+            <GuesstimateTypeIcon
+              guesstimateType={guesstimateType}
+              toggleDistributionSelector={() => {this.setState({showDistributionSelector: !showDistributionSelector})}}
+            />
+          </div>
+        </div>
+        {showDistributionSelector &&
+          <div className='row'>
+            <div className='col-sm-12'>
+              <DistributionSelector
+                onSubmit={this._changeDistributionType.bind(this)}
+                selected={this.state.guesstimateType}
+              />
+            </div>
+          </div>
+        }
       </div>)
   }
 }
 
-module.exports = connect()(GuesstimateForm);
+class GuesstimateTypeIcon extends Component{
+  displayName: 'GuesstimateTypeIcon'
+
+  _handleMouseDown() {
+    if (this.props.guesstimateType.isRangeDistribution){
+      this.props.toggleDistributionSelector()
+    }
+  }
+
+  render() {
+    const {guesstimateType} = this.props
+    const {isRangeDistribution, icon} = guesstimateType
+    const showIcon = guesstimateType && guesstimateType.icon
+
+    let className='DistributionSelectorToggle DistributionIcon'
+    className += isRangeDistribution ? ' button' : ''
+    if (showIcon) {
+      return(
+        <div
+            className={className}
+            onMouseDown={this._handleMouseDown.bind(this)}
+        >
+          <img src={icon}/>
+        </div>
+      )
+    } else {
+      return (false)
+    }
+  }
+}
+
+module.exports = connect(null, null, null, {withRef: true})(GuesstimateForm);
