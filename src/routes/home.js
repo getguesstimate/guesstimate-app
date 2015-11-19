@@ -37,7 +37,7 @@ export default class Home extends Component{
 
         <div className='ui divider'></div>
         <div className='spaceList'>
-          <SpaceList spaces={showSpaces}/>
+          <SpaceList spaces={showSpaces} showUsers={true}/>
         </div>
       </div>
     )
