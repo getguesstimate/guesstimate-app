@@ -62,7 +62,8 @@ export default class Profile extends Component {
       { isLoggedIn &&
         <div className='ui item'>
           <StandardDropdownMenu toggleButton={this.profileDropdown()}>
-            <li key='1' onMouseDown={this.logOut.bind(this)}><a className='ui item'>Log Out</a></li>
+            <li key='1'><a className='ui item' href={`/users/${this.props.me.id}`}>Profile</a></li>
+            <li key='2' onMouseDown={this.logOut.bind(this)}><a className='ui item'>Log Out</a></li>
           </StandardDropdownMenu>
         </div>
       }
