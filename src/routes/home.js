@@ -7,7 +7,8 @@ import './main.css'
 function mapStateToProps(state) {
   return {
     spaces: state.spaces,
-    metrics: state.metrics
+    metrics: state.metrics,
+    me: state.me
   }
 }
 
@@ -27,9 +28,11 @@ export default class Home extends Component{
               {'Each can have several metrics.'}
             </div>
           </div>
-          <a href='/space/new' className='ui primary button right floated'>
-            {'New Collection'}
-          </a>
+          {_.has(this.props.me, 'id') &&
+            <a href='/space/new' className='ui primary button right floated'>
+              {'New Collection'}
+            </a>
+          }
         </h2>
 
         <div className='ui divider'></div>
