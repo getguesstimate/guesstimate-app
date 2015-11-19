@@ -4,7 +4,9 @@ import {withPrecision} from '../filters.js'
 export var Sampler = {
   sample(formatted, n) {
     const mean = (formatted.high - formatted.low)/2 + formatted.low
-    const stdev = formatted.high - mean
+
+    // This assumes a 90% confidence interval
+    const stdev = (formatted.high - mean) / 1.645
     let inputs = {mean, stdev, min: Infinity}
 
     if (_.isFinite(formatted.minimum)){ inputs.min = formatted.minimum }

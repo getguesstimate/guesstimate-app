@@ -3,4 +3,3 @@ export var Sampler = {
     return {values: [formatted.value]}
   }
 }
-

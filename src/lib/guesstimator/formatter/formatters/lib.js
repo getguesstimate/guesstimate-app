@@ -1,4 +1,5 @@
 export function parseNumber(n) { return parseFloat(n) }
+
 export function isParseableNumber(n) {
   if (_.isString(n)){
     return !isNaN(n)
