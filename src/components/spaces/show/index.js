@@ -53,7 +53,7 @@ export default class SpacesShow extends Component {
 
               {space && space.user && !space.ownedByMe &&
                 <div>
-                  <a className='ui image label'>
+                  <a className='ui image label' href={`/users/${space.user.id}`}>
                     <img  src={space.user.picture}/>
                     {space.user.name}
                   </a>
