@@ -1,5 +1,11 @@
 export function parseNumber(n) { return parseFloat(n) }
-export function isParseableNumber(n) { return !!(n && !isNaN(n.toString())) }
+export function isParseableNumber(n) {
+  if (_.isString(n)){
+    return !isNaN(n)
+  } else {
+    return _.isFinite(n)
+  }
+}
 
 export const graphicalMixin = {
   matches(g) {
