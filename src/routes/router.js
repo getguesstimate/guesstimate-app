@@ -1,5 +1,6 @@
 import Router from 'ampersand-router'
 import SpaceShow from 'gComponents/spaces/show'
+import UserShow from 'gComponents/users/show/index.js'
 import SpaceNew from './spaces/new'
 import Home from './home'
 import ComponentIndex from './component-index'
@@ -40,6 +41,7 @@ export default Router.extend({
     'space/new': 'spaceNew',
     'space/:id': 'spaceShow',
     'components': 'components',
+    'users/:id': 'userShow',
   },
 
   home () {
@@ -56,5 +58,9 @@ export default Router.extend({
 
   components () {
     this.render(<ComponentIndex/>, true)
+  },
+
+  userShow (id) {
+    this.render(<UserShow userId={id}/>, true)
   },
 })

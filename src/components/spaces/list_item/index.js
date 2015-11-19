@@ -6,14 +6,14 @@ import MetricLabel from '../../metrics/label'
 import * as Space from 'gEngine/space';
 import './style.css'
 
-let SpaceListItem = ({space}) => (
+let SpaceListItem = ({space, showUser}) => (
   <div className='SpaceListItem'>
     <a href={Space.url(space)}>
     <div className='row'>
       <div className='col-xs-6'>
         <h3> {space.name} </h3>
       </div>
-        {space.user &&
+        {space.user && showUser &&
           <div className='col-xs-6'>
             <div className='user-tag'>
               <img
@@ -51,7 +51,7 @@ function mapStateToProps(state) {
 export default class SpaceListItemComponent extends Component {
   render() {
     return (
-      <SpaceListItem space={this.props.denormalizedSpace}/>
+      <SpaceListItem space={this.props.denormalizedSpace} showUser={this.props.showUser}/>
     )
   }
 }
