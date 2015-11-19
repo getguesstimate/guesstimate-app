@@ -1,6 +1,6 @@
 import e from '../../lib/engine/engine'
-import stats from 'stats-lite'
 import _ from 'lodash'
+import {Stats} from 'fast-stats'
 
 function hasNoStdev(values) {
   return (_.uniq(_.slice(values, 0, 5)).length === 1)
@@ -9,13 +9,16 @@ function hasNoStdev(values) {
 function sStats(simulation){
   if (_.has(simulation, 'sample.values') && (simulation.sample.values.length > 0)) {
     let values = simulation.sample.values;
+    let s1 = new Stats().push(values)
 
     //stats had bug where it would treat very tiny values (< 10^-10) as sometimes having a tiny stdev (<10^-30)
-    let stdev = hasNoStdev(values) ? 0 : stats.stdev(values)
+    const percentiles = {5: s1.percentile(5), 95: s1.percentile(95)}
+    let stdev = hasNoStdev(values) ? 0 : s1.stddev()
     return {
-      mean:  stats.mean(values),
+      mean:  s1.amean(),
       stdev:  stdev,
-      length:  values.length
+      length:  values.length,
+      percentiles
     };
   }
 }
