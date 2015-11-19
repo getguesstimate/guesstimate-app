@@ -1,15 +1,5 @@
 @import './styles/variables.css';
 
-.drop-appear {
-  max-height: 0;
-  overflow: hidden;
-}
-
-.drop-appear.drop-appear-active{
-  max-height: 300px;
-  transition: max-height 0.5s;
-}
-
 .editing-section {
   border-top: 1px solid #ddd;
   border-radius: 0 0 2px 2px;
@@ -19,8 +9,68 @@
   @mixin hover-input;
 }
 
-.GuesstimateForm .errors{
-  margin-top: 8px;
-  color: #666;
+.GuesstimateForm input{
+  float: left;
+  width: 75%;
 }
 
+.DistributionSelector {
+  width: 100%;
+}
+
+.DistributionSelector .DistributionList{
+  float: right;
+}
+
+.DistributionSelector hr{
+  border: none;
+  border-top: 1px solid $grey-1;
+}
+
+.GuesstimateForm .DistributionIcon.DistributionIcon{
+  font-size: 1em;
+  padding-top: 2px;
+  padding-left: 2px;
+  padding-right: 2px;
+  position: relative;
+  height: 26px;
+  width: 26px;
+  padding-top: 0;
+}
+
+.DistributionIcon.button.selected{
+  background-color: $blue-2;
+}
+
+.DistributionIcon img{
+  width: 26px;
+  opacity: 1;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 4px;
+  bottom: 0;
+}
+
+.DistributionIcon.DistributionSelectorToggle{
+  display: inline-block;
+  color: #999;
+  float: right;
+}
+
+.DistributionIcon.DistributionSelectorToggle {
+  opacity: 0.6;
+}
+
+.button.DistributionIcon.DistributionSelectorToggle {
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.button.DistributionIcon.DistributionSelectorToggle:hover {
+  opacity: 1;
+}
+
+.button.DistributionIcon.DistributionSelectorToggle:hover {
+  background-color: $grey-1;
+}

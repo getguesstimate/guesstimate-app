@@ -16,7 +16,6 @@ export default class StandardDropdownMenu extends Component {
   }
 
   click() {
-    console.log("you clicked omethign")
   }
 
   wrappedToggleButton() {

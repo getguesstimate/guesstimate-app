@@ -15,7 +15,6 @@ describe('estimateInput', () => {
     });
 
     it('with ->', () => {
-      console.log(result('1->5'))
       expect(result('1->5')).to.deep.equal({mean: 3, stdev: 2});
     });
   });
