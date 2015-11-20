@@ -24,8 +24,8 @@ class PrecisionNumber extends Component {
   }
 }
 
-const Uncertainty = ({stdev}) => (
-  <span className='stdev'> {'±'} <PrecisionNumber value={stdev}/> </span>
+const Uncertainty = ({range}) => (
+  <span className='stdev'> {'±'} <PrecisionNumber value={range}/> </span>
 )
 
 @ShowIf
@@ -38,12 +38,11 @@ class DistributionSummarySmall extends Component{
     let {mean, stdev, percentiles} = stats
     let range = null
     if (_.isObject(percentiles)){ range = (percentiles[95] - mean)}
-
     return (
       <div className="distribution-summary">
         <PrecisionNumber value={mean}/>
-          {(range) &&
-          <Uncertainty stdev={range} />
+          {!!range && range !== 0 &&
+          <Uncertainty range={range} />
           }
       </div>
     )
