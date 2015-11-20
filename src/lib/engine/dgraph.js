@@ -8,6 +8,7 @@ const metric = graph.metric;
 
 export function runSimulation(dGraph:DGraph, metricId:string, n:number): Sample{
   let m = metric(dGraph, metricId);
+  if (!m) { return {errors: ['Unknown metric referenced']}}
   return _guesstimate.sample(m.guesstimate, dGraph, n);
 }
 

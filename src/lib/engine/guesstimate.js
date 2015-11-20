@@ -30,6 +30,13 @@ export function sample(guesstimate: Guesstimate, dGraph: DGraph, n: number = 1):
   }
 }
 
+export const attributes = ['metric', 'input', 'guesstimateType']
+
+export function format(guesstimate: Guesstimate): Guesstimate{
+  let formatted = _.pick(guesstimate, attributes)
+  return _.pick(guesstimate, attributes)
+}
+
 export function inputMetrics(guesstimate: Guesstimate, dGraph: DGraph): Array<Object> {
   const strategy = getStrategy(guesstimate)
   return strategy.inputMetrics(guesstimate, dGraph)
