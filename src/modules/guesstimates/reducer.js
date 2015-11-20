@@ -1,3 +1,4 @@
+import engine from 'gEngine/engine'
 export default function guesstimates(state = [], action) {
   switch (action.type) {
   case 'SPACES_FETCH_SUCCESS':
@@ -12,7 +13,7 @@ export default function guesstimates(state = [], action) {
     if (i !== -1) {
       const newState = [
         ...state.slice(0, i),
-        action.values,
+        engine.guesstimate.format(action.values),
         ...state.slice(i+1, state.length)
       ];
       return newState

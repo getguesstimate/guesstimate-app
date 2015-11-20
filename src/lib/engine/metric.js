@@ -1,5 +1,6 @@
 import uuid from 'node-uuid';
 import generateRandomReadableId from './metric/generate_random_readable_id.js'
+import * as _guesstimate from './guesstimate';
 
 export function create(metricNames) {
   return {
@@ -28,5 +29,5 @@ export function denormalize(metric, graph) {
 }
 
 export function guesstimates(metric, graph) {
-  return graph.guesstimates.filter(g => (g.metric === metric.id))
+  return graph.guesstimates.filter(g => (g.metric === metric.id)).map(g => _guesstimate.format(g))
 }
