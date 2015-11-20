@@ -27,7 +27,11 @@ class Metric extends Component {
         'basic',
         'scientific',
         'debugging',
-      ]).isRequired
+      ]).isRequired,
+      metricClickMode: PT.oneOf([
+        'DEFAULT',
+        'FUNCTION_INPUT_SELECT'
+      ])
     }),
     dispatch: PT.func.isRequired,
     gridKeyPress: PT.func.isRequired,
@@ -38,13 +42,7 @@ class Metric extends Component {
       row: PT.number,
       column: PT.number
     }),
-    metric: PT.object.isRequired,
-    userAction: PT.oneOf([
-      'selecting',
-      'function',
-      'estimate',
-      'editing'
-    ]).isRequired
+    metric: PT.object.isRequired
   }
 
   state = {modalIsOpen: false};
@@ -67,7 +65,7 @@ class Metric extends Component {
     const selectableEl = (event.target.parentElement.getAttribute('data-select') !== 'false')
     const notYetSelected = !this.props.isSelected
     if (selectableEl && notYetSelected){
-      if (this.props.userAction == 'function') {
+      if (this.props.canvasState.metricClickMode === 'FUNCTION_INPUT_SELECT') {
         event.preventDefault()
         $(window).trigger('functionMetricClicked', this.props.metric)
       } else {
@@ -129,10 +127,10 @@ class Metric extends Component {
   }
 
   render() {
-    const {isSelected, metric, guesstimateForm, userAction} = this.props
-    const {canvasState: {metricCardView}} = this.props
+    const {isSelected, metric, guesstimateForm} = this.props
+    const {canvasState: {metricCardView, metricClickMode}} = this.props
 
-    const anotherFunctionSelected = ((userAction === 'function') && !isSelected)
+    const anotherFunctionSelected = ((metricClickMode === 'FUNCTION_INPUT_SELECT') && !isSelected)
 
     const showSimulation = this.showSimulation()
     const showStatistics = this.showStatistics()

@@ -52,7 +52,6 @@ const MetricCardProps = {
   },
   canvasState: 'scientific',
   location: {row: 3, column: 3},
-  userAction: 'selecting',
   handleSelect: () => {console.log('select')},
   isSelected: true
 }

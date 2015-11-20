@@ -17,6 +17,7 @@ export default class TextInput extends Component{
 
   componentWillUnmount() {
     $(window).off('functionMetricClicked')
+    this.props.onBlur()
   }
 
   _handleInputMetricClick(item){
@@ -26,10 +27,12 @@ export default class TextInput extends Component{
 
   _handleFocus() {
     $(window).on('functionMetricClicked', (a, item) => {this._handleInputMetricClick(item)})
+    this.props.onFocus()
   }
 
   _handleBlur() {
     $(window).off('functionMetricClicked')
+    this.props.onBlur()
   }
 
   _handlePress(event) {

@@ -11,7 +11,6 @@ import { changeSelect } from 'gModules/selection/actions'
 import { runSimulations, deleteSimulations } from 'gModules/simulations/actions'
 
 import './canvas.styl'
-import { userActionSelector } from './canvas-state-selector';
 import { denormalizedSpaceSelector } from '../denormalized-space-selector.js';
 import JSONTree from 'react-json-tree'
 
@@ -24,7 +23,6 @@ function mapStateToProps(state) {
 
 const PT = PropTypes;
 @connect(mapStateToProps)
-@connect(userActionSelector)
 @connect(denormalizedSpaceSelector)
 export default class CanvasSpace extends Component{
   static propTypes = {
@@ -39,6 +37,11 @@ export default class CanvasSpace extends Component{
         'hidden',
         'visible',
       ]).isRequired,
+      metricClickMode: PT.oneOf([
+        'DEFAULT',
+        'FUNCTION_INPUT_SELECT'
+      ])
+
     }),
     denormalizedSpace: PropTypes.object,
     dispatch: PropTypes.func,
@@ -48,13 +51,7 @@ export default class CanvasSpace extends Component{
     spaceId: PropTypes.oneOfType([
         React.PropTypes.string,
         React.PropTypes.number,
-    ]),
-    userAction: PropTypes.oneOf([
-      'selecting',
-      'function',
-      'estimate',
-      'editing'
-    ]),
+    ])
   }
 
   componentDidMount(){
@@ -89,7 +86,6 @@ export default class CanvasSpace extends Component{
           key={metric.id}
           location={location}
           metric={metric}
-          userAction={this.props.userAction}
       />
     )
   }
