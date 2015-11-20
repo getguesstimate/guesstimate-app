@@ -38,3 +38,16 @@ export function format(g) {
 export function errors(g) {
   return _matchingFormatter(g).errors(g)
 }
+
+export function preFormatGuesstimate(guesstimate, dGraph) {
+  return {metric: guesstimate.metric, text: guesstimate.input, graph: dGraph}
+}
+
+export function inputMetrics(guesstimate, dGraph) {
+  const g = preFormatGuesstimate(guesstimate, dGraph)
+
+  const formatter = _matchingFormatter(g)
+  if (!_.isFunction(formatter.inputMetrics)) { return [] }
+
+  return formatter.inputMetrics(g, dGraph)
+}

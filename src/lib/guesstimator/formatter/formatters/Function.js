@@ -17,6 +17,7 @@ export const item = Object.assign(
     },
 
     errors(g) {return []},
+    inputMetrics(g, dGraph) { return inputMetrics(g.text, dGraph) },
     _formatText(text) { return text.substring(1, text.length) },
     _formatInputs(text, graph) { return metricGraphToInputs(text, graph) }
   }
