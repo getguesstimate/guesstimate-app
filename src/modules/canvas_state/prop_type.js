@@ -10,4 +10,8 @@ export default PropTypes.shape({
     'scientific',
     'debugging',
   ]).isRequired,
+  metricClickMode: PT.oneOf([
+    'DEFAULT',
+    'FUNCTION_INPUT_SELECT'
+  ]).isRequired,
 })

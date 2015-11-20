@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import ReactDOM from 'react-dom'
 import { connect } from 'react-redux';
 import { createGuesstimateForm, destroyGuesstimateForm, changeGuesstimateForm, saveGuesstimateForm} from 'gModules/guesstimate_form/actions'
+import { changeMetricClickMode } from 'gModules/canvas_state/actions'
 import $ from 'jquery'
 import Icon from 'react-fa'
 import DistributionSelector from './distribution-selector.js'
@@ -85,7 +86,18 @@ class GuesstimateForm extends Component{
   }
 
   _changeInput(userInput) {
-    this.setState({userInput}, () => {this._dispatchChange()})
+    this.setState({userInput}, () => {
+      this._switchMetricClickMode()
+      this._dispatchChange()
+    })
+  }
+
+  _switchMetricClickMode(inClick=true) {
+    if (inClick && (this._guesstimateTypeName() === 'FUNCTION')){
+      this.props.dispatch(changeMetricClickMode('FUNCTION_INPUT_SELECT'));
+    } else {
+      this.props.dispatch(changeMetricClickMode(''));
+    }
   }
 
   //right now errors live in the simulation, which is not present here.
@@ -100,6 +112,8 @@ class GuesstimateForm extends Component{
               value={this.state.userInput}
               metricFocus={this.props.metricFocus}
               onChange={this._changeInput.bind(this)}
+              onFocus={() => {this._switchMetricClickMode.bind(this)(true)}}
+              onBlur={() => {this._switchMetricClickMode.bind(this)(false)}}
             />
             <GuesstimateTypeIcon
               guesstimateType={guesstimateType}
