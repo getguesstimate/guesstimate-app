@@ -8,6 +8,7 @@ import simulationsR from './simulations/reducer'
 import meR from './me/reducer'
 import canvasStateR from './canvas_state/reducer.js';
 import spacesR from './spaces/reducer';
+import searchSpacesR from './search_spaces/reducer';
 import {reducer as formReducer} from 'redux-form';
 
 export function changeSelect(location) {
@@ -25,7 +26,8 @@ const rootReducer = function app(state = {}, action){
     users: reduxCrud.reducersFor('users')(state.users, action),
     form: formReducer(state.form, action),
     me: meR(state.me, action),
-    canvasState: canvasStateR(state.canvasState, action)
+    canvasState: canvasStateR(state.canvasState, action),
+    searchSpaces: searchSpacesR(state.searchSpaces, action)
   };
 };
 

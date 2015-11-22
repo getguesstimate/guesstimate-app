@@ -60,6 +60,7 @@
     "react-addons-css-transition-group": "^0.14.x"
   },
   "dependencies": {
+    "algoliasearch": "^3.9.2",
     "ampersand-app": "^1.0.4",
     "ampersand-router": "^3.0.2",
     "async": "^1.4.2",

@@ -2,7 +2,7 @@ import React from 'react'
 import SpaceListItem from '../list_item'
 import './style.css'
 
-const SpaceList = ({spaces, showUsers}) => (
+const SpaceList = ({spaces, showUsers, loadMore, hasMorePages}) => (
   <div className='SpaceList'>
     {spaces.map((s) => {
       return (
@@ -13,6 +13,9 @@ const SpaceList = ({spaces, showUsers}) => (
         />
       )
     })}
+    {hasMorePages &&
+      <button className={'ui button'} onClick={loadMore}> {'More'} </button>
+    }
   </div>
 )
 
