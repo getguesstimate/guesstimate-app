@@ -3,7 +3,7 @@ import * as _metric from './metric';
 import * as _guesstimate from './guesstimate';
 
 export function url (space) {
-  return ('/space/' + space.id)
+  return (!!space) ? ('/space/' + space.id) : ''
 }
 
 export function get(collection, id){

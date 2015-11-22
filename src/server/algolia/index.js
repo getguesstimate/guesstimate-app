@@ -1,4 +1,4 @@
-import {ID, API_KEY} from './constants.js'
+import {ID, API_KEY, SPACE_INDEX} from './constants.js'
 import algoliasearch from 'algoliasearch'
 
 const algoliaClient = () =>  {
@@ -6,5 +6,5 @@ const algoliaClient = () =>  {
 }
 
 export const searchSpaceIndex = () => {
-  return algoliaClient().initIndex('Space')
+  return algoliaClient().initIndex(SPACE_INDEX)
 }

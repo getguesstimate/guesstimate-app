@@ -50,9 +50,13 @@ function mapStateToProps(state) {
 @connect(denormalizedSpaceSelector)
 export default class SpaceListItemComponent extends Component {
   render() {
-    return (
-      <SpaceListItem space={this.props.denormalizedSpace} showUser={this.props.showUser}/>
-    )
+    if (!!this.props.denormalizedSpace){
+      return (
+       <SpaceListItem space={this.props.denormalizedSpace} showUser={this.props.showUser}/>
+      )
+    } else {
+      return false
+    }
   }
 }
 
