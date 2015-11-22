@@ -9,6 +9,7 @@ const SpaceList = ({spaces, showUsers, loadMore, hasMorePages}) => (
         <SpaceListItem
             key={s.id}
             spaceId={s.id}
+            space={s}
             showUser={showUsers}
         />
       )

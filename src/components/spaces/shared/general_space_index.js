@@ -24,7 +24,6 @@ export default class GeneralSpaceIndex extends Component{
     this.props.dispatch(search.fetchNextPage())
   }
   _filters(){
-      console.log(this.props)
     if (!_.isUndefined(this.props.userId)){
       return {user_id: this.props.userId}
     } else {
