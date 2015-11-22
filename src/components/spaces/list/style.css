@@ -1,0 +1,16 @@
+@import './variables.css';
+
+.SpaceList > .nextPage {
+  text-align: center;
+  width: 100%;
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+.SpaceList > .nextPage .ui.button {
+  background-color: $grey-1;
+}
+
+.SpaceList > .nextPage .ui.button:hover {
+  background-color: $grey-2;
+}

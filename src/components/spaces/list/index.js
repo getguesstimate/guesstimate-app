@@ -14,8 +14,10 @@ const SpaceList = ({spaces, showUsers, loadMore, hasMorePages}) => (
         />
       )
     })}
-    {hasMorePages &&
-      <button className={'ui button'} onClick={loadMore}> {'More'} </button>
+    {!!spaces.length && hasMorePages &&
+      <div className='nextPage'>
+        <button className={'ui button nextpage'} onClick={loadMore}> {'Load More'} </button>
+      </div>
     }
   </div>
 )
