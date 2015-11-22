@@ -2,12 +2,12 @@ import React, {Component, PropTypes} from 'react'
 import Icon from'react-fa'
 import { connect } from 'react-redux';
 import SpaceList from 'gComponents/spaces/list'
+import * as search from 'gModules/search_spaces/actions'
 import './main.css'
 
 function mapStateToProps(state) {
   return {
-    spaces: state.spaces,
-    metrics: state.metrics,
+    searchSpaces: state.searchSpaces,
     me: state.me
   }
 }
@@ -15,10 +15,22 @@ function mapStateToProps(state) {
 @connect(mapStateToProps)
 export default class Home extends Component{
   displayName: 'Home'
+  componentWillMount(){
+    this.props.dispatch(search.fetch(''))
+  }
+  _search(e) {
+    this.props.dispatch(search.fetch(e.target.value))
+  }
+  _nextPage() {
+    const currentPage = this.props.searchSpaces.page
+    const nextPage = currentPage + 1
+    this.props.dispatch(search.fetchNextPage())
+  }
   render () {
-    const {spaces, metrics} = this.props
+    const {searchSpaces} = this.props
     let style = {paddingTop: '3em'}
-    const showSpaces = spaces.asMutable().filter(s => (_.isUndefined(s.deleted) || !s.deleted ))
+    const spaces = searchSpaces.hits || []
+    const hasMorePages = _.isFinite(searchSpaces.page) && (searchSpaces.page < (searchSpaces.nbPages - 1))
     return (
       <div className='wrap container-fluid' style={style}>
         <h2 className='ui header'>
@@ -34,10 +46,10 @@ export default class Home extends Component{
             </a>
           }
         </h2>
-
+        <input onChange={this._search.bind(this)}/>
         <div className='ui divider'></div>
         <div className='spaceList'>
-          <SpaceList spaces={showSpaces} showUsers={true}/>
+          <SpaceList spaces={spaces} showUsers={true} hasMorePages={hasMorePages} loadMore={this._nextPage.bind(this)}/>
         </div>
       </div>
     )

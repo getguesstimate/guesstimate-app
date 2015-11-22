@@ -34,7 +34,6 @@ function defaultHtml (incomingData) {
   if (data.head) {
     add(data.head)
   }
-  //add('<script src="semantic/dist/semantic.min.js"></script>')
   add('</head>')
   add('<body>')
   add('<div id="root">')
