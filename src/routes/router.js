@@ -2,7 +2,7 @@ import Router from 'ampersand-router'
 import SpaceShow from 'gComponents/spaces/show'
 import UserShow from 'gComponents/users/show/index.js'
 import SpaceNew from './spaces/new'
-import Home from './home'
+import SpaceIndex from 'gComponents/spaces/index/index.js'
 import ComponentIndex from './component-index'
 import React from 'react'
 import ReactDOM from 'react-dom'
@@ -45,7 +45,7 @@ export default Router.extend({
   },
 
   home () {
-    this.render(<Home/>, true)
+    this.render(<SpaceIndex/>, true)
   },
 
   spaceNew () {

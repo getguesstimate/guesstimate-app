@@ -5,7 +5,7 @@ export function fetch(query = '', options = {}) {
   let filters = {hitsPerPage: 20}
   filters.page = options.page || 0
   if (options.user_id) {
-    filters.numericFilters = `user_id=${user_id}`
+    filters.numericFilters = `user_id=${options.user_id}`
   }
 
   return (dispatch, getState) => {
