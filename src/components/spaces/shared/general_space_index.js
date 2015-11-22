@@ -3,6 +3,7 @@ import Icon from'react-fa'
 import { connect } from 'react-redux';
 import SpaceList from 'gComponents/spaces/list'
 import * as search from 'gModules/search_spaces/actions'
+import './style.css'
 
 function mapStateToProps(state) {
   return {
@@ -36,12 +37,20 @@ export default class GeneralSpaceIndex extends Component{
     const spaces = searchSpaces.hits || []
     const hasMorePages = _.isFinite(searchSpaces.page) && (searchSpaces.page < (searchSpaces.nbPages - 1))
     return (
-      <div className='wrap container-fluid' style={style}>
+      <div className='wrap container-fluid GeneralSpaceIndex' style={style}>
         {this.props.children}
         <div className='ui divider'></div>
-        <input onChange={this._search.bind(this)}/>
-        <div className='spaceList'>
-          <SpaceList spaces={spaces} showUsers={true} hasMorePages={hasMorePages} loadMore={this._nextPage.bind(this)}/>
+        <div className='row stuff search-form'>
+          <div className='col-sm-4'>
+            <div className='ui form'>
+              <input name='search' placeholder='Search' onChange={this._search.bind(this)}/>
+            </div>
+          </div>
+        </div>
+        <div className='row'>
+          <div className='spaceList'>
+            <SpaceList spaces={spaces} showUsers={true} hasMorePages={hasMorePages} loadMore={this._nextPage.bind(this)}/>
+          </div>
         </div>
       </div>
     )

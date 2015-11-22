@@ -4,6 +4,7 @@ import Auth0Lock from 'auth0-lock'
 import React, {Component, PropTypes} from 'react'
 import StandardDropdownMenu from 'gComponents/utility/standard-dropdown-menu'
 import * as meActions from 'gModules/me/actions.js'
+import Icon from 'react-fa'
 
 import { connect } from 'react-redux';
 const Auth0Variables = {
@@ -46,9 +47,8 @@ export default class Profile extends Component {
     const profile = this.props.me.profile
     return (
       <div>
-        <a className='ui image label'>
-          <img  src={profile.picture}/>
-          {profile.name}
+        <a>
+          <img className='ui avatar image' src={profile.picture}/>
         </a>
       </div>
     )
@@ -58,6 +58,12 @@ export default class Profile extends Component {
     const isLoggedIn = loggedIn(this.props.me)
     return (
     <div className='right menu'>
+
+      { isLoggedIn &&
+        <div className='ui item'>
+          <a className='ui button' href={`/space/new`}><Icon name='plus'/></a>
+        </div>
+      }
 
       { isLoggedIn &&
         <div className='ui item'>
