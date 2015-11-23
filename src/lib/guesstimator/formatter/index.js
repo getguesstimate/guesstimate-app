@@ -8,11 +8,8 @@ import {item as Null} from './formatters/Null.js'
 
 export const formatters = [
   Funct,
-  DistributionNormalGraphical,
   DistributionTextUpTo,
-  DistributionPointGraphical,
   DistributionPointText,
-  DistributionUniform,
 ]
 
 export function _matchingFormatter(g) {
@@ -40,7 +37,12 @@ export function errors(g) {
 }
 
 export function preFormatGuesstimate(guesstimate, dGraph) {
-  return {metric: guesstimate.metric, text: guesstimate.input, graph: dGraph}
+  return {
+    metric: guesstimate.metric,
+    text: guesstimate.input,
+    graph: dGraph,
+    guesstimateType: guesstimate.guesstimateType
+  }
 }
 
 export function inputMetrics(guesstimate, dGraph) {
