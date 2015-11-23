@@ -8,13 +8,16 @@ const Header = React.createClass({
     return (
       <div className='PageHeader'>
         <div className='container-fluid'>
-          <div className="ui secondary menu">
+          <div className="menu">
+            <div className='header-left-menu'>
               <div className='header item'>
                 <a className="navbar-brand" href="/">
                   Guesstimate
                 </a>
               </div>
-              <Login/>
+            </div>
+
+            <Login/>
           </div>
         </div>
       </div>
