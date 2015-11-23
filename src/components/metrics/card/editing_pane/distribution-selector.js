@@ -43,6 +43,7 @@ export default class DistributionSelector extends Component{
                 onSubmit={this.props.onSubmit}
                 isSelected={isSelected}
                 icon={icon}
+                key={type}
               />
             )
           })}
