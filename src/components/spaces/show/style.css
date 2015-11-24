@@ -31,7 +31,6 @@
   transition: background-color 0.3s;
   float:left;
 }
-
 .hero-unit a:hover{
   color: white;
   background-color: rgba(0,0,0,0.2);

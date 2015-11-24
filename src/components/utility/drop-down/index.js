@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom'
 import Icon from 'react-fa'
 import './style.css'
 
-export const DropDownListElement = ({icon, text, url, onMouseDown}) => (
+export const DropDownListElement = ({icon, text, url, onMouseDown, isSelected}) => (
   <li>
-    <a className='action' href={url} onMouseDown={onMouseDown}>
+    <a className={'action' + (isSelected ? ' selected' : '')} href={url} onMouseDown={onMouseDown}>
       <div className='row'>
         <div className='col-xs-2 icons'>
           <Icon name={icon}/>
@@ -58,7 +58,7 @@ export default class DropDown extends Component {
   render() {
     const {headerText} = this.props
     return (
-      <span>
+      <span className='dropDown-relative'>
         <span className={'dropDown-open'} onClick={this._toggle.bind(this)}>
           {this.props.openLink}
         </span>
