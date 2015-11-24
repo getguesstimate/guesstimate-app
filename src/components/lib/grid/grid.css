@@ -2,6 +2,8 @@
 
 .GiantGrid {
   position: relative;
+  margin-left: 1em;
+  margin-top: 1em;
 }
 
 .GiantGrid-Container {
