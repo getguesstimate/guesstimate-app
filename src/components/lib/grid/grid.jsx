@@ -103,9 +103,7 @@ export default class Grid extends Component{
       <div
           className='GiantGrid-Container'
       >
-        <HorizontalIndex columnCount={columnCount}/>
         <div className='GiantGrid-Horizontal-Motion'>
-          <VerticalIndex rowHeights={rowHeights}/>
           <div
               className='GiantGrid'
               onKeyPress={this._handleKeyPress.bind(this)}
