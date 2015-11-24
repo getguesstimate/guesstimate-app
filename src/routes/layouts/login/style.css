@@ -13,6 +13,12 @@
 .header-right-menu .item {
   float: left;
   margin: 0.1em 0.5em 0;
+  color: $grey-2;
+}
+
+.header-right-menu .item.text {
+  margin-top: 1em;
+  cursor: pointer;
 }
 
 .header-right-menu a.item > .fa {
