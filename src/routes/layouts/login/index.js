@@ -72,11 +72,11 @@ export default class Profile extends Component {
       { isLoggedIn && this.profileDropdown() }
 
       { !isLoggedIn &&
-        <a className={'item'}onClick={this.signUp.bind(this)}>Sign Up</a>
+        <a className={'item text'}onClick={this.signUp.bind(this)}>Sign Up</a>
       }
 
       { !isLoggedIn &&
-        <a className={'item'} onClick={this.signIn.bind(this)}>Sign In</a>
+        <a className={'item text'} onClick={this.signIn.bind(this)}>Sign In</a>
       }
     </div>
     )
