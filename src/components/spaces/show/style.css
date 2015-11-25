@@ -21,7 +21,7 @@
   margin-right: 1em;
 }
 
-.hero-unit a {
+.hero-unit a.space-header-action {
   color: white;
   padding: 0.5em 0.95em;
   border-radius: 3px;
@@ -31,8 +31,7 @@
   transition: background-color 0.3s;
   float:left;
 }
-
-.hero-unit a:hover{
+.hero-unit a.space-header-action:hover{
   color: white;
   background-color: rgba(0,0,0,0.2);
   cursor: pointer;

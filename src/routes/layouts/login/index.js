@@ -3,19 +3,13 @@
 import Auth0Lock from 'auth0-lock'
 import React, {Component, PropTypes} from 'react'
 import StandardDropdownMenu from 'gComponents/utility/standard-dropdown-menu'
+import DropDown from 'gComponents/utility/drop-down/index.js'
+import {DropDownListElement} from 'gComponents/utility/drop-down/index.js'
 import * as meActions from 'gModules/me/actions.js'
 import Icon from 'react-fa'
+import './style.css'
 
 import { connect } from 'react-redux';
-const Auth0Variables = {
-  AUTH0_CLIENT_ID: 'By2xEUCPuGqeJZqAFMpBlgHRqpCZelj0',
-  AUTH0_DOMAIN: 'guesstimate.auth0.com'
-};
-
-const lock = new Auth0Lock(
-  Auth0Variables.AUTH0_CLIENT_ID,
-  Auth0Variables.AUTH0_DOMAIN
-);
 
 function mapStateToProps(state) {
   return {
@@ -46,10 +40,16 @@ export default class Profile extends Component {
   profileDropdown () {
     const profile = this.props.me.profile
     return (
-      <div>
-        <a>
-          <img className='ui avatar image' src={profile.picture}/>
-        </a>
+      <div className='item'>
+        <DropDown
+            headerText={profile.name}
+            openLink={<img className='avatar' src={profile.picture}/>}
+        >
+          <ul>
+            <DropDownListElement key='1' icon='question' text='FAQ' url='https://github.com/getguesstimate/guesstimate-app'/>
+            <DropDownListElement key='2' icon='sign-out' text='Sign Out' onMouseDown={this.logOut.bind(this)}/>
+          </ul>
+        </DropDown>
       </div>
     )
 
@@ -57,29 +57,26 @@ export default class Profile extends Component {
   render () {
     const isLoggedIn = loggedIn(this.props.me)
     return (
-    <div className='right menu'>
+    <div className='header-right-menu'>
 
       { isLoggedIn &&
-        <div className='ui item'>
-          <a className='ui button' href={`/space/new`}><Icon name='plus'/></a>
-        </div>
+        <a className='item' href={`/space/new`}><Icon name='plus'/></a>
       }
 
       { isLoggedIn &&
-        <div className='ui item'>
-          <StandardDropdownMenu toggleButton={this.profileDropdown()}>
-            <li key='1'><a className='ui item' href={`/users/${this.props.me.id}`}>Profile</a></li>
-            <li key='2' onMouseDown={this.logOut.bind(this)}><a className='ui item'>Log Out</a></li>
-          </StandardDropdownMenu>
-        </div>
+        <a className='item' href={`/users/${this.props.me.id}`}>
+          <Icon name='th-large'/>
+        </a>
+      }
+
+      { isLoggedIn && this.profileDropdown() }
+
+      { !isLoggedIn &&
+        <a className={'item text'}onClick={this.signUp.bind(this)}>Sign Up</a>
       }
 
       { !isLoggedIn &&
-        <a className={'ui item'}onClick={this.signUp.bind(this)}>Sign Up</a>
-      }
-
-      { !isLoggedIn &&
-        <a className={'ui item'} onClick={this.signIn.bind(this)}>Sign In</a>
+        <a className={'item text'} onClick={this.signIn.bind(this)}>Sign In</a>
       }
     </div>
     )

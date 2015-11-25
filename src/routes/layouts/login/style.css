@@ -1,0 +1,45 @@
+@import './styles/variables.css';
+
+.header-left-menu {
+  float: left
+}
+
+.header-right-menu {
+  float: right;
+  height: 3.5em;
+  position: relative;
+}
+
+.header-right-menu .item {
+  float: left;
+  margin: 0.1em 0.5em 0;
+  color: $grey-2;
+}
+
+.header-right-menu .item.text {
+  margin-top: 1em;
+  cursor: pointer;
+}
+
+.header-right-menu a.item > .fa {
+  font-size: 1.8em;
+  color: $grey-2;
+  border-radius: 2em;
+  padding: 0.3em;
+  margin-top: 0.1em;
+}
+
+.header-right-menu .item > .fa:hover {
+  background-color: $grey-1;
+  border-radius:3em;
+}
+
+.header-right-menu .avatar {
+  width: 3.25em;
+  border-radius: 3.25em;
+  border: 0.4em solid rgba(0,0,0,0);
+}
+
+.header-right-menu .avatar:hover {
+  border-color: $grey-1;
+}
