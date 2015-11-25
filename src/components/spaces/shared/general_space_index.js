@@ -37,7 +37,7 @@ export default class GeneralSpaceIndex extends Component{
     const spaces = searchSpaces.hits || []
     const hasMorePages = _.isFinite(searchSpaces.page) && (searchSpaces.page < (searchSpaces.nbPages - 1))
     return (
-      <div className='wrap container-fluid GeneralSpaceIndex' style={style}>
+      <div className='GeneralSpaceIndex' style={style}>
         {this.props.children}
         <div className='ui divider'></div>
         <div className='row stuff search-form'>
