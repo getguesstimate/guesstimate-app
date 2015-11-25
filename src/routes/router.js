@@ -45,7 +45,7 @@ export default Router.extend({
   },
 
   home () {
-    this.render(<SpaceIndex/>, true)
+    this.render(<SpaceIndex/>, false)
   },
 
   spaceNew () {
@@ -61,6 +61,6 @@ export default Router.extend({
   },
 
   userShow (id) {
-    this.render(<UserShow userId={id}/>, true)
+    this.render(<UserShow userId={id}/>, false)
   },
 })
