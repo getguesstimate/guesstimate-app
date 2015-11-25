@@ -1,21 +1,28 @@
 import React from 'react'
-import CanvasCardViewForm from './canvasCardViewForm.js'
-import CanvasEdgeViewForm from './canvasEdgeViewForm.js'
 import StandardDropdownMenu from 'gComponents/utility/standard-dropdown-menu'
 import CanvasViewForm from './canvasViewForm.js'
 import Icon from 'react-fa'
+
+import DropDown from 'gComponents/utility/drop-down/index.js'
+import {DropDownListElement} from 'gComponents/utility/drop-down/index.js'
 
 let SpaceHeader = ({space, onSave, onDestroy}) => (
   <div className='header'>
     <h1> {space ? space.name : ''} </h1>
 
-    {space.ownedByMe &&
-      <StandardDropdownMenu toggleButton={<a className='space-header-action'><Icon name='cog'/> Actions </a>}>
-          <li key='1' onMouseDown={onDestroy}><button type='button'>Delete</button></li>
-      </StandardDropdownMenu>
-    }
-
     <CanvasViewForm/>
+
+    {space.ownedByMe &&
+      <DropDown
+          headerText={'Topic Actions'}
+          openLink={<a className='space-header-action'>Topic Actions</a>}
+          position='right'
+      >
+        <ul>
+          <DropDownListElement icon={'warning'} text='Delete Topic' />
+        </ul>
+      </DropDown>
+    }
 
     {space.ownedByMe &&
       <a disabled={!!space.busy} onClick={onSave} className='space-header-action'>

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import DropDown from 'gComponents/utility/drop-down/index.js'
 import {DropDownListElement} from 'gComponents/utility/drop-down/index.js'
 import * as canvasStateActions from 'gModules/canvas_state/actions.js'
+
 import basicImage from '../../../assets/metric-icons/blue/basic.png'
 import debuggingImage from '../../../assets/metric-icons/blue/debugging.png'
 import normalImage from '../../../assets/metric-icons/blue/normal.png'
