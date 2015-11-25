@@ -91,12 +91,14 @@ export function create(object) {
   }
 }
 
-export function update(spaceId) {
+export function update(spaceId, params={}) {
   return function(dispatch, getState) {
     let {spaces, metrics, guesstimates} = getState();
     let space = e.space.get(spaces, spaceId)
     space = e.space.withGraph(space, {metrics, guesstimates});
     space.graph = _.omit(space.graph, 'simulations')
+    Object.assign(space, params)
+
     const action = standardActionCreators.updateStart(space);
     dispatch(action)
 
