@@ -3,3 +3,30 @@
 .PageHeader{
   border-bottom: 1px solid $grey-1;
 }
+
+.navbar-brand  {
+  float: left;
+  margin-top: 0.2em;
+  font-size: 2em;
+  border-radius: 0.3em;
+  padding: 0.25em;
+}
+
+.navbar-brand:hover  {
+  background-color: $grey-1;
+}
+
+.navbar-brand .guesstimate-icon {
+  float: left;
+  margin-right: 0.3em;
+}
+
+.navbar-brand .guesstimate-icon img{
+  width: 24px;
+}
+
+.navbar-brand .guesstimate-name{
+  color: $grey-2;
+  margin-top:0.1em;
+  float: left;
+}

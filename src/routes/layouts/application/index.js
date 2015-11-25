@@ -31,7 +31,7 @@ export default class extends Component{
   render () {
     let body = this.props.children
     if (!this.props.isFluid) {
-      body = <div className="ui container"> {body} </div>
+      body = <div className="container-fluid wrap"> {body} </div>
     }
     return (
       <NavHelper>
