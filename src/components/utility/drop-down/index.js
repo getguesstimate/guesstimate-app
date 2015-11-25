@@ -3,15 +3,25 @@ import ReactDOM from 'react-dom'
 import Icon from 'react-fa'
 import './style.css'
 
-export const DropDownListElement = ({icon, text, url, onMouseDown, isSelected}) => (
+
+String.prototype.capitalizeFirstLetter = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+}
+
+export const DropDownListElement = ({icon, image, text, url, onMouseDown, isSelected}) => (
   <li>
     <a className={'action' + (isSelected ? ' selected' : '')} href={url} onMouseDown={onMouseDown}>
-      <div className='row'>
-        <div className='col-xs-2 icons'>
-          <Icon name={icon}/>
+      <div className='row middle-xs'>
+        <div className='col-xs-3 icons'>
+          {icon &&
+            <Icon name={icon}/>
+          }
+          {image &&
+            <img src={image}/>
+          }
         </div>
-        <div className='col-xs-8 text'>
-          {text}
+        <div className='col-xs-7 text .middle-xs'>
+          {text.capitalizeFirstLetter()}
         </div>
       </div>
     </a>
@@ -57,13 +67,15 @@ export default class DropDown extends Component {
 
   render() {
     const {headerText} = this.props
+    let dropDownClass = 'dropDown'
+    dropDownClass += this.props.position === 'right' ? ' position-right' : ' position-left'
     return (
       <span className='dropDown-relative'>
         <span className={'dropDown-open'} onClick={this._toggle.bind(this)}>
           {this.props.openLink}
         </span>
         {this.state.isOpen &&
-          <div className='dropDown'>
+          <div className={dropDownClass}>
             <div className='dropDown-content'>
               <div className='dropDown-header'>
                 <h3> {headerText} </h3>

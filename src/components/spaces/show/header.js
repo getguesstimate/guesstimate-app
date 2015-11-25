@@ -10,7 +10,7 @@ let SpaceHeader = ({space, onSave, onDestroy}) => (
     <h1> {space ? space.name : ''} </h1>
 
     {space.ownedByMe &&
-      <StandardDropdownMenu toggleButton={<a><Icon name='cog'/> Actions </a>}>
+      <StandardDropdownMenu toggleButton={<a className='space-header-action'><Icon name='cog'/> Actions </a>}>
           <li key='1' onMouseDown={onDestroy}><button type='button'>Delete</button></li>
       </StandardDropdownMenu>
     }
@@ -18,7 +18,7 @@ let SpaceHeader = ({space, onSave, onDestroy}) => (
     <CanvasViewForm/>
 
     {space.ownedByMe &&
-      <a disabled={!!space.busy} onClick={onSave}>
+      <a disabled={!!space.busy} onClick={onSave} className='space-header-action'>
         {'Save'}
       </a>
     }
