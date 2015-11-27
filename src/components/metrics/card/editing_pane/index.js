@@ -24,6 +24,7 @@ export default class MetricEditingPane extends Component {
             metricFocus={this.props.metricFocus}
             metricId={this.props.metricId}
             onSubmit={this.props.onChangeGuesstimate}
+            size={this.props.size}
             ref='form'
         />
     </div>

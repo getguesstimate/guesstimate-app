@@ -31,6 +31,7 @@ class SimulationHistogram extends Component{
       <Histogram data={this.values()}
           height={this.props.height}
           width={this.props.containerWidth + 5}
+          bottom={20}
           bins={this.props.bins}
       />
     )

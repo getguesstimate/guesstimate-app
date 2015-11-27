@@ -8,7 +8,7 @@
 }
 
 .react-d3-histogram {
-  bottom: -33px;
+  bottom: -4px;
   width: 100%;
   left: -5px;
 }
@@ -16,10 +16,6 @@
 .ReactModal__Overlay--after-open .react-d3-histogram__tick text {
   fill: #aaa;
   font-size: 12px;
-}
-
-.ReactModal__Overlay--after-open .react-d3-histogram__bar rect{
-  fill: $blue-1;
 }
 
 .react-d3-histogram svg {

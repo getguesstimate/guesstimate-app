@@ -3,6 +3,8 @@ import Modal from 'react-modal'
 import DistributionSummary from './simulation_summary'
 import Histogram from 'gComponents/simulations/histogram'
 import stats from 'stats-lite'
+import EditingPane from './editing_pane';
+import './modal.css'
 
 export default class MetricModal extends Component {
   showSimulation() {
@@ -19,7 +21,7 @@ export default class MetricModal extends Component {
   }
 
   percentages(values) {
-    const perc = [1, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 99]
+    const perc = [1, 5, 50, 95, 99]
     const foo = stats
     return perc.map(e => { return {percentage: e, value: stats.percentile(values, (e/100))} })
   }
@@ -34,7 +36,9 @@ export default class MetricModal extends Component {
         left                  : '10%',
         right                 : 'auto',
         bottom                : 'auto',
-        marginRight           : '-50%'
+        marginRight           : '-50%',
+        border: 'none',
+        padding: '0',
       }
     };
     const showSimulation = this.showSimulation()
@@ -49,52 +53,59 @@ export default class MetricModal extends Component {
         className={'rad-modal'}
       >
       {isOpen &&
-      <div className='container'>
+      <div className='container metricModal'>
         <div className='row'>
-          {showSimulation &&
-            <div className='col-sm-6'>
-            <h2> Histogram </h2>
-              <Histogram height={300} bins={100}
-                  simulation={metric.simulation}
-              />
+            <div className='col-sm-12'>
+                <h1> {metric.name} </h1>
             </div>
-          }
-          <div className='col-sm-3'>
-            <h2> Percentiles </h2>
-            <table className='ui very basic collapsing celled table'>
-              <tbody>
-              {this.percentages(sampleValues).map(e => {
-                return (
-                <tr><td> {e.percentage}{'%'} </td><td> {e.value} </td></tr>
-                )
-              })}
-              </tbody>
-            </table>
-          </div>
-          <div className='col-sm-3'>
-            <h2> Samples </h2>
-            <div className='sampleValues'>
-              <ul>
-              {sampleValues && sampleValues.length && _.slice(sampleValues, 0, 500).map(e =>{
-                return (<li> {e}</li>)
-              })}
-              </ul>
-            </div>
-          </div>
-
-          <div className='col-sm-12'>
-            <h1> {metric.name} </h1>
-          </div>
-            <div className='col-xs-12 mean'>
-              {showSimulation &&
-                <DistributionSummary
-                    guesstimateForm={this.props.guesstimateForm}
-                    simulation={metric.simulation}
-                />
-              }
+        </div>
+        <div className='row distributionSection'>
+          <div className='col-sm-12 island'>
+          <div className='row'>
+              <div className='col-sm-4 mean subsection'>
+                <h3> Range </h3>
+                {showSimulation &&
+                  <DistributionSummary
+                      guesstimateForm={this.props.guesstimateForm}
+                      simulation={metric.simulation}
+                  />
+                }
+              </div>
+              <div className='col-sm-5 subsection'>
+                  <h3> Histogram </h3>
+                    <Histogram height={150} top={0} bottom={0} bins={100}
+                        simulation={metric.simulation}
+                    />
+              </div>
+              <div className='col-sm-3 subsection'>
+                  <h3> Percentiles </h3>
+                  <table className='ui very basic collapsing celled table'>
+                    <tbody>
+                    {this.percentages(sampleValues).map(e => {
+                      return (
+                      <tr><td> {e.percentage}{'%'} </td><td> {e.value} </td></tr>
+                      )
+                    })}
+                    </tbody>
+                  </table>
+              </div>
             </div>
           </div>
         </div>
+        <div className='row editingInputSection'>
+          <div className='col-xs-6'>
+          </div>
+          <div className='col-xs-6 island'>
+              <EditingPane
+                  guesstimate={metric.guesstimate}
+                  guesstimateForm={this.props.guesstimateForm}
+                  metricId={metric.id}
+                  editable={false}
+                  size={'large'}
+              />
+          </div>
+        </div>
+      </div>
       }
       </Modal>
     )

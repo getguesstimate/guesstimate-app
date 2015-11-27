@@ -22,7 +22,8 @@ class GuesstimateForm extends Component{
     guesstimateForm: PropTypes.object.isRequired,
     metricId: PropTypes.string.isRequired,
     metricFocus: PropTypes.func.isRequired,
-    onSubmit: PropTypes.func
+    onSubmit: PropTypes.func,
+    size: PropTypes.bool
   }
 
   state = {
@@ -104,8 +105,10 @@ class GuesstimateForm extends Component{
   render() {
     const guesstimateType = this._guesstimateType()
     let {showDistributionSelector} = this.state
+    let formClasses = 'GuesstimateForm'
+    formClasses += (this.props.size === 'large') ? ' large' : ''
     return(
-      <div className='GuesstimateForm'>
+      <div className={formClasses}>
         <div className='row'>
           <div className='col-sm-12'>
             <TextInput
