@@ -1,12 +1,22 @@
 @import './styles/variables.css';
 
 .editing-section {
-  border-top: 1px solid #ddd;
   border-radius: 0 0 2px 2px;
+}
+
+.metric .editing-section {
+  border-top: 1px solid #ddd;
 }
 
 .GuesstimateForm input {
   @mixin hover-input;
+}
+
+.GuesstimateForm.large input {
+  font-size: 1.75em;
+  border-radius: 3px;
+  font-weight: 100;
+  color: #666;
 }
 
 .GuesstimateForm input{
@@ -38,6 +48,11 @@
   padding-top: 0;
 }
 
+.GuesstimateForm.large .DistributionIcon.DistributionIcon {
+  height: 34px;
+  width: 34px;
+}
+
 .DistributionIcon.button.selected{
   background-color: $blue-2;
 }
@@ -50,6 +65,10 @@
   right: 0;
   top: 4px;
   bottom: 0;
+}
+
+.GuesstimateForm.large .DistributionIcon img{
+  width: 34px;
 }
 
 .DistributionIcon.DistributionSelectorToggle{
