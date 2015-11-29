@@ -163,6 +163,7 @@ class Metric extends Component {
               onChange={this.handleChangeMetric.bind(this)}
               readableId={metric.readableId}
               ref='header'
+              onOpenModal={this.openModal.bind(this)}
           />
           <div className='row row1'>
             <div className='col-xs-12 mean'>
@@ -181,15 +182,6 @@ class Metric extends Component {
           {(metricCardView === 'scientific') && showStatistics &&
             <StatTable stats={metric.simulation.stats}/>
           }
-
-          <span
-              className='hover-toggle'
-              onMouseDown={this.openModal.bind(this)}
-              ref='modalLink'
-              data-select='false'
-          >
-            <Icon name='expand'/>
-          </span>
         </div>
         {isSelected && !_.isUndefined(metric.guesstimate) &&
           <EditingPane

@@ -25,23 +25,7 @@
 }
 
 .hovered .metric {
-  background-color: #EDEFF0;
-}
-
-.metric .hover-toggle {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-  color: $grey-2;
-  display: none;
-}
-
-.metric .hover-toggle:hover {
-  color: $black-2;
-}
-
-.hovered .metric .hover-toggle {
-  display: block
+  background-color: #f4f4f4;
 }
 
 .metric .card-top{
