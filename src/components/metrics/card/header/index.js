@@ -1,15 +1,8 @@
-/* @flow */
 import React, {Component, PropTypes} from 'react';
 import MetricName from '../name'
 import ShowIf from 'gComponents/utility/showIf'
-import _ from 'lodash'
-
-const MetricReadableIdd = ({readableId}) => (
-  <div className='ui label green tiny'>
-    {readableId}
-  </div>
-)
-const MetricReadableId = ShowIf(MetricReadableIdd)
+import MetricHeaderToken from './token.js'
+import './style.css'
 
 export default class MetricHeader extends Component {
   displayName: 'MetricHeader'
@@ -37,21 +30,22 @@ export default class MetricHeader extends Component {
   }
 
   render () {
-    let {anotherFunctionSelected, name, readableId, isSelected} = this.props
+    let {anotherFunctionSelected, name, readableId, isSelected, onOpenModal} = this.props
     return (
-     <div className='row'>
+     <div className='MetricHeader'>
        {(!_.isEmpty(name) || isSelected) &&
-         <div className='col-xs-12 name'>
+         <div className='name'>
            <MetricName name={name}
                onChange={this.props.onChange}
                ref='name'
            />
         </div>
        }
-       <div className='col-xs-12 name'>
-         <MetricReadableId
+       <div className='token'>
+         <MetricHeaderToken
              readableId={readableId}
-             showIf={anotherFunctionSelected}
+             anotherFunctionSelected={anotherFunctionSelected}
+             onOpenModal={onOpenModal}
          />
       </div>
      </div>
