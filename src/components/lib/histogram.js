@@ -30,7 +30,7 @@ export default class Histogram extends React.Component {
     right: 5,
     bottom: 30,
     left: 5,
-    bins: 40
+    bins: 40,
   };
 
   render() {

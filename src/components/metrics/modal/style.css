@@ -1,0 +1,118 @@
+@import './styles/variables.css';
+
+$grey: #EEE;
+
+.metricModal {
+  background-color: $grey
+}
+
+
+.metricModal > .top {
+  padding: 1.5em 1.5em 0;
+  position: relative;
+}
+
+.metricModal > .bottom {
+  background-color: white;
+  padding: 3em 1.5em 1.5em ;
+}
+
+.metricModal hr {
+  border: none;
+  border-top: 1px solid #ddd
+}
+
+.metricModal h1{
+  margin: 0.5em 0 0.5em;
+  color: #444;
+  font-weight: 200;
+}
+
+.metricModal h2{
+  color: #333;
+  font-size: 1.4em;
+}
+
+.metricModal h3{
+  color: #666;
+  font-size: 1.4em;
+  font-weight: 200;
+}
+
+.metricModal .section{
+  padding: 2em 1em 0;
+  margin: 2em 0;
+}
+
+.metricModal .histogram {
+  position:absolute;
+  left: 0;
+  right: 0;
+  bottom: -1.95em;
+  width: 70%;
+}
+
+.metricModal .histogram .react-d3-histogram .react-d3-histogram__bar rect {
+  fill: #549ACC;
+}
+
+
+.metricModal .island {
+  background-color: white;
+  border: none;
+  border-radius: 3px;
+  width: 100%;
+}
+
+.metricModal .percentiles {
+  float: right;
+}
+
+.metricModal .ui.table tr td {
+  padding: 4px 4px 4px 6px;
+  color: #333
+}
+
+.metricModal .distributionSection .island{
+  padding-top: 1em;
+  position: relative;
+}
+
+.metricModal .distributionSection .subsection{
+  z-index: 1;
+  padding: 1em;
+}
+
+.metricModal .distributionSection .mean.subsection .distribution-summary{
+  color: #000;
+  font-size: 3em;
+  margin-top: 1.5em;
+  margin-left: 0.3em;
+}
+
+.metricModal .distributionSection .mean.subsection .distribution-summary .stdev{
+  color: #666;
+}
+
+.metricModal .section-small{
+  background-color: white;
+  border-radius: 3px;
+  padding: 0.5em;
+  margin: 1em 0;
+}
+
+.metricModal .distributionSection{
+  margin: 1.5em 0 0em;
+  min-height: 12em;
+  position: relative;
+}
+
+
+.metricModal .GuesstimateForm.large input {
+   background-color: $grey;
+}
+
+.metricModal .reasoningSection{
+  color: #666;
+}
+
