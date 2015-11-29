@@ -1,10 +1,11 @@
 import React, {Component, PropTypes} from 'react'
 import Modal from 'react-modal'
-import DistributionSummary from './simulation_summary'
+import DistributionSummary from '../card/simulation_summary'
 import Histogram from 'gComponents/simulations/histogram'
 import stats from 'stats-lite'
-import EditingPane from './editing_pane';
-import './modal.css'
+import EditingPane from '../card/editing_pane';
+import Reasoning from './reasoning'
+import './style.css'
 
 export default class MetricModal extends Component {
   showSimulation() {
@@ -26,6 +27,12 @@ export default class MetricModal extends Component {
     return perc.map(e => { return {percentage: e, value: stats.percentile(values, (e/100))} })
   }
 
+  _changeReasoning(value) {
+    let newGuesstimate = Object.assign({}, this.props.metric.guesstimate, {reasoning: value})
+    console.log(newGuesstimate)
+    this.props.onChange(newGuesstimate)
+  }
+
   render() {
     const customStyles = {
       overlay: {
@@ -45,6 +52,7 @@ export default class MetricModal extends Component {
 
     const {isOpen, closeModal, metric} = this.props
     const sampleValues = _.get(metric, 'simulation.sample.values')
+    const guesstimate = metric.guesstimate
     return(
       <Modal
         isOpen={isOpen}
@@ -53,17 +61,21 @@ export default class MetricModal extends Component {
         className={'rad-modal'}
       >
       {isOpen &&
-      <div className='container metricModal'>
-        <div className='row'>
+      <div className='metricModal'>
+        <div className='container top'>
+          <div className='histogram'>
+            <Histogram height={200} top={0} bottom={0} bins={200}
+                simulation={metric.simulation}
+            />
+          </div>
+          <div className='row'>
             <div className='col-sm-12'>
                 <h1> {metric.name} </h1>
             </div>
-        </div>
-        <div className='row distributionSection'>
-          <div className='col-sm-12 island'>
-          <div className='row'>
-              <div className='col-sm-4 mean subsection'>
-                <h3> Range </h3>
+          </div>
+          <div className='distributionSection'>
+            <div className='row'>
+              <div className='col-sm-9 mean subsection'>
                 {showSimulation &&
                   <DistributionSummary
                       guesstimateForm={this.props.guesstimateForm}
@@ -71,13 +83,8 @@ export default class MetricModal extends Component {
                   />
                 }
               </div>
-              <div className='col-sm-5 subsection'>
-                  <h3> Histogram </h3>
-                    <Histogram height={150} top={0} bottom={0} bins={100}
-                        simulation={metric.simulation}
-                    />
-              </div>
               <div className='col-sm-3 subsection'>
+                <div className='percentiles'>
                   <h3> Percentiles </h3>
                   <table className='ui very basic collapsing celled table'>
                     <tbody>
@@ -88,21 +95,33 @@ export default class MetricModal extends Component {
                     })}
                     </tbody>
                   </table>
+                </div>
               </div>
             </div>
           </div>
         </div>
-        <div className='row editingInputSection'>
-          <div className='col-xs-6'>
+
+        <div className='container bottom'>
+          <div className='row editingInputSection'>
+            <div className='col-sm-6'>
+                <EditingPane
+                    guesstimate={metric.guesstimate}
+                    guesstimateForm={this.props.guesstimateForm}
+                    metricId={metric.id}
+                    editable={false}
+                    size={'large'}
+                />
+            </div>
           </div>
-          <div className='col-xs-6 island'>
-              <EditingPane
-                  guesstimate={metric.guesstimate}
-                  guesstimateForm={this.props.guesstimateForm}
-                  metricId={metric.id}
-                  editable={false}
-                  size={'large'}
-              />
+          <div className='row reasoningSection'>
+            <div className='col-xs-12'>
+              {guesstimate &&
+                <Reasoning
+                  onChange={this._changeReasoning.bind(this)}
+                  value={guesstimate.reasoning}
+                />
+              }
+            </div>
           </div>
         </div>
       </div>

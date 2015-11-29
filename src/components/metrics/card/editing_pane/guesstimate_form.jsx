@@ -33,7 +33,6 @@ class GuesstimateForm extends Component{
   }
 
   componentWillUnmount() {
-    this.props.dispatch(saveGuesstimateForm());
     this.props.dispatch(destroyGuesstimateForm());
   }
 
@@ -79,6 +78,8 @@ class GuesstimateForm extends Component{
     if (this.state.showDistributionSelector && !this._isRangeDistribution()){
       this.setState({showDistributionSelector: false})
     }
+
+    this.props.dispatch(saveGuesstimateForm());
   }
 
   _changeDistributionType(distributionType) {

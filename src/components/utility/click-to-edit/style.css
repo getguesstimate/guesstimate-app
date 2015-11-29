@@ -1,0 +1,30 @@
+@import './styles/variables.css';
+
+.click-to-edit {
+  padding: 0.5em;
+  border-radius: 3px;
+  float: left;
+  width: 100%;
+}
+
+.click-to-edit .submit-section {
+  margin-top: 10px;
+}
+
+.click-to-edit .submit-section .submit.button {
+  margin-right: 1em;
+}
+
+.click-to-edit.viewing:hover {
+  background-color: rgba(0,0,0,0.2);
+  cursor: pointer;
+}
+
+.click-to-edit textarea {
+  background-color: white;
+  border: 2px solid $blue-1;
+  border-radius: 3px;
+  width: 100%;
+  min-height: 120px;
+  padding: 0.5em;
+}

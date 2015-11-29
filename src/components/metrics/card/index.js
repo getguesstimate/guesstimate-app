@@ -4,10 +4,10 @@ import JSONTree from 'react-json-tree'
 
 import { connect } from 'react-redux';
 import { removeMetric, changeMetric } from 'gModules/metrics/actions.js';
-import { submitManualGuesstimate } from 'gModules/guesstimates/actions.js';
+import { changeGuesstimate } from 'gModules/guesstimates/actions.js';
 
 import Histogram from 'gComponents/simulations/histogram'
-import MetricModal from './modal.js'
+import MetricModal from '../modal/index.js'
 import StatTable from 'gComponents/simulations/stat_table'
 import EditingPane from './editing_pane';
 import DistributionSummary from './simulation_summary'
@@ -98,7 +98,7 @@ class Metric extends Component {
   handleChangeGuesstimate(values) {
     let guesstimate = values
     guesstimate.metric = this.props.metric.id
-    this.props.dispatch(submitManualGuesstimate(this._id(), guesstimate))
+    this.props.dispatch(changeGuesstimate(this._id(), guesstimate))
   }
 
   handleRemoveMetric () {
@@ -147,6 +147,7 @@ class Metric extends Component {
           guesstimateForm={guesstimateForm}
           isOpen={this.state.modalIsOpen}
           closeModal={this.closeModal.bind(this)}
+          onChange={this.handleChangeGuesstimate.bind(this)}
       />
 
         <div className={`card-top metric-container ${metricCardView}`}>
