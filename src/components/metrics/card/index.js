@@ -129,11 +129,13 @@ class Metric extends Component {
   render() {
     const {isSelected, metric, guesstimateForm} = this.props
     const {canvasState: {metricCardView, metricClickMode}} = this.props
+    const {guesstimate} = metric
 
     const anotherFunctionSelected = ((metricClickMode === 'FUNCTION_INPUT_SELECT') && !isSelected)
 
     const showSimulation = this.showSimulation()
     const showStatistics = this.showStatistics()
+    const hasReasoning = !_.isEmpty(guesstimate.reasoning)
     return (
       <div
           className={isSelected ? 'metric grid-item-focus' : 'metric'}
@@ -164,6 +166,7 @@ class Metric extends Component {
               readableId={metric.readableId}
               ref='header'
               onOpenModal={this.openModal.bind(this)}
+              hasReasoning={hasReasoning}
           />
           <div className='row row1'>
             <div className='col-xs-12 mean'>

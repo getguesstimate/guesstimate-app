@@ -12,7 +12,7 @@ const MetricReadableId = ({readableId}) => (
 export default class MetricHeaderToken extends Component {
   displayName: 'MetricHeaderToken'
   render() {
-    const {anotherFunctionSelected, readableId, onOpen} = this.props
+    const {anotherFunctionSelected, readableId, onOpen, hasReasoning} = this.props
 
     return (
       <div className='name-token'>
@@ -23,12 +23,19 @@ export default class MetricHeaderToken extends Component {
         }
         {!anotherFunctionSelected &&
           <span
-              className='hover-toggle'
+              className='hover-toggle hover-icon'
               onMouseDown={this.props.onOpenModal}
               ref='modalLink'
               data-select='false'
           >
             <Icon name='expand'/>
+          </span>
+        }
+        {!anotherFunctionSelected && hasReasoning &&
+          <span
+              className='hover-hide hover-icon'
+          >
+            <Icon name='comment'/>
           </span>
         }
       </div>

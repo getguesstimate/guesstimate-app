@@ -30,7 +30,7 @@ export default class MetricHeader extends Component {
   }
 
   render () {
-    let {anotherFunctionSelected, name, readableId, isSelected, onOpenModal} = this.props
+    let {anotherFunctionSelected, name, readableId, isSelected, onOpenModal, hasReasoning} = this.props
     return (
      <div className='MetricHeader'>
        {(!_.isEmpty(name) || isSelected) &&
@@ -46,6 +46,7 @@ export default class MetricHeader extends Component {
              readableId={readableId}
              anotherFunctionSelected={anotherFunctionSelected}
              onOpenModal={onOpenModal}
+             hasReasoning={hasReasoning}
          />
       </div>
      </div>
