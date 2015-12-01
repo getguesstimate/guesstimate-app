@@ -5,6 +5,7 @@ import Histogram from 'gComponents/simulations/histogram'
 import stats from 'stats-lite'
 import DistributionEditor from 'gComponents/distributions/editor/index.js'
 import Reasoning from './reasoning'
+import {ButtonClose} from 'gComponents/utility/buttons/close'
 import './style.css'
 
 export default class MetricModal extends Component {
@@ -69,8 +70,11 @@ export default class MetricModal extends Component {
             />
           </div>
           <div className='row'>
-            <div className='col-sm-12'>
+            <div className='col-sm-10'>
                 <h1> {metric.name} </h1>
+            </div>
+            <div className='col-sm-2'>
+              <ButtonClose onClick={closeModal}/>
             </div>
           </div>
           <div className='distributionSection'>
