@@ -14,7 +14,7 @@ $grey: #EEE;
 
 .metricModal > .bottom {
   background-color: white;
-  padding: 3em 1.5em 1.5em ;
+  padding: 4em 1.5em 1.5em ;
 }
 
 .metricModal hr {
@@ -109,6 +109,11 @@ $grey: #EEE;
 
 .metricModal .GuesstimateForm.large input {
    background-color: $grey;
+}
+
+.metricModal .editingInputSection{
+  margin-bottom: 1em;
+  margin-left: -4px;
 }
 
 .metricModal .reasoningSection{

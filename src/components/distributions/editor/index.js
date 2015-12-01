@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import ReactDOM from 'react-dom'
 import { connect } from 'react-redux';
-import { createGuesstimateForm, destroyGuesstimateForm, changeGuesstimateForm, saveGuesstimateForm} from 'gModules/guesstimate_form/actions'
+import { createGuesstimateForm, changeGuesstimateForm, saveGuesstimateForm} from 'gModules/guesstimate_form/actions'
 import { changeMetricClickMode } from 'gModules/canvas_state/actions'
 import $ from 'jquery'
 import Icon from 'react-fa'
@@ -31,10 +31,6 @@ class GuesstimateForm extends Component{
     userInput: this.props.guesstimate.input || '',
     distributionType: 'NORMAL',
     showDistributionSelector: false
-  }
-
-  componentWillUnmount() {
-    this.props.dispatch(destroyGuesstimateForm());
   }
 
   componentWillMount() {
@@ -70,11 +66,13 @@ class GuesstimateForm extends Component{
     const {userInput} = this.state;
     const guesstimateType = this._guesstimateTypeName();
     const {metricId} = this.props;
-    this.props.dispatch(changeGuesstimateForm({
-      input: userInput,
+    let newGuesstimateForm = {
+      ...this.props.guesstimateForm,
       metric: metricId,
+      input: userInput,
       guesstimateType
-    }));
+    }
+    this.props.dispatch(changeGuesstimateForm(newGuesstimateForm));
 
     if (this.state.showDistributionSelector && !this._isRangeDistribution()){
       this.setState({showDistributionSelector: false})
@@ -114,7 +112,7 @@ class GuesstimateForm extends Component{
         <div className='row'>
           <div className='col-sm-12'>
             <TextInput
-              value={this.state.userInput}
+              value={this.props.guesstimateForm.input}
               metricFocus={this.props.metricFocus}
               onChange={this._changeInput.bind(this)}
               onFocus={() => {this._switchMetricClickMode.bind(this)(true)}}

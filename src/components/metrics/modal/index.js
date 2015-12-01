@@ -30,7 +30,6 @@ export default class MetricModal extends Component {
 
   _changeReasoning(value) {
     let newGuesstimate = Object.assign({}, this.props.metric.guesstimate, {reasoning: value})
-    console.log(newGuesstimate)
     this.props.onChange(newGuesstimate)
   }
 
