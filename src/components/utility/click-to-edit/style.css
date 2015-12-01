@@ -20,6 +20,10 @@
   cursor: pointer;
 }
 
+.click-to-edit textarea:focus {
+  outline: none;
+}
+
 .click-to-edit textarea {
   background-color: white;
   border: 2px solid $blue-1;

@@ -29,7 +29,8 @@ export default class Reasoning extends Component {
     return (
       <div className='Reasoning'>
         <ClickToEdit
-          viewing={<ReasoningViewer value={value || 'Describe your reasoning...'}/>}
+          viewing={<ReasoningViewer value={value}/>}
+          emptyValue={<span className='emptyValue'><Icon name='align-left'/>Describe your reasoning...</span>}
           editingSaveText={'Save'}
           onSubmit={this.props.onChange}
           value={value}
