@@ -18,8 +18,8 @@ import MetricToken from './token/index.js'
 import './style.css'
 
 const PT = PropTypes
-class Metric extends Component {
-  displayName: 'Metric'
+class MetricCard extends Component {
+  displayName: 'MetricCard'
 
   static propTypes = {
     canvasState: PT.shape({
@@ -202,11 +202,11 @@ class Metric extends Component {
           </div>
 
           {shouldShowJsonTree &&
-            <div className='row'> <JSONTree data={this.props}/> </div>
+            <div className='row'> <div className='col-xs-12'> <JSONTree data={this.props}/> </div> </div>
           }
 
           {shouldShowStatistics &&
-            <div className='row'> <StatTable stats={metric.simulation.stats}/> </div>
+            <div className='row'> <div className='col-xs-12'> <StatTable stats={metric.simulation.stats}/> </div> </div>
           }
 
         </div>
@@ -233,4 +233,4 @@ function select(state) {
   }
 }
 
-module.exports = connect(select)(Metric);
+module.exports = connect(select)(MetricCard);
