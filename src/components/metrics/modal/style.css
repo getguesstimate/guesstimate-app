@@ -56,7 +56,6 @@ $grey: #EEE;
   fill: #8FBDDE;
 }
 
-
 .metricModal .island {
   background-color: white;
   border: none;
@@ -116,3 +115,7 @@ $grey: #EEE;
   color: #666;
 }
 
+.metricModal > .top .button-close {
+  float: right;
+  font-size: 2.3em;
+}
