@@ -53,7 +53,7 @@ $grey: #EEE;
 }
 
 .metricModal .histogram .react-d3-histogram .react-d3-histogram__bar rect {
-  fill: #549ACC;
+  fill: #8FBDDE;
 }
 
 
@@ -83,14 +83,14 @@ $grey: #EEE;
   padding: 1em;
 }
 
-.metricModal .distributionSection .mean.subsection .distribution-summary{
+.metricModal .distributionSection .mean.subsection .DistributionSummary{
   color: #000;
   font-size: 3em;
   margin-top: 1.5em;
   margin-left: 0.3em;
 }
 
-.metricModal .distributionSection .mean.subsection .distribution-summary .stdev{
+.metricModal .distributionSection .mean.subsection .DistributionSummary .stdev{
   color: #666;
 }
 

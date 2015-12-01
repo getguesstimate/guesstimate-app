@@ -90,7 +90,7 @@ export default class MetricModal extends Component {
                     <tbody>
                     {this.percentages(sampleValues).map(e => {
                       return (
-                      <tr><td> {e.percentage}{'%'} </td><td> {e.value} </td></tr>
+                      <tr key={e.percentage}><td> {e.percentage}{'%'} </td><td> {e.value} </td></tr>
                       )
                     })}
                     </tbody>
