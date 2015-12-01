@@ -29,7 +29,7 @@ export default class ClickToEdit extends Component {
   }
 
   _submit() {
-    const value = this.refs.input.value
+    const value = this.textInput.value
     this.props.onSubmit(value)
     this._close()
   }
@@ -38,9 +38,14 @@ export default class ClickToEdit extends Component {
     let className = 'click-to-edit'
     className += this.state.isEditing ? ' editing' : ' viewing'
     return (
-      <span className={className}>
+      <span className={className} onClick={!this.state.isEditing && this._open.bind(this)}>
         {this.state.isEditing &&
-          <textarea ref='input' defaultValue={this.props.value}/>
+          <textarea  defaultValue={this.props.value} ref='input' ref={ (ref) =>
+            {
+              ref && React.findDOMNode(ref).select();
+              this.textInput = ref
+            }
+          } />
         }
         {this.state.isEditing &&
           <div className='submit-section'>
@@ -51,9 +56,7 @@ export default class ClickToEdit extends Component {
           </div>
         }
         {!this.state.isEditing &&
-          <span onClick={this._open.bind(this)}>
-            {this.props.viewing}
-          </span>
+          (_.isEmpty(this.props.value) ? this.props.emptyValue : this.props.viewing)
         }
       </span>
     )

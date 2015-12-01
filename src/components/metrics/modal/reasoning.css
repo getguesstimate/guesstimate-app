@@ -3,3 +3,12 @@
   float: left;
   width: 100%;
 }
+
+.Reasoning .emptyValue {
+  color: #999;
+  text-decoration: underline;
+}
+
+.Reasoning .emptyValue .fa {
+  margin-right: 0.5em;
+}

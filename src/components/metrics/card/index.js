@@ -49,7 +49,8 @@ class MetricCard extends Component {
   state = {modalIsOpen: false};
 
   componentDidUpdate() {
-    if (!this.props.isSelected && this._isEmpty() && !this.refs.name.hasContent()){
+    const hasContent = _.has(this, 'refs.name') && this.refs.name.hasContent()
+    if (!this.props.isSelected && this._isEmpty() && !hasContent){
       this.handleRemoveMetric()
     }
   }

@@ -36,7 +36,7 @@ export default class MetricModal extends Component {
   render() {
     const customStyles = {
       overlay: {
-        backgroundColor: 'rgba(55, 68, 76, 0.6)'
+        backgroundColor: 'rgba(55, 68, 76, 0.4)'
       },
       content : {
         top                   : '10%',
@@ -44,6 +44,7 @@ export default class MetricModal extends Component {
         right                 : 'auto',
         bottom                : 'auto',
         marginRight           : '-50%',
+        backgroundColor      : 'rgba(0,0,0,0)',
         border: 'none',
         padding: '0',
       }

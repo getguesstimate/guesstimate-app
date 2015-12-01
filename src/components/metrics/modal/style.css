@@ -3,9 +3,8 @@
 $grey: #EEE;
 
 .metricModal {
-  background-color: $grey
+  background-color: rgba(240,240,240,0.9);
 }
-
 
 .metricModal > .top {
   padding: 1.5em 1.5em 0;
