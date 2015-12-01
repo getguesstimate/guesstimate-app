@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import DistributionSummary from '../card/simulation_summary'
 import './style.css'
 
 let MetricLabel = ({metric}) => (

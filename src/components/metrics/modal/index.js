@@ -1,9 +1,9 @@
 import React, {Component, PropTypes} from 'react'
 import Modal from 'react-modal'
-import DistributionSummary from '../card/simulation_summary'
+import DistributionSummary from 'gComponents/distributions/summary/index.js'
 import Histogram from 'gComponents/simulations/histogram'
 import stats from 'stats-lite'
-import EditingPane from '../card/editing_pane';
+import DistributionEditor from 'gComponents/distributions/editor/index.js'
 import Reasoning from './reasoning'
 import './style.css'
 
@@ -104,7 +104,7 @@ export default class MetricModal extends Component {
         <div className='container bottom'>
           <div className='row editingInputSection'>
             <div className='col-sm-6'>
-                <EditingPane
+                <DistributionEditor
                     guesstimate={metric.guesstimate}
                     guesstimateForm={this.props.guesstimateForm}
                     metricId={metric.id}

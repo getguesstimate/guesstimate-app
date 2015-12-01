@@ -9,8 +9,8 @@ import { changeGuesstimate } from 'gModules/guesstimates/actions.js';
 import Histogram from 'gComponents/simulations/histogram'
 import MetricModal from '../modal/index.js'
 import StatTable from 'gComponents/simulations/stat_table'
-import EditingPane from './editing_pane';
-import DistributionSummary from './simulation_summary'
+import DistributionEditor from 'gComponents/distributions/editor/index.js'
+import DistributionSummary from 'gComponents/distributions/summary/index.js'
 import MetricName from './name'
 import Icon from 'react-fa'
 import $ from 'jquery'
@@ -166,8 +166,8 @@ class Metric extends Component {
             />
           }
 
-          <div className='row'>
-            <div className='col-xs-10'>
+          <div className='row '>
+            <div className='col-xs-10 sqwish-right'>
               <div className='row'>
                 {(!_.isEmpty(metric.name) || isSelected) &&
                   <div className='col-xs-12'>
@@ -191,15 +191,13 @@ class Metric extends Component {
               </div>
             </div>
 
-            <div className='col-xs-2'>
-              <div className='token'>
-                <MetricToken
-                   readableId={metric.readableId}
-                   anotherFunctionSelected={anotherFunctionSelected}
-                   onOpenModal={this.openModal.bind(this)}
-                   hasReasoning={hasReasoning}
-                />
-              </div>
+            <div className='col-xs-2 sqwish-middle'>
+              <MetricToken
+                 readableId={metric.readableId}
+                 anotherFunctionSelected={anotherFunctionSelected}
+                 onOpenModal={this.openModal.bind(this)}
+                 hasReasoning={hasReasoning}
+              />
             </div>
           </div>
 
@@ -215,7 +213,7 @@ class Metric extends Component {
 
         {isSelected && !_.isUndefined(metric.guesstimate) &&
           <div className='section editing'>
-            <EditingPane
+            <DistributionEditor
                 guesstimate={metric.guesstimate}
                 guesstimateForm={guesstimateForm}
                 metricFocus={this.focus.bind(this)}
