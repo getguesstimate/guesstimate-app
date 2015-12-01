@@ -1,13 +1,5 @@
 @import './styles/variables.css';
 
-.editing-section {
-  border-radius: 0 0 2px 2px;
-}
-
-.metric .editing-section {
-  border-top: 1px solid #ddd;
-}
-
 .GuesstimateForm input {
   @mixin hover-input;
 }

@@ -1,5 +1,4 @@
 import React, {Component, PropTypes} from 'react'
-import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import GuesstimateForm from './guesstimate_form';
 import './style.css'
 
@@ -17,17 +16,15 @@ export default class MetricEditingPane extends Component {
 
   render() {
     return (
-      <div className='metric-container editing-section' key={this.props.metricId}>
-        <GuesstimateForm
-            guesstimate={this.props.guesstimate}
-            guesstimateForm={this.props.guesstimateForm}
-            metricFocus={this.props.metricFocus}
-            metricId={this.props.metricId}
-            onSubmit={this.props.onChangeGuesstimate}
-            size={this.props.size}
-            ref='form'
-        />
-    </div>
+      <GuesstimateForm
+          guesstimate={this.props.guesstimate}
+          guesstimateForm={this.props.guesstimateForm}
+          metricFocus={this.props.metricFocus}
+          metricId={this.props.metricId}
+          onSubmit={this.props.onChangeGuesstimate}
+          size={this.props.size}
+          ref='form'
+      />
     )
   }
 };
