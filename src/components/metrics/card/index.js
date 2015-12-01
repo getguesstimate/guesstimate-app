@@ -77,6 +77,10 @@ class MetricCard extends Component {
 
   _handlePress(e) {
     if (e.target === ReactDOM.findDOMNode(this)) {
+      if (e.keyCode == '13') {
+        e.preventDefault()
+        this.openModal()
+      }
       if (e.keyCode == '8') {
         e.preventDefault()
         this.handleRemoveMetric()
