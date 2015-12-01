@@ -40,7 +40,7 @@ export default class MetricName extends Component {
   render() {
     return (
       <div className='MetricName'>
-        <TextArea className='MetricName'
+        <TextArea
             defaultValue={this.props.name}
             onBlur={this.handleSubmit.bind(this)}
             onChange={e => this.setState({value: e.target.value})}

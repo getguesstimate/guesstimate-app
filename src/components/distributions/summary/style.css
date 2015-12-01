@@ -1,0 +1,18 @@
+@import './styles/variables.css';
+
+.DistributionSummary {
+  font-size: 1.6em;
+}
+
+.DistributionSummary .mean {
+  font-weight: 500;
+  font-size: 1.5em;
+  color: $black-1;
+}
+
+.DistributionSummary .stdev {
+  margin-left: 0.25em;
+  font-size: 0.75em;
+  color: #aaa;
+}
+
