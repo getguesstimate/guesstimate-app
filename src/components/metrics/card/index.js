@@ -11,9 +11,10 @@ import MetricModal from '../modal/index.js'
 import StatTable from 'gComponents/simulations/stat_table'
 import EditingPane from './editing_pane';
 import DistributionSummary from './simulation_summary'
-import Header from './header'
+import MetricName from './name'
 import Icon from 'react-fa'
 import $ from 'jquery'
+import MetricToken from './token/index.js'
 import './style.css'
 
 const PT = PropTypes
@@ -48,7 +49,7 @@ class Metric extends Component {
   state = {modalIsOpen: false};
 
   componentDidUpdate() {
-    if (!this.props.isSelected && this._isEmpty() && !this.refs.header.hasContent()){
+    if (!this.props.isSelected && this._isEmpty() && !this.refs.name.hasContent()){
       this.handleRemoveMetric()
     }
   }
@@ -122,8 +123,10 @@ class Metric extends Component {
     }
   }
 
-  showStatistics() {
-    return this.showSimulation() && (_.get(this.props, 'metric.simulation.stats').length > 1)
+  _shouldShowStatistics() {
+    const isScientific = (this.props.canvasState.metricCardView === 'scientific')
+    const isAvailable = this.showSimulation() && (_.get(this.props, 'metric.simulation.stats').length > 1)
+    return isScientific && isAvailable
   }
 
   render() {
@@ -134,66 +137,92 @@ class Metric extends Component {
     const anotherFunctionSelected = ((metricClickMode === 'FUNCTION_INPUT_SELECT') && !isSelected)
 
     const showSimulation = this.showSimulation()
-    const showStatistics = this.showStatistics()
+    const shouldShowStatistics = this._shouldShowStatistics()
+    const shouldShowJsonTree = (metricCardView === 'debugging')
     const hasReasoning = !_.isEmpty(guesstimate.reasoning)
+
     return (
       <div
-          className={isSelected ? 'metric grid-item-focus' : 'metric'}
+          className={isSelected ? 'metricCard grid-item-focus' : 'metricCard'}
           ref='dom'
           onKeyDown={this._handlePress.bind(this)}
           onMouseDown={this._handleClick.bind(this)}
           tabIndex='0'
       >
-      <MetricModal
-          metric={metric}
-          guesstimateForm={guesstimateForm}
-          isOpen={this.state.modalIsOpen}
-          closeModal={this.closeModal.bind(this)}
-          onChange={this.handleChangeGuesstimate.bind(this)}
-      />
 
-        <div className={`card-top metric-container ${metricCardView}`}>
+        <MetricModal
+            metric={metric}
+            guesstimateForm={guesstimateForm}
+            isOpen={this.state.modalIsOpen}
+            closeModal={this.closeModal.bind(this)}
+            onChange={this.handleChangeGuesstimate.bind(this)}
+        />
+
+        <div className={`section ${metricCardView}`}>
+
           {(metricCardView !== 'basic') && showSimulation &&
             <Histogram height={(metricCardView === 'scientific') ? 75 : 30}
                 simulation={metric.simulation}
             />
           }
-          <Header
-              anotherFunctionSelected={anotherFunctionSelected}
-              isSelected={isSelected}
-              name={metric.name}
-              onChange={this.handleChangeMetric.bind(this)}
-              readableId={metric.readableId}
-              ref='header'
-              onOpenModal={this.openModal.bind(this)}
-              hasReasoning={hasReasoning}
-          />
-          <div className='row row1'>
-            <div className='col-xs-12 mean'>
-              {showSimulation &&
-                <DistributionSummary
-                    guesstimateForm={guesstimateForm}
-                    simulation={metric.simulation}
+
+          <div className='row'>
+            <div className='col-xs-10'>
+              <div className='row'>
+                {(!_.isEmpty(metric.name) || isSelected) &&
+                  <div className='col-xs-12'>
+                    <MetricName
+                      isSelected={isSelected}
+                      name={metric.name}
+                      onChange={this.handleChangeMetric.bind(this)}
+                      ref='name'
+                    />
+                  </div>
+                }
+
+                <div className='col-xs-12'>
+                  {showSimulation &&
+                    <DistributionSummary
+                        guesstimateForm={guesstimateForm}
+                        simulation={metric.simulation}
+                    />
+                  }
+                </div>
+              </div>
+            </div>
+
+            <div className='col-xs-2'>
+              <div className='token'>
+                <MetricToken
+                   readableId={metric.readableId}
+                   anotherFunctionSelected={anotherFunctionSelected}
+                   onOpenModal={this.openModal.bind(this)}
+                   hasReasoning={hasReasoning}
                 />
-              }
+              </div>
             </div>
           </div>
 
-          {(metricCardView === 'debugging') &&
-            <JSONTree data={this.props}/>
+          {shouldShowJsonTree &&
+            <div className='row'> <JSONTree data={this.props}/> </div>
           }
-          {(metricCardView === 'scientific') && showStatistics &&
-            <StatTable stats={metric.simulation.stats}/>
+
+          {shouldShowStatistics &&
+            <div className='row'> <StatTable stats={metric.simulation.stats}/> </div>
           }
+
         </div>
+
         {isSelected && !_.isUndefined(metric.guesstimate) &&
-          <EditingPane
-              guesstimate={metric.guesstimate}
-              guesstimateForm={guesstimateForm}
-              metricFocus={this.focus.bind(this)}
-              metricId={metric.id}
-              onChangeGuesstimate={this.handleChangeGuesstimate.bind(this)}
-          />
+          <div className='section editing'>
+            <EditingPane
+                guesstimate={metric.guesstimate}
+                guesstimateForm={guesstimateForm}
+                metricFocus={this.focus.bind(this)}
+                metricId={metric.id}
+                onChangeGuesstimate={this.handleChangeGuesstimate.bind(this)}
+            />
+          </div>
         }
       </div>
     );

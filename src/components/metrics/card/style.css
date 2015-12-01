@@ -1,6 +1,6 @@
 @import './styles/variables.css';
 
-.metric {
+.metricCard {
   background-color: rgba(255,255,255,1);
   border-bottom: 2px solid #ccc;
   border-radius: 3px;
@@ -16,32 +16,54 @@
   cursor: pointer;
 }
 
-.selected .metric{
+.selected .metricCard{
   cursor: auto;
 }
 
-.hovered.selected .metric {
+.hovered.selected .metricCard {
   background-color: white;
 }
 
-.hovered .metric {
+.hovered .metricCard {
   background-color: #f4f4f4;
 }
 
-.metric .card-top{
+.metricCard > .section {
   position: relative;
-}
-
-.metric-container {
   flex: 1;
   padding: 0.5em;
 }
 
- .selected .metric {
+.metricCard .react-d3-histogram {
+  position: absolute;
+  z-index: -1;
+  left: -5px;
+  width: 100%;
+}
+
+.metricCard .section.editing {
+  border-top: 1px solid #ddd;
+  border-radius: 0 0 2px 2px;
+}
+
+ .selected .metricCard {
   border-color: $blue-1;
 }
 
-.metric:focus {
+.row1{
+  margin-top: 0.60em;
+  padding-left: 0.5em;
+}
+
+.metricCard .row1 > .content {
+  width: 80%;
+}
+
+.metricCard .row1 > .sidebar {
+  width: 10%;
+}
+
+.metricCard:focus {
   outline: none;
 }
 
@@ -49,10 +71,6 @@
   background-color: rgba(0,0,0,0);
 }
 
-.row1{
-  margin-top: 0.60em;
-  padding-left: 0.5em;
-}
 
 .distribution-summary {
   font-size: 1.6em;

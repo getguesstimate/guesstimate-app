@@ -1,12 +1,5 @@
 @import './styles/variables.css';
 
-.metric .react-d3-histogram {
-  position: absolute;
-  z-index: -1;
-  left: -5px;
-  width: 100%;
-}
-
 .react-d3-histogram {
   bottom: -23px;
   width: 100%;
