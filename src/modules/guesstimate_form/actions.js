@@ -27,7 +27,9 @@ export function changeGuesstimateForm(values) {
 
 export function saveGuesstimateForm() {
   return (dispatch, getState) => {
-    const guesstimateForm = getState().guesstimateForm
-    dispatch(changeGuesstimate(guesstimateForm.metric, guesstimateForm));
+    const guesstimateForm = _.pick(getState().guesstimateForm, ['input', 'guesstimateType'])
+    const oldGuesstimate = getState().guesstimates.find(e => (e.metric === guesstimateForm.metric))
+    let newGuesstimate = Object.assign({}, oldGuesstimate, guesstimateForm)
+    dispatch(changeGuesstimate(guesstimateForm.metric, newGuesstimate));
   };
 }
