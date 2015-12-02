@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react'
 import Modal from 'react-modal'
 import ClickToEdit from 'gComponents/utility/click-to-edit/index.js'
+import {MarkdownViewer} from 'gComponents/utility/markdown-viewer/index.js'
 import ReactMarkdown from 'react-markdown'
 import style from './reasoning.css'
 import Icon from 'react-fa'
@@ -16,9 +17,7 @@ export default class ReasoningEditor extends Component {
 export default class ReasoningViewer extends Component {
   render() {
     return(
-      <div className='reasoningViewer'>
-        <ReactMarkdown source={this.props.value}/>
-      </div>
+      <MarkdownViewer source={this.props.value}/>
     )
   }
 }

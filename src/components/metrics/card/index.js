@@ -11,6 +11,7 @@ import MetricModal from '../modal/index.js'
 import StatTable from 'gComponents/simulations/stat_table'
 import DistributionEditor from 'gComponents/distributions/editor/index.js'
 import DistributionSummary from 'gComponents/distributions/summary/index.js'
+import MetricToolTip from './tooltip.js'
 import MetricName from './name'
 import Icon from 'react-fa'
 import $ from 'jquery'
@@ -154,6 +155,9 @@ class MetricCard extends Component {
           onMouseDown={this._handleClick.bind(this)}
           tabIndex='0'
       >
+        {this.props.hovered && !isSelected &&
+          <MetricToolTip guesstimate={guesstimate}/>
+        }
 
         <MetricModal
             metric={metric}

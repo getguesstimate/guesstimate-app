@@ -92,6 +92,10 @@
   background-color: #ECF2F5;
 }
 
+.GiantCell.hovered {
+  z-index: 2;
+}
+
 .GiantEmptyCell:focus {
   outline: none;
   border: 2px solid #6CAED1;
