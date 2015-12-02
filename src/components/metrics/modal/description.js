@@ -3,18 +3,10 @@ import Modal from 'react-modal'
 import ClickToEdit from 'gComponents/utility/click-to-edit/index.js'
 import {MarkdownViewer} from 'gComponents/utility/markdown-viewer/index.js'
 import ReactMarkdown from 'react-markdown'
-import style from './reasoning.css'
+import style from './description.css'
 import Icon from 'react-fa'
 
-export default class ReasoningEditor extends Component {
-  render() {
-    return (
-      <textarea value={'this is interesting'}/>
-    )
-  }
-}
-
-export default class ReasoningViewer extends Component {
+export default class DescriptionViewer extends Component {
   render() {
     return(
       <MarkdownViewer source={this.props.value}/>
@@ -22,13 +14,13 @@ export default class ReasoningViewer extends Component {
   }
 }
 
-export default class Reasoning extends Component {
+export default class GuesstimateDescription extends Component {
   render() {
     const {value} = this.props
     return (
-      <div className='Reasoning'>
+      <div className='GuesstimateDescription'>
         <ClickToEdit
-          viewing={<ReasoningViewer value={value}/>}
+          viewing={<DescriptionViewer value={value}/>}
           emptyValue={<span className='emptyValue'><Icon name='align-left'/>Describe your reasoning...</span>}
           editingSaveText={'Save'}
           onSubmit={this.props.onChange}

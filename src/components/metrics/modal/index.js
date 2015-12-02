@@ -4,7 +4,7 @@ import DistributionSummary from 'gComponents/distributions/summary/index.js'
 import Histogram from 'gComponents/simulations/histogram'
 import stats from 'stats-lite'
 import DistributionEditor from 'gComponents/distributions/editor/index.js'
-import Reasoning from './reasoning'
+import GuesstimateDescription from './description'
 import {ButtonClose} from 'gComponents/utility/buttons/close'
 import './style.css'
 
@@ -28,8 +28,8 @@ export default class MetricModal extends Component {
     return perc.map(e => { return {percentage: e, value: stats.percentile(values, (e/100))} })
   }
 
-  _changeReasoning(value) {
-    let newGuesstimate = Object.assign({}, this.props.metric.guesstimate, {reasoning: value})
+  _changeGuesstimateDescription(value) {
+    let newGuesstimate = Object.assign({}, this.props.metric.guesstimate, {description: value})
     this.props.onChange(newGuesstimate)
   }
 
@@ -117,12 +117,12 @@ export default class MetricModal extends Component {
                 />
             </div>
           </div>
-          <div className='row reasoningSection'>
+          <div className='row guesstimateDescriptionSection'>
             <div className='col-xs-12'>
               {guesstimate &&
-                <Reasoning
-                  onChange={this._changeReasoning.bind(this)}
-                  value={guesstimate.reasoning}
+                <GuesstimateDescription
+                  onChange={this._changeGuesstimateDescription.bind(this)}
+                  value={guesstimate.description}
                 />
               }
             </div>

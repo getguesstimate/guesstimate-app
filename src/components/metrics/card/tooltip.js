@@ -6,12 +6,12 @@ import ReactMarkdown from 'react-markdown'
 export default class MetricToolTip extends Component {
   render() {
     const {guesstimate} = this.props
-    if (_.isEmpty(guesstimate.reasoning)){
+    if (_.isEmpty(guesstimate.description)){
       return (false)
     } else {
       return (
         <ToolTip>
-          <MarkdownViewer source={guesstimate.reasoning}/>
+          <MarkdownViewer source={guesstimate.description}/>
         </ToolTip>
       )
     }

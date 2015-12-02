@@ -1,14 +1,14 @@
-.Reasoning {
+.GuesstimateDescription {
   font-size: 1.2em;
   float: left;
   width: 100%;
 }
 
-.Reasoning .emptyValue {
+.GuesstimateDescription .emptyValue {
   color: #999;
   text-decoration: underline;
 }
 
-.Reasoning .emptyValue .fa {
+.GuesstimateDescription .emptyValue .fa {
   margin-right: 0.5em;
 }
