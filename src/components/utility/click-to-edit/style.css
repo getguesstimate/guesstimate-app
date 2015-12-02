@@ -41,10 +41,17 @@
 }
 
 .ClickToEdit .ViewingMode .editLink {
-  color: #333;
+  color: #666;
   text-decoration: underline;
   cursor: pointer;
   margin-left: 8px;
+  padding: 2px 4px;
+  border-radius: 2px;
+}
+
+.ClickToEdit .ViewingMode .editLink:hover {
+  color: #000;
+  background-color: #999;
 }
 
 .ClickToEdit .ViewingMode .header {

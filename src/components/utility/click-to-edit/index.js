@@ -41,8 +41,8 @@ export default class ViewingMode extends Component {
       <div className='ViewingMode'>
         <div className='row'>
           <div className='col-sm-12 header'>
-            Description
-            <span className='editLink' onClick={this.props.onEdit}>Edit </span>
+            Reasoning
+            <span className='editLink' onClick={this.props.onEdit}><Icon name='pencil'/> </span>
           </div>
           <div className='col-sm-12 content'>
             {this.props.children}
