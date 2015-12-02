@@ -32,6 +32,9 @@ export default class SpacesShow extends Component {
   destroy() {
     this.props.dispatch(spaceActions.destroy(this.props.denormalizedSpace))
   }
+  onSaveName(name) {
+    this.props.dispatch(spaceActions.update(parseInt(this.props.spaceId), {name}))
+  }
   render () {
     const space = this.props.denormalizedSpace;
     return (
@@ -43,6 +46,7 @@ export default class SpacesShow extends Component {
 
               {space &&
                 <SpacesShowHeader onDestroy={this.destroy.bind(this)}
+                    onSaveName={this.onSaveName.bind(this)}
                     onSave={this.onSave.bind(this)}
                     space={space}
                 />
@@ -59,7 +63,6 @@ export default class SpacesShow extends Component {
                   </a>
                 </div>
               }
-
             </div>
           </div>
         </div>

@@ -21,12 +21,28 @@
   z-index:10;
 }
 
+.dropDown.wide {
+  min-width: 30em;
+}
+
 .dropDown.position-left {
   right: 0%;
 }
 
 .dropDown.position-right {
   left: 0%;
+}
+
+.dropDown h2 {
+  color: #444;
+  font-size: 1.3em;
+  margin: 1em 0 0.5em;
+}
+
+.dropDown .ui.form textarea {
+  font-size: 1.2em;
+  background-color: $grey-1;
+  margin-bottom: 2em;
 }
 
 .dropDown h3 {
@@ -95,6 +111,10 @@
 .dropDown li .action{
   padding: 0.5em 0;
   border-radius: 0;
+}
+
+.dropDown-body.padded {
+  padding: 0 1em;
 }
 
 .dropDown li .action.selected{

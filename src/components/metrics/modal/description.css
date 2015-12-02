@@ -1,0 +1,14 @@
+.GuesstimateDescription {
+  font-size: 1.2em;
+  float: left;
+  width: 100%;
+}
+
+.GuesstimateDescription .emptyValue {
+  color: #999;
+  text-decoration: underline;
+}
+
+.GuesstimateDescription .emptyValue .fa {
+  margin-right: 0.5em;
+}

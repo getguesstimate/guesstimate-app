@@ -1,5 +1,6 @@
 /* @flow soft */
 import type {Guesstimate, Metric} from '../../lib/engine/types.js'
+import engine from 'gEngine/engine'
 
 export default function guesstimateForm(
   state: Guesstimate = {},
@@ -14,10 +15,7 @@ export default function guesstimateForm(
   case 'DESTROY_GUESSTIMATE_FORM':
     return {}
   case 'UPDATE_GUESSTIMATE_FORM':
-    return action.guesstimate;
-  case 'ADD_METRIC_INPUT_TO_GUESSTIMATE_FORM':
-    let newInput = state.input + action.metric.id;
-    return {input: newInput, metric: state.metric}
+    return engine.guesstimate.update(state, action.values)
   default:
     return state
   }

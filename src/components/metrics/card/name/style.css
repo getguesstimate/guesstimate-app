@@ -1,14 +1,16 @@
 @import './styles/variables.css';
 
-.MetricName .MetricName--plain{
-  padding: 0.75em;
+.MetricName {
+  float: left;
+  width: 100%;
+  margin-bottom: 5px;
 }
 
-textarea.MetricName {
+.MetricName textarea{
   @mixin hover-input;
+  color: $grey-2;
   font-weight: 500;
   width: 100%;
-  line-height: 1.3em;
   font-size: 0.99em;
   float: left;
 }

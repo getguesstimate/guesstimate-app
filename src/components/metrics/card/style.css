@@ -1,6 +1,6 @@
 @import './styles/variables.css';
 
-.metric {
+.metricCard {
   background-color: rgba(255,255,255,1);
   border-bottom: 2px solid #ccc;
   border-radius: 3px;
@@ -16,102 +16,57 @@
   cursor: pointer;
 }
 
-.selected .metric{
+.selected .metricCard{
   cursor: auto;
 }
 
-.hovered.selected .metric {
+.row > .sqwish-right {
+  padding-right: 0
+}
+
+.row > .sqwish-middle {
+  padding-left: 0.2rem;
+  padding-right: 0.8rem;
+}
+
+.hovered.selected .metricCard {
   background-color: white;
 }
 
-.hovered .metric {
-  background-color: #EDEFF0;
+.hovered .metricCard {
+  background-color: #f4f4f4;
 }
 
-.metric .hover-toggle {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-  color: $grey-2;
-  display: none;
-}
-
-.metric .hover-toggle:hover {
-  color: $black-2;
-}
-
-.hovered .metric .hover-toggle {
-  display: block
-}
-
-.metric .card-top{
+.metricCard > .section {
   position: relative;
-}
-
-.metric-container {
   flex: 1;
   padding: 0.5em;
 }
 
- .selected .metric {
+.metricCard .react-d3-histogram {
+  position: absolute;
+  z-index: -1;
+  left: -5px;
+  width: 100%;
+}
+
+.metricCard .section.editing {
+  border-top: 1px solid #ddd;
+  border-radius: 0 0 2px 2px;
+}
+
+.metricCard .DistributionSummary {
+  margin: 5px 0 0 5px;
+}
+
+.selected .metricCard {
   border-color: $blue-1;
 }
 
-.metric:focus {
+.metricCard:focus {
   outline: none;
-}
-
-.name input {
-  background-color: rgba(0,0,0,0);
-}
-
-.row1{
-  margin-top: 0.60em;
-  padding-left: 0.5em;
-}
-
-.distribution-summary {
-  font-size: 1.6em;
-}
-
-.distribution-summary .mean {
-  font-weight: 500;
-  font-size: 1.5em;
-  color: $black-1;
-}
-
-.distribution-summary .stdev {
-  margin-left: 0.25em;
-  font-size: 0.75em;
-  color: #aaa;
-}
-
-
-.form-group {
-  margin-bottom: 0;
-}
-.name {
-  color: $grey-2;
-}
-
-.function-id {
-  font-size: 1em;
-  color: blue;
 }
 
 .ReactModal__Overlay--after-open {
    z-index: 5;
-}
-
-.sampleValues {
-  max-height: 500px;
-  overflow: auto;
-  background-color: $grey-1;
-  padding: 3px 15px;
-  border-radius: 3px;
-}
-
-.sampleValues ul {
-   list-style-type: none;
-   padding: 0;
 }

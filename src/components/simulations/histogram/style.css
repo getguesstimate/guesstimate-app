@@ -1,25 +1,15 @@
 @import './styles/variables.css';
 
-.metric .react-d3-histogram {
-  position: absolute;
-  z-index: -1;
-  left: -5px;
-  width: 100%;
-}
-
 .react-d3-histogram {
-  bottom: -33px;
+  bottom: -23px;
   width: 100%;
   left: -5px;
 }
 
 .ReactModal__Overlay--after-open .react-d3-histogram__tick text {
-  fill: #aaa;
-  font-size: 12px;
-}
-
-.ReactModal__Overlay--after-open .react-d3-histogram__bar rect{
-  fill: $blue-1;
+  fill: #666;
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .react-d3-histogram svg {
