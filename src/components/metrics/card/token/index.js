@@ -31,19 +31,19 @@ export default class MetricToken extends Component {
 
   static propTypes = {
     anotherFunctionSelected: PropTypes.bool.isRequired,
-    hasReasoning: PropTypes.bool.isRequired,
+    hasGuesstimateDescription: PropTypes.bool.isRequired,
     onOpenModal: PropTypes.func.isRequired,
     readableId: PropTypes.string.isRequired,
   }
 
   render() {
-    const {anotherFunctionSelected, readableId, onOpenModal, hasReasoning} = this.props
+    const {anotherFunctionSelected, readableId, onOpenModal, hasGuesstimateDescription} = this.props
 
     return (
       <div className='MetricToken'>
         {anotherFunctionSelected && <MetricReadableId readableId={readableId} /> }
         {!anotherFunctionSelected && <MetricExpandButton onOpenModal={onOpenModal}/> }
-        {!anotherFunctionSelected && hasReasoning && <MetricReasoningIcon/> }
+        {!anotherFunctionSelected && hasGuesstimateDescription && <MetricReasoningIcon/> }
       </div>
     )
   }

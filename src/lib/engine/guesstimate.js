@@ -6,7 +6,7 @@ import * as estimateInput from './estimateInput.js';
 import type {Guesstimate, Distribution, DGraph, Graph, Simulation} from './types.js'
 import * as guesstimator from '../guesstimator/index.js'
 
-export const attributes = ['metric', 'input', 'guesstimateType', 'reasoning']
+export const attributes = ['metric', 'input', 'guesstimateType', 'description']
 
 export function sample(guesstimate: Guesstimate, dGraph: DGraph, n: number = 1): Object{
   return guesstimator.sampleFromGuesstimateApp(guesstimate, dGraph, n)

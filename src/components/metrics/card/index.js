@@ -145,7 +145,7 @@ class MetricCard extends Component {
     const showSimulation = this.showSimulation()
     const shouldShowStatistics = this._shouldShowStatistics()
     const shouldShowJsonTree = (metricCardView === 'debugging')
-    const hasReasoning = !_.isEmpty(guesstimate.reasoning)
+    const hasGuesstimateDescription = !_.isEmpty(guesstimate.description)
 
     return (
       <div
@@ -205,7 +205,7 @@ class MetricCard extends Component {
                  readableId={metric.readableId}
                  anotherFunctionSelected={anotherFunctionSelected}
                  onOpenModal={this.openModal.bind(this)}
-                 hasReasoning={hasReasoning}
+                 hasGuesstimateDescription={hasGuesstimateDescription}
               />
             </div>
           </div>
