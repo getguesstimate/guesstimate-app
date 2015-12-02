@@ -19,7 +19,6 @@ class GuesstimateForm extends Component{
 
   static propTypes = {
     dispatch: PropTypes.func,
-    guesstimate: PropTypes.object.isRequired,
     guesstimateForm: PropTypes.object.isRequired,
     metricId: PropTypes.string.isRequired,
     metricFocus: PropTypes.func.isRequired,
@@ -28,69 +27,42 @@ class GuesstimateForm extends Component{
   }
 
   state = {
-    userInput: this.props.guesstimate.input || '',
-    distributionType: 'NORMAL',
     showDistributionSelector: false
   }
 
   componentWillMount() {
-    const {guesstimate} = this.props
-    this.props.dispatch(createGuesstimateForm(guesstimate))
-
-    const guesstimateType = guesstimator.find(guesstimate.guesstimateType)
-    if (guesstimateType.isRangeDistribution){
-      this.setState({distributionType: guesstimateType.referenceName})
-    }
+    this.props.dispatch(createGuesstimateForm(this.props.metricId))
   }
 
   _guesstimateTypeName() {
-    if (this._isRangeDistribution()) { return this.state.distributionType }
-    else { return this._inputType().referenceName }
+    return this.props.guesstimateForm.guesstimateType
   }
 
   _guesstimateType() {
     return guesstimator.find(this._guesstimateTypeName())
   }
 
-  _inputType() {
-    const inputType = guesstimator.format({text: this.state.userInput}).guesstimateType
-    return guesstimator.find(inputType)
-  }
-
-  _isRangeDistribution() {
-    const type = this._inputType()
-    return (!!type.isRangeDistribution)
-  }
-
-  _dispatchChange() {
-    const {userInput} = this.state;
-    const guesstimateType = this._guesstimateTypeName();
-    const {metricId} = this.props;
-    let newGuesstimateForm = {
-      ...this.props.guesstimateForm,
-      metric: metricId,
-      input: userInput,
-      guesstimateType
-    }
-    this.props.dispatch(changeGuesstimateForm(newGuesstimateForm));
-
-    if (this.state.showDistributionSelector && !this._isRangeDistribution()){
+  _dispatchChange(params) {
+    this.props.dispatch(changeGuesstimateForm(params));
+    const {isRangeDistribution} = this._guesstimateType()
+    if (this.state.showDistributionSelector && !isRangeDistribution){
       this.setState({showDistributionSelector: false})
     }
-
-    this.props.dispatch(saveGuesstimateForm());
   }
 
-  _changeDistributionType(distributionType) {
-    this.setState({distributionType}, () => {this._dispatchChange()})
+  _changeDistributionType(guesstimateType) {
+    this._dispatchChange({guesstimateType})
     this.setState({showDistributionSelector: false})
   }
 
-  _changeInput(userInput) {
-    this.setState({userInput}, () => {
+  componentDidUpdate(newProps) {
+    if (newProps.guesstimateForm.input !== this.props.guesstimateForm.input){
       this._switchMetricClickMode()
-      this._dispatchChange()
-    })
+    }
+  }
+
+  _changeInput(input) {
+    this._dispatchChange({input: input})
   }
 
   _switchMetricClickMode(inClick=true) {
@@ -103,8 +75,11 @@ class GuesstimateForm extends Component{
 
   //right now errors live in the simulation, which is not present here.
   render() {
-    const guesstimateType = this._guesstimateType()
     let {showDistributionSelector} = this.state
+    const {guesstimateForm, metricFocus} = this.props
+    const {input} = guesstimateForm
+    const guesstimateType = this._guesstimateType()
+
     let formClasses = 'GuesstimateForm'
     formClasses += (this.props.size === 'large') ? ' large' : ''
     return(
@@ -112,8 +87,8 @@ class GuesstimateForm extends Component{
         <div className='row'>
           <div className='col-sm-12'>
             <TextInput
-              value={this.props.guesstimateForm.input}
-              metricFocus={this.props.metricFocus}
+              value={input}
+              metricFocus={metricFocus}
               onChange={this._changeInput.bind(this)}
               onFocus={() => {this._switchMetricClickMode.bind(this)(true)}}
               onBlur={() => {this._switchMetricClickMode.bind(this)(false)}}
@@ -129,7 +104,7 @@ class GuesstimateForm extends Component{
             <div className='col-sm-12'>
               <DistributionSelector
                 onSubmit={this._changeDistributionType.bind(this)}
-                selected={this.state.guesstimateType}
+                selected={guesstimateType}
               />
             </div>
           </div>
@@ -149,6 +124,7 @@ class GuesstimateTypeIcon extends Component{
 
   render() {
     const {guesstimateType} = this.props
+    if (!guesstimateType){ return (false) }
     const {isRangeDistribution, icon} = guesstimateType
     const showIcon = guesstimateType && guesstimateType.icon
 
