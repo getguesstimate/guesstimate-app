@@ -1,34 +1,57 @@
 @import './styles/variables.css';
 
-.click-to-edit {
-  padding: 0.5em;
-  border-radius: 3px;
+.ClickToEdit {
   float: left;
   width: 100%;
+  padding-left: 0.5em;
 }
 
-.click-to-edit .submit-section {
-  margin-top: 10px;
+.ClickToEdit > .BlankMode {
+  padding: 0.5em;
+  border-radius: 3px;
+  color: #999;
+  text-decoration: underline;
 }
 
-.click-to-edit .submit-section .submit.button {
-  margin-right: 1em;
-}
-
-.click-to-edit.viewing:hover {
+.ClickToEdit > .BlankMode:hover {
   background-color: rgba(0,0,0,0.2);
+  color: #333;
   cursor: pointer;
 }
 
-.click-to-edit textarea:focus {
+.ClickToEdit .EditingMode .submit-section {
+  margin-top: 10px;
+}
+
+.ClickToEdit .EditingMode .submit-section .submit.button {
+  margin-right: 1em;
+}
+
+.ClickToEdit .EditingMode textarea:focus {
   outline: none;
 }
 
-.click-to-edit textarea {
+.ClickToEdit .EditingMode textarea {
   background-color: white;
   border: 2px solid $blue-1;
   border-radius: 3px;
   width: 100%;
   min-height: 120px;
   padding: 0.5em;
+}
+
+.ClickToEdit .ViewingMode .editLink {
+  color: #333;
+  text-decoration: underline;
+  cursor: pointer;
+  margin-left: 8px;
+}
+
+.ClickToEdit .ViewingMode .header {
+  color: #666;
+  margin-bottom: 0.5em;
+}
+
+.ClickToEdit .ViewingMode .content {
+  color: #333;
 }
