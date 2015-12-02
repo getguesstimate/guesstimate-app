@@ -2,11 +2,11 @@ import React, {Component, PropTypes} from 'react'
 import Modal from 'react-modal'
 import DistributionSummary from 'gComponents/distributions/summary/index.js'
 import Histogram from 'gComponents/simulations/histogram'
-import stats from 'stats-lite'
 import DistributionEditor from 'gComponents/distributions/editor/index.js'
 import GuesstimateDescription from './description'
 import {ButtonClose} from 'gComponents/utility/buttons/close'
 import './style.css'
+import {Stats} from 'fast-stats'
 
 export default class MetricModal extends Component {
   showSimulation() {
@@ -24,8 +24,8 @@ export default class MetricModal extends Component {
 
   percentages(values) {
     const perc = [1, 5, 50, 95, 99]
-    const foo = stats
-    return perc.map(e => { return {percentage: e, value: stats.percentile(values, (e/100))} })
+    let s1 = new Stats().push(values)
+    return perc.map(e => { return {percentage: e, value: s1.percentile(e)} })
   }
 
   _changeGuesstimateDescription(value) {
