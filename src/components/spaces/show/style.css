@@ -13,12 +13,28 @@
   color: white;
 }
 
+.hero-unit .text-editable:hover {
+  background-color: rgba(0,0,0,0.2);
+}
+
 .hero-unit h1 {
   font-size: 2em;
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
   font-family: Lato;
   font-weigth: 500;
   float: left;
   margin-right: 1em;
+}
+
+.hero-unit .header-name {
+  max-width: 60%;
+  float: left;
+}
+
+.hero-unit .header-actions {
+  margin-top: 0.5em;
+  float: left;
 }
 
 .hero-unit a.space-header-action {
@@ -29,6 +45,7 @@
   margin-right: 10px;
   background-color: rgba(0,0,0,0);
   transition: background-color 0.3s;
+  font-size: 1.2em;
   float:left;
 }
 .hero-unit a.space-header-action:hover{

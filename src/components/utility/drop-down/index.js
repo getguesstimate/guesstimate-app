@@ -39,7 +39,7 @@ export default class DropDown extends Component {
     super(props);
 
     this.state = {
-      isOpen: false
+      isOpen: props.isOpen || false
     }
 
     this.handleDocumentClick = this.handleDocumentClick.bind(this)
@@ -65,17 +65,31 @@ export default class DropDown extends Component {
     this.state.isOpen ? this._close() : this._open()
   }
 
+  _dropDownClass(){
+    let klass = 'dropDown'
+    klass += this.props.position === 'right' ? ' position-right' : ' position-left'
+    klass += this.props.width === 'wide' ? ' wide' : ''
+    return klass
+  }
+
+  _bodyClass() {
+    let klass = 'dropDown-body'
+    klass += this.props.hasPadding === true ? ' padded' : ''
+    return klass
+  }
+
   render() {
     const {headerText} = this.props
+
     let dropDownClass = 'dropDown'
-    dropDownClass += this.props.position === 'right' ? ' position-right' : ' position-left'
+
     return (
       <span className='dropDown-relative'>
         <span className={'dropDown-open'} onClick={this._toggle.bind(this)}>
           {this.props.openLink}
         </span>
         {this.state.isOpen &&
-          <div className={dropDownClass}>
+          <div className={this._dropDownClass()}>
             <div className='dropDown-content'>
               <div className='dropDown-header'>
                 <h3> {headerText} </h3>
@@ -84,9 +98,10 @@ export default class DropDown extends Component {
                 </a>
               </div>
 
-              <hr/>
-              {this.props.children}
-
+              <div className={this._bodyClass()}>
+                <hr/>
+                {this.props.children}
+              </div>
             </div>
           </div>
         }

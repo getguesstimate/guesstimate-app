@@ -1,0 +1,29 @@
+.ToolTip {
+  position: absolute;
+  top: 100%;
+  margin-top: 10px;
+  background-color: rgba(255,255,255,0.9);
+  border-bottom: 2px solid rgba(0,0,0,0.2);
+  padding: 0.75em;
+  width: 207%;
+  border-radius: 3px;
+  z-index: 100;
+  left: -3px;
+  color: #666;
+  line-height: 1.3em;
+  min-height: 40px;
+  font-size: 1.1rem;
+  line-height: 1.4rem;
+}
+
+.ToolTip .arrow-up {
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid rgba(255,255,255,0.9);
+  position: absolute;
+  top: -8px;
+  left: 22%;
+}
+

@@ -1,5 +1,5 @@
 const initialState = {
-  metricCardView: 'scientific',
+  metricCardView: 'normal',
   edgeView: 'hidden',
   metricClickMode: 'DEFAULT'
 }

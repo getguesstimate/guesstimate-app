@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import numeral from 'numeral'
 import numberShow from 'lib/numberShower/numberShower.js'
+import './style.css'
 
 import _ from 'lodash'
 import ShowIf from 'gComponents/utility/showIf';
@@ -39,7 +40,7 @@ class DistributionSummarySmall extends Component{
     let range = null
     if (_.isObject(percentiles)){ range = (percentiles[95] - mean)}
     return (
-      <div className="distribution-summary">
+      <div className="DistributionSummary">
         <PrecisionNumber value={mean}/>
           {!!range && range !== 0 &&
           <Uncertainty range={range} />

@@ -1,112 +1,148 @@
-import React, {Component, PropTypes} from 'react'
-import HoverButton from './hover-button.js'
-import ValueForm from './value-form/index.js'
-
+import React, {Component, PropTypes} from 'react';
+import ReactDOM from 'react-dom'
+import { connect } from 'react-redux';
+import { createGuesstimateForm, changeGuesstimateForm, saveGuesstimateForm} from 'gModules/guesstimate_form/actions'
+import { changeMetricClickMode } from 'gModules/canvas_state/actions'
+import $ from 'jquery'
 import Icon from 'react-fa'
+import DistributionSelector from './distribution-selector.js'
+import * as guesstimator from 'lib/guesstimator/index.js'
+import TextInput from './text-input.js'
 import './style.css'
 
-const GuesstimateInformation = [
-  {name: 'POINT', description: 'An estimate at one point', fields: ['value']},
-  {name: 'NORMAL', description: 'A normal Guesstimate', fields: ['low', 'height']},
-  {name: 'LOGNORMAL', description: 'A lognormal thing', fields: ['low', 'height']},
-  {name: 'UNIFORM', description: 'A lognormal thing', fields: ['low', 'height']}
-]
+class GuesstimateForm extends Component{
+  displayName: 'GuesstimateForm'
 
-const PT = PropTypes;
-export default class GuesstimateEditor extends Component {
-  displayName: 'GuesstimateEditor'
+  componentWillMount() {
+    this._dispatchChange = _.throttle(this._dispatchChange, 300)
+  }
 
   static propTypes = {
-    close: PT.func,
-    guesstimate: PT.object,
-    guesstimateType: PT.object,
-    onSubmit: PT.func,
+    dispatch: PropTypes.func,
+    guesstimateForm: PropTypes.object.isRequired,
+    metricId: PropTypes.string.isRequired,
+    metricFocus: PropTypes.func.isRequired,
+    onSubmit: PropTypes.func,
+    size: PropTypes.bool
   }
 
   state = {
-    hoveredGuesstimate: null,
-    guesstimate: Object.assign({},{type: 'NORMAL'}, this.props.guesstimate)
+    showDistributionSelector: false
   }
 
-  hovered(e) {
-    this.setState({hoveredGuesstimate: e})
+  componentWillMount() {
+    this.props.dispatch(createGuesstimateForm(this.props.metricId))
   }
 
-  selected(e) {
-    this.setState({selectedGuesstimate: e})
-    const newGuesstimate = Object.assign(this.state.guesstimate, {type: e})
-    this.setState(newGuesstimate)
+  _guesstimateTypeName() {
+    return this.props.guesstimateForm.guesstimateType
   }
 
-  guesstimateType() {
-    let showType = this.state.hoveredGuesstimate || this.state.guesstimate.type
-    return GuesstimateInformation.find(e => e.name === showType)
+  _guesstimateType() {
+    return guesstimator.find(this._guesstimateTypeName())
   }
 
-  _onFieldChange(values) {
-    const newGuesstimate = Object.assign(this.state.guesstimate, values)
-    this.setState({guesstimate: newGuesstimate})
+  _dispatchChange(params) {
+    this.props.dispatch(changeGuesstimateForm(params));
+    const {isRangeDistribution} = this._guesstimateType()
+    if (this.state.showDistributionSelector && !isRangeDistribution){
+      this.setState({showDistributionSelector: false})
+    }
   }
 
-  _close() {
-    this.props.close()
+  _changeDistributionType(guesstimateType) {
+    this._dispatchChange({guesstimateType})
+    this.setState({showDistributionSelector: false})
   }
 
-  _onSubmit() {
-    let guesstimate = this.state.guesstimate
-    guesstimate.guesstimateType = guesstimate.type
-    guesstimate.input = null
-    this.props.onSubmit(guesstimate)
+  componentDidUpdate(newProps) {
+    if (newProps.guesstimateForm.input !== this.props.guesstimateForm.input){
+      this._switchMetricClickMode()
+    }
   }
 
+  _changeInput(input) {
+    this._dispatchChange({input: input})
+  }
+
+  _switchMetricClickMode(inClick=true) {
+    if (inClick && (this._guesstimateTypeName() === 'FUNCTION')){
+      this.props.dispatch(changeMetricClickMode('FUNCTION_INPUT_SELECT'));
+    } else {
+      this.props.dispatch(changeMetricClickMode(''));
+    }
+  }
+
+  //right now errors live in the simulation, which is not present here.
   render() {
-    const guesstimateType = this.guesstimateType()
-    return (
-      <div className='GuesstimateEditor'>
+    let {showDistributionSelector} = this.state
+    const {guesstimateForm, metricFocus} = this.props
+    const {input} = guesstimateForm
+    const guesstimateType = this._guesstimateType()
+
+    let formClasses = 'GuesstimateForm'
+    formClasses += (this.props.size === 'large') ? ' large' : ''
+    return(
+      <div className={formClasses}>
         <div className='row'>
           <div className='col-sm-12'>
-            <div className='four ui attached buttons'>
-              {['POINT', 'NORMAL', 'LOGNORMAL', 'UNIFORM'].map(e => {
-                const isSelected = (e === this.state.guesstimate.type)
-                return (
-                  <HoverButton
-                      isSelected={isSelected}
-                      key={e}
-                      name={e}
-                      onClick={this.selected.bind(this)}
-                      onHoverChange={this.hovered.bind(this)}
-                  />
-                )
-              })}
-            </div>
-          </div>
-        </div>
-        <div className='row'>
-          <div className='col-sm-12'>
-            <ValueForm
-                guesstimate={this.state.guesstimate}
-                guesstimateType={guesstimateType}
-                onChange={this._onFieldChange.bind(this)}
+            <TextInput
+              value={input}
+              metricFocus={metricFocus}
+              onChange={this._changeInput.bind(this)}
+              onFocus={() => {this._switchMetricClickMode.bind(this)(true)}}
+              onBlur={() => {this._switchMetricClickMode.bind(this)(false)}}
+            />
+            <GuesstimateTypeIcon
+              guesstimateType={guesstimateType}
+              toggleDistributionSelector={() => {this.setState({showDistributionSelector: !showDistributionSelector})}}
             />
           </div>
         </div>
-        <div className='row'>
-          <div className='col-sm-12 actions'>
-            <div
-                className='ui button green'
-                onClick={this._onSubmit.bind(this)}
-            >
-              {'Save'}
-            </div>
-            <div
-                className='ui button'
-                onClick={this.props.close}
-            >
-              <Icon name='close'/>
+        {showDistributionSelector &&
+          <div className='row'>
+            <div className='col-sm-12'>
+              <DistributionSelector
+                onSubmit={this._changeDistributionType.bind(this)}
+                selected={guesstimateType}
+              />
             </div>
           </div>
-        </div>
-      </div>
-    );
+        }
+      </div>)
   }
 }
+
+class GuesstimateTypeIcon extends Component{
+  displayName: 'GuesstimateTypeIcon'
+
+  _handleMouseDown() {
+    if (this.props.guesstimateType.isRangeDistribution){
+      this.props.toggleDistributionSelector()
+    }
+  }
+
+  render() {
+    const {guesstimateType} = this.props
+    if (!guesstimateType){ return (false) }
+    const {isRangeDistribution, icon} = guesstimateType
+    const showIcon = guesstimateType && guesstimateType.icon
+
+    let className='DistributionSelectorToggle DistributionIcon'
+    className += isRangeDistribution ? ' button' : ''
+    if (showIcon) {
+      return(
+        <div
+            className={className}
+            onMouseDown={this._handleMouseDown.bind(this)}
+        >
+          <img src={icon}/>
+        </div>
+      )
+    } else {
+      return (false)
+    }
+  }
+}
+
+module.exports = connect(null, null, null, {withRef: true})(GuesstimateForm);

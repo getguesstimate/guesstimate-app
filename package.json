@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "BUILD_DEV=1 NODE_ENV=development API_ENV=production webpack-dev-server",
-    "start": "BUILD_DEV=0 NODE_ENV=development API_ENV=production webpack-dev-server",
+    "start": "BUILD_DEV=0 NODE_ENV=development API_ENV=development webpack-dev-server",
     "build": "BUILD_DEV=0 API_ENV=production webpack",
     "deploy": "surge -p public -d alpha.getguesstimate.com",
     "stage": "surge -p public -d guesstimate.surge.sh",
@@ -96,6 +96,7 @@
     "react-dom": "^0.14.0",
     "react-fa": "^4.0.0",
     "react-json-tree": "^0.2.0",
+    "react-markdown": "^1.1.0",
     "react-modal": "^0.6.1",
     "react-redux": "^4.0.0",
     "react-textarea-autosize": "^3.0.0",

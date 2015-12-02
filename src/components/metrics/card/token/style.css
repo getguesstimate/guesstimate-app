@@ -1,0 +1,33 @@
+@import './styles/variables.css';
+
+.MetricToken .hover-icon {
+  float: right;
+  padding: 2px 6px;
+  color: $grey-2;
+  border-radius: 2px;
+  color: $grey-2;
+  font-size: 1.2em;
+}
+
+.MetricToken .hover-hide {
+  opacity: 0.6;
+  padding: 0 6px 2px;
+}
+
+.hovered .MetricToken .hover-hide {
+  display: none;
+}
+
+.MetricToken .hover-toggle {
+  cursor: pointer;
+  display: none
+}
+
+.MetricToken .hover-toggle:hover {
+  color: white;
+  background-color: $grey-2;
+}
+
+.hovered .MetricToken .hover-toggle {
+  display: block
+}

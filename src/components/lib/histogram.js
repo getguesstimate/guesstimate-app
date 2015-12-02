@@ -30,7 +30,7 @@ export default class Histogram extends React.Component {
     right: 5,
     bottom: 30,
     left: 5,
-    bins: 40
+    bins: 40,
   };
 
   render() {
@@ -90,7 +90,7 @@ class Tick extends React.Component {
     return (
       <g className="react-d3-histogram__tick" transform={"translate(" + scale(value) + ",0)"}>
         <line x2="0" y2="6"></line>
-        <text dy=".71em" y="-10" x="0" zindexstyle={textStyle}>
+        <text dy=".71em" y="-15" x="0" zindexstyle={textStyle}>
           {text}
         </text>
       </g>

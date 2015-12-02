@@ -1,63 +1,88 @@
 @import './styles/variables.css';
 
-.GuesstimateEditor {
-  width: 500px;
-  background-color: white;
+.GuesstimateForm input {
+  @mixin hover-input;
+}
+
+.GuesstimateForm.large input {
+  font-size: 1.5em;
+  border-radius: 3px;
+  font-weight: 100;
+  color: #666;
+  width: 87%;
+}
+
+.GuesstimateForm input{
+  float: left;
+  width: 75%;
+}
+
+.DistributionSelector {
+  width: 100%;
+}
+
+.DistributionSelector .DistributionList{
+  float: right;
+}
+
+.DistributionSelector hr{
+  border: none;
+  border-top: 1px solid $grey-1;
+}
+
+.GuesstimateForm .DistributionIcon.DistributionIcon{
+  font-size: 1em;
+  padding-top: 2px;
+  padding-left: 2px;
+  padding-right: 2px;
+  position: relative;
+  height: 26px;
+  width: 26px;
+  padding-top: 0;
+}
+
+.GuesstimateForm.large .DistributionIcon.DistributionIcon {
+  height: 34px;
+  width: 34px;
+}
+
+.DistributionIcon.button.selected{
+  background-color: $blue-2;
+}
+
+.DistributionIcon img{
+  width: 26px;
+  opacity: 1;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 4px;
+  bottom: 0;
+}
+
+.GuesstimateForm.large .DistributionIcon img{
+  width: 34px;
+}
+
+.DistributionIcon.DistributionSelectorToggle{
+  display: inline-block;
+  color: #999;
+  float: right;
+}
+
+.DistributionIcon.DistributionSelectorToggle {
+  opacity: 0.6;
+}
+
+.button.DistributionIcon.DistributionSelectorToggle {
+  cursor: pointer;
   border-radius: 5px;
 }
 
-.GuesstimateEditor .ui.button{
+.button.DistributionIcon.DistributionSelectorToggle:hover {
+  opacity: 1;
+}
+
+.button.DistributionIcon.DistributionSelectorToggle:hover {
   background-color: $grey-1;
-}
-
-.GuesstimateEditor .actions {
-  padding: 1em 1.5em 0.5em;
-}
-
-.GuesstimateEditor .actions .button{
-  float: right;
-  margin-left: 1em;
-}
-
-.GuesstimateEditor .attached.buttons{
-  padding: 0 1px;
-}
-
-.ValueForm {
-  padding: 0em 1em;
-  background-color: $grey-1;
-}
-
-.ValueForm .primary {
-  padding: 1em 0em;
-  background-color: $blue-1;
-}
-
-.ValueForm .secondary {
-  padding: 1em 0em;
-}
-
-.RangeForm .arrow {
-  text-align: center;
-}
-
-.RangeForm .arrow .fa {
-  font-size: 2.5em;
-  color: rgba(255,255,255,0.5);
-}
-
-.ui.form.ValueForm .secondary .field > label {
-  color: $grey-2;
-}
-
-.ui.form.ValueForm .primary .field > input {
-  text-align: center;
-  color: $blue-1
-}
-
-.ui.form.ValueForm .primary .field > label {
-  text-align:center;
-  margin-top: 0.3em;
-  font-weight: normal;
-  color: rgba(255,255,255,0.7);
 }

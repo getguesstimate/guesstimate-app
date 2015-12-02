@@ -23,18 +23,22 @@ class SimulationHistogram extends Component{
       (nextProps.height !== this.props.height)
     )
   }
+
   values(){
     return _.get(this.props, 'simulation.sample.values')
   };
+
   histogram() {
     return (
       <Histogram data={this.values()}
           height={this.props.height}
           width={this.props.containerWidth + 5}
+          bottom={20}
           bins={this.props.bins}
       />
     )
   };
+
   render() {
     const values = this.values()
     const hasValues =  (values && values.length >= 100)
