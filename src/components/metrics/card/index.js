@@ -136,7 +136,8 @@ class MetricCard extends Component {
   }
 
   _focusForm() {
-    this.refs.DistributionEditor.refs.wrappedInstance.focus()
+    const editorRef = _.get(this.refs, 'DistributionEditor.refs.wrappedInstance')
+    editorRef && editorRef.focus()
   }
 
   render() {
@@ -225,10 +226,9 @@ class MetricCard extends Component {
 
         </div>
 
-        {isSelected && !_.isUndefined(metric.guesstimate) &&
+        {isSelected &&
           <div className='section editing'>
             <DistributionEditor
-                guesstimate={metric.guesstimate}
                 guesstimateForm={guesstimateForm}
                 metricFocus={this.focus.bind(this)}
                 metricId={metric.id}
