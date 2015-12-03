@@ -59,7 +59,7 @@ class NumberShower {
     } else if (order < 9) {
       return {value: this.metricSystem(number, 6), symbol: 'M'}
     } else if (order < 12) {
-      return {value: this.metricSystem(number, 9), symbol: 'G'}
+      return {value: this.metricSystem(number, 9), symbol: 'B'}
     } else if (order < 15) {
       return {value: this.metricSystem(number, 12), symbol: 'T'}
     } else {
