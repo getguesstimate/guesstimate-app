@@ -20,6 +20,10 @@ export default class TextInput extends Component{
     this.props.onBlur()
   }
 
+  focus() {
+    this.refs.input.select()
+  }
+
   _handleInputMetricClick(item){
     insertAtCaret('live-input', item.readableId)
     this._changeInput();
@@ -49,7 +53,7 @@ export default class TextInput extends Component{
     return ReactDOM.findDOMNode(this.refs.input).value
   }
 
-  _handleKeyUp(e) {
+  _handleKeyDown(e) {
     if (e.which === 27 || e.which === 13) {
       e.preventDefault()
       this.props.metricFocus()
@@ -63,7 +67,7 @@ export default class TextInput extends Component{
           onBlur={this._handleBlur.bind(this)}
           onChange={this._handlePress.bind(this)}
           onFocus={this._handleFocus.bind(this)}
-          onKeyUp={this._handleKeyUp.bind(this)}
+          onKeyDown={this._handleKeyDown.bind(this)}
           placeholder={'value'}
           ref='input'
           type="text"

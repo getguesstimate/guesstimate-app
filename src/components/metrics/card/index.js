@@ -135,6 +135,10 @@ class MetricCard extends Component {
     return isScientific && isAvailable
   }
 
+  _focusForm() {
+    this.refs.DistributionEditor.refs.wrappedInstance.focus()
+  }
+
   render() {
     const {isSelected, metric, guesstimateForm} = this.props
     const {canvasState: {metricCardView, metricClickMode}} = this.props
@@ -184,6 +188,7 @@ class MetricCard extends Component {
                       isSelected={isSelected}
                       name={metric.name}
                       onChange={this.handleChangeMetric.bind(this)}
+                      jumpSection={this._focusForm.bind(this)}
                       ref='name'
                     />
                   </div>
@@ -228,6 +233,7 @@ class MetricCard extends Component {
                 metricFocus={this.focus.bind(this)}
                 metricId={metric.id}
                 onChangeGuesstimate={this.handleChangeGuesstimate.bind(this)}
+                ref='DistributionEditor'
             />
           </div>
         }
