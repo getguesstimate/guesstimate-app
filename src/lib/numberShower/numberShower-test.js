@@ -30,7 +30,7 @@ describe('NumberShow', () => {
       [110001, {value: '110', symbol: 'K', power: undefined}],
       [1000000, {value: '1.0', symbol: 'M', power: undefined}],
       [10000000, {value: '10', symbol: 'M', power: undefined}],
-      [1000000000, {value: '1.0', symbol: 'G', power: undefined}],
+      [1000000000, {value: '1.0', symbol: 'B', power: undefined}],
       [1000000000000, {value: '1.0', symbol: 'T', power: undefined}],
       [100000000000000, {value: '100', symbol: 'T', power: undefined}],
       [110000000000000, {value: '110', symbol: 'T', power: undefined}],
