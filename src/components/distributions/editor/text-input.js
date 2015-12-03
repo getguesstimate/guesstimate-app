@@ -72,6 +72,7 @@ export default class TextInput extends Component{
           ref='input'
           type="text"
           value={this.props.value}
+          tabIndex={2}
       />
     )
   }
