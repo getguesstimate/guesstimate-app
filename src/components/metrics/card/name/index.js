@@ -43,9 +43,10 @@ export default class MetricName extends Component {
   }
 
   handleKeyDown(e) {
-    if ((e.keyCode === 13) && !e.shiftKey){
-      this.props.jumpSection()
+    const ENTER = (e) => ((e.keyCode === 13) && !e.shiftKey)
+    if (ENTER(e)){
       e.stopPropagation()
+      this.props.jumpSection()
     }
   }
 
