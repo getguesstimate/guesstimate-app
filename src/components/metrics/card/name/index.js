@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import TextArea from 'react-textarea-autosize';
+import Keypress from 'react-keypress'
 import './style.css'
 
 export default class MetricName extends Component {
@@ -37,13 +38,26 @@ export default class MetricName extends Component {
     this.handleSubmit()
   }
 
+  onChange(e) {
+    this.setState({value: e.target.value})
+  }
+
+  handleKeyDown(e) {
+    if ((e.keyCode === 13) && !e.shiftKey){
+      this.props.jumpSection()
+      e.stopPropagation()
+    }
+  }
+
+
   render() {
     return (
       <div className='MetricName'>
         <TextArea
             defaultValue={this.props.name}
             onBlur={this.handleSubmit.bind(this)}
-            onChange={e => this.setState({value: e.target.value})}
+            onChange={this.onChange.bind(this)}
+            onKeyDown={this.handleKeyDown.bind(this)}
             placeholder={'name'}
             ref={'input'}
             tabIndex={2}

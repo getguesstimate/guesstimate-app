@@ -34,6 +34,10 @@ class GuesstimateForm extends Component{
     this.props.dispatch(createGuesstimateForm(this.props.metricId))
   }
 
+  focus() {
+    this.refs.TextInput.focus()
+  }
+
   _guesstimateTypeName() {
     return this.props.guesstimateForm.guesstimateType
   }
@@ -92,6 +96,7 @@ class GuesstimateForm extends Component{
               onChange={this._changeInput.bind(this)}
               onFocus={() => {this._switchMetricClickMode.bind(this)(true)}}
               onBlur={() => {this._switchMetricClickMode.bind(this)(false)}}
+              ref='TextInput'
             />
             <GuesstimateTypeIcon
               guesstimateType={guesstimateType}
