@@ -27,7 +27,7 @@ export function sampleFromGuesstimateApp(guesstimate, dGraph, n) {
   }
 }
 
-function sample(input, n) {
+export function sample(input, n) {
   const guesstimateType = find(input.guesstimateType)
   if (guesstimateType && guesstimateType.sampler) {
     return guesstimateType.sampler.sample(input, n)
