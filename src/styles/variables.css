@@ -6,7 +6,6 @@ $grey-1: #e7edf3;
 $grey-2: #7089a9;
 $grey-4: #aaa;
 
-$orange-1: #D55D27;
 
 $transparent-background: rgba(0,0,0,0);
 $editing-background: $grey-1;
@@ -24,12 +23,13 @@ $editing-background: $grey-1;
   &:not(:focus){
     cursor: pointer;
   }
+  &:hover:not(:focus) {
+    background-color: $editing-background;
+  }
   &:focus {
     outline: none;
     box-shadow: none;
-    background-color: $editing-background;
-  }
-  &:hover {
-    background-color: $editing-background;
+    background-color: #D1D9E2;
+    color: #2D3137;
   }
 }
