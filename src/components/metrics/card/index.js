@@ -94,7 +94,7 @@ class MetricCard extends Component {
 
   _isEmpty(){
     const {metric} = this.props
-    return (!metric.name && !_.get(metric, 'guesstimate.input') && !_.get(metric, 'guesstimate.guesstimateType'))
+    return (!metric.name && !_.get(metric, 'guesstimate.input'))
   }
 
   handleChangeMetric(values) {
