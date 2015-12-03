@@ -3,7 +3,7 @@ import {formatters, _matchingFormatter, format} from './index.js'
 describe('formatter', () => {
   describe('#formatters', () => {
     it('holds all formatters', () => {
-      expect(formatters.length).to.equal(6)
+      expect(formatters.length).to.equal(3)
     })
   });
 
@@ -11,10 +11,7 @@ describe('formatter', () => {
     const examples = [
       [{text: '=34'}, 'FUNCTION'],
       [{text: '34'}, 'DISTRIBUTION_POINT_TEXT'],
-      [{guesstimateType: 'POINT'}, 'DISTRIBUTION_POINT_GRAPHICAL'],
-      [{text: '34 -> 88'}, 'DISTRIBUTION_NORMAL_TEXT_UPTO'],
-      [{text: '34 +- 88'}, 'DISTRIBUTION_NORMAL_TEXT_PLUS_MINUS'],
-      [{guesstimateType: 'NORMAL', low: '3', high: '88'}, 'DISTRIBUTION_NORMAL_GRAPHICAL']
+      [{text: '34 -> 88'}, 'DISTRIBUTION_NORMAL_TEXT_UPTO']
     ]
 
     const itExamples = examples.map(e => () => {
@@ -28,9 +25,8 @@ describe('formatter', () => {
     const examples = [
       [{text: '=34', graph: {}}, {guesstimateType: 'FUNCTION', text: '34', inputs: {}}],
       [{text: '34'}, {guesstimateType: 'POINT', value: 34}],
-      [{guesstimateType: 'POINT', value: '34'}, {guesstimateType: 'POINT', value: 34}],
-      [{text: '8 -> 9'}, {guesstimateType: 'NORMAL', low: 8, high: 9}],
-      [{text: '8 +- 1'},{guesstimateType: 'NORMAL', low: 7, high: 10}]
+      [{guesstimateType: 'POINT', text: '34'}, {guesstimateType: 'POINT', value: 34}],
+      [{text: '8 -> 9'}, {guesstimateType: 'NORMAL', low: 8, high: 9}]
     ]
 
     examples.map(e => () => {
