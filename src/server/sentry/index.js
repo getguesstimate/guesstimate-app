@@ -12,3 +12,7 @@ export function trackUser(userId, info) {
 export function captureException(e, metadata) {
   Raven.captureException(e, metadata)
 }
+
+export function captureMessage(message, metadata) {
+  Raven.captureMessage(message, {tags: metadata})
+}
