@@ -1,5 +1,6 @@
 import algoliasearch from 'algoliasearch'
 import {searchSpaceIndex} from '../../server/algolia/index.js'
+import {searchError} from 'lib/errors/index.js'
 
 export function fetch(query = '', options = {}) {
   let filters = {hitsPerPage: 15}
@@ -9,9 +10,14 @@ export function fetch(query = '', options = {}) {
   }
 
   return (dispatch, getState) => {
-    searchSpaceIndex().search(query, filters, (errors, results) => {
-      results.filters = filters
-      dispatch({ type: 'SEARCH_SPACES_GET', response: results })
+    searchSpaceIndex().search(query, filters, (error, results) => {
+      if (error) {
+        searchError('AlgoliaFetch', error)
+      }
+      else {
+        results.filters = filters
+        dispatch({ type: 'SEARCH_SPACES_GET', response: results })
+      }
     })
   }
 }
@@ -24,8 +30,12 @@ export function fetchNextPage() {
 
     filters.page = page + 1
 
-    searchSpaceIndex().search(searchSpaces.query, filters, (errors, results) => {
-      dispatch({ type: 'SEARCH_SPACES_NEXT_PAGE', response: results })
+    searchSpaceIndex().search(searchSpaces.query, filters, (error, results) => {
+      if (error) {
+        searchError('AlgoliaFetchNextPage', error)
+      } else {
+        dispatch({ type: 'SEARCH_SPACES_NEXT_PAGE', response: results })
+      }
     })
   }
 }
