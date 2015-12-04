@@ -32,7 +32,6 @@ function mapStateToProps(state) {
 class FullPage extends Component {
 
   _registerUser(){
-    console.log(this.props.me)
     if (_.has(this.props, 'me.id')) {
       const {id, profile} = this.props.me
       segment.trackUser(id, profile)
