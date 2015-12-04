@@ -13,6 +13,7 @@ import configureStore from './middleware'
 
 import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react';
 import * as segment from '../server/segment/index.js'
+import * as sentry from '../server/sentry/index.js'
 import { connect } from 'react-redux';
 
 const Debug = ({store}) => (
@@ -35,6 +36,7 @@ class FullPage extends Component {
     if (_.has(this.props, 'me.id')) {
       const {id, profile} = this.props.me
       segment.trackUser(id, profile)
+      sentry.trackUser(id, profile)
     }
   }
 
