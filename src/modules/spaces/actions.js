@@ -5,6 +5,8 @@ import e from 'gEngine/engine'
 import _ from 'lodash'
 import app from 'ampersand-app'
 import {rootUrl} from 'servers/guesstimate-api/constants.js'
+import {captureApiError} from 'lib/errors/index.js'
+
 let standardActionCreators = actionCreatorsFor('spaces');
 
 
@@ -43,6 +45,10 @@ export function destroy(object) {
       console.log(successAction)
       dispatch(successAction)
     })
+
+    request.fail((jqXHR, textStatus, errorThrown) => {
+      captureApiError('SpacesDestroy', jqXHR, textStatus, errorThrown, {url: (rootUrl + 'spaces/' + id)})
+    })
   }
 }
 
@@ -62,6 +68,10 @@ export function fetch() {
     request.done(data => {
       const action = standardActionCreators.fetchSuccess(data)
       dispatch(action)
+    })
+
+    request.fail((jqXHR, textStatus, errorThrown) => {
+      captureApiError('SpacesFetch', jqXHR, textStatus, errorThrown, {url: (rootUrl+'spaces')})
     })
   }
 }
@@ -87,6 +97,9 @@ export function create(object) {
       const action = standardActionCreators.createSuccess(data, cid)
       dispatch(action)
       app.router.history.navigate('/space/' + data.id)
+    })
+    request.fail((jqXHR, textStatus, errorThrown) => {
+      captureApiError('SpacesCreate', jqXHR, textStatus, errorThrown, {url: (rootUrl+'spaces')})
     })
   }
 }
@@ -114,6 +127,9 @@ export function update(spaceId, params={}) {
     request.done((data) => {
       const action = standardActionCreators.updateSuccess(data)
       dispatch(action)
+    })
+    request.fail((jqXHR, textStatus, errorThrown) => {
+      captureApiError('SpacesUpdate', jqXHR, textStatus, errorThrown, {url: (rootUrl + 'spaces/' + spaceId)})
     })
   }
 }
