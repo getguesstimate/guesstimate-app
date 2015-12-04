@@ -3,6 +3,7 @@ import $ from 'jquery'
 import cuid from 'cuid'
 import * as meActions from 'gModules/me/actions.js'
 import {rootUrl} from 'servers/guesstimate-api/constants.js'
+import {captureApiError} from 'lib/errors/index.js'
 
 let standardActionCreators = actionCreatorsFor('users');
 
@@ -43,6 +44,10 @@ export function fetch(params = {}) {
         dispatch(meActions.guesstimateMeLoaded(me))
       }
     })
+
+    request.fail((jqXHR, textStatus, errorThrown) => {
+      captureApiError('UsersFetch', jqXHR, textStatus, errorThrown, {url})
+    })
   }
 }
 
@@ -53,10 +58,11 @@ export function create(object) {
     object = Object.assign(object, {id: cid})
     const action = standardActionCreators.createStart(object);
 
+    const url = rootUrl + 'users/'
     const request = formattedRequest({
       state: getState(),
       requestParams: {
-        url: (rootUrl + 'users/'),
+        url,
         data: JSON.stringify({user: object}),
         method: 'POST'
       }
@@ -66,6 +72,10 @@ export function create(object) {
       const action = standardActionCreators.createSuccess(data, cid)
       dispatch(action)
       dispatch(meActions.guesstimateMeLoaded(data))
+    })
+
+    request.fail((jqXHR, textStatus, errorThrown) => {
+      captureApiError('UsersCreate', jqXHR, textStatus, errorThrown, {url})
     })
   }
 }

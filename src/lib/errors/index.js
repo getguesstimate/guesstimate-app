@@ -7,3 +7,7 @@ export function captureApiError(locationName, jqXHR, textStatus, errorThrown, pa
   console.log(`AJAX Error - ${locationName}`, errorParams)
 }
 
+export function searchError(name, e){
+  sentry.captureException(e, name)
+  console.log(`AlgoliaError ${name}`, e)
+}
