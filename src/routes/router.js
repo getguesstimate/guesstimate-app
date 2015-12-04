@@ -12,6 +12,7 @@ import { Provider } from 'react-redux';
 import configureStore from './middleware'
 
 import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react';
+import * as segment from '../server/segment/index.js'
 
 const Debug = ({store}) => (
   <DebugPanel right top bottom>
@@ -33,7 +34,9 @@ export default Router.extend({
       <Provider store={store}>
         <FullPage isFluid={isFluid} page={page}/>
       </Provider>,
-      document.getElementById('root'))
+      document.getElementById('root')
+    )
+    segment.pageLoad()
   },
 
   routes: {
