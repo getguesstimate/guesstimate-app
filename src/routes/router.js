@@ -1,4 +1,5 @@
 import Router from 'ampersand-router'
+import Home from './home/index.js'
 import SpaceShow from 'gComponents/spaces/show'
 import SpaceNew from './spaces/new'
 import SpaceIndex from 'gComponents/spaces/index/index.js'
@@ -64,14 +65,19 @@ export default Router.extend({
 
   routes: {
     '': 'home',
+    'spaces': 'spaceIndex',
     'space/new': 'spaceNew',
     'space/:id': 'spaceShow',
     'components': 'components',
     'users/:id': 'userShow',
   },
 
-  home () {
+  spaceIndex () {
     this.render(<SpaceIndex/>, false)
+  },
+
+  home () {
+    this.render(<Home/>, false)
   },
 
   spaceNew () {

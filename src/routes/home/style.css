@@ -1,0 +1,57 @@
+@import './styles/variables.css';
+
+
+.guesstimate-logo-outer {
+  width: 100%;
+  text-align: center;
+}
+
+.guesstimate-logo {
+  margin-top: 0.2em;
+  font-size: 5em;
+  border-radius: 0.3em;
+  padding: 0.25em;
+  font-family: Lato;
+  display: inline-block;
+}
+
+.guesstimate-logo .guesstimate-icon {
+  float: left;
+  margin-right: 0.3em;
+}
+
+.guesstimate-logo .guesstimate-icon img{
+  width: 0.8em;
+}
+
+.guesstimate-logo .guesstimate-name{
+  color: $grey-2;
+  margin-top: 0.23em;
+  font-weight: 800;
+  float: left;
+}
+
+.guesstimate-logo {
+}
+
+.home .guesstimate-slogan h2 {
+  text-align: center;
+  color: #555;
+  font-weight: 400;
+  font-size: 2.7em;
+  font-family: Lato;
+
+}
+
+.home .guesstimate-slogan .sideComment{
+  color: $grey-2;
+}
+
+.home .guesstimate-slogan p {
+  text-align: center;
+  font-size: 2em;
+  font-family: Lato;
+  color: $grey-2;
+  padding: 0 4em;
+  font-weight: 200;
+}
