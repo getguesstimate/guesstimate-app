@@ -2,16 +2,32 @@ import React, {Component, PropTypes} from 'react'
 import Login from'../login'
 import './style.css'
 import Logo from '../../../assets/logo-grey-2.png'
+import { connect } from 'react-redux';
 
-const Header = React.createClass({
-  displayName: 'Header',
+function mapStateToProps(state) {
+  return {
+    me: state.me
+  }
+}
+
+const loggedIn = (user) =>  {
+  return !!(user && user.profile && user.profile.name)
+}
+
+@connect(mapStateToProps)
+export default class Header extends Component {
+  displayName: 'Header'
+
   render () {
+    const isLoggedIn = loggedIn(this.props.me)
     const {isFluid, isBare} = this.props
     let className = 'PageHeader'
     className += isBare ? ' isBare' : ''
 
     let containerName = 'container-fluid'
     containerName += !isFluid ? ' wrap' : ''
+
+    let navbarRef = isLoggedIn ? '/models' : '/'
     return (
       <div className={className}>
         <div className={containerName}>
@@ -19,7 +35,7 @@ const Header = React.createClass({
 
             {!isBare &&
               <div className='header-left-menu'>
-                <a className="navbar-brand" href="/">
+                <a className="navbar-brand" href={navbarRef}>
                   <div className='guesstimate-icon'>
                     <img src={Logo} />
                   </div>
@@ -28,12 +44,10 @@ const Header = React.createClass({
               </div>
             }
 
-            <Login/>
+            <Login me={this.props.me} isLoggedIn={isLoggedIn}/>
           </div>
         </div>
       </div>
     );
   }
-});
-
-export default Header;
+};
