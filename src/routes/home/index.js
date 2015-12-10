@@ -33,7 +33,7 @@ export default class Home extends Component {
 
         <div className='row'>
           <div className='col-xs-12 cta'>
-            <a href='/spaces' className='ui button huge primary'> Browse Public Models </a>
+            <a href='/models' className='ui button huge primary'> Browse Public Models </a>
           </div>
         </div>
 

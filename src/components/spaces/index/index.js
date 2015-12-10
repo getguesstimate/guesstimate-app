@@ -11,16 +11,8 @@ export default class SpacesIndex extends Component{
       <GeneralSpaceIndex>
         <h2 className='ui header'>
           <div className='content'>
-            {'Collections'}
-            <div className='sub header'>
-              {'Each can have several metrics.'}
-            </div>
+            {'Public Models'}
           </div>
-          {_.has(this.props.me, 'id') &&
-            <a href='/space/new' className='ui primary button right floated'>
-              {'New Collection'}
-            </a>
-          }
         </h2>
       </GeneralSpaceIndex>
     )

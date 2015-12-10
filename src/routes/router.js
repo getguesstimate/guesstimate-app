@@ -31,9 +31,9 @@ export default Router.extend({
 
   routes: {
     '': 'home',
-    'spaces': 'spaceIndex',
-    'space/new': 'spaceNew',
-    'space/:id': 'spaceShow',
+    'models': 'spaceIndex',
+    'models/new': 'spaceNew',
+    'models/:id': 'spaceShow',
     'components': 'components',
     'users/:id': 'userShow',
   },
