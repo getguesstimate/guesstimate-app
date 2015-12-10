@@ -9,10 +9,8 @@ export default class SpacesIndex extends Component{
   render () {
     return (
       <GeneralSpaceIndex>
-        <h2 className='ui header'>
-          <div className='content'>
-            {'Public Models'}
-          </div>
+        <h2>
+          {'Public Models'}
         </h2>
       </GeneralSpaceIndex>
     )

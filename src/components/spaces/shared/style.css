@@ -1,3 +1,19 @@
-.GeneralSpaceIndex > .search-form{
-  margin-bottom: 1em;
+@import './variables.css';
+
+.GeneralSpaceIndex {
+  margin-top:2em;
+}
+
+.GeneralSpaceIndex > .header h2 {
+  margin-top: 10px;
+  color: $grey-2;
+  font-family: Lato;
+  float: left;
+}
+
+.GeneralSpaceIndex > .divider.ui.divider {
+  margin-top: 2em;
+  margin-bottom: 3em;
+  border-color: $grey-1;
+  border-bottom: none;
 }
