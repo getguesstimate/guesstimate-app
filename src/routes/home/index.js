@@ -6,7 +6,7 @@ export default class Home extends Component {
   displayName: 'Home'
   render () {
     return (
-      <div className='container-fluid full-width home'>
+      <div className='container-fluid full-width homePage'>
         <div className='row'>
           <div className='col-md-2'></div>
           <div className='col-md-8 main'>
@@ -23,13 +23,8 @@ export default class Home extends Component {
               </div>
 
               <div className='col-sm-12 guesstimate-slogan'>
-                <h2>
-                  Decide with Confidence
-                  <span className='sideComment'> Intervals </span>
+                <h2> Reduce uncertainty by doing math with probability distributions.
                 </h2>
-                <p> Guesstimate is the simplest way to do math with probability distributions.
-                  Use it to reduce the uncertainties in your life.  It's Free.
-                </p>
               </div>
 
             </div>
@@ -37,7 +32,9 @@ export default class Home extends Component {
         </div>
 
         <div className='row'>
-          <a href='/spaces' className='ui button huge primary'> Browse Models </a>
+          <div className='col-xs-12 cta'>
+            <a href='/spaces' className='ui button huge primary'> Browse Public Models </a>
+          </div>
         </div>
 
       </div>
