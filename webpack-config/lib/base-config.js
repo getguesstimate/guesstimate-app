@@ -1,7 +1,6 @@
 var autoPrefixer = require('autoprefixer')
 var HtmlPlugin = require('./html-plugin')
 var atImport = require('postcss-import')
-var pick = require('lodash.pick')
 var webpack = require('webpack')
 var jQuery = require('jquery')
 var precss = require('precss')
@@ -33,7 +32,7 @@ module.exports = function getBaseConfig (spec) {
       ]
     },
     plugins: [
-      new HtmlPlugin(pick(spec, [
+      new HtmlPlugin(lodash.pick(spec, [
         'html',
         'isDev',
         'serveCustomHtmlInDev',
