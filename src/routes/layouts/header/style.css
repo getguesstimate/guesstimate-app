@@ -1,6 +1,6 @@
 @import './styles/variables.css';
 
-.PageHeader{
+.PageHeader:not(.isBare){
   border-bottom: 1px solid $grey-1;
 }
 

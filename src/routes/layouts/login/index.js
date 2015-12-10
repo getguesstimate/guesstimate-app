@@ -56,6 +56,7 @@ export default class Profile extends Component {
   }
   render () {
     const isLoggedIn = loggedIn(this.props.me)
+
     return (
     <div className='header-right-menu'>
 
@@ -72,11 +73,11 @@ export default class Profile extends Component {
       { isLoggedIn && this.profileDropdown() }
 
       { !isLoggedIn &&
-        <a className={'item text'}onClick={this.signUp.bind(this)}>Sign Up</a>
+        <a className={'item text'} onClick={this.signIn.bind(this)}>Sign In</a>
       }
 
       { !isLoggedIn &&
-        <a className={'item text'} onClick={this.signIn.bind(this)}>Sign In</a>
+        <a className={'item text'}onClick={this.signUp.bind(this)}>Sign Up</a>
       }
     </div>
     )

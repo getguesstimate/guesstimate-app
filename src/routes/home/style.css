@@ -34,24 +34,29 @@
 .guesstimate-logo {
 }
 
-.home .guesstimate-slogan h2 {
+.homePage .guesstimate-slogan h2 {
   text-align: center;
-  color: #555;
-  font-weight: 400;
+  color: #333;
+  font-weight: 200;
   font-size: 2.7em;
   font-family: Lato;
 
 }
 
-.home .guesstimate-slogan .sideComment{
+.homePage .guesstimate-slogan .sideComment{
   color: $grey-2;
 }
 
-.home .guesstimate-slogan p {
+.homePage .guesstimate-slogan p {
   text-align: center;
   font-size: 2em;
   font-family: Lato;
   color: $grey-2;
   padding: 0 4em;
   font-weight: 200;
+}
+
+.homePage .cta {
+  margin-top: 3em;
+  text-align: center;
 }

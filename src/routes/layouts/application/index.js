@@ -14,31 +14,50 @@ import Header from '../header'
 import NavHelper from './nav-helper'
 import './style.css';
 
+import * as segment from '../../../server/segment/index.js'
+import * as sentry from '../../../server/sentry/index.js'
+
 function mapStateToProps(state) {
   return {
-    spaces: state.spaces
+    spaces: state.spaces,
+    me: state.me
   }
 }
 
 @connect(mapStateToProps)
 export default class extends Component{
   displayName: 'Layout'
+
   componentDidMount() {
     this.props.dispatch(meActions.init())
     this.props.dispatch(spaceActions.fetch())
     this.props.dispatch(userActions.fetch())
   }
+
+  _registerUser(){
+    if (_.has(this.props, 'me.id')) {
+      const {id, profile} = this.props.me
+      segment.trackUser(id, profile)
+      sentry.trackUser(id, profile)
+    }
+  }
+
   render () {
-    let body = this.props.children
-    if (!this.props.isFluid) {
+    let options = Object.assign({}, {isFluid: false, simpleHeader: false}, this.props.options)
+
+    this._registerUser()
+    let body = this.props.page
+
+    if (!options.isFluid) {
       body = <div className="container-fluid wrap"> {body} </div>
     }
+
     return (
       <NavHelper>
-      <div className='Layout'>
-        <Header isFluid={this.props.isFluid} spaces={this.props.spaces}/>
-        {body}
-      </div>
+        <div className='Layout'>
+          <Header isFluid={options.isFluid} spaces={this.props.spaces} isBare={options.simpleHeader}/>
+          {body}
+        </div>
       </NavHelper>
     )
   }
