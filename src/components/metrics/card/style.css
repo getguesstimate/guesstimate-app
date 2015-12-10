@@ -1,8 +1,6 @@
 @import './styles/variables.css';
 
 .metricCard {
-  background-color: rgba(255,255,255,1);
-  border-bottom: 2px solid #ccc;
   border-radius: 3px;
   max-width: 30em;
   white-space: normal;
@@ -14,6 +12,11 @@
   display:flex;
   flex-direction: column;
   cursor: pointer;
+}
+
+.metricCard:not(.titleView) {
+  background-color: rgba(255,255,255,1);
+  border-bottom: 2px solid #ccc;
 }
 
 .selected .metricCard{

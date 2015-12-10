@@ -15,3 +15,7 @@
   float: left;
 }
 
+.titleView .MetricName textarea{
+  color: #666;
+  font-weight: 400;
+}
