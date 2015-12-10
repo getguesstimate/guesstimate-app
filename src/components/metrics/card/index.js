@@ -93,8 +93,20 @@ class MetricCard extends Component {
   }
 
   _isEmpty(){
-    const {metric} = this.props
-    return (!metric.name && !_.get(metric, 'guesstimate.input'))
+    console.log(this._hasGuesstimateInput(),this._hasName())
+    return (!this._hasGuesstimateInput() && !this._hasName())
+  }
+
+  _hasName(){
+    return !!this.props.metric.name
+  }
+
+  _hasGuesstimateInput(){
+    return !!_.get(this.props.metric, 'guesstimate.input')
+  }
+
+  _isTitle(){
+    return (this._hasName() && !this._hasGuesstimateInput())
   }
 
   handleChangeMetric(values) {
@@ -152,9 +164,14 @@ class MetricCard extends Component {
     const shouldShowJsonTree = (metricCardView === 'debugging')
     const hasGuesstimateDescription = !_.isEmpty(guesstimate.description)
 
+    const titleView = !this.props.hovered && !isSelected && this._isTitle()
+
+    let className = isSelected ? 'metricCard grid-item-focus' : 'metricCard'
+    className += titleView ? ' titleView' : ''
+
     return (
       <div
-          className={isSelected ? 'metricCard grid-item-focus' : 'metricCard'}
+          className={className}
           ref='dom'
           onKeyDown={this._handlePress.bind(this)}
           onMouseDown={this._handleClick.bind(this)}
