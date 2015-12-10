@@ -11,17 +11,7 @@ import './style.css'
 
 import { connect } from 'react-redux';
 
-function mapStateToProps(state) {
-  return {
-    me: state.me
-  }
-}
-
-const loggedIn = (user) =>  {
-  return !!(user && user.profile && user.profile.name)
-}
-
-@connect(mapStateToProps)
+@connect()
 export default class Profile extends Component {
   displayName: 'Profile'
 
@@ -55,7 +45,7 @@ export default class Profile extends Component {
 
   }
   render () {
-    const isLoggedIn = loggedIn(this.props.me)
+    const {me, isLoggedIn} = this.props
 
     return (
     <div className='header-right-menu'>
@@ -65,12 +55,16 @@ export default class Profile extends Component {
       }
 
       { isLoggedIn &&
-        <a className='item' href={`/users/${this.props.me.id}`}>
+        <a className='item' href={`/users/${me.id}`}>
           <Icon name='th-large'/>
         </a>
       }
 
       { isLoggedIn && this.profileDropdown() }
+
+      { !isLoggedIn &&
+        <a className={'item text'} href='/models'>Explore</a>
+      }
 
       { !isLoggedIn &&
         <a className={'item text'} onClick={this.signIn.bind(this)}>Sign In</a>
