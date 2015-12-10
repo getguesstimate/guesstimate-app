@@ -24,23 +24,17 @@ export default class UserShow extends Component{
     }
 
     return (
-      <div>
+      <div className='userShow'>
         {user &&
           <GeneralSpaceIndex userId={user.id}>
-            <h2 className='ui header'>
-              <div className='row'>
-                <div className='col-sm-10'>
-                  <div className='user-tag'>
-                    <img
-                        className='ui avatar image'
-                        src={user.picture}
-                    />
-                  </div>
-                  <div>
-                    {user.name}
-                  </div>
-                </div>
-              </div>
+            <div className='user-tag'>
+              <img
+                  className='ui avatar image'
+                  src={user.picture}
+              />
+            </div>
+            <h2>
+              {user.name}
             </h2>
           </GeneralSpaceIndex>
       }
