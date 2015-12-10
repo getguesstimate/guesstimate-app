@@ -61,7 +61,7 @@ export default class Profile extends Component {
     <div className='header-right-menu'>
 
       { isLoggedIn &&
-        <a className='item' href={`/space/new`}><Icon name='plus'/></a>
+        <a className='item' href={`/models/new`}><Icon name='plus'/></a>
       }
 
       { isLoggedIn &&
