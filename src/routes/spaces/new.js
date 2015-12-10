@@ -22,9 +22,11 @@ class NewSpaceForm extends Component {
     return (
       <div className='container' >
         <form onSubmit={handleSubmit} className='ui form'>
-          <label>Name</label>
-          <input type="text" {...name}/>
-          {name.error && name.touched && <div>{name.error}</div>}
+          <div className='field'>
+            <label>Name</label>
+            <input type="text" {...name}/>
+            {name.error && name.touched && <div>{name.error}</div>}
+          </div>
 
           <button type='submit' className='ui button primary' onClick={handleSubmit} disabled={submitting}>
             {!submitting ? 'Create' : 'Submitting'}
