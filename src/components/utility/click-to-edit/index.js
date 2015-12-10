@@ -18,7 +18,7 @@ export default class EditingMode extends Component {
       <div className='EditingMode'>
         <textarea  defaultValue={this.props.value} ref='input' ref={ (ref) =>
           {
-            ref && React.findDOMNode(ref).select();
+            ref && ReactDOM.findDOMNode(ref).select();
             this.textInput = ref
           }
         } />
