@@ -19,7 +19,7 @@ export class SpaceName extends Component {
       <span>
         {ownedByMe &&
           <DropDown
-              headerText={'Rename Topic'}
+              headerText={'Rename Model'}
               openLink={<h1 className='text-editable'> {name} </h1>}
               position='right'
               hasPadding={true}
