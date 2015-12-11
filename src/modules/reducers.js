@@ -2,6 +2,7 @@ import reduxCrud from 'redux-crud';
 
 import guesstimateFormR from './guesstimate_form/reducer'
 import selectionR from './selection/reducer'
+import displayErrorR from './displayErrors/reducer';
 import metricsR from './metrics/reducer'
 import guesstimatesR from './guesstimates/reducer'
 import simulationsR from './simulations/reducer'
@@ -26,6 +27,7 @@ const rootReducer = function app(state = {}, action){
     users: reduxCrud.reducersFor('users')(state.users, action),
     form: formReducer(state.form, action),
     me: meR(state.me, action),
+    displayError: displayErrorR(state.displayError, action),
     canvasState: canvasStateR(state.canvasState, action),
     searchSpaces: searchSpacesR(state.searchSpaces, action)
   };

@@ -93,7 +93,6 @@ class MetricCard extends Component {
   }
 
   _isEmpty(){
-    console.log(this._hasGuesstimateInput(),this._hasName())
     return (!this._hasGuesstimateInput() && !this._hasName())
   }
 
