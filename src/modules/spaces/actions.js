@@ -27,7 +27,7 @@ const formattedRequest = ({requestParams, state}) => {
 export function destroy(object) {
   const id = object.id;
   return function(dispatch, getState) {
-    app.router.history.navigate('/')
+    app.router.history.navigate('/models')
     const action = standardActionCreators.deleteStart({id: id});
     dispatch(action)
 
@@ -42,7 +42,6 @@ export function destroy(object) {
 
     request.done(() => {
       const successAction = standardActionCreators.deleteSuccess({id: id});
-      console.log(successAction)
       dispatch(successAction)
     })
 
