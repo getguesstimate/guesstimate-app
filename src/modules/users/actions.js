@@ -2,8 +2,9 @@ import {actionCreatorsFor} from 'redux-crud';
 import $ from 'jquery'
 import cuid from 'cuid'
 import * as meActions from 'gModules/me/actions.js'
+import * as displayErrorsActions from 'gModules/displayErrors/actions.js'
 import {rootUrl} from 'servers/guesstimate-api/constants.js'
-import {captureApiError} from 'lib/errors/index.js'
+import {captureApiError, generalError} from 'lib/errors/index.js'
 
 let standardActionCreators = actionCreatorsFor('users');
 
@@ -19,6 +20,7 @@ const formattedRequest = ({requestParams, state}) => {
   return $.ajax(params)
 }
 
+//either fetches all users or the specific user if auth0_id is passed in
 export function fetch(params = {}) {
   return function(dispatch, getState) {
     const action = standardActionCreators.fetchStart();
@@ -40,12 +42,18 @@ export function fetch(params = {}) {
       dispatch(action)
 
       if (params.auth0_id) {
-        const me = data[0]
-        dispatch(meActions.guesstimateMeLoaded(me))
+        if (_.isEmpty(data)){
+          generalError('UserFetch-EmptyResponse', {params, url})
+          dispatch(displayErrorsActions.newError())
+        } else {
+          const me = data[0]
+          dispatch(meActions.guesstimateMeLoaded(me))
+        }
       }
     })
 
     request.fail((jqXHR, textStatus, errorThrown) => {
+      dispatch(displayErrorsActions.newError())
       captureApiError('UsersFetch', jqXHR, textStatus, errorThrown, {url})
     })
   }
@@ -59,22 +67,29 @@ export function create(object) {
     const action = standardActionCreators.createStart(object);
 
     const url = rootUrl + 'users/'
+    const requestParams = {
+      url,
+      data: JSON.stringify({user: object}),
+      method: 'POST'
+    }
     const request = formattedRequest({
       state: getState(),
-      requestParams: {
-        url,
-        data: JSON.stringify({user: object}),
-        method: 'POST'
-      }
+      requestParams
     })
 
     request.done(data => {
-      const action = standardActionCreators.createSuccess(data, cid)
-      dispatch(action)
-      dispatch(meActions.guesstimateMeLoaded(data))
+        if (_.isEmpty(data)){
+          generalError('UserCreate-EmptyResponse', {cid, url})
+          dispatch(displayErrorsActions.newError())
+        } else {
+          const action = standardActionCreators.createSuccess(data, cid)
+          dispatch(action)
+          dispatch(meActions.guesstimateMeLoaded(data))
+        }
     })
 
     request.fail((jqXHR, textStatus, errorThrown) => {
+      dispatch(displayErrorsActions.newError())
       captureApiError('UsersCreate', jqXHR, textStatus, errorThrown, {url})
     })
   }

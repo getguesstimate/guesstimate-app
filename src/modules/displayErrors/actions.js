@@ -1,5 +1,6 @@
 export function newError(error, message) {
-  return { type: 'NEW_DISPLAY_ERROR', value: {error, message}};
+  const value = {error, message}
+  return { type: 'NEW_DISPLAY_ERROR', value };
 }
 
 export function close() {
