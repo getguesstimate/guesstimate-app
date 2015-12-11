@@ -76,7 +76,7 @@ export class GraphPropagation {
   _simulateMetric(metricPropagation): void {
     const error = metricPropagation.step(this._graph(), this.dispatch)
     if (error[0]) {
-      console.error('Metric simulation error', error[0], error[1])
+      console.warn('Metric simulation error', error[0], error[1])
     }
   }
 

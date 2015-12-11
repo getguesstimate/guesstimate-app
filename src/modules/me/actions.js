@@ -2,6 +2,8 @@ import Auth0Lock from 'auth0-lock'
 import {me} from 'gEngine/engine'
 import * as userActions from 'gModules/users/actions.js'
 import * as auth0Constants from 'servers/auth0/constants.js'
+import {generalError} from 'lib/errors/index.js'
+import * as displayErrorsActions from 'gModules/displayErrors/actions.js'
 
 export const signIn = () => {
     return (dispatch, getState) => lock.showSignin({
@@ -9,7 +11,8 @@ export const signIn = () => {
       disableResetAction: false
     }, (err, profile, token) => {
       if (err) {
-        console.log("Error logging in", err)
+        generalError('MesignIn Error', {err, profile, token})
+        dispatch(displayErrorsActions.newError())
       } else {
         dispatch(auth0MeLoaded(profile, token))
         const {name, username, picture, user_id} = profile
@@ -25,7 +28,8 @@ export const signUp = () => {
       disableResetAction: false
     }, (err, profile, token) => {
       if (err) {
-        console.log("Error logging in", err)
+        generalError('MesignUp Error', {err, profile, token})
+        dispatch(displayErrorsActions.newError())
       } else {
         dispatch(auth0MeLoaded(profile, token))
         const {name, username, picture, user_id} = profile
@@ -44,6 +48,7 @@ export const init = () => {
     if (token) {
       lock.getProfile(token, (err, profile) => {
         if (err) {
+          generalError('MeInit Error', {token, err, profile})
           me.localStorage.clear()
         } else {
           dispatch(auth0MeLoaded(profile, token))
@@ -53,10 +58,6 @@ export const init = () => {
       })
     }
   }
-}
-
-export function updateWithApiId() {
-  return { type: 'UpdateWithApiId' };
 }
 
 export function logOut() {
