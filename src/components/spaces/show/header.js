@@ -25,12 +25,12 @@ let SpaceHeader = ({space, onSave, onDestroy, onSaveName}) => (
 
       {space.ownedByMe &&
         <DropDown
-            headerText={'Topic Actions'}
-            openLink={<a className='space-header-action'>Topic Actions</a>}
+            headerText={'Model Actions'}
+            openLink={<a className='space-header-action'>Model Actions</a>}
             position='right'
         >
           <ul>
-            <DropDownListElement icon={'warning'} text='Delete Topic' />
+            <DropDownListElement icon={'warning'} text='Delete Model' />
           </ul>
         </DropDown>
       }
