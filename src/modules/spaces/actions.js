@@ -96,7 +96,7 @@ export function create(object) {
     request.done(data => {
       const action = standardActionCreators.createSuccess(data, cid)
       dispatch(action)
-      app.router.history.navigate('/space/' + data.id)
+      app.router.history.navigate('/models/' + data.id)
     })
     request.fail((jqXHR, textStatus, errorThrown) => {
       captureApiError('SpacesCreate', jqXHR, textStatus, errorThrown, {url: (rootUrl+'spaces')})
