@@ -5,10 +5,12 @@ import '../../../../semantic/dist/semantic.css'
 import '../../../styles/theme.css'
 
 import React, {Component, PropTypes} from 'react'
+import Modal from 'react-modal'
 import { connect } from 'react-redux';
 import * as spaceActions from 'gModules/spaces/actions.js';
 import * as userActions from 'gModules/users/actions.js';
 import * as meActions from 'gModules/me/actions.js';
+import ErrorModal from 'gComponents/application/errorModal/index.js';
 import * as Space from 'gEngine/space';
 import Header from '../header'
 import NavHelper from './nav-helper'
@@ -20,7 +22,7 @@ import * as sentry from '../../../server/sentry/index.js'
 function mapStateToProps(state) {
   return {
     spaces: state.spaces,
-    me: state.me
+    me: state.me,
   }
 }
 
@@ -54,6 +56,7 @@ export default class extends Component{
 
     return (
       <NavHelper>
+        <ErrorModal/>
         <div className='Layout'>
           <Header isFluid={options.isFluid} spaces={this.props.spaces} isBare={options.simpleHeader}/>
           {body}
