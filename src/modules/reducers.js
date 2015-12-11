@@ -2,7 +2,7 @@ import reduxCrud from 'redux-crud';
 
 import guesstimateFormR from './guesstimate_form/reducer'
 import selectionR from './selection/reducer'
-import displayErrorR from './displayErrors/reducer';
+import displayErrorR from './displayErrors/reducer.js';
 import metricsR from './metrics/reducer'
 import guesstimatesR from './guesstimates/reducer'
 import simulationsR from './simulations/reducer'
@@ -18,6 +18,7 @@ export function changeSelect(location) {
 
 const rootReducer = function app(state = {}, action){
   return {
+    displayError: displayErrorR(state.displayError, action),
     metrics: metricsR(state.metrics, action),
     guesstimates: guesstimatesR(state.guesstimates, action),
     selection: selectionR(state.selection, action),
@@ -27,7 +28,6 @@ const rootReducer = function app(state = {}, action){
     users: reduxCrud.reducersFor('users')(state.users, action),
     form: formReducer(state.form, action),
     me: meR(state.me, action),
-    displayError: displayErrorR(state.displayError, action),
     canvasState: canvasStateR(state.canvasState, action),
     searchSpaces: searchSpacesR(state.searchSpaces, action)
   };

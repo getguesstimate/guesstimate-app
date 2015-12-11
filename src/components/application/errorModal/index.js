@@ -3,6 +3,7 @@ import Modal from 'react-modal'
 import { connect } from 'react-redux';
 import './style.css'
 import Icon from 'react-fa'
+import * as displayErrorActions from 'gModules/displayErrors/actions.js'
 
 function mapStateToProps(state) {
   return {
@@ -14,7 +15,7 @@ function mapStateToProps(state) {
 export default class ErrorModal extends Component {
 
   _closeModal() {
-    console.log('trying to close!')
+    this.props.dispatch(displayErrorActions.close())
   }
 
   render() {
@@ -34,7 +35,7 @@ export default class ErrorModal extends Component {
       }
     };
 
-    const isOpen = true
+    const isOpen = this.props.displayError && (this.props.displayError.length !== 0)
     return(
       <Modal
         isOpen={isOpen}
