@@ -1,5 +1,4 @@
 export default function metrics(state = [], action) {
-  console.log('in metrics?')
   switch (action.type) {
   case 'SPACES_FETCH_SUCCESS':
     let newMetrics = _.flatten(action.records.map(e => _.get(e, 'graph.metrics'))).filter(e => e)

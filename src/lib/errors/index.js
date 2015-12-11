@@ -4,10 +4,15 @@ export function captureApiError(locationName, jqXHR, textStatus, errorThrown, pa
   const {responseText, statusText, status} = jqXHR
   const errorParams = {errorThrown, locationName, textStatus, statusText, status, ...params}
   sentry.captureMessage(`AJAX Error - ${locationName}`, errorParams)
-  console.log(`AJAX Error - ${locationName}`, errorParams)
+  console.error(`AJAX Error - ${locationName}`, errorParams)
 }
 
 export function searchError(name, e){
   sentry.captureException(e, name)
-  console.log(`AlgoliaError ${name}`, e)
+  console.error(`AlgoliaError ${name}`, e)
+}
+
+export function generalError(name, params){
+  console.error('generalError', name, params)
+  sentry.captureMessage(name, params)
 }
