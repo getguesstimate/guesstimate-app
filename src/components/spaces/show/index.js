@@ -48,6 +48,7 @@ export default class SpacesShow extends Component {
                 <SpacesShowHeader onDestroy={this.destroy.bind(this)}
                     onSaveName={this.onSaveName.bind(this)}
                     onSave={this.onSave.bind(this)}
+                    onDestroy={this.destroy.bind(this)}
                     space={space}
                 />
               }

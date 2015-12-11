@@ -30,7 +30,7 @@ let SpaceHeader = ({space, onSave, onDestroy, onSaveName}) => (
             position='right'
         >
           <ul>
-            <DropDownListElement icon={'warning'} text='Delete Model' />
+            <DropDownListElement icon={'warning'} text='Delete Model' onMouseDown={onDestroy}/>
           </ul>
         </DropDown>
       }
