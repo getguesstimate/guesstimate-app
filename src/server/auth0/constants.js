@@ -1,6 +1,6 @@
 const developmentCreds = {
-  AUTH0_CLIENT_ID: 'By2xEUCPuGqeJZqAFMpBlgHRqpCZelj0',
-  AUTH0_DOMAIN: 'guesstimate.auth0.com'
+  AUTH0_CLIENT_ID: 'X0m2PZEyAOqhtLY1Qz9mdetHzQcDsG8U',
+  AUTH0_DOMAIN: 'guesstimate-development.auth0.com'
 };
 
 const productionCreds = {
