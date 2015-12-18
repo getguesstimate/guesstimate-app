@@ -34,6 +34,13 @@ function defaultHtml (incomingData) {
   if (data.head) {
     add(data.head)
   }
+
+  add(`
+      <script>
+      var _elev = window._elev || {};(function() {var i,e;i=document.createElement("script"),i.type='text/javascript';i.async=1,i.src="https://static.elev.io/js/v3.js",e=document.getElementsByTagName("script")[0],e.parentNode.insertBefore(i,e);})();
+      _elev.account_id = '565e550e67ffc';
+      </script>
+      `)
   add('</head>')
   add('<body>')
   add('<div id="root">')
