@@ -60,7 +60,9 @@ class GuesstimateForm extends Component{
   }
 
   componentDidUpdate(newProps) {
-    if (newProps.guesstimateForm.input !== this.props.guesstimateForm.input){
+    const sameMetric = (newProps.guesstimateForm.metric === this.props.guesstimateForm.metric)
+    const sameInput = (newProps.guesstimateForm.input === this.props.guesstimateForm.input)
+    if (sameMetric && !sameInput){
       this._switchMetricClickMode()
     }
   }
