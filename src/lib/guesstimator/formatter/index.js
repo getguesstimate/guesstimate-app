@@ -1,5 +1,6 @@
 import {item as Funct} from './formatters/Function.js'
 import {item as DistributionTextUpTo} from './formatters/DistributionTextUpTo.js'
+import {item as DistributionTextUpToAlternate} from './formatters/DistributionTextUpToAlternate.js'
 import {item as DistributionPointText} from './formatters/DistributionPointText.js'
 import {item as DistributionUniform} from './formatters/DistributionUniform.js'
 import {item as Null} from './formatters/Null.js'
@@ -7,6 +8,7 @@ import {item as Null} from './formatters/Null.js'
 export const formatters = [
   Funct,
   DistributionTextUpTo,
+  DistributionTextUpToAlternate,
   DistributionPointText,
 ]
 
