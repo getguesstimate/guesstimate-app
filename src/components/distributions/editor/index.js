@@ -9,6 +9,7 @@ import DistributionSelector from './distribution-selector.js'
 import * as guesstimator from 'lib/guesstimator/index.js'
 import TextInput from './text-input.js'
 import './style.css'
+import * as elev from 'server/elev/index.js'
 
 class GuesstimateForm extends Component{
   displayName: 'GuesstimateForm'
@@ -123,6 +124,10 @@ class GuesstimateForm extends Component{
 class GuesstimateTypeIcon extends Component{
   displayName: 'GuesstimateTypeIcon'
 
+  _handleShowInfo() {
+    elev.open(elev.GUESSTIMATE_TYPES)
+  }
+
   _handleMouseDown() {
     if (this.props.guesstimateType.isRangeDistribution){
       this.props.toggleDistributionSelector()
@@ -147,7 +152,11 @@ class GuesstimateTypeIcon extends Component{
         </div>
       )
     } else {
-      return (false)
+      return (
+        <div className='GuesstimateTypeQuestion' onMouseDown={this._handleShowInfo.bind(this)}>
+          <Icon name='question-circle'/>
+        </div>
+      )
     }
   }
 }

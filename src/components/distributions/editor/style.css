@@ -60,6 +60,25 @@
   bottom: 0;
 }
 
+.GuesstimateTypeQuestion {
+  float: right;
+  margin-right: 10px;
+  font-size: 1.2em;
+  color: $grey-2;
+  opacity: 0.6;
+  margin-top:3px;
+}
+
+.GuesstimateForm.large .GuesstimateTypeQuestion {
+  font-size: 2em;
+  margin-top: 0;
+}
+
+.GuesstimateTypeQuestion:hover {
+  opacity: 1;
+  cursor: pointer;
+}
+
 .GuesstimateForm.large .DistributionIcon img{
   width: 34px;
 }
