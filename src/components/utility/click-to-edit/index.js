@@ -40,10 +40,12 @@ export default class ViewingMode extends Component {
     return(
       <div className='ViewingMode'>
         <div className='row'>
-          <div className='col-sm-12 header'>
-            Reasoning
-            <span className='editLink' onClick={this.props.onEdit}><Icon name='pencil'/> </span>
-          </div>
+          {this.props.canEdit &&
+            <div className='col-sm-12 header'>
+              Reasoning
+              <span className='editLink' onClick={this.props.onEdit}><Icon name='pencil'/> </span>
+            </div>
+          }
           <div className='col-sm-12 content'>
             {this.props.children}
           </div>
@@ -96,7 +98,10 @@ export default class ClickToEdit extends Component {
         }
 
         {showDescription &&
-          <ViewingMode onEdit={this._open.bind(this)}>
+          <ViewingMode
+              canEdit={this.props.canEdit}
+              onEdit={this._open.bind(this)}
+          >
             {this.props.viewing}
           </ViewingMode>
         }

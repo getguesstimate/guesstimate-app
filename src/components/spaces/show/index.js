@@ -50,6 +50,7 @@ export default class SpacesShow extends Component {
   }
   render () {
     const space = this.props.denormalizedSpace;
+    const sidebarIsViseable = !!space && (space.ownedByMe || !_.isEmpty(space.description))
     return (
     <div className='spaceShow'>
       <div className='hero-unit'>
@@ -82,14 +83,14 @@ export default class SpacesShow extends Component {
         </div>
       </div>
       <div className='content'>
-        {this.state.showSidebar &&
+        {sidebarIsViseable && this.state.showSidebar &&
           <SpaceSidebar
               space={space}
               onClose={this.hideSidebar.bind(this)}
               onSaveDescription={this.onSaveDescription.bind(this)}
           />
         }
-        {!this.state.showSidebar &&
+        {sidebarIsViseable && !this.state.showSidebar &&
           <ClosedSpaceSidebar onOpen={this.openSidebar.bind(this)}/>
         }
         {space && <SpaceCanvas spaceId={space.id}/>}
