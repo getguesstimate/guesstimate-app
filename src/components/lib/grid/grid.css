@@ -61,7 +61,7 @@
 }
 
 .GiantCell {
-  min-width: 250px;
+  width: 250px;
   display: flex;
   padding: 5px;
   flex: 1;

@@ -34,6 +34,15 @@ export default class Cell extends Component {
     onMoveItem: PropTypes.func.isRequired,
   }
 
+  shouldComponentUpdate(newProps, newState) {
+    const difProps = (newProps.isOver !== this.props.isOver) ||
+      (newProps.isSelected !== this.props.isSelected) ||
+      (newState.hover !== this.state.hover)
+    const hasItem = (!!newProps.item || !!this.props.item)
+
+    return (difProps || hasItem)
+  }
+
   state = {
     hover: false
   }
