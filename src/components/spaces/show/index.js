@@ -28,7 +28,7 @@ export default class SpacesShow extends Component {
     denormalizedSpace: PT.object,
   }
 
-  state = {showSidebar: false}
+  state = {showSidebar: true}
 
   onSave() {
     this.props.dispatch(spaceActions.update(parseInt(this.props.spaceId)))
@@ -38,6 +38,9 @@ export default class SpacesShow extends Component {
   }
   onSaveName(name) {
     this.props.dispatch(spaceActions.update(parseInt(this.props.spaceId), {name}))
+  }
+  onSaveDescription(description) {
+    this.props.dispatch(spaceActions.update(parseInt(this.props.spaceId), {description}))
   }
   hideSidebar() {
     this.setState({showSidebar: false})
@@ -80,7 +83,11 @@ export default class SpacesShow extends Component {
       </div>
       <div className='content'>
         {this.state.showSidebar &&
-          <SpaceSidebar onClose={this.hideSidebar.bind(this)}/>
+          <SpaceSidebar
+              space={space}
+              onClose={this.hideSidebar.bind(this)}
+              onSaveDescription={this.onSaveDescription.bind(this)}
+          />
         }
         {!this.state.showSidebar &&
           <ClosedSpaceSidebar onOpen={this.openSidebar.bind(this)}/>

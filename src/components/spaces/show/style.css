@@ -1,5 +1,19 @@
 @import './styles/variables.css';
 
+.spaceShow {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #d4deea;
+}
+
+.canvas-space {
+  display: flex;
+  flex: 1;
+  max-height: 100%;
+}
+
 .hero-unit {
   padding: 2em 0 .5em;
   background-color: $blue-1;
@@ -67,10 +81,14 @@
 
 .SpaceSidebar {
   max-height: 100%;
-  width: 25em;
+  width: 28em;
   box-shadow: 0 1px 3px 0 rgba(0,0,0,0.15);
   z-index: 2;
   background-color: white;
+  margin: 17px 15px 14px 14px;
+  border-radius: 2px;
+  padding: 0 1em;
+  overflow: auto;
 }
 
 .ClosedSpaceSidebar{
@@ -84,19 +102,46 @@
   padding: 7px 7px;
 }
 
+
 .SpaceSidebar .SpaceSidebar-header{
   width: 100%;
   text-align: center;
   position: relative;
-  margin-top: 1.75em;
+  margin-top: 1.25em;
 }
 
 .SpaceSidebar .SpaceSidebar-header{
   color: #777;
 }
 
-.SpaceSidebar .SpaceSidebar-header .close{
-  position: absolute;
-  right: 10px;
-  top: -3px;
+.SpaceSidebar .SpaceSidebar-header .description-icon.fa{
+  float: left;
+  font-size: 1.5em;
+  margin-top:5px;
+}
+
+.SpaceSidebar .SpaceSidebar-header .fa{
+  font-size: 1.25em;
+}
+
+.SpaceSidebar .SpaceSidebar-header .button-close {
+  float: right;
+}
+
+.SpaceSidebar .SpaceSidebar-header .button-close:not(:hover) {
+  color: #bbb;
+}
+
+.SpaceSidebar .SpaceSidebar-body {
+  float: left;
+  width: 100%;
+  margin-top: 1.5em;
+}
+
+.SpaceSidebar .SpaceSidebar-body .ClickToEdit {
+  padding: 0;
+}
+
+.SpaceSidebar .SpaceSidebar-body .ClickToEdit .EditingMode textarea {
+  min-height: 30em;
 }
