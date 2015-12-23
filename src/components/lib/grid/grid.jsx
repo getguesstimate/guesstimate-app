@@ -49,15 +49,15 @@ export default class Grid extends Component{
   }
 
   _rowCount() {
-    const lowestItem = Math.max(...this.props.children.map(e => parseInt(e.props.location.row))) + 6
-    const selected = parseInt(this.props.selected.row) + 10
-    return Math.max(20, lowestItem, selected) || 6;
+    const lowestItem = Math.max(...this.props.children.map(e => parseInt(e.props.location.row))) + 4
+    const selected = parseInt(this.props.selected.row) + 3
+    return Math.max(10, lowestItem, selected) || 6;
   }
 
   _columnCount() {
-    const lowestItem = Math.max(...this.props.children.map(e => parseInt(e.props.location.column))) + 6
-    const selected = parseInt(this.props.selected.column) + 10
-    return Math.max(15, lowestItem, selected) || 6;
+    const lowestItem = Math.max(...this.props.children.map(e => parseInt(e.props.location.column))) + 3
+    const selected = parseInt(this.props.selected.column) + 3
+    return Math.max(6, lowestItem, selected) || 6;
   }
 
   _cell(location) {
