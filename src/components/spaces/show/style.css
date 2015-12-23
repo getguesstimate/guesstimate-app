@@ -58,3 +58,45 @@
   float: left
 }
 
+.spaceShow > .content {
+  display: flex;
+  flex-direction: row;
+  max-height: 100%;
+  flex: 1;
+}
+
+.SpaceSidebar {
+  max-height: 100%;
+  width: 25em;
+  box-shadow: 0 1px 3px 0 rgba(0,0,0,0.15);
+  z-index: 2;
+  background-color: white;
+}
+
+.ClosedSpaceSidebar{
+  background-color: $blue-3;
+  padding-top: 1.5em;
+  padding-left: 3px;
+}
+
+.ClosedSpaceSidebar .open.open{
+  background-color: $blue-1;
+  padding: 7px 7px;
+}
+
+.SpaceSidebar .SpaceSidebar-header{
+  width: 100%;
+  text-align: center;
+  position: relative;
+  margin-top: 1.75em;
+}
+
+.SpaceSidebar .SpaceSidebar-header{
+  color: #777;
+}
+
+.SpaceSidebar .SpaceSidebar-header .close{
+  position: absolute;
+  right: 10px;
+  top: -3px;
+}
