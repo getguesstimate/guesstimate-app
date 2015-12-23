@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react'
 import Logo from '../../assets/logo-grey-2.png'
 import './style.css'
+import video from '../../assets/video-2.png'
 
 export default class Home extends Component {
   displayName: 'Home'
@@ -30,6 +31,10 @@ export default class Home extends Component {
             </div>
           </div>
         </div>
+
+        <a href="https://www.youtube.com/embed/ZPxII_NKLDw" className='video-demo' target='_blank'>
+          <img src={video} />
+        </a>
 
         <div className='row'>
           <div className='col-xs-12 cta'>
