@@ -6,6 +6,8 @@ import SpaceCanvas from 'gComponents/spaces/canvas'
 import SpacesShowHeader from './header.js'
 import * as spaceActions from 'gModules/spaces/actions.js'
 import { denormalizedSpaceSelector } from '../denormalized-space-selector.js';
+import SpaceSidebar from './sidebar.js'
+import ClosedSpaceSidebar from './closed_sidebar.js'
 
 function mapStateToProps(state) {
   return {
@@ -26,6 +28,8 @@ export default class SpacesShow extends Component {
     denormalizedSpace: PT.object,
   }
 
+  state = {showSidebar: false}
+
   onSave() {
     this.props.dispatch(spaceActions.update(parseInt(this.props.spaceId)))
   }
@@ -34,6 +38,12 @@ export default class SpacesShow extends Component {
   }
   onSaveName(name) {
     this.props.dispatch(spaceActions.update(parseInt(this.props.spaceId), {name}))
+  }
+  hideSidebar() {
+    this.setState({showSidebar: false})
+  }
+  openSidebar() {
+    this.setState({showSidebar: true})
   }
   render () {
     const space = this.props.denormalizedSpace;
@@ -68,7 +78,15 @@ export default class SpacesShow extends Component {
           </div>
         </div>
       </div>
-      {space && <SpaceCanvas spaceId={space.id}/>}
+      <div className='content'>
+        {this.state.showSidebar &&
+          <SpaceSidebar onClose={this.hideSidebar.bind(this)}/>
+        }
+        {!this.state.showSidebar &&
+          <ClosedSpaceSidebar onOpen={this.openSidebar.bind(this)}/>
+        }
+        {space && <SpaceCanvas spaceId={space.id}/>}
+      </div>
       </div>
     )
   }
