@@ -28,19 +28,6 @@ body {
 }
 
 
-.spaceShow {
-  flex: 2;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.canvas-space {
-  display: flex;
-  flex: 1;
-  max-height: 100%;
-}
-
 .pageHeader {
 
 }
