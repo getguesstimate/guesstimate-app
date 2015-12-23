@@ -58,7 +58,22 @@
   font-weight: 400;
 }
 
+.homePage {
+  text-align: center;
+}
+
 .homePage .cta {
   margin-top: 5em;
   text-align: center;
+}
+
+.homePage .video-demo img{
+  width: 15em;
+  border-radius: 1em;
+  border: 5px solid #bbb;
+  margin-top: 5em;
+}
+
+.homePage .video-demo img:hover{
+  border-color: #DA2626
 }
