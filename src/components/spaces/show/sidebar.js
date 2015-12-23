@@ -14,7 +14,9 @@ export default class DescriptionViewer extends Component {
 
 export default class SpaceSidebar extends Component {
   render() {
-    const description = _.get(this.props, 'space.description')
+    const {space} = this.props
+    const description = _.get(space, 'description')
+    const canEdit = !!_.get(space, 'ownedByMe')
     return (
       <div className='SpaceSidebar'>
         <div className='SpaceSidebar-header'>
@@ -27,6 +29,7 @@ export default class SpaceSidebar extends Component {
             emptyValue={<span className='emptyValue'>Describe this model...</span>}
             editingSaveText={'Save'}
             onSubmit={this.props.onSaveDescription}
+            canEdit={canEdit}
             value={description}
           />
         </div>
