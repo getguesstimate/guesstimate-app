@@ -41,6 +41,8 @@ function defaultHtml (incomingData) {
       _elev.account_id = '565e550e67ffc';
       </script>
       `)
+
+  add(`<script charSet="ISO-8859-1" src="//fast.wistia.com/assets/external/E-v1.js" async></script>`)
   add('</head>')
   add('<body>')
   add('<div id="root">')
