@@ -67,13 +67,23 @@
   text-align: center;
 }
 
-.homePage .video-demo img{
-  width: 15em;
-  border-radius: 1em;
-  border: 5px solid #bbb;
+.wistia_responsive_padding {
+  padding:56.25% 0 0 0;
+  position:relative;
+}
+
+.wistia_responsive_wrapper { 
+  height:100%;
+  left:0;
+  position:absolute;
+  top:0;
+  width:100%;
+}
+
+.wistia_embed {
+ display:inline-block;
+  height:240px;
+  width:415px;
   margin-top: 5em;
 }
 
-.homePage .video-demo img:hover{
-  border-color: #DA2626
-}

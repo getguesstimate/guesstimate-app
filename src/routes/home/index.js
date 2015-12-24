@@ -32,9 +32,9 @@ export default class Home extends Component {
           </div>
         </div>
 
-        <a href="https://www.youtube.com/embed/ZPxII_NKLDw" className='video-demo' target='_blank'>
-          <img src={video} />
-        </a>
+        <span className="wistia_embed wistia_async_ua8kd9n06a popover=true popoverAnimateThumbnail=true videoFoam=true" >
+          &nbsp;
+        </span>
 
         <div className='row'>
           <div className='col-xs-12 cta'>
