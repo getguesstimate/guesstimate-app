@@ -42,7 +42,7 @@ export default class MetricPropagation {
     this.propagationId = propagationId
 
     this.firstPass = true
-    this.remainingSimulations = [10, 5000]
+    this.remainingSimulations = [5, 5000]
     this.stepNumber = 0
     this.halted = false
   }
@@ -51,7 +51,6 @@ export default class MetricPropagation {
     if (this._needsMoreSamples(graph)) {
       const sampleCount = this.remainingSimulations[this.stepNumber]
       let simulation = this._simulate(sampleCount, graph, dispatch)
-
       if (simulation) {
         const errors = this.errors(simulation)
         this._dispatch(dispatch, simulation)
@@ -71,7 +70,7 @@ export default class MetricPropagation {
 
     const s = this._existingSimulation(graph)
     const isUncertain = !hasNoUncertainty(s)
-    const hasRemainingSimulations = (this.remainingSimulations.length > 0)
+    const hasRemainingSimulations = (this.remainingSimulations.length > this.stepNumber)
     const notObsolete = !isObsolete(this.propagationId, s)
 
     return (isUncertain && hasRemainingSimulations && notObsolete && !this.halted)
