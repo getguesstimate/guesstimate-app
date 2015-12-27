@@ -41,3 +41,7 @@ export function toDgraph(spaceId, graph){
   dGraph.ownedByMe = sameIds(_.get(spaceUser, 'id'), _.get(graph, 'me.id'))
   return dGraph
 }
+
+export function canEdit(space, me){
+  return (space.user_id === me.id)
+}
