@@ -6,6 +6,7 @@ import _ from 'lodash'
 import app from 'ampersand-app'
 import {rootUrl} from 'servers/guesstimate-api/constants.js'
 import {captureApiError} from 'lib/errors/index.js'
+import {changeSaveState} from 'gModules/canvas_state/actions.js'
 
 let standardActionCreators = actionCreatorsFor('spaces');
 
@@ -113,6 +114,7 @@ export function update(spaceId, params={}) {
 
     const action = standardActionCreators.updateStart(space);
     dispatch(action)
+    dispatch(changeSaveState('SAVING'))
 
     const request = formattedRequest({
       state: getState(),
@@ -126,9 +128,11 @@ export function update(spaceId, params={}) {
     request.done((data) => {
       const action = standardActionCreators.updateSuccess(data)
       dispatch(action)
+      dispatch(changeSaveState('SAVED'))
     })
     request.fail((jqXHR, textStatus, errorThrown) => {
       captureApiError('SpacesUpdate', jqXHR, textStatus, errorThrown, {url: (rootUrl + 'spaces/' + spaceId)})
+      dispatch(changeSaveState('ERROR'))
     })
   }
 }
