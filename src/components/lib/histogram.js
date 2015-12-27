@@ -34,7 +34,6 @@ export default class Histogram extends React.Component {
   };
 
   render() {
-    console.log('re-rendering histogram')
     var { top, right, bottom, left, data, width, height } = this.props;
 
     let xScale = getXScale(data, width);

@@ -8,7 +8,7 @@ import {addPartialSimulation} from 'gModules/simulations/actions'
 import Simulator from './simulator'
 
 function isRecentPropagation(propagationId: number, simulation: Simulation) {
-  return !_.has(simulation, 'propagation') || (propagationId >= simulation.prapogation)
+  return !_.has(simulation, 'propagationId') || (propagationId >= simulation.propagationId)
 }
 
 function hasNoUncertainty(simulation: Simulation) {
@@ -42,7 +42,7 @@ export default class MetricPropagation {
     this.propagationId = propagationId
 
     this.firstPass = true
-    this.remainingSimulations = [3, 5000]
+    this.remainingSimulations = [5, 5000]
     this.stepNumber = 0
     this.halted = false
   }
