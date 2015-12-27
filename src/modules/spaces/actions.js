@@ -135,6 +135,6 @@ export function update(spaceId, params={}) {
 
 export function registerChange(spaceId) {
   return (dispatch, getState) => {
-    console.log('autosaving spaceId', spaceId)
+    dispatch(update(spaceId))
   }
 }
