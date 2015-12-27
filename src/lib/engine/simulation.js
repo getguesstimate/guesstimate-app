@@ -1,9 +1,17 @@
 import * as sample from './sample';
 
 export function combine(simulations) {
+  let recentSimulations = simulations
+
+  if (_.any(simulations, s => s.propagationId)) {
+    const recentPropagation = _.max(simulations.map(s => s.propagationId))
+    recentSimulations = simulations.filter(s => {return s.propagationId === recentPropagation})
+  }
+
   return {
-    metric: simulations[0].metric,
-    sample: sample.combine(simulations.map(s => s.sample))
+    metric: recentSimulations[0].metric,
+    propagationId: recentSimulations[0].propagationId,
+    sample: sample.combine(recentSimulations.map(s => s.sample))
   };
 }
 

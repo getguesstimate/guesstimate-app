@@ -18,8 +18,4 @@ export default class Simulator {
     this.simulation = simulation
     return this
   }
-
-  toDispatch(): any{
-    return addPartialSimulation(this.simulation)
-  }
 }

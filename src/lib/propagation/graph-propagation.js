@@ -46,7 +46,9 @@ export class GraphPropagation {
     this.orderedMetricPropagations = this.orderedMetricIds.map(id => (new MetricPropagation(id, this.id)))
 
     this.currentStep = 0
-    this.totalSteps = this.orderedMetricPropagations.length * 3
+
+    const remainingPropagationSteps = this.orderedMetricPropagations.map(p => p.remainingSimulations.length)
+    this.totalSteps = _.sum(remainingPropagationSteps)
   }
 
   run(): void {
