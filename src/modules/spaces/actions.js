@@ -137,8 +137,15 @@ export function update(spaceId, params={}) {
   }
 }
 
+function meCanEdit(spaceId, state) {
+  const {spaces, me} = state
+  const space = e.space.get(spaces, spaceId)
+  return e.space.canEdit(space, me)
+}
+
 export function registerChange(spaceId) {
   return (dispatch, getState) => {
-    dispatch(update(spaceId))
+    const canEdit = meCanEdit(spaceId, getState())
+    canEdit && dispatch(update(spaceId))
   }
 }
