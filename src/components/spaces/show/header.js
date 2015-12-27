@@ -6,6 +6,19 @@ import Icon from 'react-fa'
 import DropDown from 'gComponents/utility/drop-down/index.js'
 import {DropDownListElement} from 'gComponents/utility/drop-down/index.js'
 import {SpaceName} from './spaceName.js'
+import './header.css'
+
+const SaveMessage = ({saveState}) => (
+  <div className='saveMessage'>
+    {saveState == 'SAVING' && 'Saving...'}
+    {saveState == 'ERROR' &&
+      <div className='ui red horizontal label'>
+        ERROR SAVING
+      </div>
+    }
+    {saveState == 'SAVED' && 'All changes saved'}
+  </div>
+)
 
 let SpaceHeader = ({space, onSave, onDestroy, onSaveName}) => (
   <div className='header'>
@@ -35,16 +48,7 @@ let SpaceHeader = ({space, onSave, onDestroy, onSaveName}) => (
         </DropDown>
       }
 
-      {space.ownedByMe &&
-        <a disabled={!!space.busy} onClick={onSave} className='space-header-action'>
-          {'Save'}
-        </a>
-      }
-      {!!space.busy &&
-        <span className='save-message'>
-          {'saving...'}
-        </span>
-      }
+      <SaveMessage saveState={space.canvasState.saveState} ownedByMe={space.ownedByMe}/>
       </div>
   </div>
 )

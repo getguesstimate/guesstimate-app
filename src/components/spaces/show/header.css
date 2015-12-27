@@ -1,0 +1,12 @@
+@import './styles/variables.css';
+
+.header .saveMessage {
+  float: left;
+  margin-top: 8px;
+  color: $grey-1;
+  padding: 0 15px;
+}
+
+.header .saveMessage .label{
+  margin-top: -10px;
+}

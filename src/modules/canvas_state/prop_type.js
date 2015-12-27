@@ -14,4 +14,10 @@ export default PropTypes.shape({
     'DEFAULT',
     'FUNCTION_INPUT_SELECT'
   ]).isRequired,
+  saveState: PT.oneOf([
+    'NONE',
+    'SAVING',
+    'ERROR',
+    'SAVED'
+  ]).isRequired,
 })
