@@ -3,7 +3,6 @@ import * as spaceActions from 'gModules/spaces/actions.js'
 
 function findSpaceId(getState, metricId) {
   const metric = e.metric.get(getState().metrics, metricId)
-  console.log('here1', metric)
   return _.get(metric, 'space')
 }
 
@@ -17,7 +16,6 @@ export function addMetric(item) {
     let newItem = Object.assign(item, e.metric.create(existingReadableIds))
 
     dispatch({ type: 'ADD_METRIC', item: newItem });
-    registerChange(dispatch, findSpaceId(getState, item.id))
   }
 }
 
