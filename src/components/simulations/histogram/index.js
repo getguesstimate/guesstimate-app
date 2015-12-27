@@ -18,7 +18,7 @@ class SimulationHistogram extends Component{
 
   shouldComponentUpdate(nextProps) {
     return (
-      (_.get(nextProps, 'simulation.stats') !== _.get(this.props, 'simulation.stats')) ||
+      (_.get(nextProps, 'simulation.stats.mean') !== _.get(this.props, 'simulation.stats.mean')) ||
       (nextProps.containerWidth !== this.props.containerWidth) ||
       (nextProps.height !== this.props.height)
     )
