@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "BUILD_DEV=1 NODE_ENV=development API_ENV=development webpack-dev-server",
-    "start": "BUILD_DEV=0 NODE_ENV=development API_ENV=development webpack-dev-server",
+    "start": "BUILD_DEV=0 NODE_ENV=development API_ENV=production webpack-dev-server",
     "build": "BUILD_DEV=0 API_ENV=production webpack",
     "deploy": "surge -p public -d getguesstimate.com",
     "stage": "surge -p public -d stage.getguesstimate.com",
@@ -81,6 +81,7 @@
     "local-links": "^1.4.0",
     "lodash": "^3.10.1",
     "mathjs": "^2.2.0",
+    "moment": "^2.10.6",
     "node-uuid": "^1.4.3",
     "numeral": "~1.5.3",
     "postcss-import": "^7.0.0",
