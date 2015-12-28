@@ -43,6 +43,7 @@ function defaultHtml (incomingData) {
       `)
 
   add(`<script charSet="ISO-8859-1" src="//fast.wistia.com/assets/external/E-v1.js" async></script>`)
+  add(`<link href='https://fonts.googleapis.com/css?family=Lato:400,700,300' rel='stylesheet' type='text/css'>`)
   add('</head>')
   add('<body>')
   add('<div id="root">')
