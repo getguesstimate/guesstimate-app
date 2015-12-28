@@ -8,8 +8,8 @@ var cfg = getConfig({
   clearBeforeBuild: true,
   html: function (context) {
     return {
-      '200.html': context.defaultTemplate(),
-      'index.html': context.defaultTemplate()
+      '200.html': context.defaultTemplate({title: 'Guesstimate'}),
+      'index.html': context.defaultTemplate({title:'Guesstimate'})
     }
   }
 });
