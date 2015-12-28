@@ -11,7 +11,7 @@
   font-size: 5em;
   border-radius: 0.3em;
   padding: 0.25em;
-  font-family: Lato;
+  font-family: Lato, Arial, sans-serif;
   display: inline-block;
 }
 
@@ -40,7 +40,7 @@
   color: #666;
   font-weight: 400;
   font-size: 2.7em;
-  font-family: Lato;
+  font-family: Lato, Arial, sans-serif;
   margin-top: .5em;
 
 }
@@ -52,7 +52,7 @@
 .homePage .guesstimate-slogan p {
   text-align: center;
   font-size: 2em;
-  font-family: Lato;
+  font-family: Lato, Arial, sans-serif;
   color: $grey-2;
   padding: 0 4em;
   font-weight: 400;
