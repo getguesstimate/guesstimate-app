@@ -5,16 +5,21 @@ import MetricLabel from '../../metrics/label'
 
 import * as Space from 'gEngine/space';
 import './style.css'
+import moment from 'moment'
+import Icon from 'react-fa'
 
+function formatDate(date) {
+ return moment(new Date(date)).format('ll')
+}
 let SpaceListItem = ({space, showUser}) => (
   <div className='SpaceListItem'>
     <a href={Space.url(space)}>
     <div className='row'>
-      <div className='col-xs-6'>
+      <div className='col-xs-9'>
         <h3> {space.name} </h3>
       </div>
         {space.user && showUser &&
-          <div className='col-xs-6'>
+          <div className='col-xs-3'>
             <div className='user-tag'>
               <img
                   className='ui avatar image'
@@ -27,10 +32,11 @@ let SpaceListItem = ({space, showUser}) => (
     </div>
 
     <div className='row'>
-      <div className='col-xs-12'>
-        {space.metrics.filter(m => !!m.name).map( m => {
-          return (<MetricLabel metric={m} key={m.id}/>)
-        })}
+      <div className='col-xs-9 updated-at'>
+        <p>Updated {formatDate(space.updated_at)}</p>
+      </div>
+      <div className='col-xs-3 metric-count'>
+        <p>{space.metrics.length} Metrics</p>
       </div>
     </div>
     </a>
