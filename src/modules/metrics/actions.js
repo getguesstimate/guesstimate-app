@@ -12,7 +12,8 @@ function registerChange(dispatch, spaceId) {
 
 export function addMetric(item) {
   return (dispatch, getState) => {
-    const existingReadableIds = getState().metrics.map(m => m.readableId)
+    const spaceMetrics = getState().metrics.filter(m => m.space === item.space)
+    const existingReadableIds = spaceMetrics.map(m => m.readableId)
     let newItem = Object.assign(item, e.metric.create(existingReadableIds))
 
     dispatch({ type: 'ADD_METRIC', item: newItem });
