@@ -121,12 +121,14 @@ export default class Grid extends Component{
                 )
               })
             }
-            <EdgeContainer
-                edges={edges}
-                refs={this.refs}
-                rowCount={rowCount}
-                rowHeights={rowHeights}
-            />
+            {!_.isEmpty(edges) &&
+              <EdgeContainer
+                  edges={edges}
+                  refs={this.refs}
+                  rowCount={rowCount}
+                  rowHeights={rowHeights}
+                />
+            }
           </div>
         </div>
       </div>
