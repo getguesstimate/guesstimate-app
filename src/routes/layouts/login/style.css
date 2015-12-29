@@ -21,6 +21,11 @@
   cursor: pointer;
 }
 
+.isBare .header-right-menu .item.text {
+  color: #1487D0;
+  font-size: 1.1em;
+}
+
 .header-right-menu a.item > .fa {
   font-size: 1.8em;
   color: $grey-2;

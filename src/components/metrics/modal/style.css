@@ -4,6 +4,7 @@ $grey: #EEE;
 
 .metricModal {
   background-color: rgba(240,240,240,0.9);
+  margin-bottom: 2em;
 }
 
 .metricModal > .top {

@@ -11,16 +11,12 @@
   width: 100%;
   display:flex;
   flex-direction: column;
-  cursor: pointer;
+  cursor: move;
 }
 
 .metricCard:not(.titleView) {
-  background-color: rgba(255,255,255,1);
+  background-color: rgba(255,255,255,0.95);
   border-bottom: 2px solid #ccc;
-}
-
-.selected .metricCard{
-  cursor: auto;
 }
 
 .row > .sqwish-right {
@@ -43,7 +39,7 @@
 .metricCard > .section {
   position: relative;
   flex: 1;
-  padding: 0.5em;
+  padding: 0.35em;
 }
 
 .metricCard .react-d3-histogram {
@@ -60,6 +56,8 @@
 
 .metricCard .DistributionSummary {
   margin: 5px 0 0 5px;
+  font-weight: 500;
+  font-family: Lato, Arial, sans-serif;
 }
 
 .selected .metricCard {
@@ -72,4 +70,8 @@
 
 .ReactModal__Overlay--after-open {
    z-index: 5;
+}
+
+.ReactModal__Overlay--after-open {
+  overflow: auto;
 }
