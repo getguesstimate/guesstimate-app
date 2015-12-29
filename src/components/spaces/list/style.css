@@ -1,5 +1,12 @@
 @import './variables.css';
 
+.SpaceList {
+  border-left: 1px solid $grey-1;
+  padding-left: 10px;
+  float: left;
+  width: 100%;
+}
+
 .SpaceList > .nextPage {
   text-align: center;
   width: 100%;

@@ -2,6 +2,8 @@
 
 .GeneralSpaceIndex {
   margin-top:2em;
+  float: left;
+  width: 100%;
 }
 
 .GeneralSpaceIndex  h2 {
@@ -19,7 +21,3 @@
   border-bottom: none;
 }
 
-.GeneralSpaceIndex .spaceList {
-  border-left: 1px solid $grey-1;
-  padding-left: 10px;
-}

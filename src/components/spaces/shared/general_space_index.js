@@ -56,9 +56,7 @@ export default class GeneralSpaceIndex extends Component{
         </div>
 
         <div className='col-sm-9'>
-          <div className='spaceList'>
-            <SpaceList spaces={spaces} showUsers={true} hasMorePages={hasMorePages} loadMore={this._nextPage.bind(this)}/>
-          </div>
+          <SpaceList spaces={spaces} showUsers={true} hasMorePages={hasMorePages} loadMore={this._nextPage.bind(this)}/>
         </div>
       </div>
     )
