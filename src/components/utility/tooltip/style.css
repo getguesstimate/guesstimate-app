@@ -2,18 +2,19 @@
   position: absolute;
   top: 100%;
   margin-top: 10px;
-  background-color: rgba(255,255,255,0.9);
+  background-color: rgba(255,255,255,0.95);
   border-bottom: 2px solid rgba(0,0,0,0.2);
   padding: 0.75em;
   width: 207%;
   border-radius: 3px;
   z-index: 100;
   left: -3px;
-  color: #666;
+  color: #333;
   line-height: 1.3em;
   min-height: 40px;
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   line-height: 1.4rem;
+  font-weight: 400;
 }
 
 .ToolTip .arrow-up {

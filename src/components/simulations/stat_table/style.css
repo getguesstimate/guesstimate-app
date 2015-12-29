@@ -1,12 +1,13 @@
 @import './styles/variables.css';
 
 table.MetricStatTable {
-  float: right;
   margin-top: 10px;
-  font-size: 10px;
-  color: $blue-1;
-  width: 110px;
+  font-weight: 500;
+  font-size: 11px;
+  color: #666;
+  width: 130px;
   background-color: rgba(255,255,255,0.3);
+  margin-left: 6px;
 }
 
 table.MetricStatTable td {

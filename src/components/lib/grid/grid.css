@@ -61,14 +61,15 @@
 }
 
 .GiantCell {
-  width: 250px;
+  width: 210px;
   display: flex;
-  padding: 5px;
+  padding: 4px;
   flex: 1;
   min-height: 60px;
   z-index: 1;
-  border-right: 1px dashed #EFF9FF;
-  border-bottom: 1px dashed #EFF9FF;
+  border-right: 1px dashed;
+  border-bottom: 1px dashed;
+  border-color: rgba(0, 25, 95, 0.15);
 }
 
 .showEdges .GiantCell {
@@ -89,7 +90,7 @@
 }
 
 .GiantCell.hovered .GiantEmptyCell {
-  background-color: #ECF2F5;
+  background-color: rgba(244, 251, 255, 0.95);
 }
 
 .GiantCell.hovered {
@@ -98,7 +99,7 @@
 
 .GiantEmptyCell:focus {
   outline: none;
-  border: 2px solid #6CAED1;
+  border: 2px solid $blue-1;
 }
 
 .IsOver .GiantEmptyCell, .IsOver .isDragging {

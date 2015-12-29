@@ -17,6 +17,7 @@
 
 .guesstimate-logo img{
   width: 7em;
+  max-width: 100%;
 }
 
 .guesstimate-logo .guesstimate-name{
@@ -58,6 +59,11 @@
 }
 
 .homePage .cta {
+  margin-top: 5em;
+  text-align: center;
+}
+
+.homePage .descriptions {
   margin-top: 5em;
   text-align: center;
 }
