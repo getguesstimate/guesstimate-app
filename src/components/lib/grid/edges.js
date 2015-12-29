@@ -53,7 +53,7 @@ export default class Edges extends Component {
 
   render() {
     const {columnWidth, containerHeight, containerWidth, edges, rowHeights} = this.props
-    const showEdges = _.get(edges, 'length') && _.get(rowHeights, 'length') && columnWidth
+    const showEdges = !!(_.get(edges, 'length') && _.get(rowHeights, 'length') && columnWidth)
     return (
       <div className='GiantGrid--Arrows'>
       {(edges.length > 0) &&
@@ -62,7 +62,7 @@ export default class Edges extends Component {
             height={containerHeight}
             width={containerWidth}
         >
-          <defs dangerouslySetInnerHTML={{__html: this.defs()}}/>
+          <defs key={'defs'} dangerouslySetInnerHTML={{__html: this.defs()}}/>
           {showEdges &&
             edges.map(e => {
               const input = this._toRectangle(e.input)
