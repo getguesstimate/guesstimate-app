@@ -11,10 +11,11 @@
 }
 
 .SpaceListItem a h3 {
-  color: $black-1;
+  color: #333;
   font-weight: 800;
   font-family: Lato;
   margin-bottom: 0.2em;
+  font-size: 1.45em;
 }
 
 .SpaceListItem .user-tag {
@@ -30,6 +31,12 @@
 
 .SpaceListItem p{
   color: $grey-2;
+}
+
+.SpaceListItem .description p{
+  color: #666;
+  font-size: 1.1em;
+  margin-top: 0.6em;
 }
 
 .SpaceListItem .metric-count p{
