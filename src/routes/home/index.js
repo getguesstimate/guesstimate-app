@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 import Logo from '../../assets/logo-grey-2.png'
+import LogoWord from '../../assets/logo-word.png'
 import './style.css'
 import video from '../../assets/video-2.png'
 
@@ -15,26 +16,18 @@ export default class Home extends Component {
               <div className='col-sm-12'>
                 <div className='guesstimate-logo-outer'>
                   <div className='guesstimate-logo'>
-                    <div className='guesstimate-icon'>
-                      <img src={Logo} />
-                    </div>
-                    <div className='guesstimate-name'>Guesstimate</div>
+                    <img src={LogoWord} />
                   </div>
                 </div>
               </div>
 
               <div className='col-sm-12 guesstimate-slogan'>
-                <h2> Reduce uncertainty by doing math with probability distributions.
-                </h2>
+                <h2> {'A spreadsheet for things'} <br/>{"that aren't certain"} </h2>
               </div>
 
             </div>
           </div>
         </div>
-
-        <span className="wistia_embed wistia_async_ua8kd9n06a popover=true popoverAnimateThumbnail=true videoFoam=true" >
-          &nbsp;
-        </span>
 
         <div className='row'>
           <div className='col-xs-12 cta'>
@@ -42,6 +35,9 @@ export default class Home extends Component {
           </div>
         </div>
 
+        <span className="wistia_embed wistia_async_ua8kd9n06a popover=true popoverAnimateThumbnail=true videoFoam=true" >
+          &nbsp;
+        </span>
       </div>
     )
   }
