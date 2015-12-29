@@ -37,26 +37,27 @@ export default class GeneralSpaceIndex extends Component{
     const spaces = searchSpaces.hits || []
     const hasMorePages = _.isFinite(searchSpaces.page) && (searchSpaces.page < (searchSpaces.nbPages - 1))
     return (
-      <div className='GeneralSpaceIndex' style={style}>
-        <div className='row header'>
+      <div className='GeneralSpaceIndex row' style={style}>
+        <div className='col-sm-3 header'>
+          <div className='row header'>
 
-          <div className='col-sm-6'>
-            <div className='ui header'>
-              {this.props.children}
+            <div className='col-sm-12'>
+              <div className='ui header'>
+                {this.props.children}
+              </div>
             </div>
-          </div>
 
-          <div className='col-sm-6'>
-            <div className='stuff search-form'>
-              <div className='ui form'>
-                <input name='search' placeholder='Search Models' onChange={this._search.bind(this)}/>
+            <div className='col-sm-12'>
+              <div className='stuff search-form'>
+                <div className='ui form'>
+                  <input name='search' placeholder='Search Models' onChange={this._search.bind(this)}/>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div className='ui divider'></div>
-        <div className='row'>
+        <div className='col-sm-9'>
           <div className='spaceList'>
             <SpaceList spaces={spaces} showUsers={true} hasMorePages={hasMorePages} loadMore={this._nextPage.bind(this)}/>
           </div>

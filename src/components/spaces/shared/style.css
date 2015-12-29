@@ -6,9 +6,10 @@
 
 .GeneralSpaceIndex > .header h2 {
   margin-top: 10px;
-  color: $grey-2;
+  color: $blue-1;
   font-family: Lato;
   float: left;
+  margin-bottom: 0.5em;
 }
 
 .GeneralSpaceIndex > .divider.ui.divider {
@@ -16,4 +17,9 @@
   margin-bottom: 3em;
   border-color: $grey-1;
   border-bottom: none;
+}
+
+.GeneralSpaceIndex .spaceList {
+  border-left: 1px solid $grey-1;
+  padding-left: 10px;
 }

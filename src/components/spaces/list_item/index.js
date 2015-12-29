@@ -7,10 +7,24 @@ import * as Space from 'gEngine/space';
 import './style.css'
 import moment from 'moment'
 import Icon from 'react-fa'
+import removeMd from 'remove-markdown'
+
+function formatDescription(description) {
+  const maxLength = 300
+
+  if (_.isEmpty(description)){ return '' }
+
+  const withoutMarkdown = removeMd(description)
+  if (withoutMarkdown.length < maxLength) { return withoutMarkdown }
+
+  const truncated = withoutMarkdown.substring(0, maxLength)
+  return `${truncated}...`
+}
 
 function formatDate(date) {
  return moment(new Date(date)).format('ll')
 }
+
 let SpaceListItem = ({space, showUser}) => (
   <div className='SpaceListItem'>
     <a href={Space.url(space)}>
@@ -39,6 +53,14 @@ let SpaceListItem = ({space, showUser}) => (
         <p>{space.metrics.length} Metrics</p>
       </div>
     </div>
+
+    {!_.isEmpty(space.description) &&
+      <div className='row description'>
+        <div className='col-xs-12'>
+          <p> {formatDescription(space.description)} </p>
+        </div>
+      </div>
+    }
     </a>
   </div>
 )
