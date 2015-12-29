@@ -4,12 +4,12 @@
   margin-top:2em;
 }
 
-.GeneralSpaceIndex > .header h2 {
+.GeneralSpaceIndex  h2 {
   margin-top: 10px;
   color: $blue-1;
   font-family: Lato;
-  float: left;
   margin-bottom: 0.5em;
+  text-align: center;
 }
 
 .GeneralSpaceIndex > .divider.ui.divider {

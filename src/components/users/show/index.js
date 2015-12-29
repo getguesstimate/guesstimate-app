@@ -29,7 +29,6 @@ export default class UserShow extends Component{
           <GeneralSpaceIndex userId={user.id}>
             <div className='main-user-tag'>
               <img
-                  className='ui avatar image'
                   src={user.picture}
               />
             </div>

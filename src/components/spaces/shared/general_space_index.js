@@ -38,13 +38,11 @@ export default class GeneralSpaceIndex extends Component{
     const hasMorePages = _.isFinite(searchSpaces.page) && (searchSpaces.page < (searchSpaces.nbPages - 1))
     return (
       <div className='GeneralSpaceIndex row' style={style}>
-        <div className='col-sm-3 header'>
-          <div className='row header'>
+        <div className='col-sm-3'>
+          <div className='row'>
 
             <div className='col-sm-12'>
-              <div className='ui header'>
-                {this.props.children}
-              </div>
+              {this.props.children}
             </div>
 
             <div className='col-sm-12'>
