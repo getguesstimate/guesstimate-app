@@ -15,13 +15,8 @@
   display: inline-block;
 }
 
-.guesstimate-logo .guesstimate-icon {
-  float: left;
-  margin-right: 0.3em;
-}
-
-.guesstimate-logo .guesstimate-icon img{
-  width: 0.8em;
+.guesstimate-logo img{
+  width: 7em;
 }
 
 .guesstimate-logo .guesstimate-name{
@@ -37,9 +32,9 @@
 
 .homePage .guesstimate-slogan h2 {
   text-align: center;
-  color: #666;
+  color: #333;
   font-weight: 400;
-  font-size: 2.7em;
+  font-size: 3em;
   font-family: Lato, Arial, sans-serif;
   margin-top: .5em;
 
