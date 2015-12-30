@@ -25,6 +25,7 @@ export default class GuesstimateDescription extends Component {
           editingSaveText={'Save'}
           onSubmit={this.props.onChange}
           value={value}
+          canEdit={true}
         />
       </div>
     )
