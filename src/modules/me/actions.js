@@ -32,8 +32,8 @@ export const signUp = () => {
         dispatch(displayErrorsActions.newError())
       } else {
         dispatch(auth0MeLoaded(profile, token))
-        const {name, username, picture, user_id} = profile
-        dispatch(userActions.create({name, username, picture, auth0_id: user_id}))
+        const {nickname, picture, user_id} = profile
+        dispatch(userActions.create({name: nickname, picture, auth0_id: user_id}))
       }
     }
   )
