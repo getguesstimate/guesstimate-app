@@ -1,6 +1,6 @@
 const initialState = {
   metricCardView: 'normal',
-  edgeView: 'hidden',
+  edgeView: 'visible',
   metricClickMode: 'DEFAULT',
   saveState: 'NONE'
 }
