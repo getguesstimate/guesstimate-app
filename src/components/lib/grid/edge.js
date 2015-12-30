@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 import _ from 'lodash'
+import angleBetweenPoints from 'angle-between-points'
 
 //const isVertical = dd
 class Rectangle {
@@ -13,39 +14,66 @@ class Rectangle {
   _xMiddle() { return (this.left + ((this.right - this.left)/2)) }
   _yMiddle() {  return (this.top + ((this.bottom - this.top)/2)) }
 
-  topPoint() { return {x: this._xMiddle(), y: this.top} }
-  bottomPoint() { return {x: this._xMiddle(), y: this.bottom} }
-  leftPoint() { return {x: this.left, y: this._yMiddle()} }
-  rightPoint() { return {x: this.right, y: this._yMiddle()} }
+  topPoint(adjust) { return {x: this._xMiddle() + adjust, y: this.top} }
+  bottomPoint(adjust) { return {x: this._xMiddle() + adjust, y: this.bottom} }
+  leftPoint(adjust) { return {x: this.left, y: this._yMiddle() + adjust} }
+  rightPoint(adjust) { return {x: this.right, y: this._yMiddle() + adjust} }
+
+  angleTo(otherRectangle) {
+    const other = new Rectangle(otherRectangle)
+    const points = [
+      {x: (this._xMiddle()), y: (-1 * this._yMiddle())},
+      {x: (other._xMiddle()), y: (-1 * other._yMiddle())}
+    ]
+    return angleBetweenPoints(...points)
+  }
 
   positionFrom(otherRectangle) {
-    const sameRow = (Math.abs(otherRectangle.top - this.top) < 200)
-    if (sameRow) {
-      if (this.right > otherRectangle.right) {
-        return 'ON_LEFT'
-      } else {
-        return 'ON_RIGHT'
-      }
+    const angle = this.angleTo(otherRectangle)
+
+    const RECTANGLE_ANGLE = 30
+    // this is 45 for a perfect square
+    //
+    if (angle < RECTANGLE_ANGLE) {
+      return 'ON_RIGHT'
+    } else if (angle < (180 - RECTANGLE_ANGLE)) {
+      return 'ON_TOP'
+    } else if (angle < (180 + RECTANGLE_ANGLE)) {
+      return 'ON_LEFT'
+    } else if (angle < (360 - RECTANGLE_ANGLE)) {
+      return 'ON_BOTTOM'
     } else {
-      if (this.top > otherRectangle.top) {
-        return 'ON_TOP'
-      } else {
-        return 'ON_BOTTOM'
-      }
+      return 'ON_RIGHT'
     }
+  }
+
+  adjustment(otherRectangle) {
+    return this.shouldAdjust(otherRectangle) ? this.adjustmentAmount(otherRectangle) : 0
+  }
+
+  shouldAdjust(otherRectangle) {
+    const angle = this.angleTo(otherRectangle)
+    return (((angle) % 90) < 4)
+  }
+
+  //this randomness really messes up with rendering, will stop for now
+  adjustmentAmount(otherRectangle) {
+    const ADJUSTMENT_RANGE = 20
+    return (Math.random() * ADJUSTMENT_RANGE) - (ADJUSTMENT_RANGE / 2)
   }
 
   showPosition(otherRectangle) {
     const positionFrom = this.positionFrom(otherRectangle)
+    const adjust = 0
     switch (positionFrom) {
     case 'ON_LEFT':
-      return this.leftPoint()
+      return this.leftPoint(adjust)
     case 'ON_RIGHT':
-      return this.rightPoint()
+      return this.rightPoint(adjust)
     case 'ON_TOP':
-      return this.topPoint()
+      return this.topPoint(adjust)
     case 'ON_BOTTOM':
-      return this.bottomPoint()
+      return this.bottomPoint(adjust)
     }
   }
 }

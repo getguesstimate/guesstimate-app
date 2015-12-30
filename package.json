@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "BUILD_DEV=1 NODE_ENV=development API_ENV=development webpack-dev-server",
-    "start": "BUILD_DEV=0 NODE_ENV=development API_ENV=development webpack-dev-server",
+    "start": "BUILD_DEV=0 NODE_ENV=development API_ENV=production webpack-dev-server",
     "build": "BUILD_DEV=0 API_ENV=production webpack",
     "deploy": "surge -p public -d getguesstimate.com",
     "stage": "surge -p public -d stage.getguesstimate.com",
@@ -63,6 +63,7 @@
     "algoliasearch": "^3.9.2",
     "ampersand-app": "^1.0.4",
     "ampersand-router": "^3.0.2",
+    "angle-between-points": "^1.0.0",
     "async": "^1.4.2",
     "auth0-lock": "^7.12.5",
     "autoprefixer-stylus": "^0.8.0",

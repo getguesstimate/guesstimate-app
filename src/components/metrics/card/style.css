@@ -15,7 +15,7 @@
 }
 
 .metricCard:not(.titleView) {
-  background-color: rgba(255,255,255,0.95);
+  background-color: rgba(255,255,255,0.975);
   border-bottom: 2px solid #ccc;
 }
 

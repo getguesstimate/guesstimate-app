@@ -13,6 +13,7 @@ import { runSimulations, deleteSimulations } from 'gModules/simulations/actions'
 import './canvas.styl'
 import { denormalizedSpaceSelector } from '../denormalized-space-selector.js';
 import JSONTree from 'react-json-tree'
+import * as canvasStateActions from 'gModules/canvas_state/actions.js'
 
 function mapStateToProps(state) {
   return {
@@ -55,6 +56,12 @@ export default class CanvasSpace extends Component{
   }
 
   componentDidMount(){
+    const metrics = _.get(this.props.denormalizedSpace, 'metrics')
+    if (!_.isEmpty(metrics) && metrics.length > 19){
+      this.props.dispatch(canvasStateActions.change({edgeView: 'hidden'}))
+    } else {
+      this.props.dispatch(canvasStateActions.change({edgeView: 'visible'}))
+    }
     this.props.dispatch(runSimulations({spaceId: this.props.denormalizedSpace.id}))
   }
 
