@@ -10,7 +10,7 @@ import Layout from './layouts/application'
 
 import Home from './home/index.js'
 import SpaceShow from 'gComponents/spaces/show'
-import SpaceNew from './spaces/new'
+import SpaceNew from 'gComponents/spaces/new/index.js'
 import SpaceIndex from 'gComponents/spaces/index/index.js'
 import ComponentIndex from './component-index'
 import UserShow from 'gComponents/users/show/index.js'
