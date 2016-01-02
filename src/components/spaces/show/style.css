@@ -19,6 +19,16 @@
   background-color: $blue-1;
 }
 
+@media only screen and (max-width: 500px) {
+  .hero-unit {
+    padding: 0.5em 0 .2em;
+  }
+
+  .header-actions {
+    display: none;
+  }
+}
+
 .hero-unit .ui.button.blue {
   background-color: $grey-2;
 }
@@ -36,7 +46,7 @@
   padding: 0.2em 0.4em;
   border-radius: 3px;
   font-family: Lato;
-  font-weigth: 500;
+  font-weight: 500;
   float: left;
   margin-right: 1em;
 }
@@ -44,6 +54,17 @@
 .hero-unit .header-name {
   max-width: 60%;
   float: left;
+}
+
+@media only screen and (max-width: 500px) {
+  .hero-unit h1 {
+    font-size: 1.2em;
+    padding: 0 0 0 0.4em;
+    margin-right: 0em;
+  }
+  .hero-unit .header-name {
+    max-width: 100%;
+  }
 }
 
 .hero-unit .header-actions {
