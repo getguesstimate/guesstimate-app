@@ -10,8 +10,9 @@ function getYScale(data, height) {
 
 function getXScale(data, width) {
   return d3.scale.linear().
-    domain([0, d3.max(data)]).
-    range([0, width]);
+    domain(d3.extent(data)).
+    range([0, width]).
+    nice();
 }
 
 export default class Histogram extends React.Component {
@@ -41,12 +42,13 @@ export default class Histogram extends React.Component {
     let histogramDataFn = d3.layout.histogram().bins(xScale.ticks(bins));
     let histogramData = histogramDataFn(data);
     let yScale = getYScale(histogramData, height);
+    let barWidth = width/histogramData.length;
     return (
       <div className="react-d3-histogram">
         {top && right && bottom && left && width && height &&
           <svg width={width + left + right} height={height + top + bottom}>
             <g transform={"translate(" + left + "," + top + ")"}>
-              {histogramData.map((d, i) => <Bar data={d} xScale={xScale} yScale={yScale} height={height} key={i} />)}
+              {histogramData.map((d, i) => <Bar data={d} xScale={xScale} yScale={yScale} height={height} barWidth={barWidth}  key={i} />)}
               <XAxis height={height} scale={xScale} />
             </g>
           </svg>
@@ -127,19 +129,20 @@ export class Bar extends React.Component {
     data: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
     xScale: React.PropTypes.func.isRequired,
     yScale: React.PropTypes.func.isRequired,
-    height: React.PropTypes.number.isRequired
+    height: React.PropTypes.number.isRequired,
+    barWidth: React.PropTypes.number.isRequired
   };
 
   render() {
-    let { data, xScale, yScale, height } = this.props;
+    let { data, xScale, yScale, height, barWidth } = this.props;
 
     let scaledX = xScale(data.x);
     let scaledY = yScale(data.y);
-    let scaledDx = xScale(data.dx);
+    let scaledDx = Math.abs(xScale(data.dx));
 
     return (
       <g className="react-d3-histogram__bar" transform={"translate(" + scaledX + "," + scaledY + ")"}>
-        <rect width={scaledDx} height={height - scaledY} />
+        <rect width={barWidth} height={height - scaledY} />
       </g>
     );
   }
