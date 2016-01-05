@@ -48,7 +48,7 @@ export default class Histogram extends React.Component {
         {top && right && bottom && left && width && height &&
           <svg width={width + left + right} height={height + top + bottom}>
             <g transform={"translate(" + left + "," + top + ")"}>
-              {histogramData.map((d, i) => <Bar data={d} xScale={xScale} yScale={yScale} height={height} barWidth={barWidth}  key={i} />)}
+              {histogramData.map((d, i) => <Bar data={d} xScale={xScale} yScale={yScale} height={height} barWidth={barWidth} key={i} />)}
               <XAxis height={height} scale={xScale} />
             </g>
           </svg>
@@ -138,7 +138,6 @@ export class Bar extends React.Component {
 
     let scaledX = xScale(data.x);
     let scaledY = yScale(data.y);
-    let scaledDx = Math.abs(xScale(data.dx));
 
     return (
       <g className="react-d3-histogram__bar" transform={"translate(" + scaledX + "," + scaledY + ")"}>
