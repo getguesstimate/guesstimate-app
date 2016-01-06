@@ -45,6 +45,16 @@
   color: $grey-2;
 }
 
+.homePage hr{
+  border: 1px solid #eee;
+  border-bottom: none;
+  width: 100%;
+  max-width: 520px;
+  border-radius: 0;
+  margin-top: 5em;
+  margin-bottom: 2em;
+}
+
 .homePage .guesstimate-slogan p {
   text-align: center;
   font-size: 2em;

@@ -35,9 +35,21 @@ export default class Home extends Component {
           </div>
         </div>
 
-        <span className="wistia_embed wistia_async_ua8kd9n06a popover=true popoverAnimateThumbnail=true videoFoam=true" >
-          &nbsp;
-        </span>
+        <div className='row'>
+          <div className='col-xs-12'>
+            <span className="wistia_embed wistia_async_ua8kd9n06a popover=true popoverAnimateThumbnail=true videoFoam=true" >
+              &nbsp;
+            </span>
+          </div>
+        </div>
+
+        <hr className='foobar'/>
+
+        <div className='row'>
+          <div className='col-xs-12'>
+            <a className="twitter-timeline" href="https://twitter.com/getguesstimate" data-widget-id="684872978949996545">Tweets by @getguesstimate</a>
+          </div>
+        </div>
       </div>
     )
   }
