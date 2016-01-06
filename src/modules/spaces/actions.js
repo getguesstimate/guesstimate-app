@@ -76,6 +76,32 @@ export function fetch() {
   }
 }
 
+export function fetchById(id) {
+  const url = (rootUrl + 'spaces/' + id)
+
+  return function(dispatch, getState) {
+    const action = standardActionCreators.fetchStart();
+    dispatch(action)
+
+    const request = formattedRequest({
+      state: getState(),
+      requestParams: {
+        url,
+        method: 'GET',
+      }
+    })
+
+    request.done(space => {
+      const action = standardActionCreators.fetchSuccess([space])
+      dispatch(action)
+    })
+
+    request.fail((jqXHR, textStatus, errorThrown) => {
+      captureApiError('SpacesFetch', jqXHR, textStatus, errorThrown, {url})
+    })
+  }
+}
+
 export function create(object) {
   return function(dispatch, getState) {
     dispatch({ type: 'redux-form/START_SUBMIT', form: 'contact' })
@@ -94,6 +120,7 @@ export function create(object) {
     })
 
     request.done(data => {
+      debuggerk
       const action = standardActionCreators.createSuccess(data, cid)
       dispatch(action)
       app.router.history.navigate('/models/' + data.id)
