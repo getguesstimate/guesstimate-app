@@ -120,7 +120,6 @@ export function create(object) {
     })
 
     request.done(data => {
-      debuggerk
       const action = standardActionCreators.createSuccess(data, cid)
       dispatch(action)
       app.router.history.navigate('/models/' + data.id)
