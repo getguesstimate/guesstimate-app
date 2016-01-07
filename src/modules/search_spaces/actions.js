@@ -3,10 +3,12 @@ import {searchSpaceIndex} from '../../server/algolia/index.js'
 import {searchError} from 'lib/errors/index.js'
 
 export function fetch(query = '', options = {}) {
-  let filters = {hitsPerPage: 50}
+  let filters = {hitsPerPage: 20}
   filters.page = options.page || 0
   if (options.user_id) {
     filters.numericFilters = `user_id=${options.user_id}`
+  } else {
+    filters.numericFilters = `metric_count>1`
   }
 
   return (dispatch, getState) => {

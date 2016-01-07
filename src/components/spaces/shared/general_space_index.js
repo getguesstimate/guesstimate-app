@@ -32,12 +32,9 @@ export default class GeneralSpaceIndex extends Component{
     }
   }
   render () {
-    const {searchSpaces, pageName} = this.props
+    const {searchSpaces} = this.props
     let style = {paddingTop: '3em'}
     let spaces = searchSpaces.hits || []
-    if (pageName === 'index') {
-      spaces = !_.isEmpty(spaces) ? spaces.filter(x => {return x.models.length > 1}) : []
-    }
     const hasMorePages = _.isFinite(searchSpaces.page) && (searchSpaces.page < (searchSpaces.nbPages - 1))
     return (
       <div className='GeneralSpaceIndex row' style={style}>
