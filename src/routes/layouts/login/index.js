@@ -51,12 +51,16 @@ export default class Profile extends Component {
     <div className='header-right-menu'>
 
       { isLoggedIn &&
-        <a className='item' href={`/models/new`}><Icon name='plus'/></a>
+        <a className='item' href={`/models/new`}>
+          <Icon name='plus'/>
+          <span className='text'>New Model</span>
+        </a>
       }
 
       { isLoggedIn &&
         <a className='item' href={`/users/${me.id}`}>
           <Icon name='th-large'/>
+          <span className='text'>My Models</span>
         </a>
       }
 
