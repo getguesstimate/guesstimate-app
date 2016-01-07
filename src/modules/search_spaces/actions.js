@@ -3,7 +3,7 @@ import {searchSpaceIndex} from '../../server/algolia/index.js'
 import {searchError} from 'lib/errors/index.js'
 
 export function fetch(query = '', options = {}) {
-  let filters = {hitsPerPage: 15}
+  let filters = {hitsPerPage: 50}
   filters.page = options.page || 0
   if (options.user_id) {
     filters.numericFilters = `user_id=${options.user_id}`

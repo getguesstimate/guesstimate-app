@@ -8,7 +8,7 @@ export default class SpacesIndex extends Component{
   displayName: 'SpacesIndex'
   render () {
     return (
-      <GeneralSpaceIndex>
+      <GeneralSpaceIndex pageName={'index'}>
         <h2>
           {'Public Models'}
         </h2>
