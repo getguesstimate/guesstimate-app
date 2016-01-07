@@ -42,9 +42,7 @@ Click on Metrics to see more information about their distributions.  The Distrib
 
 ##Limitations
 There are many things that will be improved.  Some of the more important limitations include:  
-1. Normal distributions are the default for guesses, and flat distributions are possible using math.js ```=random(3,9)```.  Lognormal, power, and other kinds of distribution should be standard/possible.  
+1. Distribution types are limited to normal, uniform, and a few discrete types with math.js functions
 2. Everything is public.    
 3. Only the creator of a collection is allowed to save edits to that collection.  
-4. The distribution view displays all negative samples as '0' for some reason.  
-5. Metrics can't be shared between collections.  
-6. Distributions are all +- 1 standard deviation.  Having everything be a 90% confidence interval would probably be better.
+4. Metrics can't be shared between collections.  
