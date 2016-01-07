@@ -31,7 +31,7 @@ export default class SpacesShow extends Component {
   state = {showSidebar: true}
 
   componentWillMount() {
-    if (!this.props.denormalizedSpace) {
+    if (!this.props.denormalizedSpace || !this.props.denormalizedSpace.graph) {
       this.props.dispatch(spaceActions.fetchById(parseInt(this.props.spaceId)))
     }
   }
