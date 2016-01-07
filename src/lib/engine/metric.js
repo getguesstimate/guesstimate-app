@@ -28,6 +28,7 @@ export function denormalize(metric, graph) {
   return Object.assign({}, metric, {guesstimate, simulation});
 }
 
+//TODO: This is incredibly slow, especially when large numbers of guesstimates are in memory.
 export function guesstimates(metric, graph) {
   return graph.guesstimates.filter(g => (g.metric === metric.id)).map(g => _guesstimate.format(g))
 }
