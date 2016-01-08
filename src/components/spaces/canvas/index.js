@@ -65,6 +65,14 @@ export default class CanvasSpace extends Component{
     this.props.dispatch(runSimulations({spaceId: this.props.denormalizedSpace.id}))
   }
 
+  componentDidUpdate(prevProps) {
+    const metrics = _.get(this.props.denormalizedSpace, 'metrics')
+    const oldMetrics = _.get(prevProps.denormalizedSpace, 'metrics')
+    if ((oldMetrics.length === 0) && (metrics.length > 0)){
+      this.props.dispatch(runSimulations({spaceId: this.props.denormalizedSpace.id}))
+    }
+  }
+
   componentWillUnmount(){
     this.props.dispatch(deleteSimulations(this.props.denormalizedSpace.metrics.map(m => m.id)))
   }
