@@ -57,7 +57,7 @@ export default class Profile extends Component {
         </a>
       }
 
-      { isLoggedIn &&
+      { isLoggedIn && me.id &&
         <a className='item' href={`/users/${me.id}`}>
           <Icon name='th-large'/>
           <span className='text'>My Models</span>
