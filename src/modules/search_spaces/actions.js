@@ -8,7 +8,7 @@ export function fetch(query = '', options = {}) {
   if (options.user_id) {
     filters.numericFilters = `user_id=${options.user_id}`
   } else {
-    filters.numericFilters = `metric_count>1`
+    filters.numericFilters = `metric_count>2`
   }
 
   return (dispatch, getState) => {
