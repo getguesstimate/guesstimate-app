@@ -32,7 +32,6 @@ export default class extends Component{
 
   componentDidMount() {
     this.props.dispatch(meActions.init())
-    this.props.dispatch(userActions.fetch())
   }
 
   _registerUser(){

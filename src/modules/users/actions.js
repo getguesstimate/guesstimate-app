@@ -59,6 +59,15 @@ export function fetch(params = {}) {
   }
 }
 
+export function fromSearch(spaces) {
+  return function(dispatch) {
+    const users = spaces.map(s => s.user_info)
+    const formatted = users.map(d => _.pick(d, ['auth0_id', 'id', 'name', 'picture']))
+    const action = standardActionCreators.fetchSuccess(formatted)
+    dispatch(action)
+  }
+}
+
 export function create(object) {
   return function(dispatch, getState) {
 
