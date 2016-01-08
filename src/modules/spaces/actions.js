@@ -52,27 +52,11 @@ export function destroy(object) {
   }
 }
 
-export function fetch() {
-  return function(dispatch, getState) {
-    const action = standardActionCreators.fetchStart();
+export function fromSearch(data) {
+  return function(dispatch) {
+    const formatted = data.map(d => _.pick(d, ['id', 'name', 'description', 'user_id', 'updated_at', 'metric_count']))
+    const action = standardActionCreators.fetchSuccess(formatted)
     dispatch(action)
-
-    const request = formattedRequest({
-      state: getState(),
-      requestParams: {
-        url: (rootUrl + 'spaces'),
-        method: 'GET',
-      }
-    })
-
-    request.done(data => {
-      const action = standardActionCreators.fetchSuccess(data)
-      dispatch(action)
-    })
-
-    request.fail((jqXHR, textStatus, errorThrown) => {
-      captureApiError('SpacesFetch', jqXHR, textStatus, errorThrown, {url: (rootUrl+'spaces')})
-    })
   }
 }
 
