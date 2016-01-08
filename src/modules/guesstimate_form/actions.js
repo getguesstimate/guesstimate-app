@@ -21,7 +21,6 @@ export function changeGuesstimateForm(values) {
   return (dispatch, getState) => {
     dispatch(updateGuesstimateForm(values));
     dispatch(runFormSimulations(getState().guesstimateForm.metric));
-    dispatch(saveGuesstimateForm())
   };
 }
 
