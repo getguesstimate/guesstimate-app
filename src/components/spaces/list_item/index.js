@@ -49,9 +49,6 @@ let SpaceListItem = ({space, showUser}) => (
       <div className='col-xs-9 updated-at'>
         <p>Updated {formatDate(space.updated_at)}</p>
       </div>
-      <div className='col-xs-3 metric-count'>
-        <p>{space.metrics.length} Metrics</p>
-      </div>
     </div>
 
     {!_.isEmpty(space.description) &&
