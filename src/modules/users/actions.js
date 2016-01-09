@@ -59,6 +59,34 @@ export function fetch(params = {}) {
   }
 }
 
+export function fetchById(id) {
+  const url = (rootUrl + 'users/' + id)
+
+  return function(dispatch, getState) {
+    const action = standardActionCreators.fetchStart();
+    dispatch(action)
+
+    const request = formattedRequest({
+      state: getState(),
+      requestParams: {
+        url,
+        method: 'GET',
+      }
+    })
+
+    request.done(data => {
+      const action = standardActionCreators.fetchSuccess(data)
+      dispatch(action)
+
+    })
+
+    request.fail((jqXHR, textStatus, errorThrown) => {
+      dispatch(displayErrorsActions.newError())
+      captureApiError('UsersFetch', jqXHR, textStatus, errorThrown, {url})
+    })
+  }
+}
+
 export function fromSearch(spaces) {
   return function(dispatch) {
     const users = spaces.map(s => s.user_info)
