@@ -13,7 +13,7 @@ Guesstimate is great at making estimates of things that aren't certain.  You can
 The most popular model on Guesstimate is [How Long it Takes to Get Ready for Preschool](/models/314).  We also recommend checking out Ozzie Gooen's models [here](/users/1).
 
 ## Are there private models?
-Not yet.  Please sign up for an account to get on our mailing list, or follow us [on twitter](https://twitter.com/getguesstimate) in order to be notified once there are.  We expect these in the next 1-6 weeks.
+Not yet.  Please sign up for an account to get on our mailing list, or follow us [on Twitter](https://twitter.com/getguesstimate) in order to be notified once there are.  We expect these in the next 1-6 weeks.
 
 ## What functions are available on Guesstimate?
 You can find a list by clicking on the **Documentation** widget on the right, then clicking **Available Existing Functions**.
@@ -33,7 +33,7 @@ Due to the great amount of interest, there are plans to make Guesstimate into a 
 Ozzie Gooen.  You can find him [on Twitter](https://twitter.com/ozziegooen).
 
 ## Is it open source?
-Currently the client code is open source.  You can check out the [Github repo](https://github.com/getguesstimate/guesstimate-app).  There is a small server component that is not available.
+Currently the client code is open source.  You can check out the [GitHub repo](https://github.com/getguesstimate/guesstimate-app).  There is a small server component that is not available.
 
 ## Where can I find more information on Guesstimate?
 We have a blog [here](https://medium.com/guesstimate-blog).
@@ -53,7 +53,7 @@ Approximately 5000.
 Monte Carlo simulations are far more general than analytical solutions, so apply to more equations and distributions.  In the future, analytical techniques may be used as is possible.
 
 ## I found a bug!
-Please file it in our bug tracker on [Github](https://github.com/getguesstimate/guesstimate-app), or just open up chat (bottom right) and let us know.
+Please file it in our bug tracker on [GitHub](https://github.com/getguesstimate/guesstimate-app), or just open up chat (bottom right) and let us know.
 
 `
 
