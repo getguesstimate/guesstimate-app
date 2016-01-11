@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import ReactDOM from 'react-dom'
 import { connect } from 'react-redux';
-import { createGuesstimateForm, changeGuesstimateForm, saveGuesstimateForm} from 'gModules/guesstimate_form/actions'
+import { createGuesstimateForm, changeGuesstimateForm, saveGuesstimateForm } from 'gModules/guesstimate_form/actions'
 import { changeMetricClickMode } from 'gModules/canvas_state/actions'
 import $ from 'jquery'
 import Icon from 'react-fa'
@@ -28,7 +28,8 @@ class GuesstimateForm extends Component{
   }
 
   state = {
-    showDistributionSelector: false
+    showDistributionSelector: false,
+    hasChanged: false
   }
 
   componentWillMount() {
@@ -70,6 +71,15 @@ class GuesstimateForm extends Component{
 
   _changeInput(input) {
     this._dispatchChange({input: input})
+    this.setState({hasChanged: true})
+  }
+
+  _handleBlur() {
+    this._switchMetricClickMode(false)
+
+    if (this.state.hasChanged){
+      this.props.dispatch(saveGuesstimateForm());
+    }
   }
 
   _switchMetricClickMode(inClick=true) {
@@ -98,7 +108,7 @@ class GuesstimateForm extends Component{
               metricFocus={metricFocus}
               onChange={this._changeInput.bind(this)}
               onFocus={() => {this._switchMetricClickMode.bind(this)(true)}}
-              onBlur={() => {this._switchMetricClickMode.bind(this)(false)}}
+              onBlur={this._handleBlur.bind(this)}
               ref='TextInput'
             />
             <GuesstimateTypeIcon
