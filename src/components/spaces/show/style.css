@@ -19,7 +19,7 @@
   background-color: $blue-1;
 }
 
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 767px) {
   .hero-unit {
     padding: 0.5em 0 .2em;
   }
@@ -56,7 +56,7 @@
   float: left;
 }
 
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 767px) {
   .hero-unit h1 {
     font-size: 1.2em;
     padding: 0 0 0 0.4em;

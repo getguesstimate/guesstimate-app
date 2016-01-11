@@ -30,3 +30,9 @@
   margin-top:0.1em;
   float: left;
 }
+
+@media only screen and (max-width: 767px) {
+  .guesstimate-name {
+    display: none;
+  }
+}
