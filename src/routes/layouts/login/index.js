@@ -36,7 +36,7 @@ export default class Profile extends Component {
             openLink={<img className='avatar' src={profile.picture}/>}
         >
           <ul>
-            <DropDownListElement key='1' icon='question' text='FAQ' url='https://github.com/getguesstimate/guesstimate-app'/>
+            <DropDownListElement key='1' icon='question' text='FAQ' url='/faq'/>
             <DropDownListElement key='2' icon='sign-out' text='Sign Out' onMouseDown={this.logOut.bind(this)}/>
           </ul>
         </DropDown>
@@ -68,6 +68,14 @@ export default class Profile extends Component {
 
       { !isLoggedIn &&
         <a className={'item text'} href='/models'>Explore</a>
+      }
+
+      { !isLoggedIn &&
+        <a className={'item text'} href='/faq'>FAQ</a>
+      }
+
+      { !isLoggedIn &&
+        <a className={'item text'} href='https://medium.com/guesstimate-blog'>Blog</a>
       }
 
       { !isLoggedIn &&
