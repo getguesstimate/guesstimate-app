@@ -7,24 +7,24 @@ import './style.css'
 const content = `
 
 ## What can Guesstimate be used for?
-Guesstimate is great at making estimates of things that aren't certain.  You can forecast your earnings from a new venture, predict the amount of time a big project will take, or experiment with scientific theories.  People have used it to optimize video games, understand lottery payoffs, and understand the costs of their childcare.
+Guesstimate is great at making estimates of things that aren't certain.  You can forecast your earnings from a new venture, predict the amount of time a big project will take, or experiment with scientific theories.  People have used it to optimize video games, understand lottery payoffs, and estimate the costs of their childcare.
 
 ## What are some good examples?
 The most popular model on Guesstimate is [How Long it Takes to Get Ready for Preschool](/models/314).  We also recommend checking out Ozzie Gooen's models [here](/users/1).
 
 ## Are there private models?
-Not yet.  Please sign up for an account to get on our mailing list, or follow us [on Twitter](https://twitter.com/getguesstimate) in order to be notified once there are.  We expect these in the next 1-6 weeks.
+Not yet.  Please sign up for an account to get on our mailing list, or follow us [on Twitter](https://twitter.com/getguesstimate) to be notified once there are.  We expect private models in the next 1-6 weeks.
 
 ## What functions are available on Guesstimate?
 You can find a list by clicking on the **Documentation** widget on the right, then clicking **Available Existing Functions**.
 
 ## Can I edit someone else's model?
-Currently all models on Guesstimate are public.  Your own models should autosave when you edit them.  If you edit models created by other people, you will be able to modify them, but your changes will not be saved.  This can be great for experimentation or entering your own assumptions in a different model.
+Currently all models on Guesstimate are public.  Your own models autosave when you edit them.  If you edit models created by other people, you will be able to modify them, but your changes will not be saved.  This can be great for experimentation or for entering your own assumptions in a different model.
 
 ## How is this different from Oracle Crystal Ball or other existing tools?
-Guesstimate is a web application, Crystal Ball is a suite of Excel-based applications. This means that with Guesstimate you can get up and running in 30 seconds on any computer and then share your model with anyone. Crystal Ball is better for more rigorous analysis, and gives you access to the Excel environment and ecosystem.
+Guesstimate is a web application, while Crystal Ball is a suite of Excel-based applications. This means that with Guesstimate you can get up and running in 30 seconds on any computer and then share your model with anyone. Crystal Ball is better for more rigorous analysis, and gives you access to the Excel environment and ecosystem.
 
-One great combination may be to quickly experiment with models in Guesstimate, then when you want to do more detailed analysis, replicate the best model and work with it with Crystal Ball.
+One great combination may be to quickly experiment with models in Guesstimate, then replicate the best model in Crystal Ball when you want to do more detailed analysis.
 
 ## Is Guesstimate a company?
 Due to the great amount of interest, there are plans to make Guesstimate into a company.
