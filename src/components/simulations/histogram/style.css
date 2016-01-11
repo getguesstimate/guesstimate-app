@@ -1,7 +1,7 @@
 @import './styles/variables.css';
 
 .react-d3-histogram {
-  bottom: -23px;
+  bottom: -25px;
   width: 100%;
   left: -5px;
 }
