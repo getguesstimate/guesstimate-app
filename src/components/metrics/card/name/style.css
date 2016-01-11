@@ -8,6 +8,7 @@
 
 .MetricName textarea{
   @mixin hover-input;
+  padding: 0;
   color: $grey-2;
   font-weight: 500;
   width: 100%;
