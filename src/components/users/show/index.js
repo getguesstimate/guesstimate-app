@@ -16,27 +16,29 @@ function mapStateToProps(state) {
 export default class UserShow extends Component{
   displayName: 'UserShow'
   render () {
-    const {users} = this.props
+    const {userId, users} = this.props
     let user = null
 
     if (users && users.length) {
-      user = this.props.users.find(u => u.id.toString() === this.props.userId.toString())
+      user = users.find(u => u.id.toString() === userId.toString())
     }
 
     return (
       <div className='userShow'>
-        {user &&
-          <GeneralSpaceIndex userId={user.id}>
-            <div className='main-user-tag'>
+        <GeneralSpaceIndex userId={userId}>
+          <div className='main-user-tag'>
+            {user &&
               <img
                   src={user.picture}
               />
-            </div>
-            <h2>
-              {user.name}
-            </h2>
-          </GeneralSpaceIndex>
-      }
+            }
+          </div>
+            {user &&
+              <h2>
+                {user.name}
+              </h2>
+            }
+        </GeneralSpaceIndex>
     </div>
     )
   }

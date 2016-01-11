@@ -7,6 +7,7 @@ import app from 'ampersand-app'
 import {rootUrl} from 'servers/guesstimate-api/constants.js'
 import {captureApiError} from 'lib/errors/index.js'
 import {changeSaveState} from 'gModules/canvas_state/actions.js'
+import * as userActions from 'gModules/users/actions.js'
 
 let standardActionCreators = actionCreatorsFor('spaces');
 
@@ -52,27 +53,11 @@ export function destroy(object) {
   }
 }
 
-export function fetch() {
-  return function(dispatch, getState) {
-    const action = standardActionCreators.fetchStart();
+export function fromSearch(data) {
+  return function(dispatch) {
+    const formatted = data.map(d => _.pick(d, ['id', 'name', 'description', 'user_id', 'updated_at', 'metric_count']))
+    const action = standardActionCreators.fetchSuccess(formatted)
     dispatch(action)
-
-    const request = formattedRequest({
-      state: getState(),
-      requestParams: {
-        url: (rootUrl + 'spaces'),
-        method: 'GET',
-      }
-    })
-
-    request.done(data => {
-      const action = standardActionCreators.fetchSuccess(data)
-      dispatch(action)
-    })
-
-    request.fail((jqXHR, textStatus, errorThrown) => {
-      captureApiError('SpacesFetch', jqXHR, textStatus, errorThrown, {url: (rootUrl+'spaces')})
-    })
   }
 }
 
@@ -94,6 +79,11 @@ export function fetchById(id) {
     request.done(space => {
       const action = standardActionCreators.fetchSuccess([space])
       dispatch(action)
+
+      const users = getState().users
+      const user_id = space.user_id
+      const has_user = !!(users.find(e => e.id === user_id))
+      if (!has_user) { dispatch(userActions.fetchById(user_id)) }
     })
 
     request.fail((jqXHR, textStatus, errorThrown) => {

@@ -1,6 +1,8 @@
 import algoliasearch from 'algoliasearch'
 import {searchSpaceIndex} from '../../server/algolia/index.js'
 import {searchError} from 'lib/errors/index.js'
+import * as spaceActions from 'gModules/spaces/actions'
+import * as userActions from 'gModules/users/actions'
 
 export function fetch(query = '', options = {}) {
   let filters = {hitsPerPage: 20}
@@ -8,7 +10,7 @@ export function fetch(query = '', options = {}) {
   if (options.user_id) {
     filters.numericFilters = `user_id=${options.user_id}`
   } else {
-    filters.numericFilters = `metric_count>1`
+    filters.numericFilters = `metric_count>2`
   }
 
   return (dispatch, getState) => {
@@ -19,6 +21,8 @@ export function fetch(query = '', options = {}) {
       else {
         results.filters = filters
         dispatch({ type: 'SEARCH_SPACES_GET', response: results })
+        dispatch(spaceActions.fromSearch(results.hits))
+        dispatch(userActions.fromSearch(results.hits))
       }
     })
   }
@@ -37,6 +41,8 @@ export function fetchNextPage() {
         searchError('AlgoliaFetchNextPage', error)
       } else {
         dispatch({ type: 'SEARCH_SPACES_NEXT_PAGE', response: results })
+        dispatch(spaceActions.fromSearch(results.hits))
+        dispatch(userActions.fromSearch(results.hits))
       }
     })
   }
