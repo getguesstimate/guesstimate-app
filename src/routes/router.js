@@ -13,6 +13,7 @@ import SpaceShow from 'gComponents/spaces/show'
 import SpaceNew from 'gComponents/spaces/new/index.js'
 import SpaceIndex from 'gComponents/spaces/index/index.js'
 import Maintenance from 'gComponents/pages/maintenance/index.js'
+import FAQ from 'gComponents/pages/faq/index.js'
 import ComponentIndex from './component-index'
 import UserShow from 'gComponents/users/show/index.js'
 import ReactDOM from 'react-dom'
@@ -37,6 +38,7 @@ export default Router.extend({
     'models/:id': 'spaceShow',
     'components': 'components',
     'maintenance': 'maintenance',
+    'faq': 'faq',
     'users/:id': 'userShow',
   },
 
@@ -62,6 +64,10 @@ export default Router.extend({
 
   maintenance () {
     this.render(<Maintenance/>)
+  },
+
+  faq () {
+    this.render(<FAQ/>)
   },
 
   userShow (id) {
