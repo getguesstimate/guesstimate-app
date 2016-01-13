@@ -2,14 +2,23 @@ var getConfig = require('./webpack-config')
 
 var path = require('path');
 
+var elev = `<script> var _elev = window._elev || {};(function() {
+      var i,e;i=document.createElement("script"),i.type='text/javascript';i.async=1,i.src="https://static.elev.io/js/v3.js",e=document.getElementsByTagName("script")[0],e.parentNode.insertBefore(i,e);})();
+      _elev.account_id = '565e550e67ffc'</script>`
+
+var wistia = `<script charSet="ISO-8859-1" src="//fast.wistia.com/assets/external/E-v1.js" async></script>`
+var twitter = `<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>`
+var fonts = `<link href='https://fonts.googleapis.com/css?family=Lato:400,700,300' rel='stylesheet' type='text/css'>`
+var head = elev + wistia + twitter + fonts
+
 var cfg = getConfig({
   in: 'src/routes/app.js',
   out: 'public',
   clearBeforeBuild: true,
   html: function (context) {
     return {
-      '200.html': context.defaultTemplate({title: 'Guesstimate'}),
-      'index.html': context.defaultTemplate({title:'Guesstimate'})
+      '200.html': context.defaultTemplate({title: 'Guesstimate', head}),
+      'index.html': context.defaultTemplate({title:'Guesstimate', head})
     }
   }
 });

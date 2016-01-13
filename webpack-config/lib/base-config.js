@@ -68,7 +68,6 @@ module.exports = function getBaseConfig (spec) {
         },
         {
           test: /node_modules\/auth0-lock\/.*\.js$/,
-          test: /node_modules\/auth0-lock\/.*\.js$/,
           loaders: ['transform/cacheable?brfs', 'transform/cacheable?packageify']
         }
       ]
