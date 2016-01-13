@@ -9,9 +9,10 @@ var elev = `<script> var _elev = window._elev || {};(function() {
 var wistia = `<script charSet="ISO-8859-1" src="//fast.wistia.com/assets/external/E-v1.js" async></script>`
 var twitter = `<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>`
 var fonts = `<link href='https://fonts.googleapis.com/css?family=Lato:400,700,300' rel='stylesheet' type='text/css'>`
-var ogtags = `<meta property="og:title" content="Guesstimate"/>`
-             + "<meta property=`og:description` content=`A spreadsheet for things that aren't certain`/>"
-             + "<meta property=`og:type` content='product'/>"
+var ogtags = ''
+             + `<meta property="og:type" content="product"/>`
+             + `<meta property="og:title" content="Guesstimate"/>`
+             + `<meta property="og:description" content="A spreadsheet for things that aren't certain"/>`
 
 var head = elev + wistia + twitter + fonts + ogtags
 
