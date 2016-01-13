@@ -25,6 +25,7 @@ function defaultHtml (incomingData) {
       add('<meta name="' + key + '" content="' + data.metaTags[key] + '"/>')
     }
   }
+
   if (data.title) {
     add('<title>' + data.title + '</title>')
   }
