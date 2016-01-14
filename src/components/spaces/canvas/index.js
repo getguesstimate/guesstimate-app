@@ -91,7 +91,6 @@ export default class CanvasSpace extends Component{
     this.props.dispatch(changeSelect(next))
   }
 
-
   renderMetric(metric) {
     const {location} = metric
     return (
