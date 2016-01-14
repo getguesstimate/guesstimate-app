@@ -6,8 +6,8 @@ function findSpaceId(getState, metricId) {
   return _.get(metric, 'space')
 }
 
-function registerChange(dispatch, spaceId) {
-  spaceId && dispatch(spaceActions.registerChange(spaceId));
+function registerGraphChange(dispatch, spaceId) {
+  spaceId && dispatch(spaceActions.registerGraphChange(spaceId));
 }
 
 export function addMetric(item) {
@@ -26,13 +26,13 @@ export function removeMetric(id) {
     const spaceId = findSpaceId(getState, id)
 
     dispatch({ type: 'REMOVE_METRIC', item: {id: id}});
-    registerChange(dispatch, spaceId)
+    registerGraphChange(dispatch, spaceId)
   }
 }
 
 export function changeMetric(item) {
   return (dispatch, getState) => {
     dispatch({ type: 'CHANGE_METRIC', item });
-    registerChange(dispatch, findSpaceId(getState, item.id))
+    registerGraphChange(dispatch, findSpaceId(getState, item.id))
   }
 }
