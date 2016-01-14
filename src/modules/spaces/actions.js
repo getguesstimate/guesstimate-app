@@ -120,15 +120,17 @@ export function create(object) {
   }
 }
 
-export function update(spaceId, params={}) {
-  return function(dispatch, getState) {
-    let {spaces, metrics, guesstimates} = getState();
-    let space = e.space.get(spaces, spaceId)
-    space = e.space.withGraph(space, {metrics, guesstimates});
-    space.graph = _.omit(space.graph, 'simulations')
-    Object.assign(space, params)
+function getSpace(getState, spaceId) {
+  let {spaces, metrics, guesstimates} = getState();
+  return e.space.get(spaces, spaceId)
+}
 
+export function generalUpdate(spaceId, params) {
+  return function(dispatch, getState) {
+
+    const space = Object.assign({}, getSpace(getState, spaceId), params)
     const action = standardActionCreators.updateStart(space);
+
     dispatch(action)
     dispatch(changeSaveState('SAVING'))
 
@@ -137,7 +139,7 @@ export function update(spaceId, params={}) {
       requestParams: {
         url: (rootUrl + 'spaces/' + spaceId),
         method: 'PATCH',
-        data: JSON.stringify({space})
+        data: JSON.stringify({space: params})
       }
     })
 
@@ -153,15 +155,39 @@ export function update(spaceId, params={}) {
   }
 }
 
+//updates everything except graph
+export function update(spaceId, params={}) {
+  return function(dispatch, getState) {
+    let space = getSpace(getState, spaceId)
+    space = Object.assign({}, space, params)
+    const updates = _.pick(space, ['name', 'description'])
+
+    dispatch(generalUpdate(spaceId, updates))
+  }
+}
+
+//updates graph only
+export function updateGraph(spaceId) {
+  return function(dispatch, getState) {
+    let {spaces, metrics, guesstimates} = getState();
+    let space = e.space.get(spaces, spaceId)
+    space = e.space.withGraph(space, {metrics, guesstimates});
+    space.graph = _.omit(space.graph, 'simulations')
+    const updates = {graph: space.graph}
+
+    dispatch(generalUpdate(spaceId, updates))
+  }
+}
+
 function meCanEdit(spaceId, state) {
   const {spaces, me} = state
   const space = e.space.get(spaces, spaceId)
   return e.space.canEdit(space, me)
 }
 
-export function registerChange(spaceId) {
+export function registerGraphChange(spaceId) {
   return (dispatch, getState) => {
     const canEdit = meCanEdit(spaceId, getState())
-    canEdit && dispatch(update(spaceId))
+    canEdit && dispatch(updateGraph(spaceId))
   }
 }
