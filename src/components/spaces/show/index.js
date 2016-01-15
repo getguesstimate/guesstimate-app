@@ -8,6 +8,7 @@ import * as spaceActions from 'gModules/spaces/actions.js'
 import { denormalizedSpaceSelector } from '../denormalized-space-selector.js';
 import SpaceSidebar from './sidebar.js'
 import ClosedSpaceSidebar from './closed_sidebar.js'
+import e from 'gEngine/engine'
 
 function mapStateToProps(state) {
   return {
@@ -57,6 +58,7 @@ export default class SpacesShow extends Component {
   render () {
     const space = this.props.denormalizedSpace;
     const sidebarIsViseable = !!space && (space.ownedByMe || !_.isEmpty(space.description))
+    const canUsePrivateModels = e.me.canUsePrivateModels(this.props.me)
     return (
     <div className='spaceShow'>
       <div className='hero-unit'>
@@ -70,6 +72,7 @@ export default class SpacesShow extends Component {
                     onSave={this.onSave.bind(this)}
                     onDestroy={this.destroy.bind(this)}
                     space={space}
+                    canUsePrivateModels={canUsePrivateModels}
                 />
               }
             </div>

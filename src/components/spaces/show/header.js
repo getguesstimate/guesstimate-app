@@ -20,7 +20,7 @@ const SaveMessage = ({saveState}) => (
   </div>
 )
 
-let SpaceHeader = ({space, onSave, onDestroy, onSaveName}) => (
+let SpaceHeader = ({space, onSave, onDestroy, onSaveName, canUsePrivateModels}) => (
   <div className='header'>
 
     <div className='header-name'>
@@ -48,8 +48,18 @@ let SpaceHeader = ({space, onSave, onDestroy, onSaveName}) => (
         </DropDown>
       }
 
+      {canUsePrivateModels &&
+        <a className='space-header-action'>
+          {space.is_private &&
+            <span> <Icon name='lock'/> Private </span>
+          }
+          {!space.is_private &&
+            <span> <Icon name='globe'/> Public </span>
+          }
+        </a>
+      }
       <SaveMessage saveState={space.canvasState.saveState} ownedByMe={space.ownedByMe}/>
-      </div>
+    </div>
   </div>
 )
 export default SpaceHeader

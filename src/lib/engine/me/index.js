@@ -10,3 +10,7 @@ export function spaces(me, graph) {
 export function guesstimateId(me) {
   return _.get(me, 'profile.user_metadata.guesstimateId')
 }
+
+export function canUsePrivateModels(me) {
+  return !!_.get(me, 'profile.has_private_access')
+}
