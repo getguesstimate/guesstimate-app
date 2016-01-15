@@ -7,6 +7,16 @@
   width: 100%;
 }
 
+.SpaceList .privacy-tag {
+  float: right;
+  margin-top: 10px;
+  color: $grey-2;
+}
+
+.SpaceList .privacy-tag .fa {
+  margin-right: 3px;
+}
+
 .SpaceList > .nextPage {
   text-align: center;
   width: 100%;

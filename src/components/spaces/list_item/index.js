@@ -8,6 +8,7 @@ import './style.css'
 import moment from 'moment'
 import Icon from 'react-fa'
 import removeMd from 'remove-markdown'
+import e from 'gEngine/engine'
 
 function formatDescription(description) {
   const maxLength = 300
@@ -25,30 +26,40 @@ function formatDate(date) {
  return moment(new Date(date)).format('ll')
 }
 
-let SpaceListItem = ({space, showUser}) => (
+let PrivateTag = ({isPrivate}) => (
+  <div className='col-xs-12'>
+    <div className='privacy-tag'>
+      <Icon name={isPrivate ? 'lock' : 'globe'}/>
+      {isPrivate ? 'Private' : 'Public'}
+    </div>
+  </div>
+)
+
+let SpaceListItem = ({space, showUser, isOwnedByMe, canUsePrivateModels}) => (
   <div className='SpaceListItem'>
     <a href={Space.url(space)}>
     <div className='row'>
       <div className='col-xs-9'>
         <h3> {space.name} </h3>
+        <p>Updated {formatDate(space.updated_at)}</p>
       </div>
         {space.user && showUser &&
           <div className='col-xs-3'>
-            <div className='user-tag'>
-              <img
-                  className='ui avatar image'
-                  src={space.user.picture}
-              />
-              {space.user.name}
+            <div className='row'>
+              <div className='col-xs-12'>
+                <div className='user-tag'>
+                  <img
+                      className='ui avatar image'
+                      src={space.user.picture}
+                  />
+                  {space.user.name}
+                </div>
+              </div>
+
+              {canUsePrivateModels && isOwnedByMe && <PrivateTag isPrivate={space.is_private}/>}
             </div>
           </div>
         }
-    </div>
-
-    <div className='row'>
-      <div className='col-xs-9 updated-at'>
-        <p>Updated {formatDate(space.updated_at)}</p>
-      </div>
     </div>
 
     {!_.isEmpty(space.description) &&
@@ -67,7 +78,8 @@ function mapStateToProps(state) {
     metrics: state.metrics,
     guesstimates: state.guesstimates,
     simulations: state.simulations,
-    spaces: state.spaces
+    spaces: state.spaces,
+    me: state.me
   }
 }
 
@@ -75,9 +87,17 @@ function mapStateToProps(state) {
 @connect(denormalizedSpaceSelector)
 export default class SpaceListItemComponent extends Component {
   render() {
+    const canUsePrivateModels = e.me.canUsePrivateModels(this.props.me)
+    const isOwnedByMe = e.me.isOwnedByMe(this.props.me, this.props.denormalizedSpace)
+    console.log(this.props.denormalizedSpace)
     if (!!this.props.denormalizedSpace){
       return (
-       <SpaceListItem space={this.props.denormalizedSpace} showUser={this.props.showUser}/>
+        <SpaceListItem
+          space={this.props.denormalizedSpace}
+          showUser={this.props.showUser}
+          isOwnedByMe={isOwnedByMe}
+          canUsePrivateModels={canUsePrivateModels}
+        />
       )
     } else {
       return false
