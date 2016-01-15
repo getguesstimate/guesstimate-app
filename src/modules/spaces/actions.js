@@ -2,7 +2,6 @@ import {actionCreatorsFor} from 'redux-crud';
 import $ from 'jquery'
 import cuid from 'cuid'
 import e from 'gEngine/engine'
-import _ from 'lodash'
 import app from 'ampersand-app'
 import {rootUrl} from 'servers/guesstimate-api/constants.js'
 import {captureApiError} from 'lib/errors/index.js'
@@ -94,7 +93,6 @@ export function fetchById(id) {
 
 export function create(object) {
   return function(dispatch, getState) {
-    dispatch({ type: 'redux-form/START_SUBMIT', form: 'contact' })
 
     const cid = cuid()
     object = Object.assign(object, {id: cid})

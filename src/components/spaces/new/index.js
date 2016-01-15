@@ -1,25 +1,24 @@
 import React, {Component, PropTypes} from 'react'
 import * as spaceActions from 'gModules/spaces/actions.js'
 import { connect } from 'react-redux';
-import {connectReduxForm} from 'redux-form';
 import './style.css'
+import serialize from 'form-serialize'
 
-function validateContact(data) {
-  const errors = {};
-  if(!data.name) {
-    errors.name = 'Required';
+function mapStateToProps(state) {
+  return {
+    me: state.me
   }
-  return errors;
 }
 
-class NewSpaceForm extends Component {
-  static propTypes = {
-    fields: PropTypes.object.isRequired,
-    handleSubmit: PropTypes.func.isRequired
+@connect()
+export default class NewSpaceFormContainer extends Component {
+  onSubmit(e) {
+    e.preventDefault()
+    const params = serialize(this.refs.form, {hash: true})
+    this.props.dispatch(spaceActions.create(params))
   }
 
   render() {
-    const { fields: {name, address, phone}, handleSubmit, submitting } = this.props;
     return (
       <div className='SpaceNew' >
         <div className='row'>
@@ -28,36 +27,19 @@ class NewSpaceForm extends Component {
           <div className='col-md-8'>
             <h2> Create a Public Model </h2>
             <br/>
-            <form onSubmit={handleSubmit} className='ui form'>
+            <form onSubmit={this.onSubmit.bind(this)} className='ui form' ref='form'>
                 <div className='field'>
                   <label>Name</label>
-                  <input type="text" {...name}/>
-                  {name.error && name.touched && <div>{name.error}</div>}
+                  <input type="text" name="name"/>
                 </div>
 
-                <button type='submit' className='ui button primary' onClick={handleSubmit} disabled={submitting}>
-                  {!submitting ? 'Create' : 'Submitting'}
+                <button type='submit' className='ui button primary'>
+                  {'Create'}
                 </button>
             </form>
           </div>
         </div>
       </div>
     );
-  }
-}
-
-NewSpaceForm = connectReduxForm({
-  form: 'newSpace',
-  fields: ['name'],
-  validate: validateContact,
-})(NewSpaceForm);
-
-@connect()
-export default class NewSpaceFormContainer extends Component{
-  onSubmit(e) {
-    this.props.dispatch(spaceActions.create(e))
-  }
-  render() {
-    return ( <NewSpaceForm onSubmit={this.onSubmit.bind(this)}/>  )
   }
 }
