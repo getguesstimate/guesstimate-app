@@ -19,3 +19,7 @@ export function isOwnedByMe(me, space) {
   const user_id = _.get(me, 'profile.id')
   return !!user_id && !!space && (user_id === space.user_id)
 }
+
+export function isLoggedIn(me) {
+  return _.has(me, 'profile')
+}
