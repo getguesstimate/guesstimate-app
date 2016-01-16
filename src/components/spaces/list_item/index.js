@@ -89,7 +89,6 @@ export default class SpaceListItemComponent extends Component {
   render() {
     const canUsePrivateModels = e.me.canUsePrivateModels(this.props.me)
     const isOwnedByMe = e.me.isOwnedByMe(this.props.me, this.props.denormalizedSpace)
-    console.log(this.props.denormalizedSpace)
     if (!!this.props.denormalizedSpace){
       return (
         <SpaceListItem

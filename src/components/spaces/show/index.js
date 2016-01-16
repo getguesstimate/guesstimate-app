@@ -29,11 +29,34 @@ export default class SpacesShow extends Component {
     denormalizedSpace: PT.object,
   }
 
-  state = {showSidebar: true}
+  state = {
+    showSidebar: true,
+    attemptedFetch: false
+  }
 
   componentWillMount() {
-    if (!this.props.denormalizedSpace || !this.props.denormalizedSpace.graph) {
+    this.considerFetch(this.props)
+  }
+
+  componentDidUpdate(newProps) {
+    this.considerFetch(newProps)
+  }
+
+  considerFetch(newProps) {
+    const space = newProps.denormalizedSpace
+    const isPublic = space && !space.is_private
+    const needsData = !_.has(space, 'graph')
+    const loggedIn = e.me.isLoggedIn(newProps.me)
+
+    if (needsData && (isPublic || loggedIn)) {
+      this.fetchData()
+    }
+  }
+
+  fetchData() {
+    if (!this.state.attemptedFetch) {
       this.props.dispatch(spaceActions.fetchById(parseInt(this.props.spaceId)))
+      this.setState({attemptedFetch: true})
     }
   }
 
