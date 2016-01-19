@@ -48,7 +48,8 @@ export default class SpacesShow extends Component {
     const needsData = !_.has(space, 'graph')
     const loggedIn = e.me.isLoggedIn(newProps.me)
 
-    if (needsData && (isPublic || loggedIn)) {
+    //if (needsData && (isPublic || loggedIn)) {
+    if (needsData) {
       this.fetchData()
     }
   }
