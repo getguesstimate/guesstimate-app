@@ -30,6 +30,21 @@ describe('sample', () => {
     });
   })
 
+  describe('data guesstimateType', () => {
+    it('works with one element', () => {
+      const input = {guesstimateType: 'DATA', value: [3]}
+      expect(sample(input, 5).values[0]).to.deep.equal(3)
+    });
+    it('works when undersampling', () => {
+      const input = {guesstimateType: 'DATA', value: [1,2,3]}
+      expect(sample(input, 5).values.length).to.deep.equal(5)
+    });
+    it('works when oversampling', () => {
+      const input = {guesstimateType: 'DATA', value: [1,2,3,4,5,6,7]}
+      expect(sample(input, 5).values.length).to.deep.equal(5)
+    });
+  })
+
   describe('function guesstimateType', () => {
     const examples = [
       [{guesstimateType: 'FUNCTION', text: '3', inputs: {}}, 1, 3],
