@@ -2,6 +2,7 @@ import {Sampler as DistributionNormalSampler} from './samplers/DistributionNorma
 import {Sampler as DistributionPointSampler} from './samplers/DistributionPoint.js'
 import {Sampler as DistributionUniformSampler} from './samplers/DistributionUniform.js'
 import {Sampler as FunctionSampler} from './samplers/Function.js'
+import {Sampler as DataSampler} from './samplers/Data.js'
 
 import NormalIcon from '../../assets/distribution-icons/normal.png'
 import LogNormalIcon from '../../assets/distribution-icons/lognormal.png'
@@ -61,12 +62,22 @@ export const DistributionUniform = {
   icon: UniformIcon
 }
 
+export const Data = {
+  referenceName: 'DATA',
+  types: ['DATA'],
+  displayName: 'Data',
+  isRangeDistribution: false,
+  sampler: DataSampler,
+  icon: UniformIcon
+}
+
 export const types = [
   Funct,
   DistributionNormal,
   DistributionPoint,
   DistributionLognormal,
   DistributionUniform,
+  Data,
   NoneGuesstimate
 ]
 

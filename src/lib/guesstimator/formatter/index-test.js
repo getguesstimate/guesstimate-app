@@ -3,7 +3,7 @@ import {formatters, _matchingFormatter, format} from './index.js'
 describe('formatter', () => {
   describe('#formatters', () => {
     it('holds all formatters', () => {
-      expect(formatters.length).to.equal(3)
+      expect(formatters.length).to.equal(4)
     })
   });
 
