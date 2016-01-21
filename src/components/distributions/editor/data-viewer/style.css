@@ -1,0 +1,19 @@
+@import './styles/variables.css';
+.metricModal .DataViewer h2{
+  font-size: 1.5em;
+  color: $grey-666;
+  margin-top: 3px;
+}
+
+.DataViewer .DataViewer--header {
+  background-color: $grey-eee;
+  padding: 0.75em 1em;
+}
+
+.DataViewer--header .button{
+  float:right;
+}
+
+.metricModal .DataViewer ul{
+  float: none;
+}

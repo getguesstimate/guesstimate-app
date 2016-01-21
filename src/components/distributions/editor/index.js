@@ -9,6 +9,7 @@ import DistributionSelector from './distribution-selector.js'
 import GuesstimateTypeIcon from './guesstimate-type-icon.js'
 import * as guesstimator from 'lib/guesstimator/index.js'
 import TextInput from './text-input.js'
+import DataViewer from './data-viewer/index.js'
 import './style.css'
 
 class GuesstimateForm extends Component{
@@ -103,18 +104,25 @@ class GuesstimateForm extends Component{
       <div className={formClasses}>
         <div className='row'>
           <div className='col-sm-12'>
-            <TextInput
-              value={input}
-              metricFocus={metricFocus}
-              onChange={this._changeInput.bind(this)}
-              onFocus={() => {this._switchMetricClickMode.bind(this)(true)}}
-              onBlur={this._handleBlur.bind(this)}
-              ref='TextInput'
-            />
-            <GuesstimateTypeIcon
-              guesstimateType={guesstimateType}
-              toggleDistributionSelector={() => {this.setState({showDistributionSelector: !showDistributionSelector})}}
-            />
+            {guesstimateForm.data &&
+              <DataViewer data={guesstimateForm.data}/>
+            }
+            {!guesstimateForm.data &&
+              <TextInput
+                value={input}
+                metricFocus={metricFocus}
+                onChange={this._changeInput.bind(this)}
+                onFocus={() => {this._switchMetricClickMode.bind(this)(true)}}
+                onBlur={this._handleBlur.bind(this)}
+                ref='TextInput'
+              />
+            }
+            {!guesstimateForm.data &&
+              <GuesstimateTypeIcon
+                guesstimateType={guesstimateType}
+                toggleDistributionSelector={() => {this.setState({showDistributionSelector: !showDistributionSelector})}}
+              />
+            }
           </div>
         </div>
         {showDistributionSelector &&
