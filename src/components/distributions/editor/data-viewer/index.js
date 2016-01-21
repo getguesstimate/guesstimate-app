@@ -11,7 +11,7 @@ class Header extends Component{
           <h2> <Icon name='bar-chart'/> Data </h2>
         </div>
         <div className='col-sm-8'>
-          <div className='ui button red tiny'> Delete </div>
+          <div className='ui button red tiny' onClick={this.props.onDelete}> Delete </div>
           <div className='ui button basic grey tiny'> Edit </div>
         </div>
       </div>
@@ -24,7 +24,7 @@ export default class DataViewer extends Component{
     return (
     <div className='DataViewer ui segments'>
       <div className='ui segment DataViewer--header'>
-        <Header/>
+        <Header onDelete={this.props.onDelete}/>
       </div>
       <div className='ui segment'>
         <ul>

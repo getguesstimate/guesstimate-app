@@ -16,9 +16,6 @@ export default function guesstimateForm(
     return {}
   case 'UPDATE_GUESSTIMATE_FORM':
     let newVersion = engine.guesstimate.update(state, action.values)
-    newVersion.guesstimateType = 'DATA'
-    newVersion.data = [1,1,1,2]
-    newVersion.input = null
     return newVersion
   default:
     return state
