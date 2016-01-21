@@ -40,7 +40,7 @@ export function preFormatGuesstimate(guesstimate, dGraph) {
     text: guesstimate.input,
     graph: dGraph,
     guesstimateType: guesstimate.guesstimateType,
-    value: guesstimate.value
+    data: guesstimate.data
   }
 }
 
