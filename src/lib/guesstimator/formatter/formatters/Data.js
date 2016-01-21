@@ -8,10 +8,10 @@ export const item = {
     format(g) {
       return {
         guesstimateType: this.guesstimateType,
-        value: g.value
+        data: g.data
       }
     },
-    matches(g) { return true },
+    matches(g) { return !!g.data },
     errors(g) {return []},
   }
 

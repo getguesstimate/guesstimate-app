@@ -10,7 +10,6 @@ function registerGraphChange(dispatch, getState, metricId) {
 
 export function changeGuesstimate(metricId, values) {
   return (dispatch, getState) => {
-    let relevantKeys = ['input', 'metric', 'guesstimateType', 'description', 'data']
     const formatted = engine.guesstimate.format(values)
     dispatch({ type: 'CHANGE_GUESSTIMATE', metricId, values: formatted })
     registerGraphChange(dispatch, getState, metricId)
