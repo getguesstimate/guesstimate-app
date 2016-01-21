@@ -3,6 +3,7 @@ import {item as DistributionTextUpTo} from './formatters/DistributionTextUpTo.js
 import {item as DistributionTextUpToAlternate} from './formatters/DistributionTextUpToAlternate.js'
 import {item as DistributionPointText} from './formatters/DistributionPointText.js'
 import {item as DistributionUniform} from './formatters/DistributionUniform.js'
+import {item as Data} from './formatters/data.js'
 import {item as Null} from './formatters/Null.js'
 
 export const formatters = [
@@ -10,15 +11,10 @@ export const formatters = [
   DistributionTextUpTo,
   DistributionTextUpToAlternate,
   DistributionPointText,
+  Data
 ]
 
 export function _matchingFormatter(g) {
-  const inputType = _.isString(g.text) ? 'TEXT' : 'GRAPHICAL'
-  let filtered = formatters.filter(f => f.inputType === inputType)
-  return _tryFormattersForMatch(g, filtered)
-}
-
-function _tryFormattersForMatch(g, formatters) {
   for(let formatter of formatters) {
     if (formatter.matches(g)) {
       return formatter
@@ -36,12 +32,15 @@ export function errors(g) {
   return _matchingFormatter(g).errors(g)
 }
 
+// General formatting that applies to everything.  After it goes through
+// this stage, a specific formatter gets applied.
 export function preFormatGuesstimate(guesstimate, dGraph) {
   return {
     metric: guesstimate.metric,
     text: guesstimate.input,
     graph: dGraph,
-    guesstimateType: guesstimate.guesstimateType
+    guesstimateType: guesstimate.guesstimateType,
+    value: guesstimate.value
   }
 }
 

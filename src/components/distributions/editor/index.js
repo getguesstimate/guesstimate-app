@@ -6,10 +6,10 @@ import { changeMetricClickMode } from 'gModules/canvas_state/actions'
 import $ from 'jquery'
 import Icon from 'react-fa'
 import DistributionSelector from './distribution-selector.js'
+import GuesstimateTypeIcon from './guesstimate-type-icon.js'
 import * as guesstimator from 'lib/guesstimator/index.js'
 import TextInput from './text-input.js'
 import './style.css'
-import * as elev from 'server/elev/index.js'
 
 class GuesstimateForm extends Component{
   displayName: 'GuesstimateForm'
@@ -128,46 +128,6 @@ class GuesstimateForm extends Component{
           </div>
         }
       </div>)
-  }
-}
-
-class GuesstimateTypeIcon extends Component{
-  displayName: 'GuesstimateTypeIcon'
-
-  _handleShowInfo() {
-    elev.open(elev.GUESSTIMATE_TYPES)
-  }
-
-  _handleMouseDown() {
-    if (this.props.guesstimateType.isRangeDistribution){
-      this.props.toggleDistributionSelector()
-    }
-  }
-
-  render() {
-    const {guesstimateType} = this.props
-    if (!guesstimateType){ return (false) }
-    const {isRangeDistribution, icon} = guesstimateType
-    const showIcon = guesstimateType && guesstimateType.icon
-
-    let className='DistributionSelectorToggle DistributionIcon'
-    className += isRangeDistribution ? ' button' : ''
-    if (showIcon) {
-      return(
-        <div
-            className={className}
-            onMouseDown={this._handleMouseDown.bind(this)}
-        >
-          <img src={icon}/>
-        </div>
-      )
-    } else {
-      return (
-        <div className='GuesstimateTypeQuestion' onMouseDown={this._handleShowInfo.bind(this)}>
-          <Icon name='question-circle'/>
-        </div>
-      )
-    }
   }
 }
 

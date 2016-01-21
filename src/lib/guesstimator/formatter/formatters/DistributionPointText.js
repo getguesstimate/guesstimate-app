@@ -12,6 +12,6 @@ export const item = Object.assign(
       const value = parseNumber(g.text)
       return {guesstimateType, value}
     },
-    _matchesText(text) { return isParseableNumber(text) },
+    _matchesText(g) { return true },
   }
 )
