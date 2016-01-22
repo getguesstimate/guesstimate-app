@@ -92,7 +92,7 @@ class GuesstimateForm extends Component{
   }
 
   _addData() {
-    this._dispatchChange({guesstimateType: 'DATA', data:[3,4,5,5,8], input: null})
+    this._dispatchChange({guesstimateType: 'DATA', data:[3,4,5,5,8,8,8,8,9,10,11,11,11,15,18,21], input: null})
     this.props.dispatch(saveGuesstimateForm());
   }
 

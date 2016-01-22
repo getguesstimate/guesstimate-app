@@ -1,17 +1,31 @@
 @import './styles/variables.css';
 .metricModal .DataViewer h2{
-  font-size: 1.5em;
   color: $grey-666;
   margin-top: 3px;
 }
 
 .DataViewer .DataViewer--header {
   background-color: $grey-eee;
-  padding: 0.75em 1em;
+  padding: 0.2em 0.5em;
 }
 
-.DataViewer--header .button{
+.DataViewer--header a{
   float:right;
+  font-size: 1.3em;
+  padding: 2px 5px;
+}
+
+.DataViewer--header a:hover{
+  color: $black-1;
+  cursor: pointer;
+}
+
+.DataViewer--header a.edit:not(:hover){
+  color: $grey-666;
+}
+
+.DataViewer--header a.delete:not(:hover){
+  color: $grey-666;
 }
 
 .metricModal .DataViewer ul{
