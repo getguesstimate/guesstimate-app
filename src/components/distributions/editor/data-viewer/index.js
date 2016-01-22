@@ -10,6 +10,11 @@ export default class DataViewer extends Component{
     this.setState({mode: 'EDIT'})
   }
 
+  onSave(data) {
+    this.props.onSave(data)
+    this.setState({mode: 'VIEW'})
+  }
+
   render() {
     return (
     <div className='DataViewer ui segments'>
@@ -17,7 +22,6 @@ export default class DataViewer extends Component{
         <Header
           onDelete={this.props.onDelete}
           onEdit={() => {this.setState({mode: 'EDIT'})}}
-          onEditCancel={() => {this.setState({mode: 'VIEW'})}}
           mode={this.state.mode}/>
       </div>
       <div className='ui segment'>
@@ -25,7 +29,11 @@ export default class DataViewer extends Component{
           <Viewer data={this.props.data}/>
         }
         {this.state.mode === 'EDIT' &&
-          <Editor data={this.props.data}/>
+          <Editor
+            data={this.props.data}
+            onEditCancel={() => {this.setState({mode: 'VIEW'})}}
+            onSave={this.onSave.bind(this)}
+          />
         }
       </div>
     </div>
@@ -44,19 +52,51 @@ const Header = ({mode, onDelete, onEdit, onEditCancel}) => (
         <a onClick={onEdit} className='edit'> <Icon name='pencil'/> </a>
       </div>
     }
-    {mode === 'EDIT' &&
-      <div className='col-sm-7'>
-        <div className='ui button tiny' onClick={onEditCancel}> <Icon name='close'/> </div>
-        <div className='ui button primary tiny'> Save </div>
-      </div>
-    }
   </div>
 )
 
 class Editor extends Component{
+  state = {
+    value: this.props.data.join('\n'),
+    valid: true
+  }
+
+  handleChange(event) {
+    const value = event.target.value
+    this.setState(
+      {
+        value,
+        valid: this._isValid(value)
+      }
+    );
+  }
+
+  _isValid(value) {
+    const numbers = this._convertToNumbers(value)
+    const allValid = _.all(numbers, e => _.isFinite(e))
+    return allValid
+  }
+
+  _handleSave() {
+    const numbers = this._convertToNumbers(this.state.value)
+    this.props.onSave(numbers)
+  }
+
+  _convertToNumbers(values) {
+    return values.split(/[\n\s,]+/).map(Number)
+  }
+
   render() {
     return (
-      <textarea defaultValue={this.props.data.join('\n')}/>
+      <div>
+      <div className='ui form'>
+        <div className='field'>
+          <textarea ref='text' value={this.state.value} onChange={this.handleChange.bind(this)}/>
+        </div>
+      </div>
+      <div className='ui button tiny' onClick={this.props.onEditCancel}> <Icon name='close'/> </div>
+      <div className='ui button primary tiny' onClick={this._handleSave.bind(this)}> Save </div>
+      </div>
     )
   }
 }

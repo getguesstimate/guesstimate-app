@@ -101,6 +101,11 @@ class GuesstimateForm extends Component{
     this.props.dispatch(saveGuesstimateForm());
   }
 
+  _changeData(data) {
+    this._dispatchChange({guesstimateType: 'DATA', data, input: null})
+    this.props.dispatch(saveGuesstimateForm());
+  }
+
   //right now errors live in the simulation, which is not present here.
   render() {
     let {showDistributionSelector} = this.state
@@ -115,7 +120,11 @@ class GuesstimateForm extends Component{
         <div className='row'>
           <div className='col-sm-12'>
             {guesstimateForm.data &&
-              <DataViewer data={guesstimateForm.data} onDelete={this._deleteData.bind(this)}/>
+              <DataViewer
+                data={guesstimateForm.data}
+                onDelete={this._deleteData.bind(this)}
+                onSave={this._changeData.bind(this)}
+              />
             }
             {!guesstimateForm.data &&
               <TextInput
