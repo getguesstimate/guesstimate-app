@@ -3,41 +3,44 @@
   font-weight: 400;
   color: white;
   margin-top: 3px;
-  font-size: 1.4em;
+  font-size: 1.3em;
 }
 
 .metricModal .DataViewer {
   max-width: 27em;
   border: none;
   box-shadow: none;
+  margin-bottom: 1.5em;
 }
 
 .DataViewer--card .button.ui.primary {
-  padding: 5px 7px;
-  margin-top: 4px;
-  margin-right: 10px;
+  padding: 3px 7px;
+  margin: 8px 10px 5px 3px;
   float: left;
-  background-color: $grey-2;
+  color: $purple-2;
+  background-color: $purple-3;
   border-radius: 2px;
+  font-size: 0.9em;
 }
 
 .DataViewer--card .button-close {
-  font-size: 1.3em;
-  float: left;
-  margin-top: 3px;
+  font-size: 1.1em;
+  float: right;
+  margin-top: 9px;
   color: #ccc;
+  margin-right: 7px;
 }
 
 .DataViewer .DataViewer--header {
-  background-color: $grey-2;
-  padding: 0.6em 1em;
+  background-color: $purple-2;
+  padding: 0.5em 1em;
   border-top: none;
 }
 
 .DataViewer .DataViewer--body{
-  background-color: $blue-3;
-  color: $grey-2;
-  max-height: 200px;
+  background-color: $purple-3;
+  color: $purple-2;
+  max-height: 250px;
   overflow: auto;
 }
 
@@ -48,7 +51,7 @@
   padding: 2px 5px;
   cursor: pointer;
   margin: 2px 5px 0;
-  font-size: 1.1em;
+  font-size: 1em;
   display: none;
 }
 
