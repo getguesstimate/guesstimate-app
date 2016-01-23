@@ -24,6 +24,11 @@ export default class DataViewer extends Component{
   }
 
   render() {
+    let bodyClass = 'ui segment DataViewer--body'
+    const viewMode = (this.state.mode === 'VIEW')
+
+    bodyClass += viewMode ? ' view' : ' edit'
+
     if (this.props.size === 'large') {
       return (
       <div className='DataViewer ui segments'>
@@ -33,7 +38,7 @@ export default class DataViewer extends Component{
             onEdit={() => {this.setState({mode: 'EDIT'})}}
             mode={this.state.mode}/>
         </div>
-        <div className='ui segment DataViewer--body'>
+        <div className={bodyClass}>
           {this.state.mode === 'VIEW' &&
             <Viewer data={this.props.data}/>
           }
