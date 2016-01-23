@@ -1,31 +1,67 @@
 @import './styles/variables.css';
 .metricModal .DataViewer h2{
-  color: $grey-666;
+  font-weight: 400;
+  color: white;
   margin-top: 3px;
+  font-size: 1.4em;
+}
+
+.metricModal .DataViewer {
+  max-width: 27em;
+  border: none;
+  box-shadow: none;
+}
+
+.DataViewer--card .button.ui.primary {
+  padding: 5px 7px;
+  margin-top: 4px;
+  margin-right: 10px;
+  float: left;
+  background-color: $grey-2;
+  border-radius: 2px;
+}
+
+.DataViewer--card .button-close {
+  font-size: 1.3em;
+  float: left;
+  margin-top: 3px;
+  color: #ccc;
 }
 
 .DataViewer .DataViewer--header {
-  background-color: $grey-eee;
-  padding: 0.2em 0.5em;
+  background-color: $grey-2;
+  padding: 0.6em 1em;
+  border-top: none;
+}
+
+.DataViewer .DataViewer--body{
+  background-color: $blue-3;
+  color: $grey-2;
+  max-height: 200px;
+  overflow: auto;
 }
 
 .DataViewer--header a{
+  margin-top: 2px;
+  color: rgba(255,255,255,0.75);
   float:right;
-  font-size: 1.3em;
   padding: 2px 5px;
+  cursor: pointer;
+  margin: 2px 5px 0;
+  font-size: 1.1em;
+  display: none;
+}
+
+.DataViewer--header a .fa{
+  font-size: 1.3em;
+}
+
+.DataViewer:hover .DataViewer--header a{
+  display: block;
 }
 
 .DataViewer--header a:hover{
-  color: $black-1;
-  cursor: pointer;
-}
-
-.DataViewer--header a.edit:not(:hover){
-  color: $grey-666;
-}
-
-.DataViewer--header a.delete:not(:hover){
-  color: $grey-666;
+  color: white;
 }
 
 .metricModal .DataViewer ul{
