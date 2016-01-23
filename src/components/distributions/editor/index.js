@@ -92,7 +92,7 @@ class GuesstimateForm extends Component{
   }
 
   _addData() {
-    this._dispatchChange({guesstimateType: 'DATA', data:[3,4,5,5,8,8,8,8,9,10,11,11,11,15,18,21], input: null})
+    this._dispatchChange({guesstimateType: 'DATA', data:[1,2,3], input: null})
     this.props.dispatch(saveGuesstimateForm());
   }
 
@@ -109,12 +109,13 @@ class GuesstimateForm extends Component{
   //right now errors live in the simulation, which is not present here.
   render() {
     let {showDistributionSelector} = this.state
-    const {guesstimateForm, metricFocus} = this.props
+    const {guesstimateForm, metricFocus, size} = this.props
     const {input} = guesstimateForm
     const guesstimateType = this._guesstimateType()
 
     let formClasses = 'GuesstimateForm'
-    formClasses += (this.props.size === 'large') ? ' large' : ''
+    const isLarge = (size === 'large')
+    formClasses += isLarge ? ' large' : ''
     return(
       <div className={formClasses}>
         <div className='row'>
@@ -124,6 +125,7 @@ class GuesstimateForm extends Component{
                 data={guesstimateForm.data}
                 onDelete={this._deleteData.bind(this)}
                 onSave={this._changeData.bind(this)}
+                size={size}
               />
             }
             {!guesstimateForm.data &&
@@ -142,7 +144,7 @@ class GuesstimateForm extends Component{
                 toggleDistributionSelector={() => {this.setState({showDistributionSelector: !showDistributionSelector})}}
               />
             }
-            {!guesstimateForm.data &&
+            {!guesstimateForm.data && isLarge &&
               <a className='ui button' onClick={this._addData.bind(this)}> Add data </a>
             }
           </div>

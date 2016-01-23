@@ -2,6 +2,14 @@ import React, {Component, PropTypes} from 'react';
 import ReactDOM from 'react-dom'
 import Icon from 'react-fa'
 import './style.css'
+import {ButtonClose} from 'gComponents/utility/buttons/close'
+
+const Button = ({onDelete}) => (
+  <div className='DataViewer DataViewer--card'>
+    <a className='ui button primary small'> <Icon name='bar-chart'/> Custom </a>
+    <ButtonClose onClick={onDelete}/>
+  </div>
+)
 
 export default class DataViewer extends Component{
   state = {mode: 'VIEW'}
@@ -16,40 +24,44 @@ export default class DataViewer extends Component{
   }
 
   render() {
-    return (
-    <div className='DataViewer ui segments'>
-      <div className='ui segment DataViewer--header'>
-        <Header
-          onDelete={this.props.onDelete}
-          onEdit={() => {this.setState({mode: 'EDIT'})}}
-          mode={this.state.mode}/>
+    if (this.props.size === 'large') {
+      return (
+      <div className='DataViewer ui segments'>
+        <div className='ui segment DataViewer--header'>
+          <Header
+            onDelete={this.props.onDelete}
+            onEdit={() => {this.setState({mode: 'EDIT'})}}
+            mode={this.state.mode}/>
+        </div>
+        <div className='ui segment DataViewer--body'>
+          {this.state.mode === 'VIEW' &&
+            <Viewer data={this.props.data}/>
+          }
+          {this.state.mode === 'EDIT' &&
+            <Editor
+              data={this.props.data}
+              onEditCancel={() => {this.setState({mode: 'VIEW'})}}
+              onSave={this.onSave.bind(this)}
+            />
+          }
+        </div>
       </div>
-      <div className='ui segment'>
-        {this.state.mode === 'VIEW' &&
-          <Viewer data={this.props.data}/>
-        }
-        {this.state.mode === 'EDIT' &&
-          <Editor
-            data={this.props.data}
-            onEditCancel={() => {this.setState({mode: 'VIEW'})}}
-            onSave={this.onSave.bind(this)}
-          />
-        }
-      </div>
-    </div>
-    )
+      )
+    } else {
+      return (<Button onDelete={this.props.onDelete}/>)
+    }
   }
 }
 
 const Header = ({mode, onDelete, onEdit, onEditCancel}) => (
   <div className='row'>
-    <div className='col-sm-5'>
+    <div className='col-sm-6'>
       <h2> <Icon name='bar-chart'/> Custom Data </h2>
     </div>
     {mode === 'VIEW' &&
-      <div className='col-sm-7'>
-        <a onClick={onDelete} className='delete'> <Icon name='close'/> </a>
-        <a onClick={onEdit} className='edit'> <Icon name='pencil'/> </a>
+      <div className='col-sm-6'>
+        <a onClick={onDelete} className='delete'> <Icon name='close'/> Delete </a>
+        <a onClick={onEdit} className='edit'> <Icon name='pencil'/> Edit </a>
       </div>
     }
   </div>
@@ -91,11 +103,11 @@ class Editor extends Component{
       <div>
       <div className='ui form'>
         <div className='field'>
-          <textarea ref='text' value={this.state.value} onChange={this.handleChange.bind(this)}/>
+          <textarea value={this.state.value} onChange={this.handleChange.bind(this)}/>
         </div>
       </div>
-      <div className='ui button tiny' onClick={this.props.onEditCancel}> <Icon name='close'/> </div>
       <div className='ui button primary tiny' onClick={this._handleSave.bind(this)}> Save </div>
+      <ButtonClose onClick={this.props.onEditCancel}/>
       </div>
     )
   }
