@@ -40,8 +40,15 @@
 .DataViewer .DataViewer--body{
   background-color: $purple-3;
   color: $purple-2;
-  max-height: 250px;
   overflow: auto;
+}
+
+.DataViewer .DataViewer--body.view{
+  max-height: 250px;
+}
+
+.DataViewer .DataViewer--body .ui.form{
+  margin-bottom: 10px;
 }
 
 .DataViewer--header a{
