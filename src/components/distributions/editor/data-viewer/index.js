@@ -4,12 +4,16 @@ import Icon from 'react-fa'
 import './style.css'
 import {ButtonClose} from 'gComponents/utility/buttons/close'
 
-const Button = ({onDelete}) => (
-  <div className='DataViewer DataViewer--card'>
-    <a className='ui button primary small'> <Icon name='bar-chart'/> Custom </a>
-    <ButtonClose onClick={onDelete}/>
-  </div>
-)
+class Button extends Component {
+  render() {
+    return (
+    <div className='DataViewer DataViewer--card'>
+      <a className='ui button primary small'> <Icon name='bar-chart'/> Custom </a>
+      <ButtonClose onClick={this.props.onDelete}/>
+    </div>
+    )
+  }
+}
 
 export default class DataViewer extends Component{
   state = {mode: 'VIEW'}

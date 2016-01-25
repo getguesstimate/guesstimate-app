@@ -25,7 +25,11 @@ class GuesstimateForm extends Component{
     metricId: PropTypes.string.isRequired,
     metricFocus: PropTypes.func.isRequired,
     onSubmit: PropTypes.func,
-    size: PropTypes.bool
+    size: PropTypes.string
+  }
+
+  static defaultProps = {
+     metricFocus: function() { }
   }
 
   state = {
@@ -106,47 +110,39 @@ class GuesstimateForm extends Component{
     this.props.dispatch(saveGuesstimateForm());
   }
 
-  //right now errors live in the simulation, which is not present here.
-  render() {
+  _dataViewer() {
+    const {guesstimateForm, size} = this.props
+    return(
+      <DataViewer
+        data={guesstimateForm.data}
+        onDelete={this._deleteData.bind(this)}
+        onSave={this._changeData.bind(this)}
+        size={size}
+      />
+    )
+  }
+
+  _textInput() {
     let {showDistributionSelector} = this.state
     const {guesstimateForm, metricFocus, size} = this.props
     const {input} = guesstimateForm
     const guesstimateType = this._guesstimateType()
-
-    let formClasses = 'GuesstimateForm'
-    const isLarge = (size === 'large')
-    formClasses += isLarge ? ' large' : ''
     return(
-      <div className={formClasses}>
+      <div>
         <div className='row'>
           <div className='col-sm-12'>
-            {guesstimateForm.data &&
-              <DataViewer
-                data={guesstimateForm.data}
-                onDelete={this._deleteData.bind(this)}
-                onSave={this._changeData.bind(this)}
-                size={size}
-              />
-            }
-            {!guesstimateForm.data &&
-              <TextInput
-                value={input}
-                metricFocus={metricFocus}
-                onChange={this._changeInput.bind(this)}
-                onFocus={() => {this._switchMetricClickMode.bind(this)(true)}}
-                onBlur={this._handleBlur.bind(this)}
-                ref='TextInput'
-              />
-            }
-            {!guesstimateForm.data &&
-              <GuesstimateTypeIcon
-                guesstimateType={guesstimateType}
-                toggleDistributionSelector={() => {this.setState({showDistributionSelector: !showDistributionSelector})}}
-              />
-            }
-            {!guesstimateForm.data && isLarge &&
-              <a className='ui button' onClick={this._addData.bind(this)}> Add data </a>
-            }
+            <TextInput
+              value={input}
+              metricFocus={metricFocus}
+              onChange={this._changeInput.bind(this)}
+              onFocus={() => {this._switchMetricClickMode.bind(this)(true)}}
+              onBlur={this._handleBlur.bind(this)}
+              ref='TextInput'
+            />
+            <GuesstimateTypeIcon
+              guesstimateType={guesstimateType}
+              toggleDistributionSelector={() => {this.setState({showDistributionSelector: !showDistributionSelector})}}
+            />
           </div>
         </div>
         {showDistributionSelector &&
@@ -156,6 +152,46 @@ class GuesstimateForm extends Component{
                 onSubmit={this._changeDistributionType.bind(this)}
                 selected={guesstimateType}
               />
+            </div>
+          </div>
+        }
+      </div>
+    )
+  }
+  //right now errors live in the simulation, which is not present here.
+  render() {
+    const {size, guesstimateForm} = this.props
+    const emptyInput = _.isEmpty(guesstimateForm.input)
+
+    const isLarge = (size === 'large')
+    const isSmall = !isLarge
+    const hasData = !!guesstimateForm.data
+
+    let formClasses = 'GuesstimateForm'
+    formClasses += isLarge ? ' large' : ''
+
+    return(
+      <div className={formClasses}>
+        {isSmall && hasData && this._dataViewer()}
+        {isSmall && !hasData && this._textInput()}
+
+        {isLarge && hasData &&
+          <div className='row'>
+            <div className='col-sm-12'>
+              {this._dataViewer()}
+            </div>
+          </div>
+        }
+
+        {isLarge && !hasData &&
+          <div className='row'>
+            <div className='col-sm-8'>
+              {this._textInput()}
+            </div>
+            <div className='col-sm-4'>
+              {emptyInput &&
+                <a className='custom-data' onClick={this._addData.bind(this)}> Add Custom Data </a>
+              }
             </div>
           </div>
         }

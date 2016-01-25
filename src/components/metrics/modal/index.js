@@ -107,7 +107,7 @@ export default class MetricModal extends Component {
 
         <div className='container bottom'>
           <div className='row editingInputSection'>
-            <div className='col-sm-6'>
+            <div className='col-sm-12'>
                 <DistributionEditor
                     guesstimate={metric.guesstimate}
                     guesstimateForm={this.props.guesstimateForm}
