@@ -65,7 +65,7 @@ export default class MetricModal extends Component {
       <div className='metricModal'>
         <div className='container top'>
           <div className='histogram'>
-            <Histogram height={150} top={0} bottom={0} bins={100}
+            <Histogram height={150} top={0} bottom={0} bins={100} widthPercent={80}
                 simulation={metric.simulation}
             />
           </div>
