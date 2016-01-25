@@ -8,7 +8,7 @@ class Button extends Component {
   render() {
     return (
     <div className='DataViewer DataViewer--card'>
-      <a className='ui button primary small'> <Icon name='bar-chart'/> Custom </a>
+      <a className='ui button primary small' onClick={this.props.onOpen}> <Icon name='bar-chart'/> Custom </a>
       <ButtonClose onClick={this.props.onDelete}/>
     </div>
     )
@@ -57,7 +57,7 @@ export default class DataViewer extends Component{
       </div>
       )
     } else {
-      return (<Button onDelete={this.props.onDelete}/>)
+      return (<Button onDelete={this.props.onDelete} onOpen={this.props.onOpen}/>)
     }
   }
 }
@@ -100,6 +100,8 @@ class Editor extends Component{
 
   _handleSave() {
     const numbers = this._convertToNumbers(this.state.value)
+                        .filter(e => _.isFinite(e))
+                        .slice(0, 10000)
     this.props.onSave(numbers)
   }
 

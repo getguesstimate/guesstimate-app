@@ -25,7 +25,8 @@ class GuesstimateForm extends Component{
     metricId: PropTypes.string.isRequired,
     metricFocus: PropTypes.func.isRequired,
     onSubmit: PropTypes.func,
-    size: PropTypes.string
+    size: PropTypes.string,
+    onOpen: PropTypes.func
   }
 
   static defaultProps = {
@@ -118,6 +119,7 @@ class GuesstimateForm extends Component{
         onDelete={this._deleteData.bind(this)}
         onSave={this._changeData.bind(this)}
         size={size}
+        onOpen={this.props.onOpen}
       />
     )
   }
