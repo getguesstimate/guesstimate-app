@@ -139,6 +139,7 @@ class GuesstimateForm extends Component{
               onChange={this._changeInput.bind(this)}
               onFocus={() => {this._switchMetricClickMode.bind(this)(true)}}
               onBlur={this._handleBlur.bind(this)}
+              onChangeData={this._changeData.bind(this)}
               ref='TextInput'
             />
             <GuesstimateTypeIcon
