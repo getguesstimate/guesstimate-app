@@ -50,7 +50,6 @@ $grey: #EEE;
   left: 0;
   right: 0;
   bottom: -1.8em;
-  width: 70%;
 }
 
 .metricModal .histogram .react-d3-histogram .react-d3-histogram__bar rect {
