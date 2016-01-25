@@ -93,19 +93,22 @@ class MetricCard extends Component {
   }
 
   _isEmpty(){
-    return (!this._hasGuesstimateInput() && !this._hasName())
+    return (!this._hasGuesstimate() && !this._hasName())
   }
 
   _hasName(){
     return !!this.props.metric.name
   }
 
-  _hasGuesstimateInput(){
-    return !!_.get(this.props.metric, 'guesstimate.input')
+  _hasGuesstimate(){
+    const {metric} = this.props
+    const hasInput = _.has(metric, 'guesstimate.input') && !_.isEmpty(metric.guesstimate.input)
+    const hasData = _.has(metric, 'guesstimate.data')
+    return (hasInput || hasData)
   }
 
   _isTitle(){
-    return (this._hasName() && !this._hasGuesstimateInput())
+    return (this._hasName() && !this._hasGuesstimate())
   }
 
   handleChangeMetric(values) {
@@ -250,6 +253,7 @@ class MetricCard extends Component {
                 metricId={metric.id}
                 onChangeGuesstimate={this.handleChangeGuesstimate.bind(this)}
                 ref='DistributionEditor'
+                onOpen={this.openModal.bind(this)}
             />
           </div>
         }

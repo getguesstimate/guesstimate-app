@@ -15,7 +15,8 @@ export default function guesstimateForm(
   case 'DESTROY_GUESSTIMATE_FORM':
     return {}
   case 'UPDATE_GUESSTIMATE_FORM':
-    return engine.guesstimate.update(state, action.values)
+    let newVersion = engine.guesstimate.update(state, action.values)
+    return newVersion
   default:
     return state
   }
