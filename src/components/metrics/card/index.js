@@ -253,6 +253,7 @@ class MetricCard extends Component {
                 metricId={metric.id}
                 onChangeGuesstimate={this.handleChangeGuesstimate.bind(this)}
                 ref='DistributionEditor'
+                onOpen={this.openModal.bind(this)}
             />
           </div>
         }
