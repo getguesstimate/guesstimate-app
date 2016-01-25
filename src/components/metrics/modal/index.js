@@ -65,7 +65,7 @@ export default class MetricModal extends Component {
       <div className='metricModal'>
         <div className='container top'>
           <div className='histogram'>
-            <Histogram height={200} top={0} bottom={0} bins={100}
+            <Histogram height={150} top={0} bottom={0} bins={100} widthPercent={80}
                 simulation={metric.simulation}
             />
           </div>
@@ -94,7 +94,7 @@ export default class MetricModal extends Component {
                     <tbody>
                     {this.percentages(sampleValues).map(e => {
                       return (
-                      <tr key={e.percentage}><td> {e.percentage}{'%'} </td><td> {e.value} </td></tr>
+                      <tr key={e.percentage}><td> {e.percentage}{'%'} </td><td> {e.value && e.value.toFixed(3)} </td></tr>
                       )
                     })}
                     </tbody>
@@ -107,7 +107,7 @@ export default class MetricModal extends Component {
 
         <div className='container bottom'>
           <div className='row editingInputSection'>
-            <div className='col-sm-6'>
+            <div className='col-sm-12'>
                 <DistributionEditor
                     guesstimate={metric.guesstimate}
                     guesstimateForm={this.props.guesstimateForm}

@@ -3,7 +3,7 @@
 $grey: #EEE;
 
 .metricModal {
-  background-color: rgba(240,240,240,0.9);
+  background-color: rgba(240,240,240,1);
   margin-bottom: 2em;
 }
 
@@ -23,9 +23,10 @@ $grey: #EEE;
 }
 
 .metricModal h1{
-  margin: 0.5em 0 0.5em;
+  margin: 0;
   color: #444;
-  font-weight: 200;
+  font-weight: 600;
+  font-size: 2.2em;
 }
 
 .metricModal h2{
@@ -34,9 +35,9 @@ $grey: #EEE;
 }
 
 .metricModal h3{
-  color: #666;
+  color: #999;
   font-size: 1.4em;
-  font-weight: 200;
+  font-weight: 400;
 }
 
 .metricModal .section{
@@ -48,12 +49,11 @@ $grey: #EEE;
   position:absolute;
   left: 0;
   right: 0;
-  bottom: -1.95em;
-  width: 70%;
+  bottom: -1.8em;
 }
 
 .metricModal .histogram .react-d3-histogram .react-d3-histogram__bar rect {
-  fill: #8FBDDE;
+  fill: rgb(146, 169, 184);
 }
 
 .metricModal .island {
@@ -69,7 +69,7 @@ $grey: #EEE;
 
 .metricModal .ui.table tr td {
   padding: 4px 4px 4px 6px;
-  color: #333
+  color: #666;
 }
 
 .metricModal .distributionSection .island{
@@ -79,13 +79,13 @@ $grey: #EEE;
 
 .metricModal .distributionSection .subsection{
   z-index: 1;
-  padding: 1em;
+  padding: 0 1em;
 }
 
 .metricModal .distributionSection .mean.subsection .DistributionSummary{
   color: #000;
-  font-size: 3em;
-  margin-top: 1.5em;
+  font-size: 2.3em;
+  margin-top: 1em;
   margin-left: 0.3em;
 }
 
@@ -101,8 +101,8 @@ $grey: #EEE;
 }
 
 .metricModal .distributionSection{
-  margin: 1.5em 0 0em;
-  min-height: 12em;
+  margin: 0.5em 0 0em;
+  min-height: 10em;
   position: relative;
 }
 
@@ -112,7 +112,7 @@ $grey: #EEE;
 }
 
 .metricModal .editingInputSection{
-  margin-bottom: 1em;
+  margin-bottom: 3em;
   margin-left: -4px;
 }
 
@@ -122,5 +122,6 @@ $grey: #EEE;
 
 .metricModal > .top .button-close {
   float: right;
-  font-size: 2.3em;
+  font-size: 2em;
+  color: #bbb;
 }

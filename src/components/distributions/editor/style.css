@@ -74,6 +74,15 @@
   margin-top: 0;
 }
 
+.GuesstimateForm.large a.custom-data{
+  text-decoration: underline;
+  color: #999;
+  margin-top: 5px;
+  float: left;
+  font-size: 1.2em;
+  cursor: pointer;
+}
+
 .GuesstimateTypeQuestion:hover {
   opacity: 1;
   cursor: pointer;

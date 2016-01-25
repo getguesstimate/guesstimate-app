@@ -41,7 +41,12 @@ export default class TextInput extends Component{
 
   _handlePress(event) {
     let value = event.target.value;
-    this._changeInput(value);
+    if (this._isData(value)) {
+      const data = this._formatData(value)
+      this.props.onChangeData(data)
+    } else {
+      this._changeInput();
+    }
     event.stopPropagation()
   }
 
@@ -51,6 +56,20 @@ export default class TextInput extends Component{
 
   _value() {
     return ReactDOM.findDOMNode(this.refs.input).value
+  }
+
+  _formatData(value) {
+    return value
+          .replace(/[\[\]]/g, '')
+          .split(/[\n\s,]+/)
+          .map(Number)
+          .filter(e => _.isFinite(e))
+          .slice(0, 10000)
+  }
+
+  _isData(input) {
+    const count = (input.match(/[\n\s,]/g) || []).length
+    return (count > 4)
   }
 
   _handleKeyDown(e) {

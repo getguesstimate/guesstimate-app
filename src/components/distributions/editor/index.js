@@ -6,10 +6,11 @@ import { changeMetricClickMode } from 'gModules/canvas_state/actions'
 import $ from 'jquery'
 import Icon from 'react-fa'
 import DistributionSelector from './distribution-selector.js'
+import GuesstimateTypeIcon from './guesstimate-type-icon.js'
 import * as guesstimator from 'lib/guesstimator/index.js'
 import TextInput from './text-input.js'
+import DataViewer from './data-viewer/index.js'
 import './style.css'
-import * as elev from 'server/elev/index.js'
 
 class GuesstimateForm extends Component{
   displayName: 'GuesstimateForm'
@@ -24,7 +25,12 @@ class GuesstimateForm extends Component{
     metricId: PropTypes.string.isRequired,
     metricFocus: PropTypes.func.isRequired,
     onSubmit: PropTypes.func,
-    size: PropTypes.bool
+    size: PropTypes.string,
+    onOpen: PropTypes.func
+  }
+
+  static defaultProps = {
+     metricFocus: function() { }
   }
 
   state = {
@@ -90,17 +96,41 @@ class GuesstimateForm extends Component{
     }
   }
 
-  //right now errors live in the simulation, which is not present here.
-  render() {
+  _addData() {
+    this._dispatchChange({guesstimateType: 'DATA', data:[1,2,3], input: null})
+    this.props.dispatch(saveGuesstimateForm());
+  }
+
+  _deleteData() {
+    this._dispatchChange({guesstimateType: null, data:null, input: null})
+    this.props.dispatch(saveGuesstimateForm());
+  }
+
+  _changeData(data) {
+    this._dispatchChange({guesstimateType: 'DATA', data, input: null})
+    this.props.dispatch(saveGuesstimateForm());
+  }
+
+  _dataViewer() {
+    const {guesstimateForm, size} = this.props
+    return(
+      <DataViewer
+        data={guesstimateForm.data}
+        onDelete={this._deleteData.bind(this)}
+        onSave={this._changeData.bind(this)}
+        size={size}
+        onOpen={this.props.onOpen}
+      />
+    )
+  }
+
+  _textInput() {
     let {showDistributionSelector} = this.state
-    const {guesstimateForm, metricFocus} = this.props
+    const {guesstimateForm, metricFocus, size} = this.props
     const {input} = guesstimateForm
     const guesstimateType = this._guesstimateType()
-
-    let formClasses = 'GuesstimateForm'
-    formClasses += (this.props.size === 'large') ? ' large' : ''
     return(
-      <div className={formClasses}>
+      <div>
         <div className='row'>
           <div className='col-sm-12'>
             <TextInput
@@ -109,6 +139,7 @@ class GuesstimateForm extends Component{
               onChange={this._changeInput.bind(this)}
               onFocus={() => {this._switchMetricClickMode.bind(this)(true)}}
               onBlur={this._handleBlur.bind(this)}
+              onChangeData={this._changeData.bind(this)}
               ref='TextInput'
             />
             <GuesstimateTypeIcon
@@ -127,47 +158,47 @@ class GuesstimateForm extends Component{
             </div>
           </div>
         }
-      </div>)
+      </div>
+    )
   }
-}
-
-class GuesstimateTypeIcon extends Component{
-  displayName: 'GuesstimateTypeIcon'
-
-  _handleShowInfo() {
-    elev.open(elev.GUESSTIMATE_TYPES)
-  }
-
-  _handleMouseDown() {
-    if (this.props.guesstimateType.isRangeDistribution){
-      this.props.toggleDistributionSelector()
-    }
-  }
-
+  //right now errors live in the simulation, which is not present here.
   render() {
-    const {guesstimateType} = this.props
-    if (!guesstimateType){ return (false) }
-    const {isRangeDistribution, icon} = guesstimateType
-    const showIcon = guesstimateType && guesstimateType.icon
+    const {size, guesstimateForm} = this.props
+    const emptyInput = _.isEmpty(guesstimateForm.input)
 
-    let className='DistributionSelectorToggle DistributionIcon'
-    className += isRangeDistribution ? ' button' : ''
-    if (showIcon) {
-      return(
-        <div
-            className={className}
-            onMouseDown={this._handleMouseDown.bind(this)}
-        >
-          <img src={icon}/>
-        </div>
-      )
-    } else {
-      return (
-        <div className='GuesstimateTypeQuestion' onMouseDown={this._handleShowInfo.bind(this)}>
-          <Icon name='question-circle'/>
-        </div>
-      )
-    }
+    const isLarge = (size === 'large')
+    const isSmall = !isLarge
+    const hasData = !!guesstimateForm.data
+
+    let formClasses = 'GuesstimateForm'
+    formClasses += isLarge ? ' large' : ''
+
+    return(
+      <div className={formClasses}>
+        {isSmall && hasData && this._dataViewer()}
+        {isSmall && !hasData && this._textInput()}
+
+        {isLarge && hasData &&
+          <div className='row'>
+            <div className='col-sm-12'>
+              {this._dataViewer()}
+            </div>
+          </div>
+        }
+
+        {isLarge && !hasData &&
+          <div className='row'>
+            <div className='col-sm-8'>
+              {this._textInput()}
+            </div>
+            <div className='col-sm-4'>
+              {emptyInput &&
+                <a className='custom-data' onClick={this._addData.bind(this)}> Add Custom Data </a>
+              }
+            </div>
+          </div>
+        }
+      </div>)
   }
 }
 
