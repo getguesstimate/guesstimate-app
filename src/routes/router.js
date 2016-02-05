@@ -15,6 +15,7 @@ import SpaceIndex from 'gComponents/spaces/index/index.js'
 import Maintenance from 'gComponents/pages/maintenance/index.js'
 import FAQ from 'gComponents/pages/faq/index.js'
 import TermsAndConditions from 'gComponents/pages/terms_and_conditions/index.js'
+import PrivacyPolicy from 'gComponents/pages/privacy_policy/index.js'
 import ComponentIndex from './component-index'
 import UserShow from 'gComponents/users/show/index.js'
 import ReactDOM from 'react-dom'
@@ -41,6 +42,7 @@ export default Router.extend({
     'maintenance': 'maintenance',
     'faq': 'faq',
     'terms': 'terms',
+    'privacy': 'privacy',
     'users/:id': 'userShow',
   },
 
@@ -70,6 +72,10 @@ export default Router.extend({
 
   terms () {
     this.render(<TermsAndConditions/>)
+  },
+
+  privacy () {
+    this.render(<PrivacyPolicy/>)
   },
 
   faq () {
