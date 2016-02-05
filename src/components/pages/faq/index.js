@@ -1,10 +1,8 @@
 import React, {Component, PropTypes} from 'react'
-import Icon from'react-fa'
-import ReactMarkdown from 'react-markdown'
-import './style.css'
-
+import PageBase from '../base/index'
 
 const content = `
+# Frequently Asked Questions
 
 ## What can Guesstimate be used for?
 Guesstimate is great at making estimates of things that aren't certain.  You can forecast your earnings from a new venture, predict the amount of time a big project will take, or experiment with scientific theories.  People have used it to optimize video games, understand lottery payoffs, and estimate the costs of their childcare.
@@ -61,17 +59,7 @@ export default class FAQ extends Component{
   displayName: 'FAQ'
   render () {
     return (
-      <div className='FAQ'>
-        <br/>
-
-        <h1>
-          Frequently Asked Questions
-        </h1>
-
-        <ReactMarkdown source={content}/>
-        <br/>
-        <br/>
-      </div>
+      <PageBase content={content}/>
     )
   }
 }
