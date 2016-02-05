@@ -1,15 +1,15 @@
 @import './styles/variables.css';
 
-.FAQ {
+.PageBase {
   font-size: 1.1em;
 }
 
-.FAQ h2 {
+.PageBase h2 {
   font-size: 1.25em;
   margin-bottom: 6px;
 }
 
-.FAQ h1 {
+.PageBase h1 {
   margin-top: 1em;
   color: $blue-1;
 }
