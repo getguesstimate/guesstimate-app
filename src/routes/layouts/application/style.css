@@ -3,3 +3,18 @@
   font-size: 1.8em;
   font-weight: 500;
 }
+
+.Layout {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+.Layout main{
+  flex: 1;
+}
+
+.Layout main.flexed{
+  display: flex;
+  flex-direction: column;
+}
