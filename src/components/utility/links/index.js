@@ -18,3 +18,15 @@ export const LinkPrivacy = () => (
     Privacy Policy
   </IubendaPrivacyPolicy>
 )
+
+export const LinkGithubStar = () => (
+  <iframe src="https://ghbtns.com/github-btn.html?user=getguesstimate&repo=guesstimate-app&type=star&count=true" frameBorder="0" scrolling="0" width="160px" height="30px"></iframe>
+)
+
+export const LinkTwitterFollow = () => (
+  <a className="twitter-follow-button"
+      href="https://twitter.com/getguesstimate"
+      dataSize="small">
+    Follow @getguesstimate</a>
+)
+
