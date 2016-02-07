@@ -3,6 +3,7 @@ import * as spaceActions from 'gModules/spaces/actions.js'
 import { connect } from 'react-redux';
 import './style.css'
 import serialize from 'form-serialize'
+import PrivacyToggle from './privacy-toggle/index.js'
 
 function mapStateToProps(state) {
   return {
@@ -45,14 +46,15 @@ export default class NewSpaceFormContainer extends Component {
 
                 {canUsePrivateModels &&
                   <div className='field'>
-                    <label>Public?</label>
-                    <input type="checkbox" name="is_public"/>
+                    <PrivacyToggle/>
                   </div>
                 }
 
-                <button type='submit' className='ui button primary'>
-                  {'Create'}
-                </button>
+                <div className='field'>
+                  <button type='submit' className='ui button primary'>
+                    {'Create'}
+                  </button>
+                </div>
             </form>
           </div>
         </div>

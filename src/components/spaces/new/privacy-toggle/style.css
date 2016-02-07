@@ -1,0 +1,38 @@
+@import './styles/variables.css';
+
+.PrivacyToggle {
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  width: 400px;
+}
+
+.PrivacyToggle li{
+  padding: 0.5em;
+  float: left;
+  width: 100%;
+}
+
+.PrivacyToggle li .icon-section{
+  width: 20%;
+  float: left;
+  text-align: center;
+}
+
+.PrivacyToggle li .icon-section .fa{
+  font-size: 3em;
+  color: $grey-2;
+  margin-top: 5px;
+}
+
+.PrivacyToggle li .info-section{
+  width: 70%;
+  float: left;
+}
+
+.PrivacyToggle li.selected{
+  background-color: $grey-1;
+}
+
+.PrivacyToggle li:hover{
+  background-color: $blue-2;
+}
