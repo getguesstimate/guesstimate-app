@@ -36,9 +36,9 @@ export default class NewSpaceFormContainer extends Component {
   }
 
   render() {
+    const {me} = this.props
     const canUsePrivateModels = this.canUsePrivateModels()
     const canMakeMorePrivateModels = e.me.canMakeMorePrivateModels(me)
-    const {me} = this.props
     let submitClasses = 'ui button primary'
     submitClasses += this.state.isValid ? '' : ' disabled'
     return (
