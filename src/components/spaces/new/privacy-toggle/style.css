@@ -3,13 +3,14 @@
 .PrivacyToggle {
   border: 1px solid #ddd;
   border-radius: 3px;
-  width: 400px;
+  width: 340px;
 }
 
 .PrivacyToggle li{
   padding: 0.5em;
   float: left;
   width: 100%;
+  cursor: pointer;
 }
 
 .PrivacyToggle li .icon-section{

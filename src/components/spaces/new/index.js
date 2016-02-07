@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 import * as spaceActions from 'gModules/spaces/actions.js'
+import e from 'gEngine/engine'
 import { connect } from 'react-redux';
 import './style.css'
 import serialize from 'form-serialize'
@@ -13,6 +14,8 @@ function mapStateToProps(state) {
 
 @connect(mapStateToProps)
 export default class NewSpaceFormContainer extends Component {
+  state = {isValid: true}
+
   onSubmit(e) {
     e.preventDefault()
     let params = serialize(this.refs.form, {hash: true})
@@ -28,8 +31,16 @@ export default class NewSpaceFormContainer extends Component {
     return !!_.get(this.props,  'me.profile.has_private_access')
   }
 
+  changeValidity(isValid) {
+    this.setState({isValid})
+  }
+
   render() {
     const canUsePrivateModels = this.canUsePrivateModels()
+    const canMakeMorePrivateModels = e.me.canMakeMorePrivateModels(me)
+    const {me} = this.props
+    let submitClasses = 'ui button primary'
+    submitClasses += this.state.isValid ? '' : ' disabled'
     return (
       <div className='SpaceNew' >
         <div className='row'>
@@ -46,12 +57,16 @@ export default class NewSpaceFormContainer extends Component {
 
                 {canUsePrivateModels &&
                   <div className='field'>
-                    <PrivacyToggle ref='privacy-toggle'/>
+                    <PrivacyToggle
+                      ref='privacy-toggle'
+                      canMakeMorePrivateModels={canMakeMorePrivateModels}
+                      changeValidity={this.changeValidity.bind(this)}
+                    />
                   </div>
                 }
 
                 <div className='field'>
-                  <button type='submit' className='ui button primary'>
+                  <button type='submit' className={submitClasses}>
                     {'Create'}
                   </button>
                 </div>
