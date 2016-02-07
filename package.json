@@ -4,8 +4,8 @@
   "description": "Make, share, and evaluate estimates of things",
   "main": "index.js",
   "scripts": {
-    "dev": "BUILD_DEV=1 NODE_ENV=development API_ENV=development webpack-dev-server",
-    "start": "BUILD_DEV=0 NODE_ENV=development API_ENV=development webpack-dev-server",
+    "dev": "BUILD_DEV=1 NODE_ENV=development API_ENV=production webpack-dev-server",
+    "start": "BUILD_DEV=0 NODE_ENV=development API_ENV=production webpack-dev-server",
     "build": "BUILD_DEV=0 API_ENV=production webpack",
     "deploy": "surge -p public -d www.getguesstimate.com",
     "stage": "surge -p public -d stage.getguesstimate.com",
