@@ -52,7 +52,7 @@ export default class PublicOption extends Component {
 
 export default class PrivateOption extends Component {
   render () {
-    const {onClick, isSelected, canMakePrivateModels} = this.props
+    const {onClick, isSelected, canMakeMorePrivateModels} = this.props
     return (
       <PrivacyOption
         isSelected={isSelected}
@@ -64,7 +64,7 @@ export default class PrivateOption extends Component {
         body={'This will only be visable to you'}
         />
 
-        {isSelected && (!canMakePrivateModels) &&
+        {isSelected && (!canMakeMorePrivateModels) &&
           <h2> You do not have permission to make any more models </h2>
         }
 
@@ -99,7 +99,7 @@ export default class PrivacyToggle extends Component {
         <PrivateOption
           isSelected={!isPublic}
           onClick={this.handlePrivateSelect.bind(this)}
-          canMakePrivateModels={this.props.canMakePrivateModels}
+          canMakeMorePrivateModels={this.props.canMakeMorePrivateModels}
         />
       </ul>
     )
