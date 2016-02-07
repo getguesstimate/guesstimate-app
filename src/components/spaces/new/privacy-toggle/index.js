@@ -55,6 +55,10 @@ export default class PrivateOption extends Component {
 export default class PrivacyToggle extends Component {
   state = {isPublic: false}
 
+  isPublic() {
+    return this.state.isPublic
+  }
+
   handlePrivateSelect () {
     this.setState({isPublic: false})
   }
