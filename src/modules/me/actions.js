@@ -75,6 +75,7 @@ function auth0MeLoaded(profile, token) {
 export function guesstimateMeLoaded(object) {
   return function(dispatch, getState) {
     dispatch({ type: 'GUESSTIMATE_ME_LOADED', id: object.id, profile: object})
+    console.log('guesstiamteme', object)
     me.localStorage.set(getState().me)
   }
 }
