@@ -47,13 +47,14 @@ export default class NewSpaceFormContainer extends Component {
           <div className='col-md-2'>
           </div>
           <div className='col-md-8'>
-            <h2> Create a {canUsePrivateModels ? '' : 'Public'} Model </h2>
+            <h2> Create a New {canUsePrivateModels ? '' : 'Public'} Model </h2>
             <br/>
             <form onSubmit={this.onSubmit.bind(this)} className='ui form' ref='form'>
                 <div className='field'>
-                  <label>Name</label>
-                  <input type="text" name="name"/>
+                  <h3>Name</h3>
+                  <input type="text" name="name" defaultValue='untitled'/>
                 </div>
+                <hr/>
 
                 {canUsePrivateModels &&
                   <div className='field'>
@@ -65,6 +66,8 @@ export default class NewSpaceFormContainer extends Component {
                   </div>
                 }
 
+
+                <hr/>
                 <div className='field'>
                   <button type='submit' className={submitClasses}>
                     {'Create'}

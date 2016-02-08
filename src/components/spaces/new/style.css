@@ -1,3 +1,26 @@
+@import './styles/variables.css';
+
 .SpaceNew {
   margin-top: 3em;
+}
+
+.SpaceNew form h3 {
+  font-size: 1.25em;
+  margin-bottom: 4px;
+}
+
+.SpaceNew form field {
+  float: left;
+  width: 100%;
+}
+
+.SpaceNew form hr{
+  margin-bottom: 10px;
+  border: none;
+  border: 0;
+  overflow: hidden;
+  border-bottom: 1px solid #eee;
+  float: left;
+  width: 100%;
+  margin: 2px 0 20px;
 }
