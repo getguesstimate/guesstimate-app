@@ -11,7 +11,8 @@ export default class PrivacyButton extends Component {
         </div>
         <div className='info-section'>
           <h3> {this.props.header} </h3>
-          <p> {this.props.body} </p>
+
+          {this.props.children}
         </div>
       </div>
     )
@@ -43,8 +44,9 @@ export default class PublicOption extends Component {
         <PrivacyButton
           icon={'globe'}
           header={'Public'}
-          body={'This will be available to everyone'}
-        />
+        >
+        This model is visable to everyone. Only you can save changes.
+      </PrivacyButton>
       </PrivacyOption>
     )
   }
@@ -61,12 +63,13 @@ export default class PrivateOption extends Component {
         <PrivacyButton
         icon={'lock'}
         header={'Private'}
-        body={'This will only be visable to you'}
-        />
+        >
+          <p> This model is only visable and editable by you. </p>
+          {isSelected && (!canMakeMorePrivateModels) &&
+            <p className='warning'> Upgrade your account to create more private models. </p>
+          }
+        </PrivacyButton>
 
-        {isSelected && (!canMakeMorePrivateModels) &&
-          <h2> You do not have permission to make any more models </h2>
-        }
 
       </PrivacyOption>
     )
@@ -83,7 +86,7 @@ export default class PrivacyToggle extends Component {
 
   handlePrivateSelect () {
     this.setState({isPublic: false})
-    this.props.changeValidity(this.props.canMakePrivateModels)
+    this.props.changeValidity(this.props.canMakeMorePrivateModels)
   }
 
   handlePublicSelect () {

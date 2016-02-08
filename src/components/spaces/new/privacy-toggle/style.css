@@ -3,31 +3,45 @@
 .PrivacyToggle {
   border: 1px solid #ddd;
   border-radius: 3px;
-  width: 340px;
+  width: 380px;
+  margin-bottom: 20px;
 }
 
 .PrivacyToggle li{
   padding: 0.5em;
   float: left;
   width: 100%;
+}
+
+.PrivacyToggle li:not(.selected){
   cursor: pointer;
 }
 
+
 .PrivacyToggle li .icon-section{
-  width: 20%;
+  width: 18%;
   float: left;
   text-align: center;
 }
 
 .PrivacyToggle li .icon-section .fa{
-  font-size: 3em;
+  font-size: 2.5em;
   color: $grey-2;
-  margin-top: 5px;
+  margin-top: 8px;
 }
 
 .PrivacyToggle li .info-section{
-  width: 70%;
+  width: 80%;
   float: left;
+}
+
+.PrivacyToggle li .info-section h3{
+  font-size: 1.1em;
+  margin-bottom: 3px;
+}
+
+.PrivacyToggle li .info-section .warning{
+  font-weight: 800;
 }
 
 .PrivacyToggle li.selected{
