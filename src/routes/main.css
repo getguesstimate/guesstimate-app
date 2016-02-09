@@ -28,17 +28,6 @@ body {
   height: 100%;
 }
 
-
-.pageHeader {
-
-}
-
-.Layout {
-  display: flex;
-  flex-direction: column;
-  height: 100%
-}
-
 .navHelper {
   height: 100%;
 }
