@@ -13,6 +13,7 @@ import * as meActions from 'gModules/me/actions.js';
 import ErrorModal from 'gComponents/application/errorModal/index.js';
 import * as Space from 'gEngine/space';
 import Header from '../header'
+import Footer from '../footer'
 import NavHelper from './nav-helper'
 import './style.css';
 
@@ -52,12 +53,17 @@ export default class extends Component{
       body = <div className="container-fluid wrap"> {body} </div>
     }
 
+    const mainClass = options.isFluid ? 'flexed' : ''
+
     return (
       <NavHelper>
         <ErrorModal/>
         <div className='Layout'>
-          <Header isFluid={options.isFluid} spaces={this.props.spaces} isBare={options.simpleHeader}/>
-          {body}
+          <Header isFluid={options.isFluid} isBare={options.simpleHeader}/>
+          <main className={mainClass}>
+            {body}
+          </main>
+          {!options.isFluid && <Footer/>}
         </div>
       </NavHelper>
     )

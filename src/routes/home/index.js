@@ -42,14 +42,6 @@ export default class Home extends Component {
             </span>
           </div>
         </div>
-
-        <hr className='foobar'/>
-
-        <div className='row'>
-          <div className='col-xs-12'>
-            <a className="twitter-timeline" href="https://twitter.com/getguesstimate" data-widget-id="684872978949996545">Tweets by @getguesstimate</a>
-          </div>
-        </div>
       </div>
     )
   }
