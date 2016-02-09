@@ -7,6 +7,7 @@ import {rootUrl} from 'servers/guesstimate-api/constants.js'
 import {captureApiError} from 'lib/errors/index.js'
 import {changeSaveState} from 'gModules/canvas_state/actions.js'
 import * as userActions from 'gModules/users/actions.js'
+import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
 
 let standardActionCreators = actionCreatorsFor('spaces');
 
@@ -18,6 +19,13 @@ const standards = (state) => {
     dataType: 'json',
     contentType: 'application/json'
   }
+}
+
+function api(state) {
+  function getToken(state) {
+    return _.get(state, 'me.token')
+  }
+  return setupGuesstimateApi(getToken(state))
 }
 
 const formattedRequest = ({requestParams, state}) => {
@@ -61,32 +69,21 @@ export function fromSearch(data) {
 }
 
 export function fetchById(id) {
-  const url = (rootUrl + 'spaces/' + id)
-
   return function(dispatch, getState) {
-    const action = standardActionCreators.fetchStart();
-    dispatch(action)
+    dispatch(standardActionCreators.fetchStart())
 
-    const request = formattedRequest({
-      state: getState(),
-      requestParams: {
-        url,
-        method: 'GET',
+    api(getState()).models.get({spaceId: id}, (err, value) => {
+      if (err) {
+        captureApiError('SpacesFetch', null, null, err, {url})
       }
-    })
+      else if (value) {
+        dispatch(standardActionCreators.fetchSuccess([value]))
 
-    request.done(space => {
-      const action = standardActionCreators.fetchSuccess([space])
-      dispatch(action)
-
-      const users = getState().users
-      const user_id = space.user_id
-      const has_user = !!(users.find(e => e.id === user_id))
-      if (!has_user) { dispatch(userActions.fetchById(user_id)) }
-    })
-
-    request.fail((jqXHR, textStatus, errorThrown) => {
-      captureApiError('SpacesFetch', jqXHR, textStatus, errorThrown, {url})
+        const users = getState().users
+        const user_id = value.user_id
+        const has_user = !!(users.find(e => e.id === user_id))
+        if (!has_user) { dispatch(userActions.fetchById(user_id)) }
+      }
     })
   }
 }
