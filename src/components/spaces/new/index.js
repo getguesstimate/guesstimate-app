@@ -67,7 +67,9 @@ export default class NewSpaceFormContainer extends Component {
                 }
 
 
-                <hr/>
+                {canUsePrivateModels &&
+                  <hr/>
+                }
                 <div className='field'>
                   <button type='submit' className={submitClasses}>
                     {'Create'}
