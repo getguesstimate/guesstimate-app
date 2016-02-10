@@ -54,7 +54,7 @@ function nodeDistances(nodes, maxDistanceList) {
 }
 
 function allNodesHaveDistances(nodes, maxDistanceList) {
-  return _.all(nodeDistances(nodes, maxDistanceList), _.isFinite)
+  return _.every(nodeDistances(nodes, maxDistanceList), _.isFinite)
 }
 
 export function maxDistance(edges, maxDistanceList, node) {

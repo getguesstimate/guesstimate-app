@@ -45,7 +45,7 @@ export const normalTextMixin = Object.assign(
     _normalTextErrors(text) {
       let errs = []
       if (this._inputSymbols(text).length > 1) { errs.push('Must contain only 1 symbol') }
-      if (!_.all(this._numbers(text), (e) => isParseableNumber(e))) { errs.push('Not all numbers are parseable') }
+      if (!_.every(this._numbers(text), (e) => isParseableNumber(e))) { errs.push('Not all numbers are parseable') }
       else if (this._numbers(text)[0] >= this._numbers(text)[1]) { errs.push('Low -> High') }
 
       return errs
