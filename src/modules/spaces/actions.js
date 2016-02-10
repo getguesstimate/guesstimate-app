@@ -9,17 +9,7 @@ import {changeSaveState} from 'gModules/canvas_state/actions.js'
 import * as userActions from 'gModules/users/actions.js'
 import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
 
-let standardActionCreators = actionCreatorsFor('spaces');
-
-
-const standards = (state) => {
-  return {
-    headers: { 'Authorization': 'Bearer ' + state.me.token },
-    method: 'GET',
-    dataType: 'json',
-    contentType: 'application/json'
-  }
-}
+let sActions = actionCreatorsFor('spaces');
 
 function api(state) {
   function getToken(state) {
@@ -28,56 +18,42 @@ function api(state) {
   return setupGuesstimateApi(getToken(state))
 }
 
-const formattedRequest = ({requestParams, state}) => {
-  const params = Object.assign(standards(state), requestParams)
-  return $.ajax(params)
-}
 
 export function destroy(object) {
   const id = object.id;
-  return function(dispatch, getState) {
+  return (dispatch, getState) => {
     app.router.history.navigate('/models')
-    const action = standardActionCreators.deleteStart({id: id});
-    dispatch(action)
+    dispatch(sActions.deleteStart({id}));
 
-    const request = formattedRequest({
-      state: getState(),
-      requestParams: {
-        url: (rootUrl + 'spaces/' + id),
-        method: 'DELETE'
+    api(getState()).models.destroy({spaceId: id}, (err, value) => {
+      if (err) {
+        captureApiError('SpacesDestroy', null, null, err, {url: 'spacesfetch'})
       }
-    })
-
-
-    request.done(() => {
-      const successAction = standardActionCreators.deleteSuccess({id: id});
-      dispatch(successAction)
-    })
-
-    request.fail((jqXHR, textStatus, errorThrown) => {
-      captureApiError('SpacesDestroy', jqXHR, textStatus, errorThrown, {url: (rootUrl + 'spaces/' + id)})
+      else if (value) {
+        dispatch(sActions.deleteSuccess({id}))
+      }
     })
   }
 }
 
 export function fromSearch(data) {
-  return function(dispatch) {
+  return (dispatch) => {
     const formatted = data.map(d => _.pick(d, ['id', 'name', 'description', 'user_id', 'updated_at', 'metric_count', 'is_private']))
-    const action = standardActionCreators.fetchSuccess(formatted)
+    const action = sActions.fetchSuccess(formatted)
     dispatch(action)
   }
 }
 
 export function fetchById(spaceId) {
-  return function(dispatch, getState) {
-    dispatch(standardActionCreators.fetchStart())
+  return (dispatch, getState) => {
+    dispatch(sActions.fetchStart())
 
     api(getState()).models.get({spaceId}, (err, value) => {
       if (err) {
         captureApiError('SpacesFetch', null, null, err, {url: 'spacesfetch'})
       }
       else if (value) {
-        dispatch(standardActionCreators.fetchSuccess([value]))
+        dispatch(sActions.fetchSuccess([value]))
 
         const users = getState().users
         const user_id = value.user_id
@@ -90,8 +66,8 @@ export function fetchById(spaceId) {
 
 //required userId for now, but later this can be optional
 export function fetch({userId}) {
-  return function(dispatch, getState) {
-    dispatch(standardActionCreators.fetchStart())
+  return (dispatch, getState) => {
+    dispatch(sActions.fetchStart())
 
     api(getState()).models.list({userId}, (err, value) => {
       if (err) {
@@ -99,35 +75,27 @@ export function fetch({userId}) {
       }
       else if (value) {
         const formatted = value.items.map(d => _.pick(d, ['id', 'name', 'description', 'user_id', 'updated_at', 'metric_count', 'is_private']))
-        dispatch(standardActionCreators.fetchSuccess(formatted))
+        dispatch(sActions.fetchSuccess(formatted))
       }
     })
   }
 }
 
 export function create(object) {
-  return function(dispatch, getState) {
+  return (dispatch, getState) => {
 
     const cid = cuid()
     object = Object.assign(object, {id: cid})
-    const action = standardActionCreators.createStart(object);
+    const action = sActions.createStart(object);
 
-    const request = formattedRequest({
-      state: getState(),
-      requestParams: {
-        url: (rootUrl + 'spaces/'),
-        data: JSON.stringify({space: object}),
-        method: 'POST'
+    api(getState()).models.create(object, (err, value) => {
+      if (err) {
+        captureApiError('SpacesCreate', null, null, err, {url: 'SpacesCreate'})
       }
-    })
-
-    request.done(data => {
-      const action = standardActionCreators.createSuccess(data, cid)
-      dispatch(action)
-      app.router.history.navigate('/models/' + data.id)
-    })
-    request.fail((jqXHR, textStatus, errorThrown) => {
-      captureApiError('SpacesCreate', jqXHR, textStatus, errorThrown, {url: (rootUrl+'spaces')})
+      else if (value) {
+        dispatch(sActions.createSuccess(value, cid))
+        app.router.history.navigate('/models/' + value.id)
+      }
     })
   }
 }
@@ -138,38 +106,29 @@ function getSpace(getState, spaceId) {
 }
 
 export function generalUpdate(spaceId, params) {
-  return function(dispatch, getState) {
+  return (dispatch, getState) => {
 
     const space = Object.assign({}, getSpace(getState, spaceId), params)
-    const action = standardActionCreators.updateStart(space);
 
-    dispatch(action)
+    dispatch(sActions.updateStart(space))
     dispatch(changeSaveState('SAVING'))
 
-    const request = formattedRequest({
-      state: getState(),
-      requestParams: {
-        url: (rootUrl + 'spaces/' + spaceId),
-        method: 'PATCH',
-        data: JSON.stringify({space: params})
+    api(getState()).models.update(spaceId, params, (err, value) => {
+      if (err) {
+        captureApiError('SpacesUpdate', null, null, err, {url: 'SpacesUpdate'})
+        dispatch(changeSaveState('ERROR'))
       }
-    })
-
-    request.done((data) => {
-      const action = standardActionCreators.updateSuccess(data)
-      dispatch(action)
-      dispatch(changeSaveState('SAVED'))
-    })
-    request.fail((jqXHR, textStatus, errorThrown) => {
-      captureApiError('SpacesUpdate', jqXHR, textStatus, errorThrown, {url: (rootUrl + 'spaces/' + spaceId)})
-      dispatch(changeSaveState('ERROR'))
+      else if (value) {
+        dispatch(sActions.updateSuccess(value))
+        dispatch(changeSaveState('SAVED'))
+      }
     })
   }
 }
 
 //updates everything except graph
 export function update(spaceId, params={}) {
-  return function(dispatch, getState) {
+  return (dispatch, getState) => {
     let space = getSpace(getState, spaceId)
     space = Object.assign({}, space, params)
     const updates = _.pick(space, ['name', 'description'])
@@ -180,7 +139,7 @@ export function update(spaceId, params={}) {
 
 //updates graph only
 export function updateGraph(spaceId) {
-  return function(dispatch, getState) {
+  return (dispatch, getState) => {
     let {spaces, metrics, guesstimates} = getState();
     let space = e.space.get(spaces, spaceId)
     space = e.space.withGraph(space, {metrics, guesstimates});
