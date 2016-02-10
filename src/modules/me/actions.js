@@ -5,11 +5,13 @@ import * as auth0Constants from 'servers/auth0/constants.js'
 import {generalError} from 'lib/errors/index.js'
 import * as displayErrorsActions from 'gModules/displayErrors/actions.js'
 
+const lockOptions = {
+  disableSignupAction: false,
+  disableResetAction: false
+}
+
 export const signIn = () => {
-    return (dispatch, getState) => lock.showSignin({
-      disableSignupAction: false,
-      disableResetAction: false
-    }, (err, profile, token) => {
+    return (dispatch, getState) => lock.showSignin(lockOptions, (err, profile, token) => {
       if (err) {
         generalError('MesignIn Error', {err, profile, token})
         dispatch(displayErrorsActions.newError())
@@ -23,10 +25,7 @@ export const signIn = () => {
 }
 
 export const signUp = () => {
-    return (dispatch, getState) => lock.showSignup({
-      disableSignupAction: false,
-      disableResetAction: false
-    }, (err, profile, token) => {
+    return (dispatch, getState) => lock.showSignin(lockOptions, (err, profile, token) => {
       if (err) {
         generalError('MesignUp Error', {err, profile, token})
         dispatch(displayErrorsActions.newError())
