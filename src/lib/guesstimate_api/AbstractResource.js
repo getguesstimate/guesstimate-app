@@ -5,24 +5,27 @@ export default class AbstractResource {
     this.api = api
   }
 
-  guesstimateRequest({url, method, params}) {
+  guesstimateRequest({url, method, data}) {
     const token = this.api.api_token
     const host = this.api.host
     const serverUrl = host + url
 
-    return ({
+    let requestParams = {
       headers: { 'Authorization': 'Bearer ' + token },
       dataType: 'json',
       contentType: 'application/json',
       url: serverUrl,
       method
-    })
+    }
+    if (data) { requestParams.data = JSON.stringify(data) }
+
+    return requestParams
   }
 
-  guesstimateMethod({url, method, params}) {
+  guesstimateMethod({url, method, data}) {
     const that = this
     return function(msg, callback) {
-      const params = that.guesstimateRequest({url, method, params})
+      const params = that.guesstimateRequest({url, method, data})
       const request = $.ajax(params)
       request.done((response) => {callback(null, response)})
       request.fail((jqXHR, textStatus, errorThrown) => {callback(errorThrown, null)})
