@@ -18,7 +18,6 @@ function api(state) {
   return setupGuesstimateApi(getToken(state))
 }
 
-
 export function destroy(object) {
   const id = object.id;
   return (dispatch, getState) => {

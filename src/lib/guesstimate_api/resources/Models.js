@@ -5,21 +5,21 @@ export default class Models extends AbstractResource {
     const url = `users/${msg.userId}/spaces`
     const method = 'GET'
 
-    this.guesstimateMethod({url, method})(msg, callback)
+    this.guesstimateMethod({url, method})(callback)
   }
 
   get(msg, callback) {
     const url = `spaces/${msg.spaceId}`
     const method = 'GET'
 
-    this.guesstimateMethod({url, method})(msg, callback)
+    this.guesstimateMethod({url, method})(callback)
   }
 
   destroy(msg, callback) {
     const url = `spaces/${msg.spaceId}`
     const method = 'DELETE'
 
-    this.guesstimateMethod({url, method})(msg, callback)
+    this.guesstimateMethod({url, method})(callback)
   }
 
   update(spaceId, msg, callback) {
@@ -27,7 +27,7 @@ export default class Models extends AbstractResource {
     const method = 'PATCH'
     const data = {space: msg}
 
-    this.guesstimateMethod({url, method, data})(msg, callback)
+    this.guesstimateMethod({url, method, data})(callback)
   }
 
   create(msg, callback) {
@@ -35,6 +35,6 @@ export default class Models extends AbstractResource {
     const method = 'POST'
     const data = {space: msg}
 
-    this.guesstimateMethod({url, method, data})(msg, callback)
+    this.guesstimateMethod({url, method, data})(callback)
   }
 }

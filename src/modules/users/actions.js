@@ -7,14 +7,7 @@ import {rootUrl} from 'servers/guesstimate-api/constants.js'
 import {captureApiError, generalError} from 'lib/errors/index.js'
 import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
 
-let standardActionCreators = actionCreatorsFor('users');
-
-const standards = () => {
-  return {
-    dataType: 'json',
-    contentType: 'application/json'
-  }
-}
+let sActions = actionCreatorsFor('users');
 
 function api(state) {
   function getToken(state) {
@@ -23,105 +16,66 @@ function api(state) {
   return setupGuesstimateApi(getToken(state))
 }
 
-const formattedRequest = ({requestParams, state}) => {
-  const params = Object.assign(standards(state), requestParams)
-  return $.ajax(params)
-}
+//fetches a specific user if auth0_id is passed in
+export function fetch({auth0_id}) {
+  return (dispatch, getState) => {
+    dispatch(sActions.fetchStart())
 
-//either fetches all users or the specific user if auth0_id is passed in
-export function fetch(params = {}) {
-  return function(dispatch, getState) {
-    const action = standardActionCreators.fetchStart();
-    dispatch(action)
-
-    let url = rootUrl + 'users'
-    params.auth0_id ? url += `?auth0_id=${params.auth0_id}` : false
-
-    const request = formattedRequest({
-      state: getState(),
-      requestParams: {
-        url,
-        method: 'GET',
+    api(getState()).users.listWithAuth0Id(auth0_id, (err, data) => {
+      if (err) {
+        dispatch(displayErrorsActions.newError())
+        captureApiError('UsersFetch', null, null, null, {url: 'usersFetchError'})
       }
-    })
-
-    request.done(data => {
-      const action = standardActionCreators.fetchSuccess(data.items)
-      dispatch(action)
-
-      if (params.auth0_id) {
-        if (_.isEmpty(data)){
-          generalError('UserFetch-EmptyResponse', {params, url})
-          dispatch(displayErrorsActions.newError())
-        } else {
-          const me = data.items[0]
-          dispatch(meActions.guesstimateMeLoaded(me))
-        }
+      else if (data) {
+        const action = sActions.fetchSuccess(data.items)
+        const me = data.items[0]
+        dispatch(meActions.guesstimateMeLoaded(me))
       }
-    })
-
-    request.fail((jqXHR, textStatus, errorThrown) => {
-      dispatch(displayErrorsActions.newError())
-      captureApiError('UsersFetch', jqXHR, textStatus, errorThrown, {url})
     })
   }
 }
 
 export function fetchById(userId) {
-  return function(dispatch, getState) {
+  return (dispatch, getState) => {
     api(getState()).users.get({userId}, (err, user) => {
       if (err) {
         dispatch(displayErrorsActions.newError())
         captureApiError('UsersFetch', null, null, err, {url: 'fetch'})
       }
       else if (user) {
-        dispatch(standardActionCreators.fetchSuccess([user]))
+        dispatch(sActions.fetchSuccess([user]))
       }
     })
   }
 }
 
 export function fromSearch(spaces) {
-  return function(dispatch) {
+  return (dispatch) => {
     const users = spaces.map(s => s.user_info)
     const formatted = users.map(d => _.pick(d, ['auth0_id', 'id', 'name', 'picture']))
-    const action = standardActionCreators.fetchSuccess(formatted)
-    dispatch(action)
+    dispatch(sActions.fetchSuccess(formatted))
   }
 }
 
 export function create(object) {
-  return function(dispatch, getState) {
+  return (dispatch, getState) => {
 
-    const cid = cuid()
-    object = Object.assign(object, {id: cid})
-    const action = standardActionCreators.createStart(object);
+    const newUser = Object.assign(object, {id: cuid()})
+    dispatch(sActions.createStart(newUser));
 
-    const url = rootUrl + 'users/'
-    const requestParams = {
-      url,
-      data: JSON.stringify({user: object}),
-      method: 'POST'
-    }
-    const request = formattedRequest({
-      state: getState(),
-      requestParams
-    })
-
-    request.done(data => {
-        if (_.isEmpty(data)){
-          generalError('UserCreate-EmptyResponse', {cid, url})
-          dispatch(displayErrorsActions.newError())
-        } else {
-          const action = standardActionCreators.createSuccess(data, cid)
-          dispatch(action)
-          dispatch(meActions.guesstimateMeLoaded(data))
-        }
-    })
-
-    request.fail((jqXHR, textStatus, errorThrown) => {
-      dispatch(displayErrorsActions.newError())
-      captureApiError('UsersCreate', jqXHR, textStatus, errorThrown, {url})
+    api(getState()).users.create(newUser, (err, user) => {
+      if (err) {
+        dispatch(displayErrorsActions.newError())
+        captureApiError('UsersCreate', null, null, err, {url: 'create'})
+      }
+      else if (_.isEmpty(user)) {
+        generalError('UserCreate-EmptyResponse', {cid: newUser.id, url: 'userscreate'})
+        dispatch(sActions.fetchSuccess([user]))
+        dispatch(displayErrorsActions.newError())
+      } else {
+        dispatch(sActions.createSuccess(user, newUser.id))
+        dispatch(meActions.guesstimateMeLoaded(user))
+      }
     })
   }
 }
