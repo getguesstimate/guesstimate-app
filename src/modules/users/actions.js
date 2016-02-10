@@ -38,7 +38,7 @@ export function fetch(params = {}) {
     })
 
     request.done(data => {
-      const action = standardActionCreators.fetchSuccess(data)
+      const action = standardActionCreators.fetchSuccess(data.items)
       dispatch(action)
 
       if (params.auth0_id) {
@@ -46,7 +46,7 @@ export function fetch(params = {}) {
           generalError('UserFetch-EmptyResponse', {params, url})
           dispatch(displayErrorsActions.newError())
         } else {
-          const me = data[0]
+          const me = data.items[0]
           dispatch(meActions.guesstimateMeLoaded(me))
         }
       }
@@ -75,7 +75,7 @@ export function fetchById(id) {
     })
 
     request.done(data => {
-      const action = standardActionCreators.fetchSuccess(data)
+      const action = standardActionCreators.fetchSuccess(data.items)
       dispatch(action)
 
     })
