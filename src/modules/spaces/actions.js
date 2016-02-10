@@ -68,13 +68,13 @@ export function fromSearch(data) {
   }
 }
 
-export function fetchById(id) {
+export function fetchById(spaceId) {
   return function(dispatch, getState) {
     dispatch(standardActionCreators.fetchStart())
 
-    api(getState()).models.get({spaceId: id}, (err, value) => {
+    api(getState()).models.get({spaceId}, (err, value) => {
       if (err) {
-        captureApiError('SpacesFetch', null, null, err, {url})
+        captureApiError('SpacesFetch', null, null, err, {url: 'spacesfetch'})
       }
       else if (value) {
         dispatch(standardActionCreators.fetchSuccess([value]))
@@ -83,6 +83,23 @@ export function fetchById(id) {
         const user_id = value.user_id
         const has_user = !!(users.find(e => e.id === user_id))
         if (!has_user) { dispatch(userActions.fetchById(user_id)) }
+      }
+    })
+  }
+}
+
+//required userId for now, but later this can be optional
+export function fetch({userId}) {
+  return function(dispatch, getState) {
+    dispatch(standardActionCreators.fetchStart())
+
+    api(getState()).models.list({userId}, (err, value) => {
+      if (err) {
+        captureApiError('SpacesFetch', null, null, err, {url: 'fetch'})
+      }
+      else if (value) {
+        const formatted = value.items.map(d => _.pick(d, ['id', 'name', 'description', 'user_id', 'updated_at', 'metric_count', 'is_private']))
+        dispatch(standardActionCreators.fetchSuccess(formatted))
       }
     })
   }
