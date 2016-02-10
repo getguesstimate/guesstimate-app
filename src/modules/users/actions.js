@@ -5,6 +5,7 @@ import * as meActions from 'gModules/me/actions.js'
 import * as displayErrorsActions from 'gModules/displayErrors/actions.js'
 import {rootUrl} from 'servers/guesstimate-api/constants.js'
 import {captureApiError, generalError} from 'lib/errors/index.js'
+import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
 
 let standardActionCreators = actionCreatorsFor('users');
 
@@ -13,6 +14,13 @@ const standards = () => {
     dataType: 'json',
     contentType: 'application/json'
   }
+}
+
+function api(state) {
+  function getToken(state) {
+    return _.get(state, 'me.token')
+  }
+  return setupGuesstimateApi(getToken(state))
 }
 
 const formattedRequest = ({requestParams, state}) => {
@@ -59,30 +67,16 @@ export function fetch(params = {}) {
   }
 }
 
-export function fetchById(id) {
-  const url = (rootUrl + 'users/' + id)
-
+export function fetchById(userId) {
   return function(dispatch, getState) {
-    const action = standardActionCreators.fetchStart();
-    dispatch(action)
-
-    const request = formattedRequest({
-      state: getState(),
-      requestParams: {
-        url,
-        method: 'GET',
+    api(getState()).users.get({userId}, (err, user) => {
+      if (err) {
+        dispatch(displayErrorsActions.newError())
+        captureApiError('UsersFetch', null, null, err, {url: 'fetch'})
       }
-    })
-
-    request.done(data => {
-      const action = standardActionCreators.fetchSuccess(data.items)
-      dispatch(action)
-
-    })
-
-    request.fail((jqXHR, textStatus, errorThrown) => {
-      dispatch(displayErrorsActions.newError())
-      captureApiError('UsersFetch', jqXHR, textStatus, errorThrown, {url})
+      else if (user) {
+        dispatch(standardActionCreators.fetchSuccess([user]))
+      }
     })
   }
 }
