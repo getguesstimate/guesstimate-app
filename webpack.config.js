@@ -14,7 +14,7 @@ var ogtags = ''
              + `<meta property="og:title" content="Guesstimate"/>`
              + `<meta property="og:description" content="A spreadsheet for things that aren't certain"/>`
 
-var head = elev + wistia + twitter + fonts + ogtags
+var head = wistia + twitter + fonts + ogtags
 
 var meta = {name: 'Guesstimate', content: `A spreadsheet for things that aren't certain`}
 
