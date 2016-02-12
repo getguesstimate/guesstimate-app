@@ -1,6 +1,6 @@
 import metricsReducer from './reducer.js'
 
-describe.only('metrics', () => {
+describe('metrics', () => {
 
   describe('#SPACES_FETCH_SUCCESS', () => {
     const metrics = [
