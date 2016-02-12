@@ -2,7 +2,6 @@ import React, {Component, PropTypes} from 'react'
 import Router from 'ampersand-router'
 import { Provider } from 'react-redux';
 import configureStore from './middleware'
-import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react';
 import { connect } from 'react-redux';
 
 import * as segment from '../server/segment/index.js'

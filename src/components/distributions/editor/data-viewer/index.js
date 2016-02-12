@@ -94,7 +94,7 @@ class Editor extends Component{
 
   _isValid(value) {
     const numbers = this._convertToNumbers(value)
-    const allValid = _.all(numbers, e => _.isFinite(e))
+    const allValid = _.every(numbers, e => _.isFinite(e))
     return allValid
   }
 
