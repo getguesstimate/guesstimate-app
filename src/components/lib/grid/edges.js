@@ -52,8 +52,10 @@ export default class Edges extends Component {
   }
 
   render() {
-    const {columnWidth, containerHeight, containerWidth, edges, rowHeights} = this.props
-    const showEdges = !!(_.get(edges, 'length') && _.get(rowHeights, 'length') && columnWidth)
+    const {columnWidth, containerHeight, containerWidth, rowHeights} = this.props
+    let {edges} = (this.props)
+    edges = _.uniqBy(edges, e => JSON.stringify(e))
+    let showEdges = !!(_.get(edges, 'length') && _.get(rowHeights, 'length') && columnWidth)
     return (
       <div className='GiantGrid--Arrows'>
       {(edges.length > 0) &&
