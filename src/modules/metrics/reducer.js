@@ -1,5 +1,5 @@
 function uniq(items) {
-  return _.uniqBy(items, 'id')
+  return _.uniqBy(items.reverse(), 'id').reverse()
 }
 
 export default function metrics(state = [], action) {
@@ -15,11 +15,11 @@ export default function metrics(state = [], action) {
     const i = state.findIndex(y => y.id === action.item.id);
     const newItem = Object.assign(state[i], action.item);
     if (i !== -1) {
-      return uniq([
+      return [
         ...state.slice(0, i),
         newItem,
         ...state.slice(i+1, state.length)
-      ]);
+      ];
     }
   default:
     return state
