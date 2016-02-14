@@ -4,16 +4,20 @@ export default function me(state = {}, action) {
     return {
       token: action.token,
       profile: action.profile,
-      loading: true
+      id: (state.id || null)
     }
   case 'GUESSTIMATE_ME_LOADED':
-    const newState = {
+    return {
       token: state.token,
       id: action.id,
-      profile: action.profile,
-      loading: false
+      profile: action.profile
     }
-    return newState
+  case 'ALL_OF_ME_RELOADED':
+    return {
+      token: action.token,
+      id: action.id,
+      profile: action.profile
+    }
   case 'DESTROY_ME':
     return {}
   default:

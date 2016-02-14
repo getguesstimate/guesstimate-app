@@ -31,7 +31,7 @@ function mapStateToProps(state) {
 export default class extends Component{
   displayName: 'Layout'
 
-  componentDidMount() {
+  componentWillMount() {
     this.props.dispatch(meActions.init())
   }
 
