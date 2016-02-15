@@ -18,7 +18,8 @@ export function canUsePrivateModels(me) {
 export function canMakeMorePrivateModels(me) {
   const profile = _.get(me, 'profile')
   if (!profile) { return false }
-  const has_enough = (profile.private_model_count < profile.available_private_model_count)
+  const private_model_limit = _.get(profile, 'plan.private_model_limit') || 0
+  const has_enough = (profile.private_model_count < private_model_limit)
   return (canUsePrivateModels(me) && has_enough)
 }
 
