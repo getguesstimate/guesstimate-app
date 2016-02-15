@@ -43,23 +43,24 @@ let SpaceListItem = ({space, showUser, isOwnedByMe, canUsePrivateModels}) => (
         <h3> {space.name} </h3>
         <p>Updated {formatDate(space.updated_at)}</p>
       </div>
-        {space.user && showUser &&
           <div className='col-xs-3'>
             <div className='row'>
-              <div className='col-xs-12'>
-                <div className='user-tag'>
-                  <img
-                      className='ui avatar image'
-                      src={space.user.picture}
-                  />
-                  {space.user.name}
+
+              {space.user && showUser &&
+                <div className='col-xs-12'>
+                  <div className='user-tag'>
+                    <img
+                        className='ui avatar image'
+                        src={space.user.picture}
+                    />
+                    {space.user.name}
+                  </div>
                 </div>
-              </div>
+              }
 
               {canUsePrivateModels && isOwnedByMe && <PrivateTag isPrivate={space.is_private}/>}
             </div>
           </div>
-        }
     </div>
 
     {!_.isEmpty(space.description) &&

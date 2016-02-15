@@ -71,14 +71,6 @@ export default class Profile extends Component {
       }
 
       { !isLoggedIn &&
-        <a className={'item text'} href='/faq'>FAQ</a>
-      }
-
-      { !isLoggedIn &&
-        <a className={'item text'} href='https://medium.com/guesstimate-blog'>Blog</a>
-      }
-
-      { !isLoggedIn &&
         <a className={'item text'} onClick={this.signIn.bind(this)}>Sign In</a>
       }
 
