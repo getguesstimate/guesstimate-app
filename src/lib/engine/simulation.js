@@ -3,7 +3,7 @@ import * as sample from './sample';
 export function combine(simulations) {
   let recentSimulations = simulations
 
-  if (_.any(simulations, s => s.propagationId)) {
+  if (_.some(simulations, s => s.propagationId)) {
     const recentPropagation = _.max(simulations.map(s => s.propagationId))
     recentSimulations = simulations.filter(s => {return s.propagationId === recentPropagation})
   }
