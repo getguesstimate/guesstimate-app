@@ -40,23 +40,26 @@ export const signUp = () => {
 
 export const init = () => {
   return (dispatch) => {
-    const {id, profile, token} = me.localStorage.get()
-    dispatch({ type: 'ALL_OF_ME_RELOADED', id, profile, token})
+    const storage = me.localStorage.get()
+    if (storage) {
+      const {id, profile, token} = storage
+      dispatch({ type: 'ALL_OF_ME_RELOADED', id, profile, token})
 
-    const meStorage = me.localStorage.get()
+      const meStorage = me.localStorage.get()
 
-    if (token) {
-      lock.getProfile(token, (err, profile) => {
-        if (err) {
-          generalError('MeInit Error', {token, err, profile})
-          me.localStorage.clear()
-          dispatch({ type: 'DESTROY_ME' })
-        } else {
-          dispatch(auth0MeLoaded(profile, token))
-          const {name, username, picture, user_id} = profile
-          dispatch(userActions.fetch({auth0_id: user_id}))
-        }
-      })
+      if (token) {
+        lock.getProfile(token, (err, profile) => {
+          if (err) {
+            generalError('MeInit Error', {token, err, profile})
+            me.localStorage.clear()
+            dispatch({ type: 'DESTROY_ME' })
+          } else {
+            dispatch(auth0MeLoaded(profile, token))
+            const {name, username, picture, user_id} = profile
+            dispatch(userActions.fetch({auth0_id: user_id}))
+          }
+        })
+      }
     }
   }
 }
