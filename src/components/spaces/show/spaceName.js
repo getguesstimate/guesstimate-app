@@ -14,13 +14,16 @@ export class SpaceName extends Component {
   }
 
   render () {
-    const {ownedByMe, name} = this.props
+    let {ownedByMe, name} = this.props
+    const hasName = !_.isEmpty(name)
+    const className = `text-editable ${hasName ? '' : 'default-value'}`
+    const showName = hasName ? name : 'Untitled Model'
     return(
       <span>
         {ownedByMe &&
           <DropDown
               headerText={'Rename Model'}
-              openLink={<h1 className='text-editable'> {name} </h1>}
+              openLink={<h1 className={className}> {showName} </h1>}
               position='right'
               hasPadding={true}
               width='wide'
