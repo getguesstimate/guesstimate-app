@@ -24,13 +24,11 @@ let SpaceHeader = ({space, onSave, onDestroy, onSaveName, canUsePrivateModels}) 
   <div className='header'>
 
     <div className='header-name'>
-      {space.name &&
-        <SpaceName
-            name={space.name}
-            ownedByMe={space.ownedByMe}
-            onSave={onSaveName}
-        />
-      }
+      <SpaceName
+          name={space.name}
+          ownedByMe={space.ownedByMe}
+          onSave={onSaveName}
+      />
     </div>
 
     <div className='header-actions'>
