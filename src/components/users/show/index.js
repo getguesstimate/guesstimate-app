@@ -26,7 +26,7 @@ export default class UserShow extends Component{
 
   render () {
     const {userId, users} = this.props
-    const spaces = this.props.userSpaces
+    const spaces =  _.orderBy(this.props.userSpaces.asMutable(), ['updated_at'], ['desc'])
 
     let user = null
 
@@ -59,7 +59,7 @@ export default class UserShow extends Component{
 
           <div className='col-sm-9'>
             {spaces &&
-              <SpaceList spaces={spaces.asMutable()} showUsers={false} hasMorePages={false}/>
+              <SpaceList spaces={spaces} showUsers={false} hasMorePages={false}/>
             }
           </div>
         </div>
