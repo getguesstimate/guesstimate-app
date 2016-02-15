@@ -41,6 +41,10 @@
   background-color: rgba(0,0,0,0.2);
 }
 
+.hero-unit .text-editable.default-value {
+  color: #ccc;
+}
+
 .hero-unit h1 {
   font-size: 2em;
   padding: 0.2em 0.4em;

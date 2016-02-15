@@ -52,7 +52,7 @@ export default class NewSpaceFormContainer extends Component {
             <form onSubmit={this.onSubmit.bind(this)} className='ui form' ref='form'>
                 <div className='field'>
                   <h3>Name</h3>
-                  <input type="text" name="name" defaultValue='untitled'/>
+                  <input type="text" name="name"/>
                 </div>
                 <hr/>
 
