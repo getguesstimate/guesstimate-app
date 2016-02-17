@@ -33,7 +33,7 @@ export default class EdgeContainer extends Component {
   }
 
   render() {
-    const {edges, containerWidth} = this.props
+    const {edges} = this.props
     const {columnWidth} = this.state
 
     const rowHeights = this.props.rowHeights
@@ -42,7 +42,6 @@ export default class EdgeContainer extends Component {
       <Edges
           columnWidth={columnWidth}
           containerHeight={containerHeight}
-          containerWidth={containerWidth}
           edges={edges}
           rowHeights={rowHeights}
       />
