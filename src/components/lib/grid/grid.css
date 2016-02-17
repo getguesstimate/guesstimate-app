@@ -122,10 +122,6 @@ svg.edge  path.basic-arrow {
   stroke-dasharray:'5,5';
 }
 
-.GiantGrid--Arrows {
-   width: 100%;
-}
-
 .arrow {
   stroke-width: 0;
   fill: $blue-1;

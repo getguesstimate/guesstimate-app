@@ -11,7 +11,6 @@ export default class Edges extends Component {
   static propTypes = {
     columnWidth: PropTypes.number,
     containerHeight: PropTypes.number,
-    containerWidth: PropTypes.number,
     edges: PropTypes.array.isRequired,
     rowHeights: PropTypes.array.isRequired,
   }
@@ -52,7 +51,7 @@ export default class Edges extends Component {
   }
 
   render() {
-    const {columnWidth, containerHeight, containerWidth, rowHeights} = this.props
+    const {columnWidth, containerHeight, rowHeights} = this.props
     let {edges} = (this.props)
     edges = _.uniqBy(edges, e => JSON.stringify(e))
     let showEdges = !!(_.get(edges, 'length') && _.get(rowHeights, 'length') && columnWidth)
@@ -62,7 +61,7 @@ export default class Edges extends Component {
         <svg
             className='edge'
             height={containerHeight}
-            width={containerWidth}
+            width={'100%'}
         >
           <defs key={'defs'} dangerouslySetInnerHTML={{__html: this.defs()}}/>
           {showEdges &&
