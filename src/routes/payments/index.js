@@ -1,7 +1,50 @@
 import React, {Component, PropTypes} from 'react'
 import $ from 'jquery'
+import {fetch_subscription_iframe} from 'gModules/subscriptions/actions.js'
+import {connect} from 'react-redux'
 
-export default class NewOrder extends Component {
+function mapStateToProps(state) {
+  return {
+    iframe: state.subscriptions.iframe
+  }
+}
+
+@connect(mapStateToProps)
+export default class Payments extends Component {
+  displayName: 'Payments'
+  componentWillMount() {
+    this.props.dispatch(fetch_subscription_iframe())
+  }
+
+  onOrderSuccess() {
+    console.log('success')
+  }
+
+  onOrderCancel() {
+    console.log('error')
+  }
+
+  render () {
+    console.log(this.props)
+    const {website_name, url, request: {waiting}} = this.props.iframe
+    const has_website = _.isString(website_name)
+    return (
+      <div className='container-fluid full-width homePage'>
+        {waiting && <h1> Loading </h1>}
+        {has_website &&
+          <NewOrder
+            page={url}
+            name={website_name}
+            onSuccess={this.onOrderSuccess.bind(this)}
+            onCancel={this.onOrderCancel.bind(this)}
+          />
+        }
+      </div>
+    )
+  }
+}
+
+export class NewOrder extends Component {
   componentDidMount() {
     const iframeContainer = '.NewOrder'
     ChargeBee.embed(this.props.page, this.props.name).load({
@@ -32,33 +75,6 @@ export default class NewOrder extends Component {
   render() {
     return (
       <div className='NewOrder'/>
-    )
-  }
-}
-
-export default class Payments extends Component {
-  displayName: 'Payments'
-
-  onOrderSuccess() {
-    console.log('success')
-  }
-
-  onOrderCancel() {
-    console.log('error')
-  }
-
-  render () {
-    window.charge = ChargeBee
-    return (
-      <div className='container-fluid full-width homePage'>
-        <h1> foobar </h1>
-        <NewOrder
-          page={'https://guesstimate-test.chargebee.com/pages/v2/b5FeGofJf2Wmn4tdZ7Jb9cqheWKavncdp/checkout'}
-          name={'guesstimate-test'}
-          onSuccess={this.onOrderSuccess.bind(this)}
-          onCancel={this.onOrderCancel.bind(this)}
-        />
-      </div>
     )
   }
 }
