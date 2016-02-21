@@ -10,6 +10,7 @@ import meR from './me/reducer'
 import canvasStateR from './canvas_state/reducer.js';
 import spacesR from './spaces/reducer';
 import searchSpacesR from './search_spaces/reducer';
+import subscriptionsR from './subscriptions/reducer';
 
 export function changeSelect(location) {
   return { type: 'CHANGE_SELECT', location };
@@ -27,7 +28,8 @@ const rootReducer = function app(state = {}, action){
     users: reduxCrud.reducersFor('users')(state.users, action),
     me: meR(state.me, action),
     canvasState: canvasStateR(state.canvasState, action),
-    searchSpaces: searchSpacesR(state.searchSpaces, action)
+    searchSpaces: searchSpacesR(state.searchSpaces, action),
+    subscriptions: subscriptionsR(state.subscriptions, action)
   };
 };
 

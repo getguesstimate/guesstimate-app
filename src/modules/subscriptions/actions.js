@@ -1,5 +1,14 @@
+import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
+
+function api(state) {
+  function getToken(state) {
+    return _.get(state, 'me.token')
+  }
+  return setupGuesstimateApi(getToken(state))
+}
+
 function actionType(action, event) {
-  return `${action}/${event}`
+  return `${action}_${event}`
 }
 
 function errorAction(action, error) {
@@ -10,6 +19,7 @@ function errorAction(action, error) {
 }
 
 function successAction(action, value) {
+  console.log('type...', actionType(action, 'SUCCESS'))
   return {
       type: actionType(action, 'SUCCESS'),
       value
@@ -17,15 +27,15 @@ function successAction(action, value) {
 }
 
 function simpleCallback({dispatch, action}) {
-  (err, value) => {
+  return (err, value) => {
     if (err) { dispatch(errorAction(action, err)) }
     else if (value) { dispatch(successAction(action, value)) }
   }
 }
 
-export function fetch_subscription_iframe() {
+export function fetch_iframe() {
   return (dispatch, getState) => {
-    action = 'SUBSCRIPTION_IFRAME_FETCH'
+    const action = 'SUBSCRIPTION_IFRAME_FETCH'
     dispatch({type: actionType(action, 'START')})
     api(getState()).subscriptions.get_new_iframe(
       simpleCallback({dispatch, action})
@@ -33,11 +43,12 @@ export function fetch_subscription_iframe() {
   }
 }
 
-export function fetch_first_subscription_iframe_url() {
+export function fetch_portal() {
   return (dispatch, getState) => {
-    action = 'SUBSCRIPTION_PORTAL_FETCH'
+    const action = 'SUBSCRIPTION_PORTAL_FETCH'
     dispatch({type: actionType(action, 'START')})
     api(getState()).subscriptions.get_portal(
       simpleCallback({dispatch, action})
     )
+  }
 }

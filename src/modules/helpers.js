@@ -26,10 +26,10 @@ export function requestReducer(state, type, action = null) {
 }
 
 export function singleEntity(state, action, type, keys) {
-  newState = (type === 'SUCCESS') ? {state..., _.pick(action,keys)} : state,
+  const newState = (type === 'SUCCESS') ? Object.assign({}, state, _.pick(action.value,keys)) : state
 
   return {
-    newState...,
+    ...newState,
     request: requestReducer(state.request, type, action)
   }
 }
