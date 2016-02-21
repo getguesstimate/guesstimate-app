@@ -18,6 +18,7 @@ import PrivacyPolicy from 'gComponents/pages/privacy_policy/index.js'
 import ComponentIndex from './component-index'
 import UserShow from 'gComponents/users/show/index.js'
 import ReactDOM from 'react-dom'
+import Payments from './payments/index.js'
 
 export default Router.extend({
   render (page, options={}) {
@@ -43,6 +44,7 @@ export default Router.extend({
     'terms': 'terms',
     'privacy': 'privacy',
     'users/:id': 'userShow',
+    'payments': 'payments',
   },
 
   spaceIndex () {
@@ -79,6 +81,10 @@ export default Router.extend({
 
   faq () {
     this.render(<FAQ/>)
+  },
+
+  payments () {
+    this.render(<Payments/>)
   },
 
   userShow (id) {
