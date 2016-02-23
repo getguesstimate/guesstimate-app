@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 import MetricCard from 'gComponents/metrics/card'
-import DistributionEditor from 'gComponents/distributions/editor'
+import FirstSubscription from 'gComponents/subscriptions/FirstSubscription/FirstSubscription.js'
 import JSONTree from 'react-json-tree'
 import './main.css'
 
@@ -75,11 +75,6 @@ export default class ComponentIndex extends Component{
             child={MetricCard}
             childProps={MetricCardProps}
             name='MetricCard'
-        />
-        <ComponentEditor
-            child={DistributionEditor}
-            childProps={DistributionEditorProps}
-            name='DistributionEditor'
         />
       </div>
     )

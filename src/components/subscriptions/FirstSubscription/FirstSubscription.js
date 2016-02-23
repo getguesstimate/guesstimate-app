@@ -1,7 +1,12 @@
 import React, {Component, PropTypes} from 'react'
+import {subStages} from 'gModules/first_subscription/state_machine.js'
 
 export default class FirstSubscription extends Component {
   displayName: 'SubscriptionIframe'
+
+  static propTypes = {
+    flowStage: PropTypes.oneOf(subStages)
+  }
 
   render() {
     const isUneccessary = (this.props.flowStage === 'UNECCESSARY')
@@ -9,24 +14,22 @@ export default class FirstSubscription extends Component {
   }
 
   renderFlow() {
-    {flowStage} = this.props
-
     const neededProps = [
-      'plan',
+      'planId',
       'iframeUrl',
       'iframeWebsiteName',
       'onPaymentCancel',
       'onPaymentSuccess'
     ]
+    const {flowStage} = this.props
     const loadedProps = _.pick(this.props, neededProps)
-
     return (
       <div className='container-fluid full-width homePage'>
-        {flowStage === 'LOADING' && <FirstSubscriptionFlowLoading/>}
-        {flowStage === 'LOADED' && <FirstSubscriptionFlowLoaded {...loadedProps}/>}
-        {flowStage === 'CANCELLED' && <FirstSubscriptionFlowCancelled/>}
-        {flowStage === 'SYNCHRONIZING' && <FirstSubscriptionFlowLoadedSynchronizing/>}
-        {flowStage === 'COMPLETE' && <FirstSubscriptionFlowLoadedComplete/>}
+        {(flowStage === 'FORM_START') && <FirstSubscriptionFlowLoading/>}
+        {(flowStage === 'FORM_SUCCESS') && <FirstSubscriptionFlowLoaded {...loadedProps}/>}
+        {(flowStage === 'CANCELLED') && <FirstSubscriptionFlowCancelled/>}
+        {(flowStage === 'SYNCHRONIZING') && <FirstSubscriptionFlowLoadedSynchronizing/>}
+        {(flowStage === 'COMPLETE') && <FirstSubscriptionFlowLoadedComplete/>}
       </div>
     )
   }
@@ -38,6 +41,7 @@ export default class FirstSubscription extends Component {
     ]
     return (
       <div className='container-fluid full-width homePage'>
+        {'me?'}
         <FirstSubscriptionFlowUneccessary
           paymentAccountPortalUrl={this.props.paymentAccountPortalUrl}
         />
@@ -46,11 +50,18 @@ export default class FirstSubscription extends Component {
   }
 }
 
+export const FirstSubscriptionFlowLoaded = ({planId, iframeUrl, iframeWebsiteName, onPaymentCancel, onPaymentSuccess}) => (
+  <div>
+  <div> Get plan: {planId} </div>
+  <a onClick={onPaymentCancel}> Cancel </a>
+  <a onClick={onPaymentSuccess}> Pay Mo Money </a>
+  </div>
+)
+
 export const FirstSubscriptionFlowLoading = () => ( <div> Loading... </div> )
 export const FirstSubscriptionFlowCancelled = () => ( <div> Payment Cancelled.  Refresh to try again. </div> )
 export const FirstSubscriptionFlowSynchronizing = () => ( <div> Synchronizing... </div> )
 export const FirstSubscriptionFlowComplete = () => ( <div> Payment Complete. </div> )
-export const FirstSubscriptionFlowLoaded = () => ( <div> Stuff is Loaded! </div> )
 
 export const FirstSubscriptionFlowUneccessary = (paymentAccountPortalUrl) => (
   <div> Please go to the portal to edit your subscriptions: #{paymentAccountPortalUrl} </div>
