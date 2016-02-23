@@ -1,22 +1,15 @@
 import AbstractResource from '../AbstractResource.js'
 
 export default class Subscriptions extends AbstractResource {
-  get_new_iframe(callback) {
-    const url = 'subscriptions/new.iframe'
+  get_new_iframe({user_id, plan_id}, callback) {
+    const url = `users/${user_id}/accounts/new_subscription_iframe?plan_id=${plan_id}`
     const method = 'GET'
 
     this.guesstimateMethod({url, method})(callback)
   }
 
-  get_portal(callback) {
-    const url = 'subscriptions/portal'
-    const method = 'GET'
-
-    this.guesstimateMethod({url, method})(callback)
-  }
-
-  synchronize(callback) {
-    const url = 'subscriptions/synchronization'
+  synchronize({user_id}, callback) {
+    const url = `users/${user_id}/accounts/synchronization`
     const method = 'POST'
     const data = {}
 

@@ -19,7 +19,6 @@ function errorAction(action, error) {
 }
 
 function successAction(action, value) {
-  console.log('type...', actionType(action, 'SUCCESS'))
   return {
       type: actionType(action, 'SUCCESS'),
       value
@@ -33,22 +32,30 @@ function simpleCallback({dispatch, action}) {
   }
 }
 
-export function fetch_iframe() {
+export function fetchIframe({user_id, plan_id}) {
   return (dispatch, getState) => {
-    const action = 'SUBSCRIPTION_IFRAME_FETCH'
+    const action = 'FIRST_SUBSCRIPTION_IFRAME_FETCH'
+
     dispatch({type: actionType(action, 'START')})
     api(getState()).subscriptions.get_new_iframe(
+      {user_id, plan_id},
       simpleCallback({dispatch, action})
     )
   }
 }
 
-export function fetch_portal() {
-  return (dispatch, getState) => {
-    const action = 'SUBSCRIPTION_PORTAL_FETCH'
-    dispatch({type: actionType(action, 'START')})
-    api(getState()).subscriptions.get_portal(
-      simpleCallback({dispatch, action})
-    )
-  }
+export function flowStageReset() {
+  return {type: 'FIRST_SUBSCRIPTION_FLOW_RESET'}
+}
+
+export function flowStageCancel() {
+  return {type: 'FIRST_SUBSCRIPTION_FLOW_CANCEL'}
+}
+
+export function flowStagePaymentSuccess() {
+  return {type: 'FIRST_SUBSCRIPTION_FLOW_PAYMENT_SUCCESS'}
+}
+
+export function flowStageSynchronizationSuccess() {
+  return {type: 'FIRST_SUBSCRIPTION_FLOW_SYNCHRONIZATION_SUCCESS'}
 }
