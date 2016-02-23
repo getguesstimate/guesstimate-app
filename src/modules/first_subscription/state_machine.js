@@ -1,6 +1,6 @@
 export const actions = {
   formFetchStart: 'FIRST_SUBSCRIPTION_IFRAME_FETCH_START',
-  unneccessary: 'FIRST_SUBSCRIPTION_FLOW_UNNECCESSARY',
+  unnecessary: 'FIRST_SUBSCRIPTION_FLOW_UNNECESSARY',
   reset: 'FIRST_SUBSCRIPTION_FLOW_RESET',
   cancel: 'FIRST_SUBSCRIPTION_FLOW_CANCEL',
   synchronizationPostStart: 'FIRST_SUBSCRIPTION_SYNCHRONIZATION_POST_START'
@@ -16,7 +16,7 @@ export const states = {
 
 export function newFlowState(state, type) {
   if (type === actions.unnecessary) {
-    return states.uneccessary
+    return states.unnecessary
   }
   if (state === states.start) {
     switch (type) {
@@ -43,18 +43,18 @@ export function newFlowState(state, type) {
   if (state === states.synchronization) {
     switch (type) {
       case actions.reset:
-        return states.uneccessary
+        return states.unencessary
     }
   }
   return state
 }
 
-export function subState({state, iframe, synchronization}) {
-  if (state === states.form) {
-    return `FORM_${iframe.status}`
+export function subState({flowState, iframe, synchronization}) {
+  if (flowState === states.form) {
+    return `FORM_${iframe.request.status}`
   }
-  else if (state === states.synchronization) {
-    return `SYNCHRONIZATION_${synchronization.status}`
+  else if (flowState === states.synchronization) {
+    return `SYNCHRONIZATION_${synchronization.request.status}`
     }
-  else { return state }
+  else { return flowState }
 }
