@@ -2,7 +2,7 @@ import {requestReducer, initialRequestState, singleEntity} from '../helpers.js'
 import { combineReducers } from 'redux'
 import { newFlowState } from './state_machine.js'
 
-const initialState = {
+export const initialState = {
   flowStage: 'START',
   iframe: {
     href: null,
@@ -14,11 +14,11 @@ const initialState = {
   }
 }
 
-function flowStage(state = initialState.flowStage, action = null) {
-  return newFlowState(state, action.type)
+function flowStage(state = initialState.flowStage, action = {type: null}) {
+  return newFlowState(state, _.get(action, 'type'))
 }
 
-function iframe(state = initialState.iframe, action = null) {
+function iframe(state = initialState.iframe, action = {type: null}) {
   switch (action.type) {
     case 'FIRST_SUBSCRIPTION_IFRAME_FETCH_START':
       return singleEntity(state, action, 'START', ['href', 'website_name'])
@@ -31,7 +31,7 @@ function iframe(state = initialState.iframe, action = null) {
   }
 }
 
-function synchronization(state = initialState.iframe, action = null) {
+function synchronization(state = initialState.iframe, action = {type: null}) {
   switch (action.type) {
     case 'FIRST_SUBSCRIPTION_SYNCHRONIZATION_POST_START':
       return singleEntity(state, action, 'START', [])
