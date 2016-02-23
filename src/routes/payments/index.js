@@ -1,39 +1,43 @@
 import React, {Component, PropTypes} from 'react'
 import $ from 'jquery'
-import {fetch_subscription_iframe} from 'gModules/subscriptions/actions.js'
+import {fetch_new_subscription_iframe} from 'gModules/subscriptions/actions.js'
 import {connect} from 'react-redux'
 
 function mapStateToProps(state) {
   return {
-    iframe: state.subscriptions.iframe
+    iframe: state.subscriptions.iframe,
+    me: state.me
   }
 }
 
 @connect(mapStateToProps)
-export default class Payments extends Component {
+export default class SubscriptionIframe extends Component {
   displayName: 'Payments'
+  state = {
+    stage: 'STARTING'
+  }
+
   componentWillMount() {
-    this.props.dispatch(fetch_subscription_iframe())
+    this.props.dispatch(fetch_new_subscription_iframe({user_id: this.props.me.id, plan_id: 'small'}))
   }
 
   onOrderSuccess() {
-    console.log('success')
+    this.setState({stage: 'SUCCESS'})
   }
 
   onOrderCancel() {
-    console.log('error')
+    this.setState({stage: 'CANCEL'})
   }
 
   render () {
-    console.log(this.props)
-    const {website_name, url, request: {waiting}} = this.props.iframe
+    const {website_name, href, request: {waiting}} = this.props.iframe
     const has_website = _.isString(website_name)
     return (
       <div className='container-fluid full-width homePage'>
         {waiting && <h1> Loading </h1>}
         {has_website &&
           <NewOrder
-            page={url}
+            page={href}
             name={website_name}
             onSuccess={this.onOrderSuccess.bind(this)}
             onCancel={this.onOrderCancel.bind(this)}

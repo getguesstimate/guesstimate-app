@@ -10,7 +10,7 @@ import meR from './me/reducer'
 import canvasStateR from './canvas_state/reducer.js';
 import spacesR from './spaces/reducer';
 import searchSpacesR from './search_spaces/reducer';
-import subscriptionsR from './subscriptions/reducer';
+import firstSubscriptionsR from './first_subscription/reducer';
 
 export function changeSelect(location) {
   return { type: 'CHANGE_SELECT', location };
@@ -29,7 +29,7 @@ const rootReducer = function app(state = {}, action){
     me: meR(state.me, action),
     canvasState: canvasStateR(state.canvasState, action),
     searchSpaces: searchSpacesR(state.searchSpaces, action),
-    subscriptions: subscriptionsR(state.subscriptions, action)
+    firstSubscription: firstSubscriptionsR(state.firstSubscription, action)
   };
 };
 
