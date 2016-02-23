@@ -43,18 +43,18 @@ export function newFlowState(state, type) {
   if (state === states.synchronization) {
     switch (type) {
       case actions.reset:
-        return states.unencessary
+        return states.unnecessary
     }
   }
   return state
 }
 
-export function subState({flowState, iframe, synchronization}) {
-  if (flowState === states.form) {
+export function subStage({flowStage, iframe, synchronization}) {
+  if (flowStage === states.form) {
     return `FORM_${iframe.request.status}`
   }
-  else if (flowState === states.synchronization) {
+  else if (flowStage === states.synchronization) {
     return `SYNCHRONIZATION_${synchronization.request.status}`
     }
-  else { return flowState }
+  else { return flowStage }
 }
