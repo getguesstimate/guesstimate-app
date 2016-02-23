@@ -18,7 +18,8 @@ import PrivacyPolicy from 'gComponents/pages/privacy_policy/index.js'
 import ComponentIndex from './component-index'
 import UserShow from 'gComponents/users/show/index.js'
 import ReactDOM from 'react-dom'
-//import Payments from './payments/index.js'
+import FirstSubscriptionContainer from 'gComponents/subscriptions/FirstSubscription/container.js'
+import FirstSubscriptionStyleGuide from 'gComponents/subscriptions/FirstSubscription/StyleGuide.js'
 
 export default Router.extend({
   render (page, options={}) {
@@ -38,13 +39,14 @@ export default Router.extend({
     'models': 'spaceIndex',
     'models/new': 'spaceNew',
     'models/:id': 'spaceShow',
-    'components': 'components',
+    'style_guide': 'styleGuide',
+    'style_guide/first_subscription': 'styleGuideFirstSubscription',
     'maintenance': 'maintenance',
     'faq': 'faq',
     'terms': 'terms',
     'privacy': 'privacy',
     'users/:id': 'userShow',
-    //'payments': 'payments',
+     'payments': 'payments',
   },
 
   spaceIndex () {
@@ -63,8 +65,12 @@ export default Router.extend({
     this.render(<SpaceShow spaceId={id}/>, {isFluid: true})
   },
 
-  components () {
+  styleGuide () {
     this.render(<ComponentIndex/>)
+  },
+
+  styleGuideFirstSubscription () {
+    this.render(<FirstSubscriptionStyleGuide/>)
   },
 
   maintenance () {
@@ -83,9 +89,9 @@ export default Router.extend({
     this.render(<FAQ/>)
   },
 
-  //payments () {
-    //this.render(<Payments/>)
-  //},
+  payments () {
+    this.render(<FirstSubscriptionContainer planId={'small'}/>)
+  },
 
   userShow (id) {
     this.render(<UserShow userId={id}/>)

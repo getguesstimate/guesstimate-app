@@ -1,5 +1,7 @@
 import React, {Component, PropTypes} from 'react'
 import * as firstSubscriptionActions from 'gModules/first_subscription/actions.js'
+import FirstSubscription from './FirstSubscription.js'
+import {subStage} from 'gModules/first_subscription/state_machine.js'
 import {connect} from 'react-redux'
 
 function mapStateToProps(state) {
@@ -13,13 +15,13 @@ function mapStateToProps(state) {
 export default class FirstSubscriptionContainer extends Component {
   displayName: 'FirstSubscriptionContainer'
 
-  componentWillMount() {
+  componentDidMount() {
     firstSubscriptionActions.flowStageReset()
 
-    if !this._paymentAccountExists() {
+    if (!this._paymentAccountExists()) {
       this.props.dispatch(firstSubscriptionActions.fetchIframe({
         user_id: this.props.me.id,
-        plan_id: this.props.plan
+        plan_id: this.props.planId
       }))
     }
   }
@@ -32,25 +34,14 @@ export default class FirstSubscriptionContainer extends Component {
 
   _iframeUrl() { return this.props.firstSubscription.iframe.href }
   _iframeWebsiteName() { return this.props.firstSubscription.iframe.website_name }
-
-  _findFlowStage() {
-    const {website_name, href, request: {waiting}} = this.props.firstSubscription.iframe
-    const {flowStage} = this.props.firstSubscription
-
-    if (this._paymentAccountExists()) {
-      return 'UNECCESSARY'
-    } if (flowStage === 'BEGIN') {
-      return (waiting) ? 'LOADING' : 'LOADED'
-    } else {
-      return flowStage
-    }
-  }
+  _flowStage() { return subStage(this.props.firstSubscription) }
 
   render() {
+    console.log(this.props.plan)
     return (
       <FirstSubscription
-        plan={this.props.plan}
-        flowStage={this._findFlowStage()}
+        planId={this.props.planId}
+        flowStage={this._flowStage()}
         paymentAccountPortalUrl={this._paymentAccountPortalUrl()}
         iframeUrl={this._iframeUrl()}
         iframeWebsiteName={this._iframeUrl()}

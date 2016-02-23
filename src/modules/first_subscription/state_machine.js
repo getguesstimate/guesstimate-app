@@ -14,6 +14,12 @@ export const states = {
   synchronization: 'SYNCHRONIZATION'
 }
 
+export const subStages = [
+  'UNNECESSARY', 'START', 'CANCELLED','FORM', 'SYNCHRONIZATION',
+  'FORM_START', 'FORM_SUCCESS', 'FORM_FAILURE',
+  'SYNCHRONIZATION_START', 'SYNCHRONIZATION_SUCCESS', 'SYNCHRONIZATION_FAILURE'
+]
+
 export function newFlowState(state, type) {
   if (type === actions.unnecessary) {
     return states.unnecessary
