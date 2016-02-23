@@ -19,15 +19,17 @@ function FirstSubscriptionStage(stage){
 export default class FirstSubscriptionStyleGuide extends Component{
   displayName: 'ComponentEditor-StyleGuide'
   render () {
+    const flowStage = 'UNNECESSARY'
     return (
       <div className='container-fluid full-width'>
         {
-          subStages.map(flowStage => {
+          subStages.map(stage => {
             return (
               <ComponentEditor
-                  child={FirstSubscription}
-                  childProps={ FirstSubscriptionStage(flowStage)}
-                  name={`FirstSubscription:: ${flowStage}`}
+                child={FirstSubscription}
+                childProps={FirstSubscriptionStage(stage)}
+                name={stage}
+                key={stage}
               />
             )
           })

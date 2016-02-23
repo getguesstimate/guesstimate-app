@@ -1,30 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 import MetricCard from 'gComponents/metrics/card'
-import FirstSubscription from 'gComponents/subscriptions/FirstSubscription/FirstSubscription.js'
-import JSONTree from 'react-json-tree'
-import './main.css'
-
-export default class ComponentEditor extends Component {
-  static propTypes = {
-    child: PropTypes.object.isRequired,
-    childProps: PropTypes.object.isRequired,
-    name: PropTypes.string.isRequired,
-  }
-
-  render() {
-    return (
-    <div className='row ComponentEditor'>
-      <div className='col-sm-2'>
-        <h2> {this.props.name} </h2>
-        <JSONTree data={this.props.childProps}/>
-      </div>
-      <div className='col-sm-10 Component'>
-        {<this.props.child {...this.props.childProps}/>}
-      </div>
-    </div>
-    )
-  }
-}
+import ComponentEditor from 'gComponents/utility/ComponentEditor/index.js'
 
 const MetricCardProps = {
   metric: {
@@ -54,16 +30,6 @@ const MetricCardProps = {
   location: {row: 3, column: 3},
   handleSelect: () => {console.log('select')},
   isSelected: true
-}
-
-const DistributionEditorProps = {
-  guesstimate: {
-    value: '34',
-    low: '30',
-    high: '100',
-    type: 'POINT',
-  },
-  onSubmit: function(g) { console.log(g) }
 }
 
 export default class ComponentIndex extends Component{
