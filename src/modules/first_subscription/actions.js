@@ -37,8 +37,20 @@ export function fetchIframe({user_id, plan_id}) {
     const action = 'FIRST_SUBSCRIPTION_IFRAME_FETCH'
 
     dispatch({type: actionType(action, 'START')})
-    api(getState()).subscriptions.get_new_iframe(
+    api(getState()).accounts.get_new_subscription_iframe(
       {user_id, plan_id},
+      simpleCallback({dispatch, action})
+    )
+  }
+}
+
+export function post_synchronization({user_id}) {
+  return (dispatch, getState) => {
+    const action = 'FIRST_SUBSCRIPTION_SYNCHRONIZATION_POST'
+
+    dispatch({type: actionType(action, 'START')})
+    api(getState()).accounts.synchronize(
+      {user_id},
       simpleCallback({dispatch, action})
     )
   }
