@@ -20,10 +20,10 @@ import UserShow from 'gComponents/users/show/index.js'
 import ReactDOM from 'react-dom'
 import FirstSubscriptionContainer from 'gComponents/subscriptions/FirstSubscription/container.js'
 import FirstSubscriptionStyleGuide from 'gComponents/subscriptions/FirstSubscription/StyleGuide.js'
+import SettingsStyleGuide from 'gComponents/users/settings/StyleGuide.js'
 
 export default Router.extend({
   render (page, options={}) {
-
     let store = configureStore()
     ReactDOM.render(
       <Provider store={store}>
@@ -42,6 +42,7 @@ export default Router.extend({
     'style_guide': 'styleGuide',
     'style_guide/first_subscription': 'styleGuideFirstSubscription',
     'maintenance': 'maintenance',
+    'settings': 'settings',
     'faq': 'faq',
     'terms': 'terms',
     'privacy': 'privacy',
@@ -49,51 +50,17 @@ export default Router.extend({
      'payments': 'payments',
   },
 
-  spaceIndex () {
-    this.render(<SpaceIndex/>)
-  },
-
-  home () {
-    this.render(<Home/>, {simpleHeader: true})
-  },
-
-  spaceNew () {
-    this.render(<SpaceNew/>)
-  },
-
-  spaceShow (id) {
-    this.render(<SpaceShow spaceId={id}/>, {isFluid: true})
-  },
-
-  styleGuide () {
-    this.render(<ComponentIndex/>)
-  },
-
-  styleGuideFirstSubscription () {
-    this.render(<FirstSubscriptionStyleGuide/>)
-  },
-
-  maintenance () {
-    this.render(<Maintenance/>)
-  },
-
-  terms () {
-    this.render(<TermsAndConditions/>)
-  },
-
-  privacy () {
-    this.render(<PrivacyPolicy/>)
-  },
-
-  faq () {
-    this.render(<FAQ/>)
-  },
-
-  payments () {
-    this.render(<FirstSubscriptionContainer planId={'small'}/>)
-  },
-
-  userShow (id) {
-    this.render(<UserShow userId={id}/>)
-  },
+  spaceIndex() { this.render(<SpaceIndex/>) },
+  home() { this.render(<Home/>, {simpleHeader: true}) },
+  spaceNew() { this.render(<SpaceNew/>) },
+  spaceShow(id) { this.render(<SpaceShow spaceId={id}/>, {isFluid: true}) },
+  styleGuide() { this.render(<ComponentIndex/>) },
+  settings() { this.render(<SettingsStyleGuide/>) },
+  styleGuideFirstSubscription() { this.render(<FirstSubscriptionStyleGuide/>) },
+  maintenance() { this.render(<Maintenance/>) },
+  terms() { this.render(<TermsAndConditions/>) },
+  privacy() { this.render(<PrivacyPolicy/>) },
+  faq() { this.render(<FAQ/>) },
+  payments() { this.render(<FirstSubscriptionContainer planId={'small'}/>) },
+  userShow(id) { this.render(<UserShow userId={id}/>) },
 })

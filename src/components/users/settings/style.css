@@ -1,0 +1,21 @@
+@import './styles/variables.css';
+
+.Plan {
+  padding: 0.5em 2em;
+  background-color: $grey-1;
+  border-radius: 5px;
+  font-size: 1.1em;
+}
+
+.Plan h2{
+  margin-top: 0.25em;
+}
+
+.Settings-Plan{
+  margin: 1.5em 0 3em;
+}
+
+.Settings-Upgrade{
+  text-align: center;
+  margin: 2em 0 2em;
+}

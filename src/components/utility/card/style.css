@@ -6,6 +6,7 @@
   margin-top: 2px;
   padding: 0.5em 0;
   float: left;
+  position: relative;
 }
 
 .Card.shadow {
