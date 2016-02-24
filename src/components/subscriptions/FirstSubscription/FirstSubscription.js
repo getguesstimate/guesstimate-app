@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 import {subStages} from 'gModules/first_subscription/state_machine.js'
+import NewOrder from './NewOrder.js'
 
 export default class FirstSubscription extends Component {
   displayName: 'SubscriptionIframe'
@@ -7,11 +8,11 @@ export default class FirstSubscription extends Component {
   static propTypes = {
     flowStage: PropTypes.oneOf(subStages).isRequired,
     planId: PropTypes.string.isRequired,
-    iframeUrl: PropTypes.string.isRequired,
-    iframeWebsiteName: PropTypes.string.isRequired,
+    iframeUrl: PropTypes.string,
+    iframeWebsiteName: PropTypes.string,
     onPaymentCancel: PropTypes.func.isRequired,
     onPaymentSuccess: PropTypes.func.isRequired,
-    paymentAccountPortalUrl: PropTypes.string.isRequired
+    paymentAccountPortalUrl: PropTypes.string,
   }
 
   _formSuccessProps() {
@@ -49,11 +50,13 @@ export default class FirstSubscription extends Component {
   }
 }
 
-export const FormSuccess = ({planId, iframeUrl, iframeWebsiteName, onPaymentCancel, onPaymentSuccess}) => (
+export const FormSuccess = ({iframeUrl, iframeWebsiteName, onPaymentCancel, onPaymentSuccess}) => (
   <div>
-  <div> Get plan: {planId} </div>
-  <a onClick={onPaymentCancel} className='ui button red'> Cancel </a>
-  <a onClick={onPaymentSuccess} className='ui button blue'> Pay Mo Money </a>
+    <NewOrder page={iframeUrl}
+      name={iframeWebsiteName}
+      onSuccess={onPaymentSuccess}
+      onCancel={onPaymentCancel}
+    />
   </div>
 )
 

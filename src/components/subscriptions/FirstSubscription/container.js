@@ -32,19 +32,18 @@ export default class FirstSubscriptionContainer extends Component {
   _paymentAccountPortalUrl() { return _.get(this.props.me, 'profile.account._links.account') }
   _paymentAccountExists() { return !!_.get(this.props.me, 'profile.has_payment_account') }
 
-  _iframeUrl() { return this.props.firstSubscription.iframe.href }
-  _iframeWebsiteName() { return this.props.firstSubscription.iframe.website_name }
+  _iframeUrl() { return _.get(this.props.firstSubscription, 'iframe.href') || '' }
+  _iframeWebsiteName() { return _.get(this.props.firstSubscription, 'iframe.website_name') || '' }
   _flowStage() { return subStage(this.props.firstSubscription) }
 
   render() {
-    console.log(this.props.plan)
     return (
       <FirstSubscription
         planId={this.props.planId}
         flowStage={this._flowStage()}
         paymentAccountPortalUrl={this._paymentAccountPortalUrl()}
         iframeUrl={this._iframeUrl()}
-        iframeWebsiteName={this._iframeUrl()}
+        iframeWebsiteName={this._iframeWebsiteName()}
         onPaymentSuccess={this._onPaymentSuccess.bind(this)}
         onPaymentCancel={this._onPaymentCancel.bind(this)}
       />
