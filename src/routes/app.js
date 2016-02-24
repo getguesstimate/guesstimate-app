@@ -3,6 +3,7 @@ import Router from './router'
 import * as segment from '../server/segment/index.js'
 import * as sentry from '../server/sentry/index.js'
 import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
+import './main.css'
 
 app.extend({
   init () {
