@@ -2,30 +2,11 @@ import React, {Component, PropTypes} from 'react'
 import ReactDOM from 'react-dom'
 import Icon from 'react-fa'
 import './style.css'
-
-
-String.prototype.capitalizeFirstLetter = function() {
-    return this.charAt(0).toUpperCase() + this.slice(1);
-}
+import {CardListElement} from 'gComponents/utility/card/index.js'
+import Card from 'gComponents/utility/card/index.js'
 
 export const DropDownListElement = ({icon, image, text, url, onMouseDown, isSelected}) => (
-  <li>
-    <a className={'action' + (isSelected ? ' selected' : '')} href={url} onMouseDown={onMouseDown}>
-      <div className='row middle-xs'>
-        <div className='col-xs-3 icons'>
-          {icon &&
-            <Icon name={icon}/>
-          }
-          {image &&
-            <img src={image}/>
-          }
-        </div>
-        <div className='col-xs-7 text .middle-xs'>
-          {text.capitalizeFirstLetter()}
-        </div>
-      </div>
-    </a>
-  </li>
+  <CardListElement icon={icon} image={image} text={text} url={url} onMouseDown={onMouseDown} isSelected={isSelected}/>
 )
 
 export default class DropDown extends Component {
@@ -72,17 +53,9 @@ export default class DropDown extends Component {
     return klass
   }
 
-  _bodyClass() {
-    let klass = 'dropDown-body'
-    klass += this.props.hasPadding === true ? ' padded' : ''
-    return klass
-  }
-
   render() {
     const {headerText} = this.props
-
-    let dropDownClass = 'dropDown'
-
+    const width = this.props.width === 'wide' ? 'normal' : 'narrow'
     return (
       <span className='dropDown-relative'>
         <span className={'dropDown-open'} onClick={this._toggle.bind(this)}>
@@ -90,19 +63,15 @@ export default class DropDown extends Component {
         </span>
         {this.state.isOpen &&
           <div className={this._dropDownClass()}>
-            <div className='dropDown-content'>
-              <div className='dropDown-header'>
-                <h3> {headerText} </h3>
-                <a className='dropDown-close' onClick={this._close.bind(this)}>
-                  <Icon name='close'/>
-                </a>
-              </div>
-
-              <div className={this._bodyClass()}>
-                <hr/>
-                {this.props.children}
-              </div>
-            </div>
+            <Card
+              headerText={headerText}
+              onClose={this._close.bind(this)}
+              width={width}
+              hasPadding={this.props.hasPadding}
+              shadow={true}
+            >
+              {this.props.children}
+            </Card>
           </div>
         }
       </span>
