@@ -26,7 +26,12 @@ export default class FirstSubscriptionContainer extends Component {
     }
   }
 
-  _onPaymentSuccess() { this.props.dispatch(firstSubscriptionActions.flowStagePaymentSuccess()) }
+  _onPaymentSuccess() {
+    this.props.dispatch(firstSubscriptionActions.postSynchronization({
+      user_id: this.props.me.id
+    }))
+  }
+
   _onPaymentCancel() { this.props.dispatch(firstSubscriptionActions.flowStageCancel()) }
 
   _paymentAccountPortalUrl() { return _.get(this.props.me, 'profile.account._links.account') }

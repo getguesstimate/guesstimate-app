@@ -1,4 +1,5 @@
 import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
+import * as meActions from 'gModules/me/actions.js'
 
 function api(state) {
   function getToken(state) {
@@ -44,14 +45,18 @@ export function fetchIframe({user_id, plan_id}) {
   }
 }
 
-export function post_synchronization({user_id}) {
+export function postSynchronization({user_id}) {
   return (dispatch, getState) => {
     const action = 'FIRST_SUBSCRIPTION_SYNCHRONIZATION_POST'
 
     dispatch({type: actionType(action, 'START')})
-    api(getState()).accounts.synchronize(
-      {user_id},
-      simpleCallback({dispatch, action})
+    api(getState()).accounts.synchronize({user_id}, (err, value) => {
+      if (err) { dispatch(errorAction(action, err)) }
+      else if (value) {
+        dispatch(successAction(action, value))
+        dispatch(meActions.guesstimateMeLoad())
+      }
+    }
     )
   }
 }
@@ -62,12 +67,4 @@ export function flowStageReset() {
 
 export function flowStageCancel() {
   return {type: 'FIRST_SUBSCRIPTION_FLOW_CANCEL'}
-}
-
-export function flowStagePaymentSuccess() {
-  return {type: 'FIRST_SUBSCRIPTION_FLOW_PAYMENT_SUCCESS'}
-}
-
-export function flowStageSynchronizationSuccess() {
-  return {type: 'FIRST_SUBSCRIPTION_FLOW_SYNCHRONIZATION_SUCCESS'}
 }
