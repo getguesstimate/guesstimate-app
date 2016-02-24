@@ -15,6 +15,13 @@ export default class FirstSubscription extends Component {
     paymentAccountPortalUrl: PropTypes.string,
   }
 
+  static defaultProps = {
+    iframeUrl: '',
+    iframeWebsiteName: '',
+    paymentAccountPortalUrl: '',
+    isTest: true
+  }
+
   _formSuccessProps() {
     const neededProps = [
       'iframeUrl',
@@ -33,7 +40,7 @@ export default class FirstSubscription extends Component {
   }
 
   render() {
-    const {flowStage} = this.props
+    const {flowStage, isTest} = this.props
     return (
       <div className='container-fluid full-width homePage'>
         {(flowStage === 'UNNECESSARY') && <Unnecessary {...this._unnecessaryProps()}/>}
@@ -41,7 +48,8 @@ export default class FirstSubscription extends Component {
         {(flowStage === 'START') && <FormStart/>}
         {(flowStage === 'FORM_START') && <FormStart/>}
         {(flowStage === 'FORM_FAILURE') && <FormFailure/>}
-        {(flowStage === 'FORM_SUCCESS') && <FormSuccess {...this._formSuccessProps()} />}
+        {(flowStage === 'FORM_SUCCESS' && !isTest) && <FormSuccess {...this._formSuccessProps()} />}
+        {(flowStage === 'FORM_SUCCESS' && isTest) && <TestFormSuccess {...this._formSuccessProps()} />}
         {(flowStage === 'SYNCHRONIZATION_START') && <SynchronizationStart/>}
         {(flowStage === 'SYNCHRONIZATION_SUCCESS') && <SynchronizationSuccess/>}
         {(flowStage === 'SYNCHRONIZATION_FAILURE') && <SynchronizationFailure/>}
@@ -49,6 +57,17 @@ export default class FirstSubscription extends Component {
     )
   }
 }
+
+export const TestFormSuccess = ({iframeUrl, iframeWebsiteName, onPaymentCancel, onPaymentSuccess}) => (
+  <div>
+    <h1>{`This is a test.`} </h1>
+    <h2>{` Pretend strongly that there is a payment iframe here`}</h2>
+    <h3>{`iframeUrl: ${iframeUrl}`} </h3>
+    <h3>{`iframeWebsiteName: ${iframeWebsiteName}`} </h3>
+    <a className='ui button red' onClick={onPaymentCancel}> {'Pretend to Cancel'} </a>
+    <a className='ui button blue' onClick={onPaymentSuccess}> {'Pretend to Pay'} </a>
+  </div>
+)
 
 export const FormSuccess = ({iframeUrl, iframeWebsiteName, onPaymentCancel, onPaymentSuccess}) => (
   <div>

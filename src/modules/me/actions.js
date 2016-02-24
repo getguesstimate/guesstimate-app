@@ -78,6 +78,15 @@ function auth0MeLoaded(profile, token) {
   }
 }
 
+export function guesstimateMeLoad() {
+  return function(dispatch, getState) {
+    const user_id = _.get(getState(), 'me.id')
+    if (user_id) {
+      dispatch(userActions.fetchById(user_id))
+    }
+  }
+}
+
 export function guesstimateMeLoaded(object) {
   return function(dispatch, getState) {
     dispatch({ type: 'GUESSTIMATE_ME_LOADED', id: object.id, profile: object})
