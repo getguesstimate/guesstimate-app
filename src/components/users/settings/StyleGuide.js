@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 import ComponentEditor from 'gComponents/utility/ComponentEditor/index.js'
-import Settings from './index.js'
+import Settings from './Settings.js'
 import Plan from 'lib/config/plan.js'
 
 export default class SettingsStyleGuide extends Component{
