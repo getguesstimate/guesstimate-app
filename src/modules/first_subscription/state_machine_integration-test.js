@@ -2,8 +2,8 @@ import {newFlowState, subStage, actions, states} from './state_machine.js'
 import firstSubscriptionReducer from './reducer.js'
 import {initialState} from './reducer.js'
 
-describe.only('FirstSubscriptionFlowStage', () => {
-  describe.only('a successful flow', () => {
+describe('FirstSubscriptionFlowStage', () => {
+  describe('a successful flow', () => {
     it('starts in start state', () => {
       let state = firstSubscriptionReducer()
       expect(state.flowStage).to.equal('START')

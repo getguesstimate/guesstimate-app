@@ -55,7 +55,7 @@ export default Router.extend({
   spaceNew() { this.render(<SpaceNew/>) },
   spaceShow(id) { this.render(<SpaceShow spaceId={id}/>, {isFluid: true}) },
   styleGuide() { this.render(<ComponentIndex/>) },
-  settings() { this.render(<SettingsStyleGuide/>) },
+  settings() { this.render(<SettingsStyleGuide/>, {isFluid: true}) },
   styleGuideFirstSubscription() { this.render(<FirstSubscriptionStyleGuide/>) },
   maintenance() { this.render(<Maintenance/>) },
   terms() { this.render(<TermsAndConditions/>) },

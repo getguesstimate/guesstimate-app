@@ -24,4 +24,8 @@ export default class Plan {
   fullName() {
     return `${this.name} Plan`
   }
+
+  number() {
+    return (this.id === 'personal_infinite') ? `∞` : this.privateModelLimit
+  }
 }
