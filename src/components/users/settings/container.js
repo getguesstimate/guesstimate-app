@@ -19,6 +19,7 @@ export default class SettingsContainer extends Component{
       <Settings
         planId={planId}
         portalUrl={portalUrl}
+        onClose={this.props.onClose}
       />
     )
   }

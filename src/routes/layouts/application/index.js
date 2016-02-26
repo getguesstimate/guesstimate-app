@@ -5,11 +5,11 @@ import '../../../../semantic/dist/semantic.css'
 import '../../../styles/theme.css'
 
 import React, {Component, PropTypes} from 'react'
-import Modal from 'react-modal'
 import { connect } from 'react-redux';
 import * as spaceActions from 'gModules/spaces/actions.js';
 import * as userActions from 'gModules/users/actions.js';
 import * as meActions from 'gModules/me/actions.js';
+import ModalContainer from 'gModules/modal/routes.js';
 import ErrorModal from 'gComponents/application/errorModal/index.js';
 import * as Space from 'gEngine/space';
 import Header from '../header'
@@ -28,7 +28,7 @@ function mapStateToProps(state) {
 }
 
 @connect(mapStateToProps)
-export default class extends Component{
+export default class Layout extends Component{
   displayName: 'Layout'
 
   componentWillMount() {
@@ -59,6 +59,7 @@ export default class extends Component{
       <NavHelper>
         <ErrorModal/>
         <div className='Layout'>
+          <ModalContainer/>
           <Header isFluid={options.isFluid} isBare={options.simpleHeader}/>
           <main className={mainClass}>
             {body}

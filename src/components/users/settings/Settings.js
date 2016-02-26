@@ -48,13 +48,8 @@ export default class Settings extends Component{
     planId: false,
   }
 
-  _close() {
-    console.log('closing')
-  }
-
   render () {
     const {planId, portalUrl} = this.props
-    console.log('here', planId)
 
     return (
       <div className='Settings'>
@@ -62,7 +57,7 @@ export default class Settings extends Component{
           <div className='ModalMedium'>
             <Card
               headerText={'Settings'}
-              onClose={this._close.bind(this)}
+              onClose={this.props.onClose}
               width={'normal'}
               hasPadding={true}
               shadow={true}
