@@ -1,5 +1,7 @@
 import React, {Component} from 'react'
 import IubendaPrivacyPolicy from 'gComponents/lib/iubenda_privacy_policy.js'
+import * as modalActions from 'gModules/modal/actions.js'
+import {connect} from 'react-redux';
 
 export const LinkFAQ = () => (
   <a href='/faq'> FAQ </a>
@@ -30,3 +32,12 @@ export const LinkTwitterFollow = () => (
     Follow @getguesstimate</a>
 )
 
+@connect()
+export class LinkSettings extends Component{
+  _openModal() {
+    this.props.dispatch(modalActions.change('Settings'))
+  }
+  render() {
+    <a onMouseDown={this._openModal.bind(this)}> Settings </a>
+  }
+}

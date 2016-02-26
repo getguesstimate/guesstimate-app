@@ -5,13 +5,22 @@ import React, {Component, PropTypes} from 'react'
 import StandardDropdownMenu from 'gComponents/utility/standard-dropdown-menu'
 import DropDown from 'gComponents/utility/drop-down/index.js'
 import {DropDownListElement} from 'gComponents/utility/drop-down/index.js'
+import {LinkSettings} from 'gComponents/utility/links/index.js'
 import * as meActions from 'gModules/me/actions.js'
+import * as modalActions from 'gModules/modal/actions.js'
 import Icon from 'react-fa'
 import './style.css'
 
 import { connect } from 'react-redux';
 
-@connect()
+
+function mapStateToProps(state) {
+  return {
+    modal: state.modal
+  }
+}
+
+@connect(mapStateToProps)
 export default class Profile extends Component {
   displayName: 'Profile'
 
@@ -27,6 +36,10 @@ export default class Profile extends Component {
     this.props.dispatch(meActions.logOut())
   }
 
+  _openModal() {
+    this.props.dispatch(modalActions.openSettings())
+  }
+
   profileDropdown () {
     const profile = this.props.me.profile
     return (
@@ -36,8 +49,9 @@ export default class Profile extends Component {
             openLink={<img className='avatar' src={profile.picture}/>}
         >
           <ul>
-            <DropDownListElement key='1' icon='question' text='FAQ' url='/faq'/>
-            <DropDownListElement key='2' icon='sign-out' text='Sign Out' onMouseDown={this.logOut.bind(this)}/>
+            <DropDownListElement key='1' icon='user' text='Profile' onMouseDown={this._openModal.bind(this)}/>
+            <DropDownListElement key='2' icon='question' text='FAQ' url='/faq'/>
+            <DropDownListElement key='3' icon='sign-out' text='Sign Out' onMouseDown={this.logOut.bind(this)}/>
           </ul>
         </DropDown>
       </div>
