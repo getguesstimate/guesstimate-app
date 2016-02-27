@@ -20,7 +20,7 @@ const PlanUpgradeButton = () => (
 )
 
 const PortalButton = ({url}) => (
-  <a className='ui button green' href={url} target='_blank'>
+  <a className='ui button black portal' href={url} target='_blank'>
     {'Edit Plan & Payment Details'}
   </a>
 )
@@ -56,7 +56,7 @@ export default class Settings extends Component{
         {!_.isEmpty(planId) &&
           <div className='ModalMedium'>
             <Card
-              headerText={'Settings'}
+              headerText={'Account'}
               onClose={this.props.onClose}
               width={'normal'}
               hasPadding={true}

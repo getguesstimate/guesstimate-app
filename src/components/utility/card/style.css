@@ -20,12 +20,6 @@
   min-width: 30em;
 }
 
-.Card h2 {
-  color: #444;
-  font-size: 1.3em;
-  margin: 1em 0 0.5em;
-}
-
 .Card .ui.form textarea {
   font-size: 1.2em;
   background-color: $grey-1;

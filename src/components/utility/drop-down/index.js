@@ -15,11 +15,15 @@ export class DropDownListElement extends Component {
     isSelected: PropTypes.bool,
     onMouseDown: PropTypes.func,
     closeOnClick: PropTypes.bool,
-    dropDown: PropTypes.object,
+    dropDown: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.bool
+    ])
   }
 
   static defaultProps = {
-    closeOnClick: false
+    closeOnClick: false,
+    dropDown: false
   }
 
   _onMouseDown() {
