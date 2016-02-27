@@ -45,7 +45,7 @@ export default class Profile extends Component {
     const profile = this.props.me.profile
 
     const listElements = [
-      {icon: 'user', text: 'profile', onMouseDown: this._openModal.bind(this)},
+      {icon: 'user', text: 'account', onMouseDown: this._openModal.bind(this)},
       {icon: 'question', text: 'FAQ', onMouseDown: () => {navigationActions.navigate('/faq')}},
       {icon: 'sign-out', text: 'Sign Out', onMouseDown: this.logOut.bind(this)}
     ]
