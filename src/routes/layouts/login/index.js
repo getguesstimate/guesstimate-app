@@ -15,13 +15,7 @@ import './style.css'
 import { connect } from 'react-redux';
 
 
-function mapStateToProps(state) {
-  return {
-    modal: state.modal
-  }
-}
-
-@connect(mapStateToProps)
+@connect()
 export default class Profile extends Component {
   displayName: 'Profile'
 
@@ -43,12 +37,20 @@ export default class Profile extends Component {
 
   profileDropdown () {
     const profile = this.props.me.profile
+    const hasPrivateAccess = profile.has_private_access
 
-    const listElements = [
-      {icon: 'user', text: 'account', onMouseDown: this._openModal.bind(this)},
+    let listElements = [
       {icon: 'question', text: 'FAQ', onMouseDown: () => {navigationActions.navigate('/faq')}},
       {icon: 'sign-out', text: 'Sign Out', onMouseDown: this.logOut.bind(this)}
     ]
+
+    if (!!hasPrivateAccess) {
+      listElements = [
+        {icon: 'user', text: 'account', onMouseDown: this._openModal.bind(this)},
+        ...listElements
+      ]
+    }
+
     return (
       <div className='item'>
         <DropDown
