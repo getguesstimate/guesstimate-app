@@ -26,15 +26,15 @@ const PortalButton = ({url}) => (
 )
 
 const PlanUpgradeSection = ({planId, portalUrl}) => {
-  const hasPortalUrl = !_.isString(portalUrl)
+  const hasPortalUrl = !!portalUrl
   if (planId === 'personal_infinite') { return <div/> }
   else {
     return (
       <div>
         <hr/>
         <div className='Settings-Upgrade'>
-          {hasPortalUrl && <PlanUpgradeButton/>}
-          {!hasPortalUrl && <PortalButton url={portalUrl}/>}
+          {!hasPortalUrl && <PlanUpgradeButton/>}
+          {hasPortalUrl && <PortalButton url={portalUrl}/>}
         </div>
       </div>
     )
