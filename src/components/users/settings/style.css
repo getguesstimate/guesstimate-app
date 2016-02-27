@@ -1,0 +1,27 @@
+@import './styles/variables.css';
+
+.Plan {
+  padding: 0.5em 2em;
+  background-color: $grey-1;
+  border-radius: 5px;
+  font-size: 1.1em;
+  color: $grey-2;
+}
+
+.Plan.Plan h2{
+  margin-top: 0.25em;
+  color: $blue-1;
+}
+
+.Settings-Plan{
+  margin: 2em 0 2em;
+}
+
+.Settings-Upgrade{
+  text-align: center;
+  margin: 2em 0 2em;
+}
+
+.Card .ui.button.portal{
+  background-color: $grey-2;
+}

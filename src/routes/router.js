@@ -20,10 +20,11 @@ import UserShow from 'gComponents/users/show/index.js'
 import ReactDOM from 'react-dom'
 import FirstSubscriptionContainer from 'gComponents/subscriptions/FirstSubscription/container.js'
 import FirstSubscriptionStyleGuide from 'gComponents/subscriptions/FirstSubscription/StyleGuide.js'
+import SettingsStyleGuide from 'gComponents/users/settings/StyleGuide.js'
+import Settings from 'gComponents/users/settings/container.js'
 
 export default Router.extend({
   render (page, options={}) {
-
     let store = configureStore()
     ReactDOM.render(
       <Provider store={store}>
@@ -39,61 +40,30 @@ export default Router.extend({
     'models': 'spaceIndex',
     'models/new': 'spaceNew',
     'models/:id': 'spaceShow',
-    'style_guide': 'styleGuide',
-    'style_guide/first_subscription': 'styleGuideFirstSubscription',
     'maintenance': 'maintenance',
     'faq': 'faq',
     'terms': 'terms',
     'privacy': 'privacy',
     'users/:id': 'userShow',
-     'payments': 'payments',
+    'payments': 'payments',
+    'style_guide': 'styleGuide',
+    'style_guide/first_subscription': 'styleGuideFirstSubscription',
+    'style_guide/settings': 'styleGuideSettings',
+    'settings': 'settings',
   },
 
-  spaceIndex () {
-    this.render(<SpaceIndex/>)
-  },
-
-  home () {
-    this.render(<Home/>, {simpleHeader: true})
-  },
-
-  spaceNew () {
-    this.render(<SpaceNew/>)
-  },
-
-  spaceShow (id) {
-    this.render(<SpaceShow spaceId={id}/>, {isFluid: true})
-  },
-
-  styleGuide () {
-    this.render(<ComponentIndex/>)
-  },
-
-  styleGuideFirstSubscription () {
-    this.render(<FirstSubscriptionStyleGuide/>)
-  },
-
-  maintenance () {
-    this.render(<Maintenance/>)
-  },
-
-  terms () {
-    this.render(<TermsAndConditions/>)
-  },
-
-  privacy () {
-    this.render(<PrivacyPolicy/>)
-  },
-
-  faq () {
-    this.render(<FAQ/>)
-  },
-
-  payments () {
-    this.render(<FirstSubscriptionContainer planId={'small'}/>)
-  },
-
-  userShow (id) {
-    this.render(<UserShow userId={id}/>)
-  },
+  spaceIndex() { this.render(<SpaceIndex/>) },
+  home() { this.render(<Home/>, {simpleHeader: true}) },
+  spaceNew() { this.render(<SpaceNew/>) },
+  spaceShow(id) { this.render(<SpaceShow spaceId={id}/>, {isFluid: true}) },
+  settings() { this.render(<Settings/>) },
+  styleGuide() { this.render(<ComponentIndex/>) },
+  styleGuideSettings() { this.render(<SettingsStyleGuide/>, {isFluid: true}) },
+  styleGuideFirstSubscription() { this.render(<FirstSubscriptionStyleGuide/>) },
+  maintenance() { this.render(<Maintenance/>) },
+  terms() { this.render(<TermsAndConditions/>) },
+  privacy() { this.render(<PrivacyPolicy/>) },
+  faq() { this.render(<FAQ/>) },
+  payments() { this.render(<FirstSubscriptionContainer planId={'small'}/>) },
+  userShow(id) { this.render(<UserShow userId={id}/>) },
 })
