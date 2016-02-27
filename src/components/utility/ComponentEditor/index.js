@@ -12,7 +12,6 @@ export default class ComponentEditor extends Component {
     return (
       <div className='row ComponentEditor'>
         <div className='col-sm-2'>
-          <h2> {this.props.name} </h2>
           <JSONTree data={this.props.childProps}/>
         </div>
         <div className='col-sm-10 Component'>

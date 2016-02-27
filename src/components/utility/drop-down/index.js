@@ -1,32 +1,41 @@
 import React, {Component, PropTypes} from 'react'
+import app from 'ampersand-app'
 import ReactDOM from 'react-dom'
 import Icon from 'react-fa'
 import './style.css'
+import {CardListElement} from 'gComponents/utility/card/index.js'
+import Card from 'gComponents/utility/card/index.js'
 
+export class DropDownListElement extends Component {
 
-String.prototype.capitalizeFirstLetter = function() {
-    return this.charAt(0).toUpperCase() + this.slice(1);
+  static propTypes = {
+    icon: PropTypes.string,
+    image: PropTypes.string,
+    text: PropTypes.string.isRequired,
+    isSelected: PropTypes.bool,
+    onMouseDown: PropTypes.func,
+    closeOnClick: PropTypes.bool,
+    dropDown: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.bool
+    ])
+  }
+
+  static defaultProps = {
+    closeOnClick: false,
+    dropDown: false
+  }
+
+  _onMouseDown() {
+    if (this.props.closeOnClick && !!this.props.dropDown) {this.props.dropDown._close() }
+    this.props.onMouseDown()
+  }
+
+  render() {
+    const {icon, image, text, isSelected} = this.props
+    return (<CardListElement icon={icon} image={image} text={text} isSelected={isSelected} onMouseDown={this._onMouseDown.bind(this)}/>)
+  }
 }
-
-export const DropDownListElement = ({icon, image, text, url, onMouseDown, isSelected}) => (
-  <li>
-    <a className={'action' + (isSelected ? ' selected' : '')} href={url} onMouseDown={onMouseDown}>
-      <div className='row middle-xs'>
-        <div className='col-xs-3 icons'>
-          {icon &&
-            <Icon name={icon}/>
-          }
-          {image &&
-            <img src={image}/>
-          }
-        </div>
-        <div className='col-xs-7 text .middle-xs'>
-          {text.capitalizeFirstLetter()}
-        </div>
-      </div>
-    </a>
-  </li>
-)
 
 export default class DropDown extends Component {
   displayName: 'DropDown'
@@ -72,17 +81,9 @@ export default class DropDown extends Component {
     return klass
   }
 
-  _bodyClass() {
-    let klass = 'dropDown-body'
-    klass += this.props.hasPadding === true ? ' padded' : ''
-    return klass
-  }
-
   render() {
     const {headerText} = this.props
-
-    let dropDownClass = 'dropDown'
-
+    const width = this.props.width === 'wide' ? 'normal' : 'narrow'
     return (
       <span className='dropDown-relative'>
         <span className={'dropDown-open'} onClick={this._toggle.bind(this)}>
@@ -90,19 +91,15 @@ export default class DropDown extends Component {
         </span>
         {this.state.isOpen &&
           <div className={this._dropDownClass()}>
-            <div className='dropDown-content'>
-              <div className='dropDown-header'>
-                <h3> {headerText} </h3>
-                <a className='dropDown-close' onClick={this._close.bind(this)}>
-                  <Icon name='close'/>
-                </a>
-              </div>
-
-              <div className={this._bodyClass()}>
-                <hr/>
-                {this.props.children}
-              </div>
-            </div>
+            <Card
+              headerText={headerText}
+              onClose={this._close.bind(this)}
+              width={width}
+              hasPadding={this.props.hasPadding}
+              shadow={true}
+            >
+              {this.props.children}
+            </Card>
           </div>
         }
       </span>
