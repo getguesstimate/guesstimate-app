@@ -8,6 +8,7 @@ import {DropDownListElement} from 'gComponents/utility/drop-down/index.js'
 import {LinkSettings} from 'gComponents/utility/links/index.js'
 import * as meActions from 'gModules/me/actions.js'
 import * as modalActions from 'gModules/modal/actions.js'
+import * as navigationActions from 'gModules/navigation/actions.js'
 import Icon from 'react-fa'
 import './style.css'
 
@@ -42,16 +43,21 @@ export default class Profile extends Component {
 
   profileDropdown () {
     const profile = this.props.me.profile
+
+    const listElements = [
+      {icon: 'user', text: 'profile', onMouseDown: this._openModal.bind(this)},
+      {icon: 'question', text: 'FAQ', onMouseDown: () => {navigationActions.navigate('/faq')}},
+      {icon: 'sign-out', text: 'Sign Out', onMouseDown: this.logOut.bind(this)}
+    ]
     return (
       <div className='item'>
         <DropDown
             headerText={profile.name}
             openLink={<img className='avatar' src={profile.picture}/>}
+            ref='dropdown'
         >
           <ul>
-            <DropDownListElement key='1' icon='user' text='Profile' onMouseDown={this._openModal.bind(this)}/>
-            <DropDownListElement key='2' icon='question' text='FAQ' url='/faq'/>
-            <DropDownListElement key='3' icon='sign-out' text='Sign Out' onMouseDown={this.logOut.bind(this)}/>
+            {listElements.map(props => <DropDownListElement {...props} key={props.icon} closeOnClick={true} dropDown={this.refs.dropdown}/>)}
           </ul>
         </DropDown>
       </div>

@@ -1,13 +1,37 @@
 import React, {Component, PropTypes} from 'react'
+import app from 'ampersand-app'
 import ReactDOM from 'react-dom'
 import Icon from 'react-fa'
 import './style.css'
 import {CardListElement} from 'gComponents/utility/card/index.js'
 import Card from 'gComponents/utility/card/index.js'
 
-export const DropDownListElement = ({icon, image, text, url, onMouseDown, isSelected}) => (
-  <CardListElement icon={icon} image={image} text={text} url={url} onMouseDown={onMouseDown} isSelected={isSelected}/>
-)
+export class DropDownListElement extends Component {
+
+  static propTypes = {
+    icon: PropTypes.string,
+    image: PropTypes.string,
+    text: PropTypes.string.isRequired,
+    isSelected: PropTypes.bool,
+    onMouseDown: PropTypes.func,
+    closeOnClick: PropTypes.bool,
+    dropDown: PropTypes.object,
+  }
+
+  static defaultProps = {
+    closeOnClick: false
+  }
+
+  _onMouseDown() {
+    if (this.props.closeOnClick && !!this.props.dropDown) {this.props.dropDown._close() }
+    this.props.onMouseDown()
+  }
+
+  render() {
+    const {icon, image, text, isSelected} = this.props
+    return (<CardListElement icon={icon} image={image} text={text} isSelected={isSelected} onMouseDown={this._onMouseDown.bind(this)}/>)
+  }
+}
 
 export default class DropDown extends Component {
   displayName: 'DropDown'
