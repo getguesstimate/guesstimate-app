@@ -27,8 +27,8 @@ class PortalMessage extends Component{
 export default class PlanIndex extends Component{
   displayName: 'PlanIndex'
   render () {
-    const {planId, portalUrl} = this.props
-    const showButtons = (planId === 'personal_free') && !portalUrl
+    const {userPlanId, portalUrl} = this.props
+    const showButtons = (userPlanId === 'personal_free') && !portalUrl
 
     return (
       <div className='PlanIndex'>

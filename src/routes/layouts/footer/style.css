@@ -13,6 +13,10 @@ footer strong {
   color: $grey-2;
 }
 
+footer ul {
+  list-style: none;
+}
+
 footer li {
   margin-bottom: 0.75em;
   font-size: 1.1em;

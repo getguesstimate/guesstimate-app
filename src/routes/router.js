@@ -22,7 +22,7 @@ import FirstSubscriptionContainer from 'gComponents/subscriptions/FirstSubscript
 import FirstSubscriptionStyleGuide from 'gComponents/subscriptions/FirstSubscription/StyleGuide.js'
 import SettingsStyleGuide from 'gComponents/users/settings/StyleGuide.js'
 import Settings from 'gComponents/users/settings/container.js'
-import PlanIndex from 'gComponents/plans/index/index.js'
+import PlanIndex from 'gComponents/plans/index/container.js'
 import PlansStyleGuide from 'gComponents/plans/index/StyleGuide.js'
 
 export default Router.extend({
