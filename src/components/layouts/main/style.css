@@ -1,0 +1,10 @@
+@import './styles/variables.css';
+
+main.flexed{
+  display: flex;
+  flex-direction: column;
+}
+
+main.blue{
+  background-color: $blue-4;
+}
