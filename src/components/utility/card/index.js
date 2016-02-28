@@ -20,7 +20,7 @@ export const CardListElement = ({icon, image, header, children, url, onMouseDown
             <img src={image}/>
           }
         </div>
-          <div className='col-xs-7 info-section .middle-xs'>
+          <div className='col-xs-7 info-section'>
             <span className='header'>{header.capitalizeFirstLetter()}</span>
             {children}
           </div>
