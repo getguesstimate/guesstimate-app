@@ -54,6 +54,7 @@ let SpaceHeader = ({space, onSave, onDestroy, onSaveName, canUsePrivateModels}) 
           openLink={<a className='space-header-action'>Privacy Options</a>}
           position='right'
           canMakeMorePrivateModels={false}
+          startPublic={!space.is_private}
         />
       }
       <SaveMessage saveState={space.canvasState.saveState} ownedByMe={space.ownedByMe}/>

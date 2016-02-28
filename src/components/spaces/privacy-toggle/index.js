@@ -1,9 +1,9 @@
-import React, {Component, PropTypes} from 'react';
-import Icon from 'react-fa';
+import React, {Component, PropTypes} from 'react'
+import Icon from 'react-fa'
 import DropDown from 'gComponents/utility/drop-down/index.js'
 import Card from 'gComponents/utility/card/index.js'
 import {CardListElement} from 'gComponents/utility/card/index.js'
-import './style.css';
+import './style.css'
 
 const PublicOption = ({isSelected, onClick}) => {
   return (
@@ -15,7 +15,7 @@ const PublicOption = ({isSelected, onClick}) => {
     >
       <p>This model is visible to everyone. Only you can save changes.</p>
     </CardListElement>
-  );
+  )
 }
 
 const PrivateOption = ({onClick, isSelected, canMakeMorePrivateModels}) => {
@@ -33,7 +33,7 @@ const PrivateOption = ({onClick, isSelected, canMakeMorePrivateModels}) => {
         </p>
       }
     </CardListElement>
-  );
+  )
 }
 
 class PrivacyToggle extends Component {
@@ -52,25 +52,25 @@ class PrivacyToggle extends Component {
   }
 
   /* TODO(matt): isPublic -> publicSelected ?*/
-  state = {isPublic: this.props.startPublic};
+  state = {isPublic: this.props.startPublic}
 
   isPublic() {
-    return this.state.isPublic;
+    return this.state.isPublic
   }
 
   onPrivateSelect() {
-    this.setState({isPublic: false});
-    this.props.onPrivateSelect();
+    this.setState({isPublic: false})
+    this.props.onPrivateSelect()
   }
 
   onPublicSelect() {
-    this.setState({isPublic: true});
-    this.props.onPublicSelect();
+    this.setState({isPublic: true})
+    this.props.onPublicSelect()
   }
 
   render() {
-    const {isPublic} = this.state;
-    const {canMakeMorePrivateModels, dropdown, headerText, openLink, position} = this.props;
+    const {isPublic} = this.state
+    const {canMakeMorePrivateModels, dropdown, headerText, openLink, position} = this.props
 
     const list = (
       <ul className={`PrivacyToggle${dropdown ? ' dropdown' : ''}`}>
@@ -84,7 +84,7 @@ class PrivacyToggle extends Component {
           canMakeMorePrivateModels={canMakeMorePrivateModels}
         />
       </ul>
-    );
+    )
 
     if (dropdown) {
       return (
@@ -95,15 +95,15 @@ class PrivacyToggle extends Component {
         >
           {list}
         </DropDown>
-      );
+      )
     } else {
       return (
         <Card headerText={headerText}>
           {list}
         </Card>
-      );
+      )
     }
   }
 }
 
-export {PrivacyToggle};
+export {PrivacyToggle}
