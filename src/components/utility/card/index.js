@@ -8,7 +8,7 @@ String.prototype.capitalizeFirstLetter = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
 }
 
-export const CardListElement = ({icon, image, text, url, onMouseDown, isSelected}) => (
+export const CardListElement = ({icon, image, header, children, url, onMouseDown, isSelected}) => (
   <li>
     <a className={'action' + (isSelected ? ' selected' : '')} href={url} onMouseDown={onMouseDown}>
       <div className='row middle-xs'>
@@ -20,9 +20,10 @@ export const CardListElement = ({icon, image, text, url, onMouseDown, isSelected
             <img src={image}/>
           }
         </div>
-        <div className='col-xs-7 text .middle-xs'>
-          {text.capitalizeFirstLetter()}
-        </div>
+          <div className='col-xs-7 info-section .middle-xs'>
+            <span className='header'>{header.capitalizeFirstLetter()}</span>
+            {children}
+          </div>
       </div>
     </a>
   </li>

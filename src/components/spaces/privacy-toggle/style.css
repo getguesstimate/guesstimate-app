@@ -7,10 +7,18 @@
   margin-bottom: 20px;
 }
 
+.PrivacyToggle.dropdown {
+  color: black;
+}
+
 .PrivacyToggle li{
   padding: 0.5em;
   float: left;
   width: 100%;
+}
+
+.PrivacyToggle.dropdown li {
+  padding: 0;
 }
 
 .PrivacyToggle li:not(.selected){
@@ -29,15 +37,34 @@
   color: $grey-2;
   margin-top: 8px;
 }
+.PrivacyToggle.dropdown li .icons .fa{
+  font-size: 2.5em;
+  color: $grey-2;
+}
 
 .PrivacyToggle li .info-section{
   width: 80%;
   float: left;
 }
 
+.PrivacyToggle.dropdown li .info-section .header{
+  font-size:1.25em;
+}
+
+.PrivacyToggle.dropdown li .info-section{
+  width: 80%;
+  float: left;
+  font-size: 0.8em;
+}
+
 .PrivacyToggle li .info-section h3{
   font-size: 1.1em;
   margin-bottom: 3px;
+}
+
+.PrivacyToggle.dropdown li .info-section h3{
+  font-weight: bold;
+  color: $black-1;
 }
 
 .PrivacyToggle li .info-section .warning{
