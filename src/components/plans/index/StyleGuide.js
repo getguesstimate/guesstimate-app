@@ -6,28 +6,28 @@ const options = [
   {
     context: 'a logged out user',
     props: {
-      planId: '',
+      userPlanId: '',
       portalUrl: ''
     }
   },
   {
     context: 'a new user',
     props: {
-      planId: 'personal_free',
+      userPlanId: 'personal_free',
       portalUrl: ''
     }
   },
   {
     context: 'an infinite user',
     props: {
-      planId: 'personal_infinite',
+      userPlanId: 'personal_infinite',
       portalUrl: ''
     }
   },
   {
     context: 'a user with payment account',
     props: {
-      planId: 'personal_small',
+      userPlanId: 'personal_small',
       portalUrl: 'http://google.com'
     }
   },
@@ -45,7 +45,7 @@ export default class PlanStyleGuide extends Component{
               childProps={option.props}
               name={`PlanIndex`}
               context={option.context}
-              key={option.props.planId}
+              key={option.context}
               backgroundColor={'grey'}
             />
           )
