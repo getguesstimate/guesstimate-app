@@ -15,7 +15,7 @@ import ErrorModal from 'gComponents/application/errorModal/index.js';
 import * as Space from 'gEngine/space';
 import Header from '../header'
 import Footer from '../footer'
-import NavHelper from './nav-helper'
+import NavHelper from 'gComponents/utility/NavHelper/index.js';
 import './style.css';
 
 import * as segment from '../../../server/segment/index.js'
