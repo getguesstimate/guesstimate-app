@@ -6,7 +6,7 @@ import Icon from 'react-fa'
 import DropDown from 'gComponents/utility/drop-down/index.js'
 import {DropDownListElement} from 'gComponents/utility/drop-down/index.js'
 import {SpaceName} from './spaceName.js'
-import {PrivacyToggleDropdown} from '../privacy-toggle/index.js'
+import {PrivacyToggle} from '../privacy-toggle/index.js'
 import './header.css'
 
 const SaveMessage = ({saveState}) => (
@@ -48,23 +48,13 @@ let SpaceHeader = ({space, onSave, onDestroy, onSaveName, canUsePrivateModels}) 
       }
 
       {canUsePrivateModels &&
-        <DropDown
-            headerText={'Privacy Options'}
-            openLink={<a className='space-header-action'>Privacy Options</a>}
-            position='right'
-        >
-          <PrivacyToggleDropdown
-            canMakeMorePrivateModels={false}
-          />
-        </DropDown>
-        //<a className='space-header-action'>
-        //  {space.is_private &&
-        //    <span> <Icon name='lock'/> Private </span>
-        //  }
-        //  {!space.is_private &&
-        //    <span> <Icon name='globe'/> Public </span>
-        //  }
-        //</a>
+        <PrivacyToggle
+          dropdown={true}
+          headerText={'Privacy Options'}
+          openLink={<a className='space-header-action'>Privacy Options</a>}
+          position='right'
+          canMakeMorePrivateModels={false}
+        />
       }
       <SaveMessage saveState={space.canvasState.saveState} ownedByMe={space.ownedByMe}/>
     </div>

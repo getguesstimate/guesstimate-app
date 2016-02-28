@@ -56,13 +56,17 @@ export default class Card extends Component {
     const {headerText, onClose, width} = this.props
     return (
       <div className={this._cardClass()}>
-        <div className='Card-header'>
-          <h3> {headerText} </h3>
-          <span className='Card-close'><ButtonClose onClick={onClose}/></span>
-        </div>
+        {headerText &&
+          <div className='Card-header'>
+            <h3> {headerText} </h3>
+            <span className='Card-close'><ButtonClose onClick={onClose}/></span>
+          </div>
+        }
 
         <div className={this._bodyClass()}>
-          <hr/>
+          {headerText &&
+            <hr/>
+          }
           {this.props.children}
         </div>
       </div>

@@ -64,7 +64,8 @@ export default class NewSpaceFormContainer extends Component {
                   <PrivacyToggle
                     ref='privacy-toggle'
                     canMakeMorePrivateModels={canMakeMorePrivateModels}
-                    changeValidity={this.changeValidity.bind(this)}
+                    onPrivateSelect={() => {this.changeValidity(canMakeMorePrivateModels)}}
+                    onPublicSelect={() => {this.changeValidity(true)}}
                   />
                 </div>
               }
