@@ -43,6 +43,7 @@ class PrivacyToggle extends Component {
     startPublic: PropTypes.bool,
     dropdown: PropTypes.bool,
     headerText: PropTypes.string,
+    position: PropTypes.string,
     canMakeMorePrivateModels: PropTypes.bool.isRequired
   }
 
