@@ -11,7 +11,7 @@ export class DropDownListElement extends Component {
   static propTypes = {
     icon: PropTypes.string,
     image: PropTypes.string,
-    text: PropTypes.string.isRequired,
+    header: PropTypes.string.isRequired,
     isSelected: PropTypes.bool,
     onMouseDown: PropTypes.func,
     closeOnClick: PropTypes.bool,
@@ -32,8 +32,12 @@ export class DropDownListElement extends Component {
   }
 
   render() {
-    const {icon, image, text, isSelected} = this.props
-    return (<CardListElement icon={icon} image={image} text={text} isSelected={isSelected} onMouseDown={this._onMouseDown.bind(this)}/>)
+    const {icon, image, header, isSelected, children} = this.props
+    return (
+      <CardListElement icon={icon} image={image} header={header} isSelected={isSelected} onMouseDown={this._onMouseDown.bind(this)}>
+        {children}
+      </CardListElement>
+    );
   }
 }
 

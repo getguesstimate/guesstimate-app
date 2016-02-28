@@ -99,7 +99,7 @@
   background-color: $grey-1;
 }
 
-.Card li .action.selected .text{
+.Card li .action.selected .header{
 }
 
 .Card li a{
@@ -117,7 +117,7 @@
   width: 35px;
 }
 
-.Card li .text{
+.Card li .header{
   color: #555;
   font-weight: bold;
 }
