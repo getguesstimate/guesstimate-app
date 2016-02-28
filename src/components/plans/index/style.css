@@ -53,6 +53,9 @@
 
 .PlanCard ul {
   margin-bottom: 1.5em;
+  list-style: none;
+  padding: 0;
+  width: 100%;
 }
 
 .PlanCard-Cost {
@@ -81,18 +84,21 @@
   margin-top: -5em;
 }
 
-.PlanCard-Limit > .per-month {
+.PlanIndex .portal-message-container {
+  width: 100%;
+  padding: 1em 18em;
 }
 
-
-.PlanIndex .body{
+.PlanIndex .portal-message {
+  background-color: rgba(255,255,255,0.8);
+  width: 100%;
+  padding: 1em;
+  color: #333;
+  border-radius: 3px;
+  text-align: center;
 }
 
-.PlanIndex h1 {
-}
-
-.PlanItem-Cost {
-}
-
-.PlanIndex h2 {
+.PlanIndex .portal-message h2{
+  font-weight: 500;
+  margin-bottom: 1em;
 }

@@ -1,28 +1,5 @@
 import React, {Component, PropTypes} from 'react'
 import Plans from './plans.js'
-import { connect } from 'react-redux';
-
-function mapStateToProps(state) {
-  return {
-    me: state.me
-  }
-}
-
-@connect(mapStateToProps)
-export default class PlanIndexContainer extends Component{
-  displayName: 'PlanIndexContainer'
-
-  render () {
-    const {me} = this.props
-    const portalUrl = _.get(me, 'profile.account._links.payment_portal.href')
-    const userPlanId = _.get(me, 'profile.plan.id')
-    const props = {portalUrl, userPlanId}
-
-    return (
-      <PlanIndex {...props}/>
-    )
-  }
-}
 
 class PortalMessage extends Component{
   render() {
@@ -47,11 +24,11 @@ class PortalMessage extends Component{
   }
 }
 
-export class PlanIndex extends Component{
+export default class PlanIndex extends Component{
   displayName: 'PlanIndex'
   render () {
     const {planId, portalUrl} = this.props
-    const showButtons = (planId === 'personal_free') && !!portalUrl
+    const showButtons = (planId === 'personal_free') && !portalUrl
 
     return (
       <div className='PlanIndex'>
@@ -59,10 +36,10 @@ export class PlanIndex extends Component{
           <h1> Plans & Pricing </h1>
         </div>
 
-        <PortalMessage portalUrl={'google.com'}/>
+        <PortalMessage portalUrl={portalUrl}/>
 
         <div className='cards'>
-          <Plans showButtons={false}/>
+          <Plans showButtons={showButtons}/>
         </div>
       </div>
     )
