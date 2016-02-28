@@ -1,4 +1,5 @@
 import planYaml from 'json!yaml!./plans.yml'
+import numeral from 'numeral'
 
 export default class Plan {
   static asHashes() {
@@ -27,5 +28,9 @@ export default class Plan {
 
   number() {
     return (this.id === 'personal_infinite') ? `∞` : this.privateModelLimit
+  }
+
+  formattedCost() {
+    return numeral(this.monthlyCost / 1000).format('0,0')
   }
 }
