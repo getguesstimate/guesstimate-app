@@ -9,72 +9,51 @@
 
 .PrivacyToggle.dropdown {
   color: black;
+  border: 0;
+  border-radius: 0;
+  margin-bottom: 0;
 }
 
 .PrivacyToggle li{
-  padding: 0.5em;
+  padding: 0em;
   float: left;
   width: 100%;
-}
-
-.PrivacyToggle.dropdown li {
-  padding: 0;
 }
 
 .PrivacyToggle li:not(.selected){
   cursor: pointer;
 }
 
-
-.PrivacyToggle li .icon-section{
+.PrivacyToggle li .icons{
   width: 18%;
   float: left;
   text-align: center;
 }
 
-.PrivacyToggle li .icon-section .fa{
-  font-size: 2.5em;
-  color: $grey-2;
-  margin-top: 8px;
-}
-.PrivacyToggle.dropdown li .icons .fa{
+.PrivacyToggle li .icons .fa{
   font-size: 2.5em;
   color: $grey-2;
 }
 
 .PrivacyToggle li .info-section{
+  font-size: 0.8em;
   width: 80%;
   float: left;
+  color: $black-1;
+  padding-left: 0;
+}
+
+.PrivacyToggle li .info-section .header{
+  font-size: 1.1em;
+  margin-bottom: 3px;
+  font-weight: bold;
+  color: $black-1;
 }
 
 .PrivacyToggle.dropdown li .info-section .header{
   font-size:1.25em;
 }
 
-.PrivacyToggle.dropdown li .info-section{
-  width: 80%;
-  float: left;
-  font-size: 0.8em;
-}
-
-.PrivacyToggle li .info-section h3{
-  font-size: 1.1em;
-  margin-bottom: 3px;
-}
-
-.PrivacyToggle.dropdown li .info-section h3{
-  font-weight: bold;
-  color: $black-1;
-}
-
 .PrivacyToggle li .info-section .warning{
   font-weight: 800;
-}
-
-.PrivacyToggle li.selected{
-  background-color: $grey-1;
-}
-
-.PrivacyToggle li:hover{
-  background-color: $blue-2;
 }

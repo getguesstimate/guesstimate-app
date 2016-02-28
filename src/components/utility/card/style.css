@@ -117,8 +117,11 @@
   width: 35px;
 }
 
-.Card li .header{
+.Card li .info-section{
   color: #555;
+}
+
+.Card li .info-section .header{
   font-weight: bold;
 }
 
