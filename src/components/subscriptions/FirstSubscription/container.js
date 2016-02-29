@@ -51,6 +51,7 @@ export default class FirstSubscriptionContainer extends Component {
         iframeWebsiteName={this._iframeWebsiteName()}
         onPaymentSuccess={this._onPaymentSuccess.bind(this)}
         onPaymentCancel={this._onPaymentCancel.bind(this)}
+        isTest={false}
       />
     )
   }

@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react'
 import {subStages} from 'gModules/first_subscription/state_machine.js'
 import NewOrder from './NewOrder.js'
+import './style.css'
 
 export default class FirstSubscription extends Component {
   displayName: 'SubscriptionIframe'
@@ -42,7 +43,7 @@ export default class FirstSubscription extends Component {
   render() {
     const {flowStage, isTest} = this.props
     return (
-      <div className='container-fluid full-width homePage'>
+      <div className='FirstSubscription'>
         {(flowStage === 'UNNECESSARY') && <Unnecessary {...this._unnecessaryProps()}/>}
         {(flowStage === 'CANCELLED') && <Cancelled/>}
         {(flowStage === 'START') && <FormStart/>}

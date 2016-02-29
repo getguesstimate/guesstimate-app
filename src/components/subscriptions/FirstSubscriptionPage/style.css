@@ -1,0 +1,18 @@
+.FirstSubscriptionPage {
+  color: white;
+  font-family: 'Lato';
+  text-align: center;
+}
+
+.FirstSubscriptionPage .header{
+  width: 100%;
+  text-align: center;
+  margin-bottom: 3em;
+}
+
+.FirstSubscriptionPage .header h1{
+  font-size: 3em;
+  opacity: 0.7;
+  font-weight: 200;
+}
+
