@@ -19,6 +19,7 @@ import ComponentIndex from './component-index'
 import UserShow from 'gComponents/users/show/index.js'
 import ReactDOM from 'react-dom'
 import FirstSubscriptionContainer from 'gComponents/subscriptions/FirstSubscription/container.js'
+import FirstSubscriptionPage from 'gComponents/subscriptions/FirstSubscriptionPage/container.js'
 import FirstSubscriptionStyleGuide from 'gComponents/subscriptions/FirstSubscription/StyleGuide.js'
 import SettingsStyleGuide from 'gComponents/users/settings/StyleGuide.js'
 import Settings from 'gComponents/users/settings/container.js'
@@ -47,13 +48,13 @@ export default Router.extend({
     'terms': 'terms',
     'privacy': 'privacy',
     'users/:id': 'userShow',
-    'payments': 'payments',
     'style_guide': 'styleGuide',
     'style_guide/first_subscription': 'styleGuideFirstSubscription',
     'style_guide/settings': 'styleGuideSettings',
     'style_guide/pricing': 'styleGuidePricing',
     'settings': 'settings',
     'pricing': 'pricing',
+    'subscribe/:id': 'subscribe',
   },
 
   spaceIndex() { this.render(<SpaceIndex/>) },
@@ -69,7 +70,7 @@ export default Router.extend({
   terms() { this.render(<TermsAndConditions/>) },
   privacy() { this.render(<PrivacyPolicy/>) },
   faq() { this.render(<FAQ/>) },
-  payments() { this.render(<FirstSubscriptionContainer planId={'small'}/>) },
+  subscribe(id) { this.render(<FirstSubscriptionPage planName={id}/>, {backgroundColor: 'BLUE'}) },
   userShow(id) { this.render(<UserShow userId={id}/>) },
   pricing() { this.render(<PlanIndex/>, {backgroundColor: 'BLUE'}) },
 })

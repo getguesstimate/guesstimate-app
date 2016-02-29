@@ -1,0 +1,15 @@
+.FirstSubscription {
+  text-align: center;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.FirstSubscription .NewOrder{
+  background-color: rgba(250,250,250,0.93);
+  padding: 4px;
+  border-radius: 4px;
+  float: left;
+  flex-direction: column;
+}

@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import { connect } from 'react-redux';
 import PlanIndex from './PlanIndex.js'
 import * as modalActions from 'gModules/modal/actions.js'
+import * as navigationActions from 'gModules/navigation/actions.js'
 
 function mapStateToProps(state) {
   return {
@@ -14,7 +15,8 @@ export default class PlanIndexContainer extends Component{
   displayName: 'PlanIndexContainer'
 
   _onChoose(planId) {
-    this.props.dispatch(modalActions.openFirstSubscription(planId))
+    const plan = {personal_lite: 'lite', personal_premium: 'premium'}[planId]
+    navigationActions.navigate(`subscribe/${plan}`)
   }
 
   render () {
