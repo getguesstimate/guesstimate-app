@@ -31,6 +31,6 @@ export default class Plan {
   }
 
   formattedCost() {
-    return numeral(this.monthlyCost / 1000).format('0,0')
+    return numeral(this.monthlyCost / 100).format('0,0')
   }
 }
