@@ -33,11 +33,10 @@ export default class GeneralSpaceIndex extends Component{
   }
   render () {
     const {searchSpaces} = this.props
-    let style = {paddingTop: '3em'}
     let spaces = searchSpaces.hits || []
     const hasMorePages = _.isFinite(searchSpaces.page) && (searchSpaces.page < (searchSpaces.nbPages - 1))
     return (
-      <div className='GeneralSpaceIndex row' style={style}>
+      <div className='GeneralSpaceIndex row'>
         <div className='col-sm-3'>
           <div className='row'>
 

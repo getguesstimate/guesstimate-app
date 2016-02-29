@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 import Plans from './plans.js'
+import Container from 'gComponents/utility/container/Container.js'
 
 class PortalMessage extends Component{
   render() {
@@ -31,17 +32,19 @@ export default class PlanIndex extends Component{
     const showButtons = (userPlanId === 'personal_free') && !portalUrl
 
     return (
-      <div className='PlanIndex'>
-        <div className='header'>
-          <h1> Plans & Pricing </h1>
-        </div>
+      <Container>
+        <div className='PlanIndex'>
+          <div className='header'>
+            <h1> Plans & Pricing </h1>
+          </div>
 
-        <PortalMessage portalUrl={portalUrl}/>
+          <PortalMessage portalUrl={portalUrl}/>
 
-        <div className='cards'>
-          <Plans showButtons={showButtons}/>
+          <div className='cards'>
+            <Plans showButtons={showButtons}/>
+          </div>
         </div>
-      </div>
+      </Container>
     )
   }
 }
