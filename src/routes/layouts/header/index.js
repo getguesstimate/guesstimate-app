@@ -24,8 +24,7 @@ export default class Header extends Component {
     let className = 'PageHeader'
     className += isBare ? ' isBare' : ''
 
-    let containerName = 'container-fluid'
-    containerName += !isFluid ? ' wrap' : ''
+    const containerName = isFluid ? 'container-fluid' : 'wrap'
 
     let navbarRef = isLoggedIn ? '/models' : '/'
     return (

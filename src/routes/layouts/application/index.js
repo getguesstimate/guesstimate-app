@@ -10,11 +10,12 @@ import * as spaceActions from 'gModules/spaces/actions.js';
 import * as userActions from 'gModules/users/actions.js';
 import * as meActions from 'gModules/me/actions.js';
 import ModalContainer from 'gModules/modal/routes.js';
+import Main from 'gComponents/layouts/main/index.js';
 import ErrorModal from 'gComponents/application/errorModal/index.js';
 import * as Space from 'gEngine/space';
 import Header from '../header'
 import Footer from '../footer'
-import NavHelper from './nav-helper'
+import NavHelper from 'gComponents/utility/NavHelper/index.js';
 import './style.css';
 
 import * as segment from '../../../server/segment/index.js'
@@ -44,16 +45,14 @@ export default class Layout extends Component{
   }
 
   render () {
-    let options = Object.assign({}, {isFluid: false, simpleHeader: false}, this.props.options)
+    let options = Object.assign({}, {
+      isFluid: false,
+      simpleHeader: false,
+      showFooter: true
+    }, this.props.options)
 
     this._registerUser()
     let body = this.props.page
-
-    if (!options.isFluid) {
-      body = <div className="container-fluid wrap"> {body} </div>
-    }
-
-    const mainClass = options.isFluid ? 'flexed' : ''
 
     return (
       <NavHelper>
@@ -61,10 +60,8 @@ export default class Layout extends Component{
         <div className='Layout'>
           <ModalContainer/>
           <Header isFluid={options.isFluid} isBare={options.simpleHeader}/>
-          <main className={mainClass}>
-            {body}
-          </main>
-          {!options.isFluid && <Footer/>}
+          <Main isFluid={options.isFluid} backgroundColor={options.backgroundColor}> {body} </Main>
+          {options.showFooter && <Footer/>}
         </div>
       </NavHelper>
     )
