@@ -45,15 +45,15 @@ export default class ModalRouter extends Component{
 
       const isOpen = true
       return(
-          <Modal
-            isOpen={isOpen}
-            onRequestClose={this.props.onClose}
-            style={customStyles}
-          >
-            <NavHelper>
-                {<item.component {...props} onClose={this.props.onClose}/>}
-            </NavHelper>
-          </Modal>
+        <Modal
+          isOpen={isOpen}
+          onRequestClose={this.props.onClose}
+          style={customStyles}
+        >
+          <NavHelper>
+              {<item.component {...props} onClose={this.props.onClose}/>}
+          </NavHelper>
+        </Modal>
       )
     }
   }
