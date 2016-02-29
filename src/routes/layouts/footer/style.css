@@ -2,7 +2,6 @@
 
 footer {
   background-color: $grey-5;
-  margin-top: 4em;
 }
 
 footer .container-fluid {
@@ -12,6 +11,10 @@ footer .container-fluid {
 footer strong {
   margin-bottom: 3em;
   color: $grey-2;
+}
+
+footer ul {
+  list-style: none;
 }
 
 footer li {

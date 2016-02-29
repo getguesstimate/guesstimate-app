@@ -13,7 +13,7 @@ const PlanC = ({planId, privateModelLimit}) => (
 )
 
 const PlanUpgradeButton = () => (
-  <a className='ui button green large'>
+  <a className='ui button green large' href={'/pricing'}>
     <Icon name='rocket'/>
     {'  Upgrade'}
   </a>
