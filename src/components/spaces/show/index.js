@@ -31,7 +31,7 @@ export default class SpacesShow extends Component {
 
   state = {
     showSidebar: true,
-    attemptedFetch: false
+    attemptedFetch: false,
   }
 
   componentWillMount() {
@@ -67,12 +67,26 @@ export default class SpacesShow extends Component {
   destroy() {
     this.props.dispatch(spaceActions.destroy(this.props.denormalizedSpace))
   }
+
+  onPublicSelect() {
+    this.props.dispatch(spaceActions.generalUpdate(parseInt(this.props.spaceId), {is_private: false}))
+  }
+
+  onPrivateSelect() {
+    const canMakeMorePrivateModels = e.me.canMakeMorePrivateModels(this.props.me)
+
+    if (canMakeMorePrivateModels) {
+      this.props.dispatch(spaceActions.generalUpdate(parseInt(this.props.spaceId), {is_private: true}))
+    }
+  }
+
   onSaveName(name) {
     this.props.dispatch(spaceActions.update(parseInt(this.props.spaceId), {name}))
   }
   onSaveDescription(description) {
     this.props.dispatch(spaceActions.update(parseInt(this.props.spaceId), {description}))
   }
+
   hideSidebar() {
     this.setState({showSidebar: false})
   }
@@ -83,6 +97,7 @@ export default class SpacesShow extends Component {
     const space = this.props.denormalizedSpace;
     const sidebarIsViseable = !!space && (space.ownedByMe || !_.isEmpty(space.description))
     const canUsePrivateModels = e.me.canUsePrivateModels(this.props.me)
+    const canMakeMorePrivateModels = e.me.canMakeMorePrivateModels(this.props.me)
     return (
     <div className='spaceShow'>
       <div className='hero-unit'>
@@ -97,7 +112,9 @@ export default class SpacesShow extends Component {
                     onDestroy={this.destroy.bind(this)}
                     space={space}
                     canUsePrivateModels={canUsePrivateModels}
-                    me={this.props.me}
+                    canMakeMorePrivateModels={canMakeMorePrivateModels}
+                    onPublicSelect={this.onPublicSelect.bind(this)}
+                    onPrivateSelect={this.onPrivateSelect.bind(this)}
                 />
               }
             </div>
