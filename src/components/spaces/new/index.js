@@ -21,7 +21,7 @@ export default class NewSpaceFormContainer extends Component {
     let params = serialize(this.refs.form, {hash: true})
 
     if (this.canUsePrivateModels()) {
-      params['is_private'] = !this.refs['privacy-toggle'].isPublic()
+      params['is_private'] = !this.refs['privacy-toggle'].isPublicSelected()
     }
 
     this.props.dispatch(spaceActions.create(params))
@@ -64,7 +64,7 @@ export default class NewSpaceFormContainer extends Component {
                 <div className='field'>
                   <PrivacyToggle
                     ref='privacy-toggle'
-                    canMakeMorePrivateModels={canMakeMorePrivateModels}
+                    isPrivateSelectionValid={canMakeMorePrivateModels}
                     onPrivateSelect={() => {this.changeValidity(canMakeMorePrivateModels)}}
                     onPublicSelect={() => {this.changeValidity(true)}}
                   />
