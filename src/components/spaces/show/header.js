@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Component} from 'react'
 import StandardDropdownMenu from 'gComponents/utility/standard-dropdown-menu'
 import CanvasViewForm from './canvasViewForm.js'
 import Icon from 'react-fa'
@@ -21,9 +21,7 @@ const SaveMessage = ({saveState}) => (
   </div>
 )
 
-const SpaceHeader = ({me, space, onSave, onDestroy, onSaveName, canUsePrivateModels}) => {
-  const canMakeMorePrivateModels = e.me.canMakeMorePrivateModels(me)
-
+const SpaceHeader = ({canMakeMorePrivateModels, space, onSave, onDestroy, onPublicSelect, onPrivateSelect, onSaveName, canUsePrivateModels}) => {
   let privacy_header = (<span> <Icon name='globe'/> Public </span>)
   if (space.is_private) {
     privacy_header = (<span> <Icon name='lock'/> Private </span>)
@@ -63,6 +61,8 @@ const SpaceHeader = ({me, space, onSave, onDestroy, onSaveName, canUsePrivateMod
             position='right'
             isPrivateSelectionValid={canMakeMorePrivateModels}
             startPublic={!space.is_private}
+            onPublicSelect={onPublicSelect}
+            onPrivateSelect={onPrivateSelect}
           />
         }
         <SaveMessage saveState={space.canvasState.saveState} ownedByMe={space.ownedByMe}/>
