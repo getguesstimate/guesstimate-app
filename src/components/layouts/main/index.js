@@ -5,14 +5,20 @@ export default class Main extends Component{
   displayName: 'Main'
 
   static defaultProps = {
-    isFluid: false
+    isFluid: false,
+    backgroundColor: ''
+  }
+
+  static propTypes = {
+    isFluid: PropTypes.bool,
+    backgroundColor: PropTypes.oneOf(['', 'BLUE'])
   }
 
   render() {
     const {children, isFluid, backgroundColor} = this.props
     let className = ''
     className += (backgroundColor === 'BLUE') ? ' blue' : ''
-    className += isFluid ? ' flexed' : ''
+    className += isFluid ? ' fluid' : ''
 
     if (isFluid) {
       return (
@@ -23,7 +29,7 @@ export default class Main extends Component{
     } else {
       return (
         <main className={className}>
-          <div className='container-fluid wrap'>
+          <div className='wrap'>
             {children}
           </div>
         </main>

@@ -9,13 +9,13 @@ plans:
     name: 'Lite'
     id: 'personal_lite'
     enum_id: 2
-    monthly_cost: 5000
+    monthly_cost: 500
     private_model_limit: 20
   -
     name: 'Premium'
     id: 'personal_premium'
     enum_id: 3
-    monthly_cost: 12000
+    monthly_cost: 1200
     private_model_limit: 100
   -
     name: 'Infinite'
