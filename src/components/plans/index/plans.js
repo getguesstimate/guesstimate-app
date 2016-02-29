@@ -39,7 +39,10 @@ class PlanCard extends Component{
           <li> unlimited public models </li>
         </ul>
         { this.props.showButton &&
-          <a className='ui button large green'> Upgrade </a>
+          <a
+            className='ui button large green'
+            onMouseDown={this.props.onClick}
+          > Upgrade </a>
         }
       </div>
     )
@@ -48,7 +51,8 @@ class PlanCard extends Component{
 
 export default class Plans extends Component{
   static defaultProps = {
-    showButtons: false
+    showButtons: false,
+    onChoose: (planId) => {console.log('choose', planId)}
   }
 
   render() {
@@ -68,6 +72,7 @@ export default class Plans extends Component{
                 key={plan.name}
                 plan={plan}
                 showButton={showButton}
+                onClick={() => {this.props.onChoose(plan.id)}}
               />
             </div>
             )
