@@ -97,6 +97,7 @@ export default class SpacesShow extends Component {
                     onDestroy={this.destroy.bind(this)}
                     space={space}
                     canUsePrivateModels={canUsePrivateModels}
+                    me={this.props.me}
                 />
               }
             </div>
