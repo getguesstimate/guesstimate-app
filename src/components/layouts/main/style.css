@@ -1,6 +1,6 @@
 @import './styles/variables.css';
 
-main.flexed{
+main.fluid{
   display: flex;
   flex-direction: column;
 }
