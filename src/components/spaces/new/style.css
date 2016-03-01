@@ -1,9 +1,5 @@
 @import './styles/variables.css';
 
-.SpaceNew {
-  margin-top: 3em;
-}
-
 .SpaceNew form h3 {
   font-size: 1.25em;
   margin-bottom: 4px;

@@ -6,6 +6,7 @@ import * as spaceActions from 'gModules/spaces/actions'
 import * as userActions from 'gModules/users/actions'
 import './style.css'
 import { userSpaceSelector } from './userSpaceSelector.js';
+import Container from 'gComponents/utility/container/Container.js'
 
 function mapStateToProps(state) {
   return {
@@ -35,35 +36,37 @@ export default class UserShow extends Component{
     }
 
     return (
-      <div className='userShow'>
-        <div className='GeneralSpaceIndex row' style={{paddingTop: '3em'}}>
-          <div className='col-sm-3'>
-            <div className='row'>
+      <Container>
+        <div className='userShow'>
+          <div className='GeneralSpaceIndex row'>
+            <div className='col-sm-3'>
+              <div className='row'>
 
-              <div className='col-sm-12'>
-                <div className='main-user-tag'>
-                  {user &&
-                    <img
-                        src={user.picture}
-                    />
-                  }
+                <div className='col-sm-12'>
+                  <div className='main-user-tag'>
+                    {user &&
+                      <img
+                          src={user.picture}
+                      />
+                    }
+                  </div>
+                    {user &&
+                      <h2>
+                        {user.name}
+                      </h2>
+                    }
                 </div>
-                  {user &&
-                    <h2>
-                      {user.name}
-                    </h2>
-                  }
               </div>
             </div>
-          </div>
 
-          <div className='col-sm-9'>
-            {spaces &&
-              <SpaceList spaces={spaces} showUsers={false} hasMorePages={false}/>
-            }
+            <div className='col-sm-9'>
+              {spaces &&
+                <SpaceList spaces={spaces} showUsers={false} hasMorePages={false}/>
+              }
+            </div>
           </div>
         </div>
-      </div>
+      </Container>
     )
   }
 }

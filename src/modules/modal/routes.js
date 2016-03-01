@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import Modal from 'react-modal'
 import SettingsContainer from 'gComponents/users/settings/container.js'
+import NavHelper from 'gComponents/utility/NavHelper/index.js';
 import * as modalActions from 'gModules/modal/actions.js'
 
 const routes = [
@@ -49,7 +50,9 @@ export default class ModalRouter extends Component{
           onRequestClose={this.props.onClose}
           style={customStyles}
         >
-          {<item.component {...props} onClose={this.props.onClose}/>}
+          <NavHelper>
+              {<item.component {...props} onClose={this.props.onClose}/>}
+          </NavHelper>
         </Modal>
       )
     }

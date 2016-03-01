@@ -22,6 +22,8 @@ import FirstSubscriptionContainer from 'gComponents/subscriptions/FirstSubscript
 import FirstSubscriptionStyleGuide from 'gComponents/subscriptions/FirstSubscription/StyleGuide.js'
 import SettingsStyleGuide from 'gComponents/users/settings/StyleGuide.js'
 import Settings from 'gComponents/users/settings/container.js'
+import PlanIndex from 'gComponents/plans/index/container.js'
+import PlansStyleGuide from 'gComponents/plans/index/StyleGuide.js'
 
 export default Router.extend({
   render (page, options={}) {
@@ -49,21 +51,25 @@ export default Router.extend({
     'style_guide': 'styleGuide',
     'style_guide/first_subscription': 'styleGuideFirstSubscription',
     'style_guide/settings': 'styleGuideSettings',
+    'style_guide/pricing': 'styleGuidePricing',
     'settings': 'settings',
+    'pricing': 'pricing',
   },
 
   spaceIndex() { this.render(<SpaceIndex/>) },
   home() { this.render(<Home/>, {simpleHeader: true}) },
   spaceNew() { this.render(<SpaceNew/>) },
-  spaceShow(id) { this.render(<SpaceShow spaceId={id}/>, {isFluid: true}) },
+  spaceShow(id) { this.render(<SpaceShow spaceId={id}/>, {isFluid: true, showFooter: false}) },
   settings() { this.render(<Settings/>) },
   styleGuide() { this.render(<ComponentIndex/>) },
-  styleGuideSettings() { this.render(<SettingsStyleGuide/>, {isFluid: true}) },
+  styleGuideSettings() { this.render(<SettingsStyleGuide/>, {isFluid: true, showFooter: false}) },
   styleGuideFirstSubscription() { this.render(<FirstSubscriptionStyleGuide/>) },
+  styleGuidePricing() { this.render(<PlansStyleGuide/>) },
   maintenance() { this.render(<Maintenance/>) },
   terms() { this.render(<TermsAndConditions/>) },
   privacy() { this.render(<PrivacyPolicy/>) },
   faq() { this.render(<FAQ/>) },
   payments() { this.render(<FirstSubscriptionContainer planId={'small'}/>) },
   userShow(id) { this.render(<UserShow userId={id}/>) },
+  pricing() { this.render(<PlanIndex/>, {backgroundColor: 'BLUE'}) },
 })
