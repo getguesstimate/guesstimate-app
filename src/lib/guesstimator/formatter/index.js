@@ -3,7 +3,7 @@ import {item as DistributionTextUpTo} from './formatters/DistributionTextUpTo.js
 import {item as DistributionTextUpToAlternate} from './formatters/DistributionTextUpToAlternate.js'
 import {item as DistributionPointText} from './formatters/DistributionPointText.js'
 import {item as DistributionUniform} from './formatters/DistributionUniform.js'
-import {item as Data} from './formatters/data.js'
+import {item as Data} from './formatters/Data'
 import {item as Null} from './formatters/Null.js'
 
 export const formatters = [
