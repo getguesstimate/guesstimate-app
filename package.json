@@ -7,7 +7,7 @@
     "dev": "BUILD_DEV=1 NODE_ENV=development API_ENV=development webpack-dev-server",
     "start": "BUILD_DEV=0 NODE_ENV=development API_ENV=development webpack-dev-server",
     "build": "BUILD_DEV=0 API_ENV=production webpack",
-    "deploy": "surge -p public -d www.getguesstimate.com",
+    "deploy": "surge -p public -d https://www.getguesstimate.com",
     "stage": "surge -p public -d stage.getguesstimate.com",
     "stage!": "BUILD_DEV=0 npm run build && npm run stage",
     "test": "karma start karma.conf.js"
