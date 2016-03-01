@@ -28,7 +28,7 @@ class PortalMessage extends Component{
 export default class PlanIndex extends Component{
   displayName: 'PlanIndex'
   render () {
-    const {userPlanId, portalUrl} = this.props
+    const {userPlanId, portalUrl, onChoose} = this.props
     const showButtons = (userPlanId === 'personal_free') && !portalUrl
 
     return (
@@ -41,7 +41,7 @@ export default class PlanIndex extends Component{
           <PortalMessage portalUrl={portalUrl}/>
 
           <div className='cards'>
-            <Plans showButtons={showButtons}/>
+            <Plans showButtons={showButtons} onChoose={onChoose}/>
           </div>
         </div>
       </Container>

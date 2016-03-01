@@ -4,10 +4,12 @@ import { connect } from 'react-redux';
 import Modal from 'react-modal'
 import SettingsContainer from 'gComponents/users/settings/container.js'
 import NavHelper from 'gComponents/utility/NavHelper/index.js';
+import FirstSubscriptionContainer from 'gComponents/subscriptions/FirstSubscription/container.js'
 import * as modalActions from 'gModules/modal/actions.js'
 
 const routes = [
-  {name: 'settings', component: SettingsContainer}
+  {name: 'settings', component: SettingsContainer},
+  {name: 'firstSubscription', component: FirstSubscriptionContainer}
 ]
 
 function getComponent(componentName) {
