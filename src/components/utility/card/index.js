@@ -17,9 +17,14 @@ export class CardListElement extends Component {
   }
   render() {
     const {icon, image, header, children, url, isSelected, isDisabled} = this.props
+
     let className = 'action'
     if (isSelected) { className += ' selected' }
     if (isDisabled) { className += ' disabled' }
+    if (!!children) { className += ' hasChildren' }
+
+    let [small, large] = !!children ? ['2', '10'] : ['3', '9']
+
     return (
       <li>
         <a
@@ -28,7 +33,7 @@ export class CardListElement extends Component {
           onMouseDown={this._onSelect.bind(this)}
         >
           <div className='row middle-xs'>
-            <div className='col-xs-3 icons'>
+            <div className={`col-xs-${small} icons`}>
               {icon &&
                 <Icon name={icon}/>
               }
@@ -36,9 +41,11 @@ export class CardListElement extends Component {
                 <img src={image}/>
               }
             </div>
-              <div className='col-xs-7 info-section'>
+              <div className={`col-xs-${large} info-section`}>
                 <span className='header'>{header.capitalizeFirstLetter()}</span>
-                {children}
+                {children &&
+                    <div className='content'> {children} </div>
+                  }
               </div>
           </div>
         </a>

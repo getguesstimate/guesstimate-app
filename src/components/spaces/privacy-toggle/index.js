@@ -13,7 +13,7 @@ const PublicOption = ({isSelected, onClick}) => {
       icon={'globe'}
       header='Public'
     >
-      <p>This model is visible to everyone. Only you can save changes.</p>
+      <div>This model is visible to everyone. Only you can save changes.</div>
     </CardListElement>
   )
 }
@@ -45,11 +45,11 @@ class PrivateOption extends Component {
         header='Private'
         isDisabled={!isPrivateSelectionValid}
       >
-        <p>This model is only visible and editable by you.</p>
+        <div>This model is only visible and editable by you.</div>
         {this._showWarning() &&
-          <p className='warning'>
+          <div className='warning'>
             Upgrade your account to create more private models.
-          </p>
+          </div>
         }
       </CardListElement>
     )
@@ -101,7 +101,7 @@ class PrivacyToggle extends Component {
       </ul>
     )
     return (
-    <Card headerText={headerText}>
+    <Card headerText={headerText} width='normal'>
       {list}
     </Card>
     )
@@ -127,6 +127,7 @@ class PrivacyToggleDropdown extends Component {
           headerText={headerText}
           openLink={openLink}
           position={position}
+          width={'wide'}
       >
         <ul className={`PrivacyToggle dropdown`}>
           <PublicOption

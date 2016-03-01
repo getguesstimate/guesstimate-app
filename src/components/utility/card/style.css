@@ -12,12 +12,13 @@
 .Card.shadow {
   box-shadow: 0 2px 6px rgba(0,0,0,0.35);
 }
+
 .Card.narrow {
-  min-width: 18em;
+  width: 18em;
 }
 
 .Card.normal {
-  min-width: 30em;
+  width: 30em;
 }
 
 .Card .ui.form textarea {
@@ -45,6 +46,10 @@
 
 .Card a {
   cursor: pointer;
+}
+
+.Card a.disabled {
+  cursor: not-allowed;
 }
 
 .Card hr{
@@ -91,6 +96,10 @@
   border-radius: 0;
 }
 
+.Card li .action.hasChildren{
+  padding: 1em 0 0.5em;
+}
+
 .Card-body.padded {
   padding: 0 1em;
 }
@@ -105,12 +114,16 @@
 .Card li a{
   width: 100%;
   float: left;
-  font-size:1.25em;
 }
 
 .Card li .icons{
   text-align: center;
   color: $grey-2;
+  font-size: 1.25em;
+}
+
+.Card li .action.hasChildren .icons{
+  font-size: 2.5em;
 }
 
 .Card li .icons img{
@@ -121,11 +134,22 @@
   color: #555;
 }
 
-.Card li .info-section .header{
+.Card li .info-section > .header{
   font-weight: bold;
+  margin-bottom: 5px;
+  font-size:1.25em;
 }
 
-.Card li a:hover{
+.Card li .info-section > .content{
+  padding: 0.5em 0;
+  font-size: 1.1em;
+}
+
+.Card li .info-section .warning{
+  margin-top: 10px;
+}
+
+.Card li a:hover:not(.disabled) {
   background-color: $blue-2;
 }
 
