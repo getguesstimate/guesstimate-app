@@ -40,13 +40,13 @@ export default class Profile extends Component {
     const hasPrivateAccess = profile.has_private_access
 
     let listElements = [
-      {icon: 'question', text: 'FAQ', onMouseDown: () => {navigationActions.navigate('/faq')}},
-      {icon: 'sign-out', text: 'Sign Out', onMouseDown: this.logOut.bind(this)}
+      {icon: 'question', header: 'FAQ', onMouseDown: () => {navigationActions.navigate('/faq')}},
+      {icon: 'sign-out', header: 'Sign Out', onMouseDown: this.logOut.bind(this)}
     ]
 
     if (!!hasPrivateAccess) {
       listElements = [
-        {icon: 'user', text: 'account', onMouseDown: this._openModal.bind(this)},
+        {icon: 'user', header: 'account', onMouseDown: this._openModal.bind(this)},
         ...listElements
       ]
     }

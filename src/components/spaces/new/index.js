@@ -2,10 +2,10 @@ import React, {Component, PropTypes} from 'react'
 import * as spaceActions from 'gModules/spaces/actions.js'
 import Container from 'gComponents/utility/container/Container.js'
 import e from 'gEngine/engine'
-import { connect } from 'react-redux';
+import {connect} from 'react-redux'
 import './style.css'
 import serialize from 'form-serialize'
-import PrivacyToggle from './privacy-toggle/index.js'
+import {PrivacyToggle} from '../privacy-toggle/index.js'
 
 function mapStateToProps(state) {
   return {
@@ -22,7 +22,7 @@ export default class NewSpaceFormContainer extends Component {
     let params = serialize(this.refs.form, {hash: true})
 
     if (this.canUsePrivateModels()) {
-      params['is_private'] = !this.refs['privacy-toggle'].isPublic()
+      params['is_private'] = !this.refs['privacy-toggle'].isPublicSelected()
     }
 
     this.props.dispatch(spaceActions.create(params))
@@ -62,8 +62,9 @@ export default class NewSpaceFormContainer extends Component {
                     <div className='field'>
                       <PrivacyToggle
                         ref='privacy-toggle'
-                        canMakeMorePrivateModels={canMakeMorePrivateModels}
-                        changeValidity={this.changeValidity.bind(this)}
+                        isPrivateSelectionValid={canMakeMorePrivateModels}
+                        onPrivateSelect={() => {this.changeValidity(canMakeMorePrivateModels)}}
+                        onPublicSelect={() => {this.changeValidity(true)}}
                       />
                     </div>
                   }
