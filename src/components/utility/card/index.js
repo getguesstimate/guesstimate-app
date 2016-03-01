@@ -8,25 +8,51 @@ String.prototype.capitalizeFirstLetter = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
 }
 
-export const CardListElement = ({icon, image, text, url, onMouseDown, isSelected}) => (
-  <li>
-    <a className={'action' + (isSelected ? ' selected' : '')} href={url} onMouseDown={onMouseDown}>
-      <div className='row middle-xs'>
-        <div className='col-xs-3 icons'>
-          {icon &&
-            <Icon name={icon}/>
-          }
-          {image &&
-            <img src={image}/>
-          }
-        </div>
-        <div className='col-xs-7 text .middle-xs'>
-          {text.capitalizeFirstLetter()}
-        </div>
-      </div>
-    </a>
-  </li>
-)
+export class CardListElement extends Component {
+  _onSelect() {
+    const {isSelected, isDisabled} = this.props
+    if ((!isSelected) && (!isDisabled)) {
+      this.props.onMouseDown()
+    }
+  }
+  render() {
+    const {icon, image, header, children, url, isSelected, isDisabled} = this.props
+
+    let className = 'action'
+    if (isSelected) { className += ' selected' }
+    if (isDisabled) { className += ' disabled' }
+    if (!!children) { className += ' hasChildren' }
+
+    let [small, large] = !!children ? ['2', '10'] : ['3', '9']
+
+    return (
+      <li>
+        <a
+          className={className}
+          href={url}
+          onMouseDown={this._onSelect.bind(this)}
+        >
+          <div className='row middle-xs'>
+            <div className={`col-xs-${small} icons`}>
+              {icon &&
+                <Icon name={icon}/>
+              }
+              {image &&
+                <img src={image}/>
+              }
+            </div>
+              <div className={`col-xs-${large} info-section`}>
+                <span className='header'>{header.capitalizeFirstLetter()}</span>
+                {children &&
+                    <div className='content'> {children} </div>
+                  }
+              </div>
+          </div>
+        </a>
+      </li>
+    )
+  }
+}
 
 export default class Card extends Component {
   displayName: 'Card'
@@ -55,13 +81,17 @@ export default class Card extends Component {
     const {headerText, onClose, width} = this.props
     return (
       <div className={this._cardClass()}>
-        <div className='Card-header'>
-          <h3> {headerText} </h3>
-          <span className='Card-close'><ButtonClose onClick={onClose}/></span>
-        </div>
+        {headerText &&
+          <div className='Card-header'>
+            <h3> {headerText} </h3>
+            <span className='Card-close'><ButtonClose onClick={onClose}/></span>
+          </div>
+        }
 
         <div className={this._bodyClass()}>
-          <hr/>
+          {headerText &&
+            <hr/>
+          }
           {this.props.children}
         </div>
       </div>
