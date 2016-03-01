@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 import * as spaceActions from 'gModules/spaces/actions.js'
+import Container from 'gComponents/utility/container/Container.js'
 import e from 'gEngine/engine'
 import {connect} from 'react-redux'
 import './style.css'
@@ -42,45 +43,46 @@ export default class NewSpaceFormContainer extends Component {
     let submitClasses = 'ui button primary'
     submitClasses += this.state.isValid ? '' : ' disabled'
     return (
-      <div className='SpaceNew' >
-        <div className='row'>
-          <div className='col-md-2'>
-          </div>
-          <div className='col-md-8'>
-            <h2> Create a New {canUsePrivateModels ? '' : 'Public'} Model </h2>
-            <br/>
-            <form
-              onSubmit={this.onSubmit.bind(this)}
-              className='ui form'
-              ref='form'
-            >
-              <div className='field'>
-                <h3>Name</h3>
-                <input type='text' name='name'/>
-              </div>
-              <hr/>
+      <Container>
+        <div className='SpaceNew' >
+          <div className='row'>
+            <div className='col-md-2'>
+            </div>
+            <div className='col-md-8'>
+              <h2> Create a New {canUsePrivateModels ? '' : 'Public'} Model </h2>
+              <br/>
+              <form onSubmit={this.onSubmit.bind(this)} className='ui form' ref='form'>
+                  <div className='field'>
+                    <h3>Name</h3>
+                    <input type="text" name="name"/>
+                  </div>
+                  <hr/>
 
-              {canUsePrivateModels &&
-                <div className='field'>
-                  <PrivacyToggle
-                    ref='privacy-toggle'
-                    isPrivateSelectionValid={canMakeMorePrivateModels}
-                    onPrivateSelect={() => {this.changeValidity(canMakeMorePrivateModels)}}
-                    onPublicSelect={() => {this.changeValidity(true)}}
-                  />
-                </div>
-              }
+                  {canUsePrivateModels &&
+                    <div className='field'>
+                      <PrivacyToggle
+                        ref='privacy-toggle'
+                        isPrivateSelectionValid={canMakeMorePrivateModels}
+                        onPrivateSelect={() => {this.changeValidity(canMakeMorePrivateModels)}}
+                        onPublicSelect={() => {this.changeValidity(true)}}
+                      />
+                    </div>
+                  }
 
-              {canUsePrivateModels && <hr/>}
-              <div className='field'>
-                <button type='submit' className={submitClasses}>
-                  {'Create'}
-                </button>
-              </div>
-            </form>
+
+                  {canUsePrivateModels &&
+                    <hr/>
+                  }
+                  <div className='field'>
+                    <button type='submit' className={submitClasses}>
+                      {'Create'}
+                    </button>
+                  </div>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
-    )
+      </Container>
+    );
   }
 }
