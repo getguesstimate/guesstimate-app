@@ -1,11 +1,12 @@
-import React from 'react'
+import React, {Component} from 'react'
 import StandardDropdownMenu from 'gComponents/utility/standard-dropdown-menu'
 import CanvasViewForm from './canvasViewForm.js'
 import Icon from 'react-fa'
-
+import e from 'gEngine/engine'
 import DropDown from 'gComponents/utility/drop-down/index.js'
 import {DropDownListElement} from 'gComponents/utility/drop-down/index.js'
 import {SpaceName} from './spaceName.js'
+import {PrivacyToggleDropdown} from '../privacy-toggle/index.js'
 import './header.css'
 
 const SaveMessage = ({saveState}) => (
@@ -20,44 +21,53 @@ const SaveMessage = ({saveState}) => (
   </div>
 )
 
-let SpaceHeader = ({space, onSave, onDestroy, onSaveName, canUsePrivateModels}) => (
-  <div className='header'>
+const SpaceHeader = ({canMakeMorePrivateModels, space, onSave, onDestroy, onPublicSelect, onPrivateSelect, onSaveName, canUsePrivateModels}) => {
+  let privacy_header = (<span> <Icon name='globe'/> Public </span>)
+  if (space.is_private) {
+    privacy_header = (<span> <Icon name='lock'/> Private </span>)
+  }
 
-    <div className='header-name'>
-      <SpaceName
-          name={space.name}
-          ownedByMe={space.ownedByMe}
-          onSave={onSaveName}
-      />
-    </div>
+  return (
+    <div className='header'>
 
-    <div className='header-actions'>
-      <CanvasViewForm/>
+      <div className='header-name'>
+        <SpaceName
+            name={space.name}
+            ownedByMe={space.ownedByMe}
+            onSave={onSaveName}
+        />
+      </div>
 
-      {space.ownedByMe &&
-        <DropDown
-            headerText={'Model Actions'}
-            openLink={<a className='space-header-action'>Model Actions</a>}
+      <div className='header-actions'>
+        <CanvasViewForm/>
+
+        {space.ownedByMe &&
+          <DropDown
+              headerText={'Model Actions'}
+              openLink={<a className='space-header-action'>Model Actions</a>}
+              position='right'
+          >
+            <ul>
+              <DropDownListElement icon={'warning'} header='Delete Model' onMouseDown={onDestroy}/>
+            </ul>
+          </DropDown>
+        }
+
+        {canUsePrivateModels &&
+          <PrivacyToggleDropdown
+            headerText={'Privacy Options'}
+            openLink={<a className='space-header-action'>{privacy_header}</a>}
             position='right'
-        >
-          <ul>
-            <DropDownListElement icon={'warning'} text='Delete Model' onMouseDown={onDestroy}/>
-          </ul>
-        </DropDown>
-      }
-
-      {canUsePrivateModels &&
-        <a className='space-header-action'>
-          {space.is_private &&
-            <span> <Icon name='lock'/> Private </span>
-          }
-          {!space.is_private &&
-            <span> <Icon name='globe'/> Public </span>
-          }
-        </a>
-      }
-      <SaveMessage saveState={space.canvasState.saveState} ownedByMe={space.ownedByMe}/>
+            isPrivateSelectionValid={canMakeMorePrivateModels}
+            isPrivate={space.is_private}
+            onPublicSelect={onPublicSelect}
+            onPrivateSelect={onPrivateSelect}
+          />
+        }
+        <SaveMessage saveState={space.canvasState.saveState} ownedByMe={space.ownedByMe}/>
+      </div>
     </div>
-  </div>
-)
+  )
+}
+
 export default SpaceHeader
