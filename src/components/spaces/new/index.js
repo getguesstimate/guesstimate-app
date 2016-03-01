@@ -1,10 +1,11 @@
 import React, {Component, PropTypes} from 'react'
 import * as spaceActions from 'gModules/spaces/actions.js'
+import Container from 'gComponents/utility/container/Container.js'
 import e from 'gEngine/engine'
-import { connect } from 'react-redux';
+import {connect} from 'react-redux'
 import './style.css'
 import serialize from 'form-serialize'
-import PrivacyToggle from './privacy-toggle/index.js'
+import {PrivacyToggle} from '../privacy-toggle/index.js'
 
 function mapStateToProps(state) {
   return {
@@ -21,7 +22,7 @@ export default class NewSpaceFormContainer extends Component {
     let params = serialize(this.refs.form, {hash: true})
 
     if (this.canUsePrivateModels()) {
-      params['is_private'] = !this.refs['privacy-toggle'].isPublic()
+      params['is_private'] = !this.refs['privacy-toggle'].isPublicSelected()
     }
 
     this.props.dispatch(spaceActions.create(params))
@@ -42,43 +43,46 @@ export default class NewSpaceFormContainer extends Component {
     let submitClasses = 'ui button primary'
     submitClasses += this.state.isValid ? '' : ' disabled'
     return (
-      <div className='SpaceNew' >
-        <div className='row'>
-          <div className='col-md-2'>
-          </div>
-          <div className='col-md-8'>
-            <h2> Create a New {canUsePrivateModels ? '' : 'Public'} Model </h2>
-            <br/>
-            <form onSubmit={this.onSubmit.bind(this)} className='ui form' ref='form'>
-                <div className='field'>
-                  <h3>Name</h3>
-                  <input type="text" name="name"/>
-                </div>
-                <hr/>
-
-                {canUsePrivateModels &&
+      <Container>
+        <div className='SpaceNew' >
+          <div className='row'>
+            <div className='col-md-2'>
+            </div>
+            <div className='col-md-8'>
+              <h2> Create a New {canUsePrivateModels ? '' : 'Public'} Model </h2>
+              <br/>
+              <form onSubmit={this.onSubmit.bind(this)} className='ui form' ref='form'>
                   <div className='field'>
-                    <PrivacyToggle
-                      ref='privacy-toggle'
-                      canMakeMorePrivateModels={canMakeMorePrivateModels}
-                      changeValidity={this.changeValidity.bind(this)}
-                    />
+                    <h3>Name</h3>
+                    <input type="text" name="name"/>
                   </div>
-                }
-
-
-                {canUsePrivateModels &&
                   <hr/>
-                }
-                <div className='field'>
-                  <button type='submit' className={submitClasses}>
-                    {'Create'}
-                  </button>
-                </div>
-            </form>
+
+                  {canUsePrivateModels &&
+                    <div className='field'>
+                      <PrivacyToggle
+                        ref='privacy-toggle'
+                        isPrivateSelectionValid={canMakeMorePrivateModels}
+                        onPrivateSelect={() => {this.changeValidity(canMakeMorePrivateModels)}}
+                        onPublicSelect={() => {this.changeValidity(true)}}
+                      />
+                    </div>
+                  }
+
+
+                  {canUsePrivateModels &&
+                    <hr/>
+                  }
+                  <div className='field'>
+                    <button type='submit' className={submitClasses}>
+                      {'Create'}
+                    </button>
+                  </div>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
+      </Container>
     );
   }
 }

@@ -5,6 +5,9 @@
   border-radius: 3px;
   width: 380px;
   margin-bottom: 20px;
+  padding: 0;
+  list-style: none;
+  float: left;
 }
 
 .PrivacyToggle li{

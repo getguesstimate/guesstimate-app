@@ -30,6 +30,7 @@ export function fetch({auth0_id}) {
         const action = sActions.fetchSuccess(data.items)
         const me = data.items[0]
         dispatch(meActions.guesstimateMeLoaded(me))
+        dispatch(fetchById(me.id))
       }
     })
   }
@@ -44,6 +45,9 @@ export function fetchById(userId) {
       }
       else if (user) {
         dispatch(sActions.fetchSuccess([user]))
+        if (getState().me.id === user.id){
+          dispatch(meActions.guesstimateMeLoaded(user))
+        }
       }
     })
   }
