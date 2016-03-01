@@ -9,7 +9,7 @@ const PublicOption = ({isSelected, onClick}) => {
   return (
     <CardListElement
       isSelected={isSelected}
-      onMouseDown={onClick}
+      onMouseDown={(!isSelected) && onClick}
       icon={'globe'}
       header='Public'
     >
@@ -18,22 +18,42 @@ const PublicOption = ({isSelected, onClick}) => {
   )
 }
 
-const PrivateOption = ({onClick, isSelected, isPrivateSelectionValid}) => {
-  return (
-    <CardListElement
-      isSelected={isSelected}
-      onMouseDown={onClick}
-      icon={'lock'}
-      header='Private'
-    >
-      <p>This model is only visible and editable by you.</p>
-      {isSelected && (!isPrivateSelectionValid) &&
-        <p className='warning'>
-          Upgrade your account to create more private models.
-        </p>
-      }
-    </CardListElement>
-  )
+class PrivateOption extends Component {
+  static propTypes = {
+    hideErrorWhenUnselected: PropTypes.bool,
+    isPrivateSelectionValid: PropTypes.bool,
+    isSelected: PropTypes.bool,
+    onClick: PropTypes.func.isRequired
+  }
+
+  static defaultProps = {
+    hideErrorWhenUnselected: true
+  }
+
+  _showWarning() {
+    const {isPrivateSelectionValid} = this.props
+    return !isPrivateSelectionValid
+  }
+
+  render() {
+    const {onClick, isSelected, isPrivateSelectionValid} = this.props
+    return (
+      <CardListElement
+        isSelected={isSelected}
+        onMouseDown={(!isSelected) && onClick}
+        icon={'lock'}
+        header='Private'
+        isDisabled={!isPrivateSelectionValid}
+      >
+        <p>This model is only visible and editable by you.</p>
+        {this._showWarning() &&
+          <p className='warning'>
+            Upgrade your account to create more private models.
+          </p>
+        }
+      </CardListElement>
+    )
+  }
 }
 
 class PrivacyToggle extends Component {
@@ -41,9 +61,7 @@ class PrivacyToggle extends Component {
     onPrivateSelect: PropTypes.func,
     onPublicSelect: PropTypes.func,
     initialSelection: PropTypes.oneOf(['Public', 'Private']),
-    isDropDown: PropTypes.bool,
     headerText: PropTypes.string,
-    position: PropTypes.string,
     isPrivateSelectionValid: PropTypes.bool.isRequired
   }
 
@@ -59,20 +77,18 @@ class PrivacyToggle extends Component {
 
   onPrivateSelect() {
     this.setState({isPublicSelected: false})
-    this.props.onPrivateSelect()
   }
 
   onPublicSelect() {
     this.setState({isPublicSelected: true})
-    this.props.onPublicSelect()
   }
 
   render() {
     const {isPublicSelected} = this.state
-    const {isPrivateSelectionValid, isDropDown, headerText, openLink, position} = this.props
+    const {isPrivateSelectionValid, headerText, openLink} = this.props
 
     const list = (
-      <ul className={`PrivacyToggle${isDropDown ? ' dropdown' : ''}`}>
+      <ul className={`PrivacyToggle`}>
         <PublicOption
           isSelected={isPublicSelected}
           onClick={this.onPublicSelect.bind(this)}
@@ -84,25 +100,49 @@ class PrivacyToggle extends Component {
         />
       </ul>
     )
-
-    if (isDropDown) {
-      return (
-        <DropDown
-            headerText={headerText}
-            openLink={openLink}
-            position={position}
-        >
-          {list}
-        </DropDown>
-      )
-    } else {
-      return (
-        <Card headerText={headerText}>
-          {list}
-        </Card>
-      )
-    }
+    return (
+    <Card headerText={headerText}>
+      {list}
+    </Card>
+    )
   }
 }
 
-export {PrivacyToggle}
+
+class PrivacyToggleDropdown extends Component {
+  static propTypes = {
+    onPrivateSelect: PropTypes.func,
+    onPublicSelect: PropTypes.func,
+    isPrivate: PropTypes.bool,
+    headerText: PropTypes.string,
+    position: PropTypes.string,
+    isPrivateSelectionValid: PropTypes.bool.isRequired
+  }
+
+  render() {
+    const {isPrivateSelectionValid, headerText, openLink, position, isPrivate} = this.props
+
+    return (
+      <DropDown
+          headerText={headerText}
+          openLink={openLink}
+          position={position}
+      >
+        <ul className={`PrivacyToggle dropdown`}>
+          <PublicOption
+            isSelected={!isPrivate}
+            onClick={this.props.onPublicSelect}
+          />
+          <PrivateOption
+            isSelected={isPrivate}
+            onClick={this.props.onPrivateSelect}
+            isPrivateSelectionValid={isPrivateSelectionValid}
+            hideErrorWhenUnselected={false}
+          />
+        </ul>
+      </DropDown>
+    )
+  }
+}
+
+export {PrivacyToggle, PrivacyToggleDropdown}
