@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/getguesstimate/guesstimate-app.png?label=ready&title=Ready)](https://waffle.io/getguesstimate/guesstimate-app)
 Guesstimate [![Gitter chat](https://badges.gitter.im/gitterHQ/services.png)](https://gitter.im/getguesstimate)
 ==================
 
