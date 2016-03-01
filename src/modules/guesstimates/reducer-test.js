@@ -1,8 +1,8 @@
 import reducer from './reducer.js'
 
-describe.only('guesstimatesReducer', () => {
+describe('guesstimatesReducer', () => {
 
-  describe.only('#SPACES_FETCH_SUCCESS', () => {
+  describe('#SPACES_FETCH_SUCCESS', () => {
     const spaces = [
       {
         graph: {

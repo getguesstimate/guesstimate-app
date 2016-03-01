@@ -1,0 +1,12 @@
+.ComponentEditor > .reference {
+  padding: 4em 10px;
+}
+
+.ComponentEditor.grey .Component{
+  background-color: #666;
+}
+
+.ComponentEditor .Component {
+  padding: 5px;
+}
+

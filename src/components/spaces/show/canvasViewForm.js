@@ -96,7 +96,7 @@ export default class CanvasViewForm extends Component {
           <ul>
             {metricCardViewOptions.map(o => {
               return(
-                <DropDownListElement key={o.name} icon={o.icon} text={o.name} isSelected={o.isSelected} onMouseDown={o.onClick} image={o.image}/>
+                <DropDownListElement key={o.name} icon={o.icon} header={o.name} isSelected={o.isSelected} onMouseDown={o.onClick} image={o.image}/>
               )
             })}
           </ul>
@@ -110,7 +110,7 @@ export default class CanvasViewForm extends Component {
           <ul>
             {arrowViewOptions.map(o => {
               return(
-                <DropDownListElement key={o.name} icon={o.icon} text={o.name} isSelected={o.isSelected} onMouseDown={o.onClick} image={o.image}/>
+                <DropDownListElement key={o.name} icon={o.icon} header={o.name} isSelected={o.isSelected} onMouseDown={o.onClick} image={o.image}/>
               )
             })}
           </ul>
