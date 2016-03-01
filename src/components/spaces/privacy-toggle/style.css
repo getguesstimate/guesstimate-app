@@ -3,54 +3,12 @@
 .PrivacyToggle {
   border: 1px solid #ddd;
   border-radius: 3px;
-  width: 380px;
-  margin-bottom: 20px;
 }
 
 .PrivacyToggle.dropdown {
   border: 0;
   border-radius: 0;
   margin-bottom: 0;
-}
-
-.PrivacyToggle li{
-  padding: 0;
-  float: left;
-  width: 100%;
-}
-
-.PrivacyToggle li:not(.selected){
-  cursor: pointer;
-}
-
-.PrivacyToggle li .icons{
-  width: 18%;
-  float: left;
-  text-align: center;
-}
-
-.PrivacyToggle li .icons .fa{
-  font-size: 2.5em;
-  color: $grey-2;
-}
-
-.PrivacyToggle li .info-section{
-  font-size: 0.8em;
-  width: 80%;
-  float: left;
-  color: $black-1;
-  padding-left: 0;
-}
-
-.PrivacyToggle li .info-section .header{
-  font-size: 1.1em;
-  margin-bottom: 3px;
-  font-weight: bold;
-  color: $black-1;
-}
-
-.PrivacyToggle.dropdown li .info-section .header{
-  font-size:1.25em;
 }
 
 .PrivacyToggle li .info-section .warning{
