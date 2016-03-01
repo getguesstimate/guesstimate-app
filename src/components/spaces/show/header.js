@@ -6,7 +6,7 @@ import e from 'gEngine/engine'
 import DropDown from 'gComponents/utility/drop-down/index.js'
 import {DropDownListElement} from 'gComponents/utility/drop-down/index.js'
 import {SpaceName} from './spaceName.js'
-import {PrivacyToggle} from '../privacy-toggle/index.js'
+import {PrivacyToggleDropdown} from '../privacy-toggle/index.js'
 import './header.css'
 
 const SaveMessage = ({saveState}) => (
@@ -54,13 +54,12 @@ const SpaceHeader = ({canMakeMorePrivateModels, space, onSave, onDestroy, onPubl
         }
 
         {canUsePrivateModels &&
-          <PrivacyToggle
-            isDropDown={true}
+          <PrivacyToggleDropdown
             headerText={'Privacy Options'}
             openLink={<a className='space-header-action'>{privacy_header}</a>}
             position='right'
             isPrivateSelectionValid={canMakeMorePrivateModels}
-            startPublic={!space.is_private}
+            isPrivate={space.is_private}
             onPublicSelect={onPublicSelect}
             onPrivateSelect={onPrivateSelect}
           />
