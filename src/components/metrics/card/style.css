@@ -52,7 +52,7 @@
   width: 100%;
 }
 
-.metricCard:not(.display) .section.editing {
+.metricCard .section.editing {
   border-top: 1px solid #ddd;
   border-radius: 0 0 2px 2px;
 }
