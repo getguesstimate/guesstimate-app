@@ -1,8 +1,7 @@
 /* @flow */
 
-import * as estimateInput from './estimateInput.js';
 import type {Guesstimate, Distribution, DGraph, Graph, Simulation} from './types.js'
-import {Guesstimator} from 'lib/guesstimator/index.js'
+import {Guesstimator} from '../guesstimator/index.js'
 
 export const attributes = ['metric', 'input', 'guesstimateType', 'description', 'data']
 
