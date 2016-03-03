@@ -2,7 +2,7 @@ import math from 'mathjs';
 
 let metricSample = (m) =>  _.sample(m.simulation.sample.values);
 let metricId = (m) => { return m.readableId; };
-
+//TODO: Is all of this obsolete?
 export function inputMetrics(functionInput, dGraph) {
   return dGraph.metrics.filter((m) => { return functionInput.includes(m.readableId); });
 }

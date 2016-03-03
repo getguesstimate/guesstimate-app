@@ -3,6 +3,7 @@ import {Sampler as DistributionPointSampler} from './samplers/DistributionPoint.
 import {Sampler as DistributionUniformSampler} from './samplers/DistributionUniform.js'
 import {Sampler as FunctionSampler} from './samplers/Function.js'
 import {Sampler as DataSampler} from './samplers/Data.js'
+import {Sampler as NoneSampler} from './samplers/None.js'
 
 import NormalIcon from '../../assets/distribution-icons/normal.png'
 import LogNormalIcon from '../../assets/distribution-icons/lognormal.png'
@@ -69,7 +70,7 @@ export const None = {
   referenceName: 'NONE',
   types: [],
   displayName: 'NONE',
-  sampler: DistributionNormalSampler
+  sampler: NoneSampler
 }
 
 const all = [
