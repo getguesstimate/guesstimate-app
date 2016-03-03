@@ -14,6 +14,7 @@ import './canvas.styl'
 import { denormalizedSpaceSelector } from '../denormalized-space-selector.js';
 import JSONTree from 'react-json-tree'
 import * as canvasStateActions from 'gModules/canvas_state/actions.js'
+import * as canvasStateProps from 'gModules/canvas_state/prop_type.js'
 
 function mapStateToProps(state) {
   return {
@@ -28,21 +29,9 @@ const PT = PropTypes;
 export default class CanvasSpace extends Component{
   static propTypes = {
     canvasState: PT.shape({
-      metricCardView: PT.oneOf([
-        'normal',
-        'basic',
-        'scientific',
-        'debugging',
-      ]).isRequired,
-      edgeView: PT.oneOf([
-        'hidden',
-        'visible',
-      ]).isRequired,
-      metricClickMode: PT.oneOf([
-        'DEFAULT',
-        'FUNCTION_INPUT_SELECT'
-      ])
-
+      edgeView: canvasStateProps.edgeView,
+      metricCardView: canvasStateProps.metricCardView,
+      metricClickMode: canvasStateProps.metricClickMode
     }),
     denormalizedSpace: PropTypes.object,
     dispatch: PropTypes.func,
@@ -130,6 +119,7 @@ export default class CanvasSpace extends Component{
 
     const edges = this.edges()
     let className = 'canvas-space'
+    const showGrid = (metricCardView !== 'display')
 
     this.showEdges() ? className += ' showEdges' : ''
 
@@ -144,6 +134,7 @@ export default class CanvasSpace extends Component{
             onAddItem={this._handleAddMetric.bind(this)}
             onMoveItem={this._handleMoveMetric.bind(this)}
             selected={selected}
+            showGrid={showGrid}
         >
           {metrics.map((m) => {
               return this.renderMetric(m)

@@ -26,7 +26,12 @@ export default class Grid extends Component{
     onMoveItem: PropTypes.func.isRequired,
     selected: PropTypes.object.isRequired,
     size: PropTypes.object,
+    showGrid: PropTypes.bool,
     showEdges: PropTypes.bool
+  }
+
+  static defaultProps = {
+    showGrid: true,
   }
 
   state = { rowHeights: [] }
@@ -98,6 +103,8 @@ export default class Grid extends Component{
     const columnCount = this._columnCount()
     const {rowHeights} = this.state
     const {edges} = this.props
+    let className = 'GiantGrid'
+    className += this.props.showGrid ? ' withLines' : ''
 
     return (
       <div
@@ -105,7 +112,7 @@ export default class Grid extends Component{
       >
         <div className='GiantGrid-Horizontal-Motion'>
           <div
-              className='GiantGrid'
+              className={className}
               onKeyPress={this._handleKeyPress.bind(this)}
           >
             {
