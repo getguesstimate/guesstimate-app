@@ -17,24 +17,14 @@ import Icon from 'react-fa'
 import $ from 'jquery'
 import MetricToken from './token/index.js'
 import './style.css'
+import * as canvasStateProps from 'gModules/canvas_state/prop_type.js'
 
 const PT = PropTypes
 class MetricCard extends Component {
   displayName: 'MetricCard'
 
   static propTypes = {
-    canvasState: PT.shape({
-      metricCardView: PT.oneOf([
-        'normal',
-        'basic',
-        'scientific',
-        'debugging',
-      ]).isRequired,
-      metricClickMode: PT.oneOf([
-        'DEFAULT',
-        'FUNCTION_INPUT_SELECT'
-      ])
-    }),
+    canvasState: canvasStateProps.canvasState,
     dispatch: PT.func.isRequired,
     gridKeyPress: PT.func.isRequired,
     guesstimateForm: PT.object.isRequired,
@@ -169,6 +159,7 @@ class MetricCard extends Component {
     const titleView = !this.props.hovered && !isSelected && this._isTitle()
 
     let className = isSelected ? 'metricCard grid-item-focus' : 'metricCard'
+    className += ` ${metricCardView}`
     className += titleView ? ' titleView' : ''
 
     return (
