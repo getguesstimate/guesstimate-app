@@ -1,6 +1,5 @@
 /* @flow */
 
-import * as eDistribution from './distribution.js';
 import * as estimateInput from './estimateInput.js';
 import type {Guesstimate, Distribution, DGraph, Graph, Simulation} from './types.js'
 import {Guesstimator} from 'lib/guesstimator/index.js'
