@@ -1,6 +1,6 @@
 import Plan from './plan.js'
 
-describe.only('plan', () => {
+describe('plan', () => {
 
   describe('.all', () => {
     it(`finds all plans`, () => {
