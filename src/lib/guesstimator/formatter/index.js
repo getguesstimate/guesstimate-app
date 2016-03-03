@@ -27,7 +27,7 @@ export function _matchingFormatter(g) {
 // this stage, a specific formatter gets applied.
 export function prepare(guesstimate) {
   return {
-    text: guesstimate.input,
+    text: (guesstimate.input || guesstimate.text),
     guesstimateType: guesstimate.guesstimateType,
     data: guesstimate.data
   }

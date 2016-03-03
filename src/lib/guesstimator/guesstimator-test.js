@@ -1,7 +1,7 @@
 import {Guesstimator} from './guesstimator.js';
 import {expect} from 'chai';
 
-describe.only('Guesstimator', () => {
+describe('Guesstimator', () => {
   describe('.parse', () => {
     it('works with a simple function', () => {
       const input = {text: '=34'}
@@ -16,7 +16,7 @@ describe.only('Guesstimator', () => {
 
   describe('.samplerTypes', () => {
     it('has many samplerTypes', () => {
-      expect(Guesstimator.samplerTypes().all.length).to.be.above(4)
+      expect(Guesstimator.samplerTypes.all.length).to.be.above(4)
     })
   })
 
