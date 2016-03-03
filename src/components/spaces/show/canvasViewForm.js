@@ -3,10 +3,12 @@ import { connect } from 'react-redux';
 import DropDown from 'gComponents/utility/drop-down/index.js'
 import {DropDownListElement} from 'gComponents/utility/drop-down/index.js'
 import * as canvasStateActions from 'gModules/canvas_state/actions.js'
+import * as canvasStateProps from 'gModules/canvas_state/prop_type.js'
 
 import basicImage from '../../../assets/metric-icons/blue/basic.png'
 import debuggingImage from '../../../assets/metric-icons/blue/debugging.png'
 import normalImage from '../../../assets/metric-icons/blue/normal.png'
+import displayImage from '../../../assets/metric-icons/blue/display.png'
 import scientificImage from '../../../assets/metric-icons/blue/scientific.png'
 import arrowsHiddenImage from '../../../assets/metric-icons/blue/arrows-hidden.png'
 import arrowsVisibleImage from '../../../assets/metric-icons/blue/arrows-visible.png'
@@ -36,16 +38,8 @@ export default class CanvasViewForm extends Component {
   displayName: 'CanvasViewForm'
 
   static propTypes = {
-    edgeView: PT.oneOf([
-      'hidden',
-      'visible',
-    ]).isRequired,
-    metricCardView: PT.oneOf([
-      'normal',
-      'basic',
-      'scientific',
-      'debugging',
-    ]).isRequired,
+    edgeView: canvasStateProps.edgeView,
+    metricCardView: canvasStateProps.metricCardView,
     dispatch: PropTypes.func
   }
 
@@ -62,6 +56,7 @@ export default class CanvasViewForm extends Component {
       {name: 'normal', image: normalImage},
       {name: 'basic', image: basicImage},
       {name: 'scientific', image: scientificImage},
+      {name: 'display', image: displayImage},
       {name: 'debugging', image: debuggingImage},
     ]
 

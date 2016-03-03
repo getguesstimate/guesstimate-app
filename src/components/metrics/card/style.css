@@ -14,9 +14,12 @@
   cursor: move;
 }
 
+.metricCard:not(.titleView):not(.display) {
+  border-bottom: 2px solid #ccc;
+}
+
 .metricCard:not(.titleView) {
   background-color: rgba(255,255,255,0.975);
-  border-bottom: 2px solid #ccc;
 }
 
 .row > .sqwish-right {
@@ -49,7 +52,7 @@
   width: 100%;
 }
 
-.metricCard .section.editing {
+.metricCard:not(.display) .section.editing {
   border-top: 1px solid #ddd;
   border-radius: 0 0 2px 2px;
 }
