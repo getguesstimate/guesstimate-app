@@ -3,7 +3,6 @@ import {find} from './types.js'
 
 export {inputMetrics, format} from './formatter/index.js'
 export {types} from './types.js'
-export {find} from './types.js'
 
 export function sampleFromGuesstimateApp(guesstimate, dGraph, n) {
   let newGuesstimate = preFormatGuesstimate(guesstimate, dGraph)

@@ -19,13 +19,6 @@ export const Funct = {
   icon: FunctionIcon
 }
 
-export const NoneGuesstimate = {
-  referenceName: 'NONE',
-  types: [],
-  displayName: 'NONE',
-  sampler: DistributionNormalSampler
-}
-
 export const DistributionNormal = {
   referenceName: 'NORMAL',
   types: ['DISTRIBUTION', 'NORMAL'],
@@ -71,6 +64,14 @@ export const Data = {
   icon: UniformIcon
 }
 
+// Change to null Guesstimate for sampler
+export const None = {
+  referenceName: 'NONE',
+  types: [],
+  displayName: 'NONE',
+  sampler: DistributionNormalSampler
+}
+
 export const types = [
   Funct,
   DistributionNormal,
@@ -78,10 +79,12 @@ export const types = [
   DistributionLognormal,
   DistributionUniform,
   Data,
-  NoneGuesstimate
+  None
 ]
+
+export const all = types
 
 export function find(referenceName) {
   const found = types.find(e => e.referenceName === referenceName)
-  return found || NoneGuesstimate
+  return found || None
 }
