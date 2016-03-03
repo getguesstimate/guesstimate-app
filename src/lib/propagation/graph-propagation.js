@@ -8,14 +8,8 @@ import type {Simulation, Graph} from '../lib/engine/types.js'
 import {deleteSimulations} from 'gModules/simulations/actions'
 import MetricPropagation from './metric-propagation.js'
 
-import Perf from 'react-addons-perf'
 function isRecentPropagation(propagationId: number, simulation: Simulation) {
   return !_.has(simulation, 'propagation') || (propagationId >= simulation.propagation)
-}
-
-function hasNoUncertainty(simulation: Simulation) {
-  const v = simulation.sample.values;
-  return (_.uniq(_.slice(v, 0, 5)).length === 1)
 }
 
 //TODO: Stop tree where there is an error
