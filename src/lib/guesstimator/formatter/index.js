@@ -28,6 +28,11 @@ export function format(g) {
   return formatter.format(g)
 }
 
+export function parse(g) {
+  const formatter = _matchingFormatter(g)
+  return [formatter.errors(g), formatter.format(g)]
+}
+
 export function errors(g) {
   return _matchingFormatter(g).errors(g)
 }
