@@ -1,15 +1,19 @@
 import math from 'mathjs';
+const IMPURE_FUNCTIONS = ['pickRandom', 'randomInt', 'random']
 
 export var Sampler = {
   sample({text, inputs}, n) {
     try {
       const compiled = math.compile(text)
-      return sample(compiled, inputs, n)
+      const sampleCount = requiredSampleCount(text, inputs, n)
+      return sample(compiled, inputs, sampleCount)
     } catch (exception) {
       return [{errors: [exception.message]}];
     }
   }
 }
+
+const requiredSampleCount = (text, inputs, n) => (isPure(text, inputs) ? 1 : n)
 
 export function sampleInputs(inputs) {
   const sample = {}
@@ -33,4 +37,17 @@ export function sample(compiled, inputs, n){
   }
 
   return {values: samples}
+}
+
+export function isPure(text, inputs) {
+  const impureInputs = _.some(inputs, (i) => someDifferent(i))
+  const impureFunction = hasImpureFunction(text)
+  return (!impureInputs) && (!impureFunction)
+}
+
+const hasImpureFunction = (text) => _.some(IMPURE_FUNCTIONS, e => text.indexOf(e) !== -1)
+
+function someDifferent(array) {
+  const firstElement = array[0]
+  return _.some(array, e => (e !== firstElement))
 }
