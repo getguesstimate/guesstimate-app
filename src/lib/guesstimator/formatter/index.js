@@ -23,32 +23,19 @@ export function _matchingFormatter(g) {
   return Null
 }
 
-export function format(g) {
-  const formatter = _matchingFormatter(g)
-  return formatter.format(g)
-}
-
-export function errors(g) {
-  return _matchingFormatter(g).errors(g)
-}
-
 // General formatting that applies to everything.  After it goes through
 // this stage, a specific formatter gets applied.
-export function preFormatGuesstimate(guesstimate, dGraph) {
+export function prepare(guesstimate) {
   return {
-    metric: guesstimate.metric,
-    text: guesstimate.input,
-    graph: dGraph,
+    text: (guesstimate.input || guesstimate.text),
     guesstimateType: guesstimate.guesstimateType,
-    data: guesstimate.data
+    data: (guesstimate.data || guesstimate.value)
   }
 }
 
-export function inputMetrics(guesstimate, dGraph) {
-  const g = preFormatGuesstimate(guesstimate, dGraph)
-
-  const formatter = _matchingFormatter(g)
-  if (!_.isFunction(formatter.inputMetrics)) { return [] }
-
-  return formatter.inputMetrics(g, dGraph)
+export function parse(g) {
+  const i = prepare(g)
+  const formatter = _matchingFormatter(i)
+  return [formatter.errors(i), formatter.format(i)]
 }
+

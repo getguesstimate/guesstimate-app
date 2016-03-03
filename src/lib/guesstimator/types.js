@@ -3,6 +3,7 @@ import {Sampler as DistributionPointSampler} from './samplers/DistributionPoint.
 import {Sampler as DistributionUniformSampler} from './samplers/DistributionUniform.js'
 import {Sampler as FunctionSampler} from './samplers/Function.js'
 import {Sampler as DataSampler} from './samplers/Data.js'
+import {Sampler as NoneSampler} from './samplers/None.js'
 
 import NormalIcon from '../../assets/distribution-icons/normal.png'
 import LogNormalIcon from '../../assets/distribution-icons/lognormal.png'
@@ -17,13 +18,6 @@ export const Funct = {
   displayName: 'Function',
   sampler: FunctionSampler,
   icon: FunctionIcon
-}
-
-export const NoneGuesstimate = {
-  referenceName: 'NONE',
-  types: [],
-  displayName: 'NONE',
-  sampler: DistributionNormalSampler
 }
 
 export const DistributionNormal = {
@@ -71,17 +65,30 @@ export const Data = {
   icon: UniformIcon
 }
 
-export const types = [
+// Change to null Guesstimate for sampler
+export const None = {
+  referenceName: 'NONE',
+  types: [],
+  displayName: 'NONE',
+  sampler: NoneSampler
+}
+
+const all = [
   Funct,
   DistributionNormal,
   DistributionPoint,
   DistributionLognormal,
   DistributionUniform,
   Data,
-  NoneGuesstimate
+  None
 ]
 
 export function find(referenceName) {
-  const found = types.find(e => e.referenceName === referenceName)
-  return found || NoneGuesstimate
+  const found = all.find(e => e.referenceName === referenceName)
+  return found || None
+}
+
+export const samplerTypes = {
+  find: referenceName => find(referenceName),
+  all
 }
