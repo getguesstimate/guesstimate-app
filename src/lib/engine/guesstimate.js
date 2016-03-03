@@ -24,23 +24,14 @@ export function simulations(guesstimate: Guesstimate, graph:Graph) : Array<Simul
 
 export function update(oldGuesstimate, newParams) {
   let newGuesstimate = Object.assign({}, oldGuesstimate, newParams)
-  newGuesstimate.guesstimateType = newGuesstimateType(oldGuesstimate, newGuesstimate)
+  newGuesstimate.guesstimateType = newGuesstimateType(newGuesstimate)
   return format(newGuesstimate)
 }
 
-export function newGuesstimateType(oldGuesstimate, newGuesstimate) {
-  const [errors, item] = Guesstimator.parse({text: newGuesstimate.input})
-  let guessType = item.samplerType()
-
-  const isInferrable = !guessType.isRangeDistribution
-  const {guesstimateType} = newGuesstimate
-  if (isInferrable) {
-    return guessType.referenceName
-  } else if (guesstimateType === 'NONE') {
-    return 'NORMAL'
-  } else {
-    return (guesstimateType || 'NORMAL')
-  }
+export function newGuesstimateType(newGuesstimate) {
+  const {input, guesstimateType} = newGuesstimate
+  const [errors, item] = Guesstimator.parse({input, guesstimateType})
+  return item.samplerType().referenceName
 }
 
 //Check if a function; if not, return []
