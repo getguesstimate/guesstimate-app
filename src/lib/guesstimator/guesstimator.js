@@ -25,8 +25,13 @@ export class Guesstimator {
     return samplerTypes.find(this.parsedInput.guesstimateType)
   }
 
+  needsExternalInputs() {
+    return (this.parsedInput.guesstimateType === 'FUNCTION')
+  }
+
   sample(n, externalInputs = []) {
     const samplerType = this.samplerType()
-    return samplerType.sampler.sample(this.parsedInput, n)
+    const sample = samplerType.sampler.sample(this.parsedInput, n, externalInputs)
+    return sample
   }
 }

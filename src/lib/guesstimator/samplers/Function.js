@@ -2,7 +2,7 @@ import math from 'mathjs';
 const IMPURE_FUNCTIONS = ['pickRandom', 'randomInt', 'random']
 
 export var Sampler = {
-  sample({text, inputs}, n) {
+  sample({text}, n, inputs) {
     try {
       const compiled = math.compile(text)
       const sampleCount = requiredSampleCount(text, inputs, n)

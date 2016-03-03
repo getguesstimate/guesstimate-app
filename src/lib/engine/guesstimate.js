@@ -1,25 +1,23 @@
 /* @flow */
 
 import * as eDistribution from './distribution.js';
-import * as functionInput from './functionInput.js';
 import * as estimateInput from './estimateInput.js';
 import type {Guesstimate, Distribution, DGraph, Graph, Simulation} from './types.js'
-import * as guesstimator from 'lib/guesstimator/index.js'
 import {Guesstimator} from 'lib/guesstimator/index.js'
 
 export const attributes = ['metric', 'input', 'guesstimateType', 'description', 'data']
 
 export function sample(guesstimate: Guesstimate, dGraph: DGraph, n: number = 1): Object{
-  return guesstimator.sampleFromGuesstimateApp(guesstimate, dGraph, n)
+  const [errors, item] = Guesstimator.parse(guesstimate)
+  const externalInputs = item.needsExternalInputs() ? _inputMetricsWithValues(guesstimate, dGraph) : []
+  const sample = item.sample(n, externalInputs)
+  const metric = guesstimate.metric
+  return { metric, sample }
 }
 
 export function format(guesstimate: Guesstimate): Guesstimate{
   let formatted = _.pick(guesstimate, attributes)
   return formatted
-}
-
-export function inputMetrics(guesstimate: Guesstimate, dGraph: DGraph): Array<Object> {
-  return guesstimator.inputMetrics(guesstimate, dGraph)
 }
 
 export function simulations(guesstimate: Guesstimate, graph:Graph) : Array<Simulation>{
@@ -45,4 +43,16 @@ export function newGuesstimateType(oldGuesstimate, newGuesstimate) {
   } else {
     return (guesstimateType || 'NORMAL')
   }
+}
+
+export function inputMetrics(guesstimate: Guesstimate, dGraph: DGraph): Array<Object> {
+  if (!_.has(dGraph, 'metrics')){ return [] }
+  return dGraph.metrics.filter( m => guesstimate.input.includes(m.readableId) );
+}
+
+export function _inputMetricsWithValues(guesstimate: Guesstimate, dGraph: DGraph): Object{
+  let inputs = {}
+  inputMetrics(guesstimate, dGraph)
+    .map(m => {inputs[m.readableId] = _.get(m, 'simulation.sample.values') })
+  return inputs
 }
