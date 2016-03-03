@@ -1,9 +1,9 @@
-import {formatters, _matchingFormatter, format} from './index.js'
+import {parse, formatters, _matchingFormatter} from './index.js'
 
 describe('formatter', () => {
   describe('#formatters', () => {
     it('holds all formatters', () => {
-      expect(formatters.length).to.equal(4)
+      expect(formatters.length).to.be.above(3)
     })
   });
 
@@ -31,7 +31,7 @@ describe('formatter', () => {
 
     examples.map(e => () => {
       it(`formats input ${JSON.stringify(e[0])}`, () => {
-        expect(format(e[0]).guesstimateType).to.deep.equal(e[1].guesstimateType)
+        expect(parse(e[0])[1].guesstimateType).to.deep.equal(e[1].guesstimateType)
       })
     }).map(e => e())
   });

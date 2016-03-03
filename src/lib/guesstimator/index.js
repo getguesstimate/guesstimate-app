@@ -1,37 +1,37 @@
-import {format, errors, preFormatGuesstimate} from './formatter/index.js'
-import {find} from './types.js'
+import {parse} from './formatter/index.js'
+import {samplerTypes} from './types.js'
 
-export {inputMetrics, format} from './formatter/index.js'
-export {types} from './types.js'
-export {find} from './types.js'
-
-export function sampleFromGuesstimateApp(guesstimate, dGraph, n) {
-  let newGuesstimate = preFormatGuesstimate(guesstimate, dGraph)
-
-  const formattedInput = format(newGuesstimate)
-  const formatterErrors = errors(newGuesstimate)
-
-  let _sample = null
-
-  if (formattedInput.guesstimateType === 'NONE') {
-    _sample = {errors: ['Invalid input']}
-  } else if (formatterErrors.length){
-    _sample = {errors: formatterErrors}
-  } else {
-    _sample = sample(formattedInput, n)
+//Guesstimator.parse({text: '3+123+FA'}]})
+export class Guesstimator {
+  static parse(unparsedInput) {
+    const [parsedErrors, parsedInput] = parse(unparsedInput)
+    const newItem = new this({unparsedInput, parsedErrors, parsedInput})
+    return [parsedErrors, newItem]
   }
 
-  return {
-    metric: guesstimate.metric,
-    sample: _sample
-  }
-}
+  static samplerTypes = samplerTypes
 
-export function sample(input, n) {
-  const guesstimateType = find(input.guesstimateType)
-  if (guesstimateType && guesstimateType.sampler) {
-    return guesstimateType.sampler.sample(input, n)
-  } else {
-    return {errors: ['No Valid Sampler']}
+  constructor({unparsedInput, parsedErrors, parsedInput}){
+    this.unparsedInput = unparsedInput;
+    this.parsedInput = parsedInput;
+    this.parsedErrors = parsedErrors;
+  }
+
+  hasParsingErrors() {
+    return !!this.parsedErrors.length
+  }
+
+  samplerType() {
+    return samplerTypes.find(this.parsedInput.guesstimateType)
+  }
+
+  needsExternalInputs() {
+    return (this.parsedInput.guesstimateType === 'FUNCTION')
+  }
+
+  sample(n, externalInputs = []) {
+    const samplerType = this.samplerType()
+    const sample = samplerType.sampler.sample(this.parsedInput, n, externalInputs)
+    return sample
   }
 }

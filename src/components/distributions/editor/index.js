@@ -8,6 +8,7 @@ import Icon from 'react-fa'
 import DistributionSelector from './distribution-selector.js'
 import GuesstimateTypeIcon from './guesstimate-type-icon.js'
 import * as guesstimator from 'lib/guesstimator/index.js'
+import {Guesstimator} from 'lib/guesstimator/index.js'
 import TextInput from './text-input.js'
 import DataViewer from './data-viewer/index.js'
 import './style.css'
@@ -51,7 +52,7 @@ class GuesstimateForm extends Component{
   }
 
   _guesstimateType() {
-    return guesstimator.find(this._guesstimateTypeName())
+    return Guesstimator.samplerTypes.find(this._guesstimateTypeName())
   }
 
   _dispatchChange(params) {
