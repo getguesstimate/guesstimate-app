@@ -45,6 +45,7 @@ export function newGuesstimateType(oldGuesstimate, newGuesstimate) {
   }
 }
 
+//Check if a function; if not, return []
 export function inputMetrics(guesstimate: Guesstimate, dGraph: DGraph): Array<Object> {
   if (!_.has(dGraph, 'metrics')){ return [] }
   return dGraph.metrics.filter( m => guesstimate.input.includes(m.readableId) );
