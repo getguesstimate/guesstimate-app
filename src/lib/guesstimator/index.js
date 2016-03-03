@@ -1,8 +1,8 @@
 import {format, errors, preFormatGuesstimate} from './formatter/index.js'
 import {find} from './types.js'
 
-export {inputMetrics, format} from './formatter/index.js'
-export {types} from './types.js'
+export {inputMetrics} from './formatter/index.js'
+export {Guesstimator} from './guesstimator.js'
 
 export function sampleFromGuesstimateApp(guesstimate, dGraph, n) {
   let newGuesstimate = preFormatGuesstimate(guesstimate, dGraph)

@@ -72,7 +72,7 @@ export const None = {
   sampler: DistributionNormalSampler
 }
 
-export const types = [
+const all = [
   Funct,
   DistributionNormal,
   DistributionPoint,
@@ -82,9 +82,12 @@ export const types = [
   None
 ]
 
-export const all = types
-
 export function find(referenceName) {
-  const found = types.find(e => e.referenceName === referenceName)
+  const found = all.find(e => e.referenceName === referenceName)
   return found || None
+}
+
+export const samplerTypes = {
+  find: referenceName => find(referenceName),
+  all
 }

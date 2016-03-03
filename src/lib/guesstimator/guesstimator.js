@@ -1,11 +1,7 @@
-import {format, errors, preFormatGuesstimate} from './formatter/index.js'
-import {find} from './types.js'
-
 import {parse} from './formatter/index.js'
-import * as samplerTypes from './types.js'
+import {samplerTypes} from './types.js'
 
 //Guesstimator.parse({text: '3+123+FA'}]})
-
 export class Guesstimator {
   static parse(unparsedInput) {
     const [parsedErrors, parsedInput] = parse(unparsedInput)
@@ -13,9 +9,7 @@ export class Guesstimator {
     return [parsedErrors, newItem]
   }
 
-  static samplerTypes() {
-    return samplerTypes.types
-  }
+  static samplerTypes = samplerTypes
 
   constructor({unparsedInput, parsedErrors, parsedInput}){
     this.unparsedInput = unparsedInput;
