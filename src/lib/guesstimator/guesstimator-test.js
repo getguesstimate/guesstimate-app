@@ -16,7 +16,7 @@ describe.only('Guesstimator', () => {
 
   describe('.samplerTypes', () => {
     it('has many samplerTypes', () => {
-      expect(Guesstimator.samplerTypes().length).to.be.above(4)
+      expect(Guesstimator.samplerTypes().all.length).to.be.above(4)
     })
   })
 

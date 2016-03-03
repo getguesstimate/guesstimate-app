@@ -4,7 +4,8 @@ import * as eDistribution from './distribution.js';
 import * as functionInput from './functionInput.js';
 import * as estimateInput from './estimateInput.js';
 import type {Guesstimate, Distribution, DGraph, Graph, Simulation} from './types.js'
-import * as guesstimator from '../guesstimator/index.js'
+import * as guesstimator from 'lib/guesstimator/index.js'
+import {Guesstimator} from 'lib/guesstimator/index.js'
 
 export const attributes = ['metric', 'input', 'guesstimateType', 'description', 'data']
 
@@ -32,7 +33,9 @@ export function update(oldGuesstimate, newParams) {
 }
 
 export function newGuesstimateType(oldGuesstimate, newGuesstimate) {
-  let guessType = guesstimator.find(guesstimator.format({text: newGuesstimate.input}).guesstimateType)
+  const [errors, item] = Guesstimator.parse({text: newGuesstimate.input})
+  let guessType = item.samplerType()
+
   const isInferrable = !guessType.isRangeDistribution
   const {guesstimateType} = newGuesstimate
   if (isInferrable) {

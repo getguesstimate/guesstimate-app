@@ -7,7 +7,7 @@ import LogNormalImage from 'assets/distribution-icons/lognormal.png'
 import ExponentialImage from 'assets/distribution-icons/exponential.png'
 import PointImage from 'assets/distribution-icons/point.png'
 import UniformImage from 'assets/distribution-icons/uniform.png'
-import * as guesstimator from 'lib/guesstimator/index.js'
+import {Guesstimator} from 'lib/guesstimator/index.js'
 
 class DistributionIcon extends Component{
   _handleSubmit() {
@@ -36,7 +36,7 @@ export default class DistributionSelector extends Component{
         <div className='DistributionList'>
           {['NORMAL', 'UNIFORM'].map(type => {
             const isSelected = (selected === type)
-            const icon = guesstimator.find(type).icon
+            const icon = Guesstimator.samplerTypes.find(type).icon
             return (
               <DistributionIcon
                 type={type}
