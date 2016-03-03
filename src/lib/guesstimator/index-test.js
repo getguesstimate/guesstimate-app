@@ -1,4 +1,4 @@
-import {Guesstimator} from './guesstimator.js';
+import {Guesstimator} from './index.js';
 import {expect} from 'chai';
 
 describe('Guesstimator', () => {
