@@ -1,3 +1,5 @@
+var path = require('path');
+
 module.exports = function (config) {
   config.set({
     browsers: [ 'Chrome' ],
@@ -35,6 +37,15 @@ module.exports = function (config) {
             loader: 'url-loader?limit=1000'
           }
         ]
+      },
+      resolve: {
+        alias: {
+          gComponents: path.resolve('./src/components'),
+          gEngine: path.resolve('./src/lib/engine'),
+          gModules: path.resolve('./src/modules'),
+          lib: path.resolve('./src/lib'),
+          servers: path.resolve('./src/server')
+        }
       }
     },
     colors: true,
