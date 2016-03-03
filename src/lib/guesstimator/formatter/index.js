@@ -29,7 +29,7 @@ export function prepare(guesstimate) {
   return {
     text: (guesstimate.input || guesstimate.text),
     guesstimateType: guesstimate.guesstimateType,
-    data: guesstimate.data
+    data: (guesstimate.data || guesstimate.value)
   }
 }
 
