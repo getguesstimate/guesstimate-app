@@ -1,5 +1,3 @@
-import {withPrecision} from '../filters.js'
-
 export var Sampler = {
   sample(formatted, n) {
     const {low, high} = formatted
