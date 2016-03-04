@@ -110,14 +110,13 @@
   min-width: 22em;
   width: 22em;
   z-index: 2;
-  margin: 17px 15px 14px 14px;
+  margin: 24px 15px 14px 14px;
   overflow: auto;
 }
 
 .SpaceSidebar-inside {
-  box-shadow: 0 1px 3px 0 rgba(0,0,0,0.15);
   padding: 0.5em 1em;
-  background-color: rgba(250,255,255,0.72);
+  background-color: rgba(255,255,255,0.8);
   border-radius: 2px;
   float: left;
   max-width: 100%;
@@ -140,11 +139,7 @@
   text-align: center;
   position: relative;
   color: #777;
-  min-height: 2.5em;
-}
-
-.SpaceSidebar:not(:hover) .button-close {
-  display: none;
+  min-height: 2em;
 }
 
 .SpaceSidebar .SpaceSidebar-header .description-icon.fa{
@@ -159,6 +154,11 @@
 
 .SpaceSidebar .SpaceSidebar-header .button-close {
   float: right;
+  font-size: 1.3em;
+}
+
+.SpaceSidebar:not(:hover) .SpaceSidebar-header .button-close {
+  display: none;
 }
 
 .SpaceSidebar .SpaceSidebar-header .button-close:not(:hover) {
