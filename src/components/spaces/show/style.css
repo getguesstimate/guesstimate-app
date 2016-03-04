@@ -109,18 +109,23 @@
   max-height: 100%;
   min-width: 22em;
   width: 22em;
-  box-shadow: 0 1px 3px 0 rgba(0,0,0,0.15);
   z-index: 2;
-  background-color: white;
   margin: 17px 15px 14px 14px;
-  border-radius: 2px;
-  padding: 0 1em;
   overflow: auto;
+}
+
+.SpaceSidebar-inside {
+  box-shadow: 0 1px 3px 0 rgba(0,0,0,0.15);
+  padding: 0.5em 1em;
+  background-color: rgba(250,255,255,0.72);
+  border-radius: 2px;
+  float: left;
+  max-width: 100%;
 }
 
 .ClosedSpaceSidebar{
   background-color: $blue-3;
-  padding-top: 1.5em;
+  padding-top: 0.5em;
   padding-left: 3px;
 }
 
@@ -134,11 +139,12 @@
   width: 100%;
   text-align: center;
   position: relative;
-  margin-top: 1.25em;
+  color: #777;
+  min-height: 2.5em;
 }
 
-.SpaceSidebar .SpaceSidebar-header{
-  color: #777;
+.SpaceSidebar:not(:hover) .button-close {
+  display: none;
 }
 
 .SpaceSidebar .SpaceSidebar-header .description-icon.fa{
@@ -162,7 +168,8 @@
 .SpaceSidebar .SpaceSidebar-body {
   float: left;
   width: 100%;
-  margin-top: 1.5em;
+  margin-top: 0.5em;
+  margin-bottom: 1em;
   font-size: 1.1em;
 }
 
