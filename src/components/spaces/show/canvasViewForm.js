@@ -32,7 +32,6 @@ const Item = ({name, onSelect}) => (
   </li>
 )
 
-const PT = PropTypes
 @connect(mapStateToProps)
 export default class CanvasViewForm extends Component {
   displayName: 'CanvasViewForm'
