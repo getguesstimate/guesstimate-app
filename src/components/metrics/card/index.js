@@ -236,7 +236,7 @@ class MetricCard extends Component {
 
         </div>
 
-        {isSelected &&
+        {isSelected && !this.state.modalIsOpen &&
           <div className='section editing'>
             <DistributionEditor
                 guesstimateForm={guesstimateForm}
