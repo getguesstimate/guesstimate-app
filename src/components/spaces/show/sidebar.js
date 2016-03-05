@@ -19,19 +19,20 @@ export default class SpaceSidebar extends Component {
     const canEdit = !!_.get(space, 'ownedByMe')
     return (
       <div className='SpaceSidebar'>
-        <div className='SpaceSidebar-header'>
-          <Icon className='description-icon' name='align-left'/>
-          <ButtonClose onClick={this.props.onClose}/>
-        </div>
-        <div className='SpaceSidebar-body'>
-          <ClickToEdit
-            viewing={<DescriptionViewer value={description}/>}
-            emptyValue={<span className='emptyValue'>Describe this model...</span>}
-            editingSaveText={'Save'}
-            onSubmit={this.props.onSaveDescription}
-            canEdit={canEdit}
-            value={description}
-          />
+        <div className='SpaceSidebar-inside'>
+          <div className='SpaceSidebar-header'>
+            <ButtonClose onClick={this.props.onClose}/>
+          </div>
+          <div className='SpaceSidebar-body'>
+            <ClickToEdit
+              viewing={<DescriptionViewer value={description}/>}
+              emptyValue={<span className='emptyValue'>Describe this model...</span>}
+              editingSaveText={'Save'}
+              onSubmit={this.props.onSaveDescription}
+              canEdit={canEdit}
+              value={description}
+            />
+          </div>
         </div>
       </div>
     )

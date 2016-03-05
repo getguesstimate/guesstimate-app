@@ -1,7 +1,7 @@
 @import './styles/variables.css';
 
 .metricCard {
-  border-radius: 3px;
+  border-radius: 2px;
   max-width: 30em;
   white-space: normal;
   z-index: 0;
@@ -16,6 +16,10 @@
 
 .metricCard:not(.titleView):not(.display) {
   border-bottom: 2px solid #ccc;
+}
+
+.selected .metricCard:not(.display) {
+  border-color: $blue-1;
 }
 
 .metricCard:not(.titleView) {
@@ -58,13 +62,9 @@
 }
 
 .metricCard .DistributionSummary {
-  margin: 5px 0 0 5px;
+  margin: 5px 0 0 2px;
   font-weight: 500;
   font-family: Lato, Arial, sans-serif;
-}
-
-.selected .metricCard {
-  border-color: $blue-1;
 }
 
 .metricCard:focus {

@@ -108,9 +108,6 @@
   background-color: $grey-1;
 }
 
-.Card li .action.selected .header{
-}
-
 .Card li a{
   width: 100%;
   float: left;
