@@ -14,24 +14,35 @@ import { DragDropContext } from 'react-dnd';
 
 let upto = (n) => Array.apply(null, {length: n}).map(Number.call, Number)
 
+const PTLocation = PropTypes.shape({
+  column: PropTypes.number,
+  row: PropTypes.number
+})
+
 @DragDropContext(HTML5Backend)
 export default class Grid extends Component{
   displayName: 'Grid'
 
   static propTypes = {
-    children: PropTypes.node,
-    edges: PropTypes.array.isRequired,
-    handleSelect: PropTypes.func.isRequired,
+    items: PropTypes.arrayOf(PropTypes.shape({
+      location: PTLocation.isRequired,
+      component: PropTypes.object.isRequired
+    })),
+    edges: PropTypes.arrayOf(PropTypes.shape({
+      input: PTLocation.isRequired,
+      output: PTLocation.isRequired
+    })),
+    selected: PTLocation,
+
+    onSelectItem: PropTypes.func.isRequired,
     onAddItem: PropTypes.func.isRequired,
     onMoveItem: PropTypes.func.isRequired,
-    selected: PropTypes.object.isRequired,
-    size: PropTypes.object,
-    showGrid: PropTypes.bool,
-    showEdges: PropTypes.bool
+
+    showGridLines: PropTypes.bool
   }
 
   static defaultProps = {
-    showGrid: true,
+    showGridLines: true,
   }
 
   state = { rowHeights: [] }
@@ -42,25 +53,25 @@ export default class Grid extends Component{
       e.preventDefault()
       const size = ({columns: this._columnCount(), rows: this._rowCount()})
       let newLocation = new DirectionToLocation(size, this.props.selected)[direction]()
-      this.props.handleSelect(newLocation)
+      this.props.onSelectItem(newLocation)
     }
   }
 
   size(){
-    const lowestItem = !this.props.children.length ? 2 : Math.max(...this.props.children.map(g => parseInt(g.location.row))) + 2
+    const lowestItem = !this.props.items.length ? 2 : Math.max(...this.props.items.map(g => parseInt(g.location.row))) + 2
     const selected = parseInt(this.props.selected.row) + 2
     const height = Math.max(3, lowestItem, selected) || 3;
     return {columns: this._columnCount(), rows: height}
   }
 
   _rowCount() {
-    const lowestItem = Math.max(...this.props.children.map(e => parseInt(e.props.location.row))) + 4
+    const lowestItem = Math.max(...this.props.items.map(e => parseInt(e.location.row))) + 4
     const selected = parseInt(this.props.selected.row) + 3
     return Math.max(10, lowestItem, selected) || 6;
   }
 
   _columnCount() {
-    const lowestItem = Math.max(...this.props.children.map(e => parseInt(e.props.location.column))) + 3
+    const lowestItem = Math.max(...this.props.items.map(e => parseInt(e.location.column))) + 3
     const selected = parseInt(this.props.selected.column) + 3
     return Math.max(6, lowestItem, selected) || 6;
   }
@@ -68,13 +79,13 @@ export default class Grid extends Component{
   _cell(location) {
    let atThisLocation = (l) => _.isEqual(l, location)
    let isSelected = atThisLocation(this.props.selected)
-   let item = this.props.children.filter(function(i) { return (atThisLocation(i.props.location)) })[0];
+   let item = this.props.items.filter(i => atThisLocation(i.location))[0];
    return (
     <Cell
         gridKeyPress={this._handleKeyPress.bind(this)}
-        handleSelect={this.props.handleSelect}
+        handleSelect={this.props.onSelectItem}
         isSelected={isSelected}
-        item={item}
+        item={item && item.component}
         key={'grid-item', location.row, location.column}
         location={location}
         onAddItem={this.props.onAddItem}
@@ -104,7 +115,7 @@ export default class Grid extends Component{
     const {rowHeights} = this.state
     const {edges} = this.props
     let className = 'GiantGrid'
-    className += this.props.showGrid ? ' withLines' : ''
+    className += this.props.showGridLines ? ' withLines' : ''
 
     return (
       <div

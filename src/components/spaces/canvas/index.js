@@ -119,8 +119,7 @@ export default class CanvasSpace extends Component{
 
     const edges = this.edges()
     let className = 'canvas-space'
-    const showGrid = (metricCardView !== 'display')
-
+    const showGridLines = (metricCardView !== 'display')
     this.showEdges() ? className += ' showEdges' : ''
 
     return (
@@ -129,17 +128,14 @@ export default class CanvasSpace extends Component{
           <JSONTree data={this.props}/>
         }
         <Grid
+            items={metrics.map(m => ({location: m.location, component: this.renderMetric(m)}))}
             edges={edges}
-            handleSelect={this._handleSelect.bind(this)}
+            selected={selected}
+            onSelectItem={this._handleSelect.bind(this)}
             onAddItem={this._handleAddMetric.bind(this)}
             onMoveItem={this._handleMoveMetric.bind(this)}
-            selected={selected}
-            showGrid={showGrid}
-        >
-          {metrics.map((m) => {
-              return this.renderMetric(m)
-          })}
-        </Grid>
+            showGridLines={showGridLines}
+          />
       </div>
     );
   }
