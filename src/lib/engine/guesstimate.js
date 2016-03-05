@@ -29,15 +29,14 @@ export function update(oldGuesstimate, newParams) {
 }
 
 export function newGuesstimateType(newGuesstimate) {
-  const {input, guesstimateType} = newGuesstimate
-  const [errors, item] = Guesstimator.parse({input, guesstimateType})
+  const [errors, item] = Guesstimator.parse(newGuesstimate)
   return item.samplerType().referenceName
 }
 
 //Check if a function; if not, return []
 export function inputMetrics(guesstimate: Guesstimate, dGraph: DGraph): Array<Object> {
   if (!_.has(dGraph, 'metrics')){ return [] }
-  return dGraph.metrics.filter( m => guesstimate.input.includes(m.readableId) );
+  return dGraph.metrics.filter( m => (guesstimate.input || '').includes(m.readableId) );
 }
 
 export function _inputMetricsWithValues(guesstimate: Guesstimate, dGraph: DGraph): Object{
