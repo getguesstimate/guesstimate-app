@@ -11,7 +11,7 @@ export const metricCardView = PT.oneOf([
   'basic',
   'scientific',
   'display',
-  'debugging',
+  'debugging'
 ]).isRequired
 
 export const metricClickMode = PT.oneOf([
@@ -19,17 +19,21 @@ export const metricClickMode = PT.oneOf([
   'FUNCTION_INPUT_SELECT'
 ])
 
-export default PropTypes.shape({
-  edgeView: PT.oneOf([
-    'normal',
-    'visible',
-  ]).isRequired,
-  metricCardView: metricCardView.isRequired,
-  metricClickMode: metricClickMode.isRequired,
-  saveState: PT.oneOf([
+export const edgeView = PT.oneOf([
+    'hidden',
+    'visible'
+])
+
+export const saveState = PT.oneOf([
     'NONE',
     'SAVING',
     'ERROR',
     'SAVED'
-  ]).isRequired,
+])
+
+export default PropTypes.shape({
+  edgeView: edgeView.isRequired,
+  metricCardView: metricCardView.isRequired,
+  metricClickMode: metricClickMode.isRequired,
+  saveState: saveState.isRequired
 })
