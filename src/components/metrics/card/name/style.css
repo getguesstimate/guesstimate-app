@@ -8,15 +8,16 @@
 
 .MetricName textarea{
   @mixin hover-input;
-  padding: 0;
+  padding: 2px;
   color: $grey-2;
   font-weight: 500;
   width: 100%;
   font-size: 0.99em;
   float: left;
+  line-height: 1.2em;
 }
 
 .titleView .MetricName textarea{
-  color: #666;
+  color: $black-2;
   font-weight: 400;
 }

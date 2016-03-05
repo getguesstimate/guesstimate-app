@@ -3,9 +3,9 @@
 .MetricToken .hover-icon {
   float: right;
   padding: 2px 6px;
-  color: rgba(0,0,0,0.3);
+  color: $blue-5;
   border-radius: 2px;
-  font-size: 1.2em;
+  font-size: 1em;
 }
 
 .MetricToken .hover-hide {
