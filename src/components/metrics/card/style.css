@@ -18,6 +18,10 @@
   border-bottom: 2px solid #ccc;
 }
 
+.selected .metricCard:not(.display) {
+  border-color: $blue-1;
+}
+
 .metricCard:not(.titleView) {
   background-color: rgba(255,255,255,0.975);
 }
@@ -58,13 +62,9 @@
 }
 
 .metricCard .DistributionSummary {
-  margin: 5px 0 0 1px;
+  margin: 5px 0 0 2px;
   font-weight: 500;
   font-family: Lato, Arial, sans-serif;
-}
-
-.selected .metricCard {
-  border-color: $blue-1;
 }
 
 .metricCard:focus {
