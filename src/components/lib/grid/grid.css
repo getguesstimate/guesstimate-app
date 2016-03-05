@@ -118,7 +118,7 @@ svg.edge {
 }
 
 svg.edge  path.basic-arrow {
-  stroke: $blue-1;
+  stroke: $blue-5;
   stroke-linecap:'round';
   stroke-width: '5';
   stroke-linejoin: 'round';
@@ -127,5 +127,5 @@ svg.edge  path.basic-arrow {
 
 .arrow {
   stroke-width: 0;
-  fill: $blue-1;
+  fill: $blue-5;
 }

@@ -1,19 +1,20 @@
+@import './variables.css';
+
 .ToolTip {
   position: absolute;
   top: 100%;
   margin-top: 10px;
-  background-color: rgba(255,255,255,0.95);
-  border-bottom: 2px solid rgba(0,0,0,0.2);
+  background-color: white;
+  border: 1px solid $grey-2;
   padding: 0.75em;
   width: 207%;
-  border-radius: 3px;
+  border-radius: 2px;
   z-index: 100;
   left: -3px;
-  color: #333;
-  line-height: 1.3em;
+  color: #111;
   min-height: 40px;
   font-size: 1.15rem;
-  line-height: 1.4rem;
+  line-height: 1.5rem;
   font-weight: 400;
 }
 
@@ -22,7 +23,7 @@
   height: 0;
   border-left: 8px solid transparent;
   border-right: 8px solid transparent;
-  border-bottom: 8px solid rgba(255,255,255,0.9);
+  border-bottom: 8px solid $grey-2;
   position: absolute;
   top: -8px;
   left: 22%;
