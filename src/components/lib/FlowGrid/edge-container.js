@@ -28,7 +28,7 @@ export default class EdgeContainer extends Component {
   }
 
   getColumnWidth() {
-    const width = $('.GiantCell') && $('.GiantCell')[0] && $('.GiantCell')[0].offsetWidth
+    const width = $('.FlowGridCell') && $('.FlowGridCell')[0] && $('.FlowGridCell')[0].offsetWidth
     this.setState({columnWidth: width})
   }
 

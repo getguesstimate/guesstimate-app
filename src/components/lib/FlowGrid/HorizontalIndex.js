@@ -9,7 +9,7 @@ export default class HorizontalIndex extends Component{
 
   render() {
     return (
-        <div className='GiantRow--Horizontal-Index'>
+        <div className='FlowGridRow--Horizontal-Index'>
           <span className='corner'></span>
           {
               upto(this.props.columnCount).map((column) => {

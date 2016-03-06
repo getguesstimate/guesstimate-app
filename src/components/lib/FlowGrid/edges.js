@@ -56,7 +56,7 @@ export default class Edges extends Component {
     edges = _.uniqBy(edges, e => JSON.stringify(e))
     let showEdges = !!(_.get(edges, 'length') && _.get(rowHeights, 'length') && columnWidth)
     return (
-      <div className='GiantGrid--Arrows'>
+      <div className='FlowGrid--Arrows'>
       {(edges.length > 0) &&
         <svg
             className='edge'

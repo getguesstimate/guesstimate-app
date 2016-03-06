@@ -38,7 +38,7 @@ export default class EmptyCell extends Component {
   }
 
   render() {
-    let className = 'GiantEmptyCell grid-item-focus'
+    let className = 'FlowGridEmptyCell grid-item-focus'
     return (
       <div
           className={className}

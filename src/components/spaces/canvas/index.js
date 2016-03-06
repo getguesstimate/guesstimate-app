@@ -3,7 +3,7 @@
 import React, {Component, PropTypes} from 'react'
 import { connect } from 'react-redux';
 
-import Grid from 'gComponents/lib/grid/grid/'
+import FlowGrid from 'gComponents/lib/FlowGrid/FlowGrid.jsx'
 import Metric from 'gComponents/metrics/card'
 
 import { changeMetric, addMetric } from 'gModules/metrics/actions'
@@ -127,7 +127,7 @@ export default class CanvasSpace extends Component{
         {(metricCardView === 'debugging') &&
           <JSONTree data={this.props}/>
         }
-        <Grid
+        <FlowGrid
             items={metrics.map(m => ({location: m.location, component: this.renderMetric(m)}))}
             edges={edges}
             selected={selected}
