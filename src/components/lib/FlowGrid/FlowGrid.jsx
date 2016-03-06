@@ -1,7 +1,7 @@
 'use strict';
 import React, {Component, PropTypes} from 'react'
 
-import './grid.css'
+import './FlowGrid.css'
 import Cell from './cell'
 import EdgeContainer from './edge-container.js'
 import HorizontalIndex from './HorizontalIndex.js'
@@ -20,8 +20,8 @@ const PTLocation = PropTypes.shape({
 })
 
 @DragDropContext(HTML5Backend)
-export default class Grid extends Component{
-  displayName: 'Grid'
+export default class FlowGrid extends Component{
+  displayName: 'FlowGrid'
 
   static propTypes = {
     items: PropTypes.arrayOf(PropTypes.shape({
@@ -114,14 +114,14 @@ export default class Grid extends Component{
     const columnCount = this._columnCount()
     const {rowHeights} = this.state
     const {edges} = this.props
-    let className = 'GiantGrid'
+    let className = 'FlowGrid'
     className += this.props.showGridLines ? ' withLines' : ''
 
     return (
       <div
-          className='GiantGrid-Container'
+          className='FlowGrid-Container'
       >
-        <div className='GiantGrid-Horizontal-Motion'>
+        <div className='FlowGrid-Horizontal-Motion'>
           <div
               className={className}
               onKeyPress={this._handleKeyPress.bind(this)}
@@ -130,7 +130,7 @@ export default class Grid extends Component{
               upto(rowCount).map((row) => {
                 return (
                   <div
-                      className='GiantRow'
+                      className='FlowGridRow'
                       key={row}
                       ref={`row-${row}`}
                   >

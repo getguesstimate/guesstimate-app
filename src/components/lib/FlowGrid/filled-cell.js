@@ -44,7 +44,7 @@ export default class ItemCell extends Component {
   }
 
   render = () => {
-    let classes = 'GiantFilledCell'
+    let classes = 'FlowGridFilledCell'
     classes += this.props.isDragging ? ' isDragging' : ''
     return this.props.connectDragSource(
       <div className={classes}>

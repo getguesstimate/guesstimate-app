@@ -10,7 +10,7 @@ export default class VerticalIndex extends Component{
   render() {
     const {rowHeights} = this.props
     return (
-        <div className='GiantRow--Vertical-Index'>
+        <div className='FlowGridRow--Vertical-Index'>
           {
               upto(this.props.rowHeights.length).map((row) => {
                 const style = {height: rowHeights[row]}
