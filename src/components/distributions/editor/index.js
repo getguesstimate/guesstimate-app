@@ -13,7 +13,8 @@ import TextInput from './text-input.js'
 import DataViewer from './data-viewer/index.js'
 import './style.css'
 
-class GuesstimateForm extends Component{
+@connect(null, null, null, {withRef: true})
+export default class GuesstimateForm extends Component{
   displayName: 'GuesstimateForm'
 
   componentWillMount() {
@@ -31,7 +32,7 @@ class GuesstimateForm extends Component{
   }
 
   static defaultProps = {
-     metricFocus: function() { }
+    metricFocus: () => { }
   }
 
   state = {
@@ -47,12 +48,8 @@ class GuesstimateForm extends Component{
     this.refs.TextInput.focus()
   }
 
-  _guesstimateTypeName() {
-    return this.props.guesstimateForm.guesstimateType
-  }
-
   _guesstimateType() {
-    return Guesstimator.samplerTypes.find(this._guesstimateTypeName())
+    return Guesstimator.parse(this.props.guesstimateForm)[1].samplerType()
   }
 
   _dispatchChange(params) {
@@ -72,12 +69,12 @@ class GuesstimateForm extends Component{
     const sameMetric = (newProps.guesstimateForm.metric === this.props.guesstimateForm.metric)
     const sameInput = (newProps.guesstimateForm.input === this.props.guesstimateForm.input)
     if (sameMetric && !sameInput){
-      this._switchMetricClickMode()
+      this._switchMetricClickMode(true)
     }
   }
 
   _changeInput(input) {
-    this._dispatchChange({input: input})
+    this._dispatchChange({input})
     this.setState({hasChanged: true})
   }
 
@@ -90,7 +87,7 @@ class GuesstimateForm extends Component{
   }
 
   _switchMetricClickMode(inClick=true) {
-    if (inClick && (this._guesstimateTypeName() === 'FUNCTION')){
+    if (inClick && (this._guesstimateType().referenceName === 'FUNCTION')){
       this.props.dispatch(changeMetricClickMode('FUNCTION_INPUT_SELECT'));
     } else {
       this.props.dispatch(changeMetricClickMode(''));
@@ -113,10 +110,10 @@ class GuesstimateForm extends Component{
   }
 
   _dataViewer() {
-    const {guesstimateForm, size} = this.props
+    const {guesstimateForm: {data}, size} = this.props
     return(
       <DataViewer
-        data={guesstimateForm.data}
+        data={data}
         onDelete={this._deleteData.bind(this)}
         onSave={this._changeData.bind(this)}
         size={size}
@@ -174,33 +171,39 @@ class GuesstimateForm extends Component{
     let formClasses = 'GuesstimateForm'
     formClasses += isLarge ? ' large' : ''
 
-    return(
-      <div className={formClasses}>
-        {isSmall && hasData && this._dataViewer()}
-        {isSmall && !hasData && this._textInput()}
+    if (!isLarge) {
+      return (
+        <div className='GuesstimateForm'>
+          {hasData && this._dataViewer()}
+          {!hasData && this._textInput()}
+        </div>
+      )
+    } else {
+      return (
+        <div className='GuesstimateForm large'>
+          {hasData &&
+            <div className='row'>
+              <div className='col-sm-12'>
+                {this._dataViewer()}
+              </div>
+            </div>
+          }
 
-        {isLarge && hasData &&
-          <div className='row'>
-            <div className='col-sm-12'>
-              {this._dataViewer()}
+          {!hasData &&
+            <div className='row'>
+              <div className='col-sm-8'>
+                {this._textInput()}
+              </div>
+              <div className='col-sm-4'>
+                {emptyInput &&
+                  <a className='custom-data' onClick={this._addData.bind(this)}> Add Custom Data </a>
+                }
+              </div>
             </div>
-          </div>
-        }
-
-        {isLarge && !hasData &&
-          <div className='row'>
-            <div className='col-sm-8'>
-              {this._textInput()}
-            </div>
-            <div className='col-sm-4'>
-              {emptyInput &&
-                <a className='custom-data' onClick={this._addData.bind(this)}> Add Custom Data </a>
-              }
-            </div>
-          </div>
-        }
-      </div>)
+          }
+        </div>
+      )
+    }
   }
 }
 
-module.exports = connect(null, null, null, {withRef: true})(GuesstimateForm);
