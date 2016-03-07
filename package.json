@@ -79,6 +79,7 @@
     "form-serialize": "^0.7.0",
     "gen-uid": "^0.0.2",
     "jquery": "2.2.0",
+    "jstat": "1.5.2",
     "jsx-loader": "^0.13.2",
     "local-links": "^1.4.0",
     "lodash": "^4.5.0",
