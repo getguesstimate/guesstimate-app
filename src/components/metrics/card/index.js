@@ -239,10 +239,8 @@ class MetricCard extends Component {
         {isSelected && !this.state.modalIsOpen &&
           <div className='section editing'>
             <DistributionEditor
-                guesstimateForm={guesstimateForm}
-                metricFocus={this.focus.bind(this)}
                 metricId={metric.id}
-                onChangeGuesstimate={this.handleChangeGuesstimate.bind(this)}
+                metricFocus={this.focus.bind(this)}
                 onOpen={this.openModal.bind(this)}
                 ref='DistributionEditor'
                 size='small'
