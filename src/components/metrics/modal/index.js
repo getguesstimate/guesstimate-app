@@ -73,7 +73,6 @@ export default class MetricModal extends Component {
         isOpen={isOpen}
         onRequestClose={closeModal}
         style={customStyles}
-        className={'rad-modal'}
       >
       {isOpen &&
       <div className='metricModal'>
@@ -112,10 +111,8 @@ export default class MetricModal extends Component {
           <div className='row editingInputSection'>
             <div className='col-sm-12'>
                 <DistributionEditor
-                    guesstimate={metric.guesstimate}
                     guesstimateForm={this.props.guesstimateForm}
                     metricId={metric.id}
-                    editable={false}
                     size={'large'}
                 />
             </div>

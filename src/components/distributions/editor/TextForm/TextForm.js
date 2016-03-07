@@ -1,15 +1,13 @@
 import React, {Component, PropTypes} from 'react';
-import GuesstimateTypeIcon from './guesstimate-type-icon.js'
+import GuesstimateTypeIcon from './GuesstimateTypeIcon.js'
 import {Guesstimator} from 'lib/guesstimator/index.js'
-import TextInput from './text-input.js'
-import DistributionSelector from './distribution-selector.js'
+import TextInput from './TextInput.js'
+import DistributionSelector from './DistributionSelector.js'
 
 export default class TextForm extends Component{
   displayName: 'GuesstimateInputForm'
 
-  state = {
-    showDistributionSelector: false
-  }
+  state = { showDistributionSelector: false }
 
   static propTypes = {
     onChange: PropTypes.func,
@@ -20,13 +18,7 @@ export default class TextForm extends Component{
     size: PropTypes.string
   }
 
-  componentWillMount() {
-    this._handleChange = _.throttle(this._handleChange, 300)
-  }
-
-  focus() {
-    this.refs.TextInput.focus()
-  }
+  focus() { this.refs.TextInput.focus() }
 
   _guesstimateType() {
     return Guesstimator.parse(this.props.guesstimateForm)[1].samplerType()
@@ -37,20 +29,12 @@ export default class TextForm extends Component{
     this.setState({showDistributionSelector: false})
   }
 
-  _changeDistributionType(guesstimateType) {
-    this._handleChange({guesstimateType})
-  }
-
   componentDidUpdate(newProps) {
     const sameMetric = (newProps.guesstimateForm.metric === this.props.guesstimateForm.metric)
     const sameInput = (newProps.guesstimateForm.input === this.props.guesstimateForm.input)
     if (sameMetric && !sameInput){
       this._switchMetricClickMode(true)
     }
-  }
-
-  _changeInput(input) {
-    this._handleChange({input})
   }
 
   _handleBlur() {
@@ -64,12 +48,11 @@ export default class TextForm extends Component{
     this.props.onChangeClickMode(newMode)
   }
 
-  _saveData(data) {
-    this.props.onSave({guesstimateType: 'DATA', data, input: null})
-  }
+  _saveData(data) { this.props.onSave({guesstimateType: 'DATA', data, input: null}) }
 
+  //onChangeData should be removed to Guesstimator lib.
   _textInput() {
-    const {guesstimateForm, metricFocus, size} = this.props
+    const {guesstimateForm, onEscape, size} = this.props
     let {showDistributionSelector} = this.state
     const {input} = guesstimateForm
     const guesstimateType = this._guesstimateType()
@@ -79,8 +62,8 @@ export default class TextForm extends Component{
           <div className='col-sm-12'>
             <TextInput
               value={input}
-              metricFocus={metricFocus}
-              onChange={this._changeInput.bind(this)}
+              onEscape={onEscape}
+              onChange={(input) => this._handleChange({input})}
               onFocus={() => {this._switchMetricClickMode.bind(this)(true)}}
               onBlur={this._handleBlur.bind(this)}
               onChangeData={this._saveData.bind(this)}
@@ -88,7 +71,7 @@ export default class TextForm extends Component{
             />
             <GuesstimateTypeIcon
               guesstimateType={guesstimateType}
-              toggleDistributionSelector={() => {this.setState({showDistributionSelector: !showDistributionSelector})}}
+              toggleDistributionSelector={() => this.setState({showDistributionSelector: !showDistributionSelector})}
             />
           </div>
         </div>
@@ -97,7 +80,7 @@ export default class TextForm extends Component{
           <div className='row'>
             <div className='col-sm-12'>
               <DistributionSelector
-                onSubmit={this._changeDistributionType.bind(this)}
+                onSubmit={(guesstimateType) => this._handleChange({guesstimateType})}
                 selected={guesstimateType}
               />
             </div>
@@ -113,7 +96,9 @@ export default class TextForm extends Component{
     const isLarge = (size === 'large')
     return (
      <div>
-        {!isLarge && this._textInput()}
+       {!isLarge &&
+         this._textInput()
+       }
         {isLarge &&
           <div className='row'>
             <div className='col-sm-8'>
@@ -128,7 +113,7 @@ export default class TextForm extends Component{
             </div>
           </div>
         }
-      </div>)
-
+      </div>
+    )
   }
 }
