@@ -20,7 +20,7 @@ const jStatDistributions = {
 // functions because we want the jStat distributions to have priority.
 math.import(jStatDistributions, {override: true})
 
-// All of jStats functions are impure as they require sampling on pure inputs.
+// All of jStat's functions are impure as they require sampling on pure inputs.
 const IMPURE_FUNCTIONS = ['pickRandom', 'randomInt', 'random'] + Object.keys(jStatDistributions)
 
 export var Sampler = {
