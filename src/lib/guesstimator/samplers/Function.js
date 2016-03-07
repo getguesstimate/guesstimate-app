@@ -2,20 +2,22 @@ import math from 'mathjs';
 var jStat = require('jstat').jStat;
 
 math.import({
-  beta: (a,b,c) => {return jStat.beta.sample(a,b,c)},
-  centralF: (a,b,c) => {return jStat.centralF.sample(a,b,c)},
-  cauchy: (a,b,c) => {return jStat.cauchy.sample(a,b,c)},
-  chisquare: (a,b) => {return jStat.chisquare.sample(a,b)},
-  exponential: (a) => {return jStat.exponential.sample(a)},
-  invgamma: (a,b) => {return jStat.invgamma.sample(a,b)},
-  kumaraswamy: (a,b) => {return jStat.kumaraswamy.sample(a,b)},
-  lognormal: (a,b) => {return jStat.lognormal.sample(a,b)},
-  normal: (a,b) => {return jStat.normal.sample(a,b)},
-  studentt: (a) => {return jStat.studentt.sample(a)},
-  weibull: (a,b) => {return jStat.weibull.sample(a,b)},
-  uniform: (a,b) => {return jStat.uniform.sample(a,b)}
-  //gamma: jStat.gamma.sample
-})
+  beta: jStat.beta.sample,
+  centralF: jStat.centralF.sample,
+  cauchy: jStat.cauchy.sample,
+  chisquare: jStat.chisquare.sample,
+  exponential: jStat.exponential.sample,
+  invgamma: jStat.invgamma.sample,
+  lognormal: jStat.lognormal.sample,
+  normal: jStat.normal.sample,
+  studentt: jStat.studentt.sample,
+  weibull: jStat.weibull.sample,
+  uniform: jStat.uniform.sample,
+  gamma: jStat.gamma.sample
+}, {
+  override: true // We want to overwrite functions within math.js.
+}
+)
 
 const IMPURE_FUNCTIONS = [
   'pickRandom',
@@ -27,11 +29,11 @@ const IMPURE_FUNCTIONS = [
   'chisquare',
   'exponential',
   'invgamma',
-  'kumaraswamy',
   'lognormal',
   'studentt',
   'weibull',
-  'uniform'
+  'uniform',
+  'gamma'
 ]
 
 export var Sampler = {
