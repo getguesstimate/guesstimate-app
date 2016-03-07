@@ -28,6 +28,7 @@ const PercentileTable = ({values}) => (
   </div>
 )
 
+//Note: Controlled inputs don't pass through very well.  Try to keep them in child connects().
 export default class MetricModal extends Component {
   showSimulation() {
     const stats = _.get(this.props, 'metric.simulation.stats')
@@ -111,9 +112,8 @@ export default class MetricModal extends Component {
           <div className='row editingInputSection'>
             <div className='col-sm-12'>
                 <DistributionEditor
-                    guesstimateForm={this.props.guesstimateForm}
-                    metricId={metric.id}
-                    size={'large'}
+                  metricId={metric.id}
+                  size={'large'}
                 />
             </div>
           </div>

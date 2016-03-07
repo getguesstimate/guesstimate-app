@@ -7,7 +7,13 @@ import './style.css'
 import TextForm from './TextForm/TextForm.js'
 import DataForm from './DataForm/DataForm.js'
 
-@connect(null, null, null, {withRef: true})
+function select(state) {
+  return {
+    guesstimateForm: state.guesstimateForm
+  }
+}
+
+@connect(select, null, null, {withRef: true})
 export default class GuesstimateForm extends Component{
   displayName: 'GuesstimateForm'
   static propTypes = {
