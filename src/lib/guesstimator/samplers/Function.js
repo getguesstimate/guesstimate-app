@@ -1,7 +1,7 @@
 import math from 'mathjs';
 var jStat = require('jstat').jStat;
 
-math.import({
+const jStatDistributions = {
   beta: jStat.beta.sample,
   centralF: jStat.centralF.sample,
   cauchy: jStat.cauchy.sample,
@@ -14,27 +14,14 @@ math.import({
   weibull: jStat.weibull.sample,
   uniform: jStat.uniform.sample,
   gamma: jStat.gamma.sample
-}, {
-  override: true // We want to overwrite functions within math.js.
 }
-)
 
-const IMPURE_FUNCTIONS = [
-  'pickRandom',
-  'randomInt',
-  'random',
-  'beta',
-  'centralF',
-  'cauchy',
-  'chisquare',
-  'exponential',
-  'invgamma',
-  'lognormal',
-  'studentt',
-  'weibull',
-  'uniform',
-  'gamma'
-]
+// Here, we extend the math.js parser and library with the jStat sample functions. We override any default math.js
+// functions because we want the jStat distributions to have priority.
+math.import(jStatDistributions, {override: true})
+
+// All of jStats functions are impure as they require sampling on pure inputs.
+const IMPURE_FUNCTIONS = ['pickRandom', 'randomInt', 'random'] + Object.keys(jStatDistributions)
 
 export var Sampler = {
   sample({text}, n, inputs) {
