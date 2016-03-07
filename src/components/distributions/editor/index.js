@@ -4,8 +4,8 @@ import { createGuesstimateForm, changeGuesstimateForm, saveGuesstimateForm } fro
 import { changeMetricClickMode } from 'gModules/canvas_state/actions'
 import * as guesstimator from 'lib/guesstimator/index.js'
 import './style.css'
-import TextForm from './TextForm.js'
-import DataForm from './DataForm.js'
+import TextForm from './TextForm/TextForm.js'
+import DataForm from './DataForm/DataForm.js'
 
 @connect(null, null, null, {withRef: true})
 export default class GuesstimateForm extends Component{
@@ -15,7 +15,6 @@ export default class GuesstimateForm extends Component{
     guesstimateForm: PropTypes.object.isRequired,
     metricId: PropTypes.string.isRequired,
     metricFocus: PropTypes.func.isRequired,
-    onSubmit: PropTypes.func,
     size: PropTypes.string,
     onOpen: PropTypes.func
   }
@@ -59,6 +58,7 @@ export default class GuesstimateForm extends Component{
             onSave={this._handleSave.bind(this)}
             onChangeClickMode={this._changeMetricClickMode.bind(this)}
             onAddDefaultData={this._addDefaultData.bind(this)}
+            onEscape={this.props.metricFocus}
             size={size}
             ref='TextForm'
           />

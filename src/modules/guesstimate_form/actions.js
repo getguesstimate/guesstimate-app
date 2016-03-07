@@ -29,6 +29,7 @@ export function saveGuesstimateForm() {
     const guesstimateForm = engine.guesstimate.format(getState().guesstimateForm)
     const oldGuesstimate = getState().guesstimates.find(e => (e.metric === guesstimateForm.metric))
     let newGuesstimate = Object.assign({}, oldGuesstimate, guesstimateForm)
+
     if (!_.isEqual(oldGuesstimate, newGuesstimate)) {
       dispatch(changeGuesstimate(guesstimateForm.metric, newGuesstimate));
     }

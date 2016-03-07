@@ -243,8 +243,9 @@ class MetricCard extends Component {
                 metricFocus={this.focus.bind(this)}
                 metricId={metric.id}
                 onChangeGuesstimate={this.handleChangeGuesstimate.bind(this)}
-                ref='DistributionEditor'
                 onOpen={this.openModal.bind(this)}
+                ref='DistributionEditor'
+                size='small'
             />
           </div>
         }
