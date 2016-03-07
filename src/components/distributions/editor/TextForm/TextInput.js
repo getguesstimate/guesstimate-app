@@ -2,27 +2,16 @@ import React, {Component, PropTypes} from 'react';
 import ReactDOM from 'react-dom'
 import $ from 'jquery'
 import insertAtCaret from 'lib/jquery/insertAtCaret'
-import DistributionSelector from './distribution-selector.js'
+import DistributionSelector from './DistributionSelector.js'
 
 export default class TextInput extends Component{
   displayName: 'GuesstimateForm-TextInput'
 
-  static propTypes = {
-    value: PropTypes.string
-  }
+  static propTypes = { value: PropTypes.string }
 
-  state = {
-    value: this.props.value || '',
-  }
+  componentWillUnmount() { this._handleBlur() }
 
-  componentWillUnmount() {
-    $(window).off('functionMetricClicked')
-    this.props.onBlur()
-  }
-
-  focus() {
-    this.refs.input.select()
-  }
+  focus() { this.refs.input.select() }
 
   _handleInputMetricClick(item){
     insertAtCaret('live-input', item.readableId)
@@ -50,13 +39,8 @@ export default class TextInput extends Component{
     event.stopPropagation()
   }
 
-  _changeInput(value=this._value()){
-    this.props.onChange(value)
-  }
-
-  _value() {
-    return ReactDOM.findDOMNode(this.refs.input).value
-  }
+  _changeInput(value=this._value()){ this.props.onChange(value) }
+  _value() { return ReactDOM.findDOMNode(this.refs.input).value }
 
   _formatData(value) {
     return value
@@ -77,7 +61,7 @@ export default class TextInput extends Component{
   _handleKeyDown(e) {
     if (e.which === 27 || e.which === 13) {
       e.preventDefault()
-      this.props.metricFocus()
+      this.props.onEscape()
     }
   }
 

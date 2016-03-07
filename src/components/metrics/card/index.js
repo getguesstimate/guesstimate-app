@@ -92,8 +92,8 @@ class MetricCard extends Component {
 
   _hasGuesstimate(){
     const {metric} = this.props
-    const hasInput = _.has(metric, 'guesstimate.input') && !_.isEmpty(metric.guesstimate.input)
-    const hasData = _.has(metric, 'guesstimate.data')
+    const hasInput = !_.isEmpty(_.get(metric, 'guesstimate.input'))
+    const hasData = !_.isEmpty(_.get(metric, 'guesstimate.data'))
     return (hasInput || hasData)
   }
 
@@ -243,8 +243,9 @@ class MetricCard extends Component {
                 metricFocus={this.focus.bind(this)}
                 metricId={metric.id}
                 onChangeGuesstimate={this.handleChangeGuesstimate.bind(this)}
-                ref='DistributionEditor'
                 onOpen={this.openModal.bind(this)}
+                ref='DistributionEditor'
+                size='small'
             />
           </div>
         }

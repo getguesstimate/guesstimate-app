@@ -1,0 +1,33 @@
+import React, {Component, PropTypes} from 'react';
+import {SmallDataViewer, LargeDataViewer} from './DataViewer.js'
+
+export default class DataForm extends Component{
+  _handleDelete() { this.props.onSave({guesstimateType: null, data: null, input: null}) }
+  _handleSave(data) { this.props.onSave({guesstimateType: 'DATA', data, input: null}) }
+
+  render() {
+    const {size, data, onOpen} = this.props
+    const isLarge = (size === 'large')
+    return (
+      <div>
+        {!isLarge &&
+          <SmallDataViewer
+            onDelete={this._handleDelete.bind(this)}
+            onOpen={onOpen}
+          />
+        }
+        {isLarge &&
+          <div className='row'>
+            <div className='col-sm-12'>
+              <LargeDataViewer
+                data={data}
+                onDelete={this._handleDelete.bind(this)}
+                onSave={this._handleSave.bind(this)}
+              />
+            </div>
+          </div>
+        }
+      </div>
+    )
+  }
+}
