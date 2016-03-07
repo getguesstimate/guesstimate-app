@@ -53,7 +53,7 @@ const SpaceHeader = ({canMakeMorePrivateModels, space, onSave, onDestroy, onPubl
           </DropDown>
         }
 
-        {canUsePrivateModels &&
+        {space.ownedByMe && canUsePrivateModels &&
           <PrivacyToggleDropdown
             headerText={'Privacy Options'}
             openLink={<a className='space-header-action'>{privacy_header}</a>}
