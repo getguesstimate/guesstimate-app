@@ -8,6 +8,26 @@ import {ButtonClose} from 'gComponents/utility/buttons/close'
 import './style.css'
 import {Stats} from 'fast-stats'
 
+const percentages = (values, perc) => {
+  let s1 = new Stats().push(values)
+  return perc.map(e => { return {percentage: e, value: s1.percentile(e)} })
+}
+
+const PercentileTable = ({values}) => (
+  <div className='percentiles'>
+    <h3> Percentiles </h3>
+    <table className='ui very basic collapsing celled table'>
+      <tbody>
+        {percentages(values, [1,5,50,95,99]).map(e => {
+          return (
+            <tr key={e.percentage}><td> {e.percentage}{'%'} </td><td> {e.value && e.value.toFixed(3)} </td></tr>
+          )
+        })}
+      </tbody>
+    </table>
+  </div>
+)
+
 export default class MetricModal extends Component {
   showSimulation() {
     const stats = _.get(this.props, 'metric.simulation.stats')
@@ -20,12 +40,6 @@ export default class MetricModal extends Component {
 
   shouldComponentUpdate(nextProps) {
     return (nextProps.isOpen || this.props.isOpen)
-  }
-
-  percentages(values) {
-    const perc = [1, 5, 50, 95, 99]
-    let s1 = new Stats().push(values)
-    return perc.map(e => { return {percentage: e, value: s1.percentile(e)} })
   }
 
   _changeGuesstimateDescription(value) {
@@ -59,7 +73,6 @@ export default class MetricModal extends Component {
         isOpen={isOpen}
         onRequestClose={closeModal}
         style={customStyles}
-        className={'rad-modal'}
       >
       {isOpen &&
       <div className='metricModal'>
@@ -88,18 +101,7 @@ export default class MetricModal extends Component {
                 }
               </div>
               <div className='col-sm-3 subsection'>
-                <div className='percentiles'>
-                  <h3> Percentiles </h3>
-                  <table className='ui very basic collapsing celled table'>
-                    <tbody>
-                    {this.percentages(sampleValues).map(e => {
-                      return (
-                      <tr key={e.percentage}><td> {e.percentage}{'%'} </td><td> {e.value && e.value.toFixed(3)} </td></tr>
-                      )
-                    })}
-                    </tbody>
-                  </table>
-                </div>
+                <PercentileTable values={sampleValues}/>
               </div>
             </div>
           </div>
@@ -109,10 +111,8 @@ export default class MetricModal extends Component {
           <div className='row editingInputSection'>
             <div className='col-sm-12'>
                 <DistributionEditor
-                    guesstimate={metric.guesstimate}
                     guesstimateForm={this.props.guesstimateForm}
                     metricId={metric.id}
-                    editable={false}
                     size={'large'}
                 />
             </div>

@@ -4,18 +4,14 @@ import Icon from 'react-fa'
 import './style.css'
 import {ButtonClose} from 'gComponents/utility/buttons/close'
 
-class Button extends Component {
-  render() {
-    return (
-    <div className='DataViewer DataViewer--card'>
-      <a className='ui button primary small' onClick={this.props.onOpen}> <Icon name='bar-chart'/> Custom </a>
-      <ButtonClose onClick={this.props.onDelete}/>
-    </div>
-    )
-  }
-}
+export const SmallDataViewer = ({onDelete, onOpen}) => (
+  <div className='DataViewer DataViewer--card'>
+    <a className='ui button primary small' onClick={onOpen}> <Icon name='bar-chart'/> Custom </a>
+    <ButtonClose onClick={onDelete}/>
+  </div>
+)
 
-export default class DataViewer extends Component{
+export class LargeDataViewer extends Component{
   state = {mode: 'VIEW'}
 
   beginEditing() {
@@ -32,9 +28,7 @@ export default class DataViewer extends Component{
     const viewMode = (this.state.mode === 'VIEW')
 
     bodyClass += viewMode ? ' view' : ' edit'
-
-    if (this.props.size === 'large') {
-      return (
+    return (
       <div className='DataViewer ui segments'>
         <div className='ui segment DataViewer--header'>
           <Header
@@ -55,10 +49,7 @@ export default class DataViewer extends Component{
           }
         </div>
       </div>
-      )
-    } else {
-      return (<Button onDelete={this.props.onDelete} onOpen={this.props.onOpen}/>)
-    }
+    )
   }
 }
 
