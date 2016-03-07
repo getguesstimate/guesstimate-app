@@ -1,26 +1,15 @@
 import React, {Component, PropTypes} from 'react';
-import ReactDOM from 'react-dom'
 import { connect } from 'react-redux';
 import { createGuesstimateForm, changeGuesstimateForm, saveGuesstimateForm } from 'gModules/guesstimate_form/actions'
 import { changeMetricClickMode } from 'gModules/canvas_state/actions'
-import $ from 'jquery'
-import Icon from 'react-fa'
-import DistributionSelector from './distribution-selector.js'
-import GuesstimateTypeIcon from './guesstimate-type-icon.js'
 import * as guesstimator from 'lib/guesstimator/index.js'
-import {Guesstimator} from 'lib/guesstimator/index.js'
-import TextInput from './text-input.js'
-import DataViewer from './data-viewer/index.js'
 import './style.css'
+import TextForm from './TextForm.js'
+import DataForm from './DataForm.js'
 
 @connect(null, null, null, {withRef: true})
 export default class GuesstimateForm extends Component{
   displayName: 'GuesstimateForm'
-
-  componentWillMount() {
-    this._dispatchChange = _.throttle(this._dispatchChange, 300)
-  }
-
   static propTypes = {
     dispatch: PropTypes.func,
     guesstimateForm: PropTypes.object.isRequired,
@@ -35,175 +24,46 @@ export default class GuesstimateForm extends Component{
     metricFocus: () => { }
   }
 
-  state = {
-    showDistributionSelector: false,
-    hasChanged: false
+  componentWillMount() { this.props.dispatch(createGuesstimateForm(this.props.metricId)) }
+  focus() { this.refs.TextForm.focus() }
+  _handleChange(params) { this.props.dispatch(changeGuesstimateForm(params)) }
+  _handleSave(params) {
+    if (!_.isEmpty(params)) {this._handleChange(params)}
+    this.props.dispatch(saveGuesstimateForm())
   }
+  _changeMetricClickMode(newMode) { this.props.dispatch(changeMetricClickMode(newMode)) }
+  _addDefaultData() { this._handleSave({guesstimateType: 'DATA', data:[1,2,3], input: null}) }
 
-  componentWillMount() {
-    this.props.dispatch(createGuesstimateForm(this.props.metricId))
-  }
-
-  focus() {
-    this.refs.TextInput.focus()
-  }
-
-  _guesstimateType() {
-    return Guesstimator.parse(this.props.guesstimateForm)[1].samplerType()
-  }
-
-  _dispatchChange(params) {
-    this.props.dispatch(changeGuesstimateForm(params));
-    const {isRangeDistribution} = this._guesstimateType()
-    if (this.state.showDistributionSelector && !isRangeDistribution){
-      this.setState({showDistributionSelector: false})
-    }
-  }
-
-  _changeDistributionType(guesstimateType) {
-    this._dispatchChange({guesstimateType})
-    this.setState({showDistributionSelector: false})
-  }
-
-  componentDidUpdate(newProps) {
-    const sameMetric = (newProps.guesstimateForm.metric === this.props.guesstimateForm.metric)
-    const sameInput = (newProps.guesstimateForm.input === this.props.guesstimateForm.input)
-    if (sameMetric && !sameInput){
-      this._switchMetricClickMode(true)
-    }
-  }
-
-  _changeInput(input) {
-    this._dispatchChange({input})
-    this.setState({hasChanged: true})
-  }
-
-  _handleBlur() {
-    this._switchMetricClickMode(false)
-
-    if (this.state.hasChanged){
-      this.props.dispatch(saveGuesstimateForm());
-    }
-  }
-
-  _switchMetricClickMode(inClick=true) {
-    if (inClick && (this._guesstimateType().referenceName === 'FUNCTION')){
-      this.props.dispatch(changeMetricClickMode('FUNCTION_INPUT_SELECT'));
-    } else {
-      this.props.dispatch(changeMetricClickMode(''));
-    }
-  }
-
-  _addData() {
-    this._dispatchChange({guesstimateType: 'DATA', data:[1,2,3], input: null})
-    this.props.dispatch(saveGuesstimateForm());
-  }
-
-  _deleteData() {
-    this._dispatchChange({guesstimateType: null, data:null, input: null})
-    this.props.dispatch(saveGuesstimateForm());
-  }
-
-  _changeData(data) {
-    this._dispatchChange({guesstimateType: 'DATA', data, input: null})
-    this.props.dispatch(saveGuesstimateForm());
-  }
-
-  _dataViewer() {
-    const {guesstimateForm: {data}, size} = this.props
-    return(
-      <DataViewer
-        data={data}
-        onDelete={this._deleteData.bind(this)}
-        onSave={this._changeData.bind(this)}
-        size={size}
-        onOpen={this.props.onOpen}
-      />
-    )
-  }
-
-  _textInput() {
-    let {showDistributionSelector} = this.state
-    const {guesstimateForm, metricFocus, size} = this.props
-    const {input} = guesstimateForm
-    const guesstimateType = this._guesstimateType()
-    return(
-      <div>
-        <div className='row'>
-          <div className='col-sm-12'>
-            <TextInput
-              value={input}
-              metricFocus={metricFocus}
-              onChange={this._changeInput.bind(this)}
-              onFocus={() => {this._switchMetricClickMode.bind(this)(true)}}
-              onBlur={this._handleBlur.bind(this)}
-              onChangeData={this._changeData.bind(this)}
-              ref='TextInput'
-            />
-            <GuesstimateTypeIcon
-              guesstimateType={guesstimateType}
-              toggleDistributionSelector={() => {this.setState({showDistributionSelector: !showDistributionSelector})}}
-            />
-          </div>
-        </div>
-        {showDistributionSelector &&
-          <div className='row'>
-            <div className='col-sm-12'>
-              <DistributionSelector
-                onSubmit={this._changeDistributionType.bind(this)}
-                selected={guesstimateType}
-              />
-            </div>
-          </div>
-        }
-      </div>
-    )
-  }
-  //right now errors live in the simulation, which is not present here.
-  render() {
-    const {size, guesstimateForm} = this.props
-    const emptyInput = _.isEmpty(guesstimateForm.input)
-
+  render () {
+    const {size, guesstimateForm, onOpen} = this.props
     const isLarge = (size === 'large')
-    const isSmall = !isLarge
     const hasData = !!guesstimateForm.data
 
     let formClasses = 'GuesstimateForm'
     formClasses += isLarge ? ' large' : ''
 
-    if (!isLarge) {
-      return (
-        <div className='GuesstimateForm'>
-          {hasData && this._dataViewer()}
-          {!hasData && this._textInput()}
-        </div>
-      )
-    } else {
-      return (
-        <div className='GuesstimateForm large'>
-          {hasData &&
-            <div className='row'>
-              <div className='col-sm-12'>
-                {this._dataViewer()}
-              </div>
-            </div>
-          }
-
-          {!hasData &&
-            <div className='row'>
-              <div className='col-sm-8'>
-                {this._textInput()}
-              </div>
-              <div className='col-sm-4'>
-                {emptyInput &&
-                  <a className='custom-data' onClick={this._addData.bind(this)}> Add Custom Data </a>
-                }
-              </div>
-            </div>
-          }
-        </div>
-      )
-    }
+    return (
+    <div className={formClasses}>
+        {hasData &&
+          <DataForm
+            data={guesstimateForm.data}
+            size={size}
+            onSave={this._handleSave.bind(this)}
+            onOpen={onOpen}
+          />
+        }
+        {!hasData &&
+          <TextForm
+            guesstimateForm={guesstimateForm}
+            onChange={this._handleChange.bind(this)}
+            onSave={this._handleSave.bind(this)}
+            onChangeClickMode={this._changeMetricClickMode.bind(this)}
+            onAddDefaultData={this._addDefaultData.bind(this)}
+            size={size}
+            ref='TextForm'
+          />
+        }
+      </div>
+    )
   }
 }
-
