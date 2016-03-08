@@ -53,7 +53,7 @@ export default class Home extends Component {
                 <p>
                   Make a great estimate in seconds.<br/>
                   If you think a number is between <strong>5</strong> and <strong>9</strong>, <br/>
-                  express that by simply writing <strong>[5,9]</strong>.
+                  simple write <strong>[5,9]</strong>.
                 </p>
               </div>
               <div className='col-sm-4'>
@@ -67,8 +67,8 @@ export default class Home extends Component {
                 <i className='ion-ios-rose'/>
                 <h2> Free </h2>
                 <p>
-                  Create unlimited public models. <br/>
-                  Also, the code is <a href='https://github.com/getguesstimate/guesstimate-app'>open source</a>.
+                  Create unlimited public models for free. <br/>
+                  Our code base is <a href='https://github.com/getguesstimate/guesstimate-app'>open source</a>.
                 </p>
               </div>
             </div>
