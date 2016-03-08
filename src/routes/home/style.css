@@ -29,6 +29,7 @@
 
 .homePage {
   margin-top: 4em;
+  font-family: Lato, Arial, sans-serif;
 }
 
 .homePage .guesstimate-slogan h2 {
@@ -36,7 +37,6 @@
   color: #333;
   font-weight: 400;
   font-size: 3em;
-  font-family: Lato, Arial, sans-serif;
   margin-top: .5em;
 
 }
@@ -96,5 +96,22 @@
   height:240px;
   width:415px;
   margin-top: 5em;
+}
+
+.homePage .sectionBenefits {
+  background-color: $grey-1;
+  padding: 4em;
+}
+
+.homePage .sectionBenefits h2 {
+  color: #444;
+  font-weight: 400;
+  font-size: 2.3rem;
+}
+
+.homePage .sectionBenefits p {
+  color: $grey-2;
+  font-size: 1.2rem;
+  line-height: 1.9rem;
 }
 
