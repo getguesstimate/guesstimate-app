@@ -22,7 +22,7 @@ export default class Home extends Component {
               </div>
 
               <div className='col-sm-12 guesstimate-slogan'>
-                <h2> {'A spreadsheet for things'} <br/>{"that aren't certain"} </h2>
+                <h2>A spreadsheet for things<br/>that aren&rsquo;t certain</h2>
               </div>
 
             </div>
