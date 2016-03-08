@@ -18,7 +18,7 @@ const PercentileTable = ({values}) => (
     <h3> Percentiles </h3>
     <table className='ui very basic collapsing celled table'>
       <tbody>
-        {percentages(values, [1,5,50,95,99]).map(e => {
+        {!_.isEmpty(values) && percentages(values, [1,5,50,95,99]).map(e => {
           return (
             <tr key={e.percentage}><td> {e.percentage}{'%'} </td><td> {e.value && e.value.toFixed(3)} </td></tr>
           )
