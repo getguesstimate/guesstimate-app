@@ -48,25 +48,27 @@ export default class Home extends Component {
           <div className='wrap'>
             <div className='row'>
               <div className='col-sm-4'>
+                <i className='ion-ios-egg'/>
                 <h2> Simple </h2>
                 <p>
-                  Guesstimate takes minutes to learn. <br/>
-                  If you think a number is between 5 and 9, <br/>
-                  express that by writing [5,9]
+                  Make a great estimate in seconds.<br/>
+                  If you think a number is between <strong>5</strong> and <strong>9</strong>, <br/>
+                  express that by simply writing <strong>[5,9]</strong>.
                 </p>
               </div>
               <div className='col-sm-4'>
+                <i className='ion-md-flame'/>
                 <h2> Powerful </h2>
                 <p>
-                  Guesstimate uses Monte Carlo modeling techniques to simulate functions performed on ranges.
+                  Guesstimate uses Monte Carlo sampling to correctly estimate uncertain results.
                 </p>
               </div>
               <div className='col-sm-4'>
+                <i className='ion-ios-rose'/>
                 <h2> Free </h2>
                 <p>
-                  Create unlimitted public models. <br/>
-                  Brows from others internationally.<br/>
-                  Also, it's open source.
+                  Create unlimited public models. <br/>
+                  Also, the code is <a href='https://github.com/getguesstimate/guesstimate-app'>open source</a>.
                 </p>
               </div>
             </div>
