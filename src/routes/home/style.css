@@ -104,7 +104,8 @@
 
 .homePage > .sectionBenefits {
   background-color: $grey-1;
-  padding: 3em 0;
+  padding-top: 3em;
+  padding-bottom: 3em;
   margin-top: 3em;
 }
 
@@ -127,57 +128,6 @@
 
 .homePage > .sectionExamples {
   background-color: #DAE3ED;
-  padding: 8em 0 6em;
-}
-
-.homePage > .sectionExamples h2 {
-  color: #444;
-  font-weight: 400;
-  font-size: 2.3rem;
-  margin-bottom: 0.5em;
-  text-align: left;
-  text-align: left;
-}
-
-.homePage > .sectionExamples p {
-  color: #7E89AB;
-  font-size: 1.5rem;
-  line-height: 2.5rem;
-  text-align: left;
-}
-
-.homePage > .sectionExamples p strong{
-  color: #007BCA;
- font-weight: 400;
-}
-
-.homePage > .sectionExamples .description {
-  margin-top: 1em;
-}
-
-.homePage > .sectionExamples .model {
-  position: relative;
-}
-
-.homePage > .sectionExamples .finder{
-  position: absolute;
-  cursor: pointer;
-  padding: 15px;
-  border-radius: 5px;
-}
-
-.homePage > .sectionExamples .finder .inner{
-  background-color: rgba(116, 210, 61, 0.37);
-  color: #359447;
-  width: 23px;
-  height: 23px;
-  border-radius: 50px;
-  line-height: 22px;
-  font-size: 21px;
-}
-
-.homePage > .sectionExamples .finder:hover .inner{
-  background-color: rgba(116, 210, 61, 0.8);
-  color: #065815;
-  transition: 0.2s color ease, 0.2s background-color ease;
+  padding-top: 8em;
+  padding-bottom: 6em;
 }
