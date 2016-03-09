@@ -58,7 +58,7 @@ export default Router.extend({
   },
 
   spaceIndex() { this.render(<SpaceIndex/>) },
-  home() { this.render(<Home/>, {simpleHeader: true}) },
+  home() { this.render(<Home/>, {isFluid: true, simpleHeader: true}) },
   spaceNew() { this.render(<SpaceNew/>) },
   spaceShow(id) { this.render(<SpaceShow spaceId={id}/>, {isFluid: true, showFooter: false}) },
   settings() { this.render(<Settings/>) },
