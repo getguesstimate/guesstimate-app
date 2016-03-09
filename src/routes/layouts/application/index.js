@@ -1,5 +1,6 @@
 import '../../../../node_modules/flexboxgrid/css/flexboxgrid.min.css'
 import '../../../../node_modules/react-dd-menu/dist/react-dd-menu.css';
+import '../../../../node_modules/ionicons/dist/css/ionicons.css';
 import '../../../../semantic/dist/semantic.css'
 //semantic js is dependent on jquery, which has trouble now
 import '../../../styles/theme.css'
