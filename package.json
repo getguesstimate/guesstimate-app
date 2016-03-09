@@ -78,6 +78,7 @@
     "font-awesome": "^4.4.0",
     "form-serialize": "^0.7.0",
     "gen-uid": "^0.0.2",
+    "ionicons": "^3.0.0-alpha.3",
     "jquery": "2.2.0",
     "jstat": "1.5.2",
     "jsx-loader": "^0.13.2",
