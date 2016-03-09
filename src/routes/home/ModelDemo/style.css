@@ -1,0 +1,54 @@
+@import './styles/variables.css';
+
+.ModelDemo .diagram {
+  display: inline-block;
+  position: relative;
+}
+
+.ModelDemo h2 {
+  color: #444;
+  font-weight: 400;
+  font-size: 2.3rem;
+  margin-bottom: 0.5em;
+  text-align: left;
+  text-align: left;
+}
+
+.ModelDemo p {
+  color: #7E89AB;
+  font-size: 1.5rem;
+  line-height: 2.5rem;
+  text-align: left;
+}
+
+.ModelDemo p strong{
+  color: #007BCA;
+ font-weight: 400;
+}
+
+.ModelDemo .description {
+  margin-top: 1em;
+}
+
+.ModelDemo .finder{
+  position: absolute;
+  cursor: pointer;
+  padding: 15px;
+  border-radius: 5px;
+}
+
+.ModelDemo .finder .inner{
+  background-color: rgba(116, 210, 61, 0.37);
+  color: #359447;
+  width: 23px;
+  height: 23px;
+  border-radius: 50px;
+  line-height: 22px;
+  font-size: 21px;
+}
+
+.ModelDemo .finder:hover .inner{
+  background-color: rgba(116, 210, 61, 0.8);
+  color: #065815;
+  transition: 0.2s color ease, 0.2s background-color ease;
+}

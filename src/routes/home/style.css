@@ -29,6 +29,11 @@
 
 .homePage {
   margin-top: 4em;
+  font-family: Lato, Arial, sans-serif;
+}
+
+.homePage img{
+  max-width: 100%
 }
 
 .homePage .guesstimate-slogan h2 {
@@ -36,7 +41,6 @@
   color: #333;
   font-weight: 400;
   font-size: 3em;
-  font-family: Lato, Arial, sans-serif;
   margin-top: .5em;
 
 }
@@ -98,3 +102,32 @@
   margin-top: 5em;
 }
 
+.homePage > .sectionBenefits {
+  background-color: $grey-1;
+  padding-top: 3em;
+  padding-bottom: 3em;
+  margin-top: 3em;
+}
+
+.homePage > .sectionBenefits h2 {
+  color: #444;
+  font-weight: 400;
+  font-size: 2.3rem;
+}
+
+.homePage > .sectionBenefits p {
+  color: $grey-2;
+  font-size: 1.2rem;
+  line-height: 1.9rem;
+}
+
+.homePage > .sectionBenefits i{
+  font-size: 4.5em;
+  opacity: 0.2;
+}
+
+.homePage > .sectionExamples {
+  background-color: #DAE3ED;
+  padding-top: 8em;
+  padding-bottom: 6em;
+}
