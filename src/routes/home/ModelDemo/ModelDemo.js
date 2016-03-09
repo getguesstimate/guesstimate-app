@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react'
 import {MarkdownViewer} from 'gComponents/utility/markdown-viewer/index.js'
 import * as TreehouseExample from './example_treehouse.js'
+import './style.css'
 
 const QuestionToggle = ({name, top, left, onSelect}) => (
   <div
@@ -8,8 +9,8 @@ const QuestionToggle = ({name, top, left, onSelect}) => (
     onMouseEnter={() => onSelect(name)}
     onMouseLeave={() => onSelect('')}
     style={{
-      top: `${top}px`,
-      left: `${left}px`
+      top: `${top}%`,
+      left: `${left}%`
     }}
   >
     <div className='inner'>
@@ -33,12 +34,12 @@ export default class ModelDemo extends Component {
     let dValue = _.isEmpty(selection) ? demoText.default : demoText[selection]
 
     return (
-      <div className='row'>
+      <div className='row ModelDemo'>
         <div className='col-sm-4 description'>
           <MarkdownViewer source={dValue}/>
         </div>
-        <div className='col-sm-8 model'>
-          <div className='Demo'>
+        <div className='col-sm-8'>
+          <div className='diagram'>
             {toggles.map(t =>
                <QuestionToggle
                  name={t[0]}
