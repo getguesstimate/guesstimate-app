@@ -3,7 +3,7 @@ import Logo from '../../assets/logo-grey-2.png'
 import LogoWord from '../../assets/logo-word.png'
 import './style.css'
 import video from '../../assets/video-2.png'
-import creationModel from '../../assets/tiny-models/creation.png'
+import ModelDemo from './ModelDemo/ModelDemo.js'
 
 export default class Home extends Component {
   displayName: 'Home'
@@ -79,21 +79,9 @@ export default class Home extends Component {
 
         <div className='container-fluid full-width sectionExamples'>
           <div className='wrap'>
-            <div className='row'>
-              <div className='col-sm-4 description'>
-                  <h2> Days to build a Treehouse </h2>
-                  <p>
-                    It can be difficult to figure out how long planning, designing, and building a treehouse will take.
-                    With Guesstimate, you can give your ranges for each of these, and then get the sum of these ranges.
-                  </p>
-              </div>
-              <div className='col-sm-8'>
-                <img src={creationModel} />
-              </div>
-            </div>
+            <ModelDemo/>
           </div>
         </div>
-
       </div>
     )
   }
