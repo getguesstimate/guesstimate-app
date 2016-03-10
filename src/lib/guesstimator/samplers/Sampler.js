@@ -1,3 +1,3 @@
-export const Sample = (n, sampler, inputs) => {
-  return Array.apply(null, [n]).map(sample)
+export const Sample = (n, sample, inputs) => {
+  return Array.apply(null, {length: n}).map(sample)
 }
