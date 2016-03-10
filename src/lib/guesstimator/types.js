@@ -44,7 +44,7 @@ export const DistributionLognormal = {
   displayName: 'LogNormal',
   isRangeDistribution: true,
   sampler: DistributionLognormalSampler,
-  icon: PointIcon // TODO(oagr): Update to new icon.
+  icon: LogNormalIcon
 }
 
 
