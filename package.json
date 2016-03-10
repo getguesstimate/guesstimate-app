@@ -115,7 +115,6 @@
     "reselect": "^2.0.3",
     "seamless-immutable": "^5.0.1",
     "standard": "^5.3.1",
-    "stochator": "^0.6.1",
     "surge": "^0.17.7",
     "url-loader": "^0.5.6",
     "xhr": "^2.0.1",
