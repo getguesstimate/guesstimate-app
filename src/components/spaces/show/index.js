@@ -93,6 +93,10 @@ export default class SpacesShow extends Component {
   openSidebar() {
     this.setState({showSidebar: true})
   }
+
+  _handleFork() {
+    this.props.dispatch(spaceActions.fork(parseInt(this.props.spaceId)))
+  }
   render () {
     const space = this.props.denormalizedSpace;
     const sidebarIsViseable = !!space && (space.ownedByMe || !_.isEmpty(space.description))
@@ -109,6 +113,7 @@ export default class SpacesShow extends Component {
                 <SpacesShowHeader onDestroy={this.destroy.bind(this)}
                     onSaveName={this.onSaveName.bind(this)}
                     onSave={this.onSave.bind(this)}
+                    onFork={this._handleFork.bind(this)}
                     onDestroy={this.destroy.bind(this)}
                     space={space}
                     canUsePrivateModels={canUsePrivateModels}

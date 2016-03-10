@@ -99,6 +99,24 @@ export function create(object) {
   }
 }
 
+export function fork(spaceId) {
+  return (dispatch, getState) => {
+
+    const cid = cuid()
+    const action = sActions.createStart({id:cid});
+
+    api(getState()).forks.create({spaceId}, (err, value) => {
+      if (err) {
+        captureApiError('SpacesCreate', null, null, err, {url: 'SpacesCreate'})
+      }
+      else if (value) {
+        dispatch(sActions.createSuccess(value, cid))
+        app.router.history.navigate('/models/' + value.id)
+      }
+    })
+  }
+}
+
 function getSpace(getState, spaceId) {
   let {spaces, metrics, guesstimates} = getState();
   return e.space.get(spaces, spaceId)
