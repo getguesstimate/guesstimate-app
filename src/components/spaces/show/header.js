@@ -21,7 +21,7 @@ const SaveMessage = ({saveState}) => (
   </div>
 )
 
-const SpaceHeader = ({canMakeMorePrivateModels, space, onSave, onDestroy, onPublicSelect, onPrivateSelect, onSaveName, canUsePrivateModels}) => {
+const SpaceHeader = ({canMakeMorePrivateModels, space, onSave, onFork, onDestroy, onPublicSelect, onPrivateSelect, onSaveName, canUsePrivateModels}) => {
   let privacy_header = (<span> <Icon name='globe'/> Public </span>)
   if (space.is_private) {
     privacy_header = (<span> <Icon name='lock'/> Private </span>)
@@ -65,6 +65,7 @@ const SpaceHeader = ({canMakeMorePrivateModels, space, onSave, onDestroy, onPubl
           />
         }
         <SaveMessage saveState={space.canvasState.saveState} ownedByMe={space.ownedByMe}/>
+        <a onMouseDown={onFork}>'Fork!!'</a>
       </div>
     </div>
   )
