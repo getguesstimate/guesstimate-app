@@ -1,14 +1,9 @@
-var jStat = require('jstat').jStat;
+var jStat = require('jstat').jStat
+import {Sample} from './Sampler.js'
 
 export var Sampler = {
   sample({low, high}, n) {
-    let results = []
-
-    while (results.length < n) {
-      results.push(jStat.uniform.sample(low, high))
-    }
-
-    return { values: results }
+    return { values: Sample(n, jStat.uniform.sample, [low, high]) }
   }
 }
 

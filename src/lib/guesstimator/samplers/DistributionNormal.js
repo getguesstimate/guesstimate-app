@@ -1,4 +1,5 @@
 import math from 'mathjs';
+import {Sample} from './Sampler.js'
 var jStat = require('jstat').jStat;
 
 export var Sampler = {
@@ -6,13 +7,7 @@ export var Sampler = {
     // This assumes a 90% confidence interval, distributed symmetrically.
     const mean = math.mean(high, low)
     const stdev = (high - mean) / 1.645
-
-    let results = []
-    while (results.length < n) {
-      results.push(jStat.normal.sample(mean, stdev))
-    }
-
-    return { values: results }
+    return { values: Sample(n, jStat.normal.sample, [mean, stdev]) }
   }
 }
 
