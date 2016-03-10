@@ -11,11 +11,10 @@ export var Sampler = {
     const mean = (logHigh + logLow)/2
     const stdev = (logHigh-logLow) / (2*1.645)
 
-    let results = []
+    const getSample = () => jStat.lognormal.sample(mean, stdev)
+    let results = Array.apply(null, {length: n}).map( getSample)
 
-    while (results.length < n) {
-      results.push(jStat.lognormal.sample(mean,stdev))
-    }
+    results = Array.isArray(results) ? results : [results]
 
     return { values: results.map(n => n) }
   }
