@@ -1,15 +1,9 @@
+import {Sample} from './Sampler.js'
+import {jStat} from 'jstat'
+
 export var Sampler = {
-  sample(formatted, n) {
-    const {low, high} = formatted
-    const offset = (high - low)
-
-    let samples = []
-    for (let i = 0; i < n; i++) {
-      const newSample = (Math.random() * offset) + low
-      samples = samples.concat(newSample)
-    }
-
-    return { values: samples }
+  sample({low, high}, n) {
+    return { values: Sample(n, () => jStat.uniform.sample(low, high)) }
   }
 }
 
