@@ -34,7 +34,7 @@ export default class DistributionSelector extends Component{
       <div className='DistributionSelector'>
         <hr/>
         <div className='DistributionList'>
-          {['NORMAL', 'UNIFORM'].map(type => {
+          {['NORMAL', 'UNIFORM', 'LOGNORMAL'].map(type => {
             const isSelected = (selected === type)
             const icon = Guesstimator.samplerTypes.find(type).icon
             return (

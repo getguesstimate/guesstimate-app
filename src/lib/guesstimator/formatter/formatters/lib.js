@@ -46,6 +46,8 @@ export const normalTextMixin = Object.assign(
           return g.guesstimateType
         case 'NORMAL':
           return g.guesstimateType
+        case 'LOGNORMAL':
+          return g.guesstimateType
         default:
           return 'NORMAL'
       }

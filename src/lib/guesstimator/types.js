@@ -1,4 +1,5 @@
 import {Sampler as DistributionNormalSampler} from './samplers/DistributionNormal.js'
+import {Sampler as DistributionLognormalSampler} from './samplers/DistributionLognormal.js'
 import {Sampler as DistributionPointSampler} from './samplers/DistributionPoint.js'
 import {Sampler as DistributionUniformSampler} from './samplers/DistributionUniform.js'
 import {Sampler as FunctionSampler} from './samplers/Function.js'
@@ -42,7 +43,7 @@ export const DistributionLognormal = {
   types: ['DISTRIBUTION', 'LOGNORMAL'],
   displayName: 'LogNormal',
   isRangeDistribution: true,
-  sampler: DistributionNormalSampler,
+  sampler: DistributionLognormalSampler,
   icon: LogNormalIcon
 }
 
