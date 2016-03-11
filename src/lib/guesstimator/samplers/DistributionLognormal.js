@@ -1,22 +1,17 @@
 import math from 'mathjs';
-var jStat = require('jstat').jStat;
+import {Sample} from './Sampler.js'
+import {jStat} from 'jstat'
 
 export var Sampler = {
-  sample(formatted, n) {
+  sample({high, low}, n) {
     // This assumes a centered 90% confidence interval, e.g. the left endpoint
     // marks 0.05% on the CDF, the right 0.95%.
-    const logHigh = math.log(formatted.high)
-    const logLow = math.log(formatted.low)
+    const logHigh = math.log(high)
+    const logLow = math.log(low)
 
-    const mean = (logHigh + logLow)/2
+    const mean = math.mean(logHigh, logLow)
     const stdev = (logHigh-logLow) / (2*1.645)
-
-    const getSample = () => jStat.lognormal.sample(mean, stdev)
-    let results = Array.apply(null, {length: n}).map( getSample)
-
-    results = Array.isArray(results) ? results : [results]
-
-    return { values: results.map(n => n) }
+    return { values: Sample(n, () => jStat.lognormal.sample(mean, stdev)) }
   }
 }
 

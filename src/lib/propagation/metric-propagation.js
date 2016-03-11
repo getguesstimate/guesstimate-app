@@ -59,10 +59,9 @@ export default class MetricPropagation {
 
         if (errors[0]) { this.halted = true }
         return errors
-      } else { return [null, null] }
-    } else {
-      return [null, null]
+      }
     }
+    return [null, null]
   }
 
   _needsMoreSamples(graph) {
