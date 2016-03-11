@@ -2,8 +2,6 @@ import React, {Component, PropTypes} from 'react';
 import numeral from 'numeral'
 import numberShow from 'lib/numberShower/numberShower.js'
 import './style.css'
-
-import _ from 'lodash'
 import ShowIf from 'gComponents/utility/showIf';
 
 function formatStat(n){
@@ -38,7 +36,10 @@ class DistributionSummarySmall extends Component{
     let stats = this.props.stats;
     let {mean, stdev, percentiles} = stats
     let range = null
-    if (_.isObject(percentiles)){ range = (percentiles[95] - mean)}
+    if (_.isObject(percentiles)) {
+      const [lowRange, highRange] = [(mean - percentiles[5]), (percentiles[95] - mean)]
+      range = (highRange + lowRange) / 2
+    }
     return (
       <div className="DistributionSummary">
         <PrecisionNumber value={mean}/>

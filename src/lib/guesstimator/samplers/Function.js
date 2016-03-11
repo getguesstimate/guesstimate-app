@@ -1,4 +1,4 @@
-import math from 'mathjs';
+import math from 'mathjs'
 import {jStat} from 'jstat'
 
 const jStatDistributions = {
