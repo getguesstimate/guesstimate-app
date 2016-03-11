@@ -4,7 +4,7 @@ dText.default = `
 ## Making a Treehouse?
 Estimate how long it will take.
 
-Guess how long the each steps will take, then find the resulting sum in a statistical way.
+Guess how long each steps will take, then find the resulting sum in a statistical way.
 `
 dText.distribution = `
 This range follows a **normal distribution**, but it can be changed to be a **uniform** distribution.
