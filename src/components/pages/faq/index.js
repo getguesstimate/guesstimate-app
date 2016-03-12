@@ -5,7 +5,7 @@ const content = `
 # Frequently Asked Questions
 
 ## What can Guesstimate be used for?
-Guesstimate is great at making estimates of things that aren't certain.  You can forecast your earnings from a new venture, predict the amount of time a big project will take, or experiment with scientific theories.  People have used it to optimize video games, understand lottery payoffs, and estimate the costs of their childcare.
+Guesstimate is great at making estimates of things that aren't certain.  You can forecast your earnings from a new venture, predict the amount of time a big project will take, or experiment with scientific theories.  People have used it to optimize video games, understand lottery payoffs, and estimate the costs of childcare.
 
 ## What are some good examples?
 The most popular model on Guesstimate is [How Long it Takes to Get Ready for Preschool](/models/314).  We also recommend checking out Ozzie Gooen's models [here](/users/1).
@@ -14,7 +14,7 @@ The most popular model on Guesstimate is [How Long it Takes to Get Ready for Pre
 Not yet.  Please sign up for an account to get on our mailing list, or follow us [on Twitter](https://twitter.com/getguesstimate) to be notified once there are.  We expect private models in the next 1-6 weeks.
 
 ## What functions are available on Guesstimate?
-You can find a list by clicking on the **Documentation** widget on the right, then clicking **Available Existing Functions**.
+You can find a list by clicking on the **Documentation** widget on the right, then clicking **Functions: Available Existing Functions**.
 
 ## Can I edit someone else's model?
 Currently all models on Guesstimate are public.  Your own models autosave when you edit them.  If you edit models created by other people, you will be able to modify them, but your changes will not be saved.  This can be great for experimentation or for entering your own assumptions in a different model.
@@ -39,7 +39,8 @@ We have a blog [here](https://medium.com/guesstimate-blog).
 # Math Related Questions
 
 ## What distribution types are supported?
-You can use normal and uniform distributions, plus a few [discrete distributions](http://mathjs.org/docs/reference/functions/categorical.html) using the math.js library.  More distributions shapes have been requested and are being worked on.  You can follow this feature [here](https://github.com/getguesstimate/guesstimate-app/issues/43).
+You can use normal, lognormal, and uniform distributions from the standard input mechanisms. Additionally, many more distributions are available through the function interface.
+You can find a list by clicking on the **Documentation** widget on the right, then clicking **Functions: Additional Distributions**. There are also a few [discrete distributions](http://mathjs.org/docs/reference/functions/categorical.html) using the math.js library.
 
 ## How many samples are done per metric?
 Approximately 5000.
@@ -48,7 +49,7 @@ Approximately 5000.
 5000 is enough to be useful for most estimates, but not enough to slow the system down.  In the future, this amount may be variable depending on the need and circumstances.
 
 ## Why isn’t the math done analytically?
-Monte Carlo simulations are far more general than analytical solutions, so apply to more equations and distributions.  In the future, analytical techniques may be used as is possible.
+Monte Carlo simulations are far more general than analytical solutions, so apply to more equations and distributions.  In the future, analytical techniques may be used when possible.
 
 ## I found a bug!
 Please file it in our bug tracker on [GitHub](https://github.com/getguesstimate/guesstimate-app), or just open up chat (bottom right) and let us know.
