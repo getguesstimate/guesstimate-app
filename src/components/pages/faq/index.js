@@ -40,8 +40,7 @@ We have a blog [here](https://medium.com/guesstimate-blog).
 
 ## What distribution types are supported?
 You can use normal, lognormal, and uniform distributions from the standard input mechanisms. Additionally, many more distributions are available through the function interface.
-
-You can find a list by clicking on the **Documentation** widget on the right, then clicking **Functions: Additional Distributions**. Additionally, there are a few [discrete distributions](http://mathjs.org/docs/reference/functions/categorical.html) using the math.js library.
+You can find a list by clicking on the **Documentation** widget on the right, then clicking **Functions: Additional Distributions**. There are also a few [discrete distributions](http://mathjs.org/docs/reference/functions/categorical.html) using the math.js library.
 
 ## How many samples are done per metric?
 Approximately 5000.
