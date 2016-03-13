@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import './style.css'
 
 import SpaceCanvas from 'gComponents/spaces/canvas'
+import Icon from 'react-fa'
 import SpacesShowHeader from './header.js'
 import * as spaceActions from 'gModules/spaces/actions.js'
 import { denormalizedSpaceSelector } from '../denormalized-space-selector.js';
@@ -124,14 +125,21 @@ export default class SpacesShow extends Component {
               }
             </div>
 
-            <div className='col-sm-2'>
+            <div className='col-sm-1'>
 
               {space && space.user && !space.ownedByMe &&
-                <div>
+                <div className='user-header'>
                   <a className='ui image label' href={`/users/${space.user.id}`}>
-                    <img  src={space.user.picture}/>
+                    <img src={space.user.picture}/>
                     {space.user.name}
                   </a>
+                </div>
+              }
+            </div>
+            <div className='col-sm-1'>
+              { space && e.me.isLoggedIn(this.props.me) &&
+                <div className='fork-button'>
+                  <Icon onMouseDown={this._handleFork.bind(this)} name='code-fork'/>
                 </div>
               }
             </div>

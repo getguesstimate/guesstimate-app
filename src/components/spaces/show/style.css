@@ -30,6 +30,15 @@
   }
 }
 
+.user-header {
+  float: left;
+}
+
+.fork-button {
+  font-size: 2em;
+  cursor: pointer;
+}
+
 .hero-unit .ui.button.blue {
   background-color: $grey-2;
 }
