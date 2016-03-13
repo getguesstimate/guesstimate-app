@@ -8,6 +8,7 @@ import ExponentialImage from 'assets/distribution-icons/exponential.png'
 import PointImage from 'assets/distribution-icons/point.png'
 import UniformImage from 'assets/distribution-icons/uniform.png'
 import {Guesstimator} from 'lib/guesstimator/index.js'
+import * as elev from 'server/elev/index.js'
 
 class DistributionIcon extends Component{
   _handleSubmit() {
@@ -28,13 +29,23 @@ class DistributionIcon extends Component{
 }
 
 export default class DistributionSelector extends Component{
+  _handleShowMore() {
+    elev.open(elev.ADDITIONAL_DISTRIBUTIONS)
+  }
+
   render() {
     const {selected} = this.props
     return (
       <div className='DistributionSelector'>
         <hr/>
+        <a
+          className='more-distributions'
+          onMouseDown={this._handleShowMore.bind(this)}
+        >
+          {'More'}
+        </a>
         <div className='DistributionList'>
-          {['NORMAL', 'UNIFORM'].map(type => {
+          {['NORMAL', 'UNIFORM', 'LOGNORMAL'].map(type => {
             const isSelected = (selected === type)
             const icon = Guesstimator.samplerTypes.find(type).icon
             return (
