@@ -1,5 +1,10 @@
 @import './styles/variables.css';
 
+.fork-button {
+  cursor: pointer;
+  float: left;
+}
+
 .header .saveMessage {
   float: left;
   margin-top: 8px;

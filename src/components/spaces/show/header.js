@@ -9,19 +9,26 @@ import {SpaceName} from './spaceName.js'
 import {PrivacyToggleDropdown} from '../privacy-toggle/index.js'
 import './header.css'
 
-const SaveMessage = ({saveState}) => (
+const ProgressMessage = ({actionState}) => (
   <div className='saveMessage'>
-    {saveState == 'SAVING' && 'Saving...'}
-    {saveState == 'ERROR' &&
+    {actionState == 'SAVING' && 'Saving...'}
+    {actionState == 'FORKING' && 'Copying...'}
+    {actionState == 'ERROR' &&
       <div className='ui red horizontal label'>
         ERROR SAVING
       </div>
     }
-    {saveState == 'SAVED' && 'All changes saved'}
+    {actionState == 'ERROR_FORKING' &&
+      <div className='ui red horizontal label'>
+        ERROR COPYING
+      </div>
+    }
+    {actionState == 'SAVED' && 'All changes saved'}
+    {actionState == 'FORKED' && 'Successfully copied'}
   </div>
 )
 
-const SpaceHeader = ({canMakeMorePrivateModels, space, onSave, onFork, onDestroy, onPublicSelect, onPrivateSelect, onSaveName, canUsePrivateModels}) => {
+const SpaceHeader = ({canMakeMorePrivateModels, space, me, onSave, onFork, onDestroy, onPublicSelect, onPrivateSelect, onSaveName, canUsePrivateModels}) => {
   let privacy_header = (<span> <Icon name='globe'/> Public </span>)
   if (space.is_private) {
     privacy_header = (<span> <Icon name='lock'/> Private </span>)
@@ -64,11 +71,15 @@ const SpaceHeader = ({canMakeMorePrivateModels, space, onSave, onFork, onDestroy
             onPrivateSelect={onPrivateSelect}
           />
         }
-        <SaveMessage saveState={space.canvasState.saveState} ownedByMe={space.ownedByMe}/>
+        { space && e.me.isLoggedIn(me) &&
+          <div onMouseDown={onFork} className='fork-button'>
+            <a className='space-header-action'><Icon onMouseDown={onFork} name='copy'/> Copy</a>
+          </div>
+        }
+        <ProgressMessage actionState={space.canvasState.actionState}/>
       </div>
     </div>
   )
 }
-//<!--<a onMouseDown={onFork}>'Fork!!'</a>-->
 
 export default SpaceHeader

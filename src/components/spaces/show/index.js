@@ -111,7 +111,9 @@ export default class SpacesShow extends Component {
             <div className='col-sm-10'>
 
               {space &&
-                <SpacesShowHeader onDestroy={this.destroy.bind(this)}
+                <SpacesShowHeader
+                    me={this.props.me}
+                    onDestroy={this.destroy.bind(this)}
                     onSaveName={this.onSaveName.bind(this)}
                     onSave={this.onSave.bind(this)}
                     onFork={this._handleFork.bind(this)}
@@ -125,21 +127,13 @@ export default class SpacesShow extends Component {
               }
             </div>
 
-            <div className='col-sm-1'>
-
+            <div className='col-sm-2'>
               {space && space.user && !space.ownedByMe &&
                 <div className='user-header'>
                   <a className='ui image label' href={`/users/${space.user.id}`}>
                     <img src={space.user.picture}/>
                     {space.user.name}
                   </a>
-                </div>
-              }
-            </div>
-            <div className='col-sm-1'>
-              { space && e.me.isLoggedIn(this.props.me) &&
-                <div className='fork-button'>
-                  <Icon onMouseDown={this._handleFork.bind(this)} name='code-fork'/>
                 </div>
               }
             </div>
