@@ -30,6 +30,15 @@
   border-top: 1px solid $grey-1;
 }
 
+.DistributionSelector .more-distributions{
+  float: left;
+  cursor: pointer;
+  padding-left: 2px;
+  padding-top: 9px;
+  font-size: 16px;
+  color: $grey-999;
+}
+
 .GuesstimateForm .DistributionIcon.DistributionIcon{
   font-size: 1em;
   padding-top: 2px;

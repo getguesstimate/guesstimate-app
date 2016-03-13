@@ -1,5 +1,5 @@
-import math from 'mathjs';
-var jStat = require('jstat').jStat;
+import math from 'mathjs'
+import {jStat} from 'jstat'
 
 const jStatDistributions = {
   beta: jStat.beta.sample,
