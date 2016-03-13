@@ -65,10 +65,10 @@ const SpaceHeader = ({canMakeMorePrivateModels, space, onSave, onFork, onDestroy
           />
         }
         <SaveMessage saveState={space.canvasState.saveState} ownedByMe={space.ownedByMe}/>
-        <a onMouseDown={onFork}>'Fork!!'</a>
       </div>
     </div>
   )
 }
+//<!--<a onMouseDown={onFork}>'Fork!!'</a>-->
 
 export default SpaceHeader
