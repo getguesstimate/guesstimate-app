@@ -1,5 +1,5 @@
 
-Guesstimate [![Gitter chat](https://badges.gitter.im/gitterHQ/services.png)](https://gitter.im/getguesstimate) [![Stories in Ready](https://badge.waffle.io/getguesstimate/guesstimate-app.png?label=ready&title=Ready)](https://waffle.io/getguesstimate/guesstimate-app)[ ![Codeship Status for getguesstimate/guesstimate-app](https://codeship.com/projects/2de3b390-c8ba-0133-d138-32ec81c9754f/status?branch=master)](https://codeship.com/projects/139423)
+Guesstimate [![Stories in Ready](https://badge.waffle.io/getguesstimate/guesstimate-app.png?label=ready&title=Ready)](https://waffle.io/getguesstimate/guesstimate-app)[ ![Codeship Status for getguesstimate/guesstimate-app](https://codeship.com/projects/2de3b390-c8ba-0133-d138-32ec81c9754f/status?branch=master)](https://codeship.com/projects/139423)
 ==================
 
 [![Throughput Graph](https://graphs.waffle.io/getguesstimate/guesstimate-app/throughput.svg)](https://waffle.io/getguesstimate/guesstimate-app/metrics)

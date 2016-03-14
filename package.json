@@ -1,33 +1,39 @@
 {
-  "name": "guestimate",
-  "version": "0.0.1",
+  "name": "guesstimate",
+  "version": "0.4.0",
   "description": "Make, share, and evaluate estimates of things",
   "main": "index.js",
   "scripts": {
-    "dev": "BUILD_DEV=1 NODE_ENV=development API_ENV=development webpack-dev-server",
+    "_build": "BUILD_DEV=0 API_ENV=production webpack",
+    "_stage": "surge -p public -d stage.getguesstimate.com",
+
     "start": "BUILD_DEV=0 NODE_ENV=development API_ENV=development webpack-dev-server",
-    "build": "BUILD_DEV=0 API_ENV=production webpack",
+    "start-production": "BUILD_DEV=0 NODE_ENV=development API_ENV=production webpack-dev-server",
+
+    "stage!": "BUILD_DEV=0 npm run _build && npm run _stage",
     "deploy": "surge -p public -d https://www.getguesstimate.com",
-    "stage": "surge -p public -d stage.getguesstimate.com",
-    "stage!": "BUILD_DEV=0 npm run build && npm run stage",
-    "test": "karma start karma.conf.js"
+
+    "test": "karma start",
+    "test-once": "karma start --single-run"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/guesstimate/guesstimate-app.git"
   },
   "keywords": [
-    "webpack"
+    "Monte Carlo",
+    "Estimate",
+    "Guesstimate"
   ],
   "author": "Ozzie Gooen",
   "license": "MIT",
   "bugs": {
-    "url": ""
+    "url": "https://github.com/getguesstimate/guesstimate-app/issues"
   },
   "babel": {
     "stage": 0
   },
-  "homepage": "",
+  "homepage": "https://www.getguesstimate.com",
   "devDependencies": {
     "babel": "^5.8.23",
     "babel-core": "^5.8.23",
