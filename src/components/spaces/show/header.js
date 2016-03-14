@@ -9,22 +9,29 @@ import {SpaceName} from './spaceName.js'
 import {PrivacyToggleDropdown} from '../privacy-toggle/index.js'
 import './header.css'
 
-const SaveMessage = ({saveState}) => (
+const ProgressMessage = ({actionState}) => (
   <div className='saveMessage'>
-    {saveState == 'SAVING' && 'Saving...'}
-    {saveState == 'ERROR' &&
+    {actionState == 'SAVING' && 'Saving...'}
+    {actionState == 'COPYING' && 'Copying...'}
+    {actionState == 'ERROR' &&
       <div className='ui red horizontal label'>
         ERROR SAVING
       </div>
     }
-    {saveState == 'SAVED' && 'All changes saved'}
+    {actionState == 'ERROR_COPYING' &&
+      <div className='ui red horizontal label'>
+        ERROR COPYING
+      </div>
+    }
+    {actionState == 'SAVED' && 'All changes saved'}
+    {actionState == 'COPIED' && 'Successfully copied'}
   </div>
 )
 
-const SpaceHeader = ({canMakeMorePrivateModels, space, onSave, onDestroy, onPublicSelect, onPrivateSelect, onSaveName, canUsePrivateModels}) => {
-  let privacy_header = (<span> <Icon name='globe'/> Public </span>)
+const SpaceHeader = ({canMakeMorePrivateModels, space, isLoggedIn, onSave, onCopy, onDestroy, onPublicSelect, onPrivateSelect, onSaveName, canUsePrivateModels}) => {
+  let privacy_header = (<span><Icon name='globe'/> Public</span>)
   if (space.is_private) {
-    privacy_header = (<span> <Icon name='lock'/> Private </span>)
+    privacy_header = (<span><Icon name='lock'/> Private</span>)
   }
 
   return (
@@ -64,7 +71,12 @@ const SpaceHeader = ({canMakeMorePrivateModels, space, onSave, onDestroy, onPubl
             onPrivateSelect={onPrivateSelect}
           />
         }
-        <SaveMessage saveState={space.canvasState.saveState} ownedByMe={space.ownedByMe}/>
+        { space && isLoggedIn &&
+          <div onMouseDown={onCopy} className='copy-button'>
+            <a className='space-header-action'><Icon name='copy'/> Copy</a>
+          </div>
+        }
+        <ProgressMessage actionState={space.canvasState.actionState}/>
       </div>
     </div>
   )

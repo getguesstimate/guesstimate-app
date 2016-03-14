@@ -44,11 +44,8 @@ export default class SpacesShow extends Component {
 
   considerFetch(newProps) {
     const space = newProps.denormalizedSpace
-    const isPublic = space && !space.is_private
     const needsData = !_.has(space, 'graph')
-    const loggedIn = e.me.isLoggedIn(newProps.me)
 
-    //if (needsData && (isPublic || loggedIn)) {
     if (needsData) {
       this.fetchData()
     }
@@ -93,11 +90,17 @@ export default class SpacesShow extends Component {
   openSidebar() {
     this.setState({showSidebar: true})
   }
-  render () {
+
+  _handleCopy() {
+    this.props.dispatch(spaceActions.copy(parseInt(this.props.spaceId)))
+  }
+
+  render() {
     const space = this.props.denormalizedSpace;
     const sidebarIsViseable = !!space && (space.ownedByMe || !_.isEmpty(space.description))
     const canUsePrivateModels = e.me.canUsePrivateModels(this.props.me)
     const canMakeMorePrivateModels = e.me.canMakeMorePrivateModels(this.props.me)
+    const isLoggedIn = e.me.isLoggedIn(this.props.me)
     return (
     <div className='spaceShow'>
       <div className='hero-unit'>
@@ -106,9 +109,12 @@ export default class SpacesShow extends Component {
             <div className='col-sm-10'>
 
               {space &&
-                <SpacesShowHeader onDestroy={this.destroy.bind(this)}
+                <SpacesShowHeader
+                    isLoggedIn={isLoggedIn}
+                    onDestroy={this.destroy.bind(this)}
                     onSaveName={this.onSaveName.bind(this)}
                     onSave={this.onSave.bind(this)}
+                    onCopy={this._handleCopy.bind(this)}
                     onDestroy={this.destroy.bind(this)}
                     space={space}
                     canUsePrivateModels={canUsePrivateModels}
@@ -120,11 +126,10 @@ export default class SpacesShow extends Component {
             </div>
 
             <div className='col-sm-2'>
-
               {space && space.user && !space.ownedByMe &&
                 <div>
                   <a className='ui image label' href={`/users/${space.user.id}`}>
-                    <img  src={space.user.picture}/>
+                    <img src={space.user.picture}/>
                     {space.user.name}
                   </a>
                 </div>
