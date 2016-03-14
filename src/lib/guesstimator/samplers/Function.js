@@ -2,7 +2,6 @@ import math from 'mathjs'
 import {jStat} from 'jstat'
 var Finance = require('financejs')
 const finance = new Finance()
-console.log(finance)
 
 const jStatDistributions = {
   beta: jStat.beta.sample,
@@ -23,7 +22,7 @@ const financeFunctions = {
   PV: finance.PV,
   FV: finance.FV,
   NPV: finance.NPV,
-  IRR: finance.IRR,
+  //IRR: finance.IRR, Too slow.
   PP: finance.PP,
   ROI: finance.ROI,
   AM: finance.AM,
