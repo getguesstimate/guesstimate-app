@@ -112,7 +112,7 @@ export default class SpacesShow extends Component {
 
               {space &&
                 <SpacesShowHeader
-                    me={this.props.me}
+                    isLoggedIn={e.me.isLoggedIn(this.props.me)}
                     onDestroy={this.destroy.bind(this)}
                     onSaveName={this.onSaveName.bind(this)}
                     onSave={this.onSave.bind(this)}
