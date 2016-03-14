@@ -12,19 +12,19 @@ import './header.css'
 const ProgressMessage = ({actionState}) => (
   <div className='saveMessage'>
     {actionState == 'SAVING' && 'Saving...'}
-    {actionState == 'FORKING' && 'Copying...'}
+    {actionState == 'COPYING' && 'Copying...'}
     {actionState == 'ERROR' &&
       <div className='ui red horizontal label'>
         ERROR SAVING
       </div>
     }
-    {actionState == 'ERROR_FORKING' &&
+    {actionState == 'ERROR_COPYING' &&
       <div className='ui red horizontal label'>
         ERROR COPYING
       </div>
     }
     {actionState == 'SAVED' && 'All changes saved'}
-    {actionState == 'FORKED' && 'Successfully copied'}
+    {actionState == 'COPIED' && 'Successfully copied'}
   </div>
 )
 

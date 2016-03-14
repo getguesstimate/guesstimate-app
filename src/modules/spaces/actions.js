@@ -101,18 +101,18 @@ export function create(object) {
 
 export function copy(spaceId) {
   return (dispatch, getState) => {
-    dispatch(changeActionState('FORKING'))
+    dispatch(changeActionState('COPYING'))
 
     const cid = cuid()
     const action = sActions.createStart({id:cid});
 
     api(getState()).copies.create({spaceId}, (err, value) => {
       if (err) {
-        dispatch(changeActionState('ERROR_FORKING'))
+        dispatch(changeActionState('ERROR_COPYING'))
         captureApiError('SpacesCreate', null, null, err, {url: 'SpacesCreate'})
       }
       else if (value) {
-        dispatch(changeActionState('FORKED'))
+        dispatch(changeActionState('COPIED'))
         // Signal the resource was created.
         dispatch(sActions.createSuccess(value, cid))
         // And that we've fetched new data from it. We have to do this in this case as the new resource is pre-populated

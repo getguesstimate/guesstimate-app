@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import './style.css'
 
 import SpaceCanvas from 'gComponents/spaces/canvas'
-import Icon from 'react-fa'
 import SpacesShowHeader from './header.js'
 import * as spaceActions from 'gModules/spaces/actions.js'
 import { denormalizedSpaceSelector } from '../denormalized-space-selector.js';
