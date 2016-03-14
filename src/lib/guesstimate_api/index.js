@@ -1,7 +1,8 @@
 import Models from './resources/Models.js'
 import Users from './resources/Users.js'
 import Accounts from './resources/Accounts.js'
-import Forks from './resources/Forks.js'
+import Copies from './resources/Copies.js'
+
 
 export default class GuesstimateApi {
   constructor(params) {
@@ -9,7 +10,7 @@ export default class GuesstimateApi {
     this.host = params['host']
     this.models = new Models(this)
     this.users = new Users(this)
-    this.forks = new Forks(this)
+    this.copies = new Copies(this)
     this.accounts = new Accounts(this)
   }
 }

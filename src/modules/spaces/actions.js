@@ -99,14 +99,14 @@ export function create(object) {
   }
 }
 
-export function fork(spaceId) {
+export function copy(spaceId) {
   return (dispatch, getState) => {
     dispatch(changeActionState('FORKING'))
 
     const cid = cuid()
     const action = sActions.createStart({id:cid});
 
-    api(getState()).forks.create({spaceId}, (err, value) => {
+    api(getState()).copies.create({spaceId}, (err, value) => {
       if (err) {
         dispatch(changeActionState('ERROR_FORKING'))
         captureApiError('SpacesCreate', null, null, err, {url: 'SpacesCreate'})
