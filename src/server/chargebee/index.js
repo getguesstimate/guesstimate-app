@@ -1,5 +1,7 @@
 import chargebee from 'chargebee'
+import variables from './constants.js'
 
-
-chargebee.configure({site : "guesstimate-test",
-  api_key : "test_8KGVtKWvLDecuvvBYmDr5HcdqyKEW4ymWe"});
+chargebee.configure({
+  site: variables.CHARGEBEE_SITE,
+  api_key:  variables.CHARGEBEE_API_KEY
+})
