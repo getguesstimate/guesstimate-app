@@ -113,7 +113,12 @@ export function fork(spaceId) {
       }
       else if (value) {
         dispatch(changeActionState('FORKED'))
+        // Signal the resource was created.
         dispatch(sActions.createSuccess(value, cid))
+        // And that we've fetched new data from it. We have to do this in this case as the new resource is pre-populated
+        // with some data.
+        dispatch(sActions.fetchSuccess([value]))
+
         app.router.history.navigate('/models/' + value.id)
       }
     })
