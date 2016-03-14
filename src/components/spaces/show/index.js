@@ -45,11 +45,8 @@ export default class SpacesShow extends Component {
 
   considerFetch(newProps) {
     const space = newProps.denormalizedSpace
-    const isPublic = space && !space.is_private
     const needsData = !_.has(space, 'graph')
-    const loggedIn = e.me.isLoggedIn(newProps.me)
 
-    //if (needsData && (isPublic || loggedIn)) {
     if (needsData) {
       this.fetchData()
     }
