@@ -42,7 +42,7 @@ math.import(jStatDistributions, {override: true})
 math.import(financeFunctions, {override: true})
 
 // All of jStat's functions are impure as they require sampling on pure inputs.
-const IMPURE_FUNCTIONS = ['pickRandom', 'randomInt', 'random'] + Object.keys(jStatDistributions)
+const IMPURE_FUNCTIONS = ['pickRandom', 'randomInt', 'random'].concat(Object.keys(jStatDistributions))
 
 export var Sampler = {
   sample({text}, n, inputs) {
