@@ -28,10 +28,10 @@ const ProgressMessage = ({actionState}) => (
   </div>
 )
 
-const SpaceHeader = ({canMakeMorePrivateModels, space, me, onSave, onFork, onDestroy, onPublicSelect, onPrivateSelect, onSaveName, canUsePrivateModels}) => {
-  let privacy_header = (<span> <Icon name='globe'/> Public </span>)
+const SpaceHeader = ({canMakeMorePrivateModels, space, isLoggedIn, onSave, onFork, onDestroy, onPublicSelect, onPrivateSelect, onSaveName, canUsePrivateModels}) => {
+  let privacy_header = (<span><Icon name='globe'/> Public</span>)
   if (space.is_private) {
-    privacy_header = (<span> <Icon name='lock'/> Private </span>)
+    privacy_header = (<span><Icon name='lock'/> Private</span>)
   }
 
   return (
@@ -71,7 +71,7 @@ const SpaceHeader = ({canMakeMorePrivateModels, space, me, onSave, onFork, onDes
             onPrivateSelect={onPrivateSelect}
           />
         }
-        { space && e.me.isLoggedIn(me) &&
+        { space && isLoggedIn &&
           <div onMouseDown={onFork} className='fork-button'>
             <a className='space-header-action'><Icon onMouseDown={onFork} name='copy'/> Copy</a>
           </div>
