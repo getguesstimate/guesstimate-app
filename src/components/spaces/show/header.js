@@ -28,7 +28,7 @@ const ProgressMessage = ({actionState}) => (
   </div>
 )
 
-const SpaceHeader = ({canMakeMorePrivateModels, space, isLoggedIn, onSave, onFork, onDestroy, onPublicSelect, onPrivateSelect, onSaveName, canUsePrivateModels}) => {
+const SpaceHeader = ({canMakeMorePrivateModels, space, isLoggedIn, onSave, onCopy, onDestroy, onPublicSelect, onPrivateSelect, onSaveName, canUsePrivateModels}) => {
   let privacy_header = (<span><Icon name='globe'/> Public</span>)
   if (space.is_private) {
     privacy_header = (<span><Icon name='lock'/> Private</span>)
@@ -72,8 +72,8 @@ const SpaceHeader = ({canMakeMorePrivateModels, space, isLoggedIn, onSave, onFor
           />
         }
         { space && isLoggedIn &&
-          <div onMouseDown={onFork} className='fork-button'>
-            <a className='space-header-action'><Icon onMouseDown={onFork} name='copy'/> Copy</a>
+          <div onMouseDown={onCopy} className='copy-button'>
+            <a className='space-header-action'><Icon name='copy'/> Copy</a>
           </div>
         }
         <ProgressMessage actionState={space.canvasState.actionState}/>

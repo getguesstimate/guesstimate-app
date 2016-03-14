@@ -92,8 +92,8 @@ export default class SpacesShow extends Component {
     this.setState({showSidebar: true})
   }
 
-  _handleFork() {
-    this.props.dispatch(spaceActions.fork(parseInt(this.props.spaceId)))
+  _handleCopy() {
+    this.props.dispatch(spaceActions.copy(parseInt(this.props.spaceId)))
   }
 
   render() {
@@ -114,7 +114,7 @@ export default class SpacesShow extends Component {
                     onDestroy={this.destroy.bind(this)}
                     onSaveName={this.onSaveName.bind(this)}
                     onSave={this.onSave.bind(this)}
-                    onFork={this._handleFork.bind(this)}
+                    onCopy={this._handleCopy.bind(this)}
                     onDestroy={this.destroy.bind(this)}
                     space={space}
                     canUsePrivateModels={canUsePrivateModels}
