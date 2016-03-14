@@ -95,7 +95,8 @@ export default class SpacesShow extends Component {
   _handleFork() {
     this.props.dispatch(spaceActions.fork(parseInt(this.props.spaceId)))
   }
-  render () {
+
+  render() {
     const space = this.props.denormalizedSpace;
     const sidebarIsViseable = !!space && (space.ownedByMe || !_.isEmpty(space.description))
     const canUsePrivateModels = e.me.canUsePrivateModels(this.props.me)
@@ -126,7 +127,7 @@ export default class SpacesShow extends Component {
 
             <div className='col-sm-2'>
               {space && space.user && !space.ownedByMe &&
-                <div className='user-header'>
+                <div>
                   <a className='ui image label' href={`/users/${space.user.id}`}>
                     <img src={space.user.picture}/>
                     {space.user.name}
