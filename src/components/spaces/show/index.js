@@ -100,6 +100,7 @@ export default class SpacesShow extends Component {
     const sidebarIsViseable = !!space && (space.ownedByMe || !_.isEmpty(space.description))
     const canUsePrivateModels = e.me.canUsePrivateModels(this.props.me)
     const canMakeMorePrivateModels = e.me.canMakeMorePrivateModels(this.props.me)
+    const isLoggedIn = e.me.isLoggedIn(this.props.me)
     return (
     <div className='spaceShow'>
       <div className='hero-unit'>
@@ -109,7 +110,7 @@ export default class SpacesShow extends Component {
 
               {space &&
                 <SpacesShowHeader
-                    isLoggedIn={e.me.isLoggedIn(this.props.me)}
+                    isLoggedIn={isLoggedIn}
                     onDestroy={this.destroy.bind(this)}
                     onSaveName={this.onSaveName.bind(this)}
                     onSave={this.onSave.bind(this)}
