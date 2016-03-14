@@ -53,8 +53,8 @@ export default Router.extend({
     'style_guide/settings': 'styleGuideSettings',
     'style_guide/pricing': 'styleGuidePricing',
     'settings': 'settings',
-    //'pricing': 'pricing',
-    //'subscribe/:id': 'subscribe',
+    'pricing': 'pricing',
+    'subscribe/:id': 'subscribe',
   },
 
   spaceIndex() { this.render(<SpaceIndex/>) },
