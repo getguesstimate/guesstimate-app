@@ -1,5 +1,4 @@
 import React, {Component, PropTypes} from 'react'
-import Icon from 'react-fa'
 import DropDown from 'gComponents/utility/drop-down/index.js'
 import Card from 'gComponents/utility/card/index.js'
 import {CardListElement} from 'gComponents/utility/card/index.js'

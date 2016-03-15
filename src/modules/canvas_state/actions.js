@@ -10,6 +10,6 @@ export function changeMetricClickMode(metricClickMode) {
   }
 }
 
-export function changeSaveState(value) {
-  return { type: 'CHANGE_CANVAS_STATE', values: {saveState: value} };
+export function changeActionState(value) {
+  return { type: 'CHANGE_CANVAS_STATE', values: {actionState: value} };
 }

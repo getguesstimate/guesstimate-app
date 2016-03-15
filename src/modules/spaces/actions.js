@@ -5,7 +5,7 @@ import e from 'gEngine/engine'
 import app from 'ampersand-app'
 import {rootUrl} from 'servers/guesstimate-api/constants.js'
 import {captureApiError} from 'lib/errors/index.js'
-import {changeSaveState} from 'gModules/canvas_state/actions.js'
+import {changeActionState} from 'gModules/canvas_state/actions.js'
 import * as userActions from 'gModules/users/actions.js'
 import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
 
@@ -99,6 +99,32 @@ export function create(object) {
   }
 }
 
+export function copy(spaceId) {
+  return (dispatch, getState) => {
+    dispatch(changeActionState('COPYING'))
+
+    const cid = cuid()
+    const action = sActions.createStart({id:cid});
+
+    api(getState()).copies.create({spaceId}, (err, value) => {
+      if (err) {
+        dispatch(changeActionState('ERROR_COPYING'))
+        captureApiError('SpacesCreate', null, null, err, {url: 'SpacesCreate'})
+      }
+      else if (value) {
+        dispatch(changeActionState('COPIED'))
+        // Signal the resource was created.
+        dispatch(sActions.createSuccess(value, cid))
+        // And that we've fetched new data from it. We have to do this in this case as the new resource is pre-populated
+        // with some data.
+        dispatch(sActions.fetchSuccess([value]))
+
+        app.router.history.navigate('/models/' + value.id)
+      }
+    })
+  }
+}
+
 function getSpace(getState, spaceId) {
   let {spaces, metrics, guesstimates} = getState();
   return e.space.get(spaces, spaceId)
@@ -110,16 +136,16 @@ export function generalUpdate(spaceId, params) {
     const space = Object.assign({}, getSpace(getState, spaceId), params)
 
     dispatch(sActions.updateStart(space))
-    dispatch(changeSaveState('SAVING'))
+    dispatch(changeActionState('SAVING'))
 
     api(getState()).models.update(spaceId, params, (err, value) => {
       if (err) {
         captureApiError('SpacesUpdate', null, null, err, {url: 'SpacesUpdate'})
-        dispatch(changeSaveState('ERROR'))
+        dispatch(changeActionState('ERROR'))
       }
       else if (value) {
         dispatch(sActions.updateSuccess(value))
-        dispatch(changeSaveState('SAVED'))
+        dispatch(changeActionState('SAVED'))
       }
     })
   }

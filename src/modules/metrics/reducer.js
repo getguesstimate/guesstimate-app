@@ -2,10 +2,15 @@ function uniq(items) {
   return _.uniqBy(items.reverse(), 'id').reverse()
 }
 
+function spaceToMetrics(space) {
+  let metrics = _.get(space, 'graph.metrics')
+  return _.isEmpty(metrics) ? [] : metrics.map(m => ({...m, space: space.id}))
+}
+
 export default function metrics(state = [], action) {
   switch (action.type) {
   case 'SPACES_FETCH_SUCCESS':
-    let newMetrics = _.flatten(action.records.map(e => _.get(e, 'graph.metrics'))).filter(e => e)
+    let newMetrics = _.flatten(action.records.map(e => spaceToMetrics(e))).filter(e => e)
     return uniq([...state, ...newMetrics])
   case 'ADD_METRIC':
     return uniq([...state, action.item])

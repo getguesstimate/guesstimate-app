@@ -3,7 +3,6 @@ import Logo from '../../assets/logo-grey-2.png'
 import LogoWord from '../../assets/logo-word.png'
 import './style.css'
 import video from '../../assets/video-2.png'
-import ModelDemo from './ModelDemo/ModelDemo.js'
 
 export default class Home extends Component {
   displayName: 'Home'
@@ -74,12 +73,6 @@ export default class Home extends Component {
                 </p>
               </div>
             </div>
-          </div>
-        </div>
-
-        <div className='container-fluid full-width sectionExamples'>
-          <div className='wrap'>
-            <ModelDemo/>
           </div>
         </div>
       </div>
