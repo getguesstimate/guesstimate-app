@@ -32,10 +32,10 @@ export class Guesstimator {
   sample(n, externalInputs = []) {
     if (!_.isEmpty(this.parsedErrors)){
       return {errors: this.parsedErrors, values: []}
-    } else {
-      const samplerType = this.samplerType()
-      const sample = samplerType.sampler.sample(this.parsedInput, n, externalInputs)
-      return sample
     }
+
+    const samplerType = this.samplerType()
+    const sample = samplerType.sampler.sample(this.parsedInput, n, externalInputs)
+    return sample
   }
 }

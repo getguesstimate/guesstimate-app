@@ -11,6 +11,6 @@ export const item = Object.assign(
       const guesstimateType = this.guesstimateType(g)
       const [low, high] = this._numbers(g.text)
       return {guesstimateType, low, high }
-    },
+    }
   }
 )
