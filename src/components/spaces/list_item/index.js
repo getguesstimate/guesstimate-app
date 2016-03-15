@@ -35,7 +35,7 @@ let PrivateTag = ({isPrivate}) => (
   </div>
 )
 
-let SpaceListItem = ({space, showUser, isOwnedByMe, canUsePrivateModels}) => (
+let SpaceListItem = ({space, showUser, isOwnedByMe}) => (
   <div className='SpaceListItem'>
     <a href={Space.url(space)}>
     <div className='row'>
@@ -58,7 +58,7 @@ let SpaceListItem = ({space, showUser, isOwnedByMe, canUsePrivateModels}) => (
                 </div>
               }
 
-              {canUsePrivateModels && isOwnedByMe && <PrivateTag isPrivate={space.is_private}/>}
+              {isOwnedByMe && <PrivateTag isPrivate={space.is_private}/>}
             </div>
           </div>
     </div>
@@ -88,7 +88,6 @@ function mapStateToProps(state) {
 @connect(denormalizedSpaceSelector)
 export default class SpaceListItemComponent extends Component {
   render() {
-    const canUsePrivateModels = e.me.canUsePrivateModels(this.props.me)
     const isOwnedByMe = e.me.isOwnedByMe(this.props.me, this.props.denormalizedSpace)
     if (!!this.props.denormalizedSpace){
       return (
@@ -96,7 +95,6 @@ export default class SpaceListItemComponent extends Component {
           space={this.props.denormalizedSpace}
           showUser={this.props.showUser}
           isOwnedByMe={isOwnedByMe}
-          canUsePrivateModels={canUsePrivateModels}
         />
       )
     } else {
