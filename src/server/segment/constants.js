@@ -5,4 +5,3 @@ export const API_KEY = (__API_ENV__ === 'development') ? DEV_API_KEY : PRODUCTIO
 
 // Event Tracking Constants
 export const PURCHASE_SUCCESS_ACTION = "Successful Purchase"
-export const PURCHASE_FAILURE_ACTION = "Failed Purchase"
