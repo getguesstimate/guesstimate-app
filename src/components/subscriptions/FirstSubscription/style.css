@@ -11,7 +11,8 @@
 
 .FirstSubscription .large-icon{
   font-size: 18em;
-  color: #DCE6CB;
+  color: $grey-2;
+  opacity: 0.2;
 }
 
 .FirstSubscription .NewOrder{
