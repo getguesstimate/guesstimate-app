@@ -1,18 +1,27 @@
+@import './styles/variables.css';
+
 .FirstSubscriptionPage {
-  color: white;
   font-family: 'Lato';
-  text-align: center;
+  margin-top: 2em;
 }
 
 .FirstSubscriptionPage .header{
-  width: 100%;
-  text-align: center;
   margin-bottom: 3em;
 }
 
 .FirstSubscriptionPage .header h1{
   font-size: 3em;
-  opacity: 0.7;
-  font-weight: 200;
+  font-weight: 400;
+  color: $grey-2;
+}
+
+.FirstSubscriptionPage h2{
+  color: #666;
+  font-weight: 400;
+  margin-top: 0.5em;
+}
+
+.FirstSubscriptionPage .thingy {
+  color: $blue-1;
 }
 
