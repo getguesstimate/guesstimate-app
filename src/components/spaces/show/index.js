@@ -98,7 +98,6 @@ export default class SpacesShow extends Component {
   render() {
     const space = this.props.denormalizedSpace;
     const sidebarIsViseable = !!space && (space.ownedByMe || !_.isEmpty(space.description))
-    const canUsePrivateModels = e.me.canUsePrivateModels(this.props.me)
     const canMakeMorePrivateModels = e.me.canMakeMorePrivateModels(this.props.me)
     const isLoggedIn = e.me.isLoggedIn(this.props.me)
     return (
@@ -117,7 +116,6 @@ export default class SpacesShow extends Component {
                     onCopy={this._handleCopy.bind(this)}
                     onDestroy={this.destroy.bind(this)}
                     space={space}
-                    canUsePrivateModels={canUsePrivateModels}
                     canMakeMorePrivateModels={canMakeMorePrivateModels}
                     onPublicSelect={this.onPublicSelect.bind(this)}
                     onPrivateSelect={this.onPrivateSelect.bind(this)}

@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react'
 import { connect } from 'react-redux';
 import Settings from './Settings.js'
+import * as meActions from 'gModules/me/actions.js'
 
 function mapStateToProps(state) {
   return {
@@ -11,6 +12,7 @@ function mapStateToProps(state) {
 @connect(mapStateToProps)
 export default class SettingsContainer extends Component{
   displayName: 'SettingsContainer'
+  _refreshMe() { this.props.dispatch(meActions.guesstimateMeLoad()) }
   render() {
     const {me} = this.props
     const portalUrl = _.get(me, 'profile.account._links.payment_portal.href')
@@ -20,6 +22,7 @@ export default class SettingsContainer extends Component{
         planId={planId}
         portalUrl={portalUrl}
         onClose={this.props.onClose}
+        onRefresh={this._refreshMe.bind(this)}
       />
     )
   }

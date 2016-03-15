@@ -19,13 +19,14 @@ const PlanUpgradeButton = () => (
   </a>
 )
 
-const PortalButton = ({url}) => (
-  <a className='ui button black portal' href={url} target='_blank'>
+// The portal url only can be clicked once.  Then, we need a new one.
+const PortalButton = ({url, onRefresh}) => (
+  <a className='ui button black portal' href={url} target='_blank' onMouseUp={onRefresh}>
     {'Edit Plan & Payment Details'}
   </a>
 )
 
-const PlanUpgradeSection = ({planId, portalUrl}) => {
+const PlanUpgradeSection = ({planId, portalUrl, onRefresh}) => {
   const hasPortalUrl = !!portalUrl
   if (planId === 'personal_infinite') { return <div/> }
   else {
@@ -34,7 +35,7 @@ const PlanUpgradeSection = ({planId, portalUrl}) => {
         <hr/>
         <div className='Settings-Upgrade'>
           {!hasPortalUrl && <PlanUpgradeButton/>}
-          {hasPortalUrl && <PortalButton url={portalUrl}/>}
+          {hasPortalUrl && <PortalButton url={portalUrl} onRefresh={onRefresh}/>}
         </div>
       </div>
     )
@@ -49,7 +50,7 @@ export default class Settings extends Component{
   }
 
   render () {
-    const {planId, portalUrl} = this.props
+    const {planId, portalUrl, onRefresh} = this.props
 
     return (
       <div className='Settings'>
@@ -67,7 +68,7 @@ export default class Settings extends Component{
                   <PlanC planId={planId} privateModelLimit={0}/>
                 </div>
 
-                <PlanUpgradeSection planId={planId} portalUrl={portalUrl}/>
+                <PlanUpgradeSection planId={planId} portalUrl={portalUrl} onRefresh={onRefresh}/>
               </div>
             </Card>
           </div>
