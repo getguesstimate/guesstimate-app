@@ -117,7 +117,7 @@ export const SynchronizationStart = () => ( <Message text='Synchronizing...'/>)
 
 export const SynchronizationFailure = () => (
   <Message>
-    <h2>Synchronization Failed.</h2>
-    <h3>Try refreshing the browser.</h3>
+    <h2>Synchronization Failed</h2>
+    <h3>Try refreshing the browser</h3>
   </Message>
 )
