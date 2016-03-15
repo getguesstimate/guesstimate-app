@@ -5,8 +5,8 @@ import {connect} from 'react-redux'
 const newStyle = (height, hidden) => {
   let style = `
     width: 400px;
-    border: 4px solid rgb(250,250,250);
-    border-radius: 3px;
+    border: none;
+    border-radius: 5px;
     overflow: hidden;
   `
   style += 'height:' + (height + 10) + 'px;'

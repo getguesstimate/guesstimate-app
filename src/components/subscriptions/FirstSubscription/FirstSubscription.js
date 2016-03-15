@@ -3,6 +3,14 @@ import {subStages} from 'gModules/first_subscription/state_machine.js'
 import NewOrder from './NewOrder.js'
 import './style.css'
 
+export const SynchronizationSuccess = () => (
+  <Message>
+    <i className='ion-ios-planet large-icon'/>
+    <h2>You now have access to private models!</h2>
+    <a className='ui button blue huge' href='/models/new'> {'Create A Private Model'} </a>
+  </Message>
+)
+
 export default class FirstSubscription extends Component {
   displayName: 'SubscriptionIframe'
 
@@ -81,14 +89,35 @@ export const FormSuccess = ({iframeUrl, iframeWebsiteName, onPaymentCancel, onPa
 )
 
 export const Unnecessary = ({paymentAccountPortalUrl}) => (
-  <div> Please go to the portal to edit your subscriptions
-    <a href={paymentAccountPortalUrl} className='ui button blue'> Portal </a>
+  <Message>
+    <h2> Go to your portal to edit your plan</h2>
+    <a href={paymentAccountPortalUrl} className='ui button blue huge'> Portal </a>
+  </Message>
+)
+
+export const Message = ({text, children}) => (
+  <div className='GeneralMessage'>
+    {text &&
+      <h2> {text} </h2>
+    }
+    {children && children}
   </div>
 )
 
-export const Cancelled = () => ( <div> Payment Cancelled.  Refresh to try again. </div> )
-export const FormStart = () => ( <div> Loading... </div> )
-export const FormFailure = () => ( <div> The form failed loading.  Try again soon. </div> )
-export const SynchronizationStart = () => ( <div> Synchronizing... </div> )
-export const SynchronizationSuccess = () => ( <div> Payment Complete. </div> )
-export const SynchronizationFailure = () => ( <div> Synchronization Failed.  You have paid.  Contact Ozzie if there are issues with this. </div> )
+export const Cancelled = () => (
+  <Message>
+    <h2>Payment Cancelled.</h2>
+    <h3> Refresh to try again.</h3>
+  </Message>
+)
+
+export const FormStart = () => ( <Message text='Loading...'/>)
+export const FormFailure = () => ( <Message text='The form failed loading.  Try again soon.' />)
+export const SynchronizationStart = () => ( <Message text='Synchronizing...'/>)
+
+export const SynchronizationFailure = () => (
+  <Message>
+    <h2>Synchronization Failed.</h2>
+    <h3>Try refreshing the browser.</h3>
+  </Message>
+)

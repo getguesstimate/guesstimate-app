@@ -24,18 +24,25 @@ export default class FirstSubscriptionPage extends Component {
     return (
       <Container>
         <div className='FirstSubscriptionPage'>
-          <div className='header'>
-            <h1> {`The ${this.props.planName.capitalizeFirstLetter()} Plan`}</h1>
+          <div className='row'>
+            <div className='col-sm-5 col-sm-offset-1'>
+              <div className='header'>
+                <h1> {`The ${this.props.planName.capitalizeFirstLetter()} Plan`}</h1>
+                <h2> <span className='thingy'> 100</span> private models </h2>
+              </div>
+            </div>
+            <div className='col-sm-5'>
+              {!!me.id && planId &&
+                <FirstSubscriptionContainer planId={planId}/>
+              }
+              {!!me.id && !planId &&
+                <h2> Plan Invalid </h2>
+              }
+              {!me.id &&
+                <h2> Log in to view this page </h2>
+              }
+            </div>
           </div>
-          {!!me.id && planId &&
-            <FirstSubscriptionContainer planId={planId}/>
-          }
-          {!!me.id && !planId &&
-            <h2> Plan Invalid </h2>
-          }
-          {!me.id &&
-            <h2> Log in to view this page </h2>
-          }
         </div>
       </Container>
     )

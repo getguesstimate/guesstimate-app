@@ -70,7 +70,7 @@ export default Router.extend({
   terms() { this.render(<TermsAndConditions/>) },
   privacy() { this.render(<PrivacyPolicy/>) },
   faq() { this.render(<FAQ/>) },
-  subscribe(id) { this.render(<FirstSubscriptionPage planName={id}/>, {backgroundColor: 'BLUE'}) },
+  subscribe(id) { this.render(<FirstSubscriptionPage planName={id}/>) },
   userShow(id) { this.render(<UserShow userId={id}/>) },
   pricing() { this.render(<PlanIndex/>, {backgroundColor: 'BLUE'}) },
 })
