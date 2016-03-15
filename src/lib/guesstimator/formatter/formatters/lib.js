@@ -54,18 +54,19 @@ export const normalTextMixin = Object.assign(
     },
     _matchesText(text) { return this._hasRelevantSymbol(text) },
     _normalTextErrors(text) {
-      let errs = []
-      if (this._inputSymbols(text).length > 1) { errs.push('Must contain only 1 symbol') }
-      if (!_.every(this._numbers(text), (e) => isParseableNumber(e))) { errs.push('Not all numbers are parseable') }
-      else if (this._numbers(text)[0] >= this._numbers(text)[1]) { errs.push('Low -> High') }
+      if (this._inputSymbols(text).length > 1) { return ['Must contain only 1 symbol'] }
 
-      return errs
+      const numbers = this._numbers(text)
+      if (numbers.length !== 2) { return ['Must contain 2 inputs'] }
+      if (!_.every(numbers, (e) => isParseableNumber(e))) { return ['Not all numbers are parseable'] }
+      if (numbers[0] >= numbers[1]) { return ['Low number must be first'] }
+
+      return []
     },
 
-    _numbers(text) { return this._splitNumbersAt(text, this._relevantSymbol(text)) },
     _inputSymbols(text) { return this._symbols.filter(e => (text.includes(e))) },
-    _splitNumbersAt(text, symbol) { return text.split(symbol).map((e) => parseNumber(e.trim())); },
     _relevantSymbol(text) { return this._inputSymbols(text)[0] },
-    _hasRelevantSymbol(text) { return (this._inputSymbols(text).length > 0) }
+    _hasRelevantSymbol(text) { return (this._inputSymbols(text).length > 0) },
+    _splitNumbersAt(text, symbol) { return text.split(symbol).map((e) => parseNumber(e.trim())); }
   }
 )
