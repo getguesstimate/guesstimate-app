@@ -2,6 +2,18 @@ import React, {Component, PropTypes} from 'react'
 import $ from 'jquery'
 import {connect} from 'react-redux'
 
+const newStyle = (height, hidden) => {
+  let style = `
+    width: 400px;
+    border: 4px solid rgb(250,250,250);
+    border-radius: 3px;
+    overflow: hidden;
+  `
+  style += 'height:' + (height + 10) + 'px;'
+  hidden && (style += 'display:none;')
+  return style
+}
+
 export default class NewOrder extends Component {
   componentDidMount() {
     const iframeContainer = '.NewOrder'
@@ -11,24 +23,16 @@ export default class NewOrder extends Component {
       addIframe(iframe) {
         $(iframeContainer).append(iframe)
       },
-      onLoad(iframe, width, height) {
-        var style= 'border:none;overflow:hidden;width:500px;';
-        style = style + 'height:' + height + 'px;';
-        style = style + 'display:none;';//This is for slide down effect
-        iframe.setAttribute('style', style);
+      onLoad(iframe, _width, height) {
         $(iframe).show()
+        iframe.setAttribute('style', newStyle(height, true));
+        $(iframe).fadeIn(500)
       },
-      onResize(iframe, width, height) {
-        var style= 'border:none;overflow:hidden;width:500px;';
-        style = style + 'height:' + height + 'px;';
-        iframe.setAttribute('style',style);
+      onResize(iframe, _width, height) {
+        iframe.setAttribute('style', newStyle(height, false));
       },
-      onSuccess(iframe) {
-        onSuccess()
-      },
-      onCancel(iframe){
-        onCancel()
-      }
+      onSuccess(iframe) { onSuccess() },
+      onCancel(iframe){ onCancel() }
      })
   }
 
