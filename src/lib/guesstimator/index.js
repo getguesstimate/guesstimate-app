@@ -13,8 +13,8 @@ export class Guesstimator {
 
   constructor({unparsedInput, parsedErrors, parsedInput}){
     this.unparsedInput = unparsedInput;
+    this.parsedErrors = parsedErrors || [];
     this.parsedInput = parsedInput;
-    this.parsedErrors = parsedErrors;
   }
 
   hasParsingErrors() {
@@ -30,6 +30,10 @@ export class Guesstimator {
   }
 
   sample(n, externalInputs = []) {
+    if (!_.isEmpty(this.parsedErrors)){
+      return {errors: this.parsedErrors, values: []}
+    }
+
     const samplerType = this.samplerType()
     const sample = samplerType.sampler.sample(this.parsedInput, n, externalInputs)
     return sample
