@@ -40,7 +40,7 @@ export default class NewSpaceFormContainer extends Component {
             <div className='col-md-2'>
             </div>
             <div className='col-md-8'>
-              <h2> Create a New Public Model </h2>
+              <h2> Create a New Model </h2>
               <br/>
               <form onSubmit={this.onSubmit.bind(this)} className='ui form' ref='form'>
                   <div className='field'>
