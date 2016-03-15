@@ -36,6 +36,20 @@ describe('Guesstimator', () => {
       expect(samples.values).to.deep.eq([34])
     })
 
+    describe('with a formatting error', () => {
+      const parsedInput = {guesstimateType: 'POINT', value: 3}
+      const parsedErrors = ['Terrible Error!']
+      const guesstimator = new Guesstimator({parsedInput, parsedErrors})
+
+      it(`does not sample`, () => {
+        expect(guesstimator.sample(1).values.length).to.equal(0)
+      })
+
+      it(`returns errors`, () => {
+        expect(guesstimator.sample(1).errors).to.deep.equal(parsedErrors)
+      })
+    })
+
     describe('normal guesstimateType', () => {
       const examples = [
         [{guesstimateType: 'NORMAL', low: 9, high: 10}, 1],
