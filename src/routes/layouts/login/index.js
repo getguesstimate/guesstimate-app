@@ -11,6 +11,7 @@ import * as modalActions from 'gModules/modal/actions.js'
 import * as navigationActions from 'gModules/navigation/actions.js'
 import Icon from 'react-fa'
 import './style.css'
+import {trackAccountModalClick, trackUserMenuOpen, trackUserMenuClose} from 'server/segment/index.js'
 
 import { connect } from 'react-redux';
 
@@ -32,6 +33,7 @@ export default class Profile extends Component {
   }
 
   _openModal() {
+    trackAccountModalClick()
     this.props.dispatch(modalActions.openSettings())
   }
 
@@ -49,6 +51,8 @@ export default class Profile extends Component {
         <DropDown
             headerText={profile.name}
             openLink={<img className='avatar' src={profile.picture}/>}
+            onOpen={trackUserMenuOpen}
+            onClose={trackUserMenuClose}
             ref='dropdown'
         >
           <ul>
@@ -90,7 +94,7 @@ export default class Profile extends Component {
       }
 
       { !isLoggedIn &&
-        <a className={'item text'}onClick={this.signUp.bind(this)}>Sign Up</a>
+        <a className={'item text'} onClick={this.signUp.bind(this)}>Sign Up</a>
       }
     </div>
     )
