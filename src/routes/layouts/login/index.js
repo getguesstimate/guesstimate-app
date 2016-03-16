@@ -39,9 +39,9 @@ export default class Profile extends Component {
     const profile = this.props.me.profile
 
     let listElements = [
-      {icon: 'user', header: 'account', onMouseDown: this._openModal.bind(this)},
-      {icon: 'question', header: 'FAQ', onMouseDown: () => {navigationActions.navigate('/faq')}},
-      {icon: 'sign-out', header: 'Sign Out', onMouseDown: this.logOut.bind(this)}
+      {ionicIcon: 'md-person', header: 'account', onMouseDown: this._openModal.bind(this)},
+      {ionicIcon: 'md-help', header: 'FAQ', onMouseDown: () => {navigationActions.navigate('/faq')}},
+      {ionicIcon: 'md-log-out', header: 'Sign Out', onMouseDown: this.logOut.bind(this)}
     ]
 
     return (

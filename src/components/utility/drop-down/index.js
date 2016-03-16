@@ -32,9 +32,9 @@ export class DropDownListElement extends Component {
   }
 
   render() {
-    const {icon, image, header, isSelected, children} = this.props
+    const {icon, ionicIcon, image, header, isSelected, children} = this.props
     return (
-      <CardListElement icon={icon} image={image} header={header} isSelected={isSelected} onMouseDown={this._onMouseDown.bind(this)}>
+      <CardListElement icon={icon} ionicIcon={ionicIcon} image={image} header={header} isSelected={isSelected} onMouseDown={this._onMouseDown.bind(this)}>
         {children}
       </CardListElement>
     );

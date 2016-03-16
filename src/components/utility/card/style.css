@@ -119,6 +119,10 @@
   font-size: 1.25em;
 }
 
+.Card li .icons i{
+  font-size: 1.5em;
+}
+
 .Card li .action.hasChildren .icons{
   font-size: 2.5em;
 }
