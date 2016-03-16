@@ -6,13 +6,14 @@ import e from 'gEngine/engine'
 import DropDown from 'gComponents/utility/drop-down/index.js'
 import {DropDownListElement} from 'gComponents/utility/drop-down/index.js'
 import {SpaceName} from './spaceName.js'
-import {PrivacyToggleDropdown} from '../privacy-toggle/index.js'
+import {PrivacyToggle} from './privacy-toggle/index.js'
 import './header.css'
 
 const ProgressMessage = ({actionState}) => (
   <div className='saveMessage'>
     {actionState == 'SAVING' && 'Saving...'}
     {actionState == 'COPYING' && 'Copying...'}
+    {actionState == 'CREATING' && 'Creating a new model...'}
     {actionState == 'ERROR' &&
       <div className='ui red horizontal label'>
         ERROR SAVING
@@ -23,8 +24,14 @@ const ProgressMessage = ({actionState}) => (
         ERROR COPYING
       </div>
     }
+    {actionState == 'ERROR_CREATING' &&
+      <div className='ui red horizontal label'>
+        ERROR CREATING NEW MODEL
+      </div>
+    }
     {actionState == 'SAVED' && 'All changes saved'}
     {actionState == 'COPIED' && 'Successfully copied'}
+    {actionState == 'CREATED' && 'New model created'}
   </div>
 )
 
@@ -61,7 +68,7 @@ const SpaceHeader = ({canMakeMorePrivateModels, space, isLoggedIn, onSave, onCop
         }
 
         {space.ownedByMe &&
-          <PrivacyToggleDropdown
+          <PrivacyToggle
             headerText={'Privacy Options'}
             openLink={<a className='space-header-action'>{privacy_header}</a>}
             position='right'

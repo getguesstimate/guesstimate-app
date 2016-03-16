@@ -12,6 +12,7 @@ import * as navigationActions from 'gModules/navigation/actions.js'
 import Icon from 'react-fa'
 import './style.css'
 import {trackAccountModalClick, trackUserMenuOpen, trackUserMenuClose} from 'server/segment/index.js'
+import * as spaceActions from 'gModules/spaces/actions.js'
 
 import { connect } from 'react-redux';
 
@@ -30,6 +31,10 @@ export default class Profile extends Component {
 
   logOut(){
     this.props.dispatch(meActions.logOut())
+  }
+
+  newModel(){
+    this.props.dispatch(spaceActions.create())
   }
 
   _openModal() {
@@ -76,7 +81,7 @@ export default class Profile extends Component {
     <div className='header-right-menu'>
 
       { isLoggedIn &&
-        <a className='item' href={`/models/new`}>
+        <a className='item' onClick={this.newModel.bind(this)}>
           <i className={`ion-md-add`}/>
           <span className='text'>New Model</span>
         </a>
