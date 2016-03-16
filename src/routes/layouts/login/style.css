@@ -12,7 +12,7 @@
 
 .header-right-menu .item {
   float: left;
-  margin: 0.1em 0.9em 0;
+  margin: 0.1em 0 0 3.5em;
   color: $grey-2;
   transition: color 5s;
 }
@@ -31,7 +31,7 @@
   transition: color 0.3s;
 }
 
-.header-right-menu a.item .fa{
+.header-right-menu a.item i{
   transition: color 0.3s;
 }
 
@@ -39,16 +39,14 @@
   color: $blue-1;
 }
 
-.header-right-menu a.item:hover .fa{
+.header-right-menu a.item:hover i{
   color: $blue-1;
 }
 
-.header-right-menu a.item > .fa {
+.header-right-menu a.item > i {
   font-size: 1.8em;
   color: $grey-2;
-  border-radius: 2em;
-  padding: 0.3em;
-  margin-top: 0.1em;
+  margin: 0.3em 0.3em 0 0;
   float: left;
 }
 

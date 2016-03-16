@@ -77,14 +77,14 @@ export default class Profile extends Component {
 
       { isLoggedIn &&
         <a className='item' href={`/models/new`}>
-          <Icon name='plus'/>
+          <i className={`ion-md-add`}/>
           <span className='text'>New Model</span>
         </a>
       }
 
       { isLoggedIn && me.id &&
         <a className='item' href={`/users/${me.id}`}>
-          <Icon name='th-large'/>
+          <i className={`ion-md-albums`}/>
           <span className='text'>My Models</span>
         </a>
       }
