@@ -5,6 +5,6 @@ import './style.css'
 
 export const ButtonClose = ({onClick}) => (
   <a className='button-close' onClick={onClick}>
-    <Icon name='close'/>
+    <i className={`ion-md-close`}/>
   </a>
 )

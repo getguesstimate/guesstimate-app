@@ -15,6 +15,10 @@ export const LinkTerms = () => (
   <a href='/terms'> Terms of Service </a>
 )
 
+export const LinkPricing = () => (
+  <a href='/pricing'> Pricing </a>
+)
+
 export const LinkPrivacy = () => (
   <IubendaPrivacyPolicy id={7790420}>
     Privacy Policy

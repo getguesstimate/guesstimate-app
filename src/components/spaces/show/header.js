@@ -28,7 +28,7 @@ const ProgressMessage = ({actionState}) => (
   </div>
 )
 
-const SpaceHeader = ({canMakeMorePrivateModels, space, isLoggedIn, onSave, onCopy, onDestroy, onPublicSelect, onPrivateSelect, onSaveName, canUsePrivateModels}) => {
+const SpaceHeader = ({canMakeMorePrivateModels, space, isLoggedIn, onSave, onCopy, onDestroy, onPublicSelect, onPrivateSelect, onSaveName}) => {
   let privacy_header = (<span><Icon name='globe'/> Public</span>)
   if (space.is_private) {
     privacy_header = (<span><Icon name='lock'/> Private</span>)
@@ -60,7 +60,7 @@ const SpaceHeader = ({canMakeMorePrivateModels, space, isLoggedIn, onSave, onCop
           </DropDown>
         }
 
-        {space.ownedByMe && canUsePrivateModels &&
+        {space.ownedByMe &&
           <PrivacyToggleDropdown
             headerText={'Privacy Options'}
             openLink={<a className='space-header-action'>{privacy_header}</a>}

@@ -20,16 +20,8 @@ export default class NewSpaceFormContainer extends Component {
   onSubmit(e) {
     e.preventDefault()
     let params = serialize(this.refs.form, {hash: true})
-
-    if (this.canUsePrivateModels()) {
-      params['is_private'] = !this.refs['privacy-toggle'].isPublicSelected()
-    }
-
+    params['is_private'] = !this.refs['privacy-toggle'].isPublicSelected()
     this.props.dispatch(spaceActions.create(params))
-  }
-
-  canUsePrivateModels() {
-    return !!_.get(this.props,  'me.profile.has_private_access')
   }
 
   changeValidity(isValid) {
@@ -38,7 +30,6 @@ export default class NewSpaceFormContainer extends Component {
 
   render() {
     const {me} = this.props
-    const canUsePrivateModels = this.canUsePrivateModels()
     const canMakeMorePrivateModels = e.me.canMakeMorePrivateModels(me)
     let submitClasses = 'ui button primary'
     submitClasses += this.state.isValid ? '' : ' disabled'
@@ -49,7 +40,7 @@ export default class NewSpaceFormContainer extends Component {
             <div className='col-md-2'>
             </div>
             <div className='col-md-8'>
-              <h2> Create a New {canUsePrivateModels ? '' : 'Public'} Model </h2>
+              <h2> Create a New Model </h2>
               <br/>
               <form onSubmit={this.onSubmit.bind(this)} className='ui form' ref='form'>
                   <div className='field'>
@@ -58,21 +49,17 @@ export default class NewSpaceFormContainer extends Component {
                   </div>
                   <hr/>
 
-                  {canUsePrivateModels &&
-                    <div className='field'>
-                      <PrivacyToggle
-                        ref='privacy-toggle'
-                        isPrivateSelectionValid={canMakeMorePrivateModels}
-                        onPrivateSelect={() => {this.changeValidity(canMakeMorePrivateModels)}}
-                        onPublicSelect={() => {this.changeValidity(true)}}
-                      />
-                    </div>
-                  }
+                  <div className='field'>
+                    <PrivacyToggle
+                      ref='privacy-toggle'
+                      isPrivateSelectionValid={canMakeMorePrivateModels}
+                      onPrivateSelect={() => {this.changeValidity(canMakeMorePrivateModels)}}
+                      onPublicSelect={() => {this.changeValidity(true)}}
+                    />
+                  </div>
 
 
-                  {canUsePrivateModels &&
-                    <hr/>
-                  }
+                  <hr/>
                   <div className='field'>
                     <button type='submit' className={submitClasses}>
                       {'Create'}

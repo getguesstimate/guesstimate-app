@@ -11,6 +11,7 @@
     "start-production": "BUILD_DEV=0 NODE_ENV=development API_ENV=production webpack-dev-server",
 
     "stage!": "BUILD_DEV=0 npm run _build && npm run _stage",
+    "stage-payments!": "BUILD_DEV=0 npm run _build && surge -p public -d payments.getguesstimate.com",
     "deploy": "surge -p public -d https://www.getguesstimate.com",
 
     "test": "karma start",
