@@ -1,6 +1,9 @@
 import React, {Component, PropTypes} from 'react'
+import Icon from 'react-fa'
 import DropDown from 'gComponents/utility/drop-down/index.js'
 import {CardListElement} from 'gComponents/utility/card/index.js'
+import * as navigationActions from 'gModules/navigation/actions.js'
+
 import './style.css'
 
 const PublicOption = ({isSelected, onClick}) => (
@@ -25,7 +28,9 @@ const PrivateOption = ({onClick, isSelected, isPrivateSelectionInvalid}) => (
     <div>This model is only visible and editable by you.</div>
     {isPrivateSelectionInvalid &&
       <div className='warning'>
-        Upgrade your account to create more private models.
+        <button className='ui button green upgrade' onMouseDown={() => navigationActions.navigate('/pricing')}>
+          <Icon name="rocket"/> Get more private models
+        </button>
       </div>
     }
   </CardListElement>
