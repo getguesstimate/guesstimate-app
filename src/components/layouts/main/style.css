@@ -6,5 +6,5 @@ main.fluid{
 }
 
 main.blue{
-  background-color: $blue-4;
+  background: linear-gradient(-140deg, #4DC7B7, #489ACC);
 }
