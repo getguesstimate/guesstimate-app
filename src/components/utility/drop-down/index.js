@@ -46,6 +46,8 @@ export default class DropDown extends Component {
 
   static propTypes = {
     headerText: PropTypes.string.isRequired,
+    onOpen: PropTypes.func,
+    onClose: PropTypes.func,
   }
 
   constructor(props) {
@@ -67,11 +69,13 @@ export default class DropDown extends Component {
   _open() {
     this.setState({isOpen: true})
     document.addEventListener('click', this.handleDocumentClick, false);
+    if (this.props.onOpen) {this.props.onOpen()}
   }
 
   _close() {
     this.setState({isOpen: false})
     document.removeEventListener('click', this.handleDocumentClick, false);
+    if (this.props.onClose) {this.props.onClose()}
   }
 
   _toggle() {
