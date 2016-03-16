@@ -80,11 +80,10 @@ export function fetch({userId}) {
   }
 }
 
-export function create(object) {
+export function create() {
   return (dispatch, getState) => {
-
     const cid = cuid()
-    object = Object.assign(object, {id: cid})
+    const object = {id: cid}
     const action = sActions.createStart(object);
 
     api(getState()).models.create(object, (err, value) => {

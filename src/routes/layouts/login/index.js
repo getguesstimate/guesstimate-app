@@ -34,7 +34,7 @@ export default class Profile extends Component {
   }
 
   newModel(){
-    this.props.dispatch(spaceActions.create({}))
+    this.props.dispatch(spaceActions.create())
   }
 
   _openModal() {
