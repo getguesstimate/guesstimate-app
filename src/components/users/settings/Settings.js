@@ -19,7 +19,7 @@ const PlanUpgradeButton = () => (
   </a>
 )
 
-// The portal url only can be clicked once.  Then, we need a new one.
+// The portal url only can be clicked once.  Then,we need a new one.
 const PortalButton = ({url, onRefresh}) => (
   <a className='ui button black portal' href={url} target='_blank' onMouseUp={onRefresh}>
     {'Edit Plan & Payment Details'}
