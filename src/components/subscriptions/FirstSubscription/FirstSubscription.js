@@ -107,7 +107,7 @@ export const Message = ({text, children}) => (
 export const Cancelled = () => (
   <Message>
     <h2>Payment Cancelled.</h2>
-    <h3> Refresh to try again.</h3>
+    <h3>Refresh to try again.</h3>
   </Message>
 )
 
