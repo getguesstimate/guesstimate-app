@@ -27,6 +27,11 @@
   font-size: 1.45em;
 }
 
+.SpaceListItem a h3.default-value {
+  color: #aaa;
+  font-style: italic;
+}
+
 .SpaceListItem .user-tag {
   float: right;
   color: $grey-2;
