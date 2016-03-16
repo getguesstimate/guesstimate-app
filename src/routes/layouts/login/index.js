@@ -39,12 +39,18 @@ export default class Profile extends Component {
 
   profileDropdown () {
     const profile = this.props.me.profile
+    const portalUrl = _.get(profile, 'account._links.payment_portal.href')
 
     let listElements = [
       {ionicIcon: 'md-person', header: 'account', onMouseDown: this._openModal.bind(this)},
+      {icon: 'rocket', header: 'upgrade', onMouseDown: () => {navigationActions.navigate('/pricing')}},
       {ionicIcon: 'md-help', header: 'FAQ', onMouseDown: () => {navigationActions.navigate('/faq')}},
       {ionicIcon: 'md-log-out', header: 'Sign Out', onMouseDown: this.logOut.bind(this)}
     ]
+
+    if (!!portalUrl) {
+      listElements = [listElements[0], listElements[2], listElements[3]]
+    }
 
     return (
       <div className='item'>
