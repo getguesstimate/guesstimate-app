@@ -72,7 +72,7 @@ const SpaceHeader = ({canMakeMorePrivateModels, space, isLoggedIn, onSave, onCop
             headerText={'Privacy Options'}
             openLink={<a className='space-header-action'>{privacy_header}</a>}
             position='right'
-            isPrivateSelectionValid={canMakeMorePrivateModels}
+            isPrivateSelectionInvalid={!canMakeMorePrivateModels}
             isPrivate={space.is_private}
             onPublicSelect={onPublicSelect}
             onPrivateSelect={onPrivateSelect}
