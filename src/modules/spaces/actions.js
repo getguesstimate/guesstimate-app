@@ -84,13 +84,17 @@ export function create() {
   return (dispatch, getState) => {
     const cid = cuid()
     const object = {id: cid}
+
+    dispatch(changeActionState('CREATING'))
     const action = sActions.createStart(object);
 
     api(getState()).models.create(object, (err, value) => {
       if (err) {
+        dispatch(changeActionState('ERROR_CREATING'))
         captureApiError('SpacesCreate', null, null, err, {url: 'SpacesCreate'})
       }
       else if (value) {
+        dispatch(changeActionState('CREATED'))
         dispatch(sActions.createSuccess(value, cid))
         app.router.history.navigate('/models/' + value.id)
       }
