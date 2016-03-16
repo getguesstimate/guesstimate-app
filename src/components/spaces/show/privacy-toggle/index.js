@@ -1,6 +1,5 @@
 import React, {Component, PropTypes} from 'react'
 import DropDown from 'gComponents/utility/drop-down/index.js'
-import Card from 'gComponents/utility/card/index.js'
 import {CardListElement} from 'gComponents/utility/card/index.js'
 import './style.css'
 
@@ -59,59 +58,6 @@ class PrivacyToggle extends Component {
   static propTypes = {
     onPrivateSelect: PropTypes.func,
     onPublicSelect: PropTypes.func,
-    initialSelection: PropTypes.oneOf(['Public', 'Private']),
-    headerText: PropTypes.string,
-    isPrivateSelectionValid: PropTypes.bool.isRequired
-  }
-
-  static defaultProps = {
-    initialSelection: 'Public',
-  }
-
-  state = {isPublicSelected: this.props.initialSelection === 'Public'}
-
-  isPublicSelected() {
-    return this.state.isPublicSelected
-  }
-
-  onPrivateSelect() {
-    this.setState({isPublicSelected: false})
-  }
-
-  onPublicSelect() {
-    this.setState({isPublicSelected: true})
-  }
-
-  render() {
-    const {isPublicSelected} = this.state
-    const {isPrivateSelectionValid, headerText, openLink} = this.props
-
-    const list = (
-      <ul className={`PrivacyToggle`}>
-        <PublicOption
-          isSelected={isPublicSelected}
-          onClick={this.onPublicSelect.bind(this)}
-        />
-        <PrivateOption
-          isSelected={!isPublicSelected}
-          onClick={this.onPrivateSelect.bind(this)}
-          isPrivateSelectionValid={isPrivateSelectionValid}
-        />
-      </ul>
-    )
-    return (
-    <Card headerText={headerText} width='normal'>
-      {list}
-    </Card>
-    )
-  }
-}
-
-
-class PrivacyToggleDropdown extends Component {
-  static propTypes = {
-    onPrivateSelect: PropTypes.func,
-    onPublicSelect: PropTypes.func,
     isPrivate: PropTypes.bool,
     headerText: PropTypes.string,
     position: PropTypes.string,
@@ -145,4 +91,4 @@ class PrivacyToggleDropdown extends Component {
   }
 }
 
-export {PrivacyToggle, PrivacyToggleDropdown}
+export {PrivacyToggle}
