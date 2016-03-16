@@ -16,7 +16,7 @@ export class CardListElement extends Component {
     }
   }
   render() {
-    const {icon, image, header, children, url, isSelected, isDisabled} = this.props
+    const {icon, ionicIcon, image, header, children, url, isSelected, isDisabled} = this.props
 
     let className = 'action'
     if (isSelected) { className += ' selected' }
@@ -36,6 +36,9 @@ export class CardListElement extends Component {
             <div className={`col-xs-${small} icons`}>
               {icon &&
                 <Icon name={icon}/>
+              }
+              {ionicIcon &&
+                <i className={`ion-${ionicIcon}`}/>
               }
               {image &&
                 <img src={image}/>

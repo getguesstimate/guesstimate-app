@@ -32,9 +32,9 @@ export class DropDownListElement extends Component {
   }
 
   render() {
-    const {icon, image, header, isSelected, children} = this.props
+    const {icon, ionicIcon, image, header, isSelected, children} = this.props
     return (
-      <CardListElement icon={icon} image={image} header={header} isSelected={isSelected} onMouseDown={this._onMouseDown.bind(this)}>
+      <CardListElement icon={icon} ionicIcon={ionicIcon} image={image} header={header} isSelected={isSelected} onMouseDown={this._onMouseDown.bind(this)}>
         {children}
       </CardListElement>
     );
@@ -46,6 +46,8 @@ export default class DropDown extends Component {
 
   static propTypes = {
     headerText: PropTypes.string.isRequired,
+    onOpen: PropTypes.func,
+    onClose: PropTypes.func,
   }
 
   constructor(props) {
@@ -67,11 +69,13 @@ export default class DropDown extends Component {
   _open() {
     this.setState({isOpen: true})
     document.addEventListener('click', this.handleDocumentClick, false);
+    if (this.props.onOpen) {this.props.onOpen()}
   }
 
   _close() {
     this.setState({isOpen: false})
     document.removeEventListener('click', this.handleDocumentClick, false);
+    if (this.props.onClose) {this.props.onClose()}
   }
 
   _toggle() {

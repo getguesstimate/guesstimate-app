@@ -11,6 +11,7 @@ import * as modalActions from 'gModules/modal/actions.js'
 import * as navigationActions from 'gModules/navigation/actions.js'
 import Icon from 'react-fa'
 import './style.css'
+import {trackAccountModalClick, trackUserMenuOpen, trackUserMenuClose} from 'server/segment/index.js'
 
 import { connect } from 'react-redux';
 
@@ -32,23 +33,23 @@ export default class Profile extends Component {
   }
 
   _openModal() {
+    trackAccountModalClick()
     this.props.dispatch(modalActions.openSettings())
   }
 
   profileDropdown () {
     const profile = this.props.me.profile
-    const hasPrivateAccess = profile.has_private_access
+    const portalUrl = _.get(profile, 'account._links.payment_portal.href')
 
     let listElements = [
-      {icon: 'question', header: 'FAQ', onMouseDown: () => {navigationActions.navigate('/faq')}},
-      {icon: 'sign-out', header: 'Sign Out', onMouseDown: this.logOut.bind(this)}
+      {ionicIcon: 'md-person', header: 'account', onMouseDown: this._openModal.bind(this)},
+      {icon: 'rocket', header: 'upgrade', onMouseDown: () => {navigationActions.navigate('/pricing')}},
+      {ionicIcon: 'md-help', header: 'FAQ', onMouseDown: () => {navigationActions.navigate('/faq')}},
+      {ionicIcon: 'md-log-out', header: 'Sign Out', onMouseDown: this.logOut.bind(this)}
     ]
 
-    if (!!hasPrivateAccess) {
-      listElements = [
-        {icon: 'user', header: 'account', onMouseDown: this._openModal.bind(this)},
-        ...listElements
-      ]
+    if (!!portalUrl) {
+      listElements = [listElements[0], listElements[2], listElements[3]]
     }
 
     return (
@@ -56,6 +57,8 @@ export default class Profile extends Component {
         <DropDown
             headerText={profile.name}
             openLink={<img className='avatar' src={profile.picture}/>}
+            onOpen={trackUserMenuOpen}
+            onClose={trackUserMenuClose}
             ref='dropdown'
         >
           <ul>
@@ -74,14 +77,14 @@ export default class Profile extends Component {
 
       { isLoggedIn &&
         <a className='item' href={`/models/new`}>
-          <Icon name='plus'/>
+          <i className={`ion-md-add`}/>
           <span className='text'>New Model</span>
         </a>
       }
 
       { isLoggedIn && me.id &&
         <a className='item' href={`/users/${me.id}`}>
-          <Icon name='th-large'/>
+          <i className={`ion-md-albums`}/>
           <span className='text'>My Models</span>
         </a>
       }
@@ -97,7 +100,7 @@ export default class Profile extends Component {
       }
 
       { !isLoggedIn &&
-        <a className={'item text'}onClick={this.signUp.bind(this)}>Sign Up</a>
+        <a className={'item text'} onClick={this.signUp.bind(this)}>Sign Up</a>
       }
     </div>
     )
