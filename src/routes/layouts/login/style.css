@@ -17,9 +17,12 @@
   transition: color 5s;
 }
 
+.header-right-menu .item {
+  cursor: pointer;
+}
+
 .header-right-menu .item.text {
   margin-top: 1em;
-  cursor: pointer;
 }
 
 .isBare .header-right-menu .item.text {
