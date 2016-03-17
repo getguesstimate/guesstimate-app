@@ -1,7 +1,5 @@
 import {normalTextMixin} from './lib.js'
 
-// TODO(matthew): Can we get rid of this????
-
 export const item = Object.assign(
   {}, normalTextMixin,
   {
