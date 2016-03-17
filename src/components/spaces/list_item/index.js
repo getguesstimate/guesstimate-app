@@ -35,44 +35,49 @@ let PrivateTag = ({isPrivate}) => (
   </div>
 )
 
-let SpaceListItem = ({space, showUser, isOwnedByMe}) => (
-  <div className='SpaceListItem'>
-    <a href={Space.url(space)}>
-    <div className='row'>
-      <div className='col-xs-9'>
-        <h3> {space.name} </h3>
-        <p>Updated {formatDate(space.updated_at)}</p>
-      </div>
-          <div className='col-xs-3'>
-            <div className='row'>
-
-              {space.user && showUser &&
-                <div className='col-xs-12'>
-                  <div className='user-tag'>
-                    <img
-                        className='ui avatar image'
-                        src={space.user.picture}
-                    />
-                    {space.user.name}
-                  </div>
-                </div>
-              }
-
-              {isOwnedByMe && <PrivateTag isPrivate={space.is_private}/>}
-            </div>
-          </div>
-    </div>
-
-    {!_.isEmpty(space.description) &&
-      <div className='row description'>
-        <div className='col-xs-12'>
-          <p> {formatDescription(space.description)} </p>
+let SpaceListItem = ({space, showUser, isOwnedByMe}) => {
+  const hasName = !_.isEmpty(space.name)
+  const className = `text-editable ${hasName ? '' : 'default-value'}`
+  const showName = hasName ? space.name : 'Untitled Model'
+  return (
+    <div className='SpaceListItem'>
+      <a href={Space.url(space)}>
+      <div className='row'>
+        <div className='col-xs-9'>
+          <h3 className={className}> {showName} </h3>
+          <p>Updated {formatDate(space.updated_at)}</p>
         </div>
+            <div className='col-xs-3'>
+              <div className='row'>
+
+                {space.user && showUser &&
+                  <div className='col-xs-12'>
+                    <div className='user-tag'>
+                      <img
+                          className='ui avatar image'
+                          src={space.user.picture}
+                      />
+                      {space.user.name}
+                    </div>
+                  </div>
+                }
+
+                {isOwnedByMe && <PrivateTag isPrivate={space.is_private}/>}
+              </div>
+            </div>
       </div>
-    }
-    </a>
-  </div>
-)
+
+      {!_.isEmpty(space.description) &&
+        <div className='row description'>
+          <div className='col-xs-12'>
+            <p> {formatDescription(space.description)} </p>
+          </div>
+        </div>
+      }
+      </a>
+    </div>
+  )
+}
 
 function mapStateToProps(state) {
   return {

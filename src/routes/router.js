@@ -9,7 +9,6 @@ import Layout from './layouts/application'
 
 import Home from './home/index.js'
 import SpaceShow from 'gComponents/spaces/show'
-import SpaceNew from 'gComponents/spaces/new/index.js'
 import SpaceIndex from 'gComponents/spaces/index/index.js'
 import Maintenance from 'gComponents/pages/maintenance/index.js'
 import FAQ from 'gComponents/pages/faq/index.js'
@@ -41,7 +40,6 @@ export default Router.extend({
   routes: {
     '': 'home',
     'models': 'spaceIndex',
-    'models/new': 'spaceNew',
     'models/:id': 'spaceShow',
     'maintenance': 'maintenance',
     'faq': 'faq',
