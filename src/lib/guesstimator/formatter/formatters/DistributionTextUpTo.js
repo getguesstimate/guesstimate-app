@@ -1,5 +1,7 @@
 import {normalTextMixin} from './lib.js'
 
+// TODO(matthew): Can we get rid of this????
+
 export const item = Object.assign(
   {}, normalTextMixin,
   {
@@ -8,9 +10,12 @@ export const item = Object.assign(
     _symbols: ['->', ':'],
     _numbers(text) { return this._splitNumbersAt(text, this._relevantSymbol(text)) },
     format(g) {
-      const guesstimateType = this.guesstimateType(g)
       const [low, high] = this._numbers(g.text)
-      return {guesstimateType, low, high }
+      if (!(isNaN(low) || isNaN(high))) {
+        const guesstimateType = this.guesstimateType(g, low > 0 ? 'LOGNORMAL' : 'NORMAL')
+        return {guesstimateType, low, high }
+      }
+      return {}
     }
   }
 )

@@ -40,7 +40,7 @@ export const normalTextMixin = Object.assign(
   {}, textMixin,
   {
     errors(g) { return this._normalTextErrors(g.text) },
-    guesstimateType(g) {
+    guesstimateType(g, defaultValue) {
       switch (g.guesstimateType) {
         case 'UNIFORM':
           return g.guesstimateType
@@ -49,7 +49,7 @@ export const normalTextMixin = Object.assign(
         case 'LOGNORMAL':
           return g.guesstimateType
         default:
-          return 'NORMAL'
+          return defaultValue ? defaultValue : ''
       }
     },
     _matchesText(text) { return this._hasRelevantSymbol(text) },
