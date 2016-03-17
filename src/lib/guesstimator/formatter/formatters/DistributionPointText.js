@@ -10,7 +10,7 @@ export const item = Object.assign(
     format(g) {
       const {guesstimateType} = this
       const value = parseNumber(g.text)
-      return {guesstimateType, value}
+      return {precision: 6, guesstimateType, value}
     },
     _matchesText(g) { return true },
   }

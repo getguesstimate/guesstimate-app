@@ -10,7 +10,7 @@ export const item = Object.assign(
     format(g) {
       const guesstimateType = this.guesstimateType(g)
       const [low, high] = this._numbers(g.text)
-      return {guesstimateType, low, high }
+      return {precision: 2, guesstimateType, low, high }
     }
   }
 )

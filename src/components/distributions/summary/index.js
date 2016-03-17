@@ -31,8 +31,7 @@ class DistributionSummarySmall extends Component{
     stats: PropTypes.object,
   }
   render () {
-    let stats = this.props.stats;
-    let {mean, stdev, percentiles} = stats
+    let {mean, stdev, percentiles, precision} = this.props.stats
     let range = null
     if (_.isObject(percentiles)) {
       const [lowRange, highRange] = [(mean - percentiles[5]), (percentiles[95] - mean)]
@@ -40,7 +39,7 @@ class DistributionSummarySmall extends Component{
     }
     return (
       <div className="DistributionSummary">
-        <PrecisionNumber value={parseFloat(mean)} precision={8}/>
+        <PrecisionNumber value={parseFloat(mean)} precision={precision}/>
           {!!range && range !== 0 &&
           <Uncertainty range={range} />
           }
