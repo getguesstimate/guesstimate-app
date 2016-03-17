@@ -28,9 +28,10 @@ const PrivateOption = ({onClick, isSelected, isPrivateSelectionInvalid}) => (
     <div>This model is only visible and editable by you.</div>
     {isPrivateSelectionInvalid &&
       <div className='warning'>
-        <button className='ui button green upgrade' onMouseDown={() => navigationActions.navigate('/pricing')}>
-          <Icon name="rocket"/> Get more private models
-        </button>
+        <span className='upgrade' onClick={() => navigationActions.navigate('/pricing')}>
+          Upgrade
+        </span>
+        {' for more private models.'}
       </div>
     }
   </CardListElement>

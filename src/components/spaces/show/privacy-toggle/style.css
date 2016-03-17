@@ -1,10 +1,10 @@
 @import './styles/variables.css';
 
 .PrivacyToggle li .info-section .warning{
-  font-weight: 800;
+  color: $black-1
 }
 
 .PrivacyToggle li .info-section .warning .upgrade{
-  font-weight: 800;
-  margin-top: .5em;
+  cursor: pointer;
+  color: $blue-6;
 }
