@@ -4,6 +4,7 @@ import FirstSubscription from './FirstSubscription.js'
 import {subStage} from 'gModules/first_subscription/state_machine.js'
 import {connect} from 'react-redux'
 import {trackPurchaseSuccess} from 'servers/segment/index.js'
+import * as spaceActions from 'gModules/spaces/actions.js'
 
 function mapStateToProps(state) {
   return {
@@ -43,6 +44,8 @@ export default class FirstSubscriptionContainer extends Component {
   _iframeWebsiteName() { return _.get(this.props.firstSubscription, 'iframe.website_name') || '' }
   _flowStage() { return subStage(this.props.firstSubscription) }
 
+  _onNewModel() { this.props.dispatch(spaceActions.create()) }
+
   render() {
     return (
       <FirstSubscription
@@ -53,6 +56,7 @@ export default class FirstSubscriptionContainer extends Component {
         iframeWebsiteName={this._iframeWebsiteName()}
         onPaymentSuccess={this._onPaymentSuccess.bind(this)}
         onPaymentCancel={this._onPaymentCancel.bind(this)}
+        onNewModel={this._onNewModel.bind(this)}
         isTest={false}
       />
     )
