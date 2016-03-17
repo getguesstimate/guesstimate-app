@@ -3,11 +3,11 @@ import {subStages} from 'gModules/first_subscription/state_machine.js'
 import NewOrder from './NewOrder.js'
 import './style.css'
 
-export const SynchronizationSuccess = () => (
+export const SynchronizationSuccess = ({onNewModel}) => (
   <Message>
     <i className='ion-ios-planet large-icon'/>
     <h2>You now have access to private models!</h2>
-    <a className='ui button blue huge' href='/models/new'> {'Create A Private Model'} </a>
+    <a className='ui button blue huge'  onClick={onNewModel} > {'Create A Private Model'} </a>
   </Message>
 )
 
@@ -49,7 +49,7 @@ export default class FirstSubscription extends Component {
   }
 
   render() {
-    const {flowStage, isTest} = this.props
+    const {flowStage, isTest, onNewModel} = this.props
     return (
       <div className='FirstSubscription'>
         {(flowStage === 'UNNECESSARY') && <Unnecessary {...this._unnecessaryProps()}/>}
@@ -60,7 +60,7 @@ export default class FirstSubscription extends Component {
         {(flowStage === 'FORM_SUCCESS' && !isTest) && <FormSuccess {...this._formSuccessProps()} />}
         {(flowStage === 'FORM_SUCCESS' && isTest) && <TestFormSuccess {...this._formSuccessProps()} />}
         {(flowStage === 'SYNCHRONIZATION_START') && <SynchronizationStart/>}
-        {(flowStage === 'SYNCHRONIZATION_SUCCESS') && <SynchronizationSuccess/>}
+        {(flowStage === 'SYNCHRONIZATION_SUCCESS') && <SynchronizationSuccess onNewModel={onNewModel}/>}
         {(flowStage === 'SYNCHRONIZATION_FAILURE') && <SynchronizationFailure/>}
       </div>
     )
