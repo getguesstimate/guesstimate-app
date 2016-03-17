@@ -53,7 +53,7 @@ export function _inputMetricsWithValues(guesstimate: Guesstimate, dGraph: DGraph
       precision = Math.min(precision, item.parsedInput.precision)
     }
   })
-  precision = (precision === Number.POSITIVE_INFINITY ? 0 : precision)
+  precision = (precision === Number.POSITIVE_INFINITY ? 1 : precision)
 
   return {inputs, precision}
 }
