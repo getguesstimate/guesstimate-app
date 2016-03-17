@@ -1,16 +1,10 @@
 @import './styles/variables.css';
 
-.PrivacyToggle {
-  border: 1px solid #ddd;
-  border-radius: 3px;
-}
-
-.PrivacyToggle.dropdown {
-  border: 0;
-  border-radius: 0;
-  margin-bottom: 0;
-}
-
 .PrivacyToggle li .info-section .warning{
-  font-weight: 800;
+  color: $black-1
+}
+
+.PrivacyToggle li .info-section .warning .upgrade{
+  cursor: pointer;
+  color: $blue-6;
 }
