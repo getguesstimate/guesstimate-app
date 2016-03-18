@@ -40,7 +40,7 @@ export const confidenceIntervalTextMixin = Object.assign(
   {}, textMixin,
   {
     errors(g) { return this._confidenceIntervalTextErrors(g.text) },
-    guesstimateType(g, low, high) {
+    guesstimateType(g, low) {
       switch (g.guesstimateType) {
         case 'UNIFORM':
           return g.guesstimateType
@@ -49,7 +49,11 @@ export const confidenceIntervalTextMixin = Object.assign(
         case 'LOGNORMAL':
           return g.guesstimateType
         default:
-          return low > 0 ? 'LOGNORMAL' : 'NORMAL'
+          if (isFinite(low)) {
+            return low > 0 ? 'LOGNORMAL' : 'NORMAL'
+          } else {
+            return 'NORMAL'
+          }
       }
     },
     _matchesText(text) { return this._hasRelevantSymbol(text) },
