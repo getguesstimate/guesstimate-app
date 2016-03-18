@@ -53,9 +53,9 @@ export default class TextInput extends Component{
 
   //TODO: It would be nice to eventually refactor this to use guesstimator lib
   _isData(input) {
-    const isFunction = (input[0] === '=')
+    const isFunction = input.includes('=')
     const count = (input.match(/[\n\s,]/g) || []).length
-    return !isFunction && (count > 10)
+    return !isFunction && (count > 3)
   }
 
   _handleKeyDown(e) {
