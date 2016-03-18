@@ -11,16 +11,14 @@ function formatStat(n){
   }
 }
 
-class PrecisionNumber extends Component {
-  render (){
-    const number = numberShow(parseFloat(this.props.value))
-    return (
-      <span>
-        {number.value}{number.symbol}
-        {number.power && (<span>{`\u00b710`}<sup>{number.power}</sup></span>)}
-      </span>
-    )
-  }
+const PrecisionNumber = ({value, precision}) => {
+  const number = numberShow(value, precision)
+  return (
+    <span>
+      {number.value}{number.symbol}
+      {number.power && (<span>{`\u00b710`}<sup>{number.power}</sup></span>)}
+    </span>
+  )
 }
 
 const Uncertainty = ({range}) => (
@@ -33,16 +31,19 @@ class DistributionSummarySmall extends Component{
     stats: PropTypes.object,
   }
   render () {
-    let stats = this.props.stats;
-    let {mean, stdev, percentiles} = stats
+    const {length, mean, stdev, percentiles} = this.props.stats
+
     let range = null
     if (_.isObject(percentiles)) {
       const [lowRange, highRange] = [(mean - percentiles[5]), (percentiles[95] - mean)]
       range = (highRange + lowRange) / 2
     }
+
+    const precision = length === 1 ? 6 : 2
+
     return (
       <div className="DistributionSummary">
-        <PrecisionNumber value={mean}/>
+        <PrecisionNumber value={parseFloat(mean)} precision={precision}/>
           {!!range && range !== 0 &&
           <Uncertainty range={range} />
           }

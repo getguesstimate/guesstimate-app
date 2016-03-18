@@ -21,7 +21,8 @@ const orderOfMagnitude = (n) => {
 
 function withXSigFigs(number, sigFigs){
   const withPrecision = number.toPrecision(sigFigs)
-  const formatted = (number >= 10) ? Number(withPrecision) : withPrecision
+  //const formatted = (number >= 10) ? Number(withPrecision) : withPrecision
+  const formatted = Number(withPrecision)
   return `${formatted}`
 }
 
