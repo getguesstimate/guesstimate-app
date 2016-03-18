@@ -36,6 +36,10 @@ export const textMixin = {
   }
 }
 
+// We assume that if the user started at 0 or tried a negative number,
+// they intended for this to be normal.
+const isNotLogNormal = low => (isFinite(low) && (low <= 0))
+
 export const confidenceIntervalTextMixin = Object.assign(
   {}, textMixin,
   {
@@ -47,13 +51,10 @@ export const confidenceIntervalTextMixin = Object.assign(
         case 'NORMAL':
           return g.guesstimateType
         case 'LOGNORMAL':
-          return g.guesstimateType
+          return isNotLogNormal(low) ? 'NORMAL' : 'LOGNORMAL'
         default:
-          if (isFinite(low)) {
-            return low > 0 ? 'LOGNORMAL' : 'NORMAL'
-          } else {
-            return 'NORMAL'
-          }
+          if (!isFinite(low)) { return 'LOGNORMAL' }
+          return isNotLogNormal(low) ? 'NORMAL' : 'LOGNORMAL'
       }
     },
     _matchesText(text) { return this._hasRelevantSymbol(text) },
