@@ -27,8 +27,7 @@ export function destroy(object) {
     api(getState()).models.destroy({spaceId: id}, (err, value) => {
       if (err) {
         captureApiError('SpacesDestroy', null, null, err, {url: 'spacesfetch'})
-      }
-      else if (value) {
+      } else {
         dispatch(sActions.deleteSuccess({id}))
       }
     })
