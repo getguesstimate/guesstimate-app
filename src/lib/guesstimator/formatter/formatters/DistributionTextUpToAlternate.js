@@ -8,11 +8,8 @@ export const item = Object.assign(
     _symbols: ['['],
     format(g) {
       let [low, high] = this._numbers(g.text)
-      if (!(isNaN(low) || isNaN(high))) {
-        const guesstimateType = this.guesstimateType(g, low, high)
-        return {guesstimateType, low, high}
-      }
-      return {}
+      const guesstimateType = this.guesstimateType(g, low)
+      return {guesstimateType, low, high}
     },
     _numbers(text) {
       return this._splitNumbersAt(text.replace('[', '').replace(']', ''), ',')
