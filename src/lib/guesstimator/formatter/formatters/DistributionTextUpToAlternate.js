@@ -1,15 +1,15 @@
-import {normalTextMixin} from './lib.js'
+import {confidenceIntervalTextMixin} from './lib.js'
 
 export const item = Object.assign(
-  {}, normalTextMixin,
+  {}, confidenceIntervalTextMixin,
   {
     inputType: 'TEXT',
     formatterName: 'DISTRIBUTION_NORMAL_TEXT_UPTO',
     _symbols: ['['],
     format(g) {
-      const guesstimateType = this.guesstimateType(g)
-      const [low, high] = this._numbers(g.text)
-      return {guesstimateType, low, high }
+      let [low, high] = this._numbers(g.text)
+      const guesstimateType = this.guesstimateType(g, low)
+      return {guesstimateType, low, high}
     },
     _numbers(text) {
       return this._splitNumbersAt(text.replace('[', '').replace(']', ''), ',')
