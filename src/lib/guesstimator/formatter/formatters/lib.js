@@ -36,11 +36,11 @@ export const textMixin = {
   }
 }
 
-export const normalTextMixin = Object.assign(
+export const confidenceIntervalTextMixin = Object.assign(
   {}, textMixin,
   {
-    errors(g) { return this._normalTextErrors(g.text) },
-    guesstimateType(g, defaultValue) {
+    errors(g) { return this._confidenceIntervalTextErrors(g.text) },
+    guesstimateType(g, low, high) {
       switch (g.guesstimateType) {
         case 'UNIFORM':
           return g.guesstimateType
@@ -49,11 +49,11 @@ export const normalTextMixin = Object.assign(
         case 'LOGNORMAL':
           return g.guesstimateType
         default:
-          return defaultValue ? defaultValue : ''
+          return low > 0 ? 'LOGNORMAL' : 'NORMAL'
       }
     },
     _matchesText(text) { return this._hasRelevantSymbol(text) },
-    _normalTextErrors(text) {
+    _confidenceIntervalTextErrors(text) {
       if (this._inputSymbols(text).length > 1) { return ['Must contain only 1 symbol'] }
 
       const numbers = this._numbers(text)
