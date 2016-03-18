@@ -15,6 +15,7 @@ function sStats(simulation){
     const percentiles = {5: s1.percentile(5), 95: s1.percentile(95)}
     let stdev = hasNoStdev(values) ? 0 : s1.stddev()
     return {
+      precision: simulation.precision,
       mean:  s1.amean(),
       stdev:  stdev,
       length:  values.length,

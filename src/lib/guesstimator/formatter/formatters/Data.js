@@ -8,6 +8,7 @@ export const item = {
     format(g) {
       return {
         guesstimateType: this.guesstimateType,
+        precision: 6,
         data: g.data
       }
     },

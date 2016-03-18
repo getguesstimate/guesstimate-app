@@ -8,9 +8,10 @@ export const attributes = ['metric', 'input', 'guesstimateType', 'description', 
 export function sample(guesstimate: Guesstimate, dGraph: DGraph, n: number = 1): Object{
   const [errors, item] = Guesstimator.parse(guesstimate)
   const externalInputs = item.needsExternalInputs() ? _inputMetricsWithValues(guesstimate, dGraph) : []
-  const sample = item.sample(n, externalInputs)
+  const sample = item.sample(n, externalInputs.inputs)
+  const precision = item.parsedInput.precision ? item.parsedInput.precision : externalInputs.precision
   const metric = guesstimate.metric
-  return { metric, sample }
+  return { metric, sample, precision }
 }
 
 export function format(guesstimate: Guesstimate): Guesstimate{
@@ -40,8 +41,19 @@ export function inputMetrics(guesstimate: Guesstimate, dGraph: DGraph): Array<Ob
 }
 
 export function _inputMetricsWithValues(guesstimate: Guesstimate, dGraph: DGraph): Object{
+  const metrics = inputMetrics(guesstimate, dGraph)
+
   let inputs = {}
-  inputMetrics(guesstimate, dGraph)
-    .map(m => {inputs[m.readableId] = _.get(m, 'simulation.sample.values') })
-  return inputs
+  metrics.map(m => { inputs[m.readableId] = _.get(m, 'simulation.sample.values') })
+
+  let precision = Number.POSITIVE_INFINITY
+  metrics.map(m => {
+    const [errors, item] = Guesstimator.parse(m.guesstimate)
+    if (errors.length === 0) {
+      precision = Math.min(precision, item.parsedInput.precision)
+    }
+  })
+  precision = (precision === Number.POSITIVE_INFINITY ? 1 : precision)
+
+  return {inputs, precision}
 }
