@@ -1,7 +1,7 @@
-import {normalTextMixin} from './lib.js'
+import {confidenceIntervalTextMixin} from './lib.js'
 
 export const item = Object.assign(
-  {}, normalTextMixin,
+  {}, confidenceIntervalTextMixin,
   {
     inputType: 'TEXT',
     formatterName: 'DISTRIBUTION_NORMAL_TEXT_UPTO',
@@ -10,8 +10,8 @@ export const item = Object.assign(
     format(g) {
       const [low, high] = this._numbers(g.text)
       if (!(isNaN(low) || isNaN(high))) {
-        const guesstimateType = this.guesstimateType(g, low > 0 ? 'LOGNORMAL' : 'NORMAL')
-        return {guesstimateType, low, high }
+        const guesstimateType = this.guesstimateType(g, low, high)
+        return {guesstimateType, low, high}
       }
       return {}
     }
