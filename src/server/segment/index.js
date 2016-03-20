@@ -15,7 +15,7 @@ export function trackUser(userId, info) {
 }
 
 export function trackPurchaseSuccess(planType) {
-  window.analytics.track(PURCHASE_SUCCESS_ACTION, {plan: planType})
+  window.analytics.track(PURCHASE_SUCCESS_ACTION, {products: [{id: planType}]})
 }
 
 export function trackAccountModalClick() {
