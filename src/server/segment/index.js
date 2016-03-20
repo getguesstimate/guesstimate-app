@@ -14,8 +14,9 @@ export function trackUser(userId, info) {
   window.analytics.identify(userId, info)
 }
 
-export function trackPurchaseSuccess(planType) {
-  window.analytics.track(PURCHASE_SUCCESS_ACTION, {products: [{id: planType}]})
+export function trackPurchaseSuccess(account, planType) {
+  const orderId = `${account.id}-${Date.now()}` // The unique order for this account finishing right now.
+  window.analytics.track(PURCHASE_SUCCESS_ACTION, {orderId: orderId, products: [{id: planType}]})
 }
 
 export function trackAccountModalClick() {
