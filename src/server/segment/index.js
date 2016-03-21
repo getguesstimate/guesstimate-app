@@ -12,7 +12,7 @@ const PREMIUM_PLAN = "premium"
 // This function resolves any changes we make in the representation of plans into the unified language used across
 // Segment's commerce events.
 function segmentPlanType(rawPlanType) {
-  switch rawPlanType {
+  switch (rawPlanType) {
     case "lite":
       return LITE_PLAN
     case "premium":
