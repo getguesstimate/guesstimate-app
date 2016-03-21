@@ -16,7 +16,7 @@ function trackAddedProduct(planType) {
   })
 }
 
-function trackViewedProduct() {
+function trackViewedAllProducts() {
   window.analytics.track(VIEWED_PRODUCT_ACTION, {
     id: LITE_PLAN,
     name: LITE_PLAN
@@ -30,7 +30,7 @@ function trackViewedProduct() {
 const pageEvents = {
   "/subscribe/lite": () => {trackAddedProduct(LITE_PLAN)},
   "/subscribe/premium": () => {trackAddedProduct(PREMIUM_PLAN)},
-  "/pricing": trackViewedProduct
+  "/pricing": trackViewedAllProducts
 }
 
 export function pageLoad() {
