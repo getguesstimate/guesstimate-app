@@ -9,6 +9,17 @@ export function initialize() {
 const LITE_PLAN = "lite"
 const PREMIUM_PLAN = "premium"
 
+// This function resolves any changes we make in the representation of plans into the unified language used across
+// Segment's commerce events.
+function segmentPlanType(rawPlanType) {
+  switch rawPlanType {
+    case "lite":
+      return LITE_PLAN
+    case "premium":
+      return PREMIUM_PLAN
+  }
+}
+
 function trackAddedProduct(planType) {
   window.analytics.track(ADDED_PRODUCT_ACTION, {
     id: planType,
@@ -45,9 +56,18 @@ export function trackUser(userId, info) {
   window.analytics.identify(userId, info)
 }
 
-export function trackPurchaseSuccess(account, planType) {
+export function trackPurchaseSuccess(account, rawPlanType) {
+  const planType = segmentPlanType(rawPlanType)
   const orderId = `${account.id}-${Date.now()}` // The unique order for this account finishing right now.
-  window.analytics.track(PURCHASE_SUCCESS_ACTION, {orderId: orderId, products: [{id: planType}]})
+  window.analytics.track(PURCHASE_SUCCESS_ACTION, {
+    orderId: orderId,
+    products: [
+      {
+        id: planType,
+        name: planType
+      }
+    ]
+  })
 }
 
 export function trackAccountModalClick() {
