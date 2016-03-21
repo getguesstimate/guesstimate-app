@@ -5,6 +5,8 @@ export const API_KEY = (__API_ENV__ === 'development') ? DEV_API_KEY : PRODUCTIO
 
 // Event Tracking Constants
 export const PURCHASE_SUCCESS_ACTION = "Completed Order"
+export const ADDED_PRODUCT_ACTION = "Added Product"
+export const VIEWED_PRODUCT_ACTION = "Viewed Product"
 export const ACCOUNT_MODAL_CLICK = "Clicked account modal"
 export const USER_MENU_OPEN = "Opened user menu"
 export const USER_MENU_CLOSE = "Closed user menu"
