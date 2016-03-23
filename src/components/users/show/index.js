@@ -61,7 +61,7 @@ export default class UserShow extends Component{
 
             <div className='col-sm-9'>
               {spaces &&
-                <SpaceList spaces={spaces} showOrganizations={true} showUsers={false} hasMorePages={false}/>
+                <SpaceList spaces={spaces} showUsers={false} hasMorePages={false}/>
               }
             </div>
           </div>

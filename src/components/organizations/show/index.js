@@ -1,10 +1,8 @@
 import React, {Component, PropTypes} from 'react'
-import Icon from'react-fa'
 import { connect } from 'react-redux';
 import SpaceList from 'gComponents/spaces/list'
 import * as spaceActions from 'gModules/spaces/actions'
 import * as organizationActions from 'gModules/organizations/actions'
-import './style.css'
 import { organizationSpaceSelector } from './organizationSpaceSelector.js';
 import Container from 'gComponents/utility/container/Container.js'
 
@@ -27,17 +25,18 @@ export default class OrganizationShow extends Component{
 
   render () {
     const {organizationId, organizations} = this.props
+    // TODO(matthew): Where does this.props.organizationSpaces come from?
     const spaces =  _.orderBy(this.props.organizationSpaces.asMutable(), ['updated_at'], ['desc'])
-
-    let organization = null
-
-    if (organizations && organizations.length) {
-      organization = organizations.find(u => u.id.toString() === organizationId.toString())
-    }
+    // TODO(matthew): Why not do the select in the router?
+    // TODO(matthew): Right now, the spaces representer doesn't return either the user or organization (just their
+    // associated ids). As a result, the space list on organization page won't display the user and the space list on
+    // the user page won't display the organizations. Do we want this behavior (in particular for the organizational
+    // case?). If so, should we just embed the organization in the representer, or do a lookup in the spacelistitem.
+    const organization = organizations.find(u => u.id.toString() === organizationId.toString())
 
     return (
       <Container>
-        <div className='userShow'>
+        <div className='organizationShow'>
           <div className='GeneralSpaceIndex row'>
             <div className='col-sm-3'>
               <div className='row'>
@@ -54,7 +53,7 @@ export default class OrganizationShow extends Component{
 
             <div className='col-sm-9'>
               {spaces &&
-                <SpaceList spaces={spaces} showUsers={true} showOrganizations={false} hasMorePages={false}/>
+                <SpaceList spaces={spaces} showUsers={true} hasMorePages={false}/>
               }
             </div>
           </div>
