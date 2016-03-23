@@ -35,7 +35,7 @@ let PrivateTag = ({isPrivate}) => (
   </div>
 )
 
-let SpaceListItem = ({space, showUser, isOwnedByMe}) => {
+let SpaceListItem = ({space, showUser, showOrganization, isOwnedByMe}) => {
   const hasName = !_.isEmpty(space.name)
   const className = `text-editable ${hasName ? '' : 'default-value'}`
   const showName = hasName ? space.name : 'Untitled Model'
@@ -58,6 +58,13 @@ let SpaceListItem = ({space, showUser, isOwnedByMe}) => {
                           src={space.user.picture}
                       />
                       {space.user.name}
+                    </div>
+                  </div>
+                }
+                {space.organization && showOrganization &&
+                  <div className='col-xs-12'>
+                    <div className='user-tag'>
+                      {space.organization.name}
                     </div>
                   </div>
                 }

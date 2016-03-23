@@ -2,7 +2,7 @@ import React from 'react'
 import SpaceListItem from '../list_item'
 import './style.css'
 
-const SpaceList = ({spaces, showUsers, loadMore, hasMorePages}) => (
+const SpaceList = ({spaces, showUsers, showOrganizations, loadMore, hasMorePages}) => (
   <div className='SpaceList'>
     {spaces.map((s) => {
       return (
@@ -11,6 +11,7 @@ const SpaceList = ({spaces, showUsers, loadMore, hasMorePages}) => (
             spaceId={s.id}
             space={s}
             showUser={showUsers}
+            showOrganization={showOrganizations}
         />
       )
     })}

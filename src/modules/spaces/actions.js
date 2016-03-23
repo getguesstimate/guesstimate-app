@@ -63,11 +63,10 @@ export function fetchById(spaceId) {
 }
 
 //required userId for now, but later this can be optional
-export function fetch({userId}) {
+export function fetch({userId, organizationId}) {
   return (dispatch, getState) => {
     dispatch(sActions.fetchStart())
-
-    api(getState()).models.list({userId}, (err, value) => {
+    api(getState()).models.list({userId, organizationId}, (err, value) => {
       if (err) {
         captureApiError('SpacesFetch', null, null, err, {url: 'fetch'})
       }
