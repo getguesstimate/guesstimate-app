@@ -19,7 +19,7 @@ export function fetchById(organizationId) {
     api(getState()).organizations.get({organizationId}, (err, organization) => {
       if (err) {
         dispatch(displayErrorsActions.newError())
-        captureApiError('OrganizationssFetch', null, null, err, {url: 'fetch'})
+        captureApiError('OrganizationsFetch', null, null, err, {url: 'fetch'})
       } else if (organization) {
         dispatch(sActions.fetchSuccess([organization]))
       }
