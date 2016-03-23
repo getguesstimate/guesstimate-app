@@ -1,11 +1,11 @@
-import {actionCreatorsFor} from 'redux-crud';
-import $ from 'jquery'
+import {actionCreatorsFor} from 'redux-crud'
+import $ from 'jquery' // TODO(matthew): Is this needed at all?
 import * as displayErrorsActions from 'gModules/displayErrors/actions.js'
 import {rootUrl} from 'servers/guesstimate-api/constants.js'
-import {captureApiError, generalError} from 'lib/errors/index.js'
+import {captureApiError} from 'lib/errors/index.js'
 import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
 
-let sActions = actionCreatorsFor('organizations');
+let sActions = actionCreatorsFor('organizations')
 
 function api(state) {
   function getToken(state) {
