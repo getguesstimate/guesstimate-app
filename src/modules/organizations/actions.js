@@ -1,7 +1,6 @@
 import {actionCreatorsFor} from 'redux-crud'
 import $ from 'jquery' // TODO(matthew): Is this needed at all?
 import * as displayErrorsActions from 'gModules/displayErrors/actions.js'
-import {rootUrl} from 'servers/guesstimate-api/constants.js'
 import {captureApiError} from 'lib/errors/index.js'
 import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
 
@@ -24,13 +23,5 @@ export function fetchById(organizationId) {
         dispatch(sActions.fetchSuccess([organization]))
       }
     })
-  }
-}
-
-export function fromSearch(spaces) {
-  return (dispatch) => {
-    const organizations = spaces.map(s => s.organization_info)
-    const formatted = organizations.map(d => _.pick(d, ['id', 'name']))
-    dispatch(sActions.fetchSuccess(formatted))
   }
 }
