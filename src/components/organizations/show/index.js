@@ -25,9 +25,7 @@ export default class OrganizationShow extends Component{
 
   render () {
     const {organizationId, organizations} = this.props
-    // TODO(matthew): Where does this.props.organizationSpaces come from?
     const spaces =  _.orderBy(this.props.organizationSpaces.asMutable(), ['updated_at'], ['desc'])
-    // TODO(matthew): Why not do the select in the router?
     // TODO(matthew): Right now, the spaces representer doesn't return either the user or organization (just their
     // associated ids). As a result, the space list on organization page won't display the user and the space list on
     // the user page won't display the organizations. Do we want this behavior (in particular for the organizational
