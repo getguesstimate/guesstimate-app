@@ -1,12 +1,11 @@
 import {actionCreatorsFor} from 'redux-crud'
 import $ from 'jquery' // TODO(matthew): Is this needed at all?
 import * as displayErrorsActions from 'gModules/displayErrors/actions.js'
-import * as membershipActions from 'gModules/memberships/actions.js'
 import {rootUrl} from 'servers/guesstimate-api/constants.js'
 import {captureApiError} from 'lib/errors/index.js'
 import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
 
-let sActions = actionCreatorsFor('organizations')
+let sActions = actionCreatorsFor('memberships')
 
 function api(state) {
   function getToken(state) {
@@ -15,15 +14,15 @@ function api(state) {
   return setupGuesstimateApi(getToken(state))
 }
 
-export function fetchById(organizationId) {
+export function fetchByOrganizationId(organizationId) {
   return (dispatch, getState) => {
-    api(getState()).organizations.get({organizationId}, (err, organization) => {
+    api(getState()).organizations.getMembers({organizationId}, (err, members) => {
       if (err) {
         dispatch(displayErrorsActions.newError())
-        captureApiError('OrganizationsFetch', null, null, err, {url: 'fetch'})
-      } else if (organization) {
-        dispatch(membershipActions.fetchByOrganizationId(organizationId))
-        dispatch(sActions.fetchSuccess([organization]))
+        captureApiError('OrganizationsMemberFetch', null, null, err, {url: 'fetchMembers'})
+      } else if (members) {
+        const formatted = members.items.map(d => _.pick(d, ['id', 'user_id', 'organization_id']))
+        dispatch(sActions.fetchSuccess(formatted))
       }
     })
   }

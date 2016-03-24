@@ -1,9 +1,9 @@
 import { createSelector } from 'reselect';
 import e from 'gEngine/engine'
 
-const spaceGraphSelector = state => {return _.pick(state, 'spaces', 'metrics', 'guesstimates', 'simulations', 'users', 'me')};
-const spaceSelector = (state, props) => {return state.spaces.find(s => s.id.toString() === props.spaceId.toString())};
-const canvasStateSelector = state => {return state.canvasState};
+const spaceGraphSelector = state => { return _.pick(state, 'spaces', 'metrics', 'guesstimates', 'simulations', 'users', 'organizations', 'memberships', 'me') }
+const spaceSelector = (state, props) => {return state.spaces.find(s => s.id.toString() === props.spaceId.toString())}
+const canvasStateSelector = state => {return state.canvasState}
 
 export const denormalizedSpaceSelector = createSelector(
   spaceGraphSelector,

@@ -7,6 +7,7 @@ import {rootUrl} from 'servers/guesstimate-api/constants.js'
 import {captureApiError} from 'lib/errors/index.js'
 import {changeActionState} from 'gModules/canvas_state/actions.js'
 import * as userActions from 'gModules/users/actions.js'
+import * as organizationActions from 'gModules/organizations/actions.js'
 import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
 
 let sActions = actionCreatorsFor('spaces');
@@ -57,6 +58,17 @@ export function fetchById(spaceId) {
         const user_id = value.user_id
         const has_user = !!(users.find(e => e.id === user_id))
         if (!has_user) { dispatch(userActions.fetchById(user_id)) }
+
+        // TODO(matthew): Right now, the space has an embedded user and organization record... why are we doing this
+        // extra fetching?
+        if (value.organization_id) {
+          const organizations = getState().organizations
+          const organization_id = value.organization_id
+          const has_organization = !!(organizations.find(e => e.id === organization_id))
+          if (!has_organization) { 
+            dispatch(organizationActions.fetchById(organization_id))
+          }
+        }
       }
     })
   }
@@ -170,6 +182,7 @@ export function updateGraph(spaceId) {
     let space = e.space.get(spaces, spaceId)
     space = e.space.withGraph(space, {metrics, guesstimates});
     space.graph = _.omit(space.graph, 'simulations')
+    debugger
     const updates = {graph: space.graph}
 
     dispatch(generalUpdate(spaceId, updates))
