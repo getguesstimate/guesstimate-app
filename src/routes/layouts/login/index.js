@@ -42,7 +42,7 @@ export default class Profile extends Component {
     this.props.dispatch(modalActions.openSettings())
   }
 
-  profileDropdown () {
+  profileDropdown() {
     const profile = this.props.me.profile
     const portalUrl = _.get(profile, 'account._links.payment_portal.href')
 
@@ -74,13 +74,34 @@ export default class Profile extends Component {
     )
 
   }
+
+  newModelDropdown() {
+    const organizations = []
+    let listElements = [
+      {header: 'Personal', onMouseDown: this.newModel.bind(this)},
+    ]
+    return (
+        <DropDown
+          headerText={'Create a Model'}
+          openLink={<a className='item'> <i className={`ion-md-add`}/> <span className='text'>New Model</span> </a>}
+          ref='new-model'
+        >
+          <ul>
+            {listElements.map(element => <DropDownListElement {...element} closeOnClick={true} dropDown={this.refs.dropdown}/>)}
+          </ul>
+        </DropDown>
+    )
+  }
+
   render () {
     const {me, isLoggedIn} = this.props
+    const hasOrganizations = true
 
     return (
     <div className='header-right-menu'>
 
-      { isLoggedIn &&
+      { isLoggedIn && hasOrganizations && this.newModelDropdown() }
+      { isLoggedIn && !hasOrganizations &&
         <a className='item' onClick={this.newModel.bind(this)}>
           <i className={`ion-md-add`}/>
           <span className='text'>New Model</span>
