@@ -182,7 +182,6 @@ export function updateGraph(spaceId) {
     let space = e.space.get(spaces, spaceId)
     space = e.space.withGraph(space, {metrics, guesstimates});
     space.graph = _.omit(space.graph, 'simulations')
-    debugger
     const updates = {graph: space.graph}
 
     dispatch(generalUpdate(spaceId, updates))
@@ -190,9 +189,9 @@ export function updateGraph(spaceId) {
 }
 
 function meCanEdit(spaceId, state) {
-  const {spaces, me} = state
+  const {spaces, me, memberships} = state
   const space = e.space.get(spaces, spaceId)
-  return e.space.canEdit(space, me)
+  return e.space.canEdit(space, me, memberships)
 }
 
 export function registerGraphChange(spaceId) {

@@ -37,18 +37,21 @@ const organization = (space, graph) => {
   return graph.organizations.find(e => sameIds(e.id, space.organization_id))
 }
 
+const isMember = (organization_id, user_id, memberships) => (
+  !!_.find(memberships, m => (m.organization_id === organization_id && m.user_id === user_id))
+)
+
 export function toDgraph(spaceId, graph){
   let dGraph = _graph.denormalize(subset(graph, spaceId))
   const space = get(graph.spaces, spaceId)
   const spaceUser = user(space, graph)
-  const spaceOrganization = organization(space, graph)
   const memberships = graph.memberships
-  const amMember = !!_.find(memberships, m => (m.organization_id === _.get(spaceOrganization, 'id') && m.user_id === _.get(graph, 'me.id')))
+  const meId = _.get(graph, 'me.id')
   dGraph.user = spaceUser
-  dGraph.ownedByMe = sameIds(_.get(spaceUser, 'id'), _.get(graph, 'me.id')) || amMember
+  dGraph.ownedByMe = sameIds(space.user_id, meId) || isMember(space.organization_id, meId, memberships)
   return dGraph
 }
 
-export function canEdit(space, me){
-  return (space.user_id === me.id)
+export function canEdit(space, me, memberships){
+  return (space.user_id === me.id || isMember(space.organization_id, me.id, memberships))
 }
