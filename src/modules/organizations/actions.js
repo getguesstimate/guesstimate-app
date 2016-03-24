@@ -2,7 +2,6 @@ import {actionCreatorsFor} from 'redux-crud'
 import $ from 'jquery' // TODO(matthew): Is this needed at all?
 import * as displayErrorsActions from 'gModules/displayErrors/actions.js'
 import * as membershipActions from 'gModules/memberships/actions.js'
-import {rootUrl} from 'servers/guesstimate-api/constants.js'
 import {captureApiError} from 'lib/errors/index.js'
 import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
 
