@@ -1,8 +1,8 @@
 import AbstractResource from '../AbstractResource.js'
 
 export default class Models extends AbstractResource {
-  list(msg, callback) {
-    const url = `users/${msg.userId}/spaces`
+  list({userId, organizationId}, callback) {
+    const url = userId ? `users/${userId}/spaces` : `organizations/${organizationId}/spaces`
     const method = 'GET'
 
     this.guesstimateMethod({url, method})(callback)

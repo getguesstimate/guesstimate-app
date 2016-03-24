@@ -63,16 +63,15 @@ export function fetchById(spaceId) {
 }
 
 //required userId for now, but later this can be optional
-export function fetch({userId}) {
+export function fetch({userId, organizationId}) {
   return (dispatch, getState) => {
     dispatch(sActions.fetchStart())
-
-    api(getState()).models.list({userId}, (err, value) => {
+    api(getState()).models.list({userId, organizationId}, (err, value) => {
       if (err) {
         captureApiError('SpacesFetch', null, null, err, {url: 'fetch'})
       }
       else if (value) {
-        const formatted = value.items.map(d => _.pick(d, ['id', 'name', 'description', 'user_id', 'updated_at', 'metric_count', 'is_private']))
+        const formatted = value.items.map(d => _.pick(d, ['id', 'name', 'description', 'user_id', 'organization_id', 'updated_at', 'metric_count', 'is_private']))
         dispatch(sActions.fetchSuccess(formatted))
       }
     })
