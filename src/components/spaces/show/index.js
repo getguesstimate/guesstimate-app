@@ -97,7 +97,7 @@ export default class SpacesShow extends Component {
 
   render() {
     const space = this.props.denormalizedSpace;
-    const sidebarIsViseable = !!space && (space.ownedByMe || !_.isEmpty(space.description))
+    const sidebarIsViseable = !!space && (space.editableByMe || !_.isEmpty(space.description))
     const canMakeMorePrivateModels = e.me.canMakeMorePrivateModels(this.props.me)
     const isLoggedIn = e.me.isLoggedIn(this.props.me)
     return (
@@ -124,7 +124,7 @@ export default class SpacesShow extends Component {
             </div>
 
             <div className='col-sm-2'>
-              {space && space.user && !space.ownedByMe &&
+              {space && space.user && !space.editableByMe &&
                 <div>
                   <a className='ui image label' href={`/users/${space.user.id}`}>
                     <img src={space.user.picture}/>
