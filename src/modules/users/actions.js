@@ -3,6 +3,7 @@ import $ from 'jquery'
 import cuid from 'cuid'
 import * as meActions from 'gModules/me/actions.js'
 import * as displayErrorsActions from 'gModules/displayErrors/actions.js'
+import * as userOrganizationMembershipActions from 'gModules/userOrganizationMemberships/actions.js'
 import {rootUrl} from 'servers/guesstimate-api/constants.js'
 import {captureApiError, generalError} from 'lib/errors/index.js'
 import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
@@ -48,6 +49,7 @@ export function fetchById(userId) {
         if (getState().me.id === user.id){
           dispatch(meActions.guesstimateMeLoaded(user))
         }
+        dispatch(userOrganizationMembershipActions.fetchByUserId(userId))
       }
     })
   }
