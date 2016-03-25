@@ -1,7 +1,7 @@
 import * as _graph from './graph'
 import * as _metric from './metric'
 import * as _guesstimate from './guesstimate'
-import * as _UserOrganizationMemberships from './userOrganizationMemberships'
+import * as _userOrganizationMemberships from './userOrganizationMemberships'
 
 export function url (space) {
   return (!!space) ? ('/models/' + space.id) : ''
@@ -43,12 +43,12 @@ export function toDgraph(spaceId, graph){
   const space = get(graph.spaces, spaceId)
   const spaceUser = user(space, graph)
   const userOrganizationMemberships = graph.userOrganizationMemberships
-  const meId = _.get(graph, 'me.id')
   dGraph.user = spaceUser
-  dGraph.ownedByMe = sameIds(space.user_id, meId) || _UserOrganizationMemberships.isMember(space.organization_id, meId, userOrganizationMemberships)
+  dGraph.editableByMe = canEdit(space, me, userOrganizationMemberships)
   return dGraph
 }
 
 export function canEdit(space, me, userOrganizationMemberships){
-  return (space.user_id === me.id || _UserOrganizationMemberships.isMember(space.organization_id, me.id, userOrganizationMemberships))
+  const meId = _.get(me, 'id')
+  return (space.user_id === meId || _userOrganizationMemberships.isMember(space.organization_id, meId, userOrganizationMemberships))
 }
