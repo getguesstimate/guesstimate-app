@@ -1,5 +1,4 @@
 import {actionCreatorsFor} from 'redux-crud'
-import $ from 'jquery' // TODO(matthew): Is this needed at all?
 import * as displayErrorsActions from 'gModules/displayErrors/actions.js'
 import * as userActions from 'gModules/users/actions.js'
 import {rootUrl} from 'servers/guesstimate-api/constants.js'
