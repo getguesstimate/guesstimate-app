@@ -77,9 +77,8 @@ export default class Profile extends Component {
 
   newModelDropdown() {
     const organizations = []
-    let listElements = [
-      {header: 'Personal', onMouseDown: this.newModel.bind(this)},
-    ]
+    let listElements = [ {header: 'Personal', onMouseDown: this.newModel.bind(this)} ]
+    listElements.concat(organizations.map(o => ({header: o.name, onMouseDown: this.newModel.bind(this)})))
     return (
         <DropDown
           headerText={'Create a Model'}
