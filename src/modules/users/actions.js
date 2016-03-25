@@ -3,6 +3,7 @@ import $ from 'jquery'
 import cuid from 'cuid'
 import * as meActions from 'gModules/me/actions.js'
 import * as displayErrorsActions from 'gModules/displayErrors/actions.js'
+import * as userOrganizationMembershipActions from 'gModules/userOrganizationMemberships/actions.js'
 import {rootUrl} from 'servers/guesstimate-api/constants.js'
 import {captureApiError, generalError} from 'lib/errors/index.js'
 import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
@@ -48,16 +49,20 @@ export function fetchById(userId) {
         if (getState().me.id === user.id){
           dispatch(meActions.guesstimateMeLoaded(user))
         }
+        dispatch(userOrganizationMembershipActions.fetchByUserId(userId))
       }
     })
   }
 }
 
+function formatUsers(unformatted) {
+  return unformatted.map(u => _.pick(u, ['auth0_id', 'id', 'name', 'picture']))
+}
+
 export function fromSearch(spaces) {
   return (dispatch) => {
     const users = spaces.map(s => s.user_info)
-    const formatted = users.map(d => _.pick(d, ['auth0_id', 'id', 'name', 'picture']))
-    dispatch(sActions.fetchSuccess(formatted))
+    dispatch(sActions.fetchSuccess(formatUsers(users)))
   }
 }
 
@@ -84,3 +89,6 @@ export function create(object) {
   }
 }
 
+export function fetchSuccess(users) {
+  return (dispatch) => { dispatch(sActions.fetchSuccess(formatUsers(users))) }
+}

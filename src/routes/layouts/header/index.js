@@ -6,7 +6,9 @@ import { connect } from 'react-redux';
 
 function mapStateToProps(state) {
   return {
-    me: state.me
+    me: state.me,
+    organizations: state.organizations,
+    userOrganizationMemberships: state.userOrganizationMemberships
   }
 }
 
@@ -43,7 +45,12 @@ export default class Header extends Component {
               </div>
             }
 
-            <Login me={this.props.me} isLoggedIn={isLoggedIn}/>
+            <Login
+              me={this.props.me}
+              organizations={this.props.organizations}
+              userOrganizationMemberships={this.props.userOrganizationMemberships}
+              isLoggedIn={isLoggedIn}
+            />
           </div>
         </div>
       </div>

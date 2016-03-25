@@ -7,6 +7,7 @@ import {rootUrl} from 'servers/guesstimate-api/constants.js'
 import {captureApiError} from 'lib/errors/index.js'
 import {changeActionState} from 'gModules/canvas_state/actions.js'
 import * as userActions from 'gModules/users/actions.js'
+import * as organizationActions from 'gModules/organizations/actions.js'
 import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
 
 let sActions = actionCreatorsFor('spaces');
@@ -42,6 +43,18 @@ export function fromSearch(data) {
   }
 }
 
+function fetchUserIfNeeded(dispatch, user_id, users) {
+  const has_user = _.some(users, e => e.id === user_id)
+  if (!has_user) { dispatch(userActions.fetchById(user_id)) }
+}
+
+function fetchOrganizationIfNeeded(dispatch, organization_id, organizations) {
+  if (organization_id) {
+    const has_organization = _.some(organizations, e => e.id === organization_id)
+    if (!has_organization) { dispatch(organizationActions.fetchById(organization_id)) }
+  }
+}
+
 export function fetchById(spaceId) {
   return (dispatch, getState) => {
     dispatch(sActions.fetchStart())
@@ -52,37 +65,38 @@ export function fetchById(spaceId) {
       }
       else if (value) {
         dispatch(sActions.fetchSuccess([value]))
-
-        const users = getState().users
-        const user_id = value.user_id
-        const has_user = !!(users.find(e => e.id === user_id))
-        if (!has_user) { dispatch(userActions.fetchById(user_id)) }
+        // TODO(matthew): Right now, the space has an embedded user and organization record... why are we doing this
+        // extra fetching?
+        fetchUserIfNeeded(dispatch, value.user_id, getState().users)
+        fetchOrganizationIfNeeded(dispatch, value.organization_id, getState().organizations)
       }
     })
   }
 }
 
 //required userId for now, but later this can be optional
-export function fetch({userId}) {
+export function fetch({userId, organizationId}) {
   return (dispatch, getState) => {
     dispatch(sActions.fetchStart())
-
-    api(getState()).models.list({userId}, (err, value) => {
+    api(getState()).models.list({userId, organizationId}, (err, value) => {
       if (err) {
         captureApiError('SpacesFetch', null, null, err, {url: 'fetch'})
       }
       else if (value) {
-        const formatted = value.items.map(d => _.pick(d, ['id', 'name', 'description', 'user_id', 'updated_at', 'metric_count', 'is_private']))
+        const formatted = value.items.map(d => _.pick(d, ['id', 'name', 'description', 'user_id', 'organization_id', 'updated_at', 'metric_count', 'is_private']))
         dispatch(sActions.fetchSuccess(formatted))
       }
     })
   }
 }
 
-export function create() {
+export function create(organizationId) {
   return (dispatch, getState) => {
     const cid = cuid()
-    const object = {id: cid}
+    let object = {id: cid}
+    if (organizationId) {
+      object.organization_id = organizationId
+    }
 
     dispatch(changeActionState('CREATING'))
     const action = sActions.createStart(object);
@@ -178,9 +192,9 @@ export function updateGraph(spaceId) {
 }
 
 function meCanEdit(spaceId, state) {
-  const {spaces, me} = state
+  const {spaces, me, userOrganizationMemberships} = state
   const space = e.space.get(spaces, spaceId)
-  return e.space.canEdit(space, me)
+  return e.space.canEdit(space, me, userOrganizationMemberships)
 }
 
 export function registerGraphChange(spaceId) {
