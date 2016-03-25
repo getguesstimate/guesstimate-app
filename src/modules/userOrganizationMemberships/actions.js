@@ -39,7 +39,7 @@ export function fetchByUserId(userId) {
         dispatch(displayErrorsActions.newError())
         captureApiError('OrganizationsMemberFetch', null, null, err, {url: 'fetchMembers'})
       } else if (memberships) {
-        const formatted = memberships.items.map(m => _.pick(m, ['id', 'user_id', 'user_id']))
+        const formatted = memberships.items.map(m => _.pick(m, ['id', 'user_id', 'organization_id']))
         dispatch(sActions.fetchSuccess(formatted))
 
         const organizations = memberships.items.map(m => _.get(m, '_embedded.organization'))

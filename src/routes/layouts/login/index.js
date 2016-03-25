@@ -83,8 +83,6 @@ export default class Profile extends Component {
     if (organizations) {
       listElements = listElements.concat(organizations.map(o => ({header: o.name, onMouseDown: this.newModel.bind(this)})))
     }
-    let foo = listElements
-    debugger
 
     return (
         <DropDown
