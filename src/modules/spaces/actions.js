@@ -43,6 +43,16 @@ export function fromSearch(data) {
   }
 }
 
+function fetchUserIfNeeded(dispatch, user_id, users) {
+  const has_user = _.some(users, e => e.id === user_id)
+  if (!has_user) { dispatch(userActions.fetchById(user_id)) }
+}
+
+function fetchOrganizationIfNeeded(dispatch, organization_id, organizations) {
+  const has_organization = _.some(organizations, e => e.id === organization_id)
+  if (!has_organization) { dispatch(organizationActions.fetchById(organization_id)) }
+}
+
 export function fetchById(spaceId) {
   return (dispatch, getState) => {
     dispatch(sActions.fetchStart())
@@ -53,22 +63,10 @@ export function fetchById(spaceId) {
       }
       else if (value) {
         dispatch(sActions.fetchSuccess([value]))
-
-        const users = getState().users
-        const user_id = value.user_id
-        const has_user = !!(users.find(e => e.id === user_id))
-        if (!has_user) { dispatch(userActions.fetchById(user_id)) }
-
         // TODO(matthew): Right now, the space has an embedded user and organization record... why are we doing this
         // extra fetching?
-        if (value.organization_id) {
-          const organizations = getState().organizations
-          const organization_id = value.organization_id
-          const has_organization = !!(organizations.find(e => e.id === organization_id))
-          if (!has_organization) { 
-            dispatch(organizationActions.fetchById(organization_id))
-          }
-        }
+        fetchUserIfNeeded(dispatch, value.user_id, getState().users)
+        fetchOrganizationIfNeeded(dispatch, value.organization_id, getState().organizations)
       }
     })
   }

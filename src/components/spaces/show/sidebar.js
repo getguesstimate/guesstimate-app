@@ -16,7 +16,7 @@ export default class SpaceSidebar extends Component {
   render() {
     const {space} = this.props
     const description = _.get(space, 'description')
-    const canEdit = !!_.get(space, 'ownedByMe')
+    const canEdit = !!_.get(space, 'editableByMe')
     return (
       <div className='SpaceSidebar'>
         <div className='SpaceSidebar-inside'>
