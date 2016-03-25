@@ -27,6 +27,8 @@ const rootReducer = function app(state = {}, action){
     simulations: simulationsR(state.simulations, action),
     spaces: spacesR(state.spaces, action),
     users: reduxCrud.reducersFor('users')(state.users, action),
+    organizations: reduxCrud.reducersFor('organizations')(state.organizations, action),
+    userOrganizationMemberships: reduxCrud.reducersFor('userOrganizationMemberships')(state.userOrganizationMemberships, action),
     me: meR(state.me, action),
     canvasState: canvasStateR(state.canvasState, action),
     searchSpaces: searchSpacesR(state.searchSpaces, action),

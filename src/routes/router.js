@@ -16,6 +16,7 @@ import TermsAndConditions from 'gComponents/pages/terms_and_conditions/index.js'
 import PrivacyPolicy from 'gComponents/pages/privacy_policy/index.js'
 import ComponentIndex from './component-index'
 import UserShow from 'gComponents/users/show/index.js'
+import OrganizationShow from 'gComponents/organizations/show/index.js'
 import ReactDOM from 'react-dom'
 import FirstSubscriptionContainer from 'gComponents/subscriptions/FirstSubscription/container.js'
 import FirstSubscriptionPage from 'gComponents/subscriptions/FirstSubscriptionPage/container.js'
@@ -46,6 +47,7 @@ export default Router.extend({
     'terms': 'terms',
     'privacy': 'privacy',
     'users/:id': 'userShow',
+    'organizations/:id': 'organizationShow',
     'style_guide': 'styleGuide',
     'style_guide/first_subscription': 'styleGuideFirstSubscription',
     'style_guide/settings': 'styleGuideSettings',
@@ -70,5 +72,6 @@ export default Router.extend({
   faq() { this.render(<FAQ/>) },
   subscribe(id) { this.render(<FirstSubscriptionPage planName={id}/>) },
   userShow(id) { this.render(<UserShow userId={id}/>) },
+  organizationShow(id) { this.render(<OrganizationShow organizationId={id}/>) },
   pricing() { this.render(<PlanIndex/>, {backgroundColor: 'BLUE'}) },
 })
