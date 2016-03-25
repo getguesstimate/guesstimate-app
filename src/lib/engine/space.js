@@ -1,7 +1,7 @@
-import * as _graph from './graph';
-import * as _metric from './metric';
-import * as _guesstimate from './guesstimate';
-import * as UserOrganizationMemberships from 'gEngine/userOrganizationMemberships'
+import * as _graph from './graph'
+import * as _metric from './metric'
+import * as _guesstimate from './guesstimate'
+import * as _UserOrganizationMemberships from './userOrganizationMemberships'
 
 export function url (space) {
   return (!!space) ? ('/models/' + space.id) : ''
@@ -45,10 +45,10 @@ export function toDgraph(spaceId, graph){
   const userOrganizationMemberships = graph.userOrganizationMemberships
   const meId = _.get(graph, 'me.id')
   dGraph.user = spaceUser
-  dGraph.ownedByMe = sameIds(space.user_id, meId) || UserOrganizationMemberships.isMember(space.organization_id, meId, userOrganizationMemberships)
+  dGraph.ownedByMe = sameIds(space.user_id, meId) || _UserOrganizationMemberships.isMember(space.organization_id, meId, userOrganizationMemberships)
   return dGraph
 }
 
 export function canEdit(space, me, userOrganizationMemberships){
-  return (space.user_id === me.id || UserOrganizationMemberships.isMember(space.organization_id, me.id, userOrganizationMemberships))
+  return (space.user_id === me.id || _UserOrganizationMemberships.isMember(space.organization_id, me.id, userOrganizationMemberships))
 }
