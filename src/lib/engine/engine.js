@@ -1,12 +1,14 @@
-import * as graph from './graph';
-import * as dgraph from './dgraph';
-import * as metric from './metric';
-import * as sample from './sample';
-import * as simulation from './simulation';
-import * as guesstimate from './guesstimate';
-import * as array from './array';
-import * as space from './space';
-import * as me from './me';
+import * as graph from './graph'
+import * as dgraph from './dgraph'
+import * as metric from './metric'
+import * as sample from './sample'
+import * as simulation from './simulation'
+import * as guesstimate from './guesstimate'
+import * as array from './array'
+import * as space from './space'
+import * as me from './me'
+import * as user from './user'
+import * as userOrganizationMemberships from './userOrganizationMemberships'
 
 let Engine = {
   array,
@@ -17,7 +19,9 @@ let Engine = {
   simulation,
   guesstimate,
   space,
-  me
+  me,
+  user,
+  userOrganizationMemberships
 };
 
 window.engine = Engine

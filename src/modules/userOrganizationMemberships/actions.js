@@ -1,6 +1,7 @@
 import {actionCreatorsFor} from 'redux-crud'
 import * as displayErrorsActions from 'gModules/displayErrors/actions.js'
 import * as userActions from 'gModules/users/actions.js'
+import * as organizationActions from 'gModules/organizations/actions.js'
 import {rootUrl} from 'servers/guesstimate-api/constants.js'
 import {captureApiError} from 'lib/errors/index.js'
 import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
@@ -26,6 +27,23 @@ export function fetchByOrganizationId(organizationId) {
 
         const users = members.items.map(m => _.get(m, '_embedded.user'))
         dispatch(userActions.fetchSuccess(users))
+      }
+    })
+  }
+}
+
+export function fetchByUserId(userId) {
+  return (dispatch, getState) => {
+    api(getState()).users.getMemberships({userId}, (err, memberships) => {
+      if (err) {
+        dispatch(displayErrorsActions.newError())
+        captureApiError('OrganizationsMemberFetch', null, null, err, {url: 'fetchMembers'})
+      } else if (memberships) {
+        const formatted = memberships.items.map(m => _.pick(m, ['id', 'user_id', 'organization_id']))
+        dispatch(sActions.fetchSuccess(formatted))
+
+        const organizations = memberships.items.map(m => _.get(m, '_embedded.organization'))
+        dispatch(organizationActions.fetchSuccess(organizations))
       }
     })
   }

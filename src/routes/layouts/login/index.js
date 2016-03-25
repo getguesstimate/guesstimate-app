@@ -1,4 +1,3 @@
-
 //import Auth0Variables from './auth0-variables'
 import Auth0Lock from 'auth0-lock'
 import React, {Component, PropTypes} from 'react'
@@ -13,6 +12,7 @@ import Icon from 'react-fa'
 import './style.css'
 import {trackAccountModalClick, trackUserMenuOpen, trackUserMenuClose} from 'server/segment/index.js'
 import * as spaceActions from 'gModules/spaces/actions.js'
+import {user} from 'gEngine/engine'
 
 import { connect } from 'react-redux';
 
@@ -21,20 +21,20 @@ import { connect } from 'react-redux';
 export default class Profile extends Component {
   displayName: 'Profile'
 
-  signUp(){
+  signUp() {
     this.props.dispatch(meActions.signUp())
   }
 
-  signIn(){
+  signIn() {
     this.props.dispatch(meActions.signIn())
   }
 
-  logOut(){
+  logOut() {
     this.props.dispatch(meActions.logOut())
   }
 
-  newModel(){
-    this.props.dispatch(spaceActions.create())
+  newModel(organizationId) {
+    this.props.dispatch(spaceActions.create(organizationId))
   }
 
   _openModal() {
@@ -42,7 +42,7 @@ export default class Profile extends Component {
     this.props.dispatch(modalActions.openSettings())
   }
 
-  profileDropdown () {
+  profileDropdown() {
     const profile = this.props.me.profile
     const portalUrl = _.get(profile, 'account._links.payment_portal.href')
 
@@ -72,16 +72,40 @@ export default class Profile extends Component {
         </DropDown>
       </div>
     )
-
   }
+
+  newModelDropdown(organizations) {
+    let listElements = [ {header: 'Personal Model', onMouseDown: this.newModel.bind(this)} ]
+    if (organizations) {
+      listElements = listElements.concat(organizations.map(o => ({header: `${o.name} Model`, onMouseDown: this.newModel.bind(this, o.id)})))
+    }
+
+    return (
+        <DropDown
+          headerText={'Create a Model'}
+          openLink={<a className='item'> <i className={`ion-md-add`}/> <span className='text'>New Model</span> </a>}
+          ref='newModel'
+        >
+          <ul>
+            {listElements.map(element => <DropDownListElement {...element} key={element.header} closeOnClick={true} dropDown={this.refs.newModel}/>)}
+          </ul>
+        </DropDown>
+    )
+  }
+
   render () {
     const {me, isLoggedIn} = this.props
+    const organizations = user.usersOrganizations(this.props.me,
+                                                  this.props.userOrganizationMemberships,
+                                                  this.props.organizations)
+    const hasOrganizations = organizations.length > 0
 
     return (
     <div className='header-right-menu'>
 
-      { isLoggedIn &&
-        <a className='item' onClick={this.newModel.bind(this)}>
+      { isLoggedIn && hasOrganizations && this.newModelDropdown(organizations) }
+      { isLoggedIn && !hasOrganizations &&
+        <a className='item' onClick={this.newModel.bind(this, null)}>
           <i className={`ion-md-add`}/>
           <span className='text'>New Model</span>
         </a>

@@ -1,8 +1,8 @@
 import AbstractResource from '../AbstractResource.js'
 
 export default class Users extends AbstractResource {
-  get(msg, callback) {
-    const url = `users/${msg.userId}`
+  get({userId}, callback) {
+    const url = `users/${userId}`
     const method = 'GET'
 
     this.guesstimateMethod({url, method})(callback)
@@ -18,6 +18,13 @@ export default class Users extends AbstractResource {
 
   listWithAuth0Id(auth0_id, callback) {
     const url = `users?auth0_id=${auth0_id}`
+    const method = 'GET'
+
+    this.guesstimateMethod({url, method})(callback)
+  }
+
+  getMemberships({userId}, callback) {
+    const url = `users/${userId}/memberships`
     const method = 'GET'
 
     this.guesstimateMethod({url, method})(callback)
