@@ -21,9 +21,15 @@ export function fetchById(organizationId) {
         dispatch(displayErrorsActions.newError())
         captureApiError('OrganizationsFetch', null, null, err, {url: 'fetch'})
       } else if (organization) {
-        dispatch(membershipActions.fetchByOrganizationId(organizationId))
         dispatch(sActions.fetchSuccess([organization]))
       }
     })
+  }
+}
+
+export function fetchSuccess(organizations) {
+  return (dispatch) => {
+    const formatted = organizations.map(o => _.pick(o, ['id', 'name']))
+    dispatch(sActions.fetchSuccess(formatted))
   }
 }
