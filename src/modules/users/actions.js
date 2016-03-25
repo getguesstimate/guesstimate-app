@@ -84,3 +84,9 @@ export function create(object) {
   }
 }
 
+export function fetchSuccess(users) {
+  return (dispatch) => {
+    const formatted = users.map(d => _.pick(d, ['auth0_id', 'id', 'name', 'picture']))
+    dispatch(sActions.fetchSuccess(formatted))
+  }
+}
