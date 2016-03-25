@@ -21,7 +21,6 @@ export function fetchById(organizationId) {
         dispatch(displayErrorsActions.newError())
         captureApiError('OrganizationsFetch', null, null, err, {url: 'fetch'})
       } else if (organization) {
-        dispatch(membershipActions.fetchByOrganizationId(organizationId))
         dispatch(sActions.fetchSuccess([organization]))
       }
     })

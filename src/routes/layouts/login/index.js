@@ -1,4 +1,3 @@
-
 //import Auth0Variables from './auth0-variables'
 import Auth0Lock from 'auth0-lock'
 import React, {Component, PropTypes} from 'react'
@@ -13,7 +12,7 @@ import Icon from 'react-fa'
 import './style.css'
 import {trackAccountModalClick, trackUserMenuOpen, trackUserMenuClose} from 'server/segment/index.js'
 import * as spaceActions from 'gModules/spaces/actions.js'
-import * as userEngine from 'gEngine/user.js'
+import {user} from 'gEngine/engine'
 
 import { connect } from 'react-redux';
 
@@ -75,10 +74,7 @@ export default class Profile extends Component {
     )
   }
 
-  newModelDropdown() {
-    const organizations = userEngine.usersOrganizations(this.props.me,
-                                                        this.props.userOrganizationMemberships,
-                                                        this.props.organizations)
+  newModelDropdown(organizations) {
     let listElements = [ {header: 'Personal Model', onMouseDown: this.newModel.bind(this)} ]
     if (organizations) {
       listElements = listElements.concat(organizations.map(o => ({header: `${o.name} Model`, onMouseDown: this.newModel.bind(this, o.id)})))
@@ -99,14 +95,17 @@ export default class Profile extends Component {
 
   render () {
     const {me, isLoggedIn} = this.props
-    const hasOrganizations = true
+    const organizations = user.usersOrganizations(this.props.me,
+                                                  this.props.userOrganizationMemberships,
+                                                  this.props.organizations)
+    const hasOrganizations = organizations.length > 0
 
     return (
     <div className='header-right-menu'>
 
-      { isLoggedIn && hasOrganizations && this.newModelDropdown() }
+      { isLoggedIn && hasOrganizations && this.newModelDropdown(organizations) }
       { isLoggedIn && !hasOrganizations &&
-        <a className='item' onClick={this.newModel.bind(this)}>
+        <a className='item' onClick={this.newModel.bind(this, null)}>
           <i className={`ion-md-add`}/>
           <span className='text'>New Model</span>
         </a>

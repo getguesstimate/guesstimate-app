@@ -49,8 +49,10 @@ function fetchUserIfNeeded(dispatch, user_id, users) {
 }
 
 function fetchOrganizationIfNeeded(dispatch, organization_id, organizations) {
-  const has_organization = _.some(organizations, e => e.id === organization_id)
-  if (!has_organization) { dispatch(organizationActions.fetchById(organization_id)) }
+  if (organization_id) {
+    const has_organization = _.some(organizations, e => e.id === organization_id)
+    if (!has_organization) { dispatch(organizationActions.fetchById(organization_id)) }
+  }
 }
 
 export function fetchById(spaceId) {
