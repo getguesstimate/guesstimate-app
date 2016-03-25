@@ -32,7 +32,7 @@ export default class FirstSubscriptionContainer extends Component {
     this.props.dispatch(firstSubscriptionActions.postSynchronization({
       user_id: this.props.me.id
     }))
-    trackPurchaseSuccess(this.props.planId)
+    trackPurchaseSuccess(this.props.me.profile.account, this.props.planId)
   }
 
   _onPaymentCancel() { this.props.dispatch(firstSubscriptionActions.flowStageCancel()) }

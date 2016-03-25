@@ -9,8 +9,6 @@ export const organizationSpaceSelector = createSelector(
   (spaces, organizationId) => {
     return {
       organizationSpaces: spaces.filter(s => s.organization_id && (s.organization_id.toString() === organizationId.toString()))
-      //TODO(matthew): Why not below?
-      //organizationSpaces: spaces.filter(s => s.organization_id == organizationId)
     }
   }
 );
