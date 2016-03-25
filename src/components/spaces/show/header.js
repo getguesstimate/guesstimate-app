@@ -47,7 +47,7 @@ const SpaceHeader = ({canMakeMorePrivateModels, space, isLoggedIn, onSave, onCop
       <div className='header-name'>
         <SpaceName
             name={space.name}
-            ownedByMe={space.ownedByMe}
+            editableByMe={space.editableByMe}
             onSave={onSaveName}
         />
       </div>
@@ -55,7 +55,7 @@ const SpaceHeader = ({canMakeMorePrivateModels, space, isLoggedIn, onSave, onCop
       <div className='header-actions'>
         <CanvasViewForm/>
 
-        {space.ownedByMe &&
+        {space.editableByMe &&
           <DropDown
               headerText={'Model Actions'}
               openLink={<a className='space-header-action'>Model Actions</a>}
@@ -67,7 +67,7 @@ const SpaceHeader = ({canMakeMorePrivateModels, space, isLoggedIn, onSave, onCop
           </DropDown>
         }
 
-        {space.ownedByMe &&
+        {space.editableByMe &&
           <PrivacyToggle
             headerText={'Privacy Options'}
             openLink={<a className='space-header-action'>{privacy_header}</a>}

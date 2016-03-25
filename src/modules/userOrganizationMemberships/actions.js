@@ -1,0 +1,32 @@
+import {actionCreatorsFor} from 'redux-crud'
+import * as displayErrorsActions from 'gModules/displayErrors/actions.js'
+import * as userActions from 'gModules/users/actions.js'
+import {rootUrl} from 'servers/guesstimate-api/constants.js'
+import {captureApiError} from 'lib/errors/index.js'
+import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
+
+let sActions = actionCreatorsFor('userOrganizationMemberships')
+
+function api(state) {
+  function getToken(state) {
+    return _.get(state, 'me.token')
+  }
+  return setupGuesstimateApi(getToken(state))
+}
+
+export function fetchByOrganizationId(organizationId) {
+  return (dispatch, getState) => {
+    api(getState()).organizations.getMembers({organizationId}, (err, members) => {
+      if (err) {
+        dispatch(displayErrorsActions.newError())
+        captureApiError('OrganizationsMemberFetch', null, null, err, {url: 'fetchMembers'})
+      } else if (members) {
+        const formatted = members.items.map(m => _.pick(m, ['id', 'user_id', 'organization_id']))
+        dispatch(sActions.fetchSuccess(formatted))
+
+        const users = members.items.map(m => _.get(m, '_embedded.user'))
+        dispatch(userActions.fetchSuccess(users))
+      }
+    })
+  }
+}
