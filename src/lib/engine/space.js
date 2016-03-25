@@ -1,6 +1,7 @@
 import * as _graph from './graph';
 import * as _metric from './metric';
 import * as _guesstimate from './guesstimate';
+import * as UserOrganizationMemberships from 'gEngine/userOrganizationMemberships'
 
 export function url (space) {
   return (!!space) ? ('/models/' + space.id) : ''
@@ -37,21 +38,17 @@ const organization = (space, graph) => {
   return graph.organizations.find(e => sameIds(e.id, space.organization_id))
 }
 
-const isMember = (organization_id, user_id, memberships) => (
-  !!_.find(memberships, m => (m.organization_id === organization_id && m.user_id === user_id))
-)
-
 export function toDgraph(spaceId, graph){
   let dGraph = _graph.denormalize(subset(graph, spaceId))
   const space = get(graph.spaces, spaceId)
   const spaceUser = user(space, graph)
-  const memberships = graph.memberships
+  const userOrganizationMemberships = graph.userOrganizationMemberships
   const meId = _.get(graph, 'me.id')
   dGraph.user = spaceUser
-  dGraph.ownedByMe = sameIds(space.user_id, meId) || isMember(space.organization_id, meId, memberships)
+  dGraph.ownedByMe = sameIds(space.user_id, meId) || UserOrganizationMemberships.isMember(space.organization_id, meId, userOrganizationMemberships)
   return dGraph
 }
 
-export function canEdit(space, me, memberships){
-  return (space.user_id === me.id || isMember(space.organization_id, me.id, memberships))
+export function canEdit(space, me, userOrganizationMemberships){
+  return (space.user_id === me.id || UserOrganizationMemberships.isMember(space.organization_id, me.id, userOrganizationMemberships))
 }
