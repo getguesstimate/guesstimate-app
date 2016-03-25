@@ -44,7 +44,7 @@ export function toDgraph(spaceId, graph){
   const spaceUser = user(space, graph)
   const userOrganizationMemberships = graph.userOrganizationMemberships
   dGraph.user = spaceUser
-  dGraph.editableByMe = canEdit(space, me, userOrganizationMemberships)
+  dGraph.editableByMe = canEdit(space, graph.me, userOrganizationMemberships)
   return dGraph
 }
 
