@@ -189,9 +189,9 @@ export function updateGraph(spaceId) {
 }
 
 function meCanEdit(spaceId, state) {
-  const {spaces, me, memberships} = state
+  const {spaces, me, userOrganizationMemberships} = state
   const space = e.space.get(spaces, spaceId)
-  return e.space.canEdit(space, me, memberships)
+  return e.space.canEdit(space, me, userOrganizationMemberships)
 }
 
 export function registerGraphChange(spaceId) {
