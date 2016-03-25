@@ -22,20 +22,20 @@ import { connect } from 'react-redux';
 export default class Profile extends Component {
   displayName: 'Profile'
 
-  signUp(){
+  signUp() {
     this.props.dispatch(meActions.signUp())
   }
 
-  signIn(){
+  signIn() {
     this.props.dispatch(meActions.signIn())
   }
 
-  logOut(){
+  logOut() {
     this.props.dispatch(meActions.logOut())
   }
 
-  newModel(){
-    this.props.dispatch(spaceActions.create())
+  newModel(organizationId) {
+    this.props.dispatch(spaceActions.create(organizationId))
   }
 
   _openModal() {
@@ -79,9 +79,9 @@ export default class Profile extends Component {
     const organizations = userEngine.usersOrganizations(this.props.me,
                                                         this.props.userOrganizationMemberships,
                                                         this.props.organizations)
-    let listElements = [ {header: 'Personal', onMouseDown: this.newModel.bind(this)} ]
+    let listElements = [ {header: 'Personal Model', onMouseDown: this.newModel.bind(this)} ]
     if (organizations) {
-      listElements = listElements.concat(organizations.map(o => ({header: o.name, onMouseDown: this.newModel.bind(this)})))
+      listElements = listElements.concat(organizations.map(o => ({header: `${o.name} Model`, onMouseDown: this.newModel.bind(this, o.id)})))
     }
 
     return (

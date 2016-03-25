@@ -88,10 +88,13 @@ export function fetch({userId, organizationId}) {
   }
 }
 
-export function create() {
+export function create(organizationId) {
   return (dispatch, getState) => {
     const cid = cuid()
-    const object = {id: cid}
+    let object = {id: cid}
+    if (organizationId) {
+      object.organization_id = organizationId
+    }
 
     dispatch(changeActionState('CREATING'))
     const action = sActions.createStart(object);
