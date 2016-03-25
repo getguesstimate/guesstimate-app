@@ -13,6 +13,7 @@ import Icon from 'react-fa'
 import './style.css'
 import {trackAccountModalClick, trackUserMenuOpen, trackUserMenuClose} from 'server/segment/index.js'
 import * as spaceActions from 'gModules/spaces/actions.js'
+import * as userEngine from 'gEngine/user.js'
 
 import { connect } from 'react-redux';
 
@@ -72,21 +73,27 @@ export default class Profile extends Component {
         </DropDown>
       </div>
     )
-
   }
 
   newModelDropdown() {
-    const organizations = []
+    const organizations = userEngine.usersOrganizations(this.props.me,
+                                                        this.props.userOrganizationMemberships,
+                                                        this.props.organizations)
     let listElements = [ {header: 'Personal', onMouseDown: this.newModel.bind(this)} ]
-    listElements.concat(organizations.map(o => ({header: o.name, onMouseDown: this.newModel.bind(this)})))
+    if (organizations) {
+      listElements = listElements.concat(organizations.map(o => ({header: o.name, onMouseDown: this.newModel.bind(this)})))
+    }
+    let foo = listElements
+    debugger
+
     return (
         <DropDown
           headerText={'Create a Model'}
           openLink={<a className='item'> <i className={`ion-md-add`}/> <span className='text'>New Model</span> </a>}
-          ref='new-model'
+          ref='newModel'
         >
           <ul>
-            {listElements.map(element => <DropDownListElement {...element} closeOnClick={true} dropDown={this.refs.dropdown}/>)}
+            {listElements.map(element => <DropDownListElement {...element} key={element.header} closeOnClick={true} dropDown={this.refs.newModel}/>)}
           </ul>
         </DropDown>
     )
