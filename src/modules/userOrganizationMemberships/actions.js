@@ -5,7 +5,7 @@ import {rootUrl} from 'servers/guesstimate-api/constants.js'
 import {captureApiError} from 'lib/errors/index.js'
 import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
 
-let sActions = actionCreatorsFor('memberships')
+let sActions = actionCreatorsFor('userOrganizationMemberships')
 
 function api(state) {
   function getToken(state) {
