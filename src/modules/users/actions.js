@@ -53,11 +53,14 @@ export function fetchById(userId) {
   }
 }
 
+function formatUsers(unformatted) {
+  return unformatted.map(u => _.pick(u, ['auth0_id', 'id', 'name', 'picture']))
+}
+
 export function fromSearch(spaces) {
   return (dispatch) => {
     const users = spaces.map(s => s.user_info)
-    const formatted = users.map(d => _.pick(d, ['auth0_id', 'id', 'name', 'picture']))
-    dispatch(sActions.fetchSuccess(formatted))
+    dispatch(sActions.fetchSuccess(formatUsers(users)))
   }
 }
 
@@ -85,8 +88,5 @@ export function create(object) {
 }
 
 export function fetchSuccess(users) {
-  return (dispatch) => {
-    const formatted = users.map(d => _.pick(d, ['auth0_id', 'id', 'name', 'picture']))
-    dispatch(sActions.fetchSuccess(formatted))
-  }
+  return (dispatch) => { dispatch(sActions.fetchSuccess(formatUsers(users))) }
 }
