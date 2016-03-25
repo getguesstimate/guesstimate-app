@@ -1,6 +1,7 @@
 import {actionCreatorsFor} from 'redux-crud'
 import $ from 'jquery' // TODO(matthew): Is this needed at all?
 import * as displayErrorsActions from 'gModules/displayErrors/actions.js'
+import * as userActions from 'gModules/users/actions.js'
 import {rootUrl} from 'servers/guesstimate-api/constants.js'
 import {captureApiError} from 'lib/errors/index.js'
 import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
@@ -21,8 +22,11 @@ export function fetchByOrganizationId(organizationId) {
         dispatch(displayErrorsActions.newError())
         captureApiError('OrganizationsMemberFetch', null, null, err, {url: 'fetchMembers'})
       } else if (members) {
-        const formatted = members.items.map(d => _.pick(d, ['id', 'user_id', 'organization_id']))
+        const formatted = members.items.map(m => _.pick(m, ['id', 'user_id', 'organization_id']))
         dispatch(sActions.fetchSuccess(formatted))
+
+        const users = members.items.map(m => _.get(m, '_embedded.user'))
+        dispatch(userActions.fetchSuccess(users))
       }
     })
   }
