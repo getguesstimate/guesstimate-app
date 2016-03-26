@@ -31,8 +31,18 @@ export const signUp = () => {
         dispatch(displayErrorsActions.newError())
       } else {
         dispatch(auth0MeLoaded(profile, token))
-        const {nickname, picture, user_id} = profile
-        dispatch(userActions.create({name: nickname, picture, auth0_id: user_id}))
+        const {nickname, picture, user_id, email, name, gender, locale, location} = profile
+        dispatch(userActions.create(
+          {
+            name,
+            username: nickname,
+            email,
+            locale,
+            location,
+            gender,
+            picture,
+            auth0_id: user_id
+          }))
       }
     }
   )
@@ -55,7 +65,7 @@ export const init = () => {
             dispatch({ type: 'DESTROY_ME' })
           } else {
             dispatch(auth0MeLoaded(profile, token))
-            const {name, username, picture, user_id} = profile
+            const {user_id} = profile
             dispatch(userActions.fetch({auth0_id: user_id}))
           }
         })
