@@ -2,6 +2,7 @@ import app from 'ampersand-app'
 import Router from './router'
 import * as segment from '../server/segment/index.js'
 import * as sentry from '../server/sentry/index.js'
+import engine from 'gEngine/engine.js'
 import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
 import './main.css'
 
@@ -15,7 +16,8 @@ app.extend({
     sentry.initialize()
     this.router = new Router()
     this.router.history.start()
-    window.api = setupGuesstimateApi(34)
+    //This just exists to help people get their api tokens
+    window.get_profile = engine.me.localStorage.get
   }
 })
 
