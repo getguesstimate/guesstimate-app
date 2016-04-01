@@ -99,10 +99,10 @@ export default class Profile extends Component {
 
   organizationsDropdown(organizations) {
     const ref='organizations'
-
     let listElements = []
+
     if (organizations) {
-      listElements = listElements.concat(organizations.map(
+      listElements = organizations.map(
         o => (
           {
             props: {
@@ -112,7 +112,7 @@ export default class Profile extends Component {
             id: o.id
           }
         )
-      ))
+      )
     }
 
     return (
