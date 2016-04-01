@@ -12,9 +12,9 @@ import Icon from 'react-fa'
 import './style.css'
 import {trackAccountModalClick, trackUserMenuOpen, trackUserMenuClose} from 'server/segment/index.js'
 import * as spaceActions from 'gModules/spaces/actions.js'
-import {user} from 'gEngine/engine'
+import {user,organization} from 'gEngine/engine'
 
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 
 
 @connect()
@@ -93,6 +93,35 @@ export default class Profile extends Component {
     )
   }
 
+  organizationsDropdown(organizations) {
+    let listElements = []
+    if (organizations) {
+      listElements = listElements.concat(organizations.map(
+        o => (
+          {
+            props: {
+              header: `${o.name}`,
+              onMouseDown: () => {navigationActions.navigate(organization.url(o))}
+            },
+            id: o.id
+          }
+        )
+      ))
+    }
+
+    return (
+        <DropDown
+          headerText={'Organizations'}
+          openLink={<a className='item'> <i className={`ion-ios-people`}/> <span className='text'>Organizations</span> </a>}
+          ref='organizations'
+        >
+          <ul>
+            {listElements.map(element => <DropDownListElement {...element.props} key={element.id} closeOnClick={true} dropDown={this.refs.organizations}/>)}
+          </ul>
+        </DropDown>
+    )
+  }
+
   render () {
     const {me, isLoggedIn} = this.props
     const organizations = user.usersOrganizations(this.props.me,
@@ -117,6 +146,8 @@ export default class Profile extends Component {
           <span className='text'>My Models</span>
         </a>
       }
+
+      { isLoggedIn && hasOrganizations && this.organizationsDropdown(organizations) }
 
       { isLoggedIn && this.profileDropdown() }
 
