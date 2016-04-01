@@ -7,7 +7,7 @@ export default class MetricName extends Component {
   displayName: 'MetricName'
 
   static propTypes = {
-    name: PropTypes.string.isRequired,
+    name: PropTypes.string,
     isSelected: PropTypes.bool.isRequired,
     onChange: PropTypes.func.isRequired,
   }
