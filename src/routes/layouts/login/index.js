@@ -81,19 +81,25 @@ export default class Profile extends Component {
     }
 
     return (
-        <DropDown
-          headerText={'Create a Model'}
-          openLink={<a className='item'> <i className={`ion-md-add`}/> <span className='text'>New Model</span> </a>}
-          ref='newModel'
-        >
-          <ul>
-            {listElements.map(element => <DropDownListElement {...element} key={element.header} closeOnClick={true} dropDown={this.refs.newModel}/>)}
-          </ul>
-        </DropDown>
+      <DropDown
+        headerText={'Create a Model'}
+        openLink={<a className='item'> <i className={`ion-md-add`}/> <span className='text'>New Model</span> </a>}
+        ref='newModel'
+      >
+        <ul>
+          {listElements.map(element => <DropDownListElement {...element} key={element.header} closeOnClick={true} dropDown={this.refs.newModel}/>)}
+        </ul>
+      </DropDown>
     )
   }
 
+  closeDropdown(dropDown) {
+    this.refs[dropDown] && this.refs[dropDown]._close()
+  }
+
   organizationsDropdown(organizations) {
+    const ref='organizations'
+
     let listElements = []
     if (organizations) {
       listElements = listElements.concat(organizations.map(
@@ -101,7 +107,7 @@ export default class Profile extends Component {
           {
             props: {
               header: `${o.name}`,
-              onMouseDown: () => {navigationActions.navigate(organization.url(o))}
+              onMouseDown: () => {navigationActions.navigate(organization.url(o)); this.closeDropdown(ref)}
             },
             id: o.id
           }
@@ -110,15 +116,15 @@ export default class Profile extends Component {
     }
 
     return (
-        <DropDown
-          headerText={'Organizations'}
-          openLink={<a className='item'> <i className={`ion-ios-people`}/> <span className='text'>Organizations</span> </a>}
-          ref='organizations'
-        >
-          <ul>
-            {listElements.map(element => <DropDownListElement {...element.props} key={element.id} closeOnClick={true} dropDown={this.refs.organizations}/>)}
-          </ul>
-        </DropDown>
+      <DropDown
+        headerText={'Organizations'}
+        openLink={<a className='item'> <i className={`ion-ios-people`}/> <span className='text'>Organizations</span> </a>}
+        ref={ref}
+      >
+        <ul>
+          {listElements.map(element => <DropDownListElement {...element.props} key={element.id} />)}
+        </ul>
+      </DropDown>
     )
   }
 
