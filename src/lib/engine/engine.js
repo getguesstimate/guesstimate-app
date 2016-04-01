@@ -8,6 +8,7 @@ import * as array from './array'
 import * as space from './space'
 import * as me from './me'
 import * as user from './user'
+import * as organization from './organization'
 import * as userOrganizationMemberships from './userOrganizationMemberships'
 
 let Engine = {
@@ -21,6 +22,7 @@ let Engine = {
   space,
   me,
   user,
+  organization,
   userOrganizationMemberships
 };
 
