@@ -18,9 +18,32 @@ function mapStateToProps(state) {
 export default class OrganizationShow extends Component{
   displayName: 'OrganizationShow'
 
-  componentWillMount(){
-    this.props.dispatch(organizationActions.fetchById(this.props.organizationId))
-    this.props.dispatch(spaceActions.fetch({organizationId: this.props.organizationId}))
+  state = {
+    attemptedFetch: false
+  }
+
+  componentWillMount() {
+    this.considerFetch(this.props)
+  }
+
+  componentDidUpdate(newProps) {
+    this.considerFetch(newProps)
+  }
+
+  considerFetch(props) {
+    const needsData = !(_.has(props, 'organizationSpaces') && props.organizationSpaces.length > 0)
+
+    if (needsData) {
+      this.fetchData()
+    }
+  }
+
+  fetchData() {
+    if (!this.state.attemptedFetch) {
+      this.props.dispatch(organizationActions.fetchById(this.props.organizationId))
+      this.props.dispatch(spaceActions.fetch({organizationId: this.props.organizationId}))
+      this.setState({attemptedFetch: true})
+    }
   }
 
   render () {

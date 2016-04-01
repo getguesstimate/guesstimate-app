@@ -27,6 +27,7 @@ export class DropDownListElement extends Component {
   }
 
   _onMouseDown() {
+    //debugger
     if (this.props.closeOnClick && !!this.props.dropDown) {this.props.dropDown._close() }
     this.props.onMouseDown()
   }
