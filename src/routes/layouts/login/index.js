@@ -74,27 +74,38 @@ export default class Profile extends Component {
     )
   }
 
+  closeDropdown(dropDown) {
+    this.refs[dropDown] && this.refs[dropDown]._close()
+  }
+
   newModelDropdown(organizations) {
-    let listElements = [ {header: 'Personal Model', onMouseDown: this.newModel.bind(this)} ]
+    const ref = 'newModel'
+    let listElements = [ {props: {header: 'Personal Model', onMouseDown: ()=>{this.newModel(); this.closeDropdown(ref)}}, id: 0} ]
     if (organizations) {
-      listElements = listElements.concat(organizations.map(o => ({header: `${o.name} Model`, onMouseDown: this.newModel.bind(this, o.id)})))
+      listElements = listElements.concat(organizations.map(
+        o => (
+          {
+            props: {
+              header: `${o.name} Model`,
+              onMouseDown: () => {this.newModel(o.id); this.closeDropdown(ref)}
+            },
+            id: o.id
+          }
+        )
+      ))
     }
 
     return (
       <DropDown
         headerText={'Create a Model'}
         openLink={<a className='item'> <i className={`ion-md-add`}/> <span className='text'>New Model</span> </a>}
-        ref='newModel'
+        ref={ref}
       >
         <ul>
-          {listElements.map(element => <DropDownListElement {...element} key={element.header} closeOnClick={true} dropDown={this.refs.newModel}/>)}
+          {listElements.map(element => <DropDownListElement {...element.props} key={element.id}/>)}
         </ul>
       </DropDown>
     )
-  }
-
-  closeDropdown(dropDown) {
-    this.refs[dropDown] && this.refs[dropDown]._close()
   }
 
   organizationsDropdown(organizations) {
