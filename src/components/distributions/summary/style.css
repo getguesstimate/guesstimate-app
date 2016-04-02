@@ -16,3 +16,14 @@
   color: #666;
 }
 
+.DistributionSummary .stdev.asymmetric {
+  margin-left: 0.25em;
+  font-size: 0.65em;
+  color: #666;
+  float: right;
+}
+
+.DistributionSummary .stdev.asymmetric .pm {
+  margin-right: 3.25em;
+  margin-top: -0.4em;
+}
