@@ -67,7 +67,7 @@ export default class Profile extends Component {
             ref='dropdown'
         >
           <ul>
-            {listElements.map(props => <DropDownListElement {...props} key={props.icon} closeOnClick={true} dropDown={this.refs.dropdown}/>)}
+            {listElements.map(props => <DropDownListElement {...props} key={props.header} closeOnClick={true} dropDown={this.refs.dropdown}/>)}
           </ul>
         </DropDown>
       </div>
