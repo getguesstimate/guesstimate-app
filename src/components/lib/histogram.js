@@ -1,7 +1,5 @@
 var React = require("react");
 var d3 = require("d3");
-
-import {Stats} from 'fast-stats'
 import numberShow from 'lib/numberShower/numberShower.js'
 
 function getYScale(data, height) {
@@ -17,15 +15,22 @@ function getXScale(data, width) {
     nice();
 }
 
+// Computes the average of an array of numbers. If the array is empty, returns 1.
 function avg(arr) {
-  return arr.reduce((a,b)=>a+b)/arr.length
+  return arr.length > 0 ? arr.reduce((a,b)=>a+b)/arr.length : 1
 }
 
+// Computes min(|a|,|b|)/max(|a|,|b|).
 function fractionLT1(a,b) {
   return Math.min(Math.abs(a),Math.abs(b))/Math.max(Math.abs(a),Math.abs(b))
 }
 
 function filterData(inputData, cutOff) {
+  // We can't filter that intelligently for small sample sets, so we don't bother.
+  if (inputData.length < 2000) {
+    return inputData
+  }
+
   let outputData = inputData // A copy for immutability
   outputData.sort((a,b) => a-b) // Sort the data from min -> max.
 
@@ -41,12 +46,12 @@ function filterData(inputData, cutOff) {
   }
 
   // Filter Right
-  right = outputData.slice(-bucketSize)
   left = outputData.slice(-2*bucketSize,-bucketSize)
+  right = outputData.slice(-bucketSize)
   while (fractionLT1(avg(left),avg(right)) < cutOff) {
     outputData = outputData.slice(0,-bucketSize)
-    right = outputData.slice(-bucketSize)
     left = outputData.slice(-2*bucketSize,-bucketSize)
+    right = outputData.slice(-bucketSize)
   }
 
   return outputData
@@ -70,7 +75,7 @@ export default class Histogram extends React.Component {
     bottom: 30,
     left: 5,
     bins: 40,
-    cutOffRatio: 0.99,
+    cutOffRatio: 0, // By default cut off nothing.
   };
 
   render() {
