@@ -1,5 +1,7 @@
 var React = require("react");
 var d3 = require("d3");
+
+import {Stats} from 'fast-stats'
 import numberShow from 'lib/numberShower/numberShower.js'
 
 function getYScale(data, height) {
@@ -15,12 +17,48 @@ function getXScale(data, width) {
     nice();
 }
 
+function avg(arr) {
+  return arr.reduce((a,b)=>a+b)/arr.length
+}
+
+function fractionLT1(a,b) {
+  return Math.min(Math.abs(a),Math.abs(b))/Math.max(Math.abs(a),Math.abs(b))
+}
+
+function filterData(inputData, cutOff) {
+  let outputData = inputData // A copy for immutability
+  outputData.sort((a,b) => a-b) // Sort the data from min -> max.
+
+  const bucketSize = outputData.length / 1000 // Grab data in 0.1% chunks.
+
+  // Filter Left
+  let left = outputData.slice(0,bucketSize)
+  let right = outputData.slice(bucketSize,2*bucketSize)
+  while (fractionLT1(avg(left),avg(right)) < cutOff) {
+    outputData = outputData.slice(bucketSize)
+    left = outputData.slice(0,bucketSize)
+    right = outputData.slice(bucketSize,2*bucketSize)
+  }
+
+  // Filter Right
+  right = outputData.slice(-bucketSize)
+  left = outputData.slice(-2*bucketSize,-bucketSize)
+  while (fractionLT1(avg(left),avg(right)) < cutOff) {
+    outputData = outputData.slice(0,-bucketSize)
+    right = outputData.slice(-bucketSize)
+    left = outputData.slice(-2*bucketSize,-bucketSize)
+  }
+
+  return outputData
+}
+
 export default class Histogram extends React.Component {
   static propTypes = {
     top: React.PropTypes.number,
     right: React.PropTypes.number,
     bottom: React.PropTypes.number,
     left: React.PropTypes.number,
+    cutOffRatio: React.PropTypes.number,
     width: React.PropTypes.number.isRequired,
     height: React.PropTypes.number.isRequired,
     data: React.PropTypes.arrayOf(React.PropTypes.number).isRequired
@@ -32,15 +70,18 @@ export default class Histogram extends React.Component {
     bottom: 30,
     left: 5,
     bins: 40,
+    cutOffRatio: 0.99,
   };
 
   render() {
-    var { top, right, bottom, left, data, width, height } = this.props;
+    const { top, right, bottom, left, data, width, height, cutOffRatio } = this.props;
 
-    let xScale = getXScale(data, width);
+    const filtered_data = filterData(data, cutOffRatio)
+
+    let xScale = getXScale(filtered_data, width);
     let bins = this.props.bins
     let histogramDataFn = d3.layout.histogram().bins(xScale.ticks(bins));
-    let histogramData = histogramDataFn(data);
+    let histogramData = histogramDataFn(filtered_data);
     let yScale = getYScale(histogramData, height);
     let barWidth = width/histogramData.length;
     return (
