@@ -36,7 +36,7 @@ function filterLowDensityPoints(inputData, cutOffRatio) {
     return inputData
   }
 
-  let outputData = Object.assign({}, inputData) // A copy for immutability
+  let outputData = Object.assign([], inputData) // A copy for immutability
   outputData.sort((a,b) => a-b) // Sort the data from min -> max.
 
   const bucketSize = outputData.length / 1000 // Grab data in 0.1% chunks.
