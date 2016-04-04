@@ -10,6 +10,7 @@ class SimulationHistogram extends Component{
     containerWidth: PT.number,
     height: PT.number,
     simulation: PT.object,
+    cutOffRatio: PT.number,
   }
 
   static defaultProps = {
@@ -36,6 +37,7 @@ class SimulationHistogram extends Component{
           width={(this.props.containerWidth + 5) * this.props.widthPercent / 100}
           bottom={20}
           bins={this.props.bins}
+          cutOffRatio={this.props.cutOffRatio}
       />
     )
   };
