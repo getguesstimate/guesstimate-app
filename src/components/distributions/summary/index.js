@@ -28,8 +28,8 @@ const NinetyPercentCI = ({low, high}) => (
 const AsymmetricUncertainty = ({lowDelta, highDelta}) => (
   <div className='stdev asymmetric'>
     <div className='pm'>
-      <div>-<PrecisionNumber value={lowDelta}/></div>
-      <div>+<PrecisionNumber value={highDelta}/></div>
+      <div><span className='sym'>+</span><PrecisionNumber value={highDelta}/></div>
+      <div><span className='sym'>-</span><PrecisionNumber value={lowDelta}/></div>
     </div>
   </div>
 )

@@ -1,7 +1,7 @@
 @import './styles/variables.css';
 
 .DistributionSummary {
-  font-size: 1.6em;
+  font-size: 1.8em;
 }
 
 .DistributionSummary .mean {
@@ -15,16 +15,22 @@
 }
 
 .DistributionSummary .stdev.asymmetric {
-  margin-left: 0.5em;
-  font-size: 0.54em;
-  line-height: 1.1em;
+  margin-left: 0.6em;
+  font-size: 0.48em;
+  line-height: 1em;
   color: #666;
   float: left;
-  margin-top: 3px;
+  margin-top: 1px;
 }
 
 .DistributionSummary .stdev.asymmetric .pm {
   margin-top: -0.4em;
+}
+
+.DistributionSummary .stdev.asymmetric .sym {
+  min-width: 7px;
+  float: left;
+  font-size: 0.7em;
 }
 
 .DistributionSummary .PrecisionNumber {
