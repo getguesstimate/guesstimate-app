@@ -19,16 +19,6 @@ export default class BasicNode {
     return this._maxDistanceFromRoot
   }
 
-  // TODO(Question for Ozzie): Should this be 'maxParentDistanceFromRoot'?
-  _calculateMaxDistanceFromRootOld(): integer {
-    if (_.isEmpty(this.parents())) {
-      return 0
-    } else {
-      const maxChildDistanceFromRoot = Math.max(...this.parents().map(c => c.maxDistanceFromRoot))
-      return (maxChildDistanceFromRoot + 1)
-    }
-  }
-
   _calculateMaxDistanceFromRoot(): integer {
     // We initialize to -1 as you alwasy get one increment for free in the loop below.
     let distanceFromRoot = -1
