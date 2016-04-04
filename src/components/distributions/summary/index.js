@@ -66,19 +66,21 @@ class DistributionSummarySmall extends Component{
 
     return (
       <div className="DistributionSummary">
+        <div className='mean'>
         <PrecisionNumber value={parseFloat(mean)} precision={precision}/>
-          {symmetric &&
-            !!range && range !== 0 &&
-              <Uncertainty range={range} />
-          }
-          {ninetypercentCI &&
-            !!low && !!high && high*low !== 0 &&
-              <NinetyPercentCI low={low} high={high} />
-          }
-          {asymmetric &&
-            !!lowDelta && !!highDelta && highDelta*lowDelta !== 0 &&
-              <AsymmetricUncertainty lowDelta={lowDelta} highDelta={highDelta} />
-          }
+        </div>
+        {symmetric &&
+          !!range && range !== 0 &&
+            <Uncertainty range={range} />
+        }
+        {ninetypercentCI &&
+          !!low && !!high && high*low !== 0 &&
+            <NinetyPercentCI low={low} high={high} />
+        }
+        {asymmetric &&
+          !!lowDelta && !!highDelta && highDelta*lowDelta !== 0 &&
+            <AsymmetricUncertainty lowDelta={lowDelta} highDelta={highDelta} />
+        }
       </div>
     )
   }

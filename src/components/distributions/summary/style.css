@@ -5,9 +5,7 @@
 }
 
 .DistributionSummary .mean {
-  font-weight: 500;
-  font-size: 1.5em;
-  color: $black-1;
+  float: left;
 }
 
 .DistributionSummary .stdev {
@@ -17,13 +15,18 @@
 }
 
 .DistributionSummary .stdev.asymmetric {
-  margin-left: 0.25em;
-  font-size: 0.65em;
+  margin-left: 0.5em;
+  font-size: 0.54em;
+  line-height: 1.1em;
   color: #666;
-  float: right;
+  float: left;
+  margin-top: 3px;
 }
 
 .DistributionSummary .stdev.asymmetric .pm {
-  margin-right: 3.25em;
   margin-top: -0.4em;
+}
+
+.DistributionSummary .PrecisionNumber {
+  float: left;
 }
