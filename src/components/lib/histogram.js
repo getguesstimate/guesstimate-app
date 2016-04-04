@@ -21,34 +21,42 @@ function avg(arr) {
 }
 
 // Computes min(|a|,|b|)/max(|a|,|b|).
-function fractionLT1(a,b) {
+function fractionLessThanOne(a,b) {
   return Math.min(Math.abs(a),Math.abs(b))/Math.max(Math.abs(a),Math.abs(b))
 }
 
-function filterData(inputData, cutOff) {
+// filterLowDensityPoints removes points that occur in only low density regions of the histogram, to ensure that only
+// points robustly well sampled in the data affect the visualization of the histogram.
+// The parameter 'cutOffRatio' controls how hight te point density must be for points to be kept; a cutOffRatio of 0
+// would keep everything, a cutOffratio of 1.0 would keep nothing.
+// Values that seem to have notable affects are typically > 0.95.
+function filterLowDensityPoints(inputData, cutOffRatio) {
   // We can't filter that intelligently for small sample sets, so we don't bother.
   if (inputData.length < 2000) {
     return inputData
   }
 
-  let outputData = inputData // A copy for immutability
+  let outputData = Object.assign({}, inputData) // A copy for immutability
   outputData.sort((a,b) => a-b) // Sort the data from min -> max.
 
   const bucketSize = outputData.length / 1000 // Grab data in 0.1% chunks.
 
   // Filter Left
+  // First we grab the first and second buckets from the left side.
   let left = outputData.slice(0,bucketSize)
   let right = outputData.slice(bucketSize,2*bucketSize)
-  while (fractionLT1(avg(left),avg(right)) < cutOff) {
+  // As long as the ratio of the magnitude of their averages is less than the cutOffRatio, we keep discarding the left
+  // endpoint and iterating along the array.
+  while (fractionLessThanOne(avg(left),avg(right)) < cutOffRatio) {
     outputData = outputData.slice(bucketSize)
     left = outputData.slice(0,bucketSize)
     right = outputData.slice(bucketSize,2*bucketSize)
   }
 
-  // Filter Right
+  // Filter Right, analogous to how we filter the left, but in reverse.
   left = outputData.slice(-2*bucketSize,-bucketSize)
   right = outputData.slice(-bucketSize)
-  while (fractionLT1(avg(left),avg(right)) < cutOff) {
+  while (fractionLessThanOne(avg(left),avg(right)) < cutOffRatio) {
     outputData = outputData.slice(0,-bucketSize)
     left = outputData.slice(-2*bucketSize,-bucketSize)
     right = outputData.slice(-bucketSize)
@@ -81,7 +89,7 @@ export default class Histogram extends React.Component {
   render() {
     const { top, right, bottom, left, data, width, height, cutOffRatio } = this.props;
 
-    const filtered_data = filterData(data, cutOffRatio)
+    const filtered_data = filterLowDensityPoints(data, cutOffRatio)
 
     let xScale = getXScale(filtered_data, width);
     let bins = this.props.bins
