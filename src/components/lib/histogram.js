@@ -163,7 +163,7 @@ export class XAxis extends React.Component {
   render() {
     let { height, scale } = this.props;
 
-    let ticks = scale.ticks.apply(scale).map(function(tick, i) {
+    let ticks = scale.ticks(2).map(function(tick, i) {
       return (
         <Tick value={tick} scale={scale} key={i} />
       );
@@ -172,7 +172,7 @@ export class XAxis extends React.Component {
     return (
       <g className="react-d3-histogram__x-axis" transform={"translate(0," + height + ")"}>
         <Path scale={scale} />
-        <g>{ticks}</g>
+        <g transform={"translate(0," + 5 + ")"}>{ticks}</g>
       </g>
     );
   }

@@ -185,7 +185,7 @@ class MetricCard extends Component {
         <div className={`section ${metricCardView}`}>
 
           {(metricCardView !== 'basic') && showSimulation &&
-            <Histogram height={(metricCardView === 'scientific') ? 75 : 30}
+            <Histogram height={(metricCardView === 'scientific') ? 85 : 40}
                 simulation={metric.simulation}
                 cutOffRatio={0.995}
             />

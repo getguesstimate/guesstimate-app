@@ -44,9 +44,6 @@ class DistributionSummarySmall extends Component{
     return (
       <div className="DistributionSummary">
         <PrecisionNumber value={parseFloat(mean)} precision={precision}/>
-          {!!range && range !== 0 &&
-          <Uncertainty range={range} />
-          }
       </div>
     )
   }

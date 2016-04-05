@@ -27,8 +27,16 @@
 }
 
 .react-d3-histogram__tick text {
-  font-size: 8px;
-  fill: none;
+  font-size: 10px;
+  fill: #92ACC1;
+}
+
+.hovered .react-d3-histogram__tick text {
+  fill: #5A7C98;
+}
+
+.whatsapp {
+  top: 50px;
 }
 
 .metric .scientific .react-d3-histogram__tick text  {
