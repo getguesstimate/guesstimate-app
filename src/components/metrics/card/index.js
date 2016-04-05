@@ -19,6 +19,13 @@ import MetricToken from './token/index.js'
 import './style.css'
 import * as canvasStateProps from 'gModules/canvas_state/prop_type.js'
 
+const relationshipType = (edges) => {
+  if (edges.inputs.length && edges.outputs.length) { return 'INTERMEDIATE' }
+  if (edges.inputs.length) { return 'OUTPUT' }
+  if (edges.outputs.length) { return 'INPUT' }
+  return 'NOEDGE'
+}
+
 const PT = PropTypes
 class MetricCard extends Component {
   displayName: 'MetricCard'
@@ -158,9 +165,19 @@ class MetricCard extends Component {
 
     const titleView = !this.props.hovered && !isSelected && this._isTitle()
 
+    const relationshipClasses = {
+      INTERMEDIATE: 'intermediate',
+      OUTPUT: 'output',
+      INPUT: 'input',
+      NOEDGE: 'noedge'
+    }
+
+    const relationshipClass = relationshipClasses[relationshipType(metric.edges)]
+
     let className = isSelected ? 'metricCard grid-item-focus' : 'metricCard'
     className += ` ${metricCardView}`
     className += titleView ? ' titleView' : ''
+    className += ' ' + relationshipClass
 
     return (
       <div

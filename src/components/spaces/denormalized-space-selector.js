@@ -15,6 +15,12 @@ export const denormalizedSpaceSelector = createSelector(
     if (dSpace) {
       dSpace.edges = e.dgraph.dependencyMap(dSpace)
       dSpace.canvasState = canvasState
+      dSpace.metrics = dSpace.metrics.map(s => {
+        let edges = {}
+        edges.inputs = dSpace.edges.filter(i => i.output === s.id).map(e => e.input)
+        edges.outputs = dSpace.edges.filter(i => i.input === s.id).map(e => e.output)
+        return Object.assign({}, s, {edges})
+      })
     }
 
     return {
