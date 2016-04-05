@@ -8,6 +8,10 @@ export default class BasicNode {
     return this.graph.children(this.id, oneLevel)
   }
 
+  parents(oneLevel = true) {
+    return this.graph.parents(this.id, oneLevel)
+  }
+
   get maxDistanceFromRoot() {
     if (_.isUndefined(this._maxDistanceFromRoot)) {
       this._maxDistanceFromRoot = this._calculateMaxDistanceFromRoot()
