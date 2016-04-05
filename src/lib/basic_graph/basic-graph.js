@@ -13,8 +13,13 @@ export default class BasicGraph {
     return new BasicGraph(itemSubset, edgeSubset)
   }
 
+  // TODO(Question for Ozzie): Why aren't these passing oneLevel down? Seems like this shouldn't work...
   children(id, oneLevel=true) {
-    return this.childrenIds(id, oneLevel).map(e => this.nodes.find(m => m.id === e))
+    return this.childrenIds(id).map(e => this.nodes.find(m => m.id === e))
+  }
+
+  parents(id, oneLevel=true) {
+    return this.parentIds(id).map(e => this.nodes.find(m => m.id === e))
   }
 
   childrenIds(id, oneLevel=true) {
@@ -32,6 +37,16 @@ export default class BasicGraph {
       newEdges = this.edges.filter(e => _.some(descendants, d => d.id === e.input))
     }
     return descendants
+  }
+
+  // TODO(Question for Ozzie): Why didn't I have to fix this too? Is this function ever being called? Is this actually
+  // used?
+  parentIds(id, oneLevel=true) {
+    const oneLevelParents = this.edges.filter(e => e.output === id).map(e => e.input)
+    return oneLevel ?
+      oneLevelParents
+      :
+      _.uniq(_.flattenDeep([oneLevelParents, oneLevelParents.map(e => this.parentsIds(e, false))]))
   }
 }
 
