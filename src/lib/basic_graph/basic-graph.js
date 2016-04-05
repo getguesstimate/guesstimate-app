@@ -13,7 +13,6 @@ export default class BasicGraph {
     return new BasicGraph(itemSubset, edgeSubset)
   }
 
-  // TODO(Question for Ozzie): Why aren't these passing oneLevel down? Seems like this shouldn't work...
   children(id, oneLevel=true) {
     return this.childrenIds(id, oneLevel).map(e => this.nodes.find(m => m.id === e))
   }
