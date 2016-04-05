@@ -97,7 +97,7 @@ class Editor extends Component{
   }
 
   _convertToNumbers(values) {
-    return values.split(/[\n\s,]+/).map(Number)
+    return values.split(/[\s,]+/).filter(s => s !== "").map(Number)
   }
 
   render() {
