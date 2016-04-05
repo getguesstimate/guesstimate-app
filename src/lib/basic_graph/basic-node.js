@@ -8,8 +8,8 @@ export default class BasicNode {
     return this.graph.children(this.id, oneLevel)
   }
 
-  parents(oneLevel = true) {
-    return this.graph.parents(this.id, oneLevel)
+  directParents() {
+    return this.graph.directParents(this.id)
   }
 
   get maxDistanceFromRoot() {
@@ -25,8 +25,8 @@ export default class BasicNode {
     let ancestors = [this]
     while (ancestors.length > 0) {
       distanceFromRoot++
-      ancestors = _.uniq(_.flatten(ancestors.map(e => e.parents())))
-      ancestors = ancestors.filter( e => (e.id !== this.id) )
+      ancestors = _.uniq(_.flatten(ancestors.map(node => node.directParents())))
+      ancestors = ancestors.filter(node => (node.id !== this.id) )
     }
     return distanceFromRoot
   }
