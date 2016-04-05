@@ -23,3 +23,14 @@ export function dependencyMap(dGraph: DGraph): Array<Object>{
   return _.flatten(asLists)
 }
 
+// The bizarro graph is the version of the graph where a guesstimates input is
+// replaces its guesstimte
+export function toBizarroGraph(graph, guesstimateForm){
+  //Super slow!
+  let bGraph = _.cloneDeep(graph)
+  bGraph.metrics = bGraph.metrics.map(m => {
+    let guesstimate = (guesstimateForm.metric === m.id) ? guesstimateForm : m.guesstimate
+    return Object.assign({}, m, {guesstimate})
+  })
+  return bGraph
+}
