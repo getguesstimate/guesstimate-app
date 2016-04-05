@@ -14,27 +14,34 @@ export default class BasicGraph {
   }
 
   children(id, oneLevel=true) {
-    return this.childrenIds(id).map(e => this.nodes.find(m => m.id === e))
+    return this.childrenIds(id, oneLevel).map(e => this.nodes.find(m => m.id === e))
   }
 
-  parents(id, oneLevel=true) {
-    return this.parentIds(id).map(e => this.nodes.find(m => m.id === e))
+  directParents(id) {
+    return this.directParentIds(id).map(e => this.nodes.find(m => m.id === e))
   }
 
   childrenIds(id, oneLevel=true) {
-    const oneLevelChildren = this.edges.filter(e => e.input === id).map(e => e.output)
-    return oneLevel ?
-      oneLevelChildren
-      :
-      _.uniq(_.flattenDeep([oneLevelChildren, oneLevelChildren.map(e => this.childrenIds(e, false))]))
+    let seen = this.edges.filter(e => e.input === id)
+    let descendants = seen.map(e => e.output)
+    if (oneLevel) {return descendants}
+
+    // Now we do a breadth first walk down the edges of the graph, checking to see if we've encountered an infinite loop
+    // at each stage.
+    let newEdges = this.edges.filter(e => _.some(descendants, d => d.id === e.input))
+    while (newEdges.length > 0) {
+      if (_.some(newEdges, e => _.some(seen, s => s === e))) {
+        break
+      }
+      descendants = _.uniq(descendants.concat(newEdges.map(e => e.output)))
+      seen = seen.concat(newEdges)
+      newEdges = this.edges.filter(e => _.some(descendants, d => d.id === e.input))
+    }
+    return descendants
   }
 
-  parentIds(id, oneLevel=true) {
-    const oneLevelParents = this.edges.filter(e => e.output === id).map(e => e.input)
-    return oneLevel ?
-      oneLevelParents
-      :
-      _.uniq(_.flattenDeep([oneLevelParents, oneLevelParents.map(e => this.parentsIds(e, false))]))
+  directParentIds(id) {
+    return this.edges.filter(e => e.output === id).map(e => e.input)
   }
 }
 
