@@ -18,8 +18,8 @@ export function toBizarroGraph(graph, guesstimateForm){
   if (!_.has(guesstimateForm, 'metric')) { return graph }
   //Super slow!
   let bGraph = _.cloneDeep(graph)
-  bGraph.guesstimates = graph.guesstimates && graph.guesstimates.filter((g) => (g.metric !== guesstimateForm.metric))
-  bGraph.guesstimates = bGraph.guesstimates && bGraph.guesstimates.concat(guesstimateForm)
+  bGraph.guesstimates = graph.guesstimates.filter((g) => (g.metric !== guesstimateForm.metric))
+  bGraph.guesstimates = bGraph.guesstimates.concat(guesstimateForm)
   return bGraph
 }
 
