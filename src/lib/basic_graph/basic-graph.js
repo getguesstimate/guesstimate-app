@@ -22,22 +22,11 @@ export default class BasicGraph {
   }
 
   childrenIds(id, oneLevel=true) {
-    let seen = this.edges.filter(e => e.input === id)
-    let descendants = seen.map(e => e.output)
-    if (oneLevel) {return descendants}
-
-    // Now we do a breadth first walk down the edges of the graph, checking to see if we've encountered an infinite loop
-    // at each stage.
-    let newEdges = this.edges.filter(e => _.some(descendants, d => d.id === e.input))
-    while (newEdges.length > 0) {
-      if (_.some(newEdges, e => _.some(seen, s => s === e))) {
-        break
-      }
-      descendants = _.uniq(descendants.concat(newEdges.map(e => e.output)))
-      seen = seen.concat(newEdges)
-      newEdges = this.edges.filter(e => _.some(descendants, d => d.id === e.input))
-    }
-    return descendants
+    const oneLevelChildren = this.edges.filter(e => e.input === id).map(e => e.output)
+    return oneLevel ?
+      oneLevelChildren
+      :
+      _.uniq(_.flattenDeep([oneLevelChildren, oneLevelChildren.map(e => this.childrenIds(e, false))]))
   }
 
   directParentIds(id) {
