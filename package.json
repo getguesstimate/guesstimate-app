@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "_build": "BUILD_DEV=0 API_ENV=production webpack",
-    "_stage": "surge -p public -d test.getguesstimate.com",
+    "_stage": "surge -p public -d stage.getguesstimate.com",
 
     "start": "BUILD_DEV=0 NODE_ENV=development API_ENV=development webpack-dev-server",
     "start-production": "BUILD_DEV=0 NODE_ENV=development API_ENV=production webpack-dev-server",

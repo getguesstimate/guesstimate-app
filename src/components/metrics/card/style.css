@@ -14,7 +14,6 @@
   cursor: move;
 }
 
-
 .metricCard:not(.titleView):not(.display) {
   border-bottom: 2px solid #ccc;
 }
@@ -23,23 +22,8 @@
   border-color: $blue-1;
 }
 
-.metricCard {
-  transition: background-color 0.2s, background 0.2s;
-}
-
 .metricCard:not(.titleView) {
-  transition: background-color 0.2s, background 0.2s;
   background-color: rgba(255,255,255,0.975);
-}
-
-.metricCard.intermediate:not(.titleView) {
-  transition: background-color 0.2s, background 0.2s;
-  background-color: rgba(242, 244, 247, 0.94);
-}
-
-.metricCard.noedge:not(.titleView) {
-  transition: background-color 0.2s, background 0.2s;
-  background-color: rgba(255,255,255,0.6);
 }
 
 .row > .sqwish-right {
@@ -79,18 +63,8 @@
 
 .metricCard .DistributionSummary {
   margin: 5px 0 0 2px;
-  font-weight: 200;
+  font-weight: 500;
   font-family: Lato, Arial, sans-serif;
-  color: #444
-}
-
-.metricCard.input .DistributionSummary {
-  color: #222;
-}
-
-.metricCard.output .DistributionSummary {
-  font-weight: 800;
-  color: #111;
 }
 
 .metricCard:focus {
