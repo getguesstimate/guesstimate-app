@@ -10,16 +10,11 @@
   @mixin hover-input;
   padding: 2px;
   color: $grey-2;
-  color: rgba(69, 98, 134, 0.83);
-  font-weight: 300;
+  font-weight: 500;
   width: 100%;
   font-size: 0.99em;
   float: left;
   line-height: 1.2em;
-}
-
-.output .MetricName textarea{
-  font-weight: 500;
 }
 
 .titleView .MetricName textarea{
