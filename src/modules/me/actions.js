@@ -31,12 +31,13 @@ export const signUp = () => {
         dispatch(displayErrorsActions.newError())
       } else {
         dispatch(auth0MeLoaded(profile, token))
-        const {nickname, picture, user_id, email, name, gender, locale, location} = profile
+        const {nickname, picture, user_id, email, job_title, name, gender, locale, location} = profile
         dispatch(userActions.create(
           {
             name,
             username: nickname,
             email,
+            job_title,
             locale,
             location,
             gender,
