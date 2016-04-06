@@ -17,20 +17,16 @@ function metricInputs(metric, dGraph) {
   return inputs.map( i => { return {output: metric.id, input: i} })
 }
 
-export function dependencyMap(dGraph: DGraph): Array<Object>{
+export function dependencyMap(dGraph, guesstimateForm = {}) {
   if (_.isUndefined(dGraph)) { return [] }
-  let asLists = dGraph.metrics.map(m => metricInputs(m, dGraph))
+
+  let asLists = dGraph.metrics
+    .map(m => toBizarroMetric(m, guesstimateForm))
+    .map(m => metricInputs(m, dGraph))
   return _.flatten(asLists)
 }
 
-// The bizarro graph is the version of the graph where a guesstimates input is
-// replaces its guesstimte
-export function toBizarroGraph(graph, guesstimateForm){
-  //Super slow!
-  let bGraph = _.cloneDeep(graph)
-  bGraph.metrics = bGraph.metrics.map(m => {
-    let guesstimate = (guesstimateForm.metric === m.id) ? guesstimateForm : m.guesstimate
-    return Object.assign({}, m, {guesstimate})
-  })
-  return bGraph
+function toBizarroMetric(metric, guesstimateForm) {
+  if (guesstimateForm.metric === metric.id) { return {...metric, guesstimate: guesstimateForm} }
+  else { return metric }
 }
