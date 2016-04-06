@@ -28,14 +28,14 @@ export default class BasicGraph {
 
     // Now we do a breadth first walk down the edges of the graph, checking to see if we've encountered an infinite loop
     // at each stage.
-    let newEdges = this.edges.filter(e => _.some(descendants, d => d.id === e.input))
+    let newEdges = this.edges.filter(e => _.some(descendants, d => d === e.input))
     while (newEdges.length > 0) {
       if (_.some(newEdges, e => _.some(seen, s => s === e))) {
         break
       }
       descendants = _.uniq(descendants.concat(newEdges.map(e => e.output)))
       seen = seen.concat(newEdges)
-      newEdges = this.edges.filter(e => _.some(descendants, d => d.id === e.input))
+      newEdges = this.edges.filter(e => _.some(descendants, d => d === e.input))
     }
     return descendants
   }
