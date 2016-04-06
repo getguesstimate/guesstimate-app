@@ -15,9 +15,7 @@ export const denormalizedSpaceSelector = createSelector(
     let dSpace = space && Object.assign(space.asMutable(), e.space.toDgraph(space.id, graph))
 
     if (dSpace) {
-      let bGraph = e.dgraph.toBizarroGraph(dSpace, guesstimateForm)
-      dSpace.edges = e.dgraph.dependencyMap(bGraph)
-
+      dSpace.edges = e.dgraph.dependencyMap(dSpace, guesstimateForm)
       dSpace.canvasState = canvasState
       dSpace.metrics = dSpace.metrics.map(s => {
         let edges = {}

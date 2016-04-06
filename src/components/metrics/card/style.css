@@ -34,7 +34,7 @@
 
 .metricCard.intermediate:not(.titleView) {
   transition: background-color 0.2s, background 0.2s;
-  background-color: rgba(234, 236, 239, 0.94)
+  background-color: rgba(242, 244, 247, 0.94);
 }
 
 .metricCard.noedge:not(.titleView) {
