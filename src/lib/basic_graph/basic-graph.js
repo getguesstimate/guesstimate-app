@@ -30,12 +30,10 @@ export default class BasicGraph {
     // at each stage.
     let newEdges = this.edges.filter(e => _.some(descendants, d => d === e.input))
     while (newEdges.length > 0) {
-      if (_.some(newEdges, e => _.some(seen, s => s === e))) {
-        break
-      }
-      descendants = _.uniq(descendants.concat(newEdges.map(e => e.output)))
+      let newDescendants = newEdges.map(e => e.output)
+      descendants = _.uniq(descendants.concat(newDescendants))
       seen = seen.concat(newEdges)
-      newEdges = this.edges.filter(e => _.some(descendants, d => d === e.input))
+      newEdges = this.edges.filter(e => !_.some(seen, s => s === e) && _.some(newDescendants, d => d === e.input))
     }
     return descendants
   }
