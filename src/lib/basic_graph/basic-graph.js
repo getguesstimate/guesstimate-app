@@ -22,18 +22,15 @@ export default class BasicGraph {
   }
 
   childrenIds(id, oneLevel=true) {
-    let seen = this.edges.filter(e => e.input === id)
-    let descendants = seen.map(e => e.output)
+    let descendants = this.edges.filter(e => e.input === id).map(e => e.output)
     if (oneLevel) {return descendants}
 
-    // Now we do a breadth first walk down the edges of the graph, checking to see if we've encountered an infinite loop
-    // at each stage.
+    // Now we do a breadth first walk down the edges of the graph, discarding all previously traversed paths.
     let newEdges = this.edges.filter(e => _.some(descendants, d => d === e.input))
     while (newEdges.length > 0) {
-      let newDescendants = newEdges.map(e => e.output)
-      descendants = _.uniq(descendants.concat(newDescendants))
-      seen = seen.concat(newEdges)
-      newEdges = this.edges.filter(e => !_.some(seen, s => s === e) && _.some(newDescendants, d => d === e.input))
+      let newDescendants = newEdges.map(e => e.output).filter(nd => !_.some(descendants, d => d === nd))
+      descendants = descendants.concat(newDescendants)
+      newEdges = this.edges.filter(e => _.some(newDescendants, d => d === e.input))
     }
     return descendants
   }
