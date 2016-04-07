@@ -96,7 +96,7 @@ export default class SpacesShow extends Component {
     if (!space) { return <div className='spaceShow'></div> }
 
     const sidebarIsViseable = space.editableByMe || !_.isEmpty(space.description)
-    const couldBePrivate = !!space.organization_id || e.me.canMakeMorePrivateModels(this.props.me)
+    const canBePrivate = !!space.organization_id || e.me.canMakeMorePrivateModels(this.props.me)
     const isLoggedIn = e.me.isLoggedIn(this.props.me)
     return (
       <div className='spaceShow'>
@@ -112,7 +112,7 @@ export default class SpacesShow extends Component {
                     onCopy={this._handleCopy.bind(this)}
                     onDestroy={this.destroy.bind(this)}
                     space={space}
-                    couldBePrivate={couldBePrivate}
+                    canBePrivate={canBePrivate}
                     onPublicSelect={this.onPublicSelect.bind(this)}
                     onPrivateSelect={this.onPrivateSelect.bind(this)}
                 />
