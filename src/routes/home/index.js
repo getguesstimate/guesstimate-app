@@ -54,7 +54,7 @@ export default class Home extends Component {
                 <p>
                   Make a great estimate in seconds.<br/>
                   If you think a number is between <strong>5</strong> and <strong>9</strong>, <br/>
-                  simple write <strong>[5,9]</strong>.
+                  simply write <strong>[5,9]</strong>.
                 </p>
               </div>
               <div className='col-sm-4'>
