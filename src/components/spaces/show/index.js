@@ -70,11 +70,7 @@ export default class SpacesShow extends Component {
   }
 
   onPrivateSelect() {
-    const canMakeMorePrivateModels = e.me.canMakeMorePrivateModels(this.props.me)
-
-    if (canMakeMorePrivateModels) {
-      this.props.dispatch(spaceActions.generalUpdate(parseInt(this.props.spaceId), {is_private: true}))
-    }
+    this.props.dispatch(spaceActions.generalUpdate(parseInt(this.props.spaceId), {is_private: true}))
   }
 
   onSaveName(name) {
@@ -97,17 +93,17 @@ export default class SpacesShow extends Component {
 
   render() {
     const space = this.props.denormalizedSpace;
-    const sidebarIsViseable = !!space && (space.editableByMe || !_.isEmpty(space.description))
-    const canMakeMorePrivateModels = e.me.canMakeMorePrivateModels(this.props.me)
+    if (!space) { return <div className='spaceShow'></div> }
+
+    const sidebarIsViseable = space.editableByMe || !_.isEmpty(space.description)
+    const canBePrivate = !!space.organization_id || e.me.canMakeMorePrivateModels(this.props.me)
     const isLoggedIn = e.me.isLoggedIn(this.props.me)
     return (
-    <div className='spaceShow'>
-      <div className='hero-unit'>
-        <div className='container-fluid'>
-          <div className='row'>
-            <div className='col-sm-10'>
-
-              {space &&
+      <div className='spaceShow'>
+        <div className='hero-unit'>
+          <div className='container-fluid'>
+            <div className='row'>
+              <div className='col-sm-10'>
                 <SpacesShowHeader
                     isLoggedIn={isLoggedIn}
                     onDestroy={this.destroy.bind(this)}
@@ -116,39 +112,38 @@ export default class SpacesShow extends Component {
                     onCopy={this._handleCopy.bind(this)}
                     onDestroy={this.destroy.bind(this)}
                     space={space}
-                    canMakeMorePrivateModels={canMakeMorePrivateModels}
+                    canBePrivate={canBePrivate}
                     onPublicSelect={this.onPublicSelect.bind(this)}
                     onPrivateSelect={this.onPrivateSelect.bind(this)}
                 />
-              }
-            </div>
+              </div>
 
-            <div className='col-sm-2'>
-              {space && space.user && !space.editableByMe &&
-                <div>
-                  <a className='ui image label' href={`/users/${space.user.id}`}>
-                    <img src={space.user.picture}/>
-                    {space.user.name}
-                  </a>
-                </div>
-              }
+              <div className='col-sm-2'>
+                {space.user && !space.editableByMe &&
+                  <div>
+                    <a className='ui image label' href={`/users/${space.user.id}`}>
+                      <img src={space.user.picture}/>
+                      {space.user.name}
+                    </a>
+                  </div>
+                }
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div className='content'>
-        {sidebarIsViseable && this.state.showSidebar &&
-          <SpaceSidebar
-              space={space}
-              onClose={this.hideSidebar.bind(this)}
-              onSaveDescription={this.onSaveDescription.bind(this)}
-          />
-        }
-        {sidebarIsViseable && !this.state.showSidebar &&
-          <ClosedSpaceSidebar onOpen={this.openSidebar.bind(this)}/>
-        }
-        {space && <SpaceCanvas spaceId={space.id}/>}
-      </div>
+        <div className='content'>
+          {sidebarIsViseable && this.state.showSidebar &&
+            <SpaceSidebar
+                space={space}
+                onClose={this.hideSidebar.bind(this)}
+                onSaveDescription={this.onSaveDescription.bind(this)}
+            />
+          }
+          {sidebarIsViseable && !this.state.showSidebar &&
+            <ClosedSpaceSidebar onOpen={this.openSidebar.bind(this)}/>
+          }
+          <SpaceCanvas spaceId={space.id}/>
+        </div>
       </div>
     )
   }
