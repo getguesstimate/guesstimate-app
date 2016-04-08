@@ -44,7 +44,7 @@ class ScatterP extends Component {
 
     var data = [{
       customLabel: 'somethingA',
-      customValues: _.zip(xSamples.slice(0,100), ySamples.slice(0,100))
+      customValues: _.zip(xSamples.slice(0,300), ySamples.slice(0,300))
     }];
 
     var labelAccessor = (s) => s.customLabel
