@@ -58,10 +58,11 @@ export var Sampler = {
 
 const requiredSampleCount = (text, inputs, n) => (isPure(text, inputs) ? 1 : n)
 
-export function sampleInputs(inputs) {
+export function sampleInputs(inputs, i) {
   const sample = {}
   for (let key of Object.keys(inputs)){
-    sample[key] = _.sample(inputs[key])
+    let item = null
+    sample[key] = inputs[key][i % inputs[key].length]
   }
   return sample
 }
@@ -69,7 +70,7 @@ export function sampleInputs(inputs) {
 export function sample(compiled, inputs, n){
   let samples = []
   for (let i = 0; i < n; i++) {
-    const sampledInputs = sampleInputs(inputs)
+    const sampledInputs = sampleInputs(inputs, i)
     const newSample = compiled.eval(sampledInputs)
 
     if (_.isFinite(newSample)) {
