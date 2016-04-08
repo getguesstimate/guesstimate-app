@@ -36,7 +36,6 @@ export default class CanvasSpace extends Component{
     denormalizedSpace: PropTypes.object,
     dispatch: PropTypes.func,
     guesstimateForm: PropTypes.object,
-    isSelected: PropTypes.bool,
     selected: PropTypes.object,
     spaceId: PropTypes.oneOfType([
         React.PropTypes.string,
@@ -80,8 +79,19 @@ export default class CanvasSpace extends Component{
     this.props.dispatch(changeSelect(next))
   }
 
+  selectedMetric() {
+   const {selected} = this.props
+   const metrics = _.get(this.props.denormalizedSpace, 'metrics')
+
+   const item = metrics && metrics.filter(i => _.isEqual(i.location, selected))[0];
+   return item
+  }
+
+
   renderMetric(metric) {
     const {location} = metric
+    const selected = this.selectedMetric()
+    const samples = _.get(selected, 'simulation.sample.values')
     return (
       <Metric
           canvasState={this.props.canvasState}
@@ -89,6 +99,7 @@ export default class CanvasSpace extends Component{
           key={metric.id}
           location={location}
           metric={metric}
+          selectedSamples={samples}
       />
     )
   }

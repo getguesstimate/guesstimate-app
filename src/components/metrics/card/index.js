@@ -226,6 +226,7 @@ class MetricCard extends Component {
                   </div>
                 }
 
+                {this.props.selectedSamples && this.props.selectedSamples.length}
                 <div className='col-xs-12'>
                   {showSimulation &&
                     <DistributionSummary
