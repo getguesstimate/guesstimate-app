@@ -18,6 +18,7 @@ import $ from 'jquery'
 import MetricToken from './token/index.js'
 import './style.css'
 import * as canvasStateProps from 'gModules/canvas_state/prop_type.js'
+import {BarChart, ScatterPlot} from 'react-d3-components'
 
 const INTERMEDIATE = 'INTERMEDIATE'
 const OUTPUT = 'OUTPUT'
@@ -35,6 +36,38 @@ const relationshipType = (edges) => {
   if (edges.inputs.length) { return OUTPUT }
   if (edges.outputs.length) { return INPUT }
   return NOEDGE
+}
+
+class ScatterP extends Component {
+  render() {
+    const {xSamples, ySamples} = this.props
+
+    var data = [{
+      customLabel: 'somethingA',
+      customValues: _.zip(xSamples.slice(0,100), ySamples.slice(0,100))
+    }];
+
+    var labelAccessor = (s) => s.customLabel
+    var valuesAccessor = (s) => s.customValues
+    var xAccessor = (e) => e[0]
+    var yAccessor = (e) => e[1]
+
+    const tooltipScatter = (x,y) => "foobar"
+    return (
+      <div className='Scatter'>
+        <ScatterPlot
+          data={data}
+          width={180}
+          height={100}
+          margin={{top: 10, bottom: 30, left: 20, right: 10}}
+          xAxis={{tickArguments: [2], innerTickSize: 4, outerTickSize: 2, tickPadding: 3}}
+          yAxis={{tickArguments: [2], innerTickSize: 4, outerTickSize: 2, tickPadding: 3}}
+          x={xAccessor}
+          y={yAccessor}
+          values={valuesAccessor}/>
+      </div>
+    )
+  }
 }
 
 const PT = PropTypes
@@ -225,8 +258,9 @@ class MetricCard extends Component {
                     />
                   </div>
                 }
-
-                {this.props.selectedSamples && this.props.selectedSamples.length}
+                {this.props.selectedSamples && this.props.selectedSamples.length && showSimulation &&
+                  <ScatterP ySamples={this.props.selectedSamples} xSamples={metric.simulation.sample.values}/>
+                }
                 <div className='col-xs-12'>
                   {showSimulation &&
                     <DistributionSummary
