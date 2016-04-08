@@ -4,6 +4,14 @@ import BasicGraph from './basic-graph.js'
 
 describe('Graph', () => {
   let inputs = {
+    // Structure:
+    //       1
+    //      /|
+    //     2 |
+    //      \|
+    //       3
+    //       |
+    //       4
     nodeIds: [1,2,3,4,5],
     nodeEdges: [
       {input: 1, output: 2},
@@ -14,6 +22,65 @@ describe('Graph', () => {
   }
 
   let graph = new BasicGraph(inputs.nodeIds, inputs.nodeEdges)
+
+  let longInputs = {
+    // Structure:
+    //  1  2  3  4
+    //   \ |  | /
+    //    \|  |/
+    //     \  /
+    //      \/
+    //   5   6
+    //    \  |
+    //     \ |
+    //      \|
+    //       7
+    //       |
+    //       8
+    //       |
+    //       9
+    nodeIds: [1,2,3,4,5,6,7,8,9],
+    nodeEdges: [
+      {input: 1, output: 6},
+      {input: 2, output: 6},
+      {input: 3, output: 6},
+      {input: 4, output: 6},
+      {input: 5, output: 7},
+      {input: 6, output: 7},
+      {input: 7, output: 8},
+      {input: 8, output: 9},
+    ]
+  }
+  let longGraph = new BasicGraph(longInputs.nodeIds, longInputs.nodeEdges)
+
+  let deepInputs = {
+    // Structure:
+    //  1  2  3  4
+    //  | /| /  /
+    //  |/ |/  /
+    //  5  /  /
+    //  | /  /
+    //  |/  /
+    //  6  /
+    //  | /
+    //  |/
+    //  7
+    //  |
+    //  8
+    nodeIds: [1,2,3,4,5,6,7,8],
+    nodeEdges: [
+      {input: 1, output: 5},
+      {input: 2, output: 5},
+      {input: 2, output: 6},
+      {input: 3, output: 6},
+      {input: 5, output: 6},
+      {input: 4, output: 7},
+      {input: 6, output: 7},
+      {input: 7, output: 8},
+    ]
+  }
+  let deepGraph = new BasicGraph(deepInputs.nodeIds, deepInputs.nodeEdges)
+
 
   describe('#constructor', () => {
     it('contains nodes', () => {
@@ -73,6 +140,14 @@ describe('Graph', () => {
 
       it('with no children', () => {
         expect(graph.children(4, false)).to.deep.equal([])
+      })
+
+      it('long graph', () => {
+        expect(longGraph.childrenIds(3, false)).to.deep.have.members([6,7,8,9])
+      })
+
+      it('deep graph', () => {
+        expect(deepGraph.childrenIds(2, false)).to.deep.have.members([5,6,7,8])
       })
     })
   })
