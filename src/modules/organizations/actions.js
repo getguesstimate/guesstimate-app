@@ -29,7 +29,7 @@ export function fetchById(organizationId) {
 
 export function fetchSuccess(organizations) {
   return (dispatch) => {
-    const formatted = organizations.map(o => _.pick(o, ['id', 'name']))
+    const formatted = organizations.map(o => _.pick(o, ['id', 'name', 'picture']))
     dispatch(sActions.fetchSuccess(formatted))
   }
 }

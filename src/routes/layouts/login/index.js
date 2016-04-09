@@ -96,7 +96,8 @@ export default class Profile extends Component {
           {
             props: {
               header: `${o.name}`,
-              ionicIcon: 'ios-people',
+              imageShape: 'circle',
+              image: o.picture,
               onMouseDown: () => {this.newModel(o.id); this.closeDropdown(ref)}
             },
             id: o.id
@@ -128,6 +129,8 @@ export default class Profile extends Component {
           {
             props: {
               header: `${o.name}`,
+              imageShape: 'circle',
+              image: o.picture,
               onMouseDown: () => {navigationActions.navigate(organization.url(o)); this.closeDropdown(ref)}
             },
             id: o.id
