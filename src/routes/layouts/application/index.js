@@ -51,7 +51,8 @@ export default class Layout extends Component{
     let options = Object.assign({}, {
       isFluid: false,
       simpleHeader: false,
-      showFooter: true
+      showFooter: true,
+      embed: false
     }, this.props.options)
 
     this._registerUser()
@@ -62,7 +63,7 @@ export default class Layout extends Component{
         <ErrorModal/>
         <div className='Layout'>
           <ModalContainer/>
-          <Header isFluid={options.isFluid} isBare={options.simpleHeader}/>
+          {!options.embed && <Header isFluid={options.isFluid} isBare={options.simpleHeader}/>}
           <Main isFluid={options.isFluid} backgroundColor={options.backgroundColor}> {body} </Main>
           {options.showFooter && <Footer/>}
         </div>
