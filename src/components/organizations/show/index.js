@@ -79,7 +79,6 @@ export default class OrganizationShow extends Component{
                     </h2>
                     <div className='members'>
                       {members && members.map(m => {
-                        console.log('member', m)
                         return (<Member key={m.id} user={m}/>)
                       })}
                     </div>

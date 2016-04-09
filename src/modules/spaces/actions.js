@@ -22,7 +22,10 @@ function api(state) {
 export function destroy(object) {
   const id = object.id;
   return (dispatch, getState) => {
-    app.router.history.navigate('/models')
+
+    const navigateTo = !!object.organization_id ? e.organization.urlById(object.organization_id) : e.user.urlById(object.user_id)
+    app.router.history.navigate(navigateTo)
+
     dispatch(sActions.deleteStart({id}));
 
     api(getState()).models.destroy({spaceId: id}, (err, value) => {

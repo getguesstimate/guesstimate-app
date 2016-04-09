@@ -5,5 +5,9 @@ export function usersOrganizations(user, memberships, organizations) {
 }
 
 export function url (user) {
-  return (!!user) ? ('/users/' + user.id) : ''
+  return (!!user) ? urlById(user.id) : ''
+}
+
+export function urlById (id) {
+  return '/users/' + id
 }
