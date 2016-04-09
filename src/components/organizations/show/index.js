@@ -4,7 +4,10 @@ import SpaceList from 'gComponents/spaces/list'
 import * as spaceActions from 'gModules/spaces/actions'
 import * as organizationActions from 'gModules/organizations/actions'
 import { organizationSpaceSelector } from './organizationSpaceSelector.js';
+import { organizationMemberSelector } from './organizationMemberSelector.js';
 import Container from 'gComponents/utility/container/Container.js'
+import e from 'gEngine/engine'
+import './style.css'
 
 function mapStateToProps(state) {
   return {
@@ -13,8 +16,15 @@ function mapStateToProps(state) {
   }
 }
 
+const Member = ({user}) => (
+  <div className='member'>
+    <a href={e.user.url(user)}><img src={user.picture}/></a>
+  </div>
+)
+
 @connect(mapStateToProps)
 @connect(organizationSpaceSelector)
+@connect(organizationMemberSelector)
 export default class OrganizationShow extends Component{
   displayName: 'OrganizationShow'
 
@@ -47,7 +57,7 @@ export default class OrganizationShow extends Component{
   }
 
   render () {
-    const {organizationId, organizations} = this.props
+    const {organizationId, organizations, members} = this.props
     const spaces =  _.orderBy(this.props.organizationSpaces.asMutable(), ['updated_at'], ['desc'])
     const organization = organizations.find(u => u.id.toString() === organizationId.toString())
 
@@ -57,14 +67,24 @@ export default class OrganizationShow extends Component{
           <div className='GeneralSpaceIndex row'>
             <div className='col-sm-3'>
               <div className='row'>
-
-                <div className='col-sm-12'>
-                    {organization &&
-                      <h2>
-                        {organization.name}
-                      </h2>
-                    }
-                </div>
+                {organization &&
+                  <div className='col-sm-12'>
+                    <div className='main-organization-tag'>
+                      <img
+                        src={organization.picture}
+                      />
+                    </div>
+                    <h2>
+                      {organization.name}
+                    </h2>
+                    <div className='members'>
+                      {members && members.map(m => {
+                        console.log('member', m)
+                        return (<Member key={m.id} user={m}/>)
+                      })}
+                    </div>
+                  </div>
+                }
               </div>
             </div>
 

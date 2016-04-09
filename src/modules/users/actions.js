@@ -90,5 +90,7 @@ export function create(object) {
 }
 
 export function fetchSuccess(users) {
-  return (dispatch) => { dispatch(sActions.fetchSuccess(formatUsers(users))) }
+  return (dispatch, getState) => {
+    dispatch(sActions.fetchSuccess(formatUsers(_.uniqBy(users, 'id'))))
+  }
 }
