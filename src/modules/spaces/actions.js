@@ -37,7 +37,7 @@ export function destroy(object) {
 
 export function fromSearch(data) {
   return (dispatch) => {
-    const formatted = data.map(d => _.pick(d, ['id', 'name', 'description', 'user_id', 'updated_at', 'metric_count', 'is_private']))
+    const formatted = data.map(d => _.pick(d, ['id', 'name', 'description', 'user_id', 'updated_at', 'metric_count', 'is_private', 'screenshot']))
     const action = sActions.fetchSuccess(formatted)
     dispatch(action)
   }
