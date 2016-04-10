@@ -61,7 +61,7 @@ export default class SpaceListItem extends Component {
       <div className='SpaceListItem'>
         <a href={Space.url(space)}>
           <div className='row'>
-            <div className='col-xs-5'>
+            <div className='col-xs-2'>
               {space.screenshot &&
                 <ScreenShot
                   expanded={this.state.expandedPicture}
@@ -71,7 +71,7 @@ export default class SpaceListItem extends Component {
                 />
               }
             </div>
-            <div className='col-xs-7'>
+            <div className='col-xs-10'>
               <div className='row'>
                 <div className='col-xs-7'>
                   <h3 className={className}> {showName} </h3>
