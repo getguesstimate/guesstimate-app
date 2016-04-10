@@ -27,6 +27,14 @@
   font-size: 1.45em;
 }
 
+.SpaceListItem .snapshot img{
+  max-width: 100%;
+}
+
+.SpaceListItem .snapshot img.expanded{
+  max-width: 900px;
+}
+
 .SpaceListItem a h3.default-value {
   color: #aaa;
   font-style: italic;
