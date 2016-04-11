@@ -62,9 +62,6 @@
     "webpack": "^1.12.13",
     "webpack-dev-server": "1.14.0"
   },
-  "peerDependencies": {
-    "react-addons-css-transition-group": "^0.15.x"
-  },
   "dependencies": {
     "algoliasearch": "^3.9.2",
     "ampersand-app": "^1.0.4",
@@ -116,7 +113,7 @@
     "react-redux": "^4.4.0",
     "react-textarea-autosize": "^4.0.0",
     "redux": "^3.1.1",
-    "redux-crud": "^1.0.0",
+    "redux-crud": "^0.10.1",
     "redux-thunk": "^2.0.1",
     "remove-markdown": "0.1.0",
     "reselect": "^2.0.3",
