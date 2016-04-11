@@ -78,15 +78,26 @@ export default class Profile extends Component {
     this.refs[dropDown] && this.refs[dropDown]._close()
   }
 
-  newModelDropdown(organizations) {
+  newModelDropdown(me, organizations) {
     const ref = 'newModel'
-    let listElements = [ {props: {header: 'Personal Model', onMouseDown: ()=>{this.newModel(); this.closeDropdown(ref)}}, id: 0} ]
+    const userPic = _.get(me, 'profile.picture')
+    const userName = _.get(me, 'profile.name')
+    const personalModel = {
+      id: 0,
+      header: userName,
+      imageShape: 'circle',
+      onMouseDown: ()=>{this.newModel(); this.closeDropdown(ref)}
+    }
+    userPic ? (personalModel.image = userPic) : (personalModel.icon = 'user')
+    let listElements = [ {props: personalModel}]
     if (organizations) {
       listElements = listElements.concat(organizations.map(
         o => (
           {
             props: {
-              header: `${o.name} Model`,
+              header: `${o.name}`,
+              imageShape: 'circle',
+              image: o.picture,
               onMouseDown: () => {this.newModel(o.id); this.closeDropdown(ref)}
             },
             id: o.id
@@ -97,7 +108,7 @@ export default class Profile extends Component {
 
     return (
       <DropDown
-        headerText={'Create a Model'}
+        headerText={'Select Owner'}
         openLink={<a className='item'> <i className={`ion-md-add`}/> <span className='text'>New Model</span> </a>}
         ref={ref}
       >
@@ -118,6 +129,8 @@ export default class Profile extends Component {
           {
             props: {
               header: `${o.name}`,
+              imageShape: 'circle',
+              image: o.picture,
               onMouseDown: () => {navigationActions.navigate(organization.url(o)); this.closeDropdown(ref)}
             },
             id: o.id
@@ -149,7 +162,7 @@ export default class Profile extends Component {
     return (
     <div className='header-right-menu'>
 
-      { isLoggedIn && hasOrganizations && this.newModelDropdown(organizations) }
+      { isLoggedIn && hasOrganizations && this.newModelDropdown(me, organizations) }
       { isLoggedIn && !hasOrganizations &&
         <a className='item' onClick={this.newModel.bind(this, null)}>
           <i className={`ion-md-add`}/>

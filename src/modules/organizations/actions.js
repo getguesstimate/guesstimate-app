@@ -4,6 +4,7 @@ import * as displayErrorsActions from 'gModules/displayErrors/actions.js'
 import * as membershipActions from 'gModules/userOrganizationMemberships/actions.js'
 import {captureApiError} from 'lib/errors/index.js'
 import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
+import * as userOrganizationMembershipActions from 'gModules/userOrganizationMemberships/actions.js'
 
 let sActions = actionCreatorsFor('organizations')
 
@@ -21,6 +22,7 @@ export function fetchById(organizationId) {
         dispatch(displayErrorsActions.newError())
         captureApiError('OrganizationsFetch', null, null, err, {url: 'fetch'})
       } else if (organization) {
+        dispatch(userOrganizationMembershipActions.fetchByOrganizationId(organizationId))
         dispatch(sActions.fetchSuccess([organization]))
       }
     })
@@ -29,7 +31,7 @@ export function fetchById(organizationId) {
 
 export function fetchSuccess(organizations) {
   return (dispatch) => {
-    const formatted = organizations.map(o => _.pick(o, ['id', 'name']))
+    const formatted = organizations.map(o => _.pick(o, ['id', 'name', 'picture']))
     dispatch(sActions.fetchSuccess(formatted))
   }
 }
