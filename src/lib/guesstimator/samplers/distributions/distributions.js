@@ -1,35 +1,11 @@
 import {jStat} from 'jstat'
-import {Sampling} from 'discrete-sampling'
+import Sampling from 'discrete-sampling'
 
-function bernoulli(p) {
-  var s = Sampling.Bernoulli(p)
-  return s.draw()
-}
-
-function binomial(n, p) {
-  var s = Sampling.Binomial(n,p)
-  return s.draw()
-}
-
-function poisson(lambda) {
-  var s = Sampling.Poisson(lambda)
-  return s.draw()
-}
-
-function discrete(probabilities) {
-  var s = Sampling.Discrete(probabilities)
-  return s.draw()
-}
-
-function multinomial(n, ps) {
-  var s = Sampling.Multinomial(n, ps)
-  return s.draw()
-}
-
-function negBinomial(r, p) {
-  var s = Sampling.negBinomial(r,p)
-  return s.draw()
-}
+const bernoulli = p => Sampling.Bernoulli(p).draw()
+const binomial = (n, p) => Sampling.Binomial(n,p).draw()
+const poisson = (lambda) => Sampling.Poisson(lambda).draw()
+const discrete = (probabilities) => Sampling.Discrete(probabilities.toArray()).draw()
+const negBinomial = (r, p) => Sampling.NegBinomial(r, p).draw()
 
 export const Distributions = {
   beta: jStat.beta.sample,
@@ -48,7 +24,6 @@ export const Distributions = {
   test: bernoulli,
   binomial: binomial,
   poisson: poisson,
-  multinomial: multinomial,
   negBinomial: negBinomial,
   discrete: discrete
 }
