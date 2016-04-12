@@ -1,22 +1,8 @@
 import math from 'mathjs'
-import {jStat} from 'jstat'
+import {Distributions} from './distributions/distributions.js'
 var Finance = require('financejs')
 const finance = new Finance()
 
-const jStatDistributions = {
-  beta: jStat.beta.sample,
-  centralF: jStat.centralF.sample,
-  cauchy: jStat.cauchy.sample,
-  chisquare: jStat.chisquare.sample,
-  exponential: jStat.exponential.sample,
-  invgamma: jStat.invgamma.sample,
-  lognormal: jStat.lognormal.sample,
-  normal: jStat.normal.sample,
-  studentt: jStat.studentt.sample,
-  weibull: jStat.weibull.sample,
-  uniform: jStat.uniform.sample,
-  gamma: jStat.gamma.sample
-}
 
 const financeFunctions = {
   PV: finance.PV,
@@ -37,12 +23,12 @@ const financeFunctions = {
 
 // Here, we extend the math.js parser and library with the jStat sample functions. We override any default math.js
 // functions because we want the jStat distributions to have priority.
-math.import(jStatDistributions, {override: true})
+math.import(Distributions, {override: true})
 // Here, we extend the math.js parser with financial functions.
 math.import(financeFunctions, {override: true})
 
 // All of jStat's functions are impure as they require sampling on pure inputs.
-const IMPURE_FUNCTIONS = ['pickRandom', 'randomInt', 'random'].concat(Object.keys(jStatDistributions))
+const IMPURE_FUNCTIONS = ['pickRandom', 'randomInt', 'random'].concat(Object.keys(Distributions))
 
 export var Sampler = {
   sample({text}, n, inputs) {
