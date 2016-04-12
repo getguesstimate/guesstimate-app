@@ -10,7 +10,7 @@ import { changeMetric, addMetric } from 'gModules/metrics/actions'
 import { changeSelect } from 'gModules/selection/actions'
 import { runSimulations, deleteSimulations } from 'gModules/simulations/actions'
 
-import './canvas.styl'
+import './style.css'
 import { denormalizedSpaceSelector } from '../denormalized-space-selector.js';
 import JSONTree from 'react-json-tree'
 import * as canvasStateActions from 'gModules/canvas_state/actions.js'
