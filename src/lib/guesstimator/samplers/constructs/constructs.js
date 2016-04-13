@@ -1,4 +1,7 @@
-const options = (values, probabilities) => {
+const scenarios = (values, inputProbabilities) => {
+  const total = _.sum(inputProbabilities)
+  const probabilities = inputProbabilities.map(e => e/total)
+
   const bound = Math.min(values.length, probabilities.length)
   const testStat = Math.random()
 
@@ -14,5 +17,5 @@ const options = (values, probabilities) => {
 }
 
 export const ImpureConstructs = {
-  options: (values, probabilities) => options(values.toArray(), probabilities.toArray()),
+  scenarios: scenarios,
 }

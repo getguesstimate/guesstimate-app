@@ -27,7 +27,7 @@ math.import(Distributions, {override: true})
 // Financial functions:
 math.import(financeFunctions, {override: true})
 // Guesstimate constructs:
-math.import(ImpureConstructs, {override: true})
+math.import(ImpureConstructs, {override: true, wrap: true})
 
 // All of jStat's functions are impure as they require sampling on pure inputs.
 const IMPURE_FUNCTIONS = ['pickRandom', 'randomInt', 'random'].concat(Object.keys(Distributions)).concat(Object.keys(ImpureConstructs))
