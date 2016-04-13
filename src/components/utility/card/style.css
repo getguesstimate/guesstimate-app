@@ -131,6 +131,10 @@
   width: 35px;
 }
 
+.Card li .icons img.circle{
+  border-radius: 3em;
+}
+
 .Card li .info-section{
   color: #555;
 }

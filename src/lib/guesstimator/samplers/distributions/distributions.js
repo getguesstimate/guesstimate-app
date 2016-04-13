@@ -4,7 +4,6 @@ import Sampling from 'discrete-sampling'
 const bernoulli = p => Sampling.Bernoulli(p).draw()
 const binomial = (n, p) => Sampling.Binomial(n,p).draw()
 const poisson = (lambda) => Sampling.Poisson(lambda).draw()
-const discrete = (probabilities) => Sampling.Discrete(probabilities.toArray()).draw()
 const negBinomial = (r, p) => Sampling.NegBinomial(r, p).draw()
 
 export const Distributions = {
@@ -24,6 +23,5 @@ export const Distributions = {
   test: bernoulli,
   binomial: binomial,
   poisson: poisson,
-  negBinomial: negBinomial,
-  discrete: discrete
+  negBinomial: negBinomial
 }

@@ -9,14 +9,23 @@ String.prototype.capitalizeFirstLetter = function() {
 }
 
 export class CardListElement extends Component {
+  static propTypes = {
+    imageShape: PropTypes.oneOf(['circle', 'square']),
+  }
+
+  static defailtProps = {
+    imageShape: 'square'
+  }
+
   _onSelect() {
     const {isSelected, isDisabled} = this.props
     if ((!isSelected) && (!isDisabled)) {
       this.props.onMouseDown()
     }
   }
+
   render() {
-    const {icon, ionicIcon, image, header, children, url, isSelected, isDisabled} = this.props
+    const {icon, ionicIcon, image, imageShape, header, children, url, isSelected, isDisabled} = this.props
 
     let className = 'action'
     if (isSelected) { className += ' selected' }
@@ -41,7 +50,7 @@ export class CardListElement extends Component {
                 <i className={`ion-${ionicIcon}`}/>
               }
               {image &&
-                <img src={image}/>
+                <img src={image} className={imageShape}/>
               }
             </div>
               <div className={`col-xs-${large} info-section`}>

@@ -59,9 +59,6 @@
     "webpack": "^1.12.13",
     "webpack-dev-server": "1.14.0"
   },
-  "peerDependencies": {
-    "react-addons-css-transition-group": "^0.15.x"
-  },
   "dependencies": {
     "algoliasearch": "^3.9.2",
     "ampersand-app": "^1.0.4",

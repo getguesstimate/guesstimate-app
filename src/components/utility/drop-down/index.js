@@ -11,6 +11,7 @@ export class DropDownListElement extends Component {
   static propTypes = {
     icon: PropTypes.string,
     image: PropTypes.string,
+    imageShape: PropTypes.oneOf(['circle', 'square']),
     header: PropTypes.string.isRequired,
     isSelected: PropTypes.bool,
     onMouseDown: PropTypes.func,
@@ -32,9 +33,9 @@ export class DropDownListElement extends Component {
   }
 
   render() {
-    const {icon, ionicIcon, image, header, isSelected, children} = this.props
+    const {icon, ionicIcon, image, imageShape, header, isSelected, children} = this.props
     return (
-      <CardListElement icon={icon} ionicIcon={ionicIcon} image={image} header={header} isSelected={isSelected} onMouseDown={this._onMouseDown.bind(this)}>
+      <CardListElement icon={icon} ionicIcon={ionicIcon} image={image} imageShape={imageShape} header={header} isSelected={isSelected} onMouseDown={this._onMouseDown.bind(this)}>
         {children}
       </CardListElement>
     );
