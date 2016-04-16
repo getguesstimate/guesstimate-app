@@ -24,7 +24,7 @@
 }
 
 .metricCard  .section.display .DistributionSummary {
-  min-height: 90px;
+  min-height: 66px;
 }
 .metricCard {
   transition: background-color 0.2s, background 0.2s;
@@ -72,7 +72,6 @@
   position: absolute;
   z-index: -1;
   left: -5px;
-  width: 100%;
 }
 
 .metricCard .section.editing {
