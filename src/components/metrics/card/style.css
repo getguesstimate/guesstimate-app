@@ -23,6 +23,9 @@
   border-color: $blue-1;
 }
 
+.metricCard  .section.display .DistributionSummary {
+  min-height: 90px;
+}
 .metricCard {
   transition: background-color 0.2s, background 0.2s;
 }

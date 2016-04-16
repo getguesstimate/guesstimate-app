@@ -111,7 +111,7 @@ export default class Edge extends Component{
         <path
             className='basic-arrow'
             d={points}
-            strokeWidth="3"
+            strokeWidth="4"
             markerEnd='url(#markerArrow)'
             fill="none"
         />
