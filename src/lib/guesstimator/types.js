@@ -87,6 +87,7 @@ export const None = {
 const all = [
   Funct,
   DistributionNormal,
+  DistributionBeta,
   DistributionPoint,
   DistributionLognormal,
   DistributionUniform,

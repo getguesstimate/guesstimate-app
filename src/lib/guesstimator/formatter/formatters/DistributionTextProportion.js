@@ -6,13 +6,15 @@ export const item = Object.assign(
     inputType: 'TEXT',
     formatterName: 'DISTRIBUTION_PROPORTIONALITY',
 
-    matches(text) { return !!text && _.isString(text) && text.includes(" of ") },
+    errors(g) { return [] },
+
+    matches({text}) { return !!text && _.isString(text) && text.includes(" of ") },
 
     _numbers(text) { return this._splitNumbersAt(text, " of ") },
 
     format(g) {
       const [hits, total] = this._numbers(g.text)
-      const guesstimateType = this.guesstimateType(g, low)
+      const guesstimateType = "BETA"
       return {guesstimateType, hits, total}
     }
   }
