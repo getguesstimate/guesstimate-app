@@ -20,9 +20,10 @@ function avg(arr) {
   return arr.length > 0 ? arr.reduce((a,b)=>a+b)/arr.length : 1
 }
 
-// Computes min(|a|,|b|)/max(|a|,|b|).
-function fractionLessThanOne(a,b) {
-  return Math.min(Math.abs(a),Math.abs(b))/Math.max(Math.abs(a),Math.abs(b))
+// Computes (min(|a|,|b|)+100)/(max(|a|,|b|)+100). We add 100 to both numerator and denominator to ensure that small
+// numbers don't disproprortionately affect results.
+function shiftedRatio(a,b) {
+  return (Math.min(Math.abs(a),Math.abs(b))+100)/(Math.max(Math.abs(a),Math.abs(b))+100)
 }
 
 // filterLowDensityPoints removes points that occur in only low density regions of the histogram, to ensure that only
@@ -47,7 +48,7 @@ function filterLowDensityPoints(inputData, cutOffRatio) {
   let right = outputData.slice(bucketSize,2*bucketSize)
   // As long as the ratio of the magnitude of their averages is less than the cutOffRatio, we keep discarding the left
   // endpoint and iterating along the array.
-  while (fractionLessThanOne(avg(left),avg(right)) < cutOffRatio) {
+  while (shiftedRatio(avg(left),avg(right)) < cutOffRatio) {
     outputData = outputData.slice(bucketSize)
     left = outputData.slice(0,bucketSize)
     right = outputData.slice(bucketSize,2*bucketSize)
@@ -56,7 +57,7 @@ function filterLowDensityPoints(inputData, cutOffRatio) {
   // Filter Right, analogous to how we filter the left, but in reverse.
   left = outputData.slice(-2*bucketSize,-bucketSize)
   right = outputData.slice(-bucketSize)
-  while (fractionLessThanOne(avg(left),avg(right)) < cutOffRatio) {
+  while (shiftedRatio(avg(left),avg(right)) < cutOffRatio) {
     outputData = outputData.slice(0,-bucketSize)
     left = outputData.slice(-2*bucketSize,-bucketSize)
     right = outputData.slice(-bucketSize)
