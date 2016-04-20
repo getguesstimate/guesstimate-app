@@ -91,7 +91,9 @@ export default class CanvasSpace extends Component{
   renderMetric(metric) {
     const {location} = metric
     const selected = this.selectedMetric()
-    const samples = selected && metric && (selected.id !== metric.id) && _.get(selected, 'simulation.sample.values')
+    const hasSelected = selected && metric && (selected.id !== metric.id)
+    const selectedSamples = _.get(selected, 'simulation.sample.values')
+    const passSelected = hasSelected && selectedSamples && selectedSamples.length
     return (
       <Metric
           canvasState={this.props.canvasState}
@@ -99,7 +101,7 @@ export default class CanvasSpace extends Component{
           key={metric.id}
           location={location}
           metric={metric}
-          selectedSamples={samples}
+          selectedMetric={passSelected && selected}
       />
     )
   }

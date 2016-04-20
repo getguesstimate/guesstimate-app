@@ -18,7 +18,8 @@ import $ from 'jquery'
 import MetricToken from './token/index.js'
 import './style.css'
 import * as canvasStateProps from 'gModules/canvas_state/prop_type.js'
-import {BarChart, ScatterPlot} from 'react-d3-components'
+import ScatterPlot from './ScatterPlot/ScatterPlot.js'
+import ToolTip from 'gComponents/utility/tooltip/index.js'
 
 const INTERMEDIATE = 'INTERMEDIATE'
 const OUTPUT = 'OUTPUT'
@@ -38,34 +39,12 @@ const relationshipType = (edges) => {
   return NOEDGE
 }
 
-class ScatterP extends Component {
+class ScatterTip extends Component {
   render() {
-    const {xSamples, ySamples} = this.props
-
-    var data = [{
-      customLabel: 'somethingA',
-      customValues: _.zip(xSamples.slice(0,300), ySamples.slice(0,300))
-    }];
-
-    var labelAccessor = (s) => s.customLabel
-    var valuesAccessor = (s) => s.customValues
-    var xAccessor = (e) => e[0]
-    var yAccessor = (e) => e[1]
-
-    const tooltipScatter = (x,y) => "foobar"
     return (
-      <div className='Scatter'>
-        <ScatterPlot
-          data={data}
-          width={180}
-          height={100}
-          margin={{top: 10, bottom: 30, left: 20, right: 10}}
-          xAxis={{tickArguments: [2], innerTickSize: 4, outerTickSize: 2, tickPadding: 3}}
-          yAxis={{tickArguments: [2], innerTickSize: 4, outerTickSize: 2, tickPadding: 3}}
-          x={xAccessor}
-          y={yAccessor}
-          values={valuesAccessor}/>
-      </div>
+      <ToolTip size='LARGE'>
+        <ScatterPlot yMetric={this.props.yMetric} xMetric={this.props.xMetric} size={'LARGE'}/>
+      </ToolTip>
     )
   }
 }
@@ -227,6 +206,10 @@ class MetricCard extends Component {
           <MetricToolTip guesstimate={guesstimate}/>
         }
 
+        {this.props.hovered && !isSelected && metric && showSimulation && this.props.selectedMetric &&
+          <ScatterTip yMetric={this.props.selectedMetric} xMetric={metric}/>
+        }
+
         <MetricModal
             metric={metric}
             guesstimateForm={guesstimateForm}
@@ -258,8 +241,8 @@ class MetricCard extends Component {
                     />
                   </div>
                 }
-                {this.props.selectedSamples && this.props.selectedSamples.length && showSimulation &&
-                  <ScatterP ySamples={this.props.selectedSamples} xSamples={metric.simulation.sample.values}/>
+                {this.props.selectedMetric && showSimulation &&
+                  <ScatterPlot yMetric={this.props.selectedMetric} xMetric={metric}/>
                 }
                 <div className='col-xs-12'>
                   {showSimulation &&
