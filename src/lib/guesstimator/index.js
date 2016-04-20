@@ -30,7 +30,6 @@ export class Guesstimator {
   }
 
   sample(n, externalInputs = []) {
-    let foo = samplerTypes
     if (!_.isEmpty(this.parsedErrors)){
       return {errors: this.parsedErrors, values: []}
     }
