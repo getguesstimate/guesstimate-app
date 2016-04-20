@@ -1,5 +1,6 @@
 import math from 'mathjs'
 import {Distributions} from './distributions/distributions.js'
+import {ImpureConstructs} from './constructs/constructs.js'
 var Finance = require('financejs')
 const finance = new Finance()
 
@@ -21,14 +22,15 @@ const financeFunctions = {
   WACC: finance.WACC
 }
 
-// Here, we extend the math.js parser and library with the jStat sample functions. We override any default math.js
-// functions because we want the jStat distributions to have priority.
+// Distributions:
 math.import(Distributions, {override: true})
-// Here, we extend the math.js parser with financial functions.
+// Financial functions:
 math.import(financeFunctions, {override: true})
+// Guesstimate constructs:
+math.import(ImpureConstructs, {override: true, wrap: true})
 
 // All of jStat's functions are impure as they require sampling on pure inputs.
-const IMPURE_FUNCTIONS = ['pickRandom', 'randomInt', 'random'].concat(Object.keys(Distributions))
+const IMPURE_FUNCTIONS = ['pickRandom', 'randomInt', 'random'].concat(Object.keys(Distributions)).concat(Object.keys(ImpureConstructs))
 
 export var Sampler = {
   sample({text}, n, inputs) {
