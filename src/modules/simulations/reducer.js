@@ -12,7 +12,7 @@ function sStats(simulation){
     let s1 = new Stats().push(values)
 
     //stats had bug where it would treat very tiny values (< 10^-10) as sometimes having a tiny stdev (<10^-30)
-    const percentiles = {5: s1.percentile(5), 95: s1.percentile(95)}
+    const percentiles = {5: s1.percentile(5), 50: s1.percentile(50), 95: s1.percentile(95)}
     let stdev = hasNoStdev(values) ? 0 : s1.stddev()
     return {
       mean:  s1.amean(),
