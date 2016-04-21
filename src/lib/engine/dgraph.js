@@ -12,10 +12,14 @@ export function runSimulation(dGraph:DGraph, metricId:string, n:number) {
       let m = metric(dGraph, metricId);
       if (!m) {
         // TODO(matthew): Change to reject
+        console.log(`Resolving in src/lib/engine/dgraph.js at line 15`)
         resolve({errors: ['Unknown metric referenced']})
       } else {
         _guesstimate.sample(m.guesstimate, dGraph, n).then(
-          sample => {resolve(sample)}
+          sample => {
+            console.log(`Resolving in src/lib/engine/dgraph.js at line 20`)
+            resolve(sample)
+          }
         )
       }
     }

@@ -63,11 +63,14 @@ export default class MetricPropagation {
                 if (errors[0]) { this.halted = true }
                 reject(errors)
               }
+              console.log(`Resolving in src/lib/propagation/metric-propagation.js at line 66`)
               resolve()
             }
           )
+        } else {
+          console.log(`Resolving in src/lib/propagation/metric-propagation.js at line 71`)
+          resolve()
         }
-        resolve()
       }
     )
   }
@@ -87,7 +90,10 @@ export default class MetricPropagation {
     return new Promise(
       (resolve, reject) => {
         const simulator = new Simulator(this.metricId, graph, this.propagationId)
-        simulator.run(sampleCount).then(simulation => {resolve(simulation)})
+        simulator.run(sampleCount).then(simulation => {
+          console.log(`Resolving in src/lib/propagation/metric-propagation.js at line 93`)
+          resolve(simulation)
+        })
       }
     )
   }

@@ -24,7 +24,10 @@ export var Sampler = {
           dataType: 'json',
           contentType: 'application/json',
           method: "POST"
-        }).done( json => {resolve(json)} )
+        }).done( json => {
+          console.log(`Resolving in src/lib/guesstimator/samplers/DistributionLognormal.js at line 28`)
+          resolve(json)
+        } )
       }
     )
   }

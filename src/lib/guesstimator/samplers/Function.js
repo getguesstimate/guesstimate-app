@@ -16,7 +16,10 @@ export var Sampler = {
           dataType: 'json',
           contentType: 'application/json',
           method: "POST"
-        }).done( json => {resolve(json)} )
+        }).done( json => {
+          console.log(`Resolving in src/lib/guesstimator/samplers/Function.js at line 20`)
+          resolve(json)
+        })
       }
     )
   }

@@ -12,7 +12,10 @@ export function sample(guesstimate: Guesstimate, dGraph: DGraph, n: number = 1) 
       const externalInputs = item.needsExternalInputs() ? _inputMetricsWithValues(guesstimate, dGraph) : []
       const metric = guesstimate.metric
       item.sample(n, externalInputs).then(
-        sample => {resolve({ metric, sample })}
+        sample => {
+          console.log(`Resolving in src/lib/engine/guesstimate.js at line 16`)
+          resolve({ metric, sample })
+        }
       )
     }
   )

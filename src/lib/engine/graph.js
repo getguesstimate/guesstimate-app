@@ -27,7 +27,10 @@ export function runSimulation(graph, metricId, n){
   return new Promise(
     (resolve, reject) => {
       _dgraph.runSimulation(denormalize(graph), metricId, n).then(
-        sample => resolve(sample)
+        sample => {
+          console.log(`Resolving in src/lib/engine/graph.js at line 31`)
+          resolve(sample)
+        }
       )
     }
   )
