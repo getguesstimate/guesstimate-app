@@ -30,12 +30,20 @@ export class Guesstimator {
   }
 
   sample(n, externalInputs = []) {
-    if (!_.isEmpty(this.parsedErrors)){
-      return {errors: this.parsedErrors, values: []}
-    }
+    return new Promise(
+      (resolve, reject) => {
+        if (!_.isEmpty(this.parsedErrors)){
+          resolve({errors: this.parsedErrors, values: []})
+        }
 
-    const samplerType = this.samplerType()
-    const sample = samplerType.sampler.sample(this.parsedInput, n, externalInputs)
-    return sample
+        const samplerType = this.samplerType()
+        const sampleOrPromise = samplerType.sampler.sample(this.parsedInput, n, externalInputs)
+        if (sampleOrPromise instanceof Promise) {
+          sampleOrPromise.then( sample => {resolve(sample)} )
+        } else {
+          resolve(sampleOrPromise)
+        }
+      }
+    )
   }
 }

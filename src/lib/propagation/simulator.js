@@ -12,10 +12,16 @@ export default class Simulator {
     this.propagationId = propagationId
   }
 
-  run(n:number): void {
-    let simulation = e.graph.runSimulation(this.graph, this.metricId, n);
-    simulation.propagationId = this.propagationId
-    this.simulation = simulation
-    return this
+  run(n:number) {
+    return new Promise(
+      (resolve, reject) => {
+        e.graph.runSimulation(this.graph, this.metricId, n).then(
+          simulation => {
+            simulation.propagationId = this.propagationId
+            resolve(simulation)
+          }
+        )
+      }
+    )
   }
 }

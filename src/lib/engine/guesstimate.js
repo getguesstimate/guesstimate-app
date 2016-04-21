@@ -5,12 +5,17 @@ import {Guesstimator} from '../guesstimator/index.js'
 
 export const attributes = ['metric', 'input', 'guesstimateType', 'description', 'data']
 
-export function sample(guesstimate: Guesstimate, dGraph: DGraph, n: number = 1): Object{
-  const [errors, item] = Guesstimator.parse(guesstimate)
-  const externalInputs = item.needsExternalInputs() ? _inputMetricsWithValues(guesstimate, dGraph) : []
-  const sample = item.sample(n, externalInputs)
-  const metric = guesstimate.metric
-  return { metric, sample }
+export function sample(guesstimate: Guesstimate, dGraph: DGraph, n: number = 1) {
+  return new Promise(
+    (resolve, reject) => {
+      const [errors, item] = Guesstimator.parse(guesstimate)
+      const externalInputs = item.needsExternalInputs() ? _inputMetricsWithValues(guesstimate, dGraph) : []
+      const metric = guesstimate.metric
+      item.sample(n, externalInputs).then(
+        sample => {resolve({ metric, sample })}
+      )
+    }
+  )
 }
 
 export function format(guesstimate: Guesstimate): Guesstimate{

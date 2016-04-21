@@ -55,26 +55,41 @@ export class GraphPropagation {
   }
 
   _propogate(): void {
-    async.whilst(
-      () => (this.currentStep < this.totalSteps),
-      (callback) =>  {
-        this._step();
-        _.delay(() => {callback(null)}, 1)
-      }
-    );
-  }
-
-  _step(): void {
-    let i = (this.currentStep % this.orderedMetricIds.length)
-    this._simulateMetric(this.orderedMetricPropagations[i]);
-    this.currentStep++
-  }
-
-  _simulateMetric(metricPropagation): void {
-    const error = metricPropagation.step(this._graph(), this.dispatch)
-    if (error[0]) {
-      console.warn('Metric simulation error', error[0], error[1])
+    if (this.currentStep >= this.totalSteps) {
+      return
     }
+    this._step().then(() => this._propogate());
+  }
+
+  _step() {
+    return new Promise(
+      (resolve, reject) => {
+        const i = (this.currentStep % this.orderedMetricIds.length)
+        this._simulateMetric(this.orderedMetricPropagations[i]).then(
+          () => {
+            this.currentStep++
+            resolve()
+          }
+        )
+      }
+    )
+  }
+
+  _simulateMetric(metricPropagation) {
+    return new Promise(
+      (resolve, reject) => {
+        metricPropagation.step(this._graph(), this.dispatch).then(
+          () => { resolve() }
+        ).catch(
+          error => {
+            if (error[0]) {
+              console.warn('Metric simulation error', error[0], error[1])
+            }
+            resolve()
+          }
+        )
+      }
+    )
   }
 
   _graph(): Graph {
