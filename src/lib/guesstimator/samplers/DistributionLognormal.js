@@ -1,7 +1,4 @@
 import math from 'mathjs';
-import {Sample} from './Sampler.js'
-import {jStat} from 'jstat'
-
 import $ from 'jquery'
 
 export var Sampler = {

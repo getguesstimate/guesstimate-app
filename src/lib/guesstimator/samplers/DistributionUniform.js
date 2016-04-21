@@ -1,9 +1,23 @@
-import {Sample} from './Sampler.js'
-import {jStat} from 'jstat'
+import $ from 'jquery'
 
 export var Sampler = {
   sample({low, high}, n) {
-    return { values: Sample(n, () => jStat.uniform.sample(low, high)) }
+    return new Promise(
+      (resolve, reject) => {
+        const simulation_cloud_url = "http://localhost:5000/simulate"
+
+        $.ajax({
+          url: simulation_cloud_url,
+          data: JSON.stringify({
+            expr: `uniform(${low},${high})`,
+            numSamples: n
+          }),
+          dataType: 'json',
+          contentType: 'application/json',
+          method: "POST"
+        }).done( json => {resolve(json)} )
+      }
+    )
   }
 }
 

@@ -58,7 +58,7 @@ export class GraphPropagation {
     if (this.currentStep >= this.totalSteps) {
       return
     }
-    this._step().then(() => this._propogate());
+    this._step().then(() => {this._propogate()});
   }
 
   _step() {
