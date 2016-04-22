@@ -6,14 +6,10 @@ import {Guesstimator} from '../guesstimator/index.js'
 export const attributes = ['metric', 'input', 'guesstimateType', 'description', 'data']
 
 export function sample(guesstimate: Guesstimate, dGraph: DGraph, n: number = 1) {
-  return new Promise(
-    (resolve, reject) => {
-      const [errors, item] = Guesstimator.parse(guesstimate)
-      const externalInputs = item.needsExternalInputs() ? _inputMetricsWithValues(guesstimate, dGraph) : []
-      const metric = guesstimate.metric
-      item.sample(n, externalInputs).then(sample => {resolve({ metric, sample })})
-    }
-  )
+  const [errors, item] = Guesstimator.parse(guesstimate)
+  const externalInputs = item.needsExternalInputs() ? _inputMetricsWithValues(guesstimate, dGraph) : []
+  const metric = guesstimate.metric
+  return item.sample(n, externalInputs).then(sample => { metric, sample })
 }
 
 export function format(guesstimate: Guesstimate): Guesstimate{

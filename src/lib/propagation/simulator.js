@@ -13,15 +13,10 @@ export default class Simulator {
   }
 
   run(n:number) {
-    return new Promise(
-      (resolve, reject) => {
-        e.graph.runSimulation(this.graph, this.metricId, n).then(
-          simulation => {
-            simulation.propagationId = this.propagationId
-            console.log(`Resolving in src/lib/propagation/simulator.js at line 21`)
-            resolve(simulation)
-          }
-        )
+    return e.graph.runSimulation(this.graph, this.metricId, n).then(
+      simulation => {
+        simulation.propagationId = this.propagationId
+        return simulation
       }
     )
   }
