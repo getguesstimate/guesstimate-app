@@ -9,7 +9,7 @@ export function sample(guesstimate: Guesstimate, dGraph: DGraph, n: number = 1) 
   const [errors, item] = Guesstimator.parse(guesstimate)
   const externalInputs = item.needsExternalInputs() ? _inputMetricsWithValues(guesstimate, dGraph) : []
   const metric = guesstimate.metric
-  return item.sample(n, externalInputs).then(sample => { metric, sample })
+  return item.sample(n, externalInputs).then(sample => ({ metric, sample }))
 }
 
 export function format(guesstimate: Guesstimate): Guesstimate{

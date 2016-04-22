@@ -9,6 +9,7 @@ const metric = graph.metric;
 export function runSimulation(dGraph:DGraph, metricId:string, n:number) {
   const m = metric(dGraph, metricId);
   if (!m) {
+    console.warn('Unknown metric referenced')
     return Promise.resolve({errors: ['Unknown metric referenced']})
   }
   return _guesstimate.sample(m.guesstimate, dGraph, n)
