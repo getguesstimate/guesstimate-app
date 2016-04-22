@@ -1,9 +1,6 @@
-import Worker from 'worker!./simulator-worker/index.js'
-const workers = [new Worker, new Worker, new Worker, new Worker]
-
 export const simulate = (expr, inputs, numSamples) => {
   const data = {expr, numSamples: numSamples/4, inputs}
-  return Promise.all(workers.map(worker => simulateOnWorker(worker, data))).then(
+  return Promise.all(window.workers.map(worker => simulateOnWorker(worker, data))).then(
     (results) => {
       let finalResult = {values: [], errors: []}
       for (let result of results) {
