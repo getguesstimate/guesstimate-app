@@ -1,5 +1,6 @@
 import math from 'mathjs';
 import $ from 'jquery'
+import {rootUrl} from 'servers/simulation-cloud/constants.js'
 
 export var Sampler = {
   sample({high, low}, n) {
@@ -10,7 +11,7 @@ export var Sampler = {
         const mean = math.mean(high, low)
         const stdev = (high - mean) / 1.645
 
-        const simulation_cloud_url = "http://localhost:5000/simulate"
+        const simulation_cloud_url = rootUrl
 
         $.ajax({
           url: simulation_cloud_url,
