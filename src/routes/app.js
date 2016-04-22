@@ -7,7 +7,7 @@ import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
 import './main.css'
 
 import Worker from 'worker!../lib/guesstimator/samplers/simulator-worker/index.js'
-window.workers = [new Worker, new Worker]
+window.workers = [new Worker]
 
 app.extend({
   init () {
