@@ -6,10 +6,13 @@ import type {DGraph, Sample} from './types.js'
 //borrowing a function from the graph library
 const metric = graph.metric;
 
-export function runSimulation(dGraph:DGraph, metricId:string, n:number): Sample{
-  let m = metric(dGraph, metricId);
-  if (!m) { return {errors: ['Unknown metric referenced']}}
-  return _guesstimate.sample(m.guesstimate, dGraph, n);
+export function runSimulation(dGraph:DGraph, metricId:string, n:number) {
+  const m = metric(dGraph, metricId);
+  if (!m) {
+    console.warn('Unknown metric referenced')
+    return Promise.resolve({errors: ['Unknown metric referenced']})
+  }
+  return _guesstimate.sample(m.guesstimate, dGraph, n)
 }
 
 function metricInputs(metric, dGraph) {

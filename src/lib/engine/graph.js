@@ -23,8 +23,8 @@ export function toBizarroGraph(graph, guesstimateForm){
   return bGraph
 }
 
-export function runSimulation(graph, metricId, n){
-  return _dgraph.runSimulation(denormalize(graph), metricId, n);
+export function runSimulation(graph, metricId, n) {
+  return _dgraph.runSimulation(denormalize(graph), metricId, n)
 }
 
 export function metric(graph, id){

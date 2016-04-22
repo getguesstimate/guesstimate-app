@@ -1,9 +1,8 @@
-import {Sample} from './Sampler.js'
-import {jStat} from 'jstat'
+import {simulate} from 'servers/simulation-cloud/simulation-cloud.js'
 
 export var Sampler = {
   sample({low, high}, n) {
-    return { values: Sample(n, () => jStat.uniform.sample(low, high)) }
+    return simulate(`uniform(${low},${high})`, [], n)
   }
 }
 

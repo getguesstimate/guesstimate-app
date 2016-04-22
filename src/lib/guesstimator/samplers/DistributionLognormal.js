@@ -1,6 +1,5 @@
-import math from 'mathjs';
-import {Sample} from './Sampler.js'
-import {jStat} from 'jstat'
+import math from 'mathjs'
+import {simulate} from 'servers/simulation-cloud/simulation-cloud.js'
 
 export var Sampler = {
   sample({high, low}, n) {
@@ -11,7 +10,7 @@ export var Sampler = {
 
     const mean = math.mean(logHigh, logLow)
     const stdev = (logHigh-logLow) / (2*1.645)
-    return { values: Sample(n, () => jStat.lognormal.sample(mean, stdev)) }
+
+    return simulate(`lognormal(${mean},${stdev})`, [], n)
   }
 }
-
