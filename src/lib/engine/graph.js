@@ -23,17 +23,8 @@ export function toBizarroGraph(graph, guesstimateForm){
   return bGraph
 }
 
-export function runSimulation(graph, metricId, n){
-  return new Promise(
-    (resolve, reject) => {
-      _dgraph.runSimulation(denormalize(graph), metricId, n).then(
-        sample => {
-          console.log(`Resolving in src/lib/engine/graph.js at line 31`)
-          resolve(sample)
-        }
-      )
-    }
-  )
+export function runSimulation(graph, metricId, n) {
+  return _dgraph.runSimulation(denormalize(graph), metricId, n)
 }
 
 export function metric(graph, id){

@@ -30,25 +30,11 @@ export class Guesstimator {
   }
 
   sample(n, externalInputs = []) {
-    return new Promise(
-      (resolve, reject) => {
-        if (!_.isEmpty(this.parsedErrors)){
-          console.log(`Resolving in src/lib/guesstimator/index.js at line 36`)
-          resolve({errors: this.parsedErrors, values: []})
-        }
+    if (!_.isEmpty(this.parsedErrors)){
+      return Promise.resolve({errors: this.parsedErrors, values: []})
+    }
 
-        const samplerType = this.samplerType()
-        const sampleOrPromise = samplerType.sampler.sample(this.parsedInput, n, externalInputs)
-        if (sampleOrPromise instanceof Promise) {
-          sampleOrPromise.then( sample => {
-            console.log(`Resolving in src/lib/guesstimator/index.js at line 43`)
-            resolve(sample)
-          } )
-        } else {
-          console.log(`Resolving in src/lib/guesstimator/index.js at line 46`)
-          resolve(sampleOrPromise)
-        }
-      }
-    )
+    const samplerType = this.samplerType()
+    return samplerType.sampler.sample(this.parsedInput, n, externalInputs)
   }
 }
