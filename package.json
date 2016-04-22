@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "_build": "BUILD_DEV=0 API_ENV=production webpack",
-    "_stage": "surge -p public -d test.getguesstimate.com",
+    "_stage": "surge -p public -d test1.getguesstimate.com",
     "start": "BUILD_DEV=0 NODE_ENV=development API_ENV=development webpack-dev-server",
     "start-production": "BUILD_DEV=0 NODE_ENV=development API_ENV=production webpack-dev-server",
     "stage!": "BUILD_DEV=0 npm run _build && npm run _stage",
@@ -119,6 +119,9 @@
     "standard": "^5.3.1",
     "surge": "^0.17.7",
     "url-loader": "^0.5.6",
+    "worker": "^0.2.1",
+    "worker-loader": "^0.7.0",
+    "workerjs": "^0.1.1",
     "xhr": "^2.0.1",
     "yaml-loader": "^0.1.0"
   }
