@@ -48,29 +48,22 @@ export default class MetricPropagation {
   }
 
   step(graph, dispatch) {
-    return new Promise(
-      (resolve, reject) => {
-        if (this._needsMoreSamples(graph)) {
-          const sampleCount = this.remainingSimulations[this.stepNumber]
-          this._simulate(sampleCount, graph, dispatch).then(
-            simulation => {
-              if (simulation) {
-                const errors = this.errors(simulation)
-                this._dispatch(dispatch, simulation)
+    if (this._needsMoreSamples(graph)) {
+      const sampleCount = this.remainingSimulations[this.stepNumber]
+      return this._simulate(sampleCount, graph, dispatch).then(
+        simulation => {
+          if (simulation) {
+            const errors = this.errors(simulation)
+            this._dispatch(dispatch, simulation)
 
-                this.stepNumber++
+            this.stepNumber++
 
-                if (errors[0]) { this.halted = true }
-                reject(errors)
-              }
-              resolve()
-            }
-          )
-        } else {
-          resolve()
+            if (errors[0]) { this.halted = true }
+          }
         }
-      }
-    )
+      )
+    }
+    return Promise.resolve()
   }
 
   _needsMoreSamples(graph) {

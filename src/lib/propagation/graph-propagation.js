@@ -62,39 +62,12 @@ export class GraphPropagation {
   }
 
   _step() {
-    return new Promise(
-      (resolve, reject) => {
-        const i = (this.currentStep % this.orderedMetricIds.length)
-        this._simulateMetric(this.orderedMetricPropagations[i]).then(
-          () => {
-            this.currentStep++
-            console.log(`Resolving in src/lib/propagation/graph-propagation.js at line 71`)
-            resolve()
-          }
-        )
-      }
-    )
+    const i = (this.currentStep % this.orderedMetricIds.length)
+    return this._simulateMetric(this.orderedMetricPropagations[i]).then(() => {this.currentStep++})
   }
 
   _simulateMetric(metricPropagation) {
-    return new Promise(
-      (resolve, reject) => {
-        metricPropagation.step(this._graph(), this.dispatch).then(
-          () => { 
-            console.log(`Resolving in src/lib/propagation/graph-propagation.js at line 84`)
-            resolve() 
-          }
-        ).catch(
-          error => {
-            if (error[0]) {
-              console.warn('Metric simulation error', error[0], error[1])
-            }
-            console.log(`Resolving in src/lib/propagation/graph-propagation.js at line 92`)
-            resolve()
-          }
-        )
-      }
-    )
+    return metricPropagation.step(this._graph(), this.dispatch)
   }
 
   _graph(): Graph {

@@ -7,23 +7,12 @@ import type {DGraph, Sample} from './types.js'
 const metric = graph.metric;
 
 export function runSimulation(dGraph:DGraph, metricId:string, n:number) {
-  return new Promise(
-    (resolve, reject) => {
-      let m = metric(dGraph, metricId);
-      if (!m) {
-        // TODO(matthew): Change to reject
-        console.log(`Resolving in src/lib/engine/dgraph.js at line 15`)
-        resolve({errors: ['Unknown metric referenced']})
-      } else {
-        _guesstimate.sample(m.guesstimate, dGraph, n).then(
-          sample => {
-            console.log(`Resolving in src/lib/engine/dgraph.js at line 20`)
-            resolve(sample)
-          }
-        )
-      }
-    }
-  )
+  const m = metric(dGraph, metricId);
+  if (!m) {
+    // TODO(matthew): Change to reject
+    return Promise.resolve({errors: ['Unknown metric referenced']})
+  }
+  return _guesstimate.sample(m.guesstimate, dGraph, n)
 }
 
 function metricInputs(metric, dGraph) {
