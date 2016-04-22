@@ -5,11 +5,6 @@ import * as sentry from '../server/sentry/index.js'
 import engine from 'gEngine/engine.js'
 import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
 import './main.css'
-import Worker from 'worker!./worker.js'
-
-const worker = new Worker
-worker.onmessage = function(e) { console.log('got', e) }
-worker.postMessage('b')
 
 app.extend({
   init () {
