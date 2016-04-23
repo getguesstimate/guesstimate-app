@@ -8,11 +8,11 @@ export function runMetricSimulations(metricId, useGuesstimateForm = false) {
   }
 }
 
-export function runFormSimulations(metricId) {
-  return (dispatch) => {
-    dispatch(runMetricSimulations(metricId, true));
-  }
-}
+//export function runFormSimulations3(metricId) {
+  //return (dispatch) => {
+    //dispatch(runMetricSimulations(metricId, true));
+  //}
+//}
 
 export function deleteSimulations(metricIds) {
   return {type: 'DELETE_SIMULATIONS', metricIds}

@@ -1,4 +1,3 @@
-import {runFormSimulations} from 'gModules/simulations/actions.js'
 import {changeGuesstimate} from 'gModules/guesstimates/actions.js'
 import engine from 'gEngine/engine'
 
@@ -20,7 +19,9 @@ export function updateGuesstimateForm(values) {
 export function changeGuesstimateForm(values) {
   return (dispatch, getState) => {
     dispatch(updateGuesstimateForm(values));
-    dispatch(runFormSimulations(getState().guesstimateForm.metric));
+    const state = getState()
+    const metric = state.guesstimateForm.metric
+    dispatch({type: "FOOBAR", getState, metric, dispatch});
   };
 }
 
