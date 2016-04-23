@@ -16,12 +16,13 @@ export function updateGuesstimateForm(values) {
   return { type: 'UPDATE_GUESSTIMATE_FORM', values };
 }
 
+//This is obviously messy, we'll need some other way of getting the State and dispatch from the propogation lib
 export function changeGuesstimateForm(values) {
   return (dispatch, getState) => {
     dispatch(updateGuesstimateForm(values));
     const state = getState()
     const metric = state.guesstimateForm.metric
-    dispatch({type: "FOOBAR", getState, metric, dispatch});
+    dispatch({type: 'RUN_FORM_SIMULATIONS', getState, metric, dispatch});
   };
 }
 
