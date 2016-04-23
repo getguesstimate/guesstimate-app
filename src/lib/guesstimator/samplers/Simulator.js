@@ -15,8 +15,7 @@ export const simulate = (expr, inputs, numSamples) => {
 const simulateOnWorker = (worker, data) => {
   return new Promise(
     (resolve, reject) => {
-      worker.onmessage = ({data}) => {resolve(JSON.parse(data))}
-      worker.postMessage(JSON.stringify(data))
+      worker.push(data, ({data}) => {resolve(JSON.parse(data))})
     }
   )
 }
