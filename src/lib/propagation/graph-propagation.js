@@ -43,7 +43,6 @@ export class GraphPropagation {
 
     const remainingPropagationSteps = this.orderedMetricPropagations.map(p => p.remainingSimulations.length)
     this.totalSteps = _.sum(remainingPropagationSteps)
-    console.log('running processing')
   }
 
   run(): void {

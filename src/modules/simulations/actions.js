@@ -4,16 +4,16 @@ import { call, put } from 'redux-saga/effects'
 
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
-export function* runFormSimulations({getState, metric, dispatch}) {
-  yield call(delay, 50)
-  const propagation = new GraphPropagation(dispatch, getState, {metricId: metric.id, useGuesstimateForm: true})
-  propagation.run()
+export function* runMetricSimluation({getState, metricId, dispatch}) {
+  const propagation = new GraphPropagation(dispatch, getState, {metricId, useGuesstimateForm: true, onlyHead: true})
+  yield propagation.run()
+  yield* runFormSimulation({getState, metricId, dispatch})
 }
 
-export function runMetricSimulations(metricId, useGuesstimateForm = false) {
-  return (dispatch, getState) => {
-    (new GraphPropagation(dispatch, getState, {metricId, useGuesstimateForm})).run()
-  }
+export function* runFormSimulation({getState, metricId, dispatch}) {
+  yield call(delay, 200)
+  const propagation = new GraphPropagation(dispatch, getState, {metricId, useGuesstimateForm: true, notHead: true})
+  yield propagation.run()
 }
 
 export function deleteSimulations(metricIds) {

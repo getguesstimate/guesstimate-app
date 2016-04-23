@@ -21,8 +21,8 @@ export function changeGuesstimateForm(values) {
   return (dispatch, getState) => {
     dispatch(updateGuesstimateForm(values));
     const state = getState()
-    const metric = state.guesstimateForm.metric
-    dispatch({type: 'RUN_FORM_SIMULATIONS', getState, metric, dispatch});
+    const metricId = state.guesstimateForm.metric
+    dispatch({type: 'RUN_FORM_SIMULATIONS', getState, dispatch, metricId});
   };
 }
 
