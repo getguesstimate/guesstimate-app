@@ -88,7 +88,8 @@ export default class Histogram extends React.Component {
   };
 
   render() {
-    const { top, right, bottom, left, data, width, height, cutOffRatio } = this.props;
+    let { top, right, bottom, left, data, width, height, cutOffRatio } = this.props;
+    width = width + 10
 
     const filtered_data = filterLowDensityPoints(data, cutOffRatio)
 

@@ -190,6 +190,10 @@ export default class Profile extends Component {
       }
 
       { !isLoggedIn &&
+        <a className={'item text'} href='/scratchpad'>Scratchpad</a>
+      }
+
+      { !isLoggedIn &&
         <a className={'item text'} onClick={this.signIn.bind(this)}>Sign In</a>
       }
 
