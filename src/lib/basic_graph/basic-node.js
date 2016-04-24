@@ -14,22 +14,19 @@ export default class BasicNode {
 
   get maxDistanceFromRoot() {
     if (_.isUndefined(this._maxDistanceFromRoot)) {
-      this._maxDistanceFromRoot = this._calculateMaxDistanceFromRoot()
+      this._maxDistanceFromRoot = this._calculateMaxDistanceFromRoot([this])
     }
     return this._maxDistanceFromRoot
   }
 
-  _calculateMaxDistanceFromRoot(): integer {
-    // We initialize to -1 as you alwasy get one increment for free in the loop below.
-    let distanceFromRoot = -1
-    let ancestors = [this]
-    let seen = [this]
-    while (ancestors.length > 0) {
-      distanceFromRoot++
-      ancestors = _.uniq(_.flatten(ancestors.map(node => node.directParents())))
-      ancestors = ancestors.filter(node => (!_.some(seen, s => s.id === node.id)))
-      seen = seen.concat(ancestors)
+  _calculateMaxDistanceFromRoot(nodesToIgnore): integer {
+    if (_.isUndefined(this._maxDistanceFromRoot)) {
+      const ancestors = _.uniq(_.flatten(this.directParents())).filter(node => (!_.some(nodesToIgnore, s => s.id === node.id)))
+      const distances = ancestors.map(n => n._calculateMaxDistanceFromRoot(nodesToIgnore.concat([this])))
+
+      this._maxDistanceFromRoot = distances.length > 0 ? Math.max(...distances) + 1 : 0
     }
-    return distanceFromRoot
+    debugger
+    return this._maxDistanceFromRoot
   }
 }
