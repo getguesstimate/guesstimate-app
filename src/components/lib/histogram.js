@@ -1,5 +1,19 @@
 var React = require("react");
+var d3 = require("d3")
 import numberShow from 'lib/numberShower/numberShower.js'
+
+function getYScale(data, height) {
+  return d3.scale.linear().
+    domain([0, d3.max(data, d => d.y)]).
+    range([height, 0])
+}
+
+function getXScale(domain, width) {
+  return d3.scale.linear().
+    domain(domain).
+    range([0, width]).
+    nice();
+}
 
 export default class Histogram extends React.Component {
   static propTypes = {
@@ -24,30 +38,49 @@ export default class Histogram extends React.Component {
   };
 
   componentWillReceiveProps(newProps) {
+    this.setState(Object.assign(this.state ? this.state : {}, {builtHistogram: false}))
+  }
+
+  componentWillUpdate(newProps, newState) {
     let {data, bins, cutOffRatio, width, height} = newProps
+    if (!(data !== this.props.data || bins !== this.props.bins || cutOffRatio !== this.props.cutOffRatio || 
+        width !== this.props.width || height !== this.props.height || !this.state.histogramData)) {
+      console.log("Skipping Update")
+      console.log(`Would simpler version work? ${this.state.builtHistogram ? 'yes' : 'no'}`)
+      return
+    }
+    let foo = this.props
+    let food = this.state
+    debugger
     width = width + 10
     if (!width) { return }
 
     console.log('hitting the worker!')
 
-    window.histogramWorker.onmessage = ({data}) => {
+    window.histogramWorker.push({samples: data, bins, cutOffRatio, width, height}, ({data}) => {
       const newState = Object.assign(this.state ? this.state : {}, JSON.parse(data))
-      debugger
+      newState.builtHistogram = true
+      console.log("Setting State")
       this.setState(newState)
-    }
-    window.histogramWorker.postMessage(JSON.stringify({samples: data, bins, cutOffRatio, width, height}))
+    })
   }
 
   render() {
+    let foo = this.props
+    let food = this.state
+    debugger
     let { top, right, bottom, left, data, width, height, cutOffRatio } = this.props;
     width = width + 10
-    if (!width) {
+    if (!width || !this.state || !this.state.histogramData || !this.state.domain || !height || !this.state.barWidth) {
       return <div></div>
     }
 
-    if (this.state) {
-      const {xScale, yScale, histogramData, barWidth} = this.state
-    }
+    const {domain, histogramData, barWidth} = this.state
+
+    const xScale = getXScale(domain, width)
+    const yScale = getYScale(histogramData, height)
+
+    debugger
 
     return (
       <div className="react-d3-histogram">

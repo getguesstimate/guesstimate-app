@@ -51,12 +51,6 @@ function filterLowDensityPoints(inputData, cutOffRatio) {
   return outputData
 }
 
-function getYScale(data, height) {
-  return d3.scale.linear().
-    domain([0, d3.max(data, (d) => d.y)]).
-    range([height, 0]);
-}
-
 function getXScale(data, width) {
   return d3.scale.linear().
     domain(d3.extent(data)).
@@ -98,24 +92,19 @@ onmessage = event => {
     postMessage(JSON.stringify({errors: errors}))
     return
   }
-  console.log('continuing')
 
   const filtered_samples = filterLowDensityPoints(data.samples, data.cutOffRatio)
-  console.log('continuing')
 
   const xScale = getXScale(filtered_samples, data.width);
-  console.log('continuing')
   const histogramDataFn = d3.layout.histogram().bins(xScale.ticks(data.bins));
-  console.log('continuing')
   const histogramData = histogramDataFn(filtered_samples);
-  console.log('continuing')
-  const yScale = getYScale(histogramData, data.height);
 
-  console.log('continuing')
-  let barWidth = data.width/histogramData.length;
+  const barWidth = data.width/histogramData.length;
+
+  const domain = d3.extent(filtered_samples)
+  const range = [0, d3.max(histogramData, (d) => d.y)]
 
   console.log("Histogram data terminating.")
-  console.log(xScale)
-  console.log(yScale)
-  postMessage(JSON.stringify({histogramData, xScale, yScale, barWidth}))
+  console.log({histogramData, domain, range, barWidth})
+  postMessage(JSON.stringify({histogramData, domain, range, barWidth}))
 }

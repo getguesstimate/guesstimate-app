@@ -1,5 +1,5 @@
 export const simulate = (expr, inputs, numSamples) => {
-  const data = {expr, numSamples: numSamples/4, inputs}
+  const data = {expr, numSamples: numSamples/window.workers.length, inputs}
   return Promise.all(window.workers.map(worker => simulateOnWorker(worker, data))).then(
     (results) => {
       let finalResult = {values: [], errors: []}
@@ -15,8 +15,7 @@ export const simulate = (expr, inputs, numSamples) => {
 const simulateOnWorker = (worker, data) => {
   return new Promise(
     (resolve, reject) => {
-      worker.onmessage = ({data}) => {resolve(JSON.parse(data))}
-      worker.postMessage(JSON.stringify(data))
+      worker.push(data, ({data}) => {resolve(JSON.parse(data))})
     }
   )
 }
