@@ -1,4 +1,3 @@
-import {runFormSimulations} from 'gModules/simulations/actions.js'
 import {changeGuesstimate} from 'gModules/guesstimates/actions.js'
 import engine from 'gEngine/engine'
 
@@ -17,10 +16,13 @@ export function updateGuesstimateForm(values) {
   return { type: 'UPDATE_GUESSTIMATE_FORM', values };
 }
 
+//This is obviously messy, we'll need some other way of getting the State and dispatch from the propogation lib
 export function changeGuesstimateForm(values) {
   return (dispatch, getState) => {
     dispatch(updateGuesstimateForm(values));
-    dispatch(runFormSimulations(getState().guesstimateForm.metric));
+    const state = getState()
+    const metricId = state.guesstimateForm.metric
+    dispatch({type: 'RUN_FORM_SIMULATIONS', getState, dispatch, metricId});
   };
 }
 
