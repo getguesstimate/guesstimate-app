@@ -70,7 +70,6 @@ function evaluate(compiled, inputs, n){
     if (_.isFinite(newSample)) {
       values = values.concat(newSample)
     } else {
-      if (i === 0) {debugger}
       return {values, errors: ['Invalid sample']}
     }
   }
