@@ -23,10 +23,12 @@ export default class BasicNode {
     // We initialize to -1 as you alwasy get one increment for free in the loop below.
     let distanceFromRoot = -1
     let ancestors = [this]
+    let seen = [this]
     while (ancestors.length > 0) {
       distanceFromRoot++
       ancestors = _.uniq(_.flatten(ancestors.map(node => node.directParents())))
-      ancestors = ancestors.filter(node => (node.id !== this.id) )
+      ancestors = ancestors.filter(node => (!_.some(seen, s => s.id === node.id)))
+      seen = seen.concat(ancestors)
     }
     return distanceFromRoot
   }
