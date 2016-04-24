@@ -46,19 +46,10 @@ export class GraphPropagation {
   }
 
   run(): void {
-    this._reset()
-    this._propogate()
-  }
-
-  _reset(): void {
-    this.dispatch(deleteSimulations(this.orderedMetricIds))
-  }
-
-  _propogate(): void {
     if (this.currentStep >= this.totalSteps) {
       return
     }
-    this._step().then(() => {this._propogate()});
+    this._step().then(() => {this.run()});
   }
 
   _step() {

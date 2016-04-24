@@ -4,7 +4,7 @@ import _ from 'lodash';
 
 import e from 'gEngine/engine';
 import type {Simulation, Graph} from '../lib/engine/types.js'
-import {addPartialSimulation} from 'gModules/simulations/actions'
+import {addSimulation} from 'gModules/simulations/actions'
 import Simulator from './simulator'
 
 function isRecentPropagation(propagationId: number, simulation: Simulation) {
@@ -87,9 +87,7 @@ export default class MetricPropagation {
   }
 
   _dispatch(dispatch, simulation) {
-    if (simulation) {
-      dispatch(addPartialSimulation(simulation))
-    }
+    simulation && dispatch(addSimulation(simulation))
   }
 
   _existingSimulation(graph): Simulation {
