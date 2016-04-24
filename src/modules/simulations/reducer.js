@@ -41,11 +41,12 @@ export default function simulations(state = [], action = null) {
     sim = action.simulation;
     const i = state.findIndex(y => y.metric === sim.metric);
     if (i !== -1) {
-      return [
+      const newState =  [
         ...state.slice(0, i),
-        withStats(e.simulation.combine([state[i], sim])),
+        withStats(sim),
         ...state.slice(i+1, state.length)
       ];
+      return newState
     } else {
       return [...state, withStats(sim)];
     }
