@@ -12,9 +12,7 @@ window.workers = [new Worker, new Worker]
 window.workers = window.workers.map(
   worker => {
     worker.queue = []
-    worker.launch = (data) => {
-      worker.postMessage(JSON.stringify(data))
-    }
+    worker.launch = (data) => { worker.postMessage(JSON.stringify(data)) }
     worker.onmessage = (event) => {
       // Remove worker from queue
       const {data, callback} = worker.queue.shift()
