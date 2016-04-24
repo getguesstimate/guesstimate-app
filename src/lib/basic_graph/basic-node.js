@@ -26,7 +26,6 @@ export default class BasicNode {
 
       this._maxDistanceFromRoot = distances.length > 0 ? Math.max(...distances) + 1 : 0
     }
-    debugger
     return this._maxDistanceFromRoot
   }
 }
