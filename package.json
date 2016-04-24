@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "_build": "BUILD_DEV=0 API_ENV=production webpack",
-    "_stage": "surge -p public -d stage.getguesstimate.com",
+    "_stage": "surge -p public -d test1.getguesstimate.com",
     "start": "BUILD_DEV=0 NODE_ENV=development API_ENV=development webpack-dev-server",
     "start-production": "BUILD_DEV=0 NODE_ENV=development API_ENV=production webpack-dev-server",
     "stage!": "BUILD_DEV=0 npm run _build && npm run _stage",
@@ -112,6 +112,7 @@
     "react-textarea-autosize": "^4.0.0",
     "redux": "^3.1.1",
     "redux-crud": "^0.10.1",
+    "redux-saga": "^0.10.0",
     "redux-thunk": "^2.0.1",
     "remove-markdown": "0.1.0",
     "reselect": "^2.0.3",
