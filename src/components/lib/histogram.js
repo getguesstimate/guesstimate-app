@@ -51,7 +51,6 @@ export default class Histogram extends React.Component {
     }
     let foo = this.props
     let food = this.state
-    debugger
     width = width + 10
     if (!width) { return }
 
@@ -60,15 +59,18 @@ export default class Histogram extends React.Component {
     window.histogramWorker.push({samples: data, bins, cutOffRatio, width, height}, ({data}) => {
       const newState = Object.assign(this.state ? this.state : {}, JSON.parse(data))
       newState.builtHistogram = true
+      for (var i = 0; i < newState.histogramData.length; i ++) {
+        newState.histogramData[i].dx = newState.otherData[i].dx
+        newState.histogramData[i].x = newState.otherData[i].x
+        newState.histogramData[i].y = newState.otherData[i].y
+      }
       console.log("Setting State")
+      console.log(newState)
       this.setState(newState)
     })
   }
 
   render() {
-    let foo = this.props
-    let food = this.state
-    debugger
     let { top, right, bottom, left, data, width, height, cutOffRatio } = this.props;
     width = width + 10
     if (!width || !this.state || !this.state.histogramData || !this.state.domain || !height || !this.state.barWidth) {
@@ -79,8 +81,6 @@ export default class Histogram extends React.Component {
 
     const xScale = getXScale(domain, width)
     const yScale = getYScale(histogramData, height)
-
-    debugger
 
     return (
       <div className="react-d3-histogram">

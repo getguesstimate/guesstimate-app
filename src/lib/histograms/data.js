@@ -102,9 +102,13 @@ onmessage = event => {
   const barWidth = data.width/histogramData.length;
 
   const domain = d3.extent(filtered_samples)
-  const range = [0, d3.max(histogramData, (d) => d.y)]
+
+  let otherData = []
+  for (let dataset of histogramData) {
+    otherData.push({dx: dataset.dx, x: dataset.x, y: dataset.y})
+  }
 
   console.log("Histogram data terminating.")
-  console.log({histogramData, domain, range, barWidth})
-  postMessage(JSON.stringify({histogramData, domain, range, barWidth}))
+  console.log({histogramData, domain, barWidth, otherData})
+  postMessage(JSON.stringify({histogramData, domain, barWidth, otherData}))
 }
