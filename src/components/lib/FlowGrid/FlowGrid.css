@@ -64,7 +64,6 @@
   width: 210px;
   min-width: 210px;
   display: flex;
-  padding: 4px;
   flex: 1;
   min-height: 60px;
   z-index: 1;
@@ -76,25 +75,37 @@
   border-color: rgba(0, 25, 95, 0.15);
 }
 
-.showEdges .FlowGridCell {
-  padding: 10px;
-}
-
 .FlowGridFilledCell {
   display: flex;
   width: 100%;
+  padding: 4px;
+}
+
+.showEdges .FlowGridFilledCell {
+  padding: 10px;
 }
 
 .FlowGridEmptyCell {
   width: 100%;
-  border-radius: 3px;
   display: flex;
   cursor: pointer;
   width: 100%;
 }
 
-.FlowGridCell.hovered .FlowGridEmptyCell {
-  background-color: rgba(244, 251, 255, 0.95);
+.FlowGridCell {
+}
+
+.FlowGridCell.hovered {
+  background-color: rgba(94, 189, 226, 0.22);
+}
+
+.FlowGridCell.selected {
+  background-color: rgba(94, 189, 226, 0.42);
+}
+
+.FlowGridCell.selected.hasItem {
+  background-color: rgba(132, 161, 183, 0.54);
+  transition: background-color 0.1s ease;
 }
 
 .FlowGridCell.hovered {
@@ -103,12 +114,12 @@
 
 .FlowGridEmptyCell:focus {
   outline: none;
-  border: 2px solid $blue-1;
 }
 
 .IsOver .FlowGridEmptyCell, .IsOver .isDragging {
-  background-color: $grey-4;
-  border-radius: 3px;
+  transition: background-color 0.2s ease;
+  background-color: rgba(127, 149, 160, 0.81);
+
 }
 
 svg.edge {
