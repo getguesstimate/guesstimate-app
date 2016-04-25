@@ -21,6 +21,21 @@ const PrecisionNumber = ({value, precision}) => {
   )
 }
 
+const AsymmetricUncertainty = ({lowDelta, highDelta}) => (
+  <div className='stdev asymmetric'>
+    <div className='pm'>
+      <div className='symbols'>
+        <div className='plus'>+</div>
+        <div className='minus'>-</div>
+      </div>
+      <div className='numbers'>
+        <div className='number'><PrecisionNumber value={highDelta}/></div>
+        <div className='number'><PrecisionNumber value={lowDelta}/></div>
+      </div>
+    </div>
+  </div>
+)
+
 const Uncertainty = ({range}) => (
   <span className='stdev'> {'±'} <PrecisionNumber value={range}/> </span>
 )
@@ -31,22 +46,39 @@ class DistributionSummarySmall extends Component{
     stats: PropTypes.object,
   }
   render () {
-    const {length, mean, stdev, percentiles} = this.props.stats
+    const {length, mean, stdev, adjustedPercentiles} = this.props.stats
 
     let range = null
-    if (_.isObject(percentiles)) {
-      const [lowRange, highRange] = [(mean - percentiles[5]), (percentiles[95] - mean)]
-      range = (highRange + lowRange) / 2
+    let low = null
+    let high = null
+    let lowDelta = null
+    let highDelta = null
+    if (_.isObject(adjustedPercentiles)) {
+      [low, high] = [adjustedPercentiles[5], adjustedPercentiles[95]]
+      range = mean - ((high + low) / 2)
+      lowDelta = mean - low
+      highDelta = high - mean
     }
 
     const precision = length === 1 ? 6 : 2
 
+    const symmetric = false
+    const ninetypercentCI = false
+    const asymmetric = true
+
     return (
       <div className="DistributionSummary">
+        <div className='mean'>
         <PrecisionNumber value={parseFloat(mean)} precision={precision}/>
-          {!!range && range !== 0 &&
-          <Uncertainty range={range} />
-          }
+        </div>
+        {symmetric &&
+          !!range && range !== 0 &&
+            <Uncertainty range={range} />
+        }
+        {asymmetric &&
+          !!lowDelta && !!highDelta && highDelta*lowDelta !== 0 &&
+            <AsymmetricUncertainty lowDelta={lowDelta} highDelta={highDelta} />
+        }
       </div>
     )
   }

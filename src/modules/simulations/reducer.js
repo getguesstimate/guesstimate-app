@@ -6,6 +6,7 @@ function hasNoStdev(values) {
   return (_.uniq(_.slice(values, 0, 5)).length === 1)
 }
 
+window.stats = Stats
 function sStats(simulation){
   if (_.has(simulation, 'sample.values') && (simulation.sample.values.length > 0)) {
     let values = simulation.sample.values;
@@ -14,11 +15,19 @@ function sStats(simulation){
     //stats had bug where it would treat very tiny values (< 10^-10) as sometimes having a tiny stdev (<10^-30)
     const percentiles = {5: s1.percentile(5), 50: s1.percentile(50), 95: s1.percentile(95)}
     let stdev = hasNoStdev(values) ? 0 : s1.stddev()
+    const mean = s1.amean()
+    const stats = Stats
+    const lowValue = (new Stats().push(values.filter(e => e < mean))).percentile(10)
+    const highValue = (new Stats().push(values.filter(e => e > mean))).percentile(90)
     return {
-      mean:  s1.amean(),
+      mean,
       stdev:  stdev,
       length:  values.length,
-      percentiles
+      percentiles,
+      adjustedPercentiles: {
+        5: lowValue,
+        95: highValue
+      }
     };
   }
 }
