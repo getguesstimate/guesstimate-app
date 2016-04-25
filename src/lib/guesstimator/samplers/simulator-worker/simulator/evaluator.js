@@ -44,7 +44,7 @@ export function Evaluate(text, n, inputs) {
 
 const hasStochasticFunction = text => _.some(STOCHASTIC_FUNCTIONS, e => text.indexOf(e) !== -1)
 
-const requiresManySamples = (text, inputs) => {
+export const requiresManySamples = (text, inputs) => {
   for (let key of Object.keys(inputs)) {
     if (_.some(inputs[key], i => i !== inputs[key][0])) { // Could also just do length === 1?
       return true
@@ -70,7 +70,6 @@ function evaluate(compiled, inputs, n){
     if (_.isFinite(newSample)) {
       values = values.concat(newSample)
     } else {
-      if (i === 0) {debugger}
       return {values, errors: ['Invalid sample']}
     }
   }
