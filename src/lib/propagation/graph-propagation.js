@@ -46,35 +46,19 @@ export class GraphPropagation {
   }
 
   run(): void {
-    this._reset()
-    this._propogate()
-  }
-
-  _reset(): void {
-    this.dispatch(deleteSimulations(this.orderedMetricIds))
-  }
-
-  _propogate(): void {
-    async.whilst(
-      () => (this.currentStep < this.totalSteps),
-      (callback) =>  {
-        this._step();
-        _.delay(() => {callback(null)}, 1)
-      }
-    );
-  }
-
-  _step(): void {
-    let i = (this.currentStep % this.orderedMetricIds.length)
-    this._simulateMetric(this.orderedMetricPropagations[i]);
-    this.currentStep++
-  }
-
-  _simulateMetric(metricPropagation): void {
-    const error = metricPropagation.step(this._graph(), this.dispatch)
-    if (error[0]) {
-      console.warn('Metric simulation error', error[0], error[1])
+    if (this.currentStep >= this.totalSteps) {
+      return
     }
+    this._step().then(() => {this.run()});
+  }
+
+  _step() {
+    const i = (this.currentStep % this.orderedMetricIds.length)
+    return this._simulateMetric(this.orderedMetricPropagations[i]).then(() => {this.currentStep++})
+  }
+
+  _simulateMetric(metricPropagation) {
+    return metricPropagation.step(this._graph(), this.dispatch)
   }
 
   _graph(): Graph {
@@ -89,6 +73,7 @@ export class GraphPropagation {
   }
 
   _orderedMetricIds(graphFilters: object): Array<Object> {
+    if (graphFilters.onlyHead) { return [graphFilters.metricId]}
     this.dependencies = e.graph.dependencyTree(this._graph(), graphFilters)
     const inOrder = _.sortBy(this.dependencies, function(n){return n[1]}).map(e => e[0])
     return inOrder

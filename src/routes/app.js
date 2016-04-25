@@ -6,6 +6,33 @@ import engine from 'gEngine/engine.js'
 import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
 import './main.css'
 
+import Worker from 'worker!../lib/guesstimator/samplers/simulator-worker/index.js'
+window.workers = [new Worker, new Worker]
+
+window.workers = window.workers.map(
+  worker => {
+    worker.queue = []
+    worker.launch = (data) => { worker.postMessage(JSON.stringify(data)) }
+    worker.onmessage = (event) => {
+      // Remove worker from queue
+      const {data, callback} = worker.queue.shift()
+      // Call user callback
+      callback(event)
+      // Run next thing
+      if (worker.queue.length > 0) { worker.launch(worker.queue[0].data) }
+    }
+    worker.push = (data, callback) => {
+      // Add to queue
+      worker.queue.push({data, callback})
+      if (worker.queue.length === 1) {
+        // If nothing is running, start running.
+        worker.launch(data)
+      }
+    }
+    return worker
+  }
+)
+
 app.extend({
   init () {
     window.intercomSettings = {

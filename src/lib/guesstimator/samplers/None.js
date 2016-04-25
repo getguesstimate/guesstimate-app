@@ -1,5 +1,5 @@
 export var Sampler = {
   sample(formatted) {
-    return {values: [], errors: ['Invalid input']}
+    return Promise.resolve({values: [], errors: ['Invalid input']})
   }
 }

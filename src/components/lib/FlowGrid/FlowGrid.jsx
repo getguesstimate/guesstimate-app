@@ -77,7 +77,7 @@ export default class FlowGrid extends Component{
   }
 
   _cell(location) {
-   let atThisLocation = (l) => _.isEqual(l, location)
+   let atThisLocation = (l) => (l.row === location.row && l.column === location.column)
    let isSelected = atThisLocation(this.props.selected)
    let item = this.props.items.filter(i => atThisLocation(i.location))[0];
    return (

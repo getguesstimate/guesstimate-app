@@ -4,7 +4,7 @@ import _ from 'lodash';
 
 import e from 'gEngine/engine';
 import type {Simulation, Graph} from '../lib/engine/types.js'
-import {addPartialSimulation} from 'gModules/simulations/actions'
+import {addSimulation} from 'gModules/simulations/actions'
 import Simulator from './simulator'
 
 function isRecentPropagation(propagationId: number, simulation: Simulation) {
@@ -50,18 +50,20 @@ export default class MetricPropagation {
   step(graph, dispatch) {
     if (this._needsMoreSamples(graph)) {
       const sampleCount = this.remainingSimulations[this.stepNumber]
-      let simulation = this._simulate(sampleCount, graph, dispatch)
-      if (simulation) {
-        const errors = this.errors(simulation)
-        this._dispatch(dispatch, simulation)
+      return this._simulate(sampleCount, graph, dispatch).then(
+        simulation => {
+          if (simulation) {
+            const errors = this.errors(simulation)
+            this._dispatch(dispatch, simulation)
 
-        this.stepNumber++
+            this.stepNumber++
 
-        if (errors[0]) { this.halted = true }
-        return errors
-      }
+            if (errors[0]) { this.halted = true }
+          }
+        }
+      )
     }
-    return [null, null]
+    return Promise.resolve()
   }
 
   _needsMoreSamples(graph) {
@@ -75,16 +77,17 @@ export default class MetricPropagation {
     return (isUncertain && hasRemainingSimulations && notObsolete && !this.halted)
   }
 
-  _simulate(sampleCount, graph, dispatch): void {
-    const simulator = new Simulator(this.metricId, graph, this.propagationId)
-    const {simulation} = simulator.run(sampleCount)
-    return simulation
+  _simulate(sampleCount, graph, dispatch) {
+    return new Promise(
+      (resolve, reject) => {
+        const simulator = new Simulator(this.metricId, graph, this.propagationId)
+        simulator.run(sampleCount).then(simulation => {resolve(simulation)})
+      }
+    )
   }
 
   _dispatch(dispatch, simulation) {
-    if (simulation) {
-      dispatch(addPartialSimulation(simulation))
-    }
+    simulation && dispatch(addSimulation(simulation))
   }
 
   _existingSimulation(graph): Simulation {
