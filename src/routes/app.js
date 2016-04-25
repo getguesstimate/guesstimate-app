@@ -6,8 +6,29 @@ import engine from 'gEngine/engine.js'
 import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
 import './main.css'
 
-import Worker from 'worker!../lib/guesstimator/samplers/simulator-worker/index.js'
-window.workers = [new Worker, new Worker]
+import SimulateWorker from 'worker!../lib/guesstimator/samplers/simulator-worker/index.js'
+import HistogramWorker from 'worker!../lib/histograms/data.js'
+window.workers = [new SimulateWorker, new SimulateWorker]
+window.histogramWorker = new HistogramWorker
+window.histogramWorker.queue = []
+window.histogramWorker.launch = (data) => {
+  window.histogramWorker.postMessage(JSON.stringify(data))
+}
+window.histogramWorker.onmessage = (event) => {
+  const {data, callback} = window.histogramWorker.queue.shift()
+  // Call user callback
+  callback(event)
+  // Run next thing
+  if (window.histogramWorker.queue.length > 0) { window.histogramWorker.launch(window.histogramWorker.queue[0].data) }
+}
+window.histogramWorker.push = (data, callback) => {
+  // Add to queue
+  window.histogramWorker.queue.push({data, callback})
+  if (window.histogramWorker.queue.length === 1) {
+    // If nothing is running, start running.
+    window.histogramWorker.launch(data)
+  }
+}
 
 window.workers = window.workers.map(
   worker => {
