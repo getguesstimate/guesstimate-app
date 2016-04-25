@@ -91,11 +91,11 @@
 }
 
 .FlowGridCell.hovered .FlowGridEmptyCell{
-  background-color: rgba(79, 152, 197, 0.35);
+  background-color: rgba(79, 152, 197, 0.25);
 }
 
 .FlowGridCell.selected .FlowGridEmptyCell{
-  background-color: rgba(79, 152, 197, 0.61);
+  background-color: rgba(79, 152, 197, 0.51);
 }
 
 .FlowGridCell.hovered.hasItem .FlowGridFilledCell{

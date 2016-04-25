@@ -26,7 +26,7 @@
   background-color: rgba(240,242,245,0.88);
 }
 
-.selected .metricCard.noedge:not(.titleView) {
+.selected .metricCard:not(.titleView) {
   background-color: rgba(255,255,255,0.975);
 }
 
