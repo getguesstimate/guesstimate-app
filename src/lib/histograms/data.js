@@ -59,47 +59,46 @@ function getXScale(data, width) {
 }
 
 onmessage = event => {
-  var data = event.data
-
   let errors = []
-  if (!data) {
+  if (!event.data) {
     errors.push("data required")
+    console.warn("data required")
     postMessage(JSON.stringify({errors}))
     return
   }
 
-  data = JSON.parse(data)
-  console.log(data)
+  const {samples, bins, cutOffRatio, width, height} = JSON.parse(event.data)
 
-  if (!data.samples) {
+  if (!samples) {
     errors.push("data.samples required")
   }
-  if (!data.bins) {
+  if (!bins) {
     errors.push("data.bins required")
   }
-  if (!data.cutOffRatio) {
+  if (!cutOffRatio) {
     errors.push("data.cutOffRatio required")
   }
-  if (!data.width) {
+  if (!width) {
     errors.push("data.width required")
   }
-  if (!data.height) {
+  if (!height) {
     errors.push("data.height required")
   }
 
   if (errors.length > 0) {
-    console.log('terminating with errors')
+    console.warn('histogram failed with errors')
+    console.warn(errors)
     postMessage(JSON.stringify({errors: errors}))
     return
   }
 
-  const filtered_samples = filterLowDensityPoints(data.samples, data.cutOffRatio)
+  const filtered_samples = filterLowDensityPoints(samples, cutOffRatio)
 
-  const xScale = getXScale(filtered_samples, data.width);
-  const histogramDataFn = d3.layout.histogram().bins(xScale.ticks(data.bins));
+  const xScale = getXScale(filtered_samples, width);
+  const histogramDataFn = d3.layout.histogram().bins(xScale.ticks(bins));
   const histogramData = histogramDataFn(filtered_samples);
 
-  const barWidth = data.width/histogramData.length;
+  const barWidth = width/histogramData.length;
 
   const domain = d3.extent(filtered_samples)
 
@@ -108,7 +107,5 @@ onmessage = event => {
     otherData.push({dx: dataset.dx, x: dataset.x, y: dataset.y})
   }
 
-  console.log("Histogram data terminating.")
-  console.log({histogramData, domain, barWidth, otherData})
   postMessage(JSON.stringify({histogramData, domain, barWidth, otherData}))
 }

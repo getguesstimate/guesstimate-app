@@ -28,7 +28,6 @@ export default class Histogram extends React.Component {
   };
 
   static defaultProps = {
-    width: 10,
     top: 20,
     right: 5,
     bottom: 30,
@@ -42,19 +41,10 @@ export default class Histogram extends React.Component {
   }
 
   componentWillUpdate(newProps, newState) {
-    let {data, bins, cutOffRatio, width, height} = newProps
-    if (!(data !== this.props.data || bins !== this.props.bins || cutOffRatio !== this.props.cutOffRatio || 
-        width !== this.props.width || height !== this.props.height || !this.state.histogramData)) {
-      console.log("Skipping Update")
-      console.log(`Would simpler version work? ${this.state.builtHistogram ? 'yes' : 'no'}`)
+    const {data, bins, cutOffRatio, width, height} = newProps
+    if (!width || (!!this.state && this.state.builtHistogram)) {
       return
     }
-    let foo = this.props
-    let food = this.state
-    width = width + 10
-    if (!width) { return }
-
-    console.log('hitting the worker!')
 
     window.histogramWorker.push({samples: data, bins, cutOffRatio, width, height}, ({data}) => {
       const newState = Object.assign(this.state ? this.state : {}, JSON.parse(data))
@@ -64,20 +54,28 @@ export default class Histogram extends React.Component {
         newState.histogramData[i].x = newState.otherData[i].x
         newState.histogramData[i].y = newState.otherData[i].y
       }
-      console.log("Setting State")
-      console.log(newState)
       this.setState(newState)
     })
   }
 
+  shouldComponentUpdate(newProps, newState) {
+    if (!newState) {
+      return false
+    }
+    return true
+  }
+
   render() {
-    let { top, right, bottom, left, data, width, height, cutOffRatio } = this.props;
-    width = width + 10
-    if (!width || !this.state || !this.state.histogramData || !this.state.domain || !height || !this.state.barWidth) {
+    if (!this.state) {
       return <div></div>
     }
 
+    const {top, right, bottom, left, data, width, height, cutOffRatio} = this.props
     const {domain, histogramData, barWidth} = this.state
+
+    if (!width || !histogramData || !domain || !height || !barWidth) {
+      return <div></div>
+    }
 
     const xScale = getXScale(domain, width)
     const yScale = getYScale(histogramData, height)
