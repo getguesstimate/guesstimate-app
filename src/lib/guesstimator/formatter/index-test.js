@@ -20,19 +20,4 @@ describe('formatter', () => {
       })
     }).map(e => e())
   });
-
-  describe('#format', () => {
-    const examples = [
-      [{text: '=34', graph: {}}, {guesstimateType: 'FUNCTION', text: '34', inputs: {}}],
-      [{text: '34'}, {guesstimateType: 'POINT', value: 34}],
-      [{guesstimateType: 'POINT', text: '34'}, {guesstimateType: 'POINT', value: 34}],
-      [{text: '8 -> 9'}, {guesstimateType: 'NORMAL', low: 8, high: 9}]
-    ]
-
-    examples.map(e => () => {
-      it(`formats input ${JSON.stringify(e[0])}`, () => {
-        expect(parse(e[0])[1].guesstimateType).to.deep.equal(e[1].guesstimateType)
-      })
-    }).map(e => e())
-  });
 })
