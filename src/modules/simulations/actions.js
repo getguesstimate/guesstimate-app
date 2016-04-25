@@ -26,6 +26,6 @@ export function runSimulations({spaceId}) {
   };
 }
 
-export function addPartialSimulation(simulation) {
+export function addSimulation(simulation) {
     return { type: 'UPDATE_SIMULATION', simulation};
 }
