@@ -17,7 +17,6 @@
 }
 
 .FlowGridRow--Horizontal-Index {
-  width: 100%;
   border-radius: 3px;
   display: flex;
   cursor: pointer;
@@ -69,11 +68,9 @@
   z-index: 1;
 }
 
-.FlowGrid.withLines .FlowGridCell {
-  border-right: 1px dashed rgba(0, 25, 95, 0.15);
-  border-bottom: 1px dashed rgba(0, 25, 95, 0.15);
-  /*border-left: 1px solid rgba(0,0,0,0);*/
-  /*border-top: 1px solid rgba(0,0,0,0);*/
+.FlowGrid .FlowGridCell{
+  border-right: 1px dashed rgba(0, 25, 95, 0.09);
+  border-bottom: 1px dashed rgba(0, 25, 95, 0.09);
 }
 
 .FlowGridFilledCell {
@@ -94,21 +91,26 @@
 }
 
 .FlowGridCell.hovered .FlowGridEmptyCell{
-  background-color: rgba(94, 189, 226, 0.22);
+  background-color: rgba(79, 152, 197, 0.35);
 }
 
 .FlowGridCell.selected .FlowGridEmptyCell{
-  background-color: rgba(99, 157, 202, 0.45);
+  background-color: rgba(79, 152, 197, 0.61);
 }
 
 .FlowGridCell.hovered.hasItem .FlowGridFilledCell{
-  background-color: rgba(132, 161, 183, 0.34);
+  background-color: rgba(75, 138, 177, 0.3);
   border-radius: 1px;
 }
 
 .FlowGridCell.selected.hasItem .FlowGridFilledCell{
-  background-color: rgba(99,139,165,0.67);
+  background-color: rgba(75, 138, 177, 0.64);
   border-radius: 1px;
+}
+
+.FlowGridCell.selected.hasItem.IsOver .FlowGridFilledCell{
+  transition: background-color 0.2s ease;
+  background-color: rgba(127, 149, 160, 0.81);
 }
 
 .FlowGridCell.hovered {
@@ -122,7 +124,6 @@
 .IsOver .FlowGridEmptyCell, .IsOver .isDragging {
   transition: background-color 0.2s ease;
   background-color: rgba(127, 149, 160, 0.81);
-
 }
 
 svg.edge {
