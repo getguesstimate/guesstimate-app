@@ -1,7 +1,7 @@
 @import './styles/variables.css';
 
 .metricCard {
-  border-radius: 2px;
+  border-radius: 1px;
   max-width: 30em;
   white-space: normal;
   z-index: 0;
@@ -12,15 +12,6 @@
   display:flex;
   flex-direction: column;
   cursor: move;
-}
-
-
-.metricCard:not(.titleView):not(.display) {
-  border-bottom: 2px solid #ccc;
-}
-
-.selected .metricCard:not(.display) {
-  border-color: $blue-1;
 }
 
 .metricCard {

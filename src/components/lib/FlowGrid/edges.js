@@ -3,7 +3,7 @@ import Edge from './edge';
 import _ from 'lodash'
 
 let upto = (n) => Array.apply(null, {length: n}).map(Number.call, Number)
-const PADDING_WIDTH = 7
+const PADDING_WIDTH = 6
 
 export default class Edges extends Component {
   displayName: 'Edges'

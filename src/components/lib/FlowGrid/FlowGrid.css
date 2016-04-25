@@ -70,19 +70,20 @@
 }
 
 .FlowGrid.withLines .FlowGridCell {
-  border-right: 1px dashed;
-  border-bottom: 1px dashed;
-  border-color: rgba(0, 25, 95, 0.15);
+  border-right: 1px dashed rgba(0, 25, 95, 0.15);
+  border-bottom: 1px dashed rgba(0, 25, 95, 0.15);
+  /*border-left: 1px solid rgba(0,0,0,0);*/
+  /*border-top: 1px solid rgba(0,0,0,0);*/
 }
 
 .FlowGridFilledCell {
   display: flex;
   width: 100%;
-  padding: 4px;
+  padding: 3px;
 }
 
 .showEdges .FlowGridFilledCell {
-  padding: 10px;
+  padding: 6px;
 }
 
 .FlowGridEmptyCell {
@@ -92,20 +93,22 @@
   width: 100%;
 }
 
-.FlowGridCell {
-}
-
-.FlowGridCell.hovered {
+.FlowGridCell.hovered .FlowGridEmptyCell{
   background-color: rgba(94, 189, 226, 0.22);
 }
 
-.FlowGridCell.selected {
-  background-color: rgba(94, 189, 226, 0.42);
+.FlowGridCell.selected .FlowGridEmptyCell{
+  background-color: rgba(99, 157, 202, 0.45);
 }
 
-.FlowGridCell.selected.hasItem {
-  background-color: rgba(132, 161, 183, 0.54);
-  transition: background-color 0.1s ease;
+.FlowGridCell.hovered.hasItem .FlowGridFilledCell{
+  background-color: rgba(132, 161, 183, 0.34);
+  border-radius: 1px;
+}
+
+.FlowGridCell.selected.hasItem .FlowGridFilledCell{
+  background-color: rgba(99,139,165,0.67);
+  border-radius: 1px;
 }
 
 .FlowGridCell.hovered {
