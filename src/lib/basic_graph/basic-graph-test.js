@@ -155,6 +155,15 @@ describe('Graph', () => {
 
 describe('BasicNode', () => {
   let inputs = {
+    // Structure:
+    //  1       5
+    //  |\
+    //  | 2
+    //  |/
+    //  3
+    //  |
+    //  |
+    //  4
     nodeIds: [1,2,3,4,5],
     nodeEdges: [
       {input: 1, output: 2},
@@ -167,10 +176,10 @@ describe('BasicNode', () => {
   let graph = new BasicGraph(inputs.nodeIds, inputs.nodeEdges)
 
   describe('#maxDistanceFromRoot', () => {
-      it('works', () => {
-        const allDistances = graph.nodes.map(n => n.maxDistanceFromRoot)
-        expect(allDistances).to.deep.equal([0, 1, 2, 3, 0])
-      })
+    it('works', () => {
+      const allDistances = graph.nodes.map(n => n.maxDistanceFromRoot)
+      expect(allDistances).to.deep.equal([0, 1, 2, 3, 0])
+    })
   })
 })
 

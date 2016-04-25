@@ -92,6 +92,7 @@ export default class Cell extends Component {
   _classes = () => {
     let classes = 'FlowGridCell'
     classes += (this.props.isSelected ? ' selected' : ' nonSelected')
+    classes += this.props.item ? ' hasItem' : ''
     classes += this.props.isOver ? ' IsOver' : ''
     classes += this.state.hover ? ' hovered' : ''
     return classes

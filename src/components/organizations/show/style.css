@@ -1,0 +1,28 @@
+.organizationShow .main-organization-tag {
+  text-align: center;
+  margin-right: 0.5em;
+  margin-top: 0.25em;
+}
+
+.organizationShow .main-organization-tag img{
+  width: 8em;
+  height: 8em;
+  border-radius: 0.5em;
+  margin-bottom: 10px;
+}
+
+.organizationShow .members {
+  margin-top: 30px;
+  float: left;
+}
+
+.organizationShow .member {
+  float: left;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.organizationShow .member img{
+  width: 40px;
+  border-radius: 3em;
+}

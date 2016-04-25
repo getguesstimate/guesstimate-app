@@ -23,8 +23,8 @@ export function toBizarroGraph(graph, guesstimateForm){
   return bGraph
 }
 
-export function runSimulation(graph, metricId, n){
-  return _dgraph.runSimulation(denormalize(graph), metricId, n);
+export function runSimulation(graph, metricId, n) {
+  return _dgraph.runSimulation(denormalize(graph), metricId, n)
 }
 
 export function metric(graph, id){
@@ -45,13 +45,21 @@ export function dependencyList(graph, spaceId) {
 
 // This could be optimized for filtering the graph by the space subset
 export function dependencyTree(oGraph, graphFilters) {
-  const {spaceId, metricId} = graphFilters
+  const {spaceId, metricId, onlyHead, notHead} = graphFilters
+  if (onlyHead) {
+    return [[metricId, 0]]
+  } else {
+    let graph = oGraph
+    if (spaceId) { graph = _space.subset(oGraph, spaceId) }
 
-  let graph = oGraph
-  if (spaceId) { graph = _space.subset(oGraph, spaceId) }
+    let bGraph = basicGraph(graph)
+    if (metricId) { bGraph = bGraph.subsetFrom(metricId) }
 
-  let bGraph = basicGraph(graph)
-  if (metricId) { bGraph = bGraph.subsetFrom(metricId) }
-
-  return bGraph.nodes.map(n => [n.id, n.maxDistanceFromRoot])
+    const nodes =  bGraph.nodes.map(n => [n.id, n.maxDistanceFromRoot])
+    if (notHead){
+      return nodes.filter(e => (e[0] !== metricId))
+    } else {
+      return nodes
+    }
+  }
 }

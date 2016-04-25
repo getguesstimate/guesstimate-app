@@ -1,5 +1,6 @@
 import {Sampler as DistributionNormalSampler} from './samplers/DistributionNormal.js'
 import {Sampler as DistributionLognormalSampler} from './samplers/DistributionLognormal.js'
+import {Sampler as DistributionBetaSampler} from './samplers/DistributionBeta.js'
 import {Sampler as DistributionPointSampler} from './samplers/DistributionPoint.js'
 import {Sampler as DistributionUniformSampler} from './samplers/DistributionUniform.js'
 import {Sampler as FunctionSampler} from './samplers/Function.js'
@@ -47,6 +48,15 @@ export const DistributionLognormal = {
   icon: LogNormalIcon
 }
 
+export const DistributionBeta = {
+  referenceName: 'BETA',
+  types: ['DISTRIBUTION', 'BETA'],
+  displayName: 'Beta',
+  isRangeDistribution: true,
+  sampler: DistributionBetaSampler,
+  icon: LogNormalIcon // Update
+}
+
 
 export const DistributionUniform = {
   referenceName: 'UNIFORM',
@@ -77,6 +87,7 @@ export const None = {
 const all = [
   Funct,
   DistributionNormal,
+  DistributionBeta,
   DistributionPoint,
   DistributionLognormal,
   DistributionUniform,
