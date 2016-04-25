@@ -73,6 +73,7 @@ export class GraphPropagation {
   }
 
   _orderedMetricIds(graphFilters: object): Array<Object> {
+    if (graphFilters.onlyHead) { return [graphFilters.metricId]}
     this.dependencies = e.graph.dependencyTree(this._graph(), graphFilters)
     const inOrder = _.sortBy(this.dependencies, function(n){return n[1]}).map(e => e[0])
     return inOrder
