@@ -166,6 +166,9 @@ class MetricCard extends Component {
     const {isSelected, metric, guesstimateForm} = this.props
     const {canvasState: {metricCardView, metricClickMode}} = this.props
     const {guesstimate} = metric
+    // Sometimes we generate a 2 element array of 'undefined' values as errors, hence the filter.
+    let errors = _.get(metric, 'simulation.sample.errors')
+    errors = errors ? errors.filter(e => !!e) : []
 
     const anotherFunctionSelected = ((metricClickMode === 'FUNCTION_INPUT_SELECT') && !isSelected)
 
@@ -181,6 +184,7 @@ class MetricCard extends Component {
     className += ` ${metricCardView}`
     className += titleView ? ' titleView' : ''
     className += ' ' + relationshipClass
+    className += errors.length > 0 ? ' hasErrors' : ''
 
     return (
       <div

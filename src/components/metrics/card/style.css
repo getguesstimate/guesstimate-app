@@ -17,17 +17,29 @@
 .metricCard:not(.titleView) {
   background-color: rgba(255,255,255,0.975);
 }
+.metricCard:not(.titleView).hasErrors {
+  background-color: rgba(255,0,0,0.5);
+}
 
 .metricCard.intermediate:not(.titleView) {
   background-color: rgba(242, 244, 247, 0.94);
+}
+.metricCard.intermediate:not(.titleView).hasErrors {
+  background-color: rgba(255,0,0,0.5);
 }
 
 .metricCard.noedge:not(.titleView) {
   background-color: rgba(240,242,245,0.88);
 }
+.metricCard.noedge:not(.titleView).hasErrors {
+  background-color: rgba(255,0,0,0.5);
+}
 
 .selected .metricCard:not(.titleView) {
   background-color: rgba(255,255,255,0.975);
+}
+.selected .metricCard:not(.titleView).hasErrors {
+  background-color: rgba(255,0,0,0.5);
 }
 
 .row > .sqwish-right {

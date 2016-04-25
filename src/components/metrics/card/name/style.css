@@ -1,5 +1,9 @@
 @import './styles/variables.css';
 
+.hasErrors .MetricName{
+  color: $black-2
+}
+
 .MetricName {
   float: left;
   width: 100%;
@@ -17,9 +21,8 @@
   float: left;
   line-height: 1.2em;
 }
-
-.output .MetricName textarea{
-  font-weight: 500;
+.haserrors .metricname textarea{
+  color: $black-2;
 }
 
 .titleView .MetricName textarea{
