@@ -1,7 +1,5 @@
 import {Evaluate} from './simulator/evaluator.js'
 
-console.log("Worker spinning up.")
-
 onmessage = event => {
   var data = event.data
 
