@@ -35,9 +35,11 @@ export default class MetricPropagation {
   metricId: string;
   propagationId: number;
   firstPass: boolean;
+  inInfiniteLoop: boolean;
   remainingSimulations: Array<number>;
 
-  constructor(metricId: string, propagationId: number) {
+  constructor(metricId: string, inInfiniteLoop: boolean, propagationId: number) {
+    this.inInfiniteLoop = inInfiniteLoop
     this.metricId = metricId
     this.propagationId = propagationId
 
@@ -48,6 +50,19 @@ export default class MetricPropagation {
   }
 
   step(graph, dispatch) {
+    if (this.inInfiniteLoop) {
+      const simulation = {
+        metric: this.metricId,
+        propagationId: this.propagationId,
+        sample: {
+          values: [],
+          errors: ['infinite loop detected']
+        }
+      }
+      this._dispatch(dispatch, simulation)
+      this.halted = true
+      return Promise.resolve()
+    }
     if (this._needsMoreSamples(graph)) {
       const sampleCount = this.remainingSimulations[this.stepNumber]
       return this._simulate(sampleCount, graph, dispatch).then(
