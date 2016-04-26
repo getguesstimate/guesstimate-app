@@ -5,7 +5,7 @@ export const simulate = (expr, inputs, numSamples) => {
       let finalResult = {values: [], errors: []}
       for (let result of results) {
         finalResult.values = finalResult.values.concat(result.values)
-        finalResult.errors = finalResult.errors.concat(result.errors)
+        finalResult.errors = _.uniq(finalResult.errors.concat(result.errors))
       }
       return finalResult
     }

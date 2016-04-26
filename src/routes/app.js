@@ -6,6 +6,10 @@ import engine from 'gEngine/engine.js'
 import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
 import './main.css'
 
+import math from 'mathjs'
+let foo = math
+debugger
+
 import Worker from 'worker!../lib/guesstimator/samplers/simulator-worker/index.js'
 window.workers = [new Worker, new Worker]
 
