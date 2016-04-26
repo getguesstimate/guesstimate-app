@@ -9,7 +9,7 @@ export const item = Object.assign(
     errors(g) {
       const value = parseNumber(g.text)
       if (!value || !isParseableNumber(value)) {
-        return ['Invalid sample']
+        return ['invalid sample']
       }
       return []
     },

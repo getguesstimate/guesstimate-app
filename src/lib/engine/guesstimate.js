@@ -19,10 +19,20 @@ export function sample(guesstimate: Guesstimate, dGraph: DGraph, n: number = 1) 
   let inputs = {}
   for (let input of Object.keys(externalInputs)) {
     if (externalInputs[input].errors && externalInputs[input].errors.length > 0) {
-      inputErrors.push(...externalInputs[input].errors.map(e => `Input ${input} has error: ${e}`))
+      const upstreamErrors = externalInputs[input].errors.map(e => {
+        if (e.startsWith("input")) {
+          return `upstream ${e}`
+        } else if (e.startsWith("upstream")) {
+          return e
+        } else {
+          return `input ${input} has error: ${e}`
+        }
+      })
+      inputErrors.push(...upstreamErrors)
     }
     inputs[input] = externalInputs[input].values
   }
+  inputErrors = _.uniq(inputErrors)
   if (inputErrors.length > 0) {
     return Promise.resolve({ metric, sample: {values: [], errors: inputErrors} })
   }

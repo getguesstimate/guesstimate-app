@@ -38,7 +38,8 @@ export function Evaluate(text, n, inputs) {
     const sampleCount = requiresManySamples(text, inputs) ? n : 1
     return evaluate(compiled, inputs, sampleCount)
   } catch (exception) {
-    return {errors: [exception.message]}
+    let error = exception.message[0].toLowerCase() + exception.message.slice(1)
+    return {errors: [error]}
   }
 }
 
@@ -70,7 +71,7 @@ function evaluate(compiled, inputs, n){
     if (_.isFinite(newSample)) {
       values = values.concat(newSample)
     } else {
-      return {values, errors: ['Invalid sample']}
+      return {values, errors: ['invalid sample']}
     }
   }
 
