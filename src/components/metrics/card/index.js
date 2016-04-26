@@ -3,8 +3,9 @@ import ReactDOM from 'react-dom'
 import JSONTree from 'react-json-tree'
 
 import { connect } from 'react-redux';
-import { removeMetric, changeMetric } from 'gModules/metrics/actions.js';
-import { changeGuesstimate } from 'gModules/guesstimates/actions.js';
+import { removeMetric, changeMetric } from 'gModules/metrics/actions.js'
+import { changeGuesstimate } from 'gModules/guesstimates/actions.js'
+import { changeGuesstimateForm } from 'gModules/guesstimate_form/actions.js'
 
 import Histogram from 'gComponents/simulations/histogram'
 import MetricModal from '../modal/index.js'
@@ -128,6 +129,7 @@ class MetricCard extends Component {
     let guesstimate = values
     guesstimate.metric = this.props.metric.id
     this.props.dispatch(changeGuesstimate(this._id(), guesstimate))
+    this.props.dispatch(changeGuesstimateForm(guesstimate, true))
   }
 
   handleRemoveMetric () {
