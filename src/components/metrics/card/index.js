@@ -195,7 +195,7 @@ class MetricCard extends Component {
           tabIndex='0'
       >
         {this.props.hovered && !isSelected &&
-          <MetricToolTip guesstimate={guesstimate}/>
+          <MetricToolTip guesstimate={guesstimate} errors={errors}/>
         }
 
         <MetricModal
