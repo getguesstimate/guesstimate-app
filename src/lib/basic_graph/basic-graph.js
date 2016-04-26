@@ -8,7 +8,7 @@ export default class BasicGraph {
 
   //TODO: If this is slow, filter edges as well
   subsetFrom(id){
-    const itemSubset = this.childrenIds(id, false)
+    const itemSubset = [id, ...this.childrenIds(id, false)]
     const edgeSubset = this.edges.filter(e => _.includes(itemSubset, e.input))
     return new BasicGraph(itemSubset, edgeSubset)
   }
