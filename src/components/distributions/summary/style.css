@@ -4,47 +4,17 @@
   font-size: 1.6em;
 }
 
-.DistributionSummary .symbols{
-  float: left;
-  color: #888;
-  font-size: 0.8em;
-  margin-top: -1px;
-}
-
-.DistributionSummary .symbols .plus{
-}
-
-.DistributionSummary .symbols .minus{
-  font-size: 1.6em;
-}
-
-.DistributionSummary .numbers{
-  float: left;
-  margin-left: 2px;
-}
-
 .DistributionSummary .mean {
   float: left;
+  width: 100%;
 }
 
-.DistributionSummary .stdev {
-  margin-left: 0.25em;
-  font-size: 0.75em;
-  color: #666;
-}
-
-.DistributionSummary .stdev.asymmetric {
-  margin-left: 0.4em;
-  font-size: 0.53em;
-  line-height: 1em;
+.DistributionSummary .UncertaintyRange {
+  font-size: 0.58em;
   color: #555;
   float: left;
-  margin-top: 2px;
-  font-weight: 400;
-}
-
-.DistributionSummary .stdev.asymmetric .pm {
-  margin-top: -0.4em;
+  margin-top: 13px;
+  margin-left: 0;
 }
 
 .DistributionSummary .PrecisionNumber {

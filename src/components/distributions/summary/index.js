@@ -21,23 +21,10 @@ const PrecisionNumber = ({value, precision}) => {
   )
 }
 
-const AsymmetricUncertainty = ({lowDelta, highDelta}) => (
-  <div className='stdev asymmetric'>
-    <div className='pm'>
-      <div className='symbols'>
-        <div className='plus'>+</div>
-        <div className='minus'>-</div>
-      </div>
-      <div className='numbers'>
-        <div className='number'><PrecisionNumber value={highDelta}/></div>
-        <div className='number'><PrecisionNumber value={lowDelta}/></div>
-      </div>
-    </div>
+const UncertaintyRange = ({low, high}) => (
+  <div className='UncertaintyRange'>
+    <PrecisionNumber value={low}/> to <PrecisionNumber value={high}/>
   </div>
-)
-
-const Uncertainty = ({range}) => (
-  <span className='stdev'> {'±'} <PrecisionNumber value={range}/> </span>
 )
 
 @ShowIf
@@ -51,33 +38,18 @@ class DistributionSummarySmall extends Component{
     let range = null
     let low = null
     let high = null
-    let lowDelta = null
-    let highDelta = null
     if (_.isObject(adjustedPercentiles)) {
       [low, high] = [adjustedPercentiles[5], adjustedPercentiles[95]]
-      range = mean - ((high + low) / 2)
-      lowDelta = mean - low
-      highDelta = high - mean
     }
 
     const precision = length === 1 ? 6 : 2
-
-    const symmetric = false
-    const ninetypercentCI = false
-    const asymmetric = true
-
     return (
       <div className="DistributionSummary">
         <div className='mean'>
         <PrecisionNumber value={parseFloat(mean)} precision={precision}/>
         </div>
-        {symmetric &&
-          !!range && range !== 0 &&
-            <Uncertainty range={range} />
-        }
-        {asymmetric &&
-          !!lowDelta && !!highDelta && highDelta*lowDelta !== 0 &&
-            <AsymmetricUncertainty lowDelta={lowDelta} highDelta={highDelta} />
+        {!!low && !!high && high*low !== 0 &&
+          <UncertaintyRange low={low} high={high} />
         }
       </div>
     )
