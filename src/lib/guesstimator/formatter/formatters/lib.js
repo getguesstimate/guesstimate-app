@@ -40,23 +40,25 @@ export const textMixin = {
 // they intended for this to be normal.
 const isNotLogNormal = low => (isFinite(low) && (low <= 0))
 
+export function guesstimateType(g, low) {
+  switch (g.guesstimateType) {
+    case 'UNIFORM':
+      return g.guesstimateType
+    case 'NORMAL':
+      return g.guesstimateType
+    case 'LOGNORMAL':
+      return isNotLogNormal(low) ? 'NORMAL' : 'LOGNORMAL'
+    default:
+      if (!isFinite(low)) { return 'LOGNORMAL' }
+      return isNotLogNormal(low) ? 'NORMAL' : 'LOGNORMAL'
+  }
+}
+
 export const confidenceIntervalTextMixin = Object.assign(
   {}, textMixin,
   {
     errors(g) { return this._confidenceIntervalTextErrors(g.text) },
-    guesstimateType(g, low) {
-      switch (g.guesstimateType) {
-        case 'UNIFORM':
-          return g.guesstimateType
-        case 'NORMAL':
-          return g.guesstimateType
-        case 'LOGNORMAL':
-          return isNotLogNormal(low) ? 'NORMAL' : 'LOGNORMAL'
-        default:
-          if (!isFinite(low)) { return 'LOGNORMAL' }
-          return isNotLogNormal(low) ? 'NORMAL' : 'LOGNORMAL'
-      }
-    },
+    guesstimateType(g, low) { return guesstimateType(g, low) },
     _matchesText(text) { return this._hasRelevantSymbol(text) },
     _confidenceIntervalTextErrors(text) {
       if (this._inputSymbols(text).length > 1) { return ['Must contain only 1 symbol'] }
