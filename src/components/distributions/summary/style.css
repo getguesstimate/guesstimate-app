@@ -5,14 +5,18 @@
 }
 
 .DistributionSummary .mean {
-  font-weight: 500;
-  font-size: 1.5em;
-  color: $black-1;
+  float: left;
+  width: 100%;
 }
 
-.DistributionSummary .stdev {
-  margin-left: 0.25em;
-  font-size: 0.75em;
-  color: #666;
+.DistributionSummary .UncertaintyRange {
+  font-size: 0.58em;
+  color: #555;
+  float: left;
+  margin-top: 5px;
+  margin-left: 0;
 }
 
+.DistributionSummary .PrecisionNumber {
+  float: left;
+}
