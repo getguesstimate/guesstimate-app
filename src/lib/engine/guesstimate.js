@@ -6,10 +6,28 @@ import {Guesstimator} from '../guesstimator/index.js'
 export const attributes = ['metric', 'input', 'guesstimateType', 'description', 'data']
 
 export function sample(guesstimate: Guesstimate, dGraph: DGraph, n: number = 1) {
-  const [errors, item] = Guesstimator.parse(guesstimate)
-  const externalInputs = item.needsExternalInputs() ? _inputMetricsWithValues(guesstimate, dGraph) : []
   const metric = guesstimate.metric
-  return item.sample(n, externalInputs).then(sample => ({ metric, sample }))
+
+  const [parseErrors, item] = Guesstimator.parse(guesstimate)
+  if (parseErrors.length > 0) {
+    return Promise.resolve({ metric, sample: {values: [], errors: parseErrors} })
+  }
+
+  const externalInputs = item.needsExternalInputs() ? _inputMetricsWithValues(guesstimate, dGraph) : []
+
+  let inputErrors = []
+  let inputs = {}
+  for (let input of Object.keys(externalInputs)) {
+    if (externalInputs[input].errors && externalInputs[input].errors.length > 0) {
+      inputErrors.push(...externalInputs[input].errors.map(e => `Input ${input} has error: ${e}`))
+    }
+    inputs[input] = externalInputs[input].values
+  }
+  if (inputErrors.length > 0) {
+    return Promise.resolve({ metric, sample: {values: [], errors: inputErrors} })
+  }
+
+  return item.sample(n, inputs).then(sample => ({ metric, sample }))
 }
 
 export function format(guesstimate: Guesstimate): Guesstimate{
@@ -38,9 +56,12 @@ export function inputMetrics(guesstimate: Guesstimate, dGraph: DGraph): Array<Ob
   return dGraph.metrics.filter( m => (guesstimate.input || '').includes(m.readableId) );
 }
 
-export function _inputMetricsWithValues(guesstimate: Guesstimate, dGraph: DGraph): Object{
+function _inputMetricsWithValues(guesstimate: Guesstimate, dGraph: DGraph): Object{
   let inputs = {}
   inputMetrics(guesstimate, dGraph)
-    .map(m => {inputs[m.readableId] = _.get(m, 'simulation.sample.values') })
+  .map(m => {inputs[m.readableId] = {
+    values: _.get(m, 'simulation.sample.values'),
+    errors: _.get(m, 'simulation.sample.errors'),
+  }})
   return inputs
 }

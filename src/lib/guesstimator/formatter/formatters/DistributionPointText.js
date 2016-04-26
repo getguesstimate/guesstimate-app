@@ -6,7 +6,13 @@ export const item = Object.assign(
     guesstimateType: 'POINT',
     inputType: 'TEXT',
     formatterName: 'DISTRIBUTION_POINT_TEXT',
-    errors(g) { return [] },
+    errors(g) {
+      const value = parseNumber(g.text)
+      if (!value || !isParseableNumber(value)) {
+        return ['Invalid sample']
+      }
+      return []
+    },
     format(g) {
       const {guesstimateType} = this
       const value = parseNumber(g.text)
