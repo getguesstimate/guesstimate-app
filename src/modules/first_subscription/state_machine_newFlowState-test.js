@@ -4,7 +4,7 @@ const expectedStateChanges = {}
 
 expectedStateChanges[states.unnecessary] = [
   {action: actions.unnecessary, newState: states.unnecessary},
-  {action: actions.start, newState: states.unnecessary},
+  {action: actions.formFetchStart, newState: states.unnecessary},
   {action: actions.cancel, newState: states.unnecessary},
 ]
 
@@ -26,7 +26,7 @@ expectedStateChanges[states.form] = [
 ]
 
 expectedStateChanges[states.synchronization] = [
-  {action: actions.reset, newState: states.uneccessary},
+  {action: actions.reset, newState: states.unnecessary},
 ]
 
 describe('FirstSubscriptionStateMachine', () => {

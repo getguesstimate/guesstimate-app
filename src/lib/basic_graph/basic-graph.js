@@ -28,7 +28,7 @@ export default class BasicGraph {
     // Now we do a breadth first walk down the edges of the graph, discarding all previously traversed paths.
     let newEdges = this.edges.filter(e => _.some(descendants, d => d === e.input))
     while (newEdges.length > 0) {
-      let newDescendants = newEdges.map(e => e.output).filter(nd => !_.some(descendants, d => d === nd))
+      let newDescendants = _.uniq(newEdges.map(e => e.output).filter(nd => !_.some(descendants, d => d === nd)))
       descendants = descendants.concat(newDescendants)
       newEdges = this.edges.filter(e => _.some(newDescendants, d => d === e.input))
     }
