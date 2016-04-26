@@ -33,13 +33,12 @@ class DistributionSummarySmall extends Component{
     stats: PropTypes.object,
   }
   render () {
-    const {length, mean, stdev, adjustedPercentiles} = this.props.stats
+    const {length, mean, stdev, adjustedConfidenceInterval} = this.props.stats
 
-    let range = null
-    let low = null
-    let high = null
-    if (_.isObject(adjustedPercentiles)) {
-      [low, high] = [adjustedPercentiles[5], adjustedPercentiles[95]]
+    let low
+    let high
+    if (_.isObject(adjustedConfidenceInterval)) {
+      [low, high] = adjustedConfidenceInterval
     }
 
     const precision = length === 1 ? 6 : 2
