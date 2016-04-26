@@ -169,13 +169,6 @@ class MetricCard extends Component {
     const {canvasState: {metricCardView, metricClickMode}} = this.props
     const {guesstimate} = metric
 
-    if (metric && metric.simulation && metric.simulation.sample && metric.simulation.sample.errors) {
-      const errors = metric.simulation.sample.errors
-      if (errors[0] === "infinite loop detected"){
-        console.log('Metric: ', metric.readableId, ' found errors: ', metric.simulation.sample.errors[0])
-      }
-    }
-
     const anotherFunctionSelected = ((metricClickMode === 'FUNCTION_INPUT_SELECT') && !isSelected)
 
     const showSimulation = this.showSimulation()
