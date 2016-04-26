@@ -68,7 +68,7 @@
   z-index: 1;
 }
 
-.FlowGrid .FlowGridCell{
+.FlowGrid.withLines .FlowGridCell{
   border-right: 1px dashed rgba(0, 25, 95, 0.09);
   border-bottom: 1px dashed rgba(0, 25, 95, 0.09);
 }
