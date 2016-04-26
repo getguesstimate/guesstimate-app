@@ -39,9 +39,7 @@ export class GraphPropagation {
     const orderedMetricIdsAndGraphErrors = this._orderedMetricIds(graphFilters)
     this.orderedMetricIds = orderedMetricIdsAndGraphErrors.map(m => m.id)
     this.orderedMetricPropagations = orderedMetricIdsAndGraphErrors.map(
-      ({id, inInfiniteLoop}) => {
-        return (new MetricPropagation(id, inInfiniteLoop, this.id))
-      }
+      ({id, inInfiniteLoop}) => (new MetricPropagation(id, inInfiniteLoop, this.id))
     )
 
     this.currentStep = 0
