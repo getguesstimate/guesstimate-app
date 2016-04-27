@@ -38,8 +38,8 @@ export default class MetricPropagation {
   inInfiniteLoop: boolean;
   remainingSimulations: Array<number>;
 
-  constructor(metricId: string, inInfiniteLoop: boolean, propagationId: number) {
-    this.inInfiniteLoop = inInfiniteLoop
+  constructor(metricId: string, errors: object, propagationId: number) {
+    this.inInfiniteLoop = errors.inInfiniteLoop
     this.metricId = metricId
     this.propagationId = propagationId
 
