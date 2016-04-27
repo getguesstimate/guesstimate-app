@@ -32,6 +32,7 @@ export default class Cell extends Component {
     }).isRequired,
     onAddItem: PropTypes.func.isRequired,
     onMoveItem: PropTypes.func.isRequired,
+    onMultipleSelect: PropTypes.func,
   }
 
   shouldComponentUpdate(newProps, newState) {

@@ -2,6 +2,7 @@ import reduxCrud from 'redux-crud';
 
 import guesstimateFormR from './guesstimate_form/reducer'
 import selectionR from './selection/reducer'
+import multipleSelectionR from './multiple_selection/reducer'
 import displayErrorR from './displayErrors/reducer.js';
 import metricsR from './metrics/reducer'
 import guesstimatesR from './guesstimates/reducer'
@@ -23,6 +24,7 @@ const rootReducer = function app(state = {}, action){
     metrics: metricsR(state.metrics, action),
     guesstimates: guesstimatesR(state.guesstimates, action),
     selection: selectionR(state.selection, action),
+    multipleSelection: multipleSelectionR(state.multipleSelection, action),
     guesstimateForm: guesstimateFormR(state.guesstimateForm, state.metrics, state.guesstimates, action),
     simulations: simulationsR(state.simulations, action),
     spaces: spacesR(state.spaces, action),

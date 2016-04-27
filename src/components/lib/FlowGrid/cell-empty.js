@@ -1,5 +1,44 @@
 import React, {Component, PropTypes} from 'react'
+import {DragSource, DropTarget} from 'react-dnd'
 
+var cardSource = {
+  beginDrag: function (props) {
+    return {location: props.location}
+  },
+  endDrag: function(props, monitor) {
+    if (monitor.didDrop()){
+      const item = monitor.getItem();
+      const dropResult = monitor.getDropResult()
+      props.onMultipleSelect(item.location, dropResult.location)
+      //props.onEndDrag()
+    }
+  }
+}
+const squareTarget = {
+  //For partial highlight.
+  //hover: function(props, monitor, component) {
+  //  console.log("hover Props: ", props)
+  //  console.log("hover monitor: ", monitor)
+  //  console.log("hover component: ", component)
+  //},
+  drop: function(props) {
+    return {location: props.location}
+  }
+}
+function collect(connect, monitor) {
+  return {
+    connectDropTarget: connect.dropTarget(),
+    isOver: monitor.isOver()
+  };
+}
+
+@DragSource('select', cardSource, (connect, monitor) => {
+  return ({
+    connectDragSource: connect.dragSource(),
+    isDragging: monitor.isDragging()
+  })
+})
+@DropTarget('select', squareTarget, collect)
 export default class EmptyCell extends Component {
   static propTypes = {
     gridKeyPress: PropTypes.func.isRequired,
@@ -31,6 +70,7 @@ export default class EmptyCell extends Component {
     if (e.button === 0){
       if (!this.props.isSelected) {
         this.props.handleSelect(this.props.location)
+        this.props.onMultipleSelect(this.props.location, this.props.location)
       } else {
         this.props.onAddItem(this.props.location)
       }
@@ -39,14 +79,14 @@ export default class EmptyCell extends Component {
 
   render() {
     let className = 'FlowGridEmptyCell grid-item-focus'
-    return (
+    return this.props.connectDropTarget(this.props.connectDragSource(
       <div
           className={className}
           onKeyDown={this._handleKeyPress.bind(this)}
           onMouseDown={this.handleClick.bind(this)}
           tabIndex='0'
       />
-    )
+    ))
   }
 }
 

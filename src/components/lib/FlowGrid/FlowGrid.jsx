@@ -8,6 +8,7 @@ import HorizontalIndex from './HorizontalIndex.js'
 import VerticalIndex from './VerticalIndex.js'
 
 import {keycodeToDirection, DirectionToLocation} from './utils'
+import {removeMetric} from 'gModules/metrics/actions.js'
 
 import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContext } from 'react-dnd';
@@ -33,8 +34,10 @@ export default class FlowGrid extends Component{
       output: PTLocation.isRequired
     })),
     selected: PTLocation,
+    multipleSelected: PropTypes.arrayOf(PTLocation, PTLocation),
 
     onSelectItem: PropTypes.func.isRequired,
+    onMultipleSelect: PropTypes.func,
     onAddItem: PropTypes.func.isRequired,
     onMoveItem: PropTypes.func.isRequired,
 
@@ -47,13 +50,24 @@ export default class FlowGrid extends Component{
 
   state = { rowHeights: [] }
 
+  _selectedItems() {
+   const {multipleSelected} = this.props
+   return this.props.items.filter(i => (multipleSelected[0].row <= i.location.row && multipleSelected[0].column <= i.location.column &&
+      multipleSelected[1].row >= i.location.row && multipleSelected[1].column >= i.location.column));
+  }
+
   _handleKeyPress(e) {
+    if (e.keyCode === 8) {
+      const selectedItems = this._selectedItems()
+      selectedItems.map(i => {this.props.dispatch(removeMetric(i.component.props.metric.id))})
+    }
     let direction = keycodeToDirection(e.keyCode)
     if (direction) {
       e.preventDefault()
       const size = ({columns: this._columnCount(), rows: this._rowCount()})
       let newLocation = new DirectionToLocation(size, this.props.selected)[direction]()
       this.props.onSelectItem(newLocation)
+      this.props.onMultipleSelect(newLocation, newLocation)
     }
   }
 
@@ -78,12 +92,18 @@ export default class FlowGrid extends Component{
 
   _cell(location) {
    let atThisLocation = (l) => (l.row === location.row && l.column === location.column)
-   let isSelected = atThisLocation(this.props.selected)
+   //let isSelected = atThisLocation(this.props.selected)
+   const {multipleSelected} = this.props
+
+   const isSelected = (multipleSelected[0].row <= location.row && multipleSelected[0].column <= location.column &&
+      multipleSelected[1].row >= location.row && multipleSelected[1].column >= location.column)
+
    let item = this.props.items.filter(i => atThisLocation(i.location))[0];
    return (
     <Cell
         gridKeyPress={this._handleKeyPress.bind(this)}
         handleSelect={this.props.onSelectItem}
+        onMultipleSelect={this.props.onMultipleSelect}
         isSelected={isSelected}
         item={item && item.component}
         key={'grid-item', location.row, location.column}

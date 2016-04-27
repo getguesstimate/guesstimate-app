@@ -8,6 +8,7 @@ import Metric from 'gComponents/metrics/card'
 
 import { changeMetric, addMetric } from 'gModules/metrics/actions'
 import { changeSelect } from 'gModules/selection/actions'
+import { multipleSelect } from 'gModules/multiple_selection/actions'
 import { runSimulations, deleteSimulations } from 'gModules/simulations/actions'
 
 import './style.css'
@@ -20,6 +21,7 @@ function mapStateToProps(state) {
   return {
     canvasState: state.canvasState,
     selected: state.selection,
+    multipleSelected: state.multipleSelection,
   }
 }
 
@@ -70,6 +72,12 @@ export default class CanvasSpace extends Component{
     this.props.dispatch(changeSelect(location))
   }
 
+  _handleMultipleSelect(corner1,corner2) {
+    console.log("Selecting region from: ", corner1.row, "x", corner1.column, " to ", corner2.row, "x", corner2.column)
+    this.props.dispatch(multipleSelect(corner1, corner2))
+    console.log("Region Selected.")
+  }
+
   _handleAddMetric(location) {
     this.props.dispatch(addMetric({space: this.props.spaceId, location: location, isNew: true}))
   }
@@ -117,7 +125,7 @@ export default class CanvasSpace extends Component{
   }
 
   render () {
-    const {selected} = this.props
+    const {selected, multipleSelected} = this.props
     const {metrics} = this.props.denormalizedSpace
     const {metricCardView} = this.props.canvasState
 
@@ -135,10 +143,13 @@ export default class CanvasSpace extends Component{
             items={metrics.map(m => ({location: m.location, component: this.renderMetric(m)}))}
             edges={edges}
             selected={selected}
+            multipleSelected={multipleSelected}
             onSelectItem={this._handleSelect.bind(this)}
+            onMultipleSelect={this._handleMultipleSelect.bind(this)}
             onAddItem={this._handleAddMetric.bind(this)}
             onMoveItem={this._handleMoveMetric.bind(this)}
             showGridLines={showGridLines}
+            dispatch={this.props.dispatch}
           />
       </div>
     );
