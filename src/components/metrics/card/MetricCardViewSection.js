@@ -7,6 +7,11 @@ import JSONTree from 'react-json-tree'
 import MetricToken from './token/index.js'
 
 export default class MetricCardViewSection extends Component {
+
+  hasContent() {
+    return _.has(this, 'refs.name') && this.refs.name.hasContent()
+  }
+
   showSimulation() {
     const stats = _.get(this.props, 'metric.simulation.stats')
     if (stats && _.isFinite(stats.mean) && _.isFinite(stats.stdev) && _.isFinite(stats.length)) {
@@ -17,29 +22,34 @@ export default class MetricCardViewSection extends Component {
   }
 
   _shouldShowStatistics() {
-    const showSimulation = this.showSimulation()
-    const shouldShowStatistics = this._shouldShowStatistics()
     const isScientific = (this.props.canvasState.metricCardView === 'scientific')
     const isAvailable = this.showSimulation() && (_.get(this.props, 'metric.simulation.stats').length > 1)
     return isScientific && isAvailable
   }
+
   render() {
-    const {
-          metricCardView,
-          showSimulation,
+    const {canvasState,
           metric,
           isSelected,
           onChangeName,
           guesstimateForm,
-          anotherFunctionSelected,
-          onOpenModal
+          onOpenModal,
+          jumpSection,
+          onClick
     } = this.props
+
+    const {canvasState: {metricCardView, metricClickMode}} = this.props
+
+    const showSimulation = this.showSimulation()
+    const shouldShowStatistics = this._shouldShowStatistics()
     const shouldShowJsonTree = (metricCardView === 'debugging')
     const {guesstimate} = metric
     const hasGuesstimateDescription = !_.isEmpty(guesstimate.description)
+    const anotherFunctionSelected = ((metricClickMode === 'FUNCTION_INPUT_SELECT') && !isSelected)
     return(
-        <div className={`ViewSection section ${metricCardView}`}>
-
+      <div className={`MetricCardViewSection section ${metricCardView}`}
+          onMouseDown={onClick}
+      >
           {(metricCardView !== 'basic') && showSimulation &&
             <Histogram height={(metricCardView === 'scientific') ? 110 : 30}
                 simulation={metric.simulation}
@@ -55,8 +65,8 @@ export default class MetricCardViewSection extends Component {
                     <MetricName
                       isSelected={isSelected}
                       name={metric.name}
-                      onChange={this.handleChangeMetric.bind(this)}
-                      jumpSection={this._focusForm.bind(this)}
+                      onChange={onChangeName}
+                      jumpSection={jumpSection}
                       ref='name'
                     />
                   </div>
@@ -77,7 +87,7 @@ export default class MetricCardViewSection extends Component {
               <MetricToken
                  readableId={metric.readableId}
                  anotherFunctionSelected={anotherFunctionSelected}
-                 onOpenModal={this.openModal.bind(this)}
+                 onOpenModal={onOpenModal}
                  hasGuesstimateDescription={hasGuesstimateDescription}
               />
             </div>
@@ -90,8 +100,7 @@ export default class MetricCardViewSection extends Component {
           {shouldShowStatistics &&
             <div className='row'> <div className='col-xs-12'> <StatTable stats={metric.simulation.stats}/> </div> </div>
           }
-
-          </div>
+        </div>
       )
   }
 }

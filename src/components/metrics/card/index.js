@@ -12,7 +12,7 @@ import MetricToolTip from './tooltip.js'
 import $ from 'jquery'
 import './style.css'
 import * as canvasStateProps from 'gModules/canvas_state/prop_type.js'
-import MetricCardViewSection from './ViewSection.js'
+import MetricCardViewSection from './MetricCardViewSection.js'
 
 const INTERMEDIATE = 'INTERMEDIATE'
 const OUTPUT = 'OUTPUT'
@@ -53,7 +53,7 @@ class MetricCard extends Component {
   state = {modalIsOpen: false};
 
   componentDidUpdate() {
-    const hasContent = _.has(this, 'refs.name') && this.refs.name.hasContent()
+    const hasContent = this.refs.MetricCardViewSection.hasContent()
     if (!this.props.isSelected && this._isEmpty() && !hasContent){
       this.handleRemoveMetric()
     }
@@ -65,19 +65,6 @@ class MetricCard extends Component {
 
   closeModal() {
      this.setState({modalIsOpen: false});
-  }
-
-  _handleClick(event) {
-    const selectableEl = (event.target.parentElement.getAttribute('data-select') !== 'false')
-    const notYetSelected = !this.props.isSelected
-    if (selectableEl && notYetSelected){
-      if (this.props.canvasState.metricClickMode === 'FUNCTION_INPUT_SELECT') {
-        event.preventDefault()
-        $(window).trigger('functionMetricClicked', this.props.metric)
-      } else {
-        this.props.handleSelect(this.props.location)
-      }
-    }
   }
 
   _handlePress(e) {
@@ -143,27 +130,39 @@ class MetricCard extends Component {
     editorRef && editorRef.focus()
   }
 
-  render() {
-    const {isSelected, metric, guesstimateForm} = this.props
-    const {canvasState: {metricCardView, metricClickMode}} = this.props
-    const {guesstimate} = metric
+  _handleClick(event) {
+    const selectableEl = (event.target.parentElement.getAttribute('data-select') !== 'false')
+    const notYetSelected = !this.props.isSelected
+    if (selectableEl && notYetSelected){
+      if (this.props.canvasState.metricClickMode === 'FUNCTION_INPUT_SELECT') {
+        event.preventDefault()
+        $(window).trigger('functionMetricClicked', this.props.metric)
+      } else {
+        this.props.handleSelect(this.props.location)
+      }
+    }
+  }
 
-    const anotherFunctionSelected = ((metricClickMode === 'FUNCTION_INPUT_SELECT') && !isSelected)
-
-    const titleView = !this.props.hovered && !isSelected && this._isTitle()
+  _className() {
+    const {isSelected, metric, hovered} = this.props
+    const {canvasState: {metricCardView}} = this.props
     const relationshipClass = relationshipClasses[relationshipType(metric.edges)]
-
+    const titleView = !hovered && !isSelected && this._isTitle()
     let className = isSelected ? 'metricCard grid-item-focus' : 'metricCard'
     className += ` ${metricCardView}`
     className += titleView ? ' titleView' : ''
     className += ' ' + relationshipClass
+    return className
+  }
 
+  render() {
+    const {isSelected, metric, guesstimateForm, canvasState} = this.props
+    const {guesstimate} = metric
     return (
       <div
-          className={className}
+          className={this._className()}
           ref='dom'
           onKeyDown={this._handlePress.bind(this)}
-          onMouseDown={this._handleClick.bind(this)}
           tabIndex='0'
       >
         {this.props.hovered && !isSelected &&
@@ -178,14 +177,16 @@ class MetricCard extends Component {
             onChange={this.handleChangeGuesstimate.bind(this)}
         />
 
-      <MetricCardViewSection
-          metricCardView={metricCardView}
-          metric={metric}
-          isSelected={isSelected}
-          onChangeName={this.handleChangeMetric.bind(this)}
-          guesstimateForm={guesstimateForm}
-          anotherFunctionSelected={anotherFunctionSelected}
-          onOpenModal={this.openModal.bind(this)}
+        <MetricCardViewSection
+            canvasState={canvasState}
+            metric={metric}
+            isSelected={isSelected}
+            onChangeName={this.handleChangeMetric.bind(this)}
+            guesstimateForm={guesstimateForm}
+            onOpenModal={this.openModal.bind(this)}
+            jumpSection={this._focusForm.bind(this)}
+            onClick={this._handleClick.bind(this)}
+            ref='MetricCardViewSection'
         />
 
         {isSelected && !this.state.modalIsOpen &&
