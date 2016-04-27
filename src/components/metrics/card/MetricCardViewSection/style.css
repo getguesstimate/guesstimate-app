@@ -1,0 +1,30 @@
+
+.MetricCardViewSection .row > .sqwish-right {
+  padding-right: 0
+}
+
+.MetricCardViewSection .row > .sqwish-middle {
+  padding-left: 0.2rem;
+  padding-right: 0.8rem;
+}
+
+.metricCard .MetricCardViewSection.hasErrors  {
+  background-color: rgb(216, 154, 148) !important;
+}
+
+.metricCard .MetricCardViewSection .react-d3-histogram {
+  position: absolute;
+  z-index: -1;
+  left: -5px;
+}
+
+
+.metricCard.input .MetricCardViewSection .DistributionSummary {
+  color: #222;
+}
+
+ .metricCard.output .MetricCardViewSection .DistributionSummary {
+  font-weight: 800;
+  color: #111;
+}
+

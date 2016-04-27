@@ -1,10 +1,11 @@
 import React, {Component, PropTypes} from 'react'
 import Histogram from 'gComponents/simulations/histogram'
-import MetricName from './name'
+import MetricName from '../name'
 import DistributionSummary from 'gComponents/distributions/summary/index.js'
 import StatTable from 'gComponents/simulations/stat_table'
 import JSONTree from 'react-json-tree'
-import MetricToken from './token/index.js'
+import MetricToken from '../token/index.js'
+import './style.css'
 
 export default class MetricCardViewSection extends Component {
 
@@ -35,6 +36,7 @@ export default class MetricCardViewSection extends Component {
           guesstimateForm,
           onOpenModal,
           jumpSection,
+          hasErrors,
           onClick
     } = this.props
 
@@ -47,7 +49,7 @@ export default class MetricCardViewSection extends Component {
     const hasGuesstimateDescription = !_.isEmpty(guesstimate.description)
     const anotherFunctionSelected = ((metricClickMode === 'FUNCTION_INPUT_SELECT') && !isSelected)
     return(
-      <div className={`MetricCardViewSection section ${metricCardView}`}
+      <div className={`MetricCardViewSection section ${metricCardView} ${hasErrors ? 'hasErrors' : ''}`}
           onMouseDown={onClick}
       >
           {(metricCardView !== 'basic') && showSimulation &&

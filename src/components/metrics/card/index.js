@@ -12,7 +12,7 @@ import MetricToolTip from './tooltip.js'
 import $ from 'jquery'
 import './style.css'
 import * as canvasStateProps from 'gModules/canvas_state/prop_type.js'
-import MetricCardViewSection from './MetricCardViewSection.js'
+import MetricCardViewSection from './MetricCardViewSection/index.js'
 
 const INTERMEDIATE = 'INTERMEDIATE'
 const OUTPUT = 'OUTPUT'
@@ -150,20 +150,20 @@ class MetricCard extends Component {
     const titleView = !hovered && !isSelected && this._isTitle()
 
     // Sometimes we generate a 2 element array of 'undefined' values as errors, hence the filter.
-    let errors = _.get(metric, 'simulation.sample.errors')
-    errors = errors ? errors.filter(e => !!e) : []
-
     let className = isSelected ? 'metricCard grid-item-focus' : 'metricCard'
     className += ` ${metricCardView}`
     className += titleView ? ' titleView' : ''
     className += ' ' + relationshipClass
-    className += errors.length > 0 ? ' hasErrors' : ''
     return className
   }
 
   render() {
     const {isSelected, metric, guesstimateForm, canvasState} = this.props
     const {guesstimate} = metric
+
+    let errors = _.get(metric, 'simulation.sample.errors')
+    errors = errors ? errors.filter(e => !!e) : []
+
     return (
       <div
           className={this._className()}
@@ -193,6 +193,7 @@ class MetricCard extends Component {
             jumpSection={this._focusForm.bind(this)}
             onClick={this._handleClick.bind(this)}
             ref='MetricCardViewSection'
+            hasErrors={errors.length > 0}
         />
 
         {isSelected && !this.state.modalIsOpen &&
