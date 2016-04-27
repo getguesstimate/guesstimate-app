@@ -14,32 +14,28 @@
   cursor: move;
 }
 
+.metricCard input{
+  transition: background-color 0.2s;
+}
+
 .metricCard:not(.titleView) {
   background-color: rgba(255,255,255,0.975);
 }
-.metricCard:not(.titleView).hasErrors {
-  background-color: rgba(255,0,0,0.5);
+.metricCard.hasErrors {
+  background-color: rgb(216, 154, 148) !important;
+  transition: background-color 0.5s;
 }
 
 .metricCard.intermediate:not(.titleView) {
   background-color: rgba(242, 244, 247, 0.94);
 }
-.metricCard.intermediate:not(.titleView).hasErrors {
-  background-color: rgba(255,0,0,0.5);
-}
 
 .metricCard.noedge:not(.titleView) {
   background-color: rgba(240,242,245,0.88);
 }
-.metricCard.noedge:not(.titleView).hasErrors {
-  background-color: rgba(255,0,0,0.5);
-}
 
 .selected .metricCard:not(.titleView) {
   background-color: rgba(255,255,255,0.975);
-}
-.selected .metricCard:not(.titleView).hasErrors {
-  background-color: rgba(255,0,0,0.5);
 }
 
 .row > .sqwish-right {
