@@ -75,7 +75,11 @@ export default class CanvasSpace extends Component{
   }
 
   _handleMoveMetric({prev, next}) {
-    const metric = this.props.denormalizedSpace.metrics.find(f => _.isEqual(f.location, prev))
+    const destinationMetric = this.props.denormalizedSpace.metrics.find(f => f.location.row === next.row && f.location.column === next.column)
+    if (!!destinationMetric) {
+      return
+    }
+    const metric = this.props.denormalizedSpace.metrics.find(f => f.location.row === prev.row && f.location.column === prev.column)
     this.props.dispatch(changeMetric({id: metric.id, location: next}))
     this.props.dispatch(changeSelect(next))
   }
