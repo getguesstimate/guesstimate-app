@@ -17,6 +17,17 @@
   width: 75%;
 }
 
+.GuesstimateForm input.hasErrors {
+  background-color: #E6E5E5;
+}
+
+.GuesstimateForm input.hasErrors:not(:focus) {
+  background-color: #E08888;
+}
+
+.GuesstimateForm input {
+}
+
 .DistributionSelector {
   width: 100%;
 }

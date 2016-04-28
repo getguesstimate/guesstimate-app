@@ -52,7 +52,7 @@ export default class TextForm extends Component{
 
   //onChangeData should be removed to Guesstimator lib.
   _textInput() {
-    const {guesstimateForm, onEscape, size} = this.props
+    const {guesstimateForm, onEscape, size, hasErrors} = this.props
     let {showDistributionSelector} = this.state
     const {input} = guesstimateForm
     const guesstimateType = this._guesstimateType()
@@ -68,6 +68,7 @@ export default class TextForm extends Component{
               onBlur={this._handleBlur.bind(this)}
               onChangeData={this._saveData.bind(this)}
               ref='TextInput'
+              hasErrors={hasErrors}
             />
             <GuesstimateTypeIcon
               guesstimateType={guesstimateType}

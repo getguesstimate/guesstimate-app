@@ -156,9 +156,16 @@ class MetricCard extends Component {
     return className
   }
 
+  _errors() {
+    if (this.props.isTitle){ return [] }
+    let errors = _.get(this.props.metric, 'simulation.sample.errors')
+    return errors ? errors.filter(e => !!e) : []
+  }
+
   render() {
     const {isSelected, metric, guesstimateForm, canvasState} = this.props
     const {guesstimate} = metric
+    const errors = this._errors()
 
     return (
       <div
@@ -200,6 +207,7 @@ class MetricCard extends Component {
                 onOpen={this.openModal.bind(this)}
                 ref='DistributionEditor'
                 size='small'
+                errors={errors}
             />
           </div>
         }

@@ -40,7 +40,7 @@ export default class GuesstimateForm extends Component{
   _addDefaultData() { this._handleSave({guesstimateType: 'DATA', data:[1,2,3], input: null}) }
 
   render () {
-    const {size, guesstimateForm, onOpen} = this.props
+    const {size, guesstimateForm, onOpen, errors} = this.props
     const isLarge = (size === 'large')
     const hasData = !!guesstimateForm.data
 
@@ -66,6 +66,7 @@ export default class GuesstimateForm extends Component{
             onAddDefaultData={this._addDefaultData.bind(this)}
             onEscape={this.props.metricFocus}
             size={size}
+            hasErrors={errors.length !== 0}
             ref='TextForm'
           />
         }
