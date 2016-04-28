@@ -16,11 +16,9 @@ var cardSource = {
 }
 const squareTarget = {
   //For partial highlight.
-  //hover: function(props, monitor, component) {
-  //  console.log("hover Props: ", props)
-  //  console.log("hover monitor: ", monitor)
-  //  console.log("hover component: ", component)
-  //},
+  hover: function(props, monitor, component) {
+    props.onHoverSelect(monitor.getItem().location, props.location)
+  },
   drop: function(props) {
     return {location: props.location}
   }
@@ -43,6 +41,7 @@ export default class EmptyCell extends Component {
   static propTypes = {
     gridKeyPress: PropTypes.func.isRequired,
     handleSelect: PropTypes.func.isRequired,
+    onHoverSelect: PropTypes.func,
     isOver: PropTypes.bool.isRequired,
     isSelected: PropTypes.bool.isRequired,
     location: PropTypes.shape({

@@ -23,6 +23,7 @@ export default class Cell extends Component {
     connectDropTarget: PropTypes.func.isRequired,
     gridKeyPress: PropTypes.func.isRequired,
     handleSelect: PropTypes.func.isRequired,
+    onHoverSelect: PropTypes.func,
     isOver: PropTypes.bool.isRequired,
     isSelected: PropTypes.bool.isRequired,
     item: PropTypes.object,
@@ -35,9 +36,17 @@ export default class Cell extends Component {
     onMultipleSelect: PropTypes.func,
   }
 
+  select() {
+    this.setState({isSelected: true})
+  }
+
+  componentWillReceiveProps(newProps) {
+    this.setState({isSelected: newProps.isSelected})
+  }
+
   shouldComponentUpdate(newProps, newState) {
     const difProps = (newProps.isOver !== this.props.isOver) ||
-      (newProps.isSelected !== this.props.isSelected) ||
+      (newProps.isSelected !== this.state.isSelected) ||
       (newState.hover !== this.state.hover)
     const hasItem = (!!newProps.item || !!this.props.item)
 
@@ -45,7 +54,8 @@ export default class Cell extends Component {
   }
 
   state = {
-    hover: false
+    hover: false,
+    isSelected: false
   }
 
   getPosition() {
@@ -64,13 +74,13 @@ export default class Cell extends Component {
   }
 
   componentDidMount = () => {
-    if (this.props.isSelected){
+    if (this.state.isSelected){
       this._focus()
     }
   }
 
-  componentDidUpdate = (prevProps) => {
-    const newlySelected = (this.props.isSelected && !prevProps.isSelected)
+  componentDidUpdate = (prevProps, prevState) => {
+    const newlySelected = (this.state.isSelected && !prevState.isSelected)
     const changeInItem = (!!prevProps.item !== !!this.props.item)
     if (newlySelected || changeInItem){
       this._focus()
@@ -92,7 +102,7 @@ export default class Cell extends Component {
 
   _classes = () => {
     let classes = 'FlowGridCell'
-    classes += (this.props.isSelected ? ' selected' : ' nonSelected')
+    classes += (this.state.isSelected ? ' selected' : ' nonSelected')
     classes += this.props.item ? ' hasItem' : ''
     classes += this.props.isOver ? ' IsOver' : ''
     classes += this.state.hover ? ' hovered' : ''

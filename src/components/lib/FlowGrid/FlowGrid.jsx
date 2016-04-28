@@ -53,7 +53,7 @@ export default class FlowGrid extends Component{
   _selectedItems() {
    const {multipleSelected} = this.props
    return this.props.items.filter(i => (multipleSelected[0].row <= i.location.row && multipleSelected[0].column <= i.location.column &&
-      multipleSelected[1].row >= i.location.row && multipleSelected[1].column >= i.location.column));
+      multipleSelected[1].row >= i.location.row && multipleSelected[1].column >= i.location.column))
   }
 
   _handleKeyPress(e) {
@@ -68,6 +68,19 @@ export default class FlowGrid extends Component{
       let newLocation = new DirectionToLocation(size, this.props.selected)[direction]()
       this.props.onSelectItem(newLocation)
       this.props.onMultipleSelect(newLocation, newLocation)
+    }
+  }
+
+  _handleHoverSelect(corner1, corner2) {
+    const leftX = Math.min(corner1.row, corner2.row)
+    const topY = Math.max(corner1.column, corner2.column)
+    const rightX = Math.max(corner1.row, corner2.row)
+    const bottomY = Math.min(corner1.column, corner2.column)
+    for (var x = leftX; x <= rightX; x++) {
+      for (var y = bottomY; y <= topY; y++) {
+        const cell = this.refs[`cell-${x}-${y}`]
+        cell.decoratedComponentInstance.select()
+      }
     }
   }
 
@@ -104,6 +117,7 @@ export default class FlowGrid extends Component{
         gridKeyPress={this._handleKeyPress.bind(this)}
         handleSelect={this.props.onSelectItem}
         onMultipleSelect={this.props.onMultipleSelect}
+        onHoverSelect={this._handleHoverSelect.bind(this)}
         isSelected={isSelected}
         item={item && item.component}
         key={'grid-item', location.row, location.column}
