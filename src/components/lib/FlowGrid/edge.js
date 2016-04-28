@@ -91,28 +91,17 @@ export default class Edge extends Component{
   }
 
   render() {
-    const {output, input} = this.props;
+    const {output, input, color} = this.props;
     const inputPoints = (new Rectangle(input)).showPosition(output)
     const outputPoints = (new Rectangle(output)).showPosition(input)
     let points = null
-
-    //if (inputPoints.y == outputPoints.y){
-      //points = `M${inputPoints.x},${inputPoints.y} L${outputPoints.x},${outputPoints.y}`
-    //} else {
-      //if (inputPoints.y > outputPoints.y) {
-        //points = `M${inputPoints.x},${inputPoints.y} L${inputPoints.x},${inputPoints.y - 8} L${outputPoints.x},${inputPoints.y - 8} L${outputPoints.x},${outputPoints.y}`
-      //} else {
-        //points = `M${inputPoints.x},${inputPoints.y} L${inputPoints.x},${inputPoints.y + 8} L${outputPoints.x},${inputPoints.y + 8} L${outputPoints.x},${outputPoints.y}`
-      //}
-    //}
     points = `M${inputPoints.x},${inputPoints.y} L${outputPoints.x-2} ,${outputPoints.y-2}`
 
     return (
         <path
-            className='basic-arrow'
+            className={`basic-arrow ${color}`}
             d={points}
-            strokeWidth="3"
-            markerEnd='url(#markerArrow)'
+            markerEnd={`url(#MarkerArrow${color})`}
             fill="none"
         />
     )
