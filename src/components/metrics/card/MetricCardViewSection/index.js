@@ -6,6 +6,7 @@ import StatTable from 'gComponents/simulations/stat_table'
 import JSONTree from 'react-json-tree'
 import MetricToken from '../token/index.js'
 import './style.css'
+import Icon from 'react-fa'
 
 export default class MetricCardViewSection extends Component {
 
@@ -49,7 +50,7 @@ export default class MetricCardViewSection extends Component {
     const hasGuesstimateDescription = !_.isEmpty(guesstimate.description)
     const anotherFunctionSelected = ((metricClickMode === 'FUNCTION_INPUT_SELECT') && !isSelected)
     return(
-      <div className={`MetricCardViewSection section ${metricCardView} ${hasErrors ? 'hasErrors' : ''}`}
+      <div className={`MetricCardViewSection ${metricCardView} ${(hasErrors & !isSelected) ? 'hasErrors' : ''}`}
           onMouseDown={onClick}
       >
           {(metricCardView !== 'basic') && showSimulation &&
@@ -59,42 +60,40 @@ export default class MetricCardViewSection extends Component {
             />
           }
 
-          <div className='row '>
-            <div className='col-xs-10 sqwish-right'>
-              <div className='row'>
-                {(!_.isEmpty(metric.name) || isSelected) &&
-                  <div className='col-xs-12'>
-                    <MetricName
-                      isSelected={isSelected}
-                      name={metric.name}
-                      onChange={onChangeName}
-                      jumpSection={jumpSection}
-                      ref='name'
-                    />
-                  </div>
-                }
-
-                <div className='col-xs-12'>
-                  {showSimulation &&
-                    <DistributionSummary
-                        guesstimateForm={guesstimateForm}
-                        simulation={metric.simulation}
-                    />
-                  }
-                </div>
-              </div>
-            </div>
-
-            <div className='col-xs-2 sqwish-middle'>
-              <MetricToken
-                 readableId={metric.readableId}
-                 anotherFunctionSelected={anotherFunctionSelected}
-                 onOpenModal={onOpenModal}
-                 hasGuesstimateDescription={hasGuesstimateDescription}
-              />
-            </div>
+          <div className='MetricTokenSection'>
+            <MetricToken
+             readableId={metric.readableId}
+             anotherFunctionSelected={anotherFunctionSelected}
+             onOpenModal={onOpenModal}
+             hasGuesstimateDescription={hasGuesstimateDescription}
+            />
           </div>
-
+          {(!_.isEmpty(metric.name) || isSelected) &&
+            <div className='NameSection'>
+                <MetricName
+                  isSelected={isSelected}
+                  name={metric.name}
+                  onChange={onChangeName}
+                  jumpSection={jumpSection}
+                  ref='name'
+                />
+            </div>
+          }
+          <div className='StatsSection'>
+            {showSimulation &&
+              <div className='StatsSectionBody'>
+                <DistributionSummary
+                    guesstimateForm={guesstimateForm}
+                    simulation={metric.simulation}
+                />
+              </div>
+            }
+            {hasErrors && !isSelected &&
+              <div className='StatsSectionErrors'>
+                <Icon name='unlink'/>
+              </div>
+            }
+          </div>
           {shouldShowJsonTree &&
             <div className='row'> <div className='col-xs-12'> <JSONTree data={this.props}/> </div> </div>
           }

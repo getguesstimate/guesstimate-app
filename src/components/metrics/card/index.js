@@ -147,9 +147,8 @@ class MetricCard extends Component {
     const {isSelected, metric, hovered} = this.props
     const {canvasState: {metricCardView}} = this.props
     const relationshipClass = relationshipClasses[relationshipType(metric.edges)]
-    const titleView = !hovered && !isSelected && this._isTitle()
 
-    // Sometimes we generate a 2 element array of 'undefined' values as errors, hence the filter.
+    const titleView = !hovered && !isSelected && this._isTitle()
     let className = isSelected ? 'metricCard grid-item-focus' : 'metricCard'
     className += ` ${metricCardView}`
     className += titleView ? ' titleView' : ''
@@ -157,12 +156,17 @@ class MetricCard extends Component {
     return className
   }
 
+  _errors() {
+    if (this._isTitle()){ return [] }
+    let errors = _.get(this.props.metric, 'simulation.sample.errors')
+    return errors ? errors.filter(e => !!e) : []
+  }
+
   render() {
     const {isSelected, metric, guesstimateForm, canvasState} = this.props
     const {guesstimate} = metric
 
-    let errors = _.get(metric, 'simulation.sample.errors')
-    errors = errors ? errors.filter(e => !!e) : []
+    const errors = this._errors()
 
     return (
       <div
@@ -172,7 +176,7 @@ class MetricCard extends Component {
           tabIndex='0'
       >
         {this.props.hovered && !isSelected &&
-          <MetricToolTip guesstimate={guesstimate} errors={errors}/>
+          <MetricToolTip guesstimate={guesstimate}/>
         }
 
         <MetricModal

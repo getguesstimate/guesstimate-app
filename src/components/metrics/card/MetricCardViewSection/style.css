@@ -1,15 +1,23 @@
-
-.MetricCardViewSection .row > .sqwish-right {
-  padding-right: 0
+.metricCard {
+  display: flex;
+  flex-direction: column;
 }
 
-.MetricCardViewSection .row > .sqwish-middle {
-  padding-left: 0.2rem;
-  padding-right: 0.8rem;
+.MetricCardViewSection {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
-.metricCard .MetricCardViewSection.hasErrors  {
-  background-color: rgb(216, 154, 148) !important;
+.MetricCardViewSection .MetricTokenSection{
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.metricCard .MetricCardViewSection.hasErrors .StatsSection  {
+  background-color: rgb(236, 202, 199) !important
 }
 
 .metricCard .MetricCardViewSection .react-d3-histogram {
@@ -28,3 +36,30 @@
   color: #111;
 }
 
+.MetricCardViewSection > .NameSection {
+  width: 100%;
+  padding: 3px 30px 0 3px;
+  float: left;
+  flex: 1;
+}
+
+.MetricCardViewSection > .StatsSection {
+  width: 100%;
+  float: left;
+  min-height: 10px;
+  flex: 10;
+  display: flex;
+}
+
+.MetricCardViewSection > .StatsSection .StatsSectionErrors {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+}
+
+.MetricCardViewSection > .StatsSection .StatsSectionErrors .fa{
+  font-size: 1.6em;
+  color:#E29A9A;
+}
