@@ -56,7 +56,7 @@
   width: 100%;
   float: left;
   min-height: 10px;
-  flex: 1;
+  flex: 5;
   display: flex;
 }
 
@@ -70,6 +70,10 @@
   align-items: center;
   justify-content: center;
   min-height: 40px;
+}
+
+.MetricCardViewSection > .StatsSection .StatsSectionErrors.padTop {
+  margin-top: 5px;
 }
 
 .metricCard .DistributionSummary {

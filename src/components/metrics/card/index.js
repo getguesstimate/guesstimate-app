@@ -168,49 +168,49 @@ class MetricCard extends Component {
     const errors = this._errors()
 
     return (
-      <div
-          className={this._className()}
-          ref='dom'
-          onKeyDown={this._handlePress.bind(this)}
-          tabIndex='0'
-      >
-        {this.props.hovered && !isSelected &&
-          <MetricToolTip guesstimate={guesstimate}/>
-        }
+      <div className='metricCard--Container'>
+        <div
+            className={this._className()}
+            ref='dom'
+            onKeyDown={this._handlePress.bind(this)}
+            tabIndex='0'
+        >
 
-        <MetricModal
-            metric={metric}
-            guesstimateForm={guesstimateForm}
-            isOpen={this.state.modalIsOpen}
-            closeModal={this.closeModal.bind(this)}
-            onChange={this.handleChangeGuesstimate.bind(this)}
-        />
+          <MetricModal
+              metric={metric}
+              guesstimateForm={guesstimateForm}
+              isOpen={this.state.modalIsOpen}
+              closeModal={this.closeModal.bind(this)}
+              onChange={this.handleChangeGuesstimate.bind(this)}
+          />
 
-        <MetricCardViewSection
-            canvasState={canvasState}
-            metric={metric}
-            isSelected={isSelected}
-            onChangeName={this.handleChangeMetric.bind(this)}
-            guesstimateForm={guesstimateForm}
-            onOpenModal={this.openModal.bind(this)}
-            jumpSection={this._focusForm.bind(this)}
-            onClick={this._handleClick.bind(this)}
-            ref='MetricCardViewSection'
-            isTitle={this._isTitle()}
-        />
+          <MetricCardViewSection
+              canvasState={canvasState}
+              metric={metric}
+              isSelected={isSelected}
+              onChangeName={this.handleChangeMetric.bind(this)}
+              guesstimateForm={guesstimateForm}
+              onOpenModal={this.openModal.bind(this)}
+              jumpSection={this._focusForm.bind(this)}
+              onClick={this._handleClick.bind(this)}
+              ref='MetricCardViewSection'
+              isTitle={this._isTitle()}
+          />
 
-        {isSelected && !this.state.modalIsOpen &&
-          <div className='section editing'>
-            <DistributionEditor
-                metricId={metric.id}
-                metricFocus={this.focus.bind(this)}
-                onOpen={this.openModal.bind(this)}
-                ref='DistributionEditor'
-                size='small'
-                errors={errors}
-            />
-          </div>
-        }
+          {isSelected && !this.state.modalIsOpen &&
+            <div className='section editing'>
+              <DistributionEditor
+                  metricId={metric.id}
+                  metricFocus={this.focus.bind(this)}
+                  onOpen={this.openModal.bind(this)}
+                  ref='DistributionEditor'
+                  size='small'
+                  errors={errors}
+              />
+            </div>
+          }
+        </div>
+        {this.props.hovered && !isSelected && <MetricToolTip guesstimate={guesstimate}/>}
       </div>
     );
   }

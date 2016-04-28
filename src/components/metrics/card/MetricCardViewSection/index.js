@@ -10,8 +10,8 @@ import Icon from 'react-fa'
 
 const isBreak = (errors) => {return errors[0] && (errors[0] === 'BROKEN_UPSTREAM' || errors[0] === 'BROKEN_INPUT' )}
 
-const ErrorSection = ({errors}) => (
-  <div className={`StatsSectionErrors ${isBreak(errors) ? 'minor' : 'serious'}`}>
+const ErrorSection = ({errors, padTop}) => (
+  <div className={`StatsSectionErrors ${isBreak(errors) ? 'minor' : 'serious'} ${padTop ? 'padTop' : ''}`}>
     {isBreak(errors) && <Icon name='unlink'/>}
     {!isBreak(errors) && <Icon name='warning'/>}
   </div>
@@ -107,7 +107,9 @@ export default class MetricCardViewSection extends Component {
             </div>
           }
 
-          {hasErrors && !isSelected && <ErrorSection errors={errors}/>}
+          {hasErrors && !isSelected &&
+            <ErrorSection errors={errors} padTop={(!_.isEmpty(metric.name) && !isSelected)}/>
+          }
         </div>
 
         {shouldShowJsonTree &&
