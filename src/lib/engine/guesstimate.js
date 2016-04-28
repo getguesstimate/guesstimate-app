@@ -5,6 +5,7 @@ import {Guesstimator} from '../guesstimator/index.js'
 
 export const attributes = ['metric', 'input', 'guesstimateType', 'description', 'data']
 
+'BROKEN_UPSTREAM', 'BROKEN_INPUT'
 export function sample(guesstimate: Guesstimate, dGraph: DGraph, n: number = 1) {
   const metric = guesstimate.metric
 
@@ -20,12 +21,10 @@ export function sample(guesstimate: Guesstimate, dGraph: DGraph, n: number = 1) 
   for (let input of Object.keys(externalInputs)) {
     if (externalInputs[input].errors && externalInputs[input].errors.length > 0) {
       const upstreamErrors = externalInputs[input].errors.map(e => {
-        if (e.startsWith("input")) {
-          return `upstream ${e}`
-        } else if (e.startsWith("upstream")) {
-          return e
+        if (e === 'BROKEN_INPUT' || e === 'BROKEN_UPSTREAM') {
+          return 'BROKEN_UPSTREAM'
         } else {
-          return `input ${input} has error: ${e}`
+          return 'BROKEN_INPUT'
         }
       })
       inputErrors.push(...upstreamErrors)

@@ -10,8 +10,9 @@
   font-weight: 300;
   width: 100%;
   display:flex;
-  flex-direction: column;
   cursor: move;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .metricCard input{
@@ -20,10 +21,6 @@
 
 .metricCard:not(.titleView) {
   background-color: rgba(255,255,255,0.975);
-}
-.metricCard.hasErrors {
-  background-color: rgb(216, 154, 148) !important;
-  transition: background-color 0.5s;
 }
 
 .metricCard.intermediate:not(.titleView) {
@@ -55,13 +52,6 @@
 .metricCard .section.editing {
   border-top: 1px solid #ddd;
   border-radius: 0 0 2px 2px;
-}
-
-.metricCard .DistributionSummary {
-  margin: 5px 0 0 2px;
-  font-weight: 200;
-  font-family: Lato, Arial, sans-serif;
-  color: #444
 }
 
 .metricCard:focus {

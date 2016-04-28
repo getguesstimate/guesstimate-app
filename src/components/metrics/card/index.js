@@ -156,17 +156,9 @@ class MetricCard extends Component {
     return className
   }
 
-  _errors() {
-    if (this._isTitle()){ return [] }
-    let errors = _.get(this.props.metric, 'simulation.sample.errors')
-    return errors ? errors.filter(e => !!e) : []
-  }
-
   render() {
     const {isSelected, metric, guesstimateForm, canvasState} = this.props
     const {guesstimate} = metric
-
-    const errors = this._errors()
 
     return (
       <div
@@ -197,7 +189,7 @@ class MetricCard extends Component {
             jumpSection={this._focusForm.bind(this)}
             onClick={this._handleClick.bind(this)}
             ref='MetricCardViewSection'
-            hasErrors={errors.length > 0}
+            isTitle={this._isTitle()}
         />
 
         {isSelected && !this.state.modalIsOpen &&

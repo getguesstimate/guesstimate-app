@@ -8,6 +8,15 @@ import MetricToken from '../token/index.js'
 import './style.css'
 import Icon from 'react-fa'
 
+const isBreak = (errors) => {return errors[0] && (errors[0] === 'BROKEN_UPSTREAM' || errors[0] === 'BROKEN_INPUT' )}
+
+const ErrorSection = ({errors}) => (
+  <div className={`StatsSectionErrors ${isBreak(errors) ? 'minor' : 'serious'}`}>
+    {isBreak(errors) && <Icon name='unlink'/>}
+    {!isBreak(errors) && <Icon name='warning'/>}
+  </div>
+)
+
 export default class MetricCardViewSection extends Component {
 
   hasContent() {
@@ -29,6 +38,12 @@ export default class MetricCardViewSection extends Component {
     return isScientific && isAvailable
   }
 
+  _errors() {
+    if (this.props.isTitle){ return [] }
+    let errors = _.get(this.props.metric, 'simulation.sample.errors')
+    return errors ? errors.filter(e => !!e) : []
+  }
+
   render() {
     const {canvasState,
           metric,
@@ -37,71 +52,71 @@ export default class MetricCardViewSection extends Component {
           guesstimateForm,
           onOpenModal,
           jumpSection,
-          hasErrors,
           onClick
     } = this.props
 
+    const errors = this._errors()
     const {canvasState: {metricCardView, metricClickMode}} = this.props
-
+    const {guesstimate} = metric
     const showSimulation = this.showSimulation()
     const shouldShowStatistics = this._shouldShowStatistics()
     const shouldShowJsonTree = (metricCardView === 'debugging')
-    const {guesstimate} = metric
     const hasGuesstimateDescription = !_.isEmpty(guesstimate.description)
     const anotherFunctionSelected = ((metricClickMode === 'FUNCTION_INPUT_SELECT') && !isSelected)
+    const hasErrors = (errors.length > 0)
+
     return(
       <div className={`MetricCardViewSection ${metricCardView} ${(hasErrors & !isSelected) ? 'hasErrors' : ''}`}
           onMouseDown={onClick}
       >
-          {(metricCardView !== 'basic') && showSimulation &&
-            <Histogram height={(metricCardView === 'scientific') ? 110 : 30}
-                simulation={metric.simulation}
-                cutOffRatio={0.995}
-            />
-          }
+        {(metricCardView !== 'basic') && showSimulation &&
+          <Histogram height={(metricCardView === 'scientific') ? 110 : 30}
+              simulation={metric.simulation}
+              cutOffRatio={0.995}
+          />
+        }
 
-          <div className='MetricTokenSection'>
-            <MetricToken
-             readableId={metric.readableId}
-             anotherFunctionSelected={anotherFunctionSelected}
-             onOpenModal={onOpenModal}
-             hasGuesstimateDescription={hasGuesstimateDescription}
-            />
+        <div className='MetricTokenSection'>
+          <MetricToken
+           readableId={metric.readableId}
+           anotherFunctionSelected={anotherFunctionSelected}
+           onOpenModal={onOpenModal}
+           hasGuesstimateDescription={hasGuesstimateDescription}
+          />
+        </div>
+
+        {(!_.isEmpty(metric.name) || isSelected) &&
+          <div className='NameSection'>
+              <MetricName
+                isSelected={isSelected}
+                name={metric.name}
+                onChange={onChangeName}
+                jumpSection={jumpSection}
+                ref='name'
+              />
           </div>
-          {(!_.isEmpty(metric.name) || isSelected) &&
-            <div className='NameSection'>
-                <MetricName
-                  isSelected={isSelected}
-                  name={metric.name}
-                  onChange={onChangeName}
-                  jumpSection={jumpSection}
-                  ref='name'
-                />
+        }
+
+        <div className='StatsSection'>
+          {showSimulation &&
+            <div className='StatsSectionBody'>
+              <DistributionSummary
+                  guesstimateForm={guesstimateForm}
+                  simulation={metric.simulation}
+              />
             </div>
           }
-          <div className='StatsSection'>
-            {showSimulation &&
-              <div className='StatsSectionBody'>
-                <DistributionSummary
-                    guesstimateForm={guesstimateForm}
-                    simulation={metric.simulation}
-                />
-              </div>
-            }
-            {hasErrors && !isSelected &&
-              <div className='StatsSectionErrors'>
-                <Icon name='unlink'/>
-              </div>
-            }
-          </div>
-          {shouldShowJsonTree &&
-            <div className='row'> <div className='col-xs-12'> <JSONTree data={this.props}/> </div> </div>
-          }
 
-          {shouldShowStatistics &&
-            <div className='row'> <div className='col-xs-12'> <StatTable stats={metric.simulation.stats}/> </div> </div>
-          }
+          {hasErrors && !isSelected && <ErrorSection errors={errors}/>}
         </div>
-      )
+
+        {shouldShowJsonTree &&
+          <div className='row'> <div className='col-xs-12'> <JSONTree data={this.props}/> </div> </div>
+        }
+        {shouldShowStatistics &&
+          <div className='row'> <div className='col-xs-12'> <StatTable stats={metric.simulation.stats}/> </div> </div>
+        }
+      </div>
+    )
   }
 }
