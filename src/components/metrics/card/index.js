@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react'
 import ReactDOM from 'react-dom'
 import JSONTree from 'react-json-tree'
+import PureRenderMixin from 'react-addons-pure-render-mixin'
 
 import { connect } from 'react-redux';
 import { removeMetric, changeMetric } from 'gModules/metrics/actions.js'
@@ -40,6 +41,11 @@ const relationshipType = (edges) => {
 
 const PT = PropTypes
 class MetricCard extends Component {
+  constructor(props) {
+    super(props)
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this)
+  }
+
   displayName: 'MetricCard'
 
   static propTypes = {
