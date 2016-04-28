@@ -16,11 +16,11 @@
 }
 
 .metricCard .MetricCardViewSection.hasErrors .StatsSectionErrors.serious  {
-  background-color: #E66060;
+  background-color: #E48585;
 }
 
 .MetricCardViewSection > .StatsSection .StatsSectionErrors.serious .fa{
-  color: white;
+  color: #A74B4B;
   font-size: 1.5em;
 }
 
