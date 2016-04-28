@@ -168,12 +168,13 @@ class MetricCard extends Component {
     const errors = this._errors()
 
     return (
-      <div className='metricCard--Container'>
+      <div className='metricCard--Container'
+          ref='dom'
+          onKeyDown={this._handlePress.bind(this)}
+          tabIndex='0'
+        >
         <div
             className={this._className()}
-            ref='dom'
-            onKeyDown={this._handlePress.bind(this)}
-            tabIndex='0'
         >
 
           <MetricModal

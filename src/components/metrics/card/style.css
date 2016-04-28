@@ -60,7 +60,7 @@
   flex: 0;
 }
 
-.metricCard:focus {
+.metricCard--Container:focus {
   outline: none;
 }
 
