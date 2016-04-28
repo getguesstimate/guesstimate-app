@@ -8,7 +8,7 @@ export const item = Object.assign(
     formatterName: 'DISTRIBUTION_POINT_TEXT',
     errors(g) {
       const value = parseNumber(g.text)
-      if (!value || !isParseableNumber(value)) {
+      if (!_.isFinite(value) || !isParseableNumber(value)) {
         return ['invalid sample']
       }
       return []

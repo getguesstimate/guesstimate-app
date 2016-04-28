@@ -5,7 +5,6 @@ import {Guesstimator} from '../guesstimator/index.js'
 
 export const attributes = ['metric', 'input', 'guesstimateType', 'description', 'data']
 
-'BROKEN_UPSTREAM', 'BROKEN_INPUT'
 export function sample(guesstimate: Guesstimate, dGraph: DGraph, n: number = 1) {
   const metric = guesstimate.metric
 
