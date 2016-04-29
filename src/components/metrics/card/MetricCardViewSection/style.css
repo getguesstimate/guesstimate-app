@@ -72,6 +72,10 @@
   min-height: 40px;
 }
 
+.MetricCardViewSection > .StatsSection .StatsSectionErrors.isHidden {
+  display: none;
+}
+
 .MetricCardViewSection > .StatsSection .StatsSectionErrors.padTop {
   margin-top: 5px;
 }

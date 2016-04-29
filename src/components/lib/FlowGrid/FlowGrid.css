@@ -144,7 +144,7 @@ svg.edge  path.basic-arrow.BLUE {
 }
 
 svg.edge  path.basic-arrow.RED {
-  stroke: #B59893;
+  stroke: #C7523E;
 }
 
 .arrow {
@@ -156,5 +156,5 @@ svg.edge  path.basic-arrow.RED {
 }
 
 .arrow.RED{
-  fill: #B59893;
+  fill: #C7523E;
 }
