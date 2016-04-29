@@ -84,6 +84,13 @@ export default class CanvasSpace extends Component{
     this.props.dispatch(changeSelect(next))
   }
 
+  _hasMetricUpdated(oldProps, newProps) {
+    return (
+      oldProps.canvasState !== newProps.canvasState ||
+      oldProps.metric.simulation !== newProps.metric.simulation
+    )
+  }
+
   renderMetric(metric) {
     const {location} = metric
     return (
@@ -136,14 +143,16 @@ export default class CanvasSpace extends Component{
           <JSONTree data={this.props}/>
         }
         <FlowGrid
-            items={metrics.map(m => ({location: m.location, component: this.renderMetric(m)}))}
-            edges={edges}
-            selected={selected}
-            onSelectItem={this._handleSelect.bind(this)}
-            onAddItem={this._handleAddMetric.bind(this)}
-            onMoveItem={this._handleMoveMetric.bind(this)}
-            showGridLines={showGridLines}
-          />
+          items={metrics.map(m => ({key: m.id, location: m.location, component: this.renderMetric(m)}))}
+          hasItemUpdated = {(oldItem, newItem) => this._hasMetricUpdated(oldItem.props, newItem.props)}
+          edges={edges}
+          selected={selected}
+          onSelectItem={this._handleSelect.bind(this)}
+          onAddItem={this._handleAddMetric.bind(this)}
+          onMoveItem={this._handleMoveMetric.bind(this)}
+          showGridLines={showGridLines}
+          canvasState={this.props.canvasState}
+        />
       </div>
     );
   }
