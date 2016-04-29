@@ -46,7 +46,7 @@
 }
 
  .metricCard.output .MetricCardViewSection .DistributionSummary {
-  font-weight: 800;
+  font-weight: 700;
   color: #111;
 }
 
@@ -54,7 +54,7 @@
   width: 100%;
   padding: 5px 30px 0px 5px;
   float: left;
-  flex: 1;
+  flex: 0 0 auto;
 }
 
 .MetricCardViewSection > .StatsSection {
@@ -89,7 +89,7 @@
 }
 
 .metricCard .DistributionSummary {
-  font-weight: 200;
+  font-weight: 300;
   font-family: Lato, Arial, sans-serif;
   color: #444
 }
