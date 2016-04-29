@@ -7,13 +7,14 @@
 .DistributionSummary .mean {
   float: left;
   width: 100%;
+  line-height: 0.9em;
 }
 
 .DistributionSummary .UncertaintyRange {
   font-size: 0.58em;
   color: #555;
   float: left;
-  margin-top: 5px;
+  margin-top: 2px;
   margin-left: 0;
 }
 

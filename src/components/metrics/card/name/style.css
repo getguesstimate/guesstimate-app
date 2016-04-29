@@ -3,7 +3,6 @@
 .MetricName {
   float: left;
   width: 100%;
-  margin-bottom: 5px;
 }
 
 .MetricName textarea{
@@ -18,8 +17,8 @@
   line-height: 1.2em;
 }
 
-.output .MetricName textarea{
-  font-weight: 500;
+.output .MetricName textarea {
+   font-weight: 500;
 }
 
 .titleView .MetricName textarea{
