@@ -24,6 +24,11 @@
   font-size: 1.5em;
 }
 
+.MetricCardViewSection > .StatsSection .StatsSectionErrors.serious i{
+  color: #A74B4B;
+  font-size: 1.8em;
+}
+
 .MetricCardViewSection > .StatsSection .StatsSectionErrors.minor .fa{
   font-size: 1.4em;
   color: #D48A8A;
