@@ -4,9 +4,14 @@ export const simulate = (expr, inputs, numSamples) => {
     (results) => {
       let finalResult = {values: [], errors: []}
       for (let result of results) {
-        finalResult.values = finalResult.values.concat(result.values)
-        finalResult.errors = finalResult.errors.concat(result.errors)
+        if (result.values) {
+          finalResult.values = finalResult.values.concat(result.values)
+        }
+        if (result.errors) {
+          finalResult.errors = finalResult.errors.concat(result.errors)
+        }
       }
+      finalResult.errors = _.uniq(finalResult.errors)
       return finalResult
     }
   )

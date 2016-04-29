@@ -1,5 +1,11 @@
 @import './styles/variables.css';
 
+.metricCard--Container {
+  position: relative;
+  display: flex;
+  width: 100%;
+}
+
 .metricCard {
   border-radius: 1px;
   max-width: 30em;
@@ -10,8 +16,13 @@
   font-weight: 300;
   width: 100%;
   display:flex;
-  flex-direction: column;
   cursor: move;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.metricCard input{
+  transition: background-color 0.2s;
 }
 
 .metricCard:not(.titleView) {
@@ -30,15 +41,6 @@
   background-color: rgba(255,255,255,0.975);
 }
 
-.row > .sqwish-right {
-  padding-right: 0
-}
-
-.row > .sqwish-middle {
-  padding-left: 0.2rem;
-  padding-right: 0.8rem;
-}
-
 .hovered.selected .metricCard {
   background-color: white;
 }
@@ -49,38 +51,16 @@
 
 .metricCard > .section {
   position: relative;
-  flex: 1;
   padding: 0.3em 0.3em 0.2em 0.3em;
-}
-
-.metricCard .react-d3-histogram {
-  position: absolute;
-  z-index: -1;
-  left: -5px;
 }
 
 .metricCard .section.editing {
   border-top: 1px solid #ddd;
   border-radius: 0 0 2px 2px;
+  flex: 0;
 }
 
-.metricCard .DistributionSummary {
-  margin: 5px 0 0 2px;
-  font-weight: 200;
-  font-family: Lato, Arial, sans-serif;
-  color: #444
-}
-
-.metricCard.input .DistributionSummary {
-  color: #222;
-}
-
-.metricCard.output .DistributionSummary {
-  font-weight: 800;
-  color: #111;
-}
-
-.metricCard:focus {
+.metricCard--Container:focus {
   outline: none;
 }
 

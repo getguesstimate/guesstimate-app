@@ -43,13 +43,6 @@ export default class Edges extends Component {
     return Object.assign(this._rowY(row), this._columnX(column))
   }
 
-  defs() {
-    return "<marker id=\"markerArrow\" markerWidth=\"3\" markerHeight=\"3\" \
-             refx=\"2\" refy=\"1.5\" orient=\"auto\"> \
-            <path d=\"M 0,0 V 3 L3,1.5 Z\" class=\"arrow\"/> \
-           </marker>";
-  }
-
   render() {
     const {columnWidth, containerHeight, rowHeights} = this.props
     let {edges} = (this.props)
@@ -63,12 +56,19 @@ export default class Edges extends Component {
             height={containerHeight}
             width={'100%'}
         >
-          <defs key={'defs'} dangerouslySetInnerHTML={{__html: this.defs()}}/>
+          <defs>
+            <marker id="MarkerArrowBLUE" markerWidth="3" markerHeight="3" refX="2" refY="1.5" orient="auto">
+              <path d="M 0,0 V 3 L3,1.5 Z" className="arrow BLUE"/>
+             </marker>
+            <marker id="MarkerArrowRED" markerWidth="3" markerHeight="3" refX="2" refY="1.5" orient="auto">
+              <path d="M 0,0 V 3 L3,1.5 Z" className="arrow RED"/>
+             </marker>
+          </defs>
           {showEdges &&
-            edges.map(e => {
+            _.sortBy(edges, e => {return e.color === 'RED' ? 1 : 0}).map(e => {
               const input = this._toRectangle(e.input)
               const output = this._toRectangle(e.output)
-              return (<Edge key={JSON.stringify(e)} input={input} output={output}/>)
+              return (<Edge color={e.color} key={JSON.stringify(e)} input={input} output={output}/>)
             })
           }
         </svg>

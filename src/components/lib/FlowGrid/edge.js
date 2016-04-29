@@ -86,51 +86,22 @@ export default class Edge extends Component{
     output: PropTypes.object.isRequired,
   }
 
-  state = {
-    changed: Math.random()
-  }
-
   shouldComponentUpdate(nextProps) {
     return (!_.isEqual(this.props !== nextProps))
   }
 
   render() {
-    const {output, input} = this.props;
+    const {output, input, color} = this.props;
     let inputPoints = (new Rectangle(input)).showPosition(output)
     let outputPoints = (new Rectangle(output)).showPosition(input)
-    let changed
 
-    if (inputPoints.x === outputPoints.x) {
-      changed = this.state.changed * 50 - 25
-      inputPoints.x = inputPoints.x + changed
-      outputPoints.x = outputPoints.x + changed
-    }
-
-    if (inputPoints.y === outputPoints.y) {
-      changed = this.state.changed * 30 - 15
-      inputPoints.y = inputPoints.y + changed
-      outputPoints.y = outputPoints.y + changed
-    }
-
-    let points = null
-
-    //if (inputPoints.y == outputPoints.y){
-      //points = `M${inputPoints.x},${inputPoints.y} L${outputPoints.x},${outputPoints.y}`
-    //} else {
-      //if (inputPoints.y > outputPoints.y) {
-        //points = `M${inputPoints.x},${inputPoints.y} L${inputPoints.x},${inputPoints.y - 8} L${outputPoints.x},${inputPoints.y - 8} L${outputPoints.x},${outputPoints.y}`
-      //} else {
-        //points = `M${inputPoints.x},${inputPoints.y} L${inputPoints.x},${inputPoints.y + 8} L${outputPoints.x},${inputPoints.y + 8} L${outputPoints.x},${outputPoints.y}`
-      //}
-    //}
-    points = `M${inputPoints.x},${inputPoints.y} L${outputPoints.x} ,${outputPoints.y}`
+    let points = `M${inputPoints.x},${inputPoints.y} L${outputPoints.x} ,${outputPoints.y}`
 
     return (
         <path
-            className='basic-arrow'
+            className={`basic-arrow ${color}`}
             d={points}
-            strokeWidth="3"
-            markerEnd='url(#markerArrow)'
+            markerEnd={`url(#MarkerArrow${color})`}
             fill="none"
         />
     )

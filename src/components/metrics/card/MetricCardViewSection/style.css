@@ -1,0 +1,88 @@
+.MetricCardViewSection {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.MetricCardViewSection .MetricTokenSection{
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.metricCard .MetricCardViewSection.hasErrors .StatsSectionErrors.minor  {
+  background-color: rgb(236, 202, 199);
+}
+
+.metricCard .MetricCardViewSection.hasErrors .StatsSectionErrors.serious  {
+  background-color: #E48585;
+}
+
+.MetricCardViewSection > .StatsSection .StatsSectionErrors.serious .fa{
+  color: #A74B4B;
+  font-size: 1.5em;
+}
+
+.MetricCardViewSection > .StatsSection .StatsSectionErrors.minor .fa{
+  font-size: 1.4em;
+  color: #D48A8A;
+  margin-top: 4px;
+}
+
+.metricCard .MetricCardViewSection .react-d3-histogram {
+  position: absolute;
+  z-index: -1;
+  left: -5px;
+}
+
+.metricCard.input .MetricCardViewSection .DistributionSummary {
+  color: #222;
+}
+
+ .metricCard.output .MetricCardViewSection .DistributionSummary {
+  font-weight: 800;
+  color: #111;
+}
+
+.MetricCardViewSection > .NameSection {
+  width: 100%;
+  padding: 5px 30px 0px 5px;
+  float: left;
+  flex: 1;
+}
+
+.MetricCardViewSection > .StatsSection {
+  width: 100%;
+  float: left;
+  min-height: 10px;
+  flex: 5;
+  display: flex;
+}
+
+.MetricCardViewSection > .StatsSection .StatsSectionBody {
+  padding: 8px 6px 4px 7px;
+}
+
+.MetricCardViewSection > .StatsSection .StatsSectionErrors {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+}
+
+.MetricCardViewSection > .StatsSection .StatsSectionErrors.isHidden {
+  display: none;
+}
+
+.MetricCardViewSection > .StatsSection .StatsSectionErrors.padTop {
+  margin-top: 5px;
+}
+
+.metricCard .DistributionSummary {
+  font-weight: 200;
+  font-family: Lato, Arial, sans-serif;
+  color: #444
+}
+

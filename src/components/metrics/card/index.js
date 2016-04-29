@@ -12,7 +12,7 @@ import MetricToolTip from './tooltip.js'
 import $ from 'jquery'
 import './style.css'
 import * as canvasStateProps from 'gModules/canvas_state/prop_type.js'
-import MetricCardViewSection from './MetricCardViewSection.js'
+import MetricCardViewSection from './MetricCardViewSection/index.js'
 
 const INTERMEDIATE = 'INTERMEDIATE'
 const OUTPUT = 'OUTPUT'
@@ -147,6 +147,7 @@ class MetricCard extends Component {
     const {isSelected, metric, hovered} = this.props
     const {canvasState: {metricCardView}} = this.props
     const relationshipClass = relationshipClasses[relationshipType(metric.edges)]
+
     const titleView = !hovered && !isSelected && this._isTitle()
     let className = isSelected ? 'metricCard grid-item-focus' : 'metricCard'
     className += ` ${metricCardView}`
@@ -155,51 +156,62 @@ class MetricCard extends Component {
     return className
   }
 
+  _errors() {
+    if (this.props.isTitle){ return [] }
+    let errors = _.get(this.props.metric, 'simulation.sample.errors')
+    return errors ? errors.filter(e => !!e) : []
+  }
+
   render() {
     const {isSelected, metric, guesstimateForm, canvasState} = this.props
     const {guesstimate} = metric
+    const errors = this._errors()
+
     return (
-      <div
-          className={this._className()}
+      <div className='metricCard--Container'
           ref='dom'
           onKeyDown={this._handlePress.bind(this)}
           tabIndex='0'
-      >
-        {this.props.hovered && !isSelected &&
-          <MetricToolTip guesstimate={guesstimate}/>
-        }
+        >
+        <div
+            className={this._className()}
+        >
 
-        <MetricModal
-            metric={metric}
-            guesstimateForm={guesstimateForm}
-            isOpen={this.state.modalIsOpen}
-            closeModal={this.closeModal.bind(this)}
-            onChange={this.handleChangeGuesstimate.bind(this)}
-        />
+          <MetricModal
+              metric={metric}
+              guesstimateForm={guesstimateForm}
+              isOpen={this.state.modalIsOpen}
+              closeModal={this.closeModal.bind(this)}
+              onChange={this.handleChangeGuesstimate.bind(this)}
+          />
 
-        <MetricCardViewSection
-            canvasState={canvasState}
-            metric={metric}
-            isSelected={isSelected}
-            onChangeName={this.handleChangeMetric.bind(this)}
-            guesstimateForm={guesstimateForm}
-            onOpenModal={this.openModal.bind(this)}
-            jumpSection={this._focusForm.bind(this)}
-            onClick={this._handleClick.bind(this)}
-            ref='MetricCardViewSection'
-        />
+          <MetricCardViewSection
+              canvasState={canvasState}
+              metric={metric}
+              isSelected={isSelected}
+              onChangeName={this.handleChangeMetric.bind(this)}
+              guesstimateForm={guesstimateForm}
+              onOpenModal={this.openModal.bind(this)}
+              jumpSection={this._focusForm.bind(this)}
+              onClick={this._handleClick.bind(this)}
+              ref='MetricCardViewSection'
+              isTitle={this._isTitle()}
+          />
 
-        {isSelected && !this.state.modalIsOpen &&
-          <div className='section editing'>
-            <DistributionEditor
-                metricId={metric.id}
-                metricFocus={this.focus.bind(this)}
-                onOpen={this.openModal.bind(this)}
-                ref='DistributionEditor'
-                size='small'
-            />
-          </div>
-        }
+          {isSelected && !this.state.modalIsOpen &&
+            <div className='section editing'>
+              <DistributionEditor
+                  metricId={metric.id}
+                  metricFocus={this.focus.bind(this)}
+                  onOpen={this.openModal.bind(this)}
+                  ref='DistributionEditor'
+                  size='small'
+                  errors={errors}
+              />
+            </div>
+          }
+        </div>
+        {this.props.hovered && !isSelected && <MetricToolTip guesstimate={guesstimate}/>}
       </div>
     );
   }
