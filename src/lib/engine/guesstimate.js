@@ -13,24 +13,8 @@ export function sample(guesstimate: Guesstimate, dGraph: DGraph, n: number = 1) 
     return Promise.resolve({ metric, sample: {values: [], errors: parseErrors} })
   }
 
-  const externalInputs = item.needsExternalInputs() ? _inputMetricsWithValues(guesstimate, dGraph) : []
+  const [inputs, inputErrors] = item.needsExternalInputs() ? _inputMetricsWithValues(guesstimate, dGraph) : [{}, []]
 
-  let inputErrors = []
-  let inputs = {}
-  for (let input of Object.keys(externalInputs)) {
-    if (externalInputs[input].errors && externalInputs[input].errors.length > 0) {
-      const upstreamErrors = externalInputs[input].errors.map(e => {
-        if (e === 'BROKEN_INPUT' || e === 'BROKEN_UPSTREAM') {
-          return 'BROKEN_UPSTREAM'
-        } else {
-          return 'BROKEN_INPUT'
-        }
-      })
-      inputErrors.push(...upstreamErrors)
-    }
-    inputs[input] = externalInputs[input].values
-  }
-  inputErrors = _.uniq(inputErrors)
   if (inputErrors.length > 0) {
     return Promise.resolve({ metric, sample: {values: [], errors: inputErrors} })
   }
@@ -64,12 +48,20 @@ export function inputMetrics(guesstimate: Guesstimate, dGraph: DGraph): Array<Ob
   return dGraph.metrics.filter( m => (guesstimate.input || '').includes(m.readableId) );
 }
 
+function _formatInputError(errorMsg) {
+  if (errorMsg === 'BROKEN_INPUT' || errorMsg === 'BROKEN_UPSTREAM') {
+    return 'BROKEN_UPSTREAM'
+  }
+  return 'BROKEN_INPUT'
+}
+
 function _inputMetricsWithValues(guesstimate: Guesstimate, dGraph: DGraph): Object{
   let inputs = {}
-  inputMetrics(guesstimate, dGraph)
-  .map(m => {inputs[m.readableId] = {
-    values: _.get(m, 'simulation.sample.values'),
-    errors: _.get(m, 'simulation.sample.errors'),
-  }})
-  return inputs
+  let errors = []
+  inputMetrics(guesstimate, dGraph).map(m => {
+    inputs[m.readableId] = _.get(m, 'simulation.sample.values')
+    const inputErrors = _.get(m, 'simulation.sample.errors')
+    errors.concat(inputErrors ? inputErrors.map(_formatInputError) : [])
+  })
+  return [inputs, _.uniq(errors)]
 }
