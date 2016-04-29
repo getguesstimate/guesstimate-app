@@ -66,7 +66,7 @@ export default class GuesstimateForm extends Component{
             onAddDefaultData={this._addDefaultData.bind(this)}
             onEscape={this.props.metricFocus}
             size={size}
-            hasErrors={errors.length !== 0}
+            hasErrors={errors && (errors.length !== 0)}
             ref='TextForm'
           />
         }
