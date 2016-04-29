@@ -56,7 +56,7 @@ export default class MetricPropagation {
         propagationId: this.propagationId,
         sample: {
           values: [],
-          errors: ['infinite loop detected']
+          errors: ['INFINITE_LOOP']
         }
       }
       this._dispatch(dispatch, simulation)

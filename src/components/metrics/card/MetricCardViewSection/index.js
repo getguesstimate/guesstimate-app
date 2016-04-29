@@ -9,13 +9,15 @@ import './style.css'
 import Icon from 'react-fa'
 
 const isBreak = (errors) => {return errors[0] && (errors[0] === 'BROKEN_UPSTREAM' || errors[0] === 'BROKEN_INPUT' )}
+const isInfiniteLoop = (errors) => {return errors[0] && (errors[0] === 'INFINITE_LOOP')}
 
 // We have to display this section after it disappears
 // to ensure that the metric card gets selected after click.
 const ErrorSection = ({errors, padTop, hide}) => (
   <div className={`StatsSectionErrors ${isBreak(errors) ? 'minor' : 'serious'} ${padTop ? 'padTop' : ''} ${hide ? 'isHidden' : ''}`}>
     {isBreak(errors) && <Icon name='unlink'/>}
-    {!isBreak(errors) && <Icon name='warning'/>}
+    {!isBreak(errors) && isInfiniteLoop(errors) && <i className='ion-ios-infinite'/>}
+    {!isBreak(errors) && !isInfiniteLoop(errors) && <Icon name='warning'/>}
   </div>
 )
 
