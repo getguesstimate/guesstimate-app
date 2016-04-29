@@ -26,7 +26,8 @@ export const denormalizedSpaceSelector = createSelector(
     }
 
     return {
-      denormalizedSpace: dSpace
+      denormalizedSpace: dSpace,
+      canvasState
     };
   }
 );

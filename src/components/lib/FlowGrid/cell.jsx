@@ -35,12 +35,50 @@ export default class Cell extends Component {
   }
 
   shouldComponentUpdate(newProps, newState) {
+    if (this.props.location.row == 0 && this.props.location.column == 0) {
+      console.log("\n\n\n")
+      console.log("FlowGrid Cell:")
+      if (_.get(this.props, 'item.props.canvasState.metricClickMode') && _.get(newProps, 'item.props.canvasState.metricClickMode')) {
+        console.log("oldProps", this.props)
+        console.log("newProps", newProps)
+        console.log("Old Click Mode: " , this.props.item.props.canvasState.metricClickMode)
+        console.log("New Click Mode: " , newProps.item.props.canvasState.metricClickMode)
+      }
+      //console.log("oldProps:")
+      //console.log(this.props)
+      //console.log("newProps:")
+      //console.log(newProps)
+      //console.log("oldState:")
+      //console.log(this.state)
+      //console.log("newState:")
+      //console.log(newState)
+    }
     const difProps = (newProps.isOver !== this.props.isOver) ||
       (newProps.isSelected !== this.props.isSelected) ||
       (newState.hover !== this.state.hover)
-    const hasItem = (!!newProps.item || !!this.props.item)
+    const itemDifferent = (!!newProps.item !== !!this.props.item)
+    const bothHaveItems = (!!newProps.item && !!this.props.item)
 
-    return (difProps || hasItem)
+    if (this.props.location.row == 0 && this.props.location.column == 0) {
+      console.log("difProps || itemDifferent", difProps || itemDifferent)
+      console.log("bothHaveItems", bothHaveItems)
+      if (!difProps && !itemDifferent && bothHaveItems) {
+        const oldProps = this.props.item.props
+        const newProps2 = newProps.item.props
+        console.log("Within Cell: CanvasSpace:")
+        console.log("oldProps:")
+        console.log(oldProps.canvasState)
+        _.get(oldProps, 'metric.simulation') && console.log(oldProps.metric.simulation)
+        console.log("newProps2:")
+        console.log(newProps2.canvasState)
+        _.get(newProps2, 'metric.simulation') && console.log(newProps2.metric.simulation)
+        console.log("this.props.hasItemUpdated: ", 
+          oldProps.canvasState !== newProps2.canvasState ||
+          oldProps.metric.simulation !== newProps2.metric.simulation
+        )
+      }
+    }
+    return (difProps || itemDifferent || (bothHaveItems && this.props.hasItemUpdated(this.props.item, newProps.item))) || this.props.canvasState !== newProps.canvasState
   }
 
   state = {

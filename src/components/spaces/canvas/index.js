@@ -18,14 +18,14 @@ import * as canvasStateProps from 'gModules/canvas_state/prop_type.js'
 
 function mapStateToProps(state) {
   return {
-    canvasState: state.canvasState,
+    //canvasState: state.canvasState,
     selected: state.selection,
   }
 }
 
 const PT = PropTypes;
 @connect(mapStateToProps)
-@connect(denormalizedSpaceSelector)
+@connect(denormalizedSpaceSelector) // Also selecting canvas State at the moment.
 export default class CanvasSpace extends Component{
   static propTypes = {
     canvasState: PT.shape({
@@ -54,7 +54,13 @@ export default class CanvasSpace extends Component{
     this.props.dispatch(runSimulations({spaceId: this.props.denormalizedSpace.id}))
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    console.log("Space canvas should update?", this.props.canvasState.metricClickMode, "to", nextProps.canvasState.metricClickMode)
+    return true
+  }
+
   componentDidUpdate(prevProps) {
+    console.log("Space canvas just updated:", prevProps.canvasState.metricClickMode, "to", this.props.canvasState.metricClickMode)
     const metrics = _.get(this.props.denormalizedSpace, 'metrics')
     const oldMetrics = _.get(prevProps.denormalizedSpace, 'metrics')
     if ((oldMetrics.length === 0) && (metrics.length > 0)){
@@ -82,6 +88,21 @@ export default class CanvasSpace extends Component{
     const metric = this.props.denormalizedSpace.metrics.find(f => f.location.row === prev.row && f.location.column === prev.column)
     this.props.dispatch(changeMetric({id: metric.id, location: next}))
     this.props.dispatch(changeSelect(next))
+  }
+
+  _hasMetricUpdated(oldProps, newProps) {
+    //console.log("CanvasSpace:")
+    //console.log("\n\n\n")
+    //console.log("oldProps:")
+    //console.log(oldProps.canvasState)
+    //console.log(oldProps.metric.simulation)
+    //console.log("newProps:")
+    //console.log(newProps.canvasState)
+    //console.log(newProps.metric.simulation)
+    return (
+      oldProps.canvasState !== newProps.canvasState ||
+      oldProps.metric.simulation !== newProps.metric.simulation
+    )
   }
 
   renderMetric(metric) {
@@ -136,14 +157,16 @@ export default class CanvasSpace extends Component{
           <JSONTree data={this.props}/>
         }
         <FlowGrid
-            items={metrics.map(m => ({location: m.location, component: this.renderMetric(m)}))}
-            edges={edges}
-            selected={selected}
-            onSelectItem={this._handleSelect.bind(this)}
-            onAddItem={this._handleAddMetric.bind(this)}
-            onMoveItem={this._handleMoveMetric.bind(this)}
-            showGridLines={showGridLines}
-          />
+          items={metrics.map(m => ({key: m.id, location: m.location, component: this.renderMetric(m)}))}
+          hasItemUpdated = {(oldItem, newItem) => this._hasMetricUpdated(oldItem.props, newItem.props)}
+          edges={edges}
+          selected={selected}
+          onSelectItem={this._handleSelect.bind(this)}
+          onAddItem={this._handleAddMetric.bind(this)}
+          onMoveItem={this._handleMoveMetric.bind(this)}
+          showGridLines={showGridLines}
+          canvasState={this.props.canvasState}
+        />
       </div>
     );
   }
