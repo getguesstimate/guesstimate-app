@@ -56,7 +56,8 @@ export default class MetricCardViewSection extends Component {
           guesstimateForm,
           onOpenModal,
           jumpSection,
-          onClick
+          onMouseDown,
+          onMouseUp
     } = this.props
 
     const errors = this._errors()
@@ -71,7 +72,8 @@ export default class MetricCardViewSection extends Component {
 
     return(
       <div className={`MetricCardViewSection ${metricCardView} ${(hasErrors & !isSelected) ? 'hasErrors' : ''}`}
-          onMouseUp={onClick}
+          onMouseUp={onMouseUp}
+          onMouseDown={onMouseDown}
       >
         {(metricCardView !== 'basic') && showSimulation &&
           <Histogram height={(metricCardView === 'scientific') ? 110 : 30}

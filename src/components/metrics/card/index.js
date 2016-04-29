@@ -130,17 +130,27 @@ class MetricCard extends Component {
     editorRef && editorRef.focus()
   }
 
-  _handleClick(event) {
-    const selectableEl = (event.target.parentElement.getAttribute('data-select') !== 'false')
-    const notYetSelected = !this.props.isSelected
-    if (selectableEl && notYetSelected){
-      if (this.props.canvasState.metricClickMode === 'FUNCTION_INPUT_SELECT') {
-        event.preventDefault()
-        $(window).trigger('functionMetricClicked', this.props.metric)
-      } else {
-        this.props.handleSelect(this.props.location)
-      }
+  _handleMouseUp(e) {
+    if (this._isSelectable(e) && !this._isFunctionInputSelectable(e)) {
+      this.props.handleSelect(this.props.location)
     }
+  }
+
+  _handleMouseDown(e) {
+    if (this._isFunctionInputSelectable(e)) {
+        e.preventDefault()
+        $(window).trigger('functionMetricClicked', this.props.metric)
+    }
+  }
+
+  _isSelectable(e) {
+    const selectableEl = (e.target.parentElement.getAttribute('data-select') !== 'false')
+    const notYetSelected = !this.props.isSelected
+    return (selectableEl && notYetSelected)
+  }
+
+  _isFunctionInputSelectable(e) {
+    return (this._isSelectable(e) && (this.props.canvasState.metricClickMode === 'FUNCTION_INPUT_SELECT'))
   }
 
   _className() {
@@ -193,7 +203,8 @@ class MetricCard extends Component {
               guesstimateForm={guesstimateForm}
               onOpenModal={this.openModal.bind(this)}
               jumpSection={this._focusForm.bind(this)}
-              onClick={this._handleClick.bind(this)}
+              onMouseDown={this._handleMouseDown.bind(this)}
+              onMouseUp={this._handleMouseUp.bind(this)}
               ref='MetricCardViewSection'
               isTitle={this._isTitle()}
               connectDragSource={this.props.connectDragSource}
