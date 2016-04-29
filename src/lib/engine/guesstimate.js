@@ -61,7 +61,7 @@ function _inputMetricsWithValues(guesstimate: Guesstimate, dGraph: DGraph): Obje
   inputMetrics(guesstimate, dGraph).map(m => {
     inputs[m.readableId] = _.get(m, 'simulation.sample.values')
     const inputErrors = _.get(m, 'simulation.sample.errors')
-    errors.concat(inputErrors ? inputErrors.map(_formatInputError) : [])
+    errors = errors.concat(inputErrors ? inputErrors.map(_formatInputError) : [])
   })
   return [inputs, _.uniq(errors)]
 }
