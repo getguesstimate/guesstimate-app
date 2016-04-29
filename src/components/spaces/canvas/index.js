@@ -25,7 +25,7 @@ function mapStateToProps(state) {
 
 const PT = PropTypes;
 @connect(mapStateToProps)
-@connect(denormalizedSpaceSelector) // Also selecting canvas State at the moment.
+@connect(denormalizedSpaceSelector)
 export default class CanvasSpace extends Component{
   static propTypes = {
     canvasState: PT.shape({
