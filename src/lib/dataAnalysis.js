@@ -1,12 +1,17 @@
+// Returns a sorted (desc) copy of the samples.
+export function sortDescending(samples) {
+  return samples.sort((a,b) => a-b)
+}
+
 // Returns the sample mean. If no samples are provided, returns 0.
-export function avg(samples) {
+export function sampleMean(samples) {
   return samples.length > 0 ? samples.reduce((a,b) => a+b)/samples.length : 0
 }
 
 // Returns the sample standard deviation. If no samples are provided, returns 0.
-export function stdev(samples) {
+export function sampleStdev(samples) {
   const samplesSqd = samples.map(s => s*s)
-  return Math.sqrt(avg(samplesSqd) - Math.pow(avg(samples), 2))
+  return Math.sqrt(sampleMean(samplesSqd) - Math.pow(sampleMean(samples), 2))
 }
 
 // Returns the cutoff value of the specified percentile, considering the samples array to be 'length' long.

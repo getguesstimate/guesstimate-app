@@ -1,16 +1,16 @@
-import e from '../../lib/engine/engine'
+import e from 'lib/engine/engine'
 import _ from 'lodash'
-import {avg, stdev, percentile, cutoff} from '../../lib/dataAnalysis.js'
+import {sampleMean, sampleStdev, percentile, cutoff, sortDescending} from 'lib/dataAnalysis.js'
 
 function sStats(simulation){
   if (!_.has(simulation, 'sample.values') || (simulation.sample.values.length === 0)) {
     return
   }
-  const samples = simulation.sample.values.sort((a,b) => a-b)
+  const samples = sortDescending(simulation.sample.values)
   const length = samples.length
-  const mean = avg(samples)
-  const meanIndex = cutoff(samples, mean)
-  const stdev = stdev(samples)
+  const mean = sampleMean(samples)
+  const meanIndex = cutoff(samples, length, mean)
+  const stdev = sampleStdev(samples)
   const percentiles = {
     5: percentile(samples, length, 5),
     50: percentile(samples, length, 50),
@@ -53,7 +53,7 @@ export default function simulations(state = [], action = null) {
       ];
       return newState
     } else {
-      return [...state, sim)];
+      return [...state, sim];
     }
   default:
     return state
