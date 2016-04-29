@@ -10,8 +10,10 @@ import Icon from 'react-fa'
 
 const isBreak = (errors) => {return errors[0] && (errors[0] === 'BROKEN_UPSTREAM' || errors[0] === 'BROKEN_INPUT' )}
 
-const ErrorSection = ({errors, padTop}) => (
-  <div className={`StatsSectionErrors ${isBreak(errors) ? 'minor' : 'serious'} ${padTop ? 'padTop' : ''}`}>
+// We have to display this section after it disappears
+// to ensure that the metric card gets selected after click.
+const ErrorSection = ({errors, padTop, hide}) => (
+  <div className={`StatsSectionErrors ${isBreak(errors) ? 'minor' : 'serious'} ${padTop ? 'padTop' : ''} ${hide ? 'isHidden' : ''}`}>
     {isBreak(errors) && <Icon name='unlink'/>}
     {!isBreak(errors) && <Icon name='warning'/>}
   </div>
@@ -107,8 +109,12 @@ export default class MetricCardViewSection extends Component {
             </div>
           }
 
-          {hasErrors && !isSelected &&
-            <ErrorSection errors={errors} padTop={(!_.isEmpty(metric.name) && !isSelected)}/>
+          {hasErrors &&
+            <ErrorSection
+              errors={errors}
+              padTop={(!_.isEmpty(metric.name) && !isSelected)}
+              hide={isSelected}
+            />
           }
         </div>
 
