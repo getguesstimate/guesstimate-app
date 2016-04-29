@@ -24,6 +24,11 @@
   font-size: 1.5em;
 }
 
+.MetricCardViewSection > .StatsSection .StatsSectionErrors.serious i{
+  color: #A74B4B;
+  font-size: 1.8em;
+}
+
 .MetricCardViewSection > .StatsSection .StatsSectionErrors.minor .fa{
   font-size: 1.4em;
   color: #D48A8A;
@@ -53,15 +58,18 @@
 }
 
 .MetricCardViewSection > .StatsSection {
+  cursor: move;
   width: 100%;
   float: left;
   min-height: 10px;
   flex: 5;
   display: flex;
+  flex-direction: column;
 }
 
 .MetricCardViewSection > .StatsSection .StatsSectionBody {
   padding: 8px 6px 4px 7px;
+  flex: 5;
 }
 
 .MetricCardViewSection > .StatsSection .StatsSectionErrors {
@@ -86,3 +94,9 @@
   color: #444
 }
 
+.MetricCardViewSection .StatsSectionTable {
+  padding: 4px 7px;
+  background-color: rgba(255,255,255,0.3);
+  margin-top: 10px;
+  flex: 1;
+}

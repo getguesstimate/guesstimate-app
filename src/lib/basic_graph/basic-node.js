@@ -21,8 +21,12 @@ export default class BasicNode {
 
   _calculateMaxDistanceFromRoot(nodesToIgnore): integer {
     if (_.isUndefined(this._maxDistanceFromRoot)) {
-      const ancestors = _.uniq(_.flatten(this.directParents())).filter(node => (!_.some(nodesToIgnore, s => s.id === node.id)))
-      const distances = ancestors.map(n => n._calculateMaxDistanceFromRoot(nodesToIgnore.concat([this])))
+      const parents = _.uniq(_.flatten(this.directParents()))
+      if (_.some(parents, node => _.some(nodesToIgnore, s => s.id === node.id))){
+        this._maxDistanceFromRoot = Infinity
+        return Infinity
+      }
+      const distances = parents.map(n => n._calculateMaxDistanceFromRoot(nodesToIgnore.concat([this])))
 
       this._maxDistanceFromRoot = distances.length > 0 ? Math.max(...distances) + 1 : 0
     }
