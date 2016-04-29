@@ -4,8 +4,6 @@ import React, {Component, PropTypes} from 'react'
 import './FlowGrid.css'
 import Cell from './cell'
 import EdgeContainer from './edge-container.js'
-import HorizontalIndex from './HorizontalIndex.js'
-import VerticalIndex from './VerticalIndex.js'
 
 import {keycodeToDirection, DirectionToLocation} from './utils'
 
