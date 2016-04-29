@@ -65,7 +65,7 @@ export default class Edges extends Component {
              </marker>
           </defs>
           {showEdges &&
-            edges.map(e => {
+            _.sortBy(edges, e => {return e.color === 'RED' ? 1 : 0}).map(e => {
               const input = this._toRectangle(e.input)
               const output = this._toRectangle(e.output)
               return (<Edge color={e.color} key={JSON.stringify(e)} input={input} output={output}/>)
