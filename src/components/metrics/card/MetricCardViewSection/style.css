@@ -46,7 +46,7 @@
 }
 
  .metricCard.output .MetricCardViewSection .DistributionSummary {
-  font-weight: 800;
+  font-weight: 700;
   color: #111;
 }
 
@@ -89,7 +89,7 @@
 }
 
 .metricCard .DistributionSummary {
-  font-weight: 200;
+  font-weight: 300;
   font-family: Lato, Arial, sans-serif;
   color: #444
 }
