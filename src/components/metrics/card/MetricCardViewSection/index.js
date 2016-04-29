@@ -69,7 +69,7 @@ export default class MetricCardViewSection extends Component {
 
     return(
       <div className={`MetricCardViewSection ${metricCardView} ${(hasErrors & !isSelected) ? 'hasErrors' : ''}`}
-          onMouseDown={onClick}
+          onMouseUp={onClick}
       >
         {(metricCardView !== 'basic') && showSimulation &&
           <Histogram height={(metricCardView === 'scientific') ? 110 : 30}
@@ -99,30 +99,34 @@ export default class MetricCardViewSection extends Component {
           </div>
         }
 
-        <div className='StatsSection'>
-          {showSimulation &&
-            <div className='StatsSectionBody'>
-              <DistributionSummary
-                  guesstimateForm={guesstimateForm}
-                  simulation={metric.simulation}
-              />
-            </div>
-          }
+        {this.props.connectDragSource(
+          <div className='StatsSection'>
+            {showSimulation &&
+              <div className='StatsSectionBody'>
+                <DistributionSummary
+                    guesstimateForm={guesstimateForm}
+                    simulation={metric.simulation}
+                />
+              </div>
+            }
+            {showSimulation && shouldShowStatistics &&
+              <div className='StatsSectionTable'>
+                <StatTable stats={metric.simulation.stats}/>
+              </div>
+            }
 
-          {hasErrors &&
-            <ErrorSection
-              errors={errors}
-              padTop={(!_.isEmpty(metric.name) && !isSelected)}
-              hide={isSelected}
-            />
-          }
-        </div>
+            {hasErrors &&
+              <ErrorSection
+                errors={errors}
+                padTop={(!_.isEmpty(metric.name) && !isSelected)}
+                hide={isSelected}
+              />
+            }
+          </div>
+        )}
 
         {shouldShowJsonTree &&
           <div className='row'> <div className='col-xs-12'> <JSONTree data={this.props}/> </div> </div>
-        }
-        {shouldShowStatistics &&
-          <div className='row'> <div className='col-xs-12'> <StatTable stats={metric.simulation.stats}/> </div> </div>
         }
       </div>
     )

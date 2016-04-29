@@ -16,7 +16,6 @@
   font-weight: 300;
   width: 100%;
   display:flex;
-  cursor: move;
   flex-direction: column;
   overflow: hidden;
 }
