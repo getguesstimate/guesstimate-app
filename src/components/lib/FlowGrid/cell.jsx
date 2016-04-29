@@ -36,7 +36,6 @@ export default class Cell extends Component {
 
   shouldComponentUpdate(newProps, newState) {
     if (this.props.location.row == 0 && this.props.location.column == 0) {
-      console.log("\n\n\n")
       console.log("FlowGrid Cell:")
       if (_.get(this.props, 'item.props.canvasState.metricClickMode') && _.get(newProps, 'item.props.canvasState.metricClickMode')) {
         console.log("oldProps", this.props)

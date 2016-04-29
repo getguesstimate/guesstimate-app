@@ -18,7 +18,8 @@ import * as canvasStateProps from 'gModules/canvas_state/prop_type.js'
 
 function mapStateToProps(state) {
   return {
-    //canvasState: state.canvasState,
+    canvasState: state.canvasState,
+    metricClickMode: state.canvasState.metricClickMode,
     selected: state.selection,
   }
 }
@@ -55,6 +56,7 @@ export default class CanvasSpace extends Component{
   }
 
   shouldComponentUpdate(nextProps, nextState) {
+    console.log("Space canvas should update?", this.props.metricClickMode, "to", nextProps.metricClickMode)
     console.log("Space canvas should update?", this.props.canvasState.metricClickMode, "to", nextProps.canvasState.metricClickMode)
     return true
   }
