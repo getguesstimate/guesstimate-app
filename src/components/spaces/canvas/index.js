@@ -19,7 +19,6 @@ import * as canvasStateProps from 'gModules/canvas_state/prop_type.js'
 function mapStateToProps(state) {
   return {
     canvasState: state.canvasState,
-    metricClickMode: state.canvasState.metricClickMode,
     selected: state.selection,
   }
 }
@@ -55,14 +54,7 @@ export default class CanvasSpace extends Component{
     this.props.dispatch(runSimulations({spaceId: this.props.denormalizedSpace.id}))
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    console.log("Space canvas should update?", this.props.metricClickMode, "to", nextProps.metricClickMode)
-    console.log("Space canvas should update?", this.props.canvasState.metricClickMode, "to", nextProps.canvasState.metricClickMode)
-    return true
-  }
-
   componentDidUpdate(prevProps) {
-    console.log("Space canvas just updated:", prevProps.canvasState.metricClickMode, "to", this.props.canvasState.metricClickMode)
     const metrics = _.get(this.props.denormalizedSpace, 'metrics')
     const oldMetrics = _.get(prevProps.denormalizedSpace, 'metrics')
     if ((oldMetrics.length === 0) && (metrics.length > 0)){
@@ -93,14 +85,6 @@ export default class CanvasSpace extends Component{
   }
 
   _hasMetricUpdated(oldProps, newProps) {
-    //console.log("CanvasSpace:")
-    //console.log("\n\n\n")
-    //console.log("oldProps:")
-    //console.log(oldProps.canvasState)
-    //console.log(oldProps.metric.simulation)
-    //console.log("newProps:")
-    //console.log(newProps.canvasState)
-    //console.log(newProps.metric.simulation)
     return (
       oldProps.canvasState !== newProps.canvasState ||
       oldProps.metric.simulation !== newProps.metric.simulation
