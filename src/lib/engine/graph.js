@@ -45,11 +45,10 @@ export function dependencyList(graph, spaceId) {
 
 // This could be optimized for filtering the graph by the space subset
 export function dependencyTree(oGraph, graphFilters) {
-  if (onlyHead) {
-    return [[metricId,0]]
-  }
-
   const {spaceId, metricId, onlyHead, notHead} = graphFilters
+
+  if (onlyHead) { return [[metricId, 0]] }
+
   let graph = oGraph
   if (spaceId) { graph = _space.subset(oGraph, spaceId) }
 
