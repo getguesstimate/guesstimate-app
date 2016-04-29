@@ -196,6 +196,7 @@ class MetricCard extends Component {
               onClick={this._handleClick.bind(this)}
               ref='MetricCardViewSection'
               isTitle={this._isTitle()}
+              connectDragSource={this.props.connectDragSource}
           />
 
           {isSelected && !this.state.modalIsOpen &&
