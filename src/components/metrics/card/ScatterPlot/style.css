@@ -8,10 +8,21 @@
   position: relative;
 }
 
-.Scatter .regression {
+.Scatter.SMALL .regression {
   position: absolute;
   bottom: 4px;
   right: 8px;
+}
+
+.Scatter.LARGE .regression {
+  position: absolute;
+  top: 15px;
+  right: 8px;
+  color: #555;
+}
+
+.Scatter.LARGE .regression .label{
+  color: #777;
 }
 
 .Scatter.SMALL .regression .label{
