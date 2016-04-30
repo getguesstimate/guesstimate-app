@@ -58,7 +58,8 @@ export default class MetricCardViewSection extends Component {
           onOpenModal,
           jumpSection,
           onMouseDown,
-          onMouseUp
+          onMouseUp,
+          showScatterPlot
     } = this.props
 
     const errors = this._errors()
@@ -106,7 +107,7 @@ export default class MetricCardViewSection extends Component {
 
         {this.props.connectDragSource(
           <div className='StatsSection'>
-            {this.props.selectedMetric && showSimulation &&
+            {showScatterPlot &&
               <ScatterPlot yMetric={this.props.selectedMetric} xMetric={metric}/>
             }
             {showSimulation &&

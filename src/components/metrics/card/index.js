@@ -193,11 +193,17 @@ class MetricCard extends Component {
     }
   }
 
+  _shouldShowScatterPlot() {
+    const isAnalysis = (this.props.canvasState.metricCardView === 'analysis')
+    return isAnalysis && this.showSimulation() && this.props.selectedMetric
+  }
+
   render() {
     const {isSelected, metric, guesstimateForm, canvasState} = this.props
     const {guesstimate} = metric
     const errors = this._errors()
     const showSimulation = this.showSimulation()
+    const shouldShowScatterPlot = this._shouldShowScatterPlot()
 
     return (
       <div className='metricCard--Container'
@@ -231,6 +237,7 @@ class MetricCard extends Component {
               isTitle={this._isTitle()}
               connectDragSource={this.props.connectDragSource}
               selectedMetric={this.props.selectedMetric}
+              showScatterPlot={shouldShowScatterPlot}
           />
 
           {isSelected && !this.state.modalIsOpen &&
@@ -246,8 +253,8 @@ class MetricCard extends Component {
             </div>
           }
         </div>
-        {this.props.hovered && !isSelected && <MetricToolTip guesstimate={guesstimate}/>}
-        {this.props.hovered && !isSelected && metric && showSimulation && this.props.selectedMetric &&
+        {this.props.hovered && !isSelected && !shouldShowScatterPlot && <MetricToolTip guesstimate={guesstimate}/>}
+        {this.props.hovered && !isSelected && shouldShowScatterPlot &&
           <ScatterTip yMetric={this.props.selectedMetric} xMetric={metric}/>
         }
       </div>

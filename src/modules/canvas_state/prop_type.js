@@ -10,6 +10,7 @@ export const metricCardView = PT.oneOf([
   'normal',
   'basic',
   'scientific',
+  'analysis',
   'display',
   'debugging'
 ]).isRequired
