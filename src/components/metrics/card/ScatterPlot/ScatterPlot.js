@@ -38,6 +38,7 @@ export default class Foobar extends Component {
     const className=`Scatter ${this.props.size}`
 
     const rSquared = regression.rSquared
+    const xIntercept = regression.intercept && (-1 * (regression.intercept / regression.slope))
     return (
       <div className={className}>
         <div className='regression'>
@@ -62,6 +63,10 @@ export default class Foobar extends Component {
                 <span className='value'> {regression.intercept.toFixed(2)}</span>
               </div>
               <div>
+                <span className='label'> x intercept</span>
+                <span className='value'> {xIntercept.toFixed(2)}</span>
+              </div>
+              <div>
                 <span className='label'> sample count</span>
                 <span className='value'> {sampleSize}</span>
               </div>
@@ -84,8 +89,8 @@ export default class Foobar extends Component {
         {this.props.size !== 'SMALL' &&
           <ScatterPlot
             data={data}
-            width={800}
-            height={400}
+            width={500}
+            height={250}
             margin={{top: 10, bottom: 40, left: 60, right: 20}}
             xAxis={{tickArguments: [6], innerTickSize: 5, outerTickSize: 2, tickPadding: 3, label: xMetric.name}}
             yAxis={{tickArguments: [6], innerTickSize: 5, outerTickSize: 2, tickPadding: 3, label: yMetric.name}}
