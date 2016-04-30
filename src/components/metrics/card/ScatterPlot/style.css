@@ -5,6 +5,42 @@
   padding: 3px 4px 6px 5px;
   background-color: rgba(189, 189, 189, 0.14);
   flex: 0;
+  position: relative;
+}
+
+.Scatter .regression {
+  position: absolute;
+  bottom: 4px;
+  right: 8px;
+}
+
+.Scatter.SMALL .regression .label{
+  font-size: 0.7em;
+}
+
+.Scatter.SMALL .regression .label{
+  color: #777;
+  font-style: italic;
+}
+
+.Scatter.SMALL .regression .value{
+  font-style: italic;
+  font-size: 1.2em;
+}
+
+.Scatter.SMALL .regression .value.low{
+  font-weight: 300;
+  color: #91A791;
+}
+
+.Scatter.SMALL .regression .value.medium{
+  font-weight: 500;
+  color: #6F9A6F;
+}
+
+.Scatter.SMALL .regression .value.high{
+  font-weight: 700;
+  color: #359235;
 }
 
 .Scatter.LARGE svg path.dot{ fill: rgba(88, 173, 109, 0.12) }

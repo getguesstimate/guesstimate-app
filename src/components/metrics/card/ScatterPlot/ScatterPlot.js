@@ -1,6 +1,14 @@
 import React, {Component, PropTypes} from 'react'
 import {BarChart, ScatterPlot} from 'react-d3-components'
+import {sampleMean, sampleStdev, percentile, cutoff, sortDescending} from 'lib/dataAnalysis.js'
+import everpolate from 'everpolate'
 import './style.css'
+
+function importance(r2) {
+  if (r2 < 0.05) { return 'low' }
+  else if (r2 < 0.5) { return 'medium' }
+  else { return 'high' }
+}
 
 export default class Foobar extends Component {
   static defaultProps = {
@@ -10,14 +18,16 @@ export default class Foobar extends Component {
   render() {
     const {xMetric, yMetric} = this.props
 
-    let sampleSize = (this.props.size === 'SMALL') ? 200 : 1500
+    let sampleSize = (this.props.size === 'SMALL') ? 100 : 1000
 
-    const xSamples = _.get(xMetric, 'simulation.sample.values')
-    const ySamples = _.get(yMetric, 'simulation.sample.values')
+    const xSamples = _.get(xMetric, 'simulation.sample.values').slice(0, sampleSize)
+    const ySamples = _.get(yMetric, 'simulation.sample.values').slice(0, sampleSize)
 
     const data = [{
-      customValues: _.zip(xSamples.slice(0,sampleSize), ySamples.slice(0,sampleSize))
+      customValues: _.zip(xSamples, ySamples)
     }];
+
+    let regression = !!xSamples.length ? everpolate.linearRegression(xSamples, ySamples) : false
 
     var labelAccessor = (s) => ''
     var valuesAccessor = (s) => s.customValues
@@ -26,8 +36,31 @@ export default class Foobar extends Component {
 
     const tooltipScatter = (x,y) => ""
     const className=`Scatter ${this.props.size}`
+
+    const rSquared = regression.rSquared
     return (
       <div className={className}>
+        <div className='regression'>
+          {this.props.size === 'SMALL' && _.isFinite(rSquared) &&
+            <div>
+              <span className='label'> r<sup>2</sup></span>
+              <span className={`value ${importance(rSquared)}`}> {rSquared.toFixed(2)}</span>
+            </div>
+          }
+          {this.props.size !== 'SMALL' &&
+            <div>
+              <div>
+                <span className='label'> r<sup>2</sup></span>
+                <span className='value'> {regression.rSquared.toFixed(2)}</span>
+              </div>
+              <div>
+                <span className='label'> slope</span>
+                <span className='value'> {regression.slope.toFixed(2)}</span>
+              </div>
+            </div>
+          }
+        </div>
+
         {this.props.size === 'SMALL' &&
           <ScatterPlot
             data={data}
