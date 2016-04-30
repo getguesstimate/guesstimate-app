@@ -17,9 +17,12 @@ export function updateGuesstimateForm(values) {
 }
 
 //This is obviously messy, we'll need some other way of getting the State and dispatch from the propogation lib
-export function changeGuesstimateForm(values) {
+export function changeGuesstimateForm(values, skipSimulations = false) {
   return (dispatch, getState) => {
     dispatch(updateGuesstimateForm(values));
+    if (skipSimulations) {
+      return
+    }
     const state = getState()
     const metricId = state.guesstimateForm.metric
     dispatch({type: 'RUN_FORM_SIMULATIONS', getState, dispatch, metricId});

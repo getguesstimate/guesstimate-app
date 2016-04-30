@@ -38,9 +38,10 @@ export default class Cell extends Component {
     const difProps = (newProps.isOver !== this.props.isOver) ||
       (newProps.isSelected !== this.props.isSelected) ||
       (newState.hover !== this.state.hover)
-    const hasItem = (!!newProps.item || !!this.props.item)
+    const itemDifferent = (!!newProps.item !== !!this.props.item)
+    const bothHaveItems = (!!newProps.item && !!this.props.item)
 
-    return (difProps || hasItem)
+    return (difProps || itemDifferent || (bothHaveItems && this.props.hasItemUpdated(this.props.item, newProps.item)))
   }
 
   state = {

@@ -38,7 +38,8 @@ export default class ItemCell extends Component {
         {
           hovered: this.props.hover,
           isSelected: this.props.isSelected,
-          gridKeyPress: this.props.gridKeyPress
+          gridKeyPress: this.props.gridKeyPress,
+          connectDragSource: this.props.connectDragSource
         }
     )
   }
@@ -46,7 +47,7 @@ export default class ItemCell extends Component {
   render = () => {
     let classes = 'FlowGridFilledCell'
     classes += this.props.isDragging ? ' isDragging' : ''
-    return this.props.connectDragSource(
+    return this.props.connectDragPreview(
       <div className={classes}>
         {!this.props.isDragging && this.item()}
       </div>

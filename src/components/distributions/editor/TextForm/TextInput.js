@@ -66,6 +66,7 @@ export default class TextInput extends Component{
   }
 
   render() {
+    const {hasErrors} = this.props
     return(
       <input
           id="live-input"
@@ -74,6 +75,7 @@ export default class TextInput extends Component{
           onFocus={this._handleFocus.bind(this)}
           onKeyDown={this._handleKeyDown.bind(this)}
           placeholder={'value'}
+          className={(this.props.value !== '' && hasErrors) ? 'hasErrors' : ''}
           ref='input'
           type="text"
           value={this.props.value}

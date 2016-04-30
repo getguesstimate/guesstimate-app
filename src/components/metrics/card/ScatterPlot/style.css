@@ -1,11 +1,10 @@
 .Scatter.SMALL {
-  margin-left: 8px;
   height: 70px;
-  margin-bottom: 7px;
   padding-left: 5px;
   padding-right: 4px;
   padding: 3px 4px 6px 5px;
   background-color: rgba(189, 189, 189, 0.14);
+  flex: 0;
 }
 
 .Scatter.LARGE svg path.dot{ fill: rgba(88, 173, 109, 0.12) }

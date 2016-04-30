@@ -36,8 +36,11 @@ export class GraphPropagation {
 
     this.useGuesstimateForm = graphFilters.useGuesstimateForm || false
 
-    this.orderedMetricIds = this._orderedMetricIds(graphFilters)
-    this.orderedMetricPropagations = this.orderedMetricIds.map(id => (new MetricPropagation(id, this.id)))
+    const orderedMetricIdsAndGraphErrors = this._orderedMetricIdsAndErrors(graphFilters)
+    this.orderedMetricIds = orderedMetricIdsAndGraphErrors.map(m => m.id)
+    this.orderedMetricPropagations = orderedMetricIdsAndGraphErrors.map(
+      ({id, errors}) => (new MetricPropagation(id, errors, this.id))
+    )
 
     this.currentStep = 0
 
@@ -72,10 +75,14 @@ export class GraphPropagation {
     return subset
   }
 
-  _orderedMetricIds(graphFilters: object): Array<Object> {
-    if (graphFilters.onlyHead) { return [graphFilters.metricId]}
+  _orderedMetricIdsAndErrors(graphFilters: object): Array<Object> {
     this.dependencies = e.graph.dependencyTree(this._graph(), graphFilters)
-    const inOrder = _.sortBy(this.dependencies, function(n){return n[1]}).map(e => e[0])
-    return inOrder
+    const orderedMetrics = _.sortBy(this.dependencies, function(n){return n[1]}).map(e => ({
+      id: e[0],
+      errors: {
+        inInfiniteLoop: !_.isFinite(e[1])
+      }
+    }))
+    return orderedMetrics
   }
 }
