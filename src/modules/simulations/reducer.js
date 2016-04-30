@@ -1,32 +1,31 @@
-import e from '../../lib/engine/engine'
+import e from 'lib/engine/engine'
 import _ from 'lodash'
-import {Stats} from 'fast-stats'
-
-function hasNoStdev(values) {
-  return (_.uniq(_.slice(values, 0, 5)).length === 1)
-}
+import {sampleMean, sampleStdev, percentile, cutoff, sortDescending} from 'lib/dataAnalysis.js'
 
 function sStats(simulation){
-  if (_.has(simulation, 'sample.values') && (simulation.sample.values.length > 0)) {
-    let values = simulation.sample.values;
-    let s1 = new Stats().push(values)
-
-    //stats had bug where it would treat very tiny values (< 10^-10) as sometimes having a tiny stdev (<10^-30)
-    const percentiles = {5: s1.percentile(5), 50: s1.percentile(50), 95: s1.percentile(95)}
-    let stdev = hasNoStdev(values) ? 0 : s1.stddev()
-    const mean = s1.amean()
-
-    const adjustedLow = (new Stats().push(values.filter(e => e < mean))).percentile(10)
-    const adjustedHigh = (new Stats().push(values.filter(e => e > mean))).percentile(90)
-
-    return {
-      mean,
-      stdev:  stdev,
-      length:  values.length,
-      percentiles,
-      adjustedConfidenceInterval: [adjustedLow, adjustedHigh]
-    };
+  if (!_.has(simulation, 'sample.values') || (simulation.sample.values.length === 0)) {
+    return
   }
+  const samples = sortDescending(simulation.sample.values)
+  const length = samples.length
+  const mean = sampleMean(samples)
+  const meanIndex = cutoff(samples, length, mean)
+  const stdev = sampleStdev(samples)
+  const percentiles = {
+    5: percentile(samples, length, 5),
+    50: percentile(samples, length, 50),
+    95: percentile(samples, length, 95),
+  }
+  const adjustedLow = percentile(samples, meanIndex, 10)
+  const adjustedHigh = percentile(samples.slice(meanIndex), length - meanIndex, 90)
+
+  return {
+    mean,
+    stdev,
+    length,
+    percentiles,
+    adjustedConfidenceInterval: [adjustedLow, adjustedHigh]
+  };
 }
 
 function withStats(simulation){
@@ -44,17 +43,17 @@ export default function simulations(state = [], action = null) {
   case 'DELETE_SIMULATIONS':
     return state.filter(y => !_.includes(action.metricIds, y.metric))
   case 'UPDATE_SIMULATION':
-    sim = action.simulation;
+    const sim = withStats(action.simulation);
     const i = state.findIndex(y => y.metric === sim.metric);
     if (i !== -1) {
       const newState =  [
         ...state.slice(0, i),
-        withStats(sim),
+        sim,
         ...state.slice(i+1, state.length)
       ];
       return newState
     } else {
-      return [...state, withStats(sim)];
+      return [...state, sim];
     }
   default:
     return state

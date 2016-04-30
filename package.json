@@ -74,7 +74,6 @@
     "d3": "^3.5.16",
     "discrete-sampling": "^1.0.2",
     "extract-text-webpack-plugin": "^1.0.1",
-    "fast-stats": "0.0.3",
     "financejs": "^3.0.0",
     "flexboxgrid": "^6.3.0",
     "font-awesome": "^4.4.0",
