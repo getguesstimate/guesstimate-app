@@ -54,10 +54,9 @@ export const requiresManySamples = (text, inputs) => {
   return hasStochasticFunction(text)
 }
 
-export function sampleInputs(inputs, i) {
+function sampleInputs(inputs, i) {
   const sample = {}
   for (let key of Object.keys(inputs)){
-    let item = null
     sample[key] = inputs[key][i % inputs[key].length]
   }
   return sample

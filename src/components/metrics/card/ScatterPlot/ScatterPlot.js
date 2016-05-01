@@ -90,7 +90,7 @@ export default class Foobar extends Component {
           <ScatterPlot
             data={data}
             width={500}
-            height={250}
+            height={300}
             margin={{top: 10, bottom: 40, left: 60, right: 20}}
             xAxis={{tickArguments: [6], innerTickSize: 5, outerTickSize: 2, tickPadding: 3, label: xMetric.name}}
             yAxis={{tickArguments: [6], innerTickSize: 5, outerTickSize: 2, tickPadding: 3, label: yMetric.name}}
