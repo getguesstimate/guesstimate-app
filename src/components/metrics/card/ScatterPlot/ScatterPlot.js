@@ -67,6 +67,10 @@ export default class Foobar extends Component {
                 <span className='value'> {regression.intercept.toFixed(2)}</span>
               </div>
               <div>
+                <span className='label'> x intercept</span>
+                <span className='value'> {xIntercept.toFixed(2)}</span>
+              </div>
+              <div>
                 <span className='label'> sample count</span>
                 <span className='value'> {sampleSize}</span>
               </div>
