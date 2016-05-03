@@ -14,7 +14,7 @@
 .PlanIndex .header h1{
   font-size: 3em;
   opacity: 0.7;
-  font-weight: 200;
+  font-weight: 300;
 }
 
 .PlanIndex > .cards {
@@ -31,7 +31,7 @@
   font-family: 'Lato';
   color: #888;
   font-size: 1.5em;
-  font-weight: 200;
+  font-weight: 300;
 }
 
 .PlanCard h2 {
@@ -64,7 +64,7 @@
 .PlanCard-Cost sup {
   top: -0.7em;
   font-size: 1.2em;
-  font-weight: 200;
+  font-weight: 300;
 }
 
 .PlanCard-Cost .number {
@@ -74,7 +74,7 @@
 }
 
 .PlanCard-Cost .per-month {
-  font-weight: 200;
+  font-weight: 300;
   margin-top: 7px;
 }
 

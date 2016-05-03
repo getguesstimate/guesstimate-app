@@ -13,11 +13,11 @@ export function denormalize(graph){
 }
 
 // The bizarro graph is the version of the graph where a guesstimates input is
-// replaces its guesstimte
+// replaces its guesstimte.
+// BEWARE: This function modifies its inputs.
 export function toBizarroGraph(graph, guesstimateForm){
   if (!_.has(guesstimateForm, 'metric')) { return graph }
-  //Super slow!
-  let bGraph = _.cloneDeep(graph)
+  let bGraph = graph
   bGraph.guesstimates = graph.guesstimates && graph.guesstimates.filter((g) => (g.metric !== guesstimateForm.metric))
   bGraph.guesstimates = bGraph.guesstimates && bGraph.guesstimates.concat(guesstimateForm)
   return bGraph
@@ -47,17 +47,23 @@ export function dependencyList(graph, spaceId) {
 export function dependencyTree(oGraph, graphFilters) {
   const {spaceId, metricId, onlyHead, notHead} = graphFilters
 
+  if (onlyHead) { return [[metricId, 0]] }
+
   let graph = oGraph
   if (spaceId) { graph = _space.subset(oGraph, spaceId) }
 
   let bGraph = basicGraph(graph)
   if (metricId) { bGraph = bGraph.subsetFrom(metricId) }
 
-  const nodes =  bGraph.nodes.map(n => [n.id, n.maxDistanceFromRoot])
-  if (onlyHead) {
-    return nodes.filter(e => (e[0] === metricId))
-  } else if (notHead){
-    return nodes.filter(e => (e[0] !== metricId))
+  const nodes = bGraph.nodes.map(n => [n.id, n.maxDistanceFromRoot])
+
+  if (notHead){
+    const head = nodes.find(e => (e[0] === metricId))
+    const rest = nodes.filter(e => (e[0] !== metricId))
+    if (!_.isFinite(head[1])) {
+      return [head,...rest]
+    }
+    return rest
   } else {
     return nodes
   }

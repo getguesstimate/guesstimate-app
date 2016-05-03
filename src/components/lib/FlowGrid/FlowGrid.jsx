@@ -4,8 +4,6 @@ import React, {Component, PropTypes} from 'react'
 import './FlowGrid.css'
 import Cell from './cell'
 import EdgeContainer from './edge-container.js'
-import HorizontalIndex from './HorizontalIndex.js'
-import VerticalIndex from './VerticalIndex.js'
 
 import {keycodeToDirection, DirectionToLocation} from './utils'
 
@@ -77,20 +75,22 @@ export default class FlowGrid extends Component{
   }
 
   _cell(location) {
-   let atThisLocation = (l) => _.isEqual(l, location)
+   let atThisLocation = (l) => (l.row === location.row && l.column === location.column)
    let isSelected = atThisLocation(this.props.selected)
    let item = this.props.items.filter(i => atThisLocation(i.location))[0];
    return (
     <Cell
-        gridKeyPress={this._handleKeyPress.bind(this)}
-        handleSelect={this.props.onSelectItem}
-        isSelected={isSelected}
-        item={item && item.component}
-        key={'grid-item', location.row, location.column}
-        location={location}
-        onAddItem={this.props.onAddItem}
-        onMoveItem={this.props.onMoveItem}
-        ref={`cell-${location.row}-${location.column}`}
+      hasItemUpdated={this.props.hasItemUpdated}
+      gridKeyPress={this._handleKeyPress.bind(this)}
+      handleSelect={this.props.onSelectItem}
+      isSelected={isSelected}
+      item={item && item.component}
+      key={'grid-item', location.row, location.column}
+      location={location}
+      onAddItem={this.props.onAddItem}
+      onMoveItem={this.props.onMoveItem}
+      canvasState={this.props.canvasState}
+      ref={`cell-${location.row}-${location.column}`}
     />
     )
   }

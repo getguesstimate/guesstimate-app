@@ -4,7 +4,6 @@ export default class EmptyCell extends Component {
   static propTypes = {
     gridKeyPress: PropTypes.func.isRequired,
     handleSelect: PropTypes.func.isRequired,
-    isOver: PropTypes.bool.isRequired,
     isSelected: PropTypes.bool.isRequired,
     location: PropTypes.shape({
       row: PropTypes.number.isRequired,
@@ -13,15 +12,13 @@ export default class EmptyCell extends Component {
     onAddItem: PropTypes.func.isRequired,
   }
 
-  shouldComponentUpdate(nextProps) {
-    return (nextProps.isOver !== this.props.isOver)
-  }
+  shouldComponentUpdate(nextProps) { return false }
 
   _handleKeyPress(e) {
     if (e.keyCode == '13') { //enter
       this.props.onAddItem(this.props.location)
     }
-    if (e.keyCode == '8') { //delete
+    if (e.keyCode == '8') { //backspace
       e.preventDefault()
     }
     this.props.gridKeyPress(e)

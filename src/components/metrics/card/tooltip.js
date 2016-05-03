@@ -8,12 +8,11 @@ export default class MetricToolTip extends Component {
     const {guesstimate} = this.props
     if (_.isEmpty(guesstimate.description)){
       return (false)
-    } else {
-      return (
-        <ToolTip>
-          <MarkdownViewer source={guesstimate.description}/>
-        </ToolTip>
-      )
     }
+    return (
+      <ToolTip>
+        <MarkdownViewer source={guesstimate.description}/>
+      </ToolTip>
+    )
   }
 }

@@ -10,6 +10,8 @@ import { changeMetric, addMetric } from 'gModules/metrics/actions'
 import { changeSelect } from 'gModules/selection/actions'
 import { runSimulations, deleteSimulations } from 'gModules/simulations/actions'
 
+import { hasMetricUpdated } from 'gComponents/metrics/card/updated.js'
+
 import './style.css'
 import { denormalizedSpaceSelector } from '../denormalized-space-selector.js';
 import JSONTree from 'react-json-tree'
@@ -75,7 +77,11 @@ export default class CanvasSpace extends Component{
   }
 
   _handleMoveMetric({prev, next}) {
-    const metric = this.props.denormalizedSpace.metrics.find(f => _.isEqual(f.location, prev))
+    const destinationMetric = this.props.denormalizedSpace.metrics.find(f => f.location.row === next.row && f.location.column === next.column)
+    if (!!destinationMetric) {
+      return
+    }
+    const metric = this.props.denormalizedSpace.metrics.find(f => f.location.row === prev.row && f.location.column === prev.column)
     this.props.dispatch(changeMetric({id: metric.id, location: next}))
     this.props.dispatch(changeSelect(next))
   }
@@ -103,10 +109,14 @@ export default class CanvasSpace extends Component{
     if (this.showEdges()){
       const space = this.props.denormalizedSpace
       const {metrics} = space
-      const metricIdToLocation = (metricId) => metrics.find(m => m.id === metricId).location
+      const findMetric = (metricId) => metrics.find(m => m.id === metricId)
+      const metricIdToLocation = (metricId) => findMetric(metricId).location
 
       edges = space.edges.map(e => {
-        return {input: metricIdToLocation(e.input), output: metricIdToLocation(e.output)}
+        const [inputMetric, outputMetric] = [findMetric(e.input), findMetric(e.output)]
+        let errors = _.get(inputMetric, 'simulation.sample.errors')
+        const color = (errors && !!errors.length) ? 'RED' : 'BLUE'
+        return {input: inputMetric.location, output: outputMetric.location, color}
       })
     }
     return edges
@@ -128,14 +138,16 @@ export default class CanvasSpace extends Component{
           <JSONTree data={this.props}/>
         }
         <FlowGrid
-            items={metrics.map(m => ({location: m.location, component: this.renderMetric(m)}))}
-            edges={edges}
-            selected={selected}
-            onSelectItem={this._handleSelect.bind(this)}
-            onAddItem={this._handleAddMetric.bind(this)}
-            onMoveItem={this._handleMoveMetric.bind(this)}
-            showGridLines={showGridLines}
-          />
+          items={metrics.map(m => ({key: m.id, location: m.location, component: this.renderMetric(m)}))}
+          hasItemUpdated = {(oldItem, newItem) => hasMetricUpdated(oldItem.props, newItem.props)}
+          edges={edges}
+          selected={selected}
+          onSelectItem={this._handleSelect.bind(this)}
+          onAddItem={this._handleAddMetric.bind(this)}
+          onMoveItem={this._handleMoveMetric.bind(this)}
+          showGridLines={showGridLines}
+          canvasState={this.props.canvasState}
+        />
       </div>
     );
   }

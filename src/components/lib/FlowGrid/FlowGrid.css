@@ -17,7 +17,6 @@
 }
 
 .FlowGridRow--Horizontal-Index {
-  width: 100%;
   border-radius: 3px;
   display: flex;
   cursor: pointer;
@@ -64,37 +63,54 @@
   width: 210px;
   min-width: 210px;
   display: flex;
-  padding: 4px;
   flex: 1;
   min-height: 60px;
   z-index: 1;
 }
 
-.FlowGrid.withLines .FlowGridCell {
-  border-right: 1px dashed;
-  border-bottom: 1px dashed;
-  border-color: rgba(0, 25, 95, 0.15);
-}
-
-.showEdges .FlowGridCell {
-  padding: 10px;
+.FlowGrid.withLines .FlowGridCell{
+  border-right: 1px dashed rgba(0, 25, 95, 0.09);
+  border-bottom: 1px dashed rgba(0, 25, 95, 0.09);
 }
 
 .FlowGridFilledCell {
   display: flex;
   width: 100%;
+  padding: 3px;
+}
+
+.showEdges .FlowGridFilledCell {
+  padding: 8px;
 }
 
 .FlowGridEmptyCell {
   width: 100%;
-  border-radius: 3px;
   display: flex;
   cursor: pointer;
   width: 100%;
 }
 
-.FlowGridCell.hovered .FlowGridEmptyCell {
-  background-color: rgba(244, 251, 255, 0.95);
+.FlowGridCell.hovered .FlowGridEmptyCell{
+  background-color: rgba(79, 152, 197, 0.25);
+}
+
+.FlowGridCell.selected .FlowGridEmptyCell{
+  background-color: rgba(79, 152, 197, 0.51);
+}
+
+.FlowGridCell.hovered.hasItem .FlowGridFilledCell{
+  background-color: rgba(75, 138, 177, 0.3);
+  border-radius: 1px;
+}
+
+.FlowGridCell.selected.hasItem .FlowGridFilledCell{
+  background-color: rgba(75, 138, 177, 0.64);
+  border-radius: 1px;
+}
+
+.FlowGridCell.selected.hasItem.IsOver .FlowGridFilledCell{
+  transition: background-color 0.2s ease;
+  background-color: rgba(127, 149, 160, 0.81);
 }
 
 .FlowGridCell.hovered {
@@ -103,12 +119,11 @@
 
 .FlowGridEmptyCell:focus {
   outline: none;
-  border: 2px solid $blue-1;
 }
 
 .IsOver .FlowGridEmptyCell, .IsOver .isDragging {
-  background-color: $grey-4;
-  border-radius: 3px;
+  transition: background-color 0.2s ease;
+  background-color: rgba(127, 149, 160, 0.81);
 }
 
 svg.edge {
@@ -118,14 +133,28 @@ svg.edge {
 }
 
 svg.edge  path.basic-arrow {
-  stroke: $blue-5;
   stroke-linecap:'round';
-  stroke-width: '5';
   stroke-linejoin: 'round';
   stroke-dasharray:'5,5';
+  stroke-width: 3px;
+}
+
+svg.edge  path.basic-arrow.BLUE {
+  stroke: $blue-5;
+}
+
+svg.edge  path.basic-arrow.RED {
+  stroke: #B59893;
 }
 
 .arrow {
   stroke-width: 0;
+}
+
+.arrow.BLUE{
   fill: $blue-5;
+}
+
+.arrow.RED{
+  fill: #B59893;
 }

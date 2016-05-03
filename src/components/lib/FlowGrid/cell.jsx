@@ -38,9 +38,10 @@ export default class Cell extends Component {
     const difProps = (newProps.isOver !== this.props.isOver) ||
       (newProps.isSelected !== this.props.isSelected) ||
       (newState.hover !== this.state.hover)
-    const hasItem = (!!newProps.item || !!this.props.item)
+    const itemDifferent = (!!newProps.item !== !!this.props.item)
+    const bothHaveItems = (!!newProps.item && !!this.props.item)
 
-    return (difProps || hasItem)
+    return (difProps || itemDifferent || (bothHaveItems && this.props.hasItemUpdated(this.props.item, newProps.item)))
   }
 
   state = {
@@ -92,6 +93,7 @@ export default class Cell extends Component {
   _classes = () => {
     let classes = 'FlowGridCell'
     classes += (this.props.isSelected ? ' selected' : ' nonSelected')
+    classes += this.props.item ? ' hasItem' : ''
     classes += this.props.isOver ? ' IsOver' : ''
     classes += this.state.hover ? ' hovered' : ''
     return classes
