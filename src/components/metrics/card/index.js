@@ -67,13 +67,12 @@ class MetricCard extends Component {
      this.setState({modalIsOpen: false});
   }
 
-  _handlePress(e) {
+  _handleKeyDown(e) {
     if (e.target === ReactDOM.findDOMNode(this)) {
       if (e.keyCode == '13') {
         e.preventDefault()
         this.openModal()
-      }
-      if (e.keyCode == '8') {
+      } else if (e.keyCode == '8') {
         e.preventDefault()
         this.handleRemoveMetric()
       }
@@ -180,7 +179,7 @@ class MetricCard extends Component {
     return (
       <div className='metricCard--Container'
           ref='dom'
-          onKeyDown={this._handlePress.bind(this)}
+          onKeyDown={this._handleKeyDown.bind(this)}
           tabIndex='0'
         >
         <div
