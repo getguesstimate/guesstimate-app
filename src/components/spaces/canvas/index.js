@@ -76,12 +76,10 @@ export default class CanvasSpace extends Component{
   }
 
   _handleCopy() {
-    console.log("copying")
     this.props.dispatch(copy(this.props.denormalizedSpace.id))
   }
 
   _handlePaste() {
-    console.log("pasting")
     this.props.dispatch(paste(this.props.denormalizedSpace.id))
   }
 

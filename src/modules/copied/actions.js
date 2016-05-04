@@ -1,12 +1,16 @@
 import e from 'gEngine/engine'
 import * as metricActions from 'gModules/metrics/actions'
 
+function isAtLocation(metric, location) {
+  return metric.location.row === location.row && metric.location.column === location.column
+}
+
 export function copy(spaceId){
   return (dispatch, getState) => {
     const state = getState()
 
     const location = state.selection
-    const metric = Object.assign({}, state.metrics.find(m => m.space === spaceId && m.location == location))
+    const metric = Object.assign({}, state.metrics.find(m => m.space === spaceId && isAtLocation(m, location)))
     const guesstimate = state.guesstimates.find(g => g.metric === metric.id)
 
     dispatch({type: "COPY", copied: {metric, guesstimate}})
@@ -22,7 +26,7 @@ export function paste(spaceId){
 
     const location = state.selection
     const spaceMetrics = getState().metrics.filter(m => m.space === spaceId)
-    const existentMetric = spaceMetrics.find(m => m.location == location)
+    const existentMetric = spaceMetrics.find(m => isAtLocation(m, location))
     const existingReadableIds = spaceMetrics.map(m => m.readableId)
 
     let newMetric = e.metric.create(existingReadableIds)
