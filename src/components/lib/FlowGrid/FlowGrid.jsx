@@ -49,8 +49,6 @@ export default class FlowGrid extends Component{
 
   _handleKeyUp(e){
     if (e.keyCode == '17') {
-      console.log("Ctrl unpressed.")
-      e.preventDefault()
       this.setState({ctrlPressed: false})
     }
   }
@@ -141,7 +139,8 @@ export default class FlowGrid extends Component{
         <div className='FlowGrid-Horizontal-Motion'>
           <div
               className={className}
-              onKeyPress={this._handleKeyDown.bind(this)}
+              onKeyDown={this._handleKeyDown.bind(this)}
+              onKeyUp={this._handleKeyUp.bind(this)}
           >
             {
               upto(rowCount).map((row) => {

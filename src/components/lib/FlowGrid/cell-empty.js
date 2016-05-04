@@ -15,7 +15,6 @@ export default class EmptyCell extends Component {
   shouldComponentUpdate(nextProps) { return false }
 
   _handleKeyPress(e) {
-    console.log("key press.")
     if (e.keyCode == '13') { //enter
       this.props.onAddItem(this.props.location)
     }
