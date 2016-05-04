@@ -1,4 +1,3 @@
-import {runMetricSimulations} from 'gModules/simulations/actions.js'
 import * as spaceActions from 'gModules/spaces/actions.js'
 import engine from 'gEngine/engine'
 
