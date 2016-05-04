@@ -14,8 +14,6 @@ import './style.css'
 import * as canvasStateProps from 'gModules/canvas_state/prop_type.js'
 import MetricCardViewSection from './MetricCardViewSection/index.js'
 
-import { hasMetricUpdated } from './updated.js'
-
 const INTERMEDIATE = 'INTERMEDIATE'
 const OUTPUT = 'OUTPUT'
 const INPUT = 'INPUT'
@@ -53,10 +51,6 @@ class MetricCard extends Component {
   }
 
   state = {modalIsOpen: false};
-
-  shouldComponentUpdate(nextProps, nextState) {
-    return hasMetricUpdated(this.props, nextProps)
-  }
 
   componentDidUpdate() {
     const hasContent = this.refs.MetricCardViewSection.hasContent()
