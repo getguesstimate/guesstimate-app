@@ -20,7 +20,6 @@ import * as canvasStateProps from 'gModules/canvas_state/prop_type.js'
 
 import { copy, paste } from 'gModules/copied/actions.js'
 
-
 function mapStateToProps(state) {
   return {
     canvasState: state.canvasState,
