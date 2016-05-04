@@ -22,6 +22,12 @@
   font-size: 0.85em;
 }
 
+.Scatter.LARGE .regression {
+  background-color: rgba(250,250,250,0.6);
+  border-radius: 3px;
+  padding: 4px;
+}
+
 .Scatter.LARGE .regression .label{
   color: #6F9A6F;
   width: 130px;
