@@ -92,16 +92,24 @@ export default class CanvasSpace extends Component{
   }
 
   _hasMetricUpdated(oldProps, newProps) {
-    return (
-      _.get(newProps, 'canvasState.metricCardView') === 'analysis' ||
-      oldProps.canvasState !== newProps.canvasState ||
-      oldProps.metric.simulation !== newProps.metric.simulation
-    )
+    if (this._isAnalysisView(newProps)) {
+      return (
+        true
+      )
+    } else {
+      return (
+        oldProps.canvasState !== newProps.canvasState ||
+        oldProps.metric.simulation !== newProps.metric.simulation
+      )
+    }
   }
 
-  renderMetric(metric) {
+  _isAnalysisView(props = this.props) {
+    return (_.get(props, 'canvasState.metricCardView') === 'analysis')
+  }
+
+  renderMetric(metric, selected) {
     const {location} = metric
-    const selected = this.selectedMetric()
     const hasSelected = selected && metric && (selected.id !== metric.id)
     const selectedSamples = _.get(selected, 'simulation.sample.values')
     const passSelected = hasSelected && selectedSamples && !!selectedSamples.length
@@ -149,6 +157,7 @@ export default class CanvasSpace extends Component{
     let className = 'canvas-space'
     const showGridLines = (metricCardView !== 'display')
     this.showEdges() ? className += ' showEdges' : ''
+    const selectedMetric = this._isAnalysisView() && this.selectedMetric()
 
     return (
       <div className={className}>
@@ -156,7 +165,7 @@ export default class CanvasSpace extends Component{
           <JSONTree data={this.props}/>
         }
         <FlowGrid
-          items={metrics.map(m => ({key: m.id, location: m.location, component: this.renderMetric(m)}))}
+          items={metrics.map(m => ({key: m.id, location: m.location, component: this.renderMetric(m, selectedMetric)}))}
           hasItemUpdated = {(oldItem, newItem) => this._hasMetricUpdated(oldItem.props, newItem.props)}
           edges={edges}
           selected={selected}
