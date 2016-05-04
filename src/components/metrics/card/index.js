@@ -73,15 +73,34 @@ class MetricCard extends Component {
      this.setState({modalIsOpen: false});
   }
 
-  _handlePress(e) {
+  _handleKeyUp(e) {
+    if (e.keyCode == '17') {
+      console.log("Ctrl unpressed.")
+      e.preventDefault()
+      this.setState({ctrlPressed: false})
+    }
+  }
+
+  _handleKeyDown(e) {
+    console.log("pressing key.")
     if (e.target === ReactDOM.findDOMNode(this)) {
+      if (this.state.ctrlPressed) {
+        if (e.keyCode == '67') {
+          console.log('copying!')
+        } else if (e.keyCode == '86') {
+          console.log('pasting!')
+        }
+      }
       if (e.keyCode == '13') {
         e.preventDefault()
         this.openModal()
-      }
-      if (e.keyCode == '8') {
+      } else if (e.keyCode == '8') {
         e.preventDefault()
         this.handleRemoveMetric()
+      } else if (e.keyCode == '17') {
+        e.preventDefault()
+        console.log("Ctrl pressed.")
+        this.setState({ctrlPressed: true})
       }
       this.props.gridKeyPress(e)
     }
@@ -186,7 +205,8 @@ class MetricCard extends Component {
     return (
       <div className='metricCard--Container'
           ref='dom'
-          onKeyDown={this._handlePress.bind(this)}
+          onKeyDown={this._handleKeyDown.bind(this)}
+          onKeyUp={this._handleKeyUp.bind(this)}
           tabIndex='0'
         >
         <div

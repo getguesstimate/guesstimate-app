@@ -72,6 +72,14 @@ export default class CanvasSpace extends Component{
     this.props.dispatch(changeSelect(location))
   }
 
+  _handleCopy() {
+    console.log("copying")
+  }
+
+  _handlePaste() {
+    console.log("pasting")
+  }
+
   _handleAddMetric(location) {
     this.props.dispatch(addMetric({space: this.props.spaceId, location: location, isNew: true}))
   }
