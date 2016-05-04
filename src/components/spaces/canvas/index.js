@@ -18,6 +18,9 @@ import JSONTree from 'react-json-tree'
 import * as canvasStateActions from 'gModules/canvas_state/actions.js'
 import * as canvasStateProps from 'gModules/canvas_state/prop_type.js'
 
+import { copy, paste } from 'gModules/copied/actions.js'
+
+
 function mapStateToProps(state) {
   return {
     canvasState: state.canvasState,
@@ -74,10 +77,12 @@ export default class CanvasSpace extends Component{
 
   _handleCopy() {
     console.log("copying")
+    this.props.dispatch(copy(this.props.denormalizedSpace.id))
   }
 
   _handlePaste() {
     console.log("pasting")
+    this.props.dispatch(paste(this.props.denormalizedSpace.id))
   }
 
   _handleAddMetric(location) {
