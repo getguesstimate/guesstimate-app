@@ -10,8 +10,6 @@ import { changeMetric, addMetric } from 'gModules/metrics/actions'
 import { changeSelect } from 'gModules/selection/actions'
 import { runSimulations, deleteSimulations } from 'gModules/simulations/actions'
 
-import { hasMetricUpdated } from 'gComponents/metrics/card/updated.js'
-
 import './style.css'
 import { denormalizedSpaceSelector } from '../denormalized-space-selector.js';
 import JSONTree from 'react-json-tree'
@@ -95,6 +93,7 @@ export default class CanvasSpace extends Component{
 
   _hasMetricUpdated(oldProps, newProps) {
     return (
+      _.get(newProps, 'canvasState.metricCardView') === 'analysis' ||
       oldProps.canvasState !== newProps.canvasState ||
       oldProps.metric.simulation !== newProps.metric.simulation
     )
@@ -158,7 +157,7 @@ export default class CanvasSpace extends Component{
         }
         <FlowGrid
           items={metrics.map(m => ({key: m.id, location: m.location, component: this.renderMetric(m)}))}
-          hasItemUpdated = {(oldItem, newItem) => hasMetricUpdated(oldItem.props, newItem.props)}
+          hasItemUpdated = {(oldItem, newItem) => this._hasMetricUpdated(oldItem.props, newItem.props)}
           edges={edges}
           selected={selected}
           onSelectItem={this._handleSelect.bind(this)}

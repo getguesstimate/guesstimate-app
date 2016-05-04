@@ -16,8 +16,6 @@ import ToolTip from 'gComponents/utility/tooltip/index.js'
 import MetricCardViewSection from './MetricCardViewSection/index.js'
 import ScatterPlot from './ScatterPlot/ScatterPlot.js'
 
-import { hasMetricUpdated } from './updated.js'
-
 const INTERMEDIATE = 'INTERMEDIATE'
 const OUTPUT = 'OUTPUT'
 const INPUT = 'INPUT'
@@ -65,10 +63,6 @@ class MetricCard extends Component {
   }
 
   state = {modalIsOpen: false};
-
-  shouldComponentUpdate(nextProps, nextState) {
-    return hasMetricUpdated(this.props, nextProps)
-  }
 
   componentDidUpdate() {
     const hasContent = this.refs.MetricCardViewSection.hasContent()
