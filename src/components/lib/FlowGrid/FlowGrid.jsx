@@ -46,9 +46,8 @@ export default class FlowGrid extends Component{
   }
 
   state = { rowHeights: [] }
-  }
 
-  _handleKeyUp(e) {
+  _handleKeyUp(e){
     if (e.keyCode == '17') {
       console.log("Ctrl unpressed.")
       e.preventDefault()
@@ -56,7 +55,7 @@ export default class FlowGrid extends Component{
     }
   }
 
-  _handleKeyDown(e) {
+  _handleKeyDown(e){
     let direction = keycodeToDirection(e.keyCode)
     if (direction) {
       e.preventDefault()

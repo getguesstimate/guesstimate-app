@@ -153,6 +153,8 @@ export default class CanvasSpace extends Component{
           onSelectItem={this._handleSelect.bind(this)}
           onAddItem={this._handleAddMetric.bind(this)}
           onMoveItem={this._handleMoveMetric.bind(this)}
+          onCopy={this._handleCopy.bind(this)}
+          onPaste={this._handlePaste.bind(this)}
           showGridLines={showGridLines}
           canvasState={this.props.canvasState}
         />
