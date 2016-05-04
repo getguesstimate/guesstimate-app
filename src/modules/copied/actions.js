@@ -1,6 +1,7 @@
-import e from 'gEngine/engine';
+import e from 'gEngine/engine'
+import * as metricActions from 'gModules/metrics/actions'
 
-export const copy = (spaceId) => {
+export function copy(spaceId){
   return (dispatch, getState) => {
     const state = getState()
 
@@ -12,7 +13,7 @@ export const copy = (spaceId) => {
   }
 }
 
-export const paste = (spaceId) => {
+export function paste(spaceId){
   return (dispatch, getState) => {
     const state = getState()
     if (!(state.copied && state.selection)) { return }
@@ -21,6 +22,7 @@ export const paste = (spaceId) => {
 
     const location = state.selection
     const spaceMetrics = getState().metrics.filter(m => m.space === spaceId)
+    const existentMetric = spaceMetrics.find(m => m.location == location)
     const existingReadableIds = spaceMetrics.map(m => m.readableId)
 
     let newMetric = e.metric.create(existingReadableIds)
@@ -28,6 +30,10 @@ export const paste = (spaceId) => {
     const newItem = Object.assign({}, metric, newMetric)
 
     const newGuesstimate = Object.assign({}, guesstimate, {metric: newItem.id})
+
+    if (existentMetric) {
+      dispatch(metricActions.removeMetric(existentMetric.id))
+    }
 
     dispatch({ type: 'ADD_METRIC', item: newItem, newGuesstimate });
     // TODO(Ozzie): Ozzie, is this going to cause a race condition? Or are redux dispatches synchronous?
