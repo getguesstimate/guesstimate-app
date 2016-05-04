@@ -1,5 +1,6 @@
 export function hasMetricUpdated(oldProps, newProps) {
   return (
+    oldProps.metric.isNew ||
     oldProps.isSelected !== newProps.isSelected ||
     oldProps.canvasState.metricCardView !== newProps.canvasState.metricCardView ||
     oldProps.canvasState.metricClickMode !== newProps.canvasState.metricClickMode ||
