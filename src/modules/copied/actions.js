@@ -30,5 +30,7 @@ export const paste = (spaceId) => {
     const newGuesstimate = Object.assign({}, guesstimate, {metric: newItem.id})
 
     dispatch({ type: 'ADD_METRIC', item: newItem, newGuesstimate });
+    // TODO(Ozzie): Ozzie, is this going to cause a race condition? Or are redux dispatches synchronous?
+    dispatch({ type: 'RUN_FORM_SIMULATIONS', getState, dispatch, metricId: newItem.id });
   }
 }
