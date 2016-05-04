@@ -55,7 +55,8 @@ class MetricCard extends Component {
   state = {modalIsOpen: false};
 
   shouldComponentUpdate(nextProps, nextState) {
-    return hasMetricUpdated(this.props, nextProps)
+    return true
+    //return hasMetricUpdated(this.props, nextProps)
   }
 
   componentDidUpdate() {
