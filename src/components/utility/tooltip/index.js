@@ -6,9 +6,8 @@ export default class ToolTip extends Component {
   displayName: 'ToolTip'
 
   render() {
-    const className = `ToolTip ${this.props.size || 'SMALL'}`
     return (
-      <div className={className}>
+      <div className={`ToolTip ${this.props.size || 'SMALL'}`}>
         <div className='arrow-up'/>
         {this.props.children}
       </div>

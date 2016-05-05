@@ -90,7 +90,7 @@ class RegressionStats extends Component {
   }
 }
 
-export default class ScatterRegion extends Component {
+export default class SensitivitySection extends Component {
   static defaultProps = {
     size: 'SMALL'
   }
@@ -103,7 +103,7 @@ export default class ScatterRegion extends Component {
     const ySamples = _.get(yMetric, 'simulation.sample.values').slice(0, sampleSize)
 
     return (
-      <div className={`Scatter ${this.props.size}`}>
+      <div className={`SensitivitySection ${this.props.size}`}>
         <RegressionStats xSamples={xSamples} ySamples={ySamples} size={size}/>
         <Plot xSamples={xSamples} ySamples={ySamples} size={size} xLabel={xMetric.name} yLabel={yMetric.name}/>
       </div>

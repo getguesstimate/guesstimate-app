@@ -14,7 +14,7 @@ import './style.css'
 import * as canvasStateProps from 'gModules/canvas_state/prop_type.js'
 import ToolTip from 'gComponents/utility/tooltip/index.js'
 import MetricCardViewSection from './MetricCardViewSection/index.js'
-import ScatterPlot from './ScatterPlot/ScatterPlot.js'
+import SensitivitySection from './SensitivitySection/SensitivitySection.js'
 
 import { hasMetricUpdated } from './updated.js'
 
@@ -40,7 +40,7 @@ class ScatterTip extends Component {
   render() {
     return (
       <ToolTip size='LARGE'>
-        <ScatterPlot yMetric={this.props.yMetric} xMetric={this.props.xMetric} size={'LARGE'}/>
+        <SensitivitySection yMetric={this.props.yMetric} xMetric={this.props.xMetric} size={'LARGE'}/>
       </ToolTip>
     )
   }
@@ -199,7 +199,7 @@ class MetricCard extends Component {
     }
   }
 
-  _shouldShowScatterPlot() {
+  _shouldShowSensitivitySection() {
     const isAnalysis = (this.props.canvasState.metricCardView === 'analysis')
     return isAnalysis && this.showSimulation() && this.props.selectedMetric
   }
@@ -209,7 +209,7 @@ class MetricCard extends Component {
     const {guesstimate} = metric
     const errors = this._errors()
     const showSimulation = this.showSimulation()
-    const shouldShowScatterPlot = this._shouldShowScatterPlot()
+    const shouldShowSensitivitySection = this._shouldShowSensitivitySection()
 
     return (
       <div className='metricCard--Container'
@@ -243,7 +243,7 @@ class MetricCard extends Component {
               isTitle={this._isTitle()}
               connectDragSource={this.props.connectDragSource}
               selectedMetric={this.props.selectedMetric}
-              showScatterPlot={shouldShowScatterPlot}
+              showSensitivitySection={shouldShowSensitivitySection}
           />
 
           {isSelected && !this.state.modalIsOpen &&
@@ -259,8 +259,8 @@ class MetricCard extends Component {
             </div>
           }
         </div>
-        {this.props.hovered && !isSelected && !shouldShowScatterPlot && <MetricToolTip guesstimate={guesstimate}/>}
-        {this.props.hovered && !isSelected && shouldShowScatterPlot &&
+        {this.props.hovered && !isSelected && !shouldShowSensitivitySection && <MetricToolTip guesstimate={guesstimate}/>}
+        {this.props.hovered && !isSelected && shouldShowSensitivitySection &&
           <ScatterTip yMetric={this.props.selectedMetric} xMetric={metric}/>
         }
       </div>

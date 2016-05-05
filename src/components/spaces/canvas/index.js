@@ -85,7 +85,7 @@ export default class CanvasSpace extends Component{
     this.props.dispatch(changeSelect(next))
   }
 
-  selectedMetric() {
+  _selectedMetric() {
    const {selected} = this.props
    const metrics = _.get(this.props.denormalizedSpace, 'metrics')
 
@@ -146,7 +146,7 @@ export default class CanvasSpace extends Component{
     let className = 'canvas-space'
     const showGridLines = (metricCardView !== 'display')
     this.showEdges() ? className += ' showEdges' : ''
-    const selectedMetric = this._isAnalysisView() && this.selectedMetric()
+    const selectedMetric = this._isAnalysisView() && this._selectedMetric()
 
     return (
       <div className={className}>
