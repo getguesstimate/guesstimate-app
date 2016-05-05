@@ -4,6 +4,7 @@ import DropDown from 'gComponents/utility/drop-down/index.js'
 import {DropDownListElement} from 'gComponents/utility/drop-down/index.js'
 import * as canvasStateActions from 'gModules/canvas_state/actions.js'
 import * as canvasStateProps from 'gModules/canvas_state/prop_type.js'
+import {trackUsedViewMode} from 'server/segment/index'
 
 import basicImage from '../../../assets/metric-icons/blue/basic.png'
 import debuggingImage from '../../../assets/metric-icons/blue/debugging.png'
@@ -26,8 +27,10 @@ function mapStateToProps(state) {
 const Item = ({name, onSelect}) => (
   <li onMouseDown={onSelect} >
     <button
-        data-card-view={name}
-        type='button'>{name.capitalizeFirstLetter()}
+      data-card-view={name}
+      type='button'
+    >
+      {name.capitalizeFirstLetter()}
     </button>
   </li>
 )
@@ -43,6 +46,7 @@ export default class CanvasViewForm extends Component {
   }
 
   _selectMetricCardView(e) {
+    trackUsedViewMode(e)
     this.props.dispatch(canvasStateActions.change({metricCardView: e}))
   }
 
