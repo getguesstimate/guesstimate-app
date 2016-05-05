@@ -26,7 +26,7 @@ export function paste(spaceId){
 
     const location = state.selection
     const spaceMetrics = getState().metrics.filter(m => m.space === spaceId)
-    const existentMetric = spaceMetrics.find(m => isAtLocation(m, location))
+    const existingMetric = spaceMetrics.find(m => isAtLocation(m, location))
     const existingReadableIds = spaceMetrics.map(m => m.readableId)
 
     let newMetric = e.metric.create(existingReadableIds)
@@ -35,8 +35,8 @@ export function paste(spaceId){
 
     const newGuesstimate = Object.assign({}, guesstimate, {metric: newItem.id})
 
-    if (existentMetric) {
-      dispatch(metricActions.removeMetric(existentMetric.id))
+    if (existingMetric) {
+      dispatch(metricActions.removeMetric(existingMetric.id))
     }
 
     dispatch({ type: 'ADD_METRIC', item: newItem, newGuesstimate });

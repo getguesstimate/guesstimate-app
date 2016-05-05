@@ -48,7 +48,7 @@ export default class FlowGrid extends Component{
   state = { rowHeights: [] }
 
   _handleKeyUp(e){
-    if (e.keyCode == '17') {
+    if (e.keyCode == '17' || e.keyCode == '224' || e.keyCode == '91') {
       this.setState({ctrlPressed: false})
     }
   }
@@ -60,7 +60,7 @@ export default class FlowGrid extends Component{
       const size = ({columns: this._columnCount(), rows: this._rowCount()})
       let newLocation = new DirectionToLocation(size, this.props.selected)[direction]()
       this.props.onSelectItem(newLocation)
-    } else if (e.keyCode == '17') {
+    } else if (e.keyCode == '17' || e.keyCode == '224' || e.keyCode == '91') {
       e.preventDefault()
       this.setState({ctrlPressed: true})
     } else if (e.keyCode == '86' && this.state.ctrlPressed) {
