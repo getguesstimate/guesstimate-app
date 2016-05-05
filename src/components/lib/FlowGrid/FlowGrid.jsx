@@ -56,6 +56,7 @@ export default class FlowGrid extends Component{
 
       const cell = this.refs[`cell-${newLocation.row}-${newLocation.column}`]
       const domNode = ReactDOM.findDOMNode(cell)
+      // domNode.childNodes[0].childNodes[0].focus()
       let foo = ReactDOM
       debugger
     }
