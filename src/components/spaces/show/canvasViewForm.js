@@ -53,10 +53,8 @@ export default class CanvasViewForm extends Component {
   render () {
     let metricCardViewOptions = [
       {name: 'normal', image: normalImage},
-      {name: 'basic', image: basicImage},
-      {name: 'scientific', image: scientificImage},
-      {name: 'display', image: displayImage},
-      {name: 'debugging', image: debuggingImage},
+      {name: 'analysis', image: debuggingImage},
+      {name: 'scientific', image: scientificImage}
     ]
 
     let arrowViewOptions = [
