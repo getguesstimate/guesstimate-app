@@ -139,8 +139,8 @@ export default class FlowGrid extends Component{
         <div className='FlowGrid-Horizontal-Motion'>
           <div
               className={className}
-              onkeydown={this._handleKeyDown.bind(this)}
-              onkeyup={this._handleKeyUp.bind(this)}
+              onKeyDown={this._handleKeyDown.bind(this)}
+              onKeyUp={this._handleKeyUp.bind(this)}
           >
             {
               upto(rowCount).map((row) => {
