@@ -40,7 +40,6 @@ export default class CanvasSpace extends Component{
     denormalizedSpace: PropTypes.object,
     dispatch: PropTypes.func,
     guesstimateForm: PropTypes.object,
-    isSelected: PropTypes.bool,
     selected: PropTypes.object,
     spaceId: PropTypes.oneOfType([
         React.PropTypes.string,
@@ -96,8 +95,22 @@ export default class CanvasSpace extends Component{
     this.props.dispatch(changeSelect(next))
   }
 
-  renderMetric(metric) {
+  _selectedMetric() {
+   const {selected} = this.props
+   const metrics = _.get(this.props.denormalizedSpace, 'metrics')
+
+   return metrics && metrics.filter(i => _.isEqual(i.location, selected))[0];
+  }
+
+  _isAnalysisView(props = this.props) {
+    return (_.get(props, 'canvasState.metricCardView') === 'analysis')
+  }
+
+  renderMetric(metric, selected) {
     const {location} = metric
+    const hasSelected = selected && metric && (selected.id !== metric.id)
+    const selectedSamples = _.get(selected, 'simulation.sample.values')
+    const passSelected = hasSelected && selectedSamples && !_.isEmpty(selectedSamples)
     return (
       <Metric
           canvasState={this.props.canvasState}
@@ -105,6 +118,7 @@ export default class CanvasSpace extends Component{
           key={metric.id}
           location={location}
           metric={metric}
+          selectedMetric={passSelected && selected}
       />
     )
   }
@@ -141,6 +155,7 @@ export default class CanvasSpace extends Component{
     let className = 'canvas-space'
     const showGridLines = (metricCardView !== 'display')
     this.showEdges() ? className += ' showEdges' : ''
+    const selectedMetric = this._isAnalysisView() && this._selectedMetric()
 
     return (
       <div className={className}>
@@ -148,7 +163,7 @@ export default class CanvasSpace extends Component{
           <JSONTree data={this.props}/>
         }
         <FlowGrid
-          items={metrics.map(m => ({key: m.id, location: m.location, component: this.renderMetric(m)}))}
+          items={metrics.map(m => ({key: m.id, location: m.location, component: this.renderMetric(m, selectedMetric)}))}
           hasItemUpdated = {(oldItem, newItem) => hasMetricUpdated(oldItem.props, newItem.props)}
           edges={edges}
           selected={selected}

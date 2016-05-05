@@ -12,7 +12,9 @@ import MetricToolTip from './tooltip.js'
 import $ from 'jquery'
 import './style.css'
 import * as canvasStateProps from 'gModules/canvas_state/prop_type.js'
+import ToolTip from 'gComponents/utility/tooltip/index.js'
 import MetricCardViewSection from './MetricCardViewSection/index.js'
+import SensitivitySection from './SensitivitySection/SensitivitySection.js'
 
 import { hasMetricUpdated } from './updated.js'
 
@@ -32,6 +34,16 @@ const relationshipType = (edges) => {
   if (edges.inputs.length) { return OUTPUT }
   if (edges.outputs.length) { return INPUT }
   return NOEDGE
+}
+
+class ScatterTip extends Component {
+  render() {
+    return (
+      <ToolTip size='LARGE'>
+        <SensitivitySection yMetric={this.props.yMetric} xMetric={this.props.xMetric} size={'LARGE'}/>
+      </ToolTip>
+    )
+  }
 }
 
 const PT = PropTypes
@@ -177,10 +189,19 @@ class MetricCard extends Component {
     return errors ? errors.filter(e => !!e) : []
   }
 
+  _shouldShowSensitivitySection() {
+    const stats = _.get(this.props, 'metric.simulation.stats')
+    const showSimulation = (stats && _.isFinite(stats.stdev) && (stats.length > 5))
+    const isAnalysis = (this.props.canvasState.metricCardView === 'analysis')
+
+    return isAnalysis && showSimulation && this.props.selectedMetric
+  }
+
   render() {
     const {isSelected, metric, guesstimateForm, canvasState} = this.props
     const {guesstimate} = metric
     const errors = this._errors()
+    const shouldShowSensitivitySection = this._shouldShowSensitivitySection()
 
     return (
       <div className='metricCard--Container'
@@ -213,6 +234,8 @@ class MetricCard extends Component {
               ref='MetricCardViewSection'
               isTitle={this._isTitle()}
               connectDragSource={this.props.connectDragSource}
+              selectedMetric={this.props.selectedMetric}
+              showSensitivitySection={shouldShowSensitivitySection}
           />
 
           {isSelected && !this.state.modalIsOpen &&
@@ -228,7 +251,10 @@ class MetricCard extends Component {
             </div>
           }
         </div>
-        {this.props.hovered && !isSelected && <MetricToolTip guesstimate={guesstimate}/>}
+        {this.props.hovered && !isSelected && !shouldShowSensitivitySection && <MetricToolTip guesstimate={guesstimate}/>}
+        {this.props.hovered && !isSelected && shouldShowSensitivitySection &&
+          <ScatterTip yMetric={this.props.selectedMetric} xMetric={metric}/>
+        }
       </div>
     );
   }
