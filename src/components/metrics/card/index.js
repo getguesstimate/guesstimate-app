@@ -74,6 +74,7 @@ class MetricCard extends Component {
   }
 
   _handlePress(e) {
+    console.log('getting pressed.')
     if (e.target === ReactDOM.findDOMNode(this)) {
       if (e.keyCode == '13') {
         e.preventDefault()

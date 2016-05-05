@@ -1,5 +1,6 @@
 'use strict';
 import React, {Component, PropTypes} from 'react'
+import ReactDOM from 'react-dom'
 
 import './FlowGrid.css'
 import Cell from './cell'
@@ -52,6 +53,11 @@ export default class FlowGrid extends Component{
       const size = ({columns: this._columnCount(), rows: this._rowCount()})
       let newLocation = new DirectionToLocation(size, this.props.selected)[direction]()
       this.props.onSelectItem(newLocation)
+
+      const cell = this.refs[`cell-${newLocation.row}-${newLocation.column}`]
+      const domNode = ReactDOM.findDOMNode(cell)
+      let foo = ReactDOM
+      debugger
     }
   }
 
