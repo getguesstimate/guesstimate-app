@@ -7,7 +7,7 @@ import JSONTree from 'react-json-tree'
 import MetricToken from '../token/index.js'
 import './style.css'
 import Icon from 'react-fa'
-import ScatterPlot from '../ScatterPlot/ScatterPlot.js'
+import SensitivitySection from '../SensitivitySection/SensitivitySection.js'
 
 const isBreak = (errors) => {return errors[0] && (errors[0] === 'BROKEN_UPSTREAM' || errors[0] === 'BROKEN_INPUT' )}
 const isInfiniteLoop = (errors) => {return errors[0] && (errors[0] === 'INFINITE_LOOP')}
@@ -59,7 +59,7 @@ export default class MetricCardViewSection extends Component {
           jumpSection,
           onMouseDown,
           onMouseUp,
-          showScatterPlot
+          showSensitivitySection
     } = this.props
 
     const errors = this._errors()
@@ -107,8 +107,8 @@ export default class MetricCardViewSection extends Component {
 
         {this.props.connectDragSource(
           <div className='StatsSection'>
-            {showScatterPlot &&
-              <ScatterPlot yMetric={this.props.selectedMetric} xMetric={metric}/>
+            {showSensitivitySection &&
+              <SensitivitySection yMetric={this.props.selectedMetric} xMetric={metric}/>
             }
             {showSimulation &&
               <div className='StatsSectionBody'>
