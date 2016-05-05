@@ -1,6 +1,7 @@
 export function hasMetricUpdated(oldProps, newProps) {
   return (
-    _.get(newProps,'canvasState.metricCardView') === 'analysis' ||
+    _.get(oldProps, 'selectedMetric.id') !== _.get(newProps, 'selectedMetric.id') ||
+    _.get(oldProps, 'selectedMetric.simulation.propagationId') !== _.get(newProps, 'selectedMetric.simulation.propagationId') ||
     oldProps.metric.isNew ||
     oldProps.isSelected !== newProps.isSelected ||
     oldProps.canvasState.metricCardView !== newProps.canvasState.metricCardView ||

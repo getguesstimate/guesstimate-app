@@ -50,7 +50,7 @@ class RegressionStats extends Component {
     if (_.isEmpty(xSamples) || _.isEmpty(ySamples)) { return (false) }
 
     const regression = everpolate.linearRegression(xSamples, ySamples)
-    const sampleSize = xSamples && xSamples.length
+    const sampleCount = xSamples && xSamples.length
 
     const rSquared = regression.rSquared
     const xIntercept = regression.intercept && (-1 * (regression.intercept / regression.slope))
@@ -82,7 +82,7 @@ class RegressionStats extends Component {
             </div>
             <div>
               <span className='label'> sample count</span>
-              <span className='value'> {sampleSize}</span>
+              <span className='value'> {sampleCount}</span>
             </div>
           </div>
         }
@@ -98,10 +98,17 @@ export default class SensitivitySection extends Component {
 
   render() {
     const {xMetric, yMetric, size} = this.props
+    let sampleCount = (size === 'SMALL') ? 100 : 1000
 
-    let sampleSize = (size === 'SMALL') ? 100 : 1000
-    const xSamples = _.get(xMetric, 'simulation.sample.values').slice(0, sampleSize)
-    const ySamples = _.get(yMetric, 'simulation.sample.values').slice(0, sampleSize)
+    const sampleValues = (metric, sampleCount) => {
+      let values = _.get(metric, 'simulation.sample.values')
+      return values && values.slice(0, sampleCount)
+    }
+
+    let xSamples = sampleValues(xMetric, sampleCount)
+    let ySamples = sampleValues(yMetric, sampleCount)
+
+    if (!xMetric || !yMetric || !xSamples || !ySamples) { return false }
 
     return (
       <div className={`SensitivitySection ${this.props.size}`}>
