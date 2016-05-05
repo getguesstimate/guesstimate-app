@@ -8,11 +8,8 @@ export const canvasState = PT.shape({
 
 export const metricCardView = PT.oneOf([
   'normal',
-  'basic',
   'scientific',
   'analysis',
-  'display',
-  'debugging'
 ]).isRequired
 
 export const metricClickMode = PT.oneOf([

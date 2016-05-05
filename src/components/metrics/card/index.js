@@ -190,25 +190,18 @@ class MetricCard extends Component {
     return errors ? errors.filter(e => !!e) : []
   }
 
-  showSimulation() {
-    const stats = _.get(this.props, 'metric.simulation.stats')
-    if (stats && _.isFinite(stats.mean) && _.isFinite(stats.stdev) && _.isFinite(stats.length)) {
-      return (stats.stdev === 0 || (stats.length > 5))
-    } else {
-      return false
-    }
-  }
-
   _shouldShowSensitivitySection() {
+    const stats = _.get(this.props, 'metric.simulation.stats')
+    const showSimulation = (stats && _.isFinite(stats.stdev) && (stats.length > 5))
     const isAnalysis = (this.props.canvasState.metricCardView === 'analysis')
-    return isAnalysis && this.showSimulation() && this.props.selectedMetric
+
+    return isAnalysis && showSimulation && this.props.selectedMetric
   }
 
   render() {
     const {isSelected, metric, guesstimateForm, canvasState} = this.props
     const {guesstimate} = metric
     const errors = this._errors()
-    const showSimulation = this.showSimulation()
     const shouldShowSensitivitySection = this._shouldShowSensitivitySection()
 
     return (

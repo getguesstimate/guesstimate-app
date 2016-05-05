@@ -89,8 +89,7 @@ export default class CanvasSpace extends Component{
    const {selected} = this.props
    const metrics = _.get(this.props.denormalizedSpace, 'metrics')
 
-   const item = metrics && metrics.filter(i => _.isEqual(i.location, selected))[0];
-   return item
+   return metrics && metrics.filter(i => _.isEqual(i.location, selected))[0];
   }
 
   _isAnalysisView(props = this.props) {
@@ -101,7 +100,7 @@ export default class CanvasSpace extends Component{
     const {location} = metric
     const hasSelected = selected && metric && (selected.id !== metric.id)
     const selectedSamples = _.get(selected, 'simulation.sample.values')
-    const passSelected = hasSelected && selectedSamples && !!selectedSamples.length
+    const passSelected = hasSelected && selectedSamples && !_.isEmpty(selectedSamples)
     return (
       <Metric
           canvasState={this.props.canvasState}

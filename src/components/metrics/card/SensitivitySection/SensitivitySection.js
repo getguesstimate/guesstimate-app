@@ -1,6 +1,5 @@
-import React, {Component, PropTypes} from 'react'
-import {BarChart, ScatterPlot} from 'react-d3-components'
-import {sampleMean, sampleStdev, percentile, cutoff, sortDescending} from 'lib/dataAnalysis.js'
+import React, {Component} from 'react'
+import {ScatterPlot} from 'react-d3-components'
 import everpolate from 'everpolate'
 import './style.css'
 
@@ -48,7 +47,9 @@ class Plot extends Component {
 class RegressionStats extends Component {
   render() {
     const {xSamples, ySamples, size} = this.props
-    const regression = !!xSamples.length ? everpolate.linearRegression(xSamples, ySamples) : false
+    if (_.isEmpty(xSamples) || _.isEmpty(ySamples)) { return (false) }
+
+    const regression = everpolate.linearRegression(xSamples, ySamples)
     const sampleSize = xSamples && xSamples.length
 
     const rSquared = regression.rSquared
@@ -61,7 +62,7 @@ class RegressionStats extends Component {
             <span className={`value ${importance(rSquared)}`}> {rSquared.toFixed(2)}</span>
           </div>
         }
-        { size !== 'SMALL' &&
+        { size !== 'SMALL' && _.isFinite(rSquared) &&
           <div>
             <div>
               <span className='label'> r<sup>2</sup></span>
