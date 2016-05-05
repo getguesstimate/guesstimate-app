@@ -9,7 +9,7 @@ import './style.css'
 import {percentile, sortDescending} from 'lib/dataAnalysis.js'
 
 const percentages = (values, perc) => {
-  const samples = sortDescending(Object.assign([], values)
+  const samples = sortDescending(Object.assign([], values))
   return perc.map(e => { return {percentage: e, value: percentile(samples, samples.length, e)} })
 }
 
