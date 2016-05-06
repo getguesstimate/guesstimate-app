@@ -5,8 +5,6 @@ describe("DistributionPointText", () => {
     const examples = [
       [{text: '3'}, true],
       [{value: '3'}, false],
-      [{text: '=3'}, false],
-      [{text: '3 -> 9'}, false]
     ]
 
     const itExamples = examples.map(e => () => {

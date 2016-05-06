@@ -21,8 +21,10 @@ const PrecisionNumber = ({value, precision}) => {
   )
 }
 
-const Uncertainty = ({range}) => (
-  <span className='stdev'> {'±'} <PrecisionNumber value={range}/> </span>
+const UncertaintyRange = ({low, high}) => (
+  <div className='UncertaintyRange'>
+    <PrecisionNumber value={low}/> to <PrecisionNumber value={high}/>
+  </div>
 )
 
 @ShowIf
@@ -31,22 +33,23 @@ class DistributionSummarySmall extends Component{
     stats: PropTypes.object,
   }
   render () {
-    const {length, mean, stdev, percentiles} = this.props.stats
+    const {length, mean, stdev, adjustedConfidenceInterval} = this.props.stats
 
-    let range = null
-    if (_.isObject(percentiles)) {
-      const [lowRange, highRange] = [(mean - percentiles[5]), (percentiles[95] - mean)]
-      range = (highRange + lowRange) / 2
+    let low
+    let high
+    if (_.isObject(adjustedConfidenceInterval)) {
+      [low, high] = adjustedConfidenceInterval
     }
 
     const precision = length === 1 ? 6 : 2
-
     return (
       <div className="DistributionSummary">
+        <div className='mean'>
         <PrecisionNumber value={parseFloat(mean)} precision={precision}/>
-          {!!range && range !== 0 &&
-          <Uncertainty range={range} />
-          }
+        </div>
+        {!!low && !!high && (low !== high) &&
+          <UncertaintyRange low={low} high={high} />
+        }
       </div>
     )
   }

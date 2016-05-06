@@ -6,10 +6,20 @@ import {Guesstimator} from '../guesstimator/index.js'
 export const attributes = ['metric', 'input', 'guesstimateType', 'description', 'data']
 
 export function sample(guesstimate: Guesstimate, dGraph: DGraph, n: number = 1) {
-  const [errors, item] = Guesstimator.parse(guesstimate)
-  const externalInputs = item.needsExternalInputs() ? _inputMetricsWithValues(guesstimate, dGraph) : []
   const metric = guesstimate.metric
-  return item.sample(n, externalInputs).then(sample => ({ metric, sample }))
+
+  const [parseErrors, item] = Guesstimator.parse(guesstimate)
+  if (parseErrors.length > 0) {
+    return Promise.resolve({ metric, sample: {values: [], errors: parseErrors} })
+  }
+
+  const [inputs, inputErrors] = item.needsExternalInputs() ? _inputMetricsWithValues(guesstimate, dGraph) : [{}, []]
+
+  if (inputErrors.length > 0) {
+    return Promise.resolve({ metric, sample: {values: [], errors: inputErrors} })
+  }
+
+  return item.sample(n, inputs).then(sample => ({ metric, sample }))
 }
 
 export function format(guesstimate: Guesstimate): Guesstimate{
@@ -38,9 +48,20 @@ export function inputMetrics(guesstimate: Guesstimate, dGraph: DGraph): Array<Ob
   return dGraph.metrics.filter( m => (guesstimate.input || '').includes(m.readableId) );
 }
 
-export function _inputMetricsWithValues(guesstimate: Guesstimate, dGraph: DGraph): Object{
+function _formatInputError(errorMsg) {
+  if (errorMsg === 'BROKEN_INPUT' || errorMsg === 'BROKEN_UPSTREAM') {
+    return 'BROKEN_UPSTREAM'
+  }
+  return 'BROKEN_INPUT'
+}
+
+function _inputMetricsWithValues(guesstimate: Guesstimate, dGraph: DGraph): Object{
   let inputs = {}
-  inputMetrics(guesstimate, dGraph)
-    .map(m => {inputs[m.readableId] = _.get(m, 'simulation.sample.values') })
-  return inputs
+  let errors = []
+  inputMetrics(guesstimate, dGraph).map(m => {
+    inputs[m.readableId] = _.get(m, 'simulation.sample.values')
+    const inputErrors = _.get(m, 'simulation.sample.errors')
+    errors = errors.concat(inputErrors ? inputErrors.map(_formatInputError) : [])
+  })
+  return [inputs, _.uniq(errors)]
 }

@@ -4,8 +4,6 @@ import React, {Component, PropTypes} from 'react'
 import './FlowGrid.css'
 import Cell from './cell'
 import EdgeContainer from './edge-container.js'
-import HorizontalIndex from './HorizontalIndex.js'
-import VerticalIndex from './VerticalIndex.js'
 
 import {keycodeToDirection, DirectionToLocation} from './utils'
 
@@ -37,6 +35,8 @@ export default class FlowGrid extends Component{
     onSelectItem: PropTypes.func.isRequired,
     onAddItem: PropTypes.func.isRequired,
     onMoveItem: PropTypes.func.isRequired,
+    onCopy: PropTypes.func,
+    onPaste: PropTypes.func,
 
     showGridLines: PropTypes.bool
   }
@@ -47,13 +47,26 @@ export default class FlowGrid extends Component{
 
   state = { rowHeights: [] }
 
-  _handleKeyPress(e) {
+  _handleKeyUp(e){
+    if (e.keyCode == '17' || e.keyCode == '224' || e.keyCode == '91') {
+      this.setState({ctrlPressed: false})
+    }
+  }
+
+  _handleKeyDown(e){
     let direction = keycodeToDirection(e.keyCode)
     if (direction) {
       e.preventDefault()
       const size = ({columns: this._columnCount(), rows: this._rowCount()})
       let newLocation = new DirectionToLocation(size, this.props.selected)[direction]()
       this.props.onSelectItem(newLocation)
+    } else if (e.keyCode == '17' || e.keyCode == '224' || e.keyCode == '91') {
+      e.preventDefault()
+      this.setState({ctrlPressed: true})
+    } else if (e.keyCode == '86' && this.state.ctrlPressed) {
+      this.props.onPaste()
+    } else if (e.keyCode == '67' && this.state.ctrlPressed) {
+      this.props.onCopy()
     }
   }
 
@@ -71,8 +84,8 @@ export default class FlowGrid extends Component{
   }
 
   _columnCount() {
-    const lowestItem = Math.max(...this.props.items.map(e => parseInt(e.location.column))) + 3
-    const selected = parseInt(this.props.selected.column) + 3
+    const lowestItem = Math.max(...this.props.items.map(e => parseInt(e.location.column))) + 4
+    const selected = parseInt(this.props.selected.column) + 4
     return Math.max(6, lowestItem, selected) || 6;
   }
 
@@ -82,15 +95,17 @@ export default class FlowGrid extends Component{
    let item = this.props.items.filter(i => atThisLocation(i.location))[0];
    return (
     <Cell
-        gridKeyPress={this._handleKeyPress.bind(this)}
-        handleSelect={this.props.onSelectItem}
-        isSelected={isSelected}
-        item={item && item.component}
-        key={'grid-item', location.row, location.column}
-        location={location}
-        onAddItem={this.props.onAddItem}
-        onMoveItem={this.props.onMoveItem}
-        ref={`cell-${location.row}-${location.column}`}
+      hasItemUpdated={this.props.hasItemUpdated}
+      gridKeyPress={this._handleKeyDown.bind(this)}
+      handleSelect={this.props.onSelectItem}
+      isSelected={isSelected}
+      item={item && item.component}
+      key={'grid-item', location.row, location.column}
+      location={location}
+      onAddItem={this.props.onAddItem}
+      onMoveItem={this.props.onMoveItem}
+      canvasState={this.props.canvasState}
+      ref={`cell-${location.row}-${location.column}`}
     />
     )
   }
@@ -124,7 +139,8 @@ export default class FlowGrid extends Component{
         <div className='FlowGrid-Horizontal-Motion'>
           <div
               className={className}
-              onKeyPress={this._handleKeyPress.bind(this)}
+              onKeyDown={this._handleKeyDown.bind(this)}
+              onKeyUp={this._handleKeyUp.bind(this)}
           >
             {
               upto(rowCount).map((row) => {

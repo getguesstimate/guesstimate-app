@@ -5,7 +5,7 @@ import './style.css'
 export var MarkdownViewer = ({source}) => {
   return (
     <div className='MarkdownViewer'>
-      <ReactMarkdown source={source}/>
+      <ReactMarkdown skipHtml={true} source={source}/>
     </div>
   );
 };

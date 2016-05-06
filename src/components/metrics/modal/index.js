@@ -6,11 +6,11 @@ import DistributionEditor from 'gComponents/distributions/editor/index.js'
 import GuesstimateDescription from './description'
 import {ButtonClose} from 'gComponents/utility/buttons/close'
 import './style.css'
-import {Stats} from 'fast-stats'
+import {percentile, sortDescending} from 'lib/dataAnalysis.js'
 
 const percentages = (values, perc) => {
-  let s1 = new Stats().push(values)
-  return perc.map(e => { return {percentage: e, value: s1.percentile(e)} })
+  const samples = sortDescending(Object.assign([], values))
+  return perc.map(e => { return {percentage: e, value: percentile(samples, samples.length, e)} })
 }
 
 const PercentileTable = ({values}) => (

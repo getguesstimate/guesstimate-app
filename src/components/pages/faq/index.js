@@ -36,6 +36,9 @@ Yes. You can check out the [GitHub repo](https://github.com/getguesstimate/guess
 ## Where can I find more information on Guesstimate?
 We have a blog [here](https://medium.com/guesstimate-blog).
 
+## I found a bug!
+Please file it in our bug tracker on [GitHub](https://github.com/getguesstimate/guesstimate-app), or just open up chat (bottom right) and let us know. If your bug is security related, please alert us immediately at [matthew@getguesstimate.com](mailto:matthew@getguesstimate.com).
+
 # Math Related Questions
 
 ## What distribution types are supported?
@@ -50,9 +53,6 @@ You can find a list by clicking on the **Documentation** widget on the right, th
 
 ## Why isn’t the math done analytically?
 Monte Carlo simulations are far more general than analytical solutions, so apply to more equations and distributions.  In the future, analytical techniques may be used when possible.
-
-## I found a bug!
-Please file it in our bug tracker on [GitHub](https://github.com/getguesstimate/guesstimate-app), or just open up chat (bottom right) and let us know.
 
 `
 

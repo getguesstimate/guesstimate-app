@@ -15,22 +15,13 @@ describe("Function", () => {
   });
 
   describe('#format', () => {
-    const defaultGraph = {
-      metrics: [
-        {readableId:'AB', simulation: {sample: {values: [3,4,5]}}},
-        {readableId:'CI', simulation: {sample: {values: [3,4,5]}}}
-      ]
-    }
-
     const examples = [
-      [{text: '=43', graph: {}}, {guesstimateType: 'FUNCTION', text: '43', inputs:{}}],
-      [{ text: '=43+AB', graph: defaultGraph }, {guesstimateType: 'FUNCTION', text: '43+AB', inputs:{AB: [3,4,5]}}],
+      [{text: '=43+AB'}, {guesstimateType: 'FUNCTION', text: '43+AB'}],
     ]
 
     examples.map(e => () => {
       it(`works for guesstimate ${JSON.stringify(e[0])}`, () => {
         const formatted = formatter.format(e[0])
-        expect(formatted.inputs).to.deep.equal(e[1].inputs)
         expect(formatted.guesstimateType).to.equal(e[1].guesstimateType)
         expect(formatted.text).to.equal(e[1].text)
       })
