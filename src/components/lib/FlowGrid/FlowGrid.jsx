@@ -35,6 +35,8 @@ export default class FlowGrid extends Component{
     onSelectItem: PropTypes.func.isRequired,
     onAddItem: PropTypes.func.isRequired,
     onMoveItem: PropTypes.func.isRequired,
+    onCopy: PropTypes.func,
+    onPaste: PropTypes.func,
 
     showGridLines: PropTypes.bool
   }
@@ -45,13 +47,26 @@ export default class FlowGrid extends Component{
 
   state = { rowHeights: [] }
 
-  _handleKeyPress(e) {
+  _handleKeyUp(e){
+    if (e.keyCode == '17' || e.keyCode == '224' || e.keyCode == '91') {
+      this.setState({ctrlPressed: false})
+    }
+  }
+
+  _handleKeyDown(e){
     let direction = keycodeToDirection(e.keyCode)
     if (direction) {
       e.preventDefault()
       const size = ({columns: this._columnCount(), rows: this._rowCount()})
       let newLocation = new DirectionToLocation(size, this.props.selected)[direction]()
       this.props.onSelectItem(newLocation)
+    } else if (e.keyCode == '17' || e.keyCode == '224' || e.keyCode == '91') {
+      e.preventDefault()
+      this.setState({ctrlPressed: true})
+    } else if (e.keyCode == '86' && this.state.ctrlPressed) {
+      this.props.onPaste()
+    } else if (e.keyCode == '67' && this.state.ctrlPressed) {
+      this.props.onCopy()
     }
   }
 
@@ -81,7 +96,7 @@ export default class FlowGrid extends Component{
    return (
     <Cell
       hasItemUpdated={this.props.hasItemUpdated}
-      gridKeyPress={this._handleKeyPress.bind(this)}
+      gridKeyPress={this._handleKeyDown.bind(this)}
       handleSelect={this.props.onSelectItem}
       isSelected={isSelected}
       item={item && item.component}
@@ -124,7 +139,8 @@ export default class FlowGrid extends Component{
         <div className='FlowGrid-Horizontal-Motion'>
           <div
               className={className}
-              onKeyPress={this._handleKeyPress.bind(this)}
+              onKeyDown={this._handleKeyDown.bind(this)}
+              onKeyUp={this._handleKeyUp.bind(this)}
           >
             {
               upto(rowCount).map((row) => {
