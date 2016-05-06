@@ -2,7 +2,7 @@ export function simulate(expr, inputs, overallNumSamples) {
   const numSamples = overallNumSamples/window.workers.length
   return Promise.all(_.map(
     window.workers,
-    (worker, index) => simulateOnWorker(worker, {expr, numSamples, inputs: sliceData(index, numSamples, inputs)})
+    (worker, index) => simulateOnWorker(worker, buildData(index, expr, numSamples, inputs))
   )).then(
     (results) => {
       let finalResult = {values: [], errors: []}
@@ -20,12 +20,12 @@ export function simulate(expr, inputs, overallNumSamples) {
   )
 }
 
-function sliceData(index, numSamples, inputs) {
+function buildData(index, expr, numSamples, inputs) {
   let slicedInputs = {}
   for (let key of Object.keys(inputs)) {
     slicedInputs[key] = inputs[key].slice(numSamples*index, numSamples*(index+1))
   }
-  return slicedInputs
+  return {expr, numSamples, inputs: slicedInputs}
 }
 
 function simulateOnWorker(worker, data) {
