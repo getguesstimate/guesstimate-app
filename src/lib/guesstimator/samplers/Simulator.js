@@ -20,10 +20,22 @@ export function simulate(expr, inputs, overallNumSamples) {
   )
 }
 
+function modularSlice(array, from, to) {
+  const len = array.length
+  if (len <= to - from) {
+    return array
+  }
+  const [newFrom, newTo] = [from % len, to % len]
+  if (newTo > newFrom) {
+    return array.slice(newFrom, newTo)
+  }
+  return [...array.slice(newFrom), array.slice(0,to)]
+}
+
 function buildData(index, expr, numSamples, inputs) {
   let slicedInputs = {}
   for (let key of Object.keys(inputs)) {
-    slicedInputs[key] = inputs[key].slice(numSamples*index, numSamples*(index+1))
+    slicedInputs[key] = modularSlice(inputs[key], numSamples*index, numSamples*(index+1))
   }
   return {expr, numSamples, inputs: slicedInputs}
 }
