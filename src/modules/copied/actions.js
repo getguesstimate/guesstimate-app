@@ -26,21 +26,18 @@ export function paste(spaceId){
 
     const location = state.selection
     const spaceMetrics = getState().metrics.filter(m => m.space === spaceId)
-    const existingMetric = spaceMetrics.find(m => isAtLocation(m, location))
     const existingReadableIds = spaceMetrics.map(m => m.readableId)
 
-    let newMetric = e.metric.create(existingReadableIds)
-    newMetric.location = location
-    const newItem = Object.assign({}, metric, newMetric)
+    const newItem = Object.assign({}, metric, e.metric.create(existingReadableIds), {location})
 
     const newGuesstimate = Object.assign({}, guesstimate, {metric: newItem.id})
 
+    const existingMetric = spaceMetrics.find(m => isAtLocation(m, location))
     if (existingMetric) {
       dispatch(metricActions.removeMetric(existingMetric.id))
     }
 
     dispatch({ type: 'ADD_METRIC', item: newItem, newGuesstimate });
-    // TODO(Ozzie): Ozzie, is this going to cause a race condition? Or are redux dispatches synchronous?
     dispatch({ type: 'RUN_FORM_SIMULATIONS', getState, dispatch, metricId: newItem.id });
   }
 }
