@@ -10,7 +10,7 @@ export default class SpacesIndex extends Component{
   render () {
     return (
       <Container>
-        <GeneralSpaceIndex pageName={'index'}>
+        <GeneralSpaceIndex pageName={'index'} showScreenshots={true}>
           <h2>
             {'Public Models'}
           </h2>

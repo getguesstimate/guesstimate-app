@@ -35,80 +35,56 @@ let PrivateTag = ({isPrivate}) => (
   </div>
 )
 
-let ScreenShot = ({src, onMouseOver, onMouseOut, expanded}) => (
-  <div className='snapshot'>
-    <img src={src}
-      onMouseOver={onMouseOver}
-      onMouseOut={onMouseOut}
-    />
-    {expanded &&
-      <img src={src} className='expanded'/>
-    }
-  </div>
-)
-
-export default class SpaceListItem extends Component {
-  state = {
-    expandedPicture: false
-  }
-
-  render() {
-    const {space, showUser, isOwnedByMe} = this.props
-    const hasName = !_.isEmpty(space.name)
-    const className = `text-editable ${hasName ? '' : 'default-value'}`
-    const showName = hasName ? space.name : 'Untitled Model'
-    return(
-      <div className='SpaceListItem'>
-        <a href={Space.url(space)}>
-          <div className='row'>
+const SpaceListItem = ({space, showUser, isOwnedByMe, showScreenshot}) => {
+  const hasName = !_.isEmpty(space.name)
+  const className = `text-editable ${hasName ? '' : 'default-value'}`
+  const showName = hasName ? space.name : 'Untitled Model'
+  return(
+    <div className='SpaceListItem'>
+      <a href={Space.url(space)}>
+        <div className='row'>
+          {showScreenshot &&
             <div className='col-xs-2'>
-              {space.screenshot &&
-                <ScreenShot
-                  expanded={this.state.expandedPicture}
-                  src={space.screenshot}
-                  onMouseOver={() => {this.setState({expandedPicture: true})}}
-                  onMouseOut={() => {this.setState({expandedPicture: false})}}
-                />
-              }
+              {space.screenshot && <div className='snapshot'> <img src={space.screenshot} /> </div> }
             </div>
-            <div className='col-xs-10'>
-              <div className='row'>
-                <div className='col-xs-7'>
-                  <h3 className={className}> {showName} </h3>
-                  <p>Updated {formatDate(space.updated_at)}</p>
-                </div>
-                <div className='col-xs-3'>
-                  <div className='row'>
-                    {space.user && showUser &&
-                      <div className='col-xs-12'>
-                        <div className='user-tag'>
-                          <img
-                              className='ui avatar image'
-                              src={space.user.picture}
-                          />
-                          {space.user.name}
-                        </div>
+          }
+          <div className={`col-xs-${showScreenshot ? 10 : 12}`}>
+            <div className='row'>
+              <div className='col-xs-7'>
+                <h3 className={className}> {showName} </h3>
+                <p>Updated {formatDate(space.updated_at)}</p>
+              </div>
+              <div className='col-xs-3'>
+                <div className='row'>
+                  {space.user && showUser &&
+                    <div className='col-xs-12'>
+                      <div className='user-tag'>
+                        <img
+                            className='ui avatar image'
+                            src={space.user.picture}
+                        />
+                        {space.user.name}
                       </div>
-                    }
+                    </div>
+                  }
 
-                    {isOwnedByMe && <PrivateTag isPrivate={space.is_private}/>}
-                  </div>
+                  {isOwnedByMe && <PrivateTag isPrivate={space.is_private}/>}
                 </div>
               </div>
-
-              {!_.isEmpty(space.description) &&
-                <div className='row description'>
-                  <div className='col-xs-12'>
-                    <p> {formatDescription(space.description)} </p>
-                  </div>
-                </div>
-              }
             </div>
+
+            {!_.isEmpty(space.description) &&
+              <div className='row description'>
+                <div className='col-xs-12'>
+                  <p> {formatDescription(space.description)} </p>
+                </div>
+              </div>
+            }
           </div>
-        </a>
-      </div>
-    )
-  }
+        </div>
+      </a>
+    </div>
+  )
 }
 
 function mapStateToProps(state) {
@@ -132,6 +108,7 @@ export default class SpaceListItemComponent extends Component {
           space={this.props.denormalizedSpace}
           showUser={this.props.showUser}
           isOwnedByMe={isOwnedByMe}
+          showScreenshot={this.props.showScreenshot}
         />
       )
     } else {
