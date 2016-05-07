@@ -18,6 +18,8 @@ import JSONTree from 'react-json-tree'
 import * as canvasStateActions from 'gModules/canvas_state/actions.js'
 import * as canvasStateProps from 'gModules/canvas_state/prop_type.js'
 
+import { copy, paste } from 'gModules/copied/actions.js'
+
 function mapStateToProps(state) {
   return {
     canvasState: state.canvasState,
@@ -38,7 +40,6 @@ export default class CanvasSpace extends Component{
     denormalizedSpace: PropTypes.object,
     dispatch: PropTypes.func,
     guesstimateForm: PropTypes.object,
-    isSelected: PropTypes.bool,
     selected: PropTypes.object,
     spaceId: PropTypes.oneOfType([
         React.PropTypes.string,
@@ -72,6 +73,14 @@ export default class CanvasSpace extends Component{
     this.props.dispatch(changeSelect(location))
   }
 
+  _handleCopy() {
+    this.props.dispatch(copy(this.props.denormalizedSpace.id))
+  }
+
+  _handlePaste() {
+    this.props.dispatch(paste(this.props.denormalizedSpace.id))
+  }
+
   _handleAddMetric(location) {
     this.props.dispatch(addMetric({space: this.props.spaceId, location: location, isNew: true}))
   }
@@ -86,8 +95,22 @@ export default class CanvasSpace extends Component{
     this.props.dispatch(changeSelect(next))
   }
 
-  renderMetric(metric) {
+  _selectedMetric() {
+   const {selected} = this.props
+   const metrics = _.get(this.props.denormalizedSpace, 'metrics')
+
+   return metrics && metrics.filter(i => _.isEqual(i.location, selected))[0];
+  }
+
+  _isAnalysisView(props = this.props) {
+    return (_.get(props, 'canvasState.metricCardView') === 'analysis')
+  }
+
+  renderMetric(metric, selected) {
     const {location} = metric
+    const hasSelected = selected && metric && (selected.id !== metric.id)
+    const selectedSamples = _.get(selected, 'simulation.sample.values')
+    const passSelected = hasSelected && selectedSamples && !_.isEmpty(selectedSamples)
     return (
       <Metric
           canvasState={this.props.canvasState}
@@ -95,6 +118,7 @@ export default class CanvasSpace extends Component{
           key={metric.id}
           location={location}
           metric={metric}
+          selectedMetric={passSelected && selected}
       />
     )
   }
@@ -131,6 +155,7 @@ export default class CanvasSpace extends Component{
     let className = 'canvas-space'
     const showGridLines = (metricCardView !== 'display')
     this.showEdges() ? className += ' showEdges' : ''
+    const selectedMetric = this._isAnalysisView() && this._selectedMetric()
 
     return (
       <div className={className}>
@@ -138,13 +163,15 @@ export default class CanvasSpace extends Component{
           <JSONTree data={this.props}/>
         }
         <FlowGrid
-          items={metrics.map(m => ({key: m.id, location: m.location, component: this.renderMetric(m)}))}
+          items={metrics.map(m => ({key: m.id, location: m.location, component: this.renderMetric(m, selectedMetric)}))}
           hasItemUpdated = {(oldItem, newItem) => hasMetricUpdated(oldItem.props, newItem.props)}
           edges={edges}
           selected={selected}
           onSelectItem={this._handleSelect.bind(this)}
           onAddItem={this._handleAddMetric.bind(this)}
           onMoveItem={this._handleMoveMetric.bind(this)}
+          onCopy={this._handleCopy.bind(this)}
+          onPaste={this._handlePaste.bind(this)}
           showGridLines={showGridLines}
           canvasState={this.props.canvasState}
         />

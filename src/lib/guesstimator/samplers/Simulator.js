@@ -1,6 +1,9 @@
-export const simulate = (expr, inputs, numSamples) => {
-  const data = {expr, numSamples: numSamples/window.workers.length, inputs}
-  return Promise.all(window.workers.map(worker => simulateOnWorker(worker, data))).then(
+export function simulate(expr, inputs, overallNumSamples) {
+  const numSamples = overallNumSamples/window.workers.length
+  return Promise.all(_.map(
+    window.workers,
+    (worker, index) => simulateOnWorker(worker, buildData(index, expr, numSamples, inputs))
+  )).then(
     (results) => {
       let finalResult = {values: [], errors: []}
       for (let result of results) {
@@ -17,7 +20,27 @@ export const simulate = (expr, inputs, numSamples) => {
   )
 }
 
-const simulateOnWorker = (worker, data) => {
+function modularSlice(array, from, to) {
+  const len = array.length
+  if (len <= to - from) {
+    return array
+  }
+  const [newFrom, newTo] = [from % len, to % len]
+  if (newTo > newFrom) {
+    return array.slice(newFrom, newTo)
+  }
+  return [...array.slice(newFrom), array.slice(0,to)]
+}
+
+function buildData(index, expr, numSamples, inputs) {
+  let slicedInputs = {}
+  for (let key of Object.keys(inputs)) {
+    slicedInputs[key] = modularSlice(inputs[key], numSamples*index, numSamples*(index+1))
+  }
+  return {expr, numSamples, inputs: slicedInputs}
+}
+
+function simulateOnWorker(worker, data) {
   return new Promise(
     (resolve, reject) => {
       worker.push(data, ({data}) => {resolve(JSON.parse(data))})
