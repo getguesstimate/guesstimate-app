@@ -79,13 +79,14 @@ export default class Cell extends Component {
   }
 
   _focus = () => {
-    if (!this.props.item) {
-      return
+    let domNode
+    if (this.props.item) {
+      // Always focus on the immediate child of the filled cell.
+      domNode = ReactDOM.findDOMNode(this.refs.item.decoratedComponentInstance).children[0]
+    } else {
+      domNode = ReactDOM.findDOMNode(this.refs.empty)
     }
-    const item = this.refs.item.decoratedComponentInstance
-    const domNode = ReactDOM.findDOMNode(item)
-    // Always focus on the immediate child of the filled cell.
-    domNode.children[0].focus()
+    domNode.focus()
   }
 
   _cellElement = () => {
@@ -93,7 +94,7 @@ export default class Cell extends Component {
       // Then endDrag fixes a bug where the original dragging position is hovered.
       return (<ItemCell onEndDrag={this.mouseOut.bind(this)} {...this.props} hover={this.state.hover} ref={'item'}/>)
     } else {
-      return (<EmptyCell {...this.props} />)
+      return (<EmptyCell {...this.props} ref={'empty'} />)
     }
   }
 
