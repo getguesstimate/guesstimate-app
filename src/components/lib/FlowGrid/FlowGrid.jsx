@@ -1,6 +1,5 @@
 'use strict';
 import React, {Component, PropTypes} from 'react'
-import ReactDOM from 'react-dom'
 
 import './FlowGrid.css'
 import Cell from './cell'
@@ -61,12 +60,6 @@ export default class FlowGrid extends Component{
       const size = ({columns: this._columnCount(), rows: this._rowCount()})
       let newLocation = new DirectionToLocation(size, this.props.selected)[direction]()
       this.props.onSelectItem(newLocation)
-
-      const cell = this.refs[`cell-${newLocation.row}-${newLocation.column}`]
-      const domNode = ReactDOM.findDOMNode(cell)
-      // domNode.childNodes[0].childNodes[0].focus()
-      let foo = ReactDOM
-      debugger
     } else if (e.keyCode == '17' || e.keyCode == '224' || e.keyCode == '91') {
       e.preventDefault()
       this.setState({ctrlPressed: true})

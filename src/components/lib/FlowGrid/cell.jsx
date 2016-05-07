@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from 'react'
+import ReactDOM from 'react-dom'
 import $ from 'jquery'
 import { DropTarget } from 'react-dnd';
 import ItemCell from './filled-cell.js';
@@ -78,13 +79,19 @@ export default class Cell extends Component {
   }
 
   _focus = () => {
-     $('.selected .grid-item-focus').focus();
+    if (!this.props.item) {
+      return
+    }
+    const item = this.refs.item.decoratedComponentInstance
+    const domNode = ReactDOM.findDOMNode(item)
+    // Always focus on the immediate child of the filled cell.
+    domNode.children[0].focus()
   }
 
   _cellElement = () => {
     if (this.props.item) {
       // Then endDrag fixes a bug where the original dragging position is hovered.
-      return (<ItemCell onEndDrag={this.mouseOut.bind(this)} {...this.props} hover={this.state.hover}/>)
+      return (<ItemCell onEndDrag={this.mouseOut.bind(this)} {...this.props} hover={this.state.hover} ref={'item'}/>)
     } else {
       return (<EmptyCell {...this.props} />)
     }
