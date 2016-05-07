@@ -57,34 +57,30 @@ export default class TextForm extends Component{
     const {input} = guesstimateForm
     const guesstimateType = this._guesstimateType()
     return(
-      <div>
-        <div className='row'>
-          <div className='col-sm-12'>
-            <TextInput
-              value={input}
-              onEscape={onEscape}
-              onChange={(input) => this._handleChange({input})}
-              onFocus={() => {this._switchMetricClickMode.bind(this)(true)}}
-              onBlur={this._handleBlur.bind(this)}
-              onChangeData={this._saveData.bind(this)}
-              ref='TextInput'
-              hasErrors={hasErrors}
-            />
-            <GuesstimateTypeIcon
-              guesstimateType={guesstimateType}
-              toggleDistributionSelector={() => this.setState({showDistributionSelector: !showDistributionSelector})}
-            />
-          </div>
+      <div className='GuesstimateInputForm'>
+        <div className='GuesstimateInputForm--row'>
+          <TextInput
+            value={input}
+            onEscape={onEscape}
+            onChange={(input) => this._handleChange({input})}
+            onFocus={() => {this._switchMetricClickMode.bind(this)(true)}}
+            onBlur={this._handleBlur.bind(this)}
+            onChangeData={this._saveData.bind(this)}
+            ref='TextInput'
+            hasErrors={hasErrors}
+          />
+          <GuesstimateTypeIcon
+            guesstimateType={guesstimateType}
+            toggleDistributionSelector={() => this.setState({showDistributionSelector: !showDistributionSelector})}
+          />
         </div>
 
         {showDistributionSelector &&
-          <div className='row'>
-            <div className='col-sm-12'>
-              <DistributionSelector
-                onSubmit={(guesstimateType) => this._handleChange({guesstimateType})}
-                selected={guesstimateType}
-              />
-            </div>
+          <div className='GuesstimateInputForm--row'>
+            <DistributionSelector
+              onSubmit={(guesstimateType) => this._handleChange({guesstimateType})}
+              selected={guesstimateType}
+            />
           </div>
         }
       </div>
@@ -95,26 +91,22 @@ export default class TextForm extends Component{
     const {size, guesstimateForm} = this.props
     const hasEmptyInput = _.isEmpty(guesstimateForm.input)
     const isLarge = (size === 'large')
-    return (
-     <div>
-       {!isLarge &&
-         this._textInput()
-       }
-        {isLarge &&
-          <div className='row'>
-            <div className='col-sm-8'>
-              {this._textInput()}
-            </div>
-            <div className='col-sm-4'>
-              {hasEmptyInput &&
-                <a className='custom-data' onClick={this.props.onAddDefaultData}>
-                  Add Custom Data
-                </a>
-              }
-            </div>
+    if (!isLarge) { return( this._textInput() ) }
+    else {
+      return(
+        <div className='row'>
+          <div className='col-sm-8'>
+            {this._textInput()}
           </div>
-        }
-      </div>
-    )
+          <div className='col-sm-4'>
+            {hasEmptyInput &&
+              <a className='custom-data' onClick={this.props.onAddDefaultData}>
+                Add Custom Data
+              </a>
+            }
+          </div>
+        </div>
+      )
+    }
   }
 }
