@@ -1,33 +1,38 @@
 @import './styles/variables.css';
 
-.GuesstimateForm input {
+.GuesstimateForm textarea {
   @mixin hover-input;
 }
 
-.GuesstimateForm.large input {
+.GuesstimateForm textarea {
+  line-height: 1.3em;
+  font-size: 0.95em;
+}
+
+.GuesstimateForm.large textarea {
   font-size: 1.5em;
   border-radius: 3px;
   font-weight: 100;
   color: #666;
 }
 
-.GuesstimateForm input{
+.GuesstimateForm textarea{
   float: left;
 }
 
-.GuesstimateForm.large input.NARROW {
+.GuesstimateForm.large textarea.NARROW {
   width: 89%
 }
 
-.GuesstimateForm input.NARROW {
+.GuesstimateForm textarea.NARROW {
   width: 85%
 }
 
-.GuesstimateForm input.WIDE {
+.GuesstimateForm textarea.WIDE {
   width: 100%
 }
 
-.GuesstimateForm input.hasErrors:not(:focus) {
+.GuesstimateForm textarea.hasErrors:not(:focus) {
   background-color: #E08888;
 }
 

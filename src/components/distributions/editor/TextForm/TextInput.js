@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import $ from 'jquery'
 import insertAtCaret from 'lib/jquery/insertAtCaret'
 import DistributionSelector from './DistributionSelector.js'
+import TextArea from 'react-textarea-autosize';
 
 export default class TextInput extends Component{
   displayName: 'GuesstimateForm-TextInput'
@@ -70,7 +71,7 @@ export default class TextInput extends Component{
    let className = (this.props.value !== '' && hasErrors) ? 'hasErrors' : ''
    className += ` ${width}`
    return(
-     <input
+     <TextArea
          id="live-input"
          onBlur={this._handleBlur.bind(this)}
          onChange={this._handlePress.bind(this)}
