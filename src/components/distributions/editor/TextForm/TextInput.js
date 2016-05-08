@@ -66,21 +66,24 @@ export default class TextInput extends Component{
   }
 
   render() {
-    const {hasErrors} = this.props
-    return(
-      <input
-          id="live-input"
-          onBlur={this._handleBlur.bind(this)}
-          onChange={this._handlePress.bind(this)}
-          onFocus={this._handleFocus.bind(this)}
-          onKeyDown={this._handleKeyDown.bind(this)}
-          placeholder={'value'}
-          className={(this.props.value !== '' && hasErrors) ? 'hasErrors' : ''}
-          ref='input'
-          type="text"
-          value={this.props.value}
-          tabIndex={2}
-      />
-    )
+   const {hasErrors, width} = this.props
+   let className = (this.props.value !== '' && hasErrors) ? 'hasErrors' : ''
+   className += ` ${width}`
+   return(
+     <input
+         id="live-input"
+         onBlur={this._handleBlur.bind(this)}
+         onChange={this._handlePress.bind(this)}
+         onFocus={this._handleFocus.bind(this)}
+         onKeyDown={this._handleKeyDown.bind(this)}
+         placeholder={'value'}
+         className={className}
+         ref='input'
+         type="text"
+         className={className}
+         value={this.props.value}
+         tabIndex={2}
+     />
+   )
   }
 }

@@ -9,16 +9,30 @@
   border-radius: 3px;
   font-weight: 100;
   color: #666;
-  width: 87%;
 }
 
 .GuesstimateForm input{
   float: left;
-  width: 85%;
 }
 
 .GuesstimateForm input.hasErrors {
   background-color: #E6E5E5;
+}
+
+.GuesstimateForm input.hasErrors {
+  background-color: #E6E5E5;
+}
+
+.GuesstimateForm.large input.NARROW {
+  width: 89%
+}
+
+.GuesstimateForm input.NARROW {
+  width: 85%
+}
+
+.GuesstimateForm input.WIDE {
+  width: 100%
 }
 
 .GuesstimateForm input.hasErrors:not(:focus) {
@@ -90,7 +104,7 @@
 
 .GuesstimateTypeQuestion {
   float: right;
-  margin-right: 10px;
+  margin-right: 4px;
   font-size: 1.2em;
   color: $grey-2;
   opacity: 0.6;

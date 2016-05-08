@@ -50,12 +50,20 @@ export default class TextForm extends Component{
 
   _saveData(data) { this.props.onSave({guesstimateType: 'DATA', data, input: null}) }
 
+  _shouldDisplayType() {
+    const type = this._guesstimateType()
+    return !(type.referenceName === 'POINT' || type.referenceName === 'FUNCTION')
+  }
+
   //onChangeData should be removed to Guesstimator lib.
   _textInput() {
     const {guesstimateForm, onEscape, size, hasErrors} = this.props
     let {showDistributionSelector} = this.state
     const {input} = guesstimateForm
     const guesstimateType = this._guesstimateType()
+    const shouldDisplayType = !(guesstimateType.referenceName === 'POINT' || guesstimateType.referenceName === 'FUNCTION')
+    const shouldBeWide = !(guesstimateType.referenceName === 'FUNCTION')
+
     return(
       <div className='GuesstimateInputForm'>
         <div className='GuesstimateInputForm--row'>
@@ -68,11 +76,15 @@ export default class TextForm extends Component{
             onChangeData={this._saveData.bind(this)}
             ref='TextInput'
             hasErrors={hasErrors}
+            width={shouldBeWide ? 'NARROW' : "WIDE"}
           />
-          <GuesstimateTypeIcon
-            guesstimateType={guesstimateType}
-            toggleDistributionSelector={() => this.setState({showDistributionSelector: !showDistributionSelector})}
-          />
+
+          { shouldDisplayType &&
+            <GuesstimateTypeIcon
+              guesstimateType={guesstimateType}
+              toggleDistributionSelector={() => this.setState({showDistributionSelector: !showDistributionSelector})}
+            />
+          }
         </div>
 
         {showDistributionSelector &&
