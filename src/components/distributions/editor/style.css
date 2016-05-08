@@ -15,14 +15,6 @@
   float: left;
 }
 
-.GuesstimateForm input.hasErrors {
-  background-color: #E6E5E5;
-}
-
-.GuesstimateForm input.hasErrors {
-  background-color: #E6E5E5;
-}
-
 .GuesstimateForm.large input.NARROW {
   width: 89%
 }
