@@ -79,13 +79,15 @@ export default class FlowGrid extends Component{
 
   _rowCount() {
     const lowestItem = Math.max(...this.props.items.map(e => parseInt(e.location.row))) + 4
-    const selected = parseInt(this.props.selected.row) + 3
+    let selectedRow = this.props.selected.row || 0
+    const selected = parseInt(selectedRow) + 3
     return Math.max(10, lowestItem, selected) || 6;
   }
 
   _columnCount() {
     const lowestItem = Math.max(...this.props.items.map(e => parseInt(e.location.column))) + 4
-    const selected = parseInt(this.props.selected.column) + 4
+    let selectedColumn = this.props.selected.column || 0
+    const selected = parseInt(selectedColumn) + 4
     return Math.max(6, lowestItem, selected) || 6;
   }
 
