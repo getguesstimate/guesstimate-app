@@ -50,7 +50,7 @@
 
 .metricCard > .section {
   position: relative;
-  padding: 0.3em 0.3em 0.2em 0.3em;
+  padding: 0.2em 0.2em 0.2em 0.2em;
 }
 
 .metricCard .section.editing {

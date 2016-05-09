@@ -10,6 +10,9 @@ import UniformImage from 'assets/distribution-icons/uniform.png'
 import {Guesstimator} from 'lib/guesstimator/index.js'
 import * as elev from 'server/elev/index.js'
 
+// We use onMouseUp to make sure that the onMouseUp
+// does not get called once another metric is underneath
+
 class DistributionIcon extends Component{
   _handleSubmit() {
     this.props.onSubmit(this.props.type)
@@ -20,7 +23,7 @@ class DistributionIcon extends Component{
     return (
       <div
             className={classes}
-            onMouseDown={this._handleSubmit.bind(this)}
+            onMouseUp={this._handleSubmit.bind(this)}
       >
         <img src={this.props.icon}/>
       </div>
