@@ -104,7 +104,7 @@ export default class CanvasSpace extends Component{
    const {selected} = this.props
    const metrics = _.get(this.props.denormalizedSpace, 'metrics')
 
-   return metrics && selected.row && metrics.filter(i => _.isEqual(i.location, selected))[0];
+   return metrics && _.isFinite(selected.row) && metrics.filter(i => _.isEqual(i.location, selected))[0];
   }
 
   _isAnalysisView(props = this.props) {
