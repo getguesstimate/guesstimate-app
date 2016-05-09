@@ -52,13 +52,7 @@ function neededSamples(text, inputs, n){
   }
 
   const numInputs = Object.keys(inputs).map(key => inputs[key].length)
-  const lcm = numInputs.reduce((x,y) => LCM(x,y))
-  const product = numInputs.reduce((x,y) => x*y)
-  if (product < n) {
-    return product
-  } else {
-    return Math.min(n, lcm)
-  }
+  return Math.min(n, numInputs.reduce((x,y) => LCM(x,y)))
 }
 
 function modularSlice(array, from, to) {
