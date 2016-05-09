@@ -6,7 +6,7 @@ function sStats(simulation){
   if (!_.has(simulation, 'sample.values') || (simulation.sample.values.length === 0)) {
     return
   }
-  const samples = sortDescending(simulation.sample.values)
+  const samples = sortDescending(Object.assign([], simulation.sample.values))
   const length = samples.length
   const mean = sampleMean(samples)
   const meanIndex = cutoff(samples, length, mean)
