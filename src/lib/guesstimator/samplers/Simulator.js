@@ -47,7 +47,7 @@ export function simulate(expr, inputs, maxSamples) {
 
 const hasStochasticFunction = text => _.some(STOCHASTIC_FUNCTIONS, e => text.indexOf(e) !== -1)
 
-function neededSamples(text, inputs, n){
+export function neededSamples(text, inputs, n){
   if (hasStochasticFunction(text)) {
     return n
   }

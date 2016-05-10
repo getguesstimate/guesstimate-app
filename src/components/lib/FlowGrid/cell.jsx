@@ -26,6 +26,7 @@ export default class Cell extends Component {
     handleSelect: PropTypes.func.isRequired,
     isOver: PropTypes.bool.isRequired,
     isSelected: PropTypes.bool.isRequired,
+    isHovered: PropTypes.bool.isRequired,
     item: PropTypes.object,
     location: PropTypes.shape({
       row: PropTypes.number.isRequired,
@@ -38,15 +39,11 @@ export default class Cell extends Component {
   shouldComponentUpdate(newProps, newState) {
     const difProps = (newProps.isOver !== this.props.isOver) ||
       (newProps.isSelected !== this.props.isSelected) ||
-      (newState.hover !== this.state.hover)
+      (newProps.isHovered !== this.props.isHovered)
     const itemDifferent = (!!newProps.item !== !!this.props.item)
     const bothHaveItems = (!!newProps.item && !!this.props.item)
 
     return (difProps || itemDifferent || (bothHaveItems && this.props.hasItemUpdated(this.props.item, newProps.item)))
-  }
-
-  state = {
-    hover: false
   }
 
   getPosition() {
@@ -92,7 +89,7 @@ export default class Cell extends Component {
   _cellElement = () => {
     if (this.props.item) {
       // Then endDrag fixes a bug where the original dragging position is hovered.
-      return (<ItemCell onEndDrag={this.mouseOut.bind(this)} {...this.props} hover={this.state.hover} ref={'item'}/>)
+      return (<ItemCell onEndDrag={this.mouseOut.bind(this)} {...this.props} hover={this.props.isHovered} ref={'item'}/>)
     } else {
       return (<EmptyCell {...this.props} ref={'empty'} />)
     }
@@ -103,7 +100,7 @@ export default class Cell extends Component {
     classes += (this.props.isSelected ? ' selected' : ' nonSelected')
     classes += this.props.item ? ' hasItem' : ''
     classes += this.props.isOver ? ' IsOver' : ''
-    classes += this.state.hover ? ' hovered' : ''
+    classes += this.props.isHovered ? ' hovered' : ''
     return classes
   }
 
@@ -117,7 +114,10 @@ export default class Cell extends Component {
 
   render = () => {
     return this.props.connectDropTarget(
-      <div className={this._classes()} onMouseOver={this.mouseOver.bind(this)} onMouseOut={this.mouseOut.bind(this)}>
+      <div
+        className={this._classes()}
+        onMouseOver={this.props.onMouseOver}
+      >
         {this._cellElement()}
       </div>
     )
