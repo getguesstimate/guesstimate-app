@@ -16,7 +16,7 @@
 }
 
 .react-d3-histogram__bar rect {
-  fill: rgba(20, 131, 208, 0.24);
+  fill: rgb(197, 224, 243);
   shape-rendering: crispEdges;
 }
 
