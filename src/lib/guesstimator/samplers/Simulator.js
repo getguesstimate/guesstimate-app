@@ -19,7 +19,8 @@ export function simulate(expr, inputs, maxSamples) {
   const numSamples = Math.floor(overallNumSamples/window.workers.length)
   const remainingSamples = numSamples + overallNumSamples % window.workers.length
 
-  const promises = [..._.map(
+  const promises = [
+    ..._.map(
       window.workers.slice(0,-1),
       (worker, index) => simulateOnWorker(worker, buildData(expr, index*numSamples, numSamples, inputs))
     ),
