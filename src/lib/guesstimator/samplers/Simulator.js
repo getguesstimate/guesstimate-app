@@ -61,10 +61,14 @@ function neededSamples(text, inputs, n){
   return Math.min(n, numInputs.reduce((x,y) => LCM(x,y)))
 }
 
+function rotate(array, newStart) {
+  return [...array.slice(newStart), ...array.slice(0,newStart)]
+}
+
 function modularSlice(array, from, to) {
   const len = array.length
   if (len <= to - from) {
-    return array
+    return rotate(array, to % len)
   }
   const [newFrom, newTo] = [from % len, to % len]
   if (newTo > newFrom) {
