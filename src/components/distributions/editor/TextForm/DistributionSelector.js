@@ -23,7 +23,7 @@ class DistributionIcon extends Component{
     return (
       <div
             className={classes}
-            onMouseUp={this._handleSubmit.bind(this)}
+            onClick={this._handleSubmit.bind(this)}
       >
         <img src={this.props.icon}/>
       </div>
@@ -43,7 +43,7 @@ export default class DistributionSelector extends Component{
         <hr/>
         <a
           className='more-distributions'
-          onMouseDown={this._handleShowMore.bind(this)}
+          onClick={this._handleShowMore.bind(this)}
         >
           {'More'}
         </a>
