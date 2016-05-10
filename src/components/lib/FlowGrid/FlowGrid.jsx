@@ -45,7 +45,10 @@ export default class FlowGrid extends Component{
     showGridLines: true,
   }
 
-  state = { rowHeights: [] }
+  state = {
+    rowHeights: [],
+    hover: {row: -1, column: -1} // An impossible location means nothing hovered.
+  }
 
   _handleKeyUp(e){
     if (e.keyCode == '17' || e.keyCode == '224' || e.keyCode == '91') {
@@ -92,23 +95,26 @@ export default class FlowGrid extends Component{
   }
 
   _cell(location) {
-   let atThisLocation = (l) => (l.row === location.row && l.column === location.column)
-   let isSelected = atThisLocation(this.props.selected)
-   let item = this.props.items.filter(i => atThisLocation(i.location))[0];
-   return (
-    <Cell
-      hasItemUpdated={this.props.hasItemUpdated}
-      gridKeyPress={this._handleKeyDown.bind(this)}
-      handleSelect={this.props.onSelectItem}
-      isSelected={isSelected}
-      item={item && item.component}
-      key={'grid-item', location.row, location.column}
-      location={location}
-      onAddItem={this.props.onAddItem}
-      onMoveItem={this.props.onMoveItem}
-      canvasState={this.props.canvasState}
-      ref={`cell-${location.row}-${location.column}`}
-    />
+    const atThisLocation = (l) => (l.row === location.row && l.column === location.column)
+    const isSelected = atThisLocation(this.props.selected)
+    const isHovered = atThisLocation(this.state.hover)
+    const item = this.props.items.filter(i => atThisLocation(i.location))[0];
+    return (
+      <Cell
+        hasItemUpdated={this.props.hasItemUpdated}
+        gridKeyPress={this._handleKeyDown.bind(this)}
+        handleSelect={this.props.onSelectItem}
+        isSelected={isSelected}
+        isHovered={isHovered}
+        item={item && item.component}
+        key={'grid-item', location.row, location.column}
+        location={location}
+        onAddItem={this.props.onAddItem}
+        onMoveItem={this.props.onMoveItem}
+        onMouseOver={() => {this.setState({hover: location})}}
+        canvasState={this.props.canvasState}
+        ref={`cell-${location.row}-${location.column}`}
+      />
     )
   }
   _row(row, columnCount) {
@@ -140,9 +146,10 @@ export default class FlowGrid extends Component{
       >
         <div className='FlowGrid-Horizontal-Motion'>
           <div
-              className={className}
-              onKeyDown={this._handleKeyDown.bind(this)}
-              onKeyUp={this._handleKeyUp.bind(this)}
+            className={className}
+            onKeyDown={this._handleKeyDown.bind(this)}
+            onKeyUp={this._handleKeyUp.bind(this)}
+            onMouseOut={() => {this.setState({hover: {row: -1, column: -1}})}}
           >
             {
               upto(rowCount).map((row) => {
