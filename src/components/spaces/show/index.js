@@ -27,6 +27,7 @@ export default class SpacesShow extends Component {
     dispatch: PT.func.isRequired,
     spaceId: PT.string,
     denormalizedSpace: PT.object,
+    embed: PT.bool
   }
 
   state = {
@@ -98,6 +99,14 @@ export default class SpacesShow extends Component {
     const sidebarIsViseable = space.editableByMe || !_.isEmpty(space.description)
     const canBePrivate = !!space.organization_id || e.me.canMakeMorePrivateModels(this.props.me)
     const isLoggedIn = e.me.isLoggedIn(this.props.me)
+    if (this.props.embed) { 
+      return (
+        <div className='spaceShow'>
+          <SpaceCanvas spaceId={space.id}/>
+        </div>
+      )
+    }
+
     return (
       <div className='spaceShow'>
         <div className='hero-unit'>
