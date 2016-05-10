@@ -53,7 +53,7 @@ function neededSamples(text, inputs, n){
   }
 
   const numInputs = Object.keys(inputs).map(key => inputs[key].length)
-  if (_.some(numInputs, i => i === n)) {
+  if (numInputs.length === 0 ||_.some(numInputs, i => i === n)) {
     // No need to compute any further if any of the inputs are maximally sampled. This is a common case so is worth an
     // edge case short circuit here, to avoid gcd/lcm calculation.
     return n
