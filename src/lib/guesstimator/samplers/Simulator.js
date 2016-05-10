@@ -52,6 +52,10 @@ function neededSamples(text, inputs, n){
     return n
   }
 
+  if (Object.keys(inputs).length === 0) {
+    return 1
+  }
+
   const numInputs = Object.keys(inputs).map(key => inputs[key].length)
   if (_.some(numInputs, i => i === n)) {
     // No need to compute any further if any of the inputs are maximally sampled. This is a common case so is worth an
