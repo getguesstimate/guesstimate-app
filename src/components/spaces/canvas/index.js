@@ -7,7 +7,7 @@ import FlowGrid from 'gComponents/lib/FlowGrid/FlowGrid.jsx'
 import Metric from 'gComponents/metrics/card'
 
 import { changeMetric, addMetric } from 'gModules/metrics/actions'
-import { changeSelect } from 'gModules/selection/actions'
+import { changeSelect, deSelect } from 'gModules/selection/actions'
 import { runSimulations, deleteSimulations } from 'gModules/simulations/actions'
 
 import { hasMetricUpdated } from 'gComponents/metrics/card/updated.js'
@@ -67,10 +67,15 @@ export default class CanvasSpace extends Component{
 
   componentWillUnmount(){
     this.props.dispatch(deleteSimulations(this.props.denormalizedSpace.metrics.map(m => m.id)))
+    this._handleDeSelect()
   }
 
   _handleSelect(location) {
     this.props.dispatch(changeSelect(location))
+  }
+
+  _handleDeSelect() {
+    this.props.dispatch(deSelect())
   }
 
   _handleCopy() {
@@ -99,7 +104,7 @@ export default class CanvasSpace extends Component{
    const {selected} = this.props
    const metrics = _.get(this.props.denormalizedSpace, 'metrics')
 
-   return metrics && metrics.filter(i => _.isEqual(i.location, selected))[0];
+   return metrics && _.isFinite(selected.row) && metrics.filter(i => _.isEqual(i.location, selected))[0];
   }
 
   _isAnalysisView(props = this.props) {
@@ -115,6 +120,7 @@ export default class CanvasSpace extends Component{
       <Metric
           canvasState={this.props.canvasState}
           handleSelect={this._handleSelect.bind(this)}
+          handleDeSelect={this._handleDeSelect.bind(this)}
           key={metric.id}
           location={location}
           metric={metric}

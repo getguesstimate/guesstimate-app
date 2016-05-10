@@ -56,6 +56,7 @@ class MetricCard extends Component {
     gridKeyPress: PT.func.isRequired,
     guesstimateForm: PT.object.isRequired,
     handleSelect: PT.func.isRequired,
+    handleDeSelect: PT.func.isRequired,
     isSelected: PT.bool.isRequired,
     location: PT.shape({
       row: PT.number,
@@ -78,7 +79,8 @@ class MetricCard extends Component {
   }
 
   openModal() {
-     this.setState({modalIsOpen: true});
+    this.setState({modalIsOpen: true});
+    this.props.handleDeSelect()
   }
 
   closeModal() {
@@ -189,12 +191,15 @@ class MetricCard extends Component {
     return errors ? errors.filter(e => !!e) : []
   }
 
-  _shouldShowSensitivitySection() {
-    const stats = _.get(this.props, 'metric.simulation.stats')
-    const showSimulation = (stats && _.isFinite(stats.stdev) && (stats.length > 5))
-    const isAnalysis = (this.props.canvasState.metricCardView === 'analysis')
+  _shouldShowSimulation(metric) {
+    const stats = _.get(metric, 'simulation.stats')
+    return (stats && _.isFinite(stats.stdev) && (stats.length > 5))
+  }
 
-    return isAnalysis && showSimulation && this.props.selectedMetric
+  _shouldShowSensitivitySection() {
+    const {metric, selectedMetric} = this.props
+    const isAnalysis = (this.props.canvasState.metricCardView === 'analysis')
+    return !!(isAnalysis && selectedMetric && this._shouldShowSimulation(metric) && this._shouldShowSimulation(selectedMetric))
   }
 
   render() {

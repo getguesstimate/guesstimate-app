@@ -30,28 +30,16 @@ math.import(financeFunctions, {override: true})
 math.import(ImpureConstructs, {override: true, wrap: true})
 
 // All of jStat's functions are impure as they require sampling on pure inputs.
-const STOCHASTIC_FUNCTIONS = ['pickRandom', 'randomInt', 'random'].concat(Object.keys(Distributions)).concat(Object.keys(ImpureConstructs))
+export const STOCHASTIC_FUNCTIONS = ['pickRandom', 'randomInt', 'random'].concat(Object.keys(Distributions)).concat(Object.keys(ImpureConstructs))
 
-export function Evaluate(text, n, inputs) {
+export function Evaluate(text, sampleCount, inputs) {
   try {
     const compiled = math.compile(text)
-    const sampleCount = requiresManySamples(text, inputs) ? n : 1
     return evaluate(compiled, inputs, sampleCount)
   } catch (exception) {
     let error = exception.message[0].toLowerCase() + exception.message.slice(1)
     return {errors: [error]}
   }
-}
-
-const hasStochasticFunction = text => _.some(STOCHASTIC_FUNCTIONS, e => text.indexOf(e) !== -1)
-
-export const requiresManySamples = (text, inputs) => {
-  for (let key of Object.keys(inputs)) {
-    if (_.some(inputs[key], i => i !== inputs[key][0])) { // Could also just do length === 1?
-      return true
-    }
-  }
-  return hasStochasticFunction(text)
 }
 
 function sampleInputs(inputs, i) {

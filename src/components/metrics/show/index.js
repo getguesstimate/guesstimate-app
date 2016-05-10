@@ -6,7 +6,7 @@ import Icon from 'react-fa'
 import * as Space from 'gEngine/space';
 import _ from 'lodash'
 import MetricProfile from './profile.js'
-import { runSimulations, deleteSimulations } from 'gModules/simulations/actions'
+import { runSimulations } from 'gModules/simulations/actions'
 
 function mapStateToProps(state) {
   return {
