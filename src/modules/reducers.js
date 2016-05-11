@@ -22,7 +22,7 @@ export function changeSelect(location) {
 const rootReducer = function app(state = {}, action){
   return {
     displayError: SI(displayErrorR(state.displayError, action)),
-    metrics: (metricsR(state.metrics, action)), // Causes Infinite Loop of Immutability on /models/:id
+    metrics: SI(metricsR(state.metrics, action)), // Causes Infinite Loop of Immutability on /models/:id
     guesstimates: SI(guesstimatesR(state.guesstimates, action)),
     selection: SI(selectionR(state.selection, action)),
     guesstimateForm: SI(guesstimateFormR(state.guesstimateForm, state.metrics, state.guesstimates, action)),
