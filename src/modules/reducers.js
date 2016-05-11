@@ -33,7 +33,7 @@ const rootReducer = function app(state = {}, action){
     userOrganizationMemberships: SI(reduxCrud.reducersFor('userOrganizationMemberships')(state.userOrganizationMemberships, action)),
     me: SI(meR(state.me, action)),
     canvasState: SI(canvasStateR(state.canvasState, action)),
-    searchSpaces: (searchSpacesR(state.searchSpaces, action)), // Causes Infinite Loop of Immutability on /models
+    searchSpaces: SI(searchSpacesR(state.searchSpaces, action)), // Causes Infinite Loop of Immutability on /models
     firstSubscription: SI(firstSubscriptionsR(state.firstSubscription, action)),
     modal: SI(modalR(state.modal, action)),
     copied: SI(copiedR(state.copied, action)),
