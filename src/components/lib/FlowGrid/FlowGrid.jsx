@@ -102,7 +102,7 @@ export default class FlowGrid extends Component{
   _handleEndRangeSelect(corner1) {
     const corner2 = this.props.selected
 
-    if (!(corner2.row && corner2.column)) {
+    if (!corner2 || !(corner2.hasOwnProperty('row') && corner2.hasOwnProperty('column'))) {
       this.props.onSelectItem(corner1)
       return
     }

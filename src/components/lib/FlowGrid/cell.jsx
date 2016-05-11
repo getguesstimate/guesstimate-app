@@ -26,6 +26,7 @@ export default class Cell extends Component {
     handleSelect: PropTypes.func.isRequired,
     isOver: PropTypes.bool.isRequired,
     isSelected: PropTypes.bool.isRequired,
+    isSinglySelected: PropTypes.bool.isRequired,
     isHovered: PropTypes.bool.isRequired,
     item: PropTypes.object,
     location: PropTypes.shape({
