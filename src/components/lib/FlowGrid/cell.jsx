@@ -63,13 +63,14 @@ export default class Cell extends Component {
 
   handleClick(e) {
     if (e.button === 0){
-      if (!this.props.isSelected) {
+      if (!this.props.isSinglySelected) {
         if (e.shiftKey) {
           this.props.handleEndRangeSelect(this.props.location)
         } else {
           this.props.handleSelect(this.props.location)
         }
       } else if (!this.props.item) {
+        this.props.handleSelect(this.props.location)
         this.props.onAddItem(this.props.location)
       }
     }

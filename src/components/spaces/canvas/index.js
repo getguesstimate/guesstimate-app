@@ -184,6 +184,7 @@ export default class CanvasSpace extends Component{
           edges={edges}
           selected={selected}
           onSelectItem={this._handleSelect.bind(this)}
+          onDeSelectItem={this._handleDeSelect.bind(this)}
           onAddItem={this._handleAddMetric.bind(this)}
           onMoveItem={this._handleMoveMetric.bind(this)}
           onCopy={this._handleCopy.bind(this)}

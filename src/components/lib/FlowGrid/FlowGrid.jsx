@@ -35,6 +35,7 @@ export default class FlowGrid extends Component{
     multipleSelected: PropTypes.arrayOf(PTLocation, PTLocation),
 
     onSelectItem: PropTypes.func.isRequired,
+    onDeSelectItem: PropTypes.func.isRequired,
     onMultipleSelect: PropTypes.func,
     onAddItem: PropTypes.func.isRequired,
     onMoveItem: PropTypes.func.isRequired,
@@ -85,7 +86,6 @@ export default class FlowGrid extends Component{
       const size = ({columns: this._columnCount(), rows: this._rowCount()})
       let newLocation = new DirectionToLocation(size, this.props.selected)[direction]()
       this.props.onSelectItem(newLocation)
-      this.props.onMultipleSelect(newLocation, newLocation)
     } else if (e.ctrlKey || e.keyCode == '17' || e.keyCode == '224' || e.keyCode == '91') {
       e.preventDefault()
       this.setState({ctrlPressed: true})
@@ -101,13 +101,18 @@ export default class FlowGrid extends Component{
 
   _handleEndRangeSelect(corner1) {
     const corner2 = this.props.selected
-    if (!corner2) {return}
+
+    if (!(corner2.row && corner2.column)) {
+      this.props.onSelectItem(corner1)
+      return
+    }
 
     const leftX = Math.min(corner1.row, corner2.row)
     const topY = Math.max(corner1.column, corner2.column)
     const rightX = Math.max(corner1.row, corner2.row)
     const bottomY = Math.min(corner1.column, corner2.column)
     this.props.onMultipleSelect({row: leftX, column: bottomY}, {row: rightX, column: topY})
+    this.props.onDeSelectItem()
   }
 
   size(){
@@ -133,13 +138,14 @@ export default class FlowGrid extends Component{
 
   _cell(location) {
     const atThisLocation = (l) => (l.row === location.row && l.column === location.column)
-    //let isSelected = atThisLocation(this.props.selected)
-    const {multipleSelected} = this.props
 
-    const isSelected = (multipleSelected[0].row <= location.row && multipleSelected[0].column <= location.column &&
-       multipleSelected[1].row >= location.row && multipleSelected[1].column >= location.column)
     const isHovered = atThisLocation(this.state.hover)
+
     const isSinglySelected = atThisLocation(this.props.selected)
+
+    const {multipleSelected} = this.props
+    const isWithinMultiselect = (multipleSelected[0].row <= location.row && multipleSelected[0].column <= location.column &&
+       multipleSelected[1].row >= location.row && multipleSelected[1].column >= location.column)
 
     let item = this.props.items.filter(i => atThisLocation(i.location))[0];
     return (
@@ -148,7 +154,8 @@ export default class FlowGrid extends Component{
         gridKeyPress={this._handleKeyDown.bind(this)}
         handleSelect={this.props.onSelectItem}
         handleEndRangeSelect={this._handleEndRangeSelect.bind(this)}
-        isSelected={isSelected}
+        isSelected={isWithinMultiselect}
+        isSinglySelected={isSinglySelected}
         isHovered={isHovered}
         item={item && item.component}
         key={'grid-item', location.row, location.column}
