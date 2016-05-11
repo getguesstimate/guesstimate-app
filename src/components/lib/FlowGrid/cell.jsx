@@ -61,6 +61,20 @@ export default class Cell extends Component {
     }
   }
 
+  handleClick(e) {
+    if (e.button === 0){
+      if (!this.props.isSelected) {
+        if (e.shiftKey) {
+          this.props.handleEndRangeSelect(this.props.location)
+        } else {
+          this.props.handleSelect(this.props.location)
+        }
+      } else if (!this.props.item) {
+        this.props.onAddItem(this.props.location)
+      }
+    }
+  }
+
   componentDidMount = () => {
     if (this.props.isSelected){
       this._focus()
@@ -104,10 +118,6 @@ export default class Cell extends Component {
     return classes
   }
 
-  mouseOver = () => {
-    this.setState({hover: true})
-  }
-
   mouseOut = () => {
     this.setState({hover: false})
   }
@@ -117,6 +127,7 @@ export default class Cell extends Component {
       <div
         className={this._classes()}
         onMouseOver={this.props.onMouseOver}
+        onClick={this.handleClick.bind(this)}
       >
         {this._cellElement()}
       </div>

@@ -24,23 +24,12 @@ export default class EmptyCell extends Component {
     this.props.gridKeyPress(e)
   }
 
-  handleClick(e) {
-    if (e.button === 0){
-      if (!this.props.isSelected) {
-        this.props.handleSelect(this.props.location)
-      } else {
-        this.props.onAddItem(this.props.location)
-      }
-    }
-  }
-
   render() {
     let className = 'FlowGridEmptyCell grid-item-focus'
     return (
       <div
           className={className}
           onKeyDown={this._handleKeyPress.bind(this)}
-          onMouseDown={this.handleClick.bind(this)}
           tabIndex='0'
       />
     )

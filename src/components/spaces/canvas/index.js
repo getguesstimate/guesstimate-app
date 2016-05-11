@@ -74,6 +74,7 @@ export default class CanvasSpace extends Component{
 
   _handleSelect(location) {
     this.props.dispatch(changeSelect(location))
+    this.props.dispatch(multipleSelect(location, location))
   }
 
   _handleMultipleSelect(corner1,corner2) {
