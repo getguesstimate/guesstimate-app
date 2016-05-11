@@ -73,7 +73,7 @@ class MetricCard extends Component {
 
   componentDidUpdate() {
     const hasContent = this.refs.MetricCardViewSection.hasContent()
-    if (!this.props.isSelected && this._isEmpty() && !hasContent){
+    if (!this.props.isSelected && this._isEmpty() && !hasContent && !this.state.modalIsOpen){
       this.handleRemoveMetric()
     }
   }
