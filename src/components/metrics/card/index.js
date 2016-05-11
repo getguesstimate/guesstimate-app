@@ -102,16 +102,20 @@ class MetricCard extends Component {
   }
 
   _isEmpty(){
-    return (!this._hasGuesstimate() && !this._hasName())
+    return !(this._hasGuesstimate() || this._hasName() || this._hasDescription())
   }
 
   _hasName(){
     return !!this.props.metric.name
   }
 
+  _hasDescription(){
+    return !!_.get(this.props.metric, 'guesstimate.description')
+  }
+
   _hasGuesstimate(){
     const has = (item) => !!_.get(this.props.metric, `guesstimate.${item}`)
-    return (has('input') || has('data') || has('description'))
+    return (has('input') || has('data'))
   }
 
   _isTitle(){
