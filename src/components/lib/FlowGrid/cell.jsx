@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from 'react'
+import ReactDOM from 'react-dom'
 import $ from 'jquery'
 import { DropTarget } from 'react-dnd';
 import ItemCell from './filled-cell.js';
@@ -23,9 +24,9 @@ export default class Cell extends Component {
     connectDropTarget: PropTypes.func.isRequired,
     gridKeyPress: PropTypes.func.isRequired,
     handleSelect: PropTypes.func.isRequired,
-    onHoverSelect: PropTypes.func,
     isOver: PropTypes.bool.isRequired,
     isSelected: PropTypes.bool.isRequired,
+    isHovered: PropTypes.bool.isRequired,
     item: PropTypes.object,
     location: PropTypes.shape({
       row: PropTypes.number.isRequired,
@@ -33,29 +34,16 @@ export default class Cell extends Component {
     }).isRequired,
     onAddItem: PropTypes.func.isRequired,
     onMoveItem: PropTypes.func.isRequired,
-    onMultipleSelect: PropTypes.func,
-  }
-
-  select() {
-    this.setState({isSelected: true})
-  }
-
-  componentWillReceiveProps(newProps) {
-    this.setState({isSelected: newProps.isSelected})
   }
 
   shouldComponentUpdate(newProps, newState) {
     const difProps = (newProps.isOver !== this.props.isOver) ||
-      (newProps.isSelected !== this.state.isSelected) ||
-      (newState.hover !== this.state.hover)
-    const hasItem = (!!newProps.item || !!this.props.item)
+      (newProps.isSelected !== this.props.isSelected) ||
+      (newProps.isHovered !== this.props.isHovered)
+    const itemDifferent = (!!newProps.item !== !!this.props.item)
+    const bothHaveItems = (!!newProps.item && !!this.props.item)
 
-    return (difProps || hasItem)
-  }
-
-  state = {
-    hover: false,
-    isSelected: false
+    return (difProps || itemDifferent || (bothHaveItems && this.props.hasItemUpdated(this.props.item, newProps.item)))
   }
 
   getPosition() {
@@ -74,13 +62,13 @@ export default class Cell extends Component {
   }
 
   componentDidMount = () => {
-    if (this.state.isSelected){
+    if (this.props.isSelected){
       this._focus()
     }
   }
 
-  componentDidUpdate = (prevProps, prevState) => {
-    const newlySelected = (this.state.isSelected && !prevState.isSelected)
+  componentDidUpdate = (prevProps) => {
+    const newlySelected = (this.props.isSelected && !prevProps.isSelected)
     const changeInItem = (!!prevProps.item !== !!this.props.item)
     if (newlySelected || changeInItem){
       this._focus()
@@ -88,24 +76,31 @@ export default class Cell extends Component {
   }
 
   _focus = () => {
-     $('.selected .grid-item-focus').focus();
+    let domNode
+    if (this.props.item) {
+      // Always focus on the immediate child of the filled cell.
+      domNode = ReactDOM.findDOMNode(this.refs.item.decoratedComponentInstance).children[0]
+    } else {
+      domNode = ReactDOM.findDOMNode(this.refs.empty)
+    }
+    domNode.focus()
   }
 
   _cellElement = () => {
     if (this.props.item) {
       // Then endDrag fixes a bug where the original dragging position is hovered.
-      return (<ItemCell onEndDrag={this.mouseOut.bind(this)} {...this.props} hover={this.state.hover}/>)
+      return (<ItemCell onEndDrag={this.mouseOut.bind(this)} {...this.props} hover={this.props.isHovered} ref={'item'}/>)
     } else {
-      return (<EmptyCell {...this.props} />)
+      return (<EmptyCell {...this.props} ref={'empty'} />)
     }
   }
 
   _classes = () => {
     let classes = 'FlowGridCell'
-    classes += (this.state.isSelected ? ' selected' : ' nonSelected')
+    classes += (this.props.isSelected ? ' selected' : ' nonSelected')
     classes += this.props.item ? ' hasItem' : ''
     classes += this.props.isOver ? ' IsOver' : ''
-    classes += this.state.hover ? ' hovered' : ''
+    classes += this.props.isHovered ? ' hovered' : ''
     return classes
   }
 
@@ -119,7 +114,10 @@ export default class Cell extends Component {
 
   render = () => {
     return this.props.connectDropTarget(
-      <div className={this._classes()} onMouseOver={this.mouseOver.bind(this)} onMouseOut={this.mouseOut.bind(this)}>
+      <div
+        className={this._classes()}
+        onMouseOver={this.props.onMouseOver}
+      >
         {this._cellElement()}
       </div>
     )

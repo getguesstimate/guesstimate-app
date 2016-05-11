@@ -1,7 +1,9 @@
-export default function selection(state = {column: 1, row: 1}, action) {
+export default function selection(state = {}, action) {
   switch (action.type) {
   case 'CHANGE_SELECT':
     return action.location;
+  case 'DE_SELECT':
+    return {}
   case 'ADD_METRIC':
     return action.item.location;
   default:

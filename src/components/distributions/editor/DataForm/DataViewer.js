@@ -109,7 +109,7 @@ class Editor extends Component{
         </div>
       </div>
       <div className='ui button primary tiny' onClick={this._handleSave.bind(this)}> Save </div>
-      <ButtonClose onClick={this.props.onEditCancel}/>
+      <div className='ui button tiny' onClick={this.props.onEditCancel}> Cancel </div>
       </div>
     )
   }

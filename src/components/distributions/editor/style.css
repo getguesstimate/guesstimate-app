@@ -1,20 +1,48 @@
 @import './styles/variables.css';
 
-.GuesstimateForm input {
+.GuesstimateForm textarea {
   @mixin hover-input;
 }
 
-.GuesstimateForm.large input {
+.GuesstimateForm textarea {
+  line-height: 1.3em;
+  font-size: 0.95em;
+}
+
+.GuesstimateForm.large textarea {
   font-size: 1.5em;
   border-radius: 3px;
   font-weight: 100;
   color: #666;
-  width: 87%;
 }
 
-.GuesstimateForm input{
+.GuesstimateForm textarea{
   float: left;
-  width: 75%;
+}
+
+.GuesstimateForm.large textarea.NARROW {
+  width: 89%
+}
+
+.GuesstimateForm textarea.NARROW {
+  width: 85%
+}
+
+.GuesstimateForm textarea.WIDE {
+  width: 100%
+}
+
+.GuesstimateForm textarea.hasErrors:not(:focus) {
+  background-color: #E08888;
+}
+
+.GuesstimateForm .GuesstimateInputForm {
+  display: flex;
+  flex-direction: column;
+}
+
+.GuesstimateForm .GuesstimateInputForm--row {
+  flex: 1;
 }
 
 .DistributionSelector {
@@ -28,6 +56,7 @@
 .DistributionSelector hr{
   border: none;
   border-top: 1px solid $grey-1;
+  margin: 4px 0;
 }
 
 .DistributionSelector .more-distributions{
@@ -45,9 +74,10 @@
   padding-left: 2px;
   padding-right: 2px;
   position: relative;
-  height: 26px;
-  width: 26px;
+  height: 24px;
+  width: 24px;
   padding-top: 0;
+  margin: 0 0 0 3px;
 }
 
 .GuesstimateForm.large .DistributionIcon.DistributionIcon {
@@ -60,7 +90,7 @@
 }
 
 .DistributionIcon img{
-  width: 26px;
+  width: 24px;
   opacity: 1;
   position: absolute;
   left: 0;
@@ -71,7 +101,7 @@
 
 .GuesstimateTypeQuestion {
   float: right;
-  margin-right: 10px;
+  margin-right: 4px;
   font-size: 1.2em;
   color: $grey-2;
   opacity: 0.6;

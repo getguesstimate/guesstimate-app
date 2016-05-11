@@ -1,25 +1,22 @@
 import React, {Component, PropTypes} from 'react'
 import ReactDOM from 'react-dom'
-import JSONTree from 'react-json-tree'
-import PureRenderMixin from 'react-addons-pure-render-mixin'
 
 import { connect } from 'react-redux';
 import { removeMetric, changeMetric } from 'gModules/metrics/actions.js'
 import { changeGuesstimate } from 'gModules/guesstimates/actions.js'
 import { changeGuesstimateForm } from 'gModules/guesstimate_form/actions.js'
 
-import Histogram from 'gComponents/simulations/histogram'
 import MetricModal from '../modal/index.js'
-import StatTable from 'gComponents/simulations/stat_table'
 import DistributionEditor from 'gComponents/distributions/editor/index.js'
-import DistributionSummary from 'gComponents/distributions/summary/index.js'
 import MetricToolTip from './tooltip.js'
-import MetricName from './name'
-import Icon from 'react-fa'
 import $ from 'jquery'
-import MetricToken from './token/index.js'
 import './style.css'
 import * as canvasStateProps from 'gModules/canvas_state/prop_type.js'
+import ToolTip from 'gComponents/utility/tooltip/index.js'
+import MetricCardViewSection from './MetricCardViewSection/index.js'
+import SensitivitySection from './SensitivitySection/SensitivitySection.js'
+
+import { hasMetricUpdated } from './updated.js'
 
 const INTERMEDIATE = 'INTERMEDIATE'
 const OUTPUT = 'OUTPUT'
@@ -39,13 +36,18 @@ const relationshipType = (edges) => {
   return NOEDGE
 }
 
+class ScatterTip extends Component {
+  render() {
+    return (
+      <ToolTip size='LARGE'>
+        <SensitivitySection yMetric={this.props.yMetric} xMetric={this.props.xMetric} size={'LARGE'}/>
+      </ToolTip>
+    )
+  }
+}
+
 const PT = PropTypes
 class MetricCard extends Component {
-  constructor(props) {
-    super(props)
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this)
-  }
-
   displayName: 'MetricCard'
 
   static propTypes = {
@@ -54,6 +56,7 @@ class MetricCard extends Component {
     gridKeyPress: PT.func.isRequired,
     guesstimateForm: PT.object.isRequired,
     handleSelect: PT.func.isRequired,
+    handleDeSelect: PT.func.isRequired,
     isSelected: PT.bool.isRequired,
     location: PT.shape({
       row: PT.number,
@@ -64,41 +67,32 @@ class MetricCard extends Component {
 
   state = {modalIsOpen: false};
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return hasMetricUpdated(this.props, nextProps) || (this.state.modalIsOpen !== nextState.modalIsOpen)
+  }
+
   componentDidUpdate() {
-    const hasContent = _.has(this, 'refs.name') && this.refs.name.hasContent()
-    if (!this.props.isSelected && this._isEmpty() && !hasContent){
+    const hasContent = this.refs.MetricCardViewSection.hasContent()
+    if (!this.props.isSelected && this._isEmpty() && !hasContent && !this.state.modalIsOpen){
       this.handleRemoveMetric()
     }
   }
 
   openModal() {
-     this.setState({modalIsOpen: true});
+    this.setState({modalIsOpen: true});
+    this.props.handleDeSelect()
   }
 
   closeModal() {
      this.setState({modalIsOpen: false});
   }
 
-  _handleClick(event) {
-    const selectableEl = (event.target.parentElement.getAttribute('data-select') !== 'false')
-    const notYetSelected = !this.props.isSelected
-    if (selectableEl && notYetSelected){
-      if (this.props.canvasState.metricClickMode === 'FUNCTION_INPUT_SELECT') {
-        event.preventDefault()
-        $(window).trigger('functionMetricClicked', this.props.metric)
-      } else {
-        this.props.handleSelect(this.props.location)
-      }
-    }
-  }
-
-  _handlePress(e) {
+  _handleKeyDown(e) {
     if (e.target === ReactDOM.findDOMNode(this)) {
       if (e.keyCode == '13') {
         e.preventDefault()
         this.openModal()
-      }
-      if (e.keyCode == '8') {
+      } else if (e.keyCode == '8') {
         e.preventDefault()
         this.handleRemoveMetric()
       }
@@ -108,18 +102,20 @@ class MetricCard extends Component {
   }
 
   _isEmpty(){
-    return (!this._hasGuesstimate() && !this._hasName())
+    return !(this._hasGuesstimate() || this._hasName() || this._hasDescription())
   }
 
   _hasName(){
     return !!this.props.metric.name
   }
 
+  _hasDescription(){
+    return !!_.get(this.props.metric, 'guesstimate.description')
+  }
+
   _hasGuesstimate(){
-    const {metric} = this.props
-    const hasInput = !_.isEmpty(_.get(metric, 'guesstimate.input'))
-    const hasData = !_.isEmpty(_.get(metric, 'guesstimate.data'))
-    return (hasInput || hasData)
+    const has = (item) => !!_.get(this.props.metric, `guesstimate.${item}`)
+    return (has('input') || has('data'))
   }
 
   _isTitle(){
@@ -150,131 +146,121 @@ class MetricCard extends Component {
     $(this.refs.dom).focus();
   }
 
-  showSimulation() {
-    const stats = _.get(this.props, 'metric.simulation.stats')
-    if (stats && _.isFinite(stats.mean) && _.isFinite(stats.stdev) && _.isFinite(stats.length)) {
-      return (stats.stdev === 0 || (stats.length > 5))
-    } else {
-      return false
-    }
-  }
-
-  _shouldShowStatistics() {
-    const isScientific = (this.props.canvasState.metricCardView === 'scientific')
-    const isAvailable = this.showSimulation() && (_.get(this.props, 'metric.simulation.stats').length > 1)
-    return isScientific && isAvailable
-  }
-
   _focusForm() {
     const editorRef = _.get(this.refs, 'DistributionEditor.refs.wrappedInstance')
     editorRef && editorRef.focus()
   }
 
-  render() {
-    const {isSelected, metric, guesstimateForm} = this.props
-    const {canvasState: {metricCardView, metricClickMode}} = this.props
-    const {guesstimate} = metric
+  _handleMouseUp(e) {
+    if (this._isSelectable(e) && !this._isFunctionInputSelectable(e)) {
+      this.props.handleSelect(this.props.location)
+    }
+  }
 
-    const anotherFunctionSelected = ((metricClickMode === 'FUNCTION_INPUT_SELECT') && !isSelected)
+  _handleMouseDown(e) {
+    if (this._isFunctionInputSelectable(e)) {
+        e.preventDefault()
+        $(window).trigger('functionMetricClicked', this.props.metric)
+    }
+  }
 
-    const showSimulation = this.showSimulation()
-    const shouldShowStatistics = this._shouldShowStatistics()
-    const shouldShowJsonTree = (metricCardView === 'debugging')
-    const hasGuesstimateDescription = !_.isEmpty(guesstimate.description)
+  _isSelectable(e) {
+    const selectableEl = (e.target.parentElement.getAttribute('data-select') !== 'false')
+    const notYetSelected = !this.props.isSelected
+    return (selectableEl && notYetSelected)
+  }
 
-    const titleView = !this.props.hovered && !isSelected && this._isTitle()
+  _isFunctionInputSelectable(e) {
+    return (this._isSelectable(e) && (this.props.canvasState.metricClickMode === 'FUNCTION_INPUT_SELECT'))
+  }
+
+  _className() {
+    const {isSelected, metric, hovered} = this.props
+    const {canvasState: {metricCardView}} = this.props
     const relationshipClass = relationshipClasses[relationshipType(metric.edges)]
 
+    const titleView = !hovered && !isSelected && this._isTitle()
     let className = isSelected ? 'metricCard grid-item-focus' : 'metricCard'
     className += ` ${metricCardView}`
     className += titleView ? ' titleView' : ''
     className += ' ' + relationshipClass
+    return className
+  }
+
+  _errors() {
+    if (this.props.isTitle){ return [] }
+    let errors = _.get(this.props.metric, 'simulation.sample.errors')
+    return errors ? errors.filter(e => !!e) : []
+  }
+
+  _shouldShowSimulation(metric) {
+    const stats = _.get(metric, 'simulation.stats')
+    return (stats && _.isFinite(stats.stdev) && (stats.length > 5))
+  }
+
+  _shouldShowSensitivitySection() {
+    const {metric, selectedMetric} = this.props
+    const isAnalysis = (this.props.canvasState.metricCardView === 'analysis')
+    return !!(isAnalysis && selectedMetric && this._shouldShowSimulation(metric) && this._shouldShowSimulation(selectedMetric))
+  }
+
+  render() {
+    const {isSelected, metric, guesstimateForm, canvasState} = this.props
+    const {guesstimate} = metric
+    const errors = this._errors()
+    const shouldShowSensitivitySection = this._shouldShowSensitivitySection()
 
     return (
-      <div
-          className={className}
+      <div className='metricCard--Container'
           ref='dom'
-          onKeyDown={this._handlePress.bind(this)}
-          onMouseDown={this._handleClick.bind(this)}
+          onKeyDown={this._handleKeyDown.bind(this)}
           tabIndex='0'
-      >
-        {this.props.hovered && !isSelected &&
-          <MetricToolTip guesstimate={guesstimate}/>
-        }
+        >
+        <div
+            className={this._className()}
+        >
 
-        <MetricModal
-            metric={metric}
-            guesstimateForm={guesstimateForm}
-            isOpen={this.state.modalIsOpen}
-            closeModal={this.closeModal.bind(this)}
-            onChange={this.handleChangeGuesstimate.bind(this)}
-        />
+          <MetricModal
+              metric={metric}
+              guesstimateForm={guesstimateForm}
+              isOpen={this.state.modalIsOpen}
+              closeModal={this.closeModal.bind(this)}
+              onChange={this.handleChangeGuesstimate.bind(this)}
+          />
 
-        <div className={`section ${metricCardView}`}>
+          <MetricCardViewSection
+              canvasState={canvasState}
+              metric={metric}
+              isSelected={isSelected}
+              onChangeName={this.handleChangeMetric.bind(this)}
+              guesstimateForm={guesstimateForm}
+              onOpenModal={this.openModal.bind(this)}
+              jumpSection={this._focusForm.bind(this)}
+              onMouseDown={this._handleMouseDown.bind(this)}
+              onMouseUp={this._handleMouseUp.bind(this)}
+              ref='MetricCardViewSection'
+              isTitle={this._isTitle()}
+              connectDragSource={this.props.connectDragSource}
+              selectedMetric={this.props.selectedMetric}
+              showSensitivitySection={shouldShowSensitivitySection}
+          />
 
-          {(metricCardView !== 'basic') && showSimulation &&
-            <Histogram height={(metricCardView === 'scientific') ? 110 : 30}
-                simulation={metric.simulation}
-                cutOffRatio={0.995}
-            />
-          }
-
-          <div className='row '>
-            <div className='col-xs-10 sqwish-right'>
-              <div className='row'>
-                {(!_.isEmpty(metric.name) || isSelected) &&
-                  <div className='col-xs-12'>
-                    <MetricName
-                      isSelected={isSelected}
-                      name={metric.name}
-                      onChange={this.handleChangeMetric.bind(this)}
-                      jumpSection={this._focusForm.bind(this)}
-                      ref='name'
-                    />
-                  </div>
-                }
-
-                <div className='col-xs-12'>
-                  {showSimulation &&
-                    <DistributionSummary
-                        guesstimateForm={guesstimateForm}
-                        simulation={metric.simulation}
-                    />
-                  }
-                </div>
-              </div>
-            </div>
-
-            <div className='col-xs-2 sqwish-middle'>
-              <MetricToken
-                 readableId={metric.readableId}
-                 anotherFunctionSelected={anotherFunctionSelected}
-                 onOpenModal={this.openModal.bind(this)}
-                 hasGuesstimateDescription={hasGuesstimateDescription}
+          {isSelected && !this.state.modalIsOpen &&
+            <div className='section editing'>
+              <DistributionEditor
+                  metricId={metric.id}
+                  metricFocus={this.focus.bind(this)}
+                  onOpen={this.openModal.bind(this)}
+                  ref='DistributionEditor'
+                  size='small'
+                  errors={errors}
               />
             </div>
-          </div>
-
-          {shouldShowJsonTree &&
-            <div className='row'> <div className='col-xs-12'> <JSONTree data={this.props}/> </div> </div>
           }
-
-          {shouldShowStatistics &&
-            <div className='row'> <div className='col-xs-12'> <StatTable stats={metric.simulation.stats}/> </div> </div>
-          }
-
         </div>
-
-        {isSelected && !this.state.modalIsOpen &&
-          <div className='section editing'>
-            <DistributionEditor
-                metricId={metric.id}
-                metricFocus={this.focus.bind(this)}
-                onOpen={this.openModal.bind(this)}
-                ref='DistributionEditor'
-                size='small'
-            />
-          </div>
+        {this.props.hovered && !isSelected && !shouldShowSensitivitySection && <MetricToolTip guesstimate={guesstimate}/>}
+        {this.props.hovered && !isSelected && shouldShowSensitivitySection &&
+          <ScatterTip yMetric={this.props.selectedMetric} xMetric={metric}/>
         }
       </div>
     );

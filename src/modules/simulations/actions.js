@@ -4,7 +4,7 @@ import { call, put } from 'redux-saga/effects'
 
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
-export function* runMetricSimluation({getState, metricId, dispatch}) {
+export function* runMetricSimulation({getState, metricId, dispatch}) {
   const propagation = new GraphPropagation(dispatch, getState, {metricId, useGuesstimateForm: true, onlyHead: true})
   yield propagation.run()
   yield* runFormSimulation({getState, metricId, dispatch})

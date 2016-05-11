@@ -1,18 +1,19 @@
-import reduxCrud from 'redux-crud';
+import reduxCrud from 'redux-crud'
 
 import guesstimateFormR from './guesstimate_form/reducer'
 import selectionR from './selection/reducer'
 import multipleSelectionR from './multiple_selection/reducer'
-import displayErrorR from './displayErrors/reducer.js';
+import displayErrorR from './displayErrors/reducer.js'
 import metricsR from './metrics/reducer'
 import guesstimatesR from './guesstimates/reducer'
 import simulationsR from './simulations/reducer'
 import meR from './me/reducer'
-import canvasStateR from './canvas_state/reducer.js';
-import spacesR from './spaces/reducer';
-import searchSpacesR from './search_spaces/reducer';
-import firstSubscriptionsR from './first_subscription/reducer';
-import modalR from './modal/reducer';
+import canvasStateR from './canvas_state/reducer.js'
+import spacesR from './spaces/reducer'
+import searchSpacesR from './search_spaces/reducer'
+import firstSubscriptionsR from './first_subscription/reducer'
+import modalR from './modal/reducer'
+import {copiedR} from './copied/reducer'
 
 export function changeSelect(location) {
   return { type: 'CHANGE_SELECT', location };
@@ -35,10 +36,11 @@ const rootReducer = function app(state = {}, action){
     canvasState: canvasStateR(state.canvasState, action),
     searchSpaces: searchSpacesR(state.searchSpaces, action),
     firstSubscription: firstSubscriptionsR(state.firstSubscription, action),
-    modal: modalR(state.modal, action)
-  };
-};
+    modal: modalR(state.modal, action),
+    copied: copiedR(state.copied, action),
+  }
+}
 
 
-export default rootReducer;
+export default rootReducer
 
