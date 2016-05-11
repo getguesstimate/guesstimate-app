@@ -38,7 +38,6 @@
 .metricCard .MetricCardViewSection .react-d3-histogram {
   position: absolute;
   z-index: -1;
-  left: -5px;
 }
 
 .metricCard.input .MetricCardViewSection .DistributionSummary {
