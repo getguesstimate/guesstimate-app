@@ -110,10 +110,8 @@ class MetricCard extends Component {
   }
 
   _hasGuesstimate(){
-    const {metric} = this.props
-    const hasInput = !_.isEmpty(_.get(metric, 'guesstimate.input'))
-    const hasData = !_.isEmpty(_.get(metric, 'guesstimate.data'))
-    return (hasInput || hasData)
+    const has = (item) => !!_.get(this.props.metric, `guesstimate.${item}`)
+    return (has('input') || has('data') || has('description'))
   }
 
   _isTitle(){
