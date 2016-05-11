@@ -10,14 +10,14 @@ export default function guesstimateForm(
   ): Guesstimate {
 
   switch (action.type) {
-  case 'CREATE_GUESSTIMATE_FORM':
-    return action.guesstimate;
-  case 'DESTROY_GUESSTIMATE_FORM':
-    return {}
-  case 'UPDATE_GUESSTIMATE_FORM':
-    return engine.guesstimate.update(state, action.values)
-  default:
-    return state
+    case 'CREATE_GUESSTIMATE_FORM':
+      return action.guesstimate;
+    case 'DESTROY_GUESSTIMATE_FORM':
+      return {}
+    case 'UPDATE_GUESSTIMATE_FORM':
+      return engine.guesstimate.update(state, action.values)
+    default:
+      return state
   }
 }
 

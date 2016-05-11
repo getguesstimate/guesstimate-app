@@ -1,4 +1,5 @@
 import reduxCrud from 'redux-crud'
+import SI from 'seamless-immutable';
 
 import guesstimateFormR from './guesstimate_form/reducer'
 import selectionR from './selection/reducer'
@@ -20,22 +21,22 @@ export function changeSelect(location) {
 
 const rootReducer = function app(state = {}, action){
   return {
-    displayError: displayErrorR(state.displayError, action),
-    metrics: metricsR(state.metrics, action),
-    guesstimates: guesstimatesR(state.guesstimates, action),
-    selection: selectionR(state.selection, action),
-    guesstimateForm: guesstimateFormR(state.guesstimateForm, state.metrics, state.guesstimates, action),
-    simulations: simulationsR(state.simulations, action),
-    spaces: spacesR(state.spaces, action),
-    users: reduxCrud.reducersFor('users')(state.users, action),
-    organizations: reduxCrud.reducersFor('organizations')(state.organizations, action),
-    userOrganizationMemberships: reduxCrud.reducersFor('userOrganizationMemberships')(state.userOrganizationMemberships, action),
-    me: meR(state.me, action),
-    canvasState: canvasStateR(state.canvasState, action),
-    searchSpaces: searchSpacesR(state.searchSpaces, action),
-    firstSubscription: firstSubscriptionsR(state.firstSubscription, action),
-    modal: modalR(state.modal, action),
-    copied: copiedR(state.copied, action),
+    displayError: SI(displayErrorR(state.displayError, action)),
+    metrics: (metricsR(state.metrics, action)), // Causes Infinite Loop of Immutability on /models/:id
+    guesstimates: SI(guesstimatesR(state.guesstimates, action)),
+    selection: SI(selectionR(state.selection, action)),
+    guesstimateForm: SI(guesstimateFormR(state.guesstimateForm, state.metrics, state.guesstimates, action)),
+    simulations: SI(simulationsR(state.simulations, action)),
+    spaces: SI(spacesR(state.spaces, action)),
+    users: SI(reduxCrud.reducersFor('users')(state.users, action)),
+    organizations: SI(reduxCrud.reducersFor('organizations')(state.organizations, action)),
+    userOrganizationMemberships: SI(reduxCrud.reducersFor('userOrganizationMemberships')(state.userOrganizationMemberships, action)),
+    me: SI(meR(state.me, action)),
+    canvasState: SI(canvasStateR(state.canvasState, action)),
+    searchSpaces: (searchSpacesR(state.searchSpaces, action)), // Causes Infinite Loop of Immutability on /models
+    firstSubscription: SI(firstSubscriptionsR(state.firstSubscription, action)),
+    modal: SI(modalR(state.modal, action)),
+    copied: SI(copiedR(state.copied, action)),
   }
 }
 

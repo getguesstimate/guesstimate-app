@@ -1,7 +1,7 @@
 import engine from 'gEngine/engine'
 
 function uniq(items) {
-  return _.uniqBy(items.reverse(), 'metric').reverse()
+  return _.uniqBy(items, 'metric')
 }
 
 export default function guesstimates(state = [], action) {

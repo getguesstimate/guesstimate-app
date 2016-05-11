@@ -1,5 +1,4 @@
 import e from 'lib/engine/engine'
-import SI from 'seamless-immutable';
 import {sampleMean, sampleStdev, percentile, cutoff, sortDescending} from 'lib/dataAnalysis.js'
 
 function sStats(simulation){
@@ -35,27 +34,27 @@ function withStats(simulation){
 }
 
 let sim = null;
-export default function simulations(state = SI([]), action = null) {
+export default function simulations(state = [], action = null) {
   switch (action.type) {
-    case 'SPACES_FETCH_SUCCESS':
-      let newSimulations = _.flatten(action.records.map(e => _.get(e, 'graph.simulations'))).filter(e => e)
-      return SI([...state, ...newSimulations])
-    case 'DELETE_SIMULATIONS':
-      return SI(state.filter(y => !_.includes(action.metricIds, y.metric)))
-    case 'UPDATE_SIMULATION':
-      const sim = withStats(action.simulation);
-      const i = state.findIndex(y => y.metric === sim.metric);
-      if (i !== -1) {
-        const newState =  [
-          ...state.slice(0, i),
-          sim,
-          ...state.slice(i+1, state.length)
-        ];
-        return SI(newState)
-      } else {
-        return SI([...state, sim]);
-      }
-    default:
-      return state
+  case 'SPACES_FETCH_SUCCESS':
+    let newSimulations = _.flatten(action.records.map(e => _.get(e, 'graph.simulations'))).filter(e => e)
+    return [...state, ...newSimulations]
+  case 'DELETE_SIMULATIONS':
+    return state.filter(y => !_.includes(action.metricIds, y.metric))
+  case 'UPDATE_SIMULATION':
+    const sim = withStats(action.simulation);
+    const i = state.findIndex(y => y.metric === sim.metric);
+    if (i !== -1) {
+      const newState =  [
+        ...state.slice(0, i),
+        sim,
+        ...state.slice(i+1, state.length)
+      ];
+      return newState
+    } else {
+      return [...state, sim];
+    }
+  default:
+    return state
   }
 }
