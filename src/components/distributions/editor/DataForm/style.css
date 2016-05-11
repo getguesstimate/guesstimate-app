@@ -43,8 +43,18 @@
   overflow: auto;
 }
 
+.DataViewer .DataViewer--body.edit .button{
+  margin-right: 10px;
+}
+
+.DataViewer .DataViewer--body.edit .button:not(.primary){
+  background: #c6c6c6;
+}
+
 .DataViewer .DataViewer--body .ui.form{
   margin-bottom: 10px;
+  display: inline-block;
+  width: 100%;
 }
 
 .DataViewer--header a{
