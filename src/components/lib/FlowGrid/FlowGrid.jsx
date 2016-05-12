@@ -86,15 +86,14 @@ export default class FlowGrid extends Component{
       const size = ({columns: this._columnCount(), rows: this._rowCount()})
       let newLocation = new DirectionToLocation(size, this.props.selected)[direction]()
       this.props.onSelectItem(newLocation)
-    } else if (e.ctrlKey || e.keyCode == '17' || e.keyCode == '224' || e.keyCode == '91') {
+    } else if (e.keyCode == '17' || e.keyCode == '224' || e.keyCode == '91') {
       e.preventDefault()
       this.setState({ctrlPressed: true})
-    } else if (e.shiftKey) {
-      e.preventDefault()
-      this.setState({shiftPressed: true})
     } else if (e.keyCode == '86' && this.state.ctrlPressed) {
+      console.log("Pasting")
       this.props.onPaste()
     } else if (e.keyCode == '67' && this.state.ctrlPressed) {
+      console.log("Copying")
       this.props.onCopy()
     }
   }

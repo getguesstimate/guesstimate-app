@@ -1,19 +1,35 @@
 import e from 'gEngine/engine'
 import * as metricActions from 'gModules/metrics/actions'
 
-function isAtLocation(metric, location) {
-  return metric.location.row === location.row && metric.location.column === location.column
+function isWithinRegion(location, region) {
+  return (
+    location.row >= region[0].row &&
+    location.row <= region[1].row &&
+    location.column >= region[0].column &&
+    location.column <= region[1].column
+  )
+}
+
+function translateLocation(location, block, withinBlockLocation) {
+  const translate = l => ({row: l.row + (location.row - block[0].row), column: l.column + location.column - block[0].column})
+  return translate(withinBlockLocation)
+}
+
+// Translates a region to have the upper left corner at location
+function translateBlock(location, block) {
+  const translate = l => ({row: l.row + (location.row - block[0].row), column: l.column + location.column - block[0].column})
+  return [location, translate(block[1])]
 }
 
 export function copy(spaceId){
   return (dispatch, getState) => {
     const state = getState()
 
-    const location = state.selection
-    const metric = Object.assign({}, state.metrics.find(m => m.space === spaceId && isAtLocation(m, location)))
-    const guesstimate = state.guesstimates.find(g => g.metric === metric.id)
+    const region = state.multipleSelection
+    const metrics = state.metrics.filter(m => m.space === spaceId && isWithinRegion(m.location, region))
+    const guesstimates = metrics.map(metric => state.guesstimates.find(g => g.metric === metric.id))
 
-    dispatch({type: "COPY", copied: {metric, guesstimate}})
+    dispatch({type: "COPY", copied: {metrics, guesstimates, block: region}})
   }
 }
 
@@ -22,22 +38,36 @@ export function paste(spaceId){
     const state = getState()
     if (!(state.copied && state.selection)) { return }
 
-    const {metric, guesstimate} = state.copied
-
+    const {metrics, guesstimates, block} = state.copied
     const location = state.selection
+    const pasteRegion = translateBlock(location, block)
+
     const spaceMetrics = getState().metrics.filter(m => m.space === spaceId)
-    const existingReadableIds = spaceMetrics.map(m => m.readableId)
+    let existingReadableIds = spaceMetrics.map(m => m.readableId)
 
-    const newItem = Object.assign({}, metric, e.metric.create(existingReadableIds), {location})
-
-    const newGuesstimate = Object.assign({}, guesstimate, {metric: newItem.id})
-
-    const existingMetric = spaceMetrics.find(m => isAtLocation(m, location))
-    if (existingMetric) {
-      dispatch(metricActions.removeMetric(existingMetric.id))
+    let newItems = []
+    for (let metric of metrics) {
+      const newMetric = Object.assign(
+        {},
+        metric,
+        e.metric.create(existingReadableIds),
+        {location: translateLocation(location, block, metric.location)}
+      )
+      debugger
+      newItems.push(newMetric)
+      existingReadableIds.push(newMetric.readableId)
     }
 
-    dispatch({ type: 'ADD_METRIC', item: newItem, newGuesstimate });
-    dispatch({ type: 'RUN_FORM_SIMULATIONS', getState, dispatch, metricId: newItem.id });
+    const newGuesstimates = _.map(guesstimates, (guesstimate, i) => Object.assign({}, guesstimate, {metric: newItems[i].id}))
+
+    const existingMetrics = spaceMetrics.filter(m => isWithinRegion(m.location, pasteRegion))
+    if (existingMetrics.length > 0) {
+      _.map(existingMetrics, existingMetric => {dispatch(metricActions.removeMetric(existingMetric.id))})
+    }
+
+    _.map(newItems, (newItem, i) => {
+      dispatch({ type: 'ADD_METRIC', item: newItem, newGuesstimate: newGuesstimates[i] })
+      dispatch({ type: 'RUN_FORM_SIMULATIONS', getState, dispatch, metricId: newItem.id })
+    })
   }
 }
