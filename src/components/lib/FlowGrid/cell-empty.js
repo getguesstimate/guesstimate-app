@@ -14,13 +14,16 @@ export default class EmptyCell extends Component {
 
   shouldComponentUpdate(nextProps) { return false }
 
-  _handleKeyPress(e) {
+  _handleKeyDown(e) {
     if (e.keyCode == '13') { //enter
       this.props.onAddItem(this.props.location)
     }
     if (e.keyCode == '8') { //backspace
       e.preventDefault()
     }
+  }
+
+  _handleKeyPress(e) {
     this.props.gridKeyPress(e)
   }
 
@@ -29,7 +32,8 @@ export default class EmptyCell extends Component {
     return (
       <div
           className={className}
-          onKeyDown={this._handleKeyPress.bind(this)}
+          onKeyPress={this._handleKeyPress.bind(this)}
+          onKeyDown={this._handleKeyDown.bind(this)}
           tabIndex='0'
       />
     )

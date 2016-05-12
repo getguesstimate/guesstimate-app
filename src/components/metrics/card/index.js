@@ -91,11 +91,18 @@ class MetricCard extends Component {
     if (e.target === ReactDOM.findDOMNode(this)) {
       if (e.keyCode == '13') {
         e.preventDefault()
+        e.stopPropagation()
         this.openModal()
-      } else if (e.keyCode == '8') {
+      } else if (e.keyCode == '8' || e.keyCode == '46') {
         e.preventDefault()
+        e.stopPropagation()
         this.handleRemoveMetric()
       }
+    }
+  }
+
+  _handleKeyPress(e) {
+    if (e.target === ReactDOM.findDOMNode(this)) {
       this.props.gridKeyPress(e)
     }
     e.stopPropagation()
@@ -219,6 +226,7 @@ class MetricCard extends Component {
     return (
       <div className='metricCard--Container'
           ref='dom'
+          onKeyPress={this._handleKeyPress.bind(this)}
           onKeyDown={this._handleKeyDown.bind(this)}
           tabIndex='0'
         >

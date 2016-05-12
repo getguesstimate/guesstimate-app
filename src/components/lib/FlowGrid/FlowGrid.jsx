@@ -75,7 +75,7 @@ export default class FlowGrid extends Component{
   }
 
   _handleKeyDown(e){
-    if (e.keyCode === 8) {
+    if (e.keyCode === 8 || e.keyCode === 46) {
       const selectedItems = this._selectedItems()
       selectedItems.map(i => {this.props.dispatch(removeMetric(i.component.props.metric.id))})
     }
@@ -90,10 +90,10 @@ export default class FlowGrid extends Component{
       e.preventDefault()
       this.setState({ctrlPressed: true})
     } else if (e.keyCode == '86' && this.state.ctrlPressed) {
-      console.log("Pasting")
+      console.log("Pasting", Math.random())
       this.props.onPaste()
     } else if (e.keyCode == '67' && this.state.ctrlPressed) {
-      console.log("Copying")
+      console.log("Copying", Math.random())
       this.props.onCopy()
     }
   }

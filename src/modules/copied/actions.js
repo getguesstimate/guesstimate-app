@@ -53,7 +53,6 @@ export function paste(spaceId){
         e.metric.create(existingReadableIds),
         {location: translateLocation(location, block, metric.location)}
       )
-      debugger
       newItems.push(newMetric)
       existingReadableIds.push(newMetric.readableId)
     }
