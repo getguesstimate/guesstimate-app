@@ -145,6 +145,7 @@ class MetricCard extends Component {
   }
 
   focus() {
+    console.log("Metric card focusing.")
     $(this.refs.dom).focus();
   }
 

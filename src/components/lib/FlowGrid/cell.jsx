@@ -78,20 +78,21 @@ export default class Cell extends Component {
   }
 
   componentDidMount = () => {
-    if (this.props.isSelected){
+    if (this.props.isSinglySelected) {
       this._focus()
     }
   }
 
   componentDidUpdate = (prevProps) => {
-    const newlySelected = (this.props.isSelected && !prevProps.isSelected)
-    const changeInItem = (!!prevProps.item !== !!this.props.item)
-    if (newlySelected || changeInItem){
+    // TODO(matthew): For some reason, clicking on a cell within a multiple selected region registers the update with
+    // prevprops also showing isSinglySelected to be true...
+    if (this.props.isSinglySelected){
       this._focus()
     }
   }
 
   _focus = () => {
+    console.log('focusing in cell')
     let domNode
     if (this.props.item) {
       // Always focus on the immediate child of the filled cell.
