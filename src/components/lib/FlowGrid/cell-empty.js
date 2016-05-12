@@ -15,7 +15,7 @@ export default class EmptyCell extends Component {
   shouldComponentUpdate(nextProps) { return false }
 
   _handleKeyDown(e) {
-    if (e.keyCode == '13') { //enter
+    if (e.keyCode == '13' && this.props.isSinglySelected) { //enter
       console.log('entering in empty cell.')
       this.props.onAddItem(this.props.location)
     }
