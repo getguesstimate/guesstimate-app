@@ -4,8 +4,6 @@ export default function selection(state = {}, action) {
     return action.location;
   case 'DE_SELECT':
     return {}
-  case 'ADD_METRIC':
-    return action.item.location;
   default:
     return state
   }

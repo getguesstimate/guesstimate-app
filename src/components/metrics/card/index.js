@@ -55,7 +55,6 @@ class MetricCard extends Component {
     dispatch: PT.func.isRequired,
     gridKeyPress: PT.func.isRequired,
     guesstimateForm: PT.object.isRequired,
-    handleSelect: PT.func.isRequired,
     handleDeSelect: PT.func.isRequired,
     isSelected: PT.bool.isRequired,
     location: PT.shape({
@@ -93,10 +92,6 @@ class MetricCard extends Component {
         e.preventDefault()
         e.stopPropagation()
         this.openModal()
-      } else if (e.keyCode == '8' || e.keyCode == '46') {
-        e.preventDefault()
-        e.stopPropagation()
-        this.handleRemoveMetric()
       }
     }
   }
