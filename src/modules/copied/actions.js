@@ -72,6 +72,6 @@ export function paste(spaceId){
     })
 
     dispatch(multipleSelect(pasteRegion[0], pasteRegion[1]))
-    dispatch(deSelect())
+    //dispatch(deSelect()) Nope. TODO this defocuses the canvas. Why????
   }
 }

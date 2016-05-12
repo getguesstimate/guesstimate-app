@@ -67,6 +67,7 @@ export default class FlowGrid extends Component{
   }
 
   _handleKeyDown(e){
+    console.log("Here I am.")
     if (!!e.skipFlowGrid) {
       return
     }
