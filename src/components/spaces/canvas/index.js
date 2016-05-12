@@ -126,7 +126,6 @@ export default class CanvasSpace extends Component{
     return (
       <Metric
           canvasState={this.props.canvasState}
-          handleSelect={this._handleSelect.bind(this)}
           handleDeSelect={this._handleDeSelect.bind(this)}
           key={metric.id}
           location={location}

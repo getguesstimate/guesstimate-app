@@ -152,13 +152,19 @@ class MetricCard extends Component {
   }
 
   _handleMouseUp(e) {
-    if (this._isSelectable(e) && !this._isFunctionInputSelectable(e)) {
-      this.props.handleSelect(this.props.location)
+    // TODO: This needs to do something in the case that you are selecting inputs to a function, not ending a range (or,
+    // rather, it needs to differentiate the two or propagate back to flow grid.
+    // TODO probably not doing anything due to change to handleMouseDown.
+    if (this._isFunctionInputSelectable) {
+      e.stopPropagation()
+      e.preventDefault()
+      e.nativeEvent.stopImmediatePropagation()
+      e.nativeEvent.stopPropagation()
     }
   }
 
   _handleMouseDown(e) {
-    if (this._isFunctionInputSelectable(e)) {
+    if (this._isFunctionInputSelectable(e) && !e.shiftKey) {
         e.preventDefault()
         $(window).trigger('functionMetricClicked', this.props.metric)
     }
