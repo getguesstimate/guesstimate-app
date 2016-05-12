@@ -40,6 +40,7 @@ export default class Cell extends Component {
   shouldComponentUpdate(newProps, newState) {
     const difProps = (newProps.isOver !== this.props.isOver) ||
       (newProps.isSelected !== this.props.isSelected) ||
+      (newProps.isSinglySelected !== this.props.isSinglySelected) ||
       (newProps.isHovered !== this.props.isHovered)
     const itemDifferent = (!!newProps.item !== !!this.props.item)
     const bothHaveItems = (!!newProps.item && !!this.props.item)
