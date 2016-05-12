@@ -88,7 +88,7 @@ class MetricCard extends Component {
 
   _handleKeyDown(e) {
     if (e.target === ReactDOM.findDOMNode(this)) {
-      if (e.keyCode == '13') {
+      if (e.keyCode == '13' && this.props.isSelected) {
         e.preventDefault()
         e.stopPropagation()
         this.openModal()

@@ -1,6 +1,7 @@
 import e from 'gEngine/engine'
 import * as metricActions from 'gModules/metrics/actions'
 import {multipleSelect} from 'gModules/multiple_selection/actions'
+import {deSelect} from 'gModules/selection/actions'
 
 function isWithinRegion(location, region) {
   return (
@@ -71,5 +72,6 @@ export function paste(spaceId){
     })
 
     dispatch(multipleSelect(pasteRegion[0], pasteRegion[1]))
+    dispatch(deSelect())
   }
 }
