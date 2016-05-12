@@ -158,18 +158,6 @@ class MetricCard extends Component {
     editorRef && editorRef.focus()
   }
 
-  _handleMouseUp(e) {
-    // TODO: This needs to do something in the case that you are selecting inputs to a function, not ending a range (or,
-    // rather, it needs to differentiate the two or propagate back to flow grid.
-    // TODO probably not doing anything due to change to handleMouseDown.
-    if (this._isFunctionInputSelectable) {
-      e.stopPropagation()
-      e.preventDefault()
-      e.nativeEvent.stopImmediatePropagation()
-      e.nativeEvent.stopPropagation()
-    }
-  }
-
   _handleMouseDown(e) {
     if (this._isFunctionInputSelectable(e) && !e.shiftKey) {
         e.preventDefault()
@@ -251,7 +239,6 @@ class MetricCard extends Component {
               onOpenModal={this.openModal.bind(this)}
               jumpSection={this._focusForm.bind(this)}
               onMouseDown={this._handleMouseDown.bind(this)}
-              onMouseUp={this._handleMouseUp.bind(this)}
               ref='MetricCardViewSection'
               isTitle={this._isTitle()}
               connectDragSource={this.props.connectDragSource}

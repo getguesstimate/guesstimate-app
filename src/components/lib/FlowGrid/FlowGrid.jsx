@@ -66,18 +66,14 @@ export default class FlowGrid extends Component{
       multipleSelected[1].row >= i.location.row && multipleSelected[1].column >= i.location.column))
   }
 
-  _handleKeyPress(e) {
-    // TODO currently unused
-    if (e.keyCode === 8) {
-      const selectedItems = this._selectedItems()
-      selectedItems.map(i => {this.props.dispatch(removeMetric(i.component.props.metric.id))})
-    }
-  }
-
   _handleKeyDown(e){
+    if (!!e.skipFlowGrid) {
+      return
+    }
     if (e.keyCode === 8 || e.keyCode === 46) {
       const selectedItems = this._selectedItems()
       selectedItems.map(i => {this.props.dispatch(removeMetric(i.component.props.metric.id))})
+      e.preventDefault()
     }
 
     let direction = keycodeToDirection(e.keyCode)

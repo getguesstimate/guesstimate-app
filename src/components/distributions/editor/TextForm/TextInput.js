@@ -65,6 +65,10 @@ export default class TextInput extends Component{
       e.preventDefault()
       this.props.onEscape()
     }
+    // Definitely not the best way to do this.
+    // TODO(matthew).
+    e.persist()
+    e.skipFlowGrid = true
   }
 
   render() {
