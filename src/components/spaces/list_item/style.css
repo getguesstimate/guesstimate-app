@@ -63,9 +63,10 @@
 }
 
 .SpaceListItem .user-tag .ui.avatar.image{
-  width: 1.3em;
-  height: 1.3em;
+  width: 1.5em;
+  height: 1.5em;
   margin-right: 5px;
+  border-radius: 2px;
 }
 
 .SpaceListItem p{
