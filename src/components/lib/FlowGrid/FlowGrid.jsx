@@ -191,6 +191,7 @@ export default class FlowGrid extends Component{
     return (
       <div
           className='FlowGrid-Container'
+          style={{overflow: this.props.overflow }}
       >
         <div className='FlowGrid-Horizontal-Motion'>
           <div

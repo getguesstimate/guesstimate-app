@@ -10,6 +10,7 @@ export const metricCardView = PT.oneOf([
   'normal',
   'scientific',
   'analysis',
+  'display'
 ]).isRequired
 
 export const metricClickMode = PT.oneOf([
