@@ -43,19 +43,25 @@
   overflow: auto;
 }
 
-.DataViewer .DataViewer--body.view{
-  max-height: 250px;
+.DataViewer .DataViewer--body.edit .button{
+  margin-right: 10px;
+}
+
+.DataViewer .DataViewer--body.edit .button:not(.primary){
+  background: #c6c6c6;
 }
 
 .DataViewer .DataViewer--body .ui.form{
   margin-bottom: 10px;
+  display: inline-block;
+  width: 100%;
 }
 
 .DataViewer--header a{
   margin-top: 2px;
   color: rgba(255,255,255,0.75);
   float:right;
-  padding: 2px 5px;
+  padding: 2px 5px 0px 5px;
   cursor: pointer;
   margin: 2px 5px 0;
   font-size: 1em;
@@ -76,4 +82,10 @@
 
 .metricModal .DataViewer ul{
   float: none;
+  list-style: none;
+  padding-left: 1em;
+}
+
+.metricModal .DataViewer textarea{
+  font-size: 1.1em;
 }

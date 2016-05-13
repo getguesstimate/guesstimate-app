@@ -47,6 +47,7 @@ export default class TextInput extends Component{
     return value
           .replace(/[\[\]]/g, '')
           .split(/[\n\s,]+/)
+          .filter(e => !_.isEmpty(e))
           .map(Number)
           .filter(e => _.isFinite(e))
           .slice(0, 10000)

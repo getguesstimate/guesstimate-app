@@ -80,16 +80,16 @@ export default class Histogram extends React.Component {
 
   static defaultProps = {
     top: 20,
-    right: 5,
     bottom: 30,
-    left: 5,
     bins: 40,
+    left: 0,
+    right: 0,
     cutOffRatio: 0, // By default cut off nothing.
   };
 
   render() {
     let { top, right, bottom, left, data, width, height, cutOffRatio } = this.props;
-    width = width + 10
+    width = width + 1
 
     const filtered_data = filterLowDensityPoints(data, cutOffRatio)
 
@@ -101,7 +101,7 @@ export default class Histogram extends React.Component {
     let barWidth = width/histogramData.length;
     return (
       <div className="react-d3-histogram">
-        {top && right && bottom && left && width && height &&
+        {top && bottom && width && height &&
           <svg width={width + left + right} height={height + top + bottom}>
             <g transform={"translate(" + left + "," + top + ")"}>
               {histogramData.map((d, i) => <Bar data={d} xScale={xScale} yScale={yScale} height={height} barWidth={barWidth} key={i} />)}

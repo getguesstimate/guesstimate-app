@@ -73,7 +73,7 @@ class MetricCard extends Component {
 
   componentDidUpdate() {
     const hasContent = this.refs.MetricCardViewSection.hasContent()
-    if (!this.props.isSelected && this._isEmpty() && !hasContent){
+    if (!this.props.isSelected && this._isEmpty() && !hasContent && !this.state.modalIsOpen){
       this.handleRemoveMetric()
     }
   }
@@ -102,18 +102,20 @@ class MetricCard extends Component {
   }
 
   _isEmpty(){
-    return (!this._hasGuesstimate() && !this._hasName())
+    return !(this._hasGuesstimate() || this._hasName() || this._hasDescription())
   }
 
   _hasName(){
     return !!this.props.metric.name
   }
 
+  _hasDescription(){
+    return !!_.get(this.props.metric, 'guesstimate.description')
+  }
+
   _hasGuesstimate(){
-    const {metric} = this.props
-    const hasInput = !_.isEmpty(_.get(metric, 'guesstimate.input'))
-    const hasData = !_.isEmpty(_.get(metric, 'guesstimate.data'))
-    return (hasInput || hasData)
+    const has = (item) => !!_.get(this.props.metric, `guesstimate.${item}`)
+    return (has('input') || has('data'))
   }
 
   _isTitle(){

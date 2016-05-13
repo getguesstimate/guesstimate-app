@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "_build": "BUILD_DEV=0 API_ENV=production webpack",
-    "_stage": "surge -p public -d stage.getguesstimate.com",
+    "_stage": "surge -p public -d test.getguesstimate.com",
     "start": "BUILD_DEV=0 NODE_ENV=development API_ENV=development webpack-dev-server",
     "start-production": "BUILD_DEV=0 NODE_ENV=development API_ENV=production webpack-dev-server",
     "stage!": "BUILD_DEV=0 npm run _build && npm run _stage",
@@ -65,7 +65,7 @@
     "ampersand-router": "^3.0.2",
     "angle-between-points": "^1.0.0",
     "async": "^1.5.2",
-    "auth0-lock": "^9.0.6",
+    "auth0-lock": "^9.1.4",
     "autoprefixer-stylus": "^0.9.1",
     "body-parser": "~1.15.0",
     "chargebee": "^1.3.5",
