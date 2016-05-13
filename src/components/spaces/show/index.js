@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import { connect } from 'react-redux';
 import './style.css'
 
-import SpaceCanvas from 'gComponents/spaces/canvas'
+import Canvas from 'gComponents/spaces/canvas'
 import SpacesShowHeader from './header.js'
 import * as spaceActions from 'gModules/spaces/actions.js'
 import { denormalizedSpaceSelector } from '../denormalized-space-selector.js';
@@ -99,10 +99,10 @@ export default class SpacesShow extends Component {
     const sidebarIsViseable = space.editableByMe || !_.isEmpty(space.description)
     const canBePrivate = !!space.organization_id || e.me.canMakeMorePrivateModels(this.props.me)
     const isLoggedIn = e.me.isLoggedIn(this.props.me)
-    if (this.props.embed) { 
+    if (this.props.embed) {
       return (
         <div className='spaceShow'>
-          <SpaceCanvas spaceId={space.id}/>
+          <Canvas spaceId={space.id} overflow={'hidden'}/>
         </div>
       )
     }
@@ -151,7 +151,7 @@ export default class SpacesShow extends Component {
           {sidebarIsViseable && !this.state.showSidebar &&
             <ClosedSpaceSidebar onOpen={this.openSidebar.bind(this)}/>
           }
-          <SpaceCanvas spaceId={space.id}/>
+          <Canvas spaceId={space.id}/>
         </div>
       </div>
     )

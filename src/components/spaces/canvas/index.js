@@ -30,7 +30,7 @@ function mapStateToProps(state) {
 const PT = PropTypes;
 @connect(mapStateToProps)
 @connect(denormalizedSpaceSelector)
-export default class CanvasSpace extends Component{
+export default class Canvas extends Component{
   static propTypes = {
     canvasState: PT.shape({
       edgeView: canvasStateProps.edgeView,
@@ -41,10 +41,15 @@ export default class CanvasSpace extends Component{
     dispatch: PropTypes.func,
     guesstimateForm: PropTypes.object,
     selected: PropTypes.object,
+    overflow: PropTypes.string,
     spaceId: PropTypes.oneOfType([
         React.PropTypes.string,
         React.PropTypes.number,
     ])
+  }
+
+  static defaultProps = {
+    overflow: 'default'
   }
 
   componentDidMount(){
@@ -169,6 +174,7 @@ export default class CanvasSpace extends Component{
           <JSONTree data={this.props}/>
         }
         <FlowGrid
+          overflow={this.props.overflow}
           items={metrics.map(m => ({key: m.id, location: m.location, component: this.renderMetric(m, selectedMetric)}))}
           hasItemUpdated = {(oldItem, newItem) => hasMetricUpdated(oldItem.props, newItem.props)}
           edges={edges}
