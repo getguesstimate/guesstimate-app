@@ -79,7 +79,7 @@ class MetricCard extends Component {
 
   openModal() {
     this.setState({modalIsOpen: true});
-    this.props.handleDeSelect()
+    //this.props.handleDeSelect()
   }
 
   closeModal() {
