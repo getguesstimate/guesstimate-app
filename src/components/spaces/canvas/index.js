@@ -61,7 +61,9 @@ export default class Canvas extends Component{
     }
     this.props.dispatch(runSimulations({spaceId: this.props.denormalizedSpace.id}))
 
-    this.props.dispatch(canvasStateActions.change({metricCardView: 'display'}))
+    if (this.props.screenshot) {
+      this.props.dispatch(canvasStateActions.change({metricCardView: 'display'}))
+    }
   }
 
   componentDidUpdate(prevProps) {

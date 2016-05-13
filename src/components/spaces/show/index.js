@@ -109,34 +109,32 @@ export default class SpacesShow extends Component {
 
     return (
       <div className='spaceShow'>
-        <div className='hero-unit'>
-          <div className='container-fluid'>
-            <div className='row'>
-              <div className='col-sm-10'>
-                <SpacesShowHeader
-                    isLoggedIn={isLoggedIn}
-                    onDestroy={this.destroy.bind(this)}
-                    onSaveName={this.onSaveName.bind(this)}
-                    onSave={this.onSave.bind(this)}
-                    onCopy={this._handleCopy.bind(this)}
-                    onDestroy={this.destroy.bind(this)}
-                    space={space}
-                    canBePrivate={canBePrivate}
-                    onPublicSelect={this.onPublicSelect.bind(this)}
-                    onPrivateSelect={this.onPrivateSelect.bind(this)}
-                />
-              </div>
+        <div className='hero-unit container-fluid'>
+          <div className='row'>
+            <div className='col-sm-10'>
+              <SpacesShowHeader
+                  isLoggedIn={isLoggedIn}
+                  onDestroy={this.destroy.bind(this)}
+                  onSaveName={this.onSaveName.bind(this)}
+                  onSave={this.onSave.bind(this)}
+                  onCopy={this._handleCopy.bind(this)}
+                  onDestroy={this.destroy.bind(this)}
+                  space={space}
+                  canBePrivate={canBePrivate}
+                  onPublicSelect={this.onPublicSelect.bind(this)}
+                  onPrivateSelect={this.onPrivateSelect.bind(this)}
+              />
+            </div>
 
-              <div className='col-sm-2'>
-                {space.user && !space.editableByMe &&
-                  <div>
-                    <a className='ui image label' href={`/users/${space.user.id}`}>
-                      <img src={space.user.picture}/>
-                      {space.user.name}
-                    </a>
-                  </div>
-                }
-              </div>
+            <div className='col-sm-2'>
+              {space.user && !space.editableByMe &&
+                <div>
+                  <a className='ui image label' href={`/users/${space.user.id}`}>
+                    <img src={space.user.picture}/>
+                    {space.user.name}
+                  </a>
+                </div>
+              }
             </div>
           </div>
         </div>
