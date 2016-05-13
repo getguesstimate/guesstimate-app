@@ -64,6 +64,10 @@ export default class Cell extends Component {
   }
 
   handleClick(e) {
+    console.log("WOOO CLICKING.")
+    if (this.props.canvasState.metricClickMode === 'FUNCTION_INPUT_SELECT') {
+      return
+    }
     if (e.button === 0){
       if (!this.props.isSinglySelected) {
         if (e.shiftKey) {

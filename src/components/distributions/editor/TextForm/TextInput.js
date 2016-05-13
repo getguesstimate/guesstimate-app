@@ -15,6 +15,7 @@ export default class TextInput extends Component{
   focus() { this.refs.input.select() }
 
   _handleInputMetricClick(item){
+    console.log("WOWOWOWOW GOT A METRIC", item)
     insertAtCaret('live-input', item.readableId)
     this._changeInput();
   }

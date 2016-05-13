@@ -155,9 +155,14 @@ class MetricCard extends Component {
   }
 
   _handleMouseDown(e) {
+    console.log("MouseDowning")
+    if (this.props.location.row == 1 && this.props.location.column == 0) {debugger}
     if (this._isFunctionInputSelectable(e) && !e.shiftKey) {
-        e.preventDefault()
-        $(window).trigger('functionMetricClicked', this.props.metric)
+      console.log(" --- ")
+      $(window).trigger('functionMetricClicked', this.props.metric)
+      console.log(" --- AND NEVER AGAIN")
+      e.preventDefault()
+      e.stopPropagation()
     }
   }
 

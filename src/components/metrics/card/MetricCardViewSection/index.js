@@ -58,7 +58,6 @@ export default class MetricCardViewSection extends Component {
           onOpenModal,
           jumpSection,
           onMouseDown,
-          onMouseUp,
           showSensitivitySection
     } = this.props
 
@@ -74,8 +73,7 @@ export default class MetricCardViewSection extends Component {
 
     return(
       <div className={`MetricCardViewSection ${metricCardView} ${(hasErrors & !isSelected) ? 'hasErrors' : ''}`}
-          onMouseUp={onMouseUp}
-          onMouseDown={onMouseDown}
+        onMouseDown={onMouseDown}
       >
         {(metricCardView !== 'basic') && showSimulation &&
           <Histogram height={(metricCardView === 'scientific') ? 110 : 30}
