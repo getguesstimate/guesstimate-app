@@ -84,6 +84,7 @@ export default class FlowGrid extends Component{
       const size = ({columns: this._columnCount(), rows: this._rowCount()})
       let newLocation = new DirectionToLocation(size, this.props.selected)[direction]()
       this.props.onSelectItem(newLocation)
+      this.refs[`cell-${newLocation.row}-${newLocation.column}`].decoratedComponentInstance._focus()
     } else if (e.keyCode == '17' || e.keyCode == '224' || e.keyCode == '91') {
       e.preventDefault()
       this.setState({ctrlPressed: true})
