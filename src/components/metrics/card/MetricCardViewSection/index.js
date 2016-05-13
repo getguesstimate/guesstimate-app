@@ -31,7 +31,7 @@ export default class MetricCardViewSection extends Component {
   showSimulation() {
     const stats = _.get(this.props, 'metric.simulation.stats')
     if (stats && _.isFinite(stats.mean) && _.isFinite(stats.stdev) && _.isFinite(stats.length)) {
-      return (stats.stdev === 0 || (stats.length > 5))
+      return (stats.stdev === 0 || (stats.length > 1))
     } else {
       return false
     }

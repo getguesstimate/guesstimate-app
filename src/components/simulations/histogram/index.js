@@ -34,7 +34,7 @@ class SimulationHistogram extends Component{
     return (
       <Histogram data={this.values()}
           height={this.props.height}
-          width={(this.props.containerWidth + 5) * this.props.widthPercent / 100}
+          width={(this.props.containerWidth) * this.props.widthPercent / 100}
           bottom={20}
           bins={this.props.bins}
           cutOffRatio={this.props.cutOffRatio}
