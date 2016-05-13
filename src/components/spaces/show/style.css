@@ -8,6 +8,10 @@
   background-color: #DFE1E4;
 }
 
+.spaceShow.screenshot {
+  background-color: #C2CDD6;
+}
+
 .canvas-space {
   display: flex;
   flex: 1;
@@ -16,13 +20,17 @@
 }
 
 .hero-unit {
-  padding: 2em 0 .5em;
+  padding-top: 2em;
+  padding-bottom: 0.5em;
   background-color: $blue-1;
+  width: 100%;
+  box-sizing: initial;
 }
 
 @media only screen and (max-width: 767px) {
   .hero-unit {
-    padding: 0.5em 0 .2em;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
   }
 
   .header-actions {
