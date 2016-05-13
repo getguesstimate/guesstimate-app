@@ -110,7 +110,6 @@ export default class FlowGrid extends Component{
     const rightX = Math.max(corner1.row, corner2.row)
     const bottomY = Math.min(corner1.column, corner2.column)
     this.props.onMultipleSelect({row: leftX, column: bottomY}, {row: rightX, column: topY})
-    this.props.onDeSelectItem()
   }
 
   size(){
