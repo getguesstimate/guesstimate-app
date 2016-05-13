@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import { connect } from 'react-redux';
 import { denormalizedSpaceSelector } from '../denormalized-space-selector.js';
 import MetricLabel from '../../metrics/label'
+import arrowsVisibleImage from '../../../assets/metric-icons/blue/arrows-visible.png'
 
 import * as Space from 'gEngine/space';
 import './style.css'
@@ -35,6 +36,10 @@ let PrivateTag = ({isPrivate}) => (
   </div>
 )
 
+let BlankScreenshot = () => (
+  <div className='snapshot blank'><img src={arrowsVisibleImage}/></div>
+)
+
 const SpaceListItem = ({space, showUser, isOwnedByMe, showScreenshot}) => {
   const hasName = !_.isEmpty(space.name)
   const className = `text-editable ${hasName ? '' : 'default-value'}`
@@ -44,11 +49,12 @@ const SpaceListItem = ({space, showUser, isOwnedByMe, showScreenshot}) => {
       <a href={Space.url(space)}>
         <div className='row'>
           {showScreenshot &&
-            <div className='col-xs-2'>
+            <div className='col-xs-3'>
               {space.screenshot && <div className='snapshot'> <img src={space.screenshot} /> </div> }
+              {!space.screenshot && <BlankScreenshot/>}
             </div>
           }
-          <div className={`col-xs-${showScreenshot ? 10 : 12}`}>
+          <div className={`col-xs-${showScreenshot ? 9 : 12}`}>
             <div className='row'>
               <div className='col-xs-7'>
                 <h3 className={className}> {showName} </h3>

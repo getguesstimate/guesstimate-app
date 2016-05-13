@@ -29,10 +29,25 @@
 
 .SpaceListItem .snapshot img{
   max-width: 100%;
+  border-radius: 1px;
 }
 
 .SpaceListItem .snapshot img.expanded{
   max-width: 900px;
+}
+
+.SpaceListItem .snapshot.blank{
+  background-color: $grey-1;
+  height: 80px;
+  border-radius: 1px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.SpaceListItem .snapshot.blank img{
+  max-width: 40%;
+  opacity: 0.3
 }
 
 .SpaceListItem a h3.default-value {
