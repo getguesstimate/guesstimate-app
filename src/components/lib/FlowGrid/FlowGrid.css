@@ -145,7 +145,7 @@ svg.edge  path.basic-arrow.BLUE {
 }
 
 .screenshot svg.edge  path.basic-arrow.BLUE {
-  stroke:rgb(79, 109, 142);
+  stroke: rgb(128, 154, 185)
 }
 
 svg.edge  path.basic-arrow.RED {
@@ -161,7 +161,7 @@ svg.edge  path.basic-arrow.RED {
 }
 
 .screenshot .arrow.BLUE{
-  fill: rgb(79, 109, 142);
+  fill: rgb(128, 154, 185)
 }
 
 .arrow.RED{
