@@ -8,6 +8,10 @@
   background-color: #DFE1E4;
 }
 
+.spaceShow.screenshot {
+  background-color: #b2c5d4;
+}
+
 .canvas-space {
   display: flex;
   flex: 1;

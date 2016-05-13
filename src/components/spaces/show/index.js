@@ -101,8 +101,8 @@ export default class SpacesShow extends Component {
     const isLoggedIn = e.me.isLoggedIn(this.props.me)
     if (this.props.embed) {
       return (
-        <div className='spaceShow'>
-          <Canvas spaceId={space.id} overflow={'hidden'}/>
+        <div className='spaceShow screenshot'>
+          <Canvas spaceId={space.id} overflow={'hidden'} screenshot={true}/>
         </div>
       )
     }

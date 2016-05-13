@@ -41,7 +41,7 @@ export default class Canvas extends Component{
     dispatch: PropTypes.func,
     guesstimateForm: PropTypes.object,
     selected: PropTypes.object,
-    overflow: PropTypes.string,
+    embed: PropTypes.bool,
     spaceId: PropTypes.oneOfType([
         React.PropTypes.string,
         React.PropTypes.number,
@@ -49,7 +49,7 @@ export default class Canvas extends Component{
   }
 
   static defaultProps = {
-    overflow: 'default'
+    screenshot: false
   }
 
   componentDidMount(){
@@ -60,6 +60,8 @@ export default class Canvas extends Component{
       this.props.dispatch(canvasStateActions.change({edgeView: 'visible'}))
     }
     this.props.dispatch(runSimulations({spaceId: this.props.denormalizedSpace.id}))
+
+    this.props.dispatch(canvasStateActions.change({metricCardView: 'display'}))
   }
 
   componentDidUpdate(prevProps) {
@@ -167,6 +169,7 @@ export default class Canvas extends Component{
     const showGridLines = (metricCardView !== 'display')
     this.showEdges() ? className += ' showEdges' : ''
     const selectedMetric = this._isAnalysisView() && this._selectedMetric()
+    const overflow = this.props.screenshot ? 'hidden' : 'default'
 
     return (
       <div className={className}>
@@ -174,7 +177,7 @@ export default class Canvas extends Component{
           <JSONTree data={this.props}/>
         }
         <FlowGrid
-          overflow={this.props.overflow}
+          overflow={overflow}
           items={metrics.map(m => ({key: m.id, location: m.location, component: this.renderMetric(m, selectedMetric)}))}
           hasItemUpdated = {(oldItem, newItem) => hasMetricUpdated(oldItem.props, newItem.props)}
           edges={edges}
