@@ -49,14 +49,14 @@ const SpaceListItem = ({space, showUser, isOwnedByMe, showScreenshot}) => {
       <a href={Space.url(space)}>
         <div className='row'>
           {showScreenshot &&
-            <div className='col-xs-3'>
+            <div className='col-sm-3'>
               {space.screenshot && <div className='snapshot'> <img src={space.screenshot} /> </div> }
               {!space.screenshot && <BlankScreenshot/>}
             </div>
           }
-          <div className={`col-xs-${showScreenshot ? 9 : 12}`}>
+          <div className={`col-sm-${showScreenshot ? 9 : 12}`}>
             <div className='row'>
-              <div className='col-xs-7'>
+              <div className='col-xs-9'>
                 <h3 className={className}> {showName} </h3>
                 <p>Updated {formatDate(space.updated_at)}</p>
               </div>
