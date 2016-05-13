@@ -52,7 +52,8 @@ export default class Layout extends Component{
       isFluid: false,
       simpleHeader: false,
       showFooter: true,
-      embed: false
+      embed: false,
+      fullHeight: false
     }, this.props.options)
 
     this._registerUser()
@@ -61,7 +62,7 @@ export default class Layout extends Component{
     return (
       <NavHelper>
         <ErrorModal/>
-        <div className='Layout'>
+        <div className={`Layout ${options.fullHeight ? 'fullHeight' : ''}`}>
           <ModalContainer/>
           {!options.embed && <Header isFluid={options.isFluid} isBare={options.simpleHeader}/>}
           <Main isFluid={options.isFluid} backgroundColor={options.backgroundColor}> {body} </Main>
