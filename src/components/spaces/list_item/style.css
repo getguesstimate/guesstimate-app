@@ -46,6 +46,12 @@
   opacity: 0.3
 }
 
+.SpaceListItem .snapshot.blank .fa{
+  font-size: 2.5em;
+  color: $grey-2;
+  opacity: 0.3;
+}
+
 .SpaceListItem a h3.default-value {
   color: #aaa;
   font-style: italic;
