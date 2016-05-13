@@ -48,6 +48,12 @@ export default class Cell extends Component {
     return (difProps || itemDifferent || (bothHaveItems && this.props.hasItemUpdated(this.props.item, newProps.item)))
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if ((!!prevProps.item !== !!this.props.item || !!prevProps.isSinglySelected !== !!this.props.isSinglySelected) && this.props.isSinglySelected) {
+      this._focus()
+    }
+  }
+
   getPosition() {
     let $el = $(this.refs.dom)
     if ($el.length) {
@@ -82,19 +88,11 @@ export default class Cell extends Component {
     }
   }
 
-  //componentDidMount = () => {
-  //  if (this.props.isSinglySelected) {
-  //    //this._focus()
-  //  }
-  //}
-
-  //componentDidUpdate = (prevProps) => {
-  //  // TODO(matthew): For some reason, clicking on a cell within a multiple selected region registers the update with
-  //  // prevprops also showing isSinglySelected to be true...
-  //  if (this.props.isSinglySelected) {
-  //    //this._focus()
-  //  }
-  //}
+  componentDidMount() {
+    if (this.props.isSinglySelected) {
+      this._focus()
+    }
+  }
 
   _focus = () => {
     console.log('focusing in cell')
