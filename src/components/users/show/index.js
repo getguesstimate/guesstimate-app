@@ -65,7 +65,7 @@ export default class UserShow extends Component{
                   spaces={spaces}
                   showUsers={false}
                   hasMorePages={false}
-                  showScreenshots={false}
+                  showScreenshots={true}
                 />
               }
             </div>
