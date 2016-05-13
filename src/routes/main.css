@@ -22,3 +22,6 @@ body {
 }
 
 
+body.remove-elev #elevio-widget {
+  display: none!important;
+}

@@ -9,6 +9,7 @@ import { denormalizedSpaceSelector } from '../denormalized-space-selector.js';
 import SpaceSidebar from './sidebar.js'
 import ClosedSpaceSidebar from './closed_sidebar.js'
 import e from 'gEngine/engine'
+import * as elev from 'server/elev/index.js'
 
 function mapStateToProps(state) {
   return {
@@ -37,6 +38,11 @@ export default class SpacesShow extends Component {
 
   componentWillMount() {
     this.considerFetch(this.props)
+    if (!this.props.embed) { elev.show() }
+  }
+
+  componentWillUnmount() {
+    if (!this.props.embed) { elev.hide() }
   }
 
   componentDidUpdate(newProps) {
