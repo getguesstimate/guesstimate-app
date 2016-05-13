@@ -32,10 +32,6 @@
   border-radius: 1px;
 }
 
-.SpaceListItem .snapshot img.expanded{
-  max-width: 900px;
-}
-
 .SpaceListItem .snapshot.blank{
   background-color: $grey-1;
   height: 80px;
