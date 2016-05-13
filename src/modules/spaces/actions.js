@@ -40,7 +40,7 @@ export function destroy(object) {
 
 export function fromSearch(data) {
   return (dispatch) => {
-    const formatted = data.map(d => _.pick(d, ['id', 'name', 'description', 'user_id', 'updated_at', 'metric_count', 'is_private']))
+    const formatted = data.map(d => _.pick(d, ['id', 'name', 'description', 'user_id', 'updated_at', 'metric_count', 'is_private', 'screenshot']))
     const action = sActions.fetchSuccess(formatted)
     dispatch(action)
   }
@@ -86,7 +86,7 @@ export function fetch({userId, organizationId}) {
         captureApiError('SpacesFetch', null, null, err, {url: 'fetch'})
       }
       else if (value) {
-        const formatted = value.items.map(d => _.pick(d, ['id', 'name', 'description', 'user_id', 'organization_id', 'updated_at', 'metric_count', 'is_private']))
+        const formatted = value.items.map(d => _.pick(d, ['id', 'name', 'description', 'user_id', 'organization_id', 'updated_at', 'metric_count', 'is_private', 'screenshot']))
         dispatch(sActions.fetchSuccess(formatted))
 
         const users = value.items.map(d => _.get(d, 'user'))

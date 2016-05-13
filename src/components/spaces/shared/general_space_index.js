@@ -32,7 +32,7 @@ export default class GeneralSpaceIndex extends Component{
     }
   }
   render () {
-    const {searchSpaces} = this.props
+    const {searchSpaces, showScreenshots} = this.props
     let spaces = searchSpaces.hits || []
     const hasMorePages = _.isFinite(searchSpaces.page) && (searchSpaces.page < (searchSpaces.nbPages - 1))
     return (
@@ -55,7 +55,13 @@ export default class GeneralSpaceIndex extends Component{
         </div>
 
         <div className='col-sm-9'>
-          <SpaceList spaces={spaces} showUsers={true} hasMorePages={hasMorePages} loadMore={this._nextPage.bind(this)}/>
+          <SpaceList
+            spaces={spaces}
+            showUsers={true}
+            hasMorePages={hasMorePages}
+            loadMore={this._nextPage.bind(this)}
+            showScreenshots={showScreenshots}
+          />
         </div>
       </div>
     )
