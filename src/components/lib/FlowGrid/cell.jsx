@@ -78,19 +78,19 @@ export default class Cell extends Component {
     }
   }
 
-  componentDidMount = () => {
-    if (this.props.isSinglySelected) {
-      this._focus()
-    }
-  }
+  //componentDidMount = () => {
+  //  if (this.props.isSinglySelected) {
+  //    //this._focus()
+  //  }
+  //}
 
-  componentDidUpdate = (prevProps) => {
-    // TODO(matthew): For some reason, clicking on a cell within a multiple selected region registers the update with
-    // prevprops also showing isSinglySelected to be true...
-    if (this.props.isSinglySelected){
-      this._focus()
-    }
-  }
+  //componentDidUpdate = (prevProps) => {
+  //  // TODO(matthew): For some reason, clicking on a cell within a multiple selected region registers the update with
+  //  // prevprops also showing isSinglySelected to be true...
+  //  if (this.props.isSinglySelected) {
+  //    //this._focus()
+  //  }
+  //}
 
   _focus = () => {
     console.log('focusing in cell')

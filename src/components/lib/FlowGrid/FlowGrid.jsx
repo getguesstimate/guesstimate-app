@@ -69,6 +69,7 @@ export default class FlowGrid extends Component{
   _handleKeyDown(e){
     console.log("Here I am.")
     if (!!e.skipFlowGrid) {
+      console.log("Skipping")
       return
     }
     if (e.keyCode === 8 || e.keyCode === 46) {
