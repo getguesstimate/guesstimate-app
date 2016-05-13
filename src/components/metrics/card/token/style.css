@@ -13,6 +13,10 @@
   font-size: 1em;
 }
 
+.screenshot .MetricToken .hover-icon {
+  display: none;
+}
+
 .MetricToken .hover-hide {
   opacity: 0.6;
   padding: 0 6px 2px;

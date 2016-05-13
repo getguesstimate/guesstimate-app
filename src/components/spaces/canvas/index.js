@@ -30,7 +30,7 @@ function mapStateToProps(state) {
 const PT = PropTypes;
 @connect(mapStateToProps)
 @connect(denormalizedSpaceSelector)
-export default class CanvasSpace extends Component{
+export default class Canvas extends Component{
   static propTypes = {
     canvasState: PT.shape({
       edgeView: canvasStateProps.edgeView,
@@ -41,10 +41,15 @@ export default class CanvasSpace extends Component{
     dispatch: PropTypes.func,
     guesstimateForm: PropTypes.object,
     selected: PropTypes.object,
+    embed: PropTypes.bool,
     spaceId: PropTypes.oneOfType([
         React.PropTypes.string,
         React.PropTypes.number,
     ])
+  }
+
+  static defaultProps = {
+    screenshot: false
   }
 
   componentDidMount(){
@@ -55,6 +60,10 @@ export default class CanvasSpace extends Component{
       this.props.dispatch(canvasStateActions.change({edgeView: 'visible'}))
     }
     this.props.dispatch(runSimulations({spaceId: this.props.denormalizedSpace.id}))
+
+    if (this.props.screenshot) {
+      this.props.dispatch(canvasStateActions.change({metricCardView: 'display'}))
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -162,6 +171,7 @@ export default class CanvasSpace extends Component{
     const showGridLines = (metricCardView !== 'display')
     this.showEdges() ? className += ' showEdges' : ''
     const selectedMetric = this._isAnalysisView() && this._selectedMetric()
+    const overflow = this.props.screenshot ? 'hidden' : 'default'
 
     return (
       <div className={className}>
@@ -169,6 +179,7 @@ export default class CanvasSpace extends Component{
           <JSONTree data={this.props}/>
         }
         <FlowGrid
+          overflow={overflow}
           items={metrics.map(m => ({key: m.id, location: m.location, component: this.renderMetric(m, selectedMetric)}))}
           hasItemUpdated = {(oldItem, newItem) => hasMetricUpdated(oldItem.props, newItem.props)}
           edges={edges}

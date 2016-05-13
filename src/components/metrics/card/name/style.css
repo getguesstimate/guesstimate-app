@@ -25,3 +25,7 @@
   color: #3C4F67;
   font-weight: 600;
 }
+
+.metricCard.display .titleView .MetricName textarea{
+  color: #3C3F44;
+}
