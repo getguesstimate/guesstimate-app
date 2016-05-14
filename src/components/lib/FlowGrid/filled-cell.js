@@ -45,15 +45,9 @@ export default class ItemCell extends Component {
   render = () => {
     let classes = 'FlowGridFilledCell'
     classes += this.props.isDragging ? ' isDragging' : ''
-    return (
+    return this.props.connectDragPreview(
       <div className={classes}>
-        {!this.props.isDragging &&
-          this.props.connectDragPreview(
-            <span className='passThrough'>
-              {this.item()}
-            </span>
-          )
-        }
+        {!this.props.isDragging && this.item()}
       </div>
     )
   }
