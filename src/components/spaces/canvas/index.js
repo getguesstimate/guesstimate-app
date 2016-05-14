@@ -86,7 +86,7 @@ export default class Canvas extends Component{
     this.props.dispatch(selectRegion(location, location))
   }
 
-  _handleMultipleSelect(corner1,corner2) {
+  _handleMultipleSelect(corner1, corner2) {
     this.props.dispatch(selectRegion(corner1, corner2))
   }
 
