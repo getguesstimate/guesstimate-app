@@ -35,14 +35,16 @@ export default class FlowGrid extends Component{
     selected: PTLocation,
     selectedRegion: PropTypes.arrayOf(PTLocation, PTLocation),
     onSelectItem: PropTypes.func.isRequired,
-    onDeSelectItem: PropTypes.func.isRequired,
     onMultipleSelect: PropTypes.func,
     onAddItem: PropTypes.func.isRequired,
     onMoveItem: PropTypes.func.isRequired,
-    onCopy: PropTypes.func,
-    onPaste: PropTypes.func,
+    onRemoveItem: PropTypes.func.isRequired,
+    onCopy: PropTypes.func.isRequired,
+    onPaste: PropTypes.func.isRequired,
 
-    showGridLines: PropTypes.bool
+    showGridLines: PropTypes.bool,
+
+    overflow: PropTypes.string,
   }
 
   static defaultProps = {
@@ -98,14 +100,10 @@ export default class FlowGrid extends Component{
       return
     }
 
-    const leftX = Math.min(corner1.row, corner2.row)
-    const topY = Math.max(corner1.column, corner2.column)
-    const rightX = Math.max(corner1.row, corner2.row)
-    const bottomY = Math.min(corner1.column, corner2.column)
-    this.props.onMultipleSelect({row: leftX, column: bottomY}, {row: rightX, column: topY})
+    this.props.onMultipleSelect(corner1, corner2)
   }
 
-  size(){
+  size() {
     const lowestItem = !this.props.items.length ? 2 : Math.max(...this.props.items.map(g => parseInt(g.location.row))) + 2
     const selected = parseInt(this.props.selected.row) + 2
     const height = Math.max(3, lowestItem, selected) || 3;

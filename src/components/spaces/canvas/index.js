@@ -78,7 +78,7 @@ export default class Canvas extends Component{
 
   componentWillUnmount(){
     this.props.dispatch(deleteSimulations(this.props.denormalizedSpace.metrics.map(m => m.id)))
-    this._handleDeSelect()
+    this.props.dispatch(deSelect())
   }
 
   _handleSelect(location) {
@@ -88,10 +88,6 @@ export default class Canvas extends Component{
 
   _handleMultipleSelect(corner1,corner2) {
     this.props.dispatch(multipleSelect(corner1, corner2))
-  }
-
-  _handleDeSelect() {
-    this.props.dispatch(deSelect())
   }
 
   _handleCopy() {
@@ -135,7 +131,6 @@ export default class Canvas extends Component{
     return (
       <Metric
           canvasState={this.props.canvasState}
-          handleDeSelect={this._handleDeSelect.bind(this)}
           key={metric.id}
           location={location}
           metric={metric}
@@ -186,7 +181,6 @@ export default class Canvas extends Component{
         }
         <FlowGrid
           onMultipleSelect={this._handleMultipleSelect.bind(this)}
-          dispatch={this.props.dispatch}
           overflow={overflow}
           items={metrics.map(m => ({key: m.id, location: m.location, component: this.renderMetric(m, selectedMetric)}))}
           hasItemUpdated = {(oldItem, newItem) => hasMetricUpdated(oldItem.props, newItem.props)}
@@ -194,7 +188,6 @@ export default class Canvas extends Component{
           selectedRegion={selectedRegion}
           selected={selected}
           onSelectItem={this._handleSelect.bind(this)}
-          onDeSelectItem={this._handleDeSelect.bind(this)}
           onAddItem={this._handleAddMetric.bind(this)}
           onMoveItem={this._handleMoveMetric.bind(this)}
           onRemoveItem={(id) => {this.props.dispatch(removeMetric(id))}}
