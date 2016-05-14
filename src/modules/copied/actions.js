@@ -4,15 +4,6 @@ import {multipleSelect} from 'gModules/multiple_selection/actions'
 import {deSelect} from 'gModules/selection/actions'
 import {runSimulations} from 'gModules/simulations/actions'
 
-function isWithinRegion(location, region) {
-  return (
-    location.row >= region[0].row &&
-    location.row <= region[1].row &&
-    location.column >= region[0].column &&
-    location.column <= region[1].column
-  )
-}
-
 function translateLocation(location, block, withinBlockLocation) {
   const translate = l => ({row: l.row + (location.row - block[0].row), column: l.column + location.column - block[0].column})
   return translate(withinBlockLocation)
