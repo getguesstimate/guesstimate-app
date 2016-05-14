@@ -68,7 +68,7 @@ export function paste(spaceId){
 
     newMetrics.forEach((newMetric, i) => {dispatch({type: 'ADD_METRIC', item: newMetric, newGuesstimate: newGuesstimates[i]})})
 
-    dispatch(runSimulations({spaceId, onlyMetrics: newMetrics}))
+    dispatch(runSimulations({spaceId, metricSubset: newMetrics}))
     dispatch(selectRegion(pasteRegion[0], pasteRegion[1]))
   }
 }
