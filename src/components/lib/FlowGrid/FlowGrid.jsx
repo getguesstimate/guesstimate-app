@@ -6,7 +6,8 @@ import Cell from './cell'
 import BackgroundContainer from './background-container.js'
 
 import {keycodeToDirection, DirectionToLocation} from './utils'
-import {removeMetric} from 'gModules/metrics/actions.js'
+
+import {isWithinRegion, isAtLocation} from 'lib/locationUtils.js'
 
 import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContext } from 'react-dnd';
@@ -63,9 +64,8 @@ export default class FlowGrid extends Component{
   }
 
   _selectedItems() {
-   const {showRegion} = this.props
-   return this.props.items.filter(i => (showRegion[0].row <= i.location.row && showRegion[0].column <= i.location.column &&
-      showRegion[1].row >= i.location.row && showRegion[1].column >= i.location.column))
+   const {multipleSelected} = this.props
+   return this.props.items.filter(i => isWithinRegion(i.location, multipleSelected))
   }
 
   _handleKeyDown(e){
@@ -74,7 +74,7 @@ export default class FlowGrid extends Component{
     }
     if (e.keyCode === 8 || e.keyCode === 46) {
       const selectedItems = this._selectedItems()
-      selectedItems.map(i => {this.props.dispatch(removeMetric(i.component.props.metric.id))})
+      selectedItems.map(i => {this.props.onRemoveItem(i.key)})
       e.preventDefault()
     }
 
@@ -131,30 +131,20 @@ export default class FlowGrid extends Component{
     return Math.max(6, lowestItem, selected) || 6;
   }
 
-  _isWithin(location) {
-    const {showRegion} = this.props
-
-    return (showRegion[0].row <= location.row && showRegion[0].column <= location.column &&
-       showRegion[1].row >= location.row && showRegion[1].column >= location.column)
-  }
-
   _cell(location) {
-    const atThisLocation = (l) => (l.row === location.row && l.column === location.column)
+    const isHovered = isAtLocation(this.state.hover, location)
+    const isSinglySelected = isAtLocation(this.props.selected, location)
 
-    const isHovered = atThisLocation(this.state.hover)
+    const {multipleSelected} = this.props
 
-    const isSinglySelected = atThisLocation(this.props.selected)
-
-    const {showRegion} = this.props
-
-    let item = this.props.items.filter(i => atThisLocation(i.location))[0];
+    let item = this.props.items.filter(i => isAtLocation(i.location, location))[0];
     return (
       <Cell
         hasItemUpdated={this.props.hasItemUpdated}
         gridKeyPress={this._handleKeyDown.bind(this)}
         handleSelect={this.props.onSelectItem}
         handleEndRangeSelect={this._handleEndRangeSelect.bind(this)}
-        isSelected={this._isWithin(location)}
+        showRegion={isWithinRegion(location, multipleSelected)}
         isSinglySelected={isSinglySelected}
         isHovered={isHovered}
         item={item && item.component}

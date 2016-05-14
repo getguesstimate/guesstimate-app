@@ -4,25 +4,7 @@ import {multipleSelect} from 'gModules/multiple_selection/actions'
 import {deSelect} from 'gModules/selection/actions'
 import {runSimulations} from 'gModules/simulations/actions'
 
-function isWithinRegion(location, region) {
-  return (
-    location.row >= region[0].row &&
-    location.row <= region[1].row &&
-    location.column >= region[0].column &&
-    location.column <= region[1].column
-  )
-}
-
-function translateLocation(location, block, withinBlockLocation) {
-  const translate = l => ({row: l.row + (location.row - block[0].row), column: l.column + location.column - block[0].column})
-  return translate(withinBlockLocation)
-}
-
-// Translates a region to have the upper left corner at location
-function translateBlock(location, block) {
-  const translate = l => ({row: l.row + (location.row - block[0].row), column: l.column + location.column - block[0].column})
-  return [location, translate(block[1])]
-}
+import {isWithinRegion, translate} from 'lib/locationUtils.js'
 
 export function copy(spaceId){
   return (dispatch, getState) => {
@@ -38,11 +20,8 @@ export function copy(spaceId){
 
 function translateReadableIds(input, idMap) {
   if (!input) {return ""}
-  let output = input
-  for (let oldID of Object.keys(idMap)) {
-    output = output.replace(oldID, idMap[oldID])
-  }
-  return output
+  const re = RegExp(Object.keys(idMap).join("|"), "g")
+  return input.replace(re, (match) => idMap[match])
 }
 
 export function paste(spaceId){
@@ -52,46 +31,44 @@ export function paste(spaceId){
 
     const {metrics, guesstimates, block} = state.copied
     const location = state.selection
-    const pasteRegion = translateBlock(location, block)
 
-    const spaceMetrics = getState().metrics.filter(m => m.space === spaceId)
+    const translateFn = translate(block[0], location)
+
+    const pasteRegion = [location, translateFn(block[1])]
+
+    const spaceMetrics = state.metrics.filter(m => m.space === spaceId)
     let existingReadableIds = spaceMetrics.map(m => m.readableId)
 
-    let newItems = []
     let readableIdsMap = {}
-    for (let metric of metrics) {
+    const newMetrics = _.map(metrics, metric => {
       const newMetric = Object.assign(
         {},
         metric,
         e.metric.create(existingReadableIds),
-        {location: translateLocation(location, block, metric.location)}
+        {space: spaceId},
+        {location: translateFn(metric.location)}
       )
-      newItems.push(newMetric)
       existingReadableIds.push(newMetric.readableId)
       readableIdsMap[metric.readableId] = newMetric.readableId
-    }
+      return newMetric
+    })
 
-    let newGuesstimates = _.map(
+    const newGuesstimates = _.map(
       guesstimates,
       (guesstimate, i) => Object.assign(
         {},
         guesstimate,
-        {metric: newItems[i].id},
+        {metric: newMetrics[i].id},
         {input: translateReadableIds(guesstimate.input, readableIdsMap)}
       )
     )
 
     const existingMetrics = spaceMetrics.filter(m => isWithinRegion(m.location, pasteRegion))
-    if (existingMetrics.length > 0) {
-      _.map(existingMetrics, existingMetric => {dispatch(metricActions.removeMetric(existingMetric.id))})
-    }
+    existingMetrics.forEach(existingMetric => {dispatch(metricActions.removeMetric(existingMetric.id))})
 
-    _.map(newItems, (newItem, i) => {
-      dispatch({ type: 'ADD_METRIC', item: newItem, newGuesstimate: newGuesstimates[i] })
-    })
+    newMetrics.forEach((newItem, i) => {dispatch({type: 'ADD_METRIC', item: newItem, newGuesstimate: newGuesstimates[i]})})
 
-    dispatch(runSimulations({spaceId, onlyMetrics: newItems}))
+    dispatch(runSimulations({spaceId, onlyMetrics: newMetrics}))
     dispatch(multipleSelect(pasteRegion[0], pasteRegion[1]))
-    //dispatch(deSelect()) Nope. TODO this defocuses the canvas. Why????
   }
 }

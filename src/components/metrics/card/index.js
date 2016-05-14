@@ -55,7 +55,6 @@ class MetricCard extends Component {
     dispatch: PT.func.isRequired,
     gridKeyPress: PT.func.isRequired,
     guesstimateForm: PT.object.isRequired,
-    handleDeSelect: PT.func.isRequired,
     isSelected: PT.bool.isRequired,
     location: PT.shape({
       row: PT.number,
@@ -79,7 +78,6 @@ class MetricCard extends Component {
 
   openModal() {
     this.setState({modalIsOpen: true});
-    //this.props.handleDeSelect()
   }
 
   closeModal() {
