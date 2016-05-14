@@ -80,6 +80,10 @@
   padding: 3px;
 }
 
+.FlowGridFilledCell .passThrough {
+  display: flex;
+}
+
 .showEdges .FlowGridFilledCell {
   padding: 8px;
 }

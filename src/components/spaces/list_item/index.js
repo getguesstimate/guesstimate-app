@@ -36,8 +36,11 @@ let PrivateTag = ({isPrivate}) => (
   </div>
 )
 
-let BlankScreenshot = () => (
-  <div className='snapshot blank'><img src={arrowsVisibleImage}/></div>
+let BlankScreenshot = ({isPrivate}) => (
+  <div className='snapshot blank'>
+    {!isPrivate && <img src={arrowsVisibleImage}/>}
+    {isPrivate && <Icon name='lock'/>}
+  </div>
 )
 
 const SpaceListItem = ({space, showUser, isOwnedByMe, showScreenshot}) => {
@@ -51,7 +54,8 @@ const SpaceListItem = ({space, showUser, isOwnedByMe, showScreenshot}) => {
           {showScreenshot &&
             <div className='col-sm-3'>
               {space.screenshot && <div className='snapshot'> <img src={space.screenshot} /> </div> }
-              {!space.screenshot && <BlankScreenshot/>}
+              {!space.screenshot && <BlankScreenshot isPrivate={space.is_private}/>}
+
             </div>
           }
           <div className={`col-sm-${showScreenshot ? 9 : 12}`}>
