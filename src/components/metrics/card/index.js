@@ -18,6 +18,8 @@ import SensitivitySection from './SensitivitySection/SensitivitySection.js'
 
 import { hasMetricUpdated } from './updated.js'
 
+import {PTLocation} from 'lib/locationUtils.js'
+
 const INTERMEDIATE = 'INTERMEDIATE'
 const OUTPUT = 'OUTPUT'
 const INPUT = 'INPUT'
@@ -56,10 +58,7 @@ class MetricCard extends Component {
     gridKeyPress: PT.func.isRequired,
     guesstimateForm: PT.object.isRequired,
     isSelected: PT.bool.isRequired,
-    location: PT.shape({
-      row: PT.number,
-      column: PT.number
-    }),
+    location: PTLocation,
     metric: PT.object.isRequired
   }
 

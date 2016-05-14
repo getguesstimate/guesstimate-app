@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 import {DragSource} from 'react-dnd'
+import {PTLocation} from 'lib/locationUtils.js'
 
 var cardSource = {
   beginDrag: function (props) {
@@ -26,10 +27,7 @@ export default class ItemCell extends Component {
     handleSelect: PropTypes.func.isRequired,
     inSelectedCell: PropTypes.bool.isRequired,
     item: PropTypes.object,
-    location: PropTypes.shape({
-      row: PropTypes.number.isRequired,
-      column: PropTypes.number.isRequired
-    }).isRequired,
+    location: PTLocation.isRequired,
   }
 
   item() {

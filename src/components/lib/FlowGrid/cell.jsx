@@ -4,6 +4,7 @@ import $ from 'jquery'
 import { DropTarget } from 'react-dnd';
 import ItemCell from './filled-cell.js';
 import EmptyCell from './cell-empty.js';
+import {PTLocation} from 'lib/locationUtils.js'
 
 const squareTarget = {
   drop(props) {
@@ -29,10 +30,7 @@ export default class Cell extends Component {
     inSelectedCell: PropTypes.bool.isRequired,
     isHovered: PropTypes.bool.isRequired,
     item: PropTypes.object,
-    location: PropTypes.shape({
-      row: PropTypes.number.isRequired,
-      column: PropTypes.number.isRequired
-    }).isRequired,
+    location: PTLocation.isRequired,
     onAddItem: PropTypes.func.isRequired,
     onMoveItem: PropTypes.func.isRequired,
   }

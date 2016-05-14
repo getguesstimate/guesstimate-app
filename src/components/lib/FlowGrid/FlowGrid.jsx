@@ -7,17 +7,12 @@ import BackgroundContainer from './background-container.js'
 
 import {keycodeToDirection, DirectionToLocation} from './utils'
 
-import {isLocation, isWithinRegion, isAtLocation} from 'lib/locationUtils.js'
+import {isLocation, isWithinRegion, isAtLocation, PTLocation} from 'lib/locationUtils.js'
 
 import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContext } from 'react-dnd';
 
 let upto = (n) => Array.apply(null, {length: n}).map(Number.call, Number)
-
-const PTLocation = PropTypes.shape({
-  column: PropTypes.number,
-  row: PropTypes.number
-})
 
 @DragDropContext(HTML5Backend)
 export default class FlowGrid extends Component{

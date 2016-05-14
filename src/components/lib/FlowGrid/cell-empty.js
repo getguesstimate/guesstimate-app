@@ -1,14 +1,13 @@
 import React, {Component, PropTypes} from 'react'
 
+import {PTLocation} from 'lib/locationUtils.js'
+
 export default class EmptyCell extends Component {
   static propTypes = {
     gridKeyPress: PropTypes.func.isRequired,
     handleSelect: PropTypes.func.isRequired,
     inSelectedCell: PropTypes.bool.isRequired,
-    location: PropTypes.shape({
-      row: PropTypes.number.isRequired,
-      column: PropTypes.number.isRequired
-    }).isRequired,
+    location: PTLocation.isRequired,
     onAddItem: PropTypes.func.isRequired,
   }
 

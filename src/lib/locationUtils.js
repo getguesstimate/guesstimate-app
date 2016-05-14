@@ -1,3 +1,10 @@
+import {PropTypes} from 'react'
+
+export const PTLocation = PropTypes.shape({
+  column: PropTypes.number,
+  row: PropTypes.number
+})
+
 export function isLocation(test) {
   return !!test && (test.hasOwnProperty('row') && test.hasOwnProperty('column'))
 }
