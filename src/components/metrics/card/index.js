@@ -57,7 +57,7 @@ class MetricCard extends Component {
     dispatch: PT.func.isRequired,
     gridKeyPress: PT.func.isRequired,
     guesstimateForm: PT.object.isRequired,
-    isSelected: PT.bool.isRequired,
+    inSelectedCell: PT.bool.isRequired,
     location: PTLocation,
     metric: PT.object.isRequired
   }
@@ -70,7 +70,7 @@ class MetricCard extends Component {
 
   componentDidUpdate() {
     const hasContent = this.refs.MetricCardViewSection.hasContent()
-    if (!this.props.isSelected && this._isEmpty() && !hasContent && !this.state.modalIsOpen){
+    if (!this.props.inSelectedCell && this._isEmpty() && !hasContent && !this.state.modalIsOpen){
       this.handleRemoveMetric()
     }
   }
@@ -85,7 +85,7 @@ class MetricCard extends Component {
 
   _handleKeyDown(e) {
     if (e.target === ReactDOM.findDOMNode(this)) {
-      if (e.keyCode == '13' && this.props.isSelected) {
+      if (e.keyCode == '13' && this.props.inSelectedCell) {
         e.preventDefault()
         e.stopPropagation()
         this.openModal()
@@ -160,7 +160,7 @@ class MetricCard extends Component {
 
   _isSelectable(e) {
     const selectableEl = (e.target.parentElement.getAttribute('data-select') !== 'false')
-    const notYetSelected = !this.props.isSelected
+    const notYetSelected = !this.props.inSelectedCell
     return (selectableEl && notYetSelected)
   }
 
@@ -169,12 +169,12 @@ class MetricCard extends Component {
   }
 
   _className() {
-    const {isSelected, metric, hovered} = this.props
+    const {inSelectedCell, metric, hovered} = this.props
     const {canvasState: {metricCardView}} = this.props
     const relationshipClass = relationshipClasses[relationshipType(metric.edges)]
 
-    const titleView = !hovered && !isSelected && this._isTitle()
-    let className = isSelected ? 'metricCard grid-item-focus' : 'metricCard'
+    const titleView = !hovered && !inSelectedCell && this._isTitle()
+    let className = inSelectedCell ? 'metricCard grid-item-focus' : 'metricCard'
     className += ` ${metricCardView}`
     className += titleView ? ' titleView' : ''
     className += ' ' + relationshipClass
@@ -199,7 +199,7 @@ class MetricCard extends Component {
   }
 
   render() {
-    const {isSelected, metric, guesstimateForm, canvasState} = this.props
+    const {inSelectedCell, metric, guesstimateForm, canvasState} = this.props
     const {guesstimate} = metric
     const errors = this._errors()
     const shouldShowSensitivitySection = this._shouldShowSensitivitySection()
@@ -226,7 +226,7 @@ class MetricCard extends Component {
           <MetricCardViewSection
               canvasState={canvasState}
               metric={metric}
-              isSelected={isSelected}
+              inSelectedCell={inSelectedCell}
               onChangeName={this.handleChangeMetric.bind(this)}
               guesstimateForm={guesstimateForm}
               onOpenModal={this.openModal.bind(this)}
@@ -239,7 +239,7 @@ class MetricCard extends Component {
               showSensitivitySection={shouldShowSensitivitySection}
           />
 
-          {isSelected && !this.state.modalIsOpen &&
+          {inSelectedCell && !this.state.modalIsOpen &&
             <div className='section editing'>
               <DistributionEditor
                   metricId={metric.id}
@@ -252,8 +252,8 @@ class MetricCard extends Component {
             </div>
           }
         </div>
-        {this.props.hovered && !isSelected && !shouldShowSensitivitySection && <MetricToolTip guesstimate={guesstimate}/>}
-        {this.props.hovered && !isSelected && shouldShowSensitivitySection &&
+        {this.props.hovered && !inSelectedCell && !shouldShowSensitivitySection && <MetricToolTip guesstimate={guesstimate}/>}
+        {this.props.hovered && !inSelectedCell && shouldShowSensitivitySection &&
           <ScatterTip yMetric={this.props.selectedMetric} xMetric={metric}/>
         }
       </div>

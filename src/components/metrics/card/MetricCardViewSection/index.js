@@ -52,7 +52,7 @@ export default class MetricCardViewSection extends Component {
   render() {
     const {canvasState,
           metric,
-          isSelected,
+          inSelectedCell,
           onChangeName,
           guesstimateForm,
           onOpenModal,
@@ -68,11 +68,11 @@ export default class MetricCardViewSection extends Component {
     const shouldShowStatistics = this._shouldShowStatistics()
     const shouldShowJsonTree = (metricCardView === 'debugging')
     const hasGuesstimateDescription = !_.isEmpty(guesstimate.description)
-    const anotherFunctionSelected = ((metricClickMode === 'FUNCTION_INPUT_SELECT') && !isSelected)
+    const anotherFunctionSelected = ((metricClickMode === 'FUNCTION_INPUT_SELECT') && !inSelectedCell)
     const hasErrors = (errors.length > 0)
 
     return(
-      <div className={`MetricCardViewSection ${metricCardView} ${(hasErrors & !isSelected) ? 'hasErrors' : ''}`}
+      <div className={`MetricCardViewSection ${metricCardView} ${(hasErrors & !inSelectedCell) ? 'hasErrors' : ''}`}
         onMouseDown={onMouseDown}
       >
         {(metricCardView !== 'basic') && showSimulation &&
@@ -91,10 +91,10 @@ export default class MetricCardViewSection extends Component {
           />
         </div>
 
-        {(!_.isEmpty(metric.name) || isSelected) &&
+        {(!_.isEmpty(metric.name) || inSelectedCell) &&
           <div className='NameSection'>
               <MetricName
-                isSelected={isSelected}
+                inSelectedCell={inSelectedCell}
                 name={metric.name}
                 onChange={onChangeName}
                 jumpSection={jumpSection}
@@ -125,8 +125,8 @@ export default class MetricCardViewSection extends Component {
             {hasErrors &&
               <ErrorSection
                 errors={errors}
-                padTop={(!_.isEmpty(metric.name) && !isSelected)}
-                hide={isSelected}
+                padTop={(!_.isEmpty(metric.name) && !inSelectedCell)}
+                hide={inSelectedCell}
               />
             }
           </div>
