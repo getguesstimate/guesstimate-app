@@ -6,3 +6,7 @@ export function multipleSelect(corner1, corner2) {
   bottomY = Math.min(corner1.column, corner2.column)
   return { type: 'MULTIPLE_SELECT', corner1: {row: leftX, column: bottomY}, corner2: {row: rightX, column: topY} }
 }
+
+export function multipleDeSelect() {
+  return { type: 'MULTIPLE_DE_SELECT' }
+}

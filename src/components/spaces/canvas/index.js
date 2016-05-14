@@ -8,7 +8,7 @@ import Metric from 'gComponents/metrics/card'
 
 import { removeMetric, changeMetric, addMetric } from 'gModules/metrics/actions'
 import { changeSelect, deSelect } from 'gModules/selection/actions'
-import { multipleSelect } from 'gModules/multiple_selection/actions'
+import { multipleSelect, multipleDeSelect } from 'gModules/multiple_selection/actions'
 import { runSimulations, deleteSimulations } from 'gModules/simulations/actions'
 
 import { hasMetricUpdated } from 'gComponents/metrics/card/updated.js'
@@ -78,7 +78,7 @@ export default class Canvas extends Component{
 
   componentWillUnmount(){
     this.props.dispatch(deleteSimulations(this.props.denormalizedSpace.metrics.map(m => m.id)))
-    this.props.dispatch(deSelect())
+    this._handleDeSelectAll()
   }
 
   _handleSelect(location) {
@@ -88,6 +88,11 @@ export default class Canvas extends Component{
 
   _handleMultipleSelect(corner1,corner2) {
     this.props.dispatch(multipleSelect(corner1, corner2))
+  }
+
+  _handleDeSelectAll() {
+    this.props.dispatch(deSelect())
+    this.props.dispatch(multipleDeSelect())
   }
 
   _handleCopy() {
@@ -188,6 +193,7 @@ export default class Canvas extends Component{
           selectedRegion={selectedRegion}
           selected={selected}
           onSelectItem={this._handleSelect.bind(this)}
+          onDeSelectAll={this._handleDeSelectAll.bind(this)}
           onAddItem={this._handleAddMetric.bind(this)}
           onMoveItem={this._handleMoveMetric.bind(this)}
           onRemoveItem={(id) => {this.props.dispatch(removeMetric(id))}}

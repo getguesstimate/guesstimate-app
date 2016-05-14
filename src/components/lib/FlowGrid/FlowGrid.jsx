@@ -35,7 +35,8 @@ export default class FlowGrid extends Component{
     selected: PTLocation,
     selectedRegion: PropTypes.arrayOf(PTLocation, PTLocation),
     onSelectItem: PropTypes.func.isRequired,
-    onMultipleSelect: PropTypes.func,
+    onMultipleSelect: PropTypes.func.isRequired,
+    onDeSelectAll: PropTypes.func.isRequired,
     onAddItem: PropTypes.func.isRequired,
     onMoveItem: PropTypes.func.isRequired,
     onRemoveItem: PropTypes.func.isRequired,
@@ -160,6 +161,10 @@ export default class FlowGrid extends Component{
     if (!_.isEqual(newHeights, this.state.rowHeights)){
       this.setState({rowHeights: newHeights})
     }
+  }
+
+  componentWillUnmount() {
+    this.props.onDeSelectAll()
   }
 
   render() {
