@@ -1,5 +1,4 @@
 let upto = (n) => Array.apply(null, {length: n}).map(Number.call, Number)
-const PADDING_WIDTH = 5
 
 export default class GridPoint {
   constructor({rowHeights, columnWidth, padding}){
@@ -38,5 +37,4 @@ export default class GridPoint {
     const output = this.rectangle(region[1])
     return {left: input.left -1, top: input.top -1, width: (output.right - input.left + 1), height: (output.bottom - input.top + 1)}
   }
-
 }

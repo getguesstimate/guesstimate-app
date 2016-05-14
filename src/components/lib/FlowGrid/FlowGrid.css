@@ -71,9 +71,6 @@
 
 .FlowGrid.withLines .FlowGridCell{
   border-bottom: 1px dashed rgba(0, 25, 95, 0.09);
-}
-
-.FlowGrid.withLines .FlowGridCell{
   border-right: 1px dashed rgba(0, 25, 95, 0.09);
 }
 
@@ -102,7 +99,6 @@
   background-color: rgba(75, 138, 177, 0.3);
   border-radius: 1px;
 }
-
 
 .FlowGridCell.selected:not(.within).hasItem.IsOver .FlowGridFilledCell{
   transition: background-color 0.2s ease;
@@ -163,7 +159,7 @@ svg.edge  path.basic-arrow.RED {
   fill: #B59893;
 }
 
-.foobar {
+.SelectedRegion {
    position: absolute;
    background: rgba(153, 186, 208, 0.87);
    border-radius: 3px;

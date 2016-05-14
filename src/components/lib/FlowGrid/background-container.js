@@ -9,7 +9,7 @@ export class Region extends Component{
     const gridPoint = new GridPoint({rowHeights: this.props.rowHeights, columnWidth: this.props.columnWidth, padding: 0})
     let region = gridPoint.region(this.props.showRegion)
     return (
-       <div className='foobar' style={region}/>
+       <div className='SelectedRegion' style={region}/>
     )
   }
 }
