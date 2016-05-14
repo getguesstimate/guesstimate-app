@@ -44,7 +44,7 @@ export class GraphPropagation {
 
     this.orderedMetricIds = orderedMetricIdsAndGraphErrors.map(m => m.id)
     this.orderedMetricPropagations = orderedMetricIdsAndGraphErrors.map(
-      ({id, errors}) => (new MetricPropagation(id, errors, this.id)
+      ({id, errors}) => (new MetricPropagation(id, errors, this.id))
     )
 
     this.currentStep = 0
