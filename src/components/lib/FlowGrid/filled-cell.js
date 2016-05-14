@@ -37,7 +37,6 @@ export default class ItemCell extends Component {
         this.props.item,
         {
           hovered: this.props.hover,
-          //handleSelect: this._handleSelect.bind(this)
           isSelected: this.props.isSinglySelected,
           gridKeyPress: this.props.gridKeyPress,
           connectDragSource: this.props.connectDragSource
