@@ -65,9 +65,6 @@ export default class TextInput extends Component{
       e.preventDefault()
       this.props.onEscape()
     }
-    // TODO(matthew): Find a way to do this that doesn't remove the event from the synthetic event pool.
-    e.persist()
-    e.skipFlowGrid = true
   }
 
   render() {

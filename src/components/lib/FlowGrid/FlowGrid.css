@@ -70,8 +70,8 @@
 }
 
 .FlowGrid.withLines .FlowGridCell{
-  border-bottom: 1px dashed rgba(0, 25, 95, 0.09);
   border-right: 1px dashed rgba(0, 25, 95, 0.09);
+  border-bottom: 1px dashed rgba(0, 25, 95, 0.09);
 }
 
 .FlowGridFilledCell {
@@ -98,11 +98,6 @@
 .FlowGridCell.hovered.hasItem .FlowGridFilledCell{
   background-color: rgba(75, 138, 177, 0.3);
   border-radius: 1px;
-}
-
-.FlowGridCell.selected:not(.within).hasItem.IsOver .FlowGridFilledCell{
-  transition: background-color 0.2s ease;
-  background-color: rgba(127, 149, 160, 0.81);
 }
 
 .FlowGridCell.hovered {
