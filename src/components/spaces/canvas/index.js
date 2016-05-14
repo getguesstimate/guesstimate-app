@@ -8,7 +8,7 @@ import Metric from 'gComponents/metrics/card'
 
 import { removeMetric, changeMetric, addMetric } from 'gModules/metrics/actions'
 import { changeSelect, deSelect } from 'gModules/selection/actions'
-import { multipleSelect, multipleDeSelect } from 'gModules/multiple_selection/actions'
+import { selectRegion, deSelectRegion } from 'gModules/multiple_selection/actions'
 import { runSimulations, deleteSimulations } from 'gModules/simulations/actions'
 
 import { hasMetricUpdated } from 'gComponents/metrics/card/updated.js'
@@ -25,7 +25,7 @@ function mapStateToProps(state) {
   return {
     canvasState: state.canvasState,
     selected: state.selection,
-    selectedRegion: state.multipleSelection,
+    selectedRegion: state.selectedRegion,
   }
 }
 
@@ -83,16 +83,16 @@ export default class Canvas extends Component{
 
   _handleSelect(location) {
     this.props.dispatch(changeSelect(location))
-    this.props.dispatch(multipleSelect(location, location))
+    this.props.dispatch(selectRegion(location, location))
   }
 
   _handleMultipleSelect(corner1,corner2) {
-    this.props.dispatch(multipleSelect(corner1, corner2))
+    this.props.dispatch(selectRegion(corner1, corner2))
   }
 
   _handleDeSelectAll() {
     this.props.dispatch(deSelect())
-    this.props.dispatch(multipleDeSelect())
+    this.props.dispatch(deSelectRegion())
   }
 
   _handleCopy() {

@@ -1,6 +1,6 @@
 import e from 'gEngine/engine'
 import * as metricActions from 'gModules/metrics/actions'
-import {multipleSelect} from 'gModules/multiple_selection/actions'
+import {selectRegion} from 'gModules/multiple_selection/actions'
 import {deSelect} from 'gModules/selection/actions'
 import {runSimulations} from 'gModules/simulations/actions'
 
@@ -10,7 +10,7 @@ export function copy(spaceId){
   return (dispatch, getState) => {
     const state = getState()
 
-    const region = state.multipleSelection
+    const region = state.selectedRegion
     const metrics = state.metrics.filter(m => m.space === spaceId && isWithinRegion(m.location, region))
     const guesstimates = metrics.map(metric => state.guesstimates.find(g => g.metric === metric.id))
 
@@ -69,6 +69,6 @@ export function paste(spaceId){
     newMetrics.forEach((newMetric, i) => {dispatch({type: 'ADD_METRIC', item: newMetric, newGuesstimate: newGuesstimates[i]})})
 
     dispatch(runSimulations({spaceId, onlyMetrics: newMetrics}))
-    dispatch(multipleSelect(pasteRegion[0], pasteRegion[1]))
+    dispatch(selectRegion(pasteRegion[0], pasteRegion[1]))
   }
 }
