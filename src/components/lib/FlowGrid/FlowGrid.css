@@ -69,9 +69,53 @@
   z-index: 1;
 }
 
-.FlowGrid.withLines .FlowGridCell{
-  border-right: 1px dashed rgba(0, 25, 95, 0.09);
+.FlowGrid.withLines .FlowGridCell:not(.within){
   border-bottom: 1px dashed rgba(0, 25, 95, 0.09);
+}
+
+.FlowGrid.withLines .FlowGridCell:not(.within){
+  border-right: 1px dashed rgba(0, 25, 95, 0.09);
+}
+
+.FlowGrid.withLines .FlowGridCell.within.onBottom{
+  border-bottom: 2px solid rgba(0, 25, 95, 0.0);
+}
+
+.FlowGrid.withLines .FlowGridCell.within.onRight{
+  border-right: 2px solid rgba(0, 25, 95, 0.0);
+}
+
+
+.FlowGridCell.within.onRight .FlowGridEmptyCell, .FlowGridCell.within.onRight .FlowGridFilledCell{
+  border-right: 1px solid rgba(0, 25, 95, 0.19);
+}
+
+.FlowGridCell.within.onBottom .FlowGridEmptyCell, .FlowGridCell.within.onBottom .FlowGridFilledCell{
+  border-bottom: 1px solid rgba(0, 25, 95, 0.19);
+}
+
+.FlowGridCell.within.onTop .FlowGridEmptyCell, .FlowGridCell.within.onTop .FlowGridFilledCell{
+  border-top: 1px solid rgba(0, 25, 95, 0.19);
+}
+
+.FlowGridCell.within.onLeft .FlowGridEmptyCell, .FlowGridCell.within.onLeft .FlowGridFilledCell{
+  border-left: 1px solid rgba(0, 25, 95, 0.19);
+}
+
+.FlowGridCell.within.onRight.onBottom .FlowGridEmptyCell, .FlowGridCell.within.onRight.onBottom .FlowGridFilledCell{
+  border-radius: 0 0 3px 0;
+}
+
+.FlowGridCell.within.onRight.onTop .FlowGridEmptyCell, .FlowGridCell.within.onRight.onTop .FlowGridFilledCell{
+  border-radius: 0 3px 0 0;
+}
+
+.FlowGridCell.within.onLeft.onBottom .FlowGridEmptyCell, .FlowGridCell.within.onLeft.onBottom .FlowGridFilledCell{
+  border-radius: 0 0 0 3px;
+}
+
+.FlowGridCell.within.onLeft.onTop .FlowGridEmptyCell, .FlowGridCell.within.onLeft.onTop .FlowGridFilledCell{
+  border-radius: 3px 0 0 0;
 }
 
 .FlowGridFilledCell {
@@ -166,4 +210,11 @@ svg.edge  path.basic-arrow.RED {
 
 .arrow.RED{
   fill: #B59893;
+}
+
+.foobar {
+   position: absolute;
+   background: rgba(128,154,184, 0.3);
+   border: 1px solid blue;
+   border-radius: 2px;
 }
