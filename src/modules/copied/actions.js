@@ -45,6 +45,7 @@ export function paste(spaceId){
         {},
         metric,
         e.metric.create(existingReadableIds),
+        {space: spaceId},
         {location: translateFn(metric.location)}
       )
       existingReadableIds.push(newMetric.readableId)
