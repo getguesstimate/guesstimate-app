@@ -3,7 +3,7 @@ import React, {Component, PropTypes} from 'react'
 
 import './FlowGrid.css'
 import Cell from './cell'
-import EdgeContainer from './edge-container.js'
+import BackgroundContainer from './background-container.js'
 
 import {keycodeToDirection, DirectionToLocation} from './utils'
 
@@ -33,8 +33,7 @@ export default class FlowGrid extends Component{
       output: PTLocation.isRequired
     })),
     selected: PTLocation,
-    multipleSelected: PropTypes.arrayOf(PTLocation, PTLocation),
-
+    selectedRegion: PropTypes.arrayOf(PTLocation, PTLocation),
     onSelectItem: PropTypes.func.isRequired,
     onMultipleSelect: PropTypes.func,
     onAddItem: PropTypes.func.isRequired,
@@ -64,8 +63,8 @@ export default class FlowGrid extends Component{
   }
 
   _selectedItems() {
-   const {multipleSelected} = this.props
-   return this.props.items.filter(i => isWithinRegion(i.location, multipleSelected))
+   const {selectedRegion} = this.props
+   return this.props.items.filter(i => isWithinRegion(i.location, selectedRegion))
   }
 
   _handleKeyDown(e){
@@ -129,9 +128,7 @@ export default class FlowGrid extends Component{
 
   _cell(location) {
     const isHovered = isAtLocation(this.state.hover, location)
-    const isSinglySelected = isAtLocation(this.props.selected, location)
-
-    const {multipleSelected} = this.props
+    const inSelectedCell = isAtLocation(this.props.selected, location)
 
     let item = this.props.items.filter(i => isAtLocation(i.location, location))[0];
     return (
@@ -140,8 +137,8 @@ export default class FlowGrid extends Component{
         gridKeyPress={this._handleKeyDown.bind(this)}
         handleSelect={this.props.onSelectItem}
         handleEndRangeSelect={this._handleEndRangeSelect.bind(this)}
-        isSelected={isWithinRegion(location, multipleSelected)}
-        isSinglySelected={isSinglySelected}
+        inSelectedRegion={isWithinRegion(location, this.props.selectedRegion)}
+        inSelectedCell={inSelectedCell}
         isHovered={isHovered}
         item={item && item.component}
         key={'grid-item', location.row, location.column}
@@ -202,14 +199,13 @@ export default class FlowGrid extends Component{
                 )
               })
             }
-            {!_.isEmpty(edges) &&
-              <EdgeContainer
+              <BackgroundContainer
                   edges={edges}
                   refs={this.refs}
                   rowCount={rowCount}
                   rowHeights={rowHeights}
+                  selectedRegion={this.props.selectedRegion}
                 />
-            }
           </div>
         </div>
       </div>

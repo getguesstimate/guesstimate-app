@@ -3,6 +3,7 @@ export function isAtLocation(test, location) {
 }
 
 export function isWithinRegion(test, region) {
+  if (!test || !region) { return false }
   return (
     test.row >= region[0].row &&
     test.row <= region[1].row &&

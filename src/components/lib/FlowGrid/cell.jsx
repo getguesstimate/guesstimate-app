@@ -25,8 +25,8 @@ export default class Cell extends Component {
     gridKeyPress: PropTypes.func.isRequired,
     handleSelect: PropTypes.func.isRequired,
     isOver: PropTypes.bool.isRequired,
-    isSelected: PropTypes.bool.isRequired,
-    isSinglySelected: PropTypes.bool.isRequired,
+    inSelectedRegion: PropTypes.bool.isRequired,
+    inSelectedCell: PropTypes.bool.isRequired,
     isHovered: PropTypes.bool.isRequired,
     item: PropTypes.object,
     location: PropTypes.shape({
@@ -39,8 +39,8 @@ export default class Cell extends Component {
 
   shouldComponentUpdate(newProps, newState) {
     const difProps = (newProps.isOver !== this.props.isOver) ||
-      (newProps.isSelected !== this.props.isSelected) ||
-      (newProps.isSinglySelected !== this.props.isSinglySelected) ||
+      (newProps.inSelectedRegion !== this.props.inSelectedRegion) ||
+      (newProps.inSelectedCell !== this.props.inSelectedCell) ||
       (newProps.isHovered !== this.props.isHovered)
     const itemDifferent = (!!newProps.item !== !!this.props.item)
     const bothHaveItems = (!!newProps.item && !!this.props.item)
@@ -49,7 +49,7 @@ export default class Cell extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if ((!!prevProps.item !== !!this.props.item || !!prevProps.isSinglySelected !== !!this.props.isSinglySelected) && this.props.isSinglySelected) {
+    if ((!!prevProps.item !== !!this.props.item || !!prevProps.inSelectedCell !== !!this.props.inSelectedCell) && this.props.inSelectedCell) {
       this._focus()
     }
   }
@@ -74,7 +74,7 @@ export default class Cell extends Component {
       return
     }
     if (e.button === 0){
-      if (!this.props.isSinglySelected) {
+      if (!this.props.inSelectedCell) {
         if (e.shiftKey) {
           this.props.handleEndRangeSelect(this.props.location)
         } else {
@@ -88,7 +88,7 @@ export default class Cell extends Component {
   }
 
   componentDidMount() {
-    if (this.props.isSinglySelected) {
+    if (this.props.inSelectedCell) {
       this._focus()
     }
   }
@@ -115,7 +115,7 @@ export default class Cell extends Component {
 
   _classes = () => {
     let classes = 'FlowGridCell'
-    classes += (this.props.isSelected ? ' selected' : ' nonSelected')
+    classes += (this.props.inSelectedRegion ? ' selected' : ' nonSelected')
     classes += this.props.item ? ' hasItem' : ''
     classes += this.props.isOver ? ' IsOver' : ''
     classes += this.props.isHovered ? ' hovered' : ''

@@ -25,7 +25,7 @@ function mapStateToProps(state) {
   return {
     canvasState: state.canvasState,
     selected: state.selection,
-    multipleSelected: state.multipleSelection,
+    selectedRegion: state.multipleSelection,
   }
 }
 
@@ -163,7 +163,7 @@ export default class Canvas extends Component{
   }
 
   render () {
-    const {selected, multipleSelected} = this.props
+    const {selected, selectedRegion} = this.props
     const {metrics} = this.props.denormalizedSpace
     const {metricCardView} = this.props.canvasState
 
@@ -180,12 +180,12 @@ export default class Canvas extends Component{
           <JSONTree data={this.props}/>
         }
         <FlowGrid
-          multipleSelected={multipleSelected}
           onMultipleSelect={this._handleMultipleSelect.bind(this)}
           overflow={overflow}
           items={metrics.map(m => ({key: m.id, location: m.location, component: this.renderMetric(m, selectedMetric)}))}
           hasItemUpdated = {(oldItem, newItem) => hasMetricUpdated(oldItem.props, newItem.props)}
           edges={edges}
+          selectedRegion={selectedRegion}
           selected={selected}
           onSelectItem={this._handleSelect.bind(this)}
           onAddItem={this._handleAddMetric.bind(this)}
