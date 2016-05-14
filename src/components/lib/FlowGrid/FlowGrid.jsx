@@ -62,11 +62,15 @@ export default class FlowGrid extends Component{
    return this.props.items.filter(i => isWithinRegion(i.location, this.props.selectedRegion))
   }
 
+  _handleRemoveSelectedItems() {
+    const selectedItems = this._selectedItems()
+    selectedItems.map(i => {this.props.onRemoveItem(i.key)})
+  }
+
   _handleKeyDown(e){
     if (e.target && e.target.type === 'textarea') { return }
     if (e.keyCode === 8 || e.keyCode === 46) {
-      const selectedItems = this._selectedItems()
-      selectedItems.map(i => {this.props.onRemoveItem(i.key)})
+      this._handleRemoveSelectedItems()
       e.preventDefault()
     }
 
@@ -80,10 +84,15 @@ export default class FlowGrid extends Component{
     } else if (e.keyCode == '17' || e.keyCode == '224' || e.keyCode == '91') {
       e.preventDefault()
       this.setState({ctrlPressed: true})
-    } else if (e.keyCode == '86' && this.state.ctrlPressed) {
-      this.props.onPaste()
-    } else if (e.keyCode == '67' && this.state.ctrlPressed) {
-      this.props.onCopy()
+    } else if (this.state.ctrlPressed) {
+      if (e.keyCode == '86') {
+        this.props.onPaste()
+      } else if (e.keyCode == '67') {
+        this.props.onCopy()
+      } else if (e.keyCode == '88') {
+        this.props.onCopy()
+        this._handleRemoveSelectedItems()
+      }
     }
   }
 
