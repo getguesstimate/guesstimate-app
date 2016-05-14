@@ -3,13 +3,15 @@ import React, {Component, PropTypes} from 'react'
 
 import './FlowGrid.css'
 import Cell from './cell'
-import EdgeContainer from './edge-container.js'
+import BackgroundContainer from './background-container.js'
 
 import {keycodeToDirection, DirectionToLocation} from './utils'
 import {removeMetric} from 'gModules/metrics/actions.js'
 
 import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContext } from 'react-dnd';
+
+import GridPoint from './gridPoints.js'
 
 let upto = (n) => Array.apply(null, {length: n}).map(Number.call, Number)
 
@@ -32,7 +34,7 @@ export default class FlowGrid extends Component{
       output: PTLocation.isRequired
     })),
     selected: PTLocation,
-    multipleSelected: PropTypes.arrayOf(PTLocation, PTLocation),
+    showRegion: PropTypes.arrayOf(PTLocation, PTLocation),
 
     onSelectItem: PropTypes.func.isRequired,
     onDeSelectItem: PropTypes.func.isRequired,
@@ -61,9 +63,9 @@ export default class FlowGrid extends Component{
   }
 
   _selectedItems() {
-   const {multipleSelected} = this.props
-   return this.props.items.filter(i => (multipleSelected[0].row <= i.location.row && multipleSelected[0].column <= i.location.column &&
-      multipleSelected[1].row >= i.location.row && multipleSelected[1].column >= i.location.column))
+   const {showRegion} = this.props
+   return this.props.items.filter(i => (showRegion[0].row <= i.location.row && showRegion[0].column <= i.location.column &&
+      showRegion[1].row >= i.location.row && showRegion[1].column >= i.location.column))
   }
 
   _handleKeyDown(e){
@@ -129,19 +131,11 @@ export default class FlowGrid extends Component{
     return Math.max(6, lowestItem, selected) || 6;
   }
 
-  _selectionRelation(location) {
-    const {multipleSelected} = this.props
-    let relation = {within: false, onLeft: false, onRight: false, onTop: false, onBottom: false}
+  _isWithin(location) {
+    const {showRegion} = this.props
 
-    relation.within = (multipleSelected[0].row <= location.row && multipleSelected[0].column <= location.column &&
-       multipleSelected[1].row >= location.row && multipleSelected[1].column >= location.column)
-
-    relation.onTop = multipleSelected[0].row === location.row
-    relation.onBottom = multipleSelected[1].row === location.row
-    relation.onLeft = multipleSelected[0].column === location.column
-    relation.onRight = multipleSelected[1].column === location.column
-
-    return relation
+    return (showRegion[0].row <= location.row && showRegion[0].column <= location.column &&
+       showRegion[1].row >= location.row && showRegion[1].column >= location.column)
   }
 
   _cell(location) {
@@ -151,8 +145,7 @@ export default class FlowGrid extends Component{
 
     const isSinglySelected = atThisLocation(this.props.selected)
 
-    const {multipleSelected} = this.props
-    const selectionRelation = this._selectionRelation(location)
+    const {showRegion} = this.props
 
     let item = this.props.items.filter(i => atThisLocation(i.location))[0];
     return (
@@ -161,8 +154,7 @@ export default class FlowGrid extends Component{
         gridKeyPress={this._handleKeyDown.bind(this)}
         handleSelect={this.props.onSelectItem}
         handleEndRangeSelect={this._handleEndRangeSelect.bind(this)}
-        isSelected={selectionRelation.within}
-        selectionRelation={selectionRelation}
+        isSelected={this._isWithin(location)}
         isSinglySelected={isSinglySelected}
         isHovered={isHovered}
         item={item && item.component}
@@ -224,15 +216,13 @@ export default class FlowGrid extends Component{
                 )
               })
             }
-            {!_.isEmpty(edges) &&
-              <EdgeContainer
+              <BackgroundContainer
                   edges={edges}
                   refs={this.refs}
                   rowCount={rowCount}
                   rowHeights={rowHeights}
-                  multipleSelected={this.props.multipleSelected}
+                  showRegion={this.props.showRegion}
                 />
-            }
           </div>
         </div>
       </div>

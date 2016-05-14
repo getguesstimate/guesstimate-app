@@ -2,13 +2,22 @@ import React, {Component, PropTypes} from 'react'
 import Dimensions from 'gComponents/utility/react-dimensions';
 import Edges from './edges';
 import $ from 'jquery'
-import _ from 'lodash'
+import GridPoint from './gridPoints.js'
 
-let upto = (n) => Array.apply(null, {length: n}).map(Number.call, Number)
+export class Region extends Component{
+  render() {
+    const gridPoint = new GridPoint({rowHeights: this.props.rowHeights, columnWidth: this.props.columnWidth, padding: 0})
+    let region = gridPoint.region(this.props.showRegion)
+    return (
+       <div className='foobar' style={region}/>
+    )
+  }
+}
+
 //Listens to events for changes to row heights and column width
 @Dimensions()
-export default class EdgeContainer extends Component {
-  displayName: 'EdgeContainer'
+export default class BackgroundContainer extends Component {
+  displayName: 'BackgroundContainer'
 
   static propTypes = {
     containerWidth: PropTypes.number,
@@ -21,6 +30,7 @@ export default class EdgeContainer extends Component {
   state = {
     columnWidth: null
   }
+
   componentWillUpdate(newProps) {
     if (newProps.containerWidth !== this.props.containerWidth){
       this.getColumnWidth()
@@ -38,13 +48,18 @@ export default class EdgeContainer extends Component {
 
     const rowHeights = this.props.rowHeights
     const containerHeight = _.get(rowHeights, 'length') && rowHeights.reduce((a,b) => a + b)
+
+    if (!columnWidth || !rowHeights.length){ return false }
     return (
-      <Edges
-          columnWidth={columnWidth}
-          containerHeight={containerHeight}
-          edges={edges}
-          rowHeights={rowHeights}
-      />
+      <div>
+        <Edges
+            columnWidth={columnWidth}
+            containerHeight={containerHeight}
+            edges={edges}
+            rowHeights={rowHeights}
+        />
+        <Region rowHeights={rowHeights} columnWidth={columnWidth} showRegion={this.props.showRegion}/>
+      </div>
     )
   }
 }

@@ -185,13 +185,13 @@ export default class Canvas extends Component{
           <JSONTree data={this.props}/>
         }
         <FlowGrid
-          multipleSelected={multipleSelected}
           onMultipleSelect={this._handleMultipleSelect.bind(this)}
           dispatch={this.props.dispatch}
           overflow={overflow}
           items={metrics.map(m => ({key: m.id, location: m.location, component: this.renderMetric(m, selectedMetric)}))}
           hasItemUpdated = {(oldItem, newItem) => hasMetricUpdated(oldItem.props, newItem.props)}
           edges={edges}
+          showRegion={multipleSelected}
           selected={selected}
           onSelectItem={this._handleSelect.bind(this)}
           onDeSelectItem={this._handleDeSelect.bind(this)}
