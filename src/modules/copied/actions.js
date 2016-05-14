@@ -14,7 +14,7 @@ export function copy(spaceId){
     const metrics = state.metrics.filter(m => m.space === spaceId && isWithinRegion(m.location, region))
     const guesstimates = metrics.map(metric => state.guesstimates.find(g => g.metric === metric.id))
 
-    dispatch({type: "COPY", copied: {metrics, guesstimates, block: region}})
+    dispatch({type: "COPY", copied: {metrics, guesstimates, region}})
   }
 }
 
@@ -29,12 +29,12 @@ export function paste(spaceId){
     const state = getState()
     if (!(state.copied && state.selectedCell && isLocation(state.selectedCell))) { return }
 
-    const {metrics, guesstimates, block} = state.copied
+    const {metrics, guesstimates, region} = state.copied
     const location = state.selectedCell
 
-    const translateFn = translate(block[0], location)
+    const translateFn = translate(region[0], location)
 
-    const pasteRegion = [location, translateFn(block[1])]
+    const pasteRegion = [location, translateFn(region[1])]
 
     const spaceMetrics = state.metrics.filter(m => m.space === spaceId)
     let existingReadableIds = spaceMetrics.map(m => m.readableId)
