@@ -197,7 +197,7 @@ export default class Canvas extends Component{
           onDeSelectItem={this._handleDeSelect.bind(this)}
           onAddItem={this._handleAddMetric.bind(this)}
           onMoveItem={this._handleMoveMetric.bind(this)}
-          onRemoveItem={(id) => {this.props.dispatch(removeMetric(this._id()))}}
+          onRemoveItem={(id) => {this.props.dispatch(removeMetric(id))}}
           onCopy={this._handleCopy.bind(this)}
           onPaste={this._handlePaste.bind(this)}
           showGridLines={showGridLines}
