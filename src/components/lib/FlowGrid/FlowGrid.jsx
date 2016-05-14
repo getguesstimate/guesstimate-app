@@ -127,10 +127,7 @@ export default class FlowGrid extends Component{
   }
 
   _cell(location) {
-    const isHovered = isAtLocation(this.state.hover, location)
-    const inSelectedCell = isAtLocation(this.props.selected, location)
-
-    let item = this.props.items.filter(i => isAtLocation(i.location, location))[0];
+    const item = this.props.items.find(i => isAtLocation(i.location, location));
     return (
       <Cell
         hasItemUpdated={this.props.hasItemUpdated}
@@ -138,8 +135,8 @@ export default class FlowGrid extends Component{
         handleSelect={this.props.onSelectItem}
         handleEndRangeSelect={this._handleEndRangeSelect.bind(this)}
         inSelectedRegion={isWithinRegion(location, this.props.selectedRegion)}
-        inSelectedCell={inSelectedCell}
-        isHovered={isHovered}
+        inSelectedCell={isAtLocation(this.props.selected, location)}
+        isHovered={isAtLocation(this.state.hover, location)}
         item={item && item.component}
         key={'grid-item', location.row, location.column}
         location={location}

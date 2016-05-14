@@ -70,6 +70,9 @@ export default class Cell extends Component {
   }
 
   handleClick(e) {
+    // TODO(matthew): I think we can refactor this and get rid of the window trigger system for doing this input, but it
+    // will be a bigger refactor, so I'm inclined to leave this for now, even though it couples the flow grid and the
+    // space more tightly than they've been integrated so far.
     if (this.props.canvasState.metricClickMode === 'FUNCTION_INPUT_SELECT') {
       return
     }
