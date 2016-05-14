@@ -7,6 +7,8 @@ import EdgeContainer from './edge-container.js'
 
 import {keycodeToDirection, DirectionToLocation} from './utils'
 
+import {isWithinRegion, isAtLocation} from 'lib/locationUtils.js'
+
 import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContext } from 'react-dnd';
 
@@ -61,8 +63,7 @@ export default class FlowGrid extends Component{
 
   _selectedItems() {
    const {multipleSelected} = this.props
-   return this.props.items.filter(i => (multipleSelected[0].row <= i.location.row && multipleSelected[0].column <= i.location.column &&
-      multipleSelected[1].row >= i.location.row && multipleSelected[1].column >= i.location.column))
+   return this.props.items.filter(i => isWithinRegion(i.location, multipleSelected))
   }
 
   _handleKeyDown(e){
@@ -129,24 +130,19 @@ export default class FlowGrid extends Component{
   }
 
   _cell(location) {
-    const atThisLocation = (l) => (l.row === location.row && l.column === location.column)
-
-    const isHovered = atThisLocation(this.state.hover)
-
-    const isSinglySelected = atThisLocation(this.props.selected)
+    const isHovered = isAtLocation(this.state.hover, location)
+    const isSinglySelected = isAtLocation(this.props.selected, location)
 
     const {multipleSelected} = this.props
-    const isWithinMultiselect = (multipleSelected[0].row <= location.row && multipleSelected[0].column <= location.column &&
-       multipleSelected[1].row >= location.row && multipleSelected[1].column >= location.column)
 
-    let item = this.props.items.filter(i => atThisLocation(i.location))[0];
+    let item = this.props.items.filter(i => isAtLocation(i.location, location))[0];
     return (
       <Cell
         hasItemUpdated={this.props.hasItemUpdated}
         gridKeyPress={this._handleKeyDown.bind(this)}
         handleSelect={this.props.onSelectItem}
         handleEndRangeSelect={this._handleEndRangeSelect.bind(this)}
-        isSelected={isWithinMultiselect}
+        isSelected={isWithinRegion(location, multipleSelected)}
         isSinglySelected={isSinglySelected}
         isHovered={isHovered}
         item={item && item.component}

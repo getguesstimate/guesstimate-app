@@ -1,10 +1,13 @@
+export function isAtLocation(test, location) {
+  return test.row === location.row && test.column === location.column
+}
 
-export function isWithinRegion(location, region) {
+export function isWithinRegion(test, region) {
   return (
-    location.row >= region[0].row &&
-    location.row <= region[1].row &&
-    location.column >= region[0].column &&
-    location.column <= region[1].column
+    test.row >= region[0].row &&
+    test.row <= region[1].row &&
+    test.column >= region[0].column &&
+    test.column <= region[1].column
   )
 }
 

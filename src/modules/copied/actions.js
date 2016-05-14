@@ -6,15 +6,6 @@ import {runSimulations} from 'gModules/simulations/actions'
 
 import {isWithinRegion, translate} from 'lib/locationUtils.js'
 
-function translateLocation(location, block, withinBlockLocation) {
-  return translate(block[0], location)(withinBlockLocation)
-}
-
-// Translates a region to have the upper left corner at location
-function translateBlock(location, block) {
-  return [location, translate(block[0], location)(block[1])]
-}
-
 export function copy(spaceId){
   return (dispatch, getState) => {
     const state = getState()
@@ -43,7 +34,8 @@ export function paste(spaceId){
 
     const {metrics, guesstimates, block} = state.copied
     const location = state.selection
-    const pasteRegion = translateBlock(location, block)
+    const translateFn = translate(block[0], location)
+    const pasteRegion = [location, translateFn(block[1])]
 
     const spaceMetrics = getState().metrics.filter(m => m.space === spaceId)
     let existingReadableIds = spaceMetrics.map(m => m.readableId)
@@ -55,7 +47,7 @@ export function paste(spaceId){
         {},
         metric,
         e.metric.create(existingReadableIds),
-        {location: translateLocation(location, block, metric.location)}
+        {location: translateFn(metric.location)}
       )
       newItems.push(newMetric)
       existingReadableIds.push(newMetric.readableId)
