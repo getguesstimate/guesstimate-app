@@ -4,15 +4,15 @@ import {multipleSelect} from 'gModules/multiple_selection/actions'
 import {deSelect} from 'gModules/selection/actions'
 import {runSimulations} from 'gModules/simulations/actions'
 
+import {isWithinRegion, translate} from 'lib/locationUtils.js'
+
 function translateLocation(location, block, withinBlockLocation) {
-  const translate = l => ({row: l.row + (location.row - block[0].row), column: l.column + location.column - block[0].column})
-  return translate(withinBlockLocation)
+  return translate(block[0], location)(withinBlockLocation)
 }
 
 // Translates a region to have the upper left corner at location
 function translateBlock(location, block) {
-  const translate = l => ({row: l.row + (location.row - block[0].row), column: l.column + location.column - block[0].column})
-  return [location, translate(block[1])]
+  return [location, translate(block[0], location)(block[1])]
 }
 
 export function copy(spaceId){
