@@ -48,8 +48,6 @@ export default class MetricName extends Component {
       e.stopPropagation()
       this.props.jumpSection()
     }
-    e.persist()
-    e.skipFlowGrid = true
   }
 
 

@@ -66,9 +66,7 @@ export default class FlowGrid extends Component{
   }
 
   _handleKeyDown(e){
-    if (!!e.skipFlowGrid) {
-      return
-    }
+    if (e.target && e.target.type === 'textarea') { return }
     if (e.keyCode === 8 || e.keyCode === 46) {
       const selectedItems = this._selectedItems()
       selectedItems.map(i => {this.props.onRemoveItem(i.key)})
