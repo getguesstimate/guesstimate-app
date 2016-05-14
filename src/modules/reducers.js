@@ -1,8 +1,8 @@
 import reduxCrud from 'redux-crud'
 
 import guesstimateFormR from './guesstimate_form/reducer'
-import {selectedCellR} from './selection/reducer'
-import {selectedRegionR} from './multiple_selection/reducer'
+import {selectedCellR} from './selected_cell/reducer'
+import {selectedRegionR} from './selected_region/reducer'
 import displayErrorR from './displayErrors/reducer.js'
 import metricsR from './metrics/reducer'
 import guesstimatesR from './guesstimates/reducer'

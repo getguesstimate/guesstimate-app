@@ -7,8 +7,8 @@ import FlowGrid from 'gComponents/lib/FlowGrid/FlowGrid.jsx'
 import Metric from 'gComponents/metrics/card'
 
 import { removeMetric, changeMetric, addMetric } from 'gModules/metrics/actions'
-import { changeSelect, deSelect } from 'gModules/selection/actions'
-import { selectRegion, deSelectRegion } from 'gModules/multiple_selection/actions'
+import { changeSelect, deSelect } from 'gModules/selected_cell/actions'
+import { selectRegion, deSelectRegion } from 'gModules/selected_region/actions'
 import { runSimulations, deleteSimulations } from 'gModules/simulations/actions'
 
 import { hasMetricUpdated } from 'gComponents/metrics/card/updated.js'

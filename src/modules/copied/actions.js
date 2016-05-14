@@ -1,10 +1,10 @@
 import e from 'gEngine/engine'
 import * as metricActions from 'gModules/metrics/actions'
-import {selectRegion} from 'gModules/multiple_selection/actions'
-import {deSelect} from 'gModules/selection/actions'
+import {selectRegion} from 'gModules/selected_region/actions'
+import {deSelect} from 'gModules/selected_cell/actions'
 import {runSimulations} from 'gModules/simulations/actions'
 
-import {isWithinRegion, translate} from 'lib/locationUtils.js'
+import {isLocation, isWithinRegion, translate} from 'lib/locationUtils.js'
 
 export function copy(spaceId){
   return (dispatch, getState) => {
@@ -27,10 +27,10 @@ function translateReadableIds(input, idMap) {
 export function paste(spaceId){
   return (dispatch, getState) => {
     const state = getState()
-    if (!(state.copied && state.selection)) { return }
+    if (!(state.copied && state.selectedCell && isLocation(state.selectedCell))) { return }
 
     const {metrics, guesstimates, block} = state.copied
-    const location = state.selection
+    const location = state.selectedCell
 
     const translateFn = translate(block[0], location)
 
