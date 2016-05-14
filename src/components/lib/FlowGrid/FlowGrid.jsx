@@ -7,7 +7,7 @@ import BackgroundContainer from './background-container.js'
 
 import {keycodeToDirection, DirectionToLocation} from './utils'
 
-import {isWithinRegion, isAtLocation} from 'lib/locationUtils.js'
+import {isLocation, isWithinRegion, isAtLocation} from 'lib/locationUtils.js'
 
 import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContext } from 'react-dnd';
@@ -32,7 +32,7 @@ export default class FlowGrid extends Component{
       input: PTLocation.isRequired,
       output: PTLocation.isRequired
     })),
-    selected: PTLocation,
+    selectedCell: PTLocation,
     selectedRegion: PropTypes.arrayOf(PTLocation, PTLocation),
     onSelectItem: PropTypes.func.isRequired,
     onMultipleSelect: PropTypes.func.isRequired,
@@ -81,7 +81,7 @@ export default class FlowGrid extends Component{
     if (direction) {
       e.preventDefault()
       const size = ({columns: this._columnCount(), rows: this._rowCount()})
-      let newLocation = new DirectionToLocation(size, this.props.selected)[direction]()
+      let newLocation = new DirectionToLocation(size, this.props.selectedCell)[direction]()
       this.props.onSelectItem(newLocation)
       this.refs[`cell-${newLocation.row}-${newLocation.column}`].decoratedComponentInstance._focus()
     } else if (e.keyCode == '17' || e.keyCode == '224' || e.keyCode == '91') {
@@ -95,9 +95,9 @@ export default class FlowGrid extends Component{
   }
 
   _handleEndRangeSelect(corner1) {
-    const corner2 = this.props.selected
+    const corner2 = this.props.selectedCell
 
-    if (!corner2 || !(corner2.hasOwnProperty('row') && corner2.hasOwnProperty('column'))) {
+    if (!isLocation(corner2)) {
       this.props.onSelectItem(corner1)
       return
     }
@@ -107,21 +107,21 @@ export default class FlowGrid extends Component{
 
   size() {
     const lowestItem = !this.props.items.length ? 2 : Math.max(...this.props.items.map(g => parseInt(g.location.row))) + 2
-    const selected = parseInt(this.props.selected.row) + 2
+    const selected = parseInt(this.props.selectedCell.row) + 2
     const height = Math.max(3, lowestItem, selected) || 3;
     return {columns: this._columnCount(), rows: height}
   }
 
   _rowCount() {
     const lowestItem = Math.max(...this.props.items.map(e => parseInt(e.location.row))) + 4
-    let selectedRow = this.props.selected.row || 0
+    let selectedRow = this.props.selectedCell.row || 0
     const selected = parseInt(selectedRow) + 3
     return Math.max(10, lowestItem, selected) || 6;
   }
 
   _columnCount() {
     const lowestItem = Math.max(...this.props.items.map(e => parseInt(e.location.column))) + 4
-    let selectedColumn = this.props.selected.column || 0
+    let selectedColumn = this.props.selectedCell.column || 0
     const selected = parseInt(selectedColumn) + 4
     return Math.max(6, lowestItem, selected) || 6;
   }
@@ -135,7 +135,7 @@ export default class FlowGrid extends Component{
         handleSelect={this.props.onSelectItem}
         handleEndRangeSelect={this._handleEndRangeSelect.bind(this)}
         inSelectedRegion={isWithinRegion(location, this.props.selectedRegion)}
-        inSelectedCell={isAtLocation(this.props.selected, location)}
+        inSelectedCell={isAtLocation(this.props.selectedCell, location)}
         isHovered={isAtLocation(this.state.hover, location)}
         item={item && item.component}
         key={'grid-item', location.row, location.column}

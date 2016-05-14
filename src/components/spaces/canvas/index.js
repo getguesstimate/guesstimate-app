@@ -24,7 +24,7 @@ import { copy, paste } from 'gModules/copied/actions.js'
 function mapStateToProps(state) {
   return {
     canvasState: state.canvasState,
-    selected: state.selection,
+    selectedCell: state.selectedCell,
     selectedRegion: state.selectedRegion,
   }
 }
@@ -42,7 +42,7 @@ export default class Canvas extends Component{
     denormalizedSpace: PropTypes.object,
     dispatch: PropTypes.func,
     guesstimateForm: PropTypes.object,
-    selected: PropTypes.object,
+    selectedCell: PropTypes.object,
     embed: PropTypes.bool,
     spaceId: PropTypes.oneOfType([
         React.PropTypes.string,
@@ -118,10 +118,11 @@ export default class Canvas extends Component{
   }
 
   _selectedMetric() {
-   const {selected} = this.props
+    // TODO(matthew): Refactor later with location libs and more precise defensive coding.
+   const {selectedCell} = this.props
    const metrics = _.get(this.props.denormalizedSpace, 'metrics')
 
-   return metrics && _.isFinite(selected.row) && metrics.filter(i => _.isEqual(i.location, selected))[0];
+   return metrics && _.isFinite(selectedCell.row) && metrics.filter(i => _.isEqual(i.location, selectedCell))[0];
   }
 
   _isAnalysisView(props = this.props) {
@@ -168,7 +169,7 @@ export default class Canvas extends Component{
   }
 
   render () {
-    const {selected, selectedRegion} = this.props
+    const {selectedCell, selectedRegion} = this.props
     const {metrics} = this.props.denormalizedSpace
     const {metricCardView} = this.props.canvasState
 
@@ -191,7 +192,7 @@ export default class Canvas extends Component{
           hasItemUpdated = {(oldItem, newItem) => hasMetricUpdated(oldItem.props, newItem.props)}
           edges={edges}
           selectedRegion={selectedRegion}
-          selected={selected}
+          selectedCell={selectedCell}
           onSelectItem={this._handleSelect.bind(this)}
           onDeSelectAll={this._handleDeSelectAll.bind(this)}
           onAddItem={this._handleAddMetric.bind(this)}

@@ -1,8 +1,8 @@
 import reduxCrud from 'redux-crud'
 
 import guesstimateFormR from './guesstimate_form/reducer'
-import selectionR from './selection/reducer'
-import selectedRegionR from './multiple_selection/reducer'
+import {selectedCellR} from './selection/reducer'
+import {selectedRegionR} from './multiple_selection/reducer'
 import displayErrorR from './displayErrors/reducer.js'
 import metricsR from './metrics/reducer'
 import guesstimatesR from './guesstimates/reducer'
@@ -24,7 +24,7 @@ const rootReducer = function app(state = {}, action){
     displayError: displayErrorR(state.displayError, action),
     metrics: metricsR(state.metrics, action),
     guesstimates: guesstimatesR(state.guesstimates, action),
-    selection: selectionR(state.selection, action),
+    selectedCell: selectedCellR(state.selectedCell, action),
     selectedRegion: selectedRegionR(state.selectedRegion, action),
     guesstimateForm: guesstimateFormR(state.guesstimateForm, state.metrics, state.guesstimates, action),
     simulations: simulationsR(state.simulations, action),
