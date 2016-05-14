@@ -78,7 +78,6 @@ export default class Canvas extends Component{
 
   componentWillUnmount(){
     this.props.dispatch(deleteSimulations(this.props.denormalizedSpace.metrics.map(m => m.id)))
-    this._handleDeSelectAll()
   }
 
   _handleSelect(location) {

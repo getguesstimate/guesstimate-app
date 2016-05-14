@@ -3,6 +3,7 @@ import * as metricActions from 'gModules/metrics/actions'
 import {selectRegion} from 'gModules/selected_region/actions'
 import {deSelect} from 'gModules/selected_cell/actions'
 import {runSimulations} from 'gModules/simulations/actions'
+import {registerGraphChange} from 'gModules/spaces/actions'
 
 import {isLocation, isWithinRegion, translate} from 'lib/locationUtils.js'
 
@@ -70,5 +71,6 @@ export function paste(spaceId){
 
     dispatch(runSimulations({spaceId, metricSubset: newMetrics}))
     dispatch(selectRegion(pasteRegion[0], pasteRegion[1]))
+    dispatch(registerGraphChange(spaceId))
   }
 }
