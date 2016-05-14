@@ -4,14 +4,13 @@ import Edges from './edges';
 import $ from 'jquery'
 import GridPoint from './gridPoints.js'
 
-export class Region extends Component{
-  render() {
-    const gridPoint = new GridPoint({rowHeights: this.props.rowHeights, columnWidth: this.props.columnWidth, padding: 0})
-    let region = gridPoint.region(this.props.selectedRegion)
-    return (
-       <div className='SelectedRegion' style={region}/>
-    )
-  }
+const Region = ({rowHeights, columnWidth, selectedRegion}) => {
+  if (!selectedRegion || selectedRegion.length !== 2) { return false }
+  const gridPoint = new GridPoint({rowHeights, columnWidth, padding: 0})
+  const region = gridPoint.region(selectedRegion)
+  return (
+     <div className='SelectedRegion' style={region}/>
+  )
 }
 
 //Listens to events for changes to row heights and column width

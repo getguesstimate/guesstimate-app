@@ -1,4 +1,4 @@
-export default function selection(state = [{column: 1, row: 1}, {column: 1, row: 1}], action) {
+export default function selection(state = [], action) {
   switch (action.type) {
   case 'MULTIPLE_SELECT':
     return [action.corner1, action.corner2];

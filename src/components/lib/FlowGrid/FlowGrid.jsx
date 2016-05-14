@@ -63,8 +63,7 @@ export default class FlowGrid extends Component{
   }
 
   _selectedItems() {
-   const {selectedRegion} = this.props
-   return this.props.items.filter(i => isWithinRegion(i.location, selectedRegion))
+   return this.props.items.filter(i => isWithinRegion(i.location, this.props.selectedRegion))
   }
 
   _handleKeyDown(e){
