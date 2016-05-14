@@ -68,13 +68,7 @@ export default class FlowGrid extends Component{
   }
 
   _handleKeyDown(e){
-    if (!e.shiftKey && (e.ctrlKey || e.keyCode == '17' || e.keyCode == '224' || e.keyCode == '91')) {
-      e.preventDefault()
-      this.setState({ctrlPressed: true})
-    } else if (e.target && e.target.type === 'textarea' && !this.state.ctrlPressed) {
-      return
-    }
-
+    if (e.target && e.target.type === 'textarea') { return }
     if (e.keyCode === 8 || e.keyCode === 46) {
       this._handleRemoveSelectedItems()
       e.preventDefault()
@@ -87,6 +81,9 @@ export default class FlowGrid extends Component{
       let newLocation = new DirectionToLocation(size, this.props.selectedCell)[direction]()
       this.props.onSelectItem(newLocation)
       this.refs[`cell-${newLocation.row}-${newLocation.column}`].decoratedComponentInstance._focus()
+    } else if (!e.shiftKey && (e.keyCode == '17' || e.keyCode == '224' || e.keyCode == '91')) {
+      e.preventDefault()
+      this.setState({ctrlPressed: true})
     } else if (this.state.ctrlPressed) {
       if (e.keyCode == '86') {
         this.props.onPaste()
