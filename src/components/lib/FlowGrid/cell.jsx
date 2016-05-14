@@ -70,7 +70,6 @@ export default class Cell extends Component {
   }
 
   handleClick(e) {
-    console.log("WOOO CLICKING.")
     if (this.props.canvasState.metricClickMode === 'FUNCTION_INPUT_SELECT') {
       return
     }
@@ -95,7 +94,6 @@ export default class Cell extends Component {
   }
 
   _focus = () => {
-    console.log('focusing in cell')
     let domNode
     if (this.props.item) {
       // Always focus on the immediate child of the filled cell.

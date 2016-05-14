@@ -33,22 +33,18 @@ export default class TextForm extends Component{
     const sameMetric = (newProps.guesstimateForm.metric === this.props.guesstimateForm.metric)
     const sameInput = (newProps.guesstimateForm.input === this.props.guesstimateForm.input)
     if (sameMetric && !sameInput){
-      console.log("Component Did Update.")
       this._switchMetricClickMode(true)
     }
   }
 
   _handleBlur() {
-    console.log("Handling Blur")
     this._switchMetricClickMode(false)
     this.props.onSave()
   }
 
   _switchMetricClickMode(inClick=true) {
-    console.log("Called with", inClick)
     const isFunction = (inClick && (this._guesstimateType().referenceName === 'FUNCTION'))
     const newMode = isFunction ? 'FUNCTION_INPUT_SELECT' : ''
-    console.log("Making the mode ", newMode)
     this.props.onChangeClickMode(newMode)
   }
 
