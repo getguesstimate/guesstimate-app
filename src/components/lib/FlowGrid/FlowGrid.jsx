@@ -12,8 +12,6 @@ import {isWithinRegion, isAtLocation} from 'lib/locationUtils.js'
 import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContext } from 'react-dnd';
 
-import GridPoint from './gridPoints.js'
-
 let upto = (n) => Array.apply(null, {length: n}).map(Number.call, Number)
 
 const PTLocation = PropTypes.shape({
