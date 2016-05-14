@@ -2,6 +2,7 @@ import e from 'gEngine/engine'
 import * as metricActions from 'gModules/metrics/actions'
 import {multipleSelect} from 'gModules/multiple_selection/actions'
 import {deSelect} from 'gModules/selection/actions'
+import {runSimulations} from 'gModules/simulations/actions'
 
 function isWithinRegion(location, region) {
   return (
@@ -35,6 +36,15 @@ export function copy(spaceId){
   }
 }
 
+function translateReadableIds(input, idMap) {
+  if (!input) {return ""}
+  let output = input
+  for (let oldID of Object.keys(idMap)) {
+    output = output.replace(oldID, idMap[oldID])
+  }
+  return output
+}
+
 export function paste(spaceId){
   return (dispatch, getState) => {
     const state = getState()
@@ -48,6 +58,7 @@ export function paste(spaceId){
     let existingReadableIds = spaceMetrics.map(m => m.readableId)
 
     let newItems = []
+    let readableIdsMap = {}
     for (let metric of metrics) {
       const newMetric = Object.assign(
         {},
@@ -57,9 +68,18 @@ export function paste(spaceId){
       )
       newItems.push(newMetric)
       existingReadableIds.push(newMetric.readableId)
+      readableIdsMap[metric.readableId] = newMetric.readableId
     }
 
-    const newGuesstimates = _.map(guesstimates, (guesstimate, i) => Object.assign({}, guesstimate, {metric: newItems[i].id}))
+    let newGuesstimates = _.map(
+      guesstimates,
+      (guesstimate, i) => Object.assign(
+        {},
+        guesstimate,
+        {metric: newItems[i].id},
+        {input: translateReadableIds(guesstimate.input, readableIdsMap)}
+      )
+    )
 
     const existingMetrics = spaceMetrics.filter(m => isWithinRegion(m.location, pasteRegion))
     if (existingMetrics.length > 0) {
@@ -68,9 +88,9 @@ export function paste(spaceId){
 
     _.map(newItems, (newItem, i) => {
       dispatch({ type: 'ADD_METRIC', item: newItem, newGuesstimate: newGuesstimates[i] })
-      dispatch({ type: 'RUN_FORM_SIMULATIONS', getState, dispatch, metricId: newItem.id })
     })
 
+    dispatch(runSimulations({spaceId, onlyMetrics: newItems}))
     dispatch(multipleSelect(pasteRegion[0], pasteRegion[1]))
     //dispatch(deSelect()) Nope. TODO this defocuses the canvas. Why????
   }

@@ -20,9 +20,9 @@ export function deleteSimulations(metricIds) {
   return {type: 'DELETE_SIMULATIONS', metricIds}
 }
 
-export function runSimulations({spaceId}) {
+export function runSimulations({spaceId, onlyMetrics}) {
   return (dispatch, getState) => {
-    (new GraphPropagation(dispatch, getState, {spaceId})).run()
+    (new GraphPropagation(dispatch, getState, {spaceId, onlyMetrics})).run()
   };
 }
 

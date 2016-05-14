@@ -26,6 +26,7 @@ export class GraphPropagation {
     this.dispatch = dispatch
     this.getState = getState
     this.id = Date.now()
+    this.onlyMetrics = graphFilters.onlyMetrics
 
     this.spaceId = graphFilters.spaceId
 
@@ -39,7 +40,7 @@ export class GraphPropagation {
     const orderedMetricIdsAndGraphErrors = this._orderedMetricIdsAndErrors(graphFilters)
     this.orderedMetricIds = orderedMetricIdsAndGraphErrors.map(m => m.id)
     this.orderedMetricPropagations = orderedMetricIdsAndGraphErrors.map(
-      ({id, errors}) => (new MetricPropagation(id, errors, this.id))
+      ({id, errors}) => (new MetricPropagation(id, errors, this.id, !!this.onlyMetrics && !_.some(this.onlyMetrics, m => m.id === id)))
     )
 
     this.currentStep = 0

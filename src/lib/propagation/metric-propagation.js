@@ -38,10 +38,11 @@ export default class MetricPropagation {
   inInfiniteLoop: boolean;
   remainingSimulations: Array<number>;
 
-  constructor(metricId: string, errors: object, propagationId: number) {
+  constructor(metricId: string, errors: object, propagationId: number, skip: boolean) {
     this.inInfiniteLoop = errors.inInfiniteLoop
     this.metricId = metricId
     this.propagationId = propagationId
+    this.skip = skip
 
     this.firstPass = true
     this.remainingSimulations = [5000]
@@ -50,6 +51,9 @@ export default class MetricPropagation {
   }
 
   step(graph, dispatch) {
+    if (this.skip) {
+      return Promise.resolve()
+    }
     if (this.inInfiniteLoop) {
       const simulation = {
         metric: this.metricId,
