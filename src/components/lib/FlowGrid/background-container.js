@@ -7,7 +7,7 @@ import GridPoint from './gridPoints.js'
 export class Region extends Component{
   render() {
     const gridPoint = new GridPoint({rowHeights: this.props.rowHeights, columnWidth: this.props.columnWidth, padding: 0})
-    let region = gridPoint.region(this.props.showRegion)
+    let region = gridPoint.region(this.props.selectedRegion)
     return (
        <div className='SelectedRegion' style={region}/>
     )
@@ -58,7 +58,7 @@ export default class BackgroundContainer extends Component {
             edges={edges}
             rowHeights={rowHeights}
         />
-        <Region rowHeights={rowHeights} columnWidth={columnWidth} showRegion={this.props.showRegion}/>
+        <Region rowHeights={rowHeights} columnWidth={columnWidth} selectedRegion={this.props.selectedRegion}/>
       </div>
     )
   }

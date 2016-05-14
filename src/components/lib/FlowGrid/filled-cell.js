@@ -24,7 +24,7 @@ export default class ItemCell extends Component {
   static propTypes = {
     gridKeyPress: PropTypes.func.isRequired,
     handleSelect: PropTypes.func.isRequired,
-    isSelected: PropTypes.bool.isRequired,
+    inSelectedCell: PropTypes.bool.isRequired,
     item: PropTypes.object,
     location: PropTypes.shape({
       row: PropTypes.number.isRequired,
@@ -37,7 +37,7 @@ export default class ItemCell extends Component {
         this.props.item,
         {
           hovered: this.props.hover,
-          isSelected: this.props.isSinglySelected,
+          isSelected: this.props.inSelectedCell,
           gridKeyPress: this.props.gridKeyPress,
           connectDragSource: this.props.connectDragSource
         }

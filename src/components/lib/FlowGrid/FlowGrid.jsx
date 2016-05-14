@@ -35,8 +35,7 @@ export default class FlowGrid extends Component{
       output: PTLocation.isRequired
     })),
     selected: PTLocation,
-    showRegion: PropTypes.arrayOf(PTLocation, PTLocation),
-
+    selectedRegion: PropTypes.arrayOf(PTLocation, PTLocation),
     onSelectItem: PropTypes.func.isRequired,
     onDeSelectItem: PropTypes.func.isRequired,
     onMultipleSelect: PropTypes.func,
@@ -64,8 +63,8 @@ export default class FlowGrid extends Component{
   }
 
   _selectedItems() {
-   const {multipleSelected} = this.props
-   return this.props.items.filter(i => isWithinRegion(i.location, multipleSelected))
+   const {selectedRegion} = this.props
+   return this.props.items.filter(i => isWithinRegion(i.location, selectedRegion))
   }
 
   _handleKeyDown(e){
@@ -133,9 +132,7 @@ export default class FlowGrid extends Component{
 
   _cell(location) {
     const isHovered = isAtLocation(this.state.hover, location)
-    const isSinglySelected = isAtLocation(this.props.selected, location)
-
-    const {multipleSelected} = this.props
+    const inSelectedCell = isAtLocation(this.props.selected, location)
 
     let item = this.props.items.filter(i => isAtLocation(i.location, location))[0];
     return (
@@ -144,8 +141,8 @@ export default class FlowGrid extends Component{
         gridKeyPress={this._handleKeyDown.bind(this)}
         handleSelect={this.props.onSelectItem}
         handleEndRangeSelect={this._handleEndRangeSelect.bind(this)}
-        showRegion={isWithinRegion(location, multipleSelected)}
-        isSinglySelected={isSinglySelected}
+        inSelectedRegion={isWithinRegion(location, this.props.selectedRegion)}
+        inSelectedCell={inSelectedCell}
         isHovered={isHovered}
         item={item && item.component}
         key={'grid-item', location.row, location.column}
@@ -211,7 +208,7 @@ export default class FlowGrid extends Component{
                   refs={this.refs}
                   rowCount={rowCount}
                   rowHeights={rowHeights}
-                  showRegion={this.props.showRegion}
+                  selectedRegion={this.props.selectedRegion}
                 />
           </div>
         </div>
