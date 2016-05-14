@@ -6,7 +6,6 @@ import Cell from './cell'
 import EdgeContainer from './edge-container.js'
 
 import {keycodeToDirection, DirectionToLocation} from './utils'
-import {removeMetric} from 'gModules/metrics/actions.js'
 
 import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContext } from 'react-dnd';
@@ -72,7 +71,7 @@ export default class FlowGrid extends Component{
     }
     if (e.keyCode === 8 || e.keyCode === 46) {
       const selectedItems = this._selectedItems()
-      selectedItems.map(i => {this.props.dispatch(removeMetric(i.component.props.metric.id))})
+      selectedItems.map(i => {this.props.onRemoveItem(i.key)})
       e.preventDefault()
     }
 

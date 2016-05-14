@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import FlowGrid from 'gComponents/lib/FlowGrid/FlowGrid.jsx'
 import Metric from 'gComponents/metrics/card'
 
-import { changeMetric, addMetric } from 'gModules/metrics/actions'
+import { removeMetric, changeMetric, addMetric } from 'gModules/metrics/actions'
 import { changeSelect, deSelect } from 'gModules/selection/actions'
 import { multipleSelect } from 'gModules/multiple_selection/actions'
 import { runSimulations, deleteSimulations } from 'gModules/simulations/actions'
@@ -197,6 +197,7 @@ export default class Canvas extends Component{
           onDeSelectItem={this._handleDeSelect.bind(this)}
           onAddItem={this._handleAddMetric.bind(this)}
           onMoveItem={this._handleMoveMetric.bind(this)}
+          onRemoveItem={(id) => {this.props.dispatch(removeMetric(this._id()))}}
           onCopy={this._handleCopy.bind(this)}
           onPaste={this._handlePaste.bind(this)}
           showGridLines={showGridLines}
