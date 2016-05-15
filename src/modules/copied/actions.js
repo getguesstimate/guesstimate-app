@@ -42,13 +42,16 @@ export function paste(spaceId){
 
     let readableIdsMap = {}
     const newMetrics = _.map(metrics, metric => {
-      const newMetric = Object.assign(
+      let newMetric = Object.assign(
         {},
         metric,
         e.metric.create(existingReadableIds),
         {space: spaceId},
         {location: translateFn(metric.location)}
       )
+      if (!_.some(existingReadableIds, id => id === metric.readableId)) {
+        newMetric.readableId = metric.readableId
+      }
       existingReadableIds.push(newMetric.readableId)
       readableIdsMap[metric.readableId] = newMetric.readableId
       return newMetric
