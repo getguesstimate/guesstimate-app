@@ -67,10 +67,14 @@ export function fetchById(spaceId) {
         captureApiError('SpacesFetch', null, null, err, {url: 'spacesfetch'})
       }
       else if (value) {
+        debugger
         dispatch(sActions.fetchSuccess([value]))
-        // TODO(matthew): Right now, the space has an embedded user and organization record... why are we doing this
-        // extra fetching?
-        fetchUserIfNeeded(dispatch, value.user_id, getState().users)
+
+        const user = _.get(value, '_embedded.user')
+        const organization = _.get(value, '_embedded.organization')
+
+        dispatch(userActions.fetchSuccess([value._embedded.user]))
+        //fetchUserIfNeeded(dispatch, value.user_id, getState().users)
         fetchOrganizationIfNeeded(dispatch, value.organization_id, getState().organizations)
       }
     })

@@ -12,7 +12,6 @@ function isRecentPropagation(propagationId: number, simulation: Simulation) {
   return !_.has(simulation, 'propagation') || (propagationId >= simulation.propagation)
 }
 
-//TODO: Stop tree where there is an error
 export class GraphPropagation {
   dispatch: Function;
   getState: Function;
