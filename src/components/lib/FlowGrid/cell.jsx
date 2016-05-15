@@ -33,6 +33,7 @@ export default class Cell extends Component {
     location: PTLocation.isRequired,
     onAddItem: PropTypes.func.isRequired,
     onMoveItem: PropTypes.func.isRequired,
+    onDropCell: PropTypes.func.isRequired,
   }
 
   shouldComponentUpdate(newProps, newState) {
@@ -67,7 +68,7 @@ export default class Cell extends Component {
     }
   }
 
-  handleClick(e) {
+  handleMouseDown(e) {
     // TODO(matthew): I think we can refactor this and get rid of the window trigger system for doing this input, but it
     // will be a bigger refactor, so I'm inclined to leave this for now, even though it couples the flow grid and the
     // space more tightly than they've been integrated so far.
@@ -108,7 +109,7 @@ export default class Cell extends Component {
   _cellElement = () => {
     if (this.props.item) {
       // Then endDrag fixes a bug where the original dragging position is hovered.
-      return (<ItemCell onEndDrag={this.mouseOut.bind(this)} {...this.props} hover={this.props.isHovered} ref={'item'}/>)
+      return (<ItemCell onBeginDrag={this.props.onGrabCell} onEndDrag={this.props.onDropCell} {...this.props} hover={this.props.isHovered} ref={'item'}/>)
     } else {
       return (<EmptyCell {...this.props} ref={'empty'} />)
     }
@@ -123,16 +124,12 @@ export default class Cell extends Component {
     return classes
   }
 
-  mouseOut = () => {
-    this.setState({hover: false})
-  }
-
   render = () => {
     return this.props.connectDropTarget(
       <div
         className={this._classes()}
         onMouseOver={this.props.onMouseOver}
-        onClick={this.handleClick.bind(this)}
+        onMouseDown={this.handleMouseDown.bind(this)}
       >
         {this._cellElement()}
       </div>

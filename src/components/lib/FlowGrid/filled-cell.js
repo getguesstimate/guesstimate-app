@@ -4,6 +4,7 @@ import {PTLocation} from 'lib/locationUtils.js'
 
 var cardSource = {
   beginDrag: function (props) {
+    props.onBeginDrag()
     return {location: props.location}
   },
   endDrag: function(props, monitor) {
@@ -11,7 +12,7 @@ var cardSource = {
       const item = monitor.getItem();
       const dropResult = monitor.getDropResult()
       props.onMoveItem({prev: item.location, next: dropResult.location})
-      props.onEndDrag()
+      props.onEndDrag(dropResult.location)
     }
   }
 };

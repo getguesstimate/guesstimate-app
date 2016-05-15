@@ -52,6 +52,36 @@ export default class FlowGrid extends Component{
     hover: {row: -1, column: -1} // An impossible location means nothing hovered.
   }
 
+  _handleMouseDown(e) {
+    if (e.target && e.target.type === 'textarea') { return }
+    if (!this.state.draggingCard && e.button === 0) {
+      this.setState({leftDown: true})
+    }
+  }
+
+  _handleMouseUp(e) {
+    if (e.button === 0) {
+      this.setState({leftDown: false})
+    }
+  }
+
+  _handleCellMouseOver(location) {
+    this.setState({hover: location})
+    if (this.state.leftDown) {
+      this._handleEndRangeSelect(location)
+    }
+  }
+
+  _handleGrabCell() {
+    this.setState({draggingCard: true})
+    this.props.onDeSelectAll()
+  }
+
+  _handleDropCell(location) {
+    this.setState({leftDown: false, draggingCard: false})
+    this.props.onSelectItem(location)
+  }
+
   _handleKeyUp(e){
     if (e.keyCode == '17' || e.keyCode == '224' || e.keyCode == '91') {
       this.setState({ctrlPressed: false})
@@ -143,7 +173,9 @@ export default class FlowGrid extends Component{
         location={location}
         onAddItem={this.props.onAddItem}
         onMoveItem={this.props.onMoveItem}
-        onMouseOver={() => {this.setState({hover: location})}}
+        onMouseOver={(e) => {this._handleCellMouseOver(location, e)}}
+        onDropCell={newLocation => {this._handleDropCell(newLocation)}}
+        onGrabCell={this._handleGrabCell.bind(this)}
         canvasState={this.props.canvasState}
         ref={`cell-${location.row}-${location.column}`}
       />
@@ -186,7 +218,9 @@ export default class FlowGrid extends Component{
             className={className}
             onKeyDown={this._handleKeyDown.bind(this)}
             onKeyUp={this._handleKeyUp.bind(this)}
-            onMouseOut={() => {this.setState({hover: {row: -1, column: -1}})}}
+            onMouseOut={() => {this.setState({hover: {row: -1, column: -1}, draggingCard: false})}}
+            onMouseDown={this._handleMouseDown.bind(this)}
+            onMouseUp={this._handleMouseUp.bind(this)}
           >
             {
               upto(rowCount).map((row) => {
