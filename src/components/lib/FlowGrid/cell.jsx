@@ -34,6 +34,8 @@ export default class Cell extends Component {
     onAddItem: PropTypes.func.isRequired,
     onMoveItem: PropTypes.func.isRequired,
     onDropCell: PropTypes.func.isRequired,
+    onFilledCellMouseDown: PropTypes.func,
+    onEmptyCellMouseDown: PropTypes.func,
   }
 
   shouldComponentUpdate(newProps, newState) {
@@ -87,6 +89,11 @@ export default class Cell extends Component {
         this.props.onAddItem(this.props.location)
       }
     }
+    if (!this.props.item) {
+      this.props.onEmptyCellMouseDown(e)
+    } else {
+      this.props.onFilledCellMouseDown(e)
+    }
   }
 
   componentDidMount() {
@@ -109,9 +116,17 @@ export default class Cell extends Component {
   _cellElement = () => {
     if (this.props.item) {
       // Then endDrag fixes a bug where the original dragging position is hovered.
-      return (<ItemCell onBeginDrag={this.props.onGrabCell} onEndDrag={this.props.onDropCell} {...this.props} hover={this.props.isHovered} ref={'item'}/>)
+      return (
+        <ItemCell
+          onBeginDrag={this.props.onGrabCell}
+          onEndDrag={this.props.onDropCell}
+          {...this.props}
+          hover={this.props.isHovered}
+          ref={'item'}
+        />
+      )
     } else {
-      return (<EmptyCell {...this.props} ref={'empty'} />)
+      return ( <EmptyCell {...this.props} ref={'empty'} />)
     }
   }
 
