@@ -26,7 +26,7 @@ export default class SpacesShow extends Component {
 
   static propTypes = {
     dispatch: PT.func.isRequired,
-    spaceId: PT.string,
+    spaceId: PT.number,
     denormalizedSpace: PT.object,
     embed: PT.bool
   }
