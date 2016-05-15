@@ -52,17 +52,23 @@ export default class FlowGrid extends Component{
     hover: {row: -1, column: -1} // An impossible location means nothing hovered.
   }
 
-  _handleEmptyCellMouseDown(e, location) {
-    if (e.target && e.target.type === 'textarea') { return }
-    if (!this.state.draggingCard && e.button === 0) {
-      this.setState({leftDown: true})
-      e.preventDefault()
-    }
+  _handleMouseLeave(e) {
+    this.setState({
+      hover: {row: -1, column: -1},
+      leftDown: false,
+    })
   }
 
   _handleMouseUp(e) {
     if (e.button === 0) {
       this.setState({leftDown: false})
+    }
+  }
+
+  _handleEmptyCellMouseDown(e, location) {
+    if (e.button === 0 && !(e.target && e.target.type === 'textarea')) {
+      this.setState({leftDown: true})
+      e.preventDefault()
     }
   }
 
@@ -73,16 +79,7 @@ export default class FlowGrid extends Component{
     }
   }
 
-  _handleGrabCell() {
-    console.log("Grabbed cell.")
-    this.setState({draggingCard: true})
-    console.log("with state: ", this.state.draggingCard)
-    this.props.onDeSelectAll()
-  }
-
-  _handleDropCell(location) {
-    console.log("Dropped Cell.")
-    this.setState({leftDown: false, draggingCard: false})
+  _handleEndDragCell(location) {
     this.props.onSelectItem(location)
   }
 
@@ -178,14 +175,8 @@ export default class FlowGrid extends Component{
         onAddItem={this.props.onAddItem}
         onMoveItem={this.props.onMoveItem}
         onMouseOver={(e) => {this._handleCellMouseOver(location, e)}}
-        onDropCell={newLocation => {this._handleDropCell(newLocation)}}
-        onGrabCell={this._handleGrabCell.bind(this)}
+        onEndDragCell={newLocation => {this._handleEndDragCell(newLocation)}}
         onEmptyCellMouseDown={(e) => {this._handleEmptyCellMouseDown(e, location)}}
-        onFilledCellMouseDown={(e) => {
-          if (e.button === 0 && !(e.target && e.target == "textarea")) {
-            this.setState({draggingCard: true})
-          }
-        }}
         canvasState={this.props.canvasState}
         ref={`cell-${location.row}-${location.column}`}
       />
@@ -220,16 +211,16 @@ export default class FlowGrid extends Component{
 
     return (
       <div
-          className='FlowGrid-Container'
-          style={{overflow: this.props.overflow }}
+        className='FlowGrid-Container'
+        style={{overflow: this.props.overflow }}
+        onMouseLeave={this._handleMouseLeave.bind(this)}
+        onMouseUp={this._handleMouseUp.bind(this)}
+        onKeyDown={this._handleKeyDown.bind(this)}
+        onKeyUp={this._handleKeyUp.bind(this)}
       >
         <div className='FlowGrid-Horizontal-Motion'>
           <div
             className={className}
-            onKeyDown={this._handleKeyDown.bind(this)}
-            onKeyUp={this._handleKeyUp.bind(this)}
-            onMouseOut={() => {this.setState({hover: {row: -1, column: -1}, draggingCard: false})}}
-            onMouseUp={this._handleMouseUp.bind(this)}
           >
             {
               upto(rowCount).map((row) => {
@@ -245,12 +236,12 @@ export default class FlowGrid extends Component{
               })
             }
               <BackgroundContainer
-                  edges={edges}
-                  refs={this.refs}
-                  rowCount={rowCount}
-                  rowHeights={rowHeights}
-                  selectedRegion={this.props.selectedRegion}
-                />
+                edges={edges}
+                refs={this.refs}
+                rowCount={rowCount}
+                rowHeights={rowHeights}
+                selectedRegion={this.props.selectedRegion}
+              />
           </div>
         </div>
       </div>
