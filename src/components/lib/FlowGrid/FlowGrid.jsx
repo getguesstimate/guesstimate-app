@@ -72,10 +72,12 @@ export default class FlowGrid extends Component{
     }
   }
 
-  _handleCellMouseOver(location) {
-    this.setState({hover: location})
+  _handleCellMouseEnter(location) {
     if (this.state.leftDown) {
+      this.setState({hover: {row: -1, column: -1})
       this._handleEndRangeSelect(location)
+    } else {
+      this.setState({hover: location})
     }
   }
 
@@ -174,7 +176,7 @@ export default class FlowGrid extends Component{
         location={location}
         onAddItem={this.props.onAddItem}
         onMoveItem={this.props.onMoveItem}
-        onMouseOver={(e) => {this._handleCellMouseOver(location, e)}}
+        onMouseEnter={(e) => {this._handleCellMouseEnter(location, e)}}
         onEndDragCell={newLocation => {this._handleEndDragCell(newLocation)}}
         onEmptyCellMouseDown={(e) => {this._handleEmptyCellMouseDown(e, location)}}
         canvasState={this.props.canvasState}

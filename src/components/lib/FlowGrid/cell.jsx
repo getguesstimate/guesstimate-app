@@ -139,7 +139,7 @@ export default class Cell extends Component {
     return this.props.connectDropTarget(
       <div
         className={this._classes()}
-        onMouseOver={this.props.onMouseOver}
+        onMouseEnter={this.props.onMouseEnter}
         onMouseDown={this.handleMouseDown.bind(this)}
       >
         {this._cellElement()}
