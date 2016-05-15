@@ -25,6 +25,7 @@ export class GraphPropagation {
     this.dispatch = dispatch
     this.getState = getState
     this.id = Date.now()
+    this.metricSubset = graphFilters.metricSubset
 
     this.spaceId = graphFilters.spaceId
 
@@ -35,7 +36,11 @@ export class GraphPropagation {
 
     this.useGuesstimateForm = graphFilters.useGuesstimateForm || false
 
-    const orderedMetricIdsAndGraphErrors = this._orderedMetricIdsAndErrors(graphFilters)
+    let orderedMetricIdsAndGraphErrors = this._orderedMetricIdsAndErrors(graphFilters)
+    if (!!this.metricSubset) {
+      orderedMetricIdsAndGraphErrors = orderedMetricIdsAndGraphErrors.filter(e => _.some(this.metricSubset, m => m.id === e.id))
+    }
+
     this.orderedMetricIds = orderedMetricIdsAndGraphErrors.map(m => m.id)
     this.orderedMetricPropagations = orderedMetricIdsAndGraphErrors.map(
       ({id, errors}) => (new MetricPropagation(id, errors, this.id))
