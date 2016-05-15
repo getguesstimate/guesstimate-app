@@ -55,7 +55,6 @@ export default class MetricName extends Component {
     return (
       <div className='MetricName'>
         <TextArea
-            defaultValue={this.props.name}
             onBlur={this.handleSubmit.bind(this)}
             onChange={this.onChange.bind(this)}
             onKeyDown={this.handleKeyDown.bind(this)}
