@@ -56,12 +56,14 @@ export default class FlowGrid extends Component{
     if (e.target && e.target.type === 'textarea') { return }
     if (!this.state.draggingCard && e.button === 0) {
       this.setState({leftDown: true})
+      e.preventDefault()
     }
   }
 
   _handleMouseUp(e) {
     if (e.button === 0) {
       this.setState({leftDown: false})
+      e.preventDefault()
     }
   }
 
