@@ -18,6 +18,8 @@ import SensitivitySection from './SensitivitySection/SensitivitySection.js'
 
 import { hasMetricUpdated } from './updated.js'
 
+import {PTLocation} from 'lib/locationUtils.js'
+
 const INTERMEDIATE = 'INTERMEDIATE'
 const OUTPUT = 'OUTPUT'
 const INPUT = 'INPUT'
@@ -55,13 +57,8 @@ class MetricCard extends Component {
     dispatch: PT.func.isRequired,
     gridKeyPress: PT.func.isRequired,
     guesstimateForm: PT.object.isRequired,
-    handleSelect: PT.func.isRequired,
-    handleDeSelect: PT.func.isRequired,
-    isSelected: PT.bool.isRequired,
-    location: PT.shape({
-      row: PT.number,
-      column: PT.number
-    }),
+    inSelectedCell: PT.bool.isRequired,
+    location: PTLocation,
     metric: PT.object.isRequired
   }
 
@@ -73,14 +70,13 @@ class MetricCard extends Component {
 
   componentDidUpdate() {
     const hasContent = this.refs.MetricCardViewSection.hasContent()
-    if (!this.props.isSelected && this._isEmpty() && !hasContent && !this.state.modalIsOpen){
+    if (!this.props.inSelectedCell && this._isEmpty() && !hasContent && !this.state.modalIsOpen){
       this.handleRemoveMetric()
     }
   }
 
   openModal() {
     this.setState({modalIsOpen: true});
-    this.props.handleDeSelect()
   }
 
   closeModal() {
@@ -89,13 +85,16 @@ class MetricCard extends Component {
 
   _handleKeyDown(e) {
     if (e.target === ReactDOM.findDOMNode(this)) {
-      if (e.keyCode == '13') {
+      if (e.keyCode == '13' && this.props.inSelectedCell) {
         e.preventDefault()
+        e.stopPropagation()
         this.openModal()
-      } else if (e.keyCode == '8') {
-        e.preventDefault()
-        this.handleRemoveMetric()
       }
+    }
+  }
+
+  _handleKeyPress(e) {
+    if (e.target === ReactDOM.findDOMNode(this)) {
       this.props.gridKeyPress(e)
     }
     e.stopPropagation()
@@ -151,22 +150,17 @@ class MetricCard extends Component {
     editorRef && editorRef.focus()
   }
 
-  _handleMouseUp(e) {
-    if (this._isSelectable(e) && !this._isFunctionInputSelectable(e)) {
-      this.props.handleSelect(this.props.location)
-    }
-  }
-
   _handleMouseDown(e) {
-    if (this._isFunctionInputSelectable(e)) {
-        e.preventDefault()
-        $(window).trigger('functionMetricClicked', this.props.metric)
+    if (this._isFunctionInputSelectable(e) && !e.shiftKey) {
+      $(window).trigger('functionMetricClicked', this.props.metric)
+      e.preventDefault()
+      e.stopPropagation()
     }
   }
 
   _isSelectable(e) {
     const selectableEl = (e.target.parentElement.getAttribute('data-select') !== 'false')
-    const notYetSelected = !this.props.isSelected
+    const notYetSelected = !this.props.inSelectedCell
     return (selectableEl && notYetSelected)
   }
 
@@ -175,12 +169,12 @@ class MetricCard extends Component {
   }
 
   _className() {
-    const {isSelected, metric, hovered} = this.props
+    const {inSelectedCell, metric, hovered} = this.props
     const {canvasState: {metricCardView}} = this.props
     const relationshipClass = relationshipClasses[relationshipType(metric.edges)]
 
-    const titleView = !hovered && !isSelected && this._isTitle()
-    let className = isSelected ? 'metricCard grid-item-focus' : 'metricCard'
+    const titleView = !hovered && !inSelectedCell && this._isTitle()
+    let className = inSelectedCell ? 'metricCard grid-item-focus' : 'metricCard'
     className += ` ${metricCardView}`
     className += titleView ? ' titleView' : ''
     className += ' ' + relationshipClass
@@ -205,7 +199,7 @@ class MetricCard extends Component {
   }
 
   render() {
-    const {isSelected, metric, guesstimateForm, canvasState} = this.props
+    const {inSelectedCell, metric, guesstimateForm, canvasState} = this.props
     const {guesstimate} = metric
     const errors = this._errors()
     const shouldShowSensitivitySection = this._shouldShowSensitivitySection()
@@ -213,6 +207,7 @@ class MetricCard extends Component {
     return (
       <div className='metricCard--Container'
           ref='dom'
+          onKeyPress={this._handleKeyPress.bind(this)}
           onKeyDown={this._handleKeyDown.bind(this)}
           tabIndex='0'
         >
@@ -231,13 +226,12 @@ class MetricCard extends Component {
           <MetricCardViewSection
               canvasState={canvasState}
               metric={metric}
-              isSelected={isSelected}
+              inSelectedCell={inSelectedCell}
               onChangeName={this.handleChangeMetric.bind(this)}
               guesstimateForm={guesstimateForm}
               onOpenModal={this.openModal.bind(this)}
               jumpSection={this._focusForm.bind(this)}
               onMouseDown={this._handleMouseDown.bind(this)}
-              onMouseUp={this._handleMouseUp.bind(this)}
               ref='MetricCardViewSection'
               isTitle={this._isTitle()}
               connectDragSource={this.props.connectDragSource}
@@ -245,7 +239,7 @@ class MetricCard extends Component {
               showSensitivitySection={shouldShowSensitivitySection}
           />
 
-          {isSelected && !this.state.modalIsOpen &&
+          {inSelectedCell && !this.state.modalIsOpen &&
             <div className='section editing'>
               <DistributionEditor
                   metricId={metric.id}
@@ -258,8 +252,8 @@ class MetricCard extends Component {
             </div>
           }
         </div>
-        {this.props.hovered && !isSelected && !shouldShowSensitivitySection && <MetricToolTip guesstimate={guesstimate}/>}
-        {this.props.hovered && !isSelected && shouldShowSensitivitySection &&
+        {this.props.hovered && !inSelectedCell && !shouldShowSensitivitySection && <MetricToolTip guesstimate={guesstimate}/>}
+        {this.props.hovered && !inSelectedCell && shouldShowSensitivitySection &&
           <ScatterTip yMetric={this.props.selectedMetric} xMetric={metric}/>
         }
       </div>

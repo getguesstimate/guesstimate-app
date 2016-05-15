@@ -8,7 +8,7 @@ export default class MetricName extends Component {
 
   static propTypes = {
     name: PropTypes.string,
-    isSelected: PropTypes.bool.isRequired,
+    inSelectedCell: PropTypes.bool.isRequired,
     onChange: PropTypes.func.isRequired,
   }
 
@@ -16,7 +16,7 @@ export default class MetricName extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     return ((nextProps.name !== this.props.name) ||
-            (nextProps.isSelected !== this.props.isSelected) ||
+            (nextProps.inSelectedCell !== this.props.inSelectedCell) ||
             (nextState.value !== this.state.value))
   }
 

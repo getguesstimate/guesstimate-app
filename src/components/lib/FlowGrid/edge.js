@@ -90,8 +90,13 @@ export default class Edge extends Component{
     return (!_.isEqual(this.props !== nextProps))
   }
 
+  _isValidNode({top, left, right, bottom}) {
+    return _.every([top, left, right, bottom], _.isFinite)
+  }
+
   render() {
     const {output, input, color} = this.props;
+    if (!this._isValidNode(input) || !this._isValidNode(output)) { return (false) }
     let inputPoints = (new Rectangle(input)).showPosition(output)
     let outputPoints = (new Rectangle(output)).showPosition(input)
 

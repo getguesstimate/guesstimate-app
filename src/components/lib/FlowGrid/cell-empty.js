@@ -1,36 +1,24 @@
 import React, {Component, PropTypes} from 'react'
 
+import {PTLocation} from 'lib/locationUtils.js'
+
 export default class EmptyCell extends Component {
   static propTypes = {
     gridKeyPress: PropTypes.func.isRequired,
     handleSelect: PropTypes.func.isRequired,
-    isSelected: PropTypes.bool.isRequired,
-    location: PropTypes.shape({
-      row: PropTypes.number.isRequired,
-      column: PropTypes.number.isRequired
-    }).isRequired,
+    inSelectedCell: PropTypes.bool.isRequired,
+    location: PTLocation.isRequired,
     onAddItem: PropTypes.func.isRequired,
   }
 
   shouldComponentUpdate(nextProps) { return false }
 
-  _handleKeyPress(e) {
-    if (e.keyCode == '13') { //enter
+  _handleKeyDown(e) {
+    if (e.keyCode == '13' && this.props.inSelectedCell) { //enter
       this.props.onAddItem(this.props.location)
     }
     if (e.keyCode == '8') { //backspace
       e.preventDefault()
-    }
-    this.props.gridKeyPress(e)
-  }
-
-  handleClick(e) {
-    if (e.button === 0){
-      if (!this.props.isSelected) {
-        this.props.handleSelect(this.props.location)
-      } else {
-        this.props.onAddItem(this.props.location)
-      }
     }
   }
 
@@ -39,8 +27,8 @@ export default class EmptyCell extends Component {
     return (
       <div
           className={className}
-          onKeyDown={this._handleKeyPress.bind(this)}
-          onMouseDown={this.handleClick.bind(this)}
+          onKeyPress={this.props.gridKeyPress}
+          onKeyDown={this._handleKeyDown.bind(this)}
           tabIndex='0'
       />
     )
