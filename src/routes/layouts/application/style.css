@@ -10,6 +10,10 @@
   flex-direction: column;
 }
 
+.Layout.fullHeight {
+  height: 100%;
+}
+
 .Layout main{
   flex: 1;
 }

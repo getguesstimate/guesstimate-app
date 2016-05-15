@@ -3,7 +3,7 @@ export function hasMetricUpdated(oldProps, newProps) {
     _.get(oldProps, 'selectedMetric.id') !== _.get(newProps, 'selectedMetric.id') ||
     _.get(oldProps, 'selectedMetric.simulation.propagationId') !== _.get(newProps, 'selectedMetric.simulation.propagationId') ||
     oldProps.metric.isNew ||
-    oldProps.isSelected !== newProps.isSelected ||
+    oldProps.inSelectedCell !== newProps.inSelectedCell ||
     oldProps.canvasState.metricCardView !== newProps.canvasState.metricCardView ||
     oldProps.canvasState.metricClickMode !== newProps.canvasState.metricClickMode ||
     oldProps.canvasState.saveState !== newProps.canvasState.saveState ||

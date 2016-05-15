@@ -10,6 +10,7 @@
   overflow: auto;
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
 .FlowGrid-Horizontal-Motion {
@@ -94,23 +95,9 @@
   background-color: rgba(79, 152, 197, 0.25);
 }
 
-.FlowGridCell.selected .FlowGridEmptyCell{
-  background-color: rgba(79, 152, 197, 0.51);
-}
-
 .FlowGridCell.hovered.hasItem .FlowGridFilledCell{
   background-color: rgba(75, 138, 177, 0.3);
   border-radius: 1px;
-}
-
-.FlowGridCell.selected.hasItem .FlowGridFilledCell{
-  background-color: rgba(75, 138, 177, 0.64);
-  border-radius: 1px;
-}
-
-.FlowGridCell.selected.hasItem.IsOver .FlowGridFilledCell{
-  transition: background-color 0.2s ease;
-  background-color: rgba(127, 149, 160, 0.81);
 }
 
 .FlowGridCell.hovered {
@@ -143,6 +130,10 @@ svg.edge  path.basic-arrow.BLUE {
   stroke: $blue-5;
 }
 
+.screenshot svg.edge  path.basic-arrow.BLUE {
+  stroke: rgb(128, 154, 185)
+}
+
 svg.edge  path.basic-arrow.RED {
   stroke: #B59893;
 }
@@ -155,6 +146,16 @@ svg.edge  path.basic-arrow.RED {
   fill: $blue-5;
 }
 
+.screenshot .arrow.BLUE{
+  fill: rgb(128, 154, 185)
+}
+
 .arrow.RED{
   fill: #B59893;
+}
+
+.SelectedRegion {
+   position: absolute;
+   background: rgba(153, 186, 208, 0.87);
+   border-radius: 3px;
 }

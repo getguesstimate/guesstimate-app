@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import { connect } from 'react-redux';
 import { denormalizedSpaceSelector } from '../denormalized-space-selector.js';
 import MetricLabel from '../../metrics/label'
+import arrowsVisibleImage from '../../../assets/metric-icons/blue/arrows-visible.png'
 
 import * as Space from 'gEngine/space';
 import './style.css'
@@ -35,45 +36,62 @@ let PrivateTag = ({isPrivate}) => (
   </div>
 )
 
-let SpaceListItem = ({space, showUser, isOwnedByMe}) => {
+let BlankScreenshot = ({isPrivate}) => (
+  <div className='snapshot blank'>
+    {!isPrivate && <img src={arrowsVisibleImage}/>}
+    {isPrivate && <Icon name='lock'/>}
+  </div>
+)
+
+const SpaceListItem = ({space, showUser, isOwnedByMe, showScreenshot}) => {
   const hasName = !_.isEmpty(space.name)
   const className = `text-editable ${hasName ? '' : 'default-value'}`
   const showName = hasName ? space.name : 'Untitled Model'
-  return (
+  return(
     <div className='SpaceListItem'>
       <a href={Space.url(space)}>
-      <div className='row'>
-        <div className='col-xs-9'>
-          <h3 className={className}> {showName} </h3>
-          <p>Updated {formatDate(space.updated_at)}</p>
-        </div>
-            <div className='col-xs-3'>
-              <div className='row'>
+        <div className='row'>
+          {showScreenshot &&
+            <div className='col-sm-3'>
+              {space.screenshot && <div className='snapshot'> <img src={space.screenshot} /> </div> }
+              {!space.screenshot && <BlankScreenshot isPrivate={space.is_private}/>}
 
-                {space.user && showUser &&
-                  <div className='col-xs-12'>
-                    <div className='user-tag'>
-                      <img
-                          className='ui avatar image'
-                          src={space.user.picture}
-                      />
-                      {space.user.name}
+            </div>
+          }
+          <div className={`col-sm-${showScreenshot ? 9 : 12}`}>
+            <div className='row'>
+              <div className='col-xs-9'>
+                <h3 className={className}> {showName} </h3>
+                <p>Updated {formatDate(space.updated_at)}</p>
+              </div>
+              <div className='col-xs-3'>
+                <div className='row'>
+                  {space.user && showUser &&
+                    <div className='col-xs-12'>
+                      <div className='user-tag'>
+                        <img
+                            className='ui avatar image'
+                            src={space.user.picture}
+                        />
+                        {space.user.name}
+                      </div>
                     </div>
-                  </div>
-                }
+                  }
 
-                {isOwnedByMe && <PrivateTag isPrivate={space.is_private}/>}
+                  {isOwnedByMe && <PrivateTag isPrivate={space.is_private}/>}
+                </div>
               </div>
             </div>
-      </div>
 
-      {!_.isEmpty(space.description) &&
-        <div className='row description'>
-          <div className='col-xs-12'>
-            <p> {formatDescription(space.description)} </p>
+            {!_.isEmpty(space.description) &&
+              <div className='row description'>
+                <div className='col-xs-12'>
+                  <p> {formatDescription(space.description)} </p>
+                </div>
+              </div>
+            }
           </div>
         </div>
-      }
       </a>
     </div>
   )
@@ -100,6 +118,7 @@ export default class SpaceListItemComponent extends Component {
           space={this.props.denormalizedSpace}
           showUser={this.props.showUser}
           isOwnedByMe={isOwnedByMe}
+          showScreenshot={this.props.showScreenshot}
         />
       )
     } else {

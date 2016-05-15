@@ -27,6 +27,31 @@
   font-size: 1.45em;
 }
 
+.SpaceListItem .snapshot img{
+  max-width: 100%;
+  border-radius: 1px;
+}
+
+.SpaceListItem .snapshot.blank{
+  background-color: $grey-1;
+  height: 80px;
+  border-radius: 1px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.SpaceListItem .snapshot.blank img{
+  max-width: 40%;
+  opacity: 0.3
+}
+
+.SpaceListItem .snapshot.blank .fa{
+  font-size: 2.5em;
+  color: $grey-2;
+  opacity: 0.3;
+}
+
 .SpaceListItem a h3.default-value {
   color: #aaa;
   font-style: italic;
@@ -38,9 +63,10 @@
 }
 
 .SpaceListItem .user-tag .ui.avatar.image{
-  width: 1.3em;
-  height: 1.3em;
+  width: 1.5em;
+  height: 1.5em;
   margin-right: 5px;
+  border-radius: 2px;
 }
 
 .SpaceListItem p{

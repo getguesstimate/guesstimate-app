@@ -6,8 +6,9 @@ import { connect } from 'react-redux';
 import FlowGrid from 'gComponents/lib/FlowGrid/FlowGrid.jsx'
 import Metric from 'gComponents/metrics/card'
 
-import { changeMetric, addMetric } from 'gModules/metrics/actions'
-import { changeSelect, deSelect } from 'gModules/selection/actions'
+import { removeMetric, changeMetric, addMetric } from 'gModules/metrics/actions'
+import { changeSelect, deSelect } from 'gModules/selected_cell/actions'
+import { selectRegion, deSelectRegion } from 'gModules/selected_region/actions'
 import { runSimulations, deleteSimulations } from 'gModules/simulations/actions'
 
 import { hasMetricUpdated } from 'gComponents/metrics/card/updated.js'
@@ -23,14 +24,15 @@ import { copy, paste } from 'gModules/copied/actions.js'
 function mapStateToProps(state) {
   return {
     canvasState: state.canvasState,
-    selected: state.selection,
+    selectedCell: state.selectedCell,
+    selectedRegion: state.selectedRegion,
   }
 }
 
 const PT = PropTypes;
 @connect(mapStateToProps)
 @connect(denormalizedSpaceSelector)
-export default class CanvasSpace extends Component{
+export default class Canvas extends Component{
   static propTypes = {
     canvasState: PT.shape({
       edgeView: canvasStateProps.edgeView,
@@ -40,11 +42,16 @@ export default class CanvasSpace extends Component{
     denormalizedSpace: PropTypes.object,
     dispatch: PropTypes.func,
     guesstimateForm: PropTypes.object,
-    selected: PropTypes.object,
+    selectedCell: PropTypes.object,
+    embed: PropTypes.bool,
     spaceId: PropTypes.oneOfType([
         React.PropTypes.string,
         React.PropTypes.number,
     ])
+  }
+
+  static defaultProps = {
+    screenshot: false
   }
 
   componentDidMount(){
@@ -55,6 +62,10 @@ export default class CanvasSpace extends Component{
       this.props.dispatch(canvasStateActions.change({edgeView: 'visible'}))
     }
     this.props.dispatch(runSimulations({spaceId: this.props.denormalizedSpace.id}))
+
+    if (this.props.screenshot) {
+      this.props.dispatch(canvasStateActions.change({metricCardView: 'display'}))
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -67,15 +78,20 @@ export default class CanvasSpace extends Component{
 
   componentWillUnmount(){
     this.props.dispatch(deleteSimulations(this.props.denormalizedSpace.metrics.map(m => m.id)))
-    this._handleDeSelect()
   }
 
   _handleSelect(location) {
     this.props.dispatch(changeSelect(location))
+    this.props.dispatch(selectRegion(location, location))
   }
 
-  _handleDeSelect() {
+  _handleMultipleSelect(corner1, corner2) {
+    this.props.dispatch(selectRegion(corner1, corner2))
+  }
+
+  _handleDeSelectAll() {
     this.props.dispatch(deSelect())
+    this.props.dispatch(deSelectRegion())
   }
 
   _handleCopy() {
@@ -101,10 +117,11 @@ export default class CanvasSpace extends Component{
   }
 
   _selectedMetric() {
-   const {selected} = this.props
+    // TODO(matthew): Refactor later with location libs and more precise defensive coding.
+   const {selectedCell} = this.props
    const metrics = _.get(this.props.denormalizedSpace, 'metrics')
 
-   return metrics && _.isFinite(selected.row) && metrics.filter(i => _.isEqual(i.location, selected))[0];
+   return metrics && _.isFinite(selectedCell.row) && metrics.filter(i => _.isEqual(i.location, selectedCell))[0];
   }
 
   _isAnalysisView(props = this.props) {
@@ -119,8 +136,6 @@ export default class CanvasSpace extends Component{
     return (
       <Metric
           canvasState={this.props.canvasState}
-          handleSelect={this._handleSelect.bind(this)}
-          handleDeSelect={this._handleDeSelect.bind(this)}
           key={metric.id}
           location={location}
           metric={metric}
@@ -153,7 +168,7 @@ export default class CanvasSpace extends Component{
   }
 
   render () {
-    const {selected} = this.props
+    const {selectedCell, selectedRegion} = this.props
     const {metrics} = this.props.denormalizedSpace
     const {metricCardView} = this.props.canvasState
 
@@ -162,6 +177,7 @@ export default class CanvasSpace extends Component{
     const showGridLines = (metricCardView !== 'display')
     this.showEdges() ? className += ' showEdges' : ''
     const selectedMetric = this._isAnalysisView() && this._selectedMetric()
+    const overflow = this.props.screenshot ? 'hidden' : 'default'
 
     return (
       <div className={className}>
@@ -170,12 +186,17 @@ export default class CanvasSpace extends Component{
         }
         <FlowGrid
           items={_.map(metrics, m => ({key: m.id, location: m.location, component: this.renderMetric(m, selectedMetric)}))}
+          onMultipleSelect={this._handleMultipleSelect.bind(this)}
+          overflow={overflow}
           hasItemUpdated = {(oldItem, newItem) => hasMetricUpdated(oldItem.props, newItem.props)}
           edges={edges}
-          selected={selected}
+          selectedRegion={selectedRegion}
+          selectedCell={selectedCell}
           onSelectItem={this._handleSelect.bind(this)}
+          onDeSelectAll={this._handleDeSelectAll.bind(this)}
           onAddItem={this._handleAddMetric.bind(this)}
           onMoveItem={this._handleMoveMetric.bind(this)}
+          onRemoveItem={(id) => {this.props.dispatch(removeMetric(id))}}
           onCopy={this._handleCopy.bind(this)}
           onPaste={this._handlePaste.bind(this)}
           showGridLines={showGridLines}

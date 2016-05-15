@@ -3,19 +3,16 @@ import React, {Component, PropTypes} from 'react'
 
 import './FlowGrid.css'
 import Cell from './cell'
-import EdgeContainer from './edge-container.js'
+import BackgroundContainer from './background-container.js'
 
 import {keycodeToDirection, DirectionToLocation} from './utils'
+
+import {isLocation, isWithinRegion, isAtLocation, PTLocation} from 'lib/locationUtils.js'
 
 import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContext } from 'react-dnd';
 
 let upto = (n) => Array.apply(null, {length: n}).map(Number.call, Number)
-
-const PTLocation = PropTypes.shape({
-  column: PropTypes.number,
-  row: PropTypes.number
-})
 
 @DragDropContext(HTML5Backend)
 export default class FlowGrid extends Component{
@@ -30,15 +27,20 @@ export default class FlowGrid extends Component{
       input: PTLocation.isRequired,
       output: PTLocation.isRequired
     })),
-    selected: PTLocation,
-
+    selectedCell: PTLocation,
+    selectedRegion: PropTypes.arrayOf(PTLocation, PTLocation),
     onSelectItem: PropTypes.func.isRequired,
+    onMultipleSelect: PropTypes.func.isRequired,
+    onDeSelectAll: PropTypes.func.isRequired,
     onAddItem: PropTypes.func.isRequired,
     onMoveItem: PropTypes.func.isRequired,
-    onCopy: PropTypes.func,
-    onPaste: PropTypes.func,
+    onRemoveItem: PropTypes.func.isRequired,
+    onCopy: PropTypes.func.isRequired,
+    onPaste: PropTypes.func.isRequired,
 
-    showGridLines: PropTypes.bool
+    showGridLines: PropTypes.bool,
+
+    overflow: PropTypes.string,
   }
 
   static defaultProps = {
@@ -56,56 +58,86 @@ export default class FlowGrid extends Component{
     }
   }
 
+  _selectedItems() {
+   return this.props.items.filter(i => isWithinRegion(i.location, this.props.selectedRegion))
+  }
+
+  _handleRemoveSelectedItems() {
+    const selectedItems = this._selectedItems()
+    selectedItems.map(i => {this.props.onRemoveItem(i.key)})
+  }
+
   _handleKeyDown(e){
+    if (e.target && e.target.type === 'textarea') { return }
+    if (e.keyCode === 8 || e.keyCode === 46) {
+      this._handleRemoveSelectedItems()
+      e.preventDefault()
+    }
+
     let direction = keycodeToDirection(e.keyCode)
     if (direction) {
       e.preventDefault()
       const size = ({columns: this._columnCount(), rows: this._rowCount()})
-      let newLocation = new DirectionToLocation(size, this.props.selected)[direction]()
+      let newLocation = new DirectionToLocation(size, this.props.selectedCell)[direction]()
       this.props.onSelectItem(newLocation)
-    } else if (e.keyCode == '17' || e.keyCode == '224' || e.keyCode == '91') {
+    } else if (!e.shiftKey && (e.keyCode == '17' || e.keyCode == '224' || e.keyCode == '91')) {
       e.preventDefault()
       this.setState({ctrlPressed: true})
-    } else if (e.keyCode == '86' && this.state.ctrlPressed) {
-      this.props.onPaste()
-    } else if (e.keyCode == '67' && this.state.ctrlPressed) {
-      this.props.onCopy()
+    } else if (this.state.ctrlPressed) {
+      if (e.keyCode == '86') {
+        this.props.onPaste()
+      } else if (e.keyCode == '67') {
+        this.props.onCopy()
+      } else if (e.keyCode == '88') {
+        this.props.onCopy()
+        this._handleRemoveSelectedItems()
+      }
     }
   }
 
-  size(){
+  _handleEndRangeSelect(corner1) {
+    const corner2 = this.props.selectedCell
+
+    if (!isLocation(corner2)) {
+      this.props.onSelectItem(corner1)
+      return
+    }
+
+    this.props.onMultipleSelect(corner1, corner2)
+  }
+
+  size() {
     const lowestItem = !this.props.items.length ? 2 : Math.max(...this.props.items.map(g => parseInt(g.location.row))) + 2
-    const selected = parseInt(this.props.selected.row) + 2
+    const selected = parseInt(this.props.selectedCell.row) + 2
     const height = Math.max(3, lowestItem, selected) || 3;
     return {columns: this._columnCount(), rows: height}
   }
 
   _rowCount() {
     const lowestItem = Math.max(...this.props.items.map(e => parseInt(e.location.row))) + 4
-    let selectedRow = this.props.selected.row || 0
+    let selectedRow = this.props.selectedCell.row || 0
     const selected = parseInt(selectedRow) + 3
     return Math.max(10, lowestItem, selected) || 6;
   }
 
   _columnCount() {
     const lowestItem = Math.max(...this.props.items.map(e => parseInt(e.location.column))) + 4
-    let selectedColumn = this.props.selected.column || 0
+    let selectedColumn = this.props.selectedCell.column || 0
     const selected = parseInt(selectedColumn) + 4
     return Math.max(6, lowestItem, selected) || 6;
   }
 
   _cell(location) {
-    const atThisLocation = (l) => (l.row === location.row && l.column === location.column)
-    const isSelected = atThisLocation(this.props.selected)
-    const isHovered = atThisLocation(this.state.hover)
-    const item = this.props.items.filter(i => atThisLocation(i.location))[0];
+    const item = this.props.items.find(i => isAtLocation(i.location, location));
     return (
       <Cell
         hasItemUpdated={this.props.hasItemUpdated}
         gridKeyPress={this._handleKeyDown.bind(this)}
         handleSelect={this.props.onSelectItem}
-        isSelected={isSelected}
-        isHovered={isHovered}
+        handleEndRangeSelect={this._handleEndRangeSelect.bind(this)}
+        inSelectedRegion={isWithinRegion(location, this.props.selectedRegion)}
+        inSelectedCell={isAtLocation(this.props.selectedCell, location)}
+        isHovered={isAtLocation(this.state.hover, location)}
         item={item && item.component}
         key={'grid-item', location.row, location.column}
         location={location}
@@ -132,6 +164,10 @@ export default class FlowGrid extends Component{
     }
   }
 
+  componentWillUnmount() {
+    this.props.onDeSelectAll()
+  }
+
   render() {
     const rowCount = this._rowCount()
     const columnCount = this._columnCount()
@@ -143,6 +179,7 @@ export default class FlowGrid extends Component{
     return (
       <div
           className='FlowGrid-Container'
+          style={{overflow: this.props.overflow }}
       >
         <div className='FlowGrid-Horizontal-Motion'>
           <div
@@ -164,14 +201,13 @@ export default class FlowGrid extends Component{
                 )
               })
             }
-            {!_.isEmpty(edges) &&
-              <EdgeContainer
+              <BackgroundContainer
                   edges={edges}
                   refs={this.refs}
                   rowCount={rowCount}
                   rowHeights={rowHeights}
+                  selectedRegion={this.props.selectedRegion}
                 />
-            }
           </div>
         </div>
       </div>

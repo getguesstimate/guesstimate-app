@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react'
 import Edge from './edge';
 import _ from 'lodash'
+import GridPoint from './gridPoints.js'
 
 let upto = (n) => Array.apply(null, {length: n}).map(Number.call, Number)
 const PADDING_WIDTH = 5
@@ -15,39 +16,12 @@ export default class Edges extends Component {
     rowHeights: PropTypes.array.isRequired,
   }
 
-  _pointCoords({row, column}) {
-    return {y: this._rowY(row), x: this._columnX(column)}
-  }
-
-  _rowY(row) {
-    if ((row !== undefined) && this.props.rowHeights){
-      let rowHeights = [0, ...this.props.rowHeights]
-      let top = upto(row+1).map(r => rowHeights[r]).reduce((a,b) => a + b)
-      let bottom = top + this.props.rowHeights[row]
-      top += PADDING_WIDTH
-      bottom -= PADDING_WIDTH
-      return {top, bottom}
-    }
-  }
-
-  _columnX(column) {
-    const {columnWidth} = this.props
-    let left = column * columnWidth
-    let right = left + columnWidth
-    left += PADDING_WIDTH
-    right -= PADDING_WIDTH
-    return {left, right}
-  }
-
-  _toRectangle({row, column}) {
-    return Object.assign(this._rowY(row), this._columnX(column))
-  }
-
   render() {
     const {columnWidth, containerHeight, rowHeights} = this.props
     let {edges} = (this.props)
     edges = _.uniqBy(edges, e => JSON.stringify(e))
     let showEdges = !!(_.get(edges, 'length') && _.get(rowHeights, 'length') && columnWidth)
+    const gridPoint = new GridPoint({rowHeights: this.props.rowHeights, columnWidth: this.props.columnWidth, padding: 5})
     return (
       <div className='FlowGrid--Arrows'>
       {(edges.length > 0) &&
@@ -66,8 +40,8 @@ export default class Edges extends Component {
           </defs>
           {showEdges &&
             _.sortBy(edges, e => {return e.color === 'RED' ? 1 : 0}).map(e => {
-              const input = this._toRectangle(e.input)
-              const output = this._toRectangle(e.output)
+              const input = gridPoint.rectangle(e.input)
+              const output = gridPoint.rectangle(e.output)
               return (<Edge color={e.color} key={JSON.stringify(e)} input={input} output={output}/>)
             })
           }
@@ -77,4 +51,3 @@ export default class Edges extends Component {
     )
   }
 }
-

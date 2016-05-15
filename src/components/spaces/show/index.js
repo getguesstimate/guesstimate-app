@@ -2,13 +2,14 @@ import React, {Component, PropTypes} from 'react'
 import { connect } from 'react-redux';
 import './style.css'
 
-import SpaceCanvas from 'gComponents/spaces/canvas'
+import Canvas from 'gComponents/spaces/canvas'
 import SpacesShowHeader from './header.js'
 import * as spaceActions from 'gModules/spaces/actions.js'
 import { denormalizedSpaceSelector } from '../denormalized-space-selector.js';
 import SpaceSidebar from './sidebar.js'
 import ClosedSpaceSidebar from './closed_sidebar.js'
 import e from 'gEngine/engine'
+import * as elev from 'server/elev/index.js'
 
 function mapStateToProps(state) {
   return {
@@ -37,6 +38,11 @@ export default class SpacesShow extends Component {
 
   componentWillMount() {
     this.considerFetch(this.props)
+    if (!this.props.embed) { elev.show() }
+  }
+
+  componentWillUnmount() {
+    if (!this.props.embed) { elev.hide() }
   }
 
   componentDidUpdate(newProps) {
@@ -99,44 +105,42 @@ export default class SpacesShow extends Component {
     const sidebarIsViseable = space.editableByMe || !_.isEmpty(space.description)
     const canBePrivate = !!space.organization_id || e.me.canMakeMorePrivateModels(this.props.me)
     const isLoggedIn = e.me.isLoggedIn(this.props.me)
-    if (this.props.embed) { 
+    if (this.props.embed) {
       return (
-        <div className='spaceShow'>
-          <SpaceCanvas spaceId={space.id}/>
+        <div className='spaceShow screenshot'>
+          <Canvas spaceId={space.id} overflow={'hidden'} screenshot={true}/>
         </div>
       )
     }
 
     return (
       <div className='spaceShow'>
-        <div className='hero-unit'>
-          <div className='container-fluid'>
-            <div className='row'>
-              <div className='col-sm-10'>
-                <SpacesShowHeader
-                    isLoggedIn={isLoggedIn}
-                    onDestroy={this.destroy.bind(this)}
-                    onSaveName={this.onSaveName.bind(this)}
-                    onSave={this.onSave.bind(this)}
-                    onCopy={this._handleCopy.bind(this)}
-                    onDestroy={this.destroy.bind(this)}
-                    space={space}
-                    canBePrivate={canBePrivate}
-                    onPublicSelect={this.onPublicSelect.bind(this)}
-                    onPrivateSelect={this.onPrivateSelect.bind(this)}
-                />
-              </div>
+        <div className='hero-unit container-fluid'>
+          <div className='row'>
+            <div className='col-sm-10'>
+              <SpacesShowHeader
+                  isLoggedIn={isLoggedIn}
+                  onDestroy={this.destroy.bind(this)}
+                  onSaveName={this.onSaveName.bind(this)}
+                  onSave={this.onSave.bind(this)}
+                  onCopy={this._handleCopy.bind(this)}
+                  onDestroy={this.destroy.bind(this)}
+                  space={space}
+                  canBePrivate={canBePrivate}
+                  onPublicSelect={this.onPublicSelect.bind(this)}
+                  onPrivateSelect={this.onPrivateSelect.bind(this)}
+              />
+            </div>
 
-              <div className='col-sm-2'>
-                {space.user && !space.editableByMe &&
-                  <div>
-                    <a className='ui image label' href={`/users/${space.user.id}`}>
-                      <img src={space.user.picture}/>
-                      {space.user.name}
-                    </a>
-                  </div>
-                }
-              </div>
+            <div className='col-sm-2'>
+              {space.user && !space.editableByMe &&
+                <div>
+                  <a className='ui image label' href={`/users/${space.user.id}`}>
+                    <img src={space.user.picture}/>
+                    {space.user.name}
+                  </a>
+                </div>
+              }
             </div>
           </div>
         </div>
@@ -151,7 +155,7 @@ export default class SpacesShow extends Component {
           {sidebarIsViseable && !this.state.showSidebar &&
             <ClosedSpaceSidebar onOpen={this.openSidebar.bind(this)}/>
           }
-          <SpaceCanvas spaceId={space.id}/>
+          <Canvas spaceId={space.id}/>
         </div>
       </div>
     )

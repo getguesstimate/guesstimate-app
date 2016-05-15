@@ -2,7 +2,8 @@ import reduxCrud from 'redux-crud'
 import SI from 'seamless-immutable';
 
 import guesstimateFormR from './guesstimate_form/reducer'
-import selectionR from './selection/reducer'
+import {selectedCellR} from './selected_cell/reducer'
+import {selectedRegionR} from './selected_region/reducer'
 import displayErrorR from './displayErrors/reducer.js'
 import metricsR from './metrics/reducer'
 import guesstimatesR from './guesstimates/reducer'
@@ -22,9 +23,10 @@ export function changeSelect(location) {
 const rootReducer = function app(state = {}, action){
   return {
     displayError: SI(displayErrorR(state.displayError, action)),
-    metrics: SI(metricsR(state.metrics, action)), // Causes Infinite Loop of Immutability on /models/:id
+    metrics: SI(metricsR(state.metrics, action)),
     guesstimates: SI(guesstimatesR(state.guesstimates, action)),
-    selection: SI(selectionR(state.selection, action)),
+    selectedCell: SI(selectedCellR(state.selectedCell, action)),
+    selectedRegion: SI(selectedRegionR(state.selectedRegion, action)),
     guesstimateForm: SI(guesstimateFormR(state.guesstimateForm, state.metrics, state.guesstimates, action)),
     simulations: SI(simulationsR(state.simulations, action)),
     spaces: SI(spacesR(state.spaces, action)),
@@ -33,13 +35,11 @@ const rootReducer = function app(state = {}, action){
     userOrganizationMemberships: SI(reduxCrud.reducersFor('userOrganizationMemberships')(state.userOrganizationMemberships, action)),
     me: SI(meR(state.me, action)),
     canvasState: SI(canvasStateR(state.canvasState, action)),
-    searchSpaces: SI(searchSpacesR(state.searchSpaces, action)), // Causes Infinite Loop of Immutability on /models
+    searchSpaces: SI(searchSpacesR(state.searchSpaces, action)),
     firstSubscription: SI(firstSubscriptionsR(state.firstSubscription, action)),
     modal: SI(modalR(state.modal, action)),
     copied: SI(copiedR(state.copied, action)),
   }
 }
 
-
 export default rootReducer
-
