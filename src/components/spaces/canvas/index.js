@@ -21,6 +21,8 @@ import * as canvasStateProps from 'gModules/canvas_state/prop_type.js'
 
 import { copy, paste } from 'gModules/copied/actions.js'
 
+import {isLocation, isAtLocation} from 'lib/locationUtils.js'
+
 function mapStateToProps(state) {
   return {
     canvasState: state.canvasState,
@@ -117,11 +119,10 @@ export default class Canvas extends Component{
   }
 
   _selectedMetric() {
-    // TODO(matthew): Refactor later with location libs and more precise defensive coding.
    const {selectedCell} = this.props
    const metrics = _.get(this.props.denormalizedSpace, 'metrics')
 
-   return metrics && _.isFinite(selectedCell.row) && metrics.filter(i => _.isEqual(i.location, selectedCell))[0];
+   return metrics && isLocation(selectedCell) && metrics.find(m => isAtLocation(m.location, selectedCell));
   }
 
   _isAnalysisView(props = this.props) {
