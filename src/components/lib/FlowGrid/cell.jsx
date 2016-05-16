@@ -33,7 +33,7 @@ export default class Cell extends Component {
     location: PTLocation.isRequired,
     onAddItem: PropTypes.func.isRequired,
     onMoveItem: PropTypes.func.isRequired,
-    onDropCell: PropTypes.func.isRequired,
+    onEndDragCell: PropTypes.func.isRequired,
     onEmptyCellMouseDown: PropTypes.func,
   }
 
