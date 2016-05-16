@@ -17,6 +17,12 @@
   transition: color 5s;
 }
 
+@media only screen and (max-width: 767px){
+ .header-right-menu .item {
+    margin-left: 1em;
+  }
+}
+
 .header-right-menu .item {
   cursor: pointer;
 }

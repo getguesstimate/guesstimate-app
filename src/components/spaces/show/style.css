@@ -44,6 +44,16 @@
   .header-actions {
     display: none;
   }
+
+  .hero-unit .header {
+    margin-right: 10px;
+  }
+
+  .hero-unit .ui.image.label {
+    margin-top: 0px;
+    font-size: 0.7em;
+    float: right;
+  }
 }
 
 .hero-unit .ui.button.blue {
