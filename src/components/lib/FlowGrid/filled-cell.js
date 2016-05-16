@@ -11,7 +11,7 @@ var cardSource = {
       const item = monitor.getItem();
       const dropResult = monitor.getDropResult()
       props.onMoveItem({prev: item.location, next: dropResult.location})
-      props.onEndDrag()
+      props.onEndDrag(dropResult.location)
     }
   }
 };
