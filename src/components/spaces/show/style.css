@@ -22,8 +22,8 @@
 .hero-unit {
   padding-top: 2em;
   padding-bottom: 0.5em;
-  background: #2B80B1;
-  background: linear-gradient(-90deg, #2D71AB, #2B80B1);
+  background: #2583A7;
+  background: linear-gradient(-90deg, #2577A7, #2583A7);
   width: 100%;
   box-sizing: initial;
 }
