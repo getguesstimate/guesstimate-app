@@ -28,6 +28,13 @@
   box-sizing: initial;
 }
 
+.hero-unit .ui.image.label{
+  color: white;
+  background: rgba(255,255,255,0.2);
+  margin-top: 6px;
+  font-size: 1.05em;
+}
+
 @media only screen and (max-width: 767px) {
   .hero-unit {
     padding-top: 0.5em;
