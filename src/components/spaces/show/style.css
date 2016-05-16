@@ -22,9 +22,17 @@
 .hero-unit {
   padding-top: 2em;
   padding-bottom: 0.5em;
-  background-color: $blue-1;
+  background: #2583A7;
+  background: linear-gradient(-90deg, #2577A7, #2583A7);
   width: 100%;
   box-sizing: initial;
+}
+
+.hero-unit .ui.image.label{
+  color: white;
+  background: rgba(255,255,255,0.2);
+  margin-top: 6px;
+  font-size: 1.05em;
 }
 
 @media only screen and (max-width: 767px) {
@@ -35,6 +43,16 @@
 
   .header-actions {
     display: none;
+  }
+
+  .hero-unit .header {
+    margin-right: 10px;
+  }
+
+  .hero-unit .ui.image.label {
+    margin-top: 0px;
+    font-size: 0.7em;
+    float: right;
   }
 }
 

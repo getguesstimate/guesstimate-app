@@ -117,7 +117,7 @@ export default class SpacesShow extends Component {
       <div className='spaceShow'>
         <div className='hero-unit container-fluid'>
           <div className='row'>
-            <div className='col-sm-10'>
+            <div className='col-md-10'>
               <SpacesShowHeader
                   isLoggedIn={isLoggedIn}
                   onDestroy={this.destroy.bind(this)}
@@ -132,14 +132,12 @@ export default class SpacesShow extends Component {
               />
             </div>
 
-            <div className='col-sm-2'>
+            <div className='col-md-2'>
               {space.user && !space.editableByMe &&
-                <div>
-                  <a className='ui image label' href={`/users/${space.user.id}`}>
-                    <img src={space.user.picture}/>
-                    {space.user.name}
-                  </a>
-                </div>
+                <a className='ui image label' href={`/users/${space.user.id}`}>
+                  <img src={space.user.picture}/>
+                  {space.user.name}
+                </a>
               }
             </div>
           </div>

@@ -182,15 +182,11 @@ export default class Profile extends Component {
       { isLoggedIn && this.profileDropdown() }
 
       { !isLoggedIn &&
-        <a className={'item text'} href='/pricing'>Plans</a>
-      }
-
-      { !isLoggedIn &&
-        <a className={'item text'} href='/models'>Explore</a>
-      }
-
-      { !isLoggedIn &&
         <a className={'item text'} href='/scratchpad'>Scratchpad</a>
+      }
+
+      { !isLoggedIn &&
+        <a className={'item text'} href='/pricing'>Plans</a>
       }
 
       { !isLoggedIn &&
