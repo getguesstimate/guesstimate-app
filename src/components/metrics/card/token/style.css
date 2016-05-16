@@ -2,7 +2,15 @@
 
 .MetricToken {
   margin-top: 5px;
-  margin-right: 3px;
+  margin-right: 1px;
+}
+
+.MetricToken .ui.tiny.label {
+  font-size: 0.85rem;
+  background-color: #32A9AE !important;
+  border-radius: 2px;
+  padding: 0.4em 0.45em 0.35em;
+  margin-top: 2px;
 }
 
 .MetricToken .hover-icon {
