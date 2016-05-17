@@ -4,6 +4,8 @@ export const item = {
   inputType: 'TEXT',
   formatterName: 'DISTRIBUTION_PROPORTIONALITY',
 
+  separators: [' of ', ' in '],
+
   errors(g) {
     const numbers = this._numbers(g.text)
     if (numbers.length !== 2) {
@@ -14,9 +16,11 @@ export const item = {
     return []
   },
 
-  matches({text}) { return !!text && _.isString(text) && text.includes(" of ") },
+  matchingSep(text) { return _.find(this.separators, s => text.includes(s)) },
 
-  _numbers(text) { return text.split(" of ").map(e => parseNumber(e.trim())) },
+  matches({text}) { return !!text && _.isString(text) && !!this.matchingSep(text) },
+
+  _numbers(text) { return text.split(this.matchingSep(text)).map(e => parseNumber(e.trim())) },
 
   format(g) {
     const [hits, total] = this._numbers(g.text)
