@@ -17,8 +17,9 @@ var ogtags = ''
              + `<meta property="og:type" content="product"/>`
              + `<meta property="og:title" content="${name}"/>`
              + `<meta property="og:description" content="${description}"/>`
+var escapedFragmentTags = '<meta name="fragment" content="!">'
 
-var head = googleTags + ogtags + elev + wistia + twitter + fonts + chargebee
+var head = escapedFragmentTags + googleTags + ogtags + elev + wistia + twitter + fonts + chargebee
 
 var meta = {name: name, content: description}
 
