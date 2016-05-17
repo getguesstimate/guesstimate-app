@@ -1,15 +1,20 @@
 import React, {Component, PropTypes} from 'react'
 import { connect } from 'react-redux';
-import './style.css'
 
 import Canvas from 'gComponents/spaces/canvas'
 import SpacesShowHeader from './header.js'
-import * as spaceActions from 'gModules/spaces/actions.js'
-import { denormalizedSpaceSelector } from '../denormalized-space-selector.js';
 import SpaceSidebar from './sidebar.js'
 import ClosedSpaceSidebar from './closed_sidebar.js'
+
+import { denormalizedSpaceSelector } from '../denormalized-space-selector.js';
+
+import * as spaceActions from 'gModules/spaces/actions.js'
+
 import e from 'gEngine/engine'
+
 import * as elev from 'server/elev/index.js'
+
+import './style.css'
 
 function mapStateToProps(state) {
   return {
