@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react'
+
 import {DragSource} from 'react-dnd'
-import {PTLocation} from 'lib/locationUtils.js'
+import {PTLocation} from 'lib/locationUtils'
 
 var cardSource = {
   beginDrag: function (props) {

@@ -1,8 +1,11 @@
-import React, {Component, PropTypes} from 'react'
+import React, {Component} from 'react'
+
 import ReactDOM from 'react-dom'
 import Icon from 'react-fa'
-import './style.css'
+
 import {ButtonClose} from '../buttons/close/index.js'
+
+import './style.css'
 
 export default class EditingMode extends Component {
   displayName: 'ClickToEditEditing'

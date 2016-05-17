@@ -1,6 +1,8 @@
-import React, {Component, PropTypes} from 'react';
-import * as elev from 'server/elev/index.js'
+import React, {Component} from 'react';
+
 import Icon from 'react-fa'
+
+import * as elev from 'server/elev/index.js'
 
 export default class GuesstimateTypeIcon extends Component{
   displayName: 'GuesstimateTypeIcon'

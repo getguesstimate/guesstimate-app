@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import _ from 'lodash'
+
 import angleBetweenPoints from 'angle-between-points'
 
 //const isVertical = dd

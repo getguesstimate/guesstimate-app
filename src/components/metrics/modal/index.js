@@ -1,12 +1,16 @@
-import React, {Component, PropTypes} from 'react'
+import React, {Component} from 'react'
+
 import Modal from 'react-modal'
-import DistributionSummary from 'gComponents/distributions/summary/index.js'
-import Histogram from 'gComponents/simulations/histogram'
-import DistributionEditor from 'gComponents/distributions/editor/index.js'
+
+import DistributionSummary from 'gComponents/distributions/summary/index'
+import DistributionEditor from 'gComponents/distributions/editor/index'
+import Histogram from 'gComponents/simulations/histogram/index'
 import GuesstimateDescription from './description'
 import {ButtonClose} from 'gComponents/utility/buttons/close'
+
+import {percentile, sortDescending} from 'lib/dataAnalysis'
+
 import './style.css'
-import {percentile, sortDescending} from 'lib/dataAnalysis.js'
 
 const percentages = (values, perc) => {
   const samples = sortDescending(Object.assign([], values))

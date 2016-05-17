@@ -1,16 +1,17 @@
 'use strict';
+
 import React, {Component, PropTypes} from 'react'
 
-import './FlowGrid.css'
+import {DragDropContext} from 'react-dnd'
+import HTML5Backend from 'react-dnd-html5-backend'
+
 import Cell from './cell'
-import BackgroundContainer from './background-container.js'
+import BackgroundContainer from './background-container'
 
 import {keycodeToDirection, DirectionToLocation} from './utils'
+import {isLocation, isWithinRegion, isAtLocation, PTLocation} from 'lib/locationUtils'
 
-import {isLocation, isWithinRegion, isAtLocation, PTLocation} from 'lib/locationUtils.js'
-
-import HTML5Backend from 'react-dnd-html5-backend';
-import { DragDropContext } from 'react-dnd';
+import './FlowGrid.css'
 
 let upto = (n) => Array.apply(null, {length: n}).map(Number.call, Number)
 

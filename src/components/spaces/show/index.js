@@ -1,12 +1,12 @@
 import React, {Component, PropTypes} from 'react'
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 
-import Canvas from 'gComponents/spaces/canvas'
-import SpacesShowHeader from './header.js'
-import SpaceSidebar from './sidebar.js'
+import SpacesShowHeader from './header'
 import ClosedSpaceSidebar from './closed_sidebar.js'
+import SpaceSidebar from './sidebar'
+import Canvas from 'gComponents/spaces/canvas'
 
-import { denormalizedSpaceSelector } from '../denormalized-space-selector.js';
+import {denormalizedSpaceSelector} from '../denormalized-space-selector.js';
 
 import * as spaceActions from 'gModules/spaces/actions.js'
 
