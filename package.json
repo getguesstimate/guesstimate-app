@@ -72,7 +72,7 @@
     "css-loader": "^0.23.1",
     "cuid": "^1.3.8",
     "d3": "^3.5.16",
-    "discrete-sampling": "^1.0.2",
+    "discrete-sampling": "^1.0.3",
     "everpolate": "0.0.3",
     "extract-text-webpack-plugin": "^1.0.1",
     "financejs": "^3.0.0",
