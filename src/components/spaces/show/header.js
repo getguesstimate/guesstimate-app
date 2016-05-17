@@ -35,9 +35,22 @@ const ProgressMessage = ({actionState}) => (
   </div>
 )
 
-const SpaceHeader = ({canBePrivate, space, isLoggedIn, onSave, onCopy, onDestroy, onPublicSelect, onPrivateSelect, onSaveName}) => {
+const SpaceHeader = ({
+  canBePrivate,
+  name,
+  isPrivate,
+  editableByMe,
+  actionState,
+  isLoggedIn,
+  onSave,
+  onCopy,
+  onDestroy,
+  onPublicSelect,
+  onPrivateSelect,
+  onSaveName,
+}) => {
   let privacy_header = (<span><Icon name='globe'/> Public</span>)
-  if (space.is_private) {
+  if (isPrivate) {
     privacy_header = (<span><Icon name='lock'/> Private</span>)
   }
 
@@ -46,8 +59,8 @@ const SpaceHeader = ({canBePrivate, space, isLoggedIn, onSave, onCopy, onDestroy
 
       <div className='header-name'>
         <SpaceName
-            name={space.name}
-            editableByMe={space.editableByMe}
+            name={name}
+            editableByMe={editableByMe}
             onSave={onSaveName}
         />
       </div>
@@ -55,7 +68,7 @@ const SpaceHeader = ({canBePrivate, space, isLoggedIn, onSave, onCopy, onDestroy
       <div className='header-actions'>
         <CanvasViewForm/>
 
-        {space.editableByMe &&
+        {editableByMe &&
           <DropDown
               headerText={'Model Actions'}
               openLink={<a className='space-header-action'>Model Actions</a>}
@@ -67,23 +80,23 @@ const SpaceHeader = ({canBePrivate, space, isLoggedIn, onSave, onCopy, onDestroy
           </DropDown>
         }
 
-        {space.editableByMe &&
+        {editableByMe &&
           <PrivacyToggle
             headerText={'Privacy Options'}
             openLink={<a className='space-header-action'>{privacy_header}</a>}
             position='right'
             isPrivateSelectionInvalid={!canBePrivate}
-            isPrivate={space.is_private}
+            isPrivate={isPrivate}
             onPublicSelect={onPublicSelect}
             onPrivateSelect={onPrivateSelect}
           />
         }
-        { space && isLoggedIn &&
+        { isLoggedIn &&
           <div onMouseDown={onCopy} className='copy-button'>
             <a className='space-header-action'><Icon name='copy'/> Copy</a>
           </div>
         }
-        <ProgressMessage actionState={space.canvasState.actionState}/>
+        <ProgressMessage actionState={actionState}/>
       </div>
     </div>
   )
