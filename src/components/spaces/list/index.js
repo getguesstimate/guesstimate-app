@@ -4,7 +4,7 @@ import './style.css'
 
 const SpaceList = ({spaces, showUsers, loadMore, hasMorePages, showScreenshots}) => (
   <div className='SpaceList'>
-    {spaces.map((s) => {
+    {_.map(spaces, (s) => {
       return (
         <SpaceListItem
           key={s.id}
