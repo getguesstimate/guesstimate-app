@@ -64,20 +64,19 @@ export function fetchById(spaceId) {
     api(getState()).models.get({spaceId}, (err, value) => {
       if (err) {
         captureApiError('SpacesFetch', null, null, err, {url: 'spacesfetch'})
+        return
       }
-      else if (value) {
-        debugger
-        dispatch(sActions.fetchSuccess([value]))
 
-        const user = _.get(value, '_embedded.user')
-        const organization = _.get(value, '_embedded.organization')
+      dispatch(sActions.fetchSuccess([value]))
 
-        if (!!organization) {dispatch(organizationActions.fetchSuccess([organization]))}
-        if (!!user) {
-          dispatch(userActions.fetchSuccess([user]))
-        } else {
-          console.warn("No user returned with a space.")
-        }
+      const user = _.get(value, '_embedded.user')
+      const organization = _.get(value, '_embedded.organization')
+
+      if (!!organization) {dispatch(organizationActions.fetchSuccess([organization]))}
+      if (!!user) {
+        dispatch(userActions.fetchSuccess([user]))
+      } else {
+        console.warn("No user returned with a space.")
       }
     })
   }
