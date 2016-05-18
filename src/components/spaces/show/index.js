@@ -124,16 +124,15 @@ export default class SpacesShow extends Component {
           <div className='row'>
             <div className='col-md-10'>
               <SpacesShowHeader
-                  isLoggedIn={isLoggedIn}
-                  onDestroy={this.destroy.bind(this)}
-                  onSaveName={this.onSaveName.bind(this)}
-                  onSave={this.onSave.bind(this)}
-                  onCopy={this._handleCopy.bind(this)}
-                  onDestroy={this.destroy.bind(this)}
-                  space={space}
-                  canBePrivate={canBePrivate}
-                  onPublicSelect={this.onPublicSelect.bind(this)}
-                  onPrivateSelect={this.onPrivateSelect.bind(this)}
+                isLoggedIn={isLoggedIn}
+                onDestroy={this.destroy.bind(this)}
+                onSaveName={this.onSaveName.bind(this)}
+                onSave={this.onSave.bind(this)}
+                onCopy={this._handleCopy.bind(this)}
+                space={space}
+                canBePrivate={canBePrivate}
+                onPublicSelect={this.onPublicSelect.bind(this)}
+                onPrivateSelect={this.onPrivateSelect.bind(this)}
               />
             </div>
 
