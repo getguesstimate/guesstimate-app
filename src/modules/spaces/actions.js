@@ -1,5 +1,4 @@
 import {actionCreatorsFor} from 'redux-crud';
-import $ from 'jquery'
 import cuid from 'cuid'
 import e from 'gEngine/engine'
 import app from 'ampersand-app'
@@ -67,11 +66,18 @@ export function fetchById(spaceId) {
         captureApiError('SpacesFetch', null, null, err, {url: 'spacesfetch'})
       }
       else if (value) {
+        debugger
         dispatch(sActions.fetchSuccess([value]))
-        // TODO(matthew): Right now, the space has an embedded user and organization record... why are we doing this
-        // extra fetching?
-        fetchUserIfNeeded(dispatch, value.user_id, getState().users)
-        fetchOrganizationIfNeeded(dispatch, value.organization_id, getState().organizations)
+
+        const user = _.get(value, '_embedded.user')
+        const organization = _.get(value, '_embedded.organization')
+
+        if (!!organization) {dispatch(organizationActions.fetchSuccess([organization]))}
+        if (!!user) {
+          dispatch(userActions.fetchSuccess([user]))
+        } else {
+          console.warn("No user returned with a space.")
+        }
       }
     })
   }
