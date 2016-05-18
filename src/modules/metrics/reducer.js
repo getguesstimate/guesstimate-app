@@ -1,5 +1,3 @@
-import SI from 'seamless-immutable';
-
 function uniq(items) {
   return _.uniqBy(items, 'id')
 }
@@ -9,7 +7,7 @@ function spaceToMetrics(space) {
   return _.isEmpty(metrics) ? [] : metrics.map(m => ({...m, space: space.id}))
 }
 
-export default function metrics(state = SI([]), action) {
+export default function metrics(state = [], action) {
   switch (action.type) {
   case 'SPACES_FETCH_SUCCESS':
     const newMetrics = (_.flatten(action.records.map(e => spaceToMetrics(e))).filter(e => e))
