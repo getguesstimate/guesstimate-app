@@ -1,15 +1,20 @@
 import React, {Component, PropTypes} from 'react'
-import { connect } from 'react-redux';
-import './style.css'
+import {connect} from 'react-redux';
 
-import Canvas from 'gComponents/spaces/canvas'
-import SpacesShowHeader from './header.js'
-import * as spaceActions from 'gModules/spaces/actions.js'
-import { denormalizedSpaceSelector } from '../denormalized-space-selector.js';
-import SpaceSidebar from './sidebar.js'
+import SpacesShowHeader from './header'
 import ClosedSpaceSidebar from './closed_sidebar.js'
+import SpaceSidebar from './sidebar'
+import Canvas from 'gComponents/spaces/canvas'
+
+import {denormalizedSpaceSelector} from '../denormalized-space-selector.js';
+
+import * as spaceActions from 'gModules/spaces/actions.js'
+
 import e from 'gEngine/engine'
+
 import * as elev from 'server/elev/index.js'
+
+import './style.css'
 
 function mapStateToProps(state) {
   return {
@@ -119,15 +124,15 @@ export default class SpacesShow extends Component {
           <div className='row'>
             <div className='col-md-10'>
               <SpacesShowHeader
-                  isLoggedIn={isLoggedIn}
-                  onDestroy={this.destroy.bind(this)}
-                  onSaveName={this.onSaveName.bind(this)}
-                  onSave={this.onSave.bind(this)}
-                  onCopy={this._handleCopy.bind(this)}
-                  space={space}
-                  canBePrivate={canBePrivate}
-                  onPublicSelect={this.onPublicSelect.bind(this)}
-                  onPrivateSelect={this.onPrivateSelect.bind(this)}
+                isLoggedIn={isLoggedIn}
+                onDestroy={this.destroy.bind(this)}
+                onSaveName={this.onSaveName.bind(this)}
+                onSave={this.onSave.bind(this)}
+                onCopy={this._handleCopy.bind(this)}
+                space={space}
+                canBePrivate={canBePrivate}
+                onPublicSelect={this.onPublicSelect.bind(this)}
+                onPrivateSelect={this.onPrivateSelect.bind(this)}
               />
             </div>
 
