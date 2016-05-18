@@ -1,20 +1,15 @@
 import React, {Component, PropTypes} from 'react'
-import {connect} from 'react-redux';
-
-import SpacesShowHeader from './header'
-import ClosedSpaceSidebar from './closed_sidebar.js'
-import SpaceSidebar from './sidebar'
-import Canvas from 'gComponents/spaces/canvas'
-
-import {denormalizedSpaceSelector} from '../denormalized-space-selector.js';
-
-import * as spaceActions from 'gModules/spaces/actions.js'
-
-import e from 'gEngine/engine'
-
-import * as elev from 'server/elev/index.js'
-
+import { connect } from 'react-redux';
 import './style.css'
+
+import Canvas from 'gComponents/spaces/canvas'
+import SpacesShowHeader from './header.js'
+import * as spaceActions from 'gModules/spaces/actions.js'
+import { denormalizedSpaceSelector } from '../denormalized-space-selector.js';
+import SpaceSidebar from './sidebar.js'
+import ClosedSpaceSidebar from './closed_sidebar.js'
+import e from 'gEngine/engine'
+import * as elev from 'server/elev/index.js'
 
 function mapStateToProps(state) {
   return {
@@ -129,7 +124,6 @@ export default class SpacesShow extends Component {
                   onSaveName={this.onSaveName.bind(this)}
                   onSave={this.onSave.bind(this)}
                   onCopy={this._handleCopy.bind(this)}
-                  onDestroy={this.destroy.bind(this)}
                   space={space}
                   canBePrivate={canBePrivate}
                   onPublicSelect={this.onPublicSelect.bind(this)}
