@@ -6,8 +6,8 @@
   "scripts": {
     "_build": "BUILD_DEV=0 API_ENV=production SEGMENT_API_ENV=production webpack",
     "_stage": "surge -p public -d test.getguesstimate.com",
-    "start": "BUILD_DEV=0 NODE_ENV=development API_ENV=development SEGMENT_API_ENV=development webpack-dev-server",
-    "start-production": "BUILD_DEV=0 NODE_ENV=development API_ENV=production SEGMENT_API_ENV=development webpack-dev-server",
+    "start": "BUILD_DEV=1 NODE_ENV=development API_ENV=development SEGMENT_API_ENV=development webpack-dev-server",
+    "start-production": "BUILD_DEV=1 NODE_ENV=development API_ENV=production SEGMENT_API_ENV=development webpack-dev-server",
     "stage!": "npm run _build && npm run _stage",
     "stage-payments!": "BUILD_DEV=0 npm run _build && surge -p public -d payments.getguesstimate.com",
     "deploy": "surge -p public -d https://www.getguesstimate.com",
