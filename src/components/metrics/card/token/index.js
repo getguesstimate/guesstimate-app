@@ -1,5 +1,7 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component, PropTypes} from 'react'
+
 import Icon from 'react-fa'
+
 import './style.css'
 
 const MetricReadableId = ({readableId}) => (

@@ -1,5 +1,5 @@
-import React, {Component, PropTypes} from 'react'
-import Icon from 'react-fa'
+import React, {Component} from 'react'
+
 import ClickToEdit from 'gComponents/utility/click-to-edit/index.js'
 import {MarkdownViewer} from 'gComponents/utility/markdown-viewer/index.js'
 import {ButtonClose} from 'gComponents/utility/buttons/close'

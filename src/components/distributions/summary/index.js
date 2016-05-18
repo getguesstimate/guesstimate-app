@@ -1,8 +1,9 @@
-import React, {Component, PropTypes} from 'react';
-import numeral from 'numeral'
-import numberShow from 'lib/numberShower/numberShower.js'
+import React, {Component, PropTypes} from 'react'
+
+import numberShow from 'lib/numberShower/numberShower'
+import ShowIf from 'gComponents/utility/showIf'
+
 import './style.css'
-import ShowIf from 'gComponents/utility/showIf';
 
 function formatStat(n){
   if (n) {

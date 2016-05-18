@@ -1,24 +1,26 @@
 import React, {Component, PropTypes} from 'react'
+import {connect} from 'react-redux'
+
 import ReactDOM from 'react-dom'
-
-import { connect } from 'react-redux';
-import { removeMetric, changeMetric } from 'gModules/metrics/actions.js'
-import { changeGuesstimate } from 'gModules/guesstimates/actions.js'
-import { changeGuesstimateForm } from 'gModules/guesstimate_form/actions.js'
-
-import MetricModal from '../modal/index.js'
-import DistributionEditor from 'gComponents/distributions/editor/index.js'
-import MetricToolTip from './tooltip.js'
 import $ from 'jquery'
+
+import {removeMetric, changeMetric} from 'gModules/metrics/actions'
+import {changeGuesstimate} from 'gModules/guesstimates/actions'
+import {changeGuesstimateForm} from 'gModules/guesstimate_form/actions'
+
+import MetricModal from 'gComponents/metrics/modal/index'
+import DistributionEditor from 'gComponents/distributions/editor/index'
+import MetricToolTip from './tooltip'
+import ToolTip from 'gComponents/utility/tooltip/index'
+import MetricCardViewSection from './MetricCardViewSection/index'
+import SensitivitySection from './SensitivitySection/SensitivitySection'
+
+import {hasMetricUpdated} from './updated'
+
+import * as canvasStateProps from 'gModules/canvas_state/prop_type'
+import {PTLocation} from 'lib/locationUtils'
+
 import './style.css'
-import * as canvasStateProps from 'gModules/canvas_state/prop_type.js'
-import ToolTip from 'gComponents/utility/tooltip/index.js'
-import MetricCardViewSection from './MetricCardViewSection/index.js'
-import SensitivitySection from './SensitivitySection/SensitivitySection.js'
-
-import { hasMetricUpdated } from './updated.js'
-
-import {PTLocation} from 'lib/locationUtils.js'
 
 const INTERMEDIATE = 'INTERMEDIATE'
 const OUTPUT = 'OUTPUT'

@@ -1,11 +1,13 @@
-import React, {Component, PropTypes} from 'react';
-import { connect } from 'react-redux';
-import { createGuesstimateForm, changeGuesstimateForm, saveGuesstimateForm } from 'gModules/guesstimate_form/actions'
-import { changeMetricClickMode } from 'gModules/canvas_state/actions'
-import * as guesstimator from 'lib/guesstimator/index.js'
+import React, {Component, PropTypes} from 'react'
+import {connect} from 'react-redux'
+
+import TextForm from './TextForm/TextForm'
+import DataForm from './DataForm/DataForm'
+
+import {createGuesstimateForm, changeGuesstimateForm, saveGuesstimateForm} from 'gModules/guesstimate_form/actions'
+import {changeMetricClickMode} from 'gModules/canvas_state/actions'
+
 import './style.css'
-import TextForm from './TextForm/TextForm.js'
-import DataForm from './DataForm/DataForm.js'
 
 function select(state) {
   return {

@@ -1,6 +1,7 @@
-import React, {Component, PropTypes} from 'react';
-import TextArea from 'react-textarea-autosize';
-import Keypress from 'react-keypress'
+import React, {Component, PropTypes} from 'react'
+
+import TextArea from 'react-textarea-autosize'
+
 import './style.css'
 
 export default class MetricName extends Component {
