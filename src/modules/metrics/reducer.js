@@ -1,5 +1,6 @@
+// TODO(matthew): Dry up code here (see guesstimate reducer), make this copying not necessary.
 function uniq(items) {
-  return _.uniqBy(items, 'id')
+  return _.uniqBy(items.slice().reverse(), 'id').reverse()
 }
 
 function spaceToMetrics(space) {
