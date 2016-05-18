@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react'
-import Edge from './edge';
-import _ from 'lodash'
-import GridPoint from './gridPoints.js'
+
+import Edge from './edge'
+import GridPoint from './gridPoints'
 
 let upto = (n) => Array.apply(null, {length: n}).map(Number.call, Number)
 const PADDING_WIDTH = 5

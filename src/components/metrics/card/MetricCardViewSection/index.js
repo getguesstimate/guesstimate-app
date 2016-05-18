@@ -1,13 +1,15 @@
-import React, {Component, PropTypes} from 'react'
-import Histogram from 'gComponents/simulations/histogram'
-import MetricName from '../name'
-import DistributionSummary from 'gComponents/distributions/summary/index.js'
-import StatTable from 'gComponents/simulations/stat_table'
-import JSONTree from 'react-json-tree'
-import MetricToken from '../token/index.js'
-import './style.css'
+import React, {Component} from 'react'
+
 import Icon from 'react-fa'
-import SensitivitySection from '../SensitivitySection/SensitivitySection.js'
+
+import Histogram from 'gComponents/simulations/histogram/index'
+import MetricName from 'gComponents/metrics/card/name/index'
+import DistributionSummary from 'gComponents/distributions/summary/index'
+import StatTable from 'gComponents/simulations/stat_table/index'
+import MetricToken from 'gComponents/metrics/card/token/index'
+import SensitivitySection from 'gComponents/metrics/card/SensitivitySection/SensitivitySection'
+
+import './style.css'
 
 const isBreak = (errors) => {return errors[0] && (errors[0] === 'BROKEN_UPSTREAM' || errors[0] === 'BROKEN_INPUT' )}
 const isInfiniteLoop = (errors) => {return errors[0] && (errors[0] === 'INFINITE_LOOP')}
@@ -66,7 +68,6 @@ export default class MetricCardViewSection extends Component {
     const {guesstimate} = metric
     const showSimulation = this.showSimulation()
     const shouldShowStatistics = this._shouldShowStatistics()
-    const shouldShowJsonTree = (metricCardView === 'debugging')
     const hasGuesstimateDescription = !_.isEmpty(guesstimate.description)
     const anotherFunctionSelected = ((metricClickMode === 'FUNCTION_INPUT_SELECT') && !inSelectedCell)
     const hasErrors = (errors.length > 0)
@@ -131,10 +132,6 @@ export default class MetricCardViewSection extends Component {
             }
           </div>
         )}
-
-        {shouldShowJsonTree &&
-          <div className='row'> <div className='col-xs-12'> <JSONTree data={this.props}/> </div> </div>
-        }
       </div>
     )
   }

@@ -1,6 +1,5 @@
-import React, {Component, PropTypes} from 'react'
+import React from 'react'
 
-import Icon from 'react-fa'
 import './style.css'
 
 export const ButtonClose = ({onClick}) => (

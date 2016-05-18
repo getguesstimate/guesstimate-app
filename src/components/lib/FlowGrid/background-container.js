@@ -1,8 +1,12 @@
 import React, {Component, PropTypes} from 'react'
-import Dimensions from 'gComponents/utility/react-dimensions';
-import Edges from './edges';
+
 import $ from 'jquery'
-import GridPoint from './gridPoints.js'
+
+import Edges from './edges'
+import GridPoint from './gridPoints'
+
+import Dimensions from 'gComponents/utility/react-dimensions'
+
 
 const Region = ({rowHeights, columnWidth, selectedRegion}) => {
   if (!selectedRegion || selectedRegion.length !== 2) { return false }

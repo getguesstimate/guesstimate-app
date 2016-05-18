@@ -1,6 +1,8 @@
 import React, {Component} from 'react'
+
 import {ScatterPlot} from 'react-d3-components'
 import everpolate from 'everpolate'
+
 import './style.css'
 
 function importance(r2) {

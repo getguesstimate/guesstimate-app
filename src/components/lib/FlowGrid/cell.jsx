@@ -1,10 +1,13 @@
 import React, {Component, PropTypes} from 'react'
+
 import ReactDOM from 'react-dom'
 import $ from 'jquery'
-import { DropTarget } from 'react-dnd';
-import ItemCell from './filled-cell.js';
-import EmptyCell from './cell-empty.js';
-import {PTLocation} from 'lib/locationUtils.js'
+import { DropTarget } from 'react-dnd'
+
+import ItemCell from './filled-cell'
+import EmptyCell from './cell-empty'
+
+import {PTLocation} from 'lib/locationUtils'
 
 const squareTarget = {
   drop(props) {

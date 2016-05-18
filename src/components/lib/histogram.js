@@ -1,6 +1,8 @@
-var React = require("react");
-var d3 = require("d3");
-import numberShow from 'lib/numberShower/numberShower.js'
+import React from 'react'
+
+import d3 from 'd3'
+
+import numberShow from 'lib/numberShower/numberShower'
 
 function getYScale(data, height) {
   return d3.scale.linear().
