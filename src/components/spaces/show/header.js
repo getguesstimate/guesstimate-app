@@ -1,12 +1,14 @@
 import React, {Component} from 'react'
-import StandardDropdownMenu from 'gComponents/utility/standard-dropdown-menu'
-import CanvasViewForm from './canvasViewForm.js'
+
 import Icon from 'react-fa'
+
+import CanvasViewForm from './canvasViewForm'
+import DropDown, {DropDownListElement} from 'gComponents/utility/drop-down/index'
+import {PrivacyToggle} from './privacy-toggle/index'
+import {SpaceName} from './spaceName'
+
 import e from 'gEngine/engine'
-import DropDown from 'gComponents/utility/drop-down/index.js'
-import {DropDownListElement} from 'gComponents/utility/drop-down/index.js'
-import {SpaceName} from './spaceName.js'
-import {PrivacyToggle} from './privacy-toggle/index.js'
+
 import './header.css'
 
 const ProgressMessage = ({actionState}) => (

@@ -1,16 +1,17 @@
 'use strict';
+
 import React, {Component, PropTypes} from 'react'
 
-import './FlowGrid.css'
+import {DragDropContext} from 'react-dnd'
+import HTML5Backend from 'react-dnd-html5-backend'
+
 import Cell from './cell'
-import BackgroundContainer from './background-container.js'
+import BackgroundContainer from './background-container'
 
 import {keycodeToDirection, DirectionToLocation} from './utils'
+import {isLocation, isWithinRegion, isAtLocation, PTLocation} from 'lib/locationUtils'
 
-import {isLocation, isWithinRegion, isAtLocation, PTLocation} from 'lib/locationUtils.js'
-
-import HTML5Backend from 'react-dnd-html5-backend';
-import { DragDropContext } from 'react-dnd';
+import './FlowGrid.css'
 
 let upto = (n) => Array.apply(null, {length: n}).map(Number.call, Number)
 
@@ -50,6 +51,39 @@ export default class FlowGrid extends Component{
   state = {
     rowHeights: [],
     hover: {row: -1, column: -1} // An impossible location means nothing hovered.
+  }
+
+  _handleMouseLeave(e) {
+    this.setState({
+      hover: {row: -1, column: -1},
+      leftDown: false,
+    })
+  }
+
+  _handleMouseUp(e) {
+    if (e.button === 0) {
+      this.setState({leftDown: false})
+    }
+  }
+
+  _handleEmptyCellMouseDown(e, location) {
+    if (e.button === 0 && !(e.target && e.target.type === 'textarea')) {
+      this.setState({leftDown: true})
+      e.preventDefault()
+    }
+  }
+
+  _handleCellMouseEnter(location) {
+    if (this.state.leftDown) {
+      this.setState({hover: {row: -1, column: -1}})
+      this._handleEndRangeSelect(location)
+    } else {
+      this.setState({hover: location})
+    }
+  }
+
+  _handleEndDragCell(location) {
+    this.props.onSelectItem(location)
   }
 
   _handleKeyUp(e){
@@ -143,7 +177,9 @@ export default class FlowGrid extends Component{
         location={location}
         onAddItem={this.props.onAddItem}
         onMoveItem={this.props.onMoveItem}
-        onMouseOver={() => {this.setState({hover: location})}}
+        onMouseEnter={(e) => {this._handleCellMouseEnter(location, e)}}
+        onEndDragCell={newLocation => {this._handleEndDragCell(newLocation)}}
+        onEmptyCellMouseDown={(e) => {this._handleEmptyCellMouseDown(e, location)}}
         canvasState={this.props.canvasState}
         ref={`cell-${location.row}-${location.column}`}
       />
@@ -178,15 +214,16 @@ export default class FlowGrid extends Component{
 
     return (
       <div
-          className='FlowGrid-Container'
-          style={{overflow: this.props.overflow }}
+        className='FlowGrid-Container'
+        style={{overflow: this.props.overflow }}
+        onMouseLeave={this._handleMouseLeave.bind(this)}
+        onMouseUp={this._handleMouseUp.bind(this)}
+        onKeyDown={this._handleKeyDown.bind(this)}
+        onKeyUp={this._handleKeyUp.bind(this)}
       >
         <div className='FlowGrid-Horizontal-Motion'>
           <div
             className={className}
-            onKeyDown={this._handleKeyDown.bind(this)}
-            onKeyUp={this._handleKeyUp.bind(this)}
-            onMouseOut={() => {this.setState({hover: {row: -1, column: -1}})}}
           >
             {
               upto(rowCount).map((row) => {
@@ -202,12 +239,12 @@ export default class FlowGrid extends Component{
               })
             }
               <BackgroundContainer
-                  edges={edges}
-                  refs={this.refs}
-                  rowCount={rowCount}
-                  rowHeights={rowHeights}
-                  selectedRegion={this.props.selectedRegion}
-                />
+                edges={edges}
+                refs={this.refs}
+                rowCount={rowCount}
+                rowHeights={rowHeights}
+                selectedRegion={this.props.selectedRegion}
+              />
           </div>
         </div>
       </div>

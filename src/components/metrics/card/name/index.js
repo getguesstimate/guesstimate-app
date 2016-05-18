@@ -1,6 +1,7 @@
-import React, {Component, PropTypes} from 'react';
-import TextArea from 'react-textarea-autosize';
-import Keypress from 'react-keypress'
+import React, {Component, PropTypes} from 'react'
+
+import TextArea from 'react-textarea-autosize'
+
 import './style.css'
 
 export default class MetricName extends Component {
@@ -55,7 +56,6 @@ export default class MetricName extends Component {
     return (
       <div className='MetricName'>
         <TextArea
-            defaultValue={this.props.name}
             onBlur={this.handleSubmit.bind(this)}
             onChange={this.onChange.bind(this)}
             onKeyDown={this.handleKeyDown.bind(this)}

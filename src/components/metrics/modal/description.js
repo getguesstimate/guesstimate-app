@@ -1,10 +1,11 @@
-import React, {Component, PropTypes} from 'react'
-import Modal from 'react-modal'
-import ClickToEdit from 'gComponents/utility/click-to-edit/index.js'
-import {MarkdownViewer} from 'gComponents/utility/markdown-viewer/index.js'
-import ReactMarkdown from 'react-markdown'
-import style from './description.css'
+import React, {Component} from 'react'
+
 import Icon from 'react-fa'
+
+import ClickToEdit from 'gComponents/utility/click-to-edit/index'
+import {MarkdownViewer} from 'gComponents/utility/markdown-viewer/index'
+
+import './description.css'
 
 export default class DescriptionViewer extends Component {
   render() {

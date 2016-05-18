@@ -1,9 +1,12 @@
 import React, {Component, PropTypes} from 'react';
+
 import ReactDOM from 'react-dom'
 import $ from 'jquery'
+import TextArea from 'react-textarea-autosize'
+
+import DistributionSelector from './DistributionSelector'
+
 import insertAtCaret from 'lib/jquery/insertAtCaret'
-import DistributionSelector from './DistributionSelector.js'
-import TextArea from 'react-textarea-autosize';
 
 export default class TextInput extends Component{
   displayName: 'GuesstimateForm-TextInput'

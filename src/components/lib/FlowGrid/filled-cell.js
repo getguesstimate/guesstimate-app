@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react'
+
 import {DragSource} from 'react-dnd'
-import {PTLocation} from 'lib/locationUtils.js'
+import {PTLocation} from 'lib/locationUtils'
 
 var cardSource = {
   beginDrag: function (props) {
@@ -11,7 +12,7 @@ var cardSource = {
       const item = monitor.getItem();
       const dropResult = monitor.getDropResult()
       props.onMoveItem({prev: item.location, next: dropResult.location})
-      props.onEndDrag()
+      props.onEndDrag(dropResult.location)
     }
   }
 };

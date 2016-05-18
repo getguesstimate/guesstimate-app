@@ -1,7 +1,10 @@
 import React, {Component, PropTypes} from 'react'
 import ReactDOM from 'react-dom'
+
 import Icon from 'react-fa'
+
 import {ButtonClose} from 'gComponents/utility/buttons/close/index.js'
+
 import './style.css'
 
 String.prototype.capitalizeFirstLetter = function() {

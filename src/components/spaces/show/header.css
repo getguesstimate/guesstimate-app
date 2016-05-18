@@ -10,6 +10,7 @@
   margin-top: 8px;
   color: $grey-1;
   padding: 0 15px;
+  min-width: 100px;
 }
 
 .header .saveMessage .label{

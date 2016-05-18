@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react'
+import React, {Component} from 'react'
+
 import Icon from 'react-fa'
 
 export default class ClosedSpaceSidebar extends Component {

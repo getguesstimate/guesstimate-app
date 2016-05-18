@@ -1,5 +1,6 @@
-import React, {Component, PropTypes} from 'react';
-import {SmallDataViewer, LargeDataViewer} from './DataViewer.js'
+import React, {Component} from 'react'
+
+import {SmallDataViewer, LargeDataViewer} from './DataViewer'
 
 export default class DataForm extends Component{
   _handleDelete() { this.props.onSave({guesstimateType: null, data: null, input: null}) }

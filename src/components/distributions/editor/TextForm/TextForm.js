@@ -1,8 +1,10 @@
-import React, {Component, PropTypes} from 'react';
-import GuesstimateTypeIcon from './GuesstimateTypeIcon.js'
-import {Guesstimator} from 'lib/guesstimator/index.js'
-import TextInput from './TextInput.js'
-import DistributionSelector from './DistributionSelector.js'
+import React, {Component, PropTypes} from 'react'
+
+import GuesstimateTypeIcon from './GuesstimateTypeIcon'
+import TextInput from './TextInput'
+import DistributionSelector from './DistributionSelector'
+
+import {Guesstimator} from 'lib/guesstimator/index'
 
 export default class TextForm extends Component{
   displayName: 'GuesstimateInputForm'

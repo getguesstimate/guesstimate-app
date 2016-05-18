@@ -1,12 +1,7 @@
 import React, {Component, PropTypes} from 'react';
+
 import ReactDOM from 'react-dom'
-import $ from 'jquery'
-import Icon from 'react-fa'
-import NormalImage from 'assets/distribution-icons/normal.png'
-import LogNormalImage from 'assets/distribution-icons/lognormal.png'
-import ExponentialImage from 'assets/distribution-icons/exponential.png'
-import PointImage from 'assets/distribution-icons/point.png'
-import UniformImage from 'assets/distribution-icons/uniform.png'
+
 import {Guesstimator} from 'lib/guesstimator/index.js'
 import * as elev from 'server/elev/index.js'
 

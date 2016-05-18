@@ -1,10 +1,6 @@
-import React, {Component, PropTypes} from 'react'
-import StandardDropdownMenu from 'gComponents/utility/standard-dropdown-menu'
-import CanvasViewForm from './canvasViewForm.js'
-import Icon from 'react-fa'
+import React, {Component} from 'react'
 
 import DropDown from 'gComponents/utility/drop-down/index.js'
-import {DropDownListElement} from 'gComponents/utility/drop-down/index.js'
 
 export class SpaceName extends Component {
   onSave() {

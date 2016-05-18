@@ -12,9 +12,15 @@
 
 .header-right-menu .item {
   float: left;
-  margin: 0.1em 0 0 3.5em;
+  margin: 0.1em 0 0 2.5em;
   color: $grey-2;
   transition: color 5s;
+}
+
+@media only screen and (max-width: 767px){
+ .header-right-menu .item {
+    margin-left: 1em;
+  }
 }
 
 .header-right-menu .item {

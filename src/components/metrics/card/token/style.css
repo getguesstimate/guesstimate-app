@@ -5,6 +5,14 @@
   margin-right: 3px;
 }
 
+.MetricToken .ui.tiny.label {
+  font-size: 0.85rem;
+  background-color: #25B530 !important;
+  border-radius: 2px;
+  padding: 0.4em 0.45em 0.35em;
+  margin-top: 2px;
+}
+
 .MetricToken .hover-icon {
   float: right;
   padding: 2px 6px;
