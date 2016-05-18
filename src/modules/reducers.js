@@ -1,9 +1,6 @@
 import reduxCrud from 'redux-crud'
 import SeamlessImuutable from 'seamless-immutable'
-let SI = SeamlessImuutable
-if (!__DEV__) {
-  SI = (a) => a
-}
+const SI = __DEV__? SeamlessImuutable : (a) => a
 
 import guesstimateFormR from './guesstimate_form/reducer'
 import {selectedCellR} from './selected_cell/reducer'
