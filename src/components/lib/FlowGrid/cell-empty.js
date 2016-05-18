@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 
-import {PTLocation} from 'lib/locationUtils.js'
+import {PTLocation} from 'lib/locationUtils'
 
 export default class EmptyCell extends Component {
   static propTypes = {

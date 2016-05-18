@@ -1,10 +1,9 @@
 import React, {Component, PropTypes} from 'react'
-import app from 'ampersand-app'
 import ReactDOM from 'react-dom'
-import Icon from 'react-fa'
+
+import Card, {CardListElement} from 'gComponents/utility/card/index.js'
+
 import './style.css'
-import {CardListElement} from 'gComponents/utility/card/index.js'
-import Card from 'gComponents/utility/card/index.js'
 
 export class DropDownListElement extends Component {
 

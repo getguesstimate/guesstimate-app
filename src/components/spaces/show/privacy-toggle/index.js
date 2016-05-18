@@ -1,7 +1,8 @@
-import React, {Component, PropTypes} from 'react'
-import Icon from 'react-fa'
+import React from 'react'
+
 import DropDown from 'gComponents/utility/drop-down/index.js'
 import {CardListElement} from 'gComponents/utility/card/index.js'
+
 import * as navigationActions from 'gModules/navigation/actions.js'
 
 import './style.css'
@@ -37,7 +38,7 @@ const PrivateOption = ({onClick, isSelected, isPrivateSelectionInvalid}) => (
   </CardListElement>
 )
 
-const PrivacyToggle = ({isPrivateSelectionInvalid, onPublicSelect, onPrivateSelect, headerText, openLink, position, isPrivate}) => (
+export const PrivacyToggle = ({isPrivateSelectionInvalid, onPublicSelect, onPrivateSelect, headerText, openLink, position, isPrivate}) => (
   <DropDown
       headerText={headerText}
       openLink={openLink}
@@ -58,5 +59,3 @@ const PrivacyToggle = ({isPrivateSelectionInvalid, onPublicSelect, onPrivateSele
     </ul>
   </DropDown>
 )
-
-export {PrivacyToggle}

@@ -1,25 +1,25 @@
 'use strict';
 
 import React, {Component, PropTypes} from 'react'
-import { connect } from 'react-redux';
+import {connect} from 'react-redux'
 
-import FlowGrid from 'gComponents/lib/FlowGrid/FlowGrid.jsx'
-import Metric from 'gComponents/metrics/card'
+import FlowGrid from 'gComponents/lib/FlowGrid/FlowGrid'
+import Metric from 'gComponents/metrics/card/index'
 
-import { removeMetric, changeMetric, addMetric } from 'gModules/metrics/actions'
-import { changeSelect, deSelect } from 'gModules/selected_cell/actions'
-import { selectRegion, deSelectRegion } from 'gModules/selected_region/actions'
-import { runSimulations, deleteSimulations } from 'gModules/simulations/actions'
+import {denormalizedSpaceSelector} from '../denormalized-space-selector'
 
-import { hasMetricUpdated } from 'gComponents/metrics/card/updated.js'
+import {addMetric, changeMetric, removeMetric} from 'gModules/metrics/actions'
+import {copy, paste} from 'gModules/copied/actions'
+import {changeSelect, deSelect} from 'gModules/selected_cell/actions'
+import {selectRegion, deSelectRegion} from 'gModules/selected_region/actions'
+import {runSimulations, deleteSimulations} from 'gModules/simulations/actions'
+import * as canvasStateActions from 'gModules/canvas_state/actions'
+
+import {hasMetricUpdated} from 'gComponents/metrics/card/updated'
+import * as canvasStateProps from 'gModules/canvas_state/prop_type'
+
 
 import './style.css'
-import { denormalizedSpaceSelector } from '../denormalized-space-selector.js';
-import JSONTree from 'react-json-tree'
-import * as canvasStateActions from 'gModules/canvas_state/actions.js'
-import * as canvasStateProps from 'gModules/canvas_state/prop_type.js'
-
-import { copy, paste } from 'gModules/copied/actions.js'
 
 function mapStateToProps(state) {
   return {
@@ -181,9 +181,6 @@ export default class Canvas extends Component{
 
     return (
       <div className={className}>
-        {(metricCardView === 'debugging') &&
-          <JSONTree data={this.props}/>
-        }
         <FlowGrid
           onMultipleSelect={this._handleMultipleSelect.bind(this)}
           overflow={overflow}
