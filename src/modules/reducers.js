@@ -1,4 +1,6 @@
 import reduxCrud from 'redux-crud'
+import SeamlessImuutable from 'seamless-immutable'
+const SI = __DEV__? SeamlessImuutable : (a) => a
 
 import guesstimateFormR from './guesstimate_form/reducer'
 import {selectedCellR} from './selected_cell/reducer'
@@ -21,26 +23,24 @@ export function changeSelect(location) {
 
 const rootReducer = function app(state = {}, action){
   return {
-    displayError: displayErrorR(state.displayError, action),
-    metrics: metricsR(state.metrics, action),
-    guesstimates: guesstimatesR(state.guesstimates, action),
-    selectedCell: selectedCellR(state.selectedCell, action),
-    selectedRegion: selectedRegionR(state.selectedRegion, action),
-    guesstimateForm: guesstimateFormR(state.guesstimateForm, state.metrics, state.guesstimates, action),
-    simulations: simulationsR(state.simulations, action),
-    spaces: spacesR(state.spaces, action),
-    users: reduxCrud.reducersFor('users')(state.users, action),
-    organizations: reduxCrud.reducersFor('organizations')(state.organizations, action),
-    userOrganizationMemberships: reduxCrud.reducersFor('userOrganizationMemberships')(state.userOrganizationMemberships, action),
-    me: meR(state.me, action),
-    canvasState: canvasStateR(state.canvasState, action),
-    searchSpaces: searchSpacesR(state.searchSpaces, action),
-    firstSubscription: firstSubscriptionsR(state.firstSubscription, action),
-    modal: modalR(state.modal, action),
-    copied: copiedR(state.copied, action),
+    displayError: SI(displayErrorR(state.displayError, action)),
+    metrics: SI(metricsR(state.metrics, action)),
+    guesstimates: SI(guesstimatesR(state.guesstimates, action)),
+    selectedCell: SI(selectedCellR(state.selectedCell, action)),
+    selectedRegion: SI(selectedRegionR(state.selectedRegion, action)),
+    guesstimateForm: SI(guesstimateFormR(state.guesstimateForm, state.metrics, state.guesstimates, action)),
+    simulations: SI(simulationsR(state.simulations, action)),
+    spaces: SI(spacesR(state.spaces, action)),
+    users: SI(reduxCrud.reducersFor('users')(state.users, action)),
+    organizations: SI(reduxCrud.reducersFor('organizations')(state.organizations, action)),
+    userOrganizationMemberships: SI(reduxCrud.reducersFor('userOrganizationMemberships')(state.userOrganizationMemberships, action)),
+    me: SI(meR(state.me, action)),
+    canvasState: SI(canvasStateR(state.canvasState, action)),
+    searchSpaces: SI(searchSpacesR(state.searchSpaces, action)),
+    firstSubscription: SI(firstSubscriptionsR(state.firstSubscription, action)),
+    modal: SI(modalR(state.modal, action)),
+    copied: SI(copiedR(state.copied, action)),
   }
 }
 
-
 export default rootReducer
-
