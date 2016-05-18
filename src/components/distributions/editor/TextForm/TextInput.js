@@ -82,7 +82,6 @@ export default class TextInput extends Component{
          onFocus={this._handleFocus.bind(this)}
          onKeyDown={this._handleKeyDown.bind(this)}
          placeholder={'value'}
-         className={className}
          ref='input'
          type="text"
          className={className}
