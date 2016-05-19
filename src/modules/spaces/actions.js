@@ -219,6 +219,6 @@ function meCanEdit(spaceId, state) {
 export function registerGraphChange(spaceId) {
   return (dispatch, getState) => {
     const canEdit = meCanEdit(spaceId, getState())
-    dispatch(updateGraph(spaceId), canEdit)
+    dispatch(updateGraph(spaceId, canEdit))
   }
 }
