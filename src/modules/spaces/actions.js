@@ -8,6 +8,7 @@ import {changeActionState} from 'gModules/canvas_state/actions'
 import {saveCheckpoint} from 'gModules/checkpoints/actions'
 import * as userActions from 'gModules/users/actions'
 import * as organizationActions from 'gModules/organizations/actions'
+import {initSpace} from 'gModules/checkpoints/actions'
 
 import {rootUrl, setupGuesstimateApi} from 'servers/guesstimate-api/constants'
 
@@ -71,6 +72,7 @@ export function fetchById(spaceId) {
       }
       else if (value) {
         dispatch(sActions.fetchSuccess([value]))
+        dispatch(initSpace(spaceId, value.graph))
         // TODO(matthew): Right now, the space has an embedded user and organization record... why are we doing this
         // extra fetching?
         fetchUserIfNeeded(dispatch, value.user_id, getState().users)
@@ -188,7 +190,7 @@ export function update(spaceId, params={}) {
 }
 
 //updates graph only
-export function updateGraph(spaceId, save=true) {
+export function updateGraph(spaceId, saveOnServer=true) {
   return (dispatch, getState) => {
     let {spaces, metrics, guesstimates} = getState();
     let space = e.space.get(spaces, spaceId)
@@ -196,9 +198,9 @@ export function updateGraph(spaceId, save=true) {
     space.graph = _.omit(space.graph, 'simulations')
     const updates = {graph: space.graph}
 
-    dispatch(generalUpdate(spaceId, updates))
-    if (save) {
-      dispatch(saveCheckpoint(spaceId, space.graph})
+    dispatch(saveCheckpoint(spaceId, space.graph))
+    if (saveOnServer) {
+      dispatch(generalUpdate(spaceId, updates))
     }
   }
 }
@@ -209,9 +211,9 @@ function meCanEdit(spaceId, state) {
   return e.space.canEdit(space, me, userOrganizationMemberships)
 }
 
-export function registerGraphChange(spaceId, save=true) {
+export function registerGraphChange(spaceId) {
   return (dispatch, getState) => {
     const canEdit = meCanEdit(spaceId, getState())
-    canEdit && dispatch(updateGraph(spaceId, save))
+    dispatch(updateGraph(spaceId), canEdit)
   }
 }
