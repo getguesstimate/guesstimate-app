@@ -130,6 +130,10 @@ export default class SpacesShow extends Component {
                 onSave={this.onSave.bind(this)}
                 onCopy={this._handleCopy.bind(this)}
                 space={space}
+                name={space.name}
+                isPrivate={space.is_private}
+                editableByMe={space.editableByMe}
+                actionState={space.canvasState.actionState}
                 canBePrivate={canBePrivate}
                 onPublicSelect={this.onPublicSelect.bind(this)}
                 onPrivateSelect={this.onPrivateSelect.bind(this)}
@@ -149,7 +153,8 @@ export default class SpacesShow extends Component {
         <div className='content'>
           {sidebarIsViseable && this.state.showSidebar &&
             <SpaceSidebar
-                space={space}
+                description={space.description}
+                canEdit={space.editableByMe}
                 onClose={this.hideSidebar.bind(this)}
                 onSaveDescription={this.onSaveDescription.bind(this)}
             />

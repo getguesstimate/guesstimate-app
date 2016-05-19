@@ -155,6 +155,7 @@ class MetricCard extends Component {
   _handleMouseDown(e) {
     if (this._isFunctionInputSelectable(e) && !e.shiftKey) {
       $(window).trigger('functionMetricClicked', this.props.metric)
+      // TODO(matthew): Why don't these stop the triggering of the flow grid cell?
       e.preventDefault()
       e.stopPropagation()
     }
