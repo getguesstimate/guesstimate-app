@@ -1,14 +1,17 @@
-import {actionCreatorsFor} from 'redux-crud';
+import {actionCreatorsFor} from 'redux-crud'
 import $ from 'jquery'
 import cuid from 'cuid'
 import e from 'gEngine/engine'
 import app from 'ampersand-app'
-import {rootUrl} from 'servers/guesstimate-api/constants.js'
-import {captureApiError} from 'lib/errors/index.js'
-import {changeActionState} from 'gModules/canvas_state/actions.js'
-import * as userActions from 'gModules/users/actions.js'
-import * as organizationActions from 'gModules/organizations/actions.js'
-import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
+
+import {changeActionState} from 'gModules/canvas_state/actions'
+import {saveCheckpoint} from 'gModules/checkpoints/actions'
+import * as userActions from 'gModules/users/actions'
+import * as organizationActions from 'gModules/organizations/actions'
+
+import {rootUrl, setupGuesstimateApi} from 'servers/guesstimate-api/constants'
+
+import {captureApiError} from 'lib/errors/index'
 
 let sActions = actionCreatorsFor('spaces');
 
@@ -185,7 +188,7 @@ export function update(spaceId, params={}) {
 }
 
 //updates graph only
-export function updateGraph(spaceId) {
+export function updateGraph(spaceId, save=true) {
   return (dispatch, getState) => {
     let {spaces, metrics, guesstimates} = getState();
     let space = e.space.get(spaces, spaceId)
@@ -194,6 +197,9 @@ export function updateGraph(spaceId) {
     const updates = {graph: space.graph}
 
     dispatch(generalUpdate(spaceId, updates))
+    if (save) {
+      dispatch(saveCheckpoint(spaceId, space.graph})
+    }
   }
 }
 
@@ -203,9 +209,9 @@ function meCanEdit(spaceId, state) {
   return e.space.canEdit(space, me, userOrganizationMemberships)
 }
 
-export function registerGraphChange(spaceId) {
+export function registerGraphChange(spaceId, save=true) {
   return (dispatch, getState) => {
     const canEdit = meCanEdit(spaceId, getState())
-    canEdit && dispatch(updateGraph(spaceId))
+    canEdit && dispatch(updateGraph(spaceId, save))
   }
 }
