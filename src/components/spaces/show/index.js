@@ -123,7 +123,9 @@ export default class SpacesShow extends Component {
     return (
       <div className='spaceShow'>
         {space.name &&
-          <Helmet title={space.name} />
+          <Helmet
+            title={space.name}
+          />
         }
         <div className='hero-unit container-fluid'>
           <div className='row'>
