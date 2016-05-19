@@ -1,6 +1,8 @@
 import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux';
 
+import Helmet from 'react-helmet'
+
 import SpacesShowHeader from './header'
 import ClosedSpaceSidebar from './closed_sidebar.js'
 import SpaceSidebar from './sidebar'
@@ -120,6 +122,9 @@ export default class SpacesShow extends Component {
 
     return (
       <div className='spaceShow'>
+        {space.name &&
+          <Helmet title={space.name} />
+        }
         <div className='hero-unit container-fluid'>
           <div className='row'>
             <div className='col-md-10'>
