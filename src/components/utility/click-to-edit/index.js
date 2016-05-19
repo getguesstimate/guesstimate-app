@@ -19,12 +19,15 @@ export default class EditingMode extends Component {
   render() {
     return(
       <div className='EditingMode'>
-        <textarea  defaultValue={this.props.value} ref='input' ref={ (ref) =>
-          {
-            ref && ReactDOM.findDOMNode(ref).select();
-            this.textInput = ref
+        <textarea
+          defaultValue={this.props.value}
+          ref={
+            (ref) => {
+              ref && ReactDOM.findDOMNode(ref).select()
+              this.textInput = ref
+            }
           }
-        } />
+        />
         <div className='submit-section'>
           <div className='submit ui button primary' onClick={this._submit.bind(this)}>
             {this.props.editingSaveText}

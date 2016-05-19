@@ -8,7 +8,7 @@ export function create(graphAttributes){
 }
 
 export function denormalize(graph){
-  let metrics = graph.metrics.map(m => _metric.denormalize(m, graph));
+  let metrics = _.map(graph.metrics, m => _metric.denormalize(m, graph));
   return {metrics};
 }
 
@@ -34,7 +34,7 @@ export function metric(graph, id){
 function basicGraph(graph){
   const dGraph = denormalize(graph)
   const edges = _dgraph.dependencyMap(dGraph)
-  return new BasicGraph(graph.metrics.map(m => m.id), edges)
+  return new BasicGraph(_.map(graph.metrics, m => m.id), edges)
 }
 
 export function dependencyList(graph, spaceId) {

@@ -1,5 +1,4 @@
 import e from 'lib/engine/engine'
-import _ from 'lodash'
 import {sampleMean, sampleStdev, percentile, cutoff, sortDescending} from 'lib/dataAnalysis.js'
 
 function sStats(simulation){

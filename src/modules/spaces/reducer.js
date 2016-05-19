@@ -1,5 +1,5 @@
-import SI         from 'seamless-immutable';
-import reduxCrud  from 'redux-crud';
+import reduxCrud  from 'redux-crud'
+import SI from 'seamless-immutable'
 
 const standardReducers = reduxCrud.reducersFor('spaces');
 

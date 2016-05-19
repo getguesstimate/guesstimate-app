@@ -183,9 +183,9 @@ export default class Canvas extends Component{
     return (
       <div className={className}>
         <FlowGrid
+          items={_.map(metrics, m => ({key: m.id, location: m.location, component: this.renderMetric(m, selectedMetric)}))}
           onMultipleSelect={this._handleMultipleSelect.bind(this)}
           overflow={overflow}
-          items={metrics.map(m => ({key: m.id, location: m.location, component: this.renderMetric(m, selectedMetric)}))}
           hasItemUpdated = {(oldItem, newItem) => hasMetricUpdated(oldItem.props, newItem.props)}
           edges={edges}
           selectedRegion={selectedRegion}
