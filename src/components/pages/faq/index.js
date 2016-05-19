@@ -24,11 +24,8 @@ Guesstimate is a web application, while Crystal Ball is a suite of Excel-based a
 
 One great combination may be to quickly experiment with models in Guesstimate, then replicate the best model in Crystal Ball when you want to do more detailed analysis.
 
-## Is Guesstimate a company?
-Due to the great amount of interest, there are plans to make Guesstimate into a company.
-
 ## Who is behind Guesstimate?
-Ozzie Gooen.  You can find him [on Twitter](https://twitter.com/ozziegooen).
+Ozzie Gooen and Matthew McDermott.
 
 ## Is it open source?
 Yes. You can check out the [GitHub repo](https://github.com/getguesstimate/guesstimate-app).
