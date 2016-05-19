@@ -120,12 +120,6 @@ export default class SpacesShow extends Component {
       )
     }
 
-    // For screenshots, we need to put this:
-    //
-    //          {property: "og:image", content: space.screenshot},
-    //
-    // below with the other meta tags, but with a larger screenshot.
-
     let tagDescription = space.description
     if (_.has(space, 'user.name')) {
       const authorCallout = `Made by ${space.user.name}`
@@ -138,6 +132,16 @@ export default class SpacesShow extends Component {
 
     return (
       <div className='spaceShow'>
+        {!space.name &&
+          <Helmet
+            meta={[
+              {name: "Description", content: tagDescription},
+              {property: "og:description", content: tagDescription},
+              {property: "og:site_name", content: "Guesstimate"},
+              {property: "og:image", content: space.big_screenshot},
+            ]}
+          />
+        }
         {space.name &&
           <Helmet
             title={space.name}
@@ -146,6 +150,7 @@ export default class SpacesShow extends Component {
               {property: "og:title", content: space.name},
               {property: "og:description", content: tagDescription},
               {property: "og:site_name", content: "Guesstimate"},
+              {property: "og:image", content: space.big_screenshot},
             ]}
           />
         }
