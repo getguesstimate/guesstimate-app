@@ -4,7 +4,7 @@
   "description": "Make, share, and evaluate estimates of things",
   "main": "index.js",
   "scripts": {
-    "_build": "BUILD_DEV=0 API_ENV=production SEGMENT_API_ENV=production webpack",
+    "_build": "BUILD_DEV=0 API_ENV=production SEGMENT_API_ENV=production webpack && cp src/_redirects public/_redirects",
     "_stage": "surge -p public -d test.getguesstimate.com",
     "start": "BUILD_DEV=1 NODE_ENV=development API_ENV=development SEGMENT_API_ENV=development webpack-dev-server",
     "start-production": "BUILD_DEV=1 NODE_ENV=development API_ENV=production SEGMENT_API_ENV=development webpack-dev-server",
