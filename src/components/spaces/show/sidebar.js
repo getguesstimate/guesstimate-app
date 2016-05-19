@@ -14,9 +14,7 @@ export default class DescriptionViewer extends Component {
 
 export default class SpaceSidebar extends Component {
   render() {
-    const {space} = this.props
-    const description = _.get(space, 'description')
-    const canEdit = !!_.get(space, 'editableByMe')
+    const {description, canEdit} = this.props
     return (
       <div className='SpaceSidebar'>
         <div className='SpaceSidebar-inside'>
