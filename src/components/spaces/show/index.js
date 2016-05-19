@@ -126,15 +126,20 @@ export default class SpacesShow extends Component {
     //
     // below with the other meta tags, but with a larger screenshot.
 
+    let tagDescription = space.description
+    if (_.has(space, 'user.name')) {
+      tagDescription = `Made by ${space.user.name}: ${tagDescription}`
+    }
+
     return (
       <div className='spaceShow'>
         {space.name &&
           <Helmet
             title={space.name}
             meta={[
-              {name: "description", content: space.description},
+              {name: "Description", content: tagDescription},
               {property: "og:title", content: space.name},
-              {property: "og:description", content: space.description},
+              {property: "og:description", content: tagDescription},
               {property: "og:site_name", content: "Guesstimate"},
             ]}
           />
