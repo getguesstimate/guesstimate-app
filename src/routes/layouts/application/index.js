@@ -64,10 +64,19 @@ export default class Layout extends Component{
     this._registerUser()
     let body = this.props.page
 
+    const baseDescription = "Plan finances, make strategic decisions, and do risk assessment.  Guesstimate uses stochastic models, Monte Carlo simulations, and sensitivity analyses."
+
     return (
       <div>
         <Helmet
+          defaultTitle="Guesstimate"
           titleTemplate="%s | Guesstimate"
+          meta={[
+            {name: "Description", content: baseDescription},
+            {property: "og:type", content: "product"},
+            {property: "og:title", content: "Guesstimate | A Spreadsheet for the Uncertain"},
+            {property: "og:description", content: baseDescription},
+          ]}
         />
         <NavHelper>
           <ErrorModal/>

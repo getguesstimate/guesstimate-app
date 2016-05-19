@@ -120,6 +120,12 @@ export default class SpacesShow extends Component {
       )
     }
 
+    // For screenshots, we need to put this:
+    //
+    //          {property: "og:image", content: space.screenshot},
+    //
+    // below with the other meta tags, but with a larger screenshot.
+
     return (
       <div className='spaceShow'>
         {space.name &&
@@ -127,11 +133,9 @@ export default class SpacesShow extends Component {
             title={space.name}
             meta={[
               {name: "description", content: space.description},
-              {property: "og:url", content: `https://www.getguesstimate.com/models/${space.id}`},
               {property: "og:title", content: space.name},
               {property: "og:description", content: space.description},
               {property: "og:site_name", content: "Guesstimate"},
-              {property: "og:image", content: space.screenshot},
             ]}
           />
         }
