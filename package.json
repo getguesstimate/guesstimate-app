@@ -11,6 +11,9 @@
     "stage!": "npm run _build && npm run _stage",
     "stage-payments!": "BUILD_DEV=0 npm run _build && surge -p public -d payments.getguesstimate.com",
     "deploy": "surge -p public -d https://www.getguesstimate.com",
+    "surge-deploy": "surge -p public -d https://www.getguesstimate.com",
+    "netlify-deploy": "netlify deploy -e production",
+    "netlify-stage": "netlify deploy -e staging",
     "test": "karma start",
     "test-once": "karma start --single-run"
   },
