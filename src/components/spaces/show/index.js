@@ -128,7 +128,12 @@ export default class SpacesShow extends Component {
 
     let tagDescription = space.description
     if (_.has(space, 'user.name')) {
-      tagDescription = `Made by ${space.user.name}: ${tagDescription}`
+      const authorCallout = `Made by ${space.user.name}`
+      if (_.isEmpty(space.description)) {
+        tagDescription = authorCallout
+      } else {
+        tagDescription = `${authorCallout}: ${tagDescription}`
+      }
     }
 
     return (
