@@ -1,3 +1,5 @@
+import {deleteSimulations} from 'gModules/simulations/actions'
+
 import engine from 'gEngine/engine'
 
 import {isAtLocation} from 'lib/locationUtils'
@@ -52,14 +54,12 @@ function updateMetricsAndGuesstimates(dispatch, spaceId, oldMetrics, newMetrics,
   const guesstimatesToAdd = newGuesstimates.filter(g => _.some(metricsToAdd, m => m.id === g.metric))
   const guesstimatesToModify = newGuesstimates.filter(g => _.some(metricsToModify, m => m.id === g.metric))
 
-  debugger
-
-  metricsToAdd.forEach(m => {
-    dispatch({ type: 'ADD_METRIC', item: m, newGuesstimate: guesstimatesToAdd.find(g => g.metric === m.id) })
-  })
-  metricsToDelete.forEach(m => {
-    dispatch({ type: 'REMOVE_METRIC', item: m})
-  })
+  if (metricsToAdd.length > 0) {
+    dispatch({type: 'ADD_METRICS', items: metricsToAdd, newGuesstimates: guesstimatesToAdd})
+  }
+  if (metricsToDelete.length > 0) {
+    dispatch({type: 'REMOVE_METRICS', items: metricsToDelete.map(m => m.id)})
+  }
   metricsToModify.forEach(m => {
     dispatch({ type: 'CHANGE_METRIC', item: m })
   })
@@ -67,6 +67,11 @@ function updateMetricsAndGuesstimates(dispatch, spaceId, oldMetrics, newMetrics,
     const formatted = engine.guesstimate.format(g)
     dispatch({ type: 'CHANGE_GUESSTIMATE', metricId: g.metric, values: formatted })
   })
+  if (guesstimatesToModify.length > 0) {
+    dispatch(deleteSimulations(guesstimatesToModify.map(g => g.metric)))
+  }
+
+  const metricsToResimulate = [...metricsToAdd, ...metricsToModify]
 }
 
 // TODO(matthew): UNDO & REDO need to update current metrics and guesstimates :/
