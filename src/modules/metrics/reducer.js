@@ -15,6 +15,8 @@ export default function metrics(state = [], action) {
     return uniq([...state, ...newMetrics])
   case 'ADD_METRIC':
     return (uniq([...state, action.item]))
+  case 'ADD_METRICS':
+    return (uniq([...state, ...action.items]))
   case 'REMOVE_METRICS':
     return (state.filter(y => !_.some(action.item.ids, id => y.id === id)))
   case 'CHANGE_METRIC':
