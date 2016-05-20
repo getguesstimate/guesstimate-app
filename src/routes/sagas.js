@@ -7,6 +7,7 @@ export function* runSimulationsSaga() {
 }
 
 export function* runUndoSimulationsSaga() {
+  console.log("Running Undo Simulations")
   yield takeLatest("RUN_UNDO_SIMULATIONS", runUndoSimulations)
 }
 

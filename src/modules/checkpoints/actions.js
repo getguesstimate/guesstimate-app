@@ -13,7 +13,6 @@ export function saveCheckpoint(spaceId, newGraph) {
 export function initSpace(spaceId, graph) {
   return (dispatch, getState) => {
     const {metrics, guesstimates} = graph
-    
     dispatch({type: 'INITIALIZE', checkpoint: {guesstimates, metrics: metrics.map(m => Object.assign({}, m, {space: spaceId}))}, spaceId})
   }
 }
@@ -58,7 +57,7 @@ function updateMetricsAndGuesstimates(dispatch, getState, spaceId, oldMetrics, n
     dispatch({type: 'ADD_METRICS', items: metricsToAdd, newGuesstimates: guesstimatesToAdd})
   }
   if (metricsToDelete.length > 0) {
-    dispatch({type: 'REMOVE_METRICS', items: metricsToDelete.map(m => m.id)})
+    dispatch({type: 'REMOVE_METRICS', item: {ids: metricsToDelete.map(m => m.id)}})
   }
   metricsToModify.forEach(m => {
     dispatch({ type: 'CHANGE_METRIC', item: m })
@@ -71,6 +70,7 @@ function updateMetricsAndGuesstimates(dispatch, getState, spaceId, oldMetrics, n
     dispatch(deleteSimulations(guesstimatesToModify.map(g => g.metric)))
   }
 
+  console.log("Dispatching undo simulations from checkpoint actions.")
   dispatch({type: 'RUN_UNDO_SIMULATIONS', getState, dispatch, spaceId})
 }
 
