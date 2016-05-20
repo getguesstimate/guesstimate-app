@@ -1,6 +1,7 @@
 import async from 'async'
-import {GraphPropagation} from '../../lib/propagation/graph-propagation.js'
-import { call, put } from 'redux-saga/effects'
+import {call} from 'redux-saga/effects'
+
+import {GraphPropagation} from '../../lib/propagation/graph-propagation'
 
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 

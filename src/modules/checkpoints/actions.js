@@ -11,3 +11,14 @@ export function initSpace(spaceId, graph) {
 }
 
 // TODO(matthew): UNDO & REDO need to update current metrics and guesstimates :/
+export function undo(spaceId) {
+  return (dispatch, getState) => {
+    dispatch({type: 'UNDO', spaceId})
+  }
+}
+
+export function redo(spaceId) {
+  return (dispatch, getState) => {
+    dispatch({type: 'REDO', spaceId})
+  }
+}

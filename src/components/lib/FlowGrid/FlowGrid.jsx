@@ -30,6 +30,8 @@ export default class FlowGrid extends Component{
     })),
     selectedCell: PTLocation,
     selectedRegion: PropTypes.arrayOf(PTLocation, PTLocation),
+    onUndo: PropTypes.func.isRequired,
+    onRedo: PropTypes.func.isRequired,
     onSelectItem: PropTypes.func.isRequired,
     onMultipleSelect: PropTypes.func.isRequired,
     onDeSelectAll: PropTypes.func.isRequired,
@@ -125,6 +127,10 @@ export default class FlowGrid extends Component{
       } else if (e.keyCode == '88') {
         this.props.onCopy()
         this._handleRemoveSelectedItems()
+      } else if (e.keyCode == '90' && !e.shiftKey) {
+        this.props.onUndo()
+      } else if (e.keyCode == '89' || (e.keyCode == '90' && e.shiftKey)) {
+        this.props.onRedo()
       }
     }
   }
