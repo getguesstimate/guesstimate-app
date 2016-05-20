@@ -72,6 +72,8 @@ function updateMetricsAndGuesstimates(dispatch, spaceId, oldMetrics, newMetrics,
   }
 
   const metricsToResimulate = [...metricsToAdd, ...metricsToModify]
+  console.log("Hi")
+  dispatch({type: 'RUN_UNDO_SIMULATIONS'})
 }
 
 // TODO(matthew): UNDO & REDO need to update current metrics and guesstimates :/
