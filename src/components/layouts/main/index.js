@@ -18,6 +18,7 @@ export default class Main extends Component{
     const {children, isFluid, backgroundColor} = this.props
     let className = ''
     className += (backgroundColor === 'BLUE') ? ' blue' : ''
+    className += (backgroundColor === 'GREY') ? ' grey' : ''
     className += isFluid ? ' fluid' : ''
 
     if (isFluid) {

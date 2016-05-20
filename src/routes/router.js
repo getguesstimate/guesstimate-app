@@ -59,7 +59,7 @@ export default Router.extend({
     'subscribe/:id': 'subscribe',
   },
 
-  spaceIndex() { this.render(<SpaceIndex/>) },
+  spaceIndex() { this.render(<SpaceIndex/>, {backgroundColor: 'GREY'}) },
   home() { this.render(<Home/>, {isFluid: true, simpleHeader: true}) },
   spaceNew() { this.render(<SpaceNew/>) },
   spaceShow(id) { this.render(<SpaceShow spaceId={parseInt(id)}/>, {isFluid: true, showFooter: false, fullHeight: true}) },

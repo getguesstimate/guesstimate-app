@@ -1,0 +1,36 @@
+.SpaceCard {
+  background-color: white;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.22);
+  width: 228px;
+  float: left;
+  border-radius: 2px;
+  margin: 10px 6px;
+  font-size: 0.9em;
+}
+
+.SpaceCard img{
+  width: 100%;
+  border-radius: 2px 2px 0 0;
+  float: left;
+  border-bottom: 1px solid #BDC0C5;
+}
+
+.SpaceCard .body {
+  float: left;
+  width: 100%;
+  padding: 6px;
+  border-left: 1px solid #D0D0D0;
+  border-right: 1px solid #D0D0D0;
+  border-bottom: 1px solid #D0D0D0;
+  border-radius: 0 0 2px 2px;
+}
+
+.SpaceCard h3 {
+  font-size: 1.1em;
+  color: #333;
+  margin-bottom: 0;
+}
+
+.SpaceCard p {
+  font-size: 0.9em;
+}
