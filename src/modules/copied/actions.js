@@ -52,7 +52,7 @@ export function paste(spaceId){
       if (!_.some(existingReadableIds, id => id === metric.readableId)) {
         newMetric.readableId = metric.readableId
       }
-      existingReadableIds.push(newMetric.readableId)
+      existingReadableIds = [...existingReadableIds, newMetric.readableId]
       readableIdsMap[metric.readableId] = newMetric.readableId
       return newMetric
     })
