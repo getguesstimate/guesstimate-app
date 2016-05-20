@@ -14,7 +14,7 @@ export function addMetric(item) {
   return (dispatch, getState) => {
     const spaceMetrics = getState().metrics.filter(m => m.space === item.space)
     const existingReadableIds = spaceMetrics.map(m => m.readableId)
-    let newItem = Object.assign(item, e.metric.create(existingReadableIds))
+    let newItem = Object.assign({}, item, e.metric.create(existingReadableIds))
 
     dispatch({ type: 'ADD_METRIC', item: newItem });
   }
