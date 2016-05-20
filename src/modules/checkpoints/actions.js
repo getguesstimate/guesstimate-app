@@ -1,3 +1,5 @@
+import engine from 'gEngine/engine'
+
 import {isAtLocation} from 'lib/locationUtils'
 
 export function saveCheckpoint(spaceId, newGraph) {
@@ -34,11 +36,11 @@ function updateMetricsAndGuesstimates(dispatch, spaceId, oldMetrics, newMetrics,
 
   const metricsToAdd = newMetrics.filter(m => !_.some(relevantOldMetrics, o => o.id === m.id))
   const metricsToDelete = relevantOldMetrics.filter(m => !_.some(newMetrics, n => n.id === m.id))
-  const metricsToModify = relevantOldMetrics.filter(m => {
-    const matchedMetric = _.find(newMetrics, n => n.id === m.id)
+  const metricsToModify = newMetrics.filter(m => {
+    const matchedMetric = _.find(oldMetrics, o => o.id === m.id)
     if (!matchedMetric) { return false }
-    const oldGuesstimate = _.find(oldGuesstimates, g => g.metric === m.id)
-    const newGuesstimate = _.find(newGuesstimates, g => g.metric === matchedMetric.id)
+    const oldGuesstimate = _.find(oldGuesstimates, g => g.metric === matchedMetric.id)
+    const newGuesstimate = _.find(newGuesstimates, g => g.metric === m.id)
     return (
       !metricEquals(matchedMetric, m) ||
       !guesstimateEquals(oldGuesstimate, newGuesstimate)
@@ -46,10 +48,21 @@ function updateMetricsAndGuesstimates(dispatch, spaceId, oldMetrics, newMetrics,
   })
 
   const guesstimatesToAdd = newGuesstimates.filter(g => _.some(metricsToAdd, m => m.id === g.metric))
-  const guesstimatesToDelete = oldGuesstimates.filter(g => _.some(metricsToDelete, m => m.id === g.metric))
-  const guesstimatesToModify = oldGuesstimates.filter(g => _.some(metricsToModify, m => m.id === g.metric))
+  const guesstimatesToModify = newGuesstimates.filter(g => _.some(metricsToModify, m => m.id === g.metric))
 
-  debugger
+  metricsToAdd.forEach(m => {
+    dispatch({ type: 'ADD_METRIC', item: m, newGuesstimate: guesstimatesToAdd.find(g => g.metric === m.id) })
+  })
+  metricsToDelete.forEach(m => {
+    dispatch({ type: 'REMOVE_METRIC', item: m})
+  })
+  metricsToModify.forEach(m => {
+    dispatch({ type: 'CHANGE_METRIC', item: m })
+  })
+  guesstimatesToModify.forEach(g => {
+    const formatted = engine.guesstimate.format(g)
+    dispatch({ type: 'CHANGE_GUESSTIMATE', metricId: g.metric, values: formatted })
+  })
 }
 
 // TODO(matthew): UNDO & REDO need to update current metrics and guesstimates :/

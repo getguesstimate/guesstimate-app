@@ -1,5 +1,5 @@
-import e from 'gEngine/engine';
-import * as spaceActions from 'gModules/spaces/actions.js'
+import e from 'gEngine/engine'
+import * as spaceActions from 'gModules/spaces/actions'
 
 function findSpaceId(getState, metricId) {
   const metric = e.metric.get(getState().metrics, metricId)
@@ -7,16 +7,16 @@ function findSpaceId(getState, metricId) {
 }
 
 function registerGraphChange(dispatch, spaceId) {
-  spaceId && dispatch(spaceActions.registerGraphChange(spaceId));
+  spaceId && dispatch(spaceActions.registerGraphChange(spaceId))
 }
 
 export function addMetric(item) {
   return (dispatch, getState) => {
     const spaceMetrics = getState().metrics.filter(m => m.space === item.space)
     const existingReadableIds = spaceMetrics.map(m => m.readableId)
-    let newItem = Object.assign(item, e.metric.create(existingReadableIds))
+    let newItem = Object.assign({}, item, e.metric.create(existingReadableIds))
 
-    dispatch({ type: 'ADD_METRIC', item: newItem });
+    dispatch({ type: 'ADD_METRIC', item: newItem })
   }
 }
 
@@ -25,14 +25,14 @@ export function removeMetric(id) {
   return (dispatch, getState) => {
     const spaceId = findSpaceId(getState, id)
 
-    dispatch({ type: 'REMOVE_METRIC', item: {id: id}});
+    dispatch({ type: 'REMOVE_METRIC', item: {id: id}})
     registerGraphChange(dispatch, spaceId)
   }
 }
 
 export function changeMetric(item) {
   return (dispatch, getState) => {
-    dispatch({ type: 'CHANGE_METRIC', item });
+    dispatch({ type: 'CHANGE_METRIC', item })
     registerGraphChange(dispatch, findSpaceId(getState, item.id))
   }
 }

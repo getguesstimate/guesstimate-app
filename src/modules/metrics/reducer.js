@@ -18,8 +18,8 @@ export default function metrics(state = [], action) {
   case 'REMOVE_METRIC':
     return (state.filter(y => y.id !== action.item.id))
   case 'CHANGE_METRIC':
-    const i = state.findIndex(y => y.id === action.item.id);
-    const newItem = Object.assign(state[i], action.item);
+    const i = state.findIndex(y => y.id === action.item.id)
+    const newItem = Object.assign({}, state[i], action.item)
     if (i !== -1) {
       return ([
         ...state.slice(0, i),
