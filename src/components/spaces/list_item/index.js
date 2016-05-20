@@ -99,9 +99,6 @@ const SpaceListItem = ({space, showUser, isOwnedByMe, showScreenshot}) => {
 
 function mapStateToProps(state) {
   return {
-    metrics: state.metrics,
-    guesstimates: state.guesstimates,
-    simulations: state.simulations,
     spaces: state.spaces,
     me: state.me
   }

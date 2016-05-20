@@ -1,8 +1,14 @@
 .SpaceCard {
   font-size: 0.9em;
-  margin-bottom: 3em;
-  padding: 0 1em;
+  margin: 3em 0.5em;
+  padding: 5px 0;
+  background-color: white;
   float: left;
+}
+
+.stuff.search-form {
+  margin-top:3em;
+  margin-bottom: 3em;
 }
 
 .SpaceCard img{
@@ -11,18 +17,66 @@
   float: left;
 }
 
+.SpaceCard .header {
+  margin-bottom: 0.25em;
+  padding: 7px 0 5px 9px;
+}
+
 .SpaceCard .body {
   float: left;
   width: 100%;
-  margin-top: 1em;
+  padding: 4px 9px;
 }
 
 .SpaceCard h3 {
-  font-size: 1.3em;
-  color: #333;
-  margin-bottom: 0.3em;
+  font-size: 1.4em;
+  color: #4A6A88;
+  margin-bottom: 0.0em;
+}
+
+.SpaceCard .changed-at {
+  color: #888;
+  font-size: 0.9em;
+}
+
+.SpaceCard .user-tag {
+  position: absolute;
+  bottom: 0.5em;
+  left: 0.5em;
+  background: rgba(147, 159, 169, 0.61);
+  border-radius: 1px;
+  float: left;
+}
+
+.SpaceCard .user-tag:hover {
+  cursor: pointer;
+  background: rgba(88, 110, 127, 0.71);
+  transition: 0.2s background;
+}
+
+.SpaceCard .user-tag .avatar{
+  width: 1.6em;
+  height: 1.6em;
+  border-radius: 1px 0 0 1px;
+  float: left;
+}
+
+.SpaceCard .user-tag .name{
+  float: left;
+  padding: 1px 7px 0 6px;
+  color: white;
+  font-size: 0.9em;
+  font-weight: 800;
+}
+
+.SpaceCard .image {
+  position: relative;
+  float: left;
 }
 
 .SpaceCard p {
-  color: #888;
+  margin-top: 0.4em;
+  width: 100%;
+  color: #78838C;
+  float: left;
 }

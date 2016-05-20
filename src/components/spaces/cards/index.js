@@ -39,24 +39,30 @@ const SpaceCard = ({space}) => {
   const hasName = !_.isEmpty(space.name)
   const className = `text-editable ${hasName ? '' : 'default-value'}`
   const showName = hasName ? space.name : 'Untitled Model'
-  console.log(space.user)
   return (
     <div className='col-md-4'>
       <div className='SpaceCard'>
-        <img src={space.big_screenshot} />
-        <div className='body'>
+        <div className='header'>
           <h3>{space.name}</h3>
-          <p>Changed {formatDate(space.updated_at)}</p>
-            {space.user &&
-            <div className='user-tag'>
-              <img
-                  className='ui avatar image'
-                  src={space.user.picture}
-              />
-              {space.user.name}
+          <div className='changed-at'>Updateed {formatDate(space.updated_at)}</div>
+        </div>
+
+        <div className='image'>
+          <img src={space.big_screenshot} />
+          {space.user &&
+          <div className='user-tag'>
+            <img
+                className='avatar'
+                src={space.user.picture}
+            />
+            <div className='name'>
+            {space.user.name}
             </div>
-            }
-            <p> {formatDescription(space.description)} </p>
+          </div>
+          }
+        </div>
+        <div className='body'>
+          <p> {formatDescription(space.description)} </p>
         </div>
       </div>
     </div>

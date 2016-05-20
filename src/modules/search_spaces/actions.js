@@ -32,11 +32,8 @@ export function fetch(query = '', options = {}) {
 export function fetchNextPage() {
   return (dispatch, getState) => {
     const searchSpaces = getState().searchSpaces
-    let {page, filters} = searchSpaces
 
-    filters.page = page + 1
-
-    searchSpaceIndex().search(searchSpaces.query, filters, (error, results) => {
+    searchSpaceIndex().search(searchSpaces.query, {...searchSpaces.filters, page: searchSpaces.page + 1}, (error, results) => {
       if (error) {
         searchError('AlgoliaFetchNextPage', error)
       } else {

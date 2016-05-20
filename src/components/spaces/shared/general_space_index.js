@@ -16,20 +16,13 @@ function mapStateToProps(state) {
 export default class GeneralSpaceIndex extends Component{
   displayName: 'GeneralSpaceIndex'
   componentWillMount(){
-    this.props.dispatch(search.fetch('', this._filters()))
+    this.props.dispatch(search.fetch('', {}))
   }
   _search(e) {
-    this.props.dispatch(search.fetch(e.target.value, this._filters()))
+    this.props.dispatch(search.fetch(e.target.value, {}))
   }
   _nextPage() {
     this.props.dispatch(search.fetchNextPage())
-  }
-  _filters(){
-    if (!_.isUndefined(this.props.userId)){
-      return {user_id: this.props.userId}
-    } else {
-      return {}
-    }
   }
   render () {
     const {searchSpaces, showScreenshots} = this.props

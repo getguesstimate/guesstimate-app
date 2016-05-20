@@ -7,6 +7,7 @@ import * as search from 'gModules/search_spaces/actions'
 function mapStateToProps(state) {
   return {
     searchSpaces: state.searchSpaces,
+    users: state.users,
     me: state.me
   }
 }
@@ -15,29 +16,38 @@ function mapStateToProps(state) {
 export default class SpacesIndex extends Component{
   displayName: 'GeneralSpaceIndex'
   componentWillMount(){
-    this.props.dispatch(search.fetch('', this._filters()))
+    this.props.dispatch(search.fetch('', {}))
   }
   _search(e) {
-    this.props.dispatch(search.fetch(e.target.value, this._filters()))
+    this.props.dispatch(search.fetch(e.target.value, {}))
   }
   _nextPage() {
     this.props.dispatch(search.fetchNextPage())
-  }
-  _filters(){
-    if (!_.isUndefined(this.props.userId)){
-      return {user_id: this.props.userId}
-    } else {
-      return {}
-    }
   }
   render () {
     const {searchSpaces, showScreenshots} = this.props
     let spaces = searchSpaces.hits || []
     const hasMorePages = _.isFinite(searchSpaces.page) && (searchSpaces.page < (searchSpaces.nbPages - 1))
+    const size='SMALL'
     return (
-      <SpaceCards
-        spaces={spaces}
-      />
+      <div>
+        <div className='row'>
+          <div className='col-md-4'/>
+          <div className='col-md-4'>
+            <div className='stuff search-form'>
+              <div className='ui form'>
+                <input name='search' placeholder='Search Models' onChange={this._search.bind(this)}/>
+              </div>
+            </div>
+          </div>
+        </div>
+        <SpaceCards spaces={spaces.map(s => {return {...s, user: s.user_info}})} size={size}/>
+        {!!spaces.length && hasMorePages &&
+          <div className='nextPage'>
+            <button className={'ui button nextpage'} onClick={this._nextPage.bind(this)}> {'Load More'} </button>
+          </div>
+        }
+      </div>
     )
   }
 }
