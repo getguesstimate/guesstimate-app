@@ -14,8 +14,11 @@ export default function metrics(state = [], action) {
     const newMetrics = (_.flatten(action.records.map(e => spaceToMetrics(e))).filter(e => e))
     return uniq([...state, ...newMetrics])
   case 'ADD_METRIC':
-    return (uniq([...state, action.item]))
+    const res = (uniq([...state, action.item]))
+    debugger
+    return res
   case 'REMOVE_METRIC':
+    console.log("Removing Metric")
     return (state.filter(y => y.id !== action.item.id))
   case 'CHANGE_METRIC':
     const i = state.findIndex(y => y.id === action.item.id)

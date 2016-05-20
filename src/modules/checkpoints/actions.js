@@ -10,7 +10,9 @@ export function saveCheckpoint(spaceId, newGraph) {
 
 export function initSpace(spaceId, graph) {
   return (dispatch, getState) => {
-    dispatch({type: 'INITIALIZE', checkpoint: graph, spaceId})
+    const {metrics, guesstimates} = graph
+    
+    dispatch({type: 'INITIALIZE', checkpoint: {guesstimates, metrics: metrics.map(m => Object.assign({}, m, {space: spaceId}))}, spaceId})
   }
 }
 
@@ -49,6 +51,8 @@ function updateMetricsAndGuesstimates(dispatch, spaceId, oldMetrics, newMetrics,
 
   const guesstimatesToAdd = newGuesstimates.filter(g => _.some(metricsToAdd, m => m.id === g.metric))
   const guesstimatesToModify = newGuesstimates.filter(g => _.some(metricsToModify, m => m.id === g.metric))
+
+  debugger
 
   metricsToAdd.forEach(m => {
     dispatch({ type: 'ADD_METRIC', item: m, newGuesstimate: guesstimatesToAdd.find(g => g.metric === m.id) })
