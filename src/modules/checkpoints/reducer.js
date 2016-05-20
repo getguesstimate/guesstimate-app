@@ -9,17 +9,9 @@ export const checkpointsR = (state = [], action) => {
       const newCheckpoints = [action.checkpoint, ...checkpoints.slice(head)]
       return [{spaceId, head: 0, checkpoints: newCheckpoints}, ...state.filter(r => r.spaceId !== spaceId)]
     }
-    case 'REDO': {
-      console.log("Redoing.")
-      const {head, checkpoints, spaceId} = state.find(r => r.spaceId === action.spaceId)
-      if (!!head) {return state}
-      return [{spaceId, head: head+1, checkpoints}, ...state.filter(r => r.spaceId !== spaceId)]
-    }
-    case 'UNDO': {
-      console.log("Undoing.")
-      const {head, checkpoints, spaceId} = state.find(r => r.spaceId === action.spaceId)
-      if (head === checkpoints.length - 1) {return state}
-      return [{spaceId, head: head-1, checkpoints}, ...state.filter(r => r.spaceId !== spaceId)]
+    case 'UPDATE_FOR_SPACE': {
+      console.log("updating")
+      return [action.newCheckpoints, ...state.filter(r => r.spaceId !== action.spaceId)]
     }
     default:
       return state
