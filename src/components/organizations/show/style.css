@@ -5,8 +5,8 @@
 }
 
 .organizationShow .main-organization-tag img{
-  width: 8em;
-  height: 8em;
+  max-width: 10em;
+  max-height: 8em;
   border-radius: 0.5em;
   margin-bottom: 10px;
 }
