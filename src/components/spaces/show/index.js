@@ -1,6 +1,8 @@
 import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
 
+import Helmet from 'react-helmet'
+
 import SpacesShowHeader from './header'
 import ClosedSpaceSidebar from './closed_sidebar.js'
 import SpaceSidebar from './sidebar'
@@ -118,8 +120,40 @@ export default class SpacesShow extends Component {
       )
     }
 
+    let tagDescription = space.description
+    if (_.has(space, 'user.name')) {
+      const authorCallout = `Made by ${space.user.name}`
+      if (_.isEmpty(space.description)) {
+        tagDescription = authorCallout
+      } else {
+        tagDescription = `${authorCallout}: ${tagDescription}`
+      }
+    }
+
     return (
       <div className='spaceShow'>
+        {!space.name &&
+          <Helmet
+            meta={[
+              {name: "Description", content: tagDescription},
+              {property: "og:description", content: tagDescription},
+              {property: "og:site_name", content: "Guesstimate"},
+              {property: "og:image", content: space.big_screenshot},
+            ]}
+          />
+        }
+        {space.name &&
+          <Helmet
+            title={space.name}
+            meta={[
+              {name: "Description", content: tagDescription},
+              {property: "og:title", content: space.name},
+              {property: "og:description", content: tagDescription},
+              {property: "og:site_name", content: "Guesstimate"},
+              {property: "og:image", content: space.big_screenshot},
+            ]}
+          />
+        }
         <div className='hero-unit container-fluid'>
           <div className='row'>
             <div className='col-md-10'>

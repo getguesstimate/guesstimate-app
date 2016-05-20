@@ -11,14 +11,16 @@ export default function guesstimates(state = [], action) {
     let newGuesstimates = _.flatten(action.records.map(e => _.get(e, 'graph.guesstimates'))).filter(e => e)
     return uniq([...state, ...newGuesstimates])
   case 'ADD_METRIC':
-    if (action.newGuesstimate) {
-      return uniq([...state, action.newGuesstimate])
+    return uniq([...state, {metric: action.item.id, input: '', guesstimateType: 'NONE', description: ''}])
+  case 'ADD_METRICS':
+    if (action.newGuesstimates) {
+      return uniq([...state, ...action.newGuesstimates])
     } else {
       // Build a new guesstimate if not provided
-      return uniq([...state, {metric: action.item.id, input: '', guesstimateType: 'NONE', description: ''}])
+      return uniq([...state, ...action.items.map(item => ({metric: item.id, input: '', guesstimateType: 'NONE', description: ''}))])
     }
-  case 'REMOVE_METRIC':
-    return state.filter(y => y.metric !== action.item.id)
+  case 'REMOVE_METRICS':
+    return state.filter(y => !_.some(action.item.ids, id => y.metric === id))
   case 'CHANGE_GUESSTIMATE':
     const i = state.findIndex(y => y.metric === action.values.metric);
     const newItem = engine.guesstimate.format(action.values)
