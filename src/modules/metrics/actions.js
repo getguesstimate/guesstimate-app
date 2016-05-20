@@ -21,11 +21,12 @@ export function addMetric(item) {
 }
 
 //spaceId must be done before the metric is removed here.
-export function removeMetric(id) {
+export function removeMetrics(ids) {
+  if (ids.length === 0) { return }
   return (dispatch, getState) => {
-    const spaceId = findSpaceId(getState, id)
+    const spaceId = findSpaceId(getState, ids[0])
 
-    dispatch({ type: 'REMOVE_METRIC', item: {id: id}});
+    dispatch({ type: 'REMOVE_METRICS', item: {ids}});
     registerGraphChange(dispatch, spaceId)
   }
 }
