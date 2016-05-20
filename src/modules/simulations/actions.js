@@ -11,8 +11,8 @@ export function* runMetricSimulation({getState, metricId, dispatch}) {
   yield* runFormSimulation({getState, metricId, dispatch})
 }
 
-export function* runUndoSimulations({getState, metricIds, dispatch}) {
-  yield console.log("Running Undo Simulation")
+export function* runUndoSimulations({getState, spaceId, dispatch}) {
+  const propagation = new GraphPropagation(dispatch, getState, {spaceId, onlyUnsimulated: true})
 }
 
 export function* runFormSimulation({getState, metricId, dispatch}) {

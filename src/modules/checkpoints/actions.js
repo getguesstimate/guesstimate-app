@@ -34,7 +34,7 @@ function guesstimateEquals(guesstimate1, guesstimate2) {
   )
 }
 
-function updateMetricsAndGuesstimates(dispatch, spaceId, oldMetrics, newMetrics, oldGuesstimates, newGuesstimates) {
+function updateMetricsAndGuesstimates(dispatch, getState, spaceId, oldMetrics, newMetrics, oldGuesstimates, newGuesstimates) {
   const relevantOldMetrics = oldMetrics.filter(m => m.space === spaceId)
   const relevantOldGuesstimates = oldGuesstimates.filter(g => _.some(relevantOldMetrics, m => g.metric === m.id))
 
@@ -71,9 +71,7 @@ function updateMetricsAndGuesstimates(dispatch, spaceId, oldMetrics, newMetrics,
     dispatch(deleteSimulations(guesstimatesToModify.map(g => g.metric)))
   }
 
-  const metricsToResimulate = [...metricsToAdd, ...metricsToModify]
-  console.log("Hi")
-  dispatch({type: 'RUN_UNDO_SIMULATIONS'})
+  dispatch({type: 'RUN_UNDO_SIMULATIONS', getState, dispatch, spaceId})
 }
 
 // TODO(matthew): UNDO & REDO need to update current metrics and guesstimates :/
@@ -87,7 +85,7 @@ export function undo(spaceId) {
     if (head === checkpoints.length - 1) { return }
     const newGraph = checkpoints[head+1]
     const {metrics, guesstimates} = getState()
-    updateMetricsAndGuesstimates(dispatch, spaceId, metrics, newGraph.metrics, guesstimates, newGraph.guesstimates)
+    updateMetricsAndGuesstimates(dispatch, getState, spaceId, metrics, newGraph.metrics, guesstimates, newGraph.guesstimates)
 
     dispatch({type: 'UPDATE_FOR_SPACE', spaceId, newCheckpoints: {spaceId, head: head+1, checkpoints}})
   }
@@ -100,7 +98,7 @@ export function redo(spaceId) {
     if (head === 0) { return }
     const newGraph = checkpoints[head-1]
     const {metrics, guesstimates} = getState()
-    updateMetricsAndGuesstimates(dispatch, spaceId, metrics, newGraph.metrics, guesstimates, newGraph.guesstimates)
+    updateMetricsAndGuesstimates(dispatch, getState, spaceId, metrics, newGraph.metrics, guesstimates, newGraph.guesstimates)
 
     dispatch({type: 'UPDATE_FOR_SPACE', spaceId, newCheckpoints: {spaceId, head: head-1, checkpoints}})
   }
