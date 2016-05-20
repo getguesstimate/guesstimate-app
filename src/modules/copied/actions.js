@@ -68,7 +68,7 @@ export function paste(spaceId){
     )
 
     const existingMetrics = spaceMetrics.filter(m => isWithinRegion(m.location, pasteRegion))
-    existingMetrics.forEach(existingMetric => {dispatch(metricActions.removeMetric(existingMetric.id))})
+    dispatch(metricActions.removeMetrics(existingMetrics.map(m => m.id)))
 
     newMetrics.forEach((newMetric, i) => {dispatch({type: 'ADD_METRIC', item: newMetric, newGuesstimate: newGuesstimates[i]})})
 

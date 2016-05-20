@@ -35,7 +35,7 @@ export default class FlowGrid extends Component{
     onDeSelectAll: PropTypes.func.isRequired,
     onAddItem: PropTypes.func.isRequired,
     onMoveItem: PropTypes.func.isRequired,
-    onRemoveItem: PropTypes.func.isRequired,
+    onRemoveItems: PropTypes.func.isRequired,
     onCopy: PropTypes.func.isRequired,
     onPaste: PropTypes.func.isRequired,
 
@@ -97,8 +97,7 @@ export default class FlowGrid extends Component{
   }
 
   _handleRemoveSelectedItems() {
-    const selectedItems = this._selectedItems()
-    selectedItems.map(i => {this.props.onRemoveItem(i.key)})
+    this.props.onRemoveItems(this._selectedItems().map(i => i.key))
   }
 
   _handleKeyDown(e){

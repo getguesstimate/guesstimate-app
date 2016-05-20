@@ -15,8 +15,8 @@ export default function metrics(state = [], action) {
     return uniq([...state, ...newMetrics])
   case 'ADD_METRIC':
     return (uniq([...state, action.item]))
-  case 'REMOVE_METRIC':
-    return (state.filter(y => y.id !== action.item.id))
+  case 'REMOVE_METRICS':
+    return (state.filter(y => !_.some(action.item.ids, id => y.id === id)))
   case 'CHANGE_METRIC':
     const i = state.findIndex(y => y.id === action.item.id);
     const newItem = Object.assign(state[i], action.item);
