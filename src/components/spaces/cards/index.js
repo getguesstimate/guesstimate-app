@@ -1,6 +1,7 @@
 import React from 'react'
 import './style.css'
 import moment from 'moment'
+import removeMd from 'remove-markdown'
 
 function formatDescription(description) {
   const maxLength = 300
@@ -40,8 +41,9 @@ const SpaceCard = ({space}) => {
   const showName = hasName ? space.name : 'Untitled Model'
   console.log(space.user)
   return (
-    <div className='SpaceCard'>
-        <img src={space.screenshot} />
+    <div className='col-md-4'>
+      <div className='SpaceCard'>
+        <img src={space.big_screenshot} />
         <div className='body'>
           <h3>{space.name}</h3>
           <p>Changed {formatDate(space.updated_at)}</p>
@@ -54,13 +56,15 @@ const SpaceCard = ({space}) => {
               {space.user.name}
             </div>
             }
+            <p> {formatDescription(space.description)} </p>
         </div>
+      </div>
     </div>
   )
 }
 
 const SpaceList = ({spaces, hasMorePages, loadMore}) => (
-  <div className='Cards'>
+  <div className='Cards row'>
     {_.map(spaces, (s) => {
       return (
         <SpaceCard
