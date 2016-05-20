@@ -12,7 +12,7 @@ export function* runMetricSimulation({getState, metricId, dispatch}) {
 }
 
 export function* runUndoSimulations({getState, metricIds, dispatch}) {
-  console.log("Running Undo Simulation")
+  yield console.log("Running Undo Simulation")
 }
 
 export function* runFormSimulation({getState, metricId, dispatch}) {
