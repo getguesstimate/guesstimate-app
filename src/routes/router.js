@@ -1,30 +1,31 @@
-import React, {Component, PropTypes} from 'react'
-import Router from 'ampersand-router'
-import { Provider } from 'react-redux';
-import configureStore from './middleware'
-import { connect } from 'react-redux';
+import React, {Component} from 'react'
+import { connect, Provider } from 'react-redux';
 
-import * as segment from '../server/segment/index.js'
-import Layout from './layouts/application'
-
-import Home from './home/index.js'
-import SpaceShow from 'gComponents/spaces/show'
-import SpaceIndex from 'gComponents/spaces/index/index.js'
-import Maintenance from 'gComponents/pages/maintenance/index.js'
-import FAQ from 'gComponents/pages/faq/index.js'
-import TermsAndConditions from 'gComponents/pages/terms_and_conditions/index.js'
-import PrivacyPolicy from 'gComponents/pages/privacy_policy/index.js'
-import ComponentIndex from './component-index'
-import UserShow from 'gComponents/users/show/index.js'
-import OrganizationShow from 'gComponents/organizations/show/index.js'
 import ReactDOM from 'react-dom'
-import FirstSubscriptionContainer from 'gComponents/subscriptions/FirstSubscription/container.js'
-import FirstSubscriptionPage from 'gComponents/subscriptions/FirstSubscriptionPage/container.js'
-import FirstSubscriptionStyleGuide from 'gComponents/subscriptions/FirstSubscription/StyleGuide.js'
-import SettingsStyleGuide from 'gComponents/users/settings/StyleGuide.js'
-import Settings from 'gComponents/users/settings/container.js'
-import PlanIndex from 'gComponents/plans/index/container.js'
-import PlansStyleGuide from 'gComponents/plans/index/StyleGuide.js'
+import Router from 'ampersand-router'
+
+import Layout from './layouts/application/index'
+import Home from './home/index'
+import SpaceShow from 'gComponents/spaces/show'
+import SpaceIndex from 'gComponents/spaces/index/index'
+import Maintenance from 'gComponents/pages/maintenance/index'
+import FAQ from 'gComponents/pages/faq/index'
+import TermsAndConditions from 'gComponents/pages/terms_and_conditions/index'
+import PrivacyPolicy from 'gComponents/pages/privacy_policy/index'
+import ComponentIndex from './component-index'
+import UserShow from 'gComponents/users/show/index'
+import OrganizationShow from 'gComponents/organizations/show/index'
+import FirstSubscriptionContainer from 'gComponents/subscriptions/FirstSubscription/container'
+import FirstSubscriptionPage from 'gComponents/subscriptions/FirstSubscriptionPage/container'
+import FirstSubscriptionStyleGuide from 'gComponents/subscriptions/FirstSubscription/StyleGuide'
+import SettingsStyleGuide from 'gComponents/users/settings/StyleGuide'
+import Settings from 'gComponents/users/settings/container'
+import PlanIndex from 'gComponents/plans/index/container'
+import PlansStyleGuide from 'gComponents/plans/index/StyleGuide'
+
+import configureStore from './middleware'
+
+import * as segment from '../server/segment/index'
 
 export default Router.extend({
   render (page, options={}) {

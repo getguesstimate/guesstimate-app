@@ -105,6 +105,7 @@
     "react-dnd-html5-backend": "^2.1.2",
     "react-dom": "^15.0.1",
     "react-fa": "^4.0.0",
+    "react-helmet": "^3.1.0",
     "react-json-tree": "^0.7.1",
     "react-keypress": "^0.1.5",
     "react-markdown": "^2.2.0",
