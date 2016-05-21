@@ -4,13 +4,13 @@
   "description": "Make, share, and evaluate estimates of things",
   "main": "index.js",
   "scripts": {
-    "prepublish": "BUILD_DEV=0 API_ENV=production SEGMENT_API_ENV=production webpack && cp src/_redirects public/_redirects",
+    "predeploy": "BUILD_DEV=0 API_ENV=production SEGMENT_API_ENV=production webpack && cp src/_redirects public/_redirects",
     "_stage": "surge -p public -d stage.getguesstimate.com",
     "start": "BUILD_DEV=1 NODE_ENV=development API_ENV=development SEGMENT_API_ENV=development webpack-dev-server",
     "start-production": "BUILD_DEV=1 NODE_ENV=development API_ENV=production SEGMENT_API_ENV=development webpack-dev-server",
-    "stage": "npm run prepublish && npm run _stage",
-    "stage-netlify": "npm run prepublish && netlify deploy -s test-guesstimate public",
-    "publish": "netlify deploy -s guesstimate public",
+    "stage": "npm run predeploy && npm run _stage",
+    "stage-netlify": "npm run predeploy && netlify deploy -s test-guesstimate public",
+    "deploy": "netlify deploy -s guesstimate public",
     "test": "karma start",
     "test-once": "karma start --single-run"
   },
