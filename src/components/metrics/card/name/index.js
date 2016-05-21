@@ -19,9 +19,6 @@ export default class MetricName extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("\n\n this.props.name", this.props.name)
-    console.log("this.state.value", this.state.value)
-    console.log("nextProps.name", nextProps.name)
     if (this.props.name === this.state.value) {this.setState({value: nextProps.name})}
   }
 
