@@ -13,22 +13,34 @@ export default class MetricName extends Component {
     onChange: PropTypes.func.isRequired,
   }
 
-  state = {value: this.props.name}
+  state = {
+    value: this.props.name,
+    editing: false,
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log("\n\n this.props.name", this.props.name)
+    console.log("this.state.value", this.state.value)
+    console.log("nextProps.name", nextProps.name)
+    if (this.props.name === this.state.value) {this.setState({value: nextProps.name})}
+  }
 
   shouldComponentUpdate(nextProps, nextState) {
     return ((nextProps.name !== this.props.name) ||
             (nextProps.inSelectedCell !== this.props.inSelectedCell) ||
-            (nextState.value !== this.state.value))
+            (nextState.value !== this.state.value) ||
+            (nextState.editing !== this.state.editing))
   }
 
   handleSubmit() {
     if (this._hasChanged()){
       this.props.onChange({name: this.state.value})
     }
+    this.setState({editing: false})
   }
 
   _hasChanged() {
-    return (this.state.value !== this.props.name)
+    return (this.state.value != this.props.name)
   }
 
   hasContent() {
@@ -55,15 +67,25 @@ export default class MetricName extends Component {
   render() {
     return (
       <div className='MetricName'>
-        <TextArea
+        {this.state.editing &&
+          <TextArea
             onBlur={this.handleSubmit.bind(this)}
             onChange={this.onChange.bind(this)}
             onKeyDown={this.handleKeyDown.bind(this)}
+            onMouseLeave={() => {if (!this._hasChanged()) {this.setState({editing: false})}}}
             placeholder={'name'}
             ref={'input'}
             tabIndex={2}
             value={this.state.value}
-        />
+          />
+        }
+        {!this.state.editing &&
+          <div
+            onMouseEnter={() => {this.setState({editing: true})}}
+          >
+            {this.state.value}
+          </div>
+        }
       </div>
     )
   }
