@@ -1,38 +1,42 @@
 import React from 'react'
+
 import Icon from'react-fa'
 
-import arrowsVisibleImage from '../../../assets/metric-icons/blue/arrows-visible.png'
-import {formatDescription, formatDate} from 'gComponents/spaces/shared'
-import './style.css'
-
 import * as navigationActions from 'gModules/navigation/actions.js'
+
 import * as Space from 'gEngine/space';
 import * as User from 'gEngine/user';
 
-let BlankScreenshot = () => (
+import {formatDescription, formatDate} from 'gComponents/spaces/shared'
+
+import arrowsVisibleImage from '../../../assets/metric-icons/blue/arrows-visible.png'
+
+import './style.css'
+
+const BlankScreenshot = () => (
   <div className='snapshot blank'>
     <img src={arrowsVisibleImage}/>
   </div>
 )
 
-let SingleButton = ({isPrivate}) => (
+const SingleButton = ({isPrivate}) => (
   <div className='tag'>
     <Icon name={isPrivate ? 'lock' : 'globe'}/>
   </div>
 )
 
-let ButtonArea = ({user, navigateToUser, isPrivate, showPrivacy}) => (
+const ButtonArea = ({user, navigateToUser, isPrivate, showPrivacy}) => (
   <div className='hover-row'>
     {user &&
-    <div className='user-tag' onClick={navigateToUser}>
-      <img
+      <div className='user-tag' onClick={navigateToUser}>
+        <img
           className='avatar'
           src={user.picture}
-      />
-      <div className='name'>
-      {user.name}
+        />
+        <div className='name'>
+          {user.name}
+        </div>
       </div>
-    </div>
     }
     {showPrivacy && <SingleButton isPrivate={isPrivate}/>}
   </div>

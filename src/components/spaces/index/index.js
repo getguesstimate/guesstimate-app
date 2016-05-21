@@ -1,8 +1,10 @@
 import React, {Component, PropTypes} from 'react'
-import Icon from'react-fa'
 import { connect } from 'react-redux';
+
 import SpaceCards from 'gComponents/spaces/cards'
+
 import * as search from 'gModules/search_spaces/actions'
+
 import './style.css'
 
 function mapStateToProps(state) {
