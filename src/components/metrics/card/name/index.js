@@ -16,6 +16,7 @@ export default class MetricName extends Component {
   state = {
     value: this.props.name,
     editing: false,
+    persistEditing: false,
   }
 
   componentWillReceiveProps(nextProps) {
@@ -33,11 +34,17 @@ export default class MetricName extends Component {
     if (this._hasChanged()){
       this.props.onChange({name: this.state.value})
     }
-    this.setState({editing: false})
+    this.setState({editing: false, persistEditing: false})
   }
 
   _hasChanged() {
     return (this.state.value != this.props.name)
+  }
+
+  _handleMouseLeave() {
+    if (!(this.state.persistEditing || this._hasChanged())) {
+      this.setState({editing: false})
+    }
   }
 
   hasContent() {
@@ -69,7 +76,7 @@ export default class MetricName extends Component {
             onBlur={this.handleSubmit.bind(this)}
             onChange={this.onChange.bind(this)}
             onKeyDown={this.handleKeyDown.bind(this)}
-            onMouseLeave={() => {if (!this._hasChanged()) {this.setState({editing: false})}}}
+            onMouseLeave={() => {}}
             placeholder={'name'}
             ref={'input'}
             tabIndex={2}
@@ -79,6 +86,7 @@ export default class MetricName extends Component {
         {!this.state.editing &&
           <div className={`static${!this.state.value ? ' default-value' : ''}`}
             onMouseEnter={() => {this.setState({editing: true})}}
+            onClick={() => {this.setState({persistEditing: true})}}
           >
             {this.state.value || 'name'}
           </div>
