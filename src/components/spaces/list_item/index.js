@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { denormalizedSpaceSelector } from '../denormalized-space-selector.js';
 import MetricLabel from '../../metrics/label'
 import arrowsVisibleImage from '../../../assets/metric-icons/blue/arrows-visible.png'
+import {formatDescription, formatDate} from 'gComponents/spaces/shared'
 
 import * as Space from 'gEngine/space';
 import './style.css'
@@ -10,22 +11,6 @@ import moment from 'moment'
 import Icon from 'react-fa'
 import removeMd from 'remove-markdown'
 import e from 'gEngine/engine'
-
-function formatDescription(description) {
-  const maxLength = 300
-
-  if (_.isEmpty(description)){ return '' }
-
-  const withoutMarkdown = removeMd(description)
-  if (withoutMarkdown.length < maxLength) { return withoutMarkdown }
-
-  const truncated = withoutMarkdown.substring(0, maxLength)
-  return `${truncated}...`
-}
-
-function formatDate(date) {
- return moment(new Date(date)).format('ll')
-}
 
 let PrivateTag = ({isPrivate}) => (
   <div className='col-xs-12'>

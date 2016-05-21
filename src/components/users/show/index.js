@@ -39,8 +39,8 @@ export default class UserShow extends Component{
 
     return (
       <Container>
-        <div className='userShow'>
-            <div className='GeneralSpaceIndex row'>
+        <div className='UserShow'>
+            <div className='row'>
               <div className='col-md-4'/>
               <div className='col-md-4'>
                   {user &&
@@ -58,14 +58,10 @@ export default class UserShow extends Component{
               </div>
             </div>
             {spaces &&
-              <div className='row'>
-                <SpaceCards
-                  spaces={spaces}
-                  size={'SMALL'}
-                  showUsers={false}
-                  showPrivacy={isMe}
-                />
-              </div>
+              <SpaceCards
+                spaces={spaces}
+                showPrivacy={isMe}
+              />
             }
         </div>
       </Container>

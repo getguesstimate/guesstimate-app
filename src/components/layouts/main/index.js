@@ -11,7 +11,7 @@ export default class Main extends Component{
 
   static propTypes = {
     isFluid: PropTypes.bool,
-    backgroundColor: PropTypes.oneOf(['', 'BLUE'])
+    backgroundColor: PropTypes.oneOf(['', 'BLUE', 'GREY'])
   }
 
   render() {
