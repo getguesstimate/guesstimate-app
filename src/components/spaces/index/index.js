@@ -44,7 +44,7 @@ export default class SpacesIndex extends Component{
         <SpaceCards spaces={spaces.map(s => {return {...s, user: s.user_info}})} size={size}/>
         {!!spaces.length && hasMorePages &&
           <div className='nextPage'>
-            <button className={'ui button nextpage'} onClick={this._nextPage.bind(this)}> {'Load More'} </button>
+            <button className={'ui button nextpage large'} onClick={this._nextPage.bind(this)}> {'Load More'} </button>
           </div>
         }
       </div>

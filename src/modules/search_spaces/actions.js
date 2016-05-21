@@ -5,7 +5,7 @@ import * as spaceActions from 'gModules/spaces/actions'
 import * as userActions from 'gModules/users/actions'
 
 export function fetch(query = '', options = {}) {
-  let filters = {hitsPerPage: 20}
+  let filters = {hitsPerPage: 21}
   filters.page = options.page || 0
   if (options.user_id) {
     filters.numericFilters = `user_id=${options.user_id}`

@@ -1,9 +1,20 @@
+.SpaceCard-same-height{
+  display: flex;
+}
+
 .SpaceCard {
-  font-size: 0.9em;
-  margin: 3em 0.5em;
-  padding: 5px 0;
-  background-color: white;
+  margin: 1.5em 0.8em;
   float: left;
+  cursor: pointer;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(0,0,0,0);
+  border-radius: 2px;
+}
+
+.SpaceCard:hover {
+  border: 1px solid #C2CDD6;
 }
 
 .stuff.search-form {
@@ -13,23 +24,29 @@
 
 .SpaceCard img{
   width: 100%;
-  border-radius: 1px;
   float: left;
+  cursor: pointer;
 }
 
 .SpaceCard .header {
-  margin-bottom: 0.25em;
-  padding: 7px 0 5px 9px;
+  padding: 9px 0 9px 9px;
+  border-radius: 2px 2px 0 0;
+  background-color: white;
+  flex: 0;
 }
 
 .SpaceCard .body {
+  border-radius: 0 0 2px 2px;
+  flex: 1;
+  background-color: white;
   float: left;
   width: 100%;
-  padding: 4px 9px;
+  padding: 4px 9px 11px 9px;
+  overflow: hidden;
 }
 
 .SpaceCard h3 {
-  font-size: 1.4em;
+  font-size: 1.3em;
   color: #4A6A88;
   margin-bottom: 0.0em;
 }
@@ -41,9 +58,9 @@
 
 .SpaceCard .user-tag {
   position: absolute;
-  bottom: 0.5em;
-  left: 0.5em;
-  background: rgba(147, 159, 169, 0.61);
+  bottom: 8px;
+  left: 10px;
+  background: rgba(147, 159, 169, 0.7);
   border-radius: 1px;
   float: left;
 }
@@ -55,23 +72,42 @@
 }
 
 .SpaceCard .user-tag .avatar{
-  width: 1.6em;
-  height: 1.6em;
+  width: 1.8em;
+  height: 1.8em;
   border-radius: 1px 0 0 1px;
   float: left;
 }
 
 .SpaceCard .user-tag .name{
   float: left;
-  padding: 1px 7px 0 6px;
+  padding: 4px 8px 0 6px;
   color: white;
-  font-size: 0.9em;
+  font-size: 1.1em;
   font-weight: 800;
 }
 
 .SpaceCard .image {
+  min-height: 13em;
   position: relative;
+  background-color: #D8DADC;
   float: left;
+  flex: 0;
+}
+
+.nextPage {
+  margin-bottom: 4em;
+  margin-top: 2em;
+  text-align: center;
+}
+.SpaceCard:hover .dimmer {
+}
+
+.SpaceCard .dimmer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
 }
 
 .SpaceCard p {
