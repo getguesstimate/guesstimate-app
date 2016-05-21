@@ -2,10 +2,10 @@ import React from 'react'
 
 import Icon from'react-fa'
 
-import * as navigationActions from 'gModules/navigation/actions.js'
+import * as navigationActions from 'gModules/navigation/actions'
 
-import * as Space from 'gEngine/space';
-import * as User from 'gEngine/user';
+import * as Space from 'gEngine/space'
+import * as User from 'gEngine/user'
 
 import {formatDescription, formatDate} from 'gComponents/spaces/shared'
 
