@@ -5,7 +5,7 @@ import * as spaceActions from 'gModules/spaces/actions'
 import * as userActions from 'gModules/users/actions'
 
 export function fetch(query = '', options = {}) {
-  let filters = {hitsPerPage: 20}
+  let filters = {hitsPerPage: 21}
   filters.page = options.page || 0
   if (options.user_id) {
     filters.numericFilters = `user_id=${options.user_id}`
@@ -32,11 +32,8 @@ export function fetch(query = '', options = {}) {
 export function fetchNextPage() {
   return (dispatch, getState) => {
     const searchSpaces = getState().searchSpaces
-    let {page, filters} = searchSpaces
 
-    filters.page = page + 1
-
-    searchSpaceIndex().search(searchSpaces.query, filters, (error, results) => {
+    searchSpaceIndex().search(searchSpaces.query, {...searchSpaces.filters, page: searchSpaces.page + 1}, (error, results) => {
       if (error) {
         searchError('AlgoliaFetchNextPage', error)
       } else {

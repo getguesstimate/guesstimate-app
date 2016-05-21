@@ -60,7 +60,7 @@ export default Router.extend({
     'subscribe/:id': 'subscribe',
   },
 
-  spaceIndex() { this.render(<SpaceIndex/>) },
+  spaceIndex() { this.render(<SpaceIndex/>, {backgroundColor: 'GREY'}) },
   home() { this.render(<Home/>, {isFluid: true, simpleHeader: true}) },
   spaceNew() { this.render(<SpaceNew/>) },
   spaceShow(id) { this.render(<SpaceShow spaceId={parseInt(id)}/>, {isFluid: true, showFooter: false, fullHeight: true}) },
@@ -76,7 +76,7 @@ export default Router.extend({
   privacy() { this.render(<PrivacyPolicy/>) },
   faq() { this.render(<FAQ/>) },
   subscribe(id) { this.render(<FirstSubscriptionPage planName={id}/>) },
-  userShow(id) { this.render(<UserShow userId={id}/>) },
+  userShow(id) { this.render(<UserShow userId={id}/>, {backgroundColor: 'GREY'}) },
   organizationShow(id) { this.render(<OrganizationShow organizationId={id}/>) },
   pricing() { this.render(<PlanIndex/>, {backgroundColor: 'BLUE'}) },
 })
