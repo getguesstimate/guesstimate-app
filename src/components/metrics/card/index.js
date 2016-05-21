@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 import ReactDOM from 'react-dom'
 import $ from 'jquery'
 
-import {removeMetric, changeMetric} from 'gModules/metrics/actions'
+import {removeMetrics, changeMetric} from 'gModules/metrics/actions'
 import {changeGuesstimate} from 'gModules/guesstimates/actions'
 import {changeGuesstimateForm} from 'gModules/guesstimate_form/actions'
 
@@ -136,7 +136,7 @@ class MetricCard extends Component {
   }
 
   handleRemoveMetric () {
-    this.props.dispatch(removeMetric(this._id()))
+    this.props.dispatch(removeMetrics([this._id()]))
   }
 
   _id(){
@@ -155,6 +155,7 @@ class MetricCard extends Component {
   _handleMouseDown(e) {
     if (this._isFunctionInputSelectable(e) && !e.shiftKey) {
       $(window).trigger('functionMetricClicked', this.props.metric)
+      // TODO(matthew): Why don't these stop the triggering of the flow grid cell?
       e.preventDefault()
       e.stopPropagation()
     }

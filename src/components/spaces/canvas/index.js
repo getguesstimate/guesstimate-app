@@ -8,7 +8,7 @@ import Metric from 'gComponents/metrics/card/index'
 
 import {denormalizedSpaceSelector} from '../denormalized-space-selector'
 
-import {addMetric, changeMetric, removeMetric} from 'gModules/metrics/actions'
+import {addMetric, changeMetric, removeMetrics} from 'gModules/metrics/actions'
 import {copy, paste} from 'gModules/copied/actions'
 import {changeSelect, deSelect} from 'gModules/selected_cell/actions'
 import {selectRegion, deSelectRegion} from 'gModules/selected_region/actions'
@@ -20,6 +20,8 @@ import * as canvasStateProps from 'gModules/canvas_state/prop_type'
 
 
 import './style.css'
+
+import {isLocation, isAtLocation} from 'lib/locationUtils.js'
 
 function mapStateToProps(state) {
   return {
@@ -117,11 +119,10 @@ export default class Canvas extends Component{
   }
 
   _selectedMetric() {
-    // TODO(matthew): Refactor later with location libs and more precise defensive coding.
    const {selectedCell} = this.props
    const metrics = _.get(this.props.denormalizedSpace, 'metrics')
 
-   return metrics && _.isFinite(selectedCell.row) && metrics.filter(i => _.isEqual(i.location, selectedCell))[0];
+   return metrics && isLocation(selectedCell) && metrics.find(m => isAtLocation(m.location, selectedCell));
   }
 
   _isAnalysisView(props = this.props) {
@@ -193,7 +194,7 @@ export default class Canvas extends Component{
           onDeSelectAll={this._handleDeSelectAll.bind(this)}
           onAddItem={this._handleAddMetric.bind(this)}
           onMoveItem={this._handleMoveMetric.bind(this)}
-          onRemoveItem={(id) => {this.props.dispatch(removeMetric(id))}}
+          onRemoveItems={(ids) => {this.props.dispatch(removeMetrics(ids))}}
           onCopy={this._handleCopy.bind(this)}
           onPaste={this._handlePaste.bind(this)}
           showGridLines={showGridLines}

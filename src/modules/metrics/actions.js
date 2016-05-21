@@ -14,18 +14,19 @@ export function addMetric(item) {
   return (dispatch, getState) => {
     const spaceMetrics = getState().metrics.filter(m => m.space === item.space)
     const existingReadableIds = spaceMetrics.map(m => m.readableId)
-    let newItem = Object.assign(item, e.metric.create(existingReadableIds))
+    let newItem = Object.assign({}, item, e.metric.create(existingReadableIds))
 
     dispatch({ type: 'ADD_METRIC', item: newItem });
   }
 }
 
 //spaceId must be done before the metric is removed here.
-export function removeMetric(id) {
+export function removeMetrics(ids) {
+  if (ids.length === 0) { return }
   return (dispatch, getState) => {
-    const spaceId = findSpaceId(getState, id)
+    const spaceId = findSpaceId(getState, ids[0])
 
-    dispatch({ type: 'REMOVE_METRIC', item: {id: id}});
+    dispatch({ type: 'REMOVE_METRICS', item: {ids}});
     registerGraphChange(dispatch, spaceId)
   }
 }

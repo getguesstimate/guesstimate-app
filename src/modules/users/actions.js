@@ -69,7 +69,7 @@ export function fromSearch(spaces) {
 export function create(object) {
   return (dispatch, getState) => {
 
-    const newUser = Object.assign(object, {id: cuid()})
+    const newUser = Object.assign({}, object, {id: cuid()})
     dispatch(sActions.createStart(newUser));
 
     api(getState()).users.create(newUser, (err, user) => {
