@@ -11,10 +11,10 @@ export default class Home extends Component {
       <div className='homePage'>
         <div className='container-fluid full-width'>
           <div className='row'>
-            <div className='col-md-2'></div>
-            <div className='col-md-8 main'>
+            <div className='col-md-2 col-xs-0'></div>
+            <div className='col-md-8 col-xs-12 main'>
               <div className='row'>
-                <div className='col-sm-12'>
+                <div className='col-xm-12 col-md-12'>
                   <div className='guesstimate-logo-outer'>
                     <div className='guesstimate-logo'>
                       <img src={LogoWord} />
@@ -22,7 +22,7 @@ export default class Home extends Component {
                   </div>
                 </div>
 
-                <div className='col-sm-12 guesstimate-slogan'>
+                <div className='col-md-12 col-xm-12 guesstimate-slogan'>
                   <h2>A spreadsheet for things<br/>that aren&rsquo;t certain</h2>
                 </div>
 
@@ -31,7 +31,7 @@ export default class Home extends Component {
           </div>
 
           <div className='row'>
-            <div className='col-xs-12 cta'>
+            <div className='col-md-12 col-xs-12 cta'>
               <a href='/models' className='ui button huge primary'> Browse Public Models </a>
             </div>
           </div>
@@ -48,7 +48,7 @@ export default class Home extends Component {
         <div className='container-fluid full-width sectionBenefits'>
           <div className='wrap'>
             <div className='row'>
-              <div className='col-sm-4'>
+              <div className='col-sm-4 col-xs-12'>
                 <i className='ion-ios-egg'/>
                 <h2> Simple </h2>
                 <p>
@@ -57,14 +57,14 @@ export default class Home extends Component {
                   simply write <strong>[5,9]</strong>.
                 </p>
               </div>
-              <div className='col-sm-4'>
+              <div className='col-sm-4 col-xs-12'>
                 <i className='ion-md-flame'/>
                 <h2> Powerful </h2>
                 <p>
                   Guesstimate uses Monte Carlo sampling to correctly estimate uncertain results.
                 </p>
               </div>
-              <div className='col-sm-4'>
+              <div className='col-sm-4 col-xs-12'>
                 <i className='ion-ios-rose'/>
                 <h2> Free </h2>
                 <p>
