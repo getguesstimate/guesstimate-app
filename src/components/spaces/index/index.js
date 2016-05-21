@@ -35,9 +35,12 @@ export default class SpacesIndex extends Component{
         <div className='row'>
           <div className='col-md-4'/>
           <div className='col-md-4'>
-            <div className='search-form'>
-              <div className='ui form'>
-                <input name='search' placeholder='Search Models' onChange={this._search.bind(this)}/>
+            <div className='SpacesIndex--header'>
+              <h1> Public Models </h1>
+              <div className='search-form'>
+                <div className='ui form'>
+                  <input name='search' placeholder='Search' onChange={this._search.bind(this)}/>
+                </div>
               </div>
             </div>
           </div>
