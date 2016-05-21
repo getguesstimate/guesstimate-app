@@ -52,7 +52,6 @@ function updateMetricsAndGuesstimates(
   dispatch({type: 'RUN_UNDO_SIMULATIONS', getState, dispatch, spaceId})
 }
 
-// TODO(matthew): UNDO & REDO need to update current metrics and guesstimates :/
 export function undo(spaceId) {
   return (dispatch, getState) => {
     const spaceCheckpoints = getState().checkpoints.find(r => r.spaceId === spaceId)
