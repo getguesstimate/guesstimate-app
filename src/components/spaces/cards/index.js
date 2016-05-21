@@ -1,10 +1,12 @@
 import React from 'react'
+import Icon from'react-fa'
 import './style.css'
 import moment from 'moment'
 import removeMd from 'remove-markdown'
 import * as navigationActions from 'gModules/navigation/actions.js'
 import * as Space from 'gEngine/space';
 import * as User from 'gEngine/user';
+import arrowsVisibleImage from '../../../assets/metric-icons/blue/arrows-visible.png'
 
 function formatDescription(description) {
   const maxLength = 300
@@ -31,42 +33,56 @@ let PrivateTag = ({isPrivate}) => (
   </div>
 )
 
-let BlankScreenshot = ({isPrivate}) => (
+let BlankScreenshot = () => (
   <div className='snapshot blank'>
-    {!isPrivate && <img src={arrowsVisibleImage}/>}
-    {isPrivate && <Icon name='lock'/>}
+    <img src={arrowsVisibleImage}/>
   </div>
 )
 
-const SpaceCard = ({space}) => {
+let MinorButton = ({isPrivate}) => (
+  <div className='tag'>
+    <Icon name={isPrivate ? 'lock' : 'globe'}/>
+  </div>
+)
+
+let ButtonArea = ({user, navigateToUser, isPrivate, showPrivacy}) => (
+  <div className='hover-row'>
+    {user &&
+    <div className='user-tag' onClick={navigateToUser}>
+      <img
+          className='avatar'
+          src={user.picture}
+      />
+      <div className='name'>
+      {user.name}
+      </div>
+    </div>
+    }
+    {showPrivacy && <MinorButton isPrivate={isPrivate}/>}
+  </div>
+)
+
+const SpaceCard = ({space, showPrivacy}) => {
   const hasName = !_.isEmpty(space.name)
-  const className = `text-editable ${hasName ? '' : 'default-value'}`
-  const showName = hasName ? space.name : 'Untitled Model'
   const navigateToSpace = () => {navigationActions.navigate(Space.url(space))}
   const navigateToUser = () => {navigationActions.navigate(User.url(space.user))}
   return (
     <div className='col-md-4 SpaceCard-same-height'>
       <div className='SpaceCard'>
-        <div className='header'>
-          <h3 onClick={navigateToSpace}>{space.name}</h3>
+        <div className={`header ${hasName ? '' : 'default-name'}`}>
+          <h3 onClick={navigateToSpace}>{hasName ? space.name : 'Untitled Model'}</h3>
           <div className='changed-at'>Updated {formatDate(space.updated_at)}</div>
         </div>
 
         <div className='image'>
+          <BlankScreenshot/>
           <img src={space.big_screenshot} onClick={navigateToSpace} />
-          <div className='dimmer' onClick={navigateToSpace}>
-          </div>
-          {space.user &&
-          <div className='user-tag' onClick={navigateToUser}>
-            <img
-                className='avatar'
-                src={space.user.picture}
-            />
-            <div className='name'>
-            {space.user.name}
-            </div>
-          </div>
-          }
+          <ButtonArea
+            user={space.user}
+            navigateToUser={navigateToUser}
+            isPrivate={space.is_private}
+            showPrivacy={showPrivacy}
+          />
         </div>
         <div className='body'>
           <p> {formatDescription(space.description)} </p>
@@ -76,22 +92,23 @@ const SpaceCard = ({space}) => {
   )
 }
 
-const SpaceList = ({spaces, hasMorePages, loadMore}) => (
+const SpaceCards = ({spaces, hasMorePages, loadMore, showPrivacy}) => (
   <div className='Cards row'>
     {_.map(spaces, (s) => {
       return (
         <SpaceCard
           key={s.id}
-          spaceId={s.id}
           space={s}
+          showPrivacy={showPrivacy}
         />
       )
     })}
     {!!spaces.length && hasMorePages &&
       <div className='nextPage'>
+        <button className={'ui button nextpage large'} onClick={loadMore}> {'Load More'} </button>
       </div>
     }
   </div>
 )
 
-export default SpaceList
+export default SpaceCards

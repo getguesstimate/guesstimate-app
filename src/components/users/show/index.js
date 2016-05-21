@@ -7,6 +7,7 @@ import * as userActions from 'gModules/users/actions'
 import './style.css'
 import { userSpaceSelector } from './userSpaceSelector.js';
 import Container from 'gComponents/utility/container/Container.js'
+import SpaceCards from 'gComponents/spaces/cards'
 
 function mapStateToProps(state) {
   return {
@@ -28,6 +29,7 @@ export default class UserShow extends Component{
   render () {
     const {userId, users} = this.props
     const spaces =  _.orderBy(this.props.userSpaces.asMutable(), ['updated_at'], ['desc'])
+    const isMe = (parseInt(this.props.me.id) === parseInt(userId))
 
     let user = null
 
@@ -38,38 +40,33 @@ export default class UserShow extends Component{
     return (
       <Container>
         <div className='userShow'>
-          <div className='GeneralSpaceIndex row'>
-            <div className='col-sm-3'>
-              <div className='row'>
-
-                <div className='col-sm-12'>
-                  <div className='main-user-tag'>
-                    {user &&
+            <div className='GeneralSpaceIndex row'>
+              <div className='col-md-4'/>
+              <div className='col-md-4'>
+                  {user &&
+                    <div className='main-user-tag'>
                       <img
                           src={user.picture}
                       />
-                    }
-                  </div>
-                    {user &&
-                      <h2>
-                        {user.name}
-                      </h2>
-                    }
-                </div>
+                      {user &&
+                        <h1>
+                          {user.name}
+                        </h1>
+                      }
+                    </div>
+                  }
               </div>
             </div>
-
-            <div className='col-sm-9'>
-              {spaces &&
-                <SpaceList
+            {spaces &&
+              <div className='row'>
+                <SpaceCards
                   spaces={spaces}
+                  size={'SMALL'}
                   showUsers={false}
-                  hasMorePages={false}
-                  showScreenshots={true}
+                  showPrivacy={isMe}
                 />
-              }
-            </div>
-          </div>
+              </div>
+            }
         </div>
       </Container>
     )

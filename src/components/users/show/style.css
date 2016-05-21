@@ -1,12 +1,15 @@
 .userShow .main-user-tag {
   text-align: center;
-  margin-right: 0.5em;
-  margin-top: 0.25em;
+  margin-bottom: 2em;
 }
 
 .userShow .main-user-tag img{
   width: 8em;
   height: 8em;
-  border-radius: 0.5em;
-  margin-bottom: 10px;
+  border-radius: 8em;
+}
+
+.userShow .main-user-tag h1{
+  margin-bottom: 0;
+  margin-top: 0.5rem;
 }
