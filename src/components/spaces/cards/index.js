@@ -47,7 +47,7 @@ const SpaceCard = ({space, showPrivacy}) => {
   const navigateToSpace = () => {navigationActions.navigate(Space.url(space))}
   const navigateToUser = () => {navigationActions.navigate(User.url(space.user))}
   return (
-    <div className='col-md-4 SpaceCard'>
+    <div className='col-xs-12 col-md-4 SpaceCard'>
       <div className='SpaceCard--inner'>
         <div className={`header ${hasName ? '' : 'default-name'}`}>
           <h3 onClick={navigateToSpace}>{hasName ? space.name : 'Untitled Model'}</h3>
