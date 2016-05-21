@@ -5,6 +5,22 @@
   width: 100%;
 }
 
+.MetricName .static{
+  @mixin hover-input;
+  padding: 2px;
+  color: $grey-2;
+  color: rgba(69, 98, 134, 0.83);
+  font-weight: 300;
+  width: 100%;
+  font-size: 0.99em;
+  float: left;
+  line-height: 1.2em;
+}
+
+.MetricName .static.default-value {
+  color: #A9A9A9;
+}
+
 .MetricName textarea{
   @mixin hover-input;
   padding: 2px;
@@ -17,19 +33,19 @@
   line-height: 1.2em;
 }
 
-.output .MetricName textarea {
+.output .MetricName .static {
    font-weight: 500;
 }
 
-.titleView .MetricName textarea{
+.titleView .MetricName .static{
   color: #3C4F67;
   font-weight: 600;
 }
 
-.MetricCardViewSection.display .MetricName textarea{
+.MetricCardViewSection.display .MetricName .static{
   overflow: hidden;
 }
 
-.metricCard.display .titleView .MetricName textarea{
+.metricCard.display .titleView .MetricName .static{
   color: #3C3F44;
 }
