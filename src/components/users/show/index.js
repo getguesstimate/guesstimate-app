@@ -42,7 +42,7 @@ export default class UserShow extends Component{
         <div className='UserShow'>
             <div className='row'>
               <div className='col-md-4'/>
-              <div className='col-md-4'>
+              <div className='col-md-4 col-xs-12'>
                   {user &&
                     <div className='main-user-tag'>
                       <img

@@ -34,7 +34,7 @@ export default class SpacesIndex extends Component{
       <div className='SpacesIndex'>
         <div className='row'>
           <div className='col-md-4'/>
-          <div className='col-md-4'>
+          <div className='col-xs-12 col-md-4'>
             <div className='SpacesIndex--header'>
               <h1> Public Models </h1>
               <div className='search-form'>
