@@ -12,9 +12,7 @@ export function* runMetricSimulation({getState, metricId, dispatch}) {
 }
 
 export function* runUndoSimulations({getState, spaceId, dispatch}) {
-  console.log("Waiting!")
-  yield call(delay, 500)
-  console.log("Running propagation!")
+  yield call(delay, 350)
   const propagation = new GraphPropagation(dispatch, getState, {spaceId, onlyUnsimulated: true})
   yield propagation.run()
 }

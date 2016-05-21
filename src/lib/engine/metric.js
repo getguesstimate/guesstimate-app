@@ -1,6 +1,17 @@
-import uuid from 'node-uuid';
-import generateRandomReadableId from './metric/generate_random_readable_id.js'
-import * as _guesstimate from './guesstimate';
+import uuid from 'node-uuid'
+
+import * as _guesstimate from './guesstimate'
+
+import generateRandomReadableId from './metric/generate_random_readable_id'
+import {isAtLocation} from 'lib/locationUtils'
+
+export function equals(l, r) {
+  return (
+    l.name === r.name &&
+    l.readableId === r.readableId &&
+    isAtLocation(l.location, r.location)
+  )
+}
 
 export function create(metricNames) {
   return {
