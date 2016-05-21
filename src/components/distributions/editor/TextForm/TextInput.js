@@ -13,6 +13,10 @@ export default class TextInput extends Component{
 
   static propTypes = { value: PropTypes.string }
 
+  state = {
+    editing: false,
+  }
+
   componentWillUnmount() { this._handleBlur() }
 
   focus() { this.refs.input.select() }
@@ -30,6 +34,7 @@ export default class TextInput extends Component{
   _handleBlur() {
     $(window).off('functionMetricClicked')
     this.props.onBlur()
+    this.setState({editing: false})
   }
 
   _handlePress(event) {
@@ -71,23 +76,35 @@ export default class TextInput extends Component{
   }
 
   render() {
-   const {hasErrors, width} = this.props
-   let className = (this.props.value !== '' && hasErrors) ? 'hasErrors' : ''
-   className += ` ${width}`
-   return(
-     <TextArea
-         id="live-input"
-         onBlur={this._handleBlur.bind(this)}
-         onChange={this._handlePress.bind(this)}
-         onFocus={this._handleFocus.bind(this)}
-         onKeyDown={this._handleKeyDown.bind(this)}
-         placeholder={'value'}
-         ref='input'
-         type="text"
-         className={className}
-         value={this.props.value}
-         tabIndex={2}
-     />
-   )
+    const {hasErrors, width} = this.props
+    let className = (this.props.value !== '' && hasErrors) ? 'input hasErrors' : 'input'
+    className += ` ${width}`
+    return (
+      <div>
+        {this.state.editing &&
+          <TextArea
+            id="live-input"
+            onBlur={this._handleBlur.bind(this)}
+            onChange={this._handlePress.bind(this)}
+            onFocus={this._handleFocus.bind(this)}
+            onKeyDown={this._handleKeyDown.bind(this)}
+            placeholder={'value'}
+            ref='input'
+            type="text"
+            className={className}
+            value={this.props.value}
+            tabIndex={2}
+          />
+        }
+        {!this.state.editing &&
+          <div
+            className={`${className}${!this.props.value ? ' default-value' : ''}`}
+            onMouseEnter={() => {this.setState({editing: true})}}
+          >
+            {this.props.value || 'value'}
+          </div>
+        }
+      </div>
+    )
   }
 }
