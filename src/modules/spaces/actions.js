@@ -1,13 +1,17 @@
-import {actionCreatorsFor} from 'redux-crud';
+import {actionCreatorsFor} from 'redux-crud'
 import cuid from 'cuid'
 import e from 'gEngine/engine'
 import app from 'ampersand-app'
-import {rootUrl} from 'servers/guesstimate-api/constants.js'
-import {captureApiError} from 'lib/errors/index.js'
-import {changeActionState} from 'gModules/canvas_state/actions.js'
-import * as userActions from 'gModules/users/actions.js'
-import * as organizationActions from 'gModules/organizations/actions.js'
-import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
+
+import {changeActionState} from 'gModules/canvas_state/actions'
+import {saveCheckpoint} from 'gModules/checkpoints/actions'
+import * as userActions from 'gModules/users/actions'
+import * as organizationActions from 'gModules/organizations/actions'
+import {initSpace} from 'gModules/checkpoints/actions'
+
+import {rootUrl, setupGuesstimateApi} from 'servers/guesstimate-api/constants'
+
+import {captureApiError} from 'lib/errors/index'
 
 let sActions = actionCreatorsFor('spaces');
 
@@ -68,6 +72,7 @@ export function fetchById(spaceId) {
       }
 
       dispatch(sActions.fetchSuccess([value]))
+      dispatch(initSpace(spaceId, value.graph))
 
       const user = _.get(value, '_embedded.user')
       const organization = _.get(value, '_embedded.organization')
@@ -190,7 +195,7 @@ export function update(spaceId, params={}) {
 }
 
 //updates graph only
-export function updateGraph(spaceId) {
+export function updateGraph(spaceId, saveOnServer=true) {
   return (dispatch, getState) => {
     let {spaces, metrics, guesstimates} = getState();
     let space = e.space.get(spaces, spaceId)
@@ -198,7 +203,10 @@ export function updateGraph(spaceId) {
     space.graph = _.omit(space.graph, 'simulations')
     const updates = {graph: space.graph}
 
-    dispatch(generalUpdate(spaceId, updates))
+    dispatch(saveCheckpoint(spaceId, space.graph))
+    if (saveOnServer) {
+      dispatch(generalUpdate(spaceId, updates))
+    }
   }
 }
 
@@ -211,6 +219,6 @@ function meCanEdit(spaceId, state) {
 export function registerGraphChange(spaceId) {
   return (dispatch, getState) => {
     const canEdit = meCanEdit(spaceId, getState())
-    canEdit && dispatch(updateGraph(spaceId))
+    dispatch(updateGraph(spaceId, canEdit))
   }
 }

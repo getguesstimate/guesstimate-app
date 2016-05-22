@@ -92,7 +92,7 @@ describe('Graph', () => {
 
   describe('#children', () => {
     it('for input 1', () => {
-      const subset = graph.subsetFrom(1)
+      const subset = graph.subsetFrom([1])
       expect(subset.nodes.map(n => n.id)).to.deep.equal([1,2,3,4])
       expect(subset.edges).to.deep.equal(
         [
@@ -105,7 +105,7 @@ describe('Graph', () => {
     })
 
     it('for input 3', () => {
-      const subset = graph.subsetFrom(3)
+      const subset = graph.subsetFrom([3])
       expect(subset.nodes.map(n => n.id)).to.deep.equal([3, 4])
       expect(subset.edges).to.deep.equal(
         [
@@ -115,7 +115,7 @@ describe('Graph', () => {
     })
 
     it('for input 4', () => {
-      const subset = graph.subsetFrom(4)
+      const subset = graph.subsetFrom([4])
       expect(subset.nodes.map(n => n.id)).to.deep.equal([4])
       expect(subset.edges).to.deep.equal([])
     })
@@ -124,7 +124,7 @@ describe('Graph', () => {
   describe('#children', () => {
     describe('oneLevel=true', () => {
       it('with children', () => {
-        expect(graph.childrenIds(1)).to.deep.equal([2,3])
+        expect(graph.childrenIds([1])).to.deep.equal([2,3])
       })
 
       it('with no children', () => {
@@ -135,7 +135,7 @@ describe('Graph', () => {
 
     describe('oneLevel=false', () => {
       it('with children', () => {
-        expect(graph.childrenIds(1, false)).to.deep.equal([2,3,4])
+        expect(graph.childrenIds([1], false)).to.deep.equal([2,3,4])
       })
 
       it('with no children', () => {
@@ -143,11 +143,11 @@ describe('Graph', () => {
       })
 
       it('long graph', () => {
-        expect(longGraph.childrenIds(3, false)).to.deep.have.members([6,7,8,9])
+        expect(longGraph.childrenIds([3], false)).to.deep.have.members([6,7,8,9])
       })
 
       it('deep graph', () => {
-        expect(deepGraph.childrenIds(2, false)).to.deep.have.members([5,6,7,8])
+        expect(deepGraph.childrenIds([2], false)).to.deep.have.members([5,6,7,8])
       })
     })
   })

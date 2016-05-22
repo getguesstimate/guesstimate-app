@@ -3,6 +3,14 @@
 import type {Guesstimate, Distribution, DGraph, Graph, Simulation} from './types.js'
 import {Guesstimator} from '../guesstimator/index.js'
 
+export function equals(l, r) {
+  return (
+    l.description === r.description &&
+    l.guesstimateType === r.guesstimateType &&
+    l.input === r.input
+  )
+}
+
 export const attributes = ['metric', 'input', 'guesstimateType', 'description', 'data']
 
 export function sample(guesstimate: Guesstimate, dGraph: DGraph, n: number = 1) {

@@ -7,22 +7,22 @@ export default class BasicGraph {
   }
 
   //TODO: If this is slow, filter edges as well
-  subsetFrom(id){
-    const itemSubset = [id, ...this.childrenIds(id, false)]
+  subsetFrom(ids){
+    const itemSubset = [...ids, ...this.childrenIds(ids, false)]
     const edgeSubset = this.edges.filter(e => _.includes(itemSubset, e.input))
     return new BasicGraph(itemSubset, edgeSubset)
   }
 
   children(id, oneLevel=true) {
-    return this.childrenIds(id, oneLevel).map(e => this.nodes.find(m => m.id === e))
+    return this.childrenIds([id], oneLevel).map(e => this.nodes.find(m => m.id === e))
   }
 
   directParents(id) {
     return this.directParentIds(id).map(e => this.nodes.find(m => m.id === e))
   }
 
-  childrenIds(id, oneLevel=true) {
-    let descendants = this.edges.filter(e => e.input === id).map(e => e.output)
+  childrenIds(ids, oneLevel=true) {
+    let descendants = this.edges.filter(e => _.some(ids, id => e.input === id)).map(e => e.output)
     if (oneLevel) {return descendants}
 
     // Now we do a breadth first walk down the edges of the graph, discarding all previously traversed paths.
