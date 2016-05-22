@@ -99,7 +99,7 @@ export default class TextInput extends Component{
         {!this.state.editing &&
           <div
             className={`${className}${!this.props.value ? ' default-value' : ''}`}
-            onMouseEnter={() => {this.setState({editing: true})}}
+            onMouseOver={() => {if (!this.state.editing) {this.setState({editing: true})}}}
           >
             {this.props.value || 'value'}
           </div>
