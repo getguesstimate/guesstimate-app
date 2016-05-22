@@ -9,6 +9,10 @@
   font-size: 0.95em;
 }
 
+.GuesstimateForm .input.default-value {
+  color: #A9A9A9;
+}
+
 .GuesstimateForm.large .input {
   font-size: 1.5em;
   border-radius: 3px;
