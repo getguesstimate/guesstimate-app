@@ -76,6 +76,7 @@ export default class MetricName extends Component {
             onBlur={this.handleSubmit.bind(this)}
             onChange={this.onChange.bind(this)}
             onKeyDown={this.handleKeyDown.bind(this)}
+            onMouseLeave={this._handleMouseLeave.bind(this)}
             placeholder={'name'}
             ref={'input'}
             tabIndex={2}
