@@ -1,6 +1,7 @@
 import async from 'async'
-import {GraphPropagation} from '../../lib/propagation/graph-propagation.js'
-import { call, put } from 'redux-saga/effects'
+import {call} from 'redux-saga/effects'
+
+import {GraphPropagation} from '../../lib/propagation/graph-propagation'
 
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
@@ -8,6 +9,12 @@ export function* runMetricSimulation({getState, metricId, dispatch}) {
   const propagation = new GraphPropagation(dispatch, getState, {metricId, useGuesstimateForm: true, onlyHead: true})
   yield propagation.run()
   yield* runFormSimulation({getState, metricId, dispatch})
+}
+
+export function* runUndoSimulations({getState, spaceId, dispatch}) {
+  yield call(delay, 350)
+  const propagation = new GraphPropagation(dispatch, getState, {spaceId, onlyUnsimulated: true})
+  yield propagation.run()
 }
 
 export function* runFormSimulation({getState, metricId, dispatch}) {

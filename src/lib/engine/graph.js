@@ -45,7 +45,7 @@ export function dependencyList(graph, spaceId) {
 
 // This could be optimized for filtering the graph by the space subset
 export function dependencyTree(oGraph, graphFilters) {
-  const {spaceId, metricId, onlyHead, notHead} = graphFilters
+  const {spaceId, metricId, onlyHead, notHead, onlyUnsimulated} = graphFilters
 
   if (onlyHead) { return [[metricId, 0]] }
 
@@ -53,7 +53,16 @@ export function dependencyTree(oGraph, graphFilters) {
   if (spaceId) { graph = _space.subset(oGraph, spaceId) }
 
   let bGraph = basicGraph(graph)
-  if (metricId) { bGraph = bGraph.subsetFrom(metricId) }
+  if (metricId) {
+    bGraph = bGraph.subsetFrom([metricId]) 
+  } else if (onlyUnsimulated) {
+    const {metrics, simulations} = oGraph
+    const unsimulatedIds = metrics.
+      filter(m => !_.some(simulations, s => s.metric === m.id)).
+      map(m => m.id)
+
+    bGraph = bGraph.subsetFrom(unsimulatedIds)
+  }
 
   const nodes = bGraph.nodes.map(n => [n.id, n.maxDistanceFromRoot])
 

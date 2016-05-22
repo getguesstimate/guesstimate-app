@@ -16,7 +16,7 @@ export default function guesstimates(state = [], action) {
     if (action.newGuesstimates) {
       return uniq([...state, ...action.newGuesstimates])
     } else {
-      // Build a new guesstimate if not provided
+      // Build new guesstimates if not provided
       return uniq([...state, ...action.items.map(item => ({metric: item.id, input: '', guesstimateType: 'NONE', description: ''}))])
     }
   case 'REMOVE_METRICS':
