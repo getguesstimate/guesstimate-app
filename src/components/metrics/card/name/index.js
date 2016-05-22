@@ -84,7 +84,7 @@ export default class MetricName extends Component {
         }
         {!this.state.editing &&
           <div className={`static${!this.state.value ? ' default-value' : ''}`}
-            onMouseEnter={() => {this.setState({editing: true})}}
+            onMouseOver={() => {if (!this.state.editing) {this.setState({editing: true})}}}
             onClick={() => {this.setState({persistEditing: true})}}
           >
             {this.state.value || 'name'}
