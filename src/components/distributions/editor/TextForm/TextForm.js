@@ -79,6 +79,7 @@ export default class TextForm extends Component{
             ref='TextInput'
             hasErrors={hasErrors}
             width={shouldBeWide ? 'NARROW' : "WIDE"}
+            editable={this.props.editable}
           />
 
           { shouldDisplayType &&
