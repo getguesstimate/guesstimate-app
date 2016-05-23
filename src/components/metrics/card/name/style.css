@@ -33,6 +33,23 @@
   line-height: 1.2em;
 }
 
+.output .MetricName textarea {
+   font-weight: 500;
+}
+
+.titleView .MetricName textarea {
+  color: #3C4F67;
+  font-weight: 600;
+}
+
+.MetricCardViewSection.display .MetricName textarea {
+  overflow: hidden;
+}
+
+.metricCard.display .titleView .MetricName textarea {
+  color: #3C3F44;
+}
+
 .output .MetricName .static {
    font-weight: 500;
 }
