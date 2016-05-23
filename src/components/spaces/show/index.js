@@ -11,6 +11,7 @@ import Canvas from 'gComponents/spaces/canvas'
 import {denormalizedSpaceSelector} from '../denormalized-space-selector.js'
 
 import * as spaceActions from 'gModules/spaces/actions.js'
+import {undo, redo} from 'gModules/checkpoints/actions'
 
 import e from 'gEngine/engine'
 
@@ -67,31 +68,41 @@ export default class SpacesShow extends Component {
 
   fetchData() {
     if (!this.state.attemptedFetch) {
-      this.props.dispatch(spaceActions.fetchById(parseInt(this.props.spaceId)))
+      this.props.dispatch(spaceActions.fetchById(this._id()))
       this.setState({attemptedFetch: true})
     }
   }
 
   onSave() {
-    this.props.dispatch(spaceActions.update(parseInt(this.props.spaceId)))
+    this.props.dispatch(spaceActions.update(this._id()))
   }
+
+  onRedo() {
+    this.props.dispatch(redo(this._id()))
+  }
+
+  onUndo() {
+    this.props.dispatch(undo(this._id()))
+  }
+
   destroy() {
     this.props.dispatch(spaceActions.destroy(this.props.denormalizedSpace))
   }
 
   onPublicSelect() {
-    this.props.dispatch(spaceActions.generalUpdate(parseInt(this.props.spaceId), {is_private: false}))
+    this.props.dispatch(spaceActions.generalUpdate(this._id(), {is_private: false}))
   }
 
   onPrivateSelect() {
-    this.props.dispatch(spaceActions.generalUpdate(parseInt(this.props.spaceId), {is_private: true}))
+    this.props.dispatch(spaceActions.generalUpdate(this._id(), {is_private: true}))
   }
 
   onSaveName(name) {
-    this.props.dispatch(spaceActions.update(parseInt(this.props.spaceId), {name}))
+    this.props.dispatch(spaceActions.update(this._id(), {name}))
   }
+
   onSaveDescription(description) {
-    this.props.dispatch(spaceActions.update(parseInt(this.props.spaceId), {description}))
+    this.props.dispatch(spaceActions.update(this._id(), {description}))
   }
 
   hideSidebar() {
@@ -102,7 +113,11 @@ export default class SpacesShow extends Component {
   }
 
   _handleCopy() {
-    this.props.dispatch(spaceActions.copy(parseInt(this.props.spaceId)))
+    this.props.dispatch(spaceActions.copy())
+  }
+
+  _id() {
+    return parseInt(this.props.spaceId)
   }
 
   render() {
@@ -170,7 +185,11 @@ export default class SpacesShow extends Component {
                 actionState={space.canvasState.actionState}
                 canBePrivate={canBePrivate}
                 onPublicSelect={this.onPublicSelect.bind(this)}
-                onPrivateSelect={this.onPrivateSelect.bind(this)}
+                onPrivateSelecundot={this.onPrivateSelect.bind(this)}
+                onUndo={this.onUndo.bind(this)}
+                onRedo={this.onRedo.bind(this)}
+                canUndo={space.checkpointMetadata.head !== space.checkpointMetadata.length - 1}
+                canRedo={space.checkpointMetadata.head !== 0}
               />
             </div>
 

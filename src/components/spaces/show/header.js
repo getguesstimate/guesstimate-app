@@ -50,6 +50,10 @@ const SpaceHeader = ({
   onPublicSelect,
   onPrivateSelect,
   onSaveName,
+  onUndo,
+  canUndo,
+  onRedo,
+  canRedo
 }) => {
   let privacy_header = (<span><Icon name='globe'/> Public</span>)
   if (isPrivate) {
@@ -69,6 +73,15 @@ const SpaceHeader = ({
 
       <div className='header-actions'>
         <CanvasViewForm/>
+
+        <div className='ui buttons'>
+        <button className={`ui icon button ${canUndo ? '' : 'disabled'}`} >
+          <Icon name='undo' onClick={onUndo}/>
+        </button>
+        <button className={`ui icon button ${canRedo ? '' : 'disabled'}`}>
+          <Icon name='rotate-right' onClick={onRedo}/>
+        </button>
+        </div>
 
         {editableByMe &&
           <DropDown
