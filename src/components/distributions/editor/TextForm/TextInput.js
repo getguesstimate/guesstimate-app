@@ -11,7 +11,10 @@ import insertAtCaret from 'lib/jquery/insertAtCaret'
 export default class TextInput extends Component{
   displayName: 'GuesstimateForm-TextInput'
 
-  static propTypes = { value: PropTypes.string }
+  static propTypes = {
+    value: PropTypes.string,
+    editable: PropTypes.bool.isRequired,
+  }
 
   state = {
     editing: false,
@@ -24,6 +27,10 @@ export default class TextInput extends Component{
   _handleInputMetricClick(item){
     insertAtCaret('live-input', item.readableId)
     this._changeInput();
+  }
+
+  _editable() {
+    return this.props.editable && this.state.editing
   }
 
   _handleFocus() {
@@ -81,7 +88,7 @@ export default class TextInput extends Component{
     className += ` ${width}`
     return (
       <div>
-        {this.state.editing &&
+        {this._editable() &&
           <TextArea
             id="live-input"
             onBlur={this._handleBlur.bind(this)}
@@ -96,7 +103,7 @@ export default class TextInput extends Component{
             tabIndex={2}
           />
         }
-        {!this.state.editing &&
+        {!this._editable() &&
           <div
             className={`${className}${!this.props.value ? ' default-value' : ''}`}
             onMouseOver={() => {if (!this.state.editing) {this.setState({editing: true})}}}

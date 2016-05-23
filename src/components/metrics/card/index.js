@@ -240,6 +240,7 @@ class MetricCard extends Component {
               connectDragSource={this.props.connectDragSource}
               selectedMetric={this.props.selectedMetric}
               showSensitivitySection={shouldShowSensitivitySection}
+              editable={this.props.hovered}
           />
 
           {inSelectedCell && !this.state.modalIsOpen &&
@@ -251,6 +252,7 @@ class MetricCard extends Component {
                   ref='DistributionEditor'
                   size='small'
                   errors={errors}
+                  editable={this.props.hovered}
               />
             </div>
           }

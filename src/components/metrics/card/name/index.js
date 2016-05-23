@@ -11,12 +11,17 @@ export default class MetricName extends Component {
     name: PropTypes.string,
     inSelectedCell: PropTypes.bool.isRequired,
     onChange: PropTypes.func.isRequired,
+    editable: PropTypes.bool.isRequired,
   }
 
   state = {
     value: this.props.name,
     editing: false,
     persistEditing: false,
+  }
+
+  _editable() {
+    return this.props.editable && this.state.editing
   }
 
   componentWillReceiveProps(nextProps) {
@@ -26,6 +31,7 @@ export default class MetricName extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     return ((nextProps.name !== this.props.name) ||
             (nextProps.inSelectedCell !== this.props.inSelectedCell) ||
+            (nextProps.editable !== this.props.editable) ||
             (nextState.value !== this.state.value) ||
             (nextState.editing !== this.state.editing))
   }
@@ -71,24 +77,24 @@ export default class MetricName extends Component {
   render() {
     return (
       <div className='MetricName'>
-        {this.state.editing &&
+        {this._editable() &&
           <TextArea
             onBlur={this.handleSubmit.bind(this)}
             onChange={this.onChange.bind(this)}
             onKeyDown={this.handleKeyDown.bind(this)}
-            onMouseLeave={this._handleMouseLeave.bind(this)}
+            onMouseOut={this._handleMouseLeave.bind(this)}
             placeholder={'name'}
             ref={'input'}
             tabIndex={2}
             value={this.state.value}
           />
         }
-        {!this.state.editing &&
+        {!this._editable() &&
           <div className={`static${!this.state.value ? ' default-value' : ''}`}
-            onMouseOver={() => {if (!this.state.editing) {this.setState({editing: true})}}}
+            onMouseOver={() => {if (!this.state.editing) {this.setState({editing: true})}}}n
             onClick={() => {this.setState({persistEditing: true})}}
           >
-            {this.state.value || 'name'}
+            {this.state.value.replace(/ /g, "\u2005") || 'name'}
           </div>
         }
       </div>
