@@ -57,7 +57,7 @@
     "style-loader": "^0.13.0",
     "transform-loader": "^0.2.3",
     "webpack": "^1.13.0",
-    "webpack-dev-server": "^1.14.0"
+    "webpack-dev-server": "1.14.0"
   },
   "dependencies": {
     "algoliasearch": "^3.14.1",
