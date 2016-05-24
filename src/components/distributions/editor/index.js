@@ -23,8 +23,9 @@ export default class GuesstimateForm extends Component{
     guesstimateForm: PropTypes.object.isRequired,
     metricId: PropTypes.string.isRequired,
     metricFocus: PropTypes.func.isRequired,
+    editable: PropTypes.bool.isRequired,
     size: PropTypes.string,
-    onOpen: PropTypes.func
+    onOpen: PropTypes.func,
   }
 
   static defaultProps = {
@@ -70,6 +71,7 @@ export default class GuesstimateForm extends Component{
             size={size}
             hasErrors={errors && (errors.length !== 0)}
             ref='TextForm'
+            editable={this.props.editable}
           />
         }
       </div>
