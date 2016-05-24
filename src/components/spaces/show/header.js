@@ -72,16 +72,19 @@ const SpaceHeader = ({
       </div>
 
       <div className='header-actions'>
-        <CanvasViewForm/>
 
-        <div className='ui buttons'>
-        <button className={`ui icon button ${canUndo ? '' : 'disabled'}`} >
-          <Icon name='undo' onClick={onUndo}/>
-        </button>
-        <button className={`ui icon button ${canRedo ? '' : 'disabled'}`}>
-          <Icon name='rotate-right' onClick={onRedo}/>
-        </button>
-        </div>
+        {editableByMe &&
+          <div className='ui buttons small'>
+            <button onClick={onUndo} className={`ui icon button ${canUndo ? '' : 'disabled'}`} >
+              <Icon name='undo'/>
+            </button>
+            <button onClick={onRedo} className={`ui icon button ${canRedo ? '' : 'disabled'}`}>
+              <Icon name='rotate-right'/>
+            </button>
+          </div>
+        }
+
+        <CanvasViewForm/>
 
         {editableByMe &&
           <DropDown

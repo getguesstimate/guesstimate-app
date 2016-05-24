@@ -103,6 +103,38 @@
   float: left;
 }
 
+.hero-unit .header-actions .ui.buttons {
+  float: left;
+  margin-top: 2px;
+  margin-right: 8px;
+}
+
+.hero-unit .header-actions .ui.buttons .ui.button {
+}
+
+.hero-unit .header-actions .ui.buttons.small .ui.button {
+  padding: .5rem;
+  font-size: 1.2rem;
+  opacity: 1 !important;
+  background-color: rgba(255,255,255,0.55);
+  color: rgba(7, 67, 105, 0.87);
+}
+
+.hero-unit .header-actions .ui.buttons .ui.button:hover {
+  background-color: rgba(255,255,255,0.7);
+  color: rgba(7, 67, 105, 0.94);
+}
+
+.hero-unit .header-actions .ui.buttons .ui.button.disabled {
+  background-color: rgba(255,255,255,0.15);
+  color: rgba(7, 67, 105, 0.4);
+}
+
+.hero-unit .header-actions .ui.buttons .ui.button.disabled:hover {
+  background-color: rgba(255,255,255,0.30);
+  color: rgba(7, 67, 105, 0.6);
+}
+
 .hero-unit a.space-header-action {
   color: white;
   padding: 0.5em 0.95em;
