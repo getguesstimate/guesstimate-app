@@ -75,7 +75,7 @@ export function paste(spaceId){
       dispatch({type: 'ADD_METRICS', items: newMetrics, newGuesstimates: newGuesstimates})
     }
 
-    dispatch({type: "COPY_PASTE"})
+    dispatch({type: "PASTE"})
     dispatch(runSimulations({spaceId, metricSubset: newMetrics}))
     dispatch(selectRegion(pasteRegion[0], pasteRegion[1]))
     dispatch(registerGraphChange(spaceId))
