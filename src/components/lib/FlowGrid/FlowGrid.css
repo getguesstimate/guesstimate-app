@@ -154,8 +154,16 @@ svg.edge  path.basic-arrow.RED {
   fill: #B59893;
 }
 
-.SelectedRegion {
+.Region {
    position: absolute;
-   background: rgba(153, 186, 208, 0.87);
    border-radius: 3px;
+}
+
+.Region.selected {
+   background: rgba(153, 186, 208, 0.87);
+}
+
+.Region.copied {
+   border: 2px dashed rgba(7, 115, 167, 0.75);
+   background: rgba(153, 186, 208, 0.17);
 }
