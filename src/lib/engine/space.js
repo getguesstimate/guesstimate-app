@@ -49,6 +49,9 @@ export function toDgraph(spaceId, graph){
 }
 
 export function canEdit(space, me, userOrganizationMemberships){
-  const meId = _.get(me, 'id')
-  return (space.user_id === meId || _userOrganizationMemberships.isMember(space.organization_id, meId, userOrganizationMemberships))
+  if (!!space.organization_id) {
+    return _userOrganizationMemberships.isMember(space.organization_id, meId, userOrganizationMemberships)
+  } else {
+    return space.user_id === _.get(me, 'id')
+  }
 }
