@@ -42,16 +42,19 @@ export function toDgraph(spaceId, graph){
   let dGraph = _graph.denormalize(subset(graph, spaceId))
   const space = get(graph.spaces, spaceId)
   const spaceUser = user(space, graph)
+  const spaceOrganization = organization(space, graph)
   const userOrganizationMemberships = graph.userOrganizationMemberships
   dGraph.user = spaceUser
+  dGraph.organization = spaceOrganization
   dGraph.editableByMe = canEdit(space, graph.me, userOrganizationMemberships)
   return dGraph
 }
 
 export function canEdit(space, me, userOrganizationMemberships){
+  const meId = _.get(me, 'id')
   if (!!space.organization_id) {
     return _userOrganizationMemberships.isMember(space.organization_id, meId, userOrganizationMemberships)
   } else {
-    return space.user_id === _.get(me, 'id')
+    return space.user_id === meId
   }
 }

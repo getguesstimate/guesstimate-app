@@ -87,7 +87,7 @@
   padding: .12em 0 0;
 }
 
-.SpaceCard .hover-row .user-tag {
+.SpaceCard .hover-row .owner-tag {
   margin-right: .5em;
   float: left;
   background: rgba(147, 159, 169, 0.7);
@@ -95,20 +95,20 @@
   float: left;
 }
 
-.SpaceCard .hover-row .user-tag:hover {
+.SpaceCard .hover-row .owner-tag:hover {
   cursor: pointer;
   background: rgba(88, 110, 127, 0.71);
   transition: .2s background;
 }
 
-.SpaceCard .hover-row .user-tag .avatar{
+.SpaceCard .hover-row .owner-tag .avatar{
   width: 1.8em;
   height: 1.8em;
   border-radius: 2px 0 0 2px;
   float: left;
 }
 
-.SpaceCard .hover-row .user-tag .name{
+.SpaceCard .hover-row .owner-tag .name{
   float: left;
   padding: .3em .5em 0 .5em;
   color: white;

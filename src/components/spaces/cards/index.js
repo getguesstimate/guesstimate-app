@@ -6,6 +6,7 @@ import * as navigationActions from 'gModules/navigation/actions'
 
 import * as Space from 'gEngine/space'
 import * as User from 'gEngine/user'
+import * as Organization from 'gEngine/organization'
 
 import {formatDescription, formatDate} from 'gComponents/spaces/shared'
 
@@ -25,16 +26,18 @@ const SingleButton = ({isPrivate}) => (
   </div>
 )
 
-const ButtonArea = ({user, navigateToUser, isPrivate, showPrivacy}) => (
+const ButtonArea = ({owner, navigateToOwner, isPrivate, showPrivacy}) => (
   <div className='hover-row'>
-    {user &&
-      <div className='user-tag' onClick={navigateToUser}>
-        <img
-          className='avatar'
-          src={user.picture}
-        />
+    {owner &&
+      <div className='owner-tag' onClick={navigateToOwner}>
+        {!!owner.picture &&
+          <img
+            className='avatar'
+            src={owner.picture}
+          />
+        }
         <div className='name'>
-          {user.name}
+          {owner.name}
         </div>
       </div>
     }
@@ -46,6 +49,11 @@ const SpaceCard = ({space, showPrivacy}) => {
   const hasName = !_.isEmpty(space.name)
   const navigateToSpace = () => {navigationActions.navigate(Space.url(space))}
   const navigateToUser = () => {navigationActions.navigate(User.url(space.user))}
+  const navigateToOrganization = () => {navigationActions.navigate(Organization.url(space.organization))}
+
+  const owner = !!space.organization ? space.organization : space.user
+  const navigateToOwner = !!space.organization ? navigateToOwner : navigateToUser
+
   return (
     <div className='col-xs-12 col-md-4 SpaceCard'>
       <div className='SpaceCard--inner'>
@@ -58,8 +66,8 @@ const SpaceCard = ({space, showPrivacy}) => {
           <BlankScreenshot/>
           <img src={space.big_screenshot} onClick={navigateToSpace} />
           <ButtonArea
-            user={space.user}
-            navigateToUser={navigateToUser}
+            owner={owner}
+            navigateToOwner={navigateToOwner}
             isPrivate={space.is_private}
             showPrivacy={showPrivacy}
           />
