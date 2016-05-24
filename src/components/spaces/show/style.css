@@ -128,11 +128,7 @@
 .hero-unit .header-actions .ui.buttons .ui.button.disabled {
   background-color: rgba(255,255,255,0.15);
   color: rgba(7, 67, 105, 0.4);
-}
-
-.hero-unit .header-actions .ui.buttons .ui.button.disabled:hover {
-  background-color: rgba(255,255,255,0.30);
-  color: rgba(7, 67, 105, 0.6);
+  pointer-events: all;
 }
 
 .hero-unit a.space-header-action {
