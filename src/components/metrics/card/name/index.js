@@ -94,7 +94,7 @@ export default class MetricName extends Component {
             onMouseOver={() => {if (!this.state.editing) {this.setState({editing: true})}}}n
             onClick={() => {this.setState({persistEditing: true})}}
           >
-            {this.state.value.replace(/ /g, "\u2005") || 'name'}
+            {(this.state.value || 'name').replace(/ /g, "\u2005")}
           </div>
         }
       </div>
