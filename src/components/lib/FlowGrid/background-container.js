@@ -8,12 +8,12 @@ import GridPoint from './gridPoints'
 import Dimensions from 'gComponents/utility/react-dimensions'
 
 
-const Region = ({rowHeights, columnWidth, selectedRegion}) => {
+const Region = ({rowHeights, columnWidth, selectedRegion, type}) => {
   if (!selectedRegion || selectedRegion.length !== 2) { return false }
   const gridPoint = new GridPoint({rowHeights, columnWidth, padding: 0})
   const region = gridPoint.region(selectedRegion)
   return (
-     <div className='SelectedRegion' style={region}/>
+     <div className={`Region ${type}`} style={region}/>
   )
 }
 
@@ -61,7 +61,18 @@ export default class BackgroundContainer extends Component {
             edges={edges}
             rowHeights={rowHeights}
         />
-        <Region rowHeights={rowHeights} columnWidth={columnWidth} selectedRegion={this.props.selectedRegion}/>
+        <Region
+          rowHeights={rowHeights}
+          columnWidth={columnWidth}
+          selectedRegion={this.props.selectedRegion}
+          type='selected'
+        />
+        <Region
+          rowHeights={rowHeights}
+          columnWidth={columnWidth}
+          selectedRegion={this.props.copiedRegion}
+          type='copied'
+        />
       </div>
     )
   }

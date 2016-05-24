@@ -249,6 +249,7 @@ export default class FlowGrid extends Component{
                 rowCount={rowCount}
                 rowHeights={rowHeights}
                 selectedRegion={this.props.selectedRegion}
+                copiedRegion={this.props.copiedRegion}
               />
           </div>
         </div>

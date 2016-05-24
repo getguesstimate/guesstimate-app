@@ -26,6 +26,7 @@ import {isLocation, isAtLocation} from 'lib/locationUtils.js'
 
 function mapStateToProps(state) {
   return {
+    copied: state.copied,
     canvasState: state.canvasState,
     selectedCell: state.selectedCell,
     selectedRegion: state.selectedRegion,
@@ -178,7 +179,7 @@ export default class Canvas extends Component{
   }
 
   render () {
-    const {selectedCell, selectedRegion} = this.props
+    const {selectedCell, selectedRegion, copied} = this.props
     const {metrics} = this.props.denormalizedSpace
     const {metricCardView} = this.props.canvasState
 
@@ -189,6 +190,8 @@ export default class Canvas extends Component{
     const selectedMetric = this._isAnalysisView() && this._selectedMetric()
     const overflow = this.props.screenshot ? 'hidden' : 'default'
 
+    const copiedRegion = (copied && (copied.pastedTimes < 1) && copied.region) || []
+
     return (
       <div className={className}>
         <FlowGrid
@@ -198,6 +201,7 @@ export default class Canvas extends Component{
           hasItemUpdated = {(oldItem, newItem) => hasMetricUpdated(oldItem.props, newItem.props)}
           edges={edges}
           selectedRegion={selectedRegion}
+          copiedRegion={copiedRegion}
           selectedCell={selectedCell}
           onUndo={this._handleUndo.bind(this)}
           onRedo={this._handleRedo.bind(this)}
