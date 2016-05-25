@@ -13,11 +13,6 @@ export default class TextInput extends Component{
 
   static propTypes = {
     value: PropTypes.string,
-    editable: PropTypes.bool.isRequired,
-  }
-
-  state = {
-    editing: false,
   }
 
   componentWillUnmount() { this._handleBlur() }
@@ -27,10 +22,6 @@ export default class TextInput extends Component{
   _handleInputMetricClick(item){
     insertAtCaret('live-input', item.readableId)
     this._changeInput();
-  }
-
-  _editable() {
-    return this.props.editable && this.state.editing
   }
 
   _handleFocus() {
@@ -88,29 +79,19 @@ export default class TextInput extends Component{
     className += ` ${width}`
     return (
       <div>
-        {this._editable() &&
-          <TextArea
-            id="live-input"
-            onBlur={this._handleBlur.bind(this)}
-            onChange={this._handlePress.bind(this)}
-            onFocus={this._handleFocus.bind(this)}
-            onKeyDown={this._handleKeyDown.bind(this)}
-            placeholder={'value'}
-            ref='input'
-            type="text"
-            className={className}
-            value={this.props.value}
-            tabIndex={2}
-          />
-        }
-        {!this._editable() &&
-          <div
-            className={`${className}${!this.props.value ? ' default-value' : ''}`}
-            onMouseOver={() => {if (!this.state.editing) {this.setState({editing: true})}}}
-          >
-            {this.props.value || 'value'}
-          </div>
-        }
+        <TextArea
+          id="live-input"
+          onBlur={this._handleBlur.bind(this)}
+          onChange={this._handlePress.bind(this)}
+          onFocus={this._handleFocus.bind(this)}
+          onKeyDown={this._handleKeyDown.bind(this)}
+          placeholder={'value'}
+          ref='input'
+          type="text"
+          className={className}
+          value={this.props.value}
+          tabIndex={2}
+        />
       </div>
     )
   }
