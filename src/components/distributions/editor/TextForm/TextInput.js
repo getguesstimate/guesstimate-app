@@ -127,16 +127,16 @@ export default class TextInput extends Component{
     className += (this.props.value !== '' && hasErrors) ? 'hasErrors' : ''
     className += ` ${width}`
     return (
-        <SimpleEditor
-          className={className}
-          onBlur={this._handleBlur.bind(this)}
-          onChange={this._handleChange.bind(this)}
-          onFocus={this._handleFocus.bind(this)}
-          onKeyDown={this._onKeyDown.bind(this)}
-          value={this.props.value}
-          placeholder={'value'}
-          ref='editor'
-        />
+      <SimpleEditor
+        className={className}
+        onBlur={this._handleBlur.bind(this)}
+        onChange={this._handleChange.bind(this)}
+        onFocus={this._handleFocus.bind(this)}
+        onKeyDown={this._onKeyDown.bind(this)}
+        value={this.props.value}
+        placeholder={'value'}
+        ref='editor'
+      />
     )
   }
 }

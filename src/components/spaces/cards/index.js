@@ -25,10 +25,10 @@ const SingleButton = ({isPrivate}) => (
   </div>
 )
 
-const ButtonArea = ({user, navigateToUser, isPrivate, showPrivacy}) => (
+const ButtonArea = ({user, isPrivate, showPrivacy}) => (
   <div className='hover-row'>
     {user &&
-      <div className='user-tag' onClick={navigateToUser}>
+      <a href={User.url(user)} className='user-tag'>
         <img
           className='avatar'
           src={user.picture}
@@ -36,7 +36,7 @@ const ButtonArea = ({user, navigateToUser, isPrivate, showPrivacy}) => (
         <div className='name'>
           {user.name}
         </div>
-      </div>
+      </a>
     }
     {showPrivacy && <SingleButton isPrivate={isPrivate}/>}
   </div>
@@ -44,22 +44,22 @@ const ButtonArea = ({user, navigateToUser, isPrivate, showPrivacy}) => (
 
 const SpaceCard = ({space, showPrivacy}) => {
   const hasName = !_.isEmpty(space.name)
-  const navigateToSpace = () => {navigationActions.navigate(Space.url(space))}
-  const navigateToUser = () => {navigationActions.navigate(User.url(space.user))}
+  const spaceUrl = Space.url(space)
+  const navigateToSpace = () => {navigationActions.navigate(spaceUrl)}
+
   return (
     <div className='col-xs-12 col-md-4 SpaceCard'>
-      <div className='SpaceCard--inner'>
+      <div className='SpaceCard--inner' onClick={navigateToSpace}>
         <div className={`header ${hasName ? '' : 'default-name'}`}>
-          <h3 onClick={navigateToSpace}>{hasName ? space.name : 'Untitled Model'}</h3>
+          <a href={spaceUrl}><h3>{hasName ? space.name : 'Untitled Model'}</h3></a>
           <div className='changed-at'>Updated {formatDate(space.updated_at)}</div>
         </div>
 
         <div className='image'>
           <BlankScreenshot/>
-          <img src={space.big_screenshot} onClick={navigateToSpace} />
+          <a href={spaceUrl}><img src={space.big_screenshot}/></a>
           <ButtonArea
             user={space.user}
-            navigateToUser={navigateToUser}
             isPrivate={space.is_private}
             showPrivacy={showPrivacy}
           />

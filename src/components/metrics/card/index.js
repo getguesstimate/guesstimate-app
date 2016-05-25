@@ -246,13 +246,12 @@ class MetricCard extends Component {
           {inSelectedCell && !this.state.modalIsOpen &&
             <div className='section editing'>
               <DistributionEditor
-                  metricId={metric.id}
-                  metricFocus={this.focus.bind(this)}
-                  onOpen={this.openModal.bind(this)}
-                  ref='DistributionEditor'
-                  size='small'
-                  errors={errors}
-                  editable={this.props.hovered}
+                metricId={metric.id}
+                metricFocus={this.focus.bind(this)}
+                onOpen={this.openModal.bind(this)}
+                ref='DistributionEditor'
+                size='small'
+                errors={errors}
               />
             </div>
           }
