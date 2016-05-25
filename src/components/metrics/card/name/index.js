@@ -78,7 +78,9 @@ export default class MetricName extends Component {
   }
 
   onChange(value) {
-    this.setState({value})
+    if (value !== this.state.value) {
+      this.setState({value})
+    }
   }
 
   handleKeyDown(e) {

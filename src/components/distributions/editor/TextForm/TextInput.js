@@ -84,11 +84,13 @@ export default class TextInput extends Component{
   }
 
   _handleChange(value) {
-    if (this._isData(value)) {
-      const data = this._formatData(value)
-      this.props.onChangeData(data)
-    } else {
-      this._changeInput(value);
+    if (value !== this.props.value) {
+      if (this._isData(value)) {
+        const data = this._formatData(value)
+        this.props.onChangeData(data)
+      } else {
+        this._changeInput(value);
+      }
     }
     event.stopPropagation()
   }
