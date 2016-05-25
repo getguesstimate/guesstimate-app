@@ -23,7 +23,7 @@ $purple-3: #EDE4F9;
 $transparent-background: rgba(0,0,0,0);
 $editing-background: $grey-1;
 
-@define-mixin hover-input {
+@define-mixin hover-text {
   background-color: $transparent-background;
   box-shadow: none;
   border: none;
@@ -33,9 +33,6 @@ $editing-background: $grey-1;
   transition: background-color .3s;
   padding: 0.2em;
   max-width: 100%;
-  &:not(:focus){
-    cursor: pointer;
-  }
   &:hover:not(:focus) {
     background-color: $editing-background;
   }
@@ -44,5 +41,13 @@ $editing-background: $grey-1;
     box-shadow: none;
     background-color: #D1D9E2;
     color: #2D3137;
+  }
+}
+
+@define-mixin hover-input {
+  @mixin hover-text;
+
+  &:not(:focus){
+    cursor: pointer;
   }
 }

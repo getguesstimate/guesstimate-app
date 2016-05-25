@@ -22,7 +22,7 @@ export default class TextInput extends Component{
 
   componentWillUnmount() { this._handleBlur() }
 
-  focus() { this.refs.input.select() }
+  focus() { this.refs.input && this.refs.input.select() }
 
   _handleInputMetricClick(item){
     insertAtCaret('live-input', item.readableId)

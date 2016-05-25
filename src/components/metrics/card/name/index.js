@@ -1,8 +1,41 @@
 import React, {Component, PropTypes} from 'react'
 
 import TextArea from 'react-textarea-autosize'
+import {EditorState, Editor, ContentState, getDefaultKeyBinding, KeyBindingUtil} from 'draft-js'
 
 import './style.css'
+
+    //editorState: EditorState.createWithContent(ContentState.createFromText(this.props.value || ''))
+class SimpleEditor extends React.Component {
+  state = {
+    editorState: EditorState.createWithContent(ContentState.createFromText(this.props.value || ''))
+  }
+
+  _onChange(editorState) {
+   this.props.onChange(editorState.getCurrentContent().getPlainText(''))
+   return this.setState({editorState})
+  }
+
+  focus() {
+    this.refs.editor.focus()
+  }
+
+  render() {
+    const {editorState} = this.state;
+    return (
+      <div onClick={this.focus.bind(this)}>
+      <Editor
+        editorState={editorState}
+        onBlur={this.props.onBlur}
+        onChange={this._onChange.bind(this)}
+        tabIndex={2}
+        ref='editor'
+        placeholder={this.props.placeholder}
+      />
+      </div>
+    );
+  }
+}
 
 export default class MetricName extends Component {
   displayName: 'MetricName'
@@ -10,18 +43,11 @@ export default class MetricName extends Component {
   static propTypes = {
     name: PropTypes.string,
     inSelectedCell: PropTypes.bool.isRequired,
-    onChange: PropTypes.func.isRequired,
-    editable: PropTypes.bool.isRequired,
+    onChange: PropTypes.func.isRequired
   }
 
   state = {
-    value: this.props.name,
-    editing: false,
-    persistEditing: false,
-  }
-
-  _editable() {
-    return this.props.editable && this.state.editing
+    value: this.props.name
   }
 
   componentWillReceiveProps(nextProps) {
@@ -31,26 +57,17 @@ export default class MetricName extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     return ((nextProps.name !== this.props.name) ||
             (nextProps.inSelectedCell !== this.props.inSelectedCell) ||
-            (nextProps.editable !== this.props.editable) ||
-            (nextState.value !== this.state.value) ||
-            (nextState.editing !== this.state.editing))
+            (nextState.value !== this.state.value))
   }
 
   handleSubmit() {
     if (this._hasChanged()){
       this.props.onChange({name: this.state.value})
     }
-    this.setState({editing: false, persistEditing: false})
   }
 
   _hasChanged() {
     return (this.state.value != this.props.name)
-  }
-
-  _handleMouseLeave() {
-    if (!(this.state.persistEditing || this._hasChanged())) {
-      this.setState({editing: false})
-    }
   }
 
   hasContent() {
@@ -61,11 +78,12 @@ export default class MetricName extends Component {
     this.handleSubmit()
   }
 
-  onChange(e) {
-    this.setState({value: e.target.value})
+  onChange(value) {
+    this.setState({value})
   }
 
   handleKeyDown(e) {
+    e.stopPropagation()
     const ENTER = (e) => ((e.keyCode === 13) && !e.shiftKey)
     if (ENTER(e)){
       e.stopPropagation()
@@ -73,31 +91,19 @@ export default class MetricName extends Component {
     }
   }
 
-
   render() {
     return (
-      <div className='MetricName'>
-        {this._editable() &&
-          <TextArea
-            onBlur={this.handleSubmit.bind(this)}
-            onChange={this.onChange.bind(this)}
-            onKeyDown={this.handleKeyDown.bind(this)}
-            onMouseOut={this._handleMouseLeave.bind(this)}
-            placeholder={'name'}
-            ref={'input'}
-            tabIndex={2}
-            value={this.state.value}
-          />
-        }
-        {!this._editable() &&
-          <div className={`static${!this.state.value ? ' default-value' : ''}`}
-            onMouseOver={() => {if (!this.state.editing) {this.setState({editing: true})}}}n
-            onClick={() => {this.setState({persistEditing: true})}}
-          >
-            {(this.state.value || 'name').replace(/ /g, "\u2005")}
-          </div>
-        }
-      </div>
+      <span
+        className='MetricName'
+        onKeyDown={this.handleKeyDown.bind(this)}
+      >
+        <SimpleEditor
+          onBlur={this.handleSubmit.bind(this)}
+          onChange={this.onChange.bind(this)}
+          value={this.state.value}
+          placeholder={'name'}
+        />
+      </span>
     )
   }
 }

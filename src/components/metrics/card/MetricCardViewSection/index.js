@@ -100,7 +100,6 @@ export default class MetricCardViewSection extends Component {
                 onChange={onChangeName}
                 jumpSection={jumpSection}
                 ref='name'
-                editable={this.props.editable}
               />
           </div>
         }
