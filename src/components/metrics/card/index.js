@@ -266,10 +266,4 @@ class MetricCard extends Component {
   }
 }
 
-function select(state) {
-  return {
-    guesstimateForm: state.guesstimateForm
-  }
-}
-
-module.exports = connect(select)(MetricCard);
+module.exports = connect()(MetricCard);
