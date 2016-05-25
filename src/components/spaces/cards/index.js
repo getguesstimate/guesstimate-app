@@ -26,10 +26,10 @@ const SingleButton = ({isPrivate}) => (
   </div>
 )
 
-const ButtonArea = ({owner, navigateToOwner, isPrivate, showPrivacy}) => (
+const ButtonArea = ({owner, ownerUrl, isPrivate, showPrivacy}) => (
   <div className='hover-row'>
     {owner &&
-      <div className='owner-tag' onClick={navigateToOwner}>
+      <a href={ownerUrl} className='owner-tag'>
         {!!owner.picture &&
           <img
             className='avatar'
@@ -39,7 +39,7 @@ const ButtonArea = ({owner, navigateToOwner, isPrivate, showPrivacy}) => (
         <div className='name'>
           {owner.name}
         </div>
-      </div>
+      </a>
     }
     {showPrivacy && <SingleButton isPrivate={isPrivate}/>}
   </div>
@@ -47,27 +47,27 @@ const ButtonArea = ({owner, navigateToOwner, isPrivate, showPrivacy}) => (
 
 const SpaceCard = ({space, showPrivacy}) => {
   const hasName = !_.isEmpty(space.name)
-  const navigateToSpace = () => {navigationActions.navigate(Space.url(space))}
-  const navigateToUser = () => {navigationActions.navigate(User.url(space.user))}
-  const navigateToOrganization = () => {navigationActions.navigate(Organization.url(space.organization))}
 
   const owner = !!space.organization ? space.organization : space.user
-  const navigateToOwner = !!space.organization ? navigateToOwner : navigateToUser
+  const ownerUrl = !!space.organization ? Organization.url(space.organization) : User.url(space.user)
+
+  const spaceUrl = Space.url(space)
+  const navigateToSpace = () => {navigationActions.navigate(spaceUrl)}
 
   return (
     <div className='col-xs-12 col-md-4 SpaceCard'>
-      <div className='SpaceCard--inner'>
+      <div className='SpaceCard--inner' onClick={navigateToSpace}>
         <div className={`header ${hasName ? '' : 'default-name'}`}>
-          <h3 onClick={navigateToSpace}>{hasName ? space.name : 'Untitled Model'}</h3>
+          <a href={spaceUrl}><h3>{hasName ? space.name : 'Untitled Model'}</h3></a>
           <div className='changed-at'>Updated {formatDate(space.updated_at)}</div>
         </div>
 
         <div className='image'>
           <BlankScreenshot/>
-          <img src={space.big_screenshot} onClick={navigateToSpace} />
+          <a href={spaceUrl}><img src={space.big_screenshot}/></a>
           <ButtonArea
             owner={owner}
-            navigateToOwner={navigateToOwner}
+            ownerUrl={ownerUrl}
             isPrivate={space.is_private}
             showPrivacy={showPrivacy}
           />
