@@ -124,7 +124,7 @@ export default class TextInput extends Component{
   render() {
     const {hasErrors, width} = this.props
     let className = 'TextInput'
-    className += (this.props.value !== '' && hasErrors) ? 'hasErrors' : ''
+    className += (this.props.value !== '' && hasErrors) ? ' hasErrors' : ''
     className += ` ${width}`
     return (
       <SimpleEditor

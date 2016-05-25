@@ -58,10 +58,6 @@
   width: 100%
 }
 
-.GuesstimateForm .TextInput.hasErrors:not(:focus) {
-  background-color: #E08888;
-}
-
 .GuesstimateForm .GuesstimateInputForm {
   display: flex;
   flex-direction: column;
