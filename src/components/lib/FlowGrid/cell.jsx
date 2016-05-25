@@ -76,23 +76,28 @@ export default class Cell extends Component {
     // TODO(matthew): I think we can refactor this and get rid of the window trigger system for doing this input, but it
     // will be a bigger refactor, so I'm inclined to leave this for now, even though it couples the flow grid and the
     // space more tightly than they've been integrated so far.
-    if (this.props.canvasState.metricClickMode === 'FUNCTION_INPUT_SELECT') {
-      return
+    const isFunctionSelect = (this.props.canvasState.metricClickMode === 'FUNCTION_INPUT_SELECT')
+    const {inSelectedCell, item, location} = this.props
+    const leftClick = (e.button === 0)
+
+    if (!leftClick) { return }
+
+    if (!item){ this.props.onEmptyCellMouseDown(e) }
+
+    if (inSelectedCell && !item){
+      this.props.handleSelect(location)
+      this.props.onAddItem(location)
     }
-    if (e.button === 0){
-      if (!this.props.inSelectedCell) {
-        if (e.shiftKey) {
-          this.props.handleEndRangeSelect(this.props.location)
-        } else {
-          this.props.handleSelect(this.props.location)
-        }
-      } else if (!this.props.item) {
-        this.props.handleSelect(this.props.location)
-        this.props.onAddItem(this.props.location)
+
+    if (!inSelectedCell) {
+      if (e.shiftKey) {
+        this.props.handleEndRangeSelect(this.props.location)
+        return
+      } else if (isFunctionSelect && item) {
+        return
+      } else {
+        this.props.handleSelect(location)
       }
-    }
-    if (!this.props.item) {
-      this.props.onEmptyCellMouseDown(e)
     }
   }
 
