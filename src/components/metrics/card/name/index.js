@@ -21,7 +21,11 @@ export default class MetricName extends Component {
   }
 
   _editable() {
-    return this.props.editable && this.state.editing
+    if (this.state.persistEditing) {
+      return this.state.editing
+    } else {
+      return this.props.editable && this.state.editing
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -83,6 +87,7 @@ export default class MetricName extends Component {
             onChange={this.onChange.bind(this)}
             onKeyDown={this.handleKeyDown.bind(this)}
             onMouseOut={this._handleMouseLeave.bind(this)}
+            onMouseDown={() => {this.setState({persistEditing: true})}}
             placeholder={'name'}
             ref={'input'}
             tabIndex={2}
@@ -92,7 +97,7 @@ export default class MetricName extends Component {
         {!this._editable() &&
           <div className={`static${!this.state.value ? ' default-value' : ''}`}
             onMouseOver={() => {if (!this.state.editing) {this.setState({editing: true})}}}n
-            onClick={() => {this.setState({persistEditing: true})}}
+            onMouseDown={() => {this.setState({persistEditing: true})}}
           >
             {(this.state.value || 'name').replace(/ /g, "\u2005")}
           </div>
