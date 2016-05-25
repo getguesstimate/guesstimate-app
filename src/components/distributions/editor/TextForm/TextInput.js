@@ -6,29 +6,42 @@ import TextArea from 'react-textarea-autosize'
 
 import DistributionSelector from './DistributionSelector'
 
-import insertAtCaret from 'lib/jquery/insertAtCaret'
-
-import {EditorState, Editor, ContentState, getDefaultKeyBinding, KeyBindingUtil} from 'draft-js'
+import {EditorState, Editor, ContentState, getDefaultKeyBinding, KeyBindingUtil, Modifier} from 'draft-js'
 
 class SimpleEditor extends React.Component {
   state = {
     editorState: EditorState.createWithContent(ContentState.createFromText(this.props.value || ''))
   }
 
+  insertAtCaret(text) {
+    const {editorState} = this.state
+    const selection = editorState.getSelection()
+    const content = editorState.getCurrentContent()
+    const newContentState = Modifier.insertText(content, selection, text)
+    const newEditorState = EditorState.push(editorState, newContentState, 'paste')
+    this._onChange(newEditorState)
+  }
+
+  _text(editorState) {
+    return editorState.getCurrentContent().getPlainText('')
+  }
+
   _onChange(editorState) {
-   this.props.onChange(editorState.getCurrentContent().getPlainText(''))
-   return this.setState({editorState})
+    this.props.onChange(editorState.getCurrentContent().getPlainText(''))
+    return this.setState({editorState})
   }
 
   focus() {
     this.refs.editor.focus()
   }
 
+
   render() {
     const {editorState} = this.state;
     return (
       <span onClick={this.focus.bind(this)}>
         <Editor
+          onFocus={this.props.onFocus}
           editorState={editorState}
           onBlur={this.props.onBlur}
           onChange={this._onChange.bind(this)}
@@ -53,8 +66,7 @@ export default class TextInput extends Component{
   focus() { this.refs.input && this.refs.input.focus() }
 
   _handleInputMetricClick(item){
-    insertAtCaret('live-input', item.readableId)
-    //this._changeInput();
+    this.refs.editor.insertAtCaret(item.readableId)
   }
 
   _handleFocus() {
@@ -111,13 +123,15 @@ export default class TextInput extends Component{
       <span onKeyDown={this._onKeyDown.bind(this)}
         id='live-input'
         className='wonderwall'
+        onFocus={this._handleFocus.bind(this)}
       >
         <SimpleEditor
           onBlur={this._handleBlur.bind(this)}
           onChange={this._handleChange.bind(this)}
+          onFocus={this._handleFocus.bind(this)}
           value={this.props.value}
           placeholder={'value'}
-          ref='input'
+          ref='editor'
         />
       </span>
     )
