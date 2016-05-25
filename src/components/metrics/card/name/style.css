@@ -13,9 +13,13 @@
   line-height: 1.2em;
 }
 
-.public-DraftEditorPlaceholder-root {
+.MetricName .public-DraftEditorPlaceholder-root {
   margin: 0 0 -20px;
   color: #A9A9A9;
+}
+
+.MetricName .public-DraftEditor-content:focus {
+  color: $black-3;
 }
 
 .output .MetricName {

@@ -5,7 +5,6 @@ import {EditorState, Editor, ContentState, getDefaultKeyBinding, KeyBindingUtil}
 
 import './style.css'
 
-    //editorState: EditorState.createWithContent(ContentState.createFromText(this.props.value || ''))
 class SimpleEditor extends React.Component {
   state = {
     editorState: EditorState.createWithContent(ContentState.createFromText(this.props.value || ''))
