@@ -8,29 +8,53 @@ import DistributionSelector from './DistributionSelector'
 
 import insertAtCaret from 'lib/jquery/insertAtCaret'
 
+import {EditorState, Editor, ContentState, getDefaultKeyBinding, KeyBindingUtil} from 'draft-js'
+
+class SimpleEditor extends React.Component {
+  state = {
+    editorState: EditorState.createWithContent(ContentState.createFromText(this.props.value || ''))
+  }
+
+  _onChange(editorState) {
+   this.props.onChange(editorState.getCurrentContent().getPlainText(''))
+   return this.setState({editorState})
+  }
+
+  focus() {
+    this.refs.editor.focus()
+  }
+
+  render() {
+    const {editorState} = this.state;
+    return (
+      <span onClick={this.focus.bind(this)}>
+        <Editor
+          editorState={editorState}
+          onBlur={this.props.onBlur}
+          onChange={this._onChange.bind(this)}
+          tabIndex={2}
+          ref='editor'
+          placeholder={this.props.placeholder}
+        />
+      </span>
+    );
+  }
+}
+
 export default class TextInput extends Component{
   displayName: 'GuesstimateForm-TextInput'
 
   static propTypes = {
     value: PropTypes.string,
-    editable: PropTypes.bool.isRequired,
-  }
-
-  state = {
-    editing: false,
   }
 
   componentWillUnmount() { this._handleBlur() }
 
-  focus() { this.refs.input && this.refs.input.select() }
+  focus() { this.refs.input && this.refs.input.focus() }
 
   _handleInputMetricClick(item){
     insertAtCaret('live-input', item.readableId)
-    this._changeInput();
-  }
-
-  _editable() {
-    return this.props.editable && this.state.editing
+    //this._changeInput();
   }
 
   _handleFocus() {
@@ -41,22 +65,19 @@ export default class TextInput extends Component{
   _handleBlur() {
     $(window).off('functionMetricClicked')
     this.props.onBlur()
-    this.setState({editing: false})
   }
 
-  _handlePress(event) {
-    let value = event.target.value;
+  _handleChange(value) {
     if (this._isData(value)) {
       const data = this._formatData(value)
       this.props.onChangeData(data)
     } else {
-      this._changeInput();
+      this._changeInput(value);
     }
     event.stopPropagation()
   }
 
-  _changeInput(value=this._value()){ this.props.onChange(value) }
-  _value() { return ReactDOM.findDOMNode(this.refs.input).value }
+  _changeInput(value){ this.props.onChange(value) }
 
   _formatData(value) {
     return value
@@ -75,9 +96,9 @@ export default class TextInput extends Component{
     return !isFunction && (count > 3)
   }
 
-  _handleKeyDown(e) {
+  _onKeyDown(e) {
+    e.stopPropagation()
     if (e.which === 27 || e.which === 13) {
-      e.preventDefault()
       this.props.onEscape()
     }
   }
@@ -87,31 +108,18 @@ export default class TextInput extends Component{
     let className = (this.props.value !== '' && hasErrors) ? 'input hasErrors' : 'input'
     className += ` ${width}`
     return (
-      <div>
-        {this._editable() &&
-          <TextArea
-            id="live-input"
-            onBlur={this._handleBlur.bind(this)}
-            onChange={this._handlePress.bind(this)}
-            onFocus={this._handleFocus.bind(this)}
-            onKeyDown={this._handleKeyDown.bind(this)}
-            placeholder={'value'}
-            ref='input'
-            type="text"
-            className={className}
-            value={this.props.value}
-            tabIndex={2}
-          />
-        }
-        {!this._editable() &&
-          <div
-            className={`${className}${!this.props.value ? ' default-value' : ''}`}
-            onMouseOver={() => {if (!this.state.editing) {this.setState({editing: true})}}}
-          >
-            {this.props.value || 'value'}
-          </div>
-        }
-      </div>
+      <span onKeyDown={this._onKeyDown.bind(this)}
+        id='live-input'
+        className='wonderwall'
+      >
+        <SimpleEditor
+          onBlur={this._handleBlur.bind(this)}
+          onChange={this._handleChange.bind(this)}
+          value={this.props.value}
+          placeholder={'value'}
+          ref='input'
+        />
+      </span>
     )
   }
 }

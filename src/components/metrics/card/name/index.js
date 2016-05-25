@@ -23,14 +23,14 @@ class SimpleEditor extends React.Component {
     const {editorState} = this.state;
     return (
       <div onClick={this.focus.bind(this)}>
-      <Editor
-        editorState={editorState}
-        onBlur={this.props.onBlur}
-        onChange={this._onChange.bind(this)}
-        tabIndex={2}
-        ref='editor'
-        placeholder={this.props.placeholder}
-      />
+        <Editor
+          editorState={editorState}
+          onBlur={this.props.onBlur}
+          onChange={this._onChange.bind(this)}
+          tabIndex={2}
+          ref='editor'
+          placeholder={this.props.placeholder}
+        />
       </div>
     );
   }

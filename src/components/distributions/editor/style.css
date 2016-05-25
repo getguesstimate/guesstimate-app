@@ -9,6 +9,28 @@
   font-size: 0.95em;
 }
 
+.wonderwall {
+  @mixin hover-text;
+  float: left;
+  width: 100%;
+  padding: 2px;
+  color: rgba(69, 98, 134, 0.83);
+  font-weight: 300;
+  width: 100%;
+  font-size: 0.99em;
+  float: left;
+  line-height: 1.2em;
+}
+
+.wonderwall .public-DraftEditorPlaceholder-root {
+  margin: 0 0 -20px;
+  color: #A9A9A9;
+}
+
+.wonderwall .public-DraftEditor-content:focus {
+  color: $black-3;
+}
+
 .GuesstimateForm .input.default-value {
   color: #A9A9A9;
 }
