@@ -1,15 +1,15 @@
 @import './styles/variables.css';
 
-.GuesstimateForm .input {
+.GuesstimateForm .TextInput {
   @mixin hover-input;
 }
 
-.GuesstimateForm .input {
+.GuesstimateForm .TextInput {
   line-height: 1.3em;
   font-size: 0.95em;
 }
 
-.wonderwall {
+.TextInput {
   @mixin hover-text;
   float: left;
   width: 100%;
@@ -22,43 +22,43 @@
   line-height: 1.2em;
 }
 
-.wonderwall .public-DraftEditorPlaceholder-root {
+.TextInput .public-DraftEditorPlaceholder-root {
   margin: 0 0 -20px;
   color: #A9A9A9;
 }
 
-.wonderwall .public-DraftEditor-content:focus {
+.TextInput .public-DraftEditor-content:focus {
   color: $black-3;
 }
 
-.GuesstimateForm .input.default-value {
+.GuesstimateForm .TextInput.default-value {
   color: #A9A9A9;
 }
 
-.GuesstimateForm.large .input {
+.GuesstimateForm.large .TextInput {
   font-size: 1.5em;
   border-radius: 3px;
   font-weight: 100;
   color: #666;
 }
 
-.GuesstimateForm .input{
+.GuesstimateForm .TextInput{
   float: left;
 }
 
-.GuesstimateForm.large .input.NARROW {
+.GuesstimateForm.large .TextInput.NARROW {
   width: 89%
 }
 
-.GuesstimateForm .input.NARROW {
+.GuesstimateForm .TextInput.NARROW {
   width: 85%
 }
 
-.GuesstimateForm .input.WIDE {
+.GuesstimateForm .TextInput.WIDE {
   width: 100%
 }
 
-.GuesstimateForm .input.hasErrors:not(:focus) {
+.GuesstimateForm .TextInput.hasErrors:not(:focus) {
   background-color: #E08888;
 }
 

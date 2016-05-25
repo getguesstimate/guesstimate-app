@@ -22,6 +22,10 @@ class SimpleEditor extends React.Component {
     this._onChange(newEditorState)
   }
 
+  focus() {
+    this.refs.editor.focus()
+  }
+
   _text(editorState) {
     return editorState.getCurrentContent().getPlainText('')
   }
@@ -31,15 +35,15 @@ class SimpleEditor extends React.Component {
     return this.setState({editorState})
   }
 
-  focus() {
-    this.refs.editor.focus()
-  }
-
-
   render() {
     const {editorState} = this.state;
     return (
-      <span onClick={this.focus.bind(this)}>
+      <span
+        className={this.props.className}
+        onClick={this.focus.bind(this)}
+        onKeyDown={this.props.onKeyDown}
+        onFocus={this.props.onFocus}
+      >
         <Editor
           onFocus={this.props.onFocus}
           editorState={editorState}
@@ -117,23 +121,20 @@ export default class TextInput extends Component{
 
   render() {
     const {hasErrors, width} = this.props
-    let className = (this.props.value !== '' && hasErrors) ? 'input hasErrors' : 'input'
+    let className = 'TextInput'
+    className += (this.props.value !== '' && hasErrors) ? 'hasErrors' : ''
     className += ` ${width}`
     return (
-      <span onKeyDown={this._onKeyDown.bind(this)}
-        id='live-input'
-        className='wonderwall'
-        onFocus={this._handleFocus.bind(this)}
-      >
         <SimpleEditor
+          className={className}
           onBlur={this._handleBlur.bind(this)}
           onChange={this._handleChange.bind(this)}
           onFocus={this._handleFocus.bind(this)}
+          onKeyDown={this._onKeyDown.bind(this)}
           value={this.props.value}
           placeholder={'value'}
           ref='editor'
         />
-      </span>
     )
   }
 }
