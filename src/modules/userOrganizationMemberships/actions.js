@@ -48,3 +48,16 @@ export function fetchByUserId(userId) {
     })
   }
 }
+
+export function destroy(id) {
+  return (dispatch, getState) => {
+    dispatch(sActions.deleteStart({id}));
+    api(getState()).userOrganizationMemberships.destroy({userOrganizationMembershipId: id}, (err, value) => {
+      if (err) {
+        captureApiError('OrganizationsMemberDestroy', null, null, err, {url: 'destroyOrganizationMember'})
+      } else {
+        dispatch(sActions.deleteSuccess({id}))
+      }
+    })
+  }
+}

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import SpaceList from 'gComponents/spaces/list'
 import * as spaceActions from 'gModules/spaces/actions'
 import * as organizationActions from 'gModules/organizations/actions'
+import * as userOrganizationMembershipActions from 'gModules/userOrganizationMemberships/actions.js'
 import { organizationSpaceSelector } from './organizationSpaceSelector.js';
 import { organizationMemberSelector } from './organizationMemberSelector.js';
 import SpaceCards from 'gComponents/spaces/cards'
@@ -17,7 +18,7 @@ function mapStateToProps(state) {
   }
 }
 
-const Member = ({user, isAdmin}) => (
+const Member = ({user, isAdmin, onRemove}) => (
   <div className='member'>
     <div className='row'>
       <div className='col-xs-7'>
@@ -28,9 +29,11 @@ const Member = ({user, isAdmin}) => (
         {isAdmin ? 'Admin' : 'Editor'}
       </div>
       <div className='col-xs-3'>
-        <button className='ui button small remove'>
-          Remove
-        </button>
+        {user.membershipId && !isAdmin &&
+          <button className='ui button small remove' onClick={onRemove}>
+            Remove
+          </button>
+        }
       </div>
     </div>
   </div>
@@ -73,6 +76,10 @@ export default class OrganizationShow extends Component{
 
   changeTab(tab) {
     this.setState({openTab: tab})
+  }
+
+  destroyMembership(user) {
+     this.props.dispatch(userOrganizationMembershipActions.destroy(user.membershipId))
   }
 
   render () {
@@ -126,7 +133,14 @@ export default class OrganizationShow extends Component{
                 <div className='col-sm-6'>
                   <div className='members'>
                     {members.map(m => {
-                      return (<Member key={m.id} user={m} isAdmin={organization.admin_id === m.id}/>)
+                      return (
+                        <Member
+                          key={m.id}
+                          user={m}
+                          isAdmin={organization.admin_id === m.id}
+                          onRemove={() => {this.destroyMembership(m)}}
+                        />
+                        )
                     })}
                   </div>
                 </div>
