@@ -1,3 +1,5 @@
+@import './styles/variables.css';
+
 .organizationShow .main-organization-tag {
   text-align: center;
   margin-right: 0.5em;
@@ -12,17 +14,45 @@
 }
 
 .organizationShow .members {
-  margin-top: 30px;
-  float: left;
+  width: 100%;
+  background-color: white;
+  border-radius: 3px;
+  padding: 0 1em;
+  margin-top: 4em;
 }
 
 .organizationShow .member {
+  padding: 1em 0.2em;
+  border-bottom: 1px solid #eee;
+}
+
+.organizationShow .member:last-child {
+  border-bottom: none;
+}
+
+.organizationShow .member .role{
+  margin-top: 0.6em;
+  color: $grey-2;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.organizationShow .member .button.remove{
+  margin-top: 0.2em;
+  float: right;
+}
+
+.organizationShow .member--name {
   float: left;
-  margin-right: 10px;
-  margin-bottom: 10px;
+  font-size: 1.4em;
+  font-weight: 800;
+  color: $black-3;
+  margin-top: 0.5em;
 }
 
 .organizationShow .member img{
+  float: left;
   width: 40px;
-  border-radius: 3em;
+  border-radius: 3px;
+  margin-right: 1em;
 }

@@ -5,6 +5,7 @@ import * as spaceActions from 'gModules/spaces/actions'
 import * as organizationActions from 'gModules/organizations/actions'
 import { organizationSpaceSelector } from './organizationSpaceSelector.js';
 import { organizationMemberSelector } from './organizationMemberSelector.js';
+import SpaceCards from 'gComponents/spaces/cards'
 import Container from 'gComponents/utility/container/Container.js'
 import e from 'gEngine/engine'
 import './style.css'
@@ -16,9 +17,22 @@ function mapStateToProps(state) {
   }
 }
 
-const Member = ({user}) => (
+const Member = ({user, isAdmin}) => (
   <div className='member'>
-    <a href={e.user.url(user)}><img src={user.picture}/></a>
+    <div className='row'>
+      <div className='col-xs-7'>
+        <a href={e.user.url(user)}><img src={user.picture}/></a>
+        <div className='member--name'>{user.name}</div>
+      </div>
+      <div className='col-xs-2 role'>
+        {isAdmin ? 'Admin' : 'Editor'}
+      </div>
+      <div className='col-xs-3'>
+        <button className='ui button small remove'>
+          Remove
+        </button>
+      </div>
+    </div>
   </div>
 )
 
@@ -29,7 +43,8 @@ export default class OrganizationShow extends Component{
   displayName: 'OrganizationShow'
 
   state = {
-    attemptedFetch: false
+    attemptedFetch: false,
+    openTab: 'MEMBERS'
   }
 
   componentWillMount() {
@@ -56,17 +71,24 @@ export default class OrganizationShow extends Component{
     }
   }
 
+  changeTab(tab) {
+    this.setState({openTab: tab})
+  }
+
   render () {
     const {organizationId, organizations, members} = this.props
+    const {openTab} = this.state
     const spaces =  _.orderBy(this.props.organizationSpaces.asMutable(), ['updated_at'], ['desc'])
     const organization = organizations.find(u => u.id.toString() === organizationId.toString())
 
     return (
       <Container>
         <div className='organizationShow'>
-          <div className='GeneralSpaceIndex row'>
-            <div className='col-sm-3'>
-              <div className='row'>
+          <div className='GeneralSpaceIndex'>
+
+            <div className='row'>
+              <div className='col-md-4'/>
+              <div className='col-md-4 col-xs-12'>
                 {organization &&
                   <div className='col-sm-12'>
                     <div className='main-organization-tag'>
@@ -77,21 +99,39 @@ export default class OrganizationShow extends Component{
                     <h2>
                       {organization.name}
                     </h2>
-                    <div className='members'>
-                      {members && members.map(m => {
-                        return (<Member key={m.id} user={m}/>)
-                      })}
-                    </div>
                   </div>
                 }
               </div>
             </div>
 
-            <div className='col-sm-9'>
-              {spaces &&
-                <SpaceList spaces={spaces} showUsers={true} hasMorePages={false}/>
-              }
+            <div className="ui tabular menu">
+              { [{name: 'Models', key: 'MODELS'}, {name: 'Members', key: 'MEMBERS'}].map( e => {
+                const className = `item ${(openTab === e.key) ? 'active' : ''}`
+                return (
+                  <a className={className} onClick={() => {this.changeTab(e.key)}}> {e.name} </a>
+                )
+               })}
             </div>
+
+            {(openTab === 'MODELS') && spaces &&
+              <SpaceCards
+                spaces={spaces}
+                showPrivacy={true}
+              />
+            }
+
+            {(openTab === 'MEMBERS') && members &&
+              <div className='row'>
+                <div className='col-sm-3'/>
+                <div className='col-sm-6'>
+                  <div className='members'>
+                    {members.map(m => {
+                      return (<Member key={m.id} user={m} isAdmin={organization.admin_id === m.id}/>)
+                    })}
+                  </div>
+                </div>
+              </div>
+            }
           </div>
         </div>
       </Container>
