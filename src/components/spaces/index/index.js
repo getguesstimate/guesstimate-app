@@ -10,7 +10,6 @@ import './style.css'
 function mapStateToProps(state) {
   return {
     searchSpaces: state.searchSpaces,
-    users: state.users,
   }
 }
 
@@ -46,7 +45,7 @@ export default class SpacesIndex extends Component{
           </div>
         </div>
 
-        <SpaceCards showPrivacy={false} spaces={spaces.map(s => {return {...s, user: s.user_info}})}/>
+        <SpaceCards showPrivacy={false} spaces={spaces.map(s => {return {...s, user: s.user_info, organization: s.organization_info}})}/>
 
         {!!spaces.length && hasMorePages &&
           <div className='nextPage'>
