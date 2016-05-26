@@ -52,3 +52,22 @@ $editing-background: $grey-1;
     cursor: pointer;
   }
 }
+
+@define-mixin small-input {
+  @mixin hover-text;
+  float: left;
+  width: 100%;
+  padding: 2px;
+  color: rgba(69, 98, 134, 0.83);
+  font-weight: 300;
+  line-height: 1.2em;
+
+  .public-DraftEditorPlaceholder-root {
+    margin: 0 0 -20px;
+    color: #A9A9A9;
+  }
+
+  .public-DraftEditor-content:focus {
+    color: $black-3;
+  }
+}

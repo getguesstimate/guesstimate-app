@@ -5,6 +5,10 @@
   flex: 1;
 }
 
+.MetricCardViewSection.anotherFunctionSelected {
+  cursor: pointer;
+}
+
 .MetricCardViewSection .MetricTokenSection{
   position: absolute;
   right: 0;
@@ -56,7 +60,7 @@
   flex: 0 0 auto;
 }
 
-.MetricCardViewSection > .StatsSection {
+.MetricCardViewSection:not(.anotherFunctionSelected) > .StatsSection {
   cursor: move;
   width: 100%;
   float: left;

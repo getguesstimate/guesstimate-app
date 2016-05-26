@@ -33,7 +33,7 @@ class SimpleEditor extends React.Component {
   render() {
     const {editorState} = this.state;
     return (
-      <div onClick={this.focus.bind(this)}>
+      <div onClick={this.props.isClickable && this.focus.bind(this)}>
         <Editor
           editorState={editorState}
           onBlur={this.props.onBlur}
@@ -98,15 +98,17 @@ export default class MetricName extends Component {
   }
 
   render() {
+    const isClickable = !this.props.anotherFunctionSelected
     return (
       <span
-        className='MetricName'
+        className={`MetricName ${isClickable ? 'isClickable' : ''}`}
         onKeyDown={this.handleKeyDown.bind(this)}
       >
         <SimpleEditor
           onBlur={this.handleSubmit.bind(this)}
           value={this.state.value}
           placeholder={'name'}
+          isClickable={isClickable}
           ref='SimpleEditor'
         />
       </span>

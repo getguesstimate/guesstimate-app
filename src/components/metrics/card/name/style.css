@@ -1,25 +1,11 @@
 @import './styles/variables.css';
 
 .MetricName {
-  @mixin hover-text;
-  float: left;
-  width: 100%;
-  padding: 2px;
-  color: rgba(69, 98, 134, 0.83);
-  font-weight: 300;
-  width: 100%;
-  font-size: 0.99em;
-  float: left;
-  line-height: 1.2em;
+  @mixin small-input;
 }
 
-.MetricName .public-DraftEditorPlaceholder-root {
-  margin: 0 0 -20px;
-  color: #A9A9A9;
-}
-
-.MetricName .public-DraftEditor-content:focus {
-  color: $black-3;
+.MetricName:not(.isClickable):hover {
+  background-color: $transparent-background;
 }
 
 .output .MetricName {

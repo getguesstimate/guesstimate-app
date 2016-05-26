@@ -1,7 +1,7 @@
 @import './styles/variables.css';
 
 .GuesstimateForm .TextInput {
-  @mixin hover-input;
+  @mixin hover-text;
 }
 
 .GuesstimateForm .TextInput {
@@ -10,25 +10,7 @@
 }
 
 .TextInput {
-  @mixin hover-text;
-  float: left;
-  width: 100%;
-  padding: 2px;
-  color: rgba(69, 98, 134, 0.83);
-  font-weight: 300;
-  width: 100%;
-  font-size: 0.99em;
-  float: left;
-  line-height: 1.2em;
-}
-
-.TextInput .public-DraftEditorPlaceholder-root {
-  margin: 0 0 -20px;
-  color: #A9A9A9;
-}
-
-.TextInput .public-DraftEditor-content:focus {
-  color: $black-3;
+  @mixin small-input;
 }
 
 .GuesstimateForm .TextInput.default-value {
