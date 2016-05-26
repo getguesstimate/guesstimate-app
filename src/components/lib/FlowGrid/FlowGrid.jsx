@@ -128,6 +128,7 @@ export default class FlowGrid extends Component{
         this._handleRemoveSelectedItems()
       } else if (e.keyCode == '90' && !e.shiftKey) {
         this.props.onUndo()
+        e.preventDefault()
       } else if (e.keyCode == '89' || (e.keyCode == '90' && e.shiftKey)) {
         this.props.onRedo()
       }
