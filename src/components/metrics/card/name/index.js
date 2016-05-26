@@ -90,6 +90,7 @@ export default class MetricName extends Component {
   handleKeyDown(e) {
     e.stopPropagation()
     this.props.heightHasChanged()
+    // TODO(Ozzie): The code below currently doesn't work; kept here for potential future use.
     const ENTER = (e) => ((e.keyCode === 13) && !e.shiftKey)
     if (ENTER(e)){
       e.stopPropagation()
