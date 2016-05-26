@@ -4,7 +4,7 @@ import {EditorState, Editor, ContentState, getDefaultKeyBinding, KeyBindingUtil}
 
 import './style.css'
 
-class SimpleEditor extends React.Component {
+class NameEditor extends Component {
   state = {
     editorState: this._plainTextEditorState(this.props.value)
   }
@@ -60,8 +60,8 @@ export default class MetricName extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!nextProps.inSelectedCell && (this.props.name !== nextProps.name) && (nextProps.name !== this.value())) {
-      this.refs.SimpleEditor.changePlainText(nextProps.name)
+    if ((this.props.name !== nextProps.name) && (nextProps.name !== this.value())) {
+      this.refs.NameEditor && this.refs.NameEditor.changePlainText(nextProps.name)
     }
   }
 
@@ -84,7 +84,7 @@ export default class MetricName extends Component {
   }
 
   value() {
-    return this.refs.SimpleEditor.getPlainText()
+    return this.refs.NameEditor.getPlainText()
   }
 
   handleKeyDown(e) {
@@ -104,12 +104,12 @@ export default class MetricName extends Component {
         className={`MetricName ${isClickable ? 'isClickable' : ''}`}
         onKeyDown={this.handleKeyDown.bind(this)}
       >
-        <SimpleEditor
+        <NameEditor
           onBlur={this.handleSubmit.bind(this)}
           value={this.state.value}
           placeholder={'name'}
           isClickable={isClickable}
-          ref='SimpleEditor'
+          ref='NameEditor'
         />
       </span>
     )

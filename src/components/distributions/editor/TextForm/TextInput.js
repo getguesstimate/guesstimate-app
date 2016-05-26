@@ -6,7 +6,7 @@ import {EditorState, Editor, ContentState, getDefaultKeyBinding, KeyBindingUtil,
 
 import DistributionSelector from './DistributionSelector'
 
-class SimpleEditor extends Component {
+class TextInputEditor extends Component {
   state = {
     editorState: EditorState.createWithContent(ContentState.createFromText(this.props.value || ''))
   }
@@ -125,7 +125,7 @@ export default class TextInput extends Component{
     className += (this.props.value !== '' && hasErrors) ? ' hasErrors' : ''
     className += ` ${width}`
     return (
-      <SimpleEditor
+      <TextInputEditor
         className={className}
         onBlur={this._handleBlur.bind(this)}
         onChange={this._handleChange.bind(this)}
