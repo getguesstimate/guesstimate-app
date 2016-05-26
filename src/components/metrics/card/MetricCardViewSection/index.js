@@ -72,8 +72,11 @@ export default class MetricCardViewSection extends Component {
     const anotherFunctionSelected = ((metricClickMode === 'FUNCTION_INPUT_SELECT') && !inSelectedCell)
     const hasErrors = (errors.length > 0)
 
+    let className = `MetricCardViewSection ${metricCardView}`
+    className += (hasErrors & !inSelectedCell) ? ' hasErrors' : ''
+    className += (anotherFunctionSelected) ? ' anotherFunctionSelected' : ''
     return(
-      <div className={`MetricCardViewSection ${metricCardView} ${(hasErrors & !inSelectedCell) ? 'hasErrors' : ''}`}
+      <div className={className}
         onMouseDown={onMouseDown}
       >
         {(metricCardView !== 'basic') && showSimulation &&
@@ -95,12 +98,13 @@ export default class MetricCardViewSection extends Component {
         {(!_.isEmpty(metric.name) || inSelectedCell) &&
           <div className='NameSection'>
               <MetricName
+                anotherFunctionSelected={anotherFunctionSelected}
                 inSelectedCell={inSelectedCell}
                 name={metric.name}
                 onChange={onChangeName}
                 jumpSection={jumpSection}
                 ref='name'
-                editable={this.props.editable}
+                heightHasChanged={this.props.heightHasChanged}
               />
           </div>
         }

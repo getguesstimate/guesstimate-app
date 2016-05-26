@@ -3,6 +3,7 @@ import React, {Component, PropTypes} from 'react'
 import localLinks from 'local-links'
 import * as modalActions from 'gModules/modal/actions.js'
 import {connect} from 'react-redux';
+import $ from 'jquery'
 
 @connect()
 export default class NavHelper extends Component{
@@ -16,6 +17,14 @@ export default class NavHelper extends Component{
       app.router.history.navigate(pathname)
       this.props.dispatch(modalActions.close())
     }
+  }
+
+  componentDidMount(){
+    $(document).on('keydown', (e) => {
+      if (e.which === 8 && $(e.target).is('body')) {
+        e.preventDefault();
+      }
+    });
   }
 
   render () {

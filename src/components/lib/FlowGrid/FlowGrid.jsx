@@ -115,7 +115,7 @@ export default class FlowGrid extends Component{
       const size = ({columns: this._columnCount(), rows: this._rowCount()})
       let newLocation = new DirectionToLocation(size, this.props.selectedCell)[direction]()
       this.props.onSelectItem(newLocation)
-    } else if (!e.shiftKey && (e.keyCode == '17' || e.keyCode == '224' || e.keyCode == '91')) {
+    } else if (!e.shiftKey && (e.keyCode == '17' || e.keyCode == '224' || e.keyCode == '91' || e.keyCode == '93')) {
       e.preventDefault()
       this.setState({ctrlPressed: true})
     } else if (this.state.ctrlPressed) {
@@ -128,8 +128,10 @@ export default class FlowGrid extends Component{
         this._handleRemoveSelectedItems()
       } else if (e.keyCode == '90' && !e.shiftKey) {
         this.props.onUndo()
+        e.preventDefault()
       } else if (e.keyCode == '89' || (e.keyCode == '90' && e.shiftKey)) {
         this.props.onRedo()
+        e.preventDefault()
       }
     }
   }
@@ -170,8 +172,10 @@ export default class FlowGrid extends Component{
     const item = this.props.items.find(i => isAtLocation(i.location, location));
     return (
       <Cell
-        hasItemUpdated={this.props.hasItemUpdated}
+        canvasState={this.props.canvasState}
+        forceFlowGridUpdate={() => this.forceUpdate()}
         gridKeyPress={this._handleKeyDown.bind(this)}
+        hasItemUpdated={this.props.hasItemUpdated}
         handleSelect={this.props.onSelectItem}
         handleEndRangeSelect={this._handleEndRangeSelect.bind(this)}
         inSelectedRegion={isWithinRegion(location, this.props.selectedRegion)}
@@ -185,7 +189,6 @@ export default class FlowGrid extends Component{
         onMouseEnter={(e) => {this._handleCellMouseEnter(location, e)}}
         onEndDragCell={newLocation => {this._handleEndDragCell(newLocation)}}
         onEmptyCellMouseDown={(e) => {this._handleEmptyCellMouseDown(e, location)}}
-        canvasState={this.props.canvasState}
         ref={`cell-${location.row}-${location.column}`}
       />
     )

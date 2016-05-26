@@ -1,43 +1,39 @@
 @import './styles/variables.css';
 
-.GuesstimateForm .input {
-  @mixin hover-input;
+.GuesstimateForm .TextInput {
+  @mixin small-input;
 }
 
-.GuesstimateForm .input {
+.GuesstimateForm .TextInput {
   line-height: 1.3em;
   font-size: 0.95em;
 }
 
-.GuesstimateForm .input.default-value {
+.GuesstimateForm .TextInput.default-value {
   color: #A9A9A9;
 }
 
-.GuesstimateForm.large .input {
+.GuesstimateForm.large .TextInput {
   font-size: 1.5em;
   border-radius: 3px;
   font-weight: 100;
   color: #666;
 }
 
-.GuesstimateForm .input{
+.GuesstimateForm .TextInput{
   float: left;
 }
 
-.GuesstimateForm.large .input.NARROW {
+.GuesstimateForm.large .TextInput.NARROW {
   width: 89%
 }
 
-.GuesstimateForm .input.NARROW {
+.GuesstimateForm .TextInput.NARROW {
   width: 85%
 }
 
-.GuesstimateForm .input.WIDE {
+.GuesstimateForm .TextInput.WIDE {
   width: 100%
-}
-
-.GuesstimateForm .input.hasErrors:not(:focus) {
-  background-color: #E08888;
 }
 
 .GuesstimateForm .GuesstimateInputForm {

@@ -31,7 +31,10 @@ export default class GuesstimateForm extends Component{
     metricFocus: () => { }
   }
 
-  componentWillMount() { this.props.dispatch(createGuesstimateForm(this.props.metricId)) }
+  componentWillMount() {
+    this.props.dispatch(createGuesstimateForm(this.props.metricId))
+  }
+
   focus() { this.refs.TextForm.focus() }
   _handleChange(params) { this.props.dispatch(changeGuesstimateForm(params)) }
   _handleSave(params) {
@@ -43,6 +46,8 @@ export default class GuesstimateForm extends Component{
 
   render () {
     const {size, guesstimateForm, onOpen, errors} = this.props
+    if(guesstimateForm.metric !== this.props.metricId) { return false }
+
     const isLarge = (size === 'large')
     const hasData = !!guesstimateForm.data
 
@@ -50,7 +55,7 @@ export default class GuesstimateForm extends Component{
     formClasses += isLarge ? ' large' : ''
 
     return (
-    <div className={formClasses}>
+      <div className={formClasses}>
         {hasData &&
           <DataForm
             data={guesstimateForm.data}

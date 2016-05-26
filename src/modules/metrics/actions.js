@@ -22,8 +22,8 @@ export function addMetric(item) {
 
 //spaceId must be done before the metric is removed here.
 export function removeMetrics(ids) {
-  if (ids.length === 0) { return }
   return (dispatch, getState) => {
+    if (ids.length === 0) { return }
     const spaceId = findSpaceId(getState, ids[0])
     dispatch({ type: 'REMOVE_METRICS', item: {ids}});
     registerGraphChange(dispatch, spaceId)
