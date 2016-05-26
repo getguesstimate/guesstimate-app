@@ -51,7 +51,9 @@ class ScatterTip extends Component {
 }
 
 const PT = PropTypes
-class MetricCard extends Component {
+
+@connect()
+export default class MetricCard extends Component {
   displayName: 'MetricCard'
 
   static propTypes = {
@@ -265,5 +267,3 @@ class MetricCard extends Component {
     );
   }
 }
-
-module.exports = connect()(MetricCard);

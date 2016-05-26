@@ -1,6 +1,5 @@
 import React, {Component, PropTypes} from 'react'
 
-import TextArea from 'react-textarea-autosize'
 import {EditorState, Editor, ContentState, getDefaultKeyBinding, KeyBindingUtil} from 'draft-js'
 
 import './style.css'

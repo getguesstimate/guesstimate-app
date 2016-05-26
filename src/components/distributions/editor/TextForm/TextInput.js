@@ -2,13 +2,11 @@ import React, {Component, PropTypes} from 'react';
 
 import ReactDOM from 'react-dom'
 import $ from 'jquery'
-import TextArea from 'react-textarea-autosize'
+import {EditorState, Editor, ContentState, getDefaultKeyBinding, KeyBindingUtil, Modifier} from 'draft-js'
 
 import DistributionSelector from './DistributionSelector'
 
-import {EditorState, Editor, ContentState, getDefaultKeyBinding, KeyBindingUtil, Modifier} from 'draft-js'
-
-class SimpleEditor extends React.Component {
+class SimpleEditor extends Component {
   state = {
     editorState: EditorState.createWithContent(ContentState.createFromText(this.props.value || ''))
   }

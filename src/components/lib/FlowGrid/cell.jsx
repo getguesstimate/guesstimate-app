@@ -84,7 +84,7 @@ export default class Cell extends Component {
 
     if (!item){ this.props.onEmptyCellMouseDown(e) }
 
-    if (inSelectedCell && !item){
+    if (inSelectedCell && !item) {
       this.props.handleSelect(location)
       this.props.onAddItem(location)
     }

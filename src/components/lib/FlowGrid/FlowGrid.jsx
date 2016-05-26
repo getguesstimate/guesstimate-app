@@ -99,8 +99,7 @@ export default class FlowGrid extends Component{
   }
 
   _handleRemoveSelectedItems() {
-    const selectedItems = this._selectedItems()
-    !_.isEmpty(selectedItems) && this.props.onRemoveItems(this._selectedItems().map(i => i.key))
+    this.props.onRemoveItems(this._selectedItems().map(i => i.key))
   }
 
   _handleKeyDown(e){
@@ -132,6 +131,7 @@ export default class FlowGrid extends Component{
         e.preventDefault()
       } else if (e.keyCode == '89' || (e.keyCode == '90' && e.shiftKey)) {
         this.props.onRedo()
+        e.preventDefault()
       }
     }
   }

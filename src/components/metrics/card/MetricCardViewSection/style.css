@@ -65,7 +65,7 @@
   flex-direction: column;
 }
 
-.MetricCardViewSection.anotherFunctionSelected > .StatsSection{
+.MetricCardViewSection.anotherFunctionSelected > .StatsSection {
   cursor: pointer;
 }
 
