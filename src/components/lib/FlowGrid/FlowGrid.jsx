@@ -99,7 +99,8 @@ export default class FlowGrid extends Component{
   }
 
   _handleRemoveSelectedItems() {
-    this.props.onRemoveItems(this._selectedItems().map(i => i.key))
+    const selectedItems = this._selectedItems()
+    !_.isEmpty(selectedItems) && this.props.onRemoveItems(this._selectedItems().map(i => i.key))
   }
 
   _handleKeyDown(e){
