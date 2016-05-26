@@ -1,8 +1,50 @@
 import React, {Component, PropTypes} from 'react'
 
-import TextArea from 'react-textarea-autosize'
+import {EditorState, Editor, ContentState, getDefaultKeyBinding, KeyBindingUtil} from 'draft-js'
 
 import './style.css'
+
+class NameEditor extends Component {
+  state = {
+    editorState: this._plainTextEditorState(this.props.value)
+  }
+
+  _plainTextEditorState(value) {
+    return EditorState.createWithContent(ContentState.createFromText(value || ''))
+  }
+
+  _onChange(editorState) {
+   return this.setState({editorState})
+  }
+
+  focus() {
+    this.refs.editor.focus()
+  }
+
+  changePlainText(value) {
+    this.setState({editorState: this._plainTextEditorState(value)})
+  }
+
+  getPlainText() {
+    return this.state.editorState.getCurrentContent().getPlainText('')
+  }
+
+  render() {
+    const {editorState} = this.state;
+    return (
+      <div onClick={this.props.isClickable && this.focus.bind(this)}>
+        <Editor
+          editorState={editorState}
+          onBlur={this.props.onBlur}
+          onChange={this._onChange.bind(this)}
+          tabIndex={2}
+          ref='editor'
+          placeholder={this.props.placeholder}
+        />
+      </div>
+    );
+  }
+}
 
 export default class MetricName extends Component {
   displayName: 'MetricName'
@@ -10,66 +52,45 @@ export default class MetricName extends Component {
   static propTypes = {
     name: PropTypes.string,
     inSelectedCell: PropTypes.bool.isRequired,
-    onChange: PropTypes.func.isRequired,
-    editable: PropTypes.bool.isRequired,
+    onChange: PropTypes.func.isRequired
   }
 
   state = {
-    value: this.props.name,
-    editing: false,
-    persistEditing: false,
-  }
-
-  _editable() {
-    if (this.state.persistEditing) {
-      return this.state.editing
-    } else {
-      return this.props.editable && this.state.editing
-    }
+    value: this.props.name
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.name === this.state.value) {this.setState({value: nextProps.name})}
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    return ((nextProps.name !== this.props.name) ||
-            (nextProps.inSelectedCell !== this.props.inSelectedCell) ||
-            (nextProps.editable !== this.props.editable) ||
-            (nextState.value !== this.state.value) ||
-            (nextState.editing !== this.state.editing))
-  }
-
-  handleSubmit() {
-    if (this._hasChanged()){
-      this.props.onChange({name: this.state.value})
+    if ((this.props.name !== nextProps.name) && (nextProps.name !== this.value())) {
+      this.refs.NameEditor && this.refs.NameEditor.changePlainText(nextProps.name)
     }
-    this.setState({editing: false, persistEditing: false})
-  }
-
-  _hasChanged() {
-    return (this.state.value != this.props.name)
-  }
-
-  _handleMouseLeave() {
-    if (!(this.state.persistEditing || this._hasChanged())) {
-      this.setState({editing: false})
-    }
-  }
-
-  hasContent() {
-    return !_.isEmpty(this.state.value)
   }
 
   componentWillUnmount() {
     this.handleSubmit()
   }
 
-  onChange(e) {
-    this.setState({value: e.target.value})
+  handleSubmit() {
+    if (this._hasChanged()){
+      this.props.onChange({name: this.value()})
+    }
+  }
+
+  _hasChanged() {
+    return (this.value() != this.props.name)
+  }
+
+  hasContent() {
+    return !_.isEmpty(this.value())
+  }
+
+  value() {
+    return this.refs.NameEditor.getPlainText()
   }
 
   handleKeyDown(e) {
+    e.stopPropagation()
+    this.props.heightHasChanged()
+    // TODO(Ozzie): The code below currently doesn't work; kept here for potential future use.
     const ENTER = (e) => ((e.keyCode === 13) && !e.shiftKey)
     if (ENTER(e)){
       e.stopPropagation()
@@ -77,32 +98,21 @@ export default class MetricName extends Component {
     }
   }
 
-
   render() {
+    const isClickable = !this.props.anotherFunctionSelected
     return (
-      <div className='MetricName'>
-        {this._editable() &&
-          <TextArea
-            onBlur={this.handleSubmit.bind(this)}
-            onChange={this.onChange.bind(this)}
-            onKeyDown={this.handleKeyDown.bind(this)}
-            onMouseOut={this._handleMouseLeave.bind(this)}
-            onMouseDown={() => {this.setState({persistEditing: true})}}
-            placeholder={'name'}
-            ref={'input'}
-            tabIndex={2}
-            value={this.state.value}
-          />
-        }
-        {!this._editable() &&
-          <div className={`static${!this.state.value ? ' default-value' : ''}`}
-            onMouseOver={() => {if (!this.state.editing) {this.setState({editing: true})}}}n
-            onMouseDown={() => {this.setState({persistEditing: true})}}
-          >
-            {(this.state.value || 'name').replace(/ /g, "\u2005")}
-          </div>
-        }
-      </div>
+      <span
+        className={`MetricName ${isClickable ? 'isClickable' : ''}`}
+        onKeyDown={this.handleKeyDown.bind(this)}
+      >
+        <NameEditor
+          onBlur={this.handleSubmit.bind(this)}
+          value={this.state.value}
+          placeholder={'name'}
+          isClickable={isClickable}
+          ref='NameEditor'
+        />
+      </span>
     )
   }
 }

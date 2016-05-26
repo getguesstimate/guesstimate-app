@@ -51,7 +51,9 @@ class ScatterTip extends Component {
 }
 
 const PT = PropTypes
-class MetricCard extends Component {
+
+@connect()
+export default class MetricCard extends Component {
   displayName: 'MetricCard'
 
   static propTypes = {
@@ -241,6 +243,7 @@ class MetricCard extends Component {
               selectedMetric={this.props.selectedMetric}
               showSensitivitySection={shouldShowSensitivitySection}
               editable={this.props.hovered}
+              heightHasChanged={this.props.forceFlowGridUpdate}
           />
 
           {inSelectedCell && !this.state.modalIsOpen &&
@@ -264,11 +267,3 @@ class MetricCard extends Component {
     );
   }
 }
-
-function select(state) {
-  return {
-    guesstimateForm: state.guesstimateForm
-  }
-}
-
-module.exports = connect(select)(MetricCard);

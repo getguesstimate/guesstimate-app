@@ -2,11 +2,59 @@ import React, {Component, PropTypes} from 'react';
 
 import ReactDOM from 'react-dom'
 import $ from 'jquery'
-import TextArea from 'react-textarea-autosize'
+import {EditorState, Editor, ContentState, getDefaultKeyBinding, KeyBindingUtil, Modifier} from 'draft-js'
 
 import DistributionSelector from './DistributionSelector'
 
-import insertAtCaret from 'lib/jquery/insertAtCaret'
+class TextInputEditor extends Component {
+  state = {
+    editorState: EditorState.createWithContent(ContentState.createFromText(this.props.value || ''))
+  }
+
+  insertAtCaret(text) {
+    const {editorState} = this.state
+    const selection = editorState.getSelection()
+    const content = editorState.getCurrentContent()
+    const newContentState = Modifier.insertText(content, selection, text)
+    const newEditorState = EditorState.push(editorState, newContentState, 'paste')
+    this._onChange(newEditorState)
+  }
+
+  focus() {
+    this.refs.editor.focus()
+  }
+
+  _text(editorState) {
+    return editorState.getCurrentContent().getPlainText('')
+  }
+
+  _onChange(editorState) {
+    this.props.onChange(editorState.getCurrentContent().getPlainText(''))
+    return this.setState({editorState})
+  }
+
+  render() {
+    const {editorState} = this.state;
+    return (
+      <span
+        className={this.props.className}
+        onClick={this.focus.bind(this)}
+        onKeyDown={this.props.onKeyDown}
+        onFocus={this.props.onFocus}
+      >
+        <Editor
+          onFocus={this.props.onFocus}
+          editorState={editorState}
+          onBlur={this.props.onBlur}
+          onChange={this._onChange.bind(this)}
+          tabIndex={2}
+          ref='editor'
+          placeholder={this.props.placeholder}
+        />
+      </span>
+    );
+  }
+}
 
 export default class TextInput extends Component{
   displayName: 'GuesstimateForm-TextInput'
@@ -17,11 +65,10 @@ export default class TextInput extends Component{
 
   componentWillUnmount() { this._handleBlur() }
 
-  focus() { this.refs.input.select() }
+  focus() { this.refs.input && this.refs.input.focus() }
 
   _handleInputMetricClick(item){
-    insertAtCaret('live-input', item.readableId)
-    this._changeInput();
+    this.refs.editor.insertAtCaret(item.readableId)
   }
 
   _handleFocus() {
@@ -32,22 +79,21 @@ export default class TextInput extends Component{
   _handleBlur() {
     $(window).off('functionMetricClicked')
     this.props.onBlur()
-    this.setState({editing: false})
   }
 
-  _handlePress(event) {
-    let value = event.target.value;
-    if (this._isData(value)) {
-      const data = this._formatData(value)
-      this.props.onChangeData(data)
-    } else {
-      this._changeInput();
+  _handleChange(value) {
+    if (value !== this.props.value) {
+      if (this._isData(value)) {
+        const data = this._formatData(value)
+        this.props.onChangeData(data)
+      } else {
+        this._changeInput(value);
+      }
     }
     event.stopPropagation()
   }
 
-  _changeInput(value=this._value()){ this.props.onChange(value) }
-  _value() { return ReactDOM.findDOMNode(this.refs.input).value }
+  _changeInput(value){ this.props.onChange(value) }
 
   _formatData(value) {
     return value
@@ -66,33 +112,29 @@ export default class TextInput extends Component{
     return !isFunction && (count > 3)
   }
 
-  _handleKeyDown(e) {
+  _onKeyDown(e) {
+    e.stopPropagation()
     if (e.which === 27 || e.which === 13) {
-      e.preventDefault()
       this.props.onEscape()
     }
   }
 
   render() {
     const {hasErrors, width} = this.props
-    let className = (this.props.value !== '' && hasErrors) ? 'input hasErrors' : 'input'
+    let className = 'TextInput'
+    className += (this.props.value !== '' && hasErrors) ? ' hasErrors' : ''
     className += ` ${width}`
     return (
-      <div>
-        <TextArea
-          id="live-input"
-          onBlur={this._handleBlur.bind(this)}
-          onChange={this._handlePress.bind(this)}
-          onFocus={this._handleFocus.bind(this)}
-          onKeyDown={this._handleKeyDown.bind(this)}
-          placeholder={'value'}
-          ref='input'
-          type="text"
-          className={className}
-          value={this.props.value}
-          tabIndex={2}
-        />
-      </div>
+      <TextInputEditor
+        className={className}
+        onBlur={this._handleBlur.bind(this)}
+        onChange={this._handleChange.bind(this)}
+        onFocus={this._handleFocus.bind(this)}
+        onKeyDown={this._onKeyDown.bind(this)}
+        value={this.props.value}
+        placeholder={'value'}
+        ref='editor'
+      />
     )
   }
 }

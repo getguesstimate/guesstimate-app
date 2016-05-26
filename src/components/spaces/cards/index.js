@@ -6,6 +6,7 @@ import * as navigationActions from 'gModules/navigation/actions'
 
 import * as Space from 'gEngine/space'
 import * as User from 'gEngine/user'
+import * as Organization from 'gEngine/organization'
 
 import {formatDescription, formatDate} from 'gComponents/spaces/shared'
 
@@ -25,16 +26,18 @@ const SingleButton = ({isPrivate}) => (
   </div>
 )
 
-const ButtonArea = ({user, isPrivate, showPrivacy}) => (
+const ButtonArea = ({owner, ownerUrl, isPrivate, showPrivacy}) => (
   <div className='hover-row'>
-    {user &&
-      <a href={User.url(user)} className='user-tag'>
-        <img
-          className='avatar'
-          src={user.picture}
-        />
+    {owner &&
+      <a href={ownerUrl} className='owner-tag'>
+        {!!owner.picture &&
+          <img
+            className='avatar'
+            src={owner.picture}
+          />
+        }
         <div className='name'>
-          {user.name}
+          {owner.name}
         </div>
       </a>
     }
@@ -44,6 +47,11 @@ const ButtonArea = ({user, isPrivate, showPrivacy}) => (
 
 const SpaceCard = ({space, showPrivacy}) => {
   const hasName = !_.isEmpty(space.name)
+  const hasOrg = _.has(space, 'organization.name')
+
+  const owner = hasOrg ? space.organization : space.user
+  const ownerUrl = hasOrg ? Organization.url(space.organization) : User.url(space.user)
+
   const spaceUrl = Space.url(space)
   const navigateToSpace = () => {navigationActions.navigate(spaceUrl)}
 
@@ -59,7 +67,8 @@ const SpaceCard = ({space, showPrivacy}) => {
           <BlankScreenshot/>
           <a href={spaceUrl}><img src={space.big_screenshot}/></a>
           <ButtonArea
-            user={space.user}
+            owner={owner}
+            ownerUrl={ownerUrl}
             isPrivate={space.is_private}
             showPrivacy={showPrivacy}
           />
