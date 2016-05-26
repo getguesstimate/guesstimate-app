@@ -136,8 +136,9 @@ export default class SpacesShow extends Component {
     }
 
     let tagDescription = space.description
-    if (_.has(space, 'user.name')) {
-      const authorCallout = `Made by ${space.user.name}`
+    if (_.has(space, 'user.name') || _.has(space, 'organization.name')) {
+      const author = _.has(space, 'organization.name') ? space.organization.name : space.user.name
+      const authorCallout = `Made by ${author}`
       if (_.isEmpty(space.description)) {
         tagDescription = authorCallout
       } else {
@@ -178,7 +179,6 @@ export default class SpacesShow extends Component {
                 onSaveName={this.onSaveName.bind(this)}
                 onSave={this.onSave.bind(this)}
                 onCopy={this._handleCopy.bind(this)}
-                space={space}
                 name={space.name}
                 isPrivate={space.is_private}
                 editableByMe={space.editableByMe}
@@ -194,7 +194,13 @@ export default class SpacesShow extends Component {
             </div>
 
             <div className='col-md-2'>
-              {space.user && !space.editableByMe &&
+              {!!space.organization &&
+                <a className='ui image label' href={`/organizations/${space.organization.id}`}>
+                  <img src={space.organization.picture}/>
+                  {space.organization.name}
+                </a>
+              }
+              {!space.organization && space.user && !space.editableByMe &&
                 <a className='ui image label' href={`/users/${space.user.id}`}>
                   <img src={space.user.picture}/>
                   {space.user.name}
