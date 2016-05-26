@@ -5,10 +5,6 @@
   flex: 1;
 }
 
-.MetricCardViewSection.anotherFunctionSelected {
-  cursor: pointer;
-}
-
 .MetricCardViewSection .MetricTokenSection{
   position: absolute;
   right: 0;
@@ -60,14 +56,21 @@
   flex: 0 0 auto;
 }
 
-.MetricCardViewSection:not(.anotherFunctionSelected) > .StatsSection {
-  cursor: move;
+.MetricCardViewSection > .StatsSection {
   width: 100%;
   float: left;
   min-height: 10px;
   flex: 5;
   display: flex;
   flex-direction: column;
+}
+
+.MetricCardViewSection.anotherFunctionSelected > .StatsSection{
+  cursor: pointer;
+}
+
+.MetricCardViewSection:not(.anotherFunctionSelected) > .StatsSection {
+  cursor: move;
 }
 
 .MetricCardViewSection > .StatsSection .StatsSectionBody {

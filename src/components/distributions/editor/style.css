@@ -1,16 +1,12 @@
 @import './styles/variables.css';
 
 .GuesstimateForm .TextInput {
-  @mixin hover-text;
+  @mixin small-input;
 }
 
 .GuesstimateForm .TextInput {
   line-height: 1.3em;
   font-size: 0.95em;
-}
-
-.TextInput {
-  @mixin small-input;
 }
 
 .GuesstimateForm .TextInput.default-value {
