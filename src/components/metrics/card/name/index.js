@@ -7,16 +7,27 @@ import './style.css'
 
 class SimpleEditor extends React.Component {
   state = {
-    editorState: EditorState.createWithContent(ContentState.createFromText(this.props.value || ''))
+    editorState: this._plainTextEditorState(this.props.value)
+  }
+
+  _plainTextEditorState(value) {
+    return EditorState.createWithContent(ContentState.createFromText(value || ''))
   }
 
   _onChange(editorState) {
-   this.props.onChange(editorState.getCurrentContent().getPlainText(''))
    return this.setState({editorState})
   }
 
   focus() {
     this.refs.editor.focus()
+  }
+
+  changePlainText(value) {
+    this.setState({editorState: this._plainTextEditorState(value)})
+  }
+
+  getPlainText() {
+    return this.state.editorState.getCurrentContent().getPlainText('')
   }
 
   render() {
@@ -50,37 +61,31 @@ export default class MetricName extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.name === this.state.value) {this.setState({value: nextProps.name})}
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    return ((nextProps.name !== this.props.name) ||
-            (nextProps.inSelectedCell !== this.props.inSelectedCell) ||
-            (nextState.value !== this.state.value))
+    if (!nextProps.inSelectedCell && (this.props.name !== nextProps.name) && (nextProps.name !== this.value())) {
+      this.refs.SimpleEditor.changePlainText(nextProps.name)
+    }
   }
 
   handleSubmit() {
     if (this._hasChanged()){
-      this.props.onChange({name: this.state.value})
+      this.props.onChange({name: this.value()})
     }
   }
 
   _hasChanged() {
-    return (this.state.value != this.props.name)
+    return (this.value() != this.props.name)
   }
 
   hasContent() {
-    return !_.isEmpty(this.state.value)
+    return !_.isEmpty(this.value())
+  }
+
+  value() {
+    return this.refs.SimpleEditor.getPlainText()
   }
 
   componentWillUnmount() {
     this.handleSubmit()
-  }
-
-  onChange(value) {
-    if (value !== this.state.value) {
-      this.setState({value})
-    }
   }
 
   handleKeyDown(e) {
@@ -100,9 +105,9 @@ export default class MetricName extends Component {
       >
         <SimpleEditor
           onBlur={this.handleSubmit.bind(this)}
-          onChange={this.onChange.bind(this)}
           value={this.state.value}
           placeholder={'name'}
+          ref='SimpleEditor'
         />
       </span>
     )
