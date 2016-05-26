@@ -123,8 +123,9 @@ export default class Cell extends Component {
       // Then endDrag fixes a bug where the original dragging position is hovered.
       return (
         <ItemCell
-          onEndDrag={this.props.onEndDragCell}
           {...this.props}
+          onEndDrag={this.props.onEndDragCell}
+          forceFlowGridUpdate={this.props.forceFlowGridUpdate}
           hover={this.props.isHovered}
           ref={'item'}
         />

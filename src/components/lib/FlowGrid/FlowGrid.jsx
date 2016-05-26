@@ -171,8 +171,10 @@ export default class FlowGrid extends Component{
     const item = this.props.items.find(i => isAtLocation(i.location, location));
     return (
       <Cell
-        hasItemUpdated={this.props.hasItemUpdated}
+        canvasState={this.props.canvasState}
+        forceFlowGridUpdate={() => this.forceUpdate()}
         gridKeyPress={this._handleKeyDown.bind(this)}
+        hasItemUpdated={this.props.hasItemUpdated}
         handleSelect={this.props.onSelectItem}
         handleEndRangeSelect={this._handleEndRangeSelect.bind(this)}
         inSelectedRegion={isWithinRegion(location, this.props.selectedRegion)}
@@ -186,7 +188,6 @@ export default class FlowGrid extends Component{
         onMouseEnter={(e) => {this._handleCellMouseEnter(location, e)}}
         onEndDragCell={newLocation => {this._handleEndDragCell(newLocation)}}
         onEmptyCellMouseDown={(e) => {this._handleEmptyCellMouseDown(e, location)}}
-        canvasState={this.props.canvasState}
         ref={`cell-${location.row}-${location.column}`}
       />
     )

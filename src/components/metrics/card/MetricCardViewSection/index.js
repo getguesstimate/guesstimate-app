@@ -104,6 +104,7 @@ export default class MetricCardViewSection extends Component {
                 onChange={onChangeName}
                 jumpSection={jumpSection}
                 ref='name'
+                heightHasChanged={this.props.heightHasChanged}
               />
           </div>
         }

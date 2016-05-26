@@ -66,6 +66,10 @@ export default class MetricName extends Component {
     }
   }
 
+  componentWillUnmount() {
+    this.handleSubmit()
+  }
+
   handleSubmit() {
     if (this._hasChanged()){
       this.props.onChange({name: this.value()})
@@ -84,12 +88,9 @@ export default class MetricName extends Component {
     return this.refs.SimpleEditor.getPlainText()
   }
 
-  componentWillUnmount() {
-    this.handleSubmit()
-  }
-
   handleKeyDown(e) {
     e.stopPropagation()
+    this.props.heightHasChanged()
     const ENTER = (e) => ((e.keyCode === 13) && !e.shiftKey)
     if (ENTER(e)){
       e.stopPropagation()

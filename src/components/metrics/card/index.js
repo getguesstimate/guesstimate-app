@@ -241,6 +241,7 @@ class MetricCard extends Component {
               selectedMetric={this.props.selectedMetric}
               showSensitivitySection={shouldShowSensitivitySection}
               editable={this.props.hovered}
+              heightHasChanged={this.props.forceFlowGridUpdate}
           />
 
           {inSelectedCell && !this.state.modalIsOpen &&
