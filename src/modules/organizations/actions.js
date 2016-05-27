@@ -1,6 +1,8 @@
 import {actionCreatorsFor} from 'redux-crud'
+import cuid from 'cuid'
 import * as displayErrorsActions from 'gModules/displayErrors/actions.js'
 import * as membershipActions from 'gModules/userOrganizationMemberships/actions.js'
+import * as userActions from 'gModules/users/actions.js'
 import {captureApiError} from 'lib/errors/index.js'
 import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
 import * as userOrganizationMembershipActions from 'gModules/userOrganizationMemberships/actions.js'
@@ -33,5 +35,24 @@ export function fetchSuccess(organizations) {
     const formatted = organizations.map(o => _.pick(o, ['id', 'name', 'picture', 'admin_id']))
     console.log('formatted', formatted)
     dispatch(sActions.fetchSuccess(formatted))
+  }
+}
+
+export function addMember(organizationId, email) {
+  return (dispatch, getState) => {
+    const cid = cuid()
+    let object = {id: cid}
+
+    const action = sActions.createStart(object);
+
+    api(getState()).organizations.addMember({organizationId, email}, (err, membership) => {
+      if (err) {
+        captureApiError('OrganizationMemberCreate', null, null, err, {url: 'OrganizationMemberCreate'})
+      }
+      else if (membership) {
+        dispatch(userActions.fetchSuccess([membership._embedded.user]))
+        dispatch(membershipActions.fetchSuccess([membership]))
+      }
+    })
   }
 }

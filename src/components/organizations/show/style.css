@@ -1,5 +1,45 @@
 @import './styles/variables.css';
 
+.organizationShow .header-background{
+  background-color: white;
+  border-bottom: 1px solid #D4D4D5;
+}
+
+.organizationShow .header-background .wrap{
+  position: relative;
+  padding-top: 3em;
+  padding-bottom: 2em;
+}
+
+.organizationShow .ui.menu {
+  float: right;
+  margin-top: 0;
+}
+
+.organizationShow .ui.menu .item{
+  font-weight: 800;
+  font-size: 1.2em;
+  color: #444;
+}
+
+.organizationShow .main-section {
+  margin-top: 1em;
+}
+
+.organizationShow .ui.menu .item.active{
+  background: #CACACA;
+}
+
+.organizationShow .ui.tabular.menu.reversed .active.item{
+  background: none #F7F5F5;
+  border-radius: 0.15rem 0.15rem 0 0 !important;
+}
+
+.organizationShow .main-organization-tag h1 {
+  margin-bottom: 0;
+  margin-top: 0.5rem;
+}
+
 .organizationShow .main-organization-tag {
   text-align: center;
   margin-right: 0.5em;
@@ -7,10 +47,10 @@
 }
 
 .organizationShow .main-organization-tag img{
-  max-width: 10em;
-  max-height: 8em;
+  max-width: 4em;
+  max-height: 5em;
   border-radius: 0.5em;
-  margin-bottom: 10px;
+  margin-bottom: 2px;
 }
 
 .organizationShow .members {

@@ -7,6 +7,7 @@ import {captureApiError} from 'lib/errors/index.js'
 import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
 
 let sActions = actionCreatorsFor('userOrganizationMemberships')
+let relevantAttributes = ['id', 'user_id', 'organization_id']
 
 function api(state) {
   function getToken(state) {
@@ -17,15 +18,14 @@ function api(state) {
 
 export function fetchByOrganizationId(organizationId) {
   return (dispatch, getState) => {
-    api(getState()).organizations.getMembers({organizationId}, (err, members) => {
+    api(getState()).organizations.getMembers({organizationId}, (err, memberships) => {
       if (err) {
         dispatch(displayErrorsActions.newError())
         captureApiError('OrganizationsMemberFetch', null, null, err, {url: 'fetchMembers'})
-      } else if (members) {
-        const formatted = members.items.map(m => _.pick(m, ['id', 'user_id', 'organization_id']))
-        dispatch(sActions.fetchSuccess(formatted))
+      } else if (memberships) {
+        dispatch(fetchSuccess(memberships.items))
 
-        const users = members.items.map(m => _.get(m, '_embedded.user'))
+        const users = memberships.items.map(m => _.get(m, '_embedded.user'))
         dispatch(userActions.fetchSuccess(users))
       }
     })
@@ -39,14 +39,18 @@ export function fetchByUserId(userId) {
         dispatch(displayErrorsActions.newError())
         captureApiError('OrganizationsMemberFetch', null, null, err, {url: 'fetchMembers'})
       } else if (memberships) {
-        const formatted = memberships.items.map(m => _.pick(m, ['id', 'user_id', 'organization_id']))
-        dispatch(sActions.fetchSuccess(formatted))
+        dispatch(fetchSuccess(memberships.items))
 
         const organizations = memberships.items.map(m => _.get(m, '_embedded.organization'))
         dispatch(organizationActions.fetchSuccess(organizations))
       }
     })
   }
+}
+
+export function fetchSuccess(memberships) {
+  const formatted = memberships.map(m => _.pick(m, relevantAttributes))
+  return sActions.fetchSuccess(formatted)
 }
 
 export function destroy(id) {

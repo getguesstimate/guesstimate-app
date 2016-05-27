@@ -10,6 +10,7 @@ import SpaceCards from 'gComponents/spaces/cards'
 import Container from 'gComponents/utility/container/Container.js'
 import e from 'gEngine/engine'
 import './style.css'
+import Icon from 'react-fa'
 
 function mapStateToProps(state) {
   return {
@@ -23,7 +24,7 @@ const Member = ({user, isAdmin, onRemove}) => (
     <div className='row'>
       <div className='col-xs-7'>
         <a href={e.user.url(user)}><img src={user.picture}/></a>
-        <div className='member--name'>{user.name}</div>
+        <a href={e.user.url(user)} className='member--name'>{user.name}</a>
       </div>
       <div className='col-xs-2 role'>
         {isAdmin ? 'Admin' : 'Editor'}
@@ -47,7 +48,8 @@ export default class OrganizationShow extends Component{
 
   state = {
     attemptedFetch: false,
-    openTab: 'MEMBERS'
+    openTab: 'MEMBERS',
+    subMembersTab: 'INDEX'
   }
 
   componentWillMount() {
@@ -82,6 +84,10 @@ export default class OrganizationShow extends Component{
      this.props.dispatch(userOrganizationMembershipActions.destroy(user.membershipId))
   }
 
+  addUser() {
+     this.props.dispatch(organizationActions.addMember(this.props.organizationId, 'foo@bar.com'))
+  }
+
   render () {
     const {organizationId, organizations, members} = this.props
     const {openTab} = this.state
@@ -102,53 +108,96 @@ export default class OrganizationShow extends Component{
                       <img
                         src={organization.picture}
                       />
+                      <h1>
+                        {organization.name}
+                      </h1>
                     </div>
-                    <h2>
-                      {organization.name}
-                    </h2>
                   </div>
                 }
               </div>
             </div>
 
-            <div className="ui tabular menu">
-              { [{name: 'Models', key: 'MODELS'}, {name: 'Members', key: 'MEMBERS'}].map( e => {
-                const className = `item ${(openTab === e.key) ? 'active' : ''}`
-                return (
-                  <a className={className} onClick={() => {this.changeTab(e.key)}}> {e.name} </a>
-                )
-               })}
-            </div>
-
-            {(openTab === 'MODELS') && spaces &&
-              <SpaceCards
-                spaces={spaces}
-                showPrivacy={true}
-              />
-            }
-
-            {(openTab === 'MEMBERS') && members &&
-              <div className='row'>
-                <div className='col-sm-3'/>
-                <div className='col-sm-6'>
-                  <div className='members'>
-                    {members.map(m => {
-                      return (
-                        <Member
-                          key={m.id}
-                          user={m}
-                          isAdmin={organization.admin_id === m.id}
-                          onRemove={() => {this.destroyMembership(m)}}
-                        />
-                        )
-                    })}
-                  </div>
+            <div className='row'>
+              <div className='col-xs-12'>
+                <div className="ui secondary menu">
+                  { [{name: 'Members', key: 'MEMBERS'}, {name: 'Models', key: 'MODELS'}].map( e => {
+                    const className = `item ${(openTab === e.key) ? 'active' : ''}`
+                    return (
+                      <a className={className} onClick={() => {this.changeTab(e.key)}}> {e.name} </a>
+                    )
+                   })}
                 </div>
               </div>
-            }
+            </div>
+
+            <div className='main-section'>
+              {(openTab === 'MODELS') && spaces &&
+                <SpaceCards
+                  spaces={spaces}
+                  showPrivacy={true}
+                />
+              }
+
+              {(openTab === 'MEMBERS') && members && organization &&
+                <MembersTab
+                  subTab={this.state.subMembersTab}
+                  members={members}
+                  admin_id={organization.admin_id}
+                  onRemove={this.destroyMembership}
+                  addUser={this.addUser.bind(this)}
+                  changeSubTab={(name) => {this.setState({subMembersTab: name})}}
+                />
+              }
+            </div>
           </div>
         </div>
       </Container>
     )
   }
 }
+
+const MembersTab = ({subTab, members, admin_id, onRemove, addUser, changeSubTab}) => (
+  <div className='row'>
+    <div className='col-sm-2'>
+          <div className='ui button large green' onClick={() => {changeSubTab('ADD')}}>
+            <Icon name='plus'/>Add Users
+          </div>
+        </div>
+    <div className='col-sm-8'>
+      {subTab === 'INDEX' &&
+        <div>
+          <div className='members'>
+            {members.map(m => {
+              return (
+                <Member
+                  key={m.id}
+                  user={m}
+                  isAdmin={admin_id === m.id}
+                  onRemove={() => {onRemove(m)}}
+                />
+                )
+            })}
+          </div>
+
+        </div>
+      }
+      {subTab === 'ADD' &&
+        <div>
+          <h1> Invite New Members </h1>
+          <h3> Members have viewing & editing access to all organization models.</h3>
+
+          <div onClick={() => {changeSubTab('INDEX')}}> close </div>
+
+        <div className="ui form">
+          <div className="field">
+            <label>Email</label>
+            <input type="text" placeholder="name@domain.com"/>
+          </div>
+        </div>
+
+        </div>
+      }
+    </div>
+  </div>
+)
+
