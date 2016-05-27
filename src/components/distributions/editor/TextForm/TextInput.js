@@ -45,6 +45,7 @@ class TextInputEditor extends Component {
         <Editor
           onFocus={this.props.onFocus}
           editorState={editorState}
+          handleReturn={() => true}
           onBlur={this.props.onBlur}
           onChange={this._onChange.bind(this)}
           tabIndex={2}
