@@ -3,6 +3,7 @@ import cuid from 'cuid'
 import * as displayErrorsActions from 'gModules/displayErrors/actions.js'
 import * as userActions from 'gModules/users/actions.js'
 import * as organizationActions from 'gModules/organizations/actions.js'
+import * as httpRequestActions from 'gModules/httpRequests/actions.js'
 import {rootUrl} from 'servers/guesstimate-api/constants.js'
 import {captureApiError} from 'lib/errors/index.js'
 import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
@@ -73,14 +74,16 @@ export function createWithEmail(organizationId, email) {
     let object = {id: cid, organization_id: organizationId}
 
     const action = sActions.createStart(object);
-
+    dispatch(httpRequestActions.start({id: cid, entity: 'foobar', metadata: {organizationId}}))
     api(getState()).organizations.addMember({organizationId, email}, (err, membership) => {
       if (err) {
         dispatch(sActions.createError(err, object))
+        dispatch(httpRequestActions.failure({id: cid, error: err}))
       }
       else if (membership) {
         dispatch(userActions.fetchSuccess([membership._embedded.user]))
         dispatch(sActions.createSuccess(membership))
+        dispatch(httpRequestActions.success({id: cid, response: {membership}}))
       }
     })
   }
