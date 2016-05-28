@@ -13,19 +13,23 @@ export class CreateOrganizationForm extends Component {
     return (
       <div className="organization-form">
         <h1>Create a new organization</h1>
-        <input
-          value={this.state.value}
-          onChange={(e) => {this.setState({value: e.target.value})}}
-        />
-        <br/>
-        <span
-          className="button"
-          onClick={() => {
-            this.props.dispatch(create(this.state.value))
-          }}
-        >
-          Submit
-        </span>
+        <div>
+          <input
+            placeholder={"name"}
+            value={this.state.value}
+            onChange={(e) => {this.setState({value: e.target.value})}}
+          />
+        </div>
+        <div>
+          <span
+            className="ui button primary"
+            onClick={() => {
+              this.props.dispatch(create(this.state.value))
+            }}
+          >
+            Submit
+          </span>
+        </div>
       </div>
     )
   }

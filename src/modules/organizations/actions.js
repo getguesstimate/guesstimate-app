@@ -1,12 +1,14 @@
 import cuid from 'cuid'
 import app from 'ampersand-app'
-
 import {actionCreatorsFor} from 'redux-crud'
+
 import * as displayErrorsActions from 'gModules/displayErrors/actions.js'
 import * as membershipActions from 'gModules/userOrganizationMemberships/actions.js'
-import {captureApiError} from 'lib/errors/index.js'
-import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
 import * as userOrganizationMembershipActions from 'gModules/userOrganizationMemberships/actions.js'
+
+import {captureApiError} from 'lib/errors/index.js'
+
+import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
 
 let oActions = actionCreatorsFor('organizations')
 
@@ -43,15 +45,14 @@ export function create(name) {
     const cid = cuid()
     let object = {id: cid, organization: {name} }
 
-    //dispatch(changeOrganizationCreationState('CREATING'))
+    // TODO(matthew): Track pending create request.
     const action = oActions.createStart(object);
 
     api(getState()).organizations.create(object, (err, value) => {
       if (err) {
-        //dispatch(changeOrganizationCreationState('ERROR_CREATING'))
+        // TODO(matthew): Track if request errors out.
         captureApiError('OrganizationsCreate', null, null, err, {url: 'OrganizationsCreate'})
       } else if (value) {
-        //dispatch(changeOrganizationCreationState('CREATED'))
         dispatch(oActions.createSuccess(value, cid))
         app.router.history.navigate('/organizations/' + value.id)
       }
