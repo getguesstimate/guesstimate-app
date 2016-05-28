@@ -7,7 +7,7 @@
 
 .MetricToken .ui.tiny.label {
   font-size: 0.85rem;
-  background-color: #25B530 !important;
+  background-color: $green-1 !important;
   border-radius: 2px;
   padding: 0.4em 0.45em 0.35em;
   margin-top: 2px;

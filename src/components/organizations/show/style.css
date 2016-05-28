@@ -22,8 +22,21 @@
   color: #444;
 }
 
+.organizationShow .ui.form{
+  font-size: 1.2em;
+  margin-top: 4em;
+}
+
 .organizationShow .main-section {
-  margin-top: 1em;
+  margin-top: 2em;
+}
+
+.organizationShow .tab-members{
+  margin-top: 7em;
+}
+
+.organizationShow .tab-members .ui.button.green{
+  background-color: $green-2;
 }
 
 .organizationShow .ui.menu .item.active{
@@ -58,7 +71,6 @@
   background-color: white;
   border-radius: 3px;
   padding: 0 1em;
-  margin-top: 4em;
 }
 
 .organizationShow .member {

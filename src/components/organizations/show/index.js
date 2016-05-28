@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from 'react'
+import ReactDOM from 'react-dom'
 import { connect } from 'react-redux';
 import SpaceList from 'gComponents/spaces/list'
 import * as spaceActions from 'gModules/spaces/actions'
@@ -22,9 +23,12 @@ function mapStateToProps(state) {
 const Member = ({user, isAdmin, onRemove}) => (
   <div className='member'>
     <div className='row'>
-      <div className='col-xs-7'>
+      <div className='col-xs-5'>
         <a href={e.user.url(user)}><img src={user.picture}/></a>
         <a href={e.user.url(user)} className='member--name'>{user.name}</a>
+      </div>
+      <div className='col-xs-2'>
+        {user.sign_in_count > 0 ? 'joined' : 'invited'}
       </div>
       <div className='col-xs-2 role'>
         {isAdmin ? 'Admin' : 'Editor'}
@@ -77,15 +81,19 @@ export default class OrganizationShow extends Component{
   }
 
   changeTab(tab) {
-    this.setState({openTab: tab})
+    this.setState({
+      openTab: tab,
+      subMembersTab: 'INDEX'
+    })
   }
 
   destroyMembership(user) {
-     this.props.dispatch(userOrganizationMembershipActions.destroy(user.membershipId))
+    this.props.dispatch(userOrganizationMembershipActions.destroy(user.membershipId))
   }
 
-  addUser() {
-     this.props.dispatch(organizationActions.addMember(this.props.organizationId, 'foo@bar.com'))
+  addUser(email) {
+    console.log("adding user", email)
+    this.props.dispatch(userOrganizationMembershipActions.createWithEmail(this.props.organizationId, email))
   }
 
   render () {
@@ -143,7 +151,7 @@ export default class OrganizationShow extends Component{
                   subTab={this.state.subMembersTab}
                   members={members}
                   admin_id={organization.admin_id}
-                  onRemove={this.destroyMembership}
+                  onRemove={this.destroyMembership.bind(this)}
                   addUser={this.addUser.bind(this)}
                   changeSubTab={(name) => {this.setState({subMembersTab: name})}}
                 />
@@ -157,14 +165,30 @@ export default class OrganizationShow extends Component{
 }
 
 const MembersTab = ({subTab, members, admin_id, onRemove, addUser, changeSubTab}) => (
-  <div className='row'>
+  <div className='row tab-members'>
     <div className='col-sm-2'>
-          <div className='ui button large green' onClick={() => {changeSubTab('ADD')}}>
-            <Icon name='plus'/>Add Users
-          </div>
-        </div>
-    <div className='col-sm-8'>
       {subTab === 'INDEX' &&
+        <div className='ui button large green' onClick={() => {changeSubTab('ADD')}}>
+          Add Users
+        </div>
+      }
+      {subTab === 'ADD' &&
+        <div className='ui button large ' onClick={() => {changeSubTab('INDEX')}}>
+          <Icon name='chevron-left'/> Back
+        </div>
+      }
+    </div>
+    <div className='col-sm-8'>
+      {subTab === 'ADD' &&
+        <div>
+          <h1> Invite New Members </h1>
+          <div className='ui ignored message'>
+          <p> Members have viewing & editing access to all organization models. If you are on a plan, your pricing will be adjusted within 24 hours.</p>
+          </div>
+          <InviteUserForm addUser={addUser}/>
+        </div>
+      }
+      {subTab !== 'INDEX1' &&
         <div>
           <div className='members'>
             {members.map(m => {
@@ -181,23 +205,46 @@ const MembersTab = ({subTab, members, admin_id, onRemove, addUser, changeSubTab}
 
         </div>
       }
-      {subTab === 'ADD' &&
-        <div>
-          <h1> Invite New Members </h1>
-          <h3> Members have viewing & editing access to all organization models.</h3>
-
-          <div onClick={() => {changeSubTab('INDEX')}}> close </div>
-
-        <div className="ui form">
-          <div className="field">
-            <label>Email</label>
-            <input type="text" placeholder="name@domain.com"/>
-          </div>
-        </div>
-
-        </div>
-      }
     </div>
   </div>
 )
 
+function validateEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+}
+
+class InviteUserForm extends Component{
+  state = { value: '' }
+
+  _submit() {
+    this.props.addUser(this.state.value)
+  }
+
+  _value() {
+    return this.refs.input && this.refs.input.value
+  }
+
+  _onChange(e) {
+    this.setState({value: this._value()})
+  }
+
+  render() {
+    const {value} = this.state
+    const isValid = validateEmail(value)
+    const isEmpty = _.isEmpty(value)
+    const buttonColor = (isValid || isEmpty) ? 'green' : 'grey'
+
+    return(
+      <div className="ui form">
+        <div className="field">
+          <label>Email Address</label>
+          <input type="text" placeholder="name@domain.com" ref='input' onChange={this._onChange.bind(this)}/>
+        </div>
+        <div className={`ui button submit ${buttonColor} ${isValid ? '' : 'disabled'}`} onClick={this._submit.bind(this)}>
+          Invite User
+        </div>
+      </div>
+    )
+  }
+}

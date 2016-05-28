@@ -1,4 +1,5 @@
 import {actionCreatorsFor} from 'redux-crud'
+import cuid from 'cuid'
 import * as displayErrorsActions from 'gModules/displayErrors/actions.js'
 import * as userActions from 'gModules/users/actions.js'
 import * as organizationActions from 'gModules/organizations/actions.js'
@@ -61,6 +62,25 @@ export function destroy(id) {
         captureApiError('OrganizationsMemberDestroy', null, null, err, {url: 'destroyOrganizationMember'})
       } else {
         dispatch(sActions.deleteSuccess({id}))
+      }
+    })
+  }
+}
+
+export function createWithEmail(organizationId, email) {
+  return (dispatch, getState) => {
+    const cid = cuid()
+    let object = {id: cid, organization_id: organizationId}
+
+    const action = sActions.createStart(object);
+
+    api(getState()).organizations.addMember({organizationId, email}, (err, membership) => {
+      if (err) {
+        dispatch(sActions.createError(err, object))
+      }
+      else if (membership) {
+        dispatch(userActions.fetchSuccess([membership._embedded.user]))
+        dispatch(sActions.createSuccess(membership))
       }
     })
   }

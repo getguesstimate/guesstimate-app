@@ -18,7 +18,8 @@ export default class Organizations extends AbstractResource {
   addMember({organizationId, email}, callback) {
     const url = `organizations/${organizationId}/members`
     const method = 'POST'
+    const data = {email}
 
-    this.guesstimateMethod({url, method})(callback)
+    this.guesstimateMethod({url, method, data})(callback)
   }
 }
