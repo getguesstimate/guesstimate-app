@@ -14,7 +14,6 @@ export const signIn = () => {
     return (dispatch) => lock.showSignin(lockOptions, (err, profile, token) => {
       if (err) {
         generalError('MesignIn Error', {err, profile, token})
-        dispatch(displayErrorsActions.newError())
       } else {
         const {name, username, picture, user_id} = profile
         dispatch(auth0MeLoaded({name, username, picture, user_id}, token))
@@ -25,13 +24,12 @@ export const signIn = () => {
 }
 
 export const signUp = () => {
-    return (dispatch) => lock.showSignin(lockOptions, (err, profile, token) => {
+    return (dispatch) => lock.showSignup(lockOptions, (err, profile, token) => {
       if (err) {
         generalError('MesignUp Error', {err, profile, token})
-        dispatch(displayErrorsActions.newError())
       } else {
-        dispatch(auth0MeLoaded(profile, token))
         const {nickname, picture, user_id, email, company, name, gender, locale, location} = profile
+        dispatch(auth0MeLoaded(profile, token))
         dispatch(userActions.create(
           {
             name,
