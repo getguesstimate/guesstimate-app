@@ -15,10 +15,10 @@ export default class Organizations extends AbstractResource {
     this.guesstimateMethod({url, method})(callback)
   }
 
-  new(name, callback) {
-    const url = 'organizations/new'
-    const method = 'GET'
+  create(data, callback) {
+    const url = 'organizations'
+    const method = 'POST'
 
-    this.guesstimateMethod({url, method})(callback)
+    this.guesstimateMethod({url, method, data})(callback)
   }
 }

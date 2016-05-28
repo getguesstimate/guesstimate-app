@@ -1,48 +1,9 @@
 import React, {Component} from 'react'
+import {connect} from 'react-redux'
 
-import {EditorState, Editor, ContentState, getDefaultKeyBinding, KeyBindingUtil} from 'draft-js'
+import {create} from 'gModules/organizations/actions'
 
-class OrganizationNameEditor extends Component {
-  state = {
-    editorState: this._plainTextEditorState(this.props.value)
-  }
-
-  _plainTextEditorState(value) {
-    return EditorState.createWithContent(ContentState.createFromText(value || ''))
-  }
-
-  _onChange(editorState) {
-   return this.setState({editorState})
-  }
-
-  focus() {
-    this.refs.editor.focus()
-  }
-
-  changePlainText(value) {
-    this.setState({editorState: this._plainTextEditorState(value)})
-  }
-
-  getPlainText() {
-    return this.state.editorState.getCurrentContent().getPlainText('')
-  }
-
-  render() {
-    const {editorState} = this.state;
-    return (
-      <div onClick={this.props.isClickable && this.focus.bind(this)}>
-        <Editor
-          editorState={editorState}
-          onChange={this._onChange.bind(this)}
-          tabIndex={2}
-          ref='editor'
-          placeholder={this.props.placeholder}
-        />
-      </div>
-    );
-  }
-}
-
+@connect()
 export class CreateOrganizationForm extends Component {
   state = {
     value: ""
@@ -57,7 +18,14 @@ export class CreateOrganizationForm extends Component {
           onChange={(e) => {this.setState({value: e.target.value})}}
         />
         <br/>
-        <span className="button">Submit</span>
+        <span
+          className="button"
+          onClick={() => {
+            this.props.dispatch(create(this.state.value))
+          }}
+        >
+          Submit
+        </span>
       </div>
     )
   }
