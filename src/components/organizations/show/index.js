@@ -220,6 +220,10 @@ function validateEmail(email) {
 class InviteUserForm extends Component{
   state = { value: '' }
 
+  componentDidMount() {
+    this.refs.input.focus()
+  }
+
   _submit() {
     this.props.addUser(this.state.value)
     this.setState({value: ''})
@@ -227,6 +231,12 @@ class InviteUserForm extends Component{
 
   _onChange(e) {
     this.setState({value: e.target.value})
+  }
+
+  _onKeyDown(e) {
+    if (e.keyCode === 13 && validateEmail(this.state.value)) {
+      this._submit();
+    }
   }
 
   render() {
@@ -241,7 +251,14 @@ class InviteUserForm extends Component{
         <div className="ui form">
           <div className="field">
             <label>Email Address</label>
-            <input value={this.state.value} type="text" placeholder="name@domain.com" ref='input' onChange={this._onChange.bind(this)}/>
+            <input
+              value={this.state.value}
+              onKeyDown={this._onKeyDown.bind(this)}
+              type='text'
+              placeholder='name@domain.com'
+              ref='input'
+              onChange={this._onChange.bind(this)}
+            />
           </div>
           <div className={`ui button submit ${buttonColor} ${isValid ? '' : 'disabled'}`} onClick={this._submit.bind(this)}>
             Invite User
