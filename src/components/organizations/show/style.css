@@ -1,111 +1,106 @@
 @import './styles/variables.css';
 
-.organizationShow .header-background{
-  background-color: white;
-  border-bottom: 1px solid #D4D4D5;
+.OrganizationShow {
+  .main-section {
+    margin-top: 2em;
+  }
+
+  .ui.menu .item.active{
+    background: #CACACA;
+  }
+
+  .ui.tabular.menu.reversed .active.item{
+    background: none #F7F5F5;
+    border-radius: 0.15rem 0.15rem 0 0 !important;
+  }
+
+  .OrganizationHeader {
+    h1 {
+      margin-bottom: 0;
+      margin-top: 0.5rem;
+    }
+
+    .center-display {
+      text-align: center;
+      margin-right: 0.5em;
+      margin-top: 0.25em;
+    }
+
+    img {
+      max-width: 4em;
+      max-height: 5em;
+      border-radius: 0.5em;
+      margin-bottom: 2px;
+    }
+  }
+
+  .OrganizationTabButtons {
+    .ui.menu {
+      float: right;
+      margin-top: 0;
+    }
+
+    .ui.menu .item{
+      font-weight: 800;
+      font-size: 1.2em;
+      color: #444;
+    }
+  }
 }
 
-.organizationShow .header-background .wrap{
-  position: relative;
-  padding-top: 3em;
-  padding-bottom: 2em;
-}
-
-.organizationShow .ui.menu {
-  float: right;
-  margin-top: 0;
-}
-
-.organizationShow .ui.menu .item{
-  font-weight: 800;
-  font-size: 1.2em;
-  color: #444;
-}
-
-.organizationShow .ui.form{
+.OrganizationShow .MembersAddSubTab .ui.form{
   font-size: 1.2em;
   margin-top: 4em;
   margin-bottom: 4em;
 }
 
-.organizationShow .main-section {
-  margin-top: 2em;
-}
-
-.organizationShow .tab-members{
+.OrganizationShow .MembersTab {
   margin-top: 7em;
-}
 
-.organizationShow .tab-members .ui.button.green{
-  background-color: $green-2;
-}
+  .ui.button.green{
+    background-color: $green-2;
+  }
 
-.organizationShow .ui.menu .item.active{
-  background: #CACACA;
-}
+  .members {
+    width: 100%;
+    background-color: white;
+    border-radius: 3px;
+    padding: 0 1em;
+  }
 
-.organizationShow .ui.tabular.menu.reversed .active.item{
-  background: none #F7F5F5;
-  border-radius: 0.15rem 0.15rem 0 0 !important;
-}
+  .Member {
+    padding: 1em 0.2em;
+    border-bottom: 1px solid #eee;
 
-.organizationShow .main-organization-tag h1 {
-  margin-bottom: 0;
-  margin-top: 0.5rem;
-}
+    .role{
+      margin-top: 0.6em;
+      color: $grey-2;
+      font-weight: bold;
+      font-size: 1.2em;
+    }
 
-.organizationShow .main-organization-tag {
-  text-align: center;
-  margin-right: 0.5em;
-  margin-top: 0.25em;
-}
+    .button.remove{
+      margin-top: 0.2em;
+      float: right;
+    }
 
-.organizationShow .main-organization-tag img{
-  max-width: 4em;
-  max-height: 5em;
-  border-radius: 0.5em;
-  margin-bottom: 2px;
-}
+    .member--name {
+      float: left;
+      font-size: 1.4em;
+      font-weight: 800;
+      color: $black-3;
+      margin-top: 0.5em;
+    }
 
-.organizationShow .members {
-  width: 100%;
-  background-color: white;
-  border-radius: 3px;
-  padding: 0 1em;
-}
+    img{
+      float: left;
+      width: 40px;
+      border-radius: 3px;
+      margin-right: 1em;
+    }
 
-.organizationShow .member {
-  padding: 1em 0.2em;
-  border-bottom: 1px solid #eee;
-}
-
-.organizationShow .member:last-child {
-  border-bottom: none;
-}
-
-.organizationShow .member .role{
-  margin-top: 0.6em;
-  color: $grey-2;
-  font-weight: bold;
-  font-size: 1.2em;
-}
-
-.organizationShow .member .button.remove{
-  margin-top: 0.2em;
-  float: right;
-}
-
-.organizationShow .member--name {
-  float: left;
-  font-size: 1.4em;
-  font-weight: 800;
-  color: $black-3;
-  margin-top: 0.5em;
-}
-
-.organizationShow .member img{
-  float: left;
-  width: 40px;
-  border-radius: 3px;
-  margin-right: 1em;
+    &:last-child {
+      border-bottom: none;
+    }
+  }
 }

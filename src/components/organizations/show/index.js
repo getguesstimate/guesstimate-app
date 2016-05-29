@@ -21,30 +21,6 @@ function mapStateToProps(state) {
   }
 }
 
-const Member = ({user, isAdmin, onRemove}) => (
-  <div className='member'>
-    <div className='row'>
-      <div className='col-xs-5'>
-        <a href={e.user.url(user)}><img src={user.picture}/></a>
-        <a href={e.user.url(user)} className='member--name'>{user.name}</a>
-      </div>
-      <div className='col-xs-2'>
-        {user.sign_in_count > 0 ? 'joined' : 'invited'}
-      </div>
-      <div className='col-xs-2 role'>
-        {isAdmin ? 'Admin' : 'Editor'}
-      </div>
-      <div className='col-xs-3'>
-        {user.membershipId && !isAdmin &&
-          <button className='ui button small remove' onClick={onRemove}>
-            Remove
-          </button>
-        }
-      </div>
-    </div>
-  </div>
-)
-
 @connect(mapStateToProps)
 @connect(organizationSpaceSelector)
 @connect(organizationMemberSelector)
@@ -55,7 +31,7 @@ export default class OrganizationShow extends Component{
   state = {
     attemptedFetch: false,
     openTab: 'MEMBERS',
-    subMembersTab: 'ADD'
+    subMembersTab: 'INDEX'
   }
 
   componentWillMount() {
@@ -105,60 +81,35 @@ export default class OrganizationShow extends Component{
 
     return (
       <Container>
-        <div className='organizationShow'>
-          <div className='GeneralSpaceIndex'>
+        <div className='OrganizationShow'>
 
-            <div className='row'>
-              <div className='col-md-4'/>
-              <div className='col-md-4 col-xs-12'>
-                {organization &&
-                  <div className='col-sm-12'>
-                    <div className='main-organization-tag'>
-                      <img
-                        src={organization.picture}
-                      />
-                      <h1>
-                        {organization.name}
-                      </h1>
-                    </div>
-                  </div>
-                }
-              </div>
-            </div>
+          <OrganizationHeader organization={organization}/>
 
-            <div className='row'>
-              <div className='col-xs-12'>
-                <div className="ui secondary menu">
-                  { [{name: 'Members', key: 'MEMBERS'}, {name: 'Models', key: 'MODELS'}].map( e => {
-                    const className = `item ${(openTab === e.key) ? 'active' : ''}`
-                    return (
-                      <a className={className} key={e.key} onClick={() => {this.changeTab(e.key)}}> {e.name} </a>
-                    )
-                   })}
-                </div>
-              </div>
-            </div>
+          <OrganizationTabButtons
+            tabs={[{name: 'Members', key: 'MEMBERS'}, {name: 'Models', key: 'MODELS'}]}
+            openTab={openTab}
+            changeTab={this.changeTab.bind(this)}
+          />
 
-            <div className='main-section'>
-              {(openTab === 'MODELS') && spaces &&
-                <SpaceCards
-                  spaces={spaces}
-                  showPrivacy={true}
-                />
-              }
+          <div className='main-section'>
+            {(openTab === 'MODELS') && spaces &&
+              <SpaceCards
+                spaces={spaces}
+                showPrivacy={true}
+              />
+            }
 
-              {(openTab === 'MEMBERS') && members && organization &&
-                <MembersTab
-                  subTab={this.state.subMembersTab}
-                  members={members}
-                  admin_id={organization.admin_id}
-                  onRemove={this.destroyMembership.bind(this)}
-                  addUser={this.addUser.bind(this)}
-                  changeSubTab={(name) => {this.setState({subMembersTab: name})}}
-                  httpRequests={this.props.httpRequests}
-                />
-              }
-            </div>
+            {(openTab === 'MEMBERS') && members && organization &&
+              <MembersTab
+                subTab={this.state.subMembersTab}
+                members={members}
+                admin_id={organization.admin_id}
+                onRemove={this.destroyMembership.bind(this)}
+                addUser={this.addUser.bind(this)}
+                onChangeSubTab={(name) => {this.setState({subMembersTab: name})}}
+                httpRequests={this.props.httpRequests}
+              />
+            }
           </div>
         </div>
       </Container>
@@ -166,31 +117,51 @@ export default class OrganizationShow extends Component{
   }
 }
 
-const MembersTab = ({subTab, members, admin_id, onRemove, addUser, changeSubTab, httpRequests}) => (
-  <div className='row tab-members'>
-    <div className='col-sm-2'>
-      {subTab === 'INDEX' &&
-        <div className='ui button large green' onClick={() => {changeSubTab('ADD')}}>
-          Add Users
+const OrganizationHeader = ({organization}) => (
+  <div className='row OrganizationHeader'>
+    <div className='col-md-4'/>
+    <div className='col-md-4 col-xs-12'>
+      {organization &&
+        <div className='col-sm-12'>
+          <div className='center-display'>
+            <img
+              src={organization.picture}
+            />
+            <h1>
+              {organization.name}
+            </h1>
+          </div>
         </div>
       }
-      {subTab === 'ADD' &&
-        <div className='ui button large ' onClick={() => {changeSubTab('INDEX')}}>
-          <Icon name='chevron-left'/> Back
+    </div>
+  </div>
+)
+
+const OrganizationTabButtons = ({tabs, openTab, changeTab}) => (
+  <div className='row OrganizationTabButtons'>
+    <div className='col-xs-12'>
+      <div className="ui secondary menu">
+        { tabs.map( e => {
+          const className = `item ${(openTab === e.key) ? 'active' : ''}`
+          return (
+            <a className={className} key={e.key} onClick={() => {changeTab(e.key)}}> {e.name} </a>
+          )
+         })}
+      </div>
+    </div>
+  </div>
+)
+
+const MembersIndexSubTab = ({subTab, members, admin_id, onChangeSubTab, onRemove}) => (
+  <div className='row MembersIndexSubTab'>
+    <div className='col-sm-2'>
+      {subTab === 'INDEX' &&
+        <div className='ui button large green' onClick={() => {onChangeSubTab('ADD')}}>
+          Add Users
         </div>
       }
     </div>
     <div className='col-sm-8'>
-      {subTab === 'ADD' &&
-        <div>
-          <h1> Invite New Members </h1>
-          <div className='ui ignored message'>
-          <p> Members have viewing & editing access to all organization models. If you are on a plan, your pricing will be adjusted within 24 hours.</p>
-          </div>
-          <InviteUserForm addUser={addUser} httpRequests={httpRequests}/>
-        </div>
-      }
-
       {subTab === 'INDEX' &&
         <div>
           <div className='members'>
@@ -205,9 +176,43 @@ const MembersTab = ({subTab, members, admin_id, onRemove, addUser, changeSubTab,
                 )
             })}
           </div>
-
         </div>
       }
+    </div>
+  </div>
+)
+
+const MembersTab = ({subTab, members, admin_id, onRemove, addUser, onChangeSubTab, httpRequests}) => (
+  <div className='MembersTab'>
+    {subTab === 'ADD' &&
+      <MembersAddSubTab {...{addUser, httpRequests, onChangeSubTab}}/>
+    }
+    {subTab === 'INDEX' &&
+      <MembersIndexSubTab {...{subTab, members, admin_id, onRemove, onChangeSubTab}}/>
+    }
+  </div>
+)
+
+const Member = ({user, isAdmin, onRemove}) => (
+  <div className='Member'>
+    <div className='row'>
+      <div className='col-xs-5'>
+        <a href={e.user.url(user)}><img src={user.picture}/></a>
+        <a href={e.user.url(user)} className='member--name'>{user.name}</a>
+      </div>
+      <div className='col-xs-2'>
+        {user.sign_in_count > 0 ? 'joined' : 'invited'}
+      </div>
+      <div className='col-xs-2 role'>
+        {isAdmin ? 'Admin' : 'Editor'}
+      </div>
+      <div className='col-xs-3'>
+        {user.membershipId && !isAdmin &&
+          <button className='ui button small remove' onClick={onRemove}>
+            Remove
+          </button>
+        }
+      </div>
     </div>
   </div>
 )
@@ -217,7 +222,7 @@ function validateEmail(email) {
     return re.test(email);
 }
 
-class InviteUserForm extends Component{
+class MembersAddSubTab extends Component{
   state = { value: '' }
 
   componentDidMount() {
@@ -247,36 +252,45 @@ class InviteUserForm extends Component{
 
     const requests = _.orderBy(_.cloneDeep(this.props.httpRequests), ['created_at'], ['desc'])
     return(
-      <div>
-        <div className="ui form">
-          <div className="field">
-            <label>Email Address</label>
-            <input
-              value={this.state.value}
-              onKeyDown={this._onKeyDown.bind(this)}
-              type='text'
-              placeholder='name@domain.com'
-              ref='input'
-              onChange={this._onChange.bind(this)}
-            />
-          </div>
-          <div className={`ui button submit ${buttonColor} ${isValid ? '' : 'disabled'}`} onClick={this._submit.bind(this)}>
-            Invite User
-          </div>
-          <div>
+      <div className='row MembersAddSubTab'>
+        <div className='col-sm-2'>
+          <div className='ui button large ' onClick={() => {this.props.onChangeSubTab('INDEX')}}>
+            <Icon name='chevron-left'/> Member List
           </div>
         </div>
-          {_.map(requests, (request) =>  {
-            return(
-              <InvitationHttpRequest
-                key={request.id}
-                busy={request.busy}
-                success={request.success}
-                email={request.email}
-                isExistingMember={request.isExistingMember}
+        <div className='col-sm-10'>
+          <h1> Invite New Members </h1>
+          <p> Members have viewing & editing access to all organization models. If you are on a plan, your pricing will be adjusted within 24 hours.</p>
+          <div className="ui form">
+            <div className="field">
+              <label>Email Address</label>
+              <input
+                value={this.state.value}
+                onKeyDown={this._onKeyDown.bind(this)}
+                type='text'
+                placeholder='name@domain.com'
+                ref='input'
+                onChange={this._onChange.bind(this)}
               />
-            )
-          })}
+            </div>
+            <div className={`ui button submit ${buttonColor} ${isValid ? '' : 'disabled'}`} onClick={this._submit.bind(this)}>
+              Invite User
+            </div>
+            <div>
+            </div>
+          </div>
+            {_.map(requests, (request) =>  {
+              return(
+                <InvitationHttpRequest
+                  key={request.id}
+                  busy={request.busy}
+                  success={request.success}
+                  email={request.email}
+                  isExistingMember={request.isExistingMember}
+                />
+              )
+            })}
+        </div>
       </div>
     )
   }
@@ -291,7 +305,7 @@ const InvitationHttpRequest = ({busy, success, email, isExistingMember}) => {
     </div>
   )} else if (status === 'failure'){ return (
     <div className='InvitationHttpRequest ui error message'>
-      Invitation failed to send.
+      Invitation to {email} failed.  This could be because they are already part of the organization or because of a server problem.  If it continues, please let us know.
     </div>
   )} else if (isExistingMember){ return (
     <div className='InvitationHttpRequest ui success message'>
