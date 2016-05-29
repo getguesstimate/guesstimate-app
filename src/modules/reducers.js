@@ -29,7 +29,7 @@ const rootReducer = function app(state = {}, action){
     guesstimates: SI(guesstimatesR(state.guesstimates, action)),
     selectedCell: SI(selectedCellR(state.selectedCell, action)),
     selectedRegion: SI(selectedRegionR(state.selectedRegion, action)),
-    guesstimateForm: SI(guesstimateFormR(state.guesstimateForm, state.metrics, state.guesstimates, action)),
+    //guesstimateForm: SI(guesstimateFormR(state.guesstimateForm, state.metrics, state.guesstimates, action)),
     simulations: SI(simulationsR(state.simulations, action)),
     spaces: SI(spacesR(state.spaces, action)),
     users: SI(reduxCrud.reducersFor('users')(state.users, action)),

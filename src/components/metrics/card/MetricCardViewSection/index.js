@@ -56,7 +56,6 @@ export default class MetricCardViewSection extends Component {
           metric,
           inSelectedCell,
           onChangeName,
-          guesstimateForm,
           onOpenModal,
           jumpSection,
           onMouseDown,
@@ -117,7 +116,6 @@ export default class MetricCardViewSection extends Component {
             {showSimulation &&
               <div className='StatsSectionBody'>
                 <DistributionSummary
-                    guesstimateForm={guesstimateForm}
                     simulation={metric.simulation}
                 />
               </div>

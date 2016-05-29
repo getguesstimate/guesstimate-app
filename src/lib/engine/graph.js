@@ -12,17 +12,6 @@ export function denormalize(graph){
   return {metrics};
 }
 
-// The bizarro graph is the version of the graph where a guesstimates input is
-// replaces its guesstimte.
-// BEWARE: This function modifies its inputs.
-export function toBizarroGraph(graph, guesstimateForm){
-  if (!_.has(guesstimateForm, 'metric')) { return graph }
-  let bGraph = graph
-  bGraph.guesstimates = graph.guesstimates && graph.guesstimates.filter((g) => (g.metric !== guesstimateForm.metric))
-  bGraph.guesstimates = bGraph.guesstimates && bGraph.guesstimates.concat(guesstimateForm)
-  return bGraph
-}
-
 export function runSimulation(graph, metricId, n) {
   return _dgraph.runSimulation(denormalize(graph), metricId, n)
 }

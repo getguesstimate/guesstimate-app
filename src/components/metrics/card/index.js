@@ -60,7 +60,6 @@ export default class MetricCard extends Component {
     canvasState: canvasStateProps.canvasState,
     dispatch: PT.func.isRequired,
     gridKeyPress: PT.func.isRequired,
-    guesstimateForm: PT.object.isRequired,
     inSelectedCell: PT.bool.isRequired,
     location: PTLocation,
     metric: PT.object.isRequired
@@ -204,7 +203,7 @@ export default class MetricCard extends Component {
   }
 
   render() {
-    const {inSelectedCell, metric, guesstimateForm, canvasState} = this.props
+    const {inSelectedCell, metric, canvasState} = this.props
     const {guesstimate} = metric
     const errors = this._errors()
     const shouldShowSensitivitySection = this._shouldShowSensitivitySection()
@@ -222,7 +221,6 @@ export default class MetricCard extends Component {
 
           <MetricModal
               metric={metric}
-              guesstimateForm={guesstimateForm}
               isOpen={this.state.modalIsOpen}
               closeModal={this.closeModal.bind(this)}
               onChange={this.handleChangeGuesstimate.bind(this)}
@@ -233,7 +231,6 @@ export default class MetricCard extends Component {
               metric={metric}
               inSelectedCell={inSelectedCell}
               onChangeName={this.handleChangeMetric.bind(this)}
-              guesstimateForm={guesstimateForm}
               onOpenModal={this.openModal.bind(this)}
               jumpSection={this._focusForm.bind(this)}
               onMouseDown={this._handleMouseDown.bind(this)}
@@ -249,6 +246,7 @@ export default class MetricCard extends Component {
           {inSelectedCell && !this.state.modalIsOpen &&
             <div className='section editing'>
               <DistributionEditor
+                guesstimate={metric.guesstimate}
                 metricId={metric.id}
                 metricFocus={this.focus.bind(this)}
                 onOpen={this.openModal.bind(this)}
