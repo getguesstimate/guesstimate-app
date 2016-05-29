@@ -7,6 +7,7 @@ import * as organizationActions from 'gModules/organizations/actions'
 import * as userOrganizationMembershipActions from 'gModules/userOrganizationMemberships/actions.js'
 import { organizationSpaceSelector } from './organizationSpaceSelector.js';
 import { organizationMemberSelector } from './organizationMemberSelector.js';
+import { httpRequestSelector } from './httpRequestSelector.js';
 import SpaceCards from 'gComponents/spaces/cards'
 import Container from 'gComponents/utility/container/Container.js'
 import e from 'gEngine/engine'
@@ -47,13 +48,14 @@ const Member = ({user, isAdmin, onRemove}) => (
 @connect(mapStateToProps)
 @connect(organizationSpaceSelector)
 @connect(organizationMemberSelector)
+@connect(httpRequestSelector)
 export default class OrganizationShow extends Component{
   displayName: 'OrganizationShow'
 
   state = {
     attemptedFetch: false,
     openTab: 'MEMBERS',
-    subMembersTab: 'INDEX'
+    subMembersTab: 'ADD'
   }
 
   componentWillMount() {
@@ -92,7 +94,6 @@ export default class OrganizationShow extends Component{
   }
 
   addUser(email) {
-    console.log("adding user", email)
     this.props.dispatch(userOrganizationMembershipActions.createWithEmail(this.props.organizationId, email))
   }
 
@@ -131,7 +132,7 @@ export default class OrganizationShow extends Component{
                   { [{name: 'Members', key: 'MEMBERS'}, {name: 'Models', key: 'MODELS'}].map( e => {
                     const className = `item ${(openTab === e.key) ? 'active' : ''}`
                     return (
-                      <a className={className} onClick={() => {this.changeTab(e.key)}}> {e.name} </a>
+                      <a className={className} key={e.key} onClick={() => {this.changeTab(e.key)}}> {e.name} </a>
                     )
                    })}
                 </div>
@@ -154,6 +155,7 @@ export default class OrganizationShow extends Component{
                   onRemove={this.destroyMembership.bind(this)}
                   addUser={this.addUser.bind(this)}
                   changeSubTab={(name) => {this.setState({subMembersTab: name})}}
+                  httpRequests={this.props.httpRequests}
                 />
               }
             </div>
@@ -164,7 +166,7 @@ export default class OrganizationShow extends Component{
   }
 }
 
-const MembersTab = ({subTab, members, admin_id, onRemove, addUser, changeSubTab}) => (
+const MembersTab = ({subTab, members, admin_id, onRemove, addUser, changeSubTab, httpRequests}) => (
   <div className='row tab-members'>
     <div className='col-sm-2'>
       {subTab === 'INDEX' &&
@@ -185,10 +187,11 @@ const MembersTab = ({subTab, members, admin_id, onRemove, addUser, changeSubTab}
           <div className='ui ignored message'>
           <p> Members have viewing & editing access to all organization models. If you are on a plan, your pricing will be adjusted within 24 hours.</p>
           </div>
-          <InviteUserForm addUser={addUser}/>
+          <InviteUserForm addUser={addUser} httpRequests={httpRequests}/>
         </div>
       }
-      {subTab !== 'INDEX1' &&
+
+      {subTab === 'INDEX' &&
         <div>
           <div className='members'>
             {members.map(m => {
@@ -219,14 +222,11 @@ class InviteUserForm extends Component{
 
   _submit() {
     this.props.addUser(this.state.value)
-  }
-
-  _value() {
-    return this.refs.input && this.refs.input.value
+    this.setState({value: ''})
   }
 
   _onChange(e) {
-    this.setState({value: this._value()})
+    this.setState({value: e.target.value})
   }
 
   render() {
@@ -235,16 +235,60 @@ class InviteUserForm extends Component{
     const isEmpty = _.isEmpty(value)
     const buttonColor = (isValid || isEmpty) ? 'green' : 'grey'
 
+    const requests = _.orderBy(_.cloneDeep(this.props.httpRequests), ['created_at'], ['desc'])
     return(
-      <div className="ui form">
-        <div className="field">
-          <label>Email Address</label>
-          <input type="text" placeholder="name@domain.com" ref='input' onChange={this._onChange.bind(this)}/>
+      <div>
+        <div className="ui form">
+          <div className="field">
+            <label>Email Address</label>
+            <input value={this.state.value} type="text" placeholder="name@domain.com" ref='input' onChange={this._onChange.bind(this)}/>
+          </div>
+          <div className={`ui button submit ${buttonColor} ${isValid ? '' : 'disabled'}`} onClick={this._submit.bind(this)}>
+            Invite User
+          </div>
+          <div>
+          </div>
         </div>
-        <div className={`ui button submit ${buttonColor} ${isValid ? '' : 'disabled'}`} onClick={this._submit.bind(this)}>
-          Invite User
-        </div>
+          {_.map(requests, (request) =>  {
+            return(
+              <InvitationHttpRequest
+                key={request.id}
+                busy={request.busy}
+                success={request.success}
+                email={request.email}
+                isExistingMember={request.isExistingMember}
+              />
+            )
+          })}
       </div>
     )
   }
+}
+
+const InvitationHttpRequest = ({busy, success, email, isExistingMember}) => {
+  let status = httpStatus(busy, success)
+
+  if (status === 'sending'){ return (
+    <div className='InvitationHttpRequest ui ignored message'>
+      Sending...
+    </div>
+  )} else if (status === 'failure'){ return (
+    <div className='InvitationHttpRequest ui error message'>
+      Invitation failed to send.
+    </div>
+  )} else if (isExistingMember){ return (
+    <div className='InvitationHttpRequest ui success message'>
+      {email} was added to your organization.
+    </div>
+  )} else { return(
+    <div className='InvitationHttpRequest ui success message'>
+      {email} was sent an email invitation to join your organization.
+    </div>
+  )}
+}
+
+function httpStatus(busy, success) {
+  if (busy) { return 'sending' }
+  else if (success) { return 'success' }
+  else { return 'failure' }
 }

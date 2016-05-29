@@ -73,8 +73,7 @@ export function createWithEmail(organizationId, email) {
     const cid = cuid()
     let object = {id: cid, organization_id: organizationId}
 
-    const action = sActions.createStart(object);
-    dispatch(httpRequestActions.start({id: cid, entity: 'foobar', metadata: {organizationId}}))
+    dispatch(httpRequestActions.start({id: cid, entity: 'userOrganizationMembershipCreate', metadata: {organizationId, email}}))
     api(getState()).organizations.addMember({organizationId, email}, (err, membership) => {
       if (err) {
         dispatch(sActions.createError(err, object))

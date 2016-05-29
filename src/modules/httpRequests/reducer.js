@@ -7,6 +7,7 @@ export const httpRequestsR = (state = [], action) => {
   case 'HTTP_REQUEST_START':
     request = {
       id: action.id,
+      created_at: Date.now(),
       entity: action.entity,
       metadata: action.metadata,
       busy: true,
