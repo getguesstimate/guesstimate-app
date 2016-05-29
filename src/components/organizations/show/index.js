@@ -96,6 +96,7 @@ export default class OrganizationShow extends Component{
     const {openTab} = this.state
     const spaces =  _.orderBy(this.props.organizationSpaces.asMutable(), ['updated_at'], ['desc'])
     const organization = organizations.find(u => u.id.toString() === organizationId.toString())
+    const meIsAdmin = !!organization && (organization.admin_id === this.props.me.id)
 
     return (
       <Container>
@@ -126,6 +127,7 @@ export default class OrganizationShow extends Component{
                 addUser={this.addUser.bind(this)}
                 onChangeSubTab={(name) => {this.setState({subMembersTab: name})}}
                 httpRequests={this.props.httpRequests}
+                meIsAdmin={meIsAdmin}
               />
             }
           </div>
@@ -170,16 +172,27 @@ const OrganizationTabButtons = ({tabs, openTab, changeTab}) => (
   </div>
 )
 
-const MembersIndexSubTab = ({subTab, members, admin_id, onChangeSubTab, onRemove}) => (
+const MembersTab = ({subTab, members, admin_id, onRemove, addUser, onChangeSubTab, httpRequests, meIsAdmin}) => (
+  <div className='MembersTab'>
+    {subTab === 'ADD' &&
+      <MembersAddSubTab {...{addUser, httpRequests, onChangeSubTab}}/>
+    }
+    {subTab === 'INDEX' &&
+      <MembersIndexSubTab {...{subTab, members, admin_id, onRemove, onChangeSubTab, meIsAdmin}}/>
+    }
+  </div>
+)
+
+const MembersIndexSubTab = ({subTab, members, admin_id, onChangeSubTab, onRemove, meIsAdmin}) => (
   <div className='row MembersIndexSubTab'>
     <div className='col-sm-2'>
-      {subTab === 'INDEX' &&
+      {subTab === 'INDEX' && meIsAdmin &&
         <div className='ui button large green' onClick={() => {onChangeSubTab('ADD')}}>
           Add Members
         </div>
       }
     </div>
-    <div className='col-sm-10'>
+    <div className={meIsAdmin ? 'col-sm-10' : 'col-sm-8'}>
       {subTab === 'INDEX' &&
         <div>
           <div className='members'>
@@ -190,6 +203,7 @@ const MembersIndexSubTab = ({subTab, members, admin_id, onChangeSubTab, onRemove
                   user={m}
                   isAdmin={admin_id === m.id}
                   onRemove={() => {onRemove(m)}}
+                  meIsAdmin={meIsAdmin}
                 />
                 )
             })}
@@ -200,38 +214,37 @@ const MembersIndexSubTab = ({subTab, members, admin_id, onChangeSubTab, onRemove
   </div>
 )
 
-const MembersTab = ({subTab, members, admin_id, onRemove, addUser, onChangeSubTab, httpRequests}) => (
-  <div className='MembersTab'>
-    {subTab === 'ADD' &&
-      <MembersAddSubTab {...{addUser, httpRequests, onChangeSubTab}}/>
-    }
-    {subTab === 'INDEX' &&
-      <MembersIndexSubTab {...{subTab, members, admin_id, onRemove, onChangeSubTab}}/>
-    }
-  </div>
-)
-
-const Member = ({user, isAdmin, onRemove}) => (
+const Member = ({user, isAdmin, onRemove, meIsAdmin}) => (
   <div className='Member'>
-    <div className='row'>
-      <div className='col-xs-6'>
-        <a href={e.user.url(user)}><img src={user.picture}/></a>
-        <a href={e.user.url(user)} className='name'>{user.name}</a>
+    {meIsAdmin &&
+      <div className='row'>
+        <div className='col-xs-6'>
+          <a href={e.user.url(user)}><img src={user.picture}/></a>
+          <a href={e.user.url(user)} className='name'>{user.name}</a>
+        </div>
+        <div className='col-xs-2 role'>
+          {isAdmin ? 'Admin' : 'Editor'}
+        </div>
+        <div className='col-xs-1 invitation-status'>
+          {user.sign_in_count > 0 ? 'joined' : 'invited'}
+        </div>
+        <div className='col-xs-3'>
+          {user.membershipId && !isAdmin &&
+            <button className='ui circular button small remove' onClick={onRemove}>
+              <i className='ion-md-close'/>
+            </button>
+          }
+        </div>
       </div>
-      <div className='col-xs-2 role'>
-        {isAdmin ? 'Admin' : 'Editor'}
+    }
+    {!meIsAdmin &&
+      <div className='row'>
+        <div className='col-xs-10'>
+          <a href={e.user.url(user)}><img src={user.picture}/></a>
+          <a href={e.user.url(user)} className='name'>{user.name}</a>
+        </div>
       </div>
-      <div className='col-xs-1 invitation-status'>
-        {user.sign_in_count > 0 ? 'joined' : 'invited'}
-      </div>
-      <div className='col-xs-3'>
-        {user.membershipId && !isAdmin &&
-          <button className='ui circular button small remove' onClick={onRemove}>
-            <i className='ion-md-close'/>
-          </button>
-        }
-      </div>
-    </div>
+    }
   </div>
 )
 
