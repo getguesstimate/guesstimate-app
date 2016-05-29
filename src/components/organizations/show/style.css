@@ -54,6 +54,12 @@
   margin-bottom: 4em;
 }
 
+.OrganizationShow .MembersAddSubTab p{
+  color: #666;
+  font-size: 1.2em;
+  line-height: 1.7em;
+}
+
 .OrganizationShow .MembersTab {
   margin-top: 7em;
 
@@ -79,17 +85,29 @@
       font-size: 1.2em;
     }
 
-    .button.remove{
+    .button.remove {
       margin-top: 0.2em;
       float: right;
+      font-size: 1.2em !important;
+      padding: 7px 10px !important;
     }
 
-    .member--name {
+    .button.remove i{
+      margin: 0 !important;
+    }
+
+    .name {
       float: left;
-      font-size: 1.4em;
+      font-size: 1.3em;
       font-weight: 800;
       color: $black-3;
       margin-top: 0.5em;
+    }
+
+    .invitation-status {
+      font-size: 1.2em;
+      color: #666;
+      margin-top: 0.6em;
     }
 
     img{

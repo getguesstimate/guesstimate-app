@@ -14,6 +14,8 @@ import e from 'gEngine/engine'
 import './style.css'
 import Icon from 'react-fa'
 
+import * as modalActions from 'gModules/modal/actions.js'
+
 function mapStateToProps(state) {
   return {
     me: state.me,
@@ -65,13 +67,29 @@ export default class OrganizationShow extends Component{
     })
   }
 
-  destroyMembership(user) {
-    this.props.dispatch(userOrganizationMembershipActions.destroy(user.membershipId))
+  destroyMembership(membershipId) {
+    this.props.dispatch(userOrganizationMembershipActions.destroy(membershipId))
   }
 
   addUser(email) {
     this.props.dispatch(userOrganizationMembershipActions.createWithEmail(this.props.organizationId, email))
   }
+
+  onRemove(member) {
+    this.confirmRemove(member)
+  }
+
+  confirmRemove({email, name, membershipId}) {
+    const removeCallback = () => {
+      this.destroyMembership(membershipId)
+      this.props.dispatch(modalActions.close())
+    }
+
+    const message = `Are you sure you want to remove ${name} from this organization?`
+
+    this.props.dispatch(modalActions.openConfirmation({onConfirm: removeCallback, message}))
+  }
+
 
   render () {
     const {organizationId, organizations, members} = this.props
@@ -104,7 +122,7 @@ export default class OrganizationShow extends Component{
                 subTab={this.state.subMembersTab}
                 members={members}
                 admin_id={organization.admin_id}
-                onRemove={this.destroyMembership.bind(this)}
+                onRemove={this.onRemove.bind(this)}
                 addUser={this.addUser.bind(this)}
                 onChangeSubTab={(name) => {this.setState({subMembersTab: name})}}
                 httpRequests={this.props.httpRequests}
@@ -157,11 +175,11 @@ const MembersIndexSubTab = ({subTab, members, admin_id, onChangeSubTab, onRemove
     <div className='col-sm-2'>
       {subTab === 'INDEX' &&
         <div className='ui button large green' onClick={() => {onChangeSubTab('ADD')}}>
-          Add Users
+          Add Members
         </div>
       }
     </div>
-    <div className='col-sm-8'>
+    <div className='col-sm-10'>
       {subTab === 'INDEX' &&
         <div>
           <div className='members'>
@@ -196,20 +214,20 @@ const MembersTab = ({subTab, members, admin_id, onRemove, addUser, onChangeSubTa
 const Member = ({user, isAdmin, onRemove}) => (
   <div className='Member'>
     <div className='row'>
-      <div className='col-xs-5'>
+      <div className='col-xs-6'>
         <a href={e.user.url(user)}><img src={user.picture}/></a>
-        <a href={e.user.url(user)} className='member--name'>{user.name}</a>
-      </div>
-      <div className='col-xs-2'>
-        {user.sign_in_count > 0 ? 'joined' : 'invited'}
+        <a href={e.user.url(user)} className='name'>{user.name}</a>
       </div>
       <div className='col-xs-2 role'>
         {isAdmin ? 'Admin' : 'Editor'}
       </div>
+      <div className='col-xs-1 invitation-status'>
+        {user.sign_in_count > 0 ? 'joined' : 'invited'}
+      </div>
       <div className='col-xs-3'>
         {user.membershipId && !isAdmin &&
-          <button className='ui button small remove' onClick={onRemove}>
-            Remove
+          <button className='ui circular button small remove' onClick={onRemove}>
+            <i className='ion-md-close'/>
           </button>
         }
       </div>
@@ -258,9 +276,9 @@ class MembersAddSubTab extends Component{
             <Icon name='chevron-left'/> Member List
           </div>
         </div>
-        <div className='col-sm-10'>
+        <div className='col-sm-8'>
           <h1> Invite New Members </h1>
-          <p> Members have viewing & editing access to all organization models. If you are on a plan, your pricing will be adjusted within 24 hours.</p>
+          <p> Members have viewing & editing access to all organization models. <br/> If you are on a plan, your pricing will be adjusted within 24 hours.</p>
           <div className="ui form">
             <div className="field">
               <label>Email Address</label>

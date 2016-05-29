@@ -6,6 +6,10 @@ export function openFirstSubscription(planId) {
   return { type: 'MODAL_CHANGE', componentName: 'firstSubscription', props: {planId} };
 }
 
+export function openConfirmation(props) {
+  return { type: 'MODAL_CHANGE', componentName: 'confirmation', props };
+}
+
 export function change({componentName, props}) {
   return { type: 'MODAL_CHANGE', componentName, props };
 }

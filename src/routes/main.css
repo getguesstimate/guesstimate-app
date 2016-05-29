@@ -25,3 +25,22 @@ body {
 body.remove-elev #elevio-widget {
   display: none!important;
 }
+
+.MainConfirmation {
+  background: white;
+  padding: 3em 4em;
+  border-radius: 2px;
+  text-align: center;
+  min-width: 12em;
+  max-width: 600px;
+}
+
+.MainConfirmation .ui.button {
+  margin-right: 1em;
+}
+
+.MainConfirmation h1{
+  margin-bottom: 2em;
+  font-size: 1.6em;
+  color: #333;
+}
