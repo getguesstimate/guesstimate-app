@@ -91,7 +91,6 @@ export default class TextInput extends Component{
         this._changeInput(value);
       }
     }
-    event.stopPropagation()
   }
 
   _changeInput(value){ this.props.onChange(value) }
