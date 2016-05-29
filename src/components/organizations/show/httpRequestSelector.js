@@ -3,6 +3,11 @@ import { createSelector } from 'reselect';
 const specificHttpRequestSelector = state => state.httpRequests
 const organizationIdSelector = (state, props) => props.organizationId
 
+function isExistingMember(request) {
+  let sign_in_count = _.get(request, 'response.membership._embedded.user.sign_in_count')
+  return (sign_in_count > 0)
+}
+
 export const httpRequestSelector = createSelector(
   specificHttpRequestSelector,
   organizationIdSelector,
@@ -13,15 +18,13 @@ export const httpRequestSelector = createSelector(
       (r.entity === 'userOrganizationMembershipCreate')
     ))
 
-    let formattedRequests = relevantRequests.map(r => (
-      {
+    let formattedRequests = relevantRequests.map(r => ({
         id: r.id,
         busy: r.busy,
         success: r.success,
         email: r.metadata.email,
         created_at: r.created_at,
-        isExistingMember: (r.success)
-
+        isExistingMember: isExistingMember(r)
     }))
 
     return {

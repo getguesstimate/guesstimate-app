@@ -23,7 +23,7 @@ export const httpRequestsR = (state = [], action) => {
         ...state[i],
         busy: false,
         success: true,
-        reponse: action.response
+        response: action.response
       }
       return [ ...state.slice(0, i), request, ...state.slice(i+1, state.length) ];
     }
