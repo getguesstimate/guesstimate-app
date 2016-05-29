@@ -32,7 +32,7 @@ export default class OrganizationShow extends Component{
 
   state = {
     attemptedFetch: false,
-    openTab: 'MEMBERS',
+    openTab: 'MODELS',
     subMembersTab: 'INDEX'
   }
 
@@ -97,6 +97,7 @@ export default class OrganizationShow extends Component{
     const spaces =  _.orderBy(this.props.organizationSpaces.asMutable(), ['updated_at'], ['desc'])
     const organization = organizations.find(u => u.id.toString() === organizationId.toString())
     const meIsAdmin = !!organization && (organization.admin_id === this.props.me.id)
+    const meIsMember = meIsAdmin || !!(members.find(m => m.id === this.props.me.id))
 
     return (
       <Container>
@@ -104,11 +105,13 @@ export default class OrganizationShow extends Component{
 
           <OrganizationHeader organization={organization}/>
 
-          <OrganizationTabButtons
-            tabs={[{name: 'Members', key: 'MEMBERS'}, {name: 'Models', key: 'MODELS'}]}
-            openTab={openTab}
-            changeTab={this.changeTab.bind(this)}
-          />
+          {meIsMember &&
+            <OrganizationTabButtons
+              tabs={[{name: 'Models', key: 'MODELS'}, {name: 'Members', key: 'MEMBERS'}]}
+              openTab={openTab}
+              changeTab={this.changeTab.bind(this)}
+            />
+          }
 
           <div className='main-section'>
             {(openTab === 'MODELS') && spaces &&
@@ -218,17 +221,17 @@ const Member = ({user, isAdmin, onRemove, meIsAdmin}) => (
   <div className='Member'>
     {meIsAdmin &&
       <div className='row'>
-        <div className='col-xs-6'>
+        <div className='col-xs-7'>
           <a href={e.user.url(user)}><img src={user.picture}/></a>
           <a href={e.user.url(user)} className='name'>{user.name}</a>
         </div>
         <div className='col-xs-2 role'>
           {isAdmin ? 'Admin' : 'Editor'}
         </div>
-        <div className='col-xs-1 invitation-status'>
+        <div className='col-xs-2 invitation-status'>
           {user.sign_in_count > 0 ? 'joined' : 'invited'}
         </div>
-        <div className='col-xs-3'>
+        <div className='col-xs-1'>
           {user.membershipId && !isAdmin &&
             <button className='ui circular button small remove' onClick={onRemove}>
               <i className='ion-md-close'/>
