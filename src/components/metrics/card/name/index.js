@@ -29,6 +29,16 @@ class NameEditor extends Component {
     return this.state.editorState.getCurrentContent().getPlainText('')
   }
 
+  handleReturn(e) {
+    const shifted = e.shiftKey
+    if (shifted) {
+      return false
+    } else {
+      this.props.handleReturn()
+      return true
+    }
+  }
+
   render() {
     const {editorState} = this.state;
     return (
@@ -37,6 +47,7 @@ class NameEditor extends Component {
           editorState={editorState}
           onBlur={this.props.onBlur}
           onChange={this._onChange.bind(this)}
+          handleReturn={this.handleReturn.bind(this)}
           tabIndex={2}
           ref='editor'
           placeholder={this.props.placeholder}
@@ -76,7 +87,7 @@ export default class MetricName extends Component {
   }
 
   _hasChanged() {
-    return (this.value() != this.props.name)
+    return ((this.value() || '') != (this.props.name || ''))
   }
 
   hasContent() {
@@ -87,15 +98,13 @@ export default class MetricName extends Component {
     return this.refs.NameEditor.getPlainText()
   }
 
+  focus() {
+    this.refs.NameEditor.focus()
+  }
+
   handleKeyDown(e) {
     e.stopPropagation()
     this.props.heightHasChanged()
-    // TODO(Ozzie): The code below currently doesn't work; kept here for potential future use.
-    const ENTER = (e) => ((e.keyCode === 13) && !e.shiftKey)
-    if (ENTER(e)){
-      e.stopPropagation()
-      this.props.jumpSection()
-    }
   }
 
   render() {
@@ -108,6 +117,7 @@ export default class MetricName extends Component {
         <NameEditor
           onBlur={this.handleSubmit.bind(this)}
           value={this.state.value}
+          handleReturn={this.props.jumpSection}
           placeholder={'name'}
           isClickable={isClickable}
           ref='NameEditor'

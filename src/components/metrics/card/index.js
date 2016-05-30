@@ -79,6 +79,12 @@ export default class MetricCard extends Component {
     }
   }
 
+  componentDidMount() {
+    if (this.props.inSelectedCell && this._isEmpty()) {
+      this.refs.MetricCardViewSection.focusName()
+    }
+  }
+
   openModal() {
     this.setState({modalIsOpen: true});
   }

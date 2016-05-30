@@ -33,6 +33,16 @@ class TextInputEditor extends Component {
     return this.setState({editorState})
   }
 
+  handleReturn(e) {
+    const shifted = e.shiftKey
+    if (shifted) {
+      return false
+    } else {
+      this.props.handleReturn()
+      return true
+    }
+  }
+
   render() {
     const {editorState} = this.state;
     return (
@@ -45,7 +55,7 @@ class TextInputEditor extends Component {
         <Editor
           onFocus={this.props.onFocus}
           editorState={editorState}
-          handleReturn={() => true}
+          handleReturn={this.handleReturn.bind(this)}
           onBlur={this.props.onBlur}
           onChange={this._onChange.bind(this)}
           tabIndex={2}
@@ -66,7 +76,7 @@ export default class TextInput extends Component{
 
   componentWillUnmount() { this._handleBlur() }
 
-  focus() { this.refs.input && this.refs.input.focus() }
+  focus() { this.refs.editor && this.refs.editor.focus() }
 
   _handleInputMetricClick(item){
     this.refs.editor.insertAtCaret(item.readableId)
@@ -114,9 +124,6 @@ export default class TextInput extends Component{
 
   _onKeyDown(e) {
     e.stopPropagation()
-    if (e.which === 27 || e.which === 13) {
-      this.props.onEscape()
-    }
   }
 
   render() {
@@ -131,6 +138,7 @@ export default class TextInput extends Component{
         onChange={this._handleChange.bind(this)}
         onFocus={this._handleFocus.bind(this)}
         onKeyDown={this._onKeyDown.bind(this)}
+        handleReturn={this.props.onEscape}
         value={this.props.value}
         placeholder={'value'}
         ref='editor'
