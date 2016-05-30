@@ -48,6 +48,7 @@ class NameEditor extends Component {
           onBlur={this.props.onBlur}
           onChange={this._onChange.bind(this)}
           handleReturn={this.handleReturn.bind(this)}
+          onEscape={this.props.onEscape}
           tabIndex={2}
           ref='editor'
           placeholder={this.props.placeholder}
@@ -118,6 +119,7 @@ export default class MetricName extends Component {
           onBlur={this.handleSubmit.bind(this)}
           value={this.state.value}
           handleReturn={this.props.jumpSection}
+          onEscape={this.props.onEscape}
           placeholder={'name'}
           isClickable={isClickable}
           ref='NameEditor'

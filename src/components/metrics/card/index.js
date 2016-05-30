@@ -250,6 +250,7 @@ export default class MetricCard extends Component {
               showSensitivitySection={shouldShowSensitivitySection}
               editable={this.props.hovered}
               heightHasChanged={this.props.forceFlowGridUpdate}
+              onEscape={this.focus.bind(this)}
           />
 
           {inSelectedCell && !this.state.modalIsOpen &&
