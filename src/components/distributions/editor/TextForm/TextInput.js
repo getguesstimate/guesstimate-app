@@ -67,7 +67,7 @@ class TextInputEditor extends Component {
 }
 
 export default class TextInput extends Component{
-  displayName: 'GuesstimateForm-TextInput'
+  displayName: 'Guesstimate-TextInput'
 
   static propTypes = {
     value: PropTypes.string,

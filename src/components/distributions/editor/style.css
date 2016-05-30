@@ -1,47 +1,47 @@
 @import './styles/variables.css';
 
-.GuesstimateForm .TextInput {
+.Guesstimate .TextInput {
   @mixin small-input;
 }
 
-.GuesstimateForm .TextInput {
+.Guesstimate .TextInput {
   line-height: 1.3em;
   font-size: 0.95em;
 }
 
-.GuesstimateForm .TextInput.default-value {
+.Guesstimate .TextInput.default-value {
   color: #A9A9A9;
 }
 
-.GuesstimateForm.large .TextInput {
+.Guesstimate.large .TextInput {
   font-size: 1.5em;
   border-radius: 3px;
   font-weight: 100;
   color: #666;
 }
 
-.GuesstimateForm .TextInput{
+.Guesstimate .TextInput{
   float: left;
 }
 
-.GuesstimateForm.large .TextInput.NARROW {
+.Guesstimate.large .TextInput.NARROW {
   width: 89%
 }
 
-.GuesstimateForm .TextInput.NARROW {
+.Guesstimate .TextInput.NARROW {
   width: 85%
 }
 
-.GuesstimateForm .TextInput.WIDE {
+.Guesstimate .TextInput.WIDE {
   width: 100%
 }
 
-.GuesstimateForm .GuesstimateInputForm {
+.Guesstimate .GuesstimateInputForm {
   display: flex;
   flex-direction: column;
 }
 
-.GuesstimateForm .GuesstimateInputForm--row {
+.Guesstimate .GuesstimateInputForm--row {
   flex: 1;
 }
 
@@ -68,7 +68,7 @@
   color: $grey-999;
 }
 
-.GuesstimateForm .DistributionIcon.DistributionIcon{
+.Guesstimate .DistributionIcon.DistributionIcon{
   font-size: 1em;
   padding-top: 2px;
   padding-left: 2px;
@@ -80,7 +80,7 @@
   margin: 0 0 0 3px;
 }
 
-.GuesstimateForm.large .DistributionIcon.DistributionIcon {
+.Guesstimate.large .DistributionIcon.DistributionIcon {
   height: 34px;
   width: 34px;
 }
@@ -108,12 +108,12 @@
   margin-top:3px;
 }
 
-.GuesstimateForm.large .GuesstimateTypeQuestion {
+.Guesstimate.large .GuesstimateTypeQuestion {
   font-size: 2em;
   margin-top: 0;
 }
 
-.GuesstimateForm.large a.custom-data{
+.Guesstimate.large a.custom-data{
   text-decoration: underline;
   color: #999;
   margin-top: 5px;
@@ -127,7 +127,7 @@
   cursor: pointer;
 }
 
-.GuesstimateForm.large .DistributionIcon img{
+.Guesstimate.large .DistributionIcon img{
   width: 34px;
 }
 

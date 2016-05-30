@@ -6,7 +6,6 @@ import $ from 'jquery'
 
 import {removeMetrics, changeMetric} from 'gModules/metrics/actions'
 import {changeGuesstimate} from 'gModules/guesstimates/actions'
-import {changeGuesstimateForm} from 'gModules/guesstimate_form/actions'
 
 import MetricModal from 'gComponents/metrics/modal/index'
 import DistributionEditor from 'gComponents/distributions/editor/index'
@@ -138,10 +137,9 @@ export default class MetricCard extends Component {
   }
 
   handleChangeGuesstimate(values) {
-    let guesstimate = values
-    guesstimate.metric = this.props.metric.id
-    this.props.dispatch(changeGuesstimate(this._id(), guesstimate))
-    this.props.dispatch(changeGuesstimateForm(guesstimate, true))
+    // TODO(matthew): Is this necessary?
+    //this.props.dispatch(changeGuesstimate(this._id(), values, false))
+    // TODO(matthew): Editing in modal deletes description. Why?
   }
 
   handleRemoveMetric () {

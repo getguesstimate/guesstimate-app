@@ -107,7 +107,7 @@ $grey: #EEE;
 }
 
 
-.metricModal .GuesstimateForm.large input {
+.metricModal .Guesstimate.large input {
    background-color: $grey;
 }
 

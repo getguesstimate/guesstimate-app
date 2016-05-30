@@ -4,15 +4,14 @@ import {connect} from 'react-redux'
 import TextForm from './TextForm/TextForm'
 import DataForm from './DataForm/DataForm'
 
-import {createGuesstimateForm, changeGuesstimateForm, saveGuesstimateForm} from 'gModules/guesstimate_form/actions'
 import {changeGuesstimate} from 'gModules/guesstimates/actions'
 import {changeMetricClickMode} from 'gModules/canvas_state/actions'
 
 import './style.css'
 
 @connect()
-export default class GuesstimateForm extends Component{
-  displayName: 'GuesstimateForm'
+export default class Guesstimate extends Component{
+  displayName: 'Guesstimate'
   static propTypes = {
     dispatch: PropTypes.func,
     guesstimate: PropTypes.object,
@@ -26,10 +25,6 @@ export default class GuesstimateForm extends Component{
     metricFocus: () => { }
   }
 
-  componentWillMount() {
-    this.props.dispatch(createGuesstimateForm(this.props.metricId))
-  }
-
   focus() { this.refs.TextForm.focus() }
   _handleChange(params) {
     console.log("Dispatching with params", params)
@@ -37,7 +32,6 @@ export default class GuesstimateForm extends Component{
   }
   _handleSave(params) {
     if (!_.isEmpty(params)) {this._handleChange(params)}
-    this.props.dispatch(saveGuesstimateForm())
   }
   _changeMetricClickMode(newMode) { this.props.dispatch(changeMetricClickMode(newMode)) }
   _addDefaultData() { this._handleSave({guesstimateType: 'DATA', data:[1,2,3], input: null}) }
@@ -49,7 +43,7 @@ export default class GuesstimateForm extends Component{
     const isLarge = (size === 'large')
     const hasData = !!guesstimate.data
 
-    let formClasses = 'GuesstimateForm'
+    let formClasses = 'Guesstimate'
     formClasses += isLarge ? ' large' : ''
 
     return (
