@@ -75,24 +75,6 @@ export function fetchById(spaceId) {
   }
 }
 
-function formatSpace(space) {
-  return _.pick(
-    space,
-    [
-      'id',
-      'name',
-      'description',
-      'user_id',
-      'organization_id',
-      'updated_at',
-      'metric_count',
-      'is_private',
-      'screenshot',
-      'big_screenshot',
-    ]
-  )
-}
-
 //required userId for now, but later this can be optional
 export function fetch({userId, organizationId}) {
   return (dispatch, getState) => {
@@ -101,7 +83,7 @@ export function fetch({userId, organizationId}) {
       if (err) {
         captureApiError('SpacesFetch', null, null, err, {url: 'fetch'})
       } else if (value) {
-        const formatted = value.items.map(formatSpace)
+        const formatted = value.items.map(d => _.pick(d, ['id', 'name', 'description', 'user_id', 'organization_id', 'updated_at', 'metric_count', 'is_private', 'screenshot', 'big_screenshot']))
         dispatch(sActions.fetchSuccess(formatted))
 
         const users = value.items.map(d => _.get(d, 'user'))
