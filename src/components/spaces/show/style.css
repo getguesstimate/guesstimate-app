@@ -103,6 +103,34 @@
   float: left;
 }
 
+.hero-unit .header-actions .ui.buttons {
+  float: left;
+  margin-top: 5px;
+  margin-right: 8px;
+}
+
+.hero-unit .header-actions .ui.buttons .ui.button {
+}
+
+.hero-unit .header-actions .ui.buttons.tiny .ui.button {
+  padding: .4rem;
+  font-size: 1rem;
+  opacity: 1 !important;
+  background-color: rgba(255,255,255,0.55);
+  color: rgba(7, 67, 105, 0.87);
+}
+
+.hero-unit .header-actions .ui.buttons .ui.button:hover {
+  background-color: rgba(255,255,255,0.7);
+  color: rgba(7, 67, 105, 0.94);
+}
+
+.hero-unit .header-actions .ui.buttons .ui.button.disabled {
+  background-color: rgba(255,255,255,0.15);
+  color: rgba(7, 67, 105, 0.4);
+  pointer-events: all;
+}
+
 .hero-unit a.space-header-action {
   color: white;
   padding: 0.5em 0.95em;
@@ -205,4 +233,23 @@
 
 .SpaceSidebar .SpaceSidebar-body .ClickToEdit .EditingMode textarea {
   min-height: 30em;
+}
+
+.small-tooltip.small-tooltip.small-tooltip {
+  background: rgba(60, 64, 68, 0.95);
+  opacity: 1;
+  padding: 4px 13px;
+  border-radius: 2px;
+  transition: none;
+  &.place-bottom {
+    margin-top: 2px;
+  }
+
+  &.place-bottom:after {
+    border-bottom: 6px solid rgba(60, 64, 68, 0.95);
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    top: -6px;
+    margin-left: -6px;
+  }
 }

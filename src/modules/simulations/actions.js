@@ -6,7 +6,7 @@ import {GraphPropagation} from '../../lib/propagation/graph-propagation'
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
 export function* runMetricSimulation({getState, metricId, dispatch}) {
-  const propagation = new GraphPropagation(dispatch, getState, {metricId, useGuesstimateForm: true, onlyHead: true})
+  const propagation = new GraphPropagation(dispatch, getState, {metricId, onlyHead: true})
   yield propagation.run()
   yield* runFormSimulation({getState, metricId, dispatch})
 }
@@ -19,7 +19,7 @@ export function* runUndoSimulations({getState, spaceId, dispatch}) {
 
 export function* runFormSimulation({getState, metricId, dispatch}) {
   yield call(delay, 200)
-  const propagation = new GraphPropagation(dispatch, getState, {metricId, useGuesstimateForm: true, notHead: true})
+  const propagation = new GraphPropagation(dispatch, getState, {metricId, notHead: true})
   yield propagation.run()
 }
 

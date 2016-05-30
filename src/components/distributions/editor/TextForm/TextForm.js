@@ -16,14 +16,14 @@ export default class TextForm extends Component{
     onSave: PropTypes.func,
     onAddDefaultData: PropTypes.func,
     onChangeClickMode: PropTypes.func,
-    guesstimateForm: PropTypes.object,
+    guesstimate: PropTypes.object,
     size: PropTypes.string
   }
 
   focus() { this.refs.TextInput.focus() }
 
   _guesstimateType() {
-    return Guesstimator.parse(this.props.guesstimateForm)[1].samplerType()
+    return Guesstimator.parse(this.props.guesstimate)[1].samplerType()
   }
 
   _handleChange(params) {
@@ -32,8 +32,8 @@ export default class TextForm extends Component{
   }
 
   componentDidUpdate(newProps) {
-    const sameMetric = (newProps.guesstimateForm.metric === this.props.guesstimateForm.metric)
-    const sameInput = (newProps.guesstimateForm.input === this.props.guesstimateForm.input)
+    const sameMetric = (newProps.guesstimate.metric === this.props.guesstimate.metric)
+    const sameInput = (newProps.guesstimate.input === this.props.guesstimate.input)
     if (sameMetric && !sameInput){
       this._switchMetricClickMode(true)
     }
@@ -59,9 +59,9 @@ export default class TextForm extends Component{
 
   //onChangeData should be removed to Guesstimator lib.
   _textInput() {
-    const {guesstimateForm, onEscape, size, hasErrors} = this.props
+    const {guesstimate, onEscape, size, hasErrors} = this.props
     let {showDistributionSelector} = this.state
-    const {input} = guesstimateForm
+    const {input} = guesstimate
     const guesstimateType = this._guesstimateType()
     const shouldDisplayType = !(guesstimateType.referenceName === 'POINT' || guesstimateType.referenceName === 'FUNCTION')
     const shouldBeWide = !(guesstimateType.referenceName === 'FUNCTION')
@@ -102,8 +102,8 @@ export default class TextForm extends Component{
   }
   //right now errors live in the simulation, which is not present here.
   render() {
-    const {size, guesstimateForm} = this.props
-    const hasEmptyInput = _.isEmpty(guesstimateForm.input)
+    const {size, guesstimate} = this.props
+    const hasEmptyInput = _.isEmpty(guesstimate.input)
     const isLarge = (size === 'large')
     if (!isLarge) { return( this._textInput() ) }
     else {
