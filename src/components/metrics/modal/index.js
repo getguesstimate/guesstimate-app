@@ -100,7 +100,7 @@ export default class MetricModal extends Component {
               <div className='col-sm-9 mean subsection'>
                 {showSimulation &&
                   <DistributionSummary
-                      simulation={metric.simulation}
+                    simulation={metric.simulation}
                   />
                 }
               </div>

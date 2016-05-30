@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom'
 import $ from 'jquery'
 
 import {removeMetrics, changeMetric} from 'gModules/metrics/actions'
+import {changeGuesstimate} from 'gModules/guesstimates/actions'
 
 import MetricModal from 'gComponents/metrics/modal/index'
 import DistributionEditor from 'gComponents/distributions/editor/index'
@@ -133,6 +134,10 @@ export default class MetricCard extends Component {
     this.props.dispatch(changeMetric(values))
   }
 
+  handleChangeGuesstimate(values) {
+    this.props.dispatch(changeGuesstimate(this._id(), values, false))
+  }
+
   handleRemoveMetric () {
     this.props.dispatch(removeMetrics([this._id()]))
   }
@@ -217,6 +222,7 @@ export default class MetricCard extends Component {
             metric={metric}
             isOpen={this.state.modalIsOpen}
             closeModal={this.closeModal.bind(this)}
+            onChange={this.handleChangeGuesstimate.bind(this)}
           />
 
           <MetricCardViewSection

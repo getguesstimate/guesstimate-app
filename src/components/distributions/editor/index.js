@@ -27,7 +27,7 @@ export default class Guesstimate extends Component{
 
   focus() { this.refs.TextForm.focus() }
   _handleChange(params) {
-    this.props.dispatch(changeGuesstimate(this.props.metricId, params, true))
+    this.props.dispatch(changeGuesstimate(this.props.metricId, {...this.props.guesstimate, ...params}, true))
   }
   _handleSave(params) {
     if (!_.isEmpty(params)) {this._handleChange(params)}
