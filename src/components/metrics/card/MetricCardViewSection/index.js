@@ -39,6 +39,10 @@ export default class MetricCardViewSection extends Component {
     }
   }
 
+  focusName() {
+    this.refs.name && this.refs.name.focus()
+  }
+
   _shouldShowStatistics() {
     const isScientific = (this.props.canvasState.metricCardView === 'scientific')
     const isAvailable = this.showSimulation() && (_.get(this.props, 'metric.simulation.stats').length > 1)
@@ -102,6 +106,7 @@ export default class MetricCardViewSection extends Component {
                 name={metric.name}
                 onChange={onChangeName}
                 jumpSection={jumpSection}
+                onEscape={this.props.onEscape}
                 ref='name'
                 heightHasChanged={this.props.heightHasChanged}
               />
