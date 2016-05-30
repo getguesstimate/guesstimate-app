@@ -74,15 +74,19 @@ export function createWithEmail(organizationId, email) {
     let object = {id: cid, organization_id: organizationId}
 
     dispatch(httpRequestActions.start({id: cid, entity: 'userOrganizationMembershipCreate', metadata: {organizationId, email}}))
-    api(getState()).organizations.addMember({organizationId, email}, (err, membership) => {
+    api(getState()).organizations.addMember({organizationId, email}, (err, invitation) => {
       if (err) {
         dispatch(sActions.createError(err, object))
         dispatch(httpRequestActions.failure({id: cid, error: err}))
       }
-      else if (membership) {
-        dispatch(userActions.fetchSuccess([membership._embedded.user]))
-        dispatch(sActions.createSuccess(membership))
-        dispatch(httpRequestActions.success({id: cid, response: {membership}}))
+      else if (invitation) {
+        const membership = _.get(invitation, '_embedded.membership')
+        const user = _.get(invitation, '_embedded.membership._embedded.user')
+
+        if (membership) { dispatch(sActions.createSuccess(membership)) }
+        if (user) { dispatch(userActions.fetchSuccess([user]))}
+
+        dispatch(httpRequestActions.success({id: cid, response: {hasUser: (!!user)}}))
       }
     })
   }

@@ -4,8 +4,7 @@ const specificHttpRequestSelector = state => state.httpRequests
 const organizationIdSelector = (state, props) => props.organizationId
 
 function isExistingMember(request) {
-  let sign_in_count = _.get(request, 'response.membership._embedded.user.sign_in_count')
-  return (sign_in_count > 0)
+  return !!_.get(request, 'response.hasUser')
 }
 
 export const httpRequestSelector = createSelector(
