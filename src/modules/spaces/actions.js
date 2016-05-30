@@ -179,7 +179,7 @@ export function generalUpdate(spaceId, params) {
     api(getState()).models.update(spaceId, updateMsg, (err, value, jqXHR) => {
       if (err) {
         if (err === 'Conflict') {
-          const updatedSpace = formatSpace(jqXHR.responseJSON)
+          const updatedSpace = jqXHR.responseJSON
           dispatch(sActions.fetchSuccess([updatedSpace]))
           dispatch(changeActionState('CONFLICT'))
         } else {
