@@ -100,8 +100,7 @@ export default class MetricModal extends Component {
               <div className='col-sm-9 mean subsection'>
                 {showSimulation &&
                   <DistributionSummary
-                      guesstimateForm={this.props.guesstimateForm}
-                      simulation={metric.simulation}
+                    simulation={metric.simulation}
                   />
                 }
               </div>
@@ -116,6 +115,7 @@ export default class MetricModal extends Component {
           <div className='row editingInputSection'>
             <div className='col-sm-12'>
                 <DistributionEditor
+                  guesstimate={metric.guesstimate}
                   metricId={metric.id}
                   size={'large'}
                 />

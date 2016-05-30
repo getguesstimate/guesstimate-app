@@ -4,23 +4,17 @@ import {connect} from 'react-redux'
 import TextForm from './TextForm/TextForm'
 import DataForm from './DataForm/DataForm'
 
-import {createGuesstimateForm, changeGuesstimateForm, saveGuesstimateForm} from 'gModules/guesstimate_form/actions'
+import {changeGuesstimate} from 'gModules/guesstimates/actions'
 import {changeMetricClickMode} from 'gModules/canvas_state/actions'
 
 import './style.css'
 
-function select(state) {
-  return {
-    guesstimateForm: state.guesstimateForm
-  }
-}
-
-@connect(select, null, null, {withRef: true})
-export default class GuesstimateForm extends Component{
-  displayName: 'GuesstimateForm'
+@connect()
+export default class Guesstimate extends Component{
+  displayName: 'Guesstimate'
   static propTypes = {
     dispatch: PropTypes.func,
-    guesstimateForm: PropTypes.object.isRequired,
+    guesstimate: PropTypes.object,
     metricId: PropTypes.string.isRequired,
     metricFocus: PropTypes.func.isRequired,
     size: PropTypes.string,
@@ -31,34 +25,31 @@ export default class GuesstimateForm extends Component{
     metricFocus: () => { }
   }
 
-  componentWillMount() {
-    this.props.dispatch(createGuesstimateForm(this.props.metricId))
-  }
-
   focus() { this.refs.TextForm.focus() }
-  _handleChange(params) { this.props.dispatch(changeGuesstimateForm(params)) }
+  _handleChange(params) {
+    this.props.dispatch(changeGuesstimate(this.props.metricId, {...this.props.guesstimate, ...params}, true))
+  }
   _handleSave(params) {
     if (!_.isEmpty(params)) {this._handleChange(params)}
-    this.props.dispatch(saveGuesstimateForm())
   }
   _changeMetricClickMode(newMode) { this.props.dispatch(changeMetricClickMode(newMode)) }
   _addDefaultData() { this._handleSave({guesstimateType: 'DATA', data:[1,2,3], input: null}) }
 
   render () {
-    const {size, guesstimateForm, onOpen, errors} = this.props
-    if(guesstimateForm.metric !== this.props.metricId) { return false }
+    const {size, guesstimate, onOpen, errors} = this.props
+    if(guesstimate.metric !== this.props.metricId) { return false }
 
     const isLarge = (size === 'large')
-    const hasData = !!guesstimateForm.data
+    const hasData = !!guesstimate.data
 
-    let formClasses = 'GuesstimateForm'
+    let formClasses = 'Guesstimate'
     formClasses += isLarge ? ' large' : ''
 
     return (
       <div className={formClasses}>
         {hasData &&
           <DataForm
-            data={guesstimateForm.data}
+            data={guesstimate.data}
             size={size}
             onSave={this._handleSave.bind(this)}
             onOpen={onOpen}
@@ -66,7 +57,7 @@ export default class GuesstimateForm extends Component{
         }
         {!hasData &&
           <TextForm
-            guesstimateForm={guesstimateForm}
+            guesstimate={guesstimate}
             onChange={this._handleChange.bind(this)}
             onSave={this._handleSave.bind(this)}
             onChangeClickMode={this._changeMetricClickMode.bind(this)}
