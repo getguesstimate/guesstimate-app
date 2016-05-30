@@ -9,7 +9,7 @@ import {changeMetricClickMode} from 'gModules/canvas_state/actions'
 
 import './style.css'
 
-@connect()
+@connect(null, null, null, {withRef: true})
 export default class Guesstimate extends Component{
   displayName: 'Guesstimate'
   static propTypes = {
