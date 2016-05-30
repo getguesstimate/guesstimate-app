@@ -5,6 +5,7 @@ import TextForm from './TextForm/TextForm'
 import DataForm from './DataForm/DataForm'
 
 import {createGuesstimateForm, changeGuesstimateForm, saveGuesstimateForm} from 'gModules/guesstimate_form/actions'
+import {changeGuesstimate} from 'gModules/guesstimates/actions'
 import {changeMetricClickMode} from 'gModules/canvas_state/actions'
 
 import './style.css'
@@ -30,7 +31,10 @@ export default class GuesstimateForm extends Component{
   }
 
   focus() { this.refs.TextForm.focus() }
-  _handleChange(params) { this.props.dispatch(changeGuesstimateForm(params)) }
+  _handleChange(params) {
+    console.log("Dispatching with params", params)
+    this.props.dispatch(changeGuesstimate(this.props.metricId, params, true))
+  }
   _handleSave(params) {
     if (!_.isEmpty(params)) {this._handleChange(params)}
     this.props.dispatch(saveGuesstimateForm())

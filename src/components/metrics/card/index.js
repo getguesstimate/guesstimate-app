@@ -74,6 +74,7 @@ export default class MetricCard extends Component {
   componentDidUpdate() {
     const hasContent = this.refs.MetricCardViewSection.hasContent()
     if (!this.props.inSelectedCell && this._isEmpty() && !hasContent && !this.state.modalIsOpen){
+      console.log("Removing card.")
       this.handleRemoveMetric()
     }
   }
@@ -122,6 +123,7 @@ export default class MetricCard extends Component {
   }
 
   _hasGuesstimate(){
+    console.log(_.get(this.props.metric, 'guesstimate.input'))
     const has = (item) => !!_.get(this.props.metric, `guesstimate.${item}`)
     return (has('input') || has('data'))
   }
