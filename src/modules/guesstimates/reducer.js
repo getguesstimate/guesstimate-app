@@ -22,7 +22,6 @@ export default function guesstimates(state = [], action) {
   case 'REMOVE_METRICS':
     return state.filter(y => !_.some(action.item.ids, id => y.metric === id))
   case 'CHANGE_GUESSTIMATE':
-    console.log("Changing guesstimate to ", action.values)
     const i = state.findIndex(y => y.metric === action.values.metric);
     const newItem = engine.guesstimate.format(action.values)
     if (i !== -1) {

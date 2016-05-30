@@ -5,7 +5,6 @@ import ReactDOM from 'react-dom'
 import $ from 'jquery'
 
 import {removeMetrics, changeMetric} from 'gModules/metrics/actions'
-import {changeGuesstimate} from 'gModules/guesstimates/actions'
 
 import MetricModal from 'gComponents/metrics/modal/index'
 import DistributionEditor from 'gComponents/distributions/editor/index'
@@ -73,7 +72,6 @@ export default class MetricCard extends Component {
   componentDidUpdate() {
     const hasContent = this.refs.MetricCardViewSection.hasContent()
     if (!this.props.inSelectedCell && this._isEmpty() && !hasContent && !this.state.modalIsOpen){
-      console.log("Removing card.")
       this.handleRemoveMetric()
     }
   }
@@ -122,7 +120,6 @@ export default class MetricCard extends Component {
   }
 
   _hasGuesstimate(){
-    console.log(_.get(this.props.metric, 'guesstimate.input'))
     const has = (item) => !!_.get(this.props.metric, `guesstimate.${item}`)
     return (has('input') || has('data'))
   }
@@ -134,12 +131,6 @@ export default class MetricCard extends Component {
   handleChangeMetric(values) {
     values.id = this._id()
     this.props.dispatch(changeMetric(values))
-  }
-
-  handleChangeGuesstimate(values) {
-    // TODO(matthew): Is this necessary?
-    //this.props.dispatch(changeGuesstimate(this._id(), values, false))
-    // TODO(matthew): Editing in modal deletes description. Why?
   }
 
   handleRemoveMetric () {
@@ -216,38 +207,34 @@ export default class MetricCard extends Component {
 
     return (
       <div className='metricCard--Container'
-          ref='dom'
-          onKeyPress={this._handleKeyPress.bind(this)}
-          onKeyDown={this._handleKeyDown.bind(this)}
-          tabIndex='0'
-        >
-        <div
-            className={this._className()}
-        >
-
+        ref='dom'
+        onKeyPress={this._handleKeyPress.bind(this)}
+        onKeyDown={this._handleKeyDown.bind(this)}
+        tabIndex='0'
+      >
+        <div className={this._className()}>
           <MetricModal
-              metric={metric}
-              isOpen={this.state.modalIsOpen}
-              closeModal={this.closeModal.bind(this)}
-              onChange={this.handleChangeGuesstimate.bind(this)}
+            metric={metric}
+            isOpen={this.state.modalIsOpen}
+            closeModal={this.closeModal.bind(this)}
           />
 
           <MetricCardViewSection
-              canvasState={canvasState}
-              metric={metric}
-              inSelectedCell={inSelectedCell}
-              onChangeName={this.handleChangeMetric.bind(this)}
-              onOpenModal={this.openModal.bind(this)}
-              jumpSection={this._focusForm.bind(this)}
-              onMouseDown={this._handleMouseDown.bind(this)}
-              ref='MetricCardViewSection'
-              isTitle={this._isTitle()}
-              connectDragSource={this.props.connectDragSource}
-              selectedMetric={this.props.selectedMetric}
-              showSensitivitySection={shouldShowSensitivitySection}
-              editable={this.props.hovered}
-              heightHasChanged={this.props.forceFlowGridUpdate}
-              onEscape={this.focus.bind(this)}
+            canvasState={canvasState}
+            metric={metric}
+            inSelectedCell={inSelectedCell}
+            onChangeName={this.handleChangeMetric.bind(this)}
+            onOpenModal={this.openModal.bind(this)}
+            jumpSection={this._focusForm.bind(this)}
+            onMouseDown={this._handleMouseDown.bind(this)}
+            ref='MetricCardViewSection'
+            isTitle={this._isTitle()}
+            connectDragSource={this.props.connectDragSource}
+            selectedMetric={this.props.selectedMetric}
+            showSensitivitySection={shouldShowSensitivitySection}
+            editable={this.props.hovered}
+            heightHasChanged={this.props.forceFlowGridUpdate}
+            onEscape={this.focus.bind(this)}
           />
 
           {inSelectedCell && !this.state.modalIsOpen &&
