@@ -60,7 +60,6 @@ export function fetchById(spaceId) {
       }
 
       dispatch(sActions.fetchSuccess([value]))
-      //debugger
       dispatch(initSpace(spaceId, value.graph))
 
       const user = _.get(value, '_embedded.user')
@@ -76,6 +75,24 @@ export function fetchById(spaceId) {
   }
 }
 
+function formatSpace(space) {
+  return _.pick(
+    space,
+    [
+      'id',
+      'name',
+      'description',
+      'user_id',
+      'organization_id',
+      'updated_at',
+      'metric_count',
+      'is_private',
+      'screenshot',
+      'big_screenshot',
+    ]
+  )
+}
+
 //required userId for now, but later this can be optional
 export function fetch({userId, organizationId}) {
   return (dispatch, getState) => {
@@ -83,9 +100,8 @@ export function fetch({userId, organizationId}) {
     api(getState()).models.list({userId, organizationId}, (err, value) => {
       if (err) {
         captureApiError('SpacesFetch', null, null, err, {url: 'fetch'})
-      }
-      else if (value) {
-        const formatted = value.items.map(d => _.pick(d, ['id', 'name', 'description', 'user_id', 'organization_id', 'updated_at', 'metric_count', 'is_private', 'screenshot', 'big_screenshot']))
+      } else if (value) {
+        const formatted = value.items.map(formatSpace)
         dispatch(sActions.fetchSuccess(formatted))
 
         const users = value.items.map(d => _.get(d, 'user'))
@@ -160,10 +176,16 @@ export function generalUpdate(spaceId, params) {
     dispatch(changeActionState('SAVING'))
 
     const updateMsg = {...params, previous_updated_at: space.updated_at}
-    api(getState()).models.update(spaceId, updateMsg, (err, value) => {
+    api(getState()).models.update(spaceId, updateMsg, (err, value, jqXHR) => {
       if (err) {
-        captureApiError('SpacesUpdate', null, null, err, {url: 'SpacesUpdate'})
-        dispatch(changeActionState('ERROR'))
+        if (err === 'Conflict') {
+          const updatedSpace = formatSpace(jqXHR.responseJSON)
+          dispatch(sActions.fetchSuccess([updatedSpace]))
+          dispatch(changeActionState('CONFLICT'))
+        } else {
+          captureApiError('SpacesUpdate', null, null, err, {url: 'SpacesUpdate'})
+          dispatch(changeActionState('ERROR'))
+        }
       } else if (value) {
         dispatch(sActions.updateSuccess(value))
         dispatch(changeActionState('SAVED'))
@@ -208,7 +230,6 @@ function meCanEdit(spaceId, state) {
 export function registerGraphChange(spaceId) {
   return (dispatch, getState) => {
     const canEdit = meCanEdit(spaceId, getState())
-    console.log("registerGraphChange")
     dispatch(updateGraph(spaceId, canEdit))
   }
 }
