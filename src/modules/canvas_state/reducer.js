@@ -2,7 +2,8 @@ const initialState = {
   metricCardView: 'normal',
   edgeView: 'visible',
   metricClickMode: 'DEFAULT',
-  saveState: 'NONE'
+  saveState: 'NONE',
+  savesAllowed: true,
 }
 
 export default function canvasState(state = initialState, action) {

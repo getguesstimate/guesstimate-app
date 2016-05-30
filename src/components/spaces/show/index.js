@@ -4,17 +4,18 @@ import {connect} from 'react-redux'
 import Helmet from 'react-helmet'
 
 import SpacesShowHeader from './header'
-import ClosedSpaceSidebar from './closed_sidebar.js'
+import ClosedSpaceSidebar from './closed_sidebar'
 import SpaceSidebar from './sidebar'
 import Canvas from 'gComponents/spaces/canvas'
 
-import {denormalizedSpaceSelector} from '../denormalized-space-selector.js'
+import {denormalizedSpaceSelector} from '../denormalized-space-selector'
 
-import * as spaceActions from 'gModules/spaces/actions.js'
+import {allowSaves, forbidSaves} from 'gModules/canvas_state/actions'
+import * as spaceActions from 'gModules/spaces/actions'
 
 import e from 'gEngine/engine'
 
-import * as elev from 'server/elev/index.js'
+import * as elev from 'server/elev/index'
 
 import './style.css'
 
@@ -167,6 +168,9 @@ export default class SpacesShow extends Component {
                 name={space.name}
                 isPrivate={space.is_private}
                 editableByMe={space.editableByMe}
+                editsAllowed={space.canvasState.editsAllowed}
+                onAllowEdits={() => {this.props.dispatch(allowSaves())}}
+                onForbidEdits={() => {this.props.dispatch(forbidSaves())}}
                 actionState={space.canvasState.actionState}
                 canBePrivate={canBePrivate}
                 onPublicSelect={this.onPublicSelect.bind(this)}

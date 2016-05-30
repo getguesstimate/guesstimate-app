@@ -42,6 +42,9 @@ const SpaceHeader = ({
   name,
   isPrivate,
   editableByMe,
+  editsAllowed,
+  onAllowEdits,
+  onForbidEdits,
   actionState,
   isLoggedIn,
   onSave,
@@ -96,6 +99,16 @@ const SpaceHeader = ({
         { isLoggedIn &&
           <div onMouseDown={onCopy} className='copy-button'>
             <a className='space-header-action'><Icon name='copy'/> Copy</a>
+          </div>
+        }
+        { isLoggedIn &&
+          <div onMouseDown={onAllowEdits}>
+            <a className='space-header-action'><Icon name='check-circle'/> Allow Saving</a>
+          </div>
+        }
+        { isLoggedIn &&
+          <div onMouseDown={onForbidEdits}>
+            <a className='space-header-action'><Icon name='minus-circle'/> Forbid Saving</a>
           </div>
         }
         <ProgressMessage actionState={actionState}/>

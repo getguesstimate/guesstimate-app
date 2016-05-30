@@ -211,9 +211,9 @@ export function updateGraph(spaceId, saveOnServer=true) {
 }
 
 function meCanEdit(spaceId, state) {
-  const {spaces, me, userOrganizationMemberships} = state
+  const {spaces, me, userOrganizationMemberships, canvasState} = state
   const space = e.space.get(spaces, spaceId)
-  return e.space.canEdit(space, me, userOrganizationMemberships)
+  return e.space.canEdit(space, me, userOrganizationMemberships, canvasState)
 }
 
 export function registerGraphChange(spaceId) {
