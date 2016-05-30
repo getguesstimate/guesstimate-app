@@ -76,7 +76,7 @@ export default class MetricName extends Component {
   }
 
   _hasChanged() {
-    return (this.value() != this.props.name)
+    return (this.value() != (this.props.name || ''))
   }
 
   hasContent() {

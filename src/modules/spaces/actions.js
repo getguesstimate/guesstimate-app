@@ -49,18 +49,6 @@ export function fromSearch(data) {
   }
 }
 
-function fetchUserIfNeeded(dispatch, user_id, users) {
-  const has_user = _.some(users, e => e.id === user_id)
-  if (!has_user) { dispatch(userActions.fetchById(user_id)) }
-}
-
-function fetchOrganizationIfNeeded(dispatch, organization_id, organizations) {
-  if (organization_id) {
-    const has_organization = _.some(organizations, e => e.id === organization_id)
-    if (!has_organization) { dispatch(organizationActions.fetchById(organization_id)) }
-  }
-}
-
 export function fetchById(spaceId) {
   return (dispatch, getState) => {
     dispatch(sActions.fetchStart())
@@ -72,6 +60,7 @@ export function fetchById(spaceId) {
       }
 
       dispatch(sActions.fetchSuccess([value]))
+      //debugger
       dispatch(initSpace(spaceId, value.graph))
 
       const user = _.get(value, '_embedded.user')
@@ -170,12 +159,12 @@ export function generalUpdate(spaceId, params) {
     dispatch(sActions.updateStart(space))
     dispatch(changeActionState('SAVING'))
 
-    api(getState()).models.update(spaceId, params, (err, value) => {
+    const updateMsg = {...params, previous_updated_at: space.updated_at}
+    api(getState()).models.update(spaceId, updateMsg, (err, value) => {
       if (err) {
         captureApiError('SpacesUpdate', null, null, err, {url: 'SpacesUpdate'})
         dispatch(changeActionState('ERROR'))
-      }
-      else if (value) {
+      } else if (value) {
         dispatch(sActions.updateSuccess(value))
         dispatch(changeActionState('SAVED'))
       }
@@ -219,6 +208,7 @@ function meCanEdit(spaceId, state) {
 export function registerGraphChange(spaceId) {
   return (dispatch, getState) => {
     const canEdit = meCanEdit(spaceId, getState())
+    console.log("registerGraphChange")
     dispatch(updateGraph(spaceId, canEdit))
   }
 }
