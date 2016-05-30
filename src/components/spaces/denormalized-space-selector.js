@@ -6,7 +6,7 @@ function _sameId(idA, idB){
 }
 
 function checkpointMetadata(id, checkpoints) {
-  let attributes = {head: 0, length: 0}
+  let attributes = {head: 0, length: 1}
   let spaceCheckpoints = checkpoints.find(i => _sameId(i.spaceId, id))
   if (!_.isEmpty(spaceCheckpoints)) {
     attributes = {head: spaceCheckpoints.head, length: spaceCheckpoints.checkpoints.length}
