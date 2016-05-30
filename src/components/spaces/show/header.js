@@ -82,7 +82,7 @@ const SpaceHeader = ({
               <Icon name='undo'/>
             </button>
             <button onClick={onRedo} className={`ui icon button ${canRedo ? '' : 'disabled'}`} data-tip data-for='redo-button'>
-              <Icon name='rotate-right'/>
+              <Icon name='repeat'/>
             </button>
           </div>
         }
