@@ -34,8 +34,7 @@ class TextInputEditor extends Component {
   }
 
   handleReturn(e) {
-    const shifted = e.shiftKey
-    if (shifted) {
+    if (e.shiftKey) {
       return false
     } else {
       this.props.handleReturn()
