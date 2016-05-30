@@ -79,6 +79,12 @@ export default class MetricCard extends Component {
     }
   }
 
+  componentDidMount() {
+    if (this.props.inSelectedCell && this._isEmpty()) {
+      this.refs.MetricCardViewSection.focusName()
+    }
+  }
+
   openModal() {
     this.setState({modalIsOpen: true});
   }
@@ -244,6 +250,7 @@ export default class MetricCard extends Component {
               showSensitivitySection={shouldShowSensitivitySection}
               editable={this.props.hovered}
               heightHasChanged={this.props.forceFlowGridUpdate}
+              onEscape={this.focus.bind(this)}
           />
 
           {inSelectedCell && !this.state.modalIsOpen &&
