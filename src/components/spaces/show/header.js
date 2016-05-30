@@ -36,7 +36,7 @@ const ProgressMessage = ({actionState}) => (
     {actionState == 'CREATED' && 'New model created'}
     {actionState == 'CONFLICT' && 
       <div className='ui red horizontal label'>
-        Can't save now; someone else is editing this model.
+        Can't save now; someone else is editing this model. Refresh and try again later.
       </div>
     }
   </div>

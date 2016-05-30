@@ -176,11 +176,9 @@ export function generalUpdate(spaceId, params) {
     dispatch(changeActionState('SAVING'))
 
     const updateMsg = {...params, previous_updated_at: space.updated_at}
-    api(getState()).models.update(spaceId, updateMsg, (err, value, jqXHR) => {
+    api(getState()).models.update(spaceId, updateMsg, (err, value) => {
       if (err) {
         if (err === 'Conflict') {
-          const updatedSpace = jqXHR.responseJSON
-          dispatch(sActions.fetchSuccess([updatedSpace]))
           dispatch(changeActionState('CONFLICT'))
         } else {
           captureApiError('SpacesUpdate', null, null, err, {url: 'SpacesUpdate'})
