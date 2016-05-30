@@ -27,7 +27,7 @@ export default class AbstractResource {
       const params = this.guesstimateRequest({url, method, data})
       const request = $.ajax(params)
       request.done((response) => {callback(null, response)})
-      request.fail((jqXHR, textStatus, errorThrown) => {callback(errorThrown, null, jqXHR)})
+      request.fail((jqXHR, textStatus, errorThrown) => {callback(errorThrown, null)})
     }
   }
 }
