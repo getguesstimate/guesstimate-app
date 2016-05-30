@@ -16,6 +16,7 @@ export default class EmptyCell extends Component {
   _handleKeyDown(e) {
     if (e.keyCode == '13' && this.props.inSelectedCell) { //enter
       this.props.onAddItem(this.props.location)
+      e.preventDefault()
     }
     if (e.keyCode == '8') { //backspace
       e.preventDefault()
