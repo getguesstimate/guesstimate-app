@@ -6,6 +6,7 @@ import CanvasViewForm from './canvasViewForm'
 import DropDown, {DropDownListElement} from 'gComponents/utility/drop-down/index'
 import {PrivacyToggle} from './privacy-toggle/index'
 import {SpaceName} from './spaceName'
+import ReactTooltip from 'react-tooltip'
 
 import e from 'gEngine/engine'
 
@@ -50,14 +51,21 @@ const SpaceHeader = ({
   onPublicSelect,
   onPrivateSelect,
   onSaveName,
+  onUndo,
+  canUndo,
+  onRedo,
+  canRedo
 }) => {
   let privacy_header = (<span><Icon name='globe'/> Public</span>)
   if (isPrivate) {
     privacy_header = (<span><Icon name='lock'/> Private</span>)
   }
+  const ReactTooltipParams = {class: 'small-tooltip', delayShow: 0, delayHide: 0, place: 'bottom', effect: 'solid'}
 
   return (
     <div className='header'>
+      <ReactTooltip {...ReactTooltipParams} id='undo-button'>Undo (ctrl-z)</ReactTooltip>
+      <ReactTooltip {...ReactTooltipParams} id='redo-button'>Redo (ctrl-shift-z)</ReactTooltip>
 
       <div className='header-name'>
         <SpaceName
@@ -68,6 +76,17 @@ const SpaceHeader = ({
       </div>
 
       <div className='header-actions'>
+        {editableByMe &&
+          <div className='ui buttons tiny'>
+            <button onClick={onUndo} className={`ui icon button ${canUndo ? '' : 'disabled'}`} data-tip data-for='undo-button'>
+              <Icon name='undo'/>
+            </button>
+            <button onClick={onRedo} className={`ui icon button ${canRedo ? '' : 'disabled'}`} data-tip data-for='redo-button'>
+              <Icon name='repeat'/>
+            </button>
+          </div>
+        }
+
         <CanvasViewForm/>
 
         {editableByMe &&
