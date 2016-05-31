@@ -97,7 +97,6 @@ export default class OrganizationShow extends Component{
   render () {
     const {organizationId, organizations, members, memberships, invitations} = this.props
     const unjoinedInvitees = invitations.filter(i => !_.some(memberships, m => m.invitation_id === i.id))
-    debugger
     const {openTab} = this.state
     const spaces =  _.orderBy(this.props.organizationSpaces.asMutable(), ['updated_at'], ['desc'])
     const organization = organizations.find(u => u.id.toString() === organizationId.toString())
