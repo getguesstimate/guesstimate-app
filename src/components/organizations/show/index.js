@@ -95,8 +95,9 @@ export default class OrganizationShow extends Component{
 
 
   render () {
-    const {organizationId, organizations, members, invitations} = this.props
-    const unjoinedInvitees = invitations.filter(i => !_.some(members, m => m.email === i.email))
+    const {organizationId, organizations, members, memberships, invitations} = this.props
+    const unjoinedInvitees = invitations.filter(i => !_.some(memberships, m => m.invitation_id === i.id))
+    debugger
     const {openTab} = this.state
     const spaces =  _.orderBy(this.props.organizationSpaces.asMutable(), ['updated_at'], ['desc'])
     const organization = organizations.find(u => u.id.toString() === organizationId.toString())
@@ -233,30 +234,32 @@ const MembersIndexSubTab = ({subTab, members, invitations, admin_id, onChangeSub
 
 const Invitee = ({email, meIsAdmin}) => (
   <div className='Member'>
-    <div className='row'>
-      {meIsAdmin &&
-        <div className='col-xs-8'>
+    {meIsAdmin &&
+      <div className='row'>
+        <div className='col-xs-7'>
           <div className='avatar'><Icon name='envelope'/></div>
           <div className='name'>{email}</div>
         </div>
         <div className='col-xs-2 role'></div>
         <div className='col-xs-2 invitation-status'>invited</div>
         <div className='col-xs-1'></div>
-      }
-      {!meIsAdmin &&
+      </div>
+    }
+    {!meIsAdmin &&
+      <div className='row'>
         <div className='col-xs-10'>
           <div className='avatar'><Icon name='envelope'/></div>
           <div className='name'>{email}</div>
         </div>
-      }
-    </div>
+      </div>
+    }
   </div>
 )
 
 const Member = ({user, isAdmin, onRemove, meIsAdmin}) => (
   <div className='Member'>
-    <div className='row'>
-      {meIsAdmin &&
+    {meIsAdmin &&
+      <div className='row'>
         <div className='col-xs-7'>
           <a href={e.user.url(user)}><img className='avatar' src={user.picture}/></a>
           <a href={e.user.url(user)} className='name'>{user.name}</a>
@@ -272,14 +275,16 @@ const Member = ({user, isAdmin, onRemove, meIsAdmin}) => (
             </button>
           }
         </div>
-      }
-      {!meIsAdmin &&
-          <div className='col-xs-10'>
-            <a href={e.user.url(user)}><img src={user.picture}/></a>
-            <a href={e.user.url(user)} className='name'>{user.name}</a>
-          </div>
-      }
-    </div>
+      </div>
+    }
+    {!meIsAdmin &&
+      <div className='row'>
+        <div className='col-xs-10'>
+          <a href={e.user.url(user)}><img src={user.picture}/></a>
+          <a href={e.user.url(user)} className='name'>{user.name}</a>
+        </div>
+      </div>
+    }
   </div>
 )
 

@@ -14,6 +14,7 @@ export const organizationMemberSelector = createSelector(
   (memberships, invitations, users, organizationId) => {
     return {
       members: e.organization.organizationUsers(organizationId, users, memberships),
+      memberships: e.organization.organizationMemberships(organizationId, memberships),
       invitations: e.organization.organizationInvitations(organizationId, invitations),
     }
   }

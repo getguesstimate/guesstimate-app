@@ -9,7 +9,7 @@ import {captureApiError} from 'lib/errors/index.js'
 import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
 
 let sActions = actionCreatorsFor('userOrganizationMemberships')
-let relevantAttributes = ['id', 'user_id', 'organization_id']
+let relevantAttributes = ['id', 'user_id', 'organization_id', 'invitation_id']
 
 function api(state) {
   function getToken(state) {
