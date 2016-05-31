@@ -26,7 +26,6 @@ export class SpaceName extends Component {
               ref='DropDown'
           >
           <div className='ui form'>
-            <h2> Name </h2>
             <textarea
               defaultValue={name}
               type='text'

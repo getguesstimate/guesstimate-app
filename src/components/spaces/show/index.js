@@ -195,6 +195,7 @@ export default class SpacesShow extends Component {
               actionState={space.canvasState.actionState}
               canBePrivate={canBePrivate}
               onPublicSelect={this.onPublicSelect.bind(this)}
+              onPrivateSelect={this.onPrivateSelect.bind(this)}
               onPrivateSelecundot={this.onPrivateSelect.bind(this)}
               space={space}
             />
