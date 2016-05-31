@@ -1,18 +1,5 @@
 @import './styles/variables.css';
 
-.viewing-callout {
-  color: white;
-  padding: 0.5em 0.95em;
-  border-radius: 3px;
-  font-weight: 300;
-  margin-right: 10px;
-  background-color: rgba(0,0,0,0);
-  transition: background-color 0.3s;
-  font-size: 1.2em;
-  float:left;
-  pointer-events: all;
-}
-
 .copy-button {
   cursor: pointer;
   float: left;
