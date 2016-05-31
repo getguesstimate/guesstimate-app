@@ -63,9 +63,9 @@ const SpaceHeader = ({
   if (isPrivate) {
     privacy_header = (<span><Icon name='lock'/> Private</span>)
   }
-  let view_mode_header = (<span><Icon name='minus-circle'/> Viewing </span>)
+  let view_mode_header = (<span><Icon name='eye'/> Viewing </span>)
   if (editsAllowed) {
-    view_mode_header = (<span><Icon name='check-circle'/> Editing </span>)
+    view_mode_header = (<span><Icon name='pencil'/> Editing </span>)
   }
 
 
@@ -133,8 +133,12 @@ const SpaceHeader = ({
             position='right'
           >
             <ul>
-              <DropDownListElement icon={'check-circle'} header='Allow Saving' onMouseDown={onAllowEdits} />
-              <DropDownListElement icon={'minus-circle'} header='Forbid Saving' onMouseDown={onForbidEdits} />
+              <DropDownListElement icon={'pencil'} header='Editing' onMouseDown={onAllowEdits}>
+                <span> Changes will be saved. </span>
+              </DropDownListElement>
+              <DropDownListElement icon={'eye'} header='Viewing' onMouseDown={onForbidEdits}>
+                <span> Changes will not be saved. </span>
+              </DropDownListElement>
             </ul>
           </DropDown>
         }

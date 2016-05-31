@@ -7,7 +7,6 @@ export function allowSaves() {
 }
 
 export function forbidSaves() {
-  console.log("Saving off")
   return { type: 'CHANGE_CANVAS_STATE', values: { savesAllowed: false } };
 }
 

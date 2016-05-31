@@ -58,7 +58,7 @@ export default class SpacesShow extends Component {
     const nextState = _.get(nextProps, 'denormalizedSpace.editableByMe')
     const currState = _.get(this.props, 'denormalizedSpace.editableByMe')
     if (nextState !== currState) {
-      if (!!currState) {
+      if (!!nextState) {
         this.props.dispatch(allowSaves())
       } else {
         this.props.dispatch(forbidSaves())
