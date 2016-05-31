@@ -92,7 +92,7 @@ export default class OrganizationShow extends Component{
 
 
   render () {
-    const {organizationId, organizations, members} = this.props
+    const {organizationId, organizations, members, invitations} = this.props
     const {openTab} = this.state
     const spaces =  _.orderBy(this.props.organizationSpaces.asMutable(), ['updated_at'], ['desc'])
     const organization = organizations.find(u => u.id.toString() === organizationId.toString())
@@ -125,6 +125,7 @@ export default class OrganizationShow extends Component{
               <MembersTab
                 subTab={this.state.subMembersTab}
                 members={members}
+                invitations={invitations}
                 admin_id={organization.admin_id}
                 onRemove={this.onRemove.bind(this)}
                 addUser={this.addUser.bind(this)}
@@ -175,18 +176,18 @@ const OrganizationTabButtons = ({tabs, openTab, changeTab}) => (
   </div>
 )
 
-const MembersTab = ({subTab, members, admin_id, onRemove, addUser, onChangeSubTab, httpRequests, meIsAdmin}) => (
+const MembersTab = ({subTab, members, invitations, admin_id, onRemove, addUser, onChangeSubTab, httpRequests, meIsAdmin}) => (
   <div className='MembersTab'>
     {subTab === 'ADD' &&
       <MembersAddSubTab {...{addUser, httpRequests, onChangeSubTab}}/>
     }
     {subTab === 'INDEX' &&
-      <MembersIndexSubTab {...{subTab, members, admin_id, onRemove, onChangeSubTab, meIsAdmin}}/>
+      <MembersIndexSubTab {...{subTab, members, invitations, admin_id, onRemove, onChangeSubTab, meIsAdmin}}/>
     }
   </div>
 )
 
-const MembersIndexSubTab = ({subTab, members, admin_id, onChangeSubTab, onRemove, meIsAdmin}) => (
+const MembersIndexSubTab = ({subTab, members, invitations, admin_id, onChangeSubTab, onRemove, meIsAdmin}) => (
   <div className='row MembersIndexSubTab'>
     <div className='col-sm-2'>
       {subTab === 'INDEX' && meIsAdmin &&
@@ -208,11 +209,30 @@ const MembersIndexSubTab = ({subTab, members, admin_id, onChangeSubTab, onRemove
                   onRemove={() => {onRemove(m)}}
                   meIsAdmin={meIsAdmin}
                 />
-                )
+              )
+            })}
+            {invitations.map(i => {
+              return (
+                <Invitee
+                  key={i.id}
+                  email={i.email}
+                />
+              )
             })}
           </div>
         </div>
       }
+    </div>
+  </div>
+)
+
+const Invitee = ({email}) => (
+  <div className='Invitee'>
+    <div className='row'>
+      <div className='col-xs-10'>
+        <Icon name='email'/>
+        <span className='name'>{email}</span>
+      </div>
     </div>
   </div>
 )

@@ -36,6 +36,7 @@ const rootReducer = function app(state = {}, action){
     users: SI(reduxCrud.reducersFor('users')(state.users, action)),
     organizations: SI(reduxCrud.reducersFor('organizations')(state.organizations, action)),
     userOrganizationMemberships: SI(reduxCrud.reducersFor('userOrganizationMemberships')(state.userOrganizationMemberships, action)),
+    userOrganizationInvitations: SI(reduxCrud.reducersFor('userOrganizationInvitations')(state.userOrganizationInvitations, action)),
     me: SI(meR(state.me, action)),
     canvasState: SI(canvasStateR(state.canvasState, action)),
     searchSpaces: SI(searchSpacesR(state.searchSpaces, action)),

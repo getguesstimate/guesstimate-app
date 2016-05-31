@@ -27,7 +27,7 @@ export function fetchByOrganizationId(organizationId) {
       } else if (memberships) {
         dispatch(fetchSuccess(memberships.items))
 
-        const users = memberships.items.map(m => _.get(m, '_embedded.user'))
+        const users = memberships.items.map(m => _.get(m, '_embedded.user')).filter(u => !!u)
         dispatch(userActions.fetchSuccess(users))
       }
     })
