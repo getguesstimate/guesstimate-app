@@ -54,8 +54,20 @@ export default class SpacesShow extends Component {
     if (!this.props.embed) { elev.hide() }
   }
 
-  componentDidUpdate(newProps) {
-    this.considerFetch(newProps)
+  componentWillReceiveProps(nextProps) {
+    const nextState = _.get(nextProps, 'denormalizedSpace.editableByMe')
+    const currState = _.get(this.props, 'denormalizedSpace.editableByMe')
+    if (nextState !== currState) {
+      if (!!currState) {
+        this.props.dispatch(allowSaves())
+      } else {
+        this.props.dispatch(forbidSaves())
+      }
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    this.considerFetch(prevProps)
   }
 
   considerFetch(newProps) {
@@ -183,7 +195,7 @@ export default class SpacesShow extends Component {
                 name={space.name}
                 isPrivate={space.is_private}
                 editableByMe={space.editableByMe}
-                editsAllowed={space.canvasState.editsAllowed}
+                editsAllowed={space.canvasState.savesAllowed}
                 onAllowEdits={() => {this.props.dispatch(allowSaves())}}
                 onForbidEdits={() => {this.props.dispatch(forbidSaves())}}
                 actionState={space.canvasState.actionState}

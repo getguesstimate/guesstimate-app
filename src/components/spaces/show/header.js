@@ -63,6 +63,12 @@ const SpaceHeader = ({
   if (isPrivate) {
     privacy_header = (<span><Icon name='lock'/> Private</span>)
   }
+  let view_mode_header = (<span><Icon name='minus-circle'/> Viewing </span>)
+  if (editsAllowed) {
+    view_mode_header = (<span><Icon name='check-circle'/> Editing </span>)
+  }
+
+
   const ReactTooltipParams = {class: 'small-tooltip', delayShow: 0, delayHide: 0, place: 'bottom', effect: 'solid'}
 
   return (
@@ -120,14 +126,21 @@ const SpaceHeader = ({
             <a className='space-header-action'><Icon name='copy'/> Copy</a>
           </div>
         }
-        { isLoggedIn &&
-          <div onMouseDown={onAllowEdits}>
-            <a className='space-header-action'><Icon name='check-circle'/> Allow Saving</a>
-          </div>
+        { isLoggedIn && editableByMe &&
+          <DropDown
+            headerText={'Viewing Mode'}
+            openLink={<a className='space-header-action'>{view_mode_header}</a>}
+            position='right'
+          >
+            <ul>
+              <DropDownListElement icon={'check-circle'} header='Allow Saving' onMouseDown={onAllowEdits} />
+              <DropDownListElement icon={'minus-circle'} header='Forbid Saving' onMouseDown={onForbidEdits} />
+            </ul>
+          </DropDown>
         }
-        { isLoggedIn &&
-          <div onMouseDown={onForbidEdits}>
-            <a className='space-header-action'><Icon name='minus-circle'/> Forbid Saving</a>
+        { isLoggedIn && !editableByMe &&
+          <div className='space-header-action'>
+            <Icon name='minus-circle'/> Forbid Saving
           </div>
         }
         <ProgressMessage actionState={actionState}/>
