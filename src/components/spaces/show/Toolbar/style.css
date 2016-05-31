@@ -1,11 +1,11 @@
-.SpaceShowSidebar {
+.SpaceShowToolbar {
   width: 100%;
   background: rgba(219, 221, 222, 0.69);
   float: left;
   border-bottom: 1px solid rgba(37, 128, 167, 0.38);
 }
 
-.SpaceShowSidebar .saveMessage{
+.SpaceShowToolbar .saveMessage{
   color: #09273A;
   margin-left: 26px;
   float: left;
@@ -13,7 +13,7 @@
   font-size: 1.1em;
 }
 
-.SpaceShowSidebar .header-actions-button {
+.SpaceShowToolbar .header-actions-button {
   cursor: pointer;
   float: left;
   padding: 0.3em 0.55em;
@@ -23,7 +23,7 @@
   margin: 0.2em 0.2em;
 }
 
-.SpaceShowSidebar .header-actions-button-border {
+.SpaceShowToolbar .header-actions-button-border {
   float: left;
   width: 2px;
   background: rgb(115, 168, 190);
@@ -31,28 +31,28 @@
   margin: 0 3px;
 }
 
-.SpaceShowSidebar .header-actions-button:hover {
+.SpaceShowToolbar .header-actions-button:hover {
   background-color: rgba(255,255,255,0.3);
 }
 
-.SpaceShowSidebar .header-actions-button:active {
+.SpaceShowToolbar .header-actions-button:active {
   background-color: rgba(255,255,255,0.5);
 }
 
-.SpaceShowSidebar .header-actions-button.disabled {
+.SpaceShowToolbar .header-actions-button.disabled {
   opacity: 0.4;
 }
 
-.SpaceShowSidebar .header-actions-button.disabled:hover {
+.SpaceShowToolbar .header-actions-button.disabled:hover {
   background-color: rgba(255,255,255,0.2);
 }
 
-.SpaceShowSidebar .ui.buttons {
+.SpaceShowToolbar .ui.buttons {
   float: left;
   margin-right: 8px;
 }
 
-.SpaceShowSidebar a.space-header-action {
+.SpaceShowToolbar a.space-header-action {
   color: white;
   padding: 0.5em 0.95em;
   border-radius: 3px;
@@ -63,7 +63,8 @@
   font-size: 1.2em;
   float:left;
 }
-.SpaceShowSidebar a.space-header-action:hover{
+
+.SpaceShowToolbar a.space-header-action:hover{
   color: white;
   background-color: rgba(0,0,0,0.2);
   cursor: pointer;

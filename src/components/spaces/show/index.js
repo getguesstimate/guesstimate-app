@@ -185,43 +185,35 @@ export default class SpacesShow extends Component {
           />
         }
         <div className='hero-unit'>
-          <div className='container-fluid'>
-            <SpacesShowHeader
-              isLoggedIn={isLoggedIn}
-              onSaveName={this.onSaveName.bind(this)}
-              name={space.name}
-              isPrivate={space.is_private}
-              editableByMe={space.editableByMe}
-              actionState={space.canvasState.actionState}
-              canBePrivate={canBePrivate}
-              onPublicSelect={this.onPublicSelect.bind(this)}
-              onPrivateSelect={this.onPrivateSelect.bind(this)}
-              onPrivateSelecundot={this.onPrivateSelect.bind(this)}
-              space={space}
-            />
-          </div>
+          <SpacesShowHeader
+            isLoggedIn={isLoggedIn}
+            onSaveName={this.onSaveName.bind(this)}
+            name={space.name}
+            isPrivate={space.is_private}
+            editableByMe={space.editableByMe}
+            actionState={space.canvasState.actionState}
+            canBePrivate={canBePrivate}
+            onPublicSelect={this.onPublicSelect.bind(this)}
+            onPrivateSelect={this.onPrivateSelect.bind(this)}
+            onPrivateSelecundot={this.onPrivateSelect.bind(this)}
+            space={space}
+          />
 
-          <div className='SpaceShowSidebar container-fluid'>
-            <div className='row'>
-              <div className='col-md-10'>
-                <SpacesShowToolbar
-                  isLoggedIn={isLoggedIn}
-                  onDestroy={this.destroy.bind(this)}
-                  onCopyModel={this._handleCopyModel.bind(this)}
-                  onCopyMetrics={this.onCopy.bind(this)}
-                  onPasteMetrics={this.onPaste.bind(this)}
-                  onCutMetrics={this.onCut.bind(this)}
-                  isPrivate={space.is_private}
-                  editableByMe={space.editableByMe}
-                  actionState={space.canvasState.actionState}
-                  onUndo={this.onUndo.bind(this)}
-                  onRedo={this.onRedo.bind(this)}
-                  canUndo={space.checkpointMetadata.head !== space.checkpointMetadata.length - 1}
-                  canRedo={space.checkpointMetadata.head !== 0}
-                />
-              </div>
-            </div>
-          </div>
+          <SpacesShowToolbar
+            isLoggedIn={isLoggedIn}
+            onDestroy={this.destroy.bind(this)}
+            onCopyModel={this._handleCopyModel.bind(this)}
+            onCopyMetrics={this.onCopy.bind(this)}
+            onPasteMetrics={this.onPaste.bind(this)}
+            onCutMetrics={this.onCut.bind(this)}
+            isPrivate={space.is_private}
+            editableByMe={space.editableByMe}
+            actionState={space.canvasState.actionState}
+            onUndo={this.onUndo.bind(this)}
+            onRedo={this.onRedo.bind(this)}
+            canUndo={space.checkpointMetadata.head !== space.checkpointMetadata.length - 1}
+            canRedo={space.checkpointMetadata.head !== 0}
+          />
         </div>
 
         <div className='content'>

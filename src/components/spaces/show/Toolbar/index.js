@@ -1,12 +1,12 @@
 import React, {Component} from 'react'
 
 import Icon from 'react-fa'
+import ReactTooltip from 'react-tooltip'
 
 import CanvasViewForm from '../canvasViewForm'
 import DropDown, {DropDownListElement} from 'gComponents/utility/drop-down/index'
 import {PrivacyToggle} from '../privacy-toggle/index'
 import {SpaceName} from '../spaceName'
-import ReactTooltip from 'react-tooltip'
 import e from 'gEngine/engine'
 import './style.css'
 
@@ -58,50 +58,52 @@ const SpaceHeader = ({
   const ReactTooltipParams = {class: 'small-tooltip', delayShow: 0, delayHide: 0, place: 'bottom', effect: 'solid'}
 
   return (
-    <div className='row'>
-      <div className='col-md-10'>
-        <ReactTooltip {...ReactTooltipParams} id='cut-button'>Cut Nodes (ctrl-x)</ReactTooltip>
-        <ReactTooltip {...ReactTooltipParams} id='copy-button'>Copy Nodes (ctrl-c)</ReactTooltip>
-        <ReactTooltip {...ReactTooltipParams} id='paste-button'>Paste Nodes (ctrl-p)</ReactTooltip>
-        <ReactTooltip {...ReactTooltipParams} id='undo-button'>Undo (ctrl-z)</ReactTooltip>
-        <ReactTooltip {...ReactTooltipParams} id='redo-button'>Redo (ctrl-shift-z)</ReactTooltip>
+    <div className='SpaceShowToolbar container-fluid'>
+      <div className='row'>
+        <div className='col-md-10'>
+          <ReactTooltip {...ReactTooltipParams} id='cut-button'>Cut Nodes (ctrl-x)</ReactTooltip>
+          <ReactTooltip {...ReactTooltipParams} id='copy-button'>Copy Nodes (ctrl-c)</ReactTooltip>
+          <ReactTooltip {...ReactTooltipParams} id='paste-button'>Paste Nodes (ctrl-p)</ReactTooltip>
+          <ReactTooltip {...ReactTooltipParams} id='undo-button'>Undo (ctrl-z)</ReactTooltip>
+          <ReactTooltip {...ReactTooltipParams} id='redo-button'>Redo (ctrl-shift-z)</ReactTooltip>
 
-        { isLoggedIn &&
-          <DropDown
-              headerText={'Model Actions'}
-              openLink={<a className='header-actions-button'>File</a>}
-              position='right'
-          >
-            <ul>
-              <DropDownListElement icon={'copy'} header='Copy Model' onMouseDown={onCopyModel}/>
-              {editableByMe &&
-                <DropDownListElement icon={'warning'} header='Delete Model' onMouseDown={onDestroy}/>
-              }
-            </ul>
-          </DropDown>
-        }
+          { isLoggedIn &&
+            <DropDown
+                headerText={'Model Actions'}
+                openLink={<a className='header-actions-button'>File</a>}
+                position='right'
+            >
+              <ul>
+                <DropDownListElement icon={'copy'} header='Copy Model' onMouseDown={onCopyModel}/>
+                {editableByMe &&
+                  <DropDownListElement icon={'warning'} header='Delete Model' onMouseDown={onDestroy}/>
+                }
+              </ul>
+            </DropDown>
+          }
 
-        <CanvasViewForm/>
+          <CanvasViewForm/>
 
-        <div className='header-actions-button-border'/>
-        <a onClick={onCutMetrics} className={`header-actions-button`} data-tip data-for='cut-button'>
-          <Icon name='cut'/>
-        </a>
-        <a onClick={onCopyMetrics} className={`header-actions-button`} data-tip data-for='copy-button'>
-          <Icon name='copy'/>
-        </a>
-        <a onClick={onPasteMetrics} className={`header-actions-button`} data-tip data-for='paste-button'>
-          <Icon name='paste'/>
-        </a>
-        <div className='header-actions-button-border'/>
-        <a onClick={onUndo} className={`header-actions-button ${canUndo ? '' : 'disabled'}`} data-tip data-for='undo-button'>
-          <Icon name='undo'/>
-        </a>
-        <a onClick={onRedo} className={`header-actions-button ${canRedo ? '' : 'disabled'}`} data-tip data-for='redo-button'>
-          <Icon name='repeat'/>
-        </a>
+          <div className='header-actions-button-border'/>
+          <a onClick={onCutMetrics} className={`header-actions-button`} data-tip data-for='cut-button'>
+            <Icon name='cut'/>
+          </a>
+          <a onClick={onCopyMetrics} className={`header-actions-button`} data-tip data-for='copy-button'>
+            <Icon name='copy'/>
+          </a>
+          <a onClick={onPasteMetrics} className={`header-actions-button`} data-tip data-for='paste-button'>
+            <Icon name='paste'/>
+          </a>
+          <div className='header-actions-button-border'/>
+          <a onClick={onUndo} className={`header-actions-button ${canUndo ? '' : 'disabled'}`} data-tip data-for='undo-button'>
+            <Icon name='undo'/>
+          </a>
+          <a onClick={onRedo} className={`header-actions-button ${canRedo ? '' : 'disabled'}`} data-tip data-for='redo-button'>
+            <Icon name='repeat'/>
+          </a>
 
-        <ProgressMessage actionState={actionState}/>
+          <ProgressMessage actionState={actionState}/>
+        </div>
       </div>
     </div>
   )

@@ -31,42 +31,44 @@ const SpaceHeader = ({
   const ReactTooltipParams = {class: 'small-tooltip', delayShow: 0, delayHide: 0, place: 'bottom', effect: 'solid'}
 
   return (
-    <div className='row header'>
-      <div className='col-sm-8'>
-        <div className='header-name'>
-          <SpaceName
-              name={name}
-              editableByMe={editableByMe}
-              onSave={onSaveName}
-          />
-        </div>
-      </div>
-
-      <div className='col-sm-4'>
-
-          {!!space.organization &&
-            <a className='ui image label' href={`/organizations/${space.organization.id}`}>
-              <img src={space.organization.picture}/>
-              {space.organization.name}
-            </a>
-          }
-          {!space.organization && space.user && !space.editableByMe &&
-            <a className='ui image label' href={`/users/${space.user.id}`}>
-              <img src={space.user.picture}/>
-              {space.user.name}
-            </a>
-          }
-
-            <PrivacyToggle
-              headerText={'Privacy Options'}
-              openLink={<a className='space-header-action'>{privacy_header}</a>}
-              position='left'
-              isPrivateSelectionInvalid={!canBePrivate}
-              isPrivate={isPrivate}
-              onPublicSelect={onPublicSelect}
-              onPrivateSelect={onPrivateSelect}
+    <div className='container-fluid'>
+      <div className='row header'>
+        <div className='col-sm-8'>
+          <div className='header-name'>
+            <SpaceName
+                name={name}
+                editableByMe={editableByMe}
+                onSave={onSaveName}
             />
+          </div>
         </div>
+
+        <div className='col-sm-4'>
+
+            {!!space.organization &&
+              <a className='ui image label' href={`/organizations/${space.organization.id}`}>
+                <img src={space.organization.picture}/>
+                {space.organization.name}
+              </a>
+            }
+            {!space.organization && space.user && !space.editableByMe &&
+              <a className='ui image label' href={`/users/${space.user.id}`}>
+                <img src={space.user.picture}/>
+                {space.user.name}
+              </a>
+            }
+
+              <PrivacyToggle
+                headerText={'Privacy Options'}
+                openLink={<a className='space-header-action'>{privacy_header}</a>}
+                position='left'
+                isPrivateSelectionInvalid={!canBePrivate}
+                isPrivate={isPrivate}
+                onPublicSelect={onPublicSelect}
+                onPrivateSelect={onPrivateSelect}
+              />
+          </div>
+      </div>
     </div>
   )
 }
