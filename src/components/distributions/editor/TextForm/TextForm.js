@@ -41,7 +41,7 @@ export default class TextForm extends Component{
 
   _handleBlur() {
     this._switchMetricClickMode(false)
-    this.props.onSave()
+    this.props.onSave({input: this.props.guesstimate.input})
   }
 
   _switchMetricClickMode(inClick=true) {

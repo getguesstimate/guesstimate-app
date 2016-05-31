@@ -29,7 +29,7 @@ class TextInputEditor extends Component {
   }
 
   _onChange(editorState) {
-    this.props.onChange(editorState.getCurrentContent().getPlainText(''))
+    this.props.onChange(this._text(editorState))
     return this.setState({editorState})
   }
 
@@ -73,7 +73,7 @@ export default class TextInput extends Component{
     value: PropTypes.string,
   }
 
-  componentWillUnmount() { this._handleBlur() }
+  componentWillUnmount() { this._handleBlur(this.props.value) }
 
   focus() { this.refs.editor && this.refs.editor.focus() }
 
@@ -86,7 +86,7 @@ export default class TextInput extends Component{
     this.props.onFocus()
   }
 
-  _handleBlur() {
+  _handleBlur(value) {
     $(window).off('functionMetricClicked')
     this.props.onBlur()
   }
