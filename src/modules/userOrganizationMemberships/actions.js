@@ -2,6 +2,7 @@ import {actionCreatorsFor} from 'redux-crud'
 import cuid from 'cuid'
 import * as displayErrorsActions from 'gModules/displayErrors/actions.js'
 import * as userActions from 'gModules/users/actions.js'
+import * as invitationActions from 'gModules/userOrganizationInvitations/actions.js'
 import * as organizationActions from 'gModules/organizations/actions.js'
 import * as httpRequestActions from 'gModules/httpRequests/actions.js'
 import {rootUrl} from 'servers/guesstimate-api/constants.js'
@@ -80,6 +81,8 @@ export function createWithEmail(organizationId, email) {
         dispatch(httpRequestActions.failure({id: cid, error: err}))
       }
       else if (invitation) {
+        dispatch(invitationActions.fetchSuccess([invitation]))
+
         const membership = _.get(invitation, '_embedded.membership')
         const user = _.get(invitation, '_embedded.membership._embedded.user')
 
