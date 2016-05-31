@@ -20,8 +20,7 @@
 }
 
 .hero-unit {
-  padding-top: 2em;
-  padding-bottom: 0.5em;
+  padding-top: 0.8em;
   background: #2583A7;
   background: linear-gradient(-90deg, #2577A7, #2583A7);
   width: 100%;
@@ -31,14 +30,14 @@
 .hero-unit .ui.image.label{
   color: white;
   background: rgba(255,255,255,0.2);
-  margin-top: 6px;
-  font-size: 1.05em;
+  margin-top: 4px;
+  font-size: 0.95em;
+  float: right;
 }
 
 @media only screen and (max-width: 767px) {
   .hero-unit {
     padding-top: 0.5em;
-    padding-bottom: 0.5em;
   }
 
   .header-actions {
@@ -73,13 +72,13 @@
 }
 
 .hero-unit h1 {
-  font-size: 2em;
-  padding: 0.2em 0.4em;
+  font-size: 1.7em;
+  padding: 0.05em 0.38em;
   border-radius: 3px;
   font-family: Lato;
   font-weight: 500;
   float: left;
-  margin-right: 1em;
+  margin: 0.1em 1em 0.3em 0;
 }
 
 .hero-unit .header-name {
@@ -96,56 +95,6 @@
   .hero-unit .header-name {
     max-width: 100%;
   }
-}
-
-.hero-unit .header-actions {
-  margin-top: 0.5em;
-  float: left;
-}
-
-.hero-unit .header-actions .ui.buttons {
-  float: left;
-  margin-top: 5px;
-  margin-right: 8px;
-}
-
-.hero-unit .header-actions .ui.buttons .ui.button {
-}
-
-.hero-unit .header-actions .ui.buttons.tiny .ui.button {
-  padding: .4rem;
-  font-size: 1rem;
-  opacity: 1 !important;
-  background-color: rgba(255,255,255,0.55);
-  color: rgba(7, 67, 105, 0.87);
-}
-
-.hero-unit .header-actions .ui.buttons .ui.button:hover {
-  background-color: rgba(255,255,255,0.7);
-  color: rgba(7, 67, 105, 0.94);
-}
-
-.hero-unit .header-actions .ui.buttons .ui.button.disabled {
-  background-color: rgba(255,255,255,0.15);
-  color: rgba(7, 67, 105, 0.4);
-  pointer-events: all;
-}
-
-.hero-unit a.space-header-action {
-  color: white;
-  padding: 0.5em 0.95em;
-  border-radius: 3px;
-  font-weight: 300;
-  margin-right: 10px;
-  background-color: rgba(0,0,0,0);
-  transition: background-color 0.3s;
-  font-size: 1.2em;
-  float:left;
-}
-.hero-unit a.space-header-action:hover{
-  color: white;
-  background-color: rgba(0,0,0,0.2);
-  cursor: pointer;
 }
 
 .hero-unit .dd-menu-left {
@@ -252,4 +201,25 @@
     top: -6px;
     margin-left: -6px;
   }
+}
+
+.hero-unit .header .dropDown-relative {
+  float: right;
+}
+
+.header .dropDown-relative .space-header-action {
+  color: white;
+  float: right;
+  background: rgba(255,255,255,0.1);
+  padding: 0.3em 0.7em;
+  border-radius: 3px;
+  margin: 4px 8px 0;
+}
+
+.header .dropDown-relative .space-header-action:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+.header .dropDown-relative .space-header-action:active {
+  background: rgba(255,255,255,0.3);
 }

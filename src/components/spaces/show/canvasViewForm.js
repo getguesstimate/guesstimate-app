@@ -80,7 +80,7 @@ export default class CanvasViewForm extends Component {
     return (
       <DropDown
           headerText={'View Options'}
-          openLink={<div className='ui buttons tiny'><a className='ui icon button'>View</a></div>}
+          openLink={<a className='header-actions-button'>View</a>}
           position='right'
       >
 

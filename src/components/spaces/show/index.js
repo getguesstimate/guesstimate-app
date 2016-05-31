@@ -4,6 +4,7 @@ import {connect} from 'react-redux'
 import Helmet from 'react-helmet'
 
 import SpacesShowHeader from './header'
+import SpacesShowToolbar from './Toolbar/index'
 import ClosedSpaceSidebar from './closed_sidebar.js'
 import SpaceSidebar from './sidebar'
 import Canvas from 'gComponents/spaces/canvas'
@@ -170,45 +171,55 @@ export default class SpacesShow extends Component {
             ]}
           />
         }
-        <div className='hero-unit container-fluid'>
-          <div className='row'>
-            <div className='col-md-10'>
-              <SpacesShowHeader
-                isLoggedIn={isLoggedIn}
-                onDestroy={this.destroy.bind(this)}
-                onSaveName={this.onSaveName.bind(this)}
-                onSave={this.onSave.bind(this)}
-                onCopy={this._handleCopy.bind(this)}
-                name={space.name}
-                isPrivate={space.is_private}
-                editableByMe={space.editableByMe}
-                actionState={space.canvasState.actionState}
-                canBePrivate={canBePrivate}
-                onPublicSelect={this.onPublicSelect.bind(this)}
-                onPrivateSelecundot={this.onPrivateSelect.bind(this)}
-                onUndo={this.onUndo.bind(this)}
-                onRedo={this.onRedo.bind(this)}
-                canUndo={space.checkpointMetadata.head !== space.checkpointMetadata.length - 1}
-                canRedo={space.checkpointMetadata.head !== 0}
-              />
-            </div>
+        <div className='hero-unit'>
+          <div className='container-fluid'>
+            <SpacesShowHeader
+              isLoggedIn={isLoggedIn}
+              onDestroy={this.destroy.bind(this)}
+              onSaveName={this.onSaveName.bind(this)}
+              onSave={this.onSave.bind(this)}
+              onCopy={this._handleCopy.bind(this)}
+              name={space.name}
+              isPrivate={space.is_private}
+              editableByMe={space.editableByMe}
+              actionState={space.canvasState.actionState}
+              canBePrivate={canBePrivate}
+              onPublicSelect={this.onPublicSelect.bind(this)}
+              onPrivateSelecundot={this.onPrivateSelect.bind(this)}
+              onUndo={this.onUndo.bind(this)}
+              onRedo={this.onRedo.bind(this)}
+              canUndo={space.checkpointMetadata.head !== space.checkpointMetadata.length - 1}
+              canRedo={space.checkpointMetadata.head !== 0}
+              space={space}
+            />
+          </div>
 
-            <div className='col-md-2'>
-              {!!space.organization &&
-                <a className='ui image label' href={`/organizations/${space.organization.id}`}>
-                  <img src={space.organization.picture}/>
-                  {space.organization.name}
-                </a>
-              }
-              {!space.organization && space.user && !space.editableByMe &&
-                <a className='ui image label' href={`/users/${space.user.id}`}>
-                  <img src={space.user.picture}/>
-                  {space.user.name}
-                </a>
-              }
+          <div className='SpaceShowSidebar container-fluid'>
+            <div className='row'>
+              <div className='col-md-10'>
+                <SpacesShowToolbar
+                  isLoggedIn={isLoggedIn}
+                  onDestroy={this.destroy.bind(this)}
+                  onSaveName={this.onSaveName.bind(this)}
+                  onSave={this.onSave.bind(this)}
+                  onCopy={this._handleCopy.bind(this)}
+                  name={space.name}
+                  isPrivate={space.is_private}
+                  editableByMe={space.editableByMe}
+                  actionState={space.canvasState.actionState}
+                  canBePrivate={canBePrivate}
+                  onPublicSelect={this.onPublicSelect.bind(this)}
+                  onPrivateSelecundot={this.onPrivateSelect.bind(this)}
+                  onUndo={this.onUndo.bind(this)}
+                  onRedo={this.onRedo.bind(this)}
+                  canUndo={space.checkpointMetadata.head !== space.checkpointMetadata.length - 1}
+                  canRedo={space.checkpointMetadata.head !== 0}
+                />
+              </div>
             </div>
           </div>
         </div>
+
         <div className='content'>
           {sidebarIsViseable && this.state.showSidebar &&
             <SpaceSidebar

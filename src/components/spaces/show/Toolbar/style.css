@@ -1,0 +1,67 @@
+.SpaceShowSidebar {
+  width: 100%;
+  background: rgba(211, 221, 224, 0.52);
+  float: left;
+}
+
+.SpaceShowSidebar .saveMessage{
+  color: #113850;
+  margin-left: 26px;
+  float: left;
+  margin-top: 6px;
+  font-size: 1.1em;
+}
+
+.SpaceShowSidebar .header-actions-button {
+  cursor: pointer;
+  float: left;
+  padding: 0.45em 0.65em;
+  font-size: 1.1em;
+  color: rgb(23, 56, 76);
+}
+
+.SpaceShowSidebar .header-actions-button-border {
+  float: left;
+  width: 2px;
+  background: rgba(37, 127, 167, 0.23);
+  height: 33px;
+}
+
+.SpaceShowSidebar .header-actions-button:hover {
+  background-color: rgba(255,255,255,0.3);
+}
+
+.SpaceShowSidebar .header-actions-button:active {
+  background-color: rgba(255,255,255,0.5);
+}
+
+.SpaceShowSidebar .header-actions-button.disabled {
+  opacity: 0.4;
+}
+
+.SpaceShowSidebar .header-actions-button.disabled:hover {
+  background-color: rgba(255,255,255,0.2);
+}
+
+.SpaceShowSidebar .ui.buttons {
+  float: left;
+  margin-right: 8px;
+}
+
+.SpaceShowSidebar a.space-header-action {
+  color: white;
+  padding: 0.5em 0.95em;
+  border-radius: 3px;
+  font-weight: 300;
+  margin-right: 10px;
+  background-color: rgba(0,0,0,0);
+  transition: background-color 0.3s;
+  font-size: 1.2em;
+  float:left;
+}
+.SpaceShowSidebar a.space-header-action:hover{
+  color: white;
+  background-color: rgba(0,0,0,0.2);
+  cursor: pointer;
+}
+
