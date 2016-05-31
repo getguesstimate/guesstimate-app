@@ -9,7 +9,7 @@ import Metric from 'gComponents/metrics/card/index'
 import {denormalizedSpaceSelector} from '../denormalized-space-selector'
 
 import {addMetric, changeMetric, removeMetrics} from 'gModules/metrics/actions'
-import {copy, paste} from 'gModules/copied/actions'
+import * as copiedActions from 'gModules/copied/actions'
 import {changeSelect, deSelect} from 'gModules/selected_cell/actions'
 import {selectRegion, deSelectRegion} from 'gModules/selected_region/actions'
 import {runSimulations, deleteSimulations} from 'gModules/simulations/actions'
@@ -103,14 +103,6 @@ export default class Canvas extends Component{
   _handleDeSelectAll() {
     this.props.dispatch(deSelect())
     this.props.dispatch(deSelectRegion())
-  }
-
-  _handleCopy() {
-    this.props.dispatch(copy(this.props.denormalizedSpace.id))
-  }
-
-  _handlePaste() {
-    this.props.dispatch(paste(this.props.denormalizedSpace.id))
   }
 
   _handleAddMetric(location) {
@@ -209,8 +201,9 @@ export default class Canvas extends Component{
           onAddItem={this._handleAddMetric.bind(this)}
           onMoveItem={this._handleMoveMetric.bind(this)}
           onRemoveItems={(ids) => {this.props.dispatch(removeMetrics(ids))}}
-          onCopy={this._handleCopy.bind(this)}
-          onPaste={this._handlePaste.bind(this)}
+          onCopy={this.props.onCopy}
+          onPaste={this.props.onPaste}
+          onCut={this.props.onCut}
           showGridLines={showGridLines}
           canvasState={this.props.canvasState}
         />
