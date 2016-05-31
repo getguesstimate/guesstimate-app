@@ -1,9 +1,3 @@
-.navbar-brand{
-  font-family: Lato;
-  font-size: 1.8em;
-  font-weight: 500;
-}
-
 .Layout {
   display: flex;
   min-height: 100vh;

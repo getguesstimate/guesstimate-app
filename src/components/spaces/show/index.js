@@ -12,6 +12,7 @@ import Canvas from 'gComponents/spaces/canvas'
 import {denormalizedSpaceSelector} from '../denormalized-space-selector.js'
 
 import * as spaceActions from 'gModules/spaces/actions.js'
+import * as copiedActions from 'gModules/copied/actions'
 import {undo, redo} from 'gModules/checkpoints/actions'
 
 import e from 'gEngine/engine'
@@ -113,8 +114,16 @@ export default class SpacesShow extends Component {
     this.setState({showSidebar: true})
   }
 
-  _handleCopy() {
+  _handleCopyModel() {
     this.props.dispatch(spaceActions.copy())
+  }
+
+  _handleCopyMetrics() {
+    this.props.dispatch(copiedActions.copy(this._id()))
+  }
+
+  _handlePasteMetrics() {
+    this.props.dispatch(copiedActions.paste(this._id()))
   }
 
   _id() {
@@ -175,10 +184,7 @@ export default class SpacesShow extends Component {
           <div className='container-fluid'>
             <SpacesShowHeader
               isLoggedIn={isLoggedIn}
-              onDestroy={this.destroy.bind(this)}
               onSaveName={this.onSaveName.bind(this)}
-              onSave={this.onSave.bind(this)}
-              onCopy={this._handleCopy.bind(this)}
               name={space.name}
               isPrivate={space.is_private}
               editableByMe={space.editableByMe}
@@ -186,10 +192,6 @@ export default class SpacesShow extends Component {
               canBePrivate={canBePrivate}
               onPublicSelect={this.onPublicSelect.bind(this)}
               onPrivateSelecundot={this.onPrivateSelect.bind(this)}
-              onUndo={this.onUndo.bind(this)}
-              onRedo={this.onRedo.bind(this)}
-              canUndo={space.checkpointMetadata.head !== space.checkpointMetadata.length - 1}
-              canRedo={space.checkpointMetadata.head !== 0}
               space={space}
             />
           </div>
@@ -200,16 +202,12 @@ export default class SpacesShow extends Component {
                 <SpacesShowToolbar
                   isLoggedIn={isLoggedIn}
                   onDestroy={this.destroy.bind(this)}
-                  onSaveName={this.onSaveName.bind(this)}
-                  onSave={this.onSave.bind(this)}
-                  onCopy={this._handleCopy.bind(this)}
-                  name={space.name}
+                  onCopyModel={this._handleCopyModel.bind(this)}
+                  onCopyMetrics={this._handleCopyMetrics.bind(this)}
+                  onPasteMetrics={this._handlePasteMetrics.bind(this)}
                   isPrivate={space.is_private}
                   editableByMe={space.editableByMe}
                   actionState={space.canvasState.actionState}
-                  canBePrivate={canBePrivate}
-                  onPublicSelect={this.onPublicSelect.bind(this)}
-                  onPrivateSelecundot={this.onPrivateSelect.bind(this)}
                   onUndo={this.onUndo.bind(this)}
                   onRedo={this.onRedo.bind(this)}
                   canUndo={space.checkpointMetadata.head !== space.checkpointMetadata.length - 1}

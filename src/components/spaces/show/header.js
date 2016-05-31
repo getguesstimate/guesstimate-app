@@ -20,16 +20,9 @@ const SpaceHeader = ({
   editableByMe,
   actionState,
   isLoggedIn,
-  onSave,
-  onCopy,
-  onDestroy,
   onPublicSelect,
   onPrivateSelect,
-  onSaveName,
-  onUndo,
-  canUndo,
-  onRedo,
-  canRedo
+  onSaveName
 }) => {
   let privacy_header = (<span><Icon name='globe'/> Public</span>)
   if (isPrivate) {

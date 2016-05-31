@@ -42,18 +42,13 @@ const ProgressMessage = ({actionState}) => (
 )
 
 const SpaceHeader = ({
-  canBePrivate,
-  name,
-  isPrivate,
   editableByMe,
   actionState,
   isLoggedIn,
-  onSave,
-  onCopy,
+  onCopyModel,
+  onCopyMetrics,
+  onPasteMetrics,
   onDestroy,
-  onPublicSelect,
-  onPrivateSelect,
-  onSaveName,
   onUndo,
   canUndo,
   onRedo,
@@ -77,7 +72,7 @@ const SpaceHeader = ({
               position='right'
           >
             <ul>
-              <DropDownListElement icon={'copy'} header='Copy Model' onMouseDown={onCopy}/>
+              <DropDownListElement icon={'copy'} header='Copy Model' onMouseDown={onCopyModel}/>
               {editableByMe &&
                 <DropDownListElement icon={'warning'} header='Delete Model' onMouseDown={onDestroy}/>
               }
@@ -91,10 +86,10 @@ const SpaceHeader = ({
         <a onClick={onUndo} className={`header-actions-button`} data-tip data-for='cut-button'>
           <Icon name='cut'/>
         </a>
-        <a onClick={onUndo} className={`header-actions-button`} data-tip data-for='copy-button'>
+        <a onClick={onCopyMetrics} className={`header-actions-button`} data-tip data-for='copy-button'>
           <Icon name='copy'/>
         </a>
-        <a onClick={onUndo} className={`header-actions-button`} data-tip data-for='paste-button'>
+        <a onClick={onPasteMetrics} className={`header-actions-button`} data-tip data-for='paste-button'>
           <Icon name='paste'/>
         </a>
         <div className='header-actions-button-border'/>
