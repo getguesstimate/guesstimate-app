@@ -28,6 +28,10 @@ class TextInputEditor extends Component {
     return editorState.getCurrentContent().getPlainText('')
   }
 
+  _onBlur() {
+    this.props.onBlur(this.state.editorState.getCurrentContent().getPlainText(''))
+  }
+
   _onChange(editorState) {
     this.props.onChange(editorState.getCurrentContent().getPlainText(''))
     return this.setState({editorState})
@@ -55,7 +59,7 @@ class TextInputEditor extends Component {
           onFocus={this.props.onFocus}
           editorState={editorState}
           handleReturn={this.handleReturn.bind(this)}
-          onBlur={this.props.onBlur}
+          onBlur={this._onBlur.bind(this)}
           onChange={this._onChange.bind(this)}
           tabIndex={2}
           ref='editor'
@@ -73,7 +77,7 @@ export default class TextInput extends Component{
     value: PropTypes.string,
   }
 
-  componentWillUnmount() { this._handleBlur() }
+  componentWillUnmount() { this._handleBlur(this.props.value) }
 
   focus() { this.refs.editor && this.refs.editor.focus() }
 
@@ -86,9 +90,9 @@ export default class TextInput extends Component{
     this.props.onFocus()
   }
 
-  _handleBlur() {
+  _handleBlur(value) {
     $(window).off('functionMetricClicked')
-    this.props.onBlur()
+    this.props.onBlur(value)
   }
 
   _handleChange(value) {
