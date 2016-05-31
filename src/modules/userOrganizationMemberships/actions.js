@@ -1,15 +1,19 @@
 import {actionCreatorsFor} from 'redux-crud'
+
 import cuid from 'cuid'
-import * as displayErrorsActions from 'gModules/displayErrors/actions.js'
-import * as userActions from 'gModules/users/actions.js'
-import * as organizationActions from 'gModules/organizations/actions.js'
-import * as httpRequestActions from 'gModules/httpRequests/actions.js'
-import {rootUrl} from 'servers/guesstimate-api/constants.js'
-import {captureApiError} from 'lib/errors/index.js'
-import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
+
+import * as displayErrorsActions from 'gModules/displayErrors/actions'
+import * as userActions from 'gModules/users/actions'
+import * as invitationActions from 'gModules/userOrganizationInvitations/actions'
+import * as organizationActions from 'gModules/organizations/actions'
+import * as httpRequestActions from 'gModules/httpRequests/actions'
+
+import {captureApiError} from 'lib/errors/index'
+
+import {setupGuesstimateApi} from 'servers/guesstimate-api/constants'
 
 let sActions = actionCreatorsFor('userOrganizationMemberships')
-let relevantAttributes = ['id', 'user_id', 'organization_id']
+let relevantAttributes = ['id', 'user_id', 'organization_id', 'invitation_id']
 
 function api(state) {
   function getToken(state) {
@@ -27,7 +31,7 @@ export function fetchByOrganizationId(organizationId) {
       } else if (memberships) {
         dispatch(fetchSuccess(memberships.items))
 
-        const users = memberships.items.map(m => _.get(m, '_embedded.user'))
+        const users = memberships.items.map(m => _.get(m, '_embedded.user')).filter(u => !!u)
         dispatch(userActions.fetchSuccess(users))
       }
     })
@@ -80,8 +84,10 @@ export function createWithEmail(organizationId, email) {
         dispatch(httpRequestActions.failure({id: cid, error: err}))
       }
       else if (invitation) {
+        dispatch(invitationActions.fetchSuccess([invitation]))
+
         const membership = _.get(invitation, '_embedded.membership')
-        const user = _.get(invitation, '_embedded.membership._embedded.user')
+        const user = _.get(membership, '_embedded.user')
 
         if (membership) { dispatch(sActions.createSuccess(membership)) }
         if (user) { dispatch(userActions.fetchSuccess([user]))}

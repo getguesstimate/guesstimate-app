@@ -1,20 +1,23 @@
 import React, {Component, PropTypes} from 'react'
+import { connect } from 'react-redux'
+
 import ReactDOM from 'react-dom'
-import { connect } from 'react-redux';
+import Icon from 'react-fa'
+
 import SpaceList from 'gComponents/spaces/list'
 import * as spaceActions from 'gModules/spaces/actions'
 import * as organizationActions from 'gModules/organizations/actions'
-import * as userOrganizationMembershipActions from 'gModules/userOrganizationMemberships/actions.js'
-import { organizationSpaceSelector } from './organizationSpaceSelector.js';
-import { organizationMemberSelector } from './organizationMemberSelector.js';
-import { httpRequestSelector } from './httpRequestSelector.js';
+import * as userOrganizationMembershipActions from 'gModules/userOrganizationMemberships/actions'
+import { organizationSpaceSelector } from './organizationSpaceSelector'
+import { organizationMemberSelector } from './organizationMemberSelector'
+import { httpRequestSelector } from './httpRequestSelector'
 import SpaceCards from 'gComponents/spaces/cards'
-import Container from 'gComponents/utility/container/Container.js'
+import Container from 'gComponents/utility/container/Container'
 import e from 'gEngine/engine'
-import './style.css'
-import Icon from 'react-fa'
 
-import * as modalActions from 'gModules/modal/actions.js'
+import * as modalActions from 'gModules/modal/actions'
+
+import './style.css'
 
 function mapStateToProps(state) {
   return {
@@ -92,7 +95,8 @@ export default class OrganizationShow extends Component{
 
 
   render () {
-    const {organizationId, organizations, members} = this.props
+    const {organizationId, organizations, members, memberships, invitations} = this.props
+    const unjoinedInvitees = invitations.filter(i => !_.some(memberships, m => m.invitation_id === i.id))
     const {openTab} = this.state
     const spaces =  _.orderBy(this.props.organizationSpaces.asMutable(), ['updated_at'], ['desc'])
     const organization = organizations.find(u => u.id.toString() === organizationId.toString())
@@ -125,6 +129,7 @@ export default class OrganizationShow extends Component{
               <MembersTab
                 subTab={this.state.subMembersTab}
                 members={members}
+                invitations={unjoinedInvitees}
                 admin_id={organization.admin_id}
                 onRemove={this.onRemove.bind(this)}
                 addUser={this.addUser.bind(this)}
@@ -175,18 +180,18 @@ const OrganizationTabButtons = ({tabs, openTab, changeTab}) => (
   </div>
 )
 
-const MembersTab = ({subTab, members, admin_id, onRemove, addUser, onChangeSubTab, httpRequests, meIsAdmin}) => (
+const MembersTab = ({subTab, members, invitations, admin_id, onRemove, addUser, onChangeSubTab, httpRequests, meIsAdmin}) => (
   <div className='MembersTab'>
     {subTab === 'ADD' &&
       <MembersAddSubTab {...{addUser, httpRequests, onChangeSubTab}}/>
     }
     {subTab === 'INDEX' &&
-      <MembersIndexSubTab {...{subTab, members, admin_id, onRemove, onChangeSubTab, meIsAdmin}}/>
+      <MembersIndexSubTab {...{subTab, members, invitations, admin_id, onRemove, onChangeSubTab, meIsAdmin}}/>
     }
   </div>
 )
 
-const MembersIndexSubTab = ({subTab, members, admin_id, onChangeSubTab, onRemove, meIsAdmin}) => (
+const MembersIndexSubTab = ({subTab, members, invitations, admin_id, onChangeSubTab, onRemove, meIsAdmin}) => (
   <div className='row MembersIndexSubTab'>
     <div className='col-sm-2'>
       {subTab === 'INDEX' && meIsAdmin &&
@@ -208,7 +213,16 @@ const MembersIndexSubTab = ({subTab, members, admin_id, onChangeSubTab, onRemove
                   onRemove={() => {onRemove(m)}}
                   meIsAdmin={meIsAdmin}
                 />
-                )
+              )
+            })}
+            {invitations.map(i => {
+              return (
+                <Invitee
+                  key={i.id}
+                  email={i.email}
+                  meIsAdmin={meIsAdmin}
+                />
+              )
             })}
           </div>
         </div>
@@ -217,20 +231,42 @@ const MembersIndexSubTab = ({subTab, members, admin_id, onChangeSubTab, onRemove
   </div>
 )
 
+const Invitee = ({email, meIsAdmin}) => (
+  <div className='Member'>
+    {meIsAdmin &&
+      <div className='row'>
+        <div className='col-xs-7'>
+          <div className='avatar'><Icon name='envelope'/></div>
+          <div className='name'>{email}</div>
+        </div>
+        <div className='col-xs-2 role'></div>
+        <div className='col-xs-2 invitation-status'>invited</div>
+        <div className='col-xs-1'></div>
+      </div>
+    }
+    {!meIsAdmin &&
+      <div className='row'>
+        <div className='col-xs-10'>
+          <div className='avatar'><Icon name='envelope'/></div>
+          <div className='name'>{email}</div>
+        </div>
+      </div>
+    }
+  </div>
+)
+
 const Member = ({user, isAdmin, onRemove, meIsAdmin}) => (
   <div className='Member'>
     {meIsAdmin &&
       <div className='row'>
         <div className='col-xs-7'>
-          <a href={e.user.url(user)}><img src={user.picture}/></a>
+          <a href={e.user.url(user)}><img className='avatar' src={user.picture}/></a>
           <a href={e.user.url(user)} className='name'>{user.name}</a>
         </div>
         <div className='col-xs-2 role'>
           {isAdmin ? 'Admin' : 'Editor'}
         </div>
-        <div className='col-xs-2 invitation-status'>
-          {user.sign_in_count > 0 ? 'joined' : 'invited'}
-        </div>
+        <div className='col-xs-2 invitation-status'>joined</div>
         <div className='col-xs-1'>
           {user.membershipId && !isAdmin &&
             <button className='ui circular button small remove' onClick={onRemove}>

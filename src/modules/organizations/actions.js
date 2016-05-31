@@ -5,6 +5,7 @@ import * as membershipActions from 'gModules/userOrganizationMemberships/actions
 import {captureApiError} from 'lib/errors/index.js'
 import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
 import * as userOrganizationMembershipActions from 'gModules/userOrganizationMemberships/actions.js'
+import * as userOrganizationInvitationActions from 'gModules/userOrganizationInvitations/actions.js'
 
 let sActions = actionCreatorsFor('organizations')
 
@@ -22,7 +23,9 @@ export function fetchById(organizationId) {
         dispatch(displayErrorsActions.newError())
         captureApiError('OrganizationsFetch', null, null, err, {url: 'fetch'})
       } else if (organization) {
+        // TODO(matthew): Unnecessary requests.
         dispatch(userOrganizationMembershipActions.fetchByOrganizationId(organizationId))
+        dispatch(userOrganizationInvitationActions.fetchByOrganizationId(organizationId))
         dispatch(sActions.fetchSuccess([organization]))
       }
     })
