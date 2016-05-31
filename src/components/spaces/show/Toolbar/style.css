@@ -1,0 +1,72 @@
+.SpaceShowToolbar {
+  width: 100%;
+  background: rgba(219, 221, 222, 0.69);
+  float: left;
+  border-bottom: 1px solid rgba(37, 128, 167, 0.38);
+}
+
+.SpaceShowToolbar .saveMessage{
+  color: #09273A;
+  margin-left: 26px;
+  float: left;
+  margin-top: 8px;
+  font-size: 1.1em;
+}
+
+.SpaceShowToolbar .header-actions-button {
+  cursor: pointer;
+  float: left;
+  padding: 0.3em 0.55em;
+  font-size: 1.1em;
+  color: rgb(18,46,64);
+  border-radius: 1px;
+  margin: 0.2em 0.2em;
+}
+
+.SpaceShowToolbar .header-actions-button-border {
+  float: left;
+  width: 2px;
+  background: rgb(115, 168, 190);
+  height: 34px;
+  margin: 0 3px;
+}
+
+.SpaceShowToolbar .header-actions-button:hover {
+  background-color: rgba(255,255,255,0.3);
+}
+
+.SpaceShowToolbar .header-actions-button:active {
+  background-color: rgba(255,255,255,0.5);
+}
+
+.SpaceShowToolbar .header-actions-button.disabled {
+  opacity: 0.4;
+}
+
+.SpaceShowToolbar .header-actions-button.disabled:hover {
+  background-color: rgba(255,255,255,0.2);
+}
+
+.SpaceShowToolbar .ui.buttons {
+  float: left;
+  margin-right: 8px;
+}
+
+.SpaceShowToolbar a.space-header-action {
+  color: white;
+  padding: 0.5em 0.95em;
+  border-radius: 3px;
+  font-weight: 300;
+  margin-right: 10px;
+  background-color: rgba(0,0,0,0);
+  transition: background-color 0.3s;
+  font-size: 1.2em;
+  float:left;
+}
+
+.SpaceShowToolbar a.space-header-action:hover{
+  color: white;
+  background-color: rgba(0,0,0,0.2);
+  cursor: pointer;
+}
+
