@@ -48,6 +48,7 @@ const SpaceHeader = ({
   onCopyModel,
   onCopyMetrics,
   onPasteMetrics,
+  onCutMetrics,
   onDestroy,
   onUndo,
   canUndo,
@@ -83,7 +84,7 @@ const SpaceHeader = ({
         <CanvasViewForm/>
 
         <div className='header-actions-button-border'/>
-        <a onClick={onUndo} className={`header-actions-button`} data-tip data-for='cut-button'>
+        <a onClick={onCutMetrics} className={`header-actions-button`} data-tip data-for='cut-button'>
           <Icon name='cut'/>
         </a>
         <a onClick={onCopyMetrics} className={`header-actions-button`} data-tip data-for='copy-button'>

@@ -118,12 +118,16 @@ export default class SpacesShow extends Component {
     this.props.dispatch(spaceActions.copy())
   }
 
-  _handleCopyMetrics() {
+  onCopy() {
     this.props.dispatch(copiedActions.copy(this._id()))
   }
 
-  _handlePasteMetrics() {
+  onPaste() {
     this.props.dispatch(copiedActions.paste(this._id()))
+  }
+
+  onCut() {
+    this.props.dispatch(copiedActions.cut(this._id()))
   }
 
   _id() {
@@ -203,8 +207,9 @@ export default class SpacesShow extends Component {
                   isLoggedIn={isLoggedIn}
                   onDestroy={this.destroy.bind(this)}
                   onCopyModel={this._handleCopyModel.bind(this)}
-                  onCopyMetrics={this._handleCopyMetrics.bind(this)}
-                  onPasteMetrics={this._handlePasteMetrics.bind(this)}
+                  onCopyMetrics={this.onCopy.bind(this)}
+                  onPasteMetrics={this.onPaste.bind(this)}
+                  onCutMetrics={this.onCut.bind(this)}
                   isPrivate={space.is_private}
                   editableByMe={space.editableByMe}
                   actionState={space.canvasState.actionState}
@@ -230,7 +235,12 @@ export default class SpacesShow extends Component {
           {sidebarIsViseable && !this.state.showSidebar &&
             <ClosedSpaceSidebar onOpen={this.openSidebar.bind(this)}/>
           }
-          <Canvas spaceId={space.id}/>
+          <Canvas
+            spaceId={space.id}
+            onCopy={this.onCopy.bind(this)}
+            onPaste={this.onPaste.bind(this)}
+            onCut={this.onCut.bind(this)}
+          />
         </div>
       </div>
     )
