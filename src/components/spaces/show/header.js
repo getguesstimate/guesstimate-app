@@ -5,6 +5,7 @@ import Icon from 'react-fa'
 import CanvasViewForm from './canvasViewForm'
 import DropDown, {DropDownListElement} from 'gComponents/utility/drop-down/index'
 import {PrivacyToggle} from './privacy-toggle/index'
+import {ViewOptionToggle} from './view-options/index'
 import {SpaceName} from './spaceName'
 import ReactTooltip from 'react-tooltip'
 
@@ -126,27 +127,15 @@ const SpaceHeader = ({
             <a className='space-header-action'><Icon name='copy'/> Copy</a>
           </div>
         }
-        { isLoggedIn && editableByMe &&
-          <DropDown
-            headerText={'Viewing Mode'}
-            openLink={<a className='space-header-action'>{view_mode_header}</a>}
-            position='right'
-          >
-            <ul>
-              <DropDownListElement icon={'pencil'} header='Editing' onMouseDown={onAllowEdits}>
-                <span> Changes will be saved. </span>
-              </DropDownListElement>
-              <DropDownListElement icon={'eye'} header='Viewing' onMouseDown={onForbidEdits}>
-                <span> Changes will not be saved. </span>
-              </DropDownListElement>
-            </ul>
-          </DropDown>
-        }
-        { isLoggedIn && !editableByMe &&
-          <span className='space-header-action disabled'>
-            <Icon name='eye'/> Viewing
-          </span>
-        }
+        <ViewOptionToggle
+          headerText={'Saving Options'}
+          openLink={<a className='space-header-action'>{view_mode_header}</a>}
+          position='right'
+          isEditingInvalid={!editableByMe}
+          isEditing={editsAllowed}
+          onAllowEdits={onAllowEdits}
+          onForbidEdits={onForbidEdits}
+        />
         <ProgressMessage actionState={actionState}/>
       </div>
     </div>
