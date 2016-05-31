@@ -35,6 +35,11 @@ const ProgressMessage = ({actionState}) => (
     {actionState == 'SAVED' && 'All changes saved'}
     {actionState == 'COPIED' && 'Successfully copied'}
     {actionState == 'CREATED' && 'New model created'}
+    {actionState == 'CONFLICT' && 
+      <div className='ui red horizontal label'>
+        {"Model has changed since your last save. Refresh and try again later."}
+      </div>
+    }
   </div>
 )
 
