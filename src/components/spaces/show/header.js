@@ -143,9 +143,9 @@ const SpaceHeader = ({
           </DropDown>
         }
         { isLoggedIn && !editableByMe &&
-          <div className='space-header-action'>
-            <Icon name='minus-circle'/> Forbid Saving
-          </div>
+          <span className='space-header-action disabled'>
+            <Icon name='eye'/> Viewing
+          </span>
         }
         <ProgressMessage actionState={actionState}/>
       </div>

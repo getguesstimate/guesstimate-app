@@ -2,12 +2,12 @@ export function change(values) {
   return { type: 'CHANGE_CANVAS_STATE', values };
 }
 
-export function allowSaves() {
-  return { type: 'CHANGE_CANVAS_STATE', values: { savesAllowed: true } };
+export function allowEdits() {
+  return { type: 'CHANGE_CANVAS_STATE', values: { editsAllowed: true } };
 }
 
-export function forbidSaves() {
-  return { type: 'CHANGE_CANVAS_STATE', values: { savesAllowed: false } };
+export function forbidEdits() {
+  return { type: 'CHANGE_CANVAS_STATE', values: { editsAllowed: false } };
 }
 
 export function changeMetricClickMode(metricClickMode) {

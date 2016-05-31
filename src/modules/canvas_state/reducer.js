@@ -3,7 +3,7 @@ const initialState = {
   edgeView: 'visible',
   metricClickMode: 'DEFAULT',
   saveState: 'NONE',
-  savesAllowed: true,
+  editsAllowed: true,
 }
 
 export default function canvasState(state = initialState, action) {

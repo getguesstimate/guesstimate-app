@@ -10,7 +10,7 @@ import Canvas from 'gComponents/spaces/canvas'
 
 import {denormalizedSpaceSelector} from '../denormalized-space-selector'
 
-import {allowSaves, forbidSaves} from 'gModules/canvas_state/actions'
+import {allowEdits, forbidEdits} from 'gModules/canvas_state/actions'
 import * as spaceActions from 'gModules/spaces/actions'
 import {undo, redo} from 'gModules/checkpoints/actions'
 
@@ -55,13 +55,13 @@ export default class SpacesShow extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const nextState = _.get(nextProps, 'denormalizedSpace.editableByMe')
-    const currState = _.get(this.props, 'denormalizedSpace.editableByMe')
-    if (nextState !== currState) {
-      if (!!nextState) {
-        this.props.dispatch(allowSaves())
+    const nextEditableState = _.get(nextProps, 'denormalizedSpace.editableByMe')
+    const currEditableState = _.get(this.props, 'denormalizedSpace.editableByMe')
+    if (nextEditableState !== currEditableState) {
+      if (!!nextEditableState) {
+        this.props.dispatch(allowEdits())
       } else {
-        this.props.dispatch(forbidSaves())
+        this.props.dispatch(forbidEdits())
       }
     }
   }
@@ -195,9 +195,9 @@ export default class SpacesShow extends Component {
                 name={space.name}
                 isPrivate={space.is_private}
                 editableByMe={space.editableByMe}
-                editsAllowed={space.canvasState.savesAllowed}
-                onAllowEdits={() => {this.props.dispatch(allowSaves())}}
-                onForbidEdits={() => {this.props.dispatch(forbidSaves())}}
+                editsAllowed={space.canvasState.editsAllowed}
+                onAllowEdits={() => {this.props.dispatch(allowEdits())}}
+                onForbidEdits={() => {this.props.dispatch(forbidEdits())}}
                 actionState={space.canvasState.actionState}
                 canBePrivate={canBePrivate}
                 onPublicSelect={this.onPublicSelect.bind(this)}

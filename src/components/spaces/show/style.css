@@ -131,7 +131,7 @@
   pointer-events: all;
 }
 
-.hero-unit a.space-header-action {
+.hero-unit .space-header-action {
   color: white;
   padding: 0.5em 0.95em;
   border-radius: 3px;
@@ -142,10 +142,14 @@
   font-size: 1.2em;
   float:left;
 }
-.hero-unit a.space-header-action:hover{
+.hero-unit .space-header-action:hover{
   color: white;
   background-color: rgba(0,0,0,0.2);
   cursor: pointer;
+}
+.hero-unit .space-header-action.disabled:hover{
+  background-color: rgba(0,0,0,0);
+  cursor: not-allowed;
 }
 
 .hero-unit .dd-menu-left {

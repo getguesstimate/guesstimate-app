@@ -51,7 +51,7 @@ export function toDgraph(spaceId, graph){
 }
 
 export function canEdit(space, me, userOrganizationMemberships, canvasState) {
-  if (_.has(canvasState, 'savesAllowed') && !canvasState.savesAllowed) { return false }
+  if (_.has(canvasState, 'editsAllowed') && !canvasState.editsAllowed) { return false }
 
   const meId = _.get(me, 'id')
   if (!!space.organization_id) {
