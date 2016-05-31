@@ -110,11 +110,14 @@
       margin-top: 0.6em;
     }
 
-    img{
+    .avatar {
       float: left;
       width: 40px;
       border-radius: 3px;
       margin-right: 1em;
+      font-size: 2.9em;
+      margin-left: 0.3em;
+      color: $blue-5;
     }
 
     &:last-child {

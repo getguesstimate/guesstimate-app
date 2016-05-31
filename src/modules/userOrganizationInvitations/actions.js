@@ -26,7 +26,6 @@ export function fetchByOrganizationId(organizationId) {
         dispatch(displayErrorsActions.newError())
         captureApiError('OrganizationsInvitationsFetch', null, null, err, {url: 'fetchMembers'})
       } else if (invitations) {
-        debugger
         dispatch(fetchSuccess(invitations.items))
 
         const memberships = invitations.items.map(i => _.get(i, '_embedded.membership')).filter(m => !!m)
