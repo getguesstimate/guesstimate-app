@@ -18,6 +18,9 @@ const SpaceHeader = ({
   space,
   isPrivate,
   editableByMe,
+  editsAllowed,
+  onAllowEdits,
+  onForbidEdits,
   actionState,
   isLoggedIn,
   onPublicSelect,
@@ -28,6 +31,8 @@ const SpaceHeader = ({
   if (isPrivate) {
     privacy_header = (<span><Icon name='lock'/> Private</span>)
   }
+
+
   const ReactTooltipParams = {class: 'small-tooltip', delayShow: 0, delayHide: 0, place: 'bottom', effect: 'solid'}
 
   return (

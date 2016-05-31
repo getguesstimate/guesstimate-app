@@ -1,7 +1,5 @@
 .SpaceShowToolbar {
-  width: 100%;
   background: rgba(219, 221, 222, 0.69);
-  float: left;
   border-bottom: 1px solid rgba(37, 128, 167, 0.38);
 }
 
@@ -13,7 +11,7 @@
   font-size: 1.1em;
 }
 
-.SpaceShowToolbar .header-actions-button {
+.SpaceShowToolbar .header-action {
   cursor: pointer;
   float: left;
   padding: 0.3em 0.55em;
@@ -23,7 +21,7 @@
   margin: 0.2em 0.2em;
 }
 
-.SpaceShowToolbar .header-actions-button-border {
+.SpaceShowToolbar .header-action-border {
   float: left;
   width: 2px;
   background: rgb(115, 168, 190);
@@ -31,19 +29,19 @@
   margin: 0 3px;
 }
 
-.SpaceShowToolbar .header-actions-button:hover {
+.SpaceShowToolbar .header-action:hover {
   background-color: rgba(255,255,255,0.3);
 }
 
-.SpaceShowToolbar .header-actions-button:active {
+.SpaceShowToolbar .header-action:active {
   background-color: rgba(255,255,255,0.5);
 }
 
-.SpaceShowToolbar .header-actions-button.disabled {
+.SpaceShowToolbar .header-action.disabled {
   opacity: 0.4;
 }
 
-.SpaceShowToolbar .header-actions-button.disabled:hover {
+.SpaceShowToolbar .header-action.disabled:hover {
   background-color: rgba(255,255,255,0.2);
 }
 
@@ -70,3 +68,17 @@
   cursor: pointer;
 }
 
+.SpaceShowToolbar .float-right{
+  float: right;
+}
+
+.SpaceShowToolbar .header-action.button {
+  background-color: rgba(255,255,255,0.3);
+  padding: 0.23em 0.53em;
+  margin: 0.3em 0 0 0.2em;
+  border-radius: 2px;
+}
+
+.SpaceShowToolbar .header-action.button:hover {
+  background-color: rgba(255,255,255,0.5);
+}
