@@ -6,7 +6,7 @@
 
 .header-right-menu {
   float: right;
-  height: 3.5em;
+  height: 3.2em;
   position: relative;
 }
 
@@ -68,9 +68,10 @@
 }
 
 .header-right-menu .avatar {
-  width: 3.25em;
-  border-radius: 3.25em;
-  border: 0.4em solid rgba(0,0,0,0);
+  width: 2.6em;
+  border-radius: 3em;
+  border: 0.3em solid rgba(0,0,0,0);
+  margin-top: 3px;
 }
 
 .header-right-menu .avatar:hover {
