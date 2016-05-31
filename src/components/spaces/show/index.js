@@ -5,19 +5,20 @@ import Helmet from 'react-helmet'
 
 import SpacesShowHeader from './header'
 import SpacesShowToolbar from './Toolbar/index'
-import ClosedSpaceSidebar from './closed_sidebar.js'
 import SpaceSidebar from './sidebar'
+import ClosedSpaceSidebar from './closed_sidebar'
 import Canvas from 'gComponents/spaces/canvas'
 
-import {denormalizedSpaceSelector} from '../denormalized-space-selector.js'
+import {denormalizedSpaceSelector} from '../denormalized-space-selector'
 
-import * as spaceActions from 'gModules/spaces/actions.js'
+import {allowEdits, forbidEdits} from 'gModules/canvas_state/actions'
+import * as spaceActions from 'gModules/spaces/actions'
 import * as copiedActions from 'gModules/copied/actions'
 import {undo, redo} from 'gModules/checkpoints/actions'
 
 import e from 'gEngine/engine'
 
-import * as elev from 'server/elev/index.js'
+import * as elev from 'server/elev/index'
 
 import './style.css'
 
@@ -55,8 +56,20 @@ export default class SpacesShow extends Component {
     if (!this.props.embed) { elev.hide() }
   }
 
-  componentDidUpdate(newProps) {
-    this.considerFetch(newProps)
+  componentWillReceiveProps(nextProps) {
+    const nextEditableState = _.get(nextProps, 'denormalizedSpace.editableByMe')
+    const currEditableState = _.get(this.props, 'denormalizedSpace.editableByMe')
+    if (nextEditableState !== currEditableState) {
+      if (!!nextEditableState) {
+        this.props.dispatch(allowEdits())
+      } else {
+        this.props.dispatch(forbidEdits())
+      }
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    this.considerFetch(prevProps)
   }
 
   considerFetch(newProps) {
@@ -184,6 +197,7 @@ export default class SpacesShow extends Component {
             ]}
           />
         }
+
         <div className='hero-unit'>
           <SpacesShowHeader
             isLoggedIn={isLoggedIn}
@@ -200,6 +214,9 @@ export default class SpacesShow extends Component {
           />
 
           <SpacesShowToolbar
+            editsAllowed={space.canvasState.editsAllowed}
+            onAllowEdits={() => {this.props.dispatch(allowEdits())}}
+            onForbidEdits={() => {this.props.dispatch(forbidEdits())}}
             isLoggedIn={isLoggedIn}
             onDestroy={this.destroy.bind(this)}
             onCopyModel={this._handleCopyModel.bind(this)}

@@ -5,6 +5,7 @@ import ReactTooltip from 'react-tooltip'
 
 import CanvasViewForm from '../canvasViewForm'
 import DropDown, {DropDownListElement} from 'gComponents/utility/drop-down/index'
+import {ViewOptionToggle} from '../view-options/index'
 import {PrivacyToggle} from '../privacy-toggle/index'
 import {SpaceName} from '../spaceName'
 import e from 'gEngine/engine'
@@ -53,14 +54,21 @@ const SpaceHeader = ({
   onUndo,
   canUndo,
   onRedo,
-  canRedo
+  canRedo,
+  editsAllowed,
+  onAllowEdits,
+  onForbidEdits,
 }) => {
   const ReactTooltipParams = {class: 'small-tooltip', delayShow: 0, delayHide: 0, place: 'bottom', effect: 'solid'}
 
+  let view_mode_header = (<span><Icon name='eye'/> Viewing </span>)
+  if (editsAllowed) {
+    view_mode_header = (<span><Icon name='pencil'/> Editing </span>)
+  }
   return (
     <div className='SpaceShowToolbar container-fluid'>
       <div className='row'>
-        <div className='col-md-10'>
+        <div className='col-sm-10'>
           <ReactTooltip {...ReactTooltipParams} id='cut-button'>Cut Nodes (ctrl-x)</ReactTooltip>
           <ReactTooltip {...ReactTooltipParams} id='copy-button'>Copy Nodes (ctrl-c)</ReactTooltip>
           <ReactTooltip {...ReactTooltipParams} id='paste-button'>Paste Nodes (ctrl-p)</ReactTooltip>
@@ -70,7 +78,7 @@ const SpaceHeader = ({
           { isLoggedIn &&
             <DropDown
                 headerText={'Model Actions'}
-                openLink={<a className='header-actions-button'>File</a>}
+                openLink={<a className='header-action'>File</a>}
                 position='right'
             >
               <ul>
@@ -84,25 +92,39 @@ const SpaceHeader = ({
 
           <CanvasViewForm/>
 
-          <div className='header-actions-button-border'/>
-          <a onClick={onCutMetrics} className={`header-actions-button`} data-tip data-for='cut-button'>
+          <div className='header-action-border'/>
+          <a onClick={onCutMetrics} className={`header-action`} data-tip data-for='cut-button'>
             <Icon name='cut'/>
           </a>
-          <a onClick={onCopyMetrics} className={`header-actions-button`} data-tip data-for='copy-button'>
+          <a onClick={onCopyMetrics} className={`header-action`} data-tip data-for='copy-button'>
             <Icon name='copy'/>
           </a>
-          <a onClick={onPasteMetrics} className={`header-actions-button`} data-tip data-for='paste-button'>
+          <a onClick={onPasteMetrics} className={`header-action`} data-tip data-for='paste-button'>
             <Icon name='paste'/>
           </a>
-          <div className='header-actions-button-border'/>
-          <a onClick={onUndo} className={`header-actions-button ${canUndo ? '' : 'disabled'}`} data-tip data-for='undo-button'>
+          <div className='header-action-border'/>
+          <a onClick={onUndo} className={`header-action ${canUndo ? '' : 'disabled'}`} data-tip data-for='undo-button'>
             <Icon name='undo'/>
           </a>
-          <a onClick={onRedo} className={`header-actions-button ${canRedo ? '' : 'disabled'}`} data-tip data-for='redo-button'>
+          <a onClick={onRedo} className={`header-action ${canRedo ? '' : 'disabled'}`} data-tip data-for='redo-button'>
             <Icon name='repeat'/>
           </a>
 
           <ProgressMessage actionState={actionState}/>
+
+        </div>
+        <div className='col-sm-2'>
+          <div className='float-right'>
+            <ViewOptionToggle
+              headerText={'Saving Options'}
+              openLink={<a className='header-action button'>{view_mode_header}</a>}
+              position='left'
+              isEditingInvalid={!editableByMe}
+              isEditing={editsAllowed}
+              onAllowEdits={onAllowEdits}
+              onForbidEdits={onForbidEdits}
+            />
+        </div>
         </div>
       </div>
     </div>
