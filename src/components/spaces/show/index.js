@@ -6,12 +6,13 @@ import Helmet from 'react-helmet'
 import SpacesShowHeader from './header'
 import SpacesShowToolbar from './Toolbar/index'
 import SpaceSidebar from './sidebar'
+import ClosedSpaceSidebar from './closed_sidebar'
 import Canvas from 'gComponents/spaces/canvas'
 
 import {denormalizedSpaceSelector} from '../denormalized-space-selector'
 
 import {allowEdits, forbidEdits} from 'gModules/canvas_state/actions'
-import * as spaceActions from 'gModules/spaces/actions.js'
+import * as spaceActions from 'gModules/spaces/actions'
 import * as copiedActions from 'gModules/copied/actions'
 import {undo, redo} from 'gModules/checkpoints/actions'
 
