@@ -22,7 +22,6 @@ export function fetchByOrganizationId(organizationId) {
         dispatch(displayErrorsActions.newError())
         captureApiError('OrganizationsMemberFetch', null, null, err, {url: 'fetchMembers'})
       } else if (members) {
-        console.log("sneaky!")
         const formatted = members.items.map(m => _.pick(m, ['id', 'user_id', 'organization_id']))
         dispatch(sActions.fetchSuccess(formatted))
 

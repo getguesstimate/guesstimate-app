@@ -27,7 +27,6 @@ export function fetch({auth0_id}) {
         dispatch(displayErrorsActions.newError())
         captureApiError('UsersFetch', null, null, null, {url: 'usersFetchError'})
       } else if (data) {
-        console.log("UsersFetch")
         const action = sActions.fetchSuccess(data.items)
         const me = data.items[0]
         dispatch(meActions.guesstimateMeLoaded(me))
@@ -44,7 +43,6 @@ export function fetchById(userId) {
         dispatch(displayErrorsActions.newError())
         captureApiError('UsersFetch', null, null, err, {url: 'fetch'})
       } else if (user) {
-        console.log("fetchById")
         dispatch(sActions.fetchSuccess([user]))
         if (getState().me.id === user.id){
           dispatch(meActions.guesstimateMeLoaded(user))
@@ -62,7 +60,6 @@ function formatUsers(unformatted) {
 export function fromSearch(spaces) {
   return (dispatch) => {
     const users = spaces.map(s => s.user_info)
-    console.log("fromSearch")
     dispatch(sActions.fetchSuccess(formatUsers(users)))
   }
 }
@@ -80,7 +77,6 @@ export function create(object) {
       }
       else if (_.isEmpty(user)) {
         generalError('UserCreate-EmptyResponse', {cid: newUser.id, url: 'userscreate'})
-        console.log("fetchSuccess")
         dispatch(sActions.fetchSuccess([user]))
         dispatch(displayErrorsActions.newError())
       } else {
@@ -93,7 +89,6 @@ export function create(object) {
 
 export function fetchSuccess(users) {
   return (dispatch, getState) => {
-    console.log("WOOOO")
     dispatch(sActions.fetchSuccess(formatUsers(_.uniqBy(users, 'id'))))
   }
 }
