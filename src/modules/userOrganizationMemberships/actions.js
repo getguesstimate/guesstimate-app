@@ -6,7 +6,7 @@ import {rootUrl} from 'servers/guesstimate-api/constants.js'
 import {captureApiError} from 'lib/errors/index.js'
 import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
 
-let sActions = actionCreatorsFor('userOrganizationMemberships')
+export const sActions = actionCreatorsFor('userOrganizationMemberships')
 
 function api(state) {
   function getToken(state) {
@@ -22,10 +22,11 @@ export function fetchByOrganizationId(organizationId) {
         dispatch(displayErrorsActions.newError())
         captureApiError('OrganizationsMemberFetch', null, null, err, {url: 'fetchMembers'})
       } else if (members) {
+        console.log("sneaky!")
         const formatted = members.items.map(m => _.pick(m, ['id', 'user_id', 'organization_id']))
         dispatch(sActions.fetchSuccess(formatted))
 
-        const users = members.items.map(m => _.get(m, '_embedded.user'))
+        const users = members.items.map(m => _.get(m, '_embedded.user')).filter(u => !!u)
         dispatch(userActions.fetchSuccess(users))
       }
     })
@@ -42,8 +43,8 @@ export function fetchByUserId(userId) {
         const formatted = memberships.items.map(m => _.pick(m, ['id', 'user_id', 'organization_id']))
         dispatch(sActions.fetchSuccess(formatted))
 
-        const organizations = memberships.items.map(m => _.get(m, '_embedded.organization'))
-        dispatch(organizationActions.fetchSuccess(organizations))
+        //const organizations = memberships.items.map(m => _.get(m, '_embedded.organization')).filter(o => !!o)
+        //dispatch(organizationActions.fetchSuccess(organizations))
       }
     })
   }
