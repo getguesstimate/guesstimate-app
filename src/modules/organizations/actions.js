@@ -23,10 +23,13 @@ export function fetchById(organizationId) {
         dispatch(displayErrorsActions.newError())
         captureApiError('OrganizationsFetch', null, null, err, {url: 'fetch'})
       } else if (organization) {
-        // TODO(matthew): Unnecessary requests.
-        dispatch(userOrganizationMembershipActions.fetchByOrganizationId(organizationId))
-        dispatch(userOrganizationInvitationActions.fetchByOrganizationId(organizationId))
         dispatch(sActions.fetchSuccess([organization]))
+
+        const members = !!organization.members ? organization.members : []
+        const invitations = !!organization.invitations ? organization.invitations : []
+
+        dispatch(userOrganizationMembershipActions.fetchSuccess(members))
+        dispatch(userOrganizationInvitationActions.fetchSuccess(invitations))
       }
     })
   }
@@ -35,7 +38,6 @@ export function fetchById(organizationId) {
 export function fetchSuccess(organizations) {
   return (dispatch) => {
     const formatted = organizations.map(o => _.pick(o, ['id', 'name', 'picture', 'admin_id']))
-    console.log('formatted', formatted)
     dispatch(sActions.fetchSuccess(formatted))
   }
 }

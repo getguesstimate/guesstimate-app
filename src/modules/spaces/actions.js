@@ -158,7 +158,7 @@ export function generalUpdate(spaceId, params) {
     dispatch(sActions.updateStart(space))
     dispatch(changeActionState('SAVING'))
 
-    const updateMsg = {...params}
+    const updateMsg = {...params, previous_updated_at: space.updated_at}
     api(getState()).models.update(spaceId, updateMsg, (err, value) => {
       if (err) {
         if (err === 'Conflict') {
