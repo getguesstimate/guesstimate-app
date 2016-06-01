@@ -7,9 +7,22 @@ import NavHelper from 'gComponents/utility/NavHelper/index.js';
 import FirstSubscriptionContainer from 'gComponents/subscriptions/FirstSubscription/container.js'
 import * as modalActions from 'gModules/modal/actions.js'
 
+export default class Confirmation extends Component{
+  render() {
+    return (
+      <div className='MainConfirmation'>
+        <h1> {this.props.message} </h1>
+        <button className='ui button primary large' onClick={this.props.onConfirm}> Confirm </button>
+        <button className='ui button grey large' onClick={this.props.onClose}> Cancel </button>
+      </div>
+    )
+  }
+}
+
 const routes = [
   {name: 'settings', component: SettingsContainer},
-  {name: 'firstSubscription', component: FirstSubscriptionContainer}
+  {name: 'firstSubscription', component: FirstSubscriptionContainer},
+  {name: 'confirmation', component: Confirmation}
 ]
 
 function getComponent(componentName) {
@@ -38,7 +51,7 @@ export default class ModalRouter extends Component{
           bottom: 'inherit',
           background: 'none',
           border: 'none',
-          padding: '0',
+          padding: 0,
           marginRight: 'auto',
           marginLeft: 'auto',
           marginTop: '14%'
