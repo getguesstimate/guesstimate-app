@@ -12,8 +12,9 @@ var wistia = `<script charSet="ISO-8859-1" src="//fast.wistia.com/assets/externa
 var twitter = `<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>`
 var fonts = `<link href='https://fonts.googleapis.com/css?family=Lato:400,700,300' rel='stylesheet' type='text/css'>`
 var chargebee = `<script type="text/javascript" src="https://js.chargebee.com/v1/chargebee.js"></script>`
+var escapedFragments = `<meta name="fragment" content="!">`
 
-var head = elev + wistia + twitter + fonts + chargebee
+var head = elev + wistia + twitter + fonts + chargebee + escapedFragments
 
 var meta = {name: name, content: description}
 
