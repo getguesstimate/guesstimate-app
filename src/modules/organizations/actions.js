@@ -25,10 +25,10 @@ export function fetchById(organizationId) {
       } else if (organization) {
         dispatch(sActions.fetchSuccess([organization]))
 
-        const members = !!organization.members ? organization.members : []
+        const memberships = !!organization.memberships ? organization.memberships : []
         const invitations = !!organization.invitations ? organization.invitations : []
 
-        dispatch(userOrganizationMembershipActions.fetchSuccess(members))
+        dispatch(userOrganizationMembershipActions.fetchSuccess(memberships))
         dispatch(userOrganizationInvitationActions.fetchSuccess(invitations))
       }
     })
