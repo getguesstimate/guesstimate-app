@@ -223,6 +223,7 @@ const MembersIndexSubTab = ({subTab, members, invitations, admin_id, onChangeSub
   </div>
 )
 
+// TODO(matthew): Invitee only renders if I'm an admin. So strip out the unnecessary stuff.
 const Invitee = ({email, meIsAdmin}) => (
   <div className='Member'>
     {meIsAdmin &&
@@ -271,7 +272,7 @@ const Member = ({user, isAdmin, onRemove, meIsAdmin}) => (
     {!meIsAdmin &&
       <div className='row'>
         <div className='col-xs-10'>
-          <a href={e.user.url(user)}><img src={user.picture}/></a>
+          <a href={e.user.url(user)}><img className='avatar' src={user.picture}/></a>
           <a href={e.user.url(user)} className='name'>{user.name}</a>
         </div>
       </div>
