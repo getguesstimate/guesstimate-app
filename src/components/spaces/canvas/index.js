@@ -9,7 +9,6 @@ import Metric from 'gComponents/metrics/card/index'
 import {denormalizedSpaceSelector} from '../denormalized-space-selector'
 
 import {addMetric, changeMetric, removeMetrics} from 'gModules/metrics/actions'
-import * as copiedActions from 'gModules/copied/actions'
 import {changeSelect, deSelect} from 'gModules/selected_cell/actions'
 import {selectRegion, deSelectRegion} from 'gModules/selected_region/actions'
 import {runSimulations, deleteSimulations} from 'gModules/simulations/actions'

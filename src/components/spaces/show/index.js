@@ -50,6 +50,18 @@ export default class SpacesShow extends Component {
   componentWillMount() {
     this.considerFetch(this.props)
     if (!this.props.embed) { elev.show() }
+
+    if (_.has(this.props, 'denormalizedSpace.editableByMe')) {
+      this.setDefaultEditPermission(_.get(this.props, 'denormalizedSpace.editableByMe'))
+    }
+  }
+
+  setDefaultEditPermission(editableByMe) {
+    if (!!editableByMe) {
+      this.props.dispatch(allowEdits())
+    } else {
+      this.props.dispatch(forbidEdits())
+    }
   }
 
   componentWillUnmount() {
@@ -59,12 +71,10 @@ export default class SpacesShow extends Component {
   componentWillReceiveProps(nextProps) {
     const nextEditableState = _.get(nextProps, 'denormalizedSpace.editableByMe')
     const currEditableState = _.get(this.props, 'denormalizedSpace.editableByMe')
-    if (nextEditableState !== currEditableState) {
-      if (!!nextEditableState) {
-        this.props.dispatch(allowEdits())
-      } else {
-        this.props.dispatch(forbidEdits())
-      }
+    const nextId = _.get(nextProps, 'spaceId')
+    const currId = _.get(this.props, 'spaceId')
+    if (nextId !== currId || nextEditableState !== currEditableState) {
+      this.setDefaultEditPermission(nextEditableState)
     }
   }
 

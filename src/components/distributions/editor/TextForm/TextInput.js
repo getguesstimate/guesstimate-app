@@ -20,6 +20,13 @@ class TextInputEditor extends Component {
     this._onChange(newEditorState)
   }
 
+  componentWillUnmount() {
+    const selection = this.state.editorState.getSelection()
+    if (selection && selection.getHasFocus()){
+      this.props.onBlur()
+    }
+  }
+
   focus() {
     this.refs.editor.focus()
   }
@@ -73,8 +80,6 @@ export default class TextInput extends Component{
     value: PropTypes.string,
   }
 
-  componentWillUnmount() { this._handleBlur(this.props.value) }
-
   focus() { this.refs.editor && this.refs.editor.focus() }
 
   _handleInputMetricClick(item){
@@ -86,7 +91,7 @@ export default class TextInput extends Component{
     this.props.onFocus()
   }
 
-  _handleBlur(value) {
+  _handleBlur() {
     $(window).off('functionMetricClicked')
     this.props.onBlur()
   }

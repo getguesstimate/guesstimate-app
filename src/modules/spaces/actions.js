@@ -112,6 +112,7 @@ export function create(organizationId) {
       else if (value) {
         dispatch(changeActionState('CREATED'))
         dispatch(sActions.createSuccess(value, cid))
+        dispatch(initSpace(value.id, {metrics: [], guesstimates: []}))
         app.router.history.navigate('/models/' + value.id)
       }
     })
@@ -157,7 +158,7 @@ export function generalUpdate(spaceId, params) {
     dispatch(sActions.updateStart(space))
     dispatch(changeActionState('SAVING'))
 
-    const updateMsg = {...params, previous_updated_at: space.updated_at}
+    const updateMsg = {...params}
     api(getState()).models.update(spaceId, updateMsg, (err, value) => {
       if (err) {
         if (err === 'Conflict') {
