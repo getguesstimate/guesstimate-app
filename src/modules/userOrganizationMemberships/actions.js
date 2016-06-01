@@ -6,7 +6,7 @@ import {rootUrl} from 'servers/guesstimate-api/constants.js'
 import {captureApiError} from 'lib/errors/index.js'
 import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
 
-let sActions = actionCreatorsFor('userOrganizationMemberships')
+export const sActions = actionCreatorsFor('userOrganizationMemberships')
 
 function api(state) {
   function getToken(state) {
@@ -25,7 +25,7 @@ export function fetchByOrganizationId(organizationId) {
         const formatted = members.items.map(m => _.pick(m, ['id', 'user_id', 'organization_id']))
         dispatch(sActions.fetchSuccess(formatted))
 
-        const users = members.items.map(m => _.get(m, '_embedded.user'))
+        const users = members.items.map(m => _.get(m, '_embedded.user')).filter(u => !!u)
         dispatch(userActions.fetchSuccess(users))
       }
     })
@@ -42,7 +42,7 @@ export function fetchByUserId(userId) {
         const formatted = memberships.items.map(m => _.pick(m, ['id', 'user_id', 'organization_id']))
         dispatch(sActions.fetchSuccess(formatted))
 
-        const organizations = memberships.items.map(m => _.get(m, '_embedded.organization'))
+        const organizations = memberships.items.map(m => _.get(m, '_embedded.organization')).filter(o => !!o)
         dispatch(organizationActions.fetchSuccess(organizations))
       }
     })

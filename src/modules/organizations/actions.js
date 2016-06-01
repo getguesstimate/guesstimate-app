@@ -21,8 +21,13 @@ export function fetchById(organizationId) {
         dispatch(displayErrorsActions.newError())
         captureApiError('OrganizationsFetch', null, null, err, {url: 'fetch'})
       } else if (organization) {
-        dispatch(userOrganizationMembershipActions.fetchByOrganizationId(organizationId))
         dispatch(sActions.fetchSuccess([organization]))
+
+        const members = !!organization.members ? organization.members : []
+        const invitations = !!organization.invitations ? organization.invitations : []
+
+        const formatted = members.map(m => _.pick(m, ['id', 'user_id', 'organization_id']))
+        dispatch(userOrganizationMembershipActions.sActions.fetchSuccess(formatted))
       }
     })
   }
