@@ -63,6 +63,7 @@ const SpaceHeader = ({
               </a>
             }
 
+            {space.editableByMe &&
               <PrivacyToggle
                 headerText={'Privacy Options'}
                 openLink={<a className='space-header-action'>{privacy_header}</a>}
@@ -72,6 +73,7 @@ const SpaceHeader = ({
                 onPublicSelect={onPublicSelect}
                 onPrivateSelect={onPrivateSelect}
               />
+            }
           </div>
       </div>
     </div>
