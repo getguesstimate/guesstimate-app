@@ -110,7 +110,7 @@ const SpaceHeader = ({
             <Icon name='repeat'/>
           </a>
 
-          <ProgressMessage actionState={actionState}/>
+          {editsAllowed && <ProgressMessage actionState={actionState}/>}
 
         </div>
         <div className='col-sm-2'>
