@@ -71,7 +71,9 @@ export default class SpacesShow extends Component {
   componentWillReceiveProps(nextProps) {
     const nextEditableState = _.get(nextProps, 'denormalizedSpace.editableByMe')
     const currEditableState = _.get(this.props, 'denormalizedSpace.editableByMe')
-    if (nextEditableState !== currEditableState) {
+    const nextId = _.get(nextProps, 'spaceId')
+    const currId = _.get(this.props, 'spaceId')
+    if (nextId !== currId || nextEditableState !== currEditableState) {
       this.setDefaultEditPermission(nextEditableState)
     }
   }
