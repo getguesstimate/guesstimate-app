@@ -124,8 +124,7 @@ export default class FlowGrid extends Component{
       } else if (e.keyCode == '67') {
         this.props.onCopy()
       } else if (e.keyCode == '88') {
-        this.props.onCopy()
-        this._handleRemoveSelectedItems()
+        this.props.onCut()
       } else if (e.keyCode == '90' && !e.shiftKey) {
         this.props.onUndo()
         e.preventDefault()

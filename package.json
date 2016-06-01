@@ -9,6 +9,9 @@
     "start": "BUILD_DEV=1 NODE_ENV=development API_ENV=development SEGMENT_API_ENV=development webpack-dev-server",
     "start-production": "BUILD_DEV=1 NODE_ENV=development API_ENV=production SEGMENT_API_ENV=development webpack-dev-server",
     "stage": "npm run predeploy && npm run _stage",
+    "stage-master": "npm run predeploy && surge -p public -d master.getguesstimate.com",
+    "stage-ozzie": "npm run predeploy && surge -p public -d ozzie.getguesstimate.com",
+    "stage-matthew": "npm run predeploy && surge -p public -d matthew.getguesstimate.com",
     "test": "karma start",
     "test-once": "karma start --single-run"
   },
@@ -110,6 +113,7 @@
     "react-markdown": "^2.2.0",
     "react-modal": "^1.2.1",
     "react-redux": "^4.4.5",
+    "react-tooltip": "^2.0.2",
     "redux": "^3.5.2",
     "redux-crud": "^0.10.1",
     "redux-saga": "^0.10.4",
