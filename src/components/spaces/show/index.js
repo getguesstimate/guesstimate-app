@@ -4,17 +4,21 @@ import {connect} from 'react-redux'
 import Helmet from 'react-helmet'
 
 import SpacesShowHeader from './header'
-import ClosedSpaceSidebar from './closed_sidebar.js'
+import SpacesShowToolbar from './Toolbar/index'
 import SpaceSidebar from './sidebar'
+import ClosedSpaceSidebar from './closed_sidebar'
 import Canvas from 'gComponents/spaces/canvas'
 
-import {denormalizedSpaceSelector} from '../denormalized-space-selector.js'
+import {denormalizedSpaceSelector} from '../denormalized-space-selector'
 
-import * as spaceActions from 'gModules/spaces/actions.js'
+import {allowEdits, forbidEdits} from 'gModules/canvas_state/actions'
+import * as spaceActions from 'gModules/spaces/actions'
+import * as copiedActions from 'gModules/copied/actions'
+import {undo, redo} from 'gModules/checkpoints/actions'
 
 import e from 'gEngine/engine'
 
-import * as elev from 'server/elev/index.js'
+import * as elev from 'server/elev/index'
 
 import './style.css'
 
@@ -46,14 +50,36 @@ export default class SpacesShow extends Component {
   componentWillMount() {
     this.considerFetch(this.props)
     if (!this.props.embed) { elev.show() }
+
+    if (_.has(this.props, 'denormalizedSpace.editableByMe')) {
+      this.setDefaultEditPermission(_.get(this.props, 'denormalizedSpace.editableByMe'))
+    }
+  }
+
+  setDefaultEditPermission(editableByMe) {
+    if (!!editableByMe) {
+      this.props.dispatch(allowEdits())
+    } else {
+      this.props.dispatch(forbidEdits())
+    }
   }
 
   componentWillUnmount() {
     if (!this.props.embed) { elev.hide() }
   }
 
-  componentDidUpdate(newProps) {
-    this.considerFetch(newProps)
+  componentWillReceiveProps(nextProps) {
+    const nextEditableState = _.get(nextProps, 'denormalizedSpace.editableByMe')
+    const currEditableState = _.get(this.props, 'denormalizedSpace.editableByMe')
+    const nextId = _.get(nextProps, 'spaceId')
+    const currId = _.get(this.props, 'spaceId')
+    if (nextId !== currId || nextEditableState !== currEditableState) {
+      this.setDefaultEditPermission(nextEditableState)
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    this.considerFetch(prevProps)
   }
 
   considerFetch(newProps) {
@@ -67,31 +93,41 @@ export default class SpacesShow extends Component {
 
   fetchData() {
     if (!this.state.attemptedFetch) {
-      this.props.dispatch(spaceActions.fetchById(parseInt(this.props.spaceId)))
+      this.props.dispatch(spaceActions.fetchById(this._id()))
       this.setState({attemptedFetch: true})
     }
   }
 
   onSave() {
-    this.props.dispatch(spaceActions.update(parseInt(this.props.spaceId)))
+    this.props.dispatch(spaceActions.update(this._id()))
   }
+
+  onRedo() {
+    this.props.dispatch(redo(this._id()))
+  }
+
+  onUndo() {
+    this.props.dispatch(undo(this._id()))
+  }
+
   destroy() {
     this.props.dispatch(spaceActions.destroy(this.props.denormalizedSpace))
   }
 
   onPublicSelect() {
-    this.props.dispatch(spaceActions.generalUpdate(parseInt(this.props.spaceId), {is_private: false}))
+    this.props.dispatch(spaceActions.generalUpdate(this._id(), {is_private: false}))
   }
 
   onPrivateSelect() {
-    this.props.dispatch(spaceActions.generalUpdate(parseInt(this.props.spaceId), {is_private: true}))
+    this.props.dispatch(spaceActions.generalUpdate(this._id(), {is_private: true}))
   }
 
   onSaveName(name) {
-    this.props.dispatch(spaceActions.update(parseInt(this.props.spaceId), {name}))
+    this.props.dispatch(spaceActions.update(this._id(), {name}))
   }
+
   onSaveDescription(description) {
-    this.props.dispatch(spaceActions.update(parseInt(this.props.spaceId), {description}))
+    this.props.dispatch(spaceActions.update(this._id(), {description}))
   }
 
   hideSidebar() {
@@ -101,8 +137,24 @@ export default class SpacesShow extends Component {
     this.setState({showSidebar: true})
   }
 
-  _handleCopy() {
-    this.props.dispatch(spaceActions.copy(parseInt(this.props.spaceId)))
+  _handleCopyModel() {
+    this.props.dispatch(spaceActions.copy())
+  }
+
+  onCopy() {
+    this.props.dispatch(copiedActions.copy(this._id()))
+  }
+
+  onPaste() {
+    this.props.dispatch(copiedActions.paste(this._id()))
+  }
+
+  onCut() {
+    this.props.dispatch(copiedActions.cut(this._id()))
+  }
+
+  _id() {
+    return parseInt(this.props.spaceId)
   }
 
   render() {
@@ -155,41 +207,42 @@ export default class SpacesShow extends Component {
             ]}
           />
         }
-        <div className='hero-unit container-fluid'>
-          <div className='row'>
-            <div className='col-md-10'>
-              <SpacesShowHeader
-                isLoggedIn={isLoggedIn}
-                onDestroy={this.destroy.bind(this)}
-                onSaveName={this.onSaveName.bind(this)}
-                onSave={this.onSave.bind(this)}
-                onCopy={this._handleCopy.bind(this)}
-                name={space.name}
-                isPrivate={space.is_private}
-                editableByMe={space.editableByMe}
-                actionState={space.canvasState.actionState}
-                canBePrivate={canBePrivate}
-                onPublicSelect={this.onPublicSelect.bind(this)}
-                onPrivateSelect={this.onPrivateSelect.bind(this)}
-              />
-            </div>
 
-            <div className='col-md-2'>
-              {!!space.organization &&
-                <a className='ui image label' href={`/organizations/${space.organization.id}`}>
-                  <img src={space.organization.picture}/>
-                  {space.organization.name}
-                </a>
-              }
-              {!space.organization && space.user && !space.editableByMe &&
-                <a className='ui image label' href={`/users/${space.user.id}`}>
-                  <img src={space.user.picture}/>
-                  {space.user.name}
-                </a>
-              }
-            </div>
-          </div>
+        <div className='hero-unit'>
+          <SpacesShowHeader
+            isLoggedIn={isLoggedIn}
+            onSaveName={this.onSaveName.bind(this)}
+            name={space.name}
+            isPrivate={space.is_private}
+            editableByMe={space.editableByMe}
+            actionState={space.canvasState.actionState}
+            canBePrivate={canBePrivate}
+            onPublicSelect={this.onPublicSelect.bind(this)}
+            onPrivateSelect={this.onPrivateSelect.bind(this)}
+            onPrivateSelecundot={this.onPrivateSelect.bind(this)}
+            space={space}
+          />
+
+          <SpacesShowToolbar
+            editsAllowed={space.canvasState.editsAllowed}
+            onAllowEdits={() => {this.props.dispatch(allowEdits())}}
+            onForbidEdits={() => {this.props.dispatch(forbidEdits())}}
+            isLoggedIn={isLoggedIn}
+            onDestroy={this.destroy.bind(this)}
+            onCopyModel={this._handleCopyModel.bind(this)}
+            onCopyMetrics={this.onCopy.bind(this)}
+            onPasteMetrics={this.onPaste.bind(this)}
+            onCutMetrics={this.onCut.bind(this)}
+            isPrivate={space.is_private}
+            editableByMe={space.editableByMe}
+            actionState={space.canvasState.actionState}
+            onUndo={this.onUndo.bind(this)}
+            onRedo={this.onRedo.bind(this)}
+            canUndo={space.checkpointMetadata.head !== space.checkpointMetadata.length - 1}
+            canRedo={space.checkpointMetadata.head !== 0}
+          />
         </div>
+
         <div className='content'>
           {sidebarIsViseable && this.state.showSidebar &&
             <SpaceSidebar
@@ -202,7 +255,12 @@ export default class SpacesShow extends Component {
           {sidebarIsViseable && !this.state.showSidebar &&
             <ClosedSpaceSidebar onOpen={this.openSidebar.bind(this)}/>
           }
-          <Canvas spaceId={space.id}/>
+          <Canvas
+            spaceId={space.id}
+            onCopy={this.onCopy.bind(this)}
+            onPaste={this.onPaste.bind(this)}
+            onCut={this.onCut.bind(this)}
+          />
         </div>
       </div>
     )

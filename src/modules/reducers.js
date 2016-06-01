@@ -2,7 +2,6 @@ import reduxCrud from 'redux-crud'
 import SeamlessImuutable from 'seamless-immutable'
 const SI = __DEV__? SeamlessImuutable : (a) => a
 
-import guesstimateFormR from './guesstimate_form/reducer'
 import {selectedCellR} from './selected_cell/reducer'
 import {selectedRegionR} from './selected_region/reducer'
 import displayErrorR from './displayErrors/reducer'
@@ -29,7 +28,6 @@ const rootReducer = function app(state = {}, action){
     guesstimates: SI(guesstimatesR(state.guesstimates, action)),
     selectedCell: SI(selectedCellR(state.selectedCell, action)),
     selectedRegion: SI(selectedRegionR(state.selectedRegion, action)),
-    guesstimateForm: SI(guesstimateFormR(state.guesstimateForm, state.metrics, state.guesstimates, action)),
     simulations: SI(simulationsR(state.simulations, action)),
     spaces: SI(spacesR(state.spaces, action)),
     users: SI(reduxCrud.reducersFor('users')(state.users, action)),

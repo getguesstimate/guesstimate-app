@@ -9,7 +9,7 @@ import Metric from 'gComponents/metrics/card/index'
 import {denormalizedSpaceSelector} from '../denormalized-space-selector'
 
 import {addMetric, changeMetric, removeMetrics} from 'gModules/metrics/actions'
-import {copy, paste} from 'gModules/copied/actions'
+import * as copiedActions from 'gModules/copied/actions'
 import {changeSelect, deSelect} from 'gModules/selected_cell/actions'
 import {selectRegion, deSelectRegion} from 'gModules/selected_region/actions'
 import {runSimulations, deleteSimulations} from 'gModules/simulations/actions'
@@ -30,7 +30,6 @@ function mapStateToProps(state) {
     canvasState: state.canvasState,
     selectedCell: state.selectedCell,
     selectedRegion: state.selectedRegion,
-    guesstimateForm: state.guesstimateForm
   }
 }
 
@@ -46,7 +45,6 @@ export default class Canvas extends Component{
     }),
     denormalizedSpace: PropTypes.object,
     dispatch: PropTypes.func,
-    guesstimateForm: PropTypes.object,
     selectedCell: PropTypes.object,
     embed: PropTypes.bool,
     spaceId: PropTypes.oneOfType([
@@ -107,14 +105,6 @@ export default class Canvas extends Component{
     this.props.dispatch(deSelectRegion())
   }
 
-  _handleCopy() {
-    this.props.dispatch(copy(this.props.denormalizedSpace.id))
-  }
-
-  _handlePaste() {
-    this.props.dispatch(paste(this.props.denormalizedSpace.id))
-  }
-
   _handleAddMetric(location) {
     this.props.dispatch(addMetric({space: this.props.spaceId, location: location, isNew: true}))
   }
@@ -145,7 +135,6 @@ export default class Canvas extends Component{
     const hasSelected = selected && metric && (selected.id !== metric.id)
     const selectedSamples = _.get(selected, 'simulation.sample.values')
     const passSelected = hasSelected && selectedSamples && !_.isEmpty(selectedSamples)
-    const {guesstimateForm} = this.props
     return (
       <Metric
           canvasState={this.props.canvasState}
@@ -153,7 +142,6 @@ export default class Canvas extends Component{
           location={location}
           metric={metric}
           selectedMetric={passSelected && selected}
-          guesstimateForm={(guesstimateForm && guesstimateForm.metric === metric.id) ? guesstimateForm : {}}
       />
     )
   }
@@ -213,8 +201,9 @@ export default class Canvas extends Component{
           onAddItem={this._handleAddMetric.bind(this)}
           onMoveItem={this._handleMoveMetric.bind(this)}
           onRemoveItems={(ids) => {this.props.dispatch(removeMetrics(ids))}}
-          onCopy={this._handleCopy.bind(this)}
-          onPaste={this._handlePaste.bind(this)}
+          onCopy={this.props.onCopy}
+          onPaste={this.props.onPaste}
+          onCut={this.props.onCut}
           showGridLines={showGridLines}
           canvasState={this.props.canvasState}
         />

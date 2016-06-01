@@ -6,7 +6,6 @@ import $ from 'jquery'
 
 import {removeMetrics, changeMetric} from 'gModules/metrics/actions'
 import {changeGuesstimate} from 'gModules/guesstimates/actions'
-import {changeGuesstimateForm} from 'gModules/guesstimate_form/actions'
 
 import MetricModal from 'gComponents/metrics/modal/index'
 import DistributionEditor from 'gComponents/distributions/editor/index'
@@ -60,7 +59,6 @@ export default class MetricCard extends Component {
     canvasState: canvasStateProps.canvasState,
     dispatch: PT.func.isRequired,
     gridKeyPress: PT.func.isRequired,
-    guesstimateForm: PT.object.isRequired,
     inSelectedCell: PT.bool.isRequired,
     location: PTLocation,
     metric: PT.object.isRequired
@@ -76,6 +74,12 @@ export default class MetricCard extends Component {
     const hasContent = this.refs.MetricCardViewSection.hasContent()
     if (!this.props.inSelectedCell && this._isEmpty() && !hasContent && !this.state.modalIsOpen){
       this.handleRemoveMetric()
+    }
+  }
+
+  componentDidMount() {
+    if (this.props.inSelectedCell && this._isEmpty()) {
+      this.refs.MetricCardViewSection.focusName()
     }
   }
 
@@ -131,10 +135,7 @@ export default class MetricCard extends Component {
   }
 
   handleChangeGuesstimate(values) {
-    let guesstimate = values
-    guesstimate.metric = this.props.metric.id
-    this.props.dispatch(changeGuesstimate(this._id(), guesstimate))
-    this.props.dispatch(changeGuesstimateForm(guesstimate, true))
+    this.props.dispatch(changeGuesstimate(this._id(), values, false))
   }
 
   handleRemoveMetric () {
@@ -204,51 +205,48 @@ export default class MetricCard extends Component {
   }
 
   render() {
-    const {inSelectedCell, metric, guesstimateForm, canvasState} = this.props
+    const {inSelectedCell, metric, canvasState} = this.props
     const {guesstimate} = metric
     const errors = this._errors()
     const shouldShowSensitivitySection = this._shouldShowSensitivitySection()
 
     return (
       <div className='metricCard--Container'
-          ref='dom'
-          onKeyPress={this._handleKeyPress.bind(this)}
-          onKeyDown={this._handleKeyDown.bind(this)}
-          tabIndex='0'
-        >
-        <div
-            className={this._className()}
-        >
-
+        ref='dom'
+        onKeyPress={this._handleKeyPress.bind(this)}
+        onKeyDown={this._handleKeyDown.bind(this)}
+        tabIndex='0'
+      >
+        <div className={this._className()}>
           <MetricModal
-              metric={metric}
-              guesstimateForm={guesstimateForm}
-              isOpen={this.state.modalIsOpen}
-              closeModal={this.closeModal.bind(this)}
-              onChange={this.handleChangeGuesstimate.bind(this)}
+            metric={metric}
+            isOpen={this.state.modalIsOpen}
+            closeModal={this.closeModal.bind(this)}
+            onChange={this.handleChangeGuesstimate.bind(this)}
           />
 
           <MetricCardViewSection
-              canvasState={canvasState}
-              metric={metric}
-              inSelectedCell={inSelectedCell}
-              onChangeName={this.handleChangeMetric.bind(this)}
-              guesstimateForm={guesstimateForm}
-              onOpenModal={this.openModal.bind(this)}
-              jumpSection={this._focusForm.bind(this)}
-              onMouseDown={this._handleMouseDown.bind(this)}
-              ref='MetricCardViewSection'
-              isTitle={this._isTitle()}
-              connectDragSource={this.props.connectDragSource}
-              selectedMetric={this.props.selectedMetric}
-              showSensitivitySection={shouldShowSensitivitySection}
-              editable={this.props.hovered}
-              heightHasChanged={this.props.forceFlowGridUpdate}
+            canvasState={canvasState}
+            metric={metric}
+            inSelectedCell={inSelectedCell}
+            onChangeName={this.handleChangeMetric.bind(this)}
+            onOpenModal={this.openModal.bind(this)}
+            jumpSection={this._focusForm.bind(this)}
+            onMouseDown={this._handleMouseDown.bind(this)}
+            ref='MetricCardViewSection'
+            isTitle={this._isTitle()}
+            connectDragSource={this.props.connectDragSource}
+            selectedMetric={this.props.selectedMetric}
+            showSensitivitySection={shouldShowSensitivitySection}
+            editable={this.props.hovered}
+            heightHasChanged={this.props.forceFlowGridUpdate}
+            onEscape={this.focus.bind(this)}
           />
 
           {inSelectedCell && !this.state.modalIsOpen &&
             <div className='section editing'>
               <DistributionEditor
+                guesstimate={metric.guesstimate}
                 metricId={metric.id}
                 metricFocus={this.focus.bind(this)}
                 onOpen={this.openModal.bind(this)}

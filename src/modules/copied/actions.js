@@ -7,6 +7,19 @@ import {registerGraphChange} from 'gModules/spaces/actions'
 
 import {isLocation, isWithinRegion, translate} from 'lib/locationUtils.js'
 
+export function cut(spaceId){
+  return (dispatch, getState) => {
+    dispatch(copy(spaceId))
+
+    const state = getState()
+    const region = state.selectedRegion
+    const existingMetrics = state.metrics.filter(m => m.space === spaceId && isWithinRegion(m.location, region))
+    if (existingMetrics.length > 0) {
+      dispatch(metricActions.removeMetrics(existingMetrics.map(m => m.id)))
+    }
+  }
+}
+
 export function copy(spaceId){
   return (dispatch, getState) => {
     const state = getState()

@@ -62,8 +62,12 @@ export default class DropDown extends Component {
 
   handleDocumentClick(event) {
     if (!ReactDOM.findDOMNode(this).contains(event.target)) {
-      this.setState({isOpen:false});
+      this._close()
     }
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('click', this.handleDocumentClick, false);
   }
 
   _open() {

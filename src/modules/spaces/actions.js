@@ -49,18 +49,6 @@ export function fromSearch(data) {
   }
 }
 
-function fetchUserIfNeeded(dispatch, user_id, users) {
-  const has_user = _.some(users, e => e.id === user_id)
-  if (!has_user) { dispatch(userActions.fetchById(user_id)) }
-}
-
-function fetchOrganizationIfNeeded(dispatch, organization_id, organizations) {
-  if (organization_id) {
-    const has_organization = _.some(organizations, e => e.id === organization_id)
-    if (!has_organization) { dispatch(organizationActions.fetchById(organization_id)) }
-  }
-}
-
 export function fetchById(spaceId) {
   return (dispatch, getState) => {
     dispatch(sActions.fetchStart())
@@ -94,8 +82,7 @@ export function fetch({userId, organizationId}) {
     api(getState()).models.list({userId, organizationId}, (err, value) => {
       if (err) {
         captureApiError('SpacesFetch', null, null, err, {url: 'fetch'})
-      }
-      else if (value) {
+      } else if (value) {
         const formatted = value.items.map(d => _.pick(d, ['id', 'name', 'description', 'user_id', 'organization_id', 'updated_at', 'metric_count', 'is_private', 'screenshot', 'big_screenshot']))
         dispatch(sActions.fetchSuccess(formatted))
 
@@ -125,6 +112,7 @@ export function create(organizationId) {
       else if (value) {
         dispatch(changeActionState('CREATED'))
         dispatch(sActions.createSuccess(value, cid))
+        dispatch(initSpace(value.id, {metrics: [], guesstimates: []}))
         app.router.history.navigate('/models/' + value.id)
       }
     })
@@ -170,12 +158,16 @@ export function generalUpdate(spaceId, params) {
     dispatch(sActions.updateStart(space))
     dispatch(changeActionState('SAVING'))
 
-    api(getState()).models.update(spaceId, params, (err, value) => {
+    const updateMsg = {...params}
+    api(getState()).models.update(spaceId, updateMsg, (err, value) => {
       if (err) {
-        captureApiError('SpacesUpdate', null, null, err, {url: 'SpacesUpdate'})
-        dispatch(changeActionState('ERROR'))
-      }
-      else if (value) {
+        if (err === 'Conflict') {
+          dispatch(changeActionState('CONFLICT'))
+        } else {
+          captureApiError('SpacesUpdate', null, null, err, {url: 'SpacesUpdate'})
+          dispatch(changeActionState('ERROR'))
+        }
+      } else if (value) {
         dispatch(sActions.updateSuccess(value))
         dispatch(changeActionState('SAVED'))
       }
@@ -211,9 +203,9 @@ export function updateGraph(spaceId, saveOnServer=true) {
 }
 
 function meCanEdit(spaceId, state) {
-  const {spaces, me, userOrganizationMemberships} = state
+  const {spaces, me, userOrganizationMemberships, canvasState} = state
   const space = e.space.get(spaces, spaceId)
-  return e.space.canEdit(space, me, userOrganizationMemberships)
+  return e.space.canEdit(space, me, userOrganizationMemberships, canvasState)
 }
 
 export function registerGraphChange(spaceId) {

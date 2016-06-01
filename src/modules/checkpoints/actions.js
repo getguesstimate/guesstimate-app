@@ -28,17 +28,19 @@ function updateMetricsAndGuesstimates(
   const metricsToDelete = oldMetrics.filter(m => !_.some(newMetrics, n => n.id === m.id))
   const metricsToModify = newMetrics.filter(m => {
     const matchedMetric = _.find(oldMetrics, o => o.id === m.id)
-    if (!matchedMetric) { return false }
-    const oldGuesstimate = _.find(oldGuesstimates, g => g.metric === matchedMetric.id)
-    const newGuesstimate = _.find(newGuesstimates, g => g.metric === m.id)
-    return (
-      !engine.metric.equals(matchedMetric, m) ||
-      !engine.guesstimate.equals(oldGuesstimate, newGuesstimate)
-    )
+    return (!!matchedMetric && !engine.metric.equals(matchedMetric, m))
   })
 
   const guesstimatesToAdd = newGuesstimates.filter(g => _.some(metricsToAdd, m => m.id === g.metric))
-  const guesstimatesToModify = newGuesstimates.filter(g => _.some(metricsToModify, m => m.id === g.metric))
+  const guesstimatesToModify = newGuesstimates.filter(g => {
+    const matchedGuesstimate = _.find(oldGuesstimates, o => o.metric === g.metric)
+    return (!!matchedGuesstimate && !engine.guesstimate.equals(matchedGuesstimate, g))
+  })
+
+  const guesstimateSimsToDelete = guesstimatesToModify.filter(newGuesstimate => {
+    const oldGuesstimate = _.find(oldGuesstimates, g => g.metric === newGuesstimate.metric)
+    return oldGuesstimate.input !== newGuesstimate.input
+  })
 
   dispatch({type: 'ADD_METRICS', items: metricsToAdd, newGuesstimates: guesstimatesToAdd})
   dispatch({type: 'REMOVE_METRICS', item: {ids: metricsToDelete.map(m => m.id)}})
@@ -47,7 +49,7 @@ function updateMetricsAndGuesstimates(
     const formatted = engine.guesstimate.format(g)
     dispatch({ type: 'CHANGE_GUESSTIMATE', metricId: g.metric, values: formatted })
   })
-  dispatch(deleteSimulations(guesstimatesToModify.map(g => g.metric)))
+  dispatch(deleteSimulations(guesstimateSimsToDelete.map(g => g.metric)))
 
   dispatch({type: 'RUN_UNDO_SIMULATIONS', getState, dispatch, spaceId})
 }

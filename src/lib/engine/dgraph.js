@@ -20,16 +20,10 @@ function metricInputs(metric, dGraph) {
   return inputs.map( i => { return {output: metric.id, input: i} })
 }
 
-export function dependencyMap(dGraph, guesstimateForm = {}) {
+export function dependencyMap(dGraph) {
   if (_.isUndefined(dGraph)) { return [] }
 
   let asLists = dGraph.metrics
-    .map(m => toBizarroMetric(m, guesstimateForm))
     .map(m => metricInputs(m, dGraph))
   return _.flatten(asLists)
-}
-
-function toBizarroMetric(metric, guesstimateForm) {
-  if (guesstimateForm.metric === metric.id) { return {...metric, guesstimate: guesstimateForm} }
-  else { return metric }
 }

@@ -38,11 +38,6 @@ export interface FunctionInput {
   sample: Sample
 }
 
-export interface GuesstimateForm {
-  metric: string,
-  input: string
-}
-
 export interface DGuesstimate extends Guesstimate {
   simulations?: Simulation[]
 }
