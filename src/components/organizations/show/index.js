@@ -118,14 +118,14 @@ export default class OrganizationShow extends Component{
           }
 
           <div className='main-section'>
-            {(openTab === 'MODELS') && spaces &&
+            {(openTab === 'MODELS' || !meIsMember) && spaces &&
               <SpaceCards
                 spaces={spaces}
                 showPrivacy={true}
               />
             }
 
-            {(openTab === 'MEMBERS') && members && organization &&
+            {(openTab === 'MEMBERS') && meIsMember && members && organization &&
               <MembersTab
                 subTab={this.state.subMembersTab}
                 members={members}
