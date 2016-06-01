@@ -207,12 +207,11 @@ const MembersIndexSubTab = ({subTab, members, invitations, admin_id, onChangeSub
                 />
               )
             })}
-            {invitations.map(i => {
+            {meIsAdmin && invitations.map(i => {
               return (
                 <Invitee
                   key={i.id}
                   email={i.email}
-                  meIsAdmin={meIsAdmin}
                 />
               )
             })}
@@ -226,25 +225,15 @@ const MembersIndexSubTab = ({subTab, members, invitations, admin_id, onChangeSub
 // TODO(matthew): Invitee only renders if I'm an admin. So strip out the unnecessary stuff.
 const Invitee = ({email, meIsAdmin}) => (
   <div className='Member'>
-    {meIsAdmin &&
-      <div className='row'>
-        <div className='col-xs-7'>
-          <div className='avatar'><Icon name='envelope'/></div>
-          <div className='name'>{email}</div>
-        </div>
-        <div className='col-xs-2 role'></div>
-        <div className='col-xs-2 invitation-status'>invited</div>
-        <div className='col-xs-1'></div>
+    <div className='row'>
+      <div className='col-xs-7'>
+        <div className='avatar'><Icon name='envelope'/></div>
+        <div className='name'>{email}</div>
       </div>
-    }
-    {!meIsAdmin &&
-      <div className='row'>
-        <div className='col-xs-10'>
-          <div className='avatar'><Icon name='envelope'/></div>
-          <div className='name'>{email}</div>
-        </div>
-      </div>
-    }
+      <div className='col-xs-2 role'></div>
+      <div className='col-xs-2 invitation-status'>invited</div>
+      <div className='col-xs-1'></div>
+    </div>
   </div>
 )
 
