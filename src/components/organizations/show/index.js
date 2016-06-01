@@ -33,19 +33,11 @@ export default class OrganizationShow extends Component{
   }
 
   componentWillMount() {
-    this.considerFetch(this.props)
+    this.fetchData()
   }
 
-  componentDidUpdate(newProps) {
-    this.considerFetch(newProps)
-  }
-
-  considerFetch(props) {
-    const needsData = !(_.has(props, 'organizationSpaces') && props.organizationSpaces.length > 0)
-
-    if (needsData) {
-      this.fetchData()
-    }
+  componentDidUpdate() {
+    this.fetchData()
   }
 
   fetchData() {

@@ -42,8 +42,8 @@ export function fetchByUserId(userId) {
         const formatted = memberships.items.map(m => _.pick(m, ['id', 'user_id', 'organization_id']))
         dispatch(sActions.fetchSuccess(formatted))
 
-        //const organizations = memberships.items.map(m => _.get(m, '_embedded.organization')).filter(o => !!o)
-        //dispatch(organizationActions.fetchSuccess(organizations))
+        const organizations = memberships.items.map(m => _.get(m, '_embedded.organization')).filter(o => !!o)
+        dispatch(organizationActions.fetchSuccess(organizations))
       }
     })
   }
