@@ -112,6 +112,7 @@ export function create(organizationId) {
       else if (value) {
         dispatch(changeActionState('CREATED'))
         dispatch(sActions.createSuccess(value, cid))
+        dispatch(initSpace(value.id, {metrics: [], guesstimates: []}))
         app.router.history.navigate('/models/' + value.id)
       }
     })
