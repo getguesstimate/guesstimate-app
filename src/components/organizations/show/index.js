@@ -207,12 +207,11 @@ const MembersIndexSubTab = ({subTab, members, invitations, admin_id, onChangeSub
                 />
               )
             })}
-            {invitations.map(i => {
+            {meIsAdmin && invitations.map(i => {
               return (
                 <Invitee
                   key={i.id}
                   email={i.email}
-                  meIsAdmin={meIsAdmin}
                 />
               )
             })}
@@ -223,27 +222,17 @@ const MembersIndexSubTab = ({subTab, members, invitations, admin_id, onChangeSub
   </div>
 )
 
-const Invitee = ({email, meIsAdmin}) => (
+const Invitee = ({email}) => (
   <div className='Member'>
-    {meIsAdmin &&
-      <div className='row'>
-        <div className='col-xs-7'>
-          <div className='avatar'><Icon name='envelope'/></div>
-          <div className='name'>{email}</div>
-        </div>
-        <div className='col-xs-2 role'></div>
-        <div className='col-xs-2 invitation-status'>invited</div>
-        <div className='col-xs-1'></div>
+    <div className='row'>
+      <div className='col-xs-7'>
+        <div className='avatar'><Icon name='envelope'/></div>
+        <div className='name'>{email}</div>
       </div>
-    }
-    {!meIsAdmin &&
-      <div className='row'>
-        <div className='col-xs-10'>
-          <div className='avatar'><Icon name='envelope'/></div>
-          <div className='name'>{email}</div>
-        </div>
-      </div>
-    }
+      <div className='col-xs-2 role'></div>
+      <div className='col-xs-2 invitation-status'>invited</div>
+      <div className='col-xs-1'></div>
+    </div>
   </div>
 )
 
@@ -271,7 +260,7 @@ const Member = ({user, isAdmin, onRemove, meIsAdmin}) => (
     {!meIsAdmin &&
       <div className='row'>
         <div className='col-xs-10'>
-          <a href={e.user.url(user)}><img src={user.picture}/></a>
+          <a href={e.user.url(user)}><img className='avatar' src={user.picture}/></a>
           <a href={e.user.url(user)} className='name'>{user.name}</a>
         </div>
       </div>
