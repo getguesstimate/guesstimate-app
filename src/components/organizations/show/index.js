@@ -222,8 +222,7 @@ const MembersIndexSubTab = ({subTab, members, invitations, admin_id, onChangeSub
   </div>
 )
 
-// TODO(matthew): Invitee only renders if I'm an admin. So strip out the unnecessary stuff.
-const Invitee = ({email, meIsAdmin}) => (
+const Invitee = ({email}) => (
   <div className='Member'>
     <div className='row'>
       <div className='col-xs-7'>
