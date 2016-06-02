@@ -26,8 +26,7 @@ export function fetch({auth0_id}) {
       if (err) {
         dispatch(displayErrorsActions.newError())
         captureApiError('UsersFetch', null, null, null, {url: 'usersFetchError'})
-      }
-      else if (data) {
+      } else if (data) {
         const action = sActions.fetchSuccess(data.items)
         const me = data.items[0]
         dispatch(meActions.guesstimateMeLoaded(me))
@@ -43,8 +42,7 @@ export function fetchById(userId) {
       if (err) {
         dispatch(displayErrorsActions.newError())
         captureApiError('UsersFetch', null, null, err, {url: 'fetch'})
-      }
-      else if (user) {
+      } else if (user) {
         dispatch(sActions.fetchSuccess([user]))
         if (getState().me.id === user.id){
           dispatch(meActions.guesstimateMeLoaded(user))
@@ -56,7 +54,7 @@ export function fetchById(userId) {
 }
 
 function formatUsers(unformatted) {
-  return unformatted.map(u => _.pick(u, ['auth0_id', 'id', 'name', 'picture']))
+  return unformatted.map(u => _.pick(u, ['auth0_id', 'id', 'name', 'picture', 'sign_in_count']))
 }
 
 export function fromSearch(spaces) {

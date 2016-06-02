@@ -86,7 +86,7 @@ export function fetch({userId, organizationId}) {
         const formatted = value.items.map(d => _.pick(d, ['id', 'name', 'description', 'user_id', 'organization_id', 'updated_at', 'metric_count', 'is_private', 'screenshot', 'big_screenshot']))
         dispatch(sActions.fetchSuccess(formatted))
 
-        const users = value.items.map(d => _.get(d, 'user'))
+        const users = value.items.map(d => _.get(d, 'user')).filter(u => !!u)
         dispatch(userActions.fetchSuccess(users))
       }
     })
@@ -158,7 +158,7 @@ export function generalUpdate(spaceId, params) {
     dispatch(sActions.updateStart(space))
     dispatch(changeActionState('SAVING'))
 
-    const updateMsg = {...params}
+    const updateMsg = {...params, previous_updated_at: space.updated_at}
     api(getState()).models.update(spaceId, updateMsg, (err, value) => {
       if (err) {
         if (err === 'Conflict') {
