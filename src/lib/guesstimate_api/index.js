@@ -3,6 +3,7 @@ import Organizations from './resources/Organizations.js'
 import Users from './resources/Users.js'
 import Accounts from './resources/Accounts.js'
 import Copies from './resources/Copies.js'
+import UserOrganizationMemberships from './resources/UserOrganizationMemberships.js'
 
 
 export default class GuesstimateApi {
@@ -14,5 +15,6 @@ export default class GuesstimateApi {
     this.organizations = new Organizations(this)
     this.copies = new Copies(this)
     this.accounts = new Accounts(this)
+    this.userOrganizationMemberships = new UserOrganizationMemberships(this)
   }
 }

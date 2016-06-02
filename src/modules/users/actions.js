@@ -54,7 +54,7 @@ export function fetchById(userId) {
 }
 
 function formatUsers(unformatted) {
-  return unformatted.map(u => _.pick(u, ['auth0_id', 'id', 'name', 'picture']))
+  return unformatted.map(u => _.pick(u, ['auth0_id', 'id', 'name', 'picture', 'sign_in_count']))
 }
 
 export function fromSearch(spaces) {

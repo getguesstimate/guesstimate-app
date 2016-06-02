@@ -77,6 +77,6 @@ export default Router.extend({
   faq() { this.render(<FAQ/>) },
   subscribe(id) { this.render(<FirstSubscriptionPage planName={id}/>) },
   userShow(id) { this.render(<UserShow userId={id}/>, {backgroundColor: 'GREY'}) },
-  organizationShow(id) { this.render(<OrganizationShow organizationId={id}/>) },
+  organizationShow(id) { this.render(<OrganizationShow organizationId={id}/>, {backgroundColor: 'GREY'}) },
   pricing() { this.render(<PlanIndex/>, {backgroundColor: 'BLUE'}) },
 })

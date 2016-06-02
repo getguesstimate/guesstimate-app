@@ -27,7 +27,7 @@
 .SpaceCard .image {
   min-height: 11em;
   position: relative;
-  background-color: #D8DADC;
+  background-color: #D9DEE2;
   float: left;
   flex: 0 0 auto;
 }
@@ -51,9 +51,9 @@
 }
 
 .SpaceCard .image .snapshot.blank img{
-  width: 31%;
-  max-width: 13em;
-  opacity: 0.3;
+  height: 67%;
+  width: auto;
+  opacity: 0.23;
   margin-bottom: 1em;
 }
 
