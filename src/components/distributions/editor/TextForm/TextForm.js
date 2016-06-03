@@ -92,7 +92,7 @@ export default class TextForm extends Component{
         {showDistributionSelector &&
           <div className='GuesstimateInputForm--row'>
             <DistributionSelector
-              onSubmit={(guesstimateType) => this._handleChange({guesstimateType})}
+              onSubmit={(guesstimateType) => this.props.onSave({guesstimateType}, true)}
               selected={guesstimateType}
             />
           </div>
