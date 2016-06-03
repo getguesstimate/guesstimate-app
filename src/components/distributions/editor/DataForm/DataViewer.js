@@ -119,7 +119,7 @@ class Editor extends Component{
 
 const Viewer = ({data}) => (
   <ul>
-    {data.map((element, index) => {
+    {_.map(data, (element, index) => {
       return (
         <li key={index}>
           <DataPoint point={element} key={index}/>
