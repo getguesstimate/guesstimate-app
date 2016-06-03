@@ -29,11 +29,11 @@ export default class Guesstimate extends Component{
   _handleChange(params, runSimulations=true, registerGraphChange=false) {
     this.props.dispatch(changeGuesstimate(this.props.metricId, {...this.props.guesstimate, ...params}, runSimulations, registerGraphChange))
   }
-  _handleSave(params) {
-    if (!_.isEmpty(params)) {this._handleChange(params, false, true)}
+  _handleSave(params, runSimulations=false) {
+    if (!_.isEmpty(params)) {this._handleChange(params, runSimulations, true)}
   }
   _changeMetricClickMode(newMode) { this.props.dispatch(changeMetricClickMode(newMode)) }
-  _addDefaultData() { this._handleSave({guesstimateType: 'DATA', data:[1,2,3], input: null}) }
+  _addDefaultData() { this._handleSave({guesstimateType: 'DATA', data:[1,2,3], input: null}, true) }
 
   render () {
     const {size, guesstimate, onOpen, errors} = this.props

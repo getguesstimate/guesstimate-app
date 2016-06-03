@@ -3,8 +3,8 @@ import React, {Component} from 'react'
 import {SmallDataViewer, LargeDataViewer} from './DataViewer'
 
 export default class DataForm extends Component{
-  _handleDelete() { this.props.onSave({guesstimateType: null, data: null, input: null}) }
-  _handleSave(data) { this.props.onSave({guesstimateType: 'DATA', data, input: null}) }
+  _handleDelete() { this.props.onSave({guesstimateType: null, data: null, input: null}, true) }
+  _handleSave(data) { this.props.onSave({guesstimateType: 'DATA', data, input: null}, true) }
 
   render() {
     const {size, data, onOpen} = this.props
