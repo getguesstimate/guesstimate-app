@@ -35,7 +35,6 @@ export default class MetricCardViewSection extends Component {
     if (stats && _.isFinite(stats.mean) && _.isFinite(stats.stdev) && _.isFinite(stats.length)) {
       return (stats.stdev === 0 || (stats.length > 1))
     } else {
-      console.log("Nope!", this.props.metric.id)
       return false
     }
   }
