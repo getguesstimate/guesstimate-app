@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Component, PropTypes} from 'react'
 
 import d3 from 'd3'
 
@@ -30,6 +30,7 @@ function shiftedRatio(a,b) {
 
 // filterLowDensityPoints removes points that occur in only low density regions of the histogram, to ensure that only
 // points robustly well sampled in the data affect the visualization of the histogram.
+//
 // The parameter 'cutOffRatio' controls how hight te point density must be for points to be kept; a cutOffRatio of 0
 // would keep everything, a cutOffratio of 1.0 would keep nothing.
 // Values that seem to have notable affects are typically > 0.95.
@@ -39,45 +40,41 @@ function filterLowDensityPoints(inputData, cutOffRatio) {
     return inputData
   }
 
-  let outputData = Object.assign([], inputData) // A copy for immutability
-  outputData.sort((a,b) => a-b) // Sort the data from min -> max.
-
-  const bucketSize = outputData.length / 1000 // Grab data in 0.1% chunks.
+  const bucketSize = inputData.length / 1000 // Grab data in 0.1% chunks.
 
   // Filter Left
-  // First we grab the first and second buckets from the left side.
-  let left = outputData.slice(0,bucketSize)
-  let right = outputData.slice(bucketSize,2*bucketSize)
   // As long as the ratio of the magnitude of their averages is less than the cutOffRatio, we keep discarding the left
   // endpoint and iterating along the array.
-  while (shiftedRatio(avg(left),avg(right)) < cutOffRatio) {
-    outputData = outputData.slice(bucketSize)
-    left = outputData.slice(0,bucketSize)
-    right = outputData.slice(bucketSize,2*bucketSize)
+  let i
+  for (i = 0; i < inputData.length; i++) {
+    const left = inputData.slice(i*bucketSize, (i+1)*bucketSize)
+    const right = inputData.slice((i+1)*bucketSize, (i+2)*bucketSize)
+    if (shiftedRatio(avg(left), avg(right)) >= cutOffRatio) { break }
   }
+  const leftIndex = i*bucketSize
 
   // Filter Right, analogous to how we filter the left, but in reverse.
-  left = outputData.slice(-2*bucketSize,-bucketSize)
-  right = outputData.slice(-bucketSize)
-  while (shiftedRatio(avg(left),avg(right)) < cutOffRatio) {
-    outputData = outputData.slice(0,-bucketSize)
-    left = outputData.slice(-2*bucketSize,-bucketSize)
-    right = outputData.slice(-bucketSize)
+  for (i = 0; i < inputData.length; i++) {
+    const left = inputData.slice(-(i+2)*bucketSize, -(i+1)*bucketSize)
+    const right = i > 0 ? inputData.slice(-(i+1)*bucketSize, -i*bucketSize) : inputData.slice(-bucketSize)
+    if (shiftedRatio(avg(left), avg(right)) >= cutOffRatio) { break }
   }
+  const rightIndex = -i*bucketSize
 
-  return outputData
+  return rightIndex == 0 ? inputData.slice(leftIndex) : inputData.slice(leftIndex, rightIndex)
 }
 
-export default class Histogram extends React.Component {
+// data prop must be sorted.
+export default class Histogram extends Component {
   static propTypes = {
-    top: React.PropTypes.number,
-    right: React.PropTypes.number,
-    bottom: React.PropTypes.number,
-    left: React.PropTypes.number,
-    cutOffRatio: React.PropTypes.number,
-    width: React.PropTypes.number.isRequired,
-    height: React.PropTypes.number.isRequired,
-    data: React.PropTypes.arrayOf(React.PropTypes.number).isRequired
+    top: PropTypes.number,
+    right: PropTypes.number,
+    bottom: PropTypes.number,
+    left: PropTypes.number,
+    cutOffRatio: PropTypes.number,
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired,
+    data: PropTypes.arrayOf(PropTypes.number).isRequired
   };
 
   static defaultProps = {
@@ -116,9 +113,9 @@ export default class Histogram extends React.Component {
   }
 }
 
-class Path extends React.Component {
+class Path extends Component {
   static propTypes = {
-    scale: React.PropTypes.func.isRequired
+    scale: PropTypes.func.isRequired
   };
 
   render() {
@@ -131,10 +128,10 @@ class Path extends React.Component {
   }
 }
 
-class Tick extends React.Component {
+class Tick extends Component {
   static propTypes = {
-    value: React.PropTypes.number.isRequired,
-    scale: React.PropTypes.func.isRequired
+    value: PropTypes.number.isRequired,
+    scale: PropTypes.func.isRequired
   };
 
   render() {
@@ -158,10 +155,10 @@ class Tick extends React.Component {
   }
 }
 
-export class XAxis extends React.Component {
+export class XAxis extends Component {
   static propTypes = {
-    height: React.PropTypes.number.isRequired,
-    scale: React.PropTypes.func.isRequired
+    height: PropTypes.number.isRequired,
+    scale: PropTypes.func.isRequired
   };
 
   render() {
@@ -182,13 +179,13 @@ export class XAxis extends React.Component {
   }
 }
 
-export class Bar extends React.Component {
+export class Bar extends Component {
   static propTypes = {
-    data: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
-    xScale: React.PropTypes.func.isRequired,
-    yScale: React.PropTypes.func.isRequired,
-    height: React.PropTypes.number.isRequired,
-    barWidth: React.PropTypes.number.isRequired
+    data: PropTypes.arrayOf(PropTypes.number).isRequired,
+    xScale: PropTypes.func.isRequired,
+    yScale: PropTypes.func.isRequired,
+    height: PropTypes.number.isRequired,
+    barWidth: PropTypes.number.isRequired
   };
 
   render() {
