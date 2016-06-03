@@ -253,6 +253,8 @@ export default class MetricCard extends Component {
                 ref='DistributionEditor'
                 size='small'
                 errors={errors}
+                onReturn={this.props.onReturn}
+                onTab={this.props.onTab}
               />
             </div>
           }
