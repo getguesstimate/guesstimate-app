@@ -158,7 +158,6 @@ export default class SpacesShow extends Component {
   }
 
   render() {
-    //console.log("Rendering spaces/show/index")
     const space = this.props.denormalizedSpace;
     if (!space) { return <div className='spaceShow'></div> }
 

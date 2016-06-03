@@ -205,7 +205,6 @@ export default class MetricCard extends Component {
   }
 
   render() {
-    //console.log("Rendering /metrics/card/index")
     const {inSelectedCell, metric, canvasState} = this.props
     const {guesstimate} = metric
     const errors = this._errors()
@@ -219,14 +218,12 @@ export default class MetricCard extends Component {
         tabIndex='0'
       >
         <div className={this._className()}>
-          {this.state.modalIsOpen &&
-            <MetricModal
-              metric={metric}
-              isOpen={this.state.modalIsOpen}
-              closeModal={this.closeModal.bind(this)}
-              onChange={this.handleChangeGuesstimate.bind(this)}
-            />
-          }
+          <MetricModal
+            metric={metric}
+            isOpen={this.state.modalIsOpen}
+            closeModal={this.closeModal.bind(this)}
+            onChange={this.handleChangeGuesstimate.bind(this)}
+          />
 
           <MetricCardViewSection
             canvasState={canvasState}

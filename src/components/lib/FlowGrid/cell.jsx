@@ -145,7 +145,6 @@ export default class Cell extends Component {
   }
 
   render = () => {
-    //console.log("Rendering /FlowGrid/cell")
     return this.props.connectDropTarget(
       <div
         className={this._classes()}

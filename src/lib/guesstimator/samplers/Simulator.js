@@ -11,7 +11,6 @@ function LCM(a, b) {
 }
 
 export function simulate(expr, inputs, maxSamples) {
-  const tStart = (new Date()).getTime()
   const overallNumSamples = neededSamples(expr, inputs, maxSamples)
   if (overallNumSamples < MIN_SAMPLES_PER_WINDOW*window.workers.length) {
     return simulateOnWorker(window.workers[0], buildData(expr, 0, overallNumSamples, inputs))
@@ -28,7 +27,7 @@ export function simulate(expr, inputs, maxSamples) {
     simulateOnWorker(window.workers[window.workers.length-1], buildData(expr, (window.workers.length - 1)* numSamples, remainingSamples, inputs))
   ]
 
-  const tAfterPromise = (new Date()).getTime()
+
   return Promise.all(promises).then(
     (results) => {
       let finalResult = {values: [], errors: []}
@@ -41,10 +40,6 @@ export function simulate(expr, inputs, maxSamples) {
         }
       }
       finalResult.errors = _.uniq(finalResult.errors)
-      const tDone = (new Date()).getTime()
-      console.log("Finished simulating. Took: ", (tDone - tStart)/1000, " seconds in total and ", (tDone - tAfterPromise)/1000, " seconds post setup.")
-      window.doneTimes = _.has(window, 'doneTimes') ? window.doneTimes.concat(tDone - tStart) : [tDone - tStart]
-      window.postSetupTimes = _.has(window, 'postSetupTimes') ? window.postSetupTimes.concat(tDone - tAfterPromise) : [tDone - tAfterPromise]
       return finalResult
     }
   )
