@@ -15,6 +15,9 @@ import './FlowGrid.css'
 
 let upto = (n) => Array.apply(null, {length: n}).map(Number.call, Number)
 
+//It would be better to have this as state, but we don't want this to cause renders.
+let lastMousePosition = [0, 0]
+
 @DragDropContext(HTML5Backend)
 export default class FlowGrid extends Component{
   displayName: 'FlowGrid'
@@ -71,14 +74,22 @@ export default class FlowGrid extends Component{
   _handleEmptyCellMouseDown(e, location) {
     if (e.button === 0 && !(e.target && e.target.type === 'textarea')) {
       this.setState({leftDown: true})
+      lastMousePosition = _.pick(e, 'pageX', 'pageY')
       e.preventDefault()
     }
   }
 
-  _handleCellMouseEnter(location) {
+  _mouseMoved(e){
+    const sameLocation = (e.pageX === lastMousePosition.pageX) && (e.pageY === lastMousePosition.pageY)
+    return !sameLocation
+  }
+
+  _handleCellMouseEnter(location, e) {
     if (this.state.leftDown) {
-      this.setState({hover: {row: -1, column: -1}})
-      this._handleEndRangeSelect(location)
+      if (this._mouseMoved(e)) {
+        this.setState({hover: {row: -1, column: -1}})
+        this._handleEndRangeSelect(location)
+      }
     } else {
       this.setState({hover: location})
     }
@@ -167,6 +178,18 @@ export default class FlowGrid extends Component{
     return Math.max(6, lowestItem, selected) || 6;
   }
 
+  _onReturn(l){
+    const {row, column} = l
+    this.props.onAddItem({column, row: row + 1})
+    this.props.onSelectItem({column, row: row + 1})
+  }
+
+  _onTab(l){
+    const {row, column} = l
+    this.props.onAddItem({column:column + 1, row})
+    this.props.onSelectItem({column:column + 1, row})
+  }
+
   _cell(location) {
     const item = this.props.items.find(i => isAtLocation(i.location, location));
     return (
@@ -188,6 +211,8 @@ export default class FlowGrid extends Component{
         onMouseEnter={(e) => {this._handleCellMouseEnter(location, e)}}
         onEndDragCell={newLocation => {this._handleEndDragCell(newLocation)}}
         onEmptyCellMouseDown={(e) => {this._handleEmptyCellMouseDown(e, location)}}
+        onReturn={() => {this._onReturn(location)}}
+        onTab={() => {this._onTab(location)}}
         ref={`cell-${location.row}-${location.column}`}
       />
     )
