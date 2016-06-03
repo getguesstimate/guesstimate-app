@@ -35,6 +35,7 @@ export default class MetricCardViewSection extends Component {
     if (stats && _.isFinite(stats.mean) && _.isFinite(stats.stdev) && _.isFinite(stats.length)) {
       return (stats.stdev === 0 || (stats.length > 1))
     } else {
+      console.log("Nope!", this.props.metric.id)
       return false
     }
   }
@@ -84,8 +85,8 @@ export default class MetricCardViewSection extends Component {
       >
         {(metricCardView !== 'basic') && showSimulation &&
           <Histogram height={(metricCardView === 'scientific') ? 110 : 30}
-              simulation={metric.simulation}
-              cutOffRatio={0.995}
+            simulation={metric.simulation}
+            cutOffRatio={0.995}
           />
         }
 
@@ -100,16 +101,16 @@ export default class MetricCardViewSection extends Component {
 
         {(!_.isEmpty(metric.name) || inSelectedCell) &&
           <div className='NameSection'>
-              <MetricName
-                anotherFunctionSelected={anotherFunctionSelected}
-                inSelectedCell={inSelectedCell}
-                name={metric.name}
-                onChange={onChangeName}
-                jumpSection={jumpSection}
-                onEscape={this.props.onEscape}
-                ref='name'
-                heightHasChanged={this.props.heightHasChanged}
-              />
+            <MetricName
+              anotherFunctionSelected={anotherFunctionSelected}
+              inSelectedCell={inSelectedCell}
+              name={metric.name}
+              onChange={onChangeName}
+              jumpSection={jumpSection}
+              onEscape={this.props.onEscape}
+              ref='name'
+              heightHasChanged={this.props.heightHasChanged}
+            />
           </div>
         }
 
@@ -121,7 +122,7 @@ export default class MetricCardViewSection extends Component {
             {showSimulation &&
               <div className='StatsSectionBody'>
                 <DistributionSummary
-                    simulation={metric.simulation}
+                  simulation={metric.simulation}
                 />
               </div>
             }

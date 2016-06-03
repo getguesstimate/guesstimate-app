@@ -7,8 +7,8 @@ import './style.css'
 
 function formatStat(n){
   if (n) {
-    let value = parseFloat(n);
-    return numberShow(value);
+    let value = parseFloat(n)
+    return numberShow(value)
   }
 }
 
@@ -71,10 +71,9 @@ export default class DistributionSummary extends Component{
   render () {
     return (
       <DistributionSummarySmall
-          showIf={_.isFinite(_.get(this.stats(), 'mean'))}
-          stats={this.stats()}
+        showIf={_.isFinite(_.get(this.stats(), 'mean'))}
+        stats={this.stats()}
       />
     )
   }
-};
-
+}

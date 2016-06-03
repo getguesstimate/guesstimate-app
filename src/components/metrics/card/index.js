@@ -205,6 +205,7 @@ export default class MetricCard extends Component {
   }
 
   render() {
+    //console.log("Rendering /metrics/card/index")
     const {inSelectedCell, metric, canvasState} = this.props
     const {guesstimate} = metric
     const errors = this._errors()
