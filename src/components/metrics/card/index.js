@@ -218,12 +218,13 @@ export default class MetricCard extends Component {
         tabIndex='0'
       >
         <div className={this._className()}>
-          <MetricModal
-            metric={metric}
-            isOpen={this.state.modalIsOpen}
-            closeModal={this.closeModal.bind(this)}
-            onChange={this.handleChangeGuesstimate.bind(this)}
-          />
+          {this.state.modalIsOpen &&
+            <MetricModal
+              metric={metric}
+              closeModal={this.closeModal.bind(this)}
+              onChange={this.handleChangeGuesstimate.bind(this)}
+            />
+          }
 
           <MetricCardViewSection
             canvasState={canvasState}

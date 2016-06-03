@@ -50,7 +50,7 @@ export default class TextForm extends Component{
     this.props.onChangeClickMode(newMode)
   }
 
-  _saveData(data) { this.props.onSave({guesstimateType: 'DATA', data, input: null}) }
+  _saveData(data) { this.props.onSave({guesstimateType: 'DATA', data, input: null}, true) }
 
   _shouldDisplayType() {
     const type = this._guesstimateType()

@@ -43,10 +43,6 @@ export default class MetricModal extends Component {
     }
   }
 
-  shouldComponentUpdate(nextProps) {
-    return (nextProps.isOpen || this.props.isOpen)
-  }
-
   _changeGuesstimateDescription(value) {
     let newGuesstimate = Object.assign({}, this.props.metric.guesstimate, {description: value})
     this.props.onChange(newGuesstimate)
@@ -70,70 +66,68 @@ export default class MetricModal extends Component {
     };
     const showSimulation = this.showSimulation()
 
-    const {isOpen, closeModal, metric} = this.props
+    const {closeModal, metric} = this.props
     const sampleValues = _.get(metric, 'simulation.sample.values')
     const guesstimate = metric.guesstimate
     return(
       <Modal
-        isOpen={isOpen}
+        isOpen={true}
         onRequestClose={closeModal}
         style={customStyles}
       >
-      {isOpen &&
-      <div className='metricModal'>
-        <div className='container top'>
-          <div className='histogram'>
-            <Histogram height={150} top={0} bottom={0} bins={100} widthPercent={80} cutOffRatio={0.98}
-                simulation={metric.simulation}
-            />
-          </div>
-          <div className='row'>
-            <div className='col-sm-10'>
-                <h1> {metric.name} </h1>
+        <div className='metricModal'>
+          <div className='container top'>
+            <div className='histogram'>
+              <Histogram height={150} top={0} bottom={0} bins={100} widthPercent={80} cutOffRatio={0.98}
+                  simulation={metric.simulation}
+              />
             </div>
-            <div className='col-sm-2'>
-              <ButtonClose onClick={closeModal}/>
-            </div>
-          </div>
-          <div className='distributionSection'>
             <div className='row'>
-              <div className='col-sm-9 mean subsection'>
-                {showSimulation &&
-                  <DistributionSummary
-                    simulation={metric.simulation}
+              <div className='col-sm-10'>
+                  <h1> {metric.name} </h1>
+              </div>
+              <div className='col-sm-2'>
+                <ButtonClose onClick={closeModal}/>
+              </div>
+            </div>
+            <div className='distributionSection'>
+              <div className='row'>
+                <div className='col-sm-9 mean subsection'>
+                  {showSimulation &&
+                    <DistributionSummary
+                      simulation={metric.simulation}
+                    />
+                  }
+                </div>
+                <div className='col-sm-3 subsection'>
+                  <PercentileTable values={sampleValues}/>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className='container bottom'>
+            <div className='row editingInputSection'>
+              <div className='col-sm-12'>
+                  <DistributionEditor
+                    guesstimate={metric.guesstimate}
+                    metricId={metric.id}
+                    size={'large'}
+                  />
+              </div>
+            </div>
+            <div className='row guesstimateDescriptionSection'>
+              <div className='col-xs-12'>
+                {guesstimate &&
+                  <GuesstimateDescription
+                    onChange={this._changeGuesstimateDescription.bind(this)}
+                    value={guesstimate.description}
                   />
                 }
               </div>
-              <div className='col-sm-3 subsection'>
-                <PercentileTable values={sampleValues}/>
-              </div>
             </div>
           </div>
         </div>
-
-        <div className='container bottom'>
-          <div className='row editingInputSection'>
-            <div className='col-sm-12'>
-                <DistributionEditor
-                  guesstimate={metric.guesstimate}
-                  metricId={metric.id}
-                  size={'large'}
-                />
-            </div>
-          </div>
-          <div className='row guesstimateDescriptionSection'>
-            <div className='col-xs-12'>
-              {guesstimate &&
-                <GuesstimateDescription
-                  onChange={this._changeGuesstimateDescription.bind(this)}
-                  value={guesstimate.description}
-                />
-              }
-            </div>
-          </div>
-        </div>
-      </div>
-      }
       </Modal>
     )
   }
