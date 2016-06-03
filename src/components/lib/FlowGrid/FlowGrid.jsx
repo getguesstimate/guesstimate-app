@@ -85,11 +85,9 @@ export default class FlowGrid extends Component{
   }
 
   _handleCellMouseEnter(location, e) {
-    if (this.state.leftDown) {
-      if (this._mouseMoved(e)) {
-        this.setState({hover: {row: -1, column: -1}})
-        this._handleEndRangeSelect(location)
-      }
+    if (this.state.leftDown && this._mouseMoved(e)) {
+      this.setState({hover: {row: -1, column: -1}})
+      this._handleEndRangeSelect(location)
     } else {
       this.setState({hover: location})
     }
