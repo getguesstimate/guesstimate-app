@@ -2,8 +2,16 @@ import e from 'lib/engine/engine'
 import {sampleMean, sampleStdev, percentile, cutoff, sortDescending} from 'lib/dataAnalysis.js'
 
 function addStats(simulation){
-  if (!_.has(simulation, 'sample.values.length') || (simulation.sample.values.length <= 1)) {
-    return simulation
+  if (!_.has(simulation, 'sample.values.length') || (simulation.sample.values.length === 0)) {
+    return
+  } else if (simulation.sample.values.length === 1) {
+    simulation.stats = {
+      mean: simulation.sample.values[0],
+      stdev: 0,
+      length: 1,
+    }
+    simulation.sample.sortedValues = simulation.sample.values
+    return
   }
 
   const sortedValues = sortDescending(simulation.sample.values)

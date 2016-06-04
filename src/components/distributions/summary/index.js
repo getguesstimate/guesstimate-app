@@ -1,80 +1,34 @@
-import React, {Component, PropTypes} from 'react'
+import React from 'react'
 
 import numberShow from 'lib/numberShower/numberShower'
-import ShowIf from 'gComponents/utility/showIf'
 
 import './style.css'
 
-function formatStat(n){
-  if (n) {
-    let value = parseFloat(n);
-    return numberShow(value);
-  }
-}
+const PrecisionNumber = ({value, precision, number=numberShow(value, precision)}) => (
+  <span>
+    {number.value}{number.symbol}
+    {number.power && (<span>{`\u00b710`}<sup>{number.power}</sup></span>)}
+  </span>
+)
 
-const PrecisionNumber = ({value, precision}) => {
-  const number = numberShow(value, precision)
-  return (
-    <span>
-      {number.value}{number.symbol}
-      {number.power && (<span>{`\u00b710`}<sup>{number.power}</sup></span>)}
-    </span>
-  )
-}
-
-const UncertaintyRange = ({low, high}) => (
-  <div className='UncertaintyRange'>
-    <PrecisionNumber value={low}/> to <PrecisionNumber value={high}/>
+const PointDisplay = ({value, precision=6}) => (
+  <div className='mean'>
+    <PrecisionNumber value={value} precision={precision}/>
   </div>
 )
 
-@ShowIf
-class DistributionSummarySmall extends Component{
-  static propTypes = {
-    stats: PropTypes.object,
-  }
-  render () {
-    const {length, mean, stdev, adjustedConfidenceInterval} = this.props.stats
+const DistributionDisplay = ({mean, adjustedConfidenceInterval: [low, high]}) => (
+  <div>
+    <PointDisplay value={mean} precision={2}/>
+    <div className='UncertaintyRange'>
+      <PrecisionNumber value={low}/> to <PrecisionNumber value={high}/>
+    </div>
+  </div>
+)
 
-    let low
-    let high
-    if (_.isObject(adjustedConfidenceInterval)) {
-      [low, high] = adjustedConfidenceInterval
-    }
-
-    const precision = length === 1 ? 6 : 2
-    return (
-      <div className="DistributionSummary">
-        <div className='mean'>
-        <PrecisionNumber value={parseFloat(mean)} precision={precision}/>
-        </div>
-        {!!low && !!high && (low !== high) &&
-          <UncertaintyRange low={low} high={high} />
-        }
-      </div>
-    )
-  }
-}
-
-export default class DistributionSummary extends Component{
-  static propTypes = {
-    simulation: PropTypes.object,
-  }
-
-  shouldComponentUpdate(newProps) {
-    return (_.get(this.props, 'simulation.stats') !== _.get(newProps, 'simulation.stats'))
-  }
-
-  stats(){
-    return _.get(this.props.simulation, 'stats') || false
-  }
-  render () {
-    return (
-      <DistributionSummarySmall
-          showIf={_.isFinite(_.get(this.stats(), 'mean'))}
-          stats={this.stats()}
-      />
-    )
-  }
-};
-
+export const DistributionSummary = ({length, mean, adjustedConfidenceInterval}) => (
+  <div className="DistributionSummary">
+    {length === 1 && <PointDisplay value={mean}/>}
+    {length > 1 && <DistributionDisplay mean={mean} adjustedConfidenceInterval={adjustedConfidenceInterval}/>}
+  </div>
+)

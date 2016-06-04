@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 
 import Modal from 'react-modal'
 
-import DistributionSummary from 'gComponents/distributions/summary/index'
+import {DistributionSummary} from 'gComponents/distributions/summary/index'
 import DistributionEditor from 'gComponents/distributions/editor/index'
 import Histogram from 'gComponents/simulations/histogram/index'
 import GuesstimateDescription from './description'
@@ -67,6 +67,7 @@ export default class MetricModal extends Component {
 
     const {closeModal, metric} = this.props
     const sortedSampleValues = _.get(metric, 'simulation.sample.sortedValues')
+    const stats = _.get(metric, 'simulation.stats')
     const guesstimate = metric.guesstimate
     return(
       <Modal
@@ -94,7 +95,9 @@ export default class MetricModal extends Component {
                 <div className='col-sm-9 mean subsection'>
                   {showSimulation &&
                     <DistributionSummary
-                      simulation={metric.simulation}
+                      length={stats.length}
+                      mean={stats.mean}
+                      adjustedConfidenceInterval={stats.adjustedConfidenceInterval}
                     />
                   }
                 </div>
