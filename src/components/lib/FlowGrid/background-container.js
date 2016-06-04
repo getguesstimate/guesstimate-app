@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react'
 
 import $ from 'jquery'
 
-import Edges from './edges'
+import {Edges} from './edges'
 import GridPoint from './gridPoints'
 
 import Dimensions from 'gComponents/utility/react-dimensions'
@@ -10,7 +10,6 @@ import {PTRegion} from 'lib/locationUtils'
 
 
 const Region = ({rowHeights, columnWidth, selectedRegion, type}) => {
-  if (!selectedRegion || selectedRegion.length !== 2) { return false }
   const gridPoint = new GridPoint({rowHeights, columnWidth, padding: 0})
   const region = gridPoint.region(selectedRegion)
   return (
@@ -42,30 +41,36 @@ export class BackgroundContainer extends Component {
   render() {
     const {edges, rowHeights, selectedRegion, copiedRegion} = this.props
     const columnWidth = $('.FlowGridCell') && $('.FlowGridCell')[0] && $('.FlowGridCell')[0].offsetWidth
+    if (!columnWidth || !rowHeights.length) { return false }
 
     const containerHeight = _.get(rowHeights, 'length') && rowHeights.reduce((a,b) => a + b)
 
-    if (!columnWidth || !rowHeights.length){ return false }
     return (
       <div>
-        <Edges
-          columnWidth={columnWidth}
-          containerHeight={containerHeight}
-          edges={edges}
-          rowHeights={rowHeights}
-        />
-        <Region
-          rowHeights={rowHeights}
-          columnWidth={columnWidth}
-          selectedRegion={selectedRegion}
-          type='selected'
-        />
-        <Region
-          rowHeights={rowHeights}
-          columnWidth={columnWidth}
-          selectedRegion={copiedRegion}
-          type='copied'
-        />
+        {edges.length > 0 &&
+          <Edges
+            columnWidth={columnWidth}
+            containerHeight={containerHeight}
+            edges={edges}
+            rowHeights={rowHeights}
+          />
+        }
+        {selectedRegion.length !== 2 &&
+          <Region
+            rowHeights={rowHeights}
+            columnWidth={columnWidth}
+            selectedRegion={selectedRegion}
+            type='selected'
+          />
+        }
+        {copiedRegion.length !== 2 &&
+          <Region
+            rowHeights={rowHeights}
+            columnWidth={columnWidth}
+            selectedRegion={copiedRegion}
+            type='copied'
+          />
+        }
       </div>
     )
   }
