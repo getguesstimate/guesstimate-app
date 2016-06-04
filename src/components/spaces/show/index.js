@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 import Helmet from 'react-helmet'
 
 import {SpaceHeader} from './header'
-import SpacesShowToolbar from './Toolbar/index'
+import {SpaceToolbar} from './Toolbar/index'
 import {SpaceSidebar} from './sidebar'
 import ClosedSpaceSidebar from './closed_sidebar'
 import Canvas from 'gComponents/spaces/canvas'
@@ -226,7 +226,7 @@ export default class SpacesShow extends Component {
             onPrivateSelect={this.onPrivateSelect.bind(this)}
           />
 
-          <SpacesShowToolbar
+          <SpaceToolbar
             editsAllowed={space.canvasState.editsAllowed}
             onAllowEdits={() => {this.props.dispatch(allowEdits())}}
             onForbidEdits={() => {this.props.dispatch(forbidEdits())}}
