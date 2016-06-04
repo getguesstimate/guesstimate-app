@@ -1,4 +1,19 @@
-export function parseNumber(n) { return parseFloat(n) }
+const PREFIXES = {
+  'K': 3,
+  'M': 6,
+  'B': 9,
+  'T': 12,
+}
+
+const getZeros = prefix => Array.apply(null, Array(PREFIXES[prefix])).map(e => 0).join('')
+
+export function parseNumber(n) {
+  let numberStr = n
+  Object.keys(PREFIXES).forEach( prefix => {
+    numberStr = numberStr.replace(prefix, getZeros(prefix))
+  })
+  return parseFloat(numberStr)
+}
 
 export function isParseableNumber(n) {
   if (_.isString(n)){
