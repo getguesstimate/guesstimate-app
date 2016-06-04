@@ -6,7 +6,7 @@ import Helmet from 'react-helmet'
 import {SpaceHeader} from './header'
 import {SpaceToolbar} from './Toolbar/index'
 import {SpaceSidebar} from './sidebar'
-import ClosedSpaceSidebar from './closed_sidebar'
+import {ClosedSpaceSidebar} from './closed_sidebar'
 import Canvas from 'gComponents/spaces/canvas'
 
 import {denormalizedSpaceSelector} from '../denormalized-space-selector'
