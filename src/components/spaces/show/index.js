@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 
 import Helmet from 'react-helmet'
 
-import SpacesShowHeader from './header'
+import {SpaceHeader} from './header'
 import SpacesShowToolbar from './Toolbar/index'
 import {SpaceSidebar} from './sidebar'
 import ClosedSpaceSidebar from './closed_sidebar'
@@ -26,6 +26,14 @@ function mapStateToProps(state) {
   return {
     me: state.me
   }
+}
+
+function spacePrepared(space) {
+  return (
+    !!space &&
+    _.has(space, 'graph') &&
+    (_.has(space, 'user.name') || _.has(space, 'organization.name'))
+  )
 }
 
 const PT = PropTypes
@@ -158,8 +166,8 @@ export default class SpacesShow extends Component {
   }
 
   render() {
-    const space = this.props.denormalizedSpace;
-    if (!space) { return <div className='spaceShow'></div> }
+    const space = this.props.denormalizedSpace
+    if (!spacePrepared(space)) { return <div className='spaceShow'></div> }
 
     const sidebarIsViseable = space.editableByMe || !_.isEmpty(space.description)
     const canBePrivate = !!space.organization_id || e.me.canMakeMorePrivateModels(this.props.me)
@@ -172,16 +180,12 @@ export default class SpacesShow extends Component {
       )
     }
 
-    let tagDescription = space.description
-    if (_.has(space, 'user.name') || _.has(space, 'organization.name')) {
-      const author = _.has(space, 'organization.name') ? space.organization.name : space.user.name
-      const authorCallout = `Made by ${author}`
-      if (_.isEmpty(space.description)) {
-        tagDescription = authorCallout
-      } else {
-        tagDescription = `${authorCallout}: ${tagDescription}`
-      }
-    }
+    const hasOrg = _.has(space, 'organization.name')
+    const owner = hasOrg ? space.organization : space.user
+    const ownerUrl = hasOrg ? e.organization.url(space.organization) : e.user.url(space.user)
+
+    const authorCallout = `Made by ${owner.name}`
+    const tagDescription = _.isEmpty(space.description) ? authorCallout : `${authorCallout}: ${space.description}`
 
     return (
       <div className='spaceShow'>
@@ -209,18 +213,17 @@ export default class SpacesShow extends Component {
         }
 
         <div className='hero-unit'>
-          <SpacesShowHeader
-            isLoggedIn={isLoggedIn}
-            onSaveName={this.onSaveName.bind(this)}
+          <SpaceHeader
             name={space.name}
             isPrivate={space.is_private}
             editableByMe={space.editableByMe}
-            actionState={space.canvasState.actionState}
             canBePrivate={canBePrivate}
+            ownerName={owner.name}
+            ownerPicture={owner.picture}
+            ownerUrl={ownerUrl}
+            onSaveName={this.onSaveName.bind(this)}
             onPublicSelect={this.onPublicSelect.bind(this)}
             onPrivateSelect={this.onPrivateSelect.bind(this)}
-            onPrivateSelecundot={this.onPrivateSelect.bind(this)}
-            space={space}
           />
 
           <SpacesShowToolbar
