@@ -6,10 +6,10 @@ import {DragDropContext} from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 
 import Cell from './cell'
-import BackgroundContainer from './background-container'
+import {BackgroundContainer} from './background-container'
 
 import {keycodeToDirection, DirectionToLocation} from './utils'
-import {isLocation, isWithinRegion, isAtLocation, PTLocation} from 'lib/locationUtils'
+import {isLocation, isWithinRegion, isAtLocation, PTRegion, PTLocation} from 'lib/locationUtils'
 
 import './FlowGrid.css'
 
@@ -32,7 +32,7 @@ export default class FlowGrid extends Component{
       output: PTLocation.isRequired
     })),
     selectedCell: PTLocation,
-    selectedRegion: PropTypes.arrayOf(PTLocation, PTLocation),
+    selectedRegion: PTRegion,
     onUndo: PropTypes.func.isRequired,
     onRedo: PropTypes.func.isRequired,
     onSelectItem: PropTypes.func.isRequired,
@@ -256,8 +256,6 @@ export default class FlowGrid extends Component{
             }
               <BackgroundContainer
                 edges={edges}
-                refs={this.refs}
-                rowCount={rowCount}
                 rowHeights={rowHeights}
                 selectedRegion={this.props.selectedRegion}
                 copiedRegion={this.props.copiedRegion}
