@@ -43,7 +43,7 @@ export class BackgroundContainer extends Component {
     const columnWidth = $('.FlowGridCell') && $('.FlowGridCell')[0] && $('.FlowGridCell')[0].offsetWidth
     if (!columnWidth || !rowHeights.length) { return false }
 
-    const containerHeight = _.get(rowHeights, 'length') && rowHeights.reduce((a,b) => a + b)
+    const containerHeight = rowHeights.reduce((a,b) => a + b)
 
     return (
       <div>
@@ -55,7 +55,7 @@ export class BackgroundContainer extends Component {
             rowHeights={rowHeights}
           />
         }
-        {selectedRegion.length !== 2 &&
+        {selectedRegion.length === 2 &&
           <Region
             rowHeights={rowHeights}
             columnWidth={columnWidth}
@@ -63,7 +63,7 @@ export class BackgroundContainer extends Component {
             type='selected'
           />
         }
-        {copiedRegion.length !== 2 &&
+        {copiedRegion.length === 2 &&
           <Region
             rowHeights={rowHeights}
             columnWidth={columnWidth}

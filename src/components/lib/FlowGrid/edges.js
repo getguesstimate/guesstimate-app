@@ -6,6 +6,15 @@ import GridPoint from './gridPoints'
 export class Edges extends Component {
   displayName: 'Edges'
 
+  shouldComponentUpdate(nextProps) {
+    return (
+      this.props.columnWidth !== nextProps.columnWidth ||
+      this.props.containerHeight !== nextProps.containerHeight ||
+      !_.isEqual(this.props.edges, nextProps.edges) ||
+      !_.isEqual(this.props.rowHeights, nextProps.rowHeights)
+    )
+  }
+
   static propTypes = {
     columnWidth: PropTypes.number.isRequired,
     containerHeight: PropTypes.number.isRequired,
