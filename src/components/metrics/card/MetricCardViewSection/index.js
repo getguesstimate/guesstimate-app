@@ -6,7 +6,7 @@ import Histogram from 'gComponents/simulations/histogram/index'
 import MetricName from 'gComponents/metrics/card/name/index'
 import DistributionSummary from 'gComponents/distributions/summary/index'
 import StatTable from 'gComponents/simulations/stat_table/index'
-import MetricToken from 'gComponents/metrics/card/token/index'
+import {MetricToken} from 'gComponents/metrics/card/token/index'
 import SensitivitySection from 'gComponents/metrics/card/SensitivitySection/SensitivitySection'
 
 import './style.css'
@@ -63,7 +63,8 @@ export default class MetricCardViewSection extends Component {
           onOpenModal,
           jumpSection,
           onMouseDown,
-          showSensitivitySection
+          showSensitivitySection,
+          hovered,
     } = this.props
 
     const errors = this._errors()
@@ -90,12 +91,14 @@ export default class MetricCardViewSection extends Component {
         }
 
         <div className='MetricTokenSection'>
-          <MetricToken
-           readableId={metric.readableId}
-           anotherFunctionSelected={anotherFunctionSelected}
-           onOpenModal={onOpenModal}
-           hasGuesstimateDescription={hasGuesstimateDescription}
-          />
+          {(hovered || anotherFunctionSelected || hasGuesstimateDescription) &&
+            <MetricToken
+              readableId={metric.readableId}
+              anotherFunctionSelected={anotherFunctionSelected}
+              onOpenModal={onOpenModal}
+              hasGuesstimateDescription={hasGuesstimateDescription}
+            />
+          }
         </div>
 
         {(!_.isEmpty(metric.name) || inSelectedCell) &&

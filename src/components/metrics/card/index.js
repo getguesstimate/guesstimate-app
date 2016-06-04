@@ -205,7 +205,15 @@ export default class MetricCard extends Component {
   }
 
   render() {
-    const {inSelectedCell, metric, canvasState} = this.props
+    const {
+      inSelectedCell,
+      metric,
+      canvasState,
+      hovered,
+      connectDragSource,
+      selectedMetric,
+      forceFlowGridUpdate,
+    } = this.props
     const {guesstimate} = metric
     const errors = this._errors()
     const shouldShowSensitivitySection = this._shouldShowSensitivitySection()
@@ -236,11 +244,11 @@ export default class MetricCard extends Component {
             onMouseDown={this._handleMouseDown.bind(this)}
             ref='MetricCardViewSection'
             isTitle={this._isTitle()}
-            connectDragSource={this.props.connectDragSource}
-            selectedMetric={this.props.selectedMetric}
+            connectDragSource={connectDragSource}
+            selectedMetric={selectedMetric}
             showSensitivitySection={shouldShowSensitivitySection}
-            editable={this.props.hovered}
-            heightHasChanged={this.props.forceFlowGridUpdate}
+            heightHasChanged={forceFlowGridUpdate}
+            hovered={hovered}
             onEscape={this.focus.bind(this)}
           />
 
@@ -258,9 +266,9 @@ export default class MetricCard extends Component {
             </div>
           }
         </div>
-        {this.props.hovered && !inSelectedCell && !shouldShowSensitivitySection && <MetricToolTip guesstimate={guesstimate}/>}
-        {this.props.hovered && !inSelectedCell && shouldShowSensitivitySection &&
-          <ScatterTip yMetric={this.props.selectedMetric} xMetric={metric}/>
+        {hovered && !inSelectedCell && !shouldShowSensitivitySection && <MetricToolTip guesstimate={guesstimate}/>}
+        {hovered && !inSelectedCell && shouldShowSensitivitySection &&
+          <ScatterTip yMetric={selectedMetric} xMetric={metric}/>
         }
       </div>
     );
