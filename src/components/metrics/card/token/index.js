@@ -1,4 +1,4 @@
-import React, {Component, PropTypes} from 'react'
+import React from 'react'
 
 import Icon from 'react-fa'
 
@@ -21,32 +21,15 @@ const MetricExpandButton = ({onOpenModal}) => (
 )
 
 const MetricReasoningIcon = () => (
-  <span
-      className='hover-hide hover-icon'
-  >
+  <span className='hover-hide hover-icon'>
     <Icon name='comment'/>
   </span>
 )
 
-export default class MetricToken extends Component {
-  displayName: 'MetricToken'
-
-  static propTypes = {
-    anotherFunctionSelected: PropTypes.bool.isRequired,
-    hasGuesstimateDescription: PropTypes.bool.isRequired,
-    onOpenModal: PropTypes.func.isRequired,
-    readableId: PropTypes.string.isRequired,
-  }
-
-  render() {
-    const {anotherFunctionSelected, readableId, onOpenModal, hasGuesstimateDescription} = this.props
-
-    return (
-      <div className='MetricToken'>
-        {anotherFunctionSelected && <MetricReadableId readableId={readableId} /> }
-        {!anotherFunctionSelected && <MetricExpandButton onOpenModal={onOpenModal}/> }
-        {!anotherFunctionSelected && hasGuesstimateDescription && <MetricReasoningIcon/> }
-      </div>
-    )
-  }
-}
+export const MetricToken = ({anotherFunctionSelected, readableId, onOpenModal, hasGuesstimateDescription}) => (
+  <div className='MetricToken'>
+    {anotherFunctionSelected && <MetricReadableId readableId={readableId} /> }
+    {!anotherFunctionSelected && <MetricExpandButton onOpenModal={onOpenModal}/> }
+    {!anotherFunctionSelected && hasGuesstimateDescription && <MetricReasoningIcon/> }
+  </div>
+)
