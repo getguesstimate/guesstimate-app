@@ -6,7 +6,7 @@ import Histogram from 'gComponents/simulations/histogram/index'
 import MetricName from 'gComponents/metrics/card/name/index'
 import {DistributionSummary} from 'gComponents/distributions/summary/index'
 import StatTable from 'gComponents/simulations/stat_table/index'
-import MetricToken from 'gComponents/metrics/card/token/index'
+import {MetricToken} from 'gComponents/metrics/card/token/index'
 import SensitivitySection from 'gComponents/metrics/card/SensitivitySection/SensitivitySection'
 
 import './style.css'
@@ -56,14 +56,16 @@ export default class MetricCardViewSection extends Component {
   }
 
   render() {
-    const {canvasState: {metricCardView, metricClickMode},
-          metric,
-          inSelectedCell,
-          onChangeName,
-          onOpenModal,
-          jumpSection,
-          onMouseDown,
-          showSensitivitySection,
+    const {
+      canvasState: {metricCardView, metricClickMode},
+      metric,
+      inSelectedCell,
+      onChangeName,
+      onOpenModal,
+      jumpSection,
+      onMouseDown,
+      showSensitivitySection,
+      hovered,
     } = this.props
 
     const errors = this._errors()
@@ -79,37 +81,38 @@ export default class MetricCardViewSection extends Component {
     className += (hasErrors & !inSelectedCell) ? ' hasErrors' : ''
     className += (anotherFunctionSelected) ? ' anotherFunctionSelected' : ''
     return(
-      <div className={className}
-        onMouseDown={onMouseDown}
-      >
+      <div className={className} onMouseDown={onMouseDown}>
         {(metricCardView !== 'basic') && showSimulation &&
-          <Histogram height={(metricCardView === 'scientific') ? 110 : 30}
-              simulation={metric.simulation}
-              cutOffRatio={0.995}
+          <Histogram
+            height={(metricCardView === 'scientific') ? 110 : 30}
+            simulation={metric.simulation}
+            cutOffRatio={0.995}
           />
         }
 
         <div className='MetricTokenSection'>
-          <MetricToken
-            readableId={metric.readableId}
-            anotherFunctionSelected={anotherFunctionSelected}
-            onOpenModal={onOpenModal}
-            hasGuesstimateDescription={hasGuesstimateDescription}
-          />
+          {(hovered || anotherFunctionSelected || hasGuesstimateDescription) &&
+            <MetricToken
+              readableId={metric.readableId}
+              anotherFunctionSelected={anotherFunctionSelected}
+              onOpenModal={onOpenModal}
+              hasGuesstimateDescription={hasGuesstimateDescription}
+            />
+          }
         </div>
 
         {(!_.isEmpty(metric.name) || inSelectedCell) &&
           <div className='NameSection'>
-              <MetricName
-                anotherFunctionSelected={anotherFunctionSelected}
-                inSelectedCell={inSelectedCell}
-                name={metric.name}
-                onChange={onChangeName}
-                jumpSection={jumpSection}
-                onEscape={this.props.onEscape}
-                ref='name'
-                heightHasChanged={this.props.heightHasChanged}
-              />
+            <MetricName
+              anotherFunctionSelected={anotherFunctionSelected}
+              inSelectedCell={inSelectedCell}
+              name={metric.name}
+              onChange={onChangeName}
+              jumpSection={jumpSection}
+              onEscape={this.props.onEscape}
+              ref='name'
+              heightHasChanged={this.props.heightHasChanged}
+            />
           </div>
         }
 
