@@ -7,6 +7,7 @@ import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
 import './main.css'
 import * as elev from 'server/elev/index.js'
 
+
 import Worker from 'worker!../lib/guesstimator/samplers/simulator-worker/index.js'
 window.workers = [new Worker, new Worker]
 
@@ -36,6 +37,11 @@ window.workers = window.workers.map(
 
 app.extend({
   init () {
+
+    if (__DEV__) {
+      window.Perf = require('react-addons-perf')
+    }
+
     window.intercomSettings = {
       app_id: "o0trb1v9"
     };
