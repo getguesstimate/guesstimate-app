@@ -5,7 +5,7 @@ import Helmet from 'react-helmet'
 
 import SpacesShowHeader from './header'
 import SpacesShowToolbar from './Toolbar/index'
-import SpaceSidebar from './sidebar'
+import {SpaceSidebar} from './sidebar'
 import ClosedSpaceSidebar from './closed_sidebar'
 import Canvas from 'gComponents/spaces/canvas'
 
@@ -246,10 +246,10 @@ export default class SpacesShow extends Component {
         <div className='content'>
           {sidebarIsViseable && this.state.showSidebar &&
             <SpaceSidebar
-                description={space.description}
-                canEdit={space.editableByMe}
-                onClose={this.hideSidebar.bind(this)}
-                onSaveDescription={this.onSaveDescription.bind(this)}
+              description={space.description}
+              canEdit={space.editableByMe}
+              onClose={this.hideSidebar.bind(this)}
+              onSaveDescription={this.onSaveDescription.bind(this)}
             />
           }
           {sidebarIsViseable && !this.state.showSidebar &&
