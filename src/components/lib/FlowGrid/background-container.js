@@ -5,9 +5,7 @@ import $ from 'jquery'
 import Edges from './edges'
 import GridPoint from './gridPoints'
 
-import Dimensions from 'gComponents/utility/react-dimensions'
 import {PTRegion} from 'lib/locationUtils'
-
 
 const Region = ({rowHeights, columnWidth, selectedRegion, type}) => {
   if (!selectedRegion || selectedRegion.length !== 2) { return false }
@@ -19,7 +17,6 @@ const Region = ({rowHeights, columnWidth, selectedRegion, type}) => {
 }
 
 //Listens to events for changes to row heights and column width
-@Dimensions()
 export class BackgroundContainer extends Component {
   displayName: 'BackgroundContainer'
 
