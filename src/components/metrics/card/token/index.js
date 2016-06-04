@@ -12,9 +12,9 @@ const MetricReadableId = ({readableId}) => (
 
 const MetricExpandButton = ({onOpenModal}) => (
   <span
-      className='hover-toggle hover-icon'
-      onMouseDown={onOpenModal}
-      data-select='false'
+    className='hover-toggle hover-icon'
+    onMouseDown={onOpenModal}
+    data-select='false'
   >
     <Icon name='expand'/>
   </span>
