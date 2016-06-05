@@ -26,9 +26,23 @@ export default class Guesstimate extends Component{
   }
 
   focus() { this.refs.TextForm.focus() }
+
+  changeGuesstimateDescription() {
+  }
+  saveGuesstimateToServer() {
+  }
+  changeGuesstimateInput() {
+  }
+  changeGuesstimateType() {
+  }
+  addDataToGuesstimate() {
+  }
+
+
   _handleChange(params, runSimulations=true, registerGraphChange=false) {
     this.props.dispatch(changeGuesstimate(this.props.metricId, {...this.props.guesstimate, ...params}, runSimulations, registerGraphChange))
   }
+
   _handleSave(params, runSimulations=false) {
     if (!_.isEmpty(params)) {this._handleChange(params, runSimulations, true)}
   }
