@@ -1,39 +1,43 @@
 import e from 'lib/engine/engine'
 import {sampleMean, sampleStdev, percentile, cutoff, sortDescending} from 'lib/dataAnalysis.js'
 
-function sStats(simulation){
-  if (!_.has(simulation, 'sample.values') || (simulation.sample.values.length === 0)) {
+function addStats(simulation){
+  if (!_.has(simulation, 'sample.values.length') || (simulation.sample.values.length === 0)) {
+    return
+  } else if (simulation.sample.values.length === 1) {
+    simulation.stats = {
+      mean: simulation.sample.values[0],
+      stdev: 0,
+      length: 1,
+    }
+    simulation.sample.sortedValues = simulation.sample.values
     return
   }
-  const samples = sortDescending(Object.assign([], simulation.sample.values))
-  const length = samples.length
-  const mean = sampleMean(samples)
-  const meanIndex = cutoff(samples, length, mean)
-  const stdev = sampleStdev(samples)
-  const percentiles = {
-    5: percentile(samples, length, 5),
-    50: percentile(samples, length, 50),
-    95: percentile(samples, length, 95),
-  }
-  const adjustedLow = percentile(samples, meanIndex, 10)
-  const adjustedHigh = percentile(samples.slice(meanIndex), length - meanIndex, 90)
 
-  return {
+  const sortedValues = sortDescending(simulation.sample.values)
+  const length = sortedValues.length
+  const mean = sampleMean(sortedValues)
+  const meanIndex = cutoff(sortedValues, length, mean)
+  const stdev = sampleStdev(sortedValues)
+  const percentiles = {
+    5: percentile(sortedValues, length, 5),
+    50: percentile(sortedValues, length, 50),
+    95: percentile(sortedValues, length, 95),
+  }
+  const adjustedLow = percentile(sortedValues, meanIndex, 10)
+  const adjustedHigh = percentile(sortedValues.slice(meanIndex), length - meanIndex, 90)
+
+  const stats = {
     mean,
     stdev,
     length,
     percentiles,
     adjustedConfidenceInterval: [adjustedLow, adjustedHigh]
-  };
+  }
+  simulation.sample.sortedValues = sortedValues
+  simulation.stats = stats
 }
 
-function withStats(simulation){
-  let newSim = _.cloneDeep(simulation);
-  newSim.stats = sStats(simulation);
-  return newSim;
-}
-
-let sim = null;
 export default function simulations(state = [], action = null) {
   switch (action.type) {
   case 'SPACES_FETCH_SUCCESS':
@@ -42,7 +46,10 @@ export default function simulations(state = [], action = null) {
   case 'DELETE_SIMULATIONS':
     return state.filter(y => !_.includes(action.metricIds, y.metric))
   case 'UPDATE_SIMULATION':
-    const sim = withStats(action.simulation);
+    let sim = action.simulation
+    // We modify the sim in place, adding stats and sorted values, before saving.
+    addStats(sim)
+
     const i = state.findIndex(y => y.metric === sim.metric);
     if (i !== -1) {
       const newState =  [

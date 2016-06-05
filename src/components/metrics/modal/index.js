@@ -2,19 +2,18 @@ import React, {Component} from 'react'
 
 import Modal from 'react-modal'
 
-import DistributionSummary from 'gComponents/distributions/summary/index'
+import {DistributionSummary} from 'gComponents/distributions/summary/index'
 import DistributionEditor from 'gComponents/distributions/editor/index'
 import Histogram from 'gComponents/simulations/histogram/index'
 import GuesstimateDescription from './description'
 import {ButtonClose} from 'gComponents/utility/buttons/close'
 
-import {percentile, sortDescending} from 'lib/dataAnalysis'
+import {percentile} from 'lib/dataAnalysis'
 
 import './style.css'
 
 const percentages = (values, perc) => {
-  const samples = sortDescending(Object.assign([], values))
-  return perc.map(e => { return {percentage: e, value: percentile(samples, samples.length, e)} })
+  return perc.map(e => { return {percentage: e, value: percentile(values, values.length, e)} })
 }
 
 const PercentileTable = ({values}) => (
@@ -67,7 +66,8 @@ export default class MetricModal extends Component {
     const showSimulation = this.showSimulation()
 
     const {closeModal, metric} = this.props
-    const sampleValues = _.get(metric, 'simulation.sample.values')
+    const sortedSampleValues = _.get(metric, 'simulation.sample.sortedValues')
+    const stats = _.get(metric, 'simulation.stats')
     const guesstimate = metric.guesstimate
     return(
       <Modal
@@ -95,12 +95,14 @@ export default class MetricModal extends Component {
                 <div className='col-sm-9 mean subsection'>
                   {showSimulation &&
                     <DistributionSummary
-                      simulation={metric.simulation}
+                      length={stats.length}
+                      mean={stats.mean}
+                      adjustedConfidenceInterval={stats.adjustedConfidenceInterval}
                     />
                   }
                 </div>
                 <div className='col-sm-3 subsection'>
-                  <PercentileTable values={sampleValues}/>
+                  <PercentileTable values={sortedSampleValues}/>
                 </div>
               </div>
             </div>

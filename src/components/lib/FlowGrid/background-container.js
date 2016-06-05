@@ -2,14 +2,12 @@ import React, {Component, PropTypes} from 'react'
 
 import $ from 'jquery'
 
-import Edges from './edges'
+import {Edges} from './edges'
 import GridPoint from './gridPoints'
 
-import Dimensions from 'gComponents/utility/react-dimensions'
-
+import {PTRegion} from 'lib/locationUtils'
 
 const Region = ({rowHeights, columnWidth, selectedRegion, type}) => {
-  if (!selectedRegion || selectedRegion.length !== 2) { return false }
   const gridPoint = new GridPoint({rowHeights, columnWidth, padding: 0})
   const region = gridPoint.region(selectedRegion)
   return (
@@ -18,61 +16,58 @@ const Region = ({rowHeights, columnWidth, selectedRegion, type}) => {
 }
 
 //Listens to events for changes to row heights and column width
-@Dimensions()
-export default class BackgroundContainer extends Component {
+export class BackgroundContainer extends Component {
   displayName: 'BackgroundContainer'
 
   static propTypes = {
-    containerWidth: PropTypes.number,
     rowHeights: PropTypes.array.isRequired,
     edges: PropTypes.array.isRequired,
-    refs: PropTypes.object.isRequired,
-    rowCount: PropTypes.number.isRequired,
+    selectedRegion: PTRegion,
+    copiedRegion: PTRegion,
   }
 
-  state = {
-    columnWidth: null
-  }
-
-  componentWillUpdate(newProps) {
-    if (newProps.containerWidth !== this.props.containerWidth){
-      this.getColumnWidth()
-    }
-  }
-
-  getColumnWidth() {
-    const width = $('.FlowGridCell') && $('.FlowGridCell')[0] && $('.FlowGridCell')[0].offsetWidth
-    this.setState({columnWidth: width})
+  shouldComponentUpdate(nextProps) {
+    return (
+      !_.isEqual(this.props.copiedRegion, nextProps.copiedRegion) ||
+      !_.isEqual(this.props.selectedRegion, nextProps.selectedRegion) ||
+      !_.isEqual(this.props.edges, nextProps.edges) ||
+      !_.isEqual(this.props.rowHeights, nextProps.rowHeights)
+    )
   }
 
   render() {
-    const {edges} = this.props
-    const {columnWidth} = this.state
+    const {edges, rowHeights, selectedRegion, copiedRegion} = this.props
+    const columnWidth = $('.FlowGridCell') && $('.FlowGridCell')[0] && $('.FlowGridCell')[0].offsetWidth
+    if (!columnWidth || !rowHeights.length) { return false }
 
-    const rowHeights = this.props.rowHeights
-    const containerHeight = _.get(rowHeights, 'length') && rowHeights.reduce((a,b) => a + b)
+    const containerHeight = rowHeights.reduce((a,b) => a + b)
 
-    if (!columnWidth || !rowHeights.length){ return false }
     return (
       <div>
-        <Edges
+        {edges.length > 0 &&
+          <Edges
             columnWidth={columnWidth}
             containerHeight={containerHeight}
             edges={edges}
             rowHeights={rowHeights}
-        />
-        <Region
-          rowHeights={rowHeights}
-          columnWidth={columnWidth}
-          selectedRegion={this.props.selectedRegion}
-          type='selected'
-        />
-        <Region
-          rowHeights={rowHeights}
-          columnWidth={columnWidth}
-          selectedRegion={this.props.copiedRegion}
-          type='copied'
-        />
+          />
+        }
+        {selectedRegion.length === 2 &&
+          <Region
+            rowHeights={rowHeights}
+            columnWidth={columnWidth}
+            selectedRegion={selectedRegion}
+            type='selected'
+          />
+        }
+        {copiedRegion.length === 2 &&
+          <Region
+            rowHeights={rowHeights}
+            columnWidth={columnWidth}
+            selectedRegion={copiedRegion}
+            type='copied'
+          />
+        }
       </div>
     )
   }

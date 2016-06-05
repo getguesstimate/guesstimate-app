@@ -29,13 +29,13 @@ class SimulationHistogram extends Component{
     )
   }
 
-  values(){
-    return _.get(this.props, 'simulation.sample.values')
+  sortedValues(){
+    return _.get(this.props, 'simulation.sample.sortedValues')
   };
 
   histogram() {
     return (
-      <Histogram data={this.values()}
+      <Histogram data={this.sortedValues()}
           height={this.props.height}
           width={(this.props.containerWidth) * this.props.widthPercent / 100}
           bottom={20}
@@ -46,8 +46,8 @@ class SimulationHistogram extends Component{
   };
 
   render() {
-    const values = this.values()
-    const hasValues =  (values && values.length > 1)
+    const sortedValues = this.sortedValues()
+    const hasValues =  (sortedValues && sortedValues.length > 1)
     if (hasValues){
       return (this.histogram())
     } else {

@@ -1,4 +1,21 @@
-export function parseNumber(n) { return parseFloat(n) }
+const PREFIXES = {
+  'K': 3,
+  'M': 6,
+  'B': 9,
+  'T': 12,
+}
+
+const getMult = prefix => Math.pow(10,PREFIXES[prefix])
+
+export function parseNumber(n) {
+  let number = parseFloat(n)
+  Object.keys(PREFIXES).forEach( prefix => {
+    if (n.includes(prefix)) {
+      number = number * getMult(prefix)
+    }
+  })
+  return number
+}
 
 export function isParseableNumber(n) {
   if (_.isString(n)){

@@ -105,7 +105,7 @@ export default class Canvas extends Component{
   }
 
   _handleAddMetric(location) {
-    this.props.dispatch(addMetric({space: this.props.spaceId, location: location, isNew: true}))
+    this.props.dispatch(addMetric({space: this.props.spaceId, location: location}))
   }
 
   _handleMoveMetric({prev, next}) {

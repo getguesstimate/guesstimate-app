@@ -1,6 +1,6 @@
 // Returns a sorted (desc) copy of the samples.
 export function sortDescending(samples) {
-  return samples.sort((a,b) => a-b)
+  return Object.assign([], samples).sort((a,b) => a-b)
 }
 
 // Returns the sample mean. If no samples are provided, returns 0.

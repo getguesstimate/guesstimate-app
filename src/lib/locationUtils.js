@@ -5,6 +5,8 @@ export const PTLocation = PropTypes.shape({
   row: PropTypes.number
 })
 
+export const PTRegion = PropTypes.arrayOf(PTLocation, PTLocation)
+
 export function isLocation(test) {
   return !!test && (test.hasOwnProperty('row') && test.hasOwnProperty('column'))
 }
