@@ -2,7 +2,8 @@ import React, {Component} from 'react'
 
 import Icon from 'react-fa'
 
-export default class ClosedSpaceSidebar extends Component {
+export class ClosedSpaceSidebar extends Component {
+  shouldComponentUpdate() { return false }
   render() {
     return (
       <div className='ClosedSpaceSidebar'>
