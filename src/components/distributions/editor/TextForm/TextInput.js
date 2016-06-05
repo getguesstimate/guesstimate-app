@@ -41,12 +41,7 @@ class TextInputEditor extends Component {
   }
 
   handleReturn(e) {
-    if (e.shiftKey) {
-      return false
-    } else {
-      this.props.onReturn()
-      return true
-    }
+    return this.props.onReturn(e.shiftKey)
   }
 
   handleEscape() {
@@ -54,8 +49,8 @@ class TextInputEditor extends Component {
   }
 
   handleTab(e){
+    this.props.onTab(e.shiftKey)
     e.preventDefault()
-    this.props.onTab()
   }
 
   render() {
@@ -75,7 +70,6 @@ class TextInputEditor extends Component {
           onTab={this.handleTab.bind(this)}
           onBlur={this.props.onBlur}
           onChange={this._onChange.bind(this)}
-          tabIndex={2}
           ref='editor'
           placeholder={this.props.placeholder}
         />

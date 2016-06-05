@@ -250,6 +250,8 @@ export default class MetricCard extends Component {
             heightHasChanged={forceFlowGridUpdate}
             hovered={hovered}
             onEscape={this.focus.bind(this)}
+            onReturn={this.props.onReturn}
+            onTab={this.props.onTab}
           />
 
           {inSelectedCell && !this.state.modalIsOpen &&
@@ -258,6 +260,7 @@ export default class MetricCard extends Component {
                 guesstimate={metric.guesstimate}
                 metricId={metric.id}
                 metricFocus={this.focus.bind(this)}
+                jumpSection={() => {this.refs.MetricCardViewSection.focusName()}}
                 onOpen={this.openModal.bind(this)}
                 ref='DistributionEditor'
                 size='small'
