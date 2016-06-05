@@ -63,6 +63,8 @@ export default class Guesstimate extends Component{
             onChangeClickMode={this._changeMetricClickMode.bind(this)}
             onAddDefaultData={this._addDefaultData.bind(this)}
             onEscape={this.props.metricFocus}
+            onReturn={this.props.onReturn}
+            onTab={this.props.onTab}
             size={size}
             hasErrors={errors && (errors.length !== 0)}
             ref='TextForm'
