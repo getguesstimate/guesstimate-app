@@ -95,7 +95,6 @@ export function fetch({userId, organizationId}) {
 
 export function create(organizationId) {
   return (dispatch, getState) => {
-    console.log("FOOO")
     const cid = cuid()
     let object = {id: cid}
     if (organizationId) {
