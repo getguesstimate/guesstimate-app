@@ -4,8 +4,6 @@ import {GuesstimateTypeIcon} from './GuesstimateTypeIcon'
 import TextInput from './TextInput'
 import DistributionSelector from './DistributionSelector'
 
-import {Guesstimator} from 'lib/guesstimator/index'
-
 export class TextForm extends Component{
   displayName: 'GuesstimateInputForm'
 
@@ -51,7 +49,6 @@ export class TextForm extends Component{
     } = this.props
     const {showDistributionSelector} = this.state
     const shouldDisplayType = !(guesstimateType === 'POINT' || guesstimateType === 'FUNCTION')
-    console.log('shouldDisplayType', shouldDisplayType, guesstimateType)
     const shouldBeWide = !(guesstimateType === 'FUNCTION')
 
     return(
