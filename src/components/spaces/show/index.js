@@ -31,7 +31,6 @@ function mapStateToProps(state) {
 function spacePrepared(space) {
   return (
     !!space &&
-    _.has(space, 'graph') &&
     (_.has(space, 'user.name') || _.has(space, 'organization.name'))
   )
 }
