@@ -5,14 +5,16 @@ const PREFIXES = {
   'T': 12,
 }
 
-const getZeros = prefix => Array.apply(null, Array(PREFIXES[prefix])).map(e => 0).join('')
+const getMult = prefix => Math.pow(10,PREFIXES[prefix])
 
 export function parseNumber(n) {
-  let numberStr = n
+  let number = parseFloat(n)
   Object.keys(PREFIXES).forEach( prefix => {
-    numberStr = numberStr.replace(prefix, getZeros(prefix))
+    if (n.includes(prefix)) {
+      number = number * getMult(prefix)
+    }
   })
-  return parseFloat(numberStr)
+  return number
 }
 
 export function isParseableNumber(n) {
