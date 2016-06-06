@@ -74,6 +74,7 @@ app.extend({
         const lastElm = list[list.length - 1]
         if (lastElm.name === name) {
           lastElm.end = time
+          lastElm.duration = lastElm.end - lastElm.start
         } else {
           appendStopToNestedList(name, time, lastElm.children)
         }
