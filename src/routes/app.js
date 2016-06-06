@@ -40,16 +40,19 @@ app.extend({
 
     if (__DEV__) {
       window.Perf = require('react-addons-perf')
-      window.AppStartTime = (new Date()).getTime()
-      window.Timeline = [{name: "Application Start", time: window.AppStartTime}]
-      window.NestedTimeline = [{name: "Application Start", time: window.AppStartTime, end: true}]
-      window.RenderCounts = {}
-      window.RenderTimings = {}
-      window.SelectorCounts = {}
-      window.SelectorTimings = {}
-      window.ActionCounts = {}
-      window.ActionTimings = {}
       window.Paused = false
+      window.ClearRecordings = () => {
+        window.AppStartTime = (new Date()).getTime()
+        window.Timeline = [{name: "Application Start", time: window.AppStartTime}]
+        window.NestedTimeline = [{name: "Application Start", time: window.AppStartTime, end: true}]
+        window.RenderCounts = {}
+        window.RenderTimings = {}
+        window.SelectorCounts = {}
+        window.SelectorTimings = {}
+        window.ActionCounts = {}
+        window.ActionTimings = {}
+      }
+      window.ClearRecordings()
 
       const appendSingletonToNestedList = (name, time, list) => {
         const lastElm = list[list.length - 1]
@@ -116,15 +119,6 @@ app.extend({
         const time = (new Date()).getTime()
         window.RenderCounts[name] = (window.RenderCounts[name] || 0) + 1
         window.RenderTimings[name] = window.RenderTimings[name].slice(0,-1).concat(time - window.RenderTimings[name][window.RenderTimings[name].length-1])
-      }
-      window.ClearRecordings = () => {
-        window.Timeline = []
-        window.RenderCounts = {}
-        window.RenderTimings = {}
-        window.ActionCounts = {}
-        window.ActionTimings = {}
-        window.SelectorCounts = {}
-        window.SelectorTimings = {}
       }
       window.PauseRecordings = () => { window.Paused = true }
       window.UnpauseRecordings = () => { window.Paused = false }
