@@ -40,6 +40,54 @@ app.extend({
 
     if (__DEV__) {
       window.Perf = require('react-addons-perf')
+      window.AppStartTime = (new Date()).getTime()
+      window.Timeline = [{name: "Application Start", time: window.AppStartTime}]
+      window.RenderCounts = {}
+      window.RenderTimings = {}
+      window.SelectorCounts = {}
+      window.SelectorTimings = {}
+      window.ActionCounts = {}
+      window.ActionTimings = {}
+      window.Paused = false
+
+      window.RecordNamedEvent = (name) => {
+        if (window.Paused) { return }
+        window.Timeline = window.Timeline.concat({
+          name,
+          time: (new Date()).getTime() - AppStartTime
+        })
+      }
+
+      window.RecordMountEvent = (component) => { window.RecordNamedEvent(component.constructor.name + " Mount") }
+      window.RecordUnmountEvent = (component) => { window.RecordNamedEvent(component.constructor.name + " Unmount") }
+      window.RecordRenderStartEvent = (component) => {
+        if (window.Paused) { return }
+        const name = component.constructor.name
+        window.RecordNamedEvent(name + " Render Start")
+
+        const time = (new Date()).getTime()
+        window.RenderTimings[name] = (window.RenderTimings[name] || []).concat(time)
+      }
+      window.RecordRenderStopEvent = (component) => {
+        if (window.Paused) { return }
+        const name = component.constructor.name
+        window.RecordNamedEvent(name + " Render Stop")
+
+        const time = (new Date()).getTime()
+        window.RenderCounts[name] = (window.RenderCounts[name] || 0) + 1
+        window.RenderTimings[name] = window.RenderTimings[name].slice(0,-1).concat(time - window.RenderTimings[name][window.RenderTimings[name].length-1])
+      }
+      window.ClearRecordings = () => {
+        window.Timeline = []
+        window.RenderCounts = {}
+        window.RenderTimings = {}
+        window.ActionCounts = {}
+        window.ActionTimings = {}
+        window.SelectorCounts = {}
+        window.SelectorTimings = {}
+      }
+      window.PauseRecordings = () => { window.Paused = true }
+      window.UnpauseRecordings = () => { window.Paused = false }
     }
 
     window.intercomSettings = {

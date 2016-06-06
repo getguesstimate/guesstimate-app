@@ -23,6 +23,12 @@ export function changeSelect(location) {
 }
 
 const rootReducer = function app(state = {}, action){
+  if (__DEV__) {
+    window.RecordNamedEvent(action.type + " Reducing")
+    if (!window.Paused) {
+      window.ActionCounts[action.type] = (window.ActionCounts[action.type] || 0) + 1
+    }
+  }
   return {
     displayError: SI(displayErrorR(state.displayError, action)),
     metrics: SI(metricsR(state.metrics, action)),

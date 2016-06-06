@@ -44,6 +44,11 @@ const ProgressMessage = ({actionState}) => (
 )
 
 export class SpaceToolbar extends Component {
+  componentDidMount() { if (__DEV__) { window.RecordMountEvent(this) } }
+  componentWillUpdate() { if (__DEV__) { window.RecordRenderStartEvent(this) } }
+  componentDidUpdate() { if (__DEV__) { window.RecordRenderStopEvent(this) } }
+  componentWillUnmount() { if (__DEV__) { window.RecordUnmountEvent(this) } }
+
   shouldComponentUpdate(nextProps) {
     if (!nextProps.editableByMe) { return false }
     return (

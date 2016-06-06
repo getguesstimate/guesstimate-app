@@ -209,15 +209,26 @@ export default class FlowGrid extends Component{
     )
   }
 
+  componentDidMount() {
+    if (__DEV__) { window.RecordMountEvent(this) }
+  }
+
+  componentWillUpdate() {
+    if (__DEV__) { window.RecordRenderStartEvent(this) }
+  }
+
   componentDidUpdate() {
     const newHeights = upto(this._rowCount()).map(rowI => _.get(this.refs[`row-${rowI}`], 'offsetHeight'))
     if (!_.isEqual(newHeights, this.state.rowHeights)){
       this.setState({rowHeights: newHeights})
     }
+
+    if (__DEV__) { window.RecordRenderStopEvent(this) }
   }
 
   componentWillUnmount() {
     this.props.onDeSelectAll()
+    if (__DEV__) { window.RecordUnmountEvent(this) }
   }
 
   render() {

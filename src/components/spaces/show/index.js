@@ -55,6 +55,10 @@ export default class SpacesShow extends Component {
   }
 
   componentWillMount() {
+    if (__DEV__) {
+      window.RecordMountEvent(this)
+    }
+
     this.considerFetch(this.props)
     if (!this.props.embed) { elev.show() }
 
@@ -72,6 +76,10 @@ export default class SpacesShow extends Component {
   }
 
   componentWillUnmount() {
+    if (__DEV__) {
+      window.RecordUnmountEvent(this)
+    }
+
     if (!this.props.embed) { elev.hide() }
   }
 
@@ -85,7 +93,17 @@ export default class SpacesShow extends Component {
     }
   }
 
+  componentWillUpdate() {
+    if (__DEV__) {
+      window.RecordRenderStartEvent(this)
+    }
+  }
+
   componentDidUpdate(prevProps) {
+    if (__DEV__) {
+      window.RecordRenderStopEvent(this)
+    }
+
     this.considerFetch(prevProps)
   }
 

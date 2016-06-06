@@ -14,9 +14,16 @@ function checkpointMetadata(id, checkpoints) {
   return attributes
 }
 
-const spaceGraphSelector = state => { return _.pick(state, 'spaces', 'metrics', 'guesstimates', 'simulations', 'users', 'organizations', 'userOrganizationMemberships', 'me', 'checkpoints') }
-const spaceSelector = (state, props) => {return state.spaces.find(s => _sameId(s.id, props.spaceId))}
-const canvasStateSelector = state => {return state.canvasState}
+let time = 0
+const spaceGraphSelector = state => {
+  if (__DEV__) {
+    window.RecordNamedEvent("Denormalized Space Selector Start")
+    time = (new Date()).getTime()
+  }
+  return _.pick(state, 'spaces', 'metrics', 'guesstimates', 'simulations', 'users', 'organizations', 'userOrganizationMemberships', 'me', 'checkpoints')
+}
+const spaceSelector = (state, props) => state.spaces.find(s => _sameId(s.id, props.spaceId))
+const canvasStateSelector = state => state.canvasState
 
 export const denormalizedSpaceSelector = createSelector(
   spaceGraphSelector,
@@ -38,6 +45,14 @@ export const denormalizedSpaceSelector = createSelector(
       })
     }
 
+    if (__DEV__) {
+      window.RecordNamedEvent("Denormalized Space Selector End")
+      if (!window.Paused) {
+        window.SelectorCounts["Denormalized Space Selector"] = (window.SelectorCounts["Denormalized Space Selector"] || 0) + 1
+        window.SelectorTimings["Denormalized Space Selector"] = (window.SelectorTimings["Denormalized Space Selector"] || []).concat((new Date()).getTime() - time)
+      }
+      time = 0
+    }
     return {
       denormalizedSpace: dSpace
     };
