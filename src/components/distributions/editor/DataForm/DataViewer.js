@@ -13,49 +13,7 @@ export const SmallDataViewer = ({onDelete, onOpen}) => (
   </div>
 )
 
-export class LargeDataViewer extends Component{
-  state = {mode: 'VIEW'}
-
-  beginEditing() {
-    this.setState({mode: 'EDIT'})
-  }
-
-  onSave(data) {
-    this.props.onSave(data)
-    this.setState({mode: 'VIEW'})
-  }
-
-  render() {
-    let bodyClass = 'ui segment DataViewer--body'
-    const viewMode = (this.state.mode === 'VIEW')
-
-    bodyClass += viewMode ? ' view' : ' edit'
-    return (
-      <div className='DataViewer ui segments'>
-        <div className='ui segment DataViewer--header'>
-          <Header
-            onDelete={this.props.onDelete}
-            onEdit={() => {this.setState({mode: 'EDIT'})}}
-            mode={this.state.mode}/>
-        </div>
-        <div className={bodyClass}>
-          {this.state.mode === 'VIEW' &&
-            <Viewer data={this.props.data}/>
-          }
-          {this.state.mode === 'EDIT' &&
-            <Editor
-              data={this.props.data}
-              onEditCancel={() => {this.setState({mode: 'VIEW'})}}
-              onSave={this.onSave.bind(this)}
-            />
-          }
-        </div>
-      </div>
-    )
-  }
-}
-
-const Header = ({mode, onDelete, onEdit, onEditCancel}) => (
+const Header = ({mode, onDelete, onEdit}) => (
   <div className='row'>
     <div className='col-sm-6'>
       <h2> <Icon name='bar-chart'/> Custom Data </h2>
@@ -122,19 +80,52 @@ const Viewer = ({data}) => (
     {_.map(data, (element, index) => {
       return (
         <li key={index}>
-          <DataPoint point={element} key={index}/>
+          <div className='DataPoint' key={index}>{element}</div>
         </li>
         )
     })}
   </ul>
 )
 
-class DataPoint extends Component{
+export class LargeDataViewer extends Component{
+  state = {mode: 'VIEW'}
+
+  beginEditing() {
+    this.setState({mode: 'EDIT'})
+  }
+
+  onSave(data) {
+    this.props.onSave(data)
+    this.setState({mode: 'VIEW'})
+  }
+
   render() {
+    let bodyClass = 'ui segment DataViewer--body'
+    const viewMode = (this.state.mode === 'VIEW')
+
+    bodyClass += viewMode ? ' view' : ' edit'
     return (
-    <div className='DataPoint'>
-      {this.props.point}
-    </div>
+      <div className='DataViewer ui segments'>
+        <div className='ui segment DataViewer--header'>
+          <Header
+            onDelete={this.props.onDelete}
+            onEdit={() => {this.setState({mode: 'EDIT'})}}
+            mode={this.state.mode}
+          />
+        </div>
+        <div className={bodyClass}>
+          {this.state.mode === 'VIEW' &&
+            <Viewer data={this.props.data}/>
+          }
+          {this.state.mode === 'EDIT' &&
+            <Editor
+              data={this.props.data}
+              onEditCancel={() => {this.setState({mode: 'VIEW'})}}
+              onSave={this.onSave.bind(this)}
+            />
+          }
+        </div>
+      </div>
     )
   }
 }

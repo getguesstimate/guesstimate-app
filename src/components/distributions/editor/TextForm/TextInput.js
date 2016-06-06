@@ -1,8 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 
-import ReactDOM from 'react-dom'
 import $ from 'jquery'
-import {EditorState, Editor, ContentState, getDefaultKeyBinding, KeyBindingUtil, Modifier} from 'draft-js'
+import {EditorState, Editor, ContentState, Modifier} from 'draft-js'
 
 import DistributionSelector from './DistributionSelector'
 
@@ -22,7 +21,7 @@ class TextInputEditor extends Component {
 
   componentWillUnmount() {
     const selection = this.state.editorState.getSelection()
-    if (selection && selection.getHasFocus()){
+    if (selection && selection.getHasFocus()) {
       this.props.onBlur()
     }
   }

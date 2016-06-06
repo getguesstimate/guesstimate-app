@@ -1,45 +1,32 @@
-import React, {Component} from 'react';
+import React from 'react'
 
 import Icon from 'react-fa'
 
-import * as elev from 'server/elev/index.js'
+import {Guesstimator} from 'lib/guesstimator/index'
 
-export default class GuesstimateTypeIcon extends Component{
-  displayName: 'GuesstimateTypeIcon'
+import * as elev from 'server/elev/index'
 
-  _handleShowInfo() {
-    elev.open(elev.GUESSTIMATE_TYPES)
-  }
-
-  _handleMouseDown() {
-    if (this.props.guesstimateType.isRangeDistribution){
-      this.props.toggleDistributionSelector()
-    }
-  }
-
-  render() {
-    const {guesstimateType} = this.props
-    if (!guesstimateType){ return (false) }
-    const {isRangeDistribution, icon} = guesstimateType
-    const showIcon = guesstimateType && guesstimateType.icon
-
+export const GuesstimateTypeIcon = ({guesstimateType, toggleDistributionSelector}) => {
+  const {isRangeDistribution, icon} = Guesstimator.samplerTypes.find(guesstimateType)
+  if (!!icon) {
     let className='DistributionSelectorToggle DistributionIcon'
     className += isRangeDistribution ? ' button' : ''
-    if (showIcon) {
-      return(
-        <div
-            className={className}
-            onMouseDown={this._handleMouseDown.bind(this)}
-        >
-          <img src={icon}/>
-        </div>
-      )
-    } else {
-      return (
-        <div className='GuesstimateTypeQuestion' onMouseDown={this._handleShowInfo.bind(this)}>
-          <Icon name='question-circle'/>
-        </div>
-      )
-    }
+    return(
+      <div
+        className={className}
+        onMouseDown={isRangeDistribution && toggleDistributionSelector}
+      >
+        <img src={icon}/>
+      </div>
+    )
+  } else {
+    return (
+      <div
+        className='GuesstimateTypeQuestion'
+        onMouseDown={() => {elev.open(elev.GUESSTIMATE_TYPES)}}
+      >
+        <Icon name='question-circle'/>
+      </div>
+    )
   }
 }
