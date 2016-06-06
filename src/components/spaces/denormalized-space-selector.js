@@ -1,6 +1,8 @@
 import { createSelector } from 'reselect';
 import e from 'gEngine/engine'
 
+const NAME = "Denormalized Space Selector"
+
 function _sameId(idA, idB){
   return idA.toString() === idB.toString()
 }
@@ -14,11 +16,9 @@ function checkpointMetadata(id, checkpoints) {
   return attributes
 }
 
-let time = 0
 const spaceGraphSelector = state => {
   if (__DEV__) {
-    window.RecordNamedEvent("Denormalized Space Selector Start")
-    time = (new Date()).getTime()
+    window.RecordSelectorStart(NAME)
   }
   return _.pick(state, 'spaces', 'metrics', 'guesstimates', 'simulations', 'users', 'organizations', 'userOrganizationMemberships', 'me', 'checkpoints')
 }
@@ -46,12 +46,7 @@ export const denormalizedSpaceSelector = createSelector(
     }
 
     if (__DEV__) {
-      window.RecordNamedEvent("Denormalized Space Selector End")
-      if (!window.Paused) {
-        window.SelectorCounts["Denormalized Space Selector"] = (window.SelectorCounts["Denormalized Space Selector"] || 0) + 1
-        window.SelectorTimings["Denormalized Space Selector"] = (window.SelectorTimings["Denormalized Space Selector"] || []).concat((new Date()).getTime() - time)
-      }
-      time = 0
+      window.RecordSelectorStop(NAME)
     }
     return {
       denormalizedSpace: dSpace
