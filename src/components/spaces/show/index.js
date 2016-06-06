@@ -68,9 +68,9 @@ export default class SpacesShow extends Component {
   }
 
   setDefaultEditPermission(editableByMe) {
-    if (!!editableByMe) {
+    if (!!editableByMe && !_.get(this.props, 'denormalizedSpace.canvasState.editsAllowed')) {
       this.props.dispatch(allowEdits())
-    } else {
+    } else if (_.get(this.props, 'denormalizedSpace.canvasState.editsAllowed')) {
       this.props.dispatch(forbidEdits())
     }
   }
@@ -192,7 +192,7 @@ export default class SpacesShow extends Component {
     if (this.props.embed) {
       return (
         <div className='spaceShow screenshot'>
-          <Canvas spaceId={space.id} overflow={'hidden'} screenshot={true}/>
+          <Canvas denormalizedSpace={space} overflow={'hidden'} screenshot={true}/>
         </div>
       )
     }
@@ -276,7 +276,7 @@ export default class SpacesShow extends Component {
             <ClosedSpaceSidebar onOpen={this.openSidebar.bind(this)}/>
           }
           <Canvas
-            spaceId={space.id}
+            denormalizedSpace={space}
             onCopy={this.onCopy.bind(this)}
             onPaste={this.onPaste.bind(this)}
             onCut={this.onCut.bind(this)}
