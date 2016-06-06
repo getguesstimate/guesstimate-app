@@ -31,6 +31,11 @@ export default class ItemCell extends Component {
     location: PTLocation.isRequired,
   }
 
+  componentDidMount() { if (__DEV__) { window.RecordMountEvent(this) } }
+  componentWillUpdate() { if (__DEV__) { window.RecordRenderStartEvent(this) } }
+  componentDidUpdate() { if (__DEV__) { window.RecordRenderStopEvent(this) } }
+  componentWillUnmount() { if (__DEV__) { window.RecordUnmountEvent(this) } }
+
   item() {
     return React.cloneElement(
         this.props.item,

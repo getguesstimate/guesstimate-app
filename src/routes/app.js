@@ -40,6 +40,90 @@ app.extend({
 
     if (__DEV__) {
       window.Perf = require('react-addons-perf')
+      window.Paused = false
+      window.ClearRecordings = () => {
+        window.AppStartTime = (new Date()).getTime()
+        window.Timeline = [{name: "Application Start", time: window.AppStartTime}]
+        window.NestedTimeline = [{name: "Application Start", time: window.AppStartTime, end: true}]
+        window.RenderCounts = {}
+        window.RenderTimings = {}
+        window.SelectorCounts = {}
+        window.SelectorTimings = {}
+        window.ActionCounts = {}
+        window.ActionTimings = {}
+      }
+      window.ClearRecordings()
+
+      const appendSingletonToNestedList = (name, time, list) => {
+        const lastElm = list[list.length - 1]
+        if (list.length === 0 || !!lastElm.end) {
+          list.push({name, time, end: true})
+        } else {
+          appendSingletonToNestedList(name, time, lastElm.children)
+        }
+      }
+      const appendStartToNestedList = (name, time, list) => {
+        const lastElm = list[list.length - 1]
+        if (list.length === 0 || !!lastElm.end) {
+          list.push({name, start: time, children: [], end: null})
+        } else {
+          appendStartToNestedList(name, time, lastElm.children)
+        }
+      }
+      const appendStopToNestedList = (name, time, list) => {
+        if (!list) { console.warn("Failed to close timing for ", name, " at ", time); return }
+        const lastElm = list[list.length - 1]
+        if (lastElm.name === name) {
+          lastElm.end = time
+          lastElm.duration = lastElm.end - lastElm.start
+        } else {
+          appendStopToNestedList(name, time, lastElm.children)
+        }
+      }
+
+      window.RecordNamedEvent = (name, suffix = "", nestFn = appendSingletonToNestedList) => {
+        if (window.Paused) { return }
+        const time = (new Date()).getTime() - AppStartTime
+        window.Timeline = window.Timeline.concat({name: name + suffix, time})
+        nestFn(name, time, window.NestedTimeline)
+      }
+
+      window.RecordSelectorStart = (name) => {
+        window.RecordNamedEvent(name, " Start", appendStartToNestedList)
+
+        const time = (new Date()).getTime()
+        window.SelectorTimings[name] = (window.SelectorTimings[name] || []).concat(time)
+      }
+      window.RecordSelectorStop = (name) => {
+        if (window.Paused) { return }
+        window.RecordNamedEvent(name, " Stop", appendStopToNestedList)
+
+        const time = (new Date()).getTime()
+        window.SelectorCounts[name] = (window.SelectorCounts[name] || 0) + 1
+        window.SelectorTimings[name] = window.SelectorTimings[name].slice(0,-1).concat(time - window.SelectorTimings[name][window.SelectorTimings[name].length-1])
+      }
+
+      window.RecordMountEvent = (component) => { window.RecordNamedEvent(component.constructor.name + " Mount") }
+      window.RecordUnmountEvent = (component) => { window.RecordNamedEvent(component.constructor.name + " Unmount") }
+      window.RecordRenderStartEvent = (component) => {
+        if (window.Paused) { return }
+        const name = component.constructor.name
+        window.RecordNamedEvent(name, " Render Start", appendStartToNestedList)
+
+        const time = (new Date()).getTime()
+        window.RenderTimings[name] = (window.RenderTimings[name] || []).concat(time)
+      }
+      window.RecordRenderStopEvent = (component) => {
+        if (window.Paused) { return }
+        const name = component.constructor.name
+        window.RecordNamedEvent(name, " Render Stop", appendStopToNestedList)
+
+        const time = (new Date()).getTime()
+        window.RenderCounts[name] = (window.RenderCounts[name] || 0) + 1
+        window.RenderTimings[name] = window.RenderTimings[name].slice(0,-1).concat(time - window.RenderTimings[name][window.RenderTimings[name].length-1])
+      }
+      window.PauseRecordings = () => { window.Paused = true }
+      window.UnpauseRecordings = () => { window.Paused = false }
     }
 
     window.intercomSettings = {
