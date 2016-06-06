@@ -59,6 +59,7 @@ export default class FlowGrid extends Component{
   }
 
   _handleMouseLeave(e) {
+    if (__DEV__) { window.RecordNamedEvent("FlowGrid set hover state") }
     this.setState({
       hover: {row: -1, column: -1},
       leftDown: false,
@@ -67,12 +68,14 @@ export default class FlowGrid extends Component{
 
   _handleMouseUp(e) {
     if (e.button === 0) {
+      if (__DEV__) { window.RecordNamedEvent("FlowGrid set left down state") }
       this.setState({leftDown: false})
     }
   }
 
   _handleEmptyCellMouseDown(e, location) {
     if (e.button === 0 && !(e.target && e.target.type === 'textarea')) {
+      if (__DEV__) { window.RecordNamedEvent("FlowGrid set left down state") }
       this.setState({leftDown: true})
       lastMousePosition = _.pick(e, 'pageX', 'pageY')
       e.preventDefault()
@@ -86,9 +89,11 @@ export default class FlowGrid extends Component{
 
   _handleCellMouseEnter(location, e) {
     if (this.state.leftDown && this._mouseMoved(e)) {
+      if (__DEV__) { window.RecordNamedEvent("FlowGrid set hover state") }
       this.setState({hover: {row: -1, column: -1}})
       this._handleEndRangeSelect(location)
     } else {
+      if (__DEV__) { window.RecordNamedEvent("FlowGrid set hover state") }
       this.setState({hover: location})
     }
   }
@@ -99,6 +104,7 @@ export default class FlowGrid extends Component{
 
   _handleKeyUp(e){
     if (e.keyCode == '17' || e.keyCode == '224' || e.keyCode == '91') {
+      if (__DEV__) { window.RecordNamedEvent("FlowGrid set ctrl pressed state") }
       this.setState({ctrlPressed: false})
     }
   }
@@ -126,6 +132,7 @@ export default class FlowGrid extends Component{
       this.props.onSelectItem(newLocation)
     } else if (!e.shiftKey && (e.keyCode == '17' || e.keyCode == '224' || e.keyCode == '91' || e.keyCode == '93')) {
       e.preventDefault()
+      if (__DEV__) { window.RecordNamedEvent("FlowGrid set ctrl pressed state") }
       this.setState({ctrlPressed: true})
     } else if (this.state.ctrlPressed) {
       if (e.keyCode == '86') {
@@ -218,17 +225,18 @@ export default class FlowGrid extends Component{
   }
 
   componentDidUpdate() {
+    if (__DEV__) { window.RecordRenderStopEvent(this) }
+
     const newHeights = upto(this._rowCount()).map(rowI => _.get(this.refs[`row-${rowI}`], 'offsetHeight'))
     if (!_.isEqual(newHeights, this.state.rowHeights)){
+      if (__DEV__) { window.RecordNamedEvent("FlowGrid set row heights state") }
       this.setState({rowHeights: newHeights})
     }
-
-    if (__DEV__) { window.RecordRenderStopEvent(this) }
   }
 
   componentWillUnmount() {
-    this.props.onDeSelectAll()
     if (__DEV__) { window.RecordUnmountEvent(this) }
+    this.props.onDeSelectAll()
   }
 
   render() {
