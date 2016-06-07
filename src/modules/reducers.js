@@ -16,7 +16,8 @@ import firstSubscriptionsR from './first_subscription/reducer'
 import modalR from './modal/reducer'
 import {copiedR} from './copied/reducer'
 import {checkpointsR} from './checkpoints/reducer'
-import {httpRequestsR} from './httpRequests/reducer.js'
+import {httpRequestsR} from './httpRequests/reducer'
+import {newOrgR} from './newOrg/reducer'
 
 export function changeSelect(location) {
   return { type: 'CHANGE_SELECT', location };
@@ -33,6 +34,7 @@ const rootReducer = function app(state = {}, action){
     spaces: SI(spacesR(state.spaces, action)),
     users: SI(reduxCrud.reducersFor('users')(state.users, action)),
     organizations: SI(reduxCrud.reducersFor('organizations')(state.organizations, action)),
+    newOrg: SI(newOrgR(state.newOrg, action)),
     userOrganizationMemberships: SI(reduxCrud.reducersFor('userOrganizationMemberships')(state.userOrganizationMemberships, action)),
     userOrganizationInvitations: SI(reduxCrud.reducersFor('userOrganizationInvitations')(state.userOrganizationInvitations, action)),
     me: SI(meR(state.me, action)),

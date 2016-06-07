@@ -60,7 +60,7 @@ export function create(name) {
         captureApiError('OrganizationsCreate', null, null, err, {url: 'OrganizationsCreate'})
       } else if (value) {
         dispatch(oActions.createSuccess(value, cid))
-        app.router.history.navigate('/organizations/' + value.id)
+        //app.router.history.navigate('/organizations/' + value.id)
       }
     })
   }
