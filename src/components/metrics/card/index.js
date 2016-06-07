@@ -75,11 +75,28 @@ export default class MetricCard extends Component {
     if (!this.props.inSelectedCell && this._isEmpty() && !hasContent && !this.state.modalIsOpen){
       this.handleRemoveMetric()
     }
+    if (this.props.inSelectedCell && !!this.props.selectedFrom) {
+      if (this.props.selectedFrom === 'UP' || this.props.selectedFrom === 'LEFT') {
+        console.log("Focusing Name")
+        this.refs.MetricCardViewSection.focusName()
+      } else if (this.props.selectedFrom === 'DOWN' || this.props.selectedFrom === 'RIGHT') {
+        console.log("Focusing Form")
+        this._focusForm()
+      }
+    }
   }
 
   componentDidMount() {
     if (this.props.inSelectedCell && this._isEmpty()) {
-      this.refs.MetricCardViewSection.focusName()
+      if (this.props.selectedFrom === 'UP' || this.props.selectedFrom === 'LEFT') {
+        console.log("Focusing Name")
+        this.refs.MetricCardViewSection.focusName()
+      } else if (this.props.selectedFrom === 'DOWN' || this.props.selectedFrom === 'RIGHT') {
+        console.log("Focusing Form")
+        this._focusForm()
+      } else {
+        this.refs.MetricCardViewSection.focusName()
+      }
     }
   }
 

@@ -181,7 +181,7 @@ export default class FlowGrid extends Component{
     const newRow = down ? row + 1 : (row || 1) -1
     const newLocation = {row: newRow, column}
     this.props.onAddItem(newLocation)
-    this.props.onSelectItem(newLocation)
+    this.props.onSelectItem(newLocation, down ? 'UP' : 'DOWN')
   }
 
   _onTab(l, right){
@@ -189,7 +189,7 @@ export default class FlowGrid extends Component{
     const newCol = right ? column + 1 : (column || 1) -1
     const newLocation = {row, column: newCol}
     this.props.onAddItem(newLocation)
-    this.props.onSelectItem(newLocation)
+    this.props.onSelectItem(newLocation, right ? 'LEFT' : 'RIGHT')
   }
 
   _cell(location) {
@@ -204,6 +204,7 @@ export default class FlowGrid extends Component{
         handleEndRangeSelect={this._handleEndRangeSelect.bind(this)}
         inSelectedRegion={isWithinRegion(location, this.props.selectedRegion)}
         inSelectedCell={isAtLocation(this.props.selectedCell, location)}
+        selectedFrom={this.props.selectedCell.selectedFrom}
         isHovered={isAtLocation(this.state.hover, location)}
         item={item && item.component}
         key={'grid-item', location.row, location.column}
