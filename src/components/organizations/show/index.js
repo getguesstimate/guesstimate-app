@@ -119,6 +119,7 @@ export default class OrganizationShow extends Component{
 
             {(openTab === 'MEMBERS') && meIsMember && members && organization &&
               <MembersTab
+                startOnIndexTab={true}
                 members={members}
                 memberships={memberships}
                 invitations={invitations}
