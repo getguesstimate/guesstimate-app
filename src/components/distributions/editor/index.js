@@ -1,11 +1,13 @@
 import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
 
-import TextForm from './TextForm/TextForm'
-import DataForm from './DataForm/DataForm'
+import {TextForm} from './TextForm/TextForm'
+import {DataForm} from './DataForm/DataForm'
 
 import {changeGuesstimate} from 'gModules/guesstimates/actions'
 import {changeMetricClickMode} from 'gModules/canvas_state/actions'
+
+import {Guesstimator} from 'lib/guesstimator/index'
 
 import './style.css'
 
@@ -25,15 +27,43 @@ export default class Guesstimate extends Component{
     metricFocus: () => { }
   }
 
+  componentDidUpdate(prevProps) {
+    const {guesstimate: {input, guesstimateType}} = this.props
+    const sameInput = input === prevProps.guesstimate.input
+    if (!sameInput && guesstimateType !== 'FUNCTION'){
+      this._changeMetricClickMode('')
+    }
+  }
+
   focus() { this.refs.TextForm.focus() }
-  _handleChange(params, runSimulations=true, registerGraphChange=false) {
-    this.props.dispatch(changeGuesstimate(this.props.metricId, {...this.props.guesstimate, ...params}, runSimulations, registerGraphChange))
+
+  _guesstimateType(changes) {
+    return Guesstimator.parse({...this.props.guesstimate, ...changes})[1].samplerType().referenceName
   }
-  _handleSave(params, runSimulations=false) {
-    if (!_.isEmpty(params)) {this._handleChange(params, runSimulations, true)}
+
+  changeGuesstimate(changes, runSims, saveToServer) {
+    this.props.dispatch(changeGuesstimate(this.props.metricId, {...this.props.guesstimate, ...changes}, runSims, saveToServer))
   }
+
+  changeDescriptionAndSave(description) {
+    this.changeGuesstimate({description}, false, true)
+  }
+  changeInput(input) {
+    const guesstimateType = this._guesstimateType({input})
+    this.changeGuesstimate({data: null, input, guesstimateType}, true, false)
+    if (guesstimateType === 'FUNCTION') {this._changeMetricClickMode('FUNCTION_INPUT_SELECT')}
+  }
+  changeGuesstimateTypeAndSave(guesstimateType) {
+    this.changeGuesstimate({guesstimateType}, false, true)
+  }
+  addDataAndSave(data) {
+    this.changeGuesstimate({guesstimateType: 'DATA', data, input: null}, true, true)
+  }
+  saveToServer() {
+    this.changeGuesstimate({}, false, true)
+  }
+
   _changeMetricClickMode(newMode) { this.props.dispatch(changeMetricClickMode(newMode)) }
-  _addDefaultData() { this._handleSave({guesstimateType: 'DATA', data:[1,2,3], input: null}, true) }
 
   handleReturn(shifted) {
     if (shifted) {
@@ -69,17 +99,19 @@ export default class Guesstimate extends Component{
           <DataForm
             data={guesstimate.data}
             size={size}
-            onSave={this._handleSave.bind(this)}
+            onSave={this.addDataAndSave.bind(this)}
             onOpen={onOpen}
           />
         }
         {!hasData &&
           <TextForm
             guesstimate={guesstimate}
-            onChange={this._handleChange.bind(this)}
-            onSave={this._handleSave.bind(this)}
+            onAddData={this.addDataAndSave.bind(this)}
+            onChangeInput={this.changeInput.bind(this)}
+            onChangeGuesstimateType={this.changeGuesstimateTypeAndSave.bind(this)}
+            onSave={this.saveToServer.bind(this)}
             onChangeClickMode={this._changeMetricClickMode.bind(this)}
-            onAddDefaultData={this._addDefaultData.bind(this)}
+            onAddDefaultData={() => {this.addDataAndSave([1,2,3])}}
             onEscape={this.props.metricFocus}
             onReturn={this.handleReturn.bind(this)}
             onTab={this.handleTab.bind(this)}

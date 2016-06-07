@@ -1,19 +1,19 @@
 import React, {Component, PropTypes} from 'react'
 
-import GuesstimateTypeIcon from './GuesstimateTypeIcon'
+import {GuesstimateTypeIcon} from './GuesstimateTypeIcon'
 import TextInput from './TextInput'
 import DistributionSelector from './DistributionSelector'
 
-import {Guesstimator} from 'lib/guesstimator/index'
-
-export default class TextForm extends Component{
+export class TextForm extends Component{
   displayName: 'GuesstimateInputForm'
 
   state = { showDistributionSelector: false }
 
   static propTypes = {
-    onChange: PropTypes.func,
-    onSave: PropTypes.func,
+    onChangeInput: PropTypes.func.isRequired,
+    onAddData: PropTypes.func.isRequired,
+    onSave: PropTypes.func.isRequired,
+    onChangeGuesstimateType: PropTypes.func.isRequired,
     onAddDefaultData: PropTypes.func,
     onChangeClickMode: PropTypes.func,
     guesstimate: PropTypes.object,
@@ -22,49 +22,36 @@ export default class TextForm extends Component{
 
   focus() { this.refs.TextInput.focus() }
 
-  _guesstimateType() {
-    return Guesstimator.parse(this.props.guesstimate)[1].samplerType()
-  }
-
-  _handleChange(params) {
-    this.props.onChange(params)
+  onChangeInput(input) {
+    this.props.onChangeInput(input)
     this.setState({showDistributionSelector: false})
   }
 
-  componentDidUpdate(newProps) {
-    const sameMetric = (newProps.guesstimate.metric === this.props.guesstimate.metric)
-    const sameInput = (newProps.guesstimate.input === this.props.guesstimate.input)
-    if (sameMetric && !sameInput){
-      this._switchMetricClickMode(true)
-    }
+  _switchMetricClickMode() {
+    if (this.props.guesstimate.guesstimateType === 'FUNCTION') {this.props.onChangeClickMode('FUNCTION_INPUT_SELECT')}
   }
 
   _handleBlur() {
-    this._switchMetricClickMode(false)
-    this.props.onSave({input: this.props.guesstimate.input, guesstimateType: this._guesstimateType().referenceName})
-  }
-
-  _switchMetricClickMode(inClick=true) {
-    const isFunction = (inClick && (this._guesstimateType().referenceName === 'FUNCTION'))
-    const newMode = isFunction ? 'FUNCTION_INPUT_SELECT' : ''
-    this.props.onChangeClickMode(newMode)
-  }
-
-  _saveData(data) { this.props.onSave({guesstimateType: 'DATA', data, input: null}, true) }
-
-  _shouldDisplayType() {
-    const type = this._guesstimateType()
-    return !(type.referenceName === 'POINT' || type.referenceName === 'FUNCTION')
+    this.props.onChangeClickMode('')
+    this.props.onSave()
   }
 
   //onChangeData should be removed to Guesstimator lib.
   _textInput() {
-    const {guesstimate, onEscape, size, hasErrors, onReturn, onTab} = this.props
-    let {showDistributionSelector} = this.state
-    const {input} = guesstimate
-    const guesstimateType = this._guesstimateType()
-    const shouldDisplayType = !(guesstimateType.referenceName === 'POINT' || guesstimateType.referenceName === 'FUNCTION')
-    const shouldBeWide = !(guesstimateType.referenceName === 'FUNCTION')
+    const {
+      guesstimate: {input, guesstimateType},
+      onEscape,
+      size,
+      hasErrors,
+      onChangeInput,
+      onAddData,
+      onChangeGuesstimateType,
+      onReturn,
+      onTab
+    } = this.props
+    const {showDistributionSelector} = this.state
+    const shouldDisplayType = !(guesstimateType === 'POINT' || guesstimateType === 'FUNCTION')
+    const shouldBeWide = !(guesstimateType === 'FUNCTION')
 
     return(
       <div className='GuesstimateInputForm'>
@@ -74,10 +61,10 @@ export default class TextForm extends Component{
             onEscape={onEscape}
             onReturn={onReturn}
             onTab={onTab}
-            onChange={(input) => this._handleChange({input})}
-            onFocus={() => {this._switchMetricClickMode.bind(this)(true)}}
+            onChange={this.onChangeInput.bind(this)}
+            onFocus={this._switchMetricClickMode.bind(this)}
             onBlur={this._handleBlur.bind(this)}
-            onChangeData={this._saveData.bind(this)}
+            onChangeData={onAddData}
             ref='TextInput'
             hasErrors={hasErrors}
             width={shouldBeWide ? 'NARROW' : "WIDE"}
@@ -94,7 +81,7 @@ export default class TextForm extends Component{
         {showDistributionSelector &&
           <div className='GuesstimateInputForm--row'>
             <DistributionSelector
-              onSubmit={(guesstimateType) => this.props.onSave({guesstimateType}, true)}
+              onSubmit={onChangeGuesstimateType}
               selected={guesstimateType}
             />
           </div>
@@ -104,25 +91,24 @@ export default class TextForm extends Component{
   }
   //right now errors live in the simulation, which is not present here.
   render() {
-    const {size, guesstimate} = this.props
-    const hasEmptyInput = _.isEmpty(guesstimate.input)
-    const isLarge = (size === 'large')
-    if (!isLarge) { return( this._textInput() ) }
-    else {
-      return(
-        <div className='row'>
-          <div className='col-sm-8'>
-            {this._textInput()}
-          </div>
-          <div className='col-sm-4'>
-            {hasEmptyInput &&
-              <a className='custom-data' onClick={this.props.onAddDefaultData}>
-                Add Custom Data
-              </a>
-            }
-          </div>
-        </div>
-      )
+    const {size, guesstimate: {input}} = this.props
+    if (size !== 'large') {
+      return( this._textInput() )
     }
+
+    return(
+      <div className='row'>
+        <div className='col-sm-8'>
+          {this._textInput()}
+        </div>
+        <div className='col-sm-4'>
+          {_.isEmpty(input) &&
+            <a className='custom-data' onClick={this.props.onAddDefaultData}>
+              Add Custom Data
+            </a>
+          }
+        </div>
+      </div>
+    )
   }
 }
