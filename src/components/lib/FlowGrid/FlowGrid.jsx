@@ -176,20 +176,25 @@ export default class FlowGrid extends Component{
     return Math.max(6, lowestItem, selected) || 6;
   }
 
-  _onReturn(l, down){
-    const {row, column} = l
-    const newRow = down ? row + 1 : (row || 1) -1
-    const newLocation = {row: newRow, column}
-    this.props.onAddItem(newLocation)
-    this.props.onSelectItem(newLocation, down ? 'UP' : 'DOWN')
+  _addIfNeededAndSelect(location, direction) {
+    if (!this.props.items.find(i => isAtLocation(i.location, location))) {
+      this.props.onAddItem(location)
+    }
+    this.props.onSelectItem(location, direction)
   }
 
-  _onTab(l, right){
-    const {row, column} = l
-    const newCol = right ? column + 1 : (column || 1) -1
+  _onReturn(location, isDown){
+    const {row, column} = location
+    const newRow = isDown ? row + 1 : (row || 1) -1
+    const newLocation = {row: newRow, column}
+    this._addIfNeededAndSelect(newLocation, isDown ? 'UP' : 'DOWN')
+  }
+
+  _onTab(location, isRight){
+    const {row, column} = location
+    const newCol = isRight ? column + 1 : (column || 1) -1
     const newLocation = {row, column: newCol}
-    this.props.onAddItem(newLocation)
-    this.props.onSelectItem(newLocation, right ? 'LEFT' : 'RIGHT')
+    this._addIfNeededAndSelect(newLocation, isRight ? 'LEFT' : 'RIGHT')
   }
 
   _cell(location) {

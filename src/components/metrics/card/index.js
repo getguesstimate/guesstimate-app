@@ -70,27 +70,25 @@ export default class MetricCard extends Component {
     return hasMetricUpdated(this.props, nextProps) || (this.state.modalIsOpen !== nextState.modalIsOpen)
   }
 
+  focusFromDirection(dir) {
+    if (dir === 'DOWN' || dir === 'RIGHT') { this._focusForm() }
+    else { this.refs.MetricCardViewSection.focusName() }
+  }
+
   componentDidUpdate(prevProps) {
     const hasContent = this.refs.MetricCardViewSection.hasContent()
-    if (!this.props.inSelectedCell && this._isEmpty() && !hasContent && !this.state.modalIsOpen){
+    const {inSelectedCell, selectedFrom} = this.props
+    if (!inSelectedCell && this._isEmpty() && !hasContent && !this.state.modalIsOpen){
       this.handleRemoveMetric()
     }
-    if (!prevProps.inSelectedCell && this.props.inSelectedCell && !!this.props.selectedFrom) {
-      if (this.props.selectedFrom === 'UP' || this.props.selectedFrom === 'LEFT') {
-        this.refs.MetricCardViewSection.focusName()
-      } else if (this.props.selectedFrom === 'DOWN' || this.props.selectedFrom === 'RIGHT') {
-        this._focusForm()
-      }
+    if (!prevProps.inSelectedCell && inSelectedCell && !!selectedFrom) {
+      this.focusFromDirection(selectedFrom)
     }
   }
 
   componentDidMount() {
     if (this.props.inSelectedCell && this._isEmpty()) {
-      if (this.props.selectedFrom === 'DOWN' || this.props.selectedFrom === 'RIGHT') {
-        this._focusForm()
-      } else {
-        this.refs.MetricCardViewSection.focusName()
-      }
+      this.focusFromDirection(this.props.selectedFrom)
     }
   }
 
