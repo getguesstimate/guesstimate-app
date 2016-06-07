@@ -5,6 +5,7 @@ import {MembersTab} from 'gComponents/organizations/show/members'
 
 import {httpRequestSelector} from 'gComponents/organizations/show/httpRequestSelector'
 import {organizationMemberSelector} from 'gComponents/organizations/show/organizationMemberSelector'
+import Card, {CardListElement} from 'gComponents/utility/card/index'
 
 import * as userOrganizationMembershipActions from 'gModules/userOrganizationMemberships/actions'
 
