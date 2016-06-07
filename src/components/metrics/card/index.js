@@ -70,12 +70,12 @@ export default class MetricCard extends Component {
     return hasMetricUpdated(this.props, nextProps) || (this.state.modalIsOpen !== nextState.modalIsOpen)
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     const hasContent = this.refs.MetricCardViewSection.hasContent()
     if (!this.props.inSelectedCell && this._isEmpty() && !hasContent && !this.state.modalIsOpen){
       this.handleRemoveMetric()
     }
-    if (this.props.inSelectedCell && !!this.props.selectedFrom) {
+    if (!prevProps.inSelectedCell && this.props.inSelectedCell && !!this.props.selectedFrom) {
       if (this.props.selectedFrom === 'UP' || this.props.selectedFrom === 'LEFT') {
         console.log("Focusing Name")
         this.refs.MetricCardViewSection.focusName()
