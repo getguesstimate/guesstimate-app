@@ -14,7 +14,7 @@ import TermsAndConditions from 'gComponents/pages/terms_and_conditions/index'
 import PrivacyPolicy from 'gComponents/pages/privacy_policy/index'
 import ComponentIndex from './component-index'
 import UserShow from 'gComponents/users/show/index'
-import {CreateOrganizationForm} from 'gComponents/organizations/new/index'
+import {CreateOrganizationPage} from 'gComponents/organizations/new/index'
 import OrganizationShow from 'gComponents/organizations/show/index'
 import FirstSubscriptionContainer from 'gComponents/subscriptions/FirstSubscription/container'
 import FirstSubscriptionPage from 'gComponents/subscriptions/FirstSubscriptionPage/container'
@@ -50,7 +50,7 @@ export default Router.extend({
     'terms': 'terms',
     'privacy': 'privacy',
     'users/:id': 'userShow',
-    'organizations/new': 'createOrganizationForm',
+    'organizations/new': 'createOrganizationPage',
     'organizations/:id': 'organizationShow',
     'style_guide': 'styleGuide',
     'style_guide/first_subscription': 'styleGuideFirstSubscription',
@@ -80,6 +80,6 @@ export default Router.extend({
   subscribe(id) { this.render(<FirstSubscriptionPage planName={id}/>) },
   userShow(id) { this.render(<UserShow userId={id}/>, {backgroundColor: 'GREY'}) },
   organizationShow(id) { this.render(<OrganizationShow organizationId={id}/>, {backgroundColor: 'GREY'}) },
-  createOrganizationForm() { this.render(<CreateOrganizationForm />) },
+  createOrganizationPage() { this.render(<CreateOrganizationPage />) },
   pricing() { this.render(<PlanIndex/>, {backgroundColor: 'BLUE'}) },
 })
