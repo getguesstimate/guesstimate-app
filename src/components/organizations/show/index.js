@@ -95,6 +95,10 @@ export default class OrganizationShow extends Component{
     const meIsAdmin = !!organization && (organization.admin_id === this.props.me.id)
     const meIsMember = meIsAdmin || !!(members.find(m => m.id === this.props.me.id))
 
+    let tabs = [{name: 'Models', key: 'MODELS'}, {name: 'Members', key: 'MEMBERS'}]
+    const portalUrl = _.get(organization, 'account._links.payment_portal.href')
+    if (!!portalUrl) { tabs = [...tabs, {name: 'Billing', key: 'BILLING', url: portalUrl}] }
+
     return (
       <Container>
         <div className='OrganizationShow'>
@@ -103,7 +107,7 @@ export default class OrganizationShow extends Component{
 
           {meIsMember &&
             <OrganizationTabButtons
-              tabs={[{name: 'Models', key: 'MODELS'}, {name: 'Members', key: 'MEMBERS'}]}
+              tabs={tabs}
               openTab={openTab}
               changeTab={this.changeTab.bind(this)}
             />
@@ -163,9 +167,13 @@ const OrganizationTabButtons = ({tabs, openTab, changeTab}) => (
       <div className="ui secondary menu">
         { tabs.map( e => {
           const className = `item ${(openTab === e.key) ? 'active' : ''}`
-          return (
-            <a className={className} key={e.key} onClick={() => {changeTab(e.key)}}> {e.name} </a>
-          )
+          if (!!e.url){
+            return (<a className='item' key={e.key} href={e.url} target='_blank'> {e.name} </a>)
+          } else {
+            return (
+              <a className={className} key={e.key} onClick={() => {changeTab(e.key)}}> {e.name} </a>
+            )
+          }
          })}
       </div>
     </div>

@@ -16,6 +16,7 @@ function api(state) {
   return setupGuesstimateApi(getToken(state))
 }
 
+//This gets overwritten by UserOrganizationInvitationAction fetchByUserId.
 export function fetchById(organizationId) {
   return (dispatch, getState) => {
     api(getState()).organizations.get({organizationId}, (err, organization) => {
@@ -37,7 +38,7 @@ export function fetchById(organizationId) {
 
 export function fetchSuccess(organizations) {
   return (dispatch) => {
-    const formatted = organizations.map(o => _.pick(o, ['id', 'name', 'picture', 'admin_id']))
+    const formatted = organizations.map(o => _.pick(o, ['id', 'name', 'picture', 'admin_id', 'account']))
     dispatch(sActions.fetchSuccess(formatted))
   }
 }
