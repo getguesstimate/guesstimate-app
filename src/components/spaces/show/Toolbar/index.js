@@ -76,7 +76,7 @@ export class SpaceToolbar extends Component {
     const ReactTooltipParams = {class: 'small-tooltip', delayShow: 0, delayHide: 0, place: 'bottom', effect: 'solid'}
 
     let view_mode_header = (<span><Icon name='eye'/> Viewing </span>)
-    if (editsAllowed) {
+    if (editableByMe && editsAllowed) {
       view_mode_header = (<span><Icon name='pencil'/> Editing </span>)
     }
     return (
@@ -124,7 +124,7 @@ export class SpaceToolbar extends Component {
               <Icon name='repeat'/>
             </a>
 
-            {editsAllowed && <ProgressMessage actionState={actionState}/>}
+            {editableByMe && editsAllowed && <ProgressMessage actionState={actionState}/>}
 
           </div>
           <div className='col-sm-2'>
@@ -134,7 +134,7 @@ export class SpaceToolbar extends Component {
                 openLink={<a className='header-action button'>{view_mode_header}</a>}
                 position='left'
                 isEditingInvalid={!editableByMe}
-                isEditing={editsAllowed}
+                isEditing={editableByMe && editsAllowed}
                 onAllowEdits={onAllowEdits}
                 onForbidEdits={onForbidEdits}
               />
