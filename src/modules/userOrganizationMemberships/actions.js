@@ -47,12 +47,12 @@ export function fetchByUserId(userId) {
   }
 }
 
-export function fetchSuccess(memberships, data) {
+export function fetchSuccess(memberships) {
   return (dispatch, getState) => {
     const formatted = memberships.map(m => _.pick(m, relevantAttributes))
     const users = memberships.map(m => _.get(m, '_embedded.user')).filter(u => !!u)
     const organizations = memberships.map(m => _.get(m, '_embedded.organization')).filter(o => !!o)
-    dispatch(sActions.fetchSuccess(formatted, {...data, users, organizations}))
+    dispatch(sActions.fetchSuccess(formatted, {users, organizations}))
   }
 }
 
