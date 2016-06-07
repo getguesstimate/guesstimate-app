@@ -54,12 +54,13 @@ export function create(name) {
     // TODO(matthew): Track pending create request.
     const action = oActions.createStart(object);
 
-    api(getState()).organizations.create(object, (err, value) => {
+    api(getState()).organizations.create(object, (err, organization) => {
       if (err) {
         // TODO(matthew): Track if request errors out.
         captureApiError('OrganizationsCreate', null, null, err, {url: 'OrganizationsCreate'})
-      } else if (value) {
-        dispatch(oActions.createSuccess(value, cid))
+      } else if (organization) {
+        dispatch(oActions.createSuccess(organization, cid))
+        dispatch(userOrganizationMembershipActions.fetchSuccess(organization.memberships))
         //app.router.history.navigate('/organizations/' + value.id)
       }
     })

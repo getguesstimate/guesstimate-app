@@ -39,7 +39,6 @@ export default class OrganizationShow extends Component{
   state = {
     attemptedFetch: false,
     openTab: 'MODELS',
-    subMembersTab: 'INDEX'
   }
 
   componentWillMount() {
@@ -61,7 +60,6 @@ export default class OrganizationShow extends Component{
   changeTab(tab) {
     this.setState({
       openTab: tab,
-      subMembersTab: 'INDEX'
     })
   }
 
@@ -91,7 +89,6 @@ export default class OrganizationShow extends Component{
 
   render () {
     const {organizationId, organizations, members, memberships, invitations} = this.props
-    const unjoinedInvitees = invitations.filter(i => !_.some(memberships, m => m.invitation_id === i.id))
     const {openTab} = this.state
     const spaces =  _.orderBy(this.props.organizationSpaces.asMutable(), ['updated_at'], ['desc'])
     const organization = organizations.find(u => u.id.toString() === organizationId.toString())
@@ -122,13 +119,12 @@ export default class OrganizationShow extends Component{
 
             {(openTab === 'MEMBERS') && meIsMember && members && organization &&
               <MembersTab
-                subTab={this.state.subMembersTab}
                 members={members}
-                invitations={unjoinedInvitees}
+                memberships={memberships}
+                invitations={invitations}
                 admin_id={organization.admin_id}
                 onRemove={this.onRemove.bind(this)}
                 addUser={this.addUser.bind(this)}
-                onChangeSubTab={(name) => {this.setState({subMembersTab: name})}}
                 httpRequests={this.props.httpRequests}
                 meIsAdmin={meIsAdmin}
               />
@@ -144,18 +140,12 @@ const OrganizationHeader = ({organization}) => (
   <div className='row OrganizationHeader'>
     <div className='col-md-4'/>
     <div className='col-md-4 col-xs-12'>
-      {organization &&
-        <div className='col-sm-12'>
-          <div className='center-display'>
-            <img
-              src={organization.picture}
-            />
-            <h1>
-              {organization.name}
-            </h1>
-          </div>
+      <div className='col-sm-12'>
+        <div className='center-display'>
+          <img src={organization.picture} />
+          <h1> {organization.name} </h1>
         </div>
-      }
+      </div>
     </div>
   </div>
 )

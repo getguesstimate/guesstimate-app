@@ -6,52 +6,61 @@ import e from 'gEngine/engine'
 
 import './members.css'
 
-export const MembersTab = ({subTab, members, invitations, admin_id, onRemove, addUser, onChangeSubTab, httpRequests, meIsAdmin}) => (
-  <div className='MembersTab'>
-    {subTab === 'ADD' &&
-      <MembersAddSubTab {...{addUser, httpRequests, onChangeSubTab}}/>
-    }
-    {subTab === 'INDEX' &&
-      <MembersIndexSubTab {...{subTab, members, invitations, admin_id, onRemove, onChangeSubTab, meIsAdmin}}/>
-    }
-  </div>
-)
+export class MembersTab extends Component {
+  state = {
+    indexTabOpen: this.props.startOnIndexTab
+  }
 
-const MembersIndexSubTab = ({subTab, members, invitations, admin_id, onChangeSubTab, onRemove, meIsAdmin}) => (
+  render() {
+    const {members, memberships, invitations, admin_id, onRemove, addUser, httpRequests, meIsAdmin} = this.props
+    const unjoinedInvitees = invitations.filter(i => !_.some(memberships, m => m.invitation_id === i.id))
+    const onChangeSubTab = () => {this.setState({indexTabOpen: !this.state.indexTabOpen})}
+    return (
+      <div className='MembersTab'>
+        {this.state.indexTabOpen &&
+          <MembersIndexSubTab {...{members, invitations: unjoinedInvitees, admin_id, onRemove, onChangeSubTab, meIsAdmin}}/>
+        }
+        {!this.state.indexTabOpen &&
+          <MembersAddSubTab {...{addUser, httpRequests, onChangeSubTab}}/>
+        }
+      </div>
+    )
+  }
+}
+
+const MembersIndexSubTab = ({members, invitations, admin_id, onChangeSubTab, onRemove, meIsAdmin}) => (
   <div className='row MembersIndexSubTab'>
     <div className='col-sm-2'>
-      {subTab === 'INDEX' && meIsAdmin &&
-        <div className='ui button large green' onClick={() => {onChangeSubTab('ADD')}}>
+      {meIsAdmin &&
+        <div className='ui button large green' onClick={onChangeSubTab}>
           Add Members
         </div>
       }
     </div>
     <div className={meIsAdmin ? 'col-sm-10' : 'col-sm-8'}>
-      {subTab === 'INDEX' &&
-        <div>
-          <div className='members'>
-            {members.map(m => {
-              return (
-                <Member
-                  key={m.id}
-                  user={m}
-                  isAdmin={admin_id === m.id}
-                  onRemove={() => {onRemove(m)}}
-                  meIsAdmin={meIsAdmin}
-                />
-              )
-            })}
-            {meIsAdmin && invitations.map(i => {
-              return (
-                <Invitee
-                  key={i.id}
-                  email={i.email}
-                />
-              )
-            })}
-          </div>
+      <div>
+        <div className='members'>
+          {members.map(m => {
+            return (
+              <Member
+                key={m.id}
+                user={m}
+                isAdmin={admin_id === m.id}
+                onRemove={() => {onRemove(m)}}
+                meIsAdmin={meIsAdmin}
+              />
+            )
+          })}
+          {meIsAdmin && invitations.map(i => {
+            return (
+              <Invitee
+                key={i.id}
+                email={i.email}
+              />
+            )
+          })}
         </div>
-      }
+      </div>
     </div>
   </div>
 )
@@ -139,7 +148,7 @@ export class MembersAddSubTab extends Component{
     return(
       <div className='row MembersAddSubTab'>
         <div className='col-sm-2'>
-          <div className='ui button large ' onClick={() => {this.props.onChangeSubTab('INDEX')}}>
+          <div className='ui button large ' onClick={this.props.onChangeSubTab}>
             <Icon name='chevron-left'/> Member List
           </div>
         </div>
