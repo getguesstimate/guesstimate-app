@@ -71,9 +71,11 @@ app.extend({
         }
       }
       const appendStopToNestedList = (name, time, list) => {
+        if (!list) { console.warn("Failed to close timing for ", name, " at ", time); return }
         const lastElm = list[list.length - 1]
         if (lastElm.name === name) {
           lastElm.end = time
+          lastElm.duration = lastElm.end - lastElm.start
         } else {
           appendStopToNestedList(name, time, lastElm.children)
         }
