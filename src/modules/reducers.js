@@ -10,10 +10,10 @@ import guesstimatesR from './guesstimates/reducer'
 import simulationsR from './simulations/reducer'
 import meR from './me/reducer'
 import canvasStateR from './canvas_state/reducer'
-import spacesR from './spaces/reducer'
 import searchSpacesR from './search_spaces/reducer'
 import firstSubscriptionsR from './first_subscription/reducer'
 import modalR from './modal/reducer'
+import {organizationsR} from './organizations/reducer'
 import {copiedR} from './copied/reducer'
 import {checkpointsR} from './checkpoints/reducer'
 import {httpRequestsR} from './httpRequests/reducer.js'
@@ -30,9 +30,9 @@ const rootReducer = function app(state = {}, action){
     selectedCell: SI(selectedCellR(state.selectedCell, action)),
     selectedRegion: SI(selectedRegionR(state.selectedRegion, action)),
     simulations: SI(simulationsR(state.simulations, action)),
-    spaces: SI(spacesR(state.spaces, action)),
+    spaces: SI(reduxCrud.reducersFor('spaces')(state.spaces, action)),
     users: SI(reduxCrud.reducersFor('users')(state.users, action)),
-    organizations: SI(reduxCrud.reducersFor('organizations')(state.organizations, action)),
+    organizations: SI(organizationsR(state.organizations, action)),
     userOrganizationMemberships: SI(reduxCrud.reducersFor('userOrganizationMemberships')(state.userOrganizationMemberships, action)),
     userOrganizationInvitations: SI(reduxCrud.reducersFor('userOrganizationInvitations')(state.userOrganizationInvitations, action)),
     me: SI(meR(state.me, action)),
