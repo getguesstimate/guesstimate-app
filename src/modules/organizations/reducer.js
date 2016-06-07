@@ -3,14 +3,13 @@ import reduxCrud  from 'redux-crud'
 const standardReducers = reduxCrud.reducersFor('organizations')
 
 export function organizationsR(state, action) {
-  console.log(action.type)
   switch(action.type) {
     case 'USER_ORGANIZATION_MEMBERSHIPS_FETCH_SUCCESS': {
-      if (_.has(action, 'data.organizations')) {
-        const updatedOrgs = action.data.organizations.map(o => ({...state.find(s => s.id === o.id), ...o}))
-        return [...state.filter(s => !_.some(action.data.organizations, o => s.id === o.id)), ...updatedOrgs]
-      }
-      return state
+      const organizations = _.get(action, 'data.organizations')
+      if (!organizations || organizations.length === 0) { return state }
+
+      const updatedOrgs = organizations.map(o => ({...state.find(s => s.id === o.id), ...o}))
+      return [...state.filter(s => !_.some(organizations, o => s.id === o.id)), ...updatedOrgs]
     }
     default:
       return standardReducers(state, action)

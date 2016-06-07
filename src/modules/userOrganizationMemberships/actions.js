@@ -41,8 +41,7 @@ export function fetchByUserId(userId) {
         dispatch(displayErrorsActions.newError())
         captureApiError('OrganizationsMemberFetch', null, null, err, {url: 'fetchMembers'})
       } else if (memberships) {
-        const organizations = memberships.items.map(m => _.get(m, '_embedded.organization')).filter(o => !!o)
-        dispatch(fetchSuccess(memberships.items, {organizations}))
+        dispatch(fetchSuccess(memberships.items))
       }
     })
   }
@@ -52,8 +51,8 @@ export function fetchSuccess(memberships, data) {
   return (dispatch, getState) => {
     const formatted = memberships.map(m => _.pick(m, relevantAttributes))
     const users = memberships.map(m => _.get(m, '_embedded.user')).filter(u => !!u)
-    dispatch(sActions.fetchSuccess(formatted, {...data, users}))
-    //dispatch(userActions.fetchSuccess(users))
+    const organizations = memberships.map(m => _.get(m, '_embedded.organization')).filter(o => !!o)
+    dispatch(sActions.fetchSuccess(formatted, {...data, users, organizations}))
   }
 }
 

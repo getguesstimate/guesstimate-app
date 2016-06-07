@@ -13,6 +13,7 @@ import canvasStateR from './canvas_state/reducer'
 import searchSpacesR from './search_spaces/reducer'
 import firstSubscriptionsR from './first_subscription/reducer'
 import modalR from './modal/reducer'
+import {usersR} from './users/reducer'
 import {organizationsR} from './organizations/reducer'
 import {copiedR} from './copied/reducer'
 import {checkpointsR} from './checkpoints/reducer'
@@ -31,7 +32,7 @@ const rootReducer = function app(state = {}, action){
     selectedRegion: SI(selectedRegionR(state.selectedRegion, action)),
     simulations: SI(simulationsR(state.simulations, action)),
     spaces: SI(reduxCrud.reducersFor('spaces')(state.spaces, action)),
-    users: SI(reduxCrud.reducersFor('users')(state.users, action)),
+    users: SI(usersR(state.users, action)),
     organizations: SI(organizationsR(state.organizations, action)),
     userOrganizationMemberships: SI(reduxCrud.reducersFor('userOrganizationMemberships')(state.userOrganizationMemberships, action)),
     userOrganizationInvitations: SI(reduxCrud.reducersFor('userOrganizationInvitations')(state.userOrganizationInvitations, action)),
