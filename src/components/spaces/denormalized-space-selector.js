@@ -46,7 +46,7 @@ export const denormalizedSpaceSelector = createSelector(
     }
 
     if (__DEV__) {
-      window.RecordSelectorStop(NAME)
+      window.RecordSelectorStop(NAME, {denormalizedSpace: dSpace})
     }
     return {
       denormalizedSpace: dSpace
