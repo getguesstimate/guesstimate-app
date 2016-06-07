@@ -11,24 +11,20 @@ export class CreateOrganizationForm extends Component {
 
   render() {
     return (
-      <div className="organization-form">
-        <h1>Create a new organization</h1>
-        <div>
+      <div className='ui form'>
+        <div class='field'>
+          <label>Organization Name</label>
           <input
             placeholder={"name"}
             value={this.state.value}
             onChange={(e) => {this.setState({value: e.target.value})}}
           />
         </div>
-        <div>
-          <span
-            className="ui button primary"
-            onClick={() => {
-              this.props.dispatch(create(this.state.value))
-            }}
-          >
-            Submit
-          </span>
+        <div
+          className="ui button submit blue"
+          onClick={() => { this.props.dispatch(create(this.state.value)) }}
+        >
+          Submit
         </div>
       </div>
     )

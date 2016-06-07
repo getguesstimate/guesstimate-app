@@ -1,0 +1,40 @@
+@import './styles/variables.css';
+
+.CreateOrganization {
+  .Header {
+    h1 {
+      margin-bottom: 0;
+      margin-top: 0.5rem;
+    }
+
+    .center-display {
+      text-align: center;
+      margin-right: 0.5em;
+      margin-top: 0.25em;
+    }
+  }
+
+  .Steps {
+    .ui.menu {
+      float: right;
+      margin-top: 0;
+    }
+
+    .ui.menu .item{
+      font-weight: 800;
+      font-size: 1.2em;
+      color: #444;
+    }
+  }
+
+  .ui.form {
+    label {
+      font-weight: bold;
+      font-size: 1.2em;
+    }
+
+    input {
+      margin: 0.6em 0 0.6em 0;
+    }
+  }
+}

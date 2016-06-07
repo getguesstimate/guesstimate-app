@@ -4,6 +4,8 @@ import {connect} from 'react-redux'
 import {CreateOrganizationForm} from './form'
 import {LocalAddMembers} from './members'
 
+import './style.css'
+
 function mapStateToProps(state) {
   return {
     newOrg: state.newOrg,
@@ -20,8 +22,8 @@ export class CreateOrganizationPage extends Component {
     const newOrg = this.props.newOrg
     const newOrgCreated = _.has(newOrg, 'id')
     return (
-      <div>
-        <div className='row CreateOrganizationHeader'>
+      <div className='CreateOrganization'>
+        <div className='row Header'>
           <div className='col-md-4'/>
           <div className='col-md-4 col-xs-12'>
             <div className='col-sm-12'>
@@ -31,7 +33,7 @@ export class CreateOrganizationPage extends Component {
             </div>
           </div>
         </div>
-        <div className='row CreateOrganizationSteps'>
+        <div className='row Steps'>
           <div className='col-xs-12'>
             <div className="ui secondary menu">
               <span className={`item ${!newOrgCreated ? 'active' : ''}`}> Create your Organization </span>
