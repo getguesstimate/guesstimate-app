@@ -15,6 +15,7 @@ export function metricsR(state = [], action) {
       return uniq([...state, ...newMetrics])
     }
     case 'SPACES_CREATE_SUCCESS': {
+      if (!_.has(action, 'record.graph.metrics')) { return state }
       const newMetrics = spaceToMetrics(action.record).filter(e => e)
       return uniq([...state, ...newMetrics])
     }

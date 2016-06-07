@@ -12,6 +12,7 @@ export function guesstimatesR(state = [], action) {
       return uniq([...state, ...newGuesstimates])
     }
     case 'SPACES_CREATE_SUCCESS': {
+      if (!_.has(action, 'record.graph.guesstimates')) { return state }
       const newGuesstimates = _.get(action.record, 'graph.guesstimates').filter(e => e)
       return [...state, ...newGuesstimates]
     }
