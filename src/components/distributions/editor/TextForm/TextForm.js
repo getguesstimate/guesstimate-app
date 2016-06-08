@@ -45,7 +45,9 @@ export class TextForm extends Component{
       hasErrors,
       onChangeInput,
       onAddData,
-      onChangeGuesstimateType
+      onChangeGuesstimateType,
+      onReturn,
+      onTab
     } = this.props
     const {showDistributionSelector} = this.state
     const shouldDisplayType = !(guesstimateType === 'POINT' || guesstimateType === 'FUNCTION')
@@ -57,6 +59,8 @@ export class TextForm extends Component{
           <TextInput
             value={input}
             onEscape={onEscape}
+            onReturn={onReturn}
+            onTab={onTab}
             onChange={this.onChangeInput.bind(this)}
             onFocus={this._switchMetricClickMode.bind(this)}
             onBlur={this._handleBlur.bind(this)}

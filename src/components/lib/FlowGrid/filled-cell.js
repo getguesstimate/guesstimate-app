@@ -37,9 +37,12 @@ export default class ItemCell extends Component {
         {
           hovered: this.props.hover,
           inSelectedCell: this.props.inSelectedCell,
+          selectedFrom: this.props.selectedFrom,
           gridKeyPress: this.props.gridKeyPress,
           connectDragSource: this.props.connectDragSource,
-          forceFlowGridUpdate: this.props.forceFlowGridUpdate
+          forceFlowGridUpdate: this.props.forceFlowGridUpdate,
+          onReturn: this.props.onReturn,
+          onTab: this.props.onTab
         }
     )
   }

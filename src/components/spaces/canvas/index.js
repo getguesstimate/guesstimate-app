@@ -90,8 +90,8 @@ export default class Canvas extends Component{
     this.props.dispatch(redo(this.props.denormalizedSpace.id))
   }
 
-  _handleSelect(location) {
-    this.props.dispatch(changeSelect(location))
+  _handleSelect(location, selectedFrom = null) {
+    this.props.dispatch(changeSelect(location, selectedFrom))
     this.props.dispatch(selectRegion(location, location))
   }
 

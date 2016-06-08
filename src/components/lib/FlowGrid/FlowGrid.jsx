@@ -176,6 +176,27 @@ export default class FlowGrid extends Component{
     return Math.max(6, lowestItem, selected) || 6;
   }
 
+  _addIfNeededAndSelect(location, direction) {
+    if (!this.props.items.find(i => isAtLocation(i.location, location))) {
+      this.props.onAddItem(location)
+    }
+    this.props.onSelectItem(location, direction)
+  }
+
+  _onReturn(location, isDown){
+    const {row, column} = location
+    const newRow = isDown ? row + 1 : (row || 1) -1
+    const newLocation = {row: newRow, column}
+    this._addIfNeededAndSelect(newLocation, isDown ? 'UP' : 'DOWN')
+  }
+
+  _onTab(location, isRight){
+    const {row, column} = location
+    const newCol = isRight ? column + 1 : (column || 1) -1
+    const newLocation = {row, column: newCol}
+    this._addIfNeededAndSelect(newLocation, isRight ? 'LEFT' : 'RIGHT')
+  }
+
   _cell(location) {
     const item = this.props.items.find(i => isAtLocation(i.location, location));
     return (
@@ -188,6 +209,7 @@ export default class FlowGrid extends Component{
         handleEndRangeSelect={this._handleEndRangeSelect.bind(this)}
         inSelectedRegion={isWithinRegion(location, this.props.selectedRegion)}
         inSelectedCell={isAtLocation(this.props.selectedCell, location)}
+        selectedFrom={this.props.selectedCell.selectedFrom}
         isHovered={isAtLocation(this.state.hover, location)}
         item={item && item.component}
         key={'grid-item', location.row, location.column}
@@ -197,6 +219,8 @@ export default class FlowGrid extends Component{
         onMouseEnter={(e) => {this._handleCellMouseEnter(location, e)}}
         onEndDragCell={newLocation => {this._handleEndDragCell(newLocation)}}
         onEmptyCellMouseDown={(e) => {this._handleEmptyCellMouseDown(e, location)}}
+        onReturn={(down=true) => {this._onReturn(location, down)}}
+        onTab={(right=true) => {this._onTab(location, right)}}
         ref={`cell-${location.row}-${location.column}`}
       />
     )

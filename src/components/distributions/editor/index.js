@@ -65,6 +65,24 @@ export default class Guesstimate extends Component{
 
   _changeMetricClickMode(newMode) { this.props.dispatch(changeMetricClickMode(newMode)) }
 
+  handleReturn(shifted) {
+    if (shifted) {
+      this.props.jumpSection()
+    } else {
+      this.props.onReturn()
+    }
+    return true
+  }
+
+  handleTab(shifted) {
+    if (shifted) {
+      this.props.jumpSection()
+    } else {
+      this.props.onTab()
+    }
+    return true
+  }
+
   render () {
     const {size, guesstimate, onOpen, errors} = this.props
     if(guesstimate.metric !== this.props.metricId) { return false }
@@ -95,6 +113,8 @@ export default class Guesstimate extends Component{
             onChangeClickMode={this._changeMetricClickMode.bind(this)}
             onAddDefaultData={() => {this.addDataAndSave([1,2,3])}}
             onEscape={this.props.metricFocus}
+            onReturn={this.handleReturn.bind(this)}
+            onTab={this.handleTab.bind(this)}
             size={size}
             hasErrors={errors && (errors.length !== 0)}
             ref='TextForm'
