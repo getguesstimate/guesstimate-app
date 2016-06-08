@@ -18,12 +18,12 @@ export class SpaceName extends Component {
       <span>
         {editableByMe &&
           <DropDown
-              headerText={'Rename Model'}
-              openLink={<h1 className={className}> {showName} </h1>}
-              position='right'
-              hasPadding={true}
-              width='wide'
-              ref='DropDown'
+            headerText={'Rename Model'}
+            openLink={<h1 className={className}> {showName} </h1>}
+            position='right'
+            hasPadding={true}
+            width='wide'
+            ref='DropDown'
           >
           <div className='ui form'>
             <textarea

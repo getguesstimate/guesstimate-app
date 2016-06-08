@@ -4,7 +4,8 @@ import Icon from 'react-fa'
 import ReactTooltip from 'react-tooltip'
 
 import CanvasViewForm from '../canvasViewForm'
-import DropDown, {DropDownListElement} from 'gComponents/utility/drop-down/index'
+import DropDown from 'gComponents/utility/drop-down/index'
+import {CardListElement} from 'gComponents/utility/card/index.js'
 import {ViewOptionToggle} from '../view-options/index'
 import {PrivacyToggle} from '../privacy-toggle/index'
 
@@ -91,16 +92,14 @@ export class SpaceToolbar extends Component {
 
             { isLoggedIn &&
               <DropDown
-                  headerText={'Model Actions'}
-                  openLink={<a className='header-action'>File</a>}
-                  position='right'
+                headerText={'Model Actions'}
+                openLink={<a className='header-action'>File</a>}
+                position='right'
               >
-                <ul>
-                  <DropDownListElement icon={'copy'} header='Copy Model' onMouseDown={onCopyModel}/>
-                  {editableByMe &&
-                    <DropDownListElement icon={'warning'} header='Delete Model' onMouseDown={onDestroy}/>
-                  }
-                </ul>
+                <CardListElement icon={'copy'} header='Copy Model' onMouseDown={onCopyModel}/>
+                {editableByMe &&
+                  <CardListElement icon={'warning'} header='Delete Model' onMouseDown={onDestroy}/>
+                }
               </DropDown>
             }
 
