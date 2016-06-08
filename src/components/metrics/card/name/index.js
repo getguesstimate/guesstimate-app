@@ -29,15 +29,6 @@ class NameEditor extends Component {
     return this.state.editorState.getCurrentContent().getPlainText('')
   }
 
-  handleReturn(e) {
-    if (e.shiftKey) {
-      return false
-    } else {
-      this.props.handleReturn()
-      return true
-    }
-  }
-
   render() {
     const {editorState} = this.state;
     return (
@@ -46,9 +37,9 @@ class NameEditor extends Component {
           editorState={editorState}
           onBlur={this.props.onBlur}
           onChange={this._onChange.bind(this)}
-          handleReturn={this.handleReturn.bind(this)}
+          handleReturn={this.props.handleReturn}
+          onTab={this.props.handleTab}
           onEscape={this.props.onEscape}
-          tabIndex={2}
           ref='editor'
           placeholder={this.props.placeholder}
         />
@@ -107,6 +98,25 @@ export default class MetricName extends Component {
     this.props.heightHasChanged()
   }
 
+  onReturn(e) {
+    if (e.shiftKey) {
+      this.props.onReturn(false)
+    } else {
+      this.props.jumpSection()
+    }
+    return true
+  }
+
+  onTab(e) {
+    if (e.shiftKey) {
+      this.props.onTab(false)
+    } else {
+      this.props.jumpSection()
+    }
+    e.preventDefault()
+    return true
+  }
+
   render() {
     const isClickable = !this.props.anotherFunctionSelected
     return (
@@ -117,10 +127,12 @@ export default class MetricName extends Component {
         <NameEditor
           onBlur={this.handleSubmit.bind(this)}
           value={this.state.value}
-          handleReturn={this.props.jumpSection}
+          handleReturn={this.onReturn.bind(this)}
+          handleTab={this.onTab.bind(this)}
           onEscape={this.props.onEscape}
           placeholder={'name'}
           isClickable={isClickable}
+          onTab={this.props.onTab}
           ref='NameEditor'
         />
       </span>

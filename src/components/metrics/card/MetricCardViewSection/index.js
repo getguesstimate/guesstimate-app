@@ -112,6 +112,8 @@ export default class MetricCardViewSection extends Component {
               onEscape={this.props.onEscape}
               ref='name'
               heightHasChanged={this.props.heightHasChanged}
+              onReturn={this.props.onReturn}
+              onTab={this.props.onTab}
             />
           </div>
         }

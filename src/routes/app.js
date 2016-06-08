@@ -1,11 +1,16 @@
 import app from 'ampersand-app'
 import Router from './router'
-import * as segment from '../server/segment/index.js'
-import * as sentry from '../server/sentry/index.js'
+
 import engine from 'gEngine/engine.js'
+
+import {GuesstimateRecorder} from 'lib/recorder'
+
+import * as segment from 'servers/segment/index.js'
+import * as sentry from 'servers/sentry/index.js'
 import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
-import './main.css'
 import * as elev from 'server/elev/index.js'
+
+import './main.css'
 
 
 import Worker from 'worker!../lib/guesstimator/samplers/simulator-worker/index.js'
@@ -40,95 +45,9 @@ app.extend({
 
     if (__DEV__) {
       window.Perf = require('react-addons-perf')
-      window.Paused = false
-      window.ClearRecordings = () => {
-        window.AppStartTime = (new Date()).getTime()
-        window.Timeline = [{name: "Application Start", time: window.AppStartTime}]
-        window.NestedTimeline = [{name: "Application Start", time: window.AppStartTime, end: true}]
-        window.RenderCounts = {}
-        window.RenderTimings = {}
-        window.SelectorCounts = {}
-        window.SelectorTimings = {}
-        window.ActionCounts = {}
-        window.ActionTimings = {}
-      }
-      window.ClearRecordings()
-
-      const appendSingletonToNestedList = (name, time, data, list) => {
-        const lastElm = list[list.length - 1]
-        if (list.length === 0 || !!lastElm.end) {
-          list.push({name, time, data, end: true})
-        } else {
-          appendSingletonToNestedList(name, time, data, lastElm.children)
-        }
-      }
-      const appendStartToNestedList = (name, time, data, list) => {
-        const lastElm = list[list.length - 1]
-        if (list.length === 0 || !!lastElm.end) {
-          list.push({name, start: time, children: [], data, end: null})
-        } else {
-          appendStartToNestedList(name, time, data, lastElm.children)
-        }
-      }
-      const appendStopToNestedList = (name, time, data, list) => {
-        if (!list) { console.warn("Failed to close timing for ", name, " at ", time); return }
-        const lastElm = list[list.length - 1]
-        if (lastElm.name === name) {
-          lastElm.end = time
-          lastElm.data = data
-          lastElm.duration = lastElm.end - lastElm.start
-        } else {
-          appendStopToNestedList(name, time, data, lastElm.children)
-        }
-      }
-
-      window.RecordNamedEvent = (name, suffix = "", nestFn = appendSingletonToNestedList, data={}) => {
-        if (window.Paused) { return }
-        const time = (new Date()).getTime() - AppStartTime
-        window.Timeline = window.Timeline.concat({name: name + suffix, time, data})
-        nestFn(name, time, data, window.NestedTimeline)
-      }
-
-      window.RecordReductionEvent = (action) => { window.RecordNamedEvent(action.type, " Reducing", appendSingletonToNestedList,
-                                                                          action) }
-
-      window.RecordSelectorStart = (name) => {
-        window.RecordNamedEvent(name, " Start", appendStartToNestedList)
-
-        const time = (new Date()).getTime()
-        window.SelectorTimings[name] = (window.SelectorTimings[name] || []).concat(time)
-      }
-      window.RecordSelectorStop = (name, returned) => {
-        if (window.Paused) { return }
-        window.RecordNamedEvent(name, " Stop", appendStopToNestedList, returned)
-
-        const time = (new Date()).getTime()
-        window.SelectorCounts[name] = (window.SelectorCounts[name] || 0) + 1
-        window.SelectorTimings[name] = window.SelectorTimings[name].slice(0,-1).concat(time - window.SelectorTimings[name][window.SelectorTimings[name].length-1])
-      }
-
-      window.RecordMountEvent = (component) => { window.RecordNamedEvent(component.constructor.name + " Mount") }
-      window.RecordUnmountEvent = (component) => { window.RecordNamedEvent(component.constructor.name + " Unmount") }
-      window.RecordRenderStartEvent = (component) => {
-        if (window.Paused) { return }
-        const name = component.constructor.name
-        window.RecordNamedEvent(name, " Render Start", appendStartToNestedList)
-
-        const time = (new Date()).getTime()
-        window.RenderTimings[name] = (window.RenderTimings[name] || []).concat(time)
-      }
-      window.RecordRenderStopEvent = (component) => {
-        if (window.Paused) { return }
-        const name = component.constructor.name
-        window.RecordNamedEvent(name, " Render Stop", appendStopToNestedList)
-
-        const time = (new Date()).getTime()
-        window.RenderCounts[name] = (window.RenderCounts[name] || 0) + 1
-        window.RenderTimings[name] = window.RenderTimings[name].slice(0,-1).concat(time - window.RenderTimings[name][window.RenderTimings[name].length-1])
-      }
-      window.PauseRecordings = () => { window.Paused = true }
-      window.UnpauseRecordings = () => { window.Paused = false }
     }
+
+    window.recorder = new GuesstimateRecorder()
 
     window.intercomSettings = {
       app_id: "o0trb1v9"

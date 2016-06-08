@@ -70,22 +70,32 @@ export default class MetricCard extends Component {
     return hasMetricUpdated(this.props, nextProps) || (this.state.modalIsOpen !== nextState.modalIsOpen)
   }
 
-  componentWillUpdate() { if (__DEV__) { window.RecordRenderStartEvent(this) } }
-  componentWillUnmount() { if (__DEV__) { window.RecordUnmountEvent(this) } }
+  focusFromDirection(dir) {
+    if (dir === 'DOWN' || dir === 'RIGHT') { this._focusForm() }
+    else { this.refs.MetricCardViewSection.focusName() }
+  }
 
-  componentDidUpdate() {
+  componentWillUpdate() { window.recorder.recordRenderStartEvent(this) }
+  componentWillUnmount() { window.recorder.recordUnmountEvent(this) }
+
+  componentDidUpdate(prevProps) {
+    window.recorder.recordRenderStopEvent(this)
+
     const hasContent = this.refs.MetricCardViewSection.hasContent()
-    if (!this.props.inSelectedCell && this._isEmpty() && !hasContent && !this.state.modalIsOpen){
+    const {inSelectedCell, selectedFrom} = this.props
+    if (!inSelectedCell && this._isEmpty() && !hasContent && !this.state.modalIsOpen){
       this.handleRemoveMetric()
     }
-    if (__DEV__) { window.RecordRenderStopEvent(this) }
+    if (!prevProps.inSelectedCell && inSelectedCell && !!selectedFrom) {
+      this.focusFromDirection(selectedFrom)
+    }
   }
 
   componentDidMount() {
+    window.recorder.recordMountEvent(this)
     if (this.props.inSelectedCell && this._isEmpty()) {
-      this.refs.MetricCardViewSection.focusName()
+      this.focusFromDirection(this.props.selectedFrom)
     }
-    if (__DEV__) { window.RecordMountEvent(this) }
   }
 
   openModal() {
@@ -255,6 +265,8 @@ export default class MetricCard extends Component {
             heightHasChanged={forceFlowGridUpdate}
             hovered={hovered}
             onEscape={this.focus.bind(this)}
+            onReturn={this.props.onReturn}
+            onTab={this.props.onTab}
           />
 
           {inSelectedCell && !this.state.modalIsOpen &&
@@ -263,10 +275,13 @@ export default class MetricCard extends Component {
                 guesstimate={metric.guesstimate}
                 metricId={metric.id}
                 metricFocus={this.focus.bind(this)}
+                jumpSection={() => {this.refs.MetricCardViewSection.focusName()}}
                 onOpen={this.openModal.bind(this)}
                 ref='DistributionEditor'
                 size='small'
                 errors={errors}
+                onReturn={this.props.onReturn}
+                onTab={this.props.onTab}
               />
             </div>
           }

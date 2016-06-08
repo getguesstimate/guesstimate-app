@@ -10,10 +10,10 @@ import e from 'gEngine/engine'
 import './header.css'
 
 export class SpaceHeader extends Component {
-  componentDidMount() { if (__DEV__) { window.RecordMountEvent(this) } }
-  componentWillUpdate() { if (__DEV__) { window.RecordRenderStartEvent(this) } }
-  componentDidUpdate() { if (__DEV__) { window.RecordRenderStopEvent(this) } }
-  componentWillUnmount() { if (__DEV__) { window.RecordUnmountEvent(this) } }
+  componentDidMount() { window.recorder.recordMountEvent(this) }
+  componentWillUpdate() { window.recorder.recordRenderStartEvent(this) }
+  componentDidUpdate() { window.recorder.recordRenderStopEvent(this) }
+  componentWillUnmount() { window.recorder.recordUnmountEvent(this) }
 
   shouldComponentUpdate(nextProps, nextState) {
     if (!nextProps.editableByMe) { return false }

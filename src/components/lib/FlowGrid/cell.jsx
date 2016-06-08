@@ -51,20 +51,13 @@ export default class Cell extends Component {
     return (difProps || itemDifferent || (bothHaveItems && this.props.hasItemUpdated(this.props.item, newProps.item)))
   }
 
-  componentWillUpdate() {
-    if (__DEV__) { window.RecordRenderStartEvent(this) }
-  }
-
-  componentWillUnmount() {
-    if (__DEV__) { window.RecordUnmountEvent(this) }
-  }
+  componentWillUpdate() { window.recorder.recordRenderStartEvent(this) }
+  componentWillUnmount() { window.recorder.recordUnmountEvent(this) }
 
   componentDidUpdate(prevProps, prevState) {
+    window.recorder.recordRenderStopEvent(this)
     if ((!!prevProps.item !== !!this.props.item || !!prevProps.inSelectedCell !== !!this.props.inSelectedCell) && this.props.inSelectedCell) {
       this._focus()
-    }
-    if (__DEV__) {
-      window.RecordRenderStopEvent(this)
     }
   }
 
@@ -116,9 +109,7 @@ export default class Cell extends Component {
     if (this.props.inSelectedCell) {
       this._focus()
     }
-    if (__DEV__) {
-      window.RecordMountEvent(this)
-    }
+    window.recorder.recordMountEvent(this)
   }
 
   _focus = () => {
