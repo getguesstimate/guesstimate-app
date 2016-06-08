@@ -4,10 +4,42 @@ import {connect} from 'react-redux'
 import {create} from 'gModules/organizations/actions'
 import Card, {CardListElement} from 'gComponents/utility/card/index'
 
+export class PlanElement extends Component {
+  render() {
+    return(
+      <div className={`PlanElement ${this.props.isSelected && 'selected'}`} onClick={this.props.onClick}>
+        <div className='radio-section'>
+          <input type='radio' checked={this.props.isSelected}/>
+        </div>
+        <div className='content-section'>
+          {this.props.children}
+        </div>
+      </div>
+    )
+  }
+}
+
+export class PlanList extends Component {
+  render() {
+    return(
+      <div className='PlanList'>
+        <PlanElement onClick={() => {this.props.onSelect('FREE')}} isSelected={this.props.plan === 'FREE'}>
+          Unlimited members and public models for free.
+        </PlanElement>
+        <PlanElement onClick={() => {this.props.onSelect('PREMIUM')}} isSelected={this.props.plan === 'PREMIUM'}>
+          Unlimited private models. $12/month per user.
+          <div className='free-trial'>Free 14-day trial, no credit card needed.</div>
+        </PlanElement>
+      </div>
+    )
+  }
+}
+
 @connect()
 export class CreateOrganizationForm extends Component {
   state = {
-    value: ""
+    value: '',
+    plan: 'PREMIUM'
   }
 
   render() {
@@ -24,6 +56,10 @@ export class CreateOrganizationForm extends Component {
               />
             </div>
 
+            <div className='field plan'>
+              <label>Plan</label>
+              <PlanList plan={this.state.plan} onSelect={(plan) => {this.setState({plan})}}/>
+            </div>
             <div
               className='ui button submit green'
               onClick={() => { this.props.dispatch(create(this.state.value)) }}
@@ -38,7 +74,6 @@ export class CreateOrganizationForm extends Component {
           <div className='ui message'>
             <h3> Organizations </h3>
             <p>Share & collaborate on models with a group you trust.</p>
-            <p>By creating this organization, you will be the administrator of it.</p>
           </div>
         </div>
       </div>

@@ -31,7 +31,6 @@
 
     .ui.menu .item{
       font-weight: 800;
-      font-size: 1.2em;
       color: #444;
     }
   }
@@ -41,17 +40,62 @@
       font-weight: bold;
     }
 
-    input {
-      margin: 0.6em 0 0.6em 0;
+    .field {
+      font-size: 1.1em;
     }
 
     .field.name {
-      font-size: 1.2em;
       margin-bottom: 1em;
-    }
 
-    .field.trial {
-      margin-bottom: 1em;
+      input {
+        margin: 0.6em 0 0.6em 0;
+      }
     }
+  }
+}
+
+
+.PlanList {
+  border-radius: 3px;
+  border: 1px solid #ccc;
+  display: flex;
+  flex-direction: column;
+}
+
+.PlanElement {
+  padding: 1.5em 0;
+  background-color: rgba(150,150,150,0.12);
+  font-size: .9em;
+
+  input {
+    margin: 0
+  }
+
+  .center-text {
+    text-align: center;
+  }
+
+  &.selected {
+     background-color: white;
+  }
+
+  &:first-child {
+    border-radius: 3px 3px 0 0;
+  }
+
+  &:last-child {
+    border-radius: 0 0 3px 3px;
+  }
+
+  .radio-section{
+     width: 8%;
+     text-align: right;
+     float: left;
+  }
+
+  .content-section{
+     width: 90%;
+     padding-left: 20px;
+     float: left;
   }
 }

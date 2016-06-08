@@ -50,7 +50,7 @@ export default Router.extend({
     'terms': 'terms',
     'privacy': 'privacy',
     'users/:id': 'userShow',
-    'organizations/new': 'createOrganizationPage',
+    'organizations/new': 'organizationsNew',
     'organizations/:id': 'organizationShow',
     'style_guide': 'styleGuide',
     'style_guide/first_subscription': 'styleGuideFirstSubscription',
@@ -80,6 +80,6 @@ export default Router.extend({
   subscribe(id) { this.render(<FirstSubscriptionPage planName={id}/>) },
   userShow(id) { this.render(<UserShow userId={id}/>, {backgroundColor: 'GREY'}) },
   organizationShow(id) { this.render(<OrganizationShow organizationId={id}/>, {backgroundColor: 'GREY'}) },
-  createOrganizationPage() { this.render(<CreateOrganizationPage />) },
+  organizationsNew() { this.render(<CreateOrganizationPage/>, {backgroundColor: 'GREY'}) },
   pricing() { this.render(<PlanIndex/>, {backgroundColor: 'BLUE'}) },
 })
