@@ -16,7 +16,6 @@ import {organizationMemberSelector} from './organizationMemberSelector'
 import * as modalActions from 'gModules/modal/actions'
 import * as spaceActions from 'gModules/spaces/actions'
 import * as organizationActions from 'gModules/organizations/actions'
-import * as userOrganizationMembershipActions from 'gModules/userOrganizationMemberships/actions'
 
 import e from 'gEngine/engine'
 
@@ -67,10 +66,6 @@ export default class OrganizationShow extends Component{
     this.props.dispatch(userOrganizationMembershipActions.destroy(membershipId))
   }
 
-  addUser(email) {
-    this.props.dispatch(userOrganizationMembershipActions.createWithEmail(this.props.organizationId, email))
-  }
-
   onRemove(member) {
     this.confirmRemove(member)
   }
@@ -95,6 +90,7 @@ export default class OrganizationShow extends Component{
     const meIsAdmin = !!organization && (organization.admin_id === this.props.me.id)
     const meIsMember = meIsAdmin || !!(members.find(m => m.id === this.props.me.id))
 
+    if (!organization) { return false }
     return (
       <Container>
         <div className='OrganizationShow'>
@@ -119,13 +115,13 @@ export default class OrganizationShow extends Component{
 
             {(openTab === 'MEMBERS') && meIsMember && members && organization &&
               <MembersTab
+                organizationId={organizationId}
                 startOnIndexTab={true}
                 members={members}
                 memberships={memberships}
                 invitations={invitations}
                 admin_id={organization.admin_id}
                 onRemove={this.onRemove.bind(this)}
-                addUser={this.addUser.bind(this)}
                 httpRequests={this.props.httpRequests}
                 meIsAdmin={meIsAdmin}
               />
