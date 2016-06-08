@@ -13,8 +13,11 @@ import {denormalizedSpaceSelector} from '../denormalized-space-selector'
 
 import {allowEdits, forbidEdits} from 'gModules/canvas_state/actions'
 import * as spaceActions from 'gModules/spaces/actions'
+import * as simulationActions from 'gModules/simulations/actions'
 import * as copiedActions from 'gModules/copied/actions'
 import {undo, redo} from 'gModules/checkpoints/actions'
+
+import {parseSlurp} from 'lib/slurpParser'
 
 import e from 'gEngine/engine'
 
@@ -119,6 +122,19 @@ export default class SpacesShow extends Component {
 
   destroy() {
     this.props.dispatch(spaceActions.destroy(this.props.denormalizedSpace))
+  }
+
+  onImportSlurp(slurpObj) {
+    const space = this.props.denormalizedSpace
+
+    const spaceUpdates = parseSlurp(slurpObj, space)
+    let noGraphUpdates = {}
+    if (!space.name) {noGraphUpdates.name = spaceUpdates.name}
+    if (!space.description) {noGraphUpdates.description = spaceUpdates.description}
+    this.props.dispatch(spaceActions.update(this._id(), noGraphUpdates))
+    this.props.dispatch({type: 'ADD_METRICS', items: spaceUpdates.newMetrics, newGuesstimates: spaceUpdates.newGuesstimates})
+    this.props.dispatch(spaceActions.updateGraph(this._id()))
+    this.props.dispatch(simulationActions.runSimulations(this._id(), spaceUpdates.newMetrics))
   }
 
   onPublicSelect() {
@@ -242,6 +258,7 @@ export default class SpacesShow extends Component {
             onRedo={this.onRedo.bind(this)}
             canUndo={space.checkpointMetadata.head !== space.checkpointMetadata.length - 1}
             canRedo={space.checkpointMetadata.head !== 0}
+            onImportSlurp={this.onImportSlurp.bind(this)}
           />
         </div>
 

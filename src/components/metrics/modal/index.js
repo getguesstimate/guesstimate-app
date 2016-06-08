@@ -62,7 +62,7 @@ export default class MetricModal extends Component {
         border: 'none',
         padding: '0',
       }
-    };
+    }
     const showSimulation = this.showSimulation()
 
     const {closeModal, metric} = this.props

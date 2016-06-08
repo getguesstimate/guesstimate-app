@@ -22,7 +22,7 @@ import SettingsStyleGuide from 'gComponents/users/settings/StyleGuide'
 import Settings from 'gComponents/users/settings/container'
 import PlanIndex from 'gComponents/plans/index/container'
 import PlansStyleGuide from 'gComponents/plans/index/StyleGuide'
-import {ImportFromSlurp} from 'gComponents/import_from_slurp'
+import {ImportFromSlurp} from 'gComponents/import_from_slurp/index'
 
 import configureStore from './middleware'
 

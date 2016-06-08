@@ -2,11 +2,13 @@ import React, {Component} from 'react'
 
 import Icon from 'react-fa'
 import ReactTooltip from 'react-tooltip'
+import Modal from 'react-modal'
 
 import CanvasViewForm from '../canvasViewForm'
 import DropDown, {DropDownListElement} from 'gComponents/utility/drop-down/index'
 import {ViewOptionToggle} from '../view-options/index'
 import {PrivacyToggle} from '../privacy-toggle/index'
+import {ImportFromSlurpForm} from 'gComponents/import_from_slurp/import_from_slurp_form'
 
 import e from 'gEngine/engine'
 
@@ -44,15 +46,20 @@ const ProgressMessage = ({actionState}) => (
 )
 
 export class SpaceToolbar extends Component {
-  shouldComponentUpdate(nextProps) {
+  shouldComponentUpdate(nextProps, nextState) {
     if (!nextProps.editableByMe) { return false }
     return (
       this.props.actionState !== nextProps.actionState ||
       this.props.editsAllowed !== nextProps.editsAllowed ||
       this.props.canUndo !== nextProps.canUndo ||
       this.props.canRedo !== nextProps.canRedo ||
-      this.props.isLoggedIn !== nextProps.isLoggedIn
+      this.props.isLoggedIn !== nextProps.isLoggedIn ||
+      this.state.importModalOpen !== nextState.importModalOpen
     )
+  }
+
+  state = {
+    importModalOpen: false
   }
 
   render() {
@@ -72,6 +79,7 @@ export class SpaceToolbar extends Component {
       editsAllowed,
       onAllowEdits,
       onForbidEdits,
+      onImportSlurp,
     } = this.props
     const ReactTooltipParams = {class: 'small-tooltip', delayShow: 0, delayHide: 0, place: 'bottom', effect: 'solid'}
 
@@ -79,8 +87,30 @@ export class SpaceToolbar extends Component {
     if (editableByMe && editsAllowed) {
       view_mode_header = (<span><Icon name='pencil'/> Editing </span>)
     }
+    const customStyles = {
+      overlay: {
+        backgroundColor: 'rgba(55, 68, 76, 0.4)'
+      },
+      content : {
+        top: '10%',
+        left: '10%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        backgroundColor: '#FFFFFF',
+        border: 'none',
+        padding: '0',
+      }
+    }
     return (
       <div className='SpaceShowToolbar container-fluid'>
+        <Modal
+          isOpen={this.state.importModalOpen}
+          onRequestClose={() => {this.setState({importModalOpen: false})}}
+          style={customStyles}
+        >
+          <ImportFromSlurpForm onSubmit={onImportSlurp} />
+        </Modal>
         <div className='row'>
           <div className='col-sm-10'>
             <ReactTooltip {...ReactTooltipParams} id='cut-button'>Cut Nodes (ctrl-x)</ReactTooltip>
@@ -98,8 +128,13 @@ export class SpaceToolbar extends Component {
                 <ul>
                   <DropDownListElement icon={'copy'} header='Copy Model' onMouseDown={onCopyModel}/>
                   {editableByMe &&
-                    <DropDownListElement icon={'warning'} header='Delete Model' onMouseDown={onDestroy}/>
+                    <DropDownListElement
+                      icon={'upload'}
+                      header='Import Slurp'
+                      onMouseDown={() => {this.setState({importModalOpen: true})}}
+                    />
                   }
+                  {editableByMe && <DropDownListElement icon={'warning'} header='Delete Model' onMouseDown={onDestroy}/> }
                 </ul>
               </DropDown>
             }
