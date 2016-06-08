@@ -17,9 +17,7 @@ function checkpointMetadata(id, checkpoints) {
 }
 
 const spaceGraphSelector = state => {
-  if (__DEV__) {
-    window.RecordSelectorStart(NAME)
-  }
+  window.recorder.recordSelectorStart(NAME)
   return _.pick(state, 'spaces', 'metrics', 'guesstimates', 'simulations', 'users', 'organizations', 'userOrganizationMemberships', 'me', 'checkpoints')
 }
 const spaceSelector = (state, props) => state.spaces.find(s => _sameId(s.id, props.spaceId))
@@ -45,9 +43,7 @@ export const denormalizedSpaceSelector = createSelector(
       })
     }
 
-    if (__DEV__) {
-      window.RecordSelectorStop(NAME, {denormalizedSpace: dSpace})
-    }
+    window.recorder.recordSelectorStop(NAME, {denormalizedSpace: dSpace})
     return {
       denormalizedSpace: dSpace
     };

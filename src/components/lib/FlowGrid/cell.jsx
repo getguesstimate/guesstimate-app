@@ -52,20 +52,18 @@ export default class Cell extends Component {
   }
 
   componentWillUpdate() {
-    if (__DEV__) { window.RecordRenderStartEvent(this) }
+    window.recorder.recordRenderStartEvent(this)
   }
 
   componentWillUnmount() {
-    if (__DEV__) { window.RecordUnmountEvent(this) }
+    window.recorder.recordUnmountEvent(this)
   }
 
   componentDidUpdate(prevProps, prevState) {
     if ((!!prevProps.item !== !!this.props.item || !!prevProps.inSelectedCell !== !!this.props.inSelectedCell) && this.props.inSelectedCell) {
       this._focus()
     }
-    if (__DEV__) {
-      window.RecordRenderStopEvent(this)
-    }
+    window.recorder.recordRenderStopEvent(this)
   }
 
   getPosition() {
@@ -116,9 +114,7 @@ export default class Cell extends Component {
     if (this.props.inSelectedCell) {
       this._focus()
     }
-    if (__DEV__) {
-      window.RecordMountEvent(this)
-    }
+    window.recorder.recordMountEvent(this)
   }
 
   _focus = () => {

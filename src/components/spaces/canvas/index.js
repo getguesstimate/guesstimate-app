@@ -69,11 +69,11 @@ export default class Canvas extends Component{
       this.props.dispatch(canvasStateActions.change({metricCardView: 'display'}))
     }
 
-    if (__DEV__) { window.RecordMountEvent(this) }
+    window.recorder.recordMountEvent(this)
   }
 
   componentWillUpdate() {
-    if (__DEV__) { window.RecordRenderStartEvent(this) }
+    window.recorder.recordRenderStartEvent(this)
   }
 
   componentDidUpdate(prevProps) {
@@ -83,12 +83,12 @@ export default class Canvas extends Component{
       this.props.dispatch(runSimulations({spaceId: this.props.denormalizedSpace.id}))
     }
 
-    if (__DEV__) { window.RecordRenderStopEvent(this) }
+    window.recorder.recordRenderStopEvent(this)
   }
 
   componentWillUnmount(){
     this.props.dispatch(deleteSimulations(this.props.denormalizedSpace.metrics.map(m => m.id)))
-    if (__DEV__) { window.RecordUnmountEvent(this) }
+    window.recorder.recordUnmountEvent(this)
   }
 
   _handleUndo() {

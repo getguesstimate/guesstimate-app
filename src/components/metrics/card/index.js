@@ -70,22 +70,22 @@ export default class MetricCard extends Component {
     return hasMetricUpdated(this.props, nextProps) || (this.state.modalIsOpen !== nextState.modalIsOpen)
   }
 
-  componentWillUpdate() { if (__DEV__) { window.RecordRenderStartEvent(this) } }
-  componentWillUnmount() { if (__DEV__) { window.RecordUnmountEvent(this) } }
+  componentWillUpdate() { window.recorder.recordRenderStartEvent(this) }
+  componentWillUnmount() { window.recorder.recordUnmountEvent(this) }
 
   componentDidUpdate() {
     const hasContent = this.refs.MetricCardViewSection.hasContent()
     if (!this.props.inSelectedCell && this._isEmpty() && !hasContent && !this.state.modalIsOpen){
       this.handleRemoveMetric()
     }
-    if (__DEV__) { window.RecordRenderStopEvent(this) }
+    window.recorder.recordRenderStopEvent(this)
   }
 
   componentDidMount() {
     if (this.props.inSelectedCell && this._isEmpty()) {
       this.refs.MetricCardViewSection.focusName()
     }
-    if (__DEV__) { window.RecordMountEvent(this) }
+    window.recorder.recordMountEvent(this)
   }
 
   openModal() {
