@@ -37,7 +37,10 @@ export class GuesstimateRecorder {
     }
   }
   static addStopToNestedList(name, time, data, list) {
-    if (!list) { console.warn("Failed to close timing for ", name, " at ", time); return }
+    if (!list) {
+      console.warn("Failed to close timing for ", name, " at ", time)
+      return {duration: null}
+    }
     const lastElm = list[list.length - 1]
     if (lastElm.name === name) {
       lastElm.end = time
