@@ -239,13 +239,8 @@ export default class FlowGrid extends Component{
     )
   }
 
-  componentDidMount() {
-    window.recorder.recordMountEvent(this)
-  }
-
-  componentWillUpdate() {
-    window.recorder.recordRenderStartEvent(this)
-  }
+  componentDidMount() { window.recorder.recordMountEvent(this) }
+  componentWillUpdate() { window.recorder.recordRenderStartEvent(this) }
 
   componentDidUpdate() {
     window.recorder.recordRenderStopEvent(this)

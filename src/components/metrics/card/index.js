@@ -92,10 +92,10 @@ export default class MetricCard extends Component {
   }
 
   componentDidMount() {
+    window.recorder.recordMountEvent(this)
     if (this.props.inSelectedCell && this._isEmpty()) {
       this.focusFromDirection(this.props.selectedFrom)
     }
-    window.recorder.recordMountEvent(this)
   }
 
   openModal() {
