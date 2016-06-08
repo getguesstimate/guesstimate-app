@@ -54,39 +54,43 @@ app.extend({
       }
       window.ClearRecordings()
 
-      const appendSingletonToNestedList = (name, time, list) => {
+      const appendSingletonToNestedList = (name, time, data, list) => {
         const lastElm = list[list.length - 1]
         if (list.length === 0 || !!lastElm.end) {
-          list.push({name, time, end: true})
+          list.push({name, time, data, end: true})
         } else {
-          appendSingletonToNestedList(name, time, lastElm.children)
+          appendSingletonToNestedList(name, time, data, lastElm.children)
         }
       }
-      const appendStartToNestedList = (name, time, list) => {
+      const appendStartToNestedList = (name, time, data, list) => {
         const lastElm = list[list.length - 1]
         if (list.length === 0 || !!lastElm.end) {
-          list.push({name, start: time, children: [], end: null})
+          list.push({name, start: time, children: [], data, end: null})
         } else {
-          appendStartToNestedList(name, time, lastElm.children)
+          appendStartToNestedList(name, time, data, lastElm.children)
         }
       }
-      const appendStopToNestedList = (name, time, list) => {
+      const appendStopToNestedList = (name, time, data, list) => {
         if (!list) { console.warn("Failed to close timing for ", name, " at ", time); return }
         const lastElm = list[list.length - 1]
         if (lastElm.name === name) {
           lastElm.end = time
+          lastElm.data = data
           lastElm.duration = lastElm.end - lastElm.start
         } else {
-          appendStopToNestedList(name, time, lastElm.children)
+          appendStopToNestedList(name, time, data, lastElm.children)
         }
       }
 
-      window.RecordNamedEvent = (name, suffix = "", nestFn = appendSingletonToNestedList) => {
+      window.RecordNamedEvent = (name, suffix = "", nestFn = appendSingletonToNestedList, data={}) => {
         if (window.Paused) { return }
         const time = (new Date()).getTime() - AppStartTime
-        window.Timeline = window.Timeline.concat({name: name + suffix, time})
-        nestFn(name, time, window.NestedTimeline)
+        window.Timeline = window.Timeline.concat({name: name + suffix, time, data})
+        nestFn(name, time, data, window.NestedTimeline)
       }
+
+      window.RecordReductionEvent = (action) => { window.RecordNamedEvent(action.type, " Reducing", appendSingletonToNestedList,
+                                                                          action) }
 
       window.RecordSelectorStart = (name) => {
         window.RecordNamedEvent(name, " Start", appendStartToNestedList)
@@ -94,9 +98,9 @@ app.extend({
         const time = (new Date()).getTime()
         window.SelectorTimings[name] = (window.SelectorTimings[name] || []).concat(time)
       }
-      window.RecordSelectorStop = (name) => {
+      window.RecordSelectorStop = (name, returned) => {
         if (window.Paused) { return }
-        window.RecordNamedEvent(name, " Stop", appendStopToNestedList)
+        window.RecordNamedEvent(name, " Stop", appendStopToNestedList, returned)
 
         const time = (new Date()).getTime()
         window.SelectorCounts[name] = (window.SelectorCounts[name] || 0) + 1
