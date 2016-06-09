@@ -55,6 +55,8 @@ export default class SpacesShow extends Component {
   }
 
   componentWillMount() {
+    window.recorder.recordMountEvent(this)
+
     this.considerFetch(this.props)
     if (!this.props.embed) { elev.show() }
 
@@ -64,28 +66,26 @@ export default class SpacesShow extends Component {
   }
 
   setDefaultEditPermission(editableByMe) {
-    if (!!editableByMe) {
+    if (!!editableByMe && !_.get(this.props, 'denormalizedSpace.canvasState.editsAllowed')) {
       this.props.dispatch(allowEdits())
-    } else {
+    } else if (!editableByMe && _.get(this.props, 'denormalizedSpace.canvasState.editsAllowed')) {
       this.props.dispatch(forbidEdits())
     }
   }
 
   componentWillUnmount() {
+    window.recorder.recordUnmountEvent(this)
+
     if (!this.props.embed) { elev.hide() }
   }
 
-  componentWillReceiveProps(nextProps) {
-    const nextEditableState = _.get(nextProps, 'denormalizedSpace.editableByMe')
-    const currEditableState = _.get(this.props, 'denormalizedSpace.editableByMe')
-    const nextId = _.get(nextProps, 'spaceId')
-    const currId = _.get(this.props, 'spaceId')
-    if (nextId !== currId || nextEditableState !== currEditableState) {
-      this.setDefaultEditPermission(nextEditableState)
-    }
+  componentWillUpdate() {
+    window.recorder.recordRenderStartEvent(this)
   }
 
   componentDidUpdate(prevProps) {
+    window.recorder.recordRenderStopEvent(this)
+
     this.considerFetch(prevProps)
   }
 
@@ -174,7 +174,7 @@ export default class SpacesShow extends Component {
     if (this.props.embed) {
       return (
         <div className='spaceShow screenshot'>
-          <Canvas spaceId={space.id} overflow={'hidden'} screenshot={true}/>
+          <Canvas denormalizedSpace={space} overflow={'hidden'} screenshot={true}/>
         </div>
       )
     }
@@ -258,7 +258,7 @@ export default class SpacesShow extends Component {
             <ClosedSpaceSidebar onOpen={this.openSidebar.bind(this)}/>
           }
           <Canvas
-            spaceId={space.id}
+            denormalizedSpace={space}
             onCopy={this.onCopy.bind(this)}
             onPaste={this.onPaste.bind(this)}
             onCut={this.onCut.bind(this)}

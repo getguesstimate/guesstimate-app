@@ -13,6 +13,7 @@ const PublicOption = ({isSelected, onClick}) => (
     onMouseDown={(!isSelected) && onClick}
     icon={'globe'}
     header='Public'
+    closeOnClick={!isSelected}
   >
     <div>This model is visible to everyone. Only you can save changes.</div>
   </CardListElement>
@@ -25,6 +26,7 @@ const PrivateOption = ({onClick, isSelected, isPrivateSelectionInvalid}) => (
     icon={'lock'}
     header='Private'
     isDisabled={isPrivateSelectionInvalid}
+    closeOnClick={!isSelected}
   >
     <div>This model is only visible and editable by you.</div>
     {isPrivateSelectionInvalid &&
@@ -45,17 +47,15 @@ export const PrivacyToggle = ({isPrivateSelectionInvalid, onPublicSelect, onPriv
       position={position}
       width={'wide'}
   >
-    <ul className={`PrivacyToggle dropdown`}>
-      <PublicOption
-        isSelected={!isPrivate}
-        onClick={onPublicSelect}
-      />
-      <PrivateOption
-        isSelected={isPrivate}
-        onClick={onPrivateSelect}
-        isPrivateSelectionInvalid={isPrivateSelectionInvalid}
-        hideErrorWhenUnselected={false}
-      />
-    </ul>
+    <PublicOption
+      isSelected={!isPrivate}
+      onClick={onPublicSelect}
+    />
+    <PrivateOption
+      isSelected={isPrivate}
+      onClick={onPrivateSelect}
+      isPrivateSelectionInvalid={isPrivateSelectionInvalid}
+      hideErrorWhenUnselected={false}
+    />
   </DropDown>
 )
