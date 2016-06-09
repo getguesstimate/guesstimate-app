@@ -26,7 +26,7 @@ export class BackgroundContainer extends Component {
     copiedRegion: PTRegion,
   }
 
-  shouldComponentUpdate(nextProps) {
+  shouldComponentUpdate(nextProps, nextState) {
     return (
       !_.isEqual(this.props.copiedRegion, nextProps.copiedRegion) ||
       !_.isEqual(this.props.selectedRegion, nextProps.selectedRegion) ||
@@ -36,7 +36,8 @@ export class BackgroundContainer extends Component {
   }
 
   render() {
-    const {edges, rowHeights, selectedRegion, copiedRegion} = this.props
+    const {edges, rowHeights, getRowHeight, selectedRegion, copiedRegion} = this.props
+
     const columnWidth = $('.FlowGridCell') && $('.FlowGridCell')[0] && $('.FlowGridCell')[0].offsetWidth
     if (!columnWidth || !rowHeights.length) { return false }
 
