@@ -9,6 +9,7 @@
     align-items: center;
     justify-content: center;
     border: 1px solid rgba(0,0,0,0);
+    min-height: 12em;
 
     &:hover {
       border: 1px solid #61a761;
