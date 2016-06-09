@@ -26,7 +26,6 @@ import {isLocation, isAtLocation} from 'lib/locationUtils.js'
 function mapStateToProps(state) {
   return {
     copied: state.copied,
-    canvasState: state.canvasState,
     selectedCell: state.selectedCell,
     selectedRegion: state.selectedRegion,
   }
@@ -34,22 +33,12 @@ function mapStateToProps(state) {
 
 const PT = PropTypes;
 @connect(mapStateToProps)
-@connect(denormalizedSpaceSelector)
 export default class Canvas extends Component{
   static propTypes = {
-    canvasState: PT.shape({
-      edgeView: canvasStateProps.edgeView,
-      metricCardView: canvasStateProps.metricCardView,
-      metricClickMode: canvasStateProps.metricClickMode
-    }),
     denormalizedSpace: PropTypes.object,
     dispatch: PropTypes.func,
     selectedCell: PropTypes.object,
     embed: PropTypes.bool,
-    spaceId: PropTypes.oneOfType([
-        React.PropTypes.string,
-        React.PropTypes.number,
-    ])
   }
 
   static defaultProps = {
@@ -112,7 +101,7 @@ export default class Canvas extends Component{
   }
 
   _handleAddMetric(location) {
-    this.props.dispatch(addMetric({space: this.props.spaceId, location: location}))
+    this.props.dispatch(addMetric({space: this.props.denormalizedSpace.id, location: location}))
   }
 
   _handleMoveMetric({prev, next}) {
@@ -133,7 +122,7 @@ export default class Canvas extends Component{
   }
 
   _isAnalysisView(props = this.props) {
-    return (_.get(props, 'canvasState.metricCardView') === 'analysis')
+    return (_.get(props, 'denormalizedSpace.canvasState.metricCardView') === 'analysis')
   }
 
   renderMetric(metric, selected) {
@@ -143,7 +132,7 @@ export default class Canvas extends Component{
     const passSelected = hasSelected && selectedSamples && !_.isEmpty(selectedSamples)
     return (
       <Metric
-          canvasState={this.props.canvasState}
+          canvasState={this.props.denormalizedSpace.canvasState}
           key={metric.id}
           location={location}
           metric={metric}
@@ -153,7 +142,7 @@ export default class Canvas extends Component{
   }
 
   showEdges() {
-    return (this.props.canvasState.edgeView === 'visible')
+    return (this.props.denormalizedSpace.canvasState.edgeView === 'visible')
   }
 
   edges() {
@@ -177,8 +166,8 @@ export default class Canvas extends Component{
 
   render () {
     const {selectedCell, selectedRegion, copied} = this.props
-    const {metrics} = this.props.denormalizedSpace
-    const {metricCardView} = this.props.canvasState
+    const {metrics, canvasState} = this.props.denormalizedSpace
+    const {metricCardView} = canvasState
 
     const edges = this.edges()
     let className = 'canvas-space'
@@ -211,7 +200,7 @@ export default class Canvas extends Component{
           onPaste={this.props.onPaste}
           onCut={this.props.onCut}
           showGridLines={showGridLines}
-          canvasState={this.props.canvasState}
+          canvasState={canvasState}
         />
       </div>
     );
