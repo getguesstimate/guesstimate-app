@@ -137,14 +137,14 @@ export class SpaceToolbar extends Component {
                 position='right'
               >
                 <CardListElement icon={'copy'} header='Copy Model' onMouseDown={onCopyModel}/>
-                  {editableByMe &&
-                    <CardListElement
-                      icon={'upload'}
-                      header='Import Slurp'
-                      onMouseDown={() => {this.setState({importModalOpen: true})}}
-                      closeOnClick={true}
-                    />
-                  }
+                {editableByMe &&
+                  <CardListElement
+                    icon={'upload'}
+                    header='Import Slurp'
+                    onMouseDown={() => {this.setState({importModalOpen: true})}}
+                    closeOnClick={true}
+                  />
+                }
                 {editableByMe && <CardListElement icon={'warning'} header='Delete Model' onMouseDown={onDestroy}/> }
               </DropDown>
             }

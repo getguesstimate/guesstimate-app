@@ -10,6 +10,7 @@ export class ImportFromSlurpForm extends Component {
   }
 
   componentDidMount() {
+    // TODO(Ozzie): Ozzie, any idea how to get this to focus? I can't seem to...
     this.refs.textarea.focus()
     ReactDOM.findDOMNode(this.refs.textarea).focus()
   }
