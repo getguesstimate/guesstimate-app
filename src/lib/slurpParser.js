@@ -8,7 +8,7 @@ export function parseSlurp(slurp, space={metrics: [], guesstimates: []}) {
 
   let existingReadableIds = space.metrics.map(m => m.readableId)
   const width = 8
-  const newMetrics = _.map(slurp.SIP, (s,i) => {
+  const newMetrics = _.map(slurp.sips, (s,i) => {
     const metric = {
       ...e.metric.create(existingReadableIds),
       location: {row: maxRow + Math.floor(i/width), column: i % width},
@@ -18,7 +18,7 @@ export function parseSlurp(slurp, space={metrics: [], guesstimates: []}) {
     existingReadableIds.concat(metric.readableId)
     return metric
   })
-  const newGuesstimates = _.map(slurp.SIP, (s,i) => ({
+  const newGuesstimates = _.map(slurp.sips, (s,i) => ({
     description: s.provenance,
     guesstimateType: 'DATA',
     data: s.value,
