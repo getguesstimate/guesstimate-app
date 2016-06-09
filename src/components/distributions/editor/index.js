@@ -56,7 +56,7 @@ export default class Guesstimate extends Component{
     }
   }
   changeGuesstimateTypeAndSave(guesstimateType) {
-    this.changeGuesstimate({guesstimateType}, false, true)
+    this.changeGuesstimate({guesstimateType}, true, true)
   }
   addDataAndSave(data) {
     this.changeGuesstimate({guesstimateType: 'DATA', data, input: null}, true, true)

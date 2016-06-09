@@ -63,7 +63,7 @@ export default Router.extend({
   spaceIndex() { this.render(<SpaceIndex/>, {backgroundColor: 'GREY'}) },
   home() { this.render(<Home/>, {isFluid: true, simpleHeader: true}) },
   spaceNew() { this.render(<SpaceNew/>) },
-  spaceShow(id) { this.render(<SpaceShow spaceId={parseInt(id)}/>, {isFluid: true, showFooter: false, fullHeight: true}) },
+  spaceShow(id) { this.render(<SpaceShow spaceId={parseInt(id)} key={parseInt(id)}/>, {isFluid: true, showFooter: false, fullHeight: true}) },
   spaceShowEmbed(id) { this.render(<SpaceShow spaceId={id} embed={true}/>, {isFluid: true, showFooter: false, embed: true, fullHeight: true}) },
   scratchpad() { this.render(<SpaceShow spaceId={5170}/>, {isFluid: true, showFooter: false}) },
   settings() { this.render(<Settings/>) },
