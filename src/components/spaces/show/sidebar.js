@@ -5,6 +5,11 @@ import {MarkdownViewer} from 'gComponents/utility/markdown-viewer/index.js'
 import {ButtonClose} from 'gComponents/utility/buttons/close'
 
 export class SpaceSidebar extends Component {
+  componentDidMount() { window.recorder.recordMountEvent(this) }
+  componentWillUpdate() { window.recorder.recordRenderStartEvent(this) }
+  componentDidUpdate() { window.recorder.recordRenderStopEvent(this) }
+  componentWillUnmount() { window.recorder.recordUnmountEvent(this) }
+
   shouldComponentUpdate(nextProps) {
     return nextProps.canEdit !== this.props.canEdit || this.props.description !== nextProps.description
   }

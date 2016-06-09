@@ -56,6 +56,7 @@ export default class FlowGrid extends Component{
   }
 
   _handleMouseLeave(e) {
+    window.recorder.recordNamedEvent("FlowGrid set hover state")
     this.setState({
       hover: {row: -1, column: -1},
       leftDown: false,
@@ -64,12 +65,14 @@ export default class FlowGrid extends Component{
 
   _handleMouseUp(e) {
     if (e.button === 0) {
+      window.recorder.recordNamedEvent("FlowGrid set left down state")
       this.setState({leftDown: false})
     }
   }
 
   _handleEmptyCellMouseDown(e, location) {
     if (e.button === 0 && !(e.target && e.target.type === 'textarea')) {
+      window.recorder.recordNamedEvent("FlowGrid set left down state")
       this.setState({leftDown: true})
       lastMousePosition = _.pick(e, 'pageX', 'pageY')
       e.preventDefault()
@@ -82,6 +85,7 @@ export default class FlowGrid extends Component{
   }
 
   _handleCellMouseEnter(location, e) {
+    window.recorder.recordNamedEvent("FlowGrid set hover state")
     if (this.state.leftDown && this._mouseMoved(e)) {
       this.setState({hover: {row: -1, column: -1}})
       this._handleEndRangeSelect(location)
@@ -96,6 +100,7 @@ export default class FlowGrid extends Component{
 
   _handleKeyUp(e){
     if (e.keyCode == '17' || e.keyCode == '224' || e.keyCode == '91') {
+      window.recorder.recordNamedEvent("FlowGrid set ctrl pressed state")
       this.setState({ctrlPressed: false})
     }
   }
@@ -123,6 +128,7 @@ export default class FlowGrid extends Component{
       this.props.onSelectItem(newLocation)
     } else if (!e.shiftKey && (e.keyCode == '17' || e.keyCode == '224' || e.keyCode == '91' || e.keyCode == '93')) {
       e.preventDefault()
+      window.recorder.recordNamedEvent("FlowGrid set ctrl pressed state")
       this.setState({ctrlPressed: true})
     } else if (this.state.ctrlPressed) {
       if (e.keyCode == '86') {
@@ -224,6 +230,7 @@ export default class FlowGrid extends Component{
       />
     )
   }
+
   _row(row, columnCount) {
     return (
       upto(columnCount).map((column) => {
@@ -236,11 +243,21 @@ export default class FlowGrid extends Component{
     return _.get(this.refs[`row-${rowI}`], 'offsetHeight')
   }
 
-  updateBackground() {
-    this.refs.background.forceUpdate()
+  componentDidMount() { window.recorder.recordMountEvent(this) }
+  componentWillUpdate() { window.recorder.recordRenderStartEvent(this) }
+
+  componentDidUpdate() {
+    window.recorder.recordRenderStopEvent(this)
+
+    const newHeights = upto(this._rowCount()).map(rowI => _.get(this.refs[`row-${rowI}`], 'offsetHeight'))
+    if (!_.isEqual(newHeights, this.state.rowHeights)){
+      window.recorder.recordNamedEvent("FlowGrid set row heights state")
+      this.setState({rowHeights: newHeights})
+    }
   }
 
   componentWillUnmount() {
+    window.recorder.recordUnmountEvent(this)
     this.props.onDeSelectAll()
   }
 
