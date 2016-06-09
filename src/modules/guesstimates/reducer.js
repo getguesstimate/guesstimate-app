@@ -28,13 +28,13 @@ export function guesstimatesR(state = [], action) {
     case 'REMOVE_METRICS':
       return state.filter(y => !_.some(action.item.ids, id => y.metric === id))
     case 'CHANGE_GUESSTIMATE':
-      const i = state.findIndex(y => y.metric === action.values.metric);
+      const i = state.findIndex(y => y.metric === action.values.metric)
       const newItem = engine.guesstimate.format(action.values)
       if (i !== -1) {
-        const newState = [ ...state.slice(0, i), newItem, ...state.slice(i+1, state.length) ];
+        const newState = [ ...state.slice(0, i), newItem, ...state.slice(i+1, state.length) ]
         return uniq(newState)
       }
     default:
-      return state;
+      return state
   }
 }

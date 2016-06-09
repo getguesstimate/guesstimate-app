@@ -45,7 +45,18 @@ const ButtonArea = ({owner, ownerUrl, isPrivate, showPrivacy}) => (
   </div>
 )
 
-const SpaceCard = ({space, showPrivacy}) => {
+export const NewSpaceCard = ({onClick}) => (
+  <div className='col-xs-12 col-md-4 SpaceCard new' onClick={onClick}>
+    <div className='SpaceCard--inner'>
+      <div className='section-middle'>
+        <Icon name='plus'/>
+        <h3>New Model</h3>
+      </div>
+    </div>
+  </div>
+)
+
+export const SpaceCard = ({space, showPrivacy}) => {
   const hasName = !_.isEmpty(space.name)
   const hasOrg = _.has(space, 'organization.name')
 

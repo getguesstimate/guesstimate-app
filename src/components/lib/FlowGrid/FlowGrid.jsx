@@ -1,5 +1,3 @@
-'use strict';
-
 import React, {Component, PropTypes} from 'react'
 
 import {DragDropContext} from 'react-dnd'
@@ -54,7 +52,6 @@ export default class FlowGrid extends Component{
   }
 
   state = {
-    rowHeights: [],
     hover: {row: -1, column: -1} // An impossible location means nothing hovered.
   }
 
@@ -228,15 +225,21 @@ export default class FlowGrid extends Component{
         onReturn={(down=true) => {this._onReturn(location, down)}}
         onTab={(right=true) => {this._onTab(location, right)}}
         ref={`cell-${location.row}-${location.column}`}
+        getRowHeight={() => {this._getRowHeight(location.row)}}
       />
     )
   }
+
   _row(row, columnCount) {
     return (
       upto(columnCount).map((column) => {
         return(this._cell({row: row, column: column}))
       })
     )
+  }
+
+  _getRowHeight(rowI) {
+    return _.get(this.refs[`row-${rowI}`], 'offsetHeight')
   }
 
   componentDidMount() { window.recorder.recordMountEvent(this) }
@@ -260,7 +263,6 @@ export default class FlowGrid extends Component{
   render() {
     const rowCount = this._rowCount()
     const columnCount = this._columnCount()
-    const {rowHeights} = this.state
     const {edges} = this.props
     let className = 'FlowGrid'
     className += this.props.showGridLines ? ' withLines' : ''
@@ -275,9 +277,7 @@ export default class FlowGrid extends Component{
         onKeyUp={this._handleKeyUp.bind(this)}
       >
         <div className='FlowGrid-Horizontal-Motion'>
-          <div
-            className={className}
-          >
+          <div className={className}>
             {
               upto(rowCount).map((row) => {
                 return (
@@ -293,7 +293,7 @@ export default class FlowGrid extends Component{
             }
               <BackgroundContainer
                 edges={edges}
-                rowHeights={rowHeights}
+                rowHeights={_.map(upto(rowCount), (_r, i) => this.getRowHeight(i))}
                 selectedRegion={this.props.selectedRegion}
                 copiedRegion={this.props.copiedRegion}
               />
