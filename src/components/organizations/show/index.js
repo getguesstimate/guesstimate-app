@@ -4,18 +4,8 @@ import {connect} from 'react-redux'
 import ReactDOM from 'react-dom'
 import Icon from 'react-fa'
 
-<<<<<<< HEAD
-=======
 import {SpaceCard, NewSpaceCard} from 'gComponents/spaces/cards'
-import * as spaceActions from 'gModules/spaces/actions'
-import * as organizationActions from 'gModules/organizations/actions'
-import * as userOrganizationMembershipActions from 'gModules/userOrganizationMemberships/actions'
-import { organizationSpaceSelector } from './organizationSpaceSelector'
-import { organizationMemberSelector } from './organizationMemberSelector'
-import { httpRequestSelector } from './httpRequestSelector'
->>>>>>> master
-import SpaceCards from 'gComponents/spaces/cards'
-import SpaceList from 'gComponents/spaces/list'
+
 import Container from 'gComponents/utility/container/Container'
 import {MembersTab} from './members'
 
@@ -26,6 +16,7 @@ import {organizationMemberSelector} from './organizationMemberSelector'
 import * as modalActions from 'gModules/modal/actions'
 import * as spaceActions from 'gModules/spaces/actions'
 import * as organizationActions from 'gModules/organizations/actions'
+import * as userOrganizationMembershipActions from 'gModules/userOrganizationMemberships/actions'
 
 import e from 'gEngine/engine'
 
