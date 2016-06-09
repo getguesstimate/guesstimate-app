@@ -75,7 +75,12 @@ export default class MetricCard extends Component {
     else { this.refs.MetricCardViewSection.focusName() }
   }
 
+  componentWillUpdate() { window.recorder.recordRenderStartEvent(this) }
+  componentWillUnmount() { window.recorder.recordUnmountEvent(this) }
+
   componentDidUpdate(prevProps) {
+    window.recorder.recordRenderStopEvent(this)
+
     const hasContent = this.refs.MetricCardViewSection.hasContent()
     const {inSelectedCell, selectedFrom} = this.props
     if (!inSelectedCell && this._isEmpty() && !hasContent && !this.state.modalIsOpen){
@@ -87,6 +92,7 @@ export default class MetricCard extends Component {
   }
 
   componentDidMount() {
+    window.recorder.recordMountEvent(this)
     if (this.props.inSelectedCell && this._isEmpty()) {
       this.focusFromDirection(this.props.selectedFrom)
     }

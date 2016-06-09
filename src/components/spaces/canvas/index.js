@@ -57,6 +57,8 @@ export default class Canvas extends Component{
   }
 
   componentDidMount(){
+    window.recorder.recordMountEvent(this)
+
     const metrics = _.get(this.props.denormalizedSpace, 'metrics')
     if (!_.isEmpty(metrics) && metrics.length > 19){
       this.props.dispatch(canvasStateActions.change({edgeView: 'hidden'}))
@@ -70,7 +72,11 @@ export default class Canvas extends Component{
     }
   }
 
+  componentWillUpdate() { window.recorder.recordRenderStartEvent(this) }
+
   componentDidUpdate(prevProps) {
+    window.recorder.recordRenderStopEvent(this)
+
     const metrics = _.get(this.props.denormalizedSpace, 'metrics')
     const oldMetrics = _.get(prevProps.denormalizedSpace, 'metrics')
     if ((oldMetrics.length === 0) && (metrics.length > 0)){
@@ -79,6 +85,7 @@ export default class Canvas extends Component{
   }
 
   componentWillUnmount(){
+    window.recorder.recordUnmountEvent(this)
     this.props.dispatch(deleteSimulations(this.props.denormalizedSpace.metrics.map(m => m.id)))
   }
 

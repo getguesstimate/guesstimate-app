@@ -1,11 +1,16 @@
 import app from 'ampersand-app'
 import Router from './router'
-import * as segment from '../server/segment/index.js'
-import * as sentry from '../server/sentry/index.js'
+
 import engine from 'gEngine/engine.js'
+
+import {GuesstimateRecorder} from 'lib/recorder'
+
+import * as segment from 'servers/segment/index.js'
+import * as sentry from 'servers/sentry/index.js'
 import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
-import './main.css'
 import * as elev from 'server/elev/index.js'
+
+import './main.css'
 
 
 import Worker from 'worker!../lib/guesstimator/samplers/simulator-worker/index.js'
@@ -41,6 +46,8 @@ app.extend({
     if (__DEV__) {
       window.Perf = require('react-addons-perf')
     }
+
+    window.recorder = new GuesstimateRecorder()
 
     window.intercomSettings = {
       app_id: "o0trb1v9"
