@@ -136,7 +136,7 @@ export class SpaceToolbar extends Component {
                     <CardListElement
                       icon={'upload'}
                       header='Import Slurp'
-                      onClick={() => {this.setState({importModalOpen: true})}}
+                      onMouseDown={() => {this.setState({importModalOpen: true})}}
                     />
                   }
                 {editableByMe && <CardListElement icon={'warning'} header='Delete Model' onMouseDown={onDestroy}/> }
