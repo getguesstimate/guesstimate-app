@@ -225,7 +225,7 @@ export default class FlowGrid extends Component{
         onReturn={(down=true) => {this._onReturn(location, down)}}
         onTab={(right=true) => {this._onTab(location, right)}}
         ref={`cell-${location.row}-${location.column}`}
-        getRowHeight={() => {this._getRowHeight(location.row)}}
+        getRowHeight={() => this._getRowHeight(location.row)}
       />
     )
   }
@@ -247,12 +247,6 @@ export default class FlowGrid extends Component{
 
   componentDidUpdate() {
     window.recorder.recordRenderStopEvent(this)
-
-    const newHeights = upto(this._rowCount()).map(rowI => _.get(this.refs[`row-${rowI}`], 'offsetHeight'))
-    if (!_.isEqual(newHeights, this.state.rowHeights)){
-      window.recorder.recordNamedEvent("FlowGrid set row heights state")
-      this.setState({rowHeights: newHeights})
-    }
   }
 
   componentWillUnmount() {
@@ -282,18 +276,18 @@ export default class FlowGrid extends Component{
               upto(rowCount).map((row) => {
                 return (
                   <div
-                      className='FlowGridRow'
-                      key={row}
-                      ref={`row-${row}`}
+                    className='FlowGridRow'
+                    key={row}
+                    ref={`row-${row}`}
                   >
-                  {this._row(row, columnCount)}
+                    {this._row(row, columnCount)}
                   </div>
                 )
               })
             }
               <BackgroundContainer
                 edges={edges}
-                rowHeights={_.map(upto(rowCount), (_r, i) => this.getRowHeight(i))}
+                rowHeights={_.map(upto(rowCount), (_r, i) => this._getRowHeight(i))}
                 selectedRegion={this.props.selectedRegion}
                 copiedRegion={this.props.copiedRegion}
               />
