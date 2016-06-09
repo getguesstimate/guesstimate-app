@@ -22,6 +22,7 @@ import SettingsStyleGuide from 'gComponents/users/settings/StyleGuide'
 import Settings from 'gComponents/users/settings/container'
 import PlanIndex from 'gComponents/plans/index/container'
 import PlansStyleGuide from 'gComponents/plans/index/StyleGuide'
+import {ImportFromSlurp} from 'gComponents/import_from_slurp/index'
 
 import configureStore from './middleware'
 
@@ -58,6 +59,7 @@ export default Router.extend({
     'scratchpad': 'scratchpad',
     'pricing': 'pricing',
     'subscribe/:id': 'subscribe',
+    'import_from_slurp': 'importFromSlurp',
   },
 
   spaceIndex() { this.render(<SpaceIndex/>, {backgroundColor: 'GREY'}) },
@@ -79,4 +81,5 @@ export default Router.extend({
   userShow(id) { this.render(<UserShow userId={id}/>, {backgroundColor: 'GREY'}) },
   organizationShow(id) { this.render(<OrganizationShow organizationId={id}/>, {backgroundColor: 'GREY'}) },
   pricing() { this.render(<PlanIndex/>, {backgroundColor: 'BLUE'}) },
+  importFromSlurp() { this.render(<ImportFromSlurp/>) },
 })
