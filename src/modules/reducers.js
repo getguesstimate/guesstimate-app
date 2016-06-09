@@ -24,6 +24,7 @@ export function changeSelect(location) {
 }
 
 const rootReducer = function app(state = {}, action){
+  window.recorder.recordReductionEvent(action)
   return {
     displayError: SI(displayErrorR(state.displayError, action)),
     metrics: SI(metricsR(state.metrics, action)),

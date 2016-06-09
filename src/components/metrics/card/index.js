@@ -4,9 +4,6 @@ import {connect} from 'react-redux'
 import ReactDOM from 'react-dom'
 import $ from 'jquery'
 
-import {removeMetrics, changeMetric} from 'gModules/metrics/actions'
-import {changeGuesstimate} from 'gModules/guesstimates/actions'
-
 import MetricModal from 'gComponents/metrics/modal/index'
 import DistributionEditor from 'gComponents/distributions/editor/index'
 import MetricToolTip from './tooltip'
@@ -15,6 +12,9 @@ import MetricCardViewSection from './MetricCardViewSection/index'
 import SensitivitySection from './SensitivitySection/SensitivitySection'
 
 import {hasMetricUpdated} from './updated'
+
+import {removeMetrics, changeMetric} from 'gModules/metrics/actions'
+import {changeGuesstimate} from 'gModules/guesstimates/actions'
 
 import * as canvasStateProps from 'gModules/canvas_state/prop_type'
 import {PTLocation} from 'lib/locationUtils'
@@ -75,7 +75,12 @@ export default class MetricCard extends Component {
     else { this.refs.MetricCardViewSection.focusName() }
   }
 
+  componentWillUpdate() { window.recorder.recordRenderStartEvent(this) }
+  componentWillUnmount() { window.recorder.recordUnmountEvent(this) }
+
   componentDidUpdate(prevProps) {
+    window.recorder.recordRenderStopEvent(this)
+
     const hasContent = this.refs.MetricCardViewSection.hasContent()
     const {inSelectedCell, selectedFrom} = this.props
     if (!inSelectedCell && this._isEmpty() && !hasContent && !this.state.modalIsOpen){
@@ -87,6 +92,7 @@ export default class MetricCard extends Component {
   }
 
   componentDidMount() {
+    window.recorder.recordMountEvent(this)
     if (this.props.inSelectedCell && this._isEmpty()) {
       this.focusFromDirection(this.props.selectedFrom)
     }

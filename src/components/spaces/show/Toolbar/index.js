@@ -5,7 +5,8 @@ import ReactTooltip from 'react-tooltip'
 import Modal from 'react-modal'
 
 import CanvasViewForm from '../canvasViewForm'
-import DropDown, {DropDownListElement} from 'gComponents/utility/drop-down/index'
+import DropDown from 'gComponents/utility/drop-down/index'
+import {CardListElement} from 'gComponents/utility/card/index.js'
 import {ViewOptionToggle} from '../view-options/index'
 import {PrivacyToggle} from '../privacy-toggle/index'
 import {ImportFromSlurpForm} from 'gComponents/import_from_slurp/import_from_slurp_form'
@@ -46,6 +47,11 @@ const ProgressMessage = ({actionState}) => (
 )
 
 export class SpaceToolbar extends Component {
+  componentDidMount() { window.recorder.recordMountEvent(this) }
+  componentWillUpdate() { window.recorder.recordRenderStartEvent(this) }
+  componentDidUpdate() { window.recorder.recordRenderStopEvent(this) }
+  componentWillUnmount() { window.recorder.recordUnmountEvent(this) }
+
   shouldComponentUpdate(nextProps, nextState) {
     if (!nextProps.editableByMe) { return false }
     return (
@@ -121,21 +127,19 @@ export class SpaceToolbar extends Component {
 
             { isLoggedIn &&
               <DropDown
-                  headerText={'Model Actions'}
-                  openLink={<a className='header-action'>File</a>}
-                  position='right'
+                headerText={'Model Actions'}
+                openLink={<a className='header-action'>File</a>}
+                position='right'
               >
-                <ul>
-                  <DropDownListElement icon={'copy'} header='Copy Model' onMouseDown={onCopyModel}/>
+                <CardListElement icon={'copy'} header='Copy Model' onMouseDown={onCopyModel}/>
                   {editableByMe &&
-                    <DropDownListElement
+                    <CardListElement
                       icon={'upload'}
                       header='Import Slurp'
-                      onMouseDown={() => {this.setState({importModalOpen: true})}}
+                      onClick={() => {this.setState({importModalOpen: true})}}
                     />
                   }
-                  {editableByMe && <DropDownListElement icon={'warning'} header='Delete Model' onMouseDown={onDestroy}/> }
-                </ul>
+                {editableByMe && <CardListElement icon={'warning'} header='Delete Model' onMouseDown={onDestroy}/> }
               </DropDown>
             }
 
