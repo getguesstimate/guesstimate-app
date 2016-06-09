@@ -16,7 +16,7 @@ export class ImportFromSlurpForm extends Component {
   }
 
   onSubmit() {
-    this.props.onSubmit(JSON.parse(this.state.value).SLURP)
+    this.props.onSubmit(JSON.parse(this.state.value))
   }
 
   render() {
