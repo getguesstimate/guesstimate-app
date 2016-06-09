@@ -2,14 +2,33 @@
   display: flex;
 }
 
-.SpaceCard.new .SpaceCard--inner {
-  background-color: #81B781;
-  transition: background-color 0.1s;
-}
+.SpaceCard.new {
+  .SpaceCard--inner {
+    background-color:#CEE4CE;
+    transition: background-color 0.1s;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(0,0,0,0);
 
-.SpaceCard.new .SpaceCard--inner:hover {
-  background-color: #61a761;
-  transition: background-color 0.1s;
+    &:hover {
+      border: 1px solid #61a761;
+    }
+
+    .section-middle{
+      text-align: center;
+
+      h3 {
+        font-size: 2em;
+        color: rgb(50, 64, 50);
+        margin-top: 0.5em;
+      }
+
+      .fa {
+        font-size: 4.5em;
+        color: #79B979;
+      }
+    }
+  }
 }
 
 .SpaceCard--inner {
