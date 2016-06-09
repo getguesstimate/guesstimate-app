@@ -31,6 +31,11 @@ const EditingOption = ({onClick, isSelected, isEditingInvalid}) => (
   </CardListElement>
 )
 
+/*
+ *
+    <ul className={'ViewOptions dropdown'}>
+    */
+
 export const ViewOptionToggle = ({isEditingInvalid, onForbidEdits, onAllowEdits, headerText, openLink, position, isEditing}) => (
   <DropDown
       headerText={headerText}
@@ -38,17 +43,17 @@ export const ViewOptionToggle = ({isEditingInvalid, onForbidEdits, onAllowEdits,
       position={position}
       width={'wide'}
   >
-    <ul className={'ViewOptions dropdown'}>
-      <ViewingOption
-        isSelected={!isEditing}
-        onClick={onForbidEdits}
-      />
-      <EditingOption
-        isSelected={isEditing}
-        onClick={onAllowEdits}
-        isEditingInvalid={isEditingInvalid}
-        hideErrorWhenUnselected={false}
-      />
-    </ul>
+    <ViewingOption
+      isSelected={!isEditing}
+      onClick={onForbidEdits}
+      closeOnClick={true}
+    />
+    <EditingOption
+      isSelected={isEditing}
+      onClick={onAllowEdits}
+      isEditingInvalid={isEditingInvalid}
+      hideErrorWhenUnselected={false}
+      closeOnClick={true}
+    />
   </DropDown>
 )

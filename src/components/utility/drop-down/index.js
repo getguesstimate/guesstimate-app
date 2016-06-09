@@ -1,45 +1,9 @@
 import React, {Component, PropTypes} from 'react'
 import ReactDOM from 'react-dom'
 
-import Card, {CardListElement} from 'gComponents/utility/card/index.js'
+import Card from 'gComponents/utility/card/index.js'
 
 import './style.css'
-
-export class DropDownListElement extends Component {
-
-  static propTypes = {
-    icon: PropTypes.string,
-    image: PropTypes.string,
-    imageShape: PropTypes.oneOf(['circle', 'square']),
-    header: PropTypes.string.isRequired,
-    isSelected: PropTypes.bool,
-    onMouseDown: PropTypes.func,
-    closeOnClick: PropTypes.bool,
-    dropDown: PropTypes.oneOfType([
-      PropTypes.object,
-      PropTypes.bool
-    ])
-  }
-
-  static defaultProps = {
-    closeOnClick: false,
-    dropDown: false
-  }
-
-  _onMouseDown() {
-    if (this.props.closeOnClick && !!this.props.dropDown) {this.props.dropDown._close() }
-    this.props.onMouseDown()
-  }
-
-  render() {
-    const {icon, ionicIcon, image, imageShape, header, isSelected, children} = this.props
-    return (
-      <CardListElement icon={icon} ionicIcon={ionicIcon} image={image} imageShape={imageShape} header={header} isSelected={isSelected} onMouseDown={this._onMouseDown.bind(this)}>
-        {children}
-      </CardListElement>
-    );
-  }
-}
 
 export default class DropDown extends Component {
   displayName: 'DropDown'
@@ -110,7 +74,22 @@ export default class DropDown extends Component {
               hasPadding={this.props.hasPadding}
               shadow={true}
             >
-              {this.props.children}
+              {_.isArray(this.props.children) &&
+                <ul>
+                  {
+                    this.props.children.map(child => {
+                      if (child.props.closeOnClick) {
+                        return (
+                          <div onClick={() => {this._close()}}> {child} </div>
+                        )
+                      } else {
+                        return child
+                      }
+                    })
+                  }
+                </ul>
+              }
+              {!_.isArray(this.props.children) && this.props.children}
             </Card>
           </div>
         }
