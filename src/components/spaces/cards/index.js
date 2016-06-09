@@ -45,7 +45,7 @@ const ButtonArea = ({owner, ownerUrl, isPrivate, showPrivacy}) => (
   </div>
 )
 
-const SpaceCard = ({space, showPrivacy}) => {
+export const SpaceCard = ({space, showPrivacy}) => {
   const hasName = !_.isEmpty(space.name)
   const hasOrg = _.has(space, 'organization.name')
 

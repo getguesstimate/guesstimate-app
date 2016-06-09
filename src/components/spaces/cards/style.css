@@ -2,6 +2,16 @@
   display: flex;
 }
 
+.SpaceCard.new .SpaceCard--inner {
+  background-color: #81B781;
+  transition: background-color 0.1s;
+}
+
+.SpaceCard.new .SpaceCard--inner:hover {
+  background-color: #61a761;
+  transition: background-color 0.1s;
+}
+
 .SpaceCard--inner {
   margin: 1.5em .8em;
   float: left;

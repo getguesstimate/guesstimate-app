@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import ReactDOM from 'react-dom'
 import Icon from 'react-fa'
 
-import SpaceList from 'gComponents/spaces/list'
+import {SpaceCard} from 'gComponents/spaces/cards'
 import * as spaceActions from 'gModules/spaces/actions'
 import * as organizationActions from 'gModules/organizations/actions'
 import * as userOrganizationMembershipActions from 'gModules/userOrganizationMemberships/actions'
@@ -111,10 +111,20 @@ export default class OrganizationShow extends Component{
 
           <div className='main-section'>
             {(openTab === 'MODELS' || !meIsMember) && spaces &&
-              <SpaceCards
-                spaces={spaces}
-                showPrivacy={true}
-              />
+              <div className='row'>
+                <div className='SpaceCard new col-xs-4'>
+                  <a className='SpaceCard--inner' href='/new'>
+                    new card
+                  </a>
+                </div>
+                {_.map(spaces, (s) =>
+                    <SpaceCard
+                      key={s.id}
+                      space={s}
+                      showPrivacy={true}
+                    />
+                )}
+              </div>
             }
 
             {(openTab === 'MEMBERS') && meIsMember && members && organization &&
