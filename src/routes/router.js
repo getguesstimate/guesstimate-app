@@ -67,7 +67,7 @@ export default Router.extend({
   spaceIndex() { this.render(<SpaceIndex/>, {backgroundColor: 'GREY'}) },
   home() { this.render(<Home/>, {isFluid: true, simpleHeader: true}) },
   spaceNew() { this.render(<SpaceNew/>) },
-  spaceShow(id) { this.render(<SpaceShow spaceId={parseInt(id)}/>, {isFluid: true, showFooter: false, fullHeight: true}) },
+  spaceShow(id) { this.render(<SpaceShow spaceId={parseInt(id)} key={parseInt(id)}/>, {isFluid: true, showFooter: false, fullHeight: true}) },
   spaceShowEmbed(id) { this.render(<SpaceShow spaceId={id} embed={true}/>, {isFluid: true, showFooter: false, embed: true, fullHeight: true}) },
   scratchpad() { this.render(<SpaceShow spaceId={5170}/>, {isFluid: true, showFooter: false}) },
   settings() { this.render(<Settings/>) },
@@ -82,7 +82,7 @@ export default Router.extend({
   faq() { this.render(<FAQ/>) },
   subscribe(id) { this.render(<FirstSubscriptionPage planName={id}/>) },
   userShow(id) { this.render(<UserShow userId={id}/>, {backgroundColor: 'GREY'}) },
-  organizationShow(id) { this.render(<OrganizationShow organizationId={id}/>, {backgroundColor: 'GREY'}) },
+  organizationShow(id) { this.render(<OrganizationShow organizationId={id} key={id}/>, {backgroundColor: 'GREY'}) },
   organizationsNew() { this.render(<CreateOrganizationPageContainer/>, {backgroundColor: 'GREY'}) },
   pricing() { this.render(<PlanIndex/>, {backgroundColor: 'BLUE'}) },
 })

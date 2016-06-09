@@ -4,6 +4,16 @@ import {connect} from 'react-redux'
 import ReactDOM from 'react-dom'
 import Icon from 'react-fa'
 
+<<<<<<< HEAD
+=======
+import {SpaceCard, NewSpaceCard} from 'gComponents/spaces/cards'
+import * as spaceActions from 'gModules/spaces/actions'
+import * as organizationActions from 'gModules/organizations/actions'
+import * as userOrganizationMembershipActions from 'gModules/userOrganizationMemberships/actions'
+import { organizationSpaceSelector } from './organizationSpaceSelector'
+import { organizationMemberSelector } from './organizationMemberSelector'
+import { httpRequestSelector } from './httpRequestSelector'
+>>>>>>> master
 import SpaceCards from 'gComponents/spaces/cards'
 import SpaceList from 'gComponents/spaces/list'
 import Container from 'gComponents/utility/container/Container'
@@ -36,30 +46,26 @@ export default class OrganizationShow extends Component{
   displayName: 'OrganizationShow'
 
   state = {
-    attemptedFetch: false,
     openTab: 'MODELS',
   }
 
   componentWillMount() {
-    this.fetchData()
+    this.refreshData()
   }
 
-  componentDidUpdate() {
-    this.fetchData()
-  }
-
-  fetchData() {
-    if (!this.state.attemptedFetch) {
-      this.props.dispatch(organizationActions.fetchById(this.props.organizationId))
-      this.props.dispatch(spaceActions.fetch({organizationId: this.props.organizationId}))
-      this.setState({attemptedFetch: true})
-    }
+  refreshData() {
+    this.props.dispatch(organizationActions.fetchById(this.props.organizationId))
+    this.props.dispatch(spaceActions.fetch({organizationId: this.props.organizationId}))
   }
 
   changeTab(tab) {
     this.setState({
       openTab: tab,
     })
+  }
+
+  _newModel() {
+    this.props.dispatch(spaceActions.create(this.props.organizationId))
   }
 
   destroyMembership(membershipId) {
@@ -81,7 +87,6 @@ export default class OrganizationShow extends Component{
     this.props.dispatch(modalActions.openConfirmation({onConfirm: removeCallback, message}))
   }
 
-
   render () {
     const {organizationId, organizations, members, memberships, invitations} = this.props
     const {openTab} = this.state
@@ -91,6 +96,10 @@ export default class OrganizationShow extends Component{
     const meIsMember = meIsAdmin || !!(members.find(m => m.id === this.props.me.id))
 
     if (!organization) { return false }
+    let tabs = [{name: 'Models', key: 'MODELS'}, {name: 'Members', key: 'MEMBERS'}]
+    const portalUrl = _.get(organization, 'account._links.payment_portal.href')
+    if (!!portalUrl) { tabs = [...tabs, {name: 'Billing', key: 'BILLING', href: portalUrl, onMouseUp: this.refreshData.bind(this)}] }
+
     return (
       <Container>
         <div className='OrganizationShow'>
@@ -99,7 +108,7 @@ export default class OrganizationShow extends Component{
 
           {meIsMember &&
             <OrganizationTabButtons
-              tabs={[{name: 'Models', key: 'MODELS'}, {name: 'Members', key: 'MEMBERS'}]}
+              tabs={tabs}
               openTab={openTab}
               changeTab={this.changeTab.bind(this)}
             />
@@ -107,10 +116,18 @@ export default class OrganizationShow extends Component{
 
           <div className='main-section'>
             {(openTab === 'MODELS' || !meIsMember) && spaces &&
-              <SpaceCards
-                spaces={spaces}
-                showPrivacy={true}
-              />
+              <div className='row'>
+                {meIsMember &&
+                  <NewSpaceCard onClick={this._newModel.bind(this)}/>
+                }
+                {_.map(spaces, (s) =>
+                    <SpaceCard
+                      key={s.id}
+                      space={s}
+                      showPrivacy={true}
+                    />
+                )}
+              </div>
             }
 
             {(openTab === 'MEMBERS') && meIsMember && members && organization &&
@@ -153,9 +170,23 @@ const OrganizationTabButtons = ({tabs, openTab, changeTab}) => (
       <div className="ui secondary menu">
         { tabs.map( e => {
           const className = `item ${(openTab === e.key) ? 'active' : ''}`
-          return (
-            <a className={className} key={e.key} onClick={() => {changeTab(e.key)}}> {e.name} </a>
-          )
+          if (!!e.href){
+            return (
+              <a
+                className='item'
+                key={e.key}
+                href={e.href}
+                target='_blank'
+                onMouseUp={e.onMouseUp ? e.onMouseUp : () => {} }
+              >
+                {e.name}
+              </a>
+            )
+          } else {
+            return (
+              <a className={className} key={e.key} onClick={() => {changeTab(e.key)}}> {e.name} </a>
+            )
+          }
          })}
       </div>
     </div>
