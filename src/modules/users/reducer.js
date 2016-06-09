@@ -1,4 +1,5 @@
 import reduxCrud  from 'redux-crud'
+import SI from 'seamless-immutable'
 
 const standardReducers = reduxCrud.reducersFor('users')
 
@@ -9,7 +10,7 @@ export function usersR(state, action) {
       if (!users || users.length === 0) { return state }
 
       const updatedUsers = users.map(u => ({...state.find(s => s.id === u.id), ...u}))
-      return [...state.filter(s => !_.some(users, o => s.id === u.id)), ...updatedUsers]
+      return SI([...state.filter(s => !_.some(users, o => s.id === u.id)), ...updatedUsers])
     }
     default:
       return standardReducers(state, action)
