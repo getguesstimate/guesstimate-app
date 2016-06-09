@@ -1,10 +1,17 @@
 import React, {Component} from 'react'
 
+import ReactDOM from 'react-dom'
+
 import e from 'gEngine/engine'
 
 export class ImportFromSlurpForm extends Component {
   state = {
     value: ""
+  }
+
+  componentDidMount() {
+    this.refs.textarea.focus()
+    ReactDOM.findDOMNode(this.refs.textarea).focus()
   }
 
   onSubmit() {
@@ -19,6 +26,8 @@ export class ImportFromSlurpForm extends Component {
           <textarea
             value={this.state.value}
             onChange={(e) => {this.setState({value: e.target.value})}}
+            tabIndex='2'
+            ref='textarea'
           />
         </div>
         <div

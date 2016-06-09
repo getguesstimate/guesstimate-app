@@ -68,6 +68,11 @@ export class SpaceToolbar extends Component {
     importModalOpen: false
   }
 
+  onImportSlurp(slurp) {
+    this.setState({importModalOpen: false})
+    this.props.onImportSlurp(slurp)
+  }
+
   render() {
     const {
       editableByMe,
@@ -85,7 +90,6 @@ export class SpaceToolbar extends Component {
       editsAllowed,
       onAllowEdits,
       onForbidEdits,
-      onImportSlurp,
     } = this.props
     const ReactTooltipParams = {class: 'small-tooltip', delayShow: 0, delayHide: 0, place: 'bottom', effect: 'solid'}
 
@@ -98,14 +102,15 @@ export class SpaceToolbar extends Component {
         backgroundColor: 'rgba(55, 68, 76, 0.4)'
       },
       content : {
-        top: '10%',
-        left: '10%',
+        top: '30%',
+        left: '30%',
+        width: '40%',
         right: 'auto',
         bottom: 'auto',
         marginRight: '-50%',
-        backgroundColor: '#FFFFFF',
+        backgroundColor: '#F0F0F0',
         border: 'none',
-        padding: '0',
+        padding: '1em'
       }
     }
     return (
@@ -115,7 +120,7 @@ export class SpaceToolbar extends Component {
           onRequestClose={() => {this.setState({importModalOpen: false})}}
           style={customStyles}
         >
-          <ImportFromSlurpForm onSubmit={onImportSlurp} />
+          <ImportFromSlurpForm onSubmit={this.onImportSlurp.bind(this)} />
         </Modal>
         <div className='row'>
           <div className='col-sm-10'>
