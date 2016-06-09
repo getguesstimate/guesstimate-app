@@ -50,7 +50,7 @@ There are many things that will be improved.  Some of the more important limitat
 3. Only the creator of a collection is allowed to save edits to that collection.  
 4. Metrics can't be shared between collections.  
 
-## Technical Information  
+# Technical Information
 
 Guesstimate is a [Single Page Application](https://en.wikipedia.org/wiki/Single-page_application).  Everything in this repo is the client side, which is one reason why this is called 'guesstimate-app'.
 
@@ -76,6 +76,35 @@ First, make sure that git and node are installed.
 
 ``npm install``
 
-``npm run start``
+``npm start``
 
 There are often errors with specific things, but it depends on what is already installed on the computer.  Later we could put it in a docker container or something.
+
+## Performance Testing \& Optimization
+When running in development mode (`npm start`), Guesstimate records performance statistics about a subset of its react
+renders, actions, and selectors. These statistics are recorded and accessible through a Javascript object embedded in
+the window, called `recorder`, with the following API:
+
+  * `recorder.nestedTimeline` prints a heirarchical view of all events the recorder has tracked so far, appropriately
+    nested. For example, if the recorder tracks renders on component `A` and component `B`, with `B` a child of `A`, the
+    nested timeline view will show information about the rendering of `B` nested within the entry for the rendering of
+    `A`.
+  * `recorder.timeline` prints a timeseries of all events the recorder has tracked so far.
+  * `recorder.renderTimings` is an object that stores how long each component has taken to render (inclusive).
+  * `recorder.selectorTimings` is an object that stores how long each selector has taken to run (inclusive).
+  * `recorder.actionCounts` is an object that stores how many times each action type has been dispatched.
+  * `recorder.renderCounts` is an object that stores how many times each tracked component has been rendered.
+  * `recorder.selectorCounts` is an object that stores how many times each tracked selector was run.
+
+To track additional components or selectors, simply add the appropriate recorder methods into the lifecycle. In
+particular, for a component, insert the following:
+  * `window.recorder.recordMountEvent(this)` within `componentWillMount`
+  * `window.recorder.recordUnmountEvent(this)` within `componentWillUnmount`
+  * `window.recorder.recordRenderStartEvent(this)` within `componentWillUpdate`
+  * `window.recorder.recordRenderStopEvent(this)` within `componentDidUpdate`
+
+Within a selector, insert the following:
+  * `window.recorder.recordSelectorStart([NAME])` at the start of the selector's execution (or the start of the first
+    selector within the selector chain).
+  * `window.recorder.recordSelectorStop([NAME], [DATA])` just before the selector returns, with data being any data
+    you'd like to track in the timeline with that selector event (the return value is typical).
