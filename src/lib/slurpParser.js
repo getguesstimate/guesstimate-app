@@ -21,7 +21,7 @@ export function parseSlurp(slurp, space={metrics: [], guesstimates: []}) {
   const newGuesstimates = _.map(slurp.SIP, (s,i) => ({
     description: s.provenance,
     guesstimateType: 'DATA',
-    data: s.values,
+    data: s.value,
     metric: newMetrics[i].id,
   }))
 
