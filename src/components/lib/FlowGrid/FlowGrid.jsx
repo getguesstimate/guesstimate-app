@@ -1,5 +1,3 @@
-'use strict';
-
 import React, {Component, PropTypes} from 'react'
 
 import {DragDropContext} from 'react-dnd'
@@ -54,7 +52,6 @@ export default class FlowGrid extends Component{
   }
 
   state = {
-    rowHeights: [],
     hover: {row: -1, column: -1} // An impossible location means nothing hovered.
   }
 
@@ -222,6 +219,8 @@ export default class FlowGrid extends Component{
         onReturn={(down=true) => {this._onReturn(location, down)}}
         onTab={(right=true) => {this._onTab(location, right)}}
         ref={`cell-${location.row}-${location.column}`}
+        getRowHeight={this.getRowHeight.bind(this)}
+        row={location.row}
       />
     )
   }
@@ -233,11 +232,12 @@ export default class FlowGrid extends Component{
     )
   }
 
-  componentDidUpdate() {
-    const newHeights = upto(this._rowCount()).map(rowI => _.get(this.refs[`row-${rowI}`], 'offsetHeight'))
-    if (!_.isEqual(newHeights, this.state.rowHeights)){
-      this.setState({rowHeights: newHeights})
-    }
+  getRowHeight(rowI) {
+    return _.get(this.refs[`row-${rowI}`], 'offsetHeight')
+  }
+
+  updateBackground() {
+    this.refs.background.forceUpdate()
   }
 
   componentWillUnmount() {
@@ -247,7 +247,6 @@ export default class FlowGrid extends Component{
   render() {
     const rowCount = this._rowCount()
     const columnCount = this._columnCount()
-    const {rowHeights} = this.state
     const {edges} = this.props
     let className = 'FlowGrid'
     className += this.props.showGridLines ? ' withLines' : ''
@@ -262,9 +261,7 @@ export default class FlowGrid extends Component{
         onKeyUp={this._handleKeyUp.bind(this)}
       >
         <div className='FlowGrid-Horizontal-Motion'>
-          <div
-            className={className}
-          >
+          <div className={className}>
             {
               upto(rowCount).map((row) => {
                 return (
@@ -280,9 +277,11 @@ export default class FlowGrid extends Component{
             }
               <BackgroundContainer
                 edges={edges}
-                rowHeights={rowHeights}
+                rowCount={rowCount}
+                getRowHeight={this.getRowHeight.bind(this)}
                 selectedRegion={this.props.selectedRegion}
                 copiedRegion={this.props.copiedRegion}
+                ref='background'
               />
           </div>
         </div>
