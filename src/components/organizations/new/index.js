@@ -14,33 +14,34 @@ function mapStateToProps(state) {
 }
 
 @connect(mapStateToProps)
-export class CreateOrganizationPage extends Component {
+export class CreateOrganizationPageContainer extends Component {
   componentWillUnmount() {
     this.props.dispatch({type: 'CLEAR_NEW_ORGANIZATION'})
   }
+  render() { return (<CreateOrganizationPage newOrg={this.props.newOrg}/>) }
+}
 
-  render() {
-    const newOrg = this.props.newOrg
-    const newOrgCreated = _.has(newOrg, 'id')
-    return (
-      <Container>
+export const CreateOrganizationPage = ({newOrg}) => {
+  const newOrgCreated = _.has(newOrg, 'id')
+  return (
+    <Container>
       <div className='CreateOrganization'>
         <div className='row'>
           <div className='col-md-2'/>
           <div className='col-md-8'>
 
-              <div className='row Header'>
-                <div className='col-xs-12'>
-                  <h1> Create an Organization </h1>
-                </div>
+            <div className='row Header'>
+              <div className='col-xs-12'>
+                <h1> Create an Organization </h1>
               </div>
-              {!newOrgCreated && <CreateOrganizationForm />}
-              {!!newOrgCreated && <LocalAddMembers organizationId={newOrg.id} admin_id={newOrg.admin_id} />}
             </div>
-
+            {!newOrgCreated && <CreateOrganizationForm />}
+            {!!newOrgCreated && <LocalAddMembers organizationId={newOrg.id} admin_id={newOrg.admin_id} />}
           </div>
+
         </div>
-      </Container>
-    )
-  }
+      </div>
+    </Container>
+  )
 }
+
