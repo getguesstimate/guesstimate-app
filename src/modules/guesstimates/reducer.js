@@ -38,4 +38,3 @@ export function guesstimatesR(state = [], action) {
       return state;
   }
 }
-
