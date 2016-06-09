@@ -51,7 +51,6 @@ export class SpaceToolbar extends Component {
   componentWillUnmount() { window.recorder.recordUnmountEvent(this) }
 
   shouldComponentUpdate(nextProps) {
-    console.log(nextProps)
     if (!nextProps.editableByMe) { return false }
     return (
       !this.props.editableByMe ||
