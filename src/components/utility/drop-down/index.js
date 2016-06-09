@@ -78,7 +78,7 @@ export default class DropDown extends Component {
                 <ul>
                   {
                     this.props.children.map(child => {
-                      if (child.props.closeOnClick) {
+                      if (!!child && child.props.closeOnClick) {
                         return (
                           <div onClick={() => {this._close()}}> {child} </div>
                         )
