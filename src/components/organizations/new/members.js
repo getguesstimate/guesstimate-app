@@ -8,6 +8,7 @@ import Card, {CardListElement} from 'gComponents/utility/card/index'
 import {MemberAddForm} from '../shared/MemberAddForm/index'
 
 import * as userOrganizationMembershipActions from 'gModules/userOrganizationMemberships/actions'
+import {organization} from 'gEngine/engine'
 
 export class LocalAddMembers extends Component {
   render() {
@@ -18,7 +19,7 @@ export class LocalAddMembers extends Component {
           <MemberAddForm organizationId={organizationId}/>
           <br/>
           <br/>
-          <div className='ui button green'>Finish Registration </div>
+          <a className='ui button green' href={organization.url({id: organizationId})}>Finish Registration </a>
         </div>
         <div className='col-sm-1'/>
         <div className='col-sm-4'>
