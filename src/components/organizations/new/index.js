@@ -32,7 +32,8 @@ export const CreateOrganizationPage = ({newOrg}) => {
 
             <div className='row Header'>
               <div className='col-xs-12'>
-                <h1> Create an Organization </h1>
+                {!newOrgCreated && <h1> Step 1: Create an Organization </h1>}
+                  {!!newOrgCreated && <h1> Step 2: Add Members </h1>}
               </div>
             </div>
             {!newOrgCreated && <CreateOrganizationForm />}

@@ -74,7 +74,6 @@ export class CreateOrganizationForm extends Component {
           <div className='ui message'>
             <h3> Organizations </h3>
             <p>Share & collaborate on models with a group you trust.</p>
-            <p>Share & collaborate on models with a group you trust.</p>
           </div>
         </div>
       </div>

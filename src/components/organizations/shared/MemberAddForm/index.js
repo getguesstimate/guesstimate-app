@@ -38,7 +38,7 @@ export class MemberAddForm extends Component{
     const {value} = this.state
     const isValid = validateEmail(value)
     const isEmpty = _.isEmpty(value)
-    const buttonColor = (isValid || isEmpty) ? 'green' : 'grey'
+    const buttonColor = (isValid || isEmpty) ? 'green' : 'blue'
 
     const requests = _.orderBy(_.cloneDeep(this.props.httpRequests), ['created_at'], ['desc'])
     return(
@@ -55,7 +55,7 @@ export class MemberAddForm extends Component{
                 onChange={this._onChange.bind(this)}
               />
             </div>
-            <div className={`ui button submit ${buttonColor} ${isValid ? '' : 'disabled'}`} onClick={this._submit.bind(this)}>
+            <div className={`ui button primary ${buttonColor} ${isValid ? '' : 'disabled'}`} onClick={this._submit.bind(this)}>
               Invite User
             </div>
           </div>
