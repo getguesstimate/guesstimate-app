@@ -225,8 +225,7 @@ export default class FlowGrid extends Component{
         onReturn={(down=true) => {this._onReturn(location, down)}}
         onTab={(right=true) => {this._onTab(location, right)}}
         ref={`cell-${location.row}-${location.column}`}
-        getRowHeight={this.getRowHeight.bind(this)}
-        row={location.row}
+        getRowHeight={() => {this._getRowHeight(location.row)}}
       />
     )
   }
@@ -239,7 +238,7 @@ export default class FlowGrid extends Component{
     )
   }
 
-  getRowHeight(rowI) {
+  _getRowHeight(rowI) {
     return _.get(this.refs[`row-${rowI}`], 'offsetHeight')
   }
 
@@ -297,7 +296,6 @@ export default class FlowGrid extends Component{
                 rowHeights={_.map(upto(rowCount), (_r, i) => this.getRowHeight(i))}
                 selectedRegion={this.props.selectedRegion}
                 copiedRegion={this.props.copiedRegion}
-                ref='background'
               />
           </div>
         </div>
