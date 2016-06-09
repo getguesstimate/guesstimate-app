@@ -16,7 +16,6 @@ function api(state) {
   return setupGuesstimateApi(getToken(state))
 }
 
-//This gets overwritten by UserOrganizationInvitationAction fetchByUserId.
 export function fetchById(organizationId) {
   return (dispatch, getState) => {
     api(getState()).organizations.get({organizationId}, (err, organization) => {

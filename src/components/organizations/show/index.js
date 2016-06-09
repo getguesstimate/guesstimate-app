@@ -34,25 +34,17 @@ export default class OrganizationShow extends Component{
   displayName: 'OrganizationShow'
 
   state = {
-    attemptedFetch: false,
     openTab: 'MODELS',
     subMembersTab: 'INDEX'
   }
 
   componentWillMount() {
-    this.fetchData()
+    this.refreshData()
   }
 
-  componentDidUpdate() {
-    this.fetchData()
-  }
-
-  fetchData() {
-    if (!this.state.attemptedFetch) {
-      this.props.dispatch(organizationActions.fetchById(this.props.organizationId))
-      this.props.dispatch(spaceActions.fetch({organizationId: this.props.organizationId}))
-      this.setState({attemptedFetch: true})
-    }
+  refreshData() {
+    this.props.dispatch(organizationActions.fetchById(this.props.organizationId))
+    this.props.dispatch(spaceActions.fetch({organizationId: this.props.organizationId}))
   }
 
   changeTab(tab) {
@@ -85,7 +77,6 @@ export default class OrganizationShow extends Component{
     this.props.dispatch(modalActions.openConfirmation({onConfirm: removeCallback, message}))
   }
 
-
   render () {
     const {organizationId, organizations, members, memberships, invitations} = this.props
     const unjoinedInvitees = invitations.filter(i => !_.some(memberships, m => m.invitation_id === i.id))
@@ -97,7 +88,7 @@ export default class OrganizationShow extends Component{
 
     let tabs = [{name: 'Models', key: 'MODELS'}, {name: 'Members', key: 'MEMBERS'}]
     const portalUrl = _.get(organization, 'account._links.payment_portal.href')
-    if (!!portalUrl) { tabs = [...tabs, {name: 'Billing', key: 'BILLING', url: portalUrl}] }
+    if (!!portalUrl) { tabs = [...tabs, {name: 'Billing', key: 'BILLING', href: portalUrl, onMouseUp: this.refreshData.bind(this)}] }
 
     return (
       <Container>
@@ -167,8 +158,18 @@ const OrganizationTabButtons = ({tabs, openTab, changeTab}) => (
       <div className="ui secondary menu">
         { tabs.map( e => {
           const className = `item ${(openTab === e.key) ? 'active' : ''}`
-          if (!!e.url){
-            return (<a className='item' key={e.key} href={e.url} target='_blank'> {e.name} </a>)
+          if (!!e.href){
+            return (
+              <a
+                className='item'
+                key={e.key}
+                href={e.href}
+                target='_blank'
+                onMouseUp={e.onMouseUp ? e.onMouseUp : () => {} }
+              >
+                {e.name}
+              </a>
+            )
           } else {
             return (
               <a className={className} key={e.key} onClick={() => {changeTab(e.key)}}> {e.name} </a>
