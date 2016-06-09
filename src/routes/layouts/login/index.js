@@ -3,7 +3,7 @@ import Auth0Lock from 'auth0-lock'
 import React, {Component, PropTypes} from 'react'
 import StandardDropdownMenu from 'gComponents/utility/standard-dropdown-menu'
 import DropDown from 'gComponents/utility/drop-down/index.js'
-import {DropDownListElement} from 'gComponents/utility/drop-down/index.js'
+import {CardListElement} from 'gComponents/utility/card/index.js'
 import {LinkSettings} from 'gComponents/utility/links/index.js'
 import * as meActions from 'gModules/me/actions.js'
 import * as modalActions from 'gModules/modal/actions.js'
@@ -60,15 +60,12 @@ export default class Profile extends Component {
     return (
       <div className='item'>
         <DropDown
-            headerText={profile.name}
-            openLink={<img className='avatar' src={profile.picture}/>}
-            onOpen={trackUserMenuOpen}
-            onClose={trackUserMenuClose}
-            ref='dropdown'
+          headerText={profile.name}
+          openLink={<img className='avatar' src={profile.picture}/>}
+          onOpen={trackUserMenuOpen}
+          onClose={trackUserMenuClose}
         >
-          <ul>
-            {listElements.map(props => <DropDownListElement {...props} key={props.header} closeOnClick={true} dropDown={this.refs.dropdown}/>)}
-          </ul>
+          {listElements.map(props => <CardListElement {...props} key={props.header} closeOnClick={true}/>)}
         </DropDown>
       </div>
     )
@@ -112,9 +109,7 @@ export default class Profile extends Component {
         openLink={<a className='item'> <i className={`ion-md-add`}/> <span className='text'>New Model</span> </a>}
         ref={ref}
       >
-        <ul>
-          {listElements.map(element => <DropDownListElement {...element.props} key={element.id}/>)}
-        </ul>
+        {listElements.map(element => <CardListElement {...element.props} key={element.id}/>)}
       </DropDown>
     )
   }
@@ -145,9 +140,7 @@ export default class Profile extends Component {
         openLink={<a className='item'> <i className={`ion-ios-people`}/> <span className='text'>Organizations</span> </a>}
         ref={ref}
       >
-        <ul>
-          {listElements.map(element => <DropDownListElement {...element.props} key={element.id} />)}
-        </ul>
+        {listElements.map(element => <CardListElement {...element.props} key={element.id} />)}
       </DropDown>
     )
   }

@@ -5,7 +5,6 @@ import cuid from 'cuid'
 import * as displayErrorsActions from 'gModules/displayErrors/actions'
 import * as userActions from 'gModules/users/actions'
 import * as invitationActions from 'gModules/userOrganizationInvitations/actions'
-import * as organizationActions from 'gModules/organizations/actions'
 import * as httpRequestActions from 'gModules/httpRequests/actions'
 
 import {captureApiError} from 'lib/errors/index'
@@ -43,9 +42,6 @@ export function fetchByUserId(userId) {
         captureApiError('OrganizationsMemberFetch', null, null, err, {url: 'fetchMembers'})
       } else if (memberships) {
         dispatch(fetchSuccess(memberships.items))
-
-        const organizations = memberships.items.map(m => _.get(m, '_embedded.organization')).filter(o => !!o)
-        dispatch(organizationActions.fetchSuccess(organizations))
       }
     })
   }
@@ -54,10 +50,9 @@ export function fetchByUserId(userId) {
 export function fetchSuccess(memberships) {
   return (dispatch, getState) => {
     const formatted = memberships.map(m => _.pick(m, relevantAttributes))
-    dispatch(sActions.fetchSuccess(formatted))
-
     const users = memberships.map(m => _.get(m, '_embedded.user')).filter(u => !!u)
-    dispatch(userActions.fetchSuccess(users))
+    const organizations = memberships.map(m => _.get(m, '_embedded.organization')).filter(o => !!o)
+    dispatch(sActions.fetchSuccess(formatted, {users, organizations}))
   }
 }
 

@@ -31,15 +31,23 @@ export default class ItemCell extends Component {
     location: PTLocation.isRequired,
   }
 
+  componentDidMount() { window.recorder.recordMountEvent(this) }
+  componentWillUpdate() { window.recorder.recordRenderStartEvent(this) }
+  componentDidUpdate() { window.recorder.recordRenderStopEvent(this) }
+  componentWillUnmount() { window.recorder.recordUnmountEvent(this) }
+
   item() {
     return React.cloneElement(
         this.props.item,
         {
           hovered: this.props.hover,
           inSelectedCell: this.props.inSelectedCell,
+          selectedFrom: this.props.selectedFrom,
           gridKeyPress: this.props.gridKeyPress,
           connectDragSource: this.props.connectDragSource,
-          forceFlowGridUpdate: this.props.forceFlowGridUpdate
+          forceFlowGridUpdate: this.props.forceFlowGridUpdate,
+          onReturn: this.props.onReturn,
+          onTab: this.props.onTab
         }
     )
   }

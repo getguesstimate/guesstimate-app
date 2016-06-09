@@ -1,7 +1,8 @@
 import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux';
 
-import DropDown, {DropDownListElement} from 'gComponents/utility/drop-down/index.js'
+import DropDown from 'gComponents/utility/drop-down/index.js'
+import {CardListElement} from 'gComponents/utility/card/index.js'
 
 import * as canvasStateActions from 'gModules/canvas_state/actions.js'
 import * as canvasStateProps from 'gModules/canvas_state/prop_type.js'
@@ -79,33 +80,32 @@ export default class CanvasViewForm extends Component {
 
     return (
       <DropDown
-          headerText={'View Options'}
-          openLink={<a className='header-action'>View</a>}
-          position='right'
+        headerText={'View Options'}
+        openLink={<a className='header-action'>View</a>}
+        position='right'
       >
-
-        <div className='section'>
-          <div className='header-divider'>
+        <div className='section' closeOnClick={true}>
+          <div className='header-divider' onClick={e => {e.stopPropagation()}}>
             <h3> Metric Style </h3>
           </div>
           <ul>
             {metricCardViewOptions.map(o => {
               return(
-                <DropDownListElement key={o.name} icon={o.icon} header={o.name} isSelected={o.isSelected} onMouseDown={o.onClick} image={o.image}/>
+                <CardListElement key={o.name} icon={o.icon} header={o.name} isSelected={o.isSelected} onMouseDown={o.onClick} image={o.image}/>
               )
             })}
           </ul>
         </div>
         <hr/>
 
-        <div className='section'>
-          <div className='header-divider'>
+        <div className='section' closeOnClick={true}>
+          <div className='header-divider' onClick={e => {e.stopPropagation()}}>
             <h3> Arrows </h3>
           </div>
           <ul>
             {arrowViewOptions.map(o => {
               return(
-                <DropDownListElement key={o.name} icon={o.icon} header={o.name} isSelected={o.isSelected} onMouseDown={o.onClick} image={o.image}/>
+                <CardListElement key={o.name} icon={o.icon} header={o.name} isSelected={o.isSelected} onMouseDown={o.onClick} image={o.image}/>
               )
             })}
           </ul>

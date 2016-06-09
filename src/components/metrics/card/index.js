@@ -4,9 +4,6 @@ import {connect} from 'react-redux'
 import ReactDOM from 'react-dom'
 import $ from 'jquery'
 
-import {removeMetrics, changeMetric} from 'gModules/metrics/actions'
-import {changeGuesstimate} from 'gModules/guesstimates/actions'
-
 import MetricModal from 'gComponents/metrics/modal/index'
 import DistributionEditor from 'gComponents/distributions/editor/index'
 import MetricToolTip from './tooltip'
@@ -15,6 +12,9 @@ import MetricCardViewSection from './MetricCardViewSection/index'
 import SensitivitySection from './SensitivitySection/SensitivitySection'
 
 import {hasMetricUpdated} from './updated'
+
+import {removeMetrics, changeMetric} from 'gModules/metrics/actions'
+import {changeGuesstimate} from 'gModules/guesstimates/actions'
 
 import * as canvasStateProps from 'gModules/canvas_state/prop_type'
 import {PTLocation} from 'lib/locationUtils'
@@ -70,16 +70,31 @@ export default class MetricCard extends Component {
     return hasMetricUpdated(this.props, nextProps) || (this.state.modalIsOpen !== nextState.modalIsOpen)
   }
 
-  componentDidUpdate() {
+  focusFromDirection(dir) {
+    if (dir === 'DOWN' || dir === 'RIGHT') { this._focusForm() }
+    else { this.refs.MetricCardViewSection.focusName() }
+  }
+
+  componentWillUpdate() { window.recorder.recordRenderStartEvent(this) }
+  componentWillUnmount() { window.recorder.recordUnmountEvent(this) }
+
+  componentDidUpdate(prevProps) {
+    window.recorder.recordRenderStopEvent(this)
+
     const hasContent = this.refs.MetricCardViewSection.hasContent()
-    if (!this.props.inSelectedCell && this._isEmpty() && !hasContent && !this.state.modalIsOpen){
+    const {inSelectedCell, selectedFrom} = this.props
+    if (!inSelectedCell && this._isEmpty() && !hasContent && !this.state.modalIsOpen){
       this.handleRemoveMetric()
+    }
+    if (!prevProps.inSelectedCell && inSelectedCell && !!selectedFrom) {
+      this.focusFromDirection(selectedFrom)
     }
   }
 
   componentDidMount() {
+    window.recorder.recordMountEvent(this)
     if (this.props.inSelectedCell && this._isEmpty()) {
-      this.refs.MetricCardViewSection.focusName()
+      this.focusFromDirection(this.props.selectedFrom)
     }
   }
 
@@ -250,6 +265,8 @@ export default class MetricCard extends Component {
             heightHasChanged={forceFlowGridUpdate}
             hovered={hovered}
             onEscape={this.focus.bind(this)}
+            onReturn={this.props.onReturn}
+            onTab={this.props.onTab}
           />
 
           {inSelectedCell && !this.state.modalIsOpen &&
@@ -258,10 +275,13 @@ export default class MetricCard extends Component {
                 guesstimate={metric.guesstimate}
                 metricId={metric.id}
                 metricFocus={this.focus.bind(this)}
+                jumpSection={() => {this.refs.MetricCardViewSection.focusName()}}
                 onOpen={this.openModal.bind(this)}
                 ref='DistributionEditor'
                 size='small'
                 errors={errors}
+                onReturn={this.props.onReturn}
+                onTab={this.props.onTab}
               />
             </div>
           }
