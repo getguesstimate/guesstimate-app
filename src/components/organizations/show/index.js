@@ -62,6 +62,10 @@ export default class OrganizationShow extends Component{
     })
   }
 
+  _newModel() {
+    this.props.dispatch(spaceActions.create(this.props.organizationId))
+  }
+
   destroyMembership(membershipId) {
     this.props.dispatch(userOrganizationMembershipActions.destroy(membershipId))
   }
@@ -112,7 +116,9 @@ export default class OrganizationShow extends Component{
           <div className='main-section'>
             {(openTab === 'MODELS' || !meIsMember) && spaces &&
               <div className='row'>
-                <NewSpaceCard/>
+                {meIsMember &&
+                  <NewSpaceCard onClick={this._newModel.bind(this)}/>
+                }
                 {_.map(spaces, (s) =>
                     <SpaceCard
                       key={s.id}

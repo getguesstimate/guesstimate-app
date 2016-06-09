@@ -45,8 +45,8 @@ const ButtonArea = ({owner, ownerUrl, isPrivate, showPrivacy}) => (
   </div>
 )
 
-export const NewSpaceCard = ({space, showPrivacy}) => (
-  <div className='col-xs-12 col-md-4 SpaceCard new'>
+export const NewSpaceCard = ({onClick}) => (
+  <div className='col-xs-12 col-md-4 SpaceCard new' onClick={onClick}>
     <div className='SpaceCard--inner'>
       <div className='section-middle'>
         <Icon name='plus'/>
