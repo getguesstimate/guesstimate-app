@@ -95,3 +95,16 @@ the window, called `recorder`, with the following API:
   * `recorder.actionCounts` is an object that stores how many times each action type has been dispatched.
   * `recorder.renderCounts` is an object that stores how many times each tracked component has been rendered.
   * `recorder.selectorCounts` is an object that stores how many times each tracked selector was run.
+
+To track additional components or selectors, simply add the appropriate recorder methods into the lifecycle. In
+particular, for a component, insert the following:
+  * `window.recorder.recordMountEvent(this)` within `componentWillMount`
+  * `window.recorder.recordUnmountEvent(this)` within `componentWillUnmount`
+  * `window.recorder.recordRenderStartEvent(this)` within `componentWillUpdate`
+  * `window.recorder.recordRenderStopEvent(this)` within `componentDidUpdate`
+
+Within a selector, insert the following:
+  * `window.recorder.recordSelectorStart([NAME])` at the start of the selector's execution (or the start of the first
+    selector within the selector chain).
+  * `window.recorder.recordSelectorStop([NAME], [DATA])` just before the selector returns, with data being any data
+    you'd like to track in the timeline with that selector event (the return value is typical).
