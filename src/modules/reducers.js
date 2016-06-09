@@ -10,10 +10,11 @@ import guesstimatesR from './guesstimates/reducer'
 import simulationsR from './simulations/reducer'
 import meR from './me/reducer'
 import canvasStateR from './canvas_state/reducer'
-import spacesR from './spaces/reducer'
 import searchSpacesR from './search_spaces/reducer'
 import firstSubscriptionsR from './first_subscription/reducer'
 import modalR from './modal/reducer'
+import {usersR} from './users/reducer'
+import {organizationsR} from './organizations/reducer'
 import {copiedR} from './copied/reducer'
 import {checkpointsR} from './checkpoints/reducer'
 import {httpRequestsR} from './httpRequests/reducer'
@@ -24,6 +25,7 @@ export function changeSelect(location) {
 }
 
 const rootReducer = function app(state = {}, action){
+  window.recorder.recordReductionEvent(action)
   return {
     displayError: SI(displayErrorR(state.displayError, action)),
     metrics: SI(metricsR(state.metrics, action)),

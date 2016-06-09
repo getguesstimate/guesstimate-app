@@ -1,5 +1,5 @@
-export function changeSelect(location) {
-  return { type: 'CHANGE_SELECT', location }
+export function changeSelect(location, selectedFrom) {
+  return { type: 'CHANGE_SELECT', selection: {...location, selectedFrom} }
 }
 
 export function deSelect() {

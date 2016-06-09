@@ -30,7 +30,7 @@ export default class Guesstimate extends Component{
   componentDidUpdate(prevProps) {
     const {guesstimate: {input, guesstimateType}} = this.props
     const sameInput = input === prevProps.guesstimate.input
-    if (!sameInput && guesstimateType !== 'FUNCTION'){
+    if (!sameInput && prevProps.guesstimate.guesstimateType === 'FUNCTION' && guesstimateType !== 'FUNCTION') {
       this._changeMetricClickMode('')
     }
   }
@@ -51,7 +51,9 @@ export default class Guesstimate extends Component{
   changeInput(input) {
     const guesstimateType = this._guesstimateType({input})
     this.changeGuesstimate({data: null, input, guesstimateType}, true, false)
-    if (guesstimateType === 'FUNCTION') {this._changeMetricClickMode('FUNCTION_INPUT_SELECT')}
+    if (guesstimateType === 'FUNCTION' && this.props.guesstimateType !== 'FUNCTION') {
+      this._changeMetricClickMode('FUNCTION_INPUT_SELECT')
+    }
   }
   changeGuesstimateTypeAndSave(guesstimateType) {
     this.changeGuesstimate({guesstimateType}, false, true)
@@ -64,6 +66,24 @@ export default class Guesstimate extends Component{
   }
 
   _changeMetricClickMode(newMode) { this.props.dispatch(changeMetricClickMode(newMode)) }
+
+  handleReturn(shifted) {
+    if (shifted) {
+      this.props.jumpSection()
+    } else {
+      this.props.onReturn()
+    }
+    return true
+  }
+
+  handleTab(shifted) {
+    if (shifted) {
+      this.props.jumpSection()
+    } else {
+      this.props.onTab()
+    }
+    return true
+  }
 
   render () {
     const {size, guesstimate, onOpen, errors} = this.props
@@ -95,6 +115,8 @@ export default class Guesstimate extends Component{
             onChangeClickMode={this._changeMetricClickMode.bind(this)}
             onAddDefaultData={() => {this.addDataAndSave([1,2,3])}}
             onEscape={this.props.metricFocus}
+            onReturn={this.handleReturn.bind(this)}
+            onTab={this.handleTab.bind(this)}
             size={size}
             hasErrors={errors && (errors.length !== 0)}
             ref='TextForm'

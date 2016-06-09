@@ -4,7 +4,8 @@ import Icon from 'react-fa'
 import ReactTooltip from 'react-tooltip'
 
 import CanvasViewForm from '../canvasViewForm'
-import DropDown, {DropDownListElement} from 'gComponents/utility/drop-down/index'
+import DropDown from 'gComponents/utility/drop-down/index'
+import {CardListElement} from 'gComponents/utility/card/index.js'
 import {ViewOptionToggle} from '../view-options/index'
 import {PrivacyToggle} from '../privacy-toggle/index'
 
@@ -44,6 +45,11 @@ const ProgressMessage = ({actionState}) => (
 )
 
 export class SpaceToolbar extends Component {
+  componentDidMount() { window.recorder.recordMountEvent(this) }
+  componentWillUpdate() { window.recorder.recordRenderStartEvent(this) }
+  componentDidUpdate() { window.recorder.recordRenderStopEvent(this) }
+  componentWillUnmount() { window.recorder.recordUnmountEvent(this) }
+
   shouldComponentUpdate(nextProps) {
     if (!nextProps.editableByMe) { return false }
     return (
@@ -76,7 +82,7 @@ export class SpaceToolbar extends Component {
     const ReactTooltipParams = {class: 'small-tooltip', delayShow: 0, delayHide: 0, place: 'bottom', effect: 'solid'}
 
     let view_mode_header = (<span><Icon name='eye'/> Viewing </span>)
-    if (editsAllowed) {
+    if (editableByMe && editsAllowed) {
       view_mode_header = (<span><Icon name='pencil'/> Editing </span>)
     }
     return (
@@ -91,16 +97,14 @@ export class SpaceToolbar extends Component {
 
             { isLoggedIn &&
               <DropDown
-                  headerText={'Model Actions'}
-                  openLink={<a className='header-action'>File</a>}
-                  position='right'
+                headerText={'Model Actions'}
+                openLink={<a className='header-action'>File</a>}
+                position='right'
               >
-                <ul>
-                  <DropDownListElement icon={'copy'} header='Copy Model' onMouseDown={onCopyModel}/>
-                  {editableByMe &&
-                    <DropDownListElement icon={'warning'} header='Delete Model' onMouseDown={onDestroy}/>
-                  }
-                </ul>
+                <CardListElement icon={'copy'} header='Copy Model' onMouseDown={onCopyModel}/>
+                {editableByMe &&
+                  <CardListElement icon={'warning'} header='Delete Model' onMouseDown={onDestroy}/>
+                }
               </DropDown>
             }
 
@@ -124,7 +128,7 @@ export class SpaceToolbar extends Component {
               <Icon name='repeat'/>
             </a>
 
-            {editsAllowed && <ProgressMessage actionState={actionState}/>}
+            {editableByMe && editsAllowed && <ProgressMessage actionState={actionState}/>}
 
           </div>
           <div className='col-sm-2'>
@@ -134,7 +138,7 @@ export class SpaceToolbar extends Component {
                 openLink={<a className='header-action button'>{view_mode_header}</a>}
                 position='left'
                 isEditingInvalid={!editableByMe}
-                isEditing={editsAllowed}
+                isEditing={editableByMe && editsAllowed}
                 onAllowEdits={onAllowEdits}
                 onForbidEdits={onForbidEdits}
               />
