@@ -8,6 +8,10 @@ export function url(organization) {
   return (!!organization) ? urlById(organization.id) : ''
 }
 
+export function image({picture}) {
+  return _.isEmpty(picture) ? '/organization-default-image.png' : picture
+}
+
 export function urlById(id) {
   return '/organizations/' + id
 }
