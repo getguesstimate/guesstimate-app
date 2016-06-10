@@ -1,45 +1,38 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 
-import {create} from 'gModules/organizations/actions'
 import Card, {CardListElement} from 'gComponents/utility/card/index'
 
-export class PlanElement extends Component {
-  render() {
-    return(
-      <div className={`PlanElement ${this.props.isSelected && 'selected'}`} onClick={this.props.onClick}>
-        <div className='radio-section'>
-          <input type='radio' checked={this.props.isSelected}/>
-        </div>
-        <div className='content-section'>
-          {this.props.children}
-        </div>
-      </div>
-    )
-  }
-}
+import {create} from 'gModules/organizations/actions'
 
-export class PlanList extends Component {
-  render() {
-    return(
-      <div className='PlanList'>
-        <PlanElement onClick={() => {this.props.onSelect('FREE')}} isSelected={this.props.plan === 'FREE'}>
-          Unlimited members and public models for free.
-        </PlanElement>
-        <PlanElement onClick={() => {this.props.onSelect('PREMIUM')}} isSelected={this.props.plan === 'PREMIUM'}>
-          Unlimited private models. $12/month per user.
-          <div className='free-trial'>Free 14-day trial, no credit card needed.</div>
-        </PlanElement>
-      </div>
-    )
-  }
-}
+export const PlanElement = ({onClick, isSelected, children}) => (
+  <div className={`PlanElement ${isSelected && 'selected'}`} onClick={onClick}>
+    <div className='radio-section'>
+      <input type='radio' checked={isSelected}/>
+    </div>
+    <div className='content-section'>
+      {children}
+    </div>
+  </div>
+)
+
+export const PlanList = ({onSelect, plan}) => (
+  <div className='PlanList'>
+    <PlanElement onClick={() => {onSelect('FREE')}} isSelected={plan === 'FREE'}>
+      Unlimited members and public models for free.
+    </PlanElement>
+    <PlanElement onClick={() => {onSelect('PREMIUM')}} isSelected={plan === 'PREMIUM'}>
+      Unlimited private models. $12/month per user.
+      <div className='free-trial'>Free 14-day trial, no credit card needed.</div>
+    </PlanElement>
+  </div>
+)
 
 @connect()
 export class CreateOrganizationForm extends Component {
   state = {
     value: '',
-    plan: 'PREMIUM'
+    plan: 'PREMIUM',
   }
 
   render() {

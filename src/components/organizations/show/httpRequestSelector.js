@@ -12,12 +12,12 @@ export const httpRequestSelector = createSelector(
   organizationIdSelector,
   (httpRequests, organizationId) => {
 
-    let relevantRequests = httpRequests.filter(r => (
+    const relevantRequests = httpRequests.filter(r => (
       (r.metadata.organizationId === organizationId) &&
       (r.entity === 'userOrganizationMembershipCreate')
     ))
 
-    let formattedRequests = relevantRequests.map(r => ({
+    const formattedRequests = relevantRequests.map(r => ({
         id: r.id,
         busy: r.busy,
         success: r.success,

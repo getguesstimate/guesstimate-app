@@ -1,4 +1,4 @@
-import { createSelector } from 'reselect';
+import {createSelector} from 'reselect'
 
 const specificHttpRequestSelector = state => state.httpRequests
 const organizationIdSelector = (state, props) => props.organizationId
