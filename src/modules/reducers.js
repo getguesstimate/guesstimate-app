@@ -13,6 +13,7 @@ import canvasStateR from './canvas_state/reducer'
 import searchSpacesR from './search_spaces/reducer'
 import firstSubscriptionsR from './first_subscription/reducer'
 import modalR from './modal/reducer'
+import {userOrganizationInvitationsR} from './userOrganizationInvitations/reducer'
 import {usersR} from './users/reducer'
 import {organizationsR} from './organizations/reducer'
 import {copiedR} from './copied/reducer'
@@ -38,7 +39,7 @@ const rootReducer = function app(state = {}, action){
     organizations: SI(organizationsR(state.organizations, action)),
     newOrganization: SI(newOrganizationR(state.newOrganization, action)),
     userOrganizationMemberships: SI(reduxCrud.reducersFor('userOrganizationMemberships')(state.userOrganizationMemberships, action)),
-    userOrganizationInvitations: SI(reduxCrud.reducersFor('userOrganizationInvitations')(state.userOrganizationInvitations, action)),
+    userOrganizationInvitations: SI(userOrganizationInvitationsR(state.userOrganizationInvitations, state.userOrganizationMemberships, action)),
     me: SI(meR(state.me, action)),
     canvasState: SI(canvasStateR(state.canvasState, action)),
     searchSpaces: SI(searchSpacesR(state.searchSpaces, action)),
