@@ -1,4 +1,4 @@
-import { createSelector } from 'reselect';
+import {createSelector} from 'reselect'
 
 const specificHttpRequestSelector = state => state.httpRequests
 const organizationIdSelector = (state, props) => props.organizationId
@@ -12,12 +12,12 @@ export const httpRequestSelector = createSelector(
   organizationIdSelector,
   (httpRequests, organizationId) => {
 
-    const relevantRequests = httpRequests.filter(r => (
+    let relevantRequests = httpRequests.filter(r => (
       (r.metadata.organizationId === organizationId) &&
       (r.entity === 'userOrganizationMembershipCreate')
     ))
 
-    const formattedRequests = relevantRequests.map(r => ({
+    let formattedRequests = relevantRequests.map(r => ({
         id: r.id,
         busy: r.busy,
         success: r.success,
