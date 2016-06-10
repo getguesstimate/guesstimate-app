@@ -44,6 +44,7 @@ export class BackgroundContainer extends Component {
     return (
       !_.isEqual(this.props.copiedRegion, nextProps.copiedRegion) ||
       !_.isEqual(this.props.selectedRegion, nextProps.selectedRegion) ||
+      !_.isEqual(this.props.fillRegion, nextProps.fillRegion) ||
       !_.isEqual(this.props.edges, nextProps.edges) ||
       !_.isEqual(this.state.rowHeights, nextState.rowHeights)
     )
@@ -89,7 +90,7 @@ export class BackgroundContainer extends Component {
             rowHeights={rowHeights}
             columnWidth={columnWidth}
             selectedRegion={fillRegion}
-            type='copied'
+            type='fill'
           />
         }
       </div>

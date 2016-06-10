@@ -35,6 +35,8 @@ export function getBounds({start, end}) {
   return [{row: leftX, column: bottomY}, {row: rightX, column: topY}]
 }
 
+export const move = ({row, column}, direction) => ({row: row + direction.row, column: column + direction.column})
+
 // Returns a function that translates all points of the form {row: X, column: Y} according to the translation that moves
 // start to end.
 export function translate(start, end) {

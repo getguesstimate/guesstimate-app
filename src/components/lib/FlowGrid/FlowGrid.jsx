@@ -92,7 +92,13 @@ export default class FlowGrid extends Component{
     // TODO(matthew): Clean up.
     if (this._mouseMoved(e) && (this.state.tracingFillRegion || this.state.leftDown)) {
       if (this.state.tracingFillRegion) {
-        this.setState({fillRegion: {start: this.state.fillRegion.start, end: location}})
+        window.recorder.recordNamedEvent("FlowGrid set fillRegion state")
+        const {fillRegion: {start}} = this.state
+        if (Math.abs(location.row - start.row) > Math.abs(location.column - start.column)) {
+          this.setState({fillRegion: {start, end: {row: location.row, column: start.column}}})
+        } else {
+          this.setState({fillRegion: {start, end: {row: start.row, column: location.column}}})
+        }
       } else if (this.state.leftDown) {
         this._handleEndRangeSelect(location)
       }
@@ -209,14 +215,15 @@ export default class FlowGrid extends Component{
   }
 
   onFillTargetMouseDown(location) {
-    console.log("So far so good....")
+    window.recorder.recordNamedEvent("FlowGrid set fillRegion state")
     this.setState({tracingFillRegion: true, fillRegion: {start: location}})
   }
 
   onCellMouseUp(location) {
     if (this.state.tracingFillRegion) {
-      console.log("oops")
-      this.setState({tracingFillRegion: false})
+      window.recorder.recordNamedEvent("FlowGrid set fillRegion state")
+      this.props.onFillRegion(this.state.fillRegion)
+      this.setState({tracingFillRegion: false, fillRegion: {}})
     }
   }
 
