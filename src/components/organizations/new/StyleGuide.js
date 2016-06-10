@@ -6,23 +6,22 @@ import {CreateOrganizationPage} from './index'
 export default class PlanStyleGuide extends Component{
   displayName: 'Settings-StyleGuide'
   render () {
-    const foo = {newOrg: {id: 34}}
     return (
       <div className=''>
         <ComponentEditor
           child={CreateOrganizationPage}
           childProps={{}}
-          name={`PlanIndex`}
-          context={'foobar'}
-          key={'foobar'}
+          name={`CreateOrganizationPage`}
+          context={'Step 1'}
+          key={'1'}
           backgroundColor={'grey'}
         />
         <ComponentEditor
           child={CreateOrganizationPage}
-          childProps={foo}
-          name={`PlanIndex`}
-          context={'foobar1'}
-          key={'foobar1'}
+          childProps={{newOrganization: {id: 34}}}
+          name={`CreateOrganizationPage`}
+          context={'Step 2'}
+          key={'2'}
           backgroundColor={'grey'}
         />
       </div>

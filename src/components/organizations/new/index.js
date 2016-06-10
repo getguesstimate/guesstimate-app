@@ -9,7 +9,7 @@ import './style.css'
 
 function mapStateToProps(state) {
   return {
-    newOrg: state.newOrg,
+    newOrganization: state.newOrganization,
   }
 }
 
@@ -18,11 +18,11 @@ export class CreateOrganizationPageContainer extends Component {
   componentWillUnmount() {
     this.props.dispatch({type: 'CLEAR_NEW_ORGANIZATION'})
   }
-  render() { return (<CreateOrganizationPage newOrg={this.props.newOrg}/>) }
+  render() { return (<CreateOrganizationPage newOrganization={this.props.newOrganization}/>) }
 }
 
-export const CreateOrganizationPage = ({newOrg}) => {
-  const newOrgCreated = _.has(newOrg, 'id')
+export const CreateOrganizationPage = ({newOrganization}) => {
+  const newOrganizationCreated = _.has(newOrganization, 'id')
   return (
     <Container>
       <div className='CreateOrganization'>
@@ -32,12 +32,12 @@ export const CreateOrganizationPage = ({newOrg}) => {
 
             <div className='row Header'>
               <div className='col-xs-12'>
-                {!newOrgCreated && <h1> Step 1: Create an Organization </h1>}
-                  {!!newOrgCreated && <h1> Step 2: Add Members </h1>}
+                {!newOrganizationCreated && <h1> Step 1: Create an Organization </h1>}
+                  {!!newOrganizationCreated && <h1> Step 2: Add Members </h1>}
               </div>
             </div>
-            {!newOrgCreated && <CreateOrganizationForm />}
-            {!!newOrgCreated && <LocalAddMembers organizationId={newOrg.id} admin_id={newOrg.admin_id} />}
+            {!newOrganizationCreated && <CreateOrganizationForm />}
+            {!!newOrganizationCreated && <LocalAddMembers organizationId={newOrganization.id} admin_id={newOrganization.admin_id} />}
           </div>
 
         </div>

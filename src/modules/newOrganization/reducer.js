@@ -1,4 +1,4 @@
-export function newOrgR(state = {}, action) {
+export function newOrganizationR(state = {}, action) {
   switch (action.type) {
     case 'CLEAR_NEW_ORGANIZATION':
       return {}
