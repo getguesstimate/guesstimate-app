@@ -63,6 +63,8 @@ export default class FlowGrid extends Component{
     this.setState({
       hover: {row: -1, column: -1},
       leftDown: false,
+      tracingFillRegion: false,
+      fillRegion: {},
     })
   }
 

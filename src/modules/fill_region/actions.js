@@ -4,6 +4,7 @@ import {runSimulations} from 'gModules/simulations/actions'
 import e from 'gEngine/engine'
 
 import {isAtLocation, isWithinRegion, getBounds, move, translate} from 'lib/locationUtils'
+import {registerGraphChange} from 'gModules/spaces/actions'
 
 const DYNAMIC_FILL_TYPES = ['FUNCTION']
 
@@ -84,5 +85,6 @@ export function fillRegion(spaceId, {start, end}) {
     dispatch({type: 'ADD_METRICS', items: newMetrics, newGuesstimates: newGuesstimates})
 
     dispatch(runSimulations({spaceId, metricSubset: newMetrics}))
+    dispatch(registerGraphChange(spaceId))
   }
 }
