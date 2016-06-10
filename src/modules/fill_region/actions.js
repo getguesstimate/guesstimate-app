@@ -9,7 +9,7 @@ const DYNAMIC_FILL_TYPES = ['FUNCTION']
 
 // TODO(matthew): Dry up code with this and copy and undo perhaps.
 function translateReadableIds(input, idMap) {
-  if (!input) {return ""}
+  if (!input || _.isEmpty(idMap)) {return input}
   const re = RegExp(Object.keys(idMap).join("|"), "g")
   return input.replace(re, (match) => idMap[match])
 }
