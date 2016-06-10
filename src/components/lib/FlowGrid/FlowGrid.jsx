@@ -62,7 +62,7 @@ export default class FlowGrid extends Component{
     window.recorder.recordNamedEvent("FlowGrid set hover state")
     this.setState({
       hover: {row: -1, column: -1},
-      leftDown: false,
+      dragSelecting: false,
       tracingFillRegion: false,
       fillRegion: {},
     })
@@ -71,14 +71,14 @@ export default class FlowGrid extends Component{
   _handleMouseUp(e) {
     if (e.button === 0) {
       window.recorder.recordNamedEvent("FlowGrid set left down state")
-      this.setState({leftDown: false})
+      this.setState({dragSelecting: false})
     }
   }
 
   _handleEmptyCellMouseDown(e, location) {
     if (e.button === 0 && !(e.target && e.target.type === 'textarea')) {
       window.recorder.recordNamedEvent("FlowGrid set left down state")
-      this.setState({leftDown: true})
+      this.setState({dragSelecting: true})
       lastMousePosition = _.pick(e, 'pageX', 'pageY')
       e.preventDefault()
     }
@@ -92,7 +92,7 @@ export default class FlowGrid extends Component{
   _handleCellMouseEnter(location, e) {
     window.recorder.recordNamedEvent("FlowGrid set hover state")
     // TODO(matthew): Clean up.
-    if (this._mouseMoved(e) && (this.state.tracingFillRegion || this.state.leftDown)) {
+    if (this._mouseMoved(e) && (this.state.tracingFillRegion || this.state.dragSelecting)) {
       if (this.state.tracingFillRegion) {
         window.recorder.recordNamedEvent("FlowGrid set fillRegion state")
         const {fillRegion: {start}} = this.state
@@ -101,7 +101,7 @@ export default class FlowGrid extends Component{
         } else {
           this.setState({fillRegion: {start, end: {row: start.row, column: location.column}}})
         }
-      } else if (this.state.leftDown) {
+      } else if (this.state.dragSelecting) {
         this._handleEndRangeSelect(location)
       }
       this.setState({hover: {row: -1, column: -1}})
@@ -226,14 +226,19 @@ export default class FlowGrid extends Component{
       window.recorder.recordNamedEvent("FlowGrid set fillRegion state")
       this.props.onFillRegion(this.state.fillRegion)
       this.setState({tracingFillRegion: false, fillRegion: {}})
+      this._handleEndRangeSelect(location)
     }
   }
 
+  // TODO(matthew): Look into necessity of 'inSelectedRegion' passed to cell below.
   _cell(location) {
-    const item = this.props.items.find(i => isAtLocation(i.location, location));
+    const item = this.props.items.find(i => isAtLocation(i.location, location))
+    const {selectedCell, selectedRegion} = this.props
+    const inSelectedCell = isAtLocation(selectedCell, location)
+    const selectedRegionNontrivial = selectedRegion.length === 2 && !isAtLocation(selectedRegion[0], selectedRegion[1])
     return (
       <Cell
-        onMouseUp={this.onCellMouseUp.bind(this)}
+        onMouseUp={() => {this.onCellMouseUp(location)}}
         onFillTargetMouseDown={() => {this.onFillTargetMouseDown(location)}}
         canvasState={this.props.canvasState}
         forceFlowGridUpdate={() => this.forceUpdate()}
@@ -241,9 +246,9 @@ export default class FlowGrid extends Component{
         hasItemUpdated={this.props.hasItemUpdated}
         handleSelect={this.props.onSelectItem}
         handleEndRangeSelect={this._handleEndRangeSelect.bind(this)}
-        inSelectedRegion={isWithinRegion(location, this.props.selectedRegion)}
-        inSelectedCell={isAtLocation(this.props.selectedCell, location)}
-        selectedFrom={this.props.selectedCell.selectedFrom}
+        inSelectedRegion={isWithinRegion(location, selectedRegion)}
+        inSelectedCell={inSelectedCell}
+        selectedFrom={selectedCell.selectedFrom}
         isHovered={isAtLocation(this.state.hover, location)}
         item={item && item.component}
         key={'grid-item', location.row, location.column}
@@ -257,6 +262,7 @@ export default class FlowGrid extends Component{
         onTab={(right=true) => {this._onTab(location, right)}}
         ref={`cell-${location.row}-${location.column}`}
         getRowHeight={() => this._getRowHeight(location.row)}
+        showFillToken={inSelectedCell && !this.state.dragSelecting && !selectedRegionNontrivial}
       />
     )
   }

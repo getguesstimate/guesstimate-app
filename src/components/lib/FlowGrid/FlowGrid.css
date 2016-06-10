@@ -177,11 +177,13 @@ svg.edge  path.basic-arrow.RED {
 }
 
 .FlowGridCell .FillToken {
-   width: 2em;
-   height: 2em;
-   border-radius: 1em;
-   background: red;
+   width: 1em;
+   height: 1em;
+   border-radius: 0.1em;
+   border: 1px solid #FFFFFF;
+   background: rgb(128, 154, 185);
    position: absolute;
-   right: -1em;
-   bottom: -1em;
+   right: -0.5em;
+   bottom: -0.5em;
+   z-index: 10;
  }

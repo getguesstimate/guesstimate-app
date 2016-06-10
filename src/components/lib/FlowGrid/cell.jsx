@@ -32,6 +32,7 @@ export default class Cell extends Component {
     inSelectedRegion: PropTypes.bool.isRequired,
     inSelectedCell: PropTypes.bool.isRequired,
     isHovered: PropTypes.bool.isRequired,
+    showFillToken: PropTypes.bool.isRequired,
     item: PropTypes.object,
     location: PTLocation.isRequired,
     onAddItem: PropTypes.func.isRequired,
@@ -45,7 +46,8 @@ export default class Cell extends Component {
     const difProps = (newProps.isOver !== this.props.isOver) ||
       (newProps.inSelectedRegion !== this.props.inSelectedRegion) ||
       (newProps.inSelectedCell !== this.props.inSelectedCell) ||
-      (newProps.isHovered !== this.props.isHovered)
+      (newProps.isHovered !== this.props.isHovered) ||
+      (newProps.showFillToken !== this.props.showFillToken)
     const itemDifferent = (!!newProps.item !== !!this.props.item)
     const bothHaveItems = (!!newProps.item && !!this.props.item)
 
@@ -167,7 +169,7 @@ export default class Cell extends Component {
         onMouseUp={this.props.onMouseUp}
       >
         {this._cellElement()}
-        {this.props.inSelectedCell && <div className='FillToken' onMouseDown={this.onFillTargetMouseDown.bind(this)}/>}
+        {this.props.showFillToken && <div className='FillToken' onMouseDown={this.onFillTargetMouseDown.bind(this)}/>}
       </div>
     )
   }
