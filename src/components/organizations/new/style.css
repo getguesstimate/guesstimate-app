@@ -98,4 +98,10 @@
      padding-left: 20px;
      float: left;
   }
+
+  .free-trial {
+     color: #1BB732;
+     font-weight: 700;
+     margin-top: 5px;
+  }
 }
