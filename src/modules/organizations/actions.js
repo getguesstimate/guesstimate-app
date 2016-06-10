@@ -46,10 +46,10 @@ export function fetchSuccess(organizations) {
   }
 }
 
-export function create(name) {
+export function create({name, planId}) {
   return (dispatch, getState) => {
     const cid = cuid()
-    let object = {id: cid, organization: {name} }
+    let object = {id: cid, organization: {name, plan: planId} }
 
     // TODO(matthew): Track pending create request.
     const action = oActions.createStart(object);

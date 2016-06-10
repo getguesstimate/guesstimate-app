@@ -35,6 +35,14 @@ export class CreateOrganizationForm extends Component {
     plan: 'PREMIUM',
   }
 
+  _onSubmit() {
+    const newOrganization = {
+      name: this.state.value,
+      planId: (this.state.plan === 'PREMIUM' ? 6 : 5)
+    }
+    this.props.dispatch(create(newOrganization))
+  }
+
   render() {
     return (
       <div className='row'>
@@ -55,7 +63,7 @@ export class CreateOrganizationForm extends Component {
             </div>
             <div
               className='ui button submit green'
-              onClick={() => { this.props.dispatch(create(this.state.value)) }}
+              onClick={this._onSubmit.bind(this)}
             >
               Create Organization
             </div>
