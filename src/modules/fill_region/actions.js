@@ -1,4 +1,5 @@
 import * as metricActions from 'gModules/metrics/actions'
+import {runSimulations} from 'gModules/simulations/actions'
 
 import e from 'gEngine/engine'
 
@@ -79,7 +80,8 @@ export function fillRegion(spaceId, {start, end}) {
 
     const {newMetrics, newGuesstimates} = buildNewMetrics(startMetric, startGuesstimate, start, getDirAndLen(start, end), metrics, guesstimates)
 
-    console.log(newMetrics, newGuesstimates)
     dispatch({type: 'ADD_METRICS', items: newMetrics, newGuesstimates: newGuesstimates})
+
+    dispatch(runSimulations({spaceId, metricSubset: newMetrics}))
   }
 }
