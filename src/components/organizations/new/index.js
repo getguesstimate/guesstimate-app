@@ -15,6 +15,9 @@ function mapStateToProps(state) {
 
 @connect(mapStateToProps)
 export class CreateOrganizationPageContainer extends Component {
+  componentWillMount() {
+    this.props.dispatch({type: 'CLEAR_NEW_ORGANIZATION'})
+  }
   componentWillUnmount() {
     this.props.dispatch({type: 'CLEAR_NEW_ORGANIZATION'})
   }
@@ -37,7 +40,7 @@ export const CreateOrganizationPage = ({newOrganization}) => {
               </div>
             </div>
             {!newOrganizationCreated && <CreateOrganizationForm />}
-            {!!newOrganizationCreated && <LocalAddMembers organizationId={newOrganization.id} admin_id={newOrganization.admin_id} />}
+            {!!newOrganizationCreated && <LocalAddMembers organizationId={newOrganization.id}/>}
           </div>
 
         </div>
