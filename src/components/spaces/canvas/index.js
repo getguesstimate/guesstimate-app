@@ -193,6 +193,7 @@ export default class Canvas extends Component{
           onRedo={this._handleRedo.bind(this)}
           onSelectItem={this._handleSelect.bind(this)}
           onDeSelectAll={this._handleDeSelectAll.bind(this)}
+          onFillRegion={() => {console.log('oooo')}}
           onAddItem={this._handleAddMetric.bind(this)}
           onMoveItem={this._handleMoveMetric.bind(this)}
           onRemoveItems={(ids) => {this.props.dispatch(removeMetrics(ids))}}

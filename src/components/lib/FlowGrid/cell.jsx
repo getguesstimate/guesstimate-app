@@ -38,6 +38,7 @@ export default class Cell extends Component {
     onMoveItem: PropTypes.func.isRequired,
     onEndDragCell: PropTypes.func.isRequired,
     onEmptyCellMouseDown: PropTypes.func,
+    onFillTargetMouseDown: PropTypes.func,
   }
 
   shouldComponentUpdate(newProps, newState) {
@@ -112,7 +113,7 @@ export default class Cell extends Component {
     window.recorder.recordMountEvent(this)
   }
 
-  _focus = () => {
+  _focus() {
     let domNode
     if (this.props.item) {
       // Always focus on the immediate child of the filled cell.
@@ -123,7 +124,7 @@ export default class Cell extends Component {
     domNode.focus()
   }
 
-  _cellElement = () => {
+  _cellElement() {
     if (this.props.item) {
       // Then endDrag fixes a bug where the original dragging position is hovered.
       return (
@@ -140,7 +141,7 @@ export default class Cell extends Component {
     }
   }
 
-  _classes = () => {
+  _classes() {
     let classes = 'FlowGridCell'
     classes += (this.props.inSelectedRegion ? ' selected' : ' nonSelected')
     classes += this.props.item ? ' hasItem' : ''
@@ -149,14 +150,24 @@ export default class Cell extends Component {
     return classes
   }
 
+  onFillTargetMouseDown(e) {
+    if (e.button === 0) {
+      this.props.onFillTargetMouseDown()
+      e.stopPropagation()
+      e.preventDefault()
+    }
+  }
+
   render = () => {
     return this.props.connectDropTarget(
       <div
         className={this._classes()}
         onMouseEnter={this.props.onMouseEnter}
         onMouseDown={this.handleMouseDown.bind(this)}
+        onMouseUp={this.props.onMouseUp}
       >
         {this._cellElement()}
+        {this.props.inSelectedCell && <div className='FillToken' onMouseDown={this.onFillTargetMouseDown.bind(this)}/>}
       </div>
     )
   }

@@ -50,7 +50,7 @@ export class BackgroundContainer extends Component {
   }
 
   render() {
-    const {edges, rowCount, getRowHeight, selectedRegion, copiedRegion} = this.props
+    const {edges, rowCount, getRowHeight, selectedRegion, copiedRegion, fillRegion} = this.props
     const {rowHeights} = this.state
 
     const columnWidth = $('.FlowGridCell') && $('.FlowGridCell')[0] && $('.FlowGridCell')[0].offsetWidth
@@ -81,6 +81,14 @@ export class BackgroundContainer extends Component {
             rowHeights={rowHeights}
             columnWidth={columnWidth}
             selectedRegion={copiedRegion}
+            type='copied'
+          />
+        }
+        {fillRegion.length === 2 &&
+          <Region
+            rowHeights={rowHeights}
+            columnWidth={columnWidth}
+            selectedRegion={fillRegion}
             type='copied'
           />
         }

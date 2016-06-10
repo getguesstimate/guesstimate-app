@@ -163,7 +163,25 @@ svg.edge  path.basic-arrow.RED {
    background: rgba(153, 186, 208, 0.87);
 }
 
+.FlowGrid .Region.fill {
+   border: 1px dashed rgba(0, 0, 0, 0.4);
+}
+
 .FlowGrid .Region.copied {
    border: 2px dashed rgba(7, 115, 167, 0.75);
    background: rgba(153, 186, 208, 0.17);
 }
+
+.FlowGridCell {
+  position: relative;
+}
+
+.FlowGridCell .FillToken {
+   width: 2em;
+   height: 2em;
+   border-radius: 1em;
+   background: red;
+   position: absolute;
+   right: -1em;
+   bottom: -1em;
+ }
