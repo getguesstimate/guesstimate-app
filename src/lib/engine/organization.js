@@ -16,6 +16,10 @@ export function urlById(id) {
   return '/organizations/' + id
 }
 
+export function canMakeMorePrivateModels(organization) {
+  return _.get(organization, 'plan.private_model_limit') !== 0
+}
+
 export function organizationUsers(organizationId, users, memberships) {
   let filteredMemberships = organizationMemberships(organizationId, memberships)
   let filteredUsers = _.filter(users, u => _userOrganizationMemberships.isMember(organizationId, u.id, filteredMemberships))
