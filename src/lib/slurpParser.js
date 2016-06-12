@@ -5,7 +5,7 @@ const MAX_WIDTH = 8
 export function parseSlurp(slurp, space={metrics: [], guesstimates: []}) {
   const name = slurp.name
   const description = slurp.provenance
-  
+
   const maxRow = space.metrics.map(m => m.location.row).reduce((x,y) => Math.max(x,y), 0) + 1
 
   let existingReadableIds = space.metrics.map(m => m.readableId)
