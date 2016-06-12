@@ -287,7 +287,8 @@ export default class FlowGrid extends Component{
             }
               <BackgroundContainer
                 edges={edges}
-                rowHeights={_.map(upto(rowCount), (_r, i) => this._getRowHeight(i))}
+                rowCount={rowCount}
+                getRowHeight={this._getRowHeight.bind(this)}
                 selectedRegion={this.props.selectedRegion}
                 copiedRegion={this.props.copiedRegion}
               />

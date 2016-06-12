@@ -4,6 +4,8 @@ import ReactDOM from 'react-dom'
 
 import e from 'gEngine/engine'
 
+import './style.css'
+
 export class ImportFromSlurpForm extends Component {
   state = {
     value: ""
@@ -21,21 +23,23 @@ export class ImportFromSlurpForm extends Component {
 
   render() {
     return (
-      <div className='ui form'>
-        <div className='field'>
-          <label>JSON Slurp</label>
-          <textarea
-            value={this.state.value}
-            onChange={(e) => {this.setState({value: e.target.value})}}
-            tabIndex='2'
-            ref='textarea'
-          />
-        </div>
-        <div
-          className='ui button submit blue'
-          onClick={this.onSubmit.bind(this)}
-        >
-          Import
+      <div className='ImportFromSlurpForm'>
+        <h2> Import SLURP </h2>
+        <div className='ui form'>
+          <div className='field'>
+            <textarea
+              value={this.state.value}
+              onChange={(e) => {this.setState({value: e.target.value})}}
+              tabIndex='2'
+              ref='textarea'
+            />
+          </div>
+          <div
+            className='ui button submit blue'
+            onClick={this.onSubmit.bind(this)}
+          >
+            Import
+          </div>
         </div>
       </div>
     )
