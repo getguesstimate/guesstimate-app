@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
+import Icon from 'react-fa'
 
 import DropDown from 'gComponents/utility/drop-down/index'
 import {CardListElement} from 'gComponents/utility/card/index.js'
@@ -20,7 +21,7 @@ const Filters = ({sortBy, timeframe, onChangeSortBy, onChangeTimeFrame}) => {
   sortNames[SORT_BY_POPULAR] = 'Popular'
 
   let timeframeNames = {}
-  timeframeNames[TIMEFRAME_MONTHLY] = 'Month'
+  timeframeNames[TIMEFRAME_MONTHLY] = 'Monthly'
   timeframeNames[TIMEFRAME_ALL_TIME] = 'All Time'
   return (
     <div>
@@ -34,7 +35,7 @@ const Filters = ({sortBy, timeframe, onChangeSortBy, onChangeTimeFrame}) => {
 
 const Filter = ({selected, names, onChange}) => (
   <DropDown
-    openLink={<a className='header-action'>{names[selected]}</a>}
+    openLink={<a className='header-action'>{names[selected]}<Icon name='chevron-down'/></a>}
     position='right'
   >
     {Object.keys(names).map(key => {
@@ -108,21 +109,27 @@ export default class SpacesIndex extends Component{
     return (
       <div className='SpacesIndex'>
         <div className='row'>
-          <div className='col-md-4'/>
-          <div className='col-xs-12 col-md-4'>
+          <div className='col-md-1'/>
+          <div className='col-xs-12 col-md-10'>
             <div className='SpacesIndex--header'>
               <h1> Public Models </h1>
               <div className='search-form'>
-                <div className='ui form'>
-                  <input name='search' placeholder='Search' onChange={this._search.bind(this)}/>
+                <div className='row'>
+                  <div className='col-sm-3'/>
+                  <div className='col-sm-6'>
+                    <div className='ui form'>
+                      <input name='search' placeholder='Search' onChange={this._search.bind(this)}/>
+                    </div>
+                  </div>
+                  <div className='col-sm-3'>
+                    <Filters
+                      sortBy={sortBy}
+                      timeframe={timeframe}
+                      onChangeSortBy={this._changeSortBy.bind(this)}
+                      onChangeTimeFrame={this._changeTimeframe.bind(this)}
+                    />
+                  </div>
                 </div>
-
-                <Filters
-                  sortBy={sortBy}
-                  timeframe={timeframe}
-                  onChangeSortBy={this._changeSortBy.bind(this)}
-                  onChangeTimeFrame={this._changeTimeframe.bind(this)}
-                />
               </div>
             </div>
           </div>
