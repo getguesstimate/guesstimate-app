@@ -9,7 +9,7 @@ import DropDown from 'gComponents/utility/drop-down/index'
 import {CardListElement} from 'gComponents/utility/card/index.js'
 import {ViewOptionToggle} from '../view-options/index'
 import {PrivacyToggle} from '../privacy-toggle/index'
-import {ImportFromSlurpForm} from 'gComponents/import_from_slurp/import_from_slurp_form'
+import {ImportFromSlurpForm} from './import_from_slurp_form'
 
 import e from 'gEngine/engine'
 
@@ -141,7 +141,7 @@ export class SpaceToolbar extends Component {
                 {editableByMe &&
                   <CardListElement
                     icon={'upload'}
-                    header='Import Slurp'
+                    header='Import'
                     onMouseDown={() => {this.setState({importModalOpen: true})}}
                     closeOnClick={true}
                   />
