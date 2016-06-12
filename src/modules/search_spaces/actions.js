@@ -7,19 +7,26 @@ import * as userActions from 'gModules/users/actions'
 export function fetch(query = '', options = {}) {
   let filters = {hitsPerPage: 21}
   filters.page = options.page || 0
-  if (options.user_id) {
-    filters.numericFilters = `user_id=${options.user_id}`
-  } else {
-    filters.numericFilters = `metric_count>2,is_private=0`
+  const {sortBy} = options
+
+  const time = new Date()
+  console.log(time.getTime()/1000)
+
+  const secondsInMonth = 60 * 60 * 24 * 30
+  const secondsAtNow = time.getTime()/1000
+
+  if (_.get(options, 'timeframe') === 'MONTHLY') {
+    filters.numericFilters = `created_at_i>${secondsAtNow - secondsInMonth}`
   }
 
   return (dispatch, getState) => {
-    searchSpaceIndex().search(query, filters, (error, results) => {
+    searchSpaceIndex(options.sortBy).search(query, filters, (error, results) => {
       if (error) {
         searchError('AlgoliaFetch', error)
       }
       else {
         results.filters = filters
+        results.sortBy = sortBy
         dispatch({ type: 'SEARCH_SPACES_GET', response: results })
         dispatch(spaceActions.fromSearch(results.hits))
         dispatch(userActions.fromSearch(results.hits))
@@ -33,7 +40,7 @@ export function fetchNextPage() {
   return (dispatch, getState) => {
     const searchSpaces = getState().searchSpaces
 
-    searchSpaceIndex().search(searchSpaces.query, {...searchSpaces.filters, page: searchSpaces.page + 1}, (error, results) => {
+    searchSpaceIndex(searchSpaces.sortBy).search(searchSpaces.query, {...searchSpaces.filters, page: searchSpaces.page + 1}, (error, results) => {
       if (error) {
         searchError('AlgoliaFetchNextPage', error)
       } else {
