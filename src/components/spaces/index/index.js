@@ -9,40 +9,55 @@ import * as search from 'gModules/search_spaces/actions'
 
 import './style.css'
 
+const TIMEFRAME_ALL_TIME = 'ALL_TIME'
+const TIMEFRAME_MONTHLY = 'MONTHLY'
+const SORT_BY_POPULAR = 'POPULAR'
+const SORT_BY_RECENT = 'RECENT'
+
+const Filters = ({sortBy, timeframe, onChangeSortBy, onChangeTimeFrame}) => {
+  let sortNames = {}
+  sortNames[SORT_BY_RECENT] = 'Recent'
+  sortNames[SORT_BY_POPULAR] = 'Popular'
+
+  let timeframeNames = {}
+  timeframeNames[TIMEFRAME_MONTHLY] = 'Month'
+  timeframeNames[TIMEFRAME_ALL_TIME] = 'All Time'
+  return (
+    <div>
+      <Filter selected={sortBy} names={sortNames} onChange={onChangeSortBy}/>
+      {sortBy !== SORT_BY_RECENT &&
+        <Filter selected={timeframe} names={timeframeNames} onChange={onChangeTimeFrame}/>
+      }
+    </div>
+  )
+}
+
+const Filter = ({selected, names, onChange}) => (
+  <DropDown
+    openLink={<a className='header-action'>{names[selected]}</a>}
+    position='right'
+  >
+    {Object.keys(names).map(key => {
+      return(
+        <CardListElement header={names[key]} selected={names[selected] === key} onMouseDown={() => {onChange(key)}} key={key}/>
+      )
+    })}
+  </DropDown>
+)
+
 function mapStateToProps(state) {
   return {
     searchSpaces: state.searchSpaces,
   }
 }
 
-const Filters = ({sortBy, timeframe, onChangeSortBy, onChangeTimeFrame}) => (
-  <div>
-    <DropDown
-      openLink={<a className='header-action'>Popular</a>}
-      openLink={<a className='header-action'>{sortBy === 'VIEWCOUNT' ? 'Popular' : 'Recent'}</a>}
-      position='right'
-    >
-      <CardListElement header='Popular' onMouseDown={() => {onChangeSortBy('VIEWCOUNT')}}/>
-      <CardListElement header='Recent' onMouseDown={() => {onChangeSortBy('CREATED_AT')}}/>
-    </DropDown>
-
-    <DropDown
-      openLink={<a className='header-action'>{timeframe === 'MONTHLY' ? 'Month' : 'All Time'}</a>}
-      position='right'
-    >
-      <CardListElement header='Month' onMouseDown={() => {onChangeTimeFrame('MONTHLY')}}/>
-      <CardListElement header='All Time' onMouseDown={() => {onChangeTimeFrame('ALL_TIME')}}/>
-    </DropDown>
-  </div>
-)
-
 @connect(mapStateToProps)
 export default class SpacesIndex extends Component{
   displayName: 'GeneralSpaceIndex'
 
   state = {
-    sortBy: 'VIEWCOUNT',
-    timeframe: 'MONTHLY'
+    sortBy: SORT_BY_POPULAR,
+    timeframe: TIMEFRAME_MONTHLY
   }
 
   componentWillMount(){
@@ -50,10 +65,16 @@ export default class SpacesIndex extends Component{
   }
 
   _search(e) {
-    if (this.state.timeframe === 'MONTHLY'){
-      this.setState({timeframe: 'ALL_TIME'}, () => {this.props.dispatch(search.fetch(e.target.value, this._searchParams()))})
+    const {value} = e.target
+
+    const runSearch = () => {
+      this.props.dispatch(search.fetch(value, this._searchParams()))
+    }
+
+    if (this.state.timeframe === TIMEFRAME_MONTHLY){
+      this.setState({timeframe: TIMEFRAME_ALL_TIME}, runSearch)
     } else {
-      this.props.dispatch(search.fetch(e.target.value, this._searchParams()))
+      runSearch()
     }
   }
 

@@ -10,8 +10,6 @@ export function fetch(query = '', options = {}) {
   const {sortBy} = options
 
   const time = new Date()
-  console.log(time.getTime()/1000)
-
   const secondsInMonth = 60 * 60 * 24 * 30
   const secondsAtNow = time.getTime()/1000
 

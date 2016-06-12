@@ -6,7 +6,7 @@ const algoliaClient = () =>  {
 }
 
 function index(sort_option){
-  return (sort_option === 'VIEWCOUNT') ? SPACE_BY_VIEWCOUNT_INDEX : SPACE_BY_DATE_INDEX
+  return (sort_option === 'POPULAR') ? SPACE_BY_VIEWCOUNT_INDEX : SPACE_BY_DATE_INDEX
 }
 
 export const searchSpaceIndex = (sort_option) => {
