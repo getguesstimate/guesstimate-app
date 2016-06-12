@@ -58,47 +58,32 @@ export default class SpacesIndex extends Component{
 
   state = {
     sortBy: SORT_BY_POPULAR,
-    timeframe: TIMEFRAME_MONTHLY
+    timeframe: TIMEFRAME_MONTHLY,
+    searchValue: ''
   }
 
-  componentWillMount(){
-    this._fetchEmptyNew()
-  }
-
-  _search(e) {
-    const {value} = e.target
-
-    const runSearch = () => {
-      this.props.dispatch(search.fetch(value, this._searchParams()))
-    }
-
-    if (this.state.timeframe === TIMEFRAME_MONTHLY){
-      this.setState({timeframe: TIMEFRAME_ALL_TIME}, runSearch)
-    } else {
-      runSearch()
-    }
-  }
+  componentWillMount(){ this._fetch() }
 
   _nextPage() {
     this.props.dispatch(search.fetchNextPage())
   }
 
-  _fetchEmptyNew() {
-    this.props.dispatch(search.fetch('', this._searchParams()))
-  }
-
-  _searchParams() {
-    const {sortBy, timeframe} = this.state
-    return {sortBy, timeframe}
+  _changeSearchValue(e) {
+    this.setState({searchValue: e.target.value, timeframe: TIMEFRAME_ALL_TIME}, this._fetch)
   }
 
   _changeSortBy(sortBy){
-    this.setState({sortBy}, () => {this._fetchEmptyNew()})
+    this.setState({sortBy}, this._fetch)
 
   }
 
   _changeTimeframe(timeframe){
-    this.setState({timeframe}, () => {this._fetchEmptyNew()})
+    this.setState({timeframe}, this._fetch)
+  }
+
+  _fetch() {
+    const {searchValue, sortBy, timeframe} = this.state
+    this.props.dispatch(search.fetch(searchValue, {sortBy, timeframe}))
   }
 
   render () {
@@ -118,7 +103,7 @@ export default class SpacesIndex extends Component{
                   <div className='col-sm-3'/>
                   <div className='col-sm-6'>
                     <div className='ui form'>
-                      <input name='search' placeholder='Search' onChange={this._search.bind(this)}/>
+                      <input name='search' placeholder='Search' onChange={this._changeSearchValue.bind(this)}/>
                     </div>
                   </div>
                   <div className='col-sm-3'>
