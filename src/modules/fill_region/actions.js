@@ -6,7 +6,7 @@ import e from 'gEngine/engine'
 import {isAtLocation, isWithinRegion, getBounds, move, translate} from 'lib/locationUtils'
 import {registerGraphChange} from 'gModules/spaces/actions'
 
-const DYNAMIC_FILL_TYPES = ['FUNCTION']
+const DYNAMIC_FILL_TYPE = 'FUNCTION'
 
 // TODO(matthew): Dry up code with this and copy and undo perhaps.
 function translateReadableIds(input, idMap) {
@@ -20,42 +20,40 @@ const getDirAndLen = (start, end) => ({
   length: Math.abs(start.row - end.row) || Math.abs(start.column - end.column),
 })
 
-function fillFunction(startMetric, startGuesstimate, metrics, idMap2, newLocation) {
-  const metric = {...startMetric, ...e.metric.create(Object.keys(idMap2)), location: newLocation}
-  const {input} = startGuesstimate
-  const translateFn = translate(startMetric.location, newLocation)
-  let idMap = {}
-  metrics.forEach(m => {
-    const matchedMetric = metrics.find(m2 => isAtLocation(translateFn(m.location), m2.location))
-    if (!!matchedMetric) { idMap[m.readableId] = matchedMetric.readableId }
-  })
+function fillFunction(startMetric, startGuesstimate) {
+  return (location, metrics) => {
+    const metric = {...startMetric, ...e.metric.create(metrics.map(m => m.readableId)), location}
+    const {input} = startGuesstimate
+    const translateFn = translate(startMetric.location, location)
+    let idMap = {}
+    metrics.forEach(m => {
+      const matchedMetric = metrics.find(m2 => isAtLocation(translateFn(m.location), m2.location))
+      if (!!matchedMetric) { idMap[m.readableId] = matchedMetric.readableId }
+    })
 
-  return { metric, guesstimate: {...startGuesstimate, metric: metric.id, input: translateReadableIds(input, idMap)} }
+    return { metric, guesstimate: {...startGuesstimate, metric: metric.id, input: translateReadableIds(input, idMap)} }
+  }
 }
 
-function addAtLoc(startMetric, startGuesstimate, metrics, idMap, newLocation) {
-  const metric = {...startMetric, ...e.metric.create(Object.keys(idMap)), location: newLocation}
-  return { metric, guesstimate: {...startGuesstimate, metric: metric.id} }
+function addAtLoc(startMetric, startGuesstimate) {
+  return (location, metrics) => {
+    const metric = {...startMetric, ...e.metric.create(metrics.map(m => m.readableId)), location}
+    return { metric, guesstimate: {...startGuesstimate, metric: metric.id} }
+  }
 }
 
-function buildNewMetrics(startMetric, startGuesstimate, startLocation, {direction, length}, metrics, guesstimates) {
+function buildNewMetrics(startMetric, startGuesstimate, {direction, length}, metrics) {
   const {guesstimateType, input} = startGuesstimate
 
   let newMetrics = []
   let newGuesstimates = []
 
-  const translateFn = DYNAMIC_FILL_TYPES.includes(guesstimateType) ? 
-    (loc, metrics, idMap) => fillFunction(startMetric, startGuesstimate, metrics, idMap, loc)
-      :
-    (loc, metrics, idMap) => addAtLoc(startMetric, startGuesstimate, metrics, idMap, loc)
+  const isDynamic = guesstimateType === DYNAMIC_FILL_TYPE
+  const translateFn = (isDynamic ? fillFunction : addAtLoc)(startMetric, startGuesstimate)
 
-  let idMap = {}
-  metrics.forEach(m => {idMap[m.readableId] = m.id})
-
-  let currLocation = move(startLocation, direction)
+  let currLocation = move(startMetric.location, direction)
   for (var i = 0; i < length; i++) {
-    const {metric, guesstimate} = translateFn(currLocation, metrics.concat(newMetrics), idMap)
-    idMap[metric.readableId] = metric.id
+    const {metric, guesstimate} = translateFn(currLocation, metrics.concat(newMetrics))
     newMetrics.push(metric)
     newGuesstimates.push(guesstimate)
     currLocation = move(currLocation, direction)
@@ -69,21 +67,20 @@ export function fillRegion(spaceId, {start, end}) {
     const state = getState()
 
     const metrics = state.metrics.filter(m => m.space === spaceId)
-    const guesstimates = state.guesstimates.filter(g => _.some(metrics, m => m.id === g.metric))
 
     const startMetric = metrics.find(m => isAtLocation(m.location, start))
 
-    const containedMetrics = metrics.filter(m => (!startMetric || m.id !== startMetric.id) && isWithinRegion(m.location, getBounds({start, end})))
+    const fillRegion = getBounds({start, end})
+    const containedMetrics = metrics.filter(m => (m.id !== _.get(startMetric, 'id')) && isWithinRegion(m.location, fillRegion))
     dispatch(metricActions.removeMetrics(containedMetrics.map(m => m.id)))
 
     if (!startMetric) { return }
 
-    const startGuesstimate = guesstimates.find(g => g.metric === startMetric.id)
+    const startGuesstimate = state.guesstimates.find(g => g.metric === startMetric.id)
 
-    const {newMetrics, newGuesstimates} = buildNewMetrics(startMetric, startGuesstimate, start, getDirAndLen(start, end), metrics, guesstimates)
+    const {newMetrics, newGuesstimates} = buildNewMetrics(startMetric, startGuesstimate, getDirAndLen(start, end), metrics)
 
     dispatch({type: 'ADD_METRICS', items: newMetrics, newGuesstimates: newGuesstimates})
-
     dispatch(runSimulations({spaceId, metricSubset: newMetrics}))
     dispatch(registerGraphChange(spaceId))
   }

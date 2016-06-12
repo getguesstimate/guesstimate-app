@@ -89,24 +89,30 @@ export default class FlowGrid extends Component{
     return !sameLocation
   }
 
+  newFillRegion(end) {
+    const {fillRegion: {start}} = this.state
+    if (Math.abs(end.row - start.row) > Math.abs(end.column - start.column)) {
+      return {start, end: {row: end.row, column: start.column}}
+    } else {
+      return {start, end: {row: start.row, column: end.column}}
+    }
+  }
+
   _handleCellMouseEnter(location, e) {
     window.recorder.recordNamedEvent("FlowGrid set hover state")
-    // TODO(matthew): Clean up.
-    if (this._mouseMoved(e) && (this.state.tracingFillRegion || this.state.dragSelecting)) {
-      if (this.state.tracingFillRegion) {
-        window.recorder.recordNamedEvent("FlowGrid set fillRegion state")
-        const {fillRegion: {start}} = this.state
-        if (Math.abs(location.row - start.row) > Math.abs(location.column - start.column)) {
-          this.setState({fillRegion: {start, end: {row: location.row, column: start.column}}})
-        } else {
-          this.setState({fillRegion: {start, end: {row: start.row, column: location.column}}})
-        }
-      } else if (this.state.dragSelecting) {
-        this._handleEndRangeSelect(location)
-      }
-      this.setState({hover: {row: -1, column: -1}})
-    } else {
+    if (!(this._mouseMoved(e) && (this.state.tracingFillRegion || this.state.dragSelecting))) {
       this.setState({hover: location})
+      return
+    }
+    const hover = {row: -1, column: -1}
+
+    if (this.state.tracingFillRegion) {
+      window.recorder.recordNamedEvent("FlowGrid set fillRegion state")
+      const fillRegion = this.newFillRegion(location)
+      this.setState({fillRegion, hover})
+    } else if (this.state.dragSelecting) {
+      this._handleEndRangeSelect(location)
+      this.setState({hover})
     }
   }
 

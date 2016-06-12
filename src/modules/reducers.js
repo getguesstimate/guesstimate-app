@@ -4,7 +4,6 @@ const SI = __DEV__? SeamlessImuutable : (a) => a
 
 import {selectedCellR} from './selected_cell/reducer'
 import {selectedRegionR} from './selected_region/reducer'
-import {fillRegionR} from './fill_region/reducer'
 import displayErrorR from './displayErrors/reducer'
 import metricsR from './metrics/reducer'
 import guesstimatesR from './guesstimates/reducer'
@@ -46,7 +45,6 @@ const rootReducer = function app(state = {}, action){
     copied: SI(copiedR(state.copied, action)),
     checkpoints: SI(checkpointsR(state.checkpoints, action)),
     httpRequests: SI(httpRequestsR(state.httpRequests, action)),
-    fillRegion: SI(fillRegionR(state, action))
   }
 }
 
