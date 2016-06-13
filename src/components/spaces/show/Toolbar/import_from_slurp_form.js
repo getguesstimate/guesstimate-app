@@ -21,6 +21,15 @@ export class ImportFromSlurpForm extends Component {
     this.props.onSubmit(JSON.parse(this.state.value))
   }
 
+  isValid() {
+    try {
+      JSON.parse(this.state.value)
+      return true
+    } catch (e) {
+      return false
+    }
+  }
+
   render() {
     return (
       <div className='ImportFromSlurpForm'>
@@ -35,7 +44,7 @@ export class ImportFromSlurpForm extends Component {
             />
           </div>
           <div
-            className='ui button submit blue'
+            className={`ui button submit ${this.isValid() ? 'blue' : 'inactive'}`}
             onClick={this.onSubmit.bind(this)}
           >
             Import
