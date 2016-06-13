@@ -9,7 +9,7 @@ export default class DropDown extends Component {
   displayName: 'DropDown'
 
   static propTypes = {
-    headerText: PropTypes.string.isRequired,
+    headerText: PropTypes.string,
     onOpen: PropTypes.func,
     onClose: PropTypes.func,
   }

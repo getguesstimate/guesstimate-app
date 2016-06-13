@@ -3,7 +3,11 @@
 }
 
 .ComponentEditor.grey .Component{
-  background-color: #666;
+  background: #F7F5F5;
+}
+
+.ComponentEditor.blue .Component{
+  background: linear-gradient(-140deg, #4DC7B7, #489ACC);
 }
 
 .ComponentEditor .Component {
