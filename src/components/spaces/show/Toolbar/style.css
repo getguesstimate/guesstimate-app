@@ -1,3 +1,5 @@
+@import './styles/variables.css';
+
 .SpaceShowToolbar {
   background: rgba(219, 221, 222, 0.69);
   border-bottom: 1px solid rgba(37, 128, 167, 0.38);
@@ -81,4 +83,15 @@
 
 .SpaceShowToolbar .header-action.button:hover {
   background-color: rgba(255,255,255,0.5);
+}
+
+.ImportFromSlurpForm h2 {
+  display: inline;
+}
+
+.ImportFromSlurpForm .SlurpQuestionLink {
+  float: right;
+  font-size: 1.6em;
+  color: $blue-4;
+  cursor: pointer;
 }
