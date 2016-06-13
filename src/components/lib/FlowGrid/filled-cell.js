@@ -38,25 +38,28 @@ export default class ItemCell extends Component {
 
   item() {
     return React.cloneElement(
-        this.props.item,
-        {
-          hovered: this.props.hover,
-          inSelectedCell: this.props.inSelectedCell,
-          selectedFrom: this.props.selectedFrom,
-          gridKeyPress: this.props.gridKeyPress,
-          connectDragSource: this.props.connectDragSource,
-          forceFlowGridUpdate: this.props.forceFlowGridUpdate,
-          onReturn: this.props.onReturn,
-          onTab: this.props.onTab
-        }
+      this.props.item,
+      {
+        hovered: this.props.hover,
+        inSelectedCell: this.props.inSelectedCell,
+        selectedFrom: this.props.selectedFrom,
+        gridKeyPress: this.props.gridKeyPress,
+        connectDragSource: this.props.connectDragSource,
+        forceFlowGridUpdate: this.props.forceFlowGridUpdate,
+        onReturn: this.props.onReturn,
+        onTab: this.props.onTab,
+      }
     )
   }
 
   render = () => {
     let classes = 'FlowGridFilledCell'
     classes += this.props.isDragging ? ' isDragging' : ''
+    // This forces dragging cells to not change their row heights. A bit hacky, but gives a better user experience in my
+    // opinion and keeps background layer in sync with real row heights during drag (which skips normal rendering tree).
+    const styles = this.props.isDragging ? {minHeight: `${this.props.getRowHeight()-1}`} : {}
     return this.props.connectDragPreview(
-      <div className={classes}>
+      <div className={classes} style={styles}>
         {!this.props.isDragging && this.item()}
       </div>
     )

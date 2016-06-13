@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react'
 import Icon from'react-fa'
 import { connect } from 'react-redux';
-import SpaceList from 'gComponents/spaces/list'
+import {SpaceCard, NewSpaceCard} from 'gComponents/spaces/cards'
 import * as spaceActions from 'gModules/spaces/actions'
 import * as userActions from 'gModules/users/actions'
 import './style.css'
@@ -24,6 +24,10 @@ export default class UserShow extends Component{
   componentWillMount(){
     this.props.dispatch(userActions.fetchById(this.props.userId))
     this.props.dispatch(spaceActions.fetch({userId: this.props.userId}))
+  }
+
+  _newModel(){
+    this.props.dispatch(spaceActions.create())
   }
 
   render () {
@@ -58,10 +62,18 @@ export default class UserShow extends Component{
               </div>
             </div>
             {spaces &&
-              <SpaceCards
-                spaces={spaces}
-                showPrivacy={isMe}
-              />
+              <div className='row'>
+                {isMe &&
+                  <NewSpaceCard onClick={this._newModel.bind(this)}/>
+                }
+                {_.map(spaces, (s) =>
+                    <SpaceCard
+                      key={s.id}
+                      space={s}
+                      showPrivacy={isMe}
+                    />
+                )}
+              </div>
             }
         </div>
       </Container>
