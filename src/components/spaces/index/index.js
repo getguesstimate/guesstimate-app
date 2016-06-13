@@ -40,7 +40,7 @@ const Filter = ({selected, names, onChange}) => (
   >
     {Object.keys(names).map(key => {
       return(
-        <CardListElement header={names[key]} selected={names[selected] === key} onMouseDown={() => {onChange(key)}} key={key}/>
+        <CardListElement header={names[key]} selected={names[selected] === key} onMouseDown={() => {onChange(key)}} key={key} closeOnClick={true}/>
       )
     })}
   </DropDown>
@@ -74,7 +74,6 @@ export default class SpacesIndex extends Component{
 
   _changeSortBy(sortBy){
     this.setState({sortBy}, this._fetch)
-
   }
 
   _changeTimeframe(timeframe){

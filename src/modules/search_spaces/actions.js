@@ -9,9 +9,8 @@ export function fetch(query = '', options = {}) {
   filters.page = options.page || 0
   const {sortBy} = options
 
-  const time = new Date()
+  const secondsAtNow = (new Date()).getTime()/1000
   const secondsInMonth = 60 * 60 * 24 * 30
-  const secondsAtNow = time.getTime()/1000
 
   if (_.get(options, 'timeframe') === 'MONTHLY') {
     filters.numericFilters = `created_at_i>${secondsAtNow - secondsInMonth}`

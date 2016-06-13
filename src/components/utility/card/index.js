@@ -60,15 +60,9 @@ export class CardListElement extends Component {
 
 const IconSection = ({colCount, icon, ionicIcon, image, imageShape}) => (
   <div className={`col-xs-${colCount} icons`}>
-    {icon &&
-      <Icon name={icon}/>
-    }
-    {ionicIcon &&
-      <i className={`ion-${ionicIcon}`}/>
-    }
-    {image &&
-      <img src={image} className={imageShape}/>
-    }
+    {icon && <Icon name={icon}/>}
+    {ionicIcon && <i className={`ion-${ionicIcon}`}/>}
+    {image && <img src={image} className={imageShape}/>}
   </div>
 )
 
