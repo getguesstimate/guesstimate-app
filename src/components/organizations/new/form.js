@@ -38,7 +38,7 @@ export class CreateOrganizationForm extends Component {
   _onSubmit() {
     const newOrganization = {
       name: this.state.value,
-      planId: (this.state.plan === 'PREMIUM' ? 6 : 5)
+      plan: (this.state.plan === 'PREMIUM' ? 6 : 5)
     }
     this.props.dispatch(create(newOrganization))
   }
