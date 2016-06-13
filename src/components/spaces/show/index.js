@@ -145,7 +145,7 @@ export default class SpacesShow extends Component {
   }
 
   _handleCopyModel() {
-    this.props.dispatch(spaceActions.copy())
+    this.props.dispatch(spaceActions.copy(this._id()))
   }
 
   onCopy() {
