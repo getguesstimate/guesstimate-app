@@ -41,15 +41,15 @@ export function fetchById(organizationId) {
 
 export function fetchSuccess(organizations) {
   return (dispatch) => {
-    const formatted = organizations.map(o => _.pick(o, ['id', 'name', 'picture', 'admin_id', 'account']))
+    const formatted = organizations.map(o => _.pick(o, ['id', 'name', 'picture', 'admin_id', 'account', 'plan']))
     dispatch(oActions.fetchSuccess(formatted))
   }
 }
 
-export function create(name) {
+export function create({name, plan}) {
   return (dispatch, getState) => {
     const cid = cuid()
-    let object = {id: cid, organization: {name} }
+    let object = {id: cid, organization: {name, plan} }
 
     // TODO(matthew): Track pending create request.
     const action = oActions.createStart(object);

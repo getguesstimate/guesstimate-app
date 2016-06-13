@@ -183,6 +183,7 @@ export default class SpacesShow extends Component {
     const owner = hasOrg ? space.organization : space.user
     const ownerUrl = hasOrg ? e.organization.url(space.organization) : e.user.url(space.user)
 
+    const canBePrivate = hasOrg ? e.organization.canMakeMorePrivateModels(space.organization) : e.me.canMakeMorePrivateModels(this.props.me)
 
     const authorCallout = `Made by ${owner.name}`
     const tagDescription = _.isEmpty(space.description) ? authorCallout : `${authorCallout}: ${space.description}`
