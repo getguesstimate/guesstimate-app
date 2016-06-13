@@ -149,7 +149,6 @@ export default class Cell extends Component {
     classes += this.props.item ? ' hasItem' : ''
     classes += this.props.isOver ? ' IsOver' : ''
     classes += this.props.isHovered ? ' hovered' : ''
-    classes += this.props.showFillToken ? ' hasToken' : ''
     return classes
   }
 
