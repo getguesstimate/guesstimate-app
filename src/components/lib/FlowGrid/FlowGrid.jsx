@@ -274,9 +274,14 @@ export default class FlowGrid extends Component{
   }
 
   _row(row, columnCount) {
+    const items = _.flatten(upto(columnCount).map(c => [c, c]))
     return (
-      upto(columnCount).map((column) => {
-        return(this._cell({row: row, column: column}))
+      _.map(items, (column, i) => {
+        if (i%2==1){
+          return(this._cell({row: row, column: column}))
+        } else {
+          return (<div className='empty'><div className='foobar'></div></div>)
+        }
       })
     )
   }

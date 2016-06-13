@@ -101,6 +101,10 @@
 }
 
 .FlowGridCell.hovered {
+  z-index: 3;
+}
+
+.FlowGridCell.hasToken {
   z-index: 2;
 }
 
@@ -176,14 +180,47 @@ svg.edge  path.basic-arrow.RED {
   position: relative;
 }
 
+.FlowGridCell .FillToken--outer {
+  position: absolute;
+  right: -1.25em;
+  bottom: -1.25em;
+  z-index: 10000;
+  border-radius: 0.5em;
+  padding: .9em;
+  width: 2.5em;
+  height: 2.5em;
+  transition: padding .05s;
+}
+
+.FlowGridCell .FillToken--outer:hover {
+  padding: 0.5em;
+  transition: padding .05s;
+}
+
 .FlowGridCell .FillToken {
-   width: 1em;
-   height: 1em;
+   cursor: crosshair;
+   height: 100%;
+   width: 100%;
    border-radius: 0.1em;
-   border: 1px solid #FFFFFF;
-   background: rgb(128, 154, 185);
-   position: absolute;
-   right: -0.5em;
-   bottom: -0.5em;
-   z-index: 10;
+   background: rgb(90, 141, 177);
  }
+
+ .empty {
+   flex: 1;
+   width: 0px;
+   background-color: red;
+   position: relative;
+ }
+
+ .foobar {
+   height: 100%;
+   background-color: rgba(200,0,0,0.2);
+   width: 0px;
+   right: 0;
+   width: 210px;
+   min-width: 210px;
+ }
+
+.FlowGridCell .FillToken--outer:hover .FillToken {
+  transition: border .05s;
+}
