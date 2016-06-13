@@ -169,7 +169,11 @@ export default class Cell extends Component {
         onMouseUp={this.props.onMouseUp}
       >
         {this._cellElement()}
-        {this.props.showFillToken && <div className='FillToken' onMouseDown={this.onFillTargetMouseDown.bind(this)}/>}
+        {this.props.showFillToken &&
+          <div className='FillToken--outer'>
+            <div className='FillToken' onMouseDown={this.onFillTargetMouseDown.bind(this)}/>
+          </div>
+        }
       </div>
     )
   }
