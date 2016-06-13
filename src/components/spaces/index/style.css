@@ -17,3 +17,21 @@
   margin-top: 2em;
   text-align: center;
 }
+
+.SpacesIndex a.header-action {
+  color: #666;
+  margin: 0.1em 1.1em 0 0;
+  font-size: 1em;
+  float: left;
+  padding: 0.4em 0.8em;
+  border-radius: 2px;
+
+  &:hover {
+    background-color: #E3E8EC;
+  }
+
+  .fa {
+    margin-left: 0.4em;
+    font-size: .8em;
+  }
+}

@@ -8,8 +8,16 @@ export function url(organization) {
   return (!!organization) ? urlById(organization.id) : ''
 }
 
+export function image({picture}) {
+  return _.isEmpty(picture) ? '/organization-default-image.png' : picture
+}
+
 export function urlById(id) {
   return '/organizations/' + id
+}
+
+export function canMakeMorePrivateModels(organization) {
+  return _.get(organization, 'plan.private_model_limit') !== 0
 }
 
 export function organizationUsers(organizationId, users, memberships) {
