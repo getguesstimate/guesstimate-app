@@ -201,22 +201,6 @@ svg.edge  path.basic-arrow.RED {
    background: rgb(90, 141, 177);
  }
 
- .empty {
-   flex: 1;
-   width: 0px;
-   background-color: red;
-   position: relative;
- }
-
- .foobar {
-   height: 100%;
-   background-color: rgba(200,0,0,0.2);
-   width: 0px;
-   right: 0;
-   width: 210px;
-   min-width: 210px;
- }
-
 .FlowGridCell .FillToken--outer:hover .FillToken {
   transition: border .05s;
 }

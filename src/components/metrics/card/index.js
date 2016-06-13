@@ -286,7 +286,7 @@ export default class MetricCard extends Component {
             </div>
           }
         </div>
-        {!inSelectedCell && !shouldShowSensitivitySection && <MetricToolTip guesstimate={guesstimate}/>}
+        {hovered && !inSelectedCell && !shouldShowSensitivitySection && <MetricToolTip guesstimate={guesstimate}/>}
         {hovered && !inSelectedCell && shouldShowSensitivitySection &&
           <ScatterTip yMetric={selectedMetric} xMetric={metric}/>
         }
