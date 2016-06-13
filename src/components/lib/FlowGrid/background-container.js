@@ -7,6 +7,8 @@ import GridPoint from './gridPoints'
 
 import {PTRegion} from 'lib/locationUtils'
 
+const upto = (n) => Array.apply(null, {length: n})
+
 const Region = ({rowHeights, columnWidth, selectedRegion, type}) => {
   const gridPoint = new GridPoint({rowHeights, columnWidth, padding: 0})
   const region = gridPoint.region(selectedRegion)
@@ -20,23 +22,37 @@ export class BackgroundContainer extends Component {
   displayName: 'BackgroundContainer'
 
   static propTypes = {
-    rowHeights: PropTypes.array.isRequired,
+    rowCount: PropTypes.number.isRequired,
     edges: PropTypes.array.isRequired,
     selectedRegion: PTRegion,
     copiedRegion: PTRegion,
   }
 
-  shouldComponentUpdate(nextProps) {
+  state = {
+    rowHeights: []
+  }
+
+  componentWillMount() {
+    this.setState({rowHeights: _.map(upto(this.props.rowCount), (r, i) => this.props.getRowHeight(i))})
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({rowHeights: _.map(upto(nextProps.rowCount), (r, i) => nextProps.getRowHeight(i))})
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
     return (
       !_.isEqual(this.props.copiedRegion, nextProps.copiedRegion) ||
       !_.isEqual(this.props.selectedRegion, nextProps.selectedRegion) ||
       !_.isEqual(this.props.edges, nextProps.edges) ||
-      !_.isEqual(this.props.rowHeights, nextProps.rowHeights)
+      !_.isEqual(this.state.rowHeights, nextState.rowHeights)
     )
   }
 
   render() {
-    const {edges, rowHeights, selectedRegion, copiedRegion} = this.props
+    const {edges, rowCount, getRowHeight, selectedRegion, copiedRegion} = this.props
+    const {rowHeights} = this.state
+
     const columnWidth = $('.FlowGridCell') && $('.FlowGridCell')[0] && $('.FlowGridCell')[0].offsetWidth
     if (!columnWidth || !rowHeights.length) { return false }
 

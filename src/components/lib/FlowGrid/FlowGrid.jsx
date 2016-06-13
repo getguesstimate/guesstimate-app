@@ -1,5 +1,3 @@
-'use strict';
-
 import React, {Component, PropTypes} from 'react'
 
 import {DragDropContext} from 'react-dnd'
@@ -54,7 +52,6 @@ export default class FlowGrid extends Component{
   }
 
   state = {
-    rowHeights: [],
     hover: {row: -1, column: -1} // An impossible location means nothing hovered.
   }
 
@@ -228,9 +225,11 @@ export default class FlowGrid extends Component{
         onReturn={(down=true) => {this._onReturn(location, down)}}
         onTab={(right=true) => {this._onTab(location, right)}}
         ref={`cell-${location.row}-${location.column}`}
+        getRowHeight={() => this._getRowHeight(location.row)}
       />
     )
   }
+
   _row(row, columnCount) {
     return (
       upto(columnCount).map((column) => {
@@ -239,17 +238,15 @@ export default class FlowGrid extends Component{
     )
   }
 
+  _getRowHeight(rowI) {
+    return _.get(this.refs[`row-${rowI}`], 'offsetHeight')
+  }
+
   componentDidMount() { window.recorder.recordMountEvent(this) }
   componentWillUpdate() { window.recorder.recordRenderStartEvent(this) }
 
   componentDidUpdate() {
     window.recorder.recordRenderStopEvent(this)
-
-    const newHeights = upto(this._rowCount()).map(rowI => _.get(this.refs[`row-${rowI}`], 'offsetHeight'))
-    if (!_.isEqual(newHeights, this.state.rowHeights)){
-      window.recorder.recordNamedEvent("FlowGrid set row heights state")
-      this.setState({rowHeights: newHeights})
-    }
   }
 
   componentWillUnmount() {
@@ -260,7 +257,6 @@ export default class FlowGrid extends Component{
   render() {
     const rowCount = this._rowCount()
     const columnCount = this._columnCount()
-    const {rowHeights} = this.state
     const {edges} = this.props
     let className = 'FlowGrid'
     className += this.props.showGridLines ? ' withLines' : ''
@@ -275,25 +271,24 @@ export default class FlowGrid extends Component{
         onKeyUp={this._handleKeyUp.bind(this)}
       >
         <div className='FlowGrid-Horizontal-Motion'>
-          <div
-            className={className}
-          >
+          <div className={className}>
             {
               upto(rowCount).map((row) => {
                 return (
                   <div
-                      className='FlowGridRow'
-                      key={row}
-                      ref={`row-${row}`}
+                    className='FlowGridRow'
+                    key={row}
+                    ref={`row-${row}`}
                   >
-                  {this._row(row, columnCount)}
+                    {this._row(row, columnCount)}
                   </div>
                 )
               })
             }
               <BackgroundContainer
                 edges={edges}
-                rowHeights={rowHeights}
+                rowCount={rowCount}
+                getRowHeight={this._getRowHeight.bind(this)}
                 selectedRegion={this.props.selectedRegion}
                 copiedRegion={this.props.copiedRegion}
               />

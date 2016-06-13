@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import { connect, Provider } from 'react-redux';
+import {connect, Provider} from 'react-redux'
 
 import ReactDOM from 'react-dom'
 import Router from 'ampersand-router'
@@ -14,6 +14,8 @@ import TermsAndConditions from 'gComponents/pages/terms_and_conditions/index'
 import PrivacyPolicy from 'gComponents/pages/privacy_policy/index'
 import ComponentIndex from './component-index'
 import UserShow from 'gComponents/users/show/index'
+import {CreateOrganizationPageContainer} from 'gComponents/organizations/new/index'
+import OrganizationNewStyleGuide from 'gComponents/organizations/new/StyleGuide'
 import OrganizationShow from 'gComponents/organizations/show/index'
 import FirstSubscriptionContainer from 'gComponents/subscriptions/FirstSubscription/container'
 import FirstSubscriptionPage from 'gComponents/subscriptions/FirstSubscriptionPage/container'
@@ -49,11 +51,13 @@ export default Router.extend({
     'terms': 'terms',
     'privacy': 'privacy',
     'users/:id': 'userShow',
+    'organizations/new': 'organizationsNew',
     'organizations/:id': 'organizationShow',
     'style_guide': 'styleGuide',
     'style_guide/first_subscription': 'styleGuideFirstSubscription',
     'style_guide/settings': 'styleGuideSettings',
     'style_guide/pricing': 'styleGuidePricing',
+    'style_guide/new_organization': 'styleGuideNewOrganization',
     'settings': 'settings',
     'scratchpad': 'scratchpad',
     'pricing': 'pricing',
@@ -71,12 +75,14 @@ export default Router.extend({
   styleGuideSettings() { this.render(<SettingsStyleGuide/>, {isFluid: true, showFooter: false}) },
   styleGuideFirstSubscription() { this.render(<FirstSubscriptionStyleGuide/>) },
   styleGuidePricing() { this.render(<PlansStyleGuide/>) },
+  styleGuideNewOrganization() { this.render(<OrganizationNewStyleGuide/>) },
   maintenance() { this.render(<Maintenance/>) },
   terms() { this.render(<TermsAndConditions/>) },
   privacy() { this.render(<PrivacyPolicy/>) },
   faq() { this.render(<FAQ/>) },
   subscribe(id) { this.render(<FirstSubscriptionPage planName={id}/>) },
   userShow(id) { this.render(<UserShow userId={id}/>, {backgroundColor: 'GREY'}) },
-  organizationShow(id) { this.render(<OrganizationShow organizationId={id}/>, {backgroundColor: 'GREY'}) },
+  organizationShow(id) { this.render(<OrganizationShow organizationId={id} key={id}/>, {backgroundColor: 'GREY'}) },
+  organizationsNew() { this.render(<CreateOrganizationPageContainer/>, {backgroundColor: 'GREY'}) },
   pricing() { this.render(<PlanIndex/>, {backgroundColor: 'BLUE'}) },
 })

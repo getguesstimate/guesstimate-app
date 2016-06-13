@@ -137,6 +137,7 @@
 
 .Card li .info-section{
   color: #555;
+  text-align: left;
 }
 
 .Card li .info-section > .header{

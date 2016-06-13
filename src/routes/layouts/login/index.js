@@ -125,7 +125,7 @@ export default class Profile extends Component {
             props: {
               header: `${o.name}`,
               imageShape: 'circle',
-              image: o.picture,
+              image: organization.image(o),
               onMouseDown: () => {navigationActions.navigate(organization.url(o)); this.closeDropdown(ref)}
             },
             id: o.id
