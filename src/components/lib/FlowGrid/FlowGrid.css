@@ -13,50 +13,11 @@
   width: 100%;
 }
 
-.FlowGrid-Container-CellLayer{
-  z-index: 1;
-  position: relative;
-}
-
-.FlowGrid-Horizontal-Motion {
+.FlowGrid-Motion {
   display: flex;
-}
-
-.FlowGridRow--Horizontal-Index {
-  border-radius: 3px;
-  display: flex;
-  cursor: pointer;
-  width: 100%;
-}
-
-.FlowGridRow--Horizontal-Index .Element {
-  min-width: 200px;
   flex: 1;
-  text-align: center;
-  border-right: 1px solid $blue-2;
-  color: $blue-2;
-  background-color: $blue-1;
-}
-
-.FlowGridRow--Horizontal-Index .corner {
-  min-width: 22px;
-  background-color: $blue-1;
-  flex: 1;
-}
-
-.FlowGridRow--Vertical-Index {
-  min-width: 22px;
-  max-width: 22px;
-  background-color: $blue-1;
-}
-
-.FlowGridRow--Vertical-Index .Element {
-  border-bottom: 1px solid $blue-2;
-  color: $blue-2;
-  justify-content: center;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
+  max-height: 100%;
+  overflow: scroll;
 }
 
 .FlowGridRow{
@@ -71,6 +32,7 @@
   display: flex;
   flex: 1;
   min-height: 60px;
+  z-index: 1;
 }
 
 .FlowGrid.withLines .FlowGridCell{
@@ -102,6 +64,10 @@
 .FlowGridCell.hovered.hasItem .FlowGridFilledCell{
   background-color: rgba(75, 138, 177, 0.3);
   border-radius: 1px;
+}
+
+.FlowGridCell.hovered {
+  z-index: 2
 }
 
 .FlowGridEmptyCell:focus {

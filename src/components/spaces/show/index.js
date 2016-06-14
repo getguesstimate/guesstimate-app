@@ -21,6 +21,7 @@ import e from 'gEngine/engine'
 import * as elev from 'server/elev/index'
 
 import './style.css'
+import $ from 'jquery'
 
 function mapStateToProps(state) {
   return {
@@ -81,6 +82,7 @@ export default class SpacesShow extends Component {
 
   componentWillUpdate() {
     window.recorder.recordRenderStartEvent(this)
+    if (this.props.embed) { $('#intercom-container').remove() }
   }
 
   componentDidUpdate(prevProps) {
@@ -145,7 +147,7 @@ export default class SpacesShow extends Component {
   }
 
   _handleCopyModel() {
-    this.props.dispatch(spaceActions.copy())
+    this.props.dispatch(spaceActions.copy(this._id()))
   }
 
   onCopy() {
@@ -169,7 +171,7 @@ export default class SpacesShow extends Component {
     if (!spacePrepared(space)) { return <div className='spaceShow'></div> }
 
     const sidebarIsViseable = space.editableByMe || !_.isEmpty(space.description)
-    const canBePrivate = !!space.organization_id || e.me.canMakeMorePrivateModels(this.props.me)
+
     const isLoggedIn = e.me.isLoggedIn(this.props.me)
     if (this.props.embed) {
       return (
@@ -182,6 +184,8 @@ export default class SpacesShow extends Component {
     const hasOrg = _.has(space, 'organization.name')
     const owner = hasOrg ? space.organization : space.user
     const ownerUrl = hasOrg ? e.organization.url(space.organization) : e.user.url(space.user)
+
+    const canBePrivate = hasOrg ? e.organization.canMakeMorePrivateModels(space.organization) : e.me.canMakeMorePrivateModels(this.props.me)
 
     const authorCallout = `Made by ${owner.name}`
     const tagDescription = _.isEmpty(space.description) ? authorCallout : `${authorCallout}: ${space.description}`

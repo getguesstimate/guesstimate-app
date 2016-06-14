@@ -37,6 +37,8 @@ export class CardListElement extends Component {
 
     let [small, large] = !!children ? ['2', '10'] : ['3', '9']
 
+    const hasImage = !!icon || !!ionicIcon || !!image
+
     return (
       <li>
         <a
@@ -45,29 +47,33 @@ export class CardListElement extends Component {
           onMouseDown={this._onSelect.bind(this)}
         >
           <div className='row middle-xs'>
-            <div className={`col-xs-${small} icons`}>
-              {icon &&
-                <Icon name={icon}/>
-              }
-              {ionicIcon &&
-                <i className={`ion-${ionicIcon}`}/>
-              }
-              {image &&
-                <img src={image} className={imageShape}/>
-              }
-            </div>
-              <div className={`col-xs-${large} info-section`}>
-                <span className='header'>{header.capitalizeFirstLetter()}</span>
-                {children &&
-                    <div className='content'> {children} </div>
-                  }
-              </div>
+            {hasImage &&
+              <IconSection {...{icon, ionicIcon, image, imageShape}} colCount={small} />
+            }
+            <ChildrenSection {...{header, children}} colCount={hasImage ? large : '12'}/>
           </div>
         </a>
       </li>
     )
   }
 }
+
+const IconSection = ({colCount, icon, ionicIcon, image, imageShape}) => (
+  <div className={`col-xs-${colCount} icons`}>
+    {icon && <Icon name={icon}/>}
+    {ionicIcon && <i className={`ion-${ionicIcon}`}/>}
+    {image && <img src={image} className={imageShape}/>}
+  </div>
+)
+
+const ChildrenSection = ({colCount, header, children}) => (
+  <div className={`col-xs-${colCount} info-section`}>
+    <span className='header'>{header.capitalizeFirstLetter()}</span>
+    {children &&
+      <div className='content'> {children} </div>
+    }
+  </div>
+)
 
 export default class Card extends Component {
   displayName: 'Card'
