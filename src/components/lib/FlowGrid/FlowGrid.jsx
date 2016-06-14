@@ -264,13 +264,14 @@ export default class FlowGrid extends Component{
     return (
       <div
         className='FlowGrid-Container'
-        style={{overflow: this.props.overflow }}
         onMouseLeave={this._handleMouseLeave.bind(this)}
         onMouseUp={this._handleMouseUp.bind(this)}
         onKeyDown={this._handleKeyDown.bind(this)}
         onKeyUp={this._handleKeyUp.bind(this)}
       >
-        <div className='FlowGrid-Horizontal-Motion'>
+        <div className='FlowGrid-Motion'
+          style={{overflow: this.props.overflow }}
+        >
           <div className={className}>
             {
               upto(rowCount).map((row) => {
