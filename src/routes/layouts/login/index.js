@@ -55,7 +55,7 @@ export default class Profile extends Component {
     ]
 
     if (!!portalUrl) {
-      listElements = [listElements[0], listElements[2], listElements[3]]
+      listElements = listElements.filter(e => (e.header !== 'upgrade'))
     }
 
     return (
