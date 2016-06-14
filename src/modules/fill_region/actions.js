@@ -127,7 +127,7 @@ export function fillRegion(spaceId, {start, end}) {
 
     const fillRegion = getBounds({start, end})
     const containedMetrics = metrics.filter(m => (m.id !== _.get(startMetric, 'id')) && isWithinRegion(m.location, fillRegion))
-    dispatch(metricActions.removeMetrics(containedMetrics.map(m => m.id)))
+    dispatch({ type: 'REMOVE_METRICS', item: {ids: containedMetrics.map(m => m.id)}})
 
     if (!startMetric) { return }
 

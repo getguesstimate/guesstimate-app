@@ -70,10 +70,6 @@
   border-radius: 1px;
 }
 
-.FlowGridCell.hovered {
-  z-index: 2
-}
-
 .FlowGridEmptyCell:focus {
   outline: none;
 }
