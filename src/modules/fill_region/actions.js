@@ -1,5 +1,5 @@
 import * as metricActions from 'gModules/metrics/actions'
-import {runSimulations} from 'gModules/simulations/actions'
+import {runSimulations, deleteSimulations} from 'gModules/simulations/actions'
 import {registerGraphChange} from 'gModules/spaces/actions'
 
 import e from 'gEngine/engine'
@@ -47,7 +47,8 @@ function fillDynamicSkipUnlessPossible(startMetric, startGuesstimate) {
 
 function fillIntelligent(startMetric, startGuesstimate, direction) {
   return (location, metrics) => {
-    const metric = {...startMetric, ...e.metric.create(metrics.map(m => m.readableId)), location}
+    const metricIds = metrics.find(m => isAtLocation(m.location, location)) || e.metric.create(metrics.map(m => m.readableId))
+    const metric = {...startMetric, ..._.pick(metricIds, ['id', 'readableId']), location}
 
     const translatableMetrics = metrics.filter(m => (
       _.some(metrics, m2 => isAtLocation(move(m.location, direction), m2.location)) || !m.name
@@ -70,21 +71,6 @@ function fillIntelligent(startMetric, startGuesstimate, direction) {
     if (numInputs !== translatableIds) {
       return {}
     }
-
-    return { metric, guesstimate: {...startGuesstimate, metric: metric.id, input: translateReadableIds(input, idMap)} }
-  }
-}
-
-function fillDynamicReplacePossible(startMetric, startGuesstimate) {
-  return (location, metrics) => {
-    const metric = {...startMetric, ...e.metric.create(metrics.map(m => m.readableId)), location}
-    const {input} = startGuesstimate
-    const translateFn = translate(startMetric.location, location)
-    let idMap = {}
-    metrics.forEach(m => {
-      const matchedMetric = metrics.find(m2 => isAtLocation(translateFn(m.location), m2.location))
-      if (!!matchedMetric) { idMap[m.readableId] = matchedMetric.readableId }
-    })
 
     return { metric, guesstimate: {...startGuesstimate, metric: metric.id, input: translateReadableIds(input, idMap)} }
   }
@@ -128,6 +114,7 @@ export function fillRegion(spaceId, {start, end}) {
     const fillRegion = getBounds({start, end})
     const containedMetrics = metrics.filter(m => (m.id !== _.get(startMetric, 'id')) && isWithinRegion(m.location, fillRegion))
     dispatch({ type: 'REMOVE_METRICS', item: {ids: containedMetrics.map(m => m.id)}})
+    dispatch(deleteSimulations(containedMetrics.map(m => m.id)))
 
     if (!startMetric) { return }
 
@@ -136,7 +123,7 @@ export function fillRegion(spaceId, {start, end}) {
     const {newMetrics, newGuesstimates} = buildNewMetrics(startMetric, startGuesstimate, getDirAndLen(start, end), metrics)
 
     dispatch({type: 'ADD_METRICS', items: newMetrics, newGuesstimates: newGuesstimates})
-    dispatch(runSimulations({spaceId, metricSubset: newMetrics}))
+    dispatch(runSimulations({spaceId, onlyUnsimulated: true}))
     dispatch(registerGraphChange(spaceId))
   }
 }
