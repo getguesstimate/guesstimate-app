@@ -13,6 +13,11 @@
   width: 100%;
 }
 
+.FlowGrid-Container-CellLayer {
+  z-index: 1;
+  position: relative;
+}
+
 .FlowGrid-Motion {
   display: flex;
   flex: 1;
@@ -32,7 +37,6 @@
   display: flex;
   flex: 1;
   min-height: 60px;
-  z-index: 1;
 }
 
 .FlowGrid.withLines .FlowGridCell{
