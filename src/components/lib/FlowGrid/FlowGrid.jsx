@@ -230,9 +230,10 @@ export default class FlowGrid extends Component{
   onCellMouseUp(location) {
     if (this.state.tracingFillRegion) {
       window.recorder.recordNamedEvent("FlowGrid set fillRegion state")
-      this.props.onFillRegion(this.state.fillRegion)
+      const {fillRegion} = this.state
+      this.props.onFillRegion(fillRegion)
+      this._handleEndRangeSelect(fillRegion.end)
       this.setState({tracingFillRegion: false, fillRegion: {}})
-      this._handleEndRangeSelect(location)
     }
   }
 
@@ -268,7 +269,7 @@ export default class FlowGrid extends Component{
         onTab={(right=true) => {this._onTab(location, right)}}
         ref={`cell-${location.row}-${location.column}`}
         getRowHeight={() => this._getRowHeight(location.row)}
-        showFillToken={inSelectedCell && !this.state.dragSelecting && !selectedRegionNontrivial}
+        showFillToken={inSelectedCell && !!item && !this.state.dragSelecting && !selectedRegionNontrivial}
       />
     )
   }

@@ -26,7 +26,7 @@ function fillDynamicSkipUnlessPossible(startMetric, startGuesstimate) {
     const inputsRegex = RegExp(metrics.map(m => m.readableId).join('|'), "g")
 
     const {input} = startGuesstimate
-    const numInputs = input.match(inputsRegex).length
+    const numInputs = !!input.match(inputsRegex) ? input.match(inputsRegex).length : 0
 
     const translateFn = translate(startMetric.location, location)
     let idMap = {}
@@ -35,7 +35,37 @@ function fillDynamicSkipUnlessPossible(startMetric, startGuesstimate) {
       if (!!matchedMetric) { idMap[m.readableId] = matchedMetric.readableId }
     })
     const re = RegExp(Object.keys(idMap).join("|"), "g")
-    const translatableIds = input.match(re).length
+    const translatableIds = !!input.match(re) ? input.match(re).length : 0
+
+    if (numInputs !== translatableIds) {
+      return {}
+    }
+
+    return { metric, guesstimate: {...startGuesstimate, metric: metric.id, input: translateReadableIds(input, idMap)} }
+  }
+}
+
+function fillIntelligent(startMetric, startGuesstimate, direction) {
+  return (location, metrics) => {
+    const metric = {...startMetric, ...e.metric.create(metrics.map(m => m.readableId)), location}
+
+    const translatableMetrics = metrics.filter(m => (
+      _.some(metrics, m2 => isAtLocation(move(m.location, direction), m2.location)) || !m.name
+    ))
+
+    const translatableInputsRegex = RegExp(translatableMetrics.map(m => m.readableId).join('|'), "g")
+
+    const {input} = startGuesstimate
+    const numInputs = !!input.match(translatableInputsRegex) ? input.match(translatableInputsRegex).length : 0
+
+    const translateFn = translate(startMetric.location, location)
+    let idMap = {}
+    translatableMetrics.forEach(m => {
+      const matchedMetric = metrics.find(m2 => isAtLocation(translateFn(m.location), m2.location))
+      if (!!matchedMetric) { idMap[m.readableId] = matchedMetric.readableId }
+    })
+    const re = RegExp(Object.keys(idMap).join("|"), "g")
+    const translatableIds = !!input.match(re) ? input.match(re).length : 0
 
     if (numInputs !== translatableIds) {
       return {}
@@ -74,7 +104,7 @@ function buildNewMetrics(startMetric, startGuesstimate, {direction, length}, met
   let newGuesstimates = []
 
   const isDynamic = guesstimateType === DYNAMIC_FILL_TYPE
-  const translateFn = (isDynamic ? fillDynamicSkipUnlessPossible : addAtLoc)(startMetric, startGuesstimate)
+  const translateFn = (isDynamic ? fillIntelligent : addAtLoc)(startMetric, startGuesstimate, direction)
 
   let currLocation = move(startMetric.location, direction)
   for (var i = 0; i < length; i++) {
