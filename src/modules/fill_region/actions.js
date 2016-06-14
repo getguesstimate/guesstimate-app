@@ -1,10 +1,10 @@
 import * as metricActions from 'gModules/metrics/actions'
 import {runSimulations} from 'gModules/simulations/actions'
+import {registerGraphChange} from 'gModules/spaces/actions'
 
 import e from 'gEngine/engine'
 
 import {isAtLocation, isWithinRegion, getBounds, move, translate} from 'lib/locationUtils'
-import {registerGraphChange} from 'gModules/spaces/actions'
 
 const DYNAMIC_FILL_TYPE = 'FUNCTION'
 
@@ -20,7 +20,32 @@ const getDirAndLen = (start, end) => ({
   length: Math.abs(start.row - end.row) || Math.abs(start.column - end.column),
 })
 
-function fillFunction(startMetric, startGuesstimate) {
+function fillDynamicSkipUnlessPossible(startMetric, startGuesstimate) {
+  return (location, metrics) => {
+    const metric = {...startMetric, ...e.metric.create(metrics.map(m => m.readableId)), location}
+    const inputsRegex = RegExp(metrics.map(m => m.readableId).join('|'), "g")
+
+    const {input} = startGuesstimate
+    const numInputs = input.match(inputsRegex).length
+
+    const translateFn = translate(startMetric.location, location)
+    let idMap = {}
+    metrics.forEach(m => {
+      const matchedMetric = metrics.find(m2 => isAtLocation(translateFn(m.location), m2.location))
+      if (!!matchedMetric) { idMap[m.readableId] = matchedMetric.readableId }
+    })
+    const re = RegExp(Object.keys(idMap).join("|"), "g")
+    const translatableIds = input.match(re).length
+
+    if (numInputs !== translatableIds) {
+      return {}
+    }
+
+    return { metric, guesstimate: {...startGuesstimate, metric: metric.id, input: translateReadableIds(input, idMap)} }
+  }
+}
+
+function fillDynamicReplacePossible(startMetric, startGuesstimate) {
   return (location, metrics) => {
     const metric = {...startMetric, ...e.metric.create(metrics.map(m => m.readableId)), location}
     const {input} = startGuesstimate
@@ -49,13 +74,13 @@ function buildNewMetrics(startMetric, startGuesstimate, {direction, length}, met
   let newGuesstimates = []
 
   const isDynamic = guesstimateType === DYNAMIC_FILL_TYPE
-  const translateFn = (isDynamic ? fillFunction : addAtLoc)(startMetric, startGuesstimate)
+  const translateFn = (isDynamic ? fillDynamicSkipUnlessPossible : addAtLoc)(startMetric, startGuesstimate)
 
   let currLocation = move(startMetric.location, direction)
   for (var i = 0; i < length; i++) {
     const {metric, guesstimate} = translateFn(currLocation, metrics.concat(newMetrics))
-    newMetrics.push(metric)
-    newGuesstimates.push(guesstimate)
+    if (!!metric) {newMetrics.push(metric)}
+    if (!!guesstimate) {newGuesstimates.push(guesstimate)}
     currLocation = move(currLocation, direction)
   }
 
