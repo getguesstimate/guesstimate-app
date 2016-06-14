@@ -243,6 +243,8 @@ export default class FlowGrid extends Component{
     const {selectedCell, selectedRegion} = this.props
     const inSelectedCell = isAtLocation(selectedCell, location)
     const selectedRegionNontrivial = selectedRegion.length === 2 && !isAtLocation(selectedRegion[0], selectedRegion[1])
+    const hasNonEmptyItem = !!item && !this.props.isItemEmpty(item.key)
+    const showFillToken = inSelectedCell && hasNonEmptyItem && !this.state.dragSelecting && !selectedRegionNontrivial
     return (
       <Cell
         onMouseUp={() => {this.onCellMouseUp(location)}}
@@ -269,7 +271,7 @@ export default class FlowGrid extends Component{
         onTab={(right=true) => {this._onTab(location, right)}}
         ref={`cell-${location.row}-${location.column}`}
         getRowHeight={() => this._getRowHeight(location.row)}
-        showFillToken={inSelectedCell && !!item && !this.state.dragSelecting && !selectedRegionNontrivial}
+        showFillToken={showFillToken}
       />
     )
   }

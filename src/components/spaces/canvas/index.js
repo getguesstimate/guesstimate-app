@@ -126,6 +126,12 @@ export default class Canvas extends Component{
     return (_.get(props, 'denormalizedSpace.canvasState.metricCardView') === 'analysis')
   }
 
+  isMetricEmpty(id) {
+    const metric = this.props.denormalizedSpace.metrics.find(m => m.id === id)
+    const {input, data} = metric.guesstimate
+    return _.isEmpty(metric.name) && _.isEmpty(input) && _.isEmpty(data)
+  }
+
   renderMetric(metric, selected) {
     const {location} = metric
     const hasSelected = selected && metric && (selected.id !== metric.id)
@@ -190,6 +196,7 @@ export default class Canvas extends Component{
           onMultipleSelect={this._handleMultipleSelect.bind(this)}
           overflow={overflow}
           hasItemUpdated = {(oldItem, newItem) => hasMetricUpdated(oldItem.props, newItem.props)}
+          isItemEmpty = {this.isMetricEmpty.bind(this)}
           edges={edges}
           selectedRegion={selectedRegion}
           copiedRegion={copiedRegion}
