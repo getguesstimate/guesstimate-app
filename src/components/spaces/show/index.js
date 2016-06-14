@@ -21,6 +21,7 @@ import e from 'gEngine/engine'
 import * as elev from 'server/elev/index'
 
 import './style.css'
+import $ from 'jquery'
 
 function mapStateToProps(state) {
   return {
@@ -81,6 +82,7 @@ export default class SpacesShow extends Component {
 
   componentWillUpdate() {
     window.recorder.recordRenderStartEvent(this)
+    if (this.props.embed) { $('#intercom-container').remove() }
   }
 
   componentDidUpdate(prevProps) {
