@@ -67,18 +67,17 @@ export default class Layout extends Component{
     const baseDescription = "Plan finances, make strategic decisions, and do risk assessment.  Guesstimate uses stochastic models, Monte Carlo simulations, and sensitivity analyses."
 
     return (
-      <div>
-        <Helmet
-          defaultTitle="Guesstimate"
-          titleTemplate="%s | Guesstimate"
-          meta={[
-            {name: "Description", content: baseDescription},
-            {property: "og:type", content: "product"},
-            {property: "og:title", content: "Guesstimate | A Spreadsheet for the Uncertain"},
-            {property: "og:description", content: baseDescription},
-          ]}
-        />
         <NavHelper>
+          <Helmet
+            defaultTitle="Guesstimate"
+            titleTemplate="%s | Guesstimate"
+            meta={[
+              {name: "Description", content: baseDescription},
+              {property: "og:type", content: "product"},
+              {property: "og:title", content: "Guesstimate | A Spreadsheet for the Uncertain"},
+              {property: "og:description", content: baseDescription},
+            ]}
+          />
           <ErrorModal/>
           <div className={`Layout ${options.fullHeight ? 'fullHeight' : ''}`}>
             <ModalContainer/>
@@ -87,7 +86,6 @@ export default class Layout extends Component{
             {options.showFooter && <Footer/>}
           </div>
         </NavHelper>
-      </div>
     )
   }
 }
