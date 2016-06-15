@@ -269,31 +269,27 @@ export default class FlowGrid extends Component{
         onKeyDown={this._handleKeyDown.bind(this)}
         onKeyUp={this._handleKeyUp.bind(this)}
       >
-        <div className='FlowGrid-Motion'
-          style={{overflow: this.props.overflow }}
-        >
-          <div className={className}>
-            {
-              upto(rowCount).map((row) => {
-                return (
-                  <div
-                    className='FlowGridRow'
-                    key={row}
-                    ref={`row-${row}`}
-                  >
-                    {this._row(row, columnCount)}
-                  </div>
-                )
-              })
-            }
-              <BackgroundContainer
-                edges={edges}
-                rowCount={rowCount}
-                getRowHeight={this._getRowHeight.bind(this)}
-                selectedRegion={this.props.selectedRegion}
-                copiedRegion={this.props.copiedRegion}
-              />
-          </div>
+        <div className={className}>
+          {
+            upto(rowCount).map((row) => {
+              return (
+                <div
+                  className='FlowGridRow'
+                  key={row}
+                  ref={`row-${row}`}
+                >
+                  {this._row(row, columnCount)}
+                </div>
+              )
+            })
+          }
+            <BackgroundContainer
+              edges={edges}
+              rowCount={rowCount}
+              getRowHeight={this._getRowHeight.bind(this)}
+              selectedRegion={this.props.selectedRegion}
+              copiedRegion={this.props.copiedRegion}
+            />
         </div>
       </div>
     )

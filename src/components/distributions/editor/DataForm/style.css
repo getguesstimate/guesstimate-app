@@ -41,6 +41,7 @@
   background-color: $purple-3;
   color: $purple-2;
   overflow: auto;
+  max-height: 40em;
 }
 
 .DataViewer .DataViewer--body.edit .button{
