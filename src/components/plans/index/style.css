@@ -1,8 +1,20 @@
 @import './styles/variables.css';
+$main-grey: #4e4e4e;
 
 .PlanIndex {
-  color: white;
+  color: $main-grey;
   font-family: 'Lato';
+}
+
+.PlanIndex .Plans {
+  float: left;
+}
+
+.PlanIndex .Plans--outer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .PlanIndex .header{
@@ -12,8 +24,11 @@
 }
 
 .PlanIndex .header h1{
-  font-size: 3em;
-  opacity: 0.7;
+  font-size: 2.5em;
+  font-weight: 500;
+}
+
+.PlanIndex .header h2{
   font-weight: 300;
 }
 
@@ -21,10 +36,28 @@
   padding: 0 6em;
 }
 
+.PlanIndex .questions {
+  margin-top: 8em;
+  color: $main-grey;
+}
+
+.PlanIndex .questions .question {
+  margin-bottom: 3em;
+  padding: 0 3rem;
+}
+
+.PlanIndex .questions .question h3 {
+  font-size: 1.5em;
+}
+
+.PlanIndex .questions .question p {
+  font-size: 1.15em;
+}
+
 .PlanCard {
   background-color: white;
-  border-radius: 3px;
-  border: 1px solid #eee;
+  border-radius: 0.3em;
+  border: 1px solid #d8d8d8;
   text-align: center;
   padding: 1.5em 0;
   margin: 3em 0;
@@ -32,11 +65,17 @@
   color: #888;
   font-size: 1.5em;
   font-weight: 300;
+  width: 15em;
+  margin-right: 3em;
+  float: left;
+  &:last-child{
+     margin-right: 0;
+  }
 }
 
 .PlanCard h2 {
   margin-bottom: 2em;
-  color: #333;
+  color: $main-grey;
   margin-bottom: 1.5em;
   font-weight: 500;
   font-size: 1.5em;
@@ -51,31 +90,40 @@
 }
 
 .PlanCard ul {
-  margin-bottom: 1.5em;
+  margin-bottom: 3em;
   list-style: none;
   padding: 0;
   width: 100%;
 }
 
+.PlanCard .promotion {
+  color: #1BB732;
+  font-weight: 500;
+}
+
 .PlanCard-Cost {
-  margin-bottom: 3em;
+  padding-bottom: 1em;
+  min-height: 5.5em;
 }
 
 .PlanCard-Cost sup {
   top: -0.7em;
   font-size: 1.2em;
-  font-weight: 300;
+  font-weight: 800;
+  color: $main-grey;
 }
 
 .PlanCard-Cost .number {
   font-size: 2.5em;
-  color: #333;
-  font-weight: 400;
+  color: $main-grey;
+  font-weight: 800;
 }
 
 .PlanCard-Cost .per-month {
-  font-weight: 300;
-  margin-top: 7px;
+  font-weight: 500;
+  margin-top: 0.75em;
+  font-size: 1em;
+  line-height: 1.3em;
 }
 
 .PlanCard-Cost .dollar-sign {
@@ -92,7 +140,7 @@
   background-color: rgba(255,255,255,0.8);
   width: 100%;
   padding: 1em;
-  color: #333;
+  color: $main-grey;
   border-radius: 3px;
   text-align: center;
 }

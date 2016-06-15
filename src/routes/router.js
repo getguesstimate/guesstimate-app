@@ -22,7 +22,7 @@ import FirstSubscriptionPage from 'gComponents/subscriptions/FirstSubscriptionPa
 import FirstSubscriptionStyleGuide from 'gComponents/subscriptions/FirstSubscription/StyleGuide'
 import SettingsStyleGuide from 'gComponents/users/settings/StyleGuide'
 import Settings from 'gComponents/users/settings/container'
-import PlanIndex from 'gComponents/plans/index/container'
+import PlanIndex from 'gComponents/plans/index/container2'
 import PlansStyleGuide from 'gComponents/plans/index/StyleGuide'
 
 import configureStore from './middleware'
@@ -84,5 +84,5 @@ export default Router.extend({
   userShow(id) { this.render(<UserShow userId={id}/>, {backgroundColor: 'GREY'}) },
   organizationShow(id) { this.render(<OrganizationShow organizationId={id} key={id}/>, {backgroundColor: 'GREY'}) },
   organizationsNew() { this.render(<CreateOrganizationPageContainer/>, {backgroundColor: 'GREY'}) },
-  pricing() { this.render(<PlanIndex/>, {backgroundColor: 'BLUE'}) },
+  pricing() { this.render(<PlanIndex/>, {backgroundColor: 'GREY'}) },
 })

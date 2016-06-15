@@ -23,3 +23,15 @@ plans:
     enum_id: 4
     monthly_cost: 0
     private_model_limit: 1000
+  -
+    name: 'Organization Free'
+    id: 'organization_free'
+    enum_id: 5
+    monthly_cost: 0
+    private_model_limit: 0
+  -
+    name: 'Organization Premium'
+    id: 'organization_basic'
+    enum_id: 6
+    monthly_cost: 1200
+    private_model_limit: 1000

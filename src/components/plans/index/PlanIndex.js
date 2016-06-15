@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react'
 import Plans from './plans.js'
 import Container from 'gComponents/utility/container/Container.js'
+import PlanIndexQuestions from './questions.js'
 
 class PortalMessage extends Component{
   render() {
@@ -36,6 +37,11 @@ export default class PlanIndex extends Component{
         <div className='PlanIndex'>
           <div className='header'>
             <h1> Plans & Pricing </h1>
+            <h2>
+              Guesstimate is free for use for public models.
+              <br/>
+              Create private models with a paid plan.
+            </h2>
           </div>
 
           <PortalMessage portalUrl={portalUrl}/>
@@ -43,6 +49,7 @@ export default class PlanIndex extends Component{
           <div className='cards'>
             <Plans showButtons={showButtons} onChoose={onChoose}/>
           </div>
+          <PlanIndexQuestions/>
         </div>
       </Container>
     )
