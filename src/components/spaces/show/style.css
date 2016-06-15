@@ -15,7 +15,14 @@
 .canvas-space {
   flex: 1;
   max-height: 100%;
+}
+
+.canvas-space:not(.overflow-hidden) {
   overflow: auto;
+}
+
+.canvas-space.overflow-hidden {
+  overflow: hidden;
 }
 
 .hero-unit {
