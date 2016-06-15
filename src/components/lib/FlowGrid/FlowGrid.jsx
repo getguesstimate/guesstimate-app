@@ -128,7 +128,7 @@ export default class FlowGrid extends Component{
   }
 
   _selectedItems() {
-   return this.props.items.filter(i => isWithinRegion(i.location, this.props.selectedRegion))
+    return this.props.items.filter(i => isWithinRegion(i.location, this.props.selectedRegion))
   }
 
   _handleRemoveSelectedItems() {
