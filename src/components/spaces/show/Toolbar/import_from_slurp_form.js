@@ -14,12 +14,6 @@ export class ImportFromSlurpForm extends Component {
     value: ""
   }
 
-  componentDidMount() {
-    // TODO(Ozzie): Ozzie, any idea how to get this to focus? I can't seem to...
-    this.refs.textarea.focus()
-    ReactDOM.findDOMNode(this.refs.textarea).focus()
-  }
-
   onSubmit() {
     this.props.onSubmit(JSON.parse(this.state.value))
   }

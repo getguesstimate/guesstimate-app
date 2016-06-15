@@ -1,6 +1,7 @@
 import e from 'gEngine/engine'
 
-const MAX_WIDTH = 8
+// Importing too many SIPs all into one row would be very hard to work with, so we limit how many columns it will fill.
+const MAX_COLUMNS = 8
 
 export function parseSlurp(slurp, space={metrics: [], guesstimates: []}) {
   const name = slurp.name
@@ -12,7 +13,7 @@ export function parseSlurp(slurp, space={metrics: [], guesstimates: []}) {
   const newMetrics = _.map(slurp.sips, (s,i) => {
     const metric = {
       ...e.metric.create(existingReadableIds),
-      location: {row: maxRow + Math.floor(i/MAX_WIDTH), column: i % MAX_WIDTH},
+      location: {row: maxRow + Math.floor(i/MAX_COLUMNS), column: i % MAX_COLUMNS},
       name: s.name,
       space: space.id,
     }

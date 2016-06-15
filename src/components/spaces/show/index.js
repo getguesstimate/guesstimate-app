@@ -128,10 +128,12 @@ export default class SpacesShow extends Component {
     const space = this.props.denormalizedSpace
 
     const spaceUpdates = parseSlurp(slurpObj, space)
-    let noGraphUpdates = {}
-    if (!space.name) {noGraphUpdates.name = spaceUpdates.name}
-    if (!space.description) {noGraphUpdates.description = spaceUpdates.description}
-    this.props.dispatch(spaceActions.update(this._id(), noGraphUpdates))
+    if (!space.name || !space.description) {
+      let nonGraphUpdates = {}
+      if (!space.name) {nonGraphUpdates.name = spaceUpdates.name}
+      if (!space.description) {nonGraphUpdates.description = spaceUpdates.description}
+      this.props.dispatch(spaceActions.update(this._id(), nonGraphUpdates))
+    }
     this.props.dispatch({type: 'ADD_METRICS', items: spaceUpdates.newMetrics, newGuesstimates: spaceUpdates.newGuesstimates})
     this.props.dispatch(spaceActions.updateGraph(this._id()))
     this.props.dispatch(simulationActions.runSimulations(this._id(), spaceUpdates.newMetrics))

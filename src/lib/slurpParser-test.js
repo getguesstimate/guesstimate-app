@@ -5,7 +5,7 @@ function matchPresent(pattern, sample) {
   const matches = true
   for (let key of Object.keys(pattern)) {
     if (!matchPresent(pattern[key],sample[key])) {
-      console.warn("Objects differ at key ", key)
+      console.warn('Objects differ at key ', key)
     }
   }
   return matches
@@ -13,28 +13,28 @@ function matchPresent(pattern, sample) {
 
 describe('parseSlurp', () => {
   describe('Valid Slurp', () => {
-    const spaceName = "Space"
-    const spaceDesc = "Space Description"
-    const metricOneName = "Metric One"
-    const guesstimateOneDesc = "Guesstimate One Description"
+    const spaceName = 'Space'
+    const spaceDesc = 'Space Description'
+    const metricOneName = 'Metric One'
+    const guesstimateOneDesc = 'Guesstimate One Description'
     const guesstimateOneData = [1, 2, 3]
-    const metricTwoName = "Metric Two"
-    const guesstimateTwoDesc = "Guesstimate Two Description"
+    const metricTwoName = 'Metric Two'
+    const guesstimateTwoDesc = 'Guesstimate Two Description'
     const guesstimateTwoData = [4, 5, 7]
 
     const slurp = {
-      "name": spaceName,
-      "provenance": spaceDesc,
-      "sips": [
+      'name': spaceName,
+      'provenance': spaceDesc,
+      'sips': [
         {
-          "name": metricOneName,
-          "provenance": guesstimateOneDesc,
-          "value": guesstimateOneData,
+          'name': metricOneName,
+          'provenance': guesstimateOneDesc,
+          'value': guesstimateOneData,
         },
         {
-          "name": metricTwoName,
-          "provenance": guesstimateTwoDesc,
-          "value": guesstimateTwoData,
+          'name': metricTwoName,
+          'provenance': guesstimateTwoDesc,
+          'value': guesstimateTwoData,
         }
       ]
     }
