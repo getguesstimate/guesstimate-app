@@ -80,7 +80,7 @@ export default class Plans extends Component{
               unit='per_month'
               private_model_count='20'
               upgrade={{
-                show: this.props.showButtons,
+                show: this.props.showPersonalUpgradeButton,
                 onClick: () => {this.props.onChoose('personal_lite')},
                 text: 'Upgrade'
               }}
@@ -92,7 +92,7 @@ export default class Plans extends Component{
               private_model_count='Unlimited'
               promotion_copy='14-day free trial'
               upgrade={{
-                show: this.props.showButtons,
+                show: this.props.isLoggedIn,
                 onClick: () => {this.props.onNewOrganizationNavigation()},
                 text: 'Begin Free Trial'
               }}
