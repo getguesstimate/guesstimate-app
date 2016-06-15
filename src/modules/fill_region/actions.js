@@ -78,7 +78,8 @@ function fillIntelligent(startMetric, startGuesstimate, direction) {
 
 function addAtLoc(startMetric, startGuesstimate) {
   return (location, metrics) => {
-    const metric = {...startMetric, ...e.metric.create(metrics.map(m => m.readableId)), location}
+    const metricIds = metrics.find(m => isAtLocation(m.location, location)) || e.metric.create(metrics.map(m => m.readableId))
+    const metric = {...startMetric, ..._.pick(metricIds, ['id', 'readableId']), location}
     return { metric, guesstimate: {...startGuesstimate, metric: metric.id} }
   }
 }
