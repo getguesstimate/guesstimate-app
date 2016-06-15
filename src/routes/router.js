@@ -22,7 +22,7 @@ import FirstSubscriptionPage from 'gComponents/subscriptions/FirstSubscriptionPa
 import FirstSubscriptionStyleGuide from 'gComponents/subscriptions/FirstSubscription/StyleGuide'
 import SettingsStyleGuide from 'gComponents/users/settings/StyleGuide'
 import Settings from 'gComponents/users/settings/container'
-import PlanIndex from 'gComponents/plans/index/container2'
+import PlanIndex from 'gComponents/plans/index/container'
 import PlansStyleGuide from 'gComponents/plans/index/StyleGuide'
 
 import configureStore from './middleware'

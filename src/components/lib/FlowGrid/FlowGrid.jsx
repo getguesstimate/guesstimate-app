@@ -43,8 +43,6 @@ export default class FlowGrid extends Component{
     onPaste: PropTypes.func.isRequired,
 
     showGridLines: PropTypes.bool,
-
-    overflow: PropTypes.string,
   }
 
   static defaultProps = {

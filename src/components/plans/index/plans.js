@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from 'react'
+import * as navigationActions from 'gModules/navigation/actions.js'
 import Plan from 'lib/config/plan.js'
 import './style.css'
 
@@ -79,7 +80,7 @@ export default class Plans extends Component{
               unit='per_month'
               private_model_count='20'
               upgrade={{
-                show: true,
+                show: this.props.showButtons,
                 onClick: () => {this.props.onChoose('personal_lite')},
                 text: 'Upgrade'
               }}
@@ -91,8 +92,8 @@ export default class Plans extends Component{
               private_model_count='Unlimited'
               promotion_copy='14-day free trial'
               upgrade={{
-                show: true,
-                onClick: () => {this.props.onChoose('personal_lite')},
+                show: this.props.showButtons,
+                onClick: () => {this.props.onNewOrganizationNavigation()},
                 text: 'Begin Free Trial'
               }}
             />

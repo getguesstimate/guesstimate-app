@@ -42,7 +42,7 @@ $main-grey: #4e4e4e;
 }
 
 .PlanIndex .questions .question {
-  margin-bottom: 3em;
+  margin-bottom: 5em;
   padding: 0 3rem;
 }
 
@@ -99,6 +99,7 @@ $main-grey: #4e4e4e;
 .PlanCard .promotion {
   color: #1BB732;
   font-weight: 500;
+  margin-bottom: 1em;
 }
 
 .PlanCard-Cost {
