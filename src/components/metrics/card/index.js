@@ -269,7 +269,7 @@ export default class MetricCard extends Component {
             onTab={this.props.onTab}
           />
 
-          {inSelectedCell && !this.state.modalIsOpen &&
+          {inSelectedCell &&
             <div className='section editing'>
               <DistributionEditor
                 guesstimate={metric.guesstimate}

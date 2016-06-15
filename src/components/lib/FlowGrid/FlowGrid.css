@@ -7,22 +7,7 @@
 }
 
 .FlowGrid-Container {
-  overflow: auto;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-
-.FlowGrid-Container-CellLayer {
-  z-index: 1;
-  position: relative;
-}
-
-.FlowGrid-Motion {
-  display: flex;
-  flex: 1;
-  max-height: 100%;
-  overflow: scroll;
+  float: left;
 }
 
 .FlowGridRow{
