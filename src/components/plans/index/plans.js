@@ -45,11 +45,11 @@ class PlanCard extends Component{
           {promotion_copy}
         </div>
         }
-        { this.props.showButton &&
+        { this.props.upgrade.show &&
           <a
             className='ui button large green'
-            onMouseDown={this.props.onClick}
-          > Upgrade </a>
+            onMouseDown={this.props.upgrade.onClick}
+          > {this.props.upgrade.text} </a>
         }
       </div>
     )
@@ -78,6 +78,11 @@ export default class Plans extends Component{
               price='5'
               unit='per_month'
               private_model_count='20'
+              upgrade={{
+                show: true,
+                onClick: () => {this.props.onChoose('personal_lite')},
+                text: 'Upgrade'
+              }}
             />
             <PlanCard
               name='Organizations'
@@ -85,6 +90,11 @@ export default class Plans extends Component{
               unit='per_user'
               private_model_count='Unlimited'
               promotion_copy='14-day free trial'
+              upgrade={{
+                show: true,
+                onClick: () => {this.props.onChoose('personal_lite')},
+                text: 'Begin Free Trial'
+              }}
             />
           </div>
         </div>
