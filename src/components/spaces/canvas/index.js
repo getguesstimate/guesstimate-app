@@ -18,6 +18,8 @@ import {undo, redo} from 'gModules/checkpoints/actions'
 import {hasMetricUpdated} from 'gComponents/metrics/card/updated'
 import * as canvasStateProps from 'gModules/canvas_state/prop_type'
 
+import * as segment from 'server/segment'
+
 
 import './style.css'
 
@@ -79,10 +81,12 @@ export default class Canvas extends Component{
   }
 
   _handleUndo() {
+    segment.trackUndo(true)
     this.props.dispatch(undo(this.props.denormalizedSpace.id))
   }
 
   _handleRedo() {
+    segment.trackUndo(true)
     this.props.dispatch(redo(this.props.denormalizedSpace.id))
   }
 
@@ -92,6 +96,7 @@ export default class Canvas extends Component{
   }
 
   _handleMultipleSelect(corner1, corner2) {
+    if (!isAtLocation(corner1, corner2)) { segment.trackSelectedRegion() }
     this.props.dispatch(selectRegion(corner1, corner2))
   }
 
