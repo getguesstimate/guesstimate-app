@@ -44,7 +44,7 @@ export class ImportFromSlurpForm extends Component {
             />
           </div>
           <div
-            className={`ui button submit ${this.isValid() ? 'blue' : 'inactive'}`}
+            className={`ui button submit ${this.isValid() ? 'blue' : 'disabled'}`}
             onClick={this.onSubmit.bind(this)}
           >
             Import
