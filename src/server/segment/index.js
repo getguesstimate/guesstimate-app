@@ -136,3 +136,7 @@ export function trackSwitchToViewMode() {
 export function trackSwitchToEditMode() {
   trackCanvasInteraction('switch to edit mode')
 }
+
+export function trackImportSlurp() {
+  trackCanvasInteraction('import slurp')
+}
