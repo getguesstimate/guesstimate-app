@@ -171,10 +171,11 @@ export default class Canvas extends Component{
 
     const edges = this.edges()
     let className = 'canvas-space'
-    const showGridLines = (metricCardView !== 'display')
-    this.showEdges() ? className += ' showEdges' : ''
+    className += this.showEdges() ? ' showEdges' : ''
+    className += this.props.screenshot ? ' overflow-hidden' : ''
+
     const selectedMetric = this._isAnalysisView() && this._selectedMetric()
-    const overflow = this.props.screenshot ? 'hidden' : 'default'
+    const showGridLines = (metricCardView !== 'display')
 
     const copiedRegion = (copied && (copied.pastedTimes < 1) && copied.region) || []
 
@@ -183,7 +184,6 @@ export default class Canvas extends Component{
         <FlowGrid
           items={_.map(metrics, m => ({key: m.id, location: m.location, component: this.renderMetric(m, selectedMetric)}))}
           onMultipleSelect={this._handleMultipleSelect.bind(this)}
-          overflow={overflow}
           hasItemUpdated = {(oldItem, newItem) => hasMetricUpdated(oldItem.props, newItem.props)}
           edges={edges}
           selectedRegion={selectedRegion}
