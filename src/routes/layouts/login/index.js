@@ -49,12 +49,13 @@ export default class Profile extends Component {
     let listElements = [
       {ionicIcon: 'md-person', header: 'account', onMouseDown: this._openModal.bind(this)},
       {icon: 'rocket', header: 'upgrade', onMouseDown: () => {navigationActions.navigate('/pricing')}},
+      {ionicIcon: 'ios-people', header: 'New Organization', onMouseDown: () => {navigationActions.navigate('/organizations/new')}},
       {ionicIcon: 'md-help', header: 'FAQ', onMouseDown: () => {navigationActions.navigate('/faq')}},
       {ionicIcon: 'md-log-out', header: 'Sign Out', onMouseDown: this.logOut.bind(this)}
     ]
 
     if (!!portalUrl) {
-      listElements = [listElements[0], listElements[2], listElements[3]]
+      listElements = listElements.filter(e => (e.header !== 'upgrade'))
     }
 
     return (

@@ -8,6 +8,10 @@
   background-color: $transparent-background;
 }
 
+.MetricName:not(.isClickable) {
+  cursor: pointer;
+}
+
 .output .MetricName {
    font-weight: 500;
 }
