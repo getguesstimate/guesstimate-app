@@ -4,54 +4,68 @@ $main-grey: #4e4e4e;
 .PlanIndex {
   color: $main-grey;
   font-family: 'Lato';
-}
 
-.PlanIndex .Plans {
-  float: left;
-}
+  .header {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 3em;
+    h1 {
+      font-size: 2.5em;
+      font-weight: 500;
+    }
+    h2 {
+      font-weight: 300;
+    }
+  }
 
-.PlanIndex .Plans--outer {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+  .Plans {
+    float: left;
+  }
 
-.PlanIndex .header{
-  width: 100%;
-  text-align: center;
-  margin-bottom: 3em;
-}
+  .Plans--outer {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-.PlanIndex .header h1{
-  font-size: 2.5em;
-  font-weight: 500;
-}
+  .portal-message-container {
+    width: 100%;
+    padding: 1em 18em;
+  }
 
-.PlanIndex .header h2{
-  font-weight: 300;
-}
+  .portal-message {
+    background-color: rgba(255,255,255,0.8);
+    width: 100%;
+    padding: 1em;
+    color: $main-grey;
+    border-radius: 3px;
+    text-align: center;
 
-.PlanIndex > .cards {
-  padding: 0 6em;
-}
+    h2 {
+      font-weight: 500;
+      margin-bottom: 1em;
+    }
+  }
 
-.PlanIndex .questions {
-  margin-top: 8em;
-  color: $main-grey;
-}
+  .questions {
+    margin-top: 8em;
+    color: $main-grey;
 
-.PlanIndex .questions .question {
-  margin-bottom: 5em;
-  padding: 0 3rem;
-}
+    .question {
+      margin-bottom: 5em;
+      padding: 0 3rem;
 
-.PlanIndex .questions .question h3 {
-  font-size: 1.5em;
-}
+      h3 {
+        font-size: 1.5em;
+      }
 
-.PlanIndex .questions .question p {
-  font-size: 1.15em;
+      p {
+        font-size: 1.15em;
+      }
+    }
+
+  }
 }
 
 .PlanCard {
@@ -71,82 +85,67 @@ $main-grey: #4e4e4e;
   &:last-child{
      margin-right: 0;
   }
-}
 
-.PlanCard h2 {
-  margin-bottom: 2em;
-  color: $main-grey;
-  margin-bottom: 1.5em;
-  font-weight: 500;
-  font-size: 1.5em;
-}
+  h2 {
+    margin-bottom: 2em;
+    color: $main-grey;
+    margin-bottom: 1.5em;
+    font-weight: 500;
+    font-size: 1.5em;
+  }
 
-.PlanCard li {
-  margin-bottom: 1em;
-}
+  h2 {
+  }
 
-.PlanCard li strong{
-  color: $blue-1;
-}
+  li {
+    margin-bottom: 1em;
+  }
 
-.PlanCard ul {
-  margin-bottom: 3em;
-  list-style: none;
-  padding: 0;
-  width: 100%;
-}
+  li strong{
+    color: $blue-1;
+  }
 
-.PlanCard .promotion {
-  color: #1BB732;
-  font-weight: 500;
-  margin-bottom: 1em;
-}
+  ul {
+    margin-bottom: 3em;
+    list-style: none;
+    padding: 0;
+    width: 100%;
+  }
 
-.PlanCard-Cost {
-  padding-bottom: 1em;
-  min-height: 5.5em;
-}
+  .promotion {
+    color: #1BB732;
+    font-weight: 500;
+    margin-bottom: 1em;
+  }
 
-.PlanCard-Cost sup {
-  top: -0.7em;
-  font-size: 1.2em;
-  font-weight: 800;
-  color: $main-grey;
-}
+  .PlanCard-Cost {
+    padding-bottom: 1em;
+    min-height: 5.5em;
 
-.PlanCard-Cost .number {
-  font-size: 2.5em;
-  color: $main-grey;
-  font-weight: 800;
-}
+    sup {
+      top: -0.7em;
+      font-size: 1.2em;
+      font-weight: 800;
+      color: $main-grey;
+    }
 
-.PlanCard-Cost .per-month {
-  font-weight: 500;
-  margin-top: 0.75em;
-  font-size: 1em;
-  line-height: 1.3em;
-}
+    .number {
+      font-size: 2.5em;
+      color: $main-grey;
+      font-weight: 800;
+    }
 
-.PlanCard-Cost .dollar-sign {
-  font-size: 0.8em;
-  margin-top: -5em;
-}
+    .per-month {
+      font-weight: 500;
+      margin-top: 0.75em;
+      font-size: 1em;
+      line-height: 1.3em;
+    }
 
-.PlanIndex .portal-message-container {
-  width: 100%;
-  padding: 1em 18em;
-}
+    .dollar-sign {
+      font-size: 0.8em;
+      margin-top: -5em;
+    }
 
-.PlanIndex .portal-message {
-  background-color: rgba(255,255,255,0.8);
-  width: 100%;
-  padding: 1em;
-  color: $main-grey;
-  border-radius: 3px;
-  text-align: center;
-}
-
-.PlanIndex .portal-message h2{
-  font-weight: 500;
-  margin-bottom: 1em;
+  }
 }
