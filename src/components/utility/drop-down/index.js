@@ -77,13 +77,15 @@ export default class DropDown extends Component {
               {_.isArray(this.props.children) &&
                 <ul>
                   {
-                    this.props.children.map(child => {
+                    _.map(this.props.children, (child, i) => {
                       if (!!child && child.props.closeOnClick) {
                         return (
-                          <div onClick={() => {this._close()}}> {child} </div>
+                          <div onMouseDown={() => {this._close()}} key={i}> {child} </div>
                         )
                       } else {
-                        return child
+                        return (
+                          <div key={i}> {child} </div>
+                        )
                       }
                     })
                   }

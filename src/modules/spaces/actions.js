@@ -93,10 +93,10 @@ export function fetch({userId, organizationId}) {
   }
 }
 
-export function create(organizationId) {
+export function create(organizationId, params={}) {
   return (dispatch, getState) => {
     const cid = cuid()
-    let object = {id: cid}
+    let object = {...params, id: cid}
     if (organizationId) {
       object.organization_id = organizationId
     }
