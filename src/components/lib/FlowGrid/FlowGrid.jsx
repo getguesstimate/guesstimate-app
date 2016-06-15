@@ -316,19 +316,21 @@ export default class FlowGrid extends Component{
         onKeyUp={this._handleKeyUp.bind(this)}
       >
         <div className={className}>
-          {
-            upto(rowCount).map((row) => {
-              return (
-                <div
-                  className='FlowGridRow'
-                  key={row}
-                  ref={`row-${row}`}
-                >
-                  {this._row(row, columnCount)}
-                </div>
-              )
-            })
-          }
+          <div className='canvas'>
+            {
+              upto(rowCount).map((row) => {
+                return (
+                  <div
+                    className='FlowGridRow'
+                    key={row}
+                    ref={`row-${row}`}
+                  >
+                    {this._row(row, columnCount)}
+                  </div>
+                )
+              })
+            }
+          </div>
           <BackgroundContainer
             edges={edges}
             rowCount={rowCount}

@@ -4,6 +4,11 @@
   position: relative;
   margin-left: 1em;
   margin-top: 1em;
+
+  .canvas {
+    position: relative;
+    z-index: 1;
+  }
 }
 
 .FlowGrid-Container {
