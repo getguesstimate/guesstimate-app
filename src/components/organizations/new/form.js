@@ -33,17 +33,22 @@ export class CreateOrganizationForm extends Component {
   state = {
     value: '',
     plan: 'PREMIUM',
+    hasClicked: false,
   }
 
   _onSubmit() {
+    if (this.state.hasClicked) { return }
     const newOrganization = {
       name: this.state.value,
       plan: (this.state.plan === 'PREMIUM' ? 6 : 5)
     }
     this.props.dispatch(create(newOrganization))
+    this.setState({hasClicked: true})
   }
 
   render() {
+    const {value, plan, hasClicked} = this.state
+    const canSubmit = _.isEmpty(this.state.value) && !hasClicked
     return (
       <div className='row'>
         <div className='col-sm-7'>
@@ -52,17 +57,17 @@ export class CreateOrganizationForm extends Component {
               <label>Organization Name</label>
               <input
                 placeholder={'name'}
-                value={this.state.value}
+                value={value}
                 onChange={(e) => {this.setState({value: e.target.value})}}
               />
             </div>
 
             <div className='field plan'>
               <label>Plan</label>
-              <PlanList plan={this.state.plan} onSelect={(plan) => {this.setState({plan})}}/>
+              <PlanList plan={plan} onSelect={(plan) => {this.setState({plan})}}/>
             </div>
             <div
-              className='ui button submit green'
+              className={`ui button submit ${canSubmit ? 'disabled' : 'green'}`}
               onClick={this._onSubmit.bind(this)}
             >
               Create Organization
