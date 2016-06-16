@@ -13,11 +13,13 @@ import {SpaceToolbar} from '../index'
 const testStore = createStore(rootReducer)
 
 describe('<SpaceToolbar>', () => {
-  it ('renders the View menu', () => {
+  it ('renders the view form', () => {
     const toolbar = TestUtils.renderIntoDocument(
       <Provider store={testStore}>
         <SpaceToolbar />
       </Provider>
     )
+
+    TestUtils.findRenderedDOMComponentWithClass(toolbar, 'SpaceShowToolbar')
   })
 })
