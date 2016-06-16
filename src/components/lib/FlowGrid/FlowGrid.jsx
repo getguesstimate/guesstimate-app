@@ -226,13 +226,11 @@ export default class FlowGrid extends Component{
   }
 
   onCellMouseUp(location) {
-    if (this.state.tracingFillRegion) {
-      window.recorder.recordNamedEvent("FlowGrid set fillRegion state")
-      const {fillRegion} = this.state
-      this.props.onFillRegion(fillRegion)
-      this._handleEndRangeSelect(fillRegion.end)
-      this.setState({tracingFillRegion: false, fillRegion: {}})
-    }
+    if (!this.state.tracingFillRegion) { return }
+    window.recorder.recordNamedEvent("FlowGrid set fillRegion state")
+    this.props.onFillRegion(this.state.fillRegion)
+    this._handleEndRangeSelect(this.state.fillRegion.end)
+    this.setState({tracingFillRegion: false, fillRegion: {}})
   }
 
   // TODO(matthew): Look into necessity of 'inSelectedRegion' passed to cell below.
