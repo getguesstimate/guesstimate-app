@@ -20,6 +20,13 @@ function segmentPlanType(rawPlanType) {
   }
 }
 
+function trackCanvasInteraction(interaction, options) {
+  window.analytics.track(Constants.INTERACTED_WITH_CANVAS, {
+    interaction,
+    ...options
+  })
+}
+
 function trackAddedProduct(planType) {
   window.analytics.track(Constants.ADDED_PRODUCT_ACTION, {
     id: planType,
@@ -38,10 +45,6 @@ function trackViewedAllProducts() {
   })
 }
 
-export function trackUsedViewMode(mode) {
-  window.analytics.track(Constants.USED_VIEW_MODE, {mode})
-}
-
 const pageEvents = {
   "/subscribe/lite": () => {trackAddedProduct(LITE_PLAN)},
   "/subscribe/premium": () => {trackAddedProduct(PREMIUM_PLAN)},
@@ -58,6 +61,10 @@ export function pageLoad() {
 
 export function trackUser(userId, info) {
   window.analytics.identify(userId, info)
+}
+
+export function trackToggledViewMode(mode) {
+  window.analytics.track(Constants.USED_VIEW_MODE, {mode})
 }
 
 export function trackPurchaseSuccess(account, rawPlanType) {
@@ -84,4 +91,52 @@ export function trackUserMenuOpen() {
 
 export function trackUserMenuClose() {
   window.analytics.track(Constants.USER_MENU_CLOSE)
+}
+
+export function trackCopyModel() {
+  window.analytics.track(Constants.COPIED_MODEL)
+}
+
+export function trackUndo(via_keyboard) {
+  trackCanvasInteraction('undo', {via_keyboard})
+}
+
+export function trackRedo(via_keyboard) {
+  trackCanvasInteraction('redo', {via_keyboard})
+}
+
+export function trackCutMetric(via_keyboard) {
+  trackCanvasInteraction('cut metric', {via_keyboard})
+}
+
+export function trackCopyMetric(via_keyboard) {
+  trackCanvasInteraction('copy metric', {via_keyboard})
+}
+
+export function trackPasteMetric(via_keyboard) {
+  trackCanvasInteraction('paste metric', {via_keyboard})
+}
+
+export function trackSelectedRegion() {
+  trackCanvasInteraction('select region')
+}
+
+export function trackOpenSidebar() {
+  trackCanvasInteraction('open sidebar')
+}
+
+export function trackCloseSidebar() {
+  trackCanvasInteraction('close sidebar')
+}
+
+export function trackSwitchToViewMode() {
+  trackCanvasInteraction('switch to view mode')
+}
+
+export function trackSwitchToEditMode() {
+  trackCanvasInteraction('switch to edit mode')
+}
+
+export function trackImportSlurp() {
+  trackCanvasInteraction('import slurp')
 }
