@@ -54,8 +54,8 @@ export default class MetricModal extends Component {
       },
       content : {
         top                   : '10%',
-        left                  : '10%',
-        width                 : '80%',
+        left                  : '50%',
+        transform             : 'translateX(-50%)',
         right                 : 'auto',
         bottom                : 'auto',
         marginRight           : '-50%',
