@@ -1,4 +1,10 @@
-var path = require('path');
+var path = require('path')
+var webpack = require('webpack')
+var useDevVariables = new webpack.DefinePlugin({
+  __DEV__: JSON.stringify(JSON.parse(process.env.BUILD_DEV || 'true')),
+  __API_ENV__: JSON.stringify(process.env.API_ENV || 'development'),
+  __SEGMENT_API_ENV__: JSON.stringify(process.env.SEGMENT_API_ENV || 'development'),
+})
 
 module.exports = function (config) {
   config.set({
@@ -29,12 +35,20 @@ module.exports = function (config) {
     // webpack config object
     webpack: { //kind of a copy of your webpack config
       devtool: 'inline-source-map', //just do inline source maps instead of the default
+      plugins: [
+        useDevVariables,
+      ],
       module: {
         loaders: [
           { test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/ },
           {
             test: /\.(jpe?g|png|gif)/,
             loader: 'url-loader?limit=1000'
+          },
+          {
+            test: /\.css$/,
+            loader: 'null-loader',
+            //loader: 'style-loader!css-loader!postcss-loader'
           }
         ]
       },
@@ -44,7 +58,9 @@ module.exports = function (config) {
           gEngine: path.resolve('./src/lib/engine'),
           gModules: path.resolve('./src/modules'),
           lib: path.resolve('./src/lib'),
-          servers: path.resolve('./src/server')
+          servers: path.resolve('./src/server'),
+          // TODO(matthew): if this works, make it unnecessary.
+          server: path.resolve('./src/server'),
         }
       }
     },
