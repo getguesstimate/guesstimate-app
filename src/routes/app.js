@@ -1,6 +1,8 @@
 import app from 'ampersand-app'
 import Router from './router'
 
+import $ from 'jquery'
+
 import engine from 'gEngine/engine.js'
 
 import {GuesstimateRecorder} from 'lib/recorder'
@@ -11,7 +13,6 @@ import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
 import * as elev from 'server/elev/index.js'
 
 import './main.css'
-
 
 import Worker from 'worker!../lib/guesstimator/samplers/simulator-worker/index.js'
 window.workers = [new Worker, new Worker]
