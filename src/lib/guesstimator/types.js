@@ -52,7 +52,7 @@ export const DistributionBeta = {
   referenceName: 'BETA',
   types: ['DISTRIBUTION', 'BETA'],
   displayName: 'Beta',
-  isRangeDistribution: true,
+  isRangeDistribution: false,
   sampler: DistributionBetaSampler,
   icon: LogNormalIcon // Update
 }
