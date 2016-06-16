@@ -26,7 +26,7 @@ function isNonConstant({location, name}, direction, metrics) {
   return _.some(metrics, m => isAtLocation(move(location, direction), m.location)) || !name
 }
 
-function fillIntelligent(startMetric, startGuesstimate, direction) {
+function fillDynamic(startMetric, startGuesstimate, direction) {
   const {input} = startGuesstimate
   return (location, metrics) => {
     const nonConstantMetrics = metrics.filter(m => isNonConstant(m, direction, metrics))
@@ -51,7 +51,7 @@ function fillIntelligent(startMetric, startGuesstimate, direction) {
   }
 }
 
-function addAtLoc(startMetric, startGuesstimate) {
+function fillStatic(startMetric, startGuesstimate) {
   return (location, metrics) => {
     const metric = buildNewMetric(startMetric, metrics, location)
     return { metric, guesstimate: {...startGuesstimate, metric: metric.id} }
@@ -65,7 +65,7 @@ function buildNewMetrics(startMetric, startGuesstimate, {direction, length}, met
   let newGuesstimates = []
 
   const isDynamic = guesstimateType === DYNAMIC_FILL_TYPE
-  const translateFn = (isDynamic ? fillIntelligent : addAtLoc)(startMetric, startGuesstimate, direction)
+  const translateFn = (isDynamic ? fillDynamic : fillStatic)(startMetric, startGuesstimate, direction)
 
   let currLocation = move(startMetric.location, direction)
   for (var i = 0; i < length; i++) {
