@@ -1,7 +1,6 @@
-import reducer from './reducer.js'
+import {guesstimatesR} from './reducer.js'
 
 describe('guesstimatesReducer', () => {
-
   describe('#SPACES_FETCH_SUCCESS', () => {
     const spaces = [
       {
@@ -17,7 +16,7 @@ describe('guesstimatesReducer', () => {
     ]
 
     it(`removes redundant metrics`, () => {
-      const newGuesstimates = reducer([], {type: 'SPACES_FETCH_SUCCESS', records: spaces })
+      const newGuesstimates = guesstimatesR([], {type: 'SPACES_FETCH_SUCCESS', records: spaces })
       expect(newGuesstimates.length).to.equal(2)
       expect(newGuesstimates[1].input).to.equal('3')
     })
@@ -30,13 +29,13 @@ describe('guesstimatesReducer', () => {
     ]
 
     it(`correctly adds new element`, () => {
-      const newGuesstimates = reducer(guesstimates, {type: 'ADD_METRIC', item: {id: '3'}})
+      const newGuesstimates = guesstimatesR(guesstimates, {type: 'ADD_METRIC', item: {id: '3'}})
       expect(newGuesstimates.length).to.equal(3)
       expect(newGuesstimates[2].metric).to.equal('3')
     })
 
     it(`correctly adds a redundant element`, () => {
-      const newGuesstimates = reducer(guesstimates, {type: 'ADD_METRIC', item: {id: '2'}})
+      const newGuesstimates = guesstimatesR(guesstimates, {type: 'ADD_METRIC', item: {id: '2'}})
       expect(newGuesstimates.length).to.equal(2)
       expect(newGuesstimates[1].input).to.equal('')
     })

@@ -13,12 +13,16 @@ import {denormalizedSpaceSelector} from '../denormalized-space-selector'
 
 import {allowEdits, forbidEdits} from 'gModules/canvas_state/actions'
 import * as spaceActions from 'gModules/spaces/actions'
+import * as simulationActions from 'gModules/simulations/actions'
 import * as copiedActions from 'gModules/copied/actions'
 import {undo, redo} from 'gModules/checkpoints/actions'
+
+import {parseSlurp} from 'lib/slurpParser'
 
 import e from 'gEngine/engine'
 
 import * as elev from 'server/elev/index'
+import * as segment from 'server/segment'
 
 import './style.css'
 import $ from 'jquery'
@@ -112,15 +116,35 @@ export default class SpacesShow extends Component {
   }
 
   onRedo() {
+    segment.trackUndo(false)
     this.props.dispatch(redo(this._id()))
   }
 
   onUndo() {
+    segment.trackUndo(false)
     this.props.dispatch(undo(this._id()))
   }
 
   destroy() {
     this.props.dispatch(spaceActions.destroy(this.props.denormalizedSpace))
+  }
+
+  onImportSlurp(slurpObj) {
+    segment.trackImportSlurp()
+    const space = this.props.denormalizedSpace
+
+    const spaceUpdates = parseSlurp(slurpObj, space)
+    if (!space.name || !space.description) {
+      let nonGraphUpdates = {}
+      if (!space.name) {nonGraphUpdates.name = spaceUpdates.name}
+      if (!space.description) {nonGraphUpdates.description = spaceUpdates.description}
+      this.props.dispatch(spaceActions.update(this._id(), nonGraphUpdates))
+    }
+    if (!_.isEmpty(spaceUpdates.newMetrics)) {
+      this.props.dispatch({type: 'ADD_METRICS', items: spaceUpdates.newMetrics, newGuesstimates: spaceUpdates.newGuesstimates})
+      this.props.dispatch(spaceActions.updateGraph(this._id()))
+      this.props.dispatch(simulationActions.runSimulations(this._id(), spaceUpdates.newMetrics))
+    }
   }
 
   onPublicSelect() {
@@ -140,25 +164,31 @@ export default class SpacesShow extends Component {
   }
 
   hideSidebar() {
+    segment.trackCloseSidebar()
     this.setState({showSidebar: false})
   }
   openSidebar() {
+    segment.trackOpenSidebar()
     this.setState({showSidebar: true})
   }
 
   _handleCopyModel() {
+    segment.trackCopyModel()
     this.props.dispatch(spaceActions.copy(this._id()))
   }
 
-  onCopy() {
+  onCopy(via_keyboard) {
+    segment.trackCopyMetric(via_keyboard)
     this.props.dispatch(copiedActions.copy(this._id()))
   }
 
-  onPaste() {
+  onPaste(via_keyboard) {
+    segment.trackPasteMetric(via_keyboard)
     this.props.dispatch(copiedActions.paste(this._id()))
   }
 
-  onCut() {
+  onCut(via_keyboard) {
+    segment.trackCutMetric(via_keyboard)
     this.props.dispatch(copiedActions.cut(this._id()))
   }
 
@@ -231,14 +261,20 @@ export default class SpacesShow extends Component {
 
           <SpaceToolbar
             editsAllowed={space.canvasState.editsAllowed}
-            onAllowEdits={() => {this.props.dispatch(allowEdits())}}
-            onForbidEdits={() => {this.props.dispatch(forbidEdits())}}
+            onAllowEdits={() => {
+              segment.trackSwitchToEditMode()
+              this.props.dispatch(allowEdits())
+            }}
+            onForbidEdits={() => {
+              segment.trackSwitchToViewMode()
+              this.props.dispatch(forbidEdits())
+            }}
             isLoggedIn={isLoggedIn}
             onDestroy={this.destroy.bind(this)}
             onCopyModel={this._handleCopyModel.bind(this)}
-            onCopyMetrics={this.onCopy.bind(this)}
-            onPasteMetrics={this.onPaste.bind(this)}
-            onCutMetrics={this.onCut.bind(this)}
+            onCopyMetrics={this.onCopy.bind(this, false)}
+            onPasteMetrics={this.onPaste.bind(this, false)}
+            onCutMetrics={this.onCut.bind(this, false)}
             isPrivate={space.is_private}
             editableByMe={space.editableByMe}
             actionState={space.canvasState.actionState}
@@ -246,6 +282,7 @@ export default class SpacesShow extends Component {
             onRedo={this.onRedo.bind(this)}
             canUndo={space.checkpointMetadata.head !== space.checkpointMetadata.length - 1}
             canRedo={space.checkpointMetadata.head !== 0}
+            onImportSlurp={this.onImportSlurp.bind(this)}
           />
         </div>
 
@@ -263,9 +300,9 @@ export default class SpacesShow extends Component {
           }
           <Canvas
             denormalizedSpace={space}
-            onCopy={this.onCopy.bind(this)}
-            onPaste={this.onPaste.bind(this)}
-            onCut={this.onCut.bind(this)}
+            onCopy={this.onCopy.bind(this, true)}
+            onPaste={this.onPaste.bind(this, true)}
+            onCut={this.onCut.bind(this, true)}
           />
         </div>
       </div>

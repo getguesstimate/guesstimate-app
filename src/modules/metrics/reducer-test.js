@@ -1,4 +1,4 @@
-import metricsReducer from './reducer.js'
+import {metricsR} from './reducer.js'
 
 describe('metrics', () => {
 
@@ -10,7 +10,7 @@ describe('metrics', () => {
     ]
 
     it(`removes redundant metrics`, () => {
-      const newMetrics = metricsReducer([], {type: 'SPACES_FETCH_SUCCESS', records: [{graph: {metrics}}] })
+      const newMetrics = metricsR([], {type: 'SPACES_FETCH_SUCCESS', records: [{graph: {metrics}}] })
       expect(newMetrics.length).to.equal(2)
       expect(newMetrics[1].name).to.equal('foo3')
     })
@@ -24,14 +24,14 @@ describe('metrics', () => {
 
     it(`correctly adds new element`, () => {
       const newMetric = {id: '3', name: 'foo3'}
-      const newMetrics = metricsReducer(metrics, {type: 'ADD_METRIC', item: newMetric})
+      const newMetrics = metricsR(metrics, {type: 'ADD_METRIC', item: newMetric})
       expect(newMetrics.length).to.equal(3)
       expect(newMetrics[2].id).to.equal('3')
     })
 
     it(`correctly adds a redundant element`, () => {
       const newMetric = {id: '2', name: 'foo3'}
-      const newMetrics = metricsReducer(metrics, {type: 'ADD_METRIC', item: newMetric})
+      const newMetrics = metricsR(metrics, {type: 'ADD_METRIC', item: newMetric})
       expect(newMetrics.length).to.equal(2)
       expect(newMetrics[1].name).to.equal('foo3')
     })
@@ -46,7 +46,7 @@ describe('metrics', () => {
 
     it(`changes metric`, () => {
       const changedMetric = {id: '2', name: 'bar2'}
-      const newMetrics = metricsReducer(metrics, {type: 'CHANGE_METRIC', item: changedMetric})
+      const newMetrics = metricsR(metrics, {type: 'CHANGE_METRIC', item: changedMetric})
       expect(newMetrics.length).to.equal(3)
       expect(newMetrics[1].name).to.equal('bar2')
     })

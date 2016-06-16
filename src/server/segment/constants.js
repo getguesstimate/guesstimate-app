@@ -10,4 +10,8 @@ export const VIEWED_PRODUCT_ACTION = "Viewed Product"
 export const ACCOUNT_MODAL_CLICK = "Clicked account modal"
 export const USER_MENU_OPEN = "Opened user menu"
 export const USER_MENU_CLOSE = "Closed user menu"
+export const COPIED_MODEL = "Copied model"
+
 export const USED_VIEW_MODE = "Used view mode"
+
+export const INTERACTED_WITH_CANVAS = "Interacted with canvas"

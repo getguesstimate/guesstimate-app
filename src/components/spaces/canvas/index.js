@@ -17,6 +17,8 @@ import {fillRegion} from 'gModules/fill_region/actions'
 import {hasMetricUpdated} from 'gComponents/metrics/card/updated'
 import * as canvasStateProps from 'gModules/canvas_state/prop_type'
 
+import * as segment from 'server/segment'
+
 
 import './style.css'
 
@@ -78,10 +80,12 @@ export default class Canvas extends Component{
   }
 
   _handleUndo() {
+    segment.trackUndo(true)
     this.props.dispatch(undo(this.props.denormalizedSpace.id))
   }
 
   _handleRedo() {
+    segment.trackUndo(true)
     this.props.dispatch(redo(this.props.denormalizedSpace.id))
   }
 
@@ -91,6 +95,7 @@ export default class Canvas extends Component{
   }
 
   _handleMultipleSelect(corner1, corner2) {
+    if (!isAtLocation(corner1, corner2)) { segment.trackSelectedRegion() }
     this.props.dispatch(selectRegion(corner1, corner2))
   }
 
@@ -180,10 +185,11 @@ export default class Canvas extends Component{
 
     const edges = this.edges()
     let className = 'canvas-space'
-    const showGridLines = (metricCardView !== 'display')
-    this.showEdges() ? className += ' showEdges' : ''
+    className += this.showEdges() ? ' showEdges' : ''
+    className += this.props.screenshot ? ' overflow-hidden' : ''
+
     const selectedMetric = this._isAnalysisView() && this._selectedMetric()
-    const overflow = this.props.screenshot ? 'hidden' : 'default'
+    const showGridLines = (metricCardView !== 'display')
 
     const copiedRegion = (copied && (copied.pastedTimes < 1) && copied.region) || []
 
@@ -192,7 +198,6 @@ export default class Canvas extends Component{
         <FlowGrid
           items={_.map(metrics, m => ({key: m.id, location: m.location, component: this.renderMetric(m, selectedMetric)}))}
           onMultipleSelect={this._handleMultipleSelect.bind(this)}
-          overflow={overflow}
           hasItemUpdated = {(oldItem, newItem) => hasMetricUpdated(oldItem.props, newItem.props)}
           isItemEmpty = {this.isMetricEmpty.bind(this)}
           edges={edges}

@@ -7,28 +7,32 @@ const options = [
     context: 'a logged out user',
     props: {
       userPlanId: '',
-      portalUrl: ''
+      portalUrl: '',
+      isLoggedIn: false
     }
   },
   {
     context: 'a new user',
     props: {
       userPlanId: 'personal_free',
-      portalUrl: ''
+      portalUrl: '',
+      isLoggedIn: true,
     }
   },
   {
     context: 'an infinite user',
     props: {
       userPlanId: 'personal_infinite',
-      portalUrl: ''
+      portalUrl: '',
+      isLoggedIn: true,
     }
   },
   {
     context: 'a user with payment account',
     props: {
       userPlanId: 'personal_small',
-      portalUrl: 'http://google.com'
+      portalUrl: 'http://google.com',
+      isLoggedIn: true,
     }
   },
 ]
