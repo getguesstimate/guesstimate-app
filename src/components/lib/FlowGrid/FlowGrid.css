@@ -58,6 +58,7 @@
 .FlowGridCell.hovered.hasItem .FlowGridFilledCell{
   background-color: rgba(75, 138, 177, 0.3);
   border-radius: 1px;
+  z-indeX: 1;
 }
 
 .FlowGridEmptyCell:focus {
