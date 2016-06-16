@@ -8,78 +8,52 @@ import {isAtLocation, isWithinRegion, getBounds, move, translate} from 'lib/loca
 
 const DYNAMIC_FILL_TYPE = 'FUNCTION'
 
-// TODO(matthew): Dry up code with this and copy and undo perhaps.
-function translateReadableIds(input, idMap) {
-  if (!input || _.isEmpty(idMap)) {return input}
-  const re = RegExp(Object.keys(idMap).join("|"), "g")
-  return input.replace(re, (match) => idMap[match])
-}
+// TODO(matthew): Dry up code with this and copy and undo.
 
-const getDirAndLen = (start, end) => ({
-  direction: {row: Math.sign(end.row - start.row), column: Math.sign(end.column - start.column)},
-  length: Math.abs(start.row - end.row) || Math.abs(start.column - end.column),
-})
-
-function fillDynamicSkipUnlessPossible(startMetric, startGuesstimate) {
-  return (location, metrics) => {
-    const metric = {...startMetric, ...e.metric.create(metrics.map(m => m.readableId)), location}
-    const inputsRegex = RegExp(metrics.map(m => m.readableId).join('|'), "g")
-
-    const {input} = startGuesstimate
-    const numInputs = !!input.match(inputsRegex) ? input.match(inputsRegex).length : 0
-
-    const translateFn = translate(startMetric.location, location)
-    let idMap = {}
-    metrics.forEach(m => {
-      const matchedMetric = metrics.find(m2 => isAtLocation(translateFn(m.location), m2.location))
-      if (!!matchedMetric) { idMap[m.readableId] = matchedMetric.readableId }
-    })
-    const re = RegExp(Object.keys(idMap).join("|"), "g")
-    const translatableIds = !!input.match(re) ? input.match(re).length : 0
-
-    if (numInputs !== translatableIds) {
-      return {}
-    }
-
-    return { metric, guesstimate: {...startGuesstimate, metric: metric.id, input: translateReadableIds(input, idMap)} }
+function getDirAndLen(start, end) {
+  return {
+    direction: {row: Math.sign(end.row - start.row), column: Math.sign(end.column - start.column)},
+    length: Math.abs(start.row - end.row) || Math.abs(start.column - end.column),
   }
 }
 
+function buildNewMetric(startMetric, metrics, location) {
+  const metricId = metrics.find(m => isAtLocation(m.location, location)) || e.metric.create(metrics.map(m => m.readableId))
+  return {...startMetric, ..._.pick(metricId, ['id', 'readableId']), location}
+}
+
+function isNonConstant({location, name}, direction, metrics) {
+  return _.some(metrics, m => isAtLocation(move(location, direction), m.location)) || !name
+}
+
 function fillIntelligent(startMetric, startGuesstimate, direction) {
+  const {input} = startGuesstimate
   return (location, metrics) => {
-    const metricIds = metrics.find(m => isAtLocation(m.location, location)) || e.metric.create(metrics.map(m => m.readableId))
-    const metric = {...startMetric, ..._.pick(metricIds, ['id', 'readableId']), location}
-
-    const translatableMetrics = metrics.filter(m => (
-      _.some(metrics, m2 => isAtLocation(move(m.location, direction), m2.location)) || !m.name
-    ))
-
-    const translatableInputsRegex = RegExp(translatableMetrics.map(m => m.readableId).join('|'), "g")
-
-    const {input} = startGuesstimate
-    const numInputs = !!input.match(translatableInputsRegex) ? input.match(translatableInputsRegex).length : 0
+    const nonConstantMetrics = metrics.filter(m => isNonConstant(m, direction, metrics))
+    const nonConstantInputsRegex = RegExp(nonConstantMetrics.map(m => m.readableId).join('|'), "g")
+    const numNonConstantInputs = (input.match(nonConstantInputsRegex) || []).length
 
     const translateFn = translate(startMetric.location, location)
     let idMap = {}
-    translatableMetrics.forEach(m => {
+    nonConstantMetrics.forEach(m => {
       const matchedMetric = metrics.find(m2 => isAtLocation(translateFn(m.location), m2.location))
       if (!!matchedMetric) { idMap[m.readableId] = matchedMetric.readableId }
     })
-    const re = RegExp(Object.keys(idMap).join("|"), "g")
-    const translatableIds = !!input.match(re) ? input.match(re).length : 0
+    const translatableInputsRegex = RegExp(Object.keys(idMap).join("|"), "g")
+    const numTranslatedInputs = (input.match(translatableInputsRegex) || []).length
 
-    if (numInputs !== translatableIds) {
-      return {}
-    }
+    if (numNonConstantInputs !== numTranslatedInputs) { return {} }
 
-    return { metric, guesstimate: {...startGuesstimate, metric: metric.id, input: translateReadableIds(input, idMap)} }
+    const metric = buildNewMetric(startMetric, metrics, location)
+    const newInput = input.replace(translatableInputsRegex, (match) => idMap[match])
+
+    return { metric, guesstimate: {...startGuesstimate, metric: metric.id, input: newInput } }
   }
 }
 
 function addAtLoc(startMetric, startGuesstimate) {
   return (location, metrics) => {
-    const metricIds = metrics.find(m => isAtLocation(m.location, location)) || e.metric.create(metrics.map(m => m.readableId))
-    const metric = {...startMetric, ..._.pick(metricIds, ['id', 'readableId']), location}
+    const metric = buildNewMetric(startMetric, metrics, location)
     return { metric, guesstimate: {...startGuesstimate, metric: metric.id} }
   }
 }
