@@ -1,0 +1,11 @@
+.calculator {
+  border: black;
+  border-radius: 1em;
+  background: white;
+  margin: 1em;
+  padding: 1em;
+}
+
+.question {
+  padding: 1em 0 1em 0;
+}

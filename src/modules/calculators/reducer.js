@@ -3,7 +3,13 @@ export function calculatorsR(state, action) {
     {
       id: 1, 
       space_id: 150,
-      content: "",
+      content: `# What are your total Expenses?
+This calculates your total monthly expenses. It Includes:
+  * Food
+  * Phone
+  * Transit
+  * Misc
+      `,
     },
   ]
 }

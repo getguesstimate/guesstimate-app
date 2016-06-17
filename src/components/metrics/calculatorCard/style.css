@@ -1,0 +1,72 @@
+@import './styles/variables.css';
+
+.metricCard--Container {
+  position: relative;
+  display: flex;
+  width: 100%;
+}
+
+.metricCard {
+  border-radius: 1px;
+  max-width: 30em;
+  white-space: normal;
+  z-index: 0;
+  font-size: 1.25em;
+  position: relative;
+  font-weight: 300;
+  width: 100%;
+  display:flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.metricCard input{
+  transition: background-color 0.2s;
+}
+
+.metricCard:not(.titleView) {
+  background-color: rgba(255,255,255,0.975);
+}
+
+.metricCard.intermediate:not(.titleView) {
+  background-color: rgba(242, 244, 247, 0.94);
+}
+
+.metricCard.noedge:not(.titleView) {
+  background-color: rgba(240,242,245,0.88);
+}
+
+.selected .metricCard:not(.titleView) {
+  background-color: rgba(255,255,255,0.975);
+}
+
+.hovered.selected .metricCard {
+  background-color: white;
+}
+
+.hovered .metricCard {
+  background-color: #f4f4f4;
+}
+
+.metricCard > .section {
+  position: relative;
+  padding: 0.2em 0.2em 0.2em 0.2em;
+}
+
+.metricCard .section.editing {
+  border-top: 1px solid #ddd;
+  border-radius: 0 0 2px 2px;
+  flex: 0 0 auto;
+}
+
+.metricCard--Container:focus {
+  outline: none;
+}
+
+.ReactModal__Overlay--after-open {
+   z-index: 5;
+}
+
+.ReactModal__Overlay--after-open {
+  overflow: auto;
+}
