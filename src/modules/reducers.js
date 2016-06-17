@@ -20,6 +20,7 @@ import {copiedR} from './copied/reducer'
 import {checkpointsR} from './checkpoints/reducer'
 import {httpRequestsR} from './httpRequests/reducer'
 import {newOrganizationR} from './newOrganization/reducer'
+import {calculatorsR} from './calculators/reducer'
 
 export function changeSelect(location) {
   return { type: 'CHANGE_SELECT', location };
@@ -47,7 +48,8 @@ const rootReducer = function app(state = {}, action){
     modal: SI(modalR(state.modal, action)),
     copied: SI(copiedR(state.copied, action)),
     checkpoints: SI(checkpointsR(state.checkpoints, action)),
-    httpRequests: SI(httpRequestsR(state.httpRequests, action))
+    httpRequests: SI(httpRequestsR(state.httpRequests, action)),
+    calculators: SI(calculatorsR(state.calculators, action)),
   }
 }
 
