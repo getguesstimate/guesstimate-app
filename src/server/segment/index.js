@@ -140,3 +140,7 @@ export function trackSwitchToEditMode() {
 export function trackImportSlurp() {
   trackCanvasInteraction('import slurp')
 }
+
+export function openedElev(via_direct_link, article_id) {
+  window.analytics.track(Constants.OPENED_ELEV, {via_direct_link, article_id})
+}
