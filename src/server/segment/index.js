@@ -141,6 +141,6 @@ export function trackImportSlurp() {
   trackCanvasInteraction('import slurp')
 }
 
-export function usedElevDocumentation(via_direct_link, article_id) {
-  window.analytics.track(Constants.USED_ELEV_DOCUMENTATION, {via_direct_link, article_id})
+export function openedElev(via_direct_link, article_id) {
+  window.analytics.track(Constants.OPENED_ELEV, {via_direct_link, article_id})
 }

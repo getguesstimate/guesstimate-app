@@ -1,6 +1,6 @@
 import $ from 'jquery'
 
-import {usedElevDocumentation} from 'servers/segment/index'
+import {openedElev} from 'servers/segment/index'
 
 export const GUESSTIMATE_TYPES = 34126
 export const EXISTING_FUNCTIONS = 34121
@@ -10,7 +10,7 @@ export const SIPS_AND_SLURPS = 67122
 
 export function open(id) {
   window._elev.openArticle(id);
-  usedElevDocumentation(true, id)
+  openedElev(true, id)
 }
 
 export function hide() {
@@ -19,5 +19,5 @@ export function hide() {
 
 export function show() {
   $('body').removeClass('remove-elev')
-  setTimeout(() => {$('#elevio-base-menu li.articles').click((e) => {usedElevDocumentation()})}, 3000)
+  setTimeout(() => {$('#elevio-base-menu li.articles').click((e) => {openedElev()})}, 3000)
 }

@@ -11,7 +11,7 @@ export const ACCOUNT_MODAL_CLICK = "Clicked account modal"
 export const USER_MENU_OPEN = "Opened user menu"
 export const USER_MENU_CLOSE = "Closed user menu"
 export const COPIED_MODEL = "Copied model"
-export const USED_ELEV_DOCUMENTATION = "Used elev"
+export const OPENED_ELEV = "Opened elev"
 
 export const USED_VIEW_MODE = "Used view mode"
 
