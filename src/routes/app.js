@@ -1,8 +1,6 @@
 import app from 'ampersand-app'
 import Router from './router'
 
-import $ from 'jquery'
-
 import engine from 'gEngine/engine.js'
 
 import {GuesstimateRecorder} from 'lib/recorder'
