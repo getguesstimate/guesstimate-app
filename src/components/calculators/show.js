@@ -3,7 +3,8 @@ import {connect} from 'react-redux'
 
 import ReactMarkdown from 'react-markdown'
 
-import {MetricCalculatorCard} from 'gComponents/metrics/calculatorCard/index'
+import {CalculatorInputCard} from 'gComponents/metrics/calculatorCard/input'
+import {CalculatorOutputCard} from 'gComponents/metrics/calculatorCard/output'
 
 import {calculatorSpaceSelector} from './calculator-space-selector'
 
@@ -28,20 +29,17 @@ const Output = ({metric}) => (
   <div className='output row'>
     <div className='col-md-3'/>
     <div className='col-md-6'>
-      WOO HOOOO
+      <CalculatorOutputCard metric={metric} />
     </div>
     <div className='col-md-3'/>
   </div>
 )
 
-const Question = ({dispatch, metric}) => (
-  <div className='question row'>
+const Input = ({dispatch, metric}) => (
+  <div className='input row'>
     <div className='col-md-3'/>
     <div className='col-md-6'>
-      <MetricCalculatorCard
-        dispatch={dispatch}
-        metric={metric}
-      />
+      <CalculatorInputCard metric={metric} />
     </div>
     <div className='col-md-3'/>
   </div>
@@ -72,7 +70,7 @@ export class CalculatorShow extends Component {
     const {content} = this.props.calculator
     const {space: {metrics}} = this.props
 
-    const questions = metrics.filter(m => relationshipType(m.edges) === INPUT)
+    const inputs = metrics.filter(m => relationshipType(m.edges) === INPUT)
     const outputs = metrics.filter(m => relationshipType(m.edges) === OUTPUT)
 
     return (
@@ -82,15 +80,16 @@ export class CalculatorShow extends Component {
           <div className='content'>
             <ReactMarkdown source={content} />
           </div>
-          <div className='questions'>
-            {_.map(questions, (m,i) => (
-              <Question
+          <div className='inputs'>
+            {_.map(inputs, (m,i) => (
+              <Input
                 key={i}
                 metric={m}
                 dispatch={this.props.dispatch}
               />
             ))}
           </div>
+          <hr />
           <div className='outputs'>
             {_.map(outputs, (m,i) => (
               <Output
