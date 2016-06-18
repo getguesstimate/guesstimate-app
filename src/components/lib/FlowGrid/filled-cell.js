@@ -10,7 +10,7 @@ var layerStyles = {
   zIndex: 10000,
   left: 0,
   top: 0,
-  width: '193px',
+  width: '100%',
   height: '100%',
 };
 
@@ -40,9 +40,8 @@ function getItemStyles(props) {
 export default class DragPreview extends Component {
   renderItem(type, item) {
     const styles = {
-      transform: 'rotate(-4deg)',
-      WebkitTransform: 'rotate(-4deg)',
       marginTop: '-26px',
+      width: `${this.props.width}px`
     }
     switch (type) {
     case 'card':
@@ -98,10 +97,23 @@ export default class ItemCell extends Component {
     location: PTLocation.isRequired,
   }
 
+  state = {
+    itemWidth: 0
+  }
+
   componentDidMount() { window.recorder.recordMountEvent(this) }
   componentWillUpdate() { window.recorder.recordRenderStartEvent(this) }
   componentDidUpdate() { window.recorder.recordRenderStopEvent(this) }
   componentWillUnmount() { window.recorder.recordUnmountEvent(this) }
+
+  componentWillReceiveProps(newProps){
+    const startedDragging = !this.props.isDragging && newProps.isDragging
+    const childItem = this.refs.container && this.refs.container.children[0]
+
+    if (startedDragging && !!childItem){
+      this.setState({width: childItem.offsetWidth})
+    }
+  }
 
   item() {
     return React.cloneElement(
@@ -126,11 +138,10 @@ export default class ItemCell extends Component {
     // opinion and keeps background layer in sync with real row heights during drag (which skips normal rendering tree).
     const styles = this.props.isDragging ? {minHeight: `${this.props.getRowHeight()-1}`} : {}
     const item = this.item()
-
     this.props.connectDragPreview(getEmptyImage());
     return (
-      <div className={classes} style={styles}>
-        {this.props.isDragging && <DragPreview>{item}</DragPreview>}
+      <div className={classes} style={styles} ref='container'>
+        {this.props.isDragging && <DragPreview width={this.state.width}>{item}</DragPreview>}
         {!this.props.isDragging && item}
       </div>
     )
