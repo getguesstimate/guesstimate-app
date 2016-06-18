@@ -132,7 +132,7 @@ svg.edge  path.basic-arrow.RED {
   position: relative;
 }
 
-.FlowGridCell .FillToken--outer {
+.FlowGridCell .AutoFillToken--outer {
   position: absolute;
   right: -1.25em;
   bottom: -1.25em;
@@ -144,12 +144,12 @@ svg.edge  path.basic-arrow.RED {
   transition: padding .05s;
 }
 
-.FlowGridCell .FillToken--outer:hover {
+.FlowGridCell .AutoFillToken--outer:hover {
   padding: 0.5em;
   transition: padding .05s;
 }
 
-.FlowGridCell .FillToken {
+.FlowGridCell .AutoFillToken {
    cursor: crosshair;
    height: 100%;
    width: 100%;

@@ -44,14 +44,14 @@ export class BackgroundContainer extends Component {
     return (
       !_.isEqual(this.props.copiedRegion, nextProps.copiedRegion) ||
       !_.isEqual(this.props.selectedRegion, nextProps.selectedRegion) ||
-      !_.isEqual(this.props.fillRegion, nextProps.fillRegion) ||
+      !_.isEqual(this.props.autoFillRegion, nextProps.autoFillRegion) ||
       !_.isEqual(this.props.edges, nextProps.edges) ||
       !_.isEqual(this.state.rowHeights, nextState.rowHeights)
     )
   }
 
   render() {
-    const {edges, rowCount, getRowHeight, selectedRegion, copiedRegion, fillRegion} = this.props
+    const {edges, rowCount, getRowHeight, selectedRegion, copiedRegion, autoFillRegion} = this.props
     const {rowHeights} = this.state
 
     const columnWidth = $('.FlowGridCell') && $('.FlowGridCell')[0] && $('.FlowGridCell')[0].offsetWidth
@@ -85,11 +85,11 @@ export class BackgroundContainer extends Component {
             type='copied'
           />
         }
-        {fillRegion.length === 2 &&
+        {autoFillRegion.length === 2 &&
           <Region
             rowHeights={rowHeights}
             columnWidth={columnWidth}
-            selectedRegion={fillRegion}
+            selectedRegion={autoFillRegion}
             type='fill'
           />
         }

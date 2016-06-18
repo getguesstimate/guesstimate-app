@@ -12,7 +12,7 @@ import {selectRegion, deSelectRegion} from 'gModules/selected_region/actions'
 import {runSimulations, deleteSimulations} from 'gModules/simulations/actions'
 import * as canvasStateActions from 'gModules/canvas_state/actions'
 import {undo, redo} from 'gModules/checkpoints/actions'
-import {fillRegion} from 'gModules/fill_region/actions'
+import {fillRegion} from 'gModules/auto_fill_region/actions'
 
 import {hasMetricUpdated} from 'gComponents/metrics/card/updated'
 import * as canvasStateProps from 'gModules/canvas_state/prop_type'
@@ -174,7 +174,7 @@ export default class Canvas extends Component{
     return edges
   }
 
-  onFillRegion(region) {
+  onAutoFillRegion(region) {
     this.props.dispatch(fillRegion(this.props.denormalizedSpace.id, region))
   }
 
@@ -208,7 +208,7 @@ export default class Canvas extends Component{
           onRedo={this._handleRedo.bind(this)}
           onSelectItem={this._handleSelect.bind(this)}
           onDeSelectAll={this._handleDeSelectAll.bind(this)}
-          onFillRegion={this.onFillRegion.bind(this)}
+          onAutoFillRegion={this.onAutoFillRegion.bind(this)}
           onAddItem={this._handleAddMetric.bind(this)}
           onMoveItem={this._handleMoveMetric.bind(this)}
           onRemoveItems={(ids) => {this.props.dispatch(removeMetrics(ids))}}

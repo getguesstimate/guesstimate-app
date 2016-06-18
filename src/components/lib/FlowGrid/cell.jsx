@@ -32,14 +32,14 @@ export default class Cell extends Component {
     inSelectedRegion: PropTypes.bool.isRequired,
     inSelectedCell: PropTypes.bool.isRequired,
     isHovered: PropTypes.bool.isRequired,
-    showFillToken: PropTypes.bool.isRequired,
+    showAutoFillToken: PropTypes.bool.isRequired,
     item: PropTypes.object,
     location: PTLocation.isRequired,
     onAddItem: PropTypes.func.isRequired,
     onMoveItem: PropTypes.func.isRequired,
     onEndDragCell: PropTypes.func.isRequired,
     onEmptyCellMouseDown: PropTypes.func,
-    onFillTargetMouseDown: PropTypes.func,
+    onAutoFillTargetMouseDown: PropTypes.func,
   }
 
   shouldComponentUpdate(newProps, newState) {
@@ -47,7 +47,7 @@ export default class Cell extends Component {
       (newProps.inSelectedRegion !== this.props.inSelectedRegion) ||
       (newProps.inSelectedCell !== this.props.inSelectedCell) ||
       (newProps.isHovered !== this.props.isHovered) ||
-      (newProps.showFillToken !== this.props.showFillToken)
+      (newProps.showAutoFillToken !== this.props.showAutoFillToken)
     const itemDifferent = (!!newProps.item !== !!this.props.item)
     const bothHaveItems = (!!newProps.item && !!this.props.item)
 
@@ -154,9 +154,9 @@ export default class Cell extends Component {
     return classes
   }
 
-  onFillTargetMouseDown(e) {
+  onAutoFillTargetMouseDown(e) {
     if (e.button === 0) {
-      this.props.onFillTargetMouseDown()
+      this.props.onAutoFillTargetMouseDown()
       e.preventDefault()
     }
   }
@@ -170,9 +170,9 @@ export default class Cell extends Component {
         onMouseUp={this.props.onMouseUp}
       >
         {this._cellElement()}
-        {this.props.showFillToken &&
-          <div className='FillToken--outer'>
-            <div className='FillToken' onMouseDown={this.onFillTargetMouseDown.bind(this)}/>
+        {this.props.showAutoFillToken &&
+          <div className='AutoFillToken--outer'>
+            <div className='AutoFillToken' onMouseDown={this.onAutoFillTargetMouseDown.bind(this)}/>
           </div>
         }
       </div>
