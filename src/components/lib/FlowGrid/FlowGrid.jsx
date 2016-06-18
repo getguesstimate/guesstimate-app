@@ -7,7 +7,7 @@ import Cell from './cell'
 import {BackgroundContainer} from './background-container'
 
 import {keycodeToDirection, DirectionToLocation} from './utils'
-import {isLocation, isWithinRegion, isAtLocation, PTRegion, PTLocation} from 'lib/locationUtils'
+import {getBounds, isLocation, isWithinRegion, isAtLocation, PTRegion, PTLocation} from 'lib/locationUtils'
 
 import './FlowGrid.css'
 
@@ -35,6 +35,7 @@ export default class FlowGrid extends Component{
     onRedo: PropTypes.func.isRequired,
     onSelectItem: PropTypes.func.isRequired,
     onMultipleSelect: PropTypes.func.isRequired,
+    onAutoFillRegion: PropTypes.func.isRequired,
     onDeSelectAll: PropTypes.func.isRequired,
     onAddItem: PropTypes.func.isRequired,
     onMoveItem: PropTypes.func.isRequired,
@@ -50,28 +51,32 @@ export default class FlowGrid extends Component{
   }
 
   state = {
-    hover: {row: -1, column: -1} // An impossible location means nothing hovered.
+    hover: {row: -1, column: -1}, // An impossible location means nothing hovered.
+    tracingAutoFillRegion: false,
+    autoFillRegion: {},
   }
 
   _handleMouseLeave(e) {
-    window.recorder.recordNamedEvent("FlowGrid set hover state")
+    window.recorder.recordNamedEvent('FlowGrid set hover state')
     this.setState({
       hover: {row: -1, column: -1},
-      leftDown: false,
+      dragSelecting: false,
+      tracingAutoFillRegion: false,
+      autoFillRegion: {},
     })
   }
 
   _handleMouseUp(e) {
     if (e.button === 0) {
-      window.recorder.recordNamedEvent("FlowGrid set left down state")
-      this.setState({leftDown: false})
+      window.recorder.recordNamedEvent('FlowGrid set left down state')
+      this.setState({dragSelecting: false})
     }
   }
 
   _handleEmptyCellMouseDown(e, location) {
     if (e.button === 0 && !(e.target && e.target.type === 'textarea')) {
-      window.recorder.recordNamedEvent("FlowGrid set left down state")
-      this.setState({leftDown: true})
+      window.recorder.recordNamedEvent('FlowGrid set left down state')
+      this.setState({dragSelecting: true})
       lastMousePosition = _.pick(e, 'pageX', 'pageY')
       e.preventDefault()
     }
@@ -82,13 +87,38 @@ export default class FlowGrid extends Component{
     return !sameLocation
   }
 
+  newAutoFillRegion(location) {
+    const {autoFillRegion: {start}} = this.state
+    // The fill region should fill either the width of the rectangle between start & location or the height, whichever
+    // is larger.
+    const width = Math.abs(location.column - start.column)
+    const height = Math.abs(location.row - start.row)
+
+    // If the width is larger, the new end will span to the column of the end location, within the starting row.
+    // Otherwise, it will span to the row of the final location, within the starting column.
+    const end = width > height ? {row: start.row, column: location.column} : {row: location.row, column: start.column}
+
+    return {start, end}
+  }
+
   _handleCellMouseEnter(location, e) {
-    window.recorder.recordNamedEvent("FlowGrid set hover state")
-    if (this.state.leftDown && this._mouseMoved(e)) {
-      this.setState({hover: {row: -1, column: -1}})
-      this._handleEndRangeSelect(location)
-    } else {
+    window.recorder.recordNamedEvent('FlowGrid set hover state')
+    // If this mouse hasn't moved, or the user is neither tracing a fill region or dragging a selected region, just set
+    // the hover state.
+    const user_dragging_selection = this.state.tracingAutoFillRegion || this.state.dragSelecting
+    if (!(this._mouseMoved(e) && user_dragging_selection)) {
       this.setState({hover: location})
+      return
+    }
+    const hover = {row: -1, column: -1}
+
+    if (this.state.tracingAutoFillRegion) {
+      window.recorder.recordNamedEvent('FlowGrid set autoFillRegion state')
+      const autoFillRegion = this.newAutoFillRegion(location)
+      this.setState({autoFillRegion, hover})
+    } else if (this.state.dragSelecting) {
+      this._handleEndRangeSelect(location)
+      this.setState({hover})
     }
   }
 
@@ -98,13 +128,13 @@ export default class FlowGrid extends Component{
 
   _handleKeyUp(e){
     if (e.keyCode == '17' || e.keyCode == '224' || e.keyCode == '91') {
-      window.recorder.recordNamedEvent("FlowGrid set ctrl pressed state")
+      window.recorder.recordNamedEvent('FlowGrid set ctrl pressed state')
       this.setState({ctrlPressed: false})
     }
   }
 
   _selectedItems() {
-   return this.props.items.filter(i => isWithinRegion(i.location, this.props.selectedRegion))
+    return this.props.items.filter(i => isWithinRegion(i.location, this.props.selectedRegion))
   }
 
   _handleRemoveSelectedItems() {
@@ -126,7 +156,7 @@ export default class FlowGrid extends Component{
       this.props.onSelectItem(newLocation)
     } else if (!e.shiftKey && (e.keyCode == '17' || e.keyCode == '224' || e.keyCode == '91' || e.keyCode == '93')) {
       e.preventDefault()
-      window.recorder.recordNamedEvent("FlowGrid set ctrl pressed state")
+      window.recorder.recordNamedEvent('FlowGrid set ctrl pressed state')
       this.setState({ctrlPressed: true})
     } else if (this.state.ctrlPressed) {
       if (e.keyCode == '86') {
@@ -198,19 +228,40 @@ export default class FlowGrid extends Component{
     this._addIfNeededAndSelect(newLocation, isRight ? 'LEFT' : 'RIGHT')
   }
 
+  onAutoFillTargetMouseDown(location) {
+    window.recorder.recordNamedEvent('FlowGrid set autoFillRegion state')
+    this.setState({tracingAutoFillRegion: true, autoFillRegion: {start: location}})
+  }
+
+  onCellMouseUp(location) {
+    if (!this.state.tracingAutoFillRegion) { return }
+    window.recorder.recordNamedEvent('FlowGrid set autoFillRegion state')
+    this.props.onAutoFillRegion(this.state.autoFillRegion)
+    this._handleEndRangeSelect(this.state.autoFillRegion.end)
+    this.setState({tracingAutoFillRegion: false, autoFillRegion: {}})
+  }
+
+  // TODO(matthew): Look into necessity of 'inSelectedRegion' passed to cell below.
   _cell(location) {
-    const item = this.props.items.find(i => isAtLocation(i.location, location));
+    const item = this.props.items.find(i => isAtLocation(i.location, location))
+    const {selectedCell, selectedRegion} = this.props
+    const inSelectedCell = isAtLocation(selectedCell, location)
+    const selectedRegionNotOneByOne = selectedRegion.length === 2 && !isAtLocation(selectedRegion[0], selectedRegion[1])
+    const hasNonEmptyItem = !!item && !this.props.isItemEmpty(item.key)
+    const showAutoFillToken = inSelectedCell && hasNonEmptyItem && !this.state.dragSelecting && !selectedRegionNotOneByOne
     return (
       <Cell
+        onMouseUp={() => {this.onCellMouseUp(location)}}
+        onAutoFillTargetMouseDown={() => {this.onAutoFillTargetMouseDown(location)}}
         canvasState={this.props.canvasState}
         forceFlowGridUpdate={() => this.forceUpdate()}
         gridKeyPress={this._handleKeyDown.bind(this)}
         hasItemUpdated={this.props.hasItemUpdated}
         handleSelect={this.props.onSelectItem}
         handleEndRangeSelect={this._handleEndRangeSelect.bind(this)}
-        inSelectedRegion={isWithinRegion(location, this.props.selectedRegion)}
-        inSelectedCell={isAtLocation(this.props.selectedCell, location)}
-        selectedFrom={this.props.selectedCell.selectedFrom}
+        inSelectedRegion={isWithinRegion(location, selectedRegion)}
+        inSelectedCell={inSelectedCell}
+        selectedFrom={selectedCell.selectedFrom}
         isHovered={isAtLocation(this.state.hover, location)}
         item={item && item.component}
         key={'grid-item', location.row, location.column}
@@ -224,6 +275,7 @@ export default class FlowGrid extends Component{
         onTab={(right=true) => {this._onTab(location, right)}}
         ref={`cell-${location.row}-${location.column}`}
         getRowHeight={() => this._getRowHeight(location.row)}
+        showAutoFillToken={showAutoFillToken}
       />
     )
   }
@@ -268,26 +320,29 @@ export default class FlowGrid extends Component{
         onKeyUp={this._handleKeyUp.bind(this)}
       >
         <div className={className}>
-          {
-            upto(rowCount).map((row) => {
-              return (
-                <div
-                  className='FlowGridRow'
-                  key={row}
-                  ref={`row-${row}`}
-                >
-                  {this._row(row, columnCount)}
-                </div>
-              )
-            })
-          }
-            <BackgroundContainer
-              edges={edges}
-              rowCount={rowCount}
-              getRowHeight={this._getRowHeight.bind(this)}
-              selectedRegion={this.props.selectedRegion}
-              copiedRegion={this.props.copiedRegion}
-            />
+          <div className='canvas'>
+            {
+              upto(rowCount).map((row) => {
+                return (
+                  <div
+                    className='FlowGridRow'
+                    key={row}
+                    ref={`row-${row}`}
+                  >
+                    {this._row(row, columnCount)}
+                  </div>
+                )
+              })
+            }
+          </div>
+          <BackgroundContainer
+            edges={edges}
+            rowCount={rowCount}
+            getRowHeight={this._getRowHeight.bind(this)}
+            selectedRegion={this.props.selectedRegion}
+            copiedRegion={this.props.copiedRegion}
+            autoFillRegion={getBounds(this.state.autoFillRegion)}
+          />
         </div>
       </div>
     )
