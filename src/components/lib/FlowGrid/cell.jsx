@@ -157,7 +157,6 @@ export default class Cell extends Component {
   onFillTargetMouseDown(e) {
     if (e.button === 0) {
       this.props.onFillTargetMouseDown()
-      e.stopPropagation()
       e.preventDefault()
     }
   }

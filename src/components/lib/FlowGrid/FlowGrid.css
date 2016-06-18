@@ -156,7 +156,3 @@ svg.edge  path.basic-arrow.RED {
    border-radius: 0.1em;
    background: rgb(90, 141, 177);
  }
-
-.FlowGridCell .FillToken--outer:hover .FillToken {
-  transition: border .05s;
-}
