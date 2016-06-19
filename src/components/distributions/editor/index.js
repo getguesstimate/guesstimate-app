@@ -20,6 +20,7 @@ export default class Guesstimate extends Component{
     metricId: PropTypes.string.isRequired,
     metricFocus: PropTypes.func.isRequired,
     size: PropTypes.string,
+    hideGuesstimateType: PropTypes.bool,
     onOpen: PropTypes.func,
   }
 
@@ -107,6 +108,7 @@ export default class Guesstimate extends Component{
         }
         {!hasData &&
           <TextForm
+            hideGuesstimateType={this.props.hideGuesstimateType}
             guesstimate={guesstimate}
             onAddData={this.addDataAndSave.bind(this)}
             onChangeInput={this.changeInput.bind(this)}

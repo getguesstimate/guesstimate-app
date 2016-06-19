@@ -4,7 +4,6 @@ import Icon from 'react-fa'
 
 import Histogram from 'gComponents/simulations/histogram/index'
 import {DistributionSummary} from 'gComponents/distributions/summary/index'
-import DistributionEditor from 'gComponents/distributions/editor/index'
 
 import './style.css'
 
@@ -82,16 +81,6 @@ export class CalculatorOutputCard extends Component {
                 />
               }
             </div>
-          </div>
-
-          <div className='section editing'>
-            <DistributionEditor
-              guesstimate={metric.guesstimate}
-              metricId={metric.id}
-              ref='DistributionEditor'
-              size='small'
-              errors={errors}
-            />
           </div>
         </div>
       </div>

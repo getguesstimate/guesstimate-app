@@ -86,6 +86,7 @@ export class CalculatorInputCard extends Component {
 
           <div className='section editing'>
             <DistributionEditor
+              hideGuesstimateType={true}
               guesstimate={metric.guesstimate}
               metricId={metric.id}
               ref='DistributionEditor'
