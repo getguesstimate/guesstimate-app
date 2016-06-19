@@ -7,7 +7,7 @@
     "_copy_assets": "cp src/_redirects public/_redirects && cp src/static/* public/",
     "predeploy": "npm install && BUILD_DEV=0 API_ENV=production SEGMENT_API_ENV=production webpack && npm run _copy_assets",
     "_stage": "surge -p public -d stage.getguesstimate.com",
-    "start": "BUILD_DEV=1 NODE_ENV=development API_ENV=development SEGMENT_API_ENV=development webpack-dev-server",
+    "start": "npm run _copy_assets && BUILD_DEV=1 NODE_ENV=development API_ENV=development SEGMENT_API_ENV=development webpack-dev-server",
     "start-production": "BUILD_DEV=1 NODE_ENV=development API_ENV=production SEGMENT_API_ENV=development webpack-dev-server",
     "stage": "npm run predeploy && npm run _stage",
     "stage-master": "npm run predeploy && surge -p public -d master.getguesstimate.com",
