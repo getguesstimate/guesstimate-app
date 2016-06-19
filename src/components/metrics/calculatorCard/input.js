@@ -1,58 +1,29 @@
 import React, {Component} from 'react'
 
-import ReactDOM from 'react-dom'
-import $ from 'jquery'
+import Icon from 'react-fa'
 
+import Histogram from 'gComponents/simulations/histogram/index'
+import {DistributionSummary} from 'gComponents/distributions/summary/index'
 import DistributionEditor from 'gComponents/distributions/editor/index'
-import MetricCardViewSection from './MetricCardViewSection/index'
 
 import './style.css'
 
+const isBreak = (errors) => {return errors[0] && (errors[0] === 'BROKEN_UPSTREAM' || errors[0] === 'BROKEN_INPUT' )}
+const isInfiniteLoop = (errors) => {return errors[0] && (errors[0] === 'INFINITE_LOOP')}
+
+// We have to display this section after it disappears
+// to ensure that the metric card gets selected after click.
+// TODO(Matthew): We-ll probably want to customize this here.
+const ErrorSection = ({errors, padTop}) => (
+  <div className={`StatsSectionErrors ${isBreak(errors) ? 'minor' : 'serious'} ${padTop ? 'padTop' : ''}`}>
+    {isBreak(errors) && <Icon name='unlink'/>}
+    {!isBreak(errors) && isInfiniteLoop(errors) && <i className='ion-ios-infinite'/>}
+    {!isBreak(errors) && !isInfiniteLoop(errors) && <Icon name='warning'/>}
+  </div>
+)
+
 export class CalculatorInputCard extends Component {
   displayName: 'MetricCard'
-
-  _isEmpty(){
-    return !(this._hasGuesstimate() || this._hasName() || this._hasDescription())
-  }
-
-  _hasName(){
-    return !!this.props.metric.name
-  }
-
-  _hasDescription(){
-    return !!_.get(this.props.metric, 'guesstimate.description')
-  }
-
-  _hasGuesstimate(){
-    const has = (item) => !!_.get(this.props.metric, `guesstimate.${item}`)
-    return (has('input') || has('data'))
-  }
-
-  _isTitle(){
-    return (this._hasName() && !this._hasGuesstimate())
-  }
-
-  _id(){
-    return this.props.metric.id
-  }
-
-  focus() {
-    $(this.refs.dom).focus();
-  }
-
-  _focusForm() {
-    const editorRef = _.get(this.refs, 'DistributionEditor.refs.wrappedInstance')
-    editorRef && editorRef.focus()
-  }
-
-  _className() {
-    const {metric} = this.props
-
-    const titleView = this._isTitle()
-    let className = 'metricCard noedge'
-    className += titleView ? ' titleView' : ''
-    return className
-  }
 
   _errors() {
     if (this.props.isTitle){ return [] }
@@ -62,34 +33,61 @@ export class CalculatorInputCard extends Component {
 
   _shouldShowSimulation(metric) {
     const stats = _.get(metric, 'simulation.stats')
-    return (stats && _.isFinite(stats.stdev) && (stats.length > 5))
+    return (this.props.showHistogram && stats && _.isFinite(stats.stdev) && (stats.length > 5))
   }
 
   render() {
     const {metric} = this.props
-    const {guesstimate} = metric
+    const stats = _.get(metric, 'simulation.stats')
     const errors = this._errors()
+    const hasErrors = !_.isEmpty(errors)
+    const showSimulation = this._shouldShowSimulation(metric)
 
     return (
       <div className='metricCard--Container'
         ref='dom'
         tabIndex='0'
       >
-        <div className={this._className()}>
-          <MetricCardViewSection
-            metric={metric}
-            jumpSection={this._focusForm.bind(this)}
-            ref='MetricCardViewSection'
-            isTitle={this._isTitle()}
-            onEscape={this.focus.bind(this)}
-          />
+        <div className={'metricCard noedge'}>
+          <div className={`MetricCardViewSection${hasErrors ? ' hasErrors' : ''}`}>
+            {showSimulation &&
+              <Histogram
+                height={30}
+                simulation={metric.simulation}
+                cutOffRatio={0.995}
+              />
+            }
+
+            {!_.isEmpty(metric.name) &&
+              <div className='NameSection'>
+                <span className={'MetricName'}> {metric.name} </span>
+              </div>
+            }
+
+            <div className='StatsSection'>
+              {showSimulation &&
+                <div className='StatsSectionBody'>
+                  <DistributionSummary
+                    length={stats.length}
+                    mean={stats.mean}
+                    adjustedConfidenceInterval={stats.adjustedConfidenceInterval}
+                  />
+                </div>
+              }
+
+              {hasErrors &&
+                <ErrorSection
+                  errors={errors}
+                  padTop={(!_.isEmpty(metric.name))}
+                />
+              }
+            </div>
+          </div>
 
           <div className='section editing'>
             <DistributionEditor
               guesstimate={metric.guesstimate}
               metricId={metric.id}
-              metricFocus={this.focus.bind(this)}
-              jumpSection={() => {this.refs.MetricCardViewSection.focusName()}}
               ref='DistributionEditor'
               size='small'
               errors={errors}
@@ -97,6 +95,6 @@ export class CalculatorInputCard extends Component {
           </div>
         </div>
       </div>
-    );
+    )
   }
 }

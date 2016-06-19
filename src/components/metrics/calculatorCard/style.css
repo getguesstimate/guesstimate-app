@@ -70,3 +70,104 @@
 .ReactModal__Overlay--after-open {
   overflow: auto;
 }
+
+.MetricCardViewSection {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.MetricCardViewSection .MetricTokenSection{
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.metricCard .MetricCardViewSection.hasErrors .StatsSectionErrors.minor  {
+  background-color: rgb(236, 202, 199);
+}
+
+.metricCard .MetricCardViewSection.hasErrors .StatsSectionErrors.serious  {
+  background-color: #E48585;
+}
+
+.MetricCardViewSection > .StatsSection .StatsSectionErrors.serious .fa{
+  color: #A74B4B;
+  font-size: 1.5em;
+}
+
+.MetricCardViewSection > .StatsSection .StatsSectionErrors.serious i{
+  color: #A74B4B;
+  font-size: 1.8em;
+}
+
+.MetricCardViewSection > .StatsSection .StatsSectionErrors.minor .fa{
+  font-size: 1.4em;
+  color: #D48A8A;
+  margin-top: 4px;
+}
+
+.metricCard .MetricCardViewSection .react-d3-histogram {
+  position: absolute;
+  z-index: -1;
+}
+
+.metricCard.input .MetricCardViewSection .DistributionSummary {
+  color: #222;
+}
+
+ .metricCard.output .MetricCardViewSection .DistributionSummary {
+  font-weight: 700;
+  color: #111;
+}
+
+.MetricCardViewSection > .NameSection {
+  width: 100%;
+  padding: 5px 30px 0px 5px;
+  float: left;
+  flex: 0 0 auto;
+}
+
+.MetricCardViewSection > .StatsSection {
+  width: 100%;
+  float: left;
+  min-height: 10px;
+  flex: 5;
+  display: flex;
+  flex-direction: column;
+}
+
+.MetricCardViewSection > .StatsSection .StatsSectionBody {
+  padding: 8px 6px 4px 7px;
+  flex: 5;
+}
+
+.MetricCardViewSection > .StatsSection .StatsSectionErrors {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+}
+
+.MetricCardViewSection > .StatsSection .StatsSectionErrors.isHidden {
+  display: none;
+}
+
+.MetricCardViewSection > .StatsSection .StatsSectionErrors.padTop {
+  margin-top: 5px;
+}
+
+.metricCard .DistributionSummary {
+  font-weight: 300;
+  font-family: Lato, Arial, sans-serif;
+  color: #444
+}
+
+.MetricCardViewSection .StatsSectionTable {
+  padding: 4px 7px;
+  background-color: rgba(255,255,255,0.3);
+  margin-top: 10px;
+  flex: 1;
+}

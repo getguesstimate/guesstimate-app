@@ -29,7 +29,9 @@ const Output = ({metric}) => (
   <div className='output row'>
     <div className='col-md-3'/>
     <div className='col-md-6'>
-      <CalculatorOutputCard metric={metric} />
+      <CalculatorOutputCard
+        metric={metric}
+      />
     </div>
     <div className='col-md-3'/>
   </div>
@@ -39,7 +41,10 @@ const Input = ({dispatch, metric}) => (
   <div className='input row'>
     <div className='col-md-3'/>
     <div className='col-md-6'>
-      <CalculatorInputCard metric={metric} />
+      <CalculatorInputCard
+        showHistogram={false}
+        metric={metric}
+      />
     </div>
     <div className='col-md-3'/>
   </div>
