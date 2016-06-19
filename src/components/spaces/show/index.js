@@ -97,15 +97,13 @@ export default class SpacesShow extends Component {
 
   considerFetch(newProps) {
     const space = newProps.denormalizedSpace
-    const needsData = !_.has(space, 'graph')
 
-    if (needsData) {
-      this.fetchData()
-    }
-  }
+    const hasOwner = _.has(space, 'user_id') || _.has(space, 'organization_id')
+    const hasGraph = _.has(space, 'graph')
 
-  fetchData() {
-    if (!this.state.attemptedFetch) {
+    const hasData = this.state.attemptedFetch || (hasGraph && hasOwner)
+
+    if (!hasData) {
       this.props.dispatch(spaceActions.fetchById(this._id()))
       this.setState({attemptedFetch: true})
     }

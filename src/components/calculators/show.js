@@ -8,7 +8,7 @@ import {CalculatorOutputCard} from 'gComponents/metrics/calculatorCard/output'
 
 import {calculatorSpaceSelector} from './calculator-space-selector'
 
-import * as spaceActions from 'gModules/spaces/actions'
+import * as calculatorActions from 'gModules/calculators/actions'
 import {runSimulations} from 'gModules/simulations/actions'
 
 import './style.css'
@@ -52,14 +52,14 @@ export class CalculatorShow extends Component {
   componentDidMount() { this.fetchData() }
   componentWillReceiveProps(nextProps) {
     if (!this.props.space && !!nextProps.space) {
-      this.props.dispatch(runSimulations({spaceId: this.props.calculator.space_id}))
+      this.props.dispatch(runSimulations({spaceId: nextProps.space.id}))
     }
   }
   componentDidUpdate() { this.fetchData() }
 
   fetchData() {
     if (!this.state.attemptedFetch) {
-      this.props.dispatch(spaceActions.fetchById(this.props.calculator.space_id))
+      this.props.dispatch(calculatorActions.fetchById(this.props.calculatorId))
       this.setState({attemptedFetch: true})
     }
   }
