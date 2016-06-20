@@ -5,7 +5,7 @@ var webpack = require('webpack')
 var jQuery = require('jquery')
 var precss = require('precss')
 var lodash = require('lodash')
-var localPlugins = require('../../plugins')
+var customConfig = require('../../customConfig')
 
 module.exports = function getBaseConfig (spec) {
   return {
@@ -25,7 +25,7 @@ module.exports = function getBaseConfig (spec) {
         '.json'
       ]
     },
-    plugins: localPlugins.concat(
+    plugins: customConfig.plugins.concat(
       new HtmlPlugin(lodash.pick(spec, [
         'html',
         'isDev',

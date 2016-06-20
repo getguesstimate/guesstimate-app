@@ -1,5 +1,4 @@
-var path = require('path')
-var localPlugins = require('./plugins')
+var customConfig = require('./customConfig')
 
 module.exports = function (config) {
   config.set({
@@ -30,7 +29,7 @@ module.exports = function (config) {
     // webpack config object
     webpack: { //kind of a copy of your webpack config
       devtool: 'inline-source-map', //just do inline source maps instead of the default
-      plugins: localPlugins,
+      plugins: customConfig.plugins,
       module: {
         loaders: [
           { test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/ },
@@ -44,17 +43,7 @@ module.exports = function (config) {
           }
         ]
       },
-      resolve: {
-        alias: {
-          gComponents: path.resolve('./src/components'),
-          gEngine: path.resolve('./src/lib/engine'),
-          gModules: path.resolve('./src/modules'),
-          lib: path.resolve('./src/lib'),
-          servers: path.resolve('./src/server'),
-          // TODO(matthew): if this works, make it unnecessary.
-          server: path.resolve('./src/server'),
-        }
-      }
+      resolve: customConfig.resolutions,
     },
     colors: true,
     autoWatch: true,

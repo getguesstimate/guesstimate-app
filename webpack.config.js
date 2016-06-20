@@ -1,6 +1,5 @@
 var getConfig = require('./webpack-config')
-
-var path = require('path');
+var customConfig = require('./customConfig')
 
 var elev = `<script> var _elev = window._elev || {};(function() {
       var i,e;i=document.createElement("script"),i.type='text/javascript';i.async=1,i.src="https://static.elev.io/js/v3.js",e=document.getElementsByTagName("script")[0],e.parentNode.insertBefore(i,e);})();
@@ -38,13 +37,7 @@ if(process.env.NODE_ENV === 'development'){
 	//module.exports.devServer.quiet=true;
 }
 
-cfg.resolve.root = path.resolve('./src');
-cfg.resolve.alias = {
-  gComponents: path.resolve('./src/components'),
-  gEngine: path.resolve('./src/lib/engine'),
-  gModules: path.resolve('./src/modules'),
-  lib: path.resolve('./src/lib'),
-  servers: path.resolve('./src/server')
-};
+cfg.resolve.root = customConfig.resolutions.root
+cfg.resolve.alias = customConfig.resolutions.alias
 
 module.exports = cfg;

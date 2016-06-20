@@ -1,4 +1,5 @@
 var webpack = require('webpack')
+var path = require('path')
 var lodash = require('lodash')
 
 var useDevVariables = new webpack.DefinePlugin({
@@ -8,4 +9,16 @@ var useDevVariables = new webpack.DefinePlugin({
 })
 var lodashPlugin = new webpack.ProvidePlugin({_: 'lodash'})
 
-module.exports = [useDevVariables, lodashPlugin]
+module.exports = {
+  plugins: [useDevVariables, lodashPlugin],
+  resolutions: {
+    root: path.resolve('./src'),
+    alias: {
+      gComponents: path.resolve('./src/components'),
+      gEngine: path.resolve('./src/lib/engine'),
+      gModules: path.resolve('./src/modules'),
+      lib: path.resolve('./src/lib'),
+      servers: path.resolve('./src/server')
+    },
+  },
+}

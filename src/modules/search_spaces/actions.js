@@ -1,8 +1,9 @@
-import algoliasearch from 'algoliasearch'
-import {searchSpaceIndex} from '../../server/algolia/index.js'
-import {searchError} from 'lib/errors/index.js'
 import * as spaceActions from 'gModules/spaces/actions'
 import * as userActions from 'gModules/users/actions'
+
+import {searchError} from 'lib/errors/index.js'
+
+import {searchSpaceIndex} from 'servers/algolia/index.js'
 
 export function fetch(query = '', options = {}) {
   let filters = {hitsPerPage: 21}

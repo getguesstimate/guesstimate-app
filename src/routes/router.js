@@ -27,7 +27,7 @@ import PlansStyleGuide from 'gComponents/plans/index/StyleGuide'
 
 import configureStore from './middleware'
 
-import * as segment from '../server/segment/index'
+import * as segment from 'servers/segment/index'
 
 export default Router.extend({
   render (page, options={}) {
