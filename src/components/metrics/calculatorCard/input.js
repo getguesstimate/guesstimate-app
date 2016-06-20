@@ -31,6 +31,7 @@ export class CalculatorInputCard extends Component {
           <div className='col-md-4 section editing'>
             <DistributionEditor
               hideGuesstimateType={true}
+              skipSaves={true}
               guesstimate={metric.guesstimate}
               metricId={metric.id}
               ref='DistributionEditor'

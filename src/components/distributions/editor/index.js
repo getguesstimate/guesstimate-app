@@ -21,11 +21,14 @@ export default class Guesstimate extends Component{
     metricFocus: PropTypes.func.isRequired,
     size: PropTypes.string,
     hideGuesstimateType: PropTypes.bool,
+    skipSave: PropTypes.bool,
     onOpen: PropTypes.func,
   }
 
   static defaultProps = {
-    metricFocus: () => { }
+    metricFocus: () => { },
+    hideGuesstimateType: false,
+    skipSave: false,
   }
 
   componentDidUpdate(prevProps) {
@@ -43,7 +46,12 @@ export default class Guesstimate extends Component{
   }
 
   changeGuesstimate(changes, runSims, saveToServer) {
-    this.props.dispatch(changeGuesstimate(this.props.metricId, {...this.props.guesstimate, ...changes}, runSims, saveToServer))
+    this.props.dispatch(changeGuesstimate(
+      this.props.metricId,
+      {...this.props.guesstimate, ...changes},
+      runSims,
+      !this.props.skipSaves && saveToServer
+    ))
   }
 
   changeDescriptionAndSave(description) {
