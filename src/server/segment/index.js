@@ -121,6 +121,10 @@ export function trackSelectedRegion() {
   trackCanvasInteraction('select region')
 }
 
+export function trackAutoFill() {
+  trackCanvasInteraction('auto fill')
+}
+
 export function trackOpenSidebar() {
   trackCanvasInteraction('open sidebar')
 }
