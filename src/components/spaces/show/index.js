@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
 
 import Helmet from 'react-helmet'
+import $ from 'jquery'
 
 import {SpaceHeader} from './header'
 import {SpaceToolbar} from './Toolbar/index'
@@ -21,11 +22,10 @@ import {parseSlurp} from 'lib/slurpParser'
 
 import e from 'gEngine/engine'
 
-import * as elev from 'server/elev/index'
-import * as segment from 'server/segment'
+import * as elev from 'servers/elev/index'
+import * as segment from 'servers/segment'
 
 import './style.css'
-import $ from 'jquery'
 
 function mapStateToProps(state) {
   return {

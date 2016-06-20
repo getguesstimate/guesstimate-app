@@ -1,4 +1,4 @@
-import * as sentry from '../../server/sentry/index.js'
+import * as sentry from 'servers/sentry/index.js'
 
 export function captureApiError(locationName, jqXHR, textStatus, errorThrown, params){
   const {responseText, statusText, status} = jqXHR
