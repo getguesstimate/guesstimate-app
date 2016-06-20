@@ -220,6 +220,8 @@ export default class MetricCard extends Component {
   }
 
   render() {
+    const foo = this
+    debugger
     const {
       inSelectedCell,
       metric,

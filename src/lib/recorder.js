@@ -85,6 +85,9 @@ export class GuesstimateRecorder {
   }
   recordRenderStopEvent(component) {
     if (this.disabled || this.paused) { return }
+
+    const parent = component._reactInternalInstance._currentElement._owner
+
     const name = component.constructor.name
     const fullRender = this.recordNamedEvent(name, component['__recorder_id__'], " Render Stop", GuesstimateRecorder.addStopToNestedList)
     incrementOrOne(this.renderCounts[name])
