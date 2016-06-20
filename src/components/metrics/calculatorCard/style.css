@@ -1,16 +1,6 @@
 @import './styles/variables.css';
 
-.calculatorMetricCard {
-  width: 100%;
-}
-
-.metricCard--Container {
-  position: relative;
-  display: flex;
-  width: 100%;
-}
-
-.metricCard {
+.metricCalculatorCard {
   border-radius: 1px;
   max-width: 30em;
   white-space: normal;
@@ -24,116 +14,59 @@
   overflow: hidden;
 }
 
-.metricCard input{
-  transition: background-color 0.2s;
-}
-
-.metricCard:not(.titleView) {
-  background-color: rgba(255,255,255,0.975);
-}
-
-.metricCard.intermediate:not(.titleView) {
-  background-color: rgba(242, 244, 247, 0.94);
-}
-
-.metricCard.noedge:not(.titleView) {
+.metricCalculatorCard.noedge:not(.titleView) {
   background-color: rgba(240,242,245,0.88);
 }
 
-.selected .metricCard:not(.titleView) {
-  background-color: rgba(255,255,255,0.975);
-}
-
-.hovered.selected .metricCard {
-  background-color: white;
-}
-
-.hovered .metricCard {
-  background-color: #f4f4f4;
-}
-
-.metricCard > .section {
-  position: relative;
-  padding: 0.2em 0.2em 0.2em 0.2em;
-}
-
-.metricCard .section.editing {
-  border-top: 1px solid #ddd;
-  border-radius: 0 0 2px 2px;
-  flex: 0 0 auto;
-}
-
-.metricCard--Container:focus {
-  outline: none;
-}
-
-.ReactModal__Overlay--after-open {
-   z-index: 5;
-}
-
-.ReactModal__Overlay--after-open {
-  overflow: auto;
-}
-
-.MetricCardViewSection {
+.MetricCalculatorCardViewSection {
   position: relative;
   display: flex;
   flex-direction: column;
   flex: 1;
 }
 
-.MetricCardViewSection .MetricTokenSection{
-  position: absolute;
-  right: 0;
-  top: 0;
-}
-
-.metricCard .MetricCardViewSection.hasErrors .StatsSectionErrors.minor  {
+.metricCalculatorCard .MetricCalculatorCardViewSection.hasErrors .StatsSectionErrors.minor  {
   background-color: rgb(236, 202, 199);
 }
 
-.metricCard .MetricCardViewSection.hasErrors .StatsSectionErrors.serious  {
+.metricCalculatorCard .MetricCalculatorCardViewSection.hasErrors .StatsSectionErrors.serious  {
   background-color: #E48585;
 }
 
-.MetricCardViewSection > .StatsSection .StatsSectionErrors.serious .fa{
+.MetricCalculatorCardViewSection > .StatsSection .StatsSectionErrors.serious .fa{
   color: #A74B4B;
   font-size: 1.5em;
 }
 
-.MetricCardViewSection > .StatsSection .StatsSectionErrors.serious i{
+.MetricCalculatorCardViewSection > .StatsSection .StatsSectionErrors.serious i{
   color: #A74B4B;
   font-size: 1.8em;
 }
 
-.MetricCardViewSection > .StatsSection .StatsSectionErrors.minor .fa{
+.MetricCalculatorCardViewSection > .StatsSection .StatsSectionErrors.minor .fa{
   font-size: 1.4em;
   color: #D48A8A;
   margin-top: 4px;
 }
 
-.metricCard .MetricCardViewSection .react-d3-histogram {
+.metricCalculatorCard .MetricCalculatorCardViewSection .react-d3-histogram {
   position: absolute;
   z-index: -1;
 }
 
-.metricCard.input .MetricCardViewSection .DistributionSummary {
-  color: #222;
-}
-
- .metricCard.output .MetricCardViewSection .DistributionSummary {
+ .metricCalculatorCard.output .MetricCalculatorCardViewSection .DistributionSummary {
   font-weight: 700;
   color: #111;
 }
 
-.MetricCardViewSection > .NameSection {
+.MetricCalculatorCardViewSection > .NameSection {
   width: 100%;
   padding: 5px 30px 0px 5px;
   float: left;
   flex: 0 0 auto;
 }
 
-.MetricCardViewSection > .StatsSection {
+.MetricCalculatorCardViewSection > .StatsSection {
   width: 100%;
   float: left;
   min-height: 10px;
@@ -142,12 +75,12 @@
   flex-direction: column;
 }
 
-.MetricCardViewSection > .StatsSection .StatsSectionBody {
+.MetricCalculatorCardViewSection > .StatsSection .StatsSectionBody {
   padding: 8px 6px 4px 7px;
   flex: 5;
 }
 
-.MetricCardViewSection > .StatsSection .StatsSectionErrors {
+.MetricCalculatorCardViewSection > .StatsSection .StatsSectionErrors {
   flex: 1;
   display: flex;
   align-items: center;
@@ -155,21 +88,21 @@
   min-height: 40px;
 }
 
-.MetricCardViewSection > .StatsSection .StatsSectionErrors.isHidden {
+.MetricCalculatorCardViewSection > .StatsSection .StatsSectionErrors.isHidden {
   display: none;
 }
 
-.MetricCardViewSection > .StatsSection .StatsSectionErrors.padTop {
+.MetricCalculatorCardViewSection > .StatsSection .StatsSectionErrors.padTop {
   margin-top: 5px;
 }
 
-.metricCard .DistributionSummary {
+.metricCalculatorCard .DistributionSummary {
   font-weight: 300;
   font-family: Lato, Arial, sans-serif;
   color: #444
 }
 
-.MetricCardViewSection .StatsSectionTable {
+.MetricCalculatorCardViewSection .StatsSectionTable {
   padding: 4px 7px;
   background-color: rgba(255,255,255,0.3);
   margin-top: 10px;

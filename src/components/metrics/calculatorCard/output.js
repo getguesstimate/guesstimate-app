@@ -43,44 +43,39 @@ export class CalculatorOutputCard extends Component {
     const showSimulation = this._shouldShowSimulation(metric)
 
     return (
-      <div className='metricCard--Container'
-        ref='dom'
-        tabIndex='0'
-      >
-        <div className={'metricCard noedge'}>
-          <div className={`MetricCardViewSection${hasErrors ? ' hasErrors' : ''}`}>
-            {showSimulation &&
-              <Histogram
-                height={30}
-                simulation={metric.simulation}
-                cutOffRatio={0.995}
-              />
-            }
+      <div className={'metricCalculatorCard noedge'}>
+        <div className={`MetricCalculatorCardViewSection${hasErrors ? ' hasErrors' : ''}`}>
+          {showSimulation &&
+            <Histogram
+              height={30}
+              simulation={metric.simulation}
+              cutOffRatio={0.995}
+            />
+          }
 
-            {!_.isEmpty(metric.name) &&
-              <div className='NameSection'>
-                <span className={'MetricName'}> {metric.name} </span>
+          {!_.isEmpty(metric.name) &&
+            <div className='NameSection'>
+              <span className={'MetricName'}> {metric.name} </span>
+            </div>
+          }
+
+          <div className='StatsSection'>
+            {showSimulation &&
+              <div className='StatsSectionBody'>
+                <DistributionSummary
+                  length={stats.length}
+                  mean={stats.mean}
+                  adjustedConfidenceInterval={stats.adjustedConfidenceInterval}
+                />
               </div>
             }
 
-            <div className='StatsSection'>
-              {showSimulation &&
-                <div className='StatsSectionBody'>
-                  <DistributionSummary
-                    length={stats.length}
-                    mean={stats.mean}
-                    adjustedConfidenceInterval={stats.adjustedConfidenceInterval}
-                  />
-                </div>
-              }
-
-              {hasErrors &&
-                <ErrorSection
-                  errors={errors}
-                  padTop={(!_.isEmpty(metric.name))}
-                />
-              }
-            </div>
+            {hasErrors &&
+              <ErrorSection
+                errors={errors}
+                padTop={(!_.isEmpty(metric.name))}
+              />
+            }
           </div>
         </div>
       </div>

@@ -93,13 +93,16 @@ export class CalculatorShow extends Component {
           </div>
           <hr className='subtle' />
           {this.state.showResult &&
-            <div className='outputs'>
-              {_.map(outputs, (m,i) => (
-                <Output
-                  key={i}
-                  metric={m}
-                />
-              ))}
+            <div>
+              <h2> Result: </h2>
+              <div className='outputs'>
+                {_.map(outputs, (m,i) => (
+                  <Output
+                    key={i}
+                    metric={m}
+                  />
+                ))}
+              </div>
             </div>
           }
           {!this.state.showResult &&
