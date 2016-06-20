@@ -47,7 +47,7 @@ const rootReducer = function app(state = {}, action){
     modal: SI(modalR(state.modal, action)),
     copied: SI(copiedR(state.copied, action)),
     checkpoints: SI(checkpointsR(state.checkpoints, action)),
-    httpRequests: SI(httpRequestsR(state.httpRequests, action))
+    httpRequests: SI(httpRequestsR(state.httpRequests, action)),
   }
 }
 

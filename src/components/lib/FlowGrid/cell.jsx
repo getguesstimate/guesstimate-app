@@ -32,19 +32,22 @@ export default class Cell extends Component {
     inSelectedRegion: PropTypes.bool.isRequired,
     inSelectedCell: PropTypes.bool.isRequired,
     isHovered: PropTypes.bool.isRequired,
+    showAutoFillToken: PropTypes.bool.isRequired,
     item: PropTypes.object,
     location: PTLocation.isRequired,
     onAddItem: PropTypes.func.isRequired,
     onMoveItem: PropTypes.func.isRequired,
     onEndDragCell: PropTypes.func.isRequired,
     onEmptyCellMouseDown: PropTypes.func,
+    onAutoFillTargetMouseDown: PropTypes.func,
   }
 
   shouldComponentUpdate(newProps, newState) {
     const difProps = (newProps.isOver !== this.props.isOver) ||
       (newProps.inSelectedRegion !== this.props.inSelectedRegion) ||
       (newProps.inSelectedCell !== this.props.inSelectedCell) ||
-      (newProps.isHovered !== this.props.isHovered)
+      (newProps.isHovered !== this.props.isHovered) ||
+      (newProps.showAutoFillToken !== this.props.showAutoFillToken)
     const itemDifferent = (!!newProps.item !== !!this.props.item)
     const bothHaveItems = (!!newProps.item && !!this.props.item)
 
@@ -114,7 +117,7 @@ export default class Cell extends Component {
     window.recorder.recordMountEvent(this)
   }
 
-  _focus = () => {
+  _focus() {
     let domNode
     if (this.props.item) {
       // Always focus on the immediate child of the filled cell.
@@ -125,7 +128,7 @@ export default class Cell extends Component {
     domNode.focus()
   }
 
-  _cellElement = () => {
+  _cellElement() {
     if (this.props.item) {
       // Then endDrag fixes a bug where the original dragging position is hovered.
       return (
@@ -142,7 +145,7 @@ export default class Cell extends Component {
     }
   }
 
-  _classes = () => {
+  _classes() {
     let classes = 'FlowGridCell'
     classes += (this.props.inSelectedRegion ? ' selected' : ' nonSelected')
     classes += this.props.item ? ' hasItem' : ''
@@ -151,14 +154,27 @@ export default class Cell extends Component {
     return classes
   }
 
+  onAutoFillTargetMouseDown(e) {
+    if (e.button === 0) {
+      this.props.onAutoFillTargetMouseDown()
+      e.preventDefault()
+    }
+  }
+
   render = () => {
     return this.props.connectDropTarget(
       <div
         className={this._classes()}
         onMouseEnter={this.props.onMouseEnter}
         onMouseDown={this.handleMouseDown.bind(this)}
+        onMouseUp={this.props.onMouseUp}
       >
         {this._cellElement()}
+        {this.props.showAutoFillToken &&
+          <div className='AutoFillToken--outer'>
+            <div className='AutoFillToken' onMouseDown={this.onAutoFillTargetMouseDown.bind(this)}/>
+          </div>
+        }
       </div>
     )
   }
