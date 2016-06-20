@@ -4,6 +4,11 @@
   position: relative;
   margin-left: 1em;
   margin-top: 1em;
+
+  .canvas {
+    position: relative;
+    z-index: 1;
+  }
 }
 
 .FlowGrid-Container {
@@ -22,7 +27,6 @@
   display: flex;
   flex: 1;
   min-height: 60px;
-  z-index: 1;
 }
 
 .FlowGrid.withLines .FlowGridCell{
@@ -54,10 +58,6 @@
 .FlowGridCell.hovered.hasItem .FlowGridFilledCell{
   background-color: rgba(75, 138, 177, 0.3);
   border-radius: 1px;
-}
-
-.FlowGridCell.hovered {
-  z-index: 2;
 }
 
 .FlowGridEmptyCell:focus {
@@ -119,7 +119,40 @@ svg.edge  path.basic-arrow.RED {
    background: rgba(153, 186, 208, 0.87);
 }
 
+.FlowGrid .Region.fill {
+   border: 1px dashed rgba(0, 0, 0, 0.4);
+}
+
 .FlowGrid .Region.copied {
    border: 2px dashed rgba(7, 115, 167, 0.75);
    background: rgba(153, 186, 208, 0.17);
 }
+
+.FlowGridCell {
+  position: relative;
+}
+
+.FlowGridCell .AutoFillToken--outer {
+  position: absolute;
+  right: -1.25em;
+  bottom: -1.25em;
+  z-index: 2;
+  border-radius: 0.5em;
+  padding: .9em;
+  width: 2.5em;
+  height: 2.5em;
+  transition: padding .05s;
+}
+
+.FlowGridCell .AutoFillToken--outer:hover {
+  padding: 0.5em;
+  transition: padding .05s;
+}
+
+.FlowGridCell .AutoFillToken {
+   cursor: crosshair;
+   height: 100%;
+   width: 100%;
+   border-radius: 0.1em;
+   background: rgb(90, 141, 177);
+ }

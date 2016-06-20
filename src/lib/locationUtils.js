@@ -25,6 +25,18 @@ export function isWithinRegion(test, region) {
   )
 }
 
+export function getBounds({start, end}) {
+  if (!start || !end) {return []}
+  let leftX, topY, rightX, bottomY
+  leftX = Math.min(start.row, end.row)
+  topY = Math.max(start.column, end.column)
+  rightX = Math.max(start.row, end.row)
+  bottomY = Math.min(start.column, end.column)
+  return [{row: leftX, column: bottomY}, {row: rightX, column: topY}]
+}
+
+export const move = ({row, column}, direction) => ({row: row + direction.row, column: column + direction.column})
+
 // Returns a function that translates all points of the form {row: X, column: Y} according to the translation that moves
 // start to end.
 export function translate(start, end) {

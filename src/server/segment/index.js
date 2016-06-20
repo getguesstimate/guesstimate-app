@@ -121,6 +121,10 @@ export function trackSelectedRegion() {
   trackCanvasInteraction('select region')
 }
 
+export function trackAutoFill() {
+  trackCanvasInteraction('auto fill')
+}
+
 export function trackOpenSidebar() {
   trackCanvasInteraction('open sidebar')
 }
@@ -139,4 +143,8 @@ export function trackSwitchToEditMode() {
 
 export function trackImportSlurp() {
   trackCanvasInteraction('import slurp')
+}
+
+export function openedElev(via_direct_link, article_id) {
+  window.analytics.track(Constants.OPENED_ELEV, {via_direct_link, article_id})
 }

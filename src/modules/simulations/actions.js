@@ -27,9 +27,9 @@ export function deleteSimulations(metricIds) {
   return {type: 'DELETE_SIMULATIONS', metricIds}
 }
 
-export function runSimulations({spaceId, metricSubset}) {
+export function runSimulations(params) {
   return (dispatch, getState) => {
-    (new GraphPropagation(dispatch, getState, {spaceId, metricSubset})).run()
+    (new GraphPropagation(dispatch, getState, params)).run()
   };
 }
 
