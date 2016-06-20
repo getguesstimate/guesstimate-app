@@ -41,6 +41,7 @@
     "brfs": "^1.4.1",
     "chai": "^3.2.0",
     "ejs-compiled-loader": "^2.1.1",
+    "enzyme": "^2.3.0",
     "file-loader": "^0.8.4",
     "json-loader": "^0.5.3",
     "karma": "^0.13.21",

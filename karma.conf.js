@@ -65,6 +65,12 @@ module.exports = function (config) {
           },
         ],
       },
+      externals: {
+        'cheerio': 'window',
+        'react/addons': true,
+        'react/lib/ExecutionEnvironment': true,
+        'react/lib/ReactContext': true,
+      },
       resolve: customConfig.resolutions,
     },
     colors: true,
