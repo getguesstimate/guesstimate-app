@@ -37,22 +37,18 @@ const Output = ({metric}) => (
   </div>
 )
 
-const Input = ({dispatch, metric}) => (
-  <div className='input row'>
-    <div className='col-md-3'/>
-    <div className='col-md-6'>
-      <CalculatorInputCard
-        showHistogram={false}
-        metric={metric}
-      />
-    </div>
-    <div className='col-md-3'/>
+const Input = ({metric, index}) => (
+  <div className='input'>
+    <CalculatorInputCard metric={metric} index={index+1}/>
   </div>
 )
 
 @connect(calculatorSpaceSelector)
 export class CalculatorShow extends Component {
-  state = {attemptedFetch: false}
+  state = {
+    attemptedFetch: false,
+    showResult: false,
+  }
 
   componentDidMount() { this.fetchData() }
   componentWillReceiveProps(nextProps) {
@@ -89,20 +85,31 @@ export class CalculatorShow extends Component {
             {_.map(inputs, (m,i) => (
               <Input
                 key={i}
+                index={i}
                 metric={m}
                 dispatch={this.props.dispatch}
               />
             ))}
           </div>
-          <hr />
-          <div className='outputs'>
-            {_.map(outputs, (m,i) => (
-              <Output
-                key={i}
-                metric={m}
-              />
-            ))}
-          </div>
+          <hr className='subtle' />
+          {this.state.showResult &&
+            <div className='outputs'>
+              {_.map(outputs, (m,i) => (
+                <Output
+                  key={i}
+                  metric={m}
+                />
+              ))}
+            </div>
+          }
+          {!this.state.showResult &&
+            <div 
+              className='primary ui button green calculateButton'
+              onClick={() => {this.setState({showResult: true})}}
+            >
+              Calculate
+            </div>
+          }
         </div>
         <div className='col-md-3' />
       </div>

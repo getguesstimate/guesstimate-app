@@ -1,5 +1,9 @@
 @import './styles/variables.css';
 
+.calculatorMetricCard {
+  width: 100%;
+}
+
 .metricCard--Container {
   position: relative;
   display: flex;
