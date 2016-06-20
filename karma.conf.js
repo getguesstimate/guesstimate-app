@@ -32,16 +32,38 @@ module.exports = function (config) {
       plugins: customConfig.plugins,
       module: {
         loaders: [
-          { test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/ },
+          {
+            test: /(\.js$)|(\.jsx$)/,
+            exclude: /node_modules/,
+            loaders: [
+              'babel-loader'
+            ]
+          },
+          {
+            test: /\.json$/,
+            loaders: ['json']
+          },
+          {
+            test: /\.(otf|eot|svg|ttf|woff)/,
+            loader: 'url-loader?limit=10000',
+          },
           {
             test: /\.(jpe?g|png|gif)/,
-            loader: 'url-loader?limit=1000'
+            loader: 'url-loader?limit=10000',
+          },
+          {
+            test: /\.ejs$/,
+            loader: 'ejs-compiled-loader'
+          },
+          {
+            test: /node_modules\/auth0-lock\/.*\.js$/,
+            loaders: ['transform/cacheable?brfs', 'transform/cacheable?packageify']
           },
           {
             test: /\.css$/,
             loader: 'null-loader',
-          }
-        ]
+          },
+        ],
       },
       resolve: customConfig.resolutions,
     },

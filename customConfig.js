@@ -20,5 +20,11 @@ module.exports = {
       lib: path.resolve('./src/lib'),
       servers: path.resolve('./src/server')
     },
+    extensions: [
+      '',
+      '.js',
+      '.jsx',
+      '.json'
+    ],
   },
 }

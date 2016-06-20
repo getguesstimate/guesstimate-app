@@ -2,7 +2,7 @@ import React from 'react'
 import TestUtils from 'react-addons-test-utils'
 import {TestRoot} from 'gComponents/rootTestComponent'
 
-import {SpaceToolbar} from '../index'
+import {SpaceToolbar} from './index'
 
 describe('<SpaceToolbar>', () => {
   it ('renders the view form', () => {
