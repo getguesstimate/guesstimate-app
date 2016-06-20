@@ -175,6 +175,7 @@ export default class Canvas extends Component{
   }
 
   onAutoFillRegion(region) {
+    segment.trackAutoFill()
     this.props.dispatch(fillRegion(this.props.denormalizedSpace.id, region))
   }
 
