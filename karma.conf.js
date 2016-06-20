@@ -1,10 +1,5 @@
 var path = require('path')
-var webpack = require('webpack')
-var useDevVariables = new webpack.DefinePlugin({
-  __DEV__: JSON.stringify(JSON.parse(process.env.BUILD_DEV || 'true')),
-  __API_ENV__: JSON.stringify(process.env.API_ENV || 'development'),
-  __SEGMENT_API_ENV__: JSON.stringify(process.env.SEGMENT_API_ENV || 'development'),
-})
+var localPlugins = require('./plugins')
 
 module.exports = function (config) {
   config.set({
@@ -35,9 +30,7 @@ module.exports = function (config) {
     // webpack config object
     webpack: { //kind of a copy of your webpack config
       devtool: 'inline-source-map', //just do inline source maps instead of the default
-      plugins: [
-        useDevVariables,
-      ],
+      plugins: localPlugins,
       module: {
         loaders: [
           { test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/ },
@@ -48,7 +41,6 @@ module.exports = function (config) {
           {
             test: /\.css$/,
             loader: 'null-loader',
-            //loader: 'style-loader!css-loader!postcss-loader'
           }
         ]
       },

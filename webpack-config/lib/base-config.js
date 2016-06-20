@@ -5,14 +5,7 @@ var webpack = require('webpack')
 var jQuery = require('jquery')
 var precss = require('precss')
 var lodash = require('lodash')
-
-var useDevVariables = new webpack.DefinePlugin({
-  __DEV__: JSON.stringify(JSON.parse(process.env.BUILD_DEV || 'true')),
-  __API_ENV__: JSON.stringify(process.env.API_ENV || 'development'),
-  __SEGMENT_API_ENV__: JSON.stringify(process.env.SEGMENT_API_ENV || 'development'),
-});
-
-lodashPlugin = new webpack.ProvidePlugin({_: 'lodash'})
+var localPlugins = require('../../plugins')
 
 module.exports = function getBaseConfig (spec) {
   return {
@@ -32,16 +25,14 @@ module.exports = function getBaseConfig (spec) {
         '.json'
       ]
     },
-    plugins: [
+    plugins: localPlugins.concat(
       new HtmlPlugin(lodash.pick(spec, [
         'html',
         'isDev',
         'serveCustomHtmlInDev',
         'package'
-      ])),
-      useDevVariables,
-      lodashPlugin
-    ],
+      ]))
+    ),
     module: {
       loaders: [
         {
