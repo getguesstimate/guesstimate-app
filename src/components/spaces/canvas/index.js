@@ -17,7 +17,7 @@ import {fillRegion} from 'gModules/auto_fill_region/actions'
 import {hasMetricUpdated} from 'gComponents/metrics/card/updated'
 import * as canvasStateProps from 'gModules/canvas_state/prop_type'
 
-import * as segment from 'server/segment'
+import * as segment from 'servers/segment'
 
 
 import './style.css'
