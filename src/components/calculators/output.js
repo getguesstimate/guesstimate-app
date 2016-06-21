@@ -9,9 +9,13 @@ const PrecisionNumber = ({value, precision, number=numberShow(value, precision)}
   </span>
 )
 
+const RangeDisplay = ({range: [low, high]}) => (
+  <div><PrecisionNumber value={low}/> to <PrecisionNumber value={high}/></div>
+)
+
 export const Output = ({metric: {name, simulation}}) => {
   if (!_.has(simulation, 'stats')) { return false }
-  const {length, mean, adjustedConfidenceInterval: [low, high]} = simulation.stats
+  const {length, mean, adjustedConfidenceInterval} = simulation.stats
   return (
     <div className='output row'>
       <div className='col-md-7 name'>
@@ -19,7 +23,7 @@ export const Output = ({metric: {name, simulation}}) => {
       </div>
       <div className='col-md-5 result-section'>
         {length === 1 && <PrecisionNumber value={mean} precision={6}/> }
-        {length > 1 && <div><PrecisionNumber value={low}/> to <PrecisionNumber value={high}/></div> }
+        {length > 1 && <RangeDisplay range={adjustedConfidenceInterval}/> }
       </div>
     </div>
   )
