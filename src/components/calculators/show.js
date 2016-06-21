@@ -22,7 +22,7 @@ import './style.css'
 export class CalculatorShow extends Component {
   state = {
     attemptedFetch: false,
-    showResult: true,
+    showResult: false,
   }
 
   componentDidMount() { this.fetchData() }
