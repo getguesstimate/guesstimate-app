@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 
 import ReactMarkdown from 'react-markdown'
+import Helmet from 'react-helmet'
 
 import {Input} from './input'
 import {CalculatorOutputCard} from 'gComponents/metrics/calculatorCard/output'
@@ -85,47 +86,58 @@ export class CalculatorShow extends Component {
     const outputs = output_ids.map(findById).filter(m => relationshipType(m.edges) === OUTPUT)
 
     return (
-      <div className='row'>
-        <div className='col-md-3'/>
-        <div className='col-md-6 calculator'>
-          <div className='content'>
-            <ReactMarkdown source={content} />
-          </div>
-          <div className='inputs'>
-            {_.map(inputs, (m,i) => (
-              <Input
-                key={i}
-                name={m.name}
-                onChange={this.onChange.bind(this, m)}
-              />
-            ))}
-          </div>
-          {this.state.showResult &&
-            <div>
-              <h2> Result: </h2>
-              <div className='outputs'>
-                {_.map(outputs, (m,i) => (
-                  <Output
-                    key={i}
-                    metric={m}
-                  />
-                ))}
-              </div>
+      <div>
+        <Helmet
+          title={title}
+          meta={[
+            {name: "Description", content},
+            {property: "og:description", content},
+            {property: "og:title", content: title},
+            {property: "og:site_name", content: "Guesstimate"},
+          ]}
+        />
+        <div className='row'>
+          <div className='col-md-3'/>
+          <div className='col-md-6 calculator'>
+            <div className='content'>
+              <ReactMarkdown source={content} />
             </div>
-          }
-          {!this.state.showResult &&
-            <div className='row'>
-              <div className='col-md-7' />
-              <div
-                className='col-md-5 ui button green calculateButton'
-                onClick={() => {this.setState({showResult: true})}}
-              >
-                Calculate
-              </div>
+            <div className='inputs'>
+              {_.map(inputs, (m,i) => (
+                <Input
+                  key={i}
+                  name={m.name}
+                  onChange={this.onChange.bind(this, m)}
+                />
+              ))}
             </div>
-          }
+            {this.state.showResult &&
+              <div>
+                <h2> Result: </h2>
+                <div className='outputs'>
+                  {_.map(outputs, (m,i) => (
+                    <Output
+                      key={i}
+                      metric={m}
+                    />
+                  ))}
+                </div>
+              </div>
+            }
+            {!this.state.showResult &&
+              <div className='row'>
+                <div className='col-md-7' />
+                <div
+                  className='col-md-5 ui button green calculateButton'
+                  onClick={() => {this.setState({showResult: true})}}
+                >
+                  Calculate
+                </div>
+              </div>
+            }
+          </div>
+          <div className='col-md-3' />
         </div>
-        <div className='col-md-3' />
       </div>
     )
   }
