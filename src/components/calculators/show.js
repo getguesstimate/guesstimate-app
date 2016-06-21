@@ -44,7 +44,7 @@ const Input = ({metric: {guesstimate, name, id}}) => (
       <DistributionEditor
         hideGuesstimateType={true}
         skipSaves={true}
-        guesstimate={guesstimate}
+        guesstimate={{...guesstimate, ...{input: ''}}}
         metricId={id}
         size='small'
       />
@@ -101,7 +101,6 @@ export class CalculatorShow extends Component {
               />
             ))}
           </div>
-          <hr className='subtle' />
           {this.state.showResult &&
             <div>
               <h2> Result: </h2>
@@ -116,11 +115,16 @@ export class CalculatorShow extends Component {
             </div>
           }
           {!this.state.showResult &&
-            <div 
-              className='primary ui button green calculateButton'
-              onClick={() => {this.setState({showResult: true})}}
-            >
-              Calculate
+            <div className='row'>
+              <div className='col-md-7' />
+              <div className='col-md-5'>
+                <div
+                  className='ui button green calculateButton'
+                  onClick={() => {this.setState({showResult: true})}}
+                >
+                  Calculate
+                </div>
+              </div>
             </div>
           }
         </div>

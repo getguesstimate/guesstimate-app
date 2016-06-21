@@ -11,24 +11,23 @@
       line-height: 1em;
       font-size: 1em;
       border: 1px solid rgba(200, 200, 200, 1);
-      border-radius: 0.2em;
+      border-radius: 0.1em;
       width: 100%;
       height: 100%;
       color: rgba(80, 80, 80, 1);
       background-color: rgba(150, 150, 150, 0.1);
     }
   }
-}
 
-hr.subtle {
-  border: 0;
-  height: 0;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  .calculateButton {
+    margin: 2.6em 0 0 0;
+    width: 100%;
+    border-radius: 0.1em;
+  }
 }
 
 .input {
-  padding: 1em;
+  padding: 0.6em 0 0.6em 0;
   font-size: 1.2em;
 }
 
