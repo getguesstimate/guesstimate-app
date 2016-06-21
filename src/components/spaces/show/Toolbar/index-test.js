@@ -9,26 +9,6 @@ import {SpaceToolbar} from './index'
 
 import CanvasViewForm from '../canvasViewForm'
 
-/*
-      <SpaceToolbar
-        editableByMe={}
-        actionState={}
-        isLoggedIn={}
-        onCopyModel={}
-        onCopyMetrics={}
-        onPasteMetrics={}
-        onCutMetrics={}
-        onDestroy={}
-        onUndo={}
-        canUndo={}
-        onRedo={}
-        canRedo={}
-        editsAllowed={}
-        onAllowEdits={}
-        onForbidEdits={}
-      />
-      */
-
 describe('<SpaceToolbar>', () => {
   it ('Always shows the view form', () => {
     const toolbar = shallow(<SpaceToolbar />)
