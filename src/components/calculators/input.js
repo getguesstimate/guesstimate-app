@@ -8,10 +8,8 @@ import {changeGuesstimate} from 'gModules/guesstimates/actions'
 
 import {Guesstimator} from 'lib/guesstimator/index'
 
-import './style.css'
-
 @connect(null, dispatch => bindActionCreators({changeGuesstimate: changeGuesstimate}, dispatch))
-export class CalculatorGuesstimateForm extends Component{
+export class Input extends Component{
   displayName: 'Guesstimate'
   static propTypes = {
     dispatch: PropTypes.func,
@@ -40,19 +38,14 @@ export class CalculatorGuesstimateForm extends Component{
   }
 
   render () {
-    if(this.props.guesstimate.metric !== this.props.metricId) { return false }
-
     return (
-      <div className={'Guesstimate'}>
-        <div className='GuesstimateInputForm'>
-          <div className='GuesstimateInputForm--row'>
-            <span className={`TextInput${_.isEmpty(this.props.errors) ? '' : ' hasErrors'}`}>
-              <Editor
-                editorState={this.state.editorState}
-                onChange={this.changeInput.bind(this)}
-              />
-            </span>
-          </div>
+      <div className='input row'>
+        <div className='name col-md-7'>{this.props.name}</div>
+        <div className='editor col-md-5'>
+          <Editor
+            editorState={this.state.editorState}
+            onChange={this.changeInput.bind(this)}
+          />
         </div>
       </div>
     )

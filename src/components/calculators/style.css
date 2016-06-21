@@ -1,3 +1,5 @@
+@import './styles/variables.css';
+
 .calculator {
   border: 1px solid rgba(200, 200, 200, 0.7);
   border-radius: 1em;
@@ -27,8 +29,22 @@
 }
 
 .input {
-  padding: 0.6em 0 0.6em 0;
-  font-size: 1.2em;
+  padding: 0.8em 0 0.8em 0;
+  font-size: 1.4em;
+
+  .name {
+    white-space: nowrap;
+    height: 1.4em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .editor {
+    height: 1.4em;
+    font-size: 1.1em;
+    padding-top: 0.25em;
+    background-color: $grey-1;
+  }
 }
 
 .content {
