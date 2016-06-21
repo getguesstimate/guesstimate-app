@@ -6,7 +6,7 @@ import ReactMarkdown from 'react-markdown'
 import Helmet from 'react-helmet'
 
 import {Input} from './input'
-import {CalculatorOutputCard} from 'gComponents/metrics/calculatorCard/output'
+import {Output} from './output'
 
 import {calculatorSpaceSelector} from './calculator-space-selector'
 
@@ -30,23 +30,11 @@ const relationshipType = (edges) => {
   return NOEDGE
 }
 
-const Output = ({metric}) => (
-  <div className='output row'>
-    <div className='col-md-3'/>
-    <div className='col-md-6'>
-      <CalculatorOutputCard
-        metric={metric}
-      />
-    </div>
-    <div className='col-md-3'/>
-  </div>
-)
-
 @connect(calculatorSpaceSelector, dispatch => bindActionCreators({...calculatorActions, changeGuesstimate, runSimulations}, dispatch))
 export class CalculatorShow extends Component {
   state = {
     attemptedFetch: false,
-    showResult: false,
+    showResult: true,
   }
 
   componentDidMount() { this.fetchData() }
@@ -113,7 +101,7 @@ export class CalculatorShow extends Component {
             </div>
             {this.state.showResult &&
               <div>
-                <h2> Result: </h2>
+                <hr className='result-divider'/>
                 <div className='outputs'>
                   {_.map(outputs, (m,i) => (
                     <Output

@@ -9,16 +9,28 @@
   color: rgba(80, 80, 80, 1);
 
   .inputs {
-    .Guesstimate .TextInput {
-      line-height: 1em;
-      font-size: 1em;
-      border: 1px solid rgba(200, 200, 200, 1);
-      border-radius: 0.1em;
-      width: 100%;
-      height: 100%;
-      color: rgba(80, 80, 80, 1);
-      background-color: rgba(150, 150, 150, 0.1);
+    .input {
+      padding: 0.8em 0 0.8em 0;
+
+      .editor {
+        height: 1.4em;
+        font-size: 1.1em;
+        padding-top: 0.25em;
+        background-color: $grey-1;
+      }
     }
+  }
+
+  .outputs {
+    padding-top: 3em;
+  }
+
+  .name {
+    white-space: nowrap;
+    font-size: 1.4em;
+    height: 1.4em;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .calculateButton {
@@ -27,21 +39,24 @@
   }
 }
 
-.input {
-  padding: 0.8em 0 0.8em 0;
-  font-size: 1.4em;
+.DistributionSummary {
+  font-size: 1.6em;
+}
 
-  .name {
-    white-space: nowrap;
-    height: 1.4em;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+.DistributionSummary .mean {
+  float: left;
+  width: 100%;
+  line-height: 0.9em;
+}
 
-  .editor {
-    height: 1.4em;
-    font-size: 1.1em;
-    padding-top: 0.25em;
-    background-color: $grey-1;
-  }
+.DistributionSummary .UncertaintyRange {
+  font-size: 0.58em;
+  color: #555;
+  float: left;
+  margin-top: 2px;
+  margin-left: 0;
+}
+
+.DistributionSummary .PrecisionNumber {
+  float: left;
 }
