@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React from 'react'
 
 import numberShow from 'lib/numberShower/numberShower'
 
@@ -9,7 +9,6 @@ const PrecisionNumber = ({value, precision, number=numberShow(value, precision)}
   </span>
 )
 
-// TODO(Point display)
 export const Output = ({metric: {name, simulation}}) => {
   if (!_.has(simulation, 'stats')) { return false }
   const {length, mean, adjustedConfidenceInterval: [low, high]} = simulation.stats

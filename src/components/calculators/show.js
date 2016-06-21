@@ -18,18 +18,6 @@ import {Guesstimator} from 'lib/guesstimator/index'
 
 import './style.css'
 
-const INTERMEDIATE = 'INTERMEDIATE'
-const OUTPUT = 'OUTPUT'
-const INPUT = 'INPUT'
-const NOEDGE = 'NOEDGE'
-
-const relationshipType = (edges) => {
-  if (edges.inputs.length && edges.outputs.length) { return INTERMEDIATE }
-  if (edges.inputs.length) { return OUTPUT }
-  if (edges.outputs.length) { return INPUT }
-  return NOEDGE
-}
-
 @connect(calculatorSpaceSelector, dispatch => bindActionCreators({...calculatorActions, changeGuesstimate, runSimulations}, dispatch))
 export class CalculatorShow extends Component {
   state = {
@@ -39,8 +27,8 @@ export class CalculatorShow extends Component {
 
   componentDidMount() { this.fetchData() }
   componentWillReceiveProps(nextProps) {
-    if (!this.props.space && !!nextProps.space) {
-      this.props.runSimulations({spaceId: nextProps.space.id})
+    if (!this.props.calculator && !!nextProps.calculator) {
+      this.props.runSimulations({spaceId: nextProps.calculator.space_id})
     }
   }
   componentDidUpdate() { this.fetchData() }
@@ -64,15 +52,9 @@ export class CalculatorShow extends Component {
   }
 
   render() {
-    if (!this.props.space || !this.props.calculator) { return false }
+    if (!this.props.calculator) { return false }
 
-    const {content, title, input_ids, output_ids} = this.props.calculator
-    const {space: {metrics}} = this.props
-
-    const findById = id => metrics.find(m => m.id === id)
-    const inputs = input_ids.map(findById).filter(m => relationshipType(m.edges) === INPUT)
-    const outputs = output_ids.map(findById).filter(m => relationshipType(m.edges) === OUTPUT)
-
+    const {calculator: {content, title}, inputs, outputs} = this.props
     return (
       <div>
         <Helmet
@@ -91,11 +73,11 @@ export class CalculatorShow extends Component {
               <ReactMarkdown source={content} />
             </div>
             <div className='inputs'>
-              {_.map(inputs, (m,i) => (
+              {_.map(inputs, (metric, i) => (
                 <Input
                   key={i}
-                  name={m.name}
-                  onChange={this.onChange.bind(this, m)}
+                  name={metric.name}
+                  onChange={this.onChange.bind(this, metric)}
                 />
               ))}
             </div>
