@@ -1,0 +1,155 @@
+@import './styles/variables.css';
+
+.Guesstimate .TextInput {
+  @mixin small-input;
+}
+
+.Guesstimate .TextInput {
+  line-height: 1.3em;
+  font-size: 0.95em;
+}
+
+.Guesstimate .TextInput.default-value {
+  color: #A9A9A9;
+}
+
+.Guesstimate.large .TextInput {
+  font-size: 1.5em;
+  border-radius: 3px;
+  font-weight: 100;
+  color: #666;
+}
+
+.Guesstimate .TextInput{
+  float: left;
+}
+
+.Guesstimate.large .TextInput.NARROW {
+  width: 89%
+}
+
+.Guesstimate .TextInput.NARROW {
+  width: 85%
+}
+
+.Guesstimate .TextInput.WIDE {
+  width: 100%
+}
+
+.Guesstimate .GuesstimateInputForm {
+  display: flex;
+  flex-direction: column;
+}
+
+.Guesstimate .GuesstimateInputForm--row {
+  flex: 1;
+}
+
+.DistributionSelector {
+  width: 100%;
+}
+
+.DistributionSelector .DistributionList{
+  float: right;
+}
+
+.DistributionSelector hr{
+  border: none;
+  border-top: 1px solid $grey-1;
+  margin: 4px 0;
+}
+
+.DistributionSelector .more-distributions{
+  float: left;
+  cursor: pointer;
+  padding-left: 2px;
+  padding-top: 9px;
+  font-size: 16px;
+  color: $grey-999;
+}
+
+.Guesstimate .DistributionIcon.DistributionIcon{
+  font-size: 1em;
+  padding-top: 2px;
+  padding-left: 2px;
+  padding-right: 2px;
+  position: relative;
+  height: 24px;
+  width: 24px;
+  padding-top: 0;
+  margin: 0 0 0 3px;
+}
+
+.Guesstimate.large .DistributionIcon.DistributionIcon {
+  height: 34px;
+  width: 34px;
+}
+
+.DistributionIcon.button.selected{
+  background-color: $blue-2;
+}
+
+.DistributionIcon img{
+  width: 24px;
+  opacity: 1;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 4px;
+  bottom: 0;
+}
+
+.GuesstimateTypeQuestion {
+  float: right;
+  margin-right: 4px;
+  font-size: 1.2em;
+  color: $grey-2;
+  opacity: 0.6;
+  margin-top:3px;
+}
+
+.Guesstimate.large .GuesstimateTypeQuestion {
+  font-size: 2em;
+  margin-top: 0;
+}
+
+.Guesstimate.large a.custom-data{
+  text-decoration: underline;
+  color: #999;
+  margin-top: 5px;
+  float: left;
+  font-size: 1.2em;
+  cursor: pointer;
+}
+
+.GuesstimateTypeQuestion:hover {
+  opacity: 1;
+  cursor: pointer;
+}
+
+.Guesstimate.large .DistributionIcon img{
+  width: 34px;
+}
+
+.DistributionIcon.DistributionSelectorToggle{
+  display: inline-block;
+  color: #999;
+  float: right;
+}
+
+.DistributionIcon.DistributionSelectorToggle {
+  opacity: 0.6;
+}
+
+.button.DistributionIcon.DistributionSelectorToggle {
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.button.DistributionIcon.DistributionSelectorToggle:hover {
+  opacity: 1;
+}
+
+.button.DistributionIcon.DistributionSelectorToggle:hover {
+  background-color: $grey-1;
+}
