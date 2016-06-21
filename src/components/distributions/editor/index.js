@@ -128,7 +128,7 @@ export default class Guesstimate extends Component{
             onReturn={this.handleReturn.bind(this)}
             onTab={this.handleTab.bind(this)}
             size={size}
-            hasErrors={errors && (errors.length !== 0)}
+            hasErrors={!_.isEmpty(errors)}
             ref='TextForm'
           />
         }
