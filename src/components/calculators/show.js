@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 
 import ReactMarkdown from 'react-markdown'
 
-import {CalculatorInputCard} from 'gComponents/metrics/calculatorCard/input'
+import DistributionEditor from 'gComponents/distributions/editor/index'
 import {CalculatorOutputCard} from 'gComponents/metrics/calculatorCard/output'
 
 import {calculatorSpaceSelector} from './calculator-space-selector'
@@ -37,9 +37,18 @@ const Output = ({metric}) => (
   </div>
 )
 
-const Input = ({metric, index}) => (
-  <div className='input'>
-    <CalculatorInputCard metric={metric} index={index+1}/>
+const Input = ({metric: {guesstimate, name, id}}) => (
+  <div className='input row'>
+    <div className='col-md-7'>{name}</div>
+    <div className='editor col-md-5'>
+      <DistributionEditor
+        hideGuesstimateType={true}
+        skipSaves={true}
+        guesstimate={guesstimate}
+        metricId={id}
+        size='small'
+      />
+    </div>
   </div>
 )
 
