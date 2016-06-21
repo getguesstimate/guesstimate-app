@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
+import {bindActionCreators} from 'redux'
 
 import ReactMarkdown from 'react-markdown'
 
@@ -10,6 +11,9 @@ import {calculatorSpaceSelector} from './calculator-space-selector'
 
 import * as calculatorActions from 'gModules/calculators/actions'
 import {runSimulations} from 'gModules/simulations/actions'
+import {changeGuesstimate} from 'gModules/guesstimates/actions'
+
+import {Guesstimator} from 'lib/guesstimator/index'
 
 import './style.css'
 
@@ -37,7 +41,7 @@ const Output = ({metric}) => (
   </div>
 )
 
-@connect(calculatorSpaceSelector)
+@connect(calculatorSpaceSelector, dispatch => bindActionCreators({...calculatorActions, changeGuesstimate, runSimulations}, dispatch))
 export class CalculatorShow extends Component {
   state = {
     attemptedFetch: false,
@@ -47,16 +51,27 @@ export class CalculatorShow extends Component {
   componentDidMount() { this.fetchData() }
   componentWillReceiveProps(nextProps) {
     if (!this.props.space && !!nextProps.space) {
-      this.props.dispatch(runSimulations({spaceId: nextProps.space.id}))
+      this.props.runSimulations({spaceId: nextProps.space.id})
     }
   }
   componentDidUpdate() { this.fetchData() }
 
   fetchData() {
     if (!this.state.attemptedFetch) {
-      this.props.dispatch(calculatorActions.fetchById(this.props.calculatorId))
+      this.props.fetchById(this.props.calculatorId)
       this.setState({attemptedFetch: true})
     }
+  }
+
+  onChange({id, guesstimate}, input) {
+    const guesstimateType = Guesstimator.parse({...guesstimate, input})[1].samplerType().referenceName
+
+    this.props.changeGuesstimate(
+      id,
+      {...guesstimate, ...{data: null, input, guesstimateType}},
+      true, // runSims
+      false // saveOnServer
+    )
   }
 
   render() {
@@ -80,9 +95,8 @@ export class CalculatorShow extends Component {
             {_.map(inputs, (m,i) => (
               <Input
                 key={i}
-                guesstimate={m.guesstimate}
                 name={m.name}
-                metricId={m.id}
+                onChange={this.onChange.bind(this, m)}
               />
             ))}
           </div>
@@ -102,13 +116,11 @@ export class CalculatorShow extends Component {
           {!this.state.showResult &&
             <div className='row'>
               <div className='col-md-7' />
-              <div className='col-md-5'>
-                <div
-                  className='ui button green calculateButton'
-                  onClick={() => {this.setState({showResult: true})}}
-                >
-                  Calculate
-                </div>
+              <div
+                className='col-md-5 ui button green calculateButton'
+                onClick={() => {this.setState({showResult: true})}}
+              >
+                Calculate
               </div>
             </div>
           }
