@@ -9,8 +9,10 @@
   color: rgba(80, 80, 80, 1);
 
   .inputs {
+    width: 100%;
+
     .input {
-      padding: 0.8em 0 0.8em 0;
+      padding: 0.8em 0.9em 0.8em 0;
 
       .editor {
         height: 1.4em;
@@ -21,8 +23,28 @@
     }
   }
 
+  hr.result-divider {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+  }
+
   .outputs {
     padding-top: 3em;
+
+    .name {
+      font-weight: 800;
+    }
+
+    .result-section {
+      font-size: 1.4em;
+      margin: 0;
+      padding: 0;
+
+      .result-value {
+        font-weight: 800;
+      }
+    }
   }
 
   .name {
@@ -37,26 +59,4 @@
     margin: 2.6em 0 0 0;
     border-radius: 0.1em;
   }
-}
-
-.DistributionSummary {
-  font-size: 1.6em;
-}
-
-.DistributionSummary .mean {
-  float: left;
-  width: 100%;
-  line-height: 0.9em;
-}
-
-.DistributionSummary .UncertaintyRange {
-  font-size: 0.58em;
-  color: #555;
-  float: left;
-  margin-top: 2px;
-  margin-left: 0;
-}
-
-.DistributionSummary .PrecisionNumber {
-  float: left;
 }
