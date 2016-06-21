@@ -68,11 +68,12 @@ export class CalculatorShow extends Component {
   render() {
     if (!this.props.space || !this.props.calculator) { return false }
 
-    const {content} = this.props.calculator
+    const {content, title, input_ids, output_ids} = this.props.calculator
     const {space: {metrics}} = this.props
 
-    const inputs = metrics.filter(m => relationshipType(m.edges) === INPUT)
-    const outputs = metrics.filter(m => relationshipType(m.edges) === OUTPUT)
+    const findById = id => metrics.find(m => m.id === id)
+    const inputs = input_ids.map(findById).filter(m => relationshipType(m.edges) === INPUT)
+    const outputs = output_ids.map(findById).filter(m => relationshipType(m.edges) === OUTPUT)
 
     return (
       <div className='row'>

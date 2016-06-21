@@ -19,7 +19,7 @@ export function fetchById(id) {
         captureApiError('CalculatorsFetch', null, null, null, {url: 'calculatorsFetchError'})
       } else if (calculator) {
         const space = _.get(calculator, '_embedded.space')
-        const formatted = _.pick(calculator, ['id', 'space_id', 'content'])
+        const formatted = _.pick(calculator, ['id', 'space_id', 'title', 'input_ids', 'output_ids', 'content'])
         dispatch(sActions.fetchSuccess([formatted], {space}))
       }
     })
