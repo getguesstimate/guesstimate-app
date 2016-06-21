@@ -9,6 +9,10 @@ window.recorder = new GuesstimateRecorder()
 
 const testStore = createStore(rootReducer)
 
+/*
+ * The TestRoot component allows one to wrap a connected component in a test store allowing it to be tested.
+ */
+
 export const TestRoot = ({children}) => (
   <Provider store={testStore}>
     {children}
