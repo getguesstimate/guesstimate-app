@@ -50,7 +50,7 @@
   .outputs {
     margin-top: 2em;
     font-size: 1.1em;
-    margin-bottom: .5em;
+    margin-bottom: 1em;
 
     .output {
       padding-bottom: 1.5em;
@@ -82,5 +82,15 @@
     padding: .7em;
     color: #444 !important;
     background-color: #82E69D !important;
+  }
+
+  .model-link {
+    width: 100%;
+    text-align: center;
+    font-size: 0.8em;
+
+    a {
+      cursor: pointer;
+    }
   }
 }
