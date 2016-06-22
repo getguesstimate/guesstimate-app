@@ -7,6 +7,12 @@
   margin: 1em;
   padding: 3em;
   color: rgba(80, 80, 80, 1);
+  font-size: 1.4em;
+
+  .content {
+    font-size: 0.8em;
+  }
+
 
   .inputs {
     width: 100%;
@@ -16,7 +22,6 @@
 
       .editor {
         height: 1.4em;
-        font-size: 1.4em;
         padding-top: 0.25em;
         background-color: $grey-1;
       }
@@ -24,17 +29,17 @@
   }
 
   .outputs {
-    padding-top: 3em;
+    padding-top: 2em;
+
+    .output {
+      padding-top: 1em;
+    }
 
     .name {
       font-weight: 800;
     }
 
     .result-section {
-      font-size: 1.4em;
-      margin: 0;
-      padding: 0;
-
       .result-value {
         font-weight: 800;
       }
@@ -43,7 +48,6 @@
 
   .name {
     white-space: nowrap;
-    font-size: 1.4em;
     height: 1.4em;
     overflow: hidden;
     text-overflow: ellipsis;
