@@ -16,6 +16,7 @@
 
   .inputs {
     width: 100%;
+    padding-bottom: 1em;
 
     .input {
       padding: 0.8em 0 0.8em 0;
@@ -30,8 +31,6 @@
   }
 
   .outputs {
-    padding-top: 1em;
-
     .output {
       padding-top: 1em;
     }

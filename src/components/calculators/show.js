@@ -22,7 +22,7 @@ import './style.css'
 export class CalculatorShow extends Component {
   state = {
     attemptedFetch: false,
-    showResult: true,
+    showResult: false,
   }
 
   componentDidMount() { this.fetchData() }
@@ -68,38 +68,40 @@ export class CalculatorShow extends Component {
         />
         <div className='row'>
           <div className='col-md-3'/>
-          <div className='col-md-6 calculator'>
-            <div className='content'>
-              <ReactMarkdown source={content} />
-            </div>
-            <div className='inputs'>
-              {_.map(inputs, (metric, i) => (
-                <Input key={i} name={metric.name} onChange={this.onChange.bind(this, metric)}/>
-              ))}
-            </div>
-            {this.state.showResult &&
-              <div>
-                <hr className='result-divider'/>
-                <div className='outputs'>
-                  {_.map(outputs, (m, i) => <Output key={i} metric={m}/>)}
-                </div>
+          <div className='col-md-6'>
+            <div className='calculator'>
+              <div className='content'>
+                <ReactMarkdown source={content} />
               </div>
-            }
-            {!this.state.showResult &&
-              <div className='row'>
-                <div className='col-md-7' />
-                <div
-                  className='col-md-5'
-                >
-                  <div
-                    className='ui button green calculateButton'
-                    onClick={() => {this.setState({showResult: true})}}
-                  >
-                    Calculate
+              <div className='inputs'>
+                {_.map(inputs, (metric, i) => (
+                  <Input key={i} name={metric.name} onChange={this.onChange.bind(this, metric)}/>
+                ))}
+              </div>
+              {this.state.showResult &&
+                <div>
+                  <hr className='result-divider'/>
+                  <div className='outputs'>
+                    {_.map(outputs, (m, i) => <Output key={i} metric={m}/>)}
                   </div>
                 </div>
-              </div>
-            }
+              }
+              {!this.state.showResult &&
+                <div className='row'>
+                  <div className='col-md-7' />
+                  <div
+                    className='col-md-5'
+                  >
+                    <div
+                      className='ui button green calculateButton'
+                      onClick={() => {this.setState({showResult: true})}}
+                    >
+                      Calculate
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
           </div>
           <div className='col-md-3' />
         </div>
