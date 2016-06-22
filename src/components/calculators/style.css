@@ -2,27 +2,39 @@
 
 .calculator {
   border: 1px solid rgba(200, 200, 200, 0.7);
-  border-radius: .4em;
+  border-radius: .2em;
   background: white;
   margin: 1em;
-  padding: 3em 2em;
+  padding: 2em 2em;
   color: rgba(80, 80, 80, 1);
   font-size: 1.6em;
   line-height: 1.2em;
 
-  .content {
-    font-size: 0.8em;
+  h1 {
+    font-size: 1.5em;
+  }
+
+  .description {
+    font-size: 0.9em;
+    margin-top: .9em;
+    margin-bottom: 2em;
+    color: #666;
   }
 
   .inputs {
     width: 100%;
     padding-bottom: 1em;
+    margin-top: 2em;
 
     .input {
       padding: 0.8em 0 0.8em 0;
 
+      .name {
+        margin-top: .3em;
+      }
+
       .editor {
-        padding: .5em;
+        padding: .4rem .8rem;
         background-color: $grey-6;
         border: 1px solid #D4D4D4;
         border-radius: 1px;
@@ -30,9 +42,21 @@
     }
   }
 
+  .result-divider {
+    border-bottom: 2px solid #D4D4D4;
+    border-top: none;
+  }
+
   .outputs {
+    margin-top: 2em;
+    font-size: 1.1em;
+    margin-bottom: .5em;
+
     .output {
-      padding-top: 1em;
+      padding-bottom: 1.5em;
+      &:last-child {
+        padding-bottom: 0em;
+      }
     }
 
     .name {
@@ -40,7 +64,12 @@
     }
 
     .result-section {
+      color: #666;
+      margin-left: .5rem;
+      font-size: 1.2em;
+
       .result-value {
+        color: rgba(80, 80, 80, 1);
         font-weight: 800;
       }
     }
@@ -49,8 +78,9 @@
   .calculateButton {
     border-radius: 0.1em;
     width: 100%;
-    font-size: 1.2em;
-    color: $black-2 !important;
+    font-size: 1.1em;
+    padding: .7em;
+    color: #444 !important;
     background-color: #82E69D !important;
   }
 }

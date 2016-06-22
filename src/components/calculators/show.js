@@ -15,6 +15,7 @@ import {runSimulations} from 'gModules/simulations/actions'
 import {changeGuesstimate} from 'gModules/guesstimates/actions'
 
 import {Guesstimator} from 'lib/guesstimator/index'
+import Container from 'gComponents/utility/container/Container.js'
 
 import './style.css'
 
@@ -56,56 +57,59 @@ export class CalculatorShow extends Component {
 
     const {calculator: {content, title}, inputs, outputs} = this.props
     return (
-      <div>
-        <Helmet
-          title={title}
-          meta={[
-            {name: "Description", content},
-            {property: "og:description", content},
-            {property: "og:title", content: title},
-            {property: "og:site_name", content: "Guesstimate"},
-          ]}
-        />
-        <div className='row'>
-          <div className='col-md-3'/>
-          <div className='col-md-6'>
-            <div className='calculator'>
-              <div className='content'>
-                <ReactMarkdown source={content} />
-              </div>
-              <div className='inputs'>
-                {_.map(inputs, (metric, i) => (
-                  <Input key={i} name={metric.name} onChange={this.onChange.bind(this, metric)}/>
-                ))}
-              </div>
-              {this.state.showResult &&
-                <div>
-                  <hr className='result-divider'/>
-                  <div className='outputs'>
-                    {_.map(outputs, (m, i) => <Output key={i} metric={m}/>)}
-                  </div>
+      <Container>
+        <div>
+          <Helmet
+            title={title}
+            meta={[
+              {name: "Description", content},
+              {property: "og:description", content},
+              {property: "og:title", content: title},
+              {property: "og:site_name", content: "Guesstimate"},
+            ]}
+          />
+          <div className='row'>
+            <div className='col-md-3'/>
+            <div className='col-md-6'>
+              <div className='calculator'>
+                <h1>{title}</h1>
+                <div className='description'>
+                  <ReactMarkdown source={content} />
                 </div>
-              }
-              {!this.state.showResult &&
-                <div className='row'>
-                  <div className='col-md-7' />
-                  <div
-                    className='col-md-5'
-                  >
-                    <div
-                      className='ui button green calculateButton'
-                      onClick={() => {this.setState({showResult: true})}}
-                    >
-                      Calculate
+                <div className='inputs'>
+                  {_.map(inputs, (metric, i) => (
+                    <Input key={i} name={metric.name} onChange={this.onChange.bind(this, metric)}/>
+                  ))}
+                </div>
+                {this.state.showResult &&
+                  <div>
+                    <hr className='result-divider'/>
+                    <div className='outputs'>
+                      {_.map(outputs, (m, i) => <Output key={i} metric={m}/>)}
                     </div>
                   </div>
-                </div>
-              }
+                }
+                {!this.state.showResult &&
+                  <div className='row'>
+                    <div className='col-md-7' />
+                    <div
+                      className='col-md-5'
+                    >
+                      <div
+                        className='ui button green calculateButton'
+                        onClick={() => {this.setState({showResult: true})}}
+                      >
+                        Calculate
+                      </div>
+                    </div>
+                  </div>
+                }
+              </div>
             </div>
+            <div className='col-md-3' />
           </div>
-          <div className='col-md-3' />
         </div>
-      </div>
+      </Container>
     )
   }
 }
