@@ -89,10 +89,14 @@ export class CalculatorShow extends Component {
               <div className='row'>
                 <div className='col-md-7' />
                 <div
-                  className='col-md-5 ui button green calculateButton'
-                  onClick={() => {this.setState({showResult: true})}}
+                  className='col-md-5'
                 >
-                  Calculate
+                  <div
+                    className='ui button green calculateButton'
+                    onClick={() => {this.setState({showResult: true})}}
+                  >
+                    Calculate
+                  </div>
                 </div>
               </div>
             }
