@@ -26,15 +26,10 @@ describe('<SpaceToolbar>', () => {
     expect(toolbar.find('.header-action.disabled')).to.have.length(2)
   })
 
-  it ('Renders the file menu if you are logged in', () => {
+  it ('Renders the file menu only if you are logged in', () => {
     let toolbar = shallow(<SpaceToolbar isLoggedIn={false} />)
     expect(toolbar.containsMatchingElement(
       <DropDown openLink={<a className='header-action'>File</a>} />
     )).to.equal(false)
-
-    let toolbar = shallow(<SpaceToolbar isLoggedIn={true} />)
-    expect(toolbar.containsMatchingElement(
-      <DropDown openLink={<a className='header-action'>File</a>} />
-    )).to.equal(true)
   })
 })
