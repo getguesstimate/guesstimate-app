@@ -2,7 +2,6 @@ import {actionCreatorsFor} from 'redux-crud'
 
 import {captureApiError, generalError} from 'lib/errors/index.js'
 
-import {rootUrl} from 'servers/guesstimate-api/constants.js'
 import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
 
 let sActions = actionCreatorsFor('calculators')

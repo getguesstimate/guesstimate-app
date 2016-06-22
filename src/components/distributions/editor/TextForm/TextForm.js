@@ -47,11 +47,10 @@ export class TextForm extends Component{
       onAddData,
       onChangeGuesstimateType,
       onReturn,
-      onTab,
-      hideGuesstimateType,
+      onTab
     } = this.props
     const {showDistributionSelector} = this.state
-    const shouldDisplayType = !(guesstimateType === 'POINT' || guesstimateType === 'FUNCTION') && !hideGuesstimateType
+    const shouldDisplayType = !(guesstimateType === 'POINT' || guesstimateType === 'FUNCTION')
     const shouldBeWide = !(guesstimateType === 'FUNCTION')
 
     return(

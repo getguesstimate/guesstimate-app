@@ -3,6 +3,8 @@ import React, {Component, PropTypes} from 'react';
 import $ from 'jquery'
 import {EditorState, Editor, ContentState, Modifier} from 'draft-js'
 
+import DistributionSelector from './DistributionSelector'
+
 class TextInputEditor extends Component {
   state = {
     editorState: EditorState.createWithContent(ContentState.createFromText(this.props.value || ''))

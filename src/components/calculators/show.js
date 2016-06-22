@@ -10,7 +10,7 @@ import {Output} from './output'
 
 import {calculatorSpaceSelector} from './calculator-space-selector'
 
-import * as calculatorActions from 'gModules/calculators/actions'
+import {fetchById} from 'gModules/calculators/actions'
 import {runSimulations} from 'gModules/simulations/actions'
 import {changeGuesstimate} from 'gModules/guesstimates/actions'
 
@@ -18,7 +18,7 @@ import {Guesstimator} from 'lib/guesstimator/index'
 
 import './style.css'
 
-@connect(calculatorSpaceSelector, dispatch => bindActionCreators({...calculatorActions, changeGuesstimate, runSimulations}, dispatch))
+@connect(calculatorSpaceSelector, dispatch => bindActionCreators({fetchById, changeGuesstimate, runSimulations}, dispatch))
 export class CalculatorShow extends Component {
   state = {
     attemptedFetch: false,
@@ -74,23 +74,14 @@ export class CalculatorShow extends Component {
             </div>
             <div className='inputs'>
               {_.map(inputs, (metric, i) => (
-                <Input
-                  key={i}
-                  name={metric.name}
-                  onChange={this.onChange.bind(this, metric)}
-                />
+                <Input key={i} name={metric.name} onChange={this.onChange.bind(this, metric)}/>
               ))}
             </div>
             {this.state.showResult &&
               <div>
                 <hr className='result-divider'/>
                 <div className='outputs'>
-                  {_.map(outputs, (m,i) => (
-                    <Output
-                      key={i}
-                      metric={m}
-                    />
-                  ))}
+                  {_.map(outputs, (m, i) => <Output key={i} metric={m}/>)}
                 </div>
               </div>
             }
