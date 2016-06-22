@@ -2,11 +2,13 @@
 
 .calculator {
   border: 1px solid rgba(200, 200, 200, 0.7);
-  border-radius: 1em;
+  border-radius: .4em;
   background: white;
   margin: 1em;
-  padding: 3em;
+  padding: 3em 2em;
   color: rgba(80, 80, 80, 1);
+  font-size: 1.6em;
+  line-height: 1.2em;
 
   .inputs {
     width: 100%;
@@ -15,10 +17,10 @@
       padding: 0.8em 0 0.8em 0;
 
       .editor {
-        height: 1.4em;
-        font-size: 1.4em;
-        padding-top: 0.25em;
-        background-color: $grey-1;
+        padding: .5em;
+        background-color: #F7F5F5;
+        border: 1px solid #D4D4D4;
+        border-radius: 1px;
       }
     }
   }
@@ -31,7 +33,6 @@
     }
 
     .result-section {
-      font-size: 1.4em;
       margin: 0;
       padding: 0;
 
@@ -41,16 +42,11 @@
     }
   }
 
-  .name {
-    white-space: nowrap;
-    font-size: 1.4em;
-    height: 1.4em;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
   .calculateButton {
-    margin: 2.6em 0 0 0;
     border-radius: 0.1em;
+    width: 100%;
+    font-size: 1.2em;
+    color: $black-2 !important;
+    background-color: #82E69D !important;
   }
 }
