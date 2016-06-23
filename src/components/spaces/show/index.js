@@ -223,10 +223,10 @@ export default class SpacesShow extends Component {
         {!space.name &&
           <Helmet
             meta={[
-              {name: "Description", content: tagDescription},
-              {property: "og:description", content: tagDescription},
-              {property: "og:site_name", content: "Guesstimate"},
-              {property: "og:image", content: space.big_screenshot},
+              {name: 'Description', content: tagDescription},
+              {property: 'og:description', content: tagDescription},
+              {property: 'og:site_name', content: 'Guesstimate'},
+              {property: 'og:image', content: space.big_screenshot},
             ]}
           />
         }
@@ -234,11 +234,11 @@ export default class SpacesShow extends Component {
           <Helmet
             title={space.name}
             meta={[
-              {name: "Description", content: tagDescription},
-              {property: "og:title", content: space.name},
-              {property: "og:description", content: tagDescription},
-              {property: "og:site_name", content: "Guesstimate"},
-              {property: "og:image", content: space.big_screenshot},
+              {name: 'Description', content: tagDescription},
+              {property: 'og:title', content: space.name},
+              {property: 'og:description', content: tagDescription},
+              {property: 'og:site_name', content: 'Guesstimate'},
+              {property: 'og:image', content: space.big_screenshot},
             ]}
           />
         }

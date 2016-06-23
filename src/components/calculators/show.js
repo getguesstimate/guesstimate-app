@@ -65,24 +65,24 @@ export class CalculatorShow extends Component {
   render() {
     if (!this.props.calculator) { return false }
 
-    const {calculator: {content, title, space_id}, inputs, outputs, navigate} = this.props
+    const {calculator: {content, title, space_id, share_image}, inputs, outputs, navigate} = this.props
     const spaceUrl = Space.url({id: space_id})
     const calculatorUrl = Calculator.fullUrl(this.props.calculator)
+
+    let metaTags = [
+      {name: 'Description', content},
+      {property: 'og:description', content},
+      {property: 'og:title', content: title},
+      {property: 'og:site_name', content: 'Guesstimate'},
+    ]
+    if (!!share_image) {metaTags = metaTags.concat({property: 'og:image', content: share_image})}
 
     const {FacebookShareButton, TwitterShareButton} = ShareButtons
     const FacebookIcon = generateShareIcon('facebook')
     const TwitterIcon = generateShareIcon('twitter')
     return (
       <Container>
-        <Helmet
-          title={title}
-          meta={[
-            {name: "Description", content},
-            {property: "og:description", content},
-            {property: "og:title", content: title},
-            {property: "og:site_name", content: "Guesstimate"},
-          ]}
-        />
+        <Helmet title={title} meta={metaTags}/>
         <div className='row'>
           <div className='col-xs-0 col-md-2'/>
           <div className='col-xs-12 col-md-8'>
