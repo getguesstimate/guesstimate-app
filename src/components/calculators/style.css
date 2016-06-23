@@ -63,7 +63,7 @@
 
   .outputs {
     margin-top: 2em;
-    font-size: 1.1em;
+    font-size: 1em;
     margin-bottom: 1em;
 
     .output {
@@ -80,7 +80,7 @@
     .result-section {
       color: #666;
       margin-left: .5rem;
-      font-size: 1.2em;
+      font-size: 1.3em;
 
       .result-value {
         color: rgba(80, 80, 80, 1);
