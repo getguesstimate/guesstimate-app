@@ -24,12 +24,17 @@ export class Input extends Component{
   }
 
   render () {
-    const {name, errors} = this.props
+    const {name, description, errors} = this.props
     return (
       <div className='input'>
         <div className='row'>
-          <div className='col-md-7'><div className='name'>{name}</div></div>
-          <div className='col-md-5'>
+          <div className='col-xs-12 col-sm-7'>
+            <div className='name'>{name}</div>
+            {description &&
+              <div className='description'>{description}</div>
+            }
+          </div>
+          <div className='col-xs-12 col-sm-5'>
             <div className='editor'>
               <Editor
                 ref='editor'
@@ -37,7 +42,8 @@ export class Input extends Component{
                 onChange={this.onChange.bind(this)}
                 handleReturn={() => true}
               />
-              {!_.isEmpty(errors) && <div className='error-alert'><Icon name='warning' /></div>}
+              {!_.isEmpty(errors) && <div className='status error'><Icon name='close' /></div>}
+              {this.hasValidContent() && <div className='status success'><Icon name='check' /></div>}
             </div>
           </div>
         </div>

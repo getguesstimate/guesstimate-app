@@ -84,8 +84,8 @@ export class CalculatorShow extends Component {
           ]}
         />
         <div className='row'>
-          <div className='col-md-3'/>
-          <div className='col-md-6'>
+          <div className='col-xs-0 col-md-2'/>
+          <div className='col-xs-12 col-md-8'>
             <div className='calculator'>
               <h1>{title}</h1>
               <div className='description'>
@@ -98,6 +98,7 @@ export class CalculatorShow extends Component {
                     key={i}
                     isFirst={i===0}
                     name={metric.name}
+                    description={_.get(metric, 'guesstimate.description')}
                     errors={_.get(metric, 'simulation.sample.errors')}
                     onChange={this.onChange.bind(this, metric)}
                   />
@@ -126,8 +127,8 @@ export class CalculatorShow extends Component {
               }
               {!this.state.showResult &&
                 <div className='row'>
-                  <div className='col-md-7' />
-                  <div className='col-md-5'>
+                  <div className='col-xs-12 col-md-7'/>
+                  <div className='col-xs-12 col-md-5'>
                     <div
                       className={`ui button green calculateButton${this.allInputsHaveContent() ? '' : ' disabled'}`}
                       onClick={() => {this.setState({showResult: true})}}
