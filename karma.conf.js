@@ -1,4 +1,4 @@
-var path = require('path');
+var customConfig = require('./customConfig')
 
 module.exports = function (config) {
   config.set({
@@ -29,24 +29,49 @@ module.exports = function (config) {
     // webpack config object
     webpack: { //kind of a copy of your webpack config
       devtool: 'inline-source-map', //just do inline source maps instead of the default
+      plugins: customConfig.plugins,
       module: {
         loaders: [
-          { test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/ },
+          {
+            test: /(\.js$)|(\.jsx$)/,
+            exclude: /node_modules/,
+            loaders: [
+              'babel-loader'
+            ]
+          },
+          {
+            test: /\.json$/,
+            loaders: ['json']
+          },
+          {
+            test: /\.(otf|eot|svg|ttf|woff)/,
+            loader: 'url-loader?limit=10000',
+          },
           {
             test: /\.(jpe?g|png|gif)/,
-            loader: 'url-loader?limit=1000'
-          }
-        ]
+            loader: 'url-loader?limit=10000',
+          },
+          {
+            test: /\.ejs$/,
+            loader: 'ejs-compiled-loader'
+          },
+          {
+            test: /node_modules\/auth0-lock\/.*\.js$/,
+            loaders: ['transform/cacheable?brfs', 'transform/cacheable?packageify']
+          },
+          {
+            test: /\.css$/,
+            loader: 'null-loader',
+          },
+        ],
       },
-      resolve: {
-        alias: {
-          gComponents: path.resolve('./src/components'),
-          gEngine: path.resolve('./src/lib/engine'),
-          gModules: path.resolve('./src/modules'),
-          lib: path.resolve('./src/lib'),
-          servers: path.resolve('./src/server')
-        }
-      }
+      externals: {
+        'cheerio': 'window',
+        'react/addons': true,
+        'react/lib/ExecutionEnvironment': true,
+        'react/lib/ReactContext': true,
+      },
+      resolve: customConfig.resolutions,
     },
     colors: true,
     autoWatch: true,

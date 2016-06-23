@@ -8,7 +8,7 @@ import {GuesstimateRecorder} from 'lib/recorder'
 import * as segment from 'servers/segment/index.js'
 import * as sentry from 'servers/sentry/index.js'
 import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
-import * as elev from 'server/elev/index.js'
+import * as elev from 'servers/elev/index.js'
 
 import './main.css'
 

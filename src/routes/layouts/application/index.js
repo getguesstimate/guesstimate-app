@@ -16,8 +16,8 @@ import * as meActions from 'gModules/me/actions'
 
 import * as Space from 'gEngine/space'
 
-import * as segment from '../../../server/segment/index'
-import * as sentry from '../../../server/sentry/index'
+import * as segment from 'servers/segment/index'
+import * as sentry from 'servers/sentry/index'
 
 import './style.css'
 import '../../../../node_modules/flexboxgrid/css/flexboxgrid.min.css'
