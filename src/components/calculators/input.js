@@ -2,6 +2,8 @@ import React, {Component} from 'react'
 
 import Icon from 'react-fa'
 
+import {Guesstimator} from 'lib/guesstimator/index'
+
 import {EditorState, Editor, ContentState} from 'draft-js'
 
 export class Input extends Component{
@@ -20,7 +22,7 @@ export class Input extends Component{
 
   hasValidContent() {
     const content = this.state.editorState.getCurrentContent().getPlainText('')
-    return !_.isEmpty(content) && _.isEmpty(this.props.errors)
+    return !_.isEmpty(content) && _.isEmpty(Guesstimator.parse({input: content})[0])
   }
 
   render () {
