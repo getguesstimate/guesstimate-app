@@ -37,7 +37,8 @@ export class Input extends Component{
                 onChange={this.onChange.bind(this)}
                 handleReturn={() => true}
               />
-              {!_.isEmpty(errors) && <div className='error-alert'><Icon name='warning' /></div>}
+              {!_.isEmpty(errors) && <div className='status error'><Icon name='close' /></div>}
+              {this.hasValidContent() && <div className='status success'><Icon name='check' /></div>}
             </div>
           </div>
         </div>

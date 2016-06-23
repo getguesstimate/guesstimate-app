@@ -54,16 +54,20 @@
         position: relative;
       }
 
-      .error-alert {
+      .status {
         position: absolute;
-        right: 0.2em;
+        right: 0.5em;
         bottom: 0;
         top: 0;
         height: 1em;
         margin: auto;
 
-        .fa-warning {
-          color: rgba(180, 20, 20, 1);
+        &.error {
+          color: rgb(206, 132, 132);
+        }
+
+        &.success {
+          color: #a9a8a8;
         }
       }
     }
