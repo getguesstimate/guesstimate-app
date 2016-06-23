@@ -12,6 +12,11 @@ export class Input extends Component{
     return this.setState({editorState})
   }
 
+  hasValidContent() {
+    const content = this.state.editorState.getCurrentContent().getPlainText('')
+    return !_.isEmpty(content) && _.isEmpty(this.props.errors)
+  }
+
   render () {
     const {name, errors} = this.props
     return (

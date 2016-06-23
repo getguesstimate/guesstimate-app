@@ -55,6 +55,11 @@ export class CalculatorShow extends Component {
     )
   }
 
+  allInputsHaveContent() {
+    const inputComponents = _.map(this.props.inputs, metric => this.refs[`input-${metric.id}`])
+    return inputComponents.map(i => !!i && i.hasValidContent()).reduce((x,y) => x && y, true)
+  }
+
   render() {
     if (!this.props.calculator) { return false }
 
@@ -82,6 +87,7 @@ export class CalculatorShow extends Component {
               <div className='inputs'>
                 {_.map(inputs, (metric, i) => (
                   <Input
+                    ref={`input-${metric.id}`}
                     key={i}
                     name={metric.name}
                     errors={_.get(metric, 'simulation.sample.errors')}
@@ -111,7 +117,7 @@ export class CalculatorShow extends Component {
                   <div className='col-md-7' />
                   <div className='col-md-5'>
                     <div
-                      className='ui button green calculateButton'
+                      className={`ui button green calculateButton${this.allInputsHaveContent() ? '' : ' disabled'}`}
                       onClick={() => {this.setState({showResult: true})}}
                     >
                       Calculate
