@@ -56,6 +56,15 @@
     }
   }
 
+  .calculateButton {
+    border-radius: 0.1em;
+    width: 100%;
+    font-size: 1.1em;
+    padding: .7em;
+    color: #444 !important;
+    background-color: #82E69D !important;
+  }
+
   .result-divider {
     border-bottom: 2px solid #D4D4D4;
     border-top: none;
@@ -89,13 +98,35 @@
     }
   }
 
-  .calculateButton {
-    border-radius: 0.1em;
+  .SocialMediaShareButton {
     width: 100%;
-    font-size: 1.1em;
-    padding: .7em;
-    color: #444 !important;
-    background-color: #82E69D !important;
+    position: relative;
+    border-radius: 0.1em;
+    margin: 1em 0;
+    cursor: pointer;
+  }
+
+  .SocialMediaShareButton--facebook {
+    background-color: rgb(59, 89, 152);
+    svg {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      margin: auto;
+    }
+  }
+  .SocialMediaShareButton--twitter {
+    background-color: rgb(0, 172, 237);
+    svg {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      margin: auto;
+    }
   }
 
   .model-link {

@@ -4,6 +4,7 @@ import {bindActionCreators} from 'redux'
 
 import ReactMarkdown from 'react-markdown'
 import Helmet from 'react-helmet'
+import {ShareButtons, generateShareIcon} from 'react-share'
 
 import Container from 'gComponents/utility/container/Container.js'
 import {Input} from './input'
@@ -17,6 +18,7 @@ import {runSimulations} from 'gModules/simulations/actions'
 import {changeGuesstimate} from 'gModules/guesstimates/actions'
 
 import * as Space from 'gEngine/space'
+import * as Calculator from 'gEngine/calculator'
 
 import {Guesstimator} from 'lib/guesstimator/index'
 
@@ -26,7 +28,7 @@ import './style.css'
 export class CalculatorShow extends Component {
   state = {
     attemptedFetch: false,
-    showResult: false,
+    showResult: true,
     didFirstFocus: false,
   }
 
@@ -66,6 +68,11 @@ export class CalculatorShow extends Component {
 
     const {calculator: {content, title, space_id}, inputs, outputs, navigate} = this.props
     const spaceUrl = Space.url({id: space_id})
+    const calculatorUrl = Calculator.url(this.props.calculator)
+
+    const {FacebookShareButton, TwitterShareButton} = ShareButtons
+    const FacebookIcon = generateShareIcon('facebook')
+    const TwitterIcon = generateShareIcon('twitter')
     return (
       <Container>
         <Helmet
@@ -102,6 +109,20 @@ export class CalculatorShow extends Component {
                   <hr className='result-divider'/>
                   <div className='outputs'>
                     {_.map(outputs, (m, i) => <Output key={i} metric={m}/>)}
+                  </div>
+                  <div className='row'>
+                    <div className='col-md-2' />
+                    <div className='col-md-4'>
+                      <FacebookShareButton url={calculatorUrl} title={title}>
+                        <FacebookIcon />
+                      </FacebookShareButton>
+                    </div>
+                    <div className='col-md-4'>
+                      <TwitterShareButton url={calculatorUrl} title={title}>
+                        <TwitterIcon />
+                      </TwitterShareButton>
+                    </div>
+                    <div className='col-md-2' />
                   </div>
                   <div className='row'>
                     <div className='col-md-3'/>
