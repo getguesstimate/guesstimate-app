@@ -106,7 +106,7 @@ export class CalculatorShow extends Component {
                   <div className='row'>
                     <div className='col-xs-12'>
                       <div className='model-link'>
-                        <a href={spaceUrl} onClick={navigate.bind(spaceUrl)}>Calculations</a>
+                        <a href={spaceUrl} onClick={navigate.bind(spaceUrl)}>See Calculations</a>
                       </div>
                     </div>
                     <div className='col-md-3'/>
