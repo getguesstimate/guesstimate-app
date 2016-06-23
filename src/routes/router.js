@@ -87,5 +87,5 @@ export default Router.extend({
   organizationShow(id) { this.render(<OrganizationShow organizationId={id} key={id}/>, {backgroundColor: 'GREY'}) },
   organizationsNew() { this.render(<CreateOrganizationPageContainer/>, {backgroundColor: 'GREY'}) },
   pricing() { this.render(<PlanIndex/>, {backgroundColor: 'GREY'}) },
-  calculatorShow(id) { this.render(<CalculatorShow calculatorId={parseInt(id)} key={parseInt(id)}/>, {isFluid: true, showFooter: false, backgroundColor: 'GREY'}) },
+  calculatorShow(id) { this.render(<CalculatorShow calculatorId={parseInt(id)} key={parseInt(id)}/>, {showFooter: false, backgroundColor: 'GREY'}) },
 })

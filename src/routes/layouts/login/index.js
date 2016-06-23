@@ -176,11 +176,11 @@ export default class Profile extends Component {
       { isLoggedIn && this.profileDropdown() }
 
       { !isLoggedIn &&
-        <a className={'item text'} href='/scratchpad'>Scratchpad</a>
+        <a className={'item text scratchpad'} href='/scratchpad'>Scratchpad</a>
       }
 
       { !isLoggedIn &&
-        <a className={'item text'} href='/pricing'>Plans</a>
+        <a className={'item text pricing'} href='/pricing'>Plans</a>
       }
 
       { !isLoggedIn &&

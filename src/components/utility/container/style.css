@@ -4,3 +4,10 @@
   display: inline-block;
   width: 100%;
 }
+
+@media only screen and (max-width: 767px) {
+  .GeneralContainer {
+    margin-top: 2em;
+    margin-bottom: 1em;
+  }
+}

@@ -28,8 +28,8 @@ export class Input extends Component{
     return (
       <div className='input'>
         <div className='row'>
-          <div className='col-md-7'><div className='name'>{name}</div></div>
-          <div className='col-md-5'>
+          <div className='col-xs-12 col-sm-7'><div className='name'>{name}</div></div>
+          <div className='col-xs-12 col-sm-5'>
             <div className='editor'>
               <Editor
                 ref='editor'

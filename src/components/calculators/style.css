@@ -1,5 +1,18 @@
 @import './styles/variables.css';
 
+@media only screen and (max-width: 767px) {
+  .calculator.calculator {
+    border-right: none;
+    border-left: none;
+    border: none;
+    font-size: 1.1em;
+    line-height: 1em;
+    padding: 1em;
+    margin: 0;
+    border-radius: 0;
+  }
+}
+
 .calculator {
   border: 1px solid rgba(200, 200, 200, 0.7);
   border-radius: .2em;
@@ -100,8 +113,8 @@
 
   .model-link {
     width: 100%;
-    text-align: center;
     font-size: 0.8em;
+    margin-top: 1.5em;
 
     a {
       cursor: pointer;

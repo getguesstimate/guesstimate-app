@@ -24,12 +24,12 @@ export const Output = ({metric: {name, simulation}}) => {
   return (
     <div className='output'>
       <div className='row'>
-        <div className='col-md-7'>
+        <div className='col-xs-12 col-sm-7'>
           <div className='name'>
             {name}
           </div>
         </div>
-        <div className='col-md-5'>
+        <div className='col-xs-12 col-sm-5'>
           {_.has(simulation, 'stats') &&
             <ResultSection {...simulation.stats}/>
           }
