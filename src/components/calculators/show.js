@@ -110,28 +110,18 @@ export class CalculatorShow extends Component {
                   <div className='outputs'>
                     {_.map(outputs, (m, i) => <Output key={i} metric={m}/>)}
                   </div>
-                  <div className='row'>
-                    <div className='col-md-2' />
-                    <div className='col-md-4'>
-                      <FacebookShareButton url={calculatorUrl} title={title}>
-                        <FacebookIcon />
-                      </FacebookShareButton>
+                  <div className='row information-section'>
+                    <div className='col-xs-12 col-md-7 calculation-link-section'>
+                        <a href={spaceUrl} onClick={navigate.bind(spaceUrl)}>See calculations</a>
                     </div>
-                    <div className='col-md-4'>
+                    <div className='col-xs-12 col-md-5'>
+                      <FacebookShareButton url={calculatorUrl} title={title}>
+                        <FacebookIcon size={42}/>
+                      </FacebookShareButton>
                       <TwitterShareButton url={calculatorUrl} title={title}>
-                        <TwitterIcon />
+                        <TwitterIcon size={42}/>
                       </TwitterShareButton>
                     </div>
-                    <div className='col-md-2' />
-                  </div>
-                  <div className='row'>
-                    <div className='col-md-3'/>
-                    <div className='col-md-6'>
-                      <div className='model-link'>
-                        <a href={spaceUrl} onClick={navigate.bind(spaceUrl)}>See the calculations</a>
-                      </div>
-                    </div>
-                    <div className='col-md-3'/>
                   </div>
                 </div>
               }

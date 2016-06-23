@@ -98,12 +98,29 @@
     }
   }
 
-  .SocialMediaShareButton {
-    width: 100%;
+  .information-section {
+    margin-top: 3em;
+  }
+
+  .calculation-link-section {
     position: relative;
+    a {
+      position: absolute;
+      bottom: 0;
+    }
+  }
+
+  .SocialMediaShareButton {
+    width: 45%;
+    position: relative;
+    float: left;
     border-radius: 0.1em;
-    margin: 1em 0;
+    margin-left: 10%;
     cursor: pointer;
+  }
+
+  .SocialMediaShareButton:first-child {
+    margin-left: 0;
   }
 
   .SocialMediaShareButton--facebook {
