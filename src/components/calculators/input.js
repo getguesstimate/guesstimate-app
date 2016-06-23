@@ -7,6 +7,12 @@ import {EditorState, Editor, ContentState} from 'draft-js'
 export class Input extends Component{
   state = {editorState: EditorState.createWithContent(ContentState.createFromText(''))}
 
+  componentDidMount() {
+    if (this.props.isFirst) {
+      setTimeout(() => {this.refs.editor.focus()}, 1)
+    }
+  }
+
   onChange(editorState) {
     this.props.onChange(editorState.getCurrentContent().getPlainText(''))
     return this.setState({editorState})
@@ -26,6 +32,7 @@ export class Input extends Component{
           <div className='col-md-5'>
             <div className='editor'>
               <Editor
+                ref='editor'
                 editorState={this.state.editorState}
                 onChange={this.onChange.bind(this)}
                 handleReturn={() => true}
