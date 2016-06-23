@@ -7,7 +7,7 @@ const middlewares = [ thunk ]
 /**
  * Creates a mock of Redux store with middleware.
  */
-export function mockStore(getState, expectedActions, done) {
+function mockStore(getState, expectedActions, done) {
   if (!Array.isArray(expectedActions)) {
     throw new Error('expectedActions should be an array of expected actions.')
   }
@@ -44,4 +44,9 @@ export function mockStore(getState, expectedActions, done) {
   )(mockStoreWithoutMiddleware)
 
   return mockStoreWithMiddleware()
+}
+
+export function expectToCallActions(startingAction, expectedActions, done, initialState = {}) {
+  const store = mockStore(initialState, expectedActions, done)
+  store.dispatch(startingAction)
 }

@@ -1,8 +1,8 @@
 import nock from 'nock'
 
-import * as actions from './actions'
+import {generalUpdate} from './actions'
 
-import {mockStore} from 'gModules/mockStore'
+import {expectToCallActions} from 'gModules/mockStore'
 
 describe('async actions', () => {
   afterEach(() => {
@@ -19,7 +19,7 @@ describe('async actions', () => {
       { type: 'CHANGE_CANVAS_STATE', values: {actionState: 'SAVING'} },
       { type: 'CHANGE_CANVAS_STATE', values: {actionState: 'ERROR'} },
     ]
-    const store = mockStore({ spaces: [{id: 1}] }, expectedActions, done)
-    store.dispatch(actions.generalUpdate(1))
+
+    expectToCallActions(generalUpdate(1), expectedActions, done, {spaces: [{id: 1}]})
   })
 })
