@@ -28,8 +28,7 @@ import './style.css'
 export class CalculatorShow extends Component {
   state = {
     attemptedFetch: false,
-    showResult: true,
-    didFirstFocus: false,
+    showResult: false,
   }
 
   componentWillMount() { this.fetchData() }
@@ -68,7 +67,7 @@ export class CalculatorShow extends Component {
 
     const {calculator: {content, title, space_id}, inputs, outputs, navigate} = this.props
     const spaceUrl = Space.url({id: space_id})
-    const calculatorUrl = Calculator.url(this.props.calculator)
+    const calculatorUrl = Calculator.fullUrl(this.props.calculator)
 
     const {FacebookShareButton, TwitterShareButton} = ShareButtons
     const FacebookIcon = generateShareIcon('facebook')

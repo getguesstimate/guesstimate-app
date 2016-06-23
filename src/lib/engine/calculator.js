@@ -1,3 +1,3 @@
-export function url (calculator) {
-  return (!!calculator) ? (`${'TODO ACTUAL URL BASE'}/calculators/${calculator.id}`) : ''
+export function fullUrl({id}) {
+  return `https://www.getguesstimate.com/calculators/${id}`
 }
