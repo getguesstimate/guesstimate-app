@@ -9,8 +9,7 @@ export class Input extends Component{
 
   componentDidMount() {
     if (this.props.isFirst) {
-      // this.refs.editor.focus()
-      window.thiswillwork = this.refs.editor
+      setTimeout(() => {this.refs.editor.focus()}, 1)
     }
   }
 
