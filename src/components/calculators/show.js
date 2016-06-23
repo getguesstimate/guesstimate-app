@@ -27,15 +27,16 @@ export class CalculatorShow extends Component {
   state = {
     attemptedFetch: false,
     showResult: false,
+    didFirstFocus: false,
   }
 
-  componentDidMount() { this.fetchData() }
+  componentWillMount() { this.fetchData() }
   componentWillReceiveProps(nextProps) {
+    this.fetchData()
     if (!this.props.calculator && !!nextProps.calculator) {
       this.props.runSimulations({spaceId: nextProps.calculator.space_id})
     }
   }
-  componentDidUpdate() { this.fetchData() }
 
   fetchData() {
     if (!this.state.attemptedFetch) {
@@ -89,6 +90,7 @@ export class CalculatorShow extends Component {
                   <Input
                     ref={`input-${metric.id}`}
                     key={i}
+                    isFirst={i===0}
                     name={metric.name}
                     errors={_.get(metric, 'simulation.sample.errors')}
                     onChange={this.onChange.bind(this, metric)}
