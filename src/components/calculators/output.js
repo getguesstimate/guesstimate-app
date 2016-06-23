@@ -13,9 +13,14 @@ const RangeDisplay = ({range: [low, high]}) => (
   <div><PrecisionNumber value={low}/> to <PrecisionNumber value={high}/></div>
 )
 
+const ResultSection = ({length, mean, adjustedConfidenceInterval}) => (
+  <div className='result-section'>
+    {length === 1 && <PrecisionNumber value={mean} precision={6}/> }
+    {length > 1 && <RangeDisplay range={adjustedConfidenceInterval}/> }
+  </div>
+)
+
 export const Output = ({metric: {name, simulation}}) => {
-  if (!_.has(simulation, 'stats')) { return false }
-  const {length, mean, adjustedConfidenceInterval} = simulation.stats
   return (
     <div className='output'>
       <div className='row'>
@@ -25,10 +30,9 @@ export const Output = ({metric: {name, simulation}}) => {
           </div>
         </div>
         <div className='col-md-5'>
-          <div className='result-section'>
-            {length === 1 && <PrecisionNumber value={mean} precision={6}/> }
-            {length > 1 && <RangeDisplay range={adjustedConfidenceInterval}/> }
-          </div>
+          {_.has(simulation, 'stats') &&
+            <ResultSection {...simulation.stats}/>
+          }
         </div>
       </div>
     </div>
