@@ -92,6 +92,7 @@ export class CalculatorShow extends Component {
                     key={i}
                     isFirst={i===0}
                     name={metric.name}
+                    description={_.get(metric, 'guesstimate.description')}
                     errors={_.get(metric, 'simulation.sample.errors')}
                     onChange={this.onChange.bind(this, metric)}
                   />

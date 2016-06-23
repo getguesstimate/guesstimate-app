@@ -46,6 +46,11 @@
         margin-top: .3em;
       }
 
+      .description {
+        font-size: .75em;
+        color: #666;
+      }
+
       .editor {
         padding: .4rem .8rem;
         background-color: $grey-6;
@@ -74,8 +79,9 @@
   }
 
   .result-divider {
-    border-bottom: 2px solid #D4D4D4;
+    border-bottom: 2px dotted #e8e8e8;
     border-top: none;
+    margin: 0;
   }
 
   .outputs {

@@ -24,11 +24,16 @@ export class Input extends Component{
   }
 
   render () {
-    const {name, errors} = this.props
+    const {name, description, errors} = this.props
     return (
       <div className='input'>
         <div className='row'>
-          <div className='col-xs-12 col-sm-7'><div className='name'>{name}</div></div>
+          <div className='col-xs-12 col-sm-7'>
+            <div className='name'>{name}</div>
+            {description &&
+              <div className='description'>{description}</div>
+            }
+          </div>
           <div className='col-xs-12 col-sm-5'>
             <div className='editor'>
               <Editor
