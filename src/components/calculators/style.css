@@ -38,6 +38,20 @@
         background-color: $grey-6;
         border: 1px solid #D4D4D4;
         border-radius: 1px;
+        position: relative;
+      }
+
+      .error-alert {
+        position: absolute;
+        right: 0.2em;
+        bottom: 0;
+        top: 0;
+        height: 1em;
+        margin: auto;
+
+        .fa-warning {
+          color: rgba(180, 20, 20, 1);
+        }
       }
     }
   }

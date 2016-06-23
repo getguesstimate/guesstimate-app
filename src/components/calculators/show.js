@@ -81,7 +81,12 @@ export class CalculatorShow extends Component {
               </div>
               <div className='inputs'>
                 {_.map(inputs, (metric, i) => (
-                  <Input key={i} name={metric.name} onChange={this.onChange.bind(this, metric)}/>
+                  <Input
+                    key={i}
+                    name={metric.name}
+                    errors={_.get(metric, 'simulation.sample.errors')}
+                    onChange={this.onChange.bind(this, metric)}
+                  />
                 ))}
               </div>
               {this.state.showResult &&
@@ -104,9 +109,7 @@ export class CalculatorShow extends Component {
               {!this.state.showResult &&
                 <div className='row'>
                   <div className='col-md-7' />
-                  <div
-                    className='col-md-5'
-                  >
+                  <div className='col-md-5'>
                     <div
                       className='ui button green calculateButton'
                       onClick={() => {this.setState({showResult: true})}}
