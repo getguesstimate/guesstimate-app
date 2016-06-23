@@ -1,9 +1,12 @@
 import Auth0Lock from 'auth0-lock'
-import {me} from 'gEngine/engine'
+
 import * as userActions from 'gModules/users/actions.js'
 import * as auth0Constants from 'servers/auth0/constants.js'
-import {generalError} from 'lib/errors/index.js'
 import * as displayErrorsActions from 'gModules/displayErrors/actions.js'
+
+import {me} from 'gEngine/engine'
+
+import {generalError} from 'lib/errors/index.js'
 
 const lockOptions = {
   disableSignupAction: false,
@@ -15,6 +18,7 @@ export const signIn = () => {
       if (err) {
         generalError('MesignIn Error', {err, profile, token})
       } else {
+        window.setTimeout(() => {dispatch(logOut())}, auth0Constants.tokenLifetimeMs)
         const {name, username, picture, user_id} = profile
         dispatch(auth0MeLoaded({name, username, picture, user_id}, token))
         dispatch(userActions.fetch({auth0_id: user_id}))
