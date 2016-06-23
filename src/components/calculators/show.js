@@ -4,6 +4,7 @@ import {bindActionCreators} from 'redux'
 
 import ReactMarkdown from 'react-markdown'
 import Helmet from 'react-helmet'
+import {ShareButtons, generateShareIcon} from 'react-share'
 
 import Container from 'gComponents/utility/container/Container.js'
 import {Input} from './input'
@@ -17,6 +18,7 @@ import {runSimulations} from 'gModules/simulations/actions'
 import {changeGuesstimate} from 'gModules/guesstimates/actions'
 
 import * as Space from 'gEngine/space'
+import * as Calculator from 'gEngine/calculator'
 
 import {Guesstimator} from 'lib/guesstimator/index'
 
@@ -27,7 +29,6 @@ export class CalculatorShow extends Component {
   state = {
     attemptedFetch: false,
     showResult: false,
-    didFirstFocus: false,
   }
 
   componentWillMount() { this.fetchData() }
@@ -66,6 +67,11 @@ export class CalculatorShow extends Component {
 
     const {calculator: {content, title, space_id}, inputs, outputs, navigate} = this.props
     const spaceUrl = Space.url({id: space_id})
+    const calculatorUrl = Calculator.fullUrl(this.props.calculator)
+
+    const {FacebookShareButton, TwitterShareButton} = ShareButtons
+    const FacebookIcon = generateShareIcon('facebook')
+    const TwitterIcon = generateShareIcon('twitter')
     return (
       <Container>
         <Helmet
@@ -104,13 +110,18 @@ export class CalculatorShow extends Component {
                   <div className='outputs'>
                     {_.map(outputs, (m, i) => <Output key={i} metric={m}/>)}
                   </div>
-                  <div className='row'>
-                    <div className='col-xs-12'>
-                      <div className='model-link'>
-                        <a href={spaceUrl} onClick={navigate.bind(spaceUrl)}>See Calculations</a>
-                      </div>
+                  <div className='row information-section'>
+                    <div className='col-xs-12 col-md-7 calculation-link-section'>
+                        <a href={spaceUrl} onClick={navigate.bind(spaceUrl)}>See calculations</a>
                     </div>
-                    <div className='col-md-3'/>
+                    <div className='col-xs-12 col-md-5'>
+                      <FacebookShareButton url={calculatorUrl} title={title}>
+                        <FacebookIcon size={42}/>
+                      </FacebookShareButton>
+                      <TwitterShareButton url={calculatorUrl} title={title}>
+                        <TwitterIcon size={42}/>
+                      </TwitterShareButton>
+                    </div>
                   </div>
                 </div>
               }
