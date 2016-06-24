@@ -37,7 +37,7 @@ export function create(spaceId, calculator) {
       if (err) {
         captureApiError('CalculatorsCreate', err.jqXHR, err.textStatus, err, {url: 'CalculatorsCreate'})
       } else if (calculator) {
-        dispatch(sActions.createSuccess(record))
+        dispatch(sActions.createSuccess(calculator))
         app.router.history.navigate(`/calculators/${calculator.id}`)
       }
     })
