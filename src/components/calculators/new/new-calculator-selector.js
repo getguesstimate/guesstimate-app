@@ -42,17 +42,9 @@ export const newCalculatorSelector = createSelector(
     const inputs = dSpace.metrics.filter(m => relationshipType(m.edges) === INPUT)
     const outputs = dSpace.metrics.filter(m => relationshipType(m.edges) !== INPUT)
 
-    const calculator = {
-      content: "",
-      title: "",
-      share_image: "",
-      space_id: dSpace.id,
-    }
-
     return {
-      calculator,
-      inputs,
-      outputs,
+      spaceId: dSpace.id,
+      space: dSpace
     }
   }
 )

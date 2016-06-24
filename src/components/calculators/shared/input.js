@@ -7,6 +7,10 @@ import {Guesstimator} from 'lib/guesstimator/index'
 import {EditorState, Editor, ContentState} from 'draft-js'
 
 export class Input extends Component{
+  static defaultProps = {
+    errors: []
+  }
+
   state = {editorState: EditorState.createWithContent(ContentState.createFromText(''))}
 
   componentDidMount() {

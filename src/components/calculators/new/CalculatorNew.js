@@ -24,19 +24,69 @@ import {Guesstimator} from 'lib/guesstimator/index'
 
 import '../shared/style.css'
 
+import {EditorState, Editor, ContentState} from 'draft-js'
+function isCalculatorAcceptableMetric(metric) {
+  return (!_.isEmpty(metric.name) && !_.isEmpty(_.get(metric, 'guesstimate.input')))
+}
+
+const relationshipType = (edges) => {
+  if (edges.inputs.length && edges.outputs.length) { return INTERMEDIATE }
+  if (edges.inputs.length) { return OUTPUT }
+  if (edges.outputs.length) { return INPUT }
+  return NOEDGE
+}
+
+const INTERMEDIATE = 'INTERMEDIATE'
+const OUTPUT = 'OUTPUT'
+const INPUT = 'INPUT'
+const NOEDGE = 'NOEDGE'
+
+function swap(array, index1, index2){
+  const firstElement = array[index1]
+  const secondElement = array[index2]
+  let newArray = _.clone(array)
+  newArray[index1] = secondElement
+  newArray[index2] = firstElement
+  return newArray
+}
+
+function incrementItemPosition(array, elementName, positiveDirection){
+  const index = _.indexOf(array, elementName)
+  let nextIndex
+  if (positiveDirection) {
+    if (index === array.length - 1) { return array }
+    nextIndex = index + 1
+    const newArray = swap(array, index, nextIndex)
+    return newArray
+  }
+  if (!positiveDirection) {
+    if (index === 0) { return array }
+    nextIndex = index - 1
+    const newArray = swap(array, index, nextIndex)
+    return newArray
+  }
+}
+
 @connect(newCalculatorSelector, dispatch => bindActionCreators({navigate, fetchById, changeGuesstimate, runSimulations}, dispatch))
-export class CalculatorNew extends Component {
+export class CalculatorNewContainer extends Component {
   state = {
     attemptedFetch: false,
-    showResult: false,
+    setupNewCalculator: false,
+    validInputs: [],
+    validOutputs: [],
+    calculator: {
+      title: null,
+      content: null,
+      input_ids: [],
+      output_ids: []
+    }
   }
 
   componentWillMount() { this.fetchData() }
-  componentWillReceiveProps(nextProps) {
+
+  componentWillReceiveProps(newProps) {
     this.fetchData()
-    if (!this.props.calculator && !!nextProps.calculator) {
-      this.props.runSimulations({spaceId: nextProps.calculator.space_id})
-    }
+    this.setup(newProps.space)
   }
 
   fetchData() {
@@ -46,90 +96,148 @@ export class CalculatorNew extends Component {
     }
   }
 
-  onChange({id, guesstimate}, input) {
-    const guesstimateType = Guesstimator.parse({...guesstimate, input})[1].samplerType().referenceName
-
-    this.props.changeGuesstimate(
-      id,
-      {...guesstimate, ...{data: null, input, guesstimateType}},
-      true, // runSims
-      false // saveOnServer
-    )
+  setup(space){
+    if (!!space.id && !this.state.setupNewCalculator){
+      const validMetrics = space.metrics.filter(m => isCalculatorAcceptableMetric)
+      const validInputs = validMetrics.filter(m => relationshipType(m.edges) === INPUT)
+      const validOutputs = validMetrics.filter(m => relationshipType(m.edges) === OUTPUT)
+      const calculator = {
+         title: space.name || "",
+         content: space.description || "",
+         input_ids: validInputs.map(e => e.id),
+         output_ids: validOutputs.map(e => e.id)
+      }
+      this.setState({calculator, validInputs, validOutputs, setupNewCalculator: true})
+    }
   }
 
-  allInputsHaveContent() {
-    const inputComponents = _.map(this.props.inputs, metric => this.refs[`input-${metric.id}`])
-    return inputComponents.map(i => !!i && i.hasValidContent()).reduce((x,y) => x && y, true)
+  _onRemoveMetric(id){
+    const {calculator} = this.state
+    this.setState({
+      calculator: {
+        ...calculator,
+        input_ids: calculator.input_ids.filter(m => m !== id),
+        output_ids: calculator.output_ids.filter(m => m !== id),
+      }
+    })
+  }
+
+  _onAddMetric(id){
+    const {calculator} = this.state
+    const isInput = _.some(this.state.validInputs, e => e.id === id)
+    let {input_ids, output_ids} = calculator
+
+    let new_input_ids, new_output_ids
+    if (isInput) {
+      new_input_ids = [...input_ids, id]
+      new_output_ids = output_ids
+    } else {
+      new_output_ids = [...input_ids, id]
+      new_input_ids = input_ids
+    }
+
+    this.setState({
+      calculator: {
+        ...calculator,
+        input_ids: new_input_ids,
+        output_ids: new_output_ids
+      }
+    })
+  }
+
+  _onMoveMetricUp(id){
+    const {calculator} = this.state
+    let {input_ids, output_ids} = calculator
+    this.setState({
+      calculator: {
+        ...calculator,
+        input_ids: incrementItemPosition(this.state.calculator.input_ids, id, true),
+        output_ids: output_ids
+      }
+    })
+  }
+
+  _onMoveMetricDown(id){
+    const {calculator} = this.state
+    let {input_ids, output_ids} = calculator
+    this.setState({
+      calculator: {
+        ...calculator,
+        input_ids: incrementItemPosition(this.state.calculator.input_ids, id, false),
+        output_ids: output_ids
+      }
+    })
+  }
+
+  _isVisible(metricId) {
+    const {calculator} = this.state
+    let {input_ids, output_ids} = calculator
+    return _.some([...input_ids, ...output_ids], e => metricId === e)
   }
 
   render() {
-    if (!this.props.calculator) { return false }
+    const {validInputs, validOutputs, calculator} = this.state
+    const inputs = [
+      ...calculator.input_ids.map(i => validInputs.find(m => m.id === i)),
+      ...validInputs.filter(i => !this._isVisible(i.id))
+    ].map(e => {return {metric: e, isVisible: this._isVisible(e.id)}})
+    console.log(calculator.input_ids, inputs)
 
-    const {calculator: {content, title, space_id, share_image}, inputs, outputs, navigate} = this.props
-    const spaceUrl = Space.url({id: space_id})
-    const calculatorUrl = Calculator.fullUrl(this.props.calculator)
+    const outputs = [
+      ...calculator.output_ids.map(i => validOutputs.find(m => m.id === i)),
+      ...validOutputs.filter(i => !this._isVisible(i.id))
+    ].map(e => {return {metric: e, isVisible: this._isVisible(e.id)}})
 
-    let metaTags = [
-      {name: 'Description', content},
-      {property: 'og:description', content},
-      {property: 'og:title', content: title},
-      {property: 'og:site_name', content: 'Guesstimate'},
-    ]
-    if (!!share_image) {metaTags = metaTags.concat({property: 'og:image', content: share_image})}
+    if (!this.state.setupNewCalculator){ return (false) }
+    return (
+      <CalculatorNew
+        calculator={calculator}
+        inputs={inputs}
+        outputs={outputs}
+        onRemoveMetric={this._onRemoveMetric.bind(this)}
+        onAddMetric={this._onAddMetric.bind(this)}
+        onMoveMetricUp={this._onMoveMetricUp.bind(this)}
+        onMoveMetricDown={this._onMoveMetricDown.bind(this)}
+      />
+    )
+  }
+}
 
-    const {FacebookShareButton, TwitterShareButton} = ShareButtons
-    const FacebookIcon = generateShareIcon('facebook')
-    const TwitterIcon = generateShareIcon('twitter')
+export class CalculatorNew extends Component {
+  render() {
+    const {calculator: {title, content}, inputs, outputs} = this.props
     return (
       <Container>
-        <Helmet title={title} meta={metaTags}/>
         <div className='row'>
           <div className='col-xs-0 col-md-2'/>
           <div className='col-xs-12 col-md-8'>
             <div className='calculator'>
               <h1>{title}</h1>
               <div className='description'>
-                <ReactMarkdown source={content} />
               </div>
               <div className='inputs'>
-                {_.map(inputs, (metric, i) => (
-                  <Input
-                    ref={`input-${metric.id}`}
+                {_.map(inputs, (input, i) => (
+                  <InputForm
+                    ref={`input-${input.metric.id}`}
                     key={i}
-                    isFirst={i===0}
-                    name={metric.name}
-                    description={_.get(metric, 'guesstimate.description')}
-                    errors={_.get(metric, 'simulation.sample.errors')}
-                    onChange={this.onChange.bind(this, metric)}
+                    name={input.metric.name}
+                    description={_.get(input.metric, 'guesstimate.description')}
+                    isVisible={input.isVisible}
+                    onRemove={() => {this.props.onRemoveMetric(input.metric.id)}}
+                    onAdd={() => {this.props.onAddMetric(input.metric.id)}}
+                    onMoveUp={() => {this.props.onMoveMetricUp(input.metric.id)}}
+                    onMoveDown={() => {this.props.onMoveMetricDown(input.metric.id)}}
                   />
                 ))}
               </div>
-              {this.state.showResult &&
+
                 <div>
                   <hr className='result-divider'/>
                   <div className='outputs'>
-                    {_.map(outputs, (m, i) => <Output key={i} metric={m}/>)}
-                  </div>
-                  <div className='row information-section'>
-                    <div className='col-xs-12 col-md-7 calculation-link-section'>
-                        <a href={spaceUrl} onClick={navigate.bind(spaceUrl)}>See calculations</a>
-                    </div>
+                      {_.map(outputs, (m, i) => <OutputForm key={i} metric={m.metric}/>)}
                   </div>
                 </div>
-              }
-              {!this.state.showResult &&
-                <div className='row'>
-                  <div className='col-xs-12 col-md-7'/>
-                  <div className='col-xs-12 col-md-5'>
-                    <div
-                      className={`ui button green calculateButton${this.allInputsHaveContent() ? '' : ' disabled'}`}
-                      onClick={() => {this.setState({showResult: true})}}
-                    >
-                      Calculate
-                    </div>
-                  </div>
-                </div>
-              }
+
             </div>
           </div>
           <div className='col-md-3' />
@@ -137,4 +245,50 @@ export class CalculatorNew extends Component {
       </Container>
     )
   }
+}
+
+export class InputForm extends Component{
+  render () {
+    const {name, description, isVisible, onRemove, onAdd, onMoveUp, onMoveDown} = this.props
+    return (
+      <div className='input'>
+        <div className='row'>
+          <div className='col-xs-12 col-sm-7'>
+            <div className='name'>{name}</div>
+            {description &&
+              <div className='description'>{description}</div>
+            }
+          </div>
+          <div className='col-xs-12 col-sm-5'>
+            {isVisible &&
+              <div>
+                <a onMouseDown={onRemove}>Remove</a>
+                <a onMouseDown={onMoveUp}>Up</a>
+                <a onMouseDown={onMoveDown}>Down</a>
+              </div>
+            }
+            {!isVisible &&
+              <a onMouseDown={onAdd}>Add</a>
+            }
+          </div>
+        </div>
+      </div>
+    )
+  }
+}
+
+export const OutputForm = ({metric: {name}}) => {
+  return (
+    <div className='output'>
+      <div className='row'>
+        <div className='col-xs-12 col-sm-7'>
+          <div className='name'>
+            {name}
+          </div>
+        </div>
+        <div className='col-xs-12 col-sm-5'>
+        </div>
+      </div>
+    </div>
+  )
 }

@@ -7,7 +7,7 @@ import Router from 'ampersand-router'
 import Layout from './layouts/application/index'
 import Home from './home/index'
 import {CalculatorShow} from 'gComponents/calculators/show/CalculatorShow'
-import {CalculatorNew} from 'gComponents/calculators/new/CalculatorNew'
+import {CalculatorNewContainer} from 'gComponents/calculators/new/CalculatorNew'
 import SpaceShow from 'gComponents/spaces/show'
 import SpaceIndex from 'gComponents/spaces/index/index'
 import Maintenance from 'gComponents/pages/maintenance/index'
@@ -90,5 +90,5 @@ export default Router.extend({
   organizationsNew() { this.render(<CreateOrganizationPageContainer/>, {backgroundColor: 'GREY'}) },
   pricing() { this.render(<PlanIndex/>, {backgroundColor: 'GREY'}) },
   calculatorShow(id) { this.render(<CalculatorShow calculatorId={parseInt(id)} key={parseInt(id)}/>, {showFooter: false, backgroundColor: 'GREY'}) },
-  calculatorNew(id) { this.render(<CalculatorNew space_id={parseInt(id)}/>, {showFooter: false, backgroundColor: 'GREY'}) },
+  calculatorNew(id) { this.render(<CalculatorNewContainer space_id={parseInt(id)}/>, {showFooter: false, backgroundColor: 'GREY'}) },
 })
