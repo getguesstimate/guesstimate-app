@@ -1,5 +1,7 @@
 import {actionCreatorsFor} from 'redux-crud'
 
+import {initSpace} from 'gModules/checkpoints/actions'
+
 import {captureApiError, generalError} from 'lib/errors/index.js'
 
 import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
@@ -19,6 +21,7 @@ export function fetchById(id) {
       } else if (calculator) {
         const space = _.get(calculator, '_embedded.space')
         const formatted = _.pick(calculator, ['id', 'space_id', 'title', 'input_ids', 'output_ids', 'content', 'share_image'])
+        dispatch(initSpace(space.id, space.graph))
         dispatch(sActions.fetchSuccess([formatted], {space}))
       }
     })
