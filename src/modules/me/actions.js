@@ -18,9 +18,8 @@ export const signIn = () => {
       if (err) {
         generalError('MesignIn Error', {err, profile, token})
       } else {
-        window.setTimeout(() => {dispatch(logOut())}, auth0Constants.tokenLifetimeMs)
         const {name, username, picture, user_id} = profile
-        dispatch(auth0MeLoaded({name, username, picture, user_id}, token))
+        dispatch(auth0MeLoaded({name, username, picture, user_id}, token, (new Date()).getTime()))
         dispatch(userActions.fetch({auth0_id: user_id}))
       }
     }
@@ -33,7 +32,7 @@ export const signUp = () => {
         generalError('MesignUp Error', {err, profile, token})
       } else {
         const {nickname, picture, user_id, email, company, name, gender, locale, location} = profile
-        dispatch(auth0MeLoaded(profile, token))
+        dispatch(auth0MeLoaded(profile, token), (new Date()).getTime())
         dispatch(userActions.create(
           {
             name,
@@ -55,23 +54,26 @@ export const init = () => {
   return (dispatch) => {
     const storage = me.localStorage.get()
     if (storage) {
-      const {id, profile, token} = storage
-      dispatch({ type: 'ALL_OF_ME_RELOADED', id, profile, token})
-
-      const meStorage = me.localStorage.get()
+      const {id, profile, token, tokenCreationTime} = storage
 
       if (token) {
+        dispatch({ type: 'ALL_OF_ME_RELOADED', id, profile, token})
+        const meStorage = me.localStorage.get()
+
         lock.getProfile(token, (err, profile) => {
           if (err) {
             generalError('MeInit Error', {token, err, profile})
             me.localStorage.clear()
             dispatch({ type: 'DESTROY_ME' })
           } else {
-            dispatch(auth0MeLoaded(profile, token))
+            dispatch(auth0MeLoaded(profile, token, tokenCreationTime))
             const {user_id} = profile
             dispatch(userActions.fetch({auth0_id: user_id}))
           }
         })
+      } else {
+        me.localStorage.clear()
+        dispatch({ type: 'DESTROY_ME' })
       }
     }
   }
@@ -79,15 +81,18 @@ export const init = () => {
 
 export function logOut() {
   me.localStorage.clear()
-  return { type: 'DESTROY_ME' };
+  return { type: 'DESTROY_ME' }
 }
 
-function auth0MeLoaded(profile, token) {
+function auth0MeLoaded(profile, token, tokenCreationTime) {
   return function(dispatch, getState) {
-    dispatch({ type: 'AUTH0_ME_LOADED', profile, token});
-    const {name, username, picture, user_id} = profile
-    const saveAs = {token, profile: {name, username, picture, user_id}}
-    me.localStorage.set(getState().me)
+    dispatch({ type: 'AUTH0_ME_LOADED', profile, token})
+
+    me.localStorage.set({...getState().me, tokenCreationTime})
+
+    const timeLeft = auth0Constants.tokenLifetimeMs - ((new Date()).getTime() - tokenCreationTime)
+    if (!!window.tokenTimer) { clearTimeout(window.tokenTimer) }
+    window.tokenTimer = setTimeout(() => {dispatch(logOut())}, timeLeft)
   }
 }
 
@@ -103,11 +108,13 @@ export function guesstimateMeLoad() {
 export function guesstimateMeLoaded(object) {
   return function(dispatch, getState) {
     dispatch({ type: 'GUESSTIMATE_ME_LOADED', id: object.id, profile: object})
-    me.localStorage.set(getState().me)
+
+    const storage = me.localStorage.get()
+    me.localStorage.set({...getState().me, tokenCreationTime: _.get(storage, 'tokenCreationTime')})
   }
 }
 
 const lock = new Auth0Lock(
   auth0Constants.variables.AUTH0_CLIENT_ID,
   auth0Constants.variables.AUTH0_DOMAIN,
-);
+)
