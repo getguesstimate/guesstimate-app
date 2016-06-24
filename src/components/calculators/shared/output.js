@@ -13,28 +13,23 @@ const RangeDisplay = ({range: [low, high]}) => (
   <div><PrecisionNumber value={low}/> to <PrecisionNumber value={high}/></div>
 )
 
-const ResultSection = ({length, mean, adjustedConfidenceInterval}) => (
-  <div className='result-section'>
-    {length === 1 && <PrecisionNumber value={mean} precision={6}/> }
-    {length > 1 && <RangeDisplay range={adjustedConfidenceInterval}/> }
-  </div>
+const ResultSection = ({length, mean, adjustedConfidenceInterval, hasErrors}) => (
+  length === 1 ? <PrecisionNumber value={mean} precision={6}/> : <RangeDisplay range={adjustedConfidenceInterval}/>
 )
 
-export const Output = ({metric: {name, simulation}}) => {
-  return (
-    <div className='output'>
-      <div className='row'>
-        <div className='col-xs-12 col-sm-7'>
-          <div className='name'>
-            {name}
-          </div>
+export const Output = ({metric: {name, simulation}}) => (
+  <div className='output'>
+    <div className='row'>
+      <div className='col-xs-12 col-sm-7'>
+        <div className='name'>
+          {name}
         </div>
-        <div className='col-xs-12 col-sm-5'>
-          {_.has(simulation, 'stats') &&
-            <ResultSection {...simulation.stats}/>
-          }
+      </div>
+      <div className='col-xs-12 col-sm-5'>
+        <div className={`result-section${!_.isEmpty(_.get(simulation, 'sample.errors')) ? ' has-errors' : ''}`}>
+          {_.has(simulation, 'stats') && <ResultSection {...simulation.stats} />}
         </div>
       </div>
     </div>
-  )
-}
+  </div>
+)
