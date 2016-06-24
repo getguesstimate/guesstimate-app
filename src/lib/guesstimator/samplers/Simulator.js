@@ -86,7 +86,7 @@ function modularSlice(array, from, to) {
 function buildData(expr, prevModularIndex, numSamples, inputs) {
   let slicedInputs = {}
   for (let key of Object.keys(inputs)) {
-    if (!!inputs[key]) { continue }
+    if (!inputs[key]) { continue }
     slicedInputs[key] = modularSlice(inputs[key], prevModularIndex, prevModularIndex + numSamples)
   }
   return {expr, numSamples, inputs: slicedInputs}

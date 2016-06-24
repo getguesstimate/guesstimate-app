@@ -17,7 +17,10 @@ const ResultSection = ({length, mean, adjustedConfidenceInterval, hasErrors}) =>
   length === 1 ? <PrecisionNumber value={mean} precision={6}/> : <RangeDisplay range={adjustedConfidenceInterval}/>
 )
 
-export const Output = ({metric: {name, simulation}}) => (
+export const Output = ({metric}) => {
+  console.log(metric)
+  const {name, simulation} = metric
+  return (
   <div className='output'>
     <div className='row'>
       <div className='col-xs-12 col-sm-7'>
@@ -32,4 +35,4 @@ export const Output = ({metric: {name, simulation}}) => (
       </div>
     </div>
   </div>
-)
+)}
