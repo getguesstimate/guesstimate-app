@@ -1,4 +1,5 @@
 import {actionCreatorsFor} from 'redux-crud'
+import cuid from 'cuid'
 
 import {captureApiError, generalError} from 'lib/errors/index.js'
 
@@ -27,14 +28,15 @@ export function fetchById(id) {
 
 export function create(spaceId, calculator) {
   return (dispatch, getState) => {
-    dispatch(sActions.createStart(calculator))
+    const record = {...calculator, id: cuid()}
+    dispatch(sActions.createStart(record))
 
     api(getState()).calculators.create(spaceId, params, (err, calculator) => {
       if (err) {
         captureApiError('CalculatorsCreate', null, null, err, {url: 'CalculatorsCreate'})
       } else if (calculator) {
-        dispatch(sActions.createSuccess(calculator))
-        app.router.history.navigate(`/calculators/${value.id}`)
+        dispatch(sActions.createSuccess(record))
+        app.router.history.navigate(`/calculators/${calculator.id}`)
       }
     })
   }
