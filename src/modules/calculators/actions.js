@@ -25,3 +25,18 @@ export function fetchById(id) {
     })
   }
 }
+
+export function create(spaceId, calculator) {
+  return (dispatch, getState) => {
+    dispatch(sActions.createStart(calculator))
+
+    api(getState()).calculators.create(spaceId, params, (err, calculator) => {
+      if (err) {
+        captureApiError('CalculatorsCreate', null, null, err, {url: 'CalculatorsCreate'})
+      } else if (calculator) {
+        dispatch(sActions.createSuccess(calculator))
+        app.router.history.navigate(`/calculators/${value.id}`)
+      }
+    })
+  }
+}
