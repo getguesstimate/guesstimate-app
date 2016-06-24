@@ -15,6 +15,7 @@ import {newCalculatorSelector} from './new-calculator-selector'
 
 import {navigate} from 'gModules/navigation/actions'
 import {fetchById} from 'gModules/spaces/actions'
+import {create} from 'gModules/calculators/actions'
 import {runSimulations} from 'gModules/simulations/actions'
 import {changeGuesstimate} from 'gModules/guesstimates/actions'
 
@@ -68,7 +69,7 @@ function incrementItemPosition(array, elementName, positiveDirection){
   }
 }
 
-@connect(newCalculatorSelector, dispatch => bindActionCreators({navigate, fetchById, changeGuesstimate, runSimulations}, dispatch))
+@connect(newCalculatorSelector, dispatch => bindActionCreators({navigate, create, fetchById, changeGuesstimate, runSimulations}, dispatch))
 export class CalculatorNewContainer extends Component {
   state = {
     attemptedFetch: false,
@@ -110,6 +111,11 @@ export class CalculatorNewContainer extends Component {
       }
       this.setState({calculator, validInputs, validOutputs, setupNewCalculator: true})
     }
+  }
+
+  _onCreate() {
+    const calculator = this.state.calculator
+    this.props.create(this.props.space_id, {calculator})
   }
 
   _onRemoveMetric(id){
@@ -193,6 +199,7 @@ export class CalculatorNewContainer extends Component {
         onAddMetric={this._onAddMetric.bind(this)}
         onMoveMetricUp={this._onMoveMetricUp.bind(this)}
         onMoveMetricDown={this._onMoveMetricDown.bind(this)}
+        onSubmit={this._onCreate.bind(this)}
       />
     )
   }
@@ -228,25 +235,39 @@ export class CalculatorNew extends Component {
                 ))}
               </div>
 
-                <div>
-                  <hr className='result-divider'/>
-                  <div className='outputs'>
-                    {_.map(outputs, (input, i) => (
-                      <OutputForm
-                        key={i}
-                        name={input.metric.name}
-                        isFirst={i === 0}
-                        isLast={i === inputs.length - 1}
-                        isVisible={input.isVisible}
-                        onRemove={() => {this.props.onRemoveMetric(input.metric.id)}}
-                        onAdd={() => {this.props.onAddMetric(input.metric.id)}}
-                        onMoveUp={() => {this.props.onMoveMetricUp(input.metric.id)}}
-                        onMoveDown={() => {this.props.onMoveMetricDown(input.metric.id)}}
-                      />
-                      )
-                    )}
-                  </div>
+              <div>
+                <hr className='result-divider'/>
+                <div className='outputs'>
+                  {_.map(outputs, (input, i) => (
+                    <OutputForm
+                      key={i}
+                      name={input.metric.name}
+                      isFirst={i === 0}
+                      isLast={i === inputs.length - 1}
+                      isVisible={input.isVisible}
+                      onRemove={() => {this.props.onRemoveMetric(input.metric.id)}}
+                      onAdd={() => {this.props.onAddMetric(input.metric.id)}}
+                      onMoveUp={() => {this.props.onMoveMetricUp(input.metric.id)}}
+                      onMoveDown={() => {this.props.onMoveMetricDown(input.metric.id)}}
+                    />
+                    )
+                  )}
                 </div>
+              </div>
+
+              <hr className='result-divider'/>
+
+              <div className='create-button-section'>
+                <div className='row'>
+                  <div className='col-md-5'>
+                    <div className='ui button green create-button' onClick={this.props.onSubmit}>
+                      Create
+                    </div>
+                  </div>
+                  <div className='col-md-7' />
+                </div>
+              </div>
+
 
             </div>
           </div>
