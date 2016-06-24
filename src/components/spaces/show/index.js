@@ -98,7 +98,7 @@ export default class SpacesShow extends Component {
   considerFetch(newProps) {
     const space = newProps.denormalizedSpace
 
-    const hasOwner = _.has(space, 'user_id') || _.has(space, 'organization_id')
+    const hasOwner = _.has(space, 'user.name') || _.has(space, 'organization.name')
     const hasGraph = _.has(space, 'graph')
 
     const hasData = this.state.attemptedFetch || (hasGraph && hasOwner)
