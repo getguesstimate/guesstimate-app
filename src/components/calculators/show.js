@@ -14,7 +14,7 @@ import {calculatorSpaceSelector} from './calculator-space-selector'
 
 import {navigateFn} from 'gModules/navigation/actions'
 import {fetchById} from 'gModules/calculators/actions'
-import {runSimulations} from 'gModules/simulations/actions'
+import {runSimulations, deleteSimulations} from 'gModules/simulations/actions'
 import {changeGuesstimate} from 'gModules/guesstimates/actions'
 
 import * as Space from 'gEngine/space'
@@ -24,7 +24,7 @@ import {Guesstimator} from 'lib/guesstimator/index'
 
 import './style.css'
 
-@connect(calculatorSpaceSelector, dispatch => bindActionCreators({fetchById, changeGuesstimate, runSimulations}, dispatch))
+@connect(calculatorSpaceSelector, dispatch => bindActionCreators({fetchById, changeGuesstimate, deleteSimulations, runSimulations}, dispatch))
 export class CalculatorShow extends Component {
   state = {
     attemptedFetch: false,
@@ -35,7 +35,11 @@ export class CalculatorShow extends Component {
   componentWillReceiveProps(nextProps) {
     this.fetchData()
     if (!this.props.calculator && !!nextProps.calculator) {
-      this.props.runSimulations({spaceId: nextProps.calculator.space_id})
+      this.props.deleteSimulations([...nextProps.calculator.input_ids, ...nextProps.calculator.output_ids])
+      const metrics = [...nextProps.inputs, ...nextProps.outputs]
+      metrics.forEach(m => {
+        this.props.changeGuesstimate(m.id, {...m.guesstimate, input: ''}, false, false)
+      })
     }
   }
 
