@@ -7,13 +7,13 @@ import Helmet from 'react-helmet'
 import {ShareButtons, generateShareIcon} from 'react-share'
 
 import Container from 'gComponents/utility/container/Container.js'
-import {Input} from './input'
-import {Output} from './output'
+import {Input} from '../shared/input'
+import {Output} from '../shared/output'
 
-import {newCalculatorSelector} from './new-calculator-selector'
+import {calculatorSpaceSelector} from './calculator-space-selector'
 
 import {navigate} from 'gModules/navigation/actions'
-import {fetchById} from 'gModules/spaces/actions'
+import {fetchById} from 'gModules/calculators/actions'
 import {runSimulations} from 'gModules/simulations/actions'
 import {changeGuesstimate} from 'gModules/guesstimates/actions'
 
@@ -22,10 +22,10 @@ import * as Calculator from 'gEngine/calculator'
 
 import {Guesstimator} from 'lib/guesstimator/index'
 
-import './style.css'
+import '../shared/style.css'
 
-@connect(newCalculatorSelector, dispatch => bindActionCreators({navigate, fetchById, changeGuesstimate, runSimulations}, dispatch))
-export class NewCalculator extends Component {
+@connect(calculatorSpaceSelector, dispatch => bindActionCreators({navigate, fetchById, changeGuesstimate, runSimulations}, dispatch))
+export class CalculatorShow extends Component {
   state = {
     attemptedFetch: false,
     showResult: false,
@@ -41,7 +41,7 @@ export class NewCalculator extends Component {
 
   fetchData() {
     if (!this.state.attemptedFetch) {
-      this.props.fetchById(this.props.space_id)
+      this.props.fetchById(this.props.calculatorId)
       this.setState({attemptedFetch: true})
     }
   }
@@ -113,6 +113,14 @@ export class NewCalculator extends Component {
                   <div className='row information-section'>
                     <div className='col-xs-12 col-md-7 calculation-link-section'>
                         <a href={spaceUrl} onClick={navigate.bind(spaceUrl)}>See calculations</a>
+                    </div>
+                    <div className='col-xs-12 col-md-5'>
+                      <FacebookShareButton url={calculatorUrl} title={title}>
+                        <FacebookIcon size={42}/>
+                      </FacebookShareButton>
+                      <TwitterShareButton url={calculatorUrl} title={title}>
+                        <TwitterIcon size={42}/>
+                      </TwitterShareButton>
                     </div>
                   </div>
                 </div>
