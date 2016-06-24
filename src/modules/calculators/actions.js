@@ -1,6 +1,8 @@
 import {actionCreatorsFor} from 'redux-crud'
 import cuid from 'cuid'
 
+import app from 'ampersand-app'
+
 import {captureApiError, generalError} from 'lib/errors/index.js'
 import * as displayErrorsActions from 'gModules/displayErrors/actions.js'
 
@@ -17,7 +19,7 @@ export function fetchById(id) {
     api(getState()).calculators.get(id, (err, calculator) => {
       if (err) {
         dispatch(displayErrorsActions.newError())
-        captureApiError('CalculatorsFetch', null, null, null, {url: 'calculatorsFetchError'})
+        captureApiError('CalculatorsFetch', err.jqXHR, err.textStatus, err, {url: 'calculatorsFetchError'})
       } else if (calculator) {
         const space = _.get(calculator, '_embedded.space')
         const formatted = _.pick(calculator, ['id', 'space_id', 'title', 'input_ids', 'output_ids', 'content', 'share_image'])
@@ -34,7 +36,7 @@ export function create(spaceId, calculator) {
 
     api(getState()).calculators.create(spaceId, calculator, (err, calculator) => {
       if (err) {
-        captureApiError('CalculatorsCreate', null, null, err, {url: 'CalculatorsCreate'})
+        captureApiError('CalculatorsCreate', err.jqXHR, err.textStatus, err, {url: 'CalculatorsCreate'})
       } else if (calculator) {
         dispatch(sActions.createSuccess(record))
         app.router.history.navigate(`/calculators/${calculator.id}`)
