@@ -5,6 +5,7 @@ import {bindActionCreators} from 'redux'
 import ReactMarkdown from 'react-markdown'
 import Helmet from 'react-helmet'
 import {ShareButtons, generateShareIcon} from 'react-share'
+import Icon from 'react-fa'
 
 import Container from 'gComponents/utility/container/Container.js'
 import {Input} from '../shared/input'
@@ -124,15 +125,14 @@ export class CalculatorNewContainer extends Component {
 
   _onAddMetric(id){
     const {calculator} = this.state
-    const isInput = _.some(this.state.validInputs, e => e.id === id)
     let {input_ids, output_ids} = calculator
 
     let new_input_ids, new_output_ids
-    if (isInput) {
+    if (this._isInput(id)) {
       new_input_ids = [...input_ids, id]
       new_output_ids = output_ids
     } else {
-      new_output_ids = [...input_ids, id]
+      new_output_ids = [...output_ids, id]
       new_input_ids = input_ids
     }
 
@@ -145,29 +145,25 @@ export class CalculatorNewContainer extends Component {
     })
   }
 
-  _onMoveMetricUp(id){
+  _isInput(id){
+    return _.some(this.state.validInputs, e => e.id === id)
+  }
+
+  _onMoveMetric(id, isDown){
     const {calculator} = this.state
     let {input_ids, output_ids} = calculator
+    let change = (this._isInput(id)) ? {input_ids: incrementItemPosition(input_ids, id, isDown)} : {output_ids: incrementItemPosition(output_ids, id, isDown)}
+
     this.setState({
       calculator: {
         ...calculator,
-        input_ids: incrementItemPosition(this.state.calculator.input_ids, id, true),
-        output_ids: output_ids
+        ...change
       }
     })
   }
 
-  _onMoveMetricDown(id){
-    const {calculator} = this.state
-    let {input_ids, output_ids} = calculator
-    this.setState({
-      calculator: {
-        ...calculator,
-        input_ids: incrementItemPosition(this.state.calculator.input_ids, id, false),
-        output_ids: output_ids
-      }
-    })
-  }
+  _onMoveMetricUp(id){this._onMoveMetric(id, false)}
+  _onMoveMetricDown(id){this._onMoveMetric(id, true)}
 
   _isVisible(metricId) {
     const {calculator} = this.state
@@ -175,18 +171,17 @@ export class CalculatorNewContainer extends Component {
     return _.some([...input_ids, ...output_ids], e => metricId === e)
   }
 
+  _orderDisplayedMetrics(metric_ids, validMetrics){
+    return [
+      ...metric_ids.map(i => validMetrics.find(m => m.id === i)),
+      ...validMetrics.filter(i => !this._isVisible(i.id))
+    ].map(e => {return {metric: e, isVisible: this._isVisible(e.id)}})
+  }
+
   render() {
     const {validInputs, validOutputs, calculator} = this.state
-    const inputs = [
-      ...calculator.input_ids.map(i => validInputs.find(m => m.id === i)),
-      ...validInputs.filter(i => !this._isVisible(i.id))
-    ].map(e => {return {metric: e, isVisible: this._isVisible(e.id)}})
-    console.log(calculator.input_ids, inputs)
-
-    const outputs = [
-      ...calculator.output_ids.map(i => validOutputs.find(m => m.id === i)),
-      ...validOutputs.filter(i => !this._isVisible(i.id))
-    ].map(e => {return {metric: e, isVisible: this._isVisible(e.id)}})
+    const inputs = this._orderDisplayedMetrics(calculator.input_ids, validInputs)
+    const outputs = this._orderDisplayedMetrics(calculator.output_ids, validOutputs)
 
     if (!this.state.setupNewCalculator){ return (false) }
     return (
@@ -221,6 +216,8 @@ export class CalculatorNew extends Component {
                     ref={`input-${input.metric.id}`}
                     key={i}
                     name={input.metric.name}
+                    isFirst={i === 0}
+                    isLast={i === inputs.length - 1}
                     description={_.get(input.metric, 'guesstimate.description')}
                     isVisible={input.isVisible}
                     onRemove={() => {this.props.onRemoveMetric(input.metric.id)}}
@@ -234,7 +231,20 @@ export class CalculatorNew extends Component {
                 <div>
                   <hr className='result-divider'/>
                   <div className='outputs'>
-                      {_.map(outputs, (m, i) => <OutputForm key={i} metric={m.metric}/>)}
+                    {_.map(outputs, (input, i) => (
+                      <OutputForm
+                        key={i}
+                        name={input.metric.name}
+                        isFirst={i === 0}
+                        isLast={i === inputs.length - 1}
+                        isVisible={input.isVisible}
+                        onRemove={() => {this.props.onRemoveMetric(input.metric.id)}}
+                        onAdd={() => {this.props.onAddMetric(input.metric.id)}}
+                        onMoveUp={() => {this.props.onMoveMetricUp(input.metric.id)}}
+                        onMoveDown={() => {this.props.onMoveMetricDown(input.metric.id)}}
+                      />
+                      )
+                    )}
                   </div>
                 </div>
 
@@ -247,9 +257,24 @@ export class CalculatorNew extends Component {
   }
 }
 
+export const EditSection = ({isFirst, isLast, isVisible, onRemove, onAdd, onMoveUp, onMoveDown}) => (
+  <div>
+    {isVisible &&
+      <div>
+        <a onMouseDown={onRemove}><Icon name='minus-circle'/></a>
+        {!isFirst && <a onMouseDown={onMoveUp}><Icon name='chevron-up'/></a>}
+        {!isLast && <a onMouseDown={onMoveDown}><Icon name='chevron-down'/></a>}
+      </div>
+    }
+    {!isVisible &&
+      <a onMouseDown={onAdd}><Icon name='plus-circle'/></a>
+    }
+  </div>
+)
+
 export class InputForm extends Component{
   render () {
-    const {name, description, isVisible, onRemove, onAdd, onMoveUp, onMoveDown} = this.props
+    const {name, description} = this.props
     return (
       <div className='input'>
         <div className='row'>
@@ -260,16 +285,7 @@ export class InputForm extends Component{
             }
           </div>
           <div className='col-xs-12 col-sm-5'>
-            {isVisible &&
-              <div>
-                <a onMouseDown={onRemove}>Remove</a>
-                <a onMouseDown={onMoveUp}>Up</a>
-                <a onMouseDown={onMoveDown}>Down</a>
-              </div>
-            }
-            {!isVisible &&
-              <a onMouseDown={onAdd}>Add</a>
-            }
+            <EditSection {...this.props}/>
           </div>
         </div>
       </div>
@@ -277,16 +293,17 @@ export class InputForm extends Component{
   }
 }
 
-export const OutputForm = ({metric: {name}}) => {
+export const OutputForm = (props) => {
   return (
     <div className='output'>
       <div className='row'>
         <div className='col-xs-12 col-sm-7'>
           <div className='name'>
-            {name}
+            {props.name}
           </div>
         </div>
         <div className='col-xs-12 col-sm-5'>
+            <EditSection {...props}/>
         </div>
       </div>
     </div>
