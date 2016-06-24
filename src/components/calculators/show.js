@@ -35,11 +35,7 @@ export class CalculatorShow extends Component {
   componentWillReceiveProps(nextProps) {
     this.fetchData()
     if (!this.props.calculator && !!nextProps.calculator) {
-      this.props.deleteSimulations([...nextProps.calculator.input_ids, ...nextProps.calculator.output_ids])
-      const metrics = [...nextProps.inputs, ...nextProps.outputs]
-      metrics.forEach(m => {
-        this.props.changeGuesstimate(m.id, {...m.guesstimate, input: ''}, false, false)
-      })
+      this.props.runSimulations({spaceId: nextProps.calculator.space_id})
     }
   }
 
