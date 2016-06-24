@@ -164,7 +164,7 @@ export function generalUpdate(spaceId, params) {
         if (err === 'Conflict') {
           dispatch(changeActionState('CONFLICT'))
         } else {
-          captureApiError('SpacesUpdate', null, null, err, {url: 'SpacesUpdate'})
+          captureApiError('SpacesUpdate', err.jqXHR, err.textStatus,  err, {url: 'SpacesUpdate'})
           dispatch(changeActionState('ERROR'))
         }
       } else if (value) {
