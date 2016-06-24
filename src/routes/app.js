@@ -41,11 +41,6 @@ window.workers = window.workers.map(
 
 app.extend({
   init () {
-
-    if (__DEV__) {
-      window.Perf = require('react-addons-perf')
-    }
-
     window.recorder = new GuesstimateRecorder()
 
     window.intercomSettings = {

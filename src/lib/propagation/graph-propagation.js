@@ -22,9 +22,6 @@ export class GraphPropagation {
   // metricId, samples
 
   constructor(dispatch: Function, getState: Function, graphFilters: object) {
-    if (__DEV__) {
-      window.Perf.start()
-    }
     this.dispatch = dispatch
     this.getState = getState
     this.id = Date.now()
@@ -55,9 +52,6 @@ export class GraphPropagation {
 
   run(): void {
     if (this.currentStep >= this.totalSteps) {
-      if (__DEV__) {
-        window.Perf.stop()
-      }
       return
     }
     this._step().then(() => {this.run()});
