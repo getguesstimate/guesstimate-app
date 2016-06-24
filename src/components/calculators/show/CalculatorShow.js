@@ -12,7 +12,7 @@ import {Output} from '../shared/output'
 
 import {calculatorSpaceSelector} from './calculator-space-selector'
 
-import {navigate} from 'gModules/navigation/actions'
+import {navigateFn} from 'gModules/navigation/actions'
 import {fetchById} from 'gModules/calculators/actions'
 import {runSimulations} from 'gModules/simulations/actions'
 import {changeGuesstimate} from 'gModules/guesstimates/actions'
@@ -24,7 +24,7 @@ import {Guesstimator} from 'lib/guesstimator/index'
 
 import '../shared/style.css'
 
-@connect(calculatorSpaceSelector, dispatch => bindActionCreators({navigate, fetchById, changeGuesstimate, runSimulations}, dispatch))
+@connect(calculatorSpaceSelector, dispatch => bindActionCreators({fetchById, changeGuesstimate, runSimulations}, dispatch))
 export class CalculatorShow extends Component {
   state = {
     attemptedFetch: false,
@@ -65,7 +65,7 @@ export class CalculatorShow extends Component {
   render() {
     if (!this.props.calculator) { return false }
 
-    const {calculator: {content, title, space_id, share_image}, inputs, outputs, navigate} = this.props
+    const {calculator: {content, title, space_id, share_image}, inputs, outputs} = this.props
     const spaceUrl = Space.url({id: space_id})
     const calculatorUrl = Calculator.fullUrl(this.props.calculator)
 
@@ -112,7 +112,7 @@ export class CalculatorShow extends Component {
                   </div>
                   <div className='row information-section'>
                     <div className='col-xs-12 col-md-7 calculation-link-section'>
-                        <a href={spaceUrl} onClick={navigate.bind(spaceUrl)}>See calculations</a>
+                        <a href={spaceUrl} onClick={navigateFn(spaceUrl)}>See calculations</a>
                     </div>
                     <div className='col-xs-12 col-md-5'>
                       <FacebookShareButton url={calculatorUrl} title={title}>
