@@ -31,7 +31,7 @@ export function create(spaceId, calculator) {
     const record = {...calculator, id: cuid()}
     dispatch(sActions.createStart(record))
 
-    api(getState()).calculators.create(spaceId, params, (err, calculator) => {
+    api(getState()).calculators.create(spaceId, calculator, (err, calculator) => {
       if (err) {
         captureApiError('CalculatorsCreate', null, null, err, {url: 'CalculatorsCreate'})
       } else if (calculator) {
