@@ -8,4 +8,6 @@ const productionCreds = {
   AUTH0_DOMAIN: 'guesstimate.auth0.com'
 };
 
+export const tokenLifetimeMs = 10*60*60*1000
+
 export const variables = (__API_ENV__ === 'development') ? developmentCreds : productionCreds
