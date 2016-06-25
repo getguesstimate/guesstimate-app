@@ -6,6 +6,7 @@ import Router from 'ampersand-router'
 
 import Layout from './layouts/application/index'
 import Home from './home/index'
+import {CalculatorShow} from 'gComponents/calculators/show'
 import SpaceShow from 'gComponents/spaces/show'
 import SpaceIndex from 'gComponents/spaces/index/index'
 import Maintenance from 'gComponents/pages/maintenance/index'
@@ -62,6 +63,7 @@ export default Router.extend({
     'scratchpad': 'scratchpad',
     'pricing': 'pricing',
     'subscribe/:id': 'subscribe',
+    'calculators/:id': 'calculatorShow',
   },
 
   spaceIndex() { this.render(<SpaceIndex/>, {backgroundColor: 'GREY'}) },
@@ -85,4 +87,5 @@ export default Router.extend({
   organizationShow(id) { this.render(<OrganizationShow organizationId={id} key={id}/>, {backgroundColor: 'GREY'}) },
   organizationsNew() { this.render(<CreateOrganizationPageContainer/>, {backgroundColor: 'GREY'}) },
   pricing() { this.render(<PlanIndex/>, {backgroundColor: 'GREY'}) },
+  calculatorShow(id) { this.render(<CalculatorShow calculatorId={parseInt(id)} key={parseInt(id)}/>, {showFooter: false, backgroundColor: 'GREY'}) },
 })
