@@ -17,7 +17,7 @@ const PointDisplay = ({value, precision=6}) => (
   </div>
 )
 
-const DistributionDisplay = ({mean, adjustedConfidenceInterval: [low, high]}) => (
+const DistributionDisplay = ({mean, range: [low, high]}) => (
   <div>
     <PointDisplay value={mean} precision={2}/>
     <div className='UncertaintyRange'>
@@ -26,9 +26,14 @@ const DistributionDisplay = ({mean, adjustedConfidenceInterval: [low, high]}) =>
   </div>
 )
 
+// TODO(matthew): Ostensibly I'd like to handle the defensivity upstream, but this is a good quick fix for the problem
+// exposed to customers presently.
 export const DistributionSummary = ({length, mean, adjustedConfidenceInterval}) => (
   <div className="DistributionSummary">
-    {length === 1 && <PointDisplay value={mean}/>}
-    {length > 1 && <DistributionDisplay mean={mean} adjustedConfidenceInterval={adjustedConfidenceInterval}/>}
+    {length === 1 || _.some(adjustedConfidenceInterval, e => !_.isFinite(e)) ?
+      <PointDisplay value={mean}/> 
+        :
+      <DistributionDisplay mean={mean} range={adjustedConfidenceInterval}/>
+    }
   </div>
 )
