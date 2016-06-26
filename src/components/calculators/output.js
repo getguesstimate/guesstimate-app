@@ -13,7 +13,7 @@ const RangeDisplay = ({range: [low, high]}) => (
   <div><PrecisionNumber value={low}/> to <PrecisionNumber value={high}/></div>
 )
 
-const ResultSection = ({length, mean, adjustedConfidenceInterval, hasErrors}) => (
+const ResultSection = ({length, mean, adjustedConfidenceInterval}) => (
   length === 1 ? <PrecisionNumber value={mean} precision={6}/> : <RangeDisplay range={adjustedConfidenceInterval}/>
 )
 
