@@ -69,14 +69,6 @@ export class CalculatorShow extends Component {
     return inputComponents.map(i => !!i && i.hasValidContent()).reduce((x,y) => x && y, true)
   }
 
-  anyOutputHasErrors() {
-    const errors = _.flatten(this.props.outputs.map(o => _.get(o, 'simulation.sample.errors'))).filter(e => !!e)
-    if (!_.isEmpty(errors)) {
-      console.warn(errors)
-    }
-    return !_.isEmpty(errors)
-  }
-
   allOutputsHaveStats() {
     return this.props.outputs.map(o => !!o && _.has(o, 'simulation.stats')).reduce((x,y) => x && y, true)
   }
@@ -104,7 +96,6 @@ export class CalculatorShow extends Component {
     const FacebookIcon = generateShareIcon('facebook')
     const TwitterIcon = generateShareIcon('twitter')
 
-    const outputsHaveErrors = this.anyOutputHasErrors()
     return (
       <Container>
         <Helmet title={title} meta={metaTags}/>
@@ -155,10 +146,10 @@ export class CalculatorShow extends Component {
                   <div className='col-xs-12 col-md-7'/>
                   <div className='col-xs-12 col-md-5'>
                     <div
-                      className={`ui button ${outputsHaveErrors ? 'hasErrors' : 'green'} calculateButton${this.readyToCalculate() ? '' : ' disabled'}`}
+                      className={`ui button calculateButton${this.readyToCalculate() ? '' : ' disabled'}`}
                       onClick={() => {this.setState({showResult: true})}}
                     >
-                      {outputsHaveErrors ? <Icon name='warning' /> : 'Calculate'}
+                      Calculate
                     </div>
                   </div>
                 </div>
