@@ -32,6 +32,10 @@
     margin-top: .9em;
     margin-bottom: 2em;
     color: #666;
+
+    img {
+      max-width: 100%;
+    }
   }
 
   .inputs {
