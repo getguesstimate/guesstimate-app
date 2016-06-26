@@ -63,6 +63,13 @@ export class CalculatorShow extends Component {
     if (shouldRunSims) {this.setState({hasSimulated: true})}
   }
 
+  onEnter() {
+    if (!this.state.showResult && this.readyToCalculate()) {
+      this.setState({showResult: true})
+    }
+    return true
+  }
+
   allInputsHaveContent(idsToExclude=[]) {
     const includedInputs = this.props.inputs.filter(i => !_.some(idsToExclude, id => i.id === id))
     const inputComponents = _.map(includedInputs, metric => this.refs[`input-${metric.id}`])
@@ -117,6 +124,7 @@ export class CalculatorShow extends Component {
                     description={_.get(metric, 'guesstimate.description')}
                     errors={_.get(metric, 'simulation.sample.errors')}
                     onChange={this.onChange.bind(this, metric)}
+                    onEnter={this.onEnter.bind(this)}
                   />
                 ))}
               </div>
