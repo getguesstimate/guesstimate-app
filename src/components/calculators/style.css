@@ -87,6 +87,11 @@
     background-color: #82E69D !important;
   }
 
+  .calculateButton.hasErrors {
+    background-color: red !important;
+    color: white !important;
+  }
+
   .result-divider {
     border-bottom: 2px dotted #e8e8e8;
     border-top: none;

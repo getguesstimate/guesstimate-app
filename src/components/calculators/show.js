@@ -5,6 +5,7 @@ import {bindActionCreators} from 'redux'
 import ReactMarkdown from 'react-markdown'
 import Helmet from 'react-helmet'
 import {ShareButtons, generateShareIcon} from 'react-share'
+import Icon from 'react-fa'
 
 import Container from 'gComponents/utility/container/Container.js'
 import {Input} from './input'
@@ -14,7 +15,7 @@ import {calculatorSpaceSelector} from './calculator-space-selector'
 
 import {navigateFn} from 'gModules/navigation/actions'
 import {fetchById} from 'gModules/calculators/actions'
-import {runSimulations} from 'gModules/simulations/actions'
+import {deleteSimulations} from 'gModules/simulations/actions'
 import {changeGuesstimate} from 'gModules/guesstimates/actions'
 
 import * as Space from 'gEngine/space'
@@ -24,7 +25,7 @@ import {Guesstimator} from 'lib/guesstimator/index'
 
 import './style.css'
 
-@connect(calculatorSpaceSelector, dispatch => bindActionCreators({fetchById, changeGuesstimate, runSimulations}, dispatch))
+@connect(calculatorSpaceSelector, dispatch => bindActionCreators({fetchById, changeGuesstimate, deleteSimulations}, dispatch))
 export class CalculatorShow extends Component {
   state = {
     attemptedFetch: false,
@@ -35,7 +36,7 @@ export class CalculatorShow extends Component {
   componentWillReceiveProps(nextProps) {
     this.fetchData()
     if (!this.props.calculator && !!nextProps.calculator) {
-      this.props.runSimulations({spaceId: nextProps.calculator.space_id})
+      this.props.deleteSimulations([...nextProps.inputs.map(m => m.id), ...nextProps.outputs.map(m => m.id)])
     }
   }
 
@@ -62,6 +63,22 @@ export class CalculatorShow extends Component {
     return inputComponents.map(i => !!i && i.hasValidContent()).reduce((x,y) => x && y, true)
   }
 
+  anyOutputHasErrors() {
+    const errors = _.flatten(this.props.outputs.map(o => _.get(o, 'simulation.sample.errors'))).filter(e => !!e)
+    if (!_.isEmpty(errors)) {
+      console.warn(errors)
+    }
+    return !_.isEmpty(errors)
+  }
+
+  allOutputsHaveStats() {
+    return this.props.outputs.map(o => !!o && _.has(o, 'simulation.stats')).reduce((x,y) => x && y, true)
+  }
+
+  readyToCalculate() {
+    return this.allInputsHaveContent() && this.allOutputsHaveStats()
+  }
+
   render() {
     if (!this.props.calculator) { return false }
 
@@ -80,6 +97,8 @@ export class CalculatorShow extends Component {
     const {FacebookShareButton, TwitterShareButton} = ShareButtons
     const FacebookIcon = generateShareIcon('facebook')
     const TwitterIcon = generateShareIcon('twitter')
+
+    const outputsHaveErrors = this.anyOutputHasErrors()
     return (
       <Container>
         <Helmet title={title} meta={metaTags}/>
@@ -130,10 +149,10 @@ export class CalculatorShow extends Component {
                   <div className='col-xs-12 col-md-7'/>
                   <div className='col-xs-12 col-md-5'>
                     <div
-                      className={`ui button green calculateButton${this.allInputsHaveContent() ? '' : ' disabled'}`}
+                      className={`ui button ${outputsHaveErrors ? 'hasErrors' : 'green'} calculateButton${this.readyToCalculate() ? '' : ' disabled'}`}
                       onClick={() => {this.setState({showResult: true})}}
                     >
-                      Calculate
+                      {outputsHaveErrors ? <Icon name='warning' /> : 'Calculate'}
                     </div>
                   </div>
                 </div>
