@@ -30,6 +30,7 @@ export class CalculatorShow extends Component {
   state = {
     attemptedFetch: false,
     showResult: false,
+    hasSimulated: false,
   }
 
   componentWillMount() { this.fetchData() }
@@ -49,17 +50,22 @@ export class CalculatorShow extends Component {
 
   onChange({id, guesstimate}, input) {
     const guesstimateType = Guesstimator.parse({...guesstimate, input})[1].samplerType().referenceName
+    const shouldRunSims = !_.isEmpty(input) && this.allInputsHaveContent([id])
+    const shouldRunAllUnsimulated = !this.state.hasSimulated
 
     this.props.changeGuesstimate(
       id,
       {...guesstimate, ...{data: null, input, guesstimateType}},
-      true, // runSims
-      false // saveOnServer
+      shouldRunSims, // runSims
+      false, // saveOnServer
+      shouldRunAllUnsimulated // runAllUnsimulated
     )
+    if (shouldRunSims) {this.setState({hasSimulated: true})}
   }
 
-  allInputsHaveContent() {
-    const inputComponents = _.map(this.props.inputs, metric => this.refs[`input-${metric.id}`])
+  allInputsHaveContent(idsToExclude=[]) {
+    const includedInputs = this.props.inputs.filter(i => !_.some(idsToExclude, id => i.id === id))
+    const inputComponents = _.map(includedInputs, metric => this.refs[`input-${metric.id}`])
     return inputComponents.map(i => !!i && i.hasValidContent()).reduce((x,y) => x && y, true)
   }
 

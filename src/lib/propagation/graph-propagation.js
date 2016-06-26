@@ -1,12 +1,12 @@
 /* @flow */
 
-import _ from 'lodash';
+import _ from 'lodash'
 import async from 'async'
 
-import e from 'gEngine/engine';
-import type {Simulation, Graph} from '../lib/engine/types.js'
+import e from 'gEngine/engine'
+import type {Simulation, Graph} from '../lib/engine/types'
 import {deleteSimulations} from 'gModules/simulations/actions'
-import MetricPropagation from './metric-propagation.js'
+import MetricPropagation from './metric-propagation'
 
 function isRecentPropagation(propagationId: number, simulation: Simulation) {
   return !_.has(simulation, 'propagation') || (propagationId >= simulation.propagation)

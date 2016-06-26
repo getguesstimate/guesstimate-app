@@ -7,7 +7,7 @@ function registerGraphChange(dispatch, getState, metricId) {
   spaceId && dispatch(spaceActions.registerGraphChange(spaceId))
 }
 
-export function changeGuesstimate(metricId, values, runSimulations=false, shouldRegisterGraphChange=true) {
+export function changeGuesstimate(metricId, values, runSimulations=false, shouldRegisterGraphChange=true, runAllUnsimulated=false) {
   return (dispatch, getState) => {
     const formatted = engine.guesstimate.format({...values, metric: metricId})
     dispatch({ type: 'CHANGE_GUESSTIMATE', metricId, values: formatted })
@@ -18,7 +18,7 @@ export function changeGuesstimate(metricId, values, runSimulations=false, should
 
     if (runSimulations) {
       const state = getState()
-      dispatch({type: 'RUN_FORM_SIMULATIONS', getState, dispatch, metricId});
+      dispatch({type: 'RUN_FORM_SIMULATIONS', getState, dispatch, metricId, runAllUnsimulated});
     }
   }
 }
