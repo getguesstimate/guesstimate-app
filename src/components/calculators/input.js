@@ -26,7 +26,7 @@ export class Input extends Component{
   }
 
   render () {
-    const {name, description, errors} = this.props
+    const {name, description, errors, onEnter} = this.props
     return (
       <div className='input'>
         <div className='row'>
@@ -42,7 +42,7 @@ export class Input extends Component{
                 ref='editor'
                 editorState={this.state.editorState}
                 onChange={this.onChange.bind(this)}
-                handleReturn={() => true}
+                handleReturn={onEnter}
               />
               {!_.isEmpty(errors) && <div className='status error'><Icon name='close' /></div>}
               {this.hasValidContent() && <div className='status success'><Icon name='check' /></div>}
