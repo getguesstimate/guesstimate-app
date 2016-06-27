@@ -5,6 +5,7 @@ import {bindActionCreators} from 'redux'
 import ReactMarkdown from 'react-markdown'
 import Helmet from 'react-helmet'
 import {ShareButtons, generateShareIcon} from 'react-share'
+import Icon from 'react-fa'
 
 import Container from 'gComponents/utility/container/Container.js'
 import {Input} from './input'
@@ -14,7 +15,7 @@ import {calculatorSpaceSelector} from './calculator-space-selector'
 
 import {navigateFn} from 'gModules/navigation/actions'
 import {fetchById} from 'gModules/calculators/actions'
-import {runSimulations} from 'gModules/simulations/actions'
+import {deleteSimulations} from 'gModules/simulations/actions'
 import {changeGuesstimate} from 'gModules/guesstimates/actions'
 
 import * as Space from 'gEngine/space'
@@ -24,18 +25,19 @@ import {Guesstimator} from 'lib/guesstimator/index'
 
 import './style.css'
 
-@connect(calculatorSpaceSelector, dispatch => bindActionCreators({fetchById, changeGuesstimate, runSimulations}, dispatch))
+@connect(calculatorSpaceSelector, dispatch => bindActionCreators({fetchById, changeGuesstimate, deleteSimulations}, dispatch))
 export class CalculatorShow extends Component {
   state = {
     attemptedFetch: false,
     showResult: false,
+    hasSimulated: false,
   }
 
   componentWillMount() { this.fetchData() }
   componentWillReceiveProps(nextProps) {
     this.fetchData()
     if (!this.props.calculator && !!nextProps.calculator) {
-      this.props.runSimulations({spaceId: nextProps.calculator.space_id})
+      this.props.deleteSimulations([...nextProps.inputs.map(m => m.id), ...nextProps.outputs.map(m => m.id)])
     }
   }
 
@@ -48,18 +50,35 @@ export class CalculatorShow extends Component {
 
   onChange({id, guesstimate}, input) {
     const guesstimateType = Guesstimator.parse({...guesstimate, input})[1].samplerType().referenceName
+    const shouldRunSims = !_.isEmpty(input) && this.allInputsHaveContent([id])
+    const shouldRunAllUnsimulated = !this.state.hasSimulated
 
     this.props.changeGuesstimate(
       id,
       {...guesstimate, ...{data: null, input, guesstimateType}},
-      true, // runSims
-      false // saveOnServer
+      shouldRunSims, // runSims
+      false, // saveOnServer
+      shouldRunAllUnsimulated // runAllUnsimulated
     )
+    if (shouldRunSims) {this.setState({hasSimulated: true})}
   }
 
-  allInputsHaveContent() {
-    const inputComponents = _.map(this.props.inputs, metric => this.refs[`input-${metric.id}`])
-    return inputComponents.map(i => !!i && i.hasValidContent()).reduce((x,y) => x && y, true)
+  onEnter() {
+    if (!this.state.showResult && this.readyToCalculate()) { this.setState({showResult: true}) }
+  }
+
+  allInputsHaveContent(idsToExclude=[]) {
+    const includedInputs = this.props.inputs.filter(i => !_.some(idsToExclude, id => i.id === id))
+    const inputComponents = _.map(includedInputs, metric => this.refs[`input-${metric.id}`])
+    return _.every(inputComponents, i => !!i && i.hasValidContent())
+  }
+
+  allOutputsHaveStats() {
+    return this.props.outputs.map(o => !!o && _.has(o, 'simulation.stats')).reduce((x,y) => x && y, true)
+  }
+
+  readyToCalculate() {
+    return this.allInputsHaveContent() && this.allOutputsHaveStats()
   }
 
   render() {
@@ -80,6 +99,7 @@ export class CalculatorShow extends Component {
     const {FacebookShareButton, TwitterShareButton} = ShareButtons
     const FacebookIcon = generateShareIcon('facebook')
     const TwitterIcon = generateShareIcon('twitter')
+
     return (
       <Container>
         <Helmet title={title} meta={metaTags}/>
@@ -101,6 +121,7 @@ export class CalculatorShow extends Component {
                     description={_.get(metric, 'guesstimate.description')}
                     errors={_.get(metric, 'simulation.sample.errors')}
                     onChange={this.onChange.bind(this, metric)}
+                    onEnter={this.onEnter.bind(this)}
                   />
                 ))}
               </div>
@@ -130,7 +151,7 @@ export class CalculatorShow extends Component {
                   <div className='col-xs-12 col-md-7'/>
                   <div className='col-xs-12 col-md-5'>
                     <div
-                      className={`ui button green calculateButton${this.allInputsHaveContent() ? '' : ' disabled'}`}
+                      className={`ui button calculateButton${this.readyToCalculate() ? '' : ' disabled'}`}
                       onClick={() => {this.setState({showResult: true})}}
                     >
                       Calculate
