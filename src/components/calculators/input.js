@@ -42,7 +42,7 @@ export class Input extends Component{
                 ref='editor'
                 editorState={this.state.editorState}
                 onChange={this.onChange.bind(this)}
-                handleReturn={onEnter}
+                handleReturn={() => {onEnter(); return true}}
               />
               {!_.isEmpty(errors) && <div className='status error'><Icon name='close' /></div>}
               {this.hasValidContent() && <div className='status success'><Icon name='check' /></div>}

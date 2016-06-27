@@ -64,16 +64,13 @@ export class CalculatorShow extends Component {
   }
 
   onEnter() {
-    if (!this.state.showResult && this.readyToCalculate()) {
-      this.setState({showResult: true})
-    }
-    return true
+    if (!this.state.showResult && this.readyToCalculate()) { this.setState({showResult: true}) }
   }
 
   allInputsHaveContent(idsToExclude=[]) {
     const includedInputs = this.props.inputs.filter(i => !_.some(idsToExclude, id => i.id === id))
     const inputComponents = _.map(includedInputs, metric => this.refs[`input-${metric.id}`])
-    return inputComponents.map(i => !!i && i.hasValidContent()).reduce((x,y) => x && y, true)
+    return _.every(inputComponents, i => !!i && i.hasValidContent())
   }
 
   allOutputsHaveStats() {
