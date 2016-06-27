@@ -3,7 +3,7 @@ import React, {Component, PropTypes} from 'react';
 import ReactDOM from 'react-dom'
 
 import {Guesstimator} from 'lib/guesstimator/index.js'
-import * as elev from 'server/elev/index.js'
+import * as elev from 'servers/elev/index.js'
 
 // We use onMouseUp to make sure that the onMouseUp
 // does not get called once another metric is underneath

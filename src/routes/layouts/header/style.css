@@ -34,7 +34,16 @@
 }
 
 @media only screen and (max-width: 767px) {
+  .PageHeader {
+    padding: 0 1em;
+  }
   .guesstimate-name {
+    display: none;
+  }
+  .item.text.scratchpad {
+    display: none;
+  }
+  .item.text.pricing {
     display: none;
   }
 }

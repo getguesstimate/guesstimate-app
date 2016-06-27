@@ -130,7 +130,7 @@ export class SpaceToolbar extends Component {
             <ReactTooltip {...ReactTooltipParams} id='undo-button'>Undo (ctrl-z)</ReactTooltip>
             <ReactTooltip {...ReactTooltipParams} id='redo-button'>Redo (ctrl-shift-z)</ReactTooltip>
 
-            { isLoggedIn &&
+            {isLoggedIn &&
               <DropDown
                 headerText={'Model Actions'}
                 openLink={<a className='header-action'>File</a>}

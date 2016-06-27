@@ -56,7 +56,8 @@ export function neededSamples(text, inputs, n){
     return 1
   }
 
-  const numInputs = Object.keys(inputs).map(key => inputs[key].length)
+  // TODO(matthew): A more permanent solution should be sought.
+  const numInputs = _.filter(inputs, i => !!i).map(i => i.length)
   if (_.some(numInputs, i => i === n)) {
     // No need to compute any further if any of the inputs are maximally sampled. This is a common case so is worth an
     // edge case short circuit here, to avoid gcd/lcm calculation.
@@ -85,6 +86,7 @@ function modularSlice(array, from, to) {
 function buildData(expr, prevModularIndex, numSamples, inputs) {
   let slicedInputs = {}
   for (let key of Object.keys(inputs)) {
+    if (!inputs[key]) { continue }
     slicedInputs[key] = modularSlice(inputs[key], prevModularIndex, prevModularIndex + numSamples)
   }
   return {expr, numSamples, inputs: slicedInputs}
