@@ -21,6 +21,16 @@ export class GuesstimateRecorder {
     this.uniqueId = 0
   }
 
+  static gatherParentIndices(component) {
+    let parentIndices = _.has(component, '__recorder_index__') ? [component['__recorder_index__']] : []
+    let ancestor = component._reactInternalInstance._currentElement._owner
+    while (!!ancestor) {
+      parentIndices = [ancestor['__recorder_index__'], ...parentIndices]
+      ancestor = ancestor._reactInternalInstance._currentElement._owner
+    }
+    return parentIndices
+  }
+
   static addSingletonToNestedList(name, id, time, data, list) {
     const lastElm = list[list.length - 1]
     if (list.length === 0 || !!lastElm.end) {
@@ -85,8 +95,6 @@ export class GuesstimateRecorder {
   }
   recordRenderStopEvent(component) {
     if (this.disabled || this.paused) { return }
-
-    const parent = component._reactInternalInstance._currentElement._owner
 
     const name = component.constructor.name
     const fullRender = this.recordNamedEvent(name, component['__recorder_id__'], " Render Stop", GuesstimateRecorder.addStopToNestedList)
