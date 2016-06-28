@@ -22,7 +22,7 @@ import * as segment from 'servers/segment'
 
 import './style.css'
 
-import {isLocation, isAtLocation} from 'lib/locationUtils.js'
+import {isLocation, isAtLocation, existsAtLoc} from 'lib/locationUtils.js'
 
 function mapStateToProps(state) {
   return {
@@ -109,11 +109,9 @@ export default class Canvas extends Component{
   }
 
   _handleMoveMetric({prev, next}) {
-    const destinationMetric = this.props.denormalizedSpace.metrics.find(f => f.location.row === next.row && f.location.column === next.column)
-    if (!!destinationMetric) {
-      return
-    }
-    const metric = this.props.denormalizedSpace.metrics.find(f => f.location.row === prev.row && f.location.column === prev.column)
+    if (_.some(this.props.denormalizedSpace.metrics, existsAtLoc(next))) { return }
+
+    const metric = this.props.denormalizedSpace.metrics.find(existsAtLoc(prev))
     this.props.dispatch(changeMetric({id: metric.id, location: next}))
     this.props.dispatch(changeSelect(next))
   }
@@ -122,7 +120,7 @@ export default class Canvas extends Component{
    const {selectedCell} = this.props
    const metrics = _.get(this.props.denormalizedSpace, 'metrics')
 
-   return metrics && isLocation(selectedCell) && metrics.find(m => isAtLocation(m.location, selectedCell));
+   return metrics && isLocation(selectedCell) && metrics.some(existsAtLoc(selectedCell));
   }
 
   _isAnalysisView(props = this.props) {
@@ -162,7 +160,6 @@ export default class Canvas extends Component{
       const space = this.props.denormalizedSpace
       const {metrics} = space
       const findMetric = (metricId) => metrics.find(m => m.id === metricId)
-      const metricIdToLocation = (metricId) => findMetric(metricId).location
 
       edges = space.edges.map(e => {
         const [inputMetric, outputMetric] = [findMetric(e.input), findMetric(e.output)]

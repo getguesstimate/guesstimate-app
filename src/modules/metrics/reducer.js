@@ -32,11 +32,10 @@ export function metricsR(state = [], action) {
       return (state.filter(y => !_.some(action.item.ids, id => y.id === id)))
     case 'CHANGE_METRIC':
       const i = state.findIndex(y => y.id === action.item.id);
-      const newItem = Object.assign({}, state[i], action.item);
       if (i !== -1) {
         return ([
           ...state.slice(0, i),
-          newItem,
+          {...state[i], ...action.item},
           ...state.slice(i+1, state.length)
         ])
       }

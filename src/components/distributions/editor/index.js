@@ -45,9 +45,6 @@ export default class Guesstimate extends Component{
     this.props.dispatch(changeGuesstimate(this.props.metricId, {...this.props.guesstimate, ...changes}, runSims, saveToServer))
   }
 
-  changeDescriptionAndSave(description) {
-    this.changeGuesstimate({description}, false, true)
-  }
   changeInput(input) {
     const guesstimateType = this._guesstimateType({input})
     this.changeGuesstimate({data: null, input, guesstimateType}, true, false)

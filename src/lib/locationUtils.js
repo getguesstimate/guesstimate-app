@@ -42,3 +42,9 @@ export const move = ({row, column}, direction) => ({row: row + direction.row, co
 export function translate(start, end) {
   return l => ({row: l.row + (end.row - start.row), column: l.column + (end.column - start.column)})
 }
+
+// Returns a function that can be used to search a list of objects of the form {location: ..., ... } for a value at the
+// passed location.
+export function existsAtLoc(seekLoc) {
+  return e => isAtLocation(e.location, seekLoc)
+}
