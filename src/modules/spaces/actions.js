@@ -130,14 +130,14 @@ export function copy(spaceId) {
       if (err) {
         dispatch(changeActionState('ERROR_COPYING'))
         captureApiError('SpacesCreate', null, null, err, {url: 'SpacesCreate'})
-      }
-      else if (value) {
+      } else if (value) {
         dispatch(changeActionState('COPIED'))
         // Signal the resource was created.
         dispatch(sActions.createSuccess(value, cid))
         // And that we've fetched new data from it. We have to do this in this case as the new resource is pre-populated
         // with some data.
         dispatch(sActions.fetchSuccess([value]))
+        dispatch(initSpace(value.id, value.graph))
 
         app.router.history.navigate('/models/' + value.id)
       }
@@ -164,7 +164,7 @@ export function generalUpdate(spaceId, params) {
         if (err === 'Conflict') {
           dispatch(changeActionState('CONFLICT'))
         } else {
-          captureApiError('SpacesUpdate', null, null, err, {url: 'SpacesUpdate'})
+          captureApiError('SpacesUpdate', err.jqXHR, err.textStatus,  err, {url: 'SpacesUpdate'})
           dispatch(changeActionState('ERROR'))
         }
       } else if (value) {

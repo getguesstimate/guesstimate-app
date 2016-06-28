@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
 
 import Helmet from 'react-helmet'
+import $ from 'jquery'
 
 import {SpaceHeader} from './header'
 import {SpaceToolbar} from './Toolbar/index'
@@ -21,11 +22,10 @@ import {parseSlurp} from 'lib/slurpParser'
 
 import e from 'gEngine/engine'
 
-import * as elev from 'server/elev/index'
-import * as segment from 'server/segment'
+import * as elev from 'servers/elev/index'
+import * as segment from 'servers/segment'
 
 import './style.css'
-import $ from 'jquery'
 
 function mapStateToProps(state) {
   return {
@@ -97,15 +97,13 @@ export default class SpacesShow extends Component {
 
   considerFetch(newProps) {
     const space = newProps.denormalizedSpace
-    const needsData = !_.has(space, 'graph')
 
-    if (needsData) {
-      this.fetchData()
-    }
-  }
+    const hasOwner = _.has(space, 'user.name') || _.has(space, 'organization.name')
+    const hasGraph = _.has(space, 'graph')
 
-  fetchData() {
-    if (!this.state.attemptedFetch) {
+    const hasData = this.state.attemptedFetch || (hasGraph && hasOwner)
+
+    if (!hasData) {
       this.props.dispatch(spaceActions.fetchById(this._id()))
       this.setState({attemptedFetch: true})
     }
@@ -225,10 +223,10 @@ export default class SpacesShow extends Component {
         {!space.name &&
           <Helmet
             meta={[
-              {name: "Description", content: tagDescription},
-              {property: "og:description", content: tagDescription},
-              {property: "og:site_name", content: "Guesstimate"},
-              {property: "og:image", content: space.big_screenshot},
+              {name: 'Description', content: tagDescription},
+              {property: 'og:description', content: tagDescription},
+              {property: 'og:site_name', content: 'Guesstimate'},
+              {property: 'og:image', content: space.big_screenshot},
             ]}
           />
         }
@@ -236,11 +234,11 @@ export default class SpacesShow extends Component {
           <Helmet
             title={space.name}
             meta={[
-              {name: "Description", content: tagDescription},
-              {property: "og:title", content: space.name},
-              {property: "og:description", content: tagDescription},
-              {property: "og:site_name", content: "Guesstimate"},
-              {property: "og:image", content: space.big_screenshot},
+              {name: 'Description', content: tagDescription},
+              {property: 'og:title', content: space.name},
+              {property: 'og:description', content: tagDescription},
+              {property: 'og:site_name', content: 'Guesstimate'},
+              {property: 'og:image', content: space.big_screenshot},
             ]}
           />
         }

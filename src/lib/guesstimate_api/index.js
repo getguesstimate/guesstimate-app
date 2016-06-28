@@ -1,6 +1,7 @@
 import Models from './resources/Models.js'
 import Organizations from './resources/Organizations.js'
 import Users from './resources/Users.js'
+import {Calculators} from './resources/Calculators'
 import Accounts from './resources/Accounts.js'
 import Copies from './resources/Copies.js'
 import UserOrganizationMemberships from './resources/UserOrganizationMemberships.js'
@@ -12,6 +13,7 @@ export default class GuesstimateApi {
     this.host = params['host']
     this.models = new Models(this)
     this.users = new Users(this)
+    this.calculators = new Calculators(this)
     this.organizations = new Organizations(this)
     this.copies = new Copies(this)
     this.accounts = new Accounts(this)

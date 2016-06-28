@@ -1,21 +1,19 @@
-//import Auth0Variables from './auth0-variables'
-import Auth0Lock from 'auth0-lock'
-import React, {Component, PropTypes} from 'react'
-import StandardDropdownMenu from 'gComponents/utility/standard-dropdown-menu'
-import DropDown from 'gComponents/utility/drop-down/index.js'
-import {CardListElement} from 'gComponents/utility/card/index.js'
-import {LinkSettings} from 'gComponents/utility/links/index.js'
-import * as meActions from 'gModules/me/actions.js'
-import * as modalActions from 'gModules/modal/actions.js'
-import * as navigationActions from 'gModules/navigation/actions.js'
-import Icon from 'react-fa'
-import './style.css'
-import {trackAccountModalClick, trackUserMenuOpen, trackUserMenuClose} from 'server/segment/index.js'
-import * as spaceActions from 'gModules/spaces/actions.js'
+import React, {Component} from 'react'
+import {connect} from 'react-redux'
+
+import DropDown from 'gComponents/utility/drop-down/index'
+import {CardListElement} from 'gComponents/utility/card/index'
+
+import * as meActions from 'gModules/me/actions'
+import * as modalActions from 'gModules/modal/actions'
+import * as navigationActions from 'gModules/navigation/actions'
+import * as spaceActions from 'gModules/spaces/actions'
+
 import {user,organization} from 'gEngine/engine'
 
-import {connect} from 'react-redux';
+import {trackAccountModalClick, trackUserMenuOpen, trackUserMenuClose} from 'servers/segment/index'
 
+import './style.css'
 
 @connect()
 export default class Profile extends Component {
@@ -176,11 +174,11 @@ export default class Profile extends Component {
       { isLoggedIn && this.profileDropdown() }
 
       { !isLoggedIn &&
-        <a className={'item text'} href='/scratchpad'>Scratchpad</a>
+        <a className={'item text scratchpad'} href='/scratchpad'>Scratchpad</a>
       }
 
       { !isLoggedIn &&
-        <a className={'item text'} href='/pricing'>Plans</a>
+        <a className={'item text pricing'} href='/pricing'>Plans</a>
       }
 
       { !isLoggedIn &&

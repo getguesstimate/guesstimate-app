@@ -4,7 +4,7 @@ import Icon from 'react-fa'
 
 import {Guesstimator} from 'lib/guesstimator/index'
 
-import * as elev from 'server/elev/index'
+import * as elev from 'servers/elev/index'
 
 export const GuesstimateTypeIcon = ({guesstimateType, toggleDistributionSelector}) => {
   const {isRangeDistribution, icon} = Guesstimator.samplerTypes.find(guesstimateType)

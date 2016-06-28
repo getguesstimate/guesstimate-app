@@ -1,12 +1,16 @@
-import {actionCreatorsFor} from 'redux-crud';
+import {actionCreatorsFor} from 'redux-crud'
+
 import $ from 'jquery'
 import cuid from 'cuid'
+
 import * as meActions from 'gModules/me/actions.js'
 import * as displayErrorsActions from 'gModules/displayErrors/actions.js'
 import * as userOrganizationMembershipActions from 'gModules/userOrganizationMemberships/actions.js'
+
 import {rootUrl} from 'servers/guesstimate-api/constants.js'
-import {captureApiError, generalError} from 'lib/errors/index.js'
 import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
+
+import {captureApiError, generalError} from 'lib/errors/index.js'
 
 let sActions = actionCreatorsFor('users');
 
@@ -54,7 +58,7 @@ export function fetchById(userId) {
 }
 
 function formatUsers(unformatted) {
-  return unformatted.map(u => _.pick(u, ['auth0_id', 'id', 'name', 'picture', 'sign_in_count']))
+  return unformatted.map(u => _.pick(u, ['auth0_id', 'id', 'name', 'picture']))
 }
 
 export function fromSearch(spaces) {
