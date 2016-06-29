@@ -1,13 +1,48 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component, PropTypes} from 'react'
 
 import $ from 'jquery'
-import {EditorState, Editor, ContentState, Modifier} from 'draft-js'
+import {EditorState, Editor, ContentState, Modifier, CompositeDecorator} from 'draft-js'
 
-import DistributionSelector from './DistributionSelector'
+import {nounSearch, propertySearch} from 'gModules/factBank/actions'
+
+// Note: these aren't very good regexes, don't use them!
+const NOUN_REGEX = /\@[\w]+/g
+const PROPERTY_REGEX = /\.[\w]+/g
+
+function nounStrategy(contentBlock, callback) {
+  findWithRegex(NOUN_REGEX, contentBlock, callback);
+}
+
+function propertyStrategy(contentBlock, callback) {
+  findWithRegex(PROPERTY_REGEX, contentBlock, callback);
+}
+
+function findWithRegex(regex, contentBlock, callback) {
+  const text = contentBlock.getText();
+  let matchArr, start;
+  while ((matchArr = regex.exec(text)) !== null) {
+    start = matchArr.index;
+    callback(start, start + matchArr[0].length);
+  }
+}
+
+const NounSpan = (props) => <span {...props} style={{color: 'red'}}>{props.children}</span>
+const PropertySpan = (props) => <span {...props} style={{color: 'blue'}}>{props.children}</span>
+
+const compositeDecorator = new CompositeDecorator([
+  {
+    strategy: nounStrategy,
+    component: NounSpan,
+  },
+  {
+    strategy: propertyStrategy,
+    component: PropertySpan,
+  },
+])
 
 class TextInputEditor extends Component {
   state = {
-    editorState: EditorState.createWithContent(ContentState.createFromText(this.props.value || ''))
+    editorState: EditorState.createWithContent(ContentState.createFromText(this.props.value || ''), compositeDecorator)
   }
 
   insertAtCaret(text) {
@@ -35,6 +70,23 @@ class TextInputEditor extends Component {
   }
 
   _onChange(editorState) {
+    const text = this._text(editorState)
+
+    const nounIndex = text.lastIndexOf('@')
+    const propertyIndex = text.lastIndexOf('.')
+    const spaceIndex = text.lastIndexOf(' ')
+
+    if (text.startsWith('=') && nounIndex != -1 && nounIndex > spaceIndex) {
+      if (propertyIndex > nounIndex) {
+        const noun = text.slice(nounIndex+1, propertyIndex)
+        const partialProperty = text.slice(propertyIndex+1)
+        const possibleProperties = propertySearch(noun, partialProperty)
+      } else {
+        const partialNoun = text.slice(nounIndex+1)
+        const possibleNouns = nounSearch(partialNoun)
+      }
+    }
+
     this.props.onChange(this._text(editorState))
     return this.setState({editorState})
   }
