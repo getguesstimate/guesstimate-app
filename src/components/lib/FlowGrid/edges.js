@@ -33,6 +33,12 @@ export class Edges extends Component {
           width={'100%'}
         >
           <defs>
+            <marker id="MarkerArrowGREEN" markerWidth="3" markerHeight="3" refX="2" refY="1.5" orient="auto">
+              <path d="M 0,0 V 3 L3,1.5 Z" className="arrow GREEN"/>
+             </marker>
+            <marker id="MarkerArrowDBLUE" markerWidth="3" markerHeight="3" refX="2" refY="1.5" orient="auto">
+              <path d="M 0,0 V 3 L3,1.5 Z" className="arrow DBLUE"/>
+             </marker>
             <marker id="MarkerArrowBLUE" markerWidth="3" markerHeight="3" refX="2" refY="1.5" orient="auto">
               <path d="M 0,0 V 3 L3,1.5 Z" className="arrow BLUE"/>
              </marker>

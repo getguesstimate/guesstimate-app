@@ -22,7 +22,7 @@ import * as segment from 'servers/segment'
 
 import './style.css'
 
-import {isLocation, isAtLocation} from 'lib/locationUtils.js'
+import {isLocation, isAtLocation, isWithinRegion} from 'lib/locationUtils.js'
 
 function mapStateToProps(state) {
   return {
@@ -160,14 +160,34 @@ export default class Canvas extends Component{
 
     if (this.showEdges()){
       const space = this.props.denormalizedSpace
+
       const {metrics} = space
       const findMetric = (metricId) => metrics.find(m => m.id === metricId)
-      const metricIdToLocation = (metricId) => findMetric(metricId).location
+
+      const {selectedRegion} = this.props
+      const selectedMetrics = metrics.filter(m => isWithinRegion(m.location, selectedRegion))
+
+      let ancestors = [...selectedMetrics], descendants = [...selectedMetrics]
+      const getAncestors = metrics => _.uniqBy(_.flatten(metrics.map(m => m.edges.inputs.map(findMetric))), 'id').filter(m => !_.some(ancestors, a => a.id === m.id))
+      const getDescendants = metrics => _.uniqBy(_.flatten(metrics.map(m => m.edges.outputs.map(findMetric))), 'id').filter(m => !_.some(descendants, d => d.id === m.id))
+
+      let nextAncestors = getAncestors(selectedMetrics)
+      let nextDescendants = getDescendants(selectedMetrics)
+
+      while (nextAncestors.length > 0 || nextDescendants.length > 0) {
+        ancestors = [...ancestors, ...nextAncestors]
+        descendants = [...descendants, ...nextDescendants]
+
+        nextAncestors = getAncestors(nextAncestors)
+        nextDescendants = getDescendants(nextDescendants)
+      }
 
       edges = space.edges.map(e => {
         const [inputMetric, outputMetric] = [findMetric(e.input), findMetric(e.output)]
         let errors = _.get(inputMetric, 'simulation.sample.errors')
-        const color = (errors && !!errors.length) ? 'RED' : 'BLUE'
+        const outputIsAncestor = _.some(ancestors, a => a.id === outputMetric.id)
+        const inputIsDescendant = _.some(descendants, d => d.id === inputMetric.id)
+        const color = (errors && !!errors.length) ? 'RED' : outputIsAncestor ? 'GREEN' : inputIsDescendant ? 'DBLUE' : 'BLUE'
         return {input: inputMetric.location, output: outputMetric.location, color}
       })
     }
