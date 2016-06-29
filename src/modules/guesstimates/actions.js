@@ -8,17 +8,12 @@ function registerGraphChange(dispatch, getState, metricId) {
   spaceId && dispatch(spaceActions.registerGraphChange(spaceId))
 }
 
-export function changeGuesstimate(metricId, newGuesstimate, runSimulations=false, shouldRegisterGraphChange=true) {
+export function changeGuesstimate(metricId, newGuesstimate, shouldRegisterGraphChange=true) {
   return (dispatch, getState) => {
     dispatch({ type: 'CHANGE_GUESSTIMATE', metricId, values: {...newGuesstimate, metric: metricId} })
 
     if (shouldRegisterGraphChange) {
       registerGraphChange(dispatch, getState, metricId)
-    }
-
-    if (runSimulations) {
-      const state = getState()
-      dispatch({type: 'RUN_FORM_SIMULATIONS', getState, dispatch, metricId});
     }
   }
 }

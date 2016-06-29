@@ -32,9 +32,13 @@ export function deleteSimulations(metricIds) {
 export function runSimulations(params) {
   return (dispatch, getState) => {
     (new GraphPropagation(dispatch, getState, params)).run()
-  };
+  }
+}
+
+export function runFormSimulations(metricId) {
+  return (dispatch, getState) => dispatch({type: 'RUN_FORM_SIMULATIONS', getState, dispatch, metricId})
 }
 
 export function addSimulation(simulation) {
-  return { type: 'UPDATE_SIMULATION', simulation};
+  return { type: 'UPDATE_SIMULATION', simulation}
 }

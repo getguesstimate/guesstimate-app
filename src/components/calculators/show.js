@@ -55,7 +55,6 @@ export class CalculatorShow extends Component {
     this.props.changeGuesstimate(
       id,
       {...guesstimate, ...{data: null, input, guesstimateType}},
-      false, // runSims
       false  // saveOnServer
     )
 
