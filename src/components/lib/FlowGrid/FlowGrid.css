@@ -100,7 +100,7 @@ svg.edge  path.basic-arrow.unconnected {
   stroke: $unconnected;
 }
 
-svg.edge  path.basic-arrow.hasErrors {
+svg.edge  path.basic-arrow.hasErrors.hasErrors {
   stroke: $errors;
 }
 
@@ -135,8 +135,8 @@ svg.edge  path.basic-arrow.default {
   fill: rgb(128, 154, 185)
 }
 
-.arrow.hasErrors{
-  fill: #B59893;
+.arrow.hasErrors.hasErrors{
+  fill: $errors;
 }
 
 .FlowGrid .Region {

@@ -46,7 +46,7 @@ export class Edges extends Component {
               <path d="M 0,0 V 3 L3,1.5 Z" className="arrow default"/>
              </marker>
             <marker id="MarkerArrow-hasErrors" markerWidth="3" markerHeight="3" refX="2" refY="1.5" orient="auto">
-              <path d="M 0,0 V 3 L3,1.5 Z" className="arrow RED"/>
+              <path d="M 0,0 V 3 L3,1.5 Z" className="arrow hasErrors"/>
              </marker>
           </defs>
           { _.sortBy(edges, e => {return e.pathStatus != 'unconnected' ? 2 : e.hasErrors ? 1 : 0}).map(
