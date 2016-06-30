@@ -15,7 +15,7 @@ import {calculatorSpaceSelector} from './calculator-space-selector'
 
 import {navigateFn} from 'gModules/navigation/actions'
 import {fetchById} from 'gModules/calculators/actions'
-import {deleteSimulations} from 'gModules/simulations/actions'
+import {deleteSimulations, runSimulations} from 'gModules/simulations/actions'
 import {changeGuesstimate} from 'gModules/guesstimates/actions'
 
 import * as Space from 'gEngine/space'
@@ -25,7 +25,7 @@ import {Guesstimator} from 'lib/guesstimator/index'
 
 import './style.css'
 
-@connect(calculatorSpaceSelector, dispatch => bindActionCreators({fetchById, changeGuesstimate, deleteSimulations}, dispatch))
+@connect(calculatorSpaceSelector, dispatch => bindActionCreators({fetchById, changeGuesstimate, deleteSimulations, runSimulations}, dispatch))
 export class CalculatorShow extends Component {
   state = {
     attemptedFetch: false,
@@ -53,18 +53,26 @@ export class CalculatorShow extends Component {
   }
 
   onChange({id, guesstimate}, input) {
-    const guesstimateType = Guesstimator.parse({...guesstimate, input})[1].samplerType().referenceName
-    const shouldRunSims = !_.isEmpty(input) && this.allInputsHaveContent([id])
-    const shouldRunAllUnsimulated = !this.state.hasSimulated
+    const parsed = Guesstimator.parse({...guesstimate, input})
+    const guesstimateType = parsed[1].samplerType().referenceName
 
     this.props.changeGuesstimate(
       id,
       {...guesstimate, ...{data: null, input, guesstimateType}},
-      shouldRunSims, // runSims
-      false, // saveOnServer
-      shouldRunAllUnsimulated // runAllUnsimulated
+      false  // saveOnServer
     )
-    if (shouldRunSims) {this.setState({hasSimulated: true})}
+
+    // We only want to simulate anything if all the inputs have simulatable content.
+    if (!_.isEmpty(input) && _.isEmpty(parsed[0]) && this.allInputsHaveContent([id])) {
+      if (!this.state.hasSimulated) {
+        // The initial simulations should run on all unsimulated metrics.
+        this.props.runSimulations({spaceId: this.props.calculator.space_id, onlyUnsimulated: true})
+        this.setState({hasSimulated: true})
+      } else {
+        // Later simulations just run on the affected subslices.
+        this.props.runSimulations({metricId: id})
+      }
+    }
   }
 
   onEnter() {

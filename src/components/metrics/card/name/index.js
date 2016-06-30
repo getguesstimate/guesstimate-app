@@ -73,7 +73,7 @@ export default class MetricName extends Component {
 
   handleSubmit() {
     if (this._hasChanged()){
-      this.props.onChange({name: this.value()})
+      this.props.onChange(this.value())
     }
   }
 

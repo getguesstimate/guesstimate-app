@@ -40,28 +40,24 @@ function addStats(simulation){
 
 export default function simulations(state = [], action = null) {
   switch (action.type) {
-  case 'SPACES_FETCH_SUCCESS':
-    let newSimulations = _.flatten(action.records.map(e => _.get(e, 'graph.simulations'))).filter(e => e)
-    return [...state, ...newSimulations]
-  case 'DELETE_SIMULATIONS':
-    return state.filter(y => !_.includes(action.metricIds, y.metric))
-  case 'UPDATE_SIMULATION':
-    let sim = action.simulation
-    // We modify the sim in place, adding stats and sorted values, before saving.
-    addStats(sim)
+    case 'DELETE_SIMULATIONS':
+      return state.filter(y => !_.includes(action.metricIds, y.metric))
+    case 'UPDATE_SIMULATION':
+      let sim = action.simulation
+      // We modify the sim in place, adding stats and sorted values, before saving.
+      addStats(sim)
 
-    const i = state.findIndex(y => y.metric === sim.metric);
-    if (i !== -1) {
-      const newState =  [
-        ...state.slice(0, i),
-        sim,
-        ...state.slice(i+1, state.length)
-      ];
-      return newState
-    } else {
-      return [...state, sim];
-    }
-  default:
-    return state
+      const i = state.findIndex(y => y.metric === sim.metric)
+      if (i !== -1) {
+        return [
+          ...state.slice(0, i),
+          sim,
+          ...state.slice(i+1, state.length)
+        ]
+      } else {
+        return [...state, sim]
+      }
+    default:
+      return state
   }
 }
