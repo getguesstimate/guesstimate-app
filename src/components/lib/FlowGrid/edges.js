@@ -40,7 +40,10 @@ export class Edges extends Component {
               <path d="M 0,0 V 3 L3,1.5 Z" className="arrow descendant"/>
              </marker>
             <marker id="MarkerArrow-unconnected" markerWidth="3" markerHeight="3" refX="2" refY="1.5" orient="auto">
-              <path d="M 0,0 V 3 L3,1.5 Z" className="arrow"/>
+              <path d="M 0,0 V 3 L3,1.5 Z" className="arrow unconnected"/>
+             </marker>
+            <marker id="MarkerArrow-default" markerWidth="3" markerHeight="3" refX="2" refY="1.5" orient="auto">
+              <path d="M 0,0 V 3 L3,1.5 Z" className="arrow default"/>
              </marker>
             <marker id="MarkerArrow-hasErrors" markerWidth="3" markerHeight="3" refX="2" refY="1.5" orient="auto">
               <path d="M 0,0 V 3 L3,1.5 Z" className="arrow RED"/>

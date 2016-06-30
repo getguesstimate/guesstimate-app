@@ -61,14 +61,6 @@ export class BackgroundContainer extends Component {
 
     return (
       <div>
-        {edges.length > 0 &&
-          <Edges
-            columnWidth={columnWidth}
-            containerHeight={containerHeight}
-            edges={edges}
-            rowHeights={rowHeights}
-          />
-        }
         {selectedRegion.length === 2 &&
           <Region
             rowHeights={rowHeights}
@@ -91,6 +83,14 @@ export class BackgroundContainer extends Component {
             columnWidth={columnWidth}
             selectedRegion={autoFillRegion}
             type='fill'
+          />
+        }
+        {edges.length > 0 &&
+          <Edges
+            columnWidth={columnWidth}
+            containerHeight={containerHeight}
+            edges={edges}
+            rowHeights={rowHeights}
           />
         }
       </div>

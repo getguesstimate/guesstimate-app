@@ -82,36 +82,52 @@ svg.edge  path.basic-arrow {
   stroke-width: 3px;
 }
 
+$default: rgb(146, 161, 177);
+$unconnected: rgb(200, 210, 222);
+$ancestor:rgb(116, 195, 159);
+$descendant: rgb(70, 126, 152);
+$errors: #B59893;
+
 svg.edge  path.basic-arrow.unconnected {
-  stroke: $blue-5;
+  stroke: $unconnected;
+}
+.arrow.unconnected{
+  fill: $unconnected;
 }
 
 .screenshot svg.edge  path.basic-arrow.unconnected {
-  stroke: rgb(128, 154, 185)
+  stroke: $unconnected;
 }
 
 svg.edge  path.basic-arrow.hasErrors {
-  stroke: #B59893;
+  stroke: $errors;
 }
+
+
 svg.edge  path.basic-arrow.ancestor {
-  stroke: green;
+  stroke: $ancestor;
 }
+.arrow.ancestor{
+  fill: $ancestor;
+}
+
 svg.edge  path.basic-arrow.descendant {
-  stroke: blue;
+  stroke: $descendant;
+}
+.arrow.descendant{
+  fill: $descendant;
+}
+
+svg.edge  path.basic-arrow.default {
+  stroke: $default;
+}
+
+.arrow.default{
+  fill: $default;
 }
 
 .arrow {
   stroke-width: 0;
-}
-
-.arrow{
-  fill: $blue-5;
-}
-.arrow.ancestor{
-  fill: green;
-}
-.arrow.descendant{
-  fill: blue;
 }
 
 .screenshot .arrow{

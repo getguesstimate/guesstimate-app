@@ -166,6 +166,8 @@ export default class Canvas extends Component{
 
       const {selectedRegion} = this.props
       const selectedMetrics = metrics.filter(m => isWithinRegion(m.location, selectedRegion))
+      const hasSelectedMetrics = !_.isEmpty(selectedMetrics)
+      const unconnectedStatus = hasSelectedMetrics ? 'unconnected' : 'default'
 
       let ancestors = [...selectedMetrics], descendants = [...selectedMetrics]
       const getAncestors = metrics => _.uniqBy(_.flatten(metrics.map(m => m.edges.inputs.map(findMetric))), 'id').filter(m => !_.some(ancestors, a => a.id === m.id))
@@ -189,7 +191,7 @@ export default class Canvas extends Component{
         const inputIsDescendant = _.some(descendants, d => d.id === inputMetric.id)
 
         const hasErrors = !_.isEmpty(errors)
-        const pathStatus = outputIsAncestor ? 'ancestor' : inputIsDescendant ? 'descendant' : 'unconnected'
+        const pathStatus = outputIsAncestor ? 'ancestor' : inputIsDescendant ? 'descendant' : unconnectedStatus
 
         return {input: inputMetric.location, output: outputMetric.location, hasErrors, pathStatus }
       })
