@@ -82,21 +82,21 @@ svg.edge  path.basic-arrow {
   stroke-width: 3px;
 }
 
-svg.edge  path.basic-arrow.BLUE {
+svg.edge  path.basic-arrow.unconnected {
   stroke: $blue-5;
 }
 
-.screenshot svg.edge  path.basic-arrow.BLUE {
+.screenshot svg.edge  path.basic-arrow.unconnected {
   stroke: rgb(128, 154, 185)
 }
 
-svg.edge  path.basic-arrow.RED {
+svg.edge  path.basic-arrow.hasErrors {
   stroke: #B59893;
 }
-svg.edge  path.basic-arrow.GREEN {
+svg.edge  path.basic-arrow.ancestor {
   stroke: green;
 }
-svg.edge  path.basic-arrow.DBLUE {
+svg.edge  path.basic-arrow.descendant {
   stroke: blue;
 }
 
@@ -104,21 +104,21 @@ svg.edge  path.basic-arrow.DBLUE {
   stroke-width: 0;
 }
 
-.arrow.BLUE{
+.arrow.unconnected{
   fill: $blue-5;
 }
-.arrow.GREEN{
+.arrow.ancestor{
   fill: green;
 }
-.arrow.DBLUE{
+.arrow.descendant{
   fill: blue;
 }
 
-.screenshot .arrow.BLUE{
+.screenshot .arrow.unconnected{
   fill: rgb(128, 154, 185)
 }
 
-.arrow.RED{
+.arrow.hasErrors{
   fill: #B59893;
 }
 

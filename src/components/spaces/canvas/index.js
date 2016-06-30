@@ -187,8 +187,11 @@ export default class Canvas extends Component{
         let errors = _.get(inputMetric, 'simulation.sample.errors')
         const outputIsAncestor = _.some(ancestors, a => a.id === outputMetric.id)
         const inputIsDescendant = _.some(descendants, d => d.id === inputMetric.id)
-        const color = (errors && !!errors.length) ? 'RED' : outputIsAncestor ? 'GREEN' : inputIsDescendant ? 'DBLUE' : 'BLUE'
-        return {input: inputMetric.location, output: outputMetric.location, color}
+
+        const hasErrors = !_.isEmpty(errors)
+        const pathStatus = outputIsAncestor ? 'ancestor' : inputIsDescendant ? : 'descendant' : 'unconnected'
+
+        return {input: inputMetric.location, output: outputMetric.location, hasErrors, pathStatus }
       })
     }
     return edges

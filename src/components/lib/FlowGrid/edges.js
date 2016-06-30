@@ -33,24 +33,24 @@ export class Edges extends Component {
           width={'100%'}
         >
           <defs>
-            <marker id="MarkerArrowGREEN" markerWidth="3" markerHeight="3" refX="2" refY="1.5" orient="auto">
-              <path d="M 0,0 V 3 L3,1.5 Z" className="arrow GREEN"/>
+            <marker id="MarkerArrow-ancestor" markerWidth="3" markerHeight="3" refX="2" refY="1.5" orient="auto">
+              <path d="M 0,0 V 3 L3,1.5 Z" className="arrow ancestor"/>
              </marker>
-            <marker id="MarkerArrowDBLUE" markerWidth="3" markerHeight="3" refX="2" refY="1.5" orient="auto">
-              <path d="M 0,0 V 3 L3,1.5 Z" className="arrow DBLUE"/>
+            <marker id="MarkerArrow-descendant" markerWidth="3" markerHeight="3" refX="2" refY="1.5" orient="auto">
+              <path d="M 0,0 V 3 L3,1.5 Z" className="arrow descendant"/>
              </marker>
-            <marker id="MarkerArrowBLUE" markerWidth="3" markerHeight="3" refX="2" refY="1.5" orient="auto">
-              <path d="M 0,0 V 3 L3,1.5 Z" className="arrow BLUE"/>
+            <marker id="MarkerArrow-unconnected" markerWidth="3" markerHeight="3" refX="2" refY="1.5" orient="auto">
+              <path d="M 0,0 V 3 L3,1.5 Z" className="arrow"/>
              </marker>
-            <marker id="MarkerArrowRED" markerWidth="3" markerHeight="3" refX="2" refY="1.5" orient="auto">
+            <marker id="MarkerArrow-hasErrors" markerWidth="3" markerHeight="3" refX="2" refY="1.5" orient="auto">
               <path d="M 0,0 V 3 L3,1.5 Z" className="arrow RED"/>
              </marker>
           </defs>
-          { _.sortBy(edges, e => {return e.color === 'RED' ? 1 : 0}).map(
+          { _.sortBy(edges, e => {return e.hasErrors ? 1 : 0}).map(
             e => {
               const input =  gridPoint.rectangle(e.input)
               const output = gridPoint.rectangle(e.output)
-              return (<Edge color={e.color} key={JSON.stringify(e)} input={input} output={output}/>)
+              return (<Edge hasErrors={e.hasErrors} key={JSON.stringify(e)} input={input} output={output}/>)
             })
           }
         </svg>
