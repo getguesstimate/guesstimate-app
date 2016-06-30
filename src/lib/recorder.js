@@ -16,7 +16,7 @@ export class GuesstimateRecorder {
 
   constructor() {
     this.disabled = !__DEV__
-    this.paused = false // TODO(matthew): change back.
+    this.paused = true
     this.clearRecordings()
     this.uniqueId = 0
   }
