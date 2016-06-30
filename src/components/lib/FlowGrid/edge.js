@@ -95,7 +95,7 @@ export default class Edge extends Component{
   }
 
   render() {
-    const {output, input, hasErrors, pathStatus} = this.props;
+    const {output, input, hasErrors, pathStatus} = this.props
     if (!this._isValidNode(input) || !this._isValidNode(output)) { return (false) }
     let inputPoints = (new Rectangle(input)).showPosition(output)
     let outputPoints = (new Rectangle(output)).showPosition(input)

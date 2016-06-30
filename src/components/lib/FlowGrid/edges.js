@@ -50,7 +50,7 @@ export class Edges extends Component {
             e => {
               const input =  gridPoint.rectangle(e.input)
               const output = gridPoint.rectangle(e.output)
-              return (<Edge hasErrors={e.hasErrors} key={JSON.stringify(e)} input={input} output={output}/>)
+              return (<Edge hasErrors={e.hasErrors} pathStatus={e.pathStatus} key={JSON.stringify(e)} input={input} output={output}/>)
             })
           }
         </svg>

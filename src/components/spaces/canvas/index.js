@@ -189,7 +189,7 @@ export default class Canvas extends Component{
         const inputIsDescendant = _.some(descendants, d => d.id === inputMetric.id)
 
         const hasErrors = !_.isEmpty(errors)
-        const pathStatus = outputIsAncestor ? 'ancestor' : inputIsDescendant ? : 'descendant' : 'unconnected'
+        const pathStatus = outputIsAncestor ? 'ancestor' : inputIsDescendant ? 'descendant' : 'unconnected'
 
         return {input: inputMetric.location, output: outputMetric.location, hasErrors, pathStatus }
       })

@@ -104,7 +104,7 @@ svg.edge  path.basic-arrow.descendant {
   stroke-width: 0;
 }
 
-.arrow.unconnected{
+.arrow{
   fill: $blue-5;
 }
 .arrow.ancestor{
@@ -114,7 +114,7 @@ svg.edge  path.basic-arrow.descendant {
   fill: blue;
 }
 
-.screenshot .arrow.unconnected{
+.screenshot .arrow{
   fill: rgb(128, 154, 185)
 }
 
