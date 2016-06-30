@@ -85,8 +85,8 @@ svg.edge  path.basic-arrow {
 $default: #b0bfd0;
 $unconnected: rgba(77, 121, 175, 0.11);
 $unconnected-head: rgb(200, 210, 222);
-$ancestor: rgb(121, 185, 155);
-$descendant: rgb(118, 147, 160);
+$ancestor: rgb(123, 158, 149);
+$descendant: rgb(118, 137, 160);
 $errors: #B59893;
 
 svg.edge  path.basic-arrow.unconnected {
