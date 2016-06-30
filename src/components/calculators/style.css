@@ -124,17 +124,23 @@
       }
     }
   }
+}
 
-  .information-section {
-    margin-top: 3em;
-  }
+.information-section {
+  padding: 1em 2em;
+  margin: 0 1em;
+  font-size: 1.6em;
 
   .calculation-link-section {
-    position: relative;
+    padding-top: .4em;
     a {
-      position: absolute;
-      bottom: 0;
+      color: #777;
     }
+
+    a:hover {
+      color: #333;
+    }
+
   }
 
   .SocialMediaShareButton {
@@ -144,6 +150,10 @@
     border-radius: 0.1em;
     margin-left: 10%;
     cursor: pointer;
+    opacity: .45;
+  }
+  .SocialMediaShareButton:hover {
+    opacity: 1;
   }
 
   .SocialMediaShareButton:first-child {
