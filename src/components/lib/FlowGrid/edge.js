@@ -95,12 +95,14 @@ export default class Edge extends Component{
   }
 
   render() {
-    const {output, input, color} = this.props;
+    const {output, input, hasErrors} = this.props;
     if (!this._isValidNode(input) || !this._isValidNode(output)) { return (false) }
     let inputPoints = (new Rectangle(input)).showPosition(output)
     let outputPoints = (new Rectangle(output)).showPosition(input)
 
     let points = `M${inputPoints.x},${inputPoints.y} L${outputPoints.x} ,${outputPoints.y}`
+
+    const color = hasErrors ? 'RED' : 'BLUE'
 
     return (
         <path

@@ -40,11 +40,11 @@ export class Edges extends Component {
               <path d="M 0,0 V 3 L3,1.5 Z" className="arrow RED"/>
              </marker>
           </defs>
-          { _.sortBy(edges, e => {return e.color === 'RED' ? 1 : 0}).map(
+          { _.sortBy(edges, e => {return e.hasErrors ? 1 : 0}).map(
             e => {
               const input =  gridPoint.rectangle(e.input)
               const output = gridPoint.rectangle(e.output)
-              return (<Edge color={e.color} key={JSON.stringify(e)} input={input} output={output}/>)
+              return (<Edge hasErrors={e.hasErrors} key={JSON.stringify(e)} input={input} output={output}/>)
             })
           }
         </svg>
