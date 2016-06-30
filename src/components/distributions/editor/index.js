@@ -1,9 +1,11 @@
 import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
+import {bindActionCreators} from 'redux'
 
 import {TextForm} from './TextForm/TextForm'
 import {DataForm} from './DataForm/DataForm'
 
+import {runFormSimulations} from 'gModules/simulations/actions'
 import {changeGuesstimate} from 'gModules/guesstimates/actions'
 import {changeMetricClickMode} from 'gModules/canvas_state/actions'
 
@@ -11,11 +13,13 @@ import {Guesstimator} from 'lib/guesstimator/index'
 
 import './style.css'
 
-@connect(null, null, null, {withRef: true})
+@connect(null, dispatch => bindActionCreators({changeGuesstimate, runFormSimulations, changeMetricClickMode}, dispatch), null, {withRef: true})
 export default class Guesstimate extends Component{
   displayName: 'Guesstimate'
   static propTypes = {
-    dispatch: PropTypes.func,
+    changeGuesstimate: PropTypes.func.isRequired,
+    runFormSimulations: PropTypes.func.isRequired,
+    changeMetricClickMode: PropTypes.func.isRequired,
     guesstimate: PropTypes.object,
     metricId: PropTypes.string.isRequired,
     metricFocus: PropTypes.func.isRequired,
@@ -41,13 +45,11 @@ export default class Guesstimate extends Component{
     return Guesstimator.parse({...this.props.guesstimate, ...changes})[1].samplerType().referenceName
   }
 
-  changeGuesstimate(changes, runSims, saveToServer) {
-    this.props.dispatch(changeGuesstimate(this.props.metricId, {...this.props.guesstimate, ...changes}, runSims, saveToServer))
+  changeGuesstimate(changes, runFormSims, saveToServer) {
+    this.props.changeGuesstimate(this.props.metricId, {...this.props.guesstimate, ...changes}, saveToServer)
+    if (runFormSims) { this.props.runFormSimulations(this.props.metricId) }
   }
 
-  changeDescriptionAndSave(description) {
-    this.changeGuesstimate({description}, false, true)
-  }
   changeInput(input) {
     const guesstimateType = this._guesstimateType({input})
     this.changeGuesstimate({data: null, input, guesstimateType}, true, false)
@@ -65,7 +67,7 @@ export default class Guesstimate extends Component{
     this.changeGuesstimate({}, false, true)
   }
 
-  _changeMetricClickMode(newMode) { this.props.dispatch(changeMetricClickMode(newMode)) }
+  _changeMetricClickMode(newMode) { this.props.changeMetricClickMode(newMode) }
 
   handleReturn(shifted) {
     if (shifted) {

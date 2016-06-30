@@ -15,7 +15,7 @@ import {calculatorSpaceSelector} from './calculator-space-selector'
 
 import {navigateFn} from 'gModules/navigation/actions'
 import {fetchById} from 'gModules/calculators/actions'
-import {deleteSimulations} from 'gModules/simulations/actions'
+import {deleteSimulations, runSimulations} from 'gModules/simulations/actions'
 import {changeGuesstimate} from 'gModules/guesstimates/actions'
 
 import * as Space from 'gEngine/space'
@@ -25,10 +25,11 @@ import {Guesstimator} from 'lib/guesstimator/index'
 
 import './style.css'
 
-@connect(calculatorSpaceSelector, dispatch => bindActionCreators({fetchById, changeGuesstimate, deleteSimulations}, dispatch))
+@connect(calculatorSpaceSelector, dispatch => bindActionCreators({fetchById, changeGuesstimate, deleteSimulations, runSimulations}, dispatch))
 export class CalculatorShow extends Component {
   state = {
     attemptedFetch: false,
+    resultComputing: false,
     showResult: false,
     hasSimulated: false,
   }
@@ -38,6 +39,9 @@ export class CalculatorShow extends Component {
     this.fetchData()
     if (!this.props.calculator && !!nextProps.calculator) {
       this.props.deleteSimulations([...nextProps.inputs.map(m => m.id), ...nextProps.outputs.map(m => m.id)])
+    }
+    if (this.state.resultComputing && this.allOutputsHaveStats()) {
+      this.setState({resultComputing: false, showResult: true})
     }
   }
 
@@ -49,22 +53,35 @@ export class CalculatorShow extends Component {
   }
 
   onChange({id, guesstimate}, input) {
-    const guesstimateType = Guesstimator.parse({...guesstimate, input})[1].samplerType().referenceName
-    const shouldRunSims = !_.isEmpty(input) && this.allInputsHaveContent([id])
-    const shouldRunAllUnsimulated = !this.state.hasSimulated
+    const parsed = Guesstimator.parse({...guesstimate, input})
+    const guesstimateType = parsed[1].samplerType().referenceName
 
     this.props.changeGuesstimate(
       id,
       {...guesstimate, ...{data: null, input, guesstimateType}},
-      shouldRunSims, // runSims
-      false, // saveOnServer
-      shouldRunAllUnsimulated // runAllUnsimulated
+      false  // saveOnServer
     )
-    if (shouldRunSims) {this.setState({hasSimulated: true})}
+
+    // We only want to simulate anything if all the inputs have simulatable content.
+    if (!_.isEmpty(input) && _.isEmpty(parsed[0]) && this.allInputsHaveContent([id])) {
+      if (!this.state.hasSimulated) {
+        // The initial simulations should run on all unsimulated metrics.
+        this.props.runSimulations({spaceId: this.props.calculator.space_id, onlyUnsimulated: true})
+        this.setState({hasSimulated: true})
+      } else {
+        // Later simulations just run on the affected subslices.
+        this.props.runSimulations({metricId: id})
+      }
+    }
   }
 
   onEnter() {
-    if (!this.state.showResult && this.readyToCalculate()) { this.setState({showResult: true}) }
+    if (!this.readyToCalculate()) { return }
+    if (this.allOutputsHaveStats()) {
+      if (!this.state.showResults) { this.setState({showResult: true}) }
+    } else {
+      if (!this.state.resultComputing) { this.setState({resultComputing: true}) }
+    }
   }
 
   allInputsHaveContent(idsToExclude=[]) {
@@ -78,7 +95,7 @@ export class CalculatorShow extends Component {
   }
 
   readyToCalculate() {
-    return this.allInputsHaveContent() && this.allOutputsHaveStats()
+    return this.allInputsHaveContent()
   }
 
   render() {
@@ -151,8 +168,8 @@ export class CalculatorShow extends Component {
                   <div className='col-xs-12 col-md-7'/>
                   <div className='col-xs-12 col-md-5'>
                     <div
-                      className={`ui button calculateButton${this.readyToCalculate() ? '' : ' disabled'}`}
-                      onClick={() => {this.setState({showResult: true})}}
+                      className={`ui button calculateButton${this.state.resultComputing ? ' loading' : this.readyToCalculate() ? '' : ' disabled'}`}
+                      onClick={() => {this.allOutputsHaveStats() ? this.setState({showResult: true}) : this.setState({resultComputing: true})}}
                     >
                       Calculate
                     </div>

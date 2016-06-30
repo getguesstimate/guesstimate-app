@@ -32,7 +32,7 @@ const PercentileTable = ({values}) => (
 )
 
 //Note: Controlled inputs don't pass through very well.  Try to keep them in child connects().
-export default class MetricModal extends Component {
+export class MetricModal extends Component {
   showSimulation() {
     const stats = _.get(this.props, 'metric.simulation.stats')
     if (stats && _.isFinite(stats.mean) && _.isFinite(stats.stdev) && _.isFinite(stats.length)) {
@@ -40,11 +40,6 @@ export default class MetricModal extends Component {
     } else {
       return false
     }
-  }
-
-  _changeGuesstimateDescription(value) {
-    let newGuesstimate = Object.assign({}, this.props.metric.guesstimate, {description: value})
-    this.props.onChange(newGuesstimate)
   }
 
   render() {
@@ -66,7 +61,7 @@ export default class MetricModal extends Component {
     }
     const showSimulation = this.showSimulation()
 
-    const {closeModal, metric} = this.props
+    const {closeModal, metric, onChangeGuesstimateDescription} = this.props
     const sortedSampleValues = _.get(metric, 'simulation.sample.sortedValues')
     const stats = _.get(metric, 'simulation.stats')
     const guesstimate = metric.guesstimate
@@ -123,7 +118,7 @@ export default class MetricModal extends Component {
               <div className='col-xs-12'>
                 {guesstimate &&
                   <GuesstimateDescription
-                    onChange={this._changeGuesstimateDescription.bind(this)}
+                    onChange={onChangeGuesstimateDescription}
                     value={guesstimate.description}
                   />
                 }

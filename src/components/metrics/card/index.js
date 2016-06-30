@@ -1,10 +1,11 @@
 import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
+import {bindActionCreators} from 'redux'
 
 import ReactDOM from 'react-dom'
 import $ from 'jquery'
 
-import MetricModal from 'gComponents/metrics/modal/index'
+import {MetricModal} from 'gComponents/metrics/modal/index'
 import DistributionEditor from 'gComponents/distributions/editor/index'
 import MetricToolTip from './tooltip'
 import ToolTip from 'gComponents/utility/tooltip/index'
@@ -51,13 +52,15 @@ class ScatterTip extends Component {
 
 const PT = PropTypes
 
-@connect()
+@connect(null, dispatch => bindActionCreators({changeMetric, changeGuesstimate, removeMetrics}, dispatch))
 export default class MetricCard extends Component {
   displayName: 'MetricCard'
 
   static propTypes = {
     canvasState: canvasStateProps.canvasState,
-    dispatch: PT.func.isRequired,
+    changeMetric: PT.func.isRequired,
+    changeGuesstimate: PT.func.isRequired,
+    removeMetrics: PT.func.isRequired,
     gridKeyPress: PT.func.isRequired,
     inSelectedCell: PT.bool.isRequired,
     location: PTLocation,
@@ -144,17 +147,16 @@ export default class MetricCard extends Component {
     return (this._hasName() && !this._hasGuesstimate())
   }
 
-  handleChangeMetric(values) {
-    values.id = this._id()
-    this.props.dispatch(changeMetric(values))
+  onChangeMetricName(name) {
+    this.props.changeMetric({id: this._id(), name})
   }
 
-  handleChangeGuesstimate(values) {
-    this.props.dispatch(changeGuesstimate(this._id(), values, false))
+  onChangeGuesstimateDescription(description) {
+    this.props.changeGuesstimate(this._id(), {...this.props.metric.guesstimate, description})
   }
 
   handleRemoveMetric () {
-    this.props.dispatch(removeMetrics([this._id()]))
+    this.props.removeMetrics([this._id()])
   }
 
   _id(){
@@ -245,7 +247,7 @@ export default class MetricCard extends Component {
             <MetricModal
               metric={metric}
               closeModal={this.closeModal.bind(this)}
-              onChange={this.handleChangeGuesstimate.bind(this)}
+              onChangeGuesstimateDescription={this.onChangeGuesstimateDescription.bind(this)}
             />
           }
 
@@ -253,7 +255,7 @@ export default class MetricCard extends Component {
             canvasState={canvasState}
             metric={metric}
             inSelectedCell={inSelectedCell}
-            onChangeName={this.handleChangeMetric.bind(this)}
+            onChangeName={this.onChangeMetricName.bind(this)}
             onOpenModal={this.openModal.bind(this)}
             jumpSection={this._focusForm.bind(this)}
             onMouseDown={this._handleMouseDown.bind(this)}
