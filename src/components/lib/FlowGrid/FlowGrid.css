@@ -82,10 +82,10 @@ svg.edge  path.basic-arrow {
   stroke-width: 3px;
 }
 
-$default: rgb(146, 161, 177);
-$unconnected: rgb(200, 210, 222);
-$ancestor:rgb(116, 195, 159);
-$descendant: rgb(70, 126, 152);
+$default: #b0bfd0;
+$unconnected: rgba(77, 121, 175, 0.11);
+$ancestor: rgb(121, 185, 155);
+$descendant: rgb(118, 147, 160);
 $errors: #B59893;
 
 svg.edge  path.basic-arrow.unconnected {
