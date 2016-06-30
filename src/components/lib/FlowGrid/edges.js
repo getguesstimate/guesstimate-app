@@ -46,7 +46,7 @@ export class Edges extends Component {
               <path d="M 0,0 V 3 L3,1.5 Z" className="arrow RED"/>
              </marker>
           </defs>
-          { _.sortBy(edges, e => {return e.hasErrors ? 1 : 0}).map(
+          { _.sortBy(edges, e => {return e.pathStatus != 'unconnected' ? 2 : e.hasErrors ? 1 : 0}).map(
             e => {
               const input =  gridPoint.rectangle(e.input)
               const output = gridPoint.rectangle(e.output)
