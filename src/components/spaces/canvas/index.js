@@ -167,8 +167,7 @@ export default class Canvas extends Component{
       edges = space.edges.map(e => {
         const [inputMetric, outputMetric] = [findMetric(e.input), findMetric(e.output)]
         let errors = _.get(inputMetric, 'simulation.sample.errors')
-        const color = (errors && !!errors.length) ? 'RED' : 'BLUE'
-        return {input: inputMetric.location, output: outputMetric.location, color}
+        return {input: inputMetric.location, output: outputMetric.location, hasErrors: !_.isEmpty(errors) }
       })
     }
     return edges
