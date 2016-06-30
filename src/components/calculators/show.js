@@ -29,6 +29,7 @@ import './style.css'
 export class CalculatorShow extends Component {
   state = {
     attemptedFetch: false,
+    resultComputing: false,
     showResult: false,
     hasSimulated: false,
   }
@@ -38,6 +39,9 @@ export class CalculatorShow extends Component {
     this.fetchData()
     if (!this.props.calculator && !!nextProps.calculator) {
       this.props.deleteSimulations([...nextProps.inputs.map(m => m.id), ...nextProps.outputs.map(m => m.id)])
+    }
+    if (this.state.resultComputing && this.allOutputsHaveStats()) {
+      this.setState({resultComputing: false, showResult: true})
     }
   }
 
@@ -64,7 +68,12 @@ export class CalculatorShow extends Component {
   }
 
   onEnter() {
-    if (!this.state.showResult && this.readyToCalculate()) { this.setState({showResult: true}) }
+    if (!this.readyToCalculate()) { return }
+    if (this.allOutputsHaveStats()) {
+      if (!this.state.showResults) { this.setState({showResult: true}) }
+    } else {
+      if (!this.state.resultComputing) { this.setState({resultComputing: true}) }
+    }
   }
 
   allInputsHaveContent(idsToExclude=[]) {
@@ -78,7 +87,7 @@ export class CalculatorShow extends Component {
   }
 
   readyToCalculate() {
-    return this.allInputsHaveContent() && this.allOutputsHaveStats()
+    return this.allInputsHaveContent()
   }
 
   render() {
@@ -151,8 +160,8 @@ export class CalculatorShow extends Component {
                   <div className='col-xs-12 col-md-7'/>
                   <div className='col-xs-12 col-md-5'>
                     <div
-                      className={`ui button calculateButton${this.readyToCalculate() ? '' : ' disabled'}`}
-                      onClick={() => {this.setState({showResult: true})}}
+                      className={`ui button calculateButton${this.state.resultComputing ? ' loading' : this.readyToCalculate() ? '' : ' disabled'}`}
+                      onClick={() => {this.allOutputsHaveStats() ? this.setState({showResult: true}) : this.setState({resultComputing: true})}}
                     >
                       Calculate
                     </div>
