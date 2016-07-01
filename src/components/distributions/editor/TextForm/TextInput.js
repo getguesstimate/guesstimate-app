@@ -42,7 +42,11 @@ const compositeDecorator = new CompositeDecorator([
 
 class TextInputEditor extends Component {
   state = {
-    editorState: EditorState.createWithContent(ContentState.createFromText(this.props.value || ''), compositeDecorator)
+    editorState: EditorState.createWithContent(ContentState.createFromText(this.props.value || ''), compositeDecorator),
+    possibleProperties: [],
+    possibleNouns: [],
+    partialNoun: '',
+    partialProperty: '',
   }
 
   insertAtCaret(text) {
@@ -78,13 +82,29 @@ class TextInputEditor extends Component {
 
     if (text.startsWith('=') && nounIndex != -1 && nounIndex > spaceIndex) {
       if (propertyIndex > nounIndex) {
-        const noun = text.slice(nounIndex+1, propertyIndex)
+        const noun = text.slice(nounIndex+1,propertyIndex)
         const partialProperty = text.slice(propertyIndex+1)
-        const possibleProperties = propertySearch(noun, partialProperty)
+        this.setState({
+          possibleProperties: propertySearch(noun, partialProperty),
+          partialProperty,
+          noun,
+        })
       } else {
         const partialNoun = text.slice(nounIndex+1)
-        const possibleNouns = nounSearch(partialNoun)
+        this.setState({
+          possibleNouns: nounSearch(partialNoun),
+          partialNoun,
+        })
       }
+    } else {
+      this.setState({
+        possibleNouns: [],
+        possibleProperties: [],
+        partialNoun: '',
+        partialProperty: '',
+        noun: '',
+        property: '',
+      })
     }
 
     this.props.onChange(this._text(editorState))
@@ -100,6 +120,22 @@ class TextInputEditor extends Component {
   }
 
   handleTab(e){
+    const {possibleNouns, possibleProperties, partialNoun, partialProperty} = this.state
+
+
+    if (!(_.isEmpty(possibleNouns) && _.isEmpty(possibleProperties))) {
+      if (!_.isEmpty(possibleNouns)) {
+        const noun = possibleNouns[0].replace(partialNoun, '')
+        this.insertAtCaret(`${noun}.`)
+        this.setState({possibleNouns: [], partialNoun: '', noun})
+      } else {
+        const property = possibleProperties[0].replace(partialProperty, '')
+        this.insertAtCaret(`${property}`)
+        this.setState({possibleProperties: [], partialProperty: '', property})
+      }
+      this.focus()
+      return
+    }
     this.props.onTab(e.shiftKey)
     e.preventDefault()
   }
