@@ -82,12 +82,17 @@ svg.edge  path.basic-arrow {
   stroke-width: 3px;
 }
 
+.arrow {
+  stroke-width: 0;
+}
+
 $default: #b0bfd0;
-$unconnected: rgba(77, 121, 175, 0.11);
+$unconnected: rgba(77, 121, 175, 0.06);
 $unconnected-head: rgb(200, 210, 222);
 $ancestor: rgb(123, 158, 149);
 $descendant: rgb(118, 137, 160);
 $errors: #B59893;
+$screenshot: rgb(128, 154, 185);
 
 svg.edge  path.basic-arrow.unconnected {
   stroke: $unconnected;
@@ -96,14 +101,26 @@ svg.edge  path.basic-arrow.unconnected {
   fill: $unconnected-head;
 }
 
-.screenshot svg.edge  path.basic-arrow.unconnected {
-  stroke: $unconnected;
+svg.edge  path.basic-arrow.default {
+  stroke: $default;
+}
+.arrow.default{
+  fill: $default;
+}
+
+.screenshot svg.edge  path.basic-arrow.default {
+  stroke: $screenshot;
+}
+.screenshot .arrow.default{
+  fill: $screenshot;
 }
 
 svg.edge  path.basic-arrow.hasErrors.hasErrors {
   stroke: $errors;
 }
-
+.arrow.hasErrors.hasErrors{
+  fill: $errors;
+}
 
 svg.edge  path.basic-arrow.ancestor {
   stroke: $ancestor;
@@ -117,26 +134,6 @@ svg.edge  path.basic-arrow.descendant {
 }
 .arrow.descendant{
   fill: $descendant;
-}
-
-svg.edge  path.basic-arrow.default {
-  stroke: $default;
-}
-
-.arrow.default{
-  fill: $default;
-}
-
-.arrow {
-  stroke-width: 0;
-}
-
-.screenshot .arrow{
-  fill: rgb(128, 154, 185)
-}
-
-.arrow.hasErrors.hasErrors{
-  fill: $errors;
 }
 
 .FlowGrid .Region {
