@@ -153,48 +153,60 @@ export default class Canvas extends Component{
     return (this.props.denormalizedSpace.canvasState.edgeView === 'visible')
   }
 
+  getSelectedLineage() {
+    const {selectedRegion, denormalizedSpace: {metrics}} = this.props
+    const selectedMetrics = metrics.filter(m => isWithinRegion(m.location, selectedRegion))
+
+    let ancestors = [...selectedMetrics], descendants = [...selectedMetrics]
+    const getAncestors = metrics => _.uniq(_.flatten(metrics.map(m => m.edges.inputs))).filter(id => !_.some(ancestors, a => a.id === id)).map(this.findMetric.bind(this))
+    const getDescendants = metrics => _.uniq(_.flatten(metrics.map(m => m.edges.outputs))).filter(id => !_.some(descendants, d => d.id === id)).map(this.findMetric.bind(this))
+
+    let nextAncestors = getAncestors(ancestors)
+    let nextDescendants = getDescendants(descendants)
+
+    while (nextAncestors.length > 0 || nextDescendants.length > 0) {
+      ancestors = [...ancestors, ...nextAncestors]
+      descendants = [...descendants, ...nextDescendants]
+
+      nextAncestors = getAncestors(nextAncestors)
+      nextDescendants = getDescendants(nextDescendants)
+    }
+
+    return {ancestors, descendants}
+  }
+
+  findMetric(metricId) {
+    return this.props.denormalizedSpace.metrics.find(m => m.id === metricId)
+  }
+
   edges() {
-    let edges = []
+    if (!this.showEdges()) { return [] }
 
-    if (this.showEdges()){
-      const space = this.props.denormalizedSpace
+    const {selectedRegion, denormalizedSpace: {metrics, edges}} = this.props
+    const selectedMetrics = metrics.filter(m => isWithinRegion(m.location, selectedRegion))
 
-      const {metrics} = space
-      const findMetric = (metricId) => metrics.find(m => m.id === metricId)
+    const hasSelectedMetrics = _.some(metrics, m => isWithinRegion(m.location, selectedRegion))
+    const unconnectedStatus = hasSelectedMetrics ? 'unconnected' : 'default'
 
-      const {selectedRegion} = this.props
-      const selectedMetrics = metrics.filter(m => isWithinRegion(m.location, selectedRegion))
-      const hasSelectedMetrics = !_.isEmpty(selectedMetrics)
-      const unconnectedStatus = hasSelectedMetrics ? 'unconnected' : 'default'
+    const {ancestors, descendants} = this.getSelectedLineage()
 
-      let ancestors = [...selectedMetrics], descendants = [...selectedMetrics]
-      const getAncestors = metrics => _.uniqBy(_.flatten(metrics.map(m => m.edges.inputs.map(findMetric))), 'id').filter(m => !_.some(ancestors, a => a.id === m.id))
-      const getDescendants = metrics => _.uniqBy(_.flatten(metrics.map(m => m.edges.outputs.map(findMetric))), 'id').filter(m => !_.some(descendants, d => d.id === m.id))
+    return edges.map(e => {
+      const [inputMetric, outputMetric] = [this.findMetric(e.input), this.findMetric(e.output)]
+      let errors = _.get(inputMetric, 'simulation.sample.errors')
+      const outputIsAncestor = _.some(ancestors, a => a.id === outputMetric.id)
+      const inputIsDescendant = _.some(descendants, d => d.id === inputMetric.id)
+      const withinSelectedRegion = _.some(selectedMetrics, m => m.id === outputMetric.id) && _.some(selectedMetrics, m => m.id === inputMetric.id)
 
-      let nextAncestors = getAncestors(selectedMetrics)
-      let nextDescendants = getDescendants(selectedMetrics)
-
-      while (nextAncestors.length > 0 || nextDescendants.length > 0) {
-        ancestors = [...ancestors, ...nextAncestors]
-        descendants = [...descendants, ...nextDescendants]
-
-        nextAncestors = getAncestors(nextAncestors)
-        nextDescendants = getDescendants(nextDescendants)
+      const hasErrors = !_.isEmpty(errors)
+      let pathStatus
+      if (withinSelectedRegion) {
+        pathStatus = unconnectedStatus
+      } else {
+        pathStatus = outputIsAncestor ? 'ancestor' : inputIsDescendant ? 'descendant' : unconnectedStatus
       }
 
-      edges = space.edges.map(e => {
-        const [inputMetric, outputMetric] = [findMetric(e.input), findMetric(e.output)]
-        let errors = _.get(inputMetric, 'simulation.sample.errors')
-        const outputIsAncestor = _.some(ancestors, a => a.id === outputMetric.id)
-        const inputIsDescendant = _.some(descendants, d => d.id === inputMetric.id)
-
-        const hasErrors = !_.isEmpty(errors)
-        const pathStatus = outputIsAncestor ? 'ancestor' : inputIsDescendant ? 'descendant' : unconnectedStatus
-
-        return {input: inputMetric.location, output: outputMetric.location, hasErrors, pathStatus }
-      })
-    }
-    return edges
+      return {input: inputMetric.location, output: outputMetric.location, hasErrors, pathStatus }
+    })
   }
 
   onAutoFillRegion(region) {
