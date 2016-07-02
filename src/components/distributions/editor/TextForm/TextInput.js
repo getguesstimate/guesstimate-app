@@ -10,11 +10,15 @@ const NOUN_REGEX = /\@[\w]+/g
 const PROPERTY_REGEX = /\.[\w]+/g
 
 function nounStrategy(contentBlock, callback) {
-  findWithRegex(NOUN_REGEX, contentBlock, callback);
+  findWithRegex(NOUN_REGEX, contentBlock, callback)
 }
 
 function propertyStrategy(contentBlock, callback) {
-  findWithRegex(PROPERTY_REGEX, contentBlock, callback);
+  findWithRegex(PROPERTY_REGEX, contentBlock, callback)
+}
+
+function partialTextStrategy(start, end) {
+  return (contentBlock, callback) => { callback(start, end); }
 }
 
 function findWithRegex(regex, contentBlock, callback) {
@@ -54,7 +58,7 @@ class TextInputEditor extends Component {
     const selection = editorState.getSelection()
     const content = editorState.getCurrentContent()
     const newContentState = Modifier.insertText(content, selection, text)
-    const newEditorState = EditorState.push(editorState, newContentState, 'paste')
+    const newEditorState = EditorState.moveFocusToEnd(EditorState.push(editorState, newContentState, 'paste'))
     this._onChange(newEditorState)
   }
 
@@ -73,7 +77,7 @@ class TextInputEditor extends Component {
     return editorState.getCurrentContent().getPlainText('')
   }
 
-  _onChange(editorState) {
+  _onChange(editorState, forceEndFocus) {
     const text = this._text(editorState)
 
     const nounIndex = text.lastIndexOf('@')
@@ -108,7 +112,9 @@ class TextInputEditor extends Component {
     }
 
     this.props.onChange(this._text(editorState))
-    return this.setState({editorState})
+
+    // TODO(matthew): Figure out how to make this work without forcing focus move all the time.
+    return this.setState({editorState: EditorState.moveFocusToEnd(editorState)})
   }
 
   handleReturn(e) {
