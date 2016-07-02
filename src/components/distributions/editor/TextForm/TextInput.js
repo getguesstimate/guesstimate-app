@@ -58,8 +58,7 @@ class TextInputEditor extends Component {
     const selection = editorState.getSelection()
     const content = editorState.getCurrentContent()
     const newContentState = Modifier.insertText(content, selection, text)
-    const newEditorState = EditorState.moveFocusToEnd(EditorState.push(editorState, newContentState, 'paste'))
-    this._onChange(newEditorState)
+    this._onChange(EditorState.push(editorState, newContentState, 'paste'))
   }
 
   componentWillUnmount() {
@@ -77,24 +76,26 @@ class TextInputEditor extends Component {
     return editorState.getCurrentContent().getPlainText('')
   }
 
-  _onChange(editorState, forceEndFocus) {
+  _onChange(editorState) {
     const text = this._text(editorState)
 
-    const nounIndex = text.lastIndexOf('@')
-    const propertyIndex = text.lastIndexOf('.')
-    const spaceIndex = text.lastIndexOf(' ')
+    const cursorPosition = editorState.getSelection().getFocusOffset()
+    const upToCursor = text.slice(0, cursorPosition)
+    const nounIndex = upToCursor.lastIndexOf('@')
+    const propertyIndex = upToCursor.lastIndexOf('.')
+    const spaceIndex = upToCursor.lastIndexOf(' ')
 
     if (text.startsWith('=') && nounIndex != -1 && nounIndex > spaceIndex) {
       if (propertyIndex > nounIndex) {
         const noun = text.slice(nounIndex+1,propertyIndex)
-        const partialProperty = text.slice(propertyIndex+1)
+        const partialProperty = text.slice(propertyIndex+1, cursorPosition)
         this.setState({
           possibleProperties: propertySearch(noun, partialProperty),
           partialProperty,
           noun,
         })
       } else {
-        const partialNoun = text.slice(nounIndex+1)
+        const partialNoun = text.slice(nounIndex+1, cursorPosition)
         this.setState({
           possibleNouns: nounSearch(partialNoun),
           partialNoun,
@@ -114,7 +115,7 @@ class TextInputEditor extends Component {
     this.props.onChange(this._text(editorState))
 
     // TODO(matthew): Figure out how to make this work without forcing focus move all the time.
-    return this.setState({editorState: EditorState.moveFocusToEnd(editorState)})
+    return this.setState({editorState})
   }
 
   handleReturn(e) {
@@ -140,9 +141,9 @@ class TextInputEditor extends Component {
         this.setState({possibleProperties: [], partialProperty: '', property})
       }
       this.focus()
-      return
+    } else {
+      this.props.onTab(e.shiftKey)
     }
-    this.props.onTab(e.shiftKey)
     e.preventDefault()
   }
 
