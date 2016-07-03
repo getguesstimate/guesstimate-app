@@ -17,8 +17,11 @@ function propertyStrategy(contentBlock, callback) {
   findWithRegex(PROPERTY_REGEX, contentBlock, callback)
 }
 
-function partialTextStrategy(start, end) {
-  return (contentBlock, callback) => { callback(start, end); }
+function suggestionDecorator(start, end) {
+  return {
+    strategy: (contentBlock, callback) => { callback(start, end) },
+    component: SuggestionSpan,
+  }
 }
 
 function findWithRegex(regex, contentBlock, callback) {
@@ -30,10 +33,11 @@ function findWithRegex(regex, contentBlock, callback) {
   }
 }
 
-const NounSpan = (props) => <span {...props} style={{color: 'red'}}>{props.children}</span>
-const PropertySpan = (props) => <span {...props} style={{color: 'blue'}}>{props.children}</span>
+const NounSpan = props => <span {...props} style={{color: 'red'}}>{props.children}</span>
+const PropertySpan = props => <span {...props} style={{color: 'blue'}}>{props.children}</span>
+const SuggestionSpan = props => <span {...props} style={{color: 'grey'}}>{props.children}</span>
 
-const compositeDecorator = new CompositeDecorator([
+const decoratorList = [
   {
     strategy: nounStrategy,
     component: NounSpan,
@@ -42,15 +46,29 @@ const compositeDecorator = new CompositeDecorator([
     strategy: propertyStrategy,
     component: PropertySpan,
   },
-])
+]
 
 class TextInputEditor extends Component {
   state = {
-    editorState: EditorState.createWithContent(ContentState.createFromText(this.props.value || ''), compositeDecorator),
+    editorState: EditorState.createWithContent(ContentState.createFromText(this.props.value || ''), new CompositeDecorator(decoratorList)),
     possibleProperties: [],
     possibleNouns: [],
     partialNoun: '',
     partialProperty: '',
+  }
+
+  getReplacedEditorState(editorState, text, [anchorOffset, focusOffset], maintainCursorPosition = false) {
+    const selection = editorState.getSelection()
+    const content = editorState.getCurrentContent()
+    const newContentState = Modifier.replaceText(content, selection.merge({anchorOffset, focusOffset: focusOffset + 1}), text)
+
+    const baseEditorState = EditorState.push(editorState, newContentState, 'paste')
+
+    if (!maintainCursorPosition) { return baseEditorState }
+
+    const cursorPosition = selection.getFocusOffset()
+    const newSelectionState = selection.merge({focusOffset: cursorPosition})
+    return EditorState.forceSelection(baseEditorState, newSelectionState)
   }
 
   getInsertedEditorState(editorState, text, maintainCursorPosition = false) {
@@ -71,6 +89,11 @@ class TextInputEditor extends Component {
     this._onChange(this.getInsertedEditorState(this.state.editorState, text, maintainCursorPosition))
   }
 
+  replaceAtCaret(text, start, end, maintainCursorPosition = false) {
+    console.log(text, start, end)
+    this._onChange(this.getReplacedEditorState(this.state.editorState, text, [start, end], maintainCursorPosition))
+  }
+
   componentWillUnmount() {
     const selection = this.state.editorState.getSelection()
     if (selection && selection.getHasFocus()) {
@@ -83,6 +106,7 @@ class TextInputEditor extends Component {
   }
 
   _onChange(editorState) {
+
     const text = editorState.getCurrentContent().getPlainText('')
 
     const cursorPosition = editorState.getSelection().getFocusOffset()
@@ -93,7 +117,7 @@ class TextInputEditor extends Component {
       possibleProperties: [],
       partialNoun: '',
       partialProperty: '',
-      fillText: '',
+      suggestion: '',
       noun: '',
       property: '',
       editorState,
@@ -111,34 +135,36 @@ class TextInputEditor extends Component {
       const noun = prevWord.slice(1, prevWord.indexOf('.'))
       const partialProperty = prevWord.slice(prevWord.indexOf('.') + 1)
       const possibleProperties = propertySearch(noun, partialProperty)
-      const fillText = _.isEmpty(possibleProperties) ? '' : possibleProperties[0].replace(partialProperty, '')
+      const suggestion = _.isEmpty(possibleProperties) ? '' : possibleProperties[0].replace(partialProperty, '')
 
-      const shouldFillOrReplaceText = false // !_.isEmpty(partialProperty)
-      Object.assign(newState, { possibleProperties, partialProperty, noun, editorState })
+      Object.assign(newState, { possibleProperties, partialProperty, noun })
 
-      if (shouldFillOrReplaceText) {
-        newState.fillText = fillText
-        if (_.isEmpty(nextWord)) {
-          newState.editorState = this.getInsertedEditorState(editorState, fillText, true)
+      if (!_.isEmpty(partialProperty)) {
+        newState.suggestion = suggestion
+        const [start, end] = [cursorPosition, cursorPosition+suggestion.length]
+        const decorator = new CompositeDecorator([suggestionDecorator(start, end), ...decoratorList])
+        if (_.isEmpty(this.state.suggestion)) {
+          newState.editorState = EditorState.set(this.getInsertedEditorState(editorState, suggestion, true), {decorator})
         } else {
-          // replace text
+          newState.editorState = EditorState.set(this.getReplacedEditorState(editorState, suggestion, [start, end], true), {decorator})
         }
       }
     } else {
       const partialNoun = prevWord.slice(1)
       const possibleNouns = nounSearch(partialNoun)
 
-      const fillText = _.isEmpty(possibleNouns) ? '' : possibleNouns[0].replace(partialNoun, '')
+      const suggestion = _.isEmpty(possibleNouns) ? '' : possibleNouns[0].replace(partialNoun, '')
 
-      const shouldFillOrReplaceText = false //(nextWord === this.state.fillText || _.isEmpty(nextWord))
       Object.assign(newState, { possibleNouns, partialNoun, editorState })
 
-      if (shouldFillOrReplaceText) {
-        newState.fillText = fillText
-        if (_.isEmpty(nextWord)) {
-          newState.editorState = this.getInsertedEditorState(editorState, fillText, true)
+      if (!_.isEmpty(partialNoun)) {
+        newState.suggestion = suggestion
+        const [start, end] = [cursorPosition, cursorPosition+suggestion.length]
+        const decorator = new CompositeDecorator([suggestionDecorator(start, end), ...decoratorList])
+        if (_.isEmpty(this.state.suggestion)) {
+          newState.editorState = EditorState.set(this.getInsertedEditorState(editorState, suggestion, true), {decorator})
         } else {
-          // replace text
+          newState.editorState = EditorState.set(this.getReplacedEditorState(editorState, suggestion, [start, end], true), {decorator})
         }
       }
     }
@@ -157,15 +183,24 @@ class TextInputEditor extends Component {
   handleTab(e){
     const {possibleNouns, possibleProperties, partialNoun, partialProperty} = this.state
 
-
     if (!(_.isEmpty(possibleNouns) && _.isEmpty(possibleProperties))) {
       if (!_.isEmpty(possibleNouns)) {
         const noun = possibleNouns[0].replace(partialNoun, '')
-        this.insertAtCaret(`${noun}.`)
+        if (_.isEmpty(this.state.suggestion)) {
+          this.insertAtCaret(`${noun}.`)
+        } else {
+          const cursorPosition = this.state.editorState.getSelection().getFocusOffset()
+          this.replaceAtCaret(`${noun}.`, cursorPosition, cursorPosition+this.state.suggestion.length)
+        }
         this.setState({possibleNouns: [], partialNoun: '', noun})
       } else {
         const property = possibleProperties[0].replace(partialProperty, '')
-        this.insertAtCaret(`${property}`)
+        if (_.isEmpty(this.state.suggestion)) {
+          this.insertAtCaret(property)
+        } else {
+          const cursorPosition = this.state.editorState.getSelection().getFocusOffset()
+          this.replaceAtCaret(property, cursorPosition, cursorPosition+this.state.suggestion.length)
+        }
         this.setState({possibleProperties: [], partialProperty: '', property})
       }
     } else {
