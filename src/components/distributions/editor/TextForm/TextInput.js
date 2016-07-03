@@ -53,12 +53,22 @@ class TextInputEditor extends Component {
     partialProperty: '',
   }
 
-  insertAtCaret(text) {
-    const {editorState} = this.state
+  getInsertedEditorState(editorState, text, maintainCursorPosition = false) {
     const selection = editorState.getSelection()
     const content = editorState.getCurrentContent()
     const newContentState = Modifier.insertText(content, selection, text)
-    this._onChange(EditorState.push(editorState, newContentState, 'paste'))
+
+    const baseEditorState = EditorState.push(editorState, newContentState, 'paste')
+
+    if (!maintainCursorPosition) { return baseEditorState }
+
+    const cursorPosition = selection.getFocusOffset()
+    const newSelectionState = selection.merge({focusOffset: cursorPosition})
+    return EditorState.forceSelection(baseEditorState, newSelectionState)
+  }
+
+  insertAtCaret(text, maintainCursorPosition = false) {
+    this._onChange(this.getInsertedEditorState(this.state.editorState, text, maintainCursorPosition))
   }
 
   componentWillUnmount() {
@@ -72,50 +82,68 @@ class TextInputEditor extends Component {
     this.refs.editor.focus()
   }
 
-  _text(editorState) {
-    return editorState.getCurrentContent().getPlainText('')
-  }
-
   _onChange(editorState) {
-    const text = this._text(editorState)
+    const text = editorState.getCurrentContent().getPlainText('')
 
     const cursorPosition = editorState.getSelection().getFocusOffset()
-    const upToCursor = text.slice(0, cursorPosition)
-    const nounIndex = upToCursor.lastIndexOf('@')
-    const propertyIndex = upToCursor.lastIndexOf('.')
-    const spaceIndex = upToCursor.lastIndexOf(' ')
+    const prevWord = text.slice(0, cursorPosition).split(/[^\w@\.]/).pop()
 
-    if (text.startsWith('=') && nounIndex != -1 && nounIndex > spaceIndex) {
-      if (propertyIndex > nounIndex) {
-        const noun = text.slice(nounIndex+1,propertyIndex)
-        const partialProperty = text.slice(propertyIndex+1, cursorPosition)
-        this.setState({
-          possibleProperties: propertySearch(noun, partialProperty),
-          partialProperty,
-          noun,
-        })
-      } else {
-        const partialNoun = text.slice(nounIndex+1, cursorPosition)
-        this.setState({
-          possibleNouns: nounSearch(partialNoun),
-          partialNoun,
-        })
-      }
-    } else {
-      this.setState({
-        possibleNouns: [],
-        possibleProperties: [],
-        partialNoun: '',
-        partialProperty: '',
-        noun: '',
-        property: '',
-      })
+    let newState = {
+      possibleNouns: [],
+      possibleProperties: [],
+      partialNoun: '',
+      partialProperty: '',
+      fillText: '',
+      noun: '',
+      property: '',
+      editorState,
     }
 
-    this.props.onChange(this._text(editorState))
+    if (!prevWord.startsWith('@')) {
+      this.setState(newState)
+      this.props.onChange(text)
+      return
+    }
 
-    // TODO(matthew): Figure out how to make this work without forcing focus move all the time.
-    return this.setState({editorState})
+    const nextWord = text.slice(cursorPosition).split(/[^\w]/)[0]
+
+    if (prevWord.includes('.')) {
+      const noun = prevWord.slice(1, prevWord.indexOf('.'))
+      const partialProperty = prevWord.slice(prevWord.indexOf('.') + 1)
+      const possibleProperties = propertySearch(noun, partialProperty)
+      const fillText = _.isEmpty(possibleProperties) ? '' : possibleProperties[0].replace(partialProperty, '')
+
+      const shouldFillOrReplaceText = false // !_.isEmpty(partialProperty)
+      Object.assign(newState, { possibleProperties, partialProperty, noun, editorState })
+
+      if (shouldFillOrReplaceText) {
+        newState.fillText = fillText
+        if (_.isEmpty(nextWord)) {
+          newState.editorState = this.getInsertedEditorState(editorState, fillText, true)
+        } else {
+          // replace text
+        }
+      }
+    } else {
+      const partialNoun = prevWord.slice(1)
+      const possibleNouns = nounSearch(partialNoun)
+
+      const fillText = _.isEmpty(possibleNouns) ? '' : possibleNouns[0].replace(partialNoun, '')
+
+      const shouldFillOrReplaceText = false //(nextWord === this.state.fillText || _.isEmpty(nextWord))
+      Object.assign(newState, { possibleNouns, partialNoun, editorState })
+
+      if (shouldFillOrReplaceText) {
+        newState.fillText = fillText
+        if (_.isEmpty(nextWord)) {
+          newState.editorState = this.getInsertedEditorState(editorState, fillText, true)
+        } else {
+          // replace text
+        }
+      }
+    }
+    this.setState(newState)
+    this.props.onChange(text)
   }
 
   handleReturn(e) {
@@ -140,11 +168,14 @@ class TextInputEditor extends Component {
         this.insertAtCaret(`${property}`)
         this.setState({possibleProperties: [], partialProperty: '', property})
       }
-      this.focus()
     } else {
       this.props.onTab(e.shiftKey)
     }
     e.preventDefault()
+  }
+
+  onKeyDown(e) {
+    this.props.onKeyDown(e)
   }
 
   render() {
@@ -153,7 +184,7 @@ class TextInputEditor extends Component {
       <span
         className={this.props.className}
         onClick={this.focus.bind(this)}
-        onKeyDown={this.props.onKeyDown}
+        onKeyDown={this.onKeyDown.bind(this)}
         onFocus={this.props.onFocus}
       >
         <Editor
@@ -168,7 +199,7 @@ class TextInputEditor extends Component {
           placeholder={this.props.placeholder}
         />
       </span>
-    );
+    )
   }
 }
 
@@ -225,10 +256,6 @@ export default class TextInput extends Component{
     return !isFunction && (count > 3)
   }
 
-  _onKeyDown(e) {
-    e.stopPropagation()
-  }
-
   render() {
     const {hasErrors, width} = this.props
     let className = 'TextInput'
@@ -240,7 +267,7 @@ export default class TextInput extends Component{
         onBlur={this._handleBlur.bind(this)}
         onChange={this._handleChange.bind(this)}
         onFocus={this._handleFocus.bind(this)}
-        onKeyDown={this._onKeyDown.bind(this)}
+        onKeyDown={e => {e.stopPropagation()}}
         handleEscape={this.props.onEscape}
         onReturn={this.props.onReturn}
         onTab={this.props.onTab}
