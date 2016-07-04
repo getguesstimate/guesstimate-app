@@ -112,7 +112,6 @@ class TextInputEditor extends Component {
   }
 
   _onChange(editorState) {
-
     const text = editorState.getCurrentContent().getPlainText('')
 
     const selection = editorState.getSelection()
@@ -136,6 +135,8 @@ class TextInputEditor extends Component {
       return
     }
 
+    const nextWord = text.slice(cursorPosition).split(/[^\w]/)[0]
+
     if (prevWord.includes('.')) {
       const noun = prevWord.slice(1, prevWord.indexOf('.'))
       const propertyIndex = prevWord.indexOf('.') + 1
@@ -145,7 +146,7 @@ class TextInputEditor extends Component {
 
       Object.assign(newState, { possibleProperties, partialProperty, noun })
 
-      if (!(_.isEmpty(partialProperty) || _.isEmpty(suggestion))) {
+      if (!(_.isEmpty(partialProperty) || _.isEmpty(suggestion)) && ((nextWord || '') === (this.state.suggestion || ''))) {
         newState.suggestion = suggestion
         const [start, end] = [cursorPosition, cursorPosition+suggestion.length]
         const decorator = new CompositeDecorator([
@@ -167,7 +168,7 @@ class TextInputEditor extends Component {
 
       Object.assign(newState, { possibleNouns, partialNoun, editorState })
 
-      if (!(_.isEmpty(partialNoun) || _.isEmpty(suggestion))) {
+      if (!(_.isEmpty(partialNoun) || _.isEmpty(suggestion)) && ((nextWord || '') === (this.state.suggestion || ''))) {
         newState.suggestion = suggestion
         const [start, end] = [cursorPosition, cursorPosition+suggestion.length]
         const decorator = new CompositeDecorator([
@@ -182,6 +183,12 @@ class TextInputEditor extends Component {
         }
       }
     }
+
+    if (_.isEmpty(newState.suggestion) && !_.isEmpty(this.state.suggestion) && nextWord === this.state.suggestion) {
+      const noSuggestion = this.getReplacedEditorState(newState.editorState, '', [cursorPosition, cursorPosition + this.state.suggestion.length], true)
+      newState.editorState = EditorState.set(noSuggestion, {decorator: new CompositeDecorator(decoratorList)})
+    }
+
     this.setState(newState)
     this.props.onChange(text)
   }
@@ -204,18 +211,16 @@ class TextInputEditor extends Component {
           this.insertAtCaret(`${noun}.`)
         } else {
           const cursorPosition = this.state.editorState.getSelection().getFocusOffset()
-          this.replaceAtCaret(`${noun}.`, cursorPosition, cursorPosition+this.state.suggestion.length)
+          this.replaceAtCaret(`${noun}.`, cursorPosition, cursorPosition+this.state.suggestion.length - 1)
         }
-        this.setState({possibleNouns: [], partialNoun: '', noun})
       } else {
         const property = possibleProperties[0].replace(partialProperty, '')
         if (_.isEmpty(this.state.suggestion)) {
           this.insertAtCaret(property)
         } else {
           const cursorPosition = this.state.editorState.getSelection().getFocusOffset()
-          this.replaceAtCaret(property, cursorPosition, cursorPosition+this.state.suggestion.length)
+          this.replaceAtCaret(property, cursorPosition, cursorPosition+this.state.suggestion.length - 1)
         }
-        this.setState({possibleProperties: [], partialProperty: '', property})
       }
     } else {
       this.props.onTab(e.shiftKey)
