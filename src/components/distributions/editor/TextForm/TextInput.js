@@ -7,25 +7,10 @@ import {isData, formatData} from 'lib/guesstimator/formatter/formatters/Data'
 
 import {nounSearch, propertySearch} from 'gModules/factBank/actions'
 
-// Note: these aren't very good regexes, don't use them!
 const NOUN_REGEX = /\@[\w]+/g
 const PROPERTY_REGEX = /\.[\w]+/g
 
-function positionDecorator(start, end, component) {
-  return {
-    strategy: (contentBlock, callback) => { callback(start, end) },
-    component,
-  }
-}
-
-function findWithRegex(regex, contentBlock, callback) {
-  const text = contentBlock.getText()
-  let matchArr, start
-  while ((matchArr = regex.exec(text)) !== null) {
-    start = matchArr.index
-    callback(start, start + matchArr[0].length)
-  }
-}
+const positionDecorator = (start, end, component) => ({strategy: (contentBlock, callback) => {callback(start, end)}, component})
 
 const NounSpan = props => <span {...props} className='noun'>{props.children}</span>
 const PropertySpan = props => <span {...props} className='property'>{props.children}</span>
@@ -43,15 +28,41 @@ const STATIC_DECORATOR_LIST = [
 ]
 const STATIC_DECORATOR = {decorator: new CompositeDecorator(STATIC_DECORATOR_LIST)}
 
+function findWithRegex(regex, contentBlock, callback) {
+  const text = contentBlock.getText()
+  let matchArr, start
+  while ((matchArr = regex.exec(text)) !== null) {
+    start = matchArr.index
+    callback(start, start + matchArr[0].length)
+  }
+}
+
+function getPropertyParams(prevWord) {
+  const noun = prevWord.slice(1, prevWord.indexOf('.'))
+  const propertyIndex = prevWord.indexOf('.') + 1
+  const partialProperty = prevWord.slice(propertyIndex)
+  const possibleProperties = propertySearch(noun, partialProperty)
+  const suggestion = _.isEmpty(possibleProperties) ? '' : possibleProperties[0].replace(partialProperty, '')
+  return {propertyIndex, partialProperty, suggestion}
+}
+
+function getNounParams(prevWord) {
+  const partialNoun = prevWord.slice(1)
+  const possibleNouns = nounSearch(partialNoun)
+  const suggestion = _.isEmpty(possibleNouns) ? '' : possibleNouns[0].replace(partialNoun, '')
+  return {partialNoun, suggestion}
+}
+
+function getFactBankParams(prevWord) {
+  return prevWord.includes('.') ? getPropertyParams(prevWord) : getNounParams(prevWord)
+}
+
 export default class TextInput extends Component{
   displayName: 'Guesstimate-TextInput'
 
   state = {
-    editorState: EditorState.createWithContent(ContentState.createFromText(this.props.value || ''), STATIC_DECORATOR),
-    possibleProperties: [],
-    possibleNouns: [],
-    partialNoun: '',
-    partialProperty: '',
+    editorState: EditorState.createWithContent(ContentState.createFromText(this.props.value || ''), new CompositeDecorator(STATIC_DECORATOR_LIST)),
+    suggestion: '',
   }
 
   static propTypes = {
@@ -60,7 +71,7 @@ export default class TextInput extends Component{
 
   focus() { this.refs.editor.focus() }
 
-  getReplacedEditorState(editorState, text, [anchorOffset, focusOffset], maintainCursorPosition = false) {
+  getReplacedEditorState(editorState, text, [anchorOffset, focusOffset], maintainCursorPosition = true) {
     const selection = editorState.getSelection()
     const content = editorState.getCurrentContent()
     const newContentState = Modifier.replaceText(content, selection.merge({anchorOffset, focusOffset: focusOffset + 1}), text)
@@ -74,7 +85,7 @@ export default class TextInput extends Component{
     return EditorState.forceSelection(baseEditorState, newSelectionState)
   }
 
-  getInsertedEditorState(editorState, text, maintainCursorPosition = false) {
+  getInsertedEditorState(editorState, text, maintainCursorPosition = true) {
     const selection = editorState.getSelection()
     const content = editorState.getCurrentContent()
     const newContentState = Modifier.insertText(content, selection, text)
@@ -88,12 +99,12 @@ export default class TextInput extends Component{
     return EditorState.forceSelection(baseEditorState, newSelectionState)
   }
 
-  insertAtCaret(text, maintainCursorPosition = false) {
-    this.onChange(EditorState.set(this.getInsertedEditorState(this.state.editorState, text, maintainCursorPosition), STATIC_DECORATOR))
+  insertAtCaret(text) {
+    this.onChange(EditorState.set(this.getInsertedEditorState(this.state.editorState, text, false), STATIC_DECORATOR))
   }
 
-  replaceAtCaret(text, start, end, maintainCursorPosition = false) {
-    this.onChange(EditorState.set(this.getReplacedEditorState(this.state.editorState, text, [start, end], maintainCursorPosition), STATIC_DECORATOR))
+  replaceAtCaret(text, start, end) {
+    this.onChange(EditorState.set(this.getReplacedEditorState(this.state.editorState, text, [start, end], false), STATIC_DECORATOR))
   }
 
   componentWillUnmount() {
@@ -103,15 +114,42 @@ export default class TextInput extends Component{
     }
   }
 
+  withSuggestion(editorState, precedingPartial, suggestion, nextWord, partialLength, decoratorComponent) {
+    const nextWordSuitable = (nextWord || '') === (this.state.suggestion || '')
+    const hasPartialAndSuggestion = !(_.isEmpty(precedingPartial) || _.isEmpty(suggestion))
+    if (!(hasPartialAndSuggestion && nextWordSuitable)) { return {} }
+
+    const cursorPosition = editorState.getSelection().getFocusOffset()
+    const decorator = new CompositeDecorator([
+      positionDecorator(cursorPosition-partialLength-1, cursorPosition, decoratorComponent),
+      positionDecorator(cursorPosition, cursorPosition+suggestion.length, SuggestionSpan),
+      ...STATIC_DECORATOR_LIST
+    ])
+    if (_.isEmpty(this.state.suggestion)) {
+      return {editorState: EditorState.set(this.getInsertedEditorState(editorState, suggestion), {decorator}), suggestion}
+    } else {
+      return {editorState: EditorState.set(this.getReplacedEditorState(editorState, suggestion, [cursorPosition, cursorPosition+suggestion.length]), {decorator}), suggestion}
+    }
+  }
+
+
+  suggestionState(editorState, prevWord, nextWord, cursorPosition) {
+    const {propertyIndex, partialProperty, partialNoun, suggestion} = getFactBankParams(prevWord)
+
+    if (_.isEmpty(suggestion) && !_.isEmpty(this.state.suggestion) && nextWord === this.state.suggestion) {
+      const noSuggestion = this.getReplacedEditorState(editorState, '', [cursorPosition, cursorPosition + this.state.suggestion.length])
+      return {editorState: EditorState.set(noSuggestion, STATIC_DECORATOR)}
+    } else if (prevWord.includes('.')) {
+      return {isNoun: false, ...this.withSuggestion(editorState, partialProperty, suggestion, nextWord, prevWord.length-propertyIndex, PropertySpan)}
+    } else {
+      return {isNoun: true, ...this.withSuggestion(editorState, partialNoun, suggestion, nextWord, prevWord.length-1, NounSpan)}
+    }
+
+  }
+
   onChange(editorState) {
     let newState = {
-      possibleNouns: [],
-      possibleProperties: [],
-      partialNoun: '',
-      partialProperty: '',
       suggestion: '',
-      noun: '',
-      property: '',
       editorState,
     }
 
@@ -123,57 +161,7 @@ export default class TextInput extends Component{
 
     if (prevWord.startsWith('@') && selection.isCollapsed()) {
       const nextWord = text.slice(cursorPosition).split(/[^\w]/)[0]
-      if (prevWord.includes('.')) {
-        const noun = prevWord.slice(1, prevWord.indexOf('.'))
-        const propertyIndex = prevWord.indexOf('.') + 1
-        const partialProperty = prevWord.slice(propertyIndex)
-        const possibleProperties = propertySearch(noun, partialProperty)
-        const suggestion = _.isEmpty(possibleProperties) ? '' : possibleProperties[0].replace(partialProperty, '')
-
-        Object.assign(newState, { possibleProperties, partialProperty, noun })
-
-        if (!(_.isEmpty(partialProperty) || _.isEmpty(suggestion)) && ((nextWord || '') === (this.state.suggestion || ''))) {
-          newState.suggestion = suggestion
-          const [start, end] = [cursorPosition, cursorPosition+suggestion.length]
-          const decorator = new CompositeDecorator([
-            positionDecorator(cursorPosition - prevWord.length + propertyIndex - 1, cursorPosition, PropertySpan),
-            positionDecorator(start, end, SuggestionSpan),
-            ...STATIC_DECORATOR_LIST
-          ])
-          if (_.isEmpty(this.state.suggestion)) {
-            newState.editorState = EditorState.set(this.getInsertedEditorState(editorState, suggestion, true), {decorator})
-          } else {
-            newState.editorState = EditorState.set(this.getReplacedEditorState(editorState, suggestion, [start, end], true), {decorator})
-          }
-        }
-      } else {
-        const partialNoun = prevWord.slice(1)
-        const possibleNouns = nounSearch(partialNoun)
-
-        const suggestion = _.isEmpty(possibleNouns) ? '' : possibleNouns[0].replace(partialNoun, '')
-
-        Object.assign(newState, { possibleNouns, partialNoun, editorState })
-
-        if (!(_.isEmpty(partialNoun) || _.isEmpty(suggestion)) && ((nextWord || '') === (this.state.suggestion || ''))) {
-          newState.suggestion = suggestion
-          const [start, end] = [cursorPosition, cursorPosition+suggestion.length]
-          const decorator = new CompositeDecorator([
-            positionDecorator(cursorPosition - prevWord.length, cursorPosition, NounSpan),
-            positionDecorator(start, end, SuggestionSpan),
-            ...STATIC_DECORATOR_LIST
-          ])
-          if (_.isEmpty(this.state.suggestion)) {
-            newState.editorState = EditorState.set(this.getInsertedEditorState(editorState, suggestion, true), {decorator})
-          } else {
-            newState.editorState = EditorState.set(this.getReplacedEditorState(editorState, suggestion, [start, end], true), {decorator})
-          }
-        }
-      }
-
-      if (_.isEmpty(newState.suggestion) && !_.isEmpty(this.state.suggestion) && nextWord === this.state.suggestion) {
-        const noSuggestion = this.getReplacedEditorState(newState.editorState, '', [cursorPosition, cursorPosition + this.state.suggestion.length], true)
-        newState.editorState = EditorState.set(noSuggestion, STATIC_DECORATOR)
-      }
+      Object.assign(newState, this.suggestionState(editorState, prevWord, nextWord, cursorPosition))
     }
 
     this.setState(newState)
@@ -187,26 +175,11 @@ export default class TextInput extends Component{
   }
 
   handleTab(e){
-    const {possibleNouns, possibleProperties, partialNoun, partialProperty} = this.state
+    const {suggestion, isNoun} = this.state
 
-    if (!(_.isEmpty(possibleNouns) && _.isEmpty(possibleProperties))) {
-      if (!_.isEmpty(possibleNouns)) {
-        const noun = possibleNouns[0].replace(partialNoun, '')
-        if (_.isEmpty(this.state.suggestion)) {
-          this.insertAtCaret(`${noun}.`)
-        } else {
-          const cursorPosition = this.state.editorState.getSelection().getFocusOffset()
-          this.replaceAtCaret(`${noun}.`, cursorPosition, cursorPosition+this.state.suggestion.length - 1)
-        }
-      } else {
-        const property = possibleProperties[0].replace(partialProperty, '')
-        if (_.isEmpty(this.state.suggestion)) {
-          this.insertAtCaret(property)
-        } else {
-          const cursorPosition = this.state.editorState.getSelection().getFocusOffset()
-          this.replaceAtCaret(property, cursorPosition, cursorPosition+this.state.suggestion.length - 1)
-        }
-      }
+    if (!_.isEmpty(suggestion)) {
+      const cursorPosition = this.state.editorState.getSelection().getFocusOffset()
+      this.replaceAtCaret(suggestion + (isNoun ? '.' : ''), cursorPosition, cursorPosition+suggestion.length - 1)
     } else {
       this.props.onTab(e.shiftKey)
     }
