@@ -3,19 +3,13 @@ import React, {Component, PropTypes} from 'react'
 import $ from 'jquery'
 import {EditorState, Editor, ContentState, Modifier, CompositeDecorator} from 'draft-js'
 
+import {isData, formatData} from 'lib/guesstimator/formatter/formatters/Data'
+
 import {nounSearch, propertySearch} from 'gModules/factBank/actions'
 
 // Note: these aren't very good regexes, don't use them!
 const NOUN_REGEX = /\@[\w]+/g
 const PROPERTY_REGEX = /\.[\w]+/g
-
-function nounStrategy(contentBlock, callback) {
-  findWithRegex(NOUN_REGEX, contentBlock, callback)
-}
-
-function propertyStrategy(contentBlock, callback) {
-  findWithRegex(PROPERTY_REGEX, contentBlock, callback)
-}
 
 function positionDecorator(start, end, component) {
   return {
@@ -24,45 +18,47 @@ function positionDecorator(start, end, component) {
   }
 }
 
-function suggestionDecorator(start, end) {
-  return {
-    strategy: (contentBlock, callback) => { callback(start, end) },
-    component: SuggestionSpan,
-  }
-}
-
 function findWithRegex(regex, contentBlock, callback) {
-  const text = contentBlock.getText();
-  let matchArr, start;
+  const text = contentBlock.getText()
+  let matchArr, start
   while ((matchArr = regex.exec(text)) !== null) {
-    start = matchArr.index;
-    callback(start, start + matchArr[0].length);
+    start = matchArr.index
+    callback(start, start + matchArr[0].length)
   }
 }
 
-const NounSpan = props => <span {...props} style={{color: 'red'}}>{props.children}</span>
-const PropertySpan = props => <span {...props} style={{color: 'blue'}}>{props.children}</span>
-const SuggestionSpan = props => <span {...props} style={{color: 'grey'}}>{props.children}</span>
+const NounSpan = props => <span {...props} className='noun'>{props.children}</span>
+const PropertySpan = props => <span {...props} className='property'>{props.children}</span>
+const SuggestionSpan = props => <span {...props} className='suggestion'>{props.children}</span>
 
-const decoratorList = [
+const STATIC_DECORATOR_LIST = [
   {
-    strategy: nounStrategy,
+    strategy: (contentBlock, callback) => { findWithRegex(NOUN_REGEX, contentBlock, callback) },
     component: NounSpan,
   },
   {
-    strategy: propertyStrategy,
+    strategy: (contentBlock, callback) => { findWithRegex(PROPERTY_REGEX, contentBlock, callback) },
     component: PropertySpan,
   },
 ]
+const STATIC_DECORATOR = {decorator: new CompositeDecorator(STATIC_DECORATOR_LIST)}
 
-class TextInputEditor extends Component {
+export default class TextInput extends Component{
+  displayName: 'Guesstimate-TextInput'
+
   state = {
-    editorState: EditorState.createWithContent(ContentState.createFromText(this.props.value || ''), new CompositeDecorator(decoratorList)),
+    editorState: EditorState.createWithContent(ContentState.createFromText(this.props.value || ''), STATIC_DECORATOR),
     possibleProperties: [],
     possibleNouns: [],
     partialNoun: '',
     partialProperty: '',
   }
+
+  static propTypes = {
+    value: PropTypes.string,
+  }
+
+  focus() { this.refs.editor.focus() }
 
   getReplacedEditorState(editorState, text, [anchorOffset, focusOffset], maintainCursorPosition = false) {
     const selection = editorState.getSelection()
@@ -93,11 +89,11 @@ class TextInputEditor extends Component {
   }
 
   insertAtCaret(text, maintainCursorPosition = false) {
-    this._onChange(EditorState.set(this.getInsertedEditorState(this.state.editorState, text, maintainCursorPosition), {decorator: new CompositeDecorator(decoratorList)}))
+    this.onChange(EditorState.set(this.getInsertedEditorState(this.state.editorState, text, maintainCursorPosition), STATIC_DECORATOR))
   }
 
   replaceAtCaret(text, start, end, maintainCursorPosition = false) {
-    this._onChange(EditorState.set(this.getReplacedEditorState(this.state.editorState, text, [start, end], maintainCursorPosition), {decorator: new CompositeDecorator(decoratorList)}))
+    this.onChange(EditorState.set(this.getReplacedEditorState(this.state.editorState, text, [start, end], maintainCursorPosition), STATIC_DECORATOR))
   }
 
   componentWillUnmount() {
@@ -107,17 +103,7 @@ class TextInputEditor extends Component {
     }
   }
 
-  focus() {
-    this.refs.editor.focus()
-  }
-
-  _onChange(editorState) {
-    const text = editorState.getCurrentContent().getPlainText('')
-
-    const selection = editorState.getSelection()
-    const cursorPosition = selection.getFocusOffset()
-    const prevWord = text.slice(0, cursorPosition).split(/[^\w@\.]/).pop()
-
+  onChange(editorState) {
     let newState = {
       possibleNouns: [],
       possibleProperties: [],
@@ -129,76 +115,75 @@ class TextInputEditor extends Component {
       editorState,
     }
 
-    if (!(prevWord.startsWith('@') && selection.isCollapsed())) {
-      this.setState(newState)
-      this.props.onChange(text)
-      return
-    }
+    const text = editorState.getCurrentContent().getPlainText('')
 
-    const nextWord = text.slice(cursorPosition).split(/[^\w]/)[0]
+    const selection = editorState.getSelection()
+    const cursorPosition = selection.getFocusOffset()
+    const prevWord = text.slice(0, cursorPosition).split(/[^\w@\.]/).pop()
 
-    if (prevWord.includes('.')) {
-      const noun = prevWord.slice(1, prevWord.indexOf('.'))
-      const propertyIndex = prevWord.indexOf('.') + 1
-      const partialProperty = prevWord.slice(propertyIndex)
-      const possibleProperties = propertySearch(noun, partialProperty)
-      const suggestion = _.isEmpty(possibleProperties) ? '' : possibleProperties[0].replace(partialProperty, '')
+    if (prevWord.startsWith('@') && selection.isCollapsed()) {
+      const nextWord = text.slice(cursorPosition).split(/[^\w]/)[0]
+      if (prevWord.includes('.')) {
+        const noun = prevWord.slice(1, prevWord.indexOf('.'))
+        const propertyIndex = prevWord.indexOf('.') + 1
+        const partialProperty = prevWord.slice(propertyIndex)
+        const possibleProperties = propertySearch(noun, partialProperty)
+        const suggestion = _.isEmpty(possibleProperties) ? '' : possibleProperties[0].replace(partialProperty, '')
 
-      Object.assign(newState, { possibleProperties, partialProperty, noun })
+        Object.assign(newState, { possibleProperties, partialProperty, noun })
 
-      if (!(_.isEmpty(partialProperty) || _.isEmpty(suggestion)) && ((nextWord || '') === (this.state.suggestion || ''))) {
-        newState.suggestion = suggestion
-        const [start, end] = [cursorPosition, cursorPosition+suggestion.length]
-        const decorator = new CompositeDecorator([
-          positionDecorator(cursorPosition - prevWord.length + propertyIndex, cursorPosition, PropertySpan),
-          positionDecorator(start, end, SuggestionSpan),
-          ...decoratorList
-        ])
-        if (_.isEmpty(this.state.suggestion)) {
-          newState.editorState = EditorState.set(this.getInsertedEditorState(editorState, suggestion, true), {decorator})
-        } else {
-          newState.editorState = EditorState.set(this.getReplacedEditorState(editorState, suggestion, [start, end], true), {decorator})
+        if (!(_.isEmpty(partialProperty) || _.isEmpty(suggestion)) && ((nextWord || '') === (this.state.suggestion || ''))) {
+          newState.suggestion = suggestion
+          const [start, end] = [cursorPosition, cursorPosition+suggestion.length]
+          const decorator = new CompositeDecorator([
+            positionDecorator(cursorPosition - prevWord.length + propertyIndex - 1, cursorPosition, PropertySpan),
+            positionDecorator(start, end, SuggestionSpan),
+            ...STATIC_DECORATOR_LIST
+          ])
+          if (_.isEmpty(this.state.suggestion)) {
+            newState.editorState = EditorState.set(this.getInsertedEditorState(editorState, suggestion, true), {decorator})
+          } else {
+            newState.editorState = EditorState.set(this.getReplacedEditorState(editorState, suggestion, [start, end], true), {decorator})
+          }
+        }
+      } else {
+        const partialNoun = prevWord.slice(1)
+        const possibleNouns = nounSearch(partialNoun)
+
+        const suggestion = _.isEmpty(possibleNouns) ? '' : possibleNouns[0].replace(partialNoun, '')
+
+        Object.assign(newState, { possibleNouns, partialNoun, editorState })
+
+        if (!(_.isEmpty(partialNoun) || _.isEmpty(suggestion)) && ((nextWord || '') === (this.state.suggestion || ''))) {
+          newState.suggestion = suggestion
+          const [start, end] = [cursorPosition, cursorPosition+suggestion.length]
+          const decorator = new CompositeDecorator([
+            positionDecorator(cursorPosition - prevWord.length, cursorPosition, NounSpan),
+            positionDecorator(start, end, SuggestionSpan),
+            ...STATIC_DECORATOR_LIST
+          ])
+          if (_.isEmpty(this.state.suggestion)) {
+            newState.editorState = EditorState.set(this.getInsertedEditorState(editorState, suggestion, true), {decorator})
+          } else {
+            newState.editorState = EditorState.set(this.getReplacedEditorState(editorState, suggestion, [start, end], true), {decorator})
+          }
         }
       }
-    } else {
-      const partialNoun = prevWord.slice(1)
-      const possibleNouns = nounSearch(partialNoun)
 
-      const suggestion = _.isEmpty(possibleNouns) ? '' : possibleNouns[0].replace(partialNoun, '')
-
-      Object.assign(newState, { possibleNouns, partialNoun, editorState })
-
-      if (!(_.isEmpty(partialNoun) || _.isEmpty(suggestion)) && ((nextWord || '') === (this.state.suggestion || ''))) {
-        newState.suggestion = suggestion
-        const [start, end] = [cursorPosition, cursorPosition+suggestion.length]
-        const decorator = new CompositeDecorator([
-          positionDecorator(cursorPosition - prevWord.length + 1, cursorPosition, NounSpan),
-          positionDecorator(start, end, SuggestionSpan),
-          ...decoratorList
-        ])
-        if (_.isEmpty(this.state.suggestion)) {
-          newState.editorState = EditorState.set(this.getInsertedEditorState(editorState, suggestion, true), {decorator})
-        } else {
-          newState.editorState = EditorState.set(this.getReplacedEditorState(editorState, suggestion, [start, end], true), {decorator})
-        }
+      if (_.isEmpty(newState.suggestion) && !_.isEmpty(this.state.suggestion) && nextWord === this.state.suggestion) {
+        const noSuggestion = this.getReplacedEditorState(newState.editorState, '', [cursorPosition, cursorPosition + this.state.suggestion.length], true)
+        newState.editorState = EditorState.set(noSuggestion, STATIC_DECORATOR)
       }
-    }
-
-    if (_.isEmpty(newState.suggestion) && !_.isEmpty(this.state.suggestion) && nextWord === this.state.suggestion) {
-      const noSuggestion = this.getReplacedEditorState(newState.editorState, '', [cursorPosition, cursorPosition + this.state.suggestion.length], true)
-      newState.editorState = EditorState.set(noSuggestion, {decorator: new CompositeDecorator(decoratorList)})
     }
 
     this.setState(newState)
-    this.props.onChange(text)
-  }
-
-  handleReturn(e) {
-    return this.props.onReturn(e.shiftKey)
-  }
-
-  handleEscape() {
-    this.props.handleEscape()
+    if (text !== this.props.value) {
+      if (isData(text)) {
+        this.props.onChangeData(formatData(text))
+      } else {
+        this.props.onChange(text)
+      }
+    }
   }
 
   handleTab(e){
@@ -228,107 +213,38 @@ class TextInputEditor extends Component {
     e.preventDefault()
   }
 
-  onKeyDown(e) {
-    this.props.onKeyDown(e)
-  }
-
-  render() {
-    const {editorState} = this.state;
-    return (
-      <span
-        className={this.props.className}
-        onClick={this.focus.bind(this)}
-        onKeyDown={this.onKeyDown.bind(this)}
-        onFocus={this.props.onFocus}
-      >
-        <Editor
-          onFocus={this.props.onFocus}
-          onEscape={this.handleEscape.bind(this)}
-          editorState={editorState}
-          handleReturn={this.handleReturn.bind(this)}
-          onTab={this.handleTab.bind(this)}
-          onBlur={this.props.onBlur}
-          onChange={this._onChange.bind(this)}
-          ref='editor'
-          placeholder={this.props.placeholder}
-        />
-      </span>
-    )
-  }
-}
-
-export default class TextInput extends Component{
-  displayName: 'Guesstimate-TextInput'
-
-  static propTypes = {
-    value: PropTypes.string,
-  }
-
-  focus() { this.refs.editor && this.refs.editor.focus() }
-
-  _handleInputMetricClick(item){
-    this.refs.editor.insertAtCaret(item.readableId)
-  }
-
-  _handleFocus() {
-    $(window).on('functionMetricClicked', (a, item) => {this._handleInputMetricClick(item)})
+  handleFocus() {
+    $(window).on('functionMetricClicked', (_, {readableId}) => {this.insertAtCaret(readableId)})
     this.props.onFocus()
   }
 
-  _handleBlur() {
+  handleBlur() {
     $(window).off('functionMetricClicked')
     this.props.onBlur()
   }
 
-  _handleChange(value) {
-    if (value !== this.props.value) {
-      if (this._isData(value)) {
-        const data = this._formatData(value)
-        this.props.onChangeData(data)
-      } else {
-        this._changeInput(value);
-      }
-    }
-  }
-
-  _changeInput(value){ this.props.onChange(value) }
-
-  _formatData(value) {
-    return value
-          .replace(/[\[\]]/g, '')
-          .split(/[\n\s,]+/)
-          .filter(e => !_.isEmpty(e))
-          .map(Number)
-          .filter(e => _.isFinite(e))
-          .slice(0, 10000)
-  }
-
-  //TODO: It would be nice to eventually refactor this to use guesstimator lib
-  _isData(input) {
-    const isFunction = input.includes('=')
-    const count = (input.match(/[\n\s,]/g) || []).length
-    return !isFunction && (count > 3)
-  }
-
   render() {
-    const {hasErrors, width} = this.props
-    let className = 'TextInput'
-    className += (this.props.value !== '' && hasErrors) ? ' hasErrors' : ''
-    className += ` ${width}`
+    const [{hasErrors, width, value}, {editorState}] = [this.props, this.state]
+    const className = `TextInput ${width}` + (_.isEmpty(value) && hasErrors ? ' hasErrors' : '')
     return (
-      <TextInputEditor
+      <span
         className={className}
-        onBlur={this._handleBlur.bind(this)}
-        onChange={this._handleChange.bind(this)}
-        onFocus={this._handleFocus.bind(this)}
+        onClick={this.focus.bind(this)}
         onKeyDown={e => {e.stopPropagation()}}
-        handleEscape={this.props.onEscape}
-        onReturn={this.props.onReturn}
-        onTab={this.props.onTab}
-        value={this.props.value}
-        placeholder={'value'}
-        ref='editor'
-      />
+        onFocus={this.handleFocus.bind(this)}
+      >
+        <Editor
+          onFocus={this.props.onFocus}
+          onEscape={this.props.onEscape}
+          editorState={editorState}
+          handleReturn={e => this.props.onReturn(e.shiftKey)}
+          onTab={this.handleTab.bind(this)}
+          onBlur={this.handleBlur.bind(this)}
+          onChange={this.onChange.bind(this)}
+          ref='editor'
+          placeholder={'value'}
+        />
+      </span>
     )
   }
 }
