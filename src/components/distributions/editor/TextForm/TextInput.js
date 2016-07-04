@@ -93,11 +93,11 @@ class TextInputEditor extends Component {
   }
 
   insertAtCaret(text, maintainCursorPosition = false) {
-    this._onChange(this.getInsertedEditorState(this.state.editorState, text, maintainCursorPosition))
+    this._onChange(EditorState.set(this.getInsertedEditorState(this.state.editorState, text, maintainCursorPosition), {decorator: new CompositeDecorator(decoratorList)}))
   }
 
   replaceAtCaret(text, start, end, maintainCursorPosition = false) {
-    this._onChange(this.getReplacedEditorState(this.state.editorState, text, [start, end], maintainCursorPosition))
+    this._onChange(EditorState.set(this.getReplacedEditorState(this.state.editorState, text, [start, end], maintainCursorPosition), {decorator: new CompositeDecorator(decoratorList)}))
   }
 
   componentWillUnmount() {
@@ -115,7 +115,8 @@ class TextInputEditor extends Component {
 
     const text = editorState.getCurrentContent().getPlainText('')
 
-    const cursorPosition = editorState.getSelection().getFocusOffset()
+    const selection = editorState.getSelection()
+    const cursorPosition = selection.getFocusOffset()
     const prevWord = text.slice(0, cursorPosition).split(/[^\w@\.]/).pop()
 
     let newState = {
@@ -129,13 +130,11 @@ class TextInputEditor extends Component {
       editorState,
     }
 
-    if (!prevWord.startsWith('@')) {
+    if (!(prevWord.startsWith('@') && selection.isCollapsed())) {
       this.setState(newState)
       this.props.onChange(text)
       return
     }
-
-    const nextWord = text.slice(cursorPosition).split(/[^\w]/)[0]
 
     if (prevWord.includes('.')) {
       const noun = prevWord.slice(1, prevWord.indexOf('.'))
@@ -146,7 +145,7 @@ class TextInputEditor extends Component {
 
       Object.assign(newState, { possibleProperties, partialProperty, noun })
 
-      if (!_.isEmpty(partialProperty)) {
+      if (!(_.isEmpty(partialProperty) || _.isEmpty(suggestion))) {
         newState.suggestion = suggestion
         const [start, end] = [cursorPosition, cursorPosition+suggestion.length]
         const decorator = new CompositeDecorator([
@@ -168,7 +167,7 @@ class TextInputEditor extends Component {
 
       Object.assign(newState, { possibleNouns, partialNoun, editorState })
 
-      if (!_.isEmpty(partialNoun)) {
+      if (!(_.isEmpty(partialNoun) || _.isEmpty(suggestion))) {
         newState.suggestion = suggestion
         const [start, end] = [cursorPosition, cursorPosition+suggestion.length]
         const decorator = new CompositeDecorator([
