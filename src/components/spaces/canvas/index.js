@@ -120,7 +120,7 @@ export default class Canvas extends Component{
    const {selectedCell} = this.props
    const metrics = _.get(this.props.denormalizedSpace, 'metrics')
 
-   return metrics && isLocation(selectedCell) && metrics.some(existsAtLoc(selectedCell));
+   return metrics && isLocation(selectedCell) && metrics.find(existsAtLoc(selectedCell))
   }
 
   _isAnalysisView(props = this.props) {
