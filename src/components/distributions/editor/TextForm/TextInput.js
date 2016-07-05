@@ -7,8 +7,8 @@ import {isData, formatData} from 'lib/guesstimator/formatter/formatters/Data'
 
 import {nounSearch, propertySearch} from 'gModules/factBank/actions'
 
-const NOUN_REGEX = /\@[\w]+/g
-const PROPERTY_REGEX = /\.[\w]+/g
+const NOUN_REGEX = /(\@[\w]+)/g
+const PROPERTY_REGEX = /[a-zA-Z_](\.[a-zA-Z_]+)/g
 
 const positionDecorator = (start, end, component) => ({strategy: (contentBlock, callback) => {callback(start, end)}, component})
 
@@ -32,8 +32,8 @@ function findWithRegex(regex, contentBlock, callback) {
   const text = contentBlock.getText()
   let matchArr, start
   while ((matchArr = regex.exec(text)) !== null) {
-    start = matchArr.index
-    callback(start, start + matchArr[0].length)
+    start = matchArr.index + matchArr[0].indexOf(matchArr[1])
+    callback(start, start + matchArr[1].length)
   }
 }
 
@@ -144,7 +144,6 @@ export default class TextInput extends Component{
     } else if (prevWord.includes('.')) {
       return {isNoun: false, ...this.withSuggestion(editorState, partialProperty, suggestion, nextWord, prevWord.length-propertyIndex, PropertySpan)}
     } else {
-      console.log('partial noun:', partialNoun, '\n new suggestion:', suggestion, '\n next word:', nextWord, '\n current suggestion: ', this.state.suggestion)
       return {isNoun: true, ...this.withSuggestion(editorState, partialNoun, suggestion, nextWord, prevWord.length-1, NounSpan)}
     }
 
