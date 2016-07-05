@@ -115,7 +115,7 @@ export default class TextInput extends Component{
   }
 
   withSuggestion(editorState, precedingPartial, suggestion, nextWord, partialLength, decoratorComponent) {
-    const nextWordSuitable = (nextWord || '') === (this.state.suggestion || '')
+    const nextWordSuitable = (nextWord || '') === (this.state.suggestion || '') || (nextWord || '') === (suggestion || '')
     const hasPartialAndSuggestion = !(_.isEmpty(precedingPartial) || _.isEmpty(suggestion))
     if (!(hasPartialAndSuggestion && nextWordSuitable)) { return {} }
 
@@ -125,7 +125,9 @@ export default class TextInput extends Component{
       positionDecorator(cursorPosition, cursorPosition+suggestion.length, SuggestionSpan),
       ...STATIC_DECORATOR_LIST
     ])
-    if (_.isEmpty(this.state.suggestion)) {
+    if ((nextWord || '') === (suggestion || '')) {
+      return {editorState: EditorState.set(this.getReplacedEditorState(editorState, suggestion, [cursorPosition, cursorPosition+nextWord.length]), {decorator}), suggestion}
+    } else if (_.isEmpty(this.state.suggestion)) {
       return {editorState: EditorState.set(this.getInsertedEditorState(editorState, suggestion), {decorator}), suggestion}
     } else {
       return {editorState: EditorState.set(this.getReplacedEditorState(editorState, suggestion, [cursorPosition, cursorPosition+suggestion.length]), {decorator}), suggestion}
@@ -142,6 +144,7 @@ export default class TextInput extends Component{
     } else if (prevWord.includes('.')) {
       return {isNoun: false, ...this.withSuggestion(editorState, partialProperty, suggestion, nextWord, prevWord.length-propertyIndex, PropertySpan)}
     } else {
+      console.log('partial noun:', partialNoun, '\n new suggestion:', suggestion, '\n next word:', nextWord, '\n current suggestion: ', this.state.suggestion)
       return {isNoun: true, ...this.withSuggestion(editorState, partialNoun, suggestion, nextWord, prevWord.length-1, NounSpan)}
     }
 
@@ -150,7 +153,7 @@ export default class TextInput extends Component{
   onChange(editorState) {
     let newState = {
       suggestion: '',
-      editorState,
+      editorState: EditorState.set(editorState, STATIC_DECORATOR),
     }
 
     const text = editorState.getCurrentContent().getPlainText('')
