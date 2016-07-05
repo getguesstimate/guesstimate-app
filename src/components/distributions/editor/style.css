@@ -9,15 +9,15 @@
   font-size: 0.95em;
 
   .noun {
-    color: red
+    color: #3c82c3;
   }
 
   .property {
-    color: blue
+    color: #3c82c3;
   }
 
   .suggestion {
-    color: grey
+    background-color: #b5ddff;
   }
 }
 
