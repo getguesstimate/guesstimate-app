@@ -95,7 +95,7 @@ export default class Edge extends Component{
   }
 
   render() {
-    const {output, input, color} = this.props;
+    const {output, input, hasErrors, pathStatus} = this.props
     if (!this._isValidNode(input) || !this._isValidNode(output)) { return (false) }
     let inputPoints = (new Rectangle(input)).showPosition(output)
     let outputPoints = (new Rectangle(output)).showPosition(input)
@@ -104,9 +104,9 @@ export default class Edge extends Component{
 
     return (
         <path
-            className={`basic-arrow ${color}`}
+            className={`basic-arrow ${pathStatus}${hasErrors ? ' hasErrors' : ''}`}
             d={points}
-            markerEnd={`url(#MarkerArrow${color})`}
+            markerEnd={`url(#MarkerArrow-${hasErrors ? 'hasErrors' : pathStatus})`}
             fill="none"
         />
     )

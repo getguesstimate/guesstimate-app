@@ -1,9 +1,9 @@
 import {takeLatest} from 'redux-saga'
 import {fork} from 'redux-saga/effects'
-import {runMetricSimulation, runUndoSimulations, runFormSimulation} from 'gModules/simulations/actions'
+import {runFormSimulation, runUndoSimulations} from 'gModules/simulations/actions'
 
 export function* runSimulationsSaga() {
-  yield takeLatest("RUN_FORM_SIMULATIONS", runMetricSimulation)
+  yield takeLatest("RUN_FORM_SIMULATIONS", runFormSimulation)
 }
 
 export function* runUndoSimulationsSaga() {
