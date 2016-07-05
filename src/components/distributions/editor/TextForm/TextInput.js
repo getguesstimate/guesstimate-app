@@ -8,7 +8,7 @@ import {isData, formatData} from 'lib/guesstimator/formatter/formatters/Data'
 import {nounSearch, propertySearch} from 'gModules/factBank/actions'
 
 const NOUN_REGEX = /(\@[\w]+)/g
-const PROPERTY_REGEX = /[a-zA-Z_](\.[a-zA-Z_]+)/g
+const PROPERTY_REGEX = /[a-zA-Z_](\.[\w]+)/g
 
 const positionDecorator = (start, end, component) => ({strategy: (contentBlock, callback) => {callback(start, end)}, component})
 
@@ -42,14 +42,14 @@ function getPropertyParams(prevWord) {
   const propertyIndex = prevWord.indexOf('.') + 1
   const partialProperty = prevWord.slice(propertyIndex)
   const possibleProperties = propertySearch(noun, partialProperty)
-  const suggestion = _.isEmpty(possibleProperties) ? '' : possibleProperties[0].replace(partialProperty, '')
+  const suggestion = _.isEmpty(partialProperty) || _.isEmpty(possibleProperties) ? '' : possibleProperties[0].replace(partialProperty, '')
   return {propertyIndex, partialProperty, suggestion}
 }
 
 function getNounParams(prevWord) {
   const partialNoun = prevWord.slice(1)
   const possibleNouns = nounSearch(partialNoun)
-  const suggestion = _.isEmpty(possibleNouns) ? '' : possibleNouns[0].replace(partialNoun, '')
+  const suggestion = _.isEmpty(partialNoun) || _.isEmpty(possibleNouns) ? '' : possibleNouns[0].replace(partialNoun, '')
   return {partialNoun, suggestion}
 }
 
