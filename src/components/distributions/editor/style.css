@@ -7,6 +7,18 @@
 .Guesstimate .TextInput {
   line-height: 1.3em;
   font-size: 0.95em;
+
+  .noun {
+    color: #3c82c3;
+  }
+
+  .property {
+    color: #3c82c3;
+  }
+
+  .suggestion {
+    background-color: #b5ddff;
+  }
 }
 
 .Guesstimate .TextInput.default-value {
