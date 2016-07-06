@@ -25,7 +25,7 @@ export function fetchById(organizationId) {
     api(getState()).organizations.get({organizationId}, (err, organization) => {
       if (err) {
         dispatch(displayErrorsActions.newError())
-        captureApiError('OrganizationsFetch', null, null, err, {url: 'fetch'})
+        captureApiError('OrganizationsFetch', err.jqXHR, err.textStatus, err, {url: 'fetch'})
       } else if (organization) {
         dispatch(oActions.fetchSuccess([organization]))
 
@@ -57,7 +57,7 @@ export function create({name, plan}) {
     api(getState()).organizations.create(object, (err, organization) => {
       if (err) {
         // TODO(matthew): Track if request errors out.
-        captureApiError('OrganizationsCreate', null, null, err, {url: 'OrganizationsCreate'})
+        captureApiError('OrganizationsCreate', err.jqXHR, err.textStatus, err, {url: 'OrganizationsCreate'})
       } else if (organization) {
         dispatch(oActions.createSuccess(organization, cid))
         dispatch(userOrganizationMembershipActions.fetchSuccess(organization.memberships))
