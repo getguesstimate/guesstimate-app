@@ -1,11 +1,12 @@
 import React, {Component, PropTypes} from 'react'
 
+let count = 0
+
 import $ from 'jquery'
 import {EditorState, Editor, ContentState, Modifier, CompositeDecorator} from 'draft-js'
 
 import {isData, formatData} from 'lib/guesstimator/formatter/formatters/Data'
-
-import {nounSearch, propertySearch} from 'gModules/factBank/actions'
+import {getFactParams, addText} from 'lib/factParser'
 
 const NOUN_REGEX = /(\@[\w]+)/g
 const PROPERTY_REGEX = /[a-zA-Z_](\.[\w]+)/g
@@ -15,6 +16,15 @@ const positionDecorator = (start, end, component) => ({strategy: (contentBlock, 
 const NounSpan = props => <span {...props} className='noun'>{props.children}</span>
 const PropertySpan = props => <span {...props} className='property'>{props.children}</span>
 const SuggestionSpan = props => <span {...props} className='suggestion'>{props.children}</span>
+
+function findWithRegex(regex, contentBlock, callback) {
+  const text = contentBlock.getText()
+  let matchArr, start
+  while ((matchArr = regex.exec(text)) !== null) {
+    start = matchArr.index + matchArr[0].indexOf(matchArr[1])
+    callback(start, start + matchArr[1].length)
+  }
+}
 
 const STATIC_DECORATOR_LIST = [
   {
@@ -27,35 +37,6 @@ const STATIC_DECORATOR_LIST = [
   },
 ]
 const STATIC_DECORATOR = {decorator: new CompositeDecorator(STATIC_DECORATOR_LIST)}
-
-function findWithRegex(regex, contentBlock, callback) {
-  const text = contentBlock.getText()
-  let matchArr, start
-  while ((matchArr = regex.exec(text)) !== null) {
-    start = matchArr.index + matchArr[0].indexOf(matchArr[1])
-    callback(start, start + matchArr[1].length)
-  }
-}
-
-function getPropertyParams(prevWord) {
-  const noun = prevWord.slice(1, prevWord.indexOf('.'))
-  const propertyIndex = prevWord.indexOf('.') + 1
-  const partialProperty = prevWord.slice(propertyIndex)
-  const possibleProperties = propertySearch(noun, partialProperty)
-  const suggestion = _.isEmpty(partialProperty) || _.isEmpty(possibleProperties) ? '' : possibleProperties[0].replace(partialProperty, '')
-  return {propertyIndex, partialProperty, suggestion}
-}
-
-function getNounParams(prevWord) {
-  const partialNoun = prevWord.slice(1)
-  const possibleNouns = nounSearch(partialNoun)
-  const suggestion = _.isEmpty(partialNoun) || _.isEmpty(possibleNouns) ? '' : possibleNouns[0].replace(partialNoun, '')
-  return {partialNoun, suggestion}
-}
-
-function getFactBankParams(prevWord) {
-  return prevWord.includes('.') ? getPropertyParams(prevWord) : getNounParams(prevWord)
-}
 
 export default class TextInput extends Component{
   displayName: 'Guesstimate-TextInput'
@@ -71,40 +52,12 @@ export default class TextInput extends Component{
 
   focus() { this.refs.editor.focus() }
 
-  getReplacedEditorState(editorState, text, [anchorOffset, focusOffset], maintainCursorPosition = true) {
-    const selection = editorState.getSelection()
-    const content = editorState.getCurrentContent()
-    const newContentState = Modifier.replaceText(content, selection.merge({anchorOffset, focusOffset: focusOffset + 1}), text)
-
-    const baseEditorState = EditorState.push(editorState, newContentState, 'paste')
-
-    if (!maintainCursorPosition) { return baseEditorState }
-
-    const cursorPosition = selection.getFocusOffset()
-    const newSelectionState = selection.merge({focusOffset: cursorPosition})
-    return EditorState.forceSelection(baseEditorState, newSelectionState)
-  }
-
-  getInsertedEditorState(editorState, text, maintainCursorPosition = true) {
-    const selection = editorState.getSelection()
-    const content = editorState.getCurrentContent()
-    const newContentState = Modifier.insertText(content, selection, text)
-
-    const baseEditorState = EditorState.push(editorState, newContentState, 'paste')
-
-    if (!maintainCursorPosition) { return baseEditorState }
-
-    const cursorPosition = selection.getFocusOffset()
-    const newSelectionState = selection.merge({focusOffset: cursorPosition})
-    return EditorState.forceSelection(baseEditorState, newSelectionState)
-  }
-
   insertAtCaret(text) {
-    this.onChange(EditorState.set(this.getInsertedEditorState(this.state.editorState, text, false), STATIC_DECORATOR))
+    this.onChange(EditorState.set(addText(this.state.editorState, text, false), STATIC_DECORATOR))
   }
 
   replaceAtCaret(text, start, end) {
-    this.onChange(EditorState.set(this.getReplacedEditorState(this.state.editorState, text, [start, end], false), STATIC_DECORATOR))
+    this.onChange(EditorState.set(addText(this.state.editorState, text, false, start, end), STATIC_DECORATOR))
   }
 
   componentWillUnmount() {
@@ -114,42 +67,46 @@ export default class TextInput extends Component{
     }
   }
 
-  withSuggestion(editorState, precedingPartial, suggestion, nextWord, partialLength, decoratorComponent) {
+  withSuggestion(baseEditorState, precedingPartial, suggestion, nextWord, decoratorComponent) {
     const nextWordSuitable = (nextWord || '') === (this.state.suggestion || '') || (nextWord || '') === (suggestion || '')
     const hasPartialAndSuggestion = !(_.isEmpty(precedingPartial) || _.isEmpty(suggestion))
     if (!(hasPartialAndSuggestion && nextWordSuitable)) { return {} }
 
-    const cursorPosition = editorState.getSelection().getFocusOffset()
+    const cursorPosition = baseEditorState.getSelection().getFocusOffset()
     const decorator = new CompositeDecorator([
-      positionDecorator(cursorPosition-partialLength-1, cursorPosition, decoratorComponent),
+      positionDecorator(cursorPosition-precedingPartial.length-1, cursorPosition, decoratorComponent),
       positionDecorator(cursorPosition, cursorPosition+suggestion.length, SuggestionSpan),
       ...STATIC_DECORATOR_LIST
     ])
-    if ((nextWord || '') === (suggestion || '')) {
-      return {editorState: EditorState.set(this.getReplacedEditorState(editorState, suggestion, [cursorPosition, cursorPosition+nextWord.length]), {decorator}), suggestion}
+
+    let editorState
+    if (nextWordSuitable) {
+      editorState = addText(baseEditorState, suggestion, true, cursorPosition, cursorPosition+nextWord.length-1)
     } else if (_.isEmpty(this.state.suggestion)) {
-      return {editorState: EditorState.set(this.getInsertedEditorState(editorState, suggestion), {decorator}), suggestion}
+      editorState = addText(baseEditorState, suggestion)
     } else {
-      return {editorState: EditorState.set(this.getReplacedEditorState(editorState, suggestion, [cursorPosition, cursorPosition+suggestion.length]), {decorator}), suggestion}
+      editorState = addText(baseEditorState, suggestion, true, cursorPosition, cursorPosition+suggestion.length)
     }
+    return {editorState: EditorState.set(editorState, {decorator}), suggestion}
   }
 
 
   suggestionState(editorState, prevWord, nextWord, cursorPosition) {
-    const {propertyIndex, partialProperty, partialNoun, suggestion} = getFactBankParams(prevWord)
+    const {propertyIndex, partialProperty, partialNoun, suggestion} = getFactParams(prevWord)
 
     if (_.isEmpty(suggestion) && !_.isEmpty(this.state.suggestion) && nextWord === this.state.suggestion) {
-      const noSuggestion = this.getReplacedEditorState(editorState, '', [cursorPosition, cursorPosition + this.state.suggestion.length])
+      const noSuggestion = addText(editorState, '', true, cursorPosition, cursorPosition + this.state.suggestion.length)
       return {editorState: EditorState.set(noSuggestion, STATIC_DECORATOR)}
     } else if (prevWord.includes('.')) {
-      return {isNoun: false, ...this.withSuggestion(editorState, partialProperty, suggestion, nextWord, prevWord.length-propertyIndex, PropertySpan)}
+      return {isNoun: false, ...this.withSuggestion(editorState, partialProperty, suggestion, nextWord, PropertySpan)}
     } else {
-      return {isNoun: true, ...this.withSuggestion(editorState, partialNoun, suggestion, nextWord, prevWord.length-1, NounSpan)}
+      return {isNoun: true, ...this.withSuggestion(editorState, partialNoun, suggestion, nextWord, NounSpan)}
     }
 
   }
 
   onChange(editorState) {
+    console.log('called onChange', count += 1, 'times')
     let newState = {
       suggestion: '',
       editorState: EditorState.set(editorState, STATIC_DECORATOR),
@@ -167,11 +124,12 @@ export default class TextInput extends Component{
     }
 
     this.setState(newState)
-    if (text !== this.props.value) {
-      if (isData(text)) {
-        this.props.onChangeData(formatData(text))
+    const newText = newState.editorState.getCurrentContent().getPlainText('')
+    if (newText !== this.props.value) {
+      if (isData(newText)) {
+        this.props.onChangeData(formatData(newText))
       } else {
-        this.props.onChange(text)
+        this.props.onChange(newText)
       }
     }
   }
@@ -185,6 +143,7 @@ export default class TextInput extends Component{
     } else {
       this.props.onTab(e.shiftKey)
     }
+    this.setState({suggestion: ''})
     e.preventDefault()
   }
 
