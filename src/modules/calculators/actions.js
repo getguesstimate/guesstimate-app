@@ -17,7 +17,7 @@ export function fetchById(id) {
     api(getState()).calculators.get(id, (err, calculator) => {
       if (err) {
         dispatch(displayErrorsActions.newError())
-        captureApiError('CalculatorsFetch', null, null, null, {url: 'calculatorsFetchError'})
+        captureApiError('CalculatorsFetch', err.jqXHR, err.textStatus, err, {url: 'calculatorsFetchError'})
       } else if (calculator) {
         const space = _.get(calculator, '_embedded.space')
         const formatted = _.pick(calculator, ['id', 'space_id', 'title', 'input_ids', 'output_ids', 'content', 'share_image'])

@@ -29,7 +29,7 @@ export function fetch({auth0_id}) {
     api(getState()).users.listWithAuth0Id(auth0_id, (err, data) => {
       if (err) {
         dispatch(displayErrorsActions.newError())
-        captureApiError('UsersFetch', null, null, null, {url: 'usersFetchError'})
+        captureApiError('UsersFetch', err.jqXHR, err.textStatus, err, {url: 'usersFetchError'})
       } else if (data) {
         const action = sActions.fetchSuccess(data.items)
         const me = data.items[0]
@@ -45,7 +45,7 @@ export function fetchById(userId) {
     api(getState()).users.get({userId}, (err, user) => {
       if (err) {
         dispatch(displayErrorsActions.newError())
-        captureApiError('UsersFetch', null, null, err, {url: 'fetch'})
+        captureApiError('UsersFetch', err.jqXHR, err.textStatus, err, {url: 'fetch'})
       } else if (user) {
         dispatch(sActions.fetchSuccess([user]))
         if (getState().me.id === user.id){
@@ -77,7 +77,7 @@ export function create(object) {
     api(getState()).users.create(newUser, (err, user) => {
       if (err) {
         dispatch(displayErrorsActions.newError())
-        captureApiError('UsersCreate', null, null, err, {url: 'create'})
+        captureApiError('UsersCreate', err.jqXHR, err.textStatus, err, {url: 'create'})
       }
       else if (_.isEmpty(user)) {
         generalError('UserCreate-EmptyResponse', {cid: newUser.id, url: 'userscreate'})
