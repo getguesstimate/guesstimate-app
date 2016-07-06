@@ -1,7 +1,5 @@
 import React, {Component, PropTypes} from 'react'
 
-let count = 0
-
 import $ from 'jquery'
 import {EditorState, Editor, ContentState, Modifier, CompositeDecorator} from 'draft-js'
 
@@ -67,70 +65,56 @@ export default class TextInput extends Component{
     }
   }
 
-  withSuggestion(baseEditorState, precedingPartial, suggestion, nextWord, decoratorComponent) {
-    const nextWordSuitable = (nextWord || '') === (this.state.suggestion || '') || (nextWord || '') === (suggestion || '')
+  withSuggestion(baseEditorState, cursorPosition, precedingPartial, suggestion, nextWord, decoratorComponent) {
+    const nextWordSuitable = [this.state.suggestion || '', suggestion || ''].includes(nextWord || '')
     const hasPartialAndSuggestion = !(_.isEmpty(precedingPartial) || _.isEmpty(suggestion))
     if (!(hasPartialAndSuggestion && nextWordSuitable)) { return {} }
 
-    const cursorPosition = baseEditorState.getSelection().getFocusOffset()
     const decorator = new CompositeDecorator([
       positionDecorator(cursorPosition-precedingPartial.length-1, cursorPosition, decoratorComponent),
       positionDecorator(cursorPosition, cursorPosition+suggestion.length, SuggestionSpan),
       ...STATIC_DECORATOR_LIST
     ])
 
-    let editorState
-    if (nextWordSuitable) {
-      editorState = addText(baseEditorState, suggestion, true, cursorPosition, cursorPosition+nextWord.length-1)
-    } else if (_.isEmpty(this.state.suggestion)) {
-      editorState = addText(baseEditorState, suggestion)
-    } else {
-      editorState = addText(baseEditorState, suggestion, true, cursorPosition, cursorPosition+suggestion.length)
-    }
-    return {editorState: EditorState.set(editorState, {decorator}), suggestion}
+    const editorState = EditorState.set(addText(baseEditorState, suggestion, true, cursorPosition, cursorPosition+nextWord.length-1), {decorator})
+    return {editorState, suggestion}
   }
 
 
-  suggestionState(editorState, prevWord, nextWord, cursorPosition) {
+  suggestionState(editorState) {
+    const cursorPosition = editorState.getSelection().getFocusOffset()
+    const text = editorState.getCurrentContent().getPlainText('')
+    const prevWord = text.slice(0, cursorPosition).split(/[^\w@\.]/).pop()
+
+    if (!(prevWord.startsWith('@') && editorState.getSelection().isCollapsed())) { return {} }
+
     const {propertyIndex, partialProperty, partialNoun, suggestion} = getFactParams(prevWord)
 
+    const nextWord = text.slice(cursorPosition).split(/[^\w]/)[0]
     if (_.isEmpty(suggestion) && !_.isEmpty(this.state.suggestion) && nextWord === this.state.suggestion) {
       const noSuggestion = addText(editorState, '', true, cursorPosition, cursorPosition + this.state.suggestion.length)
       return {editorState: EditorState.set(noSuggestion, STATIC_DECORATOR)}
     } else if (prevWord.includes('.')) {
-      return {isNoun: false, ...this.withSuggestion(editorState, partialProperty, suggestion, nextWord, PropertySpan)}
+      return {isNoun: false, ...this.withSuggestion(editorState, cursorPosition, partialProperty, suggestion, nextWord, PropertySpan)}
     } else {
-      return {isNoun: true, ...this.withSuggestion(editorState, partialNoun, suggestion, nextWord, NounSpan)}
+      return {isNoun: true, ...this.withSuggestion(editorState, cursorPosition, partialNoun, suggestion, nextWord, NounSpan)}
     }
-
   }
 
   onChange(editorState) {
-    console.log('called onChange', count += 1, 'times')
-    let newState = {
+    const newState = {
       suggestion: '',
       editorState: EditorState.set(editorState, STATIC_DECORATOR),
+      ...this.suggestionState(editorState),
     }
-
-    const text = editorState.getCurrentContent().getPlainText('')
-
-    const selection = editorState.getSelection()
-    const cursorPosition = selection.getFocusOffset()
-    const prevWord = text.slice(0, cursorPosition).split(/[^\w@\.]/).pop()
-
-    if (prevWord.startsWith('@') && selection.isCollapsed()) {
-      const nextWord = text.slice(cursorPosition).split(/[^\w]/)[0]
-      Object.assign(newState, this.suggestionState(editorState, prevWord, nextWord, cursorPosition))
-    }
-
     this.setState(newState)
-    const newText = newState.editorState.getCurrentContent().getPlainText('')
-    if (newText !== this.props.value) {
-      if (isData(newText)) {
-        this.props.onChangeData(formatData(newText))
-      } else {
-        this.props.onChange(newText)
-      }
+
+    const text = newState.editorState.getCurrentContent().getPlainText('')
+    if (text === this.props.value) { return }
+    if (isData(text)) {
+      this.props.onChangeData(formatData(text))
+    } else {
+      this.props.onChange(text)
     }
   }
 
