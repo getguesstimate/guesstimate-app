@@ -33,7 +33,7 @@ export function destroy(object) {
 
     api(getState()).models.destroy({spaceId: id}, (err, value) => {
       if (err) {
-        captureApiError('SpacesDestroy', null, null, err, {url: 'spacesfetch'})
+        captureApiError('SpacesDestroy', err.jqXHR, err.textStatus, err, {url: 'spacesfetch'})
       } else {
         dispatch(sActions.deleteSuccess({id}))
       }
@@ -55,7 +55,7 @@ export function fetchById(spaceId) {
 
     api(getState()).models.get({spaceId}, (err, value) => {
       if (err) {
-        captureApiError('SpacesFetch', null, null, err, {url: 'spacesfetch'})
+        captureApiError('SpacesFetch', err.jqXHR, err.textStatus, err, {url: 'spacesfetch'})
         return
       }
 
@@ -81,7 +81,7 @@ export function fetch({userId, organizationId}) {
     dispatch(sActions.fetchStart())
     api(getState()).models.list({userId, organizationId}, (err, value) => {
       if (err) {
-        captureApiError('SpacesFetch', null, null, err, {url: 'fetch'})
+        captureApiError('SpacesFetch', err.jqXHR, err.textStatus, err, {url: 'fetch'})
       } else if (value) {
         const formatted = value.items.map(d => _.pick(d, ['id', 'name', 'description', 'user_id', 'organization_id', 'updated_at', 'metric_count', 'is_private', 'screenshot', 'big_screenshot']))
         dispatch(sActions.fetchSuccess(formatted))
@@ -107,7 +107,7 @@ export function create(organizationId, params={}) {
     api(getState()).models.create(object, (err, value) => {
       if (err) {
         dispatch(changeActionState('ERROR_CREATING'))
-        captureApiError('SpacesCreate', null, null, err, {url: 'SpacesCreate'})
+        captureApiError('SpacesCreate', err.jqXHR, err.textStatus, err, {url: 'SpacesCreate'})
       }
       else if (value) {
         dispatch(changeActionState('CREATED'))
@@ -129,7 +129,7 @@ export function copy(spaceId) {
     api(getState()).copies.create({spaceId}, (err, value) => {
       if (err) {
         dispatch(changeActionState('ERROR_COPYING'))
-        captureApiError('SpacesCreate', null, null, err, {url: 'SpacesCreate'})
+        captureApiError('SpacesCreate', err.jqXHR, err.textStatus, err, {url: 'SpacesCreate'})
       } else if (value) {
         dispatch(changeActionState('COPIED'))
         // Signal the resource was created.
@@ -164,7 +164,7 @@ export function generalUpdate(spaceId, params) {
         if (err === 'Conflict') {
           dispatch(changeActionState('CONFLICT'))
         } else {
-          captureApiError('SpacesUpdate', null, null, err, {url: 'SpacesUpdate'})
+          captureApiError('SpacesUpdate', err.jqXHR, err.textStatus,  err, {url: 'SpacesUpdate'})
           dispatch(changeActionState('ERROR'))
         }
       } else if (value) {

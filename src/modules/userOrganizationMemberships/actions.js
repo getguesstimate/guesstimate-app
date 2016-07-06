@@ -26,7 +26,7 @@ export function fetchByOrganizationId(organizationId) {
     api(getState()).organizations.getMembers({organizationId}, (err, memberships) => {
       if (err) {
         dispatch(displayErrorsActions.newError())
-        captureApiError('OrganizationsMemberFetch', null, null, err, {url: 'fetchMembers'})
+        captureApiError('OrganizationsMemberFetch', err.jqXHR, err.textStatus, err, {url: 'fetchMembers'})
       } else if (memberships) {
         dispatch(fetchSuccess(memberships.items))
       }
@@ -39,7 +39,7 @@ export function fetchByUserId(userId) {
     api(getState()).users.getMemberships({userId}, (err, memberships) => {
       if (err) {
         dispatch(displayErrorsActions.newError())
-        captureApiError('OrganizationsMemberFetch', null, null, err, {url: 'fetchMembers'})
+        captureApiError('OrganizationsMemberFetch', err.jqXHR, err.textStatus, err, {url: 'fetchMembers'})
       } else if (memberships) {
         dispatch(fetchSuccess(memberships.items))
       }
@@ -61,7 +61,7 @@ export function destroy(id) {
     dispatch(sActions.deleteStart({id}));
     api(getState()).userOrganizationMemberships.destroy({userOrganizationMembershipId: id}, (err, value) => {
       if (err) {
-        captureApiError('OrganizationsMemberDestroy', null, null, err, {url: 'destroyOrganizationMember'})
+        captureApiError('OrganizationsMemberDestroy', err.jqXHR, err.textStatus, err, {url: 'destroyOrganizationMember'})
       } else {
         dispatch(sActions.deleteSuccess({id}))
       }

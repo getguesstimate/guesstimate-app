@@ -5,6 +5,7 @@ import {bindActionCreators} from 'redux'
 import ReactMarkdown from 'react-markdown'
 import Helmet from 'react-helmet'
 import {ShareButtons, generateShareIcon} from 'react-share'
+import Icon from 'react-fa'
 
 import Container from 'gComponents/utility/container/Container.js'
 import {Input} from '../shared/input'
@@ -14,7 +15,7 @@ import {calculatorSpaceSelector} from './calculator-space-selector'
 
 import {navigateFn} from 'gModules/navigation/actions'
 import {fetchById} from 'gModules/calculators/actions'
-import {runSimulations} from 'gModules/simulations/actions'
+import {deleteSimulations, runSimulations} from 'gModules/simulations/actions'
 import {changeGuesstimate} from 'gModules/guesstimates/actions'
 
 import * as Space from 'gEngine/space'
@@ -24,18 +25,23 @@ import {Guesstimator} from 'lib/guesstimator/index'
 
 import '../shared/style.css'
 
-@connect(calculatorSpaceSelector, dispatch => bindActionCreators({fetchById, changeGuesstimate, runSimulations}, dispatch))
+@connect(calculatorSpaceSelector, dispatch => bindActionCreators({fetchById, changeGuesstimate, deleteSimulations, runSimulations}, dispatch))
 export class CalculatorShow extends Component {
   state = {
     attemptedFetch: false,
+    resultComputing: false,
     showResult: false,
+    hasSimulated: false,
   }
 
   componentWillMount() { this.fetchData() }
   componentWillReceiveProps(nextProps) {
     this.fetchData()
     if (!this.props.calculator && !!nextProps.calculator) {
-      this.props.runSimulations({spaceId: nextProps.calculator.space_id})
+      this.props.deleteSimulations([...nextProps.inputs.map(m => m.id), ...nextProps.outputs.map(m => m.id)])
+    }
+    if (this.state.resultComputing && this.allOutputsHaveStats()) {
+      this.setState({resultComputing: false, showResult: true})
     }
   }
 
@@ -47,19 +53,49 @@ export class CalculatorShow extends Component {
   }
 
   onChange({id, guesstimate}, input) {
-    const guesstimateType = Guesstimator.parse({...guesstimate, input})[1].samplerType().referenceName
+    const parsed = Guesstimator.parse({...guesstimate, input})
+    const guesstimateType = parsed[1].samplerType().referenceName
 
     this.props.changeGuesstimate(
       id,
       {...guesstimate, ...{data: null, input, guesstimateType}},
-      true, // runSims
-      false // saveOnServer
+      false  // saveOnServer
     )
+
+    // We only want to simulate anything if all the inputs have simulatable content.
+    if (!_.isEmpty(input) && _.isEmpty(parsed[0]) && this.allInputsHaveContent([id])) {
+      if (!this.state.hasSimulated) {
+        // The initial simulations should run on all unsimulated metrics.
+        this.props.runSimulations({spaceId: this.props.calculator.space_id, onlyUnsimulated: true})
+        this.setState({hasSimulated: true})
+      } else {
+        // Later simulations just run on the affected subslices.
+        this.props.runSimulations({metricId: id})
+      }
+    }
   }
 
-  allInputsHaveContent() {
-    const inputComponents = _.map(this.props.inputs, metric => this.refs[`input-${metric.id}`])
-    return inputComponents.map(i => !!i && i.hasValidContent()).reduce((x,y) => x && y, true)
+  onEnter() {
+    if (!this.readyToCalculate()) { return }
+    if (this.allOutputsHaveStats()) {
+      if (!this.state.showResults) { this.setState({showResult: true}) }
+    } else {
+      if (!this.state.resultComputing) { this.setState({resultComputing: true}) }
+    }
+  }
+
+  allInputsHaveContent(idsToExclude=[]) {
+    const includedInputs = this.props.inputs.filter(i => !_.some(idsToExclude, id => i.id === id))
+    const inputComponents = _.map(includedInputs, metric => this.refs[`input-${metric.id}`])
+    return _.every(inputComponents, i => !!i && i.hasValidContent())
+  }
+
+  allOutputsHaveStats() {
+    return this.props.outputs.map(o => !!o && _.has(o, 'simulation.stats')).reduce((x,y) => x && y, true)
+  }
+
+  readyToCalculate() {
+    return this.allInputsHaveContent()
   }
 
   render() {
@@ -80,6 +116,7 @@ export class CalculatorShow extends Component {
     const {FacebookShareButton, TwitterShareButton} = ShareButtons
     const FacebookIcon = generateShareIcon('facebook')
     const TwitterIcon = generateShareIcon('twitter')
+
     return (
       <Container>
         <Helmet title={title} meta={metaTags}/>
@@ -101,6 +138,7 @@ export class CalculatorShow extends Component {
                     description={_.get(metric, 'guesstimate.description')}
                     errors={_.get(metric, 'simulation.sample.errors')}
                     onChange={this.onChange.bind(this, metric)}
+                    onEnter={this.onEnter.bind(this)}
                   />
                 ))}
               </div>
@@ -130,8 +168,8 @@ export class CalculatorShow extends Component {
                   <div className='col-xs-12 col-md-7'/>
                   <div className='col-xs-12 col-md-5'>
                     <div
-                      className={`ui button green calculateButton${this.allInputsHaveContent() ? '' : ' disabled'}`}
-                      onClick={() => {this.setState({showResult: true})}}
+                      className={`ui button calculateButton${this.state.resultComputing ? ' loading' : this.readyToCalculate() ? '' : ' disabled'}`}
+                      onClick={() => {this.allOutputsHaveStats() ? this.setState({showResult: true}) : this.setState({resultComputing: true})}}
                     >
                       Calculate
                     </div>

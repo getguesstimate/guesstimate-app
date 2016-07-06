@@ -1,4 +1,5 @@
 import * as _graph from './graph'
+import * as _dGraph from './dgraph.js'
 import * as _metric from './metric'
 import * as _guesstimate from './guesstimate'
 import * as _userOrganizationMemberships from './userOrganizationMemberships'
@@ -37,6 +38,25 @@ const user = (space, graph) => {
 const organization = (space, graph) => {
   return graph.organizations.find(e => sameIds(e.id, space.organization_id))
 }
+
+export function toDSpace(spaceId, graph) {
+  let space = graph.spaces && graph.spaces.find(s => sameIds(s.id, spaceId))
+  if (!space) { return {} }
+
+  let dSpace = Object.assign(space.asMutable(), toDgraph(space.id, graph))
+
+  dSpace.edges = _dGraph.dependencyMap(dSpace)
+
+  dSpace.metrics = dSpace.metrics.map(s => {
+    let edges = {}
+    edges.inputs = dSpace.edges.filter(i => i.output === s.id).map(e => e.input)
+    edges.outputs = dSpace.edges.filter(i => i.input === s.id).map(e => e.output)
+    return Object.assign({}, s, {edges})
+  })
+  return dSpace
+}
+
+ 
 
 export function toDgraph(spaceId, graph){
   let dGraph = _graph.denormalize(subset(graph, spaceId))

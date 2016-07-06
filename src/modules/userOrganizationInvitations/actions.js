@@ -25,7 +25,7 @@ export function fetchByOrganizationId(organizationId) {
     api(getState()).organizations.getInvitations({organizationId}, (err, invitations) => {
       if (err) {
         dispatch(displayErrorsActions.newError())
-        captureApiError('OrganizationsInvitationsFetch', null, null, err, {url: 'fetchMembers'})
+        captureApiError('OrganizationsInvitationsFetch', err.jqXHR, err.textStatus, err, {url: 'fetchMembers'})
       } else if (invitations) {
         dispatch(fetchSuccess(invitations.items))
 

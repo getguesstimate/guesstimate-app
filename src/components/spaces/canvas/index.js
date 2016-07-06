@@ -22,7 +22,7 @@ import * as segment from 'servers/segment'
 
 import './style.css'
 
-import {isLocation, isAtLocation} from 'lib/locationUtils.js'
+import {isLocation, isAtLocation, existsAtLoc, isWithinRegion} from 'lib/locationUtils.js'
 
 function mapStateToProps(state) {
   return {
@@ -109,11 +109,9 @@ export default class Canvas extends Component{
   }
 
   _handleMoveMetric({prev, next}) {
-    const destinationMetric = this.props.denormalizedSpace.metrics.find(f => f.location.row === next.row && f.location.column === next.column)
-    if (!!destinationMetric) {
-      return
-    }
-    const metric = this.props.denormalizedSpace.metrics.find(f => f.location.row === prev.row && f.location.column === prev.column)
+    if (_.some(this.props.denormalizedSpace.metrics, existsAtLoc(next))) { return }
+
+    const metric = this.props.denormalizedSpace.metrics.find(existsAtLoc(prev))
     this.props.dispatch(changeMetric({id: metric.id, location: next}))
     this.props.dispatch(changeSelect(next))
   }
@@ -122,7 +120,7 @@ export default class Canvas extends Component{
    const {selectedCell} = this.props
    const metrics = _.get(this.props.denormalizedSpace, 'metrics')
 
-   return metrics && isLocation(selectedCell) && metrics.find(m => isAtLocation(m.location, selectedCell));
+   return metrics && isLocation(selectedCell) && metrics.find(existsAtLoc(selectedCell))
   }
 
   _isAnalysisView(props = this.props) {
@@ -155,23 +153,60 @@ export default class Canvas extends Component{
     return (this.props.denormalizedSpace.canvasState.edgeView === 'visible')
   }
 
-  edges() {
-    let edges = []
+  getSelectedLineage() {
+    const {selectedRegion, denormalizedSpace: {metrics}} = this.props
+    const selectedMetrics = metrics.filter(m => isWithinRegion(m.location, selectedRegion))
 
-    if (this.showEdges()){
-      const space = this.props.denormalizedSpace
-      const {metrics} = space
-      const findMetric = (metricId) => metrics.find(m => m.id === metricId)
-      const metricIdToLocation = (metricId) => findMetric(metricId).location
+    let ancestors = [...selectedMetrics], descendants = [...selectedMetrics]
+    const getAncestors = metrics => _.uniq(_.flatten(metrics.map(m => m.edges.inputs))).filter(id => !_.some(ancestors, a => a.id === id)).map(this.findMetric.bind(this))
+    const getDescendants = metrics => _.uniq(_.flatten(metrics.map(m => m.edges.outputs))).filter(id => !_.some(descendants, d => d.id === id)).map(this.findMetric.bind(this))
 
-      edges = space.edges.map(e => {
-        const [inputMetric, outputMetric] = [findMetric(e.input), findMetric(e.output)]
-        let errors = _.get(inputMetric, 'simulation.sample.errors')
-        const color = (errors && !!errors.length) ? 'RED' : 'BLUE'
-        return {input: inputMetric.location, output: outputMetric.location, color}
-      })
+    let nextAncestors = getAncestors(ancestors)
+    let nextDescendants = getDescendants(descendants)
+
+    while (nextAncestors.length > 0 || nextDescendants.length > 0) {
+      ancestors = [...ancestors, ...nextAncestors]
+      descendants = [...descendants, ...nextDescendants]
+
+      nextAncestors = getAncestors(nextAncestors)
+      nextDescendants = getDescendants(nextDescendants)
     }
-    return edges
+
+    return {ancestors, descendants}
+  }
+
+  findMetric(metricId) {
+    return this.props.denormalizedSpace.metrics.find(m => m.id === metricId)
+  }
+
+  edges() {
+    if (!this.showEdges()) { return [] }
+
+    const {selectedRegion, denormalizedSpace: {metrics, edges}} = this.props
+    const selectedMetrics = metrics.filter(m => isWithinRegion(m.location, selectedRegion))
+
+    const hasSelectedMetrics = _.some(metrics, m => isWithinRegion(m.location, selectedRegion))
+    const unconnectedStatus = hasSelectedMetrics ? 'unconnected' : 'default'
+
+    const {ancestors, descendants} = this.getSelectedLineage()
+
+    return edges.map(e => {
+      const [inputMetric, outputMetric] = [this.findMetric(e.input), this.findMetric(e.output)]
+      let errors = _.get(inputMetric, 'simulation.sample.errors')
+      const outputIsAncestor = _.some(ancestors, a => a.id === outputMetric.id)
+      const inputIsDescendant = _.some(descendants, d => d.id === inputMetric.id)
+      const withinSelectedRegion = _.some(selectedMetrics, m => m.id === outputMetric.id) && _.some(selectedMetrics, m => m.id === inputMetric.id)
+
+      const hasErrors = !_.isEmpty(errors)
+      let pathStatus
+      if (withinSelectedRegion) {
+        pathStatus = unconnectedStatus
+      } else {
+        pathStatus = outputIsAncestor ? 'ancestor' : inputIsDescendant ? 'descendant' : unconnectedStatus
+      }
+
+      return {input: inputMetric.location, output: outputMetric.location, hasErrors, pathStatus }
+    })
   }
 
   onAutoFillRegion(region) {
