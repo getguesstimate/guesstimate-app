@@ -1,4 +1,7 @@
 import {actionCreatorsFor} from 'redux-crud'
+import cuid from 'cuid'
+
+import app from 'ampersand-app'
 
 import {initSpace} from 'gModules/checkpoints/actions'
 
@@ -24,6 +27,22 @@ export function fetchById(id) {
         const formatted = _.pick(calculator, ['id', 'space_id', 'title', 'input_ids', 'output_ids', 'content', 'share_image'])
         dispatch(initSpace(space.id, space.graph))
         dispatch(sActions.fetchSuccess([formatted], {space}))
+      }
+    })
+  }
+}
+
+export function create(spaceId, calculator) {
+  return (dispatch, getState) => {
+    const record = {...calculator, id: cuid()}
+    dispatch(sActions.createStart(record))
+
+    api(getState()).calculators.create(spaceId, calculator, (err, calculator) => {
+      if (err) {
+        captureApiError('CalculatorsCreate', err.jqXHR, err.textStatus, err, {url: 'CalculatorsCreate'})
+      } else if (calculator) {
+        dispatch(sActions.createSuccess(calculator))
+        app.router.history.navigate(`/calculators/${calculator.id}`)
       }
     })
   }
