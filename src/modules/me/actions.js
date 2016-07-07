@@ -8,6 +8,8 @@ import {me} from 'gEngine/engine'
 
 import {generalError} from 'lib/errors/index.js'
 
+import {trackUser} from 'servers/segment/index'
+
 const lockOptions = {
   disableSignupAction: false,
   disableResetAction: false
@@ -87,6 +89,7 @@ export function logOut() {
 function auth0MeLoaded(profile, token, tokenCreationTime) {
   return function(dispatch, getState) {
     dispatch({ type: 'AUTH0_ME_LOADED', profile, token})
+    trackUser(profile.user_id, profile)
 
     me.localStorage.set({...getState().me, tokenCreationTime})
 
