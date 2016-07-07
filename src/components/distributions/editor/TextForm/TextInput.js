@@ -42,6 +42,7 @@ export default class TextInput extends Component{
   state = {
     editorState: EditorState.createWithContent(ContentState.createFromText(this.props.value || ''), new CompositeDecorator(STATIC_DECORATOR_LIST)),
     suggestion: '',
+    isNoun: false,
   }
 
   static propTypes = {
@@ -79,7 +80,6 @@ export default class TextInput extends Component{
     const editorState = EditorState.set(addText(baseEditorState, suggestion, true, cursorPosition, cursorPosition+nextWord.length-1), {decorator})
     return {editorState, suggestion}
   }
-
 
   suggestionState(editorState) {
     const cursorPosition = editorState.getSelection().getFocusOffset()
@@ -119,17 +119,19 @@ export default class TextInput extends Component{
   }
 
   handleTab(e){
-    const {suggestion, isNoun} = this.state
-
-    if (!_.isEmpty(suggestion)) {
-      const cursorPosition = this.state.editorState.getSelection().getFocusOffset()
-      this.replaceAtCaret(suggestion + (isNoun ? '.' : ''), cursorPosition, cursorPosition+suggestion.length - 1)
-    } else {
-      this.props.onTab(e.shiftKey)
-    }
-    this.setState({suggestion: ''})
+    if (!_.isEmpty(this.state.suggestion)) { this.acceptSuggestion() }
+    else { this.props.onTab(e.shiftKey) }
     e.preventDefault()
   }
+
+  acceptSuggestion(){
+    const {suggestion, isNoun} = this.state
+    const cursorPosition = this.cursorPosition()
+    this.replaceAtCaret(suggestion + (isNoun ? '.' : ''), cursorPosition, cursorPosition + suggestion.length - 1)
+    this.setState({suggestion: ''})
+  }
+
+  cursorPosition(editorState = this.state.editorState) { return editorState.getSelection().getFocusOffset() }
 
   handleFocus() {
     $(window).on('functionMetricClicked', (_, {readableId}) => {this.insertAtCaret(readableId)})
