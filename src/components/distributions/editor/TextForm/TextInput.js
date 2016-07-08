@@ -13,7 +13,7 @@ export default class TextInput extends Component{
     editorState: EditorState.createWithContent(ContentState.createFromText(this.props.value || ''), new CompositeDecorator(STATIC_DECORATOR_LIST)),
     suggestion: {
       text: '',
-      isNoun: false
+      suffix: '',
     },
   }
 
@@ -61,10 +61,10 @@ export default class TextInput extends Component{
   }
 
   acceptSuggestion(){
-    const {text, isNoun} = this.state.suggestion
+    const {text, suffix} = this.state.suggestion
     const cursorPosition = this.cursorPosition()
-    this.replaceAtCaret(text + (isNoun ? '.' : ''), cursorPosition, cursorPosition + text.length - 1)
-    this.setState({suggestion: {text: '', isNoun: false}})
+    this.replaceAtCaret(`${text}${suffix}`, cursorPosition, cursorPosition + text.length - 1)
+    this.setState({suggestion: {text: '', suffix: ''}})
   }
 
   cursorPosition(editorState = this.state.editorState) { return editorState.getSelection().getFocusOffset() }
