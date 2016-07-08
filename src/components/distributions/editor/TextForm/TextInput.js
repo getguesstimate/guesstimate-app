@@ -4,37 +4,7 @@ import $ from 'jquery'
 import {EditorState, Editor, ContentState, Modifier, CompositeDecorator} from 'draft-js'
 
 import {isData, formatData} from 'lib/guesstimator/formatter/formatters/Data'
-import {getFactParams, addText, addSuggestionToEditorState} from 'lib/factParser'
-
-const NOUN_REGEX = /(\@[\w]+)/g
-const PROPERTY_REGEX = /[a-zA-Z_](\.[\w]+)/g
-
-const positionDecorator = (start, end, component) => ({strategy: (contentBlock, callback) => {callback(start, end)}, component})
-
-const NounSpan = props => <span {...props} className='noun'>{props.children}</span>
-const PropertySpan = props => <span {...props} className='property'>{props.children}</span>
-const SuggestionSpan = props => <span {...props} className='suggestion'>{props.children}</span>
-
-function findWithRegex(regex, contentBlock, callback) {
-  const text = contentBlock.getText()
-  let matchArr, start
-  while ((matchArr = regex.exec(text)) !== null) {
-    start = matchArr.index + matchArr[0].indexOf(matchArr[1])
-    callback(start, start + matchArr[1].length)
-  }
-}
-
-const STATIC_DECORATOR_LIST = [
-  {
-    strategy: (contentBlock, callback) => { findWithRegex(NOUN_REGEX, contentBlock, callback) },
-    component: NounSpan,
-  },
-  {
-    strategy: (contentBlock, callback) => { findWithRegex(PROPERTY_REGEX, contentBlock, callback) },
-    component: PropertySpan,
-  },
-]
-const STATIC_DECORATOR = {decorator: new CompositeDecorator(STATIC_DECORATOR_LIST)}
+import {getFactParams, addText, addSuggestionToEditorState, STATIC_DECORATOR, STATIC_DECORATOR_LIST} from 'lib/factParser'
 
 export default class TextInput extends Component{
   displayName: 'Guesstimate-TextInput'
@@ -69,7 +39,6 @@ export default class TextInput extends Component{
   }
 
   onChange(editorState) {
-    //not sure if that first line is still needed
     const newState = {
       editorState: EditorState.set(editorState, STATIC_DECORATOR),
       ...addSuggestionToEditorState(editorState, this.state.suggestion.text)
@@ -92,9 +61,9 @@ export default class TextInput extends Component{
   }
 
   acceptSuggestion(){
-    const {text, isNoun} = this.state.suggestion
+    const {text} = this.state.suggestion
     const cursorPosition = this.cursorPosition()
-    this.replaceAtCaret(text + (isNoun ? '.' : ''), cursorPosition, cursorPosition + text.length - 1)
+    this.replaceAtCaret(text, cursorPosition, cursorPosition + text.length - 1)
     this.setState({suggestion: {text: '', isNoun: false}})
   }
 
