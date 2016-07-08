@@ -96,8 +96,8 @@ class Suggestor {
   }
 
   _suggestionEditorState(precedingPartial, suggestion) {
-    const {isProperty, editorState, previouslyRecommendedSuggestion, cursorPosition, nextWord} = this
-    const decoratorComponent = isProperty ? PropertySpan : NounSpan
+    const {inProperty, editorState, previouslyRecommendedSuggestion, cursorPosition, nextWord} = this
+    const decoratorComponent = inProperty ? PropertySpan : NounSpan
 
     const nextWordSuitable = [previouslyRecommendedSuggestion || '', suggestion || ''].includes(nextWord || '')
     if (_.isEmpty(suggestion) || !nextWordSuitable) { return {} }
@@ -109,7 +109,7 @@ class Suggestor {
     ])
 
     const newEditorState = EditorState.set(addText(editorState, suggestion, true, cursorPosition, cursorPosition+nextWord.length-1), {decorator})
-    return {editorState: newEditorState, suggestion: {text: suggestion, isNoun: !isProperty}}
+    return {editorState: newEditorState, suggestion: {text: suggestion, isNoun: !inProperty}}
   }
 }
 

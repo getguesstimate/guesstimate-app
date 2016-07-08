@@ -61,9 +61,9 @@ export default class TextInput extends Component{
   }
 
   acceptSuggestion(){
-    const {text} = this.state.suggestion
+    const {text, isNoun} = this.state.suggestion
     const cursorPosition = this.cursorPosition()
-    this.replaceAtCaret(text, cursorPosition, cursorPosition + text.length - 1)
+    this.replaceAtCaret(text + (isNoun ? '.' : ''), cursorPosition, cursorPosition + text.length - 1)
     this.setState({suggestion: {text: '', isNoun: false}})
   }
 
