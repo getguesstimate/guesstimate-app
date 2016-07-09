@@ -1,22 +1,34 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component, PropTypes} from 'react'
 
 import $ from 'jquery'
-import {EditorState, Editor, ContentState, Modifier} from 'draft-js'
+import {EditorState, Editor, ContentState, Modifier, CompositeDecorator} from 'draft-js'
 
-import DistributionSelector from './DistributionSelector'
+import {isData, formatData} from 'lib/guesstimator/formatter/formatters/Data'
+import {getFactParams, addText, addSuggestionToEditorState, STATIC_DECORATOR, STATIC_DECORATOR_LIST} from 'lib/factParser'
 
-class TextInputEditor extends Component {
+export default class TextInput extends Component{
+  displayName: 'Guesstimate-TextInput'
+
   state = {
-    editorState: EditorState.createWithContent(ContentState.createFromText(this.props.value || ''))
+    editorState: EditorState.createWithContent(ContentState.createFromText(this.props.value || ''), new CompositeDecorator(STATIC_DECORATOR_LIST)),
+    suggestion: {
+      text: '',
+      suffix: '',
+    },
   }
 
+  static propTypes = {
+    value: PropTypes.string,
+  }
+
+  focus() { this.refs.editor.focus() }
+
   insertAtCaret(text) {
-    const {editorState} = this.state
-    const selection = editorState.getSelection()
-    const content = editorState.getCurrentContent()
-    const newContentState = Modifier.insertText(content, selection, text)
-    const newEditorState = EditorState.push(editorState, newContentState, 'paste')
-    this._onChange(newEditorState)
+    this.onChange(EditorState.set(addText(this.state.editorState, text, false), STATIC_DECORATOR))
+  }
+
+  replaceAtCaret(text, start, end) {
+    this.onChange(EditorState.set(addText(this.state.editorState, text, false, start, end), STATIC_DECORATOR))
   }
 
   componentWillUnmount() {
@@ -26,133 +38,69 @@ class TextInputEditor extends Component {
     }
   }
 
-  focus() {
-    this.refs.editor.focus()
-  }
+  onChange(editorState) {
+    const newState = {
+      editorState: EditorState.set(editorState, STATIC_DECORATOR),
+      ...addSuggestionToEditorState(editorState, this.state.suggestion.text)
+    }
+    this.setState(newState)
 
-  _text(editorState) {
-    return editorState.getCurrentContent().getPlainText('')
-  }
-
-  _onChange(editorState) {
-    this.props.onChange(this._text(editorState))
-    return this.setState({editorState})
-  }
-
-  handleReturn(e) {
-    return this.props.onReturn(e.shiftKey)
-  }
-
-  handleEscape() {
-    this.props.handleEscape()
+    const text = newState.editorState.getCurrentContent().getPlainText('')
+    if (text === this.props.value) { return }
+    if (isData(text)) {
+      this.props.onChangeData(formatData(text))
+    } else {
+      this.props.onChange(text)
+    }
   }
 
   handleTab(e){
-    this.props.onTab(e.shiftKey)
+    if (!_.isEmpty(this.state.suggestion.text)) { this.acceptSuggestion() }
+    else { this.props.onTab(e.shiftKey) }
     e.preventDefault()
   }
 
-  render() {
-    const {editorState} = this.state;
-    return (
-      <span
-        className={this.props.className}
-        onClick={this.focus.bind(this)}
-        onKeyDown={this.props.onKeyDown}
-        onFocus={this.props.onFocus}
-      >
-        <Editor
-          onFocus={this.props.onFocus}
-          onEscape={this.handleEscape.bind(this)}
-          editorState={editorState}
-          handleReturn={this.handleReturn.bind(this)}
-          onTab={this.handleTab.bind(this)}
-          onBlur={this.props.onBlur}
-          onChange={this._onChange.bind(this)}
-          ref='editor'
-          placeholder={this.props.placeholder}
-        />
-      </span>
-    );
-  }
-}
-
-export default class TextInput extends Component{
-  displayName: 'Guesstimate-TextInput'
-
-  static propTypes = {
-    value: PropTypes.string,
+  acceptSuggestion(){
+    const {text, suffix} = this.state.suggestion
+    const cursorPosition = this.cursorPosition()
+    this.replaceAtCaret(`${text}${suffix}`, cursorPosition, cursorPosition + text.length - 1)
+    this.setState({suggestion: {text: '', suffix: ''}})
   }
 
-  focus() { this.refs.editor && this.refs.editor.focus() }
+  cursorPosition(editorState = this.state.editorState) { return editorState.getSelection().getFocusOffset() }
 
-  _handleInputMetricClick(item){
-    this.refs.editor.insertAtCaret(item.readableId)
-  }
-
-  _handleFocus() {
-    $(window).on('functionMetricClicked', (a, item) => {this._handleInputMetricClick(item)})
+  handleFocus() {
+    $(window).on('functionMetricClicked', (_, {readableId}) => {this.insertAtCaret(readableId)})
     this.props.onFocus()
   }
 
-  _handleBlur() {
+  handleBlur() {
     $(window).off('functionMetricClicked')
     this.props.onBlur()
   }
 
-  _handleChange(value) {
-    if (value !== this.props.value) {
-      if (this._isData(value)) {
-        const data = this._formatData(value)
-        this.props.onChangeData(data)
-      } else {
-        this._changeInput(value);
-      }
-    }
-  }
-
-  _changeInput(value){ this.props.onChange(value) }
-
-  _formatData(value) {
-    return value
-          .replace(/[\[\]]/g, '')
-          .split(/[\n\s,]+/)
-          .filter(e => !_.isEmpty(e))
-          .map(Number)
-          .filter(e => _.isFinite(e))
-          .slice(0, 10000)
-  }
-
-  //TODO: It would be nice to eventually refactor this to use guesstimator lib
-  _isData(input) {
-    const isFunction = input.includes('=')
-    const count = (input.match(/[\n\s,]/g) || []).length
-    return !isFunction && (count > 3)
-  }
-
-  _onKeyDown(e) {
-    e.stopPropagation()
-  }
-
   render() {
-    const {hasErrors, width} = this.props
-    let className = 'TextInput'
-    className += (this.props.value !== '' && hasErrors) ? ' hasErrors' : ''
-    className += ` ${width}`
+    const [{hasErrors, width, value}, {editorState}] = [this.props, this.state]
+    const className = `TextInput ${width}` + (_.isEmpty(value) && hasErrors ? ' hasErrors' : '')
     return (
-      <TextInputEditor
+      <span
         className={className}
-        onBlur={this._handleBlur.bind(this)}
-        onChange={this._handleChange.bind(this)}
-        onFocus={this._handleFocus.bind(this)}
-        onKeyDown={this._onKeyDown.bind(this)}
-        handleEscape={this.props.onEscape}
-        onReturn={this.props.onReturn}
-        onTab={this.props.onTab}
-        value={this.props.value}
-        placeholder={'value'}
-        ref='editor'
-      />
+        onClick={this.focus.bind(this)}
+        onKeyDown={e => {e.stopPropagation()}}
+        onFocus={this.handleFocus.bind(this)}
+      >
+        <Editor
+          onFocus={this.props.onFocus}
+          onEscape={this.props.onEscape}
+          editorState={editorState}
+          handleReturn={e => this.props.onReturn(e.shiftKey)}
+          onTab={this.handleTab.bind(this)}
+          onBlur={this.handleBlur.bind(this)}
+          onChange={this.onChange.bind(this)}
+          ref='editor'
+          placeholder={'value'}
+        />
+      </span>
     )
   }
 }
