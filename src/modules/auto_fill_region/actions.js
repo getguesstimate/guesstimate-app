@@ -23,7 +23,7 @@ function buildNewMetric(startMetric, metrics, location) {
 }
 
 function isNonConstant({location, name}, direction, metrics) {
-  return _.some(metrics, m => isAtLocation(move(location, direction), m.location)) || !name
+  return _.some(metrics, m => isAtLocation(move(location, direction), m.location)) || _.isEmpty(name)
 }
 
 // TODO(matthew): Make this not exported (Test through the public API)
@@ -44,7 +44,10 @@ export function fillDynamic(startMetric, startGuesstimate, direction) {
       const matchedMetric = metrics.find(m2 => isAtLocation(translateFn(m.location), m2.location))
       if (!!matchedMetric) { idMap[m.readableId] = matchedMetric.readableId }
     })
-    if (_.isEmpty(idMap)) { return {metric, guesstimate: {...startGuesstimate, metric: metric.id}} }
+    if (_.isEmpty(idMap)) {
+      if (numNonConstantInputs === 0) { return {metric, guesstimate: {...startGuesstimate, metric: metric.id}} }
+      return {}
+    }
 
     const translatableInputsRegex = RegExp(Object.keys(idMap).join("|"), "g")
     const numTranslatedInputs = numNonConstantInputs === 0 ? 0 : (input.match(translatableInputsRegex) || []).length
