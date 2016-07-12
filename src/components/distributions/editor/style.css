@@ -4,6 +4,10 @@
   @mixin small-input;
 }
 
+.Guesstimate .small-tooltip {
+  /* TODO: Style */
+}
+
 .Guesstimate .TextInput {
   line-height: 1.3em;
   font-size: 0.95em;

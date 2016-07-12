@@ -42,7 +42,7 @@ export class TextForm extends Component{
       guesstimate: {input, guesstimateType},
       onEscape,
       size,
-      hasErrors,
+      errors,
       onChangeInput,
       onAddData,
       onChangeGuesstimateType,
@@ -66,7 +66,7 @@ export class TextForm extends Component{
             onBlur={this._handleBlur.bind(this)}
             onChangeData={onAddData}
             ref='TextInput'
-            hasErrors={hasErrors}
+            errors={errors}
             width={shouldBeWide ? 'NARROW' : "WIDE"}
           />
 

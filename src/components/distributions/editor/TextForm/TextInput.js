@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react'
 
 import $ from 'jquery'
 import {EditorState, Editor, ContentState, Modifier, CompositeDecorator} from 'draft-js'
+import ReactTooltip from 'react-tooltip'
 
 import {isData, formatData} from 'lib/guesstimator/formatter/formatters/Data'
 import {getFactParams, addText, addSuggestionToEditorState, STATIC_DECORATOR, STATIC_DECORATOR_LIST} from 'lib/factParser'
@@ -80,27 +81,40 @@ export default class TextInput extends Component{
   }
 
   render() {
-    const [{hasErrors, width, value}, {editorState}] = [this.props, this.state]
-    const className = `TextInput ${width}` + (_.isEmpty(value) && hasErrors ? ' hasErrors' : '')
+    const ReactTooltipParams = {class: 'small-tooltip', delayShow: 0, delayHide: 0, place: 'bottom', effect: 'solid'}
+    const [{errors, width, value}, {editorState}] = [this.props, this.state]
+    const hasErrors = !_.isEmpty(errors)
+    const className = `TextInput ${width}` + (!_.isEmpty(value) && hasErrors ? ' hasErrors' : '')
     return (
-      <span
-        className={className}
-        onClick={this.focus.bind(this)}
-        onKeyDown={e => {e.stopPropagation()}}
-        onFocus={this.handleFocus.bind(this)}
-      >
-        <Editor
-          onFocus={this.props.onFocus}
-          onEscape={this.props.onEscape}
-          editorState={editorState}
-          handleReturn={e => this.props.onReturn(e.shiftKey)}
-          onTab={this.handleTab.bind(this)}
-          onBlur={this.handleBlur.bind(this)}
-          onChange={this.onChange.bind(this)}
-          ref='editor'
-          placeholder={'value'}
-        />
-      </span>
+      <div>
+        {hasErrors &&
+          <ReactTooltip {...ReactTooltipParams} id='errors'>
+            <ul>
+              {_.map(errors, e => <li><span>{e}</span></li>)}
+            </ul>
+          </ReactTooltip>
+        }
+        <span
+          className={className}
+          onClick={this.focus.bind(this)}
+          onKeyDown={e => {e.stopPropagation()}}
+          onFocus={this.handleFocus.bind(this)}
+          data-tip
+          data-for='errors'
+        >
+          <Editor
+            onFocus={this.props.onFocus}
+            onEscape={this.props.onEscape}
+            editorState={editorState}
+            handleReturn={e => this.props.onReturn(e.shiftKey)}
+            onTab={this.handleTab.bind(this)}
+            onBlur={this.handleBlur.bind(this)}
+            onChange={this.onChange.bind(this)}
+            ref='editor'
+            placeholder={'value'}
+          />
+        </span>
+      </div>
     )
   }
 }

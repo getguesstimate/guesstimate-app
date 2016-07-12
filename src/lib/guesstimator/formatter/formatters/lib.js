@@ -75,11 +75,12 @@ export const confidenceIntervalTextMixin = Object.assign(
       }
     },
     _matchesText(text) { return this._hasRelevantSymbol(text) },
-    _confidenceIntervalTextErrors(text) {
+    _confidenceIntervalTextErrors(rawText) {
+      const text = rawText.trim()
       if (this._inputSymbols(text).length > 1) { return ['Must contain only 1 symbol'] }
 
       const numbers = this._numbers(text)
-      if (numbers.length !== 2) { return ['Must contain 2 inputs'] }
+      if (numbers.length !== 2) { return ['Must contain 2 numbers'] }
       if (!_.every(numbers, (e) => isParseableNumber(e))) { return ['Not all numbers are parseable'] }
       if (numbers[0] >= numbers[1]) { return ['Low number must be first'] }
 
