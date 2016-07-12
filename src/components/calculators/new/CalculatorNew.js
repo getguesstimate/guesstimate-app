@@ -277,7 +277,7 @@ export class CalculatorNew extends Component {
                   </div>
                   <div className='inputs'>
                     {_.map(invisibleInputs, (input, i) => (
-                      this.inputForm(inputs, input,i)
+                      this.inputForm(invisibleInputs, input,i)
                     ))}
                   </div>
                 </div>
@@ -291,7 +291,7 @@ export class CalculatorNew extends Component {
                 <div className='outputs'>
 
                   {_.map(visibleOutputs, (input, i) => (
-                      this.outputForm(inputs, input,i)
+                      this.outputForm(visibleOutputs, input,i)
                     )
                   )}
 
@@ -302,7 +302,7 @@ export class CalculatorNew extends Component {
                       </div>
 
                       {_.map(invisibleOutputs, (input, i) => (
-                          this.outputForm(inputs, input,i)
+                          this.outputForm(invisibleOutputs, input,i)
                         )
                       )}
                     </div>
@@ -334,16 +334,16 @@ export class CalculatorNew extends Component {
 }
 
 export const EditSection = ({isFirst, isLast, isVisible, onRemove, onAdd, onMoveUp, onMoveDown}) => (
-  <div>
+  <div className='nub'>
     {isVisible &&
       <div>
-        <a onMouseDown={onRemove}><Icon name='minus-circle'/></a>
-        {!isFirst && <a onMouseDown={onMoveUp}><Icon name='chevron-up'/></a>}
-        {!isLast && <a onMouseDown={onMoveDown}><Icon name='chevron-down'/></a>}
+        <a onMouseDown={onRemove} className='ui button'>hide</a>
+        {!isFirst && <a onMouseDown={onMoveUp} className='ui button'><Icon name='chevron-up'/></a>}
+        {!isLast && <a onMouseDown={onMoveDown} className='ui button'><Icon name='chevron-down'/></a>}
       </div>
     }
     {!isVisible &&
-      <a onMouseDown={onAdd}><Icon name='plus-circle'/></a>
+      <a onMouseDown={onAdd} className='ui button'>show</a>
     }
   </div>
 )
@@ -354,13 +354,13 @@ export class InputForm extends Component{
     return (
       <div className='input'>
         <div className='row'>
-          <div className='col-xs-12 col-sm-7'>
+          <div className='col-xs-12 col-sm-8'>
             <div className='name'>{name}</div>
             {description &&
               <div className='description'>{description}</div>
             }
           </div>
-          <div className='col-xs-12 col-sm-5'>
+          <div className='col-xs-12 col-sm-4'>
             <EditSection {...this.props}/>
           </div>
         </div>
@@ -373,12 +373,12 @@ export const OutputForm = (props) => {
   return (
     <div className='output'>
       <div className='row'>
-        <div className='col-xs-12 col-sm-7'>
+        <div className='col-xs-12 col-sm-8'>
           <div className='name'>
             {props.name}
           </div>
         </div>
-        <div className='col-xs-12 col-sm-5'>
+        <div className='col-xs-12 col-sm-4'>
             <EditSection {...props}/>
         </div>
       </div>
