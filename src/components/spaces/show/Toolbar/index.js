@@ -81,6 +81,7 @@ export class SpaceToolbar extends Component {
       onCopyModel,
       onCopyMetrics,
       onPasteMetrics,
+      onDeleteMetrics,
       onCutMetrics,
       onDestroy,
       onUndo,
@@ -126,7 +127,8 @@ export class SpaceToolbar extends Component {
           <div className='col-sm-10'>
             <ReactTooltip {...ReactTooltipParams} id='cut-button'>Cut Nodes (ctrl-x)</ReactTooltip>
             <ReactTooltip {...ReactTooltipParams} id='copy-button'>Copy Nodes (ctrl-c)</ReactTooltip>
-            <ReactTooltip {...ReactTooltipParams} id='paste-button'>Paste Nodes (ctrl-p)</ReactTooltip>
+            <ReactTooltip {...ReactTooltipParams} id='paste-button'>Paste Nodes (ctrl-v)</ReactTooltip>
+            <ReactTooltip {...ReactTooltipParams} id='delete-button'>Delete Nodes (del/bksp)</ReactTooltip>
             <ReactTooltip {...ReactTooltipParams} id='undo-button'>Undo (ctrl-z)</ReactTooltip>
             <ReactTooltip {...ReactTooltipParams} id='redo-button'>Redo (ctrl-shift-z)</ReactTooltip>
 
@@ -160,6 +162,9 @@ export class SpaceToolbar extends Component {
             </a>
             <a onClick={onPasteMetrics} className={`header-action`} data-tip data-for='paste-button'>
               <Icon name='paste'/>
+            </a>
+            <a onClick={onDeleteMetrics} className={`header-action`} data-tip data-for='delete-button'>
+              <Icon name='trash'/>
             </a>
             <div className='header-action-border'/>
             <a onClick={onUndo} className={`header-action ${canUndo ? '' : 'disabled'}`} data-tip data-for='undo-button'>

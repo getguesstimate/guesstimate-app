@@ -1,6 +1,8 @@
 import e from 'gEngine/engine'
 import * as spaceActions from 'gModules/spaces/actions'
 
+import {isWithinRegion} from 'lib/locationUtils.js'
+
 function findSpaceId(getState, metricId) {
   const metric = e.metric.get(getState().metrics, metricId)
   return _.get(metric, 'space')
@@ -27,6 +29,15 @@ export function removeMetrics(ids) {
     const spaceId = findSpaceId(getState, ids[0])
     dispatch({ type: 'REMOVE_METRICS', item: {ids}});
     registerGraphChange(dispatch, spaceId)
+  }
+}
+
+export function removeSelectedMetrics(spaceId) {
+  return (dispatch, getState) => {
+    const state = getState()
+    const region = state.selectedRegion
+    const metrics = state.metrics.filter(m => m.space === spaceId && isWithinRegion(m.location, region))
+    dispatch(removeMetrics(metrics.map(m => m.id)))
   }
 }
 

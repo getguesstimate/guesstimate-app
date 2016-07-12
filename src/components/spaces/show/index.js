@@ -16,6 +16,7 @@ import {allowEdits, forbidEdits} from 'gModules/canvas_state/actions'
 import * as spaceActions from 'gModules/spaces/actions'
 import * as simulationActions from 'gModules/simulations/actions'
 import * as copiedActions from 'gModules/copied/actions'
+import {removeSelectedMetrics} from 'gModules/metrics/actions'
 import {undo, redo} from 'gModules/checkpoints/actions'
 
 import {parseSlurp} from 'lib/slurpParser'
@@ -185,6 +186,10 @@ export default class SpacesShow extends Component {
     this.props.dispatch(copiedActions.paste(this._id()))
   }
 
+  onDeleteMetrics() {
+    this.props.dispatch(removeSelectedMetrics(this.props.spaceId))
+  }
+
   onCut(via_keyboard) {
     segment.trackCutMetric(via_keyboard)
     this.props.dispatch(copiedActions.cut(this._id()))
@@ -272,6 +277,7 @@ export default class SpacesShow extends Component {
             onCopyModel={this._handleCopyModel.bind(this)}
             onCopyMetrics={this.onCopy.bind(this, false)}
             onPasteMetrics={this.onPaste.bind(this, false)}
+            onDeleteMetrics={this.onDeleteMetrics.bind(this)}
             onCutMetrics={this.onCut.bind(this, false)}
             isPrivate={space.is_private}
             editableByMe={space.editableByMe}
