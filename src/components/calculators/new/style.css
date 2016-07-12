@@ -1,0 +1,11 @@
+.calculator .section {
+  background-color: #c7d2e2;
+  width: 100%;
+  padding: .5em;
+  border-radius: 3px;
+  text-align: center;
+}
+
+.calculator .section.faint {
+  background-color: #d2d5da;
+}

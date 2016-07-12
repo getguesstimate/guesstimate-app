@@ -25,6 +25,7 @@ import * as Calculator from 'gEngine/calculator'
 import {Guesstimator} from 'lib/guesstimator/index'
 
 import '../shared/style.css'
+import './style.css'
 
 import {EditorState, Editor, ContentState} from 'draft-js'
 function isCalculatorAcceptableMetric(metric) {
@@ -206,8 +207,50 @@ export class CalculatorNewContainer extends Component {
 }
 
 export class CalculatorNew extends Component {
+  inputForm(items, item, index){
+    return (
+      <InputForm
+        ref={`input-${item.metric.id}`}
+        key={index}
+        name={item.metric.name}
+        isFirst={index === 0}
+        isLast={index === items.length - 1}
+        description={_.get(item.metric, 'guesstimate.description')}
+        isVisible={item.isVisible}
+        onRemove={() => {this.props.onRemoveMetric(item.metric.id)}}
+        onAdd={() => {this.props.onAddMetric(item.metric.id)}}
+        onMoveUp={() => {this.props.onMoveMetricUp(item.metric.id)}}
+        onMoveDown={() => {this.props.onMoveMetricDown(item.metric.id)}}
+      />
+    )
+  }
+
+  outputForm(items, item, index){
+    return(
+      <OutputForm
+        key={index}
+        name={item.metric.name}
+        isFirst={index === 0}
+        isLast={index === items.length - 1}
+        isVisible={item.isVisible}
+        onRemove={() => {this.props.onRemoveMetric(item.metric.id)}}
+        onAdd={() => {this.props.onAddMetric(item.metric.id)}}
+        onMoveUp={() => {this.props.onMoveMetricUp(item.metric.id)}}
+        onMoveDown={() => {this.props.onMoveMetricDown(item.metric.id)}}
+      />
+    )
+  }
+
   render() {
     const {calculator: {title, content}, inputs, outputs} = this.props
+    const visibleInputs = inputs.filter(i => i.isVisible)
+    const invisibleInputs = inputs.filter(i => !i.isVisible)
+    const hasHiddenInputs = !_.isEmpty(invisibleInputs)
+
+    const visibleOutputs = outputs.filter(i => i.isVisible)
+    const invisibleOutputs = outputs.filter(i => !i.isVisible)
+    const hasHiddenOutputs = !_.isEmpty(invisibleOutputs)
+
     return (
       <Container>
         <div className='row'>
@@ -217,41 +260,53 @@ export class CalculatorNew extends Component {
               <h1>{title}</h1>
               <div className='description'>
               </div>
+
+              <div className='section'>
+                <h2> {`${hasHiddenInputs ? "Visible " : ""}Inputs`} </h2>
+              </div>
               <div className='inputs'>
-                {_.map(inputs, (input, i) => (
-                  <InputForm
-                    ref={`input-${input.metric.id}`}
-                    key={i}
-                    name={input.metric.name}
-                    isFirst={i === 0}
-                    isLast={i === inputs.length - 1}
-                    description={_.get(input.metric, 'guesstimate.description')}
-                    isVisible={input.isVisible}
-                    onRemove={() => {this.props.onRemoveMetric(input.metric.id)}}
-                    onAdd={() => {this.props.onAddMetric(input.metric.id)}}
-                    onMoveUp={() => {this.props.onMoveMetricUp(input.metric.id)}}
-                    onMoveDown={() => {this.props.onMoveMetricDown(input.metric.id)}}
-                  />
+                {_.map(visibleInputs, (input, i) => (
+                  this.inputForm(visibleInputs, input,i)
                 ))}
               </div>
 
+              {hasHiddenInputs &&
+                <div>
+                  <div className='section faint'>
+                    <h2> Hidden Inputs </h2>
+                  </div>
+                  <div className='inputs'>
+                    {_.map(invisibleInputs, (input, i) => (
+                      this.inputForm(inputs, input,i)
+                    ))}
+                  </div>
+                </div>
+                }
+
               <div>
-                <hr className='result-divider'/>
+                <div className='section'>
+                  <h2> {`${hasHiddenOutputs ? "Visible " : ""}Outputs`} </h2>
+                </div>
+
                 <div className='outputs'>
-                  {_.map(outputs, (input, i) => (
-                    <OutputForm
-                      key={i}
-                      name={input.metric.name}
-                      isFirst={i === 0}
-                      isLast={i === inputs.length - 1}
-                      isVisible={input.isVisible}
-                      onRemove={() => {this.props.onRemoveMetric(input.metric.id)}}
-                      onAdd={() => {this.props.onAddMetric(input.metric.id)}}
-                      onMoveUp={() => {this.props.onMoveMetricUp(input.metric.id)}}
-                      onMoveDown={() => {this.props.onMoveMetricDown(input.metric.id)}}
-                    />
+
+                  {_.map(visibleOutputs, (input, i) => (
+                      this.outputForm(inputs, input,i)
                     )
                   )}
+
+                  {hasHiddenOutputs &&
+                    <div>
+                      <div className='section faint'>
+                        <h2> Hidden Outputs </h2>
+                      </div>
+
+                      {_.map(invisibleOutputs, (input, i) => (
+                          this.outputForm(inputs, input,i)
+                        )
+                      )}
+                    </div>
+                  }
                 </div>
               </div>
 
