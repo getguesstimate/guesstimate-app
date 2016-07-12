@@ -8,6 +8,8 @@ import {me} from 'gEngine/engine'
 
 import {generalError} from 'lib/errors/index.js'
 
+import {trackUser} from 'servers/segment/index'
+
 const lockOptions = {
   disableSignupAction: false,
   disableResetAction: false
@@ -105,9 +107,10 @@ export function guesstimateMeLoad() {
   }
 }
 
-export function guesstimateMeLoaded(object) {
+export function guesstimateMeLoaded(object, shouldTrack=true) {
   return function(dispatch, getState) {
     dispatch({ type: 'GUESSTIMATE_ME_LOADED', id: object.id, profile: object})
+    if (shouldTrack) {trackUser(object.id, object)}
 
     const storage = me.localStorage.get()
     me.localStorage.set({...getState().me, tokenCreationTime: _.get(storage, 'tokenCreationTime')})
