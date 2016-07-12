@@ -16,7 +16,6 @@ import * as meActions from 'gModules/me/actions'
 
 import * as Space from 'gEngine/space'
 
-import * as segment from 'servers/segment/index'
 import * as sentry from 'servers/sentry/index'
 
 import './style.css'
@@ -46,7 +45,6 @@ export default class Layout extends Component{
     if (_.has(this.props, 'me.id')) {
       const {id, profile} = this.props.me
       if (id) {
-        segment.trackUser(id, profile)
         sentry.trackUser(id, profile)
       }
     }

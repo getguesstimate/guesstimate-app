@@ -49,7 +49,7 @@ export function fetchById(userId) {
       } else if (user) {
         dispatch(sActions.fetchSuccess([user]))
         if (getState().me.id === user.id){
-          dispatch(meActions.guesstimateMeLoaded(user))
+          dispatch(meActions.guesstimateMeLoaded(user), false)
         }
         dispatch(userOrganizationMembershipActions.fetchByUserId(userId))
       }

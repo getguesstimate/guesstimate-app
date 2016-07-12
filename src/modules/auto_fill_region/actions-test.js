@@ -34,5 +34,20 @@ describe('Autofill Actions', () => {
       const {guesstimate: {input}} = fillFn(location, metrics)
       expect(input).to.equal(startInput)
     })
+
+    it('fills properly with no translatable metrics, but some non-constant', () => {
+      const location = {row: 1, column: 2}
+      const metrics = [
+        {
+          id: '2',
+          readableId: 'VL',
+          location: {row: 0, column: 0},
+        },
+      ]
+      const fillFn = actions.fillDynamic(startMetric, startGuesstimate, direction)
+      const {metric, guesstimate} = fillFn(location, metrics)
+      expect(!!metric).to.equal(false)
+      expect(!!guesstimate).to.equal(false)
+    })
   })
 })
