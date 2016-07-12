@@ -46,8 +46,8 @@ describe('Autofill Actions', () => {
       ]
       const fillFn = actions.fillDynamic(startMetric, startGuesstimate, direction)
       const {metric, guesstimate} = fillFn(location, metrics)
-      console.log(metric, guesstimate)
-      expect(!metric && !guesstimate).to.equal(true)
+      expect(!!metric).to.equal(false)
+      expect(!!guesstimate).to.equal(false)
     })
   })
 })

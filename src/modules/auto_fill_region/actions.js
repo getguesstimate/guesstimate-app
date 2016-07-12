@@ -46,7 +46,7 @@ export function fillDynamic(startMetric, startGuesstimate, direction) {
     })
     if (_.isEmpty(idMap)) {
       if (numNonConstantInputs === 0) { return {metric, guesstimate: {...startGuesstimate, metric: metric.id}} }
-      return {}
+      else { return {} }
     }
 
     const translatableInputsRegex = RegExp(Object.keys(idMap).join("|"), "g")
