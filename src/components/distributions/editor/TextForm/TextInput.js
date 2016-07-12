@@ -34,7 +34,7 @@ export default class TextInput extends Component{
   componentWillUnmount() {
     const selection = this.state.editorState.getSelection()
     if (selection && selection.getHasFocus()) {
-      this.props.onBlur()
+      this.handleBlur()
     }
   }
 
