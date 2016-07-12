@@ -89,7 +89,6 @@ export function logOut() {
 function auth0MeLoaded(profile, token, tokenCreationTime) {
   return function(dispatch, getState) {
     dispatch({ type: 'AUTH0_ME_LOADED', profile, token})
-    trackUser(profile.user_id, profile)
 
     me.localStorage.set({...getState().me, tokenCreationTime})
 
@@ -108,9 +107,10 @@ export function guesstimateMeLoad() {
   }
 }
 
-export function guesstimateMeLoaded(object) {
+export function guesstimateMeLoaded(object, shouldTrack=true) {
   return function(dispatch, getState) {
     dispatch({ type: 'GUESSTIMATE_ME_LOADED', id: object.id, profile: object})
+    if (shouldTrack) {trackUser(object.id, object)}
 
     const storage = me.localStorage.get()
     me.localStorage.set({...getState().me, tokenCreationTime: _.get(storage, 'tokenCreationTime')})
