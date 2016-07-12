@@ -9,6 +9,7 @@ import {SpaceToolbar} from './Toolbar/index'
 import {SpaceSidebar} from './sidebar'
 import {ClosedSpaceSidebar} from './closed_sidebar'
 import Canvas from 'gComponents/spaces/canvas'
+import {CalculatorNewContainer} from 'gComponents/calculators/new/CalculatorNew'
 
 import {denormalizedSpaceSelector} from '../denormalized-space-selector'
 
@@ -302,6 +303,7 @@ export default class SpacesShow extends Component {
             onPaste={this.onPaste.bind(this, true)}
             onCut={this.onCut.bind(this, true)}
           />
+          <CalculatorNewContainer space_id={this._id()}/>
         </div>
       </div>
     )

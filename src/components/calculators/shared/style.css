@@ -13,6 +13,15 @@
   }
 }
 
+.calculator.new {
+  margin: 0;
+  padding: 1em 1em;
+  border: none;
+  font-size: 1.4em;
+  width: 25em;
+  overflow-y: auto;
+}
+
 .calculator {
   border: 1px solid rgba(200, 200, 200, 0.7);
   border-radius: .2em;

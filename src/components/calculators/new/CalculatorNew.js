@@ -100,18 +100,30 @@ export class CalculatorNewContainer extends Component {
   }
 
   setup(space){
-    if (!!space.id && !this.state.setupNewCalculator){
-      const validMetrics = space.metrics.filter(m => isCalculatorAcceptableMetric)
-      const validInputs = validMetrics.filter(m => relationshipType(m.edges) === INPUT)
-      const validOutputs = validMetrics.filter(m => relationshipType(m.edges) === OUTPUT)
-      const calculator = {
-         title: space.name || "",
-         content: space.description || "",
-         input_ids: validInputs.map(e => e.id),
-         output_ids: validOutputs.map(e => e.id)
+    if (!!space.id){
+      const {validInputs, validOutputs} = this.validMetrics(space.metrics)
+
+      if(!this.state.setupNewCalculator){
+        const calculator = {
+           title: space.name || "",
+           content: space.description || "",
+           input_ids: validInputs.map(e => e.id),
+           output_ids: validOutputs.map(e => e.id)
+        }
+        this.setState({calculator, validInputs, validOutputs, setupNewCalculator: true})
       }
-      this.setState({calculator, validInputs, validOutputs, setupNewCalculator: true})
+
+      else {
+        this.setState({validInputs, validOutputs})
+      }
     }
+  }
+
+  validMetrics(metrics) {
+    const validMetrics = metrics.filter(m => isCalculatorAcceptableMetric)
+    const validInputs = validMetrics.filter(m => relationshipType(m.edges) === INPUT)
+    const validOutputs = validMetrics.filter(m => relationshipType(m.edges) === OUTPUT)
+    return {validInputs, validOutputs}
   }
 
   _onCreate() {
@@ -252,83 +264,75 @@ export class CalculatorNew extends Component {
     const hasHiddenOutputs = !_.isEmpty(invisibleOutputs)
 
     return (
-      <Container>
-        <div className='row'>
-          <div className='col-xs-0 col-md-2'/>
-          <div className='col-xs-12 col-md-8'>
-            <div className='calculator'>
-              <h1>{title}</h1>
-              <div className='description'>
-              </div>
+      <div className='calculator new'>
+        <div className='ui form'>
+          <h1>
+            <textarea rows={1} placeholder={'Calculator Name'} className='field'/>
+          </h1>
+        </div>
 
-              <div className='section'>
-                <h2> {`${hasHiddenInputs ? "Visible " : ""}Inputs`} </h2>
-              </div>
-              <div className='inputs'>
-                {_.map(visibleInputs, (input, i) => (
-                  this.inputForm(visibleInputs, input,i)
-                ))}
-              </div>
+        <div className='section'>
+          <h2> {`${hasHiddenInputs ? "Visible " : ""}Inputs`} </h2>
+        </div>
+        <div className='inputs'>
+          {_.map(visibleInputs, (input, i) => (
+            this.inputForm(visibleInputs, input,i)
+          ))}
+        </div>
 
-              {hasHiddenInputs &&
-                <div>
-                  <div className='section faint'>
-                    <h2> Hidden Inputs </h2>
-                  </div>
-                  <div className='inputs'>
-                    {_.map(invisibleInputs, (input, i) => (
-                      this.inputForm(invisibleInputs, input,i)
-                    ))}
-                  </div>
-                </div>
-                }
-
-              <div>
-                <div className='section'>
-                  <h2> {`${hasHiddenOutputs ? "Visible " : ""}Outputs`} </h2>
-                </div>
-
-                <div className='outputs'>
-
-                  {_.map(visibleOutputs, (input, i) => (
-                      this.outputForm(visibleOutputs, input,i)
-                    )
-                  )}
-
-                  {hasHiddenOutputs &&
-                    <div>
-                      <div className='section faint'>
-                        <h2> Hidden Outputs </h2>
-                      </div>
-
-                      {_.map(invisibleOutputs, (input, i) => (
-                          this.outputForm(invisibleOutputs, input,i)
-                        )
-                      )}
-                    </div>
-                  }
-                </div>
-              </div>
-
-              <hr className='result-divider'/>
-
-              <div className='create-button-section'>
-                <div className='row'>
-                  <div className='col-md-5'>
-                    <div className='ui button green create-button' onClick={this.props.onSubmit}>
-                      Create
-                    </div>
-                  </div>
-                  <div className='col-md-7' />
-                </div>
-              </div>
-
-
+        {hasHiddenInputs &&
+          <div>
+            <div className='section faint'>
+              <h2> Hidden Inputs </h2>
+            </div>
+            <div className='inputs'>
+              {_.map(invisibleInputs, (input, i) => (
+                this.inputForm(invisibleInputs, input,i)
+              ))}
             </div>
           </div>
-          <div className='col-md-3' />
+          }
+
+        <div>
+          <div className='section'>
+            <h2> {`${hasHiddenOutputs ? "Visible " : ""}Outputs`} </h2>
+          </div>
+
+          <div className='outputs'>
+
+            {_.map(visibleOutputs, (input, i) => (
+                this.outputForm(visibleOutputs, input,i)
+              )
+            )}
+
+            {hasHiddenOutputs &&
+              <div>
+                <div className='section faint'>
+                  <h2> Hidden Outputs </h2>
+                </div>
+
+                {_.map(invisibleOutputs, (input, i) => (
+                    this.outputForm(invisibleOutputs, input,i)
+                  )
+                )}
+              </div>
+            }
+          </div>
         </div>
-      </Container>
+
+        <hr className='result-divider'/>
+
+        <div className='create-button-section'>
+          <div className='row'>
+            <div className='col-md-5'>
+              <div className='ui button green create-button' onClick={this.props.onSubmit}>
+                Create
+              </div>
+            </div>
+            <div className='col-md-7' />
+          </div>
+        </div>
+      </div>
     )
   }
 }
@@ -354,13 +358,13 @@ export class InputForm extends Component{
     return (
       <div className='input'>
         <div className='row'>
-          <div className='col-xs-12 col-sm-8'>
+          <div className='col-xs-12 col-sm-7'>
             <div className='name'>{name}</div>
             {description &&
               <div className='description'>{description}</div>
             }
           </div>
-          <div className='col-xs-12 col-sm-4'>
+          <div className='col-xs-12 col-sm-5'>
             <EditSection {...this.props}/>
           </div>
         </div>
@@ -373,12 +377,12 @@ export const OutputForm = (props) => {
   return (
     <div className='output'>
       <div className='row'>
-        <div className='col-xs-12 col-sm-8'>
+        <div className='col-xs-12 col-sm-7'>
           <div className='name'>
             {props.name}
           </div>
         </div>
-        <div className='col-xs-12 col-sm-4'>
+        <div className='col-xs-12 col-sm-5'>
             <EditSection {...props}/>
         </div>
       </div>
