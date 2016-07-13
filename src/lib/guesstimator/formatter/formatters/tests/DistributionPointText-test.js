@@ -17,8 +17,8 @@ describe("DistributionPointText", () => {
 
   describe('#format', () => {
     const examples = [
-      [{text: '3'}, {guesstimateType: 'POINT', value: 3}],
-      [{text: '3K'}, {guesstimateType: 'POINT', value: 3000}],
+      [{text: '3'}, {guesstimateType: 'POINT', params: [3]}],
+      [{text: '3K'}, {guesstimateType: 'POINT', params: [3000]}],
     ]
 
     const itExamples = examples.map(e => () => {
