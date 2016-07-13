@@ -22,7 +22,7 @@ describe('<SpaceToolbar>', () => {
         canRedo={false}
       />
     )
-    expect(toolbar.find('.header-action')).to.have.length(5)
+    expect(toolbar.find('.header-action')).to.have.length(6)
     expect(toolbar.find('.header-action.disabled')).to.have.length(2)
   })
 
