@@ -1,23 +1,15 @@
-import {textMixin, isParseableNumber, parseNumber} from './lib.js'
+import {parseNumber} from './lib.js'
 
-export const item = Object.assign(
-  {}, textMixin,
-  {
-    guesstimateType: 'POINT',
-    inputType: 'TEXT',
-    formatterName: 'DISTRIBUTION_POINT_TEXT',
-    errors(g) {
-      const value = parseNumber(g.text)
-      if (!_.isFinite(value) || !isParseableNumber(value)) {
-        return ['invalid sample']
-      }
-      return []
-    },
-    format(g) {
-      const {guesstimateType} = this
-      const value = parseNumber(g.text)
-      return {guesstimateType, value}
-    },
-    _matchesText(g) { return true },
-  }
-)
+const POINT_REGEX = /^\s*(\d*(?:\.\d+)?)\s?(M|B|K|T)?\s*$/
+
+export const item = {
+  formatterName: 'DISTRIBUTION_POINT_TEXT',
+  errors() { return [] },
+  matches({text}) { return POINT_REGEX.test(text) },
+  _number(text) {
+    const [_, num, suffix] = text.match(POINT_REGEX)
+    return parseNumber(num, suffix)
+  },
+  format({text}) { return {guesstimateType: "POINT", value: this._number(text)} }
+}
+
