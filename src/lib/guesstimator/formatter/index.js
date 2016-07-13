@@ -41,4 +41,3 @@ export function parse(g) {
   let format = errors.length ? {} : formatter.format(i)
   return [errors, format]
 }
-
