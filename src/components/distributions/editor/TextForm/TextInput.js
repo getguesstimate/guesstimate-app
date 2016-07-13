@@ -81,18 +81,14 @@ export default class TextInput extends Component{
   }
 
   render() {
-    const ReactTooltipParams = {class: 'small-tooltip', delayShow: 0, delayHide: 0, place: 'bottom', effect: 'solid'}
+    const ReactTooltipParams = {class: 'metric-errors-tooltip', delayShow: 0, delayHide: 0, type: 'error', place: 'bottom', effect: 'solid'}
     const [{errors, width, value}, {editorState}] = [this.props, this.state]
     const hasErrors = !_.isEmpty(errors)
     const className = `TextInput ${width}` + (!_.isEmpty(value) && hasErrors ? ' hasErrors' : '')
     return (
       <div>
         {hasErrors &&
-          <ReactTooltip {...ReactTooltipParams} id='errors'>
-            <ul>
-              {_.map(errors, e => <li><span>{e}</span></li>)}
-            </ul>
-          </ReactTooltip>
+          <ReactTooltip {...ReactTooltipParams} id='errors'> <span>{errors[0]}</span> </ReactTooltip>
         }
         <span
           className={className}

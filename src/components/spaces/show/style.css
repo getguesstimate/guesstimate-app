@@ -197,7 +197,7 @@
   min-height: 30em;
 }
 
-.small-tooltip.small-tooltip.small-tooltip {
+.header-action-tooltip.header-action-tooltip.header-action-tooltip {
   background: rgba(60, 64, 68, 0.95);
   opacity: 1;
   padding: 4px 13px;

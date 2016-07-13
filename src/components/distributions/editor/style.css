@@ -4,8 +4,12 @@
   @mixin small-input;
 }
 
-.Guesstimate .small-tooltip {
-  /* TODO: Style */
+.Guesstimate .metric-errors-tooltip.metric-errors-tooltip.metric-errors-tooltip {
+  text-align: center;
+  opacity: 1;
+  padding: 4px 13px;
+  border-radius: 2px;
+  transition: none;
 }
 
 .Guesstimate .TextInput {
