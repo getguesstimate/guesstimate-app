@@ -5,13 +5,14 @@ const SUFFIXES = {
   'T': 12,
 }
 
-const SUFFIX_REGEX = new RegExp(Object.keys(SUFFIXES).join('|'))
-const INTEGER_REGEX = /\d+(?!\.)/
-const DECIMAL_REGEX = /\d*(?:\.\d+)+/
-const NUMBER_REGEX = new RegExp(`(-?(?:${INTEGER_REGEX.source})|(?:${DECIMAL_REGEX}))\\s?(${SUFFIX_REGEX.source})?`)
-
+const or = res => new RegExp(res.filter(re => !!re).map(re => `(?:${re.source})`).join('|'))
 const spaceSep = res => new RegExp(res.filter(re => !!re).map(re => `(?:${re.source})`).join('\\s*'))
 const padded = res => spaceSep([/^/, ...res, /$/])
+
+const SUFFIX_REGEX = new RegExp(Object.keys(SUFFIXES).join('|'))
+const INTEGER_REGEX = /\d+(?!\.)/
+const DECIMAL_REGEX = /\d*\.\d+/
+const NUMBER_REGEX = new RegExp(`(-?${or(INTEGER_REGEX, DECIMAL_REGEX).source})\\s?(${SUFFIX_REGEX.source})?`)
 
 export const POINT_REGEX = padded([NUMBER_REGEX])
 export const rangeRegex = (sep, left, right) => padded([left, NUMBER_REGEX, sep, NUMBER_REGEX, right])
