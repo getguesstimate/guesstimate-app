@@ -20,7 +20,8 @@ export class SpaceSidebar extends Component {
       <div className='SpaceSidebar'>
         <div className='SpaceSidebar-inside'>
           <div className='SpaceSidebar-header'>
-            <ButtonClose onClick={onClose}/>
+            <span className={'ui button small closeSidebar'} onClick={onClose}>Close</span>
+            {false && <ButtonClose onClick={onClose}/>}
           </div>
           <div className='SpaceSidebar-body'>
             <ClickToEdit
