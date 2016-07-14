@@ -38,7 +38,12 @@ export function Evaluate(text, sampleCount, inputs) {
     const compiled = math.compile(text)
     return evaluate(compiled, inputs, sampleCount)
   } catch ({message}) {
-    return {errors: [{type: MATH_ERROR, message}]}
+    if (message.startsWith('Unexpected end of expression')) {
+      return {errors: [{type: MATH_ERROR, message: message.replace(/\s\(char \d+\)/, '')}]}
+    } else {
+      console.log(message)
+      return {errors: [{type: MATH_ERROR, message: 'Sampling error detected', rawMessage: message}]}
+    }
   }
 }
 

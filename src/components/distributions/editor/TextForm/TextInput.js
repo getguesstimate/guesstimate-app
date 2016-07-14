@@ -6,6 +6,7 @@ import ReactTooltip from 'react-tooltip'
 
 import {isData, formatData} from 'lib/guesstimator/formatter/formatters/Data'
 import {getFactParams, addText, addSuggestionToEditorState, STATIC_DECORATOR, STATIC_DECORATOR_LIST} from 'lib/factParser'
+import {INTERNAL_ERROR} from 'lib/errors/modelErrors'
 
 export default class TextInput extends Component{
   displayName: 'Guesstimate-TextInput'
@@ -85,10 +86,11 @@ export default class TextInput extends Component{
     const [{errors, width, value}, {editorState}] = [this.props, this.state]
     const hasErrors = !_.isEmpty(errors)
     const className = `TextInput ${width}` + (!_.isEmpty(value) && hasErrors ? ' hasErrors' : '')
+    const displayedError = errors.find(e => e.type !== INTERNAL_ERROR)
     return (
       <div>
-        {hasErrors &&
-          <ReactTooltip {...ReactTooltipParams} id='errors'> <span>{errors[0].message}</span> </ReactTooltip>
+        {hasErrors && !!displayedError &&
+          <ReactTooltip {...ReactTooltipParams} id='errors'> <span>{displayedError.message}</span> </ReactTooltip>
         }
         <span
           className={className}
