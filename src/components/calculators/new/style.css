@@ -1,13 +1,15 @@
 .calculator .section {
-  background-color: #c7d2e2;
   width: 100%;
   padding: .5em;
-  border-radius: 3px;
-  text-align: center;
+  font-size: 1.7em;
 }
 
-.calculator .section.faint {
-  background-color: #dde0e4;
+.inputs h3, .outputs h3{
+  border-bottom: 2px solid #aaa;
+  padding-bottom: .5em;
+  margin-top: 2.5em;
+  font-weight: 800;
+  font-size: 1.2em;
 }
 
 .nub {
@@ -17,6 +19,6 @@
 }
 
 .nub a.ui.button {
-  font-size: 1.2rem;
-  padding: .4em .5em;
+  padding: .3em .4em;
 }
+

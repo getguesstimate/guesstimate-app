@@ -265,16 +265,22 @@ export class CalculatorNew extends Component {
 
     return (
       <div className='calculator new'>
-        <div className='ui form'>
-          <h1>
-            <textarea rows={1} placeholder={'Calculator Name'} className='field'/>
-          </h1>
+        <div className='padded-section'>
+          <h2> New Calculator </h2>
         </div>
 
-        <div className='section'>
-          <h2> {`${hasHiddenInputs ? "Visible " : ""}Inputs`} </h2>
-        </div>
+        <hr className='result-divider'/>
+        <div className='padded-section'>
+          <div className='ui form'>
+            <h3>
+              <textarea rows={1} placeholder={'Calculator Name'} className='field'/>
+            </h3>
+            <textarea rows={3} placeholder={'Explanation (Markdown)'} className='field'/>
+          </div>
+
+
         <div className='inputs'>
+          <h3> {`${hasHiddenInputs ? "Visible " : ""}Inputs`} </h3>
           {_.map(visibleInputs, (input, i) => (
             this.inputForm(visibleInputs, input,i)
           ))}
@@ -282,10 +288,8 @@ export class CalculatorNew extends Component {
 
         {hasHiddenInputs &&
           <div>
-            <div className='section faint'>
-              <h2> Hidden Inputs </h2>
-            </div>
             <div className='inputs'>
+              <h3> Hidden Inputs </h3>
               {_.map(invisibleInputs, (input, i) => (
                 this.inputForm(invisibleInputs, input,i)
               ))}
@@ -293,12 +297,9 @@ export class CalculatorNew extends Component {
           </div>
           }
 
-        <div>
-          <div className='section'>
-            <h2> {`${hasHiddenOutputs ? "Visible " : ""}Outputs`} </h2>
-          </div>
 
           <div className='outputs'>
+            <h3> {`${hasHiddenOutputs ? "Visible " : ""}Outputs`} </h3>
 
             {_.map(visibleOutputs, (input, i) => (
                 this.outputForm(visibleOutputs, input,i)
@@ -307,14 +308,13 @@ export class CalculatorNew extends Component {
 
             {hasHiddenOutputs &&
               <div>
-                <div className='section faint'>
-                  <h2> Hidden Outputs </h2>
+                <div className=' outputs'>
+                  <h3> Hidden Outputs </h3>
+                  {_.map(invisibleOutputs, (input, i) => (
+                      this.outputForm(invisibleOutputs, input,i)
+                    )
+                  )}
                 </div>
-
-                {_.map(invisibleOutputs, (input, i) => (
-                    this.outputForm(invisibleOutputs, input,i)
-                  )
-                )}
               </div>
             }
           </div>
@@ -322,14 +322,16 @@ export class CalculatorNew extends Component {
 
         <hr className='result-divider'/>
 
-        <div className='create-button-section'>
-          <div className='row'>
-            <div className='col-md-5'>
-              <div className='ui button green create-button' onClick={this.props.onSubmit}>
-                Create
+        <div className='padded-section'>
+          <div className='create-button-section'>
+            <div className='row'>
+              <div className='col-md-5'>
+                <div className='ui button green create-button' onClick={this.props.onSubmit}>
+                  Create
+                </div>
               </div>
+              <div className='col-md-7' />
             </div>
-            <div className='col-md-7' />
           </div>
         </div>
       </div>

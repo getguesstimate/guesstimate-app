@@ -15,11 +15,30 @@
 
 .calculator.new {
   margin: 0;
-  padding: 1em 1em;
+  padding: 0;
   border: none;
-  font-size: 1.4em;
+  font-size: 1.25em;
   width: 25em;
   overflow-y: auto;
+  background: rgba(255,255,255,0.9);
+  border-radius: 0;
+  border-left: 1px solid #ccc;
+  .inputs {
+    padding-left: 1em;
+    margin-top: 0;
+    padding: 0;
+  }
+  .outputs {
+    padding-left: 1em;
+    margin-top: 0;
+    padding: 0;
+  }
+  .inputs .input {
+    padding: .3em 0 .3em 0;
+  }
+  .padded-section {
+    padding: 1em 1em;
+  }
 }
 
 .calculator {
