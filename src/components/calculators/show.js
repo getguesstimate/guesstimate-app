@@ -101,7 +101,7 @@ export class CalculatorShow extends Component {
   render() {
     if (!this.props.calculator) { return false }
 
-    const {calculator: {content, title, space_id, share_image}, inputs, outputs} = this.props
+    const {calculator: {content, title, space_id, share_image}, inputs, outputs, isPrivate} = this.props
     const spaceUrl = Space.url({id: space_id})
     const calculatorUrl = Calculator.fullUrl(this.props.calculator)
 
@@ -116,6 +116,10 @@ export class CalculatorShow extends Component {
     const {FacebookShareButton, TwitterShareButton} = ShareButtons
     const FacebookIcon = generateShareIcon('facebook')
     const TwitterIcon = generateShareIcon('twitter')
+    let privacy_header = false
+    if (isPrivate) {
+      privacy_header = (<span className='privacy-icon'><Icon name='lock'/>Private</span>)
+    }
 
     return (
       <Container>
@@ -124,7 +128,14 @@ export class CalculatorShow extends Component {
           <div className='col-xs-0 col-md-2'/>
           <div className='col-xs-12 col-md-8'>
             <div className='calculator'>
-              <h1>{title}</h1>
+              <div className='title-bar'>
+                <div className='row'>
+                  <div className='col-xs-12'>
+                    <h1>{title}</h1>
+                    {privacy_header}
+                  </div>
+                </div>
+              </div>
               <div className='description'>
                 <ReactMarkdown source={content} />
               </div>
