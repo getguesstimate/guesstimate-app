@@ -88,7 +88,7 @@ export default class TextInput extends Component{
     return (
       <div>
         {hasErrors &&
-          <ReactTooltip {...ReactTooltipParams} id='errors'> <span>{errors[0]}</span> </ReactTooltip>
+          <ReactTooltip {...ReactTooltipParams} id='errors'> <span>{errors[0].message}</span> </ReactTooltip>
         }
         <span
           className={className}
