@@ -62,10 +62,12 @@ function evaluate(compiled, inputs, n){
       errors.push({type: MATH_ERROR, message: 'Divide by zero error'})
       values.push(newSample)
     } else if (newSample.constructor.name === 'Unit') {
-      return {values, errors: [{type: PARSER_ERROR, message: "Functions can't contain units or suffixes"}]}
+      return {values: [], errors: [{type: PARSER_ERROR, message: "Functions can't contain units or suffixes"}]}
+    } else if (typeof newSample === 'function') {
+      return {values: [], errors: [{type: PARSER_ERROR, message: "Incomplete function in input"}]}
     } else {
       if (__DEV__) { console.warn('Unidentified sample detected: ', newSample) }
-      return {values, errors: [{type: MATH_ERROR, message: 'Sampling error detected'}]}
+      return {values: [], errors: [{type: MATH_ERROR, message: 'Sampling error detected'}]}
     }
   }
 

@@ -65,6 +65,7 @@ function _inputMetricsWithValues(guesstimate: Guesstimate, dGraph: DGraph): Obje
     const inputErrors = _.get(m, 'simulation.sample.errors') || []
     errors.push(...inputErrors.map(
       ({type, message}) => {
+        console.log(type, message, m.readableId)
         if (type === INPUT_ERROR) { return {type, message: message.replace('Broken input', 'Broken upstream input')} }
         else { return {type: INPUT_ERROR, message: `Broken input ${m.readableId}`} }
       }

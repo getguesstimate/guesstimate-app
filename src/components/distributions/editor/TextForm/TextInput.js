@@ -46,7 +46,7 @@ export default class TextInput extends Component{
     }
     this.setState(newState)
 
-    const text = newState.editorState.getCurrentContent().getPlainText('')
+    const text = newState.editorState.getCurrentContent().getPlainText('').trim()
     if (text === this.props.value) { return }
     if (isData(text)) {
       this.props.onChangeData(formatData(text))
