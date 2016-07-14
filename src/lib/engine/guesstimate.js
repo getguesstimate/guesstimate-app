@@ -62,12 +62,21 @@ function _inputMetricsWithValues(guesstimate: Guesstimate, dGraph: DGraph): Obje
   let errors = []
   inputMetrics(guesstimate, dGraph).map(m => {
     inputs[m.readableId] = _.get(m, 'simulation.sample.values')
+
     const inputErrors = _.get(m, 'simulation.sample.errors') || []
+    if (_.isEmpty(inputs[m.readableId]) && _.isEmpty(inputErrors)) {
+      errors.push({type: INPUT_ERROR, message: `Empty input ${m.readableId}`})
+    }
+
     errors.push(...inputErrors.map(
       ({type, message}) => {
-        console.log(type, message, m.readableId)
-        if (type === INPUT_ERROR) { return {type, message: message.replace('Broken input', 'Broken upstream input')} }
-        else { return {type: INPUT_ERROR, message: `Broken input ${m.readableId}`} }
+        if (type === INPUT_ERROR) {
+          return {
+            type,
+            message: message.includes('upstream') ? message : message.replace('input', 'upstream input')
+          }
+        }
+        return {type: INPUT_ERROR, message: `Broken input ${m.readableId}`}
       }
     ))
   })
