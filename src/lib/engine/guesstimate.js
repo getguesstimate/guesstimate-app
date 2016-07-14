@@ -19,7 +19,7 @@ export function sample(guesstimate: Guesstimate, dGraph: DGraph, n: number = 1) 
 
   let errors = []
   const [parseError, item] = Guesstimator.parse(guesstimate)
-  errors.push(parseError)
+  if (!_.isEmpty(parseError)) {errors.push(parseError)}
 
   const [inputs, inputErrors] = item.needsExternalInputs() ? _inputMetricsWithValues(guesstimate, dGraph) : [{}, []]
   errors.push(...inputErrors)
