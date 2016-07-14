@@ -6,7 +6,7 @@ import {captureApiError, generalError} from 'lib/errors/index.js'
 
 import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
 
-let sActions = actionCreatorsFor('calculators')
+export const sActions = actionCreatorsFor('calculators')
 
 const api = state => setupGuesstimateApi(_.get(state, 'me.token'))
 
