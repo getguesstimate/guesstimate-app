@@ -1,8 +1,10 @@
+import {PARSER_ERROR} from 'lib/errors/modelErrors'
+
 export const item = {
   guesstimateType: 'NONE',
   inputType: 'NONE',
   formatterName: 'NULL',
   matches(g) { return true },
   format(g) { return {guesstimateType: 'NONE'} },
-  errors({text}) { return _.isEmpty(text) ? [] : ['unrecognized input format'] },
+  error({text}) { return _.isEmpty(text) ? {} : {type: PARSER_ERROR, message: 'Improper syntax'} },
 }

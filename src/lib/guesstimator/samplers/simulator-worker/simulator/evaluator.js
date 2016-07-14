@@ -1,7 +1,8 @@
 var _ = require('lodash')
 import math from 'mathjs'
-import {Distributions} from './distributions/distributions.js'
-import {ImpureConstructs} from './constructs/constructs.js'
+import {Distributions} from './distributions/distributions'
+import {ImpureConstructs} from './constructs/constructs'
+import {MATH_ERROR} from 'lib/errors/modelErrors'
 var Finance = require('financejs')
 const finance = new Finance()
 
@@ -36,9 +37,8 @@ export function Evaluate(text, sampleCount, inputs) {
   try {
     const compiled = math.compile(text)
     return evaluate(compiled, inputs, sampleCount)
-  } catch (exception) {
-    let error = exception.message[0].toLowerCase() + exception.message.slice(1)
-    return {errors: [error]}
+  } catch ({message}) {
+    return {errors: [{type: MATH_ERROR, message}]}
   }
 }
 
@@ -59,7 +59,7 @@ function evaluate(compiled, inputs, n){
     if (_.isFinite(newSample)) {
       values = values.concat(newSample)
     } else {
-      return {values, errors: ['invalid sample']}
+      return {values, errors: [{type: MATH_ERROR, message: 'Sampling error detected'}]}
     }
   }
 

@@ -205,7 +205,7 @@ export default class MetricCard extends Component {
   }
 
   _errors() {
-    if (this.props.isTitle){ return [] }
+    if (this.props.isTitle) { return [] }
     const errors = _.get(this.props.metric, 'simulation.sample.errors') || []
     return errors.filter(e => !!e)
   }
