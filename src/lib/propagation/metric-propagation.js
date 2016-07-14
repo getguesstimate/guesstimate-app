@@ -7,7 +7,7 @@ import type {Simulation, Graph} from '../lib/engine/types'
 import {addSimulation} from 'gModules/simulations/actions'
 import Simulator from './simulator'
 
-import {GRAPH_ERROR, INTERNAL_ERROR} from 'lib/errors/modelErrors'
+import {INFINITE_LOOP_ERROR, INTERNAL_ERROR} from 'lib/errors/modelErrors'
 
 function isRecentPropagation(propagationId: number, simulation: Simulation) {
   return !_.has(simulation, 'propagationId') || (propagationId >= simulation.propagationId)
@@ -58,7 +58,7 @@ export default class MetricPropagation {
         propagationId: this.propagationId,
         sample: {
           values: [],
-          errors: [{type: GRAPH_ERROR, message: 'Infinite loop detected'}],
+          errors: [{type: INFINITE_LOOP_ERROR, message: 'Infinite loop detected'}],
         }
       }
       this._dispatch(dispatch, simulation)

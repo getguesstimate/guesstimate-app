@@ -2,7 +2,7 @@ var _ = require('lodash')
 import math from 'mathjs'
 import {Distributions} from './distributions/distributions'
 import {ImpureConstructs} from './constructs/constructs'
-import {MATH_ERROR} from 'lib/errors/modelErrors'
+import {MATH_ERROR, PARSER_ERROR} from 'lib/errors/modelErrors'
 var Finance = require('financejs')
 const finance = new Finance()
 
@@ -52,16 +52,22 @@ function sampleInputs(inputs, i) {
 
 function evaluate(compiled, inputs, n){
   let values = []
+  let errors = []
   for (let i = 0; i < n; i++) {
-    const sampledInputs = sampleInputs(inputs,i)
-    const newSample = compiled.eval(sampledInputs)
+    const newSample = compiled.eval(sampleInputs(inputs,i))
 
     if (_.isFinite(newSample)) {
-      values = values.concat(newSample)
+      values.push(newSample)
+    } else if ([Infinity, -Infinity].includes(newSample)) {
+      errors.push({type: MATH_ERROR, message: 'Divide by zero error'})
+      values.push(newSample)
+    } else if (newSample.constructor.name === 'Unit') {
+      return {values, errors: [{type: PARSER_ERROR, message: "Functions can't contain units or suffixes"}]}
     } else {
+      if (__DEV__) { console.warn('Unidentified sample detected: ', newSample) }
       return {values, errors: [{type: MATH_ERROR, message: 'Sampling error detected'}]}
     }
   }
 
-  return {values}
+  return {values, errors: _.uniq(errors)}
 }

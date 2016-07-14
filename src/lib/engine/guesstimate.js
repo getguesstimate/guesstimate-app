@@ -2,7 +2,7 @@
 
 import type {Guesstimate, Distribution, DGraph, Graph, Simulation} from './types'
 import {Guesstimator} from '../guesstimator/index'
-import {GRAPH_ERROR} from 'lib/errors/modelErrors'
+import {INPUT_ERROR} from 'lib/errors/modelErrors'
 
 export function equals(l, r) {
   return (
@@ -65,8 +65,8 @@ function _inputMetricsWithValues(guesstimate: Guesstimate, dGraph: DGraph): Obje
     const inputErrors = _.get(m, 'simulation.sample.errors') || []
     errors.push(...inputErrors.map(
       ({type, message}) => {
-        if (type === GRAPH_ERROR) { return {type, message: message.replace('Broken input', 'Broken upstream input')} }
-        else { return {type: GRAPH_ERROR, message: `Broken input ${m.readableId}`} }
+        if (type === INPUT_ERROR) { return {type, message: message.replace('Broken input', 'Broken upstream input')} }
+        else { return {type: INPUT_ERROR, message: `Broken input ${m.readableId}`} }
       }
     ))
   })
