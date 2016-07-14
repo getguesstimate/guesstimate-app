@@ -1,24 +1,24 @@
-import {parse} from './formatter/index.js'
-import {samplerTypes} from './types.js'
+import {parse} from './formatter/index'
+import {samplerTypes} from './types'
 
 //Guesstimator.parse({text: '3+123+FA'}]})
 export class Guesstimator {
   static parse(unparsedInput) {
-    const [parsedErrors, parsedInput] = parse(unparsedInput)
-    const newItem = new this({unparsedInput, parsedErrors, parsedInput})
-    return [parsedErrors, newItem]
+    const [parsedError, parsedInput] = parse(unparsedInput)
+    const newItem = new this({unparsedInput, parsedError, parsedInput})
+    return [parsedError, newItem]
   }
 
   static samplerTypes = samplerTypes
 
-  constructor({unparsedInput, parsedErrors, parsedInput}){
-    this.unparsedInput = unparsedInput;
-    this.parsedErrors = parsedErrors || [];
-    this.parsedInput = parsedInput;
+  constructor({unparsedInput, parsedError, parsedInput}){
+    this.unparsedInput = unparsedInput
+    this.parsedError = parsedError || {}
+    this.parsedInput = parsedInput
   }
 
   hasParsingErrors() {
-    return !!this.parsedErrors.length
+    return !_.isEmpty(this.parsedError)
   }
 
   samplerType() {
@@ -30,8 +30,8 @@ export class Guesstimator {
   }
 
   sample(n, externalInputs = []) {
-    if (!_.isEmpty(this.parsedErrors)){
-      return Promise.resolve({errors: this.parsedErrors, values: []})
+    if (!_.isEmpty(this.parsedError)){
+      return Promise.resolve({errors: [this.parsedError], values: []})
     }
 
     const samplerType = this.samplerType()

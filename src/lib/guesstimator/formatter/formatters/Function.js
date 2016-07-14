@@ -1,21 +1,8 @@
-import {textMixin, isParseableNumber, parseNumber} from './lib.js'
+import {PARSER_ERROR} from 'lib/errors/modelErrors'
 
-export const item = Object.assign(
-  {}, textMixin,
-  {
-    guesstimateType: 'FUNCTION',
-    inputType: 'TEXT',
-    formatterName: 'FUNCTION',
-    _matchesText(text) { return (text[0] === '=') },
-
-    format(g) {
-      return {
-        guesstimateType: this.guesstimateType,
-        text: this._formatText(g.text),
-      }
-    },
-
-    errors(g) {return []},
-    _formatText(text) { return text.substring(1, text.length) },
-  }
-)
+export const item = {
+  formatterName: 'FUNCTION',
+  matches({text}) { return !!text && text.startsWith('=') },
+  error({text}) { return text.length > 1 ? {} : {type: PARSER_ERROR, message: 'Missing function body'}},
+  format({text}) { return {guesstimateType: 'FUNCTION', text: text.slice(1)} },
+}

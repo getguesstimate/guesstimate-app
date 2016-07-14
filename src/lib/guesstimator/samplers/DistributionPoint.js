@@ -1,5 +1,5 @@
 export var Sampler = {
-  sample(formatted) {
-    return Promise.resolve({values: [formatted.value]})
+  sample({params: [value]}) {
+    return Promise.resolve({values: [value]})
   }
 }

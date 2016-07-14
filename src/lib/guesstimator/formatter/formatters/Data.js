@@ -1,5 +1,3 @@
-import {textMixin, isParseableNumber, parseNumber} from './lib.js'
-
 export function formatData(value) {
   return value
     .replace(/[\[\]]/g, '')
@@ -13,16 +11,8 @@ export function formatData(value) {
 export const isData = input => !input.includes('=') && (input.match(/[\n\s,]/g) || []).length > 3
 
 export const item = {
-  guesstimateType: 'DATA',
-  inputType: 'TEXT',
   formatterName: 'DATA',
-
-  format(g) {
-    return {
-      guesstimateType: this.guesstimateType,
-      data: g.data
-    }
-  },
+  error(g) { return {} },
   matches(g) { return !!g.data },
-  errors(g) {return []},
+  format(g) { return { guesstimateType: 'DATA', data: g.data } },
 }

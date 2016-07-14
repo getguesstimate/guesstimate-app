@@ -1,7 +1,8 @@
 /* @flow */
 
-import type {Guesstimate, Distribution, DGraph, Graph, Simulation} from './types.js'
-import {Guesstimator} from '../guesstimator/index.js'
+import type {Guesstimate, Distribution, DGraph, Graph, Simulation} from './types'
+import {Guesstimator} from '../guesstimator/index'
+import {GRAPH_ERROR} from 'lib/errors/modelErrors'
 
 export function equals(l, r) {
   return (
@@ -16,15 +17,15 @@ export const attributes = ['metric', 'input', 'guesstimateType', 'description', 
 export function sample(guesstimate: Guesstimate, dGraph: DGraph, n: number = 1) {
   const metric = guesstimate.metric
 
-  const [parseErrors, item] = Guesstimator.parse(guesstimate)
-  if (parseErrors.length > 0) {
-    return Promise.resolve({ metric, sample: {values: [], errors: parseErrors} })
-  }
+  let errors = []
+  const [parseError, item] = Guesstimator.parse(guesstimate)
+  errors.push(parseError)
 
   const [inputs, inputErrors] = item.needsExternalInputs() ? _inputMetricsWithValues(guesstimate, dGraph) : [{}, []]
+  errors.push(...inputErrors)
 
-  if (inputErrors.length > 0) {
-    return Promise.resolve({ metric, sample: {values: [], errors: inputErrors} })
+  if (!_.isEmpty(errors)) {
+    return Promise.resolve({ metric, sample: {values: [], errors} })
   }
 
   return item.sample(n, inputs).then(sample => ({ metric, sample }))
@@ -53,14 +54,7 @@ export function newGuesstimateType(newGuesstimate) {
 //Check if a function; if not, return []
 export function inputMetrics(guesstimate: Guesstimate, dGraph: DGraph): Array<Object> {
   if (!_.has(dGraph, 'metrics')){ return [] }
-  return dGraph.metrics.filter( m => (guesstimate.input || '').includes(m.readableId) );
-}
-
-function _formatInputError(errorMsg) {
-  if (errorMsg === 'BROKEN_INPUT' || errorMsg === 'BROKEN_UPSTREAM') {
-    return 'BROKEN_UPSTREAM'
-  }
-  return 'BROKEN_INPUT'
+  return dGraph.metrics.filter( m => (guesstimate.input || '').includes(m.readableId) )
 }
 
 function _inputMetricsWithValues(guesstimate: Guesstimate, dGraph: DGraph): Object{
@@ -68,8 +62,13 @@ function _inputMetricsWithValues(guesstimate: Guesstimate, dGraph: DGraph): Obje
   let errors = []
   inputMetrics(guesstimate, dGraph).map(m => {
     inputs[m.readableId] = _.get(m, 'simulation.sample.values')
-    const inputErrors = _.get(m, 'simulation.sample.errors')
-    errors = errors.concat(inputErrors ? inputErrors.map(_formatInputError) : [])
+    const inputErrors = _.get(m, 'simulation.sample.errors') || []
+    errors.push(...inputErrors.map(
+      ({type, message}) => {
+        if (type === GRAPH_ERROR) { return {type, message: message.replace('Broken input', 'Broken upstream input')} }
+        else { return {type: GRAPH_ERROR, message: `Broken input ${m.readableId}`} }
+      }
+    ))
   })
   return [inputs, _.uniq(errors)]
 }
