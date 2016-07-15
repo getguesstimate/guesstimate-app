@@ -7,6 +7,7 @@ import {changeActionState} from 'gModules/canvas_state/actions'
 import {saveCheckpoint} from 'gModules/checkpoints/actions'
 import * as userActions from 'gModules/users/actions'
 import * as organizationActions from 'gModules/organizations/actions'
+import * as calculatorActions from 'gModules/calculators/actions'
 import {initSpace} from 'gModules/checkpoints/actions'
 
 import {rootUrl, setupGuesstimateApi} from 'servers/guesstimate-api/constants'
@@ -59,12 +60,14 @@ export function fetchById(spaceId) {
         return
       }
 
-      dispatch(sActions.fetchSuccess([value]))
+      dispatch(sActions.fetchSuccess([_.omit(value, ['_embedded'])]))
       dispatch(initSpace(spaceId, value.graph))
 
       const user = _.get(value, '_embedded.user')
       const organization = _.get(value, '_embedded.organization')
+      const calculators = (_.get(value, '_embedded.calculators') || []).filter(c => !!c)
 
+      if (!_.isEmpty(calculators)) {dispatch(calculatorActions.sActions.fetchSuccess(calculators))}
       if (!!organization) {dispatch(organizationActions.fetchSuccess([organization]))}
       if (!!user) {
         dispatch(userActions.fetchSuccess([user]))
