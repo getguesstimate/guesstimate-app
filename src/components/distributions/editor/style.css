@@ -21,19 +21,21 @@
   }
 
   .input {
-    color: white;
-    border-radius: 0.15em;
+    border-radius: 0.05em;
     font-size: 0.94em;
-    padding: 0.05em 0.15em 0.05em 0.15em;
+    padding: 0.05em 0.1em 0 0.1em;
     margin: auto 0.07em auto 0.07em;
+    font-weight: 500;
   }
 
   .input.valid {
-    background-color: $green-1;
+    background-color: #c1e4b8;
+    color: #084e14;
   }
 
   .input.error {
-    background-color: #E48585;
+    color: #560606;
+    background-color: #ff9e9e;
   }
 }
 
