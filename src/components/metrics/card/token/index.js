@@ -26,10 +26,10 @@ const MetricReasoningIcon = () => (
   </span>
 )
 
-export const MetricToken = ({anotherFunctionSelected, readableId, onOpenModal, hasGuesstimateDescription}) => (
+export const MetricToken = ({shouldShowReadableId, readableId, onOpenModal, hasGuesstimateDescription}) => (
   <div className='MetricToken'>
-    {anotherFunctionSelected && <MetricReadableId readableId={readableId} /> }
-    {!anotherFunctionSelected && <MetricExpandButton onOpenModal={onOpenModal}/> }
-    {!anotherFunctionSelected && hasGuesstimateDescription && <MetricReasoningIcon/> }
+    {shouldShowReadableId && <MetricReadableId readableId={readableId} /> }
+    {!shouldShowReadableId && <MetricExpandButton onOpenModal={onOpenModal}/> }
+    {!shouldShowReadableId && hasGuesstimateDescription && <MetricReasoningIcon/> }
   </div>
 )
