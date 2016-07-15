@@ -11,6 +11,8 @@ import {ViewOptionToggle} from '../view-options/index'
 import {PrivacyToggle} from '../privacy-toggle/index'
 import {ImportFromSlurpForm} from './import_from_slurp_form'
 
+import {navigateFn} from 'gModules/navigation/actions'
+
 import e from 'gEngine/engine'
 
 import './style.css'
@@ -91,6 +93,7 @@ export class SpaceToolbar extends Component {
       editsAllowed,
       onAllowEdits,
       onForbidEdits,
+      calculators,
     } = this.props
     const ReactTooltipParams = {class: 'small-tooltip', delayShow: 0, delayHide: 0, place: 'bottom', effect: 'solid'}
 
@@ -166,6 +169,7 @@ export class SpaceToolbar extends Component {
             <a onClick={onDeleteMetrics} className={`header-action`} data-tip data-for='delete-button'>
               <Icon name='trash'/>
             </a>
+
             <div className='header-action-border'/>
             <a onClick={onUndo} className={`header-action ${canUndo ? '' : 'disabled'}`} data-tip data-for='undo-button'>
               <Icon name='undo'/>
@@ -173,6 +177,22 @@ export class SpaceToolbar extends Component {
             <a onClick={onRedo} className={`header-action ${canRedo ? '' : 'disabled'}`} data-tip data-for='redo-button'>
               <Icon name='repeat'/>
             </a>
+
+            <div className='header-action-border'/>
+            {!_.isEmpty(calculators) &&
+              <DropDown
+                headerText={'Space Calculators'}
+                openLink={<a className='header-action'><Icon name='calculator'/></a>}
+                position='right'
+              >
+                {_.map(calculators, c => (
+                  <CardListElement
+                    key={c.id}
+                    header={c.title}
+                    onMouseDown={navigateFn(e.calculator.relativePath(c))}/>
+                ))}
+              </DropDown>
+            }
 
             {editableByMe && editsAllowed && <ProgressMessage actionState={actionState}/>}
 

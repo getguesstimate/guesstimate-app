@@ -10,8 +10,9 @@ import * as me from './me'
 import * as user from './user'
 import * as organization from './organization'
 import * as userOrganizationMemberships from './userOrganizationMemberships'
+import * as calculator from './calculator'
 
-let Engine = {
+const Engine = {
   array,
   graph,
   dgraph,
@@ -23,9 +24,10 @@ let Engine = {
   me,
   user,
   organization,
-  userOrganizationMemberships
-};
+  userOrganizationMemberships,
+  calculator,
+}
 
 window.engine = Engine
 
-export default Engine;
+export default Engine
