@@ -25,9 +25,9 @@ export const calculatorSpaceSelector = createSelector(
   calculatorSelector,
   (graph, calculator) => {
     if (!_.has(calculator, 'space_id')) { return {} }
-    const dSpace = e.space.toDSpace(calculator.space_id, graph)
+    const {metrics, is_private} = e.space.toDSpace(calculator.space_id, graph)
 
-    const findById = id => dSpace.metrics.find(m => _sameId(m.id, id))
+    const findById = id => metrics.find(m => _sameId(m.id, id))
 
     const inputs = calculator.input_ids.map(findById).filter(m => relationshipType(m.edges) === INPUT)
     const outputs = calculator.output_ids.map(findById).filter(m => relationshipType(m.edges) !== INPUT)
@@ -36,6 +36,7 @@ export const calculatorSpaceSelector = createSelector(
       calculator,
       inputs,
       outputs,
+      isPrivate: is_private,
     }
   }
 )

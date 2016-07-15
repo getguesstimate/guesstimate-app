@@ -23,8 +23,15 @@
   font-size: 1.6em;
   line-height: 1.2em;
 
-  h1 {
-    font-size: 1.5em;
+  .title-bar {
+    h1 {
+      font-size: 1.5em;
+      display: inline;
+    }
+
+    span.privacy-icon {
+      padding-left: 1em;
+    }
   }
 
   .description {
