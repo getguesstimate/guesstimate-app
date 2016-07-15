@@ -19,6 +19,22 @@
   .suggestion {
     background-color: #b5ddff;
   }
+
+  .input {
+    color: white;
+    border-radius: 0.15em;
+    font-size: 0.94em;
+    padding: 0.05em 0.15em 0.05em 0.15em;
+    margin: auto 0.07em auto 0.07em;
+  }
+
+  .input.valid {
+    background-color: $green-1;
+  }
+
+  .input.error {
+    background-color: #E48585;
+  }
 }
 
 .Guesstimate .TextInput.default-value {

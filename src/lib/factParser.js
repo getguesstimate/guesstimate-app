@@ -6,7 +6,7 @@ import {getSuggestion} from 'gModules/factBank/actions'
 
 const NOUN_REGEX = /(\@[\w]+)/g
 const PROPERTY_REGEX = /[a-zA-Z_](\.[\w]+)/g
-function findWithRegex(regex, contentBlock, callback) {
+export function findWithRegex(regex, contentBlock, callback) {
   const text = contentBlock.getText()
   let matchArr, start
   while ((matchArr = regex.exec(text)) !== null) {
@@ -19,9 +19,7 @@ const NounSpan = props => <span {...props} className='noun'>{props.children}</sp
 const PropertySpan = props => <span {...props} className='property'>{props.children}</span>
 const SuggestionSpan = props => <span {...props} className='suggestion'>{props.children}</span>
 
-const positionDecorator = (start, end, component) => ({strategy: (contentBlock, callback) => {callback(start, end)}, component})
-
-export const STATIC_DECORATOR_LIST = [
+export const FACT_DECORATOR_LIST = [
   {
     strategy: (contentBlock, callback) => { findWithRegex(NOUN_REGEX, contentBlock, callback) },
     component: NounSpan,
@@ -31,7 +29,8 @@ export const STATIC_DECORATOR_LIST = [
     component: PropertySpan,
   },
 ]
-export const STATIC_DECORATOR = {decorator: new CompositeDecorator(STATIC_DECORATOR_LIST)}
+
+const positionDecorator = (start, end, component) => ({strategy: (contentBlock, callback) => {callback(start, end)}, component})
 
 export function addText(editorState, text, maintainCursorPosition = true, anchorOffset = null, focusOffset = null) {
   const selection = editorState.getSelection()
@@ -67,7 +66,7 @@ class Suggestor {
   }
 
   run(){
-    if (!this._shouldSuggest()) { return {suggestion: {text: '', suffix: ''}} }
+    if (!this._shouldSuggest()) { return {suggestion: {text: '', suffix: ''}, extraDecorators: []} }
 
     const partials = this.prevWord.slice(1).split('.')
     const newSuggestion = getSuggestion(partials)
@@ -75,8 +74,9 @@ class Suggestor {
     if (this._shouldRemoveSuggestion(newSuggestion)) {
       const noSuggestion = addText(this.editorState, '', true, this.cursorPosition, this.cursorPosition + this.currentSuggestion.length)
       return {
-        editorState: EditorState.set(noSuggestion, STATIC_DECORATOR),
+        editorState: noSuggestion,
         suggestion: { text: '', suffix: '' },
+        extraDecorators: [],
       }
     } else {
       return this._suggestionEditorState(partials.pop(), newSuggestion)
@@ -101,15 +101,15 @@ class Suggestor {
     if (_.isEmpty(newSuggestion) || !nextWordSuitable) { return {suggestion: {text: '', suffix: ''}} }
 
     const decoratorComponent = inProperty ? PropertySpan : NounSpan
-    const decorator = new CompositeDecorator([
+    const extraDecorators = [
       positionDecorator(cursorPosition - partial.length - 1, cursorPosition, decoratorComponent),
       positionDecorator(cursorPosition, cursorPosition + newSuggestion.length, SuggestionSpan),
-      ...STATIC_DECORATOR_LIST
-    ])
+    ]
 
     return {
-      editorState: EditorState.set(addText(editorState, newSuggestion, true, cursorPosition, cursorPosition+nextWord.length-1), {decorator}),
+      editorState: addText(editorState, newSuggestion, true, cursorPosition, cursorPosition+nextWord.length-1),
       suggestion: {text: newSuggestion, suffix: inProperty ? '' : '.'},
+      extraDecorators,
     }
   }
 }
