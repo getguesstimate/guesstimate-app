@@ -13,7 +13,10 @@ export default class TextInput extends Component{
   displayName: 'Guesstimate-TextInput'
 
   state = {
-    editorState: EditorState.createWithContent(ContentState.createFromText(this.props.value || '')),
+    editorState: EditorState.createWithContent(
+      ContentState.createFromText(this.props.value || ''),
+      new CompositeDecorator(this.decoratorList()),
+    ),
     suggestion: {
       text: '',
       suffix: '',
@@ -27,9 +30,9 @@ export default class TextInput extends Component{
   }
 
   decoratorList() {
-    const [{validInputs, errorInputs}, {extraDecorators}] = [this.props, this.state]
+    const {validInputs, errorInputs} = this.props
 
-    let decorators = [...extraDecorators, ...FACT_DECORATOR_LIST]
+    let decorators = [...(_.get(this, 'state.extraDecorators') || []), ...FACT_DECORATOR_LIST]
 
     if (!_.isEmpty(validInputs)) {
       const validInputsRegex = new RegExp(`(${validInputs.join('|')})`, 'g')
@@ -58,8 +61,11 @@ export default class TextInput extends Component{
     this.onChange(addText(this.state.editorState, text, false, start, end))
   }
 
-  componentDidUpdate() {
-    if (!this.state.decoratorsUpToDate) {
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      !this.state.decoratorsUpToDate ||
+      !_.isEqual(prevState.extraDecorators, this.state.extraDecorators)
+    ) {
       this.updateDecorators()
     }
   }
@@ -97,7 +103,7 @@ export default class TextInput extends Component{
     const {text, suffix} = this.state.suggestion
     const cursorPosition = this.cursorPosition()
     this.replaceAtCaret(`${text}${suffix}`, cursorPosition, cursorPosition + text.length - 1)
-    this.setState({suggestion: {text: '', suffix: ''}})
+    this.setState({suggestion: {text: '', suffix: ''}, extraDecorators: [], decoratorsUpToDate: false})
   }
 
   cursorPosition(editorState = this.state.editorState) { return editorState.getSelection().getFocusOffset() }
