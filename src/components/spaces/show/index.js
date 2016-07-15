@@ -9,7 +9,7 @@ import {SpaceToolbar} from './Toolbar/index'
 import {SpaceSidebar} from './sidebar'
 import {ClosedSpaceSidebar} from './closed_sidebar'
 import Canvas from 'gComponents/spaces/canvas'
-import {CalculatorNewContainer} from 'gComponents/calculators/new/CalculatorNew'
+import {CalculatorNewContainer} from 'gComponents/calculators/new/container'
 
 import {denormalizedSpaceSelector} from '../denormalized-space-selector'
 
