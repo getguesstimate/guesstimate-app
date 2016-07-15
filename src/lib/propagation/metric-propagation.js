@@ -1,11 +1,13 @@
 /* @flow */
 
-import _ from 'lodash';
+import _ from 'lodash'
 
-import e from 'gEngine/engine';
-import type {Simulation, Graph} from '../lib/engine/types.js'
+import e from 'gEngine/engine'
+import type {Simulation, Graph} from '../lib/engine/types'
 import {addSimulation} from 'gModules/simulations/actions'
 import Simulator from './simulator'
+
+import {INFINITE_LOOP_ERROR, INTERNAL_ERROR} from 'lib/errors/modelErrors'
 
 function isRecentPropagation(propagationId: number, simulation: Simulation) {
   return !_.has(simulation, 'propagationId') || (propagationId >= simulation.propagationId)
@@ -13,7 +15,7 @@ function isRecentPropagation(propagationId: number, simulation: Simulation) {
 
 function hasNoUncertainty(simulation: Simulation) {
   if (_.has(simulation, 'sample.values')){
-    const v = simulation.sample.values;
+    const v = simulation.sample.values
     return (_.uniq(_.slice(v, 0, 5)).length === 1)
   } else { return false }
 }
@@ -56,7 +58,7 @@ export default class MetricPropagation {
         propagationId: this.propagationId,
         sample: {
           values: [],
-          errors: ['INFINITE_LOOP']
+          errors: [{type: INFINITE_LOOP_ERROR, message: 'Infinite loop detected'}],
         }
       }
       this._dispatch(dispatch, simulation)
@@ -68,12 +70,12 @@ export default class MetricPropagation {
       return this._simulate(sampleCount, graph, dispatch).then(
         simulation => {
           if (simulation) {
-            const errors = this.errors(simulation)
             this._dispatch(dispatch, simulation)
 
             this.stepNumber++
 
-            if (errors[0]) { this.halted = true }
+            const errors = this.errors(simulation)
+            if (!_.isEmpty(errors)) { this.halted = true }
           }
         }
       )
@@ -111,13 +113,13 @@ export default class MetricPropagation {
 
   errors(simulation): Boolean {
     if (hasSimulationErrors(simulation)) {
-      return (['SIMULATION_ERROR', e.simulation.errors(simulation) ])
+      return e.simulation.errors(simulation)
     } else if (hasNoValues(simulation)) {
-      return ['NO_VALUES', null]
+      return [{type: INTERNAL_ERROR, message: 'No samples generated'}]
     } else if (hasNonNumberValues(simulation)) {
-      return ['NON_NUMBER_VALUES', null]
+      return [{type: INTERNAL_ERROR, message: 'Non numeric samples generated'}]
     } else {
-       return [null, null]
+       return []
     }
   }
 }

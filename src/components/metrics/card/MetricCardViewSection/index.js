@@ -9,10 +9,12 @@ import StatTable from 'gComponents/simulations/stat_table/index'
 import {MetricToken} from 'gComponents/metrics/card/token/index'
 import SensitivitySection from 'gComponents/metrics/card/SensitivitySection/SensitivitySection'
 
+import {INFINITE_LOOP_ERROR, INPUT_ERROR} from 'lib/errors/modelErrors'
+
 import './style.css'
 
-const isBreak = (errors) => {return errors[0] && (errors[0] === 'BROKEN_UPSTREAM' || errors[0] === 'BROKEN_INPUT' )}
-const isInfiniteLoop = (errors) => {return errors[0] && (errors[0] === 'INFINITE_LOOP')}
+const isBreak = (errors) => _.some(errors, e => e.type === INPUT_ERROR)
+const isInfiniteLoop = (errors) => _.some(errors, e => e.type === INFINITE_LOOP_ERROR)
 
 // We have to display this section after it disappears
 // to ensure that the metric card gets selected after click.

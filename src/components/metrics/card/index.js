@@ -205,7 +205,7 @@ export default class MetricCard extends Component {
   }
 
   _errors() {
-    if (this.props.isTitle){ return [] }
+    if (this.props.isTitle) { return [] }
     const errors = _.get(this.props.metric, 'simulation.sample.errors') || []
     return errors.filter(e => !!e)
   }
@@ -246,6 +246,7 @@ export default class MetricCard extends Component {
           {this.state.modalIsOpen &&
             <MetricModal
               metric={metric}
+              errors={errors}
               closeModal={this.closeModal.bind(this)}
               onChangeGuesstimateDescription={this.onChangeGuesstimateDescription.bind(this)}
             />
@@ -281,7 +282,7 @@ export default class MetricCard extends Component {
                 onOpen={this.openModal.bind(this)}
                 ref='DistributionEditor'
                 size='small'
-                errors={errors}
+                errors={this.state.modalIsOpen ? [] : errors}
                 onReturn={this.props.onReturn}
                 onTab={this.props.onTab}
               />

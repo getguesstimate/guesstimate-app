@@ -1,15 +1,17 @@
-import * as _metric from './metric';
-import * as _dgraph from './dgraph';
-import * as _space from './space';
-import BasicGraph from '../basic_graph/basic-graph.js'
+import * as _metric from './metric'
+import * as _dgraph from './dgraph'
+import * as _space from './space'
+
+import BasicGraph from 'lib/basic_graph/basic-graph'
+import {INFINITE_LOOP_ERROR} from 'lib/errors/modelErrors'
 
 export function create(graphAttributes){
-  return _.pick(graphAttributes, ['metrics', 'guesstimates', 'simulations']);
+  return _.pick(graphAttributes, ['metrics', 'guesstimates', 'simulations'])
 }
 
 export function denormalize(graph){
-  let metrics = _.map(graph.metrics, m => _metric.denormalize(m, graph));
-  return {metrics};
+  let metrics = _.map(graph.metrics, m => _metric.denormalize(m, graph))
+  return {metrics}
 }
 
 export function runSimulation(graph, metricId, n) {
@@ -17,7 +19,7 @@ export function runSimulation(graph, metricId, n) {
 }
 
 export function metric(graph, id){
-  return graph.metrics.find(m => (m.id === id));
+  return graph.metrics.find(m => (m.id === id))
 }
 
 function basicGraph(graph){
@@ -36,7 +38,12 @@ export function dependencyList(graph, spaceId) {
 export function dependencyTree(oGraph, graphFilters) {
   const {spaceId, metricId, onlyHead, notHead, onlyUnsimulated} = graphFilters
 
-  if (onlyHead) { return [[metricId, 0]] }
+  if (onlyHead) {
+    const existingErrors = _.get(oGraph.simulations.find(s => s.metric === metricId), 'sample.errors')
+    // This is a hack to prevent the error type from changing while editing metrics with infinite loops.
+    // TODO(matthew): Store denormalized check so this hack is not necessary.
+    if (!_.some(existingErrors, e => e.type === INFINITE_LOOP_ERROR)) { return [[metricId, 0]] }
+  }
 
   let graph = oGraph
   if (spaceId) { graph = _space.subset(oGraph, spaceId) }

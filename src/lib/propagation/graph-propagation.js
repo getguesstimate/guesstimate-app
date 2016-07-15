@@ -55,11 +55,7 @@ export class GraphPropagation {
 
   _step() {
     const i = (this.currentStep % this.orderedMetricIds.length)
-    return this._simulateMetric(this.orderedMetricPropagations[i]).then(() => {this.currentStep++})
-  }
-
-  _simulateMetric(metricPropagation) {
-    return metricPropagation.step(this._graph(), this.dispatch)
+    return this.orderedMetricPropagations[i].step(this._graph(), this.dispatch).then(() => {this.currentStep++})
   }
 
   _graph(): Graph {
@@ -71,7 +67,7 @@ export class GraphPropagation {
 
   _orderedMetricIdsAndErrors(graphFilters: object): Array<Object> {
     this.dependencies = e.graph.dependencyTree(this._graph(), graphFilters)
-    const orderedMetrics = _.sortBy(this.dependencies, function(n){return n[1]}).map(e => ({
+    const orderedMetrics = _.sortBy(this.dependencies, n => n[1]).map(e => ({
       id: e[0],
       errors: {
         inInfiniteLoop: !_.isFinite(e[1])

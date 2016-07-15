@@ -2,9 +2,11 @@ import React, {Component, PropTypes} from 'react'
 
 import $ from 'jquery'
 import {EditorState, Editor, ContentState, Modifier, CompositeDecorator} from 'draft-js'
+import ReactTooltip from 'react-tooltip'
 
 import {isData, formatData} from 'lib/guesstimator/formatter/formatters/Data'
 import {getFactParams, addText, addSuggestionToEditorState, STATIC_DECORATOR, STATIC_DECORATOR_LIST} from 'lib/factParser'
+import {INTERNAL_ERROR} from 'lib/errors/modelErrors'
 
 export default class TextInput extends Component{
   displayName: 'Guesstimate-TextInput'
@@ -45,7 +47,7 @@ export default class TextInput extends Component{
     }
     this.setState(newState)
 
-    const text = newState.editorState.getCurrentContent().getPlainText('')
+    const text = newState.editorState.getCurrentContent().getPlainText('').trim()
     if (text === this.props.value) { return }
     if (isData(text)) {
       this.props.onChangeData(formatData(text))
@@ -80,27 +82,37 @@ export default class TextInput extends Component{
   }
 
   render() {
-    const [{hasErrors, width, value}, {editorState}] = [this.props, this.state]
-    const className = `TextInput ${width}` + (_.isEmpty(value) && hasErrors ? ' hasErrors' : '')
+    const ReactTooltipParams = {class: 'metric-errors-tooltip', delayShow: 0, delayHide: 0, type: 'error', place: 'left', effect: 'solid'}
+    const [{errors, width, value}, {editorState}] = [this.props, this.state]
+    const hasErrors = !_.isEmpty(errors)
+    const className = `TextInput ${width}` + (!_.isEmpty(value) && hasErrors ? ' hasErrors' : '')
+    const displayedError = errors.find(e => e.type !== INTERNAL_ERROR)
     return (
-      <span
-        className={className}
-        onClick={this.focus.bind(this)}
-        onKeyDown={e => {e.stopPropagation()}}
-        onFocus={this.handleFocus.bind(this)}
-      >
-        <Editor
-          onFocus={this.props.onFocus}
-          onEscape={this.props.onEscape}
-          editorState={editorState}
-          handleReturn={e => this.props.onReturn(e.shiftKey)}
-          onTab={this.handleTab.bind(this)}
-          onBlur={this.handleBlur.bind(this)}
-          onChange={this.onChange.bind(this)}
-          ref='editor'
-          placeholder={'value'}
-        />
-      </span>
+      <div>
+        {hasErrors && !!displayedError &&
+          <ReactTooltip {...ReactTooltipParams} id='errors'> <span>{displayedError.message}</span> </ReactTooltip>
+        }
+        <span
+          className={className}
+          onClick={this.focus.bind(this)}
+          onKeyDown={e => {e.stopPropagation()}}
+          onFocus={this.handleFocus.bind(this)}
+          data-tip
+          data-for='errors'
+        >
+          <Editor
+            onFocus={this.props.onFocus}
+            onEscape={this.props.onEscape}
+            editorState={editorState}
+            handleReturn={e => this.props.onReturn(e.shiftKey)}
+            onTab={this.handleTab.bind(this)}
+            onBlur={this.handleBlur.bind(this)}
+            onChange={this.onChange.bind(this)}
+            ref='editor'
+            placeholder={'value'}
+          />
+        </span>
+      </div>
     )
   }
 }
