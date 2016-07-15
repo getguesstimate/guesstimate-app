@@ -40,6 +40,7 @@ export class TextForm extends Component{
   _textInput() {
     const {
       guesstimate: {input, guesstimateType},
+      inputMetrics,
       onEscape,
       size,
       hasErrors,
@@ -52,12 +53,20 @@ export class TextForm extends Component{
     const {showDistributionSelector} = this.state
     const shouldDisplayType = !(guesstimateType === 'POINT' || guesstimateType === 'FUNCTION')
     const shouldBeWide = !(guesstimateType === 'FUNCTION')
+    const validInputReadableIds = inputMetrics.filter(
+      m => !_.get(m, 'simulation.sample.errors.length') && !!_.get(m, 'simulation.sample.values.length')
+    ).map(m => m.readableId)
+    const errorInputReadableIds = inputMetrics.filter(
+      m => !!_.get(m, 'simulation.sample.errors.length') || !_.get(m, 'simulation.sample.values.length')
+    ).map(m => m.readableId)
 
     return(
       <div className='GuesstimateInputForm'>
         <div className='GuesstimateInputForm--row'>
           <TextInput
             value={input}
+            validInputs={validInputReadableIds}
+            errorInputs={errorInputReadableIds}
             onEscape={onEscape}
             onReturn={onReturn}
             onTab={onTab}

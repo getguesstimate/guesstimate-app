@@ -38,13 +38,9 @@ $editing-background: $grey-1;
   transition: background-color .3s;
   padding: 0.2em;
   max-width: 100%;
-  &:hover:not(:focus) {
-    background-color: $editing-background;
-  }
   &:focus {
     outline: none;
     box-shadow: none;
-    background-color: #D1D9E2;
     color: $black-3;
   }
 }
