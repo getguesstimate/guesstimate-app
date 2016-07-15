@@ -94,6 +94,7 @@ export class SpaceToolbar extends Component {
       onAllowEdits,
       onForbidEdits,
       calculators,
+      makeNewCalculator,
     } = this.props
     const ReactTooltipParams = {class: 'small-tooltip', delayShow: 0, delayHide: 0, place: 'bottom', effect: 'solid'}
 
@@ -179,20 +180,27 @@ export class SpaceToolbar extends Component {
             </a>
 
             <div className='header-action-border'/>
-            {!_.isEmpty(calculators) &&
-              <DropDown
-                headerText={'Space Calculators'}
-                openLink={<a className='header-action'><Icon name='calculator'/></a>}
-                position='right'
-              >
-                {_.map(calculators, c => (
+            <DropDown
+              headerText={'Space Calculators'}
+              openLink={<a className='header-action'><Icon name='calculator'/></a>}
+              position='right'
+            >
+              {[
+                <CardListElement
+                  key={'new'}
+                  header={'New Calculator'}
+                  onMouseDown={makeNewCalculator}
+                  closeOnClick={true}
+                />,
+                ..._.map(calculators, c => (
                   <CardListElement
                     key={c.id}
                     header={c.title}
-                    onMouseDown={navigateFn(e.calculator.relativePath(c))}/>
-                ))}
-              </DropDown>
-            }
+                    onMouseDown={navigateFn(e.calculator.relativePath(c))}
+                  />
+                )),
+              ]}
+            </DropDown>
 
             {editableByMe && editsAllowed && <ProgressMessage actionState={actionState}/>}
 
