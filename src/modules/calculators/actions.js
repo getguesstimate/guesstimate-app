@@ -6,7 +6,7 @@ import app from 'ampersand-app'
 import {initSpace} from 'gModules/checkpoints/actions'
 
 import {captureApiError, generalError} from 'lib/errors/index.js'
-import * as displayErrorsActions from 'gModules/displayErrors/actions.js'
+import * as displayErrorsActions from 'gModules/displayErrors/actions'
 
 import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
 
