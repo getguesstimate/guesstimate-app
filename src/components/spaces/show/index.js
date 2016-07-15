@@ -59,6 +59,7 @@ export default class SpacesShow extends Component {
   state = {
     showSidebar: true,
     attemptedFetch: false,
+    showCalculatorForm: false,
   }
 
   componentWillMount() {
@@ -289,6 +290,7 @@ export default class SpacesShow extends Component {
             canRedo={space.checkpointMetadata.head !== 0}
             onImportSlurp={this.onImportSlurp.bind(this)}
             calculators={space.calculators}
+            makeNewCalculator={() => {this.setState({showCalculatorForm: true})}}
           />
         </div>
 
@@ -310,7 +312,7 @@ export default class SpacesShow extends Component {
             onPaste={this.onPaste.bind(this, true)}
             onCut={this.onCut.bind(this, true)}
           />
-          <CalculatorNewContainer space_id={this._id()}/>
+          {this.state.showCalculatorForm && <CalculatorNewContainer space_id={this._id()}/>}
         </div>
       </div>
     )
