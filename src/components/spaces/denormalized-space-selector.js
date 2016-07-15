@@ -18,7 +18,7 @@ function checkpointMetadata(id, checkpoints) {
 
 const spaceGraphSelector = state => {
   window.recorder.recordSelectorStart(NAME)
-  return _.pick(state, 'spaces', 'metrics', 'guesstimates', 'simulations', 'users', 'organizations', 'userOrganizationMemberships', 'me', 'checkpoints')
+  return _.pick(state, 'spaces', 'calculators', 'metrics', 'guesstimates', 'simulations', 'users', 'organizations', 'userOrganizationMemberships', 'me', 'checkpoints')
 }
 const spaceIdSelector = (_, {spaceId}) => spaceId
 const canvasStateSelector = state => state.canvasState

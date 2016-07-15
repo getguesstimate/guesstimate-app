@@ -287,6 +287,7 @@ export default class SpacesShow extends Component {
             canUndo={space.checkpointMetadata.head !== space.checkpointMetadata.length - 1}
             canRedo={space.checkpointMetadata.head !== 0}
             onImportSlurp={this.onImportSlurp.bind(this)}
+            calculators={space.calculators}
           />
         </div>
 
