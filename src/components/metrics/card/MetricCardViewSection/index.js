@@ -76,6 +76,7 @@ export default class MetricCardViewSection extends Component {
     const hasGuesstimateDescription = !_.isEmpty(guesstimate.description)
     const anotherFunctionSelected = ((metricClickMode === 'FUNCTION_INPUT_SELECT') && !inSelectedCell)
     const hasErrors = (errors.length > 0)
+    const shouldShowReadableId = metricCardView === 'expanded' || anotherFunctionSelected
 
     let className = `MetricCardViewSection ${metricCardView}`
     className += (hasErrors & !inSelectedCell) ? ' hasErrors' : ''
@@ -91,10 +92,10 @@ export default class MetricCardViewSection extends Component {
         }
 
         <div className='MetricTokenSection'>
-          {(hovered || anotherFunctionSelected || hasGuesstimateDescription) &&
+          {(hovered || shouldShowReadableId || hasGuesstimateDescription) &&
             <MetricToken
               readableId={metric.readableId}
-              anotherFunctionSelected={anotherFunctionSelected}
+              shouldShowReadableId={shouldShowReadableId}
               onOpenModal={onOpenModal}
               hasGuesstimateDescription={hasGuesstimateDescription}
             />

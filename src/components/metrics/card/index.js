@@ -234,6 +234,7 @@ export default class MetricCard extends Component {
     const {guesstimate} = metric
     const errors = this._errors()
     const shouldShowSensitivitySection = this._shouldShowSensitivitySection()
+    const shouldShowDistributionEditor = canvasState.metricCardView === 'expanded' || inSelectedCell
 
     return (
       <div className='metricCard--Container'
@@ -271,7 +272,7 @@ export default class MetricCard extends Component {
             onTab={this.props.onTab}
           />
 
-          {inSelectedCell &&
+          {shouldShowDistributionEditor &&
             <div className='section editing'>
               <DistributionEditor
                 guesstimate={metric.guesstimate}
