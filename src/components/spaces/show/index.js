@@ -332,7 +332,7 @@ export class SpaceRightSidebar extends Component {
           <div className='col-xs-8'>
             <h2> New Calculator </h2>
           </div>
-          <div className='col-xs-4'>
+          <div className='col-xs-4 button-close-text'>
             <ButtonCloseText onClick={this.props.onClose}/>
           </div>
         </div>

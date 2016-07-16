@@ -181,7 +181,7 @@ export class SpaceToolbar extends Component {
 
             <div className='header-action-border'/>
             <DropDown
-              headerText={'Space Calculators'}
+              headerText={'Calculators'}
               openLink={<a className='header-action'><Icon name='calculator'/></a>}
               position='right'
             >
