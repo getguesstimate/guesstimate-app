@@ -22,7 +22,7 @@ export class CardListElement extends Component {
 
   _onSelect() {
     const {isSelected, isDisabled} = this.props
-    if ((!isSelected) && (!isDisabled)) {
+    if (!isDisabled) {
       this.props.onMouseDown()
     }
   }

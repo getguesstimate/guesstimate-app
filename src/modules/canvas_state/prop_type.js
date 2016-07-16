@@ -1,17 +1,17 @@
 import {PropTypes} from 'react';
 const PT = PropTypes
 
-export const canvasState = PT.shape({
-  metricCardView,
-  metricClickMode
+export const canvasViewState = PT.shape({
+  analysisViewEnabled: PT.bool,
+  scientificViewEnabled: PT.bool,
+  expandedViewEnabled: PT.bool,
+  edgeView,
 })
 
-export const metricCardView = PT.oneOf([
-  'normal',
-  'scientific',
-  'analysis',
-  'expanded',
-]).isRequired
+export const canvasState = PT.shape({
+  metricClickMode,
+  edgeView,
+})
 
 export const metricClickMode = PT.oneOf([
   'DEFAULT',
@@ -32,7 +32,6 @@ export const saveState = PT.oneOf([
 
 export default PropTypes.shape({
   edgeView: edgeView.isRequired,
-  metricCardView: metricCardView.isRequired,
   metricClickMode: metricClickMode.isRequired,
   saveState: saveState.isRequired
 })

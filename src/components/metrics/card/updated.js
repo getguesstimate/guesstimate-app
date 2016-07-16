@@ -4,9 +4,7 @@ export function hasMetricUpdated(oldProps, newProps) {
     _.get(oldProps, 'selectedMetric.simulation.propagationId') !== _.get(newProps, 'selectedMetric.simulation.propagationId') ||
     _.get(oldProps, 'metric.name') !== _.get(newProps, 'metric.name') ||
     oldProps.inSelectedCell !== newProps.inSelectedCell ||
-    oldProps.canvasState.metricCardView !== newProps.canvasState.metricCardView ||
-    oldProps.canvasState.metricClickMode !== newProps.canvasState.metricClickMode ||
-    oldProps.canvasState.saveState !== newProps.canvasState.saveState ||
+    !_.isEqual(oldProps.canvasState, newProps.canvasState) ||
     oldProps.hovered !== newProps.hovered ||
     !!oldProps.metric.simulation !== !!newProps.metric.simulation ||
     (!!oldProps.metric.simulation && (oldProps.metric.simulation.propagationId !== newProps.metric.simulation.propagationId)) ||

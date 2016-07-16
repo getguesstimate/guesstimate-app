@@ -44,7 +44,7 @@ export default class MetricCardViewSection extends Component {
   }
 
   _shouldShowStatistics() {
-    const isScientific = (this.props.canvasState.metricCardView === 'scientific')
+    const isScientific = (!!this.props.canvasState.scientificViewEnabled)
     const isAvailable = this.showSimulation() && (_.get(this.props, 'metric.simulation.stats').length > 1)
     return isScientific && isAvailable
   }
@@ -57,7 +57,7 @@ export default class MetricCardViewSection extends Component {
 
   render() {
     const {
-      canvasState: {metricCardView, metricClickMode},
+      canvasState: {scientificViewEnabled, expandedViewEnabled, metricClickMode},
       metric,
       inSelectedCell,
       onChangeName,
@@ -76,16 +76,16 @@ export default class MetricCardViewSection extends Component {
     const hasGuesstimateDescription = !_.isEmpty(guesstimate.description)
     const anotherFunctionSelected = ((metricClickMode === 'FUNCTION_INPUT_SELECT') && !inSelectedCell)
     const hasErrors = (errors.length > 0)
-    const shouldShowReadableId = metricCardView === 'expanded' || anotherFunctionSelected
+    const shouldShowReadableId = !!expandedViewEnabled || anotherFunctionSelected
 
-    let className = `MetricCardViewSection ${metricCardView}`
+    let className = 'MetricCardViewSection'
     className += (hasErrors & !inSelectedCell) ? ' hasErrors' : ''
     className += (anotherFunctionSelected) ? ' anotherFunctionSelected' : ''
     return(
       <div className={className} onMouseDown={onMouseDown}>
-        {(metricCardView !== 'basic') && showSimulation &&
+        {showSimulation &&
           <Histogram
-            height={(metricCardView === 'scientific') ? 110 : 30}
+            height={!!scientificViewEnabled ? 110 : 30}
             simulation={metric.simulation}
             cutOffRatio={0.995}
           />

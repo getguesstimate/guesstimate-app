@@ -193,12 +193,10 @@ export default class MetricCard extends Component {
 
   _className() {
     const {inSelectedCell, metric, hovered} = this.props
-    const {canvasState: {metricCardView}} = this.props
     const relationshipClass = relationshipClasses[relationshipType(metric.edges)]
 
     const titleView = !hovered && !inSelectedCell && this._isTitle()
     let className = inSelectedCell ? 'metricCard grid-item-focus' : 'metricCard'
-    className += ` ${metricCardView}`
     className += titleView ? ' titleView' : ''
     className += ' ' + relationshipClass
     return className
@@ -216,9 +214,8 @@ export default class MetricCard extends Component {
   }
 
   _shouldShowSensitivitySection() {
-    const {metric, selectedMetric} = this.props
-    const isAnalysis = (this.props.canvasState.metricCardView === 'analysis')
-    return !!(isAnalysis && selectedMetric && this._shouldShowSimulation(metric) && this._shouldShowSimulation(selectedMetric))
+    const {metric, selectedMetric, canvasState: {analysisViewEnabled}} = this.props
+    return !!(!!analysisViewEnabled && selectedMetric && this._shouldShowSimulation(metric) && this._shouldShowSimulation(selectedMetric))
   }
 
   render() {
@@ -234,7 +231,7 @@ export default class MetricCard extends Component {
     const {guesstimate} = metric
     const errors = this._errors()
     const shouldShowSensitivitySection = this._shouldShowSensitivitySection()
-    const shouldShowDistributionEditor = canvasState.metricCardView === 'expanded' || inSelectedCell
+    const shouldShowDistributionEditor = !!canvasState.expandedViewEnabled || inSelectedCell
 
     return (
       <div className='metricCard--Container'
