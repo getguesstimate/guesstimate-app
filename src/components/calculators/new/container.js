@@ -11,7 +11,6 @@ import {swap, incrementItemPosition, relationshipType} from './helpers.js'
 import {INTERMEDIATE, OUTPUT, INPUT, NOEDGE} from './helpers.js'
 
 import '../shared/style.css'
-import './style.css'
 
 import {EditorState, Editor, ContentState} from 'draft-js'
 function isCalculatorAcceptableMetric(metric) {

@@ -241,11 +241,8 @@
 }
 
 .SpaceRightSidebar {
-  margin: 0;
-  padding: 0;
-  border: none;
-  font-size: 1.25em;
-  width: 25em;
+  width: 30em;
+  overflow-x: hidden;
   overflow-y: auto;
   background: rgba(255,255,255,0.9);
   border-radius: 0;

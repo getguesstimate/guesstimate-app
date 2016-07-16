@@ -19,6 +19,7 @@ import * as simulationActions from 'gModules/simulations/actions'
 import * as copiedActions from 'gModules/copied/actions'
 import {removeSelectedMetrics} from 'gModules/metrics/actions'
 import {undo, redo} from 'gModules/checkpoints/actions'
+import {ButtonCloseText} from 'gComponents/utility/buttons/close'
 
 import {parseSlurp} from 'lib/slurpParser'
 
@@ -313,7 +314,7 @@ export default class SpacesShow extends Component {
             onCut={this.onCut.bind(this, true)}
           />
           {this.state.showCalculatorForm &&
-            <SpaceRightSidebar view={'CalculatorNew'}>
+            <SpaceRightSidebar view={'CalculatorNew'} onClose={() => {this.setState({showCalculatorForm: false})}}>
               <CalculatorNewContainer space_id={this._id()}/>
             </SpaceRightSidebar>
           }
@@ -327,8 +328,13 @@ export class SpaceRightSidebar extends Component {
   render(){
     return (
       <div className='SpaceRightSidebar'>
-        <div className='SpaceRightSidebar--padded-area'>
-          <h2> New Calculator </h2>
+        <div className='SpaceRightSidebar--padded-area row'>
+          <div className='col-xs-8'>
+            <h2> New Calculator </h2>
+          </div>
+          <div className='col-xs-4'>
+            <ButtonCloseText onClick={this.props.onClose}/>
+          </div>
         </div>
         <hr className='SpaceRightSidebar--divider'/>
         {this.props.children}
