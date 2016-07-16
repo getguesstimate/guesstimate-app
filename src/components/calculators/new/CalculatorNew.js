@@ -6,7 +6,6 @@ import * as Calculator from 'gEngine/calculator'
 export class CalculatorNew extends Component {
   metricForm(items, item, index, isInput){
     const props = {
-        ref: `input-${item.metric.id}`,
         key: index,
         name: item.metric.name,
         isFirst: index === 0,
