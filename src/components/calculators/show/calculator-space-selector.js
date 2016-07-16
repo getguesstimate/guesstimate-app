@@ -29,8 +29,8 @@ export const calculatorSpaceSelector = createSelector(
 
     const findById = id => metrics.find(m => _sameId(m.id, id))
 
-    const inputs = calculator.input_ids.map(findById).filter(m => relationshipType(m.edges) === INPUT)
-    const outputs = calculator.output_ids.map(findById).filter(m => relationshipType(m.edges) !== INPUT)
+    const inputs = calculator.input_ids.map(findById).filter(m => !!m && relationshipType(m.edges) === INPUT)
+    const outputs = calculator.output_ids.map(findById).filter(m => !!m && relationshipType(m.edges) !== INPUT)
 
     return {
       calculator,
