@@ -173,7 +173,6 @@ export class CalculatorNewContainer extends Component {
     if (!this.state.setupNewCalculator){ return (false) }
     return (
       <CalculatorNew
-        ref='form'
         calculator={calculator}
         inputs={inputs}
         outputs={outputs}

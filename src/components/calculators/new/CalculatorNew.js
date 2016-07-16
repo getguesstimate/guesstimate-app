@@ -36,7 +36,7 @@ export class CalculatorNew extends Component {
     const hasHiddenOutputs = !_.isEmpty(invisibleOutputs)
 
     return (
-      <div className='calculator new'>
+      <div className='calculator narrow'>
         <div className='padded-section'>
           <div className='ui form'>
             <h3>
