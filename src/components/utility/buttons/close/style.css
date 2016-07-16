@@ -8,3 +8,9 @@
   color: #666;
 }
 
+.ui.button.button-close-text {
+  padding: .5em .8em;
+  i {
+    margin-right: .3em;
+  }
+}
