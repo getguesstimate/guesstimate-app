@@ -17,12 +17,8 @@
   margin: 0;
   padding: 0;
   border: none;
-  font-size: 1.25em;
-  width: 25em;
-  overflow-y: auto;
-  background: rgba(255,255,255,0.9);
   border-radius: 0;
-  border-left: 1px solid #ccc;
+  font-size: 1em;
   .inputs {
     padding-left: 1em;
     margin-top: 0;
@@ -220,5 +216,5 @@
 }
 
 .create-button-section {
-  margin-top: 1em;
+  margin-top: 2em;
 }

@@ -312,8 +312,26 @@ export default class SpacesShow extends Component {
             onPaste={this.onPaste.bind(this, true)}
             onCut={this.onCut.bind(this, true)}
           />
-          {this.state.showCalculatorForm && <CalculatorNewContainer space_id={this._id()}/>}
+          {this.state.showCalculatorForm &&
+            <SpaceRightSidebar view={'CalculatorNew'}>
+              <CalculatorNewContainer space_id={this._id()}/>
+            </SpaceRightSidebar>
+          }
         </div>
+      </div>
+    )
+  }
+}
+
+export class SpaceRightSidebar extends Component {
+  render(){
+    return (
+      <div className='SpaceRightSidebar'>
+        <div className='SpaceRightSidebar--padded-area'>
+          <h2> New Calculator </h2>
+        </div>
+        <hr className='SpaceRightSidebar--divider'/>
+        {this.props.children}
       </div>
     )
   }

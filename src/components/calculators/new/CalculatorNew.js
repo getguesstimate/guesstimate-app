@@ -38,16 +38,23 @@ export class CalculatorNew extends Component {
     return (
       <div className='calculator new'>
         <div className='padded-section'>
-          <h2> New Calculator </h2>
-        </div>
-
-        <hr className='result-divider'/>
-        <div className='padded-section'>
           <div className='ui form'>
             <h3>
-              <textarea rows={1} placeholder={'Calculator Name'} className='field'/>
+              <textarea
+                rows={1}
+                placeholder={'Calculator Name'}
+                value={title}
+                onChange={this.props.onChangeName}
+                className='field'
+              />
             </h3>
-            <textarea rows={3} placeholder={'Explanation (Markdown)'} className='field'/>
+            <textarea
+              rows={3}
+              placeholder={'Explanation (Markdown)'}
+              value={content}
+              onChange={this.props.onChangeContent}
+              className='field'
+            />
           </div>
 
 
@@ -75,8 +82,7 @@ export class CalculatorNew extends Component {
 
             {_.map(visibleOutputs, (input, i) => (
               this.metricForm(visibleOutputs, input, i, false)
-            )
-            )}
+            ))}
 
             {hasHiddenOutputs &&
               <div>
@@ -90,15 +96,12 @@ export class CalculatorNew extends Component {
               </div>
             }
           </div>
-        </div>
-
-        <hr className='result-divider'/>
-
-        <div className='padded-section'>
           <div className='create-button-section'>
             <div className='row'>
               <div className='col-md-5'>
-                <div className='ui button green create-button' onClick={this.props.onSubmit}>
+                <div
+                  className={`ui button green large create-button ${this.props.isValid ? '' : 'disabled'}`}
+                  onClick={this.props.onSubmit}>
                   Create
                 </div>
               </div>

@@ -240,3 +240,29 @@
 .header .dropDown-relative .space-header-action:active {
   background: rgba(255,255,255,0.3);
 }
+
+.SpaceRightSidebar {
+  margin: 0;
+  padding: 0;
+  border: none;
+  font-size: 1.25em;
+  width: 25em;
+  overflow-y: auto;
+  background: rgba(255,255,255,0.9);
+  border-radius: 0;
+  border-left: 1px solid #ccc;
+}
+
+.SpaceRightSidebar h2 {
+  color: #476b82;
+}
+
+.SpaceRightSidebar--divider {
+    margin: 0;
+    border: none;
+    border-bottom: 2px dotted #e8e8e8;
+}
+
+.SpaceRightSidebar--padded-area {
+  padding: 1em 1em;
+}

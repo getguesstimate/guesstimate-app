@@ -7,6 +7,8 @@ import {newCalculatorSelector} from './new-calculator-selector'
 import {fetchById} from 'gModules/spaces/actions'
 import {create} from 'gModules/calculators/actions'
 import {CalculatorNew} from './CalculatorNew.js'
+import {swap, incrementItemPosition, relationshipType} from './helpers.js'
+import {INTERMEDIATE, OUTPUT, INPUT, NOEDGE} from './helpers.js'
 
 import '../shared/style.css'
 import './style.css'
@@ -14,44 +16,6 @@ import './style.css'
 import {EditorState, Editor, ContentState} from 'draft-js'
 function isCalculatorAcceptableMetric(metric) {
   return (!_.isEmpty(metric.name) && !_.isEmpty(_.get(metric, 'guesstimate.input')))
-}
-
-const relationshipType = (edges) => {
-  if (edges.inputs.length && edges.outputs.length) { return INTERMEDIATE }
-  if (edges.inputs.length) { return OUTPUT }
-  if (edges.outputs.length) { return INPUT }
-  return NOEDGE
-}
-
-const INTERMEDIATE = 'INTERMEDIATE'
-const OUTPUT = 'OUTPUT'
-const INPUT = 'INPUT'
-const NOEDGE = 'NOEDGE'
-
-function swap(array, index1, index2){
-  const firstElement = array[index1]
-  const secondElement = array[index2]
-  let newArray = _.clone(array)
-  newArray[index1] = secondElement
-  newArray[index2] = firstElement
-  return newArray
-}
-
-function incrementItemPosition(array, elementName, positiveDirection){
-  const index = _.indexOf(array, elementName)
-  let nextIndex
-  if (positiveDirection) {
-    if (index === array.length - 1) { return array }
-    nextIndex = index + 1
-    const newArray = swap(array, index, nextIndex)
-    return newArray
-  }
-  if (!positiveDirection) {
-    if (index === 0) { return array }
-    nextIndex = index - 1
-    const newArray = swap(array, index, nextIndex)
-    return newArray
-  }
 }
 
 @connect(newCalculatorSelector, dispatch => bindActionCreators({create, fetchById}, dispatch))
@@ -156,11 +120,15 @@ export class CalculatorNewContainer extends Component {
     const {calculator} = this.state
     let {input_ids, output_ids} = calculator
     let change = (this._isInput(id)) ? {input_ids: incrementItemPosition(input_ids, id, isDown)} : {output_ids: incrementItemPosition(output_ids, id, isDown)}
+    this._changeCalculator(change)
+  }
 
+  _changeCalculator(fields){
+    const {calculator} = this.state
     this.setState({
       calculator: {
         ...calculator,
-        ...change
+        ...fields
       }
     })
   }
@@ -181,6 +149,22 @@ export class CalculatorNewContainer extends Component {
     ].map(e => {return {metric: e, isVisible: this._isVisible(e.id)}})
   }
 
+  _onChangeName(e){
+    this._changeCalculator({title: e.target.value})
+  }
+
+  _onChangeContent(e){
+    this._changeCalculator({content: e.target.value})
+  }
+
+  _isValid(){
+    const {calculator} = this.state
+    const hasTitle = !_.isEmpty(calculator.title)
+    const hasInputs = !_.isEmpty(calculator.input_ids)
+    const hasOutputs = !_.isEmpty(calculator.output_ids)
+    return hasTitle && hasInputs && hasOutputs
+  }
+
   render() {
     const {validInputs, validOutputs, calculator} = this.state
     const inputs = this._orderDisplayedMetrics(calculator.input_ids, validInputs)
@@ -189,6 +173,7 @@ export class CalculatorNewContainer extends Component {
     if (!this.state.setupNewCalculator){ return (false) }
     return (
       <CalculatorNew
+        ref='form'
         calculator={calculator}
         inputs={inputs}
         outputs={outputs}
@@ -196,7 +181,10 @@ export class CalculatorNewContainer extends Component {
         onMetricShow={this._onMetricShow.bind(this)}
         onMoveMetricUp={this._onMoveMetricUp.bind(this)}
         onMoveMetricDown={this._onMoveMetricDown.bind(this)}
+        onChangeName={this._onChangeName.bind(this)}
+        onChangeContent={this._onChangeContent.bind(this)}
         onSubmit={this._onCreate.bind(this)}
+        isValid={this._isValid()}
       />
     )
   }
