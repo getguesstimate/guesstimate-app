@@ -11,13 +11,6 @@ const OUTPUT = 'OUTPUT'
 const INPUT = 'INPUT'
 const NOEDGE = 'NOEDGE'
 
-const relationshipType = (edges) => {
-  if (edges.inputs.length && edges.outputs.length) { return INTERMEDIATE }
-  if (edges.inputs.length) { return OUTPUT }
-  if (edges.outputs.length) { return INPUT }
-  return NOEDGE
-}
-
 const spaceIdSelector = (_, {space_id}) => space_id
 const spaceGraphSelector = state => _.pick(state, ['spaces', 'metrics', 'guesstimates', 'simulations', 'users', 'me', 'organizations'])
 
@@ -38,9 +31,6 @@ export const newCalculatorSelector = createSelector(
       edges.outputs = dSpace.edges.filter(i => i.input === s.id).map(e => e.output)
       return Object.assign({}, s, {edges})
     })
-
-    const inputs = dSpace.metrics.filter(m => relationshipType(m.edges) === INPUT)
-    const outputs = dSpace.metrics.filter(m => relationshipType(m.edges) !== INPUT)
 
     return {
       spaceId: dSpace.id,
