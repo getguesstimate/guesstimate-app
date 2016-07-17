@@ -14,6 +14,12 @@ function isCalculatorAcceptableMetric(metric) {
   return !_.isEmpty(metric.name) && !_.isEmpty(_.get(metric, 'guesstimate.input'))
 }
 
+function AddAtIndex(l, e, destIndex) {
+  const index = l.findIndex(el => el === e)
+  if (index >= destIndex) { return [...l.slice(0, destIndex), e, ...l.slice(destIndex, index), ...l.slice(index+1)] }
+  else { return [...l.slice(0, index), ...l.slice(index+1, destIndex+1), e, ...l.slice(destIndex+1)] }
+}
+
 @connect(null, dispatch => bindActionCreators({create, fetchById}, dispatch))
 export class CalculatorNewContainer extends Component {
   state = {
@@ -103,11 +109,10 @@ export class CalculatorNewContainer extends Component {
     return _.some(this.state.validInputs, e => e.id === id)
   }
 
-  _onMoveMetric(id, isDown){
-    const {calculator} = this.state
-    let {input_ids, output_ids} = calculator
-    let change = (this._isInput(id)) ? {input_ids: incrementItemPosition(input_ids, id, isDown)} : {output_ids: incrementItemPosition(output_ids, id, isDown)}
-    this._changeCalculator(change)
+  _onMoveMetricTo(id, destIndex){
+    const {calculator: {input_ids, output_ids}} = this.state
+    const AddId = l => AddAtIndex(l, id, destIndex)
+    this._changeCalculator(this._isInput(id) ? {input_ids: AddId(input_ids)} : {output_ids: AddId(output_ids)})
   }
 
   _changeCalculator(fields){
@@ -119,9 +124,6 @@ export class CalculatorNewContainer extends Component {
       }
     })
   }
-
-  _onMoveMetricUp(id){this._onMoveMetric(id, false)}
-  _onMoveMetricDown(id){this._onMoveMetric(id, true)}
 
   _isVisible(metricId) {
     const {calculator: {input_ids, output_ids}} = this.state
@@ -164,8 +166,7 @@ export class CalculatorNewContainer extends Component {
         outputs={outputs}
         onMetricHide={this._onMetricHide.bind(this)}
         onMetricShow={this._onMetricShow.bind(this)}
-        onMoveMetricUp={this._onMoveMetricUp.bind(this)}
-        onMoveMetricDown={this._onMoveMetricDown.bind(this)}
+        onMoveMetricTo={this._onMoveMetricTo.bind(this)}
         onChangeName={this._onChangeName.bind(this)}
         onChangeContent={this._onChangeContent.bind(this)}
         onSubmit={this._onCreate.bind(this)}
