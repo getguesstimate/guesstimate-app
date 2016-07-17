@@ -14,11 +14,10 @@ export class CalculatorNew extends Component {
     draggingMetricId: null,
   }
 
-  metricForm({metric: {name, id, guesstimate}, isVisible}, isFirst, isLast, isInput) {
+  metricForm({metric: {name, id, guesstimate}, isVisible}, isInput, isDropTarget) {
     const props = {
       name,
-      isFirst,
-      isLast,
+      isDropTarget,
       description: _.get(guesstimate, 'description'),
       isVisible: isVisible,
       onRemove: this.props.onMetricHide.bind(this, id),
@@ -38,14 +37,15 @@ export class CalculatorNew extends Component {
       this.props.onMoveMetricTo(this.state.draggingMetricId, this.state.draggingIndex)
       this.setState({...newState, draggingMetricId: null})
     } else {
+      this.props.onMoveMetricTo(this.state.draggingMetricId, newState.draggingIndex)
       this.setState({...newState})
     }
   }
 
   render() {
-    const [{calculator: {title, content}, inputs, outputs}, {draggingIndex}] = [this.props, this.state]
+    const [{calculator: {title, content}, inputs, outputs}, {draggingIndex, draggingMetricId}] = [this.props, this.state]
 
-    const generateComponents = (metrics, isInput) => _.map(metrics, (m, i) => [this.metricForm(m, i === 0, i === metrics.length -1, isInput), m.metric.id])
+    const generateComponents = (metrics, isInput) => _.map(metrics, (m, i) => [this.metricForm(m, isInput, draggingMetricId === m.metric.id), m.metric.id])
 
     const visibleInputs = generateComponents(inputs.filter(i => i.isVisible), true)
     const invisibleInputs = generateComponents(inputs.filter(i => !i.isVisible), true)
@@ -144,7 +144,7 @@ export class CalculatorNew extends Component {
   }
 }
 
-export const EditSection = ({isFirst, isLast, isVisible, onRemove, onAdd}) => (
+export const EditSection = ({isVisible, onRemove, onAdd}) => (
   <div className='nub'>
     {isVisible &&
       <div>
@@ -160,9 +160,9 @@ export const EditSection = ({isFirst, isLast, isVisible, onRemove, onAdd}) => (
 
 export class InputForm extends Component{
   render () {
-    const {name, description, isVisible} = this.props
+    const {name, description, isVisible, isDropTarget} = this.props
     return (
-      <div className='input'>
+      <div className={`input${isDropTarget ? ' drop-target': ''}`}>
         <div className='row'>
           <div className={`col-xs-12 col-sm-8`}>
             <div className='name'>{name}</div>
@@ -180,9 +180,9 @@ export class InputForm extends Component{
 }
 
 export const OutputForm = (props) => {
-  const {name, isVisible} = props
+  const {name, isVisible, isDropTarget} = props
   return (
-    <div className='output'>
+    <div className={`output${isDropTarget ? ' drop-target': ''}`}>
       <div className='row'>
         <div className={`col-xs-12 col-sm-8`}>
           <div className='name'>
