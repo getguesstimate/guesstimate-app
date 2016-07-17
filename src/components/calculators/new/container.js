@@ -120,7 +120,7 @@ export class CalculatorNewContainer extends Component {
     let change = {}
     if (this._isInput(id)) {
       const index = input_ids.findIndex(i => i === id)
-      if (index <= destIndex) {
+      if (index >= destIndex) {
         change.input_ids = [
           ...input_ids.slice(0, destIndex),
           id,
@@ -130,13 +130,28 @@ export class CalculatorNewContainer extends Component {
       } else {
         change.input_ids = [
           ...input_ids.slice(0, index),
-          ...input_ids.slice(index+1, destIndex),
+          ...input_ids.slice(index+1, destIndex+1),
           id,
-          ...input_ids.slice(destIndex),
+          ...input_ids.slice(destIndex+1),
         ]
       }
     } else {
-      output_ids: output_ids.splice(destIndex, 0, id)
+      const index = output_ids.findIndex(i => i === id)
+      if (index >= destIndex) {
+        change.output_ids = [
+          ...output_ids.slice(0, destIndex),
+          id,
+          ...output_ids.slice(destIndex, index),
+          ...output_ids.slice(index+1),
+        ]
+      } else {
+        change.output_ids = [
+          ...output_ids.slice(0, index),
+          ...output_ids.slice(index+1, destIndex+1),
+          id,
+          ...output_ids.slice(destIndex+1),
+        ]
+      }
     }
     this._changeCalculator(change)
   }

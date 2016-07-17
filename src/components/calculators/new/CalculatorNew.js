@@ -12,7 +12,6 @@ export class CalculatorNew extends Component {
   state = {
     draggingIndex: null,
     draggingMetricId: null,
-    dropTargetId: null,
   }
 
   metricForm({metric: {name, id, guesstimate}, isVisible}, isFirst, isLast, isInput) {
@@ -36,12 +35,12 @@ export class CalculatorNew extends Component {
 
   updateDragState(id, newState) {
     if (!this.state.draggingMetricId) {
-      this.setState({...newState, draggingMetricId: id, dropTargetId: null})
+      this.setState({...newState, draggingMetricId: id})
     } else if (_.isNull(newState.draggingIndex)) {
       this.props.onMoveMetricTo(this.state.draggingMetricId, this.state.draggingIndex)
-      this.setState({...newState, draggingMetricId: null, dropTargetId: null})
+      this.setState({...newState, draggingMetricId: null})
     } else {
-      this.setState({...newState, dropTargetId: id})
+      this.setState({...newState})
     }
   }
 
@@ -100,13 +99,11 @@ export class CalculatorNew extends Component {
           ))}
         </div>
 
-        {false && hasHiddenInputs &&
+        {hasHiddenInputs &&
           <div>
             <div className='inputs'>
               <h3> Hidden Inputs </h3>
-              {_.map(invisibleInputs, (input, i) => (
-                this.metricForm(invisibleInputs, input,i, true)
-              ))}
+              {_.map(invisibleInputs, ([item, id], i) => item)}
             </div>
           </div>
           }
@@ -114,19 +111,23 @@ export class CalculatorNew extends Component {
 
           <div className='outputs'>
             <h3> {`${hasHiddenOutputs ? "Visible " : ""}Outputs`} </h3>
-
-            {false && _.map(visibleOutputs, (input, i) => (
-              this.metricForm(visibleOutputs, input, i, false)
+            {_.map(visibleOutputs, ([item, id], i) => (
+              <SortableListItem
+                key = {i}
+                sortId = {i}
+                draggingIndex={draggingIndex}
+                updateState={this.updateDragState.bind(this, id)}
+                outline={'list'}
+                items = {visibleOutputs}
+                item = {item}
+              />
             ))}
 
-            {false && hasHiddenOutputs &&
+            {hasHiddenOutputs &&
               <div>
                 <div className=' outputs'>
                   <h3> Hidden Outputs </h3>
-                  {_.map(invisibleOutputs, (input, i) => (
-                    this.metricForm(invisibleOutputs, input, i, false)
-                    )
-                  )}
+                  {_.map(invisibleOutputs, ([item, id], i) => item)}
                 </div>
               </div>
             }
@@ -154,8 +155,6 @@ export const EditSection = ({isFirst, isLast, isVisible, onRemove, onAdd, onMove
     {isVisible &&
       <div>
         <a onMouseDown={onRemove} className='ui button'>hide</a>
-        {!isFirst && <a onMouseDown={onMoveUp} className='ui button'><Icon name='chevron-up'/></a>}
-        {!isLast && <a onMouseDown={onMoveDown} className='ui button'><Icon name='chevron-down'/></a>}
       </div>
     }
     {!isVisible &&
@@ -166,17 +165,18 @@ export const EditSection = ({isFirst, isLast, isVisible, onRemove, onAdd, onMove
 
 export class InputForm extends Component{
   render () {
-    const {name, description} = this.props
+    const {name, description, isVisible} = this.props
     return (
       <div className='input'>
         <div className='row'>
-          <div className='col-xs-12 col-sm-7'>
+          {isVisible && <div className='col-xs-12 col-sm-1'> <a className='ui button'><Icon name='bars' /></a> </div>}
+          <div className={`col-xs-12 col-sm-${isVisible ? '8' : '9'}`}>
             <div className='name'>{name}</div>
             {description &&
               <div className='description'>{description}</div>
             }
           </div>
-          <div className='col-xs-12 col-sm-5'>
+          <div className='col-xs-12 col-sm-3'>
             <EditSection {...this.props}/>
           </div>
         </div>
@@ -186,15 +186,17 @@ export class InputForm extends Component{
 }
 
 export const OutputForm = (props) => {
+  const {name, isVisible} = props
   return (
     <div className='output'>
       <div className='row'>
-        <div className='col-xs-12 col-sm-7'>
+        {isVisible && <div className='col-xs-12 col-sm-1'> <a className='ui button'><Icon name='bars' /></a> </div>}
+        <div className={`col-xs-12 col-sm-${isVisible ? '8' : '9'}`}>
           <div className='name'>
-            {props.name}
+            {name}
           </div>
         </div>
-        <div className='col-xs-12 col-sm-5'>
+        <div className='col-xs-12 col-sm-3'>
             <EditSection {...props}/>
         </div>
       </div>
