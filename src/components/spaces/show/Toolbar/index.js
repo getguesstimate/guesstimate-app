@@ -187,19 +187,21 @@ export class SpaceToolbar extends Component {
               position='right'
             >
               {[
-                <CardListElement
-                  key={'new'}
-                  header={'New Calculator'}
-                  onMouseDown={makeNewCalculator}
-                  closeOnClick={true}
-                />,
                 ..._.map(calculators, c => (
                   <CardListElement
                     key={c.id}
                     header={c.title}
                     onMouseDown={navigateFn(e.calculator.relativePath(c))}
+                    icon={'calculator'}
                   />
                 )),
+                <CardListElement
+                  key={'new'}
+                  header={'New Calculator'}
+                  onMouseDown={makeNewCalculator}
+                  closeOnClick={true}
+                  icon={'plus'}
+                />
               ]}
             </DropDown>
 
