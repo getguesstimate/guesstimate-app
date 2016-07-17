@@ -149,6 +149,7 @@ export const EditSection = ({isFirst, isLast, isVisible, onRemove, onAdd}) => (
     {isVisible &&
       <div>
         <a onMouseDown={onRemove} className='ui button'>hide</a>
+        <a className='ui button'><Icon name='bars' /></a>
       </div>
     }
     {!isVisible &&
@@ -163,14 +164,13 @@ export class InputForm extends Component{
     return (
       <div className='input'>
         <div className='row'>
-          {isVisible && <div className='col-xs-12 col-sm-1'> <a className='ui button'><Icon name='bars' /></a> </div>}
-          <div className={`col-xs-12 col-sm-${isVisible ? '8' : '9'}`}>
+          <div className={`col-xs-12 col-sm-8`}>
             <div className='name'>{name}</div>
             {description &&
               <div className='description'>{description}</div>
             }
           </div>
-          <div className='col-xs-12 col-sm-3'>
+          <div className='col-xs-12 col-sm-4'>
             <EditSection {...this.props}/>
           </div>
         </div>
@@ -184,14 +184,13 @@ export const OutputForm = (props) => {
   return (
     <div className='output'>
       <div className='row'>
-        {isVisible && <div className='col-xs-12 col-sm-1'> <a className='ui button'><Icon name='bars' /></a> </div>}
-        <div className={`col-xs-12 col-sm-${isVisible ? '8' : '9'}`}>
+        <div className={`col-xs-12 col-sm-8`}>
           <div className='name'>
             {name}
           </div>
         </div>
-        <div className='col-xs-12 col-sm-3'>
-            <EditSection {...props}/>
+        <div className='col-xs-12 col-sm-4'>
+          <EditSection {...props}/>
         </div>
       </div>
     </div>
