@@ -180,28 +180,34 @@ export class SpaceToolbar extends Component {
               <Icon name='repeat'/>
             </a>
 
-            <div className='header-action-border'/>
-            <DropDown
-              headerText={'Calculators'}
-              openLink={<a className='header-action'><Icon name='calculator'/></a>}
-              position='right'
-            >
-              {[
-                <CardListElement
-                  key={'new'}
-                  header={'New Calculator'}
-                  onMouseDown={makeNewCalculator}
-                  closeOnClick={true}
-                />,
-                ..._.map(calculators, c => (
-                  <CardListElement
-                    key={c.id}
-                    header={c.title}
-                    onMouseDown={navigateFn(e.calculator.relativePath(c))}
-                  />
-                )),
-              ]}
-            </DropDown>
+            {(editableByMe || !_.isEmpty(calculators)) && 
+              <div>
+                <div className='header-action-border'/>
+                <DropDown
+                  headerText={'Calculators'}
+                  openLink={<a className='header-action'><Icon name='calculator'/></a>}
+                  position='right'
+                >
+                  {[
+                    editableByMe && (
+                      <CardListElement
+                        key={'new'}
+                        header={'New Calculator'}
+                        onMouseDown={makeNewCalculator}
+                        closeOnClick={true}
+                      />
+                    ),
+                    ..._.map(calculators, c => (
+                      <CardListElement
+                        key={c.id}
+                        header={c.title}
+                        onMouseDown={navigateFn(e.calculator.relativePath(c))}
+                      />
+                    )),
+                  ]}
+                </DropDown>
+              </div>
+            }
 
             {editableByMe && editsAllowed && <ProgressMessage actionState={actionState}/>}
 
