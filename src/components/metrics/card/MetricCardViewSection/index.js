@@ -69,8 +69,10 @@ export default class MetricCardViewSection extends Component {
       isInScreenshot,
     } = this.props
 
+
     const errors = this._errors()
-    const {guesstimate} = metric
+    const {guesstimate, simulation, readableId} = metric
+
     const stats = _.get(metric, 'simulation.stats')
     const showSimulation = this.showSimulation()
     const shouldShowStatistics = this._shouldShowStatistics()
@@ -87,7 +89,7 @@ export default class MetricCardViewSection extends Component {
         {showSimulation &&
           <Histogram
             height={!!scientificViewEnabled ? 110 : 30}
-            simulation={metric.simulation}
+            simulation={simulation}
             cutOffRatio={0.995}
           />
         }
@@ -95,7 +97,7 @@ export default class MetricCardViewSection extends Component {
         <div className='MetricTokenSection'>
           {(hovered || shouldShowReadableId || hasGuesstimateDescription) &&
             <MetricToken
-              readableId={metric.readableId}
+              readableId={readableId}
               shouldShowReadableId={shouldShowReadableId}
               onOpenModal={onOpenModal}
               hasGuesstimateDescription={hasGuesstimateDescription}
