@@ -23,8 +23,6 @@ export class CalculatorNew extends Component {
       isVisible: isVisible,
       onRemove: this.props.onMetricHide.bind(this, id),
       onAdd: this.props.onMetricShow.bind(this, id),
-      onMoveUp: this.props.onMoveMetricUp.bind(this, id),
-      onMoveDown: this.props.onMoveMetricDown.bind(this, id),
     }
     if (isInput) {
       return <InputForm {...props}/>
@@ -42,10 +40,6 @@ export class CalculatorNew extends Component {
     } else {
       this.setState({...newState})
     }
-  }
-
-  componentDidUpdate() {
-    //console.log(this.state.draggingMetricId, this.state.dropTargetId, this.state.draggingIndex)
   }
 
   render() {
@@ -150,7 +144,7 @@ export class CalculatorNew extends Component {
   }
 }
 
-export const EditSection = ({isFirst, isLast, isVisible, onRemove, onAdd, onMoveUp, onMoveDown}) => (
+export const EditSection = ({isFirst, isLast, isVisible, onRemove, onAdd}) => (
   <div className='nub'>
     {isVisible &&
       <div>
