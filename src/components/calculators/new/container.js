@@ -58,7 +58,7 @@ export class CalculatorNewContainer extends Component {
   validMetrics(metrics) {
     const validMetrics = metrics.filter(m => isCalculatorAcceptableMetric)
     const validInputs = validMetrics.filter(m => relationshipType(m.edges) === INPUT)
-    const validOutputs = validMetrics.filter(m => relationshipType(m.edges) === OUTPUT)
+    const validOutputs = validMetrics.filter(m => relationshipType(m.edges) === OUTPUT || relationshipType(m.edges) === INTERMEDIATE)
     return {validInputs, validOutputs}
   }
 
