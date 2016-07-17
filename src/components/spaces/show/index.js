@@ -113,6 +113,16 @@ export default class SpacesShow extends Component {
     }
   }
 
+  showCalculatorForm() {
+    elev.hide()
+    this.setState({showCalculatorForm: true})
+  }
+
+  hideCalculatorForm() {
+    this.setState({showCalculatorForm: false})
+    elev.show()
+  }
+
   onSave() {
     this.props.dispatch(spaceActions.update(this._id()))
   }
@@ -291,7 +301,7 @@ export default class SpacesShow extends Component {
             canRedo={space.checkpointMetadata.head !== 0}
             onImportSlurp={this.onImportSlurp.bind(this)}
             calculators={space.calculators}
-            makeNewCalculator={() => {this.setState({showCalculatorForm: true})}}
+            makeNewCalculator={this.showCalculatorForm.bind(this)}
           />
         </div>
 
@@ -314,7 +324,7 @@ export default class SpacesShow extends Component {
             onCut={this.onCut.bind(this, true)}
           />
           {this.state.showCalculatorForm &&
-            <SpaceRightSidebar view={'CalculatorNew'} onClose={() => {this.setState({showCalculatorForm: false})}}>
+            <SpaceRightSidebar view={'CalculatorNew'} onClose={this.hideCalculatorForm.bind(this)}>
               <CalculatorNewContainer space_id={this._id()}/>
             </SpaceRightSidebar>
           }
