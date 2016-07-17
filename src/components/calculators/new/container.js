@@ -12,9 +12,8 @@ import {INTERMEDIATE, OUTPUT, INPUT, NOEDGE} from './helpers.js'
 
 import '../shared/style.css'
 
-import {EditorState, Editor, ContentState} from 'draft-js'
 function isCalculatorAcceptableMetric(metric) {
-  return (!_.isEmpty(metric.name) && !_.isEmpty(_.get(metric, 'guesstimate.input')))
+  return !_.isEmpty(metric.name) && !_.isEmpty(_.get(metric, 'guesstimate.input'))
 }
 
 @connect(newCalculatorSelector, dispatch => bindActionCreators({create, fetchById}, dispatch))
@@ -67,9 +66,9 @@ export class CalculatorNewContainer extends Component {
   }
 
   validMetrics(metrics) {
-    const validMetrics = metrics.filter(m => isCalculatorAcceptableMetric)
+    const validMetrics = metrics.filter(isCalculatorAcceptableMetric)
     const validInputs = validMetrics.filter(m => relationshipType(m.edges) === INPUT)
-    const validOutputs = validMetrics.filter(m => relationshipType(m.edges) === OUTPUT)
+    const validOutputs = validMetrics.filter(m => relationshipType(m.edges) !== INPUT)
     return {validInputs, validOutputs}
   }
 
@@ -136,8 +135,7 @@ export class CalculatorNewContainer extends Component {
   _onMoveMetricDown(id){this._onMoveMetric(id, true)}
 
   _isVisible(metricId) {
-    const {calculator} = this.state
-    let {input_ids, output_ids} = calculator
+    const {calculator: {input_ids, output_ids}} = this.state
     return _.some([...input_ids, ...output_ids], e => metricId === e)
   }
 

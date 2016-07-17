@@ -30,8 +30,8 @@ export class CalculatorNew extends Component {
     const invisibleInputs = inputs.filter(i => !i.isVisible)
     const hasHiddenInputs = !_.isEmpty(invisibleInputs)
 
-    const visibleOutputs = outputs.filter(i => i.isVisible)
-    const invisibleOutputs = outputs.filter(i => !i.isVisible)
+    const visibleOutputs = outputs.filter(o => o.isVisible)
+    const invisibleOutputs = outputs.filter(o => !o.isVisible)
     const hasHiddenOutputs = !_.isEmpty(invisibleOutputs)
 
     return (
