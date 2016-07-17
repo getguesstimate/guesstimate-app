@@ -66,6 +66,7 @@ export default class MetricCardViewSection extends Component {
       onMouseDown,
       showSensitivitySection,
       hovered,
+      isInScreenshot,
     } = this.props
 
     const errors = this._errors()
@@ -78,7 +79,7 @@ export default class MetricCardViewSection extends Component {
     const hasErrors = (errors.length > 0)
     const shouldShowReadableId = !!expandedViewEnabled || anotherFunctionSelected
 
-    let className = 'MetricCardViewSection'
+    let className = `MetricCardViewSection${isInScreenshot ? ' display' : ''}`
     className += (hasErrors & !inSelectedCell) ? ' hasErrors' : ''
     className += (anotherFunctionSelected) ? ' anotherFunctionSelected' : ''
     return(

@@ -136,11 +136,12 @@ export default class Canvas extends Component{
     const passSelected = hasSelected && !_.isEmpty(selectedSamples)
     return (
       <Metric
-          canvasState={this.props.denormalizedSpace.canvasState}
-          key={metric.id}
-          location={location}
-          metric={metric}
-          selectedMetric={passSelected && selected}
+        isInScreenshot={this.props.screenshot}
+        canvasState={this.props.denormalizedSpace.canvasState}
+        key={metric.id}
+        location={location}
+        metric={metric}
+        selectedMetric={passSelected && selected}
       />
     )
   }
@@ -220,7 +221,7 @@ export default class Canvas extends Component{
     className += this.props.screenshot ? ' overflow-hidden' : ''
 
     const selectedMetric = this._isAnalysisView() && this._selectedMetric()
-    const showGridLines = this.props.screenshot
+    const showGridLines = !this.props.screenshot
 
     const copiedRegion = (copied && (copied.pastedTimes < 1) && copied.region) || []
 

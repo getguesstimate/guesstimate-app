@@ -29,10 +29,6 @@
   fill: none;
 }
 
-.metric .scientific .react-d3-histogram__tick text  {
-  fill: #aaa;
-}
-
 .metric:hover .react-d3-histogram__tick text {
   fill: #aaa;
 }

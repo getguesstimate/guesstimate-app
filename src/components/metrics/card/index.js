@@ -192,11 +192,12 @@ export default class MetricCard extends Component {
   }
 
   _className() {
-    const {inSelectedCell, metric, hovered} = this.props
+    const {inSelectedCell, metric, hovered, isInScreenshot} = this.props
     const relationshipClass = relationshipClasses[relationshipType(metric.edges)]
 
     const titleView = !hovered && !inSelectedCell && this._isTitle()
     let className = inSelectedCell ? 'metricCard grid-item-focus' : 'metricCard'
+    className += isInScreenshot ? ' display' : ''
     className += titleView ? ' titleView' : ''
     className += ' ' + relationshipClass
     return className
@@ -227,6 +228,7 @@ export default class MetricCard extends Component {
       connectDragSource,
       selectedMetric,
       forceFlowGridUpdate,
+      isInScreenshot,
     } = this.props
     const {guesstimate} = metric
     const errors = this._errors()
@@ -259,6 +261,7 @@ export default class MetricCard extends Component {
             onMouseDown={this._handleMouseDown.bind(this)}
             ref='MetricCardViewSection'
             isTitle={this._isTitle()}
+            isInScreenshot={isInScreenshot}
             connectDragSource={connectDragSource}
             selectedMetric={selectedMetric}
             showSensitivitySection={shouldShowSensitivitySection}
