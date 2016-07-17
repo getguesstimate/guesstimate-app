@@ -114,6 +114,33 @@ export class CalculatorNewContainer extends Component {
     return _.some(this.state.validInputs, e => e.id === id)
   }
 
+  _onMoveMetricTo(id, destIndex){
+    const {calculator} = this.state
+    const {input_ids, output_ids} = calculator
+    let change = {}
+    if (this._isInput(id)) {
+      const index = input_ids.findIndex(i => i === id)
+      if (index <= destIndex) {
+        change.input_ids = [
+          ...input_ids.slice(0, destIndex),
+          id,
+          ...input_ids.slice(destIndex, index),
+          ...input_ids.slice(index+1),
+        ]
+      } else {
+        change.input_ids = [
+          ...input_ids.slice(0, index),
+          ...input_ids.slice(index+1, destIndex),
+          id,
+          ...input_ids.slice(destIndex),
+        ]
+      }
+    } else {
+      output_ids: output_ids.splice(destIndex, 0, id)
+    }
+    this._changeCalculator(change)
+  }
+
   _onMoveMetric(id, isDown){
     const {calculator} = this.state
     let {input_ids, output_ids} = calculator
@@ -175,6 +202,7 @@ export class CalculatorNewContainer extends Component {
         outputs={outputs}
         onMetricHide={this._onMetricHide.bind(this)}
         onMetricShow={this._onMetricShow.bind(this)}
+        onMoveMetricTo={this._onMoveMetricTo.bind(this)}
         onMoveMetricUp={this._onMoveMetricUp.bind(this)}
         onMoveMetricDown={this._onMoveMetricDown.bind(this)}
         onChangeName={this._onChangeName.bind(this)}

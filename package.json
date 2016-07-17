@@ -124,6 +124,7 @@
     "react-modal": "^1.2.1",
     "react-redux": "^4.4.5",
     "react-share": "^1.8.0",
+    "react-sortable": "^1.0.1",
     "react-tooltip": "^2.0.2",
     "redux": "^3.5.2",
     "redux-crud": "^0.10.1",

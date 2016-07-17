@@ -1,37 +1,65 @@
 import React, {Component} from 'react'
+
 import ReactMarkdown from 'react-markdown'
 import Icon from 'react-fa'
+import {Sortable} from 'react-sortable'
+
 import * as Calculator from 'gEngine/calculator'
 
+const SortableListItem = Sortable(props => <div {...props} className='list-item'>{props.item}</div>)
+
 export class CalculatorNew extends Component {
-  metricForm(items, item, index, isInput){
+  state = {
+    draggingIndex: null,
+    draggingMetricId: null,
+    dropTargetId: null,
+  }
+
+  metricForm({metric: {name, id, guesstimate}, isVisible}, isFirst, isLast, isInput) {
     const props = {
-        key: index,
-        name: item.metric.name,
-        isFirst: index === 0,
-        isLast: (index === items.length - 1),
-        description: _.get(item.metric, 'guesstimate.description'),
-        isVisible: item.isVisible,
-        onRemove: () => {this.props.onMetricHide(item.metric.id)},
-        onAdd: () => {this.props.onMetricShow(item.metric.id)},
-        onMoveUp: () => {this.props.onMoveMetricUp(item.metric.id)},
-        onMoveDown: () => {this.props.onMoveMetricDown(item.metric.id)},
+      name,
+      isFirst,
+      isLast,
+      description: _.get(guesstimate, 'description'),
+      isVisible: isVisible,
+      onRemove: this.props.onMetricHide.bind(this, id),
+      onAdd: this.props.onMetricShow.bind(this, id),
+      onMoveUp: this.props.onMoveMetricUp.bind(this, id),
+      onMoveDown: this.props.onMoveMetricDown.bind(this, id),
     }
     if (isInput) {
-      return (<InputForm {...props}/>)
+      return <InputForm {...props}/>
     } else {
-      return (<OutputForm {...props}/>)
+      return <OutputForm {...props}/>
     }
   }
 
+  updateDragState(id, newState) {
+    if (!this.state.draggingMetricId) {
+      this.setState({...newState, draggingMetricId: id, dropTargetId: null})
+    } else if (_.isNull(newState.draggingIndex)) {
+      this.props.onMoveMetricTo(this.state.draggingMetricId, this.state.draggingIndex)
+      this.setState({...newState, draggingMetricId: null, dropTargetId: null})
+    } else {
+      this.setState({...newState, dropTargetId: id})
+    }
+  }
+
+  componentDidUpdate() {
+    //console.log(this.state.draggingMetricId, this.state.dropTargetId, this.state.draggingIndex)
+  }
+
   render() {
-    const {calculator: {title, content}, inputs, outputs} = this.props
-    const visibleInputs = inputs.filter(i => i.isVisible)
-    const invisibleInputs = inputs.filter(i => !i.isVisible)
+    const [{calculator: {title, content}, inputs, outputs}, {draggingIndex}] = [this.props, this.state]
+
+    const generateComponents = (metrics, isInput) => _.map(metrics, (m, i) => [this.metricForm(m, i === 0, i === metrics.length -1, isInput), m.metric.id])
+
+    const visibleInputs = generateComponents(inputs.filter(i => i.isVisible), true)
+    const invisibleInputs = generateComponents(inputs.filter(i => !i.isVisible), true)
     const hasHiddenInputs = !_.isEmpty(invisibleInputs)
 
-    const visibleOutputs = outputs.filter(o => o.isVisible)
-    const invisibleOutputs = outputs.filter(o => !o.isVisible)
+    const visibleOutputs = generateComponents(outputs.filter(o => o.isVisible), false)
+    const invisibleOutputs = generateComponents(outputs.filter(o => !o.isVisible), false)
     const hasHiddenOutputs = !_.isEmpty(invisibleOutputs)
 
     return (
@@ -59,12 +87,20 @@ export class CalculatorNew extends Component {
 
         <div className='inputs'>
           <h3> {`${hasHiddenInputs ? "Visible " : ""}Inputs`} </h3>
-          {_.map(visibleInputs, (input, i) => (
-            this.metricForm(visibleInputs, input,i, true)
+          {_.map(visibleInputs, ([item, id], i) => (
+            <SortableListItem
+              key = {i}
+              sortId = {i}
+              draggingIndex={draggingIndex}
+              updateState={this.updateDragState.bind(this, id)}
+              outline={'list'}
+              items = {visibleInputs}
+              item = {item}
+            />
           ))}
         </div>
 
-        {hasHiddenInputs &&
+        {false && hasHiddenInputs &&
           <div>
             <div className='inputs'>
               <h3> Hidden Inputs </h3>
@@ -79,11 +115,11 @@ export class CalculatorNew extends Component {
           <div className='outputs'>
             <h3> {`${hasHiddenOutputs ? "Visible " : ""}Outputs`} </h3>
 
-            {_.map(visibleOutputs, (input, i) => (
+            {false && _.map(visibleOutputs, (input, i) => (
               this.metricForm(visibleOutputs, input, i, false)
             ))}
 
-            {hasHiddenOutputs &&
+            {false && hasHiddenOutputs &&
               <div>
                 <div className=' outputs'>
                   <h3> Hidden Outputs </h3>
