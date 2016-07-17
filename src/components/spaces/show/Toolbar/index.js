@@ -180,30 +180,36 @@ export class SpaceToolbar extends Component {
               <Icon name='repeat'/>
             </a>
 
-            <div className='header-action-border'/>
-            <DropDown
-              headerText={'Calculators'}
-              openLink={<a className='header-action'><Icon name='calculator'/></a>}
-              position='right'
-            >
-              {[
-                ..._.map(calculators, c => (
-                  <CardListElement
-                    key={c.id}
-                    header={c.title}
-                    onMouseDown={navigateFn(e.calculator.relativePath(c))}
-                    icon={'calculator'}
-                  />
-                )),
-                <CardListElement
-                  key={'new'}
-                  header={'New Calculator'}
-                  onMouseDown={makeNewCalculator}
-                  closeOnClick={true}
-                  icon={'plus'}
-                />
-              ]}
-            </DropDown>
+            {(editableByMe || !_.isEmpty(calculators)) &&
+              <div>
+                <div className='header-action-border'/>
+                <DropDown
+                  headerText={'Calculators'}
+                  openLink={<a className='header-action'><Icon name='calculator'/></a>}
+                  position='right'
+                >
+                  {[
+                    ..._.map(calculators, c => (
+                      <CardListElement
+                        key={c.id}
+                        header={c.title}
+                        onMouseDown={navigateFn(e.calculator.relativePath(c))}
+                        icon={'calculator'}
+                      />
+                    )),
+                    editableByMe && (
+                      <CardListElement
+                        key={'new'}
+                        header={'New Calculator'}
+                        onMouseDown={makeNewCalculator}
+                        closeOnClick={true}
+                        icon={'plus'}
+                      />
+                    )
+                  ]}
+                </DropDown>
+              </div>
+            }
 
             {editableByMe && editsAllowed && <ProgressMessage actionState={actionState}/>}
 
