@@ -180,7 +180,7 @@ export class SpaceToolbar extends Component {
               <Icon name='repeat'/>
             </a>
 
-            {(editableByMe || !_.isEmpty(calculators)) && 
+            {(editableByMe || !_.isEmpty(calculators)) &&
               <div>
                 <div className='header-action-border'/>
                 <DropDown
@@ -189,21 +189,23 @@ export class SpaceToolbar extends Component {
                   position='right'
                 >
                   {[
+                    ..._.map(calculators, c => (
+                      <CardListElement
+                        key={c.id}
+                        header={c.title}
+                        onMouseDown={navigateFn(e.calculator.relativePath(c))}
+                        icon={'calculator'}
+                      />
+                    )),
                     editableByMe && (
                       <CardListElement
                         key={'new'}
                         header={'New Calculator'}
                         onMouseDown={makeNewCalculator}
                         closeOnClick={true}
+                        icon={'plus'}
                       />
-                    ),
-                    ..._.map(calculators, c => (
-                      <CardListElement
-                        key={c.id}
-                        header={c.title}
-                        onMouseDown={navigateFn(e.calculator.relativePath(c))}
-                      />
-                    )),
+                    )
                   ]}
                 </DropDown>
               </div>

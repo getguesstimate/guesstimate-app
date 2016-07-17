@@ -325,7 +325,7 @@ export default class SpacesShow extends Component {
           />
           {this.state.showCalculatorForm &&
             <SpaceRightSidebar view={'CalculatorNew'} onClose={this.hideCalculatorForm.bind(this)}>
-              <CalculatorNewContainer space_id={this._id()}/>
+              <CalculatorNewContainer space={space}/>
             </SpaceRightSidebar>
           }
         </div>
