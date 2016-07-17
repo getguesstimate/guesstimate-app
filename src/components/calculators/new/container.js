@@ -2,8 +2,6 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 
-import {newCalculatorSelector} from './new-calculator-selector'
-
 import {fetchById} from 'gModules/spaces/actions'
 import {create} from 'gModules/calculators/actions'
 import {CalculatorNew} from './CalculatorNew.js'
@@ -17,10 +15,9 @@ function isCalculatorAcceptableMetric(metric) {
   return (!_.isEmpty(metric.name) && !_.isEmpty(_.get(metric, 'guesstimate.input')))
 }
 
-@connect(newCalculatorSelector, dispatch => bindActionCreators({create, fetchById}, dispatch))
+@connect(null, dispatch => bindActionCreators({create, fetchById}, dispatch))
 export class CalculatorNewContainer extends Component {
   state = {
-    attemptedFetch: false,
     setupNewCalculator: false,
     validInputs: [],
     validOutputs: [],
@@ -32,18 +29,10 @@ export class CalculatorNewContainer extends Component {
     }
   }
 
-  componentWillMount() { this.fetchData() }
+  componentWillMount() { this.setup(this.props.space) }
 
   componentWillReceiveProps(newProps) {
-    this.fetchData()
     this.setup(newProps.space)
-  }
-
-  fetchData() {
-    if (!this.state.attemptedFetch) {
-      this.props.fetchById(this.props.space_id)
-      this.setState({attemptedFetch: true})
-    }
   }
 
   setup(space){
@@ -75,7 +64,7 @@ export class CalculatorNewContainer extends Component {
 
   _onCreate() {
     const calculator = this.state.calculator
-    this.props.create(this.props.space_id, {calculator})
+    this.props.create(this.props.space.id, {calculator})
   }
 
   _onMetricHide(id){
