@@ -12,6 +12,7 @@ export class CalculatorNew extends Component {
   state = {
     draggingIndex: null,
     draggingMetricId: null,
+    dropTargetId: null,
   }
 
   metricForm({metric: {name, id, guesstimate}, isVisible}, isInput, isDropTarget) {
@@ -32,20 +33,19 @@ export class CalculatorNew extends Component {
 
   updateDragState(id, newState) {
     if (!this.state.draggingMetricId) {
-      this.setState({...newState, draggingMetricId: id})
+      this.setState({...newState, draggingMetricId: id, dropTargetId: id})
     } else if (_.isNull(newState.draggingIndex)) {
       this.props.onMoveMetricTo(this.state.draggingMetricId, this.state.draggingIndex)
-      this.setState({...newState, draggingMetricId: null})
+      this.setState({...newState, draggingMetricId: null, dropTargetId: null})
     } else {
-      this.props.onMoveMetricTo(this.state.draggingMetricId, newState.draggingIndex)
-      this.setState({...newState})
+      this.setState({...newState, dropTargetId: id})
     }
   }
 
   render() {
-    const [{calculator: {title, content}, inputs, outputs}, {draggingIndex, draggingMetricId}] = [this.props, this.state]
+    const [{calculator: {title, content}, inputs, outputs}, {draggingIndex, dropTargetId}] = [this.props, this.state]
 
-    const generateComponents = (metrics, isInput) => _.map(metrics, (m, i) => [this.metricForm(m, isInput, draggingMetricId === m.metric.id), m.metric.id])
+    const generateComponents = (metrics, isInput) => _.map(metrics, (m, i) => [this.metricForm(m, isInput, dropTargetId === m.metric.id), m.metric.id])
 
     const visibleInputs = generateComponents(inputs.filter(i => i.isVisible), true)
     const invisibleInputs = generateComponents(inputs.filter(i => !i.isVisible), true)
