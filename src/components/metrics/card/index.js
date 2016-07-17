@@ -276,6 +276,7 @@ export default class MetricCard extends Component {
             <div className='section editing'>
               <DistributionEditor
                 guesstimate={metric.guesstimate}
+                inputMetrics={metric.edges.inputMetrics}
                 metricId={metric.id}
                 metricFocus={this.focus.bind(this)}
                 jumpSection={() => {this.refs.MetricCardViewSection.focusName()}}

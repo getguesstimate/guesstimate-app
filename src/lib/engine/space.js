@@ -51,6 +51,7 @@ export function toDSpace(spaceId, graph) {
     let edges = {}
     edges.inputs = dSpace.edges.filter(i => i.output === s.id).map(e => e.input)
     edges.outputs = dSpace.edges.filter(i => i.input === s.id).map(e => e.output)
+    edges.inputMetrics = edges.inputs.map(i => dSpace.metrics.find(m => m.id === i))
     return Object.assign({}, s, {edges})
   })
   return dSpace
