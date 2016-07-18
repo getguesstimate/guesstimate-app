@@ -62,6 +62,7 @@ export class SpaceToolbar extends Component {
       this.props.canUndo !== nextProps.canUndo ||
       this.props.canRedo !== nextProps.canRedo ||
       this.props.isLoggedIn !== nextProps.isLoggedIn ||
+      !_.isEqual(this.props.calculators, nextProps.calculator) ||
       this.state.importModalOpen !== nextState.importModalOpen
     )
   }
@@ -94,6 +95,7 @@ export class SpaceToolbar extends Component {
       onAllowEdits,
       onForbidEdits,
       calculators,
+      makeNewCalculator,
     } = this.props
     const ReactTooltipParams = {class: 'small-tooltip', delayShow: 0, delayHide: 0, place: 'bottom', effect: 'solid'}
 
@@ -178,20 +180,35 @@ export class SpaceToolbar extends Component {
               <Icon name='repeat'/>
             </a>
 
-            <div className='header-action-border'/>
-            {!_.isEmpty(calculators) &&
-              <DropDown
-                headerText={'Space Calculators'}
-                openLink={<a className='header-action'><Icon name='calculator'/></a>}
-                position='right'
-              >
-                {_.map(calculators, c => (
-                  <CardListElement
-                    key={c.id}
-                    header={c.title}
-                    onMouseDown={navigateFn(e.calculator.relativePath(c))}/>
-                ))}
-              </DropDown>
+            {(editableByMe || !_.isEmpty(calculators)) &&
+              <div>
+                <div className='header-action-border'/>
+                <DropDown
+                  headerText={'Calculators'}
+                  openLink={<a className='header-action'><Icon name='calculator'/></a>}
+                  position='right'
+                >
+                  {[
+                    ..._.map(calculators, c => (
+                      <CardListElement
+                        key={c.id}
+                        header={c.title}
+                        onMouseDown={navigateFn(e.calculator.relativePath(c))}
+                        icon={'calculator'}
+                      />
+                    )),
+                    editableByMe && (
+                      <CardListElement
+                        key={'new'}
+                        header={'New Calculator'}
+                        onMouseDown={makeNewCalculator}
+                        closeOnClick={true}
+                        icon={'plus'}
+                      />
+                    )
+                  ]}
+                </DropDown>
+              </div>
             }
 
             {editableByMe && editsAllowed && <ProgressMessage actionState={actionState}/>}

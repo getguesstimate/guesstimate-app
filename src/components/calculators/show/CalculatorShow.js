@@ -23,7 +23,7 @@ import * as Calculator from 'gEngine/calculator'
 
 import {Guesstimator} from 'lib/guesstimator/index'
 
-import './style.css'
+import '../style.css'
 
 @connect(calculatorSpaceSelector, dispatch => bindActionCreators({fetchById, changeGuesstimate, deleteSimulations, runSimulations}, dispatch))
 export class CalculatorShow extends Component {
@@ -127,7 +127,7 @@ export class CalculatorShow extends Component {
         <div className='row'>
           <div className='col-xs-0 col-md-2'/>
           <div className='col-xs-12 col-md-8'>
-            <div className='calculator'>
+            <div className='calculator wide'>
               <div className='title-bar'>
                 <div className='row'>
                   <div className='col-xs-12'>

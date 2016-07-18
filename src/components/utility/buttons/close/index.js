@@ -7,3 +7,10 @@ export const ButtonClose = ({onClick}) => (
     <i className={`ion-md-close`}/>
   </a>
 )
+
+export const ButtonCloseText = ({onClick}) => (
+  <span className={'ui button button-close-text'} onClick={onClick}>
+    <i className={`ion-md-close`}/>
+    Close
+  </span>
+)
