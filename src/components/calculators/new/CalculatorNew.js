@@ -77,31 +77,29 @@ export class CalculatorNew extends Component {
             />
           </div>
 
-
-        <div className='inputs'>
-          <h3> {`${hasHiddenInputs ? "Visible " : ""}Inputs`} </h3>
-          {_.map(visibleInputs, ([item, id], i) => (
-            <SortableListItem
-              key = {i}
-              sortId = {i}
-              draggingIndex={draggingIndex}
-              updateState={this.updateDragState.bind(this, id)}
-              outline={'list'}
-              items = {visibleInputs}
-              item = {item}
-            />
-          ))}
-        </div>
-
-        {hasHiddenInputs &&
-          <div>
-            <div className='inputs'>
-              <h3> Hidden Inputs </h3>
-              {_.map(invisibleInputs, ([item, id], i) => item)}
-            </div>
+          <div className='inputs'>
+            <h3> {`${hasHiddenInputs ? "Visible " : ""}Inputs`} </h3>
+            {_.map(visibleInputs, ([item, id], i) => (
+              <SortableListItem
+                key = {i}
+                sortId = {i}
+                draggingIndex={draggingIndex}
+                updateState={this.updateDragState.bind(this, id)}
+                outline={'list'}
+                items = {visibleInputs}
+                item = {item}
+              />
+            ))}
           </div>
-          }
 
+          {hasHiddenInputs &&
+            <div>
+              <div className='inputs'>
+                <h3> Hidden Inputs </h3>
+                {_.map(invisibleInputs, ([item, id], i) => item)}
+              </div>
+            </div>
+          }
 
           <div className='outputs'>
             <h3> {`${hasHiddenOutputs ? "Visible " : ""}Outputs`} </h3>
@@ -144,7 +142,7 @@ export class CalculatorNew extends Component {
   }
 }
 
-export const EditSection = ({isVisible, onRemove, onAdd}) => (
+const EditSection = ({isVisible, onRemove, onAdd}) => (
   <div className='nub'>
     {isVisible &&
       <div>
@@ -152,47 +150,35 @@ export const EditSection = ({isVisible, onRemove, onAdd}) => (
         <a className='ui button'><Icon name='bars' /></a>
       </div>
     }
-    {!isVisible &&
-      <a onMouseDown={onAdd} className='ui button'>show</a>
-    }
+    {!isVisible && <a onMouseDown={onAdd} className='ui button'>show</a> }
   </div>
 )
 
-export class InputForm extends Component{
-  render () {
-    const {name, description, isVisible, isDropTarget} = this.props
-    return (
-      <div className={`input${isDropTarget ? ' drop-target': ''}`}>
-        <div className='row'>
-          <div className={`col-xs-12 col-sm-8`}>
-            <div className='name'>{name}</div>
-            {description &&
-              <div className='description'>{description}</div>
-            }
-          </div>
-          <div className='col-xs-12 col-sm-4'>
-            <EditSection {...this.props}/>
-          </div>
-        </div>
+const InputForm = props => (
+  <div className={`input${props.isDropTarget ? ' drop-target': ''}`}>
+    <div className='row'>
+      <div className={`col-xs-12 col-sm-8`}>
+        <div className='name'>{props.name}</div>
+        {props.description && <div className='description'>{props.description}</div>}
       </div>
-    )
-  }
-}
-
-export const OutputForm = (props) => {
-  const {name, isVisible, isDropTarget} = props
-  return (
-    <div className={`output${isDropTarget ? ' drop-target': ''}`}>
-      <div className='row'>
-        <div className={`col-xs-12 col-sm-8`}>
-          <div className='name'>
-            {name}
-          </div>
-        </div>
-        <div className='col-xs-12 col-sm-4'>
-          <EditSection {...props}/>
-        </div>
+      <div className='col-xs-12 col-sm-4'>
+        <EditSection {...props}/>
       </div>
     </div>
-  )
-}
+  </div>
+)
+
+const OutputForm = props => (
+  <div className={`output${props.isDropTarget ? ' drop-target': ''}`}>
+    <div className='row'>
+      <div className={`col-xs-12 col-sm-8`}>
+        <div className='name'>
+          {props.name}
+        </div>
+      </div>
+      <div className='col-xs-12 col-sm-4'>
+        <EditSection {...props}/>
+      </div>
+    </div>
+  </div>
+)

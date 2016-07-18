@@ -8,8 +8,8 @@ import {ShareButtons, generateShareIcon} from 'react-share'
 import Icon from 'react-fa'
 
 import Container from 'gComponents/utility/container/Container.js'
-import {Input} from '../shared/input'
-import {Output} from '../shared/output'
+import {Input} from './input'
+import {Output} from './output'
 
 import {calculatorSpaceSelector} from './calculator-space-selector'
 
@@ -23,7 +23,7 @@ import * as Calculator from 'gEngine/calculator'
 
 import {Guesstimator} from 'lib/guesstimator/index'
 
-import '../shared/style.css'
+import '../style.css'
 
 @connect(calculatorSpaceSelector, dispatch => bindActionCreators({fetchById, changeGuesstimate, deleteSimulations, runSimulations}, dispatch))
 export class CalculatorShow extends Component {
