@@ -90,8 +90,6 @@ export default class TextInput extends Component{
           onClick={this.focus.bind(this)}
           onKeyDown={e => {e.stopPropagation()}}
           onFocus={this.handleFocus.bind(this)}
-          data-tip
-          data-for='errors'
         >
           <Editor
             onFocus={this.props.onFocus}

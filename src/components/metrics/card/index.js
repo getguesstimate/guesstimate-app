@@ -255,6 +255,8 @@ export default class MetricCard extends Component {
         onKeyPress={this._handleKeyPress.bind(this)}
         onKeyDown={this._handleKeyDown.bind(this)}
         tabIndex='0'
+        data-for='errors'
+        data-tip
       >
         {hasErrors && !!displayedError &&
           <ReactTooltip {...ReactTooltipParams} id='errors'> <span>{displayedError.message}</span> </ReactTooltip>
