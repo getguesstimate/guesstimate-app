@@ -1,13 +1,13 @@
 export function change(values) {
-  return { type: 'CHANGE_CANVAS_STATE', values };
+  return { type: 'CHANGE_CANVAS_STATE', values }
 }
 
 export function allowEdits() {
-  return { type: 'CHANGE_CANVAS_STATE', values: { editsAllowed: true } };
+  return { type: 'CHANGE_CANVAS_STATE', values: { editsAllowed: true } }
 }
 
 export function forbidEdits() {
-  return { type: 'CHANGE_CANVAS_STATE', values: { editsAllowed: false } };
+  return { type: 'CHANGE_CANVAS_STATE', values: { editsAllowed: false } }
 }
 
 export function toggleView(view) {
@@ -30,13 +30,9 @@ export function toggleView(view) {
 }
 
 export function changeMetricClickMode(metricClickMode) {
-  if (_.isUndefined(metricClickMode) || metricClickMode === '' ) {
-    return { type: 'CHANGE_CANVAS_STATE', values: {metricClickMode: 'DEFAULT'}};
-  } else {
-    return { type: 'CHANGE_CANVAS_STATE', values: {metricClickMode}};
-  }
+  return { type: 'CHANGE_CANVAS_STATE', values: {metricClickMode: _.isEmpty(metricClickMode) ? 'DEFAULT' : metricClickMode} }
 }
 
-export function changeActionState(value) {
-  return { type: 'CHANGE_CANVAS_STATE', values: {actionState: value} };
+export function changeActionState(actionState) {
+  return { type: 'CHANGE_CANVAS_STATE', values: {actionState} }
 }

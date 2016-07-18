@@ -70,9 +70,8 @@ export default class CanvasViewForm extends Component {
     })
 
     arrowViewOptions = arrowViewOptions.map(e => {
-      const isSelected = (e.name === this.props.edgeView)
-      const select = () => {this._selectEdgeView(e.name)}
-      return Object.assign(e, {isSelected, onClick:select})
+      const isSelected = (e.name === this.props.canvasState.edgeView)
+      return Object.assign(e, {isSelected, onClick: () => {this._selectEdgeView(e.name)}})
     })
 
     return (

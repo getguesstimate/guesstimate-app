@@ -10,8 +10,9 @@ const initialState = {
 
 export default function canvasState(state = initialState, action) {
   switch (action.type) {
-    case 'CHANGE_CANVAS_STATE':
+    case 'CHANGE_CANVAS_STATE': {
       return {...state, ...action.values}
+    }
     default:
       return state
   }
