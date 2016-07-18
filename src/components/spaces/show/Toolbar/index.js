@@ -11,6 +11,8 @@ import {ViewOptionToggle} from '../view-options/index'
 import {PrivacyToggle} from '../privacy-toggle/index'
 import {ImportFromSlurpForm} from './import_from_slurp_form'
 
+import {navigateFn} from 'gModules/navigation/actions'
+
 import e from 'gEngine/engine'
 
 import './style.css'
@@ -60,6 +62,7 @@ export class SpaceToolbar extends Component {
       this.props.canUndo !== nextProps.canUndo ||
       this.props.canRedo !== nextProps.canRedo ||
       this.props.isLoggedIn !== nextProps.isLoggedIn ||
+      !_.isEqual(this.props.calculators, nextProps.calculator) ||
       this.state.importModalOpen !== nextState.importModalOpen
     )
   }
@@ -81,6 +84,7 @@ export class SpaceToolbar extends Component {
       onCopyModel,
       onCopyMetrics,
       onPasteMetrics,
+      onDeleteMetrics,
       onCutMetrics,
       onDestroy,
       onUndo,
@@ -90,6 +94,8 @@ export class SpaceToolbar extends Component {
       editsAllowed,
       onAllowEdits,
       onForbidEdits,
+      calculators,
+      makeNewCalculator,
     } = this.props
     const ReactTooltipParams = {class: 'small-tooltip', delayShow: 0, delayHide: 0, place: 'bottom', effect: 'solid'}
 
@@ -126,7 +132,8 @@ export class SpaceToolbar extends Component {
           <div className='col-sm-10'>
             <ReactTooltip {...ReactTooltipParams} id='cut-button'>Cut Nodes (ctrl-x)</ReactTooltip>
             <ReactTooltip {...ReactTooltipParams} id='copy-button'>Copy Nodes (ctrl-c)</ReactTooltip>
-            <ReactTooltip {...ReactTooltipParams} id='paste-button'>Paste Nodes (ctrl-p)</ReactTooltip>
+            <ReactTooltip {...ReactTooltipParams} id='paste-button'>Paste Nodes (ctrl-v)</ReactTooltip>
+            <ReactTooltip {...ReactTooltipParams} id='delete-button'>Delete Nodes (del/bksp)</ReactTooltip>
             <ReactTooltip {...ReactTooltipParams} id='undo-button'>Undo (ctrl-z)</ReactTooltip>
             <ReactTooltip {...ReactTooltipParams} id='redo-button'>Redo (ctrl-shift-z)</ReactTooltip>
 
@@ -161,6 +168,10 @@ export class SpaceToolbar extends Component {
             <a onClick={onPasteMetrics} className={`header-action`} data-tip data-for='paste-button'>
               <Icon name='paste'/>
             </a>
+            <a onClick={onDeleteMetrics} className={`header-action`} data-tip data-for='delete-button'>
+              <Icon name='trash'/>
+            </a>
+
             <div className='header-action-border'/>
             <a onClick={onUndo} className={`header-action ${canUndo ? '' : 'disabled'}`} data-tip data-for='undo-button'>
               <Icon name='undo'/>
@@ -168,6 +179,37 @@ export class SpaceToolbar extends Component {
             <a onClick={onRedo} className={`header-action ${canRedo ? '' : 'disabled'}`} data-tip data-for='redo-button'>
               <Icon name='repeat'/>
             </a>
+
+            {(editableByMe || !_.isEmpty(calculators)) &&
+              <div>
+                <div className='header-action-border'/>
+                <DropDown
+                  headerText={'Calculators'}
+                  openLink={<a className='header-action'><Icon name='calculator'/></a>}
+                  position='right'
+                >
+                  {[
+                    ..._.map(calculators, c => (
+                      <CardListElement
+                        key={c.id}
+                        header={c.title}
+                        onMouseDown={navigateFn(e.calculator.relativePath(c))}
+                        icon={'calculator'}
+                      />
+                    )),
+                    editableByMe && (
+                      <CardListElement
+                        key={'new'}
+                        header={'New Calculator'}
+                        onMouseDown={makeNewCalculator}
+                        closeOnClick={true}
+                        icon={'plus'}
+                      />
+                    )
+                  ]}
+                </DropDown>
+              </div>
+            }
 
             {editableByMe && editsAllowed && <ProgressMessage actionState={actionState}/>}
 

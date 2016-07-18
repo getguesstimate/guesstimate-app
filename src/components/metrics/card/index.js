@@ -13,32 +13,21 @@ import MetricCardViewSection from './MetricCardViewSection/index'
 import SensitivitySection from './SensitivitySection/SensitivitySection'
 
 import {hasMetricUpdated} from './updated'
-
 import {removeMetrics, changeMetric} from 'gModules/metrics/actions'
 import {changeGuesstimate} from 'gModules/guesstimates/actions'
 
 import * as canvasStateProps from 'gModules/canvas_state/prop_type'
 import {PTLocation} from 'lib/locationUtils'
 
-import './style.css'
+import {INTERMEDIATE, OUTPUT, INPUT, NOEDGE, relationshipType} from 'gEngine/graph'
 
-const INTERMEDIATE = 'INTERMEDIATE'
-const OUTPUT = 'OUTPUT'
-const INPUT = 'INPUT'
-const NOEDGE = 'NOEDGE'
+import './style.css'
 
 const relationshipClasses = {}
 relationshipClasses[INTERMEDIATE] = 'intermediate'
 relationshipClasses[OUTPUT] = 'output'
 relationshipClasses[INPUT] = 'input'
 relationshipClasses[NOEDGE] = 'noedge'
-
-const relationshipType = (edges) => {
-  if (edges.inputs.length && edges.outputs.length) { return INTERMEDIATE }
-  if (edges.inputs.length) { return OUTPUT }
-  if (edges.outputs.length) { return INPUT }
-  return NOEDGE
-}
 
 class ScatterTip extends Component {
   render() {
@@ -206,8 +195,8 @@ export default class MetricCard extends Component {
 
   _errors() {
     if (this.props.isTitle){ return [] }
-    let errors = _.get(this.props.metric, 'simulation.sample.errors')
-    return errors ? errors.filter(e => !!e) : []
+    const errors = _.get(this.props.metric, 'simulation.sample.errors') || []
+    return errors.filter(e => !!e)
   }
 
   _shouldShowSimulation(metric) {
@@ -275,6 +264,7 @@ export default class MetricCard extends Component {
             <div className='section editing'>
               <DistributionEditor
                 guesstimate={metric.guesstimate}
+                inputMetrics={metric.edges.inputMetrics}
                 metricId={metric.id}
                 metricFocus={this.focus.bind(this)}
                 jumpSection={() => {this.refs.MetricCardViewSection.focusName()}}

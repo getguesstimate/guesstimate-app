@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 
 import ClickToEdit from 'gComponents/utility/click-to-edit/index.js'
 import {MarkdownViewer} from 'gComponents/utility/markdown-viewer/index.js'
-import {ButtonClose} from 'gComponents/utility/buttons/close'
+import {ButtonCloseText} from 'gComponents/utility/buttons/close'
 
 export class SpaceSidebar extends Component {
   componentDidMount() { window.recorder.recordMountEvent(this) }
@@ -20,7 +20,9 @@ export class SpaceSidebar extends Component {
       <div className='SpaceSidebar'>
         <div className='SpaceSidebar-inside'>
           <div className='SpaceSidebar-header'>
-            <ButtonClose onClick={onClose}/>
+            <div className={'closeSidebar'}>
+              {<ButtonCloseText onClick={onClose}/>}
+            </div>
           </div>
           <div className='SpaceSidebar-body'>
             <ClickToEdit

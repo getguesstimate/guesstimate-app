@@ -23,7 +23,7 @@ import * as Calculator from 'gEngine/calculator'
 
 import {Guesstimator} from 'lib/guesstimator/index'
 
-import './style.css'
+import '../style.css'
 
 @connect(calculatorSpaceSelector, dispatch => bindActionCreators({fetchById, changeGuesstimate, deleteSimulations, runSimulations}, dispatch))
 export class CalculatorShow extends Component {
@@ -101,7 +101,7 @@ export class CalculatorShow extends Component {
   render() {
     if (!this.props.calculator) { return false }
 
-    const {calculator: {content, title, space_id, share_image}, inputs, outputs} = this.props
+    const {calculator: {content, title, space_id, share_image}, inputs, outputs, isPrivate} = this.props
     const spaceUrl = Space.url({id: space_id})
     const calculatorUrl = Calculator.fullUrl(this.props.calculator)
 
@@ -116,6 +116,10 @@ export class CalculatorShow extends Component {
     const {FacebookShareButton, TwitterShareButton} = ShareButtons
     const FacebookIcon = generateShareIcon('facebook')
     const TwitterIcon = generateShareIcon('twitter')
+    let privacy_header = false
+    if (isPrivate) {
+      privacy_header = (<span className='privacy-icon'><Icon name='lock'/>Private</span>)
+    }
 
     return (
       <Container>
@@ -123,8 +127,15 @@ export class CalculatorShow extends Component {
         <div className='row'>
           <div className='col-xs-0 col-md-2'/>
           <div className='col-xs-12 col-md-8'>
-            <div className='calculator'>
-              <h1>{title}</h1>
+            <div className='calculator wide'>
+              <div className='title-bar'>
+                <div className='row'>
+                  <div className='col-xs-12'>
+                    <h1>{title}</h1>
+                    {privacy_header}
+                  </div>
+                </div>
+              </div>
               <div className='description'>
                 <ReactMarkdown source={content} />
               </div>
@@ -148,19 +159,6 @@ export class CalculatorShow extends Component {
                   <div className='outputs'>
                     {_.map(outputs, (m, i) => <Output key={i} metric={m}/>)}
                   </div>
-                  <div className='row information-section'>
-                    <div className='col-xs-12 col-md-7 calculation-link-section'>
-                        <a href={spaceUrl} onClick={navigateFn(spaceUrl)}>See calculations</a>
-                    </div>
-                    <div className='col-xs-12 col-md-5'>
-                      <FacebookShareButton url={calculatorUrl} title={title}>
-                        <FacebookIcon size={42}/>
-                      </FacebookShareButton>
-                      <TwitterShareButton url={calculatorUrl} title={title}>
-                        <TwitterIcon size={42}/>
-                      </TwitterShareButton>
-                    </div>
-                  </div>
                 </div>
               }
               {!this.state.showResult &&
@@ -177,6 +175,26 @@ export class CalculatorShow extends Component {
                 </div>
               }
             </div>
+
+            <div className='information-section'>
+              <div className='row'>
+                <div className='col-xs-12 col-sm-6'>
+                  <FacebookShareButton url={calculatorUrl} title={title}>
+                    <FacebookIcon size={42}/>
+                  </FacebookShareButton>
+                  <TwitterShareButton url={calculatorUrl} title={title}>
+                    <TwitterIcon size={42}/>
+                  </TwitterShareButton>
+                </div>
+                <div className='col-sm-1'/>
+                <div className='col-xs-12 col-sm-5 calculation-link-section'>
+                  <a href={spaceUrl} onClick={navigateFn(spaceUrl)}>
+                    <i className='ion-ios-redo'/> See calculations
+                  </a>
+                </div>
+              </div>
+            </div>
+
           </div>
           <div className='col-md-3' />
         </div>
