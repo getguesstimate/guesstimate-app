@@ -2,13 +2,14 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 
+import {CalculatorNew} from './CalculatorNew.js'
+
 import {fetchById} from 'gModules/spaces/actions'
 import {create} from 'gModules/calculators/actions'
-import {CalculatorNew} from './CalculatorNew.js'
-import {swap, incrementItemPosition, relationshipType} from './helpers.js'
-import {INTERMEDIATE, OUTPUT, INPUT, NOEDGE} from './helpers.js'
 
-import '../shared/style.css'
+import {INTERMEDIATE, OUTPUT, INPUT, NOEDGE, relationshipType} from 'gEngine/graph'
+
+import '../style.css'
 
 function isCalculatorAcceptableMetric(metric) {
   return !_.isEmpty(metric.name) && !_.isEmpty(_.get(metric, 'guesstimate.input'))
@@ -41,36 +42,31 @@ export class CalculatorNewContainer extends Component {
   }
 
   setup(space){
-    if (!!space.id){
-      const {validInputs, validOutputs} = this.validMetrics(space.metrics)
+    if (!space.id) { return }
 
-      if(!this.state.setupNewCalculator){
-        const calculator = {
-           title: space.name || "",
-           content: space.description || "",
-           input_ids: validInputs.map(e => e.id),
-           output_ids: validOutputs.map(e => e.id)
-        }
-        this.setState({calculator, validInputs, validOutputs, setupNewCalculator: true})
-      }
+    const {validInputs, validOutputs} = this.validMetrics(space.metrics)
 
-      else {
-        this.setState({validInputs, validOutputs})
+    if(!this.state.setupNewCalculator){
+      const calculator = {
+         title: space.name || "",
+         content: space.description || "",
+         input_ids: validInputs.map(e => e.id),
+         output_ids: validOutputs.map(e => e.id)
       }
+      this.setState({calculator, validInputs, validOutputs, setupNewCalculator: true})
+    } else {
+      this.setState({validInputs, validOutputs})
     }
   }
 
   validMetrics(metrics) {
     const validMetrics = metrics.filter(isCalculatorAcceptableMetric)
     const validInputs = validMetrics.filter(m => relationshipType(m.edges) === INPUT)
-    const validOutputs = validMetrics.filter(m => relationshipType(m.edges) === OUTPUT || relationshipType(m.edges) === INTERMEDIATE)
+    const validOutputs = validMetrics.filter(m => [INTERMEDIATE, OUTPUT].includes(relationshipType(m.edges)))
     return {validInputs, validOutputs}
   }
 
-  _onCreate() {
-    const calculator = this.state.calculator
-    this.props.create(this.props.space.id, {calculator})
-  }
+  _onCreate() { this.props.create(this.props.space.id, {calculator: this.state.calculator}) }
 
   _onMetricHide(id){
     const {calculator} = this.state
@@ -85,24 +81,16 @@ export class CalculatorNewContainer extends Component {
 
   _onMetricShow(id){
     const {calculator} = this.state
-    let {input_ids, output_ids} = calculator
+    const {input_ids, output_ids} = calculator
 
-    let new_input_ids, new_output_ids
+    let changes = {}
     if (this._isInput(id)) {
-      new_input_ids = [...input_ids, id]
-      new_output_ids = output_ids
+      changes.input_ids = [...input_ids, id]
     } else {
-      new_output_ids = [...output_ids, id]
-      new_input_ids = input_ids
+      changes.output_ids = [...output_ids, id]
     }
 
-    this.setState({
-      calculator: {
-        ...calculator,
-        input_ids: new_input_ids,
-        output_ids: new_output_ids
-      }
-    })
+    this.setState({ calculator: {...calculator, ...changes} })
   }
 
   _isInput(id){
@@ -146,19 +134,17 @@ export class CalculatorNewContainer extends Component {
   }
 
   _isValid(){
-    const {calculator} = this.state
-    const hasTitle = !_.isEmpty(calculator.title)
-    const hasInputs = !_.isEmpty(calculator.input_ids)
-    const hasOutputs = !_.isEmpty(calculator.output_ids)
-    return hasTitle && hasInputs && hasOutputs
+    const {calculator: {title, input_ids, output_ids}} = this.state
+    return !(_.isEmpty(title) || _.isEmpty(input_ids) || _.isEmpty(output_ids))
   }
 
   render() {
-    const {validInputs, validOutputs, calculator} = this.state
+    const {validInputs, validOutputs, calculator, setupNewCalculator} = this.state
     const inputs = this._orderDisplayedMetrics(calculator.input_ids, validInputs)
     const outputs = this._orderDisplayedMetrics(calculator.output_ids, validOutputs)
 
-    if (!this.state.setupNewCalculator){ return (false) }
+    if (!setupNewCalculator){ return false }
+
     return (
       <CalculatorNew
         calculator={calculator}
