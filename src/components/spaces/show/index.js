@@ -9,6 +9,7 @@ import {SpaceToolbar} from './Toolbar/index'
 import {SpaceSidebar} from './sidebar'
 import {ClosedSpaceSidebar} from './closed_sidebar'
 import Canvas from 'gComponents/spaces/canvas'
+import {CalculatorNewContainer} from 'gComponents/calculators/new/container'
 
 import {denormalizedSpaceSelector} from '../denormalized-space-selector'
 
@@ -18,6 +19,7 @@ import * as simulationActions from 'gModules/simulations/actions'
 import * as copiedActions from 'gModules/copied/actions'
 import {removeSelectedMetrics} from 'gModules/metrics/actions'
 import {undo, redo} from 'gModules/checkpoints/actions'
+import {ButtonCloseText} from 'gComponents/utility/buttons/close'
 
 import {parseSlurp} from 'lib/slurpParser'
 
@@ -58,6 +60,7 @@ export default class SpacesShow extends Component {
   state = {
     showSidebar: true,
     attemptedFetch: false,
+    showCalculatorForm: false,
   }
 
   componentWillMount() {
@@ -108,6 +111,16 @@ export default class SpacesShow extends Component {
       this.props.dispatch(spaceActions.fetchById(this._id()))
       this.setState({attemptedFetch: true})
     }
+  }
+
+  showCalculatorForm() {
+    elev.hide()
+    this.setState({showCalculatorForm: true})
+  }
+
+  hideCalculatorForm() {
+    this.setState({showCalculatorForm: false})
+    elev.show()
   }
 
   onSave() {
@@ -287,6 +300,8 @@ export default class SpacesShow extends Component {
             canUndo={space.checkpointMetadata.head !== space.checkpointMetadata.length - 1}
             canRedo={space.checkpointMetadata.head !== 0}
             onImportSlurp={this.onImportSlurp.bind(this)}
+            calculators={space.calculators}
+            makeNewCalculator={this.showCalculatorForm.bind(this)}
           />
         </div>
 
@@ -308,7 +323,31 @@ export default class SpacesShow extends Component {
             onPaste={this.onPaste.bind(this, true)}
             onCut={this.onCut.bind(this, true)}
           />
+          {this.state.showCalculatorForm &&
+            <SpaceRightSidebar view={'CalculatorNew'} onClose={this.hideCalculatorForm.bind(this)}>
+              <CalculatorNewContainer space={space}/>
+            </SpaceRightSidebar>
+          }
         </div>
+      </div>
+    )
+  }
+}
+
+export class SpaceRightSidebar extends Component {
+  render(){
+    return (
+      <div className='SpaceRightSidebar'>
+        <div className='SpaceRightSidebar--padded-area row'>
+          <div className='col-xs-8'>
+            <h2> New Calculator </h2>
+          </div>
+          <div className='col-xs-4 button-close-text'>
+            <ButtonCloseText onClick={this.props.onClose}/>
+          </div>
+        </div>
+        <hr className='SpaceRightSidebar--divider'/>
+        {this.props.children}
       </div>
     )
   }

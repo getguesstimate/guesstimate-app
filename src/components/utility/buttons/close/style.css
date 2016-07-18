@@ -10,6 +10,7 @@
 
 .ui.button.button-close-text {
   padding: .5em .8em;
+  border-radius: 2px;
   i {
     margin-right: .3em;
   }
