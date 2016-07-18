@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 
 import ReactDOM from 'react-dom'
+import ReactTooltip from 'react-tooltip'
 import $ from 'jquery'
 
 import {MetricModal} from 'gComponents/metrics/modal/index'
@@ -19,6 +20,7 @@ import {changeGuesstimate} from 'gModules/guesstimates/actions'
 
 import * as canvasStateProps from 'gModules/canvas_state/prop_type'
 import {PTLocation} from 'lib/locationUtils'
+import {INTERNAL_ERROR} from 'lib/errors/modelErrors'
 
 import './style.css'
 
@@ -234,6 +236,18 @@ export default class MetricCard extends Component {
     const {guesstimate} = metric
     const errors = this._errors()
     const shouldShowSensitivitySection = this._shouldShowSensitivitySection()
+    const ReactTooltipParams = {
+      class: 'metric-errors-tooltip',
+      delayShow: 0,
+      delayHide: 0,
+      type: 'error',
+      place: 'bottom',
+      effect: 'solid',
+      event: 'click',
+      eventOff: 'click',
+    }
+    const displayedError = errors.find(e => e.type !== INTERNAL_ERROR)
+    const hasErrors = !_.isEmpty(errors)
 
     return (
       <div className='metricCard--Container'
@@ -242,6 +256,9 @@ export default class MetricCard extends Component {
         onKeyDown={this._handleKeyDown.bind(this)}
         tabIndex='0'
       >
+        {hasErrors && !!displayedError &&
+          <ReactTooltip {...ReactTooltipParams} id='errors'> <span>{displayedError.message}</span> </ReactTooltip>
+        }
         <div className={this._className()}>
           {this.state.modalIsOpen &&
             <MetricModal
