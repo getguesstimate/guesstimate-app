@@ -134,63 +134,58 @@ export class CalculatorCompressedShow extends Component {
     }
 
     return (
-      <Container>
-        <Helmet title={title} meta={metaTags}/>
-        <div className='row'>
-          <div className='col-xs-12 col-md-12'>
-            <div className='calculator narrow'>
-              <div className='title-bar'>
-                <div className='row'>
-                  <div className='col-xs-12'>
-                    <h1>{title}</h1>
-                    {privacy_header}
-                  </div>
-                </div>
-              </div>
-              <div className='description'>
-                <ReactMarkdown source={content} />
-              </div>
-              <div className='inputs'>
-                {_.map(inputs, (metric, i) => (
-                  <Input
-                    ref={`input-${metric.id}`}
-                    key={metric.id}
-                    id={metric.id}
-                    isFirst={i===0}
-                    name={metric.name}
-                    description={_.get(metric, 'guesstimate.description')}
-                    errors={_.get(metric, 'simulation.sample.errors')}
-                    onBlur={this.onBlur.bind(this, metric)}
-                    onChange={this.onChange.bind(this, metric)}
-                    onEnter={this.onEnter.bind(this)}
-                  />
-                ))}
-              </div>
-              {this.state.showResult &&
-                <div>
-                  <hr className='result-divider'/>
-                  <div className='outputs'>
-                    {_.map(outputs, (m, i) => <Output key={i} metric={m}/>)}
-                  </div>
-                </div>
-              }
-              {!this.state.showResult &&
-                <div className='row'>
-                  <div className='col-xs-12 col-md-7'/>
-                  <div className='col-xs-12 col-md-5'>
-                    <div
-                      className={`ui button calculateButton${this.state.resultComputing ? ' loading' : this.state.readyToCalculate ? '' : ' disabled'}`}
-                      onClick={() => {this.allOutputsHaveStats() ? this.setState({showResult: true}) : this.setState({resultComputing: true})}}
-                    >
-                      Calculate
-                    </div>
-                  </div>
-                </div>
-              }
+      <div className='calculator narrow medium-font-size'>
+        <div className='padded-section'>
+        <div className='title-bar'>
+          <div className='row'>
+            <div className='col-xs-12'>
+              <h1>{title}</h1>
+              {privacy_header}
             </div>
           </div>
         </div>
-      </Container>
+        <div className='description'>
+          <ReactMarkdown source={content} />
+        </div>
+        <div className='inputs'>
+          {_.map(inputs, (metric, i) => (
+            <Input
+              ref={`input-${metric.id}`}
+              key={metric.id}
+              id={metric.id}
+              isFirst={i===0}
+              name={metric.name}
+              description={_.get(metric, 'guesstimate.description')}
+              errors={_.get(metric, 'simulation.sample.errors')}
+              onBlur={this.onBlur.bind(this, metric)}
+              onChange={this.onChange.bind(this, metric)}
+              onEnter={this.onEnter.bind(this)}
+            />
+          ))}
+        </div>
+        {this.state.showResult &&
+          <div>
+            <hr className='result-divider'/>
+            <div className='outputs'>
+              {_.map(outputs, (m, i) => <Output key={i} metric={m}/>)}
+            </div>
+          </div>
+        }
+        {!this.state.showResult &&
+          <div className='row'>
+            <div className='col-xs-12 col-md-7'/>
+            <div className='col-xs-12 col-md-5'>
+              <div
+                className={`ui button calculateButton${this.state.resultComputing ? ' loading' : this.state.readyToCalculate ? '' : ' disabled'}`}
+                onClick={() => {this.allOutputsHaveStats() ? this.setState({showResult: true}) : this.setState({resultComputing: true})}}
+              >
+                Calculate
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
     )
   }
 }

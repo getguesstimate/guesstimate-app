@@ -342,7 +342,7 @@ export default class SpacesShow extends Component {
             </SpaceRightSidebar>
           }
           {!this.state.showCalculatorForm && !!this.state.showCalculatorId &&
-            <SpaceRightSidebar title={'Calculator'} onClose={this.hideCalculator.bind(this)}>
+            <SpaceRightSidebar title={''} onClose={this.hideCalculator.bind(this)}>
               <CalculatorCompressedShow calculatorId={this.state.showCalculatorId}/>
             </SpaceRightSidebar>
           }
@@ -356,7 +356,7 @@ const SpaceRightSidebar = ({title, onClose, children}) => (
   <div className='SpaceRightSidebar'>
     <div className='SpaceRightSidebar--padded-area row'>
       <div className='col-xs-8'>
-        <h2>{title}</h2>
+        {!_.isEmpty(title) && <h2> {title} </h2>}
       </div>
       <div className='col-xs-4 button-close-text'>
         <ButtonCloseText onClick={onClose}/>

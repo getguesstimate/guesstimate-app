@@ -90,9 +90,8 @@
   }
 
   .result-divider {
+    border: none;
     border-bottom: 2px dotted #e8e8e8;
-    border-top: none;
-    margin: 0;
   }
 
   .outputs {
@@ -191,6 +190,19 @@
   border: none;
   border-radius: 0;
   font-size: 1em;
+
+  &.medium-font-size{
+    font-size: 1.1em;
+  }
+
+  .result-divider {
+    margin: 1em 0;
+  }
+
+  .calculateButton {
+    margin-top: 2em;
+  }
+
   .inputs .input {
     padding: .3em 0 .3em 0;
   }
@@ -230,6 +242,10 @@
   color: rgba(80, 80, 80, 1);
   font-size: 1.6em;
   line-height: 1.2em;
+  .result-divider {
+    border-top: none;
+    margin: 0;
+  }
   .inputs {
     padding-bottom: 1em;
     margin-top: 2em;
