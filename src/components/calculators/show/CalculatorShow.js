@@ -10,7 +10,6 @@ import {Output} from './output'
 
 import {deleteSimulations, runSimulations} from 'gModules/simulations/actions'
 import {changeGuesstimate} from 'gModules/guesstimates/actions'
-import {Button} from 'gComponents/utility/buttons/button.js'
 
 import {Guesstimator} from 'lib/guesstimator/index'
 
@@ -89,25 +88,17 @@ export class CalculatorShow extends Component {
   }
 
   render() {
-    const {calculator: {content, title, space_id, share_image}, size, inputs, outputs, isPrivate, classes} = this.props
+    const {calculator: {content, title, space_id, share_image}, inputs, outputs, isPrivate, classes} = this.props
 
     return (
       <div className={`${['calculator', ...classes].join(' ')}`}>
         <div className='padded-section'>
         <div className='title-bar'>
           <div className='row'>
-            <div className='col-xs-10'>
+            <div className='col-xs-12'>
               <h1>{title}</h1>
               {isPrivate && <span className='privacy-icon'><Icon name='lock'/>Private</span>}
             </div>
-            {size === 'wide' &&
-              <div className='col-xs-2 action-section'>
-                <Button onClick={this.props.showHelp}>
-                  <Icon name='question'/>
-                  Help
-                </Button>
-              </div>
-            }
           </div>
         </div>
         <div className='description'><ReactMarkdown source={content} /></div>
