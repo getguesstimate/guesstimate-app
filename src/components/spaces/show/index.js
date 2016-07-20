@@ -21,6 +21,7 @@ import * as copiedActions from 'gModules/copied/actions'
 import {removeSelectedMetrics} from 'gModules/metrics/actions'
 import {undo, redo} from 'gModules/checkpoints/actions'
 import {ButtonCloseText} from 'gComponents/utility/buttons/close'
+import {ButtonEditText, ButtonDeleteText, ButtonExpandText} from 'gComponents/utility/buttons/button'
 
 import {parseSlurp} from 'lib/slurpParser'
 
@@ -337,12 +338,34 @@ export default class SpacesShow extends Component {
             onCut={this.onCut.bind(this, true)}
           />
           {this.state.showCalculatorForm &&
-            <SpaceRightSidebar title={'New Calculator'} onClose={this.hideCalculatorForm.bind(this)}>
+            <SpaceRightSidebar>
+              <SpaceRightHeader>
+                <div className='row'>
+                  <div className='col-xs-8'>
+                    New Calculator
+                  </div>
+                  <div className='col-xs-4 button-close-text'>
+                    <ButtonCloseText onClick={this.hideCalculatorForm.bind(this)}/>
+                  </div>
+                </div>
+              </SpaceRightHeader>
               <CalculatorNewContainer space={space}/>
             </SpaceRightSidebar>
           }
           {!this.state.showCalculatorForm && !!this.state.showCalculatorId &&
             <SpaceRightSidebar title={''} onClose={this.hideCalculator.bind(this)}>
+              <SpaceRightHeader>
+                <div className='row'>
+                  <div className='col-xs-12'>
+                    <div className='button-close-text'>
+                      <ButtonExpandText onClick={this.hideCalculatorForm.bind(this)}/>
+                      <ButtonEditText onClick={this.hideCalculatorForm.bind(this)}/>
+                      <ButtonDeleteText onClick={this.hideCalculatorForm.bind(this)}/>
+                      <ButtonCloseText onClick={this.hideCalculatorForm.bind(this)}/>
+                    </div>
+                  </div>
+                </div>
+              </SpaceRightHeader>
               <CalculatorCompressedShow calculatorId={this.state.showCalculatorId}/>
             </SpaceRightSidebar>
           }
@@ -354,15 +377,15 @@ export default class SpacesShow extends Component {
 
 const SpaceRightSidebar = ({title, onClose, children}) => (
   <div className='SpaceRightSidebar'>
-    <div className='SpaceRightSidebar--padded-area row'>
-      <div className='col-xs-8'>
-        {!_.isEmpty(title) && <h2> {title} </h2>}
-      </div>
-      <div className='col-xs-4 button-close-text'>
-        <ButtonCloseText onClick={onClose}/>
-      </div>
+    {children}
+  </div>
+)
+
+const SpaceRightHeader = ({children}) => (
+  <div>
+    <div className='SpaceRightSidebar--padded-area'>
+      {children}
     </div>
     <hr className='SpaceRightSidebar--divider'/>
-    {children}
   </div>
 )
