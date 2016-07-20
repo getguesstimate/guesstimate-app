@@ -6,7 +6,7 @@ import Helmet from 'react-helmet'
 import {ShareButtons, generateShareIcon} from 'react-share'
 
 import Container from 'gComponents/utility/container/Container'
-import {CalculatorShowIsolated} from './CalculatorShowIsolated'
+import {CalculatorShow} from './CalculatorShow'
 
 import {calculatorSpaceSelector} from './calculator-space-selector'
 
@@ -19,7 +19,7 @@ import * as Calculator from 'gEngine/calculator'
 import '../style.css'
 
 @connect(calculatorSpaceSelector, dispatch => bindActionCreators({fetchById}, dispatch))
-export class CalculatorShow extends Component {
+export class CalculatorExpandedShow extends Component {
   state = {
     attemptedFetch: false,
   }
@@ -56,7 +56,7 @@ export class CalculatorShow extends Component {
         <div className='row'>
           <div className='col-xs-0 col-md-2'/>
           <div className='col-xs-12 col-md-8'>
-            <CalculatorShowIsolated {...this.props} classes={['wide']} />
+            <CalculatorShow {...this.props} classes={['wide']} />
             <div className='information-section'>
               <div className='row'>
                 <div className='col-xs-12 col-sm-6'>

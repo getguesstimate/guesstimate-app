@@ -10,7 +10,7 @@ import {SpaceSidebar} from './sidebar'
 import {ClosedSpaceSidebar} from './closed_sidebar'
 import Canvas from 'gComponents/spaces/canvas'
 import {CalculatorNewContainer} from 'gComponents/calculators/new/container'
-import {CalculatorCompressedShow} from 'gComponents/calculators/show/CompressedViewContainer'
+import {CalculatorCompressedShow} from 'gComponents/calculators/show/CalculatorCompressedShow'
 import {ButtonCloseText} from 'gComponents/utility/buttons/close'
 import {ButtonEditText, ButtonDeleteText, ButtonExpandText} from 'gComponents/utility/buttons/button'
 
