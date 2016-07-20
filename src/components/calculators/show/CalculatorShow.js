@@ -116,10 +116,6 @@ export class CalculatorShow extends Component {
     const {FacebookShareButton, TwitterShareButton} = ShareButtons
     const FacebookIcon = generateShareIcon('facebook')
     const TwitterIcon = generateShareIcon('twitter')
-    let privacy_header = false
-    if (isPrivate) {
-      privacy_header = (<span className='privacy-icon'><Icon name='lock'/>Private</span>)
-    }
 
     return (
       <Container>
@@ -132,7 +128,7 @@ export class CalculatorShow extends Component {
                 <div className='row'>
                   <div className='col-xs-12'>
                     <h1>{title}</h1>
-                    {privacy_header}
+                    {isPrivate && <span className='privacy-icon'><Icon name='lock'/>Private</span>}
                   </div>
                 </div>
               </div>

@@ -3,15 +3,11 @@ import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 
 import ReactMarkdown from 'react-markdown'
-import {ShareButtons, generateShareIcon} from 'react-share'
 import Icon from 'react-fa'
 
 import {Input} from './input'
 import {Output} from './output'
 
-import {calculatorSpaceSelector} from './calculator-space-selector'
-
-import {fetchById} from 'gModules/calculators/actions'
 import {deleteSimulations, runSimulations} from 'gModules/simulations/actions'
 import {changeGuesstimate} from 'gModules/guesstimates/actions'
 
@@ -19,8 +15,8 @@ import {Guesstimator} from 'lib/guesstimator/index'
 
 import '../style.css'
 
-@connect(calculatorSpaceSelector, dispatch => bindActionCreators({fetchById, changeGuesstimate, deleteSimulations, runSimulations}, dispatch))
-export class CalculatorCompressedShow extends Component {
+@connect(null, dispatch => bindActionCreators({changeGuesstimate, deleteSimulations, runSimulations}, dispatch))
+export class CalculatorShowIsolated extends Component {
   state = {
     resultComputing: false,
     showResult: false,
@@ -92,12 +88,10 @@ export class CalculatorCompressedShow extends Component {
   }
 
   render() {
-    if (!this.props.calculator) { return false }
-
-    const {calculator: {content, title, space_id, share_image}, inputs, outputs, isPrivate} = this.props
+    const {calculator: {content, title, space_id, share_image}, inputs, outputs, isPrivate, classes} = this.props
 
     return (
-      <div className='calculator narrow medium-font-size'>
+      <div className={`${['calculator', ...classes].join(' ')}`}>
         <div className='padded-section'>
         <div className='title-bar'>
           <div className='row'>
