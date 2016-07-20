@@ -224,7 +224,7 @@ export default class SpacesShow extends Component {
   newCalculatorHeader() {
     return (
       <div className='row'>
-        <div className='col-xs-8'>New Calculator</div>
+        <div className='col-xs-8'><h2>New Calculator</h2></div>
         <div className='col-xs-4 button-close-text'><ButtonCloseText onClick={this.hideCalculatorSidebar.bind(this)}/></div>
       </div>
     )
