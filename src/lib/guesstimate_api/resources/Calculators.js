@@ -8,6 +8,13 @@ export class Calculators extends AbstractResource {
     this.guesstimateMethod({url, method})(callback)
   }
 
+  destroy(id, callback) {
+    const url = `calculators/${id}`
+    const method = 'DELETE'
+
+    this.guesstimateMethod({url, method})(callback)
+  }
+
   create(spaceId, data, callback) {
     const url = `spaces/${spaceId}/calculators`
     const method = 'POST'
