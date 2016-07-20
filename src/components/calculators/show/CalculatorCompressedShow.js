@@ -13,7 +13,6 @@ import {Output} from './output'
 
 import {calculatorSpaceSelector} from './calculator-space-selector'
 
-import {navigateFn} from 'gModules/navigation/actions'
 import {fetchById} from 'gModules/calculators/actions'
 import {deleteSimulations, runSimulations} from 'gModules/simulations/actions'
 import {changeGuesstimate} from 'gModules/guesstimates/actions'
