@@ -192,21 +192,11 @@ export class SpaceToolbar extends Component {
                     ..._.map(calculators, c => (
                       <CardListElement
                         key={c.id}
-                        onMouseDown={navigateFn(e.calculator.relativePath(c))}
+                        header={c.title}
+                        onMouseDown={() => {this.props.showCalculator(c.id)}}
+                        closeOnClick={true}
                         icon={'calculator'}
-                      >
-                        <div className='row'>
-                          <div className='col-md-9'>{c.title}</div>
-                          <div className='col-md-3'>
-                            <span onMouseDown={(e) => {
-                              e.stopPropagation()
-                              showCalculatorForm(c)
-                            }}>
-                              <Icon name='pencil'/>
-                            </span>
-                          </div>
-                        </div>
-                      </CardListElement>
+                      />
                     )),
                     editableByMe && (
                       <CardListElement
