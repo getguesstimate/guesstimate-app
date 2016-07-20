@@ -119,13 +119,9 @@ export default class SpacesShow extends Component {
     }
   }
 
-  showCalculatorForm(c) {
+  showCalculatorForm(calcToEdit) {
     elev.hide()
-    if (!!c) { 
-      this.setState({showEditCalculatorForm: c})
-    } else {
-      this.setState({showNewCalculatorForm: true})
-    }
+    !!calcToEdit ? this.setState({showEditCalculatorForm: calcToEdit}) : this.setState({showNewCalculatorForm: true})
   }
 
   showCalculator(showCalculatorId) {
