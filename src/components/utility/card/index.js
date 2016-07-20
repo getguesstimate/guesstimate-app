@@ -68,8 +68,8 @@ const IconSection = ({colCount, icon, ionicIcon, image, imageShape}) => (
 
 const ChildrenSection = ({colCount, header, children}) => (
   <div className={`col-xs-${colCount} info-section`}>
-    <span className='header'>{header.capitalizeFirstLetter()}</span>
-    {children &&
+    {!!header && <span className='header'>{header.capitalizeFirstLetter()}</span>}
+    {!!children &&
       <div className='content'> {children} </div>
     }
   </div>

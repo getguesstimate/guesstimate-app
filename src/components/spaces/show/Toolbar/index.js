@@ -95,7 +95,7 @@ export class SpaceToolbar extends Component {
       onAllowEdits,
       onForbidEdits,
       calculators,
-      makeNewCalculator,
+      showCalculatorForm,
     } = this.props
     const ReactTooltipParams = {class: 'small-tooltip', delayShow: 0, delayHide: 0, place: 'bottom', effect: 'solid'}
 
@@ -192,16 +192,27 @@ export class SpaceToolbar extends Component {
                     ..._.map(calculators, c => (
                       <CardListElement
                         key={c.id}
-                        header={c.title}
                         onMouseDown={navigateFn(e.calculator.relativePath(c))}
                         icon={'calculator'}
-                      />
+                      >
+                        <div className='row'>
+                          <div className='col-md-9'>{c.title}</div>
+                          <div className='col-md-3'>
+                            <span onMouseDown={(e) => {
+                              e.stopPropagation()
+                              showCalculatorForm(c)
+                            }}>
+                              <Icon name='pencil'/>
+                            </span>
+                          </div>
+                        </div>
+                      </CardListElement>
                     )),
                     editableByMe && (
                       <CardListElement
                         key={'new'}
                         header={'New Calculator'}
-                        onMouseDown={makeNewCalculator}
+                        onMouseDown={showCalculatorForm}
                         closeOnClick={true}
                         icon={'plus'}
                       />

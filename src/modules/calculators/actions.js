@@ -47,3 +47,17 @@ export function create(spaceId, calculator) {
     })
   }
 }
+
+export function update(calculator) {
+  return (dispatch, getState) => {
+    dispatch(sActions.updateStart(calculator))
+    api(getState()).calculators.update(calculator.id, calculator, (err, calculator) => {
+      if (err) {
+        captureApiError('CalculatorsCreate', err.jqXHR, err.textStatus, err, {url: 'CalculatorsCreate'})
+      } else if (calculator) {
+        dispatch(sActions.updateSuccess(calculator))
+        app.router.history.navigate(`/calculators/${calculator.id}`)
+      }
+    })
+  }
+}

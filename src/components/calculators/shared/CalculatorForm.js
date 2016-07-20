@@ -8,7 +8,7 @@ import * as Calculator from 'gEngine/calculator'
 
 const SortableListItem = Sortable(props => <div {...props} className='list-item'>{props.item}</div>)
 
-export class CalculatorNew extends Component {
+export class CalculatorForm extends Component {
   state = {
     draggingIndex: null,
     draggingMetricId: null,

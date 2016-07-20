@@ -10,6 +10,7 @@ import {SpaceSidebar} from './sidebar'
 import {ClosedSpaceSidebar} from './closed_sidebar'
 import Canvas from 'gComponents/spaces/canvas'
 import {CalculatorNewContainer} from 'gComponents/calculators/new/container'
+import {CalculatorEditContainer} from 'gComponents/calculators/edit/container'
 
 import {denormalizedSpaceSelector} from '../denormalized-space-selector'
 
@@ -60,7 +61,8 @@ export default class SpacesShow extends Component {
   state = {
     showSidebar: true,
     attemptedFetch: false,
-    showCalculatorForm: false,
+    showNewCalculatorForm: false,
+    showEditCalculatorForm: null,
   }
 
   componentWillMount() {
@@ -113,13 +115,17 @@ export default class SpacesShow extends Component {
     }
   }
 
-  showCalculatorForm() {
+  showCalculatorForm(c) {
     elev.hide()
-    this.setState({showCalculatorForm: true})
+    if (!!c) { 
+      this.setState({showEditCalculatorForm: c})
+    } else {
+      this.setState({showNewCalculatorForm: true})
+    }
   }
 
   hideCalculatorForm() {
-    this.setState({showCalculatorForm: false})
+    this.setState({showNewCalculatorForm: false, showEditCalculatorForm: null})
     elev.show()
   }
 
@@ -301,7 +307,7 @@ export default class SpacesShow extends Component {
             canRedo={space.checkpointMetadata.head !== 0}
             onImportSlurp={this.onImportSlurp.bind(this)}
             calculators={space.calculators}
-            makeNewCalculator={this.showCalculatorForm.bind(this)}
+            showCalculatorForm={this.showCalculatorForm.bind(this)}
           />
         </div>
 
@@ -323,9 +329,14 @@ export default class SpacesShow extends Component {
             onPaste={this.onPaste.bind(this, true)}
             onCut={this.onCut.bind(this, true)}
           />
-          {this.state.showCalculatorForm &&
+          {this.state.showNewCalculatorForm &&
             <SpaceRightSidebar view={'CalculatorNew'} onClose={this.hideCalculatorForm.bind(this)}>
               <CalculatorNewContainer space={space}/>
+            </SpaceRightSidebar>
+          }
+          {!this.state.showNewCalculatorForm && !!this.state.showEditCalculatorForm &&
+            <SpaceRightSidebar onClose={this.hideCalculatorForm.bind(this)}>
+              <CalculatorEditContainer space={space} calculator={this.state.showEditCalculatorForm}/>
             </SpaceRightSidebar>
           }
         </div>
