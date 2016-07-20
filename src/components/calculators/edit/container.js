@@ -4,7 +4,6 @@ import {bindActionCreators} from 'redux'
 
 import {CalculatorForm} from '../shared/CalculatorForm.js'
 
-import {fetchById} from 'gModules/spaces/actions'
 import {update} from 'gModules/calculators/actions'
 
 import {INTERMEDIATE, OUTPUT, INPUT, NOEDGE, relationshipType} from 'gEngine/graph'
@@ -21,7 +20,7 @@ function AddAtIndex(l, e, destIndex) {
   else { return [...l.slice(0, index), ...l.slice(index+1, destIndex+1), e, ...l.slice(destIndex+1)] }
 }
 
-@connect(null, dispatch => bindActionCreators({update, fetchById}, dispatch))
+@connect(null, dispatch => bindActionCreators({update}, dispatch))
 export class CalculatorEditContainer extends Component {
   state = {
     validInputs: [],
@@ -39,6 +38,7 @@ export class CalculatorEditContainer extends Component {
   setup() {
     const {calculator, space} = this.props
     if (!space.id) { return }
+
     const {validInputs, validOutputs} = this.validMetrics(space.metrics)
     this.setState({calculator, validInputs, validOutputs})
   }
@@ -103,7 +103,6 @@ export class CalculatorEditContainer extends Component {
   }
 
   _orderDisplayedMetrics(metric_ids, validMetrics) {
-    console.log(validMetrics)
     return [
       ...metric_ids.map(i => validMetrics.find(m => m.id === i)).filter(m => !!m),
       ...validMetrics.filter(i => !this._isVisible(i.id))

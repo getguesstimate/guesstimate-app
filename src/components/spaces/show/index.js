@@ -9,8 +9,8 @@ import {SpaceToolbar} from './Toolbar/index'
 import {SpaceSidebar} from './sidebar'
 import {ClosedSpaceSidebar} from './closed_sidebar'
 import Canvas from 'gComponents/spaces/canvas'
-import {CalculatorNewContainer} from 'gComponents/calculators/new/container'
-import {CalculatorEditContainer} from 'gComponents/calculators/edit/container'
+import {NewCalculatorForm} from 'gComponents/calculators/new'
+import {EditCalculatorForm} from 'gComponents/calculators/edit'
 import {CalculatorCompressedShow} from 'gComponents/calculators/show/CalculatorCompressedShow'
 import {ButtonCloseText} from 'gComponents/utility/buttons/close'
 import {ButtonEditText, ButtonDeleteText, ButtonExpandText} from 'gComponents/utility/buttons/button'
@@ -135,7 +135,7 @@ export default class SpacesShow extends Component {
 
   hideCalculatorSidebar() {
     elev.show()
-    this.setState({showCalculatorId: null, showCalculatorForm: false, showEditCalculatorForm: null})
+    this.setState({showCalculatorId: null, showNewCalculatorForm: false, showEditCalculatorForm: null})
   }
 
   onSave() {
@@ -262,9 +262,9 @@ export default class SpacesShow extends Component {
     const header = (showNewCalculatorForm || showEditCalculatorForm) ? this.calculatorFormHeader() : this.showCalculatorHeader()
     let main
     if (showNewCalculatorForm) {
-      main = <CalculatorNewContainer space={denormalizedSpace}/>
+      main = <NewCalculatorForm space={denormalizedSpace}/>
     } else if (!!showEditCalculatorForm) {
-      main = <CalculatorEditContainer space={denormalizedSpace} calculator={this.state.showEditCalculatorForm}/>
+      main = <EditCalculatorForm space={denormalizedSpace} calculator={this.state.showEditCalculatorForm}/>
     } else {
       main = <CalculatorCompressedShow calculatorId={showCalculatorId}/>
     }

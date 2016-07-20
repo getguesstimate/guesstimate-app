@@ -1,10 +1,6 @@
 import React, {Component} from 'react'
-import {connect} from 'react-redux'
-import {bindActionCreators} from 'redux'
 
 import {CalculatorForm} from '../shared/CalculatorForm.js'
-
-import {create} from 'gModules/calculators/actions'
 
 import {INTERMEDIATE, OUTPUT, INPUT, NOEDGE, relationshipType} from 'gEngine/graph'
 
@@ -20,8 +16,7 @@ function AddAtIndex(l, e, destIndex) {
   else { return [...l.slice(0, index), ...l.slice(index+1, destIndex+1), e, ...l.slice(destIndex+1)] }
 }
 
-@connect(null, dispatch => bindActionCreators({create}, dispatch))
-export class CalculatorNewContainer extends Component {
+export class FormContainer extends Component {
   state = {
     validInputs: [],
     validOutputs: [],
@@ -43,6 +38,7 @@ export class CalculatorNewContainer extends Component {
 
     const calculator = this.props.calculator || {
        title: space.name || "",
+       space_id: space.id,
        content: space.description || "",
        input_ids: validInputs.map(e => e.id),
        output_ids: validOutputs.map(e => e.id)
@@ -57,7 +53,7 @@ export class CalculatorNewContainer extends Component {
     return {validInputs, validOutputs}
   }
 
-  _onCreate() { this.props.create(this.props.space.id, {calculator: this.state.calculator}) }
+  _onCreate() { this.props.onSubmit(this.state.calculator) }
 
   _onMetricHide(id) {
     const {calculator} = this.state
@@ -130,7 +126,7 @@ export class CalculatorNewContainer extends Component {
   }
 
   render() {
-    const {validInputs, validOutputs, calculator} = this.state
+    const {props: {buttonText}, state: {validInputs, validOutputs, calculator}} = this
     if (_.isEmpty(calculator)) { return false }
 
     const inputs = this._orderDisplayedMetrics(calculator.input_ids, validInputs)
@@ -148,6 +144,7 @@ export class CalculatorNewContainer extends Component {
         onChangeContent={this._onChangeContent.bind(this)}
         onSubmit={this._onCreate.bind(this)}
         isValid={this._isValid()}
+        buttonText={buttonText}
       />
     )
   }
