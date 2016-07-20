@@ -48,6 +48,10 @@
     font-size: .7em;
   }
 
+  .header-actions .button{
+    float: right;
+  }
+
   .editor {
     padding: .4rem .8rem;
     background-color: $grey-6;

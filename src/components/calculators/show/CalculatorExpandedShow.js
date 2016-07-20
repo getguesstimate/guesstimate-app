@@ -101,40 +101,42 @@ class CalculatorHelp extends Component {
   render() {
     return (
       <div className='calculator wide help'>
-        <div className='row'>
-          <div className='col-xs-9'>
-            <h1> Useful Information </h1>
+        <div className='padded-section'>
+          <div className='row'>
+            <div className='col-xs-9'>
+              <h1> Useful Information </h1>
+            </div>
+            <div className='col-xs-3 header-actions'>
+              <ButtonCloseText onClick={this.props.onClose}/>
+            </div>
           </div>
-          <div className='col-xs-3'>
-            <ButtonCloseText onClick={this.props.onClose}/>
-          </div>
-        </div>
-        <hr className='result-divider'/>
+          <hr className='result-divider'/>
 
-        <h2> Input Types </h2>
+          <h2> Input Types </h2>
 
-      <table className='ui celled table'>
-        <thead>
-          <tr><th>Type</th><th>Example</th><th>Explanation</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Point</td><td><input className='editor' value='8'/></td><td>You believe this value is 8.</td></tr>
-          <tr><td>Range</td><td><input className='editor' value='6 to 12'/></td> <td>You believe this value is between 8 and 12.  More specifically, this indicates that you believe there's a 95% chance the value is above 6, and a 95% chance the value is below 12.</td></tr>
-        </tbody>
-      </table>
-        <hr className='result-divider'/>
-        <h2> Units </h2>
         <table className='ui celled table'>
           <thead>
-            <tr><th>Symbol</th><th>Multiplier</th><th>Example</th></tr>
+            <tr><th>Type</th><th>Example</th><th>Explanation</th></tr>
           </thead>
           <tbody>
-            <tr><td>K</td><td>Thousand</td><td><input className='editor' value='3K to 8K'/></td></tr>
-            <tr><td>M</td><td>Million</td><td><input className='editor' value='3M to 8M'/></td></tr>
-            <tr><td>G</td><td>Billion</td><td><input className='editor' value='3G to 8G'/></td></tr>
-            <tr><td>T</td><td>Trillion</td><td><input className='editor' value='3T to 8T'/></td></tr>
+            <tr><td>Point</td><td><input className='editor' value='8'/></td><td>You believe this value is 8.</td></tr>
+            <tr><td>Range</td><td><input className='editor' value='6 to 12'/></td> <td>You believe this value is between 8 and 12.  More specifically, this indicates that you believe there's a 95% chance the value is above 6, and a 95% chance the value is below 12.</td></tr>
           </tbody>
         </table>
+          <hr className='result-divider'/>
+          <h2> Units </h2>
+          <table className='ui celled table'>
+            <thead>
+              <tr><th>Symbol</th><th>Multiplier</th><th>Example</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>K</td><td>Thousand</td><td><input className='editor' value='3K to 8K'/></td></tr>
+              <tr><td>M</td><td>Million</td><td><input className='editor' value='3M to 8M'/></td></tr>
+              <tr><td>B</td><td>Billion</td><td><input className='editor' value='3G to 8G'/></td></tr>
+              <tr><td>T</td><td>Trillion</td><td><input className='editor' value='3T to 8T'/></td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     )
   }
