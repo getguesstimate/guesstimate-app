@@ -11,7 +11,6 @@ import {CalculatorShow} from './CalculatorShow'
 import {calculatorSpaceSelector} from './calculator-space-selector'
 import {ButtonCloseText} from 'gComponents/utility/buttons/close/index.js'
 
-
 import {navigateFn} from 'gModules/navigation/actions'
 import {fetchById} from 'gModules/calculators/actions'
 
@@ -120,7 +119,7 @@ class CalculatorHelp extends Component {
           </thead>
           <tbody>
             <tr><td>Point</td><td><input className='editor' value='8'/></td><td>You believe this value is 8.</td></tr>
-            <tr><td>Range</td><td><input className='editor' value='6 to 12'/></td> <td>You believe this value is between 8 and 12.  More specifically, this indicates that you believe there's a 95% chance the value is above 6, and a 95% chance the value is below 12.</td></tr>
+            <tr><td>Range</td><td><input className='editor' value='6 to 12'/></td> <td>You believe this value is between 6 and 12.  More specifically, this indicates that you believe there's a 95% chance the value is above 6, and a 95% chance the value is below 12.</td></tr>
           </tbody>
         </table>
           <hr className='result-divider'/>
@@ -132,7 +131,7 @@ class CalculatorHelp extends Component {
             <tbody>
               <tr><td>K</td><td>Thousand</td><td><input className='editor' value='3K to 8K'/></td></tr>
               <tr><td>M</td><td>Million</td><td><input className='editor' value='3M to 8M'/></td></tr>
-              <tr><td>B</td><td>Billion</td><td><input className='editor' value='3G to 8G'/></td></tr>
+              <tr><td>B</td><td>Billion</td><td><input className='editor' value='3B to 8B'/></td></tr>
               <tr><td>T</td><td>Trillion</td><td><input className='editor' value='3T to 8T'/></td></tr>
             </tbody>
           </table>
