@@ -21,6 +21,7 @@ import {allowEdits, forbidEdits} from 'gModules/canvas_state/actions'
 import * as spaceActions from 'gModules/spaces/actions'
 import * as simulationActions from 'gModules/simulations/actions'
 import * as copiedActions from 'gModules/copied/actions'
+import * as calculatorActions from 'gModules/calculators/actions'
 import {removeSelectedMetrics} from 'gModules/metrics/actions'
 import {undo, redo} from 'gModules/checkpoints/actions'
 import {navigateFn} from 'gModules/navigation/actions'
@@ -242,7 +243,14 @@ export default class SpacesShow extends Component {
             {editableByMe && 
               <ButtonEditText onClick={() => {this.setState({showEditCalculatorForm: calculators.find(c => c.id === showCalculatorId)})}}/>
             }
-            {false && editableByMe && <ButtonDeleteText onClick={() => {}}/>}
+            {editableByMe &&
+              <ButtonDeleteText onClick={
+                () => {
+                  this.props.dispatch(calculatorActions.destroy(showCalculatorId))
+                  this.hideCalculatorSidebar()
+                }
+              }/>
+            }
             <ButtonCloseText onClick={this.hideCalculatorSidebar.bind(this)}/>
           </div>
         </div>

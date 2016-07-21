@@ -32,6 +32,19 @@ export function fetchById(id) {
   }
 }
 
+export function destroy(id) {
+  return (dispatch, getState) => {
+    dispatch(sActions.deleteStart({id}))
+    api(getState()).calculators.destroy(id, (err, value) => {
+      if (err) {
+        captureApiError('CalculatorsDestroy', err.jqXHR, err.textStatus, err, {url: 'calculatorsDestroy'})
+      } else {
+        dispatch(sActions.deleteSuccess({id}))
+      }
+    })
+  }
+}
+
 export function create(spaceId, calculator, callback) {
   return (dispatch, getState) => {
     const record = {...calculator, id: cuid()}
