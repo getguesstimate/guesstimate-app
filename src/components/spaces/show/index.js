@@ -258,9 +258,16 @@ export default class SpacesShow extends Component {
     const header = (showNewCalculatorForm || showEditCalculatorForm) ? this.calculatorFormHeader() : this.showCalculatorHeader()
     let main
     if (showNewCalculatorForm) {
-      main = <NewCalculatorForm space={denormalizedSpace}/>
+      main = <NewCalculatorForm
+        space={denormalizedSpace}
+        onCalculatorSave={({id}) => this.setState({showNewCalculatorForm: false, showCalculatorId: id})}
+      />
     } else if (!!showEditCalculatorForm) {
-      main = <EditCalculatorForm space={denormalizedSpace} calculator={this.state.showEditCalculatorForm}/>
+      main = <EditCalculatorForm 
+        space={denormalizedSpace}
+        calculator={this.state.showEditCalculatorForm}
+        onCalculatorSave={({id}) => this.setState({showEditCalculatorForm: null, showCalculatorId: id})}
+      />
     } else {
       main = <CalculatorCompressedShow calculatorId={showCalculatorId}/>
     }

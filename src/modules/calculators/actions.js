@@ -32,7 +32,7 @@ export function fetchById(id) {
   }
 }
 
-export function create(spaceId, calculator) {
+export function create(spaceId, calculator, callback) {
   return (dispatch, getState) => {
     const record = {...calculator, id: cuid()}
     dispatch(sActions.createStart(record))
@@ -42,13 +42,14 @@ export function create(spaceId, calculator) {
         captureApiError('CalculatorsCreate', err.jqXHR, err.textStatus, err, {url: 'CalculatorsCreate'})
       } else if (calculator) {
         dispatch(sActions.createSuccess(calculator))
-        app.router.history.navigate(`/calculators/${calculator.id}`)
+        if (!callback) { app.router.history.navigate(`/calculators/${calculator.id}`) }
+        else { callback(calculator) }
       }
     })
   }
 }
 
-export function update(calculator) {
+export function update(calculator, callback) {
   return (dispatch, getState) => {
     dispatch(sActions.updateStart(calculator))
     api(getState()).calculators.update(calculator.id, calculator, (err, calculator) => {
@@ -56,7 +57,8 @@ export function update(calculator) {
         captureApiError('CalculatorsCreate', err.jqXHR, err.textStatus, err, {url: 'CalculatorsCreate'})
       } else if (calculator) {
         dispatch(sActions.updateSuccess(calculator))
-        app.router.history.navigate(`/calculators/${calculator.id}`)
+        if (!callback) { app.router.history.navigate(`/calculators/${calculator.id}`) }
+        else { callback(calculator) }
       }
     })
   }
