@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 
+import ReactMarkdown from 'react-markdown'
 import Icon from 'react-fa'
 
 import {Guesstimator} from 'lib/guesstimator/index'
@@ -47,7 +48,7 @@ export class Input extends Component{
           <div className='col-xs-12 col-sm-7'>
             <div className='name'>{name}</div>
             {description &&
-              <div className='description'>{description}</div>
+              <div className='description'><ReactMarkdown source={description}/></div>
             }
           </div>
           <div className='col-xs-12 col-sm-5'>
