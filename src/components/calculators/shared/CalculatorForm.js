@@ -8,7 +8,7 @@ import * as Calculator from 'gEngine/calculator'
 
 const SortableListItem = Sortable(props => <div {...props} className='list-item'>{props.item}</div>)
 
-export class CalculatorNew extends Component {
+export class CalculatorForm extends Component {
   state = {
     draggingIndex: null,
     draggingMetricId: null,
@@ -43,7 +43,7 @@ export class CalculatorNew extends Component {
   }
 
   render() {
-    const [{calculator: {title, content}, inputs, outputs}, {draggingIndex, dropTargetId}] = [this.props, this.state]
+    const {props: {calculator: {title, content}, inputs, outputs, buttonText}, state: {draggingIndex, dropTargetId}} = this
 
     const generateComponents = (metrics, isInput) => _.map(metrics, (m, i) => [this.metricForm(m, isInput, dropTargetId === m.metric.id), m.metric.id])
 
@@ -130,7 +130,7 @@ export class CalculatorNew extends Component {
                 <div
                   className={`ui button green large create-button ${this.props.isValid ? '' : 'disabled'}`}
                   onClick={this.props.onSubmit}>
-                  Create
+                  {buttonText}
                 </div>
               </div>
               <div className='col-md-7' />
