@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import Icon from 'react-fa'
 
 import numberShow from 'lib/numberShower/numberShower'
 
@@ -58,11 +59,11 @@ export class Output extends Component {
             <div className={`result-section${!_.isEmpty(_.get(simulation, 'sample.errors')) ? ' has-errors' : ''}`}>
               {_.has(simulation, 'stats') && <ResultSection {...simulation.stats} />}
 
-              {!showAnalysis &&
-                <div onClick={() => this.showAnalysis(true)}> ? </div>
+              {!showAnalysis && _.has(simulation, 'stats.percentiles.5') &&
+                <div className='icon' onClick={() => this.showAnalysis(true)}> ? </div>
               }
               {showAnalysis &&
-                <div onClick={() => this.showAnalysis(false)}> x </div>
+                <div className='icon' onClick={() => this.showAnalysis(false)}> <i className={`ion-md-close`}/></div>
               }
 
               {showAnalysis && _.has(simulation, 'stats.percentiles.5') &&
