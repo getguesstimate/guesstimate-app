@@ -272,6 +272,12 @@
   }
   .outputs .output {
     padding-bottom: 1.5em;
+
+    .stats-summary {
+      font-size: .63em;
+      margin-top: .8em;
+    }
+
   }
   .padded-section {
     padding: 1em 1em;

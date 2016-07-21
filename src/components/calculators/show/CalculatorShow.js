@@ -110,7 +110,7 @@ export class CalculatorShow extends Component {
             }
           </div>
         </div>
-        <div className='description'><ReactMarkdown source={content} /></div>
+        <div className='description'><ReactMarkdown source={content}/></div>
         <div className='inputs'>
           {_.map(inputs, (metric, i) => (
             <Input
