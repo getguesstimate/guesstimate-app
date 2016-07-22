@@ -20,14 +20,15 @@ import '../style.css'
 export class CalculatorShow extends Component {
   state = {
     resultComputing: false,
-    showResult: this.props.startFilled,
+    showResult: this.props.startFilled && this.allOutputsHaveStats(),
     hasSimulated: false,
     readyToCalculate: false,
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.state.resultComputing && this.allOutputsHaveStats()) {
-      this.setState({resultComputing: false, showResult: true})
+      this.setState({resultComputing: false})
+      this.showResult()
     }
   }
 
@@ -70,7 +71,7 @@ export class CalculatorShow extends Component {
     this.refs[`input-${id}`].blur()
     if (!this.state.readyToCalculate) { return }
     if (this.allOutputsHaveStats() && this.state.hasSimulated) {
-      if (!this.state.showResults) { this.setState({showResult: true}) }
+      this.showResult()
     } else {
       if (!this.state.resultComputing) { this.setState({resultComputing: true}) }
     }
@@ -86,6 +87,11 @@ export class CalculatorShow extends Component {
 
   allOutputsHaveStats() {
     return this.props.outputs.map(o => !!o && _.has(o, 'simulation.stats')).reduce((x,y) => x && y, true)
+  }
+
+  showResult() {
+    if (_.has(this, 'props.onShowResult')) { this.props.onShowResult() }
+    if (!this.state.showResult) { this.setState({showResult: true}) }
   }
 
   render() {
@@ -124,7 +130,7 @@ export class CalculatorShow extends Component {
               onBlur={this.onBlur.bind(this, metric)}
               onChange={this.onChange.bind(this, metric)}
               onEnter={this.onEnter.bind(this)}
-              initialValue={startFilled && _.get(metric, 'guesstimate.input')}
+              initialValue={startFilled && _.get(metric, 'guesstimate.input') || ''}
             />
           ))}
         </div>
@@ -142,7 +148,7 @@ export class CalculatorShow extends Component {
             <div className='col-xs-12 col-md-5'>
               <div
                 className={`ui button calculateButton${this.state.resultComputing ? ' loading' : this.state.readyToCalculate ? '' : ' disabled'}`}
-                onClick={() => {this.allOutputsHaveStats() ? this.setState({showResult: true}) : this.setState({resultComputing: true})}}
+                onClick={() => {this.allOutputsHaveStats() ? this.showResult() : this.setState({resultComputing: true})}}
               >
                 Calculate
               </div>
