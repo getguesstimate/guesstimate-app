@@ -1,0 +1,26 @@
+.button-close {
+  color: #888;
+  cursor: pointer;
+  font-size: 1.9em;
+}
+
+.button-close:hover {
+  color: #666;
+}
+
+.ui.button.g-button {
+  padding: .5em .8em;
+  border-radius: 2px;
+  i {
+    margin-right: .3em;
+  }
+  .fa {
+    margin-right: .3em;
+  }
+  &.red {
+    background-color: #b74d4d;
+    &:hover {
+      background-color: #923f3f;
+    }
+  }
+}

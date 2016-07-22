@@ -12,7 +12,7 @@ const spaceSep = res => new RegExp(res.filter(re => !!re).map(re => `(?:${re.sou
 const padded = res => spaceSep([/^/, ...res, /$/])
 
 const SUFFIX_REGEX = new RegExp(Object.keys(SUFFIXES).join('|'))
-const INTEGER_REGEX = /\d+(?!\.)/
+const INTEGER_REGEX = /(?:\d+)|(?:\d{1,3}(?:,\d{3})*)(?!\.)/
 const DECIMAL_REGEX = /\d*\.\d+/
 const NUMBER_REGEX = new RegExp(`(-?${or([INTEGER_REGEX, DECIMAL_REGEX]).source})\\s?(${SUFFIX_REGEX.source})?`)
 
@@ -20,7 +20,7 @@ export const POINT_REGEX = padded([NUMBER_REGEX])
 export const rangeRegex = (sep, left, right) => padded([left, NUMBER_REGEX, sep, NUMBER_REGEX, right])
 
 const getMult = suffix => Math.pow(10,SUFFIXES[suffix])
-const parseNumber = (num, suffix) => parseFloat(num) * (!!suffix ? getMult(suffix) : 1)
+const parseNumber = (num, suffix) => parseFloat(num.replace(',', '')) * (!!suffix ? getMult(suffix) : 1)
 
 const rangeErrorFn = ([low, high]) => low > high ? {type: PARSER_ERROR, message: 'The low number should come first'} : {}
 

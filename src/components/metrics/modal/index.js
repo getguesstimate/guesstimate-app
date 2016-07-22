@@ -109,7 +109,7 @@ export class MetricModal extends Component {
               <div className='col-sm-12'>
                 <DistributionEditor
                   guesstimate={metric.guesstimate}
-                  errors={errors}
+                  inputMetrics={metric.edges.inputMetrics}
                   metricId={metric.id}
                   size={'large'}
                 />

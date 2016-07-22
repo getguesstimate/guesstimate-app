@@ -140,11 +140,11 @@ export default class Canvas extends Component{
     const passSelected = hasSelected && selectedSamples && !_.isEmpty(selectedSamples)
     return (
       <Metric
-          canvasState={this.props.denormalizedSpace.canvasState}
-          key={metric.id}
-          location={location}
-          metric={metric}
-          selectedMetric={passSelected && selected}
+        canvasState={this.props.denormalizedSpace.canvasState}
+        key={metric.id}
+        location={location}
+        metric={metric}
+        selectedMetric={passSelected && selected}
       />
     )
   }

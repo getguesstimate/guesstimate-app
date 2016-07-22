@@ -5,12 +5,12 @@ import * as _space from './space'
 import BasicGraph from 'lib/basic_graph/basic-graph'
 import {INFINITE_LOOP_ERROR} from 'lib/errors/modelErrors'
 
-export function create(graphAttributes){
+export function create(graphAttributes) {
   return _.pick(graphAttributes, ['metrics', 'guesstimates', 'simulations'])
 }
 
-export function denormalize(graph){
-  let metrics = _.map(graph.metrics, m => _metric.denormalize(m, graph))
+export function denormalize(graph) {
+  const metrics = _.map(graph.metrics, m => _metric.denormalize(m, graph))
   return {metrics}
 }
 
@@ -18,11 +18,11 @@ export function runSimulation(graph, metricId, n) {
   return _dgraph.runSimulation(denormalize(graph), metricId, n)
 }
 
-export function metric(graph, id){
+export function metric(graph, id) {
   return graph.metrics.find(m => (m.id === id))
 }
 
-function basicGraph(graph){
+function basicGraph(graph) {
   const dGraph = denormalize(graph)
   const edges = _dgraph.dependencyMap(dGraph)
   return new BasicGraph(_.map(graph.metrics, m => m.id), edges)
@@ -62,7 +62,7 @@ export function dependencyTree(oGraph, graphFilters) {
 
   const nodes = bGraph.nodes.map(n => [n.id, n.maxDistanceFromRoot])
 
-  if (notHead){
+  if (notHead) {
     const head = nodes.find(e => (e[0] === metricId))
     const rest = nodes.filter(e => (e[0] !== metricId))
     if (!_.isFinite(head[1])) {

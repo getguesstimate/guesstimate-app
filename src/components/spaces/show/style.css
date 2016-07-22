@@ -129,7 +129,7 @@
   margin: 24px 15px 14px 14px;
   overflow: auto;
 
-  span.closeSidebar {
+  .closeSidebar {
     float: right;
   }
 }
@@ -174,7 +174,6 @@
 
 .SpaceSidebar .SpaceSidebar-header .button-close {
   float: right;
-  font-size: 1.3em;
 }
 
 .SpaceSidebar:not(:hover) .SpaceSidebar-header .button-close {
@@ -240,3 +239,30 @@
 .header .dropDown-relative .space-header-action:active {
   background: rgba(255,255,255,0.3);
 }
+
+.SpaceRightSidebar {
+  width: 30em;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: rgba(255,255,255,0.9);
+  border-radius: 0;
+  border-left: 1px solid #ccc;
+
+  h2 {
+    color: #476b82;
+  }
+
+  .SpaceRightSidebar--divider {
+      margin: 0;
+      border: none;
+      border-bottom: 2px dotted #e8e8e8;
+  }
+
+  .SpaceRightSidebar--padded-area {
+    padding: 1em 1em;
+    .button-close-text{
+      float: right;
+    }
+  }
+}
+
