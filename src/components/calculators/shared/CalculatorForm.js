@@ -13,6 +13,7 @@ export class CalculatorForm extends Component {
     draggingIndex: null,
     draggingMetricId: null,
     dropTargetId: null,
+    hasAlreadySubmitted: false,
   }
 
   metricForm({metric: {name, id, guesstimate}, isVisible}, isInput, isDropTarget) {
@@ -42,8 +43,17 @@ export class CalculatorForm extends Component {
     }
   }
 
+  onSubmit() {
+    if (this.state.hasAlreadySubmitted) { return }
+    this.setState({hasAlreadySubmitted: true})
+    this.props.onSubmit()
+  }
+
   render() {
-    const {props: {calculator: {title, content}, inputs, outputs, buttonText}, state: {draggingIndex, dropTargetId}} = this
+    const {
+      props: {calculator: {title, content}, inputs, outputs, buttonText, isValid},
+      state: {draggingIndex, dropTargetId, hasAlreadySubmitted}
+    } = this
 
     const generateComponents = (metrics, isInput) => _.map(metrics, (m, i) => [this.metricForm(m, isInput, dropTargetId === m.metric.id), m.metric.id])
 
@@ -128,8 +138,8 @@ export class CalculatorForm extends Component {
             <div className='row'>
               <div className='col-md-5'>
                 <div
-                  className={`ui button green large create-button ${this.props.isValid ? '' : 'disabled'}`}
-                  onClick={this.props.onSubmit}>
+                  className={`ui button green large create-button ${hasAlreadySubmitted ? 'loading' : ''} ${isValid && !hasAlreadySubmitted  ? '' : 'disabled'}`}
+                  onClick={this.onSubmit.bind(this)}>
                   {buttonText}
                 </div>
               </div>
