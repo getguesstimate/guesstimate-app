@@ -119,10 +119,30 @@
       color: #666;
       margin-left: .5rem;
       font-size: 1.3em;
+      position: relative;
 
       .result-value {
         color: rgba(80, 80, 80, 1);
         font-weight: 800;
+      }
+
+      .icon {
+        position: absolute;
+        right: -41px;
+        top: -4px;
+        background-color: #e0e8ea;
+        width: 26px;
+        height: 26px;
+        text-align: center;
+        padding-top: 1px;
+        border-radius: 1em;
+        font-size: .8em;
+        color: #88919c;
+        cursor: pointer;
+        &:hover {
+          background-color: #b9c7d0;
+          color: #5d6c7b;
+        }
       }
     }
   }
@@ -272,6 +292,12 @@
   }
   .outputs .output {
     padding-bottom: 1.5em;
+
+    .stats-summary {
+      font-size: .63em;
+      margin-top: .8em;
+    }
+
   }
   .padded-section {
     padding: 1em 1em;
