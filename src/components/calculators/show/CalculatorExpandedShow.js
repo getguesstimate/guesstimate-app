@@ -36,8 +36,8 @@ export class CalculatorExpandedShow extends Component {
   render() {
     if (!this.props.calculator) { return false }
 
-    const {calculator: {content, title, space_id, share_image}, inputs, outputs, isPrivate} = this.props
-    const spaceUrl = Space.url({id: space_id})
+    const {calculator: {content, title, space_id, share_image, id}, inputs, outputs, isPrivate} = this.props
+    const spaceUrl = Space.url({id: space_id}) + `/calculators/${id}?showResults=true`
     const calculatorUrl = Calculator.fullUrl(this.props.calculator)
 
     let metaTags = [

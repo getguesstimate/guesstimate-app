@@ -67,14 +67,15 @@ export default class SpacesShow extends Component {
     attemptedFetch: false,
     showNewCalculatorForm: false,
     showEditCalculatorForm: null,
-    showCalculatorId: null,
+    showCalculatorId: this.props.showCalculatorId,
+    showCalculatorResults: this.props.showCalculatorResults,
   }
 
   componentWillMount() {
     window.recorder.recordMountEvent(this)
 
     this.considerFetch(this.props)
-    if (!this.props.embed) { elev.show() }
+    if (!(this.props.embed || this.state.showCalculatorId)) { elev.show() }
 
     if (_.has(this.props, 'denormalizedSpace.editableByMe')) {
       this.setDefaultEditPermission(_.get(this.props, 'denormalizedSpace.editableByMe'))
@@ -132,7 +133,7 @@ export default class SpacesShow extends Component {
 
   hideCalculatorSidebar() {
     elev.show()
-    this.setState({showCalculatorId: null, showNewCalculatorForm: false, showEditCalculatorForm: null})
+    this.setState({showCalculatorId: null, showCalculatorResults: false, showNewCalculatorForm: false, showEditCalculatorForm: null})
   }
 
   onSave() {
@@ -277,7 +278,7 @@ export default class SpacesShow extends Component {
         onCalculatorSave={({id}) => this.setState({showEditCalculatorForm: null, showCalculatorId: id})}
       />
     } else {
-      main = <CalculatorCompressedShow calculatorId={showCalculatorId}/>
+      main = <CalculatorCompressedShow calculatorId={showCalculatorId} startFilled={this.state.showCalculatorResults}/>
     }
 
     return (
