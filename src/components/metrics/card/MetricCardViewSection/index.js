@@ -9,25 +9,36 @@ import StatTable from 'gComponents/simulations/stat_table/index'
 import {MetricToken} from 'gComponents/metrics/card/token/index'
 import SensitivitySection from 'gComponents/metrics/card/SensitivitySection/SensitivitySection'
 
-import {INFINITE_LOOP_ERROR, INPUT_ERROR} from 'lib/errors/modelErrors'
+import {INTERNAL_ERROR, INFINITE_LOOP_ERROR, INPUT_ERROR} from 'lib/errors/modelErrors'
 
 import './style.css'
 
-const isBreak = (errors) => _.some(errors, e => e.type === INPUT_ERROR)
-const isInfiniteLoop = (errors) => _.some(errors, e => e.type === INFINITE_LOOP_ERROR)
+const isBreak = errors => _.some(errors, e => e.type === INPUT_ERROR)
+const severity = errors => isBreak(errors) ? 'minor' : 'serious'
+const isInfiniteLoop = errors => _.some(errors, e => e.type === INFINITE_LOOP_ERROR)
 
 // We have to display this section after it disappears
 // to ensure that the metric card gets selected after click.
-const ErrorSection = ({errors, padTop, hide}) => (
-  <div className={`StatsSectionErrors ${isBreak(errors) ? 'minor' : 'serious'} ${padTop ? 'padTop' : ''} ${hide ? 'isHidden' : ''}`}>
-    {isBreak(errors) && <Icon name='unlink'/>}
-    {!isBreak(errors) && isInfiniteLoop(errors) && <i className='ion-ios-infinite'/>}
-    {!isBreak(errors) && !isInfiniteLoop(errors) && <Icon name='warning'/>}
+const ErrorText = ({error}) => (<div className={'error-message'}>{error.message}</div>)
+
+// We have to display this section after it disappears
+// to ensure that the metric card gets selected after click.
+const ErrorIcon = ({errors}) => {
+  if (isBreak(errors)) { return <Icon name='unlink'/> }
+  else if (isInfiniteLoop(errors)) { return <i className='ion-ios-infinite'/> }
+  else { return <Icon name='warning'/> }
+}
+
+// We have to display this section after it disappears
+// to ensure that the metric card gets selected after click.
+const ErrorSection = ({errors, padTop, active, errorToDisplay}) => (
+  <div className={`StatsSectionErrors ${severity(errors)} ${padTop ? 'padTop' : ''}`}>
+    {active && <ErrorText error={errorToDisplay} />}
+    {!active && <ErrorIcon errors={errors} />}
   </div>
 )
 
-export default class MetricCardViewSection extends Component {
-
+export class MetricCardViewSection extends Component {
   hasContent() {
     return _.has(this, 'refs.name') && this.refs.name.hasContent()
   }
@@ -57,6 +68,10 @@ export default class MetricCardViewSection extends Component {
     return errors ? errors.filter(e => !!e) : []
   }
 
+  _errorToDisplay() {
+    return this._errors().find(e => e.type !== INTERNAL_ERROR)
+  }
+
   render() {
     const {
       canvasState: {metricCardView, metricClickMode},
@@ -71,6 +86,7 @@ export default class MetricCardViewSection extends Component {
     } = this.props
 
     const errors = this._errors()
+    const errorToDisplay = this._errorToDisplay()
     const {guesstimate} = metric
     const stats = _.get(metric, 'simulation.stats')
     const showSimulation = this.showSimulation()
@@ -143,8 +159,9 @@ export default class MetricCardViewSection extends Component {
             {hasErrors &&
               <ErrorSection
                 errors={errors}
+                errorToDisplay={errorToDisplay}
                 padTop={(!_.isEmpty(metric.name) && !inSelectedCell)}
-                hide={inSelectedCell}
+                active={hovered || inSelectedCell}
               />
             }
           </div>

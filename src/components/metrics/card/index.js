@@ -3,14 +3,13 @@ import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 
 import ReactDOM from 'react-dom'
-import ReactTooltip from 'react-tooltip'
 import $ from 'jquery'
 
 import {MetricModal} from 'gComponents/metrics/modal/index'
 import DistributionEditor from 'gComponents/distributions/editor/index'
 import MetricToolTip from './tooltip'
 import ToolTip from 'gComponents/utility/tooltip/index'
-import MetricCardViewSection from './MetricCardViewSection/index'
+import {MetricCardViewSection} from './MetricCardViewSection/index'
 import SensitivitySection from './SensitivitySection/SensitivitySection'
 
 import {hasMetricUpdated} from './updated'
@@ -20,7 +19,6 @@ import {changeGuesstimate} from 'gModules/guesstimates/actions'
 
 import * as canvasStateProps from 'gModules/canvas_state/prop_type'
 import {PTLocation} from 'lib/locationUtils'
-import {INTERNAL_ERROR} from 'lib/errors/modelErrors'
 
 import './style.css'
 
@@ -206,12 +204,6 @@ export default class MetricCard extends Component {
     return className
   }
 
-  _errors() {
-    if (this.props.isTitle) { return [] }
-    const errors = _.get(this.props.metric, 'simulation.sample.errors') || []
-    return errors.filter(e => !!e)
-  }
-
   _shouldShowSimulation(metric) {
     const stats = _.get(metric, 'simulation.stats')
     return (stats && _.isFinite(stats.stdev) && (stats.length > 5))
@@ -234,20 +226,7 @@ export default class MetricCard extends Component {
       forceFlowGridUpdate,
     } = this.props
     const {guesstimate} = metric
-    const errors = this._errors()
     const shouldShowSensitivitySection = this._shouldShowSensitivitySection()
-    const ReactTooltipParams = {
-      class: 'metric-errors-tooltip',
-      delayShow: 0,
-      delayHide: 0,
-      type: 'error',
-      place: 'bottom',
-      effect: 'solid',
-      event: 'click',
-      eventOff: 'click',
-    }
-    const displayedError = errors.find(e => e.type !== INTERNAL_ERROR)
-    const hasErrors = !_.isEmpty(errors)
 
     return (
       <div className='metricCard--Container'
@@ -255,17 +234,11 @@ export default class MetricCard extends Component {
         onKeyPress={this._handleKeyPress.bind(this)}
         onKeyDown={this._handleKeyDown.bind(this)}
         tabIndex='0'
-        data-for={`errors-${metric.id}`}
-        data-tip
       >
-        {hasErrors && !!displayedError && !this.state.modalIsOpen &&
-          <ReactTooltip {...ReactTooltipParams} id={`errors-${metric.id}`}> <span>{displayedError.message}</span> </ReactTooltip>
-        }
         <div className={this._className()}>
           {this.state.modalIsOpen &&
             <MetricModal
               metric={metric}
-              errors={errors}
               closeModal={this.closeModal.bind(this)}
               onChangeGuesstimateDescription={this.onChangeGuesstimateDescription.bind(this)}
             />
@@ -301,7 +274,6 @@ export default class MetricCard extends Component {
                 onOpen={this.openModal.bind(this)}
                 ref='DistributionEditor'
                 size='small'
-                errors={this.state.modalIsOpen ? [] : errors}
                 onReturn={this.props.onReturn}
                 onTab={this.props.onTab}
               />
