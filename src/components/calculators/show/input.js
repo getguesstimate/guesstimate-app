@@ -11,7 +11,7 @@ export class Input extends Component{
     errors: []
   }
 
-  state = {editorState: EditorState.createWithContent(ContentState.createFromText(''))}
+  state = {editorState: EditorState.createWithContent(ContentState.createFromText(this.props.initialValue || ''))}
 
   componentDidMount() {
     if (this.props.isFirst) {

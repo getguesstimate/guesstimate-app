@@ -20,7 +20,7 @@ import '../style.css'
 export class CalculatorShow extends Component {
   state = {
     resultComputing: false,
-    showResult: false,
+    showResult: this.props.startFilled,
     hasSimulated: false,
     readyToCalculate: false,
   }
@@ -89,7 +89,7 @@ export class CalculatorShow extends Component {
   }
 
   render() {
-    const {calculator: {content, title, space_id, share_image}, size, inputs, outputs, isPrivate, classes} = this.props
+    const {calculator: {content, title, space_id, share_image}, startFilled, size, inputs, outputs, isPrivate, classes} = this.props
 
     return (
       <div className={`${['calculator', ...classes].join(' ')}`}>
@@ -124,6 +124,7 @@ export class CalculatorShow extends Component {
               onBlur={this.onBlur.bind(this, metric)}
               onChange={this.onChange.bind(this, metric)}
               onEnter={this.onEnter.bind(this)}
+              initialValue={startFilled && _.get(metric, 'guesstimate.input')}
             />
           ))}
         </div>
