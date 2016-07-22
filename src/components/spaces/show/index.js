@@ -260,7 +260,7 @@ export default class SpacesShow extends Component {
   }
 
   calculatorSidebar() {
-    const {state: {showNewCalculatorForm, showEditCalculatorForm, showCalculatorId}, props: {denormalizedSpace}} = this
+    const {state: {showNewCalculatorForm, showEditCalculatorForm, showCalculatorResults, showCalculatorId}, props: {denormalizedSpace}} = this
 
     if (!showNewCalculatorForm && !showEditCalculatorForm && !showCalculatorId) { return false }
 
@@ -278,7 +278,7 @@ export default class SpacesShow extends Component {
         onCalculatorSave={({id}) => this.setState({showEditCalculatorForm: null, showCalculatorId: id})}
       />
     } else {
-      main = <CalculatorCompressedShow calculatorId={showCalculatorId} startFilled={this.state.showCalculatorResults}/>
+      main = <CalculatorCompressedShow calculatorId={showCalculatorId} startFilled={showCalculatorResults}/>
     }
 
     return (

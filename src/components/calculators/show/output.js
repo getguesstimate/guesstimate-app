@@ -46,7 +46,6 @@ export class Output extends Component {
   render() {
     const {metric: {name, simulation}} = this.props
     const {showAnalysis} = this.state
-    console.log(simulation.stats)
     return (
       <div className='output'>
         <div className='row'>

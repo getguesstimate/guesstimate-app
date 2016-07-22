@@ -23,7 +23,8 @@ import '../style.css'
 export class CalculatorExpandedShow extends Component {
   state = {
     attemptedFetch: false,
-    showHelp: false
+    showHelp: false,
+    resultBeenShown: false,
   }
 
   componentWillMount() {
@@ -36,8 +37,8 @@ export class CalculatorExpandedShow extends Component {
   render() {
     if (!this.props.calculator) { return false }
 
-    const {calculator: {content, title, space_id, share_image, id}, inputs, outputs, isPrivate} = this.props
-    const spaceUrl = Space.url({id: space_id}) + `/calculators/${id}?showResults=true`
+    const {props: {calculator: {content, title, space_id, share_image, id}, inputs, outputs, isPrivate}, state: {resultBeenShown}} = this
+    const spaceUrl = Space.url({id: space_id}) + `/calculators/${id}${resultBeenShown ? '?showResults=true' : ''}`
     const calculatorUrl = Calculator.fullUrl(this.props.calculator)
 
     let metaTags = [
@@ -64,6 +65,7 @@ export class CalculatorExpandedShow extends Component {
                 size='wide'
                 classes={['wide']}
                 showHelp={() => this.setState({showHelp: true})}
+                onShowResult={() => this.setState({resultBeenShown: true})}
               />
             }
             { this.state.showHelp &&
