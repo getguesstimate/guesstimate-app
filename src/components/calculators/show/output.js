@@ -10,43 +10,43 @@ const PrecisionNumber = ({value, precision, number=numberShow(value, precision)}
   </span>
 )
 
-const RangeDisplay = ({low, high}) => (
+const RangeDisplay = ({range: [low, high]}) => (
   <div><PrecisionNumber value={low}/> to <PrecisionNumber value={high}/></div>
 )
 
-const ResultSection = ({length, mean, percentiles}) => (
-  length === 1 ? <PrecisionNumber value={mean} precision={6}/> : <RangeDisplay low={percentiles[5]} high={percentiles[95]}/>
+const ResultSection = ({length, mean, adjustedConfidenceInterval}) => (
+  length === 1 ? <PrecisionNumber value={mean} precision={6}/> : <RangeDisplay range={adjustedConfidenceInterval}/>
 )
 
-const AnalyticsSection = (stats) => {
-  return (
-    <div className='stats-summary'>
-      {`According to the model, this value has a 95% chance of being above `}
-      <PrecisionNumber value={stats.percentiles[5]}/>
-      {` and a 95% chance of being below `}
-      <PrecisionNumber value={stats.percentiles[95]}/>
-      {'.'}
-      {` The mean value is `}
-      <PrecisionNumber value={stats.mean}/>
-      {` and the median is `}
-      <PrecisionNumber value={stats.percentiles[50]}/>
-      {`.`}
-    </div>
-  )
-}
+const AnalyticsSection = (stats) => (
+  <div className='stats-summary'>
+    {`According to the model, this value has a 90% chance of being between `}
+    <PrecisionNumber value={stats.adjustedConfidenceInterval[0]}/>
+    {` and `}
+    <PrecisionNumber value={stats.adjustedConfidenceInterval[1]}/>
+    {'.'}
+    {` The mean value is `}
+    <PrecisionNumber value={stats.mean}/>
+    {` and the median is `}
+    <PrecisionNumber value={stats.percentiles[50]}/>
+    {`.`}
+  </div>
+)
 
 export class Output extends Component {
   state = {
     showAnalysis: false
   }
 
-  showAnalysis(show=true) {
-    this.setState({showAnalysis: show})
+  toggleAnalysis() {
+    const showAnalysis = this.state.showAnalysis
+    this.setState({showAnalysis: !showAnalysis})
   }
 
   render() {
     const {metric: {name, simulation}} = this.props
     const {showAnalysis} = this.state
+    console.log(simulation.stats)
     return (
       <div className='output'>
         <div className='row'>
@@ -60,10 +60,10 @@ export class Output extends Component {
               {_.has(simulation, 'stats') && <ResultSection {...simulation.stats} />}
 
               {!showAnalysis && _.has(simulation, 'stats.percentiles.5') &&
-                <div className='icon' onClick={() => this.showAnalysis(true)}> ? </div>
+                <div className='icon' onClick={this.toggleAnalysis.bind(this)}> ? </div>
               }
               {showAnalysis &&
-                <div className='icon' onClick={() => this.showAnalysis(false)}> <i className={`ion-md-close`}/></div>
+                <div className='icon' onClick={this.toggleAnalysis.bind(this)}> <i className={`ion-md-close`}/></div>
               }
 
               {showAnalysis && _.has(simulation, 'stats.percentiles.5') &&
