@@ -8,11 +8,12 @@ import * as Calculator from 'gEngine/calculator'
 
 const SortableListItem = Sortable(props => <div {...props} className='list-item'>{props.item}</div>)
 
-export class CalculatorNew extends Component {
+export class CalculatorForm extends Component {
   state = {
     draggingIndex: null,
     draggingMetricId: null,
     dropTargetId: null,
+    hasAlreadySubmitted: false,
   }
 
   metricForm({metric: {name, id, guesstimate}, isVisible}, isInput, isDropTarget) {
@@ -42,8 +43,17 @@ export class CalculatorNew extends Component {
     }
   }
 
+  onSubmit() {
+    if (this.state.hasAlreadySubmitted) { return }
+    this.setState({hasAlreadySubmitted: true})
+    this.props.onSubmit()
+  }
+
   render() {
-    const [{calculator: {title, content}, inputs, outputs}, {draggingIndex, dropTargetId}] = [this.props, this.state]
+    const {
+      props: {calculator: {title, content}, inputs, outputs, buttonText, isValid},
+      state: {draggingIndex, dropTargetId, hasAlreadySubmitted}
+    } = this
 
     const generateComponents = (metrics, isInput) => _.map(metrics, (m, i) => [this.metricForm(m, isInput, dropTargetId === m.metric.id), m.metric.id])
 
@@ -128,9 +138,9 @@ export class CalculatorNew extends Component {
             <div className='row'>
               <div className='col-md-5'>
                 <div
-                  className={`ui button green large create-button ${this.props.isValid ? '' : 'disabled'}`}
-                  onClick={this.props.onSubmit}>
-                  Create
+                  className={`ui button green large create-button ${hasAlreadySubmitted ? 'loading' : ''} ${isValid && !hasAlreadySubmitted  ? '' : 'disabled'}`}
+                  onClick={this.onSubmit.bind(this)}>
+                  {buttonText}
                 </div>
               </div>
               <div className='col-md-7' />

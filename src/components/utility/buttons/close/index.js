@@ -1,6 +1,6 @@
 import React from 'react'
 
-import './style.css'
+import {Button} from '../button.js'
 
 export const ButtonClose = ({onClick}) => (
   <a className='button-close' onClick={onClick}>
@@ -9,8 +9,8 @@ export const ButtonClose = ({onClick}) => (
 )
 
 export const ButtonCloseText = ({onClick}) => (
-  <span className={'ui button button-close-text'} onClick={onClick}>
+  <Button onClick={onClick}>
     <i className={`ion-md-close`}/>
     Close
-  </span>
+  </Button>
 )

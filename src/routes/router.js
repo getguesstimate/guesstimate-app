@@ -6,8 +6,7 @@ import Router from 'ampersand-router'
 
 import Layout from './layouts/application/index'
 import Home from './home/index'
-import {CalculatorShow} from 'gComponents/calculators/show/CalculatorShow'
-import {CalculatorNewContainer} from 'gComponents/calculators/new/CalculatorNew'
+import {CalculatorExpandedShow} from 'gComponents/calculators/show/CalculatorExpandedShow'
 import SpaceShow from 'gComponents/spaces/show'
 import SpaceIndex from 'gComponents/spaces/index/index'
 import Maintenance from 'gComponents/pages/maintenance/index'
@@ -47,8 +46,8 @@ export default Router.extend({
     '': 'home',
     'models': 'spaceIndex',
     'models/:id': 'spaceShow',
+    'models/:id/calculators/:id': 'spaceShow',
     'models/:id/embed': 'spaceShowEmbed',
-    'models/:id/calculators/new': 'calculatorNew',
     'maintenance': 'maintenance',
     'faq': 'faq',
     'terms': 'terms',
@@ -65,13 +64,13 @@ export default Router.extend({
     'scratchpad': 'scratchpad',
     'pricing': 'pricing',
     'subscribe/:id': 'subscribe',
-    'calculators/:id': 'calculatorShow',
+    'calculators/:id': 'calculatorExpandedShow',
   },
 
   spaceIndex() { this.render(<SpaceIndex/>, {backgroundColor: 'GREY'}) },
   home() { this.render(<Home/>, {isFluid: true, simpleHeader: true}) },
   spaceNew() { this.render(<SpaceNew/>) },
-  spaceShow(id) { this.render(<SpaceShow spaceId={parseInt(id)} key={parseInt(id)}/>, {isFluid: true, showFooter: false, fullHeight: true}) },
+  spaceShow(id, calculatorId) {this.render(<SpaceShow spaceId={parseInt(id)} showCalculatorId={parseInt(calculatorId)} showCalculatorResults={window.location.search.includes('showResults=true')} key={parseInt(id)}/>, {isFluid: true, showFooter: false, fullHeight: true}) },
   spaceShowEmbed(id) { this.render(<SpaceShow spaceId={id} embed={true}/>, {isFluid: true, showFooter: false, embed: true, fullHeight: true}) },
   scratchpad() { this.render(<SpaceShow spaceId={5170}/>, {isFluid: true, showFooter: false}) },
   settings() { this.render(<Settings/>) },
@@ -89,6 +88,5 @@ export default Router.extend({
   organizationShow(id) { this.render(<OrganizationShow organizationId={id} key={id}/>, {backgroundColor: 'GREY'}) },
   organizationsNew() { this.render(<CreateOrganizationPageContainer/>, {backgroundColor: 'GREY'}) },
   pricing() { this.render(<PlanIndex/>, {backgroundColor: 'GREY'}) },
-  calculatorShow(id) { this.render(<CalculatorShow calculatorId={parseInt(id)} key={parseInt(id)}/>, {showFooter: false, backgroundColor: 'GREY'}) },
-  calculatorNew(id) { this.render(<CalculatorNewContainer space_id={parseInt(id)}/>, {showFooter: false, backgroundColor: 'GREY'}) },
+  calculatorExpandedShow(id) { this.render(<CalculatorExpandedShow calculatorId={parseInt(id)} key={parseInt(id)}/>, {showFooter: false, backgroundColor: 'GREY'}) },
 })

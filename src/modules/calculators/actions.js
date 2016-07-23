@@ -32,7 +32,20 @@ export function fetchById(id) {
   }
 }
 
-export function create(spaceId, calculator) {
+export function destroy(id) {
+  return (dispatch, getState) => {
+    dispatch(sActions.deleteStart({id}))
+    api(getState()).calculators.destroy(id, (err, value) => {
+      if (err) {
+        captureApiError('CalculatorsDestroy', err.jqXHR, err.textStatus, err, {url: 'calculatorsDestroy'})
+      } else {
+        dispatch(sActions.deleteSuccess({id}))
+      }
+    })
+  }
+}
+
+export function create(spaceId, calculator, callback) {
   return (dispatch, getState) => {
     const record = {...calculator, id: cuid()}
     dispatch(sActions.createStart(record))
@@ -41,8 +54,24 @@ export function create(spaceId, calculator) {
       if (err) {
         captureApiError('CalculatorsCreate', err.jqXHR, err.textStatus, err, {url: 'CalculatorsCreate'})
       } else if (calculator) {
-        dispatch(sActions.createSuccess(calculator))
-        app.router.history.navigate(`/calculators/${calculator.id}`)
+        dispatch(sActions.createSuccess(calculator, record.id))
+        if (!callback) { app.router.history.navigate(`/calculators/${calculator.id}`) }
+        else { callback(calculator) }
+      }
+    })
+  }
+}
+
+export function update(calculator, callback) {
+  return (dispatch, getState) => {
+    dispatch(sActions.updateStart(calculator))
+    api(getState()).calculators.update(calculator.id, calculator, (err, calculator) => {
+      if (err) {
+        captureApiError('CalculatorsCreate', err.jqXHR, err.textStatus, err, {url: 'CalculatorsCreate'})
+      } else if (calculator) {
+        dispatch(sActions.updateSuccess(calculator))
+        if (!callback) { app.router.history.navigate(`/calculators/${calculator.id}`) }
+        else { callback(calculator) }
       }
     })
   }

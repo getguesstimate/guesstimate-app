@@ -19,6 +19,10 @@
 
 .calculator {
   .title-bar {
+    .action-section{
+      padding-top: .4em;
+    }
+
     h1 {
       font-size: 1.5em;
       display: inline;
@@ -40,6 +44,22 @@
     }
   }
 
+  table.ui.table{
+    font-size: .7em;
+  }
+
+  .header-actions .button{
+    float: right;
+  }
+
+  .editor {
+    padding: .4rem .8rem;
+    background-color: $grey-6;
+    border: 1px solid #D4D4D4;
+    border-radius: 1px;
+    position: relative;
+  }
+
   .inputs {
     width: 100%;
 
@@ -51,14 +71,6 @@
       .description {
         font-size: .75em;
         color: #666;
-      }
-
-      .editor {
-        padding: .4rem .8rem;
-        background-color: $grey-6;
-        border: 1px solid #D4D4D4;
-        border-radius: 1px;
-        position: relative;
       }
 
       .status {
@@ -90,9 +102,8 @@
   }
 
   .result-divider {
+    border: none;
     border-bottom: 2px dotted #e8e8e8;
-    border-top: none;
-    margin: 0;
   }
 
   .outputs {
@@ -108,10 +119,30 @@
       color: #666;
       margin-left: .5rem;
       font-size: 1.3em;
+      position: relative;
 
       .result-value {
         color: rgba(80, 80, 80, 1);
         font-weight: 800;
+      }
+
+      .icon {
+        position: absolute;
+        right: -41px;
+        top: -4px;
+        background-color: #e0e8ea;
+        width: 26px;
+        height: 26px;
+        text-align: center;
+        padding-top: 1px;
+        border-radius: 1em;
+        font-size: .8em;
+        color: #88919c;
+        cursor: pointer;
+        &:hover {
+          background-color: #b9c7d0;
+          color: #5d6c7b;
+        }
       }
     }
   }
@@ -191,6 +222,19 @@
   border: none;
   border-radius: 0;
   font-size: 1em;
+
+  &.medium-font-size{
+    font-size: 1.1em;
+  }
+
+  .result-divider {
+    margin: 1em 0;
+  }
+
+  .calculateButton {
+    margin-top: 2em;
+  }
+
   .inputs .input {
     padding: .3em 0 .3em 0;
   }
@@ -230,6 +274,10 @@
   color: rgba(80, 80, 80, 1);
   font-size: 1.6em;
   line-height: 1.2em;
+  .result-divider {
+    border-top: none;
+    margin: 0;
+  }
   .inputs {
     padding-bottom: 1em;
     margin-top: 2em;
@@ -244,6 +292,12 @@
   }
   .outputs .output {
     padding-bottom: 1.5em;
+
+    .stats-summary {
+      font-size: .63em;
+      margin-top: .8em;
+    }
+
   }
   .padded-section {
     padding: 1em 1em;

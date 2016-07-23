@@ -95,7 +95,7 @@ export class SpaceToolbar extends Component {
       onAllowEdits,
       onForbidEdits,
       calculators,
-      makeNewCalculator,
+      showCalculatorForm,
     } = this.props
     const ReactTooltipParams = {class: 'small-tooltip', delayShow: 0, delayHide: 0, place: 'bottom', effect: 'solid'}
 
@@ -193,7 +193,8 @@ export class SpaceToolbar extends Component {
                       <CardListElement
                         key={c.id}
                         header={c.title}
-                        onMouseDown={navigateFn(e.calculator.relativePath(c))}
+                        onMouseDown={() => {this.props.showCalculator(c.id)}}
+                        closeOnClick={true}
                         icon={'calculator'}
                       />
                     )),
@@ -201,7 +202,7 @@ export class SpaceToolbar extends Component {
                       <CardListElement
                         key={'new'}
                         header={'New Calculator'}
-                        onMouseDown={makeNewCalculator}
+                        onMouseDown={showCalculatorForm}
                         closeOnClick={true}
                         icon={'plus'}
                       />
