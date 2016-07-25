@@ -5,6 +5,18 @@ import * as _space from './space'
 import BasicGraph from 'lib/basic_graph/basic-graph'
 import {INFINITE_LOOP_ERROR} from 'lib/errors/modelErrors'
 
+export const INTERMEDIATE = 'INTERMEDIATE'
+export const OUTPUT = 'OUTPUT'
+export const INPUT = 'INPUT'
+export const NOEDGE = 'NOEDGE'
+
+export function relationshipType(edges) {
+  if (!_.isEmpty(edges.inputs) && !_.isEmpty(edges.outputs)) { return INTERMEDIATE }
+  if (!_.isEmpty(edges.inputs)) { return OUTPUT }
+  if (!_.isEmpty(edges.outputs)) { return INPUT }
+  return NOEDGE
+}
+
 export function create(graphAttributes) {
   return _.pick(graphAttributes, ['metrics', 'guesstimates', 'simulations'])
 }
