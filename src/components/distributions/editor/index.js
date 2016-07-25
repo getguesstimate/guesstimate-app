@@ -118,6 +118,7 @@ export default class Guesstimate extends Component{
             onEscape={this.props.metricFocus}
             onReturn={this.handleReturn.bind(this)}
             onTab={this.handleTab.bind(this)}
+            onFocus={this.props.onEdit}
             size={size}
             errors={errors}
             ref='TextForm'

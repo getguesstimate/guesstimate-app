@@ -31,10 +31,10 @@ const ErrorIcon = ({errors}) => {
 
 // We have to display this section after it disappears
 // to ensure that the metric card gets selected after click.
-const ErrorSection = ({errors, padTop, active, errorToDisplay}) => (
+const ErrorSection = ({errors, padTop, shouldShowErrorText, errorToDisplay}) => (
   <div className={`StatsSectionErrors ${severity(errors)} ${padTop ? 'padTop' : ''}`}>
-    {active && <ErrorText error={errorToDisplay} />}
-    {!active && <ErrorIcon errors={errors} />}
+    {shouldShowErrorText && <ErrorText error={errorToDisplay} />}
+    {!shouldShowErrorText && <ErrorIcon errors={errors} />}
   </div>
 )
 
@@ -83,6 +83,7 @@ export class MetricCardViewSection extends Component {
       onMouseDown,
       showSensitivitySection,
       hovered,
+      editing,
     } = this.props
 
     const errors = this._errors()
@@ -161,7 +162,7 @@ export class MetricCardViewSection extends Component {
                 errors={errors}
                 errorToDisplay={errorToDisplay}
                 padTop={(!_.isEmpty(metric.name) && !inSelectedCell)}
-                active={hovered || inSelectedCell}
+                shouldShowErrorText={(hovered || inSelectedCell) && !editing}
               />
             }
           </div>
