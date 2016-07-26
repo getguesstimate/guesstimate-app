@@ -42,9 +42,7 @@ const positionDecorator = (start, end, component) => ({
   component,
 })
 
-const mapStateToProps = state => ({suggestion: state.factBank.currentSuggestion})
-
-@connect(mapStateToProps)
+@connect(state => ({suggestion: state.factBank.currentSuggestion}))
 export class TextInput extends Component{
   displayName: 'Guesstimate-TextInput'
 
@@ -83,12 +81,12 @@ export class TextInput extends Component{
 
   focus() { this.refs.editor.focus() }
 
-  addText(text, maintainCursorPosition = true, replaceLength = 0) {
+  addText(text, maintainCursorPosition = true, replaceLength = null) {
     const selection = this.state.editorState.getSelection()
     const content = this.state.editorState.getCurrentContent()
 
     let baseEditorState
-    if (replaceLength === 0) {
+    if (replaceLength === null) {
       baseEditorState = EditorState.push(this.state.editorState, Modifier.insertText(content, selection, text), 'paste')
     } else {
       const replaceSelection = selection.merge({anchorOffset: this.cursorPosition(), focusOffset: this.cursorPosition() + replaceLength + 1})
