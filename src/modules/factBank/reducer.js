@@ -1,8 +1,8 @@
-import FACTS from './cities.json'
+import CITIES from './cities.json'
 
 const INITIAL_STATE = {
   currentSuggestion: '',
-  globals: FACTS,
+  globals: CITIES,
   byOrg: [],
 }
 
