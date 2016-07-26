@@ -81,16 +81,16 @@ export class TextInput extends Component{
 
   focus() { this.refs.editor.focus() }
 
-  addText(text, maintainCursorPosition = true, replaceLength = null) {
+  addText(text, maintainCursorPosition = true, replaceLength = 0) {
     const selection = this.state.editorState.getSelection()
     const content = this.state.editorState.getCurrentContent()
 
     let baseEditorState
-    if (replaceLength === null) {
-      baseEditorState = EditorState.push(this.state.editorState, Modifier.insertText(content, selection, text), 'paste')
-    } else {
-      const replaceSelection = selection.merge({anchorOffset: this.cursorPosition(), focusOffset: this.cursorPosition() + replaceLength + 1})
+    if (replaceLength > 0) {
+      const replaceSelection = selection.merge({anchorOffset: this.cursorPosition(), focusOffset: this.cursorPosition() + replaceLength})
       baseEditorState = EditorState.push(this.state.editorState, Modifier.replaceText(content, replaceSelection, text), 'paste')
+    } else {
+      baseEditorState = EditorState.push(this.state.editorState, Modifier.insertText(content, selection, text), 'paste')
     }
 
     if (!maintainCursorPosition) { return baseEditorState }
@@ -120,7 +120,7 @@ export class TextInput extends Component{
       positionDecorator(this.cursorPosition(), this.cursorPosition() + this.props.suggestion.length, Suggestion),
     ]
 
-    const addedEditorState = this.addText(this.props.suggestion, true, this.nextWord().length - 1)
+    const addedEditorState = this.addText(this.props.suggestion, true, this.nextWord().length)
 
     this.setState({editorState: this.withExtraDecorators(addedEditorState, extraDecorators)})
   }
@@ -179,7 +179,7 @@ export class TextInput extends Component{
   acceptSuggestion(){
     const inProperty = this.prevWord().includes('.')
     const cursorPosition = this.cursorPosition()
-    const addedEditorState = this.addText(`${this.props.suggestion}${inProperty ? '' : '.'}`, false, this.props.suggestion.length - 1)
+    const addedEditorState = this.addText(`${this.props.suggestion}${inProperty ? '' : '.'}`, false, this.props.suggestion.length)
     this.onChange(this.stripExtraDecorators(addedEditorState))
   }
 
