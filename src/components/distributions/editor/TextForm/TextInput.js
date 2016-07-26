@@ -171,7 +171,7 @@ export class TextInput extends Component{
   }
 
   handleTab(e){
-    if (!_.isEmpty(this.props.suggestion)) { this.acceptSuggestion() }
+    if (!_.isEmpty(this.props.suggestion) && this.nextWord() === this.props.suggestion) { this.acceptSuggestion() }
     else { this.props.onTab(e.shiftKey) }
     e.preventDefault()
   }
