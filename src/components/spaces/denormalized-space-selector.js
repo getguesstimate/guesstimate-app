@@ -16,9 +16,23 @@ function checkpointMetadata(id, checkpoints) {
   return attributes
 }
 
+const SPACE_GRAPH_PARTS = [
+  'spaces',
+  'calculators',
+  'metrics',
+  'guesstimates',
+  'simulations',
+  'factBank',
+  'users',
+  'organizations',
+  'userOrganizationMemberships',
+  'me',
+  'checkpoints',
+]
+
 const spaceGraphSelector = state => {
   window.recorder.recordSelectorStart(NAME)
-  return _.pick(state, 'spaces', 'calculators', 'metrics', 'guesstimates', 'simulations', 'users', 'organizations', 'userOrganizationMemberships', 'me', 'checkpoints')
+  return _.pick(state, SPACE_GRAPH_PARTS)
 }
 const spaceIdSelector = (_, {spaceId}) => spaceId
 const canvasStateSelector = state => state.canvasState
@@ -36,8 +50,7 @@ export const denormalizedSpaceSelector = createSelector(
     }
 
     window.recorder.recordSelectorStop(NAME, {denormalizedSpace: dSpace})
-    return {
-      denormalizedSpace: dSpace
-    };
+
+    return { denormalizedSpace: dSpace }
   }
-);
+)

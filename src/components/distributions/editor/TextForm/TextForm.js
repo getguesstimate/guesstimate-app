@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react'
 
 import {GuesstimateTypeIcon} from './GuesstimateTypeIcon'
-import TextInput from './TextInput'
+import {TextInput} from './TextInput'
 import DistributionSelector from './DistributionSelector'
 
 export class TextForm extends Component{

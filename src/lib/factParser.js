@@ -15,9 +15,9 @@ export function findWithRegex(regex, contentBlock, callback) {
   }
 }
 
-const NounSpan = props => <span {...props} className='noun'>{props.children}</span>
-const PropertySpan = props => <span {...props} className='property'>{props.children}</span>
-const SuggestionSpan = props => <span {...props} className='suggestion'>{props.children}</span>
+export const NounSpan = props => <span {...props} className='noun'>{props.children}</span>
+export const PropertySpan = props => <span {...props} className='property'>{props.children}</span>
+export const SuggestionSpan = props => <span {...props} className='suggestion'>{props.children}</span>
 
 export const FACT_DECORATOR_LIST = [
   {
@@ -30,7 +30,10 @@ export const FACT_DECORATOR_LIST = [
   },
 ]
 
-const positionDecorator = (start, end, component) => ({strategy: (contentBlock, callback) => {callback(start, end)}, component})
+export const positionDecorator = (start, end, component) => ({
+  strategy: (contentBlock, callback) => {if (end <= contentBlock.text.length) {callback(start, end)}},
+  component,
+})
 
 export function addText(editorState, text, maintainCursorPosition = true, anchorOffset = null, focusOffset = null) {
   const selection = editorState.getSelection()
@@ -52,9 +55,11 @@ export function addText(editorState, text, maintainCursorPosition = true, anchor
 }
 
 class Suggestor {
-  constructor(editorState, currentSuggestion) {
+  constructor(editorState, currentSuggestion, dispatch) {
     this.editorState = editorState
     this.currentSuggestion = currentSuggestion
+
+    this.dispatch = dispatch
 
     this.cursorPosition = editorState.getSelection().getFocusOffset()
     this.text = editorState.getCurrentContent().getPlainText('')
@@ -114,6 +119,6 @@ class Suggestor {
   }
 }
 
-export function addSuggestionToEditorState(editorState, currentSuggestion){
-  return (new Suggestor(editorState, currentSuggestion)).run()
+export function addSuggestionToEditorState(editorState, currentSuggestion, dispatch){
+  return (new Suggestor(editorState, currentSuggestion, dispatch)).run()
 }
