@@ -102,9 +102,6 @@ export class TextInput extends Component{
     return EditorState.forceSelection(baseEditorState, newSelectionState)
   }
 
-  insertAtCaret(text) {
-  }
-
   stripExtraDecorators(editorState) { return this.withExtraDecorators(editorState, []) }
   withExtraDecorators(editorState, extraDecorators) {
     return EditorState.set(editorState, {decorator: new CompositeDecorator(this.decoratorList(extraDecorators))})
@@ -119,9 +116,9 @@ export class TextInput extends Component{
     const partial = this.prevWord().slice(1).split('.').pop()
     const inProperty = this.prevWord().includes('.')
 
-    const decoratorComponent = inProperty ? Property : Noun
+    const partialComponent = inProperty ? Property : Noun
     const extraDecorators = [
-      positionDecorator(this.cursorPosition() - partial.length - 1, this.cursorPosition(), decoratorComponent),
+      positionDecorator(this.cursorPosition() - partial.length - 1, this.cursorPosition(), partialComponent),
       positionDecorator(this.cursorPosition(), this.cursorPosition() + this.props.suggestion.length, Suggestion),
     ]
 

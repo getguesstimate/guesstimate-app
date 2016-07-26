@@ -22,7 +22,6 @@ const SPACE_GRAPH_PARTS = [
   'metrics',
   'guesstimates',
   'simulations',
-  'factBank',
   'users',
   'organizations',
   'userOrganizationMemberships',
