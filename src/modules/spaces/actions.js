@@ -68,7 +68,7 @@ export function fetchById(spaceId) {
       const calculators = (_.get(value, '_embedded.calculators') || []).filter(c => !!c)
 
       if (!_.isEmpty(calculators)) {dispatch(calculatorActions.sActions.fetchSuccess(calculators))}
-      if (!!organization) {dispatch(organizationActions.fetchSuccess([organization]))}
+      if (!!organization) { dispatch(organizationActions.fetchSuccess([organization])) }
       if (!!user) {
         dispatch(userActions.fetchSuccess([user]))
       } else {

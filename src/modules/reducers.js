@@ -9,7 +9,7 @@ import {metricsR} from './metrics/reducer'
 import {guesstimatesR} from './guesstimates/reducer'
 import simulationsR from './simulations/reducer'
 import meR from './me/reducer'
-import canvasStateR from './canvas_state/reducer'
+import {canvasStateR} from './canvas_state/reducer'
 import searchSpacesR from './search_spaces/reducer'
 import firstSubscriptionsR from './first_subscription/reducer'
 import modalR from './modal/reducer'
@@ -21,6 +21,7 @@ import {copiedR} from './copied/reducer'
 import {checkpointsR} from './checkpoints/reducer'
 import {httpRequestsR} from './httpRequests/reducer'
 import {newOrganizationR} from './newOrganization/reducer'
+import {factBankR} from './factBank/reducer'
 
 export function changeSelect(location) {
   return { type: 'CHANGE_SELECT', location };
@@ -50,6 +51,7 @@ const rootReducer = function app(state = {}, action){
     checkpoints: SI(checkpointsR(state.checkpoints, action)),
     httpRequests: SI(httpRequestsR(state.httpRequests, action)),
     calculators: SI(reduxCrud.reducersFor('calculators')(state.calculators, action)),
+    factBank: SI(factBankR(state.factBank, action)),
   }
 }
 
