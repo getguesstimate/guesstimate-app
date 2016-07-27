@@ -7,10 +7,6 @@ export function getSuggestion([noun, property]) {
   return suggestion.replace(property || noun, '')
 }
 
-export function resolveProperty([noun, property]) {
-  return 5//findFactByName(noun)[property]
-}
-
 export function globalsSearch([noun, property]) {
   return (dispatch, getState) => {
     const facts = getState().factBank.globals
