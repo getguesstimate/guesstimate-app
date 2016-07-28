@@ -37,7 +37,5 @@ export function prepare(guesstimate) {
 export function parse(g) {
   const i = prepare(g)
   const formatter = _matchingFormatter(i)
-  const errors = formatter.errors(i)
-  let format = errors.length ? {} : formatter.format(i)
-  return [errors, format]
+  return [formatter.error(i), formatter.format(i)]
 }

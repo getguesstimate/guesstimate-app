@@ -11,6 +11,14 @@
   top: 0;
 }
 
+.metricCard .MetricCardViewSection.hasErrors .error-message {
+  color: #5f0909;
+  font-size: .8em;
+  font-weight: 500;
+  line-height: 1.1em;
+  padding: 2px 9px;
+}
+
 .metricCard .MetricCardViewSection.hasErrors .StatsSectionErrors.minor  {
   background-color: rgb(236, 202, 199);
 }
