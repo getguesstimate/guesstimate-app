@@ -59,6 +59,7 @@ function evaluate(compiled, inputs, n){
     if (_.isFinite(newSample)) {
       values = values.concat(newSample)
     } else {
+      debugger
       return {values, errors: ['invalid sample']}
     }
   }

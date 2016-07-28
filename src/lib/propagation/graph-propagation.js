@@ -12,6 +12,8 @@ function isRecentPropagation(propagationId: number, simulation: Simulation) {
   return !_.has(simulation, 'propagation') || (propagationId >= simulation.propagation)
 }
 
+let call = 0
+
 export class GraphPropagation {
   dispatch: Function;
   getState: Function;

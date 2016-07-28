@@ -2,7 +2,10 @@ import * as _graph from './graph'
 import * as _dGraph from './dgraph'
 import * as _metric from './metric'
 import * as _guesstimate from './guesstimate'
+import * as _factBank from './factBank'
 import * as _userOrganizationMemberships from './userOrganizationMemberships'
+
+let call = 0
 
 export function url (space) {
   return (!!space) ? ('/models/' + space.id) : ''
@@ -12,11 +15,35 @@ export function get(collection, id){
   return collection.find(i => (i.id === id))
 }
 
-export function subset(graph, spaceId){
+export function subset(graph, spaceId, organizationId){
   if (spaceId){
-    const metrics = graph.metrics.filter(m => m.space === spaceId)
-    const guesstimates = _.flatten(metrics.map(m => _metric.guesstimates(m, graph)))
-    const simulations = _.flatten(guesstimates.map(g => _guesstimate.simulations(g, graph)))
+    const directMetrics = graph.metrics.filter(m => m.space === spaceId)
+    const rawGuesstimates = _.flatten(directMetrics.map(m => _metric.guesstimates(m, graph)))
+    const directSimulations = _.flatten(rawGuesstimates.map(g => _guesstimate.simulations(g, graph)))
+
+    const factHandles = _.flatten(rawGuesstimates.map(_guesstimate.extractFactHandles)).filter(h => !_.isEmpty(h))
+    const relevantFactSelectors = factHandles.map(h => [h, _factBank.resolveToSelector(h, organizationId)])
+    const relevantFacts =
+      relevantFactSelectors
+      .map(([h, s]) => ([h, s, _factBank.findBySelector(graph.globals, s)]))
+      .filter(([_1, _2, f]) => !!f.variable_name)
+
+    let readableIds = directMetrics.map(m => m.readableId)
+    let factMetrics = []
+    let factHandleMap = {}
+    relevantFacts.forEach(([handle, selector, _]) => {
+      const metric = _factBank.toMetric(selector, readableIds)
+      factMetrics = [...factMetrics, metric]
+      readableIds = [...readableIds, metric.readableId]
+      factHandleMap[handle] = metric.readableId
+    })
+
+    const directGuesstimates = rawGuesstimates.map(g => _guesstimate.translateFactHandles(g, factHandleMap))
+
+    const metrics = [...directMetrics, ...factMetrics]
+
+    const guesstimates = [...directGuesstimates, ...relevantFacts.map(([_, selector, fact]) => _factBank.toGuesstimate(selector, fact))]
+    const simulations = [...directSimulations, ...relevantFacts.map(([_, selector, fact]) => _factBank.toSimulation(selector, fact))]
     return { metrics, guesstimates, simulations }
   } else {
     return graph

@@ -22,7 +22,6 @@ export function sample(guesstimate: Guesstimate, dGraph: DGraph, n: number = 1) 
   }
 
   const [inputs, inputErrors] = item.needsExternalInputs() ? _inputMetricsWithValues(guesstimate, dGraph) : [{}, []]
-
   if (inputErrors.length > 0) {
     return Promise.resolve({ metric, sample: {values: [], errors: inputErrors} })
   }
@@ -30,9 +29,25 @@ export function sample(guesstimate: Guesstimate, dGraph: DGraph, n: number = 1) 
   return item.sample(n, inputs).then(sample => ({ metric, sample }))
 }
 
-export function format(guesstimate: Guesstimate): Guesstimate{
+export function format(guesstimate: Guesstimate): Guesstimate {
   let formatted = _.pick(guesstimate, attributes)
   return formatted
+}
+
+export function extractFactHandles(guesstimate: Guesstimate) {
+  if (_.isEmpty(guesstimate) || _.isEmpty(guesstimate.input)) { return [] }
+  return guesstimate.input.match(/@\w+\.\w+/g)
+}
+
+function translateReadableIds(input, idMap) {
+  if (!input) {return ""}
+  const re = RegExp(Object.keys(idMap).join("|"), "g")
+  return input.replace(re, (match) => idMap[match])
+}
+
+export function translateFactHandles(guesstimate: Guesstimate, handleMap): Guesstimate {
+  if (_.isEmpty(handleMap)) { return guesstimate }
+  return {...guesstimate, input: translateReadableIds(guesstimate.input, handleMap)}
 }
 
 export function simulations(guesstimate: Guesstimate, graph:Graph) : Array<Simulation>{
@@ -53,7 +68,7 @@ export function newGuesstimateType(newGuesstimate) {
 //Check if a function; if not, return []
 export function inputMetrics(guesstimate: Guesstimate, dGraph: DGraph): Array<Object> {
   if (!_.has(dGraph, 'metrics')){ return [] }
-  return dGraph.metrics.filter( m => (guesstimate.input || '').includes(m.readableId) );
+  return dGraph.metrics.filter( m => (guesstimate.input || '').includes(m.readableId) )
 }
 
 function _formatInputError(errorMsg) {

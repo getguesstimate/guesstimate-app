@@ -1,6 +1,11 @@
+const resolveVariableName = (prefix, parents, variable_name) => `${prefix}${[...parents, variable_name].join('.')}`
+
+const to_variable_name = f => f.variable_name
+const by_variable_name = name => f => to_variable_name(f) === name
 const search = (partial, list) => _.isEmpty(partial) ? '' : [...list.filter(e => e.startsWith(partial)), ''][0]
-const nounSearch = (partial, facts) => search(partial, facts.map(f => f.name))
-const propertySearch = (noun, partial, facts) => search(partial, Object.keys(facts.find(f => f.name === noun)))
+
+const nounSearch = (partial, facts) => search(partial, facts.map(to_variable_name))
+const propertySearch = (noun, partial, facts) => search(partial, facts.find(by_variable_name(noun)).children.map(to_variable_name))
 
 export function getSuggestion([noun, property]) {
   const suggestion = typeof property !== 'undefined' ? propertySearch(noun, property) : nounSearch(noun)
