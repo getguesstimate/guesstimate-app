@@ -9,7 +9,7 @@ import {MetricModal} from 'gComponents/metrics/modal/index'
 import DistributionEditor from 'gComponents/distributions/editor/index'
 import MetricToolTip from './tooltip'
 import ToolTip from 'gComponents/utility/tooltip/index'
-import MetricCardViewSection from './MetricCardViewSection/index'
+import {MetricCardViewSection} from './MetricCardViewSection/index'
 import SensitivitySection from './SensitivitySection/SensitivitySection'
 
 import {hasMetricUpdated} from './updated'
@@ -56,10 +56,17 @@ export default class MetricCard extends Component {
     metric: PT.object.isRequired
   }
 
-  state = {modalIsOpen: false};
+  state = {
+    modalIsOpen: false,
+    editing: false,
+  }
 
   shouldComponentUpdate(nextProps, nextState) {
     return hasMetricUpdated(this.props, nextProps) || (this.state.modalIsOpen !== nextState.modalIsOpen)
+  }
+
+  onEdit() {
+    if (!this.state.editing) { this.setState({editing: true}) }
   }
 
   focusFromDirection(dir) {
@@ -67,7 +74,10 @@ export default class MetricCard extends Component {
     else { this.refs.MetricCardViewSection.focusName() }
   }
 
-  componentWillUpdate() { window.recorder.recordRenderStartEvent(this) }
+  componentWillUpdate(nextProps) {
+    window.recorder.recordRenderStartEvent(this)
+    if (this.state.editing && !nextProps.inSelectedCell) { this.setState({editing: false}) }
+  }
   componentWillUnmount() { window.recorder.recordUnmountEvent(this) }
 
   componentDidUpdate(prevProps) {
@@ -193,12 +203,6 @@ export default class MetricCard extends Component {
     return className
   }
 
-  _errors() {
-    if (this.props.isTitle){ return [] }
-    const errors = _.get(this.props.metric, 'simulation.sample.errors') || []
-    return errors.filter(e => !!e)
-  }
-
   _shouldShowSimulation(metric) {
     const stats = _.get(metric, 'simulation.stats')
     return (stats && _.isFinite(stats.stdev) && (stats.length > 5))
@@ -221,7 +225,6 @@ export default class MetricCard extends Component {
       forceFlowGridUpdate,
     } = this.props
     const {guesstimate} = metric
-    const errors = this._errors()
     const shouldShowSensitivitySection = this._shouldShowSensitivitySection()
 
     return (
@@ -255,6 +258,7 @@ export default class MetricCard extends Component {
             showSensitivitySection={shouldShowSensitivitySection}
             heightHasChanged={forceFlowGridUpdate}
             hovered={hovered}
+            editing={this.state.editing}
             onEscape={this.focus.bind(this)}
             onReturn={this.props.onReturn}
             onTab={this.props.onTab}
@@ -271,9 +275,9 @@ export default class MetricCard extends Component {
                 onOpen={this.openModal.bind(this)}
                 ref='DistributionEditor'
                 size='small'
-                errors={errors}
                 onReturn={this.props.onReturn}
                 onTab={this.props.onTab}
+                onEdit={this.onEdit.bind(this)}
               />
             </div>
           }

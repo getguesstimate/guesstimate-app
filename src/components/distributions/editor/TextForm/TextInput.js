@@ -84,7 +84,7 @@ export default class TextInput extends Component{
     }
     this.setState(newState)
 
-    const text = newState.editorState.getCurrentContent().getPlainText('')
+    const text = newState.editorState.getCurrentContent().getPlainText('').trim()
     if (text === this.props.value) { return }
     if (isData(text)) {
       this.props.onChangeData(formatData(text))
@@ -126,7 +126,7 @@ export default class TextInput extends Component{
   }
 
   render() {
-    const [{hasErrors, width, value, validInputs, errorInputs}, {editorState}] = [this.props, this.state]
+    const [{hasErrors, width, value, validInputs}, {editorState}] = [this.props, this.state]
     const className = `TextInput ${width}` + (_.isEmpty(value) && hasErrors ? ' hasErrors' : '')
     return (
       <span

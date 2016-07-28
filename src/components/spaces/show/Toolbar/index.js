@@ -97,7 +97,7 @@ export class SpaceToolbar extends Component {
       calculators,
       showCalculatorForm,
     } = this.props
-    const ReactTooltipParams = {class: 'small-tooltip', delayShow: 0, delayHide: 0, place: 'bottom', effect: 'solid'}
+    const ReactTooltipParams = {class: 'header-action-tooltip', delayShow: 0, delayHide: 0, place: 'bottom', effect: 'solid'}
 
     let view_mode_header = (<span><Icon name='eye'/> Viewing </span>)
     if (editableByMe && editsAllowed) {
