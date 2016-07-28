@@ -3,7 +3,7 @@ import CITIES from './cities.json'
 const INITIAL_STATE = {
   currentSuggestion: '',
   globals: CITIES,
-  byOrg: [],
+  organizationFacts: [],
 }
 
 export function factBankR(state = INITIAL_STATE, {type, facts, suggestion}) {
