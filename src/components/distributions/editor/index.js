@@ -91,11 +91,9 @@ export default class Guesstimate extends Component{
     const {size, guesstimate, inputMetrics, onOpen, errors} = this.props
     if(guesstimate.metric !== this.props.metricId) { return false }
 
-    const isLarge = (size === 'large')
     const hasData = !!guesstimate.data
+    const formClasses = `Guesstimate${size === 'large' ? ' large' : ''}`
 
-    let formClasses = 'Guesstimate'
-    formClasses += isLarge ? ' large' : ''
 
     return (
       <div className={formClasses}>
@@ -120,8 +118,9 @@ export default class Guesstimate extends Component{
             onEscape={this.props.metricFocus}
             onReturn={this.handleReturn.bind(this)}
             onTab={this.handleTab.bind(this)}
+            onFocus={this.props.onEdit}
             size={size}
-            hasErrors={!_.isEmpty(errors)}
+            errors={errors}
             ref='TextForm'
           />
         }

@@ -194,7 +194,7 @@ export class TextInput extends Component{
   }
 
   render() {
-    const [{hasErrors, width, value, validInputs, errorInputs}, {editorState}] = [this.props, this.state]
+    const [{hasErrors, width, value, validInputs}, {editorState}] = [this.props, this.state]
     const className = `TextInput ${width}` + (_.isEmpty(value) && hasErrors ? ' hasErrors' : '')
     return (
       <span
