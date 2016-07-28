@@ -12,8 +12,6 @@ function isRecentPropagation(propagationId: number, simulation: Simulation) {
   return !_.has(simulation, 'propagation') || (propagationId >= simulation.propagation)
 }
 
-let call = 0
-
 export class GraphPropagation {
   dispatch: Function;
   getState: Function;
@@ -62,9 +60,10 @@ export class GraphPropagation {
 
   _graph(): Graph {
     const state = this.getState()
-    let subset = e.space.subset(e.graph.create(state), this.spaceId)
-
-    return subset
+    const spaceSubset = e.space.subset(e.graph.create(state), this.spaceId)
+    const withFacts = e.factBank.addFactsToSpaceGraph(spaceSubset, state.factBank.globals, this.organizationId)
+    console.log(withFacts)
+    return withFacts
   }
 
   _orderedMetricIdsAndErrors(graphFilters: object): Array<Object> {

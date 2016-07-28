@@ -47,9 +47,8 @@ function translateReadableIds(input, idMap) {
   return input.replace(re, (match) => idMap[match])
 }
 
-export function translateFactHandles(guesstimate: Guesstimate, handleMap): Guesstimate {
-  if (_.isEmpty(handleMap)) { return guesstimate }
-  return {...guesstimate, input: translateReadableIds(guesstimate.input, handleMap)}
+export function translateFactHandleFn(handleMap) {
+  return g => _.isEmpty(handleMap) ? g : {...g, input: translateReadableIds(g.input, handleMap)}
 }
 
 export function simulations(guesstimate: Guesstimate, graph:Graph) : Array<Simulation>{
