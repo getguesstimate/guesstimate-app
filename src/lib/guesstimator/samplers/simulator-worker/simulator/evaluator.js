@@ -1,7 +1,8 @@
 var _ = require('lodash')
 import math from 'mathjs'
-import {Distributions} from './distributions/distributions.js'
-import {ImpureConstructs} from './constructs/constructs.js'
+import {Distributions} from './distributions/distributions'
+import {ImpureConstructs} from './constructs/constructs'
+import {MATH_ERROR, PARSER_ERROR} from 'lib/errors/modelErrors'
 var Finance = require('financejs')
 const finance = new Finance()
 
@@ -36,9 +37,13 @@ export function Evaluate(text, sampleCount, inputs) {
   try {
     const compiled = math.compile(text)
     return evaluate(compiled, inputs, sampleCount)
-  } catch (exception) {
-    let error = exception.message[0].toLowerCase() + exception.message.slice(1)
-    return {errors: [error]}
+  } catch ({message}) {
+    if (message.startsWith('Unexpected end of expression')) {
+      return {errors: [{type: MATH_ERROR, message: message.replace(/\s\(char \d+\)/, '')}]}
+    } else {
+      console.log(message)
+      return {errors: [{type: MATH_ERROR, message: 'Sampling error detected', rawMessage: message}]}
+    }
   }
 }
 
@@ -52,17 +57,24 @@ function sampleInputs(inputs, i) {
 
 function evaluate(compiled, inputs, n){
   let values = []
+  let errors = []
   for (let i = 0; i < n; i++) {
-    const sampledInputs = sampleInputs(inputs,i)
-    const newSample = compiled.eval(sampledInputs)
+    const newSample = compiled.eval(sampleInputs(inputs,i))
 
     if (_.isFinite(newSample)) {
-      values = values.concat(newSample)
+      values.push(newSample)
+    } else if ([Infinity, -Infinity].includes(newSample)) {
+      errors.push({type: MATH_ERROR, message: 'Divide by zero error'})
+      values.push(newSample)
+    } else if (newSample.constructor.name === 'Unit') {
+      return {values: [], errors: [{type: PARSER_ERROR, message: "Functions can't contain units or suffixes"}]}
+    } else if (typeof newSample === 'function') {
+      return {values: [], errors: [{type: PARSER_ERROR, message: "Incomplete function in input"}]}
     } else {
-      debugger
-      return {values, errors: ['invalid sample']}
+      if (__DEV__) { console.warn('Unidentified sample detected: ', newSample) }
+      return {values: [], errors: [{type: MATH_ERROR, message: 'Sampling error detected'}]}
     }
   }
 
-  return {values}
+  return {values, errors: _.uniq(errors)}
 }
