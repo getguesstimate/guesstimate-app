@@ -9,36 +9,25 @@ import {MetricModal} from 'gComponents/metrics/modal/index'
 import DistributionEditor from 'gComponents/distributions/editor/index'
 import MetricToolTip from './tooltip'
 import ToolTip from 'gComponents/utility/tooltip/index'
-import MetricCardViewSection from './MetricCardViewSection/index'
+import {MetricCardViewSection} from './MetricCardViewSection/index'
 import SensitivitySection from './SensitivitySection/SensitivitySection'
 
 import {hasMetricUpdated} from './updated'
-
 import {removeMetrics, changeMetric} from 'gModules/metrics/actions'
 import {changeGuesstimate} from 'gModules/guesstimates/actions'
 
 import * as canvasStateProps from 'gModules/canvas_state/prop_type'
 import {PTLocation} from 'lib/locationUtils'
 
-import './style.css'
+import {INTERMEDIATE, OUTPUT, INPUT, NOEDGE, relationshipType} from 'gEngine/graph'
 
-const INTERMEDIATE = 'INTERMEDIATE'
-const OUTPUT = 'OUTPUT'
-const INPUT = 'INPUT'
-const NOEDGE = 'NOEDGE'
+import './style.css'
 
 const relationshipClasses = {}
 relationshipClasses[INTERMEDIATE] = 'intermediate'
 relationshipClasses[OUTPUT] = 'output'
 relationshipClasses[INPUT] = 'input'
 relationshipClasses[NOEDGE] = 'noedge'
-
-const relationshipType = (edges) => {
-  if (edges.inputs.length && edges.outputs.length) { return INTERMEDIATE }
-  if (edges.inputs.length) { return OUTPUT }
-  if (edges.outputs.length) { return INPUT }
-  return NOEDGE
-}
 
 class ScatterTip extends Component {
   render() {
@@ -67,10 +56,17 @@ export default class MetricCard extends Component {
     metric: PT.object.isRequired
   }
 
-  state = {modalIsOpen: false};
+  state = {
+    modalIsOpen: false,
+    editing: false,
+  }
 
   shouldComponentUpdate(nextProps, nextState) {
     return hasMetricUpdated(this.props, nextProps) || (this.state.modalIsOpen !== nextState.modalIsOpen)
+  }
+
+  onEdit() {
+    if (!this.state.editing) { this.setState({editing: true}) }
   }
 
   focusFromDirection(dir) {
@@ -78,7 +74,10 @@ export default class MetricCard extends Component {
     else { this.refs.MetricCardViewSection.focusName() }
   }
 
-  componentWillUpdate() { window.recorder.recordRenderStartEvent(this) }
+  componentWillUpdate(nextProps) {
+    window.recorder.recordRenderStartEvent(this)
+    if (this.state.editing && !nextProps.inSelectedCell) { this.setState({editing: false}) }
+  }
   componentWillUnmount() { window.recorder.recordUnmountEvent(this) }
 
   componentDidUpdate(prevProps) {
@@ -203,12 +202,6 @@ export default class MetricCard extends Component {
     return className
   }
 
-  _errors() {
-    if (this.props.isTitle){ return [] }
-    const errors = _.get(this.props.metric, 'simulation.sample.errors') || []
-    return errors.filter(e => !!e)
-  }
-
   _shouldShowSimulation(metric) {
     const stats = _.get(metric, 'simulation.stats')
     return (stats && _.isFinite(stats.stdev) && (stats.length > 5))
@@ -231,7 +224,6 @@ export default class MetricCard extends Component {
       isInScreenshot,
     } = this.props
     const {guesstimate} = metric
-    const errors = this._errors()
     const shouldShowSensitivitySection = this._shouldShowSensitivitySection()
     const shouldShowDistributionEditor = !!canvasState.expandedViewEnabled || inSelectedCell
 
@@ -267,6 +259,7 @@ export default class MetricCard extends Component {
             showSensitivitySection={shouldShowSensitivitySection}
             heightHasChanged={forceFlowGridUpdate}
             hovered={hovered}
+            editing={this.state.editing}
             onEscape={this.focus.bind(this)}
             onReturn={this.props.onReturn}
             onTab={this.props.onTab}
@@ -283,9 +276,9 @@ export default class MetricCard extends Component {
                 onOpen={this.openModal.bind(this)}
                 ref='DistributionEditor'
                 size='small'
-                errors={errors}
                 onReturn={this.props.onReturn}
                 onTab={this.props.onTab}
+                onEdit={this.onEdit.bind(this)}
               />
             </div>
           }

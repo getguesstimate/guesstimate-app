@@ -11,6 +11,8 @@ import {ViewOptionToggle} from '../view-options/index'
 import {PrivacyToggle} from '../privacy-toggle/index'
 import {ImportFromSlurpForm} from './import_from_slurp_form'
 
+import {navigateFn} from 'gModules/navigation/actions'
+
 import e from 'gEngine/engine'
 
 import './style.css'
@@ -60,6 +62,7 @@ export class SpaceToolbar extends Component {
       this.props.canUndo !== nextProps.canUndo ||
       this.props.canRedo !== nextProps.canRedo ||
       this.props.isLoggedIn !== nextProps.isLoggedIn ||
+      !_.isEqual(this.props.calculators, nextProps.calculator) ||
       this.state.importModalOpen !== nextState.importModalOpen
     )
   }
@@ -91,8 +94,10 @@ export class SpaceToolbar extends Component {
       editsAllowed,
       onAllowEdits,
       onForbidEdits,
+      calculators,
+      showCalculatorForm,
     } = this.props
-    const ReactTooltipParams = {class: 'small-tooltip', delayShow: 0, delayHide: 0, place: 'bottom', effect: 'solid'}
+    const ReactTooltipParams = {class: 'header-action-tooltip', delayShow: 0, delayHide: 0, place: 'bottom', effect: 'solid'}
 
     let view_mode_header = (<span><Icon name='eye'/> Viewing </span>)
     if (editableByMe && editsAllowed) {
@@ -166,6 +171,7 @@ export class SpaceToolbar extends Component {
             <a onClick={onDeleteMetrics} className={`header-action`} data-tip data-for='delete-button'>
               <Icon name='trash'/>
             </a>
+
             <div className='header-action-border'/>
             <a onClick={onUndo} className={`header-action ${canUndo ? '' : 'disabled'}`} data-tip data-for='undo-button'>
               <Icon name='undo'/>
@@ -173,6 +179,38 @@ export class SpaceToolbar extends Component {
             <a onClick={onRedo} className={`header-action ${canRedo ? '' : 'disabled'}`} data-tip data-for='redo-button'>
               <Icon name='repeat'/>
             </a>
+
+            {(editableByMe || !_.isEmpty(calculators)) &&
+              <div>
+                <div className='header-action-border'/>
+                <DropDown
+                  headerText={'Calculators'}
+                  openLink={<a className='header-action'><Icon name='calculator'/></a>}
+                  position='right'
+                >
+                  {[
+                    ..._.map(calculators, c => (
+                      <CardListElement
+                        key={c.id}
+                        header={c.title}
+                        onMouseDown={() => {this.props.showCalculator(c.id)}}
+                        closeOnClick={true}
+                        icon={'calculator'}
+                      />
+                    )),
+                    editableByMe && (
+                      <CardListElement
+                        key={'new'}
+                        header={'New Calculator'}
+                        onMouseDown={showCalculatorForm}
+                        closeOnClick={true}
+                        icon={'plus'}
+                      />
+                    )
+                  ]}
+                </DropDown>
+              </div>
+            }
 
             {editableByMe && editsAllowed && <ProgressMessage actionState={actionState}/>}
 

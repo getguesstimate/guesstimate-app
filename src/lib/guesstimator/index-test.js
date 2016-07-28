@@ -5,8 +5,8 @@ describe('Guesstimator', () => {
   describe('.parse', () => {
     it('works with a simple function', () => {
       const input = {text: '=34'}
-      const [errors, item] = Guesstimator.parse(input)
-      expect(errors.length).to.eq(0)
+      const [error, item] = Guesstimator.parse(input)
+      expect(_.isEmpty(error)).to.eq(true)
 
       const parsedInput = item.parsedInput
       expect(parsedInput.guesstimateType).to.eq('FUNCTION')
@@ -23,7 +23,7 @@ describe('Guesstimator', () => {
   describe('#samplerType', () => {
     it('has many samplerTypes', () => {
       const input = {text: '=34'}
-      const [errors, item] = Guesstimator.parse(input)
+      const [error, item] = Guesstimator.parse(input)
       expect(item.samplerType().referenceName).to.eq('FUNCTION')
     })
   })

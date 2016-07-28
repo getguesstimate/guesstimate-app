@@ -11,7 +11,7 @@ function spaceToMetrics(space) {
 export function metricsR(state = [], action) {
   switch (action.type) {
     case 'CALCULATORS_FETCH_SUCCESS': {
-      const newMetrics = spaceToMetrics(_.get(action, 'data.space'))
+      const newMetrics = spaceToMetrics(_.get(action, 'data.space')) ||[]
       return uniq([...state, ...newMetrics])
     }
     case 'SPACES_FETCH_SUCCESS': {

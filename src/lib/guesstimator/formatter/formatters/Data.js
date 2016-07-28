@@ -12,7 +12,7 @@ export const isData = input => !input.includes('=') && (input.match(/[\n\s,]/g) 
 
 export const item = {
   formatterName: 'DATA',
-  errors(g) { return [] },
+  error(g) { return {} },
   matches(g) { return !!g.data },
   format(g) { return { guesstimateType: 'DATA', data: g.data } },
 }

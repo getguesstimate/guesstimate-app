@@ -44,7 +44,7 @@ describe('DistributionTextUpTo', () => {
 
     examples.map(e => () => {
       it(`guesstimate ${JSON.stringify(e[0])} has errors ${JSON.stringify(e[1])}`, () => {
-        expect(formatter.errors(e[0]).length > 0).to.equal(e[1])
+        expect(!_.isEmpty(formatter.error(e[0])).to.equal(e[1])
       })
     }).map(e => e())
   });

@@ -1,5 +1,5 @@
 import * as _graph from './graph'
-import * as _dGraph from './dgraph.js'
+import * as _dGraph from './dgraph'
 import * as _metric from './metric'
 import * as _guesstimate from './guesstimate'
 import * as _userOrganizationMemberships from './userOrganizationMemberships'
@@ -14,9 +14,9 @@ export function get(collection, id){
 
 export function subset(graph, spaceId){
   if (spaceId){
-    const metrics = graph.metrics.filter(m => m.space === spaceId);
-    const guesstimates = _.flatten(metrics.map(m => _metric.guesstimates(m, graph)));
-    const simulations = _.flatten(guesstimates.map(g => _guesstimate.simulations(g, graph)));
+    const metrics = graph.metrics.filter(m => m.space === spaceId)
+    const guesstimates = _.flatten(metrics.map(m => _metric.guesstimates(m, graph)))
+    const simulations = _.flatten(guesstimates.map(g => _guesstimate.simulations(g, graph)))
     return { metrics, guesstimates, simulations }
   } else {
     return graph
@@ -67,6 +67,7 @@ export function toDgraph(spaceId, graph){
   const userOrganizationMemberships = graph.userOrganizationMemberships
   dGraph.user = spaceUser
   dGraph.organization = spaceOrganization
+  dGraph.calculators = (graph.calculators || []).filter(c => c.space_id === spaceId)
   dGraph.editableByMe = canEdit(space, graph.me, userOrganizationMemberships)
   return dGraph
 }

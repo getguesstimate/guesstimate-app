@@ -16,6 +16,7 @@ export class TextForm extends Component{
     onChangeGuesstimateType: PropTypes.func.isRequired,
     onAddDefaultData: PropTypes.func,
     onChangeClickMode: PropTypes.func,
+    onFocus: PropTypes.func,
     guesstimate: PropTypes.object,
     size: PropTypes.string
   }
@@ -29,6 +30,7 @@ export class TextForm extends Component{
 
   _switchMetricClickMode() {
     if (this.props.guesstimate.guesstimateType === 'FUNCTION') {this.props.onChangeClickMode('FUNCTION_INPUT_SELECT')}
+    this.props.onFocus()
   }
 
   _handleBlur() {
@@ -43,7 +45,7 @@ export class TextForm extends Component{
       inputMetrics,
       onEscape,
       size,
-      hasErrors,
+      errors,
       onChangeInput,
       onAddData,
       onChangeGuesstimateType,
@@ -75,7 +77,7 @@ export class TextForm extends Component{
             onBlur={this._handleBlur.bind(this)}
             onChangeData={onAddData}
             ref='TextInput'
-            hasErrors={hasErrors}
+            errors={errors}
             width={shouldBeWide ? 'NARROW' : "WIDE"}
           />
 
