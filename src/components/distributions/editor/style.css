@@ -4,15 +4,6 @@
   @mixin small-input;
 }
 
-.Guesstimate .metric-errors-tooltip.metric-errors-tooltip.metric-errors-tooltip {
-  text-align: center;
-  opacity: 1;
-  padding: 4px 13px;
-  border-radius: 2px;
-  transition: none;
-  z-index: 10000000 !important;
-}
-
 .Guesstimate .TextInput {
   line-height: 1.3em;
   font-size: 0.95em;
