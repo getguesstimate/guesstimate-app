@@ -12,20 +12,10 @@ export function selectorSearch(selector, facts) {
   return {partial, suggestion}
 }
 
-export function toMetric(selector, takenReadableIds = [], prefix='@') {
-  const id = `${prefix}${selector.join('.')}`
-  return {id, readableId: generateRandomReadableId(takenReadableIds), location: {row: -1, column: -1}}
-}
-
-export function toGuesstimate(selector, {variable_name, expression}, prefix='@') {
-  const metric = `${prefix}${selector.join('.')}`
-  return {metric, input: expression}
-}
-
-export function toSimulation(selector, {variable_name, values}, prefix='@') {
-  const metric = `${prefix}${selector.join('.')}`
-  return {metric, sample: {values}}
-}
+export const idFrom = selector => selector.join('.')
+export const toMetric = (selector, takenReadableIds = []) => ({id: idFrom(selector), readableId: generateRandomReadableId(takenReadableIds)})
+export const toGuesstimate = (selector, {expression}) => ({metric: idFrom(selector), input: expression})
+export const toSimulation = (selector, {values}) => ({metric: idFrom(selector), sample: {values}})
 
 export function findBySelector(facts, selector, currFact = {}) {
   if (_.isEmpty(selector)) { return currFact }
