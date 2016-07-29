@@ -1,7 +1,7 @@
 import generateRandomReadableId from './metric/generate_random_readable_id'
 import * as _guesstimate from './guesstimate'
 
-export const HANDLE_REGEX = /@\w+\.\w+/g
+export const HANDLE_REGEX = /(?:@\w+(?:\.\w+)?|#\w+)/g
 
 const getVar = f => _.get(f, 'variable_name')
 const byVariableName = name => f => getVar(f) === name
@@ -33,14 +33,18 @@ const buildFullNode = (selector, fact, takenReadableIds) => ({
   simulation: toSimulation(selector, fact),
 })
 
-// Currently only supports globalFacts
-const resolveToSelector = handle => handle.slice(1).split('.')
-export function addFactsToSpaceGraph({metrics, guesstimates, simulations}, globalFacts, organizationId) {
+const globalSelector = handle => handle.slice(1).split('.')
+const orgSelector = (orgId, handle) => [`organization_${orgId}`,handle.slice(1)]
+export const resolveToSelector = orgId => handle => handle.startsWith('#') ? orgSelector(orgId, handle) : globalSelector(handle)
+
+export function addFactsToSpaceGraph({metrics, guesstimates, simulations}, {globalFacts, organizationFacts}, {organization_id}) {
+  const possibleFacts = [...globalFacts, organizationFacts.find(f => f.variable_name === `organization_${organization_id}`)]
+
   // First we need to extract out the relevant fact handles, which we'll evaluate into full selectors, and the facts to
   // which they refer from the graph. We group them as they are used as a unit later.
   const handles = _.uniq(_.flatten(guesstimates.map(_guesstimate.extractFactHandles))).filter(h => !_.isEmpty(h))
-  const selectors = handles.map(resolveToSelector)
-  const facts = selectors.map(s => findBySelector(globalFacts, s))
+  const selectors = handles.map(resolveToSelector(organization_id))
+  const facts = selectors.map(s => findBySelector(possibleFacts, s))
   const grouped = _.zip(handles, selectors, facts).filter(([_1, _2, f]) => _.has(f, 'variable_name'))
 
   // When dynamically generating new metrics, we need non-colliding readableIds, so we'll store a running copy of those

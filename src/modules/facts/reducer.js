@@ -7,14 +7,13 @@ const INITIAL_STATE = {
 }
 
 export function factsR(state = INITIAL_STATE, {type, facts, suggestion}) {
-  const by = property => e => !_.some(facts, f => f[property] === e[property])
   switch (type) {
     case 'LOAD_FACTS_BY_ORG':
       return {
         ...state,
         organizationFacts: [
           ...facts,
-          ...state.organizationFacts.filter(by('organization_id')),
+          ...state.organizationFacts.filter(e => !_.some(facts, f => f.variable_name === e.variable_name)),
         ],
       }
     case 'SUGGEST_FACT':

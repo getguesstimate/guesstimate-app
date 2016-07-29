@@ -4,36 +4,31 @@ import {connect} from 'react-redux'
 import $ from 'jquery'
 import {EditorState, Editor, ContentState, Modifier, CompositeDecorator} from 'draft-js'
 
-import {clearSuggestion, globalsSearch} from 'gModules/facts/actions'
+import {clearSuggestion, getSuggestion} from 'gModules/facts/actions'
+
+import {HANDLE_REGEX, resolveToSelector} from 'gEngine/facts'
 
 import {isData, formatData} from 'lib/guesstimator/formatter/formatters/Data'
 
-const NOUN_REGEX = /(\@[\w]+)/g
-const PROPERTY_REGEX = /[a-zA-Z_](\.[\w]+)/g
 function findWithRegex(regex, contentBlock, callback) {
   const text = contentBlock.getText()
   let matchArr, start
   while ((matchArr = regex.exec(text)) !== null) {
-    start = matchArr.index + matchArr[0].indexOf(matchArr[1])
-    callback(start, start + matchArr[1].length)
+    start = matchArr.index
+    callback(start, start + matchArr[0].length)
   }
 }
 
 const stylizedSpan = className => props => <span {...props} className={className}>{props.children}</span>
-const Noun = stylizedSpan('noun')
-const Property = stylizedSpan('property')
+const Fact = stylizedSpan('fact')
 const Suggestion = stylizedSpan('suggestion')
 const ValidInput = stylizedSpan('valid input')
 const ErrorInput = stylizedSpan('error input')
 
 const FACT_DECORATOR_LIST = [
   {
-    strategy: (contentBlock, callback) => { findWithRegex(NOUN_REGEX, contentBlock, callback) },
-    component: Noun,
-  },
-  {
-    strategy: (contentBlock, callback) => { findWithRegex(PROPERTY_REGEX, contentBlock, callback) },
-    component: Property,
+    strategy: (contentBlock, callback) => { findWithRegex(HANDLE_REGEX, contentBlock, callback) },
+    component: Fact,
   },
 ]
 
@@ -111,12 +106,10 @@ export class TextInput extends Component{
   }
 
   addSuggestion() {
-    const partial = this.prevWord().slice(1).split('.').pop()
-    const inProperty = this.prevWord().includes('.')
+    const partial = resolveToSelector(this.props.organizationId)(this.prevWord()).pop()
 
-    const partialComponent = inProperty ? Property : Noun
     const extraDecorators = [
-      positionDecorator(this.cursorPosition() - partial.length - 1, this.cursorPosition(), partialComponent),
+      positionDecorator(this.cursorPosition() - this.prevWord().length - 1, this.cursorPosition(), Fact),
       positionDecorator(this.cursorPosition(), this.cursorPosition() + this.props.suggestion.length, Suggestion),
     ]
 
@@ -148,15 +141,15 @@ export class TextInput extends Component{
     return this.text(editorState).slice(this.cursorPosition(editorState)).split(/[^\w]/)[0]
   }
   prevWord(editorState = this.state.editorState) {
-    return this.text(editorState).slice(0, this.cursorPosition(editorState)).split(/[^\w@\.]/).pop()
+    return this.text(editorState).slice(0, this.cursorPosition(editorState)).split(/[^\w@#\.]/).pop()
   }
 
   fetchSuggestion(editorState) {
     const prevWord = this.prevWord(editorState)
-    if (!(prevWord.startsWith('@') && editorState.getSelection().isCollapsed())) {
-      if (!_.isEmpty(this.props.suggestion)) { this.props.dispatch(clearSuggestion()) }
+    if (editorState.getSelection().isCollapsed() && (HANDLE_REGEX.test(prevWord))) {
+      this.props.dispatch(getSuggestion(resolveToSelector(this.props.organizationId)(prevWord)))
     } else {
-      this.props.dispatch(globalsSearch(prevWord.slice(1).split('.')))
+      if (!_.isEmpty(this.props.suggestion)) { this.props.dispatch(clearSuggestion()) }
     }
   }
 
@@ -177,9 +170,9 @@ export class TextInput extends Component{
   }
 
   acceptSuggestion(){
-    const inProperty = this.prevWord().includes('.')
+    const suffix = this.prevWord().startsWith('@') && !this.prevWord().includes('.') ? '.' : ''
     const cursorPosition = this.cursorPosition()
-    const addedEditorState = this.addText(`${this.props.suggestion}${inProperty ? '' : '.'}`, false, this.props.suggestion.length)
+    const addedEditorState = this.addText(`${this.props.suggestion}${suffix}`, false, this.props.suggestion.length)
     this.onChange(this.stripExtraDecorators(addedEditorState))
   }
 

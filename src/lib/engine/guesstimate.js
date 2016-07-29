@@ -37,10 +37,7 @@ export function format(guesstimate: Guesstimate): Guesstimate {
   return formatted
 }
 
-export function extractFactHandles(guesstimate: Guesstimate) {
-  if (_.isEmpty(guesstimate) || _.isEmpty(guesstimate.input)) { return [] }
-  return guesstimate.input.match(HANDLE_REGEX)
-}
+export const extractFactHandles = ({input}) => _.isEmpty(input) ? [] : input.match(HANDLE_REGEX)
 
 function translateReadableIds(input, idMap) {
   if (!input) {return ""}
