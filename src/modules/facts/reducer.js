@@ -2,7 +2,7 @@ import CITIES from './cities.json'
 
 const INITIAL_STATE = {
   currentSuggestion: '',
-  globals: CITIES,
+  globalFacts: CITIES,
   organizationFacts: [],
 }
 

@@ -2,7 +2,7 @@ import {selectorSearch} from 'gEngine/facts'
 
 export function globalsSearch(selector) {
   return (dispatch, getState) => {
-    const {partial, suggestion} = selectorSearch(selector, getState().facts.globals)
+    const {partial, suggestion} = selectorSearch(selector, getState().facts.globalFacts)
     dispatch({type: 'SUGGEST_FACT', suggestion: suggestion.replace(partial, '')})
   }
 }

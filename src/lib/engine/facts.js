@@ -25,12 +25,12 @@ export function findBySelector(facts, selector, currFact = {}) {
   return findBySelector(fact.children, selector.slice(1), fact)
 }
 
-// Currently only supports globals
+// Currently only supports globalFacts
 const resolveToSelector = handle => handle.slice(1).split('.')
-export function addFactsToSpaceGraph({metrics, guesstimates, simulations}, globals, organizationId) {
+export function addFactsToSpaceGraph({metrics, guesstimates, simulations}, globalFacts, organizationId) {
   const handles = _.uniq(_.flatten(guesstimates.map(_guesstimate.extractFactHandles))).filter(h => !_.isEmpty(h))
   const selectors = handles.map(resolveToSelector)
-  const facts = selectors.map(s => findBySelector(globals, s))
+  const facts = selectors.map(s => findBySelector(globalFacts, s))
   const grouped = _.zip(handles, selectors, facts).filter(([_1, _2, f]) => _.has(f, 'variable_name'))
 
   let readableIds = metrics.map(m => m.readableId)
