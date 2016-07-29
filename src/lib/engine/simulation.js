@@ -1,4 +1,4 @@
-import * as sample from './sample';
+import * as sample from './sample'
 
 export function combine(simulations) {
   let recentSimulations = simulations
@@ -12,11 +12,11 @@ export function combine(simulations) {
     metric: recentSimulations[0].metric,
     propagationId: recentSimulations[0].propagationId,
     sample: sample.combine(recentSimulations.map(s => s.sample))
-  };
+  }
 }
 
 export function hasValues(simulation) {
-  return (values(simulation).length > 0);
+  return (values(simulation).length > 0)
 }
 
 export function values(simulation) {
@@ -24,7 +24,7 @@ export function values(simulation) {
 }
 
 export function hasErrors(simulation) {
-  return (errors(simulation).length > 0);
+  return errors(simulation).length > 0
 }
 
 export function errors(simulation) {

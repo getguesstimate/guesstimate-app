@@ -1,3 +1,5 @@
+import {PARSER_ERROR} from 'lib/errors/modelErrors'
+
 const SUFFIXES = {
   'K': 3,
   'M': 6,
@@ -20,7 +22,7 @@ export const rangeRegex = (sep, left, right) => padded([left, NUMBER_REGEX, sep,
 const getMult = suffix => Math.pow(10,SUFFIXES[suffix])
 const parseNumber = (num, suffix) => parseFloat(num.replace(',', '')) * (!!suffix ? getMult(suffix) : 1)
 
-const rangeErrorFn = ([low, high]) => low > high ? ['the low number should come first'] : []
+const rangeErrorFn = ([low, high]) => low > high ? {type: PARSER_ERROR, message: 'The low number should come first'} : {}
 
 // We assume that if the user started at 0 or tried a negative number,
 // they intended for this to be normal.
@@ -35,7 +37,7 @@ function getGuesstimateType(guesstimateType, [low]) {
 export function regexBasedFormatter(re, guesstimateTypeFn = getGuesstimateType, errorFn = rangeErrorFn) {
   return {
     matches({text}) { return re.test(text) },
-    errors({text}) { return errorFn(this._numbers(text)) },
+    error({text}) { return errorFn(this._numbers(text)) },
 
     format({guesstimateType, text}) {
       const params = this._numbers(text)
