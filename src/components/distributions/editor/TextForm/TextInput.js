@@ -138,7 +138,7 @@ export class TextInput extends Component{
   cursorPosition(editorState = this.state.editorState) { return editorState.getSelection().getFocusOffset() }
   text(editorState = this.state.editorState) { return editorState.getCurrentContent().getPlainText('') }
   nextWord(editorState = this.state.editorState) {
-    return this.text(editorState).slice(this.cursorPosition(editorState)).split(/[^\w#]/)[0]
+    return this.text(editorState).slice(this.cursorPosition(editorState)).split(/[^\w]/)[0]
   }
   prevWord(editorState = this.state.editorState) {
     return this.text(editorState).slice(0, this.cursorPosition(editorState)).split(/[^\w@#\.]/).pop()
