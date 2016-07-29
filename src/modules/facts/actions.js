@@ -1,8 +1,9 @@
 import {selectorSearch} from 'gEngine/facts'
 
-export function globalsSearch(selector) {
+export function getSuggestion(selector) {
+  console.log(selector)
   return (dispatch, getState) => {
-    const {partial, suggestion} = selectorSearch(selector, getState().facts.globalFacts)
+    const {partial, suggestion} = selectorSearch(selector, [...getState().facts.globalFacts, ...getState().facts.organizationFacts])
     dispatch({type: 'SUGGEST_FACT', suggestion: suggestion.replace(partial, '')})
   }
 }

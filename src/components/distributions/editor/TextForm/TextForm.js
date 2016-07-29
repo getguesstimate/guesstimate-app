@@ -46,6 +46,7 @@ export class TextForm extends Component{
       onEscape,
       size,
       errors,
+      organizationId,
       onChangeInput,
       onAddData,
       onChangeGuesstimateType,
@@ -79,6 +80,7 @@ export class TextForm extends Component{
             ref='TextInput'
             errors={errors}
             width={shouldBeWide ? 'NARROW' : "WIDE"}
+            organizationId={organizationId}
           />
 
           { shouldDisplayType &&

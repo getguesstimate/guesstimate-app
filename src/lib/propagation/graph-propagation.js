@@ -33,6 +33,8 @@ export class GraphPropagation {
       this.spaceId = metric && metric.space
     }
 
+    if (!!this.spaceId) { this.space = getState().spaces.find(s => s.id === this.spaceId) }
+
     let orderedMetricIdsAndGraphErrors = this._orderedMetricIdsAndErrors(graphFilters)
 
     this.orderedMetricIds = orderedMetricIdsAndGraphErrors.map(m => m.id)
@@ -61,7 +63,7 @@ export class GraphPropagation {
   _graph(): Graph {
     const state = this.getState()
     const spaceSubset = e.space.subset(e.graph.create(state), this.spaceId)
-    return e.facts.addFactsToSpaceGraph(spaceSubset, state.facts.globalFacts, this.organizationId)
+    return e.facts.addFactsToSpaceGraph(spaceSubset, state.facts, this.space)
   }
 
   _orderedMetricIdsAndErrors(graphFilters: object): Array<Object> {
