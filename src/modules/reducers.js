@@ -21,7 +21,7 @@ import {copiedR} from './copied/reducer'
 import {checkpointsR} from './checkpoints/reducer'
 import {httpRequestsR} from './httpRequests/reducer'
 import {newOrganizationR} from './newOrganization/reducer'
-import {factBankR} from './factBank/reducer'
+import {factsR} from './facts/reducer'
 
 export function changeSelect(location) {
   return { type: 'CHANGE_SELECT', location };
@@ -51,7 +51,7 @@ const rootReducer = function app(state = {}, action){
     checkpoints: SI(checkpointsR(state.checkpoints, action)),
     httpRequests: SI(httpRequestsR(state.httpRequests, action)),
     calculators: SI(reduxCrud.reducersFor('calculators')(state.calculators, action)),
-    factBank: SI(factBankR(state.factBank, action)),
+    facts: SI(factsR(state.facts, action)),
   }
 }
 

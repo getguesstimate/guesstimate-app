@@ -20,7 +20,7 @@ export function relationshipType(edges) {
 export function create(graphAttributes) {
   return {
     ..._.pick(graphAttributes, ['metrics', 'guesstimates', 'simulations']),
-    ..._.pick(graphAttributes.factBank, ['globals', 'organizationFacts']),
+    ..._.pick(graphAttributes.facts, ['globals', 'organizationFacts']),
   }
 }
 

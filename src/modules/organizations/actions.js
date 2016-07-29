@@ -6,7 +6,7 @@ import * as displayErrorsActions from 'gModules/displayErrors/actions'
 import * as membershipActions from 'gModules/userOrganizationMemberships/actions'
 import * as userOrganizationMembershipActions from 'gModules/userOrganizationMemberships/actions'
 import * as userOrganizationInvitationActions from 'gModules/userOrganizationInvitations/actions'
-import * as factActions from 'gModules/factBank/actions'
+import * as factActions from 'gModules/facts/actions'
 
 import {captureApiError} from 'lib/errors/index'
 

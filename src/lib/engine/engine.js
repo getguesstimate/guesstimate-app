@@ -1,5 +1,5 @@
 import * as graph from './graph'
-import * as factBank from './factBank'
+import * as facts from './facts'
 import * as dgraph from './dgraph'
 import * as metric from './metric'
 import * as sample from './sample'
@@ -27,7 +27,7 @@ const Engine = {
   organization,
   userOrganizationMemberships,
   calculator,
-  factBank,
+  facts,
 }
 
 window.engine = Engine

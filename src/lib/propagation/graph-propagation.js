@@ -61,7 +61,7 @@ export class GraphPropagation {
   _graph(): Graph {
     const state = this.getState()
     const spaceSubset = e.space.subset(e.graph.create(state), this.spaceId)
-    return e.factBank.addFactsToSpaceGraph(spaceSubset, state.factBank.globals, this.organizationId)
+    return e.facts.addFactsToSpaceGraph(spaceSubset, state.facts.globals, this.organizationId)
   }
 
   _orderedMetricIdsAndErrors(graphFilters: object): Array<Object> {

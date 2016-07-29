@@ -6,7 +6,7 @@ const INITIAL_STATE = {
   organizationFacts: [],
 }
 
-export function factBankR(state = INITIAL_STATE, {type, facts, suggestion}) {
+export function factsR(state = INITIAL_STATE, {type, facts, suggestion}) {
   const by = property => e => !_.some(facts, f => f[property] === e[property])
   switch (type) {
     case 'LOAD_FACTS_BY_ORG':
