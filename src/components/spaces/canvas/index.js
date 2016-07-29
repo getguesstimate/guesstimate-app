@@ -56,10 +56,6 @@ export default class Canvas extends Component{
       this.props.dispatch(canvasStateActions.change({edgeView: 'visible'}))
     }
     this.props.dispatch(runSimulations({spaceId: this.props.denormalizedSpace.id}))
-
-    if (this.props.screenshot) {
-      this.props.dispatch(canvasStateActions.change({metricCardView: 'display'}))
-    }
   }
 
   componentWillUpdate() { window.recorder.recordRenderStartEvent(this) }
@@ -124,7 +120,7 @@ export default class Canvas extends Component{
   }
 
   _isAnalysisView(props = this.props) {
-    return (_.get(props, 'denormalizedSpace.canvasState.metricCardView') === 'analysis')
+    return !!_.get(props, 'denormalizedSpace.canvasState.analysisViewEnabled')
   }
 
   isMetricEmpty(id) {
@@ -137,9 +133,10 @@ export default class Canvas extends Component{
     const {location} = metric
     const hasSelected = selected && metric && (selected.id !== metric.id)
     const selectedSamples = _.get(selected, 'simulation.sample.values')
-    const passSelected = hasSelected && selectedSamples && !_.isEmpty(selectedSamples)
+    const passSelected = hasSelected && !_.isEmpty(selectedSamples)
     return (
       <Metric
+        isInScreenshot={this.props.screenshot}
         canvasState={this.props.denormalizedSpace.canvasState}
         key={metric.id}
         location={location}
@@ -217,7 +214,6 @@ export default class Canvas extends Component{
   render () {
     const {selectedCell, selectedRegion, copied} = this.props
     const {metrics, canvasState} = this.props.denormalizedSpace
-    const {metricCardView} = canvasState
 
     const edges = this.edges()
     let className = 'canvas-space'
@@ -225,7 +221,7 @@ export default class Canvas extends Component{
     className += this.props.screenshot ? ' overflow-hidden' : ''
 
     const selectedMetric = this._isAnalysisView() && this._selectedMetric()
-    const showGridLines = (metricCardView !== 'display')
+    const showGridLines = !this.props.screenshot
 
     const copiedRegion = (copied && (copied.pastedTimes < 1) && copied.region) || []
 

@@ -57,7 +57,7 @@ export class MetricCardViewSection extends Component {
   }
 
   _shouldShowStatistics() {
-    const isScientific = (this.props.canvasState.metricCardView === 'scientific')
+    const isScientific = (!!this.props.canvasState.scientificViewEnabled)
     const isAvailable = this.showSimulation() && (_.get(this.props, 'metric.simulation.stats').length > 1)
     return isScientific && isAvailable
   }
@@ -74,7 +74,7 @@ export class MetricCardViewSection extends Component {
 
   render() {
     const {
-      canvasState: {metricCardView, metricClickMode},
+      canvasState: {scientificViewEnabled, expandedViewEnabled, metricClickMode},
       metric,
       inSelectedCell,
       onChangeName,
@@ -83,37 +83,40 @@ export class MetricCardViewSection extends Component {
       onMouseDown,
       showSensitivitySection,
       hovered,
+      isInScreenshot,
       editing,
     } = this.props
 
+
     const errors = this._errors()
     const errorToDisplay = this._errorToDisplay()
-    const {guesstimate} = metric
+    const {guesstimate, simulation, readableId} = metric
     const stats = _.get(metric, 'simulation.stats')
     const showSimulation = this.showSimulation()
     const shouldShowStatistics = this._shouldShowStatistics()
     const hasGuesstimateDescription = !_.isEmpty(guesstimate.description)
     const anotherFunctionSelected = ((metricClickMode === 'FUNCTION_INPUT_SELECT') && !inSelectedCell)
     const hasErrors = (errors.length > 0)
+    const shouldShowReadableId = !!expandedViewEnabled || anotherFunctionSelected
 
-    let className = `MetricCardViewSection ${metricCardView}`
+    let className = `MetricCardViewSection${isInScreenshot ? ' display' : ''}`
     className += (hasErrors & !inSelectedCell) ? ' hasErrors' : ''
     className += (anotherFunctionSelected) ? ' anotherFunctionSelected' : ''
     return(
       <div className={className} onMouseDown={onMouseDown}>
-        {(metricCardView !== 'basic') && showSimulation &&
+        {showSimulation &&
           <Histogram
-            height={(metricCardView === 'scientific') ? 110 : 30}
-            simulation={metric.simulation}
+            height={!!scientificViewEnabled ? 110 : 30}
+            simulation={simulation}
             cutOffRatio={0.995}
           />
         }
 
         <div className='MetricTokenSection'>
-          {(hovered || anotherFunctionSelected || hasGuesstimateDescription) &&
+          {(hovered || shouldShowReadableId || hasGuesstimateDescription) &&
             <MetricToken
-              readableId={metric.readableId}
-              anotherFunctionSelected={anotherFunctionSelected}
+              readableId={readableId}
+              shouldShowReadableId={shouldShowReadableId}
               onOpenModal={onOpenModal}
               hasGuesstimateDescription={hasGuesstimateDescription}
             />

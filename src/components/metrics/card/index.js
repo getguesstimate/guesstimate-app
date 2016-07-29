@@ -191,13 +191,12 @@ export default class MetricCard extends Component {
   }
 
   _className() {
-    const {inSelectedCell, metric, hovered} = this.props
-    const {canvasState: {metricCardView}} = this.props
+    const {inSelectedCell, metric, hovered, isInScreenshot} = this.props
     const relationshipClass = relationshipClasses[relationshipType(metric.edges)]
 
     const titleView = !hovered && !inSelectedCell && this._isTitle()
     let className = inSelectedCell ? 'metricCard grid-item-focus' : 'metricCard'
-    className += ` ${metricCardView}`
+    className += isInScreenshot ? ' display' : ''
     className += titleView ? ' titleView' : ''
     className += ' ' + relationshipClass
     return className
@@ -209,9 +208,8 @@ export default class MetricCard extends Component {
   }
 
   _shouldShowSensitivitySection() {
-    const {metric, selectedMetric} = this.props
-    const isAnalysis = (this.props.canvasState.metricCardView === 'analysis')
-    return !!(isAnalysis && selectedMetric && this._shouldShowSimulation(metric) && this._shouldShowSimulation(selectedMetric))
+    const {metric, selectedMetric, canvasState: {analysisViewEnabled}} = this.props
+    return !!(!!analysisViewEnabled && selectedMetric && this._shouldShowSimulation(metric) && this._shouldShowSimulation(selectedMetric))
   }
 
   render() {
@@ -223,9 +221,11 @@ export default class MetricCard extends Component {
       connectDragSource,
       selectedMetric,
       forceFlowGridUpdate,
+      isInScreenshot,
     } = this.props
     const {guesstimate} = metric
     const shouldShowSensitivitySection = this._shouldShowSensitivitySection()
+    const shouldShowDistributionEditor = !!canvasState.expandedViewEnabled || inSelectedCell
 
     return (
       <div className='metricCard--Container'
@@ -253,6 +253,7 @@ export default class MetricCard extends Component {
             onMouseDown={this._handleMouseDown.bind(this)}
             ref='MetricCardViewSection'
             isTitle={this._isTitle()}
+            isInScreenshot={isInScreenshot}
             connectDragSource={connectDragSource}
             selectedMetric={selectedMetric}
             showSensitivitySection={shouldShowSensitivitySection}
@@ -264,7 +265,7 @@ export default class MetricCard extends Component {
             onTab={this.props.onTab}
           />
 
-          {inSelectedCell &&
+          {shouldShowDistributionEditor &&
             <div className='section editing'>
               <DistributionEditor
                 guesstimate={metric.guesstimate}
