@@ -32,7 +32,6 @@ function mapStateToProps(state) {
     me: state.me,
     organizations: state.organizations,
     organizationFacts: state.facts.organizationFacts,
-    foo: state,
   }
 }
 
@@ -90,9 +89,7 @@ export default class OrganizationShow extends Component{
     const {openTab} = this.state
     const spaces =  _.orderBy(this.props.organizationSpaces.asMutable(), ['updated_at'], ['desc'])
     const organization = organizations.find(u => u.id.toString() === organizationId.toString())
-    const facts = organizationFacts.find(f => f.variable_name === `organization_${organizationId}`)
-    console.log(facts)
-    console.log(this.props.foo)
+    const facts = _.get(organizationFacts.find(f => f.variable_name === `organization_${organizationId}`), 'children') || []
     const meIsAdmin = !!organization && (organization.admin_id === this.props.me.id)
     const meIsMember = meIsAdmin || !!(members.find(m => m.id === this.props.me.id))
 

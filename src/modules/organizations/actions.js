@@ -41,7 +41,7 @@ export function fetchSuccess(organizations) {
 
     const memberships = _.flatten(organizations.map(o => o.memberships || []))
     const invitations = _.flatten(organizations.map(o => o.invitations || []))
-    const factsByOrg = organizations.map(o => ({organization_id: o.id, facts: o.facts || []}))
+    const factsByOrg = organizations.map(o => ({variable_name: `organization_${o.id}`, children: o.facts || []}))
 
     if (!_.isEmpty(memberships)) { dispatch(userOrganizationMembershipActions.fetchSuccess(memberships)) }
     if (!_.isEmpty(invitations)) { dispatch(userOrganizationInvitationActions.fetchSuccess(invitations)) }
