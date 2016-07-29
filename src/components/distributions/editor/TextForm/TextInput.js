@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 import $ from 'jquery'
 import {EditorState, Editor, ContentState, Modifier, CompositeDecorator} from 'draft-js'
 
-import {clearSuggestion, globalsSearch} from 'gModules/factBank/actions'
+import {clearSuggestion, globalsSearch} from 'gModules/facts/actions'
 
 import {isData, formatData} from 'lib/guesstimator/formatter/formatters/Data'
 
@@ -42,7 +42,7 @@ const positionDecorator = (start, end, component) => ({
   component,
 })
 
-@connect(state => ({suggestion: state.factBank.currentSuggestion}))
+@connect(state => ({suggestion: state.facts.currentSuggestion}))
 export class TextInput extends Component{
   displayName: 'Guesstimate-TextInput'
 

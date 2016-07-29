@@ -3,6 +3,7 @@
 import type {Guesstimate, Distribution, DGraph, Graph, Simulation} from './types'
 import {Guesstimator} from '../guesstimator/index'
 import {INPUT_ERROR} from 'lib/errors/modelErrors'
+import {HANDLE_REGEX} from './facts'
 
 export function equals(l, r) {
   return (
@@ -31,9 +32,24 @@ export function sample(guesstimate: Guesstimate, dGraph: DGraph, n: number = 1) 
   return item.sample(n, inputs).then(sample => ({ metric, sample }))
 }
 
-export function format(guesstimate: Guesstimate): Guesstimate{
+export function format(guesstimate: Guesstimate): Guesstimate {
   let formatted = _.pick(guesstimate, attributes)
   return formatted
+}
+
+export function extractFactHandles(guesstimate: Guesstimate) {
+  if (_.isEmpty(guesstimate) || _.isEmpty(guesstimate.input)) { return [] }
+  return guesstimate.input.match(HANDLE_REGEX)
+}
+
+function translateReadableIds(input, idMap) {
+  if (!input) {return ""}
+  const re = RegExp(Object.keys(idMap).join("|"), "g")
+  return input.replace(re, (match) => idMap[match])
+}
+
+export function translateFactHandleFn(handleMap) {
+  return g => _.isEmpty(handleMap) ? g : {...g, input: translateReadableIds(g.input, handleMap)}
 }
 
 export function simulations(guesstimate: Guesstimate, graph:Graph) : Array<Simulation>{
