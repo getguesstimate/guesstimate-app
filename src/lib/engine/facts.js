@@ -1,5 +1,6 @@
 import generateRandomReadableId from './metric/generate_random_readable_id'
 import * as _guesstimate from './guesstimate'
+import MetricPropagation from 'lib/propagation/metric-propagation'
 
 export const HANDLE_REGEX = /(?:@\w+(?:\.\w+)?|#\w+)/g
 
@@ -68,4 +69,14 @@ export function addFactsToSpaceGraph({metrics, guesstimates, simulations}, {glob
     guesstimates: [...guesstimates.map(_guesstimate.translateFactHandleFn(factHandleMap)), ...factGuesstimates],
     simulations: [...simulations, ...factSimulations],
   }
+}
+
+export function simulateFact(selector, fact) {
+  const guesstimate = toGuesstimate(selector, fact)
+  const graph = {metrics: [{id: guesstimate.metric}], guesstimates: [guesstimate]}
+  const metricPropagation = new MetricPropagation(guesstimate.metric, [], 0)
+
+  return metricPropagation.simulate(5000, graph).then(
+    ({sample: {values, errors}}) => values
+  )
 }

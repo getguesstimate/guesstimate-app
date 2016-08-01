@@ -14,3 +14,7 @@ export function clearSuggestion() {
 export function loadByOrg(facts) {
   return {type: 'LOAD_FACTS_BY_ORG', facts}
 }
+
+export function addToOrg(organizationVariableName, fact) {
+  return {type: 'ADD_FACT_TO_ORG', organizationVariableName, fact}
+}

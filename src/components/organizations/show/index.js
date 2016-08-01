@@ -23,9 +23,11 @@ import e from 'gEngine/engine'
 
 import './style.css'
 
-const MODEL_TAB = 0
-const MEMBERS_TAB = 1
-const FACT_BOOK_TAB = 2
+const MODEL_TAB = 'models'
+const MEMBERS_TAB = 'members'
+const FACT_BOOK_TAB = 'facts'
+
+const isValidTabString = tabStr => [MODEL_TAB, MEMBERS_TAB, FACT_BOOK_TAB].includes(tabStr)
 
 function mapStateToProps(state) {
   return {
@@ -43,7 +45,7 @@ export default class OrganizationShow extends Component{
   displayName: 'OrganizationShow'
 
   state = {
-    openTab: MODEL_TAB,
+    openTab: isValidTabString(this.props.tab) ? this.props.tab : MODEL_TAB,
   }
 
   componentWillMount() {
@@ -143,7 +145,10 @@ export default class OrganizationShow extends Component{
             }
 
             {(openTab === FACT_BOOK_TAB) && meIsMember && !!facts &&
-              <FactBookTab facts={facts} />
+              <FactBookTab
+                onAddFact={fact => this.props.dispatch(organizationActions.addFact(organization, fact))}
+                facts={facts}
+              />
             }
           </div>
         </div>

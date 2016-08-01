@@ -8,6 +8,8 @@ import * as userOrganizationMembershipActions from 'gModules/userOrganizationMem
 import * as userOrganizationInvitationActions from 'gModules/userOrganizationInvitations/actions'
 import * as factActions from 'gModules/facts/actions'
 
+import {getFactVar} from 'gEngine/organization'
+
 import {captureApiError} from 'lib/errors/index'
 
 import {setupGuesstimateApi} from 'servers/guesstimate-api/constants'
@@ -41,7 +43,7 @@ export function fetchSuccess(organizations) {
 
     const memberships = _.flatten(organizations.map(o => o.memberships || []))
     const invitations = _.flatten(organizations.map(o => o.invitations || []))
-    const factsByOrg = organizations.map(o => ({variable_name: `organization_${o.id}`, children: o.facts || []}))
+    const factsByOrg = organizations.map(o => ({variable_name: getFactVar(o), children: o.facts || []}))
 
     if (!_.isEmpty(memberships)) { dispatch(userOrganizationMembershipActions.fetchSuccess(memberships)) }
     if (!_.isEmpty(invitations)) { dispatch(userOrganizationInvitationActions.fetchSuccess(invitations)) }
@@ -55,7 +57,7 @@ export function create({name, plan}) {
     let object = {id: cid, organization: {name, plan} }
 
     // TODO(matthew): Track pending create request.
-    const action = oActions.createStart(object);
+    const action = oActions.createStart(object)
 
     api(getState()).organizations.create(object, (err, organization) => {
       if (err) {
@@ -75,15 +77,23 @@ export function addMember(organizationId, email) {
     const cid = cuid()
     let object = {id: cid, organization_id: organizationId, user_id: 4}
 
-    const action = oActions.createStart(object);
-
     api(getState()).organizations.addMember({organizationId, email}, (err, membership) => {
-      if (err) {
-        dispatch(oActions.createError(err, object))
-      }
-      else if (membership) {
+      if (!!membership) {
         dispatch(userActions.fetchSuccess([membership._embedded.user]))
         dispatch(membershipActions.createSuccess([membership]))
+      }
+    })
+  }
+}
+
+export function addFact(organization, fact) {
+  return (dispatch, getState) => {
+    const cid = cuid()
+    let object = {id: cid, organization_id: organization.id, user_id: 4}
+
+    api(getState()).organizations.addFact(organization, fact, (err, fact) => {
+      if (!!fact) {
+        dispatch(factActions.addToOrg(getFactVar(organization), fact))
       }
     })
   }
