@@ -77,6 +77,6 @@ export function simulateFact(selector, fact) {
   const metricPropagation = new MetricPropagation(guesstimate.metric, [], 0)
 
   return metricPropagation.simulate(5000, graph).then(
-    ({sample: {values, errors}}) => values
+    ({sample: {values, errors}}) => ({values, errors})
   )
 }

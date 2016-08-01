@@ -16,6 +16,10 @@
       font-size: 1.2em;
       font-style: italic;
 
+      input {
+        width: 80%;
+        margin-left: 0.4em;
+      }
       .prefix {
         color: $grey-4;
       }
