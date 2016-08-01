@@ -8,6 +8,9 @@ import * as userOrganizationMembershipActions from 'gModules/userOrganizationMem
 import * as userOrganizationInvitationActions from 'gModules/userOrganizationInvitations/actions'
 import * as factActions from 'gModules/facts/actions'
 
+import {organizationReadableId} from 'gEngine/organization'
+import {withSortedValues} from 'gEngine/facts'
+
 import {captureApiError} from 'lib/errors/index'
 
 import {setupGuesstimateApi} from 'servers/guesstimate-api/constants'
@@ -34,6 +37,8 @@ export function fetchById(organizationId) {
   }
 }
 
+const toContainerFact = o => _.isEmpty(o.facts) ? {} : {variable_name: organizationReadableId(o), children: o.facts.map(f => withSortedValues(f))}
+
 export function fetchSuccess(organizations) {
   return (dispatch) => {
     const formatted = organizations.map(o => _.pick(o, ['id', 'name', 'picture', 'admin_id', 'account', 'plan']))
@@ -41,7 +46,7 @@ export function fetchSuccess(organizations) {
 
     const memberships = _.flatten(organizations.map(o => o.memberships || []))
     const invitations = _.flatten(organizations.map(o => o.invitations || []))
-    const factsByOrg = organizations.map(o => ({variable_name: `organization_${o.id}`, children: o.facts || []}))
+    const factsByOrg = organizations.map(toContainerFact).filter(o => !_.isEmpty(o))
 
     if (!_.isEmpty(memberships)) { dispatch(userOrganizationMembershipActions.fetchSuccess(memberships)) }
     if (!_.isEmpty(invitations)) { dispatch(userOrganizationInvitationActions.fetchSuccess(invitations)) }
@@ -55,7 +60,7 @@ export function create({name, plan}) {
     let object = {id: cid, organization: {name, plan} }
 
     // TODO(matthew): Track pending create request.
-    const action = oActions.createStart(object);
+    const action = oActions.createStart(object)
 
     api(getState()).organizations.create(object, (err, organization) => {
       if (err) {
@@ -72,18 +77,24 @@ export function create({name, plan}) {
 
 export function addMember(organizationId, email) {
   return (dispatch, getState) => {
-    const cid = cuid()
-    let object = {id: cid, organization_id: organizationId, user_id: 4}
-
-    const action = oActions.createStart(object);
-
     api(getState()).organizations.addMember({organizationId, email}, (err, membership) => {
-      if (err) {
-        dispatch(oActions.createError(err, object))
-      }
-      else if (membership) {
+      if (!!membership) {
         dispatch(userActions.fetchSuccess([membership._embedded.user]))
         dispatch(membershipActions.createSuccess([membership]))
+      }
+    })
+  }
+}
+
+// addFact adds the passed fact, with sortedValues overwritten to null, to the organization and saves it on the server.
+export function addFact(organization, rawFact) {
+  return (dispatch, getState) => {
+    let fact = Object.assign({}, rawFact)
+    _.set(fact, 'simulation.sample.sortedValues', null)
+
+    api(getState()).organizations.addFact(organization, fact, (err, serverFact) => {
+      if (!!serverFact) {
+        dispatch(factActions.addToOrg(organizationReadableId(organization), serverFact))
       }
     })
   }

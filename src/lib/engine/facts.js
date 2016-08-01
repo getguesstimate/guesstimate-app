@@ -1,11 +1,21 @@
 import generateRandomReadableId from './metric/generate_random_readable_id'
 import * as _guesstimate from './guesstimate'
 
+import MetricPropagation from 'lib/propagation/metric-propagation'
+import {sortDescending} from 'lib/dataAnalysis'
+
+
 export const HANDLE_REGEX = /(?:@\w+(?:\.\w+)?|#\w+)/g
 
 const getVar = f => _.get(f, 'variable_name')
 const byVariableName = name => f => getVar(f) === name
 const namedLike = partial => f => getVar(f).startsWith(partial)
+
+export function withSortedValues(rawFact) {
+  let fact = Object.assign({}, rawFact)
+  _.set(fact, 'simulation.sample.sortedValues', sortDescending(_.get(fact, 'simulation.sample.values')))
+  return fact
+}
 
 export function selectorSearch(selector, facts) {
   const partial = selector.pop()
@@ -68,4 +78,14 @@ export function addFactsToSpaceGraph({metrics, guesstimates, simulations}, {glob
     guesstimates: [...guesstimates.map(_guesstimate.translateFactHandleFn(factHandleMap)), ...factGuesstimates],
     simulations: [...simulations, ...factSimulations],
   }
+}
+
+export function simulateFact(selector, fact) {
+  const guesstimate = toGuesstimate(selector, fact)
+  const graph = {metrics: [{id: guesstimate.metric}], guesstimates: [guesstimate]}
+  const metricPropagation = new MetricPropagation(guesstimate.metric, [], 0)
+
+  return metricPropagation.simulate(metricPropagation.remainingSimulations[0], graph).then(
+    ({sample: {values, errors}}) => ({values, errors})
+  )
 }
