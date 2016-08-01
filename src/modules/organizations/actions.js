@@ -77,9 +77,6 @@ export function create({name, plan}) {
 
 export function addMember(organizationId, email) {
   return (dispatch, getState) => {
-    const cid = cuid()
-    let object = {id: cid, organization_id: organizationId}
-
     api(getState()).organizations.addMember({organizationId, email}, (err, membership) => {
       if (!!membership) {
         dispatch(userActions.fetchSuccess([membership._embedded.user]))
@@ -89,17 +86,15 @@ export function addMember(organizationId, email) {
   }
 }
 
+// addFact adds the passed fact, with sortedValues overwritten to null, to the organization and saves it on the server.
 export function addFact(organization, rawFact) {
   return (dispatch, getState) => {
-    const cid = cuid()
-    let object = {id: cid, organization_id: organization.id}
-
     let fact = Object.assign({}, rawFact)
     _.set(fact, 'simulation.sample.sortedValues', null)
 
-    api(getState()).organizations.addFact(organization, fact, (err, fact) => {
-      if (!!fact) {
-        dispatch(factActions.addToOrg(organizationReadableId(organization), fact))
+    api(getState()).organizations.addFact(organization, fact, (err, serverFact) => {
+      if (!!serverFact) {
+        dispatch(factActions.addToOrg(organizationReadableId(organization), serverFact))
       }
     })
   }
