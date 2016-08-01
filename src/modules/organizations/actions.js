@@ -9,6 +9,7 @@ import * as userOrganizationInvitationActions from 'gModules/userOrganizationInv
 import * as factActions from 'gModules/facts/actions'
 
 import {getFactVar} from 'gEngine/organization'
+import {withSortedValues} from 'gEngine/facts'
 
 import {captureApiError} from 'lib/errors/index'
 
@@ -36,6 +37,8 @@ export function fetchById(organizationId) {
   }
 }
 
+const toContainerFact = o => _.isEmpty(o.facts) ? {} : {variable_name: getFactVar(o), children: o.facts.map(f => withSortedValues(f))}
+
 export function fetchSuccess(organizations) {
   return (dispatch) => {
     const formatted = organizations.map(o => _.pick(o, ['id', 'name', 'picture', 'admin_id', 'account', 'plan']))
@@ -43,7 +46,7 @@ export function fetchSuccess(organizations) {
 
     const memberships = _.flatten(organizations.map(o => o.memberships || []))
     const invitations = _.flatten(organizations.map(o => o.invitations || []))
-    const factsByOrg = organizations.map(o => ({variable_name: getFactVar(o), children: o.facts || []}))
+    const factsByOrg = organizations.map(toContainerFact).filter(o => !_.isEmpty(o))
 
     if (!_.isEmpty(memberships)) { dispatch(userOrganizationMembershipActions.fetchSuccess(memberships)) }
     if (!_.isEmpty(invitations)) { dispatch(userOrganizationInvitationActions.fetchSuccess(invitations)) }

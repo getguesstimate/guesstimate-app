@@ -6,8 +6,7 @@ import Icon from 'react-fa'
 import Histogram from 'gComponents/simulations/histogram/index'
 
 import {simulateFact} from 'gEngine/facts'
-
-import {sortDescending} from 'lib/dataAnalysis'
+import {addStats} from 'gEngine/simulation'
 
 import './facts.css'
 
@@ -20,7 +19,7 @@ const FactRow = ({fact}) => (
       <div className='col-md-3'>
         <Histogram
           height={30}
-          simulation={{sample: {sortedValues: sortDescending(fact.values)}}}
+          simulation={fact.simulation}
           cutOffRatio={0.995}
         />
       </div>
@@ -59,8 +58,18 @@ class NewFactRow extends Component {
       name: '',
       variable_name: '',
       expression: '',
-      values: [],
-      errors: [],
+      simulation: {
+        sample: {
+          values: [],
+          errors: [],
+        },
+        stats: {
+          adjustedConfidenceInterval: [],
+          mean: null,
+          stdev: null,
+          length: 0,
+        },
+      },
     },
   }
 
@@ -73,11 +82,27 @@ class NewFactRow extends Component {
   onChangeExpression(e) { this.setFactState({expression: _.get(e, 'target.value')}) }
 
   onBlurExpression() {
-    simulateFact(['biz'], this.state.fact).then(({values, errors}) => {this.setFactState({values, errors})})
+    simulateFact(['biz'], this.state.fact).then(({values, errors}) => {
+      let simulation = {sample: {values, errors}}
+      addStats(simulation)
+      simulation.sample.sortedValues = null // We don't want to send this to the server for latency reasons.
+      this.setFactState({simulation})
+    })
   }
 
   isValid() {
-    return hasAllNonEmpty(this.state.fact, ['name', 'variable_name', 'expression', 'values']) && _.isEmpty(_.get(this, 'state.fact.errors'))
+    const isErrorFree = _.isEmpty(_.get(this, 'state.fact.simulation.sample.errors'))
+    const hasRequisiteProperties = hasAllNonEmpty(
+      this.state.fact,
+      [
+        'name',
+        'variable_name',
+        'expression',
+        'simulation.sample.values',
+        'simulation.stats',// TODO(matthew): this isn't really checking anything, as simulation.stats starts non-empty.
+      ]
+    )
+    return isErrorFree && hasRequisiteProperties
   }
   onSubmit() { this.props.onSubmit(this.state.fact) }
 
@@ -101,6 +126,7 @@ class NewFactRow extends Component {
               placeholder='Name'
               value={this.state.fact.name}
               onChange={this.onChangeName.bind(this)}
+              onKeyDown={(e) => {if (e.keyCode === 13 && this.isValid()) {this.onSubmit()}}}
             />
           </div>
           <div className='col-md-2'>

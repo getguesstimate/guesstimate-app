@@ -1,12 +1,21 @@
 import generateRandomReadableId from './metric/generate_random_readable_id'
 import * as _guesstimate from './guesstimate'
+
 import MetricPropagation from 'lib/propagation/metric-propagation'
+import {sortDescending} from 'lib/dataAnalysis'
+
 
 export const HANDLE_REGEX = /(?:@\w+(?:\.\w+)?|#\w+)/g
 
 const getVar = f => _.get(f, 'variable_name')
 const byVariableName = name => f => getVar(f) === name
 const namedLike = partial => f => getVar(f).startsWith(partial)
+
+export function withSortedValues(rawFact) {
+  let fact = Object.assign({}, rawFact)
+  _.set(fact, 'simulation.sample.sortedValues', sortDescending(_.get(fact, 'simulation.sample.values')))
+  return fact
+}
 
 export function selectorSearch(selector, facts) {
   const partial = selector.pop()
