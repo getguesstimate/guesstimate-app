@@ -67,7 +67,7 @@ export default class MetricPropagation {
     }
     if (this._needsMoreSamples(graph)) {
       const sampleCount = this.remainingSimulations[this.stepNumber]
-      return this._simulate(sampleCount, graph, dispatch).then(
+      return this.simulate(sampleCount, graph, dispatch).then(
         simulation => {
           if (simulation) {
             this._dispatch(dispatch, simulation)
@@ -94,7 +94,7 @@ export default class MetricPropagation {
     return (isUncertain && hasRemainingSimulations && notObsolete && !this.halted)
   }
 
-  _simulate(sampleCount, graph, dispatch) {
+  simulate(sampleCount, graph) {
     return new Promise(
       (resolve, reject) => {
         const simulator = new Simulator(this.metricId, graph, this.propagationId)

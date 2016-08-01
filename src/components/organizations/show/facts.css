@@ -1,0 +1,44 @@
+@import './styles/variables.css';
+
+.FactsTab {
+  margin-top: 7em;
+  width: 100%;
+  background-color: white;
+  border-radius: 3px;
+  padding: 0 1em;
+
+  .Fact {
+    padding: 1em 0.2em;
+    border-bottom: 1px solid #eee;
+
+    .variableName {
+      margin-top: 0.6em;
+      font-size: 1.2em;
+      font-style: italic;
+
+      input {
+        width: 80%;
+        margin-left: 0.4em;
+      }
+      .prefix {
+        color: $grey-4;
+      }
+      .variable {
+        color: $grey-2;
+        font-weight: bold;
+      }
+    }
+
+    .name {
+      float: left;
+      font-size: 1.3em;
+      font-weight: 800;
+      color: $black-3;
+      margin-top: 0.5em;
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}
