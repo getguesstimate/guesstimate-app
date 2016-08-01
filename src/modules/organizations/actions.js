@@ -8,7 +8,7 @@ import * as userOrganizationMembershipActions from 'gModules/userOrganizationMem
 import * as userOrganizationInvitationActions from 'gModules/userOrganizationInvitations/actions'
 import * as factActions from 'gModules/facts/actions'
 
-import {getFactVar} from 'gEngine/organization'
+import {organizationReadableId} from 'gEngine/organization'
 import {withSortedValues} from 'gEngine/facts'
 
 import {captureApiError} from 'lib/errors/index'
@@ -37,7 +37,7 @@ export function fetchById(organizationId) {
   }
 }
 
-const toContainerFact = o => _.isEmpty(o.facts) ? {} : {variable_name: getFactVar(o), children: o.facts.map(f => withSortedValues(f))}
+const toContainerFact = o => _.isEmpty(o.facts) ? {} : {variable_name: organizationReadableId(o), children: o.facts.map(f => withSortedValues(f))}
 
 export function fetchSuccess(organizations) {
   return (dispatch) => {
@@ -77,9 +77,6 @@ export function create({name, plan}) {
 
 export function addMember(organizationId, email) {
   return (dispatch, getState) => {
-    const cid = cuid()
-    let object = {id: cid, organization_id: organizationId, user_id: 4}
-
     api(getState()).organizations.addMember({organizationId, email}, (err, membership) => {
       if (!!membership) {
         dispatch(userActions.fetchSuccess([membership._embedded.user]))
@@ -89,14 +86,15 @@ export function addMember(organizationId, email) {
   }
 }
 
-export function addFact(organization, fact) {
+// addFact adds the passed fact, with sortedValues overwritten to null, to the organization and saves it on the server.
+export function addFact(organization, rawFact) {
   return (dispatch, getState) => {
-    const cid = cuid()
-    let object = {id: cid, organization_id: organization.id, user_id: 4}
+    let fact = Object.assign({}, rawFact)
+    _.set(fact, 'simulation.sample.sortedValues', null)
 
-    api(getState()).organizations.addFact(organization, fact, (err, fact) => {
-      if (!!fact) {
-        dispatch(factActions.addToOrg(getFactVar(organization), fact))
+    api(getState()).organizations.addFact(organization, fact, (err, serverFact) => {
+      if (!!serverFact) {
+        dispatch(factActions.addToOrg(organizationReadableId(organization), serverFact))
       }
     })
   }

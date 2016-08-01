@@ -37,4 +37,4 @@ export function organizationInvitations(organizationId, invitations) {
   return _.filter(invitations, e => sameId(e.organization_id, organizationId))
 }
 
-export const getFactVar = ({id}) => `organization_${id}`
+export const organizationReadableId = ({id}) => `organization_${id}`
