@@ -12,8 +12,6 @@ import {sortDescending} from 'lib/dataAnalysis'
 import './facts.css'
 
 
-// TODO(matthew): Add sortedValues to fact def'n on server, save those, don't re-sort here all the time. Though, its
-// probably fine for now. Probably the other stats too.
 // TODO(matthew): Also add validations for values on the server.
 
 const FactRow = ({fact}) => (
@@ -41,9 +39,22 @@ const FactRow = ({fact}) => (
 )
 
 const hasAllNonEmpty = (obj, props) => !_.some(props.map(prop => _.isEmpty(_.get(obj, prop))))
+const readableIdPartFromWord = word => (/\d/).test(word) ? word : word[0]
+function getVariableNameFromName(rawName) {
+  const name = rawName.trim().replace(/[^\w\d]/g, ' ').toLowerCase()
+  const words = name.split(/[^\w\d]/).filter(s => !_.isEmpty(s))
+  if (words.length === 1 && name.length < 10) {
+    return name
+  } else if (words.length < 3) {
+    return name.slice(0,3)
+  } else {
+    return words.map(readableIdPartFromWord).join('')
+  }
+}
 
 class NewFactRow extends Component {
   state = {
+    variableNameManuallySet: false,
     fact: {
       name: '',
       variable_name: '',
@@ -53,9 +64,12 @@ class NewFactRow extends Component {
     },
   }
 
-  setFactState(newFactState) { this.setState({fact: {...this.state.fact, ...newFactState}}) }
-  onChangeName(e) { this.setFactState({name: _.get(e, 'target.value')}) }
-  onChangeVariableName(e) { this.setFactState({variable_name: _.get(e, 'target.value')}) }
+  setFactState(newFactState, otherState = {}) { this.setState({...otherState, fact: {...this.state.fact, ...newFactState}}) }
+  onChangeName(e) {
+    const name = _.get(e, 'target.value')
+    this.setFactState(this.state.variableNameManuallySet ? {name} : {name, variable_name: getVariableNameFromName(name)})
+  }
+  onChangeVariableName(e) { this.setFactState({variable_name: _.get(e, 'target.value')}, {variableNameManuallySet: true}) }
   onChangeExpression(e) { this.setFactState({expression: _.get(e, 'target.value')}) }
 
   onBlurExpression() {
