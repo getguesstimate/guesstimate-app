@@ -86,8 +86,9 @@ class NewFactRow extends Component {
     })
   }
 
+  isExpressionValid() { return _.isEmpty(_.get(this, 'state.fact.simulation.sample.errors')) }
+  isVariableNameUnique() { return !_.some(this.props.existingVariableNames, n => n === this.state.fact.variable_name) }
   isValid() {
-    const isErrorFree = _.isEmpty(_.get(this, 'state.fact.simulation.sample.errors'))
     const hasRequisiteProperties = factIsHydrated(
       this.state.fact,
       [
@@ -98,7 +99,7 @@ class NewFactRow extends Component {
         'simulation.stats',// TODO(matthew): this isn't really checking anything, as simulation.stats starts non-empty.
       ]
     )
-    return isErrorFree && hasRequisiteProperties
+    return hasRequisiteProperties && this.isExpressionValid() && this.isVariableNameUnique()
   }
   onSubmit() { this.props.onSubmit(this.state.fact) }
 
@@ -108,25 +109,29 @@ class NewFactRow extends Component {
       <div className='Fact new ui form'>
         <div className='row'>
           <div className='col-md-3'>
-            <input
-              type='text'
-              placeholder='Expression'
-              value={this.state.fact.expression}
-              onChange={this.onChangeExpression.bind(this)}
-              onBlur={this.onBlurExpression.bind(this)}
-            />
+            <div className={`field ${this.isExpressionValid() ? '' : 'error'}`}>
+              <input
+                type='text'
+                placeholder='Expression'
+                value={this.state.fact.expression}
+                onChange={this.onChangeExpression.bind(this)}
+                onBlur={this.onBlurExpression.bind(this)}
+              />
+            </div>
           </div>
           <div className='col-md-6'>
-            <input
-              type='text'
-              placeholder='Name'
-              value={this.state.fact.name}
-              onChange={this.onChangeName.bind(this)}
-              onKeyDown={(e) => {if (e.keyCode === 13 && this.isValid()) {this.onSubmit()}}}
-            />
+            <div class='field'>
+              <input
+                type='text'
+                placeholder='Name'
+                value={this.state.fact.name}
+                onChange={this.onChangeName.bind(this)}
+                onKeyDown={(e) => {if (e.keyCode === 13 && this.isValid()) {this.onSubmit()}}}
+              />
+            </div>
           </div>
           <div className='col-md-2'>
-            <div className='variableName'>
+            <div className={`variableName field ${this.isVariableNameUnique() ? '' : 'error'}`}>
               <span className='prefix'>#</span>
               <input
                 type='text'
@@ -151,6 +156,7 @@ export const FactBookTab = ({facts, onAddFact}) => (
     {_.map(facts, fact => <FactRow key={fact.id} fact={fact} />)}
     <NewFactRow
       key='new'
+      existingVariableNames={_.map(facts, f => f.variable_name)}
       onSubmit={onAddFact}
     />
   </div>
