@@ -10,9 +10,6 @@ import {addStats} from 'gEngine/simulation'
 
 import './facts.css'
 
-
-// TODO(matthew): Also add validations for values on the server.
-
 const FactRow = ({fact}) => (
   <div className='Fact'>
     <div className='row'>
@@ -37,7 +34,7 @@ const FactRow = ({fact}) => (
   </div>
 )
 
-const hasAllNonEmpty = (obj, props) => !_.some(props.map(prop => _.isEmpty(_.get(obj, prop))))
+const factIsHydrated = (fact, props) => _.every(props.map(prop => !_.isEmpty(_.get(fact, prop))))
 const readableIdPartFromWord = word => (/\d/).test(word) ? word : word[0]
 function getVariableNameFromName(rawName) {
   const name = rawName.trim().replace(/[^\w\d]/g, ' ').toLowerCase()
@@ -85,14 +82,13 @@ class NewFactRow extends Component {
     simulateFact(['biz'], this.state.fact).then(({values, errors}) => {
       let simulation = {sample: {values, errors}}
       addStats(simulation)
-      simulation.sample.sortedValues = null // We don't want to send this to the server for latency reasons.
       this.setFactState({simulation})
     })
   }
 
   isValid() {
     const isErrorFree = _.isEmpty(_.get(this, 'state.fact.simulation.sample.errors'))
-    const hasRequisiteProperties = hasAllNonEmpty(
+    const hasRequisiteProperties = factIsHydrated(
       this.state.fact,
       [
         'name',
