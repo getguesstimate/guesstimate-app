@@ -1,15 +1,44 @@
 import React, {Component, PropTypes} from 'react'
+import {connect} from 'react-redux'
 
 import $ from 'jquery'
 import {EditorState, Editor, ContentState, Modifier, CompositeDecorator} from 'draft-js'
 
+import {clearSuggestion, getSuggestion} from 'gModules/facts/actions'
+
+import {HANDLE_REGEX, resolveToSelector} from 'gEngine/facts'
+
 import {isData, formatData} from 'lib/guesstimator/formatter/formatters/Data'
-import {getFactParams, addText, addSuggestionToEditorState, findWithRegex, FACT_DECORATOR_LIST} from 'lib/factParser'
 
-const ValidInput = props => <span {...props} className='valid input'>{props.children}</span>
-const ErrorInput = props => <span {...props} className='error input'>{props.children}</span>
+function findWithRegex(regex, contentBlock, callback) {
+  const text = contentBlock.getText()
+  let matchArr, start
+  while ((matchArr = regex.exec(text)) !== null) {
+    start = matchArr.index
+    callback(start, start + matchArr[0].length)
+  }
+}
 
-export default class TextInput extends Component{
+const stylizedSpan = className => props => <span {...props} className={className}>{props.children}</span>
+const Fact = stylizedSpan('fact')
+const Suggestion = stylizedSpan('suggestion')
+const ValidInput = stylizedSpan('valid input')
+const ErrorInput = stylizedSpan('error input')
+
+const FACT_DECORATOR_LIST = [
+  {
+    strategy: (contentBlock, callback) => { findWithRegex(HANDLE_REGEX, contentBlock, callback) },
+    component: Fact,
+  },
+]
+
+const positionDecorator = (start, end, component) => ({
+  strategy: (contentBlock, callback) => {if (end <= contentBlock.text.length) {callback(start, end)}},
+  component,
+})
+
+@connect(state => ({suggestion: state.facts.currentSuggestion}))
+export class TextInput extends Component{
   displayName: 'Guesstimate-TextInput'
 
   state = {
@@ -17,22 +46,16 @@ export default class TextInput extends Component{
       ContentState.createFromText(this.props.value || ''),
       new CompositeDecorator(this.decoratorList()),
     ),
-    suggestion: {
-      text: '',
-      suffix: '',
-    },
-    extraDecorators: [],
-    decoratorsUpToDate: false,
   }
 
   static propTypes = {
     value: PropTypes.string,
   }
 
-  decoratorList() {
+  decoratorList(extraDecorators=[]) {
     const {validInputs, errorInputs} = this.props
 
-    let decorators = [...(_.get(this, 'state.extraDecorators') || []), ...FACT_DECORATOR_LIST]
+    let decorators = [...extraDecorators, ...FACT_DECORATOR_LIST]
 
     if (!_.isEmpty(validInputs)) {
       const validInputsRegex = new RegExp(`(${validInputs.join('|')})`, 'g')
@@ -53,20 +76,55 @@ export default class TextInput extends Component{
 
   focus() { this.refs.editor.focus() }
 
-  insertAtCaret(text) {
-    this.onChange(addText(this.state.editorState, text, false))
+  addText(text, maintainCursorPosition = true, replaceLength = 0) {
+    const selection = this.state.editorState.getSelection()
+    const content = this.state.editorState.getCurrentContent()
+
+    let baseEditorState
+    if (replaceLength > 0) {
+      const replaceSelection = selection.merge({anchorOffset: this.cursorPosition(), focusOffset: this.cursorPosition() + replaceLength})
+      baseEditorState = EditorState.push(this.state.editorState, Modifier.replaceText(content, replaceSelection, text), 'paste')
+    } else {
+      baseEditorState = EditorState.push(this.state.editorState, Modifier.insertText(content, selection, text), 'paste')
+    }
+
+    if (!maintainCursorPosition) { return baseEditorState }
+
+    const cursorPosition = selection.getFocusOffset()
+    const newSelectionState = selection.merge({focusOffset: cursorPosition})
+    return EditorState.forceSelection(baseEditorState, newSelectionState)
   }
 
-  replaceAtCaret(text, start, end) {
-    this.onChange(addText(this.state.editorState, text, false, start, end))
+  stripExtraDecorators(editorState) { return this.withExtraDecorators(editorState, []) }
+  withExtraDecorators(editorState, extraDecorators) {
+    return EditorState.set(editorState, {decorator: new CompositeDecorator(this.decoratorList(extraDecorators))})
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (
-      !this.state.decoratorsUpToDate ||
-      !_.isEqual(prevState.extraDecorators, this.state.extraDecorators)
-    ) {
-      this.updateDecorators()
+  deleteOldSuggestion(oldSuggestion) {
+    const freshEditorState = this.addText('', true, oldSuggestion.length)
+    this.setState({editorState: this.stripExtraDecorators(freshEditorState)})
+  }
+
+  addSuggestion() {
+    const partial = resolveToSelector(this.props.organizationId)(this.prevWord()).pop()
+
+    const extraDecorators = [
+      positionDecorator(this.cursorPosition() - this.prevWord().length - 1, this.cursorPosition(), Fact),
+      positionDecorator(this.cursorPosition(), this.cursorPosition() + this.props.suggestion.length, Suggestion),
+    ]
+
+    const addedEditorState = this.addText(this.props.suggestion, true, this.nextWord().length)
+
+    this.setState({editorState: this.withExtraDecorators(addedEditorState, extraDecorators)})
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.suggestion !== prevProps.suggestion && this.nextWord() === prevProps.suggestion) {
+      if (_.isEmpty(this.props.suggestion)) {
+        this.deleteOldSuggestion(prevProps.suggestion)
+      } else {
+        this.addSuggestion()
+      }
     }
   }
 
@@ -77,52 +135,55 @@ export default class TextInput extends Component{
     }
   }
 
-  onChange(editorState) {
-    const newState = {
-      editorState,
-      ...addSuggestionToEditorState(editorState, this.state.suggestion.text)
-    }
-    this.setState(newState)
+  cursorPosition(editorState = this.state.editorState) { return editorState.getSelection().getFocusOffset() }
+  text(editorState = this.state.editorState) { return editorState.getCurrentContent().getPlainText('') }
+  nextWord(editorState = this.state.editorState) {
+    return this.text(editorState).slice(this.cursorPosition(editorState)).split(/[^\w]/)[0]
+  }
+  prevWord(editorState = this.state.editorState) {
+    return this.text(editorState).slice(0, this.cursorPosition(editorState)).split(/[^\w@#\.]/).pop()
+  }
 
-    const text = newState.editorState.getCurrentContent().getPlainText('').trim()
-    if (text === this.props.value) { return }
-    if (isData(text)) {
-      this.props.onChangeData(formatData(text))
+  fetchSuggestion(editorState) {
+    const prevWord = this.prevWord(editorState)
+    if (editorState.getSelection().isCollapsed() && (HANDLE_REGEX.test(prevWord))) {
+      this.props.dispatch(getSuggestion(resolveToSelector(this.props.organizationId)(prevWord)))
     } else {
-      this.props.onChange(text)
+      if (!_.isEmpty(this.props.suggestion)) { this.props.dispatch(clearSuggestion()) }
+    }
+  }
+
+  onChange(editorState) {
+    this.fetchSuggestion(editorState)
+    this.setState({editorState})
+
+    const text = this.text(editorState)
+    if (text !== this.props.value) {
+      isData(text) ? this.props.onChangeData(formatData(text)) : this.props.onChange(text)
     }
   }
 
   handleTab(e){
-    if (!_.isEmpty(this.state.suggestion.text)) { this.acceptSuggestion() }
+    if (!_.isEmpty(this.props.suggestion) && this.nextWord() === this.props.suggestion) { this.acceptSuggestion() }
     else { this.props.onTab(e.shiftKey) }
     e.preventDefault()
   }
 
   acceptSuggestion(){
-    const {text, suffix} = this.state.suggestion
+    const suffix = this.prevWord().startsWith('@') && !this.prevWord().includes('.') ? '.' : ''
     const cursorPosition = this.cursorPosition()
-    this.replaceAtCaret(`${text}${suffix}`, cursorPosition, cursorPosition + text.length - 1)
-    this.setState({suggestion: {text: '', suffix: ''}, extraDecorators: [], decoratorsUpToDate: false})
+    const addedEditorState = this.addText(`${this.props.suggestion}${suffix}`, false, this.props.suggestion.length)
+    this.onChange(this.stripExtraDecorators(addedEditorState))
   }
 
-  cursorPosition(editorState = this.state.editorState) { return editorState.getSelection().getFocusOffset() }
-
   handleFocus() {
-    $(window).on('functionMetricClicked', (_, {readableId}) => {this.insertAtCaret(readableId)})
+    $(window).on('functionMetricClicked', (_, {readableId}) => {this.onChange(this.addText(readableId, false))})
     this.props.onFocus()
   }
 
   handleBlur() {
     $(window).off('functionMetricClicked')
     this.props.onBlur()
-  }
-
-  updateDecorators() {
-    this.setState({
-      editorState: EditorState.set(this.state.editorState, {decorator: new CompositeDecorator(this.decoratorList())}),
-      decoratorsUpToDate: true,
-    })
   }
 
   render() {
@@ -132,7 +193,7 @@ export default class TextInput extends Component{
       <span
         className={className}
         onClick={this.focus.bind(this)}
-        onKeyDown={e => {this.setState({decoratorsUpToDate: false}); e.stopPropagation()}}
+        onKeyDown={e => {e.stopPropagation()}}
         onFocus={this.handleFocus.bind(this)}
       >
         <Editor

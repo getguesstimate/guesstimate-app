@@ -6,11 +6,11 @@ const initialState = {
   editsAllowed: true,
 }
 
-export default function canvasState(state = initialState, action) {
+export function canvasStateR(state = initialState, action) {
   switch (action.type) {
-  case 'CHANGE_CANVAS_STATE':
-    return Object.assign({}, state, action.values)
-  default:
-    return state
+    case 'CHANGE_CANVAS_STATE':
+      return Object.assign({}, state, action.values)
+    default:
+      return state
   }
 }
