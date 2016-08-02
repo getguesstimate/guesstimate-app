@@ -1,7 +1,5 @@
 import React, {Component, PropTypes} from 'react'
 
-import Icon from 'react-fa'
-
 import {simulateFact, FactPT} from 'gEngine/facts'
 import {addStats} from 'gEngine/simulation'
 
@@ -78,7 +76,7 @@ export class FactForm extends Component {
 
   render() {
     const buttonClasses = ['ui', 'button', ...(this.isValid() ? [] : ['disabled'])]
-    const {runningFact: {expression, name, variable_name}} = this.state
+    const {props: {buttonText}, state: {runningFact: {expression, name, variable_name}}} = this
 
     return (
       <div className='Fact new ui form'>
@@ -118,7 +116,7 @@ export class FactForm extends Component {
             </div>
           </div>
           <div className='col-md-1'>
-            <span className={buttonClasses.join(' ')} onClick={this.onSubmit.bind(this)}><Icon name='plus' /></span>
+            <span className={buttonClasses.join(' ')} onClick={this.onSubmit.bind(this)}>{buttonText}</span>
           </div>
         </div>
       </div>

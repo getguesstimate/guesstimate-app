@@ -31,6 +31,7 @@ export class FactBookTab extends Component {
     let props = {
       key: !!fact ? fact.id : 'new',
       existingVariableNames: facts.map(getVar).filter(v => v !== getVar(fact)),
+      buttonText: !!fact ? 'Save' : 'Create',
       onSubmit: (!!fact ? onEditFact : onAddFact),
     }
     if (!!fact) {props.startingFact = fact}
