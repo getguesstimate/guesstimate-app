@@ -3,42 +3,130 @@
 .FactsTab {
   margin-top: 7em;
   width: 100%;
-  background-color: white;
-  border-radius: 3px;
-  padding: 0 1em;
+  width: 38em;
 
   .Fact {
-    padding: 1em 0.2em;
-    border-bottom: 1px solid #eee;
+    padding: .4em .5em;
+    margin: .2em 0;
+    background-color: white;
+    float: left;
+    width: 100%;
+    border-radius: 2px;
+
+    &:hover {
+      background-color: #fbfbfb;
+    }
+
+    .section-simulation {
+       float: left;
+       width: 9em;
+    }
+
+    .section-name {
+       float: left;
+       width: 25em;
+    }
+
+    .section-help {
+       float: right;
+       width: 2em;
+    }
+
+    .simulation-sample {
+      position: relative;
+
+      .histogram {
+        left: 20%;
+        height: 35px;
+        position: absolute;
+        bottom: -.4em;
+        right: 0;
+        z-index: 0;
+        .react-d3-histogram__bar rect {
+          fill: rgb(231, 234, 236);
+        }
+      }
+
+      .simulation-summary {
+        float: left;
+        margin-top: 2px;
+        position: relative;
+        z-index: 1;
+        .DistributionSummary .mean {
+          font-weight: 800;
+          color: #607580;
+        }
+        .DistributionSummary .UncertaintyRange {
+           color: #8c8c8c;
+        }
+      }
+    }
+
+    .variableName.field {
+      width: 100%;
+    }
 
     .variableName {
-      margin-top: 0.6em;
-      font-size: 1.2em;
-      font-style: italic;
+      font-size: 1.3em;
+      font-weight: 800;
+      float: left;
+      margin-right: 100%;
+        color: #116f9e;
 
       input {
         width: 80%;
         margin-left: 0.4em;
       }
       .prefix {
-        color: $grey-4;
-      }
-      .variable {
-        color: $grey-2;
-        font-weight: bold;
+        margin-right: 1px;
       }
     }
 
-    .name {
+    .options {
+      font-size: 1.8em;
+      color: #dadada;
+      margin-top: .4em;
       float: left;
-      font-size: 1.3em;
-      font-weight: 800;
-      color: $black-3;
-      margin-top: 0.5em;
+    }
+    .name {
+      font-size: .9em;
+      color: #888;
+      letter-spacing: 0.36px;
+      float: left;
+      margin-top: .25em;
     }
 
     &:last-child {
       border-bottom: none;
     }
+  }
+}
+
+.Fact.new.ui.form {
+  input, textarea {
+    border: none;
+    padding: .4em .4em;
+    border-radius: 2px;
+
+    background-color: #eee;
+
+    &:hover {
+      background-color: #ddd;
+    }
+
+  }
+
+  .prefix {
+    color: #8dabbf;
+    position: absolute;
+    left: .7em;
+    top: .9em;
+    font-size: 1.2em;
+  }
+
+  input {
+    font-size: 1.2em;
+    color: #116f9e;
+    padding-left: .95em;
   }
 }
