@@ -83,14 +83,22 @@ function _inputMetricsWithValues(guesstimate: Guesstimate, dGraph: DGraph): Obje
   return [inputs, _.uniq(errors)]
 }
 
-export function inputsFromExpressions(metrics) {
+// In the `expression` syntax, input metrics are expressed as `${[metric id]}`. To match that in a regex, and translate
+// to it, we need functions that wrap passed IDs in the right syntax, appropriately escaped.
+const expressionSyntaxPad = id => `\$\{${id}\}`
+const escapedExpressionSyntaxPad = id => `\\\$\\\{${id}\\\}`
+
+// Returns a function which takes a guesstimate and returns that guesstimate with an input based on its
+// expression.
+export function expressionToInputFn(metrics) {
   let idMap = {}, reParts = []
-  metrics.forEach( ({id, readableId}) => {reParts.push(`\\\$\\\{${id}\\\}`); idMap[`\$\{${id}\}`] = readableId} )
+  metrics.forEach( ({id, readableId}) => {reParts.push(escapedExpressionSyntaxPad(id)); idMap[expressionSyntaxPad(id)] = readableId} )
 
   const translateFn = ({expression}) => expression.replace(RegExp(reParts.join('|'), 'g'), match => idMap[match])
-  return g => !_.isEmpty(g.input) || _.isEmpty(g.expression) ? g : {...g, input: translateFn(g)}
+  return g => (!_.isEmpty(g.input) || _.isEmpty(g.expression)) ? g : {...g, input: translateFn(g)}
 }
 
-export function expressionFromInput(input, idMap) {
-  return input.replace(RegExp(Object.keys(idMap).join('|'), 'g'), match => `\$\{${idMap[match]}\}`)
+// Returns an expression based on the passed input and idMap.
+export function inputToExpression(input, idMap) {
+  return input.replace(RegExp(Object.keys(idMap).join('|'), 'g'), match => expressionSyntaxPad(idMap[match]))
 }

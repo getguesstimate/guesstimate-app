@@ -11,7 +11,7 @@ import {changeMetricClickMode} from 'gModules/canvas_state/actions'
 
 import {Guesstimator} from 'lib/guesstimator/index'
 
-import {expressionFromInput} from 'gEngine/guesstimate'
+import {inputToExpression} from 'gEngine/guesstimate'
 
 import './style.css'
 
@@ -53,7 +53,7 @@ export default class Guesstimate extends Component{
   }
 
   changeInput(input) {
-    const expression = expressionFromInput(input, this.props.metricIdsMap)
+    const expression = inputToExpression(input, this.props.metricIdsMap)
     const guesstimateType = this._guesstimateType({input})
     this.changeGuesstimate({data: null, input: null, expression, guesstimateType}, true, false)
     if (guesstimateType === 'FUNCTION' && this.props.guesstimateType !== 'FUNCTION') {
