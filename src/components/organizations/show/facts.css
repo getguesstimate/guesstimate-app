@@ -33,14 +33,35 @@
 .FactsTab {
   margin-top: 7em;
   width: 100%;
-  width: 48em;
+  width: 38em;
 
   .Fact {
     padding: .4em .5em;
-    margin: .3em 0;
-    border-bottom: 1px solid #eee;
+    margin: .2em 0;
     background-color: white;
+    float: left;
+    width: 100%;
     border-radius: 2px;
+
+    &:hover {
+      background-color: #fbfbfb;
+    }
+
+    .section-simulation {
+       float: left;
+       width: 9em;
+    }
+
+    .section-name {
+       float: left;
+       width: 25em;
+    }
+
+    .section-help {
+       float: right;
+       width: 2em;
+    }
+
     .simulation-sample {
       position: relative;
 
@@ -58,11 +79,10 @@
 
       .simulation-summary {
         float: left;
-        margin-top: 4px;
+        margin-top: 2px;
         position: relative;
         z-index: 1;
         .DistributionSummary .mean {
-          font-size: .9em;
           font-weight: 800;
           color: #607580;
         }
@@ -77,7 +97,7 @@
     }
 
     .variableName {
-      font-size: 1.15em;
+      font-size: 1.3em;
       font-weight: 800;
       float: left;
       margin-right: 100%;
@@ -89,8 +109,6 @@
       }
       .prefix {
         margin-right: 1px;
-      }
-      .variable {
       }
     }
 
@@ -105,7 +123,7 @@
       color: #888;
       letter-spacing: 0.36px;
       float: left;
-      margin-top: .2em;
+      margin-top: .25em;
     }
 
     &:last-child {

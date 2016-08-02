@@ -14,38 +14,36 @@ import './facts.css'
 
 const FactRow = ({fact}) => (
   <div className='Fact'>
-    <div className='row'>
-      <div className='col-md-2 simulation-sample'>
-        {_.has(fact, 'simulation.sample.values.length') && _.has(fact, 'simulation.stats.mean') &&
-          <div className='simulation-summary'>
-          <DistributionSummary
-            length={fact.simulation.sample.values.length}
-            mean={fact.simulation.stats.mean}
-            adjustedConfidenceInterval={fact.simulation.stats.adjustedConfidenceInterval}
-          />
-          </div>
-         }
-        {_.has(fact, 'simulation.sample.values.length') &&
-          <div className='histogram'>
-            <Histogram
-              height={15}
-              simulation={fact.simulation}
-              cutOffRatio={0.995}
-            />
-          </div>
-        }
-      </div>
-      <div className='col-md-6'>
-        <div className='variableName'>
-          <span className='prefix'>#</span>
-          <span className='variable'>{fact.variable_name}</span>
+    <div className='section-simulation simulation-sample'>
+      {_.has(fact, 'simulation.sample.values.length') && _.has(fact, 'simulation.stats.mean') &&
+        <div className='simulation-summary'>
+        <DistributionSummary
+          length={fact.simulation.sample.values.length}
+          mean={fact.simulation.stats.mean}
+          adjustedConfidenceInterval={fact.simulation.stats.adjustedConfidenceInterval}
+        />
         </div>
-        <span className='name'>{fact.name}</span>
+       }
+      {_.has(fact, 'simulation.sample.values.length') &&
+        <div className='histogram'>
+          <Histogram
+            height={15}
+            simulation={fact.simulation}
+            cutOffRatio={0.995}
+          />
+        </div>
+      }
+    </div>
+    <div className='section-name'>
+      <div className='variableName'>
+        <span className='prefix'>#</span>
+        <span className='variable'>{fact.variable_name}</span>
       </div>
-      <div className='col-md-2'></div>
-      <div className='col-md-1'>
-        <span className='options'><Icon name='ellipsis-v' /></span>
-      </div>
+      <span className='name'>{fact.name}</span>
+    </div>
+
+    <div className='section-help'>
+      <span className='options'><Icon name='ellipsis-v' /></span>
     </div>
   </div>
 )
@@ -124,7 +122,19 @@ class NewFactRow extends Component {
     return (
       <div className='Fact new ui form'>
         <div className='row'>
-          <div className='col-md-6'>
+          <div className='col-md-3'>
+            <div className={`field ${this.isExpressionValid() ? '' : 'error'}`}>
+              <textarea
+                type='text'
+                rows='2'
+                placeholder='Expression'
+                value={this.state.fact.expression}
+                onChange={this.onChangeExpression.bind(this)}
+                onBlur={this.onBlurExpression.bind(this)}
+              />
+            </div>
+          </div>
+          <div className='col-md-7'>
             <div className={`field ${this.isVariableNameUnique() ? '' : 'error'}`}>
               <span className='prefix'>#</span>
               <input
@@ -143,18 +153,6 @@ class NewFactRow extends Component {
                 value={this.state.fact.name}
                 onChange={this.onChangeName.bind(this)}
                 onKeyDown={(e) => {if (e.keyCode === 13 && this.isValid()) {this.onSubmit()}}}
-              />
-            </div>
-          </div>
-          <div className='col-md-4'>
-            <div className={`field ${this.isExpressionValid() ? '' : 'error'}`}>
-              <textarea
-                type='text'
-                rows='1'
-                placeholder='Expression'
-                value={this.state.fact.expression}
-                onChange={this.onChangeExpression.bind(this)}
-                onBlur={this.onBlurExpression.bind(this)}
               />
             </div>
           </div>
