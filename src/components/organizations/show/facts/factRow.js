@@ -1,7 +1,5 @@
 import React, {Component} from 'react'
 
-import Icon from 'react-fa'
-
 import Histogram from 'gComponents/simulations/histogram/index'
 
 import './facts.css'
