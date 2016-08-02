@@ -114,3 +114,26 @@ export function simulateFact(fact) {
     ({sample: {values, errors}}) => ({values, errors})
   )
 }
+
+const readableIdPartFromWord = word => (/\d/).test(word) ? word : word[0]
+export function getBaseVariableName(rawName) {
+  const name = rawName.trim().replace(/[^\w\d]/g, ' ').toLowerCase()
+  const words = name.split(/[^\w\d]/).filter(s => !_.isEmpty(s))
+  if (words.length === 1 && name.length < 10) {
+    return name
+  } else if (words.length < 3) {
+    return name.slice(0,3)
+  } else {
+    return words.map(readableIdPartFromWord).join('')
+  }
+}
+
+export function getVariableNameFromName(rawName, otherVariableNames) {
+  const baseVariableName = getBaseVariableName(rawName)
+  const inclusionRE = new RegExp(`^${baseVariableName}(?:_(\\d+))?$`)
+  const matchedNames = otherVariableNames.filter(v => inclusionRE.test(v))
+  if (_.isEmpty(matchedNames)) { return baseVariableName }
+
+  const matchedNumerals = matchedNames.map(v => v.match(inclusionRE)[1]).map(n => _.isEmpty(n) ? 0 : parseFloat(n))
+  return `${baseVariableName}_${Math.max(...matchedNumerals) + 1}`
+}

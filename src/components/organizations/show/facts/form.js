@@ -1,22 +1,9 @@
 import React, {Component, PropTypes} from 'react'
 
-import {simulateFact, FactPT} from 'gEngine/facts'
+import {simulateFact, FactPT, getVariableNameFromName} from 'gEngine/facts'
 import {addStats} from 'gEngine/simulation'
 
 import './facts.css'
-
-const readableIdPartFromWord = word => (/\d/).test(word) ? word : word[0]
-function getVariableNameFromName(rawName) {
-  const name = rawName.trim().replace(/[^\w\d]/g, ' ').toLowerCase()
-  const words = name.split(/[^\w\d]/).filter(s => !_.isEmpty(s))
-  if (words.length === 1 && name.length < 10) {
-    return name
-  } else if (words.length < 3) {
-    return name.slice(0,3)
-  } else {
-    return words.map(readableIdPartFromWord).join('')
-  }
-}
 
 export class FactForm extends Component {
   static defaultProps = {
@@ -47,7 +34,9 @@ export class FactForm extends Component {
   setFactState(newFactState, otherState = {}) { this.setState({...otherState, runningFact: {...this.state.runningFact, ...newFactState}}) }
   onChangeName(e) {
     const name = _.get(e, 'target.value')
-    this.setFactState(this.state.variableNameManuallySet ? {name} : {name, variable_name: getVariableNameFromName(name)})
+    this.setFactState(
+      this.state.variableNameManuallySet ? {name} : {name, variable_name: getVariableNameFromName(name, this.props.existingVariableNames)}
+    )
   }
   onChangeVariableName(e) { this.setFactState({variable_name: _.get(e, 'target.value')}, {variableNameManuallySet: true}) }
   onChangeExpression(e) { this.setFactState({expression: _.get(e, 'target.value')}) }
