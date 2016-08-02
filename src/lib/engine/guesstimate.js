@@ -90,3 +90,7 @@ export function inputsFromExpressions(metrics) {
   const translateFn = ({expression}) => expression.replace(RegExp(reParts.join('|'), 'g'), match => idMap[match])
   return g => !_.isEmpty(g.input) || _.isEmpty(g.expression) ? g : {...g, input: translateFn(g)}
 }
+
+export function expressionFromInput(input, idMap) {
+  return input.replace(RegExp(Object.keys(idMap).join('|'), 'g'), match => `\$\{${idMap[match]}\}`)
+}
