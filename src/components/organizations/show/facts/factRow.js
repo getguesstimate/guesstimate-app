@@ -34,11 +34,11 @@ export const FactRow = ({fact, onEdit}) => (
         <span className='prefix'>#</span>
         <span className='variable'>{fact.variable_name}</span>
       </div>
-      <span className='name'>{fact.name}</span>
+      <div className='name'>{fact.name}</div>
     </div>
 
     <div className='section-help'>
-      <span className='ui button options' onClick={onEdit}>Edit</span>
+      <span className='ui button tiny options' onClick={onEdit}>Edit</span>
     </div>
   </div>
 )

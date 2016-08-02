@@ -24,12 +24,12 @@
 
     .section-name {
        float: left;
-       width: 25em;
+       width: 23em;
     }
 
     .section-help {
        float: right;
-       width: 2em;
+       width: 4em;
     }
 
     .simulation-sample {
@@ -62,32 +62,25 @@
       }
     }
 
-    .variableName.field {
-      width: 100%;
-    }
-
     .variableName {
       font-size: 1.3em;
       font-weight: 800;
       float: left;
       margin-right: 100%;
+      color: #116f9e;
+      .field input {
         color: #116f9e;
-
-      input {
-        width: 80%;
-        margin-left: 0.4em;
       }
+
       .prefix {
         margin-right: 1px;
       }
     }
 
     .options {
-      font-size: 1.8em;
-      color: #dadada;
-      margin-top: .4em;
       float: left;
     }
+
     .name {
       font-size: .9em;
       color: #888;
@@ -100,9 +93,45 @@
       border-bottom: none;
     }
   }
+
+  .ui.tiny.button {
+     padding: .55em 1em;
+     border-radius: 2px;
+  }
 }
 
 .Fact.new.ui.form {
+  .section-simulation {
+    padding-right: .9em;
+  }
+
+  .variableName {
+    width: 100%;
+    .field {
+      position: relative;
+
+      .prefix {
+        color: #888;
+        position: absolute;
+        left: .4em;
+        top: .4em;
+        font-size: 1.2em;
+      }
+
+      input {
+        padding-left: 1.4em;
+
+      }
+    }
+  }
+
+  .name {
+    width: 100%;
+    textarea {
+      font-size: 1rem;
+    }
+  }
+
   input, textarea {
     border: none;
     padding: .4em .4em;
@@ -114,19 +143,5 @@
       background-color: #ddd;
     }
 
-  }
-
-  .prefix {
-    color: #8dabbf;
-    position: absolute;
-    left: .7em;
-    top: .9em;
-    font-size: 1.2em;
-  }
-
-  input {
-    font-size: 1.2em;
-    color: #116f9e;
-    padding-left: .95em;
   }
 }

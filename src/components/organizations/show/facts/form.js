@@ -75,51 +75,52 @@ export class FactForm extends Component {
   onSubmit() { this.props.onSubmit(this.state.runningFact) }
 
   render() {
-    const buttonClasses = ['ui', 'button', ...(this.isValid() ? [] : ['disabled'])]
+    const buttonClasses = ['ui', 'button', 'tiny', 'primary', ...(this.isValid() ? [] : ['disabled'])]
     const {props: {buttonText}, state: {runningFact: {expression, name, variable_name}}} = this
 
     return (
       <div className='Fact new ui form'>
-        <div className='row'>
-          <div className='col-md-3'>
-            <div className={`field ${this.isExpressionValid() ? '' : 'error'}`}>
-              <input
-                type='text'
-                placeholder='Expression'
-                value={expression}
-                onChange={this.onChangeExpression.bind(this)}
-                onBlur={this.onBlurExpression.bind(this)}
-              />
-            </div>
+        <div className='section-simulation simulation-sample'>
+          <div className={`field ${this.isExpressionValid() ? '' : 'error'}`}>
+            <input
+              type='text'
+              placeholder='value'
+              value={expression}
+              onChange={this.onChangeExpression.bind(this)}
+              onBlur={this.onBlurExpression.bind(this)}
+            />
           </div>
-          <div className='col-md-6'>
-            <div class='field'>
-              <input
-                type='text'
-                placeholder='Name'
-                value={name}
-                onChange={this.onChangeName.bind(this)}
-                onKeyDown={(e) => {if (e.keyCode === 13 && this.isValid()) {this.onSubmit()}}}
-              />
-            </div>
-          </div>
-          <div className='col-md-2'>
-            <div className={`variableName field ${this.isVariableNameUnique() ? '' : 'error'}`}>
+        </div>
+        <div className='section-name'>
+          <div className='variableName'>
+            <div className={`field ${this.isVariableNameUnique() ? '' : 'error'}`}>
               <span className='prefix'>#</span>
               <input
                 type='text'
-                placeholder='Variable Name'
+                placeholder='variable_name'
                 value={variable_name}
                 onChange={this.onChangeVariableName.bind(this)}
                 onKeyDown={(e) => {if (e.keyCode === 13 && this.isValid()) {this.onSubmit()}}}
               />
             </div>
           </div>
-          <div className='col-md-1'>
-            <span className={buttonClasses.join(' ')} onClick={this.onSubmit.bind(this)}>{buttonText}</span>
+          <div className='name'>
+            <div class='field'>
+              <textarea
+                type='text'
+                rows='1'
+                placeholder='description'
+                value={name}
+                onChange={this.onChangeName.bind(this)}
+                onKeyDown={(e) => {if (e.keyCode === 13 && this.isValid()) {this.onSubmit()}}}
+              />
+            </div>
           </div>
         </div>
+      <div className='section-help'>
+        <span className={buttonClasses.join(' ')} onClick={this.onSubmit.bind(this)}>{buttonText}</span>
       </div>
+    </div>
     )
   }
 }
