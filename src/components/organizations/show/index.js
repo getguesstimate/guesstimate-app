@@ -8,7 +8,7 @@ import {SpaceCard, NewSpaceCard} from 'gComponents/spaces/cards'
 
 import Container from 'gComponents/utility/container/Container'
 import {MembersTab} from './members'
-import {FactBookTab} from './facts'
+import {FactBookTab} from './facts/facts'
 
 import {httpRequestSelector} from './httpRequestSelector'
 import {organizationSpaceSelector} from './organizationSpaceSelector'
@@ -147,6 +147,7 @@ export default class OrganizationShow extends Component{
             {(openTab === FACT_BOOK_TAB) && meIsMember && !!facts &&
               <FactBookTab
                 onAddFact={fact => this.props.dispatch(organizationActions.addFact(organization, fact))}
+                onEditFact={fact => this.props.dispatch(organizationActions.editFact(organization, fact))}
                 facts={facts}
               />
             }

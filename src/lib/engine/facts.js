@@ -1,13 +1,37 @@
+import {PropTypes} from 'react'
+
 import generateRandomReadableId from './metric/generate_random_readable_id'
 import * as _guesstimate from './guesstimate'
 
 import MetricPropagation from 'lib/propagation/metric-propagation'
 import {sortDescending} from 'lib/dataAnalysis'
 
+export const FactPT = PropTypes.shape({
+  name: PropTypes.string.isRequired,
+  variable_name: PropTypes.string.isRequired,
+  expression: PropTypes.string.isRequired,
+  simulation: PropTypes.shape({
+    sample: PropTypes.shape({
+      values: PropTypes.arrayOf(PropTypes.number).isRequired,
+      errors: PropTypes.arrayOf(PropTypes.object),
+    }).isRequired,
+    stats: PropTypes.shape({
+      adjustedConfidenceInterval: PropTypes.arrayOf(PropTypes.number),
+      mean: PropTypes.number,
+      stdev: PropTypes.number,
+      length: PropTypes.number,
+      percentiles: PropTypes.shape({
+        5: PropTypes.number.isRequired,
+        50: PropTypes.number.isRequired,
+        95: PropTypes.number.isRequired,
+      })
+    }),
+  }).isRequired,
+})
 
 export const HANDLE_REGEX = /(?:@\w+(?:\.\w+)?|#\w+)/g
 
-const getVar = f => _.get(f, 'variable_name')
+export const getVar = f => _.get(f, 'variable_name')
 const byVariableName = name => f => getVar(f) === name
 const namedLike = partial => f => getVar(f).startsWith(partial)
 
@@ -80,8 +104,9 @@ export function addFactsToSpaceGraph({metrics, guesstimates, simulations}, {glob
   }
 }
 
-export function simulateFact(selector, fact) {
-  const guesstimate = toGuesstimate(selector, fact)
+export function simulateFact(fact) {
+  const fakeSelector = ['fact']
+  const guesstimate = toGuesstimate(fakeSelector, fact)
   const graph = {metrics: [{id: guesstimate.metric}], guesstimates: [guesstimate]}
   const metricPropagation = new MetricPropagation(guesstimate.metric, [], 0)
 
