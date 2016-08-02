@@ -1,40 +1,12 @@
-import React, {Component} from 'react'
-import {connect} from 'react-redux'
+import React, {Component, PropTypes} from 'react'
 
 import Icon from 'react-fa'
 
-import Histogram from 'gComponents/simulations/histogram/index'
-
-import {simulateFact} from 'gEngine/facts'
+import {simulateFact, FactPT} from 'gEngine/facts'
 import {addStats} from 'gEngine/simulation'
 
 import './facts.css'
 
-const FactRow = ({fact}) => (
-  <div className='Fact'>
-    <div className='row'>
-      <div className='col-md-3'>
-        <Histogram
-          height={30}
-          simulation={fact.simulation}
-          cutOffRatio={0.995}
-        />
-      </div>
-      <div className='col-md-6'><span className='name'>{fact.name}</span></div>
-      <div className='col-md-2'>
-        <div className='variableName'>
-          <span className='prefix'>#</span>
-          <span className='variable'>{fact.variable_name}</span>
-        </div>
-      </div>
-      <div className='col-md-1'>
-        <span className='ui button options'><Icon name='ellipsis-v' /></span>
-      </div>
-    </div>
-  </div>
-)
-
-const factIsHydrated = (fact, props) => _.every(props.map(prop => !_.isEmpty(_.get(fact, prop))))
 const readableIdPartFromWord = word => (/\d/).test(word) ? word : word[0]
 function getVariableNameFromName(rawName) {
   const name = rawName.trim().replace(/[^\w\d]/g, ' ').toLowerCase()
@@ -48,63 +20,66 @@ function getVariableNameFromName(rawName) {
   }
 }
 
-class NewFactRow extends Component {
-  state = {
-    variableNameManuallySet: false,
-    fact: {
+export class FactForm extends Component {
+  static defaultProps = {
+    startingFact: {
       name: '',
-      variable_name: '',
       expression: '',
+      variable_name: '',
       simulation: {
         sample: {
           values: [],
           errors: [],
         },
-        stats: {
-          adjustedConfidenceInterval: [],
-          mean: null,
-          stdev: null,
-          length: 0,
-        },
       },
-    },
+    }
   }
 
-  setFactState(newFactState, otherState = {}) { this.setState({...otherState, fact: {...this.state.fact, ...newFactState}}) }
+  static propTypes = {
+    existingVariableNames: PropTypes.arrayOf(PropTypes.string).isRequired,
+    onSubmit: PropTypes.func.isRequired,
+    startingFact: FactPT,
+  }
+
+  state = {
+    variableNameManuallySet: !_.isEmpty(_.get(this.props, 'startingFact.variable_name')),
+    runningFact: this.props.startingFact,
+  }
+
+  setFactState(newFactState, otherState = {}) { this.setState({...otherState, runningFact: {...this.state.runningFact, ...newFactState}}) }
   onChangeName(e) {
     const name = _.get(e, 'target.value')
     this.setFactState(this.state.variableNameManuallySet ? {name} : {name, variable_name: getVariableNameFromName(name)})
   }
   onChangeVariableName(e) { this.setFactState({variable_name: _.get(e, 'target.value')}, {variableNameManuallySet: true}) }
   onChangeExpression(e) { this.setFactState({expression: _.get(e, 'target.value')}) }
-
   onBlurExpression() {
-    simulateFact(['biz'], this.state.fact).then(({values, errors}) => {
+    simulateFact(this.state.runningFact).then(({values, errors}) => {
       let simulation = {sample: {values, errors}}
       addStats(simulation)
       this.setFactState({simulation})
     })
   }
 
-  isExpressionValid() { return _.isEmpty(_.get(this, 'state.fact.simulation.sample.errors')) }
-  isVariableNameUnique() { return !_.some(this.props.existingVariableNames, n => n === this.state.fact.variable_name) }
+  isExpressionValid() { return _.isEmpty(_.get(this, 'state.runningFact.simulation.sample.errors')) }
+  isVariableNameUnique() { return !_.some(this.props.existingVariableNames, n => n === this.state.runningFact.variable_name) }
   isValid() {
-    const hasRequisiteProperties = factIsHydrated(
-      this.state.fact,
-      [
-        'name',
-        'variable_name',
-        'expression',
-        'simulation.sample.values',
-        'simulation.stats',// TODO(matthew): this isn't really checking anything, as simulation.stats starts non-empty.
-      ]
-    )
-    return hasRequisiteProperties && this.isExpressionValid() && this.isVariableNameUnique()
+    const requiredProperties = [
+      'name',
+      'variable_name',
+      'expression',
+      'simulation.sample.values',
+      'simulation.stats',
+    ]
+    const requiredPropertiesPresent = requiredProperties.map(prop => !_.isEmpty(_.get(this.state.runningFact, prop)))
+    return _.every(requiredPropertiesPresent) && this.isExpressionValid() && this.isVariableNameUnique()
   }
-  onSubmit() { this.props.onSubmit(this.state.fact) }
+  onSubmit() { this.props.onSubmit(this.state.runningFact) }
 
   render() {
     const buttonClasses = ['ui', 'button', ...(this.isValid() ? [] : ['disabled'])]
+    const {runningFact: {expression, name, variable_name}} = this.state
+
     return (
       <div className='Fact new ui form'>
         <div className='row'>
@@ -113,7 +88,7 @@ class NewFactRow extends Component {
               <input
                 type='text'
                 placeholder='Expression'
-                value={this.state.fact.expression}
+                value={expression}
                 onChange={this.onChangeExpression.bind(this)}
                 onBlur={this.onBlurExpression.bind(this)}
               />
@@ -124,7 +99,7 @@ class NewFactRow extends Component {
               <input
                 type='text'
                 placeholder='Name'
-                value={this.state.fact.name}
+                value={name}
                 onChange={this.onChangeName.bind(this)}
                 onKeyDown={(e) => {if (e.keyCode === 13 && this.isValid()) {this.onSubmit()}}}
               />
@@ -136,7 +111,7 @@ class NewFactRow extends Component {
               <input
                 type='text'
                 placeholder='Variable Name'
-                value={this.state.fact.variable_name}
+                value={variable_name}
                 onChange={this.onChangeVariableName.bind(this)}
                 onKeyDown={(e) => {if (e.keyCode === 13 && this.isValid()) {this.onSubmit()}}}
               />
@@ -150,14 +125,3 @@ class NewFactRow extends Component {
     )
   }
 }
-
-export const FactBookTab = ({facts, onAddFact}) => (
-  <div className='FactsTab'>
-    {_.map(facts, fact => <FactRow key={fact.id} fact={fact} />)}
-    <NewFactRow
-      key='new'
-      existingVariableNames={_.map(facts, f => f.variable_name)}
-      onSubmit={onAddFact}
-    />
-  </div>
-)

@@ -99,3 +99,17 @@ export function addFact(organization, rawFact) {
     })
   }
 }
+
+// editFact edits the passed fact, with sortedValues overwritten to null, to the organization and saves it on the server.
+export function editFact(organization, rawFact) {
+  return (dispatch, getState) => {
+    let fact = Object.assign({}, rawFact)
+    _.set(fact, 'simulation.sample.sortedValues', null)
+
+    api(getState()).organizations.editFact(organization, fact, (err, serverFact) => {
+      if (!!serverFact) {
+        dispatch(factActions.addToOrg(organizationReadableId(organization), serverFact))
+      }
+    })
+  }
+}
