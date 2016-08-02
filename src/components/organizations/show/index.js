@@ -146,6 +146,7 @@ export default class OrganizationShow extends Component{
 
             {(openTab === FACT_BOOK_TAB) && meIsMember && !!facts &&
               <FactBookTab
+                onDeleteFact={fact => this.props.dispatch(organizationActions.deleteFact(organization, fact))}
                 onAddFact={fact => this.props.dispatch(organizationActions.addFact(organization, fact))}
                 onEditFact={fact => this.props.dispatch(organizationActions.editFact(organization, fact))}
                 facts={facts}

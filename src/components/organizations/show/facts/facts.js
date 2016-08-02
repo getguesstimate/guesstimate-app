@@ -22,6 +22,7 @@ export class FactBookTab extends Component {
         key={fact.id}
         fact={fact}
         onEdit={() => {this.setState({editingFactId: fact.id})}}
+        onDelete={() => {this.props.onDeleteFact(fact)}}
       />
     )
   }

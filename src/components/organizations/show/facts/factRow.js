@@ -7,7 +7,7 @@ import Histogram from 'gComponents/simulations/histogram/index'
 
 import './facts.css'
 
-export const FactRow = ({fact, onEdit}) => (
+export const FactRow = ({fact, onEdit, onDelete}) => (
   <div className='Fact'>
     <div className='section-simulation simulation-sample'>
       {_.has(fact, 'simulation.sample.values.length') && _.has(fact, 'simulation.stats.mean') &&
@@ -39,6 +39,7 @@ export const FactRow = ({fact, onEdit}) => (
 
     <div className='section-help'>
       <span className='ui button tiny options' onClick={onEdit}>Edit</span>
+        <span className='ui button tiny options' onClick={onDelete}>Delete</span>
     </div>
   </div>
 )

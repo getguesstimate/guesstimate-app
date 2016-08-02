@@ -33,6 +33,20 @@ export function factsR(state = INITIAL_STATE, action) {
         ],
       }
     }
+    case 'DELETE_FACT_FROM_ORG': {
+      const organizationFact = state.organizationFacts.find(e => e.variable_name === action.organizationVariableName)
+      const children = !!organizationFact ? organizationFact.children.filter(c => c.id !== action.id) : []
+      return {
+        ...state,
+        organizationFacts: [
+          {
+            variable_name: action.organizationVariableName,
+            children,
+          },
+          ...state.organizationFacts.filter(e => e.variable_name !== action.organizationVariableName)
+        ],
+      }
+    }
     case 'SUGGEST_FACT':
       return {
         ...state,

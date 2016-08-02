@@ -6,6 +6,11 @@
   width: 38em;
 
   .Fact {
+  &:not(:hover){
+    .ui.tiny.button {
+      display: none;
+    }
+  }
     padding: .4em .5em;
     margin: .2em 0;
     background-color: white;
@@ -95,8 +100,12 @@
   }
 
   .ui.tiny.button {
-     padding: .55em 1em;
+     padding: .3em 1em;
      border-radius: 2px;
+     margin-bottom: 3px;
+     &:last-child {
+       margin-bottom: 0
+   }
   }
 }
 
