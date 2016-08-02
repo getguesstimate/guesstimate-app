@@ -19,6 +19,10 @@ export function addToOrg(organizationVariableName, fact) {
   return {type: 'ADD_FACT_TO_ORG', organizationVariableName, fact: withSortedValues(fact)}
 }
 
+export function updateWithinOrg(organizationVariableName, fact) {
+  return {type: 'UPDATE_FACT_WITHIN_ORG', organizationVariableName, fact: withSortedValues(fact)}
+}
+
 export function deleteFromOrg(organizationVariableName, {id}) {
   return {type: 'DELETE_FACT_FROM_ORG', organizationVariableName, id}
 }
