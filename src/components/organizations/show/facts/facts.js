@@ -8,7 +8,7 @@ import {getVar} from 'gEngine/facts'
 export class FactBookTab extends Component {
   state = {
     editingFactId: null,
-    factsAdded: 0,
+    newFactKey: 0,
   }
 
   componentWillUpdate(newProps) {
@@ -19,7 +19,7 @@ export class FactBookTab extends Component {
 
   onAddFact(fact) {
     this.props.onAddFact(fact)
-    this.setState({factsAdded: this.state.factsAdded + 1})
+    this.setState({newFactKey: this.state.newFactKey + 1})
   }
 
   renderFactShow(fact) {
@@ -35,7 +35,7 @@ export class FactBookTab extends Component {
   renderFactForm(fact = null) {
     const {facts, onEditFact} = this.props
     let props = {
-      key: !!fact ? fact.id : this.state.factsAdded.toString(),
+      key: !!fact ? fact.id : this.state.newFactKey.toString(),
       existingVariableNames: facts.map(getVar).filter(v => v !== getVar(fact)),
       buttonText: !!fact ? 'Save' : 'Create',
       onSubmit: (!!fact ? onEditFact : this.onAddFact.bind(this)),
