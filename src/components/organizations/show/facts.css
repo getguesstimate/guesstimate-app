@@ -1,36 +1,73 @@
 @import './styles/variables.css';
 
+
+.Fact.new.ui.form {
+  input, textarea {
+    border: none;
+    padding: .4em .4em;
+    border-radius: 2px;
+
+    background-color: #eee;
+
+    &:hover {
+      background-color: #ddd;
+    }
+
+  }
+
+  .prefix {
+    color: #8dabbf;
+    position: absolute;
+    left: .7em;
+    top: .9em;
+    font-size: 1.2em;
+  }
+
+  input {
+    font-size: 1.2em;
+    color: #116f9e;
+    padding-left: .95em;
+  }
+}
+
 .FactsTab {
   margin-top: 7em;
   width: 100%;
-  background-color: white;
-  border-radius: 3px;
   width: 48em;
 
   .Fact {
-    padding: .5em .5em;
+    padding: .4em .5em;
+    margin: .3em 0;
     border-bottom: 1px solid #eee;
-
+    background-color: white;
+    border-radius: 2px;
     .simulation-sample {
       position: relative;
-      padding: 4px 5px 1px 5px;
-      border-radius: 3px;
-      &:hover {
-        background-color: #e4efff;
-      }
 
       .histogram {
-        left: 50%;
-        height: 70px;
+        left: 20%;
+        height: 35px;
         position: absolute;
-        top: -12px;
+        bottom: -.4em;
         right: 0;
+        z-index: 0;
+        .react-d3-histogram__bar rect {
+          fill: rgb(231, 234, 236);
+        }
       }
 
       .simulation-summary {
         float: left;
+        margin-top: 4px;
+        position: relative;
+        z-index: 1;
         .DistributionSummary .mean {
-          font-size: .85em;
+          font-size: .9em;
+          font-weight: 800;
+          color: #607580;
+        }
+        .DistributionSummary .UncertaintyRange {
+           color: #8c8c8c;
         }
       }
     }
@@ -40,20 +77,20 @@
     }
 
     .variableName {
-      font-size: 1.2em;
+      font-size: 1.15em;
+      font-weight: 800;
       float: left;
       margin-right: 100%;
+        color: #116f9e;
 
       input {
         width: 80%;
         margin-left: 0.4em;
       }
       .prefix {
-        color: #8dabbf;
         margin-right: 1px;
       }
       .variable {
-        color: #116f9e;
       }
     }
 
@@ -64,7 +101,7 @@
       float: left;
     }
     .name {
-      font-size: 1em;
+      font-size: .9em;
       color: #888;
       letter-spacing: 0.36px;
       float: left;

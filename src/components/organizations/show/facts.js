@@ -15,14 +15,7 @@ import './facts.css'
 const FactRow = ({fact}) => (
   <div className='Fact'>
     <div className='row'>
-      <div className='col-md-6'>
-        <div className='variableName'>
-          <span className='prefix'>#</span>
-          <span className='variable'>{fact.variable_name}</span>
-        </div>
-        <span className='name'>{fact.name}</span>
-      </div>
-      <div className='col-md-3 simulation-sample'>
+      <div className='col-md-2 simulation-sample'>
         {_.has(fact, 'simulation.sample.values.length') && _.has(fact, 'simulation.stats.mean') &&
           <div className='simulation-summary'>
           <DistributionSummary
@@ -35,12 +28,19 @@ const FactRow = ({fact}) => (
         {_.has(fact, 'simulation.sample.values.length') &&
           <div className='histogram'>
             <Histogram
-              height={30}
+              height={15}
               simulation={fact.simulation}
               cutOffRatio={0.995}
             />
           </div>
         }
+      </div>
+      <div className='col-md-6'>
+        <div className='variableName'>
+          <span className='prefix'>#</span>
+          <span className='variable'>{fact.variable_name}</span>
+        </div>
+        <span className='name'>{fact.name}</span>
       </div>
       <div className='col-md-2'></div>
       <div className='col-md-1'>
@@ -124,30 +124,8 @@ class NewFactRow extends Component {
     return (
       <div className='Fact new ui form'>
         <div className='row'>
-          <div className='col-md-3'>
-            <div className={`field ${this.isExpressionValid() ? '' : 'error'}`}>
-              <input
-                type='text'
-                placeholder='Expression'
-                value={this.state.fact.expression}
-                onChange={this.onChangeExpression.bind(this)}
-                onBlur={this.onBlurExpression.bind(this)}
-              />
-            </div>
-          </div>
-          <div className='col-md-3'>
-            <div class='field'>
-              <input
-                type='text'
-                placeholder='Name'
-                value={this.state.fact.name}
-                onChange={this.onChangeName.bind(this)}
-                onKeyDown={(e) => {if (e.keyCode === 13 && this.isValid()) {this.onSubmit()}}}
-              />
-            </div>
-          </div>
-          <div className='col-md-4'>
-            <div className={`variableName field ${this.isVariableNameUnique() ? '' : 'error'}`}>
+          <div className='col-md-6'>
+            <div className={`field ${this.isVariableNameUnique() ? '' : 'error'}`}>
               <span className='prefix'>#</span>
               <input
                 type='text'
@@ -157,9 +135,31 @@ class NewFactRow extends Component {
                 onKeyDown={(e) => {if (e.keyCode === 13 && this.isValid()) {this.onSubmit()}}}
               />
             </div>
+            <div class='field'>
+              <textarea
+                type='text'
+                rows='1'
+                placeholder='Name'
+                value={this.state.fact.name}
+                onChange={this.onChangeName.bind(this)}
+                onKeyDown={(e) => {if (e.keyCode === 13 && this.isValid()) {this.onSubmit()}}}
+              />
+            </div>
           </div>
-          <div className='col-md-1'>
-            <span className={buttonClasses.join(' ')} onClick={this.onSubmit.bind(this)}><Icon name='plus' /></span>
+          <div className='col-md-4'>
+            <div className={`field ${this.isExpressionValid() ? '' : 'error'}`}>
+              <textarea
+                type='text'
+                rows='1'
+                placeholder='Expression'
+                value={this.state.fact.expression}
+                onChange={this.onChangeExpression.bind(this)}
+                onBlur={this.onBlurExpression.bind(this)}
+              />
+            </div>
+          </div>
+          <div className='col-md-2'>
+            <span className={buttonClasses.join(' ')} onClick={this.onSubmit.bind(this)}><Icon name='plus' /> Create</span>
           </div>
         </div>
       </div>
