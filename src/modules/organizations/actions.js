@@ -108,7 +108,7 @@ export function editFact(organization, rawFact) {
 
     api(getState()).organizations.editFact(organization, fact, (err, serverFact) => {
       if (!!serverFact) {
-        dispatch(factActions.addToOrg(organizationReadableId(organization), serverFact))
+        dispatch(factActions.updateWithinOrg(organizationReadableId(organization), serverFact))
       }
     })
   }

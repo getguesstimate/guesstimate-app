@@ -18,15 +18,35 @@ export function factsR(state = INITIAL_STATE, action) {
       }
     case 'ADD_FACT_TO_ORG': {
       const oldOrganizationFact = state.organizationFacts.find(e => e.variable_name === action.organizationVariableName)
-      const oldChildren = !!oldOrganizationFact ? oldOrganizationFact.children.filter(c => c.variable_name !== action.fact.variable_name) : []
+      return {
+        ...state,
+        organizationFacts: [
+          { variable_name: action.organizationVariableName, children: [...(oldOrganizationFact.children || []), action.fact] },
+          ...state.organizationFacts.filter(e => e.variable_name !== action.organizationVariableName)
+        ],
+      }
+    }
+    case 'UPDATE_FACT_WITHIN_ORG': {
+      const oldOrganizationFact = state.organizationFacts.find(e => e.variable_name === action.organizationVariableName)
+      if (!oldOrganizationFact) { 
+        return {
+          ...state,
+          organizationFacts: [{variable_name: action.organizationVariableName, children: [action.fact]}, ...state.organizationFacts],
+        }
+      }
+
+      const oldFactIndex = oldOrganizationFact.children.findIndex(c => c.id === action.fact.id)
+      const childrenBefore = oldOrganizationFact.children.slice(0, oldFactIndex)
+      const childrenAfter = oldOrganizationFact.children.slice(oldFactIndex+1)
       return {
         ...state,
         organizationFacts: [
           {
             variable_name: action.organizationVariableName,
             children: [
-              ...oldChildren,
+              ...childrenBefore,
               action.fact,
+              ...childrenAfter,
             ],
           },
           ...state.organizationFacts.filter(e => e.variable_name !== action.organizationVariableName)
