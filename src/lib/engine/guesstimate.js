@@ -12,7 +12,7 @@ export function equals(l, r) {
   )
 }
 
-export const attributes = ['metric', 'expression', 'guesstimateType', 'description', 'data']
+export const attributes = ['metric', 'expression', 'input', 'guesstimateType', 'description', 'data']
 
 export function sample(guesstimate: Guesstimate, dGraph: DGraph, n: number = 1) {
   const metric = guesstimate.metric
