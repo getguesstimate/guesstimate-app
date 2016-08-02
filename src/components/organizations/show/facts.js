@@ -4,31 +4,47 @@ import {connect} from 'react-redux'
 import Icon from 'react-fa'
 
 import Histogram from 'gComponents/simulations/histogram/index'
+import {DistributionSummary} from 'gComponents/distributions/summary/index'
 
 import {simulateFact} from 'gEngine/facts'
 import {addStats} from 'gEngine/simulation'
 
 import './facts.css'
 
+
 const FactRow = ({fact}) => (
   <div className='Fact'>
     <div className='row'>
-      <div className='col-md-3'>
-        <Histogram
-          height={30}
-          simulation={fact.simulation}
-          cutOffRatio={0.995}
-        />
-      </div>
-      <div className='col-md-6'><span className='name'>{fact.name}</span></div>
-      <div className='col-md-2'>
+      <div className='col-md-6'>
         <div className='variableName'>
           <span className='prefix'>#</span>
           <span className='variable'>{fact.variable_name}</span>
         </div>
+        <span className='name'>{fact.name}</span>
       </div>
+      <div className='col-md-3 simulation-sample'>
+        {_.has(fact, 'simulation.sample.values.length') && _.has(fact, 'simulation.stats.mean') &&
+          <div className='simulation-summary'>
+          <DistributionSummary
+            length={fact.simulation.sample.values.length}
+            mean={fact.simulation.stats.mean}
+            adjustedConfidenceInterval={fact.simulation.stats.adjustedConfidenceInterval}
+          />
+          </div>
+         }
+        {_.has(fact, 'simulation.sample.values.length') &&
+          <div className='histogram'>
+            <Histogram
+              height={30}
+              simulation={fact.simulation}
+              cutOffRatio={0.995}
+            />
+          </div>
+        }
+      </div>
+      <div className='col-md-2'></div>
       <div className='col-md-1'>
-        <span className='ui button options'><Icon name='ellipsis-v' /></span>
+        <span className='options'><Icon name='ellipsis-v' /></span>
       </div>
     </div>
   </div>
@@ -119,7 +135,7 @@ class NewFactRow extends Component {
               />
             </div>
           </div>
-          <div className='col-md-6'>
+          <div className='col-md-3'>
             <div class='field'>
               <input
                 type='text'
@@ -130,7 +146,7 @@ class NewFactRow extends Component {
               />
             </div>
           </div>
-          <div className='col-md-2'>
+          <div className='col-md-4'>
             <div className={`variableName field ${this.isVariableNameUnique() ? '' : 'error'}`}>
               <span className='prefix'>#</span>
               <input
