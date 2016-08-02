@@ -12,10 +12,11 @@ export function get(collection, id){
   return collection.find(i => (i.id === id))
 }
 
-export function subset(graph, spaceId){
+export function subset(graph, spaceId, withInputs = false){
   if (spaceId){
     const metrics = graph.metrics.filter(m => m.space === spaceId)
-    const guesstimates = _.flatten(metrics.map(m => _metric.guesstimates(m, graph)))
+    const rawGuesstimates = _.flatten(metrics.map(m => _metric.guesstimates(m, graph)))
+    const guesstimates = withInputs ? rawGuesstimates.map(_guesstimate.inputsFromExpressions(metrics)) : rawGuesstimates
     const simulations = _.flatten(guesstimates.map(g => _guesstimate.simulations(g, graph)))
     return { metrics, guesstimates, simulations }
   } else {
@@ -47,13 +48,15 @@ export function toDSpace(spaceId, graph) {
 
   dSpace.edges = _dGraph.dependencyMap(dSpace)
 
+  const withInputFn = _guesstimate.inputsFromExpressions(dSpace.metrics)
   dSpace.metrics = dSpace.metrics.map(s => {
     let edges = {}
     edges.inputs = dSpace.edges.filter(i => i.output === s.id).map(e => e.input)
     edges.outputs = dSpace.edges.filter(i => i.input === s.id).map(e => e.output)
     edges.inputMetrics = edges.inputs.map(i => dSpace.metrics.find(m => m.id === i))
-    return Object.assign({}, s, {edges})
+    return {...s, guesstimate: withInputFn(s.guesstimate), edges}
   })
+
   return dSpace
 }
 

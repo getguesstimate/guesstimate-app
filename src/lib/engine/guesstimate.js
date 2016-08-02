@@ -12,7 +12,7 @@ export function equals(l, r) {
   )
 }
 
-export const attributes = ['metric', 'input', 'guesstimateType', 'description', 'data']
+export const attributes = ['metric', 'expression', 'guesstimateType', 'description', 'data']
 
 export function sample(guesstimate: Guesstimate, dGraph: DGraph, n: number = 1) {
   const metric = guesstimate.metric
@@ -81,4 +81,12 @@ function _inputMetricsWithValues(guesstimate: Guesstimate, dGraph: DGraph): Obje
     ))
   })
   return [inputs, _.uniq(errors)]
+}
+
+export function inputsFromExpressions(metrics) {
+  let idMap = {}, reParts = []
+  metrics.forEach( ({id, readableId}) => {reParts.push(`\\\$\\\{${id}\\\}`); idMap[`\$\{${id}\}`] = readableId} )
+
+  const translateFn = ({expression}) => expression.replace(RegExp(reParts.join('|'), 'g'), match => idMap[match])
+  return g => !_.isEmpty(g.input) || _.isEmpty(g.expression) ? g : {...g, input: translateFn(g)}
 }
