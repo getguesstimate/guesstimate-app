@@ -11,6 +11,8 @@ import {changeMetricClickMode} from 'gModules/canvas_state/actions'
 
 import {Guesstimator} from 'lib/guesstimator/index'
 
+import {inputToExpression} from 'gEngine/guesstimate'
+
 import './style.css'
 
 @connect(null, dispatch => bindActionCreators({changeGuesstimate, runFormSimulations, changeMetricClickMode}, dispatch), null, {withRef: true})
@@ -51,8 +53,9 @@ export default class Guesstimate extends Component{
   }
 
   changeInput(input) {
+    const expression = inputToExpression(input, this.props.metricIdsMap)
     const guesstimateType = this._guesstimateType({input})
-    this.changeGuesstimate({data: null, input, guesstimateType}, true, false)
+    this.changeGuesstimate({data: null, input: null, expression, guesstimateType}, true, false)
     if (guesstimateType === 'FUNCTION' && this.props.guesstimateType !== 'FUNCTION') {
       this._changeMetricClickMode('FUNCTION_INPUT_SELECT')
     }

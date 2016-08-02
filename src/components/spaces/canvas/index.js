@@ -133,6 +133,11 @@ export default class Canvas extends Component{
     return _.isEmpty(metric.name) && _.isEmpty(input) && _.isEmpty(data)
   }
 
+  metricIdsMap() {
+    const metrics = _.get(this, 'props.denormalizedSpace.metrics') || []
+    return metrics.reduce((map, curr) => _.set(map, curr.readableId, curr.id), {})
+  }
+
   renderMetric(metric, selected) {
     const {location} = metric
     const hasSelected = selected && metric && (selected.id !== metric.id)
@@ -144,6 +149,7 @@ export default class Canvas extends Component{
         key={metric.id}
         location={location}
         metric={metric}
+        metricIdsMap={this.metricIdsMap()}
         selectedMetric={passSelected && selected}
       />
     )
