@@ -113,3 +113,15 @@ export function editFact(organization, rawFact) {
     })
   }
 }
+
+export function deleteFact(organization, fact) {
+  return (dispatch, getState) => {
+    api(getState()).organizations.deleteFact(organization, fact, (err, serverFact) => {
+      if (err) {
+        captureApiError('OrganizationsFactDestroy', err.jqXHR, err.textStatus, err, {url: 'destroyOrganizationMember'})
+      } else {
+        dispatch(factActions.deleteFromOrg(organizationReadableId(organization), fact))
+      }
+    })
+  }
+}
