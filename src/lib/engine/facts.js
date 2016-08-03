@@ -59,7 +59,7 @@ function findBySelector(facts, selector, currFact = {}) {
 const idFrom = selector => selector.join('.')
 const toMetric = (selector, takenReadableIds) => ({id: idFrom(selector), readableId: generateRandomReadableId(takenReadableIds)})
 const toGuesstimate = (selector, {expression}) => ({metric: idFrom(selector), input: expression})
-const toSimulation = (selector, {values}) => ({metric: idFrom(selector), sample: {values}})
+const toSimulation = (selector, {simulation}) => ({...simulation, metric: idFrom(selector)})
 
 const buildFullNode = (selector, fact, takenReadableIds) => ({
   metric: toMetric(selector, takenReadableIds),
