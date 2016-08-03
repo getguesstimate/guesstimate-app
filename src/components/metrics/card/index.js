@@ -224,6 +224,7 @@ export default class MetricCard extends Component {
       connectDragSource,
       selectedMetric,
       forceFlowGridUpdate,
+      readableIdsMap,
     } = this.props
     const {guesstimate} = metric
     const shouldShowSensitivitySection = this._shouldShowSensitivitySection()
@@ -272,6 +273,7 @@ export default class MetricCard extends Component {
                 inputMetrics={metric.edges.inputMetrics}
                 metricId={metric.id}
                 organizationId={organizationId}
+                readableIdsMap={readableIdsMap}
                 metricFocus={this.focus.bind(this)}
                 jumpSection={() => {this.refs.MetricCardViewSection.focusName()}}
                 onOpen={this.openModal.bind(this)}
