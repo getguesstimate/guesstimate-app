@@ -38,3 +38,8 @@ export function organizationInvitations(organizationId, invitations) {
 }
 
 export const organizationReadableId = ({id}) => `organization_${id}`
+
+export function findFacts(organizationId, organizationFacts) {
+  const readableId = organizationReadableId({id: organizationId})
+  return _.get(organizationFacts.find(f => f.variable_name === readableId), 'children') || []
+}
