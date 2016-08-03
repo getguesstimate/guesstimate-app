@@ -20,7 +20,7 @@ function findWithRegex(regex, contentBlock, callback) {
 }
 
 const stylizedSpan = className => props => <span {...props} className={className}>{props.children}</span>
-const Fact = stylizedSpan('fact')
+const Fact = stylizedSpan('fact input')
 const Suggestion = stylizedSpan('suggestion')
 const ValidInput = stylizedSpan('valid input')
 const ErrorInput = stylizedSpan('error input')
