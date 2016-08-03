@@ -2,7 +2,7 @@
 
 $grey-a1: rgb(231, 234, 236);
 $grey-a2: #607580;
-$blue-a1: $blue-1;
+$blue-a1: #4A6A88;
 
 .FactsTab {
   width: 38em;
@@ -72,7 +72,6 @@ $blue-a1: $blue-1;
     z-index: 1;
 
     .DistributionSummary .mean {
-      font-weight: 800;
       color: $grey-a2;
     }
     .DistributionSummary .UncertaintyRange {
@@ -99,7 +98,7 @@ $blue-a1: $blue-1;
   }
 
   .variable-name {
-    font-size: 1.3em;
+    font-size: 1.2em;
     font-weight: 800;
     float: left;
     margin-right: 100%;
