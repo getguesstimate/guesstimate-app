@@ -138,8 +138,15 @@ export default class SpacesShow extends Component {
     this.setState({showCalculatorId: null, showCalculatorResults: false, showNewCalculatorForm: false, showEditCalculatorForm: null})
   }
 
-  showFactSidebar() { this.setState({showFactSidebar: true}) }
-  hideFactSidebar() { this.setState({showFactSidebar: false}) }
+  showFactSidebar() {
+    elev.hide()
+    this.setState({showFactSidebar: true})
+  }
+
+  hideFactSidebar() {
+    elev.show()
+    this.setState({showFactSidebar: false})
+  }
 
   onSave() {
     this.props.dispatch(spaceActions.update(this._id()))
