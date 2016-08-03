@@ -29,35 +29,26 @@ export function expressionsToInputs(graph, facts) {
   return {...graph, guesstimates: graph.guesstimates.map(expressionToInputFn)}
 }
 
-export function withGraph(space, graph){
-  return {...space, graph: subset(graph, space.id)}
-}
+export const withGraph = (space, graph) => ({...space, graph: subset(graph, space.id)})
 
-const sameIds = (u1, u2) => {
-  return u1 && u2 && (u1.toString() === u2.toString())
-}
-
-const user = (space, graph) => {
-  return graph.users.find(e => sameIds(e.id, space.user_id))
-}
-
+const sameIds = (u1, u2) => u1 && u2 && (u1.toString() === u2.toString())
+const user = (space, graph) => graph.users.find(e => sameIds(e.id, space.user_id))
 const organization = (space, graph) => (graph.organizations || []).find(e => sameIds(e.id, space.organization_id))
+
+export function possibleFacts(space, graph, organizationFacts) {
+  const org = organization(space, graph)
+  return !!org ? _facts.getFactsForOrg(organizationFacts, org) : []
+}
 
 export function toDSpace(spaceId, graph, organizationFacts) {
   let space = graph.spaces && graph.spaces.find(s => sameIds(s.id, spaceId))
   if (!space) { return {} }
 
   let dSpace = Object.assign(space.asMutable(), toDgraph(space.id, graph))
-
-  const org = organization(dSpace, graph)
-  const possibleFacts = !!org ? _facts.getFactsForOrg(organizationFacts, org) : []
-  const factIdsMap = possibleFacts.reduce((map, curr) => _.set(map, `#${curr.variable_name}`, {id: curr.id, isMetric: false}), {})
-  const metricIdsMap =  dSpace.metrics.reduce((map, curr) => _.set(map, curr.readableId, {id: curr.id, isMetric: true}), {})
-  dSpace.readableIdsMap = {...metricIdsMap, ...factIdsMap}
-
   dSpace.edges = _dGraph.dependencyMap(dSpace)
 
-  const withInputFn = _guesstimate.expressionToInputFn(dSpace.metrics, possibleFacts)
+  const facts = possibleFacts(dSpace, graph, organizationFacts)
+  const withInputFn = _guesstimate.expressionToInputFn(dSpace.metrics, facts)
   dSpace.metrics = dSpace.metrics.map(s => {
     let edges = {}
     edges.inputs = dSpace.edges.filter(i => i.output === s.id).map(e => e.input)

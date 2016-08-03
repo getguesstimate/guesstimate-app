@@ -42,7 +42,6 @@ const toContainerFact = o => _.isEmpty(o.facts) ? {} : {variable_name: organizat
 export function fetchSuccess(organizations) {
   return (dispatch) => {
     const formatted = organizations.map(o => _.pick(o, ['id', 'name', 'picture', 'admin_id', 'account', 'plan']))
-    dispatch(oActions.fetchSuccess(formatted))
 
     const memberships = _.flatten(organizations.map(o => o.memberships || []))
     const invitations = _.flatten(organizations.map(o => o.invitations || []))
@@ -51,6 +50,8 @@ export function fetchSuccess(organizations) {
     if (!_.isEmpty(memberships)) { dispatch(userOrganizationMembershipActions.fetchSuccess(memberships)) }
     if (!_.isEmpty(invitations)) { dispatch(userOrganizationInvitationActions.fetchSuccess(invitations)) }
     if (!_.isEmpty(factsByOrg)) { dispatch(factActions.loadByOrg(factsByOrg)) }
+
+    dispatch(oActions.fetchSuccess(formatted))
   }
 }
 
