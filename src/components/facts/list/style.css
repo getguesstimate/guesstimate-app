@@ -4,10 +4,6 @@ $grey-a1: rgb(231, 234, 236);
 $grey-a2: #607580;
 $blue-a1: #4A6A88;
 
-.FactsTab {
-  width: 38em;
-}
-
 .Fact--outer {
   border: 1px solid rgba(0,0,0,0);
   float: left;
@@ -25,6 +21,8 @@ $blue-a1: #4A6A88;
   float: left;
   width: 100%;
   border-radius: 2px;
+  display: flex;
+  flex-direction: row;
 
   &:not(:hover):not(.form) .ui.tiny.button {
     display: none;
@@ -49,8 +47,8 @@ $blue-a1: #4A6A88;
 }
 
 .Fact  .section-simulation {
-  float: left;
-  width: 7em;
+  min-width: 7em;
+  flex: 1;
   position: relative;
 
   .histogram {
@@ -87,7 +85,7 @@ $blue-a1: #4A6A88;
 
 .Fact > .section-name {
   float: left;
-  width: 22em;
+  flex: 6;
 
   .description {
     font-size: .9em;
@@ -144,7 +142,8 @@ $blue-a1: #4A6A88;
 
 .Fact > .section-help {
   float: left;
-  width: 7.5em;
+  min-width: 5em;
+  flex: 1;
 
   .button {
     float: right;

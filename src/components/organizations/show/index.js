@@ -199,14 +199,15 @@ const OrganizationTabButtons = ({tabs, openTab, changeTab}) => (
 
 const FactTab = ({organizationId}) => (
   <div className='FactTab row'>
-    <div className='col-md-3'>
-      <h1> Organization Facts </h1>
+    <div className='col-md-2'>
+      <h2> Organizational Facts </h2>
       <p> Facts can be used in organization models by referencing them with '#' symbols. </p>
     </div>
 
-    <div className='col-md-7'>
+    <div className='col-md-1'></div>
+    <div className='col-md-6'>
       <div className='FactTab--factList'>
-        <FactListContainer organizationId={organizationId}/>
+        <FactListContainer organizationId={organizationId} isEditable={true}/>
       </div>
     </div>
   </div>
