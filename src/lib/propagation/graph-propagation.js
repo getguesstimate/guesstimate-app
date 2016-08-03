@@ -62,7 +62,7 @@ export class GraphPropagation {
 
   _graph(): Graph {
     const state = this.getState()
-    const spaceSubset = e.space.subset(e.graph.create(state), this.spaceId)
+    const spaceSubset = e.space.subset(e.graph.create(state), this.spaceId, true)
     return e.facts.addFactsToSpaceGraph(spaceSubset, state.facts, this.space)
   }
 

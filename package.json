@@ -13,6 +13,7 @@
     "stage-master": "npm run predeploy && surge -p public -d master.getguesstimate.com",
     "stage-ozzie": "npm run predeploy && surge -p public -d ozzie.getguesstimate.com",
     "stage-matthew": "npm run predeploy && surge -p public -d matthew.getguesstimate.com",
+    "stage-factbank": "npm run predeploy && surge -p public -d factbank.getguesstimate.com",
     "test": "karma start",
     "test-once": "karma start --single-run"
   },
