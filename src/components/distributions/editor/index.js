@@ -53,10 +53,8 @@ export default class Guesstimate extends Component{
   }
 
   changeInput(input) {
-    const expression = inputToExpression(input, this.props.readableIdsMap)
-
     const guesstimateType = this._guesstimateType({input})
-    this.changeGuesstimate({data: null, input: '', expression, guesstimateType}, true, false)
+    this.changeGuesstimate({data: null, input, guesstimateType}, true, false)
     if (guesstimateType === 'FUNCTION' && this.props.guesstimateType !== 'FUNCTION') {
       this._changeMetricClickMode('FUNCTION_INPUT_SELECT')
     }

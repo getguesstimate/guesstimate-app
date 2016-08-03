@@ -146,7 +146,6 @@ export default class Canvas extends Component{
         location={location}
         metric={metric}
         organizationId={this.props.denormalizedSpace.organization_id}
-        readableIdsMap={this.props.denormalizedSpace.readableIdsMap}
         selectedMetric={passSelected && selected}
       />
     )
