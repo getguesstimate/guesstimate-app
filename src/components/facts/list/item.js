@@ -5,9 +5,7 @@ import Icon from 'react-fa'
 import {DistributionSummary} from 'gComponents/distributions/summary/index'
 import Histogram from 'gComponents/simulations/histogram/index'
 
-import './facts.css'
-
-export const FactRow = ({fact, onEdit, onDelete}) => (
+export const FactItem = ({fact, onEdit, onDelete}) => (
   <div className='Fact--outer'>
     <div className='Fact'>
       <div className='section-simulation simulation-sample'>

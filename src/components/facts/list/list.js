@@ -1,11 +1,12 @@
 import React, {Component} from 'react'
 
-import {FactRow} from './factRow'
+import {FactItem} from './item'
 import {FactForm} from './form'
 
 import {getVar} from 'gEngine/facts'
+import './style.css'
 
-export class FactBookTab extends Component {
+export class FactList extends Component {
   state = {
     editingFactId: null,
     newFactKey: 0,
@@ -24,7 +25,7 @@ export class FactBookTab extends Component {
 
   renderFactShow(fact) {
     return (
-      <FactRow
+      <FactItem
         key={fact.id}
         fact={fact}
         onEdit={() => {this.setState({editingFactId: fact.id})}}

@@ -3,8 +3,6 @@ import React, {Component, PropTypes} from 'react'
 import {simulateFact, FactPT} from 'gEngine/facts'
 import {addStats} from 'gEngine/simulation'
 
-import './facts.css'
-
 const readableIdPartFromWord = word => (/\d/).test(word) ? word : word[0]
 function getVariableNameFromName(rawName) {
   const name = rawName.trim().replace(/[^\w\d]/g, ' ').toLowerCase()
