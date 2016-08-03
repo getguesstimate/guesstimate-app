@@ -1,108 +1,40 @@
 @import './styles/variables.css';
 
+$grey-a1: rgb(231, 234, 236);
+$grey-a2: #607580;
+$blue-a1: $blue-1;
+
 .FactsTab {
-  margin-top: 7em;
-  width: 100%;
   width: 38em;
+}
 
-  .Fact {
-  &:not(:hover){
-    .ui.tiny.button {
-      display: none;
-    }
+.Fact--outer {
+  border: 1px solid rgba(0,0,0,0);
+  float: left;
+  width: 100%;
+  margin: .2em 0;
+
+  &:hover {
+    border-color: #d9dee2;
   }
-    padding: .4em .5em;
-    margin: .2em 0;
-    background-color: white;
-    float: left;
-    width: 100%;
-    border-radius: 2px;
+}
 
-    &:hover {
-      background-color: #fbfbfb;
-    }
+.Fact {
+  padding: .4em .5em;
+  background-color: white;
+  float: left;
+  width: 100%;
+  border-radius: 2px;
 
-    .section-simulation {
-       float: left;
-       width: 9em;
-    }
-
-    .section-name {
-       float: left;
-       width: 23em;
-    }
-
-    .section-help {
-       float: right;
-       width: 4em;
-    }
-
-    .simulation-sample {
-      position: relative;
-
-      .histogram {
-        left: 20%;
-        height: 35px;
-        position: absolute;
-        bottom: -.4em;
-        right: 0;
-        z-index: 0;
-        .react-d3-histogram__bar rect {
-          fill: rgb(231, 234, 236);
-        }
-      }
-
-      .simulation-summary {
-        float: left;
-        margin-top: 2px;
-        position: relative;
-        z-index: 1;
-        .DistributionSummary .mean {
-          font-weight: 800;
-          color: #607580;
-        }
-        .DistributionSummary .UncertaintyRange {
-           color: #8c8c8c;
-        }
-      }
-    }
-
-    .variableName {
-      font-size: 1.3em;
-      font-weight: 800;
-      float: left;
-      margin-right: 100%;
-      color: #116f9e;
-      .field input {
-        color: #116f9e;
-      }
-
-      .prefix {
-        margin-right: 1px;
-      }
-    }
-
-    .options {
-      float: left;
-    }
-
-    .name {
-      font-size: .9em;
-      color: #888;
-      letter-spacing: 0.36px;
-      float: left;
-      margin-top: .25em;
-    }
-
-    &:last-child {
-      border-bottom: none;
-    }
+  &:not(:hover):not(.form) .ui.tiny.button {
+    display: none;
   }
 
   .ui.tiny.button {
      padding: .3em 1em;
      border-radius: 2px;
      margin-bottom: 3px;
+
      &:last-child {
        margin-bottom: 0
    }
@@ -110,17 +42,84 @@
 }
 
 .Fact.new.ui.form {
-  .section-simulation {
-    padding-right: .9em;
+  input, textarea {
+    padding: .3em .4em;
+    border-radius: 2px;
+  }
+}
+
+.Fact  .section-simulation {
+  float: left;
+  width: 7em;
+  position: relative;
+
+  .histogram {
+    left: 20%;
+    height: 35px;
+    position: absolute;
+    bottom: -.4em;
+    right: 0;
+    z-index: 0;
+    .react-d3-histogram__bar rect {
+      fill: $grey-a1;
+    }
   }
 
-  .variableName {
+  .simulation-summary {
+    float: left;
+    margin-top: 2px;
+    position: relative;
+    z-index: 1;
+
+    .DistributionSummary .mean {
+      font-weight: 800;
+      color: $grey-a2;
+    }
+    .DistributionSummary .UncertaintyRange {
+       color: $grey-999;
+    }
+  }
+}
+
+.Fact.form .section-simulation {
+  padding-right: .9em;
+}
+
+
+.Fact > .section-name {
+  float: left;
+  width: 22em;
+
+  .description {
+    font-size: .9em;
+    color: $grey-999;
+    letter-spacing: 0.36px;
+    float: left;
+    margin-top: .25em;
+  }
+
+  .variable-name {
+    font-size: 1.3em;
+    font-weight: 800;
+    float: left;
+    margin-right: 100%;
+    color: $blue-a1;
+
+    .prefix {
+      margin-right: 1px;
+    }
+  }
+}
+
+.Fact.form > .section-name {
+  .variable-name {
     width: 100%;
+
     .field {
       position: relative;
 
       .prefix {
-        color: #888;
+        color: $grey-999;
         position: absolute;
         left: .4em;
         top: .4em;
@@ -128,29 +127,28 @@
       }
 
       input {
+      color: $blue-a1;
         padding-left: 1.4em;
-
       }
     }
   }
 
-  .name {
+  .description {
     width: 100%;
+
     textarea {
+      margin-top: .3em;
       font-size: 1rem;
     }
   }
+}
 
-  input, textarea {
-    border: none;
-    padding: .4em .4em;
-    border-radius: 2px;
+.Fact > .section-help {
+  float: left;
+  width: 7.5em;
 
-    background-color: #eee;
-
-    &:hover {
-      background-color: #ddd;
-    }
-
+  .button {
+    float: right;
   }
 }
+

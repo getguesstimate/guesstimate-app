@@ -79,6 +79,7 @@ export class FactForm extends Component {
     const {props: {buttonText}, state: {runningFact: {expression, name, variable_name}}} = this
 
     return (
+    <div className='Fact--outer'>
       <div className='Fact new ui form'>
         <div className='section-simulation simulation-sample'>
           <div className={`field ${this.isExpressionValid() ? '' : 'error'}`}>
@@ -92,7 +93,7 @@ export class FactForm extends Component {
           </div>
         </div>
         <div className='section-name'>
-          <div className='variableName'>
+          <div className='variable-name'>
             <div className={`field ${this.isVariableNameUnique() ? '' : 'error'}`}>
               <span className='prefix'>#</span>
               <input
@@ -104,7 +105,7 @@ export class FactForm extends Component {
               />
             </div>
           </div>
-          <div className='name'>
+          <div className='description'>
             <div class='field'>
               <textarea
                 type='text'
@@ -117,8 +118,9 @@ export class FactForm extends Component {
             </div>
           </div>
         </div>
-      <div className='section-help'>
-        <span className={buttonClasses.join(' ')} onClick={this.onSubmit.bind(this)}>{buttonText}</span>
+        <div className='section-help'>
+          <span className={buttonClasses.join(' ')} onClick={this.onSubmit.bind(this)}>{buttonText}</span>
+        </div>
       </div>
     </div>
     )
