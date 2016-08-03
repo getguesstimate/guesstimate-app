@@ -15,12 +15,12 @@ export function get(collection, id){
 export function subset(graph, spaceId, withInputs = false){
   if (spaceId){
     const metrics = graph.metrics.filter(m => m.space === spaceId)
-    const simulations = _.flatten(guesstimates.map(g => _guesstimate.simulations(g, graph)))
 
     const rawGuesstimates = _.flatten(metrics.map(m => _metric.guesstimates(m, graph)))
     const expressionToInputFn = _guesstimate.expressionToInputFn(metrics)
-
     const guesstimates = withInputs ? rawGuesstimates.map(expressionToInputFn) : rawGuesstimates
+
+    const simulations = _.flatten(guesstimates.map(g => _guesstimate.simulations(g, graph)))
     return { metrics, guesstimates, simulations }
   } else {
     return graph
