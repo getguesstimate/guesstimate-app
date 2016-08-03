@@ -96,7 +96,7 @@ export default class OrganizationShow extends Component{
     const meIsMember = meIsAdmin || !!(members.find(m => m.id === this.props.me.id))
 
     if (!organization) { return false }
-    let tabs = [{name: 'Models', key: MODEL_TAB}, {name: 'Members', key: MEMBERS_TAB}, {name: 'Fact Book', key: FACT_BOOK_TAB}]
+    let tabs = [{name: 'Models', key: MODEL_TAB}, {name: 'Facts', key: FACT_BOOK_TAB}, {name: 'Members', key: MEMBERS_TAB}]
     const portalUrl = _.get(organization, 'account._links.payment_portal.href')
     if (!!portalUrl) { tabs = [...tabs, {name: 'Billing', key: 'BILLING', href: portalUrl, onMouseUp: this.refreshData.bind(this)}] }
 
@@ -145,7 +145,7 @@ export default class OrganizationShow extends Component{
             }
 
             {(openTab === FACT_BOOK_TAB) && meIsMember && !!facts &&
-              <FactListContainer organizationId={organizationId}/>
+              <FactTab organizationId={organizationId}/>
             }
           </div>
         </div>
@@ -196,3 +196,19 @@ const OrganizationTabButtons = ({tabs, openTab, changeTab}) => (
     </div>
   </div>
 )
+
+const FactTab = ({organizationId}) => (
+  <div className='FactTab row'>
+    <div className='col-md-3'>
+      <h1> Organization Facts </h1>
+      <p> Facts can be used in organization models by referencing them with '#' symbols. </p>
+    </div>
+
+    <div className='col-md-7'>
+      <div className='FactTab--factList'>
+        <FactListContainer organizationId={organizationId}/>
+      </div>
+    </div>
+  </div>
+)
+
