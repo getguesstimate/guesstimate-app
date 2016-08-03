@@ -17,7 +17,7 @@ export class FactListContainer extends Component{
   displayName: 'FactListContainer'
 
   render() {
-    const {organizationId, organizations, organizationFacts} = this.props
+    const {organizationId, organizations, organizationFacts, isEditable} = this.props
     const facts = _.get(organizationFacts.find(f => f.variable_name === `organization_${organizationId}`), 'children') || []
     const organization = organizations.find(u => u.id.toString() === organizationId.toString())
     return (
@@ -26,6 +26,7 @@ export class FactListContainer extends Component{
         onAddFact={fact => this.props.dispatch(organizationActions.addFact(organization, fact))}
         onEditFact={fact => this.props.dispatch(organizationActions.editFact(organization, fact))}
         facts={facts}
+        isEditable={isEditable}
       />
     )
   }

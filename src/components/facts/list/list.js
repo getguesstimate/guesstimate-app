@@ -28,6 +28,7 @@ export class FactList extends Component {
       <FactItem
         key={fact.id}
         fact={fact}
+        isEditable={this.props.isEditable}
         onEdit={() => {this.setState({editingFactId: fact.id})}}
         onDelete={() => {this.props.onDeleteFact(fact)}}
       />
@@ -62,7 +63,7 @@ export class FactList extends Component {
     return (
       <div className='FactsTab'>
         {this.renderFacts()}
-        {this.renderFactForm()}
+        {this.props.isEditable && this.renderFactForm()}
       </div>
     )
   }
