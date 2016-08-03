@@ -1,4 +1,4 @@
-import { createSelector } from 'reselect';
+import { createSelector } from 'reselect'
 import e from 'gEngine/engine'
 
 const NAME = "Denormalized Space Selector"
@@ -27,6 +27,7 @@ const SPACE_GRAPH_PARTS = [
   'userOrganizationMemberships',
   'me',
   'checkpoints',
+  'facts',
 ]
 
 const spaceGraphSelector = state => {
@@ -41,15 +42,14 @@ export const denormalizedSpaceSelector = createSelector(
   spaceIdSelector,
   canvasStateSelector,
   (graph, spaceId, canvasState) => {
-    let dSpace = e.space.toDSpace(spaceId, graph)
+    let denormalizedSpace = e.space.toDSpace(spaceId, graph, graph.facts.organizationFacts)
 
-    if (dSpace) {
-      dSpace.canvasState = canvasState
-      dSpace.checkpointMetadata = checkpointMetadata(spaceId, graph.checkpoints)
+    if (denormalizedSpace) {
+      denormalizedSpace.canvasState = canvasState
+      denormalizedSpace.checkpointMetadata = checkpointMetadata(spaceId, graph.checkpoints)
     }
 
-    window.recorder.recordSelectorStop(NAME, {denormalizedSpace: dSpace})
-
-    return { denormalizedSpace: dSpace }
+    window.recorder.recordSelectorStop(NAME, {denormalizedSpace})
+    return { denormalizedSpace }
   }
 )

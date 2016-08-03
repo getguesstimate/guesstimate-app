@@ -72,6 +72,10 @@ export class FactForm extends Component {
   }
   onSubmit() { this.props.onSubmit(this.state.runningFact) }
 
+  submitIfEnter(e){
+    if (e.keyCode === 13 && this.isValid()) {this.onSubmit()}
+  }
+
   render() {
     const buttonClasses = ['ui', 'button', 'tiny', 'primary', ...(this.isValid() ? [] : ['disabled'])]
     const {props: {buttonText}, state: {runningFact: {expression, name, variable_name}}} = this
@@ -99,7 +103,7 @@ export class FactForm extends Component {
                 placeholder='variable_name'
                 value={variable_name}
                 onChange={this.onChangeVariableName.bind(this)}
-                onKeyDown={(e) => {if (e.keyCode === 13 && this.isValid()) {this.onSubmit()}}}
+                onKeyDown={this.submitIfEnter.bind(this)}
               />
             </div>
           </div>
@@ -111,7 +115,7 @@ export class FactForm extends Component {
                 placeholder='description'
                 value={name}
                 onChange={this.onChangeName.bind(this)}
-                onKeyDown={(e) => {if (e.keyCode === 13 && this.isValid()) {this.onSubmit()}}}
+                onKeyDown={this.submitIfEnter.bind(this)}
               />
             </div>
           </div>

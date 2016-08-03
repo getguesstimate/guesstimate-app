@@ -2,6 +2,7 @@ import {PropTypes} from 'react'
 
 import generateRandomReadableId from './metric/generate_random_readable_id'
 import * as _guesstimate from './guesstimate'
+import * as _organization from './organization'
 
 import MetricPropagation from 'lib/propagation/metric-propagation'
 import {sortDescending} from 'lib/dataAnalysis'
@@ -32,7 +33,7 @@ export const FactPT = PropTypes.shape({
 export const HANDLE_REGEX = /(?:@\w+(?:\.\w+)?|#\w+)/g
 
 export const getVar = f => _.get(f, 'variable_name')
-const byVariableName = name => f => getVar(f) === name
+export const byVariableName = name => f => getVar(f) === name
 const namedLike = partial => f => getVar(f).startsWith(partial)
 
 export function withSortedValues(rawFact) {
@@ -71,7 +72,10 @@ const globalSelector = handle => handle.slice(1).split('.')
 const orgSelector = (orgId, handle) => [`organization_${orgId}`,handle.slice(1)]
 export const resolveToSelector = orgId => handle => handle.startsWith('#') ? orgSelector(orgId, handle) : globalSelector(handle)
 
-export function addFactsToSpaceGraph({metrics, guesstimates, simulations}, {globalFacts, organizationFacts}, {organization_id}) {
+const forOrg = org => byVariableName(_organization.organizationReadableId(org))
+export const getFactsForOrg = (facts, org) => (!org || _.isEmpty(facts)) ? [] : _.get(facts.find(forOrg(org)), 'children') || []
+
+export function addFactsToSpaceGraph({metrics, guesstimates, simulations}, globalFacts, organizationFacts, {organization_id}) {
   const possibleFacts = [...globalFacts, organizationFacts.find(f => f.variable_name === `organization_${organization_id}`)]
 
   // First we need to extract out the relevant fact handles, which we'll evaluate into full selectors, and the facts to

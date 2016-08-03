@@ -18,10 +18,7 @@ export function relationshipType(edges) {
 }
 
 export function create(graphAttributes) {
-  return {
-    ..._.pick(graphAttributes, ['metrics', 'guesstimates', 'simulations']),
-    ..._.pick(graphAttributes.facts, ['globalFacts', 'organizationFacts']),
-  }
+  return _.pick(graphAttributes, ['metrics', 'guesstimates', 'simulations'])
 }
 
 export function denormalize(graph) {

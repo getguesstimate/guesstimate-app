@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
 
 import * as organizationActions from 'gModules/organizations/actions'
+import {findFacts} from 'gEngine/organization.js'
 
 import {FactList} from './list.js'
 
@@ -18,7 +19,7 @@ export class FactListContainer extends Component{
 
   render() {
     const {organizationId, organizations, organizationFacts, isEditable} = this.props
-    const facts = _.get(organizationFacts.find(f => f.variable_name === `organization_${organizationId}`), 'children') || []
+    const facts = findFacts(organizationId, organizationFacts)
     const organization = organizations.find(u => u.id.toString() === organizationId.toString())
     return (
       <FactList
