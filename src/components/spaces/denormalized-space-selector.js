@@ -27,6 +27,7 @@ const SPACE_GRAPH_PARTS = [
   'userOrganizationMemberships',
   'me',
   'checkpoints',
+  'facts',
 ]
 
 const spaceGraphSelector = state => {
@@ -41,7 +42,7 @@ export const denormalizedSpaceSelector = createSelector(
   spaceIdSelector,
   canvasStateSelector,
   (graph, spaceId, canvasState) => {
-    let denormalizedSpace = e.space.toDSpace(spaceId, graph)
+    let denormalizedSpace = e.space.toDSpace(spaceId, graph, graph.facts.organizationFacts)
 
     if (denormalizedSpace) {
       denormalizedSpace.canvasState = canvasState

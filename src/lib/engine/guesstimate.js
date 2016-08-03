@@ -98,20 +98,28 @@ function _inputMetricsWithValues(guesstimate: Guesstimate, dGraph: DGraph): Obje
 
 // In the `expression` syntax, input metrics are expressed as `${[metric id]}`. To match that in a regex, and translate
 // to it, we need functions that wrap passed IDs in the right syntax, appropriately escaped.
-const expressionSyntaxPad = id => `\$\{${id}\}`
-const escapedExpressionSyntaxPad = id => `\\\$\\\{${id}\\\}`
+const expressionSyntaxPad = (id, isMetric=true) => `\$\{${isMetric ? 'metric' : 'fact'}:${id}\}`
+const escapedExpressionSyntaxPad = (id, isMetric=true) => `\\\$\\\{${isMetric ? 'metric' : 'fact'}:${id}\\\}`
 
 // Returns a function which takes a guesstimate and returns that guesstimate with an input based on its
 // expression.
-export function expressionToInputFn(metrics) {
+export function expressionToInputFn(metrics=[], facts=[]) {
   let idMap = {}, reParts = []
-  metrics.forEach( ({id, readableId}) => {reParts.push(escapedExpressionSyntaxPad(id)); idMap[expressionSyntaxPad(id)] = readableId} )
+  metrics.forEach( ({id, readableId}) => {
+    reParts.push(escapedExpressionSyntaxPad(id, true))
+    idMap[expressionSyntaxPad(id, true)] = readableId
+  })
+  facts.forEach( ({id, variable_name}) => {
+    reParts.push(escapedExpressionSyntaxPad(id, false))
+    idMap[expressionSyntaxPad(id, false)] = `#${variable_name}`}
+  )
+  const regex = RegExp(reParts.join('|'), 'g')
 
-  const translateFn = ({expression}) => expression.replace(RegExp(reParts.join('|'), 'g'), match => idMap[match])
+  const translateFn = ({expression}) => expression.replace(regex, match => idMap[match])
   return g => (!_.isEmpty(g.input) || _.isEmpty(g.expression)) ? g : {...g, input: translateFn(g)}
 }
 
 // Returns an expression based on the passed input and idMap.
 export function inputToExpression(input, idMap) {
-  return input.replace(RegExp(Object.keys(idMap).join('|'), 'g'), match => expressionSyntaxPad(idMap[match]))
+  return input.replace(RegExp(Object.keys(idMap).join('|'), 'g'), match => expressionSyntaxPad(idMap[match].id, idMap[match].isMetric))
 }

@@ -19,7 +19,6 @@ import * as canvasStateProps from 'gModules/canvas_state/prop_type'
 
 import * as segment from 'servers/segment'
 
-
 import './style.css'
 
 import {isLocation, isAtLocation, existsAtLoc, isWithinRegion} from 'lib/locationUtils.js'
@@ -29,6 +28,7 @@ function mapStateToProps(state) {
     copied: state.copied,
     selectedCell: state.selectedCell,
     selectedRegion: state.selectedRegion,
+    organizationFacts: state.facts.organizationFacts,
   }
 }
 
@@ -133,10 +133,6 @@ export default class Canvas extends Component{
     return _.isEmpty(metric.name) && _.isEmpty(input) && _.isEmpty(data)
   }
 
-  metricIdsMap() {
-    const metrics = _.get(this, 'props.denormalizedSpace.metrics') || []
-    return metrics.reduce((map, curr) => _.set(map, curr.readableId, curr.id), {})
-  }
 
   renderMetric(metric, selected) {
     const {location} = metric
@@ -150,7 +146,7 @@ export default class Canvas extends Component{
         location={location}
         metric={metric}
         organizationId={this.props.denormalizedSpace.organization_id}
-        metricIdsMap={this.metricIdsMap()}
+        readableIdsMap={this.props.denormalizedSpace.readableIdsMap}
         selectedMetric={passSelected && selected}
       />
     )
