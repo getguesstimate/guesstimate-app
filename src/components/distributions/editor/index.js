@@ -54,7 +54,6 @@ export default class Guesstimate extends Component{
 
   changeInput(input) {
     const expression = inputToExpression(input, this.props.readableIdsMap)
-    console.log(expression)
 
     const guesstimateType = this._guesstimateType({input})
     this.changeGuesstimate({data: null, input: '', expression, guesstimateType}, true, false)

@@ -48,7 +48,6 @@ export function toDSpace(spaceId, graph, organizationFacts) {
   if (!space) { return {} }
 
   let dSpace = Object.assign(space.asMutable(), toDgraph(space.id, graph))
-  console.log(dSpace.metrics.map(m => m.guesstimate.input))
 
   const org = organization(dSpace, graph)
   const possibleFacts = !!org ? _facts.getFactsForOrg(organizationFacts, org) : []
