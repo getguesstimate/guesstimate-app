@@ -35,9 +35,10 @@ export class FactList extends Component {
     )
   }
 
-  renderEditFact(fact) {
+  renderEditForm(fact) {
     const {facts, onEditFact} = this.props
     return <FactForm
+      startingFact={fact}
       key={fact.id}
       existingVariableNames={facts.map(getVar).filter(v => v !== getVar(fact))}
       buttonText={'Save'}
@@ -63,7 +64,7 @@ export class FactList extends Component {
     const editingFactIndex = facts.findIndex(fact => fact.id === editingFactId)
     return [
       ..._.map(facts.slice(0, editingFactIndex), this.renderFactShow.bind(this)),
-      this.renderEditFact(facts[editingFactIndex]),
+      this.renderEditForm(facts[editingFactIndex]),
       ..._.map(facts.slice(editingFactIndex + 1), this.renderFactShow.bind(this)),
     ]
   }
