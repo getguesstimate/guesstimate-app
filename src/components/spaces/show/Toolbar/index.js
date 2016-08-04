@@ -213,9 +213,9 @@ export class SpaceToolbar extends Component {
               </div>
             }
 
-            <a onClick={showFactSidebar} className={`header-action`}>
-              <Icon name='bank'/>
-            </a>
+            {this.props.canShowFactSidebar &&
+              <a onClick={showFactSidebar} className={`header-action`}> <Icon name='bank'/> </a>
+            }
 
             {editableByMe && editsAllowed && <ProgressMessage actionState={actionState}/>}
 

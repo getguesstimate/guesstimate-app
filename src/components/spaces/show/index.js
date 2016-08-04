@@ -302,9 +302,14 @@ export default class SpacesShow extends Component {
     )
   }
 
+  canShowFactSidebar() {
+    const orgId = _.get(this, 'props.denormalizedSpace.organization.id')
+    return !!orgId && (__DEV__ || orgId === 1)
+  }
+
   factSidebar() {
     const {state: {showFactSidebar}} = this
-    if (!showFactSidebar) { return false }
+    if (!(this.canShowFactSidebar() && showFactSidebar)) { return false }
     return (
       <div className='SpaceRightSidebar grey'>
         <div className='SpaceRightSidebar--padded-area'>
@@ -318,7 +323,7 @@ export default class SpacesShow extends Component {
         </div>
         <hr className='SpaceRightSidebar--divider'/>
         <div className='SpaceRightSidebar--padded-area'>
-          <FactListContainer organizationId={1} isEditable={false}/>
+          <FactListContainer organizationId={this.props.denormalizedSpace.organization.id} isEditable={false}/>
         </div>
       </div>
     )
@@ -416,6 +421,7 @@ export default class SpacesShow extends Component {
             showCalculatorForm={this.showCalculatorForm.bind(this)}
             showCalculator={this.showCalculator.bind(this)}
             showFactSidebar={this.showFactSidebar.bind(this)}
+            canShowFactSidebar={this.canShowFactSidebar()}
           />
         </div>
 
