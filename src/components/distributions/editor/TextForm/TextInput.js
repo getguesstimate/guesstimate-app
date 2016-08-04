@@ -109,7 +109,7 @@ export class TextInput extends Component{
     const partial = resolveToSelector(this.props.organizationId)(this.prevWord()).pop()
 
     const extraDecorators = [
-      positionDecorator(this.cursorPosition() - this.prevWord().length - 1, this.cursorPosition(), Fact),
+      positionDecorator(this.cursorPosition() - this.prevWord().length, this.cursorPosition(), Fact),
       positionDecorator(this.cursorPosition(), this.cursorPosition() + this.props.suggestion.length, Suggestion),
     ]
 
