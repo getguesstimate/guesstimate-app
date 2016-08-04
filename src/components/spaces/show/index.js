@@ -51,6 +51,41 @@ function spacePrepared(space) {
 
 const PT = PropTypes
 
+const CLOSED = 0
+const NEW_CALCULATOR_FORM = 1
+const EDIT_CALCULATOR_FORM = 2
+const SHOW_CALCULATOR = 3
+const FACT_SIDEBAR = 4
+
+const ShowCalculatorHeader = ({id, editableByMe, onEdit, onDelete, onClose}) => (
+  <div className='row'>
+    <div className='col-xs-12'>
+      <div className='button-close-text'>
+        <ButtonExpandText onClick={navigateFn(`/calculators/${showCalculatorId}`)}/>
+        {editableByMe && <ButtonEditText onClick={onEdit}/>}
+        {editableByMe && <ButtonDeleteText onClick={onDelete}/>}
+        <ButtonCloseText onClick={onClose}/>
+      </div>
+    </div>
+  </div>
+)
+
+const CalculatorFormHeader = ({isNew, onClose}) => (
+  <div className='row'>
+    <div className='col-xs-8'><h2>{`${isNew ? 'New' : 'Edit'} Calculator`}</h2></div>
+    <div className='col-xs-4 button-close-text'><ButtonCloseText onClick={onClose}/></div>
+  </div>
+)
+
+const FactSidebarHeader = ({onClose}) => (
+  <div className='row'>
+    <div className='col-xs-12'>
+      <div className='button-close-text'><ButtonCloseText onClick={onClose}/></div>
+    </div>
+  </div>
+)
+
+
 @connect(mapStateToProps)
 @connect(denormalizedSpaceSelector)
 export default class SpacesShow extends Component {
@@ -64,13 +99,12 @@ export default class SpacesShow extends Component {
   }
 
   state = {
-    showSidebar: true,
+    showLeftSidebar: true,
     attemptedFetch: false,
-    showNewCalculatorForm: false,
-    showEditCalculatorForm: null,
-    showFactSidebar: false,
-    showCalculatorId: this.props.showCalculatorId,
-    showCalculatorResults: this.props.showCalculatorResults,
+    rightSidebar: {
+      type: !!this.props.showCalculatorId ? SHOW_CALCULATOR : CLOSED,
+      showCalculatorResults: this.props.showCalculatorResults,
+    },
   }
 
   componentWillMount() {
@@ -121,31 +155,6 @@ export default class SpacesShow extends Component {
       this.props.dispatch(spaceActions.fetchById(this._id()))
       this.setState({attemptedFetch: true})
     }
-  }
-
-  showCalculatorForm(calcToEdit) {
-    elev.hide()
-    !!calcToEdit ? this.setState({showEditCalculatorForm: calcToEdit}) : this.setState({showNewCalculatorForm: true})
-  }
-
-  showCalculator(showCalculatorId) {
-    elev.hide()
-    this.setState({showCalculatorForm: false, showCalculatorId})
-  }
-
-  hideCalculatorSidebar() {
-    elev.show()
-    this.setState({showCalculatorId: null, showCalculatorResults: false, showNewCalculatorForm: false, showEditCalculatorForm: null})
-  }
-
-  showFactSidebar() {
-    elev.hide()
-    this.setState({showFactSidebar: true})
-  }
-
-  hideFactSidebar() {
-    elev.show()
-    this.setState({showFactSidebar: false})
   }
 
   onSave() {
@@ -200,13 +209,13 @@ export default class SpacesShow extends Component {
     this.props.dispatch(spaceActions.update(this._id(), {description}))
   }
 
-  hideSidebar() {
+  hideLeftSidebar() {
     segment.trackCloseSidebar()
-    this.setState({showSidebar: false})
+    this.setState({showLeftSidebar: false})
   }
-  openSidebar() {
+  openLeftSidebar() {
     segment.trackOpenSidebar()
-    this.setState({showSidebar: true})
+    this.setState({showLeftSidebar: true})
   }
 
   _handleCopyModel() {
@@ -237,94 +246,88 @@ export default class SpacesShow extends Component {
     return parseInt(this.props.spaceId)
   }
 
-  calculatorFormHeader() {
-    return (
-      <div className='row'>
-        <div className='col-xs-8'><h2>{`${this.state.showNewCalculatorForm ? 'New' : 'Edit'} Calculator`}</h2></div>
-        <div className='col-xs-4 button-close-text'><ButtonCloseText onClick={this.hideCalculatorSidebar.bind(this)}/></div>
-      </div>
-    )
-  }
-
-  showCalculatorHeader() {
-    const {state: {showCalculatorId}, props: {denormalizedSpace: {editableByMe, calculators}}} = this
-    return (
-      <div className='row'>
-        <div className='col-xs-12'>
-          <div className='button-close-text'>
-            <ButtonExpandText onClick={navigateFn(`/calculators/${showCalculatorId}`)}/>
-            {editableByMe &&
-              <ButtonEditText onClick={() => {this.setState({showEditCalculatorForm: calculators.find(c => c.id === showCalculatorId)})}}/>
-            }
-            {editableByMe &&
-              <ButtonDeleteText onClick={
-                () => {
-                  this.props.dispatch(calculatorActions.destroy(showCalculatorId))
-                  this.hideCalculatorSidebar()
-                }
-              }/>
-            }
-            <ButtonCloseText onClick={this.hideCalculatorSidebar.bind(this)}/>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  calculatorSidebar() {
-    const {state: {showNewCalculatorForm, showEditCalculatorForm, showCalculatorResults, showCalculatorId}, props: {denormalizedSpace}} = this
-
-    if (!showNewCalculatorForm && !showEditCalculatorForm && !showCalculatorId) { return false }
-
-    const header = (showNewCalculatorForm || showEditCalculatorForm) ? this.calculatorFormHeader() : this.showCalculatorHeader()
-    let main
-    if (showNewCalculatorForm) {
-      main = <NewCalculatorForm
-        space={denormalizedSpace}
-        onCalculatorSave={({id}) => this.setState({showNewCalculatorForm: false, showCalculatorId: id})}
-      />
-    } else if (!!showEditCalculatorForm) {
-      main = <EditCalculatorForm
-        space={denormalizedSpace}
-        calculator={this.state.showEditCalculatorForm}
-        onCalculatorSave={({id}) => this.setState({showEditCalculatorForm: null, showCalculatorId: id})}
-      />
-    } else {
-      main = <CalculatorCompressedShow calculatorId={showCalculatorId} startFilled={showCalculatorResults}/>
-    }
-
-    return (
-      <div className='SpaceRightSidebar'>
-        <div className='SpaceRightSidebar--padded-area'>{header}</div>
-        <hr className='SpaceRightSidebar--divider'/>
-        {main}
-      </div>
-    )
-  }
-
   canShowFactSidebar() {
     const orgId = _.get(this, 'props.denormalizedSpace.organization.id')
     return !!orgId && (__DEV__ || orgId === 1)
   }
 
-  factSidebar() {
-    const {state: {showFactSidebar}} = this
-    if (!(this.canShowFactSidebar() && showFactSidebar)) { return false }
-    return (
-      <div className='SpaceRightSidebar grey'>
-        <div className='SpaceRightSidebar--padded-area'>
-          <div className='row'>
-            <div className='col-xs-12'>
-              <div className='button-close-text'>
-                <ButtonCloseText onClick={this.hideFactSidebar.bind(this)}/>
-              </div>
+  closeRightSidebar() {
+    elev.show()
+    this.setState({rightSidebar: {type: CLOSED}})
+  }
+  openRightSidebar(rightSidebarState) {
+    elev.hide()
+    this.setState({rightSidebar: rightSidebarState}) 
+  }
+  showCalculator({id}) { this.openRightSidebar({type: SHOW_CALCULATOR, showCalculatorId: id}) }
+  editCalculator(id) { this.openRightSidebar({type: EDIT_CALCULATOR_FORM, editCalculatorId: id}) }
+  makeNewCalculator() { this.openRightSidebar({type: NEW_CALCULATOR_FORM}) }
+  showFactSidebar() { if (this.canShowFactSidebar()) { this.openRightSidebar({type: FACT_SIDEBAR}) } }
+
+  rightSidebarBody() {
+    const {props: {denormalizedSpace}, state: {rightSidebar: {type, showCalculatorResults, showCalculatorId, editCalculatorId}}} = this
+    const {editableByMe, calculators, organization} = denormalizedSpace
+    switch (type) {
+      case CLOSED:
+        return {}
+      case SHOW_CALCULATOR:
+        return {
+          classes: [],
+          header: (
+            <ShowCalculatorHeader
+              editableByMe={editableByMe}
+              onEdit={this.editCalculator.bind(this, showCalculatorId)}
+              onDelete={this.deleteCalculator.bind(this, showCalculatorId)}
+              onClose={this.closeRightSidebar.bind(this)}
+            />
+          ),
+          main: <CalculatorCompressedShow calculatorId={showCalculatorId} startFilled={showCalculatorResults}/>,
+        }
+      case EDIT_CALCULATOR_FORM:
+        return {
+          classes: [],
+          header: <CalculatorFormHeader isNew={false} onClose={this.closeRightSidebar.bind(this)}/>,
+          main: (
+            <EditCalculatorForm
+              space={denormalizedSpace}
+              calculator={calculators.find(c => c.id === editCalculatorId)}
+              onCalculatorSave={this.showCalculator.bind(this)}
+            />
+          ),
+        }
+      case NEW_CALCULATOR_FORM:
+        return {
+          classes: [],
+          header: <CalculatorFormHeader isNew={true} onClose={this.closeRightSidebar.bind(this)}/>,
+          main: (
+            <NewCalculatorForm
+              space={denormalizedSpace}
+              onCalculatorSave={this.showCalculator.bind(this)}
+            />
+          ),
+        }
+      case FACT_SIDEBAR:
+        return {
+          classes: ['grey'],
+          header: <FactSidebarHeader onClose={this.closeRightSidebar.bind(this)} />,
+          main: (
+            <div className='SpaceRightSidebar--padded-area'>
+              <FactListContainer organizationId={organization.id} isEditable={false}/>
             </div>
-          </div>
-        </div>
+          ),
+        }
+    }
+  }
+
+  rightSidebar() {
+    if (this.state.rightSidebar.type === CLOSED) { return false }
+    const {classes, header, main} = this.rightSidebarBody()
+
+    return (
+      <div className={['SpaceRightSidebar', ...classes].join(' ')} >
+        <div className='SpaceRightSidebar--padded-area'>{header}</div>
         <hr className='SpaceRightSidebar--divider'/>
-        <div className='SpaceRightSidebar--padded-area'>
-          <FactListContainer organizationId={this.props.denormalizedSpace.organization.id} isEditable={false}/>
-        </div>
+        {main}
       </div>
     )
   }
@@ -418,7 +421,7 @@ export default class SpacesShow extends Component {
             canRedo={space.checkpointMetadata.head !== 0}
             onImportSlurp={this.onImportSlurp.bind(this)}
             calculators={space.calculators}
-            showCalculatorForm={this.showCalculatorForm.bind(this)}
+            makeNewCalculator={this.makeNewCalculator.bind(this)}
             showCalculator={this.showCalculator.bind(this)}
             showFactSidebar={this.showFactSidebar.bind(this)}
             canShowFactSidebar={this.canShowFactSidebar()}
@@ -426,16 +429,16 @@ export default class SpacesShow extends Component {
         </div>
 
         <div className='content'>
-          {sidebarIsViseable && this.state.showSidebar &&
+          {sidebarIsViseable && this.state.showLeftSidebar &&
             <SpaceSidebar
               description={space.description}
               canEdit={space.editableByMe}
-              onClose={this.hideSidebar.bind(this)}
+              onClose={this.hideLeftSidebar.bind(this)}
               onSaveDescription={this.onSaveDescription.bind(this)}
             />
           }
-          {sidebarIsViseable && !this.state.showSidebar &&
-            <ClosedSpaceSidebar onOpen={this.openSidebar.bind(this)}/>
+          {sidebarIsViseable && !this.state.showLeftSidebar &&
+            <ClosedSpaceSidebar onOpen={this.openLeftSidebar.bind(this)}/>
           }
           <Canvas
             denormalizedSpace={space}
@@ -443,8 +446,7 @@ export default class SpacesShow extends Component {
             onPaste={this.onPaste.bind(this, true)}
             onCut={this.onCut.bind(this, true)}
           />
-          {this.calculatorSidebar()}
-          {this.factSidebar()}
+          {this.rightSidebar()}
         </div>
       </div>
     )
