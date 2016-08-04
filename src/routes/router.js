@@ -30,9 +30,6 @@ import configureStore from './middleware'
 
 import * as segment from 'servers/segment/index'
 
-const ORGANIZATION_TAB_REGEX = /tab=(\w+)/
-const extractOrganizationTab = query => ORGANIZATION_TAB_REGEX.test(query) ? query.match(ORGANIZATION_TAB_REGEX)[1] : null
-
 export default Router.extend({
   render (page, options={}) {
     let store = configureStore()
@@ -57,7 +54,7 @@ export default Router.extend({
     'privacy': 'privacy',
     'users/:id': 'userShow',
     'organizations/new': 'organizationsNew',
-    'organizations/:id': 'organizationShow',
+    'organizations/:id(/:tab)': 'organizationShow',
     'style_guide': 'styleGuide',
     'style_guide/first_subscription': 'styleGuideFirstSubscription',
     'style_guide/settings': 'styleGuideSettings',
@@ -88,7 +85,7 @@ export default Router.extend({
   faq() { this.render(<FAQ/>) },
   subscribe(id) { this.render(<FirstSubscriptionPage planName={id}/>) },
   userShow(id) { this.render(<UserShow userId={id}/>, {backgroundColor: 'GREY'}) },
-    organizationShow(id) { this.render(<OrganizationShow organizationId={id} key={id} tab={extractOrganizationTab(window.location.search)}/>, {backgroundColor: 'GREY'}) },
+  organizationShow(id, tab=null) { this.render(<OrganizationShow organizationId={id} key={id} tab={tab}/>, {backgroundColor: 'GREY'}) },
   organizationsNew() { this.render(<CreateOrganizationPageContainer/>, {backgroundColor: 'GREY'}) },
   pricing() { this.render(<PlanIndex/>, {backgroundColor: 'GREY'}) },
   calculatorExpandedShow(id) { this.render(<CalculatorExpandedShow calculatorId={parseInt(id)} key={parseInt(id)}/>, {showFooter: false, backgroundColor: 'GREY'}) },
