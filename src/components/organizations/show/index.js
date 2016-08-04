@@ -15,8 +15,9 @@ import {organizationSpaceSelector} from './organizationSpaceSelector'
 import {organizationMemberSelector} from './organizationMemberSelector'
 
 import * as modalActions from 'gModules/modal/actions'
-import * as spaceActions from 'gModules/spaces/actions'
+import {navigate} from 'gModules/navigation/actions'
 import * as organizationActions from 'gModules/organizations/actions'
+import * as spaceActions from 'gModules/spaces/actions'
 import * as userOrganizationMembershipActions from 'gModules/userOrganizationMemberships/actions'
 
 import e from 'gEngine/engine'
@@ -57,10 +58,16 @@ export default class OrganizationShow extends Component{
     this.props.dispatch(spaceActions.fetch({organizationId: this.props.organizationId}))
   }
 
-  changeTab(tab) {
-    this.setState({
-      openTab: tab,
-    })
+  url(openTab) {
+    const organization = this.props.organizations.find(u => u.id.toString() === this.props.organizationId.toString())
+    const base = e.organization.url(organization)
+    if (_.isEmpty(base)) { return '' }
+    return `${base}/${openTab}`
+  }
+
+  changeTab(openTab) {
+    navigate(this.url(openTab), {trigger: false})
+    this.setState({openTab})
   }
 
   _newModel() {
