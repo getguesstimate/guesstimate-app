@@ -61,7 +61,6 @@ export class FactForm extends Component {
   isVariableNameUnique() { return !_.some(this.props.existingVariableNames, n => n === this.state.runningFact.variable_name) }
   isValid() {
     const requiredProperties = [
-      'name',
       'variable_name',
       'expression',
       'simulation.sample.values',
