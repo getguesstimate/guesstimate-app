@@ -35,16 +35,25 @@ export class FactList extends Component {
     )
   }
 
-  renderFactForm(fact = null) {
+  renderEditFact(fact) {
     const {facts, onEditFact} = this.props
-    let props = {
-      key: !!fact ? fact.id : this.state.newFactKey.toString(),
-      existingVariableNames: facts.map(getVar).filter(v => v !== getVar(fact)),
-      buttonText: !!fact ? 'Save' : 'Create',
-      onSubmit: (!!fact ? onEditFact : this.onAddFact.bind(this)),
-    }
-    if (!!fact) {props.startingFact = fact}
-    return (<FactForm {...props}/>)
+    return <FactForm
+      key={fact.id}
+      existingVariableNames={facts.map(getVar).filter(v => v !== getVar(fact))}
+      buttonText={'Save'}
+      onSubmit={onEditFact}
+      onCancel={() => {this.setState({editingFactId: null})}}
+    />
+  }
+
+  renderNewForm() {
+    const {facts} = this.props
+    return <FactForm
+      key={this.state.newFactKey.toString()}
+      existingVariableNames={facts.map(getVar)}
+      buttonText={'Create'}
+      onSubmit={this.onAddFact.bind(this)}
+    />
   }
 
   renderFacts() {
@@ -54,7 +63,7 @@ export class FactList extends Component {
     const editingFactIndex = facts.findIndex(fact => fact.id === editingFactId)
     return [
       ..._.map(facts.slice(0, editingFactIndex), this.renderFactShow.bind(this)),
-      this.renderFactForm(facts[editingFactIndex]),
+      this.renderEditFact(facts[editingFactIndex]),
       ..._.map(facts.slice(editingFactIndex + 1), this.renderFactShow.bind(this)),
     ]
   }
@@ -63,7 +72,7 @@ export class FactList extends Component {
     return (
       <div className='FactsTab'>
         {this.renderFacts()}
-        {this.props.isEditable && this.renderFactForm()}
+        {this.props.isEditable && this.renderNewForm()}
       </div>
     )
   }
