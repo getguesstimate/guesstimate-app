@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react'
 
 import {GuesstimateTypeIcon} from './GuesstimateTypeIcon'
-import TextInput from './TextInput'
+import {TextInput} from './TextInput'
 import DistributionSelector from './DistributionSelector'
 
 export class TextForm extends Component{
@@ -46,6 +46,7 @@ export class TextForm extends Component{
       onEscape,
       size,
       errors,
+      organizationId,
       onChangeInput,
       onAddData,
       onChangeGuesstimateType,
@@ -79,6 +80,7 @@ export class TextForm extends Component{
             ref='TextInput'
             errors={errors}
             width={shouldBeWide ? 'NARROW' : "WIDE"}
+            organizationId={organizationId}
           />
 
           { shouldDisplayType &&

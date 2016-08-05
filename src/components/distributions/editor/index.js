@@ -53,9 +53,8 @@ export default class Guesstimate extends Component{
   }
 
   changeInput(input) {
-    const expression = inputToExpression(input, this.props.metricIdsMap)
     const guesstimateType = this._guesstimateType({input})
-    this.changeGuesstimate({data: null, input: null, expression, guesstimateType}, true, false)
+    this.changeGuesstimate({data: null, input, guesstimateType}, true, false)
     if (guesstimateType === 'FUNCTION' && this.props.guesstimateType !== 'FUNCTION') {
       this._changeMetricClickMode('FUNCTION_INPUT_SELECT')
     }
@@ -91,7 +90,7 @@ export default class Guesstimate extends Component{
   }
 
   render () {
-    const {size, guesstimate, inputMetrics, onOpen, errors} = this.props
+    const {size, guesstimate, inputMetrics, onOpen, errors, organizationId} = this.props
     if(guesstimate.metric !== this.props.metricId) { return false }
 
     const hasData = !!guesstimate.data
@@ -124,6 +123,7 @@ export default class Guesstimate extends Component{
             onFocus={this.props.onEdit}
             size={size}
             errors={errors}
+            organizationId={organizationId}
             ref='TextForm'
           />
         }

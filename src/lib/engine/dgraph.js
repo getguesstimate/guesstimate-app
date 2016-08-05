@@ -1,8 +1,11 @@
 /* @flow */
 import * as graph from './graph'
 import * as _guesstimate from './guesstimate'
+import * as _facts from './facts'
+
 import type {DGraph, Sample} from './types'
-import {INTERNAL_ERROR} from 'lib/errors/modelErrors'
+import {INTERNAL_ERROR, MATH_ERROR} from 'lib/errors/modelErrors'
+
 
 //borrowing a function from the graph library
 const metric = graph.metric
@@ -11,7 +14,11 @@ export function runSimulation(dGraph:DGraph, metricId:string, n:number) {
   const m = metric(dGraph, metricId)
   if (!m) {
     console.warn('Unknown metric referenced')
-    return Promise.resolve({errors: [{type: INTERNAL_ERROR, message: 'Unknown metric referenced'}]})
+    return Promise.resolve({sample: {errors: [{type: INTERNAL_ERROR, message: 'Unknown metric referenced'}]}})
+  } else if (_facts.HANDLE_REGEX.test(m.guesstimate.input)) {
+    const unresolvedFacts = m.guesstimate.input.match(_facts.HANDLE_REGEX)
+    const message = `Unknown Fact${unresolvedFacts.length > 1 ? 's' : ''} Referenced: ${unresolvedFacts.join(', ')}`
+    return Promise.resolve({sample: {errors: [{type: MATH_ERROR, message}]}})
   }
   return _guesstimate.sample(m.guesstimate, dGraph, n)
 }

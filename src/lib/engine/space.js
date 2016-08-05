@@ -3,6 +3,7 @@ import * as _dGraph from './dgraph'
 import * as _metric from './metric'
 import * as _guesstimate from './guesstimate'
 import * as _userOrganizationMemberships from './userOrganizationMemberships'
+import * as _facts from './facts'
 
 export function url (space) {
   return (!!space) ? ('/models/' + space.id) : ''
@@ -12,14 +13,10 @@ export function get(collection, id){
   return collection.find(i => (i.id === id))
 }
 
-export function subset(graph, spaceId, withInputs = false){
+export function subset(graph, spaceId){
   if (spaceId){
     const metrics = graph.metrics.filter(m => m.space === spaceId)
-
-    const rawGuesstimates = _.flatten(metrics.map(m => _metric.guesstimates(m, graph)))
-    const expressionToInputFn = _guesstimate.expressionToInputFn(metrics)
-    const guesstimates = withInputs ? rawGuesstimates.map(expressionToInputFn) : rawGuesstimates
-
+    const guesstimates = _.flatten(metrics.map(m => _metric.guesstimates(m, graph)))
     const simulations = _.flatten(guesstimates.map(g => _guesstimate.simulations(g, graph)))
     return { metrics, guesstimates, simulations }
   } else {
@@ -27,47 +24,44 @@ export function subset(graph, spaceId, withInputs = false){
   }
 }
 
-export function withGraph(space, graph){
-  return {...space, graph: subset(graph, space.id)}
+export function expressionsToInputs(graph, facts) {
+  const expressionToInputFn = _guesstimate.expressionToInputFn(graph.metrics, facts)
+  return {...graph, guesstimates: graph.guesstimates.map(expressionToInputFn)}
 }
 
-const sameIds = (u1, u2) => {
-  return u1 && u2 && (u1.toString() === u2.toString())
+export const withGraph = (space, graph) => ({...space, graph: subset(graph, space.id)})
+
+const sameIds = (u1, u2) => u1 && u2 && (u1.toString() === u2.toString())
+const user = (space, graph) => graph.users.find(e => sameIds(e.id, space.user_id))
+const organization = (space, graph) => (graph.organizations || []).find(e => sameIds(e.id, space.organization_id))
+
+export function possibleFacts(space, graph, organizationFacts) {
+  const org = organization(space, graph)
+  return !!org ? _facts.getFactsForOrg(organizationFacts, org) : []
 }
 
-const user = (space, graph) => {
-  return graph.users.find(e => sameIds(e.id, space.user_id))
-}
-
-const organization = (space, graph) => {
-  return graph.organizations.find(e => sameIds(e.id, space.organization_id))
-}
-
-export function toDSpace(spaceId, graph) {
+export function toDSpace(spaceId, graph, organizationFacts) {
   let space = graph.spaces && graph.spaces.find(s => sameIds(s.id, spaceId))
   if (!space) { return {} }
 
   let dSpace = Object.assign(space.asMutable(), toDgraph(space.id, graph))
 
-  dSpace.edges = _dGraph.dependencyMap(dSpace)
+  const facts = possibleFacts(dSpace, graph, organizationFacts)
+  const withInputFn = _guesstimate.expressionToInputFn(dSpace.metrics, facts)
 
-  const withInputFn = _guesstimate.expressionToInputFn(dSpace.metrics)
+  dSpace.metrics = dSpace.metrics.map(m => ({...m, guesstimate: withInputFn(m.guesstimate)}))
+
+  dSpace.edges = _dGraph.dependencyMap(dSpace)
   dSpace.metrics = dSpace.metrics.map(s => {
     let edges = {}
     edges.inputs = dSpace.edges.filter(i => i.output === s.id).map(e => e.input)
     edges.outputs = dSpace.edges.filter(i => i.input === s.id).map(e => e.output)
     edges.inputMetrics = edges.inputs.map(i => dSpace.metrics.find(m => m.id === i))
-    return {
-      ...s,
-      edges,
-      guesstimate: withInputFn(s.guesstimate),
-    }
+    return { ...s, edges }
   })
 
   return dSpace
 }
-
- 
 
 export function toDgraph(spaceId, graph){
   let dGraph = _graph.denormalize(subset(graph, spaceId))
