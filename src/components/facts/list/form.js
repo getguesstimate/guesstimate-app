@@ -3,6 +3,8 @@ import React, {Component, PropTypes} from 'react'
 import {simulateFact, FactPT} from 'gEngine/facts'
 import {addStats} from 'gEngine/simulation'
 
+import {isData, formatData} from 'lib/guesstimator/formatter/formatters/Data'
+
 const readableIdPartFromWord = word => (/\d/).test(word) ? word : word[0]
 function getVariableNameFromName(rawName) {
   const name = rawName.trim().replace(/[^\w\d]/g, ' ').toLowerCase()
@@ -51,11 +53,18 @@ export class FactForm extends Component {
   onChangeVariableName(e) { this.setFactState({variable_name: _.get(e, 'target.value')}, {variableNameManuallySet: true}) }
   onChangeExpression(e) { this.setFactState({expression: _.get(e, 'target.value')}) }
   onBlurExpression() {
-    simulateFact(this.state.runningFact).then(({values, errors}) => {
-      let simulation = {sample: {values, errors}}
+    const {runningFact} = this.state
+    if (isData(runningFact.expression)) {
+      let simulation = {sample: {values: formatData(runningFact.expression)}}
       addStats(simulation)
       this.setFactState({simulation})
-    })
+    } else {
+      simulateFact(this.state.runningFact).then(({values, errors}) => {
+        let simulation = {sample: {values, errors}}
+        addStats(simulation)
+        this.setFactState({simulation})
+      })
+    }
   }
 
   isExpressionValid() { return _.isEmpty(_.get(this, 'state.runningFact.simulation.sample.errors')) }
