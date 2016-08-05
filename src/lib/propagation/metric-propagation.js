@@ -70,7 +70,6 @@ export default class MetricPropagation {
       return this.simulate(sampleCount, graph, dispatch).then(
         simulation => {
           if (simulation) {
-            console.log(simulation)
             this._dispatch(dispatch, simulation)
 
             this.stepNumber++
