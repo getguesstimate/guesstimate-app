@@ -39,10 +39,17 @@ export function format(guesstimate: Guesstimate): Guesstimate {
 
 export const extractFactHandles = ({input}) => _.isEmpty(input) ? [] : input.match(HANDLE_REGEX)
 
+const padNonAlphaNumeric = str => `(?:[^\\w]|^)(${str})(?:[^\\w]|$)`
+
 function translateReadableIds(input, idMap) {
   if (!input) {return ""}
-  const re = RegExp(Object.keys(idMap).join("|"), "g")
-  return input.replace(re, (match) => idMap[match])
+
+  const ids = _.sortBy(Object.keys(idMap), id => -id.length)
+
+  let translatedInput = input
+  ids.forEach(id => {translatedInput = translatedInput.replace(id, idMap[id])})
+
+  return translatedInput
 }
 
 export function translateFactHandleFn(handleMap) {
