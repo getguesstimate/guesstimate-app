@@ -34,6 +34,7 @@ export class FactForm extends Component {
   static propTypes = {
     existingVariableNames: PropTypes.arrayOf(PropTypes.string).isRequired,
     onSubmit: PropTypes.func.isRequired,
+    onCancel: PropTypes.func,
     startingFact: FactPT,
   }
 
@@ -77,7 +78,7 @@ export class FactForm extends Component {
 
   render() {
     const buttonClasses = ['ui', 'button', 'tiny', 'primary', ...(this.isValid() ? [] : ['disabled'])]
-    const {props: {buttonText}, state: {runningFact: {expression, name, variable_name}}} = this
+    const {props: {buttonText, onCancel}, state: {runningFact: {expression, name, variable_name}}} = this
 
     return (
     <div className='Fact--outer'>
@@ -121,6 +122,7 @@ export class FactForm extends Component {
         </div>
         <div className='section-help'>
           <span className={buttonClasses.join(' ')} onClick={this.onSubmit.bind(this)}>{buttonText}</span>
+          {!!onCancel && <span className='ui button tiny' onClick={onCancel}>Cancel</span>}
         </div>
       </div>
     </div>
