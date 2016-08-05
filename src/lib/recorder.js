@@ -1,5 +1,6 @@
 const incrementOrOne = (val) => { val = (val || 0) + 1 }
 const concatOrNewList = (list, val) => { list = (list || []).concat(val) }
+const getParentComponent = comp => _.get(comp, '_reactInternalInstance._currentElement._owner')
 
 export class GuesstimateRecorder {
   clearRecordings() {
@@ -23,10 +24,10 @@ export class GuesstimateRecorder {
 
   static gatherParentIndices(component) {
     let parentIndices = _.has(component, '__recorder_index__') ? [component['__recorder_index__']] : []
-    let ancestor = component._reactInternalInstance._currentElement._owner
+    let ancestor = getParentComponent(component)
     while (!!ancestor) {
-      parentIndices = [ancestor['__recorder_index__'], ...parentIndices]
-      ancestor = ancestor._reactInternalInstance._currentElement._owner
+      if (_.has(ancestor, '__recorder_index__')) { parentIndices = [ancestor['__recorder_index__'], ...parentIndices] }
+      ancestor = getParentComponent(ancestor)
     }
     return parentIndices
   }
@@ -91,6 +92,9 @@ export class GuesstimateRecorder {
   }
   recordUnmountEvent(component) { this.recordNamedEvent(`${component.constructor.name} Unmount`) }
   recordRenderStartEvent(component) {
+    const parentIndices = gatherParentIndices(component)
+
+
     this.recordNamedEvent(component.constructor.name, component['__recorder_id__'], " Render Start", GuesstimateRecorder.addStartToNestedList)
   }
   recordRenderStopEvent(component) {
