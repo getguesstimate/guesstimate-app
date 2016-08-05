@@ -61,7 +61,7 @@ const ShowCalculatorHeader = ({id, editableByMe, onEdit, onDelete, onClose}) => 
   <div className='row'>
     <div className='col-xs-12'>
       <div className='button-close-text'>
-        <ButtonExpandText onClick={navigateFn(`/calculators/${showCalculatorId}`)}/>
+        <ButtonExpandText onClick={navigateFn(`/calculators/${id}`)}/>
         {editableByMe && <ButtonEditText onClick={onEdit}/>}
         {editableByMe && <ButtonDeleteText onClick={onDelete}/>}
         <ButtonCloseText onClick={onClose}/>
@@ -261,6 +261,10 @@ export default class SpacesShow extends Component {
   }
   showCalculator({id}) { this.openRightSidebar({type: SHOW_CALCULATOR, showCalculatorId: id}) }
   editCalculator(id) { this.openRightSidebar({type: EDIT_CALCULATOR_FORM, editCalculatorId: id}) }
+  deleteCalculator(id) {
+    this.props.dispatch(calculatorActions.destroy(id))
+    this.closeRightSidebar()
+  }
   makeNewCalculator() { this.openRightSidebar({type: NEW_CALCULATOR_FORM}) }
   showFactSidebar() { if (this.canShowFactSidebar()) { this.openRightSidebar({type: FACT_SIDEBAR}) } }
 
