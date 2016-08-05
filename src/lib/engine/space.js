@@ -45,20 +45,19 @@ export function toDSpace(spaceId, graph, organizationFacts) {
   if (!space) { return {} }
 
   let dSpace = Object.assign(space.asMutable(), toDgraph(space.id, graph))
-  dSpace.edges = _dGraph.dependencyMap(dSpace)
 
   const facts = possibleFacts(dSpace, graph, organizationFacts)
   const withInputFn = _guesstimate.expressionToInputFn(dSpace.metrics, facts)
+
+  dSpace.metrics = dSpace.metrics.map(m => ({...m, guesstimate: withInputFn(m.guesstimate)}))
+
+  dSpace.edges = _dGraph.dependencyMap(dSpace)
   dSpace.metrics = dSpace.metrics.map(s => {
     let edges = {}
     edges.inputs = dSpace.edges.filter(i => i.output === s.id).map(e => e.input)
     edges.outputs = dSpace.edges.filter(i => i.input === s.id).map(e => e.output)
     edges.inputMetrics = edges.inputs.map(i => dSpace.metrics.find(m => m.id === i))
-    return {
-      ...s,
-      edges,
-      guesstimate: withInputFn(s.guesstimate),
-    }
+    return { ...s, edges }
   })
 
   return dSpace
