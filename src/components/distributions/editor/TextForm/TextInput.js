@@ -48,7 +48,8 @@ export class TextInput extends Component{
   decoratorList(extraDecorators=[]) {
     const {validInputs, errorInputs} = this.props
 
-    const fact_regex = !!this.props.organizationId ? HANDLE_REGEX : GLOBALS_ONLY_REGEX
+    const canUseOrganizationFacts = (!!this.props.organizationHasFacts && (__DEV__ || this.props.organizationId.toString() === '1'))
+    const fact_regex = canUseOrganizationFacts ? HANDLE_REGEX : GLOBALS_ONLY_REGEX
     const fact_decorators = [
       {
         strategy: (contentBlock, callback) => { findWithRegex(fact_regex, contentBlock, callback) },
