@@ -158,13 +158,22 @@ export class TextInput extends Component{
     }
   }
 
+  changeData(text) { this.props.onChangeData(formatData(text)) }
+
+  handlePastedText(text) {
+    if (text === this.props.value || !isData(text)) { return false }
+
+    this.changeData(text)
+    return true
+  }
+
   onChange(editorState) {
     this.fetchSuggestion(editorState)
     this.setState({editorState})
 
     const text = this.text(editorState)
     if (text !== this.props.value) {
-      isData(text) ? this.props.onChangeData(formatData(text)) : this.props.onChange(text)
+      isData(text) ? this.changeData(text) : this.props.onChange(text)
     }
   }
 
@@ -206,6 +215,7 @@ export class TextInput extends Component{
           onEscape={this.props.onEscape}
           editorState={editorState}
           handleReturn={e => this.props.onReturn(e.shiftKey)}
+          handlePastedText={this.handlePastedText.bind(this)}
           onTab={this.handleTab.bind(this)}
           onBlur={this.handleBlur.bind(this)}
           onChange={this.onChange.bind(this)}
