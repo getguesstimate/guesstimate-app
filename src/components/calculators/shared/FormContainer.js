@@ -50,6 +50,7 @@ export class FormContainer extends Component {
     const validMetrics = metrics.filter(isCalculatorAcceptableMetric)
     const validInputs = validMetrics.filter(m => relationshipType(m.edges) === INPUT)
     const validOutputs = validMetrics.filter(m => [INTERMEDIATE, OUTPUT].includes(relationshipType(m.edges)))
+    console.log([metrics, validMetrics, validInputs, validOutputs])
     return {validInputs, validOutputs}
   }
 

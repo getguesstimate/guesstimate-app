@@ -104,6 +104,7 @@ export default class SpacesShow extends Component {
     rightSidebar: {
       type: !!this.props.showCalculatorId ? SHOW_CALCULATOR : CLOSED,
       showCalculatorResults: this.props.showCalculatorResults,
+      showCalculatorId: this.props.showCalculatorId,
     },
   }
 
@@ -111,7 +112,7 @@ export default class SpacesShow extends Component {
     window.recorder.recordMountEvent(this)
 
     this.considerFetch(this.props)
-    if (!(this.props.embed || this.state.showCalculatorId)) { elev.show() }
+    if (!(this.props.embed || this.state.rightSidebar.type !== CLOSED)) { elev.show() }
 
     if (_.has(this.props, 'denormalizedSpace.editableByMe')) {
       this.setDefaultEditPermission(_.get(this.props, 'denormalizedSpace.editableByMe'))
@@ -280,6 +281,7 @@ export default class SpacesShow extends Component {
           header: (
             <ShowCalculatorHeader
               editableByMe={editableByMe}
+              id={showCalculatorId}
               onEdit={this.editCalculator.bind(this, showCalculatorId)}
               onDelete={this.deleteCalculator.bind(this, showCalculatorId)}
               onClose={this.closeRightSidebar.bind(this)}
