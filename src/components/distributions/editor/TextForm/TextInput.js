@@ -6,7 +6,7 @@ import {EditorState, Editor, ContentState, Modifier, CompositeDecorator} from 'd
 
 import {clearSuggestion, getSuggestion} from 'gModules/facts/actions'
 
-import {HANDLE_REGEX, resolveToSelector} from 'gEngine/facts'
+import {HANDLE_REGEX, GLOBALS_ONLY_REGEX, resolveToSelector} from 'gEngine/facts'
 
 import {isData, formatData} from 'lib/guesstimator/formatter/formatters/Data'
 
@@ -24,13 +24,6 @@ const Fact = stylizedSpan('fact input')
 const Suggestion = stylizedSpan('suggestion')
 const ValidInput = stylizedSpan('valid input')
 const ErrorInput = stylizedSpan('error input')
-
-const FACT_DECORATOR_LIST = [
-  {
-    strategy: (contentBlock, callback) => { findWithRegex(HANDLE_REGEX, contentBlock, callback) },
-    component: Fact,
-  },
-]
 
 const positionDecorator = (start, end, component) => ({
   strategy: (contentBlock, callback) => {if (end <= contentBlock.text.length) {callback(start, end)}},
@@ -55,7 +48,15 @@ export class TextInput extends Component{
   decoratorList(extraDecorators=[]) {
     const {validInputs, errorInputs} = this.props
 
-    let decorators = [...extraDecorators, ...FACT_DECORATOR_LIST]
+    const fact_regex = !!this.props.organizationId ? HANDLE_REGEX : GLOBALS_ONLY_REGEX
+    const fact_decorators = [
+      {
+        strategy: (contentBlock, callback) => { findWithRegex(fact_regex, contentBlock, callback) },
+        component: Fact,
+      },
+    ]
+
+    let decorators = [...extraDecorators, ...fact_decorators]
 
     if (!_.isEmpty(validInputs)) {
       const validInputsRegex = new RegExp(`(${validInputs.join('|')})`, 'g')

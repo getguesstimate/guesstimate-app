@@ -30,6 +30,7 @@ export const FactPT = PropTypes.shape({
   }).isRequired,
 })
 
+export const GLOBALS_ONLY_REGEX = /@\w+(?:\.\w+)?/
 export const HANDLE_REGEX = /(?:@\w+(?:\.\w+)?|#\w+)/g
 
 export const getVar = f => _.get(f, 'variable_name') || ''
