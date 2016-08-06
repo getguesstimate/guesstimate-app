@@ -30,7 +30,7 @@ const positionDecorator = (start, end, component) => ({
   component,
 })
 
-@connect(state => ({suggestion: state.facts.currentSuggestion}))
+@connect(state => ({suggestion: state.facts.currentSuggestion}), null, null, {withRef: true})
 export class TextInput extends Component{
   displayName: 'Guesstimate-TextInput'
 
