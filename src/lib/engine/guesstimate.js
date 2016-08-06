@@ -47,7 +47,7 @@ function translateReadableIds(input, idMap) {
   const ids = _.sortBy(Object.keys(idMap), id => -id.length)
 
   let translatedInput = input
-  ids.forEach(id => {translatedInput = translatedInput.replace(id, idMap[id])})
+  ids.forEach(id => {translatedInput = translatedInput.replace(new RegExp(id, 'g'), idMap[id])})
 
   return translatedInput
 }
