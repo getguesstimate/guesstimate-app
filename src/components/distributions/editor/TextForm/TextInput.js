@@ -158,12 +158,12 @@ export class TextInput extends Component{
     }
   }
 
-  handlePastedText(text) {
-    console.log(text.split('\n'))
+  changeData(text) { this.props.onChangeData(formatData(text)) }
 
+  handlePastedText(text) {
     if (text === this.props.value || !isData(text)) { return false }
 
-    this.props.onChangeData(formatData(text))
+    this.changeData(text)
     return true
   }
 
@@ -173,7 +173,7 @@ export class TextInput extends Component{
 
     const text = this.text(editorState)
     if (text !== this.props.value) {
-      isData(text) ? this.props.onChangeData(formatData(text)) : this.props.onChange(text)
+      isData(text) ? this.changeData(text) : this.props.onChange(text)
     }
   }
 
