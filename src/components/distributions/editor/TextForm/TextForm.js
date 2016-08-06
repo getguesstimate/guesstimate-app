@@ -21,9 +21,7 @@ export class TextForm extends Component{
     size: PropTypes.string
   }
 
-  focus() {
-    this.refs.TextInput.getWrappedInstance().focus()
-  }
+  focus() { this.refs.TextInput.getWrappedInstance().focus() }
 
   onChangeInput(input) {
     this.props.onChangeInput(input)
