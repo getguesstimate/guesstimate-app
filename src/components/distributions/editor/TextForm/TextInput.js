@@ -99,6 +99,7 @@ export class TextInput extends Component{
   withExtraDecorators(editorState, extraDecorators) {
     return EditorState.set(editorState, {decorator: new CompositeDecorator(this.decoratorList(extraDecorators))})
   }
+  updateDecorators() { this.setState({editorState: this.withExtraDecorators(this.state.editorState)}) }
 
   deleteOldSuggestion(oldSuggestion) {
     const freshEditorState = this.addText('', true, oldSuggestion.length)
@@ -125,6 +126,8 @@ export class TextInput extends Component{
       } else {
         this.addSuggestion()
       }
+    } else if (!_.isEqual(prevProps.validInputs, this.props.validInputs) || !_.isEqual(prevProps.errorInputs, this.props.errorInputs)) {
+      this.updateDecorators()
     }
   }
 
