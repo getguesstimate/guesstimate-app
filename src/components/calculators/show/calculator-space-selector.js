@@ -1,19 +1,18 @@
 import { createSelector } from 'reselect'
 import e from 'gEngine/engine'
 
-function _sameId(idA, idB){
-  return idA.toString() === idB.toString()
-}
-
-function calculatorSelector(state, {calculatorId}) { return state.calculators.find(c => _sameId(c.id, calculatorId)) }
-function spaceGraphSelector(state) { return _.pick(state, ['spaces', 'metrics', 'guesstimates', 'simulations', 'users', 'me', 'organizations']) }
+const _sameId = (idA, idB) => idA.toString() === idB.toString()
+const spaceGraphSelector = state => _.pick(state, ['spaces', 'metrics', 'guesstimates', 'simulations', 'users', 'me', 'organizations'])
+const organizationFactsSelector = state => _.get(state, 'facts.organizationFacts')
+const calculatorSelector = (state, {calculatorId}) => state.calculators.find(c => _sameId(c.id, calculatorId))
 
 export const calculatorSpaceSelector = createSelector(
   spaceGraphSelector,
+  organizationFactsSelector,
   calculatorSelector,
-  (graph, calculator) => {
+  (graph, organizationFacts, calculator) => {
     if (!_.has(calculator, 'space_id')) { return {} }
-    const {metrics, is_private} = e.space.toDSpace(calculator.space_id, graph)
+    const {metrics, is_private} = e.space.toDSpace(calculator.space_id, graph, organizationFacts)
 
     const findById = id => metrics.find(m => _sameId(m.id, id))
 
