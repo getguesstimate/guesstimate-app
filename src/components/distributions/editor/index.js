@@ -90,7 +90,7 @@ export default class Guesstimate extends Component{
   }
 
   render () {
-    const {size, guesstimate, inputMetrics, onOpen, errors, organizationId} = this.props
+    const {size, guesstimate, inputMetrics, onOpen, errors, organizationId, organizationHasFacts} = this.props
     if(guesstimate.metric !== this.props.metricId) { return false }
 
     const hasData = !!guesstimate.data
@@ -124,6 +124,7 @@ export default class Guesstimate extends Component{
             size={size}
             errors={errors}
             organizationId={organizationId}
+            organizationHasFacts={organizationHasFacts}
             ref='TextForm'
           />
         }
