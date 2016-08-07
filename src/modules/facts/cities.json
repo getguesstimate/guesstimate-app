@@ -7,11 +7,7 @@
               "expression": "8405837",
               "simulation": {
                 "sample": {
-                  "simulation": {
-                    "sample": {
-                      "values": [8405837]
-                    }
-                  }
+                  "values": [8405837]
                 }
               }
           }
@@ -25,11 +21,7 @@
               "expression": "3884307",
               "simulation": {
                 "sample": {
-                  "simulation": {
-                    "sample": {
-                      "values": [3884307]
-                    }
-                  }
+                  "values": [3884307]
                 }
               }
           }

@@ -21,7 +21,7 @@ export class TextForm extends Component{
     size: PropTypes.string
   }
 
-  focus() { this.refs.TextInput.focus() }
+  focus() { this.refs.TextInput.getWrappedInstance().focus() }
 
   onChangeInput(input) {
     this.props.onChangeInput(input)
@@ -47,6 +47,7 @@ export class TextForm extends Component{
       size,
       errors,
       organizationId,
+      organizationHasFacts,
       onChangeInput,
       onAddData,
       onChangeGuesstimateType,
@@ -81,6 +82,7 @@ export class TextForm extends Component{
             errors={errors}
             width={shouldBeWide ? 'NARROW' : "WIDE"}
             organizationId={organizationId}
+            organizationHasFacts={organizationHasFacts}
           />
 
           { shouldDisplayType &&

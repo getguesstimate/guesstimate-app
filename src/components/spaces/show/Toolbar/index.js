@@ -194,7 +194,7 @@ export class SpaceToolbar extends Component {
                       <CardListElement
                         key={c.id}
                         header={c.title}
-                        onMouseDown={() => {this.props.showCalculator(c.id)}}
+                        onMouseDown={() => {this.props.showCalculator(c)}}
                         closeOnClick={true}
                         icon={'calculator'}
                       />

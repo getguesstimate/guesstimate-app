@@ -42,14 +42,21 @@ export const denormalizedSpaceSelector = createSelector(
   spaceIdSelector,
   canvasStateSelector,
   (graph, spaceId, canvasState) => {
-    let denormalizedSpace = e.space.toDSpace(spaceId, graph, graph.facts.organizationFacts)
+    const {facts: {organizationFacts}} = graph
+    let denormalizedSpace = e.space.toDSpace(spaceId, graph, organizationFacts)
 
     if (denormalizedSpace) {
       denormalizedSpace.canvasState = canvasState
       denormalizedSpace.checkpointMetadata = checkpointMetadata(spaceId, graph.checkpoints)
     }
 
+    const {organization_id} = denormalizedSpace
+    const organization = graph.organizations.find(o => o.id == organization_id)
+    const organizationHasFacts = !!organization && _.some(
+      organizationFacts, e.facts.byVariableName(e.organization.organizationReadableId(organization))
+    )
+
     window.recorder.recordSelectorStop(NAME, {denormalizedSpace})
-    return { denormalizedSpace }
+    return { denormalizedSpace, organizationHasFacts }
   }
 )

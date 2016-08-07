@@ -30,12 +30,12 @@ export const FactPT = PropTypes.shape({
   }).isRequired,
 })
 
+export const GLOBALS_ONLY_REGEX = /@\w+(?:\.\w+)?/
 export const HANDLE_REGEX = /(?:@\w+(?:\.\w+)?|#\w+)/g
 
 export const getVar = f => _.get(f, 'variable_name') || ''
 export const byVariableName = name => f => getVar(f) === name
 const namedLike = partial => f => getVar(f).startsWith(partial)
-const variableNameIntersection = (f1, f2) => _.intersection(f1.split(''), f2.split('')).join('')
 
 export function withSortedValues(rawFact) {
   let fact = Object.assign({}, rawFact)
@@ -51,7 +51,7 @@ export function selectorSearch(selector, facts) {
   const matches = possibleFacts.filter(namedLike(partial))
   if (_.isEmpty(matches)) { return {partial, suggestion: ''} }
 
-  const suggestion = _.map(matches, getVar).reduce(variableNameIntersection)
+  const suggestion = getVar(matches[0])
   return {partial, suggestion}
 }
 

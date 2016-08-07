@@ -61,7 +61,7 @@ const ShowCalculatorHeader = ({id, editableByMe, onEdit, onDelete, onClose}) => 
   <div className='row'>
     <div className='col-xs-12'>
       <div className='button-close-text'>
-        <ButtonExpandText onClick={navigateFn(`/calculators/${showCalculatorId}`)}/>
+        <ButtonExpandText onClick={navigateFn(`/calculators/${id}`)}/>
         {editableByMe && <ButtonEditText onClick={onEdit}/>}
         {editableByMe && <ButtonDeleteText onClick={onDelete}/>}
         <ButtonCloseText onClick={onClose}/>
@@ -104,6 +104,7 @@ export default class SpacesShow extends Component {
     rightSidebar: {
       type: !!this.props.showCalculatorId ? SHOW_CALCULATOR : CLOSED,
       showCalculatorResults: this.props.showCalculatorResults,
+      showCalculatorId: this.props.showCalculatorId,
     },
   }
 
@@ -111,7 +112,7 @@ export default class SpacesShow extends Component {
     window.recorder.recordMountEvent(this)
 
     this.considerFetch(this.props)
-    if (!(this.props.embed || this.state.showCalculatorId)) { elev.show() }
+    if (!(this.props.embed || this.state.rightSidebar.type !== CLOSED)) { elev.show() }
 
     if (_.has(this.props, 'denormalizedSpace.editableByMe')) {
       this.setDefaultEditPermission(_.get(this.props, 'denormalizedSpace.editableByMe'))
@@ -261,6 +262,10 @@ export default class SpacesShow extends Component {
   }
   showCalculator({id}) { this.openRightSidebar({type: SHOW_CALCULATOR, showCalculatorId: id}) }
   editCalculator(id) { this.openRightSidebar({type: EDIT_CALCULATOR_FORM, editCalculatorId: id}) }
+  deleteCalculator(id) {
+    this.props.dispatch(calculatorActions.destroy(id))
+    this.closeRightSidebar()
+  }
   makeNewCalculator() { this.openRightSidebar({type: NEW_CALCULATOR_FORM}) }
   showFactSidebar() { if (this.canShowFactSidebar()) { this.openRightSidebar({type: FACT_SIDEBAR}) } }
 
@@ -276,6 +281,7 @@ export default class SpacesShow extends Component {
           header: (
             <ShowCalculatorHeader
               editableByMe={editableByMe}
+              id={showCalculatorId}
               onEdit={this.editCalculator.bind(this, showCalculatorId)}
               onDelete={this.deleteCalculator.bind(this, showCalculatorId)}
               onClose={this.closeRightSidebar.bind(this)}
@@ -334,6 +340,7 @@ export default class SpacesShow extends Component {
 
   render() {
     const space = this.props.denormalizedSpace
+    const {organizationHasFacts} = this.props
     if (!spacePrepared(space)) { return <div className='spaceShow'></div> }
 
     const sidebarIsViseable = space.editableByMe || !_.isEmpty(space.description)
@@ -342,7 +349,7 @@ export default class SpacesShow extends Component {
     if (this.props.embed) {
       return (
         <div className='spaceShow screenshot'>
-          <Canvas denormalizedSpace={space} overflow={'hidden'} screenshot={true}/>
+          <Canvas denormalizedSpace={space} organizationHasFacts={organizationHasFacts} overflow={'hidden'} screenshot={true}/>
         </div>
       )
     }
@@ -441,6 +448,7 @@ export default class SpacesShow extends Component {
             <ClosedSpaceSidebar onOpen={this.openLeftSidebar.bind(this)}/>
           }
           <Canvas
+            organizationHasFacts={organizationHasFacts}
             denormalizedSpace={space}
             onCopy={this.onCopy.bind(this, true)}
             onPaste={this.onPaste.bind(this, true)}
