@@ -39,10 +39,17 @@ export function format(guesstimate: Guesstimate): Guesstimate {
 
 export const extractFactHandles = ({input}) => _.isEmpty(input) ? [] : input.match(HANDLE_REGEX)
 
+const padNonAlphaNumeric = str => `(?:[^\\w]|^)(${str})(?:[^\\w]|$)`
+
 function translateReadableIds(input, idMap) {
   if (!input) {return ""}
-  const re = RegExp(Object.keys(idMap).join("|"), "g")
-  return input.replace(re, (match) => idMap[match])
+
+  const ids = _.sortBy(Object.keys(idMap), id => -id.length)
+
+  let translatedInput = input
+  ids.forEach(id => {translatedInput = translatedInput.replace(id, idMap[id])})
+
+  return translatedInput
 }
 
 export function translateFactHandleFn(handleMap) {
@@ -113,10 +120,13 @@ export function expressionToInputFn(metrics=[], facts=[]) {
     reParts.push(escapedExpressionSyntaxPad(id, false))
     idMap[expressionSyntaxPad(id, false)] = `#${variable_name}`}
   )
-  const regex = RegExp(reParts.join('|'), 'g')
+  const validIdsRegex = RegExp(reParts.join('|'), 'g')
+  const translateValidInputsFn = expression => expression.replace(validIdsRegex, match => idMap[match])
+  const translateRemainingInputsFn = expression => expression.replace(/\$\{.*\}/, '??')
 
-  const translateFn = ({expression}) => expression.replace(regex, match => idMap[match])
-  return g => (!_.isEmpty(g.input) || _.isEmpty(g.expression)) ? g : {...g, input: translateFn(g)}
+  const translateInputsFn = ({expression}) => translateRemainingInputsFn(translateValidInputsFn(expression))
+
+  return g => (!_.isEmpty(g.input) || _.isEmpty(g.expression)) ? g : {...g, input: translateInputsFn(g)}
 }
 
 // Returns an expression based on the passed input and idMap.

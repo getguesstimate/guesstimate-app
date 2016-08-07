@@ -16,6 +16,7 @@ export default class Simulator {
     return e.graph.runSimulation(this.graph, this.metricId, n).then(
       simulation => {
         simulation.propagationId = this.propagationId
+        simulation.metric = this.metricId
         return simulation
       }
     )

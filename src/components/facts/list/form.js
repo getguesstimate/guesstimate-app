@@ -3,6 +3,8 @@ import React, {Component, PropTypes} from 'react'
 import {simulateFact, FactPT} from 'gEngine/facts'
 import {addStats} from 'gEngine/simulation'
 
+import {isData, formatData} from 'lib/guesstimator/formatter/formatters/Data'
+
 const readableIdPartFromWord = word => (/\d/).test(word) ? word : word[0]
 function getVariableNameFromName(rawName) {
   const name = rawName.trim().replace(/[^\w\d]/g, ' ').toLowerCase()
@@ -34,6 +36,7 @@ export class FactForm extends Component {
   static propTypes = {
     existingVariableNames: PropTypes.arrayOf(PropTypes.string).isRequired,
     onSubmit: PropTypes.func.isRequired,
+    onCancel: PropTypes.func,
     startingFact: FactPT,
   }
 
@@ -50,11 +53,18 @@ export class FactForm extends Component {
   onChangeVariableName(e) { this.setFactState({variable_name: _.get(e, 'target.value')}, {variableNameManuallySet: true}) }
   onChangeExpression(e) { this.setFactState({expression: _.get(e, 'target.value')}) }
   onBlurExpression() {
-    simulateFact(this.state.runningFact).then(({values, errors}) => {
-      let simulation = {sample: {values, errors}}
+    const {runningFact} = this.state
+    if (isData(runningFact.expression)) {
+      let simulation = {sample: {values: formatData(runningFact.expression)}}
       addStats(simulation)
       this.setFactState({simulation})
-    })
+    } else {
+      simulateFact(this.state.runningFact).then(({values, errors}) => {
+        let simulation = {sample: {values, errors}}
+        addStats(simulation)
+        this.setFactState({simulation})
+      })
+    }
   }
 
   isExpressionValid() { return _.isEmpty(_.get(this, 'state.runningFact.simulation.sample.errors')) }
@@ -77,7 +87,7 @@ export class FactForm extends Component {
 
   render() {
     const buttonClasses = ['ui', 'button', 'tiny', 'primary', ...(this.isValid() ? [] : ['disabled'])]
-    const {props: {buttonText}, state: {runningFact: {expression, name, variable_name}}} = this
+    const {props: {buttonText, onCancel}, state: {runningFact: {expression, name, variable_name}}} = this
 
     return (
     <div className='Fact--outer'>
@@ -121,6 +131,7 @@ export class FactForm extends Component {
         </div>
         <div className='section-help'>
           <span className={buttonClasses.join(' ')} onClick={this.onSubmit.bind(this)}>{buttonText}</span>
+          {!!onCancel && <span className='ui button tiny' onClick={onCancel}>Cancel</span>}
         </div>
       </div>
     </div>
