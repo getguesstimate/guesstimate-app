@@ -6,7 +6,7 @@ import {EditorState, Editor, ContentState, Modifier, CompositeDecorator} from 'd
 
 import {clearSuggestion, getSuggestion} from 'gModules/facts/actions'
 
-import {HANDLE_REGEX, resolveToSelector} from 'gEngine/facts'
+import {HANDLE_REGEX, GLOBALS_ONLY_REGEX, resolveToSelector} from 'gEngine/facts'
 
 import {isData, formatData} from 'lib/guesstimator/formatter/formatters/Data'
 
@@ -25,19 +25,12 @@ const Suggestion = stylizedSpan('suggestion')
 const ValidInput = stylizedSpan('valid input')
 const ErrorInput = stylizedSpan('error input')
 
-const FACT_DECORATOR_LIST = [
-  {
-    strategy: (contentBlock, callback) => { findWithRegex(HANDLE_REGEX, contentBlock, callback) },
-    component: Fact,
-  },
-]
-
 const positionDecorator = (start, end, component) => ({
   strategy: (contentBlock, callback) => {if (end <= contentBlock.text.length) {callback(start, end)}},
   component,
 })
 
-@connect(state => ({suggestion: state.facts.currentSuggestion}))
+@connect(state => ({suggestion: state.facts.currentSuggestion}), null, null, {withRef: true})
 export class TextInput extends Component{
   displayName: 'Guesstimate-TextInput'
 
@@ -55,7 +48,16 @@ export class TextInput extends Component{
   decoratorList(extraDecorators=[]) {
     const {validInputs, errorInputs} = this.props
 
-    let decorators = [...extraDecorators, ...FACT_DECORATOR_LIST]
+    const canUseOrganizationFacts = (!!this.props.organizationHasFacts && (__DEV__ || this.props.organizationId.toString() === '1'))
+    const fact_regex = canUseOrganizationFacts ? HANDLE_REGEX : GLOBALS_ONLY_REGEX
+    const fact_decorators = [
+      {
+        strategy: (contentBlock, callback) => { findWithRegex(fact_regex, contentBlock, callback) },
+        component: Fact,
+      },
+    ]
+
+    let decorators = [...extraDecorators, ...fact_decorators]
 
     if (!_.isEmpty(validInputs)) {
       const validInputsRegex = new RegExp(`(${validInputs.join('|')})`, 'g')
@@ -99,6 +101,7 @@ export class TextInput extends Component{
   withExtraDecorators(editorState, extraDecorators) {
     return EditorState.set(editorState, {decorator: new CompositeDecorator(this.decoratorList(extraDecorators))})
   }
+  updateDecorators() { this.setState({editorState: this.withExtraDecorators(this.state.editorState)}) }
 
   deleteOldSuggestion(oldSuggestion) {
     const freshEditorState = this.addText('', true, oldSuggestion.length)
@@ -125,6 +128,8 @@ export class TextInput extends Component{
       } else {
         this.addSuggestion()
       }
+    } else if (!_.isEqual(prevProps.validInputs, this.props.validInputs) || !_.isEqual(prevProps.errorInputs, this.props.errorInputs)) {
+      this.updateDecorators()
     }
   }
 
@@ -153,13 +158,22 @@ export class TextInput extends Component{
     }
   }
 
+  changeData(text) { this.props.onChangeData(formatData(text)) }
+
+  handlePastedText(text) {
+    if (text === this.props.value || !isData(text)) { return false }
+
+    this.changeData(text)
+    return true
+  }
+
   onChange(editorState) {
     this.fetchSuggestion(editorState)
     this.setState({editorState})
 
     const text = this.text(editorState)
     if (text !== this.props.value) {
-      isData(text) ? this.props.onChangeData(formatData(text)) : this.props.onChange(text)
+      isData(text) ? this.changeData(text) : this.props.onChange(text)
     }
   }
 
@@ -201,6 +215,7 @@ export class TextInput extends Component{
           onEscape={this.props.onEscape}
           editorState={editorState}
           handleReturn={e => this.props.onReturn(e.shiftKey)}
+          handlePastedText={this.handlePastedText.bind(this)}
           onTab={this.handleTab.bind(this)}
           onBlur={this.handleBlur.bind(this)}
           onChange={this.onChange.bind(this)}

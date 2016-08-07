@@ -104,7 +104,7 @@ export default class OrganizationShow extends Component{
 
     if (!organization) { return false }
     let tabs = [{name: 'Models', key: MODEL_TAB}, {name: 'Members', key: MEMBERS_TAB}]
-    if (__DEV__ || organizationId === 1) { tabs = [{name: 'Models', key: MODEL_TAB}, {name: 'Facts', key: FACT_BOOK_TAB}, {name: 'Members', key: MEMBERS_TAB}] }
+    if (__DEV__ || organizationId.toString() === '1') { tabs = [{name: 'Models', key: MODEL_TAB}, {name: 'Facts', key: FACT_BOOK_TAB}, {name: 'Members', key: MEMBERS_TAB}] }
     const portalUrl = _.get(organization, 'account._links.payment_portal.href')
     if (!!portalUrl) { tabs = [...tabs, {name: 'Billing', key: 'BILLING', href: portalUrl, onMouseUp: this.refreshData.bind(this)}] }
 

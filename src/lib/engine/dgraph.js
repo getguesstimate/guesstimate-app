@@ -17,7 +17,7 @@ export function runSimulation(dGraph:DGraph, metricId:string, n:number) {
     return Promise.resolve({sample: {errors: [{type: INTERNAL_ERROR, message: 'Unknown metric referenced'}]}})
   } else if (_facts.HANDLE_REGEX.test(m.guesstimate.input)) {
     const unresolvedFacts = m.guesstimate.input.match(_facts.HANDLE_REGEX)
-    const message = `Unknown Fact${unresolvedFacts.length > 1 ? 's' : ''} Referenced: ${unresolvedFacts.join(', ')}`
+    const message = `Unknown fact${unresolvedFacts.length > 1 ? 's' : ''} referenced: ${unresolvedFacts.join(', ')}`
     return Promise.resolve({sample: {errors: [{type: MATH_ERROR, message}]}})
   }
   return _guesstimate.sample(m.guesstimate, dGraph, n)

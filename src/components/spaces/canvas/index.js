@@ -28,7 +28,6 @@ function mapStateToProps(state) {
     copied: state.copied,
     selectedCell: state.selectedCell,
     selectedRegion: state.selectedRegion,
-    organizationFacts: state.facts.organizationFacts,
   }
 }
 
@@ -146,6 +145,7 @@ export default class Canvas extends Component{
         location={location}
         metric={metric}
         organizationId={this.props.denormalizedSpace.organization_id}
+        organizationHasFacts={this.props.organizationHasFacts}
         selectedMetric={passSelected && selected}
       />
     )

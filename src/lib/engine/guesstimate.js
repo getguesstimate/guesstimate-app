@@ -47,7 +47,7 @@ function translateReadableIds(input, idMap) {
   const ids = _.sortBy(Object.keys(idMap), id => -id.length)
 
   let translatedInput = input
-  ids.forEach(id => {translatedInput = translatedInput.replace(id, idMap[id])})
+  ids.forEach(id => {translatedInput = translatedInput.replace(new RegExp(id, 'g'), idMap[id])})
 
   return translatedInput
 }
@@ -131,5 +131,6 @@ export function expressionToInputFn(metrics=[], facts=[]) {
 
 // Returns an expression based on the passed input and idMap.
 export function inputToExpression(input, idMap) {
+  if (_.isEmpty(input) || _.isEmpty(idMap)) { return input }
   return input.replace(RegExp(Object.keys(idMap).join('|'), 'g'), match => expressionSyntaxPad(idMap[match].id, idMap[match].isMetric))
 }
