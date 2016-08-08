@@ -46,4 +46,17 @@
       color: #444;
     }
   }
+
+  .FactTab {
+    margin-top: 4em;
+
+    .FactTab--factList {
+      float: right;
+    }
+
+    p {
+      font-size: 1.1em;
+      color: #666;
+    }
+  }
 }

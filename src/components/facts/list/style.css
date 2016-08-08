@@ -1,0 +1,152 @@
+@import './styles/variables.css';
+
+$grey-a1: rgb(231, 234, 236);
+$grey-a2: #607580;
+$blue-a1: #4A6A88;
+
+.Fact--outer {
+  border: 1px solid rgba(0,0,0,0);
+  float: left;
+  width: 100%;
+  margin: .2em 0;
+
+  &:hover {
+    border-color: #d9dee2;
+  }
+}
+
+.Fact {
+  padding: .4em .5em;
+  background-color: white;
+  float: left;
+  width: 100%;
+  border-radius: 2px;
+  display: flex;
+  flex-direction: row;
+
+  &:not(:hover):not(.form) .ui.tiny.button {
+    display: none;
+  }
+
+  .ui.tiny.button {
+     padding: .3em 1em;
+     border-radius: 2px;
+     margin-bottom: 3px;
+
+     &:last-child {
+       margin-bottom: 0
+   }
+  }
+}
+
+.Fact.new.ui.form {
+  input, textarea {
+    padding: .3em .4em;
+    border-radius: 2px;
+  }
+}
+
+.Fact  .section-simulation {
+  min-width: 7em;
+  flex: 1;
+  position: relative;
+
+  .histogram {
+    left: 20%;
+    height: 35px;
+    position: absolute;
+    bottom: -.4em;
+    right: 0;
+    z-index: 0;
+    .react-d3-histogram__bar rect {
+      fill: $grey-a1;
+    }
+  }
+
+  .simulation-summary {
+    float: left;
+    margin-top: 2px;
+    position: relative;
+    z-index: 1;
+
+    .DistributionSummary .mean {
+      color: $grey-a2;
+    }
+    .DistributionSummary .UncertaintyRange {
+       color: $grey-999;
+    }
+  }
+}
+
+.Fact.form .section-simulation {
+  padding-right: .9em;
+}
+
+
+.Fact > .section-name {
+  float: left;
+  flex: 6;
+
+  .description {
+    font-size: .9em;
+    color: $grey-999;
+    letter-spacing: 0.36px;
+    float: left;
+    margin-top: .25em;
+  }
+
+  .variable-name {
+    font-size: 1.2em;
+    font-weight: 800;
+    float: left;
+    margin-right: 100%;
+    color: $blue-a1;
+
+    .prefix {
+      margin-right: 1px;
+    }
+  }
+}
+
+.Fact.form > .section-name {
+  .variable-name {
+    width: 100%;
+
+    .field {
+      position: relative;
+
+      .prefix {
+        color: $grey-999;
+        position: absolute;
+        left: .4em;
+        top: .4em;
+        font-size: 1.2em;
+      }
+
+      input {
+      color: $blue-a1;
+        padding-left: 1.4em;
+      }
+    }
+  }
+
+  .description {
+    width: 100%;
+
+    textarea {
+      margin-top: .3em;
+      font-size: 1rem;
+    }
+  }
+}
+
+.Fact > .section-help {
+  float: left;
+  min-width: 5em;
+  flex: 1;
+
+  .button {
+    float: right;
+  }
+}
+

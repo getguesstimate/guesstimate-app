@@ -1,9 +1,9 @@
 /* @flow */
 
-import _ from 'lodash';
+import _ from 'lodash'
 import async from 'async'
 
-import e from 'gEngine/engine';
+import e from 'gEngine/engine'
 import type {Simulation, Graph} from '../lib/engine/types.js'
 import {deleteSimulations} from 'gModules/simulations/actions'
 import MetricPropagation from './metric-propagation.js'
@@ -33,6 +33,13 @@ export class GraphPropagation {
       this.spaceId = metric && metric.space
     }
 
+    if (!!this.spaceId) {
+      this.space = getState().spaces.find(s => s.id === this.spaceId)
+      if (_.has(this.space, 'organization_id')) {
+        this.organization = getState().organizations.find(o => o.id === this.space.organization_id)
+      }
+    }
+
     let orderedMetricIdsAndGraphErrors = this._orderedMetricIdsAndErrors(graphFilters)
 
     this.orderedMetricIds = orderedMetricIdsAndGraphErrors.map(m => m.id)
@@ -50,7 +57,7 @@ export class GraphPropagation {
     if (this.currentStep >= this.totalSteps) {
       return
     }
-    this._step().then(() => {this.run()});
+    this._step().then(() => {this.run()})
   }
 
   _step() {
@@ -60,9 +67,14 @@ export class GraphPropagation {
 
   _graph(): Graph {
     const state = this.getState()
-    let subset = e.space.subset(e.graph.create(state), this.spaceId)
 
-    return subset
+    const spaceSubset = e.space.subset(e.graph.create(state), this.spaceId, true)
+
+    const organizationalFacts = e.facts.getFactsForOrg(state.facts.organizationFacts, this.organization)
+
+    const translatedSubset = e.space.expressionsToInputs(spaceSubset, organizationalFacts)
+
+    return e.facts.addFactsToSpaceGraph(translatedSubset, state.facts.globalFacts, state.facts.organizationFacts, this.space)
   }
 
   _orderedMetricIdsAndErrors(graphFilters: object): Array<Object> {

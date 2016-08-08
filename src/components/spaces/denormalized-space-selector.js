@@ -1,4 +1,4 @@
-import { createSelector } from 'reselect';
+import { createSelector } from 'reselect'
 import e from 'gEngine/engine'
 
 const NAME = "Denormalized Space Selector"
@@ -16,9 +16,23 @@ function checkpointMetadata(id, checkpoints) {
   return attributes
 }
 
+const SPACE_GRAPH_PARTS = [
+  'spaces',
+  'calculators',
+  'metrics',
+  'guesstimates',
+  'simulations',
+  'users',
+  'organizations',
+  'userOrganizationMemberships',
+  'me',
+  'checkpoints',
+  'facts',
+]
+
 const spaceGraphSelector = state => {
   window.recorder.recordSelectorStart(NAME)
-  return _.pick(state, 'spaces', 'calculators', 'metrics', 'guesstimates', 'simulations', 'users', 'organizations', 'userOrganizationMemberships', 'me', 'checkpoints')
+  return _.pick(state, SPACE_GRAPH_PARTS)
 }
 const spaceIdSelector = (_, {spaceId}) => spaceId
 const canvasStateSelector = state => state.canvasState
@@ -28,16 +42,21 @@ export const denormalizedSpaceSelector = createSelector(
   spaceIdSelector,
   canvasStateSelector,
   (graph, spaceId, canvasState) => {
-    let dSpace = e.space.toDSpace(spaceId, graph)
+    const {facts: {organizationFacts}} = graph
+    let denormalizedSpace = e.space.toDSpace(spaceId, graph, organizationFacts)
 
-    if (dSpace) {
-      dSpace.canvasState = canvasState
-      dSpace.checkpointMetadata = checkpointMetadata(spaceId, graph.checkpoints)
+    if (denormalizedSpace) {
+      denormalizedSpace.canvasState = canvasState
+      denormalizedSpace.checkpointMetadata = checkpointMetadata(spaceId, graph.checkpoints)
     }
 
-    window.recorder.recordSelectorStop(NAME, {denormalizedSpace: dSpace})
-    return {
-      denormalizedSpace: dSpace
-    };
+    const {organization_id} = denormalizedSpace
+    const organization = graph.organizations.find(o => o.id == organization_id)
+    const organizationHasFacts = !!organization && _.some(
+      organizationFacts, e.facts.byVariableName(e.organization.organizationReadableId(organization))
+    )
+
+    window.recorder.recordSelectorStop(NAME, {denormalizedSpace})
+    return { denormalizedSpace, organizationHasFacts }
   }
-);
+)

@@ -52,21 +52,22 @@ export function paste(spaceId){
 
     const spaceMetrics = state.metrics.filter(m => m.space === spaceId)
     let existingReadableIds = spaceMetrics.map(m => m.readableId)
+    let existingIds = spaceMetrics.map(m => m.id)
 
-    let readableIdsMap = {}
+    let idsMap = {}
     const newMetrics = _.map(metrics, metric => {
-      let newMetric = Object.assign(
-        {},
-        metric,
-        e.metric.create(existingReadableIds),
-        {space: spaceId},
-        {location: translateFn(metric.location)}
-      )
-      if (!_.some(existingReadableIds, id => id === metric.readableId)) {
-        newMetric.readableId = metric.readableId
+      let newMetric = {
+        ...metric,
+        ...e.metric.create(existingReadableIds),
+        space: spaceId,
+        location: translateFn(metric.location),
       }
+      if (!_.some(existingReadableIds, id => id === metric.readableId)) { newMetric.readableId = metric.readableId }
+      if (!_.some(existingIds, id => id === metric.id)) { newMetric.id = metric.id }
+
       existingReadableIds = [...existingReadableIds, newMetric.readableId]
-      readableIdsMap[metric.readableId] = newMetric.readableId
+      existingIds = [...existingIds, newMetric.id]
+      idsMap[metric.id] = newMetric.id
       return newMetric
     })
 
@@ -76,7 +77,7 @@ export function paste(spaceId){
         {},
         guesstimate,
         {metric: newMetrics[i].id},
-        {input: translateReadableIds(guesstimate.input, readableIdsMap)}
+        {expression: translateReadableIds(guesstimate.expression, idsMap)}
       )
     )
 

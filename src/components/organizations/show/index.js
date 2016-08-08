@@ -8,24 +8,33 @@ import {SpaceCard, NewSpaceCard} from 'gComponents/spaces/cards'
 
 import Container from 'gComponents/utility/container/Container'
 import {MembersTab} from './members'
+import {FactListContainer} from 'gComponents/facts/list/container.js'
 
 import {httpRequestSelector} from './httpRequestSelector'
 import {organizationSpaceSelector} from './organizationSpaceSelector'
 import {organizationMemberSelector} from './organizationMemberSelector'
 
 import * as modalActions from 'gModules/modal/actions'
-import * as spaceActions from 'gModules/spaces/actions'
+import {navigate} from 'gModules/navigation/actions'
 import * as organizationActions from 'gModules/organizations/actions'
+import * as spaceActions from 'gModules/spaces/actions'
 import * as userOrganizationMembershipActions from 'gModules/userOrganizationMemberships/actions'
 
 import e from 'gEngine/engine'
 
 import './style.css'
 
+const MODEL_TAB = 'models'
+const MEMBERS_TAB = 'members'
+const FACT_BOOK_TAB = 'facts'
+
+const isValidTabString = tabStr => [MODEL_TAB, MEMBERS_TAB, FACT_BOOK_TAB].includes(tabStr)
+
 function mapStateToProps(state) {
   return {
     me: state.me,
     organizations: state.organizations,
+    organizationFacts: state.facts.organizationFacts,
   }
 }
 
@@ -37,7 +46,7 @@ export default class OrganizationShow extends Component{
   displayName: 'OrganizationShow'
 
   state = {
-    openTab: 'MODELS',
+    openTab: isValidTabString(this.props.tab) ? this.props.tab : MODEL_TAB,
   }
 
   componentWillMount() {
@@ -49,10 +58,16 @@ export default class OrganizationShow extends Component{
     this.props.dispatch(spaceActions.fetch({organizationId: this.props.organizationId}))
   }
 
-  changeTab(tab) {
-    this.setState({
-      openTab: tab,
-    })
+  url(openTab) {
+    const organization = this.props.organizations.find(u => u.id.toString() === this.props.organizationId.toString())
+    const base = e.organization.url(organization)
+    if (_.isEmpty(base)) { return '' }
+    return `${base}/${openTab}`
+  }
+
+  changeTab(openTab) {
+    navigate(this.url(openTab), {trigger: false})
+    this.setState({openTab})
   }
 
   _newModel() {
@@ -79,15 +94,17 @@ export default class OrganizationShow extends Component{
   }
 
   render () {
-    const {organizationId, organizations, members, memberships, invitations} = this.props
+    const {organizationId, organizations, organizationFacts, members, memberships, invitations} = this.props
     const {openTab} = this.state
     const spaces =  _.orderBy(this.props.organizationSpaces.asMutable(), ['updated_at'], ['desc'])
     const organization = organizations.find(u => u.id.toString() === organizationId.toString())
+    const facts = _.get(organizationFacts.find(f => f.variable_name === `organization_${organizationId}`), 'children') || []
     const meIsAdmin = !!organization && (organization.admin_id === this.props.me.id)
     const meIsMember = meIsAdmin || !!(members.find(m => m.id === this.props.me.id))
 
     if (!organization) { return false }
-    let tabs = [{name: 'Models', key: 'MODELS'}, {name: 'Members', key: 'MEMBERS'}]
+    let tabs = [{name: 'Models', key: MODEL_TAB}, {name: 'Members', key: MEMBERS_TAB}]
+    if (__DEV__ || organizationId.toString() === '1') { tabs = [{name: 'Models', key: MODEL_TAB}, {name: 'Facts', key: FACT_BOOK_TAB}, {name: 'Members', key: MEMBERS_TAB}] }
     const portalUrl = _.get(organization, 'account._links.payment_portal.href')
     if (!!portalUrl) { tabs = [...tabs, {name: 'Billing', key: 'BILLING', href: portalUrl, onMouseUp: this.refreshData.bind(this)}] }
 
@@ -106,7 +123,7 @@ export default class OrganizationShow extends Component{
           }
 
           <div className='main-section'>
-            {(openTab === 'MODELS' || !meIsMember) && spaces &&
+            {(openTab === MODEL_TAB || !meIsMember) && spaces &&
               <div className='row'>
                 {meIsMember &&
                   <NewSpaceCard onClick={this._newModel.bind(this)}/>
@@ -121,7 +138,7 @@ export default class OrganizationShow extends Component{
               </div>
             }
 
-            {(openTab === 'MEMBERS') && meIsMember && members && organization &&
+            {(openTab === MEMBERS_TAB) && meIsMember && members && organization &&
               <MembersTab
                 organizationId={organizationId}
                 startOnIndexTab={true}
@@ -133,6 +150,10 @@ export default class OrganizationShow extends Component{
                 httpRequests={this.props.httpRequests}
                 meIsAdmin={meIsAdmin}
               />
+            }
+
+            {(openTab === FACT_BOOK_TAB) && meIsMember && !!facts &&
+              <FactTab organizationId={organizationId}/>
             }
           </div>
         </div>
@@ -183,3 +204,20 @@ const OrganizationTabButtons = ({tabs, openTab, changeTab}) => (
     </div>
   </div>
 )
+
+const FactTab = ({organizationId}) => (
+  <div className='FactTab row'>
+    <div className='col-md-2'>
+      <h2> Organizational Facts </h2>
+      <p> Facts can be used in organization models by referencing them with '#' symbols. </p>
+    </div>
+
+    <div className='col-md-1'></div>
+    <div className='col-md-6'>
+      <div className='FactTab--factList'>
+        <FactListContainer organizationId={organizationId} isEditable={true}/>
+      </div>
+    </div>
+  </div>
+)
+

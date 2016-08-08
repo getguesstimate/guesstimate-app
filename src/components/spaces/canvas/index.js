@@ -19,7 +19,6 @@ import * as canvasStateProps from 'gModules/canvas_state/prop_type'
 
 import * as segment from 'servers/segment'
 
-
 import './style.css'
 
 import {isLocation, isAtLocation, existsAtLoc, isWithinRegion} from 'lib/locationUtils.js'
@@ -133,6 +132,7 @@ export default class Canvas extends Component{
     return _.isEmpty(metric.name) && _.isEmpty(input) && _.isEmpty(data)
   }
 
+
   renderMetric(metric, selected) {
     const {location} = metric
     const hasSelected = selected && metric && (selected.id !== metric.id)
@@ -144,6 +144,8 @@ export default class Canvas extends Component{
         key={metric.id}
         location={location}
         metric={metric}
+        organizationId={this.props.denormalizedSpace.organization_id}
+        organizationHasFacts={this.props.organizationHasFacts}
         selectedMetric={passSelected && selected}
       />
     )
