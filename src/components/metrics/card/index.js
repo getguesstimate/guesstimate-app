@@ -220,6 +220,7 @@ export default class MetricCard extends Component {
       metric,
       organizationId,
       organizationHasFacts,
+      isPrivate,
       canvasState,
       hovered,
       connectDragSource,
@@ -274,6 +275,7 @@ export default class MetricCard extends Component {
                 metricId={metric.id}
                 organizationId={organizationId}
                 organizationHasFacts={organizationHasFacts}
+                isPrivate={isPrivate}
                 metricFocus={this.focus.bind(this)}
                 jumpSection={() => {this.refs.MetricCardViewSection.focusName()}}
                 onOpen={this.openModal.bind(this)}
