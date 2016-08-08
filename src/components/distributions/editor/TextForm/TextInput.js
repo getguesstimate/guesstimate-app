@@ -45,11 +45,15 @@ export class TextInput extends Component{
     value: PropTypes.string,
   }
 
+  factRegex() {
+    const canUseOrganizationFacts = (!!this.props.organizationHasFacts && !!this.props.isPrivate && (__DEV__ || this.props.organizationId.toString() === '1'))
+    return canUseOrganizationFacts ? HANDLE_REGEX : GLOBALS_ONLY_REGEX
+  }
+
   decoratorList(extraDecorators=[]) {
     const {validInputs, errorInputs} = this.props
 
-    const canUseOrganizationFacts = (!!this.props.organizationHasFacts && (__DEV__ || this.props.organizationId.toString() === '1'))
-    const fact_regex = canUseOrganizationFacts ? HANDLE_REGEX : GLOBALS_ONLY_REGEX
+    const fact_regex = this.factRegex()
     const fact_decorators = [
       {
         strategy: (contentBlock, callback) => { findWithRegex(fact_regex, contentBlock, callback) },
@@ -151,7 +155,7 @@ export class TextInput extends Component{
 
   fetchSuggestion(editorState) {
     const prevWord = this.prevWord(editorState)
-    if (editorState.getSelection().isCollapsed() && (HANDLE_REGEX.test(prevWord))) {
+    if (editorState.getSelection().isCollapsed() && (this.factRegex().test(prevWord))) {
       this.props.dispatch(getSuggestion(resolveToSelector(this.props.organizationId)(prevWord)))
     } else {
       if (!_.isEmpty(this.props.suggestion)) { this.props.dispatch(clearSuggestion()) }
