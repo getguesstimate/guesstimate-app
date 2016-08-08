@@ -129,7 +129,7 @@ export class TextInput extends Component{
         this.addSuggestion()
       }
     } else if (!_.isEqual(prevProps.validInputs, this.props.validInputs) || !_.isEqual(prevProps.errorInputs, this.props.errorInputs)) {
-      this.updateDecorators()
+      setTimeout(() => {this.updateDecorators()}, 1)
     }
   }
 
