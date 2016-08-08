@@ -1,28 +1,43 @@
 const incrementOrOne = (val) => { val = (val || 0) + 1 }
 const concatOrNewList = (list, val) => { list = (list || []).concat(val) }
-const getParentComponent = comp => _.get(comp, '_reactInternalInstance._currentElement._owner')
+const getParentComponent = comp => _.get(comp, '_reactInternalInstance._currentElement._owner._instance')
+function getComponentTree(component) {
+  let ancestor = getParentComponent(component)
+  let componentTree = []
+  while (!!ancestor) {
+    componentTree = [ancestor, ...componentTree]
+    ancestor = getParentComponent(ancestor)
+  }
+  return componentTree
+}
 // val of the form
 // { name, data, start, end, duration, children: [] }
 function addAtPosition(position, list, val) {
-  const list = getChildrenAtPosition(position, list)
-  parent.children.push(val)
-  return parent.children.length - 1
+  let container = _.isEmpty(position) ? list : getAtPosition(position, list).children
+  container.push(val)
+  return container.length - 1
 }
 function getAtPosition(position, list) {
   let el = list[position.shift()]
   while (!_.isEmpty(position)) { el = el.children[position.shift()] }
   return el
 }
-function getChildrenAtPosition(position, list) {
-  if (_.isEmpty(position)) { return list }
-  return getAtPosition(position, list).children}
+function gatherParentIndices(component) {
+  let parentIndices = !!_.get(component, '__recorder_index__') ? [component['__recorder_index__']] : []
+  let ancestor = getParentComponent(component)
+  while (!!ancestor) {
+    if (!!_.get(ancestor, '__recorder_index__')) { parentIndices = [ancestor['__recorder_index__'], ...parentIndices] }
+    ancestor = getParentComponent(ancestor)
+  }
+  return parentIndices
 }
+
 
 export class GuesstimateRecorder {
   clearRecordings() {
     this.appStartTime = (new Date()).getTime()
     this.timeline = [{name: "Recording Started", time: this.appStartTime}]
-    this.nestedTimeline = [{name: "Recording Started", time: this.appStartTime, end: true}]
+    this.nestedTimeline = [{name: "Recording Started", start: this.appStartTime, end: this.appStartTime}]
     this.renderCounts = {}
     this.renderTimings = {}
     this.selectorCounts = {}
@@ -33,20 +48,12 @@ export class GuesstimateRecorder {
 
   constructor() {
     this.disabled = !__DEV__
-    this.paused = true
+    this.paused = false
     this.clearRecordings()
     this.uniqueId = 0
   }
 
-  static gatherParentIndices(component) {
-    let parentIndices = _.has(component, '__recorder_index__') ? [component['__recorder_index__']] : []
-    let ancestor = getParentComponent(component)
-    while (!!ancestor) {
-      if (_.has(ancestor, '__recorder_index__')) { parentIndices = [ancestor['__recorder_index__'], ...parentIndices] }
-      ancestor = getParentComponent(ancestor)
-    }
-    return parentIndices
-  }
+  recordNamedEvent() {}
 
   recordReductionEvent(action) {
     //  if (this.disabled || this.paused) { return }
@@ -75,15 +82,23 @@ export class GuesstimateRecorder {
 
     const element = {
       name: component.constructor.name,
-      time,
+      start: time,
       children: []
     }
-    component['__recorder_index__'] = addAtPosition(parentIndices, this.nestedTimeline, element)
+    const positionInTimeline = addAtPosition(parentIndices, this.nestedTimeline, element)
+    component['__recorder_index__'] = positionInTimeline
+
+    return
   }
   recordRenderStopEvent(component) {
     if (this.disabled || this.paused) { return }
-    const parentIndices = gatherParentIndices(component)
+
+    const indices = gatherParentIndices(component)
     const time = (new Date()).getTime() - this.appStartTime
+    let element = getAtPosition(indices, this.nestedTimeline)
+    element.end = time
+    element.duration = element.end - element.start
+    component['__recorder_index__'] = null
   }
   pause() { this.paused = true }
   unpause() { this.paused = false }
