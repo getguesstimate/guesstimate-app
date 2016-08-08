@@ -70,7 +70,7 @@ API_ENV=production (as opposed to development) means that it will use the produc
 
 First, make sure that git and node are installed.
 
-``git clone git@github.com:getguesstimate/guesstimate-app.git``
+``git clone https://github.com/getguesstimate/guesstimate-app.git``
 
 ``cd guesstimate-app``
 
