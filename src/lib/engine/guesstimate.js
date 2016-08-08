@@ -105,8 +105,8 @@ function _inputMetricsWithValues(guesstimate: Guesstimate, dGraph: DGraph): Obje
 
 // In the `expression` syntax, input metrics are expressed as `${[metric id]}`. To match that in a regex, and translate
 // to it, we need functions that wrap passed IDs in the right syntax, appropriately escaped.
-const expressionSyntaxPad = (id, isMetric=true) => `\$\{${isMetric ? 'metric' : 'fact'}:${id}\}`
-const escapedExpressionSyntaxPad = (id, isMetric=true) => `\\\$\\\{${isMetric ? 'metric' : 'fact'}:${id}\\\}`
+export const expressionSyntaxPad = (id, isMetric=true) => `\$\{${isMetric ? 'metric' : 'fact'}:${id}\}`
+export const escapedExpressionSyntaxPad = (id, isMetric=true) => `\\\$\\\{${isMetric ? 'metric' : 'fact'}:${id}\\\}`
 
 // Returns a function which takes a guesstimate and returns that guesstimate with an input based on its
 // expression.

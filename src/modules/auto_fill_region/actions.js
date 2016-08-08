@@ -28,35 +28,39 @@ function isNonConstant({location, name}, direction, metrics) {
 
 // TODO(matthew): Make this not exported (Test through the public API)
 export function fillDynamic(startMetric, startGuesstimate, direction) {
-  const {input} = startGuesstimate
+  const {expression} = startGuesstimate
   return (location, metrics) => {
     const metric = buildNewMetric(startMetric, metrics, location)
 
     const nonConstantMetrics = metrics.filter(m => isNonConstant(m, direction, metrics))
     if (_.isEmpty(nonConstantMetrics)) { return {metric, guesstimate: {...startGuesstimate, metric: metric.id}} }
 
-    const nonConstantInputsRegex = RegExp(nonConstantMetrics.map(m => m.readableId).join('|'), "g")
-    const numNonConstantInputs = (input.match(nonConstantInputsRegex) || []).length
+    const nonConstantInputsRegex = RegExp(nonConstantMetrics.map(m => e.guesstimate.escapedExpressionSyntaxPad(m.id, true)).join('|'), "g")
+    const numNonConstantInputs = (expression.match(nonConstantInputsRegex) || []).length
 
     const translateFn = translate(startMetric.location, location)
     let idMap = {}
+    let translatableInputsRegexParts = []
     nonConstantMetrics.forEach(m => {
       const matchedMetric = metrics.find(m2 => isAtLocation(translateFn(m.location), m2.location))
-      if (!!matchedMetric) { idMap[m.readableId] = matchedMetric.readableId }
+      if (!!matchedMetric) {
+        idMap[e.guesstimate.expressionSyntaxPad(m.id, true)] = e.guesstimate.expressionSyntaxPad(matchedMetric.id, true)
+        translatableInputsRegexParts.push(e.guesstimate.escapedExpressionSyntaxPad(m.id, true))
+      }
     })
     if (_.isEmpty(idMap)) {
       if (numNonConstantInputs === 0) { return {metric, guesstimate: {...startGuesstimate, metric: metric.id}} }
       else { return {} }
     }
 
-    const translatableInputsRegex = RegExp(Object.keys(idMap).join("|"), "g")
-    const numTranslatedInputs = numNonConstantInputs === 0 ? 0 : (input.match(translatableInputsRegex) || []).length
+    const translatableInputsRegex = RegExp(translatableInputsRegexParts.join("|"), "g")
+    const numTranslatedInputs = numNonConstantInputs === 0 ? 0 : (expression.match(translatableInputsRegex) || []).length
 
     if (numNonConstantInputs !== numTranslatedInputs) { return {} }
 
-    const newInput = numTranslatedInputs === 0 ? input : input.replace(translatableInputsRegex, (match) => idMap[match])
+    const newExpression = numTranslatedInputs === 0 ? expression : expression.replace(translatableInputsRegex, (match) => idMap[match])
 
-    return { metric, guesstimate: {...startGuesstimate, metric: metric.id, input: newInput } }
+    return { metric, guesstimate: {...startGuesstimate, metric: metric.id, expression: newExpression } }
   }
 }
 
