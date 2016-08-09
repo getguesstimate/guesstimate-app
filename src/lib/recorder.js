@@ -1,106 +1,131 @@
 const incrementOrOne = (val) => { val = (val || 0) + 1 }
 const concatOrNewList = (list, val) => { list = (list || []).concat(val) }
+const getParentComponent = comp => _.get(comp, '_reactInternalInstance._currentElement._owner._instance')
+function getComponentTree(component) {
+  let ancestor = getParentComponent(component)
+  let componentTree = []
+  while (!!ancestor) {
+    componentTree = [ancestor, ...componentTree]
+    ancestor = getParentComponent(ancestor)
+  }
+  return componentTree
+}
+// val of the form
+// { name, data, start, end, duration, children: [] }
+function appendAtPosition(position, list, val, c) {
+  let container = _.isEmpty(position) ? list : getAtPosition(position, list, c).children
+  container.push(val)
+  return container.length - 1
+}
+function getAtPosition(position, list, c) {
+  let el = list[position[0]]
+  position.slice(1).forEach( coor => {el = el.children[coor] } )
+  if (!el) {
+    console.warn('Invalid indices detected! Crashing')
+    return
+  }
+  return el
+}
+const gatherParentIndices = component => gatherIndicesFromRoot(getParentComponent(component))
+function gatherIndicesFromRoot(component) {
+  let indices = !!_.get(component, '__recorder_index__') ? [component['__recorder_index__']] : []
+  let ancestor = getParentComponent(component)
+  while (!!ancestor) {
+    if (_.isFinite(_.get(ancestor, '__recorder_index__'))) { indices = [ancestor['__recorder_index__'], ...indices] }
+    ancestor = getParentComponent(ancestor)
+  }
+  return indices
+}
+
 
 export class GuesstimateRecorder {
   clearRecordings() {
     this.appStartTime = (new Date()).getTime()
-    this.timeline = [{name: "Recording Started", time: this.appStartTime}]
-    this.nestedTimeline = [{name: "Recording Started", time: this.appStartTime, end: true}]
+    this.nestedTimeline = [{name: "Recording Started", start: this.appStartTime, end: this.appStartTime}]
+    this.warnings = []
     this.renderCounts = {}
     this.renderTimings = {}
     this.selectorCounts = {}
     this.selectorTimings = {}
     this.actionCounts = {}
-    this.actionTimings = {}
   }
 
   constructor() {
     this.disabled = !__DEV__
     this.paused = true
+    this.verbose = false
     this.clearRecordings()
-    this.uniqueId = 0
   }
 
-  static gatherParentIndices(component) {
-    let parentIndices = _.has(component, '__recorder_index__') ? [component['__recorder_index__']] : []
-    let ancestor = component._reactInternalInstance._currentElement._owner
-    while (!!ancestor) {
-      parentIndices = [ancestor['__recorder_index__'], ...parentIndices]
-      ancestor = ancestor._reactInternalInstance._currentElement._owner
-    }
-    return parentIndices
+  time() { return (new Date()).getTime() - this.appStartTime }
+  recording() { return !(this.disabled || this.paused) }
+  warn(message, rawData={}) {
+    const data = Object.assign({}, rawData)
+    if (this.verbose) { console.warn(message, data) }
+    this.warnings.push({message, data, time: this.time()})
   }
 
-  static addSingletonToNestedList(name, id, time, data, list) {
-    const lastElm = list[list.length - 1]
-    if (list.length === 0 || !!lastElm.end) {
-      list.push({name, id, time, data, end: true})
-    } else {
-      GuesstimateRecorder.addSingletonToNestedList(name, id, time, data, lastElm.children)
-    }
-  }
-  static addStartToNestedList(name, id, time, data, list) {
-    const lastElm = list[list.length - 1]
-    if (list.length === 0 || !!lastElm.end) {
-      list.push({name, id, start: time, children: [], data, end: null})
-    } else {
-      GuesstimateRecorder.addStartToNestedList(name, id, time, data, lastElm.children)
-    }
-  }
-  static addStopToNestedList(name, id, time, data, list) {
-    // TODO(matthew): Examine all children (async).
-    if (!list) {
-      console.warn("Failed to close timing for ", name, " at ", time)
-      return {duration: null}
-    }
-    const lastElm = list[list.length - 1]
-    if (lastElm.id === id) {
-      lastElm.end = time
-      lastElm.data = data
-      lastElm.duration = lastElm.end - lastElm.start
-      return lastElm
-    } else {
-      return GuesstimateRecorder.addStopToNestedList(name, id, time, data, lastElm.children)
-    }
+  recordNamedEvent(name, suffix = '', data = {}, counters = null) {
+    if (!this.recording()) { return }
+    const element = {name: [name, suffix].filter(n => !_.isEmpty(n)).join(' '), start: this.time(), end: this.time(), duration: 0, children: [], data}
+    this.nestedTimeline.push(element)
+    if (!!counters) { incrementOrOne(counters[name]) }
   }
 
-  recordNamedEvent(name, id, suffix = "", nestFn = GuesstimateRecorder.addSingletonToNestedList, data={}) {
-    if (this.disabled || this.paused) { return }
-    const time = (new Date()).getTime() - this.appStartTime
-    this.timeline = this.timeline.concat({name: `${name} ${suffix}`, id, time, data})
-    return nestFn(name, id, time, data, this.nestedTimeline)
+  recordReductionEvent(action) { this.recordNamedEvent(action.type, 'Reducing', action, this.actionCounts) }
+  recordSelectorStart(name) {
+    if (!this.recording()) { return }
+    const start = {name, start: this.time(), children: []}
+    this.nestedTimeline.push(start)
   }
-
-  recordReductionEvent(action) {
-    if (this.disabled || this.paused) { return }
-    this.recordNamedEvent(action.type, null, " Reducing", GuesstimateRecorder.addSingletonToNestedList, action)
-    incrementOrOne(this.actionCounts[action.type])
-  }
-
-  recordSelectorStart(name) { this.recordNamedEvent(name, null, " Start", GuesstimateRecorder.addStartToNestedList) }
   recordSelectorStop(name, returned) {
-    if (this.disabled || this.paused) { return }
-    const fullSelector = this.recordNamedEvent(name, null, " Stop", GuesstimateRecorder.addStopToNestedList, returned)
-    incrementOrOne(this.selectorCounts[name])
-    concatOrNewList(this.selectorTimings[name], fullSelector.duration)
+    if (!this.recording()) { return }
+    let start = this.nestedTimeline.find(e => e.name === name && !e.end)
+    if (!start) { this.warn('Selector start/stop unbalanced (missing start)', {name, returned}); return }
+    start.end = this.time()
+    start.duration = start.end - start.start
+    start.data = returned
   }
-
   recordMountEvent(component) {
-    this.recordNamedEvent(`${component.constructor.name} Mount`)
-    component['__recorder_id__'] = this.uniqueId++
+    const parentIndices = gatherParentIndices(getParentComponent(component))
+    const element = {
+      name: `${_.get(component, 'constructor.name')} Mount`,
+      start: this.time(),
+      end: this.time(),
+      duration: 0,
+      children: [],
+    }
+    appendAtPosition(parentIndices, this.nestedTimeline, element, component)
   }
-  recordUnmountEvent(component) { this.recordNamedEvent(`${component.constructor.name} Unmount`) }
-  recordRenderStartEvent(component) {
-    this.recordNamedEvent(component.constructor.name, component['__recorder_id__'], " Render Start", GuesstimateRecorder.addStartToNestedList)
-  }
-  recordRenderStopEvent(component) {
-    if (this.disabled || this.paused) { return }
+  recordUnmountEvent(component) { this.recordNamedEvent(_.get(component, 'constructor.name'), 'Unmount') }
 
-    const name = component.constructor.name
-    const fullRender = this.recordNamedEvent(name, component['__recorder_id__'], " Render Stop", GuesstimateRecorder.addStopToNestedList)
+  recordRenderStartEvent(component) {
+    if (!this.recording()) { return }
+    if (!!_.get(component, '__recorder_index__')) { this.warn('render starting before render chain terminated', {component}) }
+
+    const parentIndices = gatherParentIndices(component)
+    const name = _.get(component, 'constructor.name')
+    const element = {name, start: this.time(), children: []}
+
+    const positionInTimeline = appendAtPosition(parentIndices, this.nestedTimeline, element, component)
+    component['__recorder_index__'] = positionInTimeline
+
     incrementOrOne(this.renderCounts[name])
-    concatOrNewList(this.renderTimings[name], fullRender.duration)
   }
+
+  recordRenderStopEvent(component) {
+    if (!this.recording()) { return }
+    if (!_.get(component, '__recorder_index__')) { this.warn('render stopping before render chain initiated', {component}); return }
+
+    const indices = gatherIndicesFromRoot(component)
+    let element = getAtPosition(indices, this.nestedTimeline, component)
+    element.end = this.time()
+    element.duration = element.end - element.start
+    component['__recorder_index__'] = null
+  }
+
   pause() { this.paused = true }
   unpause() { this.paused = false }
+  verbose() { this.verbose = true }
+  noVerbose() { this.verbose = false }
 }
