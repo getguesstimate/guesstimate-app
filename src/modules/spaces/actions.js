@@ -155,8 +155,13 @@ function getSpace(getState, spaceId) {
 
 export function generalUpdate(spaceId, params) {
   return (dispatch, getState) => {
-
-    const space = Object.assign({}, getSpace(getState, spaceId), params)
+    const space = {...getSpace(getState, spaceId), ...params}
+    const usesFacts = _.has(space, 'graph.guesstimates') && _.some(space.graph.guesstimates.map(g => g.expression), e => e.includes('${fact:'))
+    const isPrivate = space.is_private
+    if (!isPrivate && usesFacts) {
+      dispatch(changeActionState('ERROR'))
+      return
+    }
 
     dispatch(sActions.updateStart(space))
     dispatch(changeActionState('SAVING'))

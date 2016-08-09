@@ -48,6 +48,7 @@ export class TextForm extends Component{
       errors,
       organizationId,
       organizationHasFacts,
+      isPrivate,
       onChangeInput,
       onAddData,
       onChangeGuesstimateType,
@@ -83,6 +84,7 @@ export class TextForm extends Component{
             width={shouldBeWide ? 'NARROW' : "WIDE"}
             organizationId={organizationId}
             organizationHasFacts={organizationHasFacts}
+            isPrivate={isPrivate}
           />
 
           { shouldDisplayType &&

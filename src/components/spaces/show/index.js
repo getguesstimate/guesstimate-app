@@ -249,7 +249,8 @@ export default class SpacesShow extends Component {
 
   canShowFactSidebar() {
     const orgId = _.get(this, 'props.denormalizedSpace.organization.id')
-    return !!orgId && (__DEV__ || orgId === 1)
+    const is_private = _.get(this, 'props.denormalizedSpace.is_private')
+    return !!orgId && !!is_private && (__DEV__ || orgId === 1)
   }
 
   closeRightSidebar() {
