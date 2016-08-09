@@ -12,6 +12,6 @@ export function hasMetricUpdated(oldProps, newProps) {
     (!!oldProps.metric.simulation && (oldProps.metric.simulation.propagationId !== newProps.metric.simulation.propagationId)) ||
     !!oldProps.metric.guesstimate !== !!newProps.metric.guesstimate ||
     oldProps.metric.guesstimate.description !== newProps.metric.guesstimate.description ||
-    oldProps.metric.guesstimate.guessstimateType !== newProps.metric.guesstimate.guesstimateType
+    oldProps.metric.guesstimate.guesstimateType !== newProps.metric.guesstimate.guesstimateType
   )
 }
