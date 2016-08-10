@@ -77,9 +77,13 @@ const CalculatorFormHeader = ({isNew, onClose}) => (
   </div>
 )
 
-const FactSidebarHeader = ({onClose}) => (
+const FactSidebarHeader = ({onClose, organizationId}) => (
   <div className='row'>
-    <div className='col-xs-12'>
+    <div className='col-xs-6'>
+      <h2> Private Facts </h2>
+    </div>
+    <div className='col-xs-6'>
+      <ButtonExpandText onClick={navigateFn(`/organizations/${organizationId}/facts`)}/>
       <div className='button-close-text'><ButtonCloseText onClick={onClose}/></div>
     </div>
   </div>
@@ -321,7 +325,12 @@ export default class SpacesShow extends Component {
       case FACT_SIDEBAR:
         return {
           classes: ['grey'],
-          header: <FactSidebarHeader onClose={this.closeRightSidebar.bind(this)} />,
+          header: (
+            <FactSidebarHeader
+              onClose={this.closeRightSidebar.bind(this)}
+              organizationId={organization.id}
+            />
+          ),
           main: (
             <div className='SpaceRightSidebar--padded-area'>
               <FactListContainer organizationId={organization.id} isEditable={false}/>
