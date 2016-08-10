@@ -91,7 +91,9 @@ $blue-a1: #4A6A88;
 }
 
 .Fact.form .section-simulation {
-  padding-right: .9em;
+  padding-right: .8em;
+  min-width: 10em;
+  flex: 2;
 }
 
 
