@@ -32,6 +32,7 @@ export class SpaceHeader extends Component {
       ownerName,
       ownerPicture,
       ownerUrl,
+      ownerIsOrg,
       isPrivate,
       editableByMe,
       onPublicSelect,
@@ -58,7 +59,7 @@ export class SpaceHeader extends Component {
           </div>
 
           <div className='col-sm-4'>
-            {!editableByMe &&
+            {(ownerIsOrg || !editableByMe)  &&
               <a className='ui image label' href={ownerUrl}>
                 <img src={ownerPicture}/>
                 {ownerName}

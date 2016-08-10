@@ -412,6 +412,7 @@ export default class SpacesShow extends Component {
             ownerName={owner.name}
             ownerPicture={owner.picture}
             ownerUrl={ownerUrl}
+            ownerIsOrg={hasOrg}
             onSaveName={this.onSaveName.bind(this)}
             onPublicSelect={this.onPublicSelect.bind(this)}
             onPrivateSelect={this.onPrivateSelect.bind(this)}
