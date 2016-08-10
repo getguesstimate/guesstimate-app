@@ -60,7 +60,7 @@ $blue-a1: #4A6A88;
 }
 
 .Fact  .section-simulation {
-  min-width: 5.5em;
+  min-width: 6em;
   flex: 1;
   position: relative;
 
