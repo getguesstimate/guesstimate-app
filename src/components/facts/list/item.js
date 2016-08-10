@@ -5,7 +5,7 @@ import Icon from 'react-fa'
 import {DistributionSummary} from 'gComponents/distributions/summary/index'
 import Histogram from 'gComponents/simulations/histogram/index'
 
-export const FactItem = ({fact, onEdit, isEditable}) => (
+export const FactItem = ({fact, onEdit}) => (
   <div className='Fact--outer'>
     <div className='Fact'>
       <div className='section-simulation simulation-sample'>
@@ -36,11 +36,9 @@ export const FactItem = ({fact, onEdit, isEditable}) => (
         </div>
       </div>
 
-      {isEditable &&
         <div className='section-help'>
           <span className='ui button small options' onClick={onEdit}>Edit</span>
         </div>
-      }
     </div>
   </div>
 )

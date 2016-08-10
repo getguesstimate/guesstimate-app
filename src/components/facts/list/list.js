@@ -28,7 +28,6 @@ export class FactList extends Component {
       <FactItem
         key={fact.id}
         fact={fact}
-        isEditable={this.props.isEditable}
         onEdit={() => {this.setState({editingFactId: fact.id})}}
       />
     )
