@@ -86,7 +86,7 @@ export class FactForm extends Component {
   }
 
   render() {
-    const buttonClasses = ['ui', 'button', 'tiny', 'primary', ...(this.isValid() ? [] : ['disabled'])]
+    const buttonClasses = ['ui', 'button', 'small', 'primary', ...(this.isValid() ? [] : ['disabled'])]
     const {props: {buttonText, onCancel, onDelete}, state: {runningFact: {expression, name, variable_name}}} = this
 
     return (
@@ -109,7 +109,7 @@ export class FactForm extends Component {
               <textarea
                 type='text'
                 rows='1'
-                placeholder='description'
+                placeholder='name'
                 value={name}
                 onChange={this.onChangeName.bind(this)}
                 onKeyDown={this.submitIfEnter.bind(this)}
@@ -121,18 +121,18 @@ export class FactForm extends Component {
               <span className='prefix'>#</span>
               <input
                 type='text'
-                placeholder='variable_name'
+                placeholder='hashtag'
                 value={variable_name}
                 onChange={this.onChangeVariableName.bind(this)}
                 onKeyDown={this.submitIfEnter.bind(this)}
               />
             </div>
           </div>
-        </div>
-        <div className='section-help'>
-          <span className={buttonClasses.join(' ')} onClick={this.onSubmit.bind(this)}>{buttonText}</span>
-          {!!onCancel && <span className='ui button tiny' onClick={onCancel}>Cancel</span>}
-          {<span className='ui button tiny' onClick={onDelete}>Delete</span>}
+          <div className='actions'>
+            <span className={buttonClasses.join(' ')} onClick={this.onSubmit.bind(this)}>{buttonText}</span>
+            {!!onCancel && <span className='ui button small' onClick={onCancel}>Cancel</span>}
+            {!!onDelete && <span className='ui button small' onClick={onDelete}>Delete</span>}
+          </div>
         </div>
       </div>
     </div>

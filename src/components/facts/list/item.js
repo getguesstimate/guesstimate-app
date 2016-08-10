@@ -38,7 +38,7 @@ export const FactItem = ({fact, onEdit, isEditable}) => (
 
       {isEditable &&
         <div className='section-help'>
-          <span className='ui button tiny options' onClick={onEdit}>Edit</span>
+          <span className='ui button small options' onClick={onEdit}>Edit</span>
         </div>
       }
     </div>
