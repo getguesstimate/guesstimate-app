@@ -207,7 +207,7 @@ const OrganizationTabButtons = ({tabs, openTab, changeTab}) => (
 
 const FactTab = ({organizationId}) => (
   <div className='FactTab row'>
-    <div className='col-md-2'>
+    <div className='col-md-5'>
       <h2> Private Organizational Facts </h2>
       <p> Facts can be used in private organization models by referencing them with '#' symbols. </p>
     </div>
