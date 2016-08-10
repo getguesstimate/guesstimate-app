@@ -96,7 +96,7 @@ export class SpaceToolbar extends Component {
       onForbidEdits,
       calculators,
       makeNewCalculator,
-      showFactSidebar,
+      toggleFactSidebar,
     } = this.props
     const ReactTooltipParams = {class: 'header-action-tooltip', delayShow: 0, delayHide: 0, place: 'bottom', effect: 'solid'}
 
@@ -214,7 +214,7 @@ export class SpaceToolbar extends Component {
             }
 
             {this.props.canShowFactSidebar &&
-              <a onClick={showFactSidebar} className={`header-action`}> <Icon name='bank'/> </a>
+              <a onClick={toggleFactSidebar} className={`header-action`}> <Icon name='bank'/> </a>
             }
 
             {editableByMe && editsAllowed && <ProgressMessage actionState={actionState}/>}

@@ -259,7 +259,7 @@ export default class SpacesShow extends Component {
   }
   openRightSidebar(rightSidebarState) {
     elev.hide()
-    this.setState({rightSidebar: rightSidebarState}) 
+    this.setState({rightSidebar: rightSidebarState})
   }
   showCalculator({id}) { this.openRightSidebar({type: SHOW_CALCULATOR, showCalculatorId: id}) }
   editCalculator(id) { this.openRightSidebar({type: EDIT_CALCULATOR_FORM, editCalculatorId: id}) }
@@ -268,7 +268,12 @@ export default class SpacesShow extends Component {
     this.closeRightSidebar()
   }
   makeNewCalculator() { this.openRightSidebar({type: NEW_CALCULATOR_FORM}) }
-  showFactSidebar() { if (this.canShowFactSidebar()) { this.openRightSidebar({type: FACT_SIDEBAR}) } }
+  toggleFactSidebar() {
+    if (this.canShowFactSidebar()) {
+      if (this.state.rightSidebar.type !== FACT_SIDEBAR){ this.openRightSidebar({type: FACT_SIDEBAR}) }
+      else { this.closeRightSidebar() }
+    }
+  }
 
   rightSidebarBody() {
     const {props: {denormalizedSpace}, state: {rightSidebar: {type, showCalculatorResults, showCalculatorId, editCalculatorId}}} = this
@@ -431,7 +436,7 @@ export default class SpacesShow extends Component {
             calculators={space.calculators}
             makeNewCalculator={this.makeNewCalculator.bind(this)}
             showCalculator={this.showCalculator.bind(this)}
-            showFactSidebar={this.showFactSidebar.bind(this)}
+            toggleFactSidebar={this.toggleFactSidebar.bind(this)}
             canShowFactSidebar={this.canShowFactSidebar()}
           />
         </div>
