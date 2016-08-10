@@ -30,7 +30,6 @@ export class FactList extends Component {
         fact={fact}
         isEditable={this.props.isEditable}
         onEdit={() => {this.setState({editingFactId: fact.id})}}
-        onDelete={() => {this.props.onDeleteFact(fact)}}
       />
     )
   }
@@ -43,6 +42,7 @@ export class FactList extends Component {
       existingVariableNames={facts.map(getVar).filter(v => v !== getVar(fact))}
       buttonText={'Save'}
       onSubmit={onEditFact}
+      onDelete={() => {this.props.onDeleteFact(fact)}}
       onCancel={() => {this.setState({editingFactId: null})}}
     />
   }

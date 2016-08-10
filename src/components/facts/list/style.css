@@ -16,7 +16,7 @@ $blue-a1: #4A6A88;
 }
 
 .Fact {
-  padding: .4em .5em;
+  padding: .4em .5em .5em;
   background-color: white;
   float: left;
   width: 100%;
@@ -55,7 +55,7 @@ $blue-a1: #4A6A88;
     left: 20%;
     height: 35px;
     position: absolute;
-    bottom: -.4em;
+    bottom: -.5em;
     right: 0;
     z-index: 0;
     .react-d3-histogram__bar rect {
@@ -86,24 +86,33 @@ $blue-a1: #4A6A88;
 .Fact > .section-name {
   float: left;
   flex: 6;
+  margin-top: .05em;
 
-  .description {
-    font-size: .9em;
-    color: $grey-999;
-    letter-spacing: 0.36px;
+  .fact-name {
+    font-size: 1.3em;
+    color: $grey-333;
     float: left;
-    margin-top: .25em;
+    width: 100%;
   }
 
   .variable-name {
-    font-size: 1.2em;
-    font-weight: 800;
     float: left;
-    margin-right: 100%;
-    color: $blue-a1;
+    line-height: 1.2em;
+    margin-top: .4em;
+
+    &.variable-token {
+      background-color: #f3e5fc;
+      color: #603566;
+      padding: 0 3px;
+    }
 
     .prefix {
       margin-right: 1px;
+      float: left;
+    }
+
+    .name {
+      float: left;
     }
   }
 }
@@ -120,12 +129,10 @@ $blue-a1: #4A6A88;
         position: absolute;
         left: .4em;
         top: .4em;
-        font-size: 1.2em;
       }
 
       input {
-      color: $blue-a1;
-        padding-left: 1.4em;
+        padding-left: 1.1em;
       }
     }
   }
