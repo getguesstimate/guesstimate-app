@@ -28,6 +28,18 @@ $blue-a1: #4A6A88;
     display: none;
   }
 
+  &:not(:hover):not(.form) .variable-name.variable-token {
+    background-color: rgba(0,0,0,0);
+    color: #999;
+    transition: all .05s ease .05s;
+  }
+
+  &:hover:not(.form) .variable-name.variable-token {
+    background-color: #f3e5fc;
+    color: #603566;
+    transition: all .05s ease .05s;
+  }
+
   .ui.tiny.button {
      padding: .3em 1em;
      border-radius: 2px;
@@ -101,8 +113,6 @@ $blue-a1: #4A6A88;
     margin-top: .4em;
 
     &.variable-token {
-      background-color: #f3e5fc;
-      color: #603566;
       padding: 0 3px;
     }
 
