@@ -59,12 +59,12 @@ $blue-a1: #4A6A88;
 }
 
 .Fact  .section-simulation {
-  min-width: 7em;
+  min-width: 5.5em;
   flex: 1;
   position: relative;
 
   .histogram {
-    left: 20%;
+    left: 10%;
     height: 35px;
     position: absolute;
     bottom: -.5em;
@@ -102,7 +102,7 @@ $blue-a1: #4A6A88;
 
   .fact-name {
     font-size: 1.3em;
-    color: $grey-333;
+    color: #333;
     float: left;
     width: 100%;
   }
