@@ -97,6 +97,7 @@ export class SpaceToolbar extends Component {
       calculators,
       makeNewCalculator,
       toggleFactSidebar,
+      onOpenTutorial,
     } = this.props
     const ReactTooltipParams = {class: 'header-action-tooltip', delayShow: 0, delayHide: 0, place: 'bottom', effect: 'solid'}
 
@@ -157,7 +158,7 @@ export class SpaceToolbar extends Component {
               </DropDown>
             }
 
-            <CanvasViewForm/>
+            <CanvasViewForm onOpenTutorial={onOpenTutorial}/>
 
             <div className='header-action-border'/>
             <a onClick={onCutMetrics} className={`header-action`} data-tip data-for='cut-button'>

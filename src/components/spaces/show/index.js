@@ -24,6 +24,7 @@ import * as spaceActions from 'gModules/spaces/actions'
 import * as simulationActions from 'gModules/simulations/actions'
 import * as copiedActions from 'gModules/copied/actions'
 import * as calculatorActions from 'gModules/calculators/actions'
+import * as userActions from 'gModules/users/actions'
 import {removeSelectedMetrics} from 'gModules/metrics/actions'
 import {undo, redo} from 'gModules/checkpoints/actions'
 import {navigateFn} from 'gModules/navigation/actions'
@@ -105,7 +106,7 @@ export default class SpacesShow extends Component {
 
   state = {
     showLeftSidebar: true,
-    showingTutorial: true,
+    showTutorial: !!_.get(this, 'props.me.profile.needs_tutorial'),
     attemptedFetch: false,
     rightSidebar: {
       type: !!this.props.showCalculatorId ? SHOW_CALCULATOR : CLOSED,
@@ -123,6 +124,12 @@ export default class SpacesShow extends Component {
     if (_.has(this.props, 'denormalizedSpace.editableByMe')) {
       this.setDefaultEditPermission(_.get(this.props, 'denormalizedSpace.editableByMe'))
     }
+  }
+
+  openTutorial() { this.setState({showTutorial: true}) }
+  closeTutorial() {
+    if (!!_.get(this, 'props.me.profile.needs_tutorial')) { this.props.dispatch(userActions.finishedTutorial(this.props.me.profile)) }
+    this.setState({showTutorial: false})
   }
 
   setDefaultEditPermission(editableByMe) {
@@ -404,9 +411,7 @@ export default class SpacesShow extends Component {
             ]}
           />
         }
-        {!me.needs_tutorial &&
-          <TutorialModal onClose={() => {console.log('closing')}} />
-        }
+        {this.state.showTutorial && <TutorialModal onClose={this.closeTutorial.bind(this)} />}
 
         <div className='hero-unit'>
           <SpaceHeader
@@ -453,6 +458,7 @@ export default class SpacesShow extends Component {
             showCalculator={this.showCalculator.bind(this)}
             toggleFactSidebar={this.toggleFactSidebar.bind(this)}
             canShowFactSidebar={this.canShowFactSidebar()}
+            onOpenTutorial={this.openTutorial.bind(this)}
           />
         </div>
 

@@ -110,6 +110,14 @@ export default class CanvasViewForm extends Component {
             })}
           </ul>
         </div>
+        <div className='section' closeOnClick={true}>
+          <div className='header-divider' onClick={e => {e.stopPropagation()}}>
+            <h3> Help </h3>
+          </div>
+          <ul>
+            <CardListElement key={'tutorial'} icon={'question'} header={'Show Tutorial'} onMouseDown={this.props.onOpenTutorial} />
+          </ul>
+        </div>
       </DropDown>
     )
   }
