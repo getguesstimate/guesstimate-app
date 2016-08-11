@@ -1,0 +1,12 @@
+@import './styles/variables.css';
+
+.tutorial {
+  .pageContainer {
+    img {
+      height: 12em;
+    }
+  }
+
+  .actions {
+  }
+}

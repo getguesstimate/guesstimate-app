@@ -15,6 +15,7 @@ import {CalculatorCompressedShow} from 'gComponents/calculators/show/CalculatorC
 import {ButtonCloseText} from 'gComponents/utility/buttons/close'
 import {ButtonEditText, ButtonDeleteText, ButtonExpandText} from 'gComponents/utility/buttons/button'
 import {FactListContainer} from 'gComponents/facts/list/container.js'
+import {TutorialModal} from './Tutorial/index'
 
 import {denormalizedSpaceSelector} from '../denormalized-space-selector'
 
@@ -104,6 +105,7 @@ export default class SpacesShow extends Component {
 
   state = {
     showLeftSidebar: true,
+    showingTutorial: true,
     attemptedFetch: false,
     rightSidebar: {
       type: !!this.props.showCalculatorId ? SHOW_CALCULATOR : CLOSED,
@@ -355,7 +357,7 @@ export default class SpacesShow extends Component {
 
   render() {
     const space = this.props.denormalizedSpace
-    const {organizationHasFacts} = this.props
+    const {organizationHasFacts, me} = this.props
     if (!spacePrepared(space)) { return <div className='spaceShow'></div> }
 
     const sidebarIsViseable = space.editableByMe || !_.isEmpty(space.description)
@@ -401,6 +403,9 @@ export default class SpacesShow extends Component {
               {property: 'og:image', content: space.big_screenshot},
             ]}
           />
+        }
+        {!me.needs_tutorial &&
+          <TutorialModal onClose={() => {console.log('closing')}} />
         }
 
         <div className='hero-unit'>
