@@ -8,12 +8,9 @@
   line-height: 1.3em;
   font-size: 0.95em;
 
-  .noun {
-    color: #3c82c3;
-  }
-
-  .property {
-    color: #3c82c3;
+  .fact {
+    color: #483567;
+    background-color: #e5dbf7;
   }
 
   .suggestion {

@@ -23,6 +23,29 @@ export default class Organizations extends AbstractResource {
     this.guesstimateMethod({url, method, data})(callback)
   }
 
+  addFact({id}, fact, callback) {
+    const url = `organizations/${id}/facts`
+    const method = 'POST'
+    const data = {fact}
+
+    this.guesstimateMethod({url, method, data})(callback)
+  }
+
+  editFact({id}, fact, callback) {
+    const url = `organizations/${id}/facts/${fact.id}`
+    const method = 'PATCH'
+    const data = {fact}
+
+    this.guesstimateMethod({url, method, data})(callback)
+  }
+
+  deleteFact({id}, fact, callback) {
+    const url = `organizations/${id}/facts/${fact.id}`
+    const method = 'DELETE'
+
+    this.guesstimateMethod({url, method})(callback)
+  }
+
   getInvitations({organizationId}, callback) {
     const url = `organizations/${organizationId}/invitees`
     const method = 'GET'

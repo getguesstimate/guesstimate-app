@@ -41,7 +41,6 @@ export function Evaluate(text, sampleCount, inputs) {
     if (message.startsWith('Unexpected end of expression')) {
       return {errors: [{type: MATH_ERROR, message: message.replace(/\s\(char \d+\)/, '')}]}
     } else {
-      console.log(message)
       return {errors: [{type: MATH_ERROR, message: 'Sampling error detected', rawMessage: message}]}
     }
   }

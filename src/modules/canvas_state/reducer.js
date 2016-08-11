@@ -8,7 +8,7 @@ const initialState = {
   editsAllowed: true,
 }
 
-export default function canvasState(state = initialState, action) {
+export function canvasStateR(state = initialState, action) {
   switch (action.type) {
     case 'CHANGE_CANVAS_STATE': {
       return {...state, ...action.values}

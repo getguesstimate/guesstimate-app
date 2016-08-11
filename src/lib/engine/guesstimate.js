@@ -3,6 +3,7 @@
 import type {Guesstimate, Distribution, DGraph, Graph, Simulation} from './types'
 import {Guesstimator} from '../guesstimator/index'
 import {INPUT_ERROR} from 'lib/errors/modelErrors'
+import {HANDLE_REGEX} from './facts'
 
 export function equals(l, r) {
   return (
@@ -12,7 +13,7 @@ export function equals(l, r) {
   )
 }
 
-export const attributes = ['metric', 'input', 'guesstimateType', 'description', 'data']
+export const attributes = ['metric', 'expression', 'input', 'guesstimateType', 'description', 'data']
 
 export function sample(guesstimate: Guesstimate, dGraph: DGraph, n: number = 1) {
   const metric = guesstimate.metric
@@ -31,9 +32,28 @@ export function sample(guesstimate: Guesstimate, dGraph: DGraph, n: number = 1) 
   return item.sample(n, inputs).then(sample => ({ metric, sample }))
 }
 
-export function format(guesstimate: Guesstimate): Guesstimate{
+export function format(guesstimate: Guesstimate): Guesstimate {
   let formatted = _.pick(guesstimate, attributes)
   return formatted
+}
+
+export const extractFactHandles = ({input}) => _.isEmpty(input) ? [] : input.match(HANDLE_REGEX)
+
+const padNonAlphaNumeric = str => `(?:[^\\w]|^)(${str})(?:[^\\w]|$)`
+
+function translateReadableIds(input, idMap) {
+  if (!input) {return ""}
+
+  const ids = _.sortBy(Object.keys(idMap), id => -id.length)
+
+  let translatedInput = input
+  ids.forEach(id => {translatedInput = translatedInput.replace(new RegExp(id, 'g'), idMap[id])})
+
+  return translatedInput
+}
+
+export function translateFactHandleFn(handleMap) {
+  return g => _.isEmpty(handleMap) ? g : {...g, input: translateReadableIds(g.input, handleMap)}
 }
 
 export function simulations(guesstimate: Guesstimate, graph:Graph) : Array<Simulation>{
@@ -81,4 +101,36 @@ function _inputMetricsWithValues(guesstimate: Guesstimate, dGraph: DGraph): Obje
     ))
   })
   return [inputs, _.uniq(errors)]
+}
+
+// In the `expression` syntax, input metrics are expressed as `${[metric id]}`. To match that in a regex, and translate
+// to it, we need functions that wrap passed IDs in the right syntax, appropriately escaped.
+export const expressionSyntaxPad = (id, isMetric=true) => `\$\{${isMetric ? 'metric' : 'fact'}:${id}\}`
+export const escapedExpressionSyntaxPad = (id, isMetric=true) => `\\\$\\\{${isMetric ? 'metric' : 'fact'}:${id}\\\}`
+
+// Returns a function which takes a guesstimate and returns that guesstimate with an input based on its
+// expression.
+export function expressionToInputFn(metrics=[], facts=[]) {
+  let idMap = {}, reParts = []
+  metrics.forEach( ({id, readableId}) => {
+    reParts.push(escapedExpressionSyntaxPad(id, true))
+    idMap[expressionSyntaxPad(id, true)] = readableId
+  })
+  facts.forEach( ({id, variable_name}) => {
+    reParts.push(escapedExpressionSyntaxPad(id, false))
+    idMap[expressionSyntaxPad(id, false)] = `#${variable_name}`}
+  )
+  const validIdsRegex = RegExp(reParts.join('|'), 'g')
+  const translateValidInputsFn = expression => expression.replace(validIdsRegex, match => idMap[match])
+  const translateRemainingInputsFn = expression => expression.replace(/\$\{.*\}/, '??')
+
+  const translateInputsFn = ({expression}) => translateRemainingInputsFn(translateValidInputsFn(expression))
+
+  return g => (!_.isEmpty(g.input) || _.isEmpty(g.expression)) ? g : {...g, input: translateInputsFn(g)}
+}
+
+// Returns an expression based on the passed input and idMap.
+export function inputToExpression(input, idMap) {
+  if (_.isEmpty(input) || _.isEmpty(idMap)) { return input }
+  return input.replace(RegExp(Object.keys(idMap).join('|'), 'g'), match => expressionSyntaxPad(idMap[match].id, idMap[match].isMetric))
 }

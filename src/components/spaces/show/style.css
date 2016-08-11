@@ -248,6 +248,10 @@
   border-radius: 0;
   border-left: 1px solid #ccc;
 
+  &.grey {
+    background: #F7F5F5;
+  }
+
   h2 {
     color: #476b82;
   }

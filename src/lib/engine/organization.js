@@ -36,3 +36,10 @@ export function organizationMemberships(organizationId, memberships) {
 export function organizationInvitations(organizationId, invitations) {
   return _.filter(invitations, e => sameId(e.organization_id, organizationId))
 }
+
+export const organizationReadableId = ({id}) => `organization_${id}`
+
+export function findFacts(organizationId, organizationFacts) {
+  const readableId = organizationReadableId({id: organizationId})
+  return _.get(organizationFacts.find(f => f.variable_name === readableId), 'children') || []
+}

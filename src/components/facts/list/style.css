@@ -1,0 +1,177 @@
+@import './styles/variables.css';
+
+$grey-a1: rgb(231, 234, 236);
+$grey-a2: #607580;
+$blue-a1: #4A6A88;
+
+.Fact--outer {
+  border: 1px solid rgba(0,0,0,0);
+  float: left;
+  width: 100%;
+  margin: .2em 0;
+
+  &:hover {
+    border-color: #d9dee2;
+  }
+}
+
+.Fact {
+  padding: .4em .5em .5em;
+  background-color: white;
+  float: left;
+  width: 100%;
+  border-radius: 2px;
+  display: flex;
+  flex-direction: row;
+
+  &:not(:hover):not(.form) .ui.small.button {
+    display: none;
+  }
+
+  &:not(:hover):not(.form) .variable-name.variable-token {
+    background-color: rgba(0,0,0,0);
+    color: #999;
+    transition: all .05s ease .05s;
+  }
+
+  &:hover:not(.form) .variable-name.variable-token {
+    background-color: #f3e5fc;
+    color: #603566;
+    transition: all .05s ease .05s;
+  }
+
+  .ui.small.button {
+     padding: .55em 1.1em;
+     border-radius: 2px;
+     margin-bottom: 3px;
+     margin-right: .5em;
+
+     &:last-child {
+       margin-bottom: 0
+   }
+  }
+}
+
+.Fact.new.ui.form {
+  input, textarea {
+    padding: .3em .4em;
+    border-radius: 2px;
+  }
+}
+
+.Fact  .section-simulation {
+  min-width: 6em;
+  flex: 1;
+  position: relative;
+
+  .histogram {
+    left: 10%;
+    height: 35px;
+    position: absolute;
+    bottom: -.5em;
+    right: 0;
+    z-index: 0;
+    .react-d3-histogram__bar rect {
+      fill: $grey-a1;
+    }
+  }
+
+  .simulation-summary {
+    float: left;
+    margin-top: 2px;
+    position: relative;
+    z-index: 1;
+
+    .DistributionSummary .mean {
+      color: $grey-a2;
+    }
+    .DistributionSummary .UncertaintyRange {
+       color: $grey-999;
+    }
+  }
+}
+
+.Fact.form .section-simulation {
+  padding-right: .8em;
+  min-width: 10em;
+  flex: 2;
+}
+
+
+.Fact > .section-name {
+  float: left;
+  flex: 6;
+  margin-top: .05em;
+
+  .fact-name {
+    font-size: 1.3em;
+    color: #333;
+    float: left;
+    width: 100%;
+  }
+
+  .variable-name {
+    float: left;
+    line-height: 1.2em;
+    margin-top: .4em;
+
+    &.variable-token {
+      padding: 0 3px;
+    }
+
+    .prefix {
+      margin-right: 1px;
+      float: left;
+    }
+
+    .name {
+      float: left;
+    }
+  }
+}
+
+.Fact.form > .section-name {
+  .variable-name {
+    width: 100%;
+
+    .field {
+      position: relative;
+
+      .prefix {
+        color: $grey-999;
+        position: absolute;
+        left: .4em;
+        top: .4em;
+      }
+
+      input {
+        padding-left: 1.1em;
+      }
+    }
+  }
+
+  .description {
+    width: 100%;
+
+    textarea {
+      margin-top: .3em;
+      font-size: 1rem;
+    }
+  }
+
+  .actions {
+     margin-top: 1em;
+     float: left;
+  }
+}
+
+.Fact > .section-help {
+  float: left;
+  min-width: 5em;
+  flex: 1;
+
+  .button {
+    float: right;
+  }
+}
+

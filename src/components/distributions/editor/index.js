@@ -11,6 +11,8 @@ import {changeMetricClickMode} from 'gModules/canvas_state/actions'
 
 import {Guesstimator} from 'lib/guesstimator/index'
 
+import {inputToExpression} from 'gEngine/guesstimate'
+
 import './style.css'
 
 @connect(null, dispatch => bindActionCreators({changeGuesstimate, runFormSimulations, changeMetricClickMode}, dispatch), null, {withRef: true})
@@ -88,8 +90,8 @@ export default class Guesstimate extends Component{
   }
 
   render () {
-    const {size, guesstimate, inputMetrics, onOpen, errors} = this.props
-    if(guesstimate.metric !== this.props.metricId) { return false }
+    const {size, guesstimate, inputMetrics, onOpen, errors, organizationId, organizationHasFacts, isPrivate} = this.props
+    if (guesstimate.metric !== this.props.metricId) { return false }
 
     const hasData = !!guesstimate.data
     const formClasses = `Guesstimate${size === 'large' ? ' large' : ''}`
@@ -121,6 +123,9 @@ export default class Guesstimate extends Component{
             onFocus={this.props.onEdit}
             size={size}
             errors={errors}
+            organizationId={organizationId}
+            organizationHasFacts={organizationHasFacts}
+            isPrivate={isPrivate}
             ref='TextForm'
           />
         }

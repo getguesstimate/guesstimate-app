@@ -14,7 +14,7 @@ import {rootUrl, setupGuesstimateApi} from 'servers/guesstimate-api/constants'
 
 import {captureApiError} from 'lib/errors/index'
 
-let sActions = actionCreatorsFor('spaces');
+let sActions = actionCreatorsFor('spaces')
 
 function api(state) {
   function getToken(state) {
@@ -24,13 +24,13 @@ function api(state) {
 }
 
 export function destroy(object) {
-  const id = object.id;
+  const id = object.id
   return (dispatch, getState) => {
 
     const navigateTo = !!object.organization_id ? e.organization.urlById(object.organization_id) : e.user.urlById(object.user_id)
     app.router.history.navigate(navigateTo)
 
-    dispatch(sActions.deleteStart({id}));
+    dispatch(sActions.deleteStart({id}))
 
     api(getState()).models.destroy({spaceId: id}, (err, value) => {
       if (err) {
@@ -68,7 +68,7 @@ export function fetchById(spaceId) {
       const calculators = (_.get(value, '_embedded.calculators') || []).filter(c => !!c)
 
       if (!_.isEmpty(calculators)) {dispatch(calculatorActions.sActions.fetchSuccess(calculators))}
-      if (!!organization) {dispatch(organizationActions.fetchSuccess([organization]))}
+      if (!!organization) { dispatch(organizationActions.fetchSuccess([organization])) }
       if (!!user) {
         dispatch(userActions.fetchSuccess([user]))
       } else {
@@ -105,7 +105,7 @@ export function create(organizationId, params={}) {
     }
 
     dispatch(changeActionState('CREATING'))
-    const action = sActions.createStart(object);
+    const action = sActions.createStart(object)
 
     api(getState()).models.create(object, (err, value) => {
       if (err) {
@@ -127,7 +127,7 @@ export function copy(spaceId) {
     dispatch(changeActionState('COPYING'))
 
     const cid = cuid()
-    const action = sActions.createStart({id:cid});
+    const action = sActions.createStart({id:cid})
 
     api(getState()).copies.create({spaceId}, (err, value) => {
       if (err) {
@@ -149,14 +149,21 @@ export function copy(spaceId) {
 }
 
 function getSpace(getState, spaceId) {
-  let {spaces, metrics, guesstimates} = getState();
+  let {spaces, metrics, guesstimates} = getState()
   return e.space.get(spaces, spaceId)
 }
 
 export function generalUpdate(spaceId, params) {
   return (dispatch, getState) => {
-
-    const space = Object.assign({}, getSpace(getState, spaceId), params)
+    const space = {...getSpace(getState, spaceId), ...params}
+    const usesFacts = _.has(space, 'graph.guesstimates') && _.some(
+      space.graph.guesstimates, g => !!_.get(g, 'expression') && g.expression.includes('${fact:')
+    )
+    const isPrivate = space.is_private
+    if (!isPrivate && usesFacts) {
+      dispatch(changeActionState('ERROR'))
+      return
+    }
 
     dispatch(sActions.updateStart(space))
     dispatch(changeActionState('SAVING'))
@@ -192,9 +199,9 @@ export function update(spaceId, params={}) {
 //updates graph only
 export function updateGraph(spaceId, saveOnServer=true) {
   return (dispatch, getState) => {
-    let {spaces, metrics, guesstimates} = getState();
+    let {spaces, metrics, guesstimates} = getState()
     let space = e.space.get(spaces, spaceId)
-    space = e.space.withGraph(space, {metrics, guesstimates});
+    space = e.space.withGraph(space, {metrics, guesstimates})
     space.graph = _.omit(space.graph, 'simulations')
     const updates = {graph: space.graph}
 

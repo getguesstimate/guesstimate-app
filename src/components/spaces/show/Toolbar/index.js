@@ -95,7 +95,8 @@ export class SpaceToolbar extends Component {
       onAllowEdits,
       onForbidEdits,
       calculators,
-      showCalculatorForm,
+      makeNewCalculator,
+      toggleFactSidebar,
     } = this.props
     const ReactTooltipParams = {class: 'header-action-tooltip', delayShow: 0, delayHide: 0, place: 'bottom', effect: 'solid'}
 
@@ -193,7 +194,7 @@ export class SpaceToolbar extends Component {
                       <CardListElement
                         key={c.id}
                         header={c.title}
-                        onMouseDown={() => {this.props.showCalculator(c.id)}}
+                        onMouseDown={() => {this.props.showCalculator(c)}}
                         closeOnClick={true}
                         icon={'calculator'}
                       />
@@ -202,7 +203,7 @@ export class SpaceToolbar extends Component {
                       <CardListElement
                         key={'new'}
                         header={'New Calculator'}
-                        onMouseDown={showCalculatorForm}
+                        onMouseDown={makeNewCalculator}
                         closeOnClick={true}
                         icon={'plus'}
                       />
@@ -210,6 +211,10 @@ export class SpaceToolbar extends Component {
                   ]}
                 </DropDown>
               </div>
+            }
+
+            {this.props.canShowFactSidebar &&
+              <a onClick={toggleFactSidebar} className={`header-action`}> <Icon name='bank'/> </a>
             }
 
             {editableByMe && editsAllowed && <ProgressMessage actionState={actionState}/>}

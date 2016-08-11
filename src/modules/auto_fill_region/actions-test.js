@@ -7,7 +7,8 @@ describe('Autofill Actions', () => {
     //   return (location, metrics) => {
     //     ...
     //     return { metric, guesstimate }
-    const startInput = '=1 + VL'
+    const inputID = 2
+    const startExpression = `=1 + \$\{metric:${inputID}}`
     const startMetric = {
       id: '1',
       readableId: 'AA',
@@ -15,7 +16,7 @@ describe('Autofill Actions', () => {
     }
     const startGuesstimate = {
       metric: '1',
-      input: startInput,
+      expression: startExpression,
       guesstimateType: 'FUNCTION',
     }
     const direction = {row: 0, column: 1}
@@ -25,14 +26,14 @@ describe('Autofill Actions', () => {
       const metrics = [
         {
           name: 'Constant.',
-          id: '2',
+          id: inputID,
           readableId: 'VL',
           location: {row: 0, column: 0},
         },
       ]
       const fillFn = actions.fillDynamic(startMetric, startGuesstimate, direction)
-      const {guesstimate: {input}} = fillFn(location, metrics)
-      expect(input).to.equal(startInput)
+      const {guesstimate: {expression}} = fillFn(location, metrics)
+      expect(expression).to.equal(startExpression)
     })
 
     it('fills properly with no translatable metrics, but some non-constant', () => {
