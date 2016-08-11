@@ -8,6 +8,10 @@ import Modal from 'react-modal'
 import MakeACell from '../../../../assets/tutorial/makeACell.gif'
 import InteractWithACell from '../../../../assets/tutorial/InteractWithACell.gif'
 import MakeAFunction from '../../../../assets/tutorial/MakeAFunction.gif'
+import AdvancedFunctions from '../../../../assets/tutorial/AdvancedFunctions.png'
+import MakeACellWithARange from '../../../../assets/tutorial/makeACellWithARange.gif'
+import MakeACellWithData from '../../../../assets/tutorial/MakeACellWithData.gif'
+import IfStatement from '../../../../assets/tutorial/If Statements.png'
 import './style.css'
 
 export const TutorialModal = ({onClose}) => {
@@ -84,7 +88,7 @@ const TutorialPageTwo = () => (
         As well as the standard mathematical operators, functions can contain trigonometric functions, financial
         functions, ternary if statements, and statistical distributions.
       </div>
-      <div className='col-md-6'>Image</div>
+      <div className='col-md-6'><img src={AdvancedFunctions} /></div>
     </div>
   </div>
 )
@@ -95,12 +99,20 @@ const TutorialPageThree = () => (
       <div className='col-md-12'><h2>{'Ranges \& Data'}</h2></div>
     </div>
     <div className='row'>
-      <div className='col-md-6'>Image</div>
-      <div className='col-md-6'>Text</div>
+      <div className='col-md-6'><img src={MakeACellWithARange} /></div>
+      <div className='col-md-6'>
+        In addition to simply working with raw numbers, Guesstimate cells can also work with statistical objects, like
+        confidence intervals (a range in which you think a value is likely to be). If you are trying to estimate the
+        amount of money you'll spend on a trip, you might estimate that you'd spend somewhere from 300 to 700 dollars,
+        and to input that to guesstimate, you'd simply input the expression '300 to 700' into the cell value.
+      </div>
     </div>
     <div className='row'>
-      <div className='col-md-6'>Text</div>
-      <div className='col-md-6'>Image</div>
+      <div className='col-md-6'>
+        Guesstimate cells can also take raw streams of data. Simply paste in a string of comma, space, or enter
+        separated data points, and Guesstimate will use those samples as an empirical distribution.
+      </div>
+      <div className='col-md-6'><img src={MakeACellWithData} /></div>
     </div>
   </div>
 )
@@ -111,12 +123,12 @@ const TutorialPageFour = () => (
       <div className='col-md-12'><h2>Advanced Features</h2></div>
     </div>
     <div className='row'>
-      <div className='col-md-6'>Image</div>
-      <div className='col-md-6'>Text</div>
+      <div className='col-md-6'><img src={IfStatement} /></div>
+      <div className='col-md-6'>Guesstimate functions support conditionals via ternary if statements</div>
     </div>
     <div className='row'>
-      <div className='col-md-6'>Text</div>
-      <div className='col-md-6'>Image</div>
+      <div className='col-md-6'>Guesstimate has more documentaiton you can peruse if you want to learn more. See 'docs.getguesstimate.com' for more details.</div>
+      <div className='col-md-6'><Icon name='book' /></div>
     </div>
   </div>
 )
