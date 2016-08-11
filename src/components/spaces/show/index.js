@@ -77,9 +77,13 @@ const CalculatorFormHeader = ({isNew, onClose}) => (
   </div>
 )
 
-const FactSidebarHeader = ({onClose}) => (
+const FactSidebarHeader = ({onClose, organizationId}) => (
   <div className='row'>
-    <div className='col-xs-12'>
+    <div className='col-xs-6'>
+      <h2> Private Facts </h2>
+    </div>
+    <div className='col-xs-6'>
+      <ButtonExpandText onClick={navigateFn(`/organizations/${organizationId}/facts`)}/>
       <div className='button-close-text'><ButtonCloseText onClick={onClose}/></div>
     </div>
   </div>
@@ -248,9 +252,12 @@ export default class SpacesShow extends Component {
   }
 
   canShowFactSidebar() {
-    const orgId = _.get(this, 'props.denormalizedSpace.organization.id')
-    const is_private = _.get(this, 'props.denormalizedSpace.is_private')
-    return !!orgId && !!is_private && (__DEV__ || orgId === 1)
+    const organization = _.get(this, 'props.denormalizedSpace.organization')
+    if (!organization) { return false }
+
+    const orgHasPrivateAccess = e.organization.hasPrivateAccess(organization)
+    const isPrivate = _.get(this, 'props.denormalizedSpace.is_private')
+    return !!isPrivate && orgHasPrivateAccess
   }
 
   closeRightSidebar() {
@@ -259,7 +266,7 @@ export default class SpacesShow extends Component {
   }
   openRightSidebar(rightSidebarState) {
     elev.hide()
-    this.setState({rightSidebar: rightSidebarState}) 
+    this.setState({rightSidebar: rightSidebarState})
   }
   showCalculator({id}) { this.openRightSidebar({type: SHOW_CALCULATOR, showCalculatorId: id}) }
   editCalculator(id) { this.openRightSidebar({type: EDIT_CALCULATOR_FORM, editCalculatorId: id}) }
@@ -268,7 +275,12 @@ export default class SpacesShow extends Component {
     this.closeRightSidebar()
   }
   makeNewCalculator() { this.openRightSidebar({type: NEW_CALCULATOR_FORM}) }
-  showFactSidebar() { if (this.canShowFactSidebar()) { this.openRightSidebar({type: FACT_SIDEBAR}) } }
+  toggleFactSidebar() {
+    if (this.canShowFactSidebar()) {
+      if (this.state.rightSidebar.type !== FACT_SIDEBAR){ this.openRightSidebar({type: FACT_SIDEBAR}) }
+      else { this.closeRightSidebar() }
+    }
+  }
 
   rightSidebarBody() {
     const {props: {denormalizedSpace}, state: {rightSidebar: {type, showCalculatorResults, showCalculatorId, editCalculatorId}}} = this
@@ -316,7 +328,12 @@ export default class SpacesShow extends Component {
       case FACT_SIDEBAR:
         return {
           classes: ['grey'],
-          header: <FactSidebarHeader onClose={this.closeRightSidebar.bind(this)} />,
+          header: (
+            <FactSidebarHeader
+              onClose={this.closeRightSidebar.bind(this)}
+              organizationId={organization.id}
+            />
+          ),
           main: (
             <div className='SpaceRightSidebar--padded-area'>
               <FactListContainer organizationId={organization.id} isEditable={false}/>
@@ -398,6 +415,7 @@ export default class SpacesShow extends Component {
             ownerName={owner.name}
             ownerPicture={owner.picture}
             ownerUrl={ownerUrl}
+            ownerIsOrg={hasOrg}
             onSaveName={this.onSaveName.bind(this)}
             onPublicSelect={this.onPublicSelect.bind(this)}
             onPrivateSelect={this.onPrivateSelect.bind(this)}
@@ -431,7 +449,7 @@ export default class SpacesShow extends Component {
             calculators={space.calculators}
             makeNewCalculator={this.makeNewCalculator.bind(this)}
             showCalculator={this.showCalculator.bind(this)}
-            showFactSidebar={this.showFactSidebar.bind(this)}
+            toggleFactSidebar={this.toggleFactSidebar.bind(this)}
             canShowFactSidebar={this.canShowFactSidebar()}
           />
         </div>

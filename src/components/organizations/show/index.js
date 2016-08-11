@@ -98,13 +98,14 @@ export default class OrganizationShow extends Component{
     const {openTab} = this.state
     const spaces =  _.orderBy(this.props.organizationSpaces.asMutable(), ['updated_at'], ['desc'])
     const organization = organizations.find(u => u.id.toString() === organizationId.toString())
+    const hasPrivateAccess = e.organization.hasPrivateAccess(organization)
     const facts = _.get(organizationFacts.find(f => f.variable_name === `organization_${organizationId}`), 'children') || []
     const meIsAdmin = !!organization && (organization.admin_id === this.props.me.id)
     const meIsMember = meIsAdmin || !!(members.find(m => m.id === this.props.me.id))
 
     if (!organization) { return false }
     let tabs = [{name: 'Models', key: MODEL_TAB}, {name: 'Members', key: MEMBERS_TAB}]
-    if (__DEV__ || organizationId.toString() === '1') { tabs = [{name: 'Models', key: MODEL_TAB}, {name: 'Facts', key: FACT_BOOK_TAB}, {name: 'Members', key: MEMBERS_TAB}] }
+    if (hasPrivateAccess) { tabs = [{name: 'Models', key: MODEL_TAB}, {name: 'Facts', key: FACT_BOOK_TAB}, {name: 'Members', key: MEMBERS_TAB}] }
     const portalUrl = _.get(organization, 'account._links.payment_portal.href')
     if (!!portalUrl) { tabs = [...tabs, {name: 'Billing', key: 'BILLING', href: portalUrl, onMouseUp: this.refreshData.bind(this)}] }
 
@@ -207,9 +208,9 @@ const OrganizationTabButtons = ({tabs, openTab, changeTab}) => (
 
 const FactTab = ({organizationId}) => (
   <div className='FactTab row'>
-    <div className='col-md-2'>
-      <h2> Organizational Facts </h2>
-      <p> Facts can be used in organization models by referencing them with '#' symbols. </p>
+    <div className='col-md-5'>
+      <h2> Private Organizational Facts </h2>
+      <p> Facts can be used in private organization models by referencing them with '#' symbols. </p>
     </div>
 
     <div className='col-md-1'></div>

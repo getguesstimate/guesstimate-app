@@ -7,12 +7,12 @@ import {isData, formatData} from 'lib/guesstimator/formatter/formatters/Data'
 
 const readableIdPartFromWord = word => (/\d/).test(word) ? word : word[0]
 function getVariableNameFromName(rawName) {
-  const name = rawName.trim().replace(/[^\w\d]/g, ' ').toLowerCase()
+  const name = rawName.trim().replace(/[^\w\d]/g, ' ').toLowerCase().replace(/\s/g, '_')
   const words = name.split(/[^\w\d]/).filter(s => !_.isEmpty(s))
-  if (words.length === 1 && name.length < 10) {
+  if (words.length === 1 && name.length < 30) {
     return name
-  } else if (words.length < 3) {
-    return name.slice(0,3)
+  } else if (words.length < 8) {
+    return name.slice(0,8)
   } else {
     return words.map(readableIdPartFromWord).join('')
   }
@@ -86,8 +86,8 @@ export class FactForm extends Component {
   }
 
   render() {
-    const buttonClasses = ['ui', 'button', 'tiny', 'primary', ...(this.isValid() ? [] : ['disabled'])]
-    const {props: {buttonText, onCancel}, state: {runningFact: {expression, name, variable_name}}} = this
+    const buttonClasses = ['ui', 'button', 'small', 'primary', ...(this.isValid() ? [] : ['disabled'])]
+    const {props: {buttonText, onCancel, onDelete}, state: {runningFact: {expression, name, variable_name}}} = this
 
     return (
     <div className='Fact--outer'>
@@ -104,34 +104,35 @@ export class FactForm extends Component {
           </div>
         </div>
         <div className='section-name'>
-          <div className='variable-name'>
+          <div className='fact-name'>
             <div className={`field ${this.isVariableNameUnique() ? '' : 'error'}`}>
-              <span className='prefix'>#</span>
-              <input
-                type='text'
-                placeholder='variable_name'
-                value={variable_name}
-                onChange={this.onChangeVariableName.bind(this)}
-                onKeyDown={this.submitIfEnter.bind(this)}
-              />
-            </div>
-          </div>
-          <div className='description'>
-            <div class='field'>
               <textarea
                 type='text'
                 rows='1'
-                placeholder='description'
+                placeholder='name'
                 value={name}
                 onChange={this.onChangeName.bind(this)}
                 onKeyDown={this.submitIfEnter.bind(this)}
               />
             </div>
           </div>
-        </div>
-        <div className='section-help'>
-          <span className={buttonClasses.join(' ')} onClick={this.onSubmit.bind(this)}>{buttonText}</span>
-          {!!onCancel && <span className='ui button tiny' onClick={onCancel}>Cancel</span>}
+          <div className='variable-name'>
+            <div className='field'>
+              <span className='prefix'>#</span>
+              <input
+                type='text'
+                placeholder='hashtag'
+                value={variable_name}
+                onChange={this.onChangeVariableName.bind(this)}
+                onKeyDown={this.submitIfEnter.bind(this)}
+              />
+            </div>
+          </div>
+          <div className='actions'>
+            <span className={buttonClasses.join(' ')} onClick={this.onSubmit.bind(this)}>{buttonText}</span>
+            {!!onCancel && <span className='ui button small' onClick={onCancel}>Cancel</span>}
+            {!!onDelete && <span className='ui button small' onClick={onDelete}>Delete</span>}
+          </div>
         </div>
       </div>
     </div>

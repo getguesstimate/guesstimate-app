@@ -138,16 +138,18 @@ export default class Canvas extends Component{
     const hasSelected = selected && metric && (selected.id !== metric.id)
     const selectedSamples = _.get(selected, 'simulation.sample.values')
     const passSelected = hasSelected && selectedSamples && !_.isEmpty(selectedSamples)
+
     const is_private = _.get(this, 'props.denormalizedSpace.is_private')
+    const organizationId = _.get(this, 'props.denormalizedSpace.organization_id')
+    const canUseOrganizationFacts = !!is_private && !!this.props.organizationHasFacts && !!organizationId
     return (
       <Metric
         canvasState={this.props.denormalizedSpace.canvasState}
         key={metric.id}
         location={location}
         metric={metric}
-        organizationId={this.props.denormalizedSpace.organization_id}
-        organizationHasFacts={this.props.organizationHasFacts}
-        isPrivate={is_private}
+        organizationId={organizationId}
+        canUseOrganizationFacts={canUseOrganizationFacts}
         selectedMetric={passSelected && selected}
       />
     )
