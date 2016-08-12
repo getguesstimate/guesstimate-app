@@ -34,7 +34,7 @@ export const signUp = () => {
         generalError('MesignUp Error', {err, profile, token})
       } else {
         const {nickname, picture, user_id, email, company, name, gender, locale, location} = profile
-        dispatch(auth0MeLoaded(profile, token), (new Date()).getTime())
+        dispatch(auth0MeLoaded(profile, token, (new Date()).getTime()))
         dispatch(userActions.create(
           {
             name,
@@ -65,8 +65,7 @@ export const init = () => {
         lock.getProfile(token, (err, profile) => {
           if (err) {
             generalError('MeInit Error', {token, err, profile})
-            me.localStorage.clear()
-            dispatch({ type: 'DESTROY_ME' })
+            dispatch(logOut())
           } else {
             dispatch(auth0MeLoaded(profile, token, tokenCreationTime))
             const {user_id} = profile
@@ -74,8 +73,7 @@ export const init = () => {
           }
         })
       } else {
-        me.localStorage.clear()
-        dispatch({ type: 'DESTROY_ME' })
+        dispatch(logOut())
       }
     }
   }
