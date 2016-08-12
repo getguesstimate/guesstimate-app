@@ -32,12 +32,6 @@ export function copy(spaceId){
   }
 }
 
-function translateReadableIds(input, idMap) {
-  if (!input) {return ""}
-  const re = RegExp(Object.keys(idMap).join("|"), "g")
-  return input.replace(re, (match) => idMap[match])
-}
-
 export function paste(spaceId){
   return (dispatch, getState) => {
     const state = getState()
@@ -77,7 +71,7 @@ export function paste(spaceId){
         {},
         guesstimate,
         {metric: newMetrics[i].id},
-        {expression: translateReadableIds(guesstimate.expression, idsMap)}
+        {expression: e.utils.replaceByMap(guesstimate.expression, idsMap)}
       )
     )
 

@@ -150,7 +150,7 @@ export function copy(spaceId) {
 
 function getSpace(getState, spaceId) {
   let {spaces, metrics, guesstimates} = getState()
-  return e.space.get(spaces, spaceId)
+  return e.collections.get(spaces, spaceId)
 }
 
 export function generalUpdate(spaceId, params) {
@@ -200,7 +200,7 @@ export function update(spaceId, params={}) {
 export function updateGraph(spaceId, saveOnServer=true) {
   return (dispatch, getState) => {
     let {spaces, metrics, guesstimates} = getState()
-    let space = e.space.get(spaces, spaceId)
+    let space = e.collections.get(spaces, spaceId)
     space = e.space.withGraph(space, {metrics, guesstimates})
     space.graph = _.omit(space.graph, 'simulations')
     const updates = {graph: space.graph}
@@ -214,7 +214,7 @@ export function updateGraph(spaceId, saveOnServer=true) {
 
 function meCanEdit(spaceId, state) {
   const {spaces, me, userOrganizationMemberships, canvasState} = state
-  const space = e.space.get(spaces, spaceId)
+  const space = e.collections.get(spaces, spaceId)
   return e.space.canEdit(space, me, userOrganizationMemberships, canvasState)
 }
 

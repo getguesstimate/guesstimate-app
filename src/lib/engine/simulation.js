@@ -1,6 +1,10 @@
-import * as sample from './sample'
+import * as _collections from './collections'
 
 import {sampleMean, sampleStdev, percentile, cutoff, sortDescending} from 'lib/dataAnalysis.js'
+
+export const getByMetricFn = graph => _collections.getFn(_.get(graph, 'simulations'), 'metric', 'metric')
+
+///////////////////////////////////////////////
 
 export function addStats(simulation){
   if (!_.has(simulation, 'sample.values.length') || (simulation.sample.values.length === 0)) {
@@ -39,33 +43,5 @@ export function addStats(simulation){
   simulation.stats = stats
 }
 
-export function combine(simulations) {
-  let recentSimulations = simulations
-
-  if (_.some(simulations, s => s.propagationId)) {
-    const recentPropagation = _.max(simulations.map(s => s.propagationId))
-    recentSimulations = simulations.filter(s => {return s.propagationId === recentPropagation})
-  }
-
-  return {
-    metric: recentSimulations[0].metric,
-    propagationId: recentSimulations[0].propagationId,
-    sample: sample.combine(recentSimulations.map(s => s.sample))
-  }
-}
-
-export function hasValues(simulation) {
-  return (values(simulation).length > 0)
-}
-
-export function values(simulation) {
-  return _.get(simulation, 'sample.values') || []
-}
-
-export function hasErrors(simulation) {
-  return errors(simulation).length > 0
-}
-
-export function errors(simulation) {
-  return _.get(simulation, 'sample.errors') || []
-}
+export const hasErrors = simulation => errors(simulation).length > 0
+export const errors = simulation => _.get(simulation, 'sample.errors') || []

@@ -35,17 +35,15 @@ export function fillDynamic(startMetric, startGuesstimate, direction) {
     const nonConstantMetrics = metrics.filter(m => isNonConstant(m, direction, metrics))
     if (_.isEmpty(nonConstantMetrics)) { return {metric, guesstimate: {...startGuesstimate, metric: metric.id}} }
 
-    const nonConstantInputsRegex = RegExp(nonConstantMetrics.map(m => e.guesstimate.escapedExpressionSyntaxPad(m.id, true)).join('|'), "g")
+    const nonConstantInputsRegex = e.utils.or(nonConstantMetrics.map(e.guesstimate.expressionSyntaxPad))
     const numNonConstantInputs = (expression.match(nonConstantInputsRegex) || []).length
 
     const translateFn = translate(startMetric.location, location)
     let idMap = {}
-    let translatableInputsRegexParts = []
     nonConstantMetrics.forEach(m => {
       const matchedMetric = metrics.find(m2 => isAtLocation(translateFn(m.location), m2.location))
       if (!!matchedMetric) {
         idMap[e.guesstimate.expressionSyntaxPad(m.id, true)] = e.guesstimate.expressionSyntaxPad(matchedMetric.id, true)
-        translatableInputsRegexParts.push(e.guesstimate.escapedExpressionSyntaxPad(m.id, true))
       }
     })
     if (_.isEmpty(idMap)) {
@@ -53,14 +51,12 @@ export function fillDynamic(startMetric, startGuesstimate, direction) {
       else { return {} }
     }
 
-    const translatableInputsRegex = RegExp(translatableInputsRegexParts.join("|"), "g")
+    const translatableInputsRegex = e.utils.or(Object.keys(idMap))
     const numTranslatedInputs = numNonConstantInputs === 0 ? 0 : (expression.match(translatableInputsRegex) || []).length
 
     if (numNonConstantInputs !== numTranslatedInputs) { return {} }
 
-    const newExpression = numTranslatedInputs === 0 ? expression : expression.replace(translatableInputsRegex, (match) => idMap[match])
-
-    return { metric, guesstimate: {...startGuesstimate, metric: metric.id, expression: newExpression } }
+    return { metric, guesstimate: {...startGuesstimate, metric: metric.id, expression: e.utils.replaceByMap(expression, idMap) } }
   }
 }
 

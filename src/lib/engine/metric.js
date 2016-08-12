@@ -1,6 +1,7 @@
 import uuid from 'node-uuid'
 
 import * as _guesstimate from './guesstimate'
+import * as _collections from './collections'
 
 import generateRandomReadableId from './metric/generate_random_readable_id'
 import {isAtLocation} from 'lib/locationUtils'
@@ -20,25 +21,11 @@ export function create(metricNames) {
   }
 }
 
-export function get(collection, id){
-  return collection.find(i => (i.id === id))
-}
-
-function findWithId(collection, id, property) {
-  if (collection && id && property) {
-    return collection.find(e => e[property] === id)
-  } else {
-    return null
+export function denormalizeFn(graph) {
+  return metric => {
+    const findWithMetricId = collection => _collections.get(collection, metric.id, 'metric')
+    const guesstimate = findWithMetricId(graph.guesstimates)
+    const simulation = findWithMetricId(graph.simulations)
+    return {...metric, guesstimate, simulation}
   }
-}
-
-export function denormalize(metric, graph) {
-  let findWithMetricId = (g) => findWithId(g, metric.id, 'metric')
-  let guesstimate = findWithMetricId(graph.guesstimates)
-  let simulation = findWithMetricId(graph.simulations)
-  return Object.assign({}, metric, {guesstimate, simulation})
-}
-
-export function guesstimates(metric, graph) {
-  return graph.guesstimates.filter(g => (g.metric === metric.id)).map(g => _guesstimate.format(g))
 }

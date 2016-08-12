@@ -4,6 +4,8 @@ import type {Guesstimate, Distribution, DGraph, Graph, Simulation} from './types
 import {Guesstimator} from '../guesstimator/index'
 import {INPUT_ERROR} from 'lib/errors/modelErrors'
 import {HANDLE_REGEX} from './facts'
+import * as _collections from './collections'
+import * as _utils from './utils'
 
 export function equals(l, r) {
   return (
@@ -12,6 +14,10 @@ export function equals(l, r) {
     l.input === r.input
   )
 }
+
+export const getByMetricFn = graph => _collections.getFn(_.get(graph, 'guesstimates'), 'metric')
+
+//////////////////////////////////////////////////////////////////
 
 export const attributes = ['metric', 'expression', 'input', 'guesstimateType', 'description', 'data']
 
@@ -41,23 +47,8 @@ export const extractFactHandles = ({input}) => _.isEmpty(input) ? [] : input.mat
 
 const padNonAlphaNumeric = str => `(?:[^\\w]|^)(${str})(?:[^\\w]|$)`
 
-function translateReadableIds(input, idMap) {
-  if (!input) {return ""}
-
-  const ids = _.sortBy(Object.keys(idMap), id => -id.length)
-
-  let translatedInput = input
-  ids.forEach(id => {translatedInput = translatedInput.replace(new RegExp(id, 'g'), idMap[id])})
-
-  return translatedInput
-}
-
 export function translateFactHandleFn(handleMap) {
-  return g => _.isEmpty(handleMap) ? g : {...g, input: translateReadableIds(g.input, handleMap)}
-}
-
-export function simulations(guesstimate: Guesstimate, graph:Graph) : Array<Simulation>{
-  return graph.simulations && graph.simulations.filter(s => (s.metric === guesstimate.metric))
+  return g => _.isEmpty(handleMap) ? g : {...g, input: _utils.replaceByMap(g.input, handleMap)}
 }
 
 export function update(oldGuesstimate, newParams) {
@@ -71,11 +62,8 @@ export function newGuesstimateType(newGuesstimate) {
   return item.samplerType().referenceName
 }
 
-//Check if a function; if not, return []
-export function inputMetrics(guesstimate: Guesstimate, dGraph: DGraph): Array<Object> {
-  if (!_.has(dGraph, 'metrics')){ return [] }
-  return dGraph.metrics.filter( m => (guesstimate.input || '').includes(m.readableId) )
-}
+const isInputFn = (guesstimate) => ({id}) => _utils.orStr(_.get(guesstimate, 'expression')).includes(id)
+export const inputMetrics = (guesstimate, {metrics}) => _utils.orArr(metrics).filter(isInputFn(guesstimate))
 
 function _inputMetricsWithValues(guesstimate: Guesstimate, dGraph: DGraph): Object{
   let inputs = {}
@@ -103,25 +91,18 @@ function _inputMetricsWithValues(guesstimate: Guesstimate, dGraph: DGraph): Obje
   return [inputs, _.uniq(errors)]
 }
 
-// In the `expression` syntax, input metrics are expressed as `${[metric id]}`. To match that in a regex, and translate
-// to it, we need functions that wrap passed IDs in the right syntax, appropriately escaped.
+// In the `expression` syntax, input metrics are expressed as `${metric:[metric id]}`. To match that in a regex, and
+// translate to it, we need functions that wrap passed IDs in the right syntax, appropriately escaped.
 export const expressionSyntaxPad = (id, isMetric=true) => `\$\{${isMetric ? 'metric' : 'fact'}:${id}\}`
-export const escapedExpressionSyntaxPad = (id, isMetric=true) => `\\\$\\\{${isMetric ? 'metric' : 'fact'}:${id}\\\}`
 
 // Returns a function which takes a guesstimate and returns that guesstimate with an input based on its
 // expression.
 export function expressionToInputFn(metrics=[], facts=[]) {
   let idMap = {}, reParts = []
-  metrics.forEach( ({id, readableId}) => {
-    reParts.push(escapedExpressionSyntaxPad(id, true))
-    idMap[expressionSyntaxPad(id, true)] = readableId
-  })
-  facts.forEach( ({id, variable_name}) => {
-    reParts.push(escapedExpressionSyntaxPad(id, false))
-    idMap[expressionSyntaxPad(id, false)] = `#${variable_name}`}
-  )
-  const validIdsRegex = RegExp(reParts.join('|'), 'g')
-  const translateValidInputsFn = expression => expression.replace(validIdsRegex, match => idMap[match])
+  metrics.forEach( ({id, readableId}) => {idMap[expressionSyntaxPad(id, true)] = readableId} )
+  facts.forEach( ({id, variable_name}) => {idMap[expressionSyntaxPad(id, false)] = `#${variable_name}`} )
+
+  const translateValidInputsFn = expression => _utils.replaceByMap(expression, idMap)
   const translateRemainingInputsFn = expression => expression.replace(/\$\{.*\}/, '??')
 
   const translateInputsFn = ({expression}) => translateRemainingInputsFn(translateValidInputsFn(expression))

@@ -2,26 +2,21 @@ import * as _graph from './graph'
 import * as _dGraph from './dgraph'
 import * as _metric from './metric'
 import * as _guesstimate from './guesstimate'
+import * as _simulation from './simulation'
 import * as _userOrganizationMemberships from './userOrganizationMemberships'
 import * as _facts from './facts'
+import * as _collections from './collections'
 
-export function url (space) {
-  return (!!space) ? ('/models/' + space.id) : ''
-}
+export const url = ({id}) => (!!id) ? `/models/${id}` : ''
+export const withGraph = (space, graph) => ({...space, graph: subset(graph, space.id)})
 
-export function get(collection, id){
-  return collection.find(i => (i.id === id))
-}
+export function subset(graph, spaceId) {
+  if (!spaceId) { return graph }
 
-export function subset(graph, spaceId){
-  if (spaceId){
-    const metrics = graph.metrics.filter(m => m.space === spaceId)
-    const guesstimates = _.flatten(metrics.map(m => _metric.guesstimates(m, graph)))
-    const simulations = _.flatten(guesstimates.map(g => _guesstimate.simulations(g, graph)))
-    return { metrics, guesstimates, simulations }
-  } else {
-    return graph
-  }
+  const metrics = _collections.filter(graph.metrics, spaceId, 'space')
+  const guesstimates = metrics.map(_guesstimate.getByMetricFn(graph)).filter(_collections.isPresent)
+  const simulations = guesstimates.map(_simulation.getByMetricFn(graph)).filter(_collections.isPresent)
+  return { metrics, guesstimates, simulations }
 }
 
 export function expressionsToInputs(graph, facts) {
@@ -29,22 +24,16 @@ export function expressionsToInputs(graph, facts) {
   return {...graph, guesstimates: graph.guesstimates.map(expressionToInputFn)}
 }
 
-export const withGraph = (space, graph) => ({...space, graph: subset(graph, space.id)})
-
-const sameIds = (u1, u2) => u1 && u2 && (u1.toString() === u2.toString())
-const user = (space, graph) => graph.users.find(e => sameIds(e.id, space.user_id))
-const organization = (space, graph) => (graph.organizations || []).find(e => sameIds(e.id, space.organization_id))
-
-export function possibleFacts(space, graph, organizationFacts) {
-  const org = organization(space, graph)
+export function possibleFacts({organization_id}, {organizations}, organizationFacts) {
+  const org = _collections.get(organizations, organization_id)
   return !!org ? _facts.getFactsForOrg(organizationFacts, org) : []
 }
 
 export function toDSpace(spaceId, graph, organizationFacts) {
-  let space = graph.spaces && graph.spaces.find(s => sameIds(s.id, spaceId))
+  let space = _collections.get(graph.spaces, spaceId)
   if (!space) { return {} }
 
-  let dSpace = Object.assign(space.asMutable(), toDgraph(space.id, graph))
+  let dSpace = {...space, ...toDgraph(space.id, graph)}
 
   const facts = possibleFacts(dSpace, graph, organizationFacts)
   const withInputFn = _guesstimate.expressionToInputFn(dSpace.metrics, facts)
@@ -64,16 +53,17 @@ export function toDSpace(spaceId, graph, organizationFacts) {
 }
 
 export function toDgraph(spaceId, graph){
-  let dGraph = _graph.denormalize(subset(graph, spaceId))
-  const space = get(graph.spaces, spaceId)
-  const spaceUser = user(space, graph)
-  const spaceOrganization = organization(space, graph)
-  const userOrganizationMemberships = graph.userOrganizationMemberships
-  dGraph.user = spaceUser
-  dGraph.organization = spaceOrganization
-  dGraph.calculators = (graph.calculators || []).filter(c => c.space_id === spaceId)
-  dGraph.editableByMe = canEdit(space, graph.me, userOrganizationMemberships)
-  return dGraph
+  const space = _collections.get(graph.spaces, spaceId)
+  const {users, organizations, calculators, userOrganizationMemberships, me} = graph
+  const {user_id, organization_id} = space
+
+  return {
+    ..._graph.denormalize(graph, spaceId),
+    user: _collections.get(users, user_id),
+    organization: _collections.get(organizations, organization_id),
+    calculators: _collections.filter(calculators, spaceId, 'space_id'),
+    editableByMe: canEdit(space, me, userOrganizationMemberships),
+  }
 }
 
 export function canEdit(space, me, userOrganizationMemberships, canvasState) {
