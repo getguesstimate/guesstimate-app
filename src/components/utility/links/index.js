@@ -11,6 +11,10 @@ export const LinkBlog = () => (
   <a href='https://medium.com/guesstimate-blog'> Blog </a>
 )
 
+export const LinkDocumentation = () => (
+  <a href='http://docs.getguesstimate.com/'> Documentation </a>
+)
+
 export const LinkTerms = () => (
   <a href='/terms'> Terms of Service </a>
 )

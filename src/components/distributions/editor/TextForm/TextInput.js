@@ -45,10 +45,7 @@ export class TextInput extends Component{
     value: PropTypes.string,
   }
 
-  factRegex() {
-    const canUseOrganizationFacts = (!!this.props.organizationHasFacts && !!this.props.isPrivate && (__DEV__ || this.props.organizationId.toString() === '1'))
-    return canUseOrganizationFacts ? HANDLE_REGEX : GLOBALS_ONLY_REGEX
-  }
+  factRegex() { return this.props.canUseOrganizationFacts ? HANDLE_REGEX : GLOBALS_ONLY_REGEX }
 
   decoratorList(extraDecorators=[]) {
     const {validInputs, errorInputs} = this.props

@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import {LinkFAQ, LinkBlog, LinkTerms, LinkPrivacy, LinkGithubStar, LinkTwitterFollow, LinkPricing} from 'gComponents/utility/links/index.js'
+import {LinkFAQ, LinkBlog, LinkTerms, LinkDocumentation, LinkPrivacy, LinkGithubStar, LinkTwitterFollow, LinkPricing} from 'gComponents/utility/links/index.js'
 import './style.css'
 
 export default class Footer extends Component {
@@ -15,6 +15,7 @@ export default class Footer extends Component {
                 <li> <strong> Guesstimate </strong> </li>
                 <li> <LinkPricing/> </li>
                 <li> <LinkFAQ/> </li>
+                <li> <LinkDocumentation/> </li>
                 <li> <LinkBlog/> </li>
               </ul>
             </div>

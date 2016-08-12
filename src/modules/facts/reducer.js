@@ -18,9 +18,10 @@ export function factsR(state = INITIAL_STATE, action) {
       }
     case 'ADD_FACT_TO_ORG': {
       const oldOrganizationFact = state.organizationFacts.find(e => e.variable_name === action.organizationVariableName)
+      const oldChildren = _.get(oldOrganizationFact, 'children') || []
       const newOrganizationFact = {
         variable_name: action.organizationVariableName,
-        children: [...(oldOrganizationFact.children || []), action.fact],
+        children: [...oldChildren, action.fact],
       }
       return {
         ...state,
