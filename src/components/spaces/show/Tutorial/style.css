@@ -1,12 +1,32 @@
 @import './styles/variables.css';
 
 .tutorial {
+  .header {
+    padding-bottom: 1em;
+  }
+
   .pageContainer {
-    img {
+    margin-bottom: 2em;
+
+    p {
+      text-align: justify;
       height: 12em;
+      display: table-cell;
+      vertical-align: middle;
+      padding-top: 1em;
+    }
+
+    img {
+      display: block;
+      height: 12em;
+      margin: 0 auto;
     }
   }
 
   .actions {
+    width: 90%;
+    margin-left: 5%;
+    position: absolute;
+    bottom: 1em;
   }
 }

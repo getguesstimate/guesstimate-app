@@ -155,10 +155,17 @@ export class SpaceToolbar extends Component {
                   />
                 }
                 {editableByMe && <CardListElement icon={'warning'} header='Delete Model' onMouseDown={onDestroy}/> }
+                <CardListElement
+                  key={'tutorial'}
+                  icon={'question'}
+                  header={'Show Tutorial'}
+                  onMouseDown={onOpenTutorial}
+                  closeOnClick={true}
+                />
               </DropDown>
             }
 
-            <CanvasViewForm onOpenTutorial={onOpenTutorial}/>
+            <CanvasViewForm />
 
             <div className='header-action-border'/>
             <a onClick={onCutMetrics} className={`header-action`} data-tip data-for='cut-button'>
