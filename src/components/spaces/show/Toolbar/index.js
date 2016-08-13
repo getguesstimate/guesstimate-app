@@ -137,6 +137,8 @@ export class SpaceToolbar extends Component {
             <ReactTooltip {...ReactTooltipParams} id='delete-button'>Delete Nodes (del/bksp)</ReactTooltip>
             <ReactTooltip {...ReactTooltipParams} id='undo-button'>Undo (ctrl-z)</ReactTooltip>
             <ReactTooltip {...ReactTooltipParams} id='redo-button'>Redo (ctrl-shift-z)</ReactTooltip>
+            <ReactTooltip {...ReactTooltipParams} id='calculator'>Calculators</ReactTooltip>
+            <ReactTooltip {...ReactTooltipParams} id='facts'>Facts</ReactTooltip>
 
             {isLoggedIn &&
               <DropDown
@@ -186,7 +188,7 @@ export class SpaceToolbar extends Component {
                 <div className='header-action-border'/>
                 <DropDown
                   headerText={'Calculators'}
-                  openLink={<a className='header-action'><Icon name='calculator'/></a>}
+                  openLink={<a className='header-action' data-tip data-for='calculator'><Icon name='calculator'/></a>}
                   position='right'
                 >
                   {[
@@ -214,7 +216,9 @@ export class SpaceToolbar extends Component {
             }
 
             {this.props.canShowFactSidebar &&
-              <a onClick={toggleFactSidebar} className={`header-action`}> <Icon name='bank'/> </a>
+              <a onClick={toggleFactSidebar} className={`header-action`} data-tip data-for='facts'>
+                <Icon name='bank'/>
+              </a>
             }
 
             {editableByMe && editsAllowed && <ProgressMessage actionState={actionState}/>}
