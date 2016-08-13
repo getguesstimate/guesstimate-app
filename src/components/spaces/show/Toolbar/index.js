@@ -22,6 +22,11 @@ const ProgressMessage = ({actionState}) => (
     {actionState == 'SAVING' && 'Saving...'}
     {actionState == 'COPYING' && 'Copying...'}
     {actionState == 'CREATING' && 'Creating a new model...'}
+    {actionState == 'UNALLOWED_ATTEMPT' &&
+      <div className='ui red horizontal label'>
+        Saving not enabled in viewing mode.
+      </div>
+    }
     {actionState == 'ERROR' &&
       <div className='ui red horizontal label'>
         ERROR SAVING
@@ -221,7 +226,7 @@ export class SpaceToolbar extends Component {
               </a>
             }
 
-            {editableByMe && editsAllowed && <ProgressMessage actionState={actionState}/>}
+            {<ProgressMessage actionState={actionState}/>}
 
           </div>
           <div className='col-sm-2'>

@@ -208,6 +208,8 @@ export function updateGraph(spaceId, saveOnServer=true) {
     dispatch(saveCheckpoint(spaceId, space.graph))
     if (saveOnServer) {
       dispatch(generalUpdate(spaceId, updates))
+    } else {
+      dispatch(changeActionState('UNALLOWED_ATTEMPT'))
     }
   }
 }
