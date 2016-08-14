@@ -1,6 +1,7 @@
 import {PARSER_ERROR} from 'lib/errors/modelErrors'
 
 const SUFFIXES = {
+  '%': -2,
   'K': 3,
   'M': 6,
   'B': 9,

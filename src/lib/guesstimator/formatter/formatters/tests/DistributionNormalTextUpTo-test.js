@@ -25,6 +25,7 @@ describe('DistributionTextUpTo', () => {
       [{text: '0:5'}, {guesstimateType: 'NORMAL', params: [0, 5]}],
       [{text: '8:10', guesstimateType: 'UNIFORM'}, {guesstimateType: 'UNIFORM', params: [8, 10]}],
       [{text: '8K:10M', guesstimateType: 'NORMAL'}, {guesstimateType: 'NORMAL', params: [8000, 10000000]}],
+      [{text: '8%:10%', guesstimateType: 'NORMAL'}, {guesstimateType: 'NORMAL', params: [0.08, 0.1]}],
       [{text: '-5:5', guesstimateType: 'NORMAL'}, {guesstimateType: 'NORMAL', params: [-5, 5]}],
       [{text: '0:5', guesstimateType: 'NORMAL'}, {guesstimateType: 'NORMAL', params: [0, 5]}],
     ]
