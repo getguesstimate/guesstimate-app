@@ -1,18 +1,19 @@
 export function keycodeToDirection (keyCode) {
+  console.log(keyCode)
   // up arrow
-  if (keyCode == '38') {
+  if (keyCode == '38' || keyCode == '75') {
     return 'up'
   }
   // down arrow
-  else if (keyCode == '40') {
+  else if (keyCode == '40' || keyCode == '74') {
     return 'down'
   }
   // tab
-  else if (keyCode == '9') {
+  else if (keyCode == '9' || keyCode == '76') {
     return 'right'
   }
   // left arrow
-  else if (keyCode == '37') {
+  else if (keyCode == '37' || keyCode == '72') {
     return 'left'
   }
   // right arrow

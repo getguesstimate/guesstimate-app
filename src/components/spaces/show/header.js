@@ -48,7 +48,7 @@ export class SpaceHeader extends Component {
     return (
       <div className='container-fluid'>
         <div className='row header'>
-          <div className='col-sm-8'>
+          <div className='col-md-8 col-xs-6'>
             <div className='header-name'>
               <SpaceName
                   name={name}
@@ -58,7 +58,7 @@ export class SpaceHeader extends Component {
             </div>
           </div>
 
-          <div className='col-sm-4'>
+          <div className='col-md-4 col-xs-6'>
             {(ownerIsOrg || !editableByMe)  &&
               <a className='ui image label' href={ownerUrl}>
                 <img src={ownerPicture}/>
