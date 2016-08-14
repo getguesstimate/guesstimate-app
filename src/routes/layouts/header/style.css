@@ -21,6 +21,8 @@
 .navbar-brand .guesstimate-icon {
   float: left;
   margin-right: 0.3em;
+  height: 1.2em;
+  display: none;
 }
 
 .navbar-brand .guesstimate-name{
@@ -33,10 +35,19 @@
   .PageHeader {
     padding: 0 1em;
   }
+  .PageHeader .header-right-menu {
+    font-size: .9em;
+  }
   .guesstimate-name {
     display: none;
   }
+  .navbar-brand .guesstimate-icon {
+    display: block;
+  }
   .item.text.scratchpad {
+    display: none;
+  }
+  .item.new-model {
     display: none;
   }
   .item.text.pricing {

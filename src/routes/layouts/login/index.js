@@ -105,7 +105,7 @@ export default class Profile extends Component {
     return (
       <DropDown
         headerText={'Select Owner'}
-        openLink={<a className='item'> <i className={`ion-md-add`}/> <span className='text'>New Model</span> </a>}
+        openLink={<a className='item new-model'> <i className={`ion-md-add`}/> <span className='text'>New Model</span> </a>}
         ref={ref}
       >
         {listElements.map(element => <CardListElement {...element.props} key={element.id}/>)}
@@ -156,7 +156,7 @@ export default class Profile extends Component {
 
       { isLoggedIn && hasOrganizations && this.newModelDropdown(me, organizations) }
       { isLoggedIn && !hasOrganizations &&
-        <a className='item' onClick={this.newModel.bind(this, null)}>
+        <a className='item new-model' onClick={this.newModel.bind(this, null)}>
           <i className={`ion-md-add`}/>
           <span className='text'>New Model</span>
         </a>
