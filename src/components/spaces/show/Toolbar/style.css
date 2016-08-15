@@ -13,6 +13,14 @@
   font-size: 1.1em;
 }
 
+.SpaceShowToolbar .saveMessage .ui.label {
+  font-size: 1.2rem;
+  font-weight: 500;
+  border-radius: 2px;
+  padding: .25em .5em;
+  margin-top: -2px;
+}
+
 .SpaceShowToolbar .header-action {
   cursor: pointer;
   float: left;

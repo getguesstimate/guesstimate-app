@@ -48,7 +48,8 @@ export default class Profile extends Component {
       {ionicIcon: 'md-person', header: 'account', onMouseDown: this._openModal.bind(this)},
       {icon: 'rocket', header: 'upgrade', onMouseDown: () => {navigationActions.navigate('/subscribe/lite')}},
       {ionicIcon: 'ios-people', header: 'New Organization', onMouseDown: () => {navigationActions.navigate('/organizations/new')}},
-      {ionicIcon: 'md-help', header: 'FAQ', onMouseDown: () => {navigationActions.navigate('/faq')}},
+      {ionicIcon: 'md-help', header: 'Documentation', onMouseDown: () => {navigationActions.externalNavigate('http://docs.getguesstimate.com/')}},
+      {ionicIcon: 'ios-chatbubbles', header: 'Feedback', onMouseDown: () => {navigationActions.externalNavigate('https://productpains.com/product/guesstimate')}},
       {ionicIcon: 'md-log-out', header: 'Sign Out', onMouseDown: this.logOut.bind(this)}
     ]
 
@@ -105,7 +106,7 @@ export default class Profile extends Component {
     return (
       <DropDown
         headerText={'Select Owner'}
-        openLink={<a className='item'> <i className={`ion-md-add`}/> <span className='text'>New Model</span> </a>}
+        openLink={<a className='item new-model'> <i className={`ion-md-add`}/> <span className='text'>New Model</span> </a>}
         ref={ref}
       >
         {listElements.map(element => <CardListElement {...element.props} key={element.id}/>)}
@@ -156,7 +157,7 @@ export default class Profile extends Component {
 
       { isLoggedIn && hasOrganizations && this.newModelDropdown(me, organizations) }
       { isLoggedIn && !hasOrganizations &&
-        <a className='item' onClick={this.newModel.bind(this, null)}>
+        <a className='item new-model' onClick={this.newModel.bind(this, null)}>
           <i className={`ion-md-add`}/>
           <span className='text'>New Model</span>
         </a>
