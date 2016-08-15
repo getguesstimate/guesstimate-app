@@ -73,26 +73,33 @@
 
 .MetricSidebar {
 	 position: absolute;
-	 top: 0;
-	 right: -8.4em;
+	 top: 4px;
+	 right: -8.2em;
 	 z-index: 3;
 }
 
 a.MetricSidebarItem {
-	background-color: rgb(41,56,61);
 	clear: both;
 	display: block;
 	float: left;
 	width: 8em;
-	border-radius: 2px;
-	padding: .2em .5em;
-	margin-bottom: .4em;
-	transition: transform 85ms ease-in;
+	padding: .4em .7em;
 	color: white;
+	background: #52646f;
+	border-bottom: 1px solid #40525c;
+}
+
+a.MetricSidebarItem:first-child {
+	border-radius: 0 2px 0 0;
+}
+
+a.MetricSidebarItem:last-child {
+	border-radius: 0 0 2px 0;
+	border-bottom: none;
 }
 
 a.MetricSidebarItem:hover {
-	transform: translateX(5px);
+	background: #40525c;
 }
 
 .MetricSidebarItem--icon {

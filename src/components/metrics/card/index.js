@@ -325,10 +325,6 @@ export class MetricSidebar extends Component {
           name={'Delete'}
           onClick={this.props.onRemoveMetric}
         />
-        <MetricSidebarItem
-          icon={<Icon name='bar-chart'/>}
-          name={'Analyze'}
-        />
       </div>
     )
   }
