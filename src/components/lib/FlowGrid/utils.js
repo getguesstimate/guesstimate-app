@@ -1,5 +1,4 @@
 export function keycodeToDirection (keyCode) {
-  console.log(keyCode)
   // up arrow
   if (keyCode == '38' || keyCode == '75') {
     return 'up'

@@ -70,3 +70,32 @@
 .ReactModal__Overlay--after-open {
   overflow: auto;
 }
+
+.MetricSidebar {
+	 position: absolute;
+	 top: 0;
+	 right: -8.4em;
+	 z-index: 3;
+}
+
+a.MetricSidebarItem {
+	background-color: rgb(41,56,61);
+	clear: both;
+	display: block;
+	float: left;
+	width: 8em;
+	border-radius: 2px;
+	padding: .2em .5em;
+	margin-bottom: .4em;
+	transition: transform 85ms ease-in;
+	color: white;
+}
+
+a.MetricSidebarItem:hover {
+	transform: translateX(5px);
+}
+
+.MetricSidebarItem--icon {
+	float: left;
+	width: 1.5em;
+}
