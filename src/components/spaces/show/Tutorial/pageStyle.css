@@ -1,0 +1,54 @@
+@import './styles/variables.css';
+
+.tutorialPage {
+  margin-bottom: 2em;
+
+  .header {
+    width: 100%;
+    text-align: center;
+  }
+
+  h3 {
+    text-align: center;
+    color: #666;
+    margin: 0.3em auto;
+  }
+
+  p {
+    text-align: justify;
+  }
+
+  img {
+    display: block;
+    height: 12em;
+    margin: 0 auto;
+    padding-top: 1em;
+  }
+
+  table {
+    margin-right: auto;
+    margin-left: auto;
+    /*max-width: 40em;*/
+    background: #ddd;
+    border-radius: 0.2em;
+
+    td {
+      padding: 0.5em 1em;
+      text-align: justify;
+      line-height: 1.1em;
+      vertical-align: middle;
+
+      .rowLabel {
+        text-align: center;
+        font-weight: bold;
+      }
+
+      .exampleFunction {
+        background: #eee;
+        border-radius: 0.3em;
+        padding: 0.15em 0.3em;
+        font-family: "Courier New", Courier, monospace
+      }
+    }
+  }
+}

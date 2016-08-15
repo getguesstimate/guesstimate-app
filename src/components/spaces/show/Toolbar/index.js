@@ -139,31 +139,29 @@ export class SpaceToolbar extends Component {
             <ReactTooltip {...ReactTooltipParams} id='undo-button'>Undo (ctrl-z)</ReactTooltip>
             <ReactTooltip {...ReactTooltipParams} id='redo-button'>Redo (ctrl-shift-z)</ReactTooltip>
 
-            {isLoggedIn &&
-              <DropDown
-                headerText={'Model Actions'}
-                openLink={<a className='header-action'>File</a>}
-                position='right'
-              >
-                <CardListElement icon={'copy'} header='Copy Model' onMouseDown={onCopyModel}/>
-                {editableByMe &&
-                  <CardListElement
-                    icon={'download'}
-                    header='Import Slurp'
-                    onMouseDown={() => {this.setState({importModalOpen: true})}}
-                    closeOnClick={true}
-                  />
-                }
-                {editableByMe && <CardListElement icon={'warning'} header='Delete Model' onMouseDown={onDestroy}/> }
+            <DropDown
+              headerText={'Model Actions'}
+              openLink={<a className='header-action'>File</a>}
+              position='right'
+            >
+              {isLoggedIn && <CardListElement icon={'copy'} header='Copy Model' onMouseDown={onCopyModel}/>}
+              {editableByMe &&
                 <CardListElement
-                  key={'tutorial'}
-                  icon={'question'}
-                  header={'Show Tutorial'}
-                  onMouseDown={onOpenTutorial}
+                  icon={'download'}
+                  header='Import Slurp'
+                  onMouseDown={() => {this.setState({importModalOpen: true})}}
                   closeOnClick={true}
                 />
-              </DropDown>
-            }
+              }
+              {editableByMe && <CardListElement icon={'warning'} header='Delete Model' onMouseDown={onDestroy}/> }
+              <CardListElement
+                key={'tutorial'}
+                icon={'question'}
+                header={'Show Tutorial'}
+                onMouseDown={onOpenTutorial}
+                closeOnClick={true}
+              />
+            </DropDown>
 
             <CanvasViewForm />
 
