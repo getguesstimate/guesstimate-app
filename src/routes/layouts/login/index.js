@@ -49,6 +49,7 @@ export default class Profile extends Component {
       {icon: 'rocket', header: 'upgrade', onMouseDown: () => {navigationActions.navigate('/subscribe/lite')}},
       {ionicIcon: 'ios-people', header: 'New Organization', onMouseDown: () => {navigationActions.navigate('/organizations/new')}},
       {ionicIcon: 'md-help', header: 'Documentation', onMouseDown: () => {navigationActions.externalNavigate('http://docs.getguesstimate.com/')}},
+      {ionicIcon: 'ios-chatbubbles', header: 'Feedback', onMouseDown: () => {navigationActions.externalNavigate('https://productpains.com/product/guesstimate')}},
       {ionicIcon: 'md-log-out', header: 'Sign Out', onMouseDown: this.logOut.bind(this)}
     ]
 
