@@ -98,7 +98,7 @@ export default class MetricCard extends Component {
     window.recorder.recordRenderStartEvent(this)
     if (this.state.editing && !nextProps.inSelectedCell) { this.setState({editing: false}) }
     if (this.props.inSelectedCell && !nextProps.inSelectedCell) { this._closeSidebar() }
-    //if (this.props.hovered && !nextProps.hovered){ this._closeSidebar() }
+    if (this.props.hovered && !nextProps.hovered){ this._closeSidebar() }
   }
   componentWillUnmount() { window.recorder.recordUnmountEvent(this) }
 
@@ -243,6 +243,11 @@ export default class MetricCard extends Component {
     return !!(analyzedMetric && !this._isAnalyzedMetric() && this._shouldShowSimulation(metric) && this._shouldShowSimulation(analyzedMetric))
   }
 
+  _canBeAnalyzed() {
+    const {metric} = this.props
+    return this._shouldShowSimulation(metric)
+  }
+
   _isAnalyzedMetric() {
     const {metric, analyzedMetric} = this.props
     return (metric.id === analyzedMetric.id)
@@ -340,6 +345,7 @@ export default class MetricCard extends Component {
           <MetricSidebar
             onOpenModal={this.openModal.bind(this)}
             onRemoveMetric={this.handleRemoveMetric.bind(this)}
+            showAnalysis={this._canBeAnalyzed()}
             onBeginAnalysis={this._beginAnalysis.bind(this)}
             onEndAnalysis={this._endAnalysis.bind(this)}
             isAnalyzedMetric={isAnalyzedMetric}
@@ -350,55 +356,47 @@ export default class MetricCard extends Component {
   }
 }
 
-export class MetricSidebar extends Component {
-  render() {
-    return (
-      <div className='MetricSidebar'>
-        <MetricSidebarItem
-          icon={<Icon name='expand'/>}
-          name={'Expand'}
-          onClick={this.props.onOpenModal}
-        />
-        {!this.props.isAnalyzedMetric &&
-          <MetricSidebarItem
-            icon={<Icon name='bar-chart'/>}
-            name={'Sensitivity'}
-            onClick={this.props.onBeginAnalysis}
-          />
-        }
-        {this.props.isAnalyzedMetric &&
-          <MetricSidebarItem
-            className='analyzing'
-            icon={<Icon name='close'/>}
-            name={'Sensitivity'}
-            onClick={this.props.onEndAnalysis}
-          />
-        }
-        <MetricSidebarItem
-          icon={<Icon name='trash'/>}
-          name={'Delete'}
-          onClick={this.props.onRemoveMetric}
-        />
-      </div>
-    )
-  }
-}
+const MetricSidebar = ({onOpenModal, onBeginAnalysis, onEndAnalysis, onRemoveMetric, showAnalysis, isAnalyzedMetric}) => (
+  <div className='MetricSidebar'>
+    <MetricSidebarItem
+      icon={<Icon name='expand'/>}
+      name={'Expand'}
+      onClick={onOpenModal}
+    />
+    {showAnalysis && !isAnalyzedMetric &&
+      <MetricSidebarItem
+        icon={<Icon name='bar-chart'/>}
+        name={'Sensitivity'}
+        onClick={onBeginAnalysis}
+      />
+    }
+    {showAnalysis && isAnalyzedMetric &&
+      <MetricSidebarItem
+        className='analyzing'
+        icon={<Icon name='close'/>}
+        name={'Sensitivity'}
+        onClick={onEndAnalysis}
+      />
+    }
+    <MetricSidebarItem
+      icon={<Icon name='trash'/>}
+      name={'Delete'}
+      onClick={onRemoveMetric}
+    />
+  </div>
+)
 
-export class MetricSidebarItem extends Component {
-  render() {
-    return (
-      <a
-        href='#'
-        className={`MetricSidebarItem ${this.props.className && this.props.className}`}
-        onMouseDown={this.props.onClick}
-      >
-        <span className='MetricSidebarItem--icon'>
-          {this.props.icon}
-        </span>
-        <span className='MetricSidebarItem--name'>
-          {this.props.name}
-        </span>
-      </a>
-    )
-  }
-}
+const MetricSidebarItem = ({className, onClick, icon, name}) => (
+  <a
+    href='#'
+    className={`MetricSidebarItem ${className && className}`}
+    onMouseDown={onClick}
+  >
+    <span className='MetricSidebarItem--icon'>
+      {icon}
+    </span>
+    <span className='MetricSidebarItem--name'>
+      {name}
+    </span>
+  </a>
+)
