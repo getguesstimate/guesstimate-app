@@ -23,6 +23,8 @@ import {INTERMEDIATE, OUTPUT, INPUT, NOEDGE, relationshipType} from 'gEngine/gra
 
 import './style.css'
 
+import Icon from 'react-fa'
+
 const relationshipClasses = {}
 relationshipClasses[INTERMEDIATE] = 'intermediate'
 relationshipClasses[OUTPUT] = 'output'
@@ -59,10 +61,13 @@ export default class MetricCard extends Component {
   state = {
     modalIsOpen: false,
     editing: false,
+    sidebarIsOpen: false,
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return hasMetricUpdated(this.props, nextProps) || (this.state.modalIsOpen !== nextState.modalIsOpen)
+    return hasMetricUpdated(this.props, nextProps) ||
+      (this.state.modalIsOpen !== nextState.modalIsOpen) ||
+      (this.state.sidebarIsOpen !== nextState.sidebarIsOpen)
   }
 
   onEdit() {
@@ -77,6 +82,7 @@ export default class MetricCard extends Component {
   componentWillUpdate(nextProps) {
     window.recorder.recordRenderStartEvent(this)
     if (this.state.editing && !nextProps.inSelectedCell) { this.setState({editing: false}) }
+    if (this.props.inSelectedCell && !nextProps.inSelectedCell) { this.setState({sidebarIsOpen: false}) }
   }
   componentWillUnmount() { window.recorder.recordUnmountEvent(this) }
 
@@ -101,11 +107,15 @@ export default class MetricCard extends Component {
   }
 
   openModal() {
-    this.setState({modalIsOpen: true});
+    this.setState({modalIsOpen: true, sidebarIsOpen: false});
   }
 
   closeModal() {
-     this.setState({modalIsOpen: false});
+    this.setState({modalIsOpen: false});
+  }
+
+  _toggleSidebar() {
+    this.setState({sidebarIsOpen: (!this.state.sidebarIsOpen), modalIsOpen: false});
   }
 
   _handleKeyDown(e) {
@@ -214,6 +224,14 @@ export default class MetricCard extends Component {
     return !!(isAnalysis && selectedMetric && this._shouldShowSimulation(metric) && this._shouldShowSimulation(selectedMetric))
   }
 
+  // If sidebar is expanded, we want to close it if anything else is clicked
+  onMouseDown(e){
+    const isSidebarElement = (_.get(e, 'target.dataset.controlSidebar') === "true")
+    if (this.state.sidebarIsOpen && !isSidebarElement){
+      this._toggleSidebar()
+    }
+  }
+
   render() {
     const {
       inSelectedCell,
@@ -236,7 +254,10 @@ export default class MetricCard extends Component {
         onKeyDown={this._handleKeyDown.bind(this)}
         tabIndex='0'
       >
-        <div className={this._className()}>
+        <div
+          className={this._className()}
+          onMouseDown={this.onMouseDown.bind(this)}
+        >
           {this.state.modalIsOpen &&
             <MetricModal
               metric={metric}
@@ -250,7 +271,7 @@ export default class MetricCard extends Component {
             metric={metric}
             inSelectedCell={inSelectedCell}
             onChangeName={this.onChangeMetricName.bind(this)}
-            onOpenModal={this.openModal.bind(this)}
+            onToggleSidebar={this._toggleSidebar.bind(this)}
             jumpSection={this._focusForm.bind(this)}
             onMouseDown={this._handleMouseDown.bind(this)}
             ref='MetricCardViewSection'
@@ -290,7 +311,47 @@ export default class MetricCard extends Component {
         {hovered && !inSelectedCell && shouldShowSensitivitySection &&
           <ScatterTip yMetric={selectedMetric} xMetric={metric}/>
         }
+        {inSelectedCell && this.state.sidebarIsOpen &&
+          <MetricSidebar
+            onOpenModal={this.openModal.bind(this)}
+            onRemoveMetric={this.handleRemoveMetric.bind(this)}
+          />
+        }
       </div>
     );
+  }
+}
+
+export class MetricSidebar extends Component {
+  render() {
+    return (
+      <div className='MetricSidebar'>
+        <MetricSidebarItem
+          icon={<Icon name='expand'/>}
+          name={'Expand'}
+          onClick={this.props.onOpenModal}
+        />
+        <MetricSidebarItem
+          icon={<Icon name='trash'/>}
+          name={'Delete'}
+          onClick={this.props.onRemoveMetric}
+        />
+      </div>
+    )
+  }
+}
+
+export class MetricSidebarItem extends Component {
+  render() {
+    return (
+      <a href='#' className='MetricSidebarItem' onMouseDown={this.props.onClick}>
+        <span className='MetricSidebarItem--icon'>
+          {this.props.icon}
+        </span>
+        <span className='MetricSidebarItem--name'>
+          {this.props.name}
+        </span>
+      </a>
+    )
   }
 }
