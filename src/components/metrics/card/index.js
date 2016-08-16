@@ -81,6 +81,10 @@ export default class MetricCard extends Component {
     this.props.analyzeMetricId(this._id())
   }
 
+  _endAnalysis(){
+    this.props.endAnalysis()
+  }
+
   onEdit() {
     if (!this.state.editing) { this.setState({editing: true}) }
   }
@@ -231,7 +235,12 @@ export default class MetricCard extends Component {
 
   _shouldShowSensitivitySection() {
     const {metric, analyzedMetric} = this.props
-    return !!(analyzedMetric && this._shouldShowSimulation(metric) && this._shouldShowSimulation(analyzedMetric))
+    return !!(analyzedMetric && !this._isAnalyzedMetric() && this._shouldShowSimulation(metric) && this._shouldShowSimulation(analyzedMetric))
+  }
+
+  _isAnalyzedMetric() {
+    const {metric, analyzedMetric} = this.props
+    return (metric.id === analyzedMetric.id)
   }
 
   // If sidebar is expanded, we want to close it if anything else is clicked
@@ -256,6 +265,7 @@ export default class MetricCard extends Component {
     } = this.props
     const {guesstimate} = metric
     const shouldShowSensitivitySection = this._shouldShowSensitivitySection()
+    const isAnalyzedMetric = this._isAnalyzedMetric()
 
     return (
       <div className='metricCard--Container'
@@ -326,6 +336,8 @@ export default class MetricCard extends Component {
             onOpenModal={this.openModal.bind(this)}
             onRemoveMetric={this.handleRemoveMetric.bind(this)}
             onBeginAnalysis={this._beginAnalysis.bind(this)}
+            onEndAnalysis={this._endAnalysis.bind(this)}
+            isAnalyzedMetric={isAnalyzedMetric}
           />
         }
       </div>
@@ -342,15 +354,25 @@ export class MetricSidebar extends Component {
           name={'Expand'}
           onClick={this.props.onOpenModal}
         />
+        {!this.props.isAnalyzedMetric &&
+          <MetricSidebarItem
+            icon={<Icon name='bar-chart'/>}
+            name={'Sensitivity'}
+            onClick={this.props.onBeginAnalysis}
+          />
+        }
+        {this.props.isAnalyzedMetric &&
+          <MetricSidebarItem
+            className='analyzing'
+            icon={<Icon name='close'/>}
+            name={'Sensitivity'}
+            onClick={this.props.onEndAnalysis}
+          />
+        }
         <MetricSidebarItem
           icon={<Icon name='trash'/>}
           name={'Delete'}
           onClick={this.props.onRemoveMetric}
-        />
-        <MetricSidebarItem
-          icon={<Icon name='trash'/>}
-          name={'Analyze'}
-          onClick={this.props.onBeginAnalysis}
         />
       </div>
     )
@@ -360,7 +382,7 @@ export class MetricSidebar extends Component {
 export class MetricSidebarItem extends Component {
   render() {
     return (
-      <a href='#' className='MetricSidebarItem' onMouseDown={this.props.onClick}>
+      <a href='#' className={`MetricSidebarItem ${this.props.className}`} onMouseDown={this.props.onClick}>
         <span className='MetricSidebarItem--icon'>
           {this.props.icon}
         </span>

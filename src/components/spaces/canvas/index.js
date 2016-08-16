@@ -135,7 +135,7 @@ export default class Canvas extends Component{
 
   renderMetric(metric, selected) {
     const {location} = metric
-    const hasSelected = selected && metric && (selected.id !== metric.id)
+    const hasSelected = selected && metric
     const selectedSamples = _.get(selected, 'simulation.sample.values')
     const passSelected = hasSelected && selectedSamples && !_.isEmpty(selectedSamples)
 
