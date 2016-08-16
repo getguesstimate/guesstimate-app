@@ -140,7 +140,7 @@ export class MetricCardViewSection extends Component {
         {this.props.connectDragSource(
           <div className='StatsSection'>
             {showSensitivitySection &&
-              <SensitivitySection yMetric={this.props.selectedMetric} xMetric={metric}/>
+              <SensitivitySection yMetric={this.props.analyzedMetric} xMetric={metric}/>
             }
             {showSimulation &&
               <div className='StatsSectionBody'>

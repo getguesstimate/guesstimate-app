@@ -230,9 +230,9 @@ export default class MetricCard extends Component {
   }
 
   _shouldShowSensitivitySection() {
-    const {metric, selectedMetric} = this.props
+    const {metric, analyzedMetric} = this.props
     const isAnalysis = (this.props.canvasState.metricCardView === 'analysis')
-    return !!(isAnalysis && selectedMetric && this._shouldShowSimulation(metric) && this._shouldShowSimulation(selectedMetric))
+    return !!(isAnalysis && analyzedMetric && this._shouldShowSimulation(metric) && this._shouldShowSimulation(analyzedMetric))
   }
 
   // If sidebar is expanded, we want to close it if anything else is clicked
@@ -252,7 +252,7 @@ export default class MetricCard extends Component {
       canvasState,
       hovered,
       connectDragSource,
-      selectedMetric,
+      analyzedMetric,
       forceFlowGridUpdate,
     } = this.props
     const {guesstimate} = metric
@@ -288,7 +288,7 @@ export default class MetricCard extends Component {
             ref='MetricCardViewSection'
             isTitle={this._isTitle()}
             connectDragSource={connectDragSource}
-            selectedMetric={selectedMetric}
+            analyzedMetric={analyzedMetric}
             showSensitivitySection={shouldShowSensitivitySection}
             heightHasChanged={forceFlowGridUpdate}
             hovered={hovered}
@@ -320,7 +320,7 @@ export default class MetricCard extends Component {
         </div>
         {hovered && !inSelectedCell && !shouldShowSensitivitySection && <MetricToolTip guesstimate={guesstimate}/>}
         {hovered && !inSelectedCell && shouldShowSensitivitySection &&
-          <ScatterTip yMetric={selectedMetric} xMetric={metric}/>
+          <ScatterTip yMetric={analyzedMetric} xMetric={metric}/>
         }
         {inSelectedCell && this.state.sidebarIsOpen &&
           <MetricSidebar

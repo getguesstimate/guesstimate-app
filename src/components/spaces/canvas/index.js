@@ -150,7 +150,7 @@ export default class Canvas extends Component{
         metric={metric}
         organizationId={organizationId}
         canUseOrganizationFacts={canUseOrganizationFacts}
-        selectedMetric={passSelected && selected}
+        analyzedMetric={passSelected && selected}
       />
     )
   }
@@ -220,14 +220,12 @@ export default class Canvas extends Component{
     this.props.dispatch(fillRegion(this.props.denormalizedSpace.id, region))
   }
 
-  analyzedCellLocation() {
+  analyzedMetric() {
     const {metrics, canvasState} = this.props.denormalizedSpace
     const analysisMetricId = canvasState.analysisMetricId
     if (!_.isEmpty(analysisMetricId)){
-      const analysisMetric = metrics.find(e => e.id === analysisMetricId)
-      if (!_.isEmpty(analysisMetric)){ return analysisMetric.location }
+      return metrics.find(e => e.id === analysisMetricId)
     }
-
     return false
   }
 
@@ -235,21 +233,21 @@ export default class Canvas extends Component{
     const {selectedCell, selectedRegion, copied} = this.props
     const {metrics, canvasState} = this.props.denormalizedSpace
     const {metricCardView} = canvasState
+    const analyzedMetric = this.analyzedMetric()
 
     const edges = this.edges()
     let className = 'canvas-space'
     className += this.showEdges() ? ' showEdges' : ''
     className += this.props.screenshot ? ' overflow-hidden' : ''
 
-    const selectedMetric = this._isAnalysisView() && this._selectedMetric()
     const showGridLines = (metricCardView !== 'display')
 
     const copiedRegion = (copied && (copied.pastedTimes < 1) && copied.region) || []
-    const analyzedCellLocation = this.analyzedCellLocation()
+    const analyzedCellLocation = analyzedMetric.location
     return (
       <div className={className}>
         <FlowGrid
-          items={_.map(metrics, m => ({key: m.id, location: m.location, component: this.renderMetric(m, selectedMetric)}))}
+          items={_.map(metrics, m => ({key: m.id, location: m.location, component: this.renderMetric(m, analyzedMetric)}))}
           onMultipleSelect={this._handleMultipleSelect.bind(this)}
           hasItemUpdated = {(oldItem, newItem) => hasMetricUpdated(oldItem.props, newItem.props)}
           isItemEmpty = {this.isMetricEmpty.bind(this)}

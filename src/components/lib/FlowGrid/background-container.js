@@ -77,6 +77,7 @@ export class BackgroundContainer extends Component {
                 columnWidth={columnWidth}
                 selectedRegion={region[0]}
                 type={region[1]}
+                key={region[1]}
               />
             )
           } else { return false }
