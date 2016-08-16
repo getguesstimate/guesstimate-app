@@ -98,7 +98,7 @@ export default class MetricCard extends Component {
     window.recorder.recordRenderStartEvent(this)
     if (this.state.editing && !nextProps.inSelectedCell) { this.setState({editing: false}) }
     if (this.props.inSelectedCell && !nextProps.inSelectedCell) { this._closeSidebar() }
-    if (this.props.hovered && !nextProps.hovered){ this._closeSidebar() }
+    //if (this.props.hovered && !nextProps.hovered){ this._closeSidebar() }
   }
   componentWillUnmount() { window.recorder.recordUnmountEvent(this) }
 
@@ -387,7 +387,11 @@ export class MetricSidebar extends Component {
 export class MetricSidebarItem extends Component {
   render() {
     return (
-      <a href='#' className={`MetricSidebarItem ${this.props.className}`} onMouseDown={this.props.onClick}>
+      <a
+        href='#'
+        className={`MetricSidebarItem ${this.props.className && this.props.className}`}
+        onMouseDown={this.props.onClick}
+      >
         <span className='MetricSidebarItem--icon'>
           {this.props.icon}
         </span>
