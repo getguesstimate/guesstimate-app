@@ -224,10 +224,11 @@ export default class MetricCard extends Component {
     return !!(isAnalysis && selectedMetric && this._shouldShowSimulation(metric) && this._shouldShowSimulation(selectedMetric))
   }
 
+  // If sidebar is expanded, we want to close it if anything else is clicked
   onMouseDown(e){
     const isSidebarElement = (_.get(e, 'target.dataset.controlSidebar') === "true")
     if (this.state.sidebarIsOpen && !isSidebarElement){
-      this.setState({sidebarIsOpen: false})
+      this._toggleSidebar()
     }
   }
 
@@ -268,7 +269,7 @@ export default class MetricCard extends Component {
             metric={metric}
             inSelectedCell={inSelectedCell}
             onChangeName={this.onChangeMetricName.bind(this)}
-            onOpenSidebar={this._toggleSidebar.bind(this)}
+            onToggleSidebar={this._toggleSidebar.bind(this)}
             jumpSection={this._focusForm.bind(this)}
             onMouseDown={this._handleMouseDown.bind(this)}
             ref='MetricCardViewSection'

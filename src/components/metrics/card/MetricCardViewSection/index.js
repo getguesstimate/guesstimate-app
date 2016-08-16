@@ -78,7 +78,7 @@ export class MetricCardViewSection extends Component {
       metric,
       inSelectedCell,
       onChangeName,
-      onOpenSidebar,
+      onToggleSidebar,
       jumpSection,
       onMouseDown,
       showSensitivitySection,
@@ -114,7 +114,7 @@ export class MetricCardViewSection extends Component {
             <MetricToken
               readableId={metric.readableId}
               anotherFunctionSelected={anotherFunctionSelected}
-              onOpenSidebar={onOpenSidebar}
+              onToggleSidebar={onToggleSidebar}
               hasGuesstimateDescription={hasGuesstimateDescription}
             />
           }
