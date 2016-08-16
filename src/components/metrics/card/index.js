@@ -224,6 +224,13 @@ export default class MetricCard extends Component {
     return !!(isAnalysis && selectedMetric && this._shouldShowSimulation(metric) && this._shouldShowSimulation(selectedMetric))
   }
 
+  onMouseDown(e){
+    const isSidebarElement = (_.get(e, 'target.dataset.controlSidebar') === "true")
+    if (this.state.sidebarIsOpen && !isSidebarElement){
+      this.setState({sidebarIsOpen: false})
+    }
+  }
+
   render() {
     const {
       inSelectedCell,
@@ -244,6 +251,7 @@ export default class MetricCard extends Component {
         ref='dom'
         onKeyPress={this._handleKeyPress.bind(this)}
         onKeyDown={this._handleKeyDown.bind(this)}
+        onMouseDown={this.onMouseDown.bind(this)}
         tabIndex='0'
       >
         <div className={this._className()}>
