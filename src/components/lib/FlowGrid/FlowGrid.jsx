@@ -30,6 +30,7 @@ export default class FlowGrid extends Component{
       output: PTLocation.isRequired
     })),
     selectedCell: PTLocation,
+    analyzedCell: PTLocation,
     selectedRegion: PTRegion,
     onUndo: PropTypes.func.isRequired,
     onRedo: PropTypes.func.isRequired,
@@ -341,6 +342,7 @@ export default class FlowGrid extends Component{
             getRowHeight={this._getRowHeight.bind(this)}
             selectedRegion={this.props.selectedRegion}
             copiedRegion={this.props.copiedRegion}
+            analyzedRegion={this.props.analyzedRegion}
             autoFillRegion={getBounds(this.state.autoFillRegion)}
           />
         </div>

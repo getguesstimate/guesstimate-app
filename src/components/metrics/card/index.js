@@ -15,6 +15,7 @@ import SensitivitySection from './SensitivitySection/SensitivitySection'
 import {hasMetricUpdated} from './updated'
 import {removeMetrics, changeMetric} from 'gModules/metrics/actions'
 import {changeGuesstimate} from 'gModules/guesstimates/actions'
+import {analyzeMetricId, endAnalysis} from 'gModules/canvas_state/actions'
 
 import * as canvasStateProps from 'gModules/canvas_state/prop_type'
 import {PTLocation} from 'lib/locationUtils'
@@ -43,7 +44,13 @@ class ScatterTip extends Component {
 
 const PT = PropTypes
 
-@connect(null, dispatch => bindActionCreators({changeMetric, changeGuesstimate, removeMetrics}, dispatch))
+@connect(null, dispatch => bindActionCreators({
+  changeMetric,
+  changeGuesstimate,
+  removeMetrics,
+  analyzeMetricId,
+  endAnalysis
+}, dispatch))
 export default class MetricCard extends Component {
   displayName: 'MetricCard'
 
@@ -68,6 +75,10 @@ export default class MetricCard extends Component {
     return hasMetricUpdated(this.props, nextProps) ||
       (this.state.modalIsOpen !== nextState.modalIsOpen) ||
       (this.state.sidebarIsOpen !== nextState.sidebarIsOpen)
+  }
+
+  _beginAnalysis(){
+    this.props.analyzeMetricId(this._id())
   }
 
   onEdit() {
@@ -315,6 +326,7 @@ export default class MetricCard extends Component {
           <MetricSidebar
             onOpenModal={this.openModal.bind(this)}
             onRemoveMetric={this.handleRemoveMetric.bind(this)}
+            onBeginAnalysis={this._beginAnalysis.bind(this)}
           />
         }
       </div>
@@ -335,6 +347,11 @@ export class MetricSidebar extends Component {
           icon={<Icon name='trash'/>}
           name={'Delete'}
           onClick={this.props.onRemoveMetric}
+        />
+        <MetricSidebarItem
+          icon={<Icon name='trash'/>}
+          name={'Analyze'}
+          onClick={this.props.onBeginAnalysis}
         />
       </div>
     )

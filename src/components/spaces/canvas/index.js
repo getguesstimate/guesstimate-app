@@ -220,6 +220,17 @@ export default class Canvas extends Component{
     this.props.dispatch(fillRegion(this.props.denormalizedSpace.id, region))
   }
 
+  analyzedCellLocation() {
+    const {metrics, canvasState} = this.props.denormalizedSpace
+    const analysisMetricId = canvasState.analysisMetricId
+    if (!_.isEmpty(analysisMetricId)){
+      const analysisMetric = metrics.find(e => e.id === analysisMetricId)
+      if (!_.isEmpty(analysisMetric)){ return analysisMetric.location }
+    }
+
+    return false
+  }
+
   render () {
     const {selectedCell, selectedRegion, copied} = this.props
     const {metrics, canvasState} = this.props.denormalizedSpace
@@ -234,7 +245,7 @@ export default class Canvas extends Component{
     const showGridLines = (metricCardView !== 'display')
 
     const copiedRegion = (copied && (copied.pastedTimes < 1) && copied.region) || []
-
+    const analyzedCellLocation = this.analyzedCellLocation()
     return (
       <div className={className}>
         <FlowGrid
@@ -246,6 +257,7 @@ export default class Canvas extends Component{
           selectedRegion={selectedRegion}
           copiedRegion={copiedRegion}
           selectedCell={selectedCell}
+          analyzedRegion={analyzedCellLocation && [analyzedCellLocation, analyzedCellLocation] || []}
           onUndo={this._handleUndo.bind(this)}
           onRedo={this._handleRedo.bind(this)}
           onSelectItem={this._handleSelect.bind(this)}
