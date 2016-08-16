@@ -106,7 +106,7 @@ export default class SpacesShow extends Component {
 
   state = {
     showLeftSidebar: true,
-    showTutorial: true || !!_.get(this, 'props.me.profile.needs_tutorial'),
+    showTutorial: !!_.get(this, 'props.me.profile.needs_tutorial'),
     attemptedFetch: false,
     rightSidebar: {
       type: !!this.props.showCalculatorId ? SHOW_CALCULATOR : CLOSED,

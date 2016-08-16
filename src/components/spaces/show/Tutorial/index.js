@@ -38,11 +38,11 @@ export const TutorialModal = ({onClose}) => {
 }
 
 class Tutorial extends Component {
-  static PAGES_AND_HEADERS = [
-    {header: 'Cell Basics', page: <TutorialPageOne /> },
-    {header: 'Functions', page: <TutorialPageTwo /> },
-    {header: 'Ranges \& Data', page: <TutorialPageThree /> },
-    {header: 'Advanced Features', page: <TutorialPageFour /> },
+  static PAGES = [
+    <TutorialPageOne />,
+    <TutorialPageTwo />,
+    <TutorialPageThree />,
+    <TutorialPageFour />,
   ]
 
   state = {
@@ -51,8 +51,7 @@ class Tutorial extends Component {
 
   previousPage() { this.setState({onPage: Math.max(this.state.onPage - 1, 0)}) }
   nextPage() { this.setState({onPage: Math.min(this.state.onPage + 1, 4)}) }
-  renderPage() { return Tutorial.PAGES_AND_HEADERS[this.state.onPage].page }
-  header() { return Tutorial.PAGES_AND_HEADERS[this.state.onPage].header }
+  renderPage() { return Tutorial.PAGES[this.state.onPage] }
 
   render() {
     return (
