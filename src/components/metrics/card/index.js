@@ -252,10 +252,12 @@ export default class MetricCard extends Component {
         ref='dom'
         onKeyPress={this._handleKeyPress.bind(this)}
         onKeyDown={this._handleKeyDown.bind(this)}
-        onMouseDown={this.onMouseDown.bind(this)}
         tabIndex='0'
       >
-        <div className={this._className()}>
+        <div
+          className={this._className()}
+          onMouseDown={this.onMouseDown.bind(this)}
+        >
           {this.state.modalIsOpen &&
             <MetricModal
               metric={metric}
