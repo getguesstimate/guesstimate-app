@@ -9,7 +9,6 @@ export const canvasState = PT.shape({
 export const metricCardView = PT.oneOf([
   'normal',
   'scientific',
-  'analysis',
   'display'
 ]).isRequired
 
