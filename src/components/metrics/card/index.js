@@ -97,7 +97,8 @@ export default class MetricCard extends Component {
   componentWillUpdate(nextProps) {
     window.recorder.recordRenderStartEvent(this)
     if (this.state.editing && !nextProps.inSelectedCell) { this.setState({editing: false}) }
-    if (this.props.inSelectedCell && !nextProps.inSelectedCell) { this.setState({sidebarIsOpen: false}) }
+    if (this.props.inSelectedCell && !nextProps.inSelectedCell) { this._closeSidebar() }
+    if (this.props.hovered && !nextProps.hovered){ this._closeSidebar() }
   }
   componentWillUnmount() { window.recorder.recordUnmountEvent(this) }
 
@@ -131,6 +132,10 @@ export default class MetricCard extends Component {
 
   _toggleSidebar() {
     this.setState({sidebarIsOpen: (!this.state.sidebarIsOpen), modalIsOpen: false});
+  }
+
+  _closeSidebar() {
+     this.state.sidebarIsOpen && this.setState({sidebarIsOpen: false})
   }
 
   _handleKeyDown(e) {
