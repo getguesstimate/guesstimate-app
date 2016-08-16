@@ -2,6 +2,7 @@
 
 .tutorialPage {
   margin-bottom: 2em;
+  font-size: 1.1em;
 
   .header {
     width: 100%;
@@ -22,7 +23,7 @@
     display: block;
     height: 12em;
     margin: 0 auto;
-    padding-top: 1em;
+    padding-bottom: 1em;
   }
 
   table {
@@ -31,6 +32,7 @@
     /*max-width: 40em;*/
     background: #ddd;
     border-radius: 0.2em;
+    margin-bottom: 0.5em;
 
     td {
       padding: 0.5em 1em;
@@ -45,9 +47,17 @@
 
       .exampleFunction {
         background: #eee;
-        border-radius: 0.3em;
+        border-radius: 0.2em;
         padding: 0.15em 0.3em;
-        font-family: "Courier New", Courier, monospace
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.9em;
+
+        .exampleInput {
+          background-color: #c9e8c0;
+          color: #084e14;
+          padding: 0 0.1em;
+          border-radius: 0.1em;
+        }
       }
     }
   }

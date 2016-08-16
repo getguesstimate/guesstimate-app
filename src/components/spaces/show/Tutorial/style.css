@@ -5,10 +5,14 @@
     padding-bottom: 1em;
   }
 
-  .actions {
-    width: 90%;
-    margin-left: 5%;
+  .action-container {
     position: absolute;
     bottom: 1em;
+  }
+
+  .actions {
+    width: 100%;
+    margin: 0 auto;
+    margin-right: -50%;
   }
 }

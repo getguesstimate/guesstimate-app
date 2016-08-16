@@ -17,11 +17,10 @@ export const TutorialModal = ({onClose}) => {
       left: '25%',
       width: '50%',
       right: 'auto',
-      top: '10%',
-      height: '80%',
+      top: '5%',
+      height: '40em',
       bottom: 'auto',
       marginRight: '-50%',
-      marginBottom: '-50%',
       backgroundColor: '#F0F0F0',
       border: 'none',
       padding: '1em',
@@ -31,7 +30,6 @@ export const TutorialModal = ({onClose}) => {
     <Modal
       isOpen={true}
       onRequestClose={onClose}
-      shouldCloseOnOverlayClick={false}
       style={customStyles}
     >
       <Tutorial onClose={onClose} />
@@ -69,29 +67,30 @@ class Tutorial extends Component {
           </div>
         </div>}
         {this.renderPage()}
-        <div className='actions'>
+        <div className='action-container'>
           <div className='row'>
-            <div className='col-md-3' />
-            <div className='col-md-9'>
-              <span className='progress'> {this.state.onPage + 1} / 4 </span>
-              <span
-                className={`ui button ${this.state.onPage === 0 ? 'disabled' : ''}`}
-                onClick={this.previousPage.bind(this)}
-              >
-                <Icon name='arrow-left'/> Previous
-              </span>
-              <span
-                className={`ui button ${this.state.onPage === 3 ? 'disabled' : ''}`}
-                onClick={this.nextPage.bind(this)}
-              >
-                <Icon name='arrow-right'/> Next
-              </span>
-              <span
-                className='ui button'
-                onClick={this.props.onClose}
-              >
-                Skip
-              </span>
+            <div className='col-md-12'>
+              <div className='actions'>
+                <span className='progress'> {this.state.onPage + 1} / 4 </span>
+                <span
+                  className={`ui button ${this.state.onPage === 0 ? 'disabled' : ''}`}
+                  onClick={this.previousPage.bind(this)}
+                >
+                  <Icon name='arrow-left'/> Previous
+                </span>
+                <span
+                  className={`ui button ${this.state.onPage === 3 ? 'disabled' : ''}`}
+                  onClick={this.nextPage.bind(this)}
+                >
+                  <Icon name='arrow-right'/> Next
+                </span>
+                <span
+                  className='ui button'
+                  onClick={this.props.onClose}
+                >
+                  Exit
+                </span>
+              </div>
             </div>
           </div>
         </div>
