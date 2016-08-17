@@ -76,6 +76,7 @@ export default class Canvas extends Component{
   componentWillUnmount(){
     window.recorder.recordUnmountEvent(this)
     this.props.dispatch(deleteSimulations(this.props.denormalizedSpace.metrics.map(m => m.id)))
+    this.props.dispatch(canvasStateActions.endAnalysis())
   }
 
   _handleUndo() {
@@ -132,12 +133,11 @@ export default class Canvas extends Component{
     return _.isEmpty(metric.name) && _.isEmpty(input) && _.isEmpty(data)
   }
 
-
-  renderMetric(metric, selected) {
+  renderMetric(metric, analyzed) {
     const {location} = metric
-    const hasSelected = selected && metric
-    const selectedSamples = _.get(selected, 'simulation.sample.values')
-    const passSelected = hasSelected && selectedSamples && !_.isEmpty(selectedSamples)
+    const hasAnalyzed = analyzed && metric
+    const analyzedSamples = _.get(analyzed, 'simulation.sample.values')
+    const passAnalyzed = hasAnalyzed && analyzedSamples && !_.isEmpty(analyzedSamples)
 
     const is_private = _.get(this, 'props.denormalizedSpace.is_private')
     const organizationId = _.get(this, 'props.denormalizedSpace.organization_id')
@@ -150,7 +150,7 @@ export default class Canvas extends Component{
         metric={metric}
         organizationId={organizationId}
         canUseOrganizationFacts={canUseOrganizationFacts}
-        analyzedMetric={passSelected && selected}
+        analyzedMetric={passAnalyzed && analyzed}
       />
     )
   }
@@ -243,7 +243,7 @@ export default class Canvas extends Component{
     const showGridLines = (metricCardView !== 'display')
 
     const copiedRegion = (copied && (copied.pastedTimes < 1) && copied.region) || []
-    const analyzedCellLocation = analyzedMetric.location
+    const analyzedRegion = analyzedMetric ? [analyzedMetric.location, analyzedMetric.location] : []
     return (
       <div className={className}>
         <FlowGrid
@@ -255,7 +255,7 @@ export default class Canvas extends Component{
           selectedRegion={selectedRegion}
           copiedRegion={copiedRegion}
           selectedCell={selectedCell}
-          analyzedRegion={analyzedCellLocation && [analyzedCellLocation, analyzedCellLocation] || []}
+          analyzedRegion={analyzedRegion}
           onUndo={this._handleUndo.bind(this)}
           onRedo={this._handleRedo.bind(this)}
           onSelectItem={this._handleSelect.bind(this)}
