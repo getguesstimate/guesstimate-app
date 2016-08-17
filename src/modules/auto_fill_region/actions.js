@@ -35,7 +35,7 @@ export function fillDynamic(startMetric, startGuesstimate, direction) {
     const nonConstantMetrics = metrics.filter(m => isNonConstant(m, direction, metrics))
     if (_.isEmpty(nonConstantMetrics)) { return {metric, guesstimate: {...startGuesstimate, metric: metric.id}} }
 
-    const nonConstantInputsRegex = e.utils.or(nonConstantMetrics.map(e.guesstimate.expressionSyntaxPad))
+    const nonConstantInputsRegex = e.utils.or(nonConstantMetrics.map(m => e.guesstimate.expressionSyntaxPad(m.id, true)))
     const numNonConstantInputs = (expression.match(nonConstantInputsRegex) || []).length
 
     const translateFn = translate(startMetric.location, location)

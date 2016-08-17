@@ -11,6 +11,7 @@ import * as organization from './organization'
 import * as userOrganizationMemberships from './userOrganizationMemberships'
 import * as calculator from './calculator'
 import * as collections from './collections'
+import * as utils from './utils'
 
 const Engine = {
   graph,
@@ -26,6 +27,7 @@ const Engine = {
   calculator,
   facts,
   collections,
+  utils,
 }
 
 export default Engine
