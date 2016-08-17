@@ -27,12 +27,6 @@ function basicGraph(graph) {
   return new BasicGraph(_.map(graph.metrics, m => m.id), edges)
 }
 
-export function dependencyList(graph, spaceId) {
-  const graphSubset = _space.subset(graph, spaceId)
-  const bGraph = basicGraph(graphSubset)
-  return bGraph.nodes.map(n => [n.id, n.maxDistanceFromRoot])
-}
-
 // This could be optimized for filtering the graph by the space subset
 export function dependencyTree(oGraph, graphFilters) {
   const {spaceId, metricId, onlyHead, notHead, onlyUnsimulated} = graphFilters

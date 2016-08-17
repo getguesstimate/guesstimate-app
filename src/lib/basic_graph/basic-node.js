@@ -4,10 +4,6 @@ export default class BasicNode {
     this.graph = graph;
   }
 
-  children(oneLevel = true) {
-    return this.graph.children(this.id, oneLevel)
-  }
-
   directParents() {
     return this.graph.directParents(this.id)
   }

@@ -66,13 +66,13 @@ export function toDgraph(spaceId, graph){
   }
 }
 
-export function canEdit(space, me, userOrganizationMemberships, canvasState) {
+export function canEdit({user_id, organization_id}, me, userOrganizationMemberships, canvasState) {
   if (_.has(canvasState, 'editsAllowed') && !canvasState.editsAllowed) { return false }
 
   const meId = _.get(me, 'id')
-  if (!!space.organization_id) {
-    return _userOrganizationMemberships.isMember(space.organization_id, meId, userOrganizationMemberships)
+  if (!!organization_id) {
+    return _userOrganizationMemberships.isMember(organization_id, meId, userOrganizationMemberships)
   } else {
-    return space.user_id === meId
+    return user_id === meId
   }
 }

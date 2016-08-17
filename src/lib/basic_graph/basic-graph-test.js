@@ -126,20 +126,11 @@ describe('Graph', () => {
       it('with children', () => {
         expect(graph.childrenIds([1])).to.deep.equal([2,3])
       })
-
-      it('with no children', () => {
-        expect(graph.children(1).map(c => c.id)).to.deep.equal([2, 3])
-        expect(graph.children(2).map(c => c.id)).to.deep.equal([3])
-      })
     })
 
     describe('oneLevel=false', () => {
       it('with children', () => {
         expect(graph.childrenIds([1], false)).to.deep.equal([2,3,4])
-      })
-
-      it('with no children', () => {
-        expect(graph.children(4, false)).to.deep.equal([])
       })
 
       it('long graph', () => {
