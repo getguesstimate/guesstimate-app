@@ -45,7 +45,7 @@ export class BackgroundContainer extends Component {
       !_.isEqual(this.props.copiedRegion, nextProps.copiedRegion) ||
       !_.isEqual(this.props.selectedRegion, nextProps.selectedRegion) ||
       !_.isEqual(this.props.autoFillRegion, nextProps.autoFillRegion) ||
-      !_.isEqual(this.props.analyzedRegion, nextState.analyzedRegion) ||
+      !_.isEqual(this.props.analyzedRegion, nextProps.analyzedRegion) ||
       !_.isEqual(this.props.edges, nextProps.edges) ||
       !_.isEqual(this.state.rowHeights, nextState.rowHeights)
     )
