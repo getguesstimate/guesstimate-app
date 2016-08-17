@@ -182,7 +182,10 @@ export default class MetricCard extends Component {
     this.props.changeMetric({id: this._id(), name})
   }
 
-  onChangeGuesstimateDescription(description) {
+  onChangeGuesstimateDescription(rawDescription) {
+    const urlRegex = /(?:http(?:s?):\/\/)?(?:www)?\w+\.[\w\?\/\=\.]+/g
+    const description = rawDescription.replace(urlRegex, match => `[${match}](${match})`)
+
     this.props.changeGuesstimate(this._id(), {...this.props.metric.guesstimate, description})
   }
 
