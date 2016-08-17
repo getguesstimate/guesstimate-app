@@ -135,9 +135,14 @@ export default class Canvas extends Component{
 
   renderMetric(metric, analyzed) {
     const {location} = metric
-    const hasAnalyzed = analyzed && metric
     const analyzedSamples = _.get(analyzed, 'simulation.sample.values')
-    const passAnalyzed = hasAnalyzed && analyzedSamples && !_.isEmpty(analyzedSamples)
+    const hasAnalyzed = analyzed && metric && analyzedSamples && !_.isEmpty(analyzedSamples)
+
+    const analyzedRegion = analyzed ? [analyzed.location, analyzed.location] : []
+    const {ancestors, descendants} = this.getSelectedLineage(analyzedRegion)
+    const isRelatedToAnalyzed = _.some([...ancestors, ...descendants], relative => relative.id === metric.id)
+
+    const passAnalyzed = hasAnalyzed && isRelatedToAnalyzed
 
     const is_private = _.get(this, 'props.denormalizedSpace.is_private')
     const organizationId = _.get(this, 'props.denormalizedSpace.organization_id')
@@ -150,7 +155,7 @@ export default class Canvas extends Component{
         metric={metric}
         organizationId={organizationId}
         canUseOrganizationFacts={canUseOrganizationFacts}
-        analyzedMetric={passAnalyzed && analyzed}
+        analyzedMetric={passAnalyzed ? analyzed : null}
       />
     )
   }
@@ -159,8 +164,8 @@ export default class Canvas extends Component{
     return (this.props.denormalizedSpace.canvasState.edgeView === 'visible')
   }
 
-  getSelectedLineage() {
-    const {selectedRegion, denormalizedSpace: {metrics}} = this.props
+  getSelectedLineage(selectedRegion) {
+    const {denormalizedSpace: {metrics}} = this.props
     const selectedMetrics = metrics.filter(m => isWithinRegion(m.location, selectedRegion))
 
     let ancestors = [...selectedMetrics], descendants = [...selectedMetrics]
@@ -194,7 +199,7 @@ export default class Canvas extends Component{
     const hasSelectedMetrics = _.some(metrics, m => isWithinRegion(m.location, selectedRegion))
     const unconnectedStatus = hasSelectedMetrics ? 'unconnected' : 'default'
 
-    const {ancestors, descendants} = this.getSelectedLineage()
+    const {ancestors, descendants} = this.getSelectedLineage(selectedRegion)
 
     return edges.map(e => {
       const [inputMetric, outputMetric] = [this.findMetric(e.input), this.findMetric(e.output)]

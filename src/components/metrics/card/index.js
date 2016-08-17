@@ -252,7 +252,7 @@ export default class MetricCard extends Component {
 
   _isAnalyzedMetric() {
     const {metric, analyzedMetric} = this.props
-    return (metric.id === analyzedMetric.id)
+    return !!analyzedMetric && metric.id === analyzedMetric.id
   }
 
   // If sidebar is expanded, we want to close it if anything else is clicked
