@@ -27,11 +27,6 @@
   }
 
   table {
-    margin-right: auto;
-    margin-left: auto;
-    background: #ddd;
-    border-radius: 0.2em;
-    margin-bottom: 0.5em;
 
     td {
       padding: 0.5em 1em;
@@ -50,13 +45,13 @@
         padding: 0.15em 0.3em;
         font-family: "Courier New", Courier, monospace;
         font-size: 0.9em;
+      }
 
-        .exampleInput {
-          background-color: #c9e8c0;
-          color: #084e14;
-          padding: 0 0.1em;
-          border-radius: 0.1em;
-        }
+      .exampleInput {
+        background-color: #c9e8c0;
+        color: #084e14;
+        padding: 0 0.1em;
+        border-radius: 0.1em;
       }
     }
   }

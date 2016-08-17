@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 
 import {ButtonClose} from 'gComponents/utility/buttons/close/index'
-import {TutorialPageOne, TutorialPageTwo, TutorialPageThree, TutorialPageFour} from './pages'
+import {TutorialMetricPage, TutorialMetricActionsPage, TutorialFunctionPage, TutorialMoreFeaturesPage} from './pages'
 
 import Icon from 'react-fa'
 import Modal from 'react-modal'
@@ -18,7 +18,6 @@ export const TutorialModal = ({onClose}) => {
       width: '50%',
       right: 'auto',
       top: '5%',
-      height: '40em',
       bottom: 'auto',
       marginRight: '-50%',
       backgroundColor: '#F0F0F0',
@@ -39,10 +38,10 @@ export const TutorialModal = ({onClose}) => {
 
 class Tutorial extends Component {
   static PAGES = [
-    <TutorialPageOne />,
-    <TutorialPageTwo />,
-    <TutorialPageThree />,
-    <TutorialPageFour />,
+    <TutorialMetricPage />,
+    <TutorialFunctionPage />,
+    <TutorialMetricActionsPage />,
+    <TutorialMoreFeaturesPage />,
   ]
 
   state = {
