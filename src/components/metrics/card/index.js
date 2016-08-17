@@ -242,6 +242,7 @@ export default class MetricCard extends Component {
 
   _shouldShowSensitivitySection() {
     const {metric, analyzedMetric} = this.props
+    console.log(analyzedMetric)
     return !!(analyzedMetric && !this._isAnalyzedMetric() && this._shouldShowSimulation(metric) && this._shouldShowSimulation(analyzedMetric))
   }
 
@@ -252,7 +253,7 @@ export default class MetricCard extends Component {
 
   _isAnalyzedMetric() {
     const {metric, analyzedMetric} = this.props
-    return (metric.id === analyzedMetric.id)
+    return !!analyzedMetric && metric.id === analyzedMetric.id
   }
 
   // If sidebar is expanded, we want to close it if anything else is clicked
