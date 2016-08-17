@@ -135,7 +135,9 @@ export default class MetricCard extends Component {
   }
 
   _closeSidebar() {
-     this.state.sidebarIsOpen && this.setState({sidebarIsOpen: false})
+    if (this.state.sidebarIsOpen) {
+      this.setState({sidebarIsOpen: false})
+    }
   }
 
   _handleKeyDown(e) {

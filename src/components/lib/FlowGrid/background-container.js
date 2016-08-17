@@ -5,7 +5,7 @@ import $ from 'jquery'
 import {Edges} from './edges'
 import GridPoint from './gridPoints'
 
-import {PTRegion} from 'lib/locationUtils'
+import {PTRegion, isRegion} from 'lib/locationUtils'
 
 const upto = (n) => Array.apply(null, {length: n})
 
@@ -51,6 +51,20 @@ export class BackgroundContainer extends Component {
     )
   }
 
+  renderRegion(locations, name, rowHeights, columnWidth) {
+    if (isRegion(locations)) {
+      return (
+        <Region
+          rowHeights={rowHeights}
+          columnWidth={columnWidth}
+          selectedRegion={locations}
+          type={name}
+          key={name}
+        />
+      )
+    } else { return false }
+  }
+
   render() {
     const {edges, rowCount, getRowHeight, selectedRegion, copiedRegion, autoFillRegion, analyzedRegion} = this.props
     const {rowHeights} = this.state
@@ -60,7 +74,7 @@ export class BackgroundContainer extends Component {
 
     const containerHeight = rowHeights.reduce((a,b) => a + b)
 
-    const regions = [
+    const backgroundRegions = [
       [selectedRegion, 'selected'],
       [analyzedRegion, 'analyzed'],
       [copiedRegion, 'copied'],
@@ -69,19 +83,7 @@ export class BackgroundContainer extends Component {
 
     return (
       <div>
-        {regions.map(region => {
-          if (region[0].length === 2) {
-            return (
-              <Region
-                rowHeights={rowHeights}
-                columnWidth={columnWidth}
-                selectedRegion={region[0]}
-                type={region[1]}
-                key={region[1]}
-              />
-            )
-          } else { return false }
-        })}
+        {backgroundRegions.map(region => this.renderRegion(region[0], region[1], rowHeights, columnWidth))}
 
         {edges.length > 0 &&
           <Edges
