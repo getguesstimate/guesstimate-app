@@ -30,7 +30,10 @@ export default class FlowGrid extends Component{
       output: PTLocation.isRequired
     })),
     selectedCell: PTLocation,
+    analyzedCell: PTLocation,
     selectedRegion: PTRegion,
+    copiedRegion: PTRegion,
+    analyzedRegion: PTRegion,
     onUndo: PropTypes.func.isRequired,
     onRedo: PropTypes.func.isRequired,
     onSelectItem: PropTypes.func.isRequired,
@@ -42,7 +45,6 @@ export default class FlowGrid extends Component{
     onRemoveItems: PropTypes.func.isRequired,
     onCopy: PropTypes.func.isRequired,
     onPaste: PropTypes.func.isRequired,
-
     showGridLines: PropTypes.bool,
   }
 
@@ -341,6 +343,7 @@ export default class FlowGrid extends Component{
             getRowHeight={this._getRowHeight.bind(this)}
             selectedRegion={this.props.selectedRegion}
             copiedRegion={this.props.copiedRegion}
+            analyzedRegion={this.props.analyzedRegion}
             autoFillRegion={getBounds(this.state.autoFillRegion)}
           />
         </div>

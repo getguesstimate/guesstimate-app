@@ -15,6 +15,7 @@ import SensitivitySection from './SensitivitySection/SensitivitySection'
 import {hasMetricUpdated} from './updated'
 import {removeMetrics, changeMetric} from 'gModules/metrics/actions'
 import {changeGuesstimate} from 'gModules/guesstimates/actions'
+import {analyzeMetricId, endAnalysis} from 'gModules/canvas_state/actions'
 
 import * as canvasStateProps from 'gModules/canvas_state/prop_type'
 import {PTLocation} from 'lib/locationUtils'
@@ -43,7 +44,13 @@ class ScatterTip extends Component {
 
 const PT = PropTypes
 
-@connect(null, dispatch => bindActionCreators({changeMetric, changeGuesstimate, removeMetrics}, dispatch))
+@connect(null, dispatch => bindActionCreators({
+  changeMetric,
+  changeGuesstimate,
+  removeMetrics,
+  analyzeMetricId,
+  endAnalysis
+}, dispatch))
 export default class MetricCard extends Component {
   displayName: 'MetricCard'
 
@@ -70,6 +77,14 @@ export default class MetricCard extends Component {
       (this.state.sidebarIsOpen !== nextState.sidebarIsOpen)
   }
 
+  _beginAnalysis(){
+    this.props.analyzeMetricId(this._id())
+  }
+
+  _endAnalysis(){
+    this.props.endAnalysis()
+  }
+
   onEdit() {
     if (!this.state.editing) { this.setState({editing: true}) }
   }
@@ -82,7 +97,8 @@ export default class MetricCard extends Component {
   componentWillUpdate(nextProps) {
     window.recorder.recordRenderStartEvent(this)
     if (this.state.editing && !nextProps.inSelectedCell) { this.setState({editing: false}) }
-    if (this.props.inSelectedCell && !nextProps.inSelectedCell) { this.setState({sidebarIsOpen: false}) }
+    if (this.props.inSelectedCell && !nextProps.inSelectedCell) { this._closeSidebar() }
+    if (this.props.hovered && !nextProps.hovered){ this._closeSidebar() }
   }
   componentWillUnmount() { window.recorder.recordUnmountEvent(this) }
 
@@ -116,6 +132,12 @@ export default class MetricCard extends Component {
 
   _toggleSidebar() {
     this.setState({sidebarIsOpen: (!this.state.sidebarIsOpen), modalIsOpen: false});
+  }
+
+  _closeSidebar() {
+    if (this.state.sidebarIsOpen) {
+      this.setState({sidebarIsOpen: false})
+    }
   }
 
   _handleKeyDown(e) {
@@ -219,9 +241,18 @@ export default class MetricCard extends Component {
   }
 
   _shouldShowSensitivitySection() {
-    const {metric, selectedMetric} = this.props
-    const isAnalysis = (this.props.canvasState.metricCardView === 'analysis')
-    return !!(isAnalysis && selectedMetric && this._shouldShowSimulation(metric) && this._shouldShowSimulation(selectedMetric))
+    const {metric, analyzedMetric} = this.props
+    return !!(analyzedMetric && !this._isAnalyzedMetric() && this._shouldShowSimulation(metric) && this._shouldShowSimulation(analyzedMetric))
+  }
+
+  _canBeAnalyzed() {
+    const {metric} = this.props
+    return this._shouldShowSimulation(metric)
+  }
+
+  _isAnalyzedMetric() {
+    const {metric, analyzedMetric} = this.props
+    return (metric.id === analyzedMetric.id)
   }
 
   // If sidebar is expanded, we want to close it if anything else is clicked
@@ -241,11 +272,12 @@ export default class MetricCard extends Component {
       canvasState,
       hovered,
       connectDragSource,
-      selectedMetric,
+      analyzedMetric,
       forceFlowGridUpdate,
     } = this.props
     const {guesstimate} = metric
     const shouldShowSensitivitySection = this._shouldShowSensitivitySection()
+    const isAnalyzedMetric = this._isAnalyzedMetric()
 
     return (
       <div className='metricCard--Container'
@@ -277,7 +309,7 @@ export default class MetricCard extends Component {
             ref='MetricCardViewSection'
             isTitle={this._isTitle()}
             connectDragSource={connectDragSource}
-            selectedMetric={selectedMetric}
+            analyzedMetric={analyzedMetric}
             showSensitivitySection={shouldShowSensitivitySection}
             heightHasChanged={forceFlowGridUpdate}
             hovered={hovered}
@@ -309,12 +341,16 @@ export default class MetricCard extends Component {
         </div>
         {hovered && !inSelectedCell && !shouldShowSensitivitySection && <MetricToolTip guesstimate={guesstimate}/>}
         {hovered && !inSelectedCell && shouldShowSensitivitySection &&
-          <ScatterTip yMetric={selectedMetric} xMetric={metric}/>
+          <ScatterTip yMetric={analyzedMetric} xMetric={metric}/>
         }
         {inSelectedCell && this.state.sidebarIsOpen &&
           <MetricSidebar
             onOpenModal={this.openModal.bind(this)}
             onRemoveMetric={this.handleRemoveMetric.bind(this)}
+            showAnalysis={this._canBeAnalyzed()}
+            onBeginAnalysis={this._beginAnalysis.bind(this)}
+            onEndAnalysis={this._endAnalysis.bind(this)}
+            isAnalyzedMetric={isAnalyzedMetric}
           />
         }
       </div>
@@ -322,36 +358,47 @@ export default class MetricCard extends Component {
   }
 }
 
-export class MetricSidebar extends Component {
-  render() {
-    return (
-      <div className='MetricSidebar'>
-        <MetricSidebarItem
-          icon={<Icon name='expand'/>}
-          name={'Expand'}
-          onClick={this.props.onOpenModal}
-        />
-        <MetricSidebarItem
-          icon={<Icon name='trash'/>}
-          name={'Delete'}
-          onClick={this.props.onRemoveMetric}
-        />
-      </div>
-    )
-  }
-}
+const MetricSidebar = ({onOpenModal, onBeginAnalysis, onEndAnalysis, onRemoveMetric, showAnalysis, isAnalyzedMetric}) => (
+  <div className='MetricSidebar'>
+    <MetricSidebarItem
+      icon={<Icon name='expand'/>}
+      name={'Expand'}
+      onClick={onOpenModal}
+    />
+    {showAnalysis && !isAnalyzedMetric &&
+      <MetricSidebarItem
+        icon={<Icon name='bar-chart'/>}
+        name={'Sensitivity'}
+        onClick={onBeginAnalysis}
+      />
+    }
+    {showAnalysis && isAnalyzedMetric &&
+      <MetricSidebarItem
+        className='analyzing'
+        icon={<Icon name='close'/>}
+        name={'Sensitivity'}
+        onClick={onEndAnalysis}
+      />
+    }
+    <MetricSidebarItem
+      icon={<Icon name='trash'/>}
+      name={'Delete'}
+      onClick={onRemoveMetric}
+    />
+  </div>
+)
 
-export class MetricSidebarItem extends Component {
-  render() {
-    return (
-      <a href='#' className='MetricSidebarItem' onMouseDown={this.props.onClick}>
-        <span className='MetricSidebarItem--icon'>
-          {this.props.icon}
-        </span>
-        <span className='MetricSidebarItem--name'>
-          {this.props.name}
-        </span>
-      </a>
-    )
-  }
-}
+const MetricSidebarItem = ({className, onClick, icon, name}) => (
+  <a
+    href='#'
+    className={`MetricSidebarItem ${className && className}`}
+    onMouseDown={onClick}
+  >
+    <span className='MetricSidebarItem--icon'>
+      {icon}
+    </span>
+    <span className='MetricSidebarItem--name'>
+      {name}
+    </span>
+  </a>
+)

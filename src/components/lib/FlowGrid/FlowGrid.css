@@ -154,6 +154,10 @@ svg.edge  path.basic-arrow.descendant {
    background: rgba(153, 186, 208, 0.17);
 }
 
+.FlowGrid .Region.analyzed {
+   background: #77bc81;
+}
+
 .FlowGridCell {
   position: relative;
 }

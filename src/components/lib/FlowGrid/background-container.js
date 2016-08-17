@@ -5,7 +5,7 @@ import $ from 'jquery'
 import {Edges} from './edges'
 import GridPoint from './gridPoints'
 
-import {PTRegion} from 'lib/locationUtils'
+import {PTRegion, isRegion} from 'lib/locationUtils'
 
 const upto = (n) => Array.apply(null, {length: n})
 
@@ -45,13 +45,28 @@ export class BackgroundContainer extends Component {
       !_.isEqual(this.props.copiedRegion, nextProps.copiedRegion) ||
       !_.isEqual(this.props.selectedRegion, nextProps.selectedRegion) ||
       !_.isEqual(this.props.autoFillRegion, nextProps.autoFillRegion) ||
+      !_.isEqual(this.props.analyzedRegion, nextProps.analyzedRegion) ||
       !_.isEqual(this.props.edges, nextProps.edges) ||
       !_.isEqual(this.state.rowHeights, nextState.rowHeights)
     )
   }
 
+  renderRegion(locations, name, rowHeights, columnWidth) {
+    if (isRegion(locations)) {
+      return (
+        <Region
+          rowHeights={rowHeights}
+          columnWidth={columnWidth}
+          selectedRegion={locations}
+          type={name}
+          key={name}
+        />
+      )
+    } else { return false }
+  }
+
   render() {
-    const {edges, rowCount, getRowHeight, selectedRegion, copiedRegion, autoFillRegion} = this.props
+    const {edges, rowCount, getRowHeight, selectedRegion, copiedRegion, autoFillRegion, analyzedRegion} = this.props
     const {rowHeights} = this.state
 
     const columnWidth = $('.FlowGridCell') && $('.FlowGridCell')[0] && $('.FlowGridCell')[0].offsetWidth
@@ -59,32 +74,17 @@ export class BackgroundContainer extends Component {
 
     const containerHeight = rowHeights.reduce((a,b) => a + b)
 
+    const backgroundRegions = [
+      [selectedRegion, 'selected'],
+      [analyzedRegion, 'analyzed'],
+      [copiedRegion, 'copied'],
+      [autoFillRegion, 'fill']
+    ]
+
     return (
       <div>
-        {selectedRegion.length === 2 &&
-          <Region
-            rowHeights={rowHeights}
-            columnWidth={columnWidth}
-            selectedRegion={selectedRegion}
-            type='selected'
-          />
-        }
-        {copiedRegion.length === 2 &&
-          <Region
-            rowHeights={rowHeights}
-            columnWidth={columnWidth}
-            selectedRegion={copiedRegion}
-            type='copied'
-          />
-        }
-        {autoFillRegion.length === 2 &&
-          <Region
-            rowHeights={rowHeights}
-            columnWidth={columnWidth}
-            selectedRegion={autoFillRegion}
-            type='fill'
-          />
-        }
+        {backgroundRegions.map(region => this.renderRegion(region[0], region[1], rowHeights, columnWidth))}
+
         {edges.length > 0 &&
           <Edges
             columnWidth={columnWidth}
