@@ -199,7 +199,7 @@ export default class Canvas extends Component{
     const hasSelectedMetrics = _.some(metrics, m => isWithinRegion(m.location, selectedRegion))
     const unconnectedStatus = hasSelectedMetrics ? 'unconnected' : 'default'
 
-    const {ancestors, descendants} = this.getSelectedLineage()
+    const {ancestors, descendants} = this.getSelectedLineage(selectedRegion)
 
     return edges.map(e => {
       const [inputMetric, outputMetric] = [this.findMetric(e.input), this.findMetric(e.output)]

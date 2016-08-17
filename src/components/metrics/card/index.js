@@ -242,7 +242,6 @@ export default class MetricCard extends Component {
 
   _shouldShowSensitivitySection() {
     const {metric, analyzedMetric} = this.props
-    console.log(analyzedMetric)
     return !!(analyzedMetric && !this._isAnalyzedMetric() && this._shouldShowSimulation(metric) && this._shouldShowSimulation(analyzedMetric))
   }
 
