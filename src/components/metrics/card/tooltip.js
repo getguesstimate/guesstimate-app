@@ -11,7 +11,9 @@ export default class MetricToolTip extends Component {
     }
     return (
       <ToolTip>
-        <MarkdownViewer source={guesstimate.description}/>
+        <div onMouseDown={e => {e.stopPropagation()}} >
+          <MarkdownViewer source={guesstimate.description}/>
+        </div>
       </ToolTip>
     )
   }
