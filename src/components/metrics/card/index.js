@@ -22,6 +22,7 @@ import {PTLocation} from 'lib/locationUtils'
 import {getVariableNameFromName} from 'lib/nameToVariableName'
 
 import {INTERMEDIATE, OUTPUT, INPUT, NOEDGE, relationshipType} from 'gEngine/graph'
+import {makeURLsMarkdown} from 'gEngine/utils'
 
 import './style.css'
 
@@ -185,7 +186,8 @@ export default class MetricCard extends Component {
     this.props.changeMetric(metric)
   }
 
-  onChangeGuesstimateDescription(description) {
+  onChangeGuesstimateDescription(rawDescription) {
+    const description = makeURLsMarkdown(rawDescription)
     this.props.changeGuesstimate(this._id(), {...this.props.metric.guesstimate, description})
   }
 
