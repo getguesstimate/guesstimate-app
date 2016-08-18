@@ -10,13 +10,13 @@ const MetricReadableId = ({readableId}) => (
   </div>
 )
 
-const MetricExpandButton = ({onOpenModal}) => (
+const MetricExpandButton = ({onToggleSidebar}) => (
   <span
     className='hover-toggle hover-icon'
-    onMouseDown={onOpenModal}
+    onMouseDown={onToggleSidebar}
     data-select='false'
   >
-    <Icon name='expand'/>
+    <Icon name='pencil' data-control-sidebar="true"/>
   </span>
 )
 
@@ -26,10 +26,10 @@ const MetricReasoningIcon = () => (
   </span>
 )
 
-export const MetricToken = ({anotherFunctionSelected, readableId, onOpenModal, hasGuesstimateDescription}) => (
+export const MetricToken = ({anotherFunctionSelected, readableId, onToggleSidebar, hasGuesstimateDescription}) => (
   <div className='MetricToken'>
     {anotherFunctionSelected && <MetricReadableId readableId={readableId} /> }
-    {!anotherFunctionSelected && <MetricExpandButton onOpenModal={onOpenModal}/> }
+    {!anotherFunctionSelected && <MetricExpandButton onToggleSidebar={onToggleSidebar}/> }
     {!anotherFunctionSelected && hasGuesstimateDescription && <MetricReasoningIcon/> }
   </div>
 )

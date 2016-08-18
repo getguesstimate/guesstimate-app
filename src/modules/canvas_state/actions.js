@@ -3,11 +3,17 @@ export function change(values) {
 }
 
 export function allowEdits() {
-  return { type: 'CHANGE_CANVAS_STATE', values: { editsAllowed: true } };
+  return (dispatch, getState) => {
+    dispatch(changeActionState(''))
+    dispatch({ type: 'CHANGE_CANVAS_STATE', values: { editsAllowed: true } });
+  }
 }
 
 export function forbidEdits() {
-  return { type: 'CHANGE_CANVAS_STATE', values: { editsAllowed: false } };
+  return (dispatch, getState) => {
+    dispatch(changeActionState(''))
+    dispatch({ type: 'CHANGE_CANVAS_STATE', values: { editsAllowed: false } });
+  }
 }
 
 export function changeMetricClickMode(metricClickMode) {
@@ -20,4 +26,12 @@ export function changeMetricClickMode(metricClickMode) {
 
 export function changeActionState(value) {
   return { type: 'CHANGE_CANVAS_STATE', values: {actionState: value} };
+}
+
+export function analyzeMetricId(id) {
+  return { type: 'CHANGE_CANVAS_STATE', values: {analysisMetricId: id} };
+}
+
+export function endAnalysis(id) {
+  return { type: 'CHANGE_CANVAS_STATE', values: {analysisMetricId: ''} };
 }

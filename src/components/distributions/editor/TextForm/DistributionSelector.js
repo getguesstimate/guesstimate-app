@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 
 import ReactDOM from 'react-dom'
+import ReactTooltip from 'react-tooltip'
 
 import {Guesstimator} from 'lib/guesstimator/index.js'
 import * as elev from 'servers/elev/index.js'
@@ -8,19 +9,39 @@ import * as elev from 'servers/elev/index.js'
 // We use onMouseUp to make sure that the onMouseUp
 // does not get called once another metric is underneath
 
+const ReactTooltipParams = {class: 'header-action-tooltip', delayShow: 0, delayHide: 0, place: 'top', effect: 'solid'}
+
+const Descriptions = {
+  'LOGNORMAL': {
+    name: 'Lognormal'
+  },
+  'NORMAL': {
+    name: 'Normal'
+  },
+  'UNIFORM': {
+    name: 'Uniform'
+  }
+}
+
 class DistributionIcon extends Component{
   _handleSubmit() {
     this.props.onSubmit(this.props.type)
   }
   render() {
     let classes = 'ui button tinyhover-toggle DistributionIcon'
-    classes += this.props.isSelected ? ' selected' : ''
+    const {isSelected, type, icon} = this.props
+    classes += isSelected ? ' selected' : ''
     return (
       <div
             className={classes}
             onClick={this._handleSubmit.bind(this)}
+            data-tip
+            data-for={type}
       >
-        <img src={this.props.icon}/>
+        <ReactTooltip {...ReactTooltipParams} id={type}>
+          {Descriptions[type].name}
+        </ReactTooltip>
+        <img src={icon}/>
       </div>
     )
   }
@@ -43,7 +64,7 @@ export default class DistributionSelector extends Component{
           {'More'}
         </a>
         <div className='DistributionList'>
-          {['NORMAL', 'UNIFORM', 'LOGNORMAL'].map(type => {
+          {['LOGNORMAL', 'NORMAL', 'UNIFORM'].map(type => {
             const isSelected = (selected === type)
             const icon = Guesstimator.samplerTypes.find(type).icon
             return (

@@ -86,7 +86,7 @@ svg.edge  path.basic-arrow {
   stroke-width: 0;
 }
 
-$default: #b0bfd0;
+$default: #899eb6;
 $unconnected: rgba(77, 121, 175, 0.06);
 $unconnected-head: rgb(200, 210, 222);
 $ancestor: rgb(123, 158, 149);
@@ -152,6 +152,10 @@ svg.edge  path.basic-arrow.descendant {
 .FlowGrid .Region.copied {
    border: 2px dashed rgba(7, 115, 167, 0.75);
    background: rgba(153, 186, 208, 0.17);
+}
+
+.FlowGrid .Region.analyzed {
+   background: #77bc81;
 }
 
 .FlowGridCell {

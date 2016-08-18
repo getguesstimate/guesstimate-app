@@ -32,7 +32,10 @@ export default class EditingMode extends Component {
           <div className='submit ui button primary' onClick={this._submit.bind(this)}>
             {this.props.editingSaveText}
           </div>
-          <ButtonClose onClick={this.props.onClose}/>
+          <div className='submit-section-close'>
+            <ButtonClose onClick={this.props.onClose}/>
+          </div>
+          <a className='markdown-help'><i className='ion-logo-markdown markdown-icon'/></a>
         </div>
       </div>
     )

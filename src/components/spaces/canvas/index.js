@@ -76,6 +76,7 @@ export default class Canvas extends Component{
   componentWillUnmount(){
     window.recorder.recordUnmountEvent(this)
     this.props.dispatch(deleteSimulations(this.props.denormalizedSpace.metrics.map(m => m.id)))
+    this.props.dispatch(canvasStateActions.endAnalysis())
   }
 
   _handleUndo() {
@@ -132,23 +133,29 @@ export default class Canvas extends Component{
     return _.isEmpty(metric.name) && _.isEmpty(input) && _.isEmpty(data)
   }
 
-
-  renderMetric(metric, selected) {
+  renderMetric(metric, analyzed) {
     const {location} = metric
-    const hasSelected = selected && metric && (selected.id !== metric.id)
-    const selectedSamples = _.get(selected, 'simulation.sample.values')
-    const passSelected = hasSelected && selectedSamples && !_.isEmpty(selectedSamples)
+    const analyzedSamples = _.get(analyzed, 'simulation.sample.values')
+    const hasAnalyzed = analyzed && metric && analyzedSamples && !_.isEmpty(analyzedSamples)
+
+    const analyzedRegion = analyzed ? [analyzed.location, analyzed.location] : []
+    const {ancestors, descendants} = this.getSelectedLineage(analyzedRegion)
+    const isRelatedToAnalyzed = _.some([...ancestors, ...descendants], relative => relative.id === metric.id)
+
+    const passAnalyzed = hasAnalyzed && isRelatedToAnalyzed
+
     const is_private = _.get(this, 'props.denormalizedSpace.is_private')
+    const organizationId = _.get(this, 'props.denormalizedSpace.organization_id')
+    const canUseOrganizationFacts = !!is_private && !!this.props.organizationHasFacts && !!organizationId
     return (
       <Metric
         canvasState={this.props.denormalizedSpace.canvasState}
         key={metric.id}
         location={location}
         metric={metric}
-        organizationId={this.props.denormalizedSpace.organization_id}
-        organizationHasFacts={this.props.organizationHasFacts}
-        isPrivate={is_private}
-        selectedMetric={passSelected && selected}
+        organizationId={organizationId}
+        canUseOrganizationFacts={canUseOrganizationFacts}
+        analyzedMetric={passAnalyzed ? analyzed : null}
       />
     )
   }
@@ -157,8 +164,8 @@ export default class Canvas extends Component{
     return (this.props.denormalizedSpace.canvasState.edgeView === 'visible')
   }
 
-  getSelectedLineage() {
-    const {selectedRegion, denormalizedSpace: {metrics}} = this.props
+  getSelectedLineage(selectedRegion) {
+    const {denormalizedSpace: {metrics}} = this.props
     const selectedMetrics = metrics.filter(m => isWithinRegion(m.location, selectedRegion))
 
     let ancestors = [...selectedMetrics], descendants = [...selectedMetrics]
@@ -192,7 +199,7 @@ export default class Canvas extends Component{
     const hasSelectedMetrics = _.some(metrics, m => isWithinRegion(m.location, selectedRegion))
     const unconnectedStatus = hasSelectedMetrics ? 'unconnected' : 'default'
 
-    const {ancestors, descendants} = this.getSelectedLineage()
+    const {ancestors, descendants} = this.getSelectedLineage(selectedRegion)
 
     return edges.map(e => {
       const [inputMetric, outputMetric] = [this.findMetric(e.input), this.findMetric(e.output)]
@@ -218,25 +225,34 @@ export default class Canvas extends Component{
     this.props.dispatch(fillRegion(this.props.denormalizedSpace.id, region))
   }
 
+  analyzedMetric() {
+    const {metrics, canvasState} = this.props.denormalizedSpace
+    const analysisMetricId = canvasState.analysisMetricId
+    if (!_.isEmpty(analysisMetricId)){
+      return metrics.find(e => e.id === analysisMetricId)
+    }
+    return false
+  }
+
   render () {
     const {selectedCell, selectedRegion, copied} = this.props
     const {metrics, canvasState} = this.props.denormalizedSpace
     const {metricCardView} = canvasState
+    const analyzedMetric = this.analyzedMetric()
 
     const edges = this.edges()
     let className = 'canvas-space'
     className += this.showEdges() ? ' showEdges' : ''
     className += this.props.screenshot ? ' overflow-hidden' : ''
 
-    const selectedMetric = this._isAnalysisView() && this._selectedMetric()
     const showGridLines = (metricCardView !== 'display')
 
     const copiedRegion = (copied && (copied.pastedTimes < 1) && copied.region) || []
-
+    const analyzedRegion = analyzedMetric ? [analyzedMetric.location, analyzedMetric.location] : []
     return (
       <div className={className}>
         <FlowGrid
-          items={_.map(metrics, m => ({key: m.id, location: m.location, component: this.renderMetric(m, selectedMetric)}))}
+          items={_.map(metrics, m => ({key: m.id, location: m.location, component: this.renderMetric(m, analyzedMetric)}))}
           onMultipleSelect={this._handleMultipleSelect.bind(this)}
           hasItemUpdated = {(oldItem, newItem) => hasMetricUpdated(oldItem.props, newItem.props)}
           isItemEmpty = {this.isMetricEmpty.bind(this)}
@@ -244,6 +260,7 @@ export default class Canvas extends Component{
           selectedRegion={selectedRegion}
           copiedRegion={copiedRegion}
           selectedCell={selectedCell}
+          analyzedRegion={analyzedRegion}
           onUndo={this._handleUndo.bind(this)}
           onRedo={this._handleRedo.bind(this)}
           onSelectItem={this._handleSelect.bind(this)}

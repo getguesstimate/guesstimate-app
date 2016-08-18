@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import Login from'../login'
 import './style.css'
 import { connect } from 'react-redux';
+import logo from '../../../assets/new-logo-2.png'
 
 function mapStateToProps(state) {
   return {
@@ -37,6 +38,7 @@ export default class Header extends Component {
               <div className='header-left-menu'>
                 <a className="navbar-brand" href={navbarRef}>
                   <div className='guesstimate-name'>Guesstimate</div>
+                  <img className='guesstimate-icon' src={logo}/>
                 </a>
               </div>
             }

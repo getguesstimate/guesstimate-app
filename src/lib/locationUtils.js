@@ -11,6 +11,10 @@ export function isLocation(test) {
   return !!test && (test.hasOwnProperty('row') && test.hasOwnProperty('column'))
 }
 
+export function isRegion(test) {
+  return (test.length === 2)
+}
+
 export function isAtLocation(test, location) {
   return test.row === location.row && test.column === location.column
 }
