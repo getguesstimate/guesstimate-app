@@ -17,8 +17,6 @@ export function equals(l, r) {
 
 export const getByMetricFn = graph => _collections.getFn(_.get(graph, 'guesstimates'), 'metric')
 
-//////////////////////////////////////////////////////////////////
-
 export const attributes = ['metric', 'expression', 'input', 'guesstimateType', 'description', 'data']
 
 export function sample(guesstimate: Guesstimate, dGraph: DGraph, n: number = 1) {

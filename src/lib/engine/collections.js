@@ -4,7 +4,6 @@ export const get = (collection, id, prop='id') => !!collection && !!id ? collect
 
 const nullFn = x => null
 export const getFn = (coll, getProp='id', inProp='id') => !coll ? nullFn : e => get(coll, _.get(e, inProp), getProp)
-export const getByMetricFn = ({guesstimates}) => ({id}) => _collections.get(guesstimates, id, 'metric')
 
 export const filter = (collection, id, prop='id') => !!collection && !!id ? collection.filter(e => _.get(e, prop) === id) : null
 

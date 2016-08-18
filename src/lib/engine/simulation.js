@@ -4,8 +4,6 @@ import {sampleMean, sampleStdev, percentile, cutoff, sortDescending} from 'lib/d
 
 export const getByMetricFn = graph => _collections.getFn(_.get(graph, 'simulations'), 'metric', 'metric')
 
-///////////////////////////////////////////////
-
 export function addStats(simulation){
   if (!_.has(simulation, 'sample.values.length') || (simulation.sample.values.length === 0)) {
     return
