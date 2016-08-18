@@ -181,7 +181,7 @@ export default class MetricCard extends Component {
 
   onChangeMetricName(name, updateReadableId=true) {
     let metric = {id: this._id(), name}
-    if (updateReadableId) { metric.readableId = getVariableNameFromName(name, this.props.existingReadableIds, 3, 3) }
+    if (updateReadableId) { metric.readableId = getVariableNameFromName(name, this.props.existingReadableIds, 3, 3).toUpperCase() }
     this.props.changeMetric(metric)
   }
 

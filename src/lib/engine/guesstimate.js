@@ -110,6 +110,6 @@ export function expressionToInputFn(metrics=[], facts=[]) {
 
 // Returns an expression based on the passed input and idMap.
 export function inputToExpression(input, idMap) {
-  if (_.isEmpty(input) || _.isEmpty(idMap)) { return input }
-  return input.replace(RegExp(Object.keys(idMap).join('|'), 'g'), match => expressionSyntaxPad(idMap[match].id, idMap[match].isMetric))
+  const replaceMap = _.transform(idMap, (result, value, key) => {result[key] = expressionSyntaxPad(value.id, value.isMetric)})
+  return _utils.replaceByMap(input, replaceMap)
 }

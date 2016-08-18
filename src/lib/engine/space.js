@@ -1,4 +1,6 @@
 import * as _graph from './graph'
+import math from 'mathjs'
+window.math = math
 import * as _dGraph from './dgraph'
 import * as _metric from './metric'
 import * as _guesstimate from './guesstimate'
