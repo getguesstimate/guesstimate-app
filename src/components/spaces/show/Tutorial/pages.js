@@ -3,9 +3,9 @@ import React from 'react'
 import Icon from 'react-fa'
 
 import './pageStyle.css'
-import MakeAMetric from '../../../../assets/tutorial/MakeAMetric3.gif'
-import InteractWithACell from '../../../../assets/tutorial/InteractWithACell2.gif'
-import MakeAFunction from '../../../../assets/tutorial/MakeAFunction3.gif'
+import MakeAMetric from '../../../../assets/tutorial/MakeAMetric.gif'
+import InteractWithACell from '../../../../assets/tutorial/InteractWithACell.gif'
+import MakeAFunction from '../../../../assets/tutorial/MakeAFunction.gif'
 
 const TutorialPage = ({header, image, children}) => (
   <div className='tutorialPage'>
