@@ -21,12 +21,11 @@ import * as canvasStateProps from 'gModules/canvas_state/prop_type'
 import {PTLocation} from 'lib/locationUtils'
 
 import {INTERMEDIATE, OUTPUT, INPUT, NOEDGE, relationshipType} from 'gEngine/graph'
+import {makeURLsMarkdown} from 'gEngine/utils'
 
 import './style.css'
 
 import Icon from 'react-fa'
-
-const URL_REGEX = /(?:http(?:s?):\/\/)?(?:www)?\w+\.(?:[a-z]{2,})[\w\?\/\=\.]*/g
 
 const relationshipClasses = {}
 relationshipClasses[INTERMEDIATE] = 'intermediate'
@@ -185,19 +184,7 @@ export default class MetricCard extends Component {
   }
 
   onChangeGuesstimateDescription(rawDescription) {
-    const fullRegex = new RegExp(`\\[.+\\]\\(${URL_REGEX.source}\\)`, 'g')
-    let description = ''
-    let prevIndex = 0
-    let matchArr
-    while ((matchArr = fullRegex.exec(rawDescription)) !== null) {
-      const partial = rawDescription.slice(prevIndex, matchArr.index)
-      description += partial.replace(URL_REGEX, match => `[${match}](${match})`)
-      description += matchArr[0]
-      prevIndex = matchArr.index + matchArr[0].length
-    }
-    const partial = rawDescription.slice(prevIndex)
-    description += partial.replace(URL_REGEX, match => `[${match}](${match})`)
-
+    const description = makeURLsMarkdown(rawDescription)
     this.props.changeGuesstimate(this._id(), {...this.props.metric.guesstimate, description})
   }
 
