@@ -1,7 +1,7 @@
-const readableIdPartFromWord = word => (/\d/).test(word) ? word : word[0]
+const readableIdPartFromWord = word => (/^\d+$/).test(word) ? word : word[0]
 function getDirectVariableNameFromName(rawName, maxOneWordLength, maxSplitWordLength) {
-  const name = rawName.trim().replace(/[^\w\d]/g, ' ').toLowerCase().replace(/\s/g, '_')
-  const words = name.split(/[^\w\d]/).filter(s => !_.isEmpty(s))
+  const name = rawName.trim().toLowerCase().replace(/[^\w\d]/g, ' ').replace(/\s/g, '_')
+  const words = name.split(/[\_]/).filter(s => !_.isEmpty(s))
   if (words.length === 1 && name.length < maxOneWordLength) {
     return name
   } else if (words.length < maxSplitWordLength) {
