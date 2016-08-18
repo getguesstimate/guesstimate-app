@@ -8,17 +8,7 @@ import Icon from 'react-fa'
 
 import './style.css'
 
-export const TutorialModal = ({onClose}) => {
-  return (
-    <GeneralModal
-      onRequestClose={onClose}
-    >
-      <Tutorial onClose={onClose} />
-    </GeneralModal>
-  )
-}
-
-class Tutorial extends Component {
+export class Tutorial extends Component {
   static PAGES = [
     <TutorialMetricPage/>,
     <TutorialFunctionPage/>,
@@ -36,34 +26,38 @@ class Tutorial extends Component {
 
   render() {
     return (
-      <div
-        className='Tutorial'
-        onKeyDown={(e) => {if (e.keyCode === 13) { this.props.onClose() }} }
+      <GeneralModal
+        onRequestClose={this.props.onClose}
       >
-        {this.renderPage()}
-          <div className='row'>
-            <div className='col-md-12 actions'>
-                <span
-                  className={`ui button ${this.state.onPage === 0 ? 'disabled' : ''}`}
-                  onClick={this.previousPage.bind(this)}
-                >
-                  <Icon name='arrow-left'/> Previous
-                </span>
-                <span
-                  className={`ui button ${this.state.onPage === 3 ? 'disabled' : ''}`}
-                  onClick={this.nextPage.bind(this)}
-                >
-                  <Icon name='arrow-right'/> Next
-                </span>
-                <span
-                  className='ui button'
-                  onClick={this.props.onClose}
-                >
-                  Done
-                </span>
+        <div
+          className='Tutorial'
+          onKeyDown={(e) => {if (e.keyCode === 13) { this.props.onClose() }} }
+        >
+          {this.renderPage()}
+            <div className='row'>
+              <div className='col-md-12 actions'>
+                  <span
+                    className={`ui button ${this.state.onPage === 0 ? 'disabled' : ''}`}
+                    onClick={this.previousPage.bind(this)}
+                  >
+                    <Icon name='arrow-left'/> Previous
+                  </span>
+                  <span
+                    className={`ui button ${this.state.onPage === 3 ? 'disabled' : ''}`}
+                    onClick={this.nextPage.bind(this)}
+                  >
+                    <Icon name='arrow-right'/> Next
+                  </span>
+                  <span
+                    className='ui button'
+                    onClick={this.props.onClose}
+                  >
+                    Done
+                  </span>
+              </div>
             </div>
-          </div>
-      </div>
+        </div>
+    </GeneralModal>
     )
   }
 }

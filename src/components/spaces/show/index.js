@@ -15,7 +15,7 @@ import {CalculatorCompressedShow} from 'gComponents/calculators/show/CalculatorC
 import {ButtonCloseText} from 'gComponents/utility/buttons/close'
 import {ButtonEditText, ButtonDeleteText, ButtonExpandText} from 'gComponents/utility/buttons/button'
 import {FactListContainer} from 'gComponents/facts/list/container.js'
-import {TutorialModal} from './Tutorial/index'
+import {Tutorial} from './Tutorial/index'
 
 import {denormalizedSpaceSelector} from '../denormalized-space-selector'
 
@@ -414,7 +414,7 @@ export default class SpacesShow extends Component {
             ]}
           />
         }
-        {this.state.showTutorial && <TutorialModal onClose={this.closeTutorial.bind(this)} />}
+        {this.state.showTutorial && <Tutorial onClose={this.closeTutorial.bind(this)} />}
 
         <div className='hero-unit'>
           <SpaceHeader
