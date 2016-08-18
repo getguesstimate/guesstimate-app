@@ -1,4 +1,5 @@
 import {PARSER_ERROR} from 'lib/errors/modelErrors'
+import {or} from 'gEngine/utils'
 
 const SUFFIXES = {
   '%': -2,
@@ -8,7 +9,6 @@ const SUFFIXES = {
   'T': 12,
 }
 
-const or = res => new RegExp(`(?:${res.filter(re => !!re).map(re => `(?:${re.source})`).join('|')})`)
 const spaceSep = res => new RegExp(res.filter(re => !!re).map(re => `(?:${re.source})`).join('\\s*'))
 const padded = res => spaceSep([/^/, ...res, /$/])
 

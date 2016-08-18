@@ -8,7 +8,7 @@ let dMetrics = [
     id: 'A1',
     readableId: 'A1',
     guesstimate: {
-      input: '=5000/50',
+      expression: '=5000/50',
       metric: 'A1'
     }
   },
@@ -16,7 +16,7 @@ let dMetrics = [
     id: 'A2',
     readableId: 'A2',
     guesstimate: {
-      input: '=A1 + 1',
+      expression: '=${metric:A1} + 1',
       metric: 'A2'
     }
   },
@@ -24,7 +24,7 @@ let dMetrics = [
     id: 'A3',
     readableId: 'A3',
     guesstimate: {
-      input: '=A1 - 1',
+      expression: '=${metric:A1} - 1',
       metric: 'A3'
     }
   },
@@ -32,7 +32,7 @@ let dMetrics = [
     id: 'A4',
     readableId: 'A4',
     guesstimate: {
-      input: '=A2 + A3',
+      expression: '=${metric:A2} + ${metric:A3}',
       metric: 'A4'
     }
   },
@@ -40,7 +40,7 @@ let dMetrics = [
     id: 'A5',
     readableId: 'A5',
     guesstimate: {
-      input: '=A4 + 23',
+      expression: '=${metric:A4} + 23',
       metric: 'A5'
     }
   },
@@ -48,7 +48,7 @@ let dMetrics = [
     id: 'A6',
     readableId: 'A6',
     guesstimate: {
-      input: '323',
+      expression: '323',
       metric: 'A6'
     }
   }
@@ -83,27 +83,27 @@ let metrics = [
 
 let guesstimates = [
   {
-    input: '=5000/50',
+    expression: '=5000/50',
     metric: 'A1'
   },
   {
-    input: '=A1 + 1',
+    expression: '=${metric:A1} + 1',
     metric: 'A2'
   },
   {
-    input: '=A1 - 1',
+    expression: '=${A1} - 1',
     metric: 'A3'
   },
   {
-    input: '=A2 + A3',
+    expression: '=${A2} + ${A3}',
     metric: 'A4'
   },
   {
-    input: '=A4 + 23',
+    expression: '=${A4} + 23',
     metric: 'A5'
   },
   {
-    input: '323',
+    expression: '323',
     metric: 'A6'
   }
 ]

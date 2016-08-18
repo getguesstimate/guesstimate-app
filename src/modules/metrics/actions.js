@@ -4,7 +4,7 @@ import * as spaceActions from 'gModules/spaces/actions'
 import {isWithinRegion} from 'lib/locationUtils.js'
 
 function findSpaceId(getState, metricId) {
-  const metric = e.metric.get(getState().metrics, metricId)
+  const metric = e.collections.get(getState().metrics, metricId)
   return _.get(metric, 'space')
 }
 
