@@ -26,6 +26,8 @@ import './style.css'
 
 import Icon from 'react-fa'
 
+const URL_REGEX = /(?:http(?:s?):\/\/)?(?:www)?\w+\.(?:[a-z]{2,})[\w\?\/\=\.]*/g
+
 const relationshipClasses = {}
 relationshipClasses[INTERMEDIATE] = 'intermediate'
 relationshipClasses[OUTPUT] = 'output'
@@ -183,8 +185,18 @@ export default class MetricCard extends Component {
   }
 
   onChangeGuesstimateDescription(rawDescription) {
-    const urlRegex = /(?:http(?:s?):\/\/)?(?:www)?\w+\.[\w\?\/\=\.]+/g
-    const description = rawDescription.replace(urlRegex, match => `[${match}](${match})`)
+    const fullRegex = new RegExp(`\\[.+\\]\\(${URL_REGEX.source}\\)`, 'g')
+    let description = ''
+    let prevIndex = 0
+    let matchArr
+    while ((matchArr = fullRegex.exec(rawDescription)) !== null) {
+      const partial = rawDescription.slice(prevIndex, matchArr.index)
+      description += partial.replace(URL_REGEX, match => `[${match}](${match})`)
+      description += matchArr[0]
+      prevIndex = matchArr.index + matchArr[0].length
+    }
+    const partial = rawDescription.slice(prevIndex)
+    description += partial.replace(URL_REGEX, match => `[${match}](${match})`)
 
     this.props.changeGuesstimate(this._id(), {...this.props.metric.guesstimate, description})
   }
