@@ -70,3 +70,47 @@
 .ReactModal__Overlay--after-open {
   overflow: auto;
 }
+
+.MetricSidebar {
+	 position: absolute;
+	 top: 4px;
+	 right: -8.2em;
+	 z-index: 3;
+}
+
+a.MetricSidebarItem {
+	clear: both;
+	display: block;
+	float: left;
+	width: 8em;
+	padding: .4em .7em;
+	color: white;
+	background: #52646f;
+	border-bottom: 1px solid #40525c;
+}
+
+a.MetricSidebarItem.analyzing {
+	background: #1d954d;
+}
+
+a.MetricSidebarItem.analyzing:hover {
+	background: #117f3d;
+}
+
+a.MetricSidebarItem:first-child {
+	border-radius: 0 2px 0 0;
+}
+
+a.MetricSidebarItem:last-child {
+	border-radius: 0 0 2px 0;
+	border-bottom: none;
+}
+
+a.MetricSidebarItem:hover {
+	background: #40525c;
+}
+
+.MetricSidebarItem--icon {
+	float: left;
+	width: 1.5em;
+}

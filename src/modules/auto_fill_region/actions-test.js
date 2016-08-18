@@ -40,7 +40,7 @@ describe('Autofill Actions', () => {
       const location = {row: 1, column: 2}
       const metrics = [
         {
-          id: '2',
+          id: inputID,
           readableId: 'VL',
           location: {row: 0, column: 0},
         },

@@ -6,6 +6,7 @@ const initialState = {
   metricClickMode: 'DEFAULT',
   saveState: 'NONE',
   editsAllowed: true,
+  analysisMetricId: ''
 }
 
 export function canvasStateR(state = initialState, action) {

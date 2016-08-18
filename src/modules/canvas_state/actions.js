@@ -42,3 +42,11 @@ export function changeMetricClickMode(metricClickMode) {
 export function changeActionState(actionState) {
   return { type: 'CHANGE_CANVAS_STATE', values: {actionState} }
 }
+
+export function analyzeMetricId(id) {
+  return { type: 'CHANGE_CANVAS_STATE', values: {analysisMetricId: id} };
+}
+
+export function endAnalysis(id) {
+  return { type: 'CHANGE_CANVAS_STATE', values: {analysisMetricId: ''} };
+}

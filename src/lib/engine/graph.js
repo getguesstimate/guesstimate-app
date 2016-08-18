@@ -1,6 +1,7 @@
 import * as _metric from './metric'
 import * as _dgraph from './dgraph'
 import * as _space from './space'
+import * as _collections from './collections'
 
 import BasicGraph from 'lib/basic_graph/basic-graph'
 import {INFINITE_LOOP_ERROR} from 'lib/errors/modelErrors'
@@ -17,33 +18,13 @@ export function relationshipType(edges) {
   return NOEDGE
 }
 
-export function create(graphAttributes) {
-  return _.pick(graphAttributes, ['metrics', 'guesstimates', 'simulations'])
-}
-
-export function denormalize(graph) {
-  const metrics = _.map(graph.metrics, m => _metric.denormalize(m, graph))
-  return {metrics}
-}
-
-export function runSimulation(graph, metricId, n) {
-  return _dgraph.runSimulation(denormalize(graph), metricId, n)
-}
-
-export function metric(graph, id) {
-  return graph.metrics.find(m => (m.id === id))
-}
+export const denormalize = graph => ({metrics: graph.metrics.map(_metric.denormalizeFn(graph))})
+export const runSimulation = (graph, metricId, n) => _dgraph.runSimulation(denormalize(graph), metricId, n)
 
 function basicGraph(graph) {
   const dGraph = denormalize(graph)
   const edges = _dgraph.dependencyMap(dGraph)
   return new BasicGraph(_.map(graph.metrics, m => m.id), edges)
-}
-
-export function dependencyList(graph, spaceId) {
-  const graphSubset = _space.subset(graph, spaceId)
-  const bGraph = basicGraph(graphSubset)
-  return bGraph.nodes.map(n => [n.id, n.maxDistanceFromRoot])
 }
 
 // This could be optimized for filtering the graph by the space subset

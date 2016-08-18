@@ -7,6 +7,7 @@ import {EditorState, Editor, ContentState, Modifier, CompositeDecorator} from 'd
 import {clearSuggestion, getSuggestion} from 'gModules/facts/actions'
 
 import {HANDLE_REGEX, GLOBALS_ONLY_REGEX, resolveToSelector} from 'gEngine/facts'
+import {or} from 'gEngine/utils'
 
 import {isData, formatData} from 'lib/guesstimator/formatter/formatters/Data'
 
@@ -61,14 +62,14 @@ export class TextInput extends Component{
     let decorators = [...extraDecorators, ...fact_decorators]
 
     if (!_.isEmpty(validInputs)) {
-      const validInputsRegex = new RegExp(`(${validInputs.join('|')})`, 'g')
+      const validInputsRegex = or(validInputs)
       decorators.push({
         strategy: (contentBlock, callback) => { findWithRegex(validInputsRegex, contentBlock, callback) },
         component: ValidInput,
       })
     }
     if (!_.isEmpty(errorInputs)) {
-      const errorInputsRegex = new RegExp(`(${errorInputs.join('|')})`, 'g')
+      const errorInputsRegex = or(errorInputs)
       decorators.push({
         strategy: (contentBlock, callback) => { findWithRegex(errorInputsRegex, contentBlock, callback) },
         component: ErrorInput,
