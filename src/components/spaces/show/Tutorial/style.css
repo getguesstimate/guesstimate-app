@@ -1,18 +1,14 @@
 @import './styles/variables.css';
 
-.tutorial {
-  .header {
+.Tutorial {
+  float: left;
+  background-color: rgba(240,240,240,1);
+  margin-bottom: 2em;
+  text-align: center;
+  max-width: 42em;
+  padding: 3em 2em;
+
+  h2 {
     padding-bottom: 1em;
-  }
-
-  .action-container {
-    position: absolute;
-    bottom: 1em;
-  }
-
-  .actions {
-    width: 100%;
-    margin: 0 auto;
-    margin-right: -50%;
   }
 }

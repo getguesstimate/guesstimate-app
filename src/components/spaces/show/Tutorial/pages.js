@@ -3,10 +3,10 @@ import React from 'react'
 import Icon from 'react-fa'
 
 import './pageStyle.css'
-import MakeAMetric from '../../../../assets/tutorial/MakeAMetric.gif'
+import MakeAMetric from '../../../../assets/tutorial/MakeAMetric3.gif'
 import MakeACell from '../../../../assets/tutorial/makeACell.gif'
-import InteractWithACell from '../../../../assets/tutorial/InteractWithACell.gif'
-import MakeAFunction from '../../../../assets/tutorial/MakeAFunction.gif'
+import InteractWithACell from '../../../../assets/tutorial/InteractWithACell2.gif'
+import MakeAFunction from '../../../../assets/tutorial/MakeAFunction3.gif'
 import AdvancedFunctions from '../../../../assets/tutorial/AdvancedFunctions.png'
 import MakeACellWithARange from '../../../../assets/tutorial/makeACellWithARange.gif'
 import MakeACellWithData from '../../../../assets/tutorial/MakeACellWithData.gif'
@@ -14,20 +14,22 @@ import IfStatement from '../../../../assets/tutorial/If Statements.png'
 
 const TutorialPage = ({header, image, children}) => (
   <div className='tutorialPage'>
-    <div className='row'>
-      <div className='header'>
-        <div className='col-md-12'>
-          <h2>{header}</h2>
-        </div>
-      </div>
+    <div className='row header'>
+			<div className='col-md-12'>
+				<h2>{header}</h2>
+			</div>
     </div>
-    {!!image && <img src={image} />}
+    {!!image &&
+			<div className='row'>
+				<div className='col-md-12 image'>
+					<img src={image} />
+				</div>
+			</div>
+		}
     <div className='row'>
-      <div className='col-md-1' />
-      <div className='col-md-10'>
+      <div className='col-md-12'>
         {children}
       </div>
-      <div className='col-md-1' />
     </div>
   </div>
 )
@@ -125,9 +127,6 @@ export const TutorialFunctionPage = () => (
         </tr>
       </tbody>
     </table>
-    <a href={'http://docs.getguesstimate.com/functions/'} target='_blank'>
-      Reference
-    </a>
   </TutorialPage>
 )
 
@@ -135,17 +134,17 @@ export const TutorialMoreFeaturesPage = () => (
   <TutorialPage header='Advanced Features'>
     <h3>Custom Data Input</h3>
     <p>
-      You can enter your own data into a metric.  This will be randomly sampled from in functions.  <a href='#'>More</a>
+      You can enter your own data into a metric.  This will be randomly sampled from in functions.
     </p>
     <h3>Sensitivity Analysis</h3>
     <p>
       Open a metrics' sidebar and select <strong>sensitivity</strong> to show scatterplots
-      of how that metric corresponds to each other one.  <a href='#'>More</a>
+      of how that metric corresponds to each other one.
     </p>
     <h3>Model Calculators</h3>
     <p>
-      Models can be turned into calculators with a subset of their inputs and outputs.  <a href='#'>More</a>
+      Models can be turned into calculators with a subset of their inputs and outputs.
     </p>
-    <a href={'http://docs.getguesstimate.com/'}>See More</a>
+    <a href={'http://docs.getguesstimate.com/'}>Full Documentation</a>
   </TutorialPage>
 )

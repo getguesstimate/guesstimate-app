@@ -2,37 +2,19 @@ import React, {Component} from 'react'
 
 import {ButtonClose} from 'gComponents/utility/buttons/close/index'
 import {TutorialMetricPage, TutorialMetricActionsPage, TutorialFunctionPage, TutorialMoreFeaturesPage} from './pages'
+import {GeneralModal} from 'gComponents/utility/modal/index'
 
 import Icon from 'react-fa'
-import Modal from 'react-modal'
 
 import './style.css'
 
 export const TutorialModal = ({onClose}) => {
-  const customStyles = {
-    overlay: {
-      backgroundColor: 'rgba(55, 68, 76, 0.4)'
-    },
-    content : {
-      left: '25%',
-      width: '50%',
-      right: 'auto',
-      top: '5%',
-      bottom: 'auto',
-      marginRight: '-50%',
-      backgroundColor: '#F0F0F0',
-      border: 'none',
-      padding: '1em',
-    }
-  }
   return (
-    <Modal
-      isOpen={true}
+    <GeneralModal
       onRequestClose={onClose}
-      style={customStyles}
     >
       <Tutorial onClose={onClose} />
-    </Modal>
+    </GeneralModal>
   )
 }
 
@@ -55,20 +37,12 @@ class Tutorial extends Component {
   render() {
     return (
       <div
-        className='tutorial'
+        className='Tutorial'
         onKeyDown={(e) => {if (e.keyCode === 13) { this.props.onClose() }} }
       >
-        {false && <div className='header'>
-          <div className='row'>
-            <div className='col-md-11'><h2>{this.header()}</h2></div>
-            <div className='col-md-1'><ButtonClose onClick={this.props.onClose}/></div>
-          </div>
-        </div>}
         {this.renderPage()}
-        <div className='action-container'>
           <div className='row'>
-            <div className='col-md-12'>
-              <div className='actions'>
+            <div className='col-md-12 actions'>
                 <span className='progress'> {this.state.onPage + 1} / 4 </span>
                 <span
                   className={`ui button ${this.state.onPage === 0 ? 'disabled' : ''}`}
@@ -88,10 +62,8 @@ class Tutorial extends Component {
                 >
                   Exit
                 </span>
-              </div>
             </div>
           </div>
-        </div>
       </div>
     )
   }

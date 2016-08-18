@@ -3,9 +3,10 @@
 .tutorialPage {
   margin-bottom: 2em;
   font-size: 1.1em;
+	min-height: 35em;
 
   .header {
-    width: 100%;
+		margin-bottom: 1em;
     text-align: center;
   }
 
@@ -19,20 +20,26 @@
     text-align: justify;
   }
 
+  .image {
+    background-color: #dfe1e4;
+    border-radius: 3px;
+    margin-bottom: 1em;
+  }
+
   img {
     display: block;
-    height: 12em;
+    max-height: 12em;
+    max-width: 100%;
     margin: 0 auto;
     padding-bottom: 1em;
   }
 
-  table {
+  table.ui {
+    margin-top: 2.5em;
 
     td {
       padding: 0.5em 1em;
-      text-align: justify;
-      line-height: 1.1em;
-      vertical-align: middle;
+      line-height: 1.3em;
 
       .rowLabel {
         text-align: center;
