@@ -1,3 +1,5 @@
-export function isMember(organization_id, user_id, memberships) {
-  return _.some(memberships, m => (parseInt(m.organization_id) === parseInt(organization_id) && parseInt(m.user_id) === parseInt(user_id)))
-}
+import {typeSafeEq} from './utils'
+
+export const isMember = (organization_id, user_id, memberships) => (
+  _.some(memberships, m => typeSafeEq(m.organization_id, organization_id) && typeSafeEq(m.user_id, user_id))
+)
