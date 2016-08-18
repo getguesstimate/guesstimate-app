@@ -147,12 +147,16 @@ export default class Canvas extends Component{
     const is_private = _.get(this, 'props.denormalizedSpace.is_private')
     const organizationId = _.get(this, 'props.denormalizedSpace.organization_id')
     const canUseOrganizationFacts = !!is_private && !!this.props.organizationHasFacts && !!organizationId
+
+    const metrics = _.get(this, 'props.denormalizedSpace.metrics')
+    const existingReadableIds = metrics.map(m => m.readableId)
     return (
       <Metric
         canvasState={this.props.denormalizedSpace.canvasState}
         key={metric.id}
         location={location}
         metric={metric}
+        existingReadableIds={existingReadableIds}
         organizationId={organizationId}
         canUseOrganizationFacts={canUseOrganizationFacts}
         analyzedMetric={passAnalyzed ? analyzed : null}
