@@ -15,19 +15,10 @@ import IfStatement from '../../../../assets/tutorial/If Statements.png'
 const TutorialPage = ({header, image, children}) => (
   <div className='tutorialPage'>
     <div className='row header'>
-			<div className='col-md-12'>
-				<h2>{header}</h2>
-			</div>
+      <div className='col-md-12'>
+        <h2>{header}</h2>
+      </div>
     </div>
-    {!!image &&
-			<div className='row'>
-				<div className='col-md-12'>
-					<div className='image'>
-						<img src={image} />
-					</div>
-				</div>
-			</div>
-		}
     <div className='row'>
       <div className='col-md-12'>
         {children}
@@ -36,15 +27,22 @@ const TutorialPage = ({header, image, children}) => (
   </div>
 )
 
+const Image = ({image}) => (
+  <div className='image'>
+    <img src={image} />
+  </div>
+)
+
 export const TutorialMetricPage = () => (
-  <TutorialPage header='Metrics' image={MakeAMetric}>
+  <TutorialPage header='Metrics'>
     <p>
       To create a metric, double click on an empty cell in the grid. Give it a name and a value.
     </p>
+    <Image image={MakeAMetric}/>
     <table className='semantic ui table'>
       <thead>
         <tr>
-          <th>Example</th>
+          <th>Example Value</th>
           <th>Explanation</th>
         </tr>
       </thead>
@@ -67,11 +65,12 @@ export const TutorialMetricPage = () => (
 )
 
 export const TutorialMetricActionsPage = () => (
-  <TutorialPage header='Metric Actions' image={InteractWithACell}>
+  <TutorialPage header='Metric Actions'>
     <p>
-      Click a metric once to perform actions on it.
+      Click a metric once to select it, then you can perform actions on it.
     </p>
 
+    <Image image={InteractWithACell}/>
     <table className='semantic ui table'>
       <tbody>
         <tr>
@@ -99,7 +98,7 @@ export const TutorialMetricActionsPage = () => (
 )
 
 export const TutorialFunctionPage = () => (
-  <TutorialPage header='Functions' image={MakeAFunction}>
+  <TutorialPage header='Functions'>
     <p>
       In addition to points and ranges, metrics can also be functions of other metrics. Just use an <strong>=</strong> sign to begin a function.
     </p>
@@ -107,10 +106,11 @@ export const TutorialFunctionPage = () => (
       When a function is selected, you can click on other metrics or type their two letter variable names to reference them.
     </p>
 
+    <Image image={MakeAFunction}/>
     <table className='semantic ui table'>
       <thead>
         <tr>
-          <th>Example</th>
+          <th>Example Function</th>
           <th>Explanation</th>
         </tr>
       </thead>
@@ -147,6 +147,5 @@ export const TutorialMoreFeaturesPage = () => (
     <p>
       Models can be turned into calculators with a subset of their inputs and outputs.
     </p>
-    <a href={'http://docs.getguesstimate.com/'}>Full Documentation</a>
   </TutorialPage>
 )

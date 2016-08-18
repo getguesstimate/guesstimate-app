@@ -3,10 +3,10 @@
 .Tutorial {
   float: left;
   background-color: rgba(240,240,240,1);
-  margin-bottom: 2em;
   text-align: center;
   max-width: 42em;
-  padding: 3em 2em;
+  padding: 2em 2em 1em;
+  border-radius: .2em;
 
   h2 {
     padding-bottom: 1em;

@@ -2,21 +2,22 @@
 
 .tutorialPage {
   margin-bottom: 2em;
-  font-size: 1.1em;
-	min-height: 35em;
+  min-height: 35em;
 
   .header {
-		margin-bottom: 1em;
+    margin-bottom: 1em;
     text-align: center;
   }
 
   h3 {
     text-align: center;
     color: #666;
-    margin: 0.3em auto;
+    margin: 0.8em auto;
+    font-size: 1.4em;
   }
 
   p {
+    font-size: 1.1em;
     text-align: justify;
   }
 
@@ -35,7 +36,7 @@
   }
 
   table.ui {
-    margin-top: 2.5em;
+    margin-top: 1.5em;
 
     td {
       padding: 0.5em 1em;

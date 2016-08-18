@@ -20,10 +20,10 @@ export const TutorialModal = ({onClose}) => {
 
 class Tutorial extends Component {
   static PAGES = [
-    <TutorialMetricPage />,
-    <TutorialFunctionPage />,
-    <TutorialMetricActionsPage />,
-    <TutorialMoreFeaturesPage />,
+    <TutorialMetricPage/>,
+    <TutorialFunctionPage/>,
+    <TutorialMetricActionsPage/>,
+    <TutorialMoreFeaturesPage/>,
   ]
 
   state = {
@@ -43,7 +43,6 @@ class Tutorial extends Component {
         {this.renderPage()}
           <div className='row'>
             <div className='col-md-12 actions'>
-                <span className='progress'> {this.state.onPage + 1} / 4 </span>
                 <span
                   className={`ui button ${this.state.onPage === 0 ? 'disabled' : ''}`}
                   onClick={this.previousPage.bind(this)}
@@ -60,7 +59,7 @@ class Tutorial extends Component {
                   className='ui button'
                   onClick={this.props.onClose}
                 >
-                  Exit
+                  Done
                 </span>
             </div>
           </div>
