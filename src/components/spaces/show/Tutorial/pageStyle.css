@@ -56,8 +56,8 @@
       }
 
       .exampleInput {
-        background-color: #c9e8c0;
-        color: #084e14;
+        color: $green-3;
+        background-color: $green-4;
         padding: 0 0.1em;
         border-radius: 0.1em;
       }
