@@ -26,8 +26,8 @@
   }
 
   .input.valid {
-    background-color: #c9e8c0;
-    color: #084e14;
+    color: $green-3;
+    background-color: $green-4;
   }
 
   .input.error {

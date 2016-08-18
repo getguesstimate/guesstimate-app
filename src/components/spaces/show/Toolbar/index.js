@@ -102,6 +102,7 @@ export class SpaceToolbar extends Component {
       calculators,
       makeNewCalculator,
       toggleFactSidebar,
+      onOpenTutorial,
     } = this.props
     const ReactTooltipParams = {class: 'header-action-tooltip', delayShow: 0, delayHide: 0, place: 'bottom', effect: 'solid'}
 
@@ -145,26 +146,31 @@ export class SpaceToolbar extends Component {
             <ReactTooltip {...ReactTooltipParams} id='calculator'>Calculators</ReactTooltip>
             <ReactTooltip {...ReactTooltipParams} id='facts'>Facts</ReactTooltip>
 
-            {isLoggedIn &&
-              <DropDown
-                headerText={'Model Actions'}
-                openLink={<a className='header-action'>File</a>}
-                position='right'
-              >
-                <CardListElement icon={'copy'} header='Copy Model' onMouseDown={onCopyModel}/>
-                {editableByMe &&
-                  <CardListElement
-                    icon={'download'}
-                    header='Import Slurp'
-                    onMouseDown={() => {this.setState({importModalOpen: true})}}
-                    closeOnClick={true}
-                  />
-                }
-                {editableByMe && <CardListElement icon={'warning'} header='Delete Model' onMouseDown={onDestroy}/> }
-              </DropDown>
-            }
+            <DropDown
+              headerText={'Model Actions'}
+              openLink={<a className='header-action'>File</a>}
+              position='right'
+            >
+              {isLoggedIn && <CardListElement icon={'copy'} header='Copy Model' onMouseDown={onCopyModel}/>}
+              {editableByMe &&
+                <CardListElement
+                  icon={'download'}
+                  header='Import Slurp'
+                  onMouseDown={() => {this.setState({importModalOpen: true})}}
+                  closeOnClick={true}
+                />
+              }
+              {editableByMe && <CardListElement icon={'warning'} header='Delete Model' onMouseDown={onDestroy}/> }
+              <CardListElement
+                key={'tutorial'}
+                icon={'question'}
+                header={'Show Tutorial'}
+                onMouseDown={onOpenTutorial}
+                closeOnClick={true}
+              />
+            </DropDown>
 
-            <CanvasViewForm/>
+            <CanvasViewForm />
 
             <div className='header-action-border'/>
             <a onClick={onCutMetrics} className={`header-action`} data-tip data-for='cut-button'>

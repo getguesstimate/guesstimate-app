@@ -7,6 +7,7 @@ import DistributionEditor from 'gComponents/distributions/editor/index'
 import Histogram from 'gComponents/simulations/histogram/index'
 import GuesstimateDescription from './description'
 import {ButtonClose} from 'gComponents/utility/buttons/close'
+import {GeneralModal} from 'gComponents/utility/modal/index'
 
 import {percentile} from 'lib/dataAnalysis'
 
@@ -43,22 +44,6 @@ export class MetricModal extends Component {
   }
 
   render() {
-    const customStyles = {
-      overlay: {
-        backgroundColor: 'rgba(55, 68, 76, 0.4)'
-      },
-      content : {
-        top                   : '10%',
-        left                  : '50%',
-        transform             : 'translateX(-50%)',
-        right                 : 'auto',
-        bottom                : 'auto',
-        marginRight           : '-50%',
-        backgroundColor      : 'rgba(0,0,0,0)',
-        border: 'none',
-        padding: '0',
-      }
-    }
     const showSimulation = this.showSimulation()
 
     const {closeModal, metric, errors, onChangeGuesstimateDescription} = this.props
@@ -66,10 +51,8 @@ export class MetricModal extends Component {
     const stats = _.get(metric, 'simulation.stats')
     const guesstimate = metric.guesstimate
     return(
-      <Modal
-        isOpen={true}
+      <GeneralModal
         onRequestClose={closeModal}
-        style={customStyles}
       >
         <div className='metricModal'>
           <div className='container top'>
@@ -127,7 +110,7 @@ export class MetricModal extends Component {
             </div>
           </div>
         </div>
-      </Modal>
+      </GeneralModal>
     )
   }
 }

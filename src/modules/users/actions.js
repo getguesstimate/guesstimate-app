@@ -31,7 +31,6 @@ export function fetch({auth0_id}) {
         dispatch(displayErrorsActions.newError())
         captureApiError('UsersFetch', err.jqXHR, err.textStatus, err, {url: 'usersFetchError'})
       } else if (data) {
-        const action = sActions.fetchSuccess(data.items)
         const me = data.items[0]
         dispatch(meActions.guesstimateMeLoaded(me))
         dispatch(fetchById(me.id))
@@ -47,7 +46,7 @@ export function fetchById(userId) {
         dispatch(displayErrorsActions.newError())
         captureApiError('UsersFetch', err.jqXHR, err.textStatus, err, {url: 'fetch'})
       } else if (user) {
-        dispatch(sActions.fetchSuccess([user]))
+        dispatch(fetchSuccess([user]))
         if (getState().me.id === user.id){
           dispatch(meActions.guesstimateMeLoaded(user), false)
         }
@@ -58,13 +57,13 @@ export function fetchById(userId) {
 }
 
 function formatUsers(unformatted) {
-  return unformatted.map(u => _.pick(u, ['auth0_id', 'id', 'name', 'picture']))
+  return unformatted.map(u => _.pick(u, ['auth0_id', 'needs_tutorial', 'id', 'name', 'picture']))
 }
 
 export function fromSearch(spaces) {
   return (dispatch) => {
     const users = spaces.map(s => s.user_info)
-    dispatch(sActions.fetchSuccess(formatUsers(users)))
+    dispatch(fetchSuccess(users))
   }
 }
 
@@ -78,8 +77,7 @@ export function create(object) {
       if (err) {
         dispatch(displayErrorsActions.newError())
         captureApiError('UsersCreate', err.jqXHR, err.textStatus, err, {url: 'create'})
-      }
-      else if (_.isEmpty(user)) {
+      } else if (_.isEmpty(user)) {
         generalError('UserCreate-EmptyResponse', {cid: newUser.id, url: 'userscreate'})
         dispatch(sActions.fetchSuccess([user]))
         dispatch(displayErrorsActions.newError())
@@ -94,5 +92,12 @@ export function create(object) {
 export function fetchSuccess(users) {
   return (dispatch, getState) => {
     dispatch(sActions.fetchSuccess(formatUsers(_.uniqBy(users, 'id'))))
+  }
+}
+
+export function finishedTutorial(user) {
+  return (dispatch, getState) => {
+    dispatch(sActions.fetchSuccess([{...user, needs_tutorial: false}]))
+    api(getState()).users.finishedTutorial(user, () => {})
   }
 }
