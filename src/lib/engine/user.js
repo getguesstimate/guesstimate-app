@@ -1,6 +1,6 @@
 import * as _userOrganizationMemberships from './userOrganizationMemberships'
 
-export const url = ({id}) => (!!id) ? urlById(id) : ''
+export const url = u => (!!_.get(u, 'id')) ? urlById(u.id) : ''
 export const urlById = id => `/users/${id}`
 
 export function usersOrganizations(user, memberships, organizations) {

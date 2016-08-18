@@ -1,8 +1,8 @@
 import * as _userOrganizationMemberships from './userOrganizationMemberships'
 import * as _collections from './collections'
 
-export const url = ({id}) => !!id ? urlById(id) : ''
-export const image = ({picture}) => _.isEmpty(picture) ? '/organization-default-image.png' : picture
+export const url = o => !!_.get(o, 'id') ? urlById(o.id) : ''
+export const image = o => _.isEmpty(_.get(o, 'picture')) ? '/organization-default-image.png' : o.picture
 export const urlById = id => `/organizations/${id}`
 export const hasPrivateAccess = organization => _.get(organization, 'plan.private_model_limit') !== 0
 export const canMakeMorePrivateModels = hasPrivateAccess

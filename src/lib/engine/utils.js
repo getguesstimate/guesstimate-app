@@ -4,7 +4,7 @@ export const typeSafeEq = (x, y) => x.toString() === y.toString()
 export const orStr = e => e || ''
 export const orArr = e => e || []
 
-const escSpecialChars = str => str.replace(/\$|\{|\}/g, e => `\\${e}`)
+const escSpecialChars = str => str.replace(/\$|\{|\}|\_/g, e => `\\${e}`)
 const toSource = re => re instanceof RegExp ? re.source : escSpecialChars(re)
 const parenthesize = str => `(?:${str})`
 export function or(res) {

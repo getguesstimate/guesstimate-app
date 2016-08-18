@@ -4,19 +4,7 @@ import {simulateFact, FactPT} from 'gEngine/facts'
 import {addStats} from 'gEngine/simulation'
 
 import {isData, formatData} from 'lib/guesstimator/formatter/formatters/Data'
-
-const readableIdPartFromWord = word => (/\d/).test(word) ? word : word[0]
-function getVariableNameFromName(rawName) {
-  const name = rawName.trim().replace(/[^\w\d]/g, ' ').toLowerCase().replace(/\s/g, '_')
-  const words = name.split(/[^\w\d]/).filter(s => !_.isEmpty(s))
-  if (words.length === 1 && name.length < 30) {
-    return name
-  } else if (words.length < 8) {
-    return name.slice(0,8)
-  } else {
-    return words.map(readableIdPartFromWord).join('')
-  }
-}
+import {getVariableNameFromName} from 'lib/nameToVariableName'
 
 export class FactForm extends Component {
   static defaultProps = {
