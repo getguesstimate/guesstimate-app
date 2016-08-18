@@ -4,13 +4,8 @@ import Icon from 'react-fa'
 
 import './pageStyle.css'
 import MakeAMetric from '../../../../assets/tutorial/MakeAMetric3.gif'
-import MakeACell from '../../../../assets/tutorial/makeACell.gif'
 import InteractWithACell from '../../../../assets/tutorial/InteractWithACell2.gif'
 import MakeAFunction from '../../../../assets/tutorial/MakeAFunction3.gif'
-import AdvancedFunctions from '../../../../assets/tutorial/AdvancedFunctions.png'
-import MakeACellWithARange from '../../../../assets/tutorial/makeACellWithARange.gif'
-import MakeACellWithData from '../../../../assets/tutorial/MakeACellWithData.gif'
-import IfStatement from '../../../../assets/tutorial/If Statements.png'
 
 const TutorialPage = ({header, image, children}) => (
   <div className='tutorialPage'>
