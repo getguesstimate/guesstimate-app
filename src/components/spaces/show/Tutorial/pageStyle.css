@@ -21,17 +21,17 @@
   }
 
   .image {
+    width: 100%;
     background-color: #dfe1e4;
     border-radius: 3px;
-    margin-bottom: 1em;
+    margin-bottom: 2em;
   }
 
   img {
     display: block;
-    max-height: 12em;
+    max-height: 10em;
     max-width: 100%;
     margin: 0 auto;
-    padding-bottom: 1em;
   }
 
   table.ui {

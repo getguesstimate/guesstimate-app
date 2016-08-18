@@ -21,8 +21,10 @@ const TutorialPage = ({header, image, children}) => (
     </div>
     {!!image &&
 			<div className='row'>
-				<div className='col-md-12 image'>
-					<img src={image} />
+				<div className='col-md-12'>
+					<div className='image'>
+						<img src={image} />
+					</div>
 				</div>
 			</div>
 		}
