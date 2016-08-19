@@ -2,12 +2,12 @@ const DIGIT_REGEX = /^\d+$/
 const readableIdPartFromWord = word => DIGIT_REGEX.test(word) ? word : word[0]
 function prepareName(rawName) {
   const name = rawName.trim().toLowerCase().replace(/[^\w\d]/g, ' ')
-  const firstNonDigit = name.search(/[^\d]/)
+  const firstNonDigit = name.search(/[^\d\s]/)
   if (firstNonDigit === -1) { return '' }
   return name.slice(firstNonDigit).trim().replace(/\s/g, '_')
 }
 
-function getDirectVariableNameFromName(rawName, maxOneWordLength, maxSplitWordLength) {
+function getDirectVariableNameFromName(rawName, maxOneWordLength, maxSplitWordLength, cutOffLength) {
   const name = prepareName(rawName)
 
   const words = name.split(/[\_]/).filter(s => !_.isEmpty(s))
@@ -15,14 +15,20 @@ function getDirectVariableNameFromName(rawName, maxOneWordLength, maxSplitWordLe
   if (words.length === 1 && name.length < maxOneWordLength) {
     return name
   } else if (words.length < maxSplitWordLength) {
-    return name.slice(0, maxSplitWordLength)
+    return name.slice(0, cutOffLength)
   } else {
-    return words.map(readableIdPartFromWord).join('')
+    return words.map(readableIdPartFromWord).join('').slice(0, cutOffLength)
   }
 }
 
-export function getVariableNameFromName(rawName, existingVariableNames=[], maxOneWordLength=30, maxSplitWordLength=8) {
-  const directName = getDirectVariableNameFromName(rawName, maxOneWordLength, maxSplitWordLength)
+export function getVariableNameFromName(
+  rawName,
+  existingVariableNames=[],
+  maxOneWordLength=30,
+  maxSplitWordLength=8,
+  totalMaxLength=maxSplitWordLength
+) {
+  const directName = getDirectVariableNameFromName(rawName, maxOneWordLength, maxSplitWordLength, totalMaxLength)
 
   const nameRegex = new RegExp(`${directName}(?:_(\d+))?`, 'gi')
 
@@ -33,4 +39,4 @@ export function getVariableNameFromName(rawName, existingVariableNames=[], maxOn
   return `${directName}${currentMaxSuffix + 1}`
 }
 
-export const shouldTransformName = name => !_.isEmpty(name) && name.replace(/\d/g, '').split(/\s/g).length > 1
+export const shouldTransformName = name => !(_.isEmpty(name) || _.isEmpty(name.replace(/\d/g, '').trim()))
