@@ -16,7 +16,7 @@ const MetricExpandButton = ({onToggleSidebar}) => (
     onMouseDown={onToggleSidebar}
     data-select='false'
   >
-    <Icon name='pencil' data-control-sidebar="true"/>
+    <Icon name='cog' data-control-sidebar="true"/>
   </span>
 )
 

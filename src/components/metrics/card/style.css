@@ -90,11 +90,11 @@ a.MetricSidebarItem {
 }
 
 a.MetricSidebarItem.analyzing {
-	background: #1d954d;
+	background: #3d9268;
 }
 
 a.MetricSidebarItem.analyzing:hover {
-	background: #117f3d;
+	background: #2a8558;
 }
 
 a.MetricSidebarItem:first-child {

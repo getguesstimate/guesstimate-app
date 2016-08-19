@@ -23,7 +23,7 @@ const ProgressMessage = ({actionState}) => (
     {actionState == 'COPYING' && 'Copying...'}
     {actionState == 'CREATING' && 'Creating a new model...'}
     {actionState == 'UNALLOWED_ATTEMPT' &&
-      <div className='ui red horizontal label'>
+      <div className='ui grey horizontal label'>
         Notice: Your changes will not save in viewing mode
       </div>
     }
