@@ -21,6 +21,10 @@
   margin-top: -2px;
 }
 
+.SpaceShowToolbar .saveMessage .ui.label.grey {
+  background-color: #555 !important;
+}
+
 .SpaceShowToolbar .header-action {
   cursor: pointer;
   float: left;
