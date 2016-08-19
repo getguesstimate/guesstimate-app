@@ -18,6 +18,7 @@ export function or(res) {
 }
 
 export function replaceByMap(str, replacementMap) {
+  if (!str || _.isEmpty(str)) { return '' }
   const regex = or(Object.keys(replacementMap))
   return str.replace(regex, match => replacementMap[match])
 }
