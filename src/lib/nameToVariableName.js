@@ -1,8 +1,10 @@
 const DIGIT_REGEX = /^\d+$/
 const readableIdPartFromWord = word => DIGIT_REGEX.test(word) ? word : word[0]
 function prepareName(rawName) {
-  const name = rawName.trim().toLowerCase().replace(/[^\w\d]/g, ' ').replace(/\s/g, '_')
-  return name.slice(name.search(/[^\d]/))
+  const name = rawName.trim().toLowerCase().replace(/[^\w\d]/g, ' ')
+  const firstNonDigit = name.search(/[^\d]/)
+  if (firstNonDigit === -1) { return '' }
+  return name.slice(firstNonDigit).trim().replace(/\s/g, '_')
 }
 
 function getDirectVariableNameFromName(rawName, maxOneWordLength, maxSplitWordLength) {
