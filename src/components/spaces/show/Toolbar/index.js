@@ -24,7 +24,7 @@ const ProgressMessage = ({actionState}) => (
     {actionState == 'CREATING' && 'Creating a new model...'}
     {actionState == 'UNALLOWED_ATTEMPT' &&
       <div className='ui red horizontal label'>
-        Saving not enabled in viewing mode.
+        Notice: Your changes will not save in viewing mode
       </div>
     }
     {actionState == 'ERROR' &&
