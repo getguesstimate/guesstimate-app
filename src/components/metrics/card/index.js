@@ -185,7 +185,7 @@ export default class MetricCard extends Component {
     let metric = {id: this._id(), name}
     const shouldUpdateReadableId = shouldTransformName(name)
     if (shouldUpdateReadableId) {
-      const newReadableIdRaw = getVariableNameFromName(name, this.props.existingReadableIds, 3, 3).toUpperCase()
+      const newReadableIdRaw = getVariableNameFromName(name, this.props.existingReadableIds, 3, 3, 5).toUpperCase()
       metric.readableId = newReadableIdRaw.replace(/\_/g, '')
     }
     this.props.changeMetric(metric)
