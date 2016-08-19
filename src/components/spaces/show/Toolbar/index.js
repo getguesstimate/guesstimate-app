@@ -146,31 +146,28 @@ export class SpaceToolbar extends Component {
             <ReactTooltip {...ReactTooltipParams} id='calculator'>Calculators</ReactTooltip>
             <ReactTooltip {...ReactTooltipParams} id='facts'>Facts</ReactTooltip>
 
-            <DropDown
-              headerText={'Model Actions'}
-              openLink={<a className='header-action'>File</a>}
-              position='right'
-            >
-              {isLoggedIn && <CardListElement icon={'copy'} header='Copy Model' onMouseDown={onCopyModel}/>}
-              {editableByMe &&
-                <CardListElement
-                  icon={'download'}
-                  header='Import Slurp'
-                  onMouseDown={() => {this.setState({importModalOpen: true})}}
-                  closeOnClick={true}
-                />
-              }
-              {editableByMe && <CardListElement icon={'warning'} header='Delete Model' onMouseDown={onDestroy}/> }
-              <CardListElement
-                key={'tutorial'}
-                icon={'question'}
-                header={'Show Tutorial'}
-                onMouseDown={onOpenTutorial}
-                closeOnClick={true}
-              />
-            </DropDown>
+            {isLoggedIn &&
+              <DropDown
+                headerText={'Model Actions'}
+                openLink={<a className='header-action'>File</a>}
+                position='right'
+              >
+                <CardListElement icon={'copy'} header='Copy Model' onMouseDown={onCopyModel}/>
+                {editableByMe &&
+                  <CardListElement
+                    icon={'download'}
+                    header='Import Slurp'
+                    onMouseDown={() => {this.setState({importModalOpen: true})}}
+                    closeOnClick={true}
+                  />
+                }
+                {editableByMe && <CardListElement icon={'warning'} header='Delete Model' onMouseDown={onDestroy}/> }
+              </DropDown>
+            }
 
             <CanvasViewForm />
+
+            <a className='header-action' onClick={onOpenTutorial}>Tutorial</a>
 
             <div className='header-action-border'/>
             <a onClick={onCutMetrics} className={`header-action`} data-tip data-for='cut-button'>
