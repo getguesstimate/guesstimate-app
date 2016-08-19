@@ -126,10 +126,14 @@ export default class SpacesShow extends Component {
     }
   }
 
-  openTutorial() { this.setState({showTutorial: true}) }
+  openTutorial() {
+    this.setState({showTutorial: true})
+    segment.trackOpenedTutorial()
+  }
   closeTutorial() {
     if (!!_.get(this, 'props.me.profile.needs_tutorial')) { this.props.dispatch(userActions.finishedTutorial(this.props.me.profile)) }
     this.setState({showTutorial: false})
+    segment.trackClosedTutorial()
   }
 
   setDefaultEditPermission(editableByMe) {

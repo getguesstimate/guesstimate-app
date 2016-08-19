@@ -1,10 +1,12 @@
 import React, {Component} from 'react'
 
+import Icon from 'react-fa'
+
 import {ButtonClose} from 'gComponents/utility/buttons/close/index'
 import {TutorialMetricPage, TutorialMetricActionsPage, TutorialFunctionPage, TutorialMoreFeaturesPage} from './pages'
 import {GeneralModal} from 'gComponents/utility/modal/index'
 
-import Icon from 'react-fa'
+import * as segment from 'servers/segment'
 
 import './style.css'
 
@@ -20,9 +22,19 @@ export class Tutorial extends Component {
     onPage: 0
   }
 
-  previousPage() { this.setState({onPage: Math.max(this.state.onPage - 1, 0)}) }
-  nextPage() { this.setState({onPage: Math.min(this.state.onPage + 1, 4)}) }
-  renderPage() { return Tutorial.PAGES[this.state.onPage] }
+  previousPage() {
+    const onPage = Math.max(this.state.onPage - 1, 0)
+    segment.trackNavigatedBackToPage(onPage)
+    this.setState({onPage})
+  }
+  nextPage() {
+    const onPage = Math.min(this.state.onPage + 1, 4)
+    segment.trackSawTutorialPage(onPage)
+    this.setState({onPage})
+  }
+  renderPage() {
+    return Tutorial.PAGES[this.state.onPage]
+  }
 
   render() {
     return (
