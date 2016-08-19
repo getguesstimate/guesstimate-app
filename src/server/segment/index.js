@@ -99,7 +99,7 @@ export function trackSwitchToEditMode() { trackCanvasInteraction('switch to edit
 
 export function trackImportSlurp() { trackCanvasInteraction('import slurp') }
 
-export function trackOpenedTutorial() { trackSawUpToTutorialPage(1) }
+export function trackOpenedTutorial() { trackSawTutorialPage(1) }
 export function trackClosedTutorial() { trackCanvasInteraction('closed tutorial') }
 export function trackSawTutorialPage(page) { trackCanvasInteraction('saw tutorial', {page}) }
 export function trackNavigatedBackToPage(page) { trackCanvasInteraction('navigated back to tutorial page', {page}) }
