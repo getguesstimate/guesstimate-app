@@ -35,7 +35,7 @@ export function toDSpace(spaceId, graph, organizationFacts) {
   let space = _collections.get(graph.spaces, spaceId)
   if (!space) { return {} }
 
-  let dSpace = {...space, ...toDgraph(space.id, graph)}
+  let dSpace = {...space, ...toDgraph(space, graph)}
 
   const facts = possibleFacts(dSpace, graph, organizationFacts)
   const withInputFn = _guesstimate.expressionToInputFn(dSpace.metrics, facts)
@@ -54,16 +54,15 @@ export function toDSpace(spaceId, graph, organizationFacts) {
   return dSpace
 }
 
-export function toDgraph(spaceId, graph){
-  const space = _collections.get(graph.spaces, spaceId)
+export function toDgraph(space, graph){
   const {users, organizations, calculators, userOrganizationMemberships, me} = graph
   const {user_id, organization_id} = space
 
   return {
-    ..._graph.denormalize(graph, spaceId),
+    ..._graph.denormalize(subset(graph, space.id)),
     user: _collections.get(users, user_id),
     organization: _collections.get(organizations, organization_id),
-    calculators: _collections.filter(calculators, spaceId, 'space_id'),
+    calculators: _collections.filter(calculators, space.id, 'space_id'),
     editableByMe: canEdit(space, me, userOrganizationMemberships),
   }
 }
