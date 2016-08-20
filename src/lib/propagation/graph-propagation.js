@@ -29,7 +29,7 @@ export class GraphPropagation {
     this.spaceId = graphFilters.spaceId
 
     if (this.spaceId === undefined && graphFilters.metricId) {
-      const metric = e.metric.get(getState().metrics, graphFilters.metricId)
+      const metric = e.collections.get(getState().metrics, graphFilters.metricId)
       this.spaceId = metric && metric.space
     }
 
@@ -68,18 +68,16 @@ export class GraphPropagation {
   _graph(): Graph {
     const state = this.getState()
 
-    const spaceSubset = e.space.subset(e.graph.create(state), this.spaceId, true)
-
+    const spaceSubset = e.space.subset(state, this.spaceId, true)
     const organizationalFacts = e.facts.getFactsForOrg(state.facts.organizationFacts, this.organization)
-
     const translatedSubset = e.space.expressionsToInputs(spaceSubset, organizationalFacts)
 
     return e.facts.addFactsToSpaceGraph(translatedSubset, state.facts.globalFacts, state.facts.organizationFacts, this.space)
   }
 
   _orderedMetricIdsAndErrors(graphFilters: object): Array<Object> {
-    this.dependencies = e.graph.dependencyTree(this._graph(), graphFilters)
-    const orderedMetrics = _.sortBy(this.dependencies, n => n[1]).map(e => ({
+    const dependencies = e.graph.dependencyTree(this._graph(), graphFilters)
+    const orderedMetrics = _.sortBy(dependencies, n => n[1]).map(e => ({
       id: e[0],
       errors: {
         inInfiniteLoop: !_.isFinite(e[1])

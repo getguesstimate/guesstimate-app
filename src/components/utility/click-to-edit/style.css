@@ -23,6 +23,26 @@
   margin-top: 10px;
 }
 
+.ClickToEdit .EditingMode .submit-section .button {
+  float: left;
+}
+
+a.markdown-help {
+  float: right;
+  font-size: 2.5em;
+  color: #aaa;
+  cursor: pointer;
+}
+
+a.markdown-help:hover {
+  color: #777;
+}
+
+.ClickToEdit .EditingMode .submit-section .submit-section-close {
+  float: left;
+  margin-top: .2em;
+}
+
 .ClickToEdit .EditingMode .submit-section .submit.button {
   margin-right: 1em;
 }

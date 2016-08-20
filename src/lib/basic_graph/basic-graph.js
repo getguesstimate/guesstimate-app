@@ -13,10 +13,6 @@ export default class BasicGraph {
     return new BasicGraph(itemSubset, edgeSubset)
   }
 
-  children(id, oneLevel=true) {
-    return this.childrenIds([id], oneLevel).map(e => this.nodes.find(m => m.id === e))
-  }
-
   directParents(id) {
     return this.directParentIds(id).map(e => this.nodes.find(m => m.id === e))
   }

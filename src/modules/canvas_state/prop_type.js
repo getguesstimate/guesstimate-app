@@ -9,7 +9,6 @@ export const canvasState = PT.shape({
 export const metricCardView = PT.oneOf([
   'normal',
   'scientific',
-  'analysis',
   'display'
 ]).isRequired
 
@@ -30,9 +29,12 @@ export const saveState = PT.oneOf([
     'SAVED'
 ])
 
+export const analysisMetricId = PT.string
+
 export default PropTypes.shape({
   edgeView: edgeView.isRequired,
   metricCardView: metricCardView.isRequired,
   metricClickMode: metricClickMode.isRequired,
-  saveState: saveState.isRequired
+  saveState: saveState.isRequired,
+  analysisMetricId: analysisMetricId.isRequired,
 })

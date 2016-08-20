@@ -30,4 +30,11 @@ export default class Users extends AbstractResource {
     this.guesstimateMethod({url, method})(callback)
   }
 
+  finishedTutorial({id}, callback) {
+    const url = `users/${id}/finished_tutorial`
+    const method = 'PATCH'
+
+    this.guesstimateMethod({url, method})(callback)
+  }
+
 }

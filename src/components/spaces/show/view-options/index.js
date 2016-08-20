@@ -53,7 +53,7 @@ export const ViewOptionToggle = ({isEditingInvalid, onForbidEdits, onAllowEdits,
       onClick={onAllowEdits}
       isEditingInvalid={isEditingInvalid}
       hideErrorWhenUnselected={false}
-      closeOnClick={true}
+      closeOnClick={!isEditingInvalid}
     />
   </DropDown>
 )
