@@ -13,7 +13,7 @@ const spaceSep = res => new RegExp(res.filter(re => !!re).map(re => `(?:${re.sou
 const padded = res => spaceSep([/^/, ...res, /$/])
 
 const SUFFIX_REGEX = new RegExp(Object.keys(SUFFIXES).join('|'))
-const INTEGER_REGEX = /(?:(?:\d+)|(?:\d{1,3}(?:,\d{3})*))(?!\.)/
+const INTEGER_REGEX = /(?:(?:\d+)|(?:\d{1,3}(?:,\d{3})*))(?!\.[^\.])/
 const DECIMAL_REGEX = /\d*\.\d+/
 const NUMBER_REGEX = new RegExp(`(-?${or([INTEGER_REGEX, DECIMAL_REGEX]).source})\\s?(${SUFFIX_REGEX.source})?`)
 

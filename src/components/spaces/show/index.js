@@ -15,6 +15,7 @@ import {CalculatorCompressedShow} from 'gComponents/calculators/show/CalculatorC
 import {ButtonCloseText} from 'gComponents/utility/buttons/close'
 import {ButtonEditText, ButtonDeleteText, ButtonExpandText} from 'gComponents/utility/buttons/button'
 import {FactListContainer} from 'gComponents/facts/list/container.js'
+import {Tutorial} from './Tutorial/index'
 
 import {denormalizedSpaceSelector} from '../denormalized-space-selector'
 
@@ -23,6 +24,7 @@ import * as spaceActions from 'gModules/spaces/actions'
 import * as simulationActions from 'gModules/simulations/actions'
 import * as copiedActions from 'gModules/copied/actions'
 import * as calculatorActions from 'gModules/calculators/actions'
+import * as userActions from 'gModules/users/actions'
 import {removeSelectedMetrics} from 'gModules/metrics/actions'
 import {undo, redo} from 'gModules/checkpoints/actions'
 import {navigateFn} from 'gModules/navigation/actions'
@@ -104,6 +106,8 @@ export default class SpacesShow extends Component {
 
   state = {
     showLeftSidebar: true,
+    hasSetDefualtEditPermission: false,
+    showTutorial: !!_.get(this, 'props.me.profile.needs_tutorial'),
     attemptedFetch: false,
     rightSidebar: {
       type: !!this.props.showCalculatorId ? SHOW_CALCULATOR : CLOSED,
@@ -117,17 +121,29 @@ export default class SpacesShow extends Component {
 
     this.considerFetch(this.props)
     if (!(this.props.embed || this.state.rightSidebar.type !== CLOSED)) { elev.show() }
-
-    if (_.has(this.props, 'denormalizedSpace.editableByMe')) {
-      this.setDefaultEditPermission(_.get(this.props, 'denormalizedSpace.editableByMe'))
-    }
   }
 
-  setDefaultEditPermission(editableByMe) {
-    if (!!editableByMe && !_.get(this.props, 'denormalizedSpace.canvasState.editsAllowed')) {
-      this.props.dispatch(allowEdits())
-    } else if (!editableByMe && _.get(this.props, 'denormalizedSpace.canvasState.editsAllowed')) {
+  openTutorial() {
+    this.setState({showTutorial: true})
+    segment.trackOpenedTutorial()
+  }
+  closeTutorial() {
+    if (!!_.get(this, 'props.me.profile.needs_tutorial')) { this.props.dispatch(userActions.finishedTutorial(this.props.me.profile)) }
+    this.setState({showTutorial: false})
+    segment.trackClosedTutorial()
+  }
+
+  setDefaultEditPermission() {
+    const editableByMe = !!_.get(this, 'props.denormalizedSpace.editableByMe')
+    const showingCalculator = !!_.get(this, 'props.showCalculatorId')
+
+    const shouldAllowEdits = editableByMe && !showingCalculator
+    const currentlyAllowingEdits = !!_.get(this.props, 'denormalizedSpace.canvasState.editsAllowed')
+
+    if (currentlyAllowingEdits && !shouldAllowEdits) {
       this.props.dispatch(forbidEdits())
+    } else if (!currentlyAllowingEdits && shouldAllowEdits) {
+      this.props.dispatch(allowEdits())
     }
   }
 
@@ -146,6 +162,10 @@ export default class SpacesShow extends Component {
     window.recorder.recordRenderStopEvent(this)
 
     this.considerFetch(prevProps)
+    if (!this.state.hasSetDefualtEditPermission && _.has(this, 'props.denormalizedSpace.editableByMe')) {
+      this.setDefaultEditPermission()
+      this.setState({hasSetDefualtEditPermission: true})
+    }
   }
 
   considerFetch(newProps) {
@@ -358,7 +378,7 @@ export default class SpacesShow extends Component {
 
   render() {
     const space = this.props.denormalizedSpace
-    const {organizationHasFacts} = this.props
+    const {organizationHasFacts, me} = this.props
     if (!spacePrepared(space)) { return <div className='spaceShow'></div> }
 
     const sidebarIsViseable = space.editableByMe || !_.isEmpty(space.description)
@@ -405,6 +425,7 @@ export default class SpacesShow extends Component {
             ]}
           />
         }
+        {this.state.showTutorial && <Tutorial onClose={this.closeTutorial.bind(this)} />}
 
         <div className='hero-unit'>
           <SpaceHeader
@@ -451,6 +472,7 @@ export default class SpacesShow extends Component {
             showCalculator={this.showCalculator.bind(this)}
             toggleFactSidebar={this.toggleFactSidebar.bind(this)}
             canShowFactSidebar={this.canShowFactSidebar()}
+            onOpenTutorial={this.openTutorial.bind(this)}
           />
         </div>
 

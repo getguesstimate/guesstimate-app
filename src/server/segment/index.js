@@ -59,13 +59,8 @@ export function pageLoad() {
   window.analytics.page()
 }
 
-export function trackUser(userId, info) {
-  window.analytics.identify(userId, info)
-}
-
-export function trackToggledViewMode(mode) {
-  window.analytics.track(Constants.USED_VIEW_MODE, {mode})
-}
+export function trackUser(userId, info) { window.analytics.identify(userId, info) }
+export function trackToggledViewMode(mode) { window.analytics.track(Constants.USED_VIEW_MODE, {mode}) }
 
 export function trackPurchaseSuccess(account, rawPlanType) {
   const planType = segmentPlanType(rawPlanType)
@@ -81,69 +76,33 @@ export function trackPurchaseSuccess(account, rawPlanType) {
   })
 }
 
-export function trackAccountModalClick() {
-  window.analytics.track(Constants.ACCOUNT_MODAL_CLICK)
-}
+export function trackAccountModalClick() { window.analytics.track(Constants.ACCOUNT_MODAL_CLICK) }
+export function trackUserMenuOpen() { window.analytics.track(Constants.USER_MENU_OPEN) }
+export function trackUserMenuClose() { window.analytics.track(Constants.USER_MENU_CLOSE) }
 
-export function trackUserMenuOpen() {
-  window.analytics.track(Constants.USER_MENU_OPEN)
-}
+export function trackCopyModel() { window.analytics.track(Constants.COPIED_MODEL) }
 
-export function trackUserMenuClose() {
-  window.analytics.track(Constants.USER_MENU_CLOSE)
-}
+export function trackUndo(via_keyboard) { trackCanvasInteraction('undo', {via_keyboard}) }
+export function trackRedo(via_keyboard) { trackCanvasInteraction('redo', {via_keyboard}) }
+export function trackCutMetric(via_keyboard) { trackCanvasInteraction('cut metric', {via_keyboard}) }
+export function trackCopyMetric(via_keyboard) { trackCanvasInteraction('copy metric', {via_keyboard}) }
+export function trackPasteMetric(via_keyboard) { trackCanvasInteraction('paste metric', {via_keyboard}) }
 
-export function trackCopyModel() {
-  window.analytics.track(Constants.COPIED_MODEL)
-}
+export function trackSelectedRegion() { trackCanvasInteraction('select region') }
+export function trackAutoFill() { trackCanvasInteraction('auto fill') }
 
-export function trackUndo(via_keyboard) {
-  trackCanvasInteraction('undo', {via_keyboard})
-}
+export function trackOpenSidebar() { trackCanvasInteraction('open sidebar') }
+export function trackCloseSidebar() { trackCanvasInteraction('close sidebar') }
 
-export function trackRedo(via_keyboard) {
-  trackCanvasInteraction('redo', {via_keyboard})
-}
+export function trackSwitchToViewMode() { trackCanvasInteraction('switch to view mode') }
+export function trackSwitchToEditMode() { trackCanvasInteraction('switch to edit mode') }
 
-export function trackCutMetric(via_keyboard) {
-  trackCanvasInteraction('cut metric', {via_keyboard})
-}
+export function trackImportSlurp() { trackCanvasInteraction('import slurp') }
 
-export function trackCopyMetric(via_keyboard) {
-  trackCanvasInteraction('copy metric', {via_keyboard})
-}
-
-export function trackPasteMetric(via_keyboard) {
-  trackCanvasInteraction('paste metric', {via_keyboard})
-}
-
-export function trackSelectedRegion() {
-  trackCanvasInteraction('select region')
-}
-
-export function trackAutoFill() {
-  trackCanvasInteraction('auto fill')
-}
-
-export function trackOpenSidebar() {
-  trackCanvasInteraction('open sidebar')
-}
-
-export function trackCloseSidebar() {
-  trackCanvasInteraction('close sidebar')
-}
-
-export function trackSwitchToViewMode() {
-  trackCanvasInteraction('switch to view mode')
-}
-
-export function trackSwitchToEditMode() {
-  trackCanvasInteraction('switch to edit mode')
-}
-
-export function trackImportSlurp() {
-  trackCanvasInteraction('import slurp')
-}
+export function trackOpenedTutorial() { trackSawTutorialPage(1) }
+export function trackClosedTutorial() { trackCanvasInteraction('closed tutorial') }
+export function trackSawTutorialPage(page) { trackCanvasInteraction('saw tutorial', {page}) }
+export function trackNavigatedBackToPage(page) { trackCanvasInteraction('navigated back to tutorial page', {page}) }
 
 export function openedElev(via_direct_link, article_id) {
   window.analytics.track(Constants.OPENED_ELEV, {via_direct_link, article_id})

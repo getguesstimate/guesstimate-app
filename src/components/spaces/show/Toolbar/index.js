@@ -23,8 +23,8 @@ const ProgressMessage = ({actionState}) => (
     {actionState == 'COPYING' && 'Copying...'}
     {actionState == 'CREATING' && 'Creating a new model...'}
     {actionState == 'UNALLOWED_ATTEMPT' &&
-      <div className='ui red horizontal label'>
-        Saving not enabled in viewing mode.
+      <div className='ui grey horizontal label'>
+        Notice: Your changes will not save in viewing mode
       </div>
     }
     {actionState == 'ERROR' &&
@@ -102,6 +102,7 @@ export class SpaceToolbar extends Component {
       calculators,
       makeNewCalculator,
       toggleFactSidebar,
+      onOpenTutorial,
     } = this.props
     const ReactTooltipParams = {class: 'header-action-tooltip', delayShow: 0, delayHide: 0, place: 'bottom', effect: 'solid'}
 
@@ -164,7 +165,9 @@ export class SpaceToolbar extends Component {
               </DropDown>
             }
 
-            <CanvasViewForm/>
+            <CanvasViewForm />
+
+            <a className='header-action' onClick={onOpenTutorial}>Tutorial</a>
 
             <div className='header-action-border'/>
             <a onClick={onCutMetrics} className={`header-action`} data-tip data-for='cut-button'>

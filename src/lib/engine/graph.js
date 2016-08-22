@@ -18,7 +18,7 @@ export function relationshipType(edges) {
   return NOEDGE
 }
 
-export const denormalize = graph => ({metrics: graph.metrics.map(_metric.denormalizeFn(graph))})
+export const denormalize = graph => ({metrics: graph.metrics.map(_metric.denormalizeFn(graph)).filter(_collections.isPresent)})
 export const runSimulation = (graph, metricId, n) => _dgraph.runSimulation(denormalize(graph), metricId, n)
 
 function basicGraph(graph) {
