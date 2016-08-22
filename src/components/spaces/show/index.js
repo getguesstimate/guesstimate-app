@@ -106,6 +106,7 @@ export default class SpacesShow extends Component {
 
   state = {
     showLeftSidebar: true,
+    hasSetDefualtEditPermission: false,
     showTutorial: !!_.get(this, 'props.me.profile.needs_tutorial'),
     attemptedFetch: false,
     rightSidebar: {
@@ -120,10 +121,6 @@ export default class SpacesShow extends Component {
 
     this.considerFetch(this.props)
     if (!(this.props.embed || this.state.rightSidebar.type !== CLOSED)) { elev.show() }
-
-    if (_.has(this.props, 'denormalizedSpace.editableByMe')) {
-      this.setDefaultEditPermission(_.get(this.props, 'denormalizedSpace.editableByMe'))
-    }
   }
 
   openTutorial() {
@@ -136,11 +133,17 @@ export default class SpacesShow extends Component {
     segment.trackClosedTutorial()
   }
 
-  setDefaultEditPermission(editableByMe) {
-    if (!!editableByMe && !_.get(this.props, 'denormalizedSpace.canvasState.editsAllowed')) {
-      this.props.dispatch(allowEdits())
-    } else if (!editableByMe && _.get(this.props, 'denormalizedSpace.canvasState.editsAllowed')) {
+  setDefaultEditPermission() {
+    const editableByMe = !!_.get(this, 'props.denormalizedSpace.editableByMe')
+    const showingCalculator = !!_.get(this, 'props.showCalculatorId')
+
+    const shouldAllowEdits = editableByMe && !showingCalculator
+    const currentlyAllowingEdits = !!_.get(this.props, 'denormalizedSpace.canvasState.editsAllowed')
+
+    if (currentlyAllowingEdits && !shouldAllowEdits) {
       this.props.dispatch(forbidEdits())
+    } else if (!currentlyAllowingEdits && shouldAllowEdits) {
+      this.props.dispatch(allowEdits())
     }
   }
 
@@ -159,6 +162,10 @@ export default class SpacesShow extends Component {
     window.recorder.recordRenderStopEvent(this)
 
     this.considerFetch(prevProps)
+    if (!this.state.hasSetDefualtEditPermission && _.has(this, 'props.denormalizedSpace.editableByMe')) {
+      this.setDefaultEditPermission()
+      this.setState({hasSetDefualtEditPermission: true})
+    }
   }
 
   considerFetch(newProps) {
