@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react'
-import ComponentEditor from 'gComponents/utility/ComponentEditor/index'
-import {PlanIndex} from './PlanIndex'
+import ComponentEditor from 'gComponents/utility/ComponentEditor/index.js'
+import PlanIndex from './PlanIndex.js'
 
 const options = [
   {

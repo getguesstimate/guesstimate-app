@@ -59,10 +59,16 @@ class PlanCard extends Component{
 
 export default class Plans extends Component{
   static defaultProps = {
+    showButtons: false,
     onChoose: (planId) => {console.log('choose', planId)}
   }
 
   render() {
+    const plans = [
+      'personal_lite',
+      'organization_basic',
+    ].map(e => Plan.find(e))
+
     return (
       <div className='row'>
         <div className='col-sm-12'>
@@ -84,7 +90,7 @@ export default class Plans extends Component{
               price='12'
               unit='per_user'
               private_model_count='Unlimited'
-              promotion_copy='30-day free trial'
+              promotion_copy='14-day free trial'
               upgrade={{
                 show: this.props.isLoggedIn,
                 onClick: () => {this.props.onNewOrganizationNavigation()},
