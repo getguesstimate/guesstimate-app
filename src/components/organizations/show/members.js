@@ -15,7 +15,6 @@ export class MembersTab extends Component {
   render() {
     const {members, memberships, invitations, admin_id, onRemove, addUser, httpRequests, meIsAdmin, organizationId} = this.props
     const unjoinedInvitees = invitations.filter(i => !_.some(memberships, m => m.invitation_id === i.id))
-    console.log(members, unjoinedInvitees)
     const onChangeSubTab = () => {this.setState({indexTabOpen: !this.state.indexTabOpen})}
     return (
       <div className='MembersTab'>
