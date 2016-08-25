@@ -1,8 +1,11 @@
 import React, {Component, PropTypes} from 'react'
-import { connect } from 'react-redux';
-import PlanIndex from './PlanIndex.js'
+import { connect } from 'react-redux'
+
+import {PlanIndex} from './PlanIndex.js'
+
 import * as modalActions from 'gModules/modal/actions.js'
 import * as navigationActions from 'gModules/navigation/actions.js'
+
 import e from 'gEngine/engine'
 
 function mapStateToProps(state) {
