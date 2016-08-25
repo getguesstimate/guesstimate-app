@@ -183,6 +183,10 @@ export default class Profile extends Component {
       }
 
       { !isLoggedIn &&
+        <a className={'item text scratchpad'} href='http://docs.getguesstimate.com/'>Documentation</a>
+      }
+
+      { !isLoggedIn &&
         <a className={'item text'} onClick={this.signIn.bind(this)}>Sign In</a>
       }
 
