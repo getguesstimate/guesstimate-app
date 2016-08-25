@@ -60,8 +60,8 @@ export function newGuesstimateType(newGuesstimate) {
   return item.samplerType().referenceName
 }
 
-const isInputFn = (guesstimate) => ({id}) => _utils.orStr(_.get(guesstimate, 'expression')).includes(id)
-export const inputMetrics = (guesstimate, {metrics}) => _utils.orArr(metrics).filter(isInputFn(guesstimate))
+const isInputOf = (guesstimate) => ({readableId}) => _utils.orStr(_.get(guesstimate, 'input')).includes(readableId)
+export const inputMetrics = (guesstimate, {metrics}) => _utils.orArr(metrics).filter(isInputOf(guesstimate))
 
 function _inputMetricsWithValues(guesstimate: Guesstimate, dGraph: DGraph): Object{
   let inputs = {}
