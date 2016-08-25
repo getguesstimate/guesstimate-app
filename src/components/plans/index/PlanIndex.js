@@ -26,7 +26,7 @@ export const PlanIndex = ({userPlanId, portalUrl, isLoggedIn, onChoose, onNewOrg
         <div className='header'>
           <h1> Plans & Pricing </h1>
           <h2>
-            Guesstimate offers unlimited free public models, and up to three free private models.
+            Guesstimate offers unlimited free public models.
             <br/>
             Create more private models with a paid plan.
           </h2>

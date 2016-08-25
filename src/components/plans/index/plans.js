@@ -85,7 +85,7 @@ export default class Plans extends Component{
               name='Organizations'
               price='12'
               unit='per_user'
-              private_model_count='Unlimited'
+              private_model_count='200'
               promotion_copy='30-day free trial'
               upgrade={{
                 show: this.props.isLoggedIn,
