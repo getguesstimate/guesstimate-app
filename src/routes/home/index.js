@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 import Logo from '../../assets/logo-grey-2.png'
-import LogoWord from '../../assets/logo-word.png'
+import LogoWord from '../../assets/logo-word-no-beta.png'
 import './style.css'
 import video from '../../assets/video-2.png'
 
