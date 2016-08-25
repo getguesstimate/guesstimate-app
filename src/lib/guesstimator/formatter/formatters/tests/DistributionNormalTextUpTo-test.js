@@ -17,7 +17,7 @@ describe('DistributionTextUpTo', () => {
         expect(formatter.matches(e[0])).to.equal(e[1])
       })
     }).map(e => e())
-  });
+  })
 
   describe('#format', () => {
     const examples = [
@@ -35,7 +35,7 @@ describe('DistributionTextUpTo', () => {
         expect(formatter.format(e[0])).to.deep.equal(e[1])
       })
     }).map(e => e())
-  });
+  })
 
   describe('#errors', () => {
     const examples = [
@@ -45,8 +45,8 @@ describe('DistributionTextUpTo', () => {
 
     examples.map(e => () => {
       it(`guesstimate ${JSON.stringify(e[0])} has errors ${JSON.stringify(e[1])}`, () => {
-        expect(!_.isEmpty(formatter.error(e[0])).to.equal(e[1])
+        expect(!_.isEmpty(formatter.error(e[0]))).to.equal(e[1])
       })
     }).map(e => e())
-  });
+  })
 })

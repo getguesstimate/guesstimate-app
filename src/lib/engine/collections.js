@@ -7,5 +7,8 @@ export const get = (collection, id, prop='id') => allPresent(collection, id) ? c
 export const getFn = (coll, getProp='id', inProp='id') => !coll ? nullFn : e => get(coll, _.get(e, inProp), getProp)
 
 export const filter = (collection, id, prop='id') => allPresent(collection, id) ? collection.filter(equalsProp(id, prop)) : []
+export const some = (collection, id, prop='id') => allPresent(collection, id) ? _.some(collection, equalsProp(id, prop)) : false
 
 export const isPresent = e => !!e && !_.isEmpty(e)
+
+export const andFns = (...predFns) => x => predFns.reduce( (running, currFn) => running && !!currFn(x), true )
