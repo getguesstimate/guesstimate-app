@@ -14,9 +14,11 @@ const TIMEFRAME_ALL_TIME = 'ALL_TIME'
 const TIMEFRAME_MONTHLY = 'MONTHLY'
 const SORT_BY_POPULAR = 'POPULAR'
 const SORT_BY_RECENT = 'RECENT'
+const SORT_BY_RECOMMENDED = 'RECOMMENDED'
 
 const Filters = ({sortBy, timeframe, onChangeSortBy, onChangeTimeFrame}) => {
   let sortNames = {}
+  sortNames[SORT_BY_RECOMMENDED] = 'Recommended'
   sortNames[SORT_BY_RECENT] = 'Recent'
   sortNames[SORT_BY_POPULAR] = 'Popular'
 
@@ -26,7 +28,7 @@ const Filters = ({sortBy, timeframe, onChangeSortBy, onChangeTimeFrame}) => {
   return (
     <div>
       <Filter selected={sortBy} names={sortNames} onChange={onChangeSortBy}/>
-      {sortBy !== SORT_BY_RECENT &&
+      {sortBy === SORT_BY_POPULAR &&
         <Filter selected={timeframe} names={timeframeNames} onChange={onChangeTimeFrame}/>
       }
     </div>
@@ -57,8 +59,8 @@ export default class SpacesIndex extends Component{
   displayName: 'GeneralSpaceIndex'
 
   state = {
-    sortBy: SORT_BY_POPULAR,
-    timeframe: TIMEFRAME_MONTHLY,
+    sortBy: SORT_BY_RECOMMENDED,
+    timeframe: TIMEFRAME_ALL_TIME,
     searchValue: ''
   }
 

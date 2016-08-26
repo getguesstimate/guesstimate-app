@@ -13,12 +13,18 @@ export function fetch(query = '', options = {}) {
   const secondsAtNow = (new Date()).getTime()/1000
   const secondsInMonth = 60 * 60 * 24 * 30
 
-  if (_.get(options, 'timeframe') === 'MONTHLY') {
+  if (sortBy === 'POPULAR' && _.get(options, 'timeframe') === 'MONTHLY') {
     filters.numericFilters = `created_at_i>${secondsAtNow - secondsInMonth}`
   }
 
+  if (sortBy === 'RECOMMENDED') {
+    filters.facetFilters = ['is_recommended: true']
+  }
+
+  const spaceIndex = {RECENT: 'RECENT', POPULAR: 'POPULAR', RECOMMENDED: 'POPULAR'}[sortBy]
+
   return (dispatch, getState) => {
-    searchSpaceIndex(options.sortBy).search(query, filters, (error, results) => {
+    searchSpaceIndex(spaceIndex).search(query, filters, (error, results) => {
       if (error) {
         searchError('AlgoliaFetch', error)
       }

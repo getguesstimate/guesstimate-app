@@ -64,10 +64,6 @@ export default class Plans extends Component{
   }
 
   render() {
-    const plans = [
-      'personal_lite',
-      'organization_basic',
-    ].map(e => Plan.find(e))
 
     return (
       <div className='row'>
@@ -89,8 +85,8 @@ export default class Plans extends Component{
               name='Organizations'
               price='12'
               unit='per_user'
-              private_model_count='Unlimited'
-              promotion_copy='14-day free trial'
+              private_model_count='200'
+              promotion_copy='30-day free trial'
               upgrade={{
                 show: this.props.isLoggedIn,
                 onClick: () => {this.props.onNewOrganizationNavigation()},
