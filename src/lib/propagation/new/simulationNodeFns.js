@@ -31,9 +31,17 @@ export const hasErrors = n => !_.isEmpty(_.get(n, 'errors'))
 export const anyInputsWithin = inputNodeSet => n => _.some(n.inputs, i => _collections.some(inputNodeSet, i))
 export const allInputsWithin = inputNodeSet => n => _.every(n.inputs, i => _collections.some(inputNodeSet, i))
 
-export const extractInputs = n => ({...n, inputs: _utils.getSubMatches(n.expression, ID_REGEX, 1)})
+export const extractInputs = n => ({...n, inputs: _.uniq(_utils.getSubMatches(n.expression, ID_REGEX, 1))})
 
 // RELATIONS
 const getChildren = (n, nodes) => _utils.indicesOf(nodes, n2 => _.some(n2.inputs, id => _utils.typeSafeEq(id, n.id)))
 const getParents = (n, nodes) => _utils.indicesOf(nodes, n2 => _.some(n.inputs, id => _utils.typeSafeEq(id, n2.id)))
-export const withRelatives = nodes => n => ({...n, children: getChildren(n, nodes), parents: getParents(n, nodes)})
+export const withRelatives = (nodes, ancestorMap) => n => ({
+  ...n,
+  children: getChildren(n, nodes),
+  parents: getParents(n, nodes),
+  ancestors: _utils.orArr(_.get(ancestorMap, `${n.id}.ancestors`)),
+})
+
+// SAMPLES
+const resolveSamples = n => _.pick(n, ['samples', 'errors'])
