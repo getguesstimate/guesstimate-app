@@ -103,7 +103,7 @@ export class SimulationDAG {
     window.recorder.recordNodeGetInputsStop(node, inputs)
 
     window.recorder.recordNodeSampleStart(node)
-    const gtr = new Guesstimator({parsedError, parsedInput}, [...node.recordingIndices, node.sampleRecordingIndex])
+    const gtr = new Guesstimator({parsedError, parsedInput}, [...(node.recordingIndices || []), node.sampleRecordingIndex])
     return gtr.sample(n, inputs).then(simulation => {
       window.recorder.recordNodeSampleStop(node)
       node.samples = simulation.values
