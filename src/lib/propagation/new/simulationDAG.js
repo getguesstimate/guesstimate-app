@@ -1,11 +1,14 @@
 import * as NodeFns from './simulationNodeFns'
 import * as constants from './constants'
 
-import {Guesstimator} from '../guesstimator/index'
+import {Guesstimator} from 'lib/guesstimator/index'
+import {_matchingFormatter} from 'lib/guesstimator/formatter/index'
 
 import * as _collections from 'gEngine/collections'
 
 const {
+  nodeTypeToGuesstimateType,
+  NODE_TYPES,
   ERROR_TYPES: {GRAPH_ERROR},
   ERROR_SUBTYPES: {GRAPH_SUBTYPES: {MISSING_INPUT_ERROR, IN_INFINITE_LOOP, INVALID_ANCESTOR_ERROR}},
 } = constants
@@ -47,9 +50,14 @@ export class SimulationDAG {
     const withFunctions = withRelatives.map((n,i) => ({
       ...n,
       index: i,
-      getInputs: this._getInputsFor.bind(this, n),
-      addErrorToDescendants: this._addErrorToDescendants.bind(this, n),
-      simulate: this._simulateNode.bind(this, n),
+      getInputs: this._getInputsFor.bind(this, i),
+      addErrorToDescendants: this._addErrorToDescendants.bind(this, i),
+      parse: () => {
+        const e = {text: n.expression, guesstimateType: nodeTypeToGuesstimateType(n.type), data: n.type === NODE_TYPES.DATA ? n.samples : []}
+        const formatter = _matchingFormatter(e)
+        return [formatter.error(e), formatter.format(e)]
+      },
+      simulate: this._simulateNode.bind(this, i),
     }))
 
     this.nodes = withFunctions
@@ -59,12 +67,14 @@ export class SimulationDAG {
   find(id) { return _collections.get(this.nodes, id) }
   subsetFrom(idSet) { return this.nodes.filter(n => idSet.includes(n.id) || _.some(idSet, id => n.ancestors.includes(id))) }
 
-  _getInputsFor(node) {
+  _getInputsFor(i) {
+    let node = this.nodes[i]
     const inputs = node.parents.map(parentIdx => this.nodes[parentIdx])
     return _.transform(inputs, (map, node) => {map[node.id] = node.samples}, {})
   }
 
-  _addErrorToDescendants(node) {
+  _addErrorToDescendants(i) {
+    let node = this.nodes[i]
     this.subsetFrom([node.id]).forEach(n => {
       let ancestorError = _collections.get(n.errors, INVALID_ANCESTOR_ERROR, 'subType')
       if (!!ancestorError) {
@@ -75,20 +85,23 @@ export class SimulationDAG {
     })
   }
 
-  _simulateNode(node, n, globals) {
-    const [parseError, parsed] = Guesstimator.parse(guesstimate)
-    if (!_.isEmpty(parseError)) {
-      node.errors.push(parseError)
-      node.addErrorToDescendants()
-    }
+  _simulateNode(i, n) {
+    let node = this.nodes[i]
+    const [parsedError, parsedInput] = node.parse()
+    if (!_.isEmpty(parsedError)) { node.errors.push(parsedError) }
 
+    // TODO(matthew): Error handling wrong!
     if (!_.isEmpty(node.errors)) {
-      return Promise.resolve(NodeFns.resolveSamples(node))
+      node.addErrorToDescendants()
+      return Promise.resolve(_.pick(node, ['samples', 'errors']))
     }
 
-    return item.sample(n, node.getInputs()).then(samples => {
-      node.samples = samples
-      return NodeFns.resolveSamples(node)
+    const gtr = new Guesstimator({parsedError, parsedInput})
+
+    return gtr.sample(n, node.getInputs()).then(simulation => {
+      node.samples = simulation.values
+      if (!_.isEmpty(simulation.errors)) { node.errors.push(...simulation.errors) }
+      return _.pick(node, ['samples', 'errors'])
     })
   }
 }

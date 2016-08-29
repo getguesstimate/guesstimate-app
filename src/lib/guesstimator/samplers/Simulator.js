@@ -1,3 +1,6 @@
+import {replaceByMap} from 'gEngine/utils'
+
+import generateRandomReadableId from 'gEngine/metric/generate_random_readable_id'
 import {STOCHASTIC_FUNCTIONS} from './simulator-worker/simulator/evaluator.js'
 
 const MIN_SAMPLES_PER_WINDOW = 100
@@ -63,7 +66,6 @@ export function neededSamples(text, inputs, n){
     // edge case short circuit here, to avoid gcd/lcm calculation.
     return n
   }
-
   return Math.min(n, numInputs.reduce((x,y) => LCM(x,y)))
 }
 
@@ -83,12 +85,20 @@ function modularSlice(array, from, to) {
   return [...array.slice(newFrom), array.slice(0,to)]
 }
 
-function buildData(expr, prevModularIndex, numSamples, inputs) {
+function buildData(rawExpr, prevModularIndex, numSamples, inputs) {
+  let idMap = {}
+  let takenReadableIds = []
   let slicedInputs = {}
+
   for (let key of Object.keys(inputs)) {
-    if (!inputs[key]) { continue }
-    slicedInputs[key] = modularSlice(inputs[key], prevModularIndex, prevModularIndex + numSamples)
+    if (!inputs[key]) { console.warn('empty input key passed to buildData:', key); continue }
+    const readableId = generateRandomReadableId(takenReadableIds)
+    idMap[`\$\{${key}\}`] = readableId
+    takenReadableIds.push(readableId)
+    slicedInputs[readableId] = modularSlice(inputs[key], prevModularIndex, prevModularIndex + numSamples)
   }
+
+  const expr = replaceByMap(rawExpr, idMap)
   return {expr, numSamples, inputs: slicedInputs}
 }
 

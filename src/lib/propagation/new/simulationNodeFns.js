@@ -42,6 +42,3 @@ export const withRelatives = (nodes, ancestorMap) => n => ({
   parents: getParents(n, nodes),
   ancestors: _utils.orArr(_.get(ancestorMap, `${n.id}.ancestors`)),
 })
-
-// SAMPLES
-const resolveSamples = n => _.pick(n, ['samples', 'errors'])

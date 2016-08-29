@@ -28,6 +28,16 @@ export const NODE_TYPES = {
   FUNCTION: 1,
   USER_INPUT: 2,
 }
+export function nodeTypeToGuesstimateType(nodeType) {
+  switch (nodeType) {
+    case NODE_TYPES.DATA:
+      return 'DATA'
+    case NODE_TYPES.FUNCTION:
+      return 'FUNCTION'
+    case NODE_TYPES.USER_INPUT:
+      return null
+  }
+}
 
 export const ERROR_TYPES = {
   GRAPH_ERROR: 0,
