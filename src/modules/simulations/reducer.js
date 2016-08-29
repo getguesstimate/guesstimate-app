@@ -10,7 +10,6 @@ export default function simulations(state = [], action = null) {
       addStats(sim)
 
       const i = state.findIndex(y => y.metric === sim.metric)
-      console.log('updating simulation', sim, 'at position ', i, '\n\n\n')
       if (i !== -1) {
         return [
           ...state.slice(0, i),
