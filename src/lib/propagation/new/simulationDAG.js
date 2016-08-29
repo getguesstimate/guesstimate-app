@@ -15,6 +15,7 @@ const {
 
 export class SimulationDAG {
   constructor(nodes) {
+    window.recorder.recordSimulationDAGConstructionStart(this)
     let rest = nodes.map(NodeFns.extractInputs)
 
     let byId = _.transform(rest, (map, node) => {map[node.id] = {node, lastAncestors: node.inputs, ancestors: node.inputs}}, {})
@@ -62,6 +63,8 @@ export class SimulationDAG {
 
     this.nodes = withFunctions
     this.errorNodes = errorNodes
+
+    window.recorder.recordSimulationDAGConstructionStop(this)
   }
 
   find(id) { return _collections.get(this.nodes, id) }
@@ -87,20 +90,27 @@ export class SimulationDAG {
 
   _simulateNode(i, n) {
     let node = this.nodes[i]
+    if (!_.isEmpty(node.errors)) { return Promise.resolve(_.pick(node, ['samples', 'errors'])) }
+
+    // TODO(matthew): We need to have these lines here, within a function that references node via index, so the
+    // indicies are stored.
+    window.recorder.recordNodeParseStart(node)
     const [parsedError, parsedInput] = node.parse()
-    if (!_.isEmpty(parsedError)) { node.errors.push(parsedError) }
+    window.recorder.recordNodeParseStop(node, [parsedError, parsedInput])
 
-    // TODO(matthew): Error handling wrong!
-    if (!_.isEmpty(node.errors)) {
-      node.addErrorToDescendants()
-      return Promise.resolve(_.pick(node, ['samples', 'errors']))
-    }
+    window.recorder.recordNodeGetInputsStart(node)
+    const inputs = node.getInputs()
+    window.recorder.recordNodeGetInputsStop(node, inputs)
 
-    const gtr = new Guesstimator({parsedError, parsedInput})
-
-    return gtr.sample(n, node.getInputs()).then(simulation => {
+    window.recorder.recordNodeSampleStart(node)
+    const gtr = new Guesstimator({parsedError, parsedInput}, [...node.recordingIndices, node.sampleRecordingIndex])
+    return gtr.sample(n, inputs).then(simulation => {
+      window.recorder.recordNodeSampleStop(node)
       node.samples = simulation.values
-      if (!_.isEmpty(simulation.errors)) { node.errors.push(...simulation.errors) }
+      if (!_.isEmpty(simulation.errors)) {
+        node.errors.push(...simulation.errors)
+        node.addErrorToDescendants()
+      }
       return _.pick(node, ['samples', 'errors'])
     })
   }

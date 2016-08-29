@@ -13,8 +13,14 @@ function LCM(a, b) {
   return (a * b) / GCD(a, b)
 }
 
-export function simulate(expr, inputs, maxSamples) {
+export function simulate(expr, inputs, maxSamples, parentRecordingIndices) {
+  const shouldRecord = !_.isEmpty(parentRecordingIndices)
+
+  let numSamplesRecordingIndex
+  if (shouldRecord) { numSamplesRecordingIndex = window.recorder.recordNumSamplesComputeStart(parentRecordingIndices) }
   const overallNumSamples = neededSamples(expr, inputs, maxSamples)
+  if (shouldRecord) { window.recorder.recordNumSamplesComputeEnd(parentRecordingIndices, numSamplesRecordingIndex, overallNumSamples) }
+
   if (overallNumSamples < MIN_SAMPLES_PER_WINDOW*window.workers.length) {
     return simulateOnWorker(window.workers[0], buildData(expr, 0, overallNumSamples, inputs))
   }
@@ -22,6 +28,8 @@ export function simulate(expr, inputs, maxSamples) {
   const numSamples = Math.floor(overallNumSamples/window.workers.length)
   const remainingSamples = numSamples + overallNumSamples % window.workers.length
 
+  let buildPromisesIndex
+  if (shouldRecord) { buildPromisesIndex = window.recorder.recordBuildPromisesStart(parentRecordingIndices) }
   const promises = [
     ..._.map(
       window.workers.slice(0,-1),
@@ -29,10 +37,13 @@ export function simulate(expr, inputs, maxSamples) {
     ),
     simulateOnWorker(window.workers[window.workers.length-1], buildData(expr, (window.workers.length - 1)* numSamples, remainingSamples, inputs))
   ]
+  if (shouldRecord) { window.recorder.recordBuildPromisesEnd(parentRecordingIndices, buildPromisesIndex) }
 
-
+  let simulatingIndex
+  if (shouldRecord) { simulatingIndex = window.recorder.recordSimulatingStart(parentRecordingIndices) }
   return Promise.all(promises).then(
     (results) => {
+      if (shouldRecord) { window.recorder.recordSimulatingEnd(parentRecordingIndices, simulatingIndex) }
       let finalResult = {values: [], errors: []}
       for (let result of results) {
         if (result.values) {

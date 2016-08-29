@@ -25,6 +25,7 @@ export class Simulator {
   }
 
   run() {
+    window.recorder.recordPropagationStart(this)
     // Building the DAG may incur some graph errors, so we'll extract those first.
     // TODO(matthew): Node functions are currently only available on valid nodes.
     this.DAG.errorNodes.forEach(node => {this.yieldSims(node.id, _.pick(node, ['samples', 'errors']))})
@@ -32,10 +33,15 @@ export class Simulator {
   }
 
   _step() {
-    if (this.index >= this.nodesToSimulate.length) { return } // Break early if we've been pre-empted.
-    const node = this.nodesToSimulate[this.index]
-    if (this.propagationId < this.getCurrPropId(node.id)) { return }
+    if (this.index >= this.nodesToSimulate.length) {
+      window.recorder.recordPropagationStop(this)
+      return
+    }
+    let node = this.nodesToSimulate[this.index]
+    if (this.propagationId < this.getCurrPropId(node.id)) { return } // Break early if we've been pre-empted.
+    window.recorder.recordNodeSimulationStart(this, node)
     node.simulate(this.numSamples).then(sim => {
+      window.recorder.recordNodeSimulationStop(node)
       this.yieldSims(node.id, sim)
       this.index++
       this._step()
