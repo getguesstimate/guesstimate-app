@@ -42,24 +42,28 @@ export class CalculatorShow extends Component {
     )
   }
 
+  readyToSimulate(metric, input) {
+    const [parseErrors] = Guesstimator.parse({...metric.guesstimate, input})
+    return !_.isEmpty(input) && _.isEmpty(parseErrors) && this.allInputsHaveContent([metric.id])
+  }
+
   onBlur(metric, input) {
     // We only want to simulate anything if all the inputs have simulatable content.
-    const [parseErrors] = Guesstimator.parse({...metric.guesstimate, input})
-    if (!this.state.hasSimulated && !_.isEmpty(input) && _.isEmpty(parseErrors) && this.allInputsHaveContent([metric.id])) {
+    if (!this.state.hasSimulated && this.readyToSimulate(metric, input)) {
       _.defer(() => {
         this.props.inputs.forEach(i => this.changeGuesstimate(i, i.id === metric.id ? input : this.getInputContent(i)))
         this.props.deleteSimulations([...this.props.inputs.map(i => i.id), ...this.props.outputs.map(o => o.id)])
-        this.props.runSimulations({spaceId: this.props.calculator.space_id, onlyUnsimulated: true})
+        this.props.runSimulations({spaceId: this.props.calculator.space_id, simulateSubsetFrom: this.props.inputs.map(i => i.id) })
       })
       this.setState({hasSimulated: true, resultComputing: true})
     }
   }
 
   onChange(metric, input) {
-    if (this.allInputsHaveContent([metric.id]) && !_.isEmpty(input) && _.isEmpty(Guesstimator.parse({input})[0])) {
+    if (this.readyToSimulate(metric,input)) {
       if (this.state.hasSimulated) {
         this.changeGuesstimate(metric, input)
-        this.props.runSimulations({metricId: metric.id})
+        this.props.runSimulations({spaceId: this.props.calculator.space_id, simulateSubsetFrom: [metric.id]})
       }
       if (!this.state.readyToCalculate) { this.setState({readyToCalculate: true}) }
     } else {
