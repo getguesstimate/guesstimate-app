@@ -65,7 +65,7 @@ function findBySelector(facts, selector, currFact = {}) {
 
 const idFrom = selector => selector.join('.')
 const toMetric = (selector, takenReadableIds) => ({id: idFrom(selector), readableId: generateRandomReadableId(takenReadableIds)})
-const toGuesstimate = (selector, {expression}) => ({metric: idFrom(selector), input: expression})
+const toGuesstimate = (selector, {expression}) => ({metric: idFrom(selector), input: expression, expression})
 const toSimulation = (selector, {simulation}) => ({...simulation, metric: idFrom(selector)})
 
 const buildFullNode = (selector, fact, takenReadableIds) => ({
@@ -94,14 +94,17 @@ export function addFactsToSpaceGraph({metrics, guesstimates, simulations}, globa
   // When dynamically generating new metrics, we need non-colliding readableIds, so we'll store a running copy of those
   // used, and initialize some variables to account for the extra objects we'll build.
   let readableIds = metrics.map(m => m.readableId)
-  let [factMetrics, factGuesstimates, factSimulations, factHandleMap] = [[], [], [], {}]
+  let [factMetrics, factGuesstimates, factSimulations, factIdMap] = [[], [], [], {}]
   grouped.forEach(([handle, selector, fact]) => {
     // We construct virtual metrics, guesstimates, and simulations from the selector, fact, and running readable IDs...
     const {metric, guesstimate, simulation} = buildFullNode(selector, fact, readableIds)
 
     // Then update all the running variables.
-    factHandleMap[handle] = metric.readableId
+    const idToTranslate = !!_.get(fact, 'id') ? `\$\{fact:${fact.id}\}` : handle
+    factIdMap[idToTranslate] = `\$\{metric:${metric.id}\}`
+
     readableIds = [...readableIds, metric.readableId]
+
     factMetrics = [...factMetrics, metric]
     factGuesstimates = [...factGuesstimates, guesstimate]
     factSimulations = [...factSimulations, simulation]
@@ -109,7 +112,7 @@ export function addFactsToSpaceGraph({metrics, guesstimates, simulations}, globa
 
   return {
     metrics: [...metrics, ...factMetrics],
-    guesstimates: [...guesstimates.map(_guesstimate.translateFactHandleFn(factHandleMap)), ...factGuesstimates],
+    guesstimates: [...guesstimates.map(_guesstimate.translateFactHandleFn(factIdMap)), ...factGuesstimates],
     simulations: [...simulations, ...factSimulations],
   }
 }

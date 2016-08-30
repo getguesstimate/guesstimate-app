@@ -20,9 +20,13 @@ function spaceSubset(state, spaceId) {
 
   const spaceSubset = e.space.subset(state, spaceId, true)
   const organizationalFacts = e.facts.getFactsForOrg(state.facts.organizationFacts, organization)
-  const translatedSubset = e.space.expressionsToInputs(spaceSubset, organizationalFacts)
 
-  return e.facts.addFactsToSpaceGraph(translatedSubset, state.facts.globalFacts, state.facts.organizationFacts, space)
+  const translatedSubset = e.space.expressionsToInputs(spaceSubset, organizationalFacts)
+  const withFacts = e.facts.addFactsToSpaceGraph(translatedSubset, state.facts.globalFacts, state.facts.organizationFacts, space)
+
+  //console.log('space subset', spaceSubset)
+  //console.log('with facts', withFacts)
+  return withFacts
 }
 
 const nodeIdToMetricId = id => id.slice(7)

@@ -45,8 +45,8 @@ export const extractFactHandles = ({input}) => _.isEmpty(input) ? [] : input.mat
 
 const padNonAlphaNumeric = str => `(?:[^\\w]|^)(${str})(?:[^\\w]|$)`
 
-export function translateFactHandleFn(handleMap) {
-  return g => _.isEmpty(handleMap) ? g : {...g, input: _utils.replaceByMap(g.input, handleMap)}
+export function translateFactHandleFn(idMap) {
+  return _.isEmpty(idMap) ? g => g : g => ({...g, expression: _utils.replaceByMap(g.expression, idMap)})
 }
 
 export function update(oldGuesstimate, newParams) {
