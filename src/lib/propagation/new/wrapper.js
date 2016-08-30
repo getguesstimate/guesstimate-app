@@ -56,7 +56,6 @@ function denormalize({metrics, guesstimates, simulations}) {
 const allPresent = (obj, ...props) => props.map(p => present(obj, p)).reduce((x,y) => x && y, true)
 const present = (obj, prop) => _.has(obj, prop) && (!!_.get(obj, prop) || _.get(obj, prop) === 0)
 function translateOptions(graphFilters) {
-  console.log(graphFilters)
   if (allPresent(graphFilters, 'metricId', 'onlyHead')) { return {simulateIds: [metricIdToNodeId(graphFilters.metricId)]} }
   if (allPresent(graphFilters, 'metricId', 'notHead')) { return {simulateStrictSubsetFrom: [metricIdToNodeId(graphFilters.metricId)]} }
   if (allPresent(graphFilters, 'simulateSubsetFrom')) { return {simulateSubsetFrom: graphFilters.simulateSubsetFrom.map(metricIdToNodeId)} }

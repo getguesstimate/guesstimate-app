@@ -3,9 +3,7 @@ import {addStats} from 'gEngine/simulation'
 export default function simulations(state = [], action = null) {
   switch (action.type) {
     case 'DELETE_SIMULATIONS':
-      const newState = state.filter(s => !_.includes(action.metricIds, s.metric))
-      console.log('oldstate', state, 'becomes', newState)
-      return newState
+      return state.filter(s => !_.includes(action.metricIds, s.metric))
     case 'UPDATE_SIMULATION':
       let sim = action.simulation
       // We modify the sim in place, adding stats and sorted values, before saving.
