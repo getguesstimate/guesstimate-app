@@ -84,7 +84,7 @@ export function paste(spaceId){
     }
 
     dispatch({type: "PASTE"})
-    dispatch(runSimulations({spaceId, onlyUnsimulated: true}))
+    dispatch(runSimulations({spaceId, simulateSubsetFrom: newMetrics.map(m => m.id)}))
     dispatch(selectRegion(pasteRegion[0], pasteRegion[1]))
     dispatch(registerGraphChange(spaceId))
   }

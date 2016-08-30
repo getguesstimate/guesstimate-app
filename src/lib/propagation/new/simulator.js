@@ -6,8 +6,8 @@ function getNodesToSimulate(DAG, options) {
     return [DAG.find(options.simulateId)]
   } else if (!!options.simulateStrictSubsetFrom) {
     return DAG.strictSubsetFrom(options.simulateStrictSubsetFrom)
-  } else if (!!options.simulateUnsimulatedAndDescendants) {
-    return DAG.subsetFrom(DAG.nodes.filter(n => _.isEmpty(n.samples)).map(n => n.id))
+  } else if (!!options.simulateSubsetFrom) {
+    return DAG.subsetFrom(options.simulateSubsetFrom)
   } else {
     return DAG.nodes
   }

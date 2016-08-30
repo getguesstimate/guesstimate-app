@@ -45,21 +45,25 @@ const metricToSimulationNodeFn = m => ({
   errors: [],
 })
 
-function buildSimulationNodes({metrics, guesstimates, simulations}) {
-  const denormalizedMetrics = metrics.map(m => ({
+function denormalize({metrics, guesstimates, simulations}) {
+  return metrics.map(m => ({
     ...m,
     guesstimate: e.collections.get(guesstimates, m.id, 'metric'),
     simulation: e.collections.get(simulations, m.id, 'metric'),
   }))
-  return denormalizedMetrics.map(metricToSimulationNodeFn)
 }
-// TODO(matthew): Wrong, needs to actually not include metricId in not subset.
-function translateOptions(graphFilters) {
-  console.log('graphFilters:', graphFilters)
-  return {
-    simulateId: _.has(graphFilters, 'metricId') && _.has(graphFilters, 'onlyHead') ? metricIdToNodeId(graphFilters.metricId) : null,
-    simulateStrictSubsetFrom: _.has(graphFilters, 'metricId') && _.has(graphFilters, 'notHead') ? [metricIdToNodeId(graphFilters.metricId)] : null,
+
+const allPresent = (obj, ...props) => props.map(p => present(obj, p)).reduce((x,y) => x && y, true)
+const present = (obj, prop) => _.has(obj, prop) && (!!_.get(obj, prop) || _.get(obj, prop) === 0)
+function translateOptions(graphFilters, denormalizedMetrics) {
+  if (allPresent(graphFilters, 'metricId', 'onlyHead')) { return {simulateId: metricIdToNodeId(graphFilters.metricId)} }
+  if (allPresent(graphFilters, 'metricId', 'notHead')) { return {simulateStrictSubsetFrom: [metricIdToNodeId(graphFilters.metricId)]} }
+  if (allPresent(graphFilters, 'simulateSubsetFrom')) { return {simulateSubsetFrom: graphFilters.simulateSubsetFrom.map(metricIdToNodeId)} }
+  if (allPresent(graphFilters, 'unsimulatedAndDescendants')) {
+    console.log(denormalizedMetrics.filter(m => !present(m, 'simulation')).map(m => m.id).map(metricIdToNodeId))
+    return {simulateSubsetFrom: denormalizedMetrics.filter(m => !present(m, 'simulation')).map(m => m.id).map(metricIdToNodeId) }
   }
+  return {}
 }
 
 export function simulate(dispatch, getState, graphFilters) {
@@ -71,7 +75,8 @@ export function simulate(dispatch, getState, graphFilters) {
   if (!spaceId) { return }
 
   const subset = spaceSubset(getState(), spaceId)
-  const nodes = buildSimulationNodes(subset)
+  const denormalizedMetrics = denormalize(subset)
+  const nodes = denormalizedMetrics.map(metricToSimulationNodeFn)
 
   const propagationId = (new Date()).getTime()
 
@@ -83,6 +88,6 @@ export function simulate(dispatch, getState, graphFilters) {
     dispatch(addSimulation(newSimulation))
   }
 
-  let simulator = new Simulator(nodes, 5000, translateOptions(graphFilters), propagationId, yieldSims, getCurrPropId)
+  let simulator = new Simulator(nodes, 5000, translateOptions(graphFilters, denormalizedMetrics), propagationId, yieldSims, getCurrPropId)
   simulator.run()
 }
