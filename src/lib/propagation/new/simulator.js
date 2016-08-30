@@ -1,10 +1,11 @@
 import {SimulationDAG} from './simulationDAG.js'
 
 function getNodesToSimulate(DAG, options) {
+  console.log(options)
   if (!!options.simulateId) {
     return [DAG.find(options.simulateId)]
-  } else if (!!options.simulateSubsetFrom) {
-    return DAG.subsetFrom(options.simulateSubsetFrom)
+  } else if (!!options.simulateStrictSubsetFrom) {
+    return DAG.strictSubsetFrom(options.simulateStrictSubsetFrom)
   } else if (!!options.simulateUnsimulatedAndDescendants) {
     return DAG.subsetFrom(DAG.nodes.filter(n => _.isEmpty(n.samples)).map(n => n.id))
   } else {
@@ -17,6 +18,7 @@ export class Simulator {
     // First, we'll build the DAG from the passed nodes.
     this.DAG = new SimulationDAG(nodes)
     this.nodesToSimulate = getNodesToSimulate(this.DAG, options)
+    console.log(this.nodesToSimulate)
     this.index = 0
     this.numSamples = numSamples
     this.yieldSims = yieldSims

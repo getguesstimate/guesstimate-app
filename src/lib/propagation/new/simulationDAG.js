@@ -69,6 +69,7 @@ export class SimulationDAG {
 
   find(id) { return _collections.get(this.nodes, id) }
   subsetFrom(idSet) { return this.nodes.filter(n => idSet.includes(n.id) || _.some(idSet, id => n.ancestors.includes(id))) }
+  strictSubsetFrom(idSet) { return this.nodes.filter(n => _.some(idSet, id => n.ancestors.includes(id))) }
 
   _getInputsFor(i) {
     let node = this.nodes[i]

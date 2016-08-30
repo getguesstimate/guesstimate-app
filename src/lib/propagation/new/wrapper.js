@@ -5,10 +5,6 @@ import {Simulator} from './simulator'
 
 import e from 'gEngine/engine'
 
-function isRecentPropagation(propagationId: number, simulation: Simulation) {
-  return !_.has(simulation, 'propagation') || (propagationId >= simulation.propagation)
-}
-
 // simulation {
 //   sample {
 //     values: [...],
@@ -59,9 +55,10 @@ function buildSimulationNodes({metrics, guesstimates, simulations}) {
 }
 // TODO(matthew): Wrong, needs to actually not include metricId in not subset.
 function translateOptions(graphFilters) {
+  console.log('graphFilters:', graphFilters)
   return {
-    simulteId: _.has(graphFilters, 'metricId') && _.has(graphFilters, 'onlyHead') ? metricIdToNodeId(graphFilters.metricId) : null,
-    simulateSubset: _.has(graphFilters, 'metricId') && _.has(graphFilters, 'notHead') ? [metricIdToNodeId(graphFilters.metricId)] : null,
+    simulateId: _.has(graphFilters, 'metricId') && _.has(graphFilters, 'onlyHead') ? metricIdToNodeId(graphFilters.metricId) : null,
+    simulateStrictSubsetFrom: _.has(graphFilters, 'metricId') && _.has(graphFilters, 'notHead') ? [metricIdToNodeId(graphFilters.metricId)] : null,
   }
 }
 
@@ -76,17 +73,16 @@ export function simulate(dispatch, getState, graphFilters) {
   const subset = spaceSubset(getState(), spaceId)
   const nodes = buildSimulationNodes(subset)
 
-  const currPropId = 1 // TODO(set this properly)
-  const propagation = !!currPropId ? 1 : currPropId + 1
+  const propagationId = (new Date()).getTime()
 
-  const getCurrPropId = nodeId => e.collections.gget(getState().simulations, nodeIdToMetricId(nodeId), 'metric', 'propagation')
+  const getCurrPropId = nodeId => e.collections.gget(getState().simulations, nodeIdToMetricId(nodeId), 'metric', 'propagationId')
   const yieldSims = (nodeId, sim) => {
     const {samples, errors} = sim
     const metric = nodeIdToMetricId(nodeId)
-    const newSimulation = {metric, propagation, sample: {values: samples, errors}}
+    const newSimulation = {metric, propagationId, sample: {values: samples, errors}}
     dispatch(addSimulation(newSimulation))
   }
 
-  let simulator = new Simulator(nodes, 5000, translateOptions(graphFilters), propagation, yieldSims, getCurrPropId)
+  let simulator = new Simulator(nodes, 5000, translateOptions(graphFilters), propagationId, yieldSims, getCurrPropId)
   simulator.run()
 }

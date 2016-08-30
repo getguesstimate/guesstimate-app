@@ -54,7 +54,7 @@ export class GuesstimateRecorder {
 
   constructor() {
     this.disabled = !__DEV__
-    this.paused = false
+    this.paused = true
     this.verbose = false
     this.clearRecordings()
   }
