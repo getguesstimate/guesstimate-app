@@ -23,19 +23,10 @@
 
 
 export const NODE_TYPES = {
-  DATA: 0,
-  FUNCTION: 1,
-  USER_INPUT: 2,
-}
-export function nodeTypeToGuesstimateType(nodeType) {
-  switch (nodeType) {
-    case NODE_TYPES.DATA:
-      return 'DATA'
-    case NODE_TYPES.FUNCTION:
-      return 'FUNCTION'
-    case NODE_TYPES.USER_INPUT:
-      return null
-  }
+  UNSET: 0, // For safety; should not be used.
+  DATA: 1,
+  FUNCTION: 2,
+  USER_INPUT: 3,
 }
 
 export const ERROR_TYPES = {

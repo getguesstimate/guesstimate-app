@@ -17,10 +17,11 @@ import * as _collections from 'gEngine/collections'
 // }
 
 export class SimulationNode {
-  constructor({id, expression, type, samples, errors, parentIndices, ancestors}, DAG, index) {
+  constructor({id, expression, type, guesstimateType, samples, errors, parentIndices, ancestors}, DAG, index) {
     this.id = id
     this.expression = expression
     this.type = type
+    this.guesstimateType = guesstimateType
     this.samples = samples
     this.errors = errors
     this.parentIndices = parentIndices
@@ -32,7 +33,7 @@ export class SimulationNode {
   data() { return this.type === NODE_TYPES.DATA ? this.samples : [] }
 
   parse() {
-    const e = { text: this.expression, guesstimateType: nodeTypeToGuesstimateType(this.type), data: this.data() }
+    const e = { text: this.expression, guesstimateType: this.guesstimateType, data: this.data() }
     const formatter = _matchingFormatter(e)
     return [formatter.error(e), formatter.format(e)]
   }

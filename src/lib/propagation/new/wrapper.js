@@ -44,6 +44,7 @@ function guesstimateTypeToNodeType(guesstimateType) {
 const metricToSimulationNodeFn = m => ({
   id: metricIdToNodeId(m.id),
   type: guesstimateTypeToNodeType(m.guesstimate.guesstimateType),
+  guesstimateType: m.guesstimate.guesstimateType,
   expression: m.guesstimate.expression,
   samples: m.guesstimate.guesstimateType === 'DATA' ? e.utils.orArr(_.get(m, 'guesstimate.data')) : e.utils.orArr(_.get(m, 'simulation.sample.values')),
   errors: [],
