@@ -1,8 +1,6 @@
 import * as NodeFns from './simulationNodeFns'
+import {SimulationNode} from './node'
 import * as constants from './constants'
-
-import {Guesstimator} from 'lib/guesstimator/index'
-import {_matchingFormatter} from 'lib/guesstimator/formatter/index'
 
 import * as _collections from 'gEngine/collections'
 
@@ -48,20 +46,9 @@ export class SimulationDAG {
     }
 
     const withRelatives = heightOrderedNodes.map(NodeFns.withRelatives(heightOrderedNodes, byId))
-    const withFunctions = withRelatives.map((n,i) => ({
-      ...n,
-      index: i,
-      getInputs: this._getInputsFor.bind(this, i),
-      addErrorToDescendants: this._addErrorToDescendants.bind(this, i),
-      parse: () => {
-        const e = {text: n.expression, guesstimateType: nodeTypeToGuesstimateType(n.type), data: n.type === NODE_TYPES.DATA ? n.samples : []}
-        const formatter = _matchingFormatter(e)
-        return [formatter.error(e), formatter.format(e)]
-      },
-      simulate: this._simulateNode.bind(this, i),
-    }))
+    const asNodes = withRelatives.map((n,i) => new SimulationNode(n, this, i))
 
-    this.nodes = withFunctions
+    this.nodes = asNodes
     this.errorNodes = errorNodes
 
     window.recorder.recordSimulationDAGConstructionStop(this)
@@ -70,49 +57,4 @@ export class SimulationDAG {
   find(id) { return _collections.get(this.nodes, id) }
   subsetFrom(idSet) { return this.nodes.filter(n => idSet.includes(n.id) || _.some(idSet, id => n.ancestors.includes(id))) }
   strictSubsetFrom(idSet) { return this.nodes.filter(n => _.some(idSet, id => n.ancestors.includes(id))) }
-
-  _getInputsFor(i) {
-    let node = this.nodes[i]
-    const inputs = node.parents.map(parentIdx => this.nodes[parentIdx])
-    return _.transform(inputs, (map, node) => {map[node.id] = node.samples}, {})
-  }
-
-  _addErrorToDescendants(i) {
-    let node = this.nodes[i]
-    this.subsetFrom([node.id]).forEach(n => {
-      let ancestorError = _collections.get(n.errors, INVALID_ANCESTOR_ERROR, 'subType')
-      if (!!ancestorError) {
-        ancestorError.ancestors = _.uniq([...ancestorError.ancestors, node.id])
-      } else {
-        n.errors.push({type: GRAPH_ERROR, subType: INVALID_ANCESTOR_ERROR, ancestors: [node.id]})
-      }
-    })
-  }
-
-  _simulateNode(i, n) {
-    let node = this.nodes[i]
-    if (!_.isEmpty(node.errors)) { return Promise.resolve(_.pick(node, ['samples', 'errors'])) }
-
-    // TODO(matthew): We need to have these lines here, within a function that references node via index, so the
-    // indicies are stored.
-    window.recorder.recordNodeParseStart(node)
-    const [parsedError, parsedInput] = node.parse()
-    window.recorder.recordNodeParseStop(node, [parsedError, parsedInput])
-
-    window.recorder.recordNodeGetInputsStart(node)
-    const inputs = node.getInputs()
-    window.recorder.recordNodeGetInputsStop(node, inputs)
-
-    window.recorder.recordNodeSampleStart(node)
-    const gtr = new Guesstimator({parsedError, parsedInput}, [...(node.recordingIndices || []), node.sampleRecordingIndex])
-    return gtr.sample(n, inputs).then(simulation => {
-      window.recorder.recordNodeSampleStop(node)
-      node.samples = simulation.values
-      if (!_.isEmpty(simulation.errors)) {
-        node.errors.push(...simulation.errors)
-        node.addErrorToDescendants()
-      }
-      return _.pick(node, ['samples', 'errors'])
-    })
-  }
 }

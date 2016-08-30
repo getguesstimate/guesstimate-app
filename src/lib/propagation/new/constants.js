@@ -1,4 +1,3 @@
-//
 // Types:
 //
 // Simulation Node:
