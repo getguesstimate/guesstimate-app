@@ -11,7 +11,7 @@ export function equals(l, r) {
   return (
     l.description === r.description &&
     l.guesstimateType === r.guesstimateType &&
-    l.input === r.input
+    l.expression === r.expression
   )
 }
 
