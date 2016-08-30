@@ -29,7 +29,7 @@ export class SimulationNode {
     this.index = index
   }
 
-  data() { return this.type === NODE_TYPES.DATA ? n.samples : [] }
+  data() { return this.type === NODE_TYPES.DATA ? this.samples : [] }
 
   parse() {
     const e = { text: this.expression, guesstimateType: nodeTypeToGuesstimateType(this.type), data: this.data() }
