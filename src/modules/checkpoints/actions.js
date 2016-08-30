@@ -37,9 +37,11 @@ function updateMetricsAndGuesstimates(
     return (!!matchedGuesstimate && !engine.guesstimate.equals(matchedGuesstimate, g))
   })
 
-  const guesstimateSimsToDelete = guesstimatesToModify.filter(newGuesstimate => {
-    const oldGuesstimate = _.find(oldGuesstimates, g => g.metric === newGuesstimate.metric)
-    return oldGuesstimate.expression !== newGuesstimate.expression
+  // TODO(matthew): Don't delete any sims, just resimulate all guesstimates whose type or expression has changed, and
+  // all children.
+  const guesstimatesToReSimulate = guesstimatesToModify.filter(newGuesstimate => {
+    const oldGuesstimate = engine.collections.get(oldGuesstimates, newGuesstimate.metric, 'metric')
+    return oldGuesstimate.expression !== newGuesstimate.expression || oldGuesstimate.guesstimateType !== newGuesstimate.guesstimateType
   })
 
   dispatch({type: 'ADD_METRICS', items: metricsToAdd, newGuesstimates: guesstimatesToAdd})
@@ -49,9 +51,8 @@ function updateMetricsAndGuesstimates(
     const formatted = engine.guesstimate.format(g)
     dispatch({ type: 'CHANGE_GUESSTIMATE', metricId: g.metric, values: formatted })
   })
-  dispatch(deleteSimulations(guesstimateSimsToDelete.map(g => g.metric)))
 
-  dispatch({type: 'RUN_UNDO_SIMULATIONS', getState, dispatch, spaceId})
+  dispatch({type: 'RUN_UNDO_SIMULATIONS', getState, dispatch, spaceId, metricIds: guesstimatesToReSimulate.map(g => g.metric)})
 }
 
 export function undo(spaceId) {

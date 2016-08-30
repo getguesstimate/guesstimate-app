@@ -13,9 +13,9 @@ export function* runFormSimulation({getState, metricId, dispatch}) {
   yield* runDescendantSimulation({getState, metricId, dispatch})
 }
 
-export function* runUndoSimulations({getState, spaceId, dispatch}) {
+export function* runUndoSimulations({getState, spaceId, dispatch, metricIds}) {
   yield call(delay, 350)
-  const propagation = new GraphPropagation(dispatch, getState, {spaceId, unsimulatedAndDescendants: true})
+  const propagation = new GraphPropagation(dispatch, getState, {spaceId, simulateSubsetFrom: metricIds})
   yield propagation.run()
 }
 
@@ -26,7 +26,6 @@ export function* runDescendantSimulation({getState, metricId, dispatch}) {
 }
 
 export function deleteSimulations(metricIds) {
-  console.log('WOOO DELETING', metricIds)
   return {type: 'DELETE_SIMULATIONS', metricIds}
 }
 
