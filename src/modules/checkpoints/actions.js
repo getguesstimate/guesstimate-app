@@ -39,7 +39,7 @@ function updateMetricsAndGuesstimates(
 
   const guesstimateSimsToDelete = guesstimatesToModify.filter(newGuesstimate => {
     const oldGuesstimate = _.find(oldGuesstimates, g => g.metric === newGuesstimate.metric)
-    return oldGuesstimate.input !== newGuesstimate.input
+    return oldGuesstimate.expression !== newGuesstimate.expression
   })
 
   dispatch({type: 'ADD_METRICS', items: metricsToAdd, newGuesstimates: guesstimatesToAdd})
