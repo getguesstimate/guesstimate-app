@@ -4,7 +4,8 @@ import generateRandomReadableId from './metric/generate_random_readable_id'
 import * as _guesstimate from './guesstimate'
 import * as _organization from './organization'
 
-import MetricPropagation from 'lib/propagation/metric-propagation'
+import {Guesstimator} from 'lib/guesstimator/index'
+import {_matchingFormatter} from 'lib/guesstimator/formatter/index'
 import {sortDescending} from 'lib/dataAnalysis'
 
 export const FactPT = PropTypes.shape({
@@ -117,13 +118,9 @@ export function addFactsToSpaceGraph({metrics, guesstimates, simulations}, globa
   }
 }
 
-export function simulateFact(fact) {
-  const fakeSelector = ['fact']
-  const guesstimate = toGuesstimate(fakeSelector, fact)
-  const graph = {metrics: [{id: guesstimate.metric}], guesstimates: [guesstimate]}
-  const metricPropagation = new MetricPropagation(guesstimate.metric, [], 0)
-
-  return metricPropagation.simulate(metricPropagation.remainingSimulations[0], graph).then(
-    ({sample: {values, errors}}) => ({values, errors})
-  )
+export function simulateFact(fact, numSamples=5000) {
+  const e = { text: fact.expression, guesstimateType: null }
+  const formatter = _matchingFormatter(e)
+  const gtr = new Guesstimator({parsedError: formatter.error(e), parsedInput: formatter.format(e)})
+  return gtr.sample(numSamples, {})
 }
