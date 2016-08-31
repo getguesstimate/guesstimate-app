@@ -12,19 +12,20 @@ export class SimulationDAG {
     let byId = _.transform(rest, (map, node) => {map[node.id] = {node, lastAncestors: node.inputs, ancestors: node.inputs}}, {})
 
     const missingInputsNodes = _.remove(rest, NodeFns.hasMissingInputs(rest))
-    let errorNodes = missingInputsNodes.map(NodeFns.withMissingInputError(nodes))
+    let graphErrorNodes = missingInputsNodes.map(NodeFns.withMissingInputError(nodes))
+    let errorNodes = Object.assign([], graphErrorNodes)
     let heightOrderedNodes = []
 
     while (!_.isEmpty(rest)) {
-      const incomingErrorNodes = _.remove(rest, n => !_.isEmpty(n.errors) && NodeFns.allInputsWithin(heightOrderedNodes)(n))
-      errorNodes.push(...incomingErrorNodes)
-
-      const nextLevelNodes = _.remove(rest, NodeFns.allInputsWithin(heightOrderedNodes))
+      const nextLevelNodes = _.remove(
+        rest,
+        n => NodeFns.allInputsWithin(heightOrderedNodes)(n) && _.isEmpty(n.errors) && !NodeFns.anyInputsWithin(errorNodes)(n)
+      )
       heightOrderedNodes.push(...nextLevelNodes)
 
-      const infiniteLoopNodes = _.remove(rest, n => _.some(byId[n.id].lastAncestors, id => id === n.id))
-      const withInfiniteLoopErrors = infiniteLoopNodes.map(NodeFns.withInfiniteLoopError)
-      errorNodes.push(...withInfiniteLoopErrors)
+      const incomingErrorNodes = _.remove(rest, n => !_.isEmpty(n.errors) && NodeFns.allInputsWithin(heightOrderedNodes)(n))
+      errorNodes.push(...incomingErrorNodes)
+      heightOrderedNodes.push(...incomingErrorNodes) // We may want to resimulate these later anyways...
 
       const inputErrorNodes = _.remove(
         rest,
@@ -32,6 +33,12 @@ export class SimulationDAG {
       )
       const withAncestralErrors = inputErrorNodes.map(NodeFns.withAncestralError(errorNodes))
       errorNodes.push(...withAncestralErrors)
+      graphErrorNodes.push(...withAncestralErrors)
+
+      const infiniteLoopNodes = _.remove(rest, n => _.some(byId[n.id].lastAncestors, id => id === n.id))
+      const withInfiniteLoopErrors = infiniteLoopNodes.map(NodeFns.withInfiniteLoopError)
+      errorNodes.push(...withInfiniteLoopErrors)
+      graphErrorNodes.push(...withInfiniteLoopErrors)
 
       rest.forEach(n => {
         const newLastAncestors = _.uniq(_.flatten(byId[n.id].lastAncestors.map(a => byId[a].node.inputs)))
@@ -45,7 +52,7 @@ export class SimulationDAG {
     const asNodes = withRelatives.map((n,i) => new SimulationNode(n, this, i))
 
     this.nodes = asNodes
-    this.errorNodes = errorNodes
+    this.graphErrorNodes = graphErrorNodes
 
     window.recorder.recordSimulationDAGConstructionStop(this)
   }

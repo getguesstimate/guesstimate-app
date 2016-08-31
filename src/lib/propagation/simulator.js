@@ -28,7 +28,7 @@ export class Simulator {
     window.recorder.recordPropagationStart(this)
     // Building the DAG may incur some graph errors, so we'll extract those first.
     // TODO(matthew): Node functions are currently only available on valid nodes.
-    this.DAG.errorNodes.forEach(node => {this.yieldSims(node.id, _.pick(node, ['samples', 'errors']))})
+    this.DAG.graphErrorNodes.forEach(node => {this.yieldSims(node.id, _.pick(node, ['samples', 'errors']))})
     this._step()
   }
 

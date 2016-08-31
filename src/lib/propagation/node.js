@@ -11,6 +11,7 @@ import {Guesstimator} from 'lib/guesstimator/index'
 import {_matchingFormatter} from 'lib/guesstimator/formatter/index'
 
 import * as _collections from 'gEngine/collections'
+import * as _utils from 'gEngine/utils'
 
 // Types:
 //
@@ -62,24 +63,27 @@ export class SimulationNode {
     })
   }
 
-  hasErrors() { return !_.isEmpty(this.errors) }
+  hasInputErrors() { return _collections.some(this.errors, INVALID_ANCESTOR_ERROR, 'subType') }
   getResults() { return _.pick(this, ['samples', 'errors']) }
   simulate(numSamples) {
-    if (this.hasErrors()) { return Promise.resolve(this.getResults()) }
+    if (this.hasInputErrors()) { console.log('prematurely resolving'); return Promise.resolve(this.getResults()) }
 
     window.recorder.recordNodeParseStart(this)
     const [parsedError, parsedInput] = this.parse()
+    console.log([parsedError, parsedInput])
     window.recorder.recordNodeParseStop(this, [parsedError, parsedInput])
 
     window.recorder.recordNodeGetInputsStart(this)
     const inputs = this.getInputs()
+    console.log(inputs)
     window.recorder.recordNodeGetInputsStop(this, inputs)
 
     window.recorder.recordNodeSampleStart(this)
     const gtr = new Guesstimator({parsedError, parsedInput}, [...(this.recordingIndices || []), this.sampleRecordingIndex])
     return gtr.sample(numSamples, inputs).then(simulation => {
       window.recorder.recordNodeSampleStop(this)
-      this.samples = simulation.values
+      this.samples = _utils.orArr(simulation.values)
+      this.errors = _utils.orArr(simulation.errors)
       if (!_.isEmpty(simulation.errors)) {
         this.errors.push(...simulation.errors)
         this.addErrorToDescendants()

@@ -2,7 +2,7 @@ import {addSimulation} from 'gModules/simulations/actions'
 
 import * as constants from './constants'
 import {Simulator} from './simulator'
-import {INFINITE_ERROR, INPUT_ERROR, INFINITE_LOOP_ERROR} from 'lib/errors/modelErrors'
+import {INTERNAL_ERROR, INPUT_ERROR, PARSER_ERROR, INFINITE_LOOP_ERROR} from 'lib/errors/modelErrors'
 
 import e from 'gEngine/engine'
 
@@ -37,13 +37,14 @@ function guesstimateTypeToNodeType(guesstimateType) {
       return NODE_TYPES.USER_INPUT
   }
 }
+const filterErrorsFn = e => e.type !== INPUT_ERROR && e.type !== PARSER_ERROR && e.type !== INFINITE_LOOP_ERROR
 const metricToSimulationNodeFn = m => ({
   id: metricIdToNodeId(m.id),
   type: guesstimateTypeToNodeType(m.guesstimate.guesstimateType),
   guesstimateType: m.guesstimate.guesstimateType,
   expression: m.guesstimate.expression,
   samples: m.guesstimate.guesstimateType === 'DATA' ? e.utils.orArr(_.get(m, 'guesstimate.data')) : e.utils.orArr(_.get(m, 'simulation.sample.values')),
-  errors: e.utils.orArr(_.get(m, 'simulation.sample.errors')),
+  errors: Object.assign([], e.utils.orArr(_.get(m, 'simulation.sample.errors')).filter(filterErrorsFn)),
 })
 
 function denormalize({metrics, guesstimates, simulations}) {
@@ -87,7 +88,7 @@ function translateErrorFn(denormalizedMetrics, metricID) {
         let message = 'Broken '
         if (hasInvalidInputs) { message += `input${invalidDirectInputs.length > 1 ? 's' : ''} ${invalidDirectInputReadableIDs.join(', ')}` }
         if (hasBoth) { message += ` and upstream input${invalidAncestors.length > 1 ? 's' : ''} ${invalidAncestorReadableIDs.join(', ')}` }
-        else if (hasInvalidAncestors) { message += ` upstream ancestors ${invalidAncestorReadableIDs.join(', ')}` }
+        else if (hasInvalidAncestors) { message += ` upstream input${invalidAncestors.length > 1 ? 's' : ''} ${invalidAncestorReadableIDs.join(', ')}` }
         message += '.'
 
 
@@ -116,7 +117,14 @@ export function simulate(dispatch, getState, graphFilters) {
   const yieldSims = (nodeId, sim) => {
     const {samples, errors} = sim
     const metric = nodeIdToMetricId(nodeId)
-    const newSimulation = {metric, propagationId, sample: {values: samples, errors: errors.map(translateErrorFn(denormalizedMetrics, metric))}}
+    const newSimulation = {
+      metric,
+      propagationId,
+      sample: {
+        values: _.isEmpty(errors) ? samples : [],
+        errors: errors.map(translateErrorFn(denormalizedMetrics, metric))
+      }
+    }
     dispatch(addSimulation(newSimulation))
   }
 
