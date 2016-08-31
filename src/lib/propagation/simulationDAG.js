@@ -16,6 +16,9 @@ export class SimulationDAG {
     let heightOrderedNodes = []
 
     while (!_.isEmpty(rest)) {
+      const incomingErrorNodes = _.remove(rest, n => !_.isEmpty(n.errors) && NodeFns.allInputsWithin(heightOrderedNodes)(n))
+      errorNodes.push(...incomingErrorNodes)
+
       const nextLevelNodes = _.remove(rest, NodeFns.allInputsWithin(heightOrderedNodes))
       heightOrderedNodes.push(...nextLevelNodes)
 

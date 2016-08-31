@@ -12,15 +12,6 @@ const {
   ERROR_SUBTYPES: {GRAPH_SUBTYPES: {MISSING_INPUT_ERROR, IN_INFINITE_LOOP, INVALID_ANCESTOR_ERROR}},
 } = constants
 
-// simulation {
-//   sample {
-//     values: [...],
-//     errors: [...],
-//   }
-//   stats {
-//   }
-// }
-
 function spaceSubset(state, spaceId) {
   const space = e.collections.get(state.spaces, spaceId)
   const organization = e.collections.get(state.organizations, _.get(space, 'organization_id'))
@@ -31,8 +22,6 @@ function spaceSubset(state, spaceId) {
   const translatedSubset = e.space.expressionsToInputs(spaceSubset, organizationalFacts)
   const withFacts = e.facts.addFactsToSpaceGraph(translatedSubset, state.facts.globalFacts, state.facts.organizationFacts, space)
 
-  //console.log('space subset', spaceSubset)
-  //console.log('with facts', withFacts)
   return withFacts
 }
 
@@ -54,7 +43,7 @@ const metricToSimulationNodeFn = m => ({
   guesstimateType: m.guesstimate.guesstimateType,
   expression: m.guesstimate.expression,
   samples: m.guesstimate.guesstimateType === 'DATA' ? e.utils.orArr(_.get(m, 'guesstimate.data')) : e.utils.orArr(_.get(m, 'simulation.sample.values')),
-  errors: [],
+  errors: e.utils.orArr(_.get(m, 'simulation.sample.errors')),
 })
 
 function denormalize({metrics, guesstimates, simulations}) {
@@ -96,9 +85,11 @@ function translateErrorFn(denormalizedMetrics, metricID) {
         const hasBoth = hasInvalidInputs && hasInvalidAncestors
 
         let message = 'Broken '
-        if (hasInvalidInputs) { message += ` input${invalidDirectInputs.length > 1 ? 's' : ''} ${invalidDirectInputReadableIDs.join(', ')}` }
-        if (hasBoth) { message += `and upstream input${invalidAncestors.length > 1 ? 's' : ''} ${invalidAncestorReadableIDs.join(', ')}.` }
-        else if (hasInvalidAncestors) { message += `upstream ancestors ${invalidAncestorReadableIDs.join(', ')}.` }
+        if (hasInvalidInputs) { message += `input${invalidDirectInputs.length > 1 ? 's' : ''} ${invalidDirectInputReadableIDs.join(', ')}` }
+        if (hasBoth) { message += ` and upstream input${invalidAncestors.length > 1 ? 's' : ''} ${invalidAncestorReadableIDs.join(', ')}` }
+        else if (hasInvalidAncestors) { message += ` upstream ancestors ${invalidAncestorReadableIDs.join(', ')}` }
+        message += '.'
+
 
         return {type: INPUT_ERROR, message}
       default:
