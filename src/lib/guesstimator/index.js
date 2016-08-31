@@ -11,10 +11,9 @@ export class Guesstimator {
 
   static samplerTypes = samplerTypes
 
-  constructor({parsedError, parsedInput}, parentRecordingIndices){
+  constructor({parsedError, parsedInput}){
     this.parsedError = parsedError || {}
     this.parsedInput = parsedInput
-    this.parentRecordingIndices = parentRecordingIndices || []
   }
 
   hasParsingErrors() {
@@ -35,6 +34,6 @@ export class Guesstimator {
     }
 
     const samplerType = this.samplerType()
-    return samplerType.sampler.sample(this.parsedInput, n, externalInputs, this.parentRecordingIndices)
+    return samplerType.sampler.sample(this.parsedInput, n, externalInputs)
   }
 }

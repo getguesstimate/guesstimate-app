@@ -37,8 +37,6 @@ function updateMetricsAndGuesstimates(
     return (!!matchedGuesstimate && !engine.guesstimate.equals(matchedGuesstimate, g))
   })
 
-  // TODO(matthew): Don't delete any sims, just resimulate all guesstimates whose type or expression has changed, and
-  // all children.
   const guesstimatesToReSimulate = guesstimatesToModify.filter(newGuesstimate => {
     const oldGuesstimate = engine.collections.get(oldGuesstimates, newGuesstimate.metric, 'metric')
     return oldGuesstimate.expression !== newGuesstimate.expression || oldGuesstimate.guesstimateType !== newGuesstimate.guesstimateType

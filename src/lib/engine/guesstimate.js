@@ -16,19 +16,13 @@ export function equals(l, r) {
 export const getByMetricFn = graph => _collections.getFn(_.get(graph, 'guesstimates'), 'metric')
 
 export const attributes = ['metric', 'expression', 'input', 'guesstimateType', 'description', 'data']
-
 export function format(guesstimate: Guesstimate): Guesstimate {
   let formatted = _.pick(guesstimate, attributes)
   return formatted
 }
 
 export const extractFactHandles = ({input}) => _.isEmpty(input) ? [] : input.match(HANDLE_REGEX)
-
-const padNonAlphaNumeric = str => `(?:[^\\w]|^)(${str})(?:[^\\w]|$)`
-
-export function translateFactHandleFn(idMap) {
-  return _.isEmpty(idMap) ? g => g : g => ({...g, expression: _utils.replaceByMap(g.expression, idMap)})
-}
+export const translateFactHandleFn = idMap => g => ({...g, expression: _utils.replaceByMap(g.expression, idMap)})
 
 const isInputOf = (guesstimate) => ({readableId}) => _utils.orStr(_.get(guesstimate, 'input')).includes(readableId)
 export const inputMetrics = (guesstimate, {metrics}) => _utils.orArr(metrics).filter(isInputOf(guesstimate))
