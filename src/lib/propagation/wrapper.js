@@ -6,9 +6,10 @@ import {INTERNAL_ERROR, INPUT_ERROR, PARSER_ERROR, INFINITE_LOOP_ERROR} from 'li
 
 import e from 'gEngine/engine'
 
+const NUM_SAMPLES = 5000
+
 const {
   NODE_TYPES,
-  ERROR_TYPES: {GRAPH_ERROR},
   ERROR_SUBTYPES: {GRAPH_SUBTYPES: {MISSING_INPUT_ERROR, IN_INFINITE_LOOP, INVALID_ANCESTOR_ERROR}},
 } = constants
 
@@ -27,6 +28,7 @@ function spaceSubset(state, spaceId) {
 
 const nodeIdToMetricId = id => id.slice(7)
 const metricIdToNodeId = id => `metric:${id}`
+
 function guesstimateTypeToNodeType(guesstimateType) {
   switch (guesstimateType) {
     case 'FUNCTION':
@@ -37,6 +39,7 @@ function guesstimateTypeToNodeType(guesstimateType) {
       return NODE_TYPES.USER_INPUT
   }
 }
+
 const filterErrorsFn = e => e.type !== INPUT_ERROR && e.type !== PARSER_ERROR && e.type !== INFINITE_LOOP_ERROR
 const metricToSimulationNodeFn = m => ({
   id: metricIdToNodeId(m.id),
@@ -86,9 +89,15 @@ function translateErrorFn(denormalizedMetrics, metricID) {
         const hasBoth = hasInvalidInputs && hasInvalidAncestors
 
         let message = 'Broken '
-        if (hasInvalidInputs) { message += `input${invalidDirectInputs.length > 1 ? 's' : ''} ${invalidDirectInputReadableIDs.join(', ')}` }
-        if (hasBoth) { message += ` and upstream input${invalidAncestors.length > 1 ? 's' : ''} ${invalidAncestorReadableIDs.join(', ')}` }
-        else if (hasInvalidAncestors) { message += ` upstream input${invalidAncestors.length > 1 ? 's' : ''} ${invalidAncestorReadableIDs.join(', ')}` }
+        if (hasInvalidInputs) {
+          message += `input${invalidDirectInputs.length > 1 ? 's' : ''} ${invalidDirectInputReadableIDs.join(', ')}`
+        }
+
+        if (hasBoth) {
+          message += ` and upstream input${invalidAncestors.length > 1 ? 's' : ''} ${invalidAncestorReadableIDs.join(', ')}`
+        } else if (hasInvalidAncestors) {
+          message += ` upstream input${invalidAncestors.length > 1 ? 's' : ''} ${invalidAncestorReadableIDs.join(', ')}`
+        }
         message += '.'
 
 
@@ -128,6 +137,6 @@ export function simulate(dispatch, getState, graphFilters) {
     dispatch(addSimulation(newSimulation))
   }
 
-  let simulator = new Simulator(nodes, 5000, translateOptions(graphFilters), propagationId, yieldSims, getCurrPropId)
+  let simulator = new Simulator(nodes, NUM_SAMPLES, translateOptions(graphFilters), propagationId, yieldSims, getCurrPropId)
   simulator.run()
 }

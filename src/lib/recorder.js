@@ -54,7 +54,7 @@ export class GuesstimateRecorder {
 
   constructor() {
     this.disabled = !__DEV__
-    this.paused = true
+    this.paused = false
     this.verbose = false
     this.clearRecordings()
   }
@@ -77,11 +77,11 @@ export class GuesstimateRecorder {
   recordSimulationDAGConstructionStart(DAG) {
     if (!this.recording()) { return }
     const element = {name: 'Building Simulation DAG', start: this.time(), children: []}
-    DAG.recordingIndex = this.nestedTimeline.push(element) - 1
+    DAG['__recorderIndex__'] = this.nestedTimeline.push(element) - 1
   }
   recordSimulationDAGConstructionStop(DAG) {
     if (!this.recording()) { return }
-    let element = this.nestedTimeline[DAG.recordingIndex]
+    let element = this.nestedTimeline[DAG['__recorderIndex__']]
     element.end = this.time()
     element.duration = element.end - element.start
     element.data = Object.assign({}, DAG)
@@ -90,100 +90,51 @@ export class GuesstimateRecorder {
   recordPropagationStart(simulator) {
     if (!this.recording()) { return }
     const element = {name: 'Running Propagation', start: this.time(), children: []}
-    simulator.recordingIndex = this.nestedTimeline.push(element) - 1
+    simulator['__recorderIndex__'] = this.nestedTimeline.push(element) - 1
   }
   recordPropagationStop(simulator) {
     if (!this.recording()) { return }
-    let element = this.nestedTimeline[simulator.recordingIndex]
+    let element = this.nestedTimeline[simulator['__recorderIndex__']]
     element.end = this.time()
     element.duration = element.end - element.start
     element.data = Object.assign({}, simulator)
   }
+
   recordNodeSimulationStart(simulator, node) {
     if (!this.recording()) { return }
-    let parentElement = this.nestedTimeline[simulator.recordingIndex]
+    let parentElement = this.nestedTimeline[simulator['__recorderIndex__']]
     const newElement = {name: `Simulating Node ${node.id}`, start: this.time(), children: []}
-    node.recordingIndices = [simulator.recordingIndex, parentElement.children.push(newElement) - 1]
+    node['__recordingIndices__'] = [simulator['__recorderIndex__'], parentElement.children.push(newElement) - 1]
   }
   recordNodeSimulationStop(node) {
     if (!this.recording()) { return }
-    let element = getAtPosition(node.recordingIndices, this.nestedTimeline)
+    let element = getAtPosition(node['__recordingIndices__'], this.nestedTimeline)
     element.end = this.time()
     element.duration = element.end - element.start
     element.data = Object.assign({}, node)
   }
-  recordNodeParseStart(node) {
-    if (!this.recording()) { return }
-    let parentElement = getAtPosition(node.recordingIndices, this.nestedTimeline)
-    const newElement = {name: 'Parsing', start: this.time(), children: []}
-    node.parsingRecordingIndex = parentElement.children.push(newElement) - 1
-  }
-  recordNodeParseStop(node, [parsedError, parsedInput]) {
-    if (!this.recording()) { return }
-    let element = getAtPosition([...node.recordingIndices, node.parsingRecordingIndex], this.nestedTimeline)
-    element.end = this.time()
-    element.duration = element.end - element.start
-    element.data = {parsedError, parsedInput}
-  }
   recordNodeGetInputsStart(node) {
     if (!this.recording()) { return }
-    let parentElement = getAtPosition(node.recordingIndices, this.nestedTimeline)
+    let parentElement = getAtPosition(node['__recordingIndices__'], this.nestedTimeline)
     const newElement = {name: 'Getting Inputs', start: this.time(), children: []}
-    node.getInputsRecordingIndex = parentElement.children.push(newElement) - 1
+    node['__getInputsRecorderIndex__'] = parentElement.children.push(newElement) - 1
   }
   recordNodeGetInputsStop(node, inputs) {
     if (!this.recording()) { return }
-    let element = getAtPosition([...node.recordingIndices, node.getInputsRecordingIndex], this.nestedTimeline)
+    let element = getAtPosition([...node['__recordingIndices__'], node['__getInputsRecorderIndex__']], this.nestedTimeline)
     element.end = this.time()
     element.duration = element.end - element.start
     element.data = {inputs}
   }
   recordNodeSampleStart(node) {
     if (!this.recording()) { return }
-    let parentElement = getAtPosition(node.recordingIndices, this.nestedTimeline)
+    let parentElement = getAtPosition(node['__recordingIndices__'], this.nestedTimeline)
     const newElement = {name: 'Sampling', start: this.time(), children: []}
-    node.sampleRecordingIndex = parentElement.children.push(newElement) - 1
+    node['__sampleRecorderIndex__'] = parentElement.children.push(newElement) - 1
   }
   recordNodeSampleStop(node) {
     if (!this.recording()) { return }
-    let element = getAtPosition([...node.recordingIndices, node.sampleRecordingIndex], this.nestedTimeline)
-    element.end = this.time()
-    element.duration = element.end - element.start
-  }
-  recordNumSamplesComputeStart(parentIndices) {
-    if (!this.recording()) { return }
-    let parentElement = getAtPosition(parentIndices, this.nestedTimeline)
-    const newElement = {name: 'Computing Num Samples', start: this.time(), children: []}
-    return parentElement.children.push(newElement) - 1
-  }
-  recordNumSamplesComputeEnd(parentIndices, samplesComputeIndex, numSamples) {
-    if (!this.recording()) { return }
-    let element = getAtPosition([...parentIndices, samplesComputeIndex], this.nestedTimeline)
-    element.end = this.time()
-    element.duration = element.end - element.start
-    element.data = {numSamples}
-  }
-  recordBuildPromisesStart(parentIndices) {
-    if (!this.recording()) { return }
-    let parentElement = getAtPosition(parentIndices, this.nestedTimeline)
-    const newElement = {name: 'Building Promises', start: this.time(), children: []}
-    return parentElement.children.push(newElement) - 1
-  }
-  recordBuildPromisesEnd(parentIndices, buildPromisesIndex) {
-    if (!this.recording()) { return }
-    let element = getAtPosition([...parentIndices, buildPromisesIndex], this.nestedTimeline)
-    element.end = this.time()
-    element.duration = element.end - element.start
-  }
-  recordSimulatingStart(parentIndices) {
-    if (!this.recording()) { return }
-    let parentElement = getAtPosition(parentIndices, this.nestedTimeline)
-    const newElement = {name: 'Simulating on Worker', start: this.time(), children: []}
-    return parentElement.children.push(newElement) - 1
-  }
-  recordSimulatingEnd(parentIndices, simulatingIndex) {
-    if (!this.recording()) { return }
-    let element = getAtPosition([...parentIndices, simulatingIndex], this.nestedTimeline)
+    let element = getAtPosition([...node['__recordingIndices__'], node['__sampleRecorderIndex__']], this.nestedTimeline)
     element.end = this.time()
     element.duration = element.end - element.start
   }

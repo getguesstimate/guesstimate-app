@@ -36,8 +36,11 @@ export class SimulationNode {
   }
 
   getInputs() {
-    const inputs = this.parentIndices.map(parentIdx => this.DAG.nodes[parentIdx])
-    return _.transform(inputs, (map, node) => {map[node.id] = node.samples}, {})
+    window.recorder.recordNodeGetInputsStart(this)
+    const inputNodes = this.parentIndices.map(parentIdx => this.DAG.nodes[parentIdx])
+    const inputMap = _.transform(inputNodes, (map, node) => {map[node.id] = node.samples}, {})
+    window.recorder.recordNodeGetInputsStop(this, inputMap)
+    return inputMap
   }
 
   getDescendants() { return this.DAG.strictSubsetFrom([this.id]) }
@@ -55,28 +58,20 @@ export class SimulationNode {
   hasInputErrors() { return _collections.some(this.errors, INVALID_ANCESTOR_ERROR, 'subType') }
   getResults() { return _.pick(this, ['samples', 'errors']) }
   simulate(numSamples) {
-    if (this.hasInputErrors()) { console.log('prematurely resolving'); return Promise.resolve(this.getResults()) }
+    if (this.hasInputErrors()) { return Promise.resolve(this.getResults()) }
 
-    window.recorder.recordNodeParseStart(this)
     const [parsedError, parsedInput] = this.parse()
-    console.log([parsedError, parsedInput])
-    window.recorder.recordNodeParseStop(this, [parsedError, parsedInput])
 
-    window.recorder.recordNodeGetInputsStart(this)
     const inputs = this.getInputs()
-    console.log(inputs)
-    window.recorder.recordNodeGetInputsStop(this, inputs)
 
     window.recorder.recordNodeSampleStart(this)
-    const gtr = new Guesstimator({parsedError, parsedInput}, [...(this.recordingIndices || []), this.sampleRecordingIndex])
-    return gtr.sample(numSamples, inputs).then(simulation => {
+    const gtr = new Guesstimator({parsedError, parsedInput})
+    return gtr.sample(numSamples, inputs).then(({values, errors}) => {
       window.recorder.recordNodeSampleStop(this)
-      this.samples = _utils.orArr(simulation.values)
-      this.errors = _utils.orArr(simulation.errors)
-      if (!_.isEmpty(simulation.errors)) {
-        this.errors.push(...simulation.errors)
-        this.addErrorToDescendants()
-      }
+
+      this.samples = _utils.orArr(values)
+      this.errors = _utils.orArr(errors)
+      if (!_.isEmpty(errors)) { this.addErrorToDescendants() }
       return this.getResults()
     })
   }
