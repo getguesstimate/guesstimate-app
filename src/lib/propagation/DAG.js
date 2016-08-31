@@ -1,4 +1,4 @@
-import * as NodeFns from './simulationNodeFns'
+import * as NodeFns from './nodeFns'
 import {SimulationNode} from './node'
 import * as constants from './constants'
 

@@ -1,4 +1,4 @@
-import {SimulationDAG} from './simulationDAG.js'
+import {SimulationDAG} from './DAG.js'
 
 function getNodesToSimulate(DAG, options) {
   if (!!options.simulateIds) {

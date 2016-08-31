@@ -13,17 +13,6 @@ import {_matchingFormatter} from 'lib/guesstimator/formatter/index'
 import * as _collections from 'gEngine/collections'
 import * as _utils from 'gEngine/utils'
 
-// Types:
-//
-// Simulation Node:
-// {
-//   id: String,
-//   type: oneof(NODE_TYPES),
-//   expression: null if type === STYPE.data, else user expression.
-//   samples: [...],
-//   errors: [...],
-// }
-
 export class SimulationNode {
   constructor({id, expression, type, guesstimateType, samples, errors, parentIndices, ancestors}, DAG, index) {
     this.id = id
