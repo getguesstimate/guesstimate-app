@@ -6,7 +6,7 @@ import * as _collections from 'gEngine/collections'
 
 export class SimulationDAG {
   constructor(nodes) {
-    window.recorder.recordSimulationDAGConstructionStart(this)
+    if (!!_.get(window, 'recorder')) { window.recorder.recordSimulationDAGConstructionStart(this) }
     let rest = nodes.map(NodeFns.extractInputs)
 
     let byId = _.transform(rest, (map, node) => {map[node.id] = {node, lastAncestors: node.inputs, ancestors: node.inputs}}, {})
@@ -27,6 +27,11 @@ export class SimulationDAG {
       errorNodes.push(...incomingErrorNodes)
       heightOrderedNodes.push(...incomingErrorNodes) // We may want to resimulate these later anyways...
 
+      const infiniteLoopNodes = _.remove(rest, n => _.some(byId[n.id].lastAncestors, id => id === n.id))
+      const withInfiniteLoopErrors = infiniteLoopNodes.map(NodeFns.withInfiniteLoopError)
+      errorNodes.push(...withInfiniteLoopErrors)
+      graphErrorNodes.push(...withInfiniteLoopErrors)
+
       const inputErrorNodes = _.remove(
         rest,
         _collections.andFns(NodeFns.anyInputsWithin(errorNodes), NodeFns.allInputsWithin([...heightOrderedNodes, ...errorNodes]))
@@ -34,11 +39,6 @@ export class SimulationDAG {
       const withAncestralErrors = inputErrorNodes.map(NodeFns.withAncestralError(errorNodes))
       errorNodes.push(...withAncestralErrors)
       graphErrorNodes.push(...withAncestralErrors)
-
-      const infiniteLoopNodes = _.remove(rest, n => _.some(byId[n.id].lastAncestors, id => id === n.id))
-      const withInfiniteLoopErrors = infiniteLoopNodes.map(NodeFns.withInfiniteLoopError)
-      errorNodes.push(...withInfiniteLoopErrors)
-      graphErrorNodes.push(...withInfiniteLoopErrors)
 
       rest.forEach(n => {
         const newLastAncestors = _.uniq(_.flatten(byId[n.id].lastAncestors.map(a => byId[a].node.inputs)))
@@ -54,7 +54,7 @@ export class SimulationDAG {
     this.nodes = asNodes
     this.graphErrorNodes = graphErrorNodes
 
-    window.recorder.recordSimulationDAGConstructionStop(this)
+    if (!!_.get(window, 'recorder')) { window.recorder.recordSimulationDAGConstructionStop(this) }
   }
 
   find(id) { return _collections.get(this.nodes, id) }

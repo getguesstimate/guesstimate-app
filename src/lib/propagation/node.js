@@ -14,7 +14,7 @@ import * as _collections from 'gEngine/collections'
 import * as _utils from 'gEngine/utils'
 
 export class SimulationNode {
-  constructor({id, expression, type, guesstimateType, samples, errors, parentIndices, ancestors}, DAG, index) {
+  constructor({id, expression, type, guesstimateType, samples, errors, childrenIndices, parentIndices, ancestors}, DAG, index) {
     this.id = id
     this.expression = expression
     this.type = type
@@ -22,6 +22,7 @@ export class SimulationNode {
     this.samples = samples
     this.errors = errors
     this.parentIndices = parentIndices
+    this.childrenIndices = childrenIndices
     this.ancestors = ancestors
     this.DAG = DAG
     this.index = index
@@ -36,10 +37,10 @@ export class SimulationNode {
   }
 
   getInputs() {
-    window.recorder.recordNodeGetInputsStart(this)
+    if (!!_.get(window, 'recorder')) { window.recorder.recordNodeGetInputsStart(this) }
     const inputNodes = this.parentIndices.map(parentIdx => this.DAG.nodes[parentIdx])
     const inputMap = _.transform(inputNodes, (map, node) => {map[node.id] = node.samples}, {})
-    window.recorder.recordNodeGetInputsStop(this, inputMap)
+    if (!!_.get(window, 'recorder')) { window.recorder.recordNodeGetInputsStop(this, inputMap) }
     return inputMap
   }
 
@@ -64,10 +65,10 @@ export class SimulationNode {
 
     const inputs = this.getInputs()
 
-    window.recorder.recordNodeSampleStart(this)
+    if (!!_.get(window, 'recorder')) { window.recorder.recordNodeSampleStart(this) }
     const gtr = new Guesstimator({parsedError, parsedInput})
     return gtr.sample(numSamples, inputs).then(({values, errors}) => {
-      window.recorder.recordNodeSampleStop(this)
+      if (!!_.get(window, 'recorder')) { window.recorder.recordNodeSampleStop(this) }
 
       this.samples = _utils.orArr(values)
       this.errors = _utils.orArr(errors)
