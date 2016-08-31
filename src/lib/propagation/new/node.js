@@ -1,4 +1,11 @@
-import {NODE_TYPES, nodeTypeToGuesstimateType} from './constants'
+import * as constants from './constants'
+
+const {
+  NODE_TYPES,
+  nodeTypeToGuesstimateType,
+  ERROR_TYPES: {GRAPH_ERROR},
+  ERROR_SUBTYPES: {GRAPH_SUBTYPES: {MISSING_INPUT_ERROR, IN_INFINITE_LOOP, INVALID_ANCESTOR_ERROR}},
+} = constants
 
 import {Guesstimator} from 'lib/guesstimator/index'
 import {_matchingFormatter} from 'lib/guesstimator/formatter/index'

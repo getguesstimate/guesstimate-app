@@ -4,12 +4,6 @@ import * as constants from './constants'
 
 import * as _collections from 'gEngine/collections'
 
-const {
-  NODE_TYPES,
-  ERROR_TYPES: {GRAPH_ERROR},
-  ERROR_SUBTYPES: {GRAPH_SUBTYPES: {MISSING_INPUT_ERROR, IN_INFINITE_LOOP, INVALID_ANCESTOR_ERROR}},
-} = constants
-
 export class SimulationDAG {
   constructor(nodes) {
     window.recorder.recordSimulationDAGConstructionStart(this)

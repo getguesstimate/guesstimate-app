@@ -1,9 +1,16 @@
 import {addSimulation} from 'gModules/simulations/actions'
 
-import {NODE_TYPES} from './constants'
+import * as constants from './constants'
 import {Simulator} from './simulator'
+import {INFINITE_ERROR, INPUT_ERROR, INFINITE_LOOP_ERROR} from 'lib/errors/modelErrors'
 
 import e from 'gEngine/engine'
+
+const {
+  NODE_TYPES,
+  ERROR_TYPES: {GRAPH_ERROR},
+  ERROR_SUBTYPES: {GRAPH_SUBTYPES: {MISSING_INPUT_ERROR, IN_INFINITE_LOOP, INVALID_ANCESTOR_ERROR}},
+} = constants
 
 // simulation {
 //   sample {
@@ -68,6 +75,38 @@ function translateOptions(graphFilters) {
   return {}
 }
 
+function translateErrorFn(denormalizedMetrics, metricID) {
+  const metric = e.collections.get(denormalizedMetrics, metricID)
+  const getReadableIdFn = id => e.collections.gget(denormalizedMetrics, id, 'id', 'readableId')
+
+  return err => {
+    switch (err.subType) {
+      case MISSING_INPUT_ERROR:
+        return {type: INPUT_ERROR, message: 'Metric depends on deleted metric'}
+      case IN_INFINITE_LOOP:
+        return {type: INFINITE_LOOP_ERROR, message: 'Metric references itself through dependency chain'}
+      case INVALID_ANCESTOR_ERROR:
+        let invalidAncestors = Object.assign([], err.ancestors).map(nodeIdToMetricId)
+        const invalidDirectInputs = _.remove(invalidAncestors, a => metric.guesstimate.expression.includes(a))
+
+        const invalidAncestorReadableIDs = invalidAncestors.map(getReadableIdFn)
+        const invalidDirectInputReadableIDs = invalidDirectInputs.map(getReadableIdFn)
+        const hasInvalidInputs = !_.isEmpty(invalidDirectInputReadableIDs)
+        const hasInvalidAncestors = !_.isEmpty(invalidAncestorReadableIDs)
+        const hasBoth = hasInvalidInputs && hasInvalidAncestors
+
+        let message = 'Broken '
+        if (hasInvalidInputs) { message += ` input${invalidDirectInputs.length > 1 ? 's' : ''} ${invalidDirectInputReadableIDs.join(', ')}` }
+        if (hasBoth) { message += `and upstream input${invalidAncestors.length > 1 ? 's' : ''} ${invalidAncestorReadableIDs.join(', ')}.` }
+        else if (hasInvalidAncestors) { message += `upstream ancestors ${invalidAncestorReadableIDs.join(', ')}.` }
+
+        return {type: INPUT_ERROR, message}
+      default:
+        return err
+    }
+  }
+}
+
 export function simulate(dispatch, getState, graphFilters) {
   let spaceId = graphFilters.spaceId
   if (spaceId === undefined && graphFilters.metricId) {
@@ -86,7 +125,7 @@ export function simulate(dispatch, getState, graphFilters) {
   const yieldSims = (nodeId, sim) => {
     const {samples, errors} = sim
     const metric = nodeIdToMetricId(nodeId)
-    const newSimulation = {metric, propagationId, sample: {values: samples, errors}}
+    const newSimulation = {metric, propagationId, sample: {values: samples, errors: errors.map(translateErrorFn(denormalizedMetrics, metric))}}
     dispatch(addSimulation(newSimulation))
   }
 
