@@ -39,4 +39,4 @@ export function getVariableNameFromName(
   return `${directName}${currentMaxSuffix + 1}`
 }
 
-export const shouldTransformName = name => !(_.isEmpty(name) || _.isEmpty(name.replace(/\d/g, '').trim()))
+export const shouldTransformName = name => !(_.isEmpty(name) || _.isEmpty(name.replace(/[^\w\d]/g, '').trim()))
