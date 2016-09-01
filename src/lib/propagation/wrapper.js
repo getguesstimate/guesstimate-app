@@ -18,7 +18,7 @@ function spaceSubset(state, spaceId) {
   let subset = e.space.subset(state, spaceId, true)
   const organizationFacts = e.facts.getFactsForOrg(state.facts.organizationFacts, organization)
 
-  const {organizationFactsUsed, globalFactsUsed} = e.facts.getRelevantFacts(subset, state.facts.globalFacts, organizationFacts)
+  const {organizationFactsUsed, globalFactsUsed} = e.facts.getRelevantFactsAndReformatGlobals(subset, state.facts.globalFacts, organizationFacts)
 
   const globalFactHandleToNodeIdMap = _.transform(
     globalFactsUsed,

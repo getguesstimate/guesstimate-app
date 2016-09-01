@@ -86,7 +86,7 @@ export const getFactsForOrg = (facts, org) =>  _utils.orArr(
   _collections.gget(facts, _organization.organizationReadableId(org), 'variable_name', 'children')
 )
 
-export function getRelevantFacts({metrics, guesstimates, simulations}, globalFacts, organizationFacts) {
+export function getRelevantFactsAndReformatGlobals({metrics, guesstimates, simulations}, globalFacts, organizationFacts) {
   const organizationFactsUsed = organizationFacts.filter(f => _.some(guesstimates, g => g.expression.includes(`fact:${f.id}`)))
 
   // First we grab the top level global facts (e.g. the fact for 'Chicago') which contain as children subfacts of the
@@ -99,42 +99,6 @@ export function getRelevantFacts({metrics, guesstimates, simulations}, globalFac
   }))
 
   return {organizationFactsUsed, globalFactsUsed}
-}
-
-export function addFactsToSpaceGraph({metrics, guesstimates, simulations}, globalFacts, organizationFacts, {organization_id}) {
-  const possibleFacts = [...globalFacts, organizationFacts.find(f => f.variable_name === `organization_${organization_id}`)]
-
-  // First we need to extract out the relevant fact handles, which we'll evaluate into full selectors, and the facts to
-  // which they refer from the graph. We group them as they are used as a unit later.
-  const handles = _.uniq(_.flatten(guesstimates.map(_guesstimate.extractFactHandles))).filter(h => !_.isEmpty(h))
-  const selectors = handles.map(resolveToSelector(organization_id))
-  const facts = selectors.map(s => findBySelector(possibleFacts, s))
-  const grouped = _.zip(handles, selectors, facts).filter(([_1, _2, f]) => _.has(f, 'variable_name'))
-
-  // When dynamically generating new metrics, we need non-colliding readableIds, so we'll store a running copy of those
-  // used, and initialize some variables to account for the extra objects we'll build.
-  let readableIds = metrics.map(m => m.readableId)
-  let [factMetrics, factGuesstimates, factSimulations, factIdMap] = [[], [], [], {}]
-  grouped.forEach(([handle, selector, fact]) => {
-    // We construct virtual metrics, guesstimates, and simulations from the selector, fact, and running readable IDs...
-    const {metric, guesstimate, simulation} = buildFullNode(selector, fact, readableIds)
-
-    // Then update all the running variables.
-    const idToTranslate = !!_.get(fact, 'id') ? `\$\{fact:${fact.id}\}` : handle
-    factIdMap[idToTranslate] = `\$\{metric:${metric.id}\}`
-
-    readableIds = [...readableIds, metric.readableId]
-
-    factMetrics = [...factMetrics, metric]
-    factGuesstimates = [...factGuesstimates, guesstimate]
-    factSimulations = [...factSimulations, simulation]
-  })
-
-  return {
-    metrics: [...metrics, ...factMetrics],
-    guesstimates: [...guesstimates.map(_guesstimate.translateFactHandleFn(factIdMap)), ...factGuesstimates],
-    simulations: [...simulations, ...factSimulations],
-  }
 }
 
 export function simulateFact(fact) {
