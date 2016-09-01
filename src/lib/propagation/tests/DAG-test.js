@@ -1,5 +1,7 @@
 import {expect} from 'chai'
 
+import * as utils from './utils'
+
 import {SimulationDAG} from '../DAG'
 import * as constants from '../constants'
 
@@ -7,27 +9,15 @@ import * as _collections from 'gEngine/collections'
 
 // ERRORS:
 const {
-  NODE_TYPES,
   ERROR_TYPES: {GRAPH_ERROR},
   ERROR_SUBTYPES: {GRAPH_SUBTYPES: {MISSING_INPUT_ERROR, IN_INFINITE_LOOP, INVALID_ANCESTOR_ERROR}},
 } = constants
 
-const toExprId = id => `\$\{${toNodeId(id)}\}`
-const toNodeId = idNum => `node:${idNum}`
-const toExpr = inputNums => `=${inputNums.map(toExprId).join(' + ')}`
-const makeNode = (idNum, inputNums=[], samples=[], errors=[], type=NODE_TYPES.FUNCTION, expression=toExpr(inputNums)) => (
-  {id: toNodeId(idNum), errors, samples, type, expression}
-)
-
-const expectNodesToBe = (DAG, validIds, errorIds) => {
-  expect(DAG.graphErrorNodes.map(n => n.id)).to.deep.equal(errorIds.map(toNodeId))
-  expect(DAG.nodes.map(n => n.id)).to.deep.equal(validIds.map(toNodeId))
-}
 
 describe('construction', () => {
-  const simpleValidNodeList = [makeNode(1), makeNode(2, [1,3]), makeNode(3, [1])]
-  it ('Yields nodes ordered by height', () => {expectNodesToBe(new SimulationDAG(simpleValidNodeList), [1,3,2], [])})
-  it ('Correclty assignes nodes their relations', () => {
+  const simpleValidNodeList = [utils.makeNode(1), utils.makeNode(2, [1,3]), utils.makeNode(3, [1])]
+  it ('Yields nodes ordered by height', () => {utils.expectNodesToBe(new SimulationDAG(simpleValidNodeList), [1,3,2], [])})
+  it ('Correctly assigns nodes their relations', () => {
     const DAG = new SimulationDAG(simpleValidNodeList)
 
     expect(DAG.nodes.map(n => _.pick(n, ['parentIndices']))).to.deep.have.members([
@@ -37,21 +27,21 @@ describe('construction', () => {
     ])
   })
 
-  const ancestorsNodeList = [makeNode(1), makeNode(2, [1]), makeNode(3, [2]), makeNode(4, [2]), makeNode(5, [2,3,4]), makeNode(6, [1])]
+  const ancestorsNodeList = [utils.makeNode(1), utils.makeNode(2, [1]), utils.makeNode(3, [2]), utils.makeNode(4, [2]), utils.makeNode(5, [2,3,4]), utils.makeNode(6, [1])]
   it ('Correctly assigns ancestors', () => {
     const ancestorsList = (new SimulationDAG(ancestorsNodeList)).nodes.map(n => _.get(n, 'ancestors'))
     expect(ancestorsList).to.deep.have.members([
       [],
-      [1].map(toNodeId),
-      [2,1].map(toNodeId),
-      [2,1].map(toNodeId),
-      [2,3,4,1].map(toNodeId),
-      [1].map(toNodeId),
+      [1].map(utils.toNodeId),
+      [2,1].map(utils.toNodeId),
+      [2,1].map(utils.toNodeId),
+      [2,3,4,1].map(utils.toNodeId),
+      [1].map(utils.toNodeId),
     ])
   })
 
-  const missingInputsNodeList = [makeNode(1, ['missing']), makeNode(2, [1]), makeNode(3, [4]), makeNode(4), makeNode(5, [2,3])]
-  it ('Correctly flags missing input errors', () => {expectNodesToBe(new SimulationDAG(missingInputsNodeList), [4,3], [1,2,5])})
+  const missingInputsNodeList = [utils.makeNode(1, ['missing']), utils.makeNode(2, [1]), utils.makeNode(3, [4]), utils.makeNode(4), utils.makeNode(5, [2,3])]
+  it ('Correctly flags missing input errors', () => {utils.expectNodesToBe(new SimulationDAG(missingInputsNodeList), [4,3], [1,2,5])})
   it ('Produces appropriately typed errors', () => {
     const DAG = new SimulationDAG(missingInputsNodeList)
 
@@ -61,7 +51,7 @@ describe('construction', () => {
     expect(subTypes).to.have.members([MISSING_INPUT_ERROR, INVALID_ANCESTOR_ERROR, INVALID_ANCESTOR_ERROR])
   })
 
-  const infiniteLoopNodeList = [makeNode(1, [2]), makeNode(2, [1]), makeNode(3, [1]), makeNode(4), makeNode(5, [4])]
+  const infiniteLoopNodeList = [utils.makeNode(1, [2]), utils.makeNode(2, [1]), utils.makeNode(3, [1]), utils.makeNode(4), utils.makeNode(5, [4])]
   it ('Correctly flags infinite loop errors', () => {
     const DAG = new SimulationDAG(infiniteLoopNodeList)
 
@@ -77,7 +67,7 @@ describe('construction', () => {
     expect(subTypes).to.have.members([IN_INFINITE_LOOP, IN_INFINITE_LOOP, INVALID_ANCESTOR_ERROR])
   })
 
-  const errorDataNodeList = [makeNode(1, ['missing', 'gone']), makeNode(2, [1, 3]), makeNode(3, [4]), makeNode(4, [3])]
+  const errorDataNodeList = [utils.makeNode(1, ['missing', 'gone']), utils.makeNode(2, [1, 3]), utils.makeNode(3, [4]), utils.makeNode(4, [3])]
 
   it ('Assigns the correct auxilary error data', () => {
     const DAG = new SimulationDAG(errorDataNodeList)
@@ -91,50 +81,50 @@ describe('construction', () => {
 })
 
 describe('member functions', () => {
-  const simpleNodeList = [makeNode(1), makeNode(2), makeNode(3)]
+  const simpleNodeList = [utils.makeNode(1), utils.makeNode(2), utils.makeNode(3)]
   it ('Should be able to find a node by id', () => {
     const DAG = new SimulationDAG(simpleNodeList)
-    expect(DAG.find(toNodeId(2)).id).to.equal(toNodeId(2))
+    expect(DAG.find(utils.toNodeId(2)).id).to.equal(utils.toNodeId(2))
   })
 
   const complexRelations = [
-    makeNode(1),
-    makeNode(2, [1]),
-    makeNode(3, [2]),
-    makeNode(4, [2]),
-    makeNode(5, [1]),
-    makeNode(6, [1,4]),
-    makeNode(7, [5]),
-    makeNode(8),
-    makeNode(9, [8]),
-    makeNode(10, [9]),
+    utils.makeNode(1),
+    utils.makeNode(2, [1]),
+    utils.makeNode(3, [2]),
+    utils.makeNode(4, [2]),
+    utils.makeNode(5, [1]),
+    utils.makeNode(6, [1,4]),
+    utils.makeNode(7, [5]),
+    utils.makeNode(8),
+    utils.makeNode(9, [8]),
+    utils.makeNode(10, [9]),
   ]
   it ('Should generate the right subset', () => {
-    const subsetIds = (new SimulationDAG(complexRelations)).subsetFrom([2, 8].map(toNodeId)).map(n => n.id)
-    expect(subsetIds).to.have.members([2,3,4,6,8,9,10].map(toNodeId))
+    const subsetIds = (new SimulationDAG(complexRelations)).subsetFrom([2, 8].map(utils.toNodeId)).map(n => n.id)
+    expect(subsetIds).to.have.members([2,3,4,6,8,9,10].map(utils.toNodeId))
   })
 })
 
 describe('node functions', () => {
-  const simpleNodeList = [makeNode(1), makeNode(2, [1]), makeNode(3, [1,2])]
+  const simpleNodeList = [utils.makeNode(1), utils.makeNode(2, [1]), utils.makeNode(3, [1,2])]
   it ('should add errors to the right children', () => {
     let DAG = new SimulationDAG(simpleNodeList)
-    const node = DAG.find(toNodeId(1))
+    const node = DAG.find(utils.toNodeId(1))
     expect(node).to.be.ok
 
     node._addErrorToDescendants()
-    expect(DAG.find(toNodeId(2)).errors).to.deep.have.members([{type: GRAPH_ERROR, subType: INVALID_ANCESTOR_ERROR, ancestors: [toNodeId(1)]}])
-    expect(DAG.find(toNodeId(3)).errors).to.deep.have.members([{type: GRAPH_ERROR, subType: INVALID_ANCESTOR_ERROR, ancestors: [toNodeId(1)]}])
+    expect(DAG.find(utils.toNodeId(2)).errors).to.deep.have.members([{type: GRAPH_ERROR, subType: INVALID_ANCESTOR_ERROR, ancestors: [utils.toNodeId(1)]}])
+    expect(DAG.find(utils.toNodeId(3)).errors).to.deep.have.members([{type: GRAPH_ERROR, subType: INVALID_ANCESTOR_ERROR, ancestors: [utils.toNodeId(1)]}])
   })
 
-  const withSamples = [makeNode(1, [4], [3]), makeNode(2, [4], [4]), makeNode(3, [1,2]), makeNode(4, [], [5])]
+  const withSamples = [utils.makeNode(1, [4], [3]), utils.makeNode(2, [4], [4]), utils.makeNode(3, [1,2]), utils.makeNode(4, [], [5])]
   it ('should get the right inputs', () => {
     const DAG = new SimulationDAG(withSamples)
-    const node = DAG.find(toNodeId(3))
+    const node = DAG.find(utils.toNodeId(3))
     expect(node).to.be.ok
 
     const inputs = node._getInputs()
-    expect(inputs).to.have.property(toNodeId(1)).that.deep.equals([3])
-    expect(inputs).to.have.property(toNodeId(2)).that.deep.equals([4])
+    expect(inputs).to.have.property(utils.toNodeId(1)).that.deep.equals([3])
+    expect(inputs).to.have.property(utils.toNodeId(2)).that.deep.equals([4])
   })
 })
