@@ -87,7 +87,9 @@ export const getFactsForOrg = (facts, org) =>  _utils.orArr(
 )
 
 export function getRelevantFactsAndReformatGlobals({metrics, guesstimates, simulations}, globalFacts, organizationFacts) {
-  const organizationFactsUsed = organizationFacts.filter(f => _.some(guesstimates, g => g.expression.includes(`fact:${f.id}`)))
+  const organizationFactsUsed = organizationFacts.filter(
+    f => _.some(guesstimates, g => g.expression.includes(_guesstimate.expressionSyntaxPad(f.id, false)))
+  )
 
   // First we grab the top level global facts (e.g. the fact for 'Chicago') which contain as children subfacts of the
   // population variety. We'll next pre-resolve these into 'fake facts' momentarily.

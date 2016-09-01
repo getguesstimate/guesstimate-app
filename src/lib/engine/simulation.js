@@ -3,6 +3,8 @@ import * as _collections from './collections'
 import {sampleMean, sampleStdev, percentile, cutoff, sortDescending} from 'lib/dataAnalysis.js'
 
 export const NUM_SAMPLES = 5000
+export const METRIC_ID_PREFIX = 'metric:'
+export const FACT_ID_PREFIX = 'fact:'
 
 export const getByMetricFn = graph => _collections.getFn(_.get(graph, 'simulations'), 'metric', 'metric')
 

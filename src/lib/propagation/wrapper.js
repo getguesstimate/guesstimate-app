@@ -22,7 +22,7 @@ function spaceSubset(state, spaceId) {
 
   const globalFactHandleToNodeIdMap = _.transform(
     globalFactsUsed,
-    (resultMap, globalFact) => { resultMap[globalFact.variable_name] = `\$\{fact:${globalFact.id}\}` },
+    (resultMap, globalFact) => { resultMap[globalFact.variable_name] = e.guesstimate.expressionSyntaxPad(globalFact.id, false) },
     {}
   )
 
@@ -30,6 +30,8 @@ function spaceSubset(state, spaceId) {
     ...g,
     expression: e.utils.replaceByMap(g.expression, globalFactHandleToNodeIdMap)
   }))
+
+  console.log([subset.guesstimates, organizationFactsUsed, globalFactsUsed, globalFactHandleToNodeIdMap])
 
   return {subset, relevantFacts: [...organizationFactsUsed, ...globalFactsUsed]}
 }
@@ -48,7 +50,7 @@ function guesstimateTypeToNodeType(guesstimateType) {
 }
 
 const filterErrorsFn = e => e.type !== INPUT_ERROR && e.type !== PARSER_ERROR && e.type !== INFINITE_LOOP_ERROR
-const metricIdToNodeId = id => `metric:${id}`
+const metricIdToNodeId = id => `${e.simulation.METRIC_ID_PREFIX}${id}`
 const metricToSimulationNodeFn = m => ({
   id: metricIdToNodeId(m.id),
   type: guesstimateTypeToNodeType(m.guesstimate.guesstimateType),
@@ -58,7 +60,7 @@ const metricToSimulationNodeFn = m => ({
   errors: Object.assign([], e.utils.orArr(_.get(m, 'simulation.sample.errors')).filter(filterErrorsFn)),
 })
 
-const factIdToNodeId = id => `fact:${id}`
+const factIdToNodeId = id => `${e.simulation.FACT_ID_PREFIX}${id}`
 const factToSimulationNodeFn = f => ({
   id: factIdToNodeId(f.id),
   expression: f.expression,
