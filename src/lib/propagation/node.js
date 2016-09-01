@@ -27,8 +27,27 @@ export class SimulationNode {
     this.index = index
   }
 
+  simulate(numSamples) {
+    if (this._hasInputErrors()) { return Promise.resolve(this._getSimulationResults()) }
+
+    const [parsedError, parsedInput] = this._parse()
+
+    const inputs = this._getInputs()
+
+    if (!!_.get(window, 'recorder')) { window.recorder.recordNodeSampleStart(this) }
+    const guesstimator = new Guesstimator({parsedError, parsedInput})
+    return guesstimator.sample(numSamples, inputs).then(({values, errors}) => {
+      if (!!_.get(window, 'recorder')) { window.recorder.recordNodeSampleStop(this) }
+
+      this.samples = _utils.orArr(values)
+      this.errors = _utils.orArr(errors)
+      if (!_.isEmpty(errors)) { this._addErrorToDescendants() }
+      return this._getSimulationResults()
+    })
+  }
+
   _data() { return this.type === NODE_TYPES.DATA ? this.samples : [] }
-  parse() {
+  _parse() {
     const guesstimatorInput = { text: this.expression, guesstimateType: this.guesstimateType, data: this._data() }
     const formatter = _matchingFormatter(guesstimatorInput)
     return [formatter.error(guesstimatorInput), formatter.format(guesstimatorInput)]
@@ -56,22 +75,4 @@ export class SimulationNode {
 
   _hasInputErrors() { return _collections.some(this.errors, INVALID_ANCESTOR_ERROR, 'subType') }
   _getSimulationResults() { return _.pick(this, ['samples', 'errors']) }
-  simulate(numSamples) {
-    if (this._hasInputErrors()) { return Promise.resolve(this._getSimulationResults()) }
-
-    const [parsedError, parsedInput] = this.parse()
-
-    const inputs = this._getInputs()
-
-    if (!!_.get(window, 'recorder')) { window.recorder.recordNodeSampleStart(this) }
-    const guesstimator = new Guesstimator({parsedError, parsedInput})
-    return guesstimator.sample(numSamples, inputs).then(({values, errors}) => {
-      if (!!_.get(window, 'recorder')) { window.recorder.recordNodeSampleStop(this) }
-
-      this.samples = _utils.orArr(values)
-      this.errors = _utils.orArr(errors)
-      if (!_.isEmpty(errors)) { this.addErrorToDescendants() }
-      return this._getSimulationResults()
-    })
-  }
 }
