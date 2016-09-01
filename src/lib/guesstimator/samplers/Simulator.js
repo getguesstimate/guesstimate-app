@@ -1,3 +1,6 @@
+import {replaceByMap} from 'gEngine/utils'
+
+import generateRandomReadableId from 'gEngine/metric/generate_random_readable_id'
 import {STOCHASTIC_FUNCTIONS} from './simulator-worker/simulator/evaluator.js'
 
 const MIN_SAMPLES_PER_WINDOW = 100
@@ -11,9 +14,11 @@ function LCM(a, b) {
 }
 
 export function simulate(expr, inputs, maxSamples) {
+
   const overallNumSamples = neededSamples(expr, inputs, maxSamples)
+
   if (overallNumSamples < MIN_SAMPLES_PER_WINDOW*window.workers.length) {
-    return simulateOnWorker(window.workers[0], buildData(expr, 0, overallNumSamples, inputs))
+    return simulateOnWorker(window.workers[0], buildSimulationParams(expr, 0, overallNumSamples, inputs))
   }
 
   const numSamples = Math.floor(overallNumSamples/window.workers.length)
@@ -22,11 +27,10 @@ export function simulate(expr, inputs, maxSamples) {
   const promises = [
     ..._.map(
       window.workers.slice(0,-1),
-      (worker, index) => simulateOnWorker(worker, buildData(expr, index*numSamples, numSamples, inputs))
+      (worker, index) => simulateOnWorker(worker, buildSimulationParams(expr, index*numSamples, numSamples, inputs))
     ),
-    simulateOnWorker(window.workers[window.workers.length-1], buildData(expr, (window.workers.length - 1)* numSamples, remainingSamples, inputs))
+    simulateOnWorker(window.workers[window.workers.length-1], buildSimulationParams(expr, (window.workers.length - 1)* numSamples, remainingSamples, inputs))
   ]
-
 
   return Promise.all(promises).then(
     (results) => {
@@ -63,7 +67,6 @@ export function neededSamples(text, inputs, n){
     // edge case short circuit here, to avoid gcd/lcm calculation.
     return n
   }
-
   return Math.min(n, numInputs.reduce((x,y) => LCM(x,y)))
 }
 
@@ -83,12 +86,20 @@ function modularSlice(array, from, to) {
   return [...array.slice(newFrom), array.slice(0,to)]
 }
 
-function buildData(expr, prevModularIndex, numSamples, inputs) {
+function buildSimulationParams(rawExpr, prevModularIndex, numSamples, inputs) {
+  let idMap = {}
+  let takenReadableIds = []
   let slicedInputs = {}
+
   for (let key of Object.keys(inputs)) {
-    if (!inputs[key]) { continue }
-    slicedInputs[key] = modularSlice(inputs[key], prevModularIndex, prevModularIndex + numSamples)
+    if (!inputs[key]) { console.warn('empty input key passed to buildSimulationParams:', key); continue }
+    const readableId = generateRandomReadableId(takenReadableIds)
+    idMap[`\$\{${key}\}`] = readableId
+    takenReadableIds.push(readableId)
+    slicedInputs[readableId] = modularSlice(inputs[key], prevModularIndex, prevModularIndex + numSamples)
   }
+
+  const expr = replaceByMap(rawExpr, idMap)
   return {expr, numSamples, inputs: slicedInputs}
 }
 

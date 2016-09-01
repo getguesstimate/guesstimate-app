@@ -17,7 +17,7 @@ function appendAtPosition(position, list, val, c) {
   container.push(val)
   return container.length - 1
 }
-function getAtPosition(position, list, c) {
+function getAtPosition(position, list) {
   let el = list[position[0]]
   position.slice(1).forEach( coor => {el = el.children[coor] } )
   if (!el) {
@@ -48,6 +48,8 @@ export class GuesstimateRecorder {
     this.selectorCounts = {}
     this.selectorTimings = {}
     this.actionCounts = {}
+    this.simulationDAGsBuilt = 0
+    this.propagationsRun = 0
   }
 
   constructor() {
@@ -70,6 +72,71 @@ export class GuesstimateRecorder {
     const element = {name: [name, suffix].filter(n => !_.isEmpty(n)).join(' '), start: this.time(), end: this.time(), duration: 0, children: [], data}
     this.nestedTimeline.push(element)
     if (!!counters) { incrementOrOne(counters[name]) }
+  }
+
+  recordSimulationDAGConstructionStart(DAG) {
+    if (!this.recording()) { return }
+    const element = {name: 'Building Simulation DAG', start: this.time(), children: []}
+    DAG['__recorderIndex__'] = this.nestedTimeline.push(element) - 1
+  }
+  recordSimulationDAGConstructionStop(DAG) {
+    if (!this.recording()) { return }
+    let element = this.nestedTimeline[DAG['__recorderIndex__']]
+    element.end = this.time()
+    element.duration = element.end - element.start
+    element.data = Object.assign({}, DAG)
+  }
+
+  recordPropagationStart(simulator) {
+    if (!this.recording()) { return }
+    const element = {name: 'Running Propagation', start: this.time(), children: []}
+    simulator['__recorderIndex__'] = this.nestedTimeline.push(element) - 1
+  }
+  recordPropagationStop(simulator) {
+    if (!this.recording()) { return }
+    let element = this.nestedTimeline[simulator['__recorderIndex__']]
+    element.end = this.time()
+    element.duration = element.end - element.start
+    element.data = Object.assign({}, simulator)
+  }
+
+  recordNodeSimulationStart(simulator, node) {
+    if (!this.recording()) { return }
+    let parentElement = this.nestedTimeline[simulator['__recorderIndex__']]
+    const newElement = {name: `Simulating Node ${node.id}`, start: this.time(), children: []}
+    node['__recordingIndices__'] = [simulator['__recorderIndex__'], parentElement.children.push(newElement) - 1]
+  }
+  recordNodeSimulationStop(node) {
+    if (!this.recording()) { return }
+    let element = getAtPosition(node['__recordingIndices__'], this.nestedTimeline)
+    element.end = this.time()
+    element.duration = element.end - element.start
+    element.data = Object.assign({}, node)
+  }
+  recordNodeGetInputsStart(node) {
+    if (!this.recording()) { return }
+    let parentElement = getAtPosition(node['__recordingIndices__'], this.nestedTimeline)
+    const newElement = {name: 'Getting Inputs', start: this.time(), children: []}
+    node['__getInputsRecorderIndex__'] = parentElement.children.push(newElement) - 1
+  }
+  recordNodeGetInputsStop(node, inputs) {
+    if (!this.recording()) { return }
+    let element = getAtPosition([...node['__recordingIndices__'], node['__getInputsRecorderIndex__']], this.nestedTimeline)
+    element.end = this.time()
+    element.duration = element.end - element.start
+    element.data = {inputs}
+  }
+  recordNodeSampleStart(node) {
+    if (!this.recording()) { return }
+    let parentElement = getAtPosition(node['__recordingIndices__'], this.nestedTimeline)
+    const newElement = {name: 'Sampling', start: this.time(), children: []}
+    node['__sampleRecorderIndex__'] = parentElement.children.push(newElement) - 1
+  }
+  recordNodeSampleStop(node) {
+    if (!this.recording()) { return }
+    let element = getAtPosition([...node['__recordingIndices__'], node['__sampleRecorderIndex__']], this.nestedTimeline)
+    element.end = this.time()
+    element.duration = element.end - element.start
   }
 
   recordReductionEvent(action) { this.recordNamedEvent(action.type, 'Reducing', action, this.actionCounts) }
