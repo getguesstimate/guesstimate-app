@@ -3,6 +3,8 @@ import {PropTypes} from 'react'
 import generateRandomReadableId from './metric/generate_random_readable_id'
 import * as _guesstimate from './guesstimate'
 import * as _organization from './organization'
+import * as _collections from './collections'
+import * as _utils from './utils'
 import {NUM_SAMPLES} from './simulation'
 
 import {Guesstimator} from 'lib/guesstimator/index'
@@ -80,8 +82,24 @@ const globalSelector = handle => handle.slice(1).split('.')
 const orgSelector = (orgId, handle) => [`organization_${orgId}`,handle.slice(1)]
 export const resolveToSelector = orgId => handle => handle.startsWith('#') ? orgSelector(orgId, handle) : globalSelector(handle)
 
-const forOrg = org => byVariableName(_organization.organizationReadableId(org))
-export const getFactsForOrg = (facts, org) => (!org || _.isEmpty(facts)) ? [] : _.get(facts.find(forOrg(org)), 'children') || []
+export const getFactsForOrg = (facts, org) =>  _utils.orArr(
+  _collections.gget(facts, _organization.organizationReadableId(org), 'variable_name', 'children')
+)
+
+export function getRelevantFacts({metrics, guesstimates, simulations}, globalFacts, organizationFacts) {
+  const organizationFactsUsed = organizationFacts.filter(f => _.some(guesstimates, g => g.expression.includes(`fact:${f.id}`)))
+
+  // First we grab the top level global facts (e.g. the fact for 'Chicago') which contain as children subfacts of the
+  // population variety. We'll next pre-resolve these into 'fake facts' momentarily.
+  const globalFactContainersUsed = globalFacts.filter(f => _.some(guesstimates, g => g.expression.includes(f.variable_name)))
+  const globalFactsUsed = globalFactContainersUsed.map(f => ({
+    ...f.children[0],
+    id: `${f.variable_name}.population`,
+    variable_name: `@${f.variable_name}.population`,
+  }))
+
+  return {organizationFactsUsed, globalFactsUsed}
+}
 
 export function addFactsToSpaceGraph({metrics, guesstimates, simulations}, globalFacts, organizationFacts, {organization_id}) {
   const possibleFacts = [...globalFacts, organizationFacts.find(f => f.variable_name === `organization_${organization_id}`)]
