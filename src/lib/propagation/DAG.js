@@ -1,4 +1,4 @@
-import * as NodeFns from './nodeFns'
+import * as nodeFns from './nodeFns'
 import {SimulationNode} from './node'
 import * as constants from './constants'
 
@@ -7,48 +7,52 @@ import * as _collections from 'gEngine/collections'
 export class SimulationDAG {
   constructor(nodes) {
     if (!!_.get(window, 'recorder')) { window.recorder.recordSimulationDAGConstructionStart(this) }
-    let rest = nodes.map(NodeFns.extractInputs)
+    let unprocessedNodes = nodes.map(nodeFns.extractInputs)
 
-    let byId = _.transform(rest, (map, node) => {map[node.id] = {node, lastAncestors: node.inputs, ancestors: node.inputs}}, {})
+    let nodesById = _.transform(
+      unprocessedNodes,
+      (resultMap, node) => {resultMap[node.id] = {node, lastAncestors: node.inputs, ancestors: node.inputs}},
+      {}
+    )
 
-    const missingInputsNodes = _.remove(rest, NodeFns.hasMissingInputs(rest))
-    let graphErrorNodes = missingInputsNodes.map(NodeFns.withMissingInputError(nodes))
+    const missingInputsNodes = _.remove(unprocessedNodes, nodeFns.hasMissingInputs(unprocessedNodes))
+    let graphErrorNodes = missingInputsNodes.map(nodeFns.withMissingInputError(nodes))
     let errorNodes = Object.assign([], graphErrorNodes)
     let heightOrderedNodes = []
 
-    while (!_.isEmpty(rest)) {
+    while (!_.isEmpty(unprocessedNodes)) {
       const nextLevelNodes = _.remove(
-        rest,
-        n => NodeFns.allInputsWithin(heightOrderedNodes)(n) && _.isEmpty(n.errors) && !NodeFns.anyInputsWithin(errorNodes)(n)
+        unprocessedNodes,
+        n => nodeFns.allInputsWithin(heightOrderedNodes)(n) && _.isEmpty(n.errors) && !nodeFns.anyInputsWithin(errorNodes)(n)
       )
       heightOrderedNodes.push(...nextLevelNodes)
 
-      const incomingErrorNodes = _.remove(rest, n => !_.isEmpty(n.errors) && NodeFns.allInputsWithin(heightOrderedNodes)(n))
+      const incomingErrorNodes = _.remove(unprocessedNodes, n => !_.isEmpty(n.errors) && nodeFns.allInputsWithin(heightOrderedNodes)(n))
       errorNodes.push(...incomingErrorNodes)
       heightOrderedNodes.push(...incomingErrorNodes) // We may want to resimulate these later anyways...
 
-      const infiniteLoopNodes = _.remove(rest, n => _.some(byId[n.id].lastAncestors, id => id === n.id))
-      const withInfiniteLoopErrors = infiniteLoopNodes.map(NodeFns.withInfiniteLoopError)
+      const infiniteLoopNodes = _.remove(unprocessedNodes, n => _.some(nodesById[n.id].lastAncestors, id => id === n.id))
+      const withInfiniteLoopErrors = infiniteLoopNodes.map(nodeFns.withInfiniteLoopError)
       errorNodes.push(...withInfiniteLoopErrors)
       graphErrorNodes.push(...withInfiniteLoopErrors)
 
       const inputErrorNodes = _.remove(
-        rest,
-        _collections.andFns(NodeFns.anyInputsWithin(errorNodes), NodeFns.allInputsWithin([...heightOrderedNodes, ...errorNodes]))
+        unprocessedNodes,
+        _collections.andFns(nodeFns.anyInputsWithin(errorNodes), nodeFns.allInputsWithin([...heightOrderedNodes, ...errorNodes]))
       )
-      const withAncestralErrors = inputErrorNodes.map(NodeFns.withAncestralError(errorNodes))
+      const withAncestralErrors = inputErrorNodes.map(nodeFns.withAncestralError(errorNodes))
       errorNodes.push(...withAncestralErrors)
       graphErrorNodes.push(...withAncestralErrors)
 
-      rest.forEach(n => {
-        const newLastAncestors = _.uniq(_.flatten(byId[n.id].lastAncestors.map(a => byId[a].node.inputs)))
+      unprocessedNodes.forEach(n => {
+        const newLastAncestors = _.uniq(_.flatten(nodesById[n.id].lastAncestors.map(a => nodesById[a].node.inputs)))
 
-        byId[n.id].lastAncestors = newLastAncestors
-        byId[n.id].ancestors = _.uniq([...byId[n.id].ancestors, ...newLastAncestors])
+        nodesById[n.id].lastAncestors = newLastAncestors
+        nodesById[n.id].ancestors = _.uniq([...nodesById[n.id].ancestors, ...newLastAncestors])
       })
     }
 
-    const withRelatives = heightOrderedNodes.map(NodeFns.withRelatives(heightOrderedNodes, byId))
+    const withRelatives = heightOrderedNodes.map(nodeFns.withRelatives(heightOrderedNodes, nodesById))
     const asNodes = withRelatives.map((n,i) => new SimulationNode(n, this, i))
 
     this.nodes = asNodes

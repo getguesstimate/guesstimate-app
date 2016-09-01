@@ -30,10 +30,10 @@ describe('construction', () => {
   it ('Correclty assignes nodes their relations', () => {
     const DAG = new SimulationDAG(simpleValidNodeList)
 
-    expect(DAG.nodes.map(n => _.pick(n, ['parentIndices', 'childrenIndices']))).to.deep.have.members([
-      {parentIndices: [0,1], childrenIndices: []},
-      {parentIndices: [], childrenIndices: [1,2]},
-      {parentIndices: [0], childrenIndices: [2]},
+    expect(DAG.nodes.map(n => _.pick(n, ['parentIndices']))).to.deep.have.members([
+      {parentIndices: [0,1]},
+      {parentIndices: []},
+      {parentIndices: [0]},
     ])
   })
 
@@ -122,7 +122,7 @@ describe('node functions', () => {
     const node = DAG.find(toNodeId(1))
     expect(node).to.be.ok
 
-    node.addErrorToDescendants()
+    node._addErrorToDescendants()
     expect(DAG.find(toNodeId(2)).errors).to.deep.have.members([{type: GRAPH_ERROR, subType: INVALID_ANCESTOR_ERROR, ancestors: [toNodeId(1)]}])
     expect(DAG.find(toNodeId(3)).errors).to.deep.have.members([{type: GRAPH_ERROR, subType: INVALID_ANCESTOR_ERROR, ancestors: [toNodeId(1)]}])
   })
@@ -133,7 +133,7 @@ describe('node functions', () => {
     const node = DAG.find(toNodeId(3))
     expect(node).to.be.ok
 
-    const inputs = node.getInputs()
+    const inputs = node._getInputs()
     expect(inputs).to.have.property(toNodeId(1)).that.deep.equals([3])
     expect(inputs).to.have.property(toNodeId(2)).that.deep.equals([4])
   })

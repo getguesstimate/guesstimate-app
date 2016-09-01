@@ -43,7 +43,8 @@ export function makeURLsMarkdown(text) {
 export const indicesOf = (list, predFn) => list.map((e, i) => predFn(e) ? i : null).filter(e => _.isFinite(e))
 export function getSubMatches(str, regex, matchIndex) {
   if (_.isEmpty(str)) { return [] }
-  let matches = [], match
+  let matches = []
+  let match
   while (match = regex.exec(str)) { matches.push(match[matchIndex]) }
   return matches
 }

@@ -14,7 +14,7 @@ import * as _collections from 'gEngine/collections'
 import * as _utils from 'gEngine/utils'
 
 export class SimulationNode {
-  constructor({id, expression, type, guesstimateType, samples, errors, childrenIndices, parentIndices, ancestors}, DAG, index) {
+  constructor({id, expression, type, guesstimateType, samples, errors, parentIndices, ancestors}, DAG, index) {
     this.id = id
     this.expression = expression
     this.type = type
@@ -22,31 +22,21 @@ export class SimulationNode {
     this.samples = samples
     this.errors = errors
     this.parentIndices = parentIndices
-    this.childrenIndices = childrenIndices
     this.ancestors = ancestors
     this.DAG = DAG
     this.index = index
   }
 
-  data() { return this.type === NODE_TYPES.DATA ? this.samples : [] }
-
+  _data() { return this.type === NODE_TYPES.DATA ? this.samples : [] }
   parse() {
-    const e = { text: this.expression, guesstimateType: this.guesstimateType, data: this.data() }
+    const e = { text: this.expression, guesstimateType: this.guesstimateType, data: this._data() }
     const formatter = _matchingFormatter(e)
     return [formatter.error(e), formatter.format(e)]
   }
 
-  getInputs() {
-    if (!!_.get(window, 'recorder')) { window.recorder.recordNodeGetInputsStart(this) }
-    const inputNodes = this.parentIndices.map(parentIdx => this.DAG.nodes[parentIdx])
-    const inputMap = _.transform(inputNodes, (map, node) => {map[node.id] = node.samples}, {})
-    if (!!_.get(window, 'recorder')) { window.recorder.recordNodeGetInputsStop(this, inputMap) }
-    return inputMap
-  }
-
-  getDescendants() { return this.DAG.strictSubsetFrom([this.id]) }
-  addErrorToDescendants() {
-    this.getDescendants().forEach(n => {
+  _getDescendants() { return this.DAG.strictSubsetFrom([this.id]) }
+  _addErrorToDescendants() {
+    this._getDescendants().forEach(n => {
       let ancestorError = _collections.get(n.errors, INVALID_ANCESTOR_ERROR, 'subType')
       if (!!ancestorError) {
         ancestorError.ancestors = _.uniq([...ancestorError.ancestors, this.id])
@@ -56,14 +46,22 @@ export class SimulationNode {
     })
   }
 
-  hasInputErrors() { return _collections.some(this.errors, INVALID_ANCESTOR_ERROR, 'subType') }
-  getResults() { return _.pick(this, ['samples', 'errors']) }
+  _getInputs() {
+    if (!!_.get(window, 'recorder')) { window.recorder.recordNodeGetInputsStart(this) }
+    const inputNodes = this.parentIndices.map(parentIdx => this.DAG.nodes[parentIdx])
+    const inputMap = _.transform(inputNodes, (map, node) => {map[node.id] = node.samples}, {})
+    if (!!_.get(window, 'recorder')) { window.recorder.recordNodeGetInputsStop(this, inputMap) }
+    return inputMap
+  }
+
+  _hasInputErrors() { return _collections.some(this.errors, INVALID_ANCESTOR_ERROR, 'subType') }
+  _getSimulationResults() { return _.pick(this, ['samples', 'errors']) }
   simulate(numSamples) {
-    if (this.hasInputErrors()) { return Promise.resolve(this.getResults()) }
+    if (this._hasInputErrors()) { return Promise.resolve(this._getSimulationResults()) }
 
     const [parsedError, parsedInput] = this.parse()
 
-    const inputs = this.getInputs()
+    const inputs = this._getInputs()
 
     if (!!_.get(window, 'recorder')) { window.recorder.recordNodeSampleStart(this) }
     const gtr = new Guesstimator({parsedError, parsedInput})
@@ -73,7 +71,7 @@ export class SimulationNode {
       this.samples = _utils.orArr(values)
       this.errors = _utils.orArr(errors)
       if (!_.isEmpty(errors)) { this.addErrorToDescendants() }
-      return this.getResults()
+      return this._getSimulationResults()
     })
   }
 }
