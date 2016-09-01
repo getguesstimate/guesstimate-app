@@ -20,9 +20,11 @@ function spaceSubset(state, spaceId) {
 
   const {organizationFactsUsed, globalFactsUsed} = e.facts.getRelevantFacts(subset, state.facts.globalFacts, organizationFacts)
 
-  const globalFactHandleToNodeIdMap = _.transform(globalFactsUsed, (resultMap, globalFact) => {
-    resultMap[globalFact.variable_name] = `\$\{fact:${globalFact.id}\}`
-  })
+  const globalFactHandleToNodeIdMap = _.transform(
+    globalFactsUsed,
+    (resultMap, globalFact) => { resultMap[globalFact.variable_name] = `\$\{fact:${globalFact.id}\}` },
+    {}
+  )
 
   subset.guesstimates = subset.guesstimates.map(g => ({
     ...g,
