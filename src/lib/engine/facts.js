@@ -3,6 +3,7 @@ import {PropTypes} from 'react'
 import generateRandomReadableId from './metric/generate_random_readable_id'
 import * as _guesstimate from './guesstimate'
 import * as _organization from './organization'
+import {NUM_SAMPLES} from './simulation'
 
 import {Guesstimator} from 'lib/guesstimator/index'
 import {_matchingFormatter} from 'lib/guesstimator/formatter/index'
@@ -118,9 +119,9 @@ export function addFactsToSpaceGraph({metrics, guesstimates, simulations}, globa
   }
 }
 
-export function simulateFact(fact, numSamples=5000) {
-  const e = { text: fact.expression, guesstimateType: null }
-  const formatter = _matchingFormatter(e)
-  const gtr = new Guesstimator({parsedError: formatter.error(e), parsedInput: formatter.format(e)})
-  return gtr.sample(numSamples, {})
+export function simulateFact(fact) {
+  const guesstimatorInput = { text: fact.expression, guesstimateType: null }
+  const formatter = _matchingFormatter(guesstimatorInput)
+  const guesstimator = new Guesstimator({parsedError: formatter.error(guesstimatorInput), parsedInput: formatter.format(guesstimatorInput)})
+  return guesstimator.sample(NUM_SAMPLES, {})
 }

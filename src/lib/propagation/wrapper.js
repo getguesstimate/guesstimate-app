@@ -6,8 +6,6 @@ import {INTERNAL_ERROR, INPUT_ERROR, PARSER_ERROR, INFINITE_LOOP_ERROR} from 'li
 
 import e from 'gEngine/engine'
 
-const NUM_SAMPLES = 5000
-
 const {
   NODE_TYPES,
   ERROR_SUBTYPES: {GRAPH_SUBTYPES: {MISSING_INPUT_ERROR, IN_INFINITE_LOOP, INVALID_ANCESTOR_ERROR}},
@@ -137,6 +135,6 @@ export function simulate(dispatch, getState, graphFilters) {
     dispatch(addSimulation(newSimulation))
   }
 
-  let simulator = new Simulator(nodes, NUM_SAMPLES, translateOptions(graphFilters), propagationId, yieldSims, getCurrPropId)
+  let simulator = new Simulator(nodes, e.simulation.NUM_SAMPLES, translateOptions(graphFilters), propagationId, yieldSims, getCurrPropId)
   simulator.run()
 }

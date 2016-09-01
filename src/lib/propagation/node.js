@@ -29,9 +29,9 @@ export class SimulationNode {
 
   _data() { return this.type === NODE_TYPES.DATA ? this.samples : [] }
   parse() {
-    const e = { text: this.expression, guesstimateType: this.guesstimateType, data: this._data() }
-    const formatter = _matchingFormatter(e)
-    return [formatter.error(e), formatter.format(e)]
+    const guesstimatorInput = { text: this.expression, guesstimateType: this.guesstimateType, data: this._data() }
+    const formatter = _matchingFormatter(guesstimatorInput)
+    return [formatter.error(guesstimatorInput), formatter.format(guesstimatorInput)]
   }
 
   _getDescendants() { return this.DAG.strictSubsetFrom([this.id]) }
@@ -64,8 +64,8 @@ export class SimulationNode {
     const inputs = this._getInputs()
 
     if (!!_.get(window, 'recorder')) { window.recorder.recordNodeSampleStart(this) }
-    const gtr = new Guesstimator({parsedError, parsedInput})
-    return gtr.sample(numSamples, inputs).then(({values, errors}) => {
+    const guesstimator = new Guesstimator({parsedError, parsedInput})
+    return guesstimator.sample(numSamples, inputs).then(({values, errors}) => {
       if (!!_.get(window, 'recorder')) { window.recorder.recordNodeSampleStop(this) }
 
       this.samples = _utils.orArr(values)
