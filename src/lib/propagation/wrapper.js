@@ -1,4 +1,5 @@
 import {addSimulation} from 'gModules/simulations/actions'
+import {addSimulationToFact} from 'gModules/facts/actions'
 
 import * as constants from './constants'
 import {Simulator} from './simulator'
@@ -18,7 +19,7 @@ function spaceSubset(state, spaceId) {
   let subset = e.space.subset(state, spaceId, true)
   const organizationFacts = e.facts.getFactsForOrg(state.facts.organizationFacts, organization)
 
-  const {organizationFactsUsed, globalFactsUsed} = e.facts.getRelevantFactsAndReformatGlobals(subset, state.facts.globalFacts, organizationFacts)
+  const {organizationFactsUsed, globalFactsUsed} = e.facts.getRelevantFactsAndReformatGlobals(subset, state.facts.globalFacts, organizationFacts, spaceId)
 
   const globalFactHandleToNodeIdMap = _.transform(
     globalFactsUsed,
@@ -34,7 +35,9 @@ function spaceSubset(state, spaceId) {
   return {subset, relevantFacts: [...organizationFactsUsed, ...globalFactsUsed]}
 }
 
-const nodeIdToMetricId = id => id.slice(7)
+const nodeIdToMetricId = id => id.slice(e.simulation.METRIC_ID_PREFIX.length)
+const nodeIdToFactId = id => id.slice(e.simulation.FACT_ID_PREFIX.length)
+const nodeIdIsMetric = id => id.includes(e.simulation.METRIC_ID_PREFIX)
 
 function guesstimateTypeToNodeType(guesstimateType) {
   switch (guesstimateType) {
@@ -66,6 +69,7 @@ const factToSimulationNodeFn = f => ({
   guesstimateType: null, // Facts are currently type-less.
   samples: e.utils.orArr(_.get(f, 'simulation.sample.values')),
   errors: [],
+  skipSimulating: !_.get(f, 'defining_space_id'),
 })
 
 function denormalize({metrics, guesstimates, simulations}) {
@@ -142,7 +146,7 @@ export function simulate(dispatch, getState, graphFilters) {
   const propagationId = (new Date()).getTime()
 
   const getCurrPropId = nodeId => e.collections.gget(getState().simulations, nodeIdToMetricId(nodeId), 'metric', 'propagationId')
-  const yieldSims = (nodeId, sim) => {
+  const yieldMetricSims = (nodeId, sim) => {
     const {samples, errors} = sim
     const metric = nodeIdToMetricId(nodeId)
     const newSimulation = {
@@ -155,6 +159,21 @@ export function simulate(dispatch, getState, graphFilters) {
     }
     dispatch(addSimulation(newSimulation))
   }
+
+  const yieldFactSims = (nodeId, sim) => {
+    console.warn('yielding sims for ', nodeId, 'with values', sim)
+    const {samples, errors} = sim
+    const factId = nodeIdToFactId(nodeId)
+    const newSimulation = {
+      sample: {
+        values: _.isEmpty(errors) ? samples : [],
+        errors: errors
+      }
+    }
+    dispatch(addSimulationToFact(newSimulation, factId))
+  }
+
+  const yieldSims = (nodeId, sim) => { nodeIdIsMetric(nodeId) ? yieldMetricSims(nodeId, sim) : yieldFactSims(nodeId, sim) }
 
   let simulator = new Simulator(nodes, e.simulation.NUM_SAMPLES, translateOptions(graphFilters), propagationId, yieldSims, getCurrPropId)
   simulator.run()

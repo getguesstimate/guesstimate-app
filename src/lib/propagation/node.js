@@ -14,7 +14,7 @@ import * as _collections from 'gEngine/collections'
 import * as _utils from 'gEngine/utils'
 
 export class SimulationNode {
-  constructor({id, expression, type, guesstimateType, samples, errors, parentIndices, ancestors}, DAG, index) {
+  constructor({id, expression, type, guesstimateType, samples, errors, parentIndices, ancestors, skipSimulating}, DAG, index) {
     this.id = id
     this.expression = expression
     this.type = type
@@ -25,6 +25,7 @@ export class SimulationNode {
     this.ancestors = ancestors
     this.DAG = DAG
     this.index = index
+    this.skipSimulating = skipSimulating
   }
 
   simulate(numSamples) {
