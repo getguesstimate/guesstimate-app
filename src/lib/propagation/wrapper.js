@@ -31,8 +31,6 @@ function spaceSubset(state, spaceId) {
     expression: e.utils.replaceByMap(g.expression, globalFactHandleToNodeIdMap)
   }))
 
-  console.log([subset.guesstimates, organizationFactsUsed, globalFactsUsed, globalFactHandleToNodeIdMap])
-
   return {subset, relevantFacts: [...organizationFactsUsed, ...globalFactsUsed]}
 }
 
