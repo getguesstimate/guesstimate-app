@@ -86,10 +86,11 @@ export const getFactsForOrg = (facts, org) =>  _utils.orArr(
   _collections.gget(facts, _organization.organizationReadableId(org), 'variable_name', 'children')
 )
 
-export function getRelevantFactsAndReformatGlobals({metrics, guesstimates, simulations}, globalFacts, organizationFacts) {
+export function getRelevantFactsAndReformatGlobals({metrics, guesstimates, simulations}, globalFacts, organizationFacts, spaceId) {
   const organizationFactsUsed = organizationFacts.filter(
     f => _.some(guesstimates, g => g.expression.includes(_guesstimate.expressionSyntaxPad(f.id, false)))
   )
+  const organizationFactsDefined = _collections.filter(organizationFacts, spaceId, 'defining_space_id')
 
   // First we grab the top level global facts (e.g. the fact for 'Chicago') which contain as children subfacts of the
   // population variety. We'll next pre-resolve these into 'fake facts' momentarily.
@@ -100,7 +101,7 @@ export function getRelevantFactsAndReformatGlobals({metrics, guesstimates, simul
     variable_name: `@${f.variable_name}.population`,
   }))
 
-  return {organizationFactsUsed, globalFactsUsed}
+  return {organizationFactsUsed: [...organizationFactsUsed, ...organizationFactsDefined], globalFactsUsed}
 }
 
 export function simulateFact(fact) {

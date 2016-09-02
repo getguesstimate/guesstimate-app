@@ -8,7 +8,10 @@ export const hasPrivateAccess = organization => _.get(organization, 'plan.privat
 export const canMakeMorePrivateModels = hasPrivateAccess
 export const organizationMemberships = (id, memberships) => _collections.filter(memberships, id, 'organization_id')
 export const organizationInvitations = (id, invitations) => _collections.filter(invitations, id, 'organization_id')
-export const organizationReadableId = ({id}) => `organization_${id}`
+
+const ORG_FACT_READABLE_ID_PREFIX = 'organization_'
+export const organizationReadableId = ({id}) => `${ORG_FACT_READABLE_ID_PREFIX}${id}`
+export const organizationIdFromFactReadableId = str => str.slice(ORG_FACT_READABLE_ID_PREFIX.length)
 
 export function organizationUsers(organizationId, users, memberships) {
   let filteredMemberships = organizationMemberships(organizationId, memberships)

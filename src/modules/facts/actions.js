@@ -1,4 +1,9 @@
+import {editFact} from 'gModules/organizations/actions'
+
 import {selectorSearch, withSortedValues} from 'gEngine/facts'
+import * as _collections from 'gEngine/collections'
+import {organizationIdFromFactReadableId} from 'gEngine/organization'
+import {addStats} from 'gEngine/simulation'
 
 export function getSuggestion(selector) {
   return (dispatch, getState) => {
@@ -25,4 +30,30 @@ export function updateWithinOrg(organizationVariableName, fact) {
 
 export function deleteFromOrg(organizationVariableName, {id}) {
   return {type: 'DELETE_FACT_FROM_ORG', organizationVariableName, id}
+}
+
+export function addSimulationToFact(simulation, id) {
+  return (dispatch, getState) => {
+    const state = getState()
+
+    const oldOrganizationFact = state.facts.organizationFacts.find(e => _collections.some(e.children, id))
+    if (!oldOrganizationFact) {
+      console.warn('Tried to add simulations to a non-existent fact!')
+      return
+    }
+
+    const orgId = organizationIdFromFactReadableId(oldOrganizationFact.variable_name)
+    const organization = _collections.get(state.organizations, orgId)
+
+    const oldFact = _collections.get(oldOrganizationFact.children, id)
+
+    addStats(simulation)
+    const newFact = {
+      ...oldFact,
+      simulation: simulation,
+    }
+
+    dispatch(updateWithinOrg(oldOrganizationFact.variable_name, newFact))
+    dispatch(editFact(organization, newFact))
+  }
 }
