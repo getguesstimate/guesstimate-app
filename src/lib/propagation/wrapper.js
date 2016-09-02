@@ -15,17 +15,26 @@ function spaceSubset(state, spaceId) {
   const space = e.collections.get(state.spaces, spaceId)
   const organization = e.collections.get(state.organizations, _.get(space, 'organization_id'))
 
-  const spaceSubset = e.space.subset(state, spaceId, true)
-  const organizationalFacts = e.facts.getFactsForOrg(state.facts.organizationFacts, organization)
+  let subset = e.space.subset(state, spaceId, true)
+  const organizationFacts = e.facts.getFactsForOrg(state.facts.organizationFacts, organization)
 
-  const translatedSubset = e.space.expressionsToInputs(spaceSubset, organizationalFacts)
-  const withFacts = e.facts.addFactsToSpaceGraph(translatedSubset, state.facts.globalFacts, state.facts.organizationFacts, space)
+  const {organizationFactsUsed, globalFactsUsed} = e.facts.getRelevantFactsAndReformatGlobals(subset, state.facts.globalFacts, organizationFacts)
 
-  return withFacts
+  const globalFactHandleToNodeIdMap = _.transform(
+    globalFactsUsed,
+    (resultMap, globalFact) => { resultMap[globalFact.variable_name] = e.guesstimate.expressionSyntaxPad(globalFact.id, false) },
+    {}
+  )
+
+  subset.guesstimates = subset.guesstimates.map(g => ({
+    ...g,
+    expression: e.utils.replaceByMap(g.expression, globalFactHandleToNodeIdMap)
+  }))
+
+  return {subset, relevantFacts: [...organizationFactsUsed, ...globalFactsUsed]}
 }
 
 const nodeIdToMetricId = id => id.slice(7)
-const metricIdToNodeId = id => `metric:${id}`
 
 function guesstimateTypeToNodeType(guesstimateType) {
   switch (guesstimateType) {
@@ -39,6 +48,7 @@ function guesstimateTypeToNodeType(guesstimateType) {
 }
 
 const filterErrorsFn = e => e.type !== INPUT_ERROR && e.type !== PARSER_ERROR && e.type !== INFINITE_LOOP_ERROR
+const metricIdToNodeId = id => `${e.simulation.METRIC_ID_PREFIX}${id}`
 const metricToSimulationNodeFn = m => ({
   id: metricIdToNodeId(m.id),
   type: guesstimateTypeToNodeType(m.guesstimate.guesstimateType),
@@ -46,6 +56,16 @@ const metricToSimulationNodeFn = m => ({
   expression: m.guesstimate.expression,
   samples: m.guesstimate.guesstimateType === 'DATA' ? e.utils.orArr(_.get(m, 'guesstimate.data')) : e.utils.orArr(_.get(m, 'simulation.sample.values')),
   errors: Object.assign([], e.utils.orArr(_.get(m, 'simulation.sample.errors')).filter(filterErrorsFn)),
+})
+
+const factIdToNodeId = id => `${e.simulation.FACT_ID_PREFIX}${id}`
+const factToSimulationNodeFn = f => ({
+  id: factIdToNodeId(f.id),
+  expression: f.expression,
+  type: NODE_TYPES.UNSET, // Facts are currently type-less.
+  guesstimateType: null, // Facts are currently type-less.
+  samples: e.utils.orArr(_.get(f, 'simulation.sample.values')),
+  errors: [],
 })
 
 function denormalize({metrics, guesstimates, simulations}) {
@@ -114,9 +134,10 @@ export function simulate(dispatch, getState, graphFilters) {
   }
   if (!spaceId) { return }
 
-  const subset = spaceSubset(getState(), spaceId)
+  const {subset, relevantFacts} = spaceSubset(getState(), spaceId)
   const denormalizedMetrics = denormalize(subset)
-  const nodes = denormalizedMetrics.map(metricToSimulationNodeFn)
+
+  const nodes = [...denormalizedMetrics.map(metricToSimulationNodeFn), ...relevantFacts.map(factToSimulationNodeFn)]
 
   const propagationId = (new Date()).getTime()
 

@@ -3,6 +3,8 @@ import {PropTypes} from 'react'
 import generateRandomReadableId from './metric/generate_random_readable_id'
 import * as _guesstimate from './guesstimate'
 import * as _organization from './organization'
+import * as _collections from './collections'
+import * as _utils from './utils'
 import {NUM_SAMPLES} from './simulation'
 
 import {Guesstimator} from 'lib/guesstimator/index'
@@ -80,43 +82,25 @@ const globalSelector = handle => handle.slice(1).split('.')
 const orgSelector = (orgId, handle) => [`organization_${orgId}`,handle.slice(1)]
 export const resolveToSelector = orgId => handle => handle.startsWith('#') ? orgSelector(orgId, handle) : globalSelector(handle)
 
-const forOrg = org => byVariableName(_organization.organizationReadableId(org))
-export const getFactsForOrg = (facts, org) => (!org || _.isEmpty(facts)) ? [] : _.get(facts.find(forOrg(org)), 'children') || []
+export const getFactsForOrg = (facts, org) =>  _utils.orArr(
+  _collections.gget(facts, _organization.organizationReadableId(org), 'variable_name', 'children')
+)
 
-export function addFactsToSpaceGraph({metrics, guesstimates, simulations}, globalFacts, organizationFacts, {organization_id}) {
-  const possibleFacts = [...globalFacts, organizationFacts.find(f => f.variable_name === `organization_${organization_id}`)]
+export function getRelevantFactsAndReformatGlobals({metrics, guesstimates, simulations}, globalFacts, organizationFacts) {
+  const organizationFactsUsed = organizationFacts.filter(
+    f => _.some(guesstimates, g => g.expression.includes(_guesstimate.expressionSyntaxPad(f.id, false)))
+  )
 
-  // First we need to extract out the relevant fact handles, which we'll evaluate into full selectors, and the facts to
-  // which they refer from the graph. We group them as they are used as a unit later.
-  const handles = _.uniq(_.flatten(guesstimates.map(_guesstimate.extractFactHandles))).filter(h => !_.isEmpty(h))
-  const selectors = handles.map(resolveToSelector(organization_id))
-  const facts = selectors.map(s => findBySelector(possibleFacts, s))
-  const grouped = _.zip(handles, selectors, facts).filter(([_1, _2, f]) => _.has(f, 'variable_name'))
+  // First we grab the top level global facts (e.g. the fact for 'Chicago') which contain as children subfacts of the
+  // population variety. We'll next pre-resolve these into 'fake facts' momentarily.
+  const globalFactContainersUsed = globalFacts.filter(f => _.some(guesstimates, g => g.expression.includes(f.variable_name)))
+  const globalFactsUsed = globalFactContainersUsed.map(f => ({
+    ...f.children[0],
+    id: `${f.variable_name}.population`,
+    variable_name: `@${f.variable_name}.population`,
+  }))
 
-  // When dynamically generating new metrics, we need non-colliding readableIds, so we'll store a running copy of those
-  // used, and initialize some variables to account for the extra objects we'll build.
-  let readableIds = metrics.map(m => m.readableId)
-  let [factMetrics, factGuesstimates, factSimulations, factIdMap] = [[], [], [], {}]
-  grouped.forEach(([handle, selector, fact]) => {
-    // We construct virtual metrics, guesstimates, and simulations from the selector, fact, and running readable IDs...
-    const {metric, guesstimate, simulation} = buildFullNode(selector, fact, readableIds)
-
-    // Then update all the running variables.
-    const idToTranslate = !!_.get(fact, 'id') ? `\$\{fact:${fact.id}\}` : handle
-    factIdMap[idToTranslate] = `\$\{metric:${metric.id}\}`
-
-    readableIds = [...readableIds, metric.readableId]
-
-    factMetrics = [...factMetrics, metric]
-    factGuesstimates = [...factGuesstimates, guesstimate]
-    factSimulations = [...factSimulations, simulation]
-  })
-
-  return {
-    metrics: [...metrics, ...factMetrics],
-    guesstimates: [...guesstimates.map(_guesstimate.translateFactHandleFn(factIdMap)), ...factGuesstimates],
-    simulations: [...simulations, ...factSimulations],
-  }
+  return {organizationFactsUsed, globalFactsUsed}
 }
 
 export function simulateFact(fact) {
