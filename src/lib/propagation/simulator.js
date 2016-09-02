@@ -1,4 +1,4 @@
-import {SimulationDAG} from './DAG.js'
+import {SimulationDAG} from './DAG'
 
 function getNodesToSimulate(DAG, options) {
   if (!!options.simulateIds) {
@@ -16,7 +16,7 @@ export class Simulator {
   constructor(nodes, numSamples, options, propagationId, yieldSims, getCurrPropId) {
     // First, we'll build the DAG from the passed nodes.
     this.DAG = new SimulationDAG(nodes)
-    this.nodesToSimulate = getNodesToSimulate(this.DAG, options)
+    this.nodesToSimulate = getNodesToSimulate(this.DAG, options).filter(n => !n.skipSimulating)
     this.index = 0
     this.numSamples = numSamples
     this.yieldSims = yieldSims

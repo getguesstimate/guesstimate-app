@@ -71,6 +71,7 @@ const factToSimulationNodeFn = f => ({
   guesstimateType: null, // Facts are currently type-less.
   samples: e.utils.orArr(_.get(f, 'simulation.sample.values')),
   errors: [],
+  skipSimulating: !_.get(f, 'defining_space_id'),
 })
 
 function denormalize({metrics, guesstimates, simulations}) {
