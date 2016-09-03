@@ -93,7 +93,7 @@ export function getRelevantFactsAndReformatGlobals({metrics, guesstimates, simul
   const rawOrganizationFactsDefined = _collections.filter(organizationFacts, spaceId, 'defining_space_id')
   const organizationFactsDefined = rawOrganizationFactsDefined.map(f => ({
     ...f,
-    expression: `=${_guesstimate.expressionSyntaxPad(f.metricId)}`
+    expression: `=${_guesstimate.expressionSyntaxPad(f.metric_id)}`
   }))
 
   // First we grab the top level global facts (e.g. the fact for 'Chicago') which contain as children subfacts of the

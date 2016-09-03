@@ -23,6 +23,23 @@ function api(state) {
   return setupGuesstimateApi(getToken(state))
 }
 
+export function fetchSuccess(...spaces) {
+  return (dispatch, getState) => {
+    dispatch(sActions.fetchSuccess(spaces.map(s => _.omit(s, ['_embedded']))))
+    // TODO(matthew): Initialize if not already initialized. dispatch(initSpace(spaceId, value.graph))
+
+    const users = spaces.map(s => _.get(s, '_embedded.user')).filter(e.collections.isPresent)
+    const organizations = spaces.map(s => _.get(s, '_embedded.organization')).filter(e.collections.isPresent)
+    const calculators = _.flatten(spaces.map(s => e.utils.orArr(_.get(s, '_embedded.calculators')))).filter(e.collections.isPresent)
+
+    if (!_.isEmpty(calculators)) {dispatch(calculatorActions.sActions.fetchSuccess(calculators))}
+    if (!_.isEmpty(organizations)) { dispatch(organizationActions.fetchSuccess([organization])) }
+    if (!_.isEmpty(users)) {
+      dispatch(userActions.fetchSuccess([user]))
+    }
+  }
+}
+
 export function destroy(object) {
   const id = object.id
   return (dispatch, getState) => {

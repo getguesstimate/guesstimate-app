@@ -17,6 +17,8 @@ export function clearSuggestion() {
 }
 
 export function loadByOrg(facts) {
+  // TODO(matthew): Extract embedded dependent spaces here.
+  const spaces = _.flatten(facts.map(f => f.dependent_fact_defining_spaces))
   return {type: 'LOAD_FACTS_BY_ORG', facts}
 }
 

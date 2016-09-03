@@ -103,6 +103,7 @@ export function addFact(organization, rawFact) {
 
 // editFact edits the passed fact, with sortedValues overwritten to null, to the organization and saves it on the server.
 export function editFact(organization, rawFact) {
+  // TODO(matthew): Build dependency chain here?
   return (dispatch, getState) => {
     let fact = Object.assign({}, rawFact)
     _.set(fact, 'simulation.sample.sortedValues', null)
