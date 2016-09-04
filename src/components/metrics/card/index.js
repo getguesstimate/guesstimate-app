@@ -19,7 +19,7 @@ import {analyzeMetricId, endAnalysis} from 'gModules/canvas_state/actions'
 
 import * as canvasStateProps from 'gModules/canvas_state/prop_type'
 import {PTLocation} from 'lib/locationUtils'
-import {getVariableNameFromName, shouldTransformName} from 'lib/nameToVariableName'
+import {withReadableId} from 'lib/generateVariableNames/generateMetricReadableId'
 
 import {INTERMEDIATE, OUTPUT, INPUT, NOEDGE, relationshipType} from 'gEngine/graph'
 import {makeURLsMarkdown} from 'gEngine/utils'
@@ -182,12 +182,9 @@ export default class MetricCard extends Component {
 
   onChangeMetricName(name) {
     if (name === _.get(this, 'props.metric.name')) { return }
-    let metric = {id: this._id(), name}
-    const shouldUpdateReadableId = shouldTransformName(name)
-    if (shouldUpdateReadableId) {
-      const newReadableIdRaw = getVariableNameFromName(name, this.props.existingReadableIds, 3, 3, 5).toUpperCase()
-      metric.readableId = newReadableIdRaw.replace(/\_/g, '')
-    }
+
+    const metric = withReadableId({id: this._id(), name}, this.props.existingReadableIds)
+
     this.props.changeMetric(metric)
   }
 
