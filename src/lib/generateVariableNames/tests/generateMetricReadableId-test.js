@@ -1,7 +1,7 @@
 import {expect} from 'chai'
 import {withReadableId} from '../generateMetricReadableId'
 
-describe.only('generateReadableId', () => {
+describe('generateReadableId', () => {
   const existingReadableIds = [
     'AB',
     'PIN',
