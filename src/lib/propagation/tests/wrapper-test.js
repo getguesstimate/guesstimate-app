@@ -65,7 +65,7 @@ describe('getSubset', () => {
         {
           variable_name: organizationReadableId({id: 1}),
           children: [
-            {id: 1, expression: '3'},
+            {id: 1, expression: '3', dependent_fact_exporting_space_ids: [1, 2]},
             {id: 2, metric_id: 1, exporting_space_id: 1},
             {id: 3, metric_id: 3, exporting_space_id: 2},
             {id: 7, expression: '100'},
@@ -75,7 +75,7 @@ describe('getSubset', () => {
         {
           variable_name: organizationReadableId({id: 2}),
           children: [
-            {id: 4, expression: '3'},
+            {id: 4, expression: '3', dependent_fact_exporting_space_ids: [4]},
             {id: 5, metric_id: 8, exporting_space_id: 4},
             {id: 6, metric_id: 9, exporting_space_id: 4},
           ],
@@ -138,7 +138,7 @@ describe('getSubset', () => {
     ])
 
     expect(relevantFacts, 'The relevantFacts should match').to.deep.have.members([
-      {id: 1, expression: '3'},
+      {id: 1, expression: '3', dependent_fact_exporting_space_ids: [1, 2]},
       {id: 2, metric_id: 1, exporting_space_id: 1, expression: `=${expressionSyntaxPad(1)}`},
     ])
   })
@@ -161,7 +161,7 @@ describe('getSubset', () => {
     ])
 
     expect(relevantFacts, 'The relevantFacts should match').to.deep.have.members([
-      {id: 1, expression: '3'},
+      {id: 1, expression: '3', dependent_fact_exporting_space_ids: [1, 2]},
       {id: 2, metric_id: 1, exporting_space_id: 1, expression: `=${expressionSyntaxPad(1)}`},
     ])
   })
@@ -190,9 +190,21 @@ describe('getSubset', () => {
     ])
 
     expect(relevantFacts, 'The relevantFacts should match').to.deep.have.members([
-      {id: 1, expression: '3'},
+      {id: 1, expression: '3', dependent_fact_exporting_space_ids: [1, 2]},
       {id: 2, metric_id: 1, exporting_space_id: 1, expression: `=${expressionSyntaxPad(1)}`},
       {id: 3, metric_id: 3, exporting_space_id: 2, expression: `=${expressionSyntaxPad(3)}`},
     ])
+  })
+
+  // TODO(matthew): Rename per Ozzie's feedback on Server PR.
+  it ("should correctly extract an empty subset from a factId with no dependent fact exporting spaces", () => {
+    const graphFilters = { factId: 2 }
+    const {subset, relevantFacts} = getSubset(state, graphFilters)
+
+    expect(subset, "The subset's metrics should be empty").to.have.property('metrics').that.is.empty
+    expect(subset, "The subset's guesstimates should match").to.have.property('guesstimates').that.is.empty
+    expect(subset, "The subset's simulations should match").to.have.property('simulations').that.is.empty
+
+    expect(relevantFacts, 'The relevantFacts should match').to.be.empty
   })
 })
