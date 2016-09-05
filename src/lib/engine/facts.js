@@ -82,13 +82,13 @@ const globalSelector = handle => handle.slice(1).split('.')
 const orgSelector = (orgId, handle) => [`organization_${orgId}`,handle.slice(1)]
 export const resolveToSelector = orgId => handle => handle.startsWith('#') ? orgSelector(orgId, handle) : globalSelector(handle)
 
-export const getFactsForOrg = (facts, org) =>  _utils.orArr(
+export const getFactsForOrg = (facts, org) => !org ? [] : _utils.orArr(
   _collections.gget(facts, _organization.organizationReadableId(org), 'variable_name', 'children')
 )
 
 export function getRelevantFactsAndReformatGlobals({metrics, guesstimates, simulations}, globalFacts, organizationFacts, spaceId) {
   const organizationFactsUsed = organizationFacts.filter(
-    f => _.some(guesstimates, g => g.expression.includes(_guesstimate.expressionSyntaxPad(f.id, false)))
+    f => _.some(guesstimates, g => _utils.orStr(g.expression).includes(_guesstimate.expressionSyntaxPad(f.id, false)))
   )
   const rawOrganizationFactsDefined = _collections.filter(organizationFacts, spaceId, 'defining_space_id')
   const organizationFactsDefined = rawOrganizationFactsDefined.map(f => ({
@@ -98,7 +98,7 @@ export function getRelevantFactsAndReformatGlobals({metrics, guesstimates, simul
 
   // First we grab the top level global facts (e.g. the fact for 'Chicago') which contain as children subfacts of the
   // population variety. We'll next pre-resolve these into 'fake facts' momentarily.
-  const globalFactContainersUsed = globalFacts.filter(f => _.some(guesstimates, g => g.expression.includes(f.variable_name)))
+  const globalFactContainersUsed = globalFacts.filter(f => _.some(guesstimates, g => _utils.orStr(g.expression).includes(f.variable_name)))
   const globalFactsUsed = globalFactContainersUsed.map(f => ({
     ...f.children[0],
     id: `${f.variable_name}.population`,
