@@ -20,11 +20,11 @@ export function getSubset(state, graphFilters) {
   if (!!graphFilters.factId) {
     const organizationFact = state.facts.organizationFacts.find(({children}) => e.collections.some(children, graphFilters.factId))
     const fact = e.collections.get(_.get(organizationFact, 'children'), graphFilters.factId)
-    if (!_.isEmpty(fact.dependent_fact_exporting_space_ids)) {
+    if (!_.isEmpty(fact.imported_to_intermediate_space_ids)) {
       const orgId = e.organization.organizationIdFromFactReadableId(organizationFact.variable_name)
       organization = e.collections.get(state.organizations, orgId)
       const organizationSpaces = e.collections.filter(state.spaces, orgId, 'organization_id')
-      spaces.push(...organizationSpaces.filter(s => s.exported_facts_count > 0 && !_.isEmpty(s.imported_facts)))
+      spaces.push(...organizationSpaces.filter(s => s.exported_facts_count > 0 && !_.isEmpty(s.imported_fact_ids)))
     }
   } else if (!!graphFilters.spaceId) {
     spaces.push(e.collections.get(state.spaces, graphFilters.spaceId))

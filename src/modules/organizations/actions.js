@@ -32,7 +32,7 @@ export function fetchById(organizationId) {
         dispatch(displayErrorsActions.newError())
         captureApiError('OrganizationsFetch', err.jqXHR, err.textStatus, err, {url: 'fetch'})
       } else if (organization) {
-        const spaces = _.get(organization, 'fact_exporting_spaces')
+        const spaces = _.get(organization, 'intermediate_spaces')
         if (!_.isEmpty(spaces)) { dispatch(spaceActions.fetchSuccess(...spaces)) }
         dispatch(fetchSuccess([organization]))
       }

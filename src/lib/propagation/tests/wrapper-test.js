@@ -14,31 +14,31 @@ describe('getSubset', () => {
       {
         id: 1,
         organization_id: 1,
-        imported_facts: [1],
+        imported_fact_ids: [1],
         exported_facts_count: 1,
       },
       {
         id: 2,
         organization_id: 1,
-        imported_facts: [1],
+        imported_fact_ids: [1],
         exported_facts_count: 1,
       },
       {
         id: 3,
         organization_id: 1,
-        imported_facts: [7],
+        imported_fact_ids: [7],
         exported_facts_count: 0,
       },
       {
         id: 5,
         organization_id: 1,
-        imported_facts: [],
+        imported_fact_ids: [],
         exported_facts_count: 1,
       },
       {
         id: 4,
         organization_id: 2,
-        imported_facts: [4],
+        imported_fact_ids: [4],
         exported_facts_count: 2,
       },
     ],
@@ -65,19 +65,19 @@ describe('getSubset', () => {
         {
           variable_name: organizationReadableId({id: 1}),
           children: [
-            {id: 1, expression: '3', dependent_fact_exporting_space_ids: [1, 2]},
-            {id: 2, metric_id: 1, exporting_space_id: 1},
-            {id: 3, metric_id: 3, exporting_space_id: 2},
+            {id: 1, expression: '3', imported_to_intermediate_space_ids: [1, 2]},
+            {id: 2, metric_id: 1, exported_from_id: 1},
+            {id: 3, metric_id: 3, exported_from_id: 2},
             {id: 7, expression: '100'},
-            {id: 8, metric_id: 10, exporting_space_id: 5},
+            {id: 8, metric_id: 10, exported_from_id: 5},
           ],
         },
         {
           variable_name: organizationReadableId({id: 2}),
           children: [
-            {id: 4, expression: '3', dependent_fact_exporting_space_ids: [4]},
-            {id: 5, metric_id: 8, exporting_space_id: 4},
-            {id: 6, metric_id: 9, exporting_space_id: 4},
+            {id: 4, expression: '3', imported_to_intermediate_space_ids: [4]},
+            {id: 5, metric_id: 8, exported_from_id: 4},
+            {id: 6, metric_id: 9, exported_from_id: 4},
           ],
         },
       ],
@@ -138,8 +138,8 @@ describe('getSubset', () => {
     ])
 
     expect(relevantFacts, 'The relevantFacts should match').to.deep.have.members([
-      {id: 1, expression: '3', dependent_fact_exporting_space_ids: [1, 2]},
-      {id: 2, metric_id: 1, exporting_space_id: 1, expression: `=${expressionSyntaxPad(1)}`},
+      {id: 1, expression: '3', imported_to_intermediate_space_ids: [1, 2]},
+      {id: 2, metric_id: 1, exported_from_id: 1, expression: `=${expressionSyntaxPad(1)}`},
     ])
   })
 
@@ -161,8 +161,8 @@ describe('getSubset', () => {
     ])
 
     expect(relevantFacts, 'The relevantFacts should match').to.deep.have.members([
-      {id: 1, expression: '3', dependent_fact_exporting_space_ids: [1, 2]},
-      {id: 2, metric_id: 1, exporting_space_id: 1, expression: `=${expressionSyntaxPad(1)}`},
+      {id: 1, expression: '3', imported_to_intermediate_space_ids: [1, 2]},
+      {id: 2, metric_id: 1, exported_from_id: 1, expression: `=${expressionSyntaxPad(1)}`},
     ])
   })
 
@@ -190,14 +190,13 @@ describe('getSubset', () => {
     ])
 
     expect(relevantFacts, 'The relevantFacts should match').to.deep.have.members([
-      {id: 1, expression: '3', dependent_fact_exporting_space_ids: [1, 2]},
-      {id: 2, metric_id: 1, exporting_space_id: 1, expression: `=${expressionSyntaxPad(1)}`},
-      {id: 3, metric_id: 3, exporting_space_id: 2, expression: `=${expressionSyntaxPad(3)}`},
+      {id: 1, expression: '3', imported_to_intermediate_space_ids: [1, 2]},
+      {id: 2, metric_id: 1, exported_from_id: 1, expression: `=${expressionSyntaxPad(1)}`},
+      {id: 3, metric_id: 3, exported_from_id: 2, expression: `=${expressionSyntaxPad(3)}`},
     ])
   })
 
-  // TODO(matthew): Rename per Ozzie's feedback on Server PR.
-  it ("should correctly extract an empty subset from a factId with no dependent fact exporting spaces", () => {
+  it ("should correctly extract an empty subset from a factId with no imported_to_intermediate_space_ids", () => {
     const graphFilters = { factId: 2 }
     const {subset, relevantFacts} = getSubset(state, graphFilters)
 
