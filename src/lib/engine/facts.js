@@ -86,11 +86,11 @@ export const getFactsForOrg = (facts, org) => !org ? [] : _utils.orArr(
   _collections.gget(facts, _organization.organizationReadableId(org), 'variable_name', 'children')
 )
 
-export function getRelevantFactsAndReformatGlobals({metrics, guesstimates, simulations}, globalFacts, organizationFacts, spaceId) {
+export function getRelevantFactsAndReformatGlobals({metrics, guesstimates, simulations}, globalFacts, organizationFacts, spaceIds) {
   const organizationFactsUsed = organizationFacts.filter(
     f => _.some(guesstimates, g => _utils.orStr(g.expression).includes(_guesstimate.expressionSyntaxPad(f.id, false)))
   )
-  const rawOrganizationFactsDefined = _collections.filter(organizationFacts, spaceId, 'defining_space_id')
+  const rawOrganizationFactsDefined = _collections.filterByInclusion(organizationFacts, 'exporting_space_id', ...spaceIds)
   const organizationFactsDefined = rawOrganizationFactsDefined.map(f => ({
     ...f,
     expression: `=${_guesstimate.expressionSyntaxPad(f.metric_id)}`

@@ -12,21 +12,23 @@ const {
   ERROR_SUBTYPES: {GRAPH_SUBTYPES: {MISSING_INPUT_ERROR, IN_INFINITE_LOOP, INVALID_ANCESTOR_ERROR}},
 } = constants
 
-function getSubset(state, graphFilters) {
+// TODO(matthew): Find a way to test this through the public API.
+export function getSubset(state, graphFilters) {
   let spaces = []
   let organization = null
 
   if (!!graphFilters.factId) {
-    const organizationFact = state.facts.organizationFacts.find(e => _collections.some(e.children, graphFilters.factId))
+    const organizationFact = state.facts.organizationFacts.find(({children}) => e.collections.some(children, graphFilters.factId))
     const orgId = e.organization.organizationIdFromFactReadableId(organizationFact.variable_name)
     organization = e.collections.get(state.organizations, orgId)
-    spaces.push(...state.spaces.filter(s => s.exported_facts_count > 0 && s.organization_id === orgId))
+    const organizationSpaces = e.collections.filter(state.spaces, orgId, 'organization_id')
+    spaces.push(...organizationSpaces.filter(s => s.exported_facts_count > 0 && !_.isEmpty(s.imported_facts)))
   } else if (!!graphFilters.spaceId) {
-    spaces.push(e.collections.get(state.spaces, spaceId))
+    spaces.push(e.collections.get(state.spaces, graphFilters.spaceId))
     organization = e.collections.get(state.organizations, _.get(spaces[0], 'organization_id'))
   } else if (!!graphFilters.metricId) {
-    const metric = e.collections.get(state.metrics, graphFilters.metricId)
-    spaces.push(e.collections.get(state.spaces, _.get(metric, space)))
+    const spaceId = e.collections.gget(state.metrics, graphFilters.metricId, 'id', 'space')
+    spaces.push(e.collections.get(state.spaces, spaceId))
     organization = e.collections.get(state.organizations, _.get(spaces[0], 'organization_id'))
   }
 
@@ -37,7 +39,7 @@ function getSubset(state, graphFilters) {
   let subset = e.space.subsetFromList(state, spaces)
   const organizationFacts = e.facts.getFactsForOrg(state.facts.organizationFacts, organization)
 
-  const {organizationFactsUsed, globalFactsUsed} = e.facts.getRelevantFactsAndReformatGlobals(subset, state.facts.globalFacts, organizationFacts, spaceId)
+  const {organizationFactsUsed, globalFactsUsed} = e.facts.getRelevantFactsAndReformatGlobals(subset, state.facts.globalFacts, organizationFacts, spaces.map(s => s.id))
 
   const globalFactHandleToNodeIdMap = _.transform(
     globalFactsUsed,
@@ -152,7 +154,7 @@ function translateErrorFn(denormalizedMetrics, metricID) {
 export function simulate(dispatch, getState, graphFilters) {
   const state = getState()
 
-  const {subset, relevantFacts} = getSubset(state, spaceId)
+  const {subset, relevantFacts} = getSubset(state, graphFilters)
   const denormalizedMetrics = denormalize(subset)
 
   const nodes = [...denormalizedMetrics.map(metricToSimulationNodeFn), ...relevantFacts.map(factToSimulationNodeFn)]

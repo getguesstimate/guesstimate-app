@@ -39,7 +39,7 @@ export function fetchSuccess(...spaces) {
     const calculators = _.flatten(spaces.map(s => e.utils.orArr(_.get(s, '_embedded.calculators')))).filter(e.collections.isPresent)
 
     if (!_.isEmpty(calculators)) {dispatch(calculatorActions.sActions.fetchSuccess(calculators))}
-    if (!_.isEmpty(organizations)) { dispatch(organizationActions.fetchSuccess([organization])) }
+    if (!_.isEmpty(organizations)) { dispatch(organizationActions.fetchSuccess(organizations)) }
     if (!_.isEmpty(users)) { dispatch(userActions.fetchSuccess(users)) }
   }
 }
