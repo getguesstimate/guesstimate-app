@@ -19,3 +19,6 @@ export const some = (collection, id, prop='id') => allPresent(collection, id) ? 
 export const isPresent = e => !!e && !_.isEmpty(e)
 
 export const andFns = (...predFns) => x => predFns.reduce( (running, currFn) => running && !!currFn(x), true )
+
+// TODO(matthew): (Re-)Figure out why the reverses are necessary, and eliminate that necessity.
+export const uniq = (collection, prop='id') => _.uniqBy(collection.slice().reverse(), prop).reverse()

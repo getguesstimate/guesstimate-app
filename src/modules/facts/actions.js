@@ -1,4 +1,5 @@
 import {editFact} from 'gModules/organizations/actions'
+import * as spaceActions from 'gModules/spaces/actions'
 
 import {selectorSearch, withSortedValues} from 'gEngine/facts'
 import * as _collections from 'gEngine/collections'
@@ -16,10 +17,14 @@ export function clearSuggestion() {
   return {type: 'CLEAR_SUGGESTION'}
 }
 
+// TODO(matthew): Clean up this interface; right now facts is an array of org containers which are glorified arrays of
+// facts.
 export function loadByOrg(facts) {
-  // TODO(matthew): Extract embedded dependent spaces here.
-  const spaces = _.flatten(facts.map(f => f.dependent_fact_defining_spaces))
-  return {type: 'LOAD_FACTS_BY_ORG', facts}
+  return (dispatch, getState) => {
+    const spaces = _collections.uniq(_.flattenDeep(facts.map(({children}) => children.map(f => f.dependent_fact_exporting_spaces))))
+    dispatch(spaceActions.fetchSuccess(...spaces))
+    dispatch({type: 'LOAD_FACTS_BY_ORG', facts})
+  }
 }
 
 export function addToOrg(organizationVariableName, fact) {

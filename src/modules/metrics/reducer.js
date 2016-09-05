@@ -1,7 +1,4 @@
-// TODO(matthew): Dry up code here (see guesstimate reducer), make this copying not necessary.
-function uniq(items) {
-  return _.uniqBy(items.slice().reverse(), 'id').reverse()
-}
+import {uniq} from 'gEngine/collections'
 
 function spaceToMetrics(space) {
   let metrics = _.get(space, 'graph.metrics')
