@@ -1,7 +1,6 @@
 import {format, uniq} from 'gEngine/guesstimate'
 
 export function guesstimatesR(state = [], action) {
-  console.log(action)
   switch (action.type) {
     case 'CALCULATORS_FETCH_SUCCESS': {
       const newGuesstimates = _.get(action, 'data.space.graph.guesstimates') || []
@@ -9,7 +8,6 @@ export function guesstimatesR(state = [], action) {
     }
     case 'SPACES_FETCH_SUCCESS': {
       const newGuesstimates = _.flatten(action.records.map(e => _.get(e, 'graph.guesstimates'))).filter(e => e)
-      console.log('here', newGuesstimates)
       return uniq([...state, ...newGuesstimates])
     }
     case 'SPACES_CREATE_SUCCESS': {

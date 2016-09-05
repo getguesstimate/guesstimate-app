@@ -1,5 +1,4 @@
 import {editFact} from 'gModules/organizations/actions'
-import * as spaceActions from 'gModules/spaces/actions'
 
 import {selectorSearch, withSortedValues} from 'gEngine/facts'
 import * as _collections from 'gEngine/collections'
@@ -21,8 +20,6 @@ export function clearSuggestion() {
 // facts.
 export function loadByOrg(facts) {
   return (dispatch, getState) => {
-    const spaces = _collections.uniq(_.flattenDeep(facts.map(({children}) => children.map(f => f.dependent_fact_exporting_spaces))))
-    dispatch(spaceActions.fetchSuccess(...spaces))
     dispatch({type: 'LOAD_FACTS_BY_ORG', facts})
   }
 }
@@ -60,7 +57,6 @@ export function addSimulationToFact(simulation, id) {
       simulation: simulation,
     }
 
-    dispatch(updateWithinOrg(oldOrganizationFact.variable_name, newFact))
     dispatch(editFact(organization, newFact))
   }
 }

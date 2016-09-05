@@ -7,6 +7,7 @@ import * as membershipActions from 'gModules/userOrganizationMemberships/actions
 import * as userOrganizationMembershipActions from 'gModules/userOrganizationMemberships/actions'
 import * as userOrganizationInvitationActions from 'gModules/userOrganizationInvitations/actions'
 import * as factActions from 'gModules/facts/actions'
+import * as spaceActions from 'gModules/spaces/actions'
 
 import {organizationReadableId} from 'gEngine/organization'
 import {withSortedValues} from 'gEngine/facts'
@@ -31,6 +32,8 @@ export function fetchById(organizationId) {
         dispatch(displayErrorsActions.newError())
         captureApiError('OrganizationsFetch', err.jqXHR, err.textStatus, err, {url: 'fetch'})
       } else if (organization) {
+        const spaces = _.get(organization, 'fact_exporting_spaces')
+        if (!_.isEmpty(spaces)) { dispatch(spaceActions.fetchSuccess(...spaces)) }
         dispatch(fetchSuccess([organization]))
       }
     })

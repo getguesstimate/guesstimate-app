@@ -14,6 +14,7 @@ export const gget = (collection, id, searchProp, getProp) => _.get(get(collectio
 export const getFn = (coll, getProp='id', inProp='id') => !coll ? nullFn : e => get(coll, _.get(e, inProp), getProp)
 
 export const filter = (collection, id, prop='id') => allPresent(collection, id) ? collection.filter(equalsProp(id, prop)) : []
+export const filterByInclusion = (collection, prop, ...ids) => allPresent(collection, ids) ? collection.filter(e => ids.includes(_.get(e, prop))) : []
 export const some = (collection, id, prop='id') => allPresent(collection, id) ? _.some(collection, equalsProp(id, prop)) : false
 
 export const isPresent = e => !!e && !_.isEmpty(e)

@@ -12,11 +12,29 @@ const {
   ERROR_SUBTYPES: {GRAPH_SUBTYPES: {MISSING_INPUT_ERROR, IN_INFINITE_LOOP, INVALID_ANCESTOR_ERROR}},
 } = constants
 
-function spaceSubset(state, spaceId) {
-  const space = e.collections.get(state.spaces, spaceId)
-  const organization = e.collections.get(state.organizations, _.get(space, 'organization_id'))
+function getSubset(state, graphFilters) {
+  let spaces = []
+  let organization = null
 
-  let subset = e.space.subset(state, spaceId, true)
+  if (!!graphFilters.factId) {
+    const organizationFact = state.facts.organizationFacts.find(e => _collections.some(e.children, graphFilters.factId))
+    const orgId = e.organization.organizationIdFromFactReadableId(organizationFact.variable_name)
+    organization = e.collections.get(state.organizations, orgId)
+    spaces.push(...state.spaces.filter(s => s.exported_facts_count > 0 && s.organization_id === orgId))
+  } else if (!!graphFilters.spaceId) {
+    spaces.push(e.collections.get(state.spaces, spaceId))
+    organization = e.collections.get(state.organizations, _.get(spaces[0], 'organization_id'))
+  } else if (!!graphFilters.metricId) {
+    const metric = e.collections.get(state.metrics, graphFilters.metricId)
+    spaces.push(e.collections.get(state.spaces, _.get(metric, space)))
+    organization = e.collections.get(state.organizations, _.get(spaces[0], 'organization_id'))
+  }
+
+  spaces.filter(s => !!s)
+
+  if (_.isEmpty(spaces)) { return {subset: {metrics: [], guesstimates: [], simulations: []}, relevantFacts: []} }
+
+  let subset = e.space.subsetFromList(state, spaces)
   const organizationFacts = e.facts.getFactsForOrg(state.facts.organizationFacts, organization)
 
   const {organizationFactsUsed, globalFactsUsed} = e.facts.getRelevantFactsAndReformatGlobals(subset, state.facts.globalFacts, organizationFacts, spaceId)
@@ -83,6 +101,7 @@ function denormalize({metrics, guesstimates, simulations}) {
 const allPresent = (obj, ...props) => props.map(p => present(obj, p)).reduce((x,y) => x && y, true)
 const present = (obj, prop) => _.has(obj, prop) && (!!_.get(obj, prop) || _.get(obj, prop) === 0)
 function translateOptions(graphFilters) {
+  if (allPresent(graphFilters, 'factId')) { return {simulateStrictSubsetFrom: [factIdToNodeId(graphFilters.factId)]} }
   if (allPresent(graphFilters, 'metricId', 'onlyHead')) { return {simulateIds: [metricIdToNodeId(graphFilters.metricId)]} }
   if (allPresent(graphFilters, 'metricId', 'notHead')) { return {simulateStrictSubsetFrom: [metricIdToNodeId(graphFilters.metricId)]} }
   if (allPresent(graphFilters, 'simulateSubsetFrom')) { return {simulateSubsetFrom: graphFilters.simulateSubsetFrom.map(metricIdToNodeId)} }
@@ -131,23 +150,25 @@ function translateErrorFn(denormalizedMetrics, metricID) {
 }
 
 export function simulate(dispatch, getState, graphFilters) {
-  let spaceId = graphFilters.spaceId
-  if (spaceId === undefined && graphFilters.metricId) {
-    const metric = e.collections.get(getState().metrics, graphFilters.metricId)
-    if (!!metric) { spaceId = metric.space }
-  }
-  if (!spaceId) { return }
+  const state = getState()
 
-  const {subset, relevantFacts} = spaceSubset(getState(), spaceId)
+  const {subset, relevantFacts} = getSubset(state, spaceId)
   const denormalizedMetrics = denormalize(subset)
 
   const nodes = [...denormalizedMetrics.map(metricToSimulationNodeFn), ...relevantFacts.map(factToSimulationNodeFn)]
 
+  if (_.isEmpty(nodes)) { return }
+
   const propagationId = (new Date()).getTime()
 
-  const getCurrPropId = nodeId => e.collections.gget(getState().simulations, nodeIdToMetricId(nodeId), 'metric', 'propagationId')
-  const yieldMetricSims = (nodeId, sim) => {
-    const {samples, errors} = sim
+  const getCurrPropId = nodeId => {
+    if (nodeIdIsMetric(nodeId)) {
+      return e.collections.gget(state.simulations, nodeIdToMetricId(nodeId), 'metric', 'propagationId')
+    } else {
+      return 0 // TODO(matthew): Fix this.
+    }
+  }
+  const yieldMetricSims = (nodeId, {samples, errors}) => {
     const metric = nodeIdToMetricId(nodeId)
     const newSimulation = {
       metric,
@@ -160,9 +181,7 @@ export function simulate(dispatch, getState, graphFilters) {
     dispatch(addSimulation(newSimulation))
   }
 
-  const yieldFactSims = (nodeId, sim) => {
-    console.warn('yielding sims for ', nodeId, 'with values', sim)
-    const {samples, errors} = sim
+  const yieldFactSims = (nodeId, {samples, errors}) => {
     const factId = nodeIdToFactId(nodeId)
     const newSimulation = {
       sample: {
