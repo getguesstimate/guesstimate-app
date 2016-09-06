@@ -17,7 +17,7 @@ function getDirectVariableNameFromName(rawName, maxOneWordLength, maxSplitWordLe
   } else if (words.length < maxSplitWordLength) {
     return name.slice(0, cutOffLength)
   } else {
-    return words.map(readableIdPartFromWord).join('').slice(0, cutOffLength)
+    return words.map(readableIdPartFromWord).slice(0, cutOffLength).join('')
   }
 }
 
@@ -30,7 +30,7 @@ export function getVariableNameFromName(
 ) {
   const directName = getDirectVariableNameFromName(rawName, maxOneWordLength, maxSplitWordLength, totalMaxLength)
 
-  const nameRegex = new RegExp(`${directName}(?:_(\d+))?`, 'gi')
+  const nameRegex = new RegExp(`${directName}(\\d+)?`, 'i')
 
   const matchingNames = existingVariableNames.filter(v => nameRegex.test(v))
   if (_.isEmpty(matchingNames)) { return directName }
@@ -39,4 +39,4 @@ export function getVariableNameFromName(
   return `${directName}${currentMaxSuffix + 1}`
 }
 
-export const shouldTransformName = name => !(_.isEmpty(name) || _.isEmpty(name.replace(/[^\w\d]/g, '').trim()))
+export const shouldTransformName = name => !(_.isEmpty(name) || _.isEmpty(name.replace(/[^a-zA-Z]/g, '').trim()))

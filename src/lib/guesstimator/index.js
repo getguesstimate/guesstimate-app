@@ -5,14 +5,13 @@ import {samplerTypes} from './types'
 export class Guesstimator {
   static parse(unparsedInput) {
     const [parsedError, parsedInput] = parse(unparsedInput)
-    const newItem = new this({unparsedInput, parsedError, parsedInput})
+    const newItem = new this({parsedError, parsedInput})
     return [parsedError, newItem]
   }
 
   static samplerTypes = samplerTypes
 
-  constructor({unparsedInput, parsedError, parsedInput}){
-    this.unparsedInput = unparsedInput
+  constructor({parsedError, parsedInput}){
     this.parsedError = parsedError || {}
     this.parsedInput = parsedInput
   }

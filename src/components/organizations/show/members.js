@@ -41,8 +41,7 @@ const MembersIndexSubTab = ({members, invitations, admin_id, onChangeSubTab, onR
     <div className={meIsAdmin ? 'col-sm-10' : 'col-sm-8'}>
       <div>
         <div className='members'>
-          {members.map(m => {
-            return (
+          {_.map(members, m => (
               <Member
                 key={m.id}
                 user={m}
@@ -51,15 +50,8 @@ const MembersIndexSubTab = ({members, invitations, admin_id, onChangeSubTab, onR
                 meIsAdmin={meIsAdmin}
               />
             )
-          })}
-          {meIsAdmin && invitations.map(i => {
-            return (
-              <Invitee
-                key={i.id}
-                email={i.email}
-              />
-            )
-          })}
+          )}
+          {meIsAdmin && _.map(invitations, i => <Invitee key={i.id} email={i.email} /> )}
         </div>
       </div>
     </div>

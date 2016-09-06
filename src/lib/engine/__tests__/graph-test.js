@@ -1,7 +1,6 @@
-import {dependencyMap} from '../dgraph.js';
-import {dependencyTree} from '../graph.js';
+import {dependencyMap} from '../dgraph.js'
 
-import {expect} from 'chai';
+import {expect} from 'chai'
 
 let dMetrics = [
   {
@@ -9,6 +8,7 @@ let dMetrics = [
     readableId: 'A1',
     guesstimate: {
       expression: '=5000/50',
+      input: '=5000/50',
       metric: 'A1'
     }
   },
@@ -17,6 +17,7 @@ let dMetrics = [
     readableId: 'A2',
     guesstimate: {
       expression: '=${metric:A1} + 1',
+      input: '=A1 + 1',
       metric: 'A2'
     }
   },
@@ -25,6 +26,7 @@ let dMetrics = [
     readableId: 'A3',
     guesstimate: {
       expression: '=${metric:A1} - 1',
+      input: '=A1 - 1',
       metric: 'A3'
     }
   },
@@ -33,6 +35,7 @@ let dMetrics = [
     readableId: 'A4',
     guesstimate: {
       expression: '=${metric:A2} + ${metric:A3}',
+      input: '=A2 + ${metric:A3}',
       metric: 'A4'
     }
   },
@@ -41,6 +44,7 @@ let dMetrics = [
     readableId: 'A5',
     guesstimate: {
       expression: '=${metric:A4} + 23',
+      input: '=A4 + 23',
       metric: 'A5'
     }
   },
@@ -49,6 +53,7 @@ let dMetrics = [
     readableId: 'A6',
     guesstimate: {
       expression: '323',
+      input: '323',
       metric: 'A6'
     }
   }
@@ -84,26 +89,32 @@ let metrics = [
 let guesstimates = [
   {
     expression: '=5000/50',
+    input: '=5000/50',
     metric: 'A1'
   },
   {
     expression: '=${metric:A1} + 1',
+    input: '=A1 + 1',
     metric: 'A2'
   },
   {
     expression: '=${A1} - 1',
+    input: '=A1 - 1',
     metric: 'A3'
   },
   {
     expression: '=${A2} + ${A3}',
+    input: '=A2 + ${A3}',
     metric: 'A4'
   },
   {
     expression: '=${A4} + 23',
+    input: '=A4 + 23',
     metric: 'A5'
   },
   {
     expression: '323',
+    input: '323',
     metric: 'A6'
   }
 ]
@@ -122,28 +133,7 @@ describe('graph', () => {
         {input: 'A3', output: 'A4'},
         {input: 'A4', output: 'A5'},
       ]
-      expect(dependencyMap(dGraph)).to.deep.equal(result);
-    });
-  });
-
-  describe('dependencyTree', () => {
-    it('for metric 0', () => {
-      let result = [
-        ['A1', 0],
-        ['A2', 1],
-        ['A3', 1],
-        ['A4', 2],
-        ['A5', 3]
-      ]
-      expect(dependencyTree(graph, {metricId: 'A1'})).to.deep.equal(result)
-    });
-
-    it('for metric 4', () => {
-      let result = [
-        ['A4', 0],
-        ['A5', 1]
-      ]
-      expect(dependencyTree(graph, {metricId: 'A4'})).to.deep.equal(result)
-    });
-  });
-});
+      expect(dependencyMap(dGraph)).to.deep.equal(result)
+    })
+  })
+})

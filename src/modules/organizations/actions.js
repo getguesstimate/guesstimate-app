@@ -37,7 +37,7 @@ export function fetchById(organizationId) {
   }
 }
 
-const toContainerFact = o => _.isEmpty(o.facts) ? {} : {variable_name: organizationReadableId(o), children: o.facts.map(f => withSortedValues(f))}
+const toContainerFact = o => _.isEmpty(o.facts) ? {} : {variable_name: organizationReadableId(o), children: o.facts.map(withSortedValues)}
 
 export function fetchSuccess(organizations) {
   return (dispatch) => {

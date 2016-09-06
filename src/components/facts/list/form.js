@@ -4,7 +4,7 @@ import {simulateFact, FactPT} from 'gEngine/facts'
 import {addStats} from 'gEngine/simulation'
 
 import {isData, formatData} from 'lib/guesstimator/formatter/formatters/Data'
-import {getVariableNameFromName} from 'lib/nameToVariableName'
+import {getVariableNameFromName} from 'lib/generateVariableNames/nameToVariableName'
 
 export class FactForm extends Component {
   static defaultProps = {
@@ -36,7 +36,9 @@ export class FactForm extends Component {
   setFactState(newFactState, otherState = {}) { this.setState({...otherState, runningFact: {...this.state.runningFact, ...newFactState}}) }
   onChangeName(e) {
     const name = _.get(e, 'target.value')
-    this.setFactState(this.state.variableNameManuallySet ? {name} : {name, variable_name: getVariableNameFromName(name)})
+    this.setFactState(
+      this.state.variableNameManuallySet ? {name} : {name, variable_name: getVariableNameFromName(name, this.props.existingVariableNames)}
+    )
   }
   onChangeVariableName(e) { this.setFactState({variable_name: _.get(e, 'target.value')}, {variableNameManuallySet: true}) }
   onChangeExpression(e) { this.setFactState({expression: _.get(e, 'target.value')}) }

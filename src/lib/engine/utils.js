@@ -6,7 +6,7 @@ export const URL_REGEX = /(?:(?:https?|ftp):\/\/)?(?:\S+(?::\S*)?@)?(?:(?!(?:10|
 export const typeSafeEq = (x, y) => !x ? !y : !!y && x.toString() === y.toString()
 export const orStr = e => e || ''
 export const orArr = e => e || []
-export const allPresent = (...objs) => objs.reduce((x,y) => !!x && !!y, true)
+export const allPresent = (...objs) => objs.reduce((x,y) => (!!x || x === 0) && (!!y || y === 0), true)
 
 const escSpecialChars = str => str.replace(/\$|\{|\}|\_/g, e => `\\${e}`)
 const toSource = re => re instanceof RegExp ? re.source : escSpecialChars(re)
@@ -18,7 +18,7 @@ export function or(res) {
 }
 
 export function replaceByMap(str, replacementMap) {
-  if (!str || _.isEmpty(str)) { return '' }
+  if (!str || _.isEmpty(str) || _.isEmpty(replacementMap)) { return str }
   const regex = or(Object.keys(replacementMap))
   return str.replace(regex, match => replacementMap[match])
 }
@@ -38,4 +38,13 @@ export function makeURLsMarkdown(text) {
   transformedText += partial.replace(URL_REGEX, match => `[${match}](${match})`)
 
   return transformedText
+}
+
+export const indicesOf = (list, predFn) => list.map((e, i) => predFn(e) ? i : null).filter(e => _.isFinite(e))
+export function getSubMatches(str, regex, matchIndex) {
+  if (_.isEmpty(str)) { return [] }
+  let matches = []
+  let match
+  while (match = regex.exec(str)) { matches.push(match[matchIndex]) }
+  return matches
 }

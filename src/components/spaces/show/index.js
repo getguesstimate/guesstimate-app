@@ -214,7 +214,7 @@ export default class SpacesShow extends Component {
     if (!_.isEmpty(spaceUpdates.newMetrics)) {
       this.props.dispatch({type: 'ADD_METRICS', items: spaceUpdates.newMetrics, newGuesstimates: spaceUpdates.newGuesstimates})
       this.props.dispatch(spaceActions.updateGraph(this._id()))
-      this.props.dispatch(simulationActions.runSimulations(this._id(), spaceUpdates.newMetrics))
+      this.props.dispatch(simulationActions.runSimulations({spaceId: this._id(), simulateSubset: spaceUpdates.newMetrics.map(m => m.id)}))
     }
   }
 

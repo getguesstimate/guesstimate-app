@@ -49,15 +49,17 @@ export function paste(spaceId){
     let existingIds = spaceMetrics.map(m => m.id)
 
     let idsMap = {}
+    let metricsToSimulate = []
     const newMetrics = _.map(metrics, metric => {
       let newMetric = {
         ...metric,
-        ...e.metric.create(existingReadableIds),
         space: spaceId,
         location: translateFn(metric.location),
       }
-      if (!_.some(existingReadableIds, id => id === metric.readableId)) { newMetric.readableId = metric.readableId }
-      if (!_.some(existingIds, id => id === metric.id)) { newMetric.id = metric.id }
+      if (_.some(existingIds, id => id === metric.id)) {
+        Object.assign(newMetric, e.metric.create(existingReadableIds))
+        metricsToSimulate.push(newMetric)
+      }
 
       existingReadableIds = [...existingReadableIds, newMetric.readableId]
       existingIds = [...existingIds, newMetric.id]
@@ -84,7 +86,7 @@ export function paste(spaceId){
     }
 
     dispatch({type: "PASTE"})
-    dispatch(runSimulations({spaceId, onlyUnsimulated: true}))
+    dispatch(runSimulations({spaceId, simulateSubset: metricsToSimulate.map(m => m.id)}))
     dispatch(selectRegion(pasteRegion[0], pasteRegion[1]))
     dispatch(registerGraphChange(spaceId))
   }

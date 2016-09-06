@@ -3,37 +3,30 @@ import {call} from 'redux-saga/effects'
 
 import e from 'gEngine/engine'
 
-import {GraphPropagation} from '../../lib/propagation/graph-propagation'
+import {simulate} from '../../lib/propagation/wrapper'
 
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
 export function* runFormSimulation({getState, metricId, dispatch}) {
-  const propagation = new GraphPropagation(dispatch, getState, {metricId, onlyHead: true})
-  yield propagation.run()
+  yield simulate(dispatch, getState, {metricId, onlyHead: true})
   yield* runDescendantSimulation({getState, metricId, dispatch})
 }
 
-export function* runUndoSimulations({getState, spaceId, dispatch}) {
+export function* runUndoSimulations({getState, spaceId, dispatch, metricIds}) {
   yield call(delay, 350)
-  const propagation = new GraphPropagation(dispatch, getState, {spaceId, onlyUnsimulated: true})
-  yield propagation.run()
+  yield simulate(dispatch, getState, {spaceId, simulateSubsetFrom: metricIds})
 }
 
 export function* runDescendantSimulation({getState, metricId, dispatch}) {
   yield call(delay, 200)
-  const propagation = new GraphPropagation(dispatch, getState, {metricId, notHead: true})
-  yield propagation.run()
+  yield simulate(dispatch, getState, {metricId, notHead: true})
 }
 
 export function deleteSimulations(metricIds) {
   return {type: 'DELETE_SIMULATIONS', metricIds}
 }
 
-export function runSimulations(params) {
-  return (dispatch, getState) => {
-    (new GraphPropagation(dispatch, getState, params)).run()
-  }
-}
+export const runSimulations = params => (dispatch, getState) => { simulate(dispatch, getState, params) }
 
 export function runFormSimulations(metricId) {
   return (dispatch, getState) => dispatch({type: 'RUN_FORM_SIMULATIONS', getState, dispatch, metricId})

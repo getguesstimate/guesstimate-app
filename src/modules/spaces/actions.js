@@ -157,7 +157,7 @@ export function generalUpdate(spaceId, params) {
   return (dispatch, getState) => {
     const space = {...getSpace(getState, spaceId), ...params}
     const usesFacts = _.has(space, 'graph.guesstimates') && _.some(
-      space.graph.guesstimates, g => !!_.get(g, 'expression') && g.expression.includes('${fact:')
+      space.graph.guesstimates, g => !!_.get(g, 'expression') && g.expression.includes(e.simulation.FACT_ID_PREFIX)
     )
     const isPrivate = space.is_private
     if (!isPrivate && usesFacts) {

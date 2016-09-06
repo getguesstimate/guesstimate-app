@@ -11,6 +11,8 @@ import SensitivitySection from 'gComponents/metrics/card/SensitivitySection/Sens
 
 import {INTERNAL_ERROR, INFINITE_LOOP_ERROR, INPUT_ERROR} from 'lib/errors/modelErrors'
 
+import * as _collections from 'gEngine/collections'
+
 import './style.css'
 
 const isBreak = errors => _.some(errors, e => e.type === INPUT_ERROR)
@@ -69,7 +71,8 @@ export class MetricCardViewSection extends Component {
   }
 
   _errorToDisplay() {
-    return this._errors().find(e => e.type !== INTERNAL_ERROR)
+    const inputError = _collections.get(this._errors(), INPUT_ERROR, 'type')
+    return !!inputError ? inputError : this._errors().find(e => e.type !== INTERNAL_ERROR)
   }
 
   render() {
