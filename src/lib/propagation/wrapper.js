@@ -95,8 +95,8 @@ const factToSimulationNodeFn = f => ({
   type: NODE_TYPES.UNSET, // Facts are currently type-less.
   guesstimateType: null, // Facts are currently type-less.
   samples: e.utils.orArr(_.get(f, 'simulation.sample.values')),
-  errors: [],
-  skipSimulating: !_.get(f, 'defining_space_id'),
+  errors: Object.assign([], e.utils.orArr(_.get(f, 'simulation.sample.errors')).filter(filterErrorsFn)),
+  skipSimulating: !_.get(f, 'exported_from_id'),
 })
 
 function denormalize({metrics, guesstimates, simulations}) {
@@ -190,7 +190,7 @@ export function simulate(dispatch, getState, graphFilters) {
       propagationId,
       sample: {
         values: _.isEmpty(errors) ? samples : [],
-        errors: errors.map(translateErrorFn(denormalizedMetrics, metric))
+        errors: Object.assign([], errors.map(translateErrorFn(denormalizedMetrics, metric))),
       }
     }
     dispatch(addSimulation(newSimulation))
@@ -202,7 +202,7 @@ export function simulate(dispatch, getState, graphFilters) {
       propagationId,
       sample: {
         values: _.isEmpty(errors) ? samples : [],
-        errors: errors
+        errors: Object.assign([], errors),
       }
     }
     dispatch(addSimulationToFact(newSimulation, factId))
