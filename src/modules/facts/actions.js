@@ -16,8 +16,12 @@ export function clearSuggestion() {
   return {type: 'CLEAR_SUGGESTION'}
 }
 
+// TODO(matthew): Clean up this interface; right now facts is an array of org containers which are glorified arrays of
+// facts.
 export function loadByOrg(facts) {
-  return {type: 'LOAD_FACTS_BY_ORG', facts}
+  return (dispatch, getState) => {
+    dispatch({type: 'LOAD_FACTS_BY_ORG', facts})
+  }
 }
 
 export function addToOrg(organizationVariableName, fact) {
@@ -53,7 +57,6 @@ export function addSimulationToFact(simulation, id) {
       simulation: simulation,
     }
 
-    dispatch(updateWithinOrg(oldOrganizationFact.variable_name, newFact))
     dispatch(editFact(organization, newFact))
   }
 }

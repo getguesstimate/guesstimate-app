@@ -1,9 +1,4 @@
-import engine from 'gEngine/engine'
-
-// TODO(matthew): Dry up code here (see metrics reducer), make this copying not necessary.
-function uniq(items) {
-  return _.uniqBy(items.slice().reverse(), 'metric').reverse()
-}
+import {format, uniq} from 'gEngine/guesstimate'
 
 export function guesstimatesR(state = [], action) {
   switch (action.type) {
@@ -22,21 +17,22 @@ export function guesstimatesR(state = [], action) {
     }
     case 'ADD_METRIC':
       return uniq([...state, {metric: action.item.id, input: '', guesstimateType: 'NONE', description: ''}])
-    case 'ADD_METRICS':
+    case 'ADD_METRICS': {
       if (action.newGuesstimates) {
         return uniq([...state, ...action.newGuesstimates])
       } else {
         // Build new guesstimates if not provided
-        return uniq([...state, ...action.items.map(item => ({metric: item.id, input: '', guesstimateType: 'NONE', description: ''}))])
+        const newGuesstimates = action.items.map(item => ({metric: item.id, input: '', guesstimateType: 'NONE', description: ''}))
+        return uniq([...state, ...newGuesstimates])
       }
+    }
     case 'REMOVE_METRICS':
       return state.filter(y => !_.some(action.item.ids, id => y.metric === id))
     case 'CHANGE_GUESSTIMATE':
       const i = state.findIndex(y => y.metric === action.values.metric)
-      const newItem = engine.guesstimate.format(action.values)
+      const newItem = format(action.values)
       if (i !== -1) {
-        const newState = [ ...state.slice(0, i), newItem, ...state.slice(i+1, state.length) ]
-        return uniq(newState)
+        return uniq([...state.slice(0, i), newItem, ...state.slice(i+1, state.length)])
       }
     default:
       return state

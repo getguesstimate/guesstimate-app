@@ -7,6 +7,7 @@ import * as membershipActions from 'gModules/userOrganizationMemberships/actions
 import * as userOrganizationMembershipActions from 'gModules/userOrganizationMemberships/actions'
 import * as userOrganizationInvitationActions from 'gModules/userOrganizationInvitations/actions'
 import * as factActions from 'gModules/facts/actions'
+import * as spaceActions from 'gModules/spaces/actions'
 
 import {organizationReadableId} from 'gEngine/organization'
 import {withSortedValues} from 'gEngine/facts'
@@ -31,6 +32,8 @@ export function fetchById(organizationId) {
         dispatch(displayErrorsActions.newError())
         captureApiError('OrganizationsFetch', err.jqXHR, err.textStatus, err, {url: 'fetch'})
       } else if (organization) {
+        const spaces = _.get(organization, 'intermediate_spaces')
+        if (!_.isEmpty(spaces)) { dispatch(spaceActions.fetchSuccess(spaces)) }
         dispatch(fetchSuccess([organization]))
       }
     })
@@ -103,6 +106,7 @@ export function addFact(organization, rawFact) {
 
 // editFact edits the passed fact, with sortedValues overwritten to null, to the organization and saves it on the server.
 export function editFact(organization, rawFact) {
+  // TODO(matthew): Build dependency chain here?
   return (dispatch, getState) => {
     let fact = Object.assign({}, rawFact)
     _.set(fact, 'simulation.sample.sortedValues', null)
