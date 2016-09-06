@@ -1,18 +1,19 @@
 import {actionCreatorsFor} from 'redux-crud'
+
 import cuid from 'cuid'
-import e from 'gEngine/engine'
 import app from 'ampersand-app'
 
 import {changeActionState} from 'gModules/canvas_state/actions'
-import {saveCheckpoint} from 'gModules/checkpoints/actions'
+import {saveCheckpoint, initSpace} from 'gModules/checkpoints/actions'
 import * as userActions from 'gModules/users/actions'
 import * as organizationActions from 'gModules/organizations/actions'
 import * as calculatorActions from 'gModules/calculators/actions'
-import {initSpace} from 'gModules/checkpoints/actions'
 
-import {rootUrl, setupGuesstimateApi} from 'servers/guesstimate-api/constants'
+import e from 'gEngine/engine'
 
 import {captureApiError} from 'lib/errors/index'
+
+import {rootUrl, setupGuesstimateApi} from 'servers/guesstimate-api/constants'
 
 let sActions = actionCreatorsFor('spaces')
 
@@ -21,6 +22,26 @@ function api(state) {
     return _.get(state, 'me.token')
   }
   return setupGuesstimateApi(getToken(state))
+}
+
+export function fetchSuccess(spaces) {
+  return (dispatch, getState) => {
+    dispatch(sActions.fetchSuccess(spaces.map(s => _.omit(s, ['_embedded']))))
+
+    spaces.forEach(({id, graph}) => {
+      // We need to check if the space is already initialized as we do not want to double-initialize a space.
+      const isInitialized = e.collections.some(getState().checkpoints, id, 'spaceId')
+      if (!isInitialized) { dispatch(initSpace(id, graph)) }
+    })
+
+    const users = spaces.map(s => _.get(s, '_embedded.user')).filter(e.collections.isPresent)
+    const organizations = spaces.map(s => _.get(s, '_embedded.organization')).filter(e.collections.isPresent)
+    const calculators = _.flatten(spaces.map(s => e.utils.orArr(_.get(s, '_embedded.calculators')))).filter(e.collections.isPresent)
+
+    if (!_.isEmpty(calculators)) {dispatch(calculatorActions.sActions.fetchSuccess(calculators))}
+    if (!_.isEmpty(organizations)) { dispatch(organizationActions.fetchSuccess(organizations)) }
+    if (!_.isEmpty(users)) { dispatch(userActions.fetchSuccess(users)) }
+  }
 }
 
 export function destroy(object) {
@@ -60,20 +81,7 @@ export function fetchById(spaceId) {
         return
       }
 
-      dispatch(sActions.fetchSuccess([_.omit(value, ['_embedded'])]))
-      dispatch(initSpace(spaceId, value.graph))
-
-      const user = _.get(value, '_embedded.user')
-      const organization = _.get(value, '_embedded.organization')
-      const calculators = (_.get(value, '_embedded.calculators') || []).filter(c => !!c)
-
-      if (!_.isEmpty(calculators)) {dispatch(calculatorActions.sActions.fetchSuccess(calculators))}
-      if (!!organization) { dispatch(organizationActions.fetchSuccess([organization])) }
-      if (!!user) {
-        dispatch(userActions.fetchSuccess([user]))
-      } else {
-        console.warn("No user returned with a space.")
-      }
+      dispatch(fetchSuccess([value]))
     })
   }
 }
@@ -139,8 +147,7 @@ export function copy(spaceId) {
         dispatch(sActions.createSuccess(value, cid))
         // And that we've fetched new data from it. We have to do this in this case as the new resource is pre-populated
         // with some data.
-        dispatch(sActions.fetchSuccess([value]))
-        dispatch(initSpace(value.id, value.graph))
+        dispatch(fetchSuccess([value]))
 
         app.router.history.navigate('/models/' + value.id)
       }
