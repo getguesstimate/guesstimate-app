@@ -1,9 +1,12 @@
-import {editFact} from 'gModules/organizations/actions'
+import {editFact, addFact} from 'gModules/organizations/actions'
 
-import {selectorSearch, withSortedValues} from 'gEngine/facts'
+import {getVar, selectorSearch, withSortedValues} from 'gEngine/facts'
 import * as _collections from 'gEngine/collections'
-import {organizationIdFromFactReadableId} from 'gEngine/organization'
+import {orArr} from 'gEngine/utils'
+import {organizationIdFromFactReadableId, organizationReadableId} from 'gEngine/organization'
 import {addStats} from 'gEngine/simulation'
+
+import {getVariableNameFromName} from 'lib/generateVariableNames/nameToVariableName'
 
 export function getSuggestion(selector) {
   return (dispatch, getState) => {
@@ -30,6 +33,27 @@ export function updateWithinOrg(organizationVariableName, fact) {
 
 export function deleteFromOrg(organizationVariableName, {id}) {
   return {type: 'DELETE_FACT_FROM_ORG', organizationVariableName, id}
+}
+
+export function createFactFromMetric(organizationId, metric) {
+  return (dispatch, getState) => {
+    const {organizations, facts: {organizationFacts}} = getState()
+
+    const organization = _collections.get(organizations, organizationId)
+
+    const variableName = organizationReadableId(organization)
+    const existingVariableNames = orArr(_collections.gget(organizationFacts, variableName, 'variable_name', 'children')).map(getVar)
+
+    const newFactParams = {
+      name: metric.name,
+      variable_name: getVariableNameFromName(metric.name, existingVariableNames),
+      metric_id: metric.id,
+      exported_from_id: metric.space,
+      simulation: metric.simulation,
+    }
+
+    dispatch(addFact(organization, newFactParams))
+  }
 }
 
 export function addSimulationToFact(simulation, id) {

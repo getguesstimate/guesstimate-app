@@ -16,6 +16,7 @@ import {hasMetricUpdated} from './updated'
 import {removeMetrics, changeMetric} from 'gModules/metrics/actions'
 import {changeGuesstimate} from 'gModules/guesstimates/actions'
 import {analyzeMetricId, endAnalysis} from 'gModules/canvas_state/actions'
+import {createFactFromMetric} from 'gModules/facts/actions'
 
 import * as canvasStateProps from 'gModules/canvas_state/prop_type'
 import {PTLocation} from 'lib/locationUtils'
@@ -34,37 +35,30 @@ relationshipClasses[OUTPUT] = 'output'
 relationshipClasses[INPUT] = 'input'
 relationshipClasses[NOEDGE] = 'noedge'
 
-class ScatterTip extends Component {
-  render() {
-    return (
-      <ToolTip size='LARGE'>
-        <SensitivitySection yMetric={this.props.yMetric} xMetric={this.props.xMetric} size={'LARGE'}/>
-      </ToolTip>
-    )
-  }
-}
-
-const PT = PropTypes
+const ScatterTip = ({yMetric, xMetric}) => (
+  <ToolTip size='LARGE'> <SensitivitySection yMetric={yMetric} xMetric={xMetric} size={'LARGE'}/> </ToolTip>
+)
 
 @connect(null, dispatch => bindActionCreators({
   changeMetric,
   changeGuesstimate,
   removeMetrics,
   analyzeMetricId,
-  endAnalysis
+  endAnalysis,
+  createFactFromMetric,
 }, dispatch))
 export default class MetricCard extends Component {
   displayName: 'MetricCard'
 
   static propTypes = {
     canvasState: canvasStateProps.canvasState,
-    changeMetric: PT.func.isRequired,
-    changeGuesstimate: PT.func.isRequired,
-    removeMetrics: PT.func.isRequired,
-    gridKeyPress: PT.func.isRequired,
-    inSelectedCell: PT.bool.isRequired,
+    changeMetric: PropTypes.func.isRequired,
+    changeGuesstimate: PropTypes.func.isRequired,
+    removeMetrics: PropTypes.func.isRequired,
+    gridKeyPress: PropTypes.func.isRequired,
+    inSelectedCell: PropTypes.bool.isRequired,
     location: PTLocation,
-    metric: PT.object.isRequired
+    metric: PropTypes.object.isRequired
   }
 
   state = {
@@ -262,6 +256,10 @@ export default class MetricCard extends Component {
     return !!analyzedMetric && metric.id === analyzedMetric.id
   }
 
+  _makeFact() {
+    this.props.createFactFromMetric(this.props.organizationId, this.props.metric)
+  }
+
   // If sidebar is expanded, we want to close it if anything else is clicked
   onMouseDown(e){
     const isSidebarElement = (_.get(e, 'target.dataset.controlSidebar') === "true")
@@ -282,7 +280,7 @@ export default class MetricCard extends Component {
       analyzedMetric,
       forceFlowGridUpdate,
     } = this.props
-    const {guesstimate} = metric
+    const {guesstimate, name} = metric
     const shouldShowSensitivitySection = this._shouldShowSensitivitySection()
     const isAnalyzedMetric = this._isAnalyzedMetric()
 
@@ -357,6 +355,8 @@ export default class MetricCard extends Component {
             showAnalysis={this._canBeAnalyzed()}
             onBeginAnalysis={this._beginAnalysis.bind(this)}
             onEndAnalysis={this._endAnalysis.bind(this)}
+            canBeMadeFact={!_.isEmpty(name) && canUseOrganizationFacts}
+            onMakeFact={this._makeFact.bind(this)}
             isAnalyzedMetric={isAnalyzedMetric}
           />
         }
@@ -365,7 +365,16 @@ export default class MetricCard extends Component {
   }
 }
 
-const MetricSidebar = ({onOpenModal, onBeginAnalysis, onEndAnalysis, onRemoveMetric, showAnalysis, isAnalyzedMetric}) => (
+const MetricSidebar = ({
+  onOpenModal,
+  onBeginAnalysis,
+  onEndAnalysis,
+  canBeMadeFact,
+  onMakeFact,
+  onRemoveMetric,
+  showAnalysis,
+  isAnalyzedMetric
+}) => (
   <div className='MetricSidebar'>
     <MetricSidebarItem
       icon={<Icon name='expand'/>}
@@ -385,6 +394,13 @@ const MetricSidebar = ({onOpenModal, onBeginAnalysis, onEndAnalysis, onRemoveMet
         icon={<Icon name='close'/>}
         name={'Sensitivity'}
         onClick={onEndAnalysis}
+      />
+    }
+    {canBeMadeFact &&
+      <MetricSidebarItem
+        icon={<Icon name='bookmark'/>}
+        name={'Make Fact'}
+        onClick={onMakeFact}
       />
     }
     <MetricSidebarItem

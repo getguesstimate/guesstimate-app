@@ -37,7 +37,7 @@ export const FactPT = PropTypes.shape({
 export const GLOBALS_ONLY_REGEX = /@\w+(?:\.\w+)?/g
 export const HANDLE_REGEX = /(?:@\w+(?:\.\w+)?|#\w+)/g
 
-export const getVar = f => _.get(f, 'variable_name') || ''
+export const getVar = f => _utils.orStr(_.get(f, 'variable_name'))
 export const byVariableName = name => f => getVar(f) === name
 const namedLike = partial => f => getVar(f).startsWith(partial)
 
