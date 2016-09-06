@@ -43,7 +43,7 @@ export function getSubset(state, graphFilters) {
 
   if (_.isEmpty(spaces)) { return {subset: {metrics: [], guesstimates: [], simulations: []}, relevantFacts: []} }
 
-  let subset = e.space.subset(state, spaces)
+  let subset = e.space.subset(state, ...spaces.map(s => s.id))
   const organizationFacts = e.facts.getFactsForOrg(state.facts.organizationFacts, organization)
 
   const {organizationFactsUsed, globalFactsUsed} = e.facts.getRelevantFactsAndReformatGlobals(subset, state.facts.globalFacts, organizationFacts, spaces.map(s => s.id))
