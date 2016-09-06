@@ -5,6 +5,7 @@ export const URL_REGEX = /(?:(?:https?|ftp):\/\/)?(?:\S+(?::\S*)?@)?(?:(?!(?:10|
 
 export const typeSafeEq = (x, y) => !x ? !y : !!y && x.toString() === y.toString()
 export const orStr = e => e || ''
+export const orZero = e => e || 0
 export const orArr = e => e || []
 export const allPresent = (...objs) => objs.reduce((x,y) => (!!x || x === 0) && (!!y || y === 0), true)
 

@@ -12,19 +12,10 @@ import * as _collections from './collections'
 export const url = ({id}) => (!!id) ? `/models/${id}` : ''
 export const withGraph = (space, graph) => ({...space, graph: subset(graph, space.id)})
 
-export function subsetFromList(state, spaces) {
+export function subset(state, spaces) {
   const metrics = _collections.filterByInclusion(state.metrics, 'space', ...spaces.map(s => s.id))
   const guesstimates = metrics.map(_guesstimate.getByMetricFn(state)).filter(_collections.isPresent)
   const simulations = guesstimates.map(_simulation.getByMetricFn(state)).filter(_collections.isPresent)
-  return { metrics, guesstimates, simulations }
-}
-
-export function subset(graph, spaceId) {
-  if (!spaceId) { return graph }
-
-  const metrics = _collections.filter(graph.metrics, spaceId, 'space')
-  const guesstimates = metrics.map(_guesstimate.getByMetricFn(graph)).filter(_collections.isPresent)
-  const simulations = guesstimates.map(_simulation.getByMetricFn(graph)).filter(_collections.isPresent)
   return { metrics, guesstimates, simulations }
 }
 

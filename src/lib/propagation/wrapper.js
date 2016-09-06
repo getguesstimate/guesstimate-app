@@ -12,8 +12,7 @@ const {
   ERROR_SUBTYPES: {GRAPH_SUBTYPES: {MISSING_INPUT_ERROR, IN_INFINITE_LOOP, INVALID_ANCESTOR_ERROR}},
 } = constants
 
-// TODO(matthew): Find a way to test this through the public API.
-export function getSubset(state, graphFilters) {
+function getSpacesAndOrganization(state, graphFilters) {
   let spaces = []
   let organization = null
 
@@ -35,11 +34,16 @@ export function getSubset(state, graphFilters) {
     organization = e.collections.get(state.organizations, _.get(spaces[0], 'organization_id'))
   }
 
-  spaces.filter(s => !!s)
+  return {spaces: spaces.filter(s => !!s), organization}
+}
+
+// TODO(matthew): Find a way to test this through the public API.
+export function getSubset(state, graphFilters) {
+  const {spaces, organization} = getSpacesAndOrganization(state, graphFilters)
 
   if (_.isEmpty(spaces)) { return {subset: {metrics: [], guesstimates: [], simulations: []}, relevantFacts: []} }
 
-  let subset = e.space.subsetFromList(state, spaces)
+  let subset = e.space.subset(state, spaces)
   const organizationFacts = e.facts.getFactsForOrg(state.facts.organizationFacts, organization)
 
   const {organizationFactsUsed, globalFactsUsed} = e.facts.getRelevantFactsAndReformatGlobals(subset, state.facts.globalFacts, organizationFacts, spaces.map(s => s.id))
@@ -154,6 +158,19 @@ function translateErrorFn(denormalizedMetrics, metricID) {
   }
 }
 
+const getCurrPropId = state => nodeId => {
+  if (nodeIdIsMetric(nodeId)) {
+    const metricId = nodeIdToMetricId(nodeId)
+    return e.collections.gget(state.simulations, metricId, 'metric', 'propagationId')
+  } else {
+    const factId = nodeIdToFactId(nodeId)
+
+    const organizationFact = state.facts.organizationFacts.find(({children}) => e.collections.some(children, factId))
+    const fact = e.collections.get(_.get(organizationFact, 'children'), factId)
+    return e.utils.orZero(_.get(fact, 'simulation.propagationId'))
+  }
+}
+
 export function simulate(dispatch, getState, graphFilters) {
   const state = getState()
 
@@ -166,13 +183,6 @@ export function simulate(dispatch, getState, graphFilters) {
 
   const propagationId = (new Date()).getTime()
 
-  const getCurrPropId = nodeId => {
-    if (nodeIdIsMetric(nodeId)) {
-      return e.collections.gget(state.simulations, nodeIdToMetricId(nodeId), 'metric', 'propagationId')
-    } else {
-      return 0 // TODO(matthew): Fix this.
-    }
-  }
   const yieldMetricSims = (nodeId, {samples, errors}) => {
     const metric = nodeIdToMetricId(nodeId)
     const newSimulation = {
@@ -189,6 +199,7 @@ export function simulate(dispatch, getState, graphFilters) {
   const yieldFactSims = (nodeId, {samples, errors}) => {
     const factId = nodeIdToFactId(nodeId)
     const newSimulation = {
+      propagationId,
       sample: {
         values: _.isEmpty(errors) ? samples : [],
         errors: errors
@@ -199,6 +210,13 @@ export function simulate(dispatch, getState, graphFilters) {
 
   const yieldSims = (nodeId, sim) => { nodeIdIsMetric(nodeId) ? yieldMetricSims(nodeId, sim) : yieldFactSims(nodeId, sim) }
 
-  let simulator = new Simulator(nodes, e.simulation.NUM_SAMPLES, translateOptions(graphFilters), propagationId, yieldSims, getCurrPropId)
+  let simulator = new Simulator(
+    nodes,
+    e.simulation.NUM_SAMPLES,
+    translateOptions(graphFilters),
+    propagationId,
+    yieldSims,
+    getCurrPropId(state)
+  )
   simulator.run()
 }
