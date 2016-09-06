@@ -90,7 +90,7 @@ export function getRelevantFactsAndReformatGlobals({metrics, guesstimates, simul
   const organizationFactsUsed = organizationFacts.filter(
     f => _.some(guesstimates, g => _utils.orStr(g.expression).includes(_guesstimate.expressionSyntaxPad(f.id, false)))
   )
-  const rawOrganizationFactsDefined = _collections.filterByInclusion(organizationFacts, 'exported_from_id', ...spaceIds)
+  const rawOrganizationFactsDefined = _collections.filterByInclusion(organizationFacts, 'exported_from_id', spaceIds)
   const organizationFactsDefined = rawOrganizationFactsDefined.map(f => ({
     ...f,
     expression: `=${_guesstimate.expressionSyntaxPad(f.metric_id)}`

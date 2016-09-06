@@ -24,7 +24,7 @@ function api(state) {
   return setupGuesstimateApi(getToken(state))
 }
 
-export function fetchSuccess(...spaces) {
+export function fetchSuccess(spaces) {
   return (dispatch, getState) => {
     dispatch(sActions.fetchSuccess(spaces.map(s => _.omit(s, ['_embedded']))))
 
@@ -81,7 +81,7 @@ export function fetchById(spaceId) {
         return
       }
 
-      dispatch(fetchSuccess(value))
+      dispatch(fetchSuccess([value]))
     })
   }
 }

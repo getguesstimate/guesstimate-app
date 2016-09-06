@@ -113,7 +113,7 @@ describe('getSubset', () => {
     simulations: [...space1Sims, ...space2Sims, ...space3Sims, ...space4Sims, ...space5Sims],
   }
 
-  it ("should correctly extract a single space's subset", () => {
+  describe ("getSubset should correctly extract a single space's subset, through metricId or spaceId", () => {
     const testCases = [
       {
         description: "Passing a single metricId should yield that metric's space's subset",
@@ -126,39 +126,42 @@ describe('getSubset', () => {
     ]
 
     testCases.forEach( ({graphFilters, description}) => {
-      const {subset, relevantFacts} = getSubset(state, graphFilters)
-      expect(subset, "The subset's metrics should match").to.have.property('metrics').that.deep.has.members(space1Metrics)
-      expect(subset, "The subset's guesstimates should match").to.have.property('guesstimates').that.deep.has.members(space1Guesstimates)
-      expect(subset, "The subset's simulations should match").to.have.property('simulations').that.deep.has.members(space1Sims)
-      expect(relevantFacts, 'The relevantFacts should match').to.deep.have.members([
-        {id: 1, expression: '3', imported_to_intermediate_space_ids: [1, 2]},
-        {id: 2, metric_id: 1, exported_from_id: 1, expression: `=${expressionSyntaxPad(1)}`},
-      ])
+      it (description, () => {
+        const {subset, relevantFacts} = getSubset(state, graphFilters)
+
+        expect(subset, "metrics match").to.have.property('metrics').that.deep.has.members(space1Metrics)
+        expect(subset, "guesstimates match").to.have.property('guesstimates').that.deep.has.members(space1Guesstimates)
+        expect(subset, "simulations match").to.have.property('simulations').that.deep.has.members(space1Sims)
+        expect(relevantFacts, 'relevantFacts match').to.deep.have.members([
+          {id: 1, expression: '3', imported_to_intermediate_space_ids: [1, 2]},
+          {id: 2, metric_id: 1, exported_from_id: 1, expression: `=${expressionSyntaxPad(1)}`},
+        ])
+      })
     })
   })
 
-  it ("should correctly extract all possibly dependent, fact exporting space's subsets from a factId", () => {
+  it ("should correctly extract all possibly intermediate spaces' subsets from a factId", () => {
     const graphFilters = { factId: 1 }
     const {subset, relevantFacts} = getSubset(state, graphFilters)
 
-    expect(subset, "The subset's metrics should match").to.have.property('metrics').that.deep.has.members([...space1Metrics, ...space2Metrics])
-    expect(subset, "The subset's guesstimates should match").to.have.property('guesstimates').that.deep.has.members([
+    expect(subset, "metrics match").to.have.property('metrics').that.deep.has.members([...space1Metrics, ...space2Metrics])
+    expect(subset, "guesstimates match").to.have.property('guesstimates').that.deep.has.members([
       ...space1Guesstimates,
       ...space2Guesstimates,
     ])
-    expect(subset, "The subset's simulations should match").to.have.property('simulations').that.deep.has.members([
+    expect(subset, "simulations match").to.have.property('simulations').that.deep.has.members([
       ...space1Sims,
       ...space2Sims
     ])
 
-    expect(relevantFacts, 'The relevantFacts should match').to.deep.have.members([
+    expect(relevantFacts, 'relevantFacts match').to.deep.have.members([
       {id: 1, expression: '3', imported_to_intermediate_space_ids: [1, 2]},
       {id: 2, metric_id: 1, exported_from_id: 1, expression: `=${expressionSyntaxPad(1)}`},
       {id: 3, metric_id: 3, exported_from_id: 2, expression: `=${expressionSyntaxPad(3)}`},
     ])
   })
 
-  it ('should correctly extract an empty subset for invalid graphFilters', () => {
+  describe ('should correctly extract an empty subset for invalid graphFilters', () => {
     const testCases = [
       {
         description: 'an invalid metricId should yield an empty subset',
@@ -179,11 +182,14 @@ describe('getSubset', () => {
     ]
 
     testCases.forEach(({graphFilters, description}) => {
-      const {subset, relevantFacts} = getSubset(state, graphFilters)
-      expect(subset, description).to.have.property('metrics').that.is.empty
-      expect(subset, description).to.have.property('guesstimates').that.is.empty
-      expect(subset, description).to.have.property('simulations').that.is.empty
-      expect(relevantFacts, description).to.be.empty
+      it (description, () => {
+        const {subset, relevantFacts} = getSubset(state, graphFilters)
+
+        expect(subset, 'metrics are empty').to.have.property('metrics').that.is.empty
+        expect(subset, 'guesstimates are empty').to.have.property('guesstimates').that.is.empty
+        expect(subset, 'simulations are empty').to.have.property('simulations').that.is.empty
+        expect(relevantFacts, 'relevantFacts are empty').to.be.empty
+      })
     })
   })
 })

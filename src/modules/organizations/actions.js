@@ -33,7 +33,7 @@ export function fetchById(organizationId) {
         captureApiError('OrganizationsFetch', err.jqXHR, err.textStatus, err, {url: 'fetch'})
       } else if (organization) {
         const spaces = _.get(organization, 'intermediate_spaces')
-        if (!_.isEmpty(spaces)) { dispatch(spaceActions.fetchSuccess(...spaces)) }
+        if (!_.isEmpty(spaces)) { dispatch(spaceActions.fetchSuccess(spaces)) }
         dispatch(fetchSuccess([organization]))
       }
     })
