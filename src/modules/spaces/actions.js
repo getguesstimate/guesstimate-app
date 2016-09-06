@@ -25,7 +25,6 @@ function api(state) {
 }
 
 export function fetchSuccess(...spaces) {
-  console.log(spaces)
   return (dispatch, getState) => {
     dispatch(sActions.fetchSuccess(spaces.map(s => _.omit(s, ['_embedded']))))
 

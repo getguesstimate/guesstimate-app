@@ -378,7 +378,6 @@ export default class SpacesShow extends Component {
 
   render() {
     const space = this.props.denormalizedSpace
-    console.log(space)
     const {organizationHasFacts, me} = this.props
     if (!spacePrepared(space)) { return <div className='spaceShow'></div> }
 
