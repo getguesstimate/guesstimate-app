@@ -1,12 +1,13 @@
 import {expect} from 'chai'
 import {withReadableId} from '../generateMetricReadableId'
 
-describe('generateReadableId', () => {
+describe.only('generateReadableId', () => {
   const existingReadableIds = [
     'AB',
     'PIN',
     'PIN1',
     'PIN2',
+    'A',
   ]
 
   const testCases = [
@@ -83,7 +84,7 @@ describe('generateReadableId', () => {
       `,
       metric: {name: '2016 Revenue'},
       shouldGenerateReadableId: true,
-      expectedReadableId: 'REV'
+      expectedReadableId: 'REV',
     },
     {
       description: `
@@ -91,17 +92,26 @@ describe('generateReadableId', () => {
       `,
       metric: {name: 'Projected Revenue 2016'},
       shouldGenerateReadableId: true,
-      expectedReadableId: 'PR2016'
+      expectedReadableId: 'PR2016',
+    },
+    {
+      description: `
+        A metric that generates a readableID with underscores should check for existence of the underscore-stripped
+        name rather than the name with underscores.
+      `,
+      metric: {name: 'a - b'}, 
+      shouldGenerateReadableId: true,
+      expectedReadableId: 'A1',
     },
   ]
 
-  it ('Should generate the appropriate readable IDs', () => {
-    testCases.forEach(tc => {
-      const {readableId} = withReadableId(tc.metric, existingReadableIds)
-      if (tc.shouldGenerateReadableId) {
-        expect(readableId, tc.description).to.equal(tc.expectedReadableId)
+  testCases.forEach(({metric, description, shouldGenerateReadableId, expectedReadableId}) => {
+    it (description, () => {
+      const {readableId} = withReadableId(metric, existingReadableIds)
+      if (shouldGenerateReadableId) {
+        expect(readableId).to.equal(expectedReadableId)
       } else {
-        expect(readableId, tc.description).to.not.be.ok
+        expect(readableId).to.not.be.ok
       }
     })
   })

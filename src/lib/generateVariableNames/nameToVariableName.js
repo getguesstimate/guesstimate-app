@@ -1,5 +1,6 @@
 const DIGIT_REGEX = /^\d+$/
 const readableIdPartFromWord = word => DIGIT_REGEX.test(word) ? word : word[0]
+
 function prepareName(rawName) {
   const name = rawName.trim().toLowerCase().replace(/[^\w\d]/g, ' ')
   const firstNonDigit = name.search(/[^\d\s]/)
@@ -26,9 +27,11 @@ export function getVariableNameFromName(
   existingVariableNames=[],
   maxOneWordLength=30,
   maxSplitWordLength=8,
-  totalMaxLength=maxSplitWordLength
+  totalMaxLength=maxSplitWordLength,
+  allowUnderscores=true,
 ) {
-  const directName = getDirectVariableNameFromName(rawName, maxOneWordLength, maxSplitWordLength, totalMaxLength)
+  let directName = getDirectVariableNameFromName(rawName, maxOneWordLength, maxSplitWordLength, totalMaxLength)
+  if (!allowUnderscores) { directName = directName.replace(/\_/g, '') }
 
   const nameRegex = new RegExp(`${directName}(\\d+)?`, 'i')
 
