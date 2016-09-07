@@ -224,7 +224,7 @@ export default class MetricCard extends Component {
   }
 
   _className() {
-    const {inSelectedCell, metric, hovered} = this.props
+    const {inSelectedCell, metric, hovered, exportedAsFact} = this.props
     const {canvasState: {metricCardView}} = this.props
     const relationshipClass = relationshipClasses[relationshipType(metric.edges)]
 
@@ -233,6 +233,7 @@ export default class MetricCard extends Component {
     className += ` ${metricCardView}`
     className += titleView ? ' titleView' : ''
     className += ' ' + relationshipClass
+    className += exportedAsFact ? ' exportedAsFact' : ''
     return className
   }
 
@@ -279,6 +280,7 @@ export default class MetricCard extends Component {
       connectDragSource,
       analyzedMetric,
       forceFlowGridUpdate,
+      exportedAsFact,
     } = this.props
     const {guesstimate, name} = metric
     const shouldShowSensitivitySection = this._shouldShowSensitivitySection()
@@ -322,6 +324,7 @@ export default class MetricCard extends Component {
             onEscape={this.focus.bind(this)}
             onReturn={this.props.onReturn}
             onTab={this.props.onTab}
+            exportedAsFact={exportedAsFact}
           />
 
           {inSelectedCell &&
@@ -356,12 +359,13 @@ export default class MetricCard extends Component {
             onBeginAnalysis={this._beginAnalysis.bind(this)}
             onEndAnalysis={this._endAnalysis.bind(this)}
             canBeMadeFact={!_.isEmpty(name) && canUseOrganizationFacts}
+            exportedAsFact={exportedAsFact}
             onMakeFact={this._makeFact.bind(this)}
             isAnalyzedMetric={isAnalyzedMetric}
           />
         }
       </div>
-    );
+    )
   }
 }
 
@@ -370,6 +374,7 @@ const MetricSidebar = ({
   onBeginAnalysis,
   onEndAnalysis,
   canBeMadeFact,
+  exportedAsFact,
   onMakeFact,
   onRemoveMetric,
   showAnalysis,
@@ -396,11 +401,19 @@ const MetricSidebar = ({
         onClick={onEndAnalysis}
       />
     }
-    {canBeMadeFact &&
+    {canBeMadeFact && !exportedAsFact &&
       <MetricSidebarItem
         icon={<Icon name='bookmark'/>}
         name={'Make Fact'}
         onClick={onMakeFact}
+      />
+    }
+    {canBeMadeFact && exportedAsFact &&
+      <MetricSidebarItem
+        className='exportedAsFact'
+        icon={<Icon name='close'/>}
+        name={'Delete Linked Fact'}
+        onClick={() => {console.warn('NOT  YET IMPLEMENTED')}}
       />
     }
     <MetricSidebarItem

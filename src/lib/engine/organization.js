@@ -10,7 +10,7 @@ export const organizationMemberships = (id, memberships) => _collections.filter(
 export const organizationInvitations = (id, invitations) => _collections.filter(invitations, id, 'organization_id')
 
 const ORG_FACT_READABLE_ID_PREFIX = 'organization_'
-export const organizationReadableId = ({id}) => `${ORG_FACT_READABLE_ID_PREFIX}${id}`
+export const organizationReadableId = o => !!o ? `${ORG_FACT_READABLE_ID_PREFIX}${o.id}` : ''
 export const organizationIdFromFactReadableId = str => str.slice(ORG_FACT_READABLE_ID_PREFIX.length)
 
 export function organizationUsers(organizationId, users, memberships) {

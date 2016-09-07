@@ -375,8 +375,9 @@ export default class SpacesShow extends Component {
   }
 
   render() {
+    const {exportedFacts, organizationHasFacts, me} = this.props
     const space = this.props.denormalizedSpace
-    const {organizationHasFacts, me} = this.props
+
     if (!spacePrepared(space)) { return <div className='spaceShow'></div> }
 
     const sidebarIsViseable = space.editableByMe || !_.isEmpty(space.description)
@@ -385,7 +386,13 @@ export default class SpacesShow extends Component {
     if (this.props.embed) {
       return (
         <div className='spaceShow screenshot'>
-          <Canvas denormalizedSpace={space} canUseOrganizationFacts={this.canUseOrganizationFacts()} overflow={'hidden'} screenshot={true}/>
+          <Canvas
+            denormalizedSpace={space}
+            canUseOrganizationFacts={this.canUseOrganizationFacts()}
+            exportedFacts={exportedFacts}
+            overflow={'hidden'}
+            screenshot={true}
+          />
         </div>
       )
     }
@@ -488,6 +495,7 @@ export default class SpacesShow extends Component {
           }
           <Canvas
             canUseOrganizationFacts={this.canUseOrganizationFacts()}
+            exportedFacts={exportedFacts}
             denormalizedSpace={space}
             onCopy={this.onCopy.bind(this, true)}
             onPaste={this.onPaste.bind(this, true)}
