@@ -15,6 +15,8 @@ import e from 'gEngine/engine'
 //
 // 1. TODO(matthew): If you are in view mode, we want to resimulate the metrics in the space for display, but not the
 //                   exported facts; that should only happen upon space save...
+// 2. TODO(matthew): We need to simulate all descendant facts after re-simulating any facts in a space as well, as
+//                   opposed to just form based facts.
 //
 //
 //
