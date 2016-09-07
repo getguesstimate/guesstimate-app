@@ -133,8 +133,8 @@ describe('getSubset', () => {
         expect(subset, "guesstimates match").to.have.property('guesstimates').that.deep.has.members(space1Guesstimates)
         expect(subset, "simulations match").to.have.property('simulations').that.deep.has.members(space1Sims)
         expect(relevantFacts, 'relevantFacts match').to.deep.have.members([
-          {id: 1, expression: '3', imported_to_intermediate_space_ids: [1, 2]},
-          {id: 2, metric_id: 1, exported_from_id: 1, expression: `=${expressionSyntaxPad(1)}`},
+          {id: 1, expression: '3', imported_to_intermediate_space_ids: [1, 2], skipSimulating: true},
+          {id: 2, metric_id: 1, exported_from_id: 1, expression: `=${expressionSyntaxPad(1)}`, skipSimulating: false},
         ])
       })
     })
@@ -155,9 +155,9 @@ describe('getSubset', () => {
     ])
 
     expect(relevantFacts, 'relevantFacts match').to.deep.have.members([
-      {id: 1, expression: '3', imported_to_intermediate_space_ids: [1, 2]},
-      {id: 2, metric_id: 1, exported_from_id: 1, expression: `=${expressionSyntaxPad(1)}`},
-      {id: 3, metric_id: 3, exported_from_id: 2, expression: `=${expressionSyntaxPad(3)}`},
+      {id: 1, expression: '3', imported_to_intermediate_space_ids: [1, 2], skipSimulating: true},
+      {id: 2, metric_id: 1, exported_from_id: 1, expression: `=${expressionSyntaxPad(1)}`, skipSimulating: false},
+      {id: 3, metric_id: 3, exported_from_id: 2, expression: `=${expressionSyntaxPad(3)}`, skipSimulating: false},
     ])
   })
 

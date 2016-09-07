@@ -15,8 +15,8 @@ import e from 'gEngine/engine'
 //
 // 1. TODO(matthew): If you are in view mode, we want to resimulate the metrics in the space for display, but not the
 //                   exported facts; that should only happen upon space save...
-// 2. TODO(matthew): We need to simulate all descendant facts after re-simulating any facts in a space as well, as
-//                   opposed to just form based facts.
+// 2. TODO(matthew): Occasionally working with space exported facts yields 'can't call push on immutable data structure'
+//                   errors via node errors and addErrorToDescendants.
 //
 //
 //
@@ -59,11 +59,17 @@ export function getSubset(state, graphFilters) {
   const {spaces, organization} = getSpacesAndOrganization(state, graphFilters)
 
   if (_.isEmpty(spaces)) { return {subset: {metrics: [], guesstimates: [], simulations: []}, relevantFacts: []} }
+  const spaceIds = spaces.map(s => s.id)
 
-  let subset = e.space.subset(state, ...spaces.map(s => s.id))
+  let subset = e.space.subset(state, ...spaceIds)
   const organizationFacts = e.facts.getFactsForOrg(state.facts.organizationFacts, organization)
 
   const {organizationFactsUsed, globalFactsUsed} = e.facts.getRelevantFactsAndReformatGlobals(subset, state.facts.globalFacts, organizationFacts, spaces.map(s => s.id))
+
+  const organizationFactsFlaggedAsSimulatable = organizationFactsUsed.map(f => ({
+    ...f,
+    shouldBeSimulated: spaceIds.includes(_.get(f, 'exported_from_id')),
+  }))
 
   const globalFactHandleToNodeIdMap = _.transform(
     globalFactsUsed,
@@ -76,7 +82,7 @@ export function getSubset(state, graphFilters) {
     expression: e.utils.replaceByMap(g.expression, globalFactHandleToNodeIdMap)
   }))
 
-  return {subset, relevantFacts: [...organizationFactsUsed, ...globalFactsUsed]}
+  return {subset, relevantFacts: [...organizationFactsFlaggedAsSimulatable, ...globalFactsUsed]}
 }
 
 const nodeIdToMetricId = id => id.slice(e.simulation.METRIC_ID_PREFIX.length)
@@ -113,7 +119,7 @@ const factToSimulationNodeFn = f => ({
   guesstimateType: null, // Facts are currently type-less.
   samples: e.utils.orArr(_.get(f, 'simulation.sample.values')),
   errors: Object.assign([], e.utils.orArr(_.get(f, 'simulation.sample.errors')).filter(filterErrorsFn)),
-  skipSimulating: !_.get(f, 'exported_from_id'),
+  skipSimulating: !_.get(f, 'shouldBeSimulated'),
 })
 
 function denormalize({metrics, guesstimates, simulations}) {
@@ -190,6 +196,7 @@ const getCurrPropId = state => nodeId => {
 
 export function simulate(dispatch, getState, graphFilters) {
   const state = getState()
+  const shouldTriggerDownstreamFactSimulations = !graphFilters.factId
 
   const {subset, relevantFacts} = getSubset(state, graphFilters)
   const denormalizedMetrics = denormalize(subset)
@@ -222,7 +229,7 @@ export function simulate(dispatch, getState, graphFilters) {
         errors: Object.assign([], errors),
       }
     }
-    dispatch(addSimulationToFact(newSimulation, factId))
+    dispatch(addSimulationToFact(newSimulation, factId, shouldTriggerDownstreamFactSimulations))
   }
 
   const yieldSims = (nodeId, sim) => { nodeIdIsMetric(nodeId) ? yieldMetricSims(nodeId, sim) : yieldFactSims(nodeId, sim) }

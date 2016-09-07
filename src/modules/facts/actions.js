@@ -60,13 +60,13 @@ export function createFactFromMetric(organizationId, metric) {
   }
 }
 
-export function addSimulationToFact(simulation, id) {
+export function addSimulationToFact(simulation, id, shouldTriggerDownstreamFactSimulations) {
   return (dispatch, getState) => {
     const state = getState()
 
     const oldOrganizationFact = state.facts.organizationFacts.find(e => _collections.some(e.children, id))
     if (!oldOrganizationFact) {
-      console.warn('Tried to add simulations to a non-existent fact!')
+      if (__DEV__) { console.warn('Tried to add simulations to non-existent fact!', id) }
       return
     }
 
@@ -81,6 +81,6 @@ export function addSimulationToFact(simulation, id) {
       simulation: simulation,
     }
 
-    dispatch(editFact(organization, newFact))
+    dispatch(editFact(organization, newFact, shouldTriggerDownstreamFactSimulations))
   }
 }
