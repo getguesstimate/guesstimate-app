@@ -7,6 +7,21 @@ import {INTERNAL_ERROR, INPUT_ERROR, PARSER_ERROR, INFINITE_LOOP_ERROR} from 'li
 
 import e from 'gEngine/engine'
 
+// IMPORTANT TODOS DO NOT MISS
+//
+//
+//
+//
+//
+// 1. TODO(matthew): If you are in view mode, we want to resimulate the metrics in the space for display, but not the
+//                   exported facts; that should only happen upon space save...
+//
+//
+//
+//
+//
+// IMPORTANT TODOS DO NOT MISS
+
 const {
   NODE_TYPES,
   ERROR_SUBTYPES: {GRAPH_SUBTYPES: {MISSING_INPUT_ERROR, IN_INFINITE_LOOP, INVALID_ANCESTOR_ERROR}},
