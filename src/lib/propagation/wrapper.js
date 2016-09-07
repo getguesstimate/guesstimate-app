@@ -15,8 +15,9 @@ import e from 'gEngine/engine'
 //
 // 1. TODO(matthew): If you are in view mode, we want to resimulate the metrics in the space for display, but not the
 //                   exported facts; that should only happen upon space save...
-// 2. TODO(matthew): Occasionally working with space exported facts yields 'can't call push on immutable data structure'
-//                   errors via node errors and addErrorToDescendants.
+// 3. TODO(matthew): Spaces often inappropriately start in view mode.
+// 4. TODO(matthew): Facts are often not fully loaded when a cold-loaded space tries to simulate, so it thinks of them
+//                   as missing inputs.
 //
 //
 //
@@ -107,8 +108,8 @@ const metricToSimulationNodeFn = m => ({
   type: guesstimateTypeToNodeType(m.guesstimate.guesstimateType),
   guesstimateType: m.guesstimate.guesstimateType,
   expression: m.guesstimate.expression,
-  samples: m.guesstimate.guesstimateType === 'DATA' ? e.utils.orArr(_.get(m, 'guesstimate.data')) : e.utils.orArr(_.get(m, 'simulation.sample.values')),
-  errors: Object.assign([], e.utils.orArr(_.get(m, 'simulation.sample.errors')).filter(filterErrorsFn)),
+  samples: m.guesstimate.guesstimateType === 'DATA' ? e.utils.orArr(_.get(m, 'guesstimate.data')) : e.simulation.values(m.simulation),
+  errors: e.utils.mutableCopy(e.simulation.errors(m.simulation)).filter(filterErrorsFn),
 })
 
 const factIdToNodeId = id => `${e.simulation.FACT_ID_PREFIX}${id}`
@@ -117,8 +118,8 @@ const factToSimulationNodeFn = f => ({
   expression: f.expression,
   type: NODE_TYPES.UNSET, // Facts are currently type-less.
   guesstimateType: null, // Facts are currently type-less.
-  samples: e.utils.orArr(_.get(f, 'simulation.sample.values')),
-  errors: Object.assign([], e.utils.orArr(_.get(f, 'simulation.sample.errors')).filter(filterErrorsFn)),
+  samples: e.simulation.values(f.simulation),
+  errors: e.utils.mutableCopy(e.simulation.errors(f.simulation)).filter(filterErrorsFn),
   skipSimulating: !_.get(f, 'shouldBeSimulated'),
 })
 
@@ -201,7 +202,7 @@ export function simulate(dispatch, getState, graphFilters) {
   const {subset, relevantFacts} = getSubset(state, graphFilters)
   const denormalizedMetrics = denormalize(subset)
 
-  const nodes = [...denormalizedMetrics.map(metricToSimulationNodeFn), ...relevantFacts.map(factToSimulationNodeFn)]
+  const nodes = [..._.map(denormalizedMetrics, metricToSimulationNodeFn), ..._.map(relevantFacts, factToSimulationNodeFn)]
 
   if (_.isEmpty(nodes)) { return }
 
