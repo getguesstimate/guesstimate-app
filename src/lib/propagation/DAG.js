@@ -1,6 +1,5 @@
 import * as nodeFns from './nodeFns'
 import {SimulationNode} from './node'
-import * as constants from './constants'
 
 import * as _collections from 'gEngine/collections'
 
@@ -40,6 +39,10 @@ function orderNodesAndAddData(nodes) {
 
   const missingInputsNodes = _.remove(unprocessedNodes, nodeFns.hasMissingInputs(unprocessedNodes))
   let graphErrorNodes = missingInputsNodes.map(nodeFns.withMissingInputError(nodes))
+
+  const duplicateIdNodes = _.remove(unprocessedNodes, nodeFns.hasDuplicateId(unprocessedNodes))
+  graphErrorNodes.push(...duplicateIdNodes.map(nodeFns.withDuplicateIdError))
+
   let errorNodes = Object.assign([], graphErrorNodes)
   let heightOrderedNodes = []
 

@@ -10,7 +10,7 @@ import * as _collections from 'gEngine/collections'
 // ERRORS:
 const {
   ERROR_TYPES: {GRAPH_ERROR},
-  ERROR_SUBTYPES: {GRAPH_SUBTYPES: {MISSING_INPUT_ERROR, IN_INFINITE_LOOP, INVALID_ANCESTOR_ERROR}},
+  ERROR_SUBTYPES: {GRAPH_SUBTYPES: {MISSING_INPUT_ERROR, IN_INFINITE_LOOP, INVALID_ANCESTOR_ERROR, DUPLICATE_ID_ERROR}},
 } = constants
 
 
@@ -49,6 +49,17 @@ describe('construction', () => {
 
     const subTypes = _.flatten(DAG.graphErrorNodes.map(n => n.errors.map(e => e.subType)))
     expect(subTypes).to.have.members([MISSING_INPUT_ERROR, INVALID_ANCESTOR_ERROR, INVALID_ANCESTOR_ERROR])
+  })
+
+  const duplicateInputsNodeList = [utils.makeNode(1), utils.makeNode(1), utils.makeNode(3, [4]), utils.makeNode(4), utils.makeNode(5, [1,3])]
+  it ('Correctly flags missing input errors', () => {utils.expectNodesToBe(new SimulationDAG(duplicateInputsNodeList), [4,3], [1,1,5])})
+  it ('Produces appropriately typed errors', () => {
+    const DAG = new SimulationDAG(duplicateInputsNodeList)
+
+    DAG.graphErrorNodes.forEach(n => { n.errors.forEach( e => {expect(e.type).to.equal(GRAPH_ERROR)} ) })
+
+    const subTypes = _.flatten(DAG.graphErrorNodes.map(n => n.errors.map(e => e.subType)))
+    expect(subTypes).to.have.members([DUPLICATE_ID_ERROR, DUPLICATE_ID_ERROR, INVALID_ANCESTOR_ERROR])
   })
 
   const infiniteLoopNodeList = [utils.makeNode(1, [2]), utils.makeNode(2, [1]), utils.makeNode(3, [1]), utils.makeNode(4), utils.makeNode(5, [4])]

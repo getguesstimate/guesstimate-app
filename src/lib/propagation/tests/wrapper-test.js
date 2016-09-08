@@ -14,6 +14,7 @@ describe('getSubset', () => {
   const space3Metrics = [ {id: 5, space: 3}, {id: 6, space: 3} ]
   const space4Metrics = [ {id: 7, space: 4}, {id: 8, space: 4}, {id: 9, space: 4} ]
   const space5Metrics = [ {id: 10, space: 5} ]
+  const space6Metrics = [ {id: 11, space: 6} ]
 
   const space1Guesstimates = [ {metric: 1, expression: '1'}, {metric: 2, expression: '=${fact:1}'} ]
   const space2Guesstimates = [ {metric: 3, expression: '=${metric:4}'}, {metric: 4, expression: '=${fact:1}'} ]
@@ -24,6 +25,7 @@ describe('getSubset', () => {
       {metric: 9, expression: '=@Chicago.population'},
   ]
   const space5Guesstimates = [ {metric: 10, expression: '6'} ]
+  const space6Guesstimates = [ {metric: 11, expression: '=${fact:2}'} ]
 
   const space1Sims = [ {metric: 1, sample: {values: [], errors: []}}, {metric: 2, sample: {values: [], errors: []}} ]
   const space2Sims = [ {metric: 3, sample: {values: [], errors: []}}, {metric: 4, sample: {values: [], errors: []}} ]
@@ -34,6 +36,7 @@ describe('getSubset', () => {
       {metric: 9, sample: {values: [], errors: []}}
   ]
   const space5Sims = [ {metric: 10, sample: {values: [], errors: []}} ]
+  const space6Sims = [ {metric: 11, sample: {values: [], errors: []}} ]
 
   const state = {
     canvasState: {
@@ -62,6 +65,12 @@ describe('getSubset', () => {
         id: 5,
         organization_id: 1,
         imported_fact_ids: [],
+        exported_facts_count: 1,
+      },
+      {
+        id: 6,
+        organization_id: 1,
+        imported_fact_ids: [2],
         exported_facts_count: 1,
       },
       {
@@ -99,6 +108,7 @@ describe('getSubset', () => {
             {id: 3, metric_id: 3, exported_from_id: 2},
             {id: 7, expression: '100'},
             {id: 8, metric_id: 10, exported_from_id: 5},
+            {id: 9, metric_id: 11, exported_from_id: 6},
           ],
         },
         {
@@ -111,9 +121,12 @@ describe('getSubset', () => {
         },
       ],
     },
-    metrics: [...space1Metrics, ...space2Metrics, ...space3Metrics, ...space4Metrics, ...space5Metrics],
-    guesstimates: [ ...space1Guesstimates, ...space2Guesstimates, ...space3Guesstimates, ...space4Guesstimates, ...space5Guesstimates ],
-    simulations: [...space1Sims, ...space2Sims, ...space3Sims, ...space4Sims, ...space5Sims],
+    metrics: [...space1Metrics, ...space2Metrics, ...space3Metrics, ...space4Metrics, ...space5Metrics, ...space6Metrics],
+    guesstimates: [
+      ...space1Guesstimates, ...space2Guesstimates, ...space3Guesstimates,
+      ...space4Guesstimates, ...space5Guesstimates, ...space6Guesstimates,
+    ],
+    simulations: [...space1Sims, ...space2Sims, ...space3Sims, ...space4Sims, ...space5Sims, ...space6Sims],
   }
 
   describe ("getSubset should correctly extract a single space's subset, through metricId or spaceId", () => {
@@ -217,20 +230,27 @@ describe('getSubset', () => {
     const graphFilters = { factId: 1 }
     const {subset, relevantFacts} = getSubset(state, graphFilters)
 
-    expect(subset, "metrics match").to.have.property('metrics').that.deep.has.members([...space1Metrics, ...space2Metrics])
+    expect(subset, "metrics match").to.have.property('metrics').that.deep.has.members([
+      ...space1Metrics,
+      ...space2Metrics,
+      ...space6Metrics,
+    ])
     expect(subset, "guesstimates match").to.have.property('guesstimates').that.deep.has.members([
       ...space1Guesstimates,
       ...space2Guesstimates,
+      ...space6Guesstimates,
     ])
     expect(subset, "simulations match").to.have.property('simulations').that.deep.has.members([
       ...space1Sims,
-      ...space2Sims
+      ...space2Sims,
+      ...space6Sims,
     ])
 
     expect(relevantFacts, 'relevantFacts match').to.deep.have.members([
       {id: 1, expression: '3', imported_to_intermediate_space_ids: [1, 2], shouldBeSimulated: false},
       {id: 2, metric_id: 1, exported_from_id: 1, expression: `=${expressionSyntaxPad(1)}`, shouldBeSimulated: true},
       {id: 3, metric_id: 3, exported_from_id: 2, expression: `=${expressionSyntaxPad(3)}`, shouldBeSimulated: true},
+      {id: 9, metric_id: 11, exported_from_id: 6, expression: `=${expressionSyntaxPad(11)}`, shouldBeSimulated: true},
     ])
   })
 
@@ -244,21 +264,36 @@ describe('getSubset', () => {
       },
     }
     const {subset, relevantFacts} = getSubset(stateWithCanvasStateToFalse, graphFilters)
+    console.log('expecting')
+    console.log([
+      {id: 1, expression: '3', imported_to_intermediate_space_ids: [1, 2], shouldBeSimulated: false},
+      {id: 2, metric_id: 1, exported_from_id: 1, expression: `=${expressionSyntaxPad(1)}`, shouldBeSimulated: true},
+      {id: 3, metric_id: 3, exported_from_id: 2, expression: `=${expressionSyntaxPad(3)}`, shouldBeSimulated: true},
+      {id: 9, metric_id: 11, exported_from_id: 6, expression: `=${expressionSyntaxPad(11)}`, shouldBeSimulated: true},
+    ])
+    debugger
 
-    expect(subset, "metrics match").to.have.property('metrics').that.deep.has.members([...space1Metrics, ...space2Metrics])
+    expect(subset, "metrics match").to.have.property('metrics').that.deep.has.members([
+      ...space1Metrics,
+      ...space2Metrics,
+      ...space6Metrics,
+    ])
     expect(subset, "guesstimates match").to.have.property('guesstimates').that.deep.has.members([
       ...space1Guesstimates,
       ...space2Guesstimates,
+      ...space6Guesstimates,
     ])
     expect(subset, "simulations match").to.have.property('simulations').that.deep.has.members([
       ...space1Sims,
-      ...space2Sims
+      ...space2Sims,
+      ...space6Sims,
     ])
 
     expect(relevantFacts, 'relevantFacts match').to.deep.have.members([
       {id: 1, expression: '3', imported_to_intermediate_space_ids: [1, 2], shouldBeSimulated: false},
       {id: 2, metric_id: 1, exported_from_id: 1, expression: `=${expressionSyntaxPad(1)}`, shouldBeSimulated: true},
       {id: 3, metric_id: 3, exported_from_id: 2, expression: `=${expressionSyntaxPad(3)}`, shouldBeSimulated: true},
+      {id: 9, metric_id: 11, exported_from_id: 6, expression: `=${expressionSyntaxPad(11)}`, shouldBeSimulated: true},
     ])
   })
 
