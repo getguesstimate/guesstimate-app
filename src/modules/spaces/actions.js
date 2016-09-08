@@ -34,9 +34,9 @@ export function fetchSuccess(spaces) {
       if (!isInitialized) { dispatch(initSpace(id, graph)) }
     })
 
-    const users = spaces.map(s => _.get(s, '_embedded.user')).filter(e.collections.isPresent)
-    const organizations = spaces.map(s => _.get(s, '_embedded.organization')).filter(e.collections.isPresent)
-    const calculators = _.flatten(spaces.map(s => e.utils.orArr(_.get(s, '_embedded.calculators')))).filter(e.collections.isPresent)
+    const users = spaces.map(s => _.get(s, '_embedded.user')).filter(e.utils.isPresent)
+    const organizations = spaces.map(s => _.get(s, '_embedded.organization')).filter(e.utils.isPresent)
+    const calculators = _.flatten(spaces.map(s => e.utils.orArr(_.get(s, '_embedded.calculators')))).filter(e.utils.isPresent)
 
     if (!_.isEmpty(calculators)) {dispatch(calculatorActions.sActions.fetchSuccess(calculators))}
     if (!_.isEmpty(organizations)) { dispatch(organizationActions.fetchSuccess(organizations)) }
