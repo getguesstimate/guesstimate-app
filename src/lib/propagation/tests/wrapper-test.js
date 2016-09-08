@@ -36,6 +36,9 @@ describe('getSubset', () => {
   const space5Sims = [ {metric: 10, sample: {values: [], errors: []}} ]
 
   const state = {
+    canvasState: {
+      editsAllowedManuallySet: false,
+    },
     spaces: [
       {
         id: 1,
@@ -133,8 +136,8 @@ describe('getSubset', () => {
         expect(subset, "guesstimates match").to.have.property('guesstimates').that.deep.has.members(space1Guesstimates)
         expect(subset, "simulations match").to.have.property('simulations').that.deep.has.members(space1Sims)
         expect(relevantFacts, 'relevantFacts match').to.deep.have.members([
-          {id: 1, expression: '3', imported_to_intermediate_space_ids: [1, 2], skipSimulating: true},
-          {id: 2, metric_id: 1, exported_from_id: 1, expression: `=${expressionSyntaxPad(1)}`, skipSimulating: false},
+          {id: 1, expression: '3', imported_to_intermediate_space_ids: [1, 2], shouldBeSimulated: false},
+          {id: 2, metric_id: 1, exported_from_id: 1, expression: `=${expressionSyntaxPad(1)}`, shouldBeSimulated: true},
         ])
       })
     })
@@ -153,11 +156,11 @@ describe('getSubset', () => {
     ]
 
     const stateWithCanvasStateToFalse = {
-      ...state
+      ...state,
       canvasState: {
         editsAllowed: false,
         editsAllowedManuallySet: true,
-      }
+      },
     }
 
     testCases.forEach( ({graphFilters, description}) => {
@@ -168,8 +171,8 @@ describe('getSubset', () => {
         expect(subset, 'guesstimates match').to.have.property('guesstimates').that.deep.has.members(space1Guesstimates)
         expect(subset, 'simulations match').to.have.property('simulations').that.deep.has.members(space1Sims)
         expect(relevantFacts, 'relevantFacts match').to.deep.have.members([
-          {id: 1, expression: '3', imported_to_intermediate_space_ids: [1, 2], skipSimulating: true},
-          {id: 2, metric_id: 1, exported_from_id: 1, expression: `=${expressionSyntaxPad(1)}`, skipSimulating: true},
+          {id: 1, expression: '3', imported_to_intermediate_space_ids: [1, 2], shouldBeSimulated: false},
+          {id: 2, metric_id: 1, exported_from_id: 1, expression: `=${expressionSyntaxPad(1)}`, shouldBeSimulated: false},
         ])
       })
     })
@@ -188,11 +191,11 @@ describe('getSubset', () => {
     ]
 
     const stateWithCanvasStateToFalse = {
-      ...state
+      ...state,
       canvasState: {
         editsAllowed: true,
         editsAllowedManuallySet: true,
-      }
+      },
     }
 
     testCases.forEach( ({graphFilters, description}) => {
@@ -203,8 +206,8 @@ describe('getSubset', () => {
         expect(subset, 'guesstimates match').to.have.property('guesstimates').that.deep.has.members(space1Guesstimates)
         expect(subset, 'simulations match').to.have.property('simulations').that.deep.has.members(space1Sims)
         expect(relevantFacts, 'relevantFacts match').to.deep.have.members([
-          {id: 1, expression: '3', imported_to_intermediate_space_ids: [1, 2], skipSimulating: true},
-          {id: 2, metric_id: 1, exported_from_id: 1, expression: `=${expressionSyntaxPad(1)}`, skipSimulating: false},
+          {id: 1, expression: '3', imported_to_intermediate_space_ids: [1, 2], shouldBeSimulated: false},
+          {id: 2, metric_id: 1, exported_from_id: 1, expression: `=${expressionSyntaxPad(1)}`, shouldBeSimulated: true},
         ])
       })
     })
@@ -225,9 +228,37 @@ describe('getSubset', () => {
     ])
 
     expect(relevantFacts, 'relevantFacts match').to.deep.have.members([
-      {id: 1, expression: '3', imported_to_intermediate_space_ids: [1, 2], skipSimulating: true},
-      {id: 2, metric_id: 1, exported_from_id: 1, expression: `=${expressionSyntaxPad(1)}`, skipSimulating: false},
-      {id: 3, metric_id: 3, exported_from_id: 2, expression: `=${expressionSyntaxPad(3)}`, skipSimulating: false},
+      {id: 1, expression: '3', imported_to_intermediate_space_ids: [1, 2], shouldBeSimulated: false},
+      {id: 2, metric_id: 1, exported_from_id: 1, expression: `=${expressionSyntaxPad(1)}`, shouldBeSimulated: true},
+      {id: 3, metric_id: 3, exported_from_id: 2, expression: `=${expressionSyntaxPad(3)}`, shouldBeSimulated: true},
+    ])
+  })
+
+  it ("should correctly extract all possibly intermediate spaces' subsets from a factId and ignore the canvasState settings", () => {
+    const graphFilters = { factId: 1 }
+    const stateWithCanvasStateToFalse = {
+      ...state,
+      canvasState: {
+        editsAllowed: false,
+        editsAllowedManuallySet: true,
+      },
+    }
+    const {subset, relevantFacts} = getSubset(stateWithCanvasStateToFalse, graphFilters)
+
+    expect(subset, "metrics match").to.have.property('metrics').that.deep.has.members([...space1Metrics, ...space2Metrics])
+    expect(subset, "guesstimates match").to.have.property('guesstimates').that.deep.has.members([
+      ...space1Guesstimates,
+      ...space2Guesstimates,
+    ])
+    expect(subset, "simulations match").to.have.property('simulations').that.deep.has.members([
+      ...space1Sims,
+      ...space2Sims
+    ])
+
+    expect(relevantFacts, 'relevantFacts match').to.deep.have.members([
+      {id: 1, expression: '3', imported_to_intermediate_space_ids: [1, 2], shouldBeSimulated: false},
+      {id: 2, metric_id: 1, exported_from_id: 1, expression: `=${expressionSyntaxPad(1)}`, shouldBeSimulated: true},
+      {id: 3, metric_id: 3, exported_from_id: 2, expression: `=${expressionSyntaxPad(3)}`, shouldBeSimulated: true},
     ])
   })
 
