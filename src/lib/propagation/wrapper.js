@@ -66,9 +66,33 @@ export function getSubset(state, graphFilters) {
 
   const {organizationFactsUsed, globalFactsUsed} = e.facts.getRelevantFactsAndReformatGlobals(subset, state.facts.globalFacts, organizationFacts, spaces.map(s => s.id))
 
+  // When should facts be simulatable?
+  //
+  // This logic is a bit dicey, and very tempermental, so it warrants an explanation.
+  // We only want to simulate facts if the user is in editing mode on a space; you don't want to redefine their global
+  // fact store if they are just arbitrarily adjusting parameters, for example. View mode or edit mode is determined by
+  // one of two things: either the canvasState flags edits as being allowed or not, or the space's permissions itself
+  // can forbid editing by a user. But, as our permission system right now prohibits the use of (or exporting of,
+  // TODO(matthew): Add that restriction) from spaces that the user doesn't have permission to edit, this second
+  // restriction is moot; if you can't edit the space you can't be simulating output facts in the first place.
+  // Therefore, the only restriction that defines whether or not the user is in editing mode that is relevant when there
+  // are possible output facts is the canvas state. In particular, a user is in edit mode (and thus we should simulate
+  // facts) when the canvasState editsAllowed field is manually set to true.
+  //
+  // However, there is one additional caveat. If we are simulating facts as part of a downstream propagation from an
+  // upstream fact change, then we want to simulate facts independently of canvasState. This is indicated by whether or
+  // not the graphFilters object has the `factId` field set.
+  //
+  // Additionally, we never want to simulate input facts, or facts not exported by the space we're simulating.
+  //
+  // So, our final condition as to whether or not we want to simulate a given fact f is:
+  //   ([can edit] OR [simulating fact descendants]) AND [fact is output]
+  const {canvasState: {editsAllowed, editsAllowedManuallySet}} = state
+  const allowedToSimulateOutputFact = !!graphFilters.factId || !editsAllowedManuallySet || editsAllowed
+
   const organizationFactsFlaggedAsSimulatable = organizationFactsUsed.map(f => ({
     ...f,
-    shouldBeSimulated: spaceIds.includes(_.get(f, 'exported_from_id')),
+    shouldBeSimulated: allowedToSimulateOutputFact && spaceIds.includes(_.get(f, 'exported_from_id')),
   }))
 
   const globalFactHandleToNodeIdMap = _.transform(

@@ -140,6 +140,76 @@ describe('getSubset', () => {
     })
   })
 
+  describe ("getSubset should correctly extract a single space's subset, through metricId or spaceId, and flags all facts as unsimulatable when canvasState forbids edits.", () => {
+    const testCases = [
+      {
+        description: "Passing a single metricId should yield that metric's space's subset",
+        graphFilters: { metricId: 1 }
+      },
+      {
+        description: "Passing a single spaceId should yield that space's subset",
+        graphFilters: { spaceId: 1 }
+      },
+    ]
+
+    const stateWithCanvasStateToFalse = {
+      ...state
+      canvasState: {
+        editsAllowed: false,
+        editsAllowedManuallySet: true,
+      }
+    }
+
+    testCases.forEach( ({graphFilters, description}) => {
+      it (description, () => {
+        const {subset, relevantFacts} = getSubset(stateWithCanvasStateToFalse, graphFilters)
+
+        expect(subset, 'metrics match').to.have.property('metrics').that.deep.has.members(space1Metrics)
+        expect(subset, 'guesstimates match').to.have.property('guesstimates').that.deep.has.members(space1Guesstimates)
+        expect(subset, 'simulations match').to.have.property('simulations').that.deep.has.members(space1Sims)
+        expect(relevantFacts, 'relevantFacts match').to.deep.have.members([
+          {id: 1, expression: '3', imported_to_intermediate_space_ids: [1, 2], skipSimulating: true},
+          {id: 2, metric_id: 1, exported_from_id: 1, expression: `=${expressionSyntaxPad(1)}`, skipSimulating: true},
+        ])
+      })
+    })
+  })
+
+  describe ("getSubset should correctly extract a single space's subset, through metricId or spaceId, and flags facts as simulatable as appropriate when canvasState specifically allows edits.", () => {
+    const testCases = [
+      {
+        description: "Passing a single metricId should yield that metric's space's subset",
+        graphFilters: { metricId: 1 }
+      },
+      {
+        description: "Passing a single spaceId should yield that space's subset",
+        graphFilters: { spaceId: 1 }
+      },
+    ]
+
+    const stateWithCanvasStateToFalse = {
+      ...state
+      canvasState: {
+        editsAllowed: true,
+        editsAllowedManuallySet: true,
+      }
+    }
+
+    testCases.forEach( ({graphFilters, description}) => {
+      it (description, () => {
+        const {subset, relevantFacts} = getSubset(stateWithCanvasStateToFalse, graphFilters)
+
+        expect(subset, 'metrics match').to.have.property('metrics').that.deep.has.members(space1Metrics)
+        expect(subset, 'guesstimates match').to.have.property('guesstimates').that.deep.has.members(space1Guesstimates)
+        expect(subset, 'simulations match').to.have.property('simulations').that.deep.has.members(space1Sims)
+        expect(relevantFacts, 'relevantFacts match').to.deep.have.members([
+          {id: 1, expression: '3', imported_to_intermediate_space_ids: [1, 2], skipSimulating: true},
+          {id: 2, metric_id: 1, exported_from_id: 1, expression: `=${expressionSyntaxPad(1)}`, skipSimulating: false},
+        ])
+      })
+    })
+  })
+
   it ("should correctly extract all possibly intermediate spaces' subsets from a factId", () => {
     const graphFilters = { factId: 1 }
     const {subset, relevantFacts} = getSubset(state, graphFilters)
