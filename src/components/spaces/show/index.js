@@ -44,8 +44,6 @@ function mapStateToProps(state) {
   }
 }
 
-const spacePrepared = space => e.utils.isPresent(space) && e.utils.anyPresent(_.get(space, 'user.name'), _.get(space, 'organization.name'))
-
 const PT = PropTypes
 
 const CLOSED = 0
@@ -356,7 +354,7 @@ export default class SpacesShow extends Component {
   render() {
     const space = this.props.denormalizedSpace
     const {organizationHasFacts, me} = this.props
-    if (!spacePrepared(space)) { return <div className='spaceShow'></div> }
+    if (!e.space.prepared(space)) { return <div className='spaceShow'></div> }
 
     const sidebarIsViseable = space.editableByMe || !_.isEmpty(space.description)
 
