@@ -1,5 +1,5 @@
 import * as _metric from './metric'
-import * as _collections from './collections'
+import {isPresent} from './utils'
 
 export const INTERMEDIATE = 'INTERMEDIATE'
 export const OUTPUT = 'OUTPUT'
@@ -13,4 +13,4 @@ export function relationshipType(edges) {
   return NOEDGE
 }
 
-export const denormalize = graph => ({metrics: graph.metrics.map(_metric.denormalizeFn(graph)).filter(_collections.isPresent)})
+export const denormalize = graph => ({metrics: graph.metrics.map(_metric.denormalizeFn(graph)).filter(isPresent)})

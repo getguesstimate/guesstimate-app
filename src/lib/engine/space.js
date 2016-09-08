@@ -8,14 +8,15 @@ import * as _simulation from './simulation'
 import * as _userOrganizationMemberships from './userOrganizationMemberships'
 import * as _facts from './facts'
 import * as _collections from './collections'
+import * as _utils from './utils'
 
 export const url = ({id}) => (!!id) ? `/models/${id}` : ''
 export const withGraph = (space, graph) => ({...space, graph: subset(graph, space.id)})
 
 export function subset(state, ...spaceIds) {
   const metrics = _collections.filterByInclusion(state.metrics, 'space', spaceIds)
-  const guesstimates = metrics.map(_guesstimate.getByMetricFn(state)).filter(_collections.isPresent)
-  const simulations = guesstimates.map(_simulation.getByMetricFn(state)).filter(_collections.isPresent)
+  const guesstimates = metrics.map(_guesstimate.getByMetricFn(state)).filter(_utils.isPresent)
+  const simulations = guesstimates.map(_simulation.getByMetricFn(state)).filter(_utils.isPresent)
   return { metrics, guesstimates, simulations }
 }
 
@@ -52,7 +53,7 @@ export function toDSpace(spaceId, graph, organizationFacts) {
   return dSpace
 }
 
-export function toDgraph(space, graph){
+function toDgraph(space, graph){
   const {users, organizations, calculators, userOrganizationMemberships, me} = graph
   const {user_id, organization_id} = space
 
@@ -66,7 +67,8 @@ export function toDgraph(space, graph){
 }
 
 export function canEdit({user_id, organization_id}, me, userOrganizationMemberships, canvasState) {
-  if (_.has(canvasState, 'editsAllowed') && !canvasState.editsAllowed) { return false }
+  // TODO(matthew): This first check is hacky. Refactor later.
+  if (!_.isEmpty(canvasState) && !!canvasState.editsAllowedManuallySet && !canvasState.editsAllowed) { return false }
 
   const meId = _.get(me, 'id')
   if (!!organization_id) {
