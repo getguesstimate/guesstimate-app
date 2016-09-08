@@ -13,8 +13,9 @@ import e from 'gEngine/engine'
 //
 //
 //
-// 1. TODO(matthew): Delete linked facts needs to be hooked up.
-// 2. TODO(matthew): Simulating downstream facts are broken.
+// 1. TODO(matthew): Clicking 'Edit' on fact form should still load edit form w/in list, but instead of the expression
+//                   text box, there should be a button that takes you to the model.
+// 2. TODO(matthew): Remove the 'delete linked fact' button 
 //
 //
 //
