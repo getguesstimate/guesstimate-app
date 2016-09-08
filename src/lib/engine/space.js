@@ -1,6 +1,6 @@
-import * as _graph from './graph'
 import math from 'mathjs'
-window.math = math
+
+import * as _graph from './graph'
 import * as _dGraph from './dgraph'
 import * as _metric from './metric'
 import * as _guesstimate from './guesstimate'
@@ -12,6 +12,11 @@ import * as _utils from './utils'
 
 export const url = ({id}) => (!!id) ? `/models/${id}` : ''
 export const withGraph = (space, graph) => ({...space, graph: subset(graph, space.id)})
+
+export function prepared(dSpace) {
+  const ownerName = _utils.isPresent(_.get(dSpace, 'organization_id')) ? _.get(dSpace, 'organization.name') : _.get(dSpace, 'user.name')
+  return _utils.allPresent(dSpace, ownerName)
+}
 
 export function subset(state, ...spaceIds) {
   const metrics = _collections.filterByInclusion(state.metrics, 'space', spaceIds)

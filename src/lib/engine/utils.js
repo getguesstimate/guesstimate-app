@@ -12,7 +12,6 @@ export const orArr = e => e || []
 export const isPresent = e => (!!e && !_.isEmpty(e)) || (typeof e === 'number') || (e === true)
 export const presentOrVal = (e, val) => isPresent(e) ? e : val
 export const allPresent = (...objs) => objs.reduce((running, curr) => running && isPresent(curr), true)
-export const anyPresent = (...objs) => objs.reduce((running, curr) => running || isPresent(curr), false)
 
 const escSpecialChars = str => str.replace(/\$|\{|\}|\_/g, e => `\\${e}`)
 const toSource = re => re instanceof RegExp ? re.source : escSpecialChars(re)
