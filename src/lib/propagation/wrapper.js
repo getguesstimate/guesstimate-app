@@ -16,6 +16,9 @@ import e from 'gEngine/engine'
 // 1. TODO(matthew): Facts are often not fully loaded when a cold-loaded space tries to simulate, so it thinks of them
 //                   as missing inputs.
 // 2. TODO(matthew): Delete linked facts needs to be hooked up.
+// 3. TODO(matthew): Edit space defined fact broken.
+// 4. TODO(matthew): Simulating downstream facts are broken.
+//
 //
 //
 //
