@@ -5,6 +5,8 @@ import Icon from 'react-fa'
 import {DistributionSummary} from 'gComponents/distributions/summary/index'
 import Histogram from 'gComponents/simulations/histogram/index'
 
+import {isPresent} from 'gEngine/utils'
+
 export const FactItem = ({fact, onEdit}) => (
   <div className='Fact--outer'>
     <div className='Fact'>
@@ -37,7 +39,9 @@ export const FactItem = ({fact, onEdit}) => (
       </div>
 
         <div className='section-help'>
-          <span className='ui button small options' onClick={onEdit}>Edit</span>
+          <span className='ui button small options' onClick={onEdit}>
+            {isPresent(_.get(fact, 'exported_from_id')) ? 'Edit Model' : 'Edit'}
+          </span>
         </div>
     </div>
   </div>

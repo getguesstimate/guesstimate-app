@@ -10,7 +10,8 @@ import * as _facts from './facts'
 import * as _collections from './collections'
 import * as _utils from './utils'
 
-export const url = ({id}) => (!!id) ? `/models/${id}` : ''
+export const spaceUrlById = id => (!!id) ? `/models/${id}` : ''
+export const url = ({id}) => spaceUrlById(id)
 export const withGraph = (space, graph) => ({...space, graph: subset(graph, space.id)})
 
 export function prepared(dSpace) {

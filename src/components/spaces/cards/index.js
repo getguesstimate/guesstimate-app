@@ -64,7 +64,7 @@ export const SpaceCard = ({space, showPrivacy}) => {
   const ownerUrl = hasOrg ? Organization.url(space.organization) : User.url(space.user)
 
   const spaceUrl = Space.url(space)
-  const navigateToSpace = () => {navigationActions.navigate(spaceUrl)}
+  const navigateToSpace = navigationActions.navigateFn(spaceUrl)
 
   return (
     <div className='col-xs-12 col-md-4 SpaceCard'>
