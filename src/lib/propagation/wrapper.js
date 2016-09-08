@@ -15,8 +15,7 @@ import e from 'gEngine/engine'
 //
 // 1. TODO(matthew): If you are in view mode, we want to resimulate the metrics in the space for display, but not the
 //                   exported facts; that should only happen upon space save...
-// 3. TODO(matthew): Spaces often inappropriately start in view mode.
-// 4. TODO(matthew): Facts are often not fully loaded when a cold-loaded space tries to simulate, so it thinks of them
+// 2. TODO(matthew): Facts are often not fully loaded when a cold-loaded space tries to simulate, so it thinks of them
 //                   as missing inputs.
 //
 //
