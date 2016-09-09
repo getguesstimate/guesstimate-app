@@ -35,8 +35,16 @@ export class FactForm extends Component {
   }
 
   state = {
-    variableNameManuallySet: !_.isEmpty(_.get(this.props, 'startingFact.variable_name')),
     runningFact: this.props.startingFact,
+    variableNameManuallySet: !_.isEmpty(_.get(this.props, 'startingFact.variable_name')),
+    currentExpressionSimulated: true,
+    submissionPendingOnSimulation: false,
+  }
+
+  componentDidUpdate(_1, prevState) {
+    if (this.state.currentExpressionSimulated && prevState.submissionPendingOnSimulation) {
+      this.onSubmit()
+    }
   }
 
   setFactState(newFactState, otherState = {}) { this.setState({...otherState, runningFact: {...this.state.runningFact, ...newFactState}}) }
@@ -47,18 +55,19 @@ export class FactForm extends Component {
     )
   }
   onChangeVariableName(e) { this.setFactState({variable_name: _.get(e, 'target.value')}, {variableNameManuallySet: true}) }
-  onChangeExpression(e) { this.setFactState({expression: _.get(e, 'target.value')}) }
-  onBlurExpression() {
+  onChangeExpression(e) { this.setFactState({expression: _.get(e, 'target.value')}, {currentExpressionSimulated: false}) }
+  onBlurExpression() { this.simulateCurrentExpression() }
+  simulateCurrentExpression() {
     const {runningFact} = this.state
     if (isData(runningFact.expression)) {
       let simulation = {sample: {values: formatData(runningFact.expression)}}
       addStats(simulation)
-      this.setFactState({simulation})
+      this.setFactState({simulation}, {currentExpressionSimulated: true})
     } else {
       simulateFact(this.state.runningFact).then(sample => {
         let simulation = {sample}
         addStats(simulation)
-        this.setFactState({simulation})
+        this.setFactState({simulation}, {currentExpressionSimulated: true})
       })
     }
   }
@@ -67,7 +76,13 @@ export class FactForm extends Component {
   isVariableNameUnique() { return !_.some(this.props.existingVariableNames, n => n === this.state.runningFact.variable_name) }
   isValid() { return hasRequiredProperties(this.state.runningFact) && this.hasNoErrors() && this.isVariableNameUnique() }
 
-  onSubmit() { this.props.onSubmit(this.state.runningFact) }
+  onSubmit() {
+    if (this.state.currentExpressionSimulated) {
+      this.props.onSubmit(this.state.runningFact)
+    } else {
+      this.setState({submissionPendingOnSimulation: true})
+    }
+  }
 
   submitIfEnter(e) {
     if (e.keyCode === 13 && this.isValid()) {this.onSubmit()}
@@ -99,8 +114,17 @@ export class FactForm extends Component {
   }
 
   render() {
-    const buttonClasses = ['ui', 'button', 'small', 'primary', ...(this.isValid() ? [] : ['disabled'])]
-    const {props: {buttonText, onCancel, onDelete}, state: {runningFact: {expression, name, variable_name}}} = this
+    const {
+      props: {buttonText, onCancel, onDelete},
+      state: {submissionPendingOnSimulation, runningFact: {expression, name, variable_name}}
+    } = this
+
+    let buttonClasses = ['ui', 'button', 'small', 'primary']
+    if (submissionPendingOnSimulation) {
+      buttonClasses.push('disabled', 'loading')
+    } else if (!this.isValid()) {
+      buttonClasses.push('disabled')
+    }
 
     return (
     <div className='Fact--outer'>
