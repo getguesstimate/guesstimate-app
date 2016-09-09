@@ -13,10 +13,6 @@ import e from 'gEngine/engine'
 //
 //
 //
-// 1. TODO: Ensure that errors propagate correctly within facts.
-// 2. TODO: Ensure that something is in the sidebar menu for cards exported as facts.
-// 3. TODO: Some kind of indication as to the errors detected.
-// 4. TODO: Fix edit form re-simulate blur issue.
 //
 //
 //
@@ -246,6 +242,9 @@ export function simulate(dispatch, getState, graphFilters) {
   }
 
   const yieldFactSims = (nodeId, {samples, errors}) => {
+    // TODO(matthew): Proper error handling...
+    if (!_.isEmpty(errors)) { return }
+
     const factId = nodeIdToFactId(nodeId)
     const newSimulation = {
       propagationId,
