@@ -55,8 +55,8 @@ export class FactForm extends Component {
       addStats(simulation)
       this.setFactState({simulation})
     } else {
-      simulateFact(this.state.runningFact).then(({values, errors}) => {
-        let simulation = {sample: {values, errors}}
+      simulateFact(this.state.runningFact).then(sample => {
+        let simulation = {sample}
         addStats(simulation)
         this.setFactState({simulation})
       })
