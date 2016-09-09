@@ -13,10 +13,10 @@ import e from 'gEngine/engine'
 //
 //
 //
-// 1. TODO(matthew): Ensure that errors propagate correctly within facts.
-// 2. TODO(matthew): Remove the 'delete linked fact' button 
-// 3. TODO(matthew): Some kind of indication as to the errors detected.
-// 4. TODO(matthew): Fix edit form re-simulate blur issue.
+// 1. TODO: Ensure that errors propagate correctly within facts.
+// 2. TODO: Ensure that something is in the sidebar menu for cards exported as facts.
+// 3. TODO: Some kind of indication as to the errors detected.
+// 4. TODO: Fix edit form re-simulate blur issue.
 //
 //
 //

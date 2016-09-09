@@ -412,7 +412,7 @@ const MetricSidebar = ({
       <MetricSidebarItem
         className='exportedAsFact'
         icon={<Icon name='close'/>}
-        name={'Delete Linked Fact'}
+        name={'IMPLEMENT ME'}
         onClick={() => {console.warn('NOT  YET IMPLEMENTED')}}
       />
     }
