@@ -2,7 +2,6 @@ import React, {Component, PropTypes} from 'react'
 
 import {navigateFn} from 'gModules/navigation/actions'
 
-import {isPresent} from 'gEngine/utils'
 import {spaceUrlById} from 'gEngine/space'
 import {hasRequiredProperties, isExportedFromSpace, simulateFact, FactPT} from 'gEngine/facts'
 import {addStats} from 'gEngine/simulation'

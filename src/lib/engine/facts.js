@@ -43,7 +43,7 @@ export const getVar = f => _utils.orStr(_.get(f, 'variable_name'))
 export const byVariableName = name => f => getVar(f) === name
 const namedLike = partial => f => getVar(f).startsWith(partial)
 
-export const isExportedFromSpace = f => _utils.isPresent(f, 'exported_from_id')
+export const isExportedFromSpace = f => _utils.propIsPresent(f, 'exported_from_id')
 export function hasRequiredProperties(f) {
   let requiredProperties = ['variable_name', 'name']
   if (!isExportedFromSpace(f)) { requiredProperties.push('expression', 'simulation.sample.values', 'simulation.stats') }

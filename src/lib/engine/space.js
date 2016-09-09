@@ -15,7 +15,7 @@ export const url = ({id}) => spaceUrlById(id)
 export const withGraph = (space, graph) => ({...space, graph: subset(graph, space.id)})
 
 export function prepared(dSpace) {
-  const ownerName = _utils.isPresent(_.get(dSpace, 'organization_id')) ? _.get(dSpace, 'organization.name') : _.get(dSpace, 'user.name')
+  const ownerName = _utils.propIsPresent(dSpace, 'organization_id') ? _.get(dSpace, 'organization.name') : _.get(dSpace, 'user.name')
   return _utils.allPresent(dSpace, ownerName)
 }
 

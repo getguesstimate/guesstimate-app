@@ -10,8 +10,8 @@ export const orStr = e => e || ''
 export const orZero = e => e || 0
 export const orArr = e => e || []
 
-export const presentRaw = e => (!!e && !_.isEmpty(e)) || (typeof e === 'number') || (e === true)
-export const isPresent = (e, prop=null) => presentRaw(prop) ? presentRaw(_.get(e, prop)) : presentRaw(e)
+export const isPresent = e => (!!e && !_.isEmpty(e)) || (typeof e === 'number') || (e === true)
+export const propIsPresent = (e, prop) => isPresent(_.get(e, prop))
 export const presentOrVal = (e, val) => isPresent(e) ? e : val
 export const allPresent = (...objs) => objs.reduce((running, curr) => running && isPresent(curr), true)
 
