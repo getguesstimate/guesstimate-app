@@ -39,9 +39,7 @@ export const FactItem = ({fact, onEdit}) => (
       </div>
 
         <div className='section-help'>
-          <span className='ui button small options' onClick={onEdit}>
-            {isPresent(_.get(fact, 'exported_from_id')) ? 'Edit Model' : 'Edit'}
-          </span>
+          <span className='ui button small options' onClick={onEdit}>Edit</span>
         </div>
     </div>
   </div>

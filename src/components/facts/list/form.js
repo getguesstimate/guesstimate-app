@@ -1,6 +1,10 @@
 import React, {Component, PropTypes} from 'react'
 
-import {simulateFact, FactPT} from 'gEngine/facts'
+import {navigateFn} from 'gModules/navigation/actions'
+
+import {isPresent} from 'gEngine/utils'
+import {spaceUrlById} from 'gEngine/space'
+import {hasRequiredProperties, isExportedFromSpace, simulateFact, FactPT} from 'gEngine/facts'
 import {addStats} from 'gEngine/simulation'
 
 import {isData, formatData} from 'lib/guesstimator/formatter/formatters/Data'
@@ -12,6 +16,8 @@ export class FactForm extends Component {
       name: '',
       expression: '',
       variable_name: '',
+      exported_from_id: null,
+      metric_id: null,
       simulation: {
         sample: {
           values: [],
@@ -57,22 +63,39 @@ export class FactForm extends Component {
     }
   }
 
-  isExpressionValid() { return _.isEmpty(_.get(this, 'state.runningFact.simulation.sample.errors')) }
+  hasNoErrors() { return _.isEmpty(_.get(this, 'state.runningFact.simulation.sample.errors')) }
   isVariableNameUnique() { return !_.some(this.props.existingVariableNames, n => n === this.state.runningFact.variable_name) }
-  isValid() {
-    const requiredProperties = [
-      'variable_name',
-      'expression',
-      'simulation.sample.values',
-      'simulation.stats',
-    ]
-    const requiredPropertiesPresent = requiredProperties.map(prop => !_.isEmpty(_.get(this.state.runningFact, prop)))
-    return _.every(requiredPropertiesPresent) && this.isExpressionValid() && this.isVariableNameUnique()
-  }
+  isValid() { return hasRequiredProperties(this.state.runningFact) && this.hasNoErrors() && this.isVariableNameUnique() }
+
   onSubmit() { this.props.onSubmit(this.state.runningFact) }
 
-  submitIfEnter(e){
+  submitIfEnter(e) {
     if (e.keyCode === 13 && this.isValid()) {this.onSubmit()}
+  }
+
+  renderEditExpressionSection() {
+    if (isExportedFromSpace(this.state.runningFact)) {
+      const exported_from_url = spaceUrlById(_.get(this, 'state.runningFact.exported_from_id'))
+      return (
+        <div className='section-simulation simulation-sample'>
+          <span className='ui button small options' onClick={navigateFn(exported_from_url)}>Edit Model</span>
+        </div>
+      )
+    } else {
+      return (
+        <div className='section-simulation simulation-sample'>
+          <div className={`field ${this.hasNoErrors() ? '' : 'error'}`}>
+            <input
+              type='text'
+              placeholder='value'
+              value={this.state.runningFact.expression}
+              onChange={this.onChangeExpression.bind(this)}
+              onBlur={this.onBlurExpression.bind(this)}
+            />
+          </div>
+        </div>
+      )
+    }
   }
 
   render() {
@@ -82,17 +105,7 @@ export class FactForm extends Component {
     return (
     <div className='Fact--outer'>
       <div className='Fact new ui form'>
-        <div className='section-simulation simulation-sample'>
-          <div className={`field ${this.isExpressionValid() ? '' : 'error'}`}>
-            <input
-              type='text'
-              placeholder='value'
-              value={expression}
-              onChange={this.onChangeExpression.bind(this)}
-              onBlur={this.onBlurExpression.bind(this)}
-            />
-          </div>
-        </div>
+        {this.renderEditExpressionSection()}
         <div className='section-name'>
           <div className='fact-name'>
             <div className={`field ${this.isVariableNameUnique() ? '' : 'error'}`}>

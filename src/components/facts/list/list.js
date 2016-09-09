@@ -3,10 +3,6 @@ import React, {Component} from 'react'
 import {FactItem} from './item'
 import {FactForm} from './form'
 
-import {navigateFn} from 'gModules/navigation/actions'
-
-import {isPresent} from 'gEngine/utils'
-import {spaceUrlById} from 'gEngine/space'
 import {getVar} from 'gEngine/facts'
 
 import './style.css'
@@ -33,12 +29,11 @@ export class FactList extends Component {
   }
 
   renderFactShow(fact) {
-    const exported_from_url = spaceUrlById(_.get(fact, 'exported_from_id'))
     return (
       <FactItem
         key={fact.id}
         fact={fact}
-        onEdit={isPresent(exported_from_url) ? navigateFn(exported_from_url) : this.showEditForm.bind(this, fact.id)}
+        onEdit={this.showEditForm.bind(this, fact.id)}
       />
     )
   }
