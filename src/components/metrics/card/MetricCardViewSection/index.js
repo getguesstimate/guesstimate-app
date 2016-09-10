@@ -87,6 +87,7 @@ export class MetricCardViewSection extends Component {
       showSensitivitySection,
       hovered,
       editing,
+      exportedAsFact,
     } = this.props
 
     const errors = this._errors()
@@ -113,14 +114,14 @@ export class MetricCardViewSection extends Component {
         }
 
         <div className='MetricTokenSection'>
-          {(hovered || anotherFunctionSelected || hasGuesstimateDescription) &&
-            <MetricToken
-              readableId={metric.readableId}
-              anotherFunctionSelected={anotherFunctionSelected}
-              onToggleSidebar={onToggleSidebar}
-              hasGuesstimateDescription={hasGuesstimateDescription}
-            />
-          }
+          <MetricToken
+            hovered={hovered}
+            readableId={metric.readableId}
+            exportedAsFact={exportedAsFact}
+            anotherFunctionSelected={anotherFunctionSelected}
+            onToggleSidebar={onToggleSidebar}
+            hasGuesstimateDescription={hasGuesstimateDescription}
+          />
         </div>
 
         {(!_.isEmpty(metric.name) || inSelectedCell) &&
