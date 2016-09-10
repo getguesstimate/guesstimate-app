@@ -224,7 +224,7 @@ export default class MetricCard extends Component {
   }
 
   _className() {
-    const {inSelectedCell, metric, hovered, exportedAsFact} = this.props
+    const {inSelectedCell, metric, hovered} = this.props
     const {canvasState: {metricCardView}} = this.props
     const relationshipClass = relationshipClasses[relationshipType(metric.edges)]
 
@@ -233,7 +233,6 @@ export default class MetricCard extends Component {
     className += ` ${metricCardView}`
     className += titleView ? ' titleView' : ''
     className += ' ' + relationshipClass
-    className += exportedAsFact ? ' exportedAsFact' : ''
     return className
   }
 
@@ -403,8 +402,8 @@ const MetricSidebar = ({
     }
     {canBeMadeFact && !exportedAsFact &&
       <MetricSidebarItem
-        icon={<Icon name='bookmark'/>}
-        name={'Make Fact'}
+        icon={<i className='ion-ios-redo'/>}
+        name={'Export'}
         onClick={onMakeFact}
       />
     }
@@ -412,7 +411,7 @@ const MetricSidebar = ({
       <MetricSidebarItem
         className='exportedAsFact'
         icon={<Icon name='close'/>}
-        name={'IMPLEMENT ME'}
+        name={'Remove Export'}
         onClick={() => {console.warn('NOT  YET IMPLEMENTED')}}
       />
     }
