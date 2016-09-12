@@ -13,6 +13,7 @@ import {organizationReadableId} from 'gEngine/organization'
 import {withSortedValues} from 'gEngine/facts'
 
 import {captureApiError} from 'lib/errors/index'
+import {simulate} from 'lib/propagation/wrapper'
 
 import {setupGuesstimateApi} from 'servers/guesstimate-api/constants'
 
@@ -105,8 +106,7 @@ export function addFact(organization, rawFact) {
 }
 
 // editFact edits the passed fact, with sortedValues overwritten to null, to the organization and saves it on the server.
-export function editFact(organization, rawFact) {
-  // TODO(matthew): Build dependency chain here?
+export function editFact(organization, rawFact, simulateDependentFacts=false) {
   return (dispatch, getState) => {
     let fact = Object.assign({}, rawFact)
     _.set(fact, 'simulation.sample.sortedValues', null)
@@ -114,6 +114,8 @@ export function editFact(organization, rawFact) {
     api(getState()).organizations.editFact(organization, fact, (err, serverFact) => {
       if (!!serverFact) {
         dispatch(factActions.updateWithinOrg(organizationReadableId(organization), serverFact))
+
+        if (simulateDependentFacts) { simulate(dispatch, getState, {factId: fact.id}) }
       }
     })
   }

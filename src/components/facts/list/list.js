@@ -4,6 +4,7 @@ import {FactItem} from './item'
 import {FactForm} from './form'
 
 import {getVar} from 'gEngine/facts'
+
 import './style.css'
 
 export class FactList extends Component {
@@ -23,12 +24,16 @@ export class FactList extends Component {
     this.setState({newFactKey: this.state.newFactKey + 1})
   }
 
+  showEditForm(editingFactId) {
+    this.setState({editingFactId})
+  }
+
   renderFactShow(fact) {
     return (
       <FactItem
         key={fact.id}
         fact={fact}
-        onEdit={() => {this.setState({editingFactId: fact.id})}}
+        onEdit={this.showEditForm.bind(this, fact.id)}
       />
     )
   }

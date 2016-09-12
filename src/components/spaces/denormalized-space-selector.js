@@ -48,11 +48,12 @@ export const denormalizedSpaceSelector = createSelector(
 
     const {organization_id} = denormalizedSpace
     const organization = graph.organizations.find(o => o.id == organization_id)
-    const organizationHasFacts = !!organization && _.some(
-      organizationFacts, e.facts.byVariableName(e.organization.organizationReadableId(organization))
-    )
+    const variableName = e.organization.organizationReadableId(organization)
+
+    const oldOrganizationFactChildren = e.collections.gget(organizationFacts, variableName, 'variable_name', 'children')
+    const exportedFacts = e.collections.filter(oldOrganizationFactChildren, spaceId, 'exported_from_id')
 
     window.recorder.recordSelectorStop(NAME, {denormalizedSpace})
-    return { denormalizedSpace, organizationHasFacts }
+    return { denormalizedSpace, exportedFacts, organizationHasFacts: !_.isEmpty(oldOrganizationFactChildren) }
   }
 )
