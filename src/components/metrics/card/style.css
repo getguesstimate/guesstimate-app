@@ -40,15 +40,6 @@
   background-color: rgba(255,255,255,0.975);
 }
 
-/* TODO: NOT BE TERRIBLY UGLY */
-.metricCard.exportedAsFact {
-	background: rgba(122, 51, 200, 0.18);
-}
-/* TODO: NOT BE TERRIBLY UGLY */
-.metricCard.exportedAsFact:hover {
-	background: rgba(122, 51, 200, 0.18);
-}
-
 .hovered.selected .metricCard {
   background-color: white;
 }
@@ -83,7 +74,7 @@
 .MetricSidebar {
 	 position: absolute;
 	 top: 4px;
-	 right: -8.2em;
+	 right: -10.2em;
 	 z-index: 3;
 }
 
@@ -91,7 +82,7 @@ a.MetricSidebarItem {
 	clear: both;
 	display: block;
 	float: left;
-	width: 8em;
+	width: 10em;
 	padding: .4em .7em;
 	color: white;
 	background: #52646f;
@@ -100,7 +91,6 @@ a.MetricSidebarItem {
 
 /* TODO: NOT BE TERRIBLY UGLY */
 a.MetricSidebarItem.exportedAsFact {
-	background: rgba(122, 51, 200, 0.18);
 }
 
 a.MetricSidebarItem.analyzing {
