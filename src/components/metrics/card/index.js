@@ -407,14 +407,6 @@ const MetricSidebar = ({
         onClick={onMakeFact}
       />
     }
-    {canBeMadeFact && exportedAsFact &&
-      <MetricSidebarItem
-        className='exportedAsFact'
-        icon={<Icon name='close'/>}
-        name={'Remove Export'}
-        onClick={() => {console.warn('NOT  YET IMPLEMENTED')}}
-      />
-    }
     <MetricSidebarItem
       icon={<Icon name='trash'/>}
       name={'Delete'}

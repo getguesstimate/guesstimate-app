@@ -35,7 +35,7 @@ const MetricExportedIcon = () => (
   </div>
 )
 
-function tokenToShow({hovered, hasGuesstimateDescription, anotherFunctionSelected, exportedAsFact}){
+export function tokenToShow({hovered, hasGuesstimateDescription, anotherFunctionSelected, exportedAsFact}){
   if (anotherFunctionSelected) { return 'READABLE_ID' }
   else if (hovered) { return 'EXPAND_BUTTON' }
   else if (exportedAsFact) { return 'EXPORTED_AS_FACT' }
@@ -45,19 +45,16 @@ function tokenToShow({hovered, hasGuesstimateDescription, anotherFunctionSelecte
 
 export const MetricToken = ({hovered, anotherFunctionSelected, readableId, onToggleSidebar, hasGuesstimateDescription, exportedAsFact}) => {
   const show = tokenToShow({hovered, hasGuesstimateDescription, anotherFunctionSelected, exportedAsFact})
-  if (!show) { return false }
-  else {
-    return (
-      <div>
-        {show === 'EXPORTED_AS_FACT' &&
-          <MetricExportedIcon/>
-        }
-        <div className='MetricToken'>
-          {show === 'READABLE_ID' && <MetricReadableId readableId={readableId}/>}
-          {show === 'EXPAND_BUTTON' && <MetricExpandButton onToggleSidebar={onToggleSidebar}/>}
-          {show === 'REASONING_ICON' && <MetricReasoningIcon/>}
-        </div>
+  return (
+    <div>
+      {show === 'EXPORTED_AS_FACT' &&
+        <MetricExportedIcon/>
+      }
+      <div className='MetricToken'>
+        {show === 'READABLE_ID' && <MetricReadableId readableId={readableId}/>}
+        {show === 'EXPAND_BUTTON' && <MetricExpandButton onToggleSidebar={onToggleSidebar}/>}
+        {show === 'REASONING_ICON' && <MetricReasoningIcon/>}
       </div>
+    </div>
     )
-  }
 }
