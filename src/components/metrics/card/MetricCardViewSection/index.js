@@ -165,7 +165,7 @@ export class MetricCardViewSection extends Component {
                 errors={errors}
                 errorToDisplay={errorToDisplay}
                 padTop={(!_.isEmpty(metric.name) && !inSelectedCell)}
-                shouldShowErrorText={hovered}
+                shouldShowErrorText={!!errorToDisplay && hovered}
               />
             }
           </div>

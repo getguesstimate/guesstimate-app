@@ -77,7 +77,7 @@ function guesstimateTypeToNodeType(guesstimateType) {
   }
 }
 
-const filterErrorsFn = e => e.type !== INPUT_ERROR && e.type !== PARSER_ERROR && e.type !== INFINITE_LOOP_ERROR
+const filterErrorsFn = e => e.type !== INPUT_ERROR && e.type !== INFINITE_LOOP_ERROR
 const metricIdToNodeId = id => `${e.simulation.METRIC_ID_PREFIX}${id}`
 const metricToSimulationNodeFn = m => ({
   id: metricIdToNodeId(m.id),
@@ -85,7 +85,7 @@ const metricToSimulationNodeFn = m => ({
   guesstimateType: m.guesstimate.guesstimateType,
   expression: m.guesstimate.expression,
   samples: m.guesstimate.guesstimateType === 'DATA' ? e.utils.orArr(_.get(m, 'guesstimate.data')) : e.utils.orArr(_.get(m, 'simulation.sample.values')),
-  errors: Object.assign([], e.utils.orArr(_.get(m, 'simulation.sample.errors')).filter(filterErrorsFn)),
+  errors: e.utils.mutableCopy(e.utils.orArr(_.get(m, 'simulation.sample.errors')).filter(filterErrorsFn)),
 })
 
 const factIdToNodeId = id => `${e.simulation.FACT_ID_PREFIX}${id}`
@@ -129,7 +129,7 @@ function translateErrorFn(denormalizedMetrics, metricID) {
       case IN_INFINITE_LOOP:
         return {type: INFINITE_LOOP_ERROR, message: 'Metric references itself through dependency chain'}
       case INVALID_ANCESTOR_ERROR:
-        let invalidAncestors = Object.assign([], err.ancestors).map(nodeIdToMetricId)
+        let invalidAncestors = e.utils.mutableCopy(err.ancestors).map(nodeIdToMetricId)
         const invalidDirectInputs = _.remove(invalidAncestors, a => metric.guesstimate.expression.includes(a))
 
         const invalidAncestorReadableIDs = invalidAncestors.map(getReadableIdFn)
@@ -177,7 +177,7 @@ export function simulate(dispatch, getState, graphFilters) {
   const {subset, relevantFacts} = getSubset(state, graphFilters)
   const denormalizedMetrics = denormalize(subset)
 
-  const nodes = [...denormalizedMetrics.map(metricToSimulationNodeFn), ...relevantFacts.map(factToSimulationNodeFn)]
+  const nodes = [..._.map(denormalizedMetrics, metricToSimulationNodeFn), ..._.map(relevantFacts, factToSimulationNodeFn)]
 
   if (_.isEmpty(nodes)) { return }
 
