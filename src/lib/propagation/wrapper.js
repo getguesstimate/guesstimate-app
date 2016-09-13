@@ -107,7 +107,7 @@ function guesstimateTypeToNodeType(guesstimateType) {
   }
 }
 
-const filterErrorsFn = e => e.type !== INPUT_ERROR && e.type !== PARSER_ERROR && e.type !== INFINITE_LOOP_ERROR
+const filterErrorsFn = e => e.type !== INPUT_ERROR && e.type !== INFINITE_LOOP_ERROR
 const metricIdToNodeId = id => `${e.simulation.METRIC_ID_PREFIX}${id}`
 const metricToSimulationNodeFn = m => ({
   id: metricIdToNodeId(m.id),
@@ -159,7 +159,7 @@ function translateErrorFn(denormalizedMetrics, metricID) {
       case IN_INFINITE_LOOP:
         return {type: INFINITE_LOOP_ERROR, message: 'Metric references itself through dependency chain'}
       case INVALID_ANCESTOR_ERROR:
-        let invalidAncestors = Object.assign([], err.ancestors).map(nodeIdToMetricId)
+        let invalidAncestors = e.utils.mutableCopy(err.ancestors).map(nodeIdToMetricId)
         const invalidDirectInputs = _.remove(invalidAncestors, a => metric.guesstimate.expression.includes(a))
 
         const invalidAncestorReadableIDs = invalidAncestors.map(getReadableIdFn)

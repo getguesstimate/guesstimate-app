@@ -2,30 +2,28 @@ import * as nodeFns from './nodeFns'
 import {SimulationNode} from './node'
 
 import * as _collections from 'gEngine/collections'
+import * as _utils from 'gEngine/utils'
 
 function extractNextLevelAndErrorNodesAndMutate(unprocessedNodes, heightOrderedNodes, errorNodes, graphErrorNodes, nodesById) {
   const nextLevelNodes = _.remove(
     unprocessedNodes,
     n => nodeFns.allInputsWithin(heightOrderedNodes)(n) && _.isEmpty(n.errors) && !nodeFns.anyInputsWithin(errorNodes)(n)
   )
-  heightOrderedNodes.push(...nextLevelNodes)
 
   const incomingErrorNodes = _.remove(unprocessedNodes, n => !_.isEmpty(n.errors) && nodeFns.allInputsWithin(heightOrderedNodes)(n))
-  errorNodes.push(...incomingErrorNodes)
-  heightOrderedNodes.push(...incomingErrorNodes) // We may want to resimulate these later anyways...
 
   const infiniteLoopNodes = _.remove(unprocessedNodes, n => _.some(nodesById[n.id].lastAncestors, id => id === n.id))
   const withInfiniteLoopErrors = infiniteLoopNodes.map(nodeFns.withInfiniteLoopError)
-  errorNodes.push(...withInfiniteLoopErrors)
-  graphErrorNodes.push(...withInfiniteLoopErrors)
 
   const inputErrorNodes = _.remove(
     unprocessedNodes,
     _collections.andFns(nodeFns.anyInputsWithin(errorNodes), nodeFns.allInputsWithin([...heightOrderedNodes, ...errorNodes]))
   )
   const withAncestralErrors = inputErrorNodes.map(nodeFns.withAncestralError(errorNodes))
-  errorNodes.push(...withAncestralErrors)
-  graphErrorNodes.push(...withAncestralErrors)
+
+  graphErrorNodes.push(...withInfiniteLoopErrors)
+  errorNodes.push(...incomingErrorNodes, ...withInfiniteLoopErrors, ...withAncestralErrors)
+  heightOrderedNodes.push(...nextLevelNodes, ...incomingErrorNodes, ...withAncestralErrors)
 }
 
 function orderNodesAndAddData(nodes) {
@@ -50,7 +48,9 @@ function orderNodesAndAddData(nodes) {
     extractNextLevelAndErrorNodesAndMutate(unprocessedNodes, heightOrderedNodes, errorNodes, graphErrorNodes, nodesById)
 
     unprocessedNodes.forEach(n => {
-      const newLastAncestors = _.uniq(_.flatten(nodesById[n.id].lastAncestors.map(a => nodesById[a].node.inputs)))
+      const newLastAncestors = _.uniq(_.filter(
+        _.flatten(nodesById[n.id].lastAncestors.map(a => _.get(nodesById, `${a}.node.inputs`))), _utils.isPresent
+      ))
 
       nodesById[n.id].lastAncestors = newLastAncestors
       nodesById[n.id].ancestors = _.uniq([...nodesById[n.id].ancestors, ...newLastAncestors])
