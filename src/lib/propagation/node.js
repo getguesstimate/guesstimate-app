@@ -46,7 +46,7 @@ export class SimulationNode {
       this.errors = _utils.orArr(errors)
 
       if (this._hasErrors() && !startedWithErrors) { this._addErrorToDescendants() }
-      if (!this._hasErrors() && startedWithErrors) { this._clearErrorFromDescendants }
+      if (!this._hasErrors() && startedWithErrors) { this._clearErrorFromDescendants() }
 
       return this._getSimulationResults()
     })
@@ -75,9 +75,11 @@ export class SimulationNode {
       let ancestorError = _collections.get(n.errors, INVALID_ANCESTOR_ERROR, 'subType')
       if (!ancestorError) { return }
 
-      ancestorError.ancestors = _.filter(ancestorError.ancestors, e => e === this.id)
+      ancestorError.ancestors = _.filter(ancestorError.ancestors, e => e !== this.id)
+
+
       if (_.isEmpty(ancestorError.ancestors)) {
-        n.errors = _collections.filter(n.errors, INVALID_ANCESTOR_ERROR, 'subType')
+        n.errors = _.filter(n.errors, e => e.subType !== INVALID_ANCESTOR_ERROR)
       }
     })
   }
