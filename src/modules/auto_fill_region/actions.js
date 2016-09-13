@@ -107,7 +107,7 @@ export function fillRegion(spaceId, {start, end}) {
     const {newMetrics, newGuesstimates} = buildNewMetrics(startMetric, startGuesstimate, getDirAndLen(start, end), metrics)
 
     dispatch({type: 'ADD_METRICS', items: newMetrics, newGuesstimates: newGuesstimates})
-    dispatch(runSimulations({spaceId, onlyUnsimulated: true}))
+    dispatch(runSimulations({spaceId, simulateSubset: newMetrics.map(m => m.id)}))
     dispatch(registerGraphChange(spaceId))
   }
 }

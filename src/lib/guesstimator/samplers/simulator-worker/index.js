@@ -4,7 +4,7 @@ import {INTERNAL_ERROR} from 'lib/errors/modelErrors'
 onmessage = ({data}) => {
   let errors = []
   if (!data) {
-    errors.push({type: INTERNAL_ERROR, message: "data required"})
+    errors.push({type: INTERNAL_ERROR, message: 'data required'})
     postMessage(JSON.stringify({errors}))
     return
   }
@@ -12,10 +12,14 @@ onmessage = ({data}) => {
   data = JSON.parse(data)
 
   if (!data.expr) {
-    errors.push({type: INTERNAL_ERROR, message: "data.expr required"})
+    errors.push({type: INTERNAL_ERROR, message: 'data.expr required'})
   }
   if (!data.numSamples) {
-    errors.push({type: INTERNAL_ERROR, message: "data.numSamples required"})
+    if (data.numSamples === 0) {
+      errors.push({type: INTERNAL_ERROR, message: '0 is not a valid number of samples'})
+    } else {
+      errors.push({type: INTERNAL_ERROR, message: 'data.numSamples required'})
+    }
   }
 
   if (errors.length > 0) {

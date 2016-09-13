@@ -1,7 +1,6 @@
-import {dependencyMap} from '../dgraph.js';
-import {dependencyTree} from '../graph.js';
+import {dependencyMap} from '../dgraph.js'
 
-import {expect} from 'chai';
+import {expect} from 'chai'
 
 let dMetrics = [
   {
@@ -134,28 +133,7 @@ describe('graph', () => {
         {input: 'A3', output: 'A4'},
         {input: 'A4', output: 'A5'},
       ]
-      expect(dependencyMap(dGraph)).to.deep.equal(result);
-    });
-  });
-
-  describe('dependencyTree', () => {
-    it('for metric 0', () => {
-      let result = [
-        ['A1', 0],
-        ['A2', 1],
-        ['A3', 1],
-        ['A4', 2],
-        ['A5', 3]
-      ]
-      expect(dependencyTree(graph, {metricId: 'A1'})).to.deep.equal(result)
-    });
-
-    it('for metric 4', () => {
-      let result = [
-        ['A4', 0],
-        ['A5', 1]
-      ]
-      expect(dependencyTree(graph, {metricId: 'A4'})).to.deep.equal(result)
-    });
-  });
-});
+      expect(dependencyMap(dGraph)).to.deep.equal(result)
+    })
+  })
+})
