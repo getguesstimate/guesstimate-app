@@ -6,6 +6,7 @@ import {SimulationDAG} from '../DAG'
 import * as constants from '../constants'
 
 import * as _collections from 'gEngine/collections'
+import * as _utils from 'gEngine/utils'
 
 // ERRORS:
 const {
@@ -40,31 +41,26 @@ describe('construction', () => {
     ])
   })
 
-  const missingInputsNodeList = [utils.makeNode(1, ['missing']), utils.makeNode(2, [1]), utils.makeNode(3, [4]), utils.makeNode(4), utils.makeNode(5, [2,3])]
-  it ('Correctly flags missing input errors', () => {utils.expectNodesToBe(new SimulationDAG(missingInputsNodeList), [4,3], [1,2,5])})
+  const missingInputsNodeList = [utils.makeNode(1, ['missing']), utils.makeNode(2, [1,3]), utils.makeNode(3, [4]), utils.makeNode(4)]
+  it ('Correctly flags missing input errors', () => {utils.expectNodesToBe(new SimulationDAG(missingInputsNodeList), [4,3,2], [1])})
   it ('Produces appropriately typed errors', () => {
     const DAG = new SimulationDAG(missingInputsNodeList)
 
     DAG.graphErrorNodes.forEach(n => { n.errors.forEach( e => {expect(e.type).to.equal(GRAPH_ERROR)} ) })
 
     const subTypes = _.flatten(DAG.graphErrorNodes.map(n => n.errors.map(e => e.subType)))
-    expect(subTypes).to.have.members([MISSING_INPUT_ERROR, INVALID_ANCESTOR_ERROR, INVALID_ANCESTOR_ERROR])
+    expect(subTypes).to.have.members([MISSING_INPUT_ERROR])
   })
 
-  const infiniteLoopNodeList = [utils.makeNode(1, [2]), utils.makeNode(2, [1]), utils.makeNode(3, [1]), utils.makeNode(4), utils.makeNode(5, [4])]
-  it ('Correctly flags infinite loop errors', () => {
-    const DAG = new SimulationDAG(infiniteLoopNodeList)
-
-    expect(DAG.graphErrorNodes.map(n => n.id)).to.have.members(['node:1', 'node:2', 'node:3'])
-    expect(DAG.nodes.map(n => n.id)).to.deep.equal(['node:4', 'node:5'])
-  })
+  const infiniteLoopNodeList = [utils.makeNode(1, [2]), utils.makeNode(2, [1]), utils.makeNode(3), utils.makeNode(4, [3])]
+  it ('Correctly flags missing input errors', () => {utils.expectNodesToBe(new SimulationDAG(infiniteLoopNodeList), [3,4], [1,2])})
   it ('Produces appropriately typed errors', () => {
     const DAG = new SimulationDAG(infiniteLoopNodeList)
 
     DAG.graphErrorNodes.forEach(n => { n.errors.forEach( e => {expect(e.type).to.equal(GRAPH_ERROR)} ) })
 
     const subTypes = _.flatten(DAG.graphErrorNodes.map(n => n.errors.map(e => e.subType)))
-    expect(subTypes).to.have.members([IN_INFINITE_LOOP, IN_INFINITE_LOOP, INVALID_ANCESTOR_ERROR])
+    expect(subTypes).to.have.members([IN_INFINITE_LOOP, IN_INFINITE_LOOP])
   })
 
   const errorDataNodeList = [utils.makeNode(1, ['missing', 'gone']), utils.makeNode(2, [1, 3]), utils.makeNode(3, [4]), utils.makeNode(4, [3])]
@@ -72,7 +68,7 @@ describe('construction', () => {
   it ('Assigns the correct auxilary error data', () => {
     const DAG = new SimulationDAG(errorDataNodeList)
 
-    const invalidAncestorError = _collections.get(_.flatten(DAG.graphErrorNodes.map(n => n.errors)), INVALID_ANCESTOR_ERROR, 'subType')
+    const invalidAncestorError = _collections.get(_.flatten(DAG.nodes.map(n => n.errors)).filter(_utils.isPresent), INVALID_ANCESTOR_ERROR, 'subType')
     expect(invalidAncestorError.ancestors).to.have.members(['node:3', 'node:1'])
 
     const missingInputError = _collections.get(_.flatten(DAG.graphErrorNodes.map(n => n.errors)), MISSING_INPUT_ERROR, 'subType')

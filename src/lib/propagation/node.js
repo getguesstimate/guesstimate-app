@@ -31,6 +31,8 @@ export class SimulationNode {
   simulate(numSamples) {
     if (this._hasInputErrors()) { return Promise.resolve(this._getSimulationResults()) }
 
+    const startedWithErrors = this._hasErrors()
+
     const [parsedError, parsedInput] = this._parse()
 
     const inputs = this._getInputs()
@@ -42,7 +44,10 @@ export class SimulationNode {
 
       this.samples = _utils.orArr(values)
       this.errors = _utils.orArr(errors)
-      if (!_.isEmpty(errors)) { this._addErrorToDescendants() }
+
+      if (this._hasErrors() && !startedWithErrors) { this._addErrorToDescendants() }
+      if (!this._hasErrors() && startedWithErrors) { this._clearErrorFromDescendants }
+
       return this._getSimulationResults()
     })
   }
@@ -65,6 +70,17 @@ export class SimulationNode {
       }
     })
   }
+  _clearErrorFromDescendants() {
+    this._getDescendants().forEach(n => {
+      let ancestorError = _collections.get(n.errors, INVALID_ANCESTOR_ERROR, 'subType')
+      if (!ancestorError) { return }
+
+      ancestorError.ancestors = _.filter(ancestorError.ancestors, e => e === this.id)
+      if (_.isEmpty(ancestorError.ancestors)) {
+        n.errors = _collections.filter(n.errors, INVALID_ANCESTOR_ERROR, 'subType')
+      }
+    })
+  }
 
   _getInputs() {
     if (!!_.get(window, 'recorder')) { window.recorder.recordNodeGetInputsStart(this) }
@@ -74,6 +90,7 @@ export class SimulationNode {
     return inputMap
   }
 
+  _hasErrors() { return !_.isEmpty(this.errors) }
   _hasInputErrors() { return _collections.some(this.errors, INVALID_ANCESTOR_ERROR, 'subType') }
   _getSimulationResults() { return _.pick(this, ['samples', 'errors']) }
 }

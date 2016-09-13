@@ -10,6 +10,6 @@ export const makeNode = (idNum, inputNums=[], samples=[], errors=[], type=NODE_T
 )
 
 export const expectNodesToBe = (DAG, validIds, errorIds) => {
-  expect(DAG.graphErrorNodes.map(n => n.id)).to.deep.equal(errorIds.map(toNodeId))
+  expect(DAG.graphErrorNodes.map(n => n.id)).to.deep.have.members(errorIds.map(toNodeId))
   expect(DAG.nodes.map(n => n.id)).to.deep.equal(validIds.map(toNodeId))
 }

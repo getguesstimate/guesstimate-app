@@ -25,8 +25,8 @@ function extractNextLevelAndErrorNodesAndMutate(unprocessedNodes, heightOrderedN
     _collections.andFns(nodeFns.anyInputsWithin(errorNodes), nodeFns.allInputsWithin([...heightOrderedNodes, ...errorNodes]))
   )
   const withAncestralErrors = inputErrorNodes.map(nodeFns.withAncestralError(errorNodes))
+  heightOrderedNodes.push(...withAncestralErrors)
   errorNodes.push(...withAncestralErrors)
-  graphErrorNodes.push(...withAncestralErrors)
 }
 
 function orderNodesAndAddData(nodes) {
