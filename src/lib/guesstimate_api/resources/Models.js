@@ -14,7 +14,7 @@ export default class Models extends AbstractResource {
 
     // TODO(Ozzie): Offhand, do you know of a better way to do this? Setting it as data does *not* work as this is a
     // GET.
-    if (!!token) { url += `?token=${token}` }
+    if (!!token) { url += `?shareable_link_token=${token}` }
 
     this.guesstimateMethod({url, method})(callback)
   }

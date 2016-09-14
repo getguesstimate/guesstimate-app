@@ -40,7 +40,7 @@ export function fetchSuccess(spaces) {
       if (!e.utils.isPresent(organization)) { return null }
       return {
         ...organization,
-        facts: [...e.utils.orArr(_.get(organization, 'facts')), ...e.utils.orArr(_.get(s, 'imported_facts'))],
+        facts: [...e.utils.orArr(_.get(organization, 'facts')), ...e.utils.orArr(_.get(s, '_embedded.imported_facts'))],
       }
     }).filter(e.utils.isPresent)
     const calculators = _.flatten(spaces.map(s => e.utils.orArr(_.get(s, '_embedded.calculators')))).filter(e.utils.isPresent)
@@ -242,7 +242,7 @@ export function registerGraphChange(spaceId) {
 }
 
 export function enableShareableLink(spaceId) {
-  return (dispatch, _1) => {
+  return (dispatch, getState) => {
     api(getState()).models.enableShareableLink(spaceId, (err, value) => {
       if (err) {
         captureApiError('SpacesEnableShareableLink', err.jqXHR, err.textStatus,  err, {url: 'SpacesEnableShareableLink'})
@@ -254,7 +254,7 @@ export function enableShareableLink(spaceId) {
 }
 
 export function disableShareableLink(spaceId) {
-  return (dispatch, _1) => {
+  return (dispatch, getState) => {
     api(getState()).models.disableShareableLink(spaceId, (err, value) => {
       if (err) {
         captureApiError('SpacesDisableShareableLink', err.jqXHR, err.textStatus,  err, {url: 'SpacesDisableShareableLink'})
@@ -266,7 +266,7 @@ export function disableShareableLink(spaceId) {
 }
 
 export function rotateShareableLink(spaceId) {
-  return (dispatch, _1) => {
+  return (dispatch, getState) => {
     api(getState()).models.rotateShareableLink(spaceId, (err, value) => {
       if (err) {
         captureApiError('SpacesRotateShareableLink', err.jqXHR, err.textStatus,  err, {url: 'SpacesRotateShareableLink'})

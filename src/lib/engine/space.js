@@ -10,8 +10,10 @@ import * as _facts from './facts'
 import * as _collections from './collections'
 import * as _utils from './utils'
 
+import {BASE_URL} from 'lib/constants'
+
 export const url = ({id}) => (!!id) ? `/models/${id}` : ''
-export const urlWithToken = s => s.shareableLinkEnabled ? `${url(s)}?token=${s.shareableLinkToken}` : ''
+export const urlWithToken = s => s.shareable_link_enabled ? `${BASE_URL}${url(s)}?token=${s.shareable_link_token}` : ''
 
 const TOKEN_REGEX = /token=([^&]+)/
 export const extractTokenFromUrl = url => TOKEN_REGEX.test(url) ? url.match(TOKEN_REGEX)[1] : null

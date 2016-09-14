@@ -7,14 +7,34 @@ import * as navigationActions from 'gModules/navigation/actions.js'
 
 import './style.css'
 
-const ShareableLinkOption = ({shareableLinkUrl, onEnable, onRotate, onDisable}) => (
+const EnableShareableLinkOption = ({onEnable}) => (
+  <div>
+    Shareable Link Disabled. <span className='ui button shareable-link-button enable' onClick={onEnable}>Click here</span> to enable.
+  </div>
+)
+
+const DisableOrRotateShareableLinkOption = ({shareableLinkUrl, onDisable, onRotate}) => (
+  <div>
+    Anyone with the following url will be able to view this model:
+    <div className='shareable-link'>{shareableLinkUrl}</div>
+
+    <span className='ui button shareable-link-button disable' onClick={onDisable}>Disable</span>
+    <span className='ui button shareable-link-button rotate' onClick={onRotate}>Rotate</span>
+  </div>
+)
+
+const ShareableLinkOption = ({shareableLinkUrl, onEnable, onDisable, onRotate}) => (
   <CardListElement
     isSelected={false}
     icon={'link'}
     header='Shareable Link'
     closeOnClick={false}
+    onMouseDown={() => {}}
   >
-    <div>ShareableLink</div>
+    {!shareableLinkUrl && <EnableShareableLinkOption onEnable={onEnable} />}
+    {!!shareableLinkUrl &&
+      <DisableOrRotateShareableLinkOption shareableLinkUrl={shareableLinkUrl} onDisable={onDisable} onRotate={onRotate} />
+    }
   </CardListElement>
 )
 
