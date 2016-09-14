@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 import * as organizationActions from 'gModules/organizations/actions'
 import {findFacts} from 'gEngine/organization.js'
 
-import {FactList} from './list.js'
+import {FactList} from '../list/list.js'
 
 function mapStateToProps(state) {
   return {
@@ -14,11 +14,11 @@ function mapStateToProps(state) {
 }
 
 @connect(mapStateToProps)
-export class FactListContainer extends Component{
+export class FactSidebarContainer extends Component{
   displayName: 'FactListContainer'
 
   render() {
-    const {organizationId, organizations, organizationFacts, isEditable, spaceId} = this.props
+    const {organizationId, organizations, organizationFacts, isEditable, spaceId, imported_fact_ids} = this.props
     const facts = findFacts(organizationId, organizationFacts)
     const organization = organizations.find(u => u.id.toString() === organizationId.toString())
     return (
@@ -29,6 +29,7 @@ export class FactListContainer extends Component{
         facts={facts}
         isEditable={isEditable}
         spaceId={spaceId}
+        imported_fact_ids={imported_fact_ids}
       />
     )
   }

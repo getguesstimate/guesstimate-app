@@ -14,7 +14,7 @@ import {EditCalculatorForm} from 'gComponents/calculators/edit'
 import {CalculatorCompressedShow} from 'gComponents/calculators/show/CalculatorCompressedShow'
 import {ButtonCloseText} from 'gComponents/utility/buttons/close'
 import {ButtonEditText, ButtonDeleteText, ButtonExpandText} from 'gComponents/utility/buttons/button'
-import {FactListContainer} from 'gComponents/facts/list/container.js'
+import {FactSidebarContainer} from 'gComponents/facts/sidebar/container.js'
 import {Tutorial} from './Tutorial/index'
 
 import {denormalizedSpaceSelector} from '../denormalized-space-selector'
@@ -276,7 +276,7 @@ export default class SpacesShow extends Component {
   }
 
   rightSidebarBody() {
-    const {props: {denormalizedSpace}, state: {rightSidebar: {type, showCalculatorResults, showCalculatorId, editCalculatorId}}} = this
+    const {props: {denormalizedSpace, spaceId}, state: {rightSidebar: {type, showCalculatorResults, showCalculatorId, editCalculatorId}}} = this
     const {editableByMe, calculators, organization} = denormalizedSpace
     switch (type) {
       case CLOSED:
@@ -329,7 +329,12 @@ export default class SpacesShow extends Component {
           ),
           main: (
             <div className='SpaceRightSidebar--padded-area'>
-              <FactListContainer organizationId={organization.id} isEditable={false}/>
+              <FactSidebarContainer
+                organizationId={organization.id}
+                isEditable={false}
+                spaceId={spaceId}
+                imported_fact_ids={denormalizedSpace.imported_fact_ids}
+              />
             </div>
           ),
         }

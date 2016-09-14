@@ -7,7 +7,7 @@ import {navigateFn} from 'gModules/navigation/actions'
 import {DistributionSummary} from 'gComponents/distributions/summary/index'
 import Histogram from 'gComponents/simulations/histogram/index'
 
-export const FactItem = ({fact, onEdit}) => {
+export const FactItem = ({fact, onEdit, isImportedFromSpace, isExportedFromSpace}) => {
   const exported_from_url = spaceUrlById(_.get(fact, 'exported_from_id'))
   return (
     <div className='Fact--outer'>
@@ -45,8 +45,8 @@ export const FactItem = ({fact, onEdit}) => {
         </div>
 
       {!!fact.exported_from_id &&
-        <div className='section-exported' onClick={navigateFn(exported_from_url)}>
-          <Icon name='share'/>
+        <div className='section-exported' onClick={!isExportedFromSpace && navigateFn(exported_from_url)}>
+          {!isExportedFromSpace && <Icon name='share'/>}
         </div>
         }
       </div>
