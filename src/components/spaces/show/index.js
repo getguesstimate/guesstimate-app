@@ -14,7 +14,7 @@ import {EditCalculatorForm} from 'gComponents/calculators/edit'
 import {CalculatorCompressedShow} from 'gComponents/calculators/show/CalculatorCompressedShow'
 import {ButtonCloseText} from 'gComponents/utility/buttons/close'
 import {ButtonEditText, ButtonDeleteText, ButtonExpandText} from 'gComponents/utility/buttons/button'
-import {FactSidebarContainer} from 'gComponents/facts/sidebar/container.js'
+import {FactListContainer} from 'gComponents/facts/list/container.js'
 import {Tutorial} from './Tutorial/index'
 
 import {denormalizedSpaceSelector} from '../denormalized-space-selector'
@@ -329,7 +329,7 @@ export default class SpacesShow extends Component {
           ),
           main: (
             <div className='SpaceRightSidebar--padded-area'>
-              <FactSidebarContainer
+              <FactListContainer
                 organizationId={organization.id}
                 isEditable={false}
                 spaceId={spaceId}
