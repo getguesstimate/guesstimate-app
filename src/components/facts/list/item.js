@@ -8,7 +8,7 @@ import {DistributionSummary} from 'gComponents/distributions/summary/index'
 import Histogram from 'gComponents/simulations/histogram/index'
 
 export const FactItem = ({fact, onEdit, isImportedFromSpace, isExportedFromSpace}) => {
-  const exported_from_url = spaceUrlById(_.get(fact, 'exported_from_id'))
+  const exported_from_url = `${spaceUrlById(_.get(fact, 'exported_from_id'))}?factsShown=true`
   return (
     <div className='Fact--outer'>
       <div className='Fact'>
