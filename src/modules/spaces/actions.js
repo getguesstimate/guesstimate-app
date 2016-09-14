@@ -233,3 +233,39 @@ export function registerGraphChange(spaceId) {
     dispatch(updateGraph(spaceId, canEdit))
   }
 }
+
+export function enableShareableLink(spaceId) {
+  return (dispatch, _1) => {
+    api(getState()).models.enableShareableLink(spaceId, (err, value) => {
+      if (err) {
+        captureApiError('SpacesEnableShareableLink', err.jqXHR, err.textStatus,  err, {url: 'SpacesEnableShareableLink'})
+      } else if (value) {
+        dispatch(sActions.updateSuccess(value))
+      }
+    })
+  }
+}
+
+export function disableShareableLink(spaceId) {
+  return (dispatch, _1) => {
+    api(getState()).models.disableShareableLink(spaceId, (err, value) => {
+      if (err) {
+        captureApiError('SpacesDisableShareableLink', err.jqXHR, err.textStatus,  err, {url: 'SpacesDisableShareableLink'})
+      } else if (value) {
+        dispatch(sActions.updateSuccess(value))
+      }
+    })
+  }
+}
+
+export function rotateShareableLink(spaceId) {
+  return (dispatch, _1) => {
+    api(getState()).models.rotateShareableLink(spaceId, (err, value) => {
+      if (err) {
+        captureApiError('SpacesRotateShareableLink', err.jqXHR, err.textStatus,  err, {url: 'SpacesRotateShareableLink'})
+      } else if (value) {
+        dispatch(sActions.updateSuccess(value))
+      }
+    })
+  }
+}
