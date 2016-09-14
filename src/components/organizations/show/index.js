@@ -9,6 +9,7 @@ import {SpaceCard, NewSpaceCard} from 'gComponents/spaces/cards'
 import Container from 'gComponents/utility/container/Container'
 import {MembersTab} from './members'
 import {FactListContainer} from 'gComponents/facts/list/container.js'
+import {FactGraph} from './facts/factGraph'
 
 import {httpRequestSelector} from './httpRequestSelector'
 import {organizationSpaceSelector} from './organizationSpaceSelector'
@@ -27,8 +28,9 @@ import './style.css'
 const MODEL_TAB = 'models'
 const MEMBERS_TAB = 'members'
 const FACT_BOOK_TAB = 'facts'
+const FACT_GRAPH_TAB = 'fact-graph'
 
-const isValidTabString = tabStr => [MODEL_TAB, MEMBERS_TAB, FACT_BOOK_TAB].includes(tabStr)
+const isValidTabString = tabStr => [MODEL_TAB, MEMBERS_TAB, FACT_BOOK_TAB, FACT_GRAPH_TAB].includes(tabStr)
 
 function mapStateToProps(state) {
   return {
@@ -105,7 +107,14 @@ export default class OrganizationShow extends Component{
 
     if (!organization) { return false }
     let tabs = [{name: 'Models', key: MODEL_TAB}, {name: 'Members', key: MEMBERS_TAB}]
-    if (hasPrivateAccess) { tabs = [{name: 'Models', key: MODEL_TAB}, {name: 'Facts', key: FACT_BOOK_TAB}, {name: 'Members', key: MEMBERS_TAB}] }
+    if (hasPrivateAccess) {
+      tabs = [
+        {name: 'Models', key: MODEL_TAB},
+        {name: 'Facts', key: FACT_BOOK_TAB},
+        {name: 'Fact Graph', key: FACT_GRAPH_TAB},
+        {name: 'Members', key: MEMBERS_TAB}
+      ]
+    }
     const portalUrl = _.get(organization, 'account._links.payment_portal.href')
     if (!!portalUrl) { tabs = [...tabs, {name: 'Billing', key: 'BILLING', href: portalUrl, onMouseUp: this.refreshData.bind(this)}] }
 
@@ -155,6 +164,12 @@ export default class OrganizationShow extends Component{
 
             {(openTab === FACT_BOOK_TAB) && meIsMember && !!facts &&
               <FactTab organizationId={organizationId}/>
+            }
+
+            {(openTab === FACT_GRAPH_TAB) && meIsMember && !!facts &&
+              <FactGraph
+                organization={organization}
+              />
             }
           </div>
         </div>
