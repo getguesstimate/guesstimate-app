@@ -4,6 +4,13 @@ $grey-a1: rgb(231, 234, 236);
 $grey-a2: #607580;
 $blue-a1: #4A6A88;
 
+.FactsTab {
+  h3 {
+    color: #555;
+    float: left;
+  }
+}
+
 .Fact--outer {
   border: 1px solid rgba(0,0,0,0);
   float: left;
@@ -102,7 +109,7 @@ $blue-a1: #4A6A88;
   float: left;
   flex: 6;
   margin-top: .05em;
-  padding: .4em 0;
+  padding: .4em .4em 0;
 
   .fact-name {
     font-size: 1.3em;
