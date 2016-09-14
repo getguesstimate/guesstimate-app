@@ -102,7 +102,7 @@ export default class SpacesShow extends Component {
     showTutorial: !!_.get(this, 'props.me.profile.needs_tutorial'),
     attemptedFetch: false,
     rightSidebar: {
-      type: !!this.props.showCalculatorId ? SHOW_CALCULATOR : CLOSED,
+      type: !!this.props.showCalculatorId ? SHOW_CALCULATOR : !!this.props.factsShown ? FACT_SIDEBAR : CLOSED,
       showCalculatorResults: this.props.showCalculatorResults,
       showCalculatorId: this.props.showCalculatorId,
     },
