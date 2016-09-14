@@ -89,7 +89,7 @@ export class FactForm extends Component {
 
   renderEditExpressionSection() {
     if (isExportedFromSpace(this.state.runningFact)) {
-      const exported_from_url = spaceUrlById(_.get(this, 'state.runningFact.exported_from_id'))
+      const exported_from_url = `${spaceUrlById(_.get(this, 'state.runningFact.exported_from_id'))}?factsShown=true`
       return (
         <div className='section-simulation simulation-sample'>
           <span className='ui button small options' onClick={navigateFn(exported_from_url)}>Edit Model</span>
