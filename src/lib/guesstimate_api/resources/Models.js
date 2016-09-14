@@ -8,9 +8,13 @@ export default class Models extends AbstractResource {
     this.guesstimateMethod({url, method})(callback)
   }
 
-  get(msg, callback) {
-    const url = `spaces/${msg.spaceId}`
+  get(spaceId, token, callback) {
+    let url = `spaces/${spaceId}`
     const method = 'GET'
+
+    // TODO(Ozzie): Offhand, do you know of a better way to do this? Setting it as data does *not* work as this is a
+    // GET.
+    if (!!token) { url += `?token=${token}` }
 
     this.guesstimateMethod({url, method})(callback)
   }

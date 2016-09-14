@@ -152,7 +152,7 @@ export default class SpacesShow extends Component {
     const hasData = this.state.attemptedFetch || (hasGraph && hasOwner)
 
     if (!hasData) {
-      this.props.dispatch(spaceActions.fetchById(this._id()))
+      this.props.dispatch(spaceActions.fetchById(this._id(), this.props.shareableLinkToken))
       this.setState({attemptedFetch: true})
     }
   }
@@ -193,21 +193,15 @@ export default class SpacesShow extends Component {
     }
   }
 
-  onPublicSelect() {
-    this.props.dispatch(spaceActions.generalUpdate(this._id(), {is_private: false}))
-  }
+  onPublicSelect() { this.props.dispatch(spaceActions.generalUpdate(this._id(), {is_private: false})) }
+  onPrivateSelect() { this.props.dispatch(spaceActions.generalUpdate(this._id(), {is_private: true})) }
 
-  onPrivateSelect() {
-    this.props.dispatch(spaceActions.generalUpdate(this._id(), {is_private: true}))
-  }
+  onEnableShareableLink() { this.props.dispatch(spaceActions.enableShareableLink(this._id())) }
+  onDisableShareableLink() { this.props.dispatch(spaceActions.disableShareableLink(this._id())) }
+  onRotateShareableLink() { this.props.dispatch(spaceActions.rotateShareableLink(this._id())) }
 
-  onSaveName(name) {
-    this.props.dispatch(spaceActions.update(this._id(), {name}))
-  }
-
-  onSaveDescription(description) {
-    this.props.dispatch(spaceActions.update(this._id(), {description}))
-  }
+  onSaveName(name) { this.props.dispatch(spaceActions.update(this._id(), {name})) }
+  onSaveDescription(description) { this.props.dispatch(spaceActions.update(this._id(), {description})) }
 
   hideLeftSidebar() {
     segment.trackCloseSidebar()
@@ -353,12 +347,13 @@ export default class SpacesShow extends Component {
 
   render() {
     const space = this.props.denormalizedSpace
-    const {organizationHasFacts, me} = this.props
     if (!e.space.prepared(space)) { return <div className='spaceShow'></div> }
 
+    const {organizationHasFacts, me} = this.props
     const sidebarIsViseable = space.editableByMe || !_.isEmpty(space.description)
-
     const isLoggedIn = e.me.isLoggedIn(this.props.me)
+    const shareableLinkUrl = e.space.urlWithToken(space)
+
     if (this.props.embed) {
       return (
         <div className='spaceShow screenshot'>
@@ -408,6 +403,7 @@ export default class SpacesShow extends Component {
             isPrivate={space.is_private}
             editableByMe={space.editableByMe}
             canBePrivate={canBePrivate}
+            shareableLinkUrl={shareableLinkUrl}
             ownerName={owner.name}
             ownerPicture={owner.picture}
             ownerUrl={ownerUrl}
@@ -415,6 +411,9 @@ export default class SpacesShow extends Component {
             onSaveName={this.onSaveName.bind(this)}
             onPublicSelect={this.onPublicSelect.bind(this)}
             onPrivateSelect={this.onPrivateSelect.bind(this)}
+            onEnableShareableLink={this.onEnableShareableLink.bind(this)}
+            onDisableShareableLink={this.onDisableShareableLink.bind(this)}
+            onRotateShareableLink={this.onRotateShareableLink.bind(this)}
           />
 
           <SpaceToolbar

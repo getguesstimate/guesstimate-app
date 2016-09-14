@@ -35,7 +35,14 @@ export function fetchSuccess(spaces) {
     })
 
     const users = spaces.map(s => _.get(s, '_embedded.user')).filter(e.utils.isPresent)
-    const organizations = spaces.map(s => _.get(s, '_embedded.organization')).filter(e.utils.isPresent)
+    const organizations = spaces.map(s => {
+      const organization = _.get(s, '_embedded.organization')
+      if (!e.utils.isPresent(organization)) { return null }
+      return {
+        ...organization,
+        facts: [...e.utils.orArr(_.get(organization, 'facts')), ...e.utils.orArr(_.get(s, 'imported_facts'))],
+      }
+    }).filter(e.utils.isPresent)
     const calculators = _.flatten(spaces.map(s => e.utils.orArr(_.get(s, '_embedded.calculators')))).filter(e.utils.isPresent)
 
     if (!_.isEmpty(calculators)) {dispatch(calculatorActions.sActions.fetchSuccess(calculators))}
@@ -71,11 +78,11 @@ export function fromSearch(data) {
   }
 }
 
-export function fetchById(spaceId) {
+export function fetchById(spaceId, token=null) {
   return (dispatch, getState) => {
     dispatch(sActions.fetchStart())
 
-    api(getState()).models.get({spaceId}, (err, value) => {
+    api(getState()).models.get(spaceId, token, (err, value) => {
       if (err) {
         captureApiError('SpacesFetch', err.jqXHR, err.textStatus, err, {url: 'spacesfetch'})
         return

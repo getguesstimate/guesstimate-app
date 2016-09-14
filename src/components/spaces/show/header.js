@@ -21,7 +21,8 @@ export class SpaceHeader extends Component {
     return (
       this.props.name !== nextProps.name ||
       this.props.isPrivate !== nextProps.isPrivate ||
-      this.props.editableByMe !== nextProps.editableByMe
+      this.props.editableByMe !== nextProps.editableByMe ||
+      this.props.shareableLinkUrl !== nextProps.shareableLinkUrl
     )
   }
 
@@ -35,9 +36,13 @@ export class SpaceHeader extends Component {
       ownerIsOrg,
       isPrivate,
       editableByMe,
+      shareableLinkUrl,
       onPublicSelect,
       onPrivateSelect,
-      onSaveName
+      onSaveName,
+      onEnableShareableLink,
+      onDisableShareableLink,
+      onRotateShareableLink,
     } = this.props
 
     let privacy_header = (<span><Icon name='globe'/> Public</span>)
@@ -65,15 +70,18 @@ export class SpaceHeader extends Component {
                 {ownerName}
               </a>
             }
-            {editableByMe &&
+            {(isPrivate || editableByMe) &&
               <PrivacyToggle
-                headerText={'Privacy Options'}
+                editableByMe={editableByMe}
                 openLink={<a className='space-header-action'>{privacy_header}</a>}
-                position='left'
                 isPrivateSelectionInvalid={!canBePrivate}
                 isPrivate={isPrivate}
+                shareableLinkUrl={shareableLinkUrl}
                 onPublicSelect={onPublicSelect}
                 onPrivateSelect={onPrivateSelect}
+                onEnableShareableLink={onEnableShareableLink}
+                onDisableShareableLink={onDisableShareableLink}
+                onRotateShareableLink={onRotateShareableLink}
               />
             }
           </div>
