@@ -23,7 +23,7 @@ describe('NumberShow', () => {
       [10, {value: '10', symbol: undefined, power: undefined}],
       [10, {value: '10', symbol: undefined, power: undefined}],
       [100, {value: '100', symbol: undefined, power: undefined}],
-      [1000, {value: '1', symbol: 'K', power: undefined}],
+      [1000, {value: '1000', symbol: undefined, power: undefined}],
       [10000, {value: '10', symbol: 'K', power: undefined}],
       [100000, {value: '100', symbol: 'K', power: undefined}],
       [100001, {value: '100', symbol: 'K', power: undefined}],
