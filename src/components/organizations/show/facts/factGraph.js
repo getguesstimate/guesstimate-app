@@ -26,7 +26,7 @@ export class FactGraph extends Component {
       component: <FactItem fact={fact}/>,
     }))
 
-    const intermediateSpaces = _.filter(spaces, s => s.exported_facts_count > 0 && !_.isEmpty(s.imported_fact_ids))
+    const intermediateSpaces = _.filter(spaces, s => s.exported_facts_count > 0 || !_.isEmpty(s.imported_fact_ids))
     const spaceNodes = _.map(intermediateSpaces, s => ({
       key: `space:${s.id}`,
       id: `space:${s.id}`,

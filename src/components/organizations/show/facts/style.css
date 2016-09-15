@@ -1,12 +1,13 @@
 .FactGraph {
   border-radius: 3px;
-  background: #eaeaea;
+  background: #f0eeee;
   float: left;
   font-size: .8em;
   min-width: 100%;
 }
 
 .spaceNode {
+  padding: 1em;
   color: #435870;
   font-size: 1.3em;
   text-align: center;
@@ -17,7 +18,8 @@
   border-radius: 1px;
   transition: background-color .5s;
   &:hover {
-    background-color: #5b83a4;
+    background-color: #82a1bb;
+    color: #283b50;
   }
 }
 
