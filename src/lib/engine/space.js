@@ -10,7 +10,16 @@ import * as _facts from './facts'
 import * as _collections from './collections'
 import * as _utils from './utils'
 
-export const spaceUrlById = id => (!!id) ? `/models/${id}` : ''
+export const spaceUrlById = (id, params = {}) => {
+  const root = (!!id) ? `/models/${id}` : ''
+  if (!_.isEmpty(params)){
+    const param_string = '?' + _.join(_.toPairs(params).map(pair => _.join(pair, '=')), '&')
+    return root + param_string
+  } else {
+    return root
+  }
+}
+
 export const url = ({id}) => spaceUrlById(id)
 export const withGraph = (space, graph) => ({...space, graph: subset(graph, space.id)})
 

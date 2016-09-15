@@ -4,6 +4,13 @@ $grey-a1: rgb(231, 234, 236);
 $grey-a2: #607580;
 $blue-a1: #4A6A88;
 
+.FactsTab {
+  h3 {
+    color: #555;
+    float: left;
+  }
+}
+
 .Fact--outer {
   border: 1px solid rgba(0,0,0,0);
   float: left;
@@ -16,7 +23,6 @@ $blue-a1: #4A6A88;
 }
 
 .Fact {
-  padding: .4em .5em .5em;
   background-color: white;
   float: left;
   width: 100%;
@@ -61,14 +67,15 @@ $blue-a1: #4A6A88;
 
 .Fact  .section-simulation {
   min-width: 6em;
-  flex: 1;
+  flex: 1.4;
   position: relative;
+  padding: .4em 0 .4em .4em;
 
   .histogram {
     left: 10%;
     height: 35px;
     position: absolute;
-    bottom: -.5em;
+    bottom: 0;
     right: 0;
     z-index: 0;
     .react-d3-histogram__bar rect {
@@ -102,6 +109,7 @@ $blue-a1: #4A6A88;
   float: left;
   flex: 6;
   margin-top: .05em;
+  padding: .4em .4em 0;
 
   .fact-name {
     font-size: 1.3em;
@@ -168,6 +176,7 @@ $blue-a1: #4A6A88;
 .Fact > .section-help {
   float: left;
   min-width: 5em;
+  padding: .4em 0;
   flex: 1;
 
   .button {
@@ -175,3 +184,24 @@ $blue-a1: #4A6A88;
   }
 }
 
+.Fact > .section-exported {
+  padding: .4em .4em 0 .4em;
+  flex: .3;
+  background-color: #e0e3e6;
+  float: left;
+  cursor: pointer;
+}
+
+.Fact > .section-exported .fa {
+  color: #a2acbb;
+  font-size: 1.25em;
+  margin-top: .1em;
+}
+
+.Fact > .section-exported:hover {
+  transition: all .15s;
+  background-color: #bac5cf;
+  .fa {
+    color: #73849c;
+  }
+}
