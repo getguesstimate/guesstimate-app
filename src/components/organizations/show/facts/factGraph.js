@@ -5,6 +5,14 @@ import FlowGrid from 'gComponents/lib/FlowGrid/FlowGrid'
 
 import * as _collections from 'gEngine/collections'
 
+import './style.css'
+
+const SpaceCard = ({space: {name}}) => (
+  <div className='spaceNode' >
+    WOOO {name}
+  </div>
+)
+
 export class FactGraph extends Component {
   itemsAndEdges() {
     const {facts, spaces} = this.props
@@ -22,7 +30,7 @@ export class FactGraph extends Component {
       key: `space:${s.id}`,
       id: `space:${s.id}`,
       parents: s.imported_fact_ids.map(id => `fact:${id}`),
-      component: <div>WOOO {s.name} </div>,
+      component: <SpaceCard space={s} />,
     }))
 
     let unprocessedNodes = [...factNodes, ...spaceNodes]
