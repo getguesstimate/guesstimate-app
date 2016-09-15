@@ -4,10 +4,11 @@ import Icon from 'react-fa'
 
 import {spaceUrlById} from 'gEngine/space'
 import {navigateFn} from 'gModules/navigation/actions'
+import {isExportedFromSpace} from 'gEngine/facts'
 import {DistributionSummary} from 'gComponents/distributions/summary/index'
 import Histogram from 'gComponents/simulations/histogram/index'
 
-export const FactItem = ({fact, onEdit, isImportedFromSpace, isExportedFromSpace}) => {
+export const FactItem = ({fact, onEdit, isExportedFromSelectedSpace}) => {
   const exported_from_url = `${spaceUrlById(_.get(fact, 'exported_from_id'))}?factsShown=true`
   return (
     <div className='Fact--outer'>
@@ -44,9 +45,9 @@ export const FactItem = ({fact, onEdit, isImportedFromSpace, isExportedFromSpace
           <span className='ui button small options' onClick={onEdit}>Edit</span>
         </div>
 
-      {!!fact.exported_from_id &&
-        <div className='section-exported' onClick={!isExportedFromSpace && navigateFn(exported_from_url)}>
-          {!isExportedFromSpace && <Icon name='share'/>}
+      {!!isExportedFromSpace(fact) &&
+        <div className='section-exported' onClick={!isExportedFromSelectedSpace && navigateFn(exported_from_url)}>
+          {!isExportedFromSelectedSpace && <Icon name='share'/>}
         </div>
         }
       </div>

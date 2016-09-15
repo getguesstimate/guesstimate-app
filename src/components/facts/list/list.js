@@ -8,6 +8,9 @@ import {utils} from 'gEngine/engine'
 
 import './style.css'
 
+const isExportedFromSelectedSpaceFn = (fact, spaceId) => (fact.exported_from_id === spaceId)
+const isImportedFromSelectedSpaceFn = (fact, imported_fact_ids) => imported_fact_ids.indexOf(fact.id) > -1
+
 export class FactList extends Component {
   state = {
     editingFactId: null,
@@ -30,13 +33,12 @@ export class FactList extends Component {
   }
 
   renderFactShow(fact) {
-    const isExportedFromSpace = (fact.exported_from_id === this.props.spaceId)
     return (
       <FactItem
         key={fact.id}
         fact={fact}
         onEdit={this.showEditForm.bind(this, fact.id)}
-        isExportedFromSpace={isExportedFromSpace}
+        isExportedFromSelectedSpace={isExportedFromSelectedSpaceFn(fact, this.props.spaceId)}
       />
     )
   }
@@ -66,12 +68,9 @@ export class FactList extends Component {
 
   renderSpaceFacts() {
     const {props: {facts, spaceId, imported_fact_ids}, state: {editingFactId}} = this
-    const isExportedFromSpace = fact => fact.exported_from_id === this.props.spaceId
-    const isImportedFromSpace = fact => imported_fact_ids.indexOf(fact.id) > -1
-
     let filteredFacts = utils.mutableCopy(facts)
-    const exported = _.remove(filteredFacts, e => isExportedFromSpace(e))
-    const imported = _.remove(filteredFacts, e => isImportedFromSpace(e))
+    const exported = _.remove(filteredFacts, e => isExportedFromSelectedSpaceFn(e, spaceId))
+    const imported = _.remove(filteredFacts, e => isImportedFromSelectedSpaceFn(e, imported_fact_ids))
 
     return (
       <div>
