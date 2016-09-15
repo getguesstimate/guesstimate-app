@@ -4,12 +4,12 @@ import Icon from 'react-fa'
 
 import {spaceUrlById} from 'gEngine/space'
 import {navigateFn} from 'gModules/navigation/actions'
-import {isExportedFromSpace} from 'gEngine/facts'
+import {isExportedFromSpace, length, mean, adjustedConfidenceInterval} from 'gEngine/facts'
 import {DistributionSummary} from 'gComponents/distributions/summary/index'
 import Histogram from 'gComponents/simulations/histogram/index'
 
 export const FactItem = ({fact, onEdit, isExportedFromSelectedSpace}) => {
-  const exported_from_url = `${spaceUrlById(_.get(fact, 'exported_from_id'))}?factsShown=true`
+  const exported_from_url = `${spaceUrlById(_.get(fact, 'exported_from_id'), {factsShown: 'true'})}`
   return (
     <div className='Fact--outer'>
       <div className='Fact'>
@@ -17,9 +17,9 @@ export const FactItem = ({fact, onEdit, isExportedFromSelectedSpace}) => {
           {_.has(fact, 'simulation.sample.values.length') && _.has(fact, 'simulation.stats.mean') &&
             <div className='simulation-summary'>
             <DistributionSummary
-              length={fact.simulation.sample.values.length}
-              mean={fact.simulation.stats.mean}
-              adjustedConfidenceInterval={fact.simulation.stats.adjustedConfidenceInterval}
+              length={length(fact)}
+              mean={mean(fact)}
+              adjustedConfidenceInterval={adjustedConfidenceInterval(fact)}
             />
             </div>
            }

@@ -8,9 +8,6 @@ import {utils} from 'gEngine/engine'
 
 import './style.css'
 
-const isExportedFromSelectedSpaceFn = (fact, spaceId) => (fact.exported_from_id === spaceId)
-const isImportedFromSelectedSpaceFn = (fact, imported_fact_ids) => imported_fact_ids.indexOf(fact.id) > -1
-
 export class FactList extends Component {
   state = {
     editingFactId: null,
@@ -38,7 +35,7 @@ export class FactList extends Component {
         key={fact.id}
         fact={fact}
         onEdit={this.showEditForm.bind(this, fact.id)}
-        isExportedFromSelectedSpace={isExportedFromSelectedSpaceFn(fact, this.props.spaceId)}
+        isExportedFromSelectedSpace={this.isExportedFromSelectedSpaceFn(fact, this.props.spaceId)}
       />
     )
   }
@@ -69,8 +66,8 @@ export class FactList extends Component {
   renderSpaceFacts() {
     const {props: {facts, spaceId, imported_fact_ids}, state: {editingFactId}} = this
     let filteredFacts = utils.mutableCopy(facts)
-    const exported = _.remove(filteredFacts, e => isExportedFromSelectedSpaceFn(e, spaceId))
-    const imported = _.remove(filteredFacts, e => isImportedFromSelectedSpaceFn(e, imported_fact_ids))
+    const exported = _.remove(filteredFacts, e => this.isExportedFromSelectedSpaceFn(e, spaceId))
+    const imported = _.remove(filteredFacts, e => this.isImportedFromSelectedSpaceFn(e, imported_fact_ids))
 
     return (
       <div>
@@ -91,6 +88,14 @@ export class FactList extends Component {
       if (e.id === editingFactId) {return this.renderEditForm(e)}
       else {return this.renderFactShow(e)}
     })
+  }
+
+  isExportedFromSelectedSpaceFn({exported_from_id}, spaceId) {
+    return (exported_from_id === spaceId)
+  }
+
+  isImportedFromSelectedSpaceFn({id}, imported_fact_ids) {
+    return imported_fact_ids.includes(id)
   }
 
   render() {
