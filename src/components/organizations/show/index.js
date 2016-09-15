@@ -169,6 +169,8 @@ export default class OrganizationShow extends Component{
             {(openTab === FACT_GRAPH_TAB) && meIsMember && !!facts &&
               <FactGraph
                 organization={organization}
+                facts={facts}
+                spaces={spaces}
               />
             }
           </div>

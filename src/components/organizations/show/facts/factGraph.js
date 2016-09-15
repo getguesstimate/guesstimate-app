@@ -1,15 +1,20 @@
 import React, {Component} from 'react'
+import {FactItem} from 'gComponents/facts/list/item.js'
 
 import FlowGrid from 'gComponents/lib/FlowGrid/FlowGrid'
 
 export class FactGraph extends Component {
 
   items() {
+    const {facts, spaces} = this.props;
     const fakeNode = {
       location: {row: 0, column: 0}
     }
-    //items={_.map(metrics, m => ({key: m.id, location: m.location, component: this.renderMetric(m, analyzedMetric)}))}
+
     return [
+      ..._.map(facts, (fact, index) => {
+        return {key: index, location: {row: index, column: 0}, component: <FactItem fact={fact}/>}
+      })
     ]
   }
 
