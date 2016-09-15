@@ -9,14 +9,15 @@ import './style.css'
 
 const EnableShareableLinkOption = ({onEnable}) => (
   <div>
-    Shareable Link Disabled. <span className='ui button shareable-link-button enable' onClick={onEnable}>Click here</span> to enable.
+    <div>Shareable Link Disabled.</div>
+    <span className='ui button shareable-link-button enable' onClick={onEnable}>Enable</span>
   </div>
 )
 
 const DisableOrRotateShareableLinkOption = ({shareableLinkUrl, onDisable, onRotate}) => (
   <div>
     Anyone with the following url will be able to view this model:
-    <div className='shareable-link'>{shareableLinkUrl}</div>
+    <div className='ui segment shareable-link'><span>{shareableLinkUrl}</span></div>
 
     <span className='ui button shareable-link-button disable' onClick={onDisable}>Disable</span>
     <span className='ui button shareable-link-button rotate' onClick={onRotate}>Rotate</span>
