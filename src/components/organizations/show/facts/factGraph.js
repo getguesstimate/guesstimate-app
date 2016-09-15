@@ -4,13 +4,14 @@ import {FactItem} from 'gComponents/facts/list/item.js'
 import FlowGrid from 'gComponents/lib/FlowGrid/FlowGrid'
 
 import * as _collections from 'gEngine/collections'
+import * as _space from 'gEngine/space'
 
 import './style.css'
 
-const SpaceCard = ({space: {name}}) => (
-  <div className='spaceNode' >
-    WOOO {name}
-  </div>
+const SpaceCard = ({space}) => (
+  <a className='spaceNode' href={_space.spaceUrlById(space.id)}>
+    {space.name}
+  </a>
 )
 
 export class FactGraph extends Component {
@@ -66,7 +67,7 @@ export class FactGraph extends Component {
     const {items, edges} = this.itemsAndEdges()
     return (
       <div
-        style={{backgroundColor: '#ddd', float: 'left'}}
+        className='FactGraph'
       >
         <FlowGrid
           items={items}
@@ -89,7 +90,7 @@ export class FactGraph extends Component {
           onCopy={() => {}}
           onPaste={() => {}}
           onCut={() => {}}
-          showGridLines={true}
+          showGridLines={false}
           canvasState={{}}
         />
       </div>
