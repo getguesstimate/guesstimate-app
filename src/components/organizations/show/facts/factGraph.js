@@ -17,7 +17,6 @@ const SpaceCard = ({space}) => (
 
 export class FactGraph extends Component {
   itemsAndEdges() {
-    console.log('foowsh start')
     const {facts, spaces} = this.props
 
     const factNodes = _.map(facts, fact => ({
@@ -40,9 +39,7 @@ export class FactGraph extends Component {
     let unprocessedNodes = [...factNodes, ...spaceNodes]
     let heightOrderedNodes = []
     const allParentswithin = nodeSet => n => _.every(n.parents, p => _.some(nodeSet, ({id}) => p === id))
-    let times = 0
     while (!_.isEmpty(unprocessedNodes)) {
-      console.log('looped', times++, 'times')
       const nextLevelNodes = _.remove(unprocessedNodes, allParentswithin(_.flatten(heightOrderedNodes)))
       if (_.isEmpty(nextLevelNodes)) { break }
       heightOrderedNodes.push(nextLevelNodes)
@@ -53,7 +50,7 @@ export class FactGraph extends Component {
       const prevLayer = _utils.orArr(_.last(sortedHeightOrderedNodes))
       let newLayer = _utils.mutableCopy(heightSet)
       let newLayerOrdered = []
-      prevLayer.filter(n => !_.isEmpty(n.children.length)).forEach(n => {
+      prevLayer.filter(n => !_.isEmpty(n.children)).forEach(n => {
         const children = _.remove(newLayer, ({id}) => n.children.includes(id))
         const childrenSorted = _.sortBy(children, c => -c.children.length)
         newLayerOrdered.push(...childrenSorted)
@@ -65,6 +62,7 @@ export class FactGraph extends Component {
     })
 
     let items = []
+
     sortedHeightOrderedNodes.forEach((heightSet, height) => {
       const withLocations = _.map(heightSet, (node, index) => ({
         ...node,
@@ -86,10 +84,7 @@ export class FactGraph extends Component {
 
   render() {
     let {items, edges} = this.itemsAndEdges()
-    items = items.slice(0,3)
-    edges = edges.slice(0,3)
 
-    console.log('items', items, 'edges', edges)
     return (
       <div
         className='FactGraph'
