@@ -65,6 +65,11 @@ export class SpaceHeader extends Component {
                 {ownerName}
               </a>
             }
+            {(ownerIsOrg)  &&
+              <a className='ui image label' href={ownerUrl + '/fact-graph'}>
+                <Icon name='expand'/>
+              </a>
+            }
             {editableByMe &&
               <PrivacyToggle
                 headerText={'Privacy Options'}
