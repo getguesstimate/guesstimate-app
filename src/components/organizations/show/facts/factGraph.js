@@ -22,7 +22,7 @@ export class FactGraph extends Component {
     const factNodes = _.map(facts, fact => ({
       key: `fact:${fact.id}`,
       id: `fact:${fact.id}`,
-      children: fact.imported_to_intermediate_space_ids.map(id => `space:${id}`),
+      children: spaces.filter(s => _utils.orArr(s.imported_fact_ids).includes(fact.id)).map(({id}) => `space:${id}`),
       parents: !!fact.exported_from_id ? [`space:${fact.exported_from_id}`] : [],
       component: <FactItem fact={fact}/>,
     }))
