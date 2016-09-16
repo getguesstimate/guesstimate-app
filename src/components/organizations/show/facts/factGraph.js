@@ -46,6 +46,7 @@ export class FactGraph extends Component {
     }
 
     let sortedHeightOrderedNodes = []
+    let currColumn = 0
     heightOrderedNodes.forEach(heightSet => {
       const prevLayer = _utils.orArr(_.last(sortedHeightOrderedNodes))
       let newLayer = _utils.mutableCopy(heightSet)
@@ -58,18 +59,31 @@ export class FactGraph extends Component {
       const restSorted = _.sortBy(newLayer, n => -n.children.length)
       newLayerOrdered.push(...restSorted)
 
-      sortedHeightOrderedNodes.push(newLayerOrdered)
+      let currRow = 0
+      const withLocations = _.map(newLayerOrdered, node => {
+        const withLocation = {
+          ...node,
+          location: {row: currRow, column: currColumn},
+        }
+        if (node.children.length > 3) {
+          currRow += 2
+        } else {
+          currRow += 1
+        }
+        return withLocation
+      })
+
+      if (newLayer.length > 3) {
+        currColumn += 2
+      } else {
+        currColumn += 1
+      }
+
+      sortedHeightOrderedNodes.push(withLocations)
     })
 
-    let items = []
+    const items = _.flatten(sortedHeightOrderedNodes)
 
-    sortedHeightOrderedNodes.forEach((heightSet, height) => {
-      const withLocations = _.map(heightSet, (node, index) => ({
-        ...node,
-        location: {row: index, column: height},
-      }))
-      items.push(...withLocations)
-    })
     const locationById = id => _collections.gget(items, id, 'id', 'location')
 
     let edges = []
