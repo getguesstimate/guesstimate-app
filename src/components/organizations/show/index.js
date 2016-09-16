@@ -95,7 +95,8 @@ export default class OrganizationShow extends Component{
     this.props.dispatch(modalActions.openConfirmation({onConfirm: removeCallback, message}))
   }
 
-  render () {
+  render() {
+    console.log('rendering')
     const {organizationId, organizations, organizationFacts, members, memberships, invitations} = this.props
     const {openTab} = this.state
     const spaces =  _.orderBy(this.props.organizationSpaces.asMutable(), ['updated_at'], ['desc'])
