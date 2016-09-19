@@ -73,7 +73,7 @@ export class FactGraph extends Component {
         return withLocation
       })
 
-      if (newLayer.length > 3) {
+      if (newLayerOrdered.length > 3) {
         currColumn += 2
       } else {
         currColumn += 1
