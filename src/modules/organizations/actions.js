@@ -7,8 +7,10 @@ import * as membershipActions from 'gModules/userOrganizationMemberships/actions
 import * as userOrganizationMembershipActions from 'gModules/userOrganizationMemberships/actions'
 import * as userOrganizationInvitationActions from 'gModules/userOrganizationInvitations/actions'
 import * as factActions from 'gModules/facts/actions'
+import {factCategoryActions} from 'gModules/factCategories/actions'
 import * as spaceActions from 'gModules/spaces/actions'
 
+import {orArr} from 'gEngine/utils'
 import {organizationReadableId} from 'gEngine/organization'
 import {withSortedValues} from 'gEngine/facts'
 
@@ -47,12 +49,14 @@ export function fetchSuccess(organizations) {
   return (dispatch) => {
     const formatted = organizations.map(o => _.pick(o, ['id', 'name', 'picture', 'admin_id', 'account', 'plan']))
 
-    const memberships = _.flatten(organizations.map(o => o.memberships || []))
-    const invitations = _.flatten(organizations.map(o => o.invitations || []))
+    const memberships = _.flatten(organizations.map(o => orArr(o.memberships)))
+    const invitations = _.flatten(organizations.map(o => orArr(o.invitations)))
     const factsByOrg = organizations.map(toContainerFact).filter(o => !_.isEmpty(o))
+    const factCategories = _.flatten(organizations.map(o => orArr(o.fact_categories)))
 
     if (!_.isEmpty(memberships)) { dispatch(userOrganizationMembershipActions.fetchSuccess(memberships)) }
     if (!_.isEmpty(invitations)) { dispatch(userOrganizationInvitationActions.fetchSuccess(invitations)) }
+    if (!_.isEmpty(factCategories)) { dispatch(factCategoryActions.fetchSuccess(factCategories)) }
     if (!_.isEmpty(factsByOrg)) { dispatch(factActions.loadByOrg(factsByOrg)) }
 
     dispatch(oActions.fetchSuccess(formatted))
@@ -128,6 +132,26 @@ export function deleteFact(organization, fact) {
         captureApiError('OrganizationsFactDestroy', err.jqXHR, err.textStatus, err, {url: 'destroyOrganizationMember'})
       } else {
         dispatch(factActions.deleteFromOrg(organizationReadableId(organization), fact))
+      }
+    })
+  }
+}
+
+export function editFactCategory(organization, factCategory) {
+  return (dispatch, getState) => {
+    dispatch(factCategoryActions.updateStart(factCategory))
+    api(getState()).organizations.editFactCategory(organization, factCategory, (err, serverFactCategory) => {
+      if (!!serverFactCategory) { dispatch(factCategoryActions.updateSuccess(factCategory)) }
+    })
+  }
+}
+
+export function deleteFactCategory(organization, factCategory) {
+  return (dispatch, getState) => {
+    dispatch(factCategoryActions.deleteStart(factCategory))
+    api(getState()).organizations.deleteFactCategory(organization, factCategory, (err, _1) => {
+      if (!err) {
+        dispatch(factCategoryActions.deleteSuccess(factCategory))
       }
     })
   }
