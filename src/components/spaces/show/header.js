@@ -20,8 +20,8 @@ const EnableShareableLinkOption = ({onEnable}) => (
 
 const DisableOrRotateShareableLinkOption = ({shareableLinkUrl, onDisable, onRotate}) => (
   <div>
-    <p>Anyone with the shareable link will be able to view this model. They will not be able to edit the model.</p>
     <div className='ui segment shareable-link'><span>{shareableLinkUrl}</span></div>
+    <p>Anyone with the shareable link will be able to view this model. They will not be able to edit the model.</p>
 
     <span className='ui button small shareable-link-button disable' onClick={onDisable}>Disable</span>
     <span className='ui button small shareable-link-button rotate' onClick={onRotate}>Reset Link</span>
