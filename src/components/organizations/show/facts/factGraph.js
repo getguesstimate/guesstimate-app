@@ -24,7 +24,7 @@ export class FactGraph extends Component {
       id: `fact:${fact.id}`,
       children: spaces.filter(s => _utils.orArr(s.imported_fact_ids).includes(fact.id)).map(({id}) => `space:${id}`),
       parents: !!fact.exported_from_id ? [`space:${fact.exported_from_id}`] : [],
-      component: <FactItem fact={fact}/>,
+      component: <FactItem fact={fact} showModelLink={false}/>,
     }))
 
     const intermediateSpaces = _.filter(spaces, s => s.exported_facts_count > 0 || !_.isEmpty(s.imported_fact_ids))
