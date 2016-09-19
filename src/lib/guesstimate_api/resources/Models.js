@@ -8,11 +8,11 @@ export default class Models extends AbstractResource {
     this.guesstimateMethod({url, method})(callback)
   }
 
-  get(spaceId, token, callback) {
+  get(spaceId, shareableLinkToken, callback) {
     let url = `spaces/${spaceId}`
     const method = 'GET'
 
-    const headers = !!token ? {'Shareable-Link-Token': token} : {}
+    const headers = !!shareableLinkToken ? {'Shareable-Link-Token': shareableLinkToken} : {}
 
     this.guesstimateMethod({url, method, headers})(callback)
   }

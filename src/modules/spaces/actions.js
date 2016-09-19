@@ -78,11 +78,11 @@ export function fromSearch(data) {
   }
 }
 
-export function fetchById(spaceId, token=null) {
+export function fetchById(spaceId, shareableLinkToken=null) {
   return (dispatch, getState) => {
     dispatch(sActions.fetchStart())
 
-    api(getState()).models.get(spaceId, token, (err, value) => {
+    api(getState()).models.get(spaceId, shareableLinkToken, (err, value) => {
       if (err) {
         captureApiError('SpacesFetch', err.jqXHR, err.textStatus, err, {url: 'spacesfetch'})
         return
