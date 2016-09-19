@@ -12,11 +12,9 @@ export default class Models extends AbstractResource {
     let url = `spaces/${spaceId}`
     const method = 'GET'
 
-    // TODO(Ozzie): Offhand, do you know of a better way to do this? Setting it as data does *not* work as this is a
-    // GET.
-    if (!!token) { url += `?shareable_link_token=${token}` }
+    const headers = !!token ? {'Shareable-Link-Token': token} : {}
 
-    this.guesstimateMethod({url, method})(callback)
+    this.guesstimateMethod({url, method, headers})(callback)
   }
 
   destroy(msg, callback) {
