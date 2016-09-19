@@ -96,9 +96,9 @@ export function addMember(organizationId, email) {
 }
 
 // addFact adds the passed fact, with sortedValues overwritten to null, to the organization and saves it on the server.
-export function addFact(organization, rawFact) {
+export function addFact(organization, rawFact, categoryId) {
   return (dispatch, getState) => {
-    let fact = Object.assign({}, rawFact)
+    let fact = Object.assign({}, rawFact, {category_id: categoryId})
     _.set(fact, 'simulation.sample.sortedValues', null)
 
     api(getState()).organizations.addFact(organization, fact, (err, serverFact) => {
@@ -141,7 +141,7 @@ export function editFactCategory(organization, factCategory) {
   return (dispatch, getState) => {
     dispatch(factCategoryActions.updateStart(factCategory))
     api(getState()).organizations.editFactCategory(organization, factCategory, (err, serverFactCategory) => {
-      if (!!serverFactCategory) { dispatch(factCategoryActions.updateSuccess(factCategory)) }
+      if (!!serverFactCategory) { dispatch(factCategoryActions.updateSuccess(serverFactCategory)) }
     })
   }
 }

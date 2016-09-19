@@ -276,7 +276,10 @@ export default class SpacesShow extends Component {
   }
 
   rightSidebarBody() {
-    const {props: {denormalizedSpace, spaceId}, state: {rightSidebar: {type, showCalculatorResults, showCalculatorId, editCalculatorId}}} = this
+    const {
+      props: {denormalizedSpace, spaceId, organizationFacts},
+      state: {rightSidebar: {type, showCalculatorResults, showCalculatorId, editCalculatorId}},
+    } = this
     const {editableByMe, calculators, organization} = denormalizedSpace
     switch (type) {
       case CLOSED:
@@ -330,7 +333,8 @@ export default class SpacesShow extends Component {
           main: (
             <div className='SpaceRightSidebar--padded-area'>
               <FactListContainer
-                organizationId={organization.id}
+                facts={organizationFacts}
+                organization={organization}
                 isEditable={false}
                 spaceId={spaceId}
                 imported_fact_ids={denormalizedSpace.imported_fact_ids}

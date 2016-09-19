@@ -35,6 +35,7 @@ function mapStateToProps(state) {
     me: state.me,
     organizations: state.organizations,
     organizationFacts: state.facts.organizationFacts,
+    globalFactCategories: state.factCategories,
   }
 }
 
@@ -58,9 +59,10 @@ export default class OrganizationShow extends Component{
     this.props.dispatch(spaceActions.fetch({organizationId: this.props.organizationId}))
   }
 
+  organization() { return e.collections.get(this.props.organizations, this.props.organizationId) }
+
   url(openTab) {
-    const organization = this.props.organizations.find(u => u.id.toString() === this.props.organizationId.toString())
-    const base = e.organization.url(organization)
+    const base = e.organization.url(this.organization())
     if (_.isEmpty(base)) { return '' }
     return `${base}/${openTab}`
   }
@@ -76,6 +78,13 @@ export default class OrganizationShow extends Component{
 
   destroyMembership(membershipId) {
     this.props.dispatch(userOrganizationMembershipActions.destroy(membershipId))
+  }
+
+  onEditCategory(editedCategory) {
+    this.props.dispatch(organizationActions.editFactCategory(this.organization(), editedCategory))
+  }
+  onDeleteCategory(category) {
+    this.props.dispatch(organizationActions.deleteFactCategory(this.organization(), category))
   }
 
   onRemove(member) {
@@ -94,12 +103,16 @@ export default class OrganizationShow extends Component{
   }
 
   render () {
-    const {organizationId, organizations, organizationFacts, members, memberships, invitations} = this.props
-    const {openTab} = this.state
+    const {
+      props: {organizationId, organizationFacts, members, memberships, invitations, globalFactCategories},
+      state: {openTab},
+    } = this
+
+    const factCategories = e.collections.filter(globalFactCategories, organizationId, 'organization_id')
     const spaces =  _.orderBy(this.props.organizationSpaces.asMutable(), ['updated_at'], ['desc'])
-    const organization = organizations.find(u => u.id.toString() === organizationId.toString())
+    const organization = this.organization()
     const hasPrivateAccess = e.organization.hasPrivateAccess(organization)
-    const facts = _.get(organizationFacts.find(f => f.variable_name === `organization_${organizationId}`), 'children') || []
+    const facts = e.organization.findFacts(organizationId, organizationFacts)
     const meIsAdmin = !!organization && (organization.admin_id === this.props.me.id)
     const meIsMember = meIsAdmin || !!(members.find(m => m.id === this.props.me.id))
 
@@ -154,7 +167,13 @@ export default class OrganizationShow extends Component{
             }
 
             {(openTab === FACT_BOOK_TAB) && meIsMember && !!facts &&
-              <FactTab organizationId={organizationId}/>
+              <FactTab
+                organization={organization}
+                facts={facts}
+                factCategories={factCategories}
+                onEditCategory={this.onEditCategory.bind(this)}
+                onDeleteCategory={this.onDeleteCategory.bind(this)}
+              />
             }
           </div>
         </div>
@@ -206,19 +225,170 @@ const OrganizationTabButtons = ({tabs, openTab, changeTab}) => (
   </div>
 )
 
-const FactTab = ({organizationId}) => (
-  <div className='FactTab row'>
-    <div className='col-md-3'>
-      <h2> Private Organizational Facts </h2>
-      <p> Facts can be used in private organization models by referencing them with '#' symbols. </p>
-    </div>
+class CategoryHeader extends Component {
+  state = {
+    editing: false,
+    hovering: false,
+    editedName: this.props.category.name,
+  }
 
-    <div className='col-md-1'></div>
-    <div className='col-md-8'>
-      <div className='FactTab--factList'>
-        <FactListContainer organizationId={organizationId} isEditable={true}/>
+  onEnter() { this.setState({hovering: true}) }
+  onLeave() { this.setState({hovering: false}) }
+  onStartEditing() { this.setState({editing: true}) }
+  onChangeName(e) { if (!!this.state.editing) { this.setState({editedName: e.target.value}) } }
+  isNameValid() {
+    return this.state.editedName === this.props.category.name || !this.props.existingNames.includes(this.state.editedName)
+  }
+  onSaveEdits() {
+    this.props.onEditCategory({...this.props.category, name: this.state.editedName})
+    this.setState({editing: false})
+  }
+  onDelete() {
+    this.props.onDeleteCategory(this.props.category)
+  }
+
+  renderEditHeader() {
+    return (
+      <div className='row'>
+        <div className='col-md-10'>
+          <div className={`field${!this.isNameValid() ? ' error' : ''}`}>
+            <h3><input name='name' value={this.state.editedName} onChange={this.onChangeName.bind(this)} /></h3>
+          </div>
+        </div>
+        <div className='col-md-2'>
+          <span className='ui button primary tiny' onClick={this.onSaveEdits.bind(this)}>
+            Save
+          </span>
+        </div>
       </div>
+    )
+  }
+
+  renderShowHeader() {
+    const {category, onEditCategory} = this.props
+    return (
+      <div className='row'>
+        <div className='col-md-10'><h3>{category.name}</h3></div>
+        <div className='col-md-2'>
+          {!!this.state.hovering &&
+            <div className='category-actions'>
+              <span className='ui button tiny' onClick={this.onStartEditing.bind(this)}>
+                Edit
+              </span>
+              <span className='ui button tiny' onClick={this.onDelete.bind(this)}>
+                Delete
+              </span>
+            </div>
+          }
+        </div>
+      </div>
+    )
+  }
+
+  renderHeader() { return !!this.state.editing ? this.renderEditHeader() : this.renderShowHeader() }
+
+  render() {
+    return (
+      <div
+        className='category-header'
+        onMouseEnter={this.onEnter.bind(this)}
+        onMouseLeave={this.onLeave.bind(this)}
+      >
+        {this.renderHeader()}
+      </div>
+    )
+  }
+}
+
+const NullCategoryHeader = ({}) => (
+  <div className='category-header'>
+    <h3>Uncategorized</h3>
+  </div>
+)
+
+const Category = ({category, existingCategoryNames, facts, onEditCategory, onDeleteCategory, organization, existingVariableNames}) => (
+  <div className='category'>
+    {!!category ? <CategoryHeader
+        category={category}
+        existingCategoryNames={existingCategoryNames}
+        onEditCategory={onEditCategory}
+        onDeleteCategory={onDeleteCategory}
+      /> : <NullCategoryHeader />
+    }
+    <div className='category-facts FactTab--factList'>
+      <FactListContainer
+        organization={organization}
+        facts={facts}
+        existingVariableNames={existingVariableNames}
+        isEditable={true}
+        categoryId={!!category ? category.id : null}
+      />
     </div>
   </div>
 )
 
+const CategoryList = ({categories, organization, onEditCategory, onDeleteCategory, existingVariableNames}) => (
+  <div className='category-list'>
+    {_.map(categories, ({category, facts}) => (
+      <Category
+        key={!!category ? category.name : 'uncategorized'}
+        category={category}
+        existingCategoryNames={categories.map(c => _.get(c, 'category.name'))}
+        onEditCategory={onEditCategory}
+        onDeleteCategory={onDeleteCategory}
+        facts={facts}
+        existingVariableNames={existingVariableNames}
+        organization={organization}
+      />
+    ))}
+  </div>
+)
+
+const FactTab = ({
+  organization,
+  facts,
+  factCategories,
+  onEditCategory,
+  onDeleteCategory,
+}) => {
+  const categorySets = [
+    ..._.map(factCategories, c => ({
+      category: c,
+      facts: e.collections.filter(facts, c.id, 'category_id'),
+    })),
+    {
+      category: null,
+      facts: _.filter(facts, f => !f.category_id),
+    },
+  ]
+  const numCategories = categorySets.length
+  const leftListSize = Math.floor(numCategories/2)
+  const categoriesLeft = _.take(categorySets, leftListSize)
+  const categoriesRight = _.takeRight(categorySets, numCategories - leftListSize)
+
+  const existingVariableNames = facts.map(e.facts.getVar)
+
+  return (
+    <div className='FactTab row'>
+      <div className='col-md-6'>
+        <CategoryList
+          categories={categoriesLeft}
+          organization={organization}
+          existingVariableNames={existingVariableNames}
+          onEditCategory={onEditCategory}
+          onDeleteCategory={onDeleteCategory}
+        />
+      </div>
+
+      <div className='col-md-6'>
+        <CategoryList
+          categories={categoriesRight}
+          organization={organization}
+          existingVariableNames={existingVariableNames}
+          onEditCategory={onEditCategory}
+          onDeleteCategory={onDeleteCategory}
+        />
+      </div>
+    </div>
+  )
+}
