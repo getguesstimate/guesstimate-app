@@ -4,6 +4,7 @@ import {connect} from 'react-redux'
 import * as organizationActions from 'gModules/organizations/actions'
 import {findFacts} from 'gEngine/organization'
 import * as _collections from 'gEngine/collections'
+import {orArr} from 'gEngine/utils'
 
 import {FactList} from './list.js'
 
@@ -12,7 +13,7 @@ export class FactListContainer extends Component{
   displayName: 'FactListContainer'
 
   render() {
-    const {facts, existingVariableNames, organization, categoryId, isEditable, spaceId, imported_fact_ids} = this.props
+    const {facts, existingVariableNames, categories, organization, categoryId, isEditable, spaceId, imported_fact_ids} = this.props
     return (
       <FactList
         onDeleteFact={fact => this.props.dispatch(organizationActions.deleteFact(organization, fact))}
@@ -20,6 +21,8 @@ export class FactListContainer extends Component{
         onEditFact={fact => this.props.dispatch(organizationActions.editFact(organization, fact, true))}
         facts={facts}
         existingVariableNames={existingVariableNames}
+        categories={orArr(categories)}
+        categoryId={categoryId}
         isEditable={isEditable}
         spaceId={spaceId}
         imported_fact_ids={imported_fact_ids}

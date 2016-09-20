@@ -4,7 +4,9 @@ import {navigateFn} from 'gModules/navigation/actions'
 
 import {spaceUrlById} from 'gEngine/space'
 import {hasRequiredProperties, isExportedFromSpace, simulateFact, FactPT} from 'gEngine/facts'
+import {PTFactCategory} from 'gEngine/fact_category'
 import {addStats} from 'gEngine/simulation'
+import {orStr} from 'gEngine/utils'
 
 import {isData, formatData} from 'lib/guesstimator/formatter/formatters/Data'
 import {getVariableNameFromName} from 'lib/generateVariableNames/nameToVariableName'
@@ -17,16 +19,19 @@ export class FactForm extends Component {
       variable_name: '',
       exported_from_id: null,
       metric_id: null,
+      category_id: null,
       simulation: {
         sample: {
           values: [],
           errors: [],
         },
       },
-    }
+    },
+    categories: [],
   }
 
   static propTypes = {
+    categories: PropTypes.arrayOf(PTFactCategory).isRequired,
     existingVariableNames: PropTypes.arrayOf(PropTypes.string).isRequired,
     onSubmit: PropTypes.func.isRequired,
     onCancel: PropTypes.func,
@@ -34,7 +39,7 @@ export class FactForm extends Component {
   }
 
   state = {
-    runningFact: this.props.startingFact,
+    runningFact: {category_id: this.props.categoryId, ...this.props.startingFact},
     variableNameManuallySet: !_.isEmpty(_.get(this.props, 'startingFact.variable_name')),
     currentExpressionSimulated: true,
     submissionPendingOnSimulation: false,
@@ -52,6 +57,9 @@ export class FactForm extends Component {
     this.setFactState(
       this.state.variableNameManuallySet ? {name} : {name, variable_name: getVariableNameFromName(name, this.props.existingVariableNames)}
     )
+  }
+  onSelectCategory(c) {
+    this.setFactState({category_id: c.target.value})
   }
   onChangeVariableName(e) { this.setFactState({variable_name: _.get(e, 'target.value')}, {variableNameManuallySet: true}) }
   onChangeExpression(e) { this.setFactState({expression: _.get(e, 'target.value')}, {currentExpressionSimulated: false}) }
@@ -114,8 +122,8 @@ export class FactForm extends Component {
 
   render() {
     const {
-      props: {buttonText, onCancel, onDelete},
-      state: {submissionPendingOnSimulation, runningFact: {expression, name, variable_name}}
+      props: {buttonText, onCancel, onDelete, categories},
+      state: {submissionPendingOnSimulation, runningFact: {expression, name, variable_name, category_id}}
     } = this
 
     let buttonClasses = ['ui', 'button', 'small', 'primary']
@@ -154,10 +162,25 @@ export class FactForm extends Component {
               />
             </div>
           </div>
-          <div className='actions'>
-            <span className={buttonClasses.join(' ')} onClick={this.onSubmit.bind(this)}>{buttonText}</span>
-            {!!onCancel && <span className='ui button small' onClick={onCancel}>Cancel</span>}
-            {!!onDelete && <span className='ui button small' onClick={onDelete}>Delete</span>}
+          <div className='row'>
+            <div className='col-md-4'>
+              <div className='actions'>
+                <span className={buttonClasses.join(' ')} onClick={this.onSubmit.bind(this)}>{buttonText}</span>
+                {!!onCancel && <span className='ui button small' onClick={onCancel}>Cancel</span>}
+                {!!onDelete && <span className='ui button small' onClick={onDelete}>Delete</span>}
+              </div>
+            </div>
+            <div className='col-md-8'>
+              {!_.isEmpty(categories) &&
+                <div className='field'>
+                  <select class='ui search dropdown' value={`${orStr(category_id)}`} onChange={this.onSelectCategory.bind(this)}>
+                    {_.map(categories, ({id, name}) => (
+                      <option value={id} key={id}>{name}</option>
+                    ))}
+                  </select>
+                </div>
+              }
+            </div>
           </div>
         </div>
       </div>

@@ -41,11 +41,12 @@ export class FactList extends Component {
   }
 
   renderEditForm(fact) {
-    const {existingVariableNames, onEditFact} = this.props
+    const {existingVariableNames, categories, onEditFact} = this.props
     return <FactForm
       startingFact={fact}
       key={fact.id}
       existingVariableNames={existingVariableNames.filter(v => v !== getVar(fact))}
+      categories={categories}
       buttonText={'Save'}
       onSubmit={onEditFact}
       onDelete={() => {this.props.onDeleteFact(fact)}}
@@ -54,10 +55,12 @@ export class FactList extends Component {
   }
 
   renderNewForm() {
-    const {existingVariableNames} = this.props
+    const {existingVariableNames, categories, categoryId} = this.props
     return <FactForm
       key={this.state.newFactKey.toString()}
+      categoryId={categoryId}
       existingVariableNames={existingVariableNames}
+      categories={categories}
       buttonText={'Create'}
       onSubmit={this.onAddFact.bind(this)}
     />

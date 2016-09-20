@@ -80,6 +80,9 @@ export default class OrganizationShow extends Component{
     this.props.dispatch(userOrganizationMembershipActions.destroy(membershipId))
   }
 
+  onAddCategory(newCategory) {
+    this.props.dispatch(organizationActions.addFactCategory(this.organization(), newCategory))
+  }
   onEditCategory(editedCategory) {
     this.props.dispatch(organizationActions.editFactCategory(this.organization(), editedCategory))
   }
@@ -171,6 +174,7 @@ export default class OrganizationShow extends Component{
                 organization={organization}
                 facts={facts}
                 factCategories={factCategories}
+                onAddCategory={this.onAddCategory.bind(this)}
                 onEditCategory={this.onEditCategory.bind(this)}
                 onDeleteCategory={this.onDeleteCategory.bind(this)}
               />
@@ -224,6 +228,46 @@ const OrganizationTabButtons = ({tabs, openTab, changeTab}) => (
     </div>
   </div>
 )
+
+class NewCategoryForm extends Component {
+  state = {
+    runningName: '',
+  }
+
+  onChangeName(e) { this.setState({runningName: e.target.value}) }
+  isNameValid() {
+    return !_.isEmpty(this.state.runningName) && !this.props.existingCategoryNames.includes(this.state.runningName)
+  }
+  onSubmit() {
+    this.props.onAddCategory({name: this.state.runningName})
+    this.setState({runningName: ''})
+  }
+
+  render() {
+    return (
+      <div className='row'>
+        <div className='col-md-10'>
+          <div className={`field${!this.isNameValid() ? ' error' : ''}`}>
+            <h3>
+              <input
+                name='name'
+                placeholder='New Category'
+                value={this.state.runningName}
+                onChange={this.onChangeName.bind(this)}
+              />
+            </h3>
+          </div>
+        </div>
+        <div className='col-md-2'>
+          <span className='ui button primary tiny' onClick={this.onSubmit.bind(this)}>
+            Save
+          </span>
+        </div>
+      </div>
+    )
+  }
+}
+
 
 class CategoryHeader extends Component {
   state = {
@@ -306,11 +350,11 @@ const NullCategoryHeader = ({}) => (
   </div>
 )
 
-const Category = ({category, existingCategoryNames, facts, onEditCategory, onDeleteCategory, organization, existingVariableNames}) => (
+const Category = ({category, categories, facts, onEditCategory, onDeleteCategory, organization, existingVariableNames}) => (
   <div className='category'>
     {!!category ? <CategoryHeader
         category={category}
-        existingCategoryNames={existingCategoryNames}
+        existingCategoryNames={categories.map(c => c.name)}
         onEditCategory={onEditCategory}
         onDeleteCategory={onDeleteCategory}
       /> : <NullCategoryHeader />
@@ -320,6 +364,7 @@ const Category = ({category, existingCategoryNames, facts, onEditCategory, onDel
         organization={organization}
         facts={facts}
         existingVariableNames={existingVariableNames}
+        categories={categories}
         isEditable={true}
         categoryId={!!category ? category.id : null}
       />
@@ -327,13 +372,13 @@ const Category = ({category, existingCategoryNames, facts, onEditCategory, onDel
   </div>
 )
 
-const CategoryList = ({categories, organization, onEditCategory, onDeleteCategory, existingVariableNames}) => (
+const CategoryList = ({categoriesToRender, allCategories, organization, onEditCategory, onDeleteCategory, existingVariableNames}) => (
   <div className='category-list'>
-    {_.map(categories, ({category, facts}) => (
+    {_.map(categoriesToRender, ({category, facts}) => (
       <Category
         key={!!category ? category.name : 'uncategorized'}
         category={category}
-        existingCategoryNames={categories.map(c => _.get(c, 'category.name'))}
+        categories={allCategories}
         onEditCategory={onEditCategory}
         onDeleteCategory={onDeleteCategory}
         facts={facts}
@@ -348,6 +393,7 @@ const FactTab = ({
   organization,
   facts,
   factCategories,
+  onAddCategory,
   onEditCategory,
   onDeleteCategory,
 }) => {
@@ -367,14 +413,21 @@ const FactTab = ({
   const categoriesRight = _.takeRight(categorySets, numCategories - leftListSize)
 
   const existingVariableNames = facts.map(e.facts.getVar)
+  const existingCategoryNames = _.map(factCategories, c => c.name)
 
   return (
     <div className='FactTab row'>
       <div className='col-md-6'>
+        <NewCategoryForm
+          existingCategoryNames={existingCategoryNames}
+          onAddCategory={onAddCategory}
+        />
         <CategoryList
-          categories={categoriesLeft}
+          categoriesToRender={categoriesLeft}
+          allCategories={factCategories}
           organization={organization}
           existingVariableNames={existingVariableNames}
+          existingCategoryNames={existingCategoryNames}
           onEditCategory={onEditCategory}
           onDeleteCategory={onDeleteCategory}
         />
@@ -382,9 +435,11 @@ const FactTab = ({
 
       <div className='col-md-6'>
         <CategoryList
-          categories={categoriesRight}
+          categoriesToRender={categoriesRight}
+          allCategories={factCategories}
           organization={organization}
           existingVariableNames={existingVariableNames}
+          existingCategoryNames={existingCategoryNames}
           onEditCategory={onEditCategory}
           onDeleteCategory={onDeleteCategory}
         />

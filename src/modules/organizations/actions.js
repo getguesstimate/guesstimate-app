@@ -137,6 +137,16 @@ export function deleteFact(organization, fact) {
   }
 }
 
+export function addFactCategory(organization, factCategory) {
+  return (dispatch, getState) => {
+    const cid = cuid()
+    api(getState()).organizations.addFactCategory(organization, factCategory, (err, serverFactCategory) => {
+      if (!!serverFactCategory) { dispatch(factCategoryActions.createSuccess(serverFactCategory, cid)) }
+    })
+
+  }
+}
+
 export function editFactCategory(organization, factCategory) {
   return (dispatch, getState) => {
     dispatch(factCategoryActions.updateStart(factCategory))
