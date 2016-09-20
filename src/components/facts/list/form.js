@@ -39,7 +39,7 @@ export class FactForm extends Component {
   }
 
   state = {
-    runningFact: {category_id: this.props.categoryId, ...this.props.startingFact},
+    runningFact: {...this.props.startingFact, category_id: _.get(this, 'props.startingFact.category_id') || this.props.categoryId},
     variableNameManuallySet: !_.isEmpty(_.get(this.props, 'startingFact.variable_name')),
     currentExpressionSimulated: true,
     submissionPendingOnSimulation: false,
@@ -169,6 +169,7 @@ export class FactForm extends Component {
           </div>
           {!_.isEmpty(categories) &&
             <select class='ui search dropdown' value={`${orStr(category_id)}`} onChange={this.onSelectCategory.bind(this)}>
+              <option value={''}>Categorize...</option>
               {_.map(categories, ({id, name}) => (
                 <option value={id} key={id}>{name}</option>
               ))}

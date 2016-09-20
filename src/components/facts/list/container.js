@@ -17,7 +17,7 @@ export class FactListContainer extends Component{
     return (
       <FactList
         onDeleteFact={fact => this.props.dispatch(organizationActions.deleteFact(organization, fact))}
-        onAddFact={fact => this.props.dispatch(organizationActions.addFact(organization, fact, categoryId))}
+        onAddFact={fact => this.props.dispatch(organizationActions.addFact(organization, fact))}
         onEditFact={fact => this.props.dispatch(organizationActions.editFact(organization, fact, true))}
         facts={facts}
         existingVariableNames={existingVariableNames}
