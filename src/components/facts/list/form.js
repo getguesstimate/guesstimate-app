@@ -162,26 +162,18 @@ export class FactForm extends Component {
               />
             </div>
           </div>
-          <div className='row'>
-            <div className='col-md-4'>
-              <div className='actions'>
-                <span className={buttonClasses.join(' ')} onClick={this.onSubmit.bind(this)}>{buttonText}</span>
-                {!!onCancel && <span className='ui button small' onClick={onCancel}>Cancel</span>}
-                {!!onDelete && <span className='ui button small' onClick={onDelete}>Delete</span>}
-              </div>
-            </div>
-            <div className='col-md-8'>
-              {!_.isEmpty(categories) &&
-                <div className='field'>
-                  <select class='ui search dropdown' value={`${orStr(category_id)}`} onChange={this.onSelectCategory.bind(this)}>
-                    {_.map(categories, ({id, name}) => (
-                      <option value={id} key={id}>{name}</option>
-                    ))}
-                  </select>
-                </div>
-              }
-            </div>
+          <div className='actions'>
+            <span className={buttonClasses.join(' ')} onClick={this.onSubmit.bind(this)}>{buttonText}</span>
+            {!!onCancel && <span className='ui button small' onClick={onCancel}>Cancel</span>}
+            {!!onDelete && <span className='ui button small' onClick={onDelete}>Delete</span>}
           </div>
+          {!_.isEmpty(categories) &&
+            <select class='ui search dropdown' value={`${orStr(category_id)}`} onChange={this.onSelectCategory.bind(this)}>
+              {_.map(categories, ({id, name}) => (
+                <option value={id} key={id}>{name}</option>
+              ))}
+            </select>
+          }
         </div>
       </div>
     </div>
