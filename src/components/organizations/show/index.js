@@ -281,7 +281,7 @@ class CategoryHeader extends Component {
   onStartEditing() { this.setState({editing: true}) }
   onChangeName(e) { if (!!this.state.editing) { this.setState({editedName: e.target.value}) } }
   isNameValid() {
-    return this.state.editedName === this.props.category.name || !this.props.existingNames.includes(this.state.editedName)
+    return this.state.editedName === this.props.category.name || !this.props.existingCategoryNames.includes(this.state.editedName)
   }
   onSaveEdits() {
     this.props.onEditCategory({...this.props.category, name: this.state.editedName})
