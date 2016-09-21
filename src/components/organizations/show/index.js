@@ -5,10 +5,10 @@ import ReactDOM from 'react-dom'
 import Icon from 'react-fa'
 
 import {SpaceCard, NewSpaceCard} from 'gComponents/spaces/cards'
-
 import Container from 'gComponents/utility/container/Container'
 import {MembersTab} from './members'
-import {FactListContainer} from 'gComponents/facts/list/container.js'
+import {Category} from './categories/category'
+import {CategoryForm} from './categories/form'
 
 import {httpRequestSelector} from './httpRequestSelector'
 import {organizationSpaceSelector} from './organizationSpaceSelector'
@@ -229,149 +229,6 @@ const OrganizationTabButtons = ({tabs, openTab, changeTab}) => (
   </div>
 )
 
-class NewCategoryForm extends Component {
-  state = {
-    runningName: '',
-  }
-
-  onChangeName(e) { this.setState({runningName: e.target.value}) }
-  isNameValid() {
-    return !_.isEmpty(this.state.runningName) && !this.props.existingCategoryNames.includes(this.state.runningName)
-  }
-  onSubmit() {
-    this.props.onAddCategory({name: this.state.runningName})
-    this.setState({runningName: ''})
-  }
-
-  render() {
-    return (
-      <div className='row'>
-        <div className='col-md-10'>
-          <div className={`field${!this.isNameValid() ? ' error' : ''}`}>
-            <h3>
-              <input
-                name='name'
-                placeholder='New Category'
-                value={this.state.runningName}
-                onChange={this.onChangeName.bind(this)}
-              />
-            </h3>
-          </div>
-        </div>
-        <div className='col-md-2'>
-          <span className='ui button primary tiny' onClick={this.onSubmit.bind(this)}>
-            Save
-          </span>
-        </div>
-      </div>
-    )
-  }
-}
-
-
-class CategoryHeader extends Component {
-  state = {
-    editing: false,
-    hovering: false,
-    editedName: this.props.category.name,
-  }
-
-  onEnter() { this.setState({hovering: true}) }
-  onLeave() { this.setState({hovering: false}) }
-  onStartEditing() { this.setState({editing: true}) }
-  onChangeName(e) { if (!!this.state.editing) { this.setState({editedName: e.target.value}) } }
-  isNameValid() {
-    return this.state.editedName === this.props.category.name || !this.props.existingCategoryNames.includes(this.state.editedName)
-  }
-  onSaveEdits() {
-    this.props.onEdit({...this.props.category, name: this.state.editedName})
-    this.setState({editing: false})
-  }
-  onDelete() {
-    this.props.onDelete(this.props.category)
-  }
-
-  renderEditHeader() {
-    return (
-      <div className='row'>
-        <div className='col-md-10'>
-          <div className={`field${!this.isNameValid() ? ' error' : ''}`}>
-            <h3><input name='name' value={this.state.editedName} onChange={this.onChangeName.bind(this)} /></h3>
-          </div>
-        </div>
-        <div className='col-md-2'>
-          <span className='ui button primary tiny' onClick={this.onSaveEdits.bind(this)}>
-            Save
-          </span>
-        </div>
-      </div>
-    )
-  }
-
-  renderShowHeader() {
-    const {category, onEditCategory} = this.props
-    return (
-      <div className='row'>
-        <div className='col-md-10'><h3>{category.name}</h3></div>
-        <div className='col-md-2'>
-          {!!this.state.hovering &&
-            <div className='category-actions'>
-              <span className='ui button tiny' onClick={this.onStartEditing.bind(this)}>
-                Edit
-              </span>
-              <span className='ui button tiny' onClick={this.onDelete.bind(this)}>
-                Delete
-              </span>
-            </div>
-          }
-        </div>
-      </div>
-    )
-  }
-
-  renderHeader() { return !!this.state.editing ? this.renderEditHeader() : this.renderShowHeader() }
-
-  render() {
-    return (
-      <div
-        className='category-header'
-        onMouseEnter={this.onEnter.bind(this)}
-        onMouseLeave={this.onLeave.bind(this)}
-      >
-        {this.renderHeader()}
-      </div>
-    )
-  }
-}
-
-const NullCategoryHeader = ({}) => (
-  <div className='category-header'>
-    <h3>Uncategorized</h3>
-  </div>
-)
-
-const Category = ({category, categories, facts, onEditCategory, onDeleteCategory, organization, existingVariableNames}) => (
-  <div className='category'>
-    {!!category ? <CategoryHeader
-        category={category}
-        existingCategoryNames={categories.map(c => c.name)}
-        onEdit={onEditCategory}
-        onDelete={onDeleteCategory}
-      /> : <NullCategoryHeader />
-    }
-    <div className='category-facts FactTab--factList'>
-      <FactListContainer
-        organization={organization}
-        facts={facts}
-        existingVariableNames={existingVariableNames}
-        categories={categories}
-        isEditable={true}
-        categoryId={!!category ? category.id : null}
-      />
-    </div>
-  </div>
-)
-
 const FactTab = ({
   organization,
   facts,
@@ -396,9 +253,11 @@ const FactTab = ({
   return (
     <div className='FactTab row'>
       {_.map(categorySets, ({category, facts}) => (
-        <div className='col-md-6'>
+        <div
+          className='col-md-6'
+          key={!!category ? category.name : 'uncategorized'}
+        >
           <Category
-            key={!!category ? category.name : 'uncategorized'}
             category={category}
             categories={factCategories}
             onEditCategory={onEditCategory}
@@ -410,11 +269,8 @@ const FactTab = ({
         </div>
       ))}
 
-      <div className='col-md-6'>
-        <NewCategoryForm
-          existingCategoryNames={existingCategoryNames}
-          onAddCategory={onAddCategory}
-        />
+      <div className='col-md-6' key='new'>
+        <CategoryForm onSubmit={onAddCategory} existingCategoryNames={existingCategoryNames} />
       </div>
     </div>
   )

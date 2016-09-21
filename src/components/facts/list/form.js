@@ -4,7 +4,7 @@ import {navigateFn} from 'gModules/navigation/actions'
 
 import {spaceUrlById} from 'gEngine/space'
 import {hasRequiredProperties, isExportedFromSpace, simulateFact, FactPT} from 'gEngine/facts'
-import {PTFactCategory} from 'gEngine/fact_category'
+import {FactCategoryPT} from 'gEngine/fact_category'
 import {addStats} from 'gEngine/simulation'
 import {orStr} from 'gEngine/utils'
 
@@ -31,7 +31,7 @@ export class FactForm extends Component {
   }
 
   static propTypes = {
-    categories: PropTypes.arrayOf(PTFactCategory).isRequired,
+    categories: PropTypes.arrayOf(FactCategoryPT).isRequired,
     existingVariableNames: PropTypes.arrayOf(PropTypes.string).isRequired,
     onSubmit: PropTypes.func.isRequired,
     onCancel: PropTypes.func,
