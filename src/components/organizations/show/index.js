@@ -284,11 +284,11 @@ class CategoryHeader extends Component {
     return this.state.editedName === this.props.category.name || !this.props.existingCategoryNames.includes(this.state.editedName)
   }
   onSaveEdits() {
-    this.props.onEditCategory({...this.props.category, name: this.state.editedName})
+    this.props.onEdit({...this.props.category, name: this.state.editedName})
     this.setState({editing: false})
   }
   onDelete() {
-    this.props.onDeleteCategory(this.props.category)
+    this.props.onDelete(this.props.category)
   }
 
   renderEditHeader() {
@@ -355,8 +355,8 @@ const Category = ({category, categories, facts, onEditCategory, onDeleteCategory
     {!!category ? <CategoryHeader
         category={category}
         existingCategoryNames={categories.map(c => c.name)}
-        onEditCategory={onEditCategory}
-        onDeleteCategory={onDeleteCategory}
+        onEdit={onEditCategory}
+        onDelete={onDeleteCategory}
       /> : <NullCategoryHeader />
     }
     <div className='category-facts FactTab--factList'>
@@ -369,23 +369,6 @@ const Category = ({category, categories, facts, onEditCategory, onDeleteCategory
         categoryId={!!category ? category.id : null}
       />
     </div>
-  </div>
-)
-
-const CategoryList = ({categoriesToRender, allCategories, organization, onEditCategory, onDeleteCategory, existingVariableNames}) => (
-  <div className='category-list'>
-    {_.map(categoriesToRender, ({category, facts}) => (
-      <Category
-        key={!!category ? category.name : 'uncategorized'}
-        category={category}
-        categories={allCategories}
-        onEditCategory={onEditCategory}
-        onDeleteCategory={onDeleteCategory}
-        facts={facts}
-        existingVariableNames={existingVariableNames}
-        organization={organization}
-      />
-    ))}
   </div>
 )
 
