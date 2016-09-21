@@ -407,41 +407,30 @@ const FactTab = ({
       facts: _.filter(facts, f => !f.category_id),
     },
   ]
-  const numCategories = categorySets.length
-  const leftListSize = Math.floor(numCategories/2)
-  const categoriesLeft = _.take(categorySets, leftListSize)
-  const categoriesRight = _.takeRight(categorySets, numCategories - leftListSize)
-
   const existingVariableNames = facts.map(e.facts.getVar)
   const existingCategoryNames = _.map(factCategories, c => c.name)
 
   return (
     <div className='FactTab row'>
+      {_.map(categorySets, ({category, facts}) => (
+        <div className='col-md-6'>
+          <Category
+            key={!!category ? category.name : 'uncategorized'}
+            category={category}
+            categories={factCategories}
+            onEditCategory={onEditCategory}
+            onDeleteCategory={onDeleteCategory}
+            facts={facts}
+            existingVariableNames={existingVariableNames}
+            organization={organization}
+          />
+        </div>
+      ))}
+
       <div className='col-md-6'>
         <NewCategoryForm
           existingCategoryNames={existingCategoryNames}
           onAddCategory={onAddCategory}
-        />
-        <CategoryList
-          categoriesToRender={categoriesLeft}
-          allCategories={factCategories}
-          organization={organization}
-          existingVariableNames={existingVariableNames}
-          existingCategoryNames={existingCategoryNames}
-          onEditCategory={onEditCategory}
-          onDeleteCategory={onDeleteCategory}
-        />
-      </div>
-
-      <div className='col-md-6'>
-        <CategoryList
-          categoriesToRender={categoriesRight}
-          allCategories={factCategories}
-          organization={organization}
-          existingVariableNames={existingVariableNames}
-          existingCategoryNames={existingCategoryNames}
-          onEditCategory={onEditCategory}
-          onDeleteCategory={onDeleteCategory}
         />
       </div>
     </div>
