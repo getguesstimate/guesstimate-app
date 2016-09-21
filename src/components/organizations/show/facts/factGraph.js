@@ -118,7 +118,7 @@ export class FactGraph extends Component {
 
         sortedHeightOrderedNodes.push(withLocations)
       })
-      maxRowUsed = maxRowUsedInComponent
+      maxRowUsed = maxRowUsedInComponent + 1
       withFinalLocations.push(..._.flatten(sortedHeightOrderedNodes))
     })
 
