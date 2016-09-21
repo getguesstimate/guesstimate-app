@@ -15,11 +15,45 @@ const SpaceCard = ({space}) => (
   </a>
 )
 
+const allParentsWithin = nodeSet => n => _.every(n.parents, p => _.some(nodeSet, ({id}) => p === id))
+const anyParentsWithin = nodeSet => n => _.some(n.parents, p => _.some(nodeSet, ({id}) => p === id))
+const anyChildrenWithin = nodeSet => n => _.some(n.children, c => _.some(nodeSet, ({id}) => c === id))
+const anyRelativesWithin = nodeSet => n => anyParentsWithin(nodeSet)(n) || anyChildrenWithin(nodeSet)(n)
+
+function separateIntoHeightsAndStripInfiniteLoops(nodes) {
+  let unprocessedNodes = _utils.mutableCopy(nodes)
+  let heightOrderedNodes = []
+  while (!_.isEmpty(unprocessedNodes)) {
+    const nextLevelNodes = _.remove(unprocessedNodes, allParentsWithin(_.flatten(heightOrderedNodes)))
+    if (_.isEmpty(nextLevelNodes)) { break }
+    heightOrderedNodes.push(nextLevelNodes)
+  }
+  return heightOrderedNodes
+}
+
+function separateIntoDisconnectedComponents(nodes) {
+  if (_.isEmpty(nodes)) { return [] }
+  let unprocessedNodes = _utils.mutableCopy(nodes)
+  let components = []
+  let currentComponent = _.pullAt(unprocessedNodes, [0])
+  while (!_.isEmpty(unprocessedNodes)) {
+    const newComponentNodes = _.remove(unprocessedNodes, anyRelativesWithin(currentComponent))
+    if (_.isEmpty(newComponentNodes)) {
+      components.push(currentComponent)
+      currentComponent = _.pullAt(unprocessedNodes, [0])
+    } else {
+      currentComponent.push(...newComponentNodes)
+    }
+  }
+  components.push(currentComponent)
+  return components
+}
+
 export class FactGraph extends Component {
   itemsAndEdges() {
     const {facts, spaces} = this.props
 
-    const factNodes = _.map(facts, fact => ({
+    let factNodes = _.map(facts, fact => ({
       key: `fact:${fact.id}`,
       id: `fact:${fact.id}`,
       children: spaces.filter(s => _utils.orArr(s.imported_fact_ids).includes(fact.id)).map(({id}) => `space:${id}`),
@@ -27,8 +61,10 @@ export class FactGraph extends Component {
       component: <FactItem fact={fact} showModelLink={false}/>,
     }))
 
-    const intermediateSpaces = _.filter(spaces, s => s.exported_facts_count > 0 || !_.isEmpty(s.imported_fact_ids))
-    const spaceNodes = _.map(intermediateSpaces, s => ({
+    const isolatedFactNodes = _.remove(factNodes, n => _.isEmpty(n.children) && _.isEmpty(n.parents))
+
+    const spacesToDisplay = _.filter(spaces, s => s.exported_facts_count > 0 || !_.isEmpty(s.imported_fact_ids))
+    const spaceNodes = _.map(spacesToDisplay, s => ({
       key: `space:${s.id}`,
       id: `space:${s.id}`,
       parents: s.imported_fact_ids.map(id => `fact:${id}`),
@@ -37,52 +73,63 @@ export class FactGraph extends Component {
     }))
 
     let unprocessedNodes = [...factNodes, ...spaceNodes]
-    let heightOrderedNodes = []
-    const allParentswithin = nodeSet => n => _.every(n.parents, p => _.some(nodeSet, ({id}) => p === id))
-    while (!_.isEmpty(unprocessedNodes)) {
-      const nextLevelNodes = _.remove(unprocessedNodes, allParentswithin(_.flatten(heightOrderedNodes)))
-      if (_.isEmpty(nextLevelNodes)) { break }
-      heightOrderedNodes.push(nextLevelNodes)
-    }
+    const components = separateIntoDisconnectedComponents(unprocessedNodes)
+    const componentsHeightOrdered = _.map(components, separateIntoHeightsAndStripInfiniteLoops)
 
-    let sortedHeightOrderedNodes = []
-    let currColumn = 0
-    heightOrderedNodes.forEach(heightSet => {
-      const prevLayer = _utils.orArr(_.last(sortedHeightOrderedNodes))
-      let newLayer = _utils.mutableCopy(heightSet)
-      let newLayerOrdered = []
-      prevLayer.filter(n => !_.isEmpty(n.children)).forEach(n => {
-        const children = _.remove(newLayer, ({id}) => n.children.includes(id))
-        const childrenSorted = _.sortBy(children, c => -c.children.length)
-        newLayerOrdered.push(...childrenSorted)
-      })
-      const restSorted = _.sortBy(newLayer, n => -n.children.length)
-      newLayerOrdered.push(...restSorted)
+    let withFinalLocations = []
 
-      let currRow = 0
-      const withLocations = _.map(newLayerOrdered, node => {
-        const withLocation = {
-          ...node,
-          location: {row: currRow, column: currColumn},
-        }
-        if (node.children.length > 3) {
-          currRow += 2
+    let maxRowUsed = 0
+    componentsHeightOrdered.forEach(heightOrderedComponent => {
+      let sortedHeightOrderedNodes = []
+      let currColumn = 0
+      let maxRowUsedInComponent = maxRowUsed
+      heightOrderedComponent.forEach(heightSet => {
+        const prevLayer = _utils.orArr(_.last(sortedHeightOrderedNodes))
+        let newLayer = _utils.mutableCopy(heightSet)
+        let newLayerOrdered = []
+        prevLayer.filter(n => !_.isEmpty(n.children)).forEach(n => {
+          const children = _.remove(newLayer, ({id}) => n.children.includes(id))
+          const childrenSorted = _.sortBy(children, c => -c.children.length)
+          newLayerOrdered.push(...childrenSorted)
+        })
+        const restSorted = _.sortBy(newLayer, n => -n.children.length)
+        newLayerOrdered.push(...restSorted)
+
+        let currRow = maxRowUsed
+        const withLocations = _.map(newLayerOrdered, node => {
+          const withLocation = {
+            ...node,
+            location: {row: currRow, column: currColumn},
+          }
+          if (node.children.length > 3) {
+            currRow += 2
+          } else {
+            currRow += 1
+          }
+          return withLocation
+        })
+        maxRowUsedInComponent = Math.max(currRow, maxRowUsedInComponent)
+
+        if (newLayerOrdered.length > 3) {
+          currColumn += 2
         } else {
-          currRow += 1
+          currColumn += 1
         }
-        return withLocation
+
+        sortedHeightOrderedNodes.push(withLocations)
       })
-
-      if (newLayerOrdered.length > 3) {
-        currColumn += 2
-      } else {
-        currColumn += 1
-      }
-
-      sortedHeightOrderedNodes.push(withLocations)
+      maxRowUsed = maxRowUsedInComponent
+      withFinalLocations.push(..._.flatten(sortedHeightOrderedNodes))
     })
 
-    const items = _.flatten(sortedHeightOrderedNodes)
+    // Now we add locations to the isolated facts.
+    const width = Math.floor(Math.sqrt(isolatedFactNodes.length))
+    const isolatedFactNodesWithLocations = _.map(isolatedFactNodes, (n, i) => ({
+      ...n,
+      location: {row: maxRowUsed + 1 +  Math.floor(i/width), column: i % width},
+    }))
+
+    const items = [...isolatedFactNodesWithLocations, ...withFinalLocations]
 
     const locationById = id => _collections.gget(items, id, 'id', 'location')
 
