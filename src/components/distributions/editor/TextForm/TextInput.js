@@ -179,9 +179,16 @@ export class TextInput extends Component{
     }
   }
 
+  acceptSuggestionIfAppropriate() {
+    if (!_.isEmpty(this.props.suggestion) && this.nextWord() === this.props.suggestion) {
+      this.acceptSuggestion()
+      return true
+    }
+    return false
+  }
+
   handleTab(e){
-    if (!_.isEmpty(this.props.suggestion) && this.nextWord() === this.props.suggestion) { this.acceptSuggestion() }
-    else { this.props.onTab(e.shiftKey) }
+    if (!this.acceptSuggestionIfAppropriate()) { this.props.onTab(e.shiftKey) }
     e.preventDefault()
   }
 
@@ -202,6 +209,11 @@ export class TextInput extends Component{
     this.props.onBlur()
   }
 
+  handleReturn(e) {
+    if (!this.acceptSuggestionIfAppropriate()) { this.props.onReturn(e.shiftKey) }
+    return 'handled'
+  }
+
   render() {
     const [{hasErrors, width, value, validInputs}, {editorState}] = [this.props, this.state]
     const className = `TextInput ${width}` + (_.isEmpty(value) && hasErrors ? ' hasErrors' : '')
@@ -216,7 +228,7 @@ export class TextInput extends Component{
           onFocus={this.props.onFocus}
           onEscape={this.props.onEscape}
           editorState={editorState}
-          handleReturn={e => this.props.onReturn(e.shiftKey)}
+          handleReturn={this.handleReturn.bind(this)}
           handlePastedText={this.handlePastedText.bind(this)}
           onTab={this.handleTab.bind(this)}
           onBlur={this.handleBlur.bind(this)}
