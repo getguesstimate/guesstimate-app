@@ -11,6 +11,12 @@ String.prototype.capitalizeFirstLetter = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
 }
 
+export const CardListSection = ({children}) => (
+  <div className='CardListSection'>
+    {children}
+  </div>
+)
+
 export class CardListElement extends Component {
   static propTypes = {
     imageShape: PropTypes.oneOf(['circle', 'square']),
