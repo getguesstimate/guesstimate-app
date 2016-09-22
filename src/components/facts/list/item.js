@@ -8,7 +8,7 @@ import {isExportedFromSpace, length, mean, adjustedConfidenceInterval} from 'gEn
 import {DistributionSummary} from 'gComponents/distributions/summary/index'
 import Histogram from 'gComponents/simulations/histogram/index'
 
-export const FactItem = ({fact, onEdit, isExportedFromSelectedSpace}) => {
+export const FactItem = ({fact, onEdit, isExportedFromSelectedSpace, showModelLink}) => {
   const exported_from_url = `${spaceUrlById(_.get(fact, 'exported_from_id'), {factsShown: 'true'})}`
   return (
     <div className='Fact--outer'>
@@ -45,7 +45,7 @@ export const FactItem = ({fact, onEdit, isExportedFromSelectedSpace}) => {
           <span className='ui button small options' onClick={onEdit}>Edit</span>
         </div>
 
-      {!!isExportedFromSpace(fact) &&
+      {!!isExportedFromSpace(fact) && showModelLink &&
         <div className='section-exported' onClick={!isExportedFromSelectedSpace && navigateFn(exported_from_url)}>
           {!isExportedFromSelectedSpace && <Icon name='share'/>}
         </div>
