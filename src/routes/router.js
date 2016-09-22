@@ -26,6 +26,8 @@ import Settings from 'gComponents/users/settings/container'
 import PlanIndex from 'gComponents/plans/index/container'
 import PlansStyleGuide from 'gComponents/plans/index/StyleGuide'
 
+import {extractTokenFromUrl} from 'gEngine/space'
+
 import configureStore from './middleware'
 
 import * as segment from 'servers/segment/index'
@@ -77,9 +79,10 @@ export default Router.extend({
         showCalculatorId={parseInt(calculatorId)}
         showCalculatorResults={window.location.search.includes('showResults=true')}
         factsShown={window.location.search.includes('factsShown=true')}
+        shareableLinkToken={extractTokenFromUrl(window.location.search)}
         key={parseInt(id)}
       />,
-      {isFluid: true, showFooter: false, fullHeight: true},
+      {isFluid: true, showFooter: false, fullHeight: true}
     )
   },
   spaceShowEmbed(id) { this.render(<SpaceShow spaceId={id} embed={true}/>, {isFluid: true, showFooter: false, embed: true, fullHeight: true}) },

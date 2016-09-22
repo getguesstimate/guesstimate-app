@@ -8,11 +8,13 @@ export default class Models extends AbstractResource {
     this.guesstimateMethod({url, method})(callback)
   }
 
-  get(msg, callback) {
-    const url = `spaces/${msg.spaceId}`
+  get(spaceId, shareableLinkToken, callback) {
+    let url = `spaces/${spaceId}`
     const method = 'GET'
 
-    this.guesstimateMethod({url, method})(callback)
+    const headers = !!shareableLinkToken ? {'Shareable-Link-Token': shareableLinkToken} : {}
+
+    this.guesstimateMethod({url, method, headers})(callback)
   }
 
   destroy(msg, callback) {
@@ -28,6 +30,27 @@ export default class Models extends AbstractResource {
     const data = {space: msg}
 
     this.guesstimateMethod({url, method, data})(callback)
+  }
+
+  enableShareableLink(spaceId, callback) {
+    const url = `spaces/${spaceId}/enable_shareable_link`
+    const method = 'PATCH'
+
+    this.guesstimateMethod({url, method})(callback)
+  }
+
+  disableShareableLink(spaceId, callback) {
+    const url = `spaces/${spaceId}/disable_shareable_link`
+    const method = 'PATCH'
+
+    this.guesstimateMethod({url, method})(callback)
+  }
+
+  rotateShareableLink(spaceId, callback) {
+    const url = `spaces/${spaceId}/rotate_shareable_link`
+    const method = 'PATCH'
+
+    this.guesstimateMethod({url, method})(callback)
   }
 
   create(msg, callback) {
