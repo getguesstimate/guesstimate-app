@@ -51,6 +51,10 @@ export class FactForm extends Component {
     }
   }
 
+  componentDidMount() {
+    this.refs.name.focus()
+  }
+
   setFactState(newFactState, otherState = {}) { this.setState({...otherState, runningFact: {...this.state.runningFact, ...newFactState}}) }
   onChangeName(e) {
     const name = _.get(e, 'target.value')
@@ -147,6 +151,7 @@ export class FactForm extends Component {
                 value={name}
                 onChange={this.onChangeName.bind(this)}
                 onKeyDown={this.submitIfEnter.bind(this)}
+                ref='name'
               />
             </div>
           </div>
