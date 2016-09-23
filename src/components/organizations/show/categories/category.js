@@ -37,8 +37,8 @@ class CategoryHeader extends Component {
     const {category, onEditCategory} = this.props
     return (
       <div className='row'>
-        <div className='col-md-10'><h3>{category.name}</h3></div>
-        <div className='col-md-2'>
+        <div className='col-md-7'><h3>{category.name}</h3></div>
+        <div className='col-md-5'>
           {!!this.state.hovering &&
             <div className='category-actions'>
               <span className='ui button tiny' onClick={this.onStartEditing.bind(this)}>
@@ -74,7 +74,7 @@ const NullCategoryHeader = ({}) => (
 )
 
 export const Category = ({category, categories, facts, onEditCategory, onDeleteCategory, organization, existingVariableNames}) => (
-  <div className='category'>
+  <div>
     {!!category ? <CategoryHeader
         category={category}
         existingCategoryNames={categories.map(c => c.name)}
@@ -82,15 +82,13 @@ export const Category = ({category, categories, facts, onEditCategory, onDeleteC
         onDelete={onDeleteCategory}
       /> : <NullCategoryHeader />
     }
-    <div className='category-facts FactTab--factList'>
-      <FactListContainer
-        organization={organization}
-        facts={facts}
-        existingVariableNames={existingVariableNames}
-        categories={categories}
-        isEditable={true}
-        categoryId={!!category ? category.id : null}
-      />
-    </div>
+    <FactListContainer
+      organization={organization}
+      facts={facts}
+      existingVariableNames={existingVariableNames}
+      categories={categories}
+      isEditable={true}
+      categoryId={!!category ? category.id : null}
+    />
   </div>
 )

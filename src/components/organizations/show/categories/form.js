@@ -53,7 +53,7 @@ export class CategoryForm extends Component {
             className={`ui button primary tiny${!this.isValid() ? ' disabled' : ''}`}
             onClick={this.onSubmit.bind(this)}
           >
-            Submit
+            Save
           </span>
         </div>
       </div>

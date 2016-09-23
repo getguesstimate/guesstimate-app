@@ -268,26 +268,29 @@ const FactTab = ({
   const existingCategoryNames = _.map(factCategories, c => c.name)
 
   return (
-    <div className='FactTab row'>
-      {_.map(categorySets, ({category, facts}) => (
-        <div
-          className='col-md-6'
-          key={!!category ? category.name : 'uncategorized'}
-        >
-          <Category
-            category={category}
-            categories={factCategories}
-            onEditCategory={onEditCategory}
-            onDeleteCategory={onDeleteCategory}
-            facts={facts}
-            existingVariableNames={existingVariableNames}
-            organization={organization}
-          />
-        </div>
-      ))}
-
-      <div className='col-md-6' key='new'>
+    <div className='FactTab'>
+      <div className='row'>
+        {_.map(categorySets, ({category, facts}) => (
+          <div
+            className='col-md-6 Category'
+            key={!!category ? category.name : 'uncategorized'}
+          >
+            <Category
+              category={category}
+              categories={factCategories}
+              onEditCategory={onEditCategory}
+              onDeleteCategory={onDeleteCategory}
+              facts={facts}
+              existingVariableNames={existingVariableNames}
+              organization={organization}
+            />
+          </div>
+        ))}
+      </div>
+      <div className='row'>
+        <div className='col-md-6'>
         <CategoryForm onSubmit={onAddCategory} existingCategoryNames={existingCategoryNames} />
+        </div>
       </div>
     </div>
   )

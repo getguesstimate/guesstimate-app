@@ -59,8 +59,17 @@
       color: #666;
     }
 
-    .category {
-      float: left;
+    .Category {
+      margin-bottom: 3em;
+
+      h3{
+        color: #888;
+        font-size: 1.4em;
+        font-style: italic;
+        font-weight: 200;
+        margin-bottom: .3em;
+        margin-top: .5em;
+      }
     }
   }
 }
