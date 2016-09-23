@@ -11,10 +11,9 @@ import {or} from 'gEngine/utils'
 
 import {isData, formatData} from 'lib/guesstimator/formatter/formatters/Data'
 
-//function findWithRegex(baseRegex, contentBlock, callback) {
-function findWithRegex(regex, contentBlock, callback) {
+function findWithRegex(baseRegex, contentBlock, callback) {
   const text = contentBlock.getText()
-  //const regex = new RegExp(baseRegex.source, 'g')
+  const regex = new RegExp(baseRegex.source, 'g')
   let matchArr, start
   while ((matchArr = regex.exec(text)) !== null) {
     start = matchArr.index
@@ -48,7 +47,10 @@ export class TextInput extends Component{
     value: PropTypes.string,
   }
 
-  factRegex() { return this.props.canUseOrganizationFacts ? HANDLE_REGEX : GLOBALS_ONLY_REGEX }
+  factRegex() {
+    const baseRegex = this.props.canUseOrganizationFacts ? HANDLE_REGEX : GLOBALS_ONLY_REGEX
+    return new RegExp(baseRegex, 'g') // We always want a fresh, global regex.
+  }
 
   decoratorList(extraDecorators=[]) {
     const {validInputs, errorInputs} = this.props
