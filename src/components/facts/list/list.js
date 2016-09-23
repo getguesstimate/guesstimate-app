@@ -7,11 +7,13 @@ import {getVar} from 'gEngine/facts'
 import {utils} from 'gEngine/engine'
 
 import './style.css'
+import Icon from 'react-fa'
 
 export class FactList extends Component {
   state = {
     editingFactId: null,
     newFactKey: 0,
+    showNewForm: false
   }
 
   componentWillUpdate(newProps) {
@@ -64,6 +66,7 @@ export class FactList extends Component {
       categories={categories}
       buttonText={'Create'}
       onSubmit={this.onAddFact.bind(this)}
+      onCancel={this.hideNewForm.bind(this)}
     />
   }
 
@@ -102,13 +105,30 @@ export class FactList extends Component {
     return imported_fact_ids.includes(id)
   }
 
+  hideNewForm() {
+    this.setState({showNewForm: false})
+  }
+
+  showNewForm() {
+    this.setState({showNewForm: true})
+  }
+
   render() {
     return (
       <div className='FactsTab'>
         {this.props.spaceId && this.renderSpaceFacts()}
         {!this.props.spaceId && this.renderFactSublist(this.props.facts)}
-        {this.props.isEditable && this.renderNewForm()}
+        {this.props.isEditable && this.state.showNewForm && this.renderNewForm()}
+        {this.props.isEditable && !this.state.showNewForm && <NewButton onClick={this.showNewForm.bind(this)}/>}
       </div>
     )
   }
 }
+
+const NewButton = ({onClick}) => (
+  <a className='NewFactButton' href='#' onClick={onClick}>
+    <Icon name='plus'/>
+    New Fact
+  </a>
+)
+

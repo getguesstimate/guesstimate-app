@@ -51,6 +51,10 @@ export class FactForm extends Component {
     }
   }
 
+  componentDidMount() {
+    this.refs.name.focus()
+  }
+
   setFactState(newFactState, otherState = {}) { this.setState({...otherState, runningFact: {...this.state.runningFact, ...newFactState}}) }
   onChangeName(e) {
     const name = _.get(e, 'target.value')
@@ -147,6 +151,7 @@ export class FactForm extends Component {
                 value={name}
                 onChange={this.onChangeName.bind(this)}
                 onKeyDown={this.submitIfEnter.bind(this)}
+                ref='name'
               />
             </div>
           </div>
@@ -163,12 +168,16 @@ export class FactForm extends Component {
             </div>
           </div>
           {!_.isEmpty(categories) &&
-            <select class='ui search dropdown' value={`${orStr(category_id)}`} onChange={this.onSelectCategory.bind(this)}>
-              <option value={''}>Uncategorized</option>
-              {_.map(categories, ({id, name}) => (
-                <option value={id} key={id}>{name}</option>
-              ))}
-            </select>
+            <div className='field'>
+              <div className='category-select'>
+                <select value={`${orStr(category_id)}`} onChange={this.onSelectCategory.bind(this)}>
+                  <option value={''}>Uncategorized</option>
+                  {_.map(categories, ({id, name}) => (
+                    <option value={id} key={id}>{name}</option>
+                  ))}
+                </select>
+            </div>
+            </div>
           }
           <div className='actions'>
             <span className={buttonClasses.join(' ')} onClick={this.onSubmit.bind(this)}>{buttonText}</span>
