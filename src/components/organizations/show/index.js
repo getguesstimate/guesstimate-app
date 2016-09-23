@@ -289,9 +289,30 @@ const FactTab = ({
       </div>
       <div className='row'>
         <div className='col-md-6'>
-        <CategoryForm onSubmit={onAddCategory} existingCategoryNames={existingCategoryNames} />
+          <NewCategorySection onSubmit={onAddCategory} existingCategoryNames={existingCategoryNames}/>
         </div>
       </div>
     </div>
   )
+}
+
+class NewCategorySection extends Component{
+  displayName: 'NewCategorySection'
+
+  state = {
+    showForm: false
+  }
+
+  onSubmit(name) {
+    this.setState({showForm: false})
+    this.props.onSubmit(name)
+  }
+
+  render() {
+    if (this.state.showForm){
+      return (<CategoryForm onSubmit={this.onSubmit.bind(this)} existingCategoryNames={this.props.existingCategoryNames} />)
+    } else {
+      return (<div className='ui button green' onClick={() => this.setState({showForm: true})}><Icon name='plus'/> New Category</div>)
+    }
+  }
 }
