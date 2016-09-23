@@ -66,6 +66,7 @@ export class FactList extends Component {
       categories={categories}
       buttonText={'Create'}
       onSubmit={this.onAddFact.bind(this)}
+      onCancel={this.hideNewForm.bind(this)}
     />
   }
 
@@ -102,6 +103,10 @@ export class FactList extends Component {
 
   isImportedFromSelectedSpaceFn({id}, imported_fact_ids) {
     return imported_fact_ids.includes(id)
+  }
+
+  hideNewForm() {
+    this.setState({showNewForm: false})
   }
 
   showNewForm() {
