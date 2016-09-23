@@ -110,6 +110,9 @@ export class TextInput extends Component{
   deleteOldSuggestion(oldSuggestion) {
     const freshEditorState = this.addText('', true, oldSuggestion.length)
     this.setState({editorState: this.stripExtraDecorators(freshEditorState)})
+
+    const text = this.text(freshEditorState)
+    if (text !== this.props.value) { this.props.onChange(text) }
   }
 
   addSuggestion() {
