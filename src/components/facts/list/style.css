@@ -11,6 +11,29 @@ $blue-a1: #4A6A88;
   }
 }
 
+a.NewFactButton {
+  background-color: $grey-a1;
+  border-radius: 2px;
+  width: 100%;
+  float: left;
+  padding: .4em .7em;
+  transition: all .3s;
+  color: #767575;
+  font-size: 1.2em;
+  margin-top: .3em;
+
+  .fa {
+    margin-right: .5em;
+  }
+
+  &:hover {
+    color: #1a5a2c;
+    background-color: rgba(89, 168, 114, 0.54);
+    transition: all .3s;
+  }
+}
+
+
 .Fact--outer {
   border: 1px solid rgba(0,0,0,0);
   float: left;
