@@ -11,8 +11,10 @@ import {or} from 'gEngine/utils'
 
 import {isData, formatData} from 'lib/guesstimator/formatter/formatters/Data'
 
+//function findWithRegex(baseRegex, contentBlock, callback) {
 function findWithRegex(regex, contentBlock, callback) {
   const text = contentBlock.getText()
+  //const regex = new RegExp(baseRegex.source, 'g')
   let matchArr, start
   while ((matchArr = regex.exec(text)) !== null) {
     start = matchArr.index
