@@ -5,9 +5,10 @@ import ReactDOM from 'react-dom'
 import Icon from 'react-fa'
 
 import {SpaceCard, NewSpaceCard} from 'gComponents/spaces/cards'
-
 import Container from 'gComponents/utility/container/Container'
 import {MembersTab} from './members'
+import {Category} from './categories/category'
+import {CategoryForm} from './categories/form'
 import {FactListContainer} from 'gComponents/facts/list/container.js'
 import {FactGraph} from './facts/factGraph'
 
@@ -37,6 +38,7 @@ function mapStateToProps(state) {
     me: state.me,
     organizations: state.organizations,
     organizationFacts: state.facts.organizationFacts,
+    globalFactCategories: state.factCategories,
   }
 }
 
@@ -60,9 +62,10 @@ export default class OrganizationShow extends Component{
     this.props.dispatch(spaceActions.fetch({organizationId: this.props.organizationId}))
   }
 
+  organization() { return e.collections.get(this.props.organizations, this.props.organizationId) }
+
   url(openTab) {
-    const organization = this.props.organizations.find(u => u.id.toString() === this.props.organizationId.toString())
-    const base = e.organization.url(organization)
+    const base = e.organization.url(this.organization())
     if (_.isEmpty(base)) { return '' }
     return `${base}/${openTab}`
   }
@@ -78,6 +81,16 @@ export default class OrganizationShow extends Component{
 
   destroyMembership(membershipId) {
     this.props.dispatch(userOrganizationMembershipActions.destroy(membershipId))
+  }
+
+  onAddCategory(newCategory) {
+    this.props.dispatch(organizationActions.addFactCategory(this.organization(), newCategory))
+  }
+  onEditCategory(editedCategory) {
+    this.props.dispatch(organizationActions.editFactCategory(this.organization(), editedCategory))
+  }
+  onDeleteCategory(category) {
+    this.props.dispatch(organizationActions.deleteFactCategory(this.organization(), category))
   }
 
   onRemove(member) {
@@ -96,12 +109,15 @@ export default class OrganizationShow extends Component{
   }
 
   render() {
-    const {organizationId, organizations, organizationFacts, members, memberships, invitations} = this.props
-    const {openTab} = this.state
+    const {
+      props: {organizationId, organizations, organizationFacts, members, memberships, invitations, globalFactCategories},
+      state: {openTab},
+    } = this
+    const factCategories = e.collections.filter(globalFactCategories, organizationId, 'organization_id')
     const spaces =  _.orderBy(this.props.organizationSpaces.asMutable(), ['updated_at'], ['desc'])
-    const organization = organizations.find(u => u.id.toString() === organizationId.toString())
+    const organization = this.organization()
     const hasPrivateAccess = e.organization.hasPrivateAccess(organization)
-    const facts = _.get(organizationFacts.find(f => f.variable_name === `organization_${organizationId}`), 'children') || []
+    const facts = e.organization.findFacts(organizationId, organizationFacts)
     const meIsAdmin = !!organization && (organization.admin_id === this.props.me.id)
     const meIsMember = meIsAdmin || !!(members.find(m => m.id === this.props.me.id))
 
@@ -163,7 +179,14 @@ export default class OrganizationShow extends Component{
             }
 
             {(openTab === FACT_BOOK_TAB) && meIsMember && !!facts &&
-              <FactTab organizationId={organizationId}/>
+              <FactTab
+                organization={organization}
+                facts={facts}
+                factCategories={factCategories}
+                onAddCategory={this.onAddCategory.bind(this)}
+                onEditCategory={this.onEditCategory.bind(this)}
+                onDeleteCategory={this.onDeleteCategory.bind(this)}
+              />
             }
 
             {(openTab === FACT_GRAPH_TAB) && meIsMember && !!facts &&
@@ -223,19 +246,73 @@ const OrganizationTabButtons = ({tabs, openTab, changeTab}) => (
   </div>
 )
 
-const FactTab = ({organizationId}) => (
-  <div className='FactTab row'>
-    <div className='col-md-3'>
-      <h2> Private Organizational Facts </h2>
-      <p> Facts can be used in private organization models by referencing them with '#' symbols. </p>
-    </div>
+const FactTab = ({
+  organization,
+  facts,
+  factCategories,
+  onAddCategory,
+  onEditCategory,
+  onDeleteCategory,
+}) => {
+  const categorySets = [
+    ..._.map(factCategories, c => ({
+      category: c,
+      facts: e.collections.filter(facts, c.id, 'category_id'),
+    })),
+    {
+      category: null,
+      facts: _.filter(facts, f => !f.category_id),
+    },
+  ]
+  const existingVariableNames = facts.map(e.facts.getVar)
+  const existingCategoryNames = _.map(factCategories, c => c.name)
 
-    <div className='col-md-1'></div>
-    <div className='col-md-8'>
-      <div className='FactTab--factList'>
-        <FactListContainer organizationId={organizationId} isEditable={true}/>
+  return (
+    <div className='FactTab'>
+      <div className='row'>
+        {_.map(categorySets, ({category, facts}) => (
+          <div
+            className='col-md-6 Category'
+            key={!!category ? category.name : 'uncategorized'}
+          >
+            <Category
+              category={category}
+              categories={factCategories}
+              onEditCategory={onEditCategory}
+              onDeleteCategory={onDeleteCategory}
+              facts={facts}
+              existingVariableNames={existingVariableNames}
+              organization={organization}
+            />
+          </div>
+        ))}
+      </div>
+      <div className='row'>
+        <div className='col-md-6'>
+          <NewCategorySection onSubmit={onAddCategory} existingCategoryNames={existingCategoryNames}/>
+        </div>
       </div>
     </div>
-  </div>
-)
+  )
+}
 
+class NewCategorySection extends Component{
+  displayName: 'NewCategorySection'
+
+  state = {
+    showForm: false
+  }
+
+  onSubmit(name) {
+    this.setState({showForm: false})
+    this.props.onSubmit(name)
+  }
+
+  render() {
+    if (this.state.showForm){
+      return (<CategoryForm onSubmit={this.onSubmit.bind(this)} existingCategoryNames={this.props.existingCategoryNames} />)
+    } else {
+      return (<div className='ui button green' onClick={() => this.setState({showForm: true})}><Icon name='plus'/> New Category</div>)
+    }
+  }
+}

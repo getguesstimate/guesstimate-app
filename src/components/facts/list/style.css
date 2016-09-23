@@ -11,11 +11,34 @@ $blue-a1: #4A6A88;
   }
 }
 
+a.NewFactButton {
+  background-color: $grey-a1;
+  border-radius: 2px;
+  width: 100%;
+  float: left;
+  padding: .4em .7em;
+  transition: all .3s;
+  color: #767575;
+  font-size: 1.2em;
+  margin-top: .3em;
+
+  .fa {
+    margin-right: .5em;
+  }
+
+  &:hover {
+    color: #1a5a2c;
+    background-color: rgba(89, 168, 114, 0.54);
+    transition: all .3s;
+  }
+}
+
+
 .Fact--outer {
   border: 1px solid rgba(0,0,0,0);
   float: left;
   width: 100%;
-  margin: .2em 0;
+  margin: .1em 0;
 
   &:hover {
     border-color: #d9dee2;
@@ -26,7 +49,7 @@ $blue-a1: #4A6A88;
   background-color: white;
   float: left;
   width: 100%;
-  border-radius: 2px;
+  border-radius: 1px;
   display: flex;
   flex-direction: row;
 
@@ -69,7 +92,7 @@ $blue-a1: #4A6A88;
   min-width: 6em;
   flex: 1.4;
   position: relative;
-  padding: .4em 0 .4em .4em;
+  padding: .3em 0 .2em .4em;
 
   .histogram {
     left: 10%;
@@ -88,6 +111,7 @@ $blue-a1: #4A6A88;
     margin-top: 2px;
     position: relative;
     z-index: 1;
+    font-size: .88em;
 
     .DistributionSummary .mean {
       color: $grey-a2;
@@ -109,10 +133,10 @@ $blue-a1: #4A6A88;
   float: left;
   flex: 6;
   margin-top: .05em;
-  padding: .4em .4em 0;
+  padding: .3em .4em 0;
 
   .fact-name {
-    font-size: 1.3em;
+    font-size: 1.2em;
     color: #333;
     float: left;
     width: 100%;
@@ -121,7 +145,7 @@ $blue-a1: #4A6A88;
   .variable-name {
     float: left;
     line-height: 1.2em;
-    margin-top: .4em;
+    margin-top: .2em;
 
     &.variable-token {
       padding: 0 3px;
@@ -163,12 +187,23 @@ $blue-a1: #4A6A88;
 
     textarea {
       margin-top: .3em;
-      font-size: 1rem;
+      font-size: .9rem;
+    }
+  }
+
+  .category-select {
+    margin-top: .5em;
+    float: left;
+    width: 100%;
+
+    select {
+      width: 50%;
     }
   }
 
   .actions {
      margin-top: 1em;
+     margin-bottom: .3em;
      float: left;
   }
 }
@@ -194,7 +229,7 @@ $blue-a1: #4A6A88;
 
 .Fact > .section-exported .fa {
   color: #a2acbb;
-  font-size: 1.25em;
+  font-size: 1.1em;
   margin-top: .1em;
 }
 

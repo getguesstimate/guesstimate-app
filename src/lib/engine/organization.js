@@ -1,5 +1,6 @@
 import * as _userOrganizationMemberships from './userOrganizationMemberships'
 import * as _collections from './collections'
+import {orArr} from './utils'
 
 export const url = o => !!_.get(o, 'id') ? urlById(o.id) : ''
 export const image = o => _.isEmpty(_.get(o, 'picture')) ? '/organization-default-image.png' : o.picture
@@ -24,6 +25,5 @@ export function organizationUsers(organizationId, users, memberships) {
 
 export function findFacts(organizationId, organizationFacts) {
   const readableId = organizationReadableId({id: organizationId})
-  const containingFact = _collections.get(organizationFacts, readableId, 'variable_name')
-  return _.get(containingFact, 'children') || []
+  return orArr(_collections.gget(organizationFacts, readableId, 'variable_name', 'children'))
 }

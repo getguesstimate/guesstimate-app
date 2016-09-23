@@ -1,5 +1,14 @@
 @import './styles/variables.css';
 
+.shareable-link {
+  overflow: scroll;
+  cursor: auto;
+
+  span {
+    cursor: text;
+  }
+}
+
 .PrivacyToggle li .info-section .warning{
   color: $black-1
 }

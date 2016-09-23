@@ -4,7 +4,9 @@ import {navigateFn} from 'gModules/navigation/actions'
 
 import {spaceUrlById} from 'gEngine/space'
 import {hasRequiredProperties, isExportedFromSpace, simulateFact, FactPT} from 'gEngine/facts'
+import {FactCategoryPT} from 'gEngine/fact_category'
 import {addStats} from 'gEngine/simulation'
+import {orStr} from 'gEngine/utils'
 
 import {isData, formatData} from 'lib/guesstimator/formatter/formatters/Data'
 import {getVariableNameFromName} from 'lib/generateVariableNames/nameToVariableName'
@@ -17,16 +19,19 @@ export class FactForm extends Component {
       variable_name: '',
       exported_from_id: null,
       metric_id: null,
+      category_id: null,
       simulation: {
         sample: {
           values: [],
           errors: [],
         },
       },
-    }
+    },
+    categories: [],
   }
 
   static propTypes = {
+    categories: PropTypes.arrayOf(FactCategoryPT).isRequired,
     existingVariableNames: PropTypes.arrayOf(PropTypes.string).isRequired,
     onSubmit: PropTypes.func.isRequired,
     onCancel: PropTypes.func,
@@ -34,7 +39,7 @@ export class FactForm extends Component {
   }
 
   state = {
-    runningFact: this.props.startingFact,
+    runningFact: {...this.props.startingFact, category_id: _.get(this, 'props.startingFact.category_id') || this.props.categoryId},
     variableNameManuallySet: !_.isEmpty(_.get(this.props, 'startingFact.variable_name')),
     currentExpressionSimulated: true,
     submissionPendingOnSimulation: false,
@@ -46,12 +51,19 @@ export class FactForm extends Component {
     }
   }
 
+  componentDidMount() {
+    this.refs.name.focus()
+  }
+
   setFactState(newFactState, otherState = {}) { this.setState({...otherState, runningFact: {...this.state.runningFact, ...newFactState}}) }
   onChangeName(e) {
     const name = _.get(e, 'target.value')
     this.setFactState(
       this.state.variableNameManuallySet ? {name} : {name, variable_name: getVariableNameFromName(name, this.props.existingVariableNames)}
     )
+  }
+  onSelectCategory(c) {
+    this.setFactState({category_id: c.target.value})
   }
   onChangeVariableName(e) { this.setFactState({variable_name: _.get(e, 'target.value')}, {variableNameManuallySet: true}) }
   onChangeExpression(e) { this.setFactState({expression: _.get(e, 'target.value')}, {currentExpressionSimulated: false}) }
@@ -114,8 +126,8 @@ export class FactForm extends Component {
 
   render() {
     const {
-      props: {buttonText, onCancel, onDelete},
-      state: {submissionPendingOnSimulation, runningFact: {expression, name, variable_name}}
+      props: {buttonText, onCancel, onDelete, categories},
+      state: {submissionPendingOnSimulation, runningFact: {expression, name, variable_name, category_id}}
     } = this
 
     let buttonClasses = ['ui', 'button', 'small', 'primary']
@@ -139,6 +151,7 @@ export class FactForm extends Component {
                 value={name}
                 onChange={this.onChangeName.bind(this)}
                 onKeyDown={this.submitIfEnter.bind(this)}
+                ref='name'
               />
             </div>
           </div>
@@ -154,6 +167,18 @@ export class FactForm extends Component {
               />
             </div>
           </div>
+          {!_.isEmpty(categories) &&
+            <div className='field'>
+              <div className='category-select'>
+                <select value={`${orStr(category_id)}`} onChange={this.onSelectCategory.bind(this)}>
+                  <option value={''}>Uncategorized</option>
+                  {_.map(categories, ({id, name}) => (
+                    <option value={id} key={id}>{name}</option>
+                  ))}
+                </select>
+            </div>
+            </div>
+          }
           <div className='actions'>
             <span className={buttonClasses.join(' ')} onClick={this.onSubmit.bind(this)}>{buttonText}</span>
             {!!onCancel && <span className='ui button small' onClick={onCancel}>Cancel</span>}
