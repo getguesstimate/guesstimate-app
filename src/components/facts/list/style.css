@@ -38,7 +38,7 @@ a.NewFactButton {
   border: 1px solid rgba(0,0,0,0);
   float: left;
   width: 100%;
-  margin: .2em 0;
+  margin: .1em 0;
 
   &:hover {
     border-color: #d9dee2;
@@ -49,7 +49,7 @@ a.NewFactButton {
   background-color: white;
   float: left;
   width: 100%;
-  border-radius: 2px;
+  border-radius: 1px;
   display: flex;
   flex-direction: row;
 
@@ -92,7 +92,7 @@ a.NewFactButton {
   min-width: 6em;
   flex: 1.4;
   position: relative;
-  padding: .4em 0 .4em .4em;
+  padding: .3em 0 .2em .4em;
 
   .histogram {
     left: 10%;
@@ -111,6 +111,7 @@ a.NewFactButton {
     margin-top: 2px;
     position: relative;
     z-index: 1;
+    font-size: .88em;
 
     .DistributionSummary .mean {
       color: $grey-a2;
@@ -132,10 +133,10 @@ a.NewFactButton {
   float: left;
   flex: 6;
   margin-top: .05em;
-  padding: .4em .4em 0;
+  padding: .3em .4em 0;
 
   .fact-name {
-    font-size: 1.3em;
+    font-size: 1.2em;
     color: #333;
     float: left;
     width: 100%;
@@ -144,7 +145,7 @@ a.NewFactButton {
   .variable-name {
     float: left;
     line-height: 1.2em;
-    margin-top: .4em;
+    margin-top: .2em;
 
     &.variable-token {
       padding: 0 3px;
@@ -186,7 +187,7 @@ a.NewFactButton {
 
     textarea {
       margin-top: .3em;
-      font-size: 1rem;
+      font-size: .9rem;
     }
   }
 
@@ -228,7 +229,7 @@ a.NewFactButton {
 
 .Fact > .section-exported .fa {
   color: #a2acbb;
-  font-size: 1.25em;
+  font-size: 1.1em;
   margin-top: .1em;
 }
 
