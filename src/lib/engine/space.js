@@ -10,9 +10,19 @@ import * as _facts from './facts'
 import * as _collections from './collections'
 import * as _utils from './utils'
 
+export const spaceUrlById = (id, params = {}) => {
+  const root = (!!id) ? `/models/${id}` : ''
+  if (!_.isEmpty(params)){
+    const param_string = '?' + _.join(_.toPairs(params).map(pair => _.join(pair, '=')), '&')
+    return root + param_string
+  } else {
+    return root
+  }
+}
+
+export const url = ({id}) => spaceUrlById(id)
 import {BASE_URL} from 'lib/constants'
 
-export const url = ({id}) => (!!id) ? `/models/${id}` : ''
 export const urlWithToken = s => s.shareable_link_enabled ? `${BASE_URL}${url(s)}?token=${s.shareable_link_token}` : ''
 
 const TOKEN_REGEX = /token=([^&]+)/
@@ -21,7 +31,7 @@ export const extractTokenFromUrl = url => TOKEN_REGEX.test(url) ? url.match(TOKE
 export const withGraph = (space, graph) => ({...space, graph: subset(graph, space.id)})
 
 export function prepared(dSpace) {
-  const ownerName = _utils.isPresent(_.get(dSpace, 'organization_id')) ? _.get(dSpace, 'organization.name') : _.get(dSpace, 'user.name')
+  const ownerName = _utils.propIsPresent(dSpace, 'organization_id') ? _.get(dSpace, 'organization.name') : _.get(dSpace, 'user.name')
   return _utils.allPresent(dSpace, ownerName)
 }
 

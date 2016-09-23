@@ -26,10 +26,35 @@ const MetricReasoningIcon = () => (
   </span>
 )
 
-export const MetricToken = ({anotherFunctionSelected, readableId, onToggleSidebar, hasGuesstimateDescription}) => (
-  <div className='MetricToken'>
-    {anotherFunctionSelected && <MetricReadableId readableId={readableId} /> }
-    {!anotherFunctionSelected && <MetricExpandButton onToggleSidebar={onToggleSidebar}/> }
-    {!anotherFunctionSelected && hasGuesstimateDescription && <MetricReasoningIcon/> }
+const MetricExportedIcon = () => (
+  <div className='MetricToken--Corner'>
+    <div className='MetricToken--Corner-Triangle'></div>
+    <div className='MetricToken--Corner-Item'>
+      <i className='ion-ios-redo'/>
+    </div>
   </div>
 )
+
+export function tokenToShow({hovered, hasGuesstimateDescription, anotherFunctionSelected, exportedAsFact}){
+  if (anotherFunctionSelected) { return 'READABLE_ID' }
+  else if (hovered) { return 'EXPAND_BUTTON' }
+  else if (exportedAsFact) { return 'EXPORTED_AS_FACT' }
+  else if (hasGuesstimateDescription) { return 'REASONING_ICON' }
+  else { return false }
+}
+
+export const MetricToken = ({hovered, anotherFunctionSelected, readableId, onToggleSidebar, hasGuesstimateDescription, exportedAsFact}) => {
+  const show = tokenToShow({hovered, hasGuesstimateDescription, anotherFunctionSelected, exportedAsFact})
+  return (
+    <div>
+      {show === 'EXPORTED_AS_FACT' &&
+        <MetricExportedIcon/>
+      }
+      <div className='MetricToken'>
+        {show === 'READABLE_ID' && <MetricReadableId readableId={readableId}/>}
+        {show === 'EXPAND_BUTTON' && <MetricExpandButton onToggleSidebar={onToggleSidebar}/>}
+        {show === 'REASONING_ICON' && <MetricReasoningIcon/>}
+      </div>
+    </div>
+    )
+}

@@ -47,3 +47,21 @@
 .hovered .MetricToken .hover-toggle {
   display: block
 }
+
+.MetricToken--Corner-Triangle {
+  height: 0;
+  width: 0;
+  border-top: 36px solid #9fabb3;
+  border-left: 36px solid transparent;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.MetricToken--Corner-Item {
+  position: absolute;
+  top: 1px;
+  right: 3px;
+  color: white;
+  font-size: 1.1em;
+}

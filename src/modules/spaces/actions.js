@@ -101,7 +101,8 @@ export function fetch({userId, organizationId}) {
       if (err) {
         captureApiError('SpacesFetch', err.jqXHR, err.textStatus, err, {url: 'fetch'})
       } else if (value) {
-        const formatted = value.items.map(d => _.pick(d, ['id', 'name', 'description', 'user_id', 'organization_id', 'updated_at', 'metric_count', 'is_private', 'screenshot', 'big_screenshot']))
+        // TODO(matthew): Maybe we can remove metric_count?
+        const formatted = value.items.map(d => _.pick(d, ['id', 'name', 'description', 'user_id', 'organization_id', 'imported_fact_ids', 'exported_facts_count', 'updated_at', 'metric_count', 'is_private', 'screenshot', 'big_screenshot']))
         dispatch(sActions.fetchSuccess(formatted))
 
         const users = value.items.map(d => _.get(d, 'user')).filter(u => !!u)

@@ -52,6 +52,7 @@ const rootReducer = function app(state = {}, action){
     httpRequests: SI(httpRequestsR(state.httpRequests, action)),
     calculators: SI(reduxCrud.reducersFor('calculators')(state.calculators, action)),
     facts: SI(factsR(state.facts, action)),
+    factCategories: SI(reduxCrud.reducersFor('factCategories')(state.factCategories, action)),
   }
 }
 

@@ -52,7 +52,7 @@ class NumberShower {
     const order = orderOfMagnitude(number)
     if (order < -2) {
       return {value: this.metricSystem(number, order), power: order}
-    } else if (order < 3) {
+    } else if (order < 4) {
       return {value: this.metricSystem(number, 0)}
     } else if (order < 6) {
       return {value: this.metricSystem(number, 3), symbol: 'K'}

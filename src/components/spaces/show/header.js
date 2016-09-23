@@ -105,7 +105,6 @@ export class SpaceHeader extends Component {
                 {ownerName}
               </a>
             }
-
             {isPrivate && editableByMe &&
               <ShareableLinkOption
                 shareableLinkUrl={shareableLinkUrl}
@@ -118,8 +117,12 @@ export class SpaceHeader extends Component {
                 </div>
               </ShareableLinkOption>
             }
-
-            {(isPrivate || editableByMe) &&
+            {(ownerIsOrg)  &&
+              <a className='ui image label' href={ownerUrl + '/fact-graph'}>
+                <Icon name='expand'/>
+              </a>
+            }
+            {editableByMe &&
               <PrivacyToggle
                 editableByMe={editableByMe}
                 openLink={<a className='space-header-action'>{privacy_header}</a>}

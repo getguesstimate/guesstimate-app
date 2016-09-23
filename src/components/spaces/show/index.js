@@ -102,7 +102,7 @@ export default class SpacesShow extends Component {
     showTutorial: !!_.get(this, 'props.me.profile.needs_tutorial'),
     attemptedFetch: false,
     rightSidebar: {
-      type: !!this.props.showCalculatorId ? SHOW_CALCULATOR : CLOSED,
+      type: !!this.props.showCalculatorId ? SHOW_CALCULATOR : !!this.props.factsShown ? FACT_SIDEBAR : CLOSED,
       showCalculatorResults: this.props.showCalculatorResults,
       showCalculatorId: this.props.showCalculatorId,
     },
@@ -240,7 +240,7 @@ export default class SpacesShow extends Component {
     return parseInt(this.props.spaceId)
   }
 
-  canShowFactSidebar() {
+  canUseOrganizationFacts() {
     const organization = _.get(this, 'props.denormalizedSpace.organization')
     if (!organization) { return false }
 
@@ -265,14 +265,15 @@ export default class SpacesShow extends Component {
   }
   makeNewCalculator() { this.openRightSidebar({type: NEW_CALCULATOR_FORM}) }
   toggleFactSidebar() {
-    if (this.canShowFactSidebar()) {
-      if (this.state.rightSidebar.type !== FACT_SIDEBAR){ this.openRightSidebar({type: FACT_SIDEBAR}) }
-      else { this.closeRightSidebar() }
-    }
+    if (this.state.rightSidebar.type !== FACT_SIDEBAR){ this.openRightSidebar({type: FACT_SIDEBAR}) }
+    else { this.closeRightSidebar() }
   }
 
   rightSidebarBody() {
-    const {props: {denormalizedSpace}, state: {rightSidebar: {type, showCalculatorResults, showCalculatorId, editCalculatorId}}} = this
+    const {
+      props: {denormalizedSpace, spaceId, organizationFacts},
+      state: {rightSidebar: {type, showCalculatorResults, showCalculatorId, editCalculatorId}},
+    } = this
     const {editableByMe, calculators, organization} = denormalizedSpace
     switch (type) {
       case CLOSED:
@@ -325,7 +326,13 @@ export default class SpacesShow extends Component {
           ),
           main: (
             <div className='SpaceRightSidebar--padded-area'>
-              <FactListContainer organizationId={organization.id} isEditable={false}/>
+              <FactListContainer
+                facts={organizationFacts}
+                organization={organization}
+                isEditable={false}
+                spaceId={spaceId}
+                imported_fact_ids={denormalizedSpace.imported_fact_ids}
+              />
             </div>
           ),
         }
@@ -346,10 +353,11 @@ export default class SpacesShow extends Component {
   }
 
   render() {
+    const {exportedFacts, organizationHasFacts, me} = this.props
     const space = this.props.denormalizedSpace
+
     if (!e.space.prepared(space)) { return <div className='spaceShow'></div> }
 
-    const {organizationHasFacts, me} = this.props
     const sidebarIsViseable = space.editableByMe || !_.isEmpty(space.description)
     const isLoggedIn = e.me.isLoggedIn(this.props.me)
     const shareableLinkUrl = e.space.urlWithToken(space)
@@ -357,7 +365,13 @@ export default class SpacesShow extends Component {
     if (this.props.embed) {
       return (
         <div className='spaceShow screenshot'>
-          <Canvas denormalizedSpace={space} organizationHasFacts={organizationHasFacts} overflow={'hidden'} screenshot={true}/>
+          <Canvas
+            denormalizedSpace={space}
+            canUseOrganizationFacts={this.canUseOrganizationFacts()}
+            exportedFacts={exportedFacts}
+            overflow={'hidden'}
+            screenshot={true}
+          />
         </div>
       )
     }
@@ -445,7 +459,7 @@ export default class SpacesShow extends Component {
             makeNewCalculator={this.makeNewCalculator.bind(this)}
             showCalculator={this.showCalculator.bind(this)}
             toggleFactSidebar={this.toggleFactSidebar.bind(this)}
-            canShowFactSidebar={this.canShowFactSidebar()}
+            canShowFactSidebar={this.canUseOrganizationFacts()}
             onOpenTutorial={this.openTutorial.bind(this)}
           />
         </div>
@@ -463,7 +477,8 @@ export default class SpacesShow extends Component {
             <ClosedSpaceSidebar onOpen={this.openLeftSidebar.bind(this)}/>
           }
           <Canvas
-            organizationHasFacts={organizationHasFacts}
+            canUseOrganizationFacts={this.canUseOrganizationFacts()}
+            exportedFacts={exportedFacts}
             denormalizedSpace={space}
             onCopy={this.onCopy.bind(this, true)}
             onPaste={this.onPaste.bind(this, true)}
