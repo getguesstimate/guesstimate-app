@@ -9,7 +9,7 @@ import {addStats} from 'gEngine/simulation'
 import {orStr} from 'gEngine/utils'
 
 import {isData, formatData} from 'lib/guesstimator/formatter/formatters/Data'
-import {getVariableNameFromName} from 'lib/generateVariableNames/nameToVariableName'
+import {withVariableName} from 'lib/generateVariableNames/generateFactVariableName'
 
 export class FactForm extends Component {
   static defaultProps = {
@@ -59,7 +59,7 @@ export class FactForm extends Component {
   onChangeName(e) {
     const name = _.get(e, 'target.value')
     this.setFactState(
-      this.state.variableNameManuallySet ? {name} : {name, variable_name: getVariableNameFromName(name, this.props.existingVariableNames)}
+      this.state.variableNameManuallySet ? {name} : withVariableName({...this.state.runningFact, name}, this.props.existingVariableNames)
     )
   }
   onSelectCategory(c) {
