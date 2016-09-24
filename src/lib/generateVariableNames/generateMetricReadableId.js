@@ -9,5 +9,5 @@ export function withReadableId(metric, existingReadableIds) {
   const shouldUpdateReadableId = shouldTransformName(name)
   if (!shouldUpdateReadableId) { return metric }
 
-  return {...metric, readableId: getVariableNameFromName(name, existingReadableIds, 3, 3, 3, false).toUpperCase()}
+  return {...metric, readableId: getVariableNameFromName(name, existingReadableIds, 3, 3, 3, false, true).toUpperCase()}
 }
