@@ -223,10 +223,12 @@ export default class MetricCard extends Component {
     return (this._isSelectable(e) && (this.props.canvasState.metricClickMode === 'FUNCTION_INPUT_SELECT'))
   }
 
+  _relationshipType() { return relationshipType(_.get(this, 'props.metric.edges')) }
+
   _className() {
-    const {inSelectedCell, metric, hovered} = this.props
+    const {inSelectedCell, hovered} = this.props
     const {canvasState: {metricCardView}} = this.props
-    const relationshipClass = relationshipClasses[relationshipType(metric.edges)]
+    const relationshipClass = relationshipClasses[this._relationshipType()]
 
     const titleView = !hovered && !inSelectedCell && this._isTitle()
     let className = inSelectedCell ? 'metricCard grid-item-focus' : 'metricCard'
@@ -284,6 +286,9 @@ export default class MetricCard extends Component {
     const {guesstimate, name} = metric
     const shouldShowSensitivitySection = this._shouldShowSensitivitySection()
     const isAnalyzedMetric = this._isAnalyzedMetric()
+
+    const isExportableRelationshipType = [OUTPUT, INTERMEDIATE].includes(this._relationshipType())
+    const canBeMadeFact = !_.isEmpty(name) && isExportableRelationshipType && canUseOrganizationFacts
 
     return (
       <div className='metricCard--Container'
@@ -357,7 +362,7 @@ export default class MetricCard extends Component {
             showAnalysis={this._canBeAnalyzed()}
             onBeginAnalysis={this._beginAnalysis.bind(this)}
             onEndAnalysis={this._endAnalysis.bind(this)}
-            canBeMadeFact={!_.isEmpty(name) && canUseOrganizationFacts}
+            canBeMadeFact={canBeMadeFact}
             exportedAsFact={exportedAsFact}
             onMakeFact={this._makeFact.bind(this)}
             isAnalyzedMetric={isAnalyzedMetric}
