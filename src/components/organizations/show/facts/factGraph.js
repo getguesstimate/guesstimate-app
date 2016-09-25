@@ -6,10 +6,12 @@ import FlowGrid from 'gComponents/lib/FlowGrid/FlowGrid'
 import * as _collections from 'gEngine/collections'
 import * as _utils from 'gEngine/utils'
 import * as _space from 'gEngine/space'
+import SpaceListItem from 'gComponents/spaces/list_item/index.js'
+import {SpaceCard, NewSpaceCard} from 'gComponents/spaces/cards'
 
 import './style.css'
 
-const SpaceCard = ({space}) => (
+const SpaceCards = ({space}) => (
   <a className='spaceNode' href={_space.spaceUrlById(space.id)}>
     {space.name}
   </a>
@@ -69,7 +71,11 @@ export class FactGraph extends Component {
       id: `space:${s.id}`,
       parents: s.imported_fact_ids.map(id => `fact:${id}`),
       children: _collections.filter(facts, s.id, 'exported_from_id').map(f => `fact:${f.id}`),
-      component: <SpaceCard space={s} />,
+      component:  <SpaceCard
+                    size={'SMALL'}
+                    key={s.id}
+                    space={s}
+                  />
     }))
 
     let unprocessedNodes = [...factNodes, ...spaceNodes]
@@ -173,6 +179,7 @@ export class FactGraph extends Component {
           onCut={() => {}}
           showGridLines={false}
           canvasState={{}}
+          isSelectable={false}
         />
       </div>
     )

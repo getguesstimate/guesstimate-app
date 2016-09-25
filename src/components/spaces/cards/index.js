@@ -56,7 +56,7 @@ export const NewSpaceCard = ({onClick}) => (
   </div>
 )
 
-export const SpaceCard = ({space, showPrivacy}) => {
+export const SpaceCard = ({space, showPrivacy, size}) => {
   const hasName = !_.isEmpty(space.name)
   const hasOrg = _.has(space, 'organization.name')
 
@@ -66,12 +66,20 @@ export const SpaceCard = ({space, showPrivacy}) => {
   const spaceUrl = Space.url(space)
   const navigateToSpace = navigationActions.navigateFn(spaceUrl)
 
+  let className
+  if (size !== 'SMALL'){
+    className ='SpaceCard col-xs-12 col-md-4'
+  } else {
+    className ='SpaceCard Small'
+  }
   return (
-    <div className='col-xs-12 col-md-4 SpaceCard'>
+    <div className={className}>
       <div className='SpaceCard--inner' onClick={navigateToSpace}>
         <div className={`header ${hasName ? '' : 'default-name'}`}>
           <a href={spaceUrl}><h3>{hasName ? space.name : 'Untitled Model'}</h3></a>
-          <div className='changed-at'>Updated {formatDate(space.updated_at)}</div>
+          {size !== 'SMALL' &&
+            <div className='changed-at'>Updated {formatDate(space.updated_at)}</div>
+          }
         </div>
 
         <div className='image'>

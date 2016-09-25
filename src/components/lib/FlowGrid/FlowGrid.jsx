@@ -46,10 +46,12 @@ export default class FlowGrid extends Component{
     onCopy: PropTypes.func.isRequired,
     onPaste: PropTypes.func.isRequired,
     showGridLines: PropTypes.bool,
+    isSelectable: PropTypes.bool
   }
 
   static defaultProps = {
     showGridLines: true,
+    isSelectable: true
   }
 
   state = {
@@ -196,17 +198,25 @@ export default class FlowGrid extends Component{
   }
 
   _rowCount() {
-    const lowestItem = Math.max(...this.props.items.map(e => parseInt(e.location.row))) + 4
+    const lowestItem = Math.max(...this.props.items.map(e => parseInt(e.location.row))) + 1
     let selectedRow = this.props.selectedCell.row || 0
-    const selected = parseInt(selectedRow) + 3
-    return Math.max(10, lowestItem, selected) || 6;
+    const selected = parseInt(selectedRow) + 1
+    if (this.props.isSelectable) {
+      return Math.max(16, lowestItem + 3, selected + 4) || 8;
+    } else {
+      return Math.max(1, lowestItem)
+    }
   }
 
   _columnCount() {
-    const lowestItem = Math.max(...this.props.items.map(e => parseInt(e.location.column))) + 4
+    const lowestItem = Math.max(...this.props.items.map(e => parseInt(e.location.column))) + 1
     let selectedColumn = this.props.selectedCell.column || 0
-    const selected = parseInt(selectedColumn) + 4
-    return Math.max(6, lowestItem, selected) || 6;
+    const selected = parseInt(selectedColumn) + 1
+    if (this.props.isSelectable) {
+      return Math.max(10, lowestItem, selected) || 8;
+    } else {
+      return Math.max(1, lowestItem);
+    }
   }
 
   _addIfNeededAndSelect(location, direction) {
@@ -312,6 +322,7 @@ export default class FlowGrid extends Component{
     const {edges} = this.props
     let className = 'FlowGrid'
     className += this.props.showGridLines ? ' withLines' : ''
+    className += this.props.isSelectable ? ' isSelectable' : ''
 
     return (
       <div
