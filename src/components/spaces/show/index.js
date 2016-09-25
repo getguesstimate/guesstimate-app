@@ -327,7 +327,6 @@ export default class SpacesShow extends Component {
           main: (
             <div className='SpaceRightSidebar--padded-area'>
               <FactListContainer
-                existingVariableNames={organizationFacts.map(e.facts.getVar)}
                 facts={organizationFacts}
                 organization={organization}
                 isEditable={false}
