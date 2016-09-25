@@ -140,7 +140,7 @@ export class FactGraph extends Component {
       edges.push(...parents.map(p => ({input: locationById(p), output: locationById(id), pathStatus})))
     })
 
-    return { items, edges }
+    return { items, edges: edges.filter(e => !!e.input && !!e.output) }
   }
 
   render() {
