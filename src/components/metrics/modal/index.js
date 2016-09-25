@@ -9,6 +9,7 @@ import GuesstimateDescription from './description'
 import {ButtonClose} from 'gComponents/utility/buttons/close'
 import {GeneralModal} from 'gComponents/utility/modal/index'
 
+import DropDown from 'gComponents/utility/drop-down/index.js'
 import {percentile} from 'lib/dataAnalysis'
 
 import './style.css'
@@ -48,6 +49,7 @@ export class MetricModal extends Component {
 
     const {closeModal, metric, errors, onChangeGuesstimateDescription} = this.props
     const sortedSampleValues = _.get(metric, 'simulation.sample.sortedValues')
+    const allSamples = _.get(metric, 'simulation.sample.values')
     const stats = _.get(metric, 'simulation.stats')
     const guesstimate = metric.guesstimate
     return(
@@ -89,13 +91,27 @@ export class MetricModal extends Component {
 
           <div className='container bottom'>
             <div className='row editingInputSection'>
-              <div className='col-sm-12'>
+              <div className='col-sm-10'>
                 <DistributionEditor
                   guesstimate={metric.guesstimate}
                   inputMetrics={metric.edges.inputMetrics}
                   metricId={metric.id}
                   size={'large'}
                 />
+              </div>
+              <div className='col-sm-2'>
+
+              <DropDown
+                headerText={'Samples'}
+                openLink={<h1> Data </h1>}
+                position='right'
+                hasPadding={true}
+                width='wide'
+                ref='DropDown'
+              >
+                {allSamples.join(',\n')}
+              </DropDown>
+
               </div>
             </div>
             <div className='row guesstimateDescriptionSection'>
