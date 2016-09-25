@@ -46,7 +46,7 @@ export class MetricModal extends Component {
   render() {
     const showSimulation = this.showSimulation()
 
-    const {closeModal, metric, errors, onChangeGuesstimateDescription} = this.props
+    const {closeModal, metric, errors, onChangeGuesstimateDescription, organizationId, canUseOrganizationFacts} = this.props
     const sortedSampleValues = _.get(metric, 'simulation.sample.sortedValues')
     const stats = _.get(metric, 'simulation.stats')
     const guesstimate = metric.guesstimate
@@ -91,6 +91,8 @@ export class MetricModal extends Component {
             <div className='row editingInputSection'>
               <div className='col-sm-12'>
                 <DistributionEditor
+                  organizationId={organizationId}
+                  canUseOrganizationFacts={canUseOrganizationFacts}
                   guesstimate={metric.guesstimate}
                   inputMetrics={metric.edges.inputMetrics}
                   metricId={metric.id}
