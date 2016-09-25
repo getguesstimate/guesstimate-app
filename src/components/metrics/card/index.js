@@ -63,7 +63,6 @@ export default class MetricCard extends Component {
 
   state = {
     modalIsOpen: false,
-    editing: false,
     sidebarIsOpen: false,
   }
 
@@ -81,10 +80,6 @@ export default class MetricCard extends Component {
     this.props.endAnalysis()
   }
 
-  onEdit() {
-    if (!this.state.editing) { this.setState({editing: true}) }
-  }
-
   focusFromDirection(dir) {
     if (dir === 'DOWN' || dir === 'RIGHT') { this._focusForm() }
     else { this.refs.MetricCardViewSection.focusName() }
@@ -92,7 +87,6 @@ export default class MetricCard extends Component {
 
   componentWillUpdate(nextProps) {
     window.recorder.recordRenderStartEvent(this)
-    if (this.state.editing && !nextProps.inSelectedCell) { this.setState({editing: false}) }
     if (this.props.inSelectedCell && !nextProps.inSelectedCell) { this._closeSidebar() }
     if (this.props.hovered && !nextProps.hovered){ this._closeSidebar() }
   }
@@ -324,7 +318,6 @@ export default class MetricCard extends Component {
             showSensitivitySection={shouldShowSensitivitySection}
             heightHasChanged={forceFlowGridUpdate}
             hovered={hovered}
-            editing={this.state.editing}
             onEscape={this.focus.bind(this)}
             onReturn={this.props.onReturn}
             onTab={this.props.onTab}
@@ -346,7 +339,6 @@ export default class MetricCard extends Component {
                 size='small'
                 onReturn={this.props.onReturn}
                 onTab={this.props.onTab}
-                onEdit={this.onEdit.bind(this)}
               />
             </div>
           }
