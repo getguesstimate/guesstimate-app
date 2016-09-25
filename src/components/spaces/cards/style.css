@@ -36,16 +36,23 @@
   width: 100%;
 
   .image {
-    min-height: 4em;
+    flex: 1;
+    min-height: 3em;
+    border-radius: 0 0 1px 1px;
   }
   .SpaceCard--inner {
     margin: 0 .8em;
   }
 
   .image .snapshot.blank img{
-    height: 95%;
-    opacity: .3;
+    height: 85%;
+    opacity: .2;
     margin-bottom: 0;
+    max-height: 4em;
+  }
+
+  .header h3 {
+    font-size: 1.2em;
   }
 }
 

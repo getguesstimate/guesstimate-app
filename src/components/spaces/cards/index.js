@@ -92,9 +92,11 @@ export const SpaceCard = ({space, showPrivacy, size}) => {
             showPrivacy={showPrivacy}
           />
         </div>
-        <div className='body'>
-          <p> {formatDescription(space.description)} </p>
-        </div>
+        {size !== 'SMALL' &&
+          <div className='body'>
+            <p> {formatDescription(space.description)} </p>
+          </div>
+        }
       </div>
     </div>
   )
