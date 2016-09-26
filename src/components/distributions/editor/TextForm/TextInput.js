@@ -177,12 +177,10 @@ export class TextInput extends Component{
   }
 
   onChange(editorState) {
-    const text = this.text(editorState)
-    if (text.startsWith('hicago')) { debugger }
-
     this.fetchSuggestion(editorState)
     this.setState({editorState})
 
+    const text = this.text(editorState)
     if (text !== this.props.value) {
       isData(text) ? this.changeData(text) : this.props.onChange(text)
     }

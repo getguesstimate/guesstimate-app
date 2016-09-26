@@ -328,7 +328,7 @@ export default class MetricCard extends Component {
             exportedAsFact={exportedAsFact}
           />
 
-          {inSelectedCell &&
+          {inSelectedCell && !this.state.modalIsOpen &&
             <div className='section editing'>
               <DistributionEditor
                 guesstimate={metric.guesstimate}
