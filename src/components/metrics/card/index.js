@@ -303,6 +303,8 @@ export default class MetricCard extends Component {
               canUseOrganizationFacts={canUseOrganizationFacts}
               metricClickMode={metricClickMode}
               closeModal={this.closeModal.bind(this)}
+              organizationId={organizationId}
+              canUseOrganizationFacts={canUseOrganizationFacts}
               onChangeGuesstimateDescription={this.onChangeGuesstimateDescription.bind(this)}
             />
           }

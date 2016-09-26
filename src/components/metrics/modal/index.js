@@ -99,6 +99,8 @@ export class MetricModal extends Component {
             <div className='row editingInputSection'>
               <div className='col-sm-12'>
                 <DistributionEditor
+                  organizationId={organizationId}
+                  canUseOrganizationFacts={canUseOrganizationFacts}
                   guesstimate={metric.guesstimate}
                   metricClickMode={metricClickMode}
                   inputMetrics={metric.edges.inputMetrics}
