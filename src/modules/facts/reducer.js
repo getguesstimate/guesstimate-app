@@ -108,6 +108,23 @@ export function factsR(state = INITIAL_STATE, action) {
         ],
       }
     }
+    case 'SPACES_DELETE_SUCCESS': {
+      const spaceId = _.get(action, 'record.id')
+      let copiedState = mutableCopy(state.organizationFacts)
+      const organizationContainersToModify = _.remove(copiedState, o => _collections.some(o.children, spaceId, 'exported_from_id'))
+      const modifiedOrganizationContainers = _.map(organizationContainersToModify, o => ({
+        ...o,
+        children: _.filter(o.children, f => !typeSafeEq(_.get(f, 'exported_from_id'), spaceId)),
+      }))
+
+      return {
+        ...state,
+        organizationFacts: [
+          ...copiedState,
+          ...modifiedOrganizationContainers,
+        ],
+      }
+    }
     default:
       return state
   }
