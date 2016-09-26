@@ -78,6 +78,7 @@ export default Router.extend({
         spaceId={parseInt(id)}
         showCalculatorId={parseInt(calculatorId)}
         showCalculatorResults={window.location.search.includes('showResults=true')}
+        factsShown={window.location.search.includes('factsShown=true')}
         shareableLinkToken={extractTokenFromUrl(window.location.search)}
         key={parseInt(id)}
       />,

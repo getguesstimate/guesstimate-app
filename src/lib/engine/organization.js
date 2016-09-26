@@ -1,5 +1,6 @@
 import * as _userOrganizationMemberships from './userOrganizationMemberships'
 import * as _collections from './collections'
+import {orArr} from './utils'
 
 export const url = o => !!_.get(o, 'id') ? urlById(o.id) : ''
 export const image = o => _.isEmpty(_.get(o, 'picture')) ? '/organization-default-image.png' : o.picture
@@ -10,7 +11,7 @@ export const organizationMemberships = (id, memberships) => _collections.filter(
 export const organizationInvitations = (id, invitations) => _collections.filter(invitations, id, 'organization_id')
 
 const ORG_FACT_READABLE_ID_PREFIX = 'organization_'
-export const organizationReadableId = ({id}) => `${ORG_FACT_READABLE_ID_PREFIX}${id}`
+export const organizationReadableId = o => !!o ? `${ORG_FACT_READABLE_ID_PREFIX}${o.id}` : ''
 export const organizationIdFromFactReadableId = str => str.slice(ORG_FACT_READABLE_ID_PREFIX.length)
 
 export function organizationUsers(organizationId, users, memberships) {
@@ -24,6 +25,5 @@ export function organizationUsers(organizationId, users, memberships) {
 
 export function findFacts(organizationId, organizationFacts) {
   const readableId = organizationReadableId({id: organizationId})
-  const containingFact = _collections.get(organizationFacts, readableId, 'variable_name')
-  return _.get(containingFact, 'children') || []
+  return orArr(_collections.gget(organizationFacts, readableId, 'variable_name', 'children'))
 }

@@ -16,6 +16,7 @@ import {hasMetricUpdated} from './updated'
 import {removeMetrics, changeMetric} from 'gModules/metrics/actions'
 import {changeGuesstimate} from 'gModules/guesstimates/actions'
 import {analyzeMetricId, endAnalysis} from 'gModules/canvas_state/actions'
+import {createFactFromMetric} from 'gModules/facts/actions'
 
 import * as canvasStateProps from 'gModules/canvas_state/prop_type'
 import {PTLocation} from 'lib/locationUtils'
@@ -34,37 +35,30 @@ relationshipClasses[OUTPUT] = 'output'
 relationshipClasses[INPUT] = 'input'
 relationshipClasses[NOEDGE] = 'noedge'
 
-class ScatterTip extends Component {
-  render() {
-    return (
-      <ToolTip size='LARGE'>
-        <SensitivitySection yMetric={this.props.yMetric} xMetric={this.props.xMetric} size={'LARGE'}/>
-      </ToolTip>
-    )
-  }
-}
-
-const PT = PropTypes
+const ScatterTip = ({yMetric, xMetric}) => (
+  <ToolTip size='LARGE'> <SensitivitySection yMetric={yMetric} xMetric={xMetric} size={'LARGE'}/> </ToolTip>
+)
 
 @connect(null, dispatch => bindActionCreators({
   changeMetric,
   changeGuesstimate,
   removeMetrics,
   analyzeMetricId,
-  endAnalysis
+  endAnalysis,
+  createFactFromMetric,
 }, dispatch))
 export default class MetricCard extends Component {
   displayName: 'MetricCard'
 
   static propTypes = {
     canvasState: canvasStateProps.canvasState,
-    changeMetric: PT.func.isRequired,
-    changeGuesstimate: PT.func.isRequired,
-    removeMetrics: PT.func.isRequired,
-    gridKeyPress: PT.func.isRequired,
-    inSelectedCell: PT.bool.isRequired,
+    changeMetric: PropTypes.func.isRequired,
+    changeGuesstimate: PropTypes.func.isRequired,
+    removeMetrics: PropTypes.func.isRequired,
+    gridKeyPress: PropTypes.func.isRequired,
+    inSelectedCell: PropTypes.bool.isRequired,
     location: PTLocation,
-    metric: PT.object.isRequired
+    metric: PropTypes.object.isRequired
   }
 
   state = {
@@ -229,10 +223,12 @@ export default class MetricCard extends Component {
     return (this._isSelectable(e) && (this.props.canvasState.metricClickMode === 'FUNCTION_INPUT_SELECT'))
   }
 
+  _relationshipType() { return relationshipType(_.get(this, 'props.metric.edges')) }
+
   _className() {
-    const {inSelectedCell, metric, hovered} = this.props
+    const {inSelectedCell, hovered} = this.props
     const {canvasState: {metricCardView}} = this.props
-    const relationshipClass = relationshipClasses[relationshipType(metric.edges)]
+    const relationshipClass = relationshipClasses[this._relationshipType()]
 
     const titleView = !hovered && !inSelectedCell && this._isTitle()
     let className = inSelectedCell ? 'metricCard grid-item-focus' : 'metricCard'
@@ -262,6 +258,10 @@ export default class MetricCard extends Component {
     return !!analyzedMetric && metric.id === analyzedMetric.id
   }
 
+  _makeFact() {
+    this.props.createFactFromMetric(this.props.organizationId, this.props.metric)
+  }
+
   // If sidebar is expanded, we want to close it if anything else is clicked
   onMouseDown(e){
     const isSidebarElement = (_.get(e, 'target.dataset.controlSidebar') === "true")
@@ -281,10 +281,14 @@ export default class MetricCard extends Component {
       connectDragSource,
       analyzedMetric,
       forceFlowGridUpdate,
+      exportedAsFact,
     } = this.props
-    const {guesstimate} = metric
+    const {guesstimate, name} = metric
     const shouldShowSensitivitySection = this._shouldShowSensitivitySection()
     const isAnalyzedMetric = this._isAnalyzedMetric()
+
+    const isExportableRelationshipType = [OUTPUT, INTERMEDIATE].includes(this._relationshipType())
+    const canBeMadeFact = !_.isEmpty(name) && isExportableRelationshipType && canUseOrganizationFacts
 
     return (
       <div className='metricCard--Container'
@@ -301,6 +305,8 @@ export default class MetricCard extends Component {
             <MetricModal
               metric={metric}
               closeModal={this.closeModal.bind(this)}
+              organizationId={organizationId}
+              canUseOrganizationFacts={canUseOrganizationFacts}
               onChangeGuesstimateDescription={this.onChangeGuesstimateDescription.bind(this)}
             />
           }
@@ -324,6 +330,7 @@ export default class MetricCard extends Component {
             onEscape={this.focus.bind(this)}
             onReturn={this.props.onReturn}
             onTab={this.props.onTab}
+            exportedAsFact={exportedAsFact}
           />
 
           {inSelectedCell &&
@@ -357,15 +364,28 @@ export default class MetricCard extends Component {
             showAnalysis={this._canBeAnalyzed()}
             onBeginAnalysis={this._beginAnalysis.bind(this)}
             onEndAnalysis={this._endAnalysis.bind(this)}
+            canBeMadeFact={canBeMadeFact}
+            exportedAsFact={exportedAsFact}
+            onMakeFact={this._makeFact.bind(this)}
             isAnalyzedMetric={isAnalyzedMetric}
           />
         }
       </div>
-    );
+    )
   }
 }
 
-const MetricSidebar = ({onOpenModal, onBeginAnalysis, onEndAnalysis, onRemoveMetric, showAnalysis, isAnalyzedMetric}) => (
+const MetricSidebar = ({
+  onOpenModal,
+  onBeginAnalysis,
+  onEndAnalysis,
+  canBeMadeFact,
+  exportedAsFact,
+  onMakeFact,
+  onRemoveMetric,
+  showAnalysis,
+  isAnalyzedMetric
+}) => (
   <div className='MetricSidebar'>
     <MetricSidebarItem
       icon={<Icon name='expand'/>}
@@ -385,6 +405,13 @@ const MetricSidebar = ({onOpenModal, onBeginAnalysis, onEndAnalysis, onRemoveMet
         icon={<Icon name='close'/>}
         name={'Sensitivity'}
         onClick={onEndAnalysis}
+      />
+    }
+    {canBeMadeFact && !exportedAsFact &&
+      <MetricSidebarItem
+        icon={<i className='ion-ios-redo'/>}
+        name={'Export'}
+        onClick={onMakeFact}
       />
     }
     <MetricSidebarItem
