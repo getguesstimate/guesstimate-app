@@ -90,9 +90,11 @@ export class TextInput extends Component{
 
     let baseEditorState
     if (replaceLength > 0) {
+      console.log('replacing with suggestion, starting from ', this.cursorPosition(), 'up to', this.cursorPosition() + replaceLength, 'at', _.now())
       const replaceSelection = selection.merge({anchorOffset: this.cursorPosition(), focusOffset: this.cursorPosition() + replaceLength})
       baseEditorState = EditorState.push(this.state.editorState, Modifier.replaceText(content, replaceSelection, text), 'paste')
     } else {
+      console.log('adding suggestion', 'at', _.now())
       baseEditorState = EditorState.push(this.state.editorState, Modifier.insertText(content, selection, text), 'paste')
     }
 
@@ -161,9 +163,13 @@ export class TextInput extends Component{
   fetchSuggestion(editorState) {
     const prevWord = this.prevWord(editorState)
     if (editorState.getSelection().isCollapsed() && (this.factRegex().test(prevWord))) {
+      console.log('fetching suggestion based on', prevWord, 'at', _.now())
       this.props.dispatch(getSuggestion(resolveToSelector(this.props.organizationId)(prevWord)))
     } else {
-      if (!_.isEmpty(this.props.suggestion)) { this.props.dispatch(clearSuggestion()) }
+      if (!_.isEmpty(this.props.suggestion)) {
+        console.log('clearing suggestion based on', prevWord, 'at', _.now())
+        this.props.dispatch(clearSuggestion())
+      }
     }
   }
 
@@ -177,10 +183,13 @@ export class TextInput extends Component{
   }
 
   onChange(editorState) {
+    const text = this.text(editorState)
+    console.log('changingEditorState to have text', text, 'at', _.now())
+    if (text.startsWith('hicago')) { debugger }
+
     this.fetchSuggestion(editorState)
     this.setState({editorState})
 
-    const text = this.text(editorState)
     if (text !== this.props.value) {
       isData(text) ? this.changeData(text) : this.props.onChange(text)
     }

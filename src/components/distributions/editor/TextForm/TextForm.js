@@ -29,7 +29,9 @@ export class TextForm extends Component{
   }
 
   _switchMetricClickMode() {
-    if (this.props.guesstimate.guesstimateType === 'FUNCTION') {this.props.onChangeClickMode('FUNCTION_INPUT_SELECT')}
+    if (this.props.guesstimate.guesstimateType === 'FUNCTION') {
+      this.props.onChangeClickMode('FUNCTION_INPUT_SELECT')
+    }
   }
 
   _handleBlur() {

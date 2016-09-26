@@ -22,6 +22,7 @@ export default class Guesstimate extends Component{
     changeGuesstimate: PropTypes.func.isRequired,
     runFormSimulations: PropTypes.func.isRequired,
     changeMetricClickMode: PropTypes.func.isRequired,
+    metricClickMode: PropTypes.string,
     guesstimate: PropTypes.object,
     metricId: PropTypes.string.isRequired,
     metricFocus: PropTypes.func.isRequired,
@@ -69,7 +70,9 @@ export default class Guesstimate extends Component{
     this.changeGuesstimate({}, false, true)
   }
 
-  _changeMetricClickMode(newMode) { this.props.changeMetricClickMode(newMode) }
+  _changeMetricClickMode(newMode) {
+    if (this.props.metricClickMode !== newMode) { this.props.changeMetricClickMode(newMode) }
+  }
 
   handleReturn(shifted) {
     if (shifted) {

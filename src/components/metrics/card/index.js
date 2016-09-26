@@ -278,6 +278,7 @@ export default class MetricCard extends Component {
       exportedAsFact,
     } = this.props
     const {guesstimate, name} = metric
+    const {metricClickMode} = canvasState
     const shouldShowSensitivitySection = this._shouldShowSensitivitySection()
     const isAnalyzedMetric = this._isAnalyzedMetric()
 
@@ -298,6 +299,9 @@ export default class MetricCard extends Component {
           {this.state.modalIsOpen &&
             <MetricModal
               metric={metric}
+              organizationId={organizationId}
+              canUseOrganizationFacts={canUseOrganizationFacts}
+              metricClickMode={metricClickMode}
               closeModal={this.closeModal.bind(this)}
               onChangeGuesstimateDescription={this.onChangeGuesstimateDescription.bind(this)}
             />
@@ -329,6 +333,7 @@ export default class MetricCard extends Component {
               <DistributionEditor
                 guesstimate={metric.guesstimate}
                 inputMetrics={metric.edges.inputMetrics}
+                metricClickMode={metricClickMode}
                 metricId={metric.id}
                 organizationId={organizationId}
                 canUseOrganizationFacts={canUseOrganizationFacts}
