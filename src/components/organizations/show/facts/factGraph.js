@@ -142,6 +142,12 @@ export class FactGraph extends Component {
       edges.push(...parents.map(p => ({input: locationById(p), output: locationById(id), pathStatus})))
     })
 
+    const bad_edges = _.remove(edges, ({input, output}) => !_utils.allPresent(input.row, input.column, output.row, output.column))
+    if (!_.isEmpty(bad_edges)) {
+      console.warn(bad_edges.legnth, 'BAD EDGES ENCOUNTERED!')
+      console.warn(bad_edges)
+    }
+
     return { items, edges }
   }
 
