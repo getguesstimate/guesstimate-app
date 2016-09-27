@@ -38,7 +38,7 @@ export class FactList extends Component {
         fact={fact}
         onEdit={this.showEditForm.bind(this, fact.id)}
         isExportedFromSelectedSpace={this.isExportedFromSelectedSpaceFn(fact, this.props.spaceId)}
-        showModelLink={true}
+        size={'LARGE'}
       />
     )
   }

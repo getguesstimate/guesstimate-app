@@ -8,10 +8,10 @@ import {isExportedFromSpace, length, mean, adjustedConfidenceInterval} from 'gEn
 import {DistributionSummary} from 'gComponents/distributions/summary/index'
 import Histogram from 'gComponents/simulations/histogram/index'
 
-export const FactItem = ({fact, onEdit, isExportedFromSelectedSpace, showModelLink}) => {
+export const FactItem = ({fact, onEdit, isExportedFromSelectedSpace, size}) => {
   const exported_from_url = `${spaceUrlById(_.get(fact, 'exported_from_id'), {factsShown: 'true'})}`
   return (
-    <div className='Fact--outer'>
+    <div className={'Fact--outer ' + size }>
       <div className='Fact'>
         <div className='section-simulation simulation-sample'>
           {_.has(fact, 'simulation.sample.values.length') && _.has(fact, 'simulation.stats.mean') &&
@@ -35,17 +35,21 @@ export const FactItem = ({fact, onEdit, isExportedFromSelectedSpace, showModelLi
         </div>
         <div className='section-name'>
           <span className='fact-name'>{fact.name}</span>
-          <div className='variable-name variable-token'>
-            <span className='prefix'>#</span>
-            <div className='name'>{fact.variable_name}</div>
-          </div>
+          {(size !== 'SMALL') &&
+            <div className='variable-name variable-token'>
+              <span className='prefix'>#</span>
+              <div className='name'>{fact.variable_name}</div>
+            </div>
+          }
         </div>
 
+      {(size !== 'SMALL') &&
         <div className='section-help'>
           <span className='ui button small options' onClick={onEdit}>Edit</span>
         </div>
+      }
 
-      {!!isExportedFromSpace(fact) && showModelLink &&
+      {!!isExportedFromSpace(fact) && (size !== 'SMALL') &&
         <div className='section-exported' onClick={!isExportedFromSelectedSpace && navigateFn(exported_from_url)}>
           {!isExportedFromSelectedSpace && <Icon name='share'/>}
         </div>

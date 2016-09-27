@@ -54,7 +54,7 @@ export class FactGraph extends Component {
       id: `fact:${fact.id}`,
       children: spaces.filter(s => _utils.orArr(s.imported_fact_ids).includes(fact.id)).map(({id}) => `space:${id}`),
       parents: !!fact.exported_from_id ? [`space:${fact.exported_from_id}`] : [],
-      component: <FactItem fact={fact} showModelLink={false}/>,
+      component: <FactItem fact={fact} size={'SMALL'}/>,
     }))
 
     const isolatedFactNodes = _.remove(factNodes, n => _.isEmpty(n.children) && _.isEmpty(n.parents))
