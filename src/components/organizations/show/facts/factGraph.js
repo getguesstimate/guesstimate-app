@@ -73,6 +73,11 @@ export class FactGraph extends Component {
                   />
     }))
 
+    // Some facts may be missing parents, due to missing deletions or other abnormal data setups. We don't want to
+    // render those facts within the main graph so we pull them out to render with the isolated nodes at the bottom of
+    // the graph.
+    const orphanedFactNodes = _.remove(factNodes, _.negate(allParentsWithin(spaceNodes)))
+
     let unprocessedNodes = [...factNodes, ...spaceNodes]
     const components = separateIntoDisconnectedComponents(unprocessedNodes)
     const componentsHeightOrdered = _.map(components, separateIntoHeightsAndStripInfiniteLoops)
@@ -124,8 +129,8 @@ export class FactGraph extends Component {
     })
 
     // Now we add locations to the isolated facts.
-    const width = Math.floor(Math.sqrt(isolatedFactNodes.length))
-    const isolatedFactNodesWithLocations = _.map(isolatedFactNodes, (n, i) => ({
+    const width = Math.floor(Math.sqrt(isolatedFactNodes.length + orphanedFactNodes.length))
+    const isolatedFactNodesWithLocations = _.map([...isolatedFactNodes, ...orphanedFactNodes], (n, i) => ({
       ...n,
       location: {row: maxRowUsed + 1 +  Math.floor(i/width), column: i % width},
     }))
@@ -141,7 +146,13 @@ export class FactGraph extends Component {
       edges.push(...parents.map(p => ({input: locationById(p), output: locationById(id), pathStatus})))
     })
 
-    return { items, edges: edges.filter(e => !!e.input && !!e.output) }
+    const bad_edges = _.remove(edges, ({input, output}) => !_utils.allPresent(input.row, input.column, output.row, output.column))
+    if (!_.isEmpty(bad_edges)) {
+      console.warn(bad_edges.length, 'BAD EDGES ENCOUNTERED!')
+      console.warn(bad_edges)
+    }
+
+    return { items, edges }
   }
 
   render() {
