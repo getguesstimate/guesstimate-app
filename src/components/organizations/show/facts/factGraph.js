@@ -11,12 +11,6 @@ import {SpaceCard, NewSpaceCard} from 'gComponents/spaces/cards'
 
 import './style.css'
 
-const SpaceCards = ({space}) => (
-  <a className='spaceNode' href={_space.spaceUrlById(space.id)}>
-    {space.name}
-  </a>
-)
-
 const allParentsWithin = nodeSet => n => _.every(n.parents, p => _.some(nodeSet, ({id}) => p === id))
 const anyParentsWithin = nodeSet => n => _.some(n.parents, p => _.some(nodeSet, ({id}) => p === id))
 const anyChildrenWithin = nodeSet => n => _.some(n.children, c => _.some(nodeSet, ({id}) => c === id))
@@ -75,6 +69,7 @@ export class FactGraph extends Component {
                     size={'SMALL'}
                     key={s.id}
                     space={s}
+                    urlParams={{factsShown: 'true'}}
                   />
     }))
 

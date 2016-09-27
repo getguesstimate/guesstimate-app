@@ -56,14 +56,14 @@ export const NewSpaceCard = ({onClick}) => (
   </div>
 )
 
-export const SpaceCard = ({space, showPrivacy, size}) => {
+export const SpaceCard = ({space, showPrivacy, size, urlParams = {}}) => {
   const hasName = !_.isEmpty(space.name)
   const hasOrg = _.has(space, 'organization.name')
 
   const owner = hasOrg ? space.organization : space.user
   const ownerUrl = hasOrg ? Organization.url(space.organization) : User.url(space.user)
 
-  const spaceUrl = Space.url(space)
+  const spaceUrl = Space.spaceUrlById(space.id, urlParams)
   const navigateToSpace = navigationActions.navigateFn(spaceUrl)
 
   let className
