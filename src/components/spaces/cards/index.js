@@ -70,7 +70,7 @@ export const SpaceCard = ({space, showPrivacy, size, urlParams = {}}) => {
   if (size !== 'SMALL'){
     className ='SpaceCard col-xs-12 col-md-4'
   } else {
-    className ='SpaceCard Small'
+    className ='SpaceCard SMALL'
   }
   return (
     <div className={className}>
