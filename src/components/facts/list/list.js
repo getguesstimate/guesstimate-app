@@ -126,9 +126,9 @@ export class FactList extends Component {
 }
 
 const NewButton = ({onClick}) => (
-  <a className='NewFactButton' href='#' onClick={onClick}>
+  <div className='NewFactButton' onClick={onClick}>
     <Icon name='plus'/>
     New Fact
-  </a>
+  </div>
 )
 
