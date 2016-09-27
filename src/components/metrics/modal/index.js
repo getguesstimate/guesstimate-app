@@ -18,6 +18,12 @@ const percentages = (values, perc) => {
   return perc.map(e => { return {percentage: e, value: percentile(values, values.length, e)} })
 }
 
+const SampleList = ({samples}) => (
+  <div className='SampleList'>
+    {samples.join(',\n')}
+  </div>
+)
+
 const PercentileTable = ({values}) => (
   <div className='percentiles'>
     <h3> Percentiles </h3>
@@ -106,10 +112,9 @@ export class MetricModal extends Component {
                 openLink={<h1> Data </h1>}
                 position='right'
                 hasPadding={true}
-                width='wide'
                 ref='DropDown'
               >
-                {allSamples.join(',\n')}
+                <SampleList samples={allSamples}/>
               </DropDown>
 
               </div>

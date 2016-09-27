@@ -125,3 +125,11 @@ $grey: #EEE;
   font-size: 2em;
   color: #bbb;
 }
+
+.metricModal .SampleList {
+  max-height: 30em;
+  overflow: scroll;
+  padding: .5em;
+  background-color: #f0f0f0;
+  border-radius: 3px;
+}
