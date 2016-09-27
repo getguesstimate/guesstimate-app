@@ -213,7 +213,7 @@ export default class FlowGrid extends Component{
     let selectedColumn = this.props.selectedCell.column || 0
     const selected = parseInt(selectedColumn) + 1
     if (this.props.isSelectable) {
-      return Math.max(10, lowestItem, selected) || 8;
+      return Math.max(10, lowestItem + 3, selected) || 8;
     } else {
       return Math.max(1, lowestItem);
     }

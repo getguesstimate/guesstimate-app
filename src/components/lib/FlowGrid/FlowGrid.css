@@ -52,7 +52,7 @@
 
 .FlowGrid.isSelectable {
   .FlowGridEmptyCell {
-  cursor: pointer;
+    cursor: pointer;
   }
 
   .FlowGridCell.hovered .FlowGridEmptyCell{
