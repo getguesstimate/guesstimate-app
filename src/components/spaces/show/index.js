@@ -330,7 +330,7 @@ export default class SpacesShow extends Component {
                 existingVariableNames={organizationFacts.map(e.facts.getVar)}
                 facts={organizationFacts}
                 organization={organization}
-                isEditable={false}
+                isEditable={true}
                 spaceId={spaceId}
                 imported_fact_ids={denormalizedSpace.imported_fact_ids}
               />

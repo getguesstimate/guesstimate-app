@@ -11,16 +11,17 @@ $blue-a1: #4A6A88;
   }
 }
 
-a.NewFactButton {
+.NewFactButton {
   background-color: $grey-a1;
   border-radius: 2px;
   width: 100%;
   float: left;
   padding: .4em .7em;
-  transition: all .3s;
+  transition: all .15s;
   color: #767575;
   font-size: 1.2em;
   margin-top: .3em;
+  cursor: pointer;
 
   .fa {
     margin-right: .5em;
