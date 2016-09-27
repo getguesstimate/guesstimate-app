@@ -86,7 +86,6 @@ export class MetricCardViewSection extends Component {
       onMouseDown,
       showSensitivitySection,
       hovered,
-      editing,
       exportedAsFact,
     } = this.props
 

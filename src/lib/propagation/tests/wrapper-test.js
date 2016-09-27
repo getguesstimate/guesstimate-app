@@ -264,14 +264,6 @@ describe('getSubset', () => {
       },
     }
     const {subset, relevantFacts} = getSubset(stateWithCanvasStateToFalse, graphFilters)
-    console.log('expecting')
-    console.log([
-      {id: 1, expression: '3', imported_to_intermediate_space_ids: [1, 2], shouldBeSimulated: false},
-      {id: 2, metric_id: 1, exported_from_id: 1, expression: `=${expressionSyntaxPad(1)}`, shouldBeSimulated: true},
-      {id: 3, metric_id: 3, exported_from_id: 2, expression: `=${expressionSyntaxPad(3)}`, shouldBeSimulated: true},
-      {id: 9, metric_id: 11, exported_from_id: 6, expression: `=${expressionSyntaxPad(11)}`, shouldBeSimulated: true},
-    ])
-    debugger
 
     expect(subset, "metrics match").to.have.property('metrics').that.deep.has.members([
       ...space1Metrics,

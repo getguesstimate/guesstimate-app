@@ -46,7 +46,15 @@ export class MetricModal extends Component {
   render() {
     const showSimulation = this.showSimulation()
 
-    const {closeModal, metric, errors, onChangeGuesstimateDescription, organizationId, canUseOrganizationFacts} = this.props
+    const {
+      closeModal,
+      metric,
+      organizationId,
+      canUseOrganizationFacts,
+      metricClickMode,
+      errors,
+      onChangeGuesstimateDescription,
+    } = this.props
     const sortedSampleValues = _.get(metric, 'simulation.sample.sortedValues')
     const stats = _.get(metric, 'simulation.stats')
     const guesstimate = metric.guesstimate
@@ -94,8 +102,11 @@ export class MetricModal extends Component {
                   organizationId={organizationId}
                   canUseOrganizationFacts={canUseOrganizationFacts}
                   guesstimate={metric.guesstimate}
+                  metricClickMode={metricClickMode}
                   inputMetrics={metric.edges.inputMetrics}
                   metricId={metric.id}
+                  organizationId={organizationId}
+                  canUseOrganizationFacts={canUseOrganizationFacts}
                   size={'large'}
                 />
               </div>
