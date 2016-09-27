@@ -44,6 +44,14 @@ $blue-a1: #4A6A88;
   &:hover {
     border-color: #d9dee2;
   }
+
+  &.SMALL {
+    margin: .1em .6em;
+
+    .Fact {
+      flex-direction: column-reverse;
+    }
+  }
 }
 
 .Fact {

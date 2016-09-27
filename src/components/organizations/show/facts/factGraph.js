@@ -6,14 +6,10 @@ import FlowGrid from 'gComponents/lib/FlowGrid/FlowGrid'
 import * as _collections from 'gEngine/collections'
 import * as _utils from 'gEngine/utils'
 import * as _space from 'gEngine/space'
+import SpaceListItem from 'gComponents/spaces/list_item/index.js'
+import {SpaceCard, NewSpaceCard} from 'gComponents/spaces/cards'
 
 import './style.css'
-
-const SpaceCard = ({space}) => (
-  <a className='spaceNode' href={_space.spaceUrlById(space.id)}>
-    {space.name}
-  </a>
-)
 
 const allParentsWithin = nodeSet => n => _.every(n.parents, p => _.some(nodeSet, ({id}) => p === id))
 const anyParentsWithin = nodeSet => n => _.some(n.parents, p => _.some(nodeSet, ({id}) => p === id))
@@ -58,7 +54,7 @@ export class FactGraph extends Component {
       id: `fact:${fact.id}`,
       children: spaces.filter(s => _utils.orArr(s.imported_fact_ids).includes(fact.id)).map(({id}) => `space:${id}`),
       parents: !!fact.exported_from_id ? [`space:${fact.exported_from_id}`] : [],
-      component: <FactItem fact={fact} showModelLink={false}/>,
+      component: <FactItem fact={fact} size={'SMALL'}/>,
     }))
 
     const isolatedFactNodes = _.remove(factNodes, n => _.isEmpty(n.children) && _.isEmpty(n.parents))
@@ -69,7 +65,12 @@ export class FactGraph extends Component {
       id: `space:${s.id}`,
       parents: s.imported_fact_ids.map(id => `fact:${id}`),
       children: _collections.filter(facts, s.id, 'exported_from_id').map(f => `fact:${f.id}`),
-      component: <SpaceCard space={s} />,
+      component:  <SpaceCard
+                    size={'SMALL'}
+                    key={s.id}
+                    space={s}
+                    urlParams={{factsShown: 'true'}}
+                  />
     }))
 
     let unprocessedNodes = [...factNodes, ...spaceNodes]
@@ -173,6 +174,7 @@ export class FactGraph extends Component {
           onCut={() => {}}
           showGridLines={false}
           canvasState={{}}
+          isSelectable={false}
         />
       </div>
     )
