@@ -43,7 +43,7 @@ export const getVar = f => _utils.orStr(_.get(f, 'variable_name'))
 export const byVariableName = name => f => getVar(f) === name
 const namedLike = partial => f => getVar(f).startsWith(partial)
 
-export const isExportedFromSpace = f => _utils.propIsPresent(f, 'exported_from_id')
+export const isExportedFromSpace = f => _utils.allPropsPresent(f, 'exported_from_id')
 
 export const length = f => _.get(f, 'simulation.sample.values.length')
 export const mean = f => _.get(f, 'simulation.stats.mean')
