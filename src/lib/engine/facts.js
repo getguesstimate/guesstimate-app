@@ -56,9 +56,16 @@ export function hasRequiredProperties(f) {
   return _utils.allPresent(requiredProperties.map(prop => _.get(f, prop)))
 }
 
-export function withSortedValues(rawFact) {
-  let fact = Object.assign({}, rawFact)
+export function withMissingStats(rawFact) {
+  let fact = _utils.mutableCopy(rawFact)
   _.set(fact, 'simulation.sample.sortedValues', sortDescending(_.get(fact, 'simulation.sample.values')))
+
+  const length = _.get(fact, 'simulation.stats.length')
+  const needsACI = _.isFinite(length) && length > 1
+  const ACIlength = _.get('simulation.stats.adjustedConfidenceInterval.length')
+  const hasACI = _.isFinite(ACIlength) && ACIlength === 2
+  if (needsACI && !hasACI) { _.set(fact, 'simulation.stats.adjustedConfidenceInterval', [null, null]) }
+
   return fact
 }
 

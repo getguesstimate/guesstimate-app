@@ -12,7 +12,7 @@ import * as spaceActions from 'gModules/spaces/actions'
 
 import {orArr} from 'gEngine/utils'
 import {organizationReadableId} from 'gEngine/organization'
-import {withSortedValues} from 'gEngine/facts'
+import {withMissingStats} from 'gEngine/facts'
 
 import {captureApiError} from 'lib/errors/index'
 import {simulate} from 'lib/propagation/wrapper'
@@ -43,7 +43,7 @@ export function fetchById(organizationId) {
   }
 }
 
-const toContainerFact = o => _.isEmpty(o.facts) ? {} : {variable_name: organizationReadableId(o), children: o.facts.map(withSortedValues)}
+const toContainerFact = o => _.isEmpty(o.facts) ? {} : {variable_name: organizationReadableId(o), children: o.facts.map(withMissingStats)}
 
 export function fetchSuccess(organizations) {
   return (dispatch) => {
