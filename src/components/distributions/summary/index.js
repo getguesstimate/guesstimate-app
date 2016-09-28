@@ -28,12 +28,18 @@ const DistributionDisplay = ({mean, range: [low, high]}) => (
 
 // TODO(matthew): Ostensibly I'd like to handle the defensivity upstream, but this is a good quick fix for the problem
 // exposed to customers presently.
-export const DistributionSummary = ({length, mean, adjustedConfidenceInterval}) => (
-  <div className="DistributionSummary">
-    {length === 1 || _.some(adjustedConfidenceInterval, e => !_.isFinite(e)) ?
-      <PointDisplay value={mean}/> 
-        :
-      <DistributionDisplay mean={mean} range={adjustedConfidenceInterval}/>
-    }
-  </div>
-)
+export const DistributionSummary = ({length, mean, adjustedConfidenceInterval}) => {
+  console.log(length, mean, adjustedConfidenceInterval)
+  const hasLength = length === 1 ||
+    adjustedConfidenceInterval[0] === adjustedConfidenceInterval[1] ||
+    _.some(adjustedConfidenceInterval, e => !_.isFinite(e))
+  return (
+    <div className="DistributionSummary">
+      {hasLength ?
+        <PointDisplay value={mean}/>
+          :
+        <DistributionDisplay mean={mean} range={adjustedConfidenceInterval}/>
+      }
+    </div>
+  )
+}
