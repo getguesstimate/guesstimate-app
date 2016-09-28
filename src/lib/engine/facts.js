@@ -41,9 +41,16 @@ export const getVar = f => _.get(f, 'variable_name') || ''
 export const byVariableName = name => f => getVar(f) === name
 const namedLike = partial => f => getVar(f).startsWith(partial)
 
-export function withSortedValues(rawFact) {
-  let fact = Object.assign({}, rawFact)
+export function withMissingStats(rawFact) {
+  let fact = _utils.mutableCopy(rawFact)
   _.set(fact, 'simulation.sample.sortedValues', sortDescending(_.get(fact, 'simulation.sample.values')))
+
+  const length = _.get(fact, 'simulation.stats.length')
+  const needsACI = _.isFinite(length) && length > 1
+  const ACIlength = _.get('simulation.stats.adjustedConfidenceInterval.length')
+  const hasACI = _.isFinite(ACIlength) && ACIlength === 2
+  if (needsACI && !hasACI) { _.set(fact, 'simulation.stats.adjustedConfidenceInterval', [null, null]) }
+
   return fact
 }
 
