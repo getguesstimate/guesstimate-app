@@ -25,6 +25,20 @@ export function addStats(simulation){
   const length = sortedValues.length
   const mean = sampleMean(sortedValues)
   const meanIndex = cutoff(sortedValues, length, mean)
+
+  if (meanIndex === -1) {
+    // This is an edge case that occurs with broken usage when uniform valued samples are generated in length greater
+    // than 1; we'll end early in this case to protect downstream dependencies.
+    const stats = {
+      mean,
+      stdev: 0,
+      length: 1,
+    }
+    simulation.sample.sortedValues = sortedValues
+    simulation.stats = stats
+    return
+  }
+
   const stdev = sampleStdev(sortedValues)
   const percentiles = {
     5: percentile(sortedValues, length, 5),
