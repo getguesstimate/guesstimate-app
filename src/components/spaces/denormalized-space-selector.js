@@ -47,12 +47,11 @@ export const denormalizedSpaceSelector = createSelector(
     }
 
     const {organization_id} = denormalizedSpace
-    const organization = graph.organizations.find(o => o.id == organization_id)
-    const organizationHasFacts = !!organization && _.some(
-      organizationFacts, e.facts.byVariableName(e.organization.organizationReadableId(organization))
-    )
+    const facts = e.organization.findFacts(organization_id, organizationFacts)
+
+    const exportedFacts = e.collections.filter(facts, spaceId, 'exported_from_id')
 
     window.recorder.recordSelectorStop(NAME, {denormalizedSpace})
-    return { denormalizedSpace, organizationHasFacts }
+    return { denormalizedSpace, exportedFacts, organizationFacts: facts, organizationHasFacts: !_.isEmpty(facts) }
   }
 )

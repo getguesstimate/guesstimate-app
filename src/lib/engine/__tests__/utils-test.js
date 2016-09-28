@@ -82,7 +82,6 @@ describe('URL transformation', () => {
 
   describe('URL_REGEX', () => {
     const fullStrRegex = new RegExp(`^${URL_REGEX.source}$`, 'i')
-    console.log(fullStrRegex)
     it('correctly matches urls', () => {
       validURLs.forEach(url => expect(fullStrRegex.test(url), `URL: ${url} should match`).to.equal(true))
       errorURLs.forEach(url => expect(fullStrRegex.test(url), `URL: ${url} should not match`).to.equal(false))

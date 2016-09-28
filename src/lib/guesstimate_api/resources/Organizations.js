@@ -46,6 +46,29 @@ export default class Organizations extends AbstractResource {
     this.guesstimateMethod({url, method})(callback)
   }
 
+  addFactCategory({id}, fact_category, callback) {
+    const url = `organizations/${id}/fact_categories`
+    const method = 'POST'
+    const data = {fact_category}
+
+    this.guesstimateMethod({url, method, data})(callback)
+  }
+
+  editFactCategory({id}, fact_category, callback) {
+    const url = `organizations/${id}/fact_categories/${fact_category.id}`
+    const method = 'PATCH'
+    const data = {fact_category}
+
+    this.guesstimateMethod({url, method, data})(callback)
+  }
+
+  deleteFactCategory({id}, fact_category, callback) {
+    const url = `organizations/${id}/fact_categories/${fact_category.id}`
+    const method = 'DELETE'
+
+    this.guesstimateMethod({url, method})(callback)
+  }
+
   getInvitations({organizationId}, callback) {
     const url = `organizations/${organizationId}/invitees`
     const method = 'GET'

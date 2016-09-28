@@ -6,7 +6,7 @@ import Histogram from 'gComponents/simulations/histogram/index'
 import MetricName from 'gComponents/metrics/card/name/index'
 import {DistributionSummary} from 'gComponents/distributions/summary/index'
 import StatTable from 'gComponents/simulations/stat_table/index'
-import {MetricToken} from 'gComponents/metrics/card/token/index'
+import {MetricToken, tokenToShow} from 'gComponents/metrics/card/token/index'
 import SensitivitySection from 'gComponents/metrics/card/SensitivitySection/SensitivitySection'
 
 import {INTERNAL_ERROR, INFINITE_LOOP_ERROR, INPUT_ERROR} from 'lib/errors/modelErrors'
@@ -86,7 +86,7 @@ export class MetricCardViewSection extends Component {
       onMouseDown,
       showSensitivitySection,
       hovered,
-      editing,
+      exportedAsFact,
     } = this.props
 
     const errors = this._errors()
@@ -98,6 +98,8 @@ export class MetricCardViewSection extends Component {
     const hasGuesstimateDescription = !_.isEmpty(guesstimate.description)
     const anotherFunctionSelected = ((metricClickMode === 'FUNCTION_INPUT_SELECT') && !inSelectedCell)
     const hasErrors = (errors.length > 0)
+
+    const showToken = !!tokenToShow({hovered, hasGuesstimateDescription, anotherFunctionSelected, exportedAsFact})
 
     let className = `MetricCardViewSection ${metricCardView}`
     className += (hasErrors & !inSelectedCell) ? ' hasErrors' : ''
@@ -112,15 +114,17 @@ export class MetricCardViewSection extends Component {
           />
         }
 
-        <div className='MetricTokenSection'>
-          {(hovered || anotherFunctionSelected || hasGuesstimateDescription) &&
-            <MetricToken
-              readableId={metric.readableId}
-              anotherFunctionSelected={anotherFunctionSelected}
-              onToggleSidebar={onToggleSidebar}
-              hasGuesstimateDescription={hasGuesstimateDescription}
-            />
-          }
+      <div className='MetricTokenSection'>
+        {showToken &&
+          <MetricToken
+            hovered={hovered}
+            readableId={metric.readableId}
+            exportedAsFact={exportedAsFact}
+            anotherFunctionSelected={anotherFunctionSelected}
+            onToggleSidebar={onToggleSidebar}
+            hasGuesstimateDescription={hasGuesstimateDescription}
+          />
+         }
         </div>
 
         {(!_.isEmpty(metric.name) || inSelectedCell) &&
