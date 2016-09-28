@@ -142,8 +142,8 @@ export class FactGraph extends Component {
     let edges = []
     const pathStatus = 'default'
     factNodes.forEach(({id, children, parents})  => {
-      edges.push(...children.map(c => ({input: locationById(id), output: locationById(c), pathStatus})))
-      edges.push(...parents.map(p => ({input: locationById(p), output: locationById(id), pathStatus})))
+      edges.push(...children.map(c => ({input: locationById(id), inputId: id, output: locationById(c), outputId: c, pathStatus})))
+      edges.push(...parents.map(p => ({input: locationById(p), inputId: p, output: locationById(id), outputId: id, pathStatus})))
     })
 
     const bad_edges = _.remove(edges, edge => !_utils.allPropsPresent(edge, 'input.row', 'input.column', 'output.row', 'output.column'))
