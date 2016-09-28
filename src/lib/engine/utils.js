@@ -12,9 +12,9 @@ export const orZero = e => e || 0
 export const orArr = e => e || []
 
 export const isPresent = e => (!!e && !_.isEmpty(e)) || (typeof e === 'number') || (e === true)
-export const propIsPresent = (e, prop) => isPresent(_.get(e, prop))
 export const presentOrVal = (e, val) => isPresent(e) ? e : val
 export const allPresent = (...objs) => objs.reduce((running, curr) => running && isPresent(curr), true)
+export const allPropsPresent = (obj, ...props) => allPresent(...props.map(p => _.get(obj, p)))
 
 const escSpecialChars = str => str.replace(/\$|\{|\}|\_/g, e => `\\${e}`)
 const toSource = re => re instanceof RegExp ? re.source : escSpecialChars(re)
