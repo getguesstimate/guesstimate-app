@@ -32,8 +32,8 @@ export function addStats(simulation){
     50: percentile(sortedValues, length, 50),
     95: percentile(sortedValues, length, 95),
   }
-  const adjustedLow = percentile(sortedValues, meanIndex, 10)
-  const adjustedHigh = percentile(sortedValues.slice(meanIndex), length - meanIndex, 90)
+  const adjustedLow = meanIndex === -1 ? sortedValues[0] : percentile(sortedValues, meanIndex, 10)
+  const adjustedHigh = meanIndex === -1 ? sortedValues[0] : percentile(sortedValues.slice(meanIndex), length - meanIndex, 90)
 
   const stats = {
     mean,
