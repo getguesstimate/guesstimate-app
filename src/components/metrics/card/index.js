@@ -282,8 +282,8 @@ export default class MetricCard extends Component {
     const shouldShowSensitivitySection = this._shouldShowSensitivitySection()
     const isAnalyzedMetric = this._isAnalyzedMetric()
 
-    const isExportableRelationshipType = [OUTPUT, INTERMEDIATE].includes(this._relationshipType())
-    const canBeMadeFact = !_.isEmpty(name) && isExportableRelationshipType && canUseOrganizationFacts
+    const isFunction = _.get(metric, 'guesstimate.guesstimateType') === 'FUNCTION'
+    const canBeMadeFact = !_.isEmpty(name) && isFunction && canUseOrganizationFacts
 
     return (
       <div className='metricCard--Container'
