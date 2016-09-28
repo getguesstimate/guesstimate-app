@@ -1,6 +1,6 @@
 import {editFact} from 'gModules/organizations/actions'
 
-import {selectorSearch, withSortedValues} from 'gEngine/facts'
+import {selectorSearch, withMissingStats} from 'gEngine/facts'
 import * as _collections from 'gEngine/collections'
 import {organizationIdFromFactReadableId} from 'gEngine/organization'
 import {addStats} from 'gEngine/simulation'
@@ -25,11 +25,11 @@ export function loadByOrg(facts) {
 }
 
 export function addToOrg(organizationVariableName, fact) {
-  return {type: 'ADD_FACT_TO_ORG', organizationVariableName, fact: withSortedValues(fact)}
+  return {type: 'ADD_FACT_TO_ORG', organizationVariableName, fact: withMissingStats(fact)}
 }
 
 export function updateWithinOrg(organizationVariableName, fact) {
-  return {type: 'UPDATE_FACT_WITHIN_ORG', organizationVariableName, fact: withSortedValues(fact)}
+  return {type: 'UPDATE_FACT_WITHIN_ORG', organizationVariableName, fact: withMissingStats(fact)}
 }
 
 export function deleteFromOrg(organizationVariableName, {id}) {
