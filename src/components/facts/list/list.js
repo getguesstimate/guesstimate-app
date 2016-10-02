@@ -27,9 +27,13 @@ export class FactList extends Component {
     this.setState({newFactKey: this.state.newFactKey + 1})
   }
 
-  showEditForm(editingFactId) {
-    this.setState({editingFactId})
-  }
+  showEditForm(editingFactId) { this.setState({editingFactId}) }
+
+  isExportedFromSelectedSpaceFn({exported_from_id}) { return exported_from_id === this.props.spaceId }
+  isImportedFromSelectedSpaceFn({id}) { return this.props.imported_fact_ids.includes(id) }
+
+  showNewForm() { this.setState({showNewForm: true}) }
+  hideNewForm() { this.setState({showNewForm: false}) }
 
   renderFactShow(fact) {
     return (
@@ -37,7 +41,7 @@ export class FactList extends Component {
         key={fact.id}
         fact={fact}
         onEdit={this.showEditForm.bind(this, fact.id)}
-        isExportedFromSelectedSpace={this.isExportedFromSelectedSpaceFn(fact, this.props.spaceId)}
+        isExportedFromSelectedSpace={this.isExportedFromSelectedSpaceFn(fact)}
         size={'LARGE'}
       />
     )
@@ -71,10 +75,9 @@ export class FactList extends Component {
   }
 
   renderSpaceFacts() {
-    const {props: {facts, spaceId, imported_fact_ids}, state: {editingFactId}} = this
-    let filteredFacts = utils.mutableCopy(facts)
-    const exported = _.remove(filteredFacts, e => this.isExportedFromSelectedSpaceFn(e, spaceId))
-    const imported = _.remove(filteredFacts, e => this.isImportedFromSelectedSpaceFn(e, imported_fact_ids))
+    let filteredFacts = utils.mutableCopy(this.props.facts)
+    const exported = _.remove(filteredFacts, this.isExportedFromSelectedSpaceFn.bind(this))
+    const imported = _.remove(filteredFacts, this.isImportedFromSelectedSpaceFn.bind(this))
 
     return (
       <div>
@@ -97,29 +100,13 @@ export class FactList extends Component {
     })
   }
 
-  isExportedFromSelectedSpaceFn({exported_from_id}, spaceId) {
-    return (exported_from_id === spaceId)
-  }
-
-  isImportedFromSelectedSpaceFn({id}, imported_fact_ids) {
-    return imported_fact_ids.includes(id)
-  }
-
-  hideNewForm() {
-    this.setState({showNewForm: false})
-  }
-
-  showNewForm() {
-    this.setState({showNewForm: true})
-  }
-
   render() {
     return (
       <div className='FactsTab'>
         {this.props.spaceId && this.renderSpaceFacts()}
         {!this.props.spaceId && this.renderFactSublist(this.props.facts)}
-        {this.props.isEditable && this.state.showNewForm && this.renderNewForm()}
-        {this.props.isEditable && !this.state.showNewForm && <NewButton onClick={this.showNewForm.bind(this)}/>}
+        {this.props.canMakeNewFacts && this.state.showNewForm && this.renderNewForm()}
+        {this.props.canMakeNewFacts && !this.state.showNewForm && <NewButton onClick={this.showNewForm.bind(this)}/>}
       </div>
     )
   }
@@ -131,4 +118,3 @@ const NewButton = ({onClick}) => (
     New Fact
   </div>
 )
-

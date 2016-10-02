@@ -5,6 +5,7 @@ export const PTLocation = PropTypes.shape({
   row: PropTypes.number
 })
 
+// Regions are [top_left_location, bottom_right_location]
 export const PTRegion = PropTypes.arrayOf(PTLocation, PTLocation)
 
 export function isLocation(test) {
@@ -31,12 +32,7 @@ export function isWithinRegion(test, region) {
 
 export function getBounds({start, end}) {
   if (!start || !end) {return []}
-  let leftX, topY, rightX, bottomY
-  leftX = Math.min(start.row, end.row)
-  topY = Math.max(start.column, end.column)
-  rightX = Math.max(start.row, end.row)
-  bottomY = Math.min(start.column, end.column)
-  return [{row: leftX, column: bottomY}, {row: rightX, column: topY}]
+  return boundingRegion([start, end])
 }
 
 export const move = ({row, column}, direction) => ({row: row + direction.row, column: column + direction.column})
@@ -51,4 +47,12 @@ export function translate(start, end) {
 // passed location.
 export function existsAtLoc(seekLoc) {
   return e => isAtLocation(e.location, seekLoc)
+}
+
+export function boundingRegion(locations) {
+  if (_.isEmpty(locations)) { return [{row: 0, column: 0}, {row: 0, column: 0}] }
+  return [
+    {row: Math.min(...locations.map(l => l.row)), column: Math.min(...locations.map(l => l.column))},
+    {row: Math.max(...locations.map(l => l.row)), column: Math.max(...locations.map(l => l.column))},
+  ]
 }

@@ -70,6 +70,7 @@ export function destroy(object) {
   }
 }
 
+// TODO(matthew): Maybe we can remove metric_count?
 const SPACE_INDEX_ATTRIBUTES = [
   'id',
   'name',
@@ -118,7 +119,6 @@ export function fetch({userId, organizationId}) {
       if (err) {
         captureApiError('SpacesFetch', err.jqXHR, err.textStatus, err, {url: 'fetch'})
       } else if (value) {
-        // TODO(matthew): Maybe we can remove metric_count?
         const formatted = value.items.map(d => _.pick(d, SPACE_INDEX_ATTRIBUTES))
         dispatch(sActions.fetchSuccess(formatted))
 

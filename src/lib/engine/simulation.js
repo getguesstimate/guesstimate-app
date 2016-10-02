@@ -1,5 +1,5 @@
 import * as _collections from './collections'
-import * as _utils from './utils'
+import {orArr} from './utils'
 
 import {sampleMean, sampleStdev, percentile, cutoff, sortDescending} from 'lib/dataAnalysis.js'
 
@@ -47,5 +47,5 @@ export function addStats(simulation){
 }
 
 export const hasErrors = simulation => errors(simulation).length > 0
-export const errors = simulation => _utils.orArr(_.get(simulation, 'sample.errors'))
-export const values = simulation => _utils.orArr(_.get(simulation, 'sample.values'))
+export const errors = simulation => orArr(_.get(simulation, 'sample.errors'))
+export const values = simulation => orArr(_.get(simulation, 'sample.values'))

@@ -75,19 +75,21 @@ const NullCategoryHeader = ({}) => (
 
 export const Category = ({category, categories, facts, onEditCategory, onDeleteCategory, organization, existingVariableNames}) => (
   <div>
-    {!!category ? <CategoryHeader
+    {!!category &&
+      <CategoryHeader
         category={category}
         existingCategoryNames={categories.map(c => c.name)}
         onEdit={onEditCategory}
         onDelete={onDeleteCategory}
-      /> : <NullCategoryHeader />
+      />
     }
+    {!category && <NullCategoryHeader />}
     <FactListContainer
       organization={organization}
       facts={facts}
       existingVariableNames={existingVariableNames}
       categories={categories}
-      isEditable={true}
+      canMakeNewFacts={true}
       categoryId={!!category ? category.id : null}
     />
   </div>

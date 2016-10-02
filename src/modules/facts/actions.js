@@ -6,7 +6,7 @@ import {orArr} from 'gEngine/utils'
 import {organizationIdFromFactReadableId, organizationReadableId} from 'gEngine/organization'
 import {addStats} from 'gEngine/simulation'
 
-import {getVariableNameFromName} from 'lib/generateVariableNames/nameToVariableName'
+import {withVariableName} from 'lib/generateVariableNames/generateFactVariableName'
 
 export function getSuggestion(selector) {
   return (dispatch, getState) => {
@@ -45,18 +45,18 @@ export function createFactFromMetric(organizationId, metric) {
 
     const organization = _collections.get(organizations, organizationId)
 
-    const variableName = organizationReadableId(organization)
-    const existingVariableNames = orArr(_collections.gget(organizationFacts, variableName, 'variable_name', 'children')).map(getVar)
+    const organizationVariableName = organizationReadableId(organization)
+    const otherFacts = orArr(_collections.gget(organizationFacts, organizationVariableName, 'variable_name', 'children'))
+    const existingVariableNames = otherFacts.map(getVar)
 
     const newFactParams = {
       name: metric.name,
-      variable_name: getVariableNameFromName(metric.name, existingVariableNames),
       metric_id: metric.id,
       exported_from_id: metric.space,
       simulation: metric.simulation,
     }
 
-    dispatch(addFact(organization, newFactParams))
+    dispatch(addFact(organization, withVariableName(newFactParams)))
   }
 }
 

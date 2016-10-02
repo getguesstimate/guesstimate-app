@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 
+import Icon from 'react-fa'
 import ReactDOM from 'react-dom'
 import $ from 'jquery'
 
@@ -21,13 +22,12 @@ import {createFactFromMetric} from 'gModules/facts/actions'
 import * as canvasStateProps from 'gModules/canvas_state/prop_type'
 import {PTLocation} from 'lib/locationUtils'
 import {withReadableId} from 'lib/generateVariableNames/generateMetricReadableId'
+import {shouldTransformName} from 'lib/generateVariableNames/nameToVariableName'
 
 import {INTERMEDIATE, OUTPUT, INPUT, NOEDGE, relationshipType} from 'gEngine/graph'
 import {makeURLsMarkdown} from 'gEngine/utils'
 
 import './style.css'
-
-import Icon from 'react-fa'
 
 const relationshipClasses = {}
 relationshipClasses[INTERMEDIATE] = 'intermediate'
@@ -283,7 +283,7 @@ export default class MetricCard extends Component {
     const isAnalyzedMetric = this._isAnalyzedMetric()
 
     const isFunction = _.get(metric, 'guesstimate.guesstimateType') === 'FUNCTION'
-    const canBeMadeFact = !_.isEmpty(name) && isFunction && canUseOrganizationFacts
+    const canBeMadeFact = shouldTransformName(name) && isFunction && canUseOrganizationFacts
 
     return (
       <div className='metricCard--Container'

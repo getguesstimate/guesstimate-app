@@ -66,14 +66,8 @@ export const SpaceCard = ({space, showPrivacy, size, urlParams = {}}) => {
   const spaceUrl = Space.spaceUrlById(space.id, urlParams)
   const navigateToSpace = navigationActions.navigateFn(spaceUrl)
 
-  let className
-  if (size !== 'SMALL'){
-    className ='SpaceCard col-xs-12 col-md-4'
-  } else {
-    className ='SpaceCard SMALL'
-  }
   return (
-    <div className={className}>
+    <div className={`SpaceCard ${size === 'SMALL' ? 'SMALL' : 'col-xs-12 col-md-4'}`}>
       <div className='SpaceCard--inner' onClick={navigateToSpace}>
         <div className={`header ${hasName ? '' : 'default-name'}`}>
           <a href={spaceUrl}><h3>{hasName ? space.name : 'Untitled Model'}</h3></a>

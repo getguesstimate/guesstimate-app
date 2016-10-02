@@ -129,8 +129,7 @@ export class FactGraph extends Component {
     const isolatedFactNodes = _.remove(factNodes, n => _.isEmpty(n.children) && _.isEmpty(n.parents))
     const orphanedFactNodes = _.remove(factNodes, _.negate(allParentsWithin(spaceNodes)))
 
-    let unprocessedNodes = [...factNodes, ...spaceNodes]
-    const components = separateIntoDisconnectedComponents(unprocessedNodes)
+    const components = separateIntoDisconnectedComponents([...factNodes, ...spaceNodes])
     const componentsHeightOrdered = _.map(components, separateIntoHeightsAndStripInfiniteLoops)
 
     const {withFinalLocations, maxRowUsed} = addLocationsToHeightOrderedComponents(componentsHeightOrdered)
@@ -192,7 +191,7 @@ export class FactGraph extends Component {
           onCut={() => {}}
           showGridLines={false}
           canvasState={{}}
-          isSelectable={false}
+          isModelingCanvas={false}
         />
       </div>
     )

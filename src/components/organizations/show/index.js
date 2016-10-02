@@ -64,14 +64,8 @@ export default class OrganizationShow extends Component{
 
   organization() { return e.collections.get(this.props.organizations, this.props.organizationId) }
 
-  url(openTab) {
-    const base = e.organization.url(this.organization())
-    if (_.isEmpty(base)) { return '' }
-    return `${base}/${openTab}`
-  }
-
   changeTab(openTab) {
-    navigate(this.url(openTab), {trigger: false})
+    navigate(`${e.organization.url(this.organization())}/${openTab}`, {trigger: false})
     this.setState({openTab})
   }
 
@@ -297,8 +291,6 @@ const FactTab = ({
 }
 
 class NewCategorySection extends Component{
-  displayName: 'NewCategorySection'
-
   state = {
     showForm: false
   }

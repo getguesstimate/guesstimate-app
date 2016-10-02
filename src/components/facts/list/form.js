@@ -51,9 +51,7 @@ export class FactForm extends Component {
     }
   }
 
-  componentDidMount() {
-    this.refs.name.focus()
-  }
+  componentDidMount() { this.refs.name.focus() }
 
   setFactState(newFactState, otherState = {}) { this.setState({...otherState, runningFact: {...this.state.runningFact, ...newFactState}}) }
   onChangeName(e) {
@@ -62,9 +60,7 @@ export class FactForm extends Component {
       this.state.variableNameManuallySet ? {name} : withVariableName({...this.state.runningFact, name}, this.props.existingVariableNames)
     )
   }
-  onSelectCategory(c) {
-    this.setFactState({category_id: c.target.value})
-  }
+  onSelectCategory(c) { this.setFactState({category_id: c.target.value}) }
   onChangeVariableName(e) { this.setFactState({variable_name: _.get(e, 'target.value')}, {variableNameManuallySet: true}) }
   onChangeExpression(e) { this.setFactState({expression: _.get(e, 'target.value')}, {currentExpressionSimulated: false}) }
   onBlurExpression() { this.simulateCurrentExpression() }
@@ -95,30 +91,23 @@ export class FactForm extends Component {
     }
   }
 
-  submitIfEnter(e) {
-    if (e.keyCode === 13 && this.isValid()) {this.onSubmit()}
-  }
+  submitIfEnter(e) { if (e.keyCode === 13 && this.isValid()) {this.onSubmit()} }
 
   renderEditExpressionSection() {
     if (isExportedFromSpace(this.state.runningFact)) {
       const exported_from_url = `${spaceUrlById(_.get(this, 'state.runningFact.exported_from_id'))}?factsShown=true`
-      return (
-        <div className='section-simulation simulation-sample'>
-          <span className='ui button small options' onClick={navigateFn(exported_from_url)}>Edit Model</span>
-        </div>
-      )
+      return <span className='ui button small options' onClick={navigateFn(exported_from_url)}>Edit Model</span>
     } else {
       return (
-        <div className='section-simulation simulation-sample'>
-          <div className={`field ${this.hasNoErrors() ? '' : 'error'}`}>
-            <input
-              type='text'
-              placeholder='value'
-              value={this.state.runningFact.expression}
-              onChange={this.onChangeExpression.bind(this)}
-              onBlur={this.onBlurExpression.bind(this)}
-            />
-          </div>
+        <div className={`field ${this.hasNoErrors() ? '' : 'error'}`}>
+          <input
+            type='text'
+            placeholder='value'
+            value={this.state.runningFact.expression}
+            onChange={this.onChangeExpression.bind(this)}
+            onBlur={this.onBlurExpression.bind(this)}
+            onKeyDown={this.submitIfEnter.bind(this)}
+          />
         </div>
       )
     }
@@ -140,7 +129,9 @@ export class FactForm extends Component {
     return (
     <div className='Fact--outer'>
       <div className='Fact new ui form'>
-        {this.renderEditExpressionSection()}
+        <div className='section-simulation simulation-sample'>
+          {this.renderEditExpressionSection()}
+        </div>
         <div className='section-name'>
           <div className='fact-name'>
             <div className={`field ${this.isVariableNameUnique() ? '' : 'error'}`}>

@@ -3,6 +3,8 @@ import React, {Component, PropTypes} from 'react'
 import {FactCategoryPT, isFactCategoryValid} from 'gEngine/fact_category'
 
 export class CategoryForm extends Component {
+  // TODO(matthew): We have wiring (via props) for onCancel, but no button. Either strip that code or add cancellation
+  // buttons.
   static defaultProps = {
     startingCategory: {
       name: '',
