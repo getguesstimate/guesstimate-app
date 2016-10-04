@@ -3,13 +3,14 @@ import {addSimulationToFact} from 'gModules/facts/actions'
 
 import * as constants from './constants'
 import {Simulator} from './simulator'
-import {INTERNAL_ERROR, INPUT_ERROR, PARSER_ERROR, INFINITE_LOOP_ERROR} from 'lib/errors/modelErrors'
 
 import e from 'gEngine/engine'
+// TODO(matthew): Fix messages.
 
 const {
   NODE_TYPES,
-  ERROR_SUBTYPES: {GRAPH_SUBTYPES: {MISSING_INPUT_ERROR, IN_INFINITE_LOOP, INVALID_ANCESTOR_ERROR}},
+  ERROR_TYPES: {GRAPH_ERROR, PARSER_ERROR},
+  ERROR_SUBTYPES: {GRAPH_ERROR_SUBTYPES: {MISSING_INPUT_ERROR, IN_INFINITE_LOOP, INVALID_ANCESTOR_ERROR}},
 } = constants
 
 function getSpacesAndOrganization(state, graphFilters) {
@@ -107,7 +108,7 @@ function guesstimateTypeToNodeType(guesstimateType) {
   }
 }
 
-const filterErrorsFn = e => e.type !== INPUT_ERROR && e.type !== INFINITE_LOOP_ERROR
+const filterErrorsFn = e => e.type !== GRAPH_ERROR
 const metricIdToNodeId = id => `${e.simulation.METRIC_ID_PREFIX}${id}`
 const metricToSimulationNodeFn = m => ({
   id: metricIdToNodeId(m.id),
@@ -155,9 +156,9 @@ function translateErrorFn(denormalizedMetrics, metricID) {
   return err => {
     switch (err.subType) {
       case MISSING_INPUT_ERROR:
-        return {type: INPUT_ERROR, message: 'Metric depends on deleted metric'}
+        return {...err, message: 'Metric depends on deleted metric'}
       case IN_INFINITE_LOOP:
-        return {type: INFINITE_LOOP_ERROR, message: 'Metric references itself through dependency chain'}
+        return {...err, message: 'Metric references itself through dependency chain'}
       case INVALID_ANCESTOR_ERROR:
         let invalidAncestors = e.utils.mutableCopy(err.ancestors).map(nodeIdToMetricId)
         const invalidDirectInputs = _.remove(invalidAncestors, a => metric.guesstimate.expression.includes(a))
@@ -180,8 +181,7 @@ function translateErrorFn(denormalizedMetrics, metricID) {
         }
         message += '.'
 
-
-        return {type: INPUT_ERROR, message}
+        return {...err, message}
       default:
         return err
     }
@@ -221,7 +221,7 @@ export function simulate(dispatch, getState, graphFilters) {
       propagationId,
       sample: {
         values: _.isEmpty(errors) ? samples : [],
-        errors: Object.assign([], errors.map(translateErrorFn(denormalizedMetrics, metric))),
+        errors: errors.map(translateErrorFn(denormalizedMetrics, metric)),
       }
     }
     dispatch(addSimulation(newSimulation))

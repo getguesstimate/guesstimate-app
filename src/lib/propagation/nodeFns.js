@@ -7,7 +7,7 @@ const ID_REGEX = /\$\{([^\}]*)\}/g
 // ERRORS:
 const {
   ERROR_TYPES: {GRAPH_ERROR},
-  ERROR_SUBTYPES: {GRAPH_SUBTYPES: {MISSING_INPUT_ERROR, IN_INFINITE_LOOP, INVALID_ANCESTOR_ERROR, DUPLICATE_ID_ERROR}},
+  ERROR_SUBTYPES: {GRAPH_ERROR_SUBTYPES: {MISSING_INPUT_ERROR, IN_INFINITE_LOOP, INVALID_ANCESTOR_ERROR, DUPLICATE_ID_ERROR}},
 } = constants
 
 const addError = (type, subType, dataFn=()=>({})) => n => ({...n, errors: [...n.errors, {type, subType, ...dataFn(n)}]})

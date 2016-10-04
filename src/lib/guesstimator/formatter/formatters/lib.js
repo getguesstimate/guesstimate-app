@@ -1,5 +1,9 @@
-import {PARSER_ERROR} from 'lib/errors/modelErrors'
+import * as constants from 'lib/propagation/constants'
+
 import {or} from 'gEngine/utils'
+
+// TODO(matthew): fix error messages
+const {ERROR_TYPES: {PARSER_ERROR}, ERROR_SUBTYPES: {PARSER_ERROR_SUBTYPES: INVALID_RANGE_ORDERING}} = constants
 
 const SUFFIXES = {
   '%': -2,
@@ -23,7 +27,7 @@ export const rangeRegex = (sep, left, right) => padded([left, NUMBER_REGEX, sep,
 const getMult = suffix => Math.pow(10,SUFFIXES[suffix])
 const parseNumber = (num, suffix) => parseFloat(num.replace(',', '')) * (!!suffix ? getMult(suffix) : 1)
 
-const rangeErrorFn = ([low, high]) => low > high ? {type: PARSER_ERROR, message: 'The low number should come first'} : {}
+const rangeErrorFn = ([low, high]) => low > high ? {type: PARSER_ERROR, subType: INVALID_RANGE_ORDERING, message: 'The low number should come first'} : {}
 
 // We assume that if the user started at 0 or tried a negative number,
 // they intended for this to be normal.

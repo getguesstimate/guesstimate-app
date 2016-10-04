@@ -46,7 +46,6 @@ export class TextForm extends Component{
       inputMetrics,
       onEscape,
       size,
-      errors,
       organizationId,
       canUseOrganizationFacts,
       onChangeInput,
@@ -80,7 +79,6 @@ export class TextForm extends Component{
             onBlur={this._handleBlur.bind(this)}
             onChangeData={onAddData}
             ref='TextInput'
-            errors={errors}
             width={shouldBeWide ? 'NARROW' : "WIDE"}
             organizationId={organizationId}
             canUseOrganizationFacts={canUseOrganizationFacts}
@@ -105,7 +103,7 @@ export class TextForm extends Component{
       </div>
     )
   }
-  //right now errors live in the simulation, which is not present here.
+
   render() {
     const {size, guesstimate: {input}} = this.props
     if (size !== 'large') {

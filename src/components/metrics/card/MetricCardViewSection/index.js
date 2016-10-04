@@ -8,16 +8,15 @@ import {DistributionSummary} from 'gComponents/distributions/summary/index'
 import StatTable from 'gComponents/simulations/stat_table/index'
 import {MetricReadableId, MetricReasoningIcon, MetricSidebarToggle, MetricExportedIcon} from 'gComponents/metrics/card/token/index'
 import SensitivitySection from 'gComponents/metrics/card/SensitivitySection/SensitivitySection'
+import {divWithClasses} from 'gComponents/utility/container/Container'
 
-import {INTERNAL_ERROR, INFINITE_LOOP_ERROR, INPUT_ERROR} from 'lib/errors/modelErrors'
-
+import {isBreak, isInfiniteLoop, displayableError} from 'gEngine/simulation'
 import * as _collections from 'gEngine/collections'
 
 import './style.css'
 
-const isBreak = errors => _.some(errors, e => e.type === INPUT_ERROR)
-const severity = errors => isBreak(errors) ? 'minor' : 'serious'
-const isInfiniteLoop = errors => _.some(errors, e => e.type === INFINITE_LOOP_ERROR)
+// TODO(matthew): Refactor these components. E.g. it's weird that isBreak takes all errors, but you may only care about
+// the one...
 
 // We have to display this section after it disappears
 // to ensure that the metric card gets selected after click.
@@ -33,12 +32,12 @@ const ErrorIcon = ({errors}) => {
 
 // We have to display this section after it disappears
 // to ensure that the metric card gets selected after click.
-const ErrorSection = ({errors, padTop, shouldShowErrorText, errorToDisplay}) => (
-  <div className={`StatsSectionErrors ${severity(errors)} ${padTop ? 'padTop' : ''}`}>
-    {shouldShowErrorText && <ErrorText error={errorToDisplay} />}
-    {!shouldShowErrorText && <ErrorIcon errors={errors} />}
-  </div>
-)
+const ErrorSection = ({errors, padTop, shouldShowErrorText, errorToDisplay}) => {
+  const ErrorContainer = divWithClasses('StatsSectionErrors', isBreak(errors) ? 'minor' : 'serious', padTop ? 'padTop' : null)
+
+  if (shouldShowErrorText) { return <ErrorContainer><ErrorText error={errorToDisplay} /></ErrorContainer> }
+  return <ErrorContainer><ErrorIcon errors={errors} /></ErrorContainer>
+}
 
 export class MetricCardViewSection extends Component {
   hasContent() {
@@ -70,10 +69,7 @@ export class MetricCardViewSection extends Component {
     return errors ? errors.filter(e => !!e) : []
   }
 
-  _errorToDisplay() {
-    const inputError = _collections.get(this._errors(), INPUT_ERROR, 'type')
-    return !!inputError ? inputError : this._errors().find(e => e.type !== INTERNAL_ERROR)
-  }
+  _errorToDisplay() { return displayableError(this._errors()) }
 
   renderToken() {
     const {
@@ -122,11 +118,14 @@ export class MetricCardViewSection extends Component {
     const anotherFunctionSelected = ((metricClickMode === 'FUNCTION_INPUT_SELECT') && !inSelectedCell)
     const hasErrors = (errors.length > 0)
 
-    let className = `MetricCardViewSection ${metricCardView}`
-    className += (hasErrors & !inSelectedCell) ? ' hasErrors' : ''
-    className += (anotherFunctionSelected) ? ' anotherFunctionSelected' : ''
+    const MetricCardViewSectionDiv = divWithClasses(
+      'MetricCardViewSection',
+      metricCardView,
+      anotherFunctionSelected ? ' anotherFunctionSelected' : null,
+      hasErrors && !inSelectedCell ? ' hasErrors' : null,
+    )
     return (
-      <div className={className} onMouseDown={onMouseDown}>
+      <MetricCardViewSectionDiv onMouseDown={onMouseDown}>
         {(metricCardView !== 'basic') && showSimulation &&
           <Histogram
             height={(metricCardView === 'scientific') ? 110 : 30}
@@ -188,7 +187,7 @@ export class MetricCardViewSection extends Component {
             }
           </div>
         )}
-      </div>
+      </MetricCardViewSectionDiv>
     )
   }
 }

@@ -2,6 +2,8 @@ import React, {Component, PropTypes} from 'react'
 
 import {EditorState, Editor, ContentState, getDefaultKeyBinding, KeyBindingUtil} from 'draft-js'
 
+import {typeSafeEq} from 'gEngine/utils'
+
 import './style.css'
 
 class NameEditor extends Component {
@@ -26,6 +28,10 @@ class NameEditor extends Component {
   }
 
   getPlainText() {
+    if (!this.state.editorState.getCurrentContent()) {
+      const foo = this
+      debugger
+    }
     return this.state.editorState.getCurrentContent().getPlainText('')
   }
 
@@ -62,23 +68,26 @@ export default class MetricName extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    console.log('wrp')
     if ((this.props.name !== nextProps.name) && (nextProps.name !== this.value())) {
       this.refs.NameEditor && this.refs.NameEditor.changePlainText(nextProps.name)
     }
   }
 
   componentWillUnmount() {
+    console.log('unmount')
     this.handleSubmit()
   }
 
   handleSubmit() {
+    console.log('hs')
     if (this._hasChanged()){
       this.props.onChange(this.value())
     }
   }
 
   _hasChanged() {
-    return ((this.value() || '') != (this.props.name || ''))
+    return !typeSafeEq(this.value(), this.props.name || '')
   }
 
   hasContent() {
@@ -86,6 +95,12 @@ export default class MetricName extends Component {
   }
 
   value() {
+    // TODO(Matthew): probably can use lodash results here.
+    if (!this.refs.NameEditor) {
+      const foo = this
+      debugger
+    }
+
     return this.refs.NameEditor.getPlainText()
   }
 
