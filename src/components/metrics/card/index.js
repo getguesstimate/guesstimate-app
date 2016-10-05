@@ -276,7 +276,9 @@ export default class MetricCard extends Component {
       analyzedMetric,
       forceFlowGridUpdate,
       exportedAsFact,
+      location: {row, column}, // TODO(matthew): Delete this prop; it isn't used.
     } = this.props
+    console.log(`rendering metric ${metric.readableId} at location [${row} x ${column}]`)
     const {guesstimate, name} = metric
     const {metricClickMode} = canvasState
     const shouldShowSensitivitySection = this._shouldShowSensitivitySection()

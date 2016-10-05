@@ -75,27 +75,30 @@ export default class MetricName extends Component {
   }
 
   componentWillUnmount() {
-    console.log('unmount')
+    console.log(`calling 'unmount()' for metric ${this.props.readableId}`)
     this.handleSubmit()
   }
 
   handleSubmit() {
-    console.log('hs')
+    console.log(`calling 'handleSubmit()' for metric ${this.props.readableId}`)
     if (this._hasChanged()){
       this.props.onChange(this.value())
     }
   }
 
   _hasChanged() {
+    console.log(`calling '_hasChanged()' for metric ${this.props.readableId}`)
     return !typeSafeEq(this.value(), this.props.name || '')
   }
 
   hasContent() {
+    console.log(`calling 'hasContent()' for metric ${this.props.readableId}`)
     return !_.isEmpty(this.value())
   }
 
   value() {
     // TODO(Matthew): probably can use lodash results here.
+    console.log(`calling 'value()' for metric ${this.props.readableId}`)
     if (!this.refs.NameEditor) {
       const foo = this
       debugger
@@ -133,6 +136,7 @@ export default class MetricName extends Component {
   }
 
   render() {
+    console.log(`Rendering name for metric ${this.props.readableId}`)
     const isClickable = !this.props.anotherFunctionSelected
     return (
       <span

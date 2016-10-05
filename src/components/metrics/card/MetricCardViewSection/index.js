@@ -44,6 +44,10 @@ export class MetricCardViewSection extends Component {
     return _.has(this, 'refs.name') && this.refs.name.hasContent()
   }
 
+  componentWillUnmount() {
+    console.log('unmounting view section for metric', this.props.metric.readableId)
+  }
+
   showSimulation() {
     const stats = _.get(this.props, 'metric.simulation.stats')
     if (stats && _.isFinite(stats.mean) && _.isFinite(stats.stdev) && _.isFinite(stats.length)) {
@@ -107,6 +111,8 @@ export class MetricCardViewSection extends Component {
       hovered,
       exportedAsFact,
     } = this.props
+    console.log(`Rendering view section for metric ${metric.readableId}`)
+    console.log(`inSelectedCell = ${inSelectedCell}`)
 
     const errors = this._errors()
     const errorToDisplay = this._errorToDisplay()
@@ -142,7 +148,9 @@ export class MetricCardViewSection extends Component {
 
         {(!_.isEmpty(metric.name) || inSelectedCell) &&
           <div className='NameSection'>
+            {console.log('RENDERING') && false}
             <MetricName
+              readableId={metric.readableId}
               anotherFunctionSelected={anotherFunctionSelected}
               inSelectedCell={inSelectedCell}
               name={metric.name}
