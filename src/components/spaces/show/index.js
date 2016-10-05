@@ -265,7 +265,7 @@ export default class SpacesShow extends Component {
   }
   makeNewCalculator() { this.openRightSidebar({type: NEW_CALCULATOR_FORM}) }
   toggleFactSidebar() {
-    if (this.state.rightSidebar.type !== FACT_SIDEBAR){ this.openRightSidebar({type: FACT_SIDEBAR}) }
+    if (this.state.rightSidebar.type !== FACT_SIDEBAR) { this.openRightSidebar({type: FACT_SIDEBAR}) }
     else { this.closeRightSidebar() }
   }
 
@@ -274,7 +274,7 @@ export default class SpacesShow extends Component {
       props: {denormalizedSpace, spaceId, organizationFacts},
       state: {rightSidebar: {type, showCalculatorResults, showCalculatorId, editCalculatorId}},
     } = this
-    const {editableByMe, calculators, organization} = denormalizedSpace
+    const {editableByMe, calculators, organization, imported_fact_ids} = denormalizedSpace
     switch (type) {
       case CLOSED:
         return {}
@@ -330,9 +330,9 @@ export default class SpacesShow extends Component {
                 existingVariableNames={organizationFacts.map(e.facts.getVar)}
                 facts={organizationFacts}
                 organization={organization}
-                isEditable={true}
+                canMakeNewFacts={true}
                 spaceId={spaceId}
-                imported_fact_ids={denormalizedSpace.imported_fact_ids}
+                imported_fact_ids={imported_fact_ids}
               />
             </div>
           ),

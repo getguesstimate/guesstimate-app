@@ -13,7 +13,7 @@ export class FactListContainer extends Component{
   displayName: 'FactListContainer'
 
   render() {
-    const {facts, existingVariableNames, categories, organization, categoryId, isEditable, spaceId, imported_fact_ids} = this.props
+    const {facts, existingVariableNames, categories, organization, categoryId, canMakeNewFacts, spaceId, imported_fact_ids} = this.props
     return (
       <FactList
         onDeleteFact={fact => this.props.dispatch(organizationActions.deleteFact(organization, fact))}
@@ -23,7 +23,7 @@ export class FactListContainer extends Component{
         existingVariableNames={existingVariableNames}
         categories={orArr(categories)}
         categoryId={categoryId}
-        isEditable={isEditable}
+        canMakeNewFacts={canMakeNewFacts}
         spaceId={spaceId}
         imported_fact_ids={imported_fact_ids}
       />

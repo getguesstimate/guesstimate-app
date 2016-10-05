@@ -6,8 +6,10 @@ import HTML5Backend from 'react-dnd-html5-backend'
 import Cell from './cell'
 import {BackgroundContainer} from './background-container'
 
+import {allPropsPresent} from 'gEngine/utils'
+
 import {keycodeToDirection, DirectionToLocation} from './utils'
-import {getBounds, isLocation, isWithinRegion, isAtLocation, PTRegion, PTLocation} from 'lib/locationUtils'
+import {getBounds, isLocation, isWithinRegion, isAtLocation, PTRegion, PTLocation, boundingRegion} from 'lib/locationUtils'
 
 import './FlowGrid.css'
 
@@ -46,12 +48,12 @@ export default class FlowGrid extends Component{
     onCopy: PropTypes.func.isRequired,
     onPaste: PropTypes.func.isRequired,
     showGridLines: PropTypes.bool,
-    isSelectable: PropTypes.bool
+    isModelingCanvas: PropTypes.bool
   }
 
   static defaultProps = {
     showGridLines: true,
-    isSelectable: true
+    isModelingCanvas: true
   }
 
   state = {
@@ -155,8 +157,7 @@ export default class FlowGrid extends Component{
     let direction = keycodeToDirection(e.keyCode)
     if (direction) {
       e.preventDefault()
-      const size = ({columns: this._columnCount(), rows: this._rowCount()})
-      let newLocation = new DirectionToLocation(size, this.props.selectedCell)[direction]()
+      let newLocation = new DirectionToLocation(this._size(), this.props.selectedCell)[direction]()
       this.props.onSelectItem(newLocation)
     } else if (!e.shiftKey && (e.keyCode == '17' || e.keyCode == '224' || e.keyCode == '91' || e.keyCode == '93')) {
       e.preventDefault()
@@ -190,32 +191,18 @@ export default class FlowGrid extends Component{
     this.props.onMultipleSelect(corner1, corner2)
   }
 
-  size() {
-    const lowestItem = !this.props.items.length ? 2 : Math.max(...this.props.items.map(g => parseInt(g.location.row))) + 2
-    const selected = parseInt(this.props.selectedCell.row) + 2
-    const height = Math.max(3, lowestItem, selected) || 3;
-    return {columns: this._columnCount(), rows: height}
-  }
-
-  _rowCount() {
-    const lowestItem = Math.max(...this.props.items.map(e => parseInt(e.location.row))) + 1
-    let selectedRow = this.props.selectedCell.row || 0
-    const selected = parseInt(selectedRow) + 1
-    if (this.props.isSelectable) {
-      return Math.max(16, lowestItem + 3, selected + 4) || 8;
-    } else {
-      return Math.max(1, lowestItem)
+  _size() {
+    const [_1, {row: largestRow, column: largestColumn}] = boundingRegion(this.props.items.map(e => e.location))
+    let [selectedRow, selectedColumn] = [0, 0]
+    if (allPropsPresent(this.props, 'selectedCell.row', 'selectedCell.column')) {
+      selectedRow = this.props.selectedCell.row
+      selectedColumn = this.props.selectedCell.column
     }
-  }
 
-  _columnCount() {
-    const lowestItem = Math.max(...this.props.items.map(e => parseInt(e.location.column))) + 1
-    let selectedColumn = this.props.selectedCell.column || 0
-    const selected = parseInt(selectedColumn) + 1
-    if (this.props.isSelectable) {
-      return Math.max(10, lowestItem + 3, selected) || 8;
+    if (this.props.isModelingCanvas) {
+      return {rows: Math.max(16, largestRow + 4, selectedRow + 5), columns: Math.max(10, largestColumn + 4, selectedColumn + 1)}
     } else {
-      return Math.max(1, lowestItem);
+      return {rows: Math.max(1, largestRow + 1), columns: Math.max(1, largestColumn + 1)}
     }
   }
 
@@ -317,12 +304,11 @@ export default class FlowGrid extends Component{
   }
 
   render() {
-    const rowCount = this._rowCount()
-    const columnCount = this._columnCount()
+    const {rows, columns} = this._size()
     const {edges} = this.props
     let className = 'FlowGrid'
     className += this.props.showGridLines ? ' withLines' : ''
-    className += this.props.isSelectable ? ' isSelectable' : ''
+    className += this.props.isModelingCanvas ? ' isSelectable' : ''
 
     return (
       <div
@@ -335,14 +321,14 @@ export default class FlowGrid extends Component{
         <div className={className}>
           <div className='canvas'>
             {
-              upto(rowCount).map((row) => {
+              upto(rows).map((row) => {
                 return (
                   <div
                     className='FlowGridRow'
                     key={row}
                     ref={`row-${row}`}
                   >
-                    {this._row(row, columnCount)}
+                    {this._row(row, columns)}
                   </div>
                 )
               })
@@ -350,7 +336,7 @@ export default class FlowGrid extends Component{
           </div>
           <BackgroundContainer
             edges={edges}
-            rowCount={rowCount}
+            rowCount={rows}
             getRowHeight={this._getRowHeight.bind(this)}
             selectedRegion={this.props.selectedRegion}
             copiedRegion={this.props.copiedRegion}

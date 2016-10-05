@@ -89,10 +89,6 @@ a.MetricSidebarItem {
 	border-bottom: 1px solid #40525c;
 }
 
-/* TODO: NOT BE TERRIBLY UGLY */
-a.MetricSidebarItem.exportedAsFact {
-}
-
 a.MetricSidebarItem.analyzing {
 	background: #3d9268;
 }
