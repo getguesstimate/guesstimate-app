@@ -6,54 +6,6 @@ import {typeSafeEq} from 'gEngine/utils'
 
 import './style.css'
 
-class NameEditor extends Component {
-  state = {
-    editorState: this._plainTextEditorState(this.props.value)
-  }
-
-  _plainTextEditorState(value) {
-    return EditorState.createWithContent(ContentState.createFromText(value || ''))
-  }
-
-  _onChange(editorState) {
-   return this.setState({editorState})
-  }
-
-  focus() {
-    this.refs.editor.focus()
-  }
-
-  changePlainText(value) {
-    this.setState({editorState: this._plainTextEditorState(value)})
-  }
-
-  getPlainText() {
-    if (!this.state.editorState.getCurrentContent()) {
-      const foo = this
-      debugger
-    }
-    return this.state.editorState.getCurrentContent().getPlainText('')
-  }
-
-  render() {
-    const {editorState} = this.state;
-    return (
-      <div onClick={this.props.isClickable && this.focus.bind(this)}>
-        <Editor
-          editorState={editorState}
-          onBlur={this.props.onBlur}
-          onChange={this._onChange.bind(this)}
-          handleReturn={this.props.handleReturn}
-          onTab={this.props.handleTab}
-          onEscape={this.props.onEscape}
-          ref='editor'
-          placeholder={this.props.placeholder}
-        />
-      </div>
-    );
-  }
-}
-
 export default class MetricName extends Component {
   displayName: 'MetricName'
 
@@ -64,13 +16,13 @@ export default class MetricName extends Component {
   }
 
   state = {
-    value: this.props.name
+    editorState: this.plainTextEditorState(this.props.name)
   }
 
   componentWillReceiveProps(nextProps) {
     console.log('wrp')
     if ((this.props.name !== nextProps.name) && (nextProps.name !== this.value())) {
-      this.refs.NameEditor && this.refs.NameEditor.changePlainText(nextProps.name)
+      this.changePlainText(nextProps.name)
     }
   }
 
@@ -81,13 +33,13 @@ export default class MetricName extends Component {
 
   handleSubmit() {
     console.log(`calling 'handleSubmit()' for metric ${this.props.readableId}`)
-    if (this._hasChanged()){
+    if (this.hasChanged()){
       this.props.onChange(this.value())
     }
   }
 
-  _hasChanged() {
-    console.log(`calling '_hasChanged()' for metric ${this.props.readableId}`)
+  hasChanged() {
+    console.log(`calling 'hasChanged()' for metric ${this.props.readableId}`)
     return !typeSafeEq(this.value(), this.props.name || '')
   }
 
@@ -99,16 +51,12 @@ export default class MetricName extends Component {
   value() {
     // TODO(Matthew): probably can use lodash results here.
     console.log(`calling 'value()' for metric ${this.props.readableId}`)
-    if (!this.refs.NameEditor) {
+
+    if (!this.state.editorState.getCurrentContent()) {
       const foo = this
       debugger
     }
-
-    return this.refs.NameEditor.getPlainText()
-  }
-
-  focus() {
-    this.refs.NameEditor.focus()
+    return this.state.editorState.getCurrentContent().getPlainText('')
   }
 
   handleKeyDown(e) {
@@ -135,25 +83,32 @@ export default class MetricName extends Component {
     return true
   }
 
+  focus() { this.refs.editor.focus() }
+
+  plainTextEditorState(value) { return EditorState.createWithContent(ContentState.createFromText(value || '')) }
+  changePlainText(value) { this.setState({editorState: this.plainTextEditorState(value)}) }
+
   render() {
     console.log(`Rendering name for metric ${this.props.readableId}`)
-    const isClickable = !this.props.anotherFunctionSelected
+    const {props: {anotherFunctionSelected}, state: {editorState}} = this
+
     return (
       <span
-        className={`MetricName ${isClickable ? 'isClickable' : ''}`}
+        className={`MetricName ${!anotherFunctionSelected ? 'isClickable' : ''}`}
         onKeyDown={this.handleKeyDown.bind(this)}
       >
-        <NameEditor
-          onBlur={this.handleSubmit.bind(this)}
-          value={this.state.value}
-          handleReturn={this.onReturn.bind(this)}
-          handleTab={this.onTab.bind(this)}
-          onEscape={this.props.onEscape}
-          placeholder={'name'}
-          isClickable={isClickable}
-          onTab={this.props.onTab}
-          ref='NameEditor'
-        />
+        <div onClick={!anotherFunctionSelected && this.focus.bind(this)}>
+          <Editor
+            editorState={editorState}
+            onBlur={this.handleSubmit.bind(this)}
+            onChange={editorState => this.setState({editorState})}
+            handleReturn={this.onReturn.bind(this)}
+            onTab={this.onTab.bind(this)}
+            onEscape={this.props.onEscape}
+            ref='editor'
+            placeholder={'name'}
+          />
+        </div>
       </span>
     )
   }
