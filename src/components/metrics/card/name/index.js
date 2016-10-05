@@ -7,8 +7,6 @@ import {typeSafeEq} from 'gEngine/utils'
 import './style.css'
 
 export default class MetricName extends Component {
-  displayName: 'MetricName'
-
   static propTypes = {
     name: PropTypes.string,
     inSelectedCell: PropTypes.bool.isRequired,
@@ -20,49 +18,20 @@ export default class MetricName extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('wrp')
     if ((this.props.name !== nextProps.name) && (nextProps.name !== this.value())) {
       this.changePlainText(nextProps.name)
     }
   }
 
-  componentWillUnmount() {
-    console.log(`calling 'unmount()' for metric ${this.props.readableId}`)
-    this.handleSubmit()
-  }
-
-  handleSubmit() {
-    console.log(`calling 'handleSubmit()' for metric ${this.props.readableId}`)
-    if (this.hasChanged()){
-      this.props.onChange(this.value())
-    }
-  }
-
-  hasChanged() {
-    console.log(`calling 'hasChanged()' for metric ${this.props.readableId}`)
-    return !typeSafeEq(this.value(), this.props.name || '')
-  }
-
-  hasContent() {
-    console.log(`calling 'hasContent()' for metric ${this.props.readableId}`)
-    return !_.isEmpty(this.value())
-  }
-
-  value() {
-    // TODO(Matthew): probably can use lodash results here.
-    console.log(`calling 'value()' for metric ${this.props.readableId}`)
-
-    if (!this.state.editorState.getCurrentContent()) {
-      const foo = this
-      debugger
-    }
-    return this.state.editorState.getCurrentContent().getPlainText('')
-  }
-
-  handleKeyDown(e) {
-    e.stopPropagation()
-    this.props.heightHasChanged()
-  }
+  componentWillUnmount() { this.handleSubmit() }
+  handleSubmit() { if (this.hasChanged()){ this.props.onChange(this.value()) } }
+  hasChanged() { return !typeSafeEq(this.value(), this.props.name || '') }
+  hasContent() { return !_.isEmpty(this.value()) }
+  value() { return this.state.editorState.getCurrentContent().getPlainText('') }
+  handleKeyDown(e) { e.stopPropagation(); this.props.heightHasChanged() }
+  focus() { this.refs.editor.focus() }
+  plainTextEditorState(value) { return EditorState.createWithContent(ContentState.createFromText(value || '')) }
+  changePlainText(value) { this.setState({editorState: this.plainTextEditorState(value)}) }
 
   onReturn(e) {
     if (e.shiftKey) {
@@ -83,13 +52,7 @@ export default class MetricName extends Component {
     return true
   }
 
-  focus() { this.refs.editor.focus() }
-
-  plainTextEditorState(value) { return EditorState.createWithContent(ContentState.createFromText(value || '')) }
-  changePlainText(value) { this.setState({editorState: this.plainTextEditorState(value)}) }
-
   render() {
-    console.log(`Rendering name for metric ${this.props.readableId}`)
     const {props: {anotherFunctionSelected}, state: {editorState}} = this
 
     return (

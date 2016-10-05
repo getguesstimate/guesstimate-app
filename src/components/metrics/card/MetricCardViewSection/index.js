@@ -8,9 +8,9 @@ import {DistributionSummary} from 'gComponents/distributions/summary/index'
 import StatTable from 'gComponents/simulations/stat_table/index'
 import {MetricReadableId, MetricReasoningIcon, MetricSidebarToggle, MetricExportedIcon} from 'gComponents/metrics/card/token/index'
 import SensitivitySection from 'gComponents/metrics/card/SensitivitySection/SensitivitySection'
-import {divWithClasses} from 'gComponents/utility/container/Container'
 
-import {isBreak, isInfiniteLoop, displayableError} from 'gEngine/simulation'
+import {getClassName} from 'gEngine/utils'
+import {isBreak, isInfiniteLoop, hasErrors, errors, displayableError} from 'gEngine/simulation'
 import * as _collections from 'gEngine/collections'
 
 import './style.css'
@@ -32,21 +32,16 @@ const ErrorIcon = ({errors}) => {
 
 // We have to display this section after it disappears
 // to ensure that the metric card gets selected after click.
-const ErrorSection = ({errors, padTop, shouldShowErrorText, errorToDisplay}) => {
-  const ErrorContainer = divWithClasses('StatsSectionErrors', isBreak(errors) ? 'minor' : 'serious', padTop ? 'padTop' : null)
-
-  if (shouldShowErrorText) { return <ErrorContainer><ErrorText error={errorToDisplay} /></ErrorContainer> }
-  return <ErrorContainer><ErrorIcon errors={errors} /></ErrorContainer>
-}
+const ErrorSection = ({errors, padTop, shouldShowErrorText, errorToDisplay}) => (
+  <div className={getClassName('StatsSectionErrors', isBreak(errors) ? 'minor' : 'serious', padTop ? 'padTop' : null)}>
+    {shouldShowErrorText && <ErrorText error={errorToDisplay} /> }
+    {!shouldShowErrorText && <ErrorIcon errors={errors} /> }
+  </div>
+)
 
 export class MetricCardViewSection extends Component {
-  hasContent() {
-    return _.has(this, 'refs.name') && this.refs.name.hasContent()
-  }
-
-  componentWillUnmount() {
-    console.log('unmounting view section for metric', this.props.metric.readableId)
-  }
+  hasContent() { return _.result(this.refs, 'name.hasContent') }
+  focusName() { _.result(this.refs, 'name.focus') }
 
   showSimulation() {
     const stats = _.get(this.props, 'metric.simulation.stats')
@@ -57,23 +52,14 @@ export class MetricCardViewSection extends Component {
     }
   }
 
-  focusName() {
-    this.refs.name && this.refs.name.focus()
-  }
-
   _shouldShowStatistics() {
     const isScientific = (this.props.canvasState.metricCardView === 'scientific')
     const isAvailable = this.showSimulation() && (_.get(this.props, 'metric.simulation.stats').length > 1)
     return isScientific && isAvailable
   }
 
-  _errors() {
-    if (this.props.isTitle){ return [] }
-    let errors = _.get(this.props.metric, 'simulation.sample.errors')
-    return errors ? errors.filter(e => !!e) : []
-  }
-
-  _errorToDisplay() { return displayableError(this._errors()) }
+  _hasErrors() { return !this.props.isTitle && hasErrors(this.props.metric.simulation) }
+  _errors() { return this._hasErrors() ? errors(this.props.metric.simulation) : []}
 
   renderToken() {
     const {
@@ -111,27 +97,23 @@ export class MetricCardViewSection extends Component {
       hovered,
       exportedAsFact,
     } = this.props
-    console.log(`Rendering view section for metric ${metric.readableId}`)
-    console.log(`inSelectedCell = ${inSelectedCell}`)
 
-    const errors = this._errors()
-    const errorToDisplay = this._errorToDisplay()
+    const errorToDisplay = this._hasErrors() ? displayableError(this._errors()) : []
     const {guesstimate} = metric
     const stats = _.get(metric, 'simulation.stats')
     const showSimulation = this.showSimulation()
     const shouldShowStatistics = this._shouldShowStatistics()
     const hasGuesstimateDescription = !_.isEmpty(guesstimate.description)
     const anotherFunctionSelected = ((metricClickMode === 'FUNCTION_INPUT_SELECT') && !inSelectedCell)
-    const hasErrors = (errors.length > 0)
 
-    const MetricCardViewSectionDiv = divWithClasses(
+    const mainClassName = getClassName(
       'MetricCardViewSection',
       metricCardView,
-      anotherFunctionSelected ? ' anotherFunctionSelected' : null,
-      hasErrors && !inSelectedCell ? ' hasErrors' : null,
+      anotherFunctionSelected ? 'anotherFunctionSelected' : null,
+      this._hasErrors() && !inSelectedCell ? 'hasErrors' : null,
     )
     return (
-      <MetricCardViewSectionDiv onMouseDown={onMouseDown}>
+      <div className={mainClassName} onMouseDown={onMouseDown}>
         {(metricCardView !== 'basic') && showSimulation &&
           <Histogram
             height={(metricCardView === 'scientific') ? 110 : 30}
@@ -148,9 +130,7 @@ export class MetricCardViewSection extends Component {
 
         {(!_.isEmpty(metric.name) || inSelectedCell) &&
           <div className='NameSection'>
-            {console.log('RENDERING') && false}
             <MetricName
-              readableId={metric.readableId}
               anotherFunctionSelected={anotherFunctionSelected}
               inSelectedCell={inSelectedCell}
               name={metric.name}
@@ -185,9 +165,9 @@ export class MetricCardViewSection extends Component {
               </div>
             }
 
-            {hasErrors && !inSelectedCell &&
+            {this._hasErrors() && !inSelectedCell &&
               <ErrorSection
-                errors={errors}
+                errors={this._errors()}
                 errorToDisplay={errorToDisplay}
                 padTop={(!_.isEmpty(metric.name) && !inSelectedCell)}
                 shouldShowErrorText={!!errorToDisplay && hovered}
@@ -195,7 +175,7 @@ export class MetricCardViewSection extends Component {
             }
           </div>
         )}
-      </MetricCardViewSectionDiv>
+      </div>
     )
   }
 }

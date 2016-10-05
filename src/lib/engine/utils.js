@@ -16,6 +16,8 @@ export const presentOrVal = (e, val) => isPresent(e) ? e : val
 export const allPresent = (...objs) => objs.reduce((running, curr) => running && isPresent(curr), true)
 export const allPropsPresent = (obj, ...props) => allPresent(...props.map(p => _.get(obj, p)))
 
+export const getClassName = (...classes) => classes.filter(isPresent).join(' ')
+
 const escSpecialChars = str => str.replace(/\$|\{|\}|\_/g, e => `\\${e}`)
 const toSource = re => re instanceof RegExp ? re.source : escSpecialChars(re)
 const parenthesize = str => `(?:${str})`

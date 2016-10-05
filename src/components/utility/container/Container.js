@@ -1,14 +1,12 @@
-import React from 'react'
-
-import {isPresent} from 'gEngine/utils'
-
+import React, {Component} from 'react'
 import './style.css'
 
-export const divWithClasses = (...classes) => props => (
-  <div className={classes.filter(isPresent).join(' ')} {..._.omit(props, 'children')}>
-    {props.children}
-  </div>
-)
-
-const Container = divWithClasses('GeneralContainer')
-export default Container
+export default class Container extends Component{
+  render () {
+    return (
+      <div className='GeneralContainer'>
+        {this.props.children}
+      </div>
+    )
+  }
+}
