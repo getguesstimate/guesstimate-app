@@ -74,13 +74,16 @@ describe('construction', () => {
     expect(subTypes).to.have.members([IN_INFINITE_LOOP, IN_INFINITE_LOOP])
   })
 
-  const errorDataNodeList = [utils.makeNode(1, ['missing', 'gone']), utils.makeNode(2, [1, 3]), utils.makeNode(3, [4]), utils.makeNode(4, [3])]
+  const errorDataNodeList = [utils.makeNode(1, ['missing', 'gone']), utils.makeNode(2, [5, 3]), utils.makeNode(3, [4]), utils.makeNode(4, [3]), utils.makeNode(5, [1])]
 
   it ('Assigns the correct auxilary error data', () => {
     const DAG = new SimulationDAG(errorDataNodeList)
 
-    const invalidAncestorError = _collections.get(_.flatten(DAG.nodes.map(n => n.errors)).filter(_utils.isPresent), INVALID_ANCESTOR_ERROR, 'subType')
-    expect(invalidAncestorError.ancestors).to.have.members(['node:3', 'node:1'])
+    // TODO(matthew): Clean up tests.
+    // TODO(matthew): Make tests pass....
+    const invalidAncestorError = _collections.gget(DAG.nodes, utils.toNodeId(2), 'id', 'errors')[0]
+    expect(invalidAncestorError.ancestors).to.have.members(['node:1'])
+    expect(invalidAncestorError.inputs).to.have.members(['node:3'])
 
     const missingInputError = _collections.get(_.flatten(DAG.graphErrorNodes.map(n => n.errors)), MISSING_INPUT_ERROR, 'subType')
     expect(missingInputError.missingInputs).to.have.members(['node:missing', 'node:gone'])
@@ -113,15 +116,20 @@ describe('member functions', () => {
 })
 
 describe('node functions', () => {
-  const simpleNodeList = [utils.makeNode(1), utils.makeNode(2, [1]), utils.makeNode(3, [1,2])]
+  const simpleNodeList = [utils.makeNode(1), utils.makeNode(2, [1]), utils.makeNode(3, [2])]
   it ('should add errors to the right children', () => {
     let DAG = new SimulationDAG(simpleNodeList)
     const node = DAG.find(utils.toNodeId(1))
     expect(node).to.be.ok
 
     node._addErrorToDescendants()
-    expect(DAG.find(utils.toNodeId(2)).errors).to.deep.have.members([{type: GRAPH_ERROR, subType: INVALID_ANCESTOR_ERROR, ancestors: [utils.toNodeId(1)]}])
-    expect(DAG.find(utils.toNodeId(3)).errors).to.deep.have.members([{type: GRAPH_ERROR, subType: INVALID_ANCESTOR_ERROR, ancestors: [utils.toNodeId(1)]}])
+    // TODO(matthew): Make tests pass.
+    expect(DAG.find(utils.toNodeId(2)).errors).to.deep.have.members([
+      {type: GRAPH_ERROR, subType: INVALID_ANCESTOR_ERROR, inputs: [utils.toNodeId(1)]}
+    ])
+    expect(DAG.find(utils.toNodeId(3)).errors).to.deep.have.members([
+      {type: GRAPH_ERROR, subType: INVALID_ANCESTOR_ERROR, ancestors: [utils.toNodeId(1)]}
+    ])
   })
 
   const withSamples = [utils.makeNode(1, [4], [3]), utils.makeNode(2, [4], [4]), utils.makeNode(3, [1,2]), utils.makeNode(4, [], [5])]

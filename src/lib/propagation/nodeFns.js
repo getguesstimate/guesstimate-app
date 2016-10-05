@@ -25,7 +25,11 @@ export const withInfiniteLoopError = addGraphError(IN_INFINITE_LOOP)
 const concatErrorIds = a => (running, curr) => curr.subType === INVALID_ANCESTOR_ERROR ? [...running, ...curr.ancestors] : [...running, a]
 const brokenAncestors = node => _utils.orArr(_.get(node, 'errors')).reduce(concatErrorIds(node.id), [])
 const inputErrorIdsFn = errorNodes => i => _collections.some(errorNodes, i) ? brokenAncestors(_collections.get(errorNodes, i)) : []
-const getInvalidAncestorsFn = errorNodes => n => ({ancestors: _.uniq(_.flatten(n.inputs.map(inputErrorIdsFn(errorNodes))))})
+const getInvalidAncestorsFn = errorNodes => n => {
+  let ancestors = _.uniq(_.flatten(n.inputs.map(inputErrorIdsFn(errorNodes)))).filter(_utils.isPresent)
+  const inputs = _.remove(ancestors, n.inputs.includes.bind(n.inputs))
+  return {ancestors, inputs}
+}
 export const withAncestralError = errorNodes => addGraphError(INVALID_ANCESTOR_ERROR, getInvalidAncestorsFn(errorNodes))
 
 export const hasErrors = n => !_.isEmpty(_.get(n, 'errors'))

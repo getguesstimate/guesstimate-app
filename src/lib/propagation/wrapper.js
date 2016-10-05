@@ -160,7 +160,7 @@ function translateErrorFn(denormalizedMetrics, metricID) {
       case IN_INFINITE_LOOP:
         return {...err, message: 'Metric references itself through dependency chain'}
       case INVALID_ANCESTOR_ERROR:
-        let invalidAncestors = e.utils.mutableCopy(err.ancestors).map(nodeIdToMetricId)
+        let invalidAncestors = err.ancestors.map(nodeIdToMetricId)
         const invalidDirectInputs = _.remove(invalidAncestors, a => metric.guesstimate.expression.includes(a))
 
         const invalidAncestorReadableIDs = invalidAncestors.map(getReadableIdFn)
