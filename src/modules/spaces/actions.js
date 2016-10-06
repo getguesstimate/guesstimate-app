@@ -40,6 +40,7 @@ export function fetchSuccess(spaces) {
       if (!e.utils.isPresent(organization)) { return null }
       return {
         ...organization,
+        fullyLoaded: true,
         facts: [...e.utils.orArr(_.get(organization, 'facts')), ...e.utils.orArr(_.get(s, '_embedded.imported_facts'))],
       }
     }).filter(e.utils.isPresent)
