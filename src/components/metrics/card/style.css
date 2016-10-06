@@ -74,7 +74,7 @@
 .MetricSidebar {
 	 position: absolute;
 	 top: 4px;
-	 right: -8.2em;
+	 right: -10.2em;
 	 z-index: 3;
 }
 
@@ -82,7 +82,7 @@ a.MetricSidebarItem {
 	clear: both;
 	display: block;
 	float: left;
-	width: 8em;
+	width: 10em;
 	padding: .4em .7em;
 	color: white;
 	background: #52646f;

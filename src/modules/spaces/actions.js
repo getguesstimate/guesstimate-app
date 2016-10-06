@@ -70,9 +70,27 @@ export function destroy(object) {
   }
 }
 
+// TODO(matthew): Maybe we can remove metric_count?
+const SPACE_INDEX_ATTRIBUTES = [
+  'id',
+  'name',
+  'description',
+  'user_id',
+  'organization_id',
+  'updated_at',
+  'metric_count',
+  'is_private',
+  'screenshot',
+  'big_screenshot',
+  'viewcount',
+  'imported_fact_ids',
+  'exported_facts_count',
+  'editors_by_time',
+]
+
 export function fromSearch(data) {
   return (dispatch) => {
-    const formatted = data.map(d => _.pick(d, ['id', 'name', 'description', 'user_id', 'updated_at', 'metric_count', 'is_private', 'screenshot', 'big_screenshot', 'viewcount']))
+    const formatted = data.map(d => _.pick(d, SPACE_INDEX_ATTRIBUTES))
     const action = sActions.fetchSuccess(formatted)
     dispatch(action)
   }
@@ -101,7 +119,7 @@ export function fetch({userId, organizationId}) {
       if (err) {
         captureApiError('SpacesFetch', err.jqXHR, err.textStatus, err, {url: 'fetch'})
       } else if (value) {
-        const formatted = value.items.map(d => _.pick(d, ['id', 'name', 'description', 'user_id', 'organization_id', 'updated_at', 'metric_count', 'is_private', 'screenshot', 'big_screenshot']))
+        const formatted = value.items.map(d => _.pick(d, SPACE_INDEX_ATTRIBUTES))
         dispatch(sActions.fetchSuccess(formatted))
 
         const users = value.items.map(d => _.get(d, 'user')).filter(u => !!u)
