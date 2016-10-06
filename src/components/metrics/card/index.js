@@ -20,7 +20,6 @@ import {analyzeMetricId, endAnalysis} from 'gModules/canvas_state/actions'
 import {createFactFromMetric} from 'gModules/facts/actions'
 
 import * as canvasStateProps from 'gModules/canvas_state/prop_type'
-import {PTLocation} from 'lib/locationUtils'
 import {withReadableId} from 'lib/generateVariableNames/generateMetricReadableId'
 import {shouldTransformName} from 'lib/generateVariableNames/nameToVariableName'
 
@@ -57,7 +56,6 @@ export default class MetricCard extends Component {
     removeMetrics: PropTypes.func.isRequired,
     gridKeyPress: PropTypes.func.isRequired,
     inSelectedCell: PropTypes.bool.isRequired,
-    location: PTLocation,
     metric: PropTypes.object.isRequired
   }
 
@@ -93,8 +91,6 @@ export default class MetricCard extends Component {
   componentWillUnmount() { window.recorder.recordUnmountEvent(this) }
 
   componentDidUpdate(prevProps) {
-    const {metric, location: {row, column}} = this.props
-
     window.recorder.recordRenderStopEvent(this)
 
     const hasContent = _.result(this.refs, 'MetricCardViewSection.hasContent')
@@ -172,7 +168,7 @@ export default class MetricCard extends Component {
   onChangeMetricName(name) {
     if (name === _.get(this, 'props.metric.name')) { return }
 
-    const metric = withReadableId({id: this._id(), name}, this.props.existingReadableIds)
+    const metric = withReadableId({id: this._id(), name}, _.values(this.props.idMap))
 
     this.props.changeMetric(metric)
   }
@@ -264,11 +260,11 @@ export default class MetricCard extends Component {
       canUseOrganizationFacts,
       canvasState,
       hovered,
+      idMap,
       connectDragSource,
       analyzedMetric,
       forceFlowGridUpdate,
       exportedAsFact,
-      location: {row, column}, // TODO(matthew): Delete this prop; it isn't used.
     } = this.props
     const {guesstimate, name} = metric
     const {metricClickMode} = canvasState
@@ -312,9 +308,10 @@ export default class MetricCard extends Component {
             onMouseDown={this._handleMouseDown.bind(this)}
             ref='MetricCardViewSection'
             isTitle={this._isTitle()}
-            connectDragSource={connectDragSource}
+            idMap={idMap}
             analyzedMetric={analyzedMetric}
             showSensitivitySection={shouldShowSensitivitySection}
+            connectDragSource={connectDragSource}
             heightHasChanged={forceFlowGridUpdate}
             hovered={hovered}
             onEscape={this.focus.bind(this)}

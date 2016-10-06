@@ -103,7 +103,7 @@ function guesstimateTypeToNodeType(guesstimateType) {
 }
 
 const filterErrorsFn = e => e.type !== ERROR_TYPES.GRAPH_ERROR
-const metricIdToNodeId = id => `${e.simulation.METRIC_ID_PREFIX}${id}`
+export const metricIdToNodeId = id => `${e.simulation.METRIC_ID_PREFIX}${id}`
 const metricToSimulationNodeFn = m => ({
   id: metricIdToNodeId(m.id),
   type: guesstimateTypeToNodeType(m.guesstimate.guesstimateType),
