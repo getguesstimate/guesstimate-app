@@ -117,7 +117,6 @@ export class SpaceHeader extends Component {
                 </div>
               </ShareableLinkOption>
             }
-            {ownerIsOrg && <a className='ui image label' href={`${ownerUrl}/fact-graph`}><Icon name='expand'/></a>}
             {editableByMe &&
               <PrivacyToggle
                 editableByMe={editableByMe}
