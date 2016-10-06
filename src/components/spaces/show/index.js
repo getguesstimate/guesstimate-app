@@ -143,13 +143,11 @@ export default class SpacesShow extends Component {
     this.considerFetch(prevProps)
   }
 
-  considerFetch(newProps) {
-    const space = newProps.denormalizedSpace
+  considerFetch({denormalizedSpace: space}) {
+    if (this.state.attemptedFetch) { return }
 
-    const hasOwner = _.has(space, 'user.name') || _.has(space, 'organization.name')
     const hasGraph = _.has(space, 'graph')
-
-    const hasData = this.state.attemptedFetch || (hasGraph && hasOwner)
+    const hasData = hasGraph && e.space.prepared(space)
 
     if (!hasData) {
       this.props.dispatch(spaceActions.fetchById(this._id(), this.props.shareableLinkToken))

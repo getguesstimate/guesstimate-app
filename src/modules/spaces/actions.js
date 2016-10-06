@@ -26,20 +26,13 @@ function api(state) {
 
 export function fetchSuccess(spaces) {
   return (dispatch, getState) => {
-    dispatch(sActions.fetchSuccess(spaces.map(s => _.omit(s, ['_embedded']))))
-
-    spaces.forEach(({id, graph}) => {
-      // We need to check if the space is already initialized as we do not want to double-initialize a space.
-      const isInitialized = e.collections.some(getState().checkpoints, id, 'spaceId')
-      if (!isInitialized) { dispatch(initSpace(id, graph)) }
-    })
-
     const users = spaces.map(s => _.get(s, '_embedded.user')).filter(e.utils.isPresent)
     const organizations = spaces.map(s => {
       const organization = _.get(s, '_embedded.organization')
       if (!e.utils.isPresent(organization)) { return null }
       return {
         ...organization,
+        fullyLoaded: true,
         facts: [...e.utils.orArr(_.get(organization, 'facts')), ...e.utils.orArr(_.get(s, '_embedded.imported_facts'))],
       }
     }).filter(e.utils.isPresent)
@@ -48,6 +41,14 @@ export function fetchSuccess(spaces) {
     if (!_.isEmpty(calculators)) {dispatch(calculatorActions.sActions.fetchSuccess(calculators))}
     if (!_.isEmpty(organizations)) { dispatch(organizationActions.fetchSuccess(organizations)) }
     if (!_.isEmpty(users)) { dispatch(userActions.fetchSuccess(users)) }
+
+    spaces.forEach(({id, graph}) => {
+      // We need to check if the space is already initialized as we do not want to double-initialize a space.
+      const isInitialized = e.collections.some(getState().checkpoints, id, 'spaceId')
+      if (!isInitialized) { dispatch(initSpace(id, graph)) }
+    })
+
+    dispatch(sActions.fetchSuccess(spaces.map(s => _.omit(s, ['_embedded']))))
   }
 }
 
