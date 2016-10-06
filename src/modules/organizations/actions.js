@@ -37,7 +37,7 @@ export function fetchById(organizationId) {
       } else if (organization) {
         const spaces = _.get(organization, 'intermediate_spaces')
         if (!_.isEmpty(spaces)) { dispatch(spaceActions.fetchSuccess(spaces)) }
-        dispatch(fetchSuccess([organization]))
+        dispatch(fetchSuccess([{...organization, fullyLoaded: true}]))
       }
     })
   }
@@ -47,7 +47,7 @@ const toContainerFact = o => _.isEmpty(o.facts) ? {} : {variable_name: organizat
 
 export function fetchSuccess(organizations) {
   return (dispatch) => {
-    const formatted = organizations.map(o => _.pick(o, ['id', 'name', 'picture', 'admin_id', 'account', 'plan']))
+    const formatted = organizations.map(o => _.pick(o, ['id', 'name', 'picture', 'admin_id', 'account', 'plan', 'fullyLoaded']))
 
     const memberships = _.flatten(organizations.map(o => orArr(o.memberships)))
     const invitations = _.flatten(organizations.map(o => orArr(o.invitations)))
