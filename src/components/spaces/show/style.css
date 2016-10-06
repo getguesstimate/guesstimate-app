@@ -196,6 +196,7 @@
   margin-top: 0.5em;
   margin-bottom: 1em;
   font-size: 1.1em;
+  word-wrap: break-word;
 }
 
 .SpaceSidebar .SpaceSidebar-body .ClickToEdit {
