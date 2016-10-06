@@ -14,7 +14,7 @@ const {
 } = errorTypes
 
 export class SimulationNode {
-  constructor({id, expression, type, guesstimateType, samples, errors, parentIndices, ancestors, skipSimulating}, DAG, index) {
+  constructor({id, expression, type, guesstimateType, samples, errors, inputs, parentIndices, ancestors, skipSimulating}, DAG, index) {
     this.id = id
     this.expression = expression
     this.type = type
@@ -26,6 +26,7 @@ export class SimulationNode {
     this.DAG = DAG
     this.index = index
     this.skipSimulating = skipSimulating
+    this.inputs = inputs
   }
 
   simulate(numSamples) {
@@ -62,11 +63,15 @@ export class SimulationNode {
   _getDescendants() { return this.DAG.strictSubsetFrom([this.id]) }
   _addErrorToDescendants() {
     this._getDescendants().forEach(n => {
+      if (!n.inputs) { debugger }
+      const dataProp = n.inputs.includes(this.id) ? 'inputs' : 'ancestors'
       let ancestorError = _collections.get(n.errors, INVALID_ANCESTOR_ERROR, 'subType')
       if (!!ancestorError) {
-        ancestorError.ancestors = _.uniq([...ancestorError.ancestors, this.id])
+        _.set(ancestorError, dataProp,  _.uniq([..._.get(ancestorError, dataProp), this.id]))
       } else {
-        n.errors.push({type: GRAPH_ERROR, subType: INVALID_ANCESTOR_ERROR, ancestors: [this.id]})
+        let error = {type: GRAPH_ERROR, subType: INVALID_ANCESTOR_ERROR}
+        error[dataProp] = [this.id]
+        n.errors.push(error)
       }
     })
   }
