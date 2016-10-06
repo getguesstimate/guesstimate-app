@@ -1,14 +1,14 @@
-import * as constants from './constants'
+import * as errorTypes from './errors'
+
 import * as _utils from 'gEngine/utils'
 import * as _collections from 'gEngine/collections'
 
 const ID_REGEX = /\$\{([^\}]*)\}/g
 
-// ERRORS:
 const {
   ERROR_TYPES: {GRAPH_ERROR},
   ERROR_SUBTYPES: {GRAPH_ERROR_SUBTYPES: {MISSING_INPUT_ERROR, IN_INFINITE_LOOP, INVALID_ANCESTOR_ERROR, DUPLICATE_ID_ERROR}},
-} = constants
+} = errorTypes
 
 const addError = (type, subType, dataFn=()=>({})) => n => ({...n, errors: [...n.errors, {type, subType, ...dataFn(n)}]})
 const addGraphError = _.partial(addError, GRAPH_ERROR)

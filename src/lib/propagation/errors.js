@@ -1,4 +1,3 @@
-
 export const ERROR_TYPES = {
   UNSET: 0, // For safety; should not be used.
   GRAPH_ERROR: 1,
@@ -39,7 +38,7 @@ function getGraphErrorMessage(error) {
     case MISSING_INPUT_ERROR: return 'Metric depends on deleted metric.'
     case IN_INFINITE_LOOP: return 'Metric references itself through dependency chain.'
     case INVALID_ANCESTOR_ERROR: {
-      const {ancestors, inputs} = err
+      const {ancestors, inputs} = error
 
       let message = 'Broken '
       if (!_.isEmpty(inputs)) {
@@ -59,7 +58,6 @@ function getGraphErrorMessage(error) {
 }
 
 function getParserErrorMessage(error) {
-  return ''
   const {
     PARSER_ERROR_SUBTYPES: {
       NULL_WITH_TEXT_ERROR,
@@ -71,16 +69,16 @@ function getParserErrorMessage(error) {
   } = ERROR_SUBTYPES
 
   switch (error.subType) {
-    case NULL_WITH_TEXT_ERROR: return 'Syntax Error. TODO'
+    case NULL_WITH_TEXT_ERROR: return 'Improper syntax.'
     case MISSING_FUNCTION_BODY: return 'Missing function body.'
-    case INVALID_RANGE_ORDERING: return 'The low number must come first.'
+    case INVALID_RANGE_ORDERING: return 'The low number should come first.'
     case FUNCTIONS_CONTAIN_UNITS_ERROR: return 'Functions cannot contain units or symbols.'
     case INCOMPLETE_FUNCTION_ERROR: return 'Function expression incomplete. TODO(Matthew): What is this?'
   }
+  return ''
 }
 
 function getWorkerErrorMessage(error) {
-  return ''
   const {
     WORKER_ERROR_SUBTYPES: {NO_DATA_PASSED_ERROR, NO_EXPR_PASSED_ERROR, NO_NUMSAMPLES_PASSED_ERROR, ZERO_SAMPLES_REQUESTED_ERROR},
   } = ERROR_SUBTYPES
@@ -90,15 +88,16 @@ function getWorkerErrorMessage(error) {
     case NO_NUMSAMPLES_PASSED_ERROR: return 'data.numsamples required'
     case ZERO_SAMPLES_REQUESTED_ERROR: return 'zero samples requested.'
   }
+  return ''
 }
 
 function getSamplingErrorMessage(error) {
-  return ''
   const { SAMPLING_ERROR_SUBTYPES: {UNEXPECTED_END_OF_EXPRESSION_ERROR, DIVIDE_BY_ZERO_ERROR} } = ERROR_SUBTYPES
   switch (error.subType) {
     case UNEXPECTED_END_OF_EXPRESSION_ERROR: return 'Unexpected end of expression'
     case DIVIDE_BY_ZERO_ERROR: return 'Division by zero detected.'
   }
+  return 'Sampling error detected'
 }
 
 export function getMessage(error) {

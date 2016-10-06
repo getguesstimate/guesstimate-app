@@ -1,17 +1,17 @@
-import * as constants from './constants'
-
-const {
-  NODE_TYPES,
-  nodeTypeToGuesstimateType,
-  ERROR_TYPES: {GRAPH_ERROR},
-  ERROR_SUBTYPES: {GRAPH_ERROR_SUBTYPES: {MISSING_INPUT_ERROR, IN_INFINITE_LOOP, INVALID_ANCESTOR_ERROR}},
-} = constants
+import {NODE_TYPES} from './constants.js'
+import * as errorTypes from './errors'
 
 import {Guesstimator} from 'lib/guesstimator/index'
 import {_matchingFormatter} from 'lib/guesstimator/formatter/index'
 
 import * as _collections from 'gEngine/collections'
 import * as _utils from 'gEngine/utils'
+
+
+const {
+  ERROR_TYPES: {GRAPH_ERROR},
+  ERROR_SUBTYPES: {GRAPH_ERROR_SUBTYPES: {INVALID_ANCESTOR_ERROR}},
+} = errorTypes
 
 export class SimulationNode {
   constructor({id, expression, type, guesstimateType, samples, errors, parentIndices, ancestors, skipSimulating}, DAG, index) {

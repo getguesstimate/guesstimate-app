@@ -3,16 +3,15 @@ import {expect} from 'chai'
 import * as utils from './utils'
 
 import {SimulationDAG} from '../DAG'
-import * as constants from '../constants'
+import * as errorTypes from '../errors'
 
 import * as _collections from 'gEngine/collections'
 import * as _utils from 'gEngine/utils'
 
-// ERRORS:
 const {
   ERROR_TYPES: {GRAPH_ERROR},
   ERROR_SUBTYPES: {GRAPH_ERROR_SUBTYPES: {MISSING_INPUT_ERROR, IN_INFINITE_LOOP, INVALID_ANCESTOR_ERROR, DUPLICATE_ID_ERROR}},
-} = constants
+} = errorTypes
 
 
 describe('construction', () => {

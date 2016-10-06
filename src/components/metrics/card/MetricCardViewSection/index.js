@@ -11,6 +11,7 @@ import SensitivitySection from 'gComponents/metrics/card/SensitivitySection/Sens
 
 import {getClassName} from 'gEngine/utils'
 import {isBreak, isInfiniteLoop, hasErrors, errors, displayableError} from 'gEngine/simulation'
+import {getMessage} from 'lib/propagation/errors'
 import * as _collections from 'gEngine/collections'
 
 import './style.css'
@@ -20,7 +21,7 @@ import './style.css'
 
 // We have to display this section after it disappears
 // to ensure that the metric card gets selected after click.
-const ErrorText = ({error}) => (<div className={'error-message'}>{error.message}</div>)
+const ErrorText = ({error}) => (<div className={'error-message'}>{getMessage(error)}</div>)
 
 // We have to display this section after it disappears
 // to ensure that the metric card gets selected after click.

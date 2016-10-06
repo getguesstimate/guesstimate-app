@@ -2,14 +2,12 @@ import * as _collections from './collections'
 import {orArr} from './utils'
 
 import {sampleMean, sampleStdev, percentile, cutoff, sortDescending} from 'lib/dataAnalysis.js'
-import * as constants from 'lib/propagation/constants'
+import * as errorTypes from 'lib/propagation/errors'
 
 const {
-  ERROR_TYPES: {GRAPH_ERROR, WORKER_ERROR},
-  ERROR_SUBTYPES: {
-    GRAPH_ERROR_SUBTYPES: { MISSING_INPUT_ERROR, IN_INFINITE_LOOP, INVALID_ANCESTOR_ERROR },
-  },
-} = constants
+  ERROR_TYPES: {WORKER_ERROR},
+  ERROR_SUBTYPES: { GRAPH_ERROR_SUBTYPES: {IN_INFINITE_LOOP, INVALID_ANCESTOR_ERROR} },
+} = errorTypes
 
 export const NUM_SAMPLES = 5000, METRIC_ID_PREFIX = 'metric:', FACT_ID_PREFIX = 'fact:'
 

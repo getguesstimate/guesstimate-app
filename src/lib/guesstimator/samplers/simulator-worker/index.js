@@ -2,9 +2,7 @@ import {Evaluate} from './simulator/evaluator.js'
 
 import {orArr} from 'gEngine/utils'
 
-import * as constants from 'lib/propagation/constants'
-
-// TODO(matthew): fix error messages
+import * as errorTypes from 'lib/propagation/errors'
 
 const {
   ERROR_TYPES: {WORKER_ERROR},
@@ -16,12 +14,12 @@ const {
       ZERO_SAMPLES_REQUESTED_ERROR,
     }
   }
-} = constants
+} = errorTypes
 
 onmessage = ({data}) => {
   let errors = []
   if (!data) {
-    errors.push({type: WORKER_ERROR, subType: NO_DATA_PASSED_ERROR, message: 'data required'})
+    errors.push({type: WORKER_ERROR, subType: NO_DATA_PASSED_ERROR})
     postMessage(JSON.stringify({errors}))
     return
   }
@@ -29,13 +27,13 @@ onmessage = ({data}) => {
   data = JSON.parse(data)
 
   if (!data.expr) {
-    errors.push({type: WORKER_ERROR, subType: NO_EXPR_PASSED_ERROR, message: 'data.expr required'})
+    errors.push({type: WORKER_ERROR, subType: NO_EXPR_PASSED_ERROR})
   }
   if (!data.numSamples) {
     if (data.numSamples === 0) {
-      errors.push({type: WORKER_ERROR, subType: ZERO_SAMPLES_REQUESTED_ERROR, message: '0 is not a valid number of samples'})
+      errors.push({type: WORKER_ERROR, subType: ZERO_SAMPLES_REQUESTED_ERROR})
     } else {
-      errors.push({type: WORKER_ERROR, subType: NO_NUMSAMPLES_PASSED_ERROR, message: 'data.numSamples required'})
+      errors.push({type: WORKER_ERROR, subType: NO_NUMSAMPLES_PASSED_ERROR})
     }
   }
 
