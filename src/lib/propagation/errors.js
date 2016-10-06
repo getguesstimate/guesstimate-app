@@ -73,7 +73,7 @@ function getParserErrorMessage(error) {
     case MISSING_FUNCTION_BODY: return 'Missing function body.'
     case INVALID_RANGE_ORDERING: return 'The low number should come first.'
     case FUNCTIONS_CONTAIN_UNITS_ERROR: return 'Functions cannot contain units or symbols.'
-    case INCOMPLETE_FUNCTION_ERROR: return 'Function expression incomplete. TODO(Matthew): What is this?'
+    case INCOMPLETE_FUNCTION_ERROR: return 'Enter arguments for functions inside parentheses: cos(AB).'
   }
   return ''
 }
