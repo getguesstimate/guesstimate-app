@@ -1,16 +1,18 @@
 import React, {Component} from 'react'
-import { connect } from 'react-redux';
-import { denormalizedSpaceSelector } from '../denormalized-space-selector.js';
-import MetricLabel from '../../metrics/label'
-import arrowsVisibleImage from '../../../assets/metric-icons/blue/arrows-visible.png'
-import {formatDescription, formatDate} from 'gComponents/spaces/shared'
+import {connect} from 'react-redux'
 
-import * as Space from 'gEngine/space';
-import './style.css'
 import moment from 'moment'
 import Icon from 'react-fa'
 import removeMd from 'remove-markdown'
+
+import {denormalizedSpaceSelector} from '../denormalized-space-selector'
+import {formatDescription, formatDate} from 'gComponents/spaces/shared'
+
 import e from 'gEngine/engine'
+import * as Space from 'gEngine/space'
+
+import './style.css'
+import arrowsVisibleImage from '../../../assets/metric-icons/blue/arrows-visible.png'
 
 let PrivateTag = ({isPrivate}) => (
   <div className='col-xs-12'>
@@ -82,19 +84,12 @@ const SpaceListItem = ({space, showUser, isOwnedByMe, showScreenshot}) => {
   )
 }
 
-function mapStateToProps(state) {
-  return {
-    spaces: state.spaces,
-    me: state.me
-  }
-}
-
-@connect(mapStateToProps)
+@connect(_.partialRight(_.pick, ['spaces', 'me']))
 @connect(denormalizedSpaceSelector)
 export default class SpaceListItemComponent extends Component {
   render() {
     const isOwnedByMe = e.me.isOwnedByMe(this.props.me, this.props.denormalizedSpace)
-    if (!!this.props.denormalizedSpace){
+    if (!!this.props.denormalizedSpace) {
       return (
         <SpaceListItem
           space={this.props.denormalizedSpace}
