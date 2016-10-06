@@ -8,7 +8,7 @@ import * as _simulation from './simulation'
 import * as _userOrganizationMemberships from './userOrganizationMemberships'
 import * as _facts from './facts'
 import * as _collections from './collections'
-import * as _utils from './utils'
+import {allPropsPresent, isPresent} from './utils'
 
 export const spaceUrlById = (id, params = {}) => {
   if (!id) { return '' }
@@ -27,15 +27,13 @@ export const extractTokenFromUrl = url => TOKEN_REGEX.test(url) ? url.match(TOKE
 
 export const withGraph = (space, graph) => ({...space, graph: subset(graph, space.id)})
 
-export function prepared(dSpace) {
-  const ownerName = _utils.allPropsPresent(dSpace, 'organization_id') ? _.get(dSpace, 'organization.name') : _.get(dSpace, 'user.name')
-  return _utils.allPresent(dSpace, ownerName)
-}
+const requiredProps = dSpace => allPropsPresent(dSpace, 'organization_id') ? ['organization.name', 'organization.fullyLoaded'] : ['user.name']
+export const prepared = dSpace => allPropsPresent(dSpace, ...requiredProps(dSpace))
 
 export function subset(state, ...spaceIds) {
   const metrics = _collections.filterByInclusion(state.metrics, 'space', spaceIds)
-  const guesstimates = metrics.map(_guesstimate.getByMetricFn(state)).filter(_utils.isPresent)
-  const simulations = guesstimates.map(_simulation.getByMetricFn(state)).filter(_utils.isPresent)
+  const guesstimates = metrics.map(_guesstimate.getByMetricFn(state)).filter(isPresent)
+  const simulations = guesstimates.map(_simulation.getByMetricFn(state)).filter(isPresent)
   return { metrics, guesstimates, simulations }
 }
 
