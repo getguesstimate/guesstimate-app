@@ -19,7 +19,7 @@ import {Tutorial} from './Tutorial/index'
 
 import {denormalizedSpaceSelector} from '../denormalized-space-selector'
 
-import {allowEdits, forbidEdits} from 'gModules/canvas_state/actions'
+import {allowEdits, forbidEdits, clearEditsAllowed} from 'gModules/canvas_state/actions'
 import * as spaceActions from 'gModules/spaces/actions'
 import * as simulationActions from 'gModules/simulations/actions'
 import * as copiedActions from 'gModules/copied/actions'
@@ -42,13 +42,6 @@ function mapStateToProps(state) {
   return {
     me: state.me
   }
-}
-
-function spacePrepared(space) {
-  return (
-    !!space &&
-    (_.has(space, 'user.name') || _.has(space, 'organization.name'))
-  )
 }
 
 const PT = PropTypes
@@ -106,11 +99,10 @@ export default class SpacesShow extends Component {
 
   state = {
     showLeftSidebar: true,
-    hasSetDefualtEditPermission: false,
     showTutorial: !!_.get(this, 'props.me.profile.needs_tutorial'),
     attemptedFetch: false,
     rightSidebar: {
-      type: !!this.props.showCalculatorId ? SHOW_CALCULATOR : CLOSED,
+      type: !!this.props.showCalculatorId ? SHOW_CALCULATOR : !!this.props.factsShown ? FACT_SIDEBAR : CLOSED,
       showCalculatorResults: this.props.showCalculatorResults,
       showCalculatorId: this.props.showCalculatorId,
     },
@@ -120,6 +112,7 @@ export default class SpacesShow extends Component {
     window.recorder.recordMountEvent(this)
 
     this.considerFetch(this.props)
+    this.props.dispatch(clearEditsAllowed())
     if (!(this.props.embed || this.state.rightSidebar.type !== CLOSED)) { elev.show() }
   }
 
@@ -131,20 +124,6 @@ export default class SpacesShow extends Component {
     if (!!_.get(this, 'props.me.profile.needs_tutorial')) { this.props.dispatch(userActions.finishedTutorial(this.props.me.profile)) }
     this.setState({showTutorial: false})
     segment.trackClosedTutorial()
-  }
-
-  setDefaultEditPermission() {
-    const editableByMe = !!_.get(this, 'props.denormalizedSpace.editableByMe')
-    const showingCalculator = !!_.get(this, 'props.showCalculatorId')
-
-    const shouldAllowEdits = editableByMe && !showingCalculator
-    const currentlyAllowingEdits = !!_.get(this.props, 'denormalizedSpace.canvasState.editsAllowed')
-
-    if (currentlyAllowingEdits && !shouldAllowEdits) {
-      this.props.dispatch(forbidEdits())
-    } else if (!currentlyAllowingEdits && shouldAllowEdits) {
-      this.props.dispatch(allowEdits())
-    }
   }
 
   componentWillUnmount() {
@@ -162,10 +141,6 @@ export default class SpacesShow extends Component {
     window.recorder.recordRenderStopEvent(this)
 
     this.considerFetch(prevProps)
-    if (!this.state.hasSetDefualtEditPermission && _.has(this, 'props.denormalizedSpace.editableByMe')) {
-      this.setDefaultEditPermission()
-      this.setState({hasSetDefualtEditPermission: true})
-    }
   }
 
   considerFetch(newProps) {
@@ -177,7 +152,7 @@ export default class SpacesShow extends Component {
     const hasData = this.state.attemptedFetch || (hasGraph && hasOwner)
 
     if (!hasData) {
-      this.props.dispatch(spaceActions.fetchById(this._id()))
+      this.props.dispatch(spaceActions.fetchById(this._id(), this.props.shareableLinkToken))
       this.setState({attemptedFetch: true})
     }
   }
@@ -218,21 +193,15 @@ export default class SpacesShow extends Component {
     }
   }
 
-  onPublicSelect() {
-    this.props.dispatch(spaceActions.generalUpdate(this._id(), {is_private: false}))
-  }
+  onPublicSelect() { this.props.dispatch(spaceActions.generalUpdate(this._id(), {is_private: false})) }
+  onPrivateSelect() { this.props.dispatch(spaceActions.generalUpdate(this._id(), {is_private: true})) }
 
-  onPrivateSelect() {
-    this.props.dispatch(spaceActions.generalUpdate(this._id(), {is_private: true}))
-  }
+  onEnableShareableLink() { this.props.dispatch(spaceActions.enableShareableLink(this._id())) }
+  onDisableShareableLink() { this.props.dispatch(spaceActions.disableShareableLink(this._id())) }
+  onRotateShareableLink() { this.props.dispatch(spaceActions.rotateShareableLink(this._id())) }
 
-  onSaveName(name) {
-    this.props.dispatch(spaceActions.update(this._id(), {name}))
-  }
-
-  onSaveDescription(description) {
-    this.props.dispatch(spaceActions.update(this._id(), {description}))
-  }
+  onSaveName(name) { this.props.dispatch(spaceActions.update(this._id(), {name})) }
+  onSaveDescription(description) { this.props.dispatch(spaceActions.update(this._id(), {description})) }
 
   hideLeftSidebar() {
     segment.trackCloseSidebar()
@@ -271,7 +240,7 @@ export default class SpacesShow extends Component {
     return parseInt(this.props.spaceId)
   }
 
-  canShowFactSidebar() {
+  canUseOrganizationFacts() {
     const organization = _.get(this, 'props.denormalizedSpace.organization')
     if (!organization) { return false }
 
@@ -296,15 +265,16 @@ export default class SpacesShow extends Component {
   }
   makeNewCalculator() { this.openRightSidebar({type: NEW_CALCULATOR_FORM}) }
   toggleFactSidebar() {
-    if (this.canShowFactSidebar()) {
-      if (this.state.rightSidebar.type !== FACT_SIDEBAR){ this.openRightSidebar({type: FACT_SIDEBAR}) }
-      else { this.closeRightSidebar() }
-    }
+    if (this.state.rightSidebar.type !== FACT_SIDEBAR) { this.openRightSidebar({type: FACT_SIDEBAR}) }
+    else { this.closeRightSidebar() }
   }
 
   rightSidebarBody() {
-    const {props: {denormalizedSpace}, state: {rightSidebar: {type, showCalculatorResults, showCalculatorId, editCalculatorId}}} = this
-    const {editableByMe, calculators, organization} = denormalizedSpace
+    const {
+      props: {denormalizedSpace, spaceId, organizationFacts},
+      state: {rightSidebar: {type, showCalculatorResults, showCalculatorId, editCalculatorId}},
+    } = this
+    const {editableByMe, calculators, organization, imported_fact_ids} = denormalizedSpace
     switch (type) {
       case CLOSED:
         return {}
@@ -356,7 +326,14 @@ export default class SpacesShow extends Component {
           ),
           main: (
             <div className='SpaceRightSidebar--padded-area'>
-              <FactListContainer organizationId={organization.id} isEditable={false}/>
+              <FactListContainer
+                existingVariableNames={organizationFacts.map(e.facts.getVar)}
+                facts={organizationFacts}
+                organization={organization}
+                canMakeNewFacts={true}
+                spaceId={spaceId}
+                imported_fact_ids={imported_fact_ids}
+              />
             </div>
           ),
         }
@@ -377,17 +354,25 @@ export default class SpacesShow extends Component {
   }
 
   render() {
+    const {exportedFacts, organizationHasFacts, me} = this.props
     const space = this.props.denormalizedSpace
-    const {organizationHasFacts, me} = this.props
-    if (!spacePrepared(space)) { return <div className='spaceShow'></div> }
+
+    if (!e.space.prepared(space)) { return <div className='spaceShow'></div> }
 
     const sidebarIsViseable = space.editableByMe || !_.isEmpty(space.description)
-
     const isLoggedIn = e.me.isLoggedIn(this.props.me)
+    const shareableLinkUrl = e.space.urlWithToken(space)
+
     if (this.props.embed) {
       return (
         <div className='spaceShow screenshot'>
-          <Canvas denormalizedSpace={space} organizationHasFacts={organizationHasFacts} overflow={'hidden'} screenshot={true}/>
+          <Canvas
+            denormalizedSpace={space}
+            canUseOrganizationFacts={this.canUseOrganizationFacts()}
+            exportedFacts={exportedFacts}
+            overflow={'hidden'}
+            screenshot={true}
+          />
         </div>
       )
     }
@@ -433,6 +418,7 @@ export default class SpacesShow extends Component {
             isPrivate={space.is_private}
             editableByMe={space.editableByMe}
             canBePrivate={canBePrivate}
+            shareableLinkUrl={shareableLinkUrl}
             ownerName={owner.name}
             ownerPicture={owner.picture}
             ownerUrl={ownerUrl}
@@ -440,10 +426,13 @@ export default class SpacesShow extends Component {
             onSaveName={this.onSaveName.bind(this)}
             onPublicSelect={this.onPublicSelect.bind(this)}
             onPrivateSelect={this.onPrivateSelect.bind(this)}
+            onEnableShareableLink={this.onEnableShareableLink.bind(this)}
+            onDisableShareableLink={this.onDisableShareableLink.bind(this)}
+            onRotateShareableLink={this.onRotateShareableLink.bind(this)}
           />
 
           <SpaceToolbar
-            editsAllowed={space.canvasState.editsAllowed}
+            editsAllowed={space.canvasState.editsAllowedManuallySet ? space.canvasState.editsAllowed : space.editableByMe}
             onAllowEdits={() => {
               segment.trackSwitchToEditMode()
               this.props.dispatch(allowEdits())
@@ -471,7 +460,7 @@ export default class SpacesShow extends Component {
             makeNewCalculator={this.makeNewCalculator.bind(this)}
             showCalculator={this.showCalculator.bind(this)}
             toggleFactSidebar={this.toggleFactSidebar.bind(this)}
-            canShowFactSidebar={this.canShowFactSidebar()}
+            canShowFactSidebar={this.canUseOrganizationFacts()}
             onOpenTutorial={this.openTutorial.bind(this)}
           />
         </div>
@@ -489,7 +478,8 @@ export default class SpacesShow extends Component {
             <ClosedSpaceSidebar onOpen={this.openLeftSidebar.bind(this)}/>
           }
           <Canvas
-            organizationHasFacts={organizationHasFacts}
+            canUseOrganizationFacts={this.canUseOrganizationFacts()}
+            exportedFacts={exportedFacts}
             denormalizedSpace={space}
             onCopy={this.onCopy.bind(this, true)}
             onPaste={this.onPaste.bind(this, true)}

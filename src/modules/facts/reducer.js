@@ -1,3 +1,6 @@
+import {mutableCopy, typeSafeEq} from 'gEngine/utils'
+import * as _collections from 'gEngine/collections'
+
 import CITIES from './cities.json'
 
 const INITIAL_STATE = {
@@ -82,6 +85,46 @@ export function factsR(state = INITIAL_STATE, action) {
         ...state,
         currentSuggestion: INITIAL_STATE.currentSuggestion,
       }
+    case 'FACT_CATEGORIES_DELETE_SUCCESS': {
+      const categoryId = _.get(action, 'record.id')
+      let copiedState = mutableCopy(state.organizationFacts)
+      const organizationContainersToModify = _.remove(copiedState, o => _collections.some(o.children, categoryId, 'category_id'))
+      const modifiedOrganizationContainers = _.map(organizationContainersToModify, o => {
+        let copiedChildren = mutableCopy(o.children)
+        const childrenToModify = _.remove(copiedChildren, f => typeSafeEq(_.get(f, 'category_id'), categoryId))
+        return {
+          ...o,
+          children: [
+            ...copiedChildren,
+            ..._.map(childrenToModify, c => ({...c, category_id: null})),
+          ],
+        }
+      })
+      return {
+        ...state,
+        organizationFacts: [
+          ...copiedState,
+          ...modifiedOrganizationContainers,
+        ],
+      }
+    }
+    case 'SPACES_DELETE_SUCCESS': {
+      const spaceId = _.get(action, 'record.id')
+      let copiedState = mutableCopy(state.organizationFacts)
+      const organizationContainersToModify = _.remove(copiedState, o => _collections.some(o.children, spaceId, 'exported_from_id'))
+      const modifiedOrganizationContainers = _.map(organizationContainersToModify, o => ({
+        ...o,
+        children: _.filter(o.children, f => !typeSafeEq(_.get(f, 'exported_from_id'), spaceId)),
+      }))
+
+      return {
+        ...state,
+        organizationFacts: [
+          ...copiedState,
+          ...modifiedOrganizationContainers,
+        ],
+      }
+    }
     default:
       return state
   }

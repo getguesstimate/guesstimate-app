@@ -1,12 +1,11 @@
-import e from 'gEngine/engine'
 import * as spaceActions from 'gModules/spaces/actions'
+import * as organizationActions from 'gModules/organizations/actions'
+
+import e from 'gEngine/engine'
 
 import {isWithinRegion} from 'lib/locationUtils.js'
 
-function findSpaceId(getState, metricId) {
-  const metric = e.collections.get(getState().metrics, metricId)
-  return _.get(metric, 'space')
-}
+const findSpaceId = (getState, metricId) => e.collections.gget(getState().metrics, metricId, 'id', 'space')
 
 function registerGraphChange(dispatch, spaceId) {
   spaceId && dispatch(spaceActions.registerGraphChange(spaceId))
@@ -22,11 +21,23 @@ export function addMetric(item) {
   }
 }
 
-//spaceId must be done before the metric is removed here.
 export function removeMetrics(ids) {
   return (dispatch, getState) => {
     if (ids.length === 0) { return }
+
     const spaceId = findSpaceId(getState, ids[0])
+
+    const {organizations, spaces, facts: {organizationFacts}} = getState()
+    const organizationId = e.collections.gget(spaces, spaceId, 'id', 'organization_id')
+    if (!!organizationId) {
+      const organization = e.collections.get(organizations, organizationId)
+      const facts = e.organization.findFacts(organizationId, organizationFacts)
+      const factsToDelete = _.filter(facts, f => f.exported_from_id === spaceId && ids.includes(f.metric_id))
+      factsToDelete.forEach(fact => {
+        dispatch(organizationActions.deleteFact(organization, fact))
+      })
+    }
+
     dispatch({ type: 'REMOVE_METRICS', item: {ids}});
     registerGraphChange(dispatch, spaceId)
   }

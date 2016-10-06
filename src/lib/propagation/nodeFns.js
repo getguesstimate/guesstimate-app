@@ -7,7 +7,7 @@ const ID_REGEX = /\$\{([^\}]*)\}/g
 // ERRORS:
 const {
   ERROR_TYPES: {GRAPH_ERROR},
-  ERROR_SUBTYPES: {GRAPH_SUBTYPES: {MISSING_INPUT_ERROR, IN_INFINITE_LOOP, INVALID_ANCESTOR_ERROR}},
+  ERROR_SUBTYPES: {GRAPH_SUBTYPES: {MISSING_INPUT_ERROR, IN_INFINITE_LOOP, INVALID_ANCESTOR_ERROR, DUPLICATE_ID_ERROR}},
 } = constants
 
 const addError = (type, subType, dataFn=()=>({})) => n => ({...n, errors: [...n.errors, {type, subType, ...dataFn(n)}]})
@@ -16,6 +16,9 @@ const addGraphError = _.partial(addError, GRAPH_ERROR)
 const getInvalidInputsFn = nodes => n => ({missingInputs: _.filter(n.inputs, i => !_collections.some(nodes, i))})
 export const withMissingInputError = nodes => addGraphError(MISSING_INPUT_ERROR, getInvalidInputsFn(nodes))
 export const hasMissingInputs = nodes => _.negate(allInputsWithin(nodes))
+
+export const withDuplicateIdError = addGraphError(DUPLICATE_ID_ERROR)
+export const hasDuplicateId = nodes => ({id}) => _collections.filter(nodes, id).length > 1
 
 export const withInfiniteLoopError = addGraphError(IN_INFINITE_LOOP)
 

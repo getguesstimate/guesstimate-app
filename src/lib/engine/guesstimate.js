@@ -15,6 +15,7 @@ export function equals(l, r) {
 }
 
 export const getByMetricFn = graph => _collections.getFn(_.get(graph, 'guesstimates'), 'metric')
+export const uniq = guesstimates => _collections.uniq(guesstimates, 'metric')
 
 export const attributes = ['metric', 'expression', 'input', 'guesstimateType', 'description', 'data']
 export function format(guesstimate: Guesstimate): Guesstimate {

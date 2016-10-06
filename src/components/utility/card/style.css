@@ -79,6 +79,11 @@
   color: #666;
 }
 
+.Card .CardListSection{
+  padding: .8em;
+  color: #555;
+}
+
 .Card ol, .Card ul{
   list-style: none;
   padding: 0;

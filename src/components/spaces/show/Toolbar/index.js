@@ -8,7 +8,6 @@ import CanvasViewForm from '../canvasViewForm'
 import DropDown from 'gComponents/utility/drop-down/index'
 import {CardListElement} from 'gComponents/utility/card/index.js'
 import {ViewOptionToggle} from '../view-options/index'
-import {PrivacyToggle} from '../privacy-toggle/index'
 import {ImportFromSlurpForm} from './import_from_slurp_form'
 
 import {navigateFn} from 'gModules/navigation/actions'

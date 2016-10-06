@@ -14,6 +14,8 @@ import * as canvasStateActions from 'gModules/canvas_state/actions'
 import {undo, redo} from 'gModules/checkpoints/actions'
 import {fillRegion} from 'gModules/auto_fill_region/actions'
 
+import * as _collections from 'gEngine/collections'
+
 import {hasMetricUpdated} from 'gComponents/metrics/card/updated'
 import * as canvasStateProps from 'gModules/canvas_state/prop_type'
 
@@ -130,7 +132,7 @@ export default class Canvas extends Component{
   }
 
   renderMetric(metric, analyzed) {
-    const {location} = metric
+    const {location, id} = metric
     const analyzedSamples = _.get(analyzed, 'simulation.sample.values')
     const hasAnalyzed = analyzed && metric && analyzedSamples && !_.isEmpty(analyzedSamples)
 
@@ -142,10 +144,12 @@ export default class Canvas extends Component{
 
     const is_private = _.get(this, 'props.denormalizedSpace.is_private')
     const organizationId = _.get(this, 'props.denormalizedSpace.organization_id')
-    const canUseOrganizationFacts = !!is_private && !!this.props.organizationHasFacts && !!organizationId
+    const canUseOrganizationFacts = !!_.get(this, 'props.canUseOrganizationFacts')
 
-    const metrics = _.get(this, 'props.denormalizedSpace.metrics')
-    const existingReadableIds = metrics.map(m => m.readableId)
+    const existingReadableIds = _.get(this, 'props.denormalizedSpace.metrics').map(m => m.readableId)
+
+    const exportedAsFact = _collections.some(_.get(this, 'props.exportedFacts'), id, 'metric_id')
+
     return (
       <Metric
         isInScreenshot={this.props.screenshot}
@@ -156,6 +160,7 @@ export default class Canvas extends Component{
         existingReadableIds={existingReadableIds}
         organizationId={organizationId}
         canUseOrganizationFacts={canUseOrganizationFacts}
+        exportedAsFact={exportedAsFact}
         analyzedMetric={passAnalyzed ? analyzed : null}
       />
     )

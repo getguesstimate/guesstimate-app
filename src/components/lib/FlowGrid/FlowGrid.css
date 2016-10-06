@@ -47,17 +47,22 @@
 .FlowGridEmptyCell {
   width: 100%;
   display: flex;
-  cursor: pointer;
   width: 100%;
 }
 
-.FlowGridCell.hovered .FlowGridEmptyCell{
-  background-color: rgba(79, 152, 197, 0.25);
-}
+.FlowGrid.isSelectable {
+  .FlowGridEmptyCell {
+    cursor: pointer;
+  }
 
-.FlowGridCell.hovered.hasItem .FlowGridFilledCell{
-  background-color: rgba(75, 138, 177, 0.3);
-  border-radius: 1px;
+  .FlowGridCell.hovered .FlowGridEmptyCell{
+    background-color: rgba(79, 152, 197, 0.25);
+  }
+
+  .FlowGridCell.hovered.hasItem .FlowGridFilledCell{
+    background-color: rgba(75, 138, 177, 0.3);
+    border-radius: 1px;
+  }
 }
 
 .FlowGridEmptyCell:focus {

@@ -3,13 +3,9 @@ import e from 'gEngine/engine'
 
 const NAME = "Denormalized Space Selector"
 
-function _sameId(idA, idB){
-  return idA.toString() === idB.toString()
-}
-
 function checkpointMetadata(id, checkpoints) {
   let attributes = {head: 0, length: 1}
-  let spaceCheckpoints = checkpoints.find(i => _sameId(i.spaceId, id))
+  let spaceCheckpoints = e.collections.get(checkpoints, id, 'spaceId')
   if (!_.isEmpty(spaceCheckpoints)) {
     attributes = {head: spaceCheckpoints.head, length: spaceCheckpoints.checkpoints.length}
   }
@@ -51,12 +47,11 @@ export const denormalizedSpaceSelector = createSelector(
     }
 
     const {organization_id} = denormalizedSpace
-    const organization = graph.organizations.find(o => o.id == organization_id)
-    const organizationHasFacts = !!organization && _.some(
-      organizationFacts, e.facts.byVariableName(e.organization.organizationReadableId(organization))
-    )
+    const facts = e.organization.findFacts(organization_id, organizationFacts)
+
+    const exportedFacts = e.collections.filter(facts, spaceId, 'exported_from_id')
 
     window.recorder.recordSelectorStop(NAME, {denormalizedSpace})
-    return { denormalizedSpace, organizationHasFacts }
+    return { denormalizedSpace, exportedFacts, organizationFacts: facts, organizationHasFacts: !_.isEmpty(facts) }
   }
 )

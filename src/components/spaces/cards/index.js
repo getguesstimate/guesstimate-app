@@ -56,22 +56,24 @@ export const NewSpaceCard = ({onClick}) => (
   </div>
 )
 
-export const SpaceCard = ({space, showPrivacy}) => {
+export const SpaceCard = ({space, showPrivacy, size, urlParams = {}}) => {
   const hasName = !_.isEmpty(space.name)
   const hasOrg = _.has(space, 'organization.name')
 
   const owner = hasOrg ? space.organization : space.user
   const ownerUrl = hasOrg ? Organization.url(space.organization) : User.url(space.user)
 
-  const spaceUrl = Space.url(space)
-  const navigateToSpace = () => {navigationActions.navigate(spaceUrl)}
+  const spaceUrl = Space.spaceUrlById(space.id, urlParams)
+  const navigateToSpace = navigationActions.navigateFn(spaceUrl)
 
   return (
-    <div className='col-xs-12 col-md-4 SpaceCard'>
+    <div className={`SpaceCard ${size === 'SMALL' ? 'SMALL' : 'col-xs-12 col-md-4'}`}>
       <div className='SpaceCard--inner' onClick={navigateToSpace}>
         <div className={`header ${hasName ? '' : 'default-name'}`}>
           <a href={spaceUrl}><h3>{hasName ? space.name : 'Untitled Model'}</h3></a>
-          <div className='changed-at'>Updated {formatDate(space.updated_at)}</div>
+          {size !== 'SMALL' &&
+            <div className='changed-at'>Updated {formatDate(space.updated_at)}</div>
+          }
         </div>
 
         <div className='image'>
@@ -84,9 +86,11 @@ export const SpaceCard = ({space, showPrivacy}) => {
             showPrivacy={showPrivacy}
           />
         </div>
-        <div className='body'>
-          <p> {formatDescription(space.description)} </p>
-        </div>
+        {size !== 'SMALL' &&
+          <div className='body'>
+            <p> {formatDescription(space.description)} </p>
+          </div>
+        }
       </div>
     </div>
   )

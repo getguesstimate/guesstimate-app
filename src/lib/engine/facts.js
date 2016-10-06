@@ -14,7 +14,9 @@ import {sortDescending} from 'lib/dataAnalysis'
 export const FactPT = PropTypes.shape({
   name: PropTypes.string.isRequired,
   variable_name: PropTypes.string.isRequired,
-  expression: PropTypes.string.isRequired,
+  expression: PropTypes.string,
+  exported_from_id: PropTypes.number,
+  metric_id: PropTypes.string,
   simulation: PropTypes.shape({
     sample: PropTypes.shape({
       values: PropTypes.arrayOf(PropTypes.number).isRequired,
@@ -37,13 +39,33 @@ export const FactPT = PropTypes.shape({
 export const GLOBALS_ONLY_REGEX = /@\w+(?:\.\w+)?/g
 export const HANDLE_REGEX = /(?:@\w+(?:\.\w+)?|#\w+)/g
 
-export const getVar = f => _.get(f, 'variable_name') || ''
+export const getVar = f => _utils.orStr(_.get(f, 'variable_name'))
 export const byVariableName = name => f => getVar(f) === name
 const namedLike = partial => f => getVar(f).startsWith(partial)
 
-export function withSortedValues(rawFact) {
-  let fact = Object.assign({}, rawFact)
+export const isExportedFromSpace = f => _utils.allPropsPresent(f, 'exported_from_id')
+
+export const length = f => _.get(f, 'simulation.sample.values.length')
+export const mean = f => _.get(f, 'simulation.stats.mean')
+export const adjustedConfidenceInterval = f => _.get(f, 'simulation.stats.adjustedConfidenceInterval')
+
+export function hasRequiredProperties(f) {
+  let requiredProperties = ['variable_name', 'name']
+  if (!isExportedFromSpace(f)) { requiredProperties.push('expression', 'simulation.sample.values', 'simulation.stats') }
+
+  return _utils.allPresent(requiredProperties.map(prop => _.get(f, prop)))
+}
+
+export function withMissingStats(rawFact) {
+  let fact = _utils.mutableCopy(rawFact)
   _.set(fact, 'simulation.sample.sortedValues', sortDescending(_.get(fact, 'simulation.sample.values')))
+
+  const length = _.get(fact, 'simulation.stats.length')
+  const needsACI = _.isFinite(length) && length > 1
+  const ACIlength = _.get('simulation.stats.adjustedConfidenceInterval.length')
+  const hasACI = _.isFinite(ACIlength) && ACIlength === 2
+  if (needsACI && !hasACI) { _.set(fact, 'simulation.stats.adjustedConfidenceInterval', [null, null]) }
+
   return fact
 }
 
@@ -86,15 +108,17 @@ export const getFactsForOrg = (facts, org) => !org ? [] : _utils.orArr(
   _collections.gget(facts, _organization.organizationReadableId(org), 'variable_name', 'children')
 )
 
-export function getRelevantFactsAndReformatGlobals({metrics, guesstimates, simulations}, globalFacts, organizationFacts, spaceId) {
+export function getRelevantFactsAndReformatGlobals({metrics, guesstimates, simulations}, globalFacts, organizationFacts, spaceIds) {
+  const rawOrganizationFactsDefined = _collections.filterByInclusion(organizationFacts, 'exported_from_id', spaceIds)
+  const organizationFactsDefined = rawOrganizationFactsDefined.map(f => ({
+    ...f,
+    expression: `=${_guesstimate.expressionSyntaxPad(f.metric_id)}`
+  }))
+
   const organizationFactsUsed = organizationFacts.filter(
     f => _.some(guesstimates, g => _utils.orStr(g.expression).includes(_guesstimate.expressionSyntaxPad(f.id, false)))
   )
-  const rawOrganizationFactsDefined = _collections.filter(organizationFacts, spaceId, 'defining_space_id')
-  const organizationFactsDefined = rawOrganizationFactsDefined.map(f => ({
-    ...f,
-    expression: `=${_guesstimate.expressionSyntaxPad(f.metricId)}`
-  }))
+  const organizationFactsUsedDeDuped = organizationFactsUsed.filter(f => !_collections.some(organizationFactsDefined, f.id))
 
   // First we grab the top level global facts (e.g. the fact for 'Chicago') which contain as children subfacts of the
   // population variety. We'll next pre-resolve these into 'fake facts' momentarily.
@@ -105,7 +129,7 @@ export function getRelevantFactsAndReformatGlobals({metrics, guesstimates, simul
     variable_name: `@${f.variable_name}.population`,
   }))
 
-  return {organizationFactsUsed: [...organizationFactsUsed, ...organizationFactsDefined], globalFactsUsed}
+  return {organizationFactsUsed: [...organizationFactsUsedDeDuped, ...organizationFactsDefined], globalFactsUsed}
 }
 
 export function simulateFact(fact) {

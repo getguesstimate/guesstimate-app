@@ -8,18 +8,10 @@ export const canvasViewState = PT.shape({
   edgeView,
 })
 
-<<<<<<< HEAD
 export const canvasState = PT.shape({
   metricClickMode,
   edgeView,
 })
-=======
-export const metricCardView = PT.oneOf([
-  'normal',
-  'scientific',
-  'display'
-]).isRequired
->>>>>>> master
 
 export const metricClickMode = PT.oneOf([
   'DEFAULT',

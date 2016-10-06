@@ -6,7 +6,7 @@ import Histogram from 'gComponents/simulations/histogram/index'
 import MetricName from 'gComponents/metrics/card/name/index'
 import {DistributionSummary} from 'gComponents/distributions/summary/index'
 import StatTable from 'gComponents/simulations/stat_table/index'
-import {MetricToken} from 'gComponents/metrics/card/token/index'
+import {MetricReadableId, MetricReasoningIcon, MetricSidebarToggle, MetricExportedIcon} from 'gComponents/metrics/card/token/index'
 import SensitivitySection from 'gComponents/metrics/card/SensitivitySection/SensitivitySection'
 
 import {INTERNAL_ERROR, INFINITE_LOOP_ERROR, INPUT_ERROR} from 'lib/errors/modelErrors'
@@ -75,6 +75,31 @@ export class MetricCardViewSection extends Component {
     return !!inputError ? inputError : this._errors().find(e => e.type !== INTERNAL_ERROR)
   }
 
+  renderToken() {
+    const {
+      canvasState: {expandedViewEnabled, metricClickMode},
+      metric: {guesstimate: {description}, readableId},
+      inSelectedCell,
+      hovered,
+      exportedAsFact,
+      onToggleSidebar,
+    } = this.props
+    const anotherFunctionSelected = ((metricClickMode === 'FUNCTION_INPUT_SELECT') && !inSelectedCell)
+    const shouldShowReadableId = !!expandedViewEnabled || anotherFunctionSelected
+
+    if (shouldShowReadableId) {
+      return <MetricReadableId readableId={readableId} />
+    } else if (hovered) {
+      return <MetricSidebarToggle onToggleSidebar={onToggleSidebar} />
+    } else if (exportedAsFact) {
+      return <MetricExportedIcon />
+    } else if (!_.isEmpty(description)) {
+      return <MetricReasoningIcon />
+    } else {
+      return false
+    }
+  }
+
   render() {
     const {
       canvasState: {scientificViewEnabled, expandedViewEnabled, metricClickMode},
@@ -87,7 +112,7 @@ export class MetricCardViewSection extends Component {
       showSensitivitySection,
       hovered,
       isInScreenshot,
-      editing,
+      exportedAsFact,
     } = this.props
 
 
@@ -105,7 +130,7 @@ export class MetricCardViewSection extends Component {
     let className = `MetricCardViewSection${isInScreenshot ? ' display' : ''}`
     className += (hasErrors & !inSelectedCell) ? ' hasErrors' : ''
     className += (anotherFunctionSelected) ? ' anotherFunctionSelected' : ''
-    return(
+    return (
       <div className={className} onMouseDown={onMouseDown}>
         {showSimulation &&
           <Histogram
@@ -116,14 +141,9 @@ export class MetricCardViewSection extends Component {
         }
 
         <div className='MetricTokenSection'>
-          {(hovered || shouldShowReadableId || hasGuesstimateDescription) &&
-            <MetricToken
-              readableId={readableId}
-              shouldShowReadableId={shouldShowReadableId}
-              onToggleSidebar={onToggleSidebar}
-              hasGuesstimateDescription={hasGuesstimateDescription}
-            />
-          }
+          <div className='MetricToken'>
+            { this.renderToken() }
+          </div>
         </div>
 
         {(!_.isEmpty(metric.name) || inSelectedCell) &&
@@ -168,7 +188,7 @@ export class MetricCardViewSection extends Component {
                 errors={errors}
                 errorToDisplay={errorToDisplay}
                 padTop={(!_.isEmpty(metric.name) && !inSelectedCell)}
-                shouldShowErrorText={hovered}
+                shouldShowErrorText={!!errorToDisplay && hovered}
               />
             }
           </div>
