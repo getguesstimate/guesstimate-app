@@ -75,7 +75,7 @@ const CalculatorFormHeader = ({isNew, onClose}) => (
 const FactSidebarHeader = ({onClose, organizationId}) => (
   <div className='row'>
     <div className='col-xs-6'>
-      <h2> Private Facts </h2>
+      <h2> Metric Library </h2>
     </div>
     <div className='col-xs-6'>
       <ButtonExpandText onClick={navigateFn(`/organizations/${organizationId}/facts`)}/>
