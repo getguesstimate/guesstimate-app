@@ -1,11 +1,10 @@
-import * as constants from 'lib/propagation/constants'
+import * as errorTypes from 'lib/propagation/errors'
 
-const {ERROR_TYPES: {PARSER_ERROR}, ERROR_SUBTYPES: {PARSER_ERROR_SUBTYPES: {MISSING_FUNCTION_BODY}}} = constants
-// TODO(matthew): fix error messages.
+const {ERROR_TYPES: {PARSER_ERROR}, ERROR_SUBTYPES: {PARSER_ERROR_SUBTYPES: {MISSING_FUNCTION_BODY}}} = errorTypes
 
 export const item = {
   formatterName: 'FUNCTION',
   matches({text}) { return !!text && text.startsWith('=') },
-  error({text}) { return text.length > 1 ? {} : {type: PARSER_ERROR, subType: MISSING_FUNCTION_BODY, message: 'Missing function body'}},
+  error({text}) { return !_.isEmpty(text) ? {} : {type: PARSER_ERROR, subType: MISSING_FUNCTION_BODY}},
   format({text}) { return {guesstimateType: 'FUNCTION', text: text.slice(1)} },
 }

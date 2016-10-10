@@ -14,6 +14,7 @@ import * as canvasStateActions from 'gModules/canvas_state/actions'
 import {undo, redo} from 'gModules/checkpoints/actions'
 import {fillRegion} from 'gModules/auto_fill_region/actions'
 
+import {orArr} from 'gEngine/utils'
 import * as _collections from 'gEngine/collections'
 import {hasErrors} from 'gEngine/simulation'
 
@@ -152,6 +153,7 @@ export default class Canvas extends Component{
     const canUseOrganizationFacts = !!_.get(this, 'props.canUseOrganizationFacts')
 
     const existingReadableIds = _.get(this, 'props.denormalizedSpace.metrics').map(m => m.readableId)
+    const idMap = _.transform(orArr(_.get(this, 'props.denormalizedSpace.metrics')), (res, curr) => { res[curr.id] = curr.readableId }, {})
 
     const exportedAsFact = _collections.some(_.get(this, 'props.exportedFacts'), id, 'metric_id')
 
@@ -159,9 +161,8 @@ export default class Canvas extends Component{
       <Metric
         canvasState={this.props.denormalizedSpace.canvasState}
         key={metric.id}
-        location={location}
         metric={metric}
-        existingReadableIds={existingReadableIds}
+        idMap={idMap}
         organizationId={organizationId}
         canUseOrganizationFacts={canUseOrganizationFacts}
         exportedAsFact={exportedAsFact}

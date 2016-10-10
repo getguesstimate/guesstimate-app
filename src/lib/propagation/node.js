@@ -1,11 +1,5 @@
-import * as constants from './constants'
-
-const {
-  NODE_TYPES,
-  nodeTypeToGuesstimateType,
-  ERROR_TYPES: {GRAPH_ERROR},
-  ERROR_SUBTYPES: {GRAPH_ERROR_SUBTYPES: {MISSING_INPUT_ERROR, IN_INFINITE_LOOP, INVALID_ANCESTOR_ERROR}},
-} = constants
+import {NODE_TYPES} from './constants.js'
+import * as errorTypes from './errors'
 
 import {Guesstimator} from 'lib/guesstimator/index'
 import {_matchingFormatter} from 'lib/guesstimator/formatter/index'
@@ -13,8 +7,14 @@ import {_matchingFormatter} from 'lib/guesstimator/formatter/index'
 import * as _collections from 'gEngine/collections'
 import * as _utils from 'gEngine/utils'
 
+
+const {
+  ERROR_TYPES: {GRAPH_ERROR},
+  ERROR_SUBTYPES: {GRAPH_ERROR_SUBTYPES: {INVALID_ANCESTOR_ERROR}},
+} = errorTypes
+
 export class SimulationNode {
-  constructor({id, expression, type, guesstimateType, samples, errors, parentIndices, ancestors, skipSimulating}, DAG, index) {
+  constructor({id, expression, type, guesstimateType, samples, errors, inputs, parentIndices, ancestors, skipSimulating}, DAG, index) {
     this.id = id
     this.expression = expression
     this.type = type
@@ -26,6 +26,7 @@ export class SimulationNode {
     this.DAG = DAG
     this.index = index
     this.skipSimulating = skipSimulating
+    this.inputs = inputs
   }
 
   simulate(numSamples) {
@@ -62,11 +63,15 @@ export class SimulationNode {
   _getDescendants() { return this.DAG.strictSubsetFrom([this.id]) }
   _addErrorToDescendants() {
     this._getDescendants().forEach(n => {
+      if (!n.inputs) { debugger }
+      const dataProp = n.inputs.includes(this.id) ? 'inputs' : 'ancestors'
       let ancestorError = _collections.get(n.errors, INVALID_ANCESTOR_ERROR, 'subType')
       if (!!ancestorError) {
-        ancestorError.ancestors = _.uniq([...ancestorError.ancestors, this.id])
+        _.set(ancestorError, dataProp,  _.uniq([..._.get(ancestorError, dataProp), this.id]))
       } else {
-        n.errors.push({type: GRAPH_ERROR, subType: INVALID_ANCESTOR_ERROR, ancestors: [this.id]})
+        let error = {type: GRAPH_ERROR, subType: INVALID_ANCESTOR_ERROR}
+        error[dataProp] = [this.id]
+        n.errors.push(error)
       }
     })
   }

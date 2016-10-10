@@ -7,7 +7,7 @@ import math from 'mathjs'
 import {Distributions} from './distributions/distributions'
 import {ImpureConstructs} from './constructs/constructs'
 
-import * as constants from 'lib/propagation/constants'
+import * as errorTypes from 'lib/propagation/errors'
 
 const finance = new Finance()
 const {
@@ -16,8 +16,7 @@ const {
     PARSER_ERROR_SUBTYPES: {FUNCTIONS_CONTAIN_UNITS_ERROR, INCOMPLETE_FUNCTION_ERROR},
     SAMPLING_ERROR_SUBTYPES: {UNEXPECTED_END_OF_EXPRESSION_ERROR, DIVIDE_BY_ZERO_ERROR},
   },
-} = constants
-// TODO(matthew): fix error messages
+} = errorTypes
 
 const financeFunctions = {
   PV: finance.PV,
@@ -52,9 +51,9 @@ export function Evaluate(text, sampleCount, inputs) {
     return evaluate(compiled, inputs, sampleCount)
   } catch ({message}) {
     if (message.startsWith('Unexpected end of expression')) {
-      return {errors: [{type: SAMPLING_ERROR, subType: UNEXPECTED_END_OF_EXPRESSION_ERROR, message: message.replace(/\s\(char \d+\)/, '')}]}
+      return {errors: [{type: SAMPLING_ERROR, subType: UNEXPECTED_END_OF_EXPRESSION_ERROR, rawMessage: message}]}
     } else {
-      return {errors: [{type: SAMPLING_ERROR, message: 'Sampling error detected', rawMessage: message}]}
+      return {errors: [{type: SAMPLING_ERROR, rawMessage: message}]}
     }
   }
 }
@@ -76,15 +75,15 @@ function evaluate(compiled, inputs, n){
     if (_.isFinite(newSample)) {
       values.push(newSample)
     } else if ([Infinity, -Infinity].includes(newSample)) {
-      errors.push({type: SAMPLING_ERROR, subType: DIVIDE_BY_ZERO_ERROR, message: 'Divide by zero error'})
+      errors.push({type: SAMPLING_ERROR, subType: DIVIDE_BY_ZERO_ERROR})
       values.push(newSample)
     } else if (newSample.constructor.name === 'Unit') {
-      return {values: [], errors: [{type: PARSER_ERROR, subType: FUNCTIONS_CONTAIN_UNITS_ERROR, message: "Functions can't contain units or suffixes"}]}
+      return {values: [], errors: [{type: PARSER_ERROR, subType: FUNCTIONS_CONTAIN_UNITS_ERROR}]}
     } else if (typeof newSample === 'function') {
-      return {values: [], errors: [{type: PARSER_ERROR, subType: INCOMPLETE_FUNCTION_ERROR, message: "Incomplete function in input"}]}
+      return {values: [], errors: [{type: PARSER_ERROR, subType: INCOMPLETE_FUNCTION_ERROR}]}
     } else {
       if (__DEV__) { console.warn('Unidentified sample detected: ', newSample) }
-      return {values: [], errors: [{type: SAMPLING_ERROR, message: 'Sampling error detected'}]}
+      return {values: [], errors: [{type: SAMPLING_ERROR}]}
     }
   }
 
