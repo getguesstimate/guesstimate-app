@@ -1,3 +1,6 @@
+import {orArr} from 'gEngine/utils'
+import {gget} from 'gEngine/collections'
+
 export const ERROR_TYPES = {
   UNSET: 0, // For safety; should not be used.
   GRAPH_ERROR: 1,
@@ -11,7 +14,6 @@ export const ERROR_SUBTYPES = {
     MISSING_INPUT_ERROR: 1,
     IN_INFINITE_LOOP: 2,
     INVALID_ANCESTOR_ERROR: 3,
-    DUPLICATE_ID_ERROR: 4,
   },
   PARSER_ERROR_SUBTYPES: {
     NULL_WITH_TEXT_ERROR: 5,
@@ -33,7 +35,7 @@ export const ERROR_SUBTYPES = {
 }
 
 function getGraphErrorMessage(error) {
-  const {GRAPH_ERROR_SUBTYPES: {MISSING_INPUT_ERROR, IN_INFINITE_LOOP, INVALID_ANCESTOR_ERROR, DUPLICATE_ID_ERROR}} = ERROR_SUBTYPES
+  const {GRAPH_ERROR_SUBTYPES: {MISSING_INPUT_ERROR, IN_INFINITE_LOOP, INVALID_ANCESTOR_ERROR}} = ERROR_SUBTYPES
   switch (error.subType) {
     case MISSING_INPUT_ERROR: return 'Metric depends on deleted metric.'
     case IN_INFINITE_LOOP: return 'Metric references itself through dependency chain.'
@@ -52,7 +54,6 @@ function getGraphErrorMessage(error) {
 
       return message
     }
-    case DUPLICATE_ID_ERROR: return 'Metric has the same ID as another metric. Contact support for more information.'
   }
   return ''
 }
@@ -108,4 +109,32 @@ export function getMessage(error) {
     case ERROR_TYPES.SAMPLING_ERROR: return getSamplingErrorMessage(error)
   }
   return ''
+}
+
+const {GRAPH_ERROR_SUBTYPES: {MISSING_INPUT_ERROR, IN_INFINITE_LOOP, INVALID_ANCESTOR_ERROR}} = ERROR_SUBTYPES
+
+const addError = (n, error) => ({...n, errors: [...orArr(n.errors), error]})
+const newGraphError = (subType, data) => ({type: ERROR_TYPES.GRAPH_ERROR, subType, ...data})
+
+const newInfiniteLoopError = _.partial(newGraphError, IN_INFINITE_LOOP)
+export const withInfiniteLoopErrorFn = cycle => n => addError(n, newInfiniteLoopError({cycleIds: cycle.map(c => c.id)}))
+
+const newMissingInputError = _.partial(newGraphError, MISSING_INPUT_ERROR)
+const getMissingInputError = (n, missingInputs) => newMissingInputError({missingInputs: _.intersection(missingInputs, n.inputs)})
+const addMissingInputError = (n, missingInputs) => addError(n, getMissingInputError(n, missingInputs))
+const hasMissingInputError = (n, missingInputs) => _.some(n.inputs, p => missingInputs.includes(p))
+export const withMissingInputErrorFn = missingInputs => n => hasMissingInputError(n, missingInputs) ? addMissingInputError(n, missingInputs) : n
+
+const newAncestralError = _.partial(newGraphError, INVALID_ANCESTOR_ERROR)
+export function withAncestralErrorFn(nodes, ancestors) {
+  return n => {
+    const isReportable = e => e.subType !== INVALID_ANCESTOR_ERROR && !(e.subType === IN_INFINITE_LOOP && e.cycleIds.includes(n.id))
+    const hasReportableErrors = a => a !== n.id && !_.isEmpty(orArr(gget(nodes, a, 'id', 'errors')).filter(isReportable))
+
+    let erroroneousAncestorIds = ancestors[n.id].filter(hasReportableErrors)
+    if (_.isEmpty(erroroneousAncestorIds)) { return n }
+
+    const inputs = _.remove(erroroneousAncestorIds, a => n.inputs.includes(a))
+    return addError(n, newAncestralError({ancestors: erroroneousAncestorIds, inputs}))
+  }
 }

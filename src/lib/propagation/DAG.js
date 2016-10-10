@@ -1,83 +1,48 @@
-import * as nodeFns from './nodeFns'
 import {SimulationNode} from './node'
+import {withInfiniteLoopErrorFn, withMissingInputErrorFn, withAncestralErrorFn} from './errors'
 
-import * as _collections from 'gEngine/collections'
-import * as _utils from 'gEngine/utils'
+import {getSubMatches, indicesOf} from 'gEngine/utils'
+import {get, orFns} from 'gEngine/collections'
 
-function extractNextLevelAndErrorNodesAndMutate(unprocessedNodes, heightOrderedNodes, errorNodes, graphErrorNodes, nodesById) {
-  const nextLevelNodes = _.remove(
-    unprocessedNodes,
-    n => nodeFns.allInputsWithin(heightOrderedNodes)(n) && _.isEmpty(n.errors) && !nodeFns.anyInputsWithin(errorNodes)(n)
-  )
+import {idMatchesSome, getMissingInputs, getAncestors, getCycleSets, toCyclePseudoNode, separateIntoHeightSets} from 'lib/DAG/DAG'
 
-  const incomingErrorNodes = _.remove(unprocessedNodes, n => !_.isEmpty(n.errors) && nodeFns.allInputsWithin(heightOrderedNodes)(n))
+const ID_REGEX = /\$\{([^\}]*)\}/g
+const isDescendedFromFn = (idSet, ancestors) => n => _.some(idSet, id => ancestors[n.id].includes(id))
+const withInputIndicesFn = nodeSet => n => ({...n, inputIndices: indicesOf(nodeSet, ({id}) => n.inputs.includes(id))})
 
-  const infiniteLoopNodes = _.remove(unprocessedNodes, n => _.some(nodesById[n.id].lastAncestors, id => id === n.id))
-  const withInfiniteLoopErrors = infiniteLoopNodes.map(nodeFns.withInfiniteLoopError)
+function expandCyclesAndAddGraphErrors(component, ancestors) {
+  const missingInputs = getMissingInputs(_.flatten(component))
 
-  const inputErrorNodes = _.remove(
-    unprocessedNodes,
-    _collections.andFns(nodeFns.anyInputsWithin(errorNodes), nodeFns.allInputsWithin([...heightOrderedNodes, ...errorNodes]))
-  )
-  const withAncestralErrors = inputErrorNodes.map(nodeFns.withAncestralError(errorNodes))
+  const withCyclesExpanded = component.map(heightSet => _.flatten(heightSet.map(n => n.isCycle ? n.nodes.map(withInfiniteLoopErrorFn(n.nodes)) : n)))
+  const withMissingInputErrors = withCyclesExpanded.map(heightSet => heightSet.map(withMissingInputErrorFn(missingInputs)))
 
-  graphErrorNodes.push(...withInfiniteLoopErrors)
-  errorNodes.push(...incomingErrorNodes, ...withInfiniteLoopErrors, ...withAncestralErrors)
-  heightOrderedNodes.push(...nextLevelNodes, ...incomingErrorNodes, ...withAncestralErrors)
-}
-
-function orderNodesAndAddData(nodes) {
-  let unprocessedNodes = nodes.map(nodeFns.extractInputs)
-
-  let nodesById = _.transform(
-    unprocessedNodes,
-    (resultMap, node) => {resultMap[node.id] = {node, lastAncestors: node.inputs, ancestors: node.inputs}},
-    {}
-  )
-
-  const missingInputsNodes = _.remove(unprocessedNodes, nodeFns.hasMissingInputs(unprocessedNodes))
-  let graphErrorNodes = missingInputsNodes.map(nodeFns.withMissingInputError(nodes))
-
-  const duplicateIdNodes = _.remove(unprocessedNodes, nodeFns.hasDuplicateId(unprocessedNodes))
-  graphErrorNodes.push(...duplicateIdNodes.map(nodeFns.withDuplicateIdError))
-
-  let errorNodes = Object.assign([], graphErrorNodes)
-  let heightOrderedNodes = []
-
-  while (!_.isEmpty(unprocessedNodes)) {
-    extractNextLevelAndErrorNodesAndMutate(unprocessedNodes, heightOrderedNodes, errorNodes, graphErrorNodes, nodesById)
-
-    unprocessedNodes.forEach(n => {
-      const newLastAncestors = _.uniq(_.filter(
-        _.flatten(nodesById[n.id].lastAncestors.map(a => _.get(nodesById, `${a}.node.inputs`))), _utils.isPresent
-      ))
-
-      nodesById[n.id].lastAncestors = newLastAncestors
-      nodesById[n.id].ancestors = _.uniq([...nodesById[n.id].ancestors, ...newLastAncestors])
-    })
-  }
-
-  return {
-    orderedNodeStructs: heightOrderedNodes.map(nodeFns.withRelatives(heightOrderedNodes, nodesById)),
-    graphErrorNodes,
-  }
+  return withMissingInputErrors.map(heightSet => {
+    return heightSet.map(withAncestralErrorFn(_.flatten(withMissingInputErrors), ancestors))
+  })
 }
 
 export class SimulationDAG {
   constructor(nodes) {
     if (!!_.get(window, 'recorder')) { window.recorder.recordSimulationDAGConstructionStart(this) }
 
-    const {orderedNodeStructs, graphErrorNodes} = orderNodesAndAddData(nodes)
+    const containsDuplicates = _.some(nodes, (n, i) => idMatchesSome(nodes.slice(i+1))(n))
+    if (containsDuplicates) { console.warn('DUPLICATE IDs DETECTED'); return }
 
-    const asNodes = orderedNodeStructs.map((n,i) => new SimulationNode(n, this, i))
+    const withInputs = nodes.map(n => ({...n, inputs: _.uniq(getSubMatches(n.expression, ID_REGEX, 1))}))
 
-    this.nodes = asNodes
-    this.graphErrorNodes = graphErrorNodes
+    this.ancestors = getAncestors(withInputs)
+    const {acyclicNodes, cycleSets} = getCycleSets(withInputs, this.ancestors)
+    const cyclePseudoNodes = cycleSets.map(toCyclePseudoNode)
+    const heightSets =  separateIntoHeightSets([...acyclicNodes, ...cyclePseudoNodes])
+    const processedHeightSets = _.flatten(expandCyclesAndAddGraphErrors(heightSets, this.ancestors))
+    const foo = withInputIndicesFn(processedHeightSets)
+    const withInputIndices = processedHeightSets.map(withInputIndicesFn(processedHeightSets))
+    this.nodes = withInputIndices.map((n, i) => new SimulationNode(n, this, i))
 
     if (!!_.get(window, 'recorder')) { window.recorder.recordSimulationDAGConstructionStop(this) }
   }
 
-  find(id) { return _collections.get(this.nodes, id) }
-  subsetFrom(idSet) { return this.nodes.filter(n => idSet.includes(n.id) || _.some(idSet, id => n.ancestors.includes(id))) }
-  strictSubsetFrom(idSet) { return this.nodes.filter(n => _.some(idSet, id => n.ancestors.includes(id))) }
+  find(id) { return get(this.nodes, id) }
+  subsetFrom(idSet) { return this.nodes.filter(orFns(n => idSet.includes(n.id), isDescendedFromFn(idSet, this.ancestors))) }
+  strictSubsetFrom(idSet) { return this.nodes.filter(isDescendedFromFn(idSet, this.ancestors)) }
 }
