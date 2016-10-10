@@ -143,7 +143,7 @@ export class SpaceToolbar extends Component {
             <ReactTooltip {...ReactTooltipParams} id='undo-button'>Undo (ctrl-z)</ReactTooltip>
             <ReactTooltip {...ReactTooltipParams} id='redo-button'>Redo (ctrl-shift-z)</ReactTooltip>
             <ReactTooltip {...ReactTooltipParams} id='calculator'>Calculators</ReactTooltip>
-            <ReactTooltip {...ReactTooltipParams} id='facts'>Facts</ReactTooltip>
+            <ReactTooltip {...ReactTooltipParams} id='facts'>Metric Library</ReactTooltip>
 
             {isLoggedIn &&
               <DropDown
