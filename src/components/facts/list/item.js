@@ -23,6 +23,7 @@ export const FactItem = ({fact, onEdit, isExportedFromSelectedSpace, size}) => {
                   length={length(fact)}
                   mean={mean(fact)}
                   adjustedConfidenceInterval={adjustedConfidenceInterval(fact)}
+                  precision={4}
                 />
               </div>
               <div className='histogram'>
