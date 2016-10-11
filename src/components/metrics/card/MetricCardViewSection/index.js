@@ -86,9 +86,10 @@ export class MetricCardViewSection extends Component {
   renderErrorSection() {
     const { metric: {name}, idMap, inSelectedCell, hovered } = this.props
 
-    if (!(this._hasErrors() && !inSelectedCell)) { return false }
+    const shouldShowErrorSection = this._hasErrors() && !inSelectedCell
+    if (!shouldShowErrorSection) { return false }
 
-    const nodeIdMap = _.transform(idMap, (res, value, key) => {res[metricIdToNodeId(key)] = value}, {})
+    const nodeIdMap = _.transform(idMap, (runningMap, value, key) => {runningMap[metricIdToNodeId(key)] = value}, {})
     const messageToDisplay = replaceByMap(getMessage(displayableError(this._errors())), nodeIdMap)
 
     return (
