@@ -19,6 +19,10 @@
 
 .calculator {
   .title-bar {
+    float: left;
+    width: 100%;
+    margin-bottom: 1em;
+
     .action-section{
       padding-top: .4em;
     }
