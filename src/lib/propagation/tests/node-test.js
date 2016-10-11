@@ -1,13 +1,7 @@
 import {expect} from 'chai'
 
-import * as utils from './utils'
-
 import {SimulationDAG} from '../DAG'
-import {SimulationNode} from '../node'
 import * as errorTypes from '../errors'
-
-import * as _collections from 'gEngine/collections'
-import * as _utils from 'gEngine/utils'
 
 const {
   ERROR_TYPES: {GRAPH_ERROR, SAMPLING_ERROR, PARSER_ERROR},
