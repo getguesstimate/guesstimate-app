@@ -1,7 +1,7 @@
 import {SimulationNode} from './node'
 import {withInfiniteLoopErrorFn, withMissingInputErrorFn, withAncestralErrorFn} from './errors'
 
-import {getSubMatches, indicesOf} from 'gEngine/utils'
+import {getSubMatches} from 'gEngine/utils'
 import {get, orFns} from 'gEngine/collections'
 
 import {getCycleSets, toCyclePseudoNode, separateIntoHeightSets} from 'lib/DAG/DAG'
