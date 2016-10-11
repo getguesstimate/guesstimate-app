@@ -41,15 +41,36 @@ describe('DAG library', () => {
     }, {
       id: 'J',
       inputs: ['G', 'I'],
-    },
+    }, {
+      id: 'K',
+      inputs: [],
+    }, {
+      id: 'L',
+      inputs: ['K'],
+    }, {
+      id: 'M',
+      inputs: ['K'],
+    }, {
+      id: 'N',
+      inputs: ['M', 'L'],
+    }
   ]
   describe('getAncestors', () => {
     it ('Correctly assigns nodes their relations', () => {
       const ancestors = getAncestors(layeredGraphNodes)
       expect(ancestors['I']).to.have.members(['H', 'I', 'A'])
+      expect(ancestors['I'].length).to.eq(3)
+
       expect(ancestors['J']).to.have.members(['G', 'I', 'H', 'A', 'F', 'D', 'C', 'B'])
+      expect(ancestors['J'].length).to.eq(8)
+
       expect(ancestors['A']).to.have.members([])
+
       expect(ancestors['B']).to.have.members(['A'])
+      expect(ancestors['B'].length).to.eq(1)
+
+      expect(ancestors['N']).to.have.members(['K', 'L', 'M'])
+      expect(ancestors['N'].length).to.eq(3)
     })
   })
 

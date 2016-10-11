@@ -10,10 +10,11 @@ import * as _collections from 'gEngine/collections'
 import * as _utils from 'gEngine/utils'
 
 const {
-  ERROR_TYPES: {GRAPH_ERROR, SAMPLING_ERROR},
+  ERROR_TYPES: {GRAPH_ERROR, SAMPLING_ERROR, PARSER_ERROR},
   ERROR_SUBTYPES: {
     GRAPH_ERROR_SUBTYPES: {MISSING_INPUT_ERROR, IN_INFINITE_LOOP, INVALID_ANCESTOR_ERROR},
     SAMPLING_ERROR_SUBTYPES: {DIVIDE_BY_ZERO_ERROR},
+    PARSER_ERROR_SUBTYPES: {MISSING_FUNCTION_BODY},
   },
 } = errorTypes
 
@@ -71,6 +72,27 @@ describe('Simulation Node', () => {
 
       expect(DAG.find('ii').errors).to.be.empty
       expect(DAG.find('iii').errors).to.be.empty
+    })
+  })
+
+  describe('#_simulate', () => {
+    let DAG = new SimulationDAG([
+      {id: 'a', expression: '=${foo}', errors: [
+        {type: PARSER_ERROR, subType: MISSING_FUNCTION_BODY},
+        {type: GRAPH_ERROR, subType: MISSING_INPUT_ERROR},
+        {type: SAMPLING_ERROR, subType: DIVIDE_BY_ZERO_ERROR},
+      ]},
+    ])
+
+    it ('clears the parse error before returning but not the graph error or worker error', () => {
+      const node = DAG.find('a')
+      node.simulate(5).then(({samples, errors}) => {
+        expect(errors).to.deep.have.members([
+          {type: GRAPH_ERROR, subType: MISSING_INPUT_ERROR},
+          {type: SAMPLING_ERROR, subType: DIVIDE_BY_ZERO_ERROR},
+        ])
+        expect(samples).to.be.empty
+      })
     })
   })
 })

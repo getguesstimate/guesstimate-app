@@ -43,13 +43,12 @@ export function separateIntoDisconnectedComponents(nodes, ancestors) {
   return components
 }
 
-const nextLevelAncestors = (curr, total, key) => _.flatten(curr.map(a => orArr(total[a]))).filter(a => !total[key].includes(a))
+const nextLevelAncestors = (curr, total, key) => _.uniq(_.flatten(curr.map(a => orArr(total[a]))).filter(a => !total[key].includes(a)))
 const getNewAncestorsFn = ancestors => (res, value, key) => {res[key] = nextLevelAncestors(value, ancestors, key)}
 export function getAncestors(nodes) {
-  const inputsById = _.transform(nodes, (res, {id, inputs}) => {res[id] = inputs}, {})
   let unprocessedNodes = mutableCopy(nodes)
 
-  let newAncestors = mutableCopy(inputsById, true)
+  let newAncestors = _.transform(nodes, (res, {id, inputs}) => {res[id] = inputs}, {})
   let ancestors = _.transform(nodes, (res, {id}) => {res[id] = []}, {})
 
   while (!_.isEmpty(newAncestors)) {

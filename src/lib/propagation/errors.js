@@ -132,6 +132,7 @@ export function withAncestralErrorFn(nodes, ancestors) {
     const hasReportableErrors = a => a !== n.id && !_.isEmpty(orArr(gget(nodes, a, 'id', 'errors')).filter(isReportable))
 
     let erroroneousAncestorIds = ancestors[n.id].filter(hasReportableErrors)
+    console.log('erroneous ancestors.', erroroneousAncestorIds)
     if (_.isEmpty(erroroneousAncestorIds)) { return n }
 
     const inputs = _.remove(erroroneousAncestorIds, a => n.inputs.includes(a))

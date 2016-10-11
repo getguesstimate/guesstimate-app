@@ -9,7 +9,7 @@ import * as _utils from 'gEngine/utils'
 
 
 const {
-  ERROR_TYPES: {GRAPH_ERROR},
+  ERROR_TYPES: {GRAPH_ERROR, PARSER_ERROR},
   ERROR_SUBTYPES: {GRAPH_ERROR_SUBTYPES: {INVALID_ANCESTOR_ERROR}},
 } = errorTypes
 
@@ -29,11 +29,14 @@ export class SimulationNode {
   }
 
   simulate(numSamples) {
-    if (this._hasGraphErrors()) { return Promise.resolve(this._getSimulationResults()) }
-
     const startedWithErrors = this._hasErrors()
 
     const [parsedError, parsedInput] = this._parse()
+    if (this._hasParserError() && _.isEmpty(parsedError)) {
+      this.errors = this.errors.filter(e => e.type !== PARSER_ERROR)
+    }
+
+    if (this._hasGraphErrors()) { return Promise.resolve(this._getSimulationResults()) }
 
     const inputs = this._getInputs()
 
@@ -97,6 +100,7 @@ export class SimulationNode {
   }
 
   _hasErrors() { return !_.isEmpty(this.errors) }
+  _hasParserError() { return _collections.some(this.errors, PARSER_ERROR, 'type') }
   _hasGraphErrors() { return _collections.some(this.errors, GRAPH_ERROR, 'type') }
   _getSimulationResults() { return _.pick(this, ['samples', 'errors']) }
 }

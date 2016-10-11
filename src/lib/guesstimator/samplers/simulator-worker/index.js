@@ -27,6 +27,7 @@ onmessage = ({data}) => {
   data = JSON.parse(data)
 
   if (!data.expr) {
+    console.log('NO expr passed!', data)
     errors.push({type: WORKER_ERROR, subType: NO_EXPR_PASSED_ERROR})
   }
   if (!data.numSamples) {
