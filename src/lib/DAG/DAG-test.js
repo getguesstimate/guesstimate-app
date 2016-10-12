@@ -55,7 +55,7 @@ describe('DAG library', () => {
           id: null,
           isCycle: true,
           inputs: ['K'],
-          dependants: [],
+          outputs: [],
           nodes: [
             {id: 'A', inputs: ['G']},
             {id: 'B', inputs: ['A']},
@@ -69,7 +69,7 @@ describe('DAG library', () => {
           id: null,
           isCycle: true,
           inputs: [],
-          dependants: [],
+          outputs: [],
           nodes: [
             {id: 'H', inputs: ['K']},
             {id: 'I', inputs: ['H']},
