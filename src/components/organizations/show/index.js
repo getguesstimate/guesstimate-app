@@ -120,8 +120,8 @@ export default class OrganizationShow extends Component{
     if (hasPrivateAccess) {
       tabs = [
         {name: 'Models', key: MODEL_TAB},
-        {name: 'Facts', key: FACT_BOOK_TAB},
-        {name: 'Fact Graph', key: FACT_GRAPH_TAB},
+        {name: 'Metric Library', key: FACT_BOOK_TAB},
+        {name: 'Metric Graph', key: FACT_GRAPH_TAB},
         {name: 'Members', key: MEMBERS_TAB}
       ]
     }

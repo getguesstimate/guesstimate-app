@@ -134,6 +134,7 @@
   z-index: 2;
   margin: 24px 15px 14px 14px;
   overflow: auto;
+  background: rgba(223,225,228,0.1);
 
   .closeSidebar {
     float: right;
