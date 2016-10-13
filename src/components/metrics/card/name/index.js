@@ -67,7 +67,6 @@ export default class MetricName extends Component {
             onChange={editorState => this.setState({editorState})}
             handleReturn={this.onReturn.bind(this)}
             onTab={this.onTab.bind(this)}
-            onEscape={this.props.onEscape}
             ref='editor'
             placeholder={'name'}
           />

@@ -25,13 +25,8 @@ export default class Guesstimate extends Component{
     metricClickMode: PropTypes.string,
     guesstimate: PropTypes.object,
     metricId: PropTypes.string.isRequired,
-    metricFocus: PropTypes.func.isRequired,
     size: PropTypes.string,
     onOpen: PropTypes.func,
-  }
-
-  static defaultProps = {
-    metricFocus: () => { }
   }
 
   componentDidUpdate(prevProps) {
@@ -120,7 +115,6 @@ export default class Guesstimate extends Component{
             onSave={this.saveToServer.bind(this)}
             onChangeClickMode={this._changeMetricClickMode.bind(this)}
             onAddDefaultData={() => {this.addDataAndSave([1,2,3])}}
-            onEscape={this.props.metricFocus}
             onReturn={this.handleReturn.bind(this)}
             onTab={this.handleTab.bind(this)}
             size={size}
