@@ -23,7 +23,7 @@ export const PlanList = ({onSelect, plan}) => (
     </PlanElement>
     <PlanElement onClick={() => {onSelect('PREMIUM')}} isSelected={plan === 'PREMIUM'}>
       Unlimited private models. $12/month per user.
-      <div className='free-trial'>Free 14-day trial, no credit card needed.</div>
+      <div className='free-trial'>Free 30-day trial, no credit card needed.</div>
     </PlanElement>
   </div>
 )

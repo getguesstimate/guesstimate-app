@@ -51,7 +51,7 @@ export function toCyclePseudoNode(nodes) {
     id: null,
     isCycle: true,
     inputs: _.uniq(_.flatten(nodes.map(n => orArr(n.inputs).filter(notIn(containedIds))))),
-    dependants: _.uniq(_.flatten(nodes.map(n => orArr(n.dependants).filter(notIn(containedIds))))),
+    outputs: _.uniq(_.flatten(nodes.map(n => orArr(n.outputs).filter(notIn(containedIds))))),
     nodes,
   }
 }
