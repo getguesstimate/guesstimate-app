@@ -155,7 +155,6 @@ export class MetricCardViewSection extends Component {
               name={metric.name}
               onChange={onChangeName}
               jumpSection={jumpSection}
-              onEscape={this.props.onEscape}
               ref='name'
               heightHasChanged={this.props.heightHasChanged}
               onReturn={this.props.onReturn}

@@ -44,7 +44,6 @@ export class TextForm extends Component{
     const {
       guesstimate: {input, guesstimateType},
       inputMetrics,
-      onEscape,
       size,
       organizationId,
       canUseOrganizationFacts,
@@ -71,7 +70,6 @@ export class TextForm extends Component{
             value={input}
             validInputs={validInputReadableIds}
             errorInputs={errorInputReadableIds}
-            onEscape={onEscape}
             onReturn={onReturn}
             onTab={onTab}
             onChange={this.onChangeInput.bind(this)}

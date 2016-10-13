@@ -181,11 +181,6 @@ export default class MetricCard extends Component {
   handleRemoveMetric () { this.props.removeMetrics([this._id()]) }
   _id() { return this.props.metric.id }
 
-  focus() {
-    // TODO(matthew): Is this important?
-    //$(this.refs.dom).focus();
-  }
-
   _focusForm() { _.result(this.refs, 'DistributionEditor.refs.wrappedInstance.focus') }
 
   _handleMouseDown(e) {
@@ -274,7 +269,6 @@ export default class MetricCard extends Component {
     const isFunction = _.get(metric, 'guesstimate.guesstimateType') === 'FUNCTION'
     const canBeMadeFact = shouldTransformName(name) && isFunction && canUseOrganizationFacts
 
-    //        ref='dom'
     return (
       <div className='metricCard--Container'
         onKeyPress={this._handleKeyPress.bind(this)}
@@ -314,7 +308,6 @@ export default class MetricCard extends Component {
             connectDragSource={connectDragSource}
             heightHasChanged={forceFlowGridUpdate}
             hovered={hovered}
-            onEscape={this.focus.bind(this)}
             onReturn={this.props.onReturn}
             onTab={this.props.onTab}
             exportedAsFact={exportedAsFact}
@@ -329,7 +322,6 @@ export default class MetricCard extends Component {
                 metricId={metric.id}
                 organizationId={organizationId}
                 canUseOrganizationFacts={canUseOrganizationFacts}
-                metricFocus={this.focus.bind(this)}
                 jumpSection={() => {this.refs.MetricCardViewSection.focusName()}}
                 onOpen={this.openModal.bind(this)}
                 ref='DistributionEditor'
