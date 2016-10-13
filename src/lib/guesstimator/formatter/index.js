@@ -16,7 +16,7 @@ export const formatters = [
 ]
 
 export function _matchingFormatter(g) {
-  for(let formatter of formatters) {
+  for (let formatter of formatters) {
     if (formatter.matches(g)) {
       return formatter
     }
