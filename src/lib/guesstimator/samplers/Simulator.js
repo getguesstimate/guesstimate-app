@@ -29,7 +29,7 @@ export function simulate(expr, inputs, maxSamples) {
       window.workers.slice(0,-1),
       (worker, index) => simulateOnWorker(worker, buildSimulationParams(expr, index*numSamples, numSamples, inputs))
     ),
-    simulateOnWorker(window.workers[window.workers.length-1], buildSimulationParams(expr, (window.workers.length - 1)* numSamples, remainingSamples, inputs))
+    simulateOnWorker(window.workers[window.workers.length-1], buildSimulationParams(expr, (window.workers.length - 1) * numSamples, remainingSamples, inputs))
   ]
 
   return Promise.all(promises).then(

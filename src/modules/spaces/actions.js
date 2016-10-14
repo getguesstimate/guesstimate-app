@@ -232,7 +232,7 @@ export function update(spaceId, params={}) {
 //updates graph only
 export function updateGraph(spaceId, saveOnServer=true) {
   return (dispatch, getState) => {
-    let {spaces, metrics, guesstimates} = getState()
+    let {spaces, metrics, guesstimates, canvasState: {actionState}} = getState()
     let space = e.collections.get(spaces, spaceId)
     space = e.space.withGraph(space, {metrics, guesstimates})
     space.graph = _.omit(space.graph, 'simulations')
@@ -241,7 +241,7 @@ export function updateGraph(spaceId, saveOnServer=true) {
     dispatch(saveCheckpoint(spaceId, space.graph))
     if (saveOnServer) {
       dispatch(generalUpdate(spaceId, updates))
-    } else {
+    } else if (actionState !== 'UNALLOWED_ATTEMPT') {
       dispatch(changeActionState('UNALLOWED_ATTEMPT'))
     }
   }

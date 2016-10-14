@@ -1,7 +1,5 @@
 import {Evaluate} from './simulator/evaluator.js'
 
-import {orArr} from 'gEngine/utils'
-
 import * as errorTypes from 'lib/propagation/errors'
 
 const {
@@ -38,6 +36,6 @@ onmessage = ({data}) => {
   if (!_.isEmpty(errors)) {
     postMessage(JSON.stringify({errors}))
   } else {
-    postMessage(JSON.stringify(Evaluate(data.expr, data.numSamples, orArr(data.inputs))))
+    postMessage(JSON.stringify(Evaluate(data.expr, data.numSamples, data.inputs)))
   }
 }
