@@ -14,7 +14,7 @@ import {EditCalculatorForm} from 'gComponents/calculators/edit'
 import {CalculatorCompressedShow} from 'gComponents/calculators/show/CalculatorCompressedShow'
 import {ButtonCloseText} from 'gComponents/utility/buttons/close'
 import {ButtonEditText, ButtonDeleteText, ButtonExpandText} from 'gComponents/utility/buttons/button'
-import {FactListContainer} from 'gComponents/facts/list/container.js'
+import {FactListContainer} from 'gComponents/facts/list/container'
 import {Tutorial} from './Tutorial/index'
 
 import {denormalizedSpaceSelector} from '../denormalized-space-selector'
@@ -75,7 +75,7 @@ const CalculatorFormHeader = ({isNew, onClose}) => (
 const FactSidebarHeader = ({onClose, organizationId}) => (
   <div className='row'>
     <div className='col-xs-6'>
-      <h2> Private Facts </h2>
+      <h2> Metric Library </h2>
     </div>
     <div className='col-xs-6'>
       <ButtonExpandText onClick={navigateFn(`/organizations/${organizationId}/facts`)}/>
@@ -143,13 +143,11 @@ export default class SpacesShow extends Component {
     this.considerFetch(prevProps)
   }
 
-  considerFetch(newProps) {
-    const space = newProps.denormalizedSpace
+  considerFetch({denormalizedSpace: space}) {
+    if (this.state.attemptedFetch) { return }
 
-    const hasOwner = _.has(space, 'user.name') || _.has(space, 'organization.name')
     const hasGraph = _.has(space, 'graph')
-
-    const hasData = this.state.attemptedFetch || (hasGraph && hasOwner)
+    const hasData = hasGraph && e.space.prepared(space)
 
     if (!hasData) {
       this.props.dispatch(spaceActions.fetchById(this._id(), this.props.shareableLinkToken))

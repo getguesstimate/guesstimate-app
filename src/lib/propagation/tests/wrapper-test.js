@@ -1,7 +1,5 @@
 import {expect} from 'chai'
 
-import * as utils from './utils'
-
 import {getSubset} from '../wrapper'
 
 import * as _collections from 'gEngine/collections'

@@ -14,7 +14,9 @@ import * as canvasStateActions from 'gModules/canvas_state/actions'
 import {undo, redo} from 'gModules/checkpoints/actions'
 import {fillRegion} from 'gModules/auto_fill_region/actions'
 
+import {orArr} from 'gEngine/utils'
 import * as _collections from 'gEngine/collections'
+import {hasErrors} from 'gEngine/simulation'
 
 import {hasMetricUpdated} from 'gComponents/metrics/card/updated'
 import * as canvasStateProps from 'gModules/canvas_state/prop_type'
@@ -147,6 +149,7 @@ export default class Canvas extends Component{
     const canUseOrganizationFacts = !!_.get(this, 'props.canUseOrganizationFacts')
 
     const existingReadableIds = _.get(this, 'props.denormalizedSpace.metrics').map(m => m.readableId)
+    const idMap = _.transform(orArr(_.get(this, 'props.denormalizedSpace.metrics')), (res, curr) => { res[curr.id] = curr.readableId }, {})
 
     const exportedAsFact = _collections.some(_.get(this, 'props.exportedFacts'), id, 'metric_id')
 
@@ -155,9 +158,8 @@ export default class Canvas extends Component{
         isInScreenshot={this.props.screenshot}
         canvasState={this.props.denormalizedSpace.canvasState}
         key={metric.id}
-        location={location}
         metric={metric}
-        existingReadableIds={existingReadableIds}
+        idMap={idMap}
         organizationId={organizationId}
         canUseOrganizationFacts={canUseOrganizationFacts}
         exportedAsFact={exportedAsFact}
@@ -208,21 +210,19 @@ export default class Canvas extends Component{
     const {ancestors, descendants} = this.getSelectedLineage(selectedRegion)
 
     return edges.map(e => {
-      const [inputMetric, outputMetric] = [this.findMetric(e.input), this.findMetric(e.output)]
-      let errors = _.get(inputMetric, 'simulation.sample.errors')
-      const outputIsAncestor = _.some(ancestors, a => a.id === outputMetric.id)
-      const inputIsDescendant = _.some(descendants, d => d.id === inputMetric.id)
-      const withinSelectedRegion = _.some(selectedMetrics, m => m.id === outputMetric.id) && _.some(selectedMetrics, m => m.id === inputMetric.id)
+      const {id: inputId, location: input, simulation} = this.findMetric(e.input)
+      const {id: outputId, location: output} = this.findMetric(e.output)
+      const outputIsAncestor = _collections.some(ancestors, outputId)
+      const inputIsDescendant = _collections.some(descendants, inputId)
 
-      const hasErrors = !_.isEmpty(errors)
-      let pathStatus
-      if (withinSelectedRegion) {
-        pathStatus = unconnectedStatus
-      } else {
-        pathStatus = outputIsAncestor ? 'ancestor' : inputIsDescendant ? 'descendant' : unconnectedStatus
+      const withinSelectedRegion = _collections.some(selectedMetrics, outputId) && _collections.some(selectedMetrics, inputId)
+
+      let pathStatus = unconnectedStatus
+      if (!withinSelectedRegion && (outputIsAncestor || inputIsDescendant)) {
+        pathStatus = outputIsAncestor ? 'ancestor' : 'descendant'
       }
 
-      return {input: inputMetric.location, output: outputMetric.location, hasErrors, pathStatus }
+      return {input, output, pathStatus, hasErrors: hasErrors(simulation) }
     })
   }
 

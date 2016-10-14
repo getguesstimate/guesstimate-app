@@ -13,6 +13,6 @@ export const isData = input => !input.includes('=') && (input.match(/[\n\s,]/g) 
 export const item = {
   formatterName: 'DATA',
   error(g) { return {} },
-  matches(g) { return !!g.data },
+  matches(g) { return !_.isEmpty(g.data) },
   format(g) { return { guesstimateType: 'DATA', data: g.data } },
 }

@@ -7,10 +7,12 @@ import Icon from 'react-fa'
 
 import {Input} from './input'
 import {Output} from './output'
+import {Button} from 'gComponents/utility/buttons/button.js'
 
 import {deleteSimulations, runSimulations} from 'gModules/simulations/actions'
 import {changeGuesstimate} from 'gModules/guesstimates/actions'
-import {Button} from 'gComponents/utility/buttons/button.js'
+
+import * as _simulation from 'gEngine/simulation'
 
 import {Guesstimator} from 'lib/guesstimator/index'
 
@@ -26,7 +28,7 @@ export class CalculatorShow extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.state.resultComputing && this.allOutputsHaveStats()) {
+    if (this.state.resultComputing && this.allOutputsHaveStats(nextProps)) {
       this.setState({resultComputing: false})
       this.showResult()
     }
@@ -89,8 +91,8 @@ export class CalculatorShow extends Component {
     return _.every(inputComponents, i => !!i && i.hasValidContent())
   }
 
-  allOutputsHaveStats() {
-    return this.props.outputs.map(o => !!o && _.has(o, 'simulation.stats')).reduce((x,y) => x && y, true)
+  allOutputsHaveStats({outputs} = this.props) {
+    return outputs.map(o => !!o && _.has(o, 'simulation.stats')).reduce((x,y) => x && y, true)
   }
 
   showResult() {
@@ -130,7 +132,7 @@ export class CalculatorShow extends Component {
               isFirst={i===0}
               name={metric.name}
               description={_.get(metric, 'guesstimate.description')}
-              errors={_.get(metric, 'simulation.sample.errors')}
+              errors={_simulation.errors(metric.simulation)}
               onBlur={this.onBlur.bind(this, metric)}
               onChange={this.onChange.bind(this, metric)}
               onEnter={this.onEnter.bind(this)}

@@ -81,11 +81,11 @@ export class FactList extends Component {
 
     return (
       <div>
-        {!!exported.length && <h3> Model Outputs </h3>}
+        {!!exported.length && <h3> Model Output Metrics </h3>}
         {this.renderFactSublist(exported)}
-        {!!imported.length && <h3> Model Inputs </h3>}
+        {!!imported.length && <h3> Model Input Metrics </h3>}
         {this.renderFactSublist(imported)}
-        {!!filteredFacts.length && <h3> Other Facts </h3>}
+        {!!filteredFacts.length && <h3> Other Library Metrics </h3>}
         {this.renderFactSublist(filteredFacts)}
       </div>
     )
@@ -115,6 +115,6 @@ export class FactList extends Component {
 const NewButton = ({onClick}) => (
   <div className='NewFactButton' onClick={onClick}>
     <Icon name='plus'/>
-    New Fact
+    New Metric
   </div>
 )
