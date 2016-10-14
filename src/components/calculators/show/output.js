@@ -3,7 +3,7 @@ import Icon from 'react-fa'
 
 import numberShow from 'lib/numberShower/numberShower'
 
-import hasErrors from 'gEngine/simulation'
+import {hasErrors} from 'gEngine/simulation'
 
 const PrecisionNumber = ({value, precision, number=numberShow(value, precision)}) => (
   <span className='result-value'>
