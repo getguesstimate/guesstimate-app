@@ -52,7 +52,6 @@ export class MetricModal extends Component {
       organizationId,
       canUseOrganizationFacts,
       metricClickMode,
-      errors,
       onChangeGuesstimateDescription,
     } = this.props
     const sortedSampleValues = _.get(metric, 'simulation.sample.sortedValues')

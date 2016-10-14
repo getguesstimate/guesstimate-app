@@ -20,12 +20,11 @@ import {analyzeMetricId, endAnalysis} from 'gModules/canvas_state/actions'
 import {createFactFromMetric} from 'gModules/facts/actions'
 
 import * as canvasStateProps from 'gModules/canvas_state/prop_type'
-import {PTLocation} from 'lib/locationUtils'
 import {withReadableId} from 'lib/generateVariableNames/generateMetricReadableId'
 import {shouldTransformName} from 'lib/generateVariableNames/nameToVariableName'
 
 import {INTERMEDIATE, OUTPUT, INPUT, NOEDGE, relationshipType} from 'gEngine/graph'
-import {makeURLsMarkdown} from 'gEngine/utils'
+import {makeURLsMarkdown, allPropsPresent} from 'gEngine/utils'
 
 import './style.css'
 
@@ -57,7 +56,6 @@ export default class MetricCard extends Component {
     removeMetrics: PropTypes.func.isRequired,
     gridKeyPress: PropTypes.func.isRequired,
     inSelectedCell: PropTypes.bool.isRequired,
-    location: PTLocation,
     metric: PropTypes.object.isRequired
   }
 
@@ -72,11 +70,11 @@ export default class MetricCard extends Component {
       (this.state.sidebarIsOpen !== nextState.sidebarIsOpen)
   }
 
-  _beginAnalysis(){
+  _beginAnalysis() {
     this.props.analyzeMetricId(this._id())
   }
 
-  _endAnalysis(){
+  _endAnalysis() {
     this.props.endAnalysis()
   }
 
@@ -88,16 +86,16 @@ export default class MetricCard extends Component {
   componentWillUpdate(nextProps) {
     window.recorder.recordRenderStartEvent(this)
     if (this.props.inSelectedCell && !nextProps.inSelectedCell) { this._closeSidebar() }
-    if (this.props.hovered && !nextProps.hovered){ this._closeSidebar() }
+    if (this.props.hovered && !nextProps.hovered) { this._closeSidebar() }
   }
   componentWillUnmount() { window.recorder.recordUnmountEvent(this) }
 
   componentDidUpdate(prevProps) {
     window.recorder.recordRenderStopEvent(this)
 
-    const hasContent = this.refs.MetricCardViewSection.hasContent()
+    const hasContent = _.result(this.refs, 'MetricCardViewSection.hasContent')
     const {inSelectedCell, selectedFrom} = this.props
-    if (!inSelectedCell && this._isEmpty() && !hasContent && !this.state.modalIsOpen){
+    if (!inSelectedCell && this._isEmpty() && !hasContent && !this.state.modalIsOpen) {
       this.handleRemoveMetric()
     }
     if (!prevProps.inSelectedCell && inSelectedCell && !!selectedFrom) {
@@ -147,31 +145,30 @@ export default class MetricCard extends Component {
     e.stopPropagation()
   }
 
-  _isEmpty(){
+  // TODO(matthew): Maybe use allPropsPresent
+  _isEmpty() {
     return !(this._hasGuesstimate() || this._hasName() || this._hasDescription())
   }
 
-  _hasName(){
+  _hasName() {
     return !!this.props.metric.name
   }
 
-  _hasDescription(){
+  _hasDescription() {
     return !!_.get(this.props.metric, 'guesstimate.description')
   }
 
-  _hasGuesstimate(){
+  _hasGuesstimate() {
     const has = (item) => !!_.get(this.props.metric, `guesstimate.${item}`)
     return (has('input') || has('data'))
   }
 
-  _isTitle(){
-    return (this._hasName() && !this._hasGuesstimate())
-  }
+  _isTitle() { return this._hasName() && !this._hasGuesstimate() }
 
   onChangeMetricName(name) {
     if (name === _.get(this, 'props.metric.name')) { return }
 
-    const metric = withReadableId({id: this._id(), name}, this.props.existingReadableIds)
+    const metric = withReadableId({id: this._id(), name}, _.values(this.props.idMap))
 
     this.props.changeMetric(metric)
   }
@@ -181,22 +178,10 @@ export default class MetricCard extends Component {
     this.props.changeGuesstimate(this._id(), {...this.props.metric.guesstimate, description})
   }
 
-  handleRemoveMetric () {
-    this.props.removeMetrics([this._id()])
-  }
+  handleRemoveMetric () { this.props.removeMetrics([this._id()]) }
+  _id() { return this.props.metric.id }
 
-  _id(){
-    return this.props.metric.id
-  }
-
-  focus() {
-    $(this.refs.dom).focus();
-  }
-
-  _focusForm() {
-    const editorRef = _.get(this.refs, 'DistributionEditor.refs.wrappedInstance')
-    editorRef && editorRef.focus()
-  }
+  _focusForm() { _.result(this.refs, 'DistributionEditor.refs.wrappedInstance.focus') }
 
   _handleMouseDown(e) {
     if (this._isFunctionInputSelectable(e) && !e.shiftKey) {
@@ -214,7 +199,7 @@ export default class MetricCard extends Component {
   }
 
   _isFunctionInputSelectable(e) {
-    return (this._isSelectable(e) && (this.props.canvasState.metricClickMode === 'FUNCTION_INPUT_SELECT'))
+    return this._isSelectable(e) && (this.props.canvasState.metricClickMode === 'FUNCTION_INPUT_SELECT')
   }
 
   _relationshipType() { return relationshipType(_.get(this, 'props.metric.edges')) }
@@ -252,14 +237,12 @@ export default class MetricCard extends Component {
     return !!analyzedMetric && metric.id === analyzedMetric.id
   }
 
-  _makeFact() {
-    this.props.createFactFromMetric(this.props.organizationId, this.props.metric)
-  }
+  _makeFact() { this.props.createFactFromMetric(this.props.organizationId, this.props.metric) }
 
   // If sidebar is expanded, we want to close it if anything else is clicked
-  onMouseDown(e){
+  onMouseDown(e) {
     const isSidebarElement = (_.get(e, 'target.dataset.controlSidebar') === "true")
-    if (this.state.sidebarIsOpen && !isSidebarElement){
+    if (this.state.sidebarIsOpen && !isSidebarElement) {
       this._toggleSidebar()
     }
   }
@@ -272,6 +255,7 @@ export default class MetricCard extends Component {
       canUseOrganizationFacts,
       canvasState,
       hovered,
+      idMap,
       connectDragSource,
       analyzedMetric,
       forceFlowGridUpdate,
@@ -287,7 +271,6 @@ export default class MetricCard extends Component {
 
     return (
       <div className='metricCard--Container'
-        ref='dom'
         onKeyPress={this._handleKeyPress.bind(this)}
         onKeyDown={this._handleKeyDown.bind(this)}
         tabIndex='0'
@@ -319,12 +302,12 @@ export default class MetricCard extends Component {
             onMouseDown={this._handleMouseDown.bind(this)}
             ref='MetricCardViewSection'
             isTitle={this._isTitle()}
-            connectDragSource={connectDragSource}
+            idMap={idMap}
             analyzedMetric={analyzedMetric}
             showSensitivitySection={shouldShowSensitivitySection}
+            connectDragSource={connectDragSource}
             heightHasChanged={forceFlowGridUpdate}
             hovered={hovered}
-            onEscape={this.focus.bind(this)}
             onReturn={this.props.onReturn}
             onTab={this.props.onTab}
             exportedAsFact={exportedAsFact}
@@ -339,7 +322,6 @@ export default class MetricCard extends Component {
                 metricId={metric.id}
                 organizationId={organizationId}
                 canUseOrganizationFacts={canUseOrganizationFacts}
-                metricFocus={this.focus.bind(this)}
                 jumpSection={() => {this.refs.MetricCardViewSection.focusName()}}
                 onOpen={this.openModal.bind(this)}
                 ref='DistributionEditor'

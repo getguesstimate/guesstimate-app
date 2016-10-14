@@ -1,49 +1,18 @@
 import React, {Component} from 'react'
-import {FactItem} from 'gComponents/facts/list/item.js'
 
+import {FactItem} from 'gComponents/facts/list/item.js'
 import FlowGrid from 'gComponents/lib/FlowGrid/FlowGrid'
+import SpaceListItem from 'gComponents/spaces/list_item/index.js'
+import {SpaceCard, NewSpaceCard} from 'gComponents/spaces/cards'
 
 import * as _collections from 'gEngine/collections'
 import * as _utils from 'gEngine/utils'
 import * as _space from 'gEngine/space'
-import SpaceListItem from 'gComponents/spaces/list_item/index.js'
-import {SpaceCard, NewSpaceCard} from 'gComponents/spaces/cards'
+
+import {separateIntoDisconnectedComponents, separateIntoHeightSets} from 'lib/DAG/DAG'
+import {getNodeAncestors, getMissingInputs} from 'lib/DAG/nodeFns'
 
 import './style.css'
-
-const allParentsWithin = nodeSet => n => _.every(n.parents, p => _.some(nodeSet, ({id}) => p === id))
-const anyParentsWithin = nodeSet => n => _.some(n.parents, p => _.some(nodeSet, ({id}) => p === id))
-const anyChildrenWithin = nodeSet => n => _.some(n.children, c => _.some(nodeSet, ({id}) => c === id))
-const anyRelativesWithin = nodeSet => n => anyParentsWithin(nodeSet)(n) || anyChildrenWithin(nodeSet)(n)
-
-function separateIntoHeightsAndStripInfiniteLoops(nodes) {
-  let unprocessedNodes = _utils.mutableCopy(nodes)
-  let heightOrderedNodes = []
-  while (!_.isEmpty(unprocessedNodes)) {
-    const nextLevelNodes = _.remove(unprocessedNodes, allParentsWithin(_.flatten(heightOrderedNodes)))
-    if (_.isEmpty(nextLevelNodes)) { break }
-    heightOrderedNodes.push(nextLevelNodes)
-  }
-  return heightOrderedNodes
-}
-
-function separateIntoDisconnectedComponents(nodes) {
-  if (_.isEmpty(nodes)) { return [] }
-  let unprocessedNodes = _utils.mutableCopy(nodes)
-  let components = []
-  let currentComponent = _.pullAt(unprocessedNodes, [0])
-  while (!_.isEmpty(unprocessedNodes)) {
-    const newComponentNodes = _.remove(unprocessedNodes, anyRelativesWithin(currentComponent))
-    if (_.isEmpty(newComponentNodes)) {
-      components.push(currentComponent)
-      currentComponent = _.pullAt(unprocessedNodes, [0])
-    } else {
-      currentComponent.push(...newComponentNodes)
-    }
-  }
-  components.push(currentComponent)
-  return components
-}
 
 const idToNodeId = (id, isFact) => `${isFact ? 'fact' : 'space'}:${id}`
 const spaceIdToNodeId = ({id}) => idToNodeId(id, false)
@@ -52,15 +21,15 @@ const factIdToNodeId = ({id}) => idToNodeId(id, true)
 const makeFactNodeFn = spaces => fact => ({
   key: factIdToNodeId(fact),
   id: factIdToNodeId(fact),
-  children: spaces.filter(s => _utils.orArr(s.imported_fact_ids).includes(fact.id)).map(spaceIdToNodeId),
-  parents: !!fact.exported_from_id ? [idToNodeId(fact.exported_from_id, false)] : [],
+  outputs: spaces.filter(s => _utils.orArr(s.imported_fact_ids).includes(fact.id)).map(spaceIdToNodeId),
+  inputs: !!fact.exported_from_id ? [idToNodeId(fact.exported_from_id, false)] : [],
   component: <FactItem fact={fact} size={'SMALL'}/>,
 })
 const makeSpaceNodeFn = facts => s => ({
   key: spaceIdToNodeId(s),
   id: spaceIdToNodeId(s),
-  parents: s.imported_fact_ids.map(id => idToNodeId(id, true)),
-  children: _collections.filter(facts, s.id, 'exported_from_id').map(factIdToNodeId),
+  inputs: s.imported_fact_ids.map(id => idToNodeId(id, true)),
+  outputs: _collections.filter(facts, s.id, 'exported_from_id').map(factIdToNodeId),
   component:  <SpaceCard size={'SMALL'} key={s.id} space={s} urlParams={{factsShown: 'true'}}/>
 })
 
@@ -75,12 +44,12 @@ const addLocationsToHeightOrderedComponents = componentsHeightOrdered => {
       const prevLayer = _utils.orArr(_.last(sortedHeightOrderedNodes))
       let newLayer = _utils.mutableCopy(heightSet)
       let newLayerOrdered = []
-      prevLayer.filter(n => !_.isEmpty(n.children)).forEach(n => {
-        const children = _.remove(newLayer, ({id}) => n.children.includes(id))
-        const childrenSorted = _.sortBy(children, c => -c.children.length)
-        newLayerOrdered.push(...childrenSorted)
+      prevLayer.filter(n => !_.isEmpty(n.outputs)).forEach(n => {
+        const outputs = _.remove(newLayer, ({id}) => n.outputs.includes(id))
+        const outputsSorted = _.sortBy(outputs, c => -c.outputs.length)
+        newLayerOrdered.push(...outputsSorted)
       })
-      const restSorted = _.sortBy(newLayer, n => -n.children.length)
+      const restSorted = _.sortBy(newLayer, n => -n.outputs.length)
       newLayerOrdered.push(...restSorted)
 
       let currRow = maxRowUsed
@@ -89,7 +58,7 @@ const addLocationsToHeightOrderedComponents = componentsHeightOrdered => {
           ...node,
           location: {row: currRow, column: currColumn},
         }
-        if (node.children.length > 3) {
+        if (node.outputs.length > 3) {
           currRow += 2
         } else {
           currRow += 1
@@ -122,21 +91,23 @@ export class FactGraph extends Component {
     const spaceNodes = _.map(spacesToDisplay, makeSpaceNodeFn(facts))
 
     // Here we remove some facts from the set of fact nodes, to display them separately, outside the rest of the graph.
-    // In particular, we remove facts that are isolated (i.e. have no parents or children) and orphaned facts, which are
-    // facts that are missing parents, due to missing deletions or other abnormal data setups. We don't want to
+    // In particular, we remove facts that are isolated (i.e. have no inputs or outputs) and orphaned facts, which are
+    // facts that are missing inputs, due to missing deletions or other abnormal data setups. We don't want to
     // render those facts within the main graph, as they have no sensible edges we could display, so we pull them out to
     // render with the isolated nodes at the bottom of the graph.
-    const isolatedFactNodes = _.remove(factNodes, n => _.isEmpty(n.children) && _.isEmpty(n.parents))
-    const orphanedFactNodes = _.remove(factNodes, _.negate(allParentsWithin(spaceNodes)))
+    const isolatedFactNodes = _.remove(factNodes, n => _.isEmpty(n.outputs) && _.isEmpty(n.inputs))
 
-    const components = separateIntoDisconnectedComponents([...factNodes, ...spaceNodes])
-    const componentsHeightOrdered = _.map(components, separateIntoHeightsAndStripInfiniteLoops)
+    const nodes = [...factNodes, ...spaceNodes]
+    const nodeAncestors = getNodeAncestors(nodes)
+
+    const components = separateIntoDisconnectedComponents(nodes, nodeAncestors)
+    const componentsHeightOrdered = _.map(components, separateIntoHeightSets)
 
     const {withFinalLocations, maxRowUsed} = addLocationsToHeightOrderedComponents(componentsHeightOrdered)
 
     // Now we add locations to the isolated facts.
-    const width = Math.floor(Math.sqrt(isolatedFactNodes.length + orphanedFactNodes.length))
-    const isolatedFactNodesWithLocations = _.map([...isolatedFactNodes, ...orphanedFactNodes], (n, i) => ({
+    const width = Math.floor(Math.sqrt(isolatedFactNodes.length))
+    const isolatedFactNodesWithLocations = _.map(isolatedFactNodes, (n, i) => ({
       ...n,
       location: {row: maxRowUsed + 1 +  Math.floor(i/width), column: i % width},
     }))
@@ -147,9 +118,9 @@ export class FactGraph extends Component {
 
     let edges = []
     const pathStatus = 'default'
-    factNodes.forEach(({id, children, parents})  => {
-      edges.push(...children.map(c => ({input: locationById(id), inputId: id, output: locationById(c), outputId: c, pathStatus})))
-      edges.push(...parents.map(p => ({input: locationById(p), inputId: p, output: locationById(id), outputId: id, pathStatus})))
+    factNodes.forEach(({id, outputs, inputs})  => {
+      edges.push(...outputs.map(c => ({input: locationById(id), inputId: id, output: locationById(c), outputId: c, pathStatus})))
+      edges.push(...inputs.map(p => ({input: locationById(p), inputId: p, output: locationById(id), outputId: id, pathStatus})))
     })
 
     const bad_edges = _.remove(edges, edge => !_utils.allPropsPresent(edge, 'input.row', 'input.column', 'output.row', 'output.column'))

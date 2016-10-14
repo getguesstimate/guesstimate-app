@@ -25,13 +25,8 @@ export default class Guesstimate extends Component{
     metricClickMode: PropTypes.string,
     guesstimate: PropTypes.object,
     metricId: PropTypes.string.isRequired,
-    metricFocus: PropTypes.func.isRequired,
     size: PropTypes.string,
     onOpen: PropTypes.func,
-  }
-
-  static defaultProps = {
-    metricFocus: () => { }
   }
 
   componentDidUpdate(prevProps) {
@@ -93,7 +88,7 @@ export default class Guesstimate extends Component{
   }
 
   render () {
-    const {size, guesstimate, inputMetrics, onOpen, errors, organizationId, canUseOrganizationFacts} = this.props
+    const {size, guesstimate, inputMetrics, onOpen, organizationId, canUseOrganizationFacts} = this.props
     if (guesstimate.metric !== this.props.metricId) { return false }
 
     const hasData = !!guesstimate.data
@@ -120,11 +115,9 @@ export default class Guesstimate extends Component{
             onSave={this.saveToServer.bind(this)}
             onChangeClickMode={this._changeMetricClickMode.bind(this)}
             onAddDefaultData={() => {this.addDataAndSave([1,2,3])}}
-            onEscape={this.props.metricFocus}
             onReturn={this.handleReturn.bind(this)}
             onTab={this.handleTab.bind(this)}
             size={size}
-            errors={errors}
             organizationId={organizationId}
             canUseOrganizationFacts={canUseOrganizationFacts}
             ref='TextForm'

@@ -14,7 +14,7 @@ import {EditCalculatorForm} from 'gComponents/calculators/edit'
 import {CalculatorCompressedShow} from 'gComponents/calculators/show/CalculatorCompressedShow'
 import {ButtonCloseText} from 'gComponents/utility/buttons/close'
 import {ButtonEditText, ButtonDeleteText, ButtonExpandText} from 'gComponents/utility/buttons/button'
-import {FactListContainer} from 'gComponents/facts/list/container.js'
+import {FactListContainer} from 'gComponents/facts/list/container'
 import {Tutorial} from './Tutorial/index'
 
 import {denormalizedSpaceSelector} from '../denormalized-space-selector'
