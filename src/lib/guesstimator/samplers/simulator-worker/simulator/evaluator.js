@@ -1,6 +1,3 @@
-// TODO(matthew): Check if this import is required (maybe it is as it is on worker?)...
-var _ = require('lodash')
-
 var Finance = require('financejs')
 import math from 'mathjs'
 
