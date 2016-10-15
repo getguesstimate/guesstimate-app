@@ -67,7 +67,8 @@ function evaluate(compiled, inputs, n){
   let values = []
   let errors = []
   for (let i = 0; i < n; i++) {
-    const newSample = compiled.eval(sampleInputs(inputs,i))
+    const newNum = compiled.eval(sampleInputs(inputs,i))
+    const newSample = parseFloat(newNum.toFixed(12))
 
     if (_.isFinite(newSample)) {
       values.push(newSample)

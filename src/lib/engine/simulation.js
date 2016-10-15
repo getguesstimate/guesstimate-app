@@ -23,7 +23,14 @@ export const getByMetricFn = graph => _collections.getFn(_.get(graph, 'simulatio
 export function addStats(simulation){
   if (!_.has(simulation, 'sample.values.length') || (simulation.sample.values.length === 0)) {
     return
-  } else if (simulation.sample.values.length === 1) {
+  }
+
+  const sortedValues = sortDescending(simulation.sample.values)
+  if (sortedValues[0] === sortedValues[sortedValues.length - 1]) {
+    simulation.sample.values = simulation.sample.values.slice(0,1)
+  }
+
+  if (simulation.sample.values.length === 1) {
     simulation.stats = {
       mean: simulation.sample.values[0],
       stdev: 0,
@@ -33,7 +40,6 @@ export function addStats(simulation){
     return
   }
 
-  const sortedValues = sortDescending(simulation.sample.values)
   const length = sortedValues.length
   const mean = sampleMean(sortedValues)
   const meanIndex = cutoff(sortedValues, length, mean)
