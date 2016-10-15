@@ -12,6 +12,8 @@ import {Button} from 'gComponents/utility/buttons/button.js'
 import {deleteSimulations, runSimulations} from 'gModules/simulations/actions'
 import {changeGuesstimate} from 'gModules/guesstimates/actions'
 
+import * as _simulation from 'gEngine/simulation'
+
 import {Guesstimator} from 'lib/guesstimator/index'
 
 import '../style.css'
@@ -130,7 +132,7 @@ export class CalculatorShow extends Component {
               isFirst={i===0}
               name={metric.name}
               description={_.get(metric, 'guesstimate.description')}
-              errors={_.get(metric, 'simulation.sample.errors')}
+              errors={_simulation.errors(metric.simulation)}
               onBlur={this.onBlur.bind(this, metric)}
               onChange={this.onChange.bind(this, metric)}
               onEnter={this.onEnter.bind(this)}

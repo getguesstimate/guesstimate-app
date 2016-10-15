@@ -3,6 +3,8 @@ import Icon from 'react-fa'
 
 import numberShow from 'lib/numberShower/numberShower'
 
+import {hasErrors} from 'gEngine/simulation'
+
 const PrecisionNumber = ({value, precision, number=numberShow(value, precision)}) => (
   <span className='result-value'>
     {number.value}{number.symbol}
@@ -55,7 +57,7 @@ export class Output extends Component {
             </div>
           </div>
           <div className='col-xs-12 col-sm-5'>
-            <div className={`result-section${!_.isEmpty(_.get(simulation, 'sample.errors')) ? ' has-errors' : ''}`}>
+            <div className={`result-section${hasErrors(simulation) ? ' has-errors' : ''}`}>
               {_.has(simulation, 'stats') && <ResultSection {...simulation.stats} />}
 
               {!showAnalysis && _.has(simulation, 'stats.percentiles.5') &&

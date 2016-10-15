@@ -232,7 +232,6 @@ export class TextInput extends Component{
       >
         <Editor
           onFocus={this.handleFocus.bind(this)}
-          onEscape={this.props.onEscape}
           editorState={editorState}
           handleReturn={this.handleReturn.bind(this)}
           handlePastedText={this.handlePastedText.bind(this)}

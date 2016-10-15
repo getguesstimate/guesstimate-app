@@ -2,6 +2,8 @@ import * as spaceActions from 'gModules/spaces/actions'
 
 import e from 'gEngine/engine'
 
+// TODO(matthew): Doing fact/metric translations here means that systems that rely on guesstimate idenity comparisons
+// (e.g. action triggering qualifiers) will break.
 export function changeGuesstimate(metricId, newGuesstimate, shouldRegisterGraphChange=true) {
   return (dispatch, getState) => {
     const state = getState()

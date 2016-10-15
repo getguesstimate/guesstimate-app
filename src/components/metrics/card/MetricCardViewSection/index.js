@@ -9,19 +9,17 @@ import StatTable from 'gComponents/simulations/stat_table/index'
 import {MetricReadableId, MetricReasoningIcon, MetricSidebarToggle, MetricExportedIcon} from 'gComponents/metrics/card/token/index'
 import SensitivitySection from 'gComponents/metrics/card/SensitivitySection/SensitivitySection'
 
-import {INTERNAL_ERROR, INFINITE_LOOP_ERROR, INPUT_ERROR} from 'lib/errors/modelErrors'
+import {metricIdToNodeId} from 'lib/propagation/wrapper'
+import {getMessage} from 'lib/propagation/errors'
 
+import {getClassName, allPropsPresent, replaceByMap} from 'gEngine/utils'
+import {isBreak, isInfiniteLoop, hasErrors, errors, displayableError} from 'gEngine/simulation'
 import * as _collections from 'gEngine/collections'
 
 import './style.css'
 
-const isBreak = errors => _.some(errors, e => e.type === INPUT_ERROR)
-const severity = errors => isBreak(errors) ? 'minor' : 'serious'
-const isInfiniteLoop = errors => _.some(errors, e => e.type === INFINITE_LOOP_ERROR)
-
-// We have to display this section after it disappears
-// to ensure that the metric card gets selected after click.
-const ErrorText = ({error}) => (<div className={'error-message'}>{error.message}</div>)
+// TODO(matthew): Refactor these components. E.g. it's weird that isBreak takes all errors, but you may only care about
+// the one...
 
 // We have to display this section after it disappears
 // to ensure that the metric card gets selected after click.
@@ -33,17 +31,16 @@ const ErrorIcon = ({errors}) => {
 
 // We have to display this section after it disappears
 // to ensure that the metric card gets selected after click.
-const ErrorSection = ({errors, padTop, shouldShowErrorText, errorToDisplay}) => (
-  <div className={`StatsSectionErrors ${severity(errors)} ${padTop ? 'padTop' : ''}`}>
-    {shouldShowErrorText && <ErrorText error={errorToDisplay} />}
-    {!shouldShowErrorText && <ErrorIcon errors={errors} />}
+const ErrorSection = ({errors, padTop, shouldShowErrorText, messageToDisplay}) => (
+  <div className={getClassName('StatsSectionErrors', isBreak(errors) ? 'minor' : 'serious', padTop ? 'padTop' : null)}>
+    {shouldShowErrorText && <div className={'error-message'}>{messageToDisplay}</div> }
+    {!shouldShowErrorText && <ErrorIcon errors={errors} /> }
   </div>
 )
 
 export class MetricCardViewSection extends Component {
-  hasContent() {
-    return _.has(this, 'refs.name') && this.refs.name.hasContent()
-  }
+  hasContent() { return _.result(this.refs, 'name.hasContent') }
+  focusName() { _.result(this.refs, 'name.focus') }
 
   showSimulation() {
     const stats = _.get(this.props, 'metric.simulation.stats')
@@ -54,26 +51,14 @@ export class MetricCardViewSection extends Component {
     }
   }
 
-  focusName() {
-    this.refs.name && this.refs.name.focus()
-  }
-
   _shouldShowStatistics() {
     const isScientific = (this.props.canvasState.metricCardView === 'scientific')
     const isAvailable = this.showSimulation() && (_.get(this.props, 'metric.simulation.stats').length > 1)
     return isScientific && isAvailable
   }
 
-  _errors() {
-    if (this.props.isTitle){ return [] }
-    let errors = _.get(this.props.metric, 'simulation.sample.errors')
-    return errors ? errors.filter(e => !!e) : []
-  }
-
-  _errorToDisplay() {
-    const inputError = _collections.get(this._errors(), INPUT_ERROR, 'type')
-    return !!inputError ? inputError : this._errors().find(e => e.type !== INTERNAL_ERROR)
-  }
+  _hasErrors() { return !this.props.isTitle && hasErrors(this.props.metric.simulation) }
+  _errors() { return this._hasErrors() ? errors(this.props.metric.simulation) : []}
 
   renderToken() {
     const {
@@ -98,6 +83,27 @@ export class MetricCardViewSection extends Component {
     }
   }
 
+  renderErrorSection() {
+    const { metric: {name}, idMap, inSelectedCell, hovered } = this.props
+
+    const shouldShowErrorSection = this._hasErrors() && !inSelectedCell 
+    if (!shouldShowErrorSection) { return false }
+
+    const errorToDisplay = displayableError(this._errors())
+
+    const nodeIdMap = _.transform(idMap, (runningMap, value, key) => {runningMap[metricIdToNodeId(key)] = value}, {})
+    const messageToDisplay = !!errorToDisplay ? replaceByMap(getMessage(errorToDisplay), nodeIdMap) : null
+
+    return (
+      <ErrorSection
+        errors={this._errors()}
+        messageToDisplay={messageToDisplay}
+        padTop={!_.isEmpty(name) && !inSelectedCell}
+        shouldShowErrorText={!!messageToDisplay && hovered}
+      />
+    )
+  }
+
   render() {
     const {
       canvasState: {metricCardView, metricClickMode},
@@ -112,21 +118,21 @@ export class MetricCardViewSection extends Component {
       exportedAsFact,
     } = this.props
 
-    const errors = this._errors()
-    const errorToDisplay = this._errorToDisplay()
     const {guesstimate} = metric
     const stats = _.get(metric, 'simulation.stats')
     const showSimulation = this.showSimulation()
     const shouldShowStatistics = this._shouldShowStatistics()
     const hasGuesstimateDescription = !_.isEmpty(guesstimate.description)
     const anotherFunctionSelected = ((metricClickMode === 'FUNCTION_INPUT_SELECT') && !inSelectedCell)
-    const hasErrors = (errors.length > 0)
 
-    let className = `MetricCardViewSection ${metricCardView}`
-    className += (hasErrors & !inSelectedCell) ? ' hasErrors' : ''
-    className += (anotherFunctionSelected) ? ' anotherFunctionSelected' : ''
+    const mainClassName = getClassName(
+      'MetricCardViewSection',
+      metricCardView,
+      anotherFunctionSelected ? 'anotherFunctionSelected' : null,
+      this._hasErrors() && !inSelectedCell ? 'hasErrors' : null,
+    )
     return (
-      <div className={className} onMouseDown={onMouseDown}>
+      <div className={mainClassName} onMouseDown={onMouseDown}>
         {(metricCardView !== 'basic') && showSimulation &&
           <Histogram
             height={(metricCardView === 'scientific') ? 110 : 30}
@@ -149,7 +155,6 @@ export class MetricCardViewSection extends Component {
               name={metric.name}
               onChange={onChangeName}
               jumpSection={jumpSection}
-              onEscape={this.props.onEscape}
               ref='name'
               heightHasChanged={this.props.heightHasChanged}
               onReturn={this.props.onReturn}
@@ -178,14 +183,7 @@ export class MetricCardViewSection extends Component {
               </div>
             }
 
-            {hasErrors && !inSelectedCell &&
-              <ErrorSection
-                errors={errors}
-                errorToDisplay={errorToDisplay}
-                padTop={(!_.isEmpty(metric.name) && !inSelectedCell)}
-                shouldShowErrorText={!!errorToDisplay && hovered}
-              />
-            }
+            {this.renderErrorSection()}
           </div>
         )}
       </div>

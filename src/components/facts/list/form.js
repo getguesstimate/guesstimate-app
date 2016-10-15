@@ -5,7 +5,7 @@ import {navigateFn} from 'gModules/navigation/actions'
 import {spaceUrlById} from 'gEngine/space'
 import {hasRequiredProperties, isExportedFromSpace, simulateFact, FactPT} from 'gEngine/facts'
 import {FactCategoryPT} from 'gEngine/fact_category'
-import {addStats} from 'gEngine/simulation'
+import {addStats, hasErrors} from 'gEngine/simulation'
 import {orStr} from 'gEngine/utils'
 
 import {isData, formatData} from 'lib/guesstimator/formatter/formatters/Data'
@@ -79,7 +79,7 @@ export class FactForm extends Component {
     }
   }
 
-  hasNoErrors() { return _.isEmpty(_.get(this, 'state.runningFact.simulation.sample.errors')) }
+  hasNoErrors() { return !hasErrors(this.state.runningFact.simulation) }
   isVariableNameUnique() { return !_.some(this.props.existingVariableNames, n => n === this.state.runningFact.variable_name) }
   isValid() { return hasRequiredProperties(this.state.runningFact) && this.hasNoErrors() && this.isVariableNameUnique() }
 

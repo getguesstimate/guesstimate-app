@@ -66,7 +66,7 @@ export class SpaceToolbar extends Component {
       this.props.canUndo !== nextProps.canUndo ||
       this.props.canRedo !== nextProps.canRedo ||
       this.props.isLoggedIn !== nextProps.isLoggedIn ||
-      !_.isEqual(this.props.calculators, nextProps.calculator) ||
+      !_.isEqual(this.props.calculators, nextProps.calculators) ||
       this.state.importModalOpen !== nextState.importModalOpen
     )
   }
