@@ -26,16 +26,18 @@ export function addStats(simulation){
   }
 
   const sortedValues = sortDescending(simulation.sample.values)
-  let numDistinctNums = 0
-  let index = 0
+  if (sortedValues[sortedValues.length - 1] - sortedValues[0] < 1e-15) {
+    let numDistinctNums = 0
+    let index = 0
 
-  while (index != -1) {
-    numDistinctNums++
-    index = sortedValues.findIndex((e, i) => i > index && e !== sortedValues[index])
-  }
+    while (index != -1) {
+      numDistinctNums++
+      index = sortedValues.findIndex((e, i) => i > index && e !== sortedValues[index])
+    }
 
-  if ((sortedValues[sortedValues.length - 1] - sortedValues[0] < 1e-15) && numDistinctNums < 10) {
-    simulation.sample.values = simulation.sample.values.slice(0,1)
+    if (numDistinctNums < 10) {
+      simulation.sample.values = simulation.sample.values.slice(0,1)
+    }
   }
 
   if (simulation.sample.values.length === 1) {
