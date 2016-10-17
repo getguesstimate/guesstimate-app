@@ -1,3 +1,36 @@
+// TODO(matthew): Rename.
+function bisectFirstNotEqualSearch(sortedValues, start, end) {
+  if (sortedValues[start] === sortedValues[end]) { return -1 }
+
+  while (start !== end - 1) {
+    const index = Math.floor((end + start)/2)
+    if (sortedValues[start] === sortedValues[index]) {
+      start = index
+    } else {
+      end = index
+    }
+  }
+  return end
+}
+
+/* Returns the number of distinct values in the list of sorted samples. If cutoff is specified, the function will
+ * terminate early if more than cutoff values are detected (as a performance optimization).
+ */
+export function numDistinctValues(sortedValues, cutoff = Infinity) {
+  if (_.isEmpty(sortedValues)) { return 0 }
+
+  let numDistinctValues = 0
+  let index = 0
+
+  while (index !== -1) {
+    numDistinctValues++
+    index = bisectFirstNotEqualSearch(sortedValues, index, sortedValues.length)
+    if (numDistinctValues >= cutoff) { break }
+  }
+
+  return numDistinctValues
+}
+
 // Returns a sorted (desc) copy of the samples.
 export function sortDescending(samples) {
   return Object.assign([], samples).sort((a,b) => a-b)

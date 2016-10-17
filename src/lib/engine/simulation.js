@@ -1,7 +1,7 @@
 import * as _collections from './collections'
 import {orArr} from './utils'
 
-import {sampleMean, sampleStdev, percentile, cutoff, sortDescending} from 'lib/dataAnalysis.js'
+import {sampleMean, sampleStdev, percentile, cutoff, sortDescending, numDistinctValues} from 'lib/dataAnalysis.js'
 import * as errorTypes from 'lib/propagation/errors'
 
 const {
@@ -27,15 +27,7 @@ export function addStats(simulation){
 
   const sortedValues = sortDescending(simulation.sample.values)
   if (sortedValues[sortedValues.length - 1] - sortedValues[0] < 1e-15) {
-    let numDistinctNums = 0
-    let index = 0
-
-    while (index != -1) {
-      numDistinctNums++
-      index = sortedValues.findIndex((e, i) => i > index && e !== sortedValues[index])
-    }
-
-    if (numDistinctNums < 10) {
+    if (numDistinctValues(sortedValues, 10) < 10) {
       simulation.sample.values = simulation.sample.values.slice(0,1)
     }
   }
