@@ -27,6 +27,8 @@ export function addStats(simulation){
 
   const sortedValues = sortDescending(simulation.sample.values)
   if (sortedValues[sortedValues.length - 1] - sortedValues[0] < 1e-15) {
+    // The number of distinct values should only be computed if the list has appropriately small span. We nest it
+    // like this rather than use a simple && to emphasize that.
     if (numDistinctValues(sortedValues, 10) < 10) {
       simulation.sample.values = simulation.sample.values.slice(0,1)
     }

@@ -1,5 +1,4 @@
-// TODO(matthew): Rename.
-function bisectFirstNotEqualSearch(sortedValues, start, end) {
+function nextDistinctValueSearch(sortedValues, start, end) {
   if (sortedValues[start] === sortedValues[end]) { return -1 }
 
   while (start !== end - 1) {
@@ -24,7 +23,7 @@ export function numDistinctValues(sortedValues, cutoff = Infinity) {
 
   while (index !== -1) {
     numDistinctValues++
-    index = bisectFirstNotEqualSearch(sortedValues, index, sortedValues.length)
+    index = nextDistinctValueSearch(sortedValues, index, sortedValues.length)
     if (numDistinctValues >= cutoff) { break }
   }
 
