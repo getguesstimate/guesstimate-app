@@ -94,8 +94,10 @@ svg.edge  path.basic-arrow {
 $default: #899eb6;
 $unconnected: rgba(77, 121, 175, 0.06);
 $unconnected-head: rgba(77, 121, 175, 0.06);
-$ancestor: rgb(123, 158, 149);
-$descendant: rgb(118, 137, 160);
+$ancestor: rgb(149, 182, 178);
+$ancestor-1-degree: rgb(67, 121, 107);
+$descendant: rgb(158, 172, 188);
+$descendant-1-degree: rgb(86, 104, 125);
 $errors: #B59893;
 $screenshot: rgb(128, 154, 185);
 
@@ -134,11 +136,25 @@ svg.edge  path.basic-arrow.ancestor {
   fill: $ancestor;
 }
 
+svg.edge  path.basic-arrow.ancestor-1-degree {
+  stroke: $ancestor-1-degree;
+}
+.arrow.ancestor-1-degree{
+  fill: $ancestor-1-degree;
+}
+
 svg.edge  path.basic-arrow.descendant {
   stroke: $descendant;
 }
 .arrow.descendant{
   fill: $descendant;
+}
+
+svg.edge  path.basic-arrow.descendant-1-degree {
+  stroke: $descendant-1-degree;
+}
+.arrow.descendant-1-degree {
+  fill: $descendant-1-degree;
 }
 
 .FlowGrid .Region {

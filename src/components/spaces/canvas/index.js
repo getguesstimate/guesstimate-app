@@ -222,10 +222,16 @@ export default class Canvas extends Component{
 
       let pathStatus = unconnectedStatus
       if (!withinSelectedRegion && (outputIsAncestor || inputIsDescendant)) {
+        const degree = outputIsAncestor ?
+          ancestors.findIndex(e => e.id === outputId) + 1
+          :
+          descendants.findIndex(e => e.id === inputId) + 1
+
         pathStatus = outputIsAncestor ? 'ancestor' : 'descendant'
+        if (degree === 1) { pathStatus += '-1-degree' }
       }
 
-      return {input, output, pathStatus, hasErrors: hasErrors(simulation) }
+      return {input, output, pathStatus, hasErrors: hasErrors(simulation), className: '' }
     })
   }
 
