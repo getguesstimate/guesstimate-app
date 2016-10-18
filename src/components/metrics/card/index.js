@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 
+import Icon from 'react-fa'
 import ReactDOM from 'react-dom'
 import $ from 'jquery'
 
@@ -16,17 +17,16 @@ import {hasMetricUpdated} from './updated'
 import {removeMetrics, changeMetric} from 'gModules/metrics/actions'
 import {changeGuesstimate} from 'gModules/guesstimates/actions'
 import {analyzeMetricId, endAnalysis} from 'gModules/canvas_state/actions'
+import {createFactFromMetric} from 'gModules/facts/actions'
 
 import * as canvasStateProps from 'gModules/canvas_state/prop_type'
-import {PTLocation} from 'lib/locationUtils'
 import {withReadableId} from 'lib/generateVariableNames/generateMetricReadableId'
+import {shouldTransformName} from 'lib/generateVariableNames/nameToVariableName'
 
 import {INTERMEDIATE, OUTPUT, INPUT, NOEDGE, relationshipType} from 'gEngine/graph'
-import {makeURLsMarkdown} from 'gEngine/utils'
+import {makeURLsMarkdown, allPropsPresent} from 'gEngine/utils'
 
 import './style.css'
-
-import Icon from 'react-fa'
 
 const relationshipClasses = {}
 relationshipClasses[INTERMEDIATE] = 'intermediate'
@@ -34,42 +34,33 @@ relationshipClasses[OUTPUT] = 'output'
 relationshipClasses[INPUT] = 'input'
 relationshipClasses[NOEDGE] = 'noedge'
 
-class ScatterTip extends Component {
-  render() {
-    return (
-      <ToolTip size='LARGE'>
-        <SensitivitySection yMetric={this.props.yMetric} xMetric={this.props.xMetric} size={'LARGE'}/>
-      </ToolTip>
-    )
-  }
-}
-
-const PT = PropTypes
+const ScatterTip = ({yMetric, xMetric}) => (
+  <ToolTip size='LARGE'> <SensitivitySection yMetric={yMetric} xMetric={xMetric} size={'LARGE'}/> </ToolTip>
+)
 
 @connect(null, dispatch => bindActionCreators({
   changeMetric,
   changeGuesstimate,
   removeMetrics,
   analyzeMetricId,
-  endAnalysis
+  endAnalysis,
+  createFactFromMetric,
 }, dispatch))
 export default class MetricCard extends Component {
   displayName: 'MetricCard'
 
   static propTypes = {
     canvasState: canvasStateProps.canvasState,
-    changeMetric: PT.func.isRequired,
-    changeGuesstimate: PT.func.isRequired,
-    removeMetrics: PT.func.isRequired,
-    gridKeyPress: PT.func.isRequired,
-    inSelectedCell: PT.bool.isRequired,
-    location: PTLocation,
-    metric: PT.object.isRequired
+    changeMetric: PropTypes.func.isRequired,
+    changeGuesstimate: PropTypes.func.isRequired,
+    removeMetrics: PropTypes.func.isRequired,
+    gridKeyPress: PropTypes.func.isRequired,
+    inSelectedCell: PropTypes.bool.isRequired,
+    metric: PropTypes.object.isRequired
   }
 
   state = {
     modalIsOpen: false,
-    editing: false,
     sidebarIsOpen: false,
   }
 
@@ -79,16 +70,12 @@ export default class MetricCard extends Component {
       (this.state.sidebarIsOpen !== nextState.sidebarIsOpen)
   }
 
-  _beginAnalysis(){
+  _beginAnalysis() {
     this.props.analyzeMetricId(this._id())
   }
 
-  _endAnalysis(){
+  _endAnalysis() {
     this.props.endAnalysis()
-  }
-
-  onEdit() {
-    if (!this.state.editing) { this.setState({editing: true}) }
   }
 
   focusFromDirection(dir) {
@@ -98,18 +85,17 @@ export default class MetricCard extends Component {
 
   componentWillUpdate(nextProps) {
     window.recorder.recordRenderStartEvent(this)
-    if (this.state.editing && !nextProps.inSelectedCell) { this.setState({editing: false}) }
     if (this.props.inSelectedCell && !nextProps.inSelectedCell) { this._closeSidebar() }
-    if (this.props.hovered && !nextProps.hovered){ this._closeSidebar() }
+    if (this.props.hovered && !nextProps.hovered) { this._closeSidebar() }
   }
   componentWillUnmount() { window.recorder.recordUnmountEvent(this) }
 
   componentDidUpdate(prevProps) {
     window.recorder.recordRenderStopEvent(this)
 
-    const hasContent = this.refs.MetricCardViewSection.hasContent()
+    const hasContent = _.result(this.refs, 'MetricCardViewSection.hasContent')
     const {inSelectedCell, selectedFrom} = this.props
-    if (!inSelectedCell && this._isEmpty() && !hasContent && !this.state.modalIsOpen){
+    if (!inSelectedCell && this._isEmpty() && !hasContent && !this.state.modalIsOpen) {
       this.handleRemoveMetric()
     }
     if (!prevProps.inSelectedCell && inSelectedCell && !!selectedFrom) {
@@ -159,31 +145,30 @@ export default class MetricCard extends Component {
     e.stopPropagation()
   }
 
-  _isEmpty(){
+  // TODO(matthew): Maybe use allPropsPresent
+  _isEmpty() {
     return !(this._hasGuesstimate() || this._hasName() || this._hasDescription())
   }
 
-  _hasName(){
+  _hasName() {
     return !!this.props.metric.name
   }
 
-  _hasDescription(){
+  _hasDescription() {
     return !!_.get(this.props.metric, 'guesstimate.description')
   }
 
-  _hasGuesstimate(){
+  _hasGuesstimate() {
     const has = (item) => !!_.get(this.props.metric, `guesstimate.${item}`)
     return (has('input') || has('data'))
   }
 
-  _isTitle(){
-    return (this._hasName() && !this._hasGuesstimate())
-  }
+  _isTitle() { return this._hasName() && !this._hasGuesstimate() }
 
   onChangeMetricName(name) {
     if (name === _.get(this, 'props.metric.name')) { return }
 
-    const metric = withReadableId({id: this._id(), name}, this.props.existingReadableIds)
+    const metric = withReadableId({id: this._id(), name}, _.values(this.props.idMap))
 
     this.props.changeMetric(metric)
   }
@@ -193,22 +178,10 @@ export default class MetricCard extends Component {
     this.props.changeGuesstimate(this._id(), {...this.props.metric.guesstimate, description})
   }
 
-  handleRemoveMetric () {
-    this.props.removeMetrics([this._id()])
-  }
+  handleRemoveMetric () { this.props.removeMetrics([this._id()]) }
+  _id() { return this.props.metric.id }
 
-  _id(){
-    return this.props.metric.id
-  }
-
-  focus() {
-    $(this.refs.dom).focus();
-  }
-
-  _focusForm() {
-    const editorRef = _.get(this.refs, 'DistributionEditor.refs.wrappedInstance')
-    editorRef && editorRef.focus()
-  }
+  _focusForm() { _.result(this.refs, 'DistributionEditor.refs.wrappedInstance.focus') }
 
   _handleMouseDown(e) {
     if (this._isFunctionInputSelectable(e) && !e.shiftKey) {
@@ -226,13 +199,15 @@ export default class MetricCard extends Component {
   }
 
   _isFunctionInputSelectable(e) {
-    return (this._isSelectable(e) && (this.props.canvasState.metricClickMode === 'FUNCTION_INPUT_SELECT'))
+    return this._isSelectable(e) && (this.props.canvasState.metricClickMode === 'FUNCTION_INPUT_SELECT')
   }
 
+  _relationshipType() { return relationshipType(_.get(this, 'props.metric.edges')) }
+
   _className() {
-    const {inSelectedCell, metric, hovered} = this.props
+    const {inSelectedCell, hovered} = this.props
     const {canvasState: {metricCardView}} = this.props
-    const relationshipClass = relationshipClasses[relationshipType(metric.edges)]
+    const relationshipClass = relationshipClasses[this._relationshipType()]
 
     const titleView = !hovered && !inSelectedCell && this._isTitle()
     let className = inSelectedCell ? 'metricCard grid-item-focus' : 'metricCard'
@@ -262,10 +237,12 @@ export default class MetricCard extends Component {
     return !!analyzedMetric && metric.id === analyzedMetric.id
   }
 
+  _makeFact() { this.props.createFactFromMetric(this.props.organizationId, this.props.metric) }
+
   // If sidebar is expanded, we want to close it if anything else is clicked
-  onMouseDown(e){
+  onMouseDown(e) {
     const isSidebarElement = (_.get(e, 'target.dataset.controlSidebar') === "true")
-    if (this.state.sidebarIsOpen && !isSidebarElement){
+    if (this.state.sidebarIsOpen && !isSidebarElement) {
       this._toggleSidebar()
     }
   }
@@ -278,17 +255,22 @@ export default class MetricCard extends Component {
       canUseOrganizationFacts,
       canvasState,
       hovered,
+      idMap,
       connectDragSource,
       analyzedMetric,
       forceFlowGridUpdate,
+      exportedAsFact,
     } = this.props
-    const {guesstimate} = metric
+    const {guesstimate, name} = metric
+    const {metricClickMode} = canvasState
     const shouldShowSensitivitySection = this._shouldShowSensitivitySection()
     const isAnalyzedMetric = this._isAnalyzedMetric()
 
+    const isFunction = _.get(metric, 'guesstimate.guesstimateType') === 'FUNCTION'
+    const canBeMadeFact = shouldTransformName(name) && isFunction && canUseOrganizationFacts
+
     return (
       <div className='metricCard--Container'
-        ref='dom'
         onKeyPress={this._handleKeyPress.bind(this)}
         onKeyDown={this._handleKeyDown.bind(this)}
         tabIndex='0'
@@ -300,7 +282,12 @@ export default class MetricCard extends Component {
           {this.state.modalIsOpen &&
             <MetricModal
               metric={metric}
+              organizationId={organizationId}
+              canUseOrganizationFacts={canUseOrganizationFacts}
+              metricClickMode={metricClickMode}
               closeModal={this.closeModal.bind(this)}
+              organizationId={organizationId}
+              canUseOrganizationFacts={canUseOrganizationFacts}
               onChangeGuesstimateDescription={this.onChangeGuesstimateDescription.bind(this)}
             />
           }
@@ -315,33 +302,32 @@ export default class MetricCard extends Component {
             onMouseDown={this._handleMouseDown.bind(this)}
             ref='MetricCardViewSection'
             isTitle={this._isTitle()}
-            connectDragSource={connectDragSource}
+            idMap={idMap}
             analyzedMetric={analyzedMetric}
             showSensitivitySection={shouldShowSensitivitySection}
+            connectDragSource={connectDragSource}
             heightHasChanged={forceFlowGridUpdate}
             hovered={hovered}
-            editing={this.state.editing}
-            onEscape={this.focus.bind(this)}
             onReturn={this.props.onReturn}
             onTab={this.props.onTab}
+            exportedAsFact={exportedAsFact}
           />
 
-          {inSelectedCell &&
+          {inSelectedCell && !this.state.modalIsOpen &&
             <div className='section editing'>
               <DistributionEditor
                 guesstimate={metric.guesstimate}
                 inputMetrics={metric.edges.inputMetrics}
+                metricClickMode={metricClickMode}
                 metricId={metric.id}
                 organizationId={organizationId}
                 canUseOrganizationFacts={canUseOrganizationFacts}
-                metricFocus={this.focus.bind(this)}
                 jumpSection={() => {this.refs.MetricCardViewSection.focusName()}}
                 onOpen={this.openModal.bind(this)}
                 ref='DistributionEditor'
                 size='small'
                 onReturn={this.props.onReturn}
                 onTab={this.props.onTab}
-                onEdit={this.onEdit.bind(this)}
               />
             </div>
           }
@@ -357,15 +343,28 @@ export default class MetricCard extends Component {
             showAnalysis={this._canBeAnalyzed()}
             onBeginAnalysis={this._beginAnalysis.bind(this)}
             onEndAnalysis={this._endAnalysis.bind(this)}
+            canBeMadeFact={canBeMadeFact}
+            exportedAsFact={exportedAsFact}
+            onMakeFact={this._makeFact.bind(this)}
             isAnalyzedMetric={isAnalyzedMetric}
           />
         }
       </div>
-    );
+    )
   }
 }
 
-const MetricSidebar = ({onOpenModal, onBeginAnalysis, onEndAnalysis, onRemoveMetric, showAnalysis, isAnalyzedMetric}) => (
+const MetricSidebar = ({
+  onOpenModal,
+  onBeginAnalysis,
+  onEndAnalysis,
+  canBeMadeFact,
+  exportedAsFact,
+  onMakeFact,
+  onRemoveMetric,
+  showAnalysis,
+  isAnalyzedMetric
+}) => (
   <div className='MetricSidebar'>
     <MetricSidebarItem
       icon={<Icon name='expand'/>}
@@ -385,6 +384,13 @@ const MetricSidebar = ({onOpenModal, onBeginAnalysis, onEndAnalysis, onRemoveMet
         icon={<Icon name='close'/>}
         name={'Sensitivity'}
         onClick={onEndAnalysis}
+      />
+    }
+    {canBeMadeFact && !exportedAsFact &&
+      <MetricSidebarItem
+        icon={<i className='ion-ios-redo'/>}
+        name={'Export'}
+        onClick={onMakeFact}
       />
     }
     <MetricSidebarItem

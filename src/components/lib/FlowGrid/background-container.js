@@ -32,13 +32,11 @@ export class BackgroundContainer extends Component {
     rowHeights: []
   }
 
-  componentWillMount() {
-    this.setState({rowHeights: _.map(upto(this.props.rowCount), (r, i) => this.props.getRowHeight(i))})
+  setRowHeights(params = this.props, {rowCount, getRowHeight} = params) {
+    this.setState({rowHeights: _.map(upto(rowCount), (_1, i) => getRowHeight(i))})
   }
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({rowHeights: _.map(upto(nextProps.rowCount), (r, i) => nextProps.getRowHeight(i))})
-  }
+  componentDidMount() { this.setRowHeights() }
+  componentWillReceiveProps(nextProps) { this.setRowHeights(nextProps) }
 
   shouldComponentUpdate(nextProps, nextState) {
     return (
@@ -65,11 +63,15 @@ export class BackgroundContainer extends Component {
     } else { return false }
   }
 
+  getColumnWidth() {
+    return $('.FlowGridCell') && $('.FlowGridCell')[0] ? $('.FlowGridCell')[0].offsetWidth : null
+  }
+
   render() {
     const {edges, rowCount, getRowHeight, selectedRegion, copiedRegion, autoFillRegion, analyzedRegion} = this.props
     const {rowHeights} = this.state
 
-    const columnWidth = $('.FlowGridCell') && $('.FlowGridCell')[0] && $('.FlowGridCell')[0].offsetWidth
+    const columnWidth = this.getColumnWidth()
     if (!columnWidth || !rowHeights.length) { return false }
 
     const containerHeight = rowHeights.reduce((a,b) => a + b)

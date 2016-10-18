@@ -229,11 +229,9 @@ export class TextInput extends Component{
         className={className}
         onClick={this.focus.bind(this)}
         onKeyDown={e => {e.stopPropagation()}}
-        onFocus={this.handleFocus.bind(this)}
       >
         <Editor
-          onFocus={this.props.onFocus}
-          onEscape={this.props.onEscape}
+          onFocus={this.handleFocus.bind(this)}
           editorState={editorState}
           handleReturn={this.handleReturn.bind(this)}
           handlePastedText={this.handlePastedText.bind(this)}

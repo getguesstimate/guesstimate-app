@@ -26,20 +26,13 @@ function api(state) {
 
 export function fetchSuccess(spaces) {
   return (dispatch, getState) => {
-    dispatch(sActions.fetchSuccess(spaces.map(s => _.omit(s, ['_embedded']))))
-
-    spaces.forEach(({id, graph}) => {
-      // We need to check if the space is already initialized as we do not want to double-initialize a space.
-      const isInitialized = e.collections.some(getState().checkpoints, id, 'spaceId')
-      if (!isInitialized) { dispatch(initSpace(id, graph)) }
-    })
-
     const users = spaces.map(s => _.get(s, '_embedded.user')).filter(e.utils.isPresent)
     const organizations = spaces.map(s => {
       const organization = _.get(s, '_embedded.organization')
       if (!e.utils.isPresent(organization)) { return null }
       return {
         ...organization,
+        fullyLoaded: true,
         facts: [...e.utils.orArr(_.get(organization, 'facts')), ...e.utils.orArr(_.get(s, '_embedded.imported_facts'))],
       }
     }).filter(e.utils.isPresent)
@@ -48,6 +41,14 @@ export function fetchSuccess(spaces) {
     if (!_.isEmpty(calculators)) {dispatch(calculatorActions.sActions.fetchSuccess(calculators))}
     if (!_.isEmpty(organizations)) { dispatch(organizationActions.fetchSuccess(organizations)) }
     if (!_.isEmpty(users)) { dispatch(userActions.fetchSuccess(users)) }
+
+    spaces.forEach(({id, graph}) => {
+      // We need to check if the space is already initialized as we do not want to double-initialize a space.
+      const isInitialized = e.collections.some(getState().checkpoints, id, 'spaceId')
+      if (!isInitialized) { dispatch(initSpace(id, graph)) }
+    })
+
+    dispatch(sActions.fetchSuccess(spaces.map(s => _.omit(s, ['_embedded']))))
   }
 }
 
@@ -70,9 +71,27 @@ export function destroy(object) {
   }
 }
 
+// TODO(matthew): Maybe we can remove metric_count?
+const SPACE_INDEX_ATTRIBUTES = [
+  'id',
+  'name',
+  'description',
+  'user_id',
+  'organization_id',
+  'updated_at',
+  'metric_count',
+  'is_private',
+  'screenshot',
+  'big_screenshot',
+  'viewcount',
+  'imported_fact_ids',
+  'exported_facts_count',
+  'editors_by_time',
+]
+
 export function fromSearch(data) {
   return (dispatch) => {
-    const formatted = data.map(d => _.pick(d, ['id', 'name', 'description', 'user_id', 'updated_at', 'metric_count', 'is_private', 'screenshot', 'big_screenshot', 'viewcount']))
+    const formatted = data.map(d => _.pick(d, SPACE_INDEX_ATTRIBUTES))
     const action = sActions.fetchSuccess(formatted)
     dispatch(action)
   }
@@ -101,7 +120,7 @@ export function fetch({userId, organizationId}) {
       if (err) {
         captureApiError('SpacesFetch', err.jqXHR, err.textStatus, err, {url: 'fetch'})
       } else if (value) {
-        const formatted = value.items.map(d => _.pick(d, ['id', 'name', 'description', 'user_id', 'organization_id', 'updated_at', 'metric_count', 'is_private', 'screenshot', 'big_screenshot']))
+        const formatted = value.items.map(d => _.pick(d, SPACE_INDEX_ATTRIBUTES))
         dispatch(sActions.fetchSuccess(formatted))
 
         const users = value.items.map(d => _.get(d, 'user')).filter(u => !!u)
@@ -213,7 +232,7 @@ export function update(spaceId, params={}) {
 //updates graph only
 export function updateGraph(spaceId, saveOnServer=true) {
   return (dispatch, getState) => {
-    let {spaces, metrics, guesstimates} = getState()
+    let {spaces, metrics, guesstimates, canvasState: {actionState}} = getState()
     let space = e.collections.get(spaces, spaceId)
     space = e.space.withGraph(space, {metrics, guesstimates})
     space.graph = _.omit(space.graph, 'simulations')
@@ -222,7 +241,7 @@ export function updateGraph(spaceId, saveOnServer=true) {
     dispatch(saveCheckpoint(spaceId, space.graph))
     if (saveOnServer) {
       dispatch(generalUpdate(spaceId, updates))
-    } else {
+    } else if (actionState !== 'UNALLOWED_ATTEMPT') {
       dispatch(changeActionState('UNALLOWED_ATTEMPT'))
     }
   }

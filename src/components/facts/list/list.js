@@ -4,12 +4,16 @@ import {FactItem} from './item'
 import {FactForm} from './form'
 
 import {getVar} from 'gEngine/facts'
+import {utils} from 'gEngine/engine'
+
 import './style.css'
+import Icon from 'react-fa'
 
 export class FactList extends Component {
   state = {
     editingFactId: null,
     newFactKey: 0,
+    showNewForm: false
   }
 
   componentWillUpdate(newProps) {
@@ -23,22 +27,33 @@ export class FactList extends Component {
     this.setState({newFactKey: this.state.newFactKey + 1})
   }
 
+  showEditForm(editingFactId) { this.setState({editingFactId}) }
+
+  isExportedFromSelectedSpaceFn({exported_from_id}) { return exported_from_id === this.props.spaceId }
+  isImportedFromSelectedSpaceFn({id}) { return this.props.imported_fact_ids.includes(id) }
+
+  showNewForm() { this.setState({showNewForm: true}) }
+  hideNewForm() { this.setState({showNewForm: false}) }
+
   renderFactShow(fact) {
     return (
       <FactItem
         key={fact.id}
         fact={fact}
-        onEdit={() => {this.setState({editingFactId: fact.id})}}
+        onEdit={this.showEditForm.bind(this, fact.id)}
+        isExportedFromSelectedSpace={this.isExportedFromSelectedSpaceFn(fact)}
+        size={'LARGE'}
       />
     )
   }
 
   renderEditForm(fact) {
-    const {facts, onEditFact} = this.props
+    const {existingVariableNames, categories, onEditFact} = this.props
     return <FactForm
       startingFact={fact}
       key={fact.id}
-      existingVariableNames={facts.map(getVar).filter(v => v !== getVar(fact))}
+      existingVariableNames={existingVariableNames.filter(v => v !== getVar(fact))}
+      categories={categories}
       buttonText={'Save'}
       onSubmit={onEditFact}
       onDelete={() => {this.props.onDeleteFact(fact)}}
@@ -47,33 +62,59 @@ export class FactList extends Component {
   }
 
   renderNewForm() {
-    const {facts} = this.props
+    const {existingVariableNames, categories, categoryId} = this.props
     return <FactForm
       key={this.state.newFactKey.toString()}
-      existingVariableNames={facts.map(getVar)}
+      categoryId={categoryId}
+      existingVariableNames={existingVariableNames}
+      categories={categories}
       buttonText={'Create'}
       onSubmit={this.onAddFact.bind(this)}
+      onCancel={this.hideNewForm.bind(this)}
     />
   }
 
-  renderFacts() {
-    const {props: {facts}, state: {editingFactId}} = this
-    if (!editingFactId) { return _.map(facts, this.renderFactShow.bind(this)) }
+  renderSpaceFacts() {
+    let filteredFacts = utils.mutableCopy(this.props.facts)
+    const exported = _.remove(filteredFacts, this.isExportedFromSelectedSpaceFn.bind(this))
+    const imported = _.remove(filteredFacts, this.isImportedFromSelectedSpaceFn.bind(this))
 
-    const editingFactIndex = facts.findIndex(fact => fact.id === editingFactId)
-    return [
-      ..._.map(facts.slice(0, editingFactIndex), this.renderFactShow.bind(this)),
-      this.renderEditForm(facts[editingFactIndex]),
-      ..._.map(facts.slice(editingFactIndex + 1), this.renderFactShow.bind(this)),
-    ]
+    return (
+      <div>
+        {!!exported.length && <h3> Model Output Metrics </h3>}
+        {this.renderFactSublist(exported)}
+        {!!imported.length && <h3> Model Input Metrics </h3>}
+        {this.renderFactSublist(imported)}
+        {!!filteredFacts.length && <h3> Other Library Metrics </h3>}
+        {this.renderFactSublist(filteredFacts)}
+      </div>
+    )
+  }
+
+  renderFactSublist(facts) {
+    const {state: {editingFactId}} = this
+
+    return _.map(facts, e => {
+      if (e.id === editingFactId) {return this.renderEditForm(e)}
+      else {return this.renderFactShow(e)}
+    })
   }
 
   render() {
     return (
       <div className='FactsTab'>
-        {this.renderFacts()}
-        {this.props.isEditable && this.renderNewForm()}
+        {this.props.spaceId && this.renderSpaceFacts()}
+        {!this.props.spaceId && this.renderFactSublist(this.props.facts)}
+        {this.props.canMakeNewFacts && this.state.showNewForm && this.renderNewForm()}
+        {this.props.canMakeNewFacts && !this.state.showNewForm && <NewButton onClick={this.showNewForm.bind(this)}/>}
       </div>
     )
   }
 }
+
+const NewButton = ({onClick}) => (
+  <div className='NewFactButton' onClick={onClick}>
+    <Icon name='plus'/>
+    New Metric
+  </div>
+)

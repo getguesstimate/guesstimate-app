@@ -2,6 +2,7 @@ import {parse} from './formatter/index'
 import {samplerTypes} from './types'
 
 //Guesstimator.parse({text: '3+123+FA'}]})
+//TODO(fix this class)
 export class Guesstimator {
   static parse(unparsedInput) {
     const [parsedError, parsedInput] = parse(unparsedInput)

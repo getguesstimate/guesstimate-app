@@ -28,13 +28,14 @@ export class TextForm extends Component{
     this.setState({showDistributionSelector: false})
   }
 
-  _switchMetricClickMode() {
-    if (this.props.guesstimate.guesstimateType === 'FUNCTION') {this.props.onChangeClickMode('FUNCTION_INPUT_SELECT')}
-    this.props.onFocus()
+  _flagMetricAsClicked() {
+    if (this.props.guesstimate.guesstimateType === 'FUNCTION') {
+      this.props.onChangeClickMode('FUNCTION_INPUT_SELECT')
+    }
   }
 
   _handleBlur() {
-    this.props.onChangeClickMode('')
+    this.props.onChangeClickMode()
     this.props.onSave()
   }
 
@@ -43,9 +44,7 @@ export class TextForm extends Component{
     const {
       guesstimate: {input, guesstimateType},
       inputMetrics,
-      onEscape,
       size,
-      errors,
       organizationId,
       canUseOrganizationFacts,
       onChangeInput,
@@ -71,15 +70,13 @@ export class TextForm extends Component{
             value={input}
             validInputs={validInputReadableIds}
             errorInputs={errorInputReadableIds}
-            onEscape={onEscape}
             onReturn={onReturn}
             onTab={onTab}
             onChange={this.onChangeInput.bind(this)}
-            onFocus={this._switchMetricClickMode.bind(this)}
+            onFocus={this._flagMetricAsClicked.bind(this)}
             onBlur={this._handleBlur.bind(this)}
             onChangeData={onAddData}
             ref='TextInput'
-            errors={errors}
             width={shouldBeWide ? 'NARROW' : "WIDE"}
             organizationId={organizationId}
             canUseOrganizationFacts={canUseOrganizationFacts}
@@ -104,7 +101,7 @@ export class TextForm extends Component{
       </div>
     )
   }
-  //right now errors live in the simulation, which is not present here.
+
   render() {
     const {size, guesstimate: {input}} = this.props
     if (size !== 'large') {

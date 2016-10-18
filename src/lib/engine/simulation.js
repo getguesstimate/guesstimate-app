@@ -1,10 +1,22 @@
 import * as _collections from './collections'
+import {orArr} from './utils'
 
 import {sampleMean, sampleStdev, percentile, cutoff, sortDescending} from 'lib/dataAnalysis.js'
+import * as errorTypes from 'lib/propagation/errors'
 
-export const NUM_SAMPLES = 5000
-export const METRIC_ID_PREFIX = 'metric:'
-export const FACT_ID_PREFIX = 'fact:'
+const {
+  ERROR_TYPES: {WORKER_ERROR},
+  ERROR_SUBTYPES: { GRAPH_ERROR_SUBTYPES: {IN_INFINITE_LOOP, INVALID_ANCESTOR_ERROR} },
+} = errorTypes
+
+export const NUM_SAMPLES = 5000, METRIC_ID_PREFIX = 'metric:', FACT_ID_PREFIX = 'fact:'
+
+const someOfSubType = _.partialRight(_collections.some, 'subType')
+const getBySubType = _.partialRight(_collections.get, 'subType')
+export const isBreak = _.partialRight(someOfSubType, INVALID_ANCESTOR_ERROR)
+export const isInfiniteLoop = _.partialRight(someOfSubType, IN_INFINITE_LOOP)
+export const hasInputError = _.partialRight(someOfSubType, INVALID_ANCESTOR_ERROR)
+export const displayableError = errors => hasInputError(errors) ? getBySubType(errors, INVALID_ANCESTOR_ERROR) : errors.find(e => e.type !== WORKER_ERROR)
 
 export const getByMetricFn = graph => _collections.getFn(_.get(graph, 'simulations'), 'metric', 'metric')
 
@@ -46,4 +58,5 @@ export function addStats(simulation){
 }
 
 export const hasErrors = simulation => errors(simulation).length > 0
-export const errors = simulation => _.get(simulation, 'sample.errors') || []
+export const errors = simulation => orArr(_.get(simulation, 'sample.errors'))
+export const values = simulation => orArr(_.get(simulation, 'sample.values'))

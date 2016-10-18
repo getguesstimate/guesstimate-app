@@ -105,7 +105,6 @@ export class SpaceHeader extends Component {
                 {ownerName}
               </a>
             }
-
             {isPrivate && editableByMe &&
               <ShareableLinkOption
                 shareableLinkUrl={shareableLinkUrl}
@@ -118,8 +117,7 @@ export class SpaceHeader extends Component {
                 </div>
               </ShareableLinkOption>
             }
-
-            {(isPrivate || editableByMe) &&
+            {editableByMe &&
               <PrivacyToggle
                 editableByMe={editableByMe}
                 openLink={<a className='space-header-action'>{privacy_header}</a>}
