@@ -19,9 +19,15 @@ const percentages = (values, perc) => {
 }
 
 const SampleList = ({samples}) => (
-  <div className='SampleList'>
-    {samples.join(',\n')}
-  </div>
+  <ul className='SampleList'>
+    {_.map(samples, (element, index) => {
+      return (
+        <li key={index}>
+          <div key={index}>{element}</div>
+        </li>
+        )
+    })}
+  </ul>
 )
 
 const PercentileTable = ({values}) => (
@@ -119,15 +125,17 @@ export class MetricModal extends Component {
               </div>
               <div className='col-sm-2'>
 
-              <DropDown
-                headerText={'Samples'}
-                openLink={<h1> Data </h1>}
-                position='right'
-                hasPadding={true}
-                ref='DropDown'
-              >
-                <SampleList samples={allSamples}/>
-              </DropDown>
+              <div className='metricModal--sample-container'>
+                <DropDown
+                  headerText={'Samples'}
+                  openLink={<a className='modal-action button'> Samples </a>}
+                  position='right'
+                  hasPadding={true}
+                  ref='DropDown'
+                >
+                  <SampleList samples={allSamples}/>
+                </DropDown>
+              </div>
 
               </div>
             </div>

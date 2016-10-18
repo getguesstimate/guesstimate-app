@@ -42,10 +42,11 @@
 
 .Guesstimate.large .TextInput {
   font-size: 1.5em;
-  border-radius: 3px;
+  border-radius: 2px;
   font-weight: 100;
   color: #666;
   background: #eee;
+  padding: 2px 4px;
 }
 
 .Guesstimate .TextInput{
