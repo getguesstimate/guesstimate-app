@@ -131,7 +131,6 @@ export class MetricModal extends Component {
                   openLink={<a className='modal-action button'> Samples </a>}
                   position='right'
                   hasPadding={true}
-                  ref='DropDown'
                 >
                   <SampleList samples={allSamples}/>
                 </DropDown>
