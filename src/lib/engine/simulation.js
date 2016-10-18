@@ -25,7 +25,8 @@ export function addStats(simulation){
     return
   }
 
-  const sortedValues = sortDescending(simulation.sample.values)
+  // TODO(matthew): Something cleaner.
+  const sortedValues = sortDescending(simulation.sample.values.slice(0, 2000))
   if (sortedValues[sortedValues.length - 1] - sortedValues[0] < 1e-15) {
     // The number of distinct values should only be computed if the list has appropriately small span. We nest it
     // like this rather than use a simple && to emphasize that.
@@ -44,22 +45,22 @@ export function addStats(simulation){
     return
   }
 
-  const length = sortedValues.length
-  const mean = sampleMean(sortedValues)
-  const meanIndex = cutoff(sortedValues, length, mean)
-  const stdev = sampleStdev(sortedValues)
+  const mean = sampleMean(simulation.sample.values)
+  const stdev = sampleStdev(simulation.sample.values)
+
+  const meanIndex = cutoff(sortedValues, sortedValues.length, mean)
   const percentiles = {
-    5: percentile(sortedValues, length, 5),
-    50: percentile(sortedValues, length, 50),
-    95: percentile(sortedValues, length, 95),
+    5: percentile(sortedValues, sortedValues.length, 5),
+    50: percentile(sortedValues, sortedValues.length, 50),
+    95: percentile(sortedValues, sortedValues.length, 95),
   }
   const adjustedLow = percentile(sortedValues, meanIndex, 10)
-  const adjustedHigh = percentile(sortedValues.slice(meanIndex), length - meanIndex, 90)
+  const adjustedHigh = percentile(sortedValues.slice(meanIndex), sortedValues.length - meanIndex, 90)
 
   const stats = {
     mean,
     stdev,
-    length,
+    length: samples.length,
     percentiles,
     adjustedConfidenceInterval: [adjustedLow, adjustedHigh]
   }
