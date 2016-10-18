@@ -12,6 +12,7 @@ const customStyles = {
     right: 'auto',
     bottom: 'auto',
     border: 'none',
+    overflow: 'visible',
     padding: '0px',
     transform: 'translateX(-50%)',
     marginRight: '-50%',
