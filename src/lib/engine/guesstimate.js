@@ -26,8 +26,9 @@ export function format(guesstimate: Guesstimate): Guesstimate {
 export const extractFactHandles = ({input}) => _.isEmpty(input) ? [] : input.match(HANDLE_REGEX)
 export const translateFactHandleFn = idMap => g => ({...g, expression: _utils.replaceByMap(g.expression, idMap)})
 
-const isInputOf = (guesstimate) => ({readableId}) => _utils.orStr(_.get(guesstimate, 'input')).includes(readableId)
-export const inputMetrics = (guesstimate, {metrics}) => _utils.orArr(metrics).filter(isInputOf(guesstimate))
+// TODO(matthew): No global regex constants...
+const METRIC_ID_REGEX = new RegExp(`\\$\\{${METRIC_ID_PREFIX}([^\}]*)\\}`, 'g')
+export const extractMetricIds = ({expression}) => _.uniq(_utils.getSubMatches(expression, METRIC_ID_REGEX, 1))
 
 // In the `expression` syntax, input metrics are expressed as `${metric:[metric id]}`. To match that in a regex, and
 // translate to it, we need functions that wrap passed IDs in the right syntax, appropriately escaped.
