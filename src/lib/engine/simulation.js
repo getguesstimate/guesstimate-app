@@ -1,7 +1,7 @@
 import * as _collections from './collections'
 import {orArr} from './utils'
 
-import {sampleMean, sampleStdev, percentile, cutoff, sortDescending, numDistinctValues} from 'lib/dataAnalysis.js'
+import {sampleMeanAndStdev, percentile, cutoff, sortDescending, numDistinctValues} from 'lib/dataAnalysis.js'
 import * as errorTypes from 'lib/propagation/errors'
 
 const {
@@ -45,10 +45,9 @@ export function addStats(simulation){
     return
   }
 
-  const mean = sampleMean(simulation.sample.values)
-  const stdev = sampleStdev(simulation.sample.values)
+  const {mean, stdev} = sampleMeanAndStdev(simulation.sample.values)
 
-  const meanIndex = cutoff(sortedValues, sortedValues.length, mean)
+  const meanIndex = cutoff(sortedValues, mean)
   const percentiles = {
     5: percentile(sortedValues, sortedValues.length, 5),
     50: percentile(sortedValues, sortedValues.length, 50),
@@ -60,7 +59,7 @@ export function addStats(simulation){
   const stats = {
     mean,
     stdev,
-    length: samples.length,
+    length: simulation.sample.values.length,
     percentiles,
     adjustedConfidenceInterval: [adjustedLow, adjustedHigh]
   }
