@@ -47,7 +47,7 @@ export function sampleMeanAndStdev(samples) {
   const sampleMean = stdSum/samples.length
   const sqdMean = sqdSum/samples.length
 
-  return {mean: sampleMean, stdev: Math.sqrt(sqdMean - sampleMean, 2)}
+  return {mean: sampleMean, stdev: Math.sqrt(sqdMean - Math.pow(sampleMean, 2))}
 }
 
 // Returns the cutoff value of the specified percentile, considering the samples array to be 'length' long.
