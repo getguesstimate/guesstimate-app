@@ -1,10 +1,17 @@
 import {jStat} from 'jstat'
 import Sampling from 'discrete-sampling'
 
+import {SAMPLE_FILTERED} from '../evaluator'
+
 const bernoulli = p => Sampling.Bernoulli(p).draw()
 const binomial = (n, p) => Sampling.Binomial(n,p).draw()
 const poisson = (lambda) => Sampling.Poisson(lambda).draw()
 const negBinomial = (r, p) => Sampling.NegBinomial(r, p).draw()
+
+function filteredNormal(mu, sigma, min = -Infinity, max = Infinity) {
+  const r = jStat.normal.sample(mu, sigma)
+  return r <= min || r >= max ? SAMPLE_FILTERED : r
+}
 
 export const Distributions = {
   beta: jStat.beta.sample,
@@ -23,5 +30,6 @@ export const Distributions = {
   test: bernoulli,
   binomial: binomial,
   poisson: poisson,
-  negBinomial: negBinomial
+  negBinomial: negBinomial,
+  filteredNormal,
 }

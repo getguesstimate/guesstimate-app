@@ -39,6 +39,11 @@ math.import(financeFunctions, {override: true})
 // Guesstimate constructs:
 math.import(ImpureConstructs, {override: true, wrap: true})
 
+export const SAMPLE_FILTERED = 'filtered'
+
+// Test construct:
+math.import({nullFn: ()=> SAMPLE_FILTERED})
+
 // All of jStat's functions are impure as they require sampling on pure inputs.
 export const STOCHASTIC_FUNCTIONS = ['pickRandom', 'randomInt', 'random'].concat(Object.keys(Distributions)).concat(Object.keys(ImpureConstructs))
 
@@ -66,13 +71,18 @@ function sampleInputs(inputs, i) {
 function evaluate(compiled, inputs, n){
   let values = []
   let errors = []
-  for (let i = 0; i < n; i++) {
-    const newSample = compiled.eval(sampleInputs(inputs,i))
+  for (var i = 0; i < n; i++) {
+    const sampledInputs = sampleInputs(inputs, i)
+    const someInputFiltered = _.some(sampledInputs, val => val === SAMPLE_FILTERED)
+
+    const newSample = someInputFiltered ? SAMPLE_FILTERED : compiled.eval(sampledInputs)
 
     if (_.isFinite(newSample)) {
       values.push(newSample)
     } else if ([Infinity, -Infinity].includes(newSample)) {
       errors.push({type: SAMPLING_ERROR, subType: DIVIDE_BY_ZERO_ERROR})
+      values.push(newSample)
+    } else if (newSample === SAMPLE_FILTERED) {
       values.push(newSample)
     } else if (newSample.constructor.name === 'Unit') {
       return {values: [], errors: [{type: PARSER_ERROR, subType: FUNCTIONS_CONTAIN_UNITS_ERROR}]}

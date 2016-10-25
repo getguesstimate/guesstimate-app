@@ -3,6 +3,7 @@ import {orArr} from './utils'
 
 import {sampleMean, sampleStdev, percentile, cutoff, sortDescending, numDistinctValues} from 'lib/dataAnalysis.js'
 import * as errorTypes from 'lib/propagation/errors'
+import {SAMPLE_FILTERED} from 'lib/guesstimator/samplers/simulator-worker/simulator/evaluator'
 
 const {
   ERROR_TYPES: {WORKER_ERROR},
@@ -25,7 +26,7 @@ export function addStats(simulation){
     return
   }
 
-  const sortedValues = sortDescending(simulation.sample.values)
+  const sortedValues = sortDescending(simulation.sample.values.filter(v => v !== SAMPLE_FILTERED))
   if (sortedValues[sortedValues.length - 1] - sortedValues[0] < 1e-15) {
     // The number of distinct values should only be computed if the list has appropriately small span. We nest it
     // like this rather than use a simple && to emphasize that.
