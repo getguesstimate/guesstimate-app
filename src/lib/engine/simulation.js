@@ -1,7 +1,7 @@
 import * as _collections from './collections'
 import {orArr} from './utils'
 
-import {sampleMean, sampleStdev, percentile, cutoff, sortDescending, numDistinctValues} from 'lib/dataAnalysis.js'
+import {sampleMeanAndStdev, percentile, cutoff, sortDescending, numDistinctValues} from 'lib/dataAnalysis.js'
 import * as errorTypes from 'lib/propagation/errors'
 import {SAMPLE_FILTERED} from 'lib/guesstimator/samplers/simulator-worker/simulator/filters/filters'
 
@@ -26,7 +26,8 @@ export function addStats(simulation){
     return
   }
 
-  const sortedValues = sortDescending(simulation.sample.values.filter(v => !_.isEqual(v, SAMPLE_FILTERED)))
+  const possibleValues = simulation.sample.values.filter(v => !_.isEqual(v, SAMPLE_FILTERED))
+  const sortedValues = sortDescending(possibleValues.slice(0, 2000))
   if (sortedValues[sortedValues.length - 1] - sortedValues[0] < 1e-15) {
     // The number of distinct values should only be computed if the list has appropriately small span. We nest it
     // like this rather than use a simple && to emphasize that.
@@ -45,22 +46,21 @@ export function addStats(simulation){
     return
   }
 
-  const length = sortedValues.length
-  const mean = sampleMean(sortedValues)
-  const meanIndex = cutoff(sortedValues, length, mean)
-  const stdev = sampleStdev(sortedValues)
+  const {mean, stdev} = sampleMeanAndStdev(possibleValues)
+
+  const meanIndex = cutoff(sortedValues, mean)
   const percentiles = {
-    5: percentile(sortedValues, length, 5),
-    50: percentile(sortedValues, length, 50),
-    95: percentile(sortedValues, length, 95),
+    5: percentile(sortedValues, sortedValues.length, 5),
+    50: percentile(sortedValues, sortedValues.length, 50),
+    95: percentile(sortedValues, sortedValues.length, 95),
   }
   const adjustedLow = percentile(sortedValues, meanIndex, 10)
-  const adjustedHigh = percentile(sortedValues.slice(meanIndex), length - meanIndex, 90)
+  const adjustedHigh = percentile(sortedValues.slice(meanIndex), sortedValues.length - meanIndex, 90)
 
   const stats = {
     mean,
     stdev,
-    length,
+    length: simulation.sample.values.length,
     percentiles,
     adjustedConfidenceInterval: [adjustedLow, adjustedHigh]
   }
