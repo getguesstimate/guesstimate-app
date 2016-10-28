@@ -8,9 +8,10 @@ import Histogram from 'gComponents/simulations/histogram/index'
 import GuesstimateDescription from './description'
 import {ButtonClose} from 'gComponents/utility/buttons/close'
 import {GeneralModal} from 'gComponents/utility/modal/index'
+import DropDown from 'gComponents/utility/drop-down/index'
 
-import DropDown from 'gComponents/utility/drop-down/index.js'
 import {percentile} from 'lib/dataAnalysis'
+import {SAMPLE_FILTERED} from 'lib/guesstimator/samplers/simulator-worker/simulator/filters/filters'
 
 import './style.css'
 
@@ -20,13 +21,11 @@ const percentages = (values, perc) => {
 
 const SampleList = ({samples}) => (
   <ul className='SampleList'>
-    {_.map(samples, (element, index) => {
-      return (
+    {_.map(samples, (element, index) => !_.isEqual(element, SAMPLE_FILTERED) && (
         <li key={index}>
           <div key={index}>{element}</div>
         </li>
-        )
-    })}
+    ))}
   </ul>
 )
 

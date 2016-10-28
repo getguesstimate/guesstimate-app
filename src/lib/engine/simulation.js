@@ -60,7 +60,7 @@ export function addStats(simulation){
   const stats = {
     mean,
     stdev,
-    length: simulation.sample.values.length,
+    length: possibleValues.length,
     percentiles,
     adjustedConfidenceInterval: [adjustedLow, adjustedHigh]
   }
