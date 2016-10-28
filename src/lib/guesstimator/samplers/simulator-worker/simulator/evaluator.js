@@ -72,7 +72,7 @@ function evaluate(compiled, inputs, n, text){
   let anyNotFiltered = false
   for (var i = 0; i < n; i++) {
     const sampledInputs = sampleInputs(inputs, i)
-    const someInputFiltered = _.some(sampledInputs, val => val === SAMPLE_FILTERED)
+    const someInputFiltered = _.some(sampledInputs, val => _.isEqual(val, SAMPLE_FILTERED))
 
     let newSample = NaN
     try {
