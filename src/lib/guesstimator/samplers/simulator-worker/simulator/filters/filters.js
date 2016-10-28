@@ -8,5 +8,5 @@ const filterBetween = (val, min, max) => val < min || val > max ? SAMPLE_FILTERE
 export const Filters = {
   filterLessThan,
   filterGreaterThan,
-  filterGreaterThan,
+  filterBetween,
 }
