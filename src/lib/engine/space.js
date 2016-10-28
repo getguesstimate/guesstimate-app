@@ -55,7 +55,11 @@ export function toDSpace(spaceId, graph, organizationFacts) {
   const facts = possibleFacts(dSpace, graph, organizationFacts)
   const withInputFn = _guesstimate.expressionToInputFn(dSpace.metrics, facts)
 
-  dSpace.edges = _.flatten(dSpace.metrics.map(m => _guesstimate.extractMetricIds(m.guesstimate).map(id => ({input: id, output: m.id}))))
+  const extractReferencedMetricsFn = m => {
+    const allIdsReferenced = _guesstimate.extractMetricIds(m.guesstimate)
+    return allIdsReferenced.filter(id => _collections.some(dSpace.metrics, id))
+  }
+  dSpace.edges = _.flatten(dSpace.metrics.map(m => extractReferencedMetricsFn(m).map(id => ({input: id, output: m.id}))))
   dSpace.metrics = dSpace.metrics.map(s => {
     let edges = {}
     edges.inputs = dSpace.edges.filter(i => i.output === s.id).map(e => e.input)
