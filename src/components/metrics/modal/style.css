@@ -125,3 +125,26 @@ $grey: #EEE;
   font-size: 2em;
   color: #bbb;
 }
+
+.metricModal .SampleList {
+  max-height: 30em;
+  overflow: scroll;
+  padding: .5em;
+  background-color: #f0f0f0;
+  border-radius: 3px;
+}
+
+.metricModal .modal-action.button {
+  background-color: #ddd;
+  border-radius: .3px;
+  padding: .25em .7em;
+  color: #555;
+  font-size: 1.1em;
+  &:hover {
+    background-color: #bbb;
+  }
+}
+
+.metricModal--sample-container{
+  float: right;
+}

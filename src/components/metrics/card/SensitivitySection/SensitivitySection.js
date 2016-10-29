@@ -14,35 +14,40 @@ function importance(r2) {
 class Plot extends Component {
   render() {
     const {xSamples, ySamples, size, xLabel, yLabel} = this.props
-    const data = [{ customValues: _.zip(xSamples, ySamples) }];
+    const customValues = _.zip(xSamples, ySamples).filter(([x, y]) => _.isFinite(x) && _.isFinite(y))
+    const data = [{customValues}]
     const valuesAccessor = (s) => s.customValues
     const xAccessor = (e) => e[0]
     const yAccessor = (e) => e[1]
 
-    if (size === 'SMALL'){ return(
-          <ScatterPlot
-            data={data}
-            width={180}
-            height={68}
-            margin={{top: 5, bottom: 9, left: 5, right: 3}}
-            xAxis={{tickArguments: [0], innerTickSize: 1, outerTickSize: 1, tickPadding: 1}}
-            yAxis={{tickArguments: [0], innerTickSize: 0, outerTickSize: 0, tickPadding: 0}}
-            x={xAccessor}
-            y={yAccessor}
-            values={valuesAccessor}/>
-    )}
-    else { return(
+    let customProps = {}
+    if (size === 'SMALL'){
+      customProps = {
+        width: 180,
+        height: 68,
+        margin: {top: 5, bottom: 9, left: 5, right: 3},
+        xAxis: {tickArguments: [0], innerTickSize: 1, outerTickSize: 1, tickPadding: 1},
+        yAxis: {tickArguments: [0], innerTickSize: 0, outerTickSize: 0, tickPadding: 0},
+      }
+    } else {
+      customProps = {
+        width: 500,
+        height: 300,
+        margin: {top: 10, bottom: 40, left: 60, right: 20},
+        xAxis: {tickArguments: [6], innerTickSize: 5, outerTickSize: 2, tickPadding: 3, label: xLabel},
+        yAxis: {tickArguments: [6], innerTickSize: 5, outerTickSize: 2, tickPadding: 3, label: yLabel},
+      }
+    }
+
+    return (
       <ScatterPlot
         data={data}
-        width={500}
-        height={300}
-        margin={{top: 10, bottom: 40, left: 60, right: 20}}
-        xAxis={{tickArguments: [6], innerTickSize: 5, outerTickSize: 2, tickPadding: 3, label: xLabel}}
-        yAxis={{tickArguments: [6], innerTickSize: 5, outerTickSize: 2, tickPadding: 3, label: yLabel}}
         x={xAccessor}
         y={yAccessor}
-        values={valuesAccessor}/>
-    )}
+        values={valuesAccessor}
+        {...customProps}
+      />
+    )
   }
 }
 

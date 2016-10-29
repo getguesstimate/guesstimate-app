@@ -1,7 +1,6 @@
 import math from 'mathjs'
 
 import * as _graph from './graph'
-import * as _dGraph from './dgraph'
 import * as _metric from './metric'
 import * as _guesstimate from './guesstimate'
 import * as _simulation from './simulation'
@@ -56,15 +55,17 @@ export function toDSpace(spaceId, graph, organizationFacts) {
   const facts = possibleFacts(dSpace, graph, organizationFacts)
   const withInputFn = _guesstimate.expressionToInputFn(dSpace.metrics, facts)
 
-  dSpace.metrics = dSpace.metrics.map(m => ({...m, guesstimate: withInputFn(m.guesstimate)}))
-
-  dSpace.edges = _dGraph.dependencyMap(dSpace)
+  const extractReferencedMetricsFn = m => {
+    const allIdsReferenced = _guesstimate.extractMetricIds(m.guesstimate)
+    return allIdsReferenced.filter(id => _collections.some(dSpace.metrics, id))
+  }
+  dSpace.edges = _.flatten(dSpace.metrics.map(m => extractReferencedMetricsFn(m).map(id => ({input: id, output: m.id}))))
   dSpace.metrics = dSpace.metrics.map(s => {
     let edges = {}
     edges.inputs = dSpace.edges.filter(i => i.output === s.id).map(e => e.input)
     edges.outputs = dSpace.edges.filter(i => i.input === s.id).map(e => e.output)
     edges.inputMetrics = edges.inputs.map(i => dSpace.metrics.find(m => m.id === i))
-    return { ...s, edges }
+    return { ...s, guesstimate: withInputFn(s.guesstimate), edges }
   })
 
   return dSpace
