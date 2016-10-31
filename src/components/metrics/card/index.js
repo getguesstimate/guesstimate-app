@@ -70,13 +70,8 @@ export default class MetricCard extends Component {
       (this.state.sidebarIsOpen !== nextState.sidebarIsOpen)
   }
 
-  _beginAnalysis() {
-    this.props.analyzeMetricId(this._id())
-  }
-
-  _endAnalysis() {
-    this.props.endAnalysis()
-  }
+  _beginAnalysis() { this.props.analyzeMetricId(this._id()) }
+  _endAnalysis() { this.props.endAnalysis() }
 
   focusFromDirection(dir) {
     if (dir === 'DOWN' || dir === 'RIGHT') { this._focusForm() }
