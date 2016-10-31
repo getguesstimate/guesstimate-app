@@ -2,7 +2,8 @@ import React, {Component, PropTypes} from 'react'
 
 import angleBetweenPoints from 'angle-between-points'
 
-//const isVertical = dd
+import {getClassName} from 'gEngine/utils'
+
 class Rectangle {
   constructor(locations){
     this.left = locations.left
@@ -103,12 +104,12 @@ export default class Edge extends Component{
     let points = `M${inputPoints.x},${inputPoints.y} L${outputPoints.x} ,${outputPoints.y}`
 
     return (
-        <path
-            className={`basic-arrow ${pathStatus}${hasErrors ? ' hasErrors' : ''}`}
-            d={points}
-            markerEnd={`url(#MarkerArrow-${hasErrors ? 'hasErrors' : pathStatus})`}
-            fill="none"
-        />
+      <path
+        className={getClassName('basic-arrow', pathStatus, hasErrors ? ' hasErrors' : null)}
+        d={points}
+        markerEnd={`url(#MarkerArrow-${hasErrors ? 'hasErrors' : pathStatus})`}
+        fill="none"
+      />
     )
   }
 }
