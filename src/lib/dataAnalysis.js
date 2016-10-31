@@ -58,7 +58,7 @@ export function percentile(samples, length, percentage) {
 
 // Returns the first index before length whose value is greater than the supplied cutoff. Else returns -1.
 export function cutoff(sortedValues, value, start = 0, end = sortedValues.length) {
-  if (end <= value) { return -1 }
+  if (sortedValues[end-1] <= value) { return -1 }
 
   while (start !== end - 1) {
     const index = Math.floor((end + start)/2)
