@@ -21,3 +21,9 @@
 .DistributionSummary .PrecisionNumber {
   float: left;
 }
+
+.sup {
+  font-size: 0.6em;
+  position: relative;
+  top: -0.5em;
+}
