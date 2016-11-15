@@ -7,7 +7,7 @@ import './style.css'
 const PrecisionNumber = ({value, precision, number=numberShow(value, precision)}) => (
   <span>
     {number.value}{number.symbol}
-    {number.power && (<span>{`\u00b710`}<sup>{number.power}</sup></span>)}
+    {number.power && (<span>{`\u00b710`}<span className='sup'>{number.power}</span></span>)}
   </span>
 )
 
