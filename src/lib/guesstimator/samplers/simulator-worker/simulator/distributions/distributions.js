@@ -15,6 +15,27 @@ function triangular(min, max, mode = (min + max)/2) {
   }
 }
 
+// Source:
+// http://www.mhnederlof.nl/doubletriangular.html
+function doubleTriangular(min, max, mode = (min + max)/2) {
+  const u = Math.random()
+  if (u <= 0.5) {
+    return min + (mode - min)*Math.sqrt(2*u)
+  } else {
+    return max - (max - mode)*Math.sqrt(2*(1-u))
+  }
+}
+
+// Source:
+// https://en.wikipedia.org/wiki/Beta_distribution#Transformations
+function pert(min, max, mode = (min + max)/2, lambda = 4) {
+  const width = max - min
+  const a = 1 + lambda * ((mode - min)/width)
+  const b = 1 + lambda * ((max - mode)/width)
+  const p = jStat.beta.sample(a, b)
+  return min + p*width
+}
+
 export const Distributions = {
   beta: jStat.beta.sample,
   centralF: jStat.centralF.sample,
@@ -29,6 +50,8 @@ export const Distributions = {
   uniform: jStat.uniform.sample,
   gamma: jStat.gamma.sample,
   triangular,
+  doubleTriangular,
+  pert,
   bernoulli: bernoulli,
   if: bernoulli,
   test: bernoulli,
