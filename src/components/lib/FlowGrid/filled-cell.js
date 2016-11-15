@@ -1,8 +1,9 @@
 import React, {Component, PropTypes} from 'react'
 
 import {DragSource, DragLayer} from 'react-dnd'
+import {getEmptyImage} from 'react-dnd-html5-backend'
+
 import {PTLocation} from 'lib/locationUtils'
-import { getEmptyImage } from 'react-dnd-html5-backend';
 
 var layerStyles = {
   position: 'fixed',
@@ -12,30 +13,25 @@ var layerStyles = {
   top: 0,
   width: '100%',
   height: '100%',
-};
+}
 
 function getItemStyles(props) {
-  var currentOffset = props.currentOffset;
+  var currentOffset = props.currentOffset
   if (!currentOffset) {
-    return {
-      display: 'none'
-    };
+    return {display: 'none'}
   }
 
-  var x = currentOffset.x;
-  var y = currentOffset.y;
-  var transform = 'translate(' + x + 'px, ' + y + 'px)';
-  return {
-    transform: transform,
-    WebkitTransform: transform
-  };
+  var x = currentOffset.x
+  var y = currentOffset.y
+  var transform = `translate(${x}px, ${y}px)`
+  return {transform: transform, WebkitTransform: transform}
 }
 
 @DragLayer(monitor => ({
     item: monitor.getItem(),
     itemType: monitor.getItemType(),
     currentOffset: monitor.getSourceClientOffset(),
-    isDragging: monitor.isDragging()
+    isDragging: monitor.isDragging(),
 }))
 export default class DragPreview extends Component {
   renderItem(type, item) {
@@ -47,16 +43,16 @@ export default class DragPreview extends Component {
     case 'card':
       return (
         <div style={styles}>{this.props.children} </div>
-      );
+      )
     }
   }
 
   render() {
-    var item = this.props.item;
-    var itemType = this.props.itemType;
-    var isDragging = this.props.isDragging;
+    var item = this.props.item
+    var itemType = this.props.itemType
+    var isDragging = this.props.isDragging
     if (!isDragging) {
-      return null;
+      return null
     }
 
     return (
@@ -65,23 +61,25 @@ export default class DragPreview extends Component {
           {this.renderItem(itemType, item)}
         </div>
       </div>
-    );
+    )
   }
-};
+}
 
 var cardSource = {
   beginDrag: function (props) {
     return {location: props.location}
   },
   endDrag: function(props, monitor) {
-    if (monitor.didDrop()){
-      const item = monitor.getItem();
-      const dropResult = monitor.getDropResult()
-      props.onMoveItem({prev: item.location, next: dropResult.location})
-      props.onEndDrag(dropResult.location)
+    if (!monitor.didDrop()) { return }
+
+    const {location: startLocation} = monitor.getItem()
+    const {location: dropLocation, item: dropItem} = monitor.getDropResult()
+    if (!dropItem) {
+      props.onMoveItem({prev: startLocation, next: dropLocation})
+      props.onEndDrag(dropLocation)
     }
   }
-};
+}
 
 @DragSource('card', cardSource, (connect, monitor) => ({
   connectDragSource: connect.dragSource(),
@@ -138,7 +136,7 @@ export default class ItemCell extends Component {
     // opinion and keeps background layer in sync with real row heights during drag (which skips normal rendering tree).
     const styles = this.props.isDragging ? {minHeight: `${this.props.getRowHeight()-1}px`} : {}
     const item = this.item()
-    this.props.connectDragPreview(getEmptyImage());
+    this.props.connectDragPreview(getEmptyImage())
     return (
       <div className={classes} style={styles} ref='container'>
         {this.props.isDragging && <DragPreview width={this.state.width}>{item}</DragPreview>}

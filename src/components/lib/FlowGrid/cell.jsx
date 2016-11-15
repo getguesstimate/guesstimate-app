@@ -11,15 +11,15 @@ import {PTLocation} from 'lib/locationUtils'
 
 const squareTarget = {
   drop(props) {
-    return {location: props.location}
+    return {location: props.location, item: props.item}
   }
-};
+}
 
 function collect(connect, monitor) {
   return {
     connectDropTarget: connect.dropTarget(),
     isOver: monitor.isOver()
-  };
+  }
 }
 
 @DropTarget('card', squareTarget, collect)
