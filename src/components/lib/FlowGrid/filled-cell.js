@@ -136,7 +136,7 @@ export default class ItemCell extends Component {
     classes += this.props.isDragging ? ' isDragging' : ''
     // This forces dragging cells to not change their row heights. A bit hacky, but gives a better user experience in my
     // opinion and keeps background layer in sync with real row heights during drag (which skips normal rendering tree).
-    const styles = this.props.isDragging ? {minHeight: `${this.props.getRowHeight()-1}`} : {}
+    const styles = this.props.isDragging ? {minHeight: `${this.props.getRowHeight()-1}px`} : {}
     const item = this.item()
     this.props.connectDragPreview(getEmptyImage());
     return (
