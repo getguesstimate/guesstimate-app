@@ -8,7 +8,7 @@ import {create} from 'gModules/organizations/actions'
 export const PlanElement = ({onClick, isSelected, children}) => (
   <div className={`PlanElement ${isSelected && 'selected'}`} onClick={onClick}>
     <div className='radio-section'>
-      <input type='radio' checked={isSelected}/>
+      <input type='radio' checked={isSelected} readOnly={true}/>
     </div>
     <div className='content-section'>
       {children}

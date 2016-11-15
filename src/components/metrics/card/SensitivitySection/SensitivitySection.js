@@ -65,7 +65,7 @@ class RegressionStats extends Component {
       <div className='regression'>
         {size === 'SMALL' && _.isFinite(rSquared) &&
           <div>
-            <span className='label'> r<sup>2</sup></span>
+            <span className='label'> {'r²'}</span>
             <span className={`value ${importance(rSquared)}`}> {rSquared.toFixed(2)}</span>
           </div>
         }
