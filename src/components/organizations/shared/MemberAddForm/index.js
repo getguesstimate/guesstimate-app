@@ -7,36 +7,31 @@ import * as userOrganizationMembershipActions from 'gModules/userOrganizationMem
 
 function validateEmail(email) {
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(email);
+    return re.test(email)
 }
 
 @connect(httpRequestSelector)
 export class MemberAddForm extends Component{
   state = { value: '' }
 
-  componentDidMount() {
-    this.refs.input && this.refs.input.focus()
+  componentDidMount() { this.refs.input && this.refs.input.focus() }
+
+  _email() { return this.state.value.trim() }
+  _onChange(e) { this.setState({value: e.target.value}) }
+  _onKeyDown(e) {
+    if (e.keyCode === 13 && validateEmail(this._email())) {
+      this._submit()
+    }
   }
 
   _submit() {
-    const email = this.state.value
-    this.props.dispatch(userOrganizationMembershipActions.createWithEmail(this.props.organizationId, email))
+    this.props.dispatch(userOrganizationMembershipActions.createWithEmail(this.props.organizationId, this._email()))
     this.setState({value: ''})
-  }
-
-  _onChange(e) {
-    this.setState({value: e.target.value})
-  }
-
-  _onKeyDown(e) {
-    if (e.keyCode === 13 && validateEmail(this.state.value)) {
-      this._submit();
-    }
   }
 
   render() {
     const {value} = this.state
-    const isValid = validateEmail(value)
+    const isValid = validateEmail(this._email())
     const isEmpty = _.isEmpty(value)
     const buttonColor = (isValid || isEmpty) ? 'green' : 'blue'
 
