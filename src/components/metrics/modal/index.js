@@ -8,14 +8,26 @@ import Histogram from 'gComponents/simulations/histogram/index'
 import GuesstimateDescription from './description'
 import {ButtonClose} from 'gComponents/utility/buttons/close'
 import {GeneralModal} from 'gComponents/utility/modal/index'
+import DropDown from 'gComponents/utility/drop-down/index'
 
 import {percentile} from 'lib/dataAnalysis'
+import {SAMPLE_FILTERED} from 'lib/guesstimator/samplers/simulator-worker/simulator/filters/filters'
 
 import './style.css'
 
 const percentages = (values, perc) => {
   return perc.map(e => { return {percentage: e, value: percentile(values, values.length, e)} })
 }
+
+const SampleList = ({samples}) => (
+  <ul className='SampleList'>
+    {_.map(samples, (element, index) => !_.isEqual(element, SAMPLE_FILTERED) && (
+        <li key={index}>
+          <div key={index}>{element}</div>
+        </li>
+    ))}
+  </ul>
+)
 
 const PercentileTable = ({values}) => (
   <div className='percentiles'>
@@ -55,6 +67,7 @@ export class MetricModal extends Component {
       onChangeGuesstimateDescription,
     } = this.props
     const sortedSampleValues = _.get(metric, 'simulation.sample.sortedValues')
+    const allSamples = _.get(metric, 'simulation.sample.values')
     const stats = _.get(metric, 'simulation.stats')
     const guesstimate = metric.guesstimate
     return(
@@ -96,7 +109,7 @@ export class MetricModal extends Component {
 
           <div className='container bottom'>
             <div className='row editingInputSection'>
-              <div className='col-sm-12'>
+              <div className='col-sm-10'>
                 <DistributionEditor
                   organizationId={organizationId}
                   canUseOrganizationFacts={canUseOrganizationFacts}
@@ -108,6 +121,20 @@ export class MetricModal extends Component {
                   canUseOrganizationFacts={canUseOrganizationFacts}
                   size={'large'}
                 />
+              </div>
+              <div className='col-sm-2'>
+
+              <div className='metricModal--sample-container'>
+                <DropDown
+                  headerText={'Samples'}
+                  openLink={<a className='modal-action button'> Samples </a>}
+                  position='right'
+                  hasPadding={true}
+                >
+                  <SampleList samples={allSamples}/>
+                </DropDown>
+              </div>
+
               </div>
             </div>
             <div className='row guesstimateDescriptionSection'>

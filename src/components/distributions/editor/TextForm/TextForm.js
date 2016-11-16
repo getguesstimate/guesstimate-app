@@ -28,14 +28,14 @@ export class TextForm extends Component{
     this.setState({showDistributionSelector: false})
   }
 
-  _switchMetricClickMode() {
+  _flagMetricAsClicked() {
     if (this.props.guesstimate.guesstimateType === 'FUNCTION') {
       this.props.onChangeClickMode('FUNCTION_INPUT_SELECT')
     }
   }
 
   _handleBlur() {
-    this.props.onChangeClickMode('')
+    this.props.onChangeClickMode()
     this.props.onSave()
   }
 
@@ -73,7 +73,7 @@ export class TextForm extends Component{
             onReturn={onReturn}
             onTab={onTab}
             onChange={this.onChangeInput.bind(this)}
-            onFocus={this._switchMetricClickMode.bind(this)}
+            onFocus={this._flagMetricAsClicked.bind(this)}
             onBlur={this._handleBlur.bind(this)}
             onChangeData={onAddData}
             ref='TextInput'

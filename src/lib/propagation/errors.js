@@ -31,6 +31,7 @@ export const ERROR_SUBTYPES = {
   SAMPLING_ERROR_SUBTYPES: {
     UNEXPECTED_END_OF_EXPRESSION_ERROR: 14,
     DIVIDE_BY_ZERO_ERROR: 15,
+    ALL_SAMPLES_FILTERED_ERROR: 16,
   },
 }
 
@@ -93,10 +94,11 @@ function getWorkerErrorMessage(error) {
 }
 
 function getSamplingErrorMessage(error) {
-  const { SAMPLING_ERROR_SUBTYPES: {UNEXPECTED_END_OF_EXPRESSION_ERROR, DIVIDE_BY_ZERO_ERROR} } = ERROR_SUBTYPES
+  const { SAMPLING_ERROR_SUBTYPES: {UNEXPECTED_END_OF_EXPRESSION_ERROR, DIVIDE_BY_ZERO_ERROR, ALL_SAMPLES_FILTERED_ERROR} } = ERROR_SUBTYPES
   switch (error.subType) {
     case UNEXPECTED_END_OF_EXPRESSION_ERROR: return 'Unexpected end of expression'
     case DIVIDE_BY_ZERO_ERROR: return 'Division by zero detected.'
+    case ALL_SAMPLES_FILTERED_ERROR: return 'All samples removed in filtering.'
   }
   return 'Sampling error detected'
 }

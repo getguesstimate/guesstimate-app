@@ -36,7 +36,11 @@ export class SimulationNode {
       this.errors = this.errors.filter(e => e.type !== PARSER_ERROR)
     }
 
-    if (this._hasGraphErrors()) { return Promise.resolve(this._getSimulationResults()) }
+    if (this._hasGraphErrors()) {
+      // Now, we'll clear all non-parser or -graph errors as we can't be confident that they still apply.
+      this.errors = this.errors.filter(e => [PARSER_ERROR, GRAPH_ERROR].includes(e.type))
+      return Promise.resolve(this._getSimulationResults())
+    }
 
     const inputs = this._getInputs()
 

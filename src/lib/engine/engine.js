@@ -1,6 +1,5 @@
 import * as graph from './graph'
 import * as facts from './facts'
-import * as dgraph from './dgraph'
 import * as metric from './metric'
 import * as simulation from './simulation'
 import * as guesstimate from './guesstimate'
@@ -15,7 +14,6 @@ import * as utils from './utils'
 
 const Engine = {
   graph,
-  dgraph,
   metric,
   simulation,
   guesstimate,

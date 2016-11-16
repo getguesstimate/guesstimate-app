@@ -33,7 +33,7 @@ export default class Guesstimate extends Component{
     const {guesstimate: {input, guesstimateType}} = this.props
     const sameInput = input === prevProps.guesstimate.input
     if (!sameInput && prevProps.guesstimate.guesstimateType === 'FUNCTION' && guesstimateType !== 'FUNCTION') {
-      this._changeMetricClickMode('')
+      this._changeMetricClickMode()
     }
   }
 
@@ -65,7 +65,8 @@ export default class Guesstimate extends Component{
     this.changeGuesstimate({}, false, true)
   }
 
-  _changeMetricClickMode(newMode) {
+  // TODO(matthew): no magic strings.
+  _changeMetricClickMode(newMode = 'DEFAULT') {
     if (this.props.metricClickMode !== newMode) { this.props.changeMetricClickMode(newMode) }
   }
 
