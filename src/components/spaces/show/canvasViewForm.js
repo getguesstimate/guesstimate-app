@@ -10,7 +10,6 @@ import * as canvasStateProps from 'gModules/canvas_state/prop_type.js'
 import {trackToggledViewMode} from 'servers/segment/index'
 
 import debuggingImage from '../../../assets/metric-icons/blue/debugging.png'
-import normalImage from '../../../assets/metric-icons/blue/normal.png'
 import scientificImage from '../../../assets/metric-icons/blue/scientific.png'
 import arrowsHiddenImage from '../../../assets/metric-icons/blue/arrows-hidden.png'
 import arrowsVisibleImage from '../../../assets/metric-icons/blue/arrows-visible.png'
@@ -54,7 +53,6 @@ export default class CanvasViewForm extends Component {
 
   render () {
     let metricCardViewOptions = [
-      {name: 'normal', image: normalImage},
       {name: 'scientific', image: scientificImage},
       {name: 'expanded', image: debuggingImage, key: 'expandedViewEnabled'},
     ]
