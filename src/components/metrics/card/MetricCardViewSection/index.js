@@ -40,20 +40,6 @@ const ErrorSection = ({errors, padTop, shouldShowErrorText, messageToDisplay}) =
 )
 
 export class MetricCardViewSection extends Component {
-  componentDidUpdate() {
-    const {canvasState: {metricClickMode}, inSelectedCell} = this.props
-    const selfFunctionSelected = (metricClickMode === 'FUNCTION_INPUT_SELECT') && inSelectedCell
-    if (selfFunctionSelected) {
-      $(window).on('functionMetricClicked', this.flash.bind(this))
-    } else {
-      $(window).off('functionMetricClicked')
-    }
-  }
-
-  flash() {
-    console.log('woo flash triggered')
-  }
-
   hasContent() { return _.result(this.refs, 'name.hasContent') }
   focusName() { _.result(this.refs, 'name.focus') }
 

@@ -7,7 +7,7 @@ import {EditorState, Editor, ContentState, Modifier, CompositeDecorator} from 'd
 import {clearSuggestion, getSuggestion} from 'gModules/facts/actions'
 
 import {HANDLE_REGEX, GLOBALS_ONLY_REGEX, resolveToSelector} from 'gEngine/facts'
-import {or} from 'gEngine/utils'
+import {or, getClassName} from 'gEngine/utils'
 
 import {isData, formatData} from 'lib/guesstimator/formatter/formatters/Data'
 
@@ -41,6 +41,7 @@ export class TextInput extends Component{
       ContentState.createFromText(this.props.value || ''),
       new CompositeDecorator(this.decoratorList()),
     ),
+    isFlashing: false,
   }
 
   static propTypes = {
@@ -206,8 +207,18 @@ export class TextInput extends Component{
     this.onChange(this.stripExtraDecorators(addedEditorState))
   }
 
+  flash() {
+    this.setState({isFlashing: true})
+    setTimeout(() => {this.setState({isFlashing: false}); console.log('done flashing')}, 500)
+  }
+
+  functionMetricClicked(readableId) {
+    this.onChange(this.addText(readableId, false))
+    this.flash()
+  }
+
   handleFocus() {
-    $(window).on('functionMetricClicked', (_, {readableId}) => {this.onChange(this.addText(readableId, false))})
+    $(window).on('functionMetricClicked', (_, {readableId}) => {this.functionMetricClicked(readableId)})
     this.props.onFocus()
   }
 
@@ -222,8 +233,8 @@ export class TextInput extends Component{
   }
 
   render() {
-    const [{hasErrors, width, value, validInputs}, {editorState}] = [this.props, this.state]
-    const className = `TextInput ${width}` + (_.isEmpty(value) && hasErrors ? ' hasErrors' : '')
+    const {props: {hasErrors, width, value, validInputs}, state: {isFlashing, editorState}} = this
+    const className = getClassName('TextInput', width, isFlashing ? 'flashing' : null, hasErrors ? 'hasErrors' : null)
     return (
       <span
         className={className}

@@ -25,6 +25,10 @@
     font-weight: 500;
   }
 
+  .input.flashing {
+    background-color: green;
+  }
+
   .input.valid {
     color: $green-3;
     background-color: $green-4;
@@ -34,6 +38,10 @@
     color: #560606;
     background-color: #ff9e9e;
   }
+}
+
+.TextInput.flashing {
+  border: 3px solid black;
 }
 
 .Guesstimate .TextInput.default-value {
