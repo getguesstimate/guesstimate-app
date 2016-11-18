@@ -25,8 +25,12 @@
     font-weight: 500;
   }
 
-  .input.flashing {
+  .input.flashing-valid {
     background-color: green;
+  }
+
+  .input.flashing-error {
+    background-color: red;
   }
 
   .input.valid {
