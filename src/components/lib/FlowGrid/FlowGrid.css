@@ -15,7 +15,7 @@
   float: left;
 }
 
-.FlowGridRow{
+.FlowGridRow {
   display: flex;
   align-items: stretch;
   flex-direction: row;
