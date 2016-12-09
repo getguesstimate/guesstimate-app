@@ -2,7 +2,9 @@ import React, {Component, PropTypes} from 'react'
 
 import {GuesstimateTypeIcon} from './GuesstimateTypeIcon'
 import {TextInput} from './TextInput'
-import DistributionSelector from './DistributionSelector'
+import {DistributionSelector} from './DistributionSelector'
+
+import {Guesstimator} from 'lib/guesstimator/index'
 
 export class TextForm extends Component{
   displayName: 'GuesstimateInputForm'
@@ -39,21 +41,24 @@ export class TextForm extends Component{
     this.props.onSave()
   }
 
-  //onChangeData should be removed to Guesstimator lib.
   _textInput() {
     const {
-      guesstimate: {input, guesstimateType},
-      inputMetrics,
-      size,
-      organizationId,
-      canUseOrganizationFacts,
-      onChangeInput,
-      onAddData,
-      onChangeGuesstimateType,
-      onReturn,
-      onTab
-    } = this.props
-    const {showDistributionSelector} = this.state
+      props: {
+        guesstimate: {input, guesstimateType},
+        inputMetrics,
+        size,
+        organizationId,
+        canUseOrganizationFacts,
+        onChangeInput,
+        onAddData,
+        onChangeGuesstimateType,
+        onReturn,
+        onTab,
+      }, state: {
+        showDistributionSelector,
+      }
+    } = this
+
     const shouldDisplayType = !(guesstimateType === 'POINT' || guesstimateType === 'FUNCTION')
     const shouldBeWide = !(guesstimateType === 'FUNCTION')
     const validInputReadableIds = inputMetrics.filter(
@@ -62,6 +67,13 @@ export class TextForm extends Component{
     const errorInputReadableIds = inputMetrics.filter(
       m => !!_.get(m, 'simulation.sample.errors.length') || !_.get(m, 'simulation.sample.values.length')
     ).map(m => m.readableId)
+
+    // To see if this guesstimate is a valid choice for a lognormal distribution, we'll try to parse it with
+    // guesstimateType manually set to 'LOGNORMAL', and see if the parser corrects that type to something else. This
+    // approach is a bit hacky, but it gets the job done.
+    const [_1, parsed] = Guesstimator.parse({input, guesstimateType: 'LOGNORMAL'})
+    const parsedType = _.get(parsed, 'parsedInput.guesstimateType')
+    const isLognormalValid = parsedType === 'LOGNORMAL'
 
     return(
       <div className='GuesstimateInputForm'>
@@ -93,6 +105,7 @@ export class TextForm extends Component{
         {showDistributionSelector &&
           <div className='GuesstimateInputForm--row'>
             <DistributionSelector
+              disabledTypes={isLognormalValid ? [] : ['LOGNORMAL']}
               onSubmit={onChangeGuesstimateType}
               selected={guesstimateType}
             />
