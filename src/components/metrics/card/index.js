@@ -204,7 +204,6 @@ export default class MetricCard extends Component {
     const relationshipClass = relationshipClasses[this._relationshipType()]
     const {canvasState: {metricCardView}} = this.props
 
-    const relationshipClass = relationshipClasses[this._relationshipType()]
     const titleView = !hovered && !inSelectedCell && this._isTitle()
     let className = inSelectedCell ? 'metricCard grid-item-focus' : 'metricCard'
     className += isInScreenshot ? ' display' : ''
