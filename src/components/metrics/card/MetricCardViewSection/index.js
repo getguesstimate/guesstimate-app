@@ -52,7 +52,7 @@ export class MetricCardViewSection extends Component {
   }
 
   _shouldShowStatistics() {
-    const isScientific = (this.props.canvasState.metricCardView === 'scientific')
+    const isScientific = (!!this.props.canvasState.scientificViewEnabled)
     const isAvailable = this.showSimulation() && (_.get(this.props, 'metric.simulation.stats').length > 1)
     return isScientific && isAvailable
   }
@@ -62,15 +62,17 @@ export class MetricCardViewSection extends Component {
 
   renderToken() {
     const {
-      canvasState: {metricClickMode},
+      canvasState: {expandedViewEnabled, metricClickMode},
       metric: {guesstimate: {description}, readableId},
       inSelectedCell,
       hovered,
       exportedAsFact,
       onToggleSidebar,
     } = this.props
+    const anotherFunctionSelected = ((metricClickMode === 'FUNCTION_INPUT_SELECT') && !inSelectedCell)
+    const shouldShowReadableId = !!expandedViewEnabled || anotherFunctionSelected
 
-    if ((metricClickMode === 'FUNCTION_INPUT_SELECT') && !inSelectedCell) {
+    if (shouldShowReadableId) {
       return <MetricReadableId readableId={readableId} />
     } else if (hovered) {
       return <MetricSidebarToggle onToggleSidebar={onToggleSidebar} />
@@ -106,7 +108,7 @@ export class MetricCardViewSection extends Component {
 
   render() {
     const {
-      canvasState: {metricCardView, metricClickMode},
+      canvasState: {scientificViewEnabled, expandedViewEnabled, metricClickMode},
       metric,
       inSelectedCell,
       onChangeName,
@@ -115,11 +117,12 @@ export class MetricCardViewSection extends Component {
       onMouseDown,
       showSensitivitySection,
       hovered,
+      isInScreenshot,
       exportedAsFact,
     } = this.props
 
-    const {guesstimate} = metric
-    const stats = _.get(metric, 'simulation.stats')
+    const {guesstimate, simulation} = metric
+    const stats = _.get(simulation, 'stats')
     const showSimulation = this.showSimulation()
     const shouldShowStatistics = this._shouldShowStatistics()
     const hasGuesstimateDescription = !_.isEmpty(guesstimate.description)
@@ -127,16 +130,15 @@ export class MetricCardViewSection extends Component {
 
     const mainClassName = getClassName(
       'MetricCardViewSection',
-      metricCardView,
       anotherFunctionSelected ? 'anotherFunctionSelected' : null,
       this._hasErrors() && !inSelectedCell ? 'hasErrors' : null,
     )
     return (
       <div className={mainClassName} onMouseDown={onMouseDown}>
-        {(metricCardView !== 'basic') && showSimulation &&
+        {showSimulation &&
           <Histogram
-            height={(metricCardView === 'scientific') ? 110 : 30}
-            simulation={metric.simulation}
+            height={!!scientificViewEnabled ? 110 : 30}
+            simulation={simulation}
             cutOffRatio={0.995}
           />
         }
