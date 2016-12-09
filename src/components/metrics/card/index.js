@@ -24,7 +24,7 @@ import {withReadableId} from 'lib/generateVariableNames/generateMetricReadableId
 import {shouldTransformName} from 'lib/generateVariableNames/nameToVariableName'
 
 import {INTERMEDIATE, OUTPUT, INPUT, NOEDGE, relationshipType} from 'gEngine/graph'
-import {makeURLsMarkdown, allPropsPresent} from 'gEngine/utils'
+import {makeURLsMarkdown, allPropsPresent, getClassName} from 'gEngine/utils'
 
 import './style.css'
 
@@ -202,12 +202,15 @@ export default class MetricCard extends Component {
   _className() {
     const {inSelectedCell, hovered, isInScreenshot} = this.props
     const relationshipClass = relationshipClasses[this._relationshipType()]
+    const {canvasState: {metricCardView}} = this.props
 
+    const relationshipClass = relationshipClasses[this._relationshipType()]
     const titleView = !hovered && !inSelectedCell && this._isTitle()
     let className = inSelectedCell ? 'metricCard grid-item-focus' : 'metricCard'
     className += isInScreenshot ? ' display' : ''
     className += titleView ? ' titleView' : ''
     className += ' ' + relationshipClass
+    className += ' ' + metricCardView
     return className
   }
 

@@ -24,13 +24,12 @@ export default class EmptyCell extends Component {
   }
 
   render() {
-    let className = 'FlowGridEmptyCell grid-item-focus'
     return (
       <div
-          className={className}
-          onKeyPress={this.props.gridKeyPress}
-          onKeyDown={this._handleKeyDown.bind(this)}
-          tabIndex='0'
+        className={'FlowGridEmptyCell'}
+        onKeyPress={this.props.gridKeyPress}
+        onKeyDown={this._handleKeyDown.bind(this)}
+        tabIndex='0'
       />
     )
   }

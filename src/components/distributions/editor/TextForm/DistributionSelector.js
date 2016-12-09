@@ -1,10 +1,13 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component, PropTypes} from 'react'
 
 import ReactDOM from 'react-dom'
 import ReactTooltip from 'react-tooltip'
 
-import {Guesstimator} from 'lib/guesstimator/index.js'
-import * as elev from 'servers/elev/index.js'
+import {Guesstimator} from 'lib/guesstimator/index'
+
+import {getClassName} from 'gEngine/utils'
+
+import * as elev from 'servers/elev/index'
 
 // We use onMouseUp to make sure that the onMouseUp
 // does not get called once another metric is underneath
@@ -23,60 +26,51 @@ const Descriptions = {
   }
 }
 
-class DistributionIcon extends Component{
-  _handleSubmit() {
-    this.props.onSubmit(this.props.type)
-  }
-  render() {
-    let classes = 'ui button tinyhover-toggle DistributionIcon'
-    const {isSelected, type, icon} = this.props
-    classes += isSelected ? ' selected' : ''
-    return (
-      <div
-            className={classes}
-            onClick={this._handleSubmit.bind(this)}
-            data-tip
-            data-for={type}
-      >
-        <ReactTooltip {...ReactTooltipParams} id={type}>
-          {Descriptions[type].name}
-        </ReactTooltip>
-        <img src={icon}/>
-      </div>
-    )
-  }
-}
+const DistributionIcon = ({isSelected, isDisabled, type, icon, onSubmit}) => (
+  <div
+    className={getClassName(
+      'ui',
+      'button',
+      'tinyhover-toggle',
+      'DistributionIcon',
+      isSelected ? 'selected' : null,
+      isDisabled ? 'disabled' : null,
+    )}
+    onClick={() => onSubmit(type)}
+    data-tip
+    data-for={type}
+  >
+    <ReactTooltip {...ReactTooltipParams} id={type}> {Descriptions[type].name} </ReactTooltip>
+    <img src={icon}/>
+  </div>
+)
 
-export default class DistributionSelector extends Component{
+export class DistributionSelector extends Component{
+  static defaultProps = {
+    disabledTypes: [],
+  }
+
   _handleShowMore() {
     elev.open(elev.ADDITIONAL_DISTRIBUTIONS)
   }
 
   render() {
-    const {selected} = this.props
+    const {selected, disabledTypes} = this.props
     return (
       <div className='DistributionSelector'>
         <hr/>
-        <a
-          className='more-distributions'
-          onClick={this._handleShowMore.bind(this)}
-        >
-          {'More'}
-        </a>
+        <a className='more-distributions' onClick={this._handleShowMore.bind(this)}> More </a>
         <div className='DistributionList'>
-          {['LOGNORMAL', 'NORMAL', 'UNIFORM'].map(type => {
-            const isSelected = (selected === type)
-            const icon = Guesstimator.samplerTypes.find(type).icon
-            return (
-              <DistributionIcon
-                type={type}
-                onSubmit={this.props.onSubmit}
-                isSelected={isSelected}
-                icon={icon}
-                key={type}
-              />
-            )
-          })}
+          {['LOGNORMAL', 'NORMAL', 'UNIFORM'].map(type => (
+            <DistributionIcon
+              type={type}
+              onSubmit={this.props.onSubmit}
+              isSelected={selected === type}
+              isDisabled={disabledTypes.includes(type)}
+              icon={Guesstimator.samplerTypes.find(type).icon}
+              key={type}
+            />
+          ))}
         </div>
       </div>
     )

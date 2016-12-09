@@ -5,6 +5,8 @@ import {getEmptyImage} from 'react-dnd-html5-backend'
 
 import {PTLocation} from 'lib/locationUtils'
 
+import {getClassName} from 'gEngine/utils'
+
 var layerStyles = {
   position: 'fixed',
   pointerEvents: 'none',
@@ -125,22 +127,30 @@ export default class ItemCell extends Component {
         forceFlowGridUpdate: this.props.forceFlowGridUpdate,
         onReturn: this.props.onReturn,
         onTab: this.props.onTab,
+        ref: 'item',
       }
     )
   }
 
-  render = () => {
-    let classes = 'FlowGridFilledCell'
-    classes += this.props.isDragging ? ' isDragging' : ''
+  onMouseUp(e) {
+    if (e.button === 0 && e.target.className === 'FlowGridFilledCell') { this.props.focusCell() }
+  }
+
+  render() {
+    const className = getClassName('FlowGridFilledCell', this.props.isDragging ? 'isDragging' : null)
     // This forces dragging cells to not change their row heights. A bit hacky, but gives a better user experience in my
     // opinion and keeps background layer in sync with real row heights during drag (which skips normal rendering tree).
     const styles = this.props.isDragging ? {minHeight: `${this.props.getRowHeight()-1}px`} : {}
-    const item = this.item()
     this.props.connectDragPreview(getEmptyImage())
     return (
-      <div className={classes} style={styles} ref='container'>
+      <div
+        className={className}
+        style={styles}
+        ref='container'
+        onMouseUp={this.onMouseUp.bind(this)}
+      >
         {this.props.isDragging && <DragPreview width={this.state.width}>{item}</DragPreview>}
-        {!this.props.isDragging && item}
+        {!this.props.isDragging && this.item()}
       </div>
     )
   }
