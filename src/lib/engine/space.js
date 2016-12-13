@@ -73,10 +73,19 @@ export function toDSpace(spaceId, graph, organizationFacts) {
 
 function toDgraph(space, graph){
   const {users, organizations, calculators, userOrganizationMemberships, me} = graph
-  const {user_id, organization_id} = space
+  const {user_id, organization_id, author_contributions} = space
+
+  let org_users = []
+
+  if (!!organization_id && !_.isEmpty(author_contributions)){
+    org_users = Object.keys(author_contributions).map(key => ({..._collections.get(users, key), edits: author_contributions[key]}))
+  } else {
+    org_users = _collections.get(users, user_id)
+  }
 
   return {
     ..._graph.denormalize(subset(graph, space.id)),
+    users: org_users,
     user: _collections.get(users, user_id),
     organization: _collections.get(organizations, organization_id),
     calculators: _collections.filter(calculators, space.id, 'space_id'),
