@@ -71,6 +71,7 @@ export class SpaceHeader extends Component {
       ownerIsOrg,
       isPrivate,
       editableByMe,
+      editors,
       shareableLinkUrl,
       onPublicSelect,
       onPrivateSelect,
@@ -99,6 +100,13 @@ export class SpaceHeader extends Component {
           </div>
 
           <div className='col-md-4 col-xs-6'>
+            {(ownerIsOrg) &&
+              editors.map(editor => (
+                <a href={e.user.url(editor)}>
+                  <img src={editor.picture} className='ui avatar image'/>
+                </a>
+              ))
+            }
             {(ownerIsOrg || !editableByMe)  &&
               <a className='ui image label' href={ownerUrl}>
                 <img src={ownerPicture}/>
