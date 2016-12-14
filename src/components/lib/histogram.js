@@ -93,24 +93,20 @@ export default class Histogram extends Component {
     histogramData: []
   }
 
-  componentWillReceiveProps(nextProps){
+  componentWillReceiveProps(nextProps) {
     if (this.needsNewScales(nextProps)){
       this.computeNewScales(nextProps)
     }
   }
 
-  componentWillMount(){
-    //this.computeNewScales(this.props)
-  }
-
-  needsNewScales(prevProps){
+  needsNewScales(prevProps) {
     return (prevProps.width !== this.props.width) ||
       (prevProps.cutOffRatio !== this.props.cutOffRatio) ||
       (prevProps.bins !== this.props.bins) ||
       (_.get(prevProps, 'simulation.stats') !== _.get(this.props ,'simulation.stats'))
   }
 
-  computeNewScales(props){
+  computeNewScales(props) {
     let { bins, data, width, height, cutOffRatio, onChangeXScale } = props;
     width = width + 1
 
@@ -152,7 +148,7 @@ export default class Histogram extends Component {
 }
 
 class Hoverbar extends Component {
-  render(){
+  render() {
     let { height, hoveredXCoord } = this.props;
     return (<line x1={hoveredXCoord} x2={hoveredXCoord} y1={0} y2={height} className='react-d3-histogram__hoverbar'/>)
   }

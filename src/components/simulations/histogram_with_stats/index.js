@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {DistributionSummary} from 'gComponents/distributions/summary/index'
 import Histogram from 'gComponents/simulations/histogram/index'
-import {percentile} from 'lib/dataAnalysis'
+import {percentile, cutoff} from 'lib/dataAnalysis'
 import $ from 'jquery'
 import './style.css'
 
@@ -12,7 +12,7 @@ const percentages = (values, perc) => {
 }
 
 const findPercentile = (values, value) => {
-  return values.filter(v => v < value).length / values.length
+  return cutoff(values, value) / values.length
 }
 
 const PercentileTable = ({values}) => (
