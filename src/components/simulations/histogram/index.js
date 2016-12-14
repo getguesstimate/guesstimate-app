@@ -25,7 +25,9 @@ class SimulationHistogram extends Component{
     return (
       (_.get(nextProps, 'simulation.stats') !== _.get(this.props, 'simulation.stats')) ||
       (nextProps.containerWidth !== this.props.containerWidth) ||
-      (nextProps.height !== this.props.height)
+      (nextProps.height !== this.props.height) ||
+      (nextProps.hoveredXCoord !== this.props.hoveredXCoord) ||
+      (nextProps.allowHover !== this.props.allowHover)
     )
   }
 
@@ -34,13 +36,13 @@ class SimulationHistogram extends Component{
   };
 
   histogram() {
+    const props = _.pick(this.props, ['height', 'left', 'bins', 'cutOffRatio', 'hoveredXCoord', 'onChangeXScale', 'allowHover'])
     return (
       <Histogram data={this.sortedValues()}
-          height={this.props.height}
-          width={(this.props.containerWidth) * this.props.widthPercent / 100}
-          bottom={20}
-          bins={this.props.bins}
-          cutOffRatio={this.props.cutOffRatio}
+        width={(this.props.containerWidth) * this.props.widthPercent / 100}
+        bottom={20}
+        bins={this.props.bins}
+        {...props}
       />
     )
   };

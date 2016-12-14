@@ -3,6 +3,7 @@ import React, {Component, PropTypes} from 'react'
 import d3 from 'd3'
 
 import numberShow from 'lib/numberShower/numberShower'
+import $ from 'jquery'
 
 function getYScale(data, height) {
   return d3.scale.linear().
@@ -86,30 +87,74 @@ export default class Histogram extends Component {
     cutOffRatio: 0, // By default cut off nothing.
   };
 
-  render() {
-    let { top, right, bottom, left, data, width, height, cutOffRatio } = this.props;
+  state = {
+    xScale: (e) => e,
+    yScale: (e) => e,
+    histogramData: []
+  }
+
+  componentWillReceiveProps(nextProps){
+    if (this.needsNewScales(nextProps)){
+      this.computeNewScales(nextProps)
+    }
+  }
+
+  componentWillMount(){
+    //this.computeNewScales(this.props)
+  }
+
+  needsNewScales(prevProps){
+    return (prevProps.width !== this.props.width) ||
+      (prevProps.cutOffRatio !== this.props.cutOffRatio) ||
+      (prevProps.bins !== this.props.bins) ||
+      (_.get(prevProps, 'simulation.stats') !== _.get(this.props ,'simulation.stats'))
+  }
+
+  computeNewScales(props){
+    let { bins, data, width, height, cutOffRatio, onChangeXScale } = props;
     width = width + 1
 
     const filtered_data = filterLowDensityPoints(data, cutOffRatio)
 
     let xScale = getXScale(filtered_data, width);
-    let bins = this.props.bins
     let histogramDataFn = d3.layout.histogram().bins(xScale.ticks(bins));
     let histogramData = histogramDataFn(filtered_data);
     let yScale = getYScale(histogramData, height);
+
+    if (onChangeXScale){ onChangeXScale(xScale.invert) }
+    this.setState({xScale, yScale, histogramData})
+  }
+
+  render() {
+    let { top, right, bottom, left, width, height,  hoveredXCoord, allowHover } = this.props;
+    width = width + 1
+
+    const {xScale, yScale, histogramData} = this.state
     let barWidth = width/histogramData.length;
+    if (!_.isFinite(width)){ return false }
+
     return (
       <div className="react-d3-histogram">
         {top && bottom && width && height &&
           <svg width={width + left + right} height={height + top + bottom}>
             <g transform={"translate(" + left + "," + top + ")"}>
               {histogramData.map((d, i) => <Bar data={d} xScale={xScale} yScale={yScale} height={height} barWidth={barWidth} key={i} />)}
+
+              {allowHover && <Hoverbar height={height} hoveredXCoord={hoveredXCoord}/>}
+
               <XAxis height={height} scale={xScale} />
             </g>
           </svg>
         }
       </div>
     );
+  }
+}
+
+class Hoverbar extends Component {
+  render(){
+    let { height, hoveredXCoord } = this.props;
+    return (<line x1={hoveredXCoord} x2={hoveredXCoord} y1={0} y2={height} className='react-d3-histogram__hoverbar'/>)
   }
 }
 
@@ -147,7 +192,7 @@ class Tick extends Component {
     return (
       <g className="react-d3-histogram__tick" transform={"translate(" + scale(value) + ",0)"}>
         <line x2="0" y2="6"></line>
-        <text dy=".71em" y="-15" x="0" zindexstyle={textStyle}>
+        <text dy=".71em" y="-15" x="-6" zindexstyle={textStyle}>
           {text}
         </text>
       </g>
