@@ -78,7 +78,12 @@ function toDgraph(space, graph){
   let org_users = []
 
   if (!!organization_id && !_.isEmpty(author_contributions)){
-    org_users = Object.keys(author_contributions).map(key => ({..._collections.get(users, key), edits: author_contributions[key]}))
+    org_users = Object.keys(author_contributions).map(
+      author_id => ({
+        ..._collections.get(users, author_id),
+        edits: author_contributions[author_id]
+      })
+    )
   } else {
     org_users = [_collections.get(users, user_id)]
   }
