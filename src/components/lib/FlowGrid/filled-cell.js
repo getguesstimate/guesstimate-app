@@ -149,7 +149,7 @@ export default class ItemCell extends Component {
         ref='container'
         onMouseUp={this.onMouseUp.bind(this)}
       >
-        {this.props.isDragging && <DragPreview width={this.state.width}>{item}</DragPreview>}
+        {this.props.isDragging && <DragPreview width={this.state.width}>{this.item()}</DragPreview>}
         {!this.props.isDragging && this.item()}
       </div>
     )
