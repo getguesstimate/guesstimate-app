@@ -5,6 +5,8 @@ import {percentile} from 'lib/dataAnalysis'
 import $ from 'jquery'
 import './style.css'
 
+const MARGIN_LEFT = 10
+
 const percentages = (values, perc) => {
   return perc.map(e => { return {percentage: e, value: percentile(values, values.length, e)} })
 }
@@ -28,8 +30,6 @@ const PercentileTable = ({values}) => (
   </div>
 )
 
-const MARGIN_LEFT = 10
-
 export class HistogramWithStats extends Component {
   state = {
     hoveredXCoord: 0,
@@ -51,8 +51,11 @@ export class HistogramWithStats extends Component {
   render() {
     const {stats, simulation, sortedSampleValues} = this.props
     const {hoveredXCoord, isHovering} = this.state
-    const hoveredValue = this.state.xScale(hoveredXCoord)
-    let hoveredPercentile = findPercentile(sortedSampleValues, hoveredValue)
+    let hoveredValue, hoveredPercentile
+    if (isHovering){
+      hoveredValue = this.state.xScale(hoveredXCoord)
+      hoveredPercentile = findPercentile(sortedSampleValues, hoveredValue)
+    }
     return (
       <div className='HistogramWithStats'
         ref='div'
@@ -68,7 +71,7 @@ export class HistogramWithStats extends Component {
                 mean={stats.mean}
                 adjustedConfidenceInterval={stats.adjustedConfidenceInterval}
               />
-              {true &&
+              {isHovering &&
                 <div className='hovered-value'>
                   <h3>{hoveredValue.toFixed(2)}</h3>
                   <h4>{`${(hoveredPercentile * 100).toFixed(2)}th percentile`}</h4>
@@ -85,7 +88,7 @@ export class HistogramWithStats extends Component {
             height={150} top={0} bottom={0} bins={100} widthPercent={80} cutOffRatio={0.98}
             left={MARGIN_LEFT}
             simulation={simulation}
-            allowHover={this.state.isHovering}
+            allowHover={isHovering}
             hoveredXCoord={hoveredXCoord}
             onChangeXScale={this.changeXScale.bind(this)}
           />
