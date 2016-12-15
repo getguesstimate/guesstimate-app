@@ -37,3 +37,8 @@
   fill: none;
   shape-rendering: crispEdges;
 }
+
+.react-d3-histogram__hoverbar {
+   stroke: rgba(14, 44, 64, 0.46);
+   stroke-dasharray: 8,5;
+}

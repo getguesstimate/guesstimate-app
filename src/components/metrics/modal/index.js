@@ -4,7 +4,7 @@ import Modal from 'react-modal'
 
 import {DistributionSummary} from 'gComponents/distributions/summary/index'
 import DistributionEditor from 'gComponents/distributions/editor/index'
-import Histogram from 'gComponents/simulations/histogram/index'
+import {HistogramWithStats} from 'gComponents/simulations/histogram_with_stats/index'
 import GuesstimateDescription from './description'
 import {ButtonClose} from 'gComponents/utility/buttons/close'
 import {GeneralModal} from 'gComponents/utility/modal/index'
@@ -15,10 +15,6 @@ import {SAMPLE_FILTERED} from 'lib/guesstimator/samplers/simulator-worker/simula
 
 import './style.css'
 
-const percentages = (values, perc) => {
-  return perc.map(e => { return {percentage: e, value: percentile(values, values.length, e)} })
-}
-
 const SampleList = ({samples}) => (
   <ul className='SampleList'>
     {_.map(samples, (element, index) => !_.isEqual(element, SAMPLE_FILTERED) && (
@@ -27,21 +23,6 @@ const SampleList = ({samples}) => (
         </li>
     ))}
   </ul>
-)
-
-const PercentileTable = ({values}) => (
-  <div className='percentiles'>
-    <h3> Percentiles </h3>
-    <table className='ui very basic collapsing celled table'>
-      <tbody>
-        {!_.isEmpty(values) && percentages(values, [1,5,50,95,99]).map(e => {
-          return (
-            <tr key={e.percentage}><td> {e.percentage}{'%'} </td><td> {e.value && e.value.toFixed(3)} </td></tr>
-          )
-        })}
-      </tbody>
-    </table>
-  </div>
 )
 
 //Note: Controlled inputs don't pass through very well.  Try to keep them in child connects().
@@ -76,11 +57,6 @@ export class MetricModal extends Component {
       >
         <div className='metricModal'>
           <div className='container top'>
-            <div className='histogram'>
-              <Histogram height={150} top={0} bottom={0} bins={100} widthPercent={80} cutOffRatio={0.98}
-                  simulation={metric.simulation}
-              />
-            </div>
             <div className='row'>
               <div className='col-sm-10'>
                   <h1> {metric.name} </h1>
@@ -89,22 +65,13 @@ export class MetricModal extends Component {
                 <ButtonClose onClick={closeModal}/>
               </div>
             </div>
-            <div className='distributionSection'>
-              <div className='row'>
-                <div className='col-sm-9 mean subsection'>
-                  {showSimulation &&
-                    <DistributionSummary
-                      length={stats.length}
-                      mean={stats.mean}
-                      adjustedConfidenceInterval={stats.adjustedConfidenceInterval}
-                    />
-                  }
-                </div>
-                <div className='col-sm-3 subsection'>
-                  <PercentileTable values={sortedSampleValues}/>
-                </div>
-              </div>
-            </div>
+            {showSimulation &&
+              <HistogramWithStats
+                simulation={metric.simulation}
+                stats={stats}
+                sortedSampleValues={sortedSampleValues}
+              />
+            }
           </div>
 
           <div className='container bottom'>
