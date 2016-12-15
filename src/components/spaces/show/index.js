@@ -377,6 +377,7 @@ export default class SpacesShow extends Component {
 
     const hasOrg = _.has(space, 'organization.name')
     const owner = hasOrg ? space.organization : space.user
+    const {users} = space
     const ownerUrl = hasOrg ? e.organization.url(space.organization) : e.user.url(space.user)
 
     const canBePrivate = hasOrg ? e.organization.canMakeMorePrivateModels(space.organization) : e.me.canMakeMorePrivateModels(this.props.me)
@@ -421,6 +422,7 @@ export default class SpacesShow extends Component {
             ownerPicture={owner.picture}
             ownerUrl={ownerUrl}
             ownerIsOrg={hasOrg}
+            editors={users}
             onSaveName={this.onSaveName.bind(this)}
             onPublicSelect={this.onPublicSelect.bind(this)}
             onPrivateSelect={this.onPrivateSelect.bind(this)}
