@@ -94,7 +94,7 @@ export default class Histogram extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.needsNewScales(nextProps)){
+    if (this.needsNewScales(nextProps)) {
       this.computeNewScales(nextProps)
     }
   }
@@ -117,7 +117,7 @@ export default class Histogram extends Component {
     let histogramData = histogramDataFn(filtered_data)
     let yScale = getYScale(histogramData, height)
 
-    if (onChangeXScale){ onChangeXScale(xScale.invert) }
+    if (onChangeXScale) { onChangeXScale(xScale.invert) }
     this.setState({xScale, yScale, histogramData})
   }
 
@@ -127,7 +127,7 @@ export default class Histogram extends Component {
 
     const {xScale, yScale, histogramData} = this.state
     let barWidth = width/histogramData.length
-    if (!_.isFinite(width)){ return false }
+    if (!_.isFinite(width)) { return false }
 
     return (
       <div className="react-d3-histogram">
