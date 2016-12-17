@@ -115,7 +115,7 @@ export class TextInput extends Component{
   }
   updateDecorators() {
     const {isFlashing, flashingInput} = this.state
-    const flashSpan = this.props.validInputs.includes(flashingInput) ? FlashingValidInput : FlashingErrorInput
+    const flashSpan = this.props.errorInputs.includes(flashingInput) ? FlashingValidInput : FlashingErrorInput
     const cursorPos = this.cursorPosition()
     let extraDecorators = isFlashing ? [positionDecorator(cursorPos - flashingInput.length, cursorPos, flashSpan)] : []
     this.setState({editorState: this.withExtraDecorators(this.state.editorState, extraDecorators)})
@@ -223,7 +223,7 @@ export class TextInput extends Component{
   }
 
   flash(readableId) {
-    this.setState({isFlashing: true, flashingInput: readableId})
+    setTimeout(() => {this.setState({isFlashing: true, flashingInput: readableId})}, 1)
     setTimeout(() => {this.setState({isFlashing: false, flashingInput: null})}, FLASH_DURATION_MS)
   }
 
