@@ -7,6 +7,11 @@
 .Guesstimate .TextInput {
   line-height: 1.3em;
   font-size: 0.95em;
+  border: 2px solid rgba(0,0,0,0);
+  transition: border 0.2s ease;
+  transition: background-color 0.2s ease;
+  border-radius: 2px;
+  padding: 0;
 
   .fact {
     color: #483567;
@@ -25,6 +30,16 @@
     font-weight: 500;
   }
 
+  .input.flashing-valid {
+    background-color: #82c76e;
+    color: #04330c;
+  }
+
+  .input.flashing-error {
+    background-color: #ce4848;
+    color: #190101
+  }
+
   .input.valid {
     color: $green-3;
     background-color: $green-4;
@@ -33,6 +48,13 @@
   .input.error {
     color: #560606;
     background-color: #ff9e9e;
+  }
+
+  &.flashing {
+    transition: border 0.2s ease;
+    transition: background-color 0.2s ease;
+    border: 2px solid #0fb963;
+    background-color: #c9e8c0;
   }
 }
 

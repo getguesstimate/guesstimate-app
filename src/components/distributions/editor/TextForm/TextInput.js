@@ -7,7 +7,7 @@ import {EditorState, Editor, ContentState, Modifier, CompositeDecorator} from 'd
 import {clearSuggestion, getSuggestion} from 'gModules/facts/actions'
 
 import {HANDLE_REGEX, GLOBALS_ONLY_REGEX, resolveToSelector} from 'gEngine/facts'
-import {or} from 'gEngine/utils'
+import {or, getClassName} from 'gEngine/utils'
 
 import {isData, formatData} from 'lib/guesstimator/formatter/formatters/Data'
 
@@ -21,11 +21,15 @@ function findWithRegex(baseRegex, contentBlock, callback) {
   }
 }
 
+const FLASH_DURATION_MS = 300 // ADJUST FLASH TIMING HERE.
+
 const stylizedSpan = className => props => <span {...props} className={className}>{props.children}</span>
 const Fact = stylizedSpan('fact input')
 const Suggestion = stylizedSpan('suggestion')
 const ValidInput = stylizedSpan('valid input')
 const ErrorInput = stylizedSpan('error input')
+const FlashingValidInput = stylizedSpan('flashing-valid input')
+const FlashingErrorInput = stylizedSpan('flashing-error input')
 
 const positionDecorator = (start, end, component) => ({
   strategy: (contentBlock, callback) => {if (end <= contentBlock.text.length) {callback(start, end)}},
@@ -41,6 +45,8 @@ export class TextInput extends Component{
       ContentState.createFromText(this.props.value || ''),
       new CompositeDecorator(this.decoratorList()),
     ),
+    isFlashing: false,
+    flashingInput: null,
   }
 
   static propTypes = {
@@ -107,7 +113,13 @@ export class TextInput extends Component{
   withExtraDecorators(editorState, extraDecorators) {
     return EditorState.set(editorState, {decorator: new CompositeDecorator(this.decoratorList(extraDecorators))})
   }
-  updateDecorators() { this.setState({editorState: this.withExtraDecorators(this.state.editorState)}) }
+  updateDecorators() {
+    const {isFlashing, flashingInput} = this.state
+    const flashSpan = this.props.validInputs.includes(flashingInput) ? FlashingValidInput : FlashingErrorInput
+    const cursorPos = this.cursorPosition()
+    let extraDecorators = isFlashing ? [positionDecorator(cursorPos - flashingInput.length, cursorPos, flashSpan)] : []
+    this.setState({editorState: this.withExtraDecorators(this.state.editorState, extraDecorators)})
+  }
 
   deleteOldSuggestion(oldSuggestion) {
     const freshEditorState = this.addText('', true, oldSuggestion.length)
@@ -130,14 +142,18 @@ export class TextInput extends Component{
     this.setState({editorState: this.withExtraDecorators(addedEditorState, extraDecorators)})
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     if (this.props.suggestion !== prevProps.suggestion && this.nextWord() === prevProps.suggestion) {
       if (_.isEmpty(this.props.suggestion)) {
         this.deleteOldSuggestion(prevProps.suggestion)
       } else {
         this.addSuggestion()
       }
-    } else if (!_.isEqual(prevProps.validInputs, this.props.validInputs) || !_.isEqual(prevProps.errorInputs, this.props.errorInputs)) {
+    } else if (
+      !_.isEqual(prevProps.validInputs, this.props.validInputs) ||
+      !_.isEqual(prevProps.errorInputs, this.props.errorInputs) ||
+      !_.isEqual(prevState.isFlashing, this.state.isFlashing)
+    ) {
       setTimeout(() => {this.updateDecorators()}, 1)
     }
   }
@@ -206,8 +222,18 @@ export class TextInput extends Component{
     this.onChange(this.stripExtraDecorators(addedEditorState))
   }
 
+  flash(readableId) {
+    this.setState({isFlashing: true, flashingInput: readableId})
+    setTimeout(() => {this.setState({isFlashing: false, flashingInput: null})}, FLASH_DURATION_MS)
+  }
+
+  functionMetricClicked(readableId) {
+    this.onChange(this.addText(readableId, false))
+    this.flash(readableId)
+  }
+
   handleFocus() {
-    $(window).on('functionMetricClicked', (_, {readableId}) => {this.onChange(this.addText(readableId, false))})
+    $(window).on('functionMetricClicked', (_, {readableId}) => {this.functionMetricClicked(readableId)})
     this.props.onFocus()
   }
 
@@ -222,8 +248,8 @@ export class TextInput extends Component{
   }
 
   render() {
-    const [{hasErrors, width, value, validInputs}, {editorState}] = [this.props, this.state]
-    const className = `TextInput ${width}` + (_.isEmpty(value) && hasErrors ? ' hasErrors' : '')
+    const {props: {hasErrors, width, value, validInputs}, state: {isFlashing, editorState}} = this
+    const className = getClassName('TextInput', width, isFlashing ? 'flashing' : null, hasErrors ? 'hasErrors' : null)
     return (
       <span
         className={className}
