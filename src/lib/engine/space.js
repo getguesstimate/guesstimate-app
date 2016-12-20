@@ -87,6 +87,7 @@ function toDgraph(space, graph){
   } else {
     org_users = [_collections.get(users, user_id)]
   }
+  org_users = org_users.filter(o => !!o.id)
 
   return {
     ..._graph.denormalize(subset(graph, space.id)),
