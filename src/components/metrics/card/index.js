@@ -24,7 +24,7 @@ import {withReadableId} from 'lib/generateVariableNames/generateMetricReadableId
 import {shouldTransformName} from 'lib/generateVariableNames/nameToVariableName'
 
 import {INTERMEDIATE, OUTPUT, INPUT, NOEDGE, relationshipType} from 'gEngine/graph'
-import {makeURLsMarkdown, allPropsPresent} from 'gEngine/utils'
+import {makeURLsMarkdown, allPropsPresent, getClassName} from 'gEngine/utils'
 
 import './style.css'
 
@@ -200,15 +200,16 @@ export default class MetricCard extends Component {
   _relationshipType() { return relationshipType(_.get(this, 'props.metric.edges')) }
 
   _className() {
-    const {inSelectedCell, hovered} = this.props
-    const {canvasState: {metricCardView}} = this.props
+    const {inSelectedCell, hovered, isInScreenshot} = this.props
     const relationshipClass = relationshipClasses[this._relationshipType()]
+    const {canvasState: {metricCardView}} = this.props
 
     const titleView = !hovered && !inSelectedCell && this._isTitle()
     let className = inSelectedCell ? 'metricCard grid-item-focus' : 'metricCard'
-    className += ` ${metricCardView}`
+    className += isInScreenshot ? ' display' : ''
     className += titleView ? ' titleView' : ''
     className += ' ' + relationshipClass
+    className += ' ' + metricCardView
     return className
   }
 
@@ -254,11 +255,13 @@ export default class MetricCard extends Component {
       connectDragSource,
       analyzedMetric,
       forceFlowGridUpdate,
+      isInScreenshot,
       exportedAsFact,
     } = this.props
     const {guesstimate, name} = metric
     const {metricClickMode} = canvasState
     const shouldShowSensitivitySection = this._shouldShowSensitivitySection()
+    const shouldShowDistributionEditor = !!canvasState.expandedViewEnabled || inSelectedCell
     const isAnalyzedMetric = this._isAnalyzedMetric()
 
     const isFunction = _.get(metric, 'guesstimate.guesstimateType') === 'FUNCTION'
@@ -297,6 +300,8 @@ export default class MetricCard extends Component {
             onMouseDown={this._handleMouseDown.bind(this)}
             ref='MetricCardViewSection'
             isTitle={this._isTitle()}
+            isInScreenshot={isInScreenshot}
+            connectDragSource={connectDragSource}
             idMap={idMap}
             analyzedMetric={analyzedMetric}
             showSensitivitySection={shouldShowSensitivitySection}
@@ -308,7 +313,7 @@ export default class MetricCard extends Component {
             exportedAsFact={exportedAsFact}
           />
 
-          {inSelectedCell && !this.state.modalIsOpen &&
+          {shouldShowDistributionEditor && !this.state.modalIsOpen &&
             <div className='section editing'>
               <DistributionEditor
                 guesstimate={metric.guesstimate}

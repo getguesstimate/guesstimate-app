@@ -87,11 +87,31 @@ $grey: #EEE;
   font-size: 2.3em;
   margin-top: 1em;
   margin-left: 0.3em;
+  float: left;
 }
 
 .metricModal .distributionSection .mean.subsection .DistributionSummary .stdev{
   color: #666;
 }
+
+.metricModal .distributionSection .mean.subsection .hovered-value {
+  float: right;
+  background-color: rgba(240, 240, 240, 0.68);
+}
+
+.metricModal .distributionSection .mean.subsection .hovered-value h4{
+  margin-top: .5em;
+  color: #888888;
+  font-weight: 200;
+}
+
+.metricModal .distributionSection .mean.subsection .hovered-value h3{
+  margin-bottom: 0;
+  font-size: 2em;
+  color: #555555;
+  font-weight: 200;
+}
+
 
 .metricModal .section-small{
   background-color: white;

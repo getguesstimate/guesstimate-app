@@ -1,5 +1,7 @@
 const initialState = {
-  metricCardView: 'normal',
+  analysisViewEnabled: false,
+  expandedViewEnabled: false,
+  scientificViewEnabled: false,
   edgeView: 'visible',
   metricClickMode: 'DEFAULT',
   saveState: 'NONE',
@@ -10,8 +12,9 @@ const initialState = {
 
 export function canvasStateR(state = initialState, action) {
   switch (action.type) {
-    case 'CHANGE_CANVAS_STATE':
-      return Object.assign({}, state, action.values)
+    case 'CHANGE_CANVAS_STATE': {
+      return {...state, ...action.values}
+    }
     default:
       return state
   }

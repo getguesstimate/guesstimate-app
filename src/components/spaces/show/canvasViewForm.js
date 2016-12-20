@@ -10,7 +10,6 @@ import * as canvasStateProps from 'gModules/canvas_state/prop_type.js'
 import {trackToggledViewMode} from 'servers/segment/index'
 
 import debuggingImage from '../../../assets/metric-icons/blue/debugging.png'
-import normalImage from '../../../assets/metric-icons/blue/normal.png'
 import scientificImage from '../../../assets/metric-icons/blue/scientific.png'
 import arrowsHiddenImage from '../../../assets/metric-icons/blue/arrows-hidden.png'
 import arrowsVisibleImage from '../../../assets/metric-icons/blue/arrows-visible.png'
@@ -19,8 +18,7 @@ import './style.css'
 
 function mapStateToProps(state) {
   return {
-    metricCardView: state.canvasState.metricCardView,
-    edgeView: state.canvasState.edgeView
+    canvasState: state.canvasState,
   }
 }
 
@@ -40,14 +38,13 @@ export default class CanvasViewForm extends Component {
   displayName: 'CanvasViewForm'
 
   static propTypes = {
-    edgeView: canvasStateProps.edgeView,
-    metricCardView: canvasStateProps.metricCardView,
+    canvasState: canvasStateProps.canvasViewState,
     dispatch: PropTypes.func
   }
 
   _selectMetricCardView(e) {
     trackToggledViewMode(e)
-    this.props.dispatch(canvasStateActions.change({metricCardView: e}))
+    this.props.dispatch(canvasStateActions.toggleView(e))
   }
 
   _selectEdgeView(e) {
@@ -56,8 +53,8 @@ export default class CanvasViewForm extends Component {
 
   render () {
     let metricCardViewOptions = [
-      {name: 'normal', image: normalImage},
-      {name: 'scientific', image: scientificImage}
+      {name: 'scientific', image: scientificImage, key: 'scientificViewEnabled'},
+      {name: 'expanded', image: debuggingImage, key: 'expandedViewEnabled'},
     ]
 
     let arrowViewOptions = [
@@ -66,15 +63,13 @@ export default class CanvasViewForm extends Component {
     ]
 
     metricCardViewOptions = metricCardViewOptions.map(e => {
-      const isSelected = (e.name === this.props.metricCardView)
-      const select = () => {this._selectMetricCardView(e.name)}
-      return Object.assign(e, {isSelected, onClick:select})
+      const isSelected = !!this.props.canvasState[e.key]
+      return Object.assign(e, {isSelected, onClick: () => {this._selectMetricCardView(e.name)}})
     })
 
     arrowViewOptions = arrowViewOptions.map(e => {
-      const isSelected = (e.name === this.props.edgeView)
-      const select = () => {this._selectEdgeView(e.name)}
-      return Object.assign(e, {isSelected, onClick:select})
+      const isSelected = (e.name === this.props.canvasState.edgeView)
+      return Object.assign(e, {isSelected, onClick: () => {this._selectEdgeView(e.name)}})
     })
 
     return (
@@ -83,7 +78,7 @@ export default class CanvasViewForm extends Component {
         openLink={<a className='header-action'>View</a>}
         position='right'
       >
-        <div className='section' closeOnClick={true}>
+        <div className='section' closeOnClick={false}>
           <div className='header-divider' onClick={e => {e.stopPropagation()}}>
             <h3> Metric Style </h3>
           </div>
@@ -97,7 +92,7 @@ export default class CanvasViewForm extends Component {
         </div>
         <hr/>
 
-        <div className='section' closeOnClick={true}>
+        <div className='section' closeOnClick={false}>
           <div className='header-divider' onClick={e => {e.stopPropagation()}}>
             <h3> Arrows </h3>
           </div>

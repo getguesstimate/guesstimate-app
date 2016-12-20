@@ -23,6 +23,25 @@ export function forbidEdits(editsAllowedManuallySet = true) {
   }
 }
 
+export function toggleView(view) {
+  return (dispatch, getState) => {
+    const {canvasState: {analysisViewEnabled, expandedViewEnabled, scientificViewEnabled}} = getState()
+    let values = {}
+    switch (view) {
+      case 'analysis':
+        values.analysisViewEnabled = !analysisViewEnabled
+        break
+      case 'expanded':
+        values.expandedViewEnabled = !expandedViewEnabled
+        break
+      case 'scientific':
+        values.scientificViewEnabled = !scientificViewEnabled
+        break
+    }
+    if (!_.isEmpty(values)) { dispatch({type: 'CHANGE_CANVAS_STATE', values}) }
+  }
+}
+
 export const changeMetricClickMode = clickMode => change({metricClickMode: presentOrVal(clickMode, 'DEFAULT')})
 export const changeActionState = actionState => change({actionState})
 export const analyzeMetricId = analysisMetricId => change({analysisMetricId})

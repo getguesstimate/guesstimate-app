@@ -3,10 +3,11 @@ import React, {Component} from 'react'
 import DropDown from 'gComponents/utility/drop-down/index.js'
 
 export class SpaceName extends Component {
+  focusForm() { this.refs.name.focus() }
+
   onSave() {
+    this.props.onSave(this.refs.name.value)
     this.refs.DropDown._close()
-    const name = this.refs.name.value
-    this.props.onSave(name)
   }
 
   render () {
@@ -18,24 +19,31 @@ export class SpaceName extends Component {
       <span>
         {editableByMe &&
           <DropDown
-            headerText={'Rename Model'}
+            headerText={hasName ? 'Rename Model' : 'Name Model'}
             openLink={<h1 className={className}> {showName} </h1>}
             position='right'
             hasPadding={true}
             width='wide'
+            onOpen={this.focusForm.bind(this)}
             ref='DropDown'
           >
-          <div className='ui form'>
-            <textarea
-              defaultValue={name}
-              type='text'
-              rows='2'
-              ref='name'
-            />
-            <div className='ui button primary large' onClick={this.onSave.bind(this)}>
-                Rename
+            <div className='ui form'>
+              <textarea
+                defaultValue={name}
+                type='text'
+                rows='2'
+                ref='name'
+              />
+              {!hasName &&
+                <p>
+                  What are you trying to estimate? Be specific, so others can understand. Example: 'The time it will take
+                  George to walk home.'
+                </p>
+              }
+              <div className='ui button primary large' onClick={this.onSave.bind(this)}>
+                {hasName ? 'Rename Model' : 'Name Model'}
+              </div>
             </div>
-          </div>
           </DropDown>
         }
         {!editableByMe &&

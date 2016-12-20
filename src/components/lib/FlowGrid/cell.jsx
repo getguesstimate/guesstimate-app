@@ -9,6 +9,8 @@ import EmptyCell from './cell-empty'
 
 import {PTLocation} from 'lib/locationUtils'
 
+import {getClassName} from 'gEngine/utils'
+
 const squareTarget = {
   drop(props) {
     return {location: props.location, item: props.item}
@@ -137,21 +139,13 @@ export default class Cell extends Component {
           onEndDrag={this.props.onEndDragCell}
           forceFlowGridUpdate={this.props.forceFlowGridUpdate}
           hover={this.props.isHovered}
+          focusCell={this._focus.bind(this)}
           ref={'item'}
         />
       )
     } else {
       return ( <EmptyCell {...this.props} ref={'empty'} />)
     }
-  }
-
-  _classes() {
-    let classes = 'FlowGridCell'
-    classes += (this.props.inSelectedRegion ? ' selected' : ' nonSelected')
-    classes += this.props.item ? ' hasItem' : ''
-    classes += this.props.isOver ? ' IsOver' : ''
-    classes += this.props.isHovered ? ' hovered' : ''
-    return classes
   }
 
   onAutoFillTargetMouseDown(e) {
@@ -161,10 +155,18 @@ export default class Cell extends Component {
     }
   }
 
-  render = () => {
+  render() {
+    const {inSelectedRegion, item, isOver, isHovered, onMouseEnter, onMouseUp, showAutoFillToken} = this.props
+    const className = getClassName(
+      'FlowGridCell', 
+      inSelectedRegion ? 'selected' : 'nonSelected',
+      !!item ? 'hasItem' : null,
+      isOver ? 'IsOver' : null,
+      isHovered ? 'hovered' : null,
+    )
     return this.props.connectDropTarget(
       <div
-        className={this._classes()}
+        className={className}
         onMouseEnter={this.props.onMouseEnter}
         onMouseDown={this.handleMouseDown.bind(this)}
         onMouseUp={this.props.onMouseUp}

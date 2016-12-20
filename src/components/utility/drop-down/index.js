@@ -15,7 +15,7 @@ export default class DropDown extends Component {
   }
 
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       isOpen: props.isOpen || false
@@ -31,18 +31,21 @@ export default class DropDown extends Component {
   }
 
   componentWillUnmount() {
-    document.removeEventListener('click', this.handleDocumentClick, false);
+    document.removeEventListener('click', this.handleDocumentClick, false)
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (!prevState.isOpen && this.state.isOpen && !!this.props.onOpen) { this.props.onOpen() }
   }
 
   _open() {
     this.setState({isOpen: true})
-    document.addEventListener('click', this.handleDocumentClick, false);
-    if (this.props.onOpen) {this.props.onOpen()}
+    document.addEventListener('click', this.handleDocumentClick, false)
   }
 
   _close() {
     this.setState({isOpen: false})
-    document.removeEventListener('click', this.handleDocumentClick, false);
+    document.removeEventListener('click', this.handleDocumentClick, false)
     if (this.props.onClose) {this.props.onClose()}
   }
 
