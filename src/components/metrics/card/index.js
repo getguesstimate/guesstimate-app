@@ -85,7 +85,7 @@ export default class MetricCard extends Component {
   }
   componentWillUnmount() { window.recorder.recordUnmountEvent(this) }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     window.recorder.recordRenderStopEvent(this)
 
     const hasContent = _.result(this.refs, 'MetricCardViewSection.hasContent')
@@ -95,6 +95,10 @@ export default class MetricCard extends Component {
     }
     if (!prevProps.inSelectedCell && inSelectedCell && !!selectedFrom) {
       this.focusFromDirection(selectedFrom)
+    }
+
+    if (this.state.modalIsOpen !== prevState.modalIsOpen){
+      this.props.forceFlowGridUpdate()
     }
   }
 
