@@ -8,14 +8,14 @@ import $ from 'jquery'
 function getYScale(data, height) {
   return d3.scale.linear().
     domain([0, d3.max(data, (d) => d.y)]).
-    range([height, 0]);
+    range([height, 0])
 }
 
 function getXScale(data, width) {
   return d3.scale.linear().
     domain(d3.extent(data)).
     range([0, width]).
-    nice();
+    nice()
 }
 
 // Computes the average of an array of numbers. If the array is empty, returns 1.
@@ -76,7 +76,7 @@ export default class Histogram extends Component {
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
     data: PropTypes.arrayOf(PropTypes.number).isRequired
-  };
+  }
 
   static defaultProps = {
     top: 20,
@@ -85,7 +85,7 @@ export default class Histogram extends Component {
     left: 0,
     right: 0,
     cutOffRatio: 0, // By default cut off nothing.
-  };
+  }
 
   state = {
     xScale: (e) => e,
@@ -94,26 +94,26 @@ export default class Histogram extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    let { bins, data, width, height, cutOffRatio, onChangeXScale } = nextProps;
+    let { bins, data, width, height, cutOffRatio, onChangeXScale } = nextProps
     width = width + 1
 
     const filtered_data = filterLowDensityPoints(data, cutOffRatio)
 
-    let xScale = getXScale(filtered_data, width);
-    let histogramDataFn = d3.layout.histogram().bins(xScale.ticks(bins));
-    let histogramData = histogramDataFn(filtered_data);
-    let yScale = getYScale(histogramData, height);
+    let xScale = getXScale(filtered_data, width)
+    let histogramDataFn = d3.layout.histogram().bins(xScale.ticks(bins))
+    let histogramData = histogramDataFn(filtered_data)
+    let yScale = getYScale(histogramData, height)
 
-    if (onChangeXScale){ onChangeXScale(xScale.invert) }
+    if (onChangeXScale) { onChangeXScale(xScale.invert) }
     this.setState({xScale, yScale, histogramData})
   }
 
   render() {
-    let { top, right, bottom, left, width, height,  hoveredXCoord, allowHover } = this.props;
+    let { top, right, bottom, left, width, height,  hoveredXCoord, allowHover } = this.props
     width = width + 1
 
     const {xScale, yScale, histogramData} = this.state
-    let barWidth = width/histogramData.length;
+    let barWidth = width/histogramData.length
     if (!_.isFinite(width) || !_.isFinite(barWidth)){ return false }
 
     return (
@@ -130,13 +130,13 @@ export default class Histogram extends Component {
           </svg>
         }
       </div>
-    );
+    )
   }
 }
 
 class Hoverbar extends Component {
   render() {
-    let { height, hoveredXCoord } = this.props;
+    let { height, hoveredXCoord } = this.props
     return (<line x1={hoveredXCoord} x2={hoveredXCoord} y1={0} y2={height} className='react-d3-histogram__hoverbar'/>)
   }
 }
@@ -144,15 +144,15 @@ class Hoverbar extends Component {
 class Path extends Component {
   static propTypes = {
     scale: PropTypes.func.isRequired
-  };
+  }
 
   render() {
-    let [start, end] = this.props.scale.range();
-    let d = `M0${start},6V0H${end}V6`;
+    let [start, end] = this.props.scale.range()
+    let d = `M0${start},6V0H${end}V6`
 
     return (
       <path className="react-d3-histogram__domain" d={d} />
-    );
+    )
   }
 }
 
@@ -160,11 +160,11 @@ class Tick extends Component {
   static propTypes = {
     value: PropTypes.number.isRequired,
     scale: PropTypes.func.isRequired
-  };
+  }
 
   render() {
-    let { value, scale } = this.props;
-    let textStyle = { textAnchor: "middle" };
+    let { value, scale } = this.props
+    let textStyle = { textAnchor: "middle" }
 
     let valueText = numberShow(value)
     let text = _.isFinite(value) && valueText
@@ -179,7 +179,7 @@ class Tick extends Component {
           {text}
         </text>
       </g>
-    );
+    )
   }
 }
 
@@ -187,23 +187,23 @@ export class XAxis extends Component {
   static propTypes = {
     height: PropTypes.number.isRequired,
     scale: PropTypes.func.isRequired
-  };
+  }
 
   render() {
-    let { height, scale } = this.props;
+    let { height, scale } = this.props
 
     let ticks = scale.ticks.apply(scale).map(function(tick, i) {
       return (
         <Tick value={tick} scale={scale} key={i} />
-      );
-    });
+      )
+    })
 
     return (
       <g className="react-d3-histogram__x-axis" transform={"translate(0," + height + ")"}>
         <Path scale={scale} />
         <g>{ticks}</g>
       </g>
-    );
+    )
   }
 }
 
@@ -214,18 +214,18 @@ export class Bar extends Component {
     yScale: PropTypes.func.isRequired,
     height: PropTypes.number.isRequired,
     barWidth: PropTypes.number.isRequired
-  };
+  }
 
   render() {
-    let { data, xScale, yScale, height, barWidth } = this.props;
+    let { data, xScale, yScale, height, barWidth } = this.props
 
-    let scaledX = xScale(data.x);
-    let scaledY = yScale(data.y);
+    let scaledX = xScale(data.x)
+    let scaledY = yScale(data.y)
 
     return (
       <g className="react-d3-histogram__bar" transform={"translate(" + scaledX + "," + scaledY + ")"}>
         <rect width={barWidth} height={height - scaledY} />
       </g>
-    );
+    )
   }
 }
