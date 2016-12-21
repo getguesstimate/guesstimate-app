@@ -22,7 +22,7 @@ body {
 }
 
 
-body.remove-elev #elevio-widget {
+body.remove-elev #_elev_io {
   display: none!important;
 }
 

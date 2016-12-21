@@ -94,20 +94,7 @@ export default class Histogram extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.needsNewScales(nextProps)) {
-      this.computeNewScales(nextProps)
-    }
-  }
-
-  needsNewScales(prevProps) {
-    return (prevProps.width !== this.props.width) ||
-      (prevProps.cutOffRatio !== this.props.cutOffRatio) ||
-      (prevProps.bins !== this.props.bins) ||
-      (_.get(prevProps, 'simulation.stats') !== _.get(this.props ,'simulation.stats'))
-  }
-
-  computeNewScales(props) {
-    let { bins, data, width, height, cutOffRatio, onChangeXScale } = props
+    let { bins, data, width, height, cutOffRatio, onChangeXScale } = nextProps
     width = width + 1
 
     const filtered_data = filterLowDensityPoints(data, cutOffRatio)
@@ -127,7 +114,7 @@ export default class Histogram extends Component {
 
     const {xScale, yScale, histogramData} = this.state
     let barWidth = width/histogramData.length
-    if (!_.isFinite(width)) { return false }
+    if (!_.isFinite(width) || !_.isFinite(barWidth)){ return false }
 
     return (
       <div className="react-d3-histogram">

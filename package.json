@@ -15,7 +15,8 @@
     "stage-matthew": "npm run predeploy && surge -p public -d matthew.getguesstimate.com",
     "stage-factbank": "npm run predeploy && surge -p public -d factbank.getguesstimate.com",
     "test": "karma start",
-    "test-once": "karma start --single-run"
+    "test-once": "karma start --single-run",
+    "deploy": "npm run predeploy && netlify deploy -e production"
   },
   "repository": {
     "type": "git",
