@@ -21,7 +21,7 @@ function findWithRegex(baseRegex, contentBlock, callback) {
   }
 }
 
-const FLASH_DURATION_MS = 300 // ADJUST FLASH TIMING HERE.
+const FLASH_DURATION_MS = 1200 // ADJUST FLASH TIMING HERE.
 
 const stylizedSpan = className => props => <span {...props} className={className}>{props.children}</span>
 const Fact = stylizedSpan('fact input')
