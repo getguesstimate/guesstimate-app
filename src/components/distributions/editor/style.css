@@ -1,5 +1,7 @@
 @import './styles/variables.css';
 
+$flash-duration-sec: 0.4s;
+
 .Guesstimate .TextInput {
   @mixin small-input;
 }
@@ -7,6 +9,10 @@
 .Guesstimate .TextInput {
   line-height: 1.3em;
   font-size: 0.95em;
+  border-radius: 2px;
+  padding: 0;
+  border: 2px solid transparent;
+  transition: border-color $flash-duration-sec ease, background-color $flash-duration-sec ease;
 
   .fact {
     color: #483567;
@@ -23,16 +29,21 @@
     padding: 0.05em 0.1em 0 0.1em;
     margin: auto 0.07em auto 0.07em;
     font-weight: 500;
+
+    &.valid {
+      color: $green-3;
+      background-color: $green-4;
+    }
+
+    &.error {
+      color: #560606;
+      background-color: #ff9e9e;
+    }
   }
 
-  .input.valid {
-    color: $green-3;
-    background-color: $green-4;
-  }
-
-  .input.error {
-    color: #560606;
-    background-color: #ff9e9e;
+  &.flashing {
+    border: 2px solid #0fb963;
+    background-color: #c9e8c0;
   }
 }
 

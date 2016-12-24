@@ -109,22 +109,12 @@ export default class MetricCard extends Component {
     }
   }
 
-  openModal() {
-    this.setState({modalIsOpen: true, sidebarIsOpen: false});
-  }
-
-  closeModal() {
-    this.setState({modalIsOpen: false});
-  }
-
-  _toggleSidebar() {
-    this.setState({sidebarIsOpen: (!this.state.sidebarIsOpen), modalIsOpen: false});
-  }
+  openModal() { this.setState({modalIsOpen: true, sidebarIsOpen: false}) }
+  closeModal() { this.setState({modalIsOpen: false}) }
+  _toggleSidebar() { this.setState({sidebarIsOpen: (!this.state.sidebarIsOpen), modalIsOpen: false}) }
 
   _closeSidebar() {
-    if (this.state.sidebarIsOpen) {
-      this.setState({sidebarIsOpen: false})
-    }
+    if (this.state.sidebarIsOpen) { this.setState({sidebarIsOpen: false}) }
   }
 
   _handleKeyDown(e) {
