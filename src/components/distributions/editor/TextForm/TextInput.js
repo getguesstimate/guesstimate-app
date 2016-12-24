@@ -21,15 +21,13 @@ function findWithRegex(baseRegex, contentBlock, callback) {
   }
 }
 
-const FLASH_DURATION_MS = 1200 // ADJUST FLASH TIMING HERE.
+const FLASH_DURATION_MS = 400 // Adjust flash duration here. Should match variable in ../../style.css as well.
 
 const stylizedSpan = className => props => <span {...props} className={className}>{props.children}</span>
 const Fact = stylizedSpan('fact input')
 const Suggestion = stylizedSpan('suggestion')
 const ValidInput = stylizedSpan('valid input')
 const ErrorInput = stylizedSpan('error input')
-const FlashingValidInput = stylizedSpan('flashing-valid input')
-const FlashingErrorInput = stylizedSpan('flashing-error input')
 
 const positionDecorator = (start, end, component) => ({
   strategy: (contentBlock, callback) => {if (end <= contentBlock.text.length) {callback(start, end)}},
@@ -46,7 +44,6 @@ export class TextInput extends Component{
       new CompositeDecorator(this.decoratorList()),
     ),
     isFlashing: false,
-    flashingInput: null,
   }
 
   static propTypes = {
@@ -113,13 +110,7 @@ export class TextInput extends Component{
   withExtraDecorators(editorState, extraDecorators) {
     return EditorState.set(editorState, {decorator: new CompositeDecorator(this.decoratorList(extraDecorators))})
   }
-  updateDecorators() {
-    const {isFlashing, flashingInput} = this.state
-    const flashSpan = this.props.errorInputs.includes(flashingInput) ? FlashingValidInput : FlashingErrorInput
-    const cursorPos = this.cursorPosition()
-    let extraDecorators = isFlashing ? [positionDecorator(cursorPos - flashingInput.length, cursorPos, flashSpan)] : []
-    this.setState({editorState: this.withExtraDecorators(this.state.editorState, extraDecorators)})
-  }
+  updateDecorators() { this.setState({editorState: this.withExtraDecorators(this.state.editorState, [])}) }
 
   deleteOldSuggestion(oldSuggestion) {
     const freshEditorState = this.addText('', true, oldSuggestion.length)
@@ -222,14 +213,14 @@ export class TextInput extends Component{
     this.onChange(this.stripExtraDecorators(addedEditorState))
   }
 
-  flash(readableId) {
-    setTimeout(() => {this.setState({isFlashing: true, flashingInput: readableId})}, 1)
-    setTimeout(() => {this.setState({isFlashing: false, flashingInput: null})}, FLASH_DURATION_MS)
+  flash() {
+    this.setState({isFlashing: true})
+    setTimeout(() => {this.setState({isFlashing: false})}, FLASH_DURATION_MS)
   }
 
   functionMetricClicked(readableId) {
     this.onChange(this.addText(readableId, false))
-    this.flash(readableId)
+    this.flash()
   }
 
   handleFocus() {
