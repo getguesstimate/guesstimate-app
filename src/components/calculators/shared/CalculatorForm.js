@@ -2,11 +2,11 @@ import React, {Component} from 'react'
 
 import ReactMarkdown from 'react-markdown'
 import Icon from 'react-fa'
-import {Sortable} from 'react-sortable'
+import {sortable} from 'react-sortable'
 
 import * as Calculator from 'gEngine/calculator'
 
-const SortableListItem = Sortable(props => <div {...props} className='list-item'>{props.item}</div>)
+const SortableListItem = sortable(props => <div {...props} className='list-item'>{props.item}</div>)
 
 export class CalculatorForm extends Component {
   state = {
@@ -55,7 +55,9 @@ export class CalculatorForm extends Component {
       state: {draggingIndex, dropTargetId, hasAlreadySubmitted}
     } = this
 
-    const generateComponents = (metrics, isInput) => _.map(metrics, (m, i) => [this.metricForm(m, isInput, dropTargetId === m.metric.id), m.metric.id])
+    const generateComponents = (metrics, isInput) => (
+      _.map(metrics, (m, i) => [this.metricForm(m, isInput, dropTargetId === m.metric.id), m.metric.id])
+    )
 
     const visibleInputs = generateComponents(inputs.filter(i => i.isVisible), true)
     const invisibleInputs = generateComponents(inputs.filter(i => !i.isVisible), true)
