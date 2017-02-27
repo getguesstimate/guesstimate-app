@@ -6,7 +6,7 @@ import {sortable} from 'react-sortable'
 
 import * as Calculator from 'gEngine/calculator'
 
-const SortableListItem = sortable(props => <div {...props} className='list-item'>{props.item}</div>)
+const SortableListItem = sortable(props => <div {...props} className='list-item'>{props.children}</div>)
 
 export class CalculatorForm extends Component {
   state = {
@@ -59,6 +59,7 @@ export class CalculatorForm extends Component {
       _.map(metrics, (m, i) => [this.metricForm(m, isInput, dropTargetId === m.metric.id), m.metric.id])
     )
 
+
     const visibleInputs = generateComponents(inputs.filter(i => i.isVisible), true)
     const invisibleInputs = generateComponents(inputs.filter(i => !i.isVisible), true)
     const hasHiddenInputs = !_.isEmpty(invisibleInputs)
@@ -99,8 +100,9 @@ export class CalculatorForm extends Component {
                 updateState={this.updateDragState.bind(this, id)}
                 outline={'list'}
                 items = {visibleInputs}
-                item = {item}
-              />
+              >
+                {item}
+              </SortableListItem>
             ))}
           </div>
 
@@ -123,8 +125,9 @@ export class CalculatorForm extends Component {
                 updateState={this.updateDragState.bind(this, id)}
                 outline={'list'}
                 items = {visibleOutputs}
-                item = {item}
-              />
+              >
+                {item}
+              </SortableListItem>
             ))}
 
             {hasHiddenOutputs &&
