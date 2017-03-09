@@ -85,7 +85,7 @@ export default class MetricCard extends Component {
   }
   componentWillUnmount() { window.recorder.recordUnmountEvent(this) }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     window.recorder.recordRenderStopEvent(this)
 
     const hasContent = _.result(this.refs, 'MetricCardViewSection.hasContent')
@@ -96,6 +96,10 @@ export default class MetricCard extends Component {
     if (!prevProps.inSelectedCell && inSelectedCell && !!selectedFrom) {
       this.focusFromDirection(selectedFrom)
     }
+
+    if (this.state.modalIsOpen !== prevState.modalIsOpen){
+      this.props.forceFlowGridUpdate()
+    }
   }
 
   componentDidMount() {
@@ -105,22 +109,12 @@ export default class MetricCard extends Component {
     }
   }
 
-  openModal() {
-    this.setState({modalIsOpen: true, sidebarIsOpen: false});
-  }
-
-  closeModal() {
-    this.setState({modalIsOpen: false});
-  }
-
-  _toggleSidebar() {
-    this.setState({sidebarIsOpen: (!this.state.sidebarIsOpen), modalIsOpen: false});
-  }
+  openModal() { this.setState({modalIsOpen: true, sidebarIsOpen: false}) }
+  closeModal() { this.setState({modalIsOpen: false}) }
+  _toggleSidebar() { this.setState({sidebarIsOpen: (!this.state.sidebarIsOpen), modalIsOpen: false}) }
 
   _closeSidebar() {
-    if (this.state.sidebarIsOpen) {
-      this.setState({sidebarIsOpen: false})
-    }
+    if (this.state.sidebarIsOpen) { this.setState({sidebarIsOpen: false}) }
   }
 
   _handleKeyDown(e) {

@@ -222,6 +222,7 @@
 
 .calculator.narrow {
   margin: 0;
+  margin-top: 2em;
   padding: 0;
   border: none;
   border-radius: 0;

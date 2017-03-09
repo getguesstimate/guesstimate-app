@@ -28,7 +28,7 @@ function doubleTriangular(min, max, mode = (min + max)/2) {
 
 // Source:
 // https://en.wikipedia.org/wiki/Beta_distribution#Transformations
-function pert(min, max, mode = (min + max)/2, lambda = 4) {
+function PERT(min, max, mode = (min + max)/2, lambda = 4) {
   const width = max - min
   const a = 1 + lambda * ((mode - min)/width)
   const b = 1 + lambda * ((max - mode)/width)
@@ -51,7 +51,7 @@ export const Distributions = {
   gamma: jStat.gamma.sample,
   triangular,
   doubleTriangular,
-  pert,
+  PERT,
   bernoulli: bernoulli,
   if: bernoulli,
   test: bernoulli,

@@ -7,7 +7,7 @@ import {EditorState, Editor, ContentState, Modifier, CompositeDecorator} from 'd
 import {clearSuggestion, getSuggestion} from 'gModules/facts/actions'
 
 import {HANDLE_REGEX, GLOBALS_ONLY_REGEX, resolveToSelector} from 'gEngine/facts'
-import {or} from 'gEngine/utils'
+import {or, getClassName} from 'gEngine/utils'
 
 import {isData, formatData} from 'lib/guesstimator/formatter/formatters/Data'
 
@@ -20,6 +20,8 @@ function findWithRegex(baseRegex, contentBlock, callback) {
     callback(start, start + matchArr[0].length)
   }
 }
+
+const FLASH_DURATION_MS = 400 // Adjust flash duration here. Should match variable in ../../style.css as well.
 
 const stylizedSpan = className => props => <span {...props} className={className}>{props.children}</span>
 const Fact = stylizedSpan('fact input')
@@ -41,6 +43,7 @@ export class TextInput extends Component{
       ContentState.createFromText(this.props.value || ''),
       new CompositeDecorator(this.decoratorList()),
     ),
+    isFlashing: false,
   }
 
   static propTypes = {
@@ -107,7 +110,7 @@ export class TextInput extends Component{
   withExtraDecorators(editorState, extraDecorators) {
     return EditorState.set(editorState, {decorator: new CompositeDecorator(this.decoratorList(extraDecorators))})
   }
-  updateDecorators() { this.setState({editorState: this.withExtraDecorators(this.state.editorState)}) }
+  updateDecorators() { this.setState({editorState: this.withExtraDecorators(this.state.editorState, [])}) }
 
   deleteOldSuggestion(oldSuggestion) {
     const freshEditorState = this.addText('', true, oldSuggestion.length)
@@ -130,14 +133,18 @@ export class TextInput extends Component{
     this.setState({editorState: this.withExtraDecorators(addedEditorState, extraDecorators)})
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     if (this.props.suggestion !== prevProps.suggestion && this.nextWord() === prevProps.suggestion) {
       if (_.isEmpty(this.props.suggestion)) {
         this.deleteOldSuggestion(prevProps.suggestion)
       } else {
         this.addSuggestion()
       }
-    } else if (!_.isEqual(prevProps.validInputs, this.props.validInputs) || !_.isEqual(prevProps.errorInputs, this.props.errorInputs)) {
+    } else if (
+      !_.isEqual(prevProps.validInputs, this.props.validInputs) ||
+      !_.isEqual(prevProps.errorInputs, this.props.errorInputs) ||
+      !_.isEqual(prevState.isFlashing, this.state.isFlashing)
+    ) {
       setTimeout(() => {this.updateDecorators()}, 1)
     }
   }
@@ -206,8 +213,18 @@ export class TextInput extends Component{
     this.onChange(this.stripExtraDecorators(addedEditorState))
   }
 
+  flash() {
+    this.setState({isFlashing: true})
+    setTimeout(() => {this.setState({isFlashing: false})}, FLASH_DURATION_MS)
+  }
+
+  functionMetricClicked(readableId) {
+    this.onChange(this.addText(readableId, false))
+    this.flash()
+  }
+
   handleFocus() {
-    $(window).on('functionMetricClicked', (_, {readableId}) => {this.onChange(this.addText(readableId, false))})
+    $(window).on('functionMetricClicked', (_, {readableId}) => {this.functionMetricClicked(readableId)})
     this.props.onFocus()
   }
 
@@ -222,8 +239,8 @@ export class TextInput extends Component{
   }
 
   render() {
-    const [{hasErrors, width, value, validInputs}, {editorState}] = [this.props, this.state]
-    const className = `TextInput ${width}` + (_.isEmpty(value) && hasErrors ? ' hasErrors' : '')
+    const {props: {hasErrors, width, value, validInputs}, state: {isFlashing, editorState}} = this
+    const className = getClassName('TextInput', width, isFlashing ? 'flashing' : null, hasErrors ? 'hasErrors' : null)
     return (
       <span
         className={className}
