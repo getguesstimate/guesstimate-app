@@ -41,7 +41,7 @@ Arrows between metrics can be turned on or off.  They can be useful, but also ad
 ![distributions](http://g.recordit.co/fkD7HJknPT.gif)
 Click on Metrics to see more information about their distributions.  The Distribution shows a large view of the Distribution, information about different percentiles, and a description.
 
-## Limitations
+### Limitations
 There are many things that will be improved.  Some of the more important limitations include:  
 1. Distribution types are limited to normal, uniform, and a few discrete types with math.js functions  
 2. Everything is public.    
