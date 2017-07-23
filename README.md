@@ -1,9 +1,4 @@
 
-Guesstimate [![Stories in Ready](https://badge.waffle.io/getguesstimate/guesstimate-app.png?label=ready&title=Ready)](https://waffle.io/getguesstimate/guesstimate-app)[ ![Codeship Status for getguesstimate/guesstimate-app](https://codeship.com/projects/2de3b390-c8ba-0133-d138-32ec81c9754f/status?branch=master)](https://codeship.com/projects/139423)
-==================
-
-[![Throughput Graph](https://graphs.waffle.io/getguesstimate/guesstimate-app/throughput.svg)](https://waffle.io/getguesstimate/guesstimate-app/metrics)
-
 Guesstimate is a tool for performing estimates using [monte carlo experiments](https://en.wikipedia.org/wiki/Monte_Carlo_method).  It can be used similarly to excel, but provides the option of providing ranges and distributions as values instead of individual points.  Other metrics can do mathematical operations on these cells/metrics.  After each new input is added or changed, a set of 5000 samples is randomly generated from each input and goes through the specified operations to produce confidence intervals in the output. 
 
 
