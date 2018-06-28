@@ -55,7 +55,7 @@
     "karma-mocha": "^0.2.2",
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^1.7.0",
-    "mocha": "^2.4.5",
+    "mocha": "^5.2.0",
     "nock": "^8.0.0",
     "null-loader": "^0.1.1",
     "packageify": "^0.2.2",
@@ -67,7 +67,8 @@
     "style-loader": "^0.13.0",
     "transform-loader": "^0.2.3",
     "webpack": "^1.13.0",
-    "webpack-dev-server": "1.14.0"
+    "webpack-cli": "^3.0.8",
+    "webpack-dev-server": "^1.14.0"
   },
   "dependencies": {
     "algoliasearch": "^3.29.0",
@@ -101,7 +102,7 @@
     "lodash": "^4.17.10",
     "lodash.assign": "^4.0.9",
     "lodash.defaults": "^4.0.1",
-    "mathjs": "^3.2.1",
+    "mathjs": "^5.0.0",
     "moment": "^2.22.2",
     "node-uuid": "^1.4.3",
     "numeral": "~1.5.3",
