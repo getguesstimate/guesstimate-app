@@ -103,3 +103,5 @@ Within a selector, insert the following:
     selector within the selector chain).
   * `window.recorder.recordSelectorStop([NAME], [DATA])` just before the selector returns, with data being any data
     you'd like to track in the timeline with that selector event (the return value is typical).
+
+cats
