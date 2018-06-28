@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import {LinkFAQ, LinkBlog, LinkTerms, LinkDocumentation, LinkPrivacy, LinkGithubStar, LinkTwitterFollow, LinkPricing} from 'gComponents/utility/links/index.js'
+import {LinkFAQ, LinkBlog, LinkTerms, LinkDocumentation, LinkPrivacy, LinkGithubStar, LinkPricing} from 'gComponents/utility/links/index.js'
 import './style.css'
 
 export default class Footer extends Component {
@@ -28,7 +28,6 @@ export default class Footer extends Component {
             </div>
             <div className='col-sm-2 col-xs-12'>
               <LinkGithubStar/>
-              <LinkTwitterFollow/>
             </div>
           </div>
         </div>

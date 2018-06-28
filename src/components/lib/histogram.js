@@ -175,7 +175,7 @@ class Tick extends Component {
     return (
       <g className="react-d3-histogram__tick" transform={"translate(" + scale(value) + ",0)"}>
         <line x2="0" y2="6"></line>
-        <text dy=".71em" y="-15" x="-6" zindexstyle={textStyle}>
+        <text dy=".71em" y="-15" x="-6">
           {text}
         </text>
       </g>
