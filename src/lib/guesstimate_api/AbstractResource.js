@@ -10,6 +10,7 @@ export default class AbstractResource {
     const host = this.api.host
     const serverUrl = host + url
 
+    // const allHeaders = { 'Authorization': 'Bearer ' + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2d1ZXNzdGltYXRlLWRldmVsb3BtZW50LmF1dGgwLmNvbS8iLCJzdWIiOiJnaXRodWJ8Mzc3MDY1IiwiYXVkIjoiWDBtMlBaRXlBT3FodExZMVF6OW1kZXRIelFjRHNHOFUiLCJpYXQiOjE1MzA2MDEwODIsImV4cCI6MTUzMDYzNzA4MiwiYXRfaGFzaCI6InNrOG1EejZEQXQxdHV4Z1pUb1ktSUEiLCJub25jZSI6IktFYlpKWTFkfmRvRVAxd3lJOXE5WEZMU0NOWG96cVEwIn0.myff4FcjOCMQzevTyCqukIn-DIe9nUwOeU2A-3c1IbI", ...headers }
     const allHeaders = { 'Authorization': 'Bearer ' + token, ...headers }
     let requestParams = {
       headers: allHeaders,

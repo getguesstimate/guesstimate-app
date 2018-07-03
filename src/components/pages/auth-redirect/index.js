@@ -21,7 +21,7 @@ export default class AuthRedirect extends Component{
   displayName: 'AuthRedirect'
 
   auth() {
-    this.props.dispatch(meActions.logIn(handleAuthentication(this.props)))
+    this.props.dispatch(meActions.logIn())
   }
 
   render () {
