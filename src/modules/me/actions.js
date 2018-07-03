@@ -1,4 +1,5 @@
 import Auth0Lock from 'auth0-lock'
+import auth0 from 'auth0-js'
 
 import * as userActions from 'gModules/users/actions.js'
 import * as auth0Constants from 'servers/auth0/constants.js'
@@ -15,18 +16,69 @@ const lockOptions = {
   disableResetAction: false
 }
 
-export const signIn = () => {
-    return (dispatch) => lock.showSignin(lockOptions, (err, profile, token) => {
-      if (err) {
-        generalError('MesignIn Error', {err, profile, token})
-      } else {
-        const {name, username, picture, user_id} = profile
-        dispatch(auth0MeLoaded({name, username, picture, user_id}, token, (new Date()).getTime()))
-        dispatch(userActions.fetch({auth0_id: user_id}))
-      }
-    }
-  )
+class MainAuth {
+  constructor() {
+    this.authorize = this.authorize.bind(this);
+  }
+
+  auth(){
+    const foo = new auth0.WebAuth({
+      domain: auth0Constants.variables.AUTH0_DOMAIN,
+      clientID: auth0Constants.variables.AUTH0_CLIENT_ID,
+      redirectUri: "http://localhost:3000/auth-redirect",
+      audience: `https://${auth0Constants.variables.AUTH0_DOMAIN}/userinfo`,
+      responseType: 'token id_token',
+      scope: 'openid'
+    });
+    return foo
+  }
+
+  authorize() {
+    this.auth().authorize();
+  }
 }
+
+export const signIn = () => {
+  return (dispatch) => {
+    const auth = new MainAuth()
+    auth.authorize()
+  }
+}
+
+//Take the auth hash from the /redirect page.
+export const logIn = (authHash) => {
+  const _auth = new MainAuth()
+  const auth = _auth.auth()
+  return (dispatch) => {
+    auth.parseHash({hash: authHash}, (err, authResult) => {
+      if (!err){
+      dispatch(auth0MeLoaded({
+        user_id: authResult.idTokenPayload.sub
+      }, authResult.accessToken, (new Date()).getTime()
+    ));
+      dispatch(userActions.fetch({auth0_id: authResult.idTokenPayload.sub}))
+      }
+      // debugger
+      // auth.client.userInfo(authResult.accessToken, function(err, user) {
+      //   const foobar = authResult
+      //   debugger;
+      //   console.log("INSIDE", user)
+    })
+  }
+}
+
+// export const signIn = () => {
+//     return (dispatch) => lock.showSignin(lockOptions, (err, profile, token) => {
+//       if (err) {
+//         generalError('MesignIn Error', {err, profile, token})
+//       } else {
+//         const {name, username, picture, user_id} = profile
+//         dispatch(auth0MeLoaded({name, username, picture, user_id}, token, (new Date()).getTime()))
+//         dispatch(userActions.fetch({auth0_id: user_id}))
+//       }
+//     }
+//   )
+// }
 
 export const signUp = () => {
     return (dispatch) => lock.showSignup(lockOptions, (err, profile, token) => {
@@ -56,22 +108,23 @@ export const init = () => {
   return (dispatch) => {
     const storage = me.localStorage.get()
     if (storage) {
-      const {id, profile, token, tokenCreationTime} = storage
+      const {id, profile, token, user_id, tokenCreationTime} = storage
 
       if (token) {
         dispatch({ type: 'ALL_OF_ME_RELOADED', id, profile, token})
-        const meStorage = me.localStorage.get()
-
-        lock.getProfile(token, (err, profile) => {
-          if (err) {
-            generalError('MeInit Error', {token, err, profile})
-            dispatch(logOut())
-          } else {
-            dispatch(auth0MeLoaded(profile, token, tokenCreationTime))
-            const {user_id} = profile
-            dispatch(userActions.fetch({auth0_id: user_id}))
-          }
-        })
+        dispatch(auth0MeLoaded(profile, token, tokenCreationTime))
+        dispatch(userActions.fetch({auth0_id: profile.auth0_id}))
+        // const meStorage = me.localStorage.get()
+        // lock.getProfile(token, (err, profile) => {
+        //   if (err) {
+        //     generalError('MeInit Error', {token, err, profile})
+        //     dispatch(logOut())
+        //   } else {
+        //     dispatch(auth0MeLoaded(profile, token, tokenCreationTime))
+        //     const {user_id} = profile
+        //     dispatch(userActions.fetch({auth0_id: user_id}))
+        //   }
+        // })
       } else {
         dispatch(logOut())
       }
@@ -89,6 +142,7 @@ function auth0MeLoaded(profile, token, tokenCreationTime) {
     dispatch({ type: 'AUTH0_ME_LOADED', profile, token})
 
     me.localStorage.set({...getState().me, tokenCreationTime})
+    console.log(getState())
 
     const timeLeft = auth0Constants.tokenLifetimeMs - ((new Date()).getTime() - tokenCreationTime)
     if (!!window.tokenTimer) { clearTimeout(window.tokenTimer) }
