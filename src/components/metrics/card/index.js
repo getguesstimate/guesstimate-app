@@ -170,7 +170,8 @@ export default class MetricCard extends Component {
   handleRemoveMetric () { this.props.removeMetrics([this._id()]) }
   _id() { return this.props.metric.id }
 
-  _focusForm() { _.result(this.refs, 'DistributionEditor.refs.wrappedInstance.focus') }
+  _focusForm() {
+    _.result(this.refs, 'DistributionEditor.wrappedInstance.focus') }
 
   _handleMouseDown(e) {
     if (this._isFunctionInputSelectable(e) && !e.shiftKey) {
