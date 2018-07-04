@@ -129,6 +129,7 @@ export default class FlowGrid extends Component{
   }
 
   _handleEndDragCell(location) {
+    this._handleMouseLeave()
     this.props.onSelectItem(location)
   }
 
