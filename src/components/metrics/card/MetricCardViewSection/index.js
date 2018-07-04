@@ -149,7 +149,7 @@ export class MetricCardViewSection extends Component {
           </div>
         </div>
 
-        {(!_.isEmpty(metric.name) || inSelectedCell) &&
+        {(!_.isEmpty(metric.name) || inSelectedCell || this.hasContent()) &&
           <div className='NameSection'>
             <MetricName
               anotherFunctionSelected={anotherFunctionSelected}
