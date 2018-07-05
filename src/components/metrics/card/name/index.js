@@ -29,7 +29,7 @@ export default class MetricName extends Component {
   hasContent() { return !_.isEmpty(this.value()) }
   value() { return this.state.editorState.getCurrentContent().getPlainText('') }
   handleKeyDown(e) { e.stopPropagation(); this.props.heightHasChanged() }
-  focus() { this.refs.editor.focus() }
+  focus() { window.setTimeout(() => {this.refs.editor.focus()}, 1) }
   plainTextEditorState(value) { return EditorState.createWithContent(ContentState.createFromText(value || '')) }
   changePlainText(value) { this.setState({editorState: this.plainTextEditorState(value)}) }
 

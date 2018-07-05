@@ -83,7 +83,7 @@
     "cuid": "^2.1.1",
     "d3": "^3.5.17",
     "discrete-sampling": "^1.0.3",
-    "draft-js": "^0.9.1",
+    "draft-js": "^0.10.5",
     "everpolate": "^0.0.3",
     "extract-text-webpack-plugin": "^1.0.1",
     "financejs": "^4.1.0",
