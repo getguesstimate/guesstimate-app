@@ -1,5 +1,6 @@
 import app from 'ampersand-app'
-import React, {Component, PropTypes} from 'react'
+import React, {Component} from 'react' 
+import PropTypes from 'prop-types'
 import localLinks from 'local-links'
 import * as modalActions from 'gModules/modal/actions.js'
 import {connect} from 'react-redux';

@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react'
+import React, {Component} from 'react' 
+import PropTypes from 'prop-types'
 import {LinkFAQ, LinkBlog, LinkTerms, LinkDocumentation, LinkPrivacy, LinkGithubStar, LinkPricing} from 'gComponents/utility/links/index.js'
 import './style.css'
 
