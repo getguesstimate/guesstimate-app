@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react'
+import React, {Component} from 'react' 
+import PropTypes from 'prop-types'
 import IubendaPrivacyPolicy from 'gComponents/lib/iubenda_privacy_policy.js'
 
 export default class PrivacyPolicy extends Component{

@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react'
+import React, {Component} from 'react' 
+import PropTypes from 'prop-types'
 import Logo from '../../assets/logo-grey-2.png'
 import LogoWord from '../../assets/logo-word-no-beta.png'
 import './style.css'

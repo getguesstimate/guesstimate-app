@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react'
+import React, {Component} from 'react' 
+import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 
@@ -170,7 +171,8 @@ export default class MetricCard extends Component {
   handleRemoveMetric () { this.props.removeMetrics([this._id()]) }
   _id() { return this.props.metric.id }
 
-  _focusForm() { _.result(this.refs, 'DistributionEditor.refs.wrappedInstance.focus') }
+  _focusForm() {
+    _.result(this.refs, 'DistributionEditor.wrappedInstance.focus') }
 
   _handleMouseDown(e) {
     if (this._isFunctionInputSelectable(e) && !e.shiftKey) {

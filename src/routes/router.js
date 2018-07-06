@@ -31,8 +31,6 @@ import {extractTokenFromUrl} from 'gEngine/space'
 
 import configureStore from './middleware'
 
-import * as segment from 'servers/segment/index'
-
 export default Router.extend({
   render (page, options={}) {
     let store = configureStore()
@@ -42,7 +40,6 @@ export default Router.extend({
       </Provider>,
       document.getElementById('root')
     )
-    segment.pageLoad()
   },
 
   routes: {
