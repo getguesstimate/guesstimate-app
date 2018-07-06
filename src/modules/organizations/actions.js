@@ -68,7 +68,6 @@ export function create({name, plan}) {
     const cid = cuid()
     let object = {id: cid, organization: {name, plan} }
 
-    // TODO(matthew): Track pending create request.
     const action = oActions.createStart(object)
 
     api(getState()).organizations.create(object, (err, organization) => {

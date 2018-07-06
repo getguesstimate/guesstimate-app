@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react'
+import React, {Component} from 'react' 
+import PropTypes from 'prop-types'
 
 import {EditorState, Editor, ContentState, getDefaultKeyBinding, KeyBindingUtil} from 'draft-js'
 
@@ -29,7 +30,7 @@ export default class MetricName extends Component {
   hasContent() { return !_.isEmpty(this.value()) }
   value() { return this.state.editorState.getCurrentContent().getPlainText('') }
   handleKeyDown(e) { e.stopPropagation(); this.props.heightHasChanged() }
-  focus() { this.refs.editor.focus() }
+  focus() { window.setTimeout(() => {this.refs.editor.focus()}, 1) }
   plainTextEditorState(value) { return EditorState.createWithContent(ContentState.createFromText(value || '')) }
   changePlainText(value) { this.setState({editorState: this.plainTextEditorState(value)}) }
 

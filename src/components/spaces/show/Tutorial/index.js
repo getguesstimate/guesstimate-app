@@ -6,8 +6,6 @@ import {ButtonClose} from 'gComponents/utility/buttons/close/index'
 import {TutorialMetricPage, TutorialMetricActionsPage, TutorialFunctionPage, TutorialMoreFeaturesPage} from './pages'
 import {GeneralModal} from 'gComponents/utility/modal/index'
 
-import * as segment from 'servers/segment'
-
 import './style.css'
 
 export class Tutorial extends Component {
@@ -24,12 +22,10 @@ export class Tutorial extends Component {
 
   previousPage() {
     const onPage = Math.max(this.state.onPage - 1, 0)
-    segment.trackNavigatedBackToPage(onPage)
     this.setState({onPage})
   }
   nextPage() {
     const onPage = Math.min(this.state.onPage + 1, 4)
-    segment.trackSawTutorialPage(onPage)
     this.setState({onPage})
   }
   renderPage() {

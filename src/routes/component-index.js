@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react'
+import React, {Component} from 'react' 
+import PropTypes from 'prop-types'
 import MetricCard from 'gComponents/metrics/card'
 import ComponentEditor from 'gComponents/utility/ComponentEditor/index.js'
 

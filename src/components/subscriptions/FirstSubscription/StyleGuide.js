@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react'
+import React, {Component} from 'react' 
+import PropTypes from 'prop-types'
 import FirstSubscription from './FirstSubscription.js'
 import ComponentEditor from 'gComponents/utility/ComponentEditor/index.js'
 import {subStages} from 'gModules/first_subscription/state_machine'
