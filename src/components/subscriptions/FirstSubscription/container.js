@@ -4,7 +4,6 @@ import * as firstSubscriptionActions from 'gModules/first_subscription/actions.j
 import FirstSubscription from './FirstSubscription.js'
 import {subStage} from 'gModules/first_subscription/state_machine.js'
 import {connect} from 'react-redux'
-import {trackPurchaseSuccess} from 'servers/segment/index.js'
 import * as spaceActions from 'gModules/spaces/actions.js'
 
 function mapStateToProps(state) {
@@ -33,7 +32,6 @@ export default class FirstSubscriptionContainer extends Component {
     this.props.dispatch(firstSubscriptionActions.postSynchronization({
       user_id: this.props.me.id
     }))
-    trackPurchaseSuccess(this.props.me.profile.account, this.props.planId)
   }
 
   _onPaymentCancel() { this.props.dispatch(firstSubscriptionActions.flowStageCancel()) }

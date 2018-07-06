@@ -8,8 +8,6 @@ import {CardListElement} from 'gComponents/utility/card/index.js'
 import * as canvasStateActions from 'gModules/canvas_state/actions.js'
 import * as canvasStateProps from 'gModules/canvas_state/prop_type.js'
 
-import {trackToggledViewMode} from 'servers/segment/index'
-
 import debuggingImage from '../../../assets/metric-icons/blue/debugging.png'
 import scientificImage from '../../../assets/metric-icons/blue/scientific.png'
 import arrowsHiddenImage from '../../../assets/metric-icons/blue/arrows-hidden.png'
@@ -44,7 +42,6 @@ export default class CanvasViewForm extends Component {
   }
 
   _selectMetricCardView(e) {
-    trackToggledViewMode(e)
     this.props.dispatch(canvasStateActions.toggleView(e))
   }
 
