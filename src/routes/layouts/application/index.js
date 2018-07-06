@@ -44,9 +44,6 @@ export default class Layout extends Component{
   _registerUser(){
     if (_.has(this.props, 'me.id')) {
       const {id, profile} = this.props.me
-      if (id) {
-        sentry.trackUser(id, profile)
-      }
     }
   }
 
