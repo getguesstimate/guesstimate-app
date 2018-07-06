@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react'
+import React, {Component} from 'react' 
+import PropTypes from 'prop-types'
 
 import d3 from 'd3'
 
@@ -175,7 +176,7 @@ class Tick extends Component {
     return (
       <g className="react-d3-histogram__tick" transform={"translate(" + scale(value) + ",0)"}>
         <line x2="0" y2="6"></line>
-        <text dy=".71em" y="-15" x="-6" zindexstyle={textStyle}>
+        <text dy=".71em" y="-15" x="-6">
           {text}
         </text>
       </g>

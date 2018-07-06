@@ -1,4 +1,6 @@
-import React, {Component, PropTypes} from 'react'
+import React, {Component} from 'react'
+import PropTypes from 'prop-types';
+
 import {connect} from 'react-redux'
 
 import $ from 'jquery'
@@ -23,6 +25,8 @@ function findWithRegex(baseRegex, contentBlock, callback) {
 
 const FLASH_DURATION_MS = 400 // Adjust flash duration here. Should match variable in ../../style.css as well.
 
+//TODO: The passing in of all props in the span causes React to complain. See this issue:
+//https://github.com/facebook/draft-js/issues/675
 const stylizedSpan = className => props => <span {...props} className={className}>{props.children}</span>
 const Fact = stylizedSpan('fact input')
 const Suggestion = stylizedSpan('suggestion')

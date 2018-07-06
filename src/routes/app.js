@@ -9,6 +9,7 @@ import * as segment from 'servers/segment/index.js'
 import * as sentry from 'servers/sentry/index.js'
 import {setupGuesstimateApi} from 'servers/guesstimate-api/constants.js'
 import * as elev from 'servers/elev/index.js'
+import Modal from 'react-modal'
 
 import './main.css'
 
@@ -42,7 +43,7 @@ window.workers = window.workers.map(
 app.extend({
   init () {
     window.recorder = new GuesstimateRecorder()
-
+    Modal.setAppElement('#root');
     window.intercomSettings = {
       app_id: "o0trb1v9"
     };
