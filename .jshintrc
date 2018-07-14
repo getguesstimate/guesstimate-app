@@ -2,5 +2,6 @@
   "node": true,
   "browser": true,
   "esnext": true,
-  "newcap": false
+  "newcap": false,
+  "asi": true 
 }

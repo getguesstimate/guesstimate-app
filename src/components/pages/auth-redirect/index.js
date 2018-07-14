@@ -2,31 +2,36 @@ import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
 import PageBase from '../base/index'
 import * as meActions from 'gModules/me/actions'
+import app from 'ampersand-app'
+import {user} from 'gEngine/engine'
 
 const content = `
-# Redirected 
+# Redirection 
 
 ## You are being redirected.
 `
 
-const handleAuthentication = ({location}) => {
-  if (/access_token|id_token|error/.test(location.hash)) {
-    console.log(location.hash)
-    // auth.handleAuthentication();
+function mapStateToProps(state) {
+  return {
+    me: state.me,
   }
 }
 
-@connect()
+@connect(mapStateToProps)
 export default class AuthRedirect extends Component{
   displayName: 'AuthRedirect'
 
-  auth() {
+  componentWillMount(){
     this.props.dispatch(meActions.logIn())
   }
 
+  componentDidUpdate(){
+    if (this.props.me && this.props.me.id){
+      app.router.history.navigate(user.urlById(this.props.me.id))
+    }
+  }
+
   render () {
-    // console.log(handleAuthentication(this.props));
-    this.auth()
     return (
       <div>
         <PageBase content={content}/>

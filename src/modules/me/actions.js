@@ -1,12 +1,10 @@
 import auth0 from 'auth0-js'
+import app from 'ampersand-app'
 
 import * as userActions from 'gModules/users/actions.js'
 import * as auth0Constants from 'servers/auth0/constants.js'
-import * as displayErrorsActions from 'gModules/displayErrors/actions.js'
 
 import {me} from 'gEngine/engine'
-
-import {generalError} from 'lib/errors/index.js'
 
 class WebAuth {
   constructor() {
@@ -17,7 +15,7 @@ class WebAuth {
       audience: `https://${auth0Constants.variables.AUTH0_DOMAIN}/userinfo`,
       responseType: 'token id_token',
       scope: 'openid'
-    });
+    })
   }
 
   signIn() {
@@ -59,32 +57,6 @@ export const logIn = () => {
     auth.parseHashFromUrl(dispatch)
   }
 }
-
-//generalError('MesignIn Error', {err, profile, token})
-
-// export const signUp = () => {
-  //   return (dispatch) => lock.showSignup(lockOptions, (err, profile, token) => {
-  //     if (err) {
-  //       generalError('MesignUp Error', {err, profile, token})
-  //     } else {
-  //       const {nickname, picture, user_id, email, company, name, gender, locale, location} = profile
-  //       dispatch(auth0MeLoaded(profile, token, (new Date()).getTime()))
-  //       dispatch(userActions.create(
-  //         {
-  //           name,
-  //           username: nickname,
-  //           email,
-  //           company,
-  //           locale,
-  //           location,
-  //           gender,
-  //           picture,
-  //           auth0_id: user_id
-  //         }))
-  //     }
-  //   }
-  // )
-// }
 
 export const init = () => {
   return (dispatch) => {
