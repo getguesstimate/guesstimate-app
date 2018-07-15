@@ -30,11 +30,13 @@ class WebAuth {
     if (/access_token|id_token|error/.test(location.hash)) {
       this.auth.parseHash({hash: location.hash}, (err, authResult) => {
         if (!err){
-        dispatch(auth0MeLoaded({
-          user_id: authResult.idTokenPayload.sub
-        }, authResult.idToken, (new Date()).getTime()
-      ));
-        dispatch(userActions.fetch({auth0_id: authResult.idTokenPayload.sub}))
+          dispatch(auth0MeLoaded({
+            user_id: authResult.idTokenPayload.sub
+          }, authResult.idToken, (new Date()).getTime()
+          ));
+          dispatch(userActions.fetch({auth0_id: authResult.idTokenPayload.sub}))
+        } else {
+          generalError("parseHash Error", {err})
         }
       })
     }
