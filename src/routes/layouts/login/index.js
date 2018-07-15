@@ -18,11 +18,11 @@ export default class Profile extends Component {
   displayName: 'Profile'
 
   signUp() {
-    this.props.dispatch(meActions.signUp())
+    meActions.signUp()
   }
 
   signIn() {
-    this.props.dispatch(meActions.signIn())
+    meActions.signIn()
   }
 
   logOut() {
