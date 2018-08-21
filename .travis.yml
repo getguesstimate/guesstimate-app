@@ -6,6 +6,10 @@ cache:
   directories:
     - node_modules
 
+sudo: required
+addons:
+  chrome: stable
+
 script:
   - npm run lint
   - npm run ci:test
