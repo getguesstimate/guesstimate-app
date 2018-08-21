@@ -1,4 +1,4 @@
-import React, {Component} from 'react' 
+import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 
 import {DragSource, DragLayer} from 'react-dnd'
@@ -36,7 +36,7 @@ function getItemStyles(props) {
     currentOffset: monitor.getSourceClientOffset(),
     isDragging: monitor.isDragging(),
 }))
-export default class DragPreview extends Component {
+export class DragPreview extends Component {
   renderItem(type, item) {
     const styles = {
       marginTop: '-26px',
