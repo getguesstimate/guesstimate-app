@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react'
+import React, {Component} from 'react' 
+import PropTypes from 'prop-types'
 
 import {DragSource, DragLayer} from 'react-dnd'
 import {getEmptyImage} from 'react-dnd-html5-backend'
@@ -29,13 +30,14 @@ function getItemStyles(props) {
   return {transform: transform, WebkitTransform: transform}
 }
 
+
 @DragLayer(monitor => ({
     item: monitor.getItem(),
     itemType: monitor.getItemType(),
     currentOffset: monitor.getSourceClientOffset(),
     isDragging: monitor.isDragging(),
 }))
-export default class DragPreview extends Component {
+class DragPreview extends Component {
   renderItem(type, item) {
     const styles = {
       marginTop: '-26px',

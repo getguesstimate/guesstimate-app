@@ -25,12 +25,11 @@ import SettingsStyleGuide from 'gComponents/users/settings/StyleGuide'
 import Settings from 'gComponents/users/settings/container'
 import PlanIndex from 'gComponents/plans/index/container'
 import PlansStyleGuide from 'gComponents/plans/index/StyleGuide'
+import AuthRedirect from 'gComponents/pages/auth-redirect/index'
 
 import {extractTokenFromUrl} from 'gEngine/space'
 
 import configureStore from './middleware'
-
-import * as segment from 'servers/segment/index'
 
 export default Router.extend({
   render (page, options={}) {
@@ -41,7 +40,6 @@ export default Router.extend({
       </Provider>,
       document.getElementById('root')
     )
-    segment.pageLoad()
   },
 
   routes: {
@@ -65,6 +63,7 @@ export default Router.extend({
     'settings': 'settings',
     'scratchpad': 'scratchpad',
     'pricing': 'pricing',
+    'auth-redirect': 'authRedirect',
     'subscribe/:id': 'subscribe',
     'calculators/:id': 'calculatorExpandedShow',
   },
@@ -97,6 +96,7 @@ export default Router.extend({
   terms() { this.render(<TermsAndConditions/>) },
   privacy() { this.render(<PrivacyPolicy/>) },
   faq() { this.render(<FAQ/>) },
+  authRedirect() { this.render(<AuthRedirect location={window.location}/>)},
   subscribe(id) { this.render(<FirstSubscriptionPage planName={id}/>) },
   userShow(id) { this.render(<UserShow userId={id}/>, {backgroundColor: 'GREY'}) },
   organizationShow(id, tab=null) { this.render(<OrganizationShow organizationId={id} key={id} tab={tab}/>, {backgroundColor: 'GREY'}) },

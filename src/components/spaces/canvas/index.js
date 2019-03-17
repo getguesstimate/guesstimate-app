@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react'
+import React, {Component} from 'react' 
+import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 
 import FlowGrid from 'gComponents/lib/FlowGrid/FlowGrid'
@@ -20,8 +21,6 @@ import {hasErrors} from 'gEngine/simulation'
 
 import {hasMetricUpdated} from 'gComponents/metrics/card/updated'
 import * as canvasStateProps from 'gModules/canvas_state/prop_type'
-
-import * as segment from 'servers/segment'
 
 import './style.css'
 
@@ -80,12 +79,10 @@ export default class Canvas extends Component{
   }
 
   _handleUndo() {
-    segment.trackUndo(true)
     this.props.dispatch(undo(this.props.denormalizedSpace.id))
   }
 
   _handleRedo() {
-    segment.trackUndo(true)
     this.props.dispatch(redo(this.props.denormalizedSpace.id))
   }
 
@@ -95,7 +92,6 @@ export default class Canvas extends Component{
   }
 
   _handleMultipleSelect(corner1, corner2) {
-    if (!isAtLocation(corner1, corner2)) { segment.trackSelectedRegion() }
     this.props.dispatch(selectRegion(corner1, corner2))
   }
 
@@ -230,7 +226,6 @@ export default class Canvas extends Component{
   }
 
   onAutoFillRegion(region) {
-    segment.trackAutoFill()
     this.props.dispatch(fillRegion(this.props.denormalizedSpace.id, region))
   }
 

@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react'
+import React, {Component} from 'react' 
+import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 
 import Helmet from 'react-helmet'
@@ -34,7 +35,6 @@ import {parseSlurp} from 'lib/slurpParser'
 import e from 'gEngine/engine'
 
 import * as elev from 'servers/elev/index'
-import * as segment from 'servers/segment'
 
 import './style.css'
 
@@ -118,12 +118,10 @@ export default class SpacesShow extends Component {
 
   openTutorial() {
     this.setState({showTutorial: true})
-    segment.trackOpenedTutorial()
   }
   closeTutorial() {
     if (!!_.get(this, 'props.me.profile.needs_tutorial')) { this.props.dispatch(userActions.finishedTutorial(this.props.me.profile)) }
     this.setState({showTutorial: false})
-    segment.trackClosedTutorial()
   }
 
   componentWillUnmount() {
@@ -160,12 +158,10 @@ export default class SpacesShow extends Component {
   }
 
   onRedo() {
-    segment.trackUndo(false)
     this.props.dispatch(redo(this._id()))
   }
 
   onUndo() {
-    segment.trackUndo(false)
     this.props.dispatch(undo(this._id()))
   }
 
@@ -174,7 +170,6 @@ export default class SpacesShow extends Component {
   }
 
   onImportSlurp(slurpObj) {
-    segment.trackImportSlurp()
     const space = this.props.denormalizedSpace
 
     const spaceUpdates = parseSlurp(slurpObj, space)
@@ -202,26 +197,21 @@ export default class SpacesShow extends Component {
   onSaveDescription(description) { this.props.dispatch(spaceActions.update(this._id(), {description})) }
 
   hideLeftSidebar() {
-    segment.trackCloseSidebar()
     this.setState({showLeftSidebar: false})
   }
   openLeftSidebar() {
-    segment.trackOpenSidebar()
     this.setState({showLeftSidebar: true})
   }
 
   _handleCopyModel() {
-    segment.trackCopyModel()
     this.props.dispatch(spaceActions.copy(this._id()))
   }
 
-  onCopy(via_keyboard) {
-    segment.trackCopyMetric(via_keyboard)
+  onCopy() {
     this.props.dispatch(copiedActions.copy(this._id()))
   }
 
-  onPaste(via_keyboard) {
-    segment.trackPasteMetric(via_keyboard)
+  onPaste() {
     this.props.dispatch(copiedActions.paste(this._id()))
   }
 
@@ -229,8 +219,7 @@ export default class SpacesShow extends Component {
     this.props.dispatch(removeSelectedMetrics(this.props.spaceId))
   }
 
-  onCut(via_keyboard) {
-    segment.trackCutMetric(via_keyboard)
+  onCut() {
     this.props.dispatch(copiedActions.cut(this._id()))
   }
 
@@ -434,11 +423,9 @@ export default class SpacesShow extends Component {
           <SpaceToolbar
             editsAllowed={space.canvasState.editsAllowedManuallySet ? space.canvasState.editsAllowed : space.editableByMe}
             onAllowEdits={() => {
-              segment.trackSwitchToEditMode()
               this.props.dispatch(allowEdits())
             }}
             onForbidEdits={() => {
-              segment.trackSwitchToViewMode()
               this.props.dispatch(forbidEdits())
             }}
             isLoggedIn={isLoggedIn}

@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react'
+import React, {Component} from 'react' 
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux';
 
 import Modal from 'react-modal'
@@ -7,7 +8,7 @@ import NavHelper from 'gComponents/utility/NavHelper/index.js';
 import FirstSubscriptionContainer from 'gComponents/subscriptions/FirstSubscription/container.js'
 import * as modalActions from 'gModules/modal/actions.js'
 
-export default class Confirmation extends Component{
+class Confirmation extends Component{
   render() {
     return (
       <div className='MainConfirmation'>
@@ -30,7 +31,7 @@ function getComponent(componentName) {
   return component.component || false
 }
 
-export default class ModalRouter extends Component{
+class ModalRouter extends Component{
   render () {
     const {componentName, props} = this.props
     if (!componentName){ return false }

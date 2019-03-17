@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react'
+import React, {Component} from 'react' 
+import PropTypes from 'prop-types'
 import './style.css'
 import Container from 'gComponents/utility/container/Container.js'
 import FirstSubscriptionContainer from 'gComponents/subscriptions/FirstSubscription/container.js'

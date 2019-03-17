@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react'
+import React, {Component} from 'react' 
+import PropTypes from 'prop-types'
 import ReactMarkdown from 'react-markdown'
 import Container from 'gComponents/utility/container/Container.js'
 import './style.css'

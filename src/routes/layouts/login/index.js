@@ -11,8 +11,6 @@ import * as spaceActions from 'gModules/spaces/actions'
 
 import {user,organization} from 'gEngine/engine'
 
-import {trackAccountModalClick, trackUserMenuOpen, trackUserMenuClose} from 'servers/segment/index'
-
 import './style.css'
 
 @connect()
@@ -20,11 +18,11 @@ export default class Profile extends Component {
   displayName: 'Profile'
 
   signUp() {
-    this.props.dispatch(meActions.signUp())
+    meActions.signUp()
   }
 
   signIn() {
-    this.props.dispatch(meActions.signIn())
+    meActions.signIn()
   }
 
   logOut() {
@@ -36,7 +34,6 @@ export default class Profile extends Component {
   }
 
   _openModal() {
-    trackAccountModalClick()
     this.props.dispatch(modalActions.openSettings())
   }
 
@@ -62,8 +59,6 @@ export default class Profile extends Component {
         <DropDown
           headerText={profile.name}
           openLink={<img className='avatar' src={profile.picture}/>}
-          onOpen={trackUserMenuOpen}
-          onClose={trackUserMenuClose}
         >
           {listElements.map(props => <CardListElement {...props} key={props.header} closeOnClick={true}/>)}
         </DropDown>
