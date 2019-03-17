@@ -4,6 +4,7 @@ import {BASE_URL} from 'lib/constants'
 import * as userActions from 'gModules/users/actions.js'
 import * as auth0Constants from 'servers/auth0/constants.js'
 
+import { generalError} from 'lib/errors/index.js'
 import {me} from 'gEngine/engine'
 
 class WebAuth {
