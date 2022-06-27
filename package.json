@@ -107,7 +107,7 @@
     "lodash.assign": "^4.0.9",
     "lodash.defaults": "^4.0.1",
     "mathjs": "^5.7.0",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "node-uuid": "^1.4.8",
     "numeral": "~2.0.6",
     "postcss-import": "^7.1.3",
