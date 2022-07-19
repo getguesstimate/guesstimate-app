@@ -79,7 +79,7 @@
     "ampersand-app": "^1.0.4",
     "ampersand-router": "^3.0.2",
     "angle-between-points": "^1.0.0",
-    "async": "^2.6.1",
+    "async": "^2.6.4",
     "auth0-js": "^9.10.0",
     "autoprefixer": "^8.6.4",
     "autoprefixer-stylus": "^0.14.0",
