@@ -103,7 +103,7 @@
     "jstat": "^1.7.1",
     "jsx-loader": "^0.13.2",
     "local-links": "^1.4.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.21",
     "lodash.assign": "^4.0.9",
     "lodash.defaults": "^4.0.1",
     "mathjs": "^5.7.0",
