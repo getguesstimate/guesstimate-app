@@ -1,0 +1,22 @@
+name: Karma tests
+
+on: [push, pull_request]
+
+jobs:
+  build-karmatest:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x, 14.x, 16.x]
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up node ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Install dependencies
+      run: yarn
+    - name: Test once
+      run: yarn ci:test

@@ -1,15 +1,23 @@
 {
-    "parser": "babel-eslint",
     "env": {
         "browser": true,
-        "node": true
+        "es6": true
     },
-    "settings": {
-        "ecmascript": 6,
-        "jsx": true
+    "extends": "eslint:recommended",
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
+    },
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 2018,
+        "sourceType": "module"
     },
     "plugins": [
-        "react"
+        "react",
+        "import"
     ],
     "rules": {
         "quotes": 0,
@@ -25,8 +33,8 @@
         "react/jsx-no-duplicate-props": 1,
         "react/jsx-no-literals": 1,
         "react/jsx-no-undef": 1,
-        "react/jsx-quotes": 1,
-        "react/jsx-sort-prop-types": 1,
+        "jsx-quotes": 1,
+        "react/sort-prop-types": 1,
         "react/jsx-sort-props": 1,
         "react/jsx-uses-react": 1,
         "react/jsx-uses-vars": 1,
@@ -38,9 +46,9 @@
         "react/no-unknown-property": 1,
         "react/prop-types": 1,
         "react/react-in-jsx-scope": 1,
-        "react/require-extension": 1,
+        "import/extensions": 1,
         "react/self-closing-comp": 1,
         "react/sort-comp": 1,
-        "react/wrap-multilines": 1
+        "react/jsx-wrap-multilines": 1
     }
 }

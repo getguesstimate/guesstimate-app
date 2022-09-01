@@ -7,7 +7,7 @@ import {ButtonClose} from '../buttons/close/index.js'
 
 import './style.css'
 
-export default class EditingMode extends Component {
+class EditingMode extends Component {
   displayName: 'ClickToEditEditing'
 
   _submit() {
@@ -42,7 +42,7 @@ export default class EditingMode extends Component {
   }
 }
 
-export default class ViewingMode extends Component {
+class ViewingMode extends Component {
   displayName: 'ClickToEditViewing'
 
   render() {
