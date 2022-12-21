@@ -1,4 +1,4 @@
-@import "./styles/variables.css";
+@import "styles/variables.css";
 .metricModal .DataViewer h2 {
   font-weight: 400;
   color: white;

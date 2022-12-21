@@ -1,4 +1,4 @@
-@import "./variables.css";
+@import "styles/variables.css";
 
 .ToolTip {
   position: absolute;

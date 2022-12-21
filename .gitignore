@@ -7,3 +7,5 @@ tags
 .tern-project
 
 .netlify
+
+*.css.json
