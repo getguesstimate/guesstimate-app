@@ -1,26 +1,27 @@
-import React, {Component} from 'react' 
-import PropTypes from 'prop-types'
+import React, { Component } from "react";
+import PropTypes from "prop-types";
 
-import DropdownMenu from 'react-dd-menu'
+import DropdownMenu from "react-dd-menu";
 
 export default class StandardDropdownMenu extends Component {
   state = {
-    isMenuOpen: false
-  }
+    isMenuOpen: false,
+  };
 
   toggle() {
-    this.setState({ isMenuOpen: !this.state.isMenuOpen })
+    this.setState({ isMenuOpen: !this.state.isMenuOpen });
   }
 
   close() {
-    this.setState({ isMenuOpen: false })
+    this.setState({ isMenuOpen: false });
   }
 
-  click() {
-  }
+  click() {}
 
   wrappedToggleButton() {
-    return (<span onClick={this.toggle.bind(this)}>{this.props.toggleButton}</span>)
+    return (
+      <span onClick={this.toggle.bind(this)}>{this.props.toggleButton}</span>
+    );
   }
 
   render() {
@@ -28,13 +29,11 @@ export default class StandardDropdownMenu extends Component {
       isOpen: this.state.isMenuOpen,
       close: this.close.bind(this),
       toggle: this.wrappedToggleButton(),
-      align: 'left',
+      align: "left",
       animate: true,
-      animAlign: 'center',
-      children: this.props.children
+      animAlign: "center",
+      children: this.props.children,
     };
-    return (
-      <DropdownMenu {...menuOptions}/>
-    );
+    return <DropdownMenu {...menuOptions} />;
   }
 }

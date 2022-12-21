@@ -1,8 +1,8 @@
-@import './styles/variables.css';
+@import "./styles/variables.css";
 
 $grey-a1: rgb(231, 234, 236);
 $grey-a2: #607580;
-$blue-a1: #4A6A88;
+$blue-a1: #4a6a88;
 
 .FactsTab {
   h3 {
@@ -16,30 +16,29 @@ $blue-a1: #4A6A88;
   border-radius: 2px;
   width: 100%;
   float: left;
-  padding: .4em .7em;
-  transition: all .15s;
+  padding: 0.4em 0.7em;
+  transition: all 0.15s;
   color: #767575;
   font-size: 1.2em;
-  margin-top: .3em;
+  margin-top: 0.3em;
   cursor: pointer;
 
   .fa {
-    margin-right: .5em;
+    margin-right: 0.5em;
   }
 
   &:hover {
     color: #1a5a2c;
     background-color: rgba(89, 168, 114, 0.54);
-    transition: all .3s;
+    transition: all 0.3s;
   }
 }
 
-
 .Fact--outer {
-  border: 1px solid rgba(0,0,0,0);
+  border: 1px solid rgba(0, 0, 0, 0);
   float: left;
   width: 100%;
-  margin: .1em 0;
+  margin: 0.1em 0;
   display: flex;
 
   &:hover {
@@ -47,7 +46,7 @@ $blue-a1: #4A6A88;
   }
 
   &.SMALL {
-    margin: .1em .6em;
+    margin: 0.1em 0.6em;
 
     .Fact {
       flex: 1;
@@ -69,41 +68,42 @@ $blue-a1: #4A6A88;
   }
 
   &:not(:hover):not(.form) .variable-name.variable-token {
-    background-color: rgba(0,0,0,0);
+    background-color: rgba(0, 0, 0, 0);
     color: #999;
-    transition: all .05s ease .05s;
+    transition: all 0.05s ease 0.05s;
   }
 
   &:hover:not(.form) .variable-name.variable-token {
     background-color: #f3e5fc;
     color: #603566;
-    transition: all .05s ease .05s;
+    transition: all 0.05s ease 0.05s;
   }
 
   .ui.small.button {
-     padding: .55em 1.1em;
-     border-radius: 2px;
-     margin-bottom: 3px;
-     margin-right: .5em;
+    padding: 0.55em 1.1em;
+    border-radius: 2px;
+    margin-bottom: 3px;
+    margin-right: 0.5em;
 
-     &:last-child {
-       margin-bottom: 0
-   }
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
 }
 
 .Fact.new.ui.form {
-  input, textarea {
-    padding: .3em .4em;
+  input,
+  textarea {
+    padding: 0.3em 0.4em;
     border-radius: 2px;
   }
 }
 
-.Fact  .section-simulation {
+.Fact .section-simulation {
   min-width: 6em;
   flex: 1.4;
   position: relative;
-  padding: .3em 0 .2em .4em;
+  padding: 0.3em 0 0.2em 0.4em;
 
   .histogram {
     left: 10%;
@@ -122,29 +122,28 @@ $blue-a1: #4A6A88;
     margin-top: 2px;
     position: relative;
     z-index: 1;
-    font-size: .88em;
+    font-size: 0.88em;
 
     .DistributionSummary .mean {
       color: $grey-a2;
     }
     .DistributionSummary .UncertaintyRange {
-       color: $grey-999;
+      color: $grey-999;
     }
   }
 }
 
 .Fact.form .section-simulation {
-  padding-right: .8em;
+  padding-right: 0.8em;
   min-width: 10em;
   flex: 2;
 }
 
-
 .Fact > .section-name {
   float: left;
   flex: 6;
-  margin-top: .05em;
-  padding: .3em .4em 0;
+  margin-top: 0.05em;
+  padding: 0.3em 0.4em 0;
   word-wrap: break-word;
 
   .fact-name {
@@ -157,7 +156,7 @@ $blue-a1: #4A6A88;
   .variable-name {
     float: left;
     line-height: 1.2em;
-    margin-top: .2em;
+    margin-top: 0.2em;
 
     &.variable-token {
       padding: 0 3px;
@@ -184,8 +183,8 @@ $blue-a1: #4A6A88;
       .prefix {
         color: $grey-999;
         position: absolute;
-        left: .4em;
-        top: .4em;
+        left: 0.4em;
+        top: 0.4em;
       }
 
       input {
@@ -198,13 +197,13 @@ $blue-a1: #4A6A88;
     width: 100%;
 
     textarea {
-      margin-top: .3em;
-      font-size: .9rem;
+      margin-top: 0.3em;
+      font-size: 0.9rem;
     }
   }
 
   .category-select {
-    margin-top: .5em;
+    margin-top: 0.5em;
     float: left;
     width: 100%;
 
@@ -214,16 +213,16 @@ $blue-a1: #4A6A88;
   }
 
   .actions {
-     margin-top: 1em;
-     margin-bottom: .3em;
-     float: left;
+    margin-top: 1em;
+    margin-bottom: 0.3em;
+    float: left;
   }
 }
 
 .Fact > .section-help {
   float: left;
   min-width: 5em;
-  padding: .4em 0;
+  padding: 0.4em 0;
   flex: 1;
 
   .button {
@@ -232,8 +231,8 @@ $blue-a1: #4A6A88;
 }
 
 .Fact > .section-exported {
-  padding: .4em .4em 0 .4em;
-  flex: .3;
+  padding: 0.4em 0.4em 0 0.4em;
+  flex: 0.3;
   background-color: #e0e3e6;
   float: left;
   cursor: pointer;
@@ -242,11 +241,11 @@ $blue-a1: #4A6A88;
 .Fact > .section-exported .fa {
   color: #a2acbb;
   font-size: 1.1em;
-  margin-top: .1em;
+  margin-top: 0.1em;
 }
 
 .Fact > .section-exported:hover {
-  transition: all .15s;
+  transition: all 0.15s;
   background-color: #bac5cf;
   .fa {
     color: #73849c;

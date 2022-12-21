@@ -2,15 +2,14 @@
   padding: 4em 10px;
 }
 
-.ComponentEditor.grey .Component{
-  background: #F7F5F5;
+.ComponentEditor.grey .Component {
+  background: #f7f5f5;
 }
 
-.ComponentEditor.blue .Component{
-  background: linear-gradient(-140deg, #4DC7B7, #489ACC);
+.ComponentEditor.blue .Component {
+  background: linear-gradient(-140deg, #4dc7b7, #489acc);
 }
 
 .ComponentEditor .Component {
   padding: 5px;
 }
-

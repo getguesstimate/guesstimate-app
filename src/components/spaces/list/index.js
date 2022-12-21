@@ -1,9 +1,15 @@
-import React from 'react'
-import SpaceListItem from '../list_item'
-import './style.css'
+import React from "react";
+import SpaceListItem from "../list_item";
+import "./style.css";
 
-const SpaceList = ({spaces, showUsers, loadMore, hasMorePages, showScreenshots}) => (
-  <div className='SpaceList'>
+const SpaceList = ({
+  spaces,
+  showUsers,
+  loadMore,
+  hasMorePages,
+  showScreenshots,
+}) => (
+  <div className="SpaceList">
     {_.map(spaces, (s) => {
       return (
         <SpaceListItem
@@ -13,14 +19,17 @@ const SpaceList = ({spaces, showUsers, loadMore, hasMorePages, showScreenshots})
           showUser={showUsers}
           showScreenshot={showScreenshots}
         />
-      )
+      );
     })}
-    {!!spaces.length && hasMorePages &&
-      <div className='nextPage'>
-        <button className={'ui button nextpage'} onClick={loadMore}> {'Load More'} </button>
+    {!!spaces.length && hasMorePages && (
+      <div className="nextPage">
+        <button className={"ui button nextpage"} onClick={loadMore}>
+          {" "}
+          {"Load More"}{" "}
+        </button>
       </div>
-    }
+    )}
   </div>
-)
+);
 
-export default SpaceList
+export default SpaceList;

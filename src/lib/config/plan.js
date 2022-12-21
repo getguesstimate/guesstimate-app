@@ -1,36 +1,36 @@
-import planYaml from 'json!yaml!./plans.yml'
-import numeral from 'numeral'
+import planYaml from "json!yaml!./plans.yml";
+import numeral from "numeral";
 
 export default class Plan {
   static asHashes() {
-    return planYaml.plans
+    return planYaml.plans;
   }
 
   static all() {
-    const that = this
-    return this.asHashes().map(e => new that(e))
+    const that = this;
+    return this.asHashes().map((e) => new that(e));
   }
 
   static find(id) {
-    return this.all().filter(e => (e.id === id))[0]
+    return this.all().filter((e) => e.id === id)[0];
   }
 
-  constructor({id, monthly_cost, name, private_model_limit}) {
+  constructor({ id, monthly_cost, name, private_model_limit }) {
     this.id = id;
     this.monthlyCost = monthly_cost;
     this.name = name;
-    this.privateModelLimit = private_model_limit
+    this.privateModelLimit = private_model_limit;
   }
 
   fullName() {
-    return `${this.name} Plan`
+    return `${this.name} Plan`;
   }
 
   number() {
-    return (this.id === 'personal_infinite') ? `∞` : this.privateModelLimit
+    return this.id === "personal_infinite" ? `∞` : this.privateModelLimit;
   }
 
   formattedCost() {
-    return numeral(this.monthlyCost / 100).format('0,0')
+    return numeral(this.monthlyCost / 100).format("0,0");
   }
 }

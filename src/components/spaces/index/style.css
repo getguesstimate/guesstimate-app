@@ -4,9 +4,9 @@
   text-align: center;
 }
 
-.SpacesIndex .SpacesIndex--header h1{
+.SpacesIndex .SpacesIndex--header h1 {
   margin-top: 0;
-  margin-bottom: .7em;
+  margin-bottom: 0.7em;
   color: #444;
   font-weight: 800;
   font-size: 2em;
@@ -27,11 +27,11 @@
   border-radius: 2px;
 
   &:hover {
-    background-color: #E3E8EC;
+    background-color: #e3e8ec;
   }
 
   .fa {
     margin-left: 0.4em;
-    font-size: .8em;
+    font-size: 0.8em;
   }
 }

@@ -1,10 +1,10 @@
-@import './styles/variables.css';
+@import "./styles/variables.css";
 
 .CreateOrganization {
   ul {
     list-style: none;
     padding: 0;
-    margin: 0 0 .25 0;
+    margin: 0 0 0.25 0;
     float: left;
     width: 100%;
   }
@@ -29,7 +29,7 @@
       margin-top: 0;
     }
 
-    .ui.menu .item{
+    .ui.menu .item {
       font-weight: 800;
       color: #444;
     }
@@ -54,7 +54,6 @@
   }
 }
 
-
 .PlanList {
   border-radius: 3px;
   border: 1px solid #ccc;
@@ -64,11 +63,11 @@
 
 .PlanElement {
   padding: 1.5em 0;
-  background-color: rgba(150,150,150,0.12);
-  font-size: .9em;
+  background-color: rgba(150, 150, 150, 0.12);
+  font-size: 0.9em;
 
   input {
-    margin: 0
+    margin: 0;
   }
 
   .center-text {
@@ -76,7 +75,7 @@
   }
 
   &.selected {
-     background-color: white;
+    background-color: white;
   }
 
   &:first-child {
@@ -87,21 +86,21 @@
     border-radius: 0 0 3px 3px;
   }
 
-  .radio-section{
-     width: 8%;
-     text-align: right;
-     float: left;
+  .radio-section {
+    width: 8%;
+    text-align: right;
+    float: left;
   }
 
-  .content-section{
-     width: 90%;
-     padding-left: 20px;
-     float: left;
+  .content-section {
+    width: 90%;
+    padding-left: 20px;
+    float: left;
   }
 
   .free-trial {
-     color: #1BB732;
-     font-weight: 700;
-     margin-top: 5px;
+    color: #1bb732;
+    font-weight: 700;
+    margin-top: 5px;
   }
 }

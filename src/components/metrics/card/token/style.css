@@ -1,4 +1,4 @@
-@import './styles/variables.css';
+@import "./styles/variables.css";
 
 .MetricToken {
   margin-top: 5px;
@@ -36,7 +36,7 @@
 
 .MetricToken .hover-toggle {
   cursor: pointer;
-  display: none
+  display: none;
 }
 
 .MetricToken .hover-toggle:hover {
@@ -45,7 +45,7 @@
 }
 
 .hovered .MetricToken .hover-toggle {
-  display: block
+  display: block;
 }
 
 .MetricToken--Corner-Triangle {

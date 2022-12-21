@@ -1,4 +1,4 @@
-@import './styles/variables.css';
+@import "./styles/variables.css";
 
 .Plan {
   padding: 0.5em 2em;
@@ -8,20 +8,20 @@
   color: $grey-2;
 }
 
-.Plan.Plan h2{
+.Plan.Plan h2 {
   margin-top: 0.25em;
   color: $blue-1;
 }
 
-.Settings-Plan{
+.Settings-Plan {
   margin: 2em 0 2em;
 }
 
-.Settings-Upgrade{
+.Settings-Upgrade {
   text-align: center;
   margin: 2em 0 2em;
 }
 
-.Card .ui.button.portal{
+.Card .ui.button.portal {
   background-color: $grey-2;
 }

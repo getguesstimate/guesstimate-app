@@ -1,16 +1,16 @@
-import React, {Component} from 'react'
+import React, { Component } from "react";
 
-import './style.css'
+import "./style.css";
 
 export default class ToolTip extends Component {
-  displayName: 'ToolTip'
+  displayName: "ToolTip";
 
   render() {
     return (
-      <div className={`ToolTip ${this.props.size || 'SMALL'}`}>
-        <div className='arrow-up'/>
+      <div className={`ToolTip ${this.props.size || "SMALL"}`}>
+        <div className="arrow-up" />
         {this.props.children}
       </div>
-    )
+    );
   }
 }

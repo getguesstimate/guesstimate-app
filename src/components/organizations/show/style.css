@@ -1,16 +1,16 @@
-@import './styles/variables.css';
+@import "./styles/variables.css";
 
 .OrganizationShow {
   .main-section {
     margin-top: 2em;
   }
 
-  .ui.menu .item.active{
-    background: #CACACA;
+  .ui.menu .item.active {
+    background: #cacaca;
   }
 
-  .ui.tabular.menu.reversed .active.item{
-    background: none #F7F5F5;
+  .ui.tabular.menu.reversed .active.item {
+    background: none #f7f5f5;
     border-radius: 0.15rem 0.15rem 0 0 !important;
   }
 
@@ -40,7 +40,7 @@
       margin-top: 0;
     }
 
-    .ui.menu .item{
+    .ui.menu .item {
       font-weight: 800;
       font-size: 1.2em;
       color: #444;
@@ -62,13 +62,13 @@
     .Category {
       margin-bottom: 3em;
 
-      h3{
+      h3 {
         color: #888;
         font-size: 1.4em;
         font-style: italic;
         font-weight: 200;
-        margin-bottom: .3em;
-        margin-top: .5em;
+        margin-bottom: 0.3em;
+        margin-top: 0.5em;
       }
     }
   }

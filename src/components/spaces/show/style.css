@@ -1,15 +1,15 @@
-@import './styles/variables.css';
+@import "./styles/variables.css";
 
 .spaceShow {
   flex: 2;
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: #DFE1E4;
+  background-color: #dfe1e4;
 }
 
 .spaceShow.screenshot {
-  background-color: #C2CDD6;
+  background-color: #c2cdd6;
 }
 
 .canvas-space {
@@ -27,8 +27,8 @@
 
 .hero-unit {
   padding-top: 0.8em;
-  background: #2583A7;
-  background: linear-gradient(-90deg, #2577A7, #2583A7);
+  background: #2583a7;
+  background: linear-gradient(-90deg, #2577a7, #2583a7);
   width: 100%;
   box-sizing: initial;
 }
@@ -38,13 +38,13 @@
   margin-left: 8px;
   margin-bottom: 5px;
   margin-right: 0;
-  font-size: .92em;
+  font-size: 0.92em;
   float: right;
   &.label {
     color: white;
-    background: rgba(255,255,255,0.2);
+    background: rgba(255, 255, 255, 0.2);
     img {
-      height: 2.1em !important
+      height: 2.1em !important;
     }
   }
 }
@@ -72,7 +72,6 @@
     margin-top: 0px;
     font-size: 0.7em;
   }
-
 }
 
 .hero-unit .ui.button.blue {
@@ -84,7 +83,7 @@
 }
 
 .hero-unit .text-editable:hover {
-  background-color: rgba(0,0,0,0.2);
+  background-color: rgba(0, 0, 0, 0.2);
 }
 
 .hero-unit .text-editable.default-value {
@@ -123,7 +122,7 @@
 }
 
 .hero-unit .dd-menu-left {
-  float: left
+  float: left;
 }
 
 .spaceShow > .content {
@@ -140,7 +139,7 @@
   z-index: 2;
   margin: 24px 15px 14px 14px;
   overflow: auto;
-  background: rgba(223,225,228,0.1);
+  background: rgba(223, 225, 228, 0.1);
 
   .closeSidebar {
     float: right;
@@ -149,25 +148,24 @@
 
 .SpaceSidebar-inside {
   padding: 1em 1em 0.5em 1em;
-  background-color: rgba(255,255,255,0.8);
+  background-color: rgba(255, 255, 255, 0.8);
   border-radius: 2px;
   float: left;
   width: 100%;
 }
 
-.ClosedSpaceSidebar{
-  background-color: #DFE1E4;
+.ClosedSpaceSidebar {
+  background-color: #dfe1e4;
   padding-top: 0.5em;
   padding-left: 3px;
 }
 
-.ClosedSpaceSidebar .open.open{
+.ClosedSpaceSidebar .open.open {
   background-color: $blue-1;
   padding: 7px 7px;
 }
 
-
-.SpaceSidebar .SpaceSidebar-header{
+.SpaceSidebar .SpaceSidebar-header {
   width: 100%;
   text-align: center;
   position: relative;
@@ -175,13 +173,13 @@
   min-height: 2em;
 }
 
-.SpaceSidebar .SpaceSidebar-header .description-icon.fa{
+.SpaceSidebar .SpaceSidebar-header .description-icon.fa {
   float: left;
   font-size: 1.8em;
-  margin-top:8px;
+  margin-top: 8px;
 }
 
-.SpaceSidebar .SpaceSidebar-header .fa{
+.SpaceSidebar .SpaceSidebar-header .fa {
   font-size: 1.25em;
 }
 
@@ -251,30 +249,30 @@
 .header .dropDown-relative .space-header-action {
   color: white;
   float: right;
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
   padding: 0.3em 0.7em;
   border-radius: 3px;
   margin: 4px 0 6px 8px;
 }
 
 .header .dropDown-relative .space-header-action:hover {
-  background: rgba(255,255,255,0.2);
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .header .dropDown-relative .space-header-action:active {
-  background: rgba(255,255,255,0.3);
+  background: rgba(255, 255, 255, 0.3);
 }
 
 .SpaceRightSidebar {
   width: 30em;
   overflow-x: hidden;
   overflow-y: auto;
-  background: rgba(255,255,255,0.9);
+  background: rgba(255, 255, 255, 0.9);
   border-radius: 0;
   border-left: 1px solid #ccc;
 
   &.grey {
-    background: #F7F5F5;
+    background: #f7f5f5;
   }
 
   h2 {
@@ -282,18 +280,17 @@
   }
 
   .SpaceRightSidebar--divider {
-      margin: 0;
-      border: none;
-      border-bottom: 2px dotted #e8e8e8;
+    margin: 0;
+    border: none;
+    border-bottom: 2px dotted #e8e8e8;
   }
 
   .SpaceRightSidebar--padded-area {
     padding: 1em 1em;
     float: left;
     width: 100%;
-    .button-close-text{
+    .button-close-text {
       float: right;
     }
   }
 }
-

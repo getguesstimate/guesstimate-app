@@ -1,4 +1,4 @@
-@import './styles/variables.css';
+@import "./styles/variables.css";
 
 .FirstSubscription {
   text-align: center;
@@ -9,13 +9,13 @@
   justify-content: center;
 }
 
-.FirstSubscription .large-icon{
+.FirstSubscription .large-icon {
   font-size: 18em;
   color: $grey-2;
   opacity: 0.2;
 }
 
-.FirstSubscription .NewOrder{
+.FirstSubscription .NewOrder {
   float: left;
   flex-direction: column;
 }
@@ -30,6 +30,6 @@
   margin-top: 1em;
 }
 
-.FirstSubscription .GeneralMessage .button{
+.FirstSubscription .GeneralMessage .button {
   margin-top: 2em;
 }

@@ -1,4 +1,4 @@
-@import './styles/variables.css';
+@import "./styles/variables.css";
 
 @media only screen and (max-width: 767px) {
   .calculator.calculator {
@@ -23,8 +23,8 @@
     width: 100%;
     margin-bottom: 1em;
 
-    .action-section{
-      padding-top: .4em;
+    .action-section {
+      padding-top: 0.4em;
     }
 
     h1 {
@@ -39,7 +39,7 @@
 
   .description {
     font-size: 0.9em;
-    margin-top: .9em;
+    margin-top: 0.9em;
     margin-bottom: 2em;
     color: #666;
 
@@ -48,18 +48,18 @@
     }
   }
 
-  table.ui.table{
-    font-size: .7em;
+  table.ui.table {
+    font-size: 0.7em;
   }
 
-  .header-actions .button{
+  .header-actions .button {
     float: right;
   }
 
   .editor {
-    padding: .4rem .8rem;
+    padding: 0.4rem 0.8rem;
     background-color: $grey-6;
-    border: 1px solid #D4D4D4;
+    border: 1px solid #d4d4d4;
     border-radius: 1px;
     position: relative;
   }
@@ -69,11 +69,11 @@
 
     .input {
       .name {
-        margin-top: .3em;
+        margin-top: 0.3em;
       }
 
       .description {
-        font-size: .75em;
+        font-size: 0.75em;
         color: #666;
       }
 
@@ -100,9 +100,9 @@
     border-radius: 0.1em;
     width: 100%;
     font-size: 1.1em;
-    padding: .7em;
+    padding: 0.7em;
     color: #444 !important;
-    background-color: #82E69D !important;
+    background-color: #82e69d !important;
   }
 
   .result-divider {
@@ -121,7 +121,7 @@
 
     .result-section {
       color: #666;
-      margin-left: .5rem;
+      margin-left: 0.5rem;
       font-size: 1.3em;
       position: relative;
 
@@ -140,7 +140,7 @@
         text-align: center;
         padding-top: 1px;
         border-radius: 1em;
-        font-size: .8em;
+        font-size: 0.8em;
         color: #88919c;
         cursor: pointer;
         &:hover {
@@ -158,7 +158,7 @@
   font-size: 1.6em;
 
   .calculation-link-section {
-    padding-top: .4em;
+    padding-top: 0.4em;
     a {
       color: #777;
     }
@@ -166,7 +166,6 @@
     a:hover {
       color: #333;
     }
-
   }
 
   .SocialMediaShareButton {
@@ -176,7 +175,7 @@
     border-radius: 0.1em;
     margin-left: 10%;
     cursor: pointer;
-    opacity: .45;
+    opacity: 0.45;
   }
   .SocialMediaShareButton:hover {
     opacity: 1;
@@ -228,7 +227,7 @@
   border-radius: 0;
   font-size: 1em;
 
-  &.medium-font-size{
+  &.medium-font-size {
     font-size: 1.1em;
   }
 
@@ -241,7 +240,7 @@
   }
 
   .inputs .input {
-    padding: .3em 0 .3em 0;
+    padding: 0.3em 0 0.3em 0;
   }
   .padded-section {
     padding: 1em 1em;
@@ -250,20 +249,22 @@
     margin-top: 2em;
   }
 
-  .input, .output {
+  .input,
+  .output {
     a.ui.button {
-      padding: .3em .4em;
+      padding: 0.3em 0.4em;
       border-radius: 3px;
     }
   }
 
   .outputs .output {
-    padding: .3em 0 .3em 0;
+    padding: 0.3em 0 0.3em 0;
   }
 
-  .inputs h3, .outputs h3{
+  .inputs h3,
+  .outputs h3 {
     border-bottom: 2px solid #aaa;
-    padding-bottom: .5em;
+    padding-bottom: 0.5em;
     margin-top: 2.5em;
     font-weight: 800;
     font-size: 1.2em;
@@ -272,7 +273,7 @@
 
 .calculator.wide {
   border: 1px solid rgba(200, 200, 200, 0.7);
-  border-radius: .2em;
+  border-radius: 0.2em;
   background: white;
   margin: 1em;
   padding: 2em 2em;
@@ -299,13 +300,11 @@
     padding-bottom: 1.5em;
 
     .stats-summary {
-      font-size: .63em;
-      margin-top: .8em;
+      font-size: 0.63em;
+      margin-top: 0.8em;
     }
-
   }
   .padded-section {
     padding: 1em 1em;
   }
 }
-

@@ -1,4 +1,4 @@
-@import './styles/variables.css';
+@import "./styles/variables.css";
 
 .SpaceListItem {
   border-radius: 4px;
@@ -7,14 +7,14 @@
   width: 100%;
 }
 
-.SpaceListItem a{
+.SpaceListItem a {
   padding: 15px;
-  transition: background .2s;
+  transition: background 0.2s;
   float: left;
   width: 100%;
 }
 
-.SpaceListItem a:hover{
+.SpaceListItem a:hover {
   background: $grey-1;
   border-radius: 3px;
 }
@@ -27,12 +27,12 @@
   font-size: 1.45em;
 }
 
-.SpaceListItem .snapshot img{
+.SpaceListItem .snapshot img {
   max-width: 100%;
   border-radius: 1px;
 }
 
-.SpaceListItem .snapshot.blank{
+.SpaceListItem .snapshot.blank {
   background-color: $grey-1;
   height: 80px;
   border-radius: 1px;
@@ -41,12 +41,12 @@
   align-items: center;
 }
 
-.SpaceListItem .snapshot.blank img{
+.SpaceListItem .snapshot.blank img {
   max-width: 40%;
-  opacity: 0.3
+  opacity: 0.3;
 }
 
-.SpaceListItem .snapshot.blank .fa{
+.SpaceListItem .snapshot.blank .fa {
   font-size: 2.5em;
   color: $grey-2;
   opacity: 0.3;
@@ -62,23 +62,23 @@
   color: $grey-2;
 }
 
-.SpaceListItem .user-tag .ui.avatar.image{
+.SpaceListItem .user-tag .ui.avatar.image {
   width: 1.5em;
   height: 1.5em;
   margin-right: 5px;
   border-radius: 2px;
 }
 
-.SpaceListItem p{
+.SpaceListItem p {
   color: $grey-2;
 }
 
-.SpaceListItem .description p{
+.SpaceListItem .description p {
   color: #666;
   font-size: 1.1em;
   margin-top: 0.6em;
 }
 
-.SpaceListItem .metric-count p{
+.SpaceListItem .metric-count p {
   float: right;
 }

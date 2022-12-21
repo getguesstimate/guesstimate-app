@@ -1,8 +1,8 @@
-@import './variables.css';
-@import './overrides.css';
+@import "./variables.css";
+@import "./overrides.css";
 
 body {
-  font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+  font-family: "Open Sans", Helvetica, Arial, sans-serif;
 }
 
 ::-webkit-scrollbar {
@@ -11,13 +11,13 @@ body {
 }
 
 ::-webkit-scrollbar-thumb:horizontal {
-    background-color: $grey-2;
-    border-radius: 3px;
+  background-color: $grey-2;
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:vertical {
-    background-color: $grey-2;
-    border-radius: 3px;
+  background-color: $grey-2;
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-track {
@@ -27,5 +27,3 @@ body {
 ::-webkit-scrollbar-track:corner {
   background-color: black;
 }
-
-

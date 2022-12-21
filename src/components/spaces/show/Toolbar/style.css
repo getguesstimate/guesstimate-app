@@ -1,12 +1,12 @@
-@import './styles/variables.css';
+@import "./styles/variables.css";
 
 .SpaceShowToolbar {
   background: rgba(219, 221, 222, 0.69);
   border-bottom: 1px solid rgba(37, 128, 167, 0.38);
 }
 
-.SpaceShowToolbar .saveMessage{
-  color: #09273A;
+.SpaceShowToolbar .saveMessage {
+  color: #09273a;
   margin-left: 26px;
   float: left;
   margin-top: 8px;
@@ -17,7 +17,7 @@
   font-size: 1.2rem;
   font-weight: 500;
   border-radius: 2px;
-  padding: .25em .5em;
+  padding: 0.25em 0.5em;
   margin-top: -2px;
 }
 
@@ -30,7 +30,7 @@
   float: left;
   padding: 0.3em 0.55em;
   font-size: 1.1em;
-  color: rgb(18,46,64);
+  color: rgb(18, 46, 64);
   border-radius: 1px;
   margin: 0.2em 0.2em;
 }
@@ -44,11 +44,11 @@
 }
 
 .SpaceShowToolbar .header-action:hover {
-  background-color: rgba(255,255,255,0.3);
+  background-color: rgba(255, 255, 255, 0.3);
 }
 
 .SpaceShowToolbar .header-action:active {
-  background-color: rgba(255,255,255,0.5);
+  background-color: rgba(255, 255, 255, 0.5);
 }
 
 .SpaceShowToolbar .header-action.disabled {
@@ -56,7 +56,7 @@
 }
 
 .SpaceShowToolbar .header-action.disabled:hover {
-  background-color: rgba(255,255,255,0.2);
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
 .SpaceShowToolbar .ui.buttons {
@@ -70,31 +70,31 @@
   border-radius: 3px;
   font-weight: 300;
   margin-right: 10px;
-  background-color: rgba(0,0,0,0);
+  background-color: rgba(0, 0, 0, 0);
   transition: background-color 0.3s;
   font-size: 1.2em;
-  float:left;
+  float: left;
 }
 
-.SpaceShowToolbar a.space-header-action:hover{
+.SpaceShowToolbar a.space-header-action:hover {
   color: white;
-  background-color: rgba(0,0,0,0.2);
+  background-color: rgba(0, 0, 0, 0.2);
   cursor: pointer;
 }
 
-.SpaceShowToolbar .float-right{
+.SpaceShowToolbar .float-right {
   float: right;
 }
 
 .SpaceShowToolbar .header-action.button {
-  background-color: rgba(255,255,255,0.3);
+  background-color: rgba(255, 255, 255, 0.3);
   padding: 0.23em 0.53em;
   margin: 0.3em 0 0 0.2em;
   border-radius: 2px;
 }
 
 .SpaceShowToolbar .header-action.button:hover {
-  background-color: rgba(255,255,255,0.5);
+  background-color: rgba(255, 255, 255, 0.5);
 }
 
 .ImportFromSlurpForm h2 {

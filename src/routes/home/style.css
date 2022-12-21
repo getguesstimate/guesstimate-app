@@ -1,5 +1,4 @@
-@import './styles/variables.css';
-
+@import "./styles/variables.css";
 
 .guesstimate-logo-outer {
   width: 100%;
@@ -15,12 +14,12 @@
   display: inline-block;
 }
 
-.guesstimate-logo img{
+.guesstimate-logo img {
   width: 7em;
   max-width: 100%;
 }
 
-.guesstimate-logo .guesstimate-name{
+.guesstimate-logo .guesstimate-name {
   color: $grey-2;
   margin-top: 0.23em;
   font-weight: 600;
@@ -32,8 +31,8 @@
   font-family: Lato, Arial, sans-serif;
 }
 
-.homePage img{
-  max-width: 100%
+.homePage img {
+  max-width: 100%;
 }
 
 .homePage .guesstimate-slogan h2 {
@@ -41,15 +40,14 @@
   color: #333;
   font-weight: 400;
   font-size: 3em;
-  margin-top: .5em;
-
+  margin-top: 0.5em;
 }
 
-.homePage .guesstimate-slogan .sideComment{
+.homePage .guesstimate-slogan .sideComment {
   color: $grey-2;
 }
 
-.homePage hr{
+.homePage hr {
   border: 1px solid #eee;
   border-bottom: none;
   width: 100%;
@@ -83,22 +81,22 @@
 }
 
 .wistia_responsive_padding {
-  padding:56.25% 0 0 0;
-  position:relative;
+  padding: 56.25% 0 0 0;
+  position: relative;
 }
 
-.wistia_responsive_wrapper { 
-  height:100%;
-  left:0;
-  position:absolute;
-  top:0;
-  width:100%;
+.wistia_responsive_wrapper {
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
 }
 
 .wistia_embed {
- display:inline-block;
-  height:240px;
-  width:415px;
+  display: inline-block;
+  height: 240px;
+  width: 415px;
   margin-top: 5em;
 }
 
@@ -121,13 +119,13 @@
   line-height: 1.9rem;
 }
 
-.homePage > .sectionBenefits i{
+.homePage > .sectionBenefits i {
   font-size: 4.5em;
   opacity: 0.2;
 }
 
 .homePage > .sectionExamples {
-  background-color: #DAE3ED;
+  background-color: #dae3ed;
   padding-top: 8em;
   padding-bottom: 6em;
 }

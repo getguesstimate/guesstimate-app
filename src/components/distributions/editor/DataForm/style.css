@@ -1,5 +1,5 @@
-@import './styles/variables.css';
-.metricModal .DataViewer h2{
+@import "./styles/variables.css";
+.metricModal .DataViewer h2 {
   font-weight: 400;
   color: white;
   margin-top: 3px;
@@ -37,31 +37,31 @@
   border-top: none;
 }
 
-.DataViewer .DataViewer--body{
+.DataViewer .DataViewer--body {
   background-color: $purple-3;
   color: $purple-2;
   overflow: auto;
   max-height: 25em;
 }
 
-.DataViewer .DataViewer--body.edit .button{
+.DataViewer .DataViewer--body.edit .button {
   margin-right: 10px;
 }
 
-.DataViewer .DataViewer--body.edit .button:not(.primary){
+.DataViewer .DataViewer--body.edit .button:not(.primary) {
   background: #c6c6c6;
 }
 
-.DataViewer .DataViewer--body .ui.form{
+.DataViewer .DataViewer--body .ui.form {
   margin-bottom: 10px;
   display: inline-block;
   width: 100%;
 }
 
-.DataViewer--header a{
+.DataViewer--header a {
   margin-top: 2px;
-  color: rgba(255,255,255,0.75);
-  float:right;
+  color: rgba(255, 255, 255, 0.75);
+  float: right;
   padding: 2px 5px 0px 5px;
   cursor: pointer;
   margin: 2px 5px 0;
@@ -69,24 +69,24 @@
   display: none;
 }
 
-.DataViewer--header a .fa{
+.DataViewer--header a .fa {
   font-size: 1.3em;
 }
 
-.DataViewer:hover .DataViewer--header a{
+.DataViewer:hover .DataViewer--header a {
   display: block;
 }
 
-.DataViewer--header a:hover{
+.DataViewer--header a:hover {
   color: white;
 }
 
-.metricModal .DataViewer ul{
+.metricModal .DataViewer ul {
   float: none;
   list-style: none;
   padding-left: 1em;
 }
 
-.metricModal .DataViewer textarea{
+.metricModal .DataViewer textarea {
   font-size: 1.1em;
 }

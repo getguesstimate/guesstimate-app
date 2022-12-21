@@ -1,9 +1,9 @@
-@import './styles/variables.css';
+@import "./styles/variables.css";
 $main-grey: #4e4e4e;
 
 .PlanIndex {
   color: $main-grey;
-  font-family: 'Lato';
+  font-family: "Lato";
 
   .header {
     width: 100%;
@@ -35,7 +35,7 @@ $main-grey: #4e4e4e;
   }
 
   .portal-message {
-    background-color: rgba(255,255,255,0.8);
+    background-color: rgba(255, 255, 255, 0.8);
     width: 100%;
     padding: 1em;
     color: $main-grey;
@@ -64,7 +64,6 @@ $main-grey: #4e4e4e;
         font-size: 1.15em;
       }
     }
-
   }
 }
 
@@ -75,15 +74,15 @@ $main-grey: #4e4e4e;
   text-align: center;
   padding: 1.5em 0;
   margin: 3em 0;
-  font-family: 'Lato';
+  font-family: "Lato";
   color: #888;
   font-size: 1.5em;
   font-weight: 300;
   width: 15em;
   margin-right: 3em;
   float: left;
-  &:last-child{
-     margin-right: 0;
+  &:last-child {
+    margin-right: 0;
   }
 
   h2 {
@@ -101,7 +100,7 @@ $main-grey: #4e4e4e;
     margin-bottom: 1em;
   }
 
-  li strong{
+  li strong {
     color: $blue-1;
   }
 
@@ -113,7 +112,7 @@ $main-grey: #4e4e4e;
   }
 
   .promotion {
-    color: #1BB732;
+    color: #1bb732;
     font-weight: 500;
     margin-bottom: 1em;
   }
@@ -146,6 +145,5 @@ $main-grey: #4e4e4e;
       font-size: 0.8em;
       margin-top: -5em;
     }
-
   }
 }

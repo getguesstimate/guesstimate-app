@@ -1,103 +1,114 @@
-import React, {Component} from 'react' 
-import PropTypes from 'prop-types'
-import * as navigationActions from 'gModules/navigation/actions.js'
-import Plan from 'lib/config/plan.js'
-import './style.css'
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import * as navigationActions from "gModules/navigation/actions.js";
+import Plan from "lib/config/plan.js";
+import "./style.css";
 
-const Cost = ({cost, unit}) => (
-  <div className='PlanCard-Cost'>
+const Cost = ({ cost, unit }) => (
+  <div className="PlanCard-Cost">
     <div>
       <sup>$</sup>
-      <span className='number'>{cost}</span>
+      <span className="number">{cost}</span>
     </div>
-    {unit === 'per_user' &&
-      <div className='per-month'>
+    {unit === "per_user" && (
+      <div className="per-month">
         per user
-        <br/>
+        <br />
         per month
       </div>
-    }
-    {unit !== 'per_user' &&
-      <div className='per-month'>
-        per month
-      </div>
-    }
+    )}
+    {unit !== "per_user" && <div className="per-month">per month</div>}
   </div>
-)
+);
 
-const Limit = ({limit}) => (
-  <div className='PlanCard-Limit'>
-    <span className='number'> {limit} </span>
+const Limit = ({ limit }) => (
+  <div className="PlanCard-Limit">
+    <span className="number"> {limit} </span>
     <span> private models </span>
   </div>
-)
+);
 
-class PlanCard extends Component{
+class PlanCard extends Component {
   render() {
-    const {name, promotion_copy, price, unit, private_model_count, showButton, onClick} = this.props
+    const {
+      name,
+      promotion_copy,
+      price,
+      unit,
+      private_model_count,
+      showButton,
+      onClick,
+    } = this.props;
     return (
-      <div className='PlanCard'>
+      <div className="PlanCard">
         <h2> {name} </h2>
-        <Cost cost={price} unit={unit}/>
+        <Cost cost={price} unit={unit} />
         <ul>
-          <li> <strong>{private_model_count}</strong> private models </li>
+          <li>
+            {" "}
+            <strong>{private_model_count}</strong> private models{" "}
+          </li>
         </ul>
-        {promotion_copy &&
-        <div className='promotion'>
-          {promotion_copy}
-        </div>
-        }
-        { this.props.upgrade.show &&
+        {promotion_copy && <div className="promotion">{promotion_copy}</div>}
+        {this.props.upgrade.show && (
           <a
-            className='ui button large green'
+            className="ui button large green"
             onMouseDown={this.props.upgrade.onClick}
-          > {this.props.upgrade.text} </a>
-        }
+          >
+            {" "}
+            {this.props.upgrade.text}{" "}
+          </a>
+        )}
       </div>
-    )
+    );
   }
 }
 
-export default class Plans extends Component{
+export default class Plans extends Component {
   static defaultProps = {
     showButtons: false,
-    onChoose: (planId) => {console.log('choose', planId)}
-  }
+    onChoose: (planId) => {
+      console.log("choose", planId);
+    },
+  };
 
   render() {
-
     return (
-      <div className='row'>
-        <div className='col-sm-12'>
-        <div className='Plans--outer'>
-          <div className='Plans'>
-            <PlanCard
-              name='Individuals'
-              price='5'
-              unit='per_month'
-              private_model_count='20'
-              upgrade={{
-                show: this.props.showPersonalUpgradeButton,
-                onClick: () => {this.props.onChoose('personal_lite')},
-                text: 'Upgrade'
-              }}
-            />
-            <PlanCard
-              name='Organizations'
-              price='12'
-              unit='per_user'
-              private_model_count='200'
-              promotion_copy='30-day free trial'
-              upgrade={{
-                show: this.props.isLoggedIn,
-                onClick: () => {this.props.onNewOrganizationNavigation()},
-                text: 'Begin Free Trial'
-              }}
-            />
+      <div className="row">
+        <div className="col-sm-12">
+          <div className="Plans--outer">
+            <div className="Plans">
+              <PlanCard
+                name="Individuals"
+                price="5"
+                unit="per_month"
+                private_model_count="20"
+                upgrade={{
+                  show: this.props.showPersonalUpgradeButton,
+                  onClick: () => {
+                    this.props.onChoose("personal_lite");
+                  },
+                  text: "Upgrade",
+                }}
+              />
+              <PlanCard
+                name="Organizations"
+                price="12"
+                unit="per_user"
+                private_model_count="200"
+                promotion_copy="30-day free trial"
+                upgrade={{
+                  show: this.props.isLoggedIn,
+                  onClick: () => {
+                    this.props.onNewOrganizationNavigation();
+                  },
+                  text: "Begin Free Trial",
+                }}
+              />
+            </div>
           </div>
         </div>
-        </div>
       </div>
-    )
+    );
   }
 }

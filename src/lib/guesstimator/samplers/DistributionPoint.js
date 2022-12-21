@@ -1,5 +1,5 @@
 export var Sampler = {
-  sample({params: [value]}) {
-    return Promise.resolve({values: [value]})
-  }
-}
+  sample({ params: [value] }) {
+    return Promise.resolve({ values: [value] });
+  },
+};

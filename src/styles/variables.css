@@ -1,33 +1,32 @@
-$blue-1: #1487D0;
+$blue-1: #1487d0;
 $blue-2: #d0ecfd;
-$blue-3: #D4DEEA;
-$blue-4: #5A9DC1;
-$blue-5: rgb(140,166,195);
-$blue-6: #002EBD;
+$blue-3: #d4deea;
+$blue-4: #5a9dc1;
+$blue-5: rgb(140, 166, 195);
+$blue-6: #002ebd;
 
 $black-1: #111111;
 $black-2: #333;
-$black-3: #2D3137;
+$black-3: #2d3137;
 $grey-1: #e7edf3;
 $grey-2: #7089a9;
 $grey-4: #aaa;
 $grey-5: #f5f8fd;
-$grey-6: #F7F5F5;
+$grey-6: #f7f5f5;
 $grey-666: #666;
 $grey-999: #999;
 $grey-eee: #eee;
 
-$green-1: #25B530;
-$green-2: #1EB128;
+$green-1: #25b530;
+$green-2: #1eb128;
 $green-3: #084e14;
 $green-4: #c9e8c0;
 
-$purple-1: #7970A9;
-$purple-2: #6C5A8C;
-$purple-3: #EDE4F9;
+$purple-1: #7970a9;
+$purple-2: #6c5a8c;
+$purple-3: #ede4f9;
 
-
-$transparent-background: rgba(0,0,0,0);
+$transparent-background: rgba(0, 0, 0, 0);
 $editing-background: $grey-1;
 
 @define-mixin hover-text {
@@ -37,7 +36,7 @@ $editing-background: $grey-1;
   border-radius: 1px;
   outline: none;
   resize: none;
-  transition: background-color .3s;
+  transition: background-color 0.3s;
   padding: 0.2em;
   max-width: 100%;
   &:focus {
@@ -50,7 +49,7 @@ $editing-background: $grey-1;
 @define-mixin hover-input {
   @mixin hover-text;
 
-  &:not(:focus){
+  &:not(:focus) {
     cursor: pointer;
   }
 }
@@ -66,7 +65,7 @@ $editing-background: $grey-1;
 
   .public-DraftEditorPlaceholder-root {
     margin: 0 0 -20px;
-    color: #A9A9A9;
+    color: #a9a9a9;
   }
 
   .public-DraftEditor-content:focus {

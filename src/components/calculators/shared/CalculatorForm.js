@@ -1,12 +1,16 @@
-import React, {Component} from 'react'
+import React, { Component } from "react";
 
-import ReactMarkdown from 'react-markdown'
-import Icon from 'react-fa'
-import {sortable} from 'react-sortable'
+import ReactMarkdown from "react-markdown";
+import Icon from "react-fa";
+import { sortable } from "react-sortable";
 
-import * as Calculator from 'gEngine/calculator'
+import * as Calculator from "gEngine/calculator";
 
-const SortableListItem = sortable(props => <div {...props} className='list-item'>{props.children}</div>)
+const SortableListItem = sortable((props) => (
+  <div {...props} className="list-item">
+    {props.children}
+  </div>
+));
 
 export class CalculatorForm extends Component {
   state = {
@@ -14,186 +18,229 @@ export class CalculatorForm extends Component {
     draggingMetricId: null,
     dropTargetId: null,
     hasAlreadySubmitted: false,
-  }
+  };
 
-  metricForm({metric: {name, id, guesstimate}, isVisible}, isInput, isDropTarget) {
+  metricForm(
+    { metric: { name, id, guesstimate }, isVisible },
+    isInput,
+    isDropTarget
+  ) {
     const props = {
       name,
       isDropTarget,
-      description: _.get(guesstimate, 'description'),
+      description: _.get(guesstimate, "description"),
       isVisible: isVisible,
       onRemove: this.props.onMetricHide.bind(this, id),
       onAdd: this.props.onMetricShow.bind(this, id),
-    }
+    };
     if (isInput) {
-      return <InputForm {...props}/>
+      return <InputForm {...props} />;
     } else {
-      return <OutputForm {...props}/>
+      return <OutputForm {...props} />;
     }
   }
 
   updateDragState(id, newState) {
     if (!this.state.draggingMetricId) {
-      this.setState({...newState, draggingMetricId: id, dropTargetId: id})
+      this.setState({ ...newState, draggingMetricId: id, dropTargetId: id });
     } else if (_.isNull(newState.draggingIndex)) {
-      this.props.onMoveMetricTo(this.state.draggingMetricId, this.state.draggingIndex)
-      this.setState({...newState, draggingMetricId: null, dropTargetId: null})
+      this.props.onMoveMetricTo(
+        this.state.draggingMetricId,
+        this.state.draggingIndex
+      );
+      this.setState({
+        ...newState,
+        draggingMetricId: null,
+        dropTargetId: null,
+      });
     } else {
-      this.setState({...newState, dropTargetId: id})
+      this.setState({ ...newState, dropTargetId: id });
     }
   }
 
   onSubmit() {
-    if (this.state.hasAlreadySubmitted) { return }
-    this.setState({hasAlreadySubmitted: true})
-    this.props.onSubmit()
+    if (this.state.hasAlreadySubmitted) {
+      return;
+    }
+    this.setState({ hasAlreadySubmitted: true });
+    this.props.onSubmit();
   }
 
   render() {
     const {
-      props: {calculator: {title, content}, inputs, outputs, buttonText, isValid},
-      state: {draggingIndex, dropTargetId, hasAlreadySubmitted}
-    } = this
+      props: {
+        calculator: { title, content },
+        inputs,
+        outputs,
+        buttonText,
+        isValid,
+      },
+      state: { draggingIndex, dropTargetId, hasAlreadySubmitted },
+    } = this;
 
-    const generateComponents = (metrics, isInput) => (
-      _.map(metrics, (m, i) => [this.metricForm(m, isInput, dropTargetId === m.metric.id), m.metric.id])
-    )
+    const generateComponents = (metrics, isInput) =>
+      _.map(metrics, (m, i) => [
+        this.metricForm(m, isInput, dropTargetId === m.metric.id),
+        m.metric.id,
+      ]);
 
+    const visibleInputs = generateComponents(
+      inputs.filter((i) => i.isVisible),
+      true
+    );
+    const invisibleInputs = generateComponents(
+      inputs.filter((i) => !i.isVisible),
+      true
+    );
+    const hasHiddenInputs = !_.isEmpty(invisibleInputs);
 
-    const visibleInputs = generateComponents(inputs.filter(i => i.isVisible), true)
-    const invisibleInputs = generateComponents(inputs.filter(i => !i.isVisible), true)
-    const hasHiddenInputs = !_.isEmpty(invisibleInputs)
-
-    const visibleOutputs = generateComponents(outputs.filter(o => o.isVisible), false)
-    const invisibleOutputs = generateComponents(outputs.filter(o => !o.isVisible), false)
-    const hasHiddenOutputs = !_.isEmpty(invisibleOutputs)
+    const visibleOutputs = generateComponents(
+      outputs.filter((o) => o.isVisible),
+      false
+    );
+    const invisibleOutputs = generateComponents(
+      outputs.filter((o) => !o.isVisible),
+      false
+    );
+    const hasHiddenOutputs = !_.isEmpty(invisibleOutputs);
 
     return (
-      <div className='calculator narrow'>
-        <div className='padded-section'>
-          <div className='ui form'>
+      <div className="calculator narrow">
+        <div className="padded-section">
+          <div className="ui form">
             <h3>
               <textarea
                 rows={1}
-                placeholder={'Calculator Name'}
+                placeholder={"Calculator Name"}
                 value={title}
                 onChange={this.props.onChangeName}
-                className='field'
+                className="field"
               />
             </h3>
             <textarea
               rows={3}
-              placeholder={'Explanation (Markdown)'}
+              placeholder={"Explanation (Markdown)"}
               value={content}
               onChange={this.props.onChangeContent}
-              className='field'
+              className="field"
             />
           </div>
 
-          <div className='inputs'>
+          <div className="inputs">
             <h3> {`${hasHiddenInputs ? "Visible " : ""}Inputs`} </h3>
             {_.map(visibleInputs, ([item, id], i) => (
               <SortableListItem
-                key = {i}
-                sortId = {i}
+                key={i}
+                sortId={i}
                 draggingIndex={draggingIndex}
                 updateState={this.updateDragState.bind(this, id)}
-                outline={'list'}
-                items = {visibleInputs}
+                outline={"list"}
+                items={visibleInputs}
               >
                 {item}
               </SortableListItem>
             ))}
           </div>
 
-          {hasHiddenInputs &&
+          {hasHiddenInputs && (
             <div>
-              <div className='inputs'>
+              <div className="inputs">
                 <h3> Hidden Inputs </h3>
                 {_.map(invisibleInputs, ([item, id], i) => item)}
               </div>
             </div>
-          }
+          )}
 
-          <div className='outputs'>
+          <div className="outputs">
             <h3> {`${hasHiddenOutputs ? "Visible " : ""}Outputs`} </h3>
             {_.map(visibleOutputs, ([item, id], i) => (
               <SortableListItem
-                key = {i}
-                sortId = {i}
+                key={i}
+                sortId={i}
                 draggingIndex={draggingIndex}
                 updateState={this.updateDragState.bind(this, id)}
-                outline={'list'}
-                items = {visibleOutputs}
+                outline={"list"}
+                items={visibleOutputs}
               >
                 {item}
               </SortableListItem>
             ))}
 
-            {hasHiddenOutputs &&
+            {hasHiddenOutputs && (
               <div>
-                <div className=' outputs'>
+                <div className=" outputs">
                   <h3> Hidden Outputs </h3>
                   {_.map(invisibleOutputs, ([item, id], i) => item)}
                 </div>
               </div>
-            }
+            )}
           </div>
-          <div className='create-button-section'>
-            <div className='row'>
-              <div className='col-md-5'>
+          <div className="create-button-section">
+            <div className="row">
+              <div className="col-md-5">
                 <div
-                  className={`ui button green large create-button ${hasAlreadySubmitted ? 'loading' : ''} ${isValid && !hasAlreadySubmitted  ? '' : 'disabled'}`}
-                  onClick={this.onSubmit.bind(this)}>
+                  className={`ui button green large create-button ${
+                    hasAlreadySubmitted ? "loading" : ""
+                  } ${isValid && !hasAlreadySubmitted ? "" : "disabled"}`}
+                  onClick={this.onSubmit.bind(this)}
+                >
                   {buttonText}
                 </div>
               </div>
-              <div className='col-md-7' />
+              <div className="col-md-7" />
             </div>
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 
-const EditSection = ({isVisible, onRemove, onAdd}) => (
-  <div className='nub'>
-    {isVisible &&
+const EditSection = ({ isVisible, onRemove, onAdd }) => (
+  <div className="nub">
+    {isVisible && (
       <div>
-        <a onMouseDown={onRemove} className='ui button'>hide</a>
-        <a className='ui button'><Icon name='bars' /></a>
+        <a onMouseDown={onRemove} className="ui button">
+          hide
+        </a>
+        <a className="ui button">
+          <Icon name="bars" />
+        </a>
       </div>
-    }
-    {!isVisible && <a onMouseDown={onAdd} className='ui button'>show</a> }
+    )}
+    {!isVisible && (
+      <a onMouseDown={onAdd} className="ui button">
+        show
+      </a>
+    )}
   </div>
-)
+);
 
-const InputForm = props => (
-  <div className={`input${props.isDropTarget ? ' drop-target': ''}`}>
-    <div className='row'>
+const InputForm = (props) => (
+  <div className={`input${props.isDropTarget ? " drop-target" : ""}`}>
+    <div className="row">
       <div className={`col-xs-12 col-sm-8`}>
-        <div className='name'>{props.name}</div>
-        {props.description && <div className='description'>{props.description}</div>}
+        <div className="name">{props.name}</div>
+        {props.description && (
+          <div className="description">{props.description}</div>
+        )}
       </div>
-      <div className='col-xs-12 col-sm-4'>
-        <EditSection {...props}/>
+      <div className="col-xs-12 col-sm-4">
+        <EditSection {...props} />
       </div>
     </div>
   </div>
-)
+);
 
-const OutputForm = props => (
-  <div className={`output${props.isDropTarget ? ' drop-target': ''}`}>
-    <div className='row'>
+const OutputForm = (props) => (
+  <div className={`output${props.isDropTarget ? " drop-target" : ""}`}>
+    <div className="row">
       <div className={`col-xs-12 col-sm-8`}>
-        <div className='name'>
-          {props.name}
-        </div>
+        <div className="name">{props.name}</div>
       </div>
-      <div className='col-xs-12 col-sm-4'>
-        <EditSection {...props}/>
+      <div className="col-xs-12 col-sm-4">
+        <EditSection {...props} />
       </div>
     </div>
   </div>
-)
+);

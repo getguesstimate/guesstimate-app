@@ -3,4 +3,4 @@ export const NODE_TYPES = {
   DATA: 1,
   FUNCTION: 2,
   USER_INPUT: 3,
-}
+};

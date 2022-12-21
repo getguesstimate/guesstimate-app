@@ -1,56 +1,54 @@
-import React, {Component} from 'react'
+import React, { Component } from "react";
 
-import DropDown from 'gComponents/utility/drop-down/index.js'
+import DropDown from "gComponents/utility/drop-down/index.js";
 
 export class SpaceName extends Component {
-  focusForm() { this.refs.name.focus() }
-
-  onSave() {
-    this.props.onSave(this.refs.name.value)
-    this.refs.DropDown._close()
+  focusForm() {
+    this.refs.name.focus();
   }
 
-  render () {
-    let {editableByMe, name} = this.props
-    const hasName = !_.isEmpty(name)
-    const className = `text-editable ${hasName ? '' : 'default-value'}`
-    const showName = hasName ? name : 'Untitled Model'
-    return(
+  onSave() {
+    this.props.onSave(this.refs.name.value);
+    this.refs.DropDown._close();
+  }
+
+  render() {
+    let { editableByMe, name } = this.props;
+    const hasName = !_.isEmpty(name);
+    const className = `text-editable ${hasName ? "" : "default-value"}`;
+    const showName = hasName ? name : "Untitled Model";
+    return (
       <span>
-        {editableByMe &&
+        {editableByMe && (
           <DropDown
-            headerText={hasName ? 'Rename Model' : 'Name Model'}
+            headerText={hasName ? "Rename Model" : "Name Model"}
             openLink={<h1 className={className}> {showName} </h1>}
-            position='right'
+            position="right"
             hasPadding={true}
-            width='wide'
+            width="wide"
             onOpen={this.focusForm.bind(this)}
-            ref='DropDown'
+            ref="DropDown"
           >
-            <div className='ui form'>
-              <textarea
-                defaultValue={name}
-                type='text'
-                rows='2'
-                ref='name'
-              />
-              {!hasName &&
+            <div className="ui form">
+              <textarea defaultValue={name} type="text" rows="2" ref="name" />
+              {!hasName && (
                 <p>
-                  What are you trying to estimate? Be specific, so others can understand. Example: 'The time it will take
-                  George to walk home.'
+                  What are you trying to estimate? Be specific, so others can
+                  understand. Example: 'The time it will take George to walk
+                  home.'
                 </p>
-              }
-              <div className='ui button primary large' onClick={this.onSave.bind(this)}>
-                {hasName ? 'Rename Model' : 'Name Model'}
+              )}
+              <div
+                className="ui button primary large"
+                onClick={this.onSave.bind(this)}
+              >
+                {hasName ? "Rename Model" : "Name Model"}
               </div>
             </div>
           </DropDown>
-        }
-        {!editableByMe &&
-          <h1> {name} </h1>
-        }
+        )}
+        {!editableByMe && <h1> {name} </h1>}
       </span>
-    )
+    );
   }
 }
-

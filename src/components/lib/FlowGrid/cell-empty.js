@@ -1,7 +1,7 @@
-import React, {Component} from 'react' 
-import PropTypes from 'prop-types'
+import React, { Component } from "react";
+import PropTypes from "prop-types";
 
-import {PTLocation} from 'lib/locationUtils'
+import { PTLocation } from "lib/locationUtils";
 
 export default class EmptyCell extends Component {
   static propTypes = {
@@ -10,29 +10,32 @@ export default class EmptyCell extends Component {
     inSelectedCell: PropTypes.bool.isRequired,
     location: PTLocation.isRequired,
     onAddItem: PropTypes.func.isRequired,
+  };
+
+  shouldComponentUpdate(nextProps) {
+    return false;
   }
 
-  shouldComponentUpdate(nextProps) { return false }
-
   _handleKeyDown(e) {
-    if (e.keyCode == '13' && this.props.inSelectedCell) { //enter
-      this.props.onAddItem(this.props.location)
-      e.preventDefault()
+    if (e.keyCode == "13" && this.props.inSelectedCell) {
+      //enter
+      this.props.onAddItem(this.props.location);
+      e.preventDefault();
     }
-    if (e.keyCode == '8') { //backspace
-      e.preventDefault()
+    if (e.keyCode == "8") {
+      //backspace
+      e.preventDefault();
     }
   }
 
   render() {
     return (
       <div
-        className={'FlowGridEmptyCell'}
+        className={"FlowGridEmptyCell"}
         onKeyPress={this.props.gridKeyPress}
         onKeyDown={this._handleKeyDown.bind(this)}
-        tabIndex='0'
+        tabIndex="0"
       />
-    )
+    );
   }
 }
-

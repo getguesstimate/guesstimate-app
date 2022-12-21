@@ -1,5 +1,5 @@
 .canvas-space::selection {
-  background-color: none
+  background-color: none;
 }
 
 .canvas-space .inner-editor input {
@@ -7,5 +7,5 @@
 }
 
 .canvas-space .inner-editor .header .save-message {
-  color: #888
+  color: #888;
 }

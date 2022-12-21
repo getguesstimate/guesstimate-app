@@ -1,32 +1,38 @@
-import React from 'react'
+import React from "react";
 
-import Icon from 'react-fa'
+import Icon from "react-fa";
 
-import {Guesstimator} from 'lib/guesstimator/index'
+import { Guesstimator } from "lib/guesstimator/index";
 
-import * as elev from 'servers/elev/index'
+import * as elev from "servers/elev/index";
 
-export const GuesstimateTypeIcon = ({guesstimateType, toggleDistributionSelector}) => {
-  const {isRangeDistribution, icon} = Guesstimator.samplerTypes.find(guesstimateType)
+export const GuesstimateTypeIcon = ({
+  guesstimateType,
+  toggleDistributionSelector,
+}) => {
+  const { isRangeDistribution, icon } =
+    Guesstimator.samplerTypes.find(guesstimateType);
   if (!!icon) {
-    let className='DistributionSelectorToggle DistributionIcon'
-    className += isRangeDistribution ? ' button' : ''
-    return(
+    let className = "DistributionSelectorToggle DistributionIcon";
+    className += isRangeDistribution ? " button" : "";
+    return (
       <div
         className={className}
         onMouseDown={isRangeDistribution && toggleDistributionSelector}
       >
-        <img src={icon}/>
+        <img src={icon} />
       </div>
-    )
+    );
   } else {
     return (
       <div
-        className='GuesstimateTypeQuestion'
-        onMouseDown={() => {elev.open(elev.GUESSTIMATE_TYPES)}}
+        className="GuesstimateTypeQuestion"
+        onMouseDown={() => {
+          elev.open(elev.GUESSTIMATE_TYPES);
+        }}
       >
-        <Icon name='question-circle'/>
+        <Icon name="question-circle" />
       </div>
-    )
+    );
   }
-}
+};

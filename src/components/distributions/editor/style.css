@@ -1,4 +1,4 @@
-@import './styles/variables.css';
+@import "./styles/variables.css";
 
 $flash-duration-sec: 0.4s;
 
@@ -12,7 +12,8 @@ $flash-duration-sec: 0.4s;
   border-radius: 2px;
   padding: 0;
   border: 2px solid transparent;
-  transition: border-color $flash-duration-sec ease, background-color $flash-duration-sec ease;
+  transition: border-color $flash-duration-sec ease,
+    background-color $flash-duration-sec ease;
 
   .fact {
     color: #483567;
@@ -48,7 +49,7 @@ $flash-duration-sec: 0.4s;
 }
 
 .Guesstimate .TextInput.default-value {
-  color: #A9A9A9;
+  color: #a9a9a9;
 }
 
 .Guesstimate.large .TextInput {
@@ -60,20 +61,20 @@ $flash-duration-sec: 0.4s;
   padding: 2px 4px;
 }
 
-.Guesstimate .TextInput{
+.Guesstimate .TextInput {
   float: left;
 }
 
 .Guesstimate.large .TextInput.NARROW {
-  width: 89%
+  width: 89%;
 }
 
 .Guesstimate .TextInput.NARROW {
-  width: 85%
+  width: 85%;
 }
 
 .Guesstimate .TextInput.WIDE {
-  width: 100%
+  width: 100%;
 }
 
 .Guesstimate .GuesstimateInputForm {
@@ -89,17 +90,17 @@ $flash-duration-sec: 0.4s;
   width: 100%;
 }
 
-.DistributionSelector .DistributionList{
+.DistributionSelector .DistributionList {
   float: right;
 }
 
-.DistributionSelector hr{
+.DistributionSelector hr {
   border: none;
   border-top: 1px solid $grey-1;
   margin: 4px 0;
 }
 
-.DistributionSelector .more-distributions{
+.DistributionSelector .more-distributions {
   float: left;
   cursor: pointer;
   padding-left: 2px;
@@ -108,7 +109,7 @@ $flash-duration-sec: 0.4s;
   color: $grey-999;
 }
 
-.Guesstimate .DistributionIcon.DistributionIcon{
+.Guesstimate .DistributionIcon.DistributionIcon {
   font-size: 1em;
   padding-top: 2px;
   padding-left: 2px;
@@ -125,11 +126,11 @@ $flash-duration-sec: 0.4s;
   width: 34px;
 }
 
-.DistributionIcon.button.selected{
+.DistributionIcon.button.selected {
   background-color: $blue-2;
 }
 
-.DistributionIcon img{
+.DistributionIcon img {
   width: 24px;
   opacity: 1;
   position: absolute;
@@ -145,7 +146,7 @@ $flash-duration-sec: 0.4s;
   font-size: 1.2em;
   color: $grey-2;
   opacity: 0.6;
-  margin-top:3px;
+  margin-top: 3px;
 }
 
 .Guesstimate.large .GuesstimateTypeQuestion {
@@ -153,7 +154,7 @@ $flash-duration-sec: 0.4s;
   margin-top: 0;
 }
 
-.Guesstimate.large a.custom-data{
+.Guesstimate.large a.custom-data {
   text-decoration: underline;
   color: #999;
   margin-top: 5px;
@@ -167,11 +168,11 @@ $flash-duration-sec: 0.4s;
   cursor: pointer;
 }
 
-.Guesstimate.large .DistributionIcon img{
+.Guesstimate.large .DistributionIcon img {
   width: 34px;
 }
 
-.DistributionIcon.DistributionSelectorToggle{
+.DistributionIcon.DistributionSelectorToggle {
   display: inline-block;
   color: #999;
   float: right;

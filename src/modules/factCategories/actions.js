@@ -1,3 +1,3 @@
-import {actionCreatorsFor} from 'redux-crud'
+import { actionCreatorsFor } from "redux-crud";
 
-export const factCategoryActions = actionCreatorsFor('factCategories')
+export const factCategoryActions = actionCreatorsFor("factCategories");

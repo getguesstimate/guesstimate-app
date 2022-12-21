@@ -1,41 +1,40 @@
 export type Guesstimate = {
-  input: string;
-  metric: string
+  input: string,
+  metric: string,
 };
 
 export type Distribution = {
-  mean?: number;
+  mean?: number,
   stdev?: number,
-  input?: string
+  input?: string,
 };
 
 export type DGraph = {
-  metrics: any
+  metrics: any,
 };
 
 export type Graph = {
   metrics: any,
-  simulations: any
+  simulations: any,
 };
 
 export type Simulation = {
   metric?: string,
-  sample?: Array<Sample>
+  sample?: Array<Sample>,
 };
 
 export type Sample = {
   values?: any,
-  errors?: any
+  errors?: any,
 };
 
 export type GridLocation = {
   row: number,
-  column: number
+  column: number,
 };
 
 export type Metric = {
   id: string,
   readableId?: string,
-  location?: GridLocation
+  location?: GridLocation,
 };
-

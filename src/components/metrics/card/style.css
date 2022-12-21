@@ -1,4 +1,4 @@
-@import './styles/variables.css';
+@import "./styles/variables.css";
 
 .metricCard--Container {
   position: relative;
@@ -15,17 +15,17 @@
   position: relative;
   font-weight: 300;
   width: 100%;
-  display:flex;
+  display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
-.metricCard input{
+.metricCard input {
   transition: background-color 0.2s;
 }
 
 .metricCard:not(.titleView) {
-  background-color: rgba(255,255,255,0.975);
+  background-color: rgba(255, 255, 255, 0.975);
 }
 
 .metricCard.intermediate:not(.titleView) {
@@ -33,11 +33,11 @@
 }
 
 .metricCard.noedge:not(.titleView) {
-  background-color: rgba(240,242,245,0.88);
+  background-color: rgba(240, 242, 245, 0.88);
 }
 
 .selected .metricCard:not(.titleView) {
-  background-color: rgba(255,255,255,0.975);
+  background-color: rgba(255, 255, 255, 0.975);
 }
 
 .hovered.selected .metricCard {
@@ -64,7 +64,7 @@
 }
 
 .ReactModal__Overlay--after-open {
-   z-index: 5;
+  z-index: 5;
 }
 
 .ReactModal__Overlay--after-open {
@@ -72,45 +72,45 @@
 }
 
 .MetricSidebar {
-	 position: absolute;
-	 top: 4px;
-	 right: -10.2em;
-	 z-index: 3;
+  position: absolute;
+  top: 4px;
+  right: -10.2em;
+  z-index: 3;
 }
 
 a.MetricSidebarItem {
-	clear: both;
-	display: block;
-	float: left;
-	width: 10em;
-	padding: .4em .7em;
-	color: white;
-	background: #52646f;
-	border-bottom: 1px solid #40525c;
+  clear: both;
+  display: block;
+  float: left;
+  width: 10em;
+  padding: 0.4em 0.7em;
+  color: white;
+  background: #52646f;
+  border-bottom: 1px solid #40525c;
 }
 
 a.MetricSidebarItem.analyzing {
-	background: #3d9268;
+  background: #3d9268;
 }
 
 a.MetricSidebarItem.analyzing:hover {
-	background: #2a8558;
+  background: #2a8558;
 }
 
 a.MetricSidebarItem:first-child {
-	border-radius: 0 2px 0 0;
+  border-radius: 0 2px 0 0;
 }
 
 a.MetricSidebarItem:last-child {
-	border-radius: 0 0 2px 0;
-	border-bottom: none;
+  border-radius: 0 0 2px 0;
+  border-bottom: none;
 }
 
 a.MetricSidebarItem:hover {
-	background: #40525c;
+  background: #40525c;
 }
 
 .MetricSidebarItem--icon {
-	float: left;
-	width: 1.5em;
+  float: left;
+  width: 1.5em;
 }

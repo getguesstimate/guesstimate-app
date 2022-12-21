@@ -23,66 +23,77 @@
 }
 
 .SensitivitySection.LARGE .regression {
-  background-color: rgba(250,250,250,0.6);
+  background-color: rgba(250, 250, 250, 0.6);
   border-radius: 3px;
   padding: 4px;
 }
 
-.SensitivitySection.LARGE .regression .label{
-  color: #6F9A6F;
+.SensitivitySection.LARGE .regression .label {
+  color: #6f9a6f;
   width: 130px;
 }
 
-.SensitivitySection.SMALL .regression .label{
+.SensitivitySection.SMALL .regression .label {
   font-size: 0.7em;
 }
 
-.SensitivitySection.SMALL .regression .label{
+.SensitivitySection.SMALL .regression .label {
   color: #777;
   font-style: italic;
 }
 
-.SensitivitySection.SMALL .regression .value{
+.SensitivitySection.SMALL .regression .value {
   font-style: italic;
   font-size: 1.2em;
 }
 
-.SensitivitySection.SMALL .regression .value.low{
+.SensitivitySection.SMALL .regression .value.low {
   font-weight: 300;
-  color: #91A791;
+  color: #91a791;
 }
 
-.SensitivitySection.SMALL .regression .value.medium{
+.SensitivitySection.SMALL .regression .value.medium {
   font-weight: 500;
-  color: #6F9A6F;
+  color: #6f9a6f;
 }
 
-.SensitivitySection.SMALL .regression .value.high{
+.SensitivitySection.SMALL .regression .value.high {
   font-weight: 700;
   color: #359235;
 }
 
-.SensitivitySection.LARGE svg path.dot{ fill: rgba(88, 173, 109, 0.12) }
-.SensitivitySection.SMALL svg path.dot{ fill: rgba(88, 173, 109, 0.18) }
-.SensitivitySection svg .axis line{ stroke: #CED6DC; }
-.SensitivitySection svg .axis .tick{ fill: #CED6DC; }
-.SensitivitySection svg .axis .domain{ fill:#E2EFE9; stroke: none; }
-
-.metricCard.intermediate .SensitivitySection.LARGE svg path.dot{
-  fill: rgba(90, 113, 89, 0.12)
+.SensitivitySection.LARGE svg path.dot {
+  fill: rgba(88, 173, 109, 0.12);
+}
+.SensitivitySection.SMALL svg path.dot {
+  fill: rgba(88, 173, 109, 0.18);
+}
+.SensitivitySection svg .axis line {
+  stroke: #ced6dc;
+}
+.SensitivitySection svg .axis .tick {
+  fill: #ced6dc;
+}
+.SensitivitySection svg .axis .domain {
+  fill: #e2efe9;
+  stroke: none;
 }
 
-.metricCard.intermediate .SensitivitySection.SMALL svg path.dot{
-  fill: rgba(90, 113, 89, 0.18)
+.metricCard.intermediate .SensitivitySection.LARGE svg path.dot {
+  fill: rgba(90, 113, 89, 0.12);
 }
 
-.SensitivitySection svg .axis text{
+.metricCard.intermediate .SensitivitySection.SMALL svg path.dot {
+  fill: rgba(90, 113, 89, 0.18);
+}
+
+.SensitivitySection svg .axis text {
   font-size: 0.9em;
-  fill: #7A909A;
+  fill: #7a909a;
 }
 
-.SensitivitySection svg text.axis.label{
-  fill: #3C4448;
+.SensitivitySection svg text.axis.label {
+  fill: #3c4448;
   font-size: 1em;
   font-weight: 700;
 }

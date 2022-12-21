@@ -5,7 +5,7 @@
   flex: 1;
 }
 
-.MetricCardViewSection .MetricTokenSection{
+.MetricCardViewSection .MetricTokenSection {
   position: absolute;
   right: 0;
   top: 0;
@@ -13,33 +13,33 @@
 
 .metricCard .MetricCardViewSection.hasErrors .error-message {
   color: #5f0909;
-  font-size: .8em;
+  font-size: 0.8em;
   font-weight: 500;
   line-height: 1.1em;
   padding: 2px 9px;
 }
 
-.metricCard .MetricCardViewSection.hasErrors .StatsSectionErrors.minor  {
+.metricCard .MetricCardViewSection.hasErrors .StatsSectionErrors.minor {
   background-color: rgb(236, 202, 199);
 }
 
-.metricCard .MetricCardViewSection.hasErrors .StatsSectionErrors.serious  {
-  background-color: #E48585;
+.metricCard .MetricCardViewSection.hasErrors .StatsSectionErrors.serious {
+  background-color: #e48585;
 }
 
-.MetricCardViewSection > .StatsSection .StatsSectionErrors.serious .fa{
-  color: #A74B4B;
+.MetricCardViewSection > .StatsSection .StatsSectionErrors.serious .fa {
+  color: #a74b4b;
   font-size: 1.5em;
 }
 
-.MetricCardViewSection > .StatsSection .StatsSectionErrors.serious i{
-  color: #A74B4B;
+.MetricCardViewSection > .StatsSection .StatsSectionErrors.serious i {
+  color: #a74b4b;
   font-size: 1.8em;
 }
 
-.MetricCardViewSection > .StatsSection .StatsSectionErrors.minor .fa{
+.MetricCardViewSection > .StatsSection .StatsSectionErrors.minor .fa {
   font-size: 1.4em;
-  color: #D48A8A;
+  color: #d48a8a;
   margin-top: 4px;
 }
 
@@ -52,7 +52,7 @@
   color: #222;
 }
 
- .metricCard.output .MetricCardViewSection .DistributionSummary {
+.metricCard.output .MetricCardViewSection .DistributionSummary {
   font-weight: 700;
   color: #111;
 }
@@ -105,12 +105,12 @@
 .metricCard .DistributionSummary {
   font-weight: 300;
   font-family: Lato, Arial, sans-serif;
-  color: #444
+  color: #444;
 }
 
 .MetricCardViewSection .StatsSectionTable {
   padding: 0 7px;
-  background-color: rgba(255,255,255,0.3);
+  background-color: rgba(255, 255, 255, 0.3);
   margin-top: 10px;
   flex: 1;
 }

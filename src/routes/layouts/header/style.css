@@ -1,10 +1,10 @@
-@import './styles/variables.css';
+@import "./styles/variables.css";
 
-.PageHeader:not(.isBare){
+.PageHeader:not(.isBare) {
   border-bottom: 1px solid $grey-1;
 }
 
-.navbar-brand  {
+.navbar-brand {
   float: left;
   margin-top: 0.2em;
   font-size: 1.8em;
@@ -14,7 +14,7 @@
   font-weight: 500;
 }
 
-.navbar-brand:hover  {
+.navbar-brand:hover {
   background-color: $grey-1;
 }
 
@@ -25,9 +25,9 @@
   display: none;
 }
 
-.navbar-brand .guesstimate-name{
+.navbar-brand .guesstimate-name {
   color: $grey-2;
-  margin-top:0.1em;
+  margin-top: 0.1em;
   float: left;
 }
 
@@ -36,7 +36,7 @@
     padding: 0 1em;
   }
   .PageHeader .header-right-menu {
-    font-size: .9em;
+    font-size: 0.9em;
   }
   .guesstimate-name {
     display: none;

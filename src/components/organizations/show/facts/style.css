@@ -1,5 +1,5 @@
 .FactGraph {
-  font-size: .8em;
+  font-size: 0.8em;
   display: flex;
   flex-align: center;
   justify-content: center;
@@ -15,7 +15,7 @@
   width: 100%;
   background-color: #acbfcf;
   border-radius: 1px;
-  transition: background-color .5s;
+  transition: background-color 0.5s;
   &:hover {
     background-color: #82a1bb;
     color: #283b50;

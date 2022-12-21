@@ -1,49 +1,67 @@
-import React, {Component} from 'react' 
-import PropTypes from 'prop-types'
-import * as firstSubscriptionActions from 'gModules/first_subscription/actions.js'
-import FirstSubscription from './FirstSubscription.js'
-import {subStage} from 'gModules/first_subscription/state_machine.js'
-import {connect} from 'react-redux'
-import * as spaceActions from 'gModules/spaces/actions.js'
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import * as firstSubscriptionActions from "gModules/first_subscription/actions.js";
+import FirstSubscription from "./FirstSubscription.js";
+import { subStage } from "gModules/first_subscription/state_machine.js";
+import { connect } from "react-redux";
+import * as spaceActions from "gModules/spaces/actions.js";
 
 function mapStateToProps(state) {
   return {
     me: state.me,
-    firstSubscription: state.firstSubscription
-  }
+    firstSubscription: state.firstSubscription,
+  };
 }
 
 @connect(mapStateToProps)
 export default class FirstSubscriptionContainer extends Component {
-  displayName: 'FirstSubscriptionContainer'
+  displayName: "FirstSubscriptionContainer";
 
   componentDidMount() {
-    firstSubscriptionActions.flowStageReset()
+    firstSubscriptionActions.flowStageReset();
 
     if (!this._paymentAccountExists()) {
-      this.props.dispatch(firstSubscriptionActions.fetchIframe({
-        user_id: this.props.me.id,
-        plan_id: this.props.planId
-      }))
+      this.props.dispatch(
+        firstSubscriptionActions.fetchIframe({
+          user_id: this.props.me.id,
+          plan_id: this.props.planId,
+        })
+      );
     }
   }
 
   _onPaymentSuccess() {
-    this.props.dispatch(firstSubscriptionActions.postSynchronization({
-      user_id: this.props.me.id
-    }))
+    this.props.dispatch(
+      firstSubscriptionActions.postSynchronization({
+        user_id: this.props.me.id,
+      })
+    );
   }
 
-  _onPaymentCancel() { this.props.dispatch(firstSubscriptionActions.flowStageCancel()) }
+  _onPaymentCancel() {
+    this.props.dispatch(firstSubscriptionActions.flowStageCancel());
+  }
 
-  _paymentAccountPortalUrl() { return _.get(this.props.me, 'profile.account._links.account') }
-  _paymentAccountExists() { return !!_.get(this.props.me, 'profile.has_payment_account') }
+  _paymentAccountPortalUrl() {
+    return _.get(this.props.me, "profile.account._links.account");
+  }
+  _paymentAccountExists() {
+    return !!_.get(this.props.me, "profile.has_payment_account");
+  }
 
-  _iframeUrl() { return _.get(this.props.firstSubscription, 'iframe.href') || '' }
-  _iframeWebsiteName() { return _.get(this.props.firstSubscription, 'iframe.website_name') || '' }
-  _flowStage() { return subStage(this.props.firstSubscription) }
+  _iframeUrl() {
+    return _.get(this.props.firstSubscription, "iframe.href") || "";
+  }
+  _iframeWebsiteName() {
+    return _.get(this.props.firstSubscription, "iframe.website_name") || "";
+  }
+  _flowStage() {
+    return subStage(this.props.firstSubscription);
+  }
 
-  _onNewModel() { this.props.dispatch(spaceActions.create()) }
+  _onNewModel() {
+    this.props.dispatch(spaceActions.create());
+  }
 
   render() {
     return (
@@ -58,6 +76,6 @@ export default class FirstSubscriptionContainer extends Component {
         onNewModel={this._onNewModel.bind(this)}
         isTest={false}
       />
-    )
+    );
   }
 }

@@ -1,31 +1,31 @@
-import React, {Component} from 'react' 
-import PropTypes from 'prop-types'
+import React, { Component } from "react";
+import PropTypes from "prop-types";
 
-import ReactDOM from 'react-dom'
-import $ from 'jquery'
-import { DropTarget } from 'react-dnd'
+import ReactDOM from "react-dom";
+import $ from "jquery";
+import { DropTarget } from "react-dnd";
 
-import ItemCell from './filled-cell'
-import EmptyCell from './cell-empty'
+import ItemCell from "./filled-cell";
+import EmptyCell from "./cell-empty";
 
-import {PTLocation} from 'lib/locationUtils'
+import { PTLocation } from "lib/locationUtils";
 
-import {getClassName} from 'gEngine/utils'
+import { getClassName } from "gEngine/utils";
 
 const squareTarget = {
   drop(props) {
-    return {location: props.location, item: props.item}
-  }
-}
+    return { location: props.location, item: props.item };
+  },
+};
 
 function collect(connect, monitor) {
   return {
     connectDropTarget: connect.dropTarget(),
-    isOver: monitor.isOver()
-  }
+    isOver: monitor.isOver(),
+  };
 }
 
-@DropTarget('card', squareTarget, collect)
+@DropTarget("card", squareTarget, collect)
 export default class Cell extends Component {
   static propTypes = {
     connectDropTarget: PropTypes.func.isRequired,
@@ -43,42 +43,56 @@ export default class Cell extends Component {
     onEndDragCell: PropTypes.func.isRequired,
     onEmptyCellMouseDown: PropTypes.func,
     onAutoFillTargetMouseDown: PropTypes.func,
-  }
+  };
 
   shouldComponentUpdate(newProps, newState) {
-    const difProps = (newProps.isOver !== this.props.isOver) ||
-      (newProps.inSelectedRegion !== this.props.inSelectedRegion) ||
-      (newProps.inSelectedCell !== this.props.inSelectedCell) ||
-      (newProps.isHovered !== this.props.isHovered) ||
-      (newProps.showAutoFillToken !== this.props.showAutoFillToken)
-    const itemDifferent = (!!newProps.item !== !!this.props.item)
-    const bothHaveItems = (!!newProps.item && !!this.props.item)
+    const difProps =
+      newProps.isOver !== this.props.isOver ||
+      newProps.inSelectedRegion !== this.props.inSelectedRegion ||
+      newProps.inSelectedCell !== this.props.inSelectedCell ||
+      newProps.isHovered !== this.props.isHovered ||
+      newProps.showAutoFillToken !== this.props.showAutoFillToken;
+    const itemDifferent = !!newProps.item !== !!this.props.item;
+    const bothHaveItems = !!newProps.item && !!this.props.item;
 
-    return (difProps || itemDifferent || (bothHaveItems && this.props.hasItemUpdated(this.props.item, newProps.item)))
+    return (
+      difProps ||
+      itemDifferent ||
+      (bothHaveItems &&
+        this.props.hasItemUpdated(this.props.item, newProps.item))
+    );
   }
 
-  componentWillUpdate() { window.recorder.recordRenderStartEvent(this) }
-  componentWillUnmount() { window.recorder.recordUnmountEvent(this) }
+  componentWillUpdate() {
+    window.recorder.recordRenderStartEvent(this);
+  }
+  componentWillUnmount() {
+    window.recorder.recordUnmountEvent(this);
+  }
 
   componentDidUpdate(prevProps, prevState) {
-    window.recorder.recordRenderStopEvent(this)
-    if ((!!prevProps.item !== !!this.props.item || !!prevProps.inSelectedCell !== !!this.props.inSelectedCell) && this.props.inSelectedCell) {
-      this._focus()
+    window.recorder.recordRenderStopEvent(this);
+    if (
+      (!!prevProps.item !== !!this.props.item ||
+        !!prevProps.inSelectedCell !== !!this.props.inSelectedCell) &&
+      this.props.inSelectedCell
+    ) {
+      this._focus();
     }
   }
 
   getPosition() {
-    let $el = $(this.refs.dom)
+    let $el = $(this.refs.dom);
     if ($el.length) {
-      const position = $el.position()
+      const position = $el.position();
       return {
         top: position.top,
         left: position.left,
         height: $el.height(),
-        width: $el.width()
-      }
+        width: $el.width(),
+      };
     } else {
-      return {}
+      return {};
     }
   }
 
@@ -86,49 +100,55 @@ export default class Cell extends Component {
     // TODO(matthew): I think we can refactor this and get rid of the window trigger system for doing this input, but it
     // will be a bigger refactor, so I'm inclined to leave this for now, even though it couples the flow grid and the
     // space more tightly than they've been integrated so far.
-    const isFunctionSelect = (this.props.canvasState.metricClickMode === 'FUNCTION_INPUT_SELECT')
-    const {inSelectedCell, item, location} = this.props
-    const leftClick = (e.button === 0)
+    const isFunctionSelect =
+      this.props.canvasState.metricClickMode === "FUNCTION_INPUT_SELECT";
+    const { inSelectedCell, item, location } = this.props;
+    const leftClick = e.button === 0;
 
-    if (!leftClick) { return }
+    if (!leftClick) {
+      return;
+    }
 
-    if (!item){ this.props.onEmptyCellMouseDown(e) }
+    if (!item) {
+      this.props.onEmptyCellMouseDown(e);
+    }
 
     if (inSelectedCell) {
       if (!item) {
-        this.props.onAddItem(location)
+        this.props.onAddItem(location);
       }
-      this.props.handleSelect(location)
+      this.props.handleSelect(location);
     }
 
     if (!inSelectedCell) {
       if (e.shiftKey) {
-        this.props.handleEndRangeSelect(this.props.location)
-        return
+        this.props.handleEndRangeSelect(this.props.location);
+        return;
       } else if (isFunctionSelect && item) {
-        return
+        return;
       } else {
-        this.props.handleSelect(location)
+        this.props.handleSelect(location);
       }
     }
   }
 
   componentDidMount() {
     if (this.props.inSelectedCell) {
-      this._focus()
+      this._focus();
     }
-    window.recorder.recordMountEvent(this)
+    window.recorder.recordMountEvent(this);
   }
 
   _focus() {
-    let domNode
+    let domNode;
     if (this.props.item) {
       // Always focus on the immediate child of the filled cell.
-      domNode = ReactDOM.findDOMNode(this.refs.item.decoratedComponentInstance).children[0]
+      domNode = ReactDOM.findDOMNode(this.refs.item.decoratedComponentInstance)
+        .children[0];
     } else {
-      domNode = ReactDOM.findDOMNode(this.refs.empty)
+      domNode = ReactDOM.findDOMNode(this.refs.empty);
     }
-    domNode.focus()
+    domNode.focus();
   }
 
   _cellElement() {
@@ -141,30 +161,38 @@ export default class Cell extends Component {
           forceFlowGridUpdate={this.props.forceFlowGridUpdate}
           hover={this.props.isHovered}
           focusCell={this._focus.bind(this)}
-          ref={'item'}
+          ref={"item"}
         />
-      )
+      );
     } else {
-      return ( <EmptyCell {...this.props} ref={'empty'} />)
+      return <EmptyCell {...this.props} ref={"empty"} />;
     }
   }
 
   onAutoFillTargetMouseDown(e) {
     if (e.button === 0) {
-      this.props.onAutoFillTargetMouseDown()
-      e.preventDefault()
+      this.props.onAutoFillTargetMouseDown();
+      e.preventDefault();
     }
   }
 
   render() {
-    const {inSelectedRegion, item, isOver, isHovered, onMouseEnter, onMouseUp, showAutoFillToken} = this.props
+    const {
+      inSelectedRegion,
+      item,
+      isOver,
+      isHovered,
+      onMouseEnter,
+      onMouseUp,
+      showAutoFillToken,
+    } = this.props;
     const className = getClassName(
-      'FlowGridCell', 
-      inSelectedRegion ? 'selected' : 'nonSelected',
-      !!item ? 'hasItem' : null,
-      isOver ? 'IsOver' : null,
-      isHovered ? 'hovered' : null,
-    )
+      "FlowGridCell",
+      inSelectedRegion ? "selected" : "nonSelected",
+      !!item ? "hasItem" : null,
+      isOver ? "IsOver" : null,
+      isHovered ? "hovered" : null
+    );
     return this.props.connectDropTarget(
       <div
         className={className}
@@ -173,12 +201,15 @@ export default class Cell extends Component {
         onMouseUp={this.props.onMouseUp}
       >
         {this._cellElement()}
-        {this.props.showAutoFillToken &&
-          <div className='AutoFillToken--outer'>
-            <div className='AutoFillToken' onMouseDown={this.onAutoFillTargetMouseDown.bind(this)}/>
+        {this.props.showAutoFillToken && (
+          <div className="AutoFillToken--outer">
+            <div
+              className="AutoFillToken"
+              onMouseDown={this.onAutoFillTargetMouseDown.bind(this)}
+            />
           </div>
-        }
+        )}
       </div>
-    )
+    );
   }
 }

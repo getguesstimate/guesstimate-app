@@ -9,13 +9,13 @@
 }
 
 .ui.button.g-button {
-  padding: .5em .8em;
+  padding: 0.5em 0.8em;
   border-radius: 2px;
   i {
-    margin-right: .3em;
+    margin-right: 0.3em;
   }
   .fa {
-    margin-right: .3em;
+    margin-right: 0.3em;
   }
   &.red {
     background-color: #b74d4d;

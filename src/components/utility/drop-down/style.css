@@ -1,19 +1,19 @@
-@import './styles/variables.css';
+@import "./styles/variables.css";
 
 .dropDown-open {
   cursor: pointer;
 }
 
-.dropDown-relative{
+.dropDown-relative {
   position: relative;
   float: left;
 }
 
 .dropDown {
-  position:absolute;
+  position: absolute;
   top: 100%;
   margin-top: 2px;
-  z-index:10;
+  z-index: 10;
 }
 
 .dropDown.position-left {

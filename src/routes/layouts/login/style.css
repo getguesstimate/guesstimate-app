@@ -1,7 +1,7 @@
-@import './styles/variables.css';
+@import "./styles/variables.css";
 
 .header-left-menu {
-  float: left
+  float: left;
 }
 
 .header-right-menu {
@@ -17,8 +17,8 @@
   transition: color 5s;
 }
 
-@media only screen and (max-width: 767px){
- .header-right-menu .item {
+@media only screen and (max-width: 767px) {
+  .header-right-menu .item {
     margin-left: 1em;
   }
 }
@@ -32,7 +32,7 @@
 }
 
 .isBare .header-right-menu .item.text {
-  color: #1487D0;
+  color: #1487d0;
   font-size: 1.1em;
 }
 
@@ -40,7 +40,7 @@
   transition: color 0.3s;
 }
 
-.header-right-menu a.item i{
+.header-right-menu a.item i {
   transition: color 0.3s;
 }
 
@@ -48,7 +48,7 @@
   color: $blue-1;
 }
 
-.header-right-menu a.item:hover i{
+.header-right-menu a.item:hover i {
   color: $blue-1;
 }
 
@@ -70,7 +70,7 @@
 .header-right-menu .avatar {
   width: 2.6em;
   border-radius: 3em;
-  border: 0.3em solid rgba(0,0,0,0);
+  border: 0.3em solid rgba(0, 0, 0, 0);
   margin-top: 3px;
 }
 

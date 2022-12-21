@@ -21,9 +21,8 @@ body {
   height: 100%;
 }
 
-
 body.remove-elev #_elev_io {
-  display: none!important;
+  display: none !important;
 }
 
 .MainConfirmation {
@@ -39,7 +38,7 @@ body.remove-elev #_elev_io {
   margin-right: 1em;
 }
 
-.MainConfirmation h1{
+.MainConfirmation h1 {
   margin-bottom: 2em;
   font-size: 1.6em;
   color: #333;

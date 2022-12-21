@@ -1,40 +1,40 @@
 export default class InputToGuesstimate {
-  constructor(input){
-    this.input = input
+  constructor(input) {
+    this.input = input;
   }
-  toGuesstimate(){
+  toGuesstimate() {
     if (this.isFunction()) {
-      return {funct: this.parseFunction()}
+      return { funct: this.parseFunction() };
     } else if (this.isEstimate()) {
-      return {estimate: this.parseEstimate()}
+      return { estimate: this.parseEstimate() };
     } else {
-      return {}
+      return {};
     }
   }
-  toEditorState(){
-    if (this.isFunction()){
-      return 'function'
-    } else if (this.isEstimate()){
-      return 'estimate'
+  toEditorState() {
+    if (this.isFunction()) {
+      return "function";
+    } else if (this.isEstimate()) {
+      return "estimate";
     } else {
-      return 'editing'
+      return "editing";
     }
   }
-  isFunction(){
-    return this.input[0] === '=';
+  isFunction() {
+    return this.input[0] === "=";
   }
-  parseFunction(){
-    return {textField: this.input}
+  parseFunction() {
+    return { textField: this.input };
   }
-  isEstimate(){
-    return this.parseEstimate() !== false
+  isEstimate() {
+    return this.parseEstimate() !== false;
   }
-  parseEstimate(){
-    if (this.input.includes('/')){
-      let [median, stdev] = this.input.split('/').map((e) => e.trim());
-      return {median, stdev};
+  parseEstimate() {
+    if (this.input.includes("/")) {
+      let [median, stdev] = this.input.split("/").map((e) => e.trim());
+      return { median, stdev };
     } else {
-      return false
+      return false;
     }
   }
 }

@@ -1,4 +1,4 @@
-@import './variables.css';
+@import "./variables.css";
 
 .ToolTip {
   position: absolute;
@@ -23,14 +23,14 @@
 
 .ToolTip.LARGE {
   border: none;
-  background-color: rgba(250,250,250,0.99);
+  background-color: rgba(250, 250, 250, 0.99);
 }
 
-.ToolTip.LARGE .arrow-up{
+.ToolTip.LARGE .arrow-up {
   left: 8%;
 }
 
-.ToolTip.SMALL .arrow-up{
+.ToolTip.SMALL .arrow-up {
   left: 22%;
 }
 
@@ -43,4 +43,3 @@
   position: absolute;
   top: -8px;
 }
-

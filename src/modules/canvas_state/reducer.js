@@ -2,20 +2,20 @@ const initialState = {
   analysisViewEnabled: false,
   expandedViewEnabled: false,
   scientificViewEnabled: false,
-  edgeView: 'visible',
-  metricClickMode: 'DEFAULT',
-  saveState: 'NONE',
+  edgeView: "visible",
+  metricClickMode: "DEFAULT",
+  saveState: "NONE",
   editsAllowed: true,
   editsAllowedManuallySet: false,
-  analysisMetricId: ''
-}
+  analysisMetricId: "",
+};
 
 export function canvasStateR(state = initialState, action) {
   switch (action.type) {
-    case 'CHANGE_CANVAS_STATE': {
-      return {...state, ...action.values}
+    case "CHANGE_CANVAS_STATE": {
+      return { ...state, ...action.values };
     }
     default:
-      return state
+      return state;
   }
 }

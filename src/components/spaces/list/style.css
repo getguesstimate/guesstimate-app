@@ -1,4 +1,4 @@
-@import './variables.css';
+@import "./variables.css";
 
 .SpaceList {
   border-left: 1px solid $grey-1;

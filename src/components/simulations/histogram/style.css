@@ -1,4 +1,4 @@
-@import './styles/variables.css';
+@import "./styles/variables.css";
 
 .react-d3-histogram {
   bottom: -24px;
@@ -19,7 +19,6 @@
   shape-rendering: crispEdges;
 }
 
-
 .react-d3-histogram__bar text {
   fill: none;
 }
@@ -33,12 +32,13 @@
   fill: #aaa;
 }
 
-.react-d3-histogram__x-axis path, .react-d3-histogram__x-axis line {
+.react-d3-histogram__x-axis path,
+.react-d3-histogram__x-axis line {
   fill: none;
   shape-rendering: crispEdges;
 }
 
 .react-d3-histogram__hoverbar {
-   stroke: rgba(14, 44, 64, 0.46);
-   stroke-dasharray: 8,5;
+  stroke: rgba(14, 44, 64, 0.46);
+  stroke-dasharray: 8, 5;
 }

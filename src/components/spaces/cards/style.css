@@ -4,18 +4,18 @@
 
 .SpaceCard.new {
   .SpaceCard--inner {
-    background-color:#CEE4CE;
+    background-color: #cee4ce;
     transition: background-color 0.1s;
     align-items: center;
     justify-content: center;
-    border: 1px solid rgba(0,0,0,0);
+    border: 1px solid rgba(0, 0, 0, 0);
     min-height: 12em;
 
     &:hover {
       border: 1px solid #61a761;
     }
 
-    .section-middle{
+    .section-middle {
       text-align: center;
 
       h3 {
@@ -26,7 +26,7 @@
 
       .fa {
         font-size: 4.5em;
-        color: #79B979;
+        color: #79b979;
       }
     }
   }
@@ -42,12 +42,12 @@
   }
 
   .SpaceCard--inner {
-    margin: 0 .8em;
+    margin: 0 0.8em;
   }
 
-  .image .snapshot.blank img{
+  .image .snapshot.blank img {
     height: 85%;
-    opacity: .2;
+    opacity: 0.2;
     margin-bottom: 0;
     max-height: 4em;
   }
@@ -58,22 +58,22 @@
 }
 
 .SpaceCard--inner {
-  margin: 1.5em .8em;
+  margin: 1.5em 0.8em;
   float: left;
   cursor: pointer;
   width: 100%;
   display: flex;
   flex-direction: column;
-  border: 1px solid rgba(0,0,0,0);
+  border: 1px solid rgba(0, 0, 0, 0);
   border-radius: 2px;
 }
 
 .SpaceCard--inner:hover {
-  border: 1px solid #C2CDD6;
+  border: 1px solid #c2cdd6;
 }
 
 .SpaceCard .header {
-  padding: .5em;
+  padding: 0.5em;
   border-radius: 2px 2px 0 0;
   background-color: white;
   flex: 0 0 auto;
@@ -82,19 +82,19 @@
 .SpaceCard .image {
   min-height: 11em;
   position: relative;
-  background-color: #D9DEE2;
+  background-color: #d9dee2;
   float: left;
   flex: 0 0 auto;
 }
 
-.SpaceCard .image img{
+.SpaceCard .image img {
   width: 100%;
   float: left;
   position: relative;
   z-index: 1;
 }
 
-.SpaceCard .image .snapshot.blank{
+.SpaceCard .image .snapshot.blank {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -105,7 +105,7 @@
   bottom: 0;
 }
 
-.SpaceCard .image .snapshot.blank img{
+.SpaceCard .image .snapshot.blank img {
   height: 67%;
   width: auto;
   opacity: 0.23;
@@ -114,7 +114,7 @@
 
 .SpaceCard .header h3 {
   font-size: 1.3em;
-  color: #4A6A88;
+  color: #4a6a88;
   margin-bottom: 0;
 }
 
@@ -125,25 +125,25 @@
 
 .SpaceCard .header .changed-at {
   color: #888;
-  font-size: .9em;
+  font-size: 0.9em;
 }
 
 .SpaceCard .hover-row {
   position: absolute;
-  left: .5em;
-  bottom: .5em;
+  left: 0.5em;
+  bottom: 0.5em;
   z-index: 2;
 }
 
 .SpaceCard .hover-row .tag {
   float: left;
   font-size: 1.6em;
-  color: #6E7980;
-  padding: .12em 0 0;
+  color: #6e7980;
+  padding: 0.12em 0 0;
 }
 
 .SpaceCard .hover-row .owner-tag {
-  margin-right: .5em;
+  margin-right: 0.5em;
   float: left;
   background: rgba(147, 159, 169, 0.7);
   border-radius: 2px;
@@ -153,19 +153,19 @@
 .SpaceCard .hover-row .owner-tag:hover {
   cursor: pointer;
   background: rgba(88, 110, 127, 0.71);
-  transition: .2s background;
+  transition: 0.2s background;
 }
 
-.SpaceCard .hover-row .owner-tag .avatar{
+.SpaceCard .hover-row .owner-tag .avatar {
   width: 1.8em;
   height: 1.8em;
   border-radius: 2px 0 0 2px;
   float: left;
 }
 
-.SpaceCard .hover-row .owner-tag .name{
+.SpaceCard .hover-row .owner-tag .name {
   float: left;
-  padding: .3em .5em 0 .5em;
+  padding: 0.3em 0.5em 0 0.5em;
   color: white;
   font-size: 1.1em;
   font-weight: 800;
@@ -177,14 +177,13 @@
   background-color: white;
   float: left;
   width: 100%;
-  padding: .3em .5em .6em .5em;
+  padding: 0.3em 0.5em 0.6em 0.5em;
   overflow: hidden;
 }
 
 .SpaceCard .body p {
   margin-top: 0.4em;
   width: 100%;
-  color: #78838C;
+  color: #78838c;
   float: left;
 }
-

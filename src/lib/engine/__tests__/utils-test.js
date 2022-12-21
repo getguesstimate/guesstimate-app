@@ -1,7 +1,7 @@
-import {URL_REGEX, makeURLsMarkdown} from '../utils'
-import {expect} from 'chai'
+import { URL_REGEX, makeURLsMarkdown } from "../utils";
+import { expect } from "chai";
 
-describe('URL transformation', () => {
+describe("URL transformation", () => {
   // Source: https://mathiasbynens.be/demo/url-regex
   const validURLs = [
     "http://foo.com/blah_blah",
@@ -40,7 +40,7 @@ describe('URL transformation', () => {
     "http://1337.net",
     "http://a.b-c.de",
     "http://223.255.255.254",
-  ]
+  ];
 
   const errorURLs = [
     "http://",
@@ -78,23 +78,32 @@ describe('URL transformation', () => {
     "http://.www.foo.bar/",
     "http://.www.foo.bar./",
     "http://10.1.1.1",
-  ]
+  ];
 
-  describe('URL_REGEX', () => {
-    const fullStrRegex = new RegExp(`^${URL_REGEX.source}$`, 'i')
-    it('correctly matches urls', () => {
-      validURLs.forEach(url => expect(fullStrRegex.test(url), `URL: ${url} should match`).to.equal(true))
-      errorURLs.forEach(url => expect(fullStrRegex.test(url), `URL: ${url} should not match`).to.equal(false))
-    })
-  })
+  describe("URL_REGEX", () => {
+    const fullStrRegex = new RegExp(`^${URL_REGEX.source}$`, "i");
+    it("correctly matches urls", () => {
+      validURLs.forEach((url) =>
+        expect(fullStrRegex.test(url), `URL: ${url} should match`).to.equal(
+          true
+        )
+      );
+      errorURLs.forEach((url) =>
+        expect(fullStrRegex.test(url), `URL: ${url} should not match`).to.equal(
+          false
+        )
+      );
+    });
+  });
 
-  describe('makeURLsMarkdown', () => {
-    const sampleUrl = 'www.google.com'
-    const sampleUrlTransformed = `[${sampleUrl}](${sampleUrl})`
-    const fullText = `Hi There. ${sampleUrl}, ${sampleUrlTransformed}, [foo](${sampleUrl}), (${sampleUrl})`
-    const fullTextTransformed = `Hi There. ${sampleUrlTransformed}, ${sampleUrlTransformed}, [foo](${sampleUrl}), (${sampleUrlTransformed})`
+  describe("makeURLsMarkdown", () => {
+    const sampleUrl = "www.google.com";
+    const sampleUrlTransformed = `[${sampleUrl}](${sampleUrl})`;
+    const fullText = `Hi There. ${sampleUrl}, ${sampleUrlTransformed}, [foo](${sampleUrl}), (${sampleUrl})`;
+    const fullTextTransformed = `Hi There. ${sampleUrlTransformed}, ${sampleUrlTransformed}, [foo](${sampleUrl}), (${sampleUrlTransformed})`;
 
-    it('correctly transforms text', () => { expect(makeURLsMarkdown(fullText)).to.equal(fullTextTransformed) })
-  })
-})
-
+    it("correctly transforms text", () => {
+      expect(makeURLsMarkdown(fullText)).to.equal(fullTextTransformed);
+    });
+  });
+});

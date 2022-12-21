@@ -1,4 +1,4 @@
-@import './styles/variables.css';
+@import "./styles/variables.css";
 
 .ClickToEdit {
   float: left;
@@ -14,7 +14,7 @@
 }
 
 .ClickToEdit > .BlankMode:hover {
-  background-color: rgba(0,0,0,0.2);
+  background-color: rgba(0, 0, 0, 0.2);
   color: #333;
   cursor: pointer;
 }
@@ -40,7 +40,7 @@ a.markdown-help:hover {
 
 .ClickToEdit .EditingMode .submit-section .submit-section-close {
   float: left;
-  margin-top: .2em;
+  margin-top: 0.2em;
 }
 
 .ClickToEdit .EditingMode .submit-section .submit.button {

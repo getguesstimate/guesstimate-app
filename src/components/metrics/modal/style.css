@@ -1,9 +1,9 @@
-@import './styles/variables.css';
+@import "./styles/variables.css";
 
-$grey: #EEE;
+$grey: #eee;
 
 .metricModal {
-  background-color: rgba(240,240,240,1);
+  background-color: rgba(240, 240, 240, 1);
   margin-bottom: 2em;
 }
 
@@ -14,39 +14,39 @@ $grey: #EEE;
 
 .metricModal > .bottom {
   background-color: white;
-  padding: 4em 1.5em 1.5em ;
+  padding: 4em 1.5em 1.5em;
 }
 
 .metricModal hr {
   border: none;
-  border-top: 1px solid #ddd
+  border-top: 1px solid #ddd;
 }
 
-.metricModal h1{
+.metricModal h1 {
   margin: 0;
   color: #444;
   font-weight: 600;
   font-size: 2.2em;
 }
 
-.metricModal h2{
+.metricModal h2 {
   color: #333;
   font-size: 1.4em;
 }
 
-.metricModal h3{
+.metricModal h3 {
   color: #999;
   font-size: 1.4em;
   font-weight: 400;
 }
 
-.metricModal .section{
+.metricModal .section {
   padding: 2em 1em 0;
   margin: 2em 0;
 }
 
 .metricModal .histogram {
-  position:absolute;
+  position: absolute;
   left: 0;
   right: 0;
   bottom: -1.8em;
@@ -72,17 +72,17 @@ $grey: #EEE;
   color: #666;
 }
 
-.metricModal .distributionSection .island{
+.metricModal .distributionSection .island {
   padding-top: 1em;
   position: relative;
 }
 
-.metricModal .distributionSection .subsection{
+.metricModal .distributionSection .subsection {
   z-index: 1;
   padding: 0 1em;
 }
 
-.metricModal .distributionSection .mean.subsection .DistributionSummary{
+.metricModal .distributionSection .mean.subsection .DistributionSummary {
   color: #000;
   font-size: 2.3em;
   margin-top: 1em;
@@ -90,7 +90,7 @@ $grey: #EEE;
   float: left;
 }
 
-.metricModal .distributionSection .mean.subsection .DistributionSummary .stdev{
+.metricModal .distributionSection .mean.subsection .DistributionSummary .stdev {
   color: #666;
 }
 
@@ -99,44 +99,42 @@ $grey: #EEE;
   background-color: rgba(240, 240, 240, 0.68);
 }
 
-.metricModal .distributionSection .mean.subsection .hovered-value h4{
-  margin-top: .5em;
+.metricModal .distributionSection .mean.subsection .hovered-value h4 {
+  margin-top: 0.5em;
   color: #888888;
   font-weight: 200;
 }
 
-.metricModal .distributionSection .mean.subsection .hovered-value h3{
+.metricModal .distributionSection .mean.subsection .hovered-value h3 {
   margin-bottom: 0;
   font-size: 2em;
   color: #555555;
   font-weight: 200;
 }
 
-
-.metricModal .section-small{
+.metricModal .section-small {
   background-color: white;
   border-radius: 3px;
   padding: 0.5em;
   margin: 1em 0;
 }
 
-.metricModal .distributionSection{
+.metricModal .distributionSection {
   margin: 0.5em 0 0em;
   min-height: 10em;
   position: relative;
 }
 
-
 .metricModal .Guesstimate.large input {
-   background-color: $grey;
+  background-color: $grey;
 }
 
-.metricModal .editingInputSection{
+.metricModal .editingInputSection {
   margin-bottom: 3em;
   margin-left: -4px;
 }
 
-.metricModal .guesstimateDescriptionSection{
+.metricModal .guesstimateDescriptionSection {
   color: #666;
 }
 
@@ -149,15 +147,15 @@ $grey: #EEE;
 .metricModal .SampleList {
   max-height: 30em;
   overflow: scroll;
-  padding: .5em;
+  padding: 0.5em;
   background-color: #f0f0f0;
   border-radius: 3px;
 }
 
 .metricModal .modal-action.button {
   background-color: #ddd;
-  border-radius: .3px;
-  padding: .25em .7em;
+  border-radius: 0.3px;
+  padding: 0.25em 0.7em;
   color: #555;
   font-size: 1.1em;
   &:hover {
@@ -165,6 +163,6 @@ $grey: #EEE;
   }
 }
 
-.metricModal--sample-container{
+.metricModal--sample-container {
   float: right;
 }

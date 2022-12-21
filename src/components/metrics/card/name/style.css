@@ -1,4 +1,4 @@
-@import './styles/variables.css';
+@import "./styles/variables.css";
 
 .MetricName {
   @mixin small-input;
@@ -13,11 +13,11 @@
 }
 
 .output .MetricName {
-   font-weight: 500;
+  font-weight: 500;
 }
 
 .titleView .MetricName {
-  color: #3C4F67;
+  color: #3c4f67;
   font-weight: 600;
 }
 
@@ -26,22 +26,22 @@
 }
 
 .metricCard.display .titleView .MetricName {
-  color: #3C3F44;
+  color: #3c3f44;
 }
 
 .output .MetricName .static {
-   font-weight: 500;
+  font-weight: 500;
 }
 
-.titleView .MetricName .static{
-  color: #3C4F67;
+.titleView .MetricName .static {
+  color: #3c4f67;
   font-weight: 600;
 }
 
-.MetricCardViewSection.display .MetricName .static{
+.MetricCardViewSection.display .MetricName .static {
   overflow: hidden;
 }
 
-.metricCard.display .titleView .MetricName .static{
-  color: #3C3F44;
+.metricCard.display .titleView .MetricName .static {
+  color: #3c3f44;
 }

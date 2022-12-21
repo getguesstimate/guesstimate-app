@@ -1,31 +1,31 @@
-@import './styles/variables.css';
+@import "./styles/variables.css";
 
-.FirstSubscriptionPage{
-  font-family: 'Lato';
+.FirstSubscriptionPage {
+  font-family: "Lato";
   margin-top: 2em;
 }
 
-.FirstSubscriptionPage .FirstSubscriptionPage-header{
+.FirstSubscriptionPage .FirstSubscriptionPage-header {
   margin-bottom: 6em;
 }
 
-.FirstSubscriptionPage .FirstSubscriptionPage-header h1{
+.FirstSubscriptionPage .FirstSubscriptionPage-header h1 {
   font-size: 3em;
   font-weight: 400;
   color: $grey-2;
 }
 
-.FirstSubscriptionPage .FirstSubscriptionPage-header .number{
+.FirstSubscriptionPage .FirstSubscriptionPage-header .number {
   color: $blue-1;
 }
 
-.FirstSubscriptionPage h2{
+.FirstSubscriptionPage h2 {
   color: #666;
   font-weight: 400;
   margin-top: 0.5em;
 }
 
-.FirstSubscriptionPage .FirstSubscriptionPage-sidebar{
+.FirstSubscriptionPage .FirstSubscriptionPage-sidebar {
   color: #666;
   max-width: 300px;
   background: $grey-5;
@@ -33,6 +33,6 @@
   border-radius: 2px;
 }
 
-.FirstSubscriptionPage .FirstSubscriptionPage-sidebar h3{
+.FirstSubscriptionPage .FirstSubscriptionPage-sidebar h3 {
   color: $grey-2;
 }
