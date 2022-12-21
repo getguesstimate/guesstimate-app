@@ -1,18 +1,16 @@
-import React, { Component } from "react";
 import PropTypes from "prop-types";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-import { TextForm } from "./TextForm/TextForm";
 import { DataForm } from "./DataForm/DataForm";
+import { TextForm } from "./TextForm/TextForm";
 
-import { runFormSimulations } from "gModules/simulations/actions";
-import { changeGuesstimate } from "gModules/guesstimates/actions";
 import { changeMetricClickMode } from "gModules/canvas_state/actions";
+import { changeGuesstimate } from "gModules/guesstimates/actions";
+import { runFormSimulations } from "gModules/simulations/actions";
 
 import { Guesstimator } from "lib/guesstimator/index";
-
-import { inputToExpression } from "gEngine/guesstimate";
 
 import "./style.css";
 
@@ -27,7 +25,6 @@ import "./style.css";
   { withRef: true }
 )
 export default class Guesstimate extends Component {
-  displayName: "Guesstimate";
   static propTypes = {
     changeGuesstimate: PropTypes.func.isRequired,
     runFormSimulations: PropTypes.func.isRequired,

@@ -1,11 +1,10 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
+
 import ComponentEditor from "gComponents/utility/ComponentEditor/index.js";
 
 import { CreateOrganizationPage } from "./index";
 
 export default class PlanStyleGuide extends Component {
-  displayName: "Settings-StyleGuide";
   render() {
     return (
       <div className="">

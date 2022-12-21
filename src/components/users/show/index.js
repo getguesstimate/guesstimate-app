@@ -1,12 +1,8 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
-import Icon from "react-fa";
-
-import { SpaceCard, NewSpaceCard } from "gComponents/spaces/cards";
+import { NewSpaceCard, SpaceCard } from "gComponents/spaces/cards";
 import Container from "gComponents/utility/container/Container";
-import SpaceCards from "gComponents/spaces/cards";
 
 import { userSpaceSelector } from "./userSpaceSelector";
 
@@ -18,8 +14,6 @@ import "./style.css";
 @connect(_.partialRight(_.pick, ["me", "users"]))
 @connect(userSpaceSelector)
 export default class UserShow extends Component {
-  displayName: "UserShow";
-
   componentWillMount() {
     this.props.dispatch(userActions.fetchById(this.props.userId));
     this.props.dispatch(spaceActions.fetch({ userId: this.props.userId }));

@@ -95,8 +95,6 @@ class Rectangle {
 }
 
 export default class Edge extends Component {
-  displayName: "Edge";
-
   static propTypes = {
     input: PropTypes.object.isRequired,
     output: PropTypes.object.isRequired,

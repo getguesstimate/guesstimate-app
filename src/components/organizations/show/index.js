@@ -1,21 +1,18 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
-import ReactDOM from "react-dom";
 import Icon from "react-fa";
 
-import { SpaceCard, NewSpaceCard } from "gComponents/spaces/cards";
+import { NewSpaceCard, SpaceCard } from "gComponents/spaces/cards";
 import Container from "gComponents/utility/container/Container";
-import { MembersTab } from "./members";
 import { Category } from "./categories/category";
 import { CategoryForm } from "./categories/form";
-import { FactListContainer } from "gComponents/facts/list/container.js";
 import { FactGraph } from "./facts/factGraph";
+import { MembersTab } from "./members";
 
 import { httpRequestSelector } from "./httpRequestSelector";
-import { organizationSpaceSelector } from "./organizationSpaceSelector";
 import { organizationMemberSelector } from "./organizationMemberSelector";
+import { organizationSpaceSelector } from "./organizationSpaceSelector";
 
 import * as modalActions from "gModules/modal/actions";
 import { navigate } from "gModules/navigation/actions";
@@ -49,8 +46,6 @@ function mapStateToProps(state) {
 @connect(organizationMemberSelector)
 @connect(httpRequestSelector)
 export default class OrganizationShow extends Component {
-  displayName: "OrganizationShow";
-
   state = {
     openTab: isValidTabString(this.props.tab) ? this.props.tab : MODEL_TAB,
   };

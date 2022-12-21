@@ -8,8 +8,6 @@ import { ButtonClose } from "../buttons/close/index.js";
 import "./style.css";
 
 class EditingMode extends Component {
-  displayName: "ClickToEditEditing";
-
   _submit() {
     const value = this.textInput.value;
     this.props.onSubmit(value);
@@ -46,8 +44,6 @@ class EditingMode extends Component {
 }
 
 class ViewingMode extends Component {
-  displayName: "ClickToEditViewing";
-
   render() {
     return (
       <div className="ViewingMode">
@@ -68,8 +64,6 @@ class ViewingMode extends Component {
 }
 
 export default class ClickToEdit extends Component {
-  displayName: "ClickToEdit";
-
   constructor(props) {
     super(props);
 

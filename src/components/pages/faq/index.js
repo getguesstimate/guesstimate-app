@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import PageBase from "../base/index";
 
 const content = `
@@ -55,7 +54,6 @@ Monte Carlo simulations are far more general than analytical solutions, so apply
 `;
 
 export default class FAQ extends Component {
-  displayName: "FAQ";
   render() {
     return <PageBase content={content} />;
   }

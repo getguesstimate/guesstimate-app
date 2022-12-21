@@ -1,22 +1,20 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import DropDown from "gComponents/utility/drop-down/index";
 import { CardListElement } from "gComponents/utility/card/index";
+import DropDown from "gComponents/utility/drop-down/index";
 
 import * as meActions from "gModules/me/actions";
 import * as modalActions from "gModules/modal/actions";
 import * as navigationActions from "gModules/navigation/actions";
 import * as spaceActions from "gModules/spaces/actions";
 
-import { user, organization } from "gEngine/engine";
+import { organization, user } from "gEngine/engine";
 
 import "./style.css";
 
 @connect()
 export default class Profile extends Component {
-  displayName: "Profile";
-
   signUp() {
     meActions.signUp();
   }

@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
+import { connect } from "react-redux";
+
+import logo from "../../../assets/new-logo-2.png";
 import Login from "../login";
 import "./style.css";
-import { connect } from "react-redux";
-import logo from "../../../assets/new-logo-2.png";
 
 function mapStateToProps(state) {
   return {
@@ -19,8 +19,6 @@ const loggedIn = (user) => {
 
 @connect(mapStateToProps)
 export default class Header extends Component {
-  displayName: "Header";
-
   render() {
     const isLoggedIn = loggedIn(this.props.me);
     const { isFluid, isBare } = this.props;

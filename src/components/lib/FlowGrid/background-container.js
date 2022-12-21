@@ -1,12 +1,12 @@
-import React, { Component } from "react";
 import PropTypes from "prop-types";
+import React, { Component } from "react";
 
 import $ from "jquery";
 
 import { Edges } from "./edges";
 import GridPoint from "./gridPoints";
 
-import { PTRegion, isRegion } from "lib/locationUtils";
+import { isRegion, PTRegion } from "lib/locationUtils";
 
 const upto = (n) => Array.apply(null, { length: n });
 
@@ -18,8 +18,6 @@ const Region = ({ rowHeights, columnWidth, selectedRegion, type }) => {
 
 //Listens to events for changes to row heights and column width
 export class BackgroundContainer extends Component {
-  displayName: "BackgroundContainer";
-
   static propTypes = {
     rowCount: PropTypes.number.isRequired,
     edges: PropTypes.array.isRequired,

@@ -3,8 +3,6 @@ import PropTypes from "prop-types";
 import "./style.css";
 
 export default class Main extends Component {
-  displayName: "Main";
-
   static defaultProps = {
     isFluid: false,
     backgroundColor: "",

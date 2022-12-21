@@ -1,11 +1,10 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
+
 import ComponentEditor from "gComponents/utility/ComponentEditor/index.js";
-import Settings from "./Settings.js";
 import Plan from "lib/config/plan.js";
+import Settings from "./Settings.js";
 
 export default class SettingsStyleGuide extends Component {
-  displayName: "Settings-StyleGuide";
   render() {
     const planIds = Plan.all().map((e) => e.id);
     return (

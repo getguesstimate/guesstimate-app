@@ -1,19 +1,17 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
+
 import {
-  LinkFAQ,
   LinkBlog,
-  LinkTerms,
   LinkDocumentation,
-  LinkPrivacy,
+  LinkFAQ,
   LinkGithubStar,
   LinkPricing,
+  LinkPrivacy,
+  LinkTerms,
 } from "gComponents/utility/links/index.js";
 import "./style.css";
 
 export default class Footer extends Component {
-  displayName: "Footer";
-
   render() {
     return (
       <footer>

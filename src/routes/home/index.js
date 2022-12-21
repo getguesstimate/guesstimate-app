@@ -1,12 +1,9 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
-import Logo from "../../assets/logo-grey-2.png";
+
 import LogoWord from "../../assets/logo-word-no-beta.png";
 import "./style.css";
-import video from "../../assets/video-2.png";
 
 export default class Home extends Component {
-  displayName: "Home";
   render() {
     return (
       <div className="homePage">

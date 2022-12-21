@@ -1,10 +1,12 @@
-import React, { Component } from "react";
 import PropTypes from "prop-types";
-import "./style.css";
-import Container from "gComponents/utility/container/Container.js";
-import FirstSubscriptionContainer from "gComponents/subscriptions/FirstSubscription/container.js";
-import Plan from "lib/config/plan.js";
+import React, { Component } from "react";
 import { connect } from "react-redux";
+
+import FirstSubscriptionContainer from "gComponents/subscriptions/FirstSubscription/container.js";
+import Container from "gComponents/utility/container/Container.js";
+import Plan from "lib/config/plan.js";
+
+import "./style.css";
 
 function mapStateToProps(state) {
   return {
@@ -14,8 +16,6 @@ function mapStateToProps(state) {
 
 @connect(mapStateToProps)
 export default class FirstSubscriptionPage extends Component {
-  displayName: "FirstSubscriptionPage";
-
   static propTypes = {
     planName: PropTypes.oneOf(["lite", "premium"]),
   };

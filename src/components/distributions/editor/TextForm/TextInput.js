@@ -1,27 +1,27 @@
-import React, { Component } from "react";
 import PropTypes from "prop-types";
+import React, { Component } from "react";
 
 import { connect } from "react-redux";
 
-import $ from "jquery";
 import {
-  EditorState,
-  Editor,
-  ContentState,
-  Modifier,
   CompositeDecorator,
+  ContentState,
+  Editor,
+  EditorState,
+  Modifier,
 } from "draft-js";
+import $ from "jquery";
 
 import { clearSuggestion, getSuggestion } from "gModules/facts/actions";
 
 import {
-  HANDLE_REGEX,
   GLOBALS_ONLY_REGEX,
+  HANDLE_REGEX,
   resolveToSelector,
 } from "gEngine/facts";
-import { or, getClassName } from "gEngine/utils";
+import { getClassName, or } from "gEngine/utils";
 
-import { isData, formatData } from "lib/guesstimator/formatter/formatters/Data";
+import { formatData, isData } from "lib/guesstimator/formatter/formatters/Data";
 
 function findWithRegex(baseRegex, contentBlock, callback) {
   const text = contentBlock.getText();
@@ -64,8 +64,6 @@ const positionDecorator = (start, end, component) => ({
   { withRef: true }
 )
 export class TextInput extends Component {
-  displayName: "Guesstimate-TextInput";
-
   state = {
     editorState: EditorState.createWithContent(
       ContentState.createFromText(this.props.value || ""),

@@ -1,9 +1,6 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
-import Icon from "react-fa";
 
 export default class Maintenance extends Component {
-  displayName: "Maintenance";
   render() {
     return (
       <div>

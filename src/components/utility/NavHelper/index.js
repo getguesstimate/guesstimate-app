@@ -1,15 +1,13 @@
 import app from "ampersand-app";
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import localLinks from "local-links";
-import * as modalActions from "gModules/modal/actions.js";
-import { connect } from "react-redux";
 import $ from "jquery";
+import localLinks from "local-links";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+
+import * as modalActions from "gModules/modal/actions.js";
 
 @connect()
 export default class NavHelper extends Component {
-  displayName: "NavHelper";
-
   onClick(event) {
     const pathname = localLinks.getLocalPathname(event);
 

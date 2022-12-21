@@ -7,8 +7,6 @@ import Card from "gComponents/utility/card/index.js";
 import "./style.css";
 
 export default class DropDown extends Component {
-  displayName: "DropDown";
-
   static propTypes = {
     headerText: PropTypes.string,
     onOpen: PropTypes.func,

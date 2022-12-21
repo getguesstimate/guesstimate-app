@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import Settings from "./Settings.js";
+
 import * as meActions from "gModules/me/actions.js";
+import Settings from "./Settings.js";
 
 function mapStateToProps(state) {
   return {
@@ -12,7 +12,6 @@ function mapStateToProps(state) {
 
 @connect(mapStateToProps)
 export default class SettingsContainer extends Component {
-  displayName: "SettingsContainer";
   _refreshMe() {
     this.props.dispatch(meActions.guesstimateMeLoad());
   }

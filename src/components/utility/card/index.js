@@ -1,6 +1,5 @@
-import React, { Component } from "react";
 import PropTypes from "prop-types";
-import ReactDOM from "react-dom";
+import React, { Component } from "react";
 
 import Icon from "react-fa";
 
@@ -103,8 +102,6 @@ const ChildrenSection = ({ colCount, header, children }) => (
 );
 
 export default class Card extends Component {
-  displayName: "Card";
-
   static propTypes = {
     headerText: PropTypes.string,
     width: PropTypes.string,

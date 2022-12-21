@@ -1,24 +1,24 @@
-import React, { Component } from "react";
 import PropTypes from "prop-types";
+import React, { Component } from "react";
 
 import { DragDropContext } from "react-dnd";
 import HTML5Backend from "react-dnd-html5-backend";
 
-import Cell from "./cell";
 import { BackgroundContainer } from "./background-container";
+import Cell from "./cell";
 
 import { allPropsPresent } from "gEngine/utils";
 
-import { keycodeToDirection, DirectionToLocation } from "./utils";
 import {
+  boundingRegion,
   getBounds,
+  isAtLocation,
   isLocation,
   isWithinRegion,
-  isAtLocation,
-  PTRegion,
   PTLocation,
-  boundingRegion,
+  PTRegion,
 } from "lib/locationUtils";
+import { DirectionToLocation, keycodeToDirection } from "./utils";
 
 import "./FlowGrid.css";
 
@@ -29,8 +29,6 @@ let lastMousePosition = [0, 0];
 
 @DragDropContext(HTML5Backend)
 export default class FlowGrid extends Component {
-  displayName: "FlowGrid";
-
   static propTypes = {
     items: PropTypes.arrayOf(
       PropTypes.shape({

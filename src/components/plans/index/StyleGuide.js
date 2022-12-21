@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
+
 import ComponentEditor from "gComponents/utility/ComponentEditor/index.js";
 import { PlanIndex } from "./PlanIndex";
 
@@ -39,7 +39,6 @@ const options = [
 ];
 
 export default class PlanStyleGuide extends Component {
-  displayName: "Settings-StyleGuide";
   render() {
     return (
       <div className="full-width">

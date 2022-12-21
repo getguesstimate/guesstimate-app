@@ -1,5 +1,6 @@
-import React, { Component } from "react";
 import PropTypes from "prop-types";
+import React, { Component } from "react";
+
 import { subStages } from "gModules/first_subscription/state_machine.js";
 import NewOrder from "./NewOrder.js";
 import "./style.css";
@@ -16,8 +17,6 @@ export const SynchronizationSuccess = ({ onNewModel }) => (
 );
 
 export default class FirstSubscription extends Component {
-  displayName: "SubscriptionIframe";
-
   static propTypes = {
     flowStage: PropTypes.oneOf(subStages).isRequired,
     planId: PropTypes.string.isRequired,

@@ -1,12 +1,10 @@
-import React, { Component } from "react";
 import PropTypes from "prop-types";
+import React, { Component } from "react";
 
 import Edge from "./edge";
 import GridPoint from "./gridPoints";
 
 export class Edges extends Component {
-  displayName: "Edges";
-
   shouldComponentUpdate(nextProps) {
     return (
       this.props.columnWidth !== nextProps.columnWidth ||

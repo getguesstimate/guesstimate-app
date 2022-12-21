@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
-import FirstSubscription from "./FirstSubscription.js";
+
 import ComponentEditor from "gComponents/utility/ComponentEditor/index.js";
 import { subStages } from "gModules/first_subscription/state_machine";
+
+import FirstSubscription from "./FirstSubscription.js";
 
 const FirstSubscriptionBaseProps = {
   planId: "small",
@@ -22,7 +23,6 @@ function FirstSubscriptionStage(stage) {
 }
 
 export default class FirstSubscriptionStyleGuide extends Component {
-  displayName: "ComponentEditor-StyleGuide";
   render() {
     const flowStage = "UNNECESSARY";
     return (

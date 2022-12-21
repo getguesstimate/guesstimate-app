@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
+
 import PageBase from "../base/index";
 
 const content = `
@@ -95,7 +95,6 @@ If you have any questions about these Terms, please contact us.
 `;
 
 export default class TermsAndConditions extends Component {
-  displayName: "TermsAndConditions";
   render() {
     return <PageBase content={content} />;
   }

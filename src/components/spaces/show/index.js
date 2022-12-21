@@ -1,42 +1,42 @@
-import React, { Component } from "react";
 import PropTypes from "prop-types";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import Helmet from "react-helmet";
 import $ from "jquery";
+import Helmet from "react-helmet";
 
-import { SpaceHeader } from "./header";
-import { SpaceToolbar } from "./Toolbar/index";
-import { SpaceSidebar } from "./sidebar";
-import { ClosedSpaceSidebar } from "./closed_sidebar";
-import Canvas from "gComponents/spaces/canvas";
-import { NewCalculatorForm } from "gComponents/calculators/new";
 import { EditCalculatorForm } from "gComponents/calculators/edit";
+import { NewCalculatorForm } from "gComponents/calculators/new";
 import { CalculatorCompressedShow } from "gComponents/calculators/show/CalculatorCompressedShow";
-import { ButtonCloseText } from "gComponents/utility/buttons/close";
+import { FactListContainer } from "gComponents/facts/list/container";
+import Canvas from "gComponents/spaces/canvas";
 import {
-  ButtonEditText,
   ButtonDeleteText,
+  ButtonEditText,
   ButtonExpandText,
 } from "gComponents/utility/buttons/button";
-import { FactListContainer } from "gComponents/facts/list/container";
+import { ButtonCloseText } from "gComponents/utility/buttons/close";
+import { ClosedSpaceSidebar } from "./closed_sidebar";
+import { SpaceHeader } from "./header";
+import { SpaceSidebar } from "./sidebar";
+import { SpaceToolbar } from "./Toolbar/index";
 import { Tutorial } from "./Tutorial/index";
 
 import { denormalizedSpaceSelector } from "../denormalized-space-selector";
 
+import * as calculatorActions from "gModules/calculators/actions";
 import {
   allowEdits,
-  forbidEdits,
   clearEditsAllowed,
+  forbidEdits,
 } from "gModules/canvas_state/actions";
-import * as spaceActions from "gModules/spaces/actions";
-import * as simulationActions from "gModules/simulations/actions";
+import { redo, undo } from "gModules/checkpoints/actions";
 import * as copiedActions from "gModules/copied/actions";
-import * as calculatorActions from "gModules/calculators/actions";
-import * as userActions from "gModules/users/actions";
 import { removeSelectedMetrics } from "gModules/metrics/actions";
-import { undo, redo } from "gModules/checkpoints/actions";
 import { navigateFn } from "gModules/navigation/actions";
+import * as simulationActions from "gModules/simulations/actions";
+import * as spaceActions from "gModules/spaces/actions";
+import * as userActions from "gModules/users/actions";
 
 import { parseSlurp } from "lib/slurpParser";
 
@@ -109,8 +109,6 @@ const FactSidebarHeader = ({ onClose, organizationId }) => (
 @connect(mapStateToProps)
 @connect(denormalizedSpaceSelector)
 export default class SpacesShow extends Component {
-  displayName: "RepoDetailPage";
-
   static propTypes = {
     dispatch: PT.func.isRequired,
     spaceId: PT.number,

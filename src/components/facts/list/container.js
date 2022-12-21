@@ -1,17 +1,13 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import * as organizationActions from "gModules/organizations/actions";
-import { findFacts } from "gEngine/organization";
-import * as _collections from "gEngine/collections";
 import { orArr } from "gEngine/utils";
+import * as organizationActions from "gModules/organizations/actions";
 
 import { FactList } from "./list.js";
 
 @connect(null)
 export class FactListContainer extends Component {
-  displayName: "FactListContainer";
-
   render() {
     const {
       facts,

@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
 import Icon from "react-fa";
+import { connect } from "react-redux";
 
-import DropDown from "gComponents/utility/drop-down/index";
-import { CardListElement } from "gComponents/utility/card/index.js";
 import SpaceCards from "gComponents/spaces/cards";
+import { CardListElement } from "gComponents/utility/card/index.js";
+import DropDown from "gComponents/utility/drop-down/index";
 
 import * as search from "gModules/search_spaces/actions";
 
@@ -73,8 +73,6 @@ function mapStateToProps(state) {
 
 @connect(mapStateToProps)
 export default class SpacesIndex extends Component {
-  displayName: "GeneralSpaceIndex";
-
   state = {
     sortBy: SORT_BY_RECOMMENDED,
     timeframe: TIMEFRAME_ALL_TIME,

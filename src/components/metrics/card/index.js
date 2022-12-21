@@ -1,37 +1,38 @@
-import React, { Component } from "react";
 import PropTypes from "prop-types";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-import Icon from "react-fa";
-import ReactDOM from "react-dom";
 import $ from "jquery";
+import ReactDOM from "react-dom";
+import Icon from "react-fa";
 
-import { MetricModal } from "gComponents/metrics/modal/index";
-import DistributionEditor from "gComponents/distributions/editor/index";
 import MetricToolTip from "./tooltip";
+import { hasMetricUpdated } from "./updated";
+
+import DistributionEditor from "gComponents/distributions/editor/index";
+import { MetricModal } from "gComponents/metrics/modal/index";
 import ToolTip from "gComponents/utility/tooltip/index";
 import { MetricCardViewSection } from "./MetricCardViewSection/index";
 import SensitivitySection from "./SensitivitySection/SensitivitySection";
 
-import { hasMetricUpdated } from "./updated";
-import { removeMetrics, changeMetric } from "gModules/metrics/actions";
-import { changeGuesstimate } from "gModules/guesstimates/actions";
 import { analyzeMetricId, endAnalysis } from "gModules/canvas_state/actions";
 import { createFactFromMetric } from "gModules/facts/actions";
+import { changeGuesstimate } from "gModules/guesstimates/actions";
+import { changeMetric, removeMetrics } from "gModules/metrics/actions";
 
 import * as canvasStateProps from "gModules/canvas_state/prop_type";
 import { withReadableId } from "lib/generateVariableNames/generateMetricReadableId";
 import { shouldTransformName } from "lib/generateVariableNames/nameToVariableName";
 
 import {
-  INTERMEDIATE,
-  OUTPUT,
   INPUT,
+  INTERMEDIATE,
   NOEDGE,
+  OUTPUT,
   relationshipType,
 } from "gEngine/graph";
-import { makeURLsMarkdown, allPropsPresent, getClassName } from "gEngine/utils";
+import { makeURLsMarkdown } from "gEngine/utils";
 
 import "./style.css";
 
@@ -66,8 +67,6 @@ const ScatterTip = ({ yMetric, xMetric }) => (
   )
 )
 export default class MetricCard extends Component {
-  displayName: "MetricCard";
-
   static propTypes = {
     canvasState: canvasStateProps.canvasState,
     changeMetric: PropTypes.func.isRequired,

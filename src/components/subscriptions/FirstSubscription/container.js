@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
-import * as firstSubscriptionActions from "gModules/first_subscription/actions.js";
-import FirstSubscription from "./FirstSubscription.js";
-import { subStage } from "gModules/first_subscription/state_machine.js";
 import { connect } from "react-redux";
+
+import * as firstSubscriptionActions from "gModules/first_subscription/actions.js";
+import { subStage } from "gModules/first_subscription/state_machine.js";
 import * as spaceActions from "gModules/spaces/actions.js";
+
+import FirstSubscription from "./FirstSubscription.js";
 
 function mapStateToProps(state) {
   return {
@@ -15,8 +16,6 @@ function mapStateToProps(state) {
 
 @connect(mapStateToProps)
 export default class FirstSubscriptionContainer extends Component {
-  displayName: "FirstSubscriptionContainer";
-
   componentDidMount() {
     firstSubscriptionActions.flowStageReset();
 

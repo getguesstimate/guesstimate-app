@@ -1,10 +1,9 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import "./style.css";
 import Icon from "react-fa";
+
 import Card from "gComponents/utility/card/index.js";
 import Plan from "lib/config/plan.js";
+import "./style.css";
 
 const PlanC = ({ planId, privateModelLimit }) => (
   <div className="Plan">
@@ -52,8 +51,6 @@ const PlanUpgradeSection = ({ planId, portalUrl, onRefresh }) => {
 };
 
 export default class Settings extends Component {
-  displayName: "Settings";
-
   static defaultProps = {
     planId: false,
   };
