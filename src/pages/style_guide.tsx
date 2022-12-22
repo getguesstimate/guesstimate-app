@@ -5,7 +5,7 @@ import ComponentIndex from "../routes/component-index";
 
 const StyleGuidePage: NextPage = () => {
   return (
-    <Layout options={{}}>
+    <Layout>
       <ComponentIndex />
     </Layout>
   );

@@ -5,7 +5,7 @@ import PrivacyPolicy from "gComponents/pages/privacy_policy/index";
 
 const PrivacyPolicyPage: NextPage = () => {
   return (
-    <Layout options={{}}>
+    <Layout>
       <PrivacyPolicy />
     </Layout>
   );

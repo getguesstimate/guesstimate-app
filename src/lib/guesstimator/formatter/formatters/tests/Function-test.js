@@ -1,4 +1,4 @@
-import { item as formatter } from "../Function.js";
+import { item as formatter } from "../Function";
 
 describe("Function", () => {
   describe("#matches", () => {

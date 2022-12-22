@@ -1,7 +1,7 @@
 import React from "react";
 
-import DropDown from "gComponents/utility/drop-down/index.js";
-import { CardListElement } from "gComponents/utility/card/index.js";
+import DropDown from "gComponents/utility/drop-down/index";
+import { CardListElement } from "gComponents/utility/card/index";
 
 const ViewingOption = ({ isSelected, onClick }) => (
   <CardListElement

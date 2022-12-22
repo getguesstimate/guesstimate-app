@@ -1,12 +1,12 @@
 import app from "ampersand-app";
 
-import * as engine from "gEngine/engine.js";
+import * as engine from "gEngine/engine";
 
 import { GuesstimateRecorder } from "lib/recorder";
 
 import Modal from "react-modal";
-import * as elev from "servers/elev/index.js";
-import * as sentry from "servers/sentry/index.js";
+import * as elev from "servers/elev/index";
+import * as sentry from "servers/sentry/index";
 
 if (typeof window !== "undefined") {
   window.workers = new Array(2)

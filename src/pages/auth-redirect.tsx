@@ -8,8 +8,8 @@ const AuthRedirectPage: NextPage = () => {
     return null;
   }
   return (
-    <Layout options={{ isFluid: true, simpleHeader: true }}>
-      <AuthRedirect location={window.location} />
+    <Layout>
+      <AuthRedirect />
     </Layout>
   );
 };

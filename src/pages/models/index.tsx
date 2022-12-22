@@ -5,7 +5,7 @@ import SpaceIndex from "gComponents/spaces/index/index";
 
 const ModelsPage: NextPage = () => {
   return (
-    <Layout options={{ backgroundColor: "GREY" }}>
+    <Layout backgroundColor="GREY">
       <SpaceIndex />
     </Layout>
   );

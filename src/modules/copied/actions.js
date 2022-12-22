@@ -4,7 +4,7 @@ import { selectRegion } from "gModules/selected_region/actions";
 import { runSimulations } from "gModules/simulations/actions";
 import { registerGraphChange } from "gModules/spaces/actions";
 
-import { isLocation, isWithinRegion, translate } from "lib/locationUtils.js";
+import { isLocation, isWithinRegion, translate } from "lib/locationUtils";
 
 export function cut(spaceId) {
   return (dispatch, getState) => {

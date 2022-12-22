@@ -1,4 +1,4 @@
-import { parse, formatters, _matchingFormatter } from "./index.js";
+import { parse, formatters, _matchingFormatter } from "./index";
 
 describe("formatter", () => {
   describe("#formatters", () => {

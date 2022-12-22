@@ -1,4 +1,4 @@
-import AbstractResource from "../AbstractResource.js";
+import AbstractResource from "../AbstractResource";
 
 export default class Models extends AbstractResource {
   list({ userId, organizationId }, callback) {

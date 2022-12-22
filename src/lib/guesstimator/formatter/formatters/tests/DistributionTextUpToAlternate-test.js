@@ -1,4 +1,4 @@
-import { item as formatter } from "../DistributionTextUpToAlternate.js";
+import { item as formatter } from "../DistributionTextUpToAlternate";
 
 describe("DistributionTextUpTo", () => {
   describe("#matches", () => {

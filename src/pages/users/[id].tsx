@@ -9,7 +9,7 @@ const UserPage: NextPage = () => {
 
   const { id } = router.query;
   return (
-    <Layout options={{ backgroundColor: "GREY" }}>
+    <Layout backgroundColor="GREY">
       {id === undefined ? null : <UserShow userId={id as string} />}
     </Layout>
   );

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Button } from "../button.js";
+import { Button } from "../button";
 
 export const ButtonClose = ({ onClick }) => (
   <a className="button-close" onClick={onClick}>

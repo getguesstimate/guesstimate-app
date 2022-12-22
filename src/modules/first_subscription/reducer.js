@@ -1,11 +1,7 @@
 import _ from "lodash";
-import {
-  requestReducer,
-  initialRequestState,
-  singleEntity,
-} from "../helpers.js";
 import { combineReducers } from "redux";
-import { newFlowState } from "./state_machine.js";
+import { initialRequestState, singleEntity } from "../helpers";
+import { newFlowState } from "./state_machine";
 
 export const initialState = {
   flowStage: "START",

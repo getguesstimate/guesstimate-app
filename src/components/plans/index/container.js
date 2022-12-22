@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "next/router";
 
-import { PlanIndex } from "./PlanIndex.js";
+import { PlanIndex } from "./PlanIndex";
 
 import * as e from "gEngine/engine";
 

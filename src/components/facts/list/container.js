@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { orArr } from "gEngine/utils";
 import * as organizationActions from "gModules/organizations/actions";
 
-import { FactList } from "./list.js";
+import { FactList } from "./list";
 
 class UnconnectedFactListContainer extends Component {
   render() {

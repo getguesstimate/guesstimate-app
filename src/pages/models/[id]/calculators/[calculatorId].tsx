@@ -13,7 +13,7 @@ const ModelWithCalculatorIdPage: NextPage = () => {
   const intCalculatorId = parseInt(calculatorId as string);
 
   return (
-    <Layout options={{ isFluid: true, showFooter: false, fullHeight: true }}>
+    <Layout isFluid showFooter={false} fullHeight>
       {id === undefined ? null : (
         <SpaceShow
           spaceId={intId}

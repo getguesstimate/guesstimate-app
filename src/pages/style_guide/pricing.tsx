@@ -5,7 +5,7 @@ import Layout from "../../routes/layouts/application/index";
 
 const PricingStyleGuidePage: NextPage = () => {
   return (
-    <Layout options={{}}>
+    <Layout>
       <PlansStyleGuide />
     </Layout>
   );

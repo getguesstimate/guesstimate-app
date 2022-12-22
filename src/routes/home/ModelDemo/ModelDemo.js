@@ -1,6 +1,6 @@
-import { MarkdownViewer } from "gComponents/utility/markdown-viewer/index.js";
+import { MarkdownViewer } from "gComponents/utility/markdown-viewer/index";
 import React, { Component } from "react";
-import * as TreehouseExample from "./example_treehouse.js";
+import * as TreehouseExample from "./example_treehouse";
 
 const QuestionToggle = ({ name, top, left, onSelect }) => (
   <div

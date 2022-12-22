@@ -1,4 +1,4 @@
-import AbstractResource from "../AbstractResource.js";
+import AbstractResource from "../AbstractResource";
 
 export default class Accounts extends AbstractResource {
   get_new_subscription_iframe({ user_id, plan_id }, callback) {

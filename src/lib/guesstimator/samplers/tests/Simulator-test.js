@@ -1,4 +1,4 @@
-import { neededSamples } from "../Simulator.js";
+import { neededSamples } from "../Simulator";
 import { expect } from "chai";
 
 const n = 5000;

@@ -1,4 +1,4 @@
-import { metricsR } from "./reducer.js";
+import { metricsR } from "./reducer";
 
 describe("metrics", () => {
   describe("#SPACES_FETCH_SUCCESS", () => {

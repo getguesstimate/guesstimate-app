@@ -5,7 +5,7 @@ import SettingsStyleGuide from "gComponents/users/settings/StyleGuide";
 
 const SettingsStyleGuidePage: NextPage = () => {
   return (
-    <Layout options={{ isFluid: true, showFooter: false }}>
+    <Layout isFluid showFooter={false}>
       <SettingsStyleGuide />
     </Layout>
   );

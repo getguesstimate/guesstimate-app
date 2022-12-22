@@ -5,7 +5,7 @@ import FAQ from "gComponents/pages/faq/index";
 
 const FAQPage: NextPage = () => {
   return (
-    <Layout options={{}}>
+    <Layout>
       <FAQ />
     </Layout>
   );

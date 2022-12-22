@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 export const initialRequestState = {
   waiting: false,
   error: null,

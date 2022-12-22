@@ -1,4 +1,4 @@
-import { item as formatter } from "../DistributionPointText.js";
+import { item as formatter } from "../DistributionPointText";
 
 describe("DistributionPointText", () => {
   describe("#matches", () => {

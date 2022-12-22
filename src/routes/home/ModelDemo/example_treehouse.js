@@ -29,7 +29,7 @@ The three inputs are summed using their variable names.
 Better get started!
 `;
 
-export image from "../../../assets/tiny-models/creation.png";
+export const image = "/assets/tiny-models/creation.png";
 export const toggles = [
   ["distribution", 21.5, 96],
   ["input", 21.5, 6],

@@ -1,4 +1,4 @@
-import { newFlowState, actions, states } from "./state_machine.js";
+import { newFlowState, actions, states } from "./state_machine";
 
 const expectedStateChanges = {};
 

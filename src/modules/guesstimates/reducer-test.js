@@ -1,4 +1,4 @@
-import { guesstimatesR } from "./reducer.js";
+import { guesstimatesR } from "./reducer";
 
 describe("guesstimatesReducer", () => {
   describe("#SPACES_FETCH_SUCCESS", () => {

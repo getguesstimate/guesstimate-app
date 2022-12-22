@@ -3,7 +3,7 @@ import {
   API_KEY,
   SPACE_BY_DATE_INDEX,
   SPACE_BY_VIEWCOUNT_INDEX,
-} from "./constants.js";
+} from "./constants";
 import algoliasearch from "algoliasearch";
 
 const algoliaClient = () => {

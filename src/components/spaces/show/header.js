@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 
 import Icon from "gComponents/react-fa-patched";
-import { CardListSection } from "gComponents/utility/card/index.js";
+import { CardListSection } from "gComponents/utility/card/index";
 
-import DropDown from "gComponents/utility/drop-down/index.js";
+import DropDown from "gComponents/utility/drop-down/index";
 import { PrivacyToggle } from "./privacy-toggle/index";
 import { SpaceName } from "./spaceName";
 

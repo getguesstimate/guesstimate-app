@@ -1,4 +1,4 @@
-import AbstractResource from "../AbstractResource.js";
+import AbstractResource from "../AbstractResource";
 
 export class Calculators extends AbstractResource {
   get(calculatorId, callback) {

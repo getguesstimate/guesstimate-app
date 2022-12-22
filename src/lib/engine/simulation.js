@@ -8,7 +8,7 @@ import {
   cutoff,
   sortDescending,
   numDistinctValues,
-} from "lib/dataAnalysis.js";
+} from "lib/dataAnalysis";
 import * as errorTypes from "lib/propagation/errors";
 import { SAMPLE_FILTERED } from "lib/guesstimator/samplers/simulator-worker/simulator/filters/filters";
 

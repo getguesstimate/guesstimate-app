@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import ReactDOM from "react-dom";
 
-import Card from "gComponents/utility/card/index.js";
+import Card from "gComponents/utility/card/index";
 
 export default class DropDown extends Component {
   static propTypes = {

@@ -1,4 +1,4 @@
-import { simulate } from "./Simulator.js";
+import { simulate } from "./Simulator";
 
 export var Sampler = {
   sample({ params: [low, high] }, n, _1) {

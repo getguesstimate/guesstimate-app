@@ -5,7 +5,7 @@ import Home from "../routes/home/index";
 
 const IndexPage: NextPage = () => {
   return (
-    <Layout options={{ isFluid: true, simpleHeader: true }}>
+    <Layout isFluid simpleHeader>
       <Home />
     </Layout>
   );

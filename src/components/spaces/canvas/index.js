@@ -26,7 +26,7 @@ import { orArr } from "gEngine/utils";
 
 import { hasMetricUpdated } from "gComponents/metrics/card/updated";
 
-import { existsAtLoc, isLocation, isWithinRegion } from "lib/locationUtils.js";
+import { existsAtLoc, isLocation, isWithinRegion } from "lib/locationUtils";
 
 function mapStateToProps(state) {
   return {

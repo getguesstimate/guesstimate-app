@@ -1,4 +1,4 @@
-import * as sentry from "servers/sentry/index.js";
+import * as sentry from "servers/sentry/index";
 
 export function captureApiError(
   locationName,

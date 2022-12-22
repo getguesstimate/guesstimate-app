@@ -1,4 +1,4 @@
-import { NODE_TYPES } from "./constants.js";
+import { NODE_TYPES } from "./constants";
 import * as errorTypes from "./errors";
 
 import { Guesstimator } from "lib/guesstimator/index";

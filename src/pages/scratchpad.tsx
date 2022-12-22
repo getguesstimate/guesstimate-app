@@ -5,12 +5,7 @@ import SpaceShow from "gComponents/spaces/show";
 
 const ScratchpadPage: NextPage = () => {
   return (
-    <Layout
-      options={{
-        isFluid: true,
-        showFooter: false,
-      }}
-    >
+    <Layout isFluid showFooter={false}>
       <SpaceShow spaceId={5170} />
     </Layout>
   );

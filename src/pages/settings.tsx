@@ -5,7 +5,7 @@ import Settings from "gComponents/users/settings/container";
 
 const SettingsPage: NextPage = () => {
   return (
-    <Layout options={{}}>
+    <Layout>
       <Settings />
     </Layout>
   );

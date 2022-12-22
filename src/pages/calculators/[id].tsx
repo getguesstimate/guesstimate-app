@@ -11,7 +11,7 @@ const CalculatorPage: NextPage = () => {
   const intId = parseInt(id as string);
 
   return (
-    <Layout options={{ showFooter: false, backgroundColor: "GREY" }}>
+    <Layout showFooter={false} backgroundColor="GREY">
       {id === undefined ? null : (
         <CalculatorExpandedShow calculatorId={intId} key={intId} />
       )}

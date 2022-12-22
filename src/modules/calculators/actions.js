@@ -6,9 +6,9 @@ import app from "ampersand-app";
 import { initSpace } from "gModules/checkpoints/actions";
 
 import * as displayErrorsActions from "gModules/displayErrors/actions";
-import { captureApiError } from "lib/errors/index.js";
+import { captureApiError } from "lib/errors/index";
 
-import { setupGuesstimateApi } from "servers/guesstimate-api/constants.js";
+import { setupGuesstimateApi } from "servers/guesstimate-api/constants";
 
 export const sActions = actionCreatorsFor("calculators");
 

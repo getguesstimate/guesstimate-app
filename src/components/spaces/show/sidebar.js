@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
-import ClickToEdit from "gComponents/utility/click-to-edit/index.js";
-import { MarkdownViewer } from "gComponents/utility/markdown-viewer/index.js";
+import ClickToEdit from "gComponents/utility/click-to-edit/index";
+import { MarkdownViewer } from "gComponents/utility/markdown-viewer/index";
 import { ButtonCloseText } from "gComponents/utility/buttons/close";
 
 export class SpaceSidebar extends Component {

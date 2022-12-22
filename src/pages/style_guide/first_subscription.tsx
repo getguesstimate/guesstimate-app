@@ -5,7 +5,7 @@ import FirstSubscriptionStyleGuide from "gComponents/subscriptions/FirstSubscrip
 
 const FirstSubscriptionStyleGuidePage: NextPage = () => {
   return (
-    <Layout options={{}}>
+    <Layout>
       <FirstSubscriptionStyleGuide />
     </Layout>
   );

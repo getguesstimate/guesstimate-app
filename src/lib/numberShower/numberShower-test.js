@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import numberShow from "./numberShower.js";
+import numberShow from "./numberShower";
 
 describe("NumberShow", () => {
   describe("#with two units of precision", () => {

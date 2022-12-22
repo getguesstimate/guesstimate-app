@@ -1,5 +1,5 @@
 import chargebee from "chargebee";
-import variables from "./constants.js";
+import variables from "./constants";
 
 chargebee.configure({
   site: variables.CHARGEBEE_SITE,

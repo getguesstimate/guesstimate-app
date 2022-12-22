@@ -1,5 +1,5 @@
 import { __API_ENV__ } from "lib/constants";
-import { API_KEY } from "./constants.js";
+import { API_KEY } from "./constants";
 
 // TODO - fails due to SSR
 // import Raven from "raven-js";

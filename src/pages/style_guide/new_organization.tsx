@@ -5,7 +5,7 @@ import OrganizationNewStyleGuide from "gComponents/organizations/new/StyleGuide"
 
 const NewOrganizationStyleGuidePage: NextPage = () => {
   return (
-    <Layout options={{}}>
+    <Layout>
       <OrganizationNewStyleGuide />
     </Layout>
   );

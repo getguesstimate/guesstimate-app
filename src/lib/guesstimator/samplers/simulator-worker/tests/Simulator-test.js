@@ -1,4 +1,4 @@
-import { Evaluate } from "../simulator/evaluator.js";
+import { Evaluate } from "../simulator/evaluator";
 import { expect } from "chai";
 
 describe("Simulator", () => {

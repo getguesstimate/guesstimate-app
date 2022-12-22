@@ -1,4 +1,5 @@
-import * as metricActions from "gModules/metrics/actions";
+import _ from "lodash";
+
 import {
   runSimulations,
   deleteSimulations,

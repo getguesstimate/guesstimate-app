@@ -1,3 +1,4 @@
+import _ from "lodash";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "next/router";
@@ -142,12 +143,11 @@ class Profile extends Component {
 
     return (
       <DropDown
-        headerText={"Select Owner"}
+        headerText="Select Owner"
         openLink={
           <a className="item new-model">
             {" "}
-            <i className={`ion-md-add`} />{" "}
-            <span className="text">New Model</span>{" "}
+            <i className="ion-md-add" /> <span className="text">New Model</span>{" "}
           </a>
         }
         ref={ref}
@@ -180,11 +180,11 @@ class Profile extends Component {
 
     return (
       <DropDown
-        headerText={"Organizations"}
+        headerText="Organizations"
         openLink={
           <a className="item">
             {" "}
-            <i className={`ion-ios-people`} />{" "}
+            <i className="ion-ios-people" />{" "}
             <span className="text">Organizations</span>{" "}
           </a>
         }
@@ -216,7 +216,7 @@ class Profile extends Component {
             className="item new-model"
             onClick={this.newModel.bind(this, null)}
           >
-            <i className={`ion-md-add`} />
+            <i className="ion-md-add" />
             <span className="text">New Model</span>
           </a>
         )}
@@ -241,14 +241,14 @@ class Profile extends Component {
         )}
 
         {!isLoggedIn && (
-          <a className={"item text pricing"} href="/pricing">
+          <a className="item text pricing" href="/pricing">
             Plans
           </a>
         )}
 
         {!isLoggedIn && (
           <a
-            className={"item text scratchpad"}
+            className="item text scratchpad"
             href="http://docs.getguesstimate.com/"
           >
             Documentation
@@ -256,13 +256,13 @@ class Profile extends Component {
         )}
 
         {!isLoggedIn && (
-          <a className={"item text"} onClick={this.signIn.bind(this)}>
+          <a className="item text" onClick={this.signIn.bind(this)}>
             Sign In
           </a>
         )}
 
         {!isLoggedIn && (
-          <a className={"item text"} onClick={this.signUp.bind(this)}>
+          <a className="item text" onClick={this.signUp.bind(this)}>
             Sign Up
           </a>
         )}

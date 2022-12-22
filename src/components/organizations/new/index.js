@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 
 import { CreateOrganizationForm } from "./form";
 import { LocalAddMembers } from "./members";
-import Container from "gComponents/utility/container/Container.js";
+import Container from "gComponents/utility/container/Container";
 
 function mapStateToProps(state) {
   return {

@@ -5,7 +5,7 @@ import PlanIndex from "gComponents/plans/index/container";
 
 const PricingPage: NextPage = () => {
   return (
-    <Layout options={{ backgroundColor: "GREY" }}>
+    <Layout backgroundColor="GREY">
       <PlanIndex />
     </Layout>
   );

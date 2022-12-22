@@ -1,9 +1,9 @@
 import * as spaceActions from "gModules/spaces/actions";
 import * as userActions from "gModules/users/actions";
 
-import { searchError } from "lib/errors/index.js";
+import { searchError } from "lib/errors/index";
 
-import { searchSpaceIndex } from "servers/algolia/index.js";
+import { searchSpaceIndex } from "servers/algolia/index";
 
 export function fetch(query = "", options = {}) {
   let filters = { hitsPerPage: 21 };

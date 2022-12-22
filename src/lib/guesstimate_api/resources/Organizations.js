@@ -1,4 +1,4 @@
-import AbstractResource from "../AbstractResource.js";
+import AbstractResource from "../AbstractResource";
 
 export default class Organizations extends AbstractResource {
   get({ organizationId }, callback) {

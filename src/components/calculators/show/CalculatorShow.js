@@ -7,7 +7,7 @@ import Icon from "gComponents/react-fa-patched";
 
 import { Input } from "./input";
 import { Output } from "./output";
-import { Button } from "gComponents/utility/buttons/button.js";
+import { Button } from "gComponents/utility/buttons/button";
 
 import {
   deleteSimulations,

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { FactItem } from "gComponents/facts/list/item.js";
+import { FactItem } from "gComponents/facts/list/item";
 import FlowGrid from "gComponents/lib/FlowGrid/FlowGrid";
 import { SpaceCard } from "gComponents/spaces/cards";
 

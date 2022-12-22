@@ -4,7 +4,7 @@ import Icon from "gComponents/react-fa-patched";
 import Modal from "react-modal";
 import ReactTooltip from "react-tooltip";
 
-import { CardListElement } from "gComponents/utility/card/index.js";
+import { CardListElement } from "gComponents/utility/card/index";
 import DropDown from "gComponents/utility/drop-down/index";
 import CanvasViewForm from "../canvasViewForm";
 import { ViewOptionToggle } from "../view-options/index";

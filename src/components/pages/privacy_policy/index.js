@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import IubendaPrivacyPolicy from "gComponents/lib/iubenda_privacy_policy.js";
+import IubendaPrivacyPolicy from "gComponents/lib/iubenda_privacy_policy";
 
 export default class PrivacyPolicy extends Component {
   render() {

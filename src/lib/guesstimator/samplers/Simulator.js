@@ -1,7 +1,7 @@
 import { replaceByMap } from "gEngine/utils";
 
 import generateRandomReadableId from "gEngine/metric/generate_random_readable_id";
-import { STOCHASTIC_FUNCTIONS } from "./simulator-worker/simulator/evaluator.js";
+import { STOCHASTIC_FUNCTIONS } from "./simulator-worker/simulator/evaluator";
 
 const MIN_SAMPLES_PER_WINDOW = 100;
 

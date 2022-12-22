@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import SpaceCards from "gComponents/spaces/cards";
-import { CardListElement } from "gComponents/utility/card/index.js";
+import { CardListElement } from "gComponents/utility/card/index";
 import DropDown from "gComponents/utility/drop-down/index";
 
 import * as search from "gModules/search_spaces/actions";

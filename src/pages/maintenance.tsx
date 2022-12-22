@@ -5,7 +5,7 @@ import Maintenance from "gComponents/pages/maintenance/index";
 
 const MaintenancePage: NextPage = () => {
   return (
-    <Layout options={{}}>
+    <Layout>
       <Maintenance />
     </Layout>
   );

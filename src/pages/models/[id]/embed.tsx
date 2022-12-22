@@ -9,14 +9,7 @@ const EmbedModelPage: NextPage = () => {
 
   const { id } = router.query;
   return (
-    <Layout
-      options={{
-        isFluid: true,
-        showFooter: false,
-        embed: true,
-        fullHeight: true,
-      }}
-    >
+    <Layout isFluid showFooter={false} embed fullHeight>
       {id === undefined ? null : (
         <SpaceShow spaceId={parseInt(id as string)} embed={true} />
       )}

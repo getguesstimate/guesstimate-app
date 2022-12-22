@@ -8,26 +8,22 @@ import Footer from "../footer";
 import Header from "../header";
 
 type Props = {
-  options: Partial<{
-    isFluid: boolean;
-    simpleHeader: boolean;
-    showFooter: boolean;
-    embed: boolean;
-    fullHeight: boolean;
-    backgroundColor: "BLUE" | "GREY";
-  }>;
+  isFluid?: boolean;
+  simpleHeader?: boolean;
+  showFooter?: boolean;
+  embed?: boolean;
+  fullHeight?: boolean;
+  backgroundColor?: "BLUE" | "GREY";
   children: React.ReactElement;
 };
 
 const Layout: React.FC<Props> = ({
-  options: {
-    isFluid = false,
-    simpleHeader = false,
-    showFooter = true,
-    embed = false,
-    fullHeight = false,
-    backgroundColor = "",
-  },
+  isFluid = false,
+  simpleHeader = false,
+  showFooter = true,
+  embed = false,
+  fullHeight = false,
+  backgroundColor = "",
   children,
 }) => {
   return (

@@ -1,6 +1,6 @@
-import { newFlowState, subStage, actions, states } from "./state_machine.js";
-import firstSubscriptionReducer from "./reducer.js";
-import { initialState } from "./reducer.js";
+import { newFlowState, subStage, actions, states } from "./state_machine";
+import firstSubscriptionReducer from "./reducer";
+import { initialState } from "./reducer";
 
 describe("FirstSubscriptionFlowStage", () => {
   describe("a successful flow", () => {

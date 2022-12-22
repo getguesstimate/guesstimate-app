@@ -1,4 +1,4 @@
-import { parseSlurp } from "./slurpParser.js";
+import { parseSlurp } from "./slurpParser";
 
 function matchPresent(pattern, sample) {
   if (!_.isObject(pattern)) {

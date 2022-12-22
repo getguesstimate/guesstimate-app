@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { FactListContainer } from "gComponents/facts/list/container.js";
+import { FactListContainer } from "gComponents/facts/list/container";
 import { CategoryForm } from "./form";
 
 class CategoryHeader extends Component {

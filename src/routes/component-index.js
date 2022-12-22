@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 import MetricCard from "gComponents/metrics/card";
-import ComponentEditor from "gComponents/utility/ComponentEditor/index.js";
+import ComponentEditor from "gComponents/utility/ComponentEditor/index";
 
 const MetricCardProps = {
   metric: {

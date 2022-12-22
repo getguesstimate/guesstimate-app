@@ -5,7 +5,7 @@ import TermsAndConditions from "gComponents/pages/terms_and_conditions/index";
 
 const TermsPage: NextPage = () => {
   return (
-    <Layout options={{}}>
+    <Layout>
       <TermsAndConditions />
     </Layout>
   );

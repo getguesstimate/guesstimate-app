@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 
-import ComponentEditor from "gComponents/utility/ComponentEditor/index.js";
+import ComponentEditor from "gComponents/utility/ComponentEditor/index";
 import { subStages } from "gModules/first_subscription/state_machine";
 
-import FirstSubscription from "./FirstSubscription.js";
+import FirstSubscription from "./FirstSubscription";
 
 const FirstSubscriptionBaseProps = {
   planId: "small",

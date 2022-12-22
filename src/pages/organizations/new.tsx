@@ -5,7 +5,7 @@ import { CreateOrganizationPageContainer } from "gComponents/organizations/new/i
 
 const CreateOrganizationPage: NextPage = () => {
   return (
-    <Layout options={{ backgroundColor: "GREY" }}>
+    <Layout backgroundColor="GREY">
       <CreateOrganizationPageContainer />
     </Layout>
   );

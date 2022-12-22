@@ -4,7 +4,7 @@ import Icon from "gComponents/react-fa-patched";
 
 import * as e from "gEngine/engine";
 
-import { MemberAddForm } from "../shared/MemberAddForm/index.js";
+import { MemberAddForm } from "../shared/MemberAddForm/index";
 
 export class MembersTab extends Component {
   state = {

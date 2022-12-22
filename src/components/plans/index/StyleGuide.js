@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import ComponentEditor from "gComponents/utility/ComponentEditor/index.js";
+import ComponentEditor from "gComponents/utility/ComponentEditor/index";
 import { PlanIndex } from "./PlanIndex";
 
 const options = [

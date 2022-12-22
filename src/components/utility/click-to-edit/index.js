@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import Icon from "gComponents/react-fa-patched";
 
-import { ButtonClose } from "../buttons/close/index.js";
+import { ButtonClose } from "../buttons/close/index";
 
 class EditingMode extends Component {
   _submit() {
