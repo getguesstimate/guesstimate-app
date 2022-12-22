@@ -1,14 +1,11 @@
 node_modules
 npm-debug.log
 .DS_Store
-/public
 
 tags
 .tern-project
 
 .netlify
-
-*.css.json
 
 /.next
 /tsconfig.tsbuildinfo

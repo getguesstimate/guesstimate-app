@@ -1,8 +1,9 @@
-import Layout from "../routes/layouts/application/index";
+import { NextPage } from "next";
 
+import Layout from "../routes/layouts/application/index";
 import ComponentIndex from "../routes/component-index";
 
-const StyleGuidePage = () => {
+const StyleGuidePage: NextPage = () => {
   return (
     <Layout options={{}}>
       <ComponentIndex />

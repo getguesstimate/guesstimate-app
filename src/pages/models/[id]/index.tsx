@@ -1,27 +1,29 @@
-import Layout from "../../../routes/layouts/application/index";
+import { NextPage } from "next";
 import { useRouter } from "next/router";
 
+import Layout from "../../../routes/layouts/application/index";
 import SpaceShow from "gComponents/spaces/show";
 import { extractTokenFromUrl } from "gEngine/space";
 
-const ModelWithCalculatorIdPage = () => {
+const ModelPage: NextPage = () => {
   const router = useRouter();
 
-  const { id, calculatorId } = router.query;
+  const { id } = router.query;
+  const intId = parseInt(id as string);
+
   return (
     <Layout options={{ isFluid: true, showFooter: false, fullHeight: true }}>
       <SpaceShow
-        spaceId={parseInt(id)}
-        showCalculatorId={parseInt(calculatorId)}
+        spaceId={intId}
         showCalculatorResults={window.location.search.includes(
           "showResults=true"
         )}
         factsShown={window.location.search.includes("factsShown=true")}
         shareableLinkToken={extractTokenFromUrl(window.location.search)}
-        key={parseInt(id)}
+        key={intId}
       />
     </Layout>
   );
 };
 
-export default ModelWithCalculatorIdPage;
+export default ModelPage;

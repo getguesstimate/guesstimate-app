@@ -1,8 +1,9 @@
-import Layout from "../routes/layouts/application/index";
+import { NextPage } from "next";
 
+import Layout from "../../routes/layouts/application/index";
 import FirstSubscriptionStyleGuide from "gComponents/subscriptions/FirstSubscription/StyleGuide";
 
-const FirstSubscriptionStyleGuidePage = () => {
+const FirstSubscriptionStyleGuidePage: NextPage = () => {
   return (
     <Layout options={{}}>
       <FirstSubscriptionStyleGuide />

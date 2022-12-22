@@ -1,8 +1,9 @@
-import Layout from "../routes/layouts/application/index";
+import { NextPage } from "next";
 
+import Layout from "../routes/layouts/application/index";
 import FAQ from "gComponents/pages/faq/index";
 
-const FAQPage = () => {
+const FAQPage: NextPage = () => {
   return (
     <Layout options={{}}>
       <FAQ />

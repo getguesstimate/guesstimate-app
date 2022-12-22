@@ -1,18 +1,17 @@
-import { Sampler as DistributionNormalSampler } from "./samplers/DistributionNormal.js";
-import { Sampler as DistributionLognormalSampler } from "./samplers/DistributionLognormal.js";
-import { Sampler as DistributionBetaSampler } from "./samplers/DistributionBeta.js";
-import { Sampler as DistributionPointSampler } from "./samplers/DistributionPoint.js";
-import { Sampler as DistributionUniformSampler } from "./samplers/DistributionUniform.js";
-import { Sampler as FunctionSampler } from "./samplers/Function.js";
-import { Sampler as DataSampler } from "./samplers/Data.js";
-import { Sampler as NoneSampler } from "./samplers/None.js";
+import { Sampler as DataSampler } from "./samplers/Data";
+import { Sampler as DistributionBetaSampler } from "./samplers/DistributionBeta";
+import { Sampler as DistributionLognormalSampler } from "./samplers/DistributionLognormal";
+import { Sampler as DistributionNormalSampler } from "./samplers/DistributionNormal";
+import { Sampler as DistributionPointSampler } from "./samplers/DistributionPoint";
+import { Sampler as DistributionUniformSampler } from "./samplers/DistributionUniform";
+import { Sampler as FunctionSampler } from "./samplers/Function";
+import { Sampler as NoneSampler } from "./samplers/None";
 
-import NormalIcon from "../../assets/distribution-icons/normal.png";
-import LogNormalIcon from "../../assets/distribution-icons/lognormal.png";
-import ExponentialIcon from "../../assets/distribution-icons/exponential.png";
-import PointIcon from "../../assets/distribution-icons/point.png";
-import UniformIcon from "../../assets/distribution-icons/uniform.png";
-import FunctionIcon from "../../assets/distribution-icons/function.png";
+const FunctionIcon = "/assets/distribution-icons/function.png";
+const LogNormalIcon = "../assets/distribution-icons/lognormal.png";
+const NormalIcon = "../assets/distribution-icons/normal.png";
+const PointIcon = "../assets/distribution-icons/point.png";
+const UniformIcon = "../assets/distribution-icons/uniform.png";
 
 export const Funct = {
   referenceName: "FUNCTION",

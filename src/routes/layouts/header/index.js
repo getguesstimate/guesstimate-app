@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import logo from "../../../assets/new-logo-2.png";
 import Login from "../login";
+
+const logo = "/assets/new-logo-2.png";
 
 function mapStateToProps(state) {
   return {

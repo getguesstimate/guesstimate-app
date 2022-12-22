@@ -1,8 +1,9 @@
-import Layout from "../routes/layouts/application/index";
+import { NextPage } from "next";
 
+import Layout from "../../routes/layouts/application/index";
 import OrganizationNewStyleGuide from "gComponents/organizations/new/StyleGuide";
 
-const NewOrganizationStyleGuidePage = () => {
+const NewOrganizationStyleGuidePage: NextPage = () => {
   return (
     <Layout options={{}}>
       <OrganizationNewStyleGuide />

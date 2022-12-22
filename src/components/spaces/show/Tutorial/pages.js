@@ -1,8 +1,8 @@
 import React from "react";
 
-import MakeAMetric from "../../../../assets/tutorial/MakeAMetric.gif";
-import InteractWithACell from "../../../../assets/tutorial/InteractWithACell.gif";
-import MakeAFunction from "../../../../assets/tutorial/MakeAFunction.gif";
+const MakeAMetric = "/assets/tutorial/MakeAMetric.gif";
+const InteractWithACell = "/assets/tutorial/InteractWithACell.gif";
+const MakeAFunction = "/assets/tutorial/MakeAFunction.gif";
 
 const TutorialPage = ({ header, image, children }) => (
   <div className="tutorialPage">

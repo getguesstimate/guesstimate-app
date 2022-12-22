@@ -4,10 +4,7 @@ import React, { Component } from "react";
 import Icon from "gComponents/react-fa-patched";
 
 import { ButtonClose } from "gComponents/utility/buttons/close/index.js";
-
-String.prototype.capitalizeFirstLetter = function () {
-  return this.charAt(0).toUpperCase() + this.slice(1);
-};
+import { capitalizeFirstLetter } from "lib/string";
 
 export const CardListSection = ({ children }) => (
   <div className="CardListSection">{children}</div>
@@ -93,7 +90,7 @@ const IconSection = ({ colCount, icon, ionicIcon, image, imageShape }) => (
 const ChildrenSection = ({ colCount, header, children }) => (
   <div className={`col-xs-${colCount} info-section`}>
     {!!header && (
-      <span className="header">{header.capitalizeFirstLetter()}</span>
+      <span className="header">{capitalizeFirstLetter(header)}</span>
     )}
     {!!children && <div className="content"> {children} </div>}
   </div>

@@ -7,11 +7,12 @@ import DropDown from "gComponents/utility/drop-down/index.js";
 
 import * as canvasStateActions from "gModules/canvas_state/actions";
 import * as canvasStateProps from "gModules/canvas_state/prop_type.js";
+import { capitalizeFirstLetter } from "lib/string";
 
-import arrowsHiddenImage from "../../../assets/metric-icons/blue/arrows-hidden.png";
-import arrowsVisibleImage from "../../../assets/metric-icons/blue/arrows-visible.png";
-import debuggingImage from "../../../assets/metric-icons/blue/debugging.png";
-import scientificImage from "../../../assets/metric-icons/blue/scientific.png";
+const arrowsHiddenImage = "/assets/metric-icons/blue/arrows-hidden.png";
+const arrowsVisibleImage = "/assets/metric-icons/blue/arrows-visible.png";
+const debuggingImage = "/assets/metric-icons/blue/debugging.png";
+const scientificImage = "/assets/metric-icons/blue/scientific.png";
 
 function mapStateToProps(state) {
   return {
@@ -22,7 +23,7 @@ function mapStateToProps(state) {
 const Item = ({ name, onSelect }) => (
   <li onMouseDown={onSelect}>
     <button data-card-view={name} type="button">
-      {name.capitalizeFirstLetter()}
+      {capitalizeFirstLetter(name)}
     </button>
   </li>
 );

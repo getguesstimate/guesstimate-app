@@ -1,8 +1,9 @@
-import Layout from "../routes/layouts/application/index";
+import { NextPage } from "next";
 
+import Layout from "../routes/layouts/application/index";
 import Maintenance from "gComponents/pages/maintenance/index";
 
-const MaintenancePage = () => {
+const MaintenancePage: NextPage = () => {
   return (
     <Layout options={{}}>
       <Maintenance />

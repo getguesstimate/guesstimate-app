@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Image from "next/image";
 
-import LogoWord from "../../assets/logo-word-no-beta.png";
+import LogoWord from "../../../public/assets/logo-word-no-beta.png";
 
 export default class Home extends Component {
   render() {

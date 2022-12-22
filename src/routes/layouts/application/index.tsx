@@ -25,7 +25,7 @@ type Props = {
 const Layout: React.FC<Props> = ({
   options: {
     isFluid = false,
-    simpleHeader = true,
+    simpleHeader = false,
     showFooter = true,
     embed = false,
     fullHeight = false,

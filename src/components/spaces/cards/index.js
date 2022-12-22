@@ -9,7 +9,7 @@ import * as User from "gEngine/user";
 
 import { formatDate, formatDescription } from "gComponents/spaces/shared";
 
-import arrowsVisibleImage from "../../../assets/metric-icons/blue/arrows-visible.png";
+const arrowsVisibleImage = "/assets/metric-icons/blue/arrows-visible.png";
 
 const BlankScreenshot = () => (
   <div className="snapshot blank">
