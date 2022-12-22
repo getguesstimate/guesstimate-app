@@ -14,16 +14,18 @@ const ModelWithCalculatorIdPage: NextPage = () => {
 
   return (
     <Layout options={{ isFluid: true, showFooter: false, fullHeight: true }}>
-      <SpaceShow
-        spaceId={intId}
-        showCalculatorId={intCalculatorId}
-        showCalculatorResults={window.location.search.includes(
-          "showResults=true"
-        )}
-        factsShown={window.location.search.includes("factsShown=true")}
-        shareableLinkToken={extractTokenFromUrl(window.location.search)}
-        key={intId}
-      />
+      {id === undefined ? null : (
+        <SpaceShow
+          spaceId={intId}
+          showCalculatorId={intCalculatorId}
+          showCalculatorResults={window.location.search.includes(
+            "showResults=true"
+          )}
+          factsShown={window.location.search.includes("factsShown=true")}
+          shareableLinkToken={extractTokenFromUrl(window.location.search)}
+          key={intId}
+        />
+      )}
     </Layout>
   );
 };

@@ -10,7 +10,9 @@ const SubscribePage: NextPage = () => {
   const { id } = router.query;
   return (
     <Layout options={{}}>
-      <FirstSubscriptionPage planName={id as string} />
+      {id === undefined ? null : (
+        <FirstSubscriptionPage planName={id as string} />
+      )}
     </Layout>
   );
 };

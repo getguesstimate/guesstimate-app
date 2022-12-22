@@ -17,7 +17,9 @@ const EmbedModelPage: NextPage = () => {
         fullHeight: true,
       }}
     >
-      <SpaceShow spaceId={parseInt(id as string)} embed={true} />
+      {id === undefined ? null : (
+        <SpaceShow spaceId={parseInt(id as string)} embed={true} />
+      )}
     </Layout>
   );
 };

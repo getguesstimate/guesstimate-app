@@ -10,7 +10,9 @@ const OrganizationPage: NextPage = () => {
   const { id } = router.query;
   return (
     <Layout options={{ backgroundColor: "GREY" }}>
-      <OrganizationShow organizationId={id} key={id as string} tab={null} />
+      {id === undefined ? null : (
+        <OrganizationShow organizationId={id} key={id as string} tab={null} />
+      )}
     </Layout>
   );
 };

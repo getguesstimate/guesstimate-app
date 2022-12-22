@@ -12,7 +12,9 @@ const CalculatorPage: NextPage = () => {
 
   return (
     <Layout options={{ showFooter: false, backgroundColor: "GREY" }}>
-      <CalculatorExpandedShow calculatorId={intId} key={intId} />
+      {id === undefined ? null : (
+        <CalculatorExpandedShow calculatorId={intId} key={intId} />
+      )}
     </Layout>
   );
 };
