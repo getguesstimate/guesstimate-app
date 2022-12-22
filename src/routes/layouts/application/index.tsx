@@ -1,14 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 
-import NavHelper from "gComponents/utility/NavHelper/index";
 import ErrorModal from "gComponents/application/errorModal/index";
 import Main from "gComponents/layouts/main/index";
+import NavHelper from "gComponents/utility/NavHelper/index";
 import ModalContainer from "gModules/modal/routes";
 import Footer from "../footer";
 import Header from "../header";
-
-import * as meActions from "gModules/me/actions";
-import { useAppDispatch } from "gModules/hooks";
 
 type Props = {
   options: Partial<{
@@ -33,12 +30,6 @@ const Layout: React.FC<Props> = ({
   },
   children,
 }) => {
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(meActions.init());
-  }, [dispatch]);
-
   return (
     <NavHelper>
       <ErrorModal />

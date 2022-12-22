@@ -357,8 +357,6 @@ class MetricCard extends Component {
               canUseOrganizationFacts={canUseOrganizationFacts}
               metricClickMode={metricClickMode}
               closeModal={this.closeModal.bind(this)}
-              organizationId={organizationId}
-              canUseOrganizationFacts={canUseOrganizationFacts}
               onChangeGuesstimateDescription={this.onChangeGuesstimateDescription.bind(
                 this
               )}
@@ -380,7 +378,6 @@ class MetricCard extends Component {
             idMap={idMap}
             analyzedMetric={analyzedMetric}
             showSensitivitySection={shouldShowSensitivitySection}
-            connectDragSource={connectDragSource}
             heightHasChanged={forceFlowGridUpdate}
             hovered={hovered}
             onReturn={this.props.onReturn}

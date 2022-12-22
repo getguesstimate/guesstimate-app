@@ -1,16 +1,13 @@
-import React, { Component } from "react";
+import _ from "lodash";
+import { Component } from "react";
 
-import Modal from "react-modal";
-
-import { DistributionSummary } from "gComponents/distributions/summary/index";
 import DistributionEditor from "gComponents/distributions/editor/index";
 import { HistogramWithStats } from "gComponents/simulations/histogram_with_stats/index";
-import GuesstimateDescription from "./description";
 import { ButtonClose } from "gComponents/utility/buttons/close";
-import { GeneralModal } from "gComponents/utility/modal/index";
 import DropDown from "gComponents/utility/drop-down/index";
+import { GeneralModal } from "gComponents/utility/modal/index";
+import GuesstimateDescription from "./description";
 
-import { percentile } from "lib/dataAnalysis";
 import { SAMPLE_FILTERED } from "lib/guesstimator/samplers/simulator-worker/simulator/filters/filters";
 
 const SampleList = ({ samples }) => (
@@ -89,8 +86,6 @@ export class MetricModal extends Component {
                   metricClickMode={metricClickMode}
                   inputMetrics={metric.edges.inputMetrics}
                   metricId={metric.id}
-                  organizationId={organizationId}
-                  canUseOrganizationFacts={canUseOrganizationFacts}
                   size={"large"}
                 />
               </div>

@@ -46,7 +46,12 @@ export const NewSpaceCard = ({ onClick }) => (
   </div>
 );
 
-export const SpaceCard = ({ space, showPrivacy, size, urlParams = {} }) => {
+export const SpaceCard = ({
+  space,
+  showPrivacy,
+  size = undefined,
+  urlParams = {},
+}) => {
   const router = useRouter();
   const hasName = !_.isEmpty(space.name);
   const hasOrg = _.has(space, "organization.name");
