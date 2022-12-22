@@ -1,9 +1,10 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { useRouter, withRouter } from "next/router";
 
 import $ from "jquery";
-import Helmet from "react-helmet";
+import Head from "next/head";
 
 import { EditCalculatorForm } from "gComponents/calculators/edit";
 import { NewCalculatorForm } from "gComponents/calculators/new";
@@ -33,18 +34,15 @@ import {
 import { redo, undo } from "gModules/checkpoints/actions";
 import * as copiedActions from "gModules/copied/actions";
 import { removeSelectedMetrics } from "gModules/metrics/actions";
-import { navigateFn } from "gModules/navigation/actions";
 import * as simulationActions from "gModules/simulations/actions";
 import * as spaceActions from "gModules/spaces/actions";
 import * as userActions from "gModules/users/actions";
 
 import { parseSlurp } from "lib/slurpParser";
 
-import e from "gEngine/engine";
+import * as e from "gEngine/engine";
 
 import * as elev from "servers/elev/index";
-
-import "./style.css";
 
 function mapStateToProps(state) {
   return {
@@ -66,18 +64,21 @@ const ShowCalculatorHeader = ({
   onEdit,
   onDelete,
   onClose,
-}) => (
-  <div className="row">
-    <div className="col-xs-12">
-      <div className="button-close-text">
-        <ButtonExpandText onClick={navigateFn(`/calculators/${id}`)} />
-        {editableByMe && <ButtonEditText onClick={onEdit} />}
-        {editableByMe && <ButtonDeleteText onClick={onDelete} />}
-        <ButtonCloseText onClick={onClose} />
+}) => {
+  const router = useRouter();
+  return (
+    <div className="row">
+      <div className="col-xs-12">
+        <div className="button-close-text">
+          <ButtonExpandText onClick={() => router.push(`/calculators/${id}`)} />
+          {editableByMe && <ButtonEditText onClick={onEdit} />}
+          {editableByMe && <ButtonDeleteText onClick={onDelete} />}
+          <ButtonCloseText onClick={onClose} />
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 const CalculatorFormHeader = ({ isNew, onClose }) => (
   <div className="row">
@@ -90,25 +91,26 @@ const CalculatorFormHeader = ({ isNew, onClose }) => (
   </div>
 );
 
-const FactSidebarHeader = ({ onClose, organizationId }) => (
-  <div className="row">
-    <div className="col-xs-6">
-      <h2> Metric Library </h2>
-    </div>
-    <div className="col-xs-6">
-      <ButtonExpandText
-        onClick={navigateFn(`/organizations/${organizationId}/facts`)}
-      />
-      <div className="button-close-text">
-        <ButtonCloseText onClick={onClose} />
+const FactSidebarHeader = ({ onClose, organizationId }) => {
+  const router = useRouter();
+  return (
+    <div className="row">
+      <div className="col-xs-6">
+        <h2> Metric Library </h2>
+      </div>
+      <div className="col-xs-6">
+        <ButtonExpandText
+          onClick={() => router.push(`/organizations/${organizationId}/facts`)}
+        />
+        <div className="button-close-text">
+          <ButtonCloseText onClick={onClose} />
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
-@connect(mapStateToProps)
-@connect(denormalizedSpaceSelector)
-export default class SpacesShow extends Component {
+class SpacesShow extends Component {
   static propTypes = {
     dispatch: PT.func.isRequired,
     spaceId: PT.number,
@@ -201,7 +203,9 @@ export default class SpacesShow extends Component {
   }
 
   destroy() {
-    this.props.dispatch(spaceActions.destroy(this.props.denormalizedSpace));
+    this.props.dispatch(
+      spaceActions.destroy(this.props.denormalizedSpace, this.props.router)
+    );
   }
 
   onImportSlurp(slurpObj) {
@@ -270,7 +274,7 @@ export default class SpacesShow extends Component {
   }
 
   _handleCopyModel() {
-    this.props.dispatch(spaceActions.copy(this._id()));
+    this.props.dispatch(spaceActions.copy(this._id(), this.props.router));
   }
 
   onCopy() {
@@ -487,28 +491,20 @@ export default class SpacesShow extends Component {
 
     return (
       <div className="spaceShow">
-        {!space.name && (
-          <Helmet
-            meta={[
-              { name: "Description", content: tagDescription },
-              { property: "og:description", content: tagDescription },
-              { property: "og:site_name", content: "Guesstimate" },
-              { property: "og:image", content: space.big_screenshot },
-            ]}
-          />
-        )}
-        {space.name && (
-          <Helmet
-            title={space.name}
-            meta={[
-              { name: "Description", content: tagDescription },
-              { property: "og:title", content: space.name },
-              { property: "og:description", content: tagDescription },
-              { property: "og:site_name", content: "Guesstimate" },
-              { property: "og:image", content: space.big_screenshot },
-            ]}
-          />
-        )}
+        <Head>
+          {space.name && <title key="title">{space.name}</title>}
+          {[
+            { name: "description", content: tagDescription },
+            ...(space.name
+              ? [{ property: "og:title", content: space.name }]
+              : []),
+            { property: "og:description", content: tagDescription },
+            { property: "og:site_name", content: "Guesstimate" },
+            { property: "og:image", content: space.big_screenshot },
+          ].map((tag) => (
+            <meta {...tag} key={tag.name || tag.property} />
+          ))}
+        </Head>
         {this.state.showTutorial && (
           <Tutorial onClose={this.closeTutorial.bind(this)} />
         )}
@@ -598,3 +594,7 @@ export default class SpacesShow extends Component {
     );
   }
 }
+
+export default connect(mapStateToProps)(
+  connect(denormalizedSpaceSelector)(withRouter(SpacesShow))
+);

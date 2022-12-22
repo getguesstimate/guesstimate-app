@@ -1,5 +1,7 @@
+import _ from "lodash";
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { withRouter } from "next/router";
 
 import { NewSpaceCard, SpaceCard } from "gComponents/spaces/cards";
 import Container from "gComponents/utility/container/Container";
@@ -9,18 +11,14 @@ import { userSpaceSelector } from "./userSpaceSelector";
 import * as spaceActions from "gModules/spaces/actions";
 import * as userActions from "gModules/users/actions";
 
-import "./style.css";
-
-@connect(_.partialRight(_.pick, ["me", "users"]))
-@connect(userSpaceSelector)
-export default class UserShow extends Component {
+class UserShow extends Component {
   componentWillMount() {
     this.props.dispatch(userActions.fetchById(this.props.userId));
     this.props.dispatch(spaceActions.fetch({ userId: this.props.userId }));
   }
 
   _newModel() {
-    this.props.dispatch(spaceActions.create());
+    this.props.dispatch(spaceActions.create(undefined, {}, this.props.router));
   }
 
   render() {
@@ -65,3 +63,7 @@ export default class UserShow extends Component {
     );
   }
 }
+
+export default connect(_.partialRight(_.pick, ["me", "users"]))(
+  connect(userSpaceSelector)(withRouter(UserShow))
+);

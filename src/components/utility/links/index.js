@@ -31,8 +31,7 @@ export const LinkGithubStar = () => (
   ></iframe>
 );
 
-@connect()
-export class LinkSettings extends Component {
+class UnconnectedLinkSettings extends Component {
   _openModal() {
     this.props.dispatch(modalActions.change("Settings"));
   }
@@ -40,3 +39,5 @@ export class LinkSettings extends Component {
     <a onMouseDown={this._openModal.bind(this)}> Settings </a>;
   }
 }
+
+export const LinkSettings = connect()(UnconnectedLinkSettings);

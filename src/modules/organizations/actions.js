@@ -1,5 +1,4 @@
 import cuid from "cuid";
-import app from "ampersand-app";
 import { actionCreatorsFor } from "redux-crud";
 
 import * as displayErrorsActions from "gModules/displayErrors/actions";

@@ -9,3 +9,5 @@ tags
 .netlify
 
 *.css.json
+
+/.next

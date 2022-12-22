@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import Icon from "react-fa";
+import Icon from "gComponents/react-fa-patched";
 
 import Card from "gComponents/utility/card/index.js";
 import Plan from "lib/config/plan.js";
-import "./style.css";
 
 const PlanC = ({ planId, privateModelLimit }) => (
   <div className="Plan">

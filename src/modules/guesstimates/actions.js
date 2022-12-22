@@ -1,6 +1,6 @@
 import * as spaceActions from "gModules/spaces/actions";
 
-import e from "gEngine/engine";
+import * as e from "gEngine/engine";
 
 // TODO(matthew): Doing fact/metric translations here means that systems that rely on guesstimate idenity comparisons
 // (e.g. action triggering qualifiers) will break.

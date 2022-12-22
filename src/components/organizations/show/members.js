@@ -1,11 +1,9 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 
-import Icon from "react-fa";
+import Icon from "gComponents/react-fa-patched";
 
-import e from "gEngine/engine";
+import * as e from "gEngine/engine";
 
-import "./members.css";
 import { MemberAddForm } from "../shared/MemberAddForm/index.js";
 
 export class MembersTab extends Component {

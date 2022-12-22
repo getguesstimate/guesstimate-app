@@ -2,8 +2,6 @@ import React from "react";
 
 import numberShow from "lib/numberShower/numberShower";
 
-import "./style.css";
-
 const PrecisionNumber = ({
   value,
   precision,

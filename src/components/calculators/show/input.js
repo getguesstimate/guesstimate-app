@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 import ReactMarkdown from "react-markdown";
-import Icon from "react-fa";
+import Icon from "gComponents/react-fa-patched";
 
 import { Guesstimator } from "lib/guesstimator/index";
 

@@ -1,9 +1,7 @@
-import React, { Component } from "react";
 import { DistributionSummary } from "gComponents/distributions/summary/index";
 import Histogram from "gComponents/simulations/histogram/index";
-import { percentile, cutoff } from "lib/dataAnalysis";
-import $ from "jquery";
-import "./style.css";
+import { cutoff, percentile } from "lib/dataAnalysis";
+import React, { Component } from "react";
 
 const MARGIN_LEFT = 10;
 

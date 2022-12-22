@@ -1,5 +1,4 @@
 import { createSelector } from "reselect";
-import e from "gEngine/engine";
 
 const spaceSelector = (state) => state.spaces;
 const userIdSelector = (state, props) => props.userId;

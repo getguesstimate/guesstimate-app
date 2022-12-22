@@ -1,5 +1,5 @@
 import { createSelector } from "reselect";
-import e from "gEngine/engine";
+import * as e from "gEngine/engine";
 
 const _sameId = (idA, idB) => idA.toString() === idB.toString();
 const spaceGraphSelector = (state) =>

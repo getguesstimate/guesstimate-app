@@ -10,12 +10,9 @@ import {
   LinkTerms,
 } from "gComponents/utility/links/index.js";
 
-import styles from "./style.css.json";
-import "./style.css";
-
 const Footer = () => {
   return (
-    <footer className={styles.footer}>
+    <footer className="gFooter">
       <div className="container-fluid wrap">
         <div className="row">
           <div className="col-sm-2 col-sm-offset-3 col-xs-6">

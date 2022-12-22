@@ -1,7 +1,4 @@
-import async from "async";
 import { call } from "redux-saga/effects";
-
-import e from "gEngine/engine";
 
 import { simulate } from "lib/propagation/wrapper";
 

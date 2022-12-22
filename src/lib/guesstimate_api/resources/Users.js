@@ -1,4 +1,4 @@
-import AbstractResource from "../AbstractResource.js";
+import AbstractResource from "../AbstractResource";
 
 export default class Users extends AbstractResource {
   get({ userId }, callback) {

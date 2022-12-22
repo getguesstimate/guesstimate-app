@@ -1,18 +1,15 @@
 import React from "react";
+import { useRouter } from "next/router";
 
-import Icon from "react-fa";
+import Icon from "gComponents/react-fa-patched";
 
-import * as navigationActions from "gModules/navigation/actions";
-
+import * as Organization from "gEngine/organization";
 import * as Space from "gEngine/space";
 import * as User from "gEngine/user";
-import * as Organization from "gEngine/organization";
 
-import { formatDescription, formatDate } from "gComponents/spaces/shared";
+import { formatDate, formatDescription } from "gComponents/spaces/shared";
 
 import arrowsVisibleImage from "../../../assets/metric-icons/blue/arrows-visible.png";
-
-import "./style.css";
 
 const BlankScreenshot = () => (
   <div className="snapshot blank">
@@ -50,6 +47,7 @@ export const NewSpaceCard = ({ onClick }) => (
 );
 
 export const SpaceCard = ({ space, showPrivacy, size, urlParams = {} }) => {
+  const router = useRouter();
   const hasName = !_.isEmpty(space.name);
   const hasOrg = _.has(space, "organization.name");
 
@@ -59,7 +57,7 @@ export const SpaceCard = ({ space, showPrivacy, size, urlParams = {} }) => {
     : User.url(space.user);
 
   const spaceUrl = Space.spaceUrlById(space.id, urlParams);
-  const navigateToSpace = navigationActions.navigateFn(spaceUrl);
+  const navigateToSpace = () => router.push(spaceUrl);
 
   return (
     <div

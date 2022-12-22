@@ -5,7 +5,7 @@ import { NODE_TYPES } from "./constants";
 import { ERROR_TYPES } from "./errors";
 import { Simulator } from "./simulator";
 
-import e from "gEngine/engine";
+import * as e from "gEngine/engine";
 
 function getSpacesAndOrganization(state, graphFilters) {
   let spaces = [];

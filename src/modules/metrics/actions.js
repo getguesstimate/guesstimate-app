@@ -1,7 +1,7 @@
 import * as spaceActions from "gModules/spaces/actions";
 import * as organizationActions from "gModules/organizations/actions";
 
-import e from "gEngine/engine";
+import * as e from "gEngine/engine";
 
 import { isWithinRegion } from "lib/locationUtils.js";
 

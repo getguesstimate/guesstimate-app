@@ -1,6 +1,5 @@
+import Icon from "gComponents/react-fa-patched";
 import React from "react";
-import Icon from "react-fa";
-import "./style.css";
 
 export const Button = ({ onClick, color, children }) => (
   <span className={`ui button g-button ${color}`} onClick={onClick}>

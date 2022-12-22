@@ -5,16 +5,13 @@ import { CreateOrganizationForm } from "./form";
 import { LocalAddMembers } from "./members";
 import Container from "gComponents/utility/container/Container.js";
 
-import "./style.css";
-
 function mapStateToProps(state) {
   return {
     newOrganization: state.newOrganization,
   };
 }
 
-@connect(mapStateToProps)
-export class CreateOrganizationPageContainer extends Component {
+class UnconnectedCreateOrganizationPageContainer extends Component {
   componentWillMount() {
     this.props.dispatch({ type: "CLEAR_NEW_ORGANIZATION" });
   }
@@ -27,6 +24,10 @@ export class CreateOrganizationPageContainer extends Component {
     );
   }
 }
+
+export const CreateOrganizationPageContainer = connect(mapStateToProps)(
+  UnconnectedCreateOrganizationPageContainer
+);
 
 export const CreateOrganizationPage = ({ newOrganization }) => {
   const newOrganizationCreated = _.has(newOrganization, "id");

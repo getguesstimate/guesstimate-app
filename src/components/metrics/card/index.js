@@ -3,9 +3,9 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
+import Icon from "gComponents/react-fa-patched";
 import $ from "jquery";
 import ReactDOM from "react-dom";
-import Icon from "react-fa";
 
 import MetricToolTip from "./tooltip";
 import { hasMetricUpdated } from "./updated";
@@ -34,8 +34,6 @@ import {
 } from "gEngine/graph";
 import { makeURLsMarkdown } from "gEngine/utils";
 
-import "./style.css";
-
 const relationshipClasses = {};
 relationshipClasses[INTERMEDIATE] = "intermediate";
 relationshipClasses[OUTPUT] = "output";
@@ -53,20 +51,7 @@ const ScatterTip = ({ yMetric, xMetric }) => (
   </ToolTip>
 );
 
-@connect(null, (dispatch) =>
-  bindActionCreators(
-    {
-      changeMetric,
-      changeGuesstimate,
-      removeMetrics,
-      analyzeMetricId,
-      endAnalysis,
-      createFactFromMetric,
-    },
-    dispatch
-  )
-)
-export default class MetricCard extends Component {
+class MetricCard extends Component {
   static propTypes = {
     canvasState: canvasStateProps.canvasState,
     changeMetric: PropTypes.func.isRequired,
@@ -447,6 +432,20 @@ export default class MetricCard extends Component {
     );
   }
 }
+
+export default connect(null, (dispatch) =>
+  bindActionCreators(
+    {
+      changeMetric,
+      changeGuesstimate,
+      removeMetrics,
+      analyzeMetricId,
+      endAnalysis,
+      createFactFromMetric,
+    },
+    dispatch
+  )
+)(MetricCard);
 
 const MetricSidebar = ({
   onOpenModal,

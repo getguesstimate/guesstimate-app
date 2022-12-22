@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { withRouter } from "next/router";
 
 import { CardListElement } from "gComponents/utility/card/index";
 import DropDown from "gComponents/utility/drop-down/index";
@@ -11,10 +12,7 @@ import * as spaceActions from "gModules/spaces/actions";
 
 import { organization, user } from "gEngine/engine";
 
-import "./style.css";
-
-@connect()
-export default class Profile extends Component {
+class Profile extends Component {
   signUp() {
     meActions.signUp();
   }
@@ -28,7 +26,9 @@ export default class Profile extends Component {
   }
 
   newModel(organizationId) {
-    this.props.dispatch(spaceActions.create(organizationId));
+    this.props.dispatch(
+      spaceActions.create(organizationId, {}, this.props.router)
+    );
   }
 
   _openModal() {
@@ -49,14 +49,14 @@ export default class Profile extends Component {
         icon: "rocket",
         header: "upgrade",
         onMouseDown: () => {
-          navigationActions.navigate("/subscribe/lite");
+          this.props.router.push("/subscribe/lite");
         },
       },
       {
         ionicIcon: "ios-people",
         header: "New Organization",
         onMouseDown: () => {
-          navigationActions.navigate("/organizations/new");
+          this.props.router.push("/organizations/new");
         },
       },
       {
@@ -170,7 +170,7 @@ export default class Profile extends Component {
           imageShape: "circle",
           image: organization.image(o),
           onMouseDown: () => {
-            navigationActions.navigate(organization.url(o));
+            this.props.router.push(organization.url(o));
             this.closeDropdown(ref);
           },
         },
@@ -270,3 +270,5 @@ export default class Profile extends Component {
     );
   }
 }
+
+export default connect()(withRouter(Profile));

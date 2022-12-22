@@ -1,3 +1,5 @@
+import { __API_ENV__ } from "lib/constants";
+
 const developmentCreds = {
   AUTH0_CLIENT_ID: "X0m2PZEyAOqhtLY1Qz9mdetHzQcDsG8U",
   AUTH0_DOMAIN: "guesstimate-development.auth0.com",

@@ -6,8 +6,7 @@ import * as organizationActions from "gModules/organizations/actions";
 
 import { FactList } from "./list.js";
 
-@connect(null)
-export class FactListContainer extends Component {
+class UnconnectedFactListContainer extends Component {
   render() {
     const {
       facts,
@@ -45,3 +44,5 @@ export class FactListContainer extends Component {
     );
   }
 }
+
+export const FactListContainer = connect(null)(UnconnectedFactListContainer);

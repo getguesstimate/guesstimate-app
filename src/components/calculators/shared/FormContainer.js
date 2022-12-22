@@ -10,8 +10,6 @@ import {
   relationshipType,
 } from "gEngine/graph";
 
-import "../style.css";
-
 function isCalculatorAcceptableMetric(metric) {
   return (
     !_.isEmpty(metric.name) && !_.isEmpty(_.get(metric, "guesstimate.input"))

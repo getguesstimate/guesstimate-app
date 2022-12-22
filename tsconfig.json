@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "gComponents/*": ["./src/components/*"],
+      "gEngine/*": ["./src/lib/engine/*"],
+      "gModules/*": ["./src/modules/*"],
+      "lib/*": ["./src/lib/*"],
+      "servers/*": ["./src/server/*"]
+    },
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "incremental": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "experimentalDecorators": true
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules"]
+}

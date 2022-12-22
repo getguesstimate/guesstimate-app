@@ -1,8 +1,9 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 
 export default class IubendaPrivacyPolicy extends Component {
   static propTypes = {
-    id: React.PropTypes.number,
+    id: PropTypes.number,
   };
 
   componentWillMount() {

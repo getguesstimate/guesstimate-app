@@ -57,13 +57,7 @@ const positionDecorator = (start, end, component) => ({
   component,
 });
 
-@connect(
-  (state) => ({ suggestion: state.facts.currentSuggestion }),
-  null,
-  null,
-  { withRef: true }
-)
-export class TextInput extends Component {
+class UnconnectedTextInput extends Component {
   state = {
     editorState: EditorState.createWithContent(
       ContentState.createFromText(this.props.value || ""),
@@ -390,3 +384,10 @@ export class TextInput extends Component {
     );
   }
 }
+
+export const TextInput = connect(
+  (state) => ({ suggestion: state.facts.currentSuggestion }),
+  null,
+  null,
+  { withRef: true }
+)(UnconnectedTextInput);

@@ -1,42 +1,32 @@
-import React, { Component } from "react";
 import PropTypes from "prop-types";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import FlowGrid from "gComponents/lib/FlowGrid/FlowGrid";
 import Metric from "gComponents/metrics/card/index";
 
-import { denormalizedSpaceSelector } from "../denormalized-space-selector";
-
+import { fillRegion } from "gModules/auto_fill_region/actions";
+import * as canvasStateActions from "gModules/canvas_state/actions";
+import { redo, undo } from "gModules/checkpoints/actions";
 import {
   addMetric,
   changeMetric,
   removeMetrics,
 } from "gModules/metrics/actions";
 import { changeSelect, deSelect } from "gModules/selected_cell/actions";
-import { selectRegion, deSelectRegion } from "gModules/selected_region/actions";
+import { deSelectRegion, selectRegion } from "gModules/selected_region/actions";
 import {
-  runSimulations,
   deleteSimulations,
+  runSimulations,
 } from "gModules/simulations/actions";
-import * as canvasStateActions from "gModules/canvas_state/actions";
-import { undo, redo } from "gModules/checkpoints/actions";
-import { fillRegion } from "gModules/auto_fill_region/actions";
 
-import { orArr } from "gEngine/utils";
 import * as _collections from "gEngine/collections";
 import { hasErrors } from "gEngine/simulation";
+import { orArr } from "gEngine/utils";
 
 import { hasMetricUpdated } from "gComponents/metrics/card/updated";
-import * as canvasStateProps from "gModules/canvas_state/prop_type";
 
-import "./style.css";
-
-import {
-  isLocation,
-  isAtLocation,
-  existsAtLoc,
-  isWithinRegion,
-} from "lib/locationUtils.js";
+import { existsAtLoc, isLocation, isWithinRegion } from "lib/locationUtils.js";
 
 function mapStateToProps(state) {
   return {
@@ -47,8 +37,8 @@ function mapStateToProps(state) {
 }
 
 const PT = PropTypes;
-@connect(mapStateToProps)
-export default class Canvas extends Component {
+
+class Canvas extends Component {
   static propTypes = {
     denormalizedSpace: PropTypes.object,
     dispatch: PropTypes.func,
@@ -378,3 +368,5 @@ export default class Canvas extends Component {
     );
   }
 }
+
+export default connect(mapStateToProps)(Canvas);

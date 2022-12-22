@@ -1,10 +1,10 @@
-import Models from "./resources/Models.js";
-import Organizations from "./resources/Organizations.js";
-import Users from "./resources/Users.js";
+import Models from "./resources/Models";
+import Organizations from "./resources/Organizations";
+import Users from "./resources/Users";
 import { Calculators } from "./resources/Calculators";
-import Accounts from "./resources/Accounts.js";
-import Copies from "./resources/Copies.js";
-import UserOrganizationMemberships from "./resources/UserOrganizationMemberships.js";
+import Accounts from "./resources/Accounts";
+import Copies from "./resources/Copies";
+import UserOrganizationMemberships from "./resources/UserOrganizationMemberships";
 
 export default class GuesstimateApi {
   constructor(params) {

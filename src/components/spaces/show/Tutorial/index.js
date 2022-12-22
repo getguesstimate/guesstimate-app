@@ -1,17 +1,14 @@
 import React, { Component } from "react";
 
-import Icon from "react-fa";
+import Icon from "gComponents/react-fa-patched";
 
-import { ButtonClose } from "gComponents/utility/buttons/close/index";
+import { GeneralModal } from "gComponents/utility/modal/index";
 import {
-  TutorialMetricPage,
-  TutorialMetricActionsPage,
   TutorialFunctionPage,
+  TutorialMetricActionsPage,
+  TutorialMetricPage,
   TutorialMoreFeaturesPage,
 } from "./pages";
-import { GeneralModal } from "gComponents/utility/modal/index";
-
-import "./style.css";
 
 export class Tutorial extends Component {
   static PAGES = [

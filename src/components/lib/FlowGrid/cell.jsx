@@ -25,8 +25,7 @@ function collect(connect, monitor) {
   };
 }
 
-@DropTarget("card", squareTarget, collect)
-export default class Cell extends Component {
+class Cell extends Component {
   static propTypes = {
     connectDropTarget: PropTypes.func.isRequired,
     gridKeyPress: PropTypes.func.isRequired,
@@ -213,3 +212,5 @@ export default class Cell extends Component {
     );
   }
 }
+
+export default DropTarget("card", squareTarget, collect)(Cell);

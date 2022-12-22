@@ -1,20 +1,14 @@
 import React, { Component } from "react";
 
-import Icon from "react-fa";
-import ReactTooltip from "react-tooltip";
+import Icon from "gComponents/react-fa-patched";
 import Modal from "react-modal";
+import ReactTooltip from "react-tooltip";
 
-import CanvasViewForm from "../canvasViewForm";
-import DropDown from "gComponents/utility/drop-down/index";
 import { CardListElement } from "gComponents/utility/card/index.js";
+import DropDown from "gComponents/utility/drop-down/index";
+import CanvasViewForm from "../canvasViewForm";
 import { ViewOptionToggle } from "../view-options/index";
 import { ImportFromSlurpForm } from "./import_from_slurp_form";
-
-import { navigateFn } from "gModules/navigation/actions";
-
-import e from "gEngine/engine";
-
-import "./style.css";
 
 const ProgressMessage = ({ actionState }) => (
   <div className="saveMessage">

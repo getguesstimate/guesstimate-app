@@ -1,4 +1,4 @@
-import e from "gEngine/engine";
+import * as e from "gEngine/engine";
 
 // Importing too many SIPs all into one row would be very hard to work with, so we limit how many columns it will fill.
 const MAX_COLUMNS = 8;

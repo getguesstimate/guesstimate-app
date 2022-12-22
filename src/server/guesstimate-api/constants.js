@@ -1,4 +1,5 @@
-import GuesstimateApi from "../../lib/guesstimate_api/index.js";
+import { __API_ENV__ } from "lib/constants";
+import GuesstimateApi from "../../lib/guesstimate_api/index";
 
 export const rootUrl =
   __API_ENV__ === "development"

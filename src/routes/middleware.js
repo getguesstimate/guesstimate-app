@@ -1,13 +1,19 @@
-import { createStore, applyMiddleware, compose } from "redux";
-import thunk from "redux-thunk";
 import rootReducer from "gModules/reducers.js";
+import { __DEV__ } from "lib/constants";
+import { applyMiddleware, compose, createStore } from "redux";
+import thunk from "redux-thunk";
 // import { devTools, persistState } from 'redux-devtools';
-import { call, put, takeEvery, takeLatest } from "redux-saga";
 import createSagaMiddleware from "redux-saga";
 import { dispatchCatchSaga } from "./sagas.js";
+import { isWindow } from "jquery";
+
+const composeEnhancers =
+  typeof window !== "undefined" && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    : compose;
 
 const sagaMiddleware = createSagaMiddleware();
-const devStore = compose(
+const devStore = composeEnhancers(
   // Enables your middleware:
   applyMiddleware(thunk),
   applyMiddleware(sagaMiddleware)
@@ -17,7 +23,7 @@ const devStore = compose(
   // persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/))
 )(createStore);
 
-const regularStore = compose(
+const regularStore = composeEnhancers(
   // Enables your middleware:
   applyMiddleware(thunk),
   applyMiddleware(sagaMiddleware)

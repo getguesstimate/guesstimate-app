@@ -91,8 +91,7 @@ function mapStateToProps(state) {
   };
 }
 
-@connect(mapStateToProps)
-export default class ModalContainer extends Component {
+class ModalContainer extends Component {
   _close() {
     this.props.dispatch(modalActions.close());
   }
@@ -107,3 +106,5 @@ export default class ModalContainer extends Component {
     );
   }
 }
+
+export default connect(mapStateToProps)(ModalContainer);

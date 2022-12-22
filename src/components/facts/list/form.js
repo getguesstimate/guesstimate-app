@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-
-import { navigateFn } from "gModules/navigation/actions";
+import { withRouter } from "next/router";
 
 import { spaceUrlById } from "gEngine/space";
 import {
@@ -17,7 +16,7 @@ import { orStr } from "gEngine/utils";
 import { isData, formatData } from "lib/guesstimator/formatter/formatters/Data";
 import { withVariableName } from "lib/generateVariableNames/generateFactVariableName";
 
-export class FactForm extends Component {
+class FactForm_ extends Component {
   static defaultProps = {
     startingFact: {
       name: "",
@@ -161,7 +160,7 @@ export class FactForm extends Component {
       return (
         <span
           className="ui button small options"
-          onClick={navigateFn(exported_from_url)}
+          onClick={() => this.props.router.push(exported_from_url)}
         >
           Edit Model
         </span>
@@ -275,3 +274,5 @@ export class FactForm extends Component {
     );
   }
 }
+
+export const FactForm = withRouter(FactForm_);

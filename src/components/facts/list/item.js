@@ -1,17 +1,17 @@
-import React, { Component } from "react";
+import React from "react";
+import { useRouter } from "next/router";
 
-import Icon from "react-fa";
+import Icon from "gComponents/react-fa-patched";
 
-import { spaceUrlById } from "gEngine/space";
-import { navigateFn } from "gModules/navigation/actions";
+import { DistributionSummary } from "gComponents/distributions/summary/index";
+import Histogram from "gComponents/simulations/histogram/index";
 import {
+  adjustedConfidenceInterval,
   isExportedFromSpace,
   length,
   mean,
-  adjustedConfidenceInterval,
 } from "gEngine/facts";
-import { DistributionSummary } from "gComponents/distributions/summary/index";
-import Histogram from "gComponents/simulations/histogram/index";
+import { spaceUrlById } from "gEngine/space";
 
 import { allPropsPresent } from "gEngine/utils";
 
@@ -21,6 +21,8 @@ export const FactItem = ({
   isExportedFromSelectedSpace,
   size,
 }) => {
+  const router = useRouter();
+
   const exported_from_url = spaceUrlById(_.get(fact, "exported_from_id"), {
     factsShown: "true",
   });
@@ -74,7 +76,7 @@ export const FactItem = ({
           <div
             className="section-exported"
             onClick={
-              !isExportedFromSelectedSpace && navigateFn(exported_from_url)
+              !isExportedFromSelectedSpace && router.push(exported_from_url)
             }
           >
             {!isExportedFromSelectedSpace && <Icon name="share" />}

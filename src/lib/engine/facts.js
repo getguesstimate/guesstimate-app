@@ -1,4 +1,5 @@
-import { PropTypes } from "react";
+import _ from "lodash";
+import PropTypes from "prop-types";
 
 import generateRandomReadableId from "./metric/generate_random_readable_id";
 import * as _guesstimate from "./guesstimate";

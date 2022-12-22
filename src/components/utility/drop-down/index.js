@@ -4,8 +4,6 @@ import ReactDOM from "react-dom";
 
 import Card from "gComponents/utility/card/index.js";
 
-import "./style.css";
-
 export default class DropDown extends Component {
   static propTypes = {
     headerText: PropTypes.string,

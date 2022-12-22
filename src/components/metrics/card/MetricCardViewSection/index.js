@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import Icon from "react-fa";
+import Icon from "gComponents/react-fa-patched";
 
 import Histogram from "gComponents/simulations/histogram/index";
 import MetricName from "gComponents/metrics/card/name/index";
@@ -26,8 +26,6 @@ import {
   displayableError,
 } from "gEngine/simulation";
 import * as _collections from "gEngine/collections";
-
-import "./style.css";
 
 // TODO(matthew): Refactor these components. E.g. it's weird that isBreak takes all errors, but you may only care about
 // the one...

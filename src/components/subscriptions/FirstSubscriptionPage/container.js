@@ -6,16 +6,13 @@ import FirstSubscriptionContainer from "gComponents/subscriptions/FirstSubscript
 import Container from "gComponents/utility/container/Container.js";
 import Plan from "lib/config/plan.js";
 
-import "./style.css";
-
 function mapStateToProps(state) {
   return {
     me: state.me,
   };
 }
 
-@connect(mapStateToProps)
-export default class FirstSubscriptionPage extends Component {
+class FirstSubscriptionPage extends Component {
   static propTypes = {
     planName: PropTypes.oneOf(["lite", "premium"]),
   };
@@ -67,3 +64,5 @@ export default class FirstSubscriptionPage extends Component {
     );
   }
 }
+
+export default connect(mapStateToProps)(FirstSubscriptionPage);

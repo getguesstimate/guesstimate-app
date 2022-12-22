@@ -5,8 +5,6 @@ import Histogram from "gComponents/lib/histogram";
 
 import Dimensions from "gComponents/utility/react-dimensions";
 
-import "./style.css";
-
 const PT = PropTypes;
 class SimulationHistogram extends Component {
   static propTypes = {

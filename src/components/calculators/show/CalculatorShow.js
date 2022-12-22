@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
 import ReactMarkdown from "react-markdown";
-import Icon from "react-fa";
+import Icon from "gComponents/react-fa-patched";
 
 import { Input } from "./input";
 import { Output } from "./output";
@@ -19,15 +19,7 @@ import * as _simulation from "gEngine/simulation";
 
 import { Guesstimator } from "lib/guesstimator/index";
 
-import "../style.css";
-
-@connect(null, (dispatch) =>
-  bindActionCreators(
-    { changeGuesstimate, deleteSimulations, runSimulations },
-    dispatch
-  )
-)
-export class CalculatorShow extends Component {
+class UnconnectedCalculatorShow extends Component {
   state = {
     resultComputing: false,
     showResult: this.props.startFilled && this.allOutputsHaveStats(),
@@ -242,3 +234,10 @@ export class CalculatorShow extends Component {
     );
   }
 }
+
+export const CalculatorShow = connect(null, (dispatch) =>
+  bindActionCreators(
+    { changeGuesstimate, deleteSimulations, runSimulations },
+    dispatch
+  )
+)(UnconnectedCalculatorShow);

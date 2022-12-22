@@ -1,4 +1,4 @@
-import planYaml from "json!yaml!./plans.yml";
+import planYaml from "./plans.yml";
 import numeral from "numeral";
 
 export default class Plan {

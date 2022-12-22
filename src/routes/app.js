@@ -1,50 +1,60 @@
 import app from "ampersand-app";
-import Router from "./router";
 
-import engine from "gEngine/engine.js";
+import * as engine from "gEngine/engine.js";
 
 import { GuesstimateRecorder } from "lib/recorder";
 
-import * as sentry from "servers/sentry/index.js";
-import { setupGuesstimateApi } from "servers/guesstimate-api/constants.js";
-import * as elev from "servers/elev/index.js";
 import Modal from "react-modal";
+import * as elev from "servers/elev/index.js";
+import * as sentry from "servers/sentry/index.js";
 
-import "./main.css";
+if (typeof window !== "undefined") {
+  window.workers = new Array(2)
+    .fill(null)
+    .map(
+      () =>
+        new Worker(
+          new URL(
+            "../lib/guesstimator/samplers/simulator-worker/index",
+            import.meta.url
+          )
+        )
+    );
 
-import Worker from "worker!../lib/guesstimator/samplers/simulator-worker/index.js";
-window.workers = [new Worker(), new Worker()];
-
-window.workers = window.workers.map((worker) => {
-  worker.queue = [];
-  worker.launch = (data) => {
-    worker.postMessage(JSON.stringify(data));
-  };
-  worker.onmessage = (event) => {
-    // Remove worker from queue
-    const { data, callback } = worker.queue.shift();
-    // Call user callback
-    callback(event);
-    // Run next thing
-    if (worker.queue.length > 0) {
-      worker.launch(worker.queue[0].data);
-    }
-  };
-  worker.push = (data, callback) => {
-    // Add to queue
-    worker.queue.push({ data, callback });
-    if (worker.queue.length === 1) {
-      // If nothing is running, start running.
-      worker.launch(data);
-    }
-  };
-  return worker;
-});
+  window.workers = window.workers.map((worker) => {
+    worker.queue = [];
+    worker.launch = (data) => {
+      worker.postMessage(JSON.stringify(data));
+    };
+    worker.onmessage = (event) => {
+      // Remove worker from queue
+      const { data, callback } = worker.queue.shift();
+      // Call user callback
+      callback(event);
+      // Run next thing
+      if (worker.queue.length > 0) {
+        worker.launch(worker.queue[0].data);
+      }
+    };
+    worker.push = (data, callback) => {
+      // Add to queue
+      worker.queue.push({ data, callback });
+      if (worker.queue.length === 1) {
+        // If nothing is running, start running.
+        worker.launch(data);
+      }
+    };
+    return worker;
+  });
+}
 
 app.extend({
   init() {
+    if (typeof window === "undefined") {
+      return;
+    }
     window.recorder = new GuesstimateRecorder();
-    Modal.setAppElement("#root");
+    Modal.setAppElement("#__next");
     window.intercomSettings = {
       app_id: "o0trb1v9",
     };
@@ -81,8 +91,9 @@ app.extend({
     })();
     elev.hide();
     sentry.initialize();
-    this.router = new Router();
-    this.router.history.start();
+
+    // this.router = new Router();
+    // this.router.history.start();
     //This just exists to help people get their api tokens
     window.get_profile = engine.me.localStorage.get;
   },

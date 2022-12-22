@@ -1,5 +1,5 @@
+import Icon from "gComponents/react-fa-patched";
 import React, { Component } from "react";
-import Icon from "react-fa";
 import { connect } from "react-redux";
 
 import SpaceCards from "gComponents/spaces/cards";
@@ -7,8 +7,6 @@ import { CardListElement } from "gComponents/utility/card/index.js";
 import DropDown from "gComponents/utility/drop-down/index";
 
 import * as search from "gModules/search_spaces/actions";
-
-import "./style.css";
 
 const TIMEFRAME_ALL_TIME = "ALL_TIME";
 const TIMEFRAME_MONTHLY = "MONTHLY";
@@ -71,8 +69,7 @@ function mapStateToProps(state) {
   };
 }
 
-@connect(mapStateToProps)
-export default class SpacesIndex extends Component {
+class SpacesIndex extends Component {
   state = {
     sortBy: SORT_BY_RECOMMENDED,
     timeframe: TIMEFRAME_ALL_TIME,
@@ -173,3 +170,5 @@ export default class SpacesIndex extends Component {
     );
   }
 }
+
+export default connect(mapStateToProps)(SpacesIndex);

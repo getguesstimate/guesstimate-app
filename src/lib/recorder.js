@@ -1,3 +1,5 @@
+import { __DEV__ } from "./constants";
+
 const incrementOrOne = (val) => {
   val = (val || 0) + 1;
 };

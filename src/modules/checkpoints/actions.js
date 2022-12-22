@@ -1,6 +1,4 @@
-import { deleteSimulations } from "gModules/simulations/actions";
-
-import engine from "gEngine/engine";
+import * as engine from "gEngine/engine";
 
 export function saveCheckpoint(spaceId, newGraph) {
   return (dispatch, getState) => {

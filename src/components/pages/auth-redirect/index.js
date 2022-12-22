@@ -1,4 +1,5 @@
-import app from "ampersand-app";
+import { withRouter } from "next/router";
+
 import { user } from "gEngine/engine";
 import * as meActions from "gModules/me/actions";
 import React, { Component } from "react";
@@ -17,15 +18,14 @@ function mapStateToProps(state) {
   };
 }
 
-@connect(mapStateToProps)
-export default class AuthRedirect extends Component {
+class AuthRedirect extends Component {
   componentWillMount() {
     this.props.dispatch(meActions.logIn());
   }
 
   componentDidUpdate() {
     if (this.props.me && this.props.me.id) {
-      app.router.history.navigate(user.urlById(this.props.me.id));
+      this.props.router.push(user.urlById(this.props.me.id));
     }
   }
 
@@ -37,3 +37,5 @@ export default class AuthRedirect extends Component {
     );
   }
 }
+
+export default connect(mapStateToProps)(withRouter(AuthRedirect));

@@ -1,10 +1,10 @@
 import auth0 from "auth0-js";
 import { BASE_URL } from "lib/constants";
 
-import * as userActions from "gModules/users/actions.js";
-import * as auth0Constants from "servers/auth0/constants.js";
+import * as userActions from "gModules/users/actions";
+import * as auth0Constants from "servers/auth0/constants";
 
-import { generalError } from "lib/errors/index.js";
+import { generalError } from "lib/errors/index";
 import { me } from "gEngine/engine";
 
 class WebAuth {

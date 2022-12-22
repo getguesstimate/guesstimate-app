@@ -1,4 +1,4 @@
-export * as localStorage from "./localStorage.js";
+export * as localStorage from "./localStorage";
 
 export function spaces(me, graph) {
   id = guesstimateId(me);

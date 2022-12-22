@@ -3,8 +3,6 @@ import ReactMarkdown from "react-markdown";
 
 import Container from "gComponents/utility/container/Container";
 
-import "./style.css";
-
 export default class PageBase extends Component {
   render() {
     return (

@@ -13,8 +13,6 @@ import DropDown from "gComponents/utility/drop-down/index";
 import { percentile } from "lib/dataAnalysis";
 import { SAMPLE_FILTERED } from "lib/guesstimator/samplers/simulator-worker/simulator/filters/filters";
 
-import "./style.css";
-
 const SampleList = ({ samples }) => (
   <ul className="SampleList">
     {_.map(

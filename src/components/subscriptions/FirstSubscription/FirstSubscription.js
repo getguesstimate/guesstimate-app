@@ -3,7 +3,6 @@ import React, { Component } from "react";
 
 import { subStages } from "gModules/first_subscription/state_machine.js";
 import NewOrder from "./NewOrder.js";
-import "./style.css";
 
 export const SynchronizationSuccess = ({ onNewModel }) => (
   <Message>

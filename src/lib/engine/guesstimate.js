@@ -1,12 +1,4 @@
-/* @flow */
-
-import type {
-  Guesstimate,
-  Distribution,
-  DGraph,
-  Graph,
-  Simulation,
-} from "./types";
+import { Guesstimate, Distribution, DGraph, Graph, Simulation } from "./types";
 import { HANDLE_REGEX } from "./facts";
 import * as _collections from "./collections";
 import * as _utils from "./utils";
@@ -32,7 +24,7 @@ export const attributes = [
   "description",
   "data",
 ];
-export function format(guesstimate: Guesstimate): Guesstimate {
+export function format(guesstimate /*: Guesstimate */) /*: Guesstimate */ {
   let formatted = _.pick(guesstimate, attributes);
   return formatted;
 }

@@ -5,7 +5,7 @@ import {
 } from "gModules/simulations/actions";
 import { registerGraphChange } from "gModules/spaces/actions";
 
-import e from "gEngine/engine";
+import * as e from "gEngine/engine";
 
 import {
   isAtLocation,

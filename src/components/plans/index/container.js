@@ -1,11 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { withRouter } from "next/router";
 
 import { PlanIndex } from "./PlanIndex.js";
 
-import * as navigationActions from "gModules/navigation/actions.js";
-
-import e from "gEngine/engine";
+import * as e from "gEngine/engine";
 
 function mapStateToProps(state) {
   return {
@@ -13,15 +12,14 @@ function mapStateToProps(state) {
   };
 }
 
-@connect(mapStateToProps)
-export default class PlanIndexContainer extends Component {
+class PlanIndexContainer extends Component {
   _onChoose(planId) {
     const plan = { personal_lite: "lite", personal_premium: "premium" }[planId];
-    navigationActions.navigate(`subscribe/${plan}`);
+    this.props.router.push(`subscribe/${plan}`);
   }
 
   _onNewOrganizationNavigation() {
-    navigationActions.navigate(`organizations/new`);
+    this.props.router.push(`organizations/new`);
   }
 
   render() {
@@ -41,3 +39,5 @@ export default class PlanIndexContainer extends Component {
     return <PlanIndex {...props} />;
   }
 }
+
+export default connect(mapStateToProps)(withRouter(PlanIndexContainer));

@@ -20,15 +20,12 @@ import {
 } from "lib/locationUtils";
 import { DirectionToLocation, keycodeToDirection } from "./utils";
 
-import "./FlowGrid.css";
-
 let upto = (n) => Array.apply(null, { length: n }).map(Number.call, Number);
 
 //It would be better to have this as state, but we don't want this to cause renders.
 let lastMousePosition = [0, 0];
 
-@DragDropContext(HTML5Backend)
-export default class FlowGrid extends Component {
+class FlowGrid extends Component {
   static propTypes = {
     items: PropTypes.arrayOf(
       PropTypes.shape({
@@ -414,3 +411,5 @@ export default class FlowGrid extends Component {
     );
   }
 }
+
+export default DragDropContext(HTML5Backend)(FlowGrid);

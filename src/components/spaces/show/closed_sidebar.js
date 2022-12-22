@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import Icon from "react-fa";
+import Icon from "gComponents/react-fa-patched";
 
 export class ClosedSpaceSidebar extends Component {
   shouldComponentUpdate() {

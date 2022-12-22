@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import Icon from "react-fa";
 
 import numberShow from "lib/numberShower/numberShower";
 

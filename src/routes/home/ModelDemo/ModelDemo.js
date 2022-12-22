@@ -1,8 +1,6 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
 import { MarkdownViewer } from "gComponents/utility/markdown-viewer/index.js";
+import React, { Component } from "react";
 import * as TreehouseExample from "./example_treehouse.js";
-import "./style.css";
 
 const QuestionToggle = ({ name, top, left, onSelect }) => (
   <div

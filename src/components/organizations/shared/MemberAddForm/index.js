@@ -12,8 +12,7 @@ function validateEmail(email) {
   return re.test(email);
 }
 
-@connect(httpRequestSelector)
-export class MemberAddForm extends Component {
+export class UnconnectedMemberAddForm extends Component {
   state = { value: "" };
 
   componentDidMount() {
@@ -91,6 +90,10 @@ export class MemberAddForm extends Component {
     );
   }
 }
+
+export const MemberAddForm = connect(httpRequestSelector)(
+  UnconnectedMemberAddForm
+);
 
 const InvitationHttpRequest = ({ busy, success, email, isExistingMember }) => {
   let status = httpStatus(busy, success);

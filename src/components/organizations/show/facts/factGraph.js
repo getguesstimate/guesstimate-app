@@ -2,20 +2,16 @@ import React, { Component } from "react";
 
 import { FactItem } from "gComponents/facts/list/item.js";
 import FlowGrid from "gComponents/lib/FlowGrid/FlowGrid";
-import SpaceListItem from "gComponents/spaces/list_item/index.js";
-import { SpaceCard, NewSpaceCard } from "gComponents/spaces/cards";
+import { SpaceCard } from "gComponents/spaces/cards";
 
 import * as _collections from "gEngine/collections";
 import * as _utils from "gEngine/utils";
-import * as _space from "gEngine/space";
 
 import {
   separateIntoDisconnectedComponents,
   separateIntoHeightSets,
 } from "lib/DAG/DAG";
-import { getNodeAncestors, getMissingInputs } from "lib/DAG/nodeFns";
-
-import "./style.css";
+import { getNodeAncestors } from "lib/DAG/nodeFns";
 
 const idToNodeId = (id, isFact) => `${isFact ? "fact" : "space"}:${id}`;
 const spaceIdToNodeId = ({ id }) => idToNodeId(id, false);

@@ -1,6 +1,7 @@
 var Finance = require("financejs");
 import math from "mathjs";
 
+import { __DEV__ } from "lib/constants";
 import { Distributions } from "./distributions/distributions";
 import { Filters, SAMPLE_FILTERED } from "./filters/filters";
 import { ImpureConstructs } from "./constructs/constructs";

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
+import Image from "next/image";
 
 import LogoWord from "../../assets/logo-word-no-beta.png";
-import "./style.css";
 
 export default class Home extends Component {
   render() {
@@ -15,7 +15,7 @@ export default class Home extends Component {
                 <div className="col-xm-12 col-md-12">
                   <div className="guesstimate-logo-outer">
                     <div className="guesstimate-logo">
-                      <img src={LogoWord} />
+                      <Image src={LogoWord} width={490} />
                     </div>
                   </div>
                 </div>
@@ -34,8 +34,7 @@ export default class Home extends Component {
           <div className="row">
             <div className="col-md-12 col-xs-12 cta">
               <a href="/models" className="ui button huge primary">
-                {" "}
-                Browse Public Models{" "}
+                Browse Public Models
               </a>
             </div>
           </div>

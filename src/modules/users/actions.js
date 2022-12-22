@@ -1,13 +1,11 @@
 import { actionCreatorsFor } from "redux-crud";
 
-import $ from "jquery";
 import cuid from "cuid";
 
-import * as meActions from "gModules/me/actions.js";
 import * as displayErrorsActions from "gModules/displayErrors/actions.js";
+import * as meActions from "gModules/me/actions.js";
 import * as userOrganizationMembershipActions from "gModules/userOrganizationMemberships/actions.js";
 
-import { rootUrl } from "servers/guesstimate-api/constants.js";
 import { setupGuesstimateApi } from "servers/guesstimate-api/constants.js";
 
 import { captureApiError, generalError } from "lib/errors/index.js";
@@ -28,7 +26,7 @@ export function fetch({ auth0_id }) {
 
     api(getState()).users.listWithAuth0Id(auth0_id, (err, data) => {
       if (err) {
-        dispatch(displayErrorsActions.newError());
+        dispatch(displayErrorsActions.newError(err));
         captureApiError("UsersFetch", err.jqXHR, err.textStatus, err, {
           url: "usersFetchError",
         });
@@ -45,7 +43,7 @@ export function fetchById(userId) {
   return (dispatch, getState) => {
     api(getState()).users.get({ userId }, (err, user) => {
       if (err) {
-        dispatch(displayErrorsActions.newError());
+        dispatch(displayErrorsActions.newError(err));
         captureApiError("UsersFetch", err.jqXHR, err.textStatus, err, {
           url: "fetch",
         });

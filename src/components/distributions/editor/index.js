@@ -12,19 +12,7 @@ import { runFormSimulations } from "gModules/simulations/actions";
 
 import { Guesstimator } from "lib/guesstimator/index";
 
-import "./style.css";
-
-@connect(
-  null,
-  (dispatch) =>
-    bindActionCreators(
-      { changeGuesstimate, runFormSimulations, changeMetricClickMode },
-      dispatch
-    ),
-  null,
-  { withRef: true }
-)
-export default class Guesstimate extends Component {
+class Guesstimate extends Component {
   static propTypes = {
     changeGuesstimate: PropTypes.func.isRequired,
     runFormSimulations: PropTypes.func.isRequired,
@@ -173,3 +161,14 @@ export default class Guesstimate extends Component {
     );
   }
 }
+
+export default connect(
+  null,
+  (dispatch) =>
+    bindActionCreators(
+      { changeGuesstimate, runFormSimulations, changeMetricClickMode },
+      dispatch
+    ),
+  null,
+  { withRef: true }
+)(Guesstimate);

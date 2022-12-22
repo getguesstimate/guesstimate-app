@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { withRouter } from "next/router";
 
 import * as firstSubscriptionActions from "gModules/first_subscription/actions.js";
 import { subStage } from "gModules/first_subscription/state_machine.js";
@@ -14,8 +15,7 @@ function mapStateToProps(state) {
   };
 }
 
-@connect(mapStateToProps)
-export default class FirstSubscriptionContainer extends Component {
+class FirstSubscriptionContainer extends Component {
   componentDidMount() {
     firstSubscriptionActions.flowStageReset();
 
@@ -59,7 +59,7 @@ export default class FirstSubscriptionContainer extends Component {
   }
 
   _onNewModel() {
-    this.props.dispatch(spaceActions.create());
+    this.props.dispatch(spaceActions.create(undefined, {}, this.props.router));
   }
 
   render() {
@@ -78,3 +78,5 @@ export default class FirstSubscriptionContainer extends Component {
     );
   }
 }
+
+export default connect(mapStateToProps)(withRouter(FirstSubscriptionContainer));

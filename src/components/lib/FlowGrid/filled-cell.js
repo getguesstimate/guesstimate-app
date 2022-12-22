@@ -84,12 +84,7 @@ var cardSource = {
   },
 };
 
-@DragSource("card", cardSource, (connect, monitor) => ({
-  connectDragSource: connect.dragSource(),
-  connectDragPreview: connect.dragPreview(),
-  isDragging: monitor.isDragging(),
-}))
-export default class ItemCell extends Component {
+class ItemCell extends Component {
   static propTypes = {
     gridKeyPress: PropTypes.func.isRequired,
     handleSelect: PropTypes.func.isRequired,
@@ -170,3 +165,9 @@ export default class ItemCell extends Component {
     );
   }
 }
+
+export default DragSource("card", cardSource, (connect, monitor) => ({
+  connectDragSource: connect.dragSource(),
+  connectDragPreview: connect.dragPreview(),
+  isDragging: monitor.isDragging(),
+}))(ItemCell);

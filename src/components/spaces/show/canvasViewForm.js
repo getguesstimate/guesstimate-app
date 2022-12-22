@@ -13,8 +13,6 @@ import arrowsVisibleImage from "../../../assets/metric-icons/blue/arrows-visible
 import debuggingImage from "../../../assets/metric-icons/blue/debugging.png";
 import scientificImage from "../../../assets/metric-icons/blue/scientific.png";
 
-import "./style.css";
-
 function mapStateToProps(state) {
   return {
     canvasState: state.canvasState,
@@ -29,8 +27,7 @@ const Item = ({ name, onSelect }) => (
   </li>
 );
 
-@connect(mapStateToProps)
-export default class CanvasViewForm extends Component {
+class CanvasViewForm extends Component {
   static propTypes = {
     canvasState: canvasStateProps.canvasViewState,
     dispatch: PropTypes.func,
@@ -139,3 +136,5 @@ export default class CanvasViewForm extends Component {
     );
   }
 }
+
+export default connect(mapStateToProps)(CanvasViewForm);

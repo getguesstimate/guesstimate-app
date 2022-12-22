@@ -1,10 +1,8 @@
 import React, { Component } from "react";
 
-import Icon from "react-fa";
+import Icon from "gComponents/react-fa-patched";
 
 import { ButtonClose } from "gComponents/utility/buttons/close";
-
-import "./style.css";
 
 export const SmallDataViewer = ({ onDelete, onOpen }) => (
   <div className="DataViewer DataViewer--card">

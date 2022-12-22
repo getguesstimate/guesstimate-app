@@ -1,11 +1,8 @@
 import React from "react";
+import { useRouter } from "next/router";
 
 import DropDown from "gComponents/utility/drop-down/index.js";
 import { CardListElement } from "gComponents/utility/card/index.js";
-
-import * as navigationActions from "gModules/navigation/actions.js";
-
-import "./style.css";
 
 const PublicOption = ({ isSelected, onClick }) => (
   <CardListElement
@@ -24,33 +21,33 @@ const PrivateOption = ({
   isSelected,
   isPrivateSelectionInvalid,
   editableByMe,
-}) => (
-  <CardListElement
-    isSelected={isSelected}
-    onMouseDown={!isSelected && onClick}
-    icon={"lock"}
-    header="Private"
-    isDisabled={isPrivateSelectionInvalid}
-    closeOnClick={!isSelected}
-  >
-    <div>
-      {editableByMe
-        ? "This model is only visible and editable by you."
-        : "You have been given view access to this model."}
-    </div>
-    {isPrivateSelectionInvalid && (
-      <div className="warning">
-        <span
-          className="upgrade"
-          onClick={() => navigationActions.navigate("/pricing")}
-        >
-          Upgrade
-        </span>
-        {" for more private models."}
+}) => {
+  const router = useRouter();
+  return (
+    <CardListElement
+      isSelected={isSelected}
+      onMouseDown={!isSelected && onClick}
+      icon={"lock"}
+      header="Private"
+      isDisabled={isPrivateSelectionInvalid}
+      closeOnClick={!isSelected}
+    >
+      <div>
+        {editableByMe
+          ? "This model is only visible and editable by you."
+          : "You have been given view access to this model."}
       </div>
-    )}
-  </CardListElement>
-);
+      {isPrivateSelectionInvalid && (
+        <div className="warning">
+          <span className="upgrade" onClick={() => router.push("/pricing")}>
+            Upgrade
+          </span>
+          {" for more private models."}
+        </div>
+      )}
+    </CardListElement>
+  );
+};
 
 export const PrivacyToggle = ({
   editableByMe,

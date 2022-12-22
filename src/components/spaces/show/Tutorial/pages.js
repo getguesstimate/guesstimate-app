@@ -1,8 +1,5 @@
 import React from "react";
 
-import Icon from "react-fa";
-
-import "./pageStyle.css";
 import MakeAMetric from "../../../../assets/tutorial/MakeAMetric.gif";
 import InteractWithACell from "../../../../assets/tutorial/InteractWithACell.gif";
 import MakeAFunction from "../../../../assets/tutorial/MakeAFunction.gif";
@@ -127,7 +124,7 @@ export const TutorialFunctionPage = () => (
         <tr>
           <td>
             <span className="exampleFunction">
-              = <span className="exampleInput">FA</span> > 5 ? 100 : 0
+              = <span className="exampleInput">FA</span> &gt; 5 ? 100 : 0
             </span>
           </td>
           <td>

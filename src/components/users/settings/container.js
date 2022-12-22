@@ -10,8 +10,7 @@ function mapStateToProps(state) {
   };
 }
 
-@connect(mapStateToProps)
-export default class SettingsContainer extends Component {
+class SettingsContainer extends Component {
   _refreshMe() {
     this.props.dispatch(meActions.guesstimateMeLoad());
   }
@@ -29,3 +28,5 @@ export default class SettingsContainer extends Component {
     );
   }
 }
+
+export default connect(mapStateToProps)(SettingsContainer);

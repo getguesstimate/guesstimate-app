@@ -1,6 +1,6 @@
 import React from "react";
 
-import Icon from "react-fa";
+import Icon from "gComponents/react-fa-patched";
 
 import { Guesstimator } from "lib/guesstimator/index";
 

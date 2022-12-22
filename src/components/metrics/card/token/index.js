@@ -1,8 +1,6 @@
 import React from "react";
 
-import Icon from "react-fa";
-
-import "./style.css";
+import Icon from "gComponents/react-fa-patched";
 
 export const MetricReadableId = ({ readableId }) => (
   <div className="ui label green tiny">{readableId}</div>

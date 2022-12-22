@@ -1,6 +1,5 @@
 import React from "react";
 import SpaceListItem from "../list_item";
-import "./style.css";
 
 const SpaceList = ({
   spaces,

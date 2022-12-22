@@ -11,8 +11,6 @@ import {
 
 import { typeSafeEq } from "gEngine/utils";
 
-import "./style.css";
-
 export default class MetricName extends Component {
   static propTypes = {
     name: PropTypes.string,

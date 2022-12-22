@@ -1,7 +1,6 @@
-import e from "gEngine/engine";
+import * as e from "gEngine/engine";
 import * as metricActions from "gModules/metrics/actions";
 import { selectRegion } from "gModules/selected_region/actions";
-import { deSelect } from "gModules/selected_cell/actions";
 import { runSimulations } from "gModules/simulations/actions";
 import { registerGraphChange } from "gModules/spaces/actions";
 

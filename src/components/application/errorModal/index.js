@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import Modal from "react-modal";
 import { connect } from "react-redux";
-import "./style.css";
-import Icon from "react-fa";
+
+import Icon from "gComponents/react-fa-patched";
 import * as displayErrorActions from "gModules/displayErrors/actions.js";
 
 function mapStateToProps(state) {
@@ -12,8 +11,7 @@ function mapStateToProps(state) {
   };
 }
 
-@connect(mapStateToProps)
-export default class ErrorModal extends Component {
+class ErrorModal extends Component {
   _closeModal() {
     this.props.dispatch(displayErrorActions.close());
   }
@@ -71,3 +69,5 @@ export default class ErrorModal extends Component {
     );
   }
 }
+
+export default connect(mapStateToProps)(ErrorModal);

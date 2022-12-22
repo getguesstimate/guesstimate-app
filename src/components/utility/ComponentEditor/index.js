@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import JSONTree from "react-json-tree";
-import "./style.css";
 
 export default class ComponentEditor extends Component {
   static propTypes = {

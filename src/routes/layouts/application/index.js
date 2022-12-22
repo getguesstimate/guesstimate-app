@@ -1,24 +1,14 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import Helmet from "react-helmet";
-
+import NavHelper from "gComponents/utility/NavHelper/index";
 import ErrorModal from "gComponents/application/errorModal/index";
 import Main from "gComponents/layouts/main/index";
-import NavHelper from "gComponents/utility/NavHelper/index";
 import ModalContainer from "gModules/modal/routes";
 import Footer from "../footer";
 import Header from "../header";
 
 import * as meActions from "gModules/me/actions";
-
-import "../../../../node_modules/flexboxgrid/css/flexboxgrid.min.css";
-import "../../../../node_modules/ionicons/dist/css/ionicons.css";
-import "../../../../node_modules/react-dd-menu/dist/react-dd-menu.css";
-import "../../../../semantic/dist/semantic.css";
-import "./style.css";
-//semantic js is dependent on jquery, which has trouble now
-import "../../../styles/theme.css";
 
 function mapStateToProps(state) {
   return {
@@ -27,20 +17,13 @@ function mapStateToProps(state) {
   };
 }
 
-@connect(mapStateToProps)
-export default class Layout extends Component {
+class Layout extends Component {
   componentWillMount() {
     this.props.dispatch(meActions.init());
   }
 
-  _registerUser() {
-    if (_.has(this.props, "me.id")) {
-      const { id, profile } = this.props.me;
-    }
-  }
-
   render() {
-    let options = Object.assign(
+    const options = Object.assign(
       {},
       {
         isFluid: false,
@@ -52,27 +35,10 @@ export default class Layout extends Component {
       this.props.options
     );
 
-    this._registerUser();
-    let body = this.props.page;
-
-    const baseDescription =
-      "Plan finances, make strategic decisions, and do risk assessment.  Guesstimate uses stochastic models, Monte Carlo simulations, and sensitivity analyses.";
+    const body = this.props.page || this.props.children;
 
     return (
       <NavHelper>
-        <Helmet
-          defaultTitle="Guesstimate"
-          titleTemplate="%s | Guesstimate"
-          meta={[
-            { name: "Description", content: baseDescription },
-            { property: "og:type", content: "product" },
-            {
-              property: "og:title",
-              content: "Guesstimate | A Spreadsheet for the Uncertain",
-            },
-            { property: "og:description", content: baseDescription },
-          ]}
-        />
         <ErrorModal />
         <div className={`Layout ${options.fullHeight ? "fullHeight" : ""}`}>
           <ModalContainer />
@@ -83,8 +49,7 @@ export default class Layout extends Component {
             isFluid={options.isFluid}
             backgroundColor={options.backgroundColor}
           >
-            {" "}
-            {body}{" "}
+            {body}
           </Main>
           {options.showFooter && <Footer />}
         </div>
@@ -92,3 +57,5 @@ export default class Layout extends Component {
     );
   }
 }
+
+export default connect(mapStateToProps)(Layout);

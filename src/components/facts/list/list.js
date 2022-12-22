@@ -1,13 +1,12 @@
 import React, { Component } from "react";
 
-import { FactItem } from "./item";
 import { FactForm } from "./form";
+import { FactItem } from "./item";
 
-import { getVar } from "gEngine/facts";
 import { utils } from "gEngine/engine";
+import { getVar } from "gEngine/facts";
 
-import "./style.css";
-import Icon from "react-fa";
+import Icon from "gComponents/react-fa-patched";
 
 export class FactList extends Component {
   state = {

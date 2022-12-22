@@ -1,11 +1,7 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
 
-import { CategoryForm } from "./form";
 import { FactListContainer } from "gComponents/facts/list/container.js";
-
-import "../style.css";
+import { CategoryForm } from "./form";
 
 class CategoryHeader extends Component {
   state = {

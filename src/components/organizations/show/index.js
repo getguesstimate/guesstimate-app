@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { withRouter } from "next/router";
 
-import Icon from "react-fa";
+import Icon from "gComponents/react-fa-patched";
 
 import { NewSpaceCard, SpaceCard } from "gComponents/spaces/cards";
 import Container from "gComponents/utility/container/Container";
@@ -15,14 +16,11 @@ import { organizationMemberSelector } from "./organizationMemberSelector";
 import { organizationSpaceSelector } from "./organizationSpaceSelector";
 
 import * as modalActions from "gModules/modal/actions";
-import { navigate } from "gModules/navigation/actions";
 import * as organizationActions from "gModules/organizations/actions";
 import * as spaceActions from "gModules/spaces/actions";
 import * as userOrganizationMembershipActions from "gModules/userOrganizationMemberships/actions";
 
-import e from "gEngine/engine";
-
-import "./style.css";
+import * as e from "gEngine/engine";
 
 const MODEL_TAB = "models";
 const MEMBERS_TAB = "members";
@@ -41,11 +39,7 @@ function mapStateToProps(state) {
   };
 }
 
-@connect(mapStateToProps)
-@connect(organizationSpaceSelector)
-@connect(organizationMemberSelector)
-@connect(httpRequestSelector)
-export default class OrganizationShow extends Component {
+class OrganizationShow extends Component {
   state = {
     openTab: isValidTabString(this.props.tab) ? this.props.tab : MODEL_TAB,
   };
@@ -71,14 +65,20 @@ export default class OrganizationShow extends Component {
   }
 
   changeTab(openTab) {
-    navigate(`${e.organization.url(this.organization())}/${openTab}`, {
-      trigger: false,
-    });
+    this.props.router.push(
+      `${e.organization.url(this.organization())}/${openTab}`,
+      undefined,
+      {
+        shallow: true,
+      }
+    );
     this.setState({ openTab });
   }
 
   _newModel() {
-    this.props.dispatch(spaceActions.create(this.props.organizationId));
+    this.props.dispatch(
+      spaceActions.create(this.props.organizationId, {}, this.props.router)
+    );
   }
 
   destroyMembership(membershipId) {
@@ -245,6 +245,14 @@ export default class OrganizationShow extends Component {
     );
   }
 }
+
+export default connect(mapStateToProps)(
+  connect(organizationSpaceSelector)(
+    connect(organizationMemberSelector)(
+      connect(httpRequestSelector)(withRouter(OrganizationShow))
+    )
+  )
+);
 
 const OrganizationHeader = ({ organization }) => (
   <div className="row OrganizationHeader">

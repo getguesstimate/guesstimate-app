@@ -1,0 +1,3851 @@
+@import "./variables.css";
+
+/* src/components/application/errorModal/style.css */
+.ui.modal.ErrorModal {
+  background-color: white;
+  top: 10%;
+}
+
+/* src/components/calculators/style.css */
+@media only screen and (max-width: 767px) {
+  .calculator.calculator {
+    border-right: none;
+    border-left: none;
+    border: none;
+    font-size: 1.1em;
+    line-height: 1em;
+    padding: 1em;
+    margin: 0;
+    border-radius: 0;
+  }
+}
+
+.drop-target {
+  background-color: $grey-1;
+}
+
+.calculator {
+  .title-bar {
+    float: left;
+    width: 100%;
+    margin-bottom: 1em;
+
+    .action-section {
+      padding-top: 0.4em;
+    }
+
+    h1 {
+      font-size: 1.5em;
+      display: inline;
+    }
+
+    span.privacy-icon {
+      padding-left: 1em;
+    }
+  }
+
+  .description {
+    font-size: 0.9em;
+    margin-top: 0.9em;
+    margin-bottom: 2em;
+    color: #666;
+
+    img {
+      max-width: 100%;
+    }
+  }
+
+  table.ui.table {
+    font-size: 0.7em;
+  }
+
+  .header-actions .button {
+    float: right;
+  }
+
+  .editor {
+    padding: 0.4rem 0.8rem;
+    background-color: $grey-6;
+    border: 1px solid #d4d4d4;
+    border-radius: 1px;
+    position: relative;
+  }
+
+  .inputs {
+    width: 100%;
+
+    .input {
+      .name {
+        margin-top: 0.3em;
+      }
+
+      .description {
+        font-size: 0.75em;
+        color: #666;
+      }
+
+      .status {
+        position: absolute;
+        right: 0.5em;
+        bottom: 0;
+        top: 0;
+        height: 1em;
+        margin: auto;
+
+        &.error {
+          color: rgb(206, 132, 132);
+        }
+
+        &.success {
+          color: #a9a8a8;
+        }
+      }
+    }
+  }
+
+  .calculateButton {
+    border-radius: 0.1em;
+    width: 100%;
+    font-size: 1.1em;
+    padding: 0.7em;
+    color: #444 !important;
+    background-color: #82e69d !important;
+  }
+
+  .result-divider {
+    border: none;
+    border-bottom: 2px dotted #e8e8e8;
+  }
+
+  .outputs {
+    .output:last-child {
+      padding-bottom: 0em;
+    }
+
+    .name {
+      font-weight: 800;
+    }
+
+    .result-section {
+      color: #666;
+      margin-left: 0.5rem;
+      font-size: 1.3em;
+      position: relative;
+
+      .result-value {
+        color: rgba(80, 80, 80, 1);
+        font-weight: 800;
+      }
+
+      .icon {
+        position: absolute;
+        right: -41px;
+        top: -4px;
+        background-color: #e0e8ea;
+        width: 26px;
+        height: 26px;
+        text-align: center;
+        padding-top: 1px;
+        border-radius: 1em;
+        font-size: 0.8em;
+        color: #88919c;
+        cursor: pointer;
+        &:hover {
+          background-color: #b9c7d0;
+          color: #5d6c7b;
+        }
+      }
+    }
+  }
+}
+
+.information-section {
+  padding: 1em 2em;
+  margin: 0 1em;
+  font-size: 1.6em;
+
+  .calculation-link-section {
+    padding-top: 0.4em;
+    a {
+      color: #777;
+    }
+
+    a:hover {
+      color: #333;
+    }
+  }
+
+  .SocialMediaShareButton {
+    width: 45%;
+    position: relative;
+    float: left;
+    border-radius: 0.1em;
+    margin-left: 10%;
+    cursor: pointer;
+    opacity: 0.45;
+  }
+  .SocialMediaShareButton:hover {
+    opacity: 1;
+  }
+
+  .SocialMediaShareButton:first-child {
+    margin-left: 0;
+  }
+
+  .SocialMediaShareButton--facebook {
+    background-color: rgb(59, 89, 152);
+    svg {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      margin: auto;
+    }
+  }
+  .SocialMediaShareButton--twitter {
+    background-color: rgb(0, 172, 237);
+    svg {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      margin: auto;
+    }
+  }
+
+  .model-link {
+    width: 100%;
+    font-size: 0.8em;
+    margin-top: 1.5em;
+
+    a {
+      cursor: pointer;
+    }
+  }
+}
+
+.calculator.narrow {
+  margin: 0;
+  margin-top: 2em;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  font-size: 1em;
+
+  &.medium-font-size {
+    font-size: 1.1em;
+  }
+
+  .result-divider {
+    margin: 1em 0;
+  }
+
+  .calculateButton {
+    margin-top: 2em;
+  }
+
+  .inputs .input {
+    padding: 0.3em 0 0.3em 0;
+  }
+  .padded-section {
+    padding: 1em 1em;
+  }
+  .create-button-section {
+    margin-top: 2em;
+  }
+
+  .input,
+  .output {
+    a.ui.button {
+      padding: 0.3em 0.4em;
+      border-radius: 3px;
+    }
+  }
+
+  .outputs .output {
+    padding: 0.3em 0 0.3em 0;
+  }
+
+  .inputs h3,
+  .outputs h3 {
+    border-bottom: 2px solid #aaa;
+    padding-bottom: 0.5em;
+    margin-top: 2.5em;
+    font-weight: 800;
+    font-size: 1.2em;
+  }
+}
+
+.calculator.wide {
+  border: 1px solid rgba(200, 200, 200, 0.7);
+  border-radius: 0.2em;
+  background: white;
+  margin: 1em;
+  padding: 2em 2em;
+  color: rgba(80, 80, 80, 1);
+  font-size: 1.6em;
+  line-height: 1.2em;
+  .result-divider {
+    border-top: none;
+    margin: 0;
+  }
+  .inputs {
+    padding-bottom: 1em;
+    margin-top: 2em;
+  }
+  .outputs {
+    margin-top: 2em;
+    font-size: 1em;
+    margin-bottom: 1em;
+  }
+  .inputs .input {
+    padding: 0.8em 0 0.8em 0;
+  }
+  .outputs .output {
+    padding-bottom: 1.5em;
+
+    .stats-summary {
+      font-size: 0.63em;
+      margin-top: 0.8em;
+    }
+  }
+  .padded-section {
+    padding: 1em 1em;
+  }
+}
+
+/* src/components/distributions/editor/DataForm/style.css */
+.metricModal .DataViewer h2 {
+  font-weight: 400;
+  color: white;
+  margin-top: 3px;
+  font-size: 1.3em;
+}
+
+.metricModal .DataViewer {
+  max-width: 27em;
+  border: none;
+  box-shadow: none;
+  margin-bottom: 1.5em;
+}
+
+.DataViewer--card .button.ui.primary {
+  padding: 3px 7px;
+  margin: 8px 10px 5px 3px;
+  float: left;
+  color: $purple-2;
+  background-color: $purple-3;
+  border-radius: 2px;
+  font-size: 0.9em;
+}
+
+.DataViewer--card .button-close {
+  font-size: 1.1em;
+  float: right;
+  margin-top: 9px;
+  color: #ccc;
+  margin-right: 7px;
+}
+
+.DataViewer .DataViewer--header {
+  background-color: $purple-2;
+  padding: 0.5em 1em;
+  border-top: none;
+}
+
+.DataViewer .DataViewer--body {
+  background-color: $purple-3;
+  color: $purple-2;
+  overflow: auto;
+  max-height: 25em;
+}
+
+.DataViewer .DataViewer--body.edit .button {
+  margin-right: 10px;
+}
+
+.DataViewer .DataViewer--body.edit .button:not(.primary) {
+  background: #c6c6c6;
+}
+
+.DataViewer .DataViewer--body .ui.form {
+  margin-bottom: 10px;
+  display: inline-block;
+  width: 100%;
+}
+
+.DataViewer--header a {
+  margin-top: 2px;
+  color: rgba(255, 255, 255, 0.75);
+  float: right;
+  padding: 2px 5px 0px 5px;
+  cursor: pointer;
+  margin: 2px 5px 0;
+  font-size: 1em;
+  display: none;
+}
+
+.DataViewer--header a .fa {
+  font-size: 1.3em;
+}
+
+.DataViewer:hover .DataViewer--header a {
+  display: block;
+}
+
+.DataViewer--header a:hover {
+  color: white;
+}
+
+.metricModal .DataViewer ul {
+  float: none;
+  list-style: none;
+  padding-left: 1em;
+}
+
+.metricModal .DataViewer textarea {
+  font-size: 1.1em;
+}
+
+/* src/components/distributions/editor/style.css */
+$flash-duration-sec: 0.4s;
+
+.Guesstimate .TextInput {
+  @mixin small-input;
+}
+
+.Guesstimate .TextInput {
+  line-height: 1.3em;
+  font-size: 0.95em;
+  border-radius: 2px;
+  padding: 0;
+  border: 2px solid transparent;
+  transition: border-color $flash-duration-sec ease,
+    background-color $flash-duration-sec ease;
+
+  .fact {
+    color: #483567;
+    background-color: #e5dbf7;
+  }
+
+  .suggestion {
+    background-color: #b5ddff;
+  }
+
+  .input {
+    border-radius: 0.05em;
+    font-size: 0.94em;
+    padding: 0.05em 0.1em 0 0.1em;
+    margin: auto 0.07em auto 0.07em;
+    font-weight: 500;
+
+    &.valid {
+      color: $green-3;
+      background-color: $green-4;
+    }
+
+    &.error {
+      color: #560606;
+      background-color: #ff9e9e;
+    }
+  }
+
+  &.flashing {
+    border: 2px solid #0fb963;
+    background-color: #c9e8c0;
+  }
+}
+
+.Guesstimate .TextInput.default-value {
+  color: #a9a9a9;
+}
+
+.Guesstimate.large .TextInput {
+  font-size: 1.5em;
+  border-radius: 2px;
+  font-weight: 100;
+  color: #666;
+  background: #eee;
+  padding: 2px 4px;
+}
+
+.Guesstimate .TextInput {
+  float: left;
+}
+
+.Guesstimate.large .TextInput.NARROW {
+  width: 89%;
+}
+
+.Guesstimate .TextInput.NARROW {
+  width: 85%;
+}
+
+.Guesstimate .TextInput.WIDE {
+  width: 100%;
+}
+
+.Guesstimate .GuesstimateInputForm {
+  display: flex;
+  flex-direction: column;
+}
+
+.Guesstimate .GuesstimateInputForm--row {
+  flex: 1;
+}
+
+.DistributionSelector {
+  width: 100%;
+}
+
+.DistributionSelector .DistributionList {
+  float: right;
+}
+
+.DistributionSelector hr {
+  border: none;
+  border-top: 1px solid $grey-1;
+  margin: 4px 0;
+}
+
+.DistributionSelector .more-distributions {
+  float: left;
+  cursor: pointer;
+  padding-left: 2px;
+  padding-top: 9px;
+  font-size: 16px;
+  color: $grey-999;
+}
+
+.Guesstimate .DistributionIcon.DistributionIcon {
+  font-size: 1em;
+  padding-top: 2px;
+  padding-left: 2px;
+  padding-right: 2px;
+  position: relative;
+  height: 24px;
+  width: 24px;
+  padding-top: 0;
+  margin: 0 0 0 3px;
+}
+
+.Guesstimate.large .DistributionIcon.DistributionIcon {
+  height: 34px;
+  width: 34px;
+}
+
+.DistributionIcon.button.selected {
+  background-color: $blue-2;
+}
+
+.DistributionIcon img {
+  width: 24px;
+  opacity: 1;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 4px;
+  bottom: 0;
+}
+
+.GuesstimateTypeQuestion {
+  float: right;
+  margin-right: 4px;
+  font-size: 1.2em;
+  color: $grey-2;
+  opacity: 0.6;
+  margin-top: 3px;
+}
+
+.Guesstimate.large .GuesstimateTypeQuestion {
+  font-size: 2em;
+  margin-top: 0;
+}
+
+.Guesstimate.large a.custom-data {
+  text-decoration: underline;
+  color: #999;
+  margin-top: 5px;
+  float: left;
+  font-size: 1.2em;
+  cursor: pointer;
+}
+
+.GuesstimateTypeQuestion:hover {
+  opacity: 1;
+  cursor: pointer;
+}
+
+.Guesstimate.large .DistributionIcon img {
+  width: 34px;
+}
+
+.DistributionIcon.DistributionSelectorToggle {
+  display: inline-block;
+  color: #999;
+  float: right;
+}
+
+.DistributionIcon.DistributionSelectorToggle {
+  opacity: 0.6;
+}
+
+.button.DistributionIcon.DistributionSelectorToggle {
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.button.DistributionIcon.DistributionSelectorToggle:hover {
+  opacity: 1;
+}
+
+.button.DistributionIcon.DistributionSelectorToggle:hover {
+  background-color: $grey-1;
+}
+
+/* src/components/distributions/summary/style.css */
+.DistributionSummary {
+  font-size: 1.6em;
+}
+
+.DistributionSummary .mean {
+  float: left;
+  width: 100%;
+  line-height: 0.9em;
+}
+
+.DistributionSummary .UncertaintyRange {
+  font-size: 0.58em;
+  color: #555;
+  float: left;
+  margin-top: 2px;
+  margin-left: 0;
+}
+
+.DistributionSummary .PrecisionNumber {
+  float: left;
+}
+
+.sup {
+  font-size: 0.6em;
+  vertical-align: super;
+}
+
+/* src/components/facts/list/style.css */
+$grey-a1: rgb(231, 234, 236);
+$grey-a2: #607580;
+$blue-a1: #4a6a88;
+
+.FactsTab {
+  h3 {
+    color: #555;
+    float: left;
+  }
+}
+
+.NewFactButton {
+  background-color: $grey-a1;
+  border-radius: 2px;
+  width: 100%;
+  float: left;
+  padding: 0.4em 0.7em;
+  transition: all 0.15s;
+  color: #767575;
+  font-size: 1.2em;
+  margin-top: 0.3em;
+  cursor: pointer;
+
+  .fa {
+    margin-right: 0.5em;
+  }
+
+  &:hover {
+    color: #1a5a2c;
+    background-color: rgba(89, 168, 114, 0.54);
+    transition: all 0.3s;
+  }
+}
+
+.Fact--outer {
+  border: 1px solid rgba(0, 0, 0, 0);
+  float: left;
+  width: 100%;
+  margin: 0.1em 0;
+  display: flex;
+
+  &:hover {
+    border-color: #d9dee2;
+  }
+
+  &.SMALL {
+    margin: 0.1em 0.6em;
+
+    .Fact {
+      flex: 1;
+      flex-direction: column-reverse;
+    }
+  }
+}
+
+.Fact {
+  background-color: white;
+  float: left;
+  width: 100%;
+  border-radius: 1px;
+  display: flex;
+  flex-direction: row;
+
+  &:not(:hover):not(.form) .ui.small.button {
+    display: none;
+  }
+
+  &:not(:hover):not(.form) .variable-name.variable-token {
+    background-color: rgba(0, 0, 0, 0);
+    color: #999;
+    transition: all 0.05s ease 0.05s;
+  }
+
+  &:hover:not(.form) .variable-name.variable-token {
+    background-color: #f3e5fc;
+    color: #603566;
+    transition: all 0.05s ease 0.05s;
+  }
+
+  .ui.small.button {
+    padding: 0.55em 1.1em;
+    border-radius: 2px;
+    margin-bottom: 3px;
+    margin-right: 0.5em;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.Fact.new.ui.form {
+  input,
+  textarea {
+    padding: 0.3em 0.4em;
+    border-radius: 2px;
+  }
+}
+
+.Fact .section-simulation {
+  min-width: 6em;
+  flex: 1.4;
+  position: relative;
+  padding: 0.3em 0 0.2em 0.4em;
+
+  .histogram {
+    left: 10%;
+    height: 35px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    z-index: 0;
+    .react-d3-histogram__bar rect {
+      fill: $grey-a1;
+    }
+  }
+
+  .simulation-summary {
+    float: left;
+    margin-top: 2px;
+    position: relative;
+    z-index: 1;
+    font-size: 0.88em;
+
+    .DistributionSummary .mean {
+      color: $grey-a2;
+    }
+    .DistributionSummary .UncertaintyRange {
+      color: $grey-999;
+    }
+  }
+}
+
+.Fact.form .section-simulation {
+  padding-right: 0.8em;
+  min-width: 10em;
+  flex: 2;
+}
+
+.Fact > .section-name {
+  float: left;
+  flex: 6;
+  margin-top: 0.05em;
+  padding: 0.3em 0.4em 0;
+  word-wrap: break-word;
+
+  .fact-name {
+    font-size: 1.2em;
+    color: #333;
+    float: left;
+    width: 100%;
+  }
+
+  .variable-name {
+    float: left;
+    line-height: 1.2em;
+    margin-top: 0.2em;
+
+    &.variable-token {
+      padding: 0 3px;
+    }
+
+    .prefix {
+      margin-right: 1px;
+      float: left;
+    }
+
+    .name {
+      float: left;
+    }
+  }
+}
+
+.Fact.form > .section-name {
+  .variable-name {
+    width: 100%;
+
+    .field {
+      position: relative;
+
+      .prefix {
+        color: $grey-999;
+        position: absolute;
+        left: 0.4em;
+        top: 0.4em;
+      }
+
+      input {
+        padding-left: 1.1em;
+      }
+    }
+  }
+
+  .description {
+    width: 100%;
+
+    textarea {
+      margin-top: 0.3em;
+      font-size: 0.9rem;
+    }
+  }
+
+  .category-select {
+    margin-top: 0.5em;
+    float: left;
+    width: 100%;
+
+    select {
+      width: 50%;
+    }
+  }
+
+  .actions {
+    margin-top: 1em;
+    margin-bottom: 0.3em;
+    float: left;
+  }
+}
+
+.Fact > .section-help {
+  float: left;
+  min-width: 5em;
+  padding: 0.4em 0;
+  flex: 1;
+
+  .button {
+    float: right;
+  }
+}
+
+.Fact > .section-exported {
+  padding: 0.4em 0.4em 0 0.4em;
+  flex: 0.3;
+  background-color: #e0e3e6;
+  float: left;
+  cursor: pointer;
+}
+
+.Fact > .section-exported .fa {
+  color: #a2acbb;
+  font-size: 1.1em;
+  margin-top: 0.1em;
+}
+
+.Fact > .section-exported:hover {
+  transition: all 0.15s;
+  background-color: #bac5cf;
+  .fa {
+    color: #73849c;
+  }
+}
+
+/* src/components/metrics/card/MetricCardViewSection/style.css */
+.MetricCardViewSection {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.MetricCardViewSection .MetricTokenSection {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.metricCard .MetricCardViewSection.hasErrors .error-message {
+  color: #5f0909;
+  font-size: 0.8em;
+  font-weight: 500;
+  line-height: 1.1em;
+  padding: 2px 9px;
+}
+
+.metricCard .MetricCardViewSection.hasErrors .StatsSectionErrors.minor {
+  background-color: rgb(236, 202, 199);
+}
+
+.metricCard .MetricCardViewSection.hasErrors .StatsSectionErrors.serious {
+  background-color: #e48585;
+}
+
+.MetricCardViewSection > .StatsSection .StatsSectionErrors.serious .fa {
+  color: #a74b4b;
+  font-size: 1.5em;
+}
+
+.MetricCardViewSection > .StatsSection .StatsSectionErrors.serious i {
+  color: #a74b4b;
+  font-size: 1.8em;
+}
+
+.MetricCardViewSection > .StatsSection .StatsSectionErrors.minor .fa {
+  font-size: 1.4em;
+  color: #d48a8a;
+  margin-top: 4px;
+}
+
+.metricCard .MetricCardViewSection .react-d3-histogram {
+  position: absolute;
+  z-index: -1;
+}
+
+.metricCard.input .MetricCardViewSection .DistributionSummary {
+  color: #222;
+}
+
+.metricCard.output .MetricCardViewSection .DistributionSummary {
+  font-weight: 700;
+  color: #111;
+}
+
+.MetricCardViewSection > .NameSection {
+  width: 100%;
+  padding: 5px 30px 0px 5px;
+  float: left;
+  flex: 0 0 auto;
+}
+
+.MetricCardViewSection > .StatsSection {
+  width: 100%;
+  float: left;
+  min-height: 10px;
+  flex: 5;
+  display: flex;
+  flex-direction: column;
+}
+
+.MetricCardViewSection.anotherFunctionSelected > .StatsSection {
+  cursor: pointer;
+}
+
+.MetricCardViewSection:not(.anotherFunctionSelected) > .StatsSection {
+  cursor: move;
+}
+
+.MetricCardViewSection > .StatsSection .StatsSectionBody {
+  padding: 8px 6px 4px 7px;
+  flex: 5;
+}
+
+.MetricCardViewSection > .StatsSection .StatsSectionErrors {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+}
+
+.MetricCardViewSection > .StatsSection .StatsSectionErrors.isHidden {
+  display: none;
+}
+
+.MetricCardViewSection > .StatsSection .StatsSectionErrors.padTop {
+  margin-top: 5px;
+}
+
+.metricCard .DistributionSummary {
+  font-weight: 300;
+  font-family: Lato, Arial, sans-serif;
+  color: #444;
+}
+
+.MetricCardViewSection .StatsSectionTable {
+  padding: 0 7px;
+  background-color: rgba(255, 255, 255, 0.3);
+  margin-top: 10px;
+  flex: 1;
+}
+
+/* src/components/metrics/card/SensitivitySection/style.css */
+.SensitivitySection.SMALL {
+  height: 70px;
+  padding-left: 5px;
+  padding-right: 4px;
+  padding: 3px 4px 6px 5px;
+  background-color: rgba(189, 189, 189, 0.14);
+  flex: 0;
+  position: relative;
+}
+
+.SensitivitySection.SMALL .regression {
+  position: absolute;
+  bottom: 4px;
+  right: 8px;
+}
+
+.SensitivitySection.LARGE .regression {
+  position: absolute;
+  top: 15px;
+  right: 8px;
+  color: #444;
+  font-size: 0.85em;
+}
+
+.SensitivitySection.LARGE .regression {
+  background-color: rgba(250, 250, 250, 0.6);
+  border-radius: 3px;
+  padding: 4px;
+}
+
+.SensitivitySection.LARGE .regression .label {
+  color: #6f9a6f;
+  width: 130px;
+}
+
+.SensitivitySection.SMALL .regression .label {
+  font-size: 0.7em;
+}
+
+.SensitivitySection.SMALL .regression .label {
+  color: #777;
+  font-style: italic;
+}
+
+.SensitivitySection.SMALL .regression .value {
+  font-style: italic;
+  font-size: 1.2em;
+}
+
+.SensitivitySection.SMALL .regression .value.low {
+  font-weight: 300;
+  color: #91a791;
+}
+
+.SensitivitySection.SMALL .regression .value.medium {
+  font-weight: 500;
+  color: #6f9a6f;
+}
+
+.SensitivitySection.SMALL .regression .value.high {
+  font-weight: 700;
+  color: #359235;
+}
+
+.SensitivitySection.LARGE svg path.dot {
+  fill: rgba(88, 173, 109, 0.12);
+}
+.SensitivitySection.SMALL svg path.dot {
+  fill: rgba(88, 173, 109, 0.18);
+}
+.SensitivitySection svg .axis line {
+  stroke: #ced6dc;
+}
+.SensitivitySection svg .axis .tick {
+  fill: #ced6dc;
+}
+.SensitivitySection svg .axis .domain {
+  fill: #e2efe9;
+  stroke: none;
+}
+
+.metricCard.intermediate .SensitivitySection.LARGE svg path.dot {
+  fill: rgba(90, 113, 89, 0.12);
+}
+
+.metricCard.intermediate .SensitivitySection.SMALL svg path.dot {
+  fill: rgba(90, 113, 89, 0.18);
+}
+
+.SensitivitySection svg .axis text {
+  font-size: 0.9em;
+  fill: #7a909a;
+}
+
+.SensitivitySection svg text.axis.label {
+  fill: #3c4448;
+  font-size: 1em;
+  font-weight: 700;
+}
+
+/* src/components/metrics/card/name/style.css */
+.MetricName {
+  @mixin small-input;
+}
+
+.MetricName:not(.isClickable):hover {
+  background-color: $transparent-background;
+}
+
+.MetricName:not(.isClickable) {
+  cursor: pointer;
+}
+
+.output .MetricName {
+  font-weight: 500;
+}
+
+.titleView .MetricName {
+  color: #3c4f67;
+  font-weight: 600;
+}
+
+.MetricCardViewSection.display .MetricName {
+  overflow: hidden;
+}
+
+.metricCard.display .titleView .MetricName {
+  color: #3c3f44;
+}
+
+.output .MetricName .static {
+  font-weight: 500;
+}
+
+.titleView .MetricName .static {
+  color: #3c4f67;
+  font-weight: 600;
+}
+
+.MetricCardViewSection.display .MetricName .static {
+  overflow: hidden;
+}
+
+.metricCard.display .titleView .MetricName .static {
+  color: #3c3f44;
+}
+
+/* src/components/metrics/card/style.css */
+.metricCard--Container {
+  position: relative;
+  display: flex;
+  width: 100%;
+}
+
+.metricCard {
+  border-radius: 1px;
+  max-width: 30em;
+  white-space: normal;
+  z-index: 0;
+  font-size: 1.25em;
+  position: relative;
+  font-weight: 300;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.metricCard input {
+  transition: background-color 0.2s;
+}
+
+.metricCard:not(.titleView) {
+  background-color: rgba(255, 255, 255, 0.975);
+}
+
+.metricCard.intermediate:not(.titleView) {
+  background-color: rgba(242, 244, 247, 0.94);
+}
+
+.metricCard.noedge:not(.titleView) {
+  background-color: rgba(240, 242, 245, 0.88);
+}
+
+.selected .metricCard:not(.titleView) {
+  background-color: rgba(255, 255, 255, 0.975);
+}
+
+.hovered.selected .metricCard {
+  background-color: white;
+}
+
+.hovered .metricCard {
+  background-color: #f4f4f4;
+}
+
+.metricCard > .section {
+  position: relative;
+  padding: 0.2em 0.2em 0.2em 0.2em;
+}
+
+.metricCard .section.editing {
+  border-top: 1px solid #ddd;
+  border-radius: 0 0 2px 2px;
+  flex: 0 0 auto;
+}
+
+.metricCard--Container:focus {
+  outline: none;
+}
+
+.ReactModal__Overlay--after-open {
+  z-index: 5;
+}
+
+.ReactModal__Overlay--after-open {
+  overflow: auto;
+}
+
+.MetricSidebar {
+  position: absolute;
+  top: 4px;
+  right: -10.2em;
+  z-index: 3;
+}
+
+a.MetricSidebarItem {
+  clear: both;
+  display: block;
+  float: left;
+  width: 10em;
+  padding: 0.4em 0.7em;
+  color: white;
+  background: #52646f;
+  border-bottom: 1px solid #40525c;
+}
+
+a.MetricSidebarItem.analyzing {
+  background: #3d9268;
+}
+
+a.MetricSidebarItem.analyzing:hover {
+  background: #2a8558;
+}
+
+a.MetricSidebarItem:first-child {
+  border-radius: 0 2px 0 0;
+}
+
+a.MetricSidebarItem:last-child {
+  border-radius: 0 0 2px 0;
+  border-bottom: none;
+}
+
+a.MetricSidebarItem:hover {
+  background: #40525c;
+}
+
+.MetricSidebarItem--icon {
+  float: left;
+  width: 1.5em;
+}
+
+/* src/components/metrics/card/token/style.css */
+.MetricToken {
+  margin-top: 5px;
+  margin-right: 3px;
+}
+
+.MetricToken .ui.tiny.label {
+  font-size: 0.85rem;
+  background-color: $green-1 !important;
+  border-radius: 2px;
+  padding: 0.4em 0.45em 0.35em;
+  margin-top: 2px;
+}
+
+.MetricToken .hover-icon {
+  float: right;
+  padding: 2px 6px;
+  color: $blue-5;
+  border-radius: 2px;
+  font-size: 1em;
+}
+
+.screenshot .MetricToken .hover-icon {
+  display: none;
+}
+
+.MetricToken .hover-hide {
+  opacity: 0.6;
+  padding: 0 6px 2px;
+}
+
+.hovered .MetricToken .hover-hide {
+  display: none;
+}
+
+.MetricToken .hover-toggle {
+  cursor: pointer;
+  display: none;
+}
+
+.MetricToken .hover-toggle:hover {
+  color: white;
+  background-color: $grey-2;
+}
+
+.hovered .MetricToken .hover-toggle {
+  display: block;
+}
+
+.MetricToken--Corner-Triangle {
+  height: 0;
+  width: 0;
+  border-top: 36px solid #9fabb3;
+  border-left: 36px solid transparent;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.MetricToken--Corner-Item {
+  position: absolute;
+  top: 1px;
+  right: 3px;
+  color: white;
+  font-size: 1.1em;
+}
+
+/* src/components/metrics/modal/style.css */
+$grey: #eee;
+
+.metricModal {
+  background-color: rgba(240, 240, 240, 1);
+  margin-bottom: 2em;
+}
+
+.metricModal > .top {
+  padding: 1.5em 1.5em 0;
+  position: relative;
+}
+
+.metricModal > .bottom {
+  background-color: white;
+  padding: 4em 1.5em 1.5em;
+}
+
+.metricModal hr {
+  border: none;
+  border-top: 1px solid #ddd;
+}
+
+.metricModal h1 {
+  margin: 0;
+  color: #444;
+  font-weight: 600;
+  font-size: 2.2em;
+}
+
+.metricModal h2 {
+  color: #333;
+  font-size: 1.4em;
+}
+
+.metricModal h3 {
+  color: #999;
+  font-size: 1.4em;
+  font-weight: 400;
+}
+
+.metricModal .section {
+  padding: 2em 1em 0;
+  margin: 2em 0;
+}
+
+.metricModal .histogram {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1.8em;
+}
+
+.metricModal .histogram .react-d3-histogram .react-d3-histogram__bar rect {
+  fill: rgb(146, 169, 184);
+}
+
+.metricModal .island {
+  background-color: white;
+  border: none;
+  border-radius: 3px;
+  width: 100%;
+}
+
+.metricModal .percentiles {
+  float: right;
+}
+
+.metricModal .ui.table tr td {
+  padding: 4px 4px 4px 6px;
+  color: #666;
+}
+
+.metricModal .distributionSection .island {
+  padding-top: 1em;
+  position: relative;
+}
+
+.metricModal .distributionSection .subsection {
+  z-index: 1;
+  padding: 0 1em;
+}
+
+.metricModal .distributionSection .mean.subsection .DistributionSummary {
+  color: #000;
+  font-size: 2.3em;
+  margin-top: 1em;
+  margin-left: 0.3em;
+  float: left;
+}
+
+.metricModal .distributionSection .mean.subsection .DistributionSummary .stdev {
+  color: #666;
+}
+
+.metricModal .distributionSection .mean.subsection .hovered-value {
+  float: right;
+  background-color: rgba(240, 240, 240, 0.68);
+}
+
+.metricModal .distributionSection .mean.subsection .hovered-value h4 {
+  margin-top: 0.5em;
+  color: #888888;
+  font-weight: 200;
+}
+
+.metricModal .distributionSection .mean.subsection .hovered-value h3 {
+  margin-bottom: 0;
+  font-size: 2em;
+  color: #555555;
+  font-weight: 200;
+}
+
+.metricModal .section-small {
+  background-color: white;
+  border-radius: 3px;
+  padding: 0.5em;
+  margin: 1em 0;
+}
+
+.metricModal .distributionSection {
+  margin: 0.5em 0 0em;
+  min-height: 10em;
+  position: relative;
+}
+
+.metricModal .Guesstimate.large input {
+  background-color: $grey;
+}
+
+.metricModal .editingInputSection {
+  margin-bottom: 3em;
+  margin-left: -4px;
+}
+
+.metricModal .guesstimateDescriptionSection {
+  color: #666;
+}
+
+.metricModal > .top .button-close {
+  float: right;
+  font-size: 2em;
+  color: #bbb;
+}
+
+.metricModal .SampleList {
+  max-height: 30em;
+  overflow: scroll;
+  padding: 0.5em;
+  background-color: #f0f0f0;
+  border-radius: 3px;
+}
+
+.metricModal .modal-action.button {
+  background-color: #ddd;
+  border-radius: 0.3px;
+  padding: 0.25em 0.7em;
+  color: #555;
+  font-size: 1.1em;
+  &:hover {
+    background-color: #bbb;
+  }
+}
+
+.metricModal--sample-container {
+  float: right;
+}
+
+/* src/components/organizations/new/style.css */
+.CreateOrganization {
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 0.25 0;
+    float: left;
+    width: 100%;
+  }
+  .Header {
+    h1 {
+      margin-top: 0.5rem;
+      font-size: 3em;
+      font-weight: 500;
+      margin-bottom: 1em;
+    }
+
+    .center-display {
+      text-align: center;
+      margin-right: 0.5em;
+      margin-top: 0.25em;
+    }
+  }
+
+  .Steps {
+    .ui.menu {
+      float: right;
+      margin-top: 0;
+    }
+
+    .ui.menu .item {
+      font-weight: 800;
+      color: #444;
+    }
+  }
+
+  .ui.form {
+    label {
+      font-weight: bold;
+    }
+
+    .field {
+      font-size: 1.1em;
+    }
+
+    .field.name {
+      margin-bottom: 1em;
+
+      input {
+        margin: 0.6em 0 0.6em 0;
+      }
+    }
+  }
+}
+
+.PlanList {
+  border-radius: 3px;
+  border: 1px solid #ccc;
+  display: flex;
+  flex-direction: column;
+}
+
+.PlanElement {
+  padding: 1.5em 0;
+  background-color: rgba(150, 150, 150, 0.12);
+  font-size: 0.9em;
+
+  input {
+    margin: 0;
+  }
+
+  .center-text {
+    text-align: center;
+  }
+
+  &.selected {
+    background-color: white;
+  }
+
+  &:first-child {
+    border-radius: 3px 3px 0 0;
+  }
+
+  &:last-child {
+    border-radius: 0 0 3px 3px;
+  }
+
+  .radio-section {
+    width: 8%;
+    text-align: right;
+    float: left;
+  }
+
+  .content-section {
+    width: 90%;
+    padding-left: 20px;
+    float: left;
+  }
+
+  .free-trial {
+    color: #1bb732;
+    font-weight: 700;
+    margin-top: 5px;
+  }
+}
+
+/* src/components/organizations/show/facts/style.css */
+.FactGraph {
+  font-size: 0.8em;
+  display: flex;
+  flex-align: center;
+  justify-content: center;
+}
+
+.spaceNode {
+  padding: 1em;
+  color: #435870;
+  font-size: 1.3em;
+  text-align: center;
+  background-color: white;
+  margin: 4px;
+  width: 100%;
+  background-color: #acbfcf;
+  border-radius: 1px;
+  transition: background-color 0.5s;
+  &:hover {
+    background-color: #82a1bb;
+    color: #283b50;
+  }
+}
+
+.FactGraph .FlowGridCell.FlowGridCell {
+  width: 150px;
+  min-width: 150px;
+}
+
+.FactGraph .FlowGridCell.hovered .FlowGridEmptyCell {
+  background-color: none;
+}
+
+/* src/components/organizations/show/style.css */
+.OrganizationShow {
+  .main-section {
+    margin-top: 2em;
+  }
+
+  .ui.menu .item.active {
+    background: #cacaca;
+  }
+
+  .ui.tabular.menu.reversed .active.item {
+    background: none #f7f5f5;
+    border-radius: 0.15rem 0.15rem 0 0 !important;
+  }
+
+  .OrganizationHeader {
+    h1 {
+      margin-bottom: 0;
+      margin-top: 0.5rem;
+    }
+
+    .center-display {
+      text-align: center;
+      margin-right: 0.5em;
+      margin-top: 0.25em;
+    }
+
+    img {
+      max-width: 4em;
+      max-height: 5em;
+      border-radius: 0.5em;
+      margin-bottom: 2px;
+    }
+  }
+
+  .OrganizationTabButtons {
+    .ui.menu {
+      float: right;
+      margin-top: 0;
+    }
+
+    .ui.menu .item {
+      font-weight: 800;
+      font-size: 1.2em;
+      color: #444;
+    }
+  }
+
+  .FactTab {
+    margin-top: 4em;
+
+    .FactTab--factList {
+      float: right;
+    }
+
+    p {
+      font-size: 1.1em;
+      color: #666;
+    }
+
+    .Category {
+      margin-bottom: 3em;
+
+      h3 {
+        color: #888;
+        font-size: 1.4em;
+        font-style: italic;
+        font-weight: 200;
+        margin-bottom: 0.3em;
+        margin-top: 0.5em;
+      }
+    }
+  }
+}
+
+/* src/components/pages/base/style.css */
+.PageBase {
+  font-size: 1.1em;
+}
+
+.PageBase h2 {
+  font-size: 1.25em;
+  margin-bottom: 6px;
+}
+
+.PageBase h1 {
+  color: $blue-1;
+}
+
+/* src/components/plans/index/style.css */
+$main-grey: #4e4e4e;
+
+.PlanIndex {
+  color: $main-grey;
+  font-family: "Lato";
+
+  .header {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 3em;
+    h1 {
+      font-size: 2.5em;
+      font-weight: 500;
+    }
+    h2 {
+      font-weight: 300;
+    }
+  }
+
+  .Plans {
+    float: left;
+  }
+
+  .Plans--outer {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .portal-message-container {
+    width: 100%;
+    padding: 1em 18em;
+  }
+
+  .portal-message {
+    background-color: rgba(255, 255, 255, 0.8);
+    width: 100%;
+    padding: 1em;
+    color: $main-grey;
+    border-radius: 3px;
+    text-align: center;
+
+    h2 {
+      font-weight: 500;
+      margin-bottom: 1em;
+    }
+  }
+
+  .questions {
+    margin-top: 8em;
+    color: $main-grey;
+
+    .question {
+      margin-bottom: 5em;
+      padding: 0 3rem;
+
+      h3 {
+        font-size: 1.5em;
+      }
+
+      p {
+        font-size: 1.15em;
+      }
+    }
+  }
+}
+
+.PlanCard {
+  background-color: white;
+  border-radius: 0.3em;
+  border: 1px solid #d8d8d8;
+  text-align: center;
+  padding: 1.5em 0;
+  margin: 3em 0;
+  font-family: "Lato";
+  color: #888;
+  font-size: 1.5em;
+  font-weight: 300;
+  width: 15em;
+  margin-right: 3em;
+  float: left;
+  &:last-child {
+    margin-right: 0;
+  }
+
+  h2 {
+    margin-bottom: 2em;
+    color: $main-grey;
+    margin-bottom: 1.5em;
+    font-weight: 500;
+    font-size: 1.5em;
+  }
+
+  h2 {
+  }
+
+  li {
+    margin-bottom: 1em;
+  }
+
+  li strong {
+    color: $blue-1;
+  }
+
+  ul {
+    margin-bottom: 3em;
+    list-style: none;
+    padding: 0;
+    width: 100%;
+  }
+
+  .promotion {
+    color: #1bb732;
+    font-weight: 500;
+    margin-bottom: 1em;
+  }
+
+  .PlanCard-Cost {
+    padding-bottom: 1em;
+    min-height: 5.5em;
+
+    sup {
+      top: -0.7em;
+      font-size: 1.2em;
+      font-weight: 800;
+      color: $main-grey;
+    }
+
+    .number {
+      font-size: 2.5em;
+      color: $main-grey;
+      font-weight: 800;
+    }
+
+    .per-month {
+      font-weight: 500;
+      margin-top: 0.75em;
+      font-size: 1em;
+      line-height: 1.3em;
+    }
+
+    .dollar-sign {
+      font-size: 0.8em;
+      margin-top: -5em;
+    }
+  }
+}
+
+/* src/components/simulations/histogram/style.css */
+.react-d3-histogram {
+  bottom: -24px;
+}
+
+.ReactModal__Overlay--after-open .react-d3-histogram__tick text {
+  fill: #666;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.react-d3-histogram svg {
+  width: 100%;
+}
+
+.react-d3-histogram__bar rect {
+  fill: rgb(197, 224, 243);
+  shape-rendering: crispEdges;
+}
+
+.react-d3-histogram__bar text {
+  fill: none;
+}
+
+.react-d3-histogram__tick text {
+  font-size: 8px;
+  fill: none;
+}
+
+.metric:hover .react-d3-histogram__tick text {
+  fill: #aaa;
+}
+
+.react-d3-histogram__x-axis path,
+.react-d3-histogram__x-axis line {
+  fill: none;
+  shape-rendering: crispEdges;
+}
+
+.react-d3-histogram__hoverbar {
+  stroke: rgba(14, 44, 64, 0.46);
+  stroke-dasharray: 8, 5;
+}
+
+/* src/components/simulations/histogram_with_stats/style.css */
+.HistogramWithStats {
+  position: relative;
+}
+
+/* src/components/simulations/stat_table/style.css */
+table.MetricStatTable {
+  font-weight: 500;
+  font-size: 11px;
+  color: #666;
+  width: 100%;
+}
+
+table.MetricStatTable td {
+  text-align: left;
+  padding: 0;
+  line-height: 1.5em;
+}
+
+/* src/components/spaces/canvas/style.css */
+.canvas-space::selection {
+  background-color: none;
+}
+
+.canvas-space .inner-editor input {
+  text-align: left;
+}
+
+.canvas-space .inner-editor .header .save-message {
+  color: #888;
+}
+
+/* src/components/spaces/cards/style.css */
+.SpaceCard {
+  display: flex;
+}
+
+.SpaceCard.new {
+  .SpaceCard--inner {
+    background-color: #cee4ce;
+    transition: background-color 0.1s;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(0, 0, 0, 0);
+    min-height: 12em;
+
+    &:hover {
+      border: 1px solid #61a761;
+    }
+
+    .section-middle {
+      text-align: center;
+
+      h3 {
+        font-size: 2em;
+        color: rgb(50, 64, 50);
+        margin-top: 0.5em;
+      }
+
+      .fa {
+        font-size: 4.5em;
+        color: #79b979;
+      }
+    }
+  }
+}
+
+.SpaceCard.SMALL {
+  width: 100%;
+
+  .image {
+    flex: 1;
+    min-height: 3em;
+    border-radius: 0 0 1px 1px;
+  }
+
+  .SpaceCard--inner {
+    margin: 0 0.8em;
+  }
+
+  .image .snapshot.blank img {
+    height: 85%;
+    opacity: 0.2;
+    margin-bottom: 0;
+    max-height: 4em;
+  }
+
+  .header h3 {
+    font-size: 1.2em;
+  }
+}
+
+.SpaceCard--inner {
+  margin: 1.5em 0.8em;
+  float: left;
+  cursor: pointer;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(0, 0, 0, 0);
+  border-radius: 2px;
+}
+
+.SpaceCard--inner:hover {
+  border: 1px solid #c2cdd6;
+}
+
+.SpaceCard .header {
+  padding: 0.5em;
+  border-radius: 2px 2px 0 0;
+  background-color: white;
+  flex: 0 0 auto;
+}
+
+.SpaceCard .image {
+  min-height: 11em;
+  position: relative;
+  background-color: #d9dee2;
+  float: left;
+  flex: 0 0 auto;
+}
+
+.SpaceCard .image img {
+  width: 100%;
+  float: left;
+  position: relative;
+  z-index: 1;
+}
+
+.SpaceCard .image .snapshot.blank {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.SpaceCard .image .snapshot.blank img {
+  height: 67%;
+  width: auto;
+  opacity: 0.23;
+  margin-bottom: 1em;
+}
+
+.SpaceCard .header h3 {
+  font-size: 1.3em;
+  color: #4a6a88;
+  margin-bottom: 0;
+}
+
+.SpaceCard .header.default-name h3 {
+  color: #bbb;
+  font-style: italic;
+}
+
+.SpaceCard .header .changed-at {
+  color: #888;
+  font-size: 0.9em;
+}
+
+.SpaceCard .hover-row {
+  position: absolute;
+  left: 0.5em;
+  bottom: 0.5em;
+  z-index: 2;
+}
+
+.SpaceCard .hover-row .tag {
+  float: left;
+  font-size: 1.6em;
+  color: #6e7980;
+  padding: 0.12em 0 0;
+}
+
+.SpaceCard .hover-row .owner-tag {
+  margin-right: 0.5em;
+  float: left;
+  background: rgba(147, 159, 169, 0.7);
+  border-radius: 2px;
+  float: left;
+}
+
+.SpaceCard .hover-row .owner-tag:hover {
+  cursor: pointer;
+  background: rgba(88, 110, 127, 0.71);
+  transition: 0.2s background;
+}
+
+.SpaceCard .hover-row .owner-tag .avatar {
+  width: 1.8em;
+  height: 1.8em;
+  border-radius: 2px 0 0 2px;
+  float: left;
+}
+
+.SpaceCard .hover-row .owner-tag .name {
+  float: left;
+  padding: 0.3em 0.5em 0 0.5em;
+  color: white;
+  font-size: 1.1em;
+  font-weight: 800;
+}
+
+.SpaceCard .body {
+  border-radius: 0 0 2px 2px;
+  flex: 1;
+  background-color: white;
+  float: left;
+  width: 100%;
+  padding: 0.3em 0.5em 0.6em 0.5em;
+  overflow: hidden;
+}
+
+.SpaceCard .body p {
+  margin-top: 0.4em;
+  width: 100%;
+  color: #78838c;
+  float: left;
+}
+
+/* src/components/spaces/index/style.css */
+.SpacesIndex .SpacesIndex--header {
+  margin-top: 4em;
+  margin-bottom: 3em;
+  text-align: center;
+}
+
+.SpacesIndex .SpacesIndex--header h1 {
+  margin-top: 0;
+  margin-bottom: 0.7em;
+  color: #444;
+  font-weight: 800;
+  font-size: 2em;
+}
+
+.SpacesIndex .nextPage {
+  margin-bottom: 4em;
+  margin-top: 2em;
+  text-align: center;
+}
+
+.SpacesIndex a.header-action {
+  color: #666;
+  margin: 0.1em 1.1em 0 0;
+  font-size: 1em;
+  float: left;
+  padding: 0.4em 0.8em;
+  border-radius: 2px;
+
+  &:hover {
+    background-color: #e3e8ec;
+  }
+
+  .fa {
+    margin-left: 0.4em;
+    font-size: 0.8em;
+  }
+}
+
+/* src/components/spaces/list/style.css */
+.SpaceList {
+  border-left: 1px solid $grey-1;
+  padding-left: 10px;
+  float: left;
+  width: 100%;
+}
+
+.SpaceList .privacy-tag {
+  float: right;
+  margin-top: 10px;
+  color: $grey-2;
+}
+
+.SpaceList .privacy-tag .fa {
+  margin-right: 3px;
+}
+
+.SpaceList > .nextPage {
+  text-align: center;
+  width: 100%;
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+.SpaceList > .nextPage .ui.button {
+  background-color: $grey-1;
+}
+
+.SpaceList > .nextPage .ui.button:hover {
+  background-color: $grey-2;
+}
+
+/* src/components/spaces/list_item/style.css */
+.SpaceListItem {
+  border-radius: 4px;
+  margin-bottom: 2px;
+  float: left;
+  width: 100%;
+}
+
+.SpaceListItem a {
+  padding: 15px;
+  transition: background 0.2s;
+  float: left;
+  width: 100%;
+}
+
+.SpaceListItem a:hover {
+  background: $grey-1;
+  border-radius: 3px;
+}
+
+.SpaceListItem a h3 {
+  color: #333;
+  font-weight: 600;
+  font-family: Lato;
+  margin-bottom: 0.2em;
+  font-size: 1.45em;
+}
+
+.SpaceListItem .snapshot img {
+  max-width: 100%;
+  border-radius: 1px;
+}
+
+.SpaceListItem .snapshot.blank {
+  background-color: $grey-1;
+  height: 80px;
+  border-radius: 1px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.SpaceListItem .snapshot.blank img {
+  max-width: 40%;
+  opacity: 0.3;
+}
+
+.SpaceListItem .snapshot.blank .fa {
+  font-size: 2.5em;
+  color: $grey-2;
+  opacity: 0.3;
+}
+
+.SpaceListItem a h3.default-value {
+  color: #aaa;
+  font-style: italic;
+}
+
+.SpaceListItem .user-tag {
+  float: right;
+  color: $grey-2;
+}
+
+.SpaceListItem .user-tag .ui.avatar.image {
+  width: 1.5em;
+  height: 1.5em;
+  margin-right: 5px;
+  border-radius: 2px;
+}
+
+.SpaceListItem p {
+  color: $grey-2;
+}
+
+.SpaceListItem .description p {
+  color: #666;
+  font-size: 1.1em;
+  margin-top: 0.6em;
+}
+
+.SpaceListItem .metric-count p {
+  float: right;
+}
+
+/* src/components/spaces/show/Toolbar/style.css */
+.SpaceShowToolbar {
+  background: rgba(219, 221, 222, 0.69);
+  border-bottom: 1px solid rgba(37, 128, 167, 0.38);
+}
+
+.SpaceShowToolbar .saveMessage {
+  color: #09273a;
+  margin-left: 26px;
+  float: left;
+  margin-top: 8px;
+  font-size: 1.1em;
+}
+
+.SpaceShowToolbar .saveMessage .ui.label {
+  font-size: 1.2rem;
+  font-weight: 500;
+  border-radius: 2px;
+  padding: 0.25em 0.5em;
+  margin-top: -2px;
+}
+
+.SpaceShowToolbar .saveMessage .ui.label.grey {
+  background-color: #555 !important;
+}
+
+.SpaceShowToolbar .header-action {
+  cursor: pointer;
+  float: left;
+  padding: 0.3em 0.55em;
+  font-size: 1.1em;
+  color: rgb(18, 46, 64);
+  border-radius: 1px;
+  margin: 0.2em 0.2em;
+}
+
+.SpaceShowToolbar .header-action-border {
+  float: left;
+  width: 2px;
+  background: rgb(115, 168, 190);
+  height: 34px;
+  margin: 0 3px;
+}
+
+.SpaceShowToolbar .header-action:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.SpaceShowToolbar .header-action:active {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.SpaceShowToolbar .header-action.disabled {
+  opacity: 0.4;
+}
+
+.SpaceShowToolbar .header-action.disabled:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.SpaceShowToolbar .ui.buttons {
+  float: left;
+  margin-right: 8px;
+}
+
+.SpaceShowToolbar a.space-header-action {
+  color: white;
+  padding: 0.5em 0.95em;
+  border-radius: 3px;
+  font-weight: 300;
+  margin-right: 10px;
+  background-color: rgba(0, 0, 0, 0);
+  transition: background-color 0.3s;
+  font-size: 1.2em;
+  float: left;
+}
+
+.SpaceShowToolbar a.space-header-action:hover {
+  color: white;
+  background-color: rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.SpaceShowToolbar .float-right {
+  float: right;
+}
+
+.SpaceShowToolbar .header-action.button {
+  background-color: rgba(255, 255, 255, 0.3);
+  padding: 0.23em 0.53em;
+  margin: 0.3em 0 0 0.2em;
+  border-radius: 2px;
+}
+
+.SpaceShowToolbar .header-action.button:hover {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.ImportFromSlurpForm h2 {
+  display: inline;
+}
+
+.ImportFromSlurpForm .SlurpQuestionLink {
+  float: right;
+  font-size: 1.6em;
+  color: $blue-4;
+  cursor: pointer;
+}
+
+/* src/components/spaces/show/Tutorial/style.css */
+.Tutorial {
+  float: left;
+  background-color: rgba(240, 240, 240, 1);
+  text-align: center;
+  max-width: 42em;
+  padding: 2em 2em 1em;
+  border-radius: 0.2em;
+
+  h2 {
+    padding-bottom: 1em;
+  }
+}
+
+/* src/components/spaces/show/privacy-toggle/style.css */
+.shareable-link {
+  overflow: scroll;
+  cursor: auto;
+
+  span {
+    cursor: text;
+  }
+}
+
+.PrivacyToggle li .info-section .warning {
+  color: $black-1;
+}
+
+.PrivacyToggle li .info-section .warning .upgrade {
+  cursor: pointer;
+  color: $blue-6;
+}
+
+/* src/components/spaces/show/style.css */
+.spaceShow {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #dfe1e4;
+}
+
+.spaceShow.screenshot {
+  background-color: #c2cdd6;
+}
+
+.canvas-space {
+  flex: 1;
+  max-height: 100%;
+}
+
+.canvas-space:not(.overflow-hidden) {
+  overflow: auto;
+}
+
+.canvas-space.overflow-hidden {
+  overflow: hidden;
+}
+
+.hero-unit {
+  padding-top: 0.8em;
+  background: #2583a7;
+  background: linear-gradient(-90deg, #2577a7, #2583a7);
+  width: 100%;
+  box-sizing: initial;
+}
+
+.hero-unit .ui.image {
+  margin-top: 4px;
+  margin-left: 8px;
+  margin-bottom: 5px;
+  margin-right: 0;
+  font-size: 0.92em;
+  float: right;
+  &.label {
+    color: white;
+    background: rgba(255, 255, 255, 0.2);
+    img {
+      height: 2.1em !important;
+    }
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .hero-unit {
+    padding-top: 0.5em;
+  }
+
+  .SpaceShowToolbar {
+    display: none;
+  }
+
+  .hero-unit .header {
+    margin-right: 10px;
+  }
+
+  .hero-unit .ui.image.label {
+    margin-top: 0px;
+    font-size: 0.7em;
+    float: right;
+  }
+
+  .hero-unit .space-header-action {
+    margin-top: 0px;
+    font-size: 0.7em;
+  }
+}
+
+.hero-unit .ui.button.blue {
+  background-color: $grey-2;
+}
+
+.hero-unit {
+  color: white;
+}
+
+.hero-unit .text-editable:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.hero-unit .text-editable.default-value {
+  color: #ccc;
+}
+
+.hero-unit h1 {
+  font-size: 1.7em;
+  padding: 0.05em 0.38em;
+  border-radius: 3px;
+  font-family: Lato;
+  font-weight: 500;
+  float: left;
+  margin: 0.1em 1em 0.3em 0;
+}
+
+.hero-unit .header-name {
+  max-width: 60%;
+  float: left;
+  p {
+    padding-top: 0;
+    margin-top: 0;
+    color: grey;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .hero-unit h1 {
+    font-size: 1.2em;
+    padding: 0 0 0 0.4em;
+    margin-right: 0em;
+  }
+  .hero-unit .header-name {
+    max-width: 100%;
+  }
+}
+
+.hero-unit .dd-menu-left {
+  float: left;
+}
+
+.spaceShow > .content {
+  display: flex;
+  flex-direction: row;
+  max-height: 100%;
+  flex: 1;
+}
+
+.SpaceSidebar {
+  max-height: 100%;
+  min-width: 22em;
+  width: 22em;
+  z-index: 2;
+  margin: 24px 15px 14px 14px;
+  overflow: auto;
+  background: rgba(223, 225, 228, 0.1);
+
+  .closeSidebar {
+    float: right;
+  }
+}
+
+.SpaceSidebar-inside {
+  padding: 1em 1em 0.5em 1em;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 2px;
+  float: left;
+  width: 100%;
+}
+
+.ClosedSpaceSidebar {
+  background-color: #dfe1e4;
+  padding-top: 0.5em;
+  padding-left: 3px;
+}
+
+.ClosedSpaceSidebar .open.open {
+  background-color: $blue-1;
+  padding: 7px 7px;
+}
+
+.SpaceSidebar .SpaceSidebar-header {
+  width: 100%;
+  text-align: center;
+  position: relative;
+  color: #777;
+  min-height: 2em;
+}
+
+.SpaceSidebar .SpaceSidebar-header .description-icon.fa {
+  float: left;
+  font-size: 1.8em;
+  margin-top: 8px;
+}
+
+.SpaceSidebar .SpaceSidebar-header .fa {
+  font-size: 1.25em;
+}
+
+.SpaceSidebar .SpaceSidebar-header .button-close {
+  float: right;
+}
+
+.SpaceSidebar:not(:hover) .SpaceSidebar-header .button-close {
+  display: none;
+}
+
+.SpaceSidebar .SpaceSidebar-header .button-close:not(:hover) {
+  color: #bbb;
+}
+
+.SpaceSidebar .SpaceSidebar-body {
+  float: left;
+  width: 100%;
+  margin-top: 0.5em;
+  margin-bottom: 1em;
+  font-size: 1.1em;
+  word-wrap: break-word;
+}
+
+.SpaceSidebar .SpaceSidebar-body .ClickToEdit {
+  padding: 0;
+}
+
+.SpaceSidebar .SpaceSidebar-body .ClickToEdit .EditingMode textarea {
+  min-height: 30em;
+}
+
+.header-action-tooltip.header-action-tooltip.header-action-tooltip {
+  background: rgba(60, 64, 68, 0.95);
+  opacity: 1;
+  padding: 4px 13px;
+  border-radius: 2px;
+  transition: none;
+
+  &.place-top:after {
+    border-top: 6px solid rgba(60, 64, 68, 0.95);
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+  }
+
+  &.place-top {
+    margin-top: 0px;
+  }
+
+  &.place-bottom {
+    margin-top: 2px;
+  }
+
+  &.place-bottom:after {
+    border-bottom: 6px solid rgba(60, 64, 68, 0.95);
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    top: -6px;
+    margin-left: -6px;
+  }
+}
+
+.hero-unit .header .dropDown-relative {
+  float: right;
+}
+
+.header .dropDown-relative .space-header-action {
+  color: white;
+  float: right;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.3em 0.7em;
+  border-radius: 3px;
+  margin: 4px 0 6px 8px;
+}
+
+.header .dropDown-relative .space-header-action:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.header .dropDown-relative .space-header-action:active {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.SpaceRightSidebar {
+  width: 30em;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 0;
+  border-left: 1px solid #ccc;
+
+  &.grey {
+    background: #f7f5f5;
+  }
+
+  h2 {
+    color: #476b82;
+  }
+
+  .SpaceRightSidebar--divider {
+    margin: 0;
+    border: none;
+    border-bottom: 2px dotted #e8e8e8;
+  }
+
+  .SpaceRightSidebar--padded-area {
+    padding: 1em 1em;
+    float: left;
+    width: 100%;
+    .button-close-text {
+      float: right;
+    }
+  }
+}
+
+/* src/components/subscriptions/FirstSubscription/style.css */
+.FirstSubscription {
+  text-align: center;
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.FirstSubscription .large-icon {
+  font-size: 18em;
+  color: $grey-2;
+  opacity: 0.2;
+}
+
+.FirstSubscription .NewOrder {
+  float: left;
+  flex-direction: column;
+}
+
+.FirstSubscription .GeneralMessage {
+  background-color: $grey-5;
+  min-height: 12em;
+  width: 100%;
+  border-radius: 3px;
+  color: $grey-2;
+  padding: 3em 2em;
+  margin-top: 1em;
+}
+
+.FirstSubscription .GeneralMessage .button {
+  margin-top: 2em;
+}
+
+/* src/components/subscriptions/FirstSubscriptionPage/style.css */
+.FirstSubscriptionPage {
+  font-family: "Lato";
+  margin-top: 2em;
+}
+
+.FirstSubscriptionPage .FirstSubscriptionPage-header {
+  margin-bottom: 6em;
+}
+
+.FirstSubscriptionPage .FirstSubscriptionPage-header h1 {
+  font-size: 3em;
+  font-weight: 400;
+  color: $grey-2;
+}
+
+.FirstSubscriptionPage .FirstSubscriptionPage-header .number {
+  color: $blue-1;
+}
+
+.FirstSubscriptionPage h2 {
+  color: #666;
+  font-weight: 400;
+  margin-top: 0.5em;
+}
+
+.FirstSubscriptionPage .FirstSubscriptionPage-sidebar {
+  color: #666;
+  max-width: 300px;
+  background: $grey-5;
+  padding: 12px;
+  border-radius: 2px;
+}
+
+.FirstSubscriptionPage .FirstSubscriptionPage-sidebar h3 {
+  color: $grey-2;
+}
+
+/* src/components/users/settings/style.css */
+.Plan {
+  padding: 0.5em 2em;
+  background-color: $grey-1;
+  border-radius: 5px;
+  font-size: 1.1em;
+  color: $grey-2;
+}
+
+.Plan.Plan h2 {
+  margin-top: 0.25em;
+  color: $blue-1;
+}
+
+.Settings-Plan {
+  margin: 2em 0 2em;
+}
+
+.Settings-Upgrade {
+  text-align: center;
+  margin: 2em 0 2em;
+}
+
+.Card .ui.button.portal {
+  background-color: $grey-2;
+}
+
+/* src/components/users/show/style.css */
+.UserShow .main-user-tag {
+  text-align: center;
+  margin-bottom: 2em;
+}
+
+.UserShow .main-user-tag img {
+  width: 8em;
+  height: 8em;
+  border-radius: 8em;
+}
+
+.UserShow .main-user-tag h1 {
+  margin-bottom: 0;
+  margin-top: 0.5rem;
+}
+
+/* src/components/utility/ComponentEditor/style.css */
+.ComponentEditor > .reference {
+  padding: 4em 10px;
+}
+
+.ComponentEditor.grey .Component {
+  background: #f7f5f5;
+}
+
+.ComponentEditor.blue .Component {
+  background: linear-gradient(-140deg, #4dc7b7, #489acc);
+}
+
+.ComponentEditor .Component {
+  padding: 5px;
+}
+
+/* src/components/utility/buttons/style.css */
+.button-close {
+  color: #888;
+  cursor: pointer;
+  font-size: 1.9em;
+}
+
+.button-close:hover {
+  color: #666;
+}
+
+.ui.button.g-button {
+  padding: 0.5em 0.8em;
+  border-radius: 2px;
+  i {
+    margin-right: 0.3em;
+  }
+  .fa {
+    margin-right: 0.3em;
+  }
+  &.red {
+    background-color: #b74d4d;
+    &:hover {
+      background-color: #923f3f;
+    }
+  }
+}
+
+/* src/components/utility/card/style.css */
+.Card {
+  background-color: rgba(255, 255, 255, 1);
+  border-radius: 0.3em;
+  margin-top: 2px;
+  padding: 0.5em 0;
+  float: left;
+  position: relative;
+}
+
+.Card.shadow {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+}
+
+.Card.narrow {
+  width: 18em;
+}
+
+.Card.normal {
+  width: 30em;
+}
+
+.Card .ui.form textarea {
+  font-size: 1.2em;
+  background-color: $grey-1;
+  margin-bottom: 2em;
+}
+
+.Card h3 {
+  color: #888;
+  font-weight: 200;
+  margin: 0;
+}
+
+.Card .section {
+  margin: 1em 0;
+}
+
+.Card .header-divider {
+  padding: 0.5em 0 0.3em 1em;
+  margin-bottom: 0.25em;
+  float: left;
+  width: 100%;
+}
+
+.Card a {
+  cursor: pointer;
+}
+
+.Card a.disabled {
+  cursor: not-allowed;
+}
+
+.Card hr {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid $grey-1;
+}
+
+.Card-content {
+  width: 100%;
+  position: relative;
+}
+
+.Card-header {
+  text-align: center;
+  margin: 0.25em 0 0.75em;
+}
+
+.Card .Card-close {
+  position: absolute;
+  top: 9px;
+  right: 12px;
+  padding-top: 0px;
+}
+
+.Card .Card-content .Card-close:hover {
+  color: #666;
+}
+
+.Card .CardListSection {
+  padding: 0.8em;
+  color: #555;
+}
+
+.Card ol,
+.Card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 0.25em 0;
+  float: left;
+  width: 100%;
+}
+
+.Card li .row {
+  margin: 0;
+}
+
+.Card li .action {
+  padding: 0.5em 0;
+  border-radius: 0;
+}
+
+.Card li .action.hasChildren {
+  padding: 1em 0 0.5em;
+}
+
+.Card-body.padded {
+  padding: 0 1em;
+}
+
+.Card li .action.selected {
+  background-color: $grey-1;
+}
+
+.Card li a {
+  width: 100%;
+  float: left;
+}
+
+.Card li .icons {
+  text-align: center;
+  color: $grey-2;
+  font-size: 1.25em;
+}
+
+.Card li .icons i {
+  font-size: 1.5em;
+}
+
+.Card li .action.hasChildren .icons {
+  font-size: 2.5em;
+}
+
+.Card li .icons img {
+  width: 35px;
+}
+
+.Card li .icons img.circle {
+  border-radius: 3em;
+}
+
+.Card li .info-section {
+  color: #555;
+  text-align: left;
+}
+
+.Card li .info-section > .header {
+  font-weight: bold;
+  margin-bottom: 5px;
+  font-size: 1.25em;
+}
+
+.Card li .info-section > .content {
+  padding: 0.5em 0;
+  font-size: 1.1em;
+}
+
+.Card li .info-section .warning {
+  margin-top: 10px;
+}
+
+.Card li a:hover:not(.disabled) {
+  background-color: $blue-2;
+}
+
+/* src/components/utility/click-to-edit/style.css */
+.ClickToEdit {
+  float: left;
+  width: 100%;
+  padding-left: 0.5em;
+}
+
+.ClickToEdit > .BlankMode {
+  padding: 0.5em;
+  border-radius: 3px;
+  color: #999;
+  text-decoration: underline;
+}
+
+.ClickToEdit > .BlankMode:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+  color: #333;
+  cursor: pointer;
+}
+
+.ClickToEdit .EditingMode .submit-section {
+  margin-top: 10px;
+}
+
+.ClickToEdit .EditingMode .submit-section .button {
+  float: left;
+}
+
+a.markdown-help {
+  float: right;
+  font-size: 2.5em;
+  color: #aaa;
+  cursor: pointer;
+}
+
+a.markdown-help:hover {
+  color: #777;
+}
+
+.ClickToEdit .EditingMode .submit-section .submit-section-close {
+  float: left;
+  margin-top: 0.2em;
+}
+
+.ClickToEdit .EditingMode .submit-section .submit.button {
+  margin-right: 1em;
+}
+
+.ClickToEdit .EditingMode textarea:focus {
+  outline: none;
+}
+
+.ClickToEdit .EditingMode textarea {
+  background-color: white;
+  border: 2px solid $blue-1;
+  border-radius: 3px;
+  width: 100%;
+  min-height: 120px;
+  padding: 0.5em;
+}
+
+.ClickToEdit .ViewingMode .editLink {
+  color: #666;
+  text-decoration: underline;
+  cursor: pointer;
+  margin-left: 8px;
+  padding: 2px 4px;
+  border-radius: 2px;
+}
+
+.ClickToEdit .ViewingMode .editLink:hover {
+  color: #000;
+  background-color: #999;
+}
+
+.ClickToEdit .ViewingMode .header {
+  color: #666;
+  margin-bottom: 0.5em;
+}
+
+.ClickToEdit .ViewingMode .content {
+  color: #333;
+}
+
+/* src/components/utility/container/style.css */
+.GeneralContainer {
+  margin-top: 4em;
+  margin-bottom: 2em;
+  display: inline-block;
+  width: 100%;
+}
+
+@media only screen and (max-width: 767px) {
+  .GeneralContainer {
+    margin-top: 2em;
+    margin-bottom: 1em;
+  }
+}
+
+/* src/components/utility/drop-down/style.css */
+.dropDown-open {
+  cursor: pointer;
+}
+
+.dropDown-relative {
+  position: relative;
+  float: left;
+}
+
+.dropDown {
+  position: absolute;
+  top: 100%;
+  margin-top: 2px;
+  z-index: 10;
+}
+
+.dropDown.position-left {
+  right: 0%;
+}
+
+.dropDown.position-right {
+  left: 0%;
+}
+
+/* src/components/utility/markdown-viewer/style.css */
+.MarkdownViewer img {
+  max-width: 100%;
+}
+
+/* src/components/utility/tooltip/style.css */
+.ToolTip {
+  position: absolute;
+  top: 100%;
+  margin-top: 10px;
+  padding: 0.75em;
+  border-radius: 2px;
+  z-index: 100;
+  left: -3px;
+  color: #111;
+  min-height: 40px;
+  font-size: 1.15rem;
+  line-height: 1.5rem;
+  font-weight: 400;
+}
+
+.ToolTip.SMALL {
+  background-color: white;
+  width: 207%;
+  border: 1px solid $grey-2;
+}
+
+.ToolTip.LARGE {
+  border: none;
+  background-color: rgba(250, 250, 250, 0.99);
+}
+
+.ToolTip.LARGE .arrow-up {
+  left: 8%;
+}
+
+.ToolTip.SMALL .arrow-up {
+  left: 22%;
+}
+
+.ToolTip .arrow-up {
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid $grey-2;
+  position: absolute;
+  top: -8px;
+}
+
+/* src/routes/home/ModelDemo/style.css */
+.ModelDemo .diagram {
+  display: inline-block;
+  position: relative;
+}
+
+.ModelDemo h2 {
+  color: #444;
+  font-weight: 400;
+  font-size: 2.3rem;
+  margin-bottom: 0.5em;
+  text-align: left;
+  text-align: left;
+}
+
+.ModelDemo p {
+  color: #7e89ab;
+  font-size: 1.5rem;
+  line-height: 2.5rem;
+  text-align: left;
+}
+
+.ModelDemo p strong {
+  color: #007bca;
+  font-weight: 400;
+}
+
+.ModelDemo .description {
+  margin-top: 1em;
+}
+
+.ModelDemo .finder {
+  position: absolute;
+  cursor: pointer;
+  padding: 15px;
+  border-radius: 5px;
+}
+
+.ModelDemo .finder .inner {
+  background-color: rgba(116, 210, 61, 0.37);
+  color: #359447;
+  width: 23px;
+  height: 23px;
+  border-radius: 50px;
+  line-height: 22px;
+  font-size: 21px;
+}
+
+.ModelDemo .finder:hover .inner {
+  background-color: rgba(116, 210, 61, 0.8);
+  color: #065815;
+  transition: 0.2s color ease, 0.2s background-color ease;
+}
+
+/* src/routes/layouts/application/style.css */
+.Layout {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+.Layout.fullHeight {
+  height: 100%;
+}
+
+.Layout main {
+  flex: 1;
+}
+
+/* src/routes/layouts/header/style.css */
+.PageHeader:not(.isBare) {
+  border-bottom: 1px solid $grey-1;
+}
+
+.navbar-brand {
+  float: left;
+  margin-top: 0.2em;
+  font-size: 1.8em;
+  border-radius: 0.3em;
+  padding: 0.25em;
+  font-family: Lato;
+  font-weight: 500;
+}
+
+.navbar-brand:hover {
+  background-color: $grey-1;
+}
+
+.navbar-brand .guesstimate-icon {
+  float: left;
+  margin-right: 0.3em;
+  height: 1.2em;
+  display: none;
+}
+
+.navbar-brand .guesstimate-name {
+  color: $grey-2;
+  margin-top: 0.1em;
+  float: left;
+}
+
+@media only screen and (max-width: 767px) {
+  .PageHeader {
+    padding: 0 1em;
+  }
+  .PageHeader .header-right-menu {
+    font-size: 0.9em;
+  }
+  .guesstimate-name {
+    display: none;
+  }
+  .navbar-brand .guesstimate-icon {
+    display: block;
+  }
+  .item.text.scratchpad {
+    display: none;
+  }
+  .item.new-model {
+    display: none;
+  }
+  .item.text.pricing {
+    display: none;
+  }
+}
+
+/* src/routes/layouts/login/style.css */
+.header-left-menu {
+  float: left;
+}
+
+.header-right-menu {
+  float: right;
+  height: 3.2em;
+  position: relative;
+}
+
+.header-right-menu .item {
+  float: left;
+  margin: 0.1em 0 0 2.5em;
+  color: $grey-2;
+  transition: color 5s;
+}
+
+@media only screen and (max-width: 767px) {
+  .header-right-menu .item {
+    margin-left: 1em;
+  }
+}
+
+.header-right-menu .item {
+  cursor: pointer;
+}
+
+.header-right-menu .item.text {
+  margin-top: 1em;
+}
+
+.isBare .header-right-menu .item.text {
+  color: #1487d0;
+  font-size: 1.1em;
+}
+
+.header-right-menu a.item {
+  transition: color 0.3s;
+}
+
+.header-right-menu a.item i {
+  transition: color 0.3s;
+}
+
+.header-right-menu a.item:hover {
+  color: $blue-1;
+}
+
+.header-right-menu a.item:hover i {
+  color: $blue-1;
+}
+
+.header-right-menu a.item > i {
+  font-size: 1.8em;
+  color: $grey-2;
+  margin: 0.3em 0.3em 0 0;
+  float: left;
+}
+
+.header-right-menu a.item > .text {
+  float: left;
+  font-size: 1.2em;
+  font-weight: 600;
+  font-family: Lato, Arial, sans-serif;
+  margin-top: 11px;
+}
+
+.header-right-menu .avatar {
+  width: 2.6em;
+  border-radius: 3em;
+  border: 0.3em solid rgba(0, 0, 0, 0);
+  margin-top: 3px;
+}
+
+.header-right-menu .avatar:hover {
+  border-color: $grey-1;
+}
+
+/* src/routes/layouts/footer/style.css */
+.gFooter {
+  background-color: $grey-5;
+
+  .container-fluid {
+    padding: 3em 0 2em;
+  }
+
+  strong {
+    margin-bottom: 3em;
+    color: $grey-2;
+  }
+
+  ul {
+    list-style: none;
+  }
+
+  li {
+    margin-bottom: 0.75em;
+    font-size: 1.1em;
+  }
+
+  li:first-child {
+    margin-bottom: 1em;
+  }
+
+  a {
+    color: $grey-2;
+    font-weight: 300;
+  }
+}
+
+/* src/components/layouts/main/style.css */
+main.fluid {
+  display: flex;
+  flex-direction: column;
+}
+
+main.blue {
+  background: linear-gradient(-140deg, #4dc7b7, #489acc);
+}
+
+main.grey {
+  background: #f7f5f5;
+}
+
+/* src/routes/home/style.css */
+.guesstimate-logo-outer {
+  width: 100%;
+  text-align: center;
+}
+
+.guesstimate-logo {
+  margin-top: 0.2em;
+  font-size: 5em;
+  border-radius: 0.3em;
+  padding: 0.25em;
+  font-family: Lato, Arial, sans-serif;
+  display: inline-block;
+}
+
+.guesstimate-logo .guesstimate-name {
+  color: $grey-2;
+  margin-top: 0.23em;
+  font-weight: 600;
+  float: left;
+}
+
+.homePage {
+  margin-top: 4em;
+  font-family: Lato, Arial, sans-serif;
+}
+
+.homePage img {
+  max-width: 100%;
+}
+
+.homePage .guesstimate-slogan h2 {
+  text-align: center;
+  color: #333;
+  font-weight: 400;
+  font-size: 3em;
+  margin-top: 0.5em;
+}
+
+.homePage .guesstimate-slogan .sideComment {
+  color: $grey-2;
+}
+
+.homePage hr {
+  border: 1px solid #eee;
+  border-bottom: none;
+  width: 100%;
+  max-width: 520px;
+  border-radius: 0;
+  margin-top: 5em;
+  margin-bottom: 2em;
+}
+
+.homePage .guesstimate-slogan p {
+  text-align: center;
+  font-size: 2em;
+  font-family: Lato, Arial, sans-serif;
+  color: $grey-2;
+  padding: 0 4em;
+  font-weight: 400;
+}
+
+.homePage {
+  text-align: center;
+}
+
+.homePage .cta {
+  margin-top: 5em;
+  text-align: center;
+}
+
+.homePage .descriptions {
+  margin-top: 5em;
+  text-align: center;
+}
+
+.wistia_responsive_padding {
+  padding: 56.25% 0 0 0;
+  position: relative;
+}
+
+.wistia_responsive_wrapper {
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+.wistia_embed {
+  display: inline-block;
+  height: 240px;
+  width: 415px;
+  margin-top: 5em;
+}
+
+.homePage > .sectionBenefits {
+  background-color: $grey-1;
+  padding-top: 3em;
+  padding-bottom: 3em;
+  margin-top: 3em;
+}
+
+.homePage > .sectionBenefits h2 {
+  color: #444;
+  font-weight: 400;
+  font-size: 2.3rem;
+}
+
+.homePage > .sectionBenefits p {
+  color: $grey-2;
+  font-size: 1.2rem;
+  line-height: 1.9rem;
+}
+
+.homePage > .sectionBenefits i {
+  font-size: 4.5em;
+  opacity: 0.2;
+}
+
+.homePage > .sectionExamples {
+  background-color: #dae3ed;
+  padding-top: 8em;
+  padding-bottom: 6em;
+}
+
+/* src/components/metrics/modal/description.css */
+.GuesstimateDescription {
+  font-size: 1.2em;
+  float: left;
+  width: 100%;
+}
+
+.GuesstimateDescription .emptyValue .fa {
+  margin-right: 0.5em;
+}
+
+/* src/components/organizations/show/members.css */
+.MembersAddSubTab .ui.form {
+  font-size: 1.2em;
+  margin-top: 4em;
+  margin-bottom: 4em;
+}
+
+.MembersAddSubTab p {
+  color: #666;
+  font-size: 1.2em;
+  line-height: 1.7em;
+}
+
+.MembersTab {
+  margin-top: 7em;
+
+  .ui.button.green {
+    background-color: $green-2;
+  }
+
+  .members {
+    width: 100%;
+    background-color: white;
+    border-radius: 3px;
+    padding: 0 1em;
+  }
+
+  .Member {
+    padding: 1em 0.2em;
+    border-bottom: 1px solid #eee;
+
+    .role {
+      margin-top: 0.6em;
+      color: $grey-2;
+      font-weight: bold;
+      font-size: 1.2em;
+    }
+
+    .button.remove {
+      margin-top: 0.2em;
+      float: right;
+      font-size: 1.2em !important;
+      padding: 7px 10px !important;
+    }
+
+    .button.remove i {
+      margin: 0 !important;
+    }
+
+    .name {
+      float: left;
+      font-size: 1.3em;
+      font-weight: 800;
+      color: $black-3;
+      margin-top: 0.5em;
+    }
+
+    .invitation-status {
+      font-size: 1.2em;
+      color: #666;
+      margin-top: 0.6em;
+    }
+
+    .avatar {
+      float: left;
+      width: 40px;
+      border-radius: 3px;
+      margin-right: 1em;
+      font-size: 2.9em;
+      margin-left: 0.3em;
+      color: $blue-5;
+      text-align: center;
+    }
+
+    .avatar .fa {
+      font-size: 0.6em;
+      margin-top: 5px;
+      opacity: 0.7;
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}
+
+/* src/components/spaces/show/Tutorial/pageStyle.css */
+.tutorialPage {
+  margin-bottom: 2em;
+  min-height: 35em;
+
+  .header {
+    margin-bottom: 1em;
+    text-align: center;
+  }
+
+  h3 {
+    text-align: center;
+    color: #666;
+    margin: 0.8em auto;
+    font-size: 1.4em;
+  }
+
+  p {
+    font-size: 1.1em;
+    text-align: justify;
+  }
+
+  .image {
+    width: 100%;
+    background-color: #dfe1e4;
+    border-radius: 3px;
+    margin-bottom: 2em;
+  }
+
+  img {
+    display: block;
+    max-height: 10em;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  table.ui {
+    margin-top: 1.5em;
+
+    td {
+      padding: 0.5em 1em;
+      line-height: 1.3em;
+
+      .rowLabel {
+        text-align: center;
+        font-weight: bold;
+      }
+
+      .exampleFunction {
+        background: #eee;
+        border-radius: 0.2em;
+        padding: 0.15em 0.3em;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.9em;
+      }
+
+      .exampleInput {
+        color: $green-3;
+        background-color: $green-4;
+        padding: 0 0.1em;
+        border-radius: 0.1em;
+      }
+    }
+  }
+}
+
+/* src/components/spaces/show/header.css */
+.copy-button {
+  cursor: pointer;
+  float: left;
+}
+
+.header .saveMessage {
+  float: left;
+  margin-top: 8px;
+  color: $grey-1;
+  padding: 0 15px;
+  min-width: 100px;
+}
+
+.header .saveMessage .label {
+  margin-top: -10px;
+}
+
+/* src/routes/main.css */
+.wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.container-fluid.full-width {
+  width: 100%;
+}
+
+body {
+  height: 100%;
+}
+
+#__next {
+  height: 100%;
+}
+
+.navHelper {
+  height: 100%;
+}
+
+body.remove-elev #_elev_io {
+  display: none !important;
+}
+
+.MainConfirmation {
+  background: white;
+  padding: 3em 4em;
+  border-radius: 2px;
+  text-align: center;
+  min-width: 12em;
+  max-width: 600px;
+}
+
+.MainConfirmation .ui.button {
+  margin-right: 1em;
+}
+
+.MainConfirmation h1 {
+  margin-bottom: 2em;
+  font-size: 1.6em;
+  color: #333;
+  line-height: 1.8em;
+}

@@ -1,12 +1,12 @@
-import { actionCreatorsFor } from "redux-crud";
 import cuid from "cuid";
+import { actionCreatorsFor } from "redux-crud";
 
 import app from "ampersand-app";
 
 import { initSpace } from "gModules/checkpoints/actions";
 
-import { captureApiError, generalError } from "lib/errors/index.js";
 import * as displayErrorsActions from "gModules/displayErrors/actions";
+import { captureApiError } from "lib/errors/index.js";
 
 import { setupGuesstimateApi } from "servers/guesstimate-api/constants.js";
 

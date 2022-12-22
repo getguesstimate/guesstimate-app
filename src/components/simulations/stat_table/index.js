@@ -1,7 +1,5 @@
 import React from "react";
 
-import "./style.css";
-
 const MetricStatTable = ({ stats }) => (
   <table className="MetricStatTable">
     <tbody>

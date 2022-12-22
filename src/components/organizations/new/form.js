@@ -38,8 +38,7 @@ export const PlanList = ({ onSelect, plan }) => (
   </div>
 );
 
-@connect()
-export class CreateOrganizationForm extends Component {
+class UnconnectedCreateOrganizationForm extends Component {
   state = {
     value: "",
     plan: "PREMIUM",
@@ -105,3 +104,7 @@ export class CreateOrganizationForm extends Component {
     );
   }
 }
+
+export const CreateOrganizationForm = connect()(
+  UnconnectedCreateOrganizationForm
+);

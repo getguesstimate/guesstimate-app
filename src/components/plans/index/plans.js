@@ -1,8 +1,4 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
-import * as navigationActions from "gModules/navigation/actions.js";
-import Plan from "lib/config/plan.js";
-import "./style.css";
 
 const Cost = ({ cost, unit }) => (
   <div className="PlanCard-Cost">

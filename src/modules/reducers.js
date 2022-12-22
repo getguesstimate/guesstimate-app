@@ -1,3 +1,4 @@
+import { __DEV__ } from "lib/constants";
 import reduxCrud from "redux-crud";
 import SeamlessImuutable from "seamless-immutable";
 const SI = __DEV__ ? SeamlessImuutable : (a) => a;
@@ -28,7 +29,7 @@ export function changeSelect(location) {
 }
 
 const rootReducer = function app(state = {}, action) {
-  window.recorder.recordReductionEvent(action);
+  if (window && window.recorder) window.recorder.recordReductionEvent(action);
   return {
     displayError: SI(displayErrorR(state.displayError, action)),
     metrics: SI(metricsR(state.metrics, action)),

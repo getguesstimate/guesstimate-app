@@ -12,7 +12,7 @@ import * as calculator from "./calculator";
 import * as collections from "./collections";
 import * as utils from "./utils";
 
-const Engine = {
+export {
   graph,
   metric,
   simulation,
@@ -27,5 +27,3 @@ const Engine = {
   collections,
   utils,
 };
-
-export default Engine;

@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import { withRouter } from "next/router";
 
-import Helmet from "react-helmet";
+import Head from "next/head";
 import { ShareButtons, generateShareIcon } from "react-share";
 
 import Container from "gComponents/utility/container/Container";
@@ -11,18 +12,12 @@ import { CalculatorShow } from "./CalculatorShow";
 import { calculatorSpaceSelector } from "./calculator-space-selector";
 import { ButtonCloseText } from "gComponents/utility/buttons/close/index.js";
 
-import { navigateFn } from "gModules/navigation/actions";
 import { fetchById } from "gModules/calculators/actions";
 
 import * as Space from "gEngine/space";
 import * as Calculator from "gEngine/calculator";
 
-import "../style.css";
-
-@connect(calculatorSpaceSelector, (dispatch) =>
-  bindActionCreators({ fetchById }, dispatch)
-)
-export class CalculatorExpandedShow extends Component {
+class UnconnectedCalculatorExpandedShow extends Component {
   state = {
     attemptedFetch: false,
     showHelp: false,
@@ -56,7 +51,7 @@ export class CalculatorExpandedShow extends Component {
     const calculatorUrl = Calculator.fullUrl(this.props.calculator);
 
     let metaTags = [
-      { name: "Description", content },
+      { name: "description", content },
       { property: "og:description", content },
       { property: "og:title", content: title },
       { property: "og:site_name", content: "Guesstimate" },
@@ -74,7 +69,12 @@ export class CalculatorExpandedShow extends Component {
 
     return (
       <Container>
-        <Helmet title={title} meta={metaTags} />
+        <Head>
+          <title key="title">{title}</title>
+          {metaTags.map((tag) => (
+            <meta {...tag} key={tag.name ?? tag.property} />
+          ))}
+        </Head>
         <div className="row">
           <div className="col-xs-0 col-md-2" />
           <div className="col-xs-12 col-md-8">
@@ -104,7 +104,10 @@ export class CalculatorExpandedShow extends Component {
                 </div>
                 <div className="col-sm-1" />
                 <div className="col-xs-12 col-sm-5 calculation-link-section">
-                  <a href={spaceUrl} onClick={navigateFn(spaceUrl)}>
+                  <a
+                    href={spaceUrl}
+                    onClick={() => this.props.router.push(spaceUrl)}
+                  >
                     <i className="ion-ios-redo" /> See calculations
                   </a>
                 </div>
@@ -117,6 +120,11 @@ export class CalculatorExpandedShow extends Component {
     );
   }
 }
+
+export const CalculatorExpandedShow = connect(
+  calculatorSpaceSelector,
+  (dispatch) => bindActionCreators({ fetchById }, dispatch)
+)(withRouter(UnconnectedCalculatorExpandedShow));
 
 class CalculatorHelp extends Component {
   render() {

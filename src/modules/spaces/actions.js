@@ -1,22 +1,19 @@
+import _ from "lodash";
 import { actionCreatorsFor } from "redux-crud";
 
 import cuid from "cuid";
-import app from "ampersand-app";
 
-import { changeActionState } from "gModules/canvas_state/actions";
-import { saveCheckpoint, initSpace } from "gModules/checkpoints/actions";
-import * as userActions from "gModules/users/actions";
-import * as organizationActions from "gModules/organizations/actions";
 import * as calculatorActions from "gModules/calculators/actions";
+import { changeActionState } from "gModules/canvas_state/actions";
+import { initSpace, saveCheckpoint } from "gModules/checkpoints/actions";
+import * as organizationActions from "gModules/organizations/actions";
+import * as userActions from "gModules/users/actions";
 
-import e from "gEngine/engine";
+import * as e from "gEngine/engine";
 
 import { captureApiError } from "lib/errors/index";
 
-import {
-  rootUrl,
-  setupGuesstimateApi,
-} from "servers/guesstimate-api/constants";
+import { setupGuesstimateApi } from "servers/guesstimate-api/constants";
 
 let sActions = actionCreatorsFor("spaces");
 
@@ -80,13 +77,14 @@ export function fetchSuccess(spaces) {
   };
 }
 
-export function destroy(object) {
+export function destroy(object, router) {
   const id = object.id;
   return (dispatch, getState) => {
     const navigateTo = !!object.organization_id
       ? e.organization.urlById(object.organization_id)
       : e.user.urlById(object.user_id);
-    app.router.history.navigate(navigateTo);
+
+    router.push(navigateTo);
 
     dispatch(sActions.deleteStart({ id }));
 
@@ -169,7 +167,7 @@ export function fetch({ userId, organizationId }) {
   };
 }
 
-export function create(organizationId, params = {}) {
+export function create(organizationId, params = {}, router) {
   return (dispatch, getState) => {
     const cid = cuid();
     let object = { ...params, id: cid };
@@ -190,13 +188,13 @@ export function create(organizationId, params = {}) {
         dispatch(changeActionState("CREATED"));
         dispatch(sActions.createSuccess(value, cid));
         dispatch(initSpace(value.id, { metrics: [], guesstimates: [] }));
-        app.router.history.navigate("/models/" + value.id);
+        router.push("/models/" + value.id);
       }
     });
   };
 }
 
-export function copy(spaceId) {
+export function copy(spaceId, router) {
   return (dispatch, getState) => {
     dispatch(changeActionState("COPYING"));
 
@@ -217,7 +215,7 @@ export function copy(spaceId) {
         // with some data.
         dispatch(fetchSuccess([value]));
 
-        app.router.history.navigate("/models/" + value.id);
+        router.push("/models/" + value.id);
       }
     });
   };

@@ -1,17 +1,14 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import moment from "moment";
-import Icon from "react-fa";
-import removeMd from "remove-markdown";
+import Icon from "gComponents/react-fa-patched";
 
+import { formatDate, formatDescription } from "gComponents/spaces/shared";
 import { denormalizedSpaceSelector } from "../denormalized-space-selector";
-import { formatDescription, formatDate } from "gComponents/spaces/shared";
 
-import e from "gEngine/engine";
+import * as e from "gEngine/engine";
 import * as Space from "gEngine/space";
 
-import "./style.css";
 import arrowsVisibleImage from "../../../assets/metric-icons/blue/arrows-visible.png";
 
 let PrivateTag = ({ isPrivate }) => (
@@ -90,9 +87,10 @@ const SpaceListItem = ({ space, showUser, isOwnedByMe, showScreenshot }) => {
   );
 };
 
+export default
 @connect(_.partialRight(_.pick, ["spaces", "me"]))
 @connect(denormalizedSpaceSelector)
-export default class SpaceListItemComponent extends Component {
+class SpaceListItemComponent extends Component {
   render() {
     const isOwnedByMe = e.me.isOwnedByMe(
       this.props.me,

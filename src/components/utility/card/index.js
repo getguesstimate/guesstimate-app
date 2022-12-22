@@ -1,11 +1,9 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 
-import Icon from "react-fa";
+import Icon from "gComponents/react-fa-patched";
 
 import { ButtonClose } from "gComponents/utility/buttons/close/index.js";
-
-import "./style.css";
 
 String.prototype.capitalizeFirstLetter = function () {
   return this.charAt(0).toUpperCase() + this.slice(1);
