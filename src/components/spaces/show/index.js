@@ -489,14 +489,16 @@ class SpacesShow extends Component {
       ? authorCallout
       : `${authorCallout}: ${space.description}`;
 
+    const pageTitle = `${space.name} | Guesstimate`;
+
     return (
       <div className="spaceShow">
         <Head>
-          {space.name && <title key="title">{space.name}</title>}
+          {space.name && <title key="title">{pageTitle}</title>}
           {[
             { name: "description", content: tagDescription },
             ...(space.name
-              ? [{ property: "og:title", content: space.name }]
+              ? [{ property: "og:title", content: pageTitle }]
               : []),
             { property: "og:description", content: tagDescription },
             { property: "og:site_name", content: "Guesstimate" },

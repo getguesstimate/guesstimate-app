@@ -50,10 +50,12 @@ class UnconnectedCalculatorExpandedShow extends Component {
       `/calculators/${id}${resultBeenShown ? "?showResults=true" : ""}`;
     const calculatorUrl = Calculator.fullUrl(this.props.calculator);
 
+    const pageTitle = `${title} | Guesstimate`;
+
     let metaTags = [
       { name: "description", content },
       { property: "og:description", content },
-      { property: "og:title", content: title },
+      { property: "og:title", content: pageTitle },
       { property: "og:site_name", content: "Guesstimate" },
     ];
     if (!!share_image) {
@@ -70,7 +72,7 @@ class UnconnectedCalculatorExpandedShow extends Component {
     return (
       <Container>
         <Head>
-          <title key="title">{title}</title>
+          <title key="title">{pageTitle}</title>
           {metaTags.map((tag) => (
             <meta {...tag} key={tag.name ?? tag.property} />
           ))}
