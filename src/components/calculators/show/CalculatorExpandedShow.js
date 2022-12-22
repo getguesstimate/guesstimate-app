@@ -10,7 +10,7 @@ import Container from "gComponents/utility/container/Container";
 import { CalculatorShow } from "./CalculatorShow";
 
 import { calculatorSpaceSelector } from "./calculator-space-selector";
-import { ButtonCloseText } from "gComponents/utility/buttons/close/index.js";
+import { ButtonCloseText } from "gComponents/utility/buttons/close/index";
 
 import { fetchById } from "gModules/calculators/actions";
 

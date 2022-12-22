@@ -3,7 +3,7 @@ import * as organizationActions from "gModules/organizations/actions";
 
 import * as e from "gEngine/engine";
 
-import { isWithinRegion } from "lib/locationUtils.js";
+import { isWithinRegion } from "lib/locationUtils";
 
 const findSpaceId = (getState, metricId) =>
   e.collections.gget(getState().metrics, metricId, "id", "space");

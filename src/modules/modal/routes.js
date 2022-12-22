@@ -1,12 +1,11 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import { Component } from "react";
 import { connect } from "react-redux";
 
+import FirstSubscriptionContainer from "gComponents/subscriptions/FirstSubscription/container";
+import SettingsContainer from "gComponents/users/settings/container";
+import NavHelper from "gComponents/utility/NavHelper/index";
+import * as modalActions from "gModules/modal/actions";
 import Modal from "react-modal";
-import SettingsContainer from "gComponents/users/settings/container.js";
-import NavHelper from "gComponents/utility/NavHelper/index.js";
-import FirstSubscriptionContainer from "gComponents/subscriptions/FirstSubscription/container.js";
-import * as modalActions from "gModules/modal/actions.js";
 
 class Confirmation extends Component {
   render() {

@@ -2,13 +2,13 @@ import { actionCreatorsFor } from "redux-crud";
 
 import cuid from "cuid";
 
-import * as displayErrorsActions from "gModules/displayErrors/actions.js";
-import * as meActions from "gModules/me/actions.js";
-import * as userOrganizationMembershipActions from "gModules/userOrganizationMemberships/actions.js";
+import * as displayErrorsActions from "gModules/displayErrors/actions";
+import * as meActions from "gModules/me/actions";
+import * as userOrganizationMembershipActions from "gModules/userOrganizationMemberships/actions";
 
-import { setupGuesstimateApi } from "servers/guesstimate-api/constants.js";
+import { setupGuesstimateApi } from "servers/guesstimate-api/constants";
 
-import { captureApiError, generalError } from "lib/errors/index.js";
+import { captureApiError, generalError } from "lib/errors/index";
 
 let sActions = actionCreatorsFor("users");
 

@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { CardListElement } from "gComponents/utility/card/index.js";
 import DropDown from "gComponents/utility/drop-down/index.js";
 
-import * as canvasStateActions from "gModules/canvas_state/actions.js";
+import * as canvasStateActions from "gModules/canvas_state/actions";
 import * as canvasStateProps from "gModules/canvas_state/prop_type.js";
 
 import arrowsHiddenImage from "../../../assets/metric-icons/blue/arrows-hidden.png";

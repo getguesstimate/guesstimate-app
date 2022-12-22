@@ -1,3 +1,4 @@
+import _ from "lodash";
 import auth0 from "auth0-js";
 import { BASE_URL } from "lib/constants";
 
@@ -6,8 +7,11 @@ import * as auth0Constants from "servers/auth0/constants";
 
 import { generalError } from "lib/errors/index";
 import { me } from "gEngine/engine";
+import { AppThunk } from "gModules/store";
 
 class WebAuth {
+  auth: any; // TODO - types for auth0-js
+
   constructor() {
     this.auth = new auth0.WebAuth({
       domain: auth0Constants.variables.AUTH0_DOMAIN,
@@ -61,14 +65,14 @@ export const signUp = () => {
   auth.signUp();
 };
 
-export const logIn = () => {
+export const logIn = (): AppThunk => {
   const auth = new WebAuth();
   return (dispatch) => {
     auth.parseHashFromUrl(dispatch);
   };
 };
 
-export const init = () => {
+export const init = (): AppThunk => {
   return (dispatch) => {
     const storage = me.localStorage.get();
     if (storage) {
@@ -90,7 +94,7 @@ export function logOut() {
   return { type: "DESTROY_ME" };
 }
 
-function auth0MeLoaded(profile, token, tokenCreationTime) {
+function auth0MeLoaded(profile, token, tokenCreationTime): AppThunk {
   return function (dispatch, getState) {
     dispatch({ type: "AUTH0_ME_LOADED", profile, token });
 
@@ -102,16 +106,16 @@ function auth0MeLoaded(profile, token, tokenCreationTime) {
     if (timeLeft < 1) {
       dispatch(logOut());
     }
-    if (!!window.tokenTimer) {
-      clearTimeout(window.tokenTimer);
+    if (!!(window as any).tokenTimer) {
+      clearTimeout((window as any).tokenTimer);
     }
-    window.tokenTimer = setTimeout(() => {
+    (window as any).tokenTimer = setTimeout(() => {
       dispatch(logOut());
     }, timeLeft);
   };
 }
 
-export function guesstimateMeLoad() {
+export function guesstimateMeLoad(): AppThunk {
   return function (dispatch, getState) {
     const user_id = _.get(getState(), "me.id");
     if (user_id) {
@@ -120,7 +124,7 @@ export function guesstimateMeLoad() {
   };
 }
 
-export function guesstimateMeLoaded(object) {
+export function guesstimateMeLoaded(object): AppThunk {
   return function (dispatch, getState) {
     dispatch({ type: "GUESSTIMATE_ME_LOADED", id: object.id, profile: object });
 

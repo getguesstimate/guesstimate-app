@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import * as meActions from "gModules/me/actions.js";
-import Settings from "./Settings.js";
+import * as meActions from "gModules/me/actions";
+import Settings from "./Settings";
 
 function mapStateToProps(state) {
   return {

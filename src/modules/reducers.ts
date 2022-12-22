@@ -1,35 +1,68 @@
 import { __DEV__ } from "lib/constants";
 import reduxCrud from "redux-crud";
-import SeamlessImuutable from "seamless-immutable";
-const SI = __DEV__ ? SeamlessImuutable : (a) => a;
+import SeamlessImmutable from "seamless-immutable";
+const SI = __DEV__ ? SeamlessImmutable : (a) => a;
 
+import { AnyAction, Reducer } from "redux";
+import { canvasStateR } from "./canvas_state/reducer";
+import { checkpointsR } from "./checkpoints/reducer";
+import { copiedR } from "./copied/reducer";
+import displayErrorR from "./displayErrors/reducer";
+import { factsR } from "./facts/reducer";
+import firstSubscriptionsR from "./first_subscription/reducer";
+import { guesstimatesR } from "./guesstimates/reducer";
+import { httpRequestsR } from "./httpRequests/reducer";
+import meR from "./me/reducer";
+import { metricsR } from "./metrics/reducer";
+import modalR from "./modal/reducer";
+import { newOrganizationR } from "./newOrganization/reducer";
+import { organizationsR } from "./organizations/reducer";
+import searchSpacesR from "./search_spaces/reducer";
 import { selectedCellR } from "./selected_cell/reducer";
 import { selectedRegionR } from "./selected_region/reducer";
-import displayErrorR from "./displayErrors/reducer";
-import { metricsR } from "./metrics/reducer";
-import { guesstimatesR } from "./guesstimates/reducer";
 import simulationsR from "./simulations/reducer";
-import meR from "./me/reducer";
-import { canvasStateR } from "./canvas_state/reducer";
-import searchSpacesR from "./search_spaces/reducer";
-import firstSubscriptionsR from "./first_subscription/reducer";
-import modalR from "./modal/reducer";
 import { spacesR } from "./spaces/reducer";
 import { userOrganizationInvitationsR } from "./userOrganizationInvitations/reducer";
 import { usersR } from "./users/reducer";
-import { organizationsR } from "./organizations/reducer";
-import { copiedR } from "./copied/reducer";
-import { checkpointsR } from "./checkpoints/reducer";
-import { httpRequestsR } from "./httpRequests/reducer";
-import { newOrganizationR } from "./newOrganization/reducer";
-import { factsR } from "./facts/reducer";
 
 export function changeSelect(location) {
   return { type: "CHANGE_SELECT", location };
 }
 
-const rootReducer = function app(state = {}, action) {
-  if (window && window.recorder) window.recorder.recordReductionEvent(action);
+type State = {
+  displayError: ReturnType<typeof displayErrorR>;
+  metrics: ReturnType<typeof metricsR>;
+  guesstimates: ReturnType<typeof guesstimatesR>;
+  selectedCell: ReturnType<typeof selectedCellR>;
+  selectedRegion: ReturnType<typeof selectedRegionR>;
+  simulations: ReturnType<typeof simulationsR>;
+  spaces: ReturnType<typeof spacesR>;
+  users: ReturnType<typeof usersR>;
+  organizations: ReturnType<typeof organizationsR>;
+  newOrganization: ReturnType<typeof newOrganizationR>;
+  userOrganizationMemberships: any; // TODO
+  userOrganizationInvitations: any; // TODO
+  me: ReturnType<typeof meR>;
+  canvasState: ReturnType<typeof canvasStateR>;
+  searchSpaces: ReturnType<typeof searchSpacesR>;
+  firstSubscription: ReturnType<typeof firstSubscriptionsR>;
+  modal: ReturnType<typeof modalR>;
+  copied: ReturnType<typeof copiedR>;
+  checkpoints: ReturnType<typeof checkpointsR>;
+  httpRequests: ReturnType<typeof httpRequestsR>;
+  calculators: any; // TODO
+  facts: ReturnType<typeof factsR>;
+  factCategories: any; // TODO
+};
+
+const rootReducer: Reducer<State, AnyAction> = function app(
+  state = {} as any,
+  action
+) {
+  if (typeof window !== "undefined" && (window as any).recorder) {
+    (window as any).recorder.recordReductionEvent(action);
+  }
+
   return {
     displayError: SI(displayErrorR(state.displayError, action)),
     metrics: SI(metricsR(state.metrics, action)),

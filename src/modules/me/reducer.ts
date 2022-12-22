@@ -1,4 +1,12 @@
-export default function me(state = {}, action) {
+import { AnyAction, Reducer } from "redux";
+
+type MeState = Partial<{
+  token: string;
+  id: string;
+  profile: unknown;
+}>;
+
+const me: Reducer<MeState, AnyAction> = function (state = {}, action) {
   switch (action.type) {
     case "AUTH0_ME_LOADED":
       return {
@@ -23,4 +31,6 @@ export default function me(state = {}, action) {
     default:
       return state;
   }
-}
+};
+
+export default me;

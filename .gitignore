@@ -11,3 +11,4 @@ tags
 *.css.json
 
 /.next
+/tsconfig.tsbuildinfo

@@ -2,11 +2,11 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "next/router";
 
-import * as firstSubscriptionActions from "gModules/first_subscription/actions.js";
-import { subStage } from "gModules/first_subscription/state_machine.js";
-import * as spaceActions from "gModules/spaces/actions.js";
+import * as firstSubscriptionActions from "gModules/first_subscription/actions";
+import { subStage } from "gModules/first_subscription/state_machine";
+import * as spaceActions from "gModules/spaces/actions";
 
-import FirstSubscription from "./FirstSubscription.js";
+import FirstSubscription from "./FirstSubscription";
 
 function mapStateToProps(state) {
   return {

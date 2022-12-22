@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { CalculatorForm } from "../shared/CalculatorForm.js";
+import { CalculatorForm } from "../shared/CalculatorForm";
 
 import {
   INTERMEDIATE,

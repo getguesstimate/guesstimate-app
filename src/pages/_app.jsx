@@ -2,7 +2,7 @@ import dynamic from "next/dynamic";
 import Head from "next/head";
 
 import { Provider } from "react-redux";
-import configureStore from "../routes/middleware";
+import configureStore from "../modules/store";
 
 import "../routes/layouts/application/style.css";
 import "flexboxgrid/css/flexboxgrid.min.css";

@@ -12,7 +12,7 @@ function _interopRequireDefault(obj) {
   return obj && obj.__esModule ? obj : { default: obj };
 }
 
-// commented out - not compatible with next.js
+// commented out - not compatible with next.js; included in pages/_app instead
 // require('font-awesome/css/font-awesome.css');
 
 var _Icon = require("react-fa/lib/Icon");

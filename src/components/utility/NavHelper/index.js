@@ -4,7 +4,7 @@ import localLinks from "local-links";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import * as modalActions from "gModules/modal/actions.js";
+import * as modalActions from "gModules/modal/actions";
 
 class NavHelper extends Component {
   onClick(event) {

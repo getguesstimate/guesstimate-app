@@ -1,5 +1,5 @@
-import { setupGuesstimateApi } from "servers/guesstimate-api/constants.js";
-import * as meActions from "gModules/me/actions.js";
+import { setupGuesstimateApi } from "servers/guesstimate-api/constants";
+import * as meActions from "gModules/me/actions";
 
 function api(state) {
   function getToken(state) {

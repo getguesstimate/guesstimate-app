@@ -3,7 +3,7 @@ import Modal from "react-modal";
 import { connect } from "react-redux";
 
 import Icon from "gComponents/react-fa-patched";
-import * as displayErrorActions from "gModules/displayErrors/actions.js";
+import * as displayErrorActions from "gModules/displayErrors/actions";
 
 function mapStateToProps(state) {
   return {

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import IubendaPrivacyPolicy from "gComponents/lib/iubenda_privacy_policy.js";
-import * as modalActions from "gModules/modal/actions.js";
+import IubendaPrivacyPolicy from "gComponents/lib/iubenda_privacy_policy";
+import * as modalActions from "gModules/modal/actions";
 import { connect } from "react-redux";
 
 export const LinkFAQ = () => <a href="/faq"> FAQ </a>;
