@@ -1,6 +1,10 @@
+import _ from "lodash";
 import { addStats } from "gEngine/simulation";
+import { AnyAction, Reducer } from "redux";
 
-export default function simulations(state = [], action = null) {
+type State = any[]; // FIXME
+
+const simulations: Reducer<State, AnyAction> = (state = [], action) => {
   switch (action.type) {
     case "DELETE_SIMULATIONS":
       return state.filter((s) => !_.includes(action.metricIds, s.metric));
@@ -18,4 +22,6 @@ export default function simulations(state = [], action = null) {
     default:
       return state;
   }
-}
+};
+
+export default simulations;

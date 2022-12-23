@@ -1,3 +1,4 @@
+import _ from "lodash";
 import React, { Component } from "react";
 
 import Icon from "gComponents/react-fa-patched";
@@ -40,7 +41,34 @@ const ProgressMessage = ({ actionState }) => (
   </div>
 );
 
-export class SpaceToolbar extends Component {
+type Props = {
+  editsAllowed: boolean;
+  onAllowEdits: () => void;
+  onForbidEdits: () => void;
+  isLoggedIn: boolean;
+  onDestroy: () => void;
+  onCopyModel: () => void;
+  onCopyMetrics: () => void;
+  onPasteMetrics: () => void;
+  onDeleteMetrics: () => void;
+  onCutMetrics: () => void;
+  isPrivate: boolean;
+  editableByMe: boolean;
+  actionState: string; // TODO - union
+  onUndo: () => void;
+  onRedo: () => void;
+  canUndo: boolean;
+  canRedo: boolean;
+  onImportSlurp: (slurp: unknown) => void;
+  calculators: any; // FIXME
+  makeNewCalculator: () => void;
+  showCalculator: (c: unknown) => void;
+  toggleFactSidebar: () => void;
+  canShowFactSidebar: boolean;
+  onOpenTutorial: () => void;
+};
+
+export class SpaceToolbar extends Component<Props> {
   componentDidMount() {
     window.recorder.recordMountEvent(this);
   }

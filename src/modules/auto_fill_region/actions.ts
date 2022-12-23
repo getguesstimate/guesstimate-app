@@ -133,8 +133,8 @@ function buildNewMetrics(
 ) {
   const { guesstimateType, input } = startGuesstimate;
 
-  let newMetrics = [];
-  let newGuesstimates = [];
+  let newMetrics: any[] = []; // FIXME
+  let newGuesstimates: any[] = [];
 
   const isDynamic = guesstimateType === DYNAMIC_FILL_TYPE;
   const translateFn = (isDynamic ? fillDynamic : fillStatic)(

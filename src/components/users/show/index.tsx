@@ -34,7 +34,7 @@ const UserShow: React.FC<Props> = ({ userId }) => {
   };
 
   const spaces = _.orderBy(userSpaces.asMutable(), ["updated_at"], ["desc"]);
-  const isMe = parseInt(me.id) === parseInt(userId);
+  const isMe = parseInt(me.id || "") === parseInt(userId);
 
   let user = null;
 
@@ -50,8 +50,8 @@ const UserShow: React.FC<Props> = ({ userId }) => {
           <div className="col-md-4 col-xs-12">
             {user && (
               <div className="main-user-tag">
-                <img src={user.picture} />
-                {user && <h1>{user.name}</h1>}
+                <img src={(user as any).picture} />
+                {user && <h1>{(user as any).name}</h1>}
               </div>
             )}
           </div>

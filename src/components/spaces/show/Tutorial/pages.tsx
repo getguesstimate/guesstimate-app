@@ -4,7 +4,12 @@ const MakeAMetric = "/assets/tutorial/MakeAMetric.gif";
 const InteractWithACell = "/assets/tutorial/InteractWithACell.gif";
 const MakeAFunction = "/assets/tutorial/MakeAFunction.gif";
 
-const TutorialPage = ({ header, image, children }) => (
+type PageProps = {
+  header: string;
+  children: React.ReactNode;
+};
+
+const TutorialPage: React.FC<PageProps> = ({ header, children }) => (
   <div className="tutorialPage">
     <div className="row header">
       <div className="col-md-12">
@@ -23,7 +28,7 @@ const Image = ({ image }) => (
   </div>
 );
 
-export const TutorialMetricPage = () => (
+export const TutorialMetricPage: React.FC = () => (
   <TutorialPage header="Metrics">
     <p>
       To create a metric, double click on an empty cell in the grid. Give it a
@@ -55,7 +60,7 @@ export const TutorialMetricPage = () => (
   </TutorialPage>
 );
 
-export const TutorialMetricActionsPage = () => (
+export const TutorialMetricActionsPage: React.FC = () => (
   <TutorialPage header="Metric Actions">
     <p>Click a metric once to select it, then you can perform actions on it.</p>
 
@@ -91,7 +96,7 @@ export const TutorialMetricActionsPage = () => (
   </TutorialPage>
 );
 
-export const TutorialFunctionPage = () => (
+export const TutorialFunctionPage: React.FC = () => (
   <TutorialPage header="Functions">
     <p>
       In addition to points and ranges, metrics can also be functions of other
@@ -137,7 +142,7 @@ export const TutorialFunctionPage = () => (
   </TutorialPage>
 );
 
-export const TutorialMoreFeaturesPage = () => (
+export const TutorialMoreFeaturesPage: React.FC = () => (
   <TutorialPage header="Advanced Features">
     <h3>Custom Data Input</h3>
     <p>

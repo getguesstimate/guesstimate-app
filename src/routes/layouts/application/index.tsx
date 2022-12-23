@@ -14,7 +14,7 @@ type Props = {
   embed?: boolean;
   fullHeight?: boolean;
   backgroundColor?: "BLUE" | "GREY";
-  children: React.ReactElement;
+  children: React.ReactNode;
 };
 
 const Layout: React.FC<Props> = ({

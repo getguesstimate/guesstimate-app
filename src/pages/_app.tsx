@@ -19,7 +19,7 @@ import * as meActions from "gModules/me/actions";
 import "../routes/app";
 
 // hacky, consider https://github.com/kirill-konshin/next-redux-wrapper
-let store = undefined;
+let store: ReturnType<typeof configureStore> | undefined = undefined;
 
 const MyApp = ({ Component }: AppProps) => {
   const [isClient, setIsClient] = useState(false);
@@ -30,8 +30,9 @@ const MyApp = ({ Component }: AppProps) => {
     store = configureStore();
   }
 
+  // this must be at the top level because we don't want it to fire too often
   useEffect(() => {
-    // this must be at the top level because we don't want it to fire too often
+    if (!store) return; // should never happen, but satisfies typescript
     store.dispatch(meActions.init());
   }, [store.dispatch]);
 

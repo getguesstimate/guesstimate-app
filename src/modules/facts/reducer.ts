@@ -1,15 +1,26 @@
+import _ from "lodash";
 import { mutableCopy, typeSafeEq } from "gEngine/utils";
 import * as _collections from "gEngine/collections";
 
 import CITIES from "./cities.json";
+import { AnyAction, Reducer } from "redux";
 
-const INITIAL_STATE = {
+type State = {
+  currentSuggestion: string;
+  globalFacts: unknown;
+  organizationFacts: any[]; // FIXME
+};
+
+const INITIAL_STATE: State = {
   currentSuggestion: "",
   globalFacts: CITIES,
   organizationFacts: [],
 };
 
-export function factsR(state = INITIAL_STATE, action) {
+export const factsR: Reducer<State, AnyAction> = (
+  state = INITIAL_STATE,
+  action
+) => {
   switch (action.type) {
     case "LOAD_FACTS_BY_ORG":
       return {
@@ -114,14 +125,14 @@ export function factsR(state = INITIAL_STATE, action) {
     case "FACT_CATEGORIES_DELETE_SUCCESS": {
       const categoryId = _.get(action, "record.id");
       let copiedState = mutableCopy(state.organizationFacts);
-      const organizationContainersToModify = _.remove(copiedState, (o) =>
+      const organizationContainersToModify = _.remove<any>(copiedState, (o) =>
         _collections.some(o.children, categoryId, "category_id")
       );
       const modifiedOrganizationContainers = _.map(
         organizationContainersToModify,
         (o) => {
           let copiedChildren = mutableCopy(o.children);
-          const childrenToModify = _.remove(copiedChildren, (f) =>
+          const childrenToModify = _.remove<any>(copiedChildren, (f) =>
             typeSafeEq(_.get(f, "category_id"), categoryId)
           );
           return {
@@ -141,7 +152,7 @@ export function factsR(state = INITIAL_STATE, action) {
     case "SPACES_DELETE_SUCCESS": {
       const spaceId = _.get(action, "record.id");
       let copiedState = mutableCopy(state.organizationFacts);
-      const organizationContainersToModify = _.remove(copiedState, (o) =>
+      const organizationContainersToModify = _.remove<any>(copiedState, (o) =>
         _collections.some(o.children, spaceId, "exported_from_id")
       );
       const modifiedOrganizationContainers = _.map(
@@ -163,4 +174,4 @@ export function factsR(state = INITIAL_STATE, action) {
     default:
       return state;
   }
-}
+};

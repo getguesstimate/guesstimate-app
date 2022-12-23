@@ -1,6 +1,11 @@
 import _ from "lodash";
 import { uniq } from "gEngine/collections";
 
+// TODO - better type
+type Metric = { [k: string]: unknown };
+
+type MetricsState = Metric[];
+
 function spaceToMetrics(space) {
   let metrics = _.get(space, "graph.metrics");
   return _.isEmpty(metrics)
@@ -8,7 +13,7 @@ function spaceToMetrics(space) {
     : metrics.map((m) => ({ ...m, space: space.id }));
 }
 
-export function metricsR(state = [], action) {
+export function metricsR(state: MetricsState = [], action) {
   switch (action.type) {
     case "CALCULATORS_FETCH_SUCCESS": {
       const newMetrics = spaceToMetrics(_.get(action, "data.space")) || [];
