@@ -34,6 +34,12 @@
   border-bottom: 1px dashed rgba(0, 25, 95, 0.09);
 }
 
+/* draggable by react-dnd */
+.FlowGridCell > div {
+  display: flex;
+  width: 100%;
+}
+
 .FlowGridFilledCell {
   display: flex;
   width: 100%;

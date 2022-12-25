@@ -1,4 +1,4 @@
-export function newError(error: string, message: string) {
+export function newError(error?: string, message?: string) {
   const value = { error, message };
   return { type: "NEW_DISPLAY_ERROR" as const, value };
 }

@@ -24,6 +24,11 @@
     "jsx": "preserve",
     "experimentalDecorators": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "src/modules/auto_fill_region/actions-test.js"
+  ],
   "exclude": ["node_modules"]
 }

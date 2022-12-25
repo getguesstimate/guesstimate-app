@@ -1,9 +1,9 @@
-import { AnyAction } from "redux";
+import { Reducer } from "redux";
 import { DisplayErrorAction } from "./actions";
 
 type DisplayErrorState = {
-  error: string;
-  message: string;
+  error?: string;
+  message?: string;
 }[];
 
 const testExample: DisplayErrorState = [
@@ -12,10 +12,10 @@ const testExample: DisplayErrorState = [
 
 const initialState: DisplayErrorState = [];
 
-export default function displayError(
+const displayError: Reducer<DisplayErrorState, DisplayErrorAction> = (
   state = initialState,
-  action: DisplayErrorAction // this is a lie, action can be something else
-): DisplayErrorState {
+  action: DisplayErrorAction // FIXME - this is a lie, action can be something else
+) => {
   switch (action.type) {
     case "NEW_DISPLAY_ERROR":
       return [...state, action.value];
@@ -24,4 +24,6 @@ export default function displayError(
     default:
       return state;
   }
-}
+};
+
+export default displayError;

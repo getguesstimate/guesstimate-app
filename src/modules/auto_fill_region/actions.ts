@@ -15,6 +15,7 @@ import {
   move,
   translate,
 } from "lib/locationUtils";
+import { AppThunk } from "gModules/store";
 
 const DYNAMIC_FILL_TYPE = "FUNCTION";
 
@@ -161,7 +162,7 @@ function buildNewMetrics(
   return { newMetrics, newGuesstimates };
 }
 
-export function fillRegion(spaceId, { start, end }) {
+export function fillRegion(spaceId, { start, end }): AppThunk {
   return (dispatch, getState) => {
     const state = getState();
 
