@@ -11,7 +11,11 @@ const OrganizationTabPage: NextPage = () => {
   return (
     <Layout backgroundColor="GREY">
       {id === undefined ? null : (
-        <OrganizationShow organizationId={id} key={id as string} tab={tab} />
+        <OrganizationShow
+          organizationId={id as string}
+          key={id as string}
+          tab={tab as string}
+        />
       )}
     </Layout>
   );

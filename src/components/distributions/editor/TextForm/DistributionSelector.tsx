@@ -1,4 +1,4 @@
-import { Component } from "react";
+import React, { Component } from "react";
 
 import ReactTooltip from "react-tooltip";
 
@@ -7,6 +7,8 @@ import { Guesstimator } from "lib/guesstimator/index";
 import { getClassName } from "gEngine/utils";
 
 import * as elev from "servers/elev/index";
+
+type DistributionType = "LOGNORMAL" | "NORMAL" | "UNIFORM";
 
 // We use onMouseUp to make sure that the onMouseUp
 // does not get called once another metric is underneath
@@ -19,7 +21,7 @@ const ReactTooltipParams = {
   effect: "solid",
 };
 
-const Descriptions = {
+const Descriptions: { [k in DistributionType]: { name: string } } = {
   LOGNORMAL: {
     name: "Lognormal",
   },
@@ -31,7 +33,13 @@ const Descriptions = {
   },
 };
 
-const DistributionIcon = ({ isSelected, isDisabled, type, icon, onSubmit }) => (
+const DistributionIcon: React.FC<{
+  isSelected: boolean;
+  isDisabled: boolean;
+  type: DistributionType;
+  icon: string;
+  onSubmit(type: DistributionType): void;
+}> = ({ isSelected, isDisabled, type, icon, onSubmit }) => (
   <div
     className={getClassName(
       "ui",
@@ -53,7 +61,11 @@ const DistributionIcon = ({ isSelected, isDisabled, type, icon, onSubmit }) => (
   </div>
 );
 
-export class DistributionSelector extends Component {
+export class DistributionSelector extends Component<{
+  disabledTypes: DistributionType[];
+  selected: string;
+  onSubmit(type: DistributionType): void;
+}> {
   static defaultProps = {
     disabledTypes: [],
   };
@@ -64,6 +76,8 @@ export class DistributionSelector extends Component {
 
   render() {
     const { selected, disabledTypes } = this.props;
+
+    const allTypes: DistributionType[] = ["LOGNORMAL", "NORMAL", "UNIFORM"];
     return (
       <div className="DistributionSelector">
         <hr />
@@ -71,11 +85,10 @@ export class DistributionSelector extends Component {
           className="more-distributions"
           onClick={this._handleShowMore.bind(this)}
         >
-          {" "}
-          More{" "}
+          More
         </a>
         <div className="DistributionList">
-          {["LOGNORMAL", "NORMAL", "UNIFORM"].map((type) => (
+          {allTypes.map((type) => (
             <DistributionIcon
               type={type}
               onSubmit={this.props.onSubmit}

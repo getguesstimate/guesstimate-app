@@ -1,3 +1,4 @@
+import _ from "lodash";
 import React from "react";
 import { useRouter } from "next/router";
 
@@ -7,6 +8,7 @@ import { DistributionSummary } from "gComponents/distributions/summary/index";
 import Histogram from "gComponents/simulations/histogram/index";
 import {
   adjustedConfidenceInterval,
+  Fact,
   isExportedFromSpace,
   length,
   mean,
@@ -15,7 +17,14 @@ import { spaceUrlById } from "gEngine/space";
 
 import { allPropsPresent } from "gEngine/utils";
 
-export const FactItem = ({
+type Props = {
+  fact: Fact;
+  onEdit?(): void;
+  isExportedFromSelectedSpace?: boolean;
+  size: string;
+};
+
+export const FactItem: React.FC<Props> = ({
   fact,
   onEdit,
   isExportedFromSelectedSpace,
@@ -75,9 +84,9 @@ export const FactItem = ({
         {!!isExportedFromSpace(fact) && size !== "SMALL" && (
           <div
             className="section-exported"
-            onClick={
-              !isExportedFromSelectedSpace && router.push(exported_from_url)
-            }
+            onClick={() => {
+              !isExportedFromSelectedSpace && router.push(exported_from_url);
+            }}
           >
             {!isExportedFromSelectedSpace && <Icon name="share" />}
           </div>

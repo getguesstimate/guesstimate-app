@@ -81,7 +81,7 @@ export class UnwrappedDistributionEditor extends Component<Props> {
   changeGuesstimateTypeAndSave(guesstimateType) {
     this.changeGuesstimate({ guesstimateType }, true, true);
   }
-  addDataAndSave(data) {
+  addDataAndSave(data: number[] | null) {
     this.changeGuesstimate(
       { guesstimateType: "DATA", data, input: null },
       true,

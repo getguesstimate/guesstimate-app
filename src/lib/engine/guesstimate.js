@@ -1,3 +1,4 @@
+import _ from "lodash";
 import { Guesstimate, Distribution, DGraph, Graph, Simulation } from "./types";
 import { HANDLE_REGEX } from "./facts";
 import * as _collections from "./collections";

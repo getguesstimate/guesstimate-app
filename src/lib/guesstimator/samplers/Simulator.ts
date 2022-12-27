@@ -1,3 +1,4 @@
+import _ from "lodash";
 import { replaceByMap } from "gEngine/utils";
 
 import generateRandomReadableId from "gEngine/metric/generate_random_readable_id";
@@ -5,11 +6,11 @@ import { STOCHASTIC_FUNCTIONS } from "./simulator-worker/simulator/evaluator";
 
 const MIN_SAMPLES_PER_WINDOW = 100;
 
-function GCD(a, b) {
+function GCD(a: number, b: number) {
   return !b ? a : GCD(b, a % b);
 }
 
-function LCM(a, b) {
+function LCM(a: number, b: number) {
   return (a * b) / GCD(a, b);
 }
 
@@ -47,7 +48,7 @@ export function simulate(expr, inputs, maxSamples) {
 
   return Promise.all(promises).then((results) => {
     let finalResult = { values: [], errors: [] };
-    for (let result of results) {
+    for (let result of results as any[]) {
       if (result.values) {
         finalResult.values = finalResult.values.concat(result.values);
       }
@@ -63,7 +64,11 @@ export function simulate(expr, inputs, maxSamples) {
 const hasStochasticFunction = (text) =>
   _.some(STOCHASTIC_FUNCTIONS, (e) => text.indexOf(e) !== -1);
 
-export function neededSamples(text, inputs, n) {
+export function neededSamples(
+  text,
+  inputs: { [k: string]: number[] },
+  n: number
+) {
   if (hasStochasticFunction(text)) {
     return n;
   }
@@ -103,7 +108,7 @@ function modularSlice(array, from, to) {
 
 function buildSimulationParams(rawExpr, prevModularIndex, numSamples, inputs) {
   let idMap = {};
-  let takenReadableIds = [];
+  let takenReadableIds: string[] = [];
   let slicedInputs = {};
 
   for (let key of Object.keys(inputs)) {

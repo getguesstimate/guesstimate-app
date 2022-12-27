@@ -1,6 +1,8 @@
 import $ from "jquery";
 
 export default class AbstractResource {
+  api: any;
+
   constructor(api) {
     this.api = api;
   }
@@ -11,7 +13,7 @@ export default class AbstractResource {
     const serverUrl = host + url;
 
     const allHeaders = { Authorization: "Bearer " + token, ...headers };
-    let requestParams = {
+    let requestParams: any = {
       headers: allHeaders,
       dataType: "json",
       contentType: "application/json",
@@ -25,7 +27,7 @@ export default class AbstractResource {
     return requestParams;
   }
 
-  guesstimateMethod({ url, method, data, headers }) {
+  guesstimateMethod({ url, method, data, headers }: any) {
     return (callback) => {
       const params = this.guesstimateRequest({ url, method, data, headers });
       const request = $.ajax(params);

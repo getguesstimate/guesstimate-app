@@ -26,7 +26,7 @@ const UserShow: React.FC<Props> = ({ userId }) => {
 
   useEffect(() => {
     dispatch(userActions.fetchById(userId));
-    dispatch(spaceActions.fetch({ userId, organizationId: undefined }));
+    dispatch(spaceActions.fetch({ userId }));
   }, [dispatch, userId]);
 
   const _newModel = () => {

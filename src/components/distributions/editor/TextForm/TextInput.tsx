@@ -1,3 +1,4 @@
+import _ from "lodash";
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 
@@ -22,6 +23,7 @@ import {
 import { getClassName, or } from "gEngine/utils";
 
 import { formatData, isData } from "lib/guesstimator/formatter/formatters/Data";
+import { AppDispatch, RootState } from "gModules/store";
 
 function findWithRegex(baseRegex, contentBlock, callback) {
   const text = contentBlock.getText();
@@ -57,7 +59,24 @@ const positionDecorator = (start, end, component) => ({
   component,
 });
 
-class UnconnectedTextInput extends Component {
+type Props = {
+  value: string;
+  validInputs: any;
+  errorInputs: any;
+  onChangeData(data: number[]): void;
+  onChange(text: string): void;
+  onTab(shifted: boolean): void;
+  onReturn(shifted: boolean): void;
+  onBlur(): void;
+  onFocus(): void;
+  canUseOrganizationFacts: boolean;
+  organizationId?: string;
+  width: "NARROW" | "WIDE";
+} & { dispatch: AppDispatch } & { suggestion: string };
+
+export class UnconnectedTextInput extends Component<Props> {
+  editorRef: React.RefObject<Editor>;
+
   state = {
     editorState: EditorState.createWithContent(
       ContentState.createFromText(this.props.value || ""),
@@ -66,9 +85,10 @@ class UnconnectedTextInput extends Component {
     isFlashing: false,
   };
 
-  static propTypes = {
-    value: PropTypes.string,
-  };
+  constructor(props: Props) {
+    super(props);
+    this.editorRef = React.createRef();
+  }
 
   factRegex() {
     const baseRegex = this.props.canUseOrganizationFacts
@@ -114,7 +134,7 @@ class UnconnectedTextInput extends Component {
   }
 
   focus() {
-    this.refs.editor.focus();
+    this.editorRef.current.focus();
   }
 
   addText(text, maintainCursorPosition = true, replaceLength = 0) {
@@ -298,7 +318,7 @@ class UnconnectedTextInput extends Component {
     return false;
   }
 
-  handleTab(e) {
+  handleTab(e: React.KeyboardEvent) {
     if (!this.acceptSuggestionIfAppropriate()) {
       this.props.onTab(e.shiftKey);
     }
@@ -343,7 +363,7 @@ class UnconnectedTextInput extends Component {
     this.props.onBlur();
   }
 
-  handleReturn(e) {
+  handleReturn(e: React.KeyboardEvent) {
     if (!this.acceptSuggestionIfAppropriate()) {
       this.props.onReturn(e.shiftKey);
     }
@@ -352,14 +372,14 @@ class UnconnectedTextInput extends Component {
 
   render() {
     const {
-      props: { hasErrors, width, value, validInputs },
+      props: { width },
       state: { isFlashing, editorState },
     } = this;
     const className = getClassName(
       "TextInput",
       width,
-      isFlashing ? "flashing" : null,
-      hasErrors ? "hasErrors" : null
+      isFlashing ? "flashing" : null
+      // hasErrors ? "hasErrors" : null
     );
     return (
       <span
@@ -377,8 +397,8 @@ class UnconnectedTextInput extends Component {
           onTab={this.handleTab.bind(this)}
           onBlur={this.handleBlur.bind(this)}
           onChange={this.onChange.bind(this)}
-          ref="editor"
-          placeholder={"value"}
+          ref={this.editorRef}
+          placeholder="value"
         />
       </span>
     );
@@ -386,8 +406,8 @@ class UnconnectedTextInput extends Component {
 }
 
 export const TextInput = connect(
-  (state) => ({ suggestion: state.facts.currentSuggestion }),
+  (state: RootState) => ({ suggestion: state.facts.currentSuggestion }),
   null,
   null,
-  { withRef: true }
+  { forwardRef: true }
 )(UnconnectedTextInput);

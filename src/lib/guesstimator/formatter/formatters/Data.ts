@@ -1,4 +1,6 @@
-export function formatData(value) {
+import _ from "lodash";
+
+export function formatData(value: string): number[] {
   return value
     .replace(/[\[\]]/g, "")
     .split(/[\n\s,]+/)
@@ -8,7 +10,7 @@ export function formatData(value) {
     .slice(0, 10000);
 }
 
-export const isData = (input) =>
+export const isData = (input: string): boolean =>
   !input.includes("=") && (input.match(/[\n\s,]/g) || []).length > 3;
 
 export const item = {

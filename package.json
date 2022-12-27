@@ -43,7 +43,6 @@
     "babel": "^5.8.23",
     "babel-core": "^5.8.23",
     "babel-eslint": "^8.2.5",
-    "babel-loader": "^5.3.2",
     "brfs": "^1.4.1",
     "chai": "^4.1.2",
     "ejs-compiled-loader": "^2.1.1",
@@ -105,7 +104,6 @@
     "ionicons": "^3.0.0",
     "jquery": "^3.3.0",
     "jstat": "^1.7.1",
-    "jsx-loader": "^0.13.2",
     "local-links": "^1.4.0",
     "lodash": "^4.17.21",
     "lodash.assign": "^4.0.9",
@@ -113,14 +111,11 @@
     "mathjs": "^5.7.0",
     "moment": "^2.29.4",
     "next": "^13.0.7",
-    "next-plugin-yaml": "^1.0.1",
     "node-uuid": "^1.4.8",
     "numeral": "~2.0.6",
     "postcss": "^8.4.20",
     "postcss-import": "12",
-    "postcss-loader": "3.0.0",
     "postcss-mixins": "^9.0.4",
-    "postcss-modules": "3.2.2",
     "postcss-nested": "3.0",
     "postcss-simple-vars": "^7.0.1",
     "prop-types": "^15.6.2",
@@ -135,7 +130,6 @@
     "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^18.2.0",
     "react-fa": "^4.0.0",
-    "react-helmet": "^5.2.0",
     "react-json-tree": "^0.11.0",
     "react-keypress": "^0.1.5",
     "react-markdown": "^3.3.4",
@@ -156,7 +150,6 @@
     "surge": "^0.20.3",
     "url-loader": "^0.5.6",
     "worker-loader": "^0.7.0",
-    "xhr": "^2.0.1",
-    "yaml-loader": "^0.1.0"
+    "xhr": "^2.0.1"
   }
 }

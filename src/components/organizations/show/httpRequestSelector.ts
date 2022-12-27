@@ -1,7 +1,8 @@
+import _ from "lodash";
 import { createSelector } from "reselect";
 
 const specificHttpRequestSelector = (state) => state.httpRequests;
-const organizationIdSelector = (state, props) => props.organizationId;
+const organizationIdSelector = (state, organizationId) => organizationId;
 
 function isExistingMember(request) {
   return !!_.get(request, "response.hasUser");

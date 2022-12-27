@@ -1,11 +1,9 @@
+import { RootState } from "gModules/store";
 import { createSelector } from "reselect";
 
-const spaceSelector = (state) => state.spaces;
-const organizationIdSelector = (state, props) => props.organizationId;
-
 export const organizationSpaceSelector = createSelector(
-  spaceSelector,
-  organizationIdSelector,
+  (state: RootState) => state.spaces,
+  (_, organizationId: string) => organizationId,
   (spaces, organizationId) => {
     return {
       organizationSpaces: spaces.filter(

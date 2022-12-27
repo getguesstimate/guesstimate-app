@@ -2,7 +2,14 @@ import React, { Component } from "react";
 
 import { SmallDataViewer, LargeDataViewer } from "./DataViewer";
 
-export class DataForm extends Component {
+type Props = {
+  data: number[];
+  size: string;
+  onOpen(): void;
+  onSave(data: number[] | null): void;
+};
+
+export class DataForm extends Component<Props> {
   shouldComponentUpdate() {
     // Deep comparing the data would be expensive and the real gain here is just to avoid rerendering the static small component.
     return this.props.size !== "small";

@@ -1,7 +1,7 @@
 import AbstractResource from "../AbstractResource";
 
 export default class Models extends AbstractResource {
-  list({ userId, organizationId }, callback) {
+  list({ userId, organizationId }: any, callback) {
     const url = userId
       ? `users/${userId}/spaces`
       : `organizations/${organizationId}/spaces`;

@@ -1,22 +1,20 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 
-import { FactCategoryPT, isFactCategoryValid } from "gEngine/fact_category";
+import { FactCategory, isFactCategoryValid } from "gEngine/fact_category";
 
-export class CategoryForm extends Component {
-  // TODO(matthew): We have wiring (via props) for onCancel, but no button. Either strip that code or add cancellation
-  // buttons.
+type Props = {
+  startingCategory: FactCategory;
+  onSubmit(category: FactCategory): void;
+  onCancel?(): void;
+  existingCategoryNames: string[];
+};
+
+export class CategoryForm extends Component<Props> {
+  // TODO(matthew): We have wiring (via props) for onCancel, but no button. Either strip that code or add cancellation buttons.
   static defaultProps = {
     startingCategory: {
       name: "",
     },
-  };
-
-  static propTypes = {
-    onSubmit: PropTypes.func.isRequired,
-    onCancel: PropTypes.func,
-    existingCategoryNames: PropTypes.arrayOf(PropTypes.string).isRequired,
-    startingCategory: FactCategoryPT,
   };
 
   state = {
@@ -28,7 +26,7 @@ export class CategoryForm extends Component {
       runningCategory: { ...this.state.runningCategory, ...newCategoryState },
     });
   }
-  onChangeName(e) {
+  onChangeName(e: React.ChangeEvent<HTMLInputElement>) {
     this.setCategoryState({ name: e.target.value });
   }
   isValid() {

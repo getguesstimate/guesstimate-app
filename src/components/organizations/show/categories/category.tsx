@@ -2,8 +2,17 @@ import React, { Component } from "react";
 
 import { FactListContainer } from "gComponents/facts/list/container";
 import { CategoryForm } from "./form";
+import { FactCategory } from "gEngine/fact_category";
+import { Fact } from "gEngine/facts";
 
-class CategoryHeader extends Component {
+type HeaderProps = {
+  category: FactCategory;
+  existingCategoryNames: string[];
+  onEdit(c: FactCategory): void;
+  onDelete(c: FactCategory): void;
+};
+
+class CategoryHeader extends Component<HeaderProps> {
   state = {
     editing: false,
     hovering: false,
@@ -21,7 +30,7 @@ class CategoryHeader extends Component {
   onStopEditing() {
     this.setState({ editing: false });
   }
-  onSaveEdits(editedCategory) {
+  onSaveEdits(editedCategory: FactCategory) {
     this.props.onEdit(editedCategory);
     this.onStopEditing();
   }
@@ -41,7 +50,7 @@ class CategoryHeader extends Component {
   }
 
   renderShowHeader() {
-    const { category, onEditCategory } = this.props;
+    const { category } = this.props;
     return (
       <div className="row">
         <div className="col-md-7">
@@ -90,7 +99,17 @@ const NullCategoryHeader = ({}) => (
   </div>
 );
 
-export const Category = ({
+type Props = {
+  category: FactCategory;
+  categories: FactCategory[];
+  facts: Fact[];
+  onEditCategory(c: FactCategory): void;
+  onDeleteCategory(c: FactCategory): void;
+  organization: any;
+  existingVariableNames: string[];
+};
+
+export const Category: React.FC<Props> = ({
   category,
   categories,
   facts,

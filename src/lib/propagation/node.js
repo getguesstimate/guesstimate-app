@@ -1,3 +1,4 @@
+import _ from "lodash";
 import { NODE_TYPES } from "./constants";
 import * as errorTypes from "./errors";
 

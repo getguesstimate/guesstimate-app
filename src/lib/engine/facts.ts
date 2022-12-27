@@ -12,6 +12,32 @@ import { Guesstimator } from "lib/guesstimator/index";
 import { _matchingFormatter } from "lib/guesstimator/formatter/index";
 import { sortDescending } from "lib/dataAnalysis";
 
+export type Fact = {
+  id: string;
+  name: string;
+  variable_name: string;
+  expression?: string;
+  exported_from_id?: string;
+  metric_id?: string;
+  simulation: {
+    sample: {
+      values: number[];
+      errors: unknown[];
+    };
+    stats: {
+      adjustedConfidenceInterval?: number[];
+      mean?: number;
+      stdev?: number;
+      length?: number;
+      percentiles?: {
+        5: number;
+        50: number;
+        95: number;
+      };
+    };
+  };
+};
+
 export const FactPT = PropTypes.shape({
   name: PropTypes.string.isRequired,
   variable_name: PropTypes.string.isRequired,
@@ -40,19 +66,19 @@ export const FactPT = PropTypes.shape({
 export const GLOBALS_ONLY_REGEX = /@\w+(?:\.\w+)?/g;
 export const HANDLE_REGEX = /(?:@\w+(?:\.\w+)?|#\w+)/g;
 
-export const getVar = (f) => _utils.orStr(_.get(f, "variable_name"));
-export const byVariableName = (name) => (f) => getVar(f) === name;
+export const getVar = (f: Fact) => _utils.orStr(f.variable_name);
+export const byVariableName = (name: string) => (f: Fact) => getVar(f) === name;
 const namedLike = (partial) => (f) => getVar(f).startsWith(partial);
 
-export const isExportedFromSpace = (f) =>
+export const isExportedFromSpace = (f: Fact) =>
   _utils.allPropsPresent(f, "exported_from_id");
 
-export const length = (f) => _.get(f, "simulation.sample.values.length");
-export const mean = (f) => _.get(f, "simulation.stats.mean");
-export const adjustedConfidenceInterval = (f) =>
+export const length = (f: Fact) => _.get(f, "simulation.sample.values.length");
+export const mean = (f: Fact) => _.get(f, "simulation.stats.mean");
+export const adjustedConfidenceInterval = (f: Fact) =>
   _.get(f, "simulation.stats.adjustedConfidenceInterval");
 
-export function hasRequiredProperties(f) {
+export function hasRequiredProperties(f: Fact) {
   let requiredProperties = ["variable_name", "name"];
   if (!isExportedFromSpace(f)) {
     requiredProperties.push(
@@ -65,7 +91,7 @@ export function hasRequiredProperties(f) {
   return _utils.allPresent(requiredProperties.map((prop) => _.get(f, prop)));
 }
 
-export function withMissingStats(rawFact) {
+export function withMissingStats(rawFact: Fact) {
   let fact = _utils.mutableCopy(rawFact);
   _.set(
     fact,
@@ -75,7 +101,12 @@ export function withMissingStats(rawFact) {
 
   const length = _.get(fact, "simulation.stats.length");
   const needsACI = _.isFinite(length) && length > 1;
-  const ACIlength = _.get("simulation.stats.adjustedConfidenceInterval.length");
+
+  // was broken; previously:
+  // _.get("simulation.stats.adjustedConfidenceInterval.length");
+  // (note the missing first arg)
+  const ACIlength = undefined;
+
   const hasACI = _.isFinite(ACIlength) && ACIlength === 2;
   if (needsACI && !hasACI) {
     _.set(fact, "simulation.stats.adjustedConfidenceInterval", [null, null]);
@@ -206,7 +237,7 @@ export function getRelevantFactsAndReformatGlobals(
   };
 }
 
-export function simulateFact(fact) {
+export function simulateFact(fact: Fact) {
   const guesstimatorInput = { text: fact.expression, guesstimateType: null };
   const formatter = _matchingFormatter(guesstimatorInput);
   const guesstimator = new Guesstimator({

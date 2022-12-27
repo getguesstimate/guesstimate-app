@@ -1,49 +1,59 @@
+import _ from "lodash";
 import React, { Component } from "react";
 
 import Icon from "gComponents/react-fa-patched";
 
 import { ButtonClose } from "gComponents/utility/buttons/close";
 
-export const SmallDataViewer = ({ onDelete, onOpen }) => (
+type Mode = "VIEW" | "EDIT";
+
+export const SmallDataViewer: React.FC<{
+  onDelete(): void;
+  onOpen(): void;
+}> = ({ onDelete, onOpen }) => (
   <div className="DataViewer DataViewer--card">
     <a className="ui button primary small" onClick={onOpen}>
-      {" "}
-      <Icon name="bar-chart" /> Custom{" "}
+      <Icon name="bar-chart" /> Custom
     </a>
     <ButtonClose onClick={onDelete} />
   </div>
 );
 
-const Header = ({ mode, onDelete, onEdit }) => (
+const Header: React.FC<{
+  onDelete(): void;
+  onEdit(): void;
+  mode: Mode;
+}> = ({ mode, onDelete, onEdit }) => (
   <div className="row">
     <div className="col-sm-6">
       <h2>
-        {" "}
-        <Icon name="bar-chart" /> Custom Data{" "}
+        <Icon name="bar-chart" /> Custom Data
       </h2>
     </div>
     {mode === "VIEW" && (
       <div className="col-sm-6">
         <a onClick={onDelete} className="delete">
-          {" "}
-          <Icon name="close" /> Delete{" "}
+          <Icon name="close" /> Delete
         </a>
         <a onClick={onEdit} className="edit">
-          {" "}
-          <Icon name="pencil" /> Edit{" "}
+          <Icon name="pencil" /> Edit
         </a>
       </div>
     )}
   </div>
 );
 
-class Editor extends Component {
+class Editor extends Component<{
+  data: number[];
+  onSave(data: number[]): void;
+  onEditCancel(): void;
+}> {
   state = {
     value: this.props.data.join("\n"),
     valid: true,
   };
 
-  handleChange(event) {
+  handleChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
     const value = event.target.value;
     this.setState({
       value,
@@ -51,7 +61,7 @@ class Editor extends Component {
     });
   }
 
-  _isValid(value) {
+  _isValid(value: string) {
     const numbers = this._convertToNumbers(value);
     const allValid = _.every(numbers, (e) => _.isFinite(e));
     return allValid;
@@ -64,7 +74,7 @@ class Editor extends Component {
     this.props.onSave(numbers);
   }
 
-  _convertToNumbers(values) {
+  _convertToNumbers(values: string) {
     return values
       .split(/[\s,]+/)
       .filter((s) => s !== "")
@@ -86,21 +96,19 @@ class Editor extends Component {
           className="ui button primary tiny"
           onClick={this._handleSave.bind(this)}
         >
-          {" "}
-          Save{" "}
+          Save
         </div>
         <div className="ui button tiny" onClick={this.props.onEditCancel}>
-          {" "}
-          Cancel{" "}
+          Cancel
         </div>
       </div>
     );
   }
 }
 
-const Viewer = ({ data }) => (
+const Viewer: React.FC<{ data: number[] }> = ({ data }) => (
   <ul>
-    {_.map(data, (element, index) => {
+    {data.map((element, index) => {
       return (
         <li key={index}>
           <div className="DataPoint" key={index}>
@@ -112,14 +120,27 @@ const Viewer = ({ data }) => (
   </ul>
 );
 
-export class LargeDataViewer extends Component {
-  state = { mode: "VIEW" };
+type LargeDataViewerProps = {
+  data: number[];
+  onDelete(): void;
+  onSave(data: number[]): void;
+};
+
+type LargeDataViewerState = {
+  mode: Mode;
+};
+
+export class LargeDataViewer extends Component<
+  LargeDataViewerProps,
+  LargeDataViewerState
+> {
+  state: LargeDataViewerState = { mode: "VIEW" as const };
 
   beginEditing() {
     this.setState({ mode: "EDIT" });
   }
 
-  onSave(data) {
+  onSave(data: number[]) {
     this.props.onSave(data);
     this.setState({ mode: "VIEW" });
   }

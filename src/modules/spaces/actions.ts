@@ -14,6 +14,7 @@ import * as e from "gEngine/engine";
 import { captureApiError } from "lib/errors/index";
 
 import { setupGuesstimateApi } from "servers/guesstimate-api/constants";
+import { AppThunk } from "gModules/store";
 
 let sActions = actionCreatorsFor("spaces");
 
@@ -143,11 +144,12 @@ export function fetchById(spaceId, shareableLinkToken = null) {
   };
 }
 
-//required userId for now, but later this can be optional
-export function fetch({ userId, organizationId }) {
+export const fetch = (
+  args: { userId: string } | { organizationId: string }
+): AppThunk => {
   return (dispatch, getState) => {
     dispatch(sActions.fetchStart());
-    api(getState()).models.list({ userId, organizationId }, (err, value) => {
+    api(getState()).models.list(args, (err, value) => {
       if (err) {
         captureApiError("SpacesFetch", err.jqXHR, err.textStatus, err, {
           url: "fetch",
@@ -165,9 +167,9 @@ export function fetch({ userId, organizationId }) {
       }
     });
   };
-}
+};
 
-export function create(organizationId, params = {}, router) {
+export function create(organizationId, params: any = {}, router) {
   return (dispatch, getState) => {
     const cid = cuid();
     let object = { ...params, id: cid };

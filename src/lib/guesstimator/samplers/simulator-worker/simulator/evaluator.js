@@ -1,3 +1,4 @@
+import _ from "lodash";
 var Finance = require("financejs");
 import math from "mathjs";
 

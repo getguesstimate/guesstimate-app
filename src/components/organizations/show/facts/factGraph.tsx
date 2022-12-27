@@ -1,3 +1,4 @@
+import _ from "lodash";
 import React, { Component } from "react";
 
 import { FactItem } from "gComponents/facts/list/item";
@@ -12,54 +13,70 @@ import {
   separateIntoHeightSets,
 } from "lib/DAG/DAG";
 import { getNodeAncestors } from "lib/DAG/nodeFns";
+import { Fact } from "gEngine/facts";
+import { GridItem } from "gComponents/lib/FlowGrid/types";
 
-const idToNodeId = (id, isFact) => `${isFact ? "fact" : "space"}:${id}`;
+const idToNodeId = (id: string, isFact: boolean) =>
+  `${isFact ? "fact" : "space"}:${id}`;
 const spaceIdToNodeId = ({ id }) => idToNodeId(id, false);
 const factIdToNodeId = ({ id }) => idToNodeId(id, true);
 
-const makeFactNodeFn = (spaces) => (fact) => ({
-  key: factIdToNodeId(fact),
-  id: factIdToNodeId(fact),
-  outputs: spaces
-    .filter((s) => _utils.orArr(s.imported_fact_ids).includes(fact.id))
-    .map(spaceIdToNodeId),
-  inputs: !!fact.exported_from_id
-    ? [idToNodeId(fact.exported_from_id, false)]
-    : [],
-  component: <FactItem fact={fact} size={"SMALL"} />,
-});
-const makeSpaceNodeFn = (facts) => (s) => ({
-  key: spaceIdToNodeId(s),
-  id: spaceIdToNodeId(s),
-  inputs: s.imported_fact_ids.map((id) => idToNodeId(id, true)),
-  outputs: _collections
-    .filter(facts, s.id, "exported_from_id")
-    .map(factIdToNodeId),
-  component: (
-    <SpaceCard
-      size={"SMALL"}
-      key={s.id}
-      space={s}
-      urlParams={{ factsShown: "true" }}
-    />
-  ),
-});
+type FactGridItem = Omit<GridItem, "location"> & {
+  id: string;
+  inputs: any[];
+  outputs: any[];
+};
+
+const makeFactNodeFn =
+  (spaces) =>
+  (fact: Fact): FactGridItem => ({
+    key: factIdToNodeId(fact),
+    id: factIdToNodeId(fact),
+    outputs: spaces
+      .filter((s) => _utils.orArr(s.imported_fact_ids).includes(fact.id))
+      .map(spaceIdToNodeId),
+    inputs: !!fact.exported_from_id
+      ? [idToNodeId(fact.exported_from_id, false)]
+      : [],
+    props: {},
+    component: () => <FactItem fact={fact} size="SMALL" />,
+  });
+
+const makeSpaceNodeFn =
+  (facts: Fact[]) =>
+  (s): FactGridItem => ({
+    key: spaceIdToNodeId(s),
+    id: spaceIdToNodeId(s),
+    inputs: s.imported_fact_ids.map((id) => idToNodeId(id, true)),
+    outputs: _collections
+      .filter(facts, s.id, "exported_from_id")
+      .map(factIdToNodeId),
+    props: {},
+    component: () => (
+      <SpaceCard
+        size="SMALL"
+        key={s.id}
+        space={s}
+        urlParams={{ factsShown: "true" }}
+      />
+    ),
+  });
 
 const addLocationsToHeightOrderedComponents = (componentsHeightOrdered) => {
-  let withFinalLocations = [];
+  let withFinalLocations: any[] = [];
   let maxRowUsed = 0;
   componentsHeightOrdered.forEach((heightOrderedComponent) => {
-    let sortedHeightOrderedNodes = [];
+    let sortedHeightOrderedNodes: any[] = [];
     let currColumn = 0;
     let maxRowUsedInComponent = maxRowUsed;
     heightOrderedComponent.forEach((heightSet) => {
       const prevLayer = _utils.orArr(_.last(sortedHeightOrderedNodes));
       let newLayer = _utils.mutableCopy(heightSet);
-      let newLayerOrdered = [];
+      let newLayerOrdered: any[] = [];
       prevLayer
         .filter((n) => !_.isEmpty(n.outputs))
         .forEach((n) => {
-          const outputs = _.remove(newLayer, ({ id }) =>
+          const outputs: any[] = _.remove(newLayer, ({ id }) =>
             n.outputs.includes(id)
           );
           const outputsSorted = _.sortBy(outputs, (c) => -c.outputs.length);
@@ -97,7 +114,13 @@ const addLocationsToHeightOrderedComponents = (componentsHeightOrdered) => {
   return { withFinalLocations, maxRowUsed };
 };
 
-export class FactGraph extends Component {
+type Props = {
+  organization: any;
+  facts: Fact[];
+  spaces: any[];
+};
+
+export class FactGraph extends Component<Props> {
   itemsAndEdges() {
     const { facts, spaces } = this.props;
 
@@ -142,7 +165,7 @@ export class FactGraph extends Component {
 
     const locationById = (id) => _collections.gget(items, id, "id", "location");
 
-    let edges = [];
+    let edges: any[] = [];
     const pathStatus = "default";
     factNodes.forEach(({ id, outputs, inputs }) => {
       edges.push(

@@ -6,7 +6,12 @@ import { Guesstimator } from "lib/guesstimator/index";
 
 import * as elev from "servers/elev/index";
 
-export const GuesstimateTypeIcon = ({
+type Props = {
+  guesstimateType: string;
+  toggleDistributionSelector(): void;
+};
+
+export const GuesstimateTypeIcon: React.FC<Props> = ({
   guesstimateType,
   toggleDistributionSelector,
 }) => {

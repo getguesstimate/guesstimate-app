@@ -6,7 +6,7 @@ const userOrganizationMembershipSelector = (state) =>
 const userOrganizationInvitationSelector = (state) =>
   state.userOrganizationInvitations;
 const userSelector = (state) => state.users;
-const organizationIdSelector = (state, props) => props.organizationId;
+const organizationIdSelector = (state, organizationId) => organizationId;
 
 export const organizationMemberSelector = createSelector(
   userOrganizationMembershipSelector,

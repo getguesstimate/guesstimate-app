@@ -1,3 +1,4 @@
+import _ from "lodash";
 import React from "react";
 import { useRouter } from "next/router";
 
@@ -11,13 +12,13 @@ import { formatDate, formatDescription } from "gComponents/spaces/shared";
 
 const arrowsVisibleImage = "/assets/metric-icons/blue/arrows-visible.png";
 
-const BlankScreenshot = () => (
+const BlankScreenshot: React.FC = () => (
   <div className="snapshot blank">
     <img src={arrowsVisibleImage} />
   </div>
 );
 
-const SingleButton = ({ isPrivate }) => (
+const SingleButton: React.FC<{ isPrivate: boolean }> = ({ isPrivate }) => (
   <div className="tag">
     <Icon name={isPrivate ? "lock" : "globe"} />
   </div>
@@ -46,12 +47,12 @@ export const NewSpaceCard = ({ onClick }) => (
   </div>
 );
 
-export const SpaceCard = ({
-  space,
-  showPrivacy,
-  size = undefined,
-  urlParams = {},
-}) => {
+export const SpaceCard: React.FC<{
+  space: any;
+  showPrivacy?: boolean;
+  size?: string;
+  urlParams?: any;
+}> = ({ space, showPrivacy, size = undefined, urlParams = {} }) => {
   const router = useRouter();
   const hasName = !_.isEmpty(space.name);
   const hasOrg = _.has(space, "organization.name");

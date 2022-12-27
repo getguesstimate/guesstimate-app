@@ -11,7 +11,7 @@ function isCalculatorAcceptableMetric(metric) {
   );
 }
 
-function AddAtIndex(l, e, destIndex) {
+function addAtIndex(l, e, destIndex) {
   const index = l.findIndex((el) => el === e);
   if (index >= destIndex) {
     return [
@@ -122,11 +122,11 @@ export class FormContainer extends Component<Props> {
     const {
       calculator: { input_ids, output_ids },
     } = this.state;
-    const AddId = (l) => AddAtIndex(l, id, destIndex);
+    const addId = (l) => addAtIndex(l, id, destIndex);
     this._changeCalculator(
       this._isInput(id)
-        ? { input_ids: AddId(input_ids) }
-        : { output_ids: AddId(output_ids) }
+        ? { input_ids: addId(input_ids) }
+        : { output_ids: addId(output_ids) }
     );
   }
 

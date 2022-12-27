@@ -1,10 +1,8 @@
+import _ from "lodash";
 import React, { Component } from "react";
 
-import ReactMarkdown from "react-markdown";
 import Icon from "gComponents/react-fa-patched";
 import { sortable } from "react-sortable";
-
-import * as Calculator from "gEngine/calculator";
 
 const SortableListItem = sortable((props) => (
   <div {...props} className="list-item">
@@ -12,7 +10,28 @@ const SortableListItem = sortable((props) => (
   </div>
 ));
 
-export class CalculatorForm extends Component {
+type Props = {
+  calculator: any;
+  inputs: any;
+  outputs: any;
+  onMetricHide(id: string): void;
+  onMetricShow(id: string): void;
+  onMoveMetricTo(id: string, destIndex: number): void;
+  onChangeName(e: React.ChangeEvent): void;
+  onChangeContent(e: React.ChangeEvent): void;
+  onSubmit(): void;
+  isValid: boolean;
+  buttonText: string;
+};
+
+type State = {
+  draggingIndex: number | null;
+  draggingMetricId: string | null;
+  dropTargetId: number | null;
+  hasAlreadySubmitted: boolean;
+};
+
+export class CalculatorForm extends Component<Props, State> {
   state = {
     draggingIndex: null,
     draggingMetricId: null,
@@ -22,14 +41,14 @@ export class CalculatorForm extends Component {
 
   metricForm(
     { metric: { name, id, guesstimate }, isVisible },
-    isInput,
-    isDropTarget
+    isInput: boolean,
+    isDropTarget: boolean
   ) {
     const props = {
       name,
       isDropTarget,
       description: _.get(guesstimate, "description"),
-      isVisible: isVisible,
+      isVisible,
       onRemove: this.props.onMetricHide.bind(this, id),
       onAdd: this.props.onMetricShow.bind(this, id),
     };
@@ -46,7 +65,7 @@ export class CalculatorForm extends Component {
     } else if (_.isNull(newState.draggingIndex)) {
       this.props.onMoveMetricTo(
         this.state.draggingMetricId,
-        this.state.draggingIndex
+        this.state.draggingIndex as any // bad casting, but sorting is broken anyway
       );
       this.setState({
         ...newState,
@@ -78,8 +97,8 @@ export class CalculatorForm extends Component {
       state: { draggingIndex, dropTargetId, hasAlreadySubmitted },
     } = this;
 
-    const generateComponents = (metrics, isInput) =>
-      _.map(metrics, (m, i) => [
+    const generateComponents = (metrics: any[], isInput: boolean) =>
+      metrics.map((m, i) => [
         this.metricForm(m, isInput, dropTargetId === m.metric.id),
         m.metric.id,
       ]);
@@ -111,7 +130,7 @@ export class CalculatorForm extends Component {
             <h3>
               <textarea
                 rows={1}
-                placeholder={"Calculator Name"}
+                placeholder="Calculator Name"
                 value={title}
                 onChange={this.props.onChangeName}
                 className="field"
@@ -119,7 +138,7 @@ export class CalculatorForm extends Component {
             </h3>
             <textarea
               rows={3}
-              placeholder={"Explanation (Markdown)"}
+              placeholder="Explanation (Markdown)"
               value={content}
               onChange={this.props.onChangeContent}
               className="field"
@@ -128,14 +147,15 @@ export class CalculatorForm extends Component {
 
           <div className="inputs">
             <h3> {`${hasHiddenInputs ? "Visible " : ""}Inputs`} </h3>
-            {_.map(visibleInputs, ([item, id], i) => (
+            {visibleInputs.map(([item, id], i) => (
               <SortableListItem
                 key={i}
                 sortId={i}
                 draggingIndex={draggingIndex}
                 updateState={this.updateDragState.bind(this, id)}
-                outline={"list"}
+                outline="list"
                 items={visibleInputs}
+                onSortItems={() => undefined} // broken
               >
                 {item}
               </SortableListItem>
@@ -145,22 +165,23 @@ export class CalculatorForm extends Component {
           {hasHiddenInputs && (
             <div>
               <div className="inputs">
-                <h3> Hidden Inputs </h3>
-                {_.map(invisibleInputs, ([item, id], i) => item)}
+                <h3>Hidden Inputs</h3>
+                {invisibleInputs.map(([item, id], i) => item)}
               </div>
             </div>
           )}
 
           <div className="outputs">
             <h3> {`${hasHiddenOutputs ? "Visible " : ""}Outputs`} </h3>
-            {_.map(visibleOutputs, ([item, id], i) => (
+            {visibleOutputs.map(([item, id], i) => (
               <SortableListItem
                 key={i}
                 sortId={i}
                 draggingIndex={draggingIndex}
                 updateState={this.updateDragState.bind(this, id)}
-                outline={"list"}
+                outline="list"
                 items={visibleOutputs}
+                onSortItems={() => undefined} // broken
               >
                 {item}
               </SortableListItem>
@@ -169,8 +190,8 @@ export class CalculatorForm extends Component {
             {hasHiddenOutputs && (
               <div>
                 <div className=" outputs">
-                  <h3> Hidden Outputs </h3>
-                  {_.map(invisibleOutputs, ([item, id], i) => item)}
+                  <h3>Hidden Outputs</h3>
+                  {invisibleOutputs.map(([item, id], i) => item)}
                 </div>
               </div>
             )}
@@ -219,7 +240,7 @@ const EditSection = ({ isVisible, onRemove, onAdd }) => (
 const InputForm = (props) => (
   <div className={`input${props.isDropTarget ? " drop-target" : ""}`}>
     <div className="row">
-      <div className={`col-xs-12 col-sm-8`}>
+      <div className="col-xs-12 col-sm-8">
         <div className="name">{props.name}</div>
         {props.description && (
           <div className="description">{props.description}</div>
@@ -235,7 +256,7 @@ const InputForm = (props) => (
 const OutputForm = (props) => (
   <div className={`output${props.isDropTarget ? " drop-target" : ""}`}>
     <div className="row">
-      <div className={`col-xs-12 col-sm-8`}>
+      <div className="col-xs-12 col-sm-8">
         <div className="name">{props.name}</div>
       </div>
       <div className="col-xs-12 col-sm-4">

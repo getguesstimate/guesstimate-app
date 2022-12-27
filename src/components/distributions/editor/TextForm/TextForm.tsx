@@ -1,32 +1,45 @@
+import _ from "lodash";
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 
 import { DistributionSelector } from "./DistributionSelector";
 import { GuesstimateTypeIcon } from "./GuesstimateTypeIcon";
-import { TextInput } from "./TextInput";
+import { TextInput, UnconnectedTextInput } from "./TextInput";
 
 import { Guesstimator } from "lib/guesstimator/index";
 
-export class TextForm extends Component {
+type Props = {
+  guesstimate: any;
+  inputMetrics: any;
+  onChangeInput(text: string): void;
+  onChangeClickMode(mode?: string): void; // TODO - enum?
+  onAddData(data: number[]): void;
+  onSave(): void;
+  size: string;
+  organizationId?: string;
+  canUseOrganizationFacts: boolean;
+  onAddDefaultData(): void;
+  onChangeGuesstimateType(type: string): void;
+  onTab(shifted: boolean): void;
+  onReturn(shifted: boolean): void;
+  //   onChangeClickMode: PropTypes.func,
+  //   onFocus: PropTypes.func,
+};
+
+export class TextForm extends Component<Props> {
+  inputRef: React.RefObject<UnconnectedTextInput>;
   state = { showDistributionSelector: false };
 
-  static propTypes = {
-    onChangeInput: PropTypes.func.isRequired,
-    onAddData: PropTypes.func.isRequired,
-    onSave: PropTypes.func.isRequired,
-    onChangeGuesstimateType: PropTypes.func.isRequired,
-    onAddDefaultData: PropTypes.func,
-    onChangeClickMode: PropTypes.func,
-    onFocus: PropTypes.func,
-    guesstimate: PropTypes.object,
-    size: PropTypes.string,
-  };
-
-  focus() {
-    this.refs.TextInput.getWrappedInstance().focus();
+  constructor(props: Props) {
+    super(props);
+    this.inputRef = React.createRef();
   }
 
-  onChangeInput(input) {
+  focus() {
+    this.inputRef.current?.focus();
+  }
+
+  onChangeInput(input: string) {
     this.props.onChangeInput(input);
     this.setState({ showDistributionSelector: false });
   }
@@ -47,10 +60,8 @@ export class TextForm extends Component {
       props: {
         guesstimate: { input, guesstimateType },
         inputMetrics,
-        size,
         organizationId,
         canUseOrganizationFacts,
-        onChangeInput,
         onAddData,
         onChangeGuesstimateType,
         onReturn,
@@ -101,7 +112,7 @@ export class TextForm extends Component {
             onFocus={this._flagMetricAsClicked.bind(this)}
             onBlur={this._handleBlur.bind(this)}
             onChangeData={onAddData}
-            ref="TextInput"
+            ref={this.inputRef}
             width={shouldBeWide ? "NARROW" : "WIDE"}
             organizationId={organizationId}
             canUseOrganizationFacts={canUseOrganizationFacts}

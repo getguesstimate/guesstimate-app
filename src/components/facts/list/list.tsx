@@ -1,21 +1,35 @@
+import _ from "lodash";
 import React, { Component } from "react";
 
 import { FactForm } from "./form";
 import { FactItem } from "./item";
 
 import { utils } from "gEngine/engine";
-import { getVar } from "gEngine/facts";
+import { Fact, getVar } from "gEngine/facts";
 
 import Icon from "gComponents/react-fa-patched";
 
-export class FactList extends Component {
+type Props = {
+  spaceId?: string;
+  categoryId: string | null | undefined;
+  facts: Fact[];
+  categories: unknown;
+  imported_fact_ids?: string[];
+  onAddFact(fact: Fact): void;
+  onDeleteFact(fact: Fact): void;
+  onEditFact(fact: Fact): void;
+  existingVariableNames: string[];
+  canMakeNewFacts: boolean;
+};
+
+export class FactList extends Component<Props> {
   state = {
     editingFactId: null,
     newFactKey: 0,
     showNewForm: false,
   };
 
-  componentWillUpdate(newProps) {
+  componentWillUpdate(newProps: Props) {
     if (
       !!this.state.editingFactId &&
       !_.isEqual(this.props.facts, newProps.facts)
@@ -24,20 +38,22 @@ export class FactList extends Component {
     }
   }
 
-  onAddFact(fact) {
+  onAddFact(fact: Fact) {
     this.props.onAddFact(fact);
     this.setState({ newFactKey: this.state.newFactKey + 1 });
   }
 
-  showEditForm(editingFactId) {
+  showEditForm(editingFactId: string) {
     this.setState({ editingFactId });
   }
 
-  isExportedFromSelectedSpaceFn({ exported_from_id }) {
-    return exported_from_id === this.props.spaceId;
+  isExportedFromSelectedSpaceFn(fact: Fact): boolean {
+    return Boolean(
+      this.props.spaceId && fact.exported_from_id === this.props.spaceId
+    );
   }
   isImportedFromSelectedSpaceFn({ id }) {
-    return this.props.imported_fact_ids.includes(id);
+    return this.props.imported_fact_ids?.includes(id);
   }
 
   showNewForm() {
@@ -47,19 +63,19 @@ export class FactList extends Component {
     this.setState({ showNewForm: false });
   }
 
-  renderFactShow(fact) {
+  renderFactShow(fact: Fact) {
     return (
       <FactItem
         key={fact.id}
         fact={fact}
         onEdit={this.showEditForm.bind(this, fact.id)}
         isExportedFromSelectedSpace={this.isExportedFromSelectedSpaceFn(fact)}
-        size={"LARGE"}
+        size="LARGE"
       />
     );
   }
 
-  renderEditForm(fact) {
+  renderEditForm(fact: Fact) {
     const { existingVariableNames, categories, onEditFact } = this.props;
     return (
       <FactForm

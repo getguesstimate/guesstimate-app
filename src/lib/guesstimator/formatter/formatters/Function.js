@@ -1,3 +1,4 @@
+import _ from "lodash";
 import * as errorTypes from "lib/propagation/errors";
 
 const {

@@ -1,13 +1,17 @@
+import _ from "lodash";
 import { parse } from "./formatter/index";
 import { samplerTypes } from "./types";
 
 //Guesstimator.parse({text: '3+123+FA'}]})
 //TODO(fix this class)
 export class Guesstimator {
+  parsedError: any;
+  parsedInput: any;
+
   static parse(unparsedInput) {
     const [parsedError, parsedInput] = parse(unparsedInput);
     const newItem = new this({ parsedError, parsedInput });
-    return [parsedError, newItem];
+    return [parsedError, newItem] as const;
   }
 
   static samplerTypes = samplerTypes;
@@ -29,7 +33,7 @@ export class Guesstimator {
     return this.parsedInput.guesstimateType === "FUNCTION";
   }
 
-  sample(n, externalInputs = []) {
+  sample(n: number, externalInputs: { [k: string]: number[] } = {}) {
     if (!_.isEmpty(this.parsedError)) {
       return Promise.resolve({ errors: [this.parsedError], values: [] });
     }
