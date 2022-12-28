@@ -7,7 +7,10 @@ import {
 // a copy of that object with a `variable_name` field set to a unique variable_name derived from the name parameter, if
 // appropriate, otherwise returns a copy of the obect unchanged.
 
-export function withVariableName(fact, existingReadableIds) {
+export function withVariableName(
+  fact,
+  existingReadableIds: string[] | undefined = undefined
+) {
   const { name } = fact;
   if (!shouldTransformName(name)) {
     return fact;
