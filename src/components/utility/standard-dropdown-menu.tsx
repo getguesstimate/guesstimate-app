@@ -3,7 +3,8 @@ import PropTypes from "prop-types";
 
 import DropdownMenu from "react-dd-menu";
 
-export default class StandardDropdownMenu extends Component {
+// unused
+export default class StandardDropdownMenu extends Component<any> {
   state = {
     isMenuOpen: false,
   };

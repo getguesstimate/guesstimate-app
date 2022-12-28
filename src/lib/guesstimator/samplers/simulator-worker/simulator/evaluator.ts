@@ -56,7 +56,7 @@ export const STOCHASTIC_FUNCTIONS = ["pickRandom", "randomInt", "random"]
   .concat(Object.keys(Distributions))
   .concat(Object.keys(ImpureConstructs));
 
-export function Evaluate(text, sampleCount, inputs) {
+export function Evaluate(text: string, sampleCount: number, inputs) {
   try {
     const compiled = math.compile(text);
     return evaluate(compiled, inputs, sampleCount, text);

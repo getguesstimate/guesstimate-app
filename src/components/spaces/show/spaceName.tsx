@@ -1,15 +1,16 @@
+import _ from "lodash";
 import React, { Component } from "react";
 
 import DropDown from "gComponents/utility/drop-down/index";
 
-export class SpaceName extends Component {
+export class SpaceName extends Component<any> {
   focusForm() {
-    this.refs.name.focus();
+    (this.refs.name as any).focus();
   }
 
   onSave() {
-    this.props.onSave(this.refs.name.value);
-    this.refs.DropDown._close();
+    this.props.onSave((this.refs.name as any).value);
+    (this.refs.DropDown as any)._close();
   }
 
   render() {
@@ -30,7 +31,7 @@ export class SpaceName extends Component {
             ref="DropDown"
           >
             <div className="ui form">
-              <textarea defaultValue={name} type="text" rows="2" ref="name" />
+              <textarea defaultValue={name} rows={2} ref="name" />
               {!hasName && (
                 <p>
                   What are you trying to estimate? Be specific, so others can

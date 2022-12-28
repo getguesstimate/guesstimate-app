@@ -1,4 +1,4 @@
-let dText = {};
+let dText: any = {};
 
 dText.default = `
 ## Making a Treehouse?

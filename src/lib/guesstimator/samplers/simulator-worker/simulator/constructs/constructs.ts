@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 const scenarios = (values, inputProbabilities) => {
   const total = _.sum(inputProbabilities);
   const probabilities = inputProbabilities.map((e) => e / total);
@@ -13,7 +15,7 @@ const scenarios = (values, inputProbabilities) => {
     }
   }
 
-  return Math.Nan;
+  return undefined; // previously: `return Math.Nan;`
 };
 
 export const ImpureConstructs = {

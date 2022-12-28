@@ -1,12 +1,15 @@
-import PropTypes from "prop-types";
-import React, { Component } from "react";
+import { Component } from "react";
 import { connect } from "react-redux";
 
-import { CardListElement } from "gComponents/utility/card/index";
+import {
+  CardListElement,
+  CardListElementProps,
+} from "gComponents/utility/card/index";
 import DropDown from "gComponents/utility/drop-down/index";
 
 import * as canvasStateActions from "gModules/canvas_state/actions";
-import * as canvasStateProps from "gModules/canvas_state/prop_type";
+import { CanvasViewState } from "gModules/canvas_state/prop_type";
+import { AppDispatch } from "gModules/store";
 import { capitalizeFirstLetter } from "lib/string";
 
 const arrowsHiddenImage = "/assets/metric-icons/blue/arrows-hidden.png";
@@ -28,12 +31,12 @@ const Item = ({ name, onSelect }) => (
   </li>
 );
 
-class CanvasViewForm extends Component {
-  static propTypes = {
-    canvasState: canvasStateProps.canvasViewState,
-    dispatch: PropTypes.func,
-  };
+type Props = {
+  canvasState: CanvasViewState;
+  dispatch: AppDispatch;
+};
 
+class CanvasViewForm extends Component<Props> {
   _selectMetricCardView(e) {
     this.props.dispatch(canvasStateActions.toggleView(e));
   }
@@ -43,7 +46,14 @@ class CanvasViewForm extends Component {
   }
 
   render() {
-    let metricCardViewOptions = [
+    type Option = {
+      name: CardListElementProps["header"];
+      image: CardListElementProps["image"];
+      isSelected?: CardListElementProps["isSelected"];
+      onClick?: CardListElementProps["onMouseDown"];
+    };
+
+    let metricCardViewOptions: (Option & { key: string })[] = [
       {
         name: "scientific",
         image: scientificImage,
@@ -52,7 +62,7 @@ class CanvasViewForm extends Component {
       { name: "expanded", image: debuggingImage, key: "expandedViewEnabled" },
     ];
 
-    let arrowViewOptions = [
+    let arrowViewOptions: Option[] = [
       { name: "hidden", image: arrowsHiddenImage },
       { name: "visible", image: arrowsVisibleImage },
     ];
@@ -83,7 +93,7 @@ class CanvasViewForm extends Component {
         openLink={<a className="header-action">View</a>}
         position="right"
       >
-        <div className="section" closeOnClick={false}>
+        <div className="section">
           <div
             className="header-divider"
             onClick={(e) => {
@@ -97,10 +107,9 @@ class CanvasViewForm extends Component {
               return (
                 <CardListElement
                   key={o.name}
-                  icon={o.icon}
                   header={o.name}
                   isSelected={o.isSelected}
-                  onMouseDown={o.onClick}
+                  onMouseDown={o.onClick!}
                   image={o.image}
                 />
               );
@@ -109,7 +118,7 @@ class CanvasViewForm extends Component {
         </div>
         <hr />
 
-        <div className="section" closeOnClick={false}>
+        <div className="section">
           <div
             className="header-divider"
             onClick={(e) => {
@@ -123,10 +132,9 @@ class CanvasViewForm extends Component {
               return (
                 <CardListElement
                   key={o.name}
-                  icon={o.icon}
                   header={o.name}
                   isSelected={o.isSelected}
-                  onMouseDown={o.onClick}
+                  onMouseDown={o.onClick!}
                   image={o.image}
                 />
               );

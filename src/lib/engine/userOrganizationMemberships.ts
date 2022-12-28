@@ -1,6 +1,11 @@
+import _ from "lodash";
 import { typeSafeEq } from "./utils";
 
-export const isMember = (organization_id, user_id, memberships) =>
+export const isMember = (
+  organization_id: string,
+  user_id: string,
+  memberships
+) =>
   _.some(
     memberships,
     (m) =>

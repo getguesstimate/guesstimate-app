@@ -1,3 +1,4 @@
+import _ from "lodash";
 import React, { Component } from "react";
 
 import { ScatterPlot } from "react-d3-components";
@@ -13,7 +14,7 @@ function importance(r2) {
   }
 }
 
-class Plot extends Component {
+class Plot extends Component<any> {
   render() {
     const { xSamples, ySamples, size, xLabel, yLabel } = this.props;
     const customValues = _.zip(xSamples, ySamples).filter(
@@ -77,7 +78,7 @@ class Plot extends Component {
   }
 }
 
-class RegressionStats extends Component {
+class RegressionStats extends Component<any> {
   render() {
     const { xSamples, ySamples, size } = this.props;
     if (_.isEmpty(xSamples) || _.isEmpty(ySamples)) {
@@ -133,7 +134,7 @@ class RegressionStats extends Component {
   }
 }
 
-export default class SensitivitySection extends Component {
+export default class SensitivitySection extends Component<any> {
   static defaultProps = {
     size: "SMALL",
   };

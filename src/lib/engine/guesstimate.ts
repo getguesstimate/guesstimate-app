@@ -1,9 +1,8 @@
 import _ from "lodash";
-import { Guesstimate, Distribution, DGraph, Graph, Simulation } from "./types";
-import { HANDLE_REGEX } from "./facts";
 import * as _collections from "./collections";
+import { HANDLE_REGEX } from "./facts";
+import { FACT_ID_PREFIX, METRIC_ID_PREFIX } from "./simulation";
 import * as _utils from "./utils";
-import { METRIC_ID_PREFIX, FACT_ID_PREFIX } from "./simulation";
 
 export function equals(l, r) {
   return (
@@ -75,7 +74,7 @@ export function expressionToInputFn(metrics = [], facts = []) {
 
 // Returns an expression based on the passed input and idMap.
 export function inputToExpression(input, idMap) {
-  const replaceMap = _.transform(idMap, (result, value, key) => {
+  const replaceMap = _.transform(idMap, (result: any, value, key) => {
     result[key] = expressionSyntaxPad(value.id, value.isMetric);
   });
   return _utils.replaceByMap(input, replaceMap);

@@ -1,21 +1,29 @@
-import React, { Component } from "react";
+import _ from "lodash";
+import { NextRouter, withRouter } from "next/router";
+import { Component } from "react";
 import { connect } from "react-redux";
-import { withRouter } from "next/router";
 
 import * as firstSubscriptionActions from "gModules/first_subscription/actions";
 import { subStage } from "gModules/first_subscription/state_machine";
 import * as spaceActions from "gModules/spaces/actions";
 
+import { AppDispatch, RootState } from "gModules/store";
 import FirstSubscription from "./FirstSubscription";
 
-function mapStateToProps(state) {
+function mapStateToProps(state: RootState) {
   return {
     me: state.me,
     firstSubscription: state.firstSubscription,
   };
 }
 
-class FirstSubscriptionContainer extends Component {
+type Props = {
+  planId: string;
+} & { dispatch: AppDispatch; router: NextRouter } & ReturnType<
+    typeof mapStateToProps
+  >;
+
+class FirstSubscriptionContainer extends Component<Props> {
   componentDidMount() {
     firstSubscriptionActions.flowStageReset();
 

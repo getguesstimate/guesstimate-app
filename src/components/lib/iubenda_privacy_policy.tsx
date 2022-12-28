@@ -1,11 +1,10 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
-export default class IubendaPrivacyPolicy extends Component {
-  static propTypes = {
-    id: PropTypes.number,
-  };
-
+export default class IubendaPrivacyPolicy extends Component<{
+  id: number;
+  children: React.ReactNode;
+}> {
   componentWillMount() {
     var loadIubenda = function (w, d) {
       var loader = function () {

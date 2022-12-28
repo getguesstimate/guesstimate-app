@@ -1,3 +1,4 @@
+import _ from "lodash";
 import { mutableCopy } from "gEngine/utils";
 
 const DIGIT_REGEX = /^\d+$/;
@@ -89,7 +90,7 @@ function getDirectVariableNameFromName(
 
 export function getVariableNameFromName(
   rawName,
-  existingVariableNames = [],
+  existingVariableNames: string[] = [],
   maxOneWordLength,
   maxSplitWordLength,
   totalMaxLength,
@@ -115,7 +116,7 @@ export function getVariableNameFromName(
   }
 
   const suffixes = matchingNames.map((v) =>
-    parseInt(v.match(nameRegex)[1] || "0")
+    parseInt(v.match(nameRegex)?.[1] || "0")
   );
   if (!suffixes.includes(0)) {
     return directName;

@@ -1,9 +1,13 @@
+import _ from "lodash";
 import * as e from "gEngine/engine";
 
 // Importing too many SIPs all into one row would be very hard to work with, so we limit how many columns it will fill.
 const MAX_COLUMNS = 8;
 
-export function parseSlurp(slurp, space = { metrics: [], guesstimates: [] }) {
+export function parseSlurp(
+  slurp,
+  space: any = { metrics: [], guesstimates: [] }
+) {
   const name = slurp.name;
   const description = slurp.provenance;
 
@@ -13,7 +17,7 @@ export function parseSlurp(slurp, space = { metrics: [], guesstimates: [] }) {
       .reduce((x, y) => Math.max(x, y), 0) + 1;
 
   let existingReadableIds = space.metrics.map((m) => m.readableId);
-  const newMetrics = _.map(slurp.sips, (s, i) => {
+  const newMetrics = slurp.sips.map((s, i) => {
     const metric = {
       ...e.metric.create(existingReadableIds),
       location: {

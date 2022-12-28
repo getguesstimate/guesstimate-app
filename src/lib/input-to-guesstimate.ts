@@ -1,4 +1,6 @@
 export default class InputToGuesstimate {
+  input: any;
+
   constructor(input) {
     this.input = input;
   }

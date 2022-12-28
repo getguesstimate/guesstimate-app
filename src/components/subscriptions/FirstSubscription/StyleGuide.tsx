@@ -30,7 +30,7 @@ export default class FirstSubscriptionStyleGuide extends Component {
         {subStages.map((stage) => {
           return (
             <ComponentEditor
-              child={FirstSubscription}
+              child={FirstSubscription as any}
               childProps={FirstSubscriptionStage(stage)}
               name={stage}
               key={stage}

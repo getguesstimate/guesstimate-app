@@ -1,3 +1,4 @@
+import _ from "lodash";
 import { MarkdownViewer } from "gComponents/utility/markdown-viewer/index";
 import React, { Component } from "react";
 import * as TreehouseExample from "./example_treehouse";
@@ -16,7 +17,8 @@ const QuestionToggle = ({ name, top, left, onSelect }) => (
   </div>
 );
 
-export default class ModelDemo extends Component {
+// unused?
+export default class ModelDemo extends Component<{ selection: any }> {
   state = { selection: this.props.selection || "" };
 
   _onSelect(selection) {

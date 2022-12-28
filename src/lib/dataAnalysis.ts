@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 function nextDistinctValueSearch(sortedValues, start, end) {
   if (sortedValues[start] === sortedValues[end]) {
     return -1;
