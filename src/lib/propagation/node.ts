@@ -41,8 +41,8 @@ export class SimulationNode {
       inputIndices,
       skipSimulating,
     },
-    DAG,
-    index
+    DAG: SimulationDAG,
+    index: number
   ) {
     this.id = id;
     this.expression = expression;
@@ -57,7 +57,7 @@ export class SimulationNode {
     this.inputs = _utils.orArr(inputs);
   }
 
-  simulate(numSamples) {
+  simulate(numSamples: number) {
     const startedWithErrors = this._hasErrors();
 
     const [parsedError, parsedInput] = this._parse();

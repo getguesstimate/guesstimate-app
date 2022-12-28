@@ -1,4 +1,3 @@
-import { expect } from "chai";
 import numberShow from "./numberShower";
 
 describe("NumberShow", () => {
@@ -38,13 +37,13 @@ describe("NumberShow", () => {
       [1200000000000000, { value: "1.2", symbol: undefined, power: 15 }],
       [1.2e25, { value: "1.2", symbol: undefined, power: 25 }],
       [1.2e100, { value: "1.2", symbol: undefined, power: 100 }],
-    ];
+    ] as const;
 
     const itExamples = examples.map((e) => () => {
       it(`works for number ${e[0]}`, () => {
-        expect(numberShow(e[0]).value).to.equal(e[1].value);
-        expect(numberShow(e[0]).symbol).to.equal(e[1].symbol);
-        expect(numberShow(e[0]).power).to.equal(e[1].power);
+        expect(numberShow(e[0]).value).toEqual(e[1].value);
+        expect(numberShow(e[0]).symbol).toEqual(e[1].symbol);
+        expect(numberShow(e[0]).power).toEqual(e[1].power);
       });
     });
     itExamples.map((e) => e());

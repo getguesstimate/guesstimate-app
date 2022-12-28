@@ -38,7 +38,7 @@ export function or(res) {
   return new RegExp(parenthesize(lengthSorted.join("|")), "g");
 }
 
-export function replaceByMap(str, replacementMap) {
+export function replaceByMap(str: string, replacementMap): string {
   if (!str || _.isEmpty(str) || _.isEmpty(replacementMap)) {
     return str;
   }

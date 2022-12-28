@@ -1,6 +1,8 @@
 import { AnyAction, Reducer } from "redux";
 
-const initialState = {
+export type CanvasState = any;
+
+const initialState: CanvasState = {
   analysisViewEnabled: false,
   expandedViewEnabled: false,
   scientificViewEnabled: false,

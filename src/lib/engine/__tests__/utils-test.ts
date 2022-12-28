@@ -1,5 +1,4 @@
 import { URL_REGEX, makeURLsMarkdown } from "../utils";
-import { expect } from "chai";
 
 describe("URL transformation", () => {
   // Source: https://mathiasbynens.be/demo/url-regex
@@ -83,16 +82,8 @@ describe("URL transformation", () => {
   describe("URL_REGEX", () => {
     const fullStrRegex = new RegExp(`^${URL_REGEX.source}$`, "i");
     it("correctly matches urls", () => {
-      validURLs.forEach((url) =>
-        expect(fullStrRegex.test(url), `URL: ${url} should match`).to.equal(
-          true
-        )
-      );
-      errorURLs.forEach((url) =>
-        expect(fullStrRegex.test(url), `URL: ${url} should not match`).to.equal(
-          false
-        )
-      );
+      validURLs.forEach((url) => expect(fullStrRegex.test(url)).toEqual(true));
+      errorURLs.forEach((url) => expect(fullStrRegex.test(url)).toEqual(false));
     });
   });
 
@@ -103,7 +94,7 @@ describe("URL transformation", () => {
     const fullTextTransformed = `Hi There. ${sampleUrlTransformed}, ${sampleUrlTransformed}, [foo](${sampleUrl}), (${sampleUrlTransformed})`;
 
     it("correctly transforms text", () => {
-      expect(makeURLsMarkdown(fullText)).to.equal(fullTextTransformed);
+      expect(makeURLsMarkdown(fullText)).toEqual(fullTextTransformed);
     });
   });
 });

@@ -3,6 +3,7 @@ import { replaceByMap } from "gEngine/utils";
 
 import generateRandomReadableId from "gEngine/metric/generate_random_readable_id";
 import { STOCHASTIC_FUNCTIONS } from "./simulator-worker/simulator/evaluator";
+import { GuesstimateWorker } from "lib/window";
 
 const MIN_SAMPLES_PER_WINDOW = 100;
 
@@ -14,7 +15,7 @@ function LCM(a: number, b: number) {
   return (a * b) / GCD(a, b);
 }
 
-export function simulate(expr, inputs, maxSamples) {
+export function simulate(expr: string, inputs, maxSamples: number) {
   const overallNumSamples = neededSamples(expr, inputs, maxSamples);
 
   if (overallNumSamples < MIN_SAMPLES_PER_WINDOW * window.workers.length) {
@@ -29,12 +30,14 @@ export function simulate(expr, inputs, maxSamples) {
     numSamples + (overallNumSamples % window.workers.length);
 
   const promises = [
-    ..._.map(window.workers.slice(0, -1), (worker, index) =>
-      simulateOnWorker(
-        worker,
-        buildSimulationParams(expr, index * numSamples, numSamples, inputs)
-      )
-    ),
+    ...window.workers
+      .slice(0, -1)
+      .map((worker, index) =>
+        simulateOnWorker(
+          worker,
+          buildSimulationParams(expr, index * numSamples, numSamples, inputs)
+        )
+      ),
     simulateOnWorker(
       window.workers[window.workers.length - 1],
       buildSimulationParams(
@@ -61,11 +64,11 @@ export function simulate(expr, inputs, maxSamples) {
   });
 }
 
-const hasStochasticFunction = (text) =>
+const hasStochasticFunction = (text: string) =>
   _.some(STOCHASTIC_FUNCTIONS, (e) => text.indexOf(e) !== -1);
 
 export function neededSamples(
-  text,
+  text: string,
   inputs: { [k: string]: number[] },
   n: number
 ) {
@@ -106,7 +109,12 @@ function modularSlice(array, from, to) {
   return [...array.slice(newFrom), array.slice(0, to)];
 }
 
-function buildSimulationParams(rawExpr, prevModularIndex, numSamples, inputs) {
+function buildSimulationParams(
+  rawExpr: string,
+  prevModularIndex: number,
+  numSamples: number,
+  inputs
+) {
   let idMap = {};
   let takenReadableIds: string[] = [];
   let slicedInputs = {};
@@ -130,7 +138,7 @@ function buildSimulationParams(rawExpr, prevModularIndex, numSamples, inputs) {
   return { expr, numSamples, inputs: slicedInputs };
 }
 
-function simulateOnWorker(worker, data) {
+function simulateOnWorker(worker: GuesstimateWorker, data) {
   return new Promise((resolve, reject) => {
     worker.push(data, ({ data }) => {
       resolve(JSON.parse(data));

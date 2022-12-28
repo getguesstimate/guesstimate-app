@@ -1,11 +1,13 @@
 import { neededSamples } from "../Simulator";
-import { expect } from "chai";
 
 const n = 5000;
 
 describe("Simulator", () => {
   describe("#neededSamples", () => {
-    const examples = [
+    const examples: [
+      { text: string; inputs: { [k: string]: number[] } },
+      number
+    ][] = [
       [{ text: "3", inputs: {} }, 1],
       [{ text: "foofunction([4,5,3])", inputs: { AK: [3], BA: [5] } }, 1],
 
@@ -29,7 +31,7 @@ describe("Simulator", () => {
       .map((e) => () => {
         it(`with inputs ${JSON.stringify(e[0])}, is ${e[1]} `, () => {
           const inputs = e[0];
-          expect(neededSamples(inputs.text, inputs.inputs, n)).to.equal(e[1]);
+          expect(neededSamples(inputs.text, inputs.inputs, n)).toEqual(e[1]);
         });
       })
       .map((e) => e());

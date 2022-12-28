@@ -1,5 +1,3 @@
-import { expect } from "chai";
-
 import {
   getCycleSets,
   toCyclePseudoNode,
@@ -30,12 +28,12 @@ describe("DAG library", () => {
     const { acyclicNodes, cycleSets } = getCycleSets(withCycles, nodeAncestors);
 
     it("Correctly extracts cycles", () => {
-      expect(acyclicNodes).to.deep.have.members([
+      expect(acyclicNodes).toEqual([
         { id: "1", inputs: [] },
         { id: "2", inputs: ["1"] },
         { id: "3", inputs: ["1"] },
       ]);
-      expect(cycleSets).to.deep.have.members([
+      expect(cycleSets).toEqual([
         [
           { id: "A", inputs: ["G"] },
           { id: "B", inputs: ["A"] },
@@ -56,7 +54,7 @@ describe("DAG library", () => {
 
     const cyclePseudoNodes = cycleSets.map(toCyclePseudoNode);
     it("correctly makes psuedo nodes", () => {
-      expect(cyclePseudoNodes).to.deep.have.members([
+      expect(cyclePseudoNodes).toEqual([
         {
           id: null,
           isCycle: true,
@@ -110,7 +108,7 @@ describe("DAG library", () => {
 
     it("separates into proper height sets", () => {
       const heightSets = separateIntoHeightSets(nodesToSeparate);
-      expect(heightSets).to.deep.equal([
+      expect(heightSets).toEqual([
         [
           { id: "0", inputs: [] },
           { id: "1", inputs: [] },
@@ -151,13 +149,13 @@ describe("DAG library", () => {
 
     const nodeAncestors = getNodeAncestors(nodes);
     const components = separateIntoDisconnectedComponents(nodes, nodeAncestors);
-    expect(components).to.have.length(2);
-    expect(components[0]).to.deep.have.members([
+    expect(components).toHaveLength(2);
+    expect(components[0]).toEqual([
       { id: "1", inputs: [] },
       { id: "2", inputs: ["1"] },
       { id: "3", inputs: ["1"] },
     ]);
-    expect(components[1]).to.deep.have.members([
+    expect(components[1]).toEqual([
       { id: "4", inputs: [] },
       { id: "5", inputs: ["4"] },
       { id: "6", inputs: ["4", "5"] },

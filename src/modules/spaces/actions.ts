@@ -228,7 +228,7 @@ function getSpace(getState, spaceId) {
   return e.collections.get(spaces, spaceId);
 }
 
-export function generalUpdate(spaceId, params) {
+export function generalUpdate(spaceId, params): AppThunk {
   return (dispatch, getState) => {
     const space = { ...getSpace(getState, spaceId), ...params };
     const usesFacts =
@@ -269,7 +269,7 @@ export function generalUpdate(spaceId, params) {
 }
 
 //updates everything except graph
-export function update(spaceId, params = {}) {
+export function update(spaceId, params = {}): AppThunk {
   return (dispatch, getState) => {
     let space = getSpace(getState, spaceId);
     space = Object.assign({}, space, params);
@@ -280,7 +280,7 @@ export function update(spaceId, params = {}) {
 }
 
 //updates graph only
-export function updateGraph(spaceId, saveOnServer = true) {
+export function updateGraph(spaceId, saveOnServer = true): AppThunk {
   return (dispatch, getState) => {
     let {
       spaces,
@@ -308,14 +308,14 @@ function meCanEdit(spaceId, state) {
   return e.space.canEdit(space, me, userOrganizationMemberships, canvasState);
 }
 
-export function registerGraphChange(spaceId) {
+export function registerGraphChange(spaceId): AppThunk {
   return (dispatch, getState) => {
     const canEdit = meCanEdit(spaceId, getState());
     dispatch(updateGraph(spaceId, canEdit));
   };
 }
 
-export function enableShareableLink(spaceId) {
+export function enableShareableLink(spaceId): AppThunk {
   return (dispatch, getState) => {
     api(getState()).models.enableShareableLink(spaceId, (err, value) => {
       if (err) {
@@ -329,7 +329,7 @@ export function enableShareableLink(spaceId) {
   };
 }
 
-export function disableShareableLink(spaceId) {
+export function disableShareableLink(spaceId): AppThunk {
   return (dispatch, getState) => {
     api(getState()).models.disableShareableLink(spaceId, (err, value) => {
       if (err) {
@@ -343,7 +343,7 @@ export function disableShareableLink(spaceId) {
   };
 }
 
-export function rotateShareableLink(spaceId) {
+export function rotateShareableLink(spaceId): AppThunk {
   return (dispatch, getState) => {
     api(getState()).models.rotateShareableLink(spaceId, (err, value) => {
       if (err) {

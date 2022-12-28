@@ -1,6 +1,6 @@
 export type FormatterInput = {
   text?: string;
-  guesstimateType: string | null;
+  guesstimateType?: string | null;
   data?: any;
 };
 

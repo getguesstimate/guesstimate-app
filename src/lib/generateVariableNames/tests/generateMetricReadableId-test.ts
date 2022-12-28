@@ -1,4 +1,3 @@
-import { expect } from "chai";
 import { withReadableId } from "../generateMetricReadableId";
 
 describe("generateReadableId", () => {
@@ -106,9 +105,9 @@ describe("generateReadableId", () => {
       it(description, () => {
         const { readableId } = withReadableId(metric, existingReadableIds);
         if (shouldGenerateReadableId) {
-          expect(readableId).to.equal(expectedReadableId);
+          expect(readableId).toEqual(expectedReadableId);
         } else {
-          expect(readableId).to.not.be.ok;
+          expect(readableId).toBe(undefined);
         }
       });
     }

@@ -20,8 +20,8 @@ describe("guesstimatesReducer", () => {
         type: "SPACES_FETCH_SUCCESS",
         records: spaces,
       });
-      expect(newGuesstimates.length).to.equal(2);
-      expect(newGuesstimates[1].input).to.equal("3");
+      expect(newGuesstimates.length).toEqual(2);
+      expect(newGuesstimates[1].input).toEqual("3");
     });
   });
 
@@ -36,8 +36,8 @@ describe("guesstimatesReducer", () => {
         type: "ADD_METRIC",
         item: { id: "3" },
       });
-      expect(newGuesstimates.length).to.equal(3);
-      expect(newGuesstimates[2].metric).to.equal("3");
+      expect(newGuesstimates.length).toEqual(3);
+      expect(newGuesstimates[2].metric).toEqual("3");
     });
 
     it(`correctly adds a redundant element`, () => {
@@ -45,8 +45,8 @@ describe("guesstimatesReducer", () => {
         type: "ADD_METRIC",
         item: { id: "2" },
       });
-      expect(newGuesstimates.length).to.equal(2);
-      expect(newGuesstimates[1].input).to.equal("");
+      expect(newGuesstimates.length).toEqual(2);
+      expect(newGuesstimates[1].input).toEqual("");
     });
   });
 });

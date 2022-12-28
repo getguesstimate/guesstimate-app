@@ -6,12 +6,12 @@ describe("DistributionTextUpTo", () => {
       [{ text: "[8,10]", guesstimateType: "UNIFORM" }, true],
       [{ text: "[8,10", guesstimateType: "UNIFORM" }, false],
       [{ text: "8,10]", guesstimateType: "UNIFORM" }, false],
-    ];
+    ] as const;
 
     examples
       .map((e) => () => {
         it(`works for guesstimate ${JSON.stringify(e[0])}`, () => {
-          expect(formatter.matches(e[0])).to.equal(e[1]);
+          expect(formatter.matches(e[0])).toEqual(e[1]);
         });
       })
       .map((e) => e());
@@ -44,7 +44,7 @@ describe("DistributionTextUpTo", () => {
         it(`guesstimate ${JSON.stringify(e[0])} converts to ${JSON.stringify(
           e[1]
         )}`, () => {
-          expect(formatter.format(e[0])).to.deep.equal(e[1]);
+          expect(formatter.format(e[0])).toEqual(e[1]);
         });
       })
       .map((e) => e());

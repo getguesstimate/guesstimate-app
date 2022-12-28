@@ -1,5 +1,3 @@
-import { expect } from "chai";
-
 import { getSubset } from "../wrapper";
 
 import * as _collections from "gEngine/collections";
@@ -192,33 +190,35 @@ describe("getSubset", () => {
     ];
 
     testCases.forEach(({ graphFilters, description }) => {
-      it(description, () => {
+      describe(description, () => {
         const { subset, relevantFacts } = getSubset(state, graphFilters);
 
-        expect(subset, "metrics match")
-          .to.have.property("metrics")
-          .that.deep.has.members(space1Metrics);
-        expect(subset, "guesstimates match")
-          .to.have.property("guesstimates")
-          .that.deep.has.members(space1Guesstimates);
-        expect(subset, "simulations match")
-          .to.have.property("simulations")
-          .that.deep.has.members(space1Sims);
-        expect(relevantFacts, "relevantFacts match").to.deep.have.members([
-          {
-            id: 1,
-            expression: "3",
-            imported_to_intermediate_space_ids: [1, 2],
-            shouldBeSimulated: false,
-          },
-          {
-            id: 2,
-            metric_id: 1,
-            exported_from_id: 1,
-            expression: `=${expressionSyntaxPad(1)}`,
-            shouldBeSimulated: true,
-          },
-        ]);
+        test("metrics match", () => {
+          expect(subset).toHaveProperty("metrics", space1Metrics);
+        });
+        test("guesstimates match", () => {
+          expect(subset).toHaveProperty("guesstimates", space1Guesstimates);
+        });
+        test("simulations match", () => {
+          expect(subset).toHaveProperty("simulations", space1Sims);
+        });
+        test("relevantFacts match", () => {
+          expect(relevantFacts).toEqual([
+            {
+              id: 1,
+              expression: "3",
+              imported_to_intermediate_space_ids: [1, 2],
+              shouldBeSimulated: false,
+            },
+            {
+              id: 2,
+              metric_id: 1,
+              exported_from_id: 1,
+              expression: `=${expressionSyntaxPad(1)}`,
+              shouldBeSimulated: true,
+            },
+          ]);
+        });
       });
     });
   });
@@ -246,36 +246,38 @@ describe("getSubset", () => {
     };
 
     testCases.forEach(({ graphFilters, description }) => {
-      it(description, () => {
+      describe(description, () => {
         const { subset, relevantFacts } = getSubset(
           stateWithCanvasStateToFalse,
           graphFilters
         );
 
-        expect(subset, "metrics match")
-          .to.have.property("metrics")
-          .that.deep.has.members(space1Metrics);
-        expect(subset, "guesstimates match")
-          .to.have.property("guesstimates")
-          .that.deep.has.members(space1Guesstimates);
-        expect(subset, "simulations match")
-          .to.have.property("simulations")
-          .that.deep.has.members(space1Sims);
-        expect(relevantFacts, "relevantFacts match").to.deep.have.members([
-          {
-            id: 1,
-            expression: "3",
-            imported_to_intermediate_space_ids: [1, 2],
-            shouldBeSimulated: false,
-          },
-          {
-            id: 2,
-            metric_id: 1,
-            exported_from_id: 1,
-            expression: `=${expressionSyntaxPad(1)}`,
-            shouldBeSimulated: false,
-          },
-        ]);
+        test("metrics match", () => {
+          expect(subset).toHaveProperty("metrics", space1Metrics);
+        });
+        test("guesstimates match", () => {
+          expect(subset).toHaveProperty("guesstimates", space1Guesstimates);
+        });
+        test("simulations match", () => {
+          expect(subset).toHaveProperty("simulations", space1Sims);
+        });
+        test("relevantFacts match", () => {
+          expect(relevantFacts).toEqual([
+            {
+              id: 1,
+              expression: "3",
+              imported_to_intermediate_space_ids: [1, 2],
+              shouldBeSimulated: false,
+            },
+            {
+              id: 2,
+              metric_id: 1,
+              exported_from_id: 1,
+              expression: `=${expressionSyntaxPad(1)}`,
+              shouldBeSimulated: false,
+            },
+          ]);
+        });
       });
     });
   });
@@ -303,94 +305,102 @@ describe("getSubset", () => {
     };
 
     testCases.forEach(({ graphFilters, description }) => {
-      it(description, () => {
+      describe(description, () => {
         const { subset, relevantFacts } = getSubset(
           stateWithCanvasStateToFalse,
           graphFilters
         );
 
-        expect(subset, "metrics match")
-          .to.have.property("metrics")
-          .that.deep.has.members(space1Metrics);
-        expect(subset, "guesstimates match")
-          .to.have.property("guesstimates")
-          .that.deep.has.members(space1Guesstimates);
-        expect(subset, "simulations match")
-          .to.have.property("simulations")
-          .that.deep.has.members(space1Sims);
-        expect(relevantFacts, "relevantFacts match").to.deep.have.members([
-          {
-            id: 1,
-            expression: "3",
-            imported_to_intermediate_space_ids: [1, 2],
-            shouldBeSimulated: false,
-          },
-          {
-            id: 2,
-            metric_id: 1,
-            exported_from_id: 1,
-            expression: `=${expressionSyntaxPad(1)}`,
-            shouldBeSimulated: true,
-          },
-        ]);
+        test("metrics match", () => {
+          expect(subset).toHaveProperty("metrics", space1Metrics);
+        });
+        test("guesstimates match", () => {
+          expect(subset).toHaveProperty("guesstimates", space1Guesstimates);
+        });
+        test("simulations match", () => {
+          expect(subset).toHaveProperty("simulations", space1Sims);
+        });
+        test("relevantFacts match", () => {
+          expect(relevantFacts).toEqual([
+            {
+              id: 1,
+              expression: "3",
+              imported_to_intermediate_space_ids: [1, 2],
+              shouldBeSimulated: false,
+            },
+            {
+              id: 2,
+              metric_id: 1,
+              exported_from_id: 1,
+              expression: `=${expressionSyntaxPad(1)}`,
+              shouldBeSimulated: true,
+            },
+          ]);
+        });
       });
     });
   });
 
-  it("should correctly extract all possibly intermediate spaces' subsets from a factId", () => {
+  describe("should correctly extract all possibly intermediate spaces' subsets from a factId", () => {
     const graphFilters = { factId: 1 };
     const { subset, relevantFacts } = getSubset(state, graphFilters);
 
-    expect(subset, "metrics match")
-      .to.have.property("metrics")
-      .that.deep.has.members([
+    test("metrics match", () => {
+      expect(subset).toHaveProperty("metrics", [
         ...space1Metrics,
         ...space2Metrics,
         ...space6Metrics,
       ]);
-    expect(subset, "guesstimates match")
-      .to.have.property("guesstimates")
-      .that.deep.has.members([
+    });
+    test("guesstimates match", () => {
+      expect(subset).toHaveProperty("guesstimates", [
         ...space1Guesstimates,
         ...space2Guesstimates,
         ...space6Guesstimates,
       ]);
-    expect(subset, "simulations match")
-      .to.have.property("simulations")
-      .that.deep.has.members([...space1Sims, ...space2Sims, ...space6Sims]);
+    });
+    test("simulations match", () => {
+      expect(subset).toHaveProperty("simulations", [
+        ...space1Sims,
+        ...space2Sims,
+        ...space6Sims,
+      ]);
+    });
 
-    expect(relevantFacts, "relevantFacts match").to.deep.have.members([
-      {
-        id: 1,
-        expression: "3",
-        imported_to_intermediate_space_ids: [1, 2],
-        shouldBeSimulated: false,
-      },
-      {
-        id: 2,
-        metric_id: 1,
-        exported_from_id: 1,
-        expression: `=${expressionSyntaxPad(1)}`,
-        shouldBeSimulated: true,
-      },
-      {
-        id: 3,
-        metric_id: 3,
-        exported_from_id: 2,
-        expression: `=${expressionSyntaxPad(3)}`,
-        shouldBeSimulated: true,
-      },
-      {
-        id: 9,
-        metric_id: 11,
-        exported_from_id: 6,
-        expression: `=${expressionSyntaxPad(11)}`,
-        shouldBeSimulated: true,
-      },
-    ]);
+    test("relevantFacts match", () => {
+      expect(relevantFacts).toEqual([
+        {
+          id: 1,
+          expression: "3",
+          imported_to_intermediate_space_ids: [1, 2],
+          shouldBeSimulated: false,
+        },
+        {
+          id: 2,
+          metric_id: 1,
+          exported_from_id: 1,
+          expression: `=${expressionSyntaxPad(1)}`,
+          shouldBeSimulated: true,
+        },
+        {
+          id: 3,
+          metric_id: 3,
+          exported_from_id: 2,
+          expression: `=${expressionSyntaxPad(3)}`,
+          shouldBeSimulated: true,
+        },
+        {
+          id: 9,
+          metric_id: 11,
+          exported_from_id: 6,
+          expression: `=${expressionSyntaxPad(11)}`,
+          shouldBeSimulated: true,
+        },
+      ]);
+    });
   });
 
-  it("should correctly extract all possibly intermediate spaces' subsets from a factId and ignore the canvasState settings", () => {
+  describe("should correctly extract all possibly intermediate spaces' subsets from a factId and ignore the canvasState settings", () => {
     const graphFilters = { factId: 1 };
     const stateWithCanvasStateToFalse = {
       ...state,
@@ -404,53 +414,59 @@ describe("getSubset", () => {
       graphFilters
     );
 
-    expect(subset, "metrics match")
-      .to.have.property("metrics")
-      .that.deep.has.members([
+    test("metrics match", () => {
+      expect(subset).toHaveProperty("metrics", [
         ...space1Metrics,
         ...space2Metrics,
         ...space6Metrics,
       ]);
-    expect(subset, "guesstimates match")
-      .to.have.property("guesstimates")
-      .that.deep.has.members([
+    });
+    test("guesstimates match", () => {
+      expect(subset).toHaveProperty("guesstimates", [
         ...space1Guesstimates,
         ...space2Guesstimates,
         ...space6Guesstimates,
       ]);
-    expect(subset, "simulations match")
-      .to.have.property("simulations")
-      .that.deep.has.members([...space1Sims, ...space2Sims, ...space6Sims]);
+    });
+    test("simulations match", () => {
+      expect(subset).toHaveProperty("simulations", [
+        ...space1Sims,
+        ...space2Sims,
+        ...space6Sims,
+      ]);
+    });
 
-    expect(relevantFacts, "relevantFacts match").to.deep.have.members([
-      {
-        id: 1,
-        expression: "3",
-        imported_to_intermediate_space_ids: [1, 2],
-        shouldBeSimulated: false,
-      },
-      {
-        id: 2,
-        metric_id: 1,
-        exported_from_id: 1,
-        expression: `=${expressionSyntaxPad(1)}`,
-        shouldBeSimulated: true,
-      },
-      {
-        id: 3,
-        metric_id: 3,
-        exported_from_id: 2,
-        expression: `=${expressionSyntaxPad(3)}`,
-        shouldBeSimulated: true,
-      },
-      {
-        id: 9,
-        metric_id: 11,
-        exported_from_id: 6,
-        expression: `=${expressionSyntaxPad(11)}`,
-        shouldBeSimulated: true,
-      },
-    ]);
+    test("relevantFacts match", () => {
+      expect(relevantFacts).toEqual([
+        {
+          id: 1,
+          expression: "3",
+          imported_to_intermediate_space_ids: [1, 2],
+          shouldBeSimulated: false,
+        },
+        {
+          id: 2,
+          metric_id: 1,
+          exported_from_id: 1,
+          expression: `=${expressionSyntaxPad(1)}`,
+          shouldBeSimulated: true,
+        },
+        {
+          id: 3,
+          metric_id: 3,
+          exported_from_id: 2,
+          expression: `=${expressionSyntaxPad(3)}`,
+          shouldBeSimulated: true,
+        },
+        {
+          id: 9,
+          metric_id: 11,
+          exported_from_id: 6,
+          expression: `=${expressionSyntaxPad(11)}`,
+          shouldBeSimulated: true,
+        },
+      ]);
+    });
   });
 
   describe("should correctly extract an empty subset for invalid graphFilters", () => {
@@ -475,17 +491,21 @@ describe("getSubset", () => {
     ];
 
     testCases.forEach(({ graphFilters, description }) => {
-      it(description, () => {
+      describe(description, () => {
         const { subset, relevantFacts } = getSubset(state, graphFilters);
 
-        expect(subset, "metrics are empty").to.have.property("metrics").that.is
-          .empty;
-        expect(subset, "guesstimates are empty").to.have.property(
-          "guesstimates"
-        ).that.is.empty;
-        expect(subset, "simulations are empty").to.have.property("simulations")
-          .that.is.empty;
-        expect(relevantFacts, "relevantFacts are empty").to.be.empty;
+        test("metrics are empty", () => {
+          expect(subset).toHaveProperty("metrics", []);
+        });
+        test("guesstimates are empty", () => {
+          expect(subset).toHaveProperty("guesstimates", []);
+        });
+        test("simulations are empty", () => {
+          expect(subset).toHaveProperty("simulations", []);
+        });
+        test("relevantFacts are empty", () => {
+          expect(relevantFacts).toEqual([]);
+        });
       });
     });
   });

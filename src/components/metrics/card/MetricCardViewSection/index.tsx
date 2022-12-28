@@ -18,7 +18,6 @@ import StatTable from "gComponents/simulations/stat_table/index";
 import { getMessage } from "lib/propagation/errors";
 import { metricIdToNodeId } from "lib/propagation/wrapper";
 
-import { CanvasState } from "gComponents/lib/FlowGrid/types";
 import {
   displayableError,
   errors,
@@ -28,6 +27,7 @@ import {
 } from "gEngine/simulation";
 import { getClassName, replaceByMap } from "gEngine/utils";
 import { ConnectDragSource } from "react-dnd";
+import { CanvasState } from "gModules/canvas_state/reducer";
 
 // TODO(matthew): Refactor these components. E.g. it's weird that isBreak takes all errors, but you may only care about
 // the one...

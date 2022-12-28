@@ -5,13 +5,13 @@ describe("DistributionPointText", () => {
     const examples = [
       [{ text: "3" }, true],
       [{ value: "3" }, false],
-    ];
+    ] as const;
 
     const itExamples = examples
       .map((e) => () => {
         it(`works for guesstimate ${JSON.stringify(e[0])}`, () => {
           const foo = formatter;
-          expect(formatter.matches(e[0])).to.equal(e[1]);
+          expect(formatter.matches(e[0] as any)).toEqual(e[1]);
         });
       })
       .map((e) => e());
@@ -26,7 +26,7 @@ describe("DistributionPointText", () => {
     const itExamples = examples
       .map((e) => () => {
         it(`works for guesstimate ${JSON.stringify(e[0])}`, () => {
-          expect(formatter.format(e[0])).to.deep.equal(e[1]);
+          expect(formatter.format(e[0])).toEqual(e[1]);
         });
       })
       .map((e) => e());

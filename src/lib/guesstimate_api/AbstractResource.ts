@@ -27,7 +27,12 @@ export default class AbstractResource {
         },
         ...(data ? { body: JSON.stringify(data) } : {}),
       })
-        .then((response) => response.json())
+        .then((response) => {
+          if (response.status >= 400) {
+            throw new Error(`${response.status} ${response.statusText}`);
+          }
+          return response.json();
+        })
         .then((response) => callback(null, response))
         .catch((error) => callback(error, null));
     };

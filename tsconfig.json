@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "paths": {
       "gComponents/*": ["./src/components/*"],
       "gEngine/*": ["./src/lib/engine/*"],
@@ -24,6 +25,6 @@
     "jsx": "preserve",
     "experimentalDecorators": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "jest.config.js"],
   "exclude": ["node_modules"]
 }

@@ -1,5 +1,4 @@
 import _ from "lodash";
-import PropTypes from "prop-types";
 import React, { Component } from "react";
 
 import { connect } from "react-redux";
@@ -22,8 +21,8 @@ import {
 } from "gEngine/facts";
 import { getClassName, or } from "gEngine/utils";
 
-import { formatData, isData } from "lib/guesstimator/formatter/formatters/Data";
 import { AppDispatch, RootState } from "gModules/store";
+import { formatData, isData } from "lib/guesstimator/formatter/formatters/Data";
 
 function findWithRegex(baseRegex, contentBlock, callback) {
   const text = contentBlock.getText();

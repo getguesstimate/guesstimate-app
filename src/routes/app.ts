@@ -1,13 +1,14 @@
 import * as engine from "gEngine/engine";
 
 import { GuesstimateRecorder } from "lib/recorder";
+import { GuesstimateWorker } from "lib/window";
 
 import Modal from "react-modal";
 import * as elev from "servers/elev/index";
 import * as sentry from "servers/sentry/index";
 
 if (typeof window !== "undefined") {
-  window.workers = new Array(2)
+  const workers = new Array(2)
     .fill(null)
     .map(
       () =>
@@ -19,14 +20,18 @@ if (typeof window !== "undefined") {
         )
     );
 
-  window.workers = window.workers.map((worker) => {
+  window.workers = workers.map((worker: GuesstimateWorker) => {
     worker.queue = [];
     worker.launch = (data) => {
       worker.postMessage(JSON.stringify(data));
     };
     worker.onmessage = (event) => {
       // Remove worker from queue
-      const { data, callback } = worker.queue.shift();
+      const task = worker.queue.shift();
+      if (!task) {
+        return;
+      }
+      const { data, callback } = task;
       // Call user callback
       callback(event);
       // Run next thing

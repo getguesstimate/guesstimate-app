@@ -1,16 +1,21 @@
-import nock from "nock";
+import fetch, { enableFetchMocks } from "jest-fetch-mock";
 
 import { generalUpdate } from "./actions";
 
 import { expectToCallActions } from "gModules/mockStore";
 
-describe("async actions", () => {
-  afterEach(() => {
-    nock.cleanAll();
-  });
+enableFetchMocks();
 
+describe("async actions", () => {
   it("creates CHANGE_CANVAS_STATE when saving fails", (done) => {
-    nock("http://localhost:3000/").patch("/spaces/1").reply(422, {});
+    fetch.mockResponseOnce(async (req) => {
+      return {
+        init: {
+          status: 422,
+        },
+        body: "{}",
+      };
+    });
 
     const expectedActions = [
       { type: "SPACES_UPDATE_START", record: { id: 1 }, data: undefined },
@@ -18,7 +23,7 @@ describe("async actions", () => {
       { type: "CHANGE_CANVAS_STATE", values: { actionState: "ERROR" } },
     ];
 
-    expectToCallActions(generalUpdate(1), expectedActions, done, {
+    expectToCallActions(generalUpdate(1, {}), expectedActions, done, {
       spaces: [{ id: 1 }],
     });
   });

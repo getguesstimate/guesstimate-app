@@ -1,17 +1,16 @@
 import { denormalizeFn, create } from "../metric";
-import { expect } from "chai";
 
 describe("metric", () => {
-  let metric = null;
-  let graph = null;
-  let result = null;
+  let metric: any = null;
+  let graph: any = null;
+  let result: any = null;
 
-  let guesstimates = [
+  const guesstimates = [
     { metric: "abc", name: "what" },
     { metric: "324", name: "silly" },
   ];
 
-  let simulations = [
+  const simulations = [
     { metric: "324", data: [2, 3, 54] },
     { metric: "abc", data: [2, 3, 4] },
   ];
@@ -21,23 +20,23 @@ describe("metric", () => {
       metric = { id: "abc" };
       graph = { metrics: [metric], guesstimates, simulations };
       result = denormalizeFn(graph)(metric);
-      expect(result.guesstimate).to.deep.equal(guesstimates[0]);
-      expect(result.simulation).to.deep.equal(simulations[1]);
+      expect(result.guesstimate).toEqual(guesstimates[0]);
+      expect(result.simulation).toEqual(simulations[1]);
     });
 
     it("works with only guesstimates", () => {
       metric = { id: "abc" };
       graph = { metrics: [metric], guesstimates };
       result = denormalizeFn(graph)(metric);
-      expect(result.guesstimate).to.deep.equal(guesstimates[0]);
+      expect(result.guesstimate).toEqual(guesstimates[0]);
     });
   });
 
   describe("create", () => {
     it("generates uuid and readableId", () => {
       metric = create([]);
-      expect(metric.id.length).to.equal(36);
-      expect(metric.readableId.length).to.equal(2);
+      expect(metric.id.length).toEqual(36);
+      expect(metric.readableId.length).toEqual(2);
     });
   });
 });

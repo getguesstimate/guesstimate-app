@@ -2,12 +2,12 @@
 //It takes a param, otherNames, to ensure that there are no duplicates
 
 export default function generateRandomReadableId(existing: string[] = []) {
-  let attempt = readableIdAttempt(name);
+  let attempt = readableIdAttempt();
   if (!isDuplicate(attempt, existing)) {
     return attempt;
   } else {
     while (isDuplicate(attempt, existing)) {
-      attempt = readableIdAttempt(name);
+      attempt = readableIdAttempt();
     }
     return attempt;
   }
@@ -21,7 +21,7 @@ const firstCharsOfWords = (s) =>
     .map((e) => e[0])
     .join("");
 
-const readableIdAttempt = (name) => {
+const readableIdAttempt = () => {
   return `${randomString(2)}`;
 };
 

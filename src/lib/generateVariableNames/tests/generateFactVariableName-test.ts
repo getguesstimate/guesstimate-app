@@ -1,4 +1,3 @@
-import { expect } from "chai";
 import { withVariableName } from "../generateFactVariableName";
 
 describe("generateVariableName", () => {
@@ -119,21 +118,20 @@ describe("generateVariableName", () => {
     },
   ];
 
-  testCases.forEach(
+  test.each(testCases)(
+    "$description",
     ({
       fact,
       description,
       shouldGenerateVariableName,
       expectedVariableName,
     }) => {
-      it(description, () => {
-        const { variable_name } = withVariableName(fact, existingVariableNames);
-        if (shouldGenerateVariableName) {
-          expect(variable_name).to.equal(expectedVariableName);
-        } else {
-          expect(variable_name).to.not.be.ok;
-        }
-      });
+      const { variable_name } = withVariableName(fact, existingVariableNames);
+      if (shouldGenerateVariableName) {
+        expect(variable_name).toEqual(expectedVariableName);
+      } else {
+        expect(variable_name).not.toBeTruthy();
+      }
     }
   );
 });

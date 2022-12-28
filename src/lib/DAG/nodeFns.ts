@@ -43,7 +43,7 @@ export const getMissingInputs = (nodes): any[] =>
   _.uniq(_.flatten(nodes.map((n) => n.inputs))).filter(
     _.negate(idMatchesSomeFn(nodes))
   );
-export const isDescendedFromFn = (ids, ancestors) => (n) =>
+export const isDescendedFromFn = (ids: string[], ancestors) => (n) =>
   _.some(ids, (id) => ancestors[n.id].includes(id));
 export const withInputIndicesFn = (nodes: any[]) => (n) => ({
   ...n,
@@ -61,7 +61,7 @@ const nextLevelAncestors = (curr, total, key) =>
 const getNewAncestorsFn = (nodeAncestors) => (res, value, key) => {
   res[key] = nextLevelAncestors(value, nodeAncestors, key);
 };
-export function getNodeAncestors(nodes): any {
+export function getNodeAncestors(nodes: any[]): any {
   let unprocessedNodes = mutableCopy(nodes);
 
   let newAncestors: any = _.transform(

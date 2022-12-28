@@ -1,4 +1,5 @@
-import { newFlowState, actions, states, subStage } from "./state_machine";
+import _ from "lodash";
+import { states, subStage } from "./state_machine";
 
 const defaultStage = {
   flowStage: "START",
@@ -23,20 +24,20 @@ const defaultStage = {
 describe("FirstSubscriptionStateMachine", () => {
   describe("#subStage", () => {
     it(`in initial state`, () => {
-      expect(subStage(defaultStage)).to.equal("START");
+      expect(subStage(defaultStage)).toEqual("START");
     });
 
     it(`in cancelled state`, () => {
       let newStage = _.clone(defaultStage);
       newStage.flowStage = states.cancelled;
-      expect(subStage(newStage)).to.equal("CANCELLED");
+      expect(subStage(newStage)).toEqual("CANCELLED");
     });
 
     it(`in form fetching state`, () => {
       let newStage = _.clone(defaultStage);
       newStage.flowStage = "FORM";
       newStage.iframe.request = { waiting: true, error: null, status: "START" };
-      expect(subStage(newStage)).to.equal("FORM_START");
+      expect(subStage(newStage)).toEqual("FORM_START");
     });
 
     it(`in form success state`, () => {
@@ -47,7 +48,7 @@ describe("FirstSubscriptionStateMachine", () => {
         error: null,
         status: "SUCCESS",
       };
-      expect(subStage(newStage)).to.equal("FORM_SUCCESS");
+      expect(subStage(newStage)).toEqual("FORM_SUCCESS");
     });
 
     it(`in synchronization start state`, () => {
@@ -58,7 +59,7 @@ describe("FirstSubscriptionStateMachine", () => {
         error: null,
         status: "START",
       };
-      expect(subStage(newStage)).to.equal("SYNCHRONIZATION_START");
+      expect(subStage(newStage)).toEqual("SYNCHRONIZATION_START");
     });
 
     it(`in synchronization success state`, () => {
@@ -69,7 +70,7 @@ describe("FirstSubscriptionStateMachine", () => {
         error: null,
         status: "SUCCESS",
       };
-      expect(subStage(newStage)).to.equal("SYNCHRONIZATION_SUCCESS");
+      expect(subStage(newStage)).toEqual("SYNCHRONIZATION_SUCCESS");
     });
 
     it(`in unnecessary state`, () => {
@@ -80,7 +81,7 @@ describe("FirstSubscriptionStateMachine", () => {
         status: "SUCCESS",
       };
       newStage.flowStage = states.unnecessary;
-      expect(subStage(newStage)).to.equal("UNNECESSARY");
+      expect(subStage(newStage)).toEqual("UNNECESSARY");
     });
   });
 });

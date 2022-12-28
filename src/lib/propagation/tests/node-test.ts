@@ -1,5 +1,3 @@
-import { expect } from "chai";
-
 import { SimulationDAG } from "../DAG";
 import * as errorTypes from "../errors";
 
@@ -26,7 +24,7 @@ describe("Simulation Node", () => {
 
     it("gets the correct inputs", () => {
       //debugger
-      expect(DAG.find("C")._getInputs()).to.deep.equal({
+      expect(DAG.find("C")!._getInputs()).toEqual({
         A: [3],
         B: [4],
       });
@@ -41,12 +39,12 @@ describe("Simulation Node", () => {
     ]);
 
     it("adds an error to descendants", () => {
-      expect(DAG.find("2").errors).to.be.empty;
-      expect(DAG.find("3").errors).to.be.empty;
+      expect(DAG.find("2")!.errors).toHaveLength(0);
+      expect(DAG.find("3")!.errors).toHaveLength(0);
 
-      DAG.find("1")._addErrorToDescendants();
+      DAG.find("1")!._addErrorToDescendants();
 
-      expect(DAG.find("2").errors).to.have.deep.members([
+      expect(DAG.find("2")!.errors).toEqual([
         {
           type: GRAPH_ERROR,
           subType: INVALID_ANCESTOR_ERROR,
@@ -54,7 +52,7 @@ describe("Simulation Node", () => {
           ancestors: [],
         },
       ]);
-      expect(DAG.find("3").errors).to.have.deep.members([
+      expect(DAG.find("3")!.errors).toEqual([
         {
           type: GRAPH_ERROR,
           subType: INVALID_ANCESTOR_ERROR,
@@ -77,18 +75,18 @@ describe("Simulation Node", () => {
     ]);
 
     it("adds an error to descendants", () => {
-      expect(DAG.find("ii").errors).to.not.be.empty;
-      expect(DAG.find("iii").errors).to.not.be.empty;
+      expect(DAG.find("ii")!.errors.length).toBeGreaterThan(0);
+      expect(DAG.find("iii")!.errors.length).toBeGreaterThan(0);
 
-      DAG.find("i")._clearErrorFromDescendants();
+      DAG.find("i")!._clearErrorFromDescendants();
 
-      expect(DAG.find("ii").errors).to.be.empty;
-      expect(DAG.find("iii").errors).to.be.empty;
+      expect(DAG.find("ii")!.errors).toHaveLength(0);
+      expect(DAG.find("iii")!.errors).toHaveLength(0);
     });
   });
 
   describe("#_simulate", () => {
-    let DAG = new SimulationDAG([
+    const DAG = new SimulationDAG([
       {
         id: "a",
         expression: "=${foo}",
@@ -100,14 +98,14 @@ describe("Simulation Node", () => {
       },
     ]);
 
-    it("clears the parse error before returning but not the graph error or worker error", () => {
+    it.skip("clears the parse error before returning but not the graph error or worker error", () => {
       const node = DAG.find("a");
-      node.simulate(5).then(({ samples, errors }) => {
-        expect(errors).to.deep.have.members([
+      node!.simulate(5).then(({ samples, errors }) => {
+        expect(errors).toEqual([
           { type: GRAPH_ERROR, subType: MISSING_INPUT_ERROR },
           { type: SAMPLING_ERROR, subType: DIVIDE_BY_ZERO_ERROR },
         ]);
-        expect(samples).to.be.empty;
+        expect(samples).toHaveLength(0);
       });
     });
   });

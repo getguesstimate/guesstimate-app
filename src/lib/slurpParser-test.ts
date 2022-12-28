@@ -1,3 +1,4 @@
+import _ from "lodash";
 import { parseSlurp } from "./slurpParser";
 
 function matchPresent(pattern, sample) {
@@ -57,7 +58,7 @@ describe("parseSlurp", () => {
     };
     it("should parse a valid slurp", () => {
       const parsedSlurp = parseSlurp(slurp);
-      expect(matchPresent(parsedUpdatePattern, parsedSlurp)).to.equal(true);
+      expect(matchPresent(parsedUpdatePattern, parsedSlurp)).toEqual(true);
     });
   });
 });

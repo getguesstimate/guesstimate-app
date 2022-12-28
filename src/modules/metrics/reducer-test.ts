@@ -13,8 +13,8 @@ describe("metrics", () => {
         type: "SPACES_FETCH_SUCCESS",
         records: [{ graph: { metrics } }],
       });
-      expect(newMetrics.length).to.equal(2);
-      expect(newMetrics[1].name).to.equal("foo3");
+      expect(newMetrics.length).toEqual(2);
+      expect(newMetrics[1].name).toEqual("foo3");
     });
   });
 
@@ -30,8 +30,8 @@ describe("metrics", () => {
         type: "ADD_METRIC",
         item: newMetric,
       });
-      expect(newMetrics.length).to.equal(3);
-      expect(newMetrics[2].id).to.equal("3");
+      expect(newMetrics.length).toEqual(3);
+      expect(newMetrics[2].id).toEqual("3");
     });
 
     it(`correctly adds a redundant element`, () => {
@@ -40,8 +40,8 @@ describe("metrics", () => {
         type: "ADD_METRIC",
         item: newMetric,
       });
-      expect(newMetrics.length).to.equal(2);
-      expect(newMetrics[1].name).to.equal("foo3");
+      expect(newMetrics.length).toEqual(2);
+      expect(newMetrics[1].name).toEqual("foo3");
     });
   });
 
@@ -58,8 +58,8 @@ describe("metrics", () => {
         type: "CHANGE_METRIC",
         item: changedMetric,
       });
-      expect(newMetrics.length).to.equal(3);
-      expect(newMetrics[1].name).to.equal("bar2");
+      expect(newMetrics.length).toEqual(3);
+      expect(newMetrics[1].name).toEqual("bar2");
     });
   });
 });

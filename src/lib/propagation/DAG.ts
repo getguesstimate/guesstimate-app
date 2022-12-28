@@ -47,9 +47,9 @@ function expandCyclesAndAddGraphErrors(component, nodeAncestors) {
 
 export class SimulationDAG {
   nodeAncestors: any;
-  nodes: any;
+  nodes: SimulationNode[];
 
-  constructor(nodes) {
+  constructor(nodes: any[]) {
     if (!!_.get(window, "recorder")) {
       window.recorder.recordSimulationDAGConstructionStart(this);
     }
@@ -86,10 +86,10 @@ export class SimulationDAG {
     }
   }
 
-  find(id) {
+  find(id: string): SimulationNode | null {
     return get(this.nodes, id);
   }
-  subsetFrom(idSet) {
+  subsetFrom(idSet: string[]) {
     return this.nodes.filter(
       orFns(
         (n) => idSet.includes(n.id),
@@ -97,7 +97,7 @@ export class SimulationDAG {
       )
     );
   }
-  strictSubsetFrom(idSet) {
+  strictSubsetFrom(idSet: string[]) {
     return this.nodes.filter(isDescendedFromFn(idSet, this.nodeAncestors));
   }
 }

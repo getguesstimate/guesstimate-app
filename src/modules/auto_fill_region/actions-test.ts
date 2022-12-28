@@ -39,7 +39,7 @@ describe("Autofill Actions", () => {
       const {
         guesstimate: { expression },
       } = fillFn(location, metrics);
-      expect(expression).to.equal(startExpression);
+      expect(expression).toEqual(startExpression);
     });
 
     it("fills properly with no translatable metrics, but some non-constant", () => {
@@ -57,8 +57,8 @@ describe("Autofill Actions", () => {
         direction
       );
       const { metric, guesstimate } = fillFn(location, metrics);
-      expect(!!metric).to.equal(false);
-      expect(!!guesstimate).to.equal(false);
+      expect(!!metric).toEqual(false);
+      expect(!!guesstimate).toEqual(false);
     });
   });
 });

@@ -1,3 +1,4 @@
+import _ from "lodash";
 import { newFlowState, actions, states } from "./state_machine";
 
 const expectedStateChanges = {};
@@ -39,7 +40,7 @@ describe("FirstSubscriptionStateMachine", () => {
       const changes = expectedStateChanges[stateName];
       changes.map((change) => {
         it(`state ${stateName} and action ${change.action} go to ${change.newState}`, () => {
-          expect(newFlowState(stateName, change.action)).to.equal(
+          expect(newFlowState(stateName, change.action)).toEqual(
             change.newState
           );
         });
