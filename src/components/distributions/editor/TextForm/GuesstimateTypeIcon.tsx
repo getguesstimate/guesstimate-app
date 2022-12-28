@@ -23,7 +23,9 @@ export const GuesstimateTypeIcon: React.FC<Props> = ({
     return (
       <div
         className={className}
-        onMouseDown={isRangeDistribution && toggleDistributionSelector}
+        onMouseDown={
+          isRangeDistribution ? toggleDistributionSelector : undefined
+        }
       >
         <img src={icon} />
       </div>

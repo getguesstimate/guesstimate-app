@@ -11,9 +11,9 @@ import { useAppDispatch } from "gModules/hooks";
 type Props = {
   facts: Fact[];
   existingVariableNames: string[];
-  categories: unknown;
+  categories?: unknown;
   organization: unknown;
-  categoryId: string | null | undefined;
+  categoryId?: string | null;
   canMakeNewFacts: boolean;
   spaceId?: string;
   imported_fact_ids?: string[];

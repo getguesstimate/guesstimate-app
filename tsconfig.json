@@ -7,7 +7,7 @@
       "lib/*": ["./src/lib/*"],
       "servers/*": ["./src/server/*"]
     },
-    "target": "es5",
+    "target": "es2015",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -24,11 +24,6 @@
     "jsx": "preserve",
     "experimentalDecorators": true
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "src/modules/auto_fill_region/actions-test.js"
-  ],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
 }

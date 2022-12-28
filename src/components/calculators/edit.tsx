@@ -6,7 +6,7 @@ import {
 
 import { update } from "gModules/calculators/actions";
 
-type Props = FormContainerProps & {
+type Props = Omit<FormContainerProps, "buttonText" | "onSubmit"> & {
   onCalculatorSave: () => void;
 };
 

@@ -5,8 +5,9 @@ import { item as DistributionTextProportion } from "./formatters/DistributionTex
 import { item as DistributionPointText } from "./formatters/DistributionPointText";
 import { item as Data } from "./formatters/Data";
 import { item as Null } from "./formatters/Null";
+import { Formatter, FormatterInput } from "./types";
 
-export const formatters = [
+export const formatters: Formatter[] = [
   Funct,
   DistributionTextUpTo,
   DistributionTextProportion,
@@ -15,7 +16,7 @@ export const formatters = [
   Data,
 ];
 
-export function _matchingFormatter(g) {
+export function _matchingFormatter(g: FormatterInput): Formatter {
   for (let formatter of formatters) {
     if (formatter.matches(g)) {
       return formatter;
@@ -26,7 +27,7 @@ export function _matchingFormatter(g) {
 
 // General formatting that applies to everything.  After it goes through
 // this stage, a specific formatter gets applied.
-export function prepare(guesstimate) {
+export function prepare(guesstimate): FormatterInput {
   return {
     text: guesstimate.input || guesstimate.text,
     guesstimateType: guesstimate.guesstimateType,

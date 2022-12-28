@@ -52,9 +52,9 @@ const PlanUpgradeSection = ({ planId, portalUrl, onRefresh }) => {
 
 type Props = {
   planId: any;
-  onClose?: () => void;
+  onClose(): void;
   portalUrl?: string;
-  onRefresh?: () => void;
+  onRefresh?(): void;
 };
 
 const Settings: React.FC<Props> = ({

@@ -1,9 +1,10 @@
 import React, { Component } from "react";
+import ReactDOM from "react-dom";
 
 import { ConnectDropTarget, useDrop } from "react-dnd";
 
 import EmptyCell from "./cell-empty";
-import ItemCell from "./filled-cell";
+import ItemCell, { InnerItemCell } from "./filled-cell";
 
 import { getClassName } from "gEngine/utils";
 import { Location } from "lib/locationUtils";
@@ -20,28 +21,35 @@ type OwnProps = {
   inSelectedCell: boolean;
   isHovered: boolean;
   showAutoFillToken: boolean;
-  handleSelect: (location: Location, direction?: any) => void;
-  handleEndRangeSelect: (location: Location) => void;
+  handleSelect(location: Location, direction?: any): void;
+  handleEndRangeSelect(location: Location): void;
   item?: GridItem;
   location: Location;
-  onAddItem: (location: Location) => void;
-  onMoveItem: (arg: { prev: Location; next: Location }) => void;
-  hasItemUpdated: (oldItem: GridItem, newItem: GridItem) => boolean;
-  onEndDragCell: (location: Location) => void;
-  forceFlowGridUpdate: () => void;
-  onEmptyCellMouseDown: (e: React.MouseEvent) => void;
-  onMouseEnter: (e: React.MouseEvent) => void;
-  onMouseUp: (e: React.MouseEvent) => void;
-  gridKeyPress: (e: React.KeyboardEvent) => void;
-  onAutoFillTargetMouseDown: () => void;
-  onReturn: () => void;
-  onTab: () => void;
+  onAddItem(location: Location): void;
+  onMoveItem(arg: { prev: Location; next: Location }): void;
+  hasItemUpdated(oldItem: GridItem, newItem: GridItem): boolean;
+  onEndDragCell(location: Location): void;
+  forceFlowGridUpdate(): void;
+  onEmptyCellMouseDown(e: React.MouseEvent): void;
+  onMouseEnter(e: React.MouseEvent): void;
+  onMouseUp(e: React.MouseEvent): void;
+  gridKeyPress(e: React.KeyboardEvent): void;
+  onAutoFillTargetMouseDown(): void;
+  onReturn(): void;
+  onTab(): void;
   selectedFrom?: "UP" | "DOWN" | "LEFT" | "RIGHT";
-  getRowHeight: () => number;
+  getRowHeight(): number;
 };
 type Props = OwnProps & CollectedProps;
 
 class Cell extends Component<Props> {
+  itemRef: React.RefObject<InnerItemCell>;
+
+  constructor(props: Props) {
+    super(props);
+    this.itemRef = React.createRef();
+  }
+
   shouldComponentUpdate(newProps: Props) {
     const difProps =
       newProps.isOver !== this.props.isOver ||
@@ -122,19 +130,12 @@ class Cell extends Component<Props> {
   }
 
   _focus() {
-    // FIXME
-    // let domNode;
-    // if (this.props.item) {
-    //   // Always focus on the immediate child of the filled cell.
-    //   domNode = (
-    //     ReactDOM.findDOMNode(
-    //       (this.refs.item as any).decoratedComponentInstance
-    //     ) as any
-    //   ).children[0];
-    // } else {
-    //   domNode = ReactDOM.findDOMNode(this.refs.empty);
-    // }
-    // domNode.focus();
+    if (this.itemRef.current) {
+      // Always focus on the immediate child of the filled cell.
+      this.itemRef.current.focus();
+    } else {
+      (ReactDOM.findDOMNode(this.refs.empty) as any)?.focus();
+    }
   }
 
   _cellElement() {
@@ -147,7 +148,7 @@ class Cell extends Component<Props> {
           onEndDrag={this.props.onEndDragCell}
           forceFlowGridUpdate={this.props.forceFlowGridUpdate}
           hover={this.props.isHovered}
-          focusCell={this._focus.bind(this)}
+          ref={this.itemRef}
         />
       );
     } else {

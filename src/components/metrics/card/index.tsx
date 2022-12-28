@@ -36,6 +36,7 @@ import { makeURLsMarkdown } from "gEngine/utils";
 import { AppDispatch } from "gModules/store";
 import { GridContext } from "gComponents/lib/FlowGrid/filled-cell";
 import { CanvasState } from "gComponents/lib/FlowGrid/types";
+import { ReactReduxContextInstance } from "react-redux/es/components/Context";
 
 const relationshipClasses = {};
 relationshipClasses[INTERMEDIATE] = "intermediate";
@@ -165,9 +166,9 @@ class MetricCard extends Component<Props, State> {
     }
   }
 
-  _handleKeyDown(e) {
+  _handleKeyDown(e: React.KeyboardEvent) {
     if (e.target === ReactDOM.findDOMNode(this)) {
-      if (e.keyCode == "13" && this.props.inSelectedCell) {
+      if (e.keyCode === 13 && this.props.inSelectedCell) {
         e.preventDefault();
         e.stopPropagation();
         this.openModal();
@@ -175,7 +176,7 @@ class MetricCard extends Component<Props, State> {
     }
   }
 
-  _handleKeyPress(e) {
+  _handleKeyPress(e: React.KeyboardEvent) {
     if (e.target === ReactDOM.findDOMNode(this)) {
       this.props.gridKeyPress(e);
     }
@@ -239,6 +240,7 @@ class MetricCard extends Component<Props, State> {
   }
 
   _focusForm() {
+    console.log("focusForm");
     this.editorRef.current?.focus();
   }
 
@@ -289,7 +291,7 @@ class MetricCard extends Component<Props, State> {
 
   _shouldShowSimulation(metric) {
     const stats = _.get(metric, "simulation.stats");
-    return stats && _.isFinite(stats.stdev) && stats.length > 5;
+    return Boolean(stats && _.isFinite(stats.stdev) && stats.length > 5);
   }
 
   _shouldShowSensitivitySection() {
@@ -447,7 +449,17 @@ class MetricCard extends Component<Props, State> {
 
 export default connect(null)(MetricCard);
 
-const MetricSidebar = ({
+const MetricSidebar: React.FC<{
+  onOpenModal(): void;
+  onRemoveMetric(): void;
+  showAnalysis: boolean;
+  onBeginAnalysis(): void;
+  onEndAnalysis(): void;
+  canBeMadeFact: boolean;
+  exportedAsFact: boolean;
+  onMakeFact(): void;
+  isAnalyzedMetric: boolean;
+}> = ({
   onOpenModal,
   onBeginAnalysis,
   onEndAnalysis,

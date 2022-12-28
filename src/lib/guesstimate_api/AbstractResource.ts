@@ -1,42 +1,35 @@
-import $ from "jquery";
+import GuesstimateApi from ".";
+
+type RequestParams = {
+  url: string;
+  method: "GET" | "POST" | "PATCH" | "DELETE";
+  data?: any;
+  headers?: any;
+};
+
+export type Callback = (error: unknown | null, response: any | null) => void;
 
 export default class AbstractResource {
-  api: any;
+  api: GuesstimateApi;
 
-  constructor(api) {
+  constructor(api: GuesstimateApi) {
     this.api = api;
   }
 
-  guesstimateRequest({ url, method, data, headers }) {
-    const token = this.api.api_token;
-    const host = this.api.host;
-    const serverUrl = host + url;
-
-    const allHeaders = { Authorization: "Bearer " + token, ...headers };
-    let requestParams: any = {
-      headers: allHeaders,
-      dataType: "json",
-      contentType: "application/json",
-      url: serverUrl,
-      method,
-    };
-    if (data) {
-      requestParams.data = JSON.stringify(data);
-    }
-
-    return requestParams;
-  }
-
-  guesstimateMethod({ url, method, data, headers }: any) {
-    return (callback) => {
-      const params = this.guesstimateRequest({ url, method, data, headers });
-      const request = $.ajax(params);
-      request.done((response) => {
-        callback(null, response);
-      });
-      request.fail((jqXHR, textStatus, errorThrown) => {
-        callback({ jqXHR, textStatus, errorThrown }, null);
-      });
+  guesstimateMethod({ url, method, data, headers }: RequestParams) {
+    return (callback: Callback) => {
+      fetch(this.api.host + url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + this.api.api_token,
+          ...headers,
+        },
+        ...(data ? { body: JSON.stringify(data) } : {}),
+      })
+        .then((response) => response.json())
+        .then((response) => callback(null, response))
+        .catch((error) => callback(error, null));
     };
   }
 }

@@ -19,6 +19,7 @@ import {
 } from "lib/locationUtils";
 import { CanvasState, GridItem } from "./types";
 import { DirectionToLocation, keycodeToDirection } from "./utils";
+import { EdgeShape } from "gComponents/spaces/canvas";
 
 const upto = (n: number): number[] =>
   Array.apply(null, { length: n }).map(Number.call, Number);
@@ -28,31 +29,28 @@ let lastMousePosition = { pageX: 0, pageY: 0 };
 
 type Props = {
   canvasState: CanvasState;
-  onUndo: () => void;
-  onRedo: () => void;
+  onUndo(): void;
+  onRedo(): void;
   items: GridItem[];
-  edges: {
-    input: Location;
-    output: Location;
-  }[];
+  edges: EdgeShape[];
   selectedCell: SelectedCellState;
   selectedRegion: MaybeRegion;
   copiedRegion: MaybeRegion;
   analyzedRegion: MaybeRegion;
-  onSelectItem: (location: Location, direction?: any) => void;
-  onMultipleSelect: (corner1: Location, corner2: Location) => void;
-  onAutoFillRegion: (autoFillRegion: any) => void;
-  onDeSelectAll: () => void;
-  onAddItem: (location: Location) => void;
-  onMoveItem: (arg: { prev: Location; next: Location }) => void;
-  hasItemUpdated: (oldItem: GridItem, newItem: GridItem) => boolean;
+  onSelectItem(location: Location, direction?: any): void;
+  onMultipleSelect(corner1: Location, corner2: Location): void;
+  onAutoFillRegion(autoFillRegion: any): void;
+  onDeSelectAll(): void;
+  onAddItem(location: Location): void;
+  onMoveItem(arg: { prev: Location; next: Location }): void;
+  hasItemUpdated(oldItem: GridItem, newItem: GridItem): boolean;
   showGridLines: boolean;
   isModelingCanvas?: boolean;
-  onRemoveItems: (ids: string[]) => void;
-  onCut: () => void;
-  onCopy: () => void;
-  onPaste: () => void;
-  isItemEmpty: (id: string) => boolean;
+  onRemoveItems(ids: string[]): void;
+  onCut?(): void;
+  onCopy?(): void;
+  onPaste?(): void;
+  isItemEmpty(id: string): boolean;
 };
 
 type State = {
@@ -202,9 +200,9 @@ export default class FlowGrid extends Component<Props, State> {
     }
 
     const direction = keycodeToDirection(e.keyCode);
-    if (direction) {
+    if (direction && "row" in this.props.selectedCell) {
       e.preventDefault();
-      let newLocation = new DirectionToLocation(
+      const newLocation = new DirectionToLocation(
         this._size(),
         this.props.selectedCell
       )[direction]();
@@ -221,11 +219,11 @@ export default class FlowGrid extends Component<Props, State> {
       this.setState({ ctrlPressed: true });
     } else if (this.state.ctrlPressed) {
       if (e.keyCode == 86) {
-        this.props.onPaste();
+        this.props.onPaste?.();
       } else if (e.keyCode == 67) {
-        this.props.onCopy();
+        this.props.onCopy?.();
       } else if (e.keyCode == 88) {
-        this.props.onCut();
+        this.props.onCut?.();
       } else if (e.keyCode == 90 && !e.shiftKey) {
         this.props.onUndo();
         e.preventDefault();
@@ -344,7 +342,9 @@ export default class FlowGrid extends Component<Props, State> {
         handleEndRangeSelect={this._handleEndRangeSelect.bind(this)}
         inSelectedRegion={isWithinRegion(location, selectedRegion)}
         inSelectedCell={inSelectedCell}
-        selectedFrom={selectedCell.selectedFrom}
+        selectedFrom={
+          "selectedFrom" in selectedCell ? selectedCell.selectedFrom : undefined
+        }
         isHovered={isAtLocation(this.state.hover, location)}
         item={item}
         key={location.column}
@@ -380,7 +380,7 @@ export default class FlowGrid extends Component<Props, State> {
   }
 
   _getRowHeight(rowI: number) {
-    return _.get(this.refs[`row-${rowI}`], "offsetHeight") as any;
+    return _.get(this.refs[`row-${rowI}`], "offsetHeight") as unknown as number;
   }
 
   componentDidMount() {

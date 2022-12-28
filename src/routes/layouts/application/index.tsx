@@ -23,7 +23,7 @@ const Layout: React.FC<Props> = ({
   showFooter = true,
   embed = false,
   fullHeight = false,
-  backgroundColor = "",
+  backgroundColor = undefined,
   children,
 }) => {
   return (

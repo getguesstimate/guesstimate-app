@@ -1,7 +1,7 @@
 import React from "react";
 
 type Props = {
-  children: React.ReactElement;
+  children: React.ReactNode;
 };
 
 const Container: React.FC<Props> = ({ children }) => {

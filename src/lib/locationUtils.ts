@@ -21,7 +21,7 @@ export function isLocation(test): test is Location {
   return !!test && test.hasOwnProperty("row") && test.hasOwnProperty("column");
 }
 
-export function isRegion(test) {
+export function isRegion(test: MaybeRegion): test is Region {
   return test.length === 2;
 }
 
@@ -47,7 +47,7 @@ export function getBounds({
 }: {
   start?: Location;
   end?: Location;
-}) {
+}): MaybeRegion {
   if (!start || !end) {
     return [];
   }
@@ -74,7 +74,7 @@ export function existsAtLoc(seekLoc) {
   return (e) => isAtLocation(e.location, seekLoc);
 }
 
-export function boundingRegion(locations) {
+export function boundingRegion(locations): Region {
   if (_.isEmpty(locations)) {
     return [
       { row: 0, column: 0 },

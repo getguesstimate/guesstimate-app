@@ -6,7 +6,7 @@ import * as meActions from "gModules/me/actions";
 import Settings from "./Settings";
 
 type Props = {
-  onClose?: () => void;
+  onClose(): void;
 };
 
 const SettingsContainer: React.FC<Props> = ({ onClose }) => {

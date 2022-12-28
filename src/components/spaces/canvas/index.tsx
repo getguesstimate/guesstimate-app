@@ -38,6 +38,13 @@ import {
   MaybeRegion,
 } from "lib/locationUtils";
 
+export type EdgeShape = {
+  input: Location;
+  output: Location;
+  pathStatus: string;
+  hasErrors: boolean;
+};
+
 function mapStateToProps(state: RootState) {
   return {
     copied: state.copied,
@@ -52,11 +59,11 @@ type Props = {
   selectedRegion: MaybeRegion;
   screenshot: boolean;
   copied: any; // FIXME
-  //   embed: PropTypes.bool,
-  onCut: () => void;
-  onCopy: () => void;
-  onPaste: () => void;
+  onCut?(): void;
+  onCopy?(): void;
+  onPaste?(): void;
   exportedFacts: any;
+  canUseOrganizationFacts: boolean;
 } & { dispatch: AppDispatch };
 
 class Canvas extends Component<Props> {
@@ -268,7 +275,7 @@ class Canvas extends Component<Props> {
     return this.props.denormalizedSpace.metrics.find((m) => m.id === metricId);
   }
 
-  edges() {
+  edges(): EdgeShape[] {
     if (!this.showEdges()) {
       return [];
     }

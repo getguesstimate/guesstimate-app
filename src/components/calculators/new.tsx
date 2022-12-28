@@ -6,8 +6,8 @@ import {
 
 import { create } from "gModules/calculators/actions";
 
-type Props = FormContainerProps & {
-  onCalculatorSave: () => void;
+type Props = Omit<FormContainerProps, "buttonText" | "onSubmit"> & {
+  onCalculatorSave(): void;
 };
 
 export const NewCalculatorForm: React.FC<Props> = (props) => {

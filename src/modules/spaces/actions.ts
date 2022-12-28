@@ -91,7 +91,7 @@ export function destroy(object, router) {
 
     api(getState()).models.destroy({ spaceId: id }, (err, value) => {
       if (err) {
-        captureApiError("SpacesDestroy", err.jqXHR, err.textStatus, err, {
+        captureApiError("SpacesDestroy", err, {
           url: "spacesfetch",
         });
       } else {
@@ -127,13 +127,13 @@ export function fromSearch(data) {
   };
 }
 
-export function fetchById(spaceId, shareableLinkToken = null) {
+export function fetchById(spaceId, shareableLinkToken: string | null = null) {
   return (dispatch, getState) => {
     dispatch(sActions.fetchStart());
 
     api(getState()).models.get(spaceId, shareableLinkToken, (err, value) => {
       if (err) {
-        captureApiError("SpacesFetch", err.jqXHR, err.textStatus, err, {
+        captureApiError("SpacesFetch", err, {
           url: "spacesfetch",
         });
         return;
@@ -151,7 +151,7 @@ export const fetch = (
     dispatch(sActions.fetchStart());
     api(getState()).models.list(args, (err, value) => {
       if (err) {
-        captureApiError("SpacesFetch", err.jqXHR, err.textStatus, err, {
+        captureApiError("SpacesFetch", err, {
           url: "fetch",
         });
       } else if (value) {
@@ -183,7 +183,7 @@ export function create(organizationId, params: any = {}, router) {
     api(getState()).models.create(object, (err, value) => {
       if (err) {
         dispatch(changeActionState("ERROR_CREATING"));
-        captureApiError("SpacesCreate", err.jqXHR, err.textStatus, err, {
+        captureApiError("SpacesCreate", err, {
           url: "SpacesCreate",
         });
       } else if (value) {
@@ -206,7 +206,7 @@ export function copy(spaceId, router) {
     api(getState()).copies.create({ spaceId }, (err, value) => {
       if (err) {
         dispatch(changeActionState("ERROR_COPYING"));
-        captureApiError("SpacesCreate", err.jqXHR, err.textStatus, err, {
+        captureApiError("SpacesCreate", err, {
           url: "SpacesCreate",
         });
       } else if (value) {
@@ -251,10 +251,11 @@ export function generalUpdate(spaceId, params) {
     const updateMsg = { ...params, previous_updated_at: space.updated_at };
     api(getState()).models.update(spaceId, updateMsg, (err, value) => {
       if (err) {
-        if (err === "Conflict") {
+        if ((err as any) === "Conflict") {
+          // TODO - will never happen
           dispatch(changeActionState("CONFLICT"));
         } else {
-          captureApiError("SpacesUpdate", err.jqXHR, err.textStatus, err, {
+          captureApiError("SpacesUpdate", err, {
             url: "SpacesUpdate",
           });
           dispatch(changeActionState("ERROR"));
@@ -318,13 +319,9 @@ export function enableShareableLink(spaceId) {
   return (dispatch, getState) => {
     api(getState()).models.enableShareableLink(spaceId, (err, value) => {
       if (err) {
-        captureApiError(
-          "SpacesEnableShareableLink",
-          err.jqXHR,
-          err.textStatus,
-          err,
-          { url: "SpacesEnableShareableLink" }
-        );
+        captureApiError("SpacesEnableShareableLink", err, {
+          url: "SpacesEnableShareableLink",
+        });
       } else if (value) {
         dispatch(sActions.updateSuccess(value));
       }
@@ -336,13 +333,9 @@ export function disableShareableLink(spaceId) {
   return (dispatch, getState) => {
     api(getState()).models.disableShareableLink(spaceId, (err, value) => {
       if (err) {
-        captureApiError(
-          "SpacesDisableShareableLink",
-          err.jqXHR,
-          err.textStatus,
-          err,
-          { url: "SpacesDisableShareableLink" }
-        );
+        captureApiError("SpacesDisableShareableLink", err, {
+          url: "SpacesDisableShareableLink",
+        });
       } else if (value) {
         dispatch(sActions.updateSuccess(value));
       }
@@ -354,13 +347,9 @@ export function rotateShareableLink(spaceId) {
   return (dispatch, getState) => {
     api(getState()).models.rotateShareableLink(spaceId, (err, value) => {
       if (err) {
-        captureApiError(
-          "SpacesRotateShareableLink",
-          err.jqXHR,
-          err.textStatus,
-          err,
-          { url: "SpacesRotateShareableLink" }
-        );
+        captureApiError("SpacesRotateShareableLink", err, {
+          url: "SpacesRotateShareableLink",
+        });
       } else if (value) {
         dispatch(sActions.updateSuccess(value));
       }

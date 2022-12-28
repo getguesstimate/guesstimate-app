@@ -17,6 +17,7 @@ import "../styles/theme.css";
 
 import * as meActions from "gModules/me/actions";
 import "../routes/app";
+import Script from "next/script";
 
 // hacky, consider https://github.com/kirill-konshin/next-redux-wrapper
 let store: ReturnType<typeof configureStore> | undefined = undefined;
@@ -40,6 +41,12 @@ const MyApp = ({ Component }: AppProps) => {
 
   return (
     <>
+      <Script id="elev">{`var _elev = window._elev || {};(function() {
+      var i,e;i=document.createElement("script"),i.type='text/javascript';i.async=1,i.src="https://static.elev.io/js/v3.js",e=document.getElementsByTagName("script")[0],e.parentNode.insertBefore(i,e);})();
+      _elev.account_id = '565e550e67ffc'`}</Script>
+      <Script id="wistia" src="//fast.wistia.com/assets/external/E-v1.js" />
+      <Script id="twitter">{`!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");`}</Script>
+      <Script id="chargebee" src="https://js.chargebee.com/v1/chargebee.js" />
       <Head>
         <title key="title">Guesstimate</title>
         <meta

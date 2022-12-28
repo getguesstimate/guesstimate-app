@@ -12,11 +12,11 @@ export type GridContext = {
   hovered: boolean;
   inSelectedCell: boolean;
   selectedFrom?: any;
-  gridKeyPress: (e: React.SyntheticEvent) => void;
+  gridKeyPress(e: React.SyntheticEvent): void;
   connectDragSource: ConnectDragSource;
-  forceFlowGridUpdate: () => void;
-  onReturn: () => void;
-  onTab: () => void;
+  forceFlowGridUpdate(): void;
+  onReturn(): void;
+  onTab(): void;
 };
 
 const layerStyles: CSSProperties = {
@@ -77,20 +77,19 @@ type CollectedProps = {
 };
 
 type OuterProps = {
-  focusCell: () => void;
   hover: boolean;
-  gridKeyPress: (e: React.SyntheticEvent) => void;
-  forceFlowGridUpdate: () => void;
-  onTab: () => void;
-  onReturn: () => void;
+  gridKeyPress(e: React.SyntheticEvent): void;
+  forceFlowGridUpdate(): void;
+  onTab(): void;
+  onReturn(): void;
   inSelectedCell: boolean;
   selectedFrom?: any;
   item: GridItem;
-  getRowHeight: () => number;
+  getRowHeight(): number;
   location: Location;
-  handleSelect: (location: Location, direction?: any) => void;
-  onMoveItem: (arg: { prev: Location; next: Location }) => void;
-  onEndDrag: (location: Location) => void;
+  handleSelect(location: Location, direction?: any): void;
+  onMoveItem(arg: { prev: Location; next: Location }): void;
+  onEndDrag(location: Location): void;
 };
 
 type State = {
@@ -99,7 +98,7 @@ type State = {
 
 type Props = CollectedProps & OuterProps;
 
-class ItemCell extends Component<Props, State> {
+export class InnerItemCell extends Component<Props, State> {
   containerRef: React.RefObject<HTMLDivElement>;
 
   state = {
@@ -129,15 +128,22 @@ class ItemCell extends Component<Props, State> {
     const childItem =
       this.containerRef && this.containerRef.current!.children[0];
 
-    if (startedDragging && !!childItem) {
+    if (startedDragging && childItem) {
       this.setState({ width: (childItem as any).offsetWidth });
     }
   }
 
   onMouseUp(e: React.MouseEvent) {
-    if (e.button === 0 && e.currentTarget.className === "FlowGridFilledCell") {
-      this.props.focusCell();
+    if (
+      e.button === 0 &&
+      (e.target as any).className === "FlowGridFilledCell"
+    ) {
+      this.focus();
     }
+  }
+
+  focus() {
+    this.containerRef.current?.focus();
   }
 
   render() {
@@ -169,6 +175,7 @@ class ItemCell extends Component<Props, State> {
         style={styles}
         onMouseUp={this.onMouseUp.bind(this)}
         ref={this.containerRef}
+        tabIndex={-1}
       >
         {this.props.isDragging ? (
           <DragPreview width={this.state.width}>{item}</DragPreview>
@@ -180,49 +187,58 @@ class ItemCell extends Component<Props, State> {
   }
 }
 
-const DragItemCell: React.FC<OuterProps> = (props) => {
-  const [collectedProps, drag, dragPreview] = useDrag<
-    { location: Location },
-    {
-      location: Location;
-      item: GridItem;
-    },
-    { isDragging: boolean }
-  >(
-    () => ({
-      type: "card",
-      item() {
-        return { location: props.location };
+const DragItemCell = React.forwardRef<InnerItemCell, OuterProps>(
+  (props, ref) => {
+    const [collectedProps, drag, dragPreview] = useDrag<
+      { location: Location },
+      {
+        location: Location;
+        item: GridItem;
       },
-      end(_, monitor) {
-        if (!monitor.didDrop()) {
-          return;
-        }
+      { isDragging: boolean }
+    >(
+      () => ({
+        type: "card",
+        item() {
+          return { location: props.location };
+        },
+        end(_, monitor) {
+          if (!monitor.didDrop()) {
+            return;
+          }
 
-        const dropResult = monitor.getDropResult();
-        if (!dropResult || dropResult.item) {
-          return;
-        }
-        const startLocation = monitor.getItem().location;
-        const dropLocation = dropResult.location;
-        props.onMoveItem({ prev: startLocation, next: dropLocation });
-        props.onEndDrag(dropLocation);
-      },
-      collect(monitor) {
-        return {
-          isDragging: monitor.isDragging(),
-        };
-      },
-    }),
-    [props.location]
-  );
+          const dropResult = monitor.getDropResult();
+          if (!dropResult || dropResult.item) {
+            return;
+          }
+          const startLocation = monitor.getItem().location;
+          const dropLocation = dropResult.location;
+          props.onMoveItem({ prev: startLocation, next: dropLocation });
+          props.onEndDrag(dropLocation);
+        },
+        collect(monitor) {
+          return {
+            isDragging: monitor.isDragging(),
+          };
+        },
+      }),
+      [props.location]
+    );
 
-  // hide default drag preview, we use useDragLayer instead
-  useEffect(() => {
-    dragPreview(getEmptyImage());
-  }, []);
+    // hide default drag preview, we use useDragLayer instead
+    useEffect(() => {
+      dragPreview(getEmptyImage());
+    }, []);
 
-  return <ItemCell {...props} {...collectedProps} connectDragSource={drag} />;
-};
+    return (
+      <InnerItemCell
+        {...props}
+        {...collectedProps}
+        ref={ref}
+        connectDragSource={drag}
+      />
+    );
+  }
+);
 
 export default DragItemCell;

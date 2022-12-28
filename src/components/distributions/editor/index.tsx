@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import { DataForm } from "./DataForm/DataForm";
 import { TextForm } from "./TextForm/TextForm";
 
 import { changeMetricClickMode } from "gModules/canvas_state/actions";
@@ -10,20 +9,27 @@ import { runFormSimulations } from "gModules/simulations/actions";
 
 import { AppDispatch } from "gModules/store";
 import { Guesstimator } from "lib/guesstimator/index";
+import { LargeDataViewer, SmallDataViewer } from "./DataForm/DataViewer";
 
 type Props = {
   metricClickMode: string;
   guesstimate: any;
   metricId: string;
-  onReturn: () => void;
-  onTab: () => void;
-  jumpSection: () => void;
+  onReturn?(): void;
+  onTab?(): void;
+  jumpSection?(): void;
   canUseOrganizationFacts: boolean;
   organizationId?: string;
-  size: string;
-  onOpen: () => void;
   inputMetrics: any;
-} & { dispatch: AppDispatch };
+} & (
+  | {
+      size: "large";
+    }
+  | {
+      size: "small";
+      onOpen(): void;
+    }
+) & { dispatch: AppDispatch };
 
 export class UnwrappedDistributionEditor extends Component<Props> {
   formRef: React.RefObject<TextForm>;
@@ -99,20 +105,20 @@ export class UnwrappedDistributionEditor extends Component<Props> {
     }
   }
 
-  handleReturn(shifted) {
+  handleReturn(shifted: boolean) {
     if (shifted) {
-      this.props.jumpSection();
+      this.props.jumpSection?.();
     } else {
-      this.props.onReturn();
+      this.props.onReturn?.();
     }
     return true;
   }
 
-  handleTab(shifted) {
+  handleTab(shifted: boolean) {
     if (shifted) {
-      this.props.jumpSection();
+      this.props.jumpSection?.();
     } else {
-      this.props.onTab();
+      this.props.onTab?.();
     }
     return true;
   }
@@ -122,7 +128,6 @@ export class UnwrappedDistributionEditor extends Component<Props> {
       size,
       guesstimate,
       inputMetrics,
-      onOpen,
       organizationId,
       canUseOrganizationFacts,
     } = this.props;
@@ -135,15 +140,28 @@ export class UnwrappedDistributionEditor extends Component<Props> {
 
     return (
       <div className={formClasses}>
-        {hasData && (
-          <DataForm
-            data={guesstimate.data}
-            size={size}
-            onSave={this.addDataAndSave.bind(this)}
-            onOpen={onOpen}
-          />
-        )}
-        {!hasData && (
+        {hasData ? (
+          size === "large" ? (
+            <div className="row">
+              <div className="col-sm-12">
+                <LargeDataViewer
+                  data={guesstimate.data}
+                  onDelete={() => {
+                    this.addDataAndSave(null);
+                  }}
+                  onSave={this.addDataAndSave.bind(this)}
+                />
+              </div>
+            </div>
+          ) : (
+            <SmallDataViewer
+              onDelete={() => {
+                this.addDataAndSave(null);
+              }}
+              onOpen={this.props.onOpen}
+            />
+          )
+        ) : (
           <TextForm
             guesstimate={guesstimate}
             inputMetrics={inputMetrics}

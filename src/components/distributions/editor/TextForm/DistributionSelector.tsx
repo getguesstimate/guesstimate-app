@@ -37,7 +37,7 @@ const DistributionIcon: React.FC<{
   isSelected: boolean;
   isDisabled: boolean;
   type: DistributionType;
-  icon: string;
+  icon?: string;
   onSubmit(type: DistributionType): void;
 }> = ({ isSelected, isDisabled, type, icon, onSubmit }) => (
   <div
@@ -57,7 +57,7 @@ const DistributionIcon: React.FC<{
       {" "}
       {Descriptions[type].name}{" "}
     </ReactTooltip>
-    <img src={icon} />
+    {icon ? <img src={icon} /> : undefined}
   </div>
 );
 

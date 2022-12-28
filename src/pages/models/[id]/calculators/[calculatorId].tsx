@@ -17,7 +17,7 @@ const ModelWithCalculatorIdPage: NextPage = () => {
       {id === undefined ? null : (
         <SpaceShow
           spaceId={intId}
-          showCalculatorId={intCalculatorId}
+          showCalculatorId={String(intCalculatorId)}
           showCalculatorResults={window.location.search.includes(
             "showResults=true"
           )}

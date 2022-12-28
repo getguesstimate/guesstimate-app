@@ -13,7 +13,7 @@ const CalculatorPage: NextPage = () => {
   return (
     <Layout showFooter={false} backgroundColor="GREY">
       {id === undefined ? null : (
-        <CalculatorExpandedShow calculatorId={intId} key={intId} />
+        <CalculatorExpandedShow calculatorId={String(intId)} key={intId} />
       )}
     </Layout>
   );

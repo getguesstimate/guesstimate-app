@@ -2,7 +2,7 @@ import { Reducer } from "redux";
 import { DisplayErrorAction } from "./actions";
 
 type DisplayErrorState = {
-  error?: string;
+  error?: unknown;
   message?: string;
 }[];
 

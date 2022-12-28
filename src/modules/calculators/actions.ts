@@ -15,14 +15,14 @@ export const sActions = actionCreatorsFor("calculators");
 
 const api = (state) => setupGuesstimateApi(_.get(state, "me.token"));
 
-export function fetchById(id): AppThunk {
+export function fetchById(id: string): AppThunk {
   return (dispatch, getState) => {
     dispatch(sActions.fetchStart());
 
     api(getState()).calculators.get(id, (err, calculator) => {
       if (err) {
         dispatch(displayErrorsActions.newError());
-        captureApiError("CalculatorsFetch", err.jqXHR, err.textStatus, err, {
+        captureApiError("CalculatorsFetch", err, {
           url: "calculatorsFetchError",
         });
       } else if (calculator) {
@@ -48,7 +48,7 @@ export function destroy(id): AppThunk {
     dispatch(sActions.deleteStart({ id }));
     api(getState()).calculators.destroy(id, (err, value) => {
       if (err) {
-        captureApiError("CalculatorsDestroy", err.jqXHR, err.textStatus, err, {
+        captureApiError("CalculatorsDestroy", err, {
           url: "calculatorsDestroy",
         });
       } else {
@@ -68,7 +68,7 @@ export function create(spaceId: string, calculator, callback): AppThunk {
       calculator,
       (err, calculator) => {
         if (err) {
-          captureApiError("CalculatorsCreate", err.jqXHR, err.textStatus, err, {
+          captureApiError("CalculatorsCreate", err, {
             url: "CalculatorsCreate",
           });
         } else if (calculator) {
@@ -88,7 +88,7 @@ export function update(calculator, callback): AppThunk {
       calculator,
       (err, calculator) => {
         if (err) {
-          captureApiError("CalculatorsCreate", err.jqXHR, err.textStatus, err, {
+          captureApiError("CalculatorsCreate", err, {
             url: "CalculatorsCreate",
           });
         } else if (calculator) {

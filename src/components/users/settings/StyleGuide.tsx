@@ -14,7 +14,7 @@ const SettingsStyleGuide: React.FC = () => {
             return (
               <ComponentEditor
                 child={Settings}
-                childProps={{ planId }}
+                childProps={{ planId, onClose() {} }}
                 name="Settings"
                 key={planId}
               />
@@ -26,7 +26,11 @@ const SettingsStyleGuide: React.FC = () => {
             return (
               <ComponentEditor
                 child={Settings}
-                childProps={{ planId, portalUrl: "http://google.com" }}
+                childProps={{
+                  planId,
+                  portalUrl: "http://google.com",
+                  onClose() {},
+                }}
                 name="Settings"
                 key={planId}
               />

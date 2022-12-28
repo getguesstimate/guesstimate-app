@@ -1,7 +1,6 @@
 import _ from "lodash";
+import { useRouter } from "next/router";
 import React, { Component, useEffect, useState } from "react";
-import { connect } from "react-redux";
-import { useRouter, withRouter } from "next/router";
 
 import Icon from "gComponents/react-fa-patched";
 
@@ -12,7 +11,6 @@ import { CategoryForm } from "./categories/form";
 import { FactGraph } from "./facts/factGraph";
 import { MembersTab } from "./members";
 
-import { httpRequestSelector } from "./httpRequestSelector";
 import { organizationMemberSelector } from "./organizationMemberSelector";
 import { organizationSpaceSelector } from "./organizationSpaceSelector";
 
@@ -218,9 +216,6 @@ const OrganizationShow: React.FC<{
   const { members, memberships, invitations } = useAppSelector((state) =>
     organizationMemberSelector(state, organizationId)
   );
-  const { httpRequests } = useAppSelector((state) =>
-    httpRequestSelector(state, organizationId)
-  );
 
   const organization = e.collections.get(organizations, organizationId);
 
@@ -235,7 +230,7 @@ const OrganizationShow: React.FC<{
     dispatch(spaceActions.create(organizationId, {}, router));
   };
 
-  const destroyMembership = (membershipId) => {
+  const destroyMembership = (membershipId: string) => {
     dispatch(userOrganizationMembershipActions.destroy(membershipId));
   };
 
@@ -344,7 +339,7 @@ const OrganizationShow: React.FC<{
               invitations={invitations}
               admin_id={organization.admin_id}
               onRemove={onRemove}
-              httpRequests={httpRequests}
+              // httpRequests={httpRequests}
               meIsAdmin={meIsAdmin}
             />
           )}

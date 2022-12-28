@@ -6,7 +6,7 @@ import Settings from "gComponents/users/settings/container";
 const SettingsPage: NextPage = () => {
   return (
     <Layout>
-      <Settings />
+      <Settings onClose={() => undefined} />
     </Layout>
   );
 };

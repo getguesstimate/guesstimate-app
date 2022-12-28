@@ -208,13 +208,13 @@ export class SpaceToolbar extends Component<Props> {
                 position="right"
               >
                 <CardListElement
-                  icon={"copy"}
+                  icon="copy"
                   header="Copy Model"
                   onMouseDown={onCopyModel}
                 />
                 {editableByMe && (
                   <CardListElement
-                    icon={"download"}
+                    icon="download"
                     header="Import Slurp"
                     onMouseDown={() => {
                       this.setState({ importModalOpen: true });
@@ -224,7 +224,7 @@ export class SpaceToolbar extends Component<Props> {
                 )}
                 {editableByMe && (
                   <CardListElement
-                    icon={"warning"}
+                    icon="warning"
                     header="Delete Model"
                     onMouseDown={onDestroy}
                   />
