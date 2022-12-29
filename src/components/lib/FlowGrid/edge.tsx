@@ -1,6 +1,5 @@
 import _ from "lodash";
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import { Component } from "react";
 
 import angleBetweenPoints from "angle-between-points";
 
@@ -109,11 +108,6 @@ type Props = {
 };
 
 export default class Edge extends Component<Props> {
-  static propTypes = {
-    input: PropTypes.object.isRequired,
-    output: PropTypes.object.isRequired,
-  };
-
   shouldComponentUpdate(nextProps: Props) {
     return !_.isEqual(this.props, nextProps);
   }

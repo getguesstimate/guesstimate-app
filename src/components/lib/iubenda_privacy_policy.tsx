@@ -1,15 +1,14 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 
 export default class IubendaPrivacyPolicy extends Component<{
   id: number;
   children: React.ReactNode;
 }> {
   componentWillMount() {
-    var loadIubenda = function (w, d) {
-      var loader = function () {
-        var s = d.createElement("script");
-        var tag = d.getElementsByTagName("script")[0];
+    const loadIubenda = function (w, d) {
+      const loader = () => {
+        const s = d.createElement("script");
+        const tag = d.getElementsByTagName("script")[0];
         s.src = "//cdn.iubenda.com/iubenda.js";
         tag.parentNode.insertBefore(s, tag);
       };

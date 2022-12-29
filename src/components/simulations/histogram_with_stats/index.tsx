@@ -54,8 +54,8 @@ export class HistogramWithStats extends Component<Props> {
 
   onMouseHover(event) {
     const div: any = this.refs.div;
-    var bounds = div.getBoundingClientRect();
-    var x = event.clientX - bounds.left - MARGIN_LEFT;
+    const bounds = div.getBoundingClientRect();
+    const x = event.clientX - bounds.left - MARGIN_LEFT;
     this.setState({ hoveredXCoord: x, isHovering: true });
   }
 

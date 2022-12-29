@@ -1,11 +1,9 @@
 import _ from "lodash";
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import { Component } from "react";
 
 import d3 from "d3";
 
 import numberShow from "lib/numberShower/numberShower";
-import $ from "jquery";
 
 function getYScale(data, height) {
   return d3.scale
@@ -117,7 +115,7 @@ export default class Histogram extends Component<Props> {
 
     let xScale = getXScale(filtered_data, width);
     let histogramDataFn = d3.layout.histogram().bins(xScale.ticks(bins));
-    let histogramData = histogramDataFn(filtered_data);
+    let histogramData: any = histogramDataFn(filtered_data);
     let yScale = getYScale(histogramData, height);
 
     onChangeXScale?.(xScale.invert);
@@ -173,9 +171,12 @@ export default class Histogram extends Component<Props> {
   }
 }
 
-class Hoverbar extends Component<any> {
+class Hoverbar extends Component<{
+  height: number;
+  hoveredXCoord: number | undefined;
+}> {
   render() {
-    let { height, hoveredXCoord } = this.props;
+    const { height, hoveredXCoord } = this.props;
     return (
       <line
         x1={hoveredXCoord}
@@ -188,11 +189,9 @@ class Hoverbar extends Component<any> {
   }
 }
 
-class Path extends Component<any> {
-  static propTypes = {
-    scale: PropTypes.func.isRequired,
-  };
-
+class Path extends Component<{
+  scale: any;
+}> {
   render() {
     let [start, end] = this.props.scale.range();
     let d = `M0${start},6V0H${end}V6`;
@@ -201,17 +200,14 @@ class Path extends Component<any> {
   }
 }
 
-class Tick extends Component<any> {
-  static propTypes = {
-    value: PropTypes.number.isRequired,
-    scale: PropTypes.func.isRequired,
-  };
-
+class Tick extends Component<{
+  value: number;
+  scale: any;
+}> {
   render() {
-    let { value, scale } = this.props;
-    let textStyle = { textAnchor: "middle" };
+    const { value, scale } = this.props;
 
-    let valueText = numberShow(value);
+    const valueText = numberShow(value);
     let text: any = _.isFinite(value) && valueText;
     text = `${text.value}`;
     text += valueText.symbol ? valueText.symbol : "";
@@ -233,16 +229,14 @@ class Tick extends Component<any> {
   }
 }
 
-export class XAxis extends Component<any> {
-  static propTypes = {
-    height: PropTypes.number.isRequired,
-    scale: PropTypes.func.isRequired,
-  };
-
+export class XAxis extends Component<{
+  height: number;
+  scale: any;
+}> {
   render() {
-    let { height, scale } = this.props;
+    const { height, scale } = this.props;
 
-    let ticks = scale.ticks.apply(scale).map(function (tick, i) {
+    const ticks = scale.ticks.apply(scale).map(function (tick, i) {
       return <Tick value={tick} scale={scale} key={i} />;
     });
 
@@ -258,20 +252,18 @@ export class XAxis extends Component<any> {
   }
 }
 
-export class Bar extends Component<any> {
-  static propTypes = {
-    data: PropTypes.arrayOf(PropTypes.number).isRequired,
-    xScale: PropTypes.func.isRequired,
-    yScale: PropTypes.func.isRequired,
-    height: PropTypes.number.isRequired,
-    barWidth: PropTypes.number.isRequired,
-  };
-
+export class Bar extends Component<{
+  data: any;
+  xScale: any;
+  yScale: any;
+  height: number;
+  barWidth: number;
+}> {
   render() {
-    let { data, xScale, yScale, height, barWidth } = this.props;
+    const { data, xScale, yScale, height, barWidth } = this.props;
 
-    let scaledX = xScale(data.x);
-    let scaledY = yScale(data.y);
+    const scaledX = xScale(data.x);
+    const scaledY = yScale(data.y);
 
     return (
       <g

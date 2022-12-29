@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 
 type Props = {
   isFluid?: boolean;
@@ -11,11 +10,6 @@ export default class Main extends Component<Props> {
   static defaultProps = {
     isFluid: false,
     backgroundColor: "",
-  };
-
-  static propTypes = {
-    isFluid: PropTypes.bool,
-    backgroundColor: PropTypes.oneOf(["", "BLUE", "GREY"]),
   };
 
   render() {

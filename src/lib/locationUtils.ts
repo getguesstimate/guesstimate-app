@@ -1,21 +1,13 @@
 import _ from "lodash";
-import PropTypes from "prop-types";
 
 export type Location = {
   column: number;
   row: number;
 };
 
+// Regions are [top_left_location, bottom_right_location]
 export type Region = [Location, Location];
 export type MaybeRegion = [Location, Location] | [];
-
-export const PTLocation = PropTypes.shape({
-  column: PropTypes.number,
-  row: PropTypes.number,
-});
-
-// Regions are [top_left_location, bottom_right_location]
-export const PTRegion = PropTypes.arrayOf(PTLocation);
 
 export function isLocation(test): test is Location {
   return !!test && test.hasOwnProperty("row") && test.hasOwnProperty("column");

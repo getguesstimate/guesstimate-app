@@ -8,7 +8,7 @@ const scenarios = (values, inputProbabilities) => {
   const testStat = Math.random();
 
   let running = 0;
-  for (var i = 0; i < bound; i++) {
+  for (let i = 0; i < bound; i++) {
     running += probabilities[i];
     if (testStat < running) {
       return values[i];

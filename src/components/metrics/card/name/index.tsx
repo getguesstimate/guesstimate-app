@@ -1,23 +1,31 @@
 import _ from "lodash";
-import PropTypes from "prop-types";
 import React, { Component } from "react";
 
 import { ContentState, Editor, EditorState } from "draft-js";
 
 import { typeSafeEq } from "gEngine/utils";
 
-export default class MetricName extends Component<any> {
-  static propTypes = {
-    name: PropTypes.string,
-    inSelectedCell: PropTypes.bool.isRequired,
-    onChange: PropTypes.func.isRequired,
-  };
+type Props = {
+  name: string;
+  inSelectedCell: boolean;
+  onChange(text: string): void;
+  heightHasChanged(): void;
+  anotherFunctionSelected: boolean;
+  jumpSection(): void;
+  onReturn(): void;
+  onTab(): void;
+};
 
+type State = {
+  editorState: any;
+};
+
+export default class MetricName extends Component<Props, State> {
   state = {
     editorState: this.plainTextEditorState(this.props.name),
   };
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: Props) {
     if (this.props.name !== nextProps.name && nextProps.name !== this.value()) {
       this.changePlainText(nextProps.name);
     }
@@ -40,7 +48,7 @@ export default class MetricName extends Component<any> {
   value() {
     return this.state.editorState.getCurrentContent().getPlainText("");
   }
-  handleKeyDown(e) {
+  handleKeyDown(e: React.KeyboardEvent) {
     e.stopPropagation();
     this.props.heightHasChanged();
   }
@@ -60,7 +68,7 @@ export default class MetricName extends Component<any> {
 
   onReturn(e: React.KeyboardEvent) {
     if (e.shiftKey) {
-      this.props.onReturn(false);
+      this.props.onReturn();
     } else {
       this.props.jumpSection();
     }
@@ -69,7 +77,7 @@ export default class MetricName extends Component<any> {
 
   onTab(e: React.KeyboardEvent) {
     if (e.shiftKey) {
-      this.props.onTab(false);
+      this.props.onTab();
     } else {
       this.props.jumpSection();
     }

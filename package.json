@@ -108,7 +108,6 @@
     "postcss-mixins": "^9.0.4",
     "postcss-nested": "3.0",
     "postcss-simple-vars": "^7.0.1",
-    "prop-types": "^15.6.2",
     "qs": "^6.5.2",
     "raven-js": "^2.1.1",
     "react": "^18.2.0",

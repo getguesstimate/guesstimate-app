@@ -1,24 +1,24 @@
 import _ from "lodash";
-import PropTypes from "prop-types";
 
-import generateRandomReadableId from "./metric/generate_random_readable_id";
-import * as _guesstimate from "./guesstimate";
-import * as _organization from "./organization";
 import * as _collections from "./collections";
-import * as _utils from "./utils";
+import * as _guesstimate from "./guesstimate";
+import generateRandomReadableId from "./metric/generate_random_readable_id";
+import * as _organization from "./organization";
 import { NUM_SAMPLES } from "./simulation";
+import * as _utils from "./utils";
 
-import { Guesstimator } from "lib/guesstimator/index";
-import { _matchingFormatter } from "lib/guesstimator/formatter/index";
 import { sortDescending } from "lib/dataAnalysis";
+import { _matchingFormatter } from "lib/guesstimator/formatter/index";
+import { Guesstimator } from "lib/guesstimator/index";
 
 export type Fact = {
   id: string;
+  category_id?: string | null;
   name: string;
   variable_name: string;
-  expression?: string;
-  exported_from_id?: string;
-  metric_id?: string;
+  expression: string;
+  exported_from_id?: string | null;
+  metric_id?: string | null;
   simulation: {
     sample: {
       values: number[];
@@ -37,31 +37,6 @@ export type Fact = {
     };
   };
 };
-
-export const FactPT = PropTypes.shape({
-  name: PropTypes.string.isRequired,
-  variable_name: PropTypes.string.isRequired,
-  expression: PropTypes.string,
-  exported_from_id: PropTypes.number,
-  metric_id: PropTypes.string,
-  simulation: PropTypes.shape({
-    sample: PropTypes.shape({
-      values: PropTypes.arrayOf(PropTypes.number).isRequired,
-      errors: PropTypes.arrayOf(PropTypes.object),
-    }).isRequired,
-    stats: PropTypes.shape({
-      adjustedConfidenceInterval: PropTypes.arrayOf(PropTypes.number),
-      mean: PropTypes.number,
-      stdev: PropTypes.number,
-      length: PropTypes.number,
-      percentiles: PropTypes.shape({
-        5: PropTypes.number.isRequired,
-        50: PropTypes.number.isRequired,
-        95: PropTypes.number.isRequired,
-      }),
-    }),
-  }).isRequired,
-});
 
 export const GLOBALS_ONLY_REGEX = /@\w+(?:\.\w+)?/g;
 export const HANDLE_REGEX = /(?:@\w+(?:\.\w+)?|#\w+)/g;

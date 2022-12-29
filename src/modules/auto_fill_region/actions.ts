@@ -145,7 +145,7 @@ function buildNewMetrics(
   );
 
   let currLocation = move(startMetric.location, direction);
-  for (var i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     const { metric, guesstimate } = translateFn(
       currLocation,
       metrics.concat(newMetrics)

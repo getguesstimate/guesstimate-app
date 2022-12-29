@@ -1,5 +1,3 @@
-import PT from "prop-types";
-
 type EdgeView = "hidden" | "visible";
 
 type MetricClickMode = "DEFAULT" | "FUNCTION_INPUT_SELECT";

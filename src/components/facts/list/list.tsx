@@ -8,12 +8,13 @@ import { utils } from "gEngine/engine";
 import { Fact, getVar } from "gEngine/facts";
 
 import Icon from "gComponents/react-fa-patched";
+import { FactCategory } from "gEngine/fact_category";
 
 type Props = {
   spaceId?: string;
-  categoryId: string | null | undefined;
+  categoryId?: string | null;
   facts: Fact[];
-  categories: unknown;
+  categories: FactCategory[];
   imported_fact_ids?: string[];
   onAddFact(fact: Fact): void;
   onDeleteFact(fact: Fact): void;
@@ -105,7 +106,7 @@ export class FactList extends Component<Props> {
         categoryId={categoryId}
         existingVariableNames={existingVariableNames}
         categories={categories}
-        buttonText={"Create"}
+        buttonText="Create"
         onSubmit={this.onAddFact.bind(this)}
         onCancel={this.hideNewForm.bind(this)}
       />

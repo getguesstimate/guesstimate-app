@@ -1,7 +1,6 @@
 import { EdgeShape } from "gComponents/spaces/canvas";
 import _ from "lodash";
-import PropTypes from "prop-types";
-import React, { Component } from "react";
+import { Component } from "react";
 
 import Edge from "./edge";
 import GridPoint from "./gridPoints";
@@ -22,13 +21,6 @@ export class Edges extends Component<Props> {
       !_.isEqual(this.props.rowHeights, nextProps.rowHeights)
     );
   }
-
-  static propTypes = {
-    columnWidth: PropTypes.number.isRequired,
-    containerHeight: PropTypes.number.isRequired,
-    edges: PropTypes.array.isRequired,
-    rowHeights: PropTypes.array.isRequired,
-  };
 
   render() {
     const { columnWidth, containerHeight, rowHeights, edges } = this.props;

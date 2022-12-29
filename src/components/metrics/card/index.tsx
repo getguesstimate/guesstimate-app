@@ -25,6 +25,8 @@ import { changeMetric, removeMetrics } from "gModules/metrics/actions";
 import { withReadableId } from "lib/generateVariableNames/generateMetricReadableId";
 import { shouldTransformName } from "lib/generateVariableNames/nameToVariableName";
 
+import { GridContext } from "gComponents/lib/FlowGrid/filled-cell";
+import { CanvasState } from "gComponents/lib/FlowGrid/types";
 import {
   INPUT,
   INTERMEDIATE,
@@ -34,9 +36,6 @@ import {
 } from "gEngine/graph";
 import { makeURLsMarkdown } from "gEngine/utils";
 import { AppDispatch } from "gModules/store";
-import { GridContext } from "gComponents/lib/FlowGrid/filled-cell";
-import { CanvasState } from "gComponents/lib/FlowGrid/types";
-import { ReactReduxContextInstance } from "react-redux/es/components/Context";
 
 const relationshipClasses = {};
 relationshipClasses[INTERMEDIATE] = "intermediate";

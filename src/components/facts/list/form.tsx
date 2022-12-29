@@ -1,25 +1,43 @@
 import _ from "lodash";
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { withRouter } from "next/router";
+import { NextRouter, withRouter } from "next/router";
+import { Component } from "react";
 
-import { spaceUrlById } from "gEngine/space";
 import {
+  Fact,
   hasRequiredProperties,
   isExportedFromSpace,
   simulateFact,
-  FactPT,
 } from "gEngine/facts";
-import { FactCategoryPT } from "gEngine/fact_category";
+import { FactCategory } from "gEngine/fact_category";
 import { addStats, hasErrors } from "gEngine/simulation";
+import { spaceUrlById } from "gEngine/space";
 import { orStr } from "gEngine/utils";
 
-import { isData, formatData } from "lib/guesstimator/formatter/formatters/Data";
 import { withVariableName } from "lib/generateVariableNames/generateFactVariableName";
+import { formatData, isData } from "lib/guesstimator/formatter/formatters/Data";
 
-class FactForm_ extends Component<any> {
+type Props = {
+  categories: FactCategory[];
+  existingVariableNames: string[];
+  onSubmit(fact: Fact): void;
+  onCancel(): void;
+  onDelete?(): void;
+  startingFact?: Fact;
+  categoryId?: string | null;
+  buttonText: string;
+} & { router: NextRouter };
+
+type State = {
+  runningFact: Fact;
+  variableNameManuallySet: boolean;
+  currentExpressionSimulated: boolean;
+  submissionPendingOnSimulation: boolean;
+};
+
+class FactForm_ extends Component<Props, State> {
   static defaultProps = {
     startingFact: {
+      id: "0",
       name: "",
       expression: "",
       variable_name: "",
@@ -31,22 +49,15 @@ class FactForm_ extends Component<any> {
           values: [],
           errors: [],
         },
+        stats: {},
       },
     },
     categories: [],
   };
 
-  static propTypes = {
-    categories: PropTypes.arrayOf(FactCategoryPT).isRequired,
-    existingVariableNames: PropTypes.arrayOf(PropTypes.string).isRequired,
-    onSubmit: PropTypes.func.isRequired,
-    onCancel: PropTypes.func,
-    startingFact: FactPT,
-  };
-
-  state = {
+  state: State = {
     runningFact: {
-      ...this.props.startingFact,
+      ...this.props.startingFact!,
       category_id:
         _.get(this, "props.startingFact.category_id") || this.props.categoryId,
     },

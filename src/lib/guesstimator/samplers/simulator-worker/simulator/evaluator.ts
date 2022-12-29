@@ -1,5 +1,5 @@
 import _ from "lodash";
-var Finance = require("financejs");
+const Finance = require("financejs");
 import math from "mathjs";
 
 import { __DEV__ } from "lib/constants";
@@ -89,7 +89,7 @@ function evaluate(compiled, inputs, n, text) {
   let values: any[] = [];
   let errors: any[] = [];
   let anyNotFiltered = false;
-  for (var i = 0; i < n; i++) {
+  for (let i = 0; i < n; i++) {
     const sampledInputs = sampleInputs(inputs, i);
     const someInputFiltered = _.some(sampledInputs, (val) =>
       _.isEqual(val, SAMPLE_FILTERED)
