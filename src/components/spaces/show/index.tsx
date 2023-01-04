@@ -6,17 +6,17 @@ import { connect } from "react-redux";
 import $ from "jquery";
 import Head from "next/head";
 
-import { EditCalculatorForm } from "gComponents/calculators/edit";
-import { NewCalculatorForm } from "gComponents/calculators/new";
-import { CalculatorCompressedShow } from "gComponents/calculators/show/CalculatorCompressedShow";
-import { FactListContainer } from "gComponents/facts/list/container";
-import Canvas from "gComponents/spaces/canvas";
+import { EditCalculatorForm } from "~/components/calculators/edit";
+import { NewCalculatorForm } from "~/components/calculators/new";
+import { CalculatorCompressedShow } from "~/components/calculators/show/CalculatorCompressedShow";
+import { FactListContainer } from "~/components/facts/list/container";
+import Canvas from "~/components/spaces/canvas";
 import {
   ButtonDeleteText,
   ButtonEditText,
   ButtonExpandText,
-} from "gComponents/utility/buttons/button";
-import { ButtonCloseText } from "gComponents/utility/buttons/close";
+} from "~/components/utility/buttons/button";
+import { ButtonCloseText } from "~/components/utility/buttons/close";
 import { ClosedSpaceSidebar } from "./closed_sidebar";
 import { SpaceHeader } from "./header";
 import { SpaceSidebar } from "./sidebar";
@@ -28,27 +28,27 @@ import {
   ExtendedDSpace,
 } from "../denormalized-space-selector";
 
-import * as calculatorActions from "gModules/calculators/actions";
+import * as calculatorActions from "~/modules/calculators/actions";
 import {
   allowEdits,
   clearEditsAllowed,
   forbidEdits,
-} from "gModules/canvas_state/actions";
-import { redo, undo } from "gModules/checkpoints/actions";
-import * as copiedActions from "gModules/copied/actions";
-import { removeSelectedMetrics } from "gModules/metrics/actions";
-import * as simulationActions from "gModules/simulations/actions";
-import * as spaceActions from "gModules/spaces/actions";
-import * as userActions from "gModules/users/actions";
+} from "~/modules/canvas_state/actions";
+import { redo, undo } from "~/modules/checkpoints/actions";
+import * as copiedActions from "~/modules/copied/actions";
+import { removeSelectedMetrics } from "~/modules/metrics/actions";
+import * as simulationActions from "~/modules/simulations/actions";
+import * as spaceActions from "~/modules/spaces/actions";
+import * as userActions from "~/modules/users/actions";
 
-import { parseSlurp } from "lib/slurpParser";
+import { parseSlurp } from "~/lib/slurpParser";
 
-import * as e from "gEngine/engine";
+import * as e from "~/lib/engine/engine";
 
-import { Fact } from "gEngine/facts";
-import { AppDispatch, RootState } from "gModules/store";
-import * as elev from "servers/elev/index";
-import { DSpace } from "gEngine/space";
+import { Fact } from "~/lib/engine/facts";
+import { AppDispatch, RootState } from "~/modules/store";
+import * as elev from "~/server/elev/index";
+import { DSpace } from "~/lib/engine/space";
 
 function mapStateToProps(state: RootState) {
   return {

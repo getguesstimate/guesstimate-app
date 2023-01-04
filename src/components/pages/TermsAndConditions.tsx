@@ -1,6 +1,6 @@
-import React, { Component } from "react";
+import React from "react";
 
-import PageBase from "../base/index";
+import { PageBase } from "../utility/PageBase";
 
 const content = `
 # Terms and Conditions ("Terms")
@@ -94,8 +94,6 @@ By continuing to access or use our Service after any revisions become effective,
 If you have any questions about these Terms, please contact us.
 `;
 
-const TermsAndConditions: React.FC = () => {
+export const TermsAndConditions: React.FC = () => {
   return <PageBase content={content} />;
 };
-
-export default TermsAndConditions;

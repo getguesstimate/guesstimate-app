@@ -4,17 +4,17 @@ import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import { generateShareIcon, ShareButtons } from "react-share";
 
-import Container from "gComponents/utility/container/Container";
+import Container from "~/components/utility/container/Container";
 import { CalculatorShow } from "./CalculatorShow";
 
-import { ButtonCloseText } from "gComponents/utility/buttons/close/index";
+import { ButtonCloseText } from "~/components/utility/buttons/close/index";
 import { calculatorSpaceSelector } from "./calculator-space-selector";
 
-import { fetchById } from "gModules/calculators/actions";
+import { fetchById } from "~/modules/calculators/actions";
 
-import * as Calculator from "gEngine/calculator";
-import * as Space from "gEngine/space";
-import { useAppDispatch, useAppSelector } from "gModules/hooks";
+import * as Calculator from "~/lib/engine/calculator";
+import * as Space from "~/lib/engine/space";
+import { useAppDispatch, useAppSelector } from "~/modules/hooks";
 
 type Props = {
   calculatorId: string;

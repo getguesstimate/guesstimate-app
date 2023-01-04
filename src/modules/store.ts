@@ -1,4 +1,4 @@
-import rootReducer from "gModules/reducers";
+import rootReducer from "~/modules/reducers";
 import createSagaMiddleware from "redux-saga";
 import { dispatchCatchSaga } from "../routes/sagas";
 

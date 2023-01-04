@@ -2,10 +2,10 @@ import _ from "lodash";
 import { useRouter } from "next/router";
 import React, { Component, useEffect, useState } from "react";
 
-import Icon from "gComponents/react-fa-patched";
+import Icon from "~/components/react-fa-patched";
 
-import { NewSpaceCard, SpaceCard } from "gComponents/spaces/cards";
-import Container from "gComponents/utility/container/Container";
+import { NewSpaceCard, SpaceCard } from "~/components/spaces/cards";
+import Container from "~/components/utility/container/Container";
 import { Category } from "./categories/category";
 import { CategoryForm } from "./categories/form";
 import { FactGraph } from "./facts/factGraph";
@@ -14,14 +14,14 @@ import { MembersTab } from "./members";
 import { organizationMemberSelector } from "./organizationMemberSelector";
 import { organizationSpaceSelector } from "./organizationSpaceSelector";
 
-import * as modalActions from "gModules/modal/actions";
-import * as organizationActions from "gModules/organizations/actions";
-import * as spaceActions from "gModules/spaces/actions";
-import * as userOrganizationMembershipActions from "gModules/userOrganizationMemberships/actions";
+import * as modalActions from "~/modules/modal/actions";
+import * as organizationActions from "~/modules/organizations/actions";
+import * as spaceActions from "~/modules/spaces/actions";
+import * as userOrganizationMembershipActions from "~/modules/userOrganizationMemberships/actions";
 
-import * as e from "gEngine/engine";
-import { FactCategory } from "gEngine/fact_category";
-import { useAppDispatch, useAppSelector } from "gModules/hooks";
+import * as e from "~/lib/engine/engine";
+import { FactCategory } from "~/lib/engine/fact_category";
+import { useAppDispatch, useAppSelector } from "~/modules/hooks";
 
 const MODEL_TAB = "models";
 const MEMBERS_TAB = "members";
@@ -227,7 +227,7 @@ const OrganizationShow: React.FC<{
   };
 
   const _newModel = () => {
-    dispatch(spaceActions.create(organizationId, {}, router));
+    dispatch(spaceActions.create(organizationId, router));
   };
 
   const destroyMembership = (membershipId: string) => {

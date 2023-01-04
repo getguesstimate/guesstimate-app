@@ -3,12 +3,12 @@ import { connect } from "react-redux";
 
 import { TextForm } from "./TextForm/TextForm";
 
-import { changeMetricClickMode } from "gModules/canvas_state/actions";
-import { changeGuesstimate } from "gModules/guesstimates/actions";
-import { runFormSimulations } from "gModules/simulations/actions";
+import { changeMetricClickMode } from "~/modules/canvas_state/actions";
+import { changeGuesstimate } from "~/modules/guesstimates/actions";
+import { runFormSimulations } from "~/modules/simulations/actions";
 
-import { AppDispatch } from "gModules/store";
-import { Guesstimator } from "lib/guesstimator/index";
+import { AppDispatch } from "~/modules/store";
+import { Guesstimator } from "~/lib/guesstimator/index";
 import { LargeDataViewer, SmallDataViewer } from "./DataForm/DataViewer";
 
 type Props = {

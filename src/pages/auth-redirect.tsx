@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 
-import Layout from "../routes/layouts/application/index";
-import AuthRedirect from "gComponents/pages/auth-redirect/index";
+import { Layout } from "~/components/layouts";
+import { AuthRedirect } from "~/components/pages/AuthRedirect";
 
 const AuthRedirectPage: NextPage = () => {
   if (typeof window === "undefined") {

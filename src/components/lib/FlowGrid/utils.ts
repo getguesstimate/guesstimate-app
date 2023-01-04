@@ -1,5 +1,5 @@
-import { SelectedCellState } from "gModules/selected_cell/reducer";
-import { Location } from "lib/locationUtils";
+import { SelectedCellState } from "~/modules/selected_cell/reducer";
+import { Location } from "~/lib/locationUtils";
 
 export function keycodeToDirection(keyCode: number) {
   // up arrow

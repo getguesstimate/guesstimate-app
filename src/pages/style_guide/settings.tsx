@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 
-import Layout from "../../routes/layouts/application/index";
-import SettingsStyleGuide from "gComponents/users/settings/StyleGuide";
+import { Layout } from "~/components/layouts";
+import { SettingsStyleGuide } from "~/components/users/settings/SettingsStyleGuide";
 
 const SettingsStyleGuidePage: NextPage = () => {
   return (

@@ -6,8 +6,8 @@ import { ConnectDropTarget, useDrop } from "react-dnd";
 import EmptyCell from "./cell-empty";
 import ItemCell, { InnerItemCell } from "./filled-cell";
 
-import { getClassName } from "gEngine/utils";
-import { Location } from "lib/locationUtils";
+import { getClassName } from "~/lib/engine/utils";
+import { Location } from "~/lib/locationUtils";
 import { CanvasState, GridItem } from "./types";
 
 type CollectedProps = {

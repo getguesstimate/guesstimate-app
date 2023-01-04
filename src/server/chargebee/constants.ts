@@ -1,4 +1,4 @@
-import { __API_ENV__ } from "lib/constants";
+import { __API_ENV__ } from "~/lib/constants";
 
 const developmentCreds = {
   CHARGEBEE_SITE: "guesstimate-test",

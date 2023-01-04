@@ -1,25 +1,28 @@
-import Icon from "gComponents/react-fa-patched";
+import Icon from "~/components/react-fa-patched";
 import _ from "lodash";
 import React from "react";
 
-import Card from "gComponents/utility/card/index";
-import Plan from "lib/config/plan";
+import Card from "~/components/utility/card/index";
+import Plan from "~/lib/config/plan";
 
-const PlanC = ({ planId, privateModelLimit }) => (
+const PlanC: React.FC<{ planId: string | undefined }> = ({ planId }) => (
   <div className="Plan">
     <h2> {Plan.find(planId).fullName()} </h2>
     <p> {`${Plan.find(planId).number()} Private Models`}</p>
   </div>
 );
 
-const PlanUpgradeButton = () => (
+const PlanUpgradeButton: React.FC = () => (
   <a className="ui button green large" href="/subscribe/lite">
     <Icon name="rocket" /> Upgrade
   </a>
 );
 
 // The portal url only can be clicked once.  Then,we need a new one.
-const PortalButton = ({ url, onRefresh }) => (
+const PortalButton: React.FC<{
+  url: string;
+  onRefresh?(): void;
+}> = ({ url, onRefresh }) => (
   <a
     className="ui button black portal"
     href={url}
@@ -30,7 +33,11 @@ const PortalButton = ({ url, onRefresh }) => (
   </a>
 );
 
-const PlanUpgradeSection = ({ planId, portalUrl, onRefresh }) => {
+const PlanUpgradeSection: React.FC<{
+  planId: string | undefined;
+  portalUrl: string | undefined;
+  onRefresh?(): void;
+}> = ({ planId, portalUrl, onRefresh }) => {
   const hasPortalUrl = !!portalUrl;
   if (planId === "personal_infinite") {
     return <div />;
@@ -51,14 +58,14 @@ const PlanUpgradeSection = ({ planId, portalUrl, onRefresh }) => {
 };
 
 type Props = {
-  planId: any;
+  planId: string | undefined;
   onClose(): void;
   portalUrl?: string;
   onRefresh?(): void;
 };
 
 const Settings: React.FC<Props> = ({
-  planId = false,
+  planId,
   onClose,
   portalUrl,
   onRefresh,
@@ -76,7 +83,7 @@ const Settings: React.FC<Props> = ({
           >
             <div>
               <div className="Settings-Plan">
-                <PlanC planId={planId} privateModelLimit={0} />
+                <PlanC planId={planId} />
               </div>
 
               <PlanUpgradeSection

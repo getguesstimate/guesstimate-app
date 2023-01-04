@@ -1,11 +1,11 @@
 import React from "react";
 
-import FirstSubscriptionContainer from "gComponents/subscriptions/FirstSubscription/container";
-import Container from "gComponents/utility/container/Container";
-import * as displayErrorsActions from "gModules/displayErrors/actions";
-import { useAppDispatch, useAppSelector } from "gModules/hooks";
-import Plan from "lib/config/plan";
-import { capitalizeFirstLetter } from "lib/string";
+import FirstSubscriptionContainer from "~/components/subscriptions/FirstSubscription/container";
+import Container from "~/components/utility/container/Container";
+import * as displayErrorsActions from "~/modules/displayErrors/actions";
+import { useAppDispatch, useAppSelector } from "~/modules/hooks";
+import Plan from "~/lib/config/plan";
+import { capitalizeFirstLetter } from "~/lib/string";
 
 type Props = {
   planName: string;

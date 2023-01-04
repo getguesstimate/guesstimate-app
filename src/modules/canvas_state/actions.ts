@@ -1,6 +1,6 @@
 import _ from "lodash";
-import { presentOrVal } from "gEngine/utils";
-import { AppThunk } from "gModules/store";
+import { presentOrVal } from "~/lib/engine/utils";
+import { AppThunk } from "~/modules/store";
 
 export const change = (values) => ({ type: "CHANGE_CANVAS_STATE", values });
 

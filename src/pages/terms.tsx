@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 
-import Layout from "../routes/layouts/application/index";
-import TermsAndConditions from "gComponents/pages/terms_and_conditions/index";
+import { Layout } from "~/components/layouts";
+import { TermsAndConditions } from "~/components/pages/TermsAndConditions";
 
 const TermsPage: NextPage = () => {
   return (

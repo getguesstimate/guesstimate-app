@@ -2,13 +2,13 @@ import _ from "lodash";
 import React from "react";
 import { useRouter } from "next/router";
 
-import Icon from "gComponents/react-fa-patched";
+import Icon from "~/components/react-fa-patched";
 
-import * as Organization from "gEngine/organization";
-import * as Space from "gEngine/space";
-import * as User from "gEngine/user";
+import * as Organization from "~/lib/engine/organization";
+import * as Space from "~/lib/engine/space";
+import * as User from "~/lib/engine/user";
 
-import { formatDate, formatDescription } from "gComponents/spaces/shared";
+import { formatDate, formatDescription } from "~/components/spaces/shared";
 
 const arrowsVisibleImage = "/assets/metric-icons/blue/arrows-visible.png";
 
@@ -110,7 +110,10 @@ export const SpaceCard: React.FC<{
   );
 };
 
-const SpaceCards = ({ spaces, showPrivacy }) => (
+const SpaceCards: React.FC<{
+  spaces: any[];
+  showPrivacy: boolean;
+}> = ({ spaces, showPrivacy }) => (
   <div className="row">
     {_.map(spaces, (s) => (
       <SpaceCard key={s.id} space={s} showPrivacy={showPrivacy} />

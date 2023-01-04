@@ -1,5 +1,5 @@
-import * as engine from "gEngine/engine";
-import { AppDispatch, AppThunk, RootState } from "gModules/store";
+import * as engine from "~/lib/engine/engine";
+import { AppDispatch, AppThunk, RootState } from "~/modules/store";
 import _ from "lodash";
 
 export function saveCheckpoint(spaceId, newGraph): AppThunk {

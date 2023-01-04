@@ -4,8 +4,8 @@ import * as _guesstimate from "./guesstimate";
 import * as _collections from "./collections";
 
 import generateRandomReadableId from "./metric/generate_random_readable_id";
-import { isAtLocation } from "lib/locationUtils";
-import { RootState } from "gModules/store";
+import { isAtLocation } from "~/lib/locationUtils";
+import { RootState } from "~/modules/store";
 
 export function equals(l, r) {
   return (

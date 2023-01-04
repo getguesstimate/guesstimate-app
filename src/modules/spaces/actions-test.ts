@@ -2,7 +2,7 @@ import fetch, { enableFetchMocks } from "jest-fetch-mock";
 
 import { generalUpdate } from "./actions";
 
-import { expectToCallActions } from "gModules/mockStore";
+import { expectToCallActions } from "~/modules/mockStore";
 
 enableFetchMocks();
 

@@ -3,7 +3,7 @@ import React, { Component } from "react";
 
 import { ContentState, Editor, EditorState } from "draft-js";
 
-import { typeSafeEq } from "gEngine/utils";
+import { typeSafeEq } from "~/lib/engine/utils";
 
 type Props = {
   name: string;

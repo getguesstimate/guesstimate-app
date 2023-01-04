@@ -1,6 +1,17 @@
 import { AnyAction, Reducer } from "redux";
 
-export type CanvasState = any;
+export type CanvasState = {
+  analysisViewEnabled: boolean;
+  expandedViewEnabled: boolean;
+  scientificViewEnabled: boolean;
+  edgeView: string; // TODO - enum
+  metricClickMode: string; // TODO - enum
+  saveState: string; // TODO - enum
+  editsAllowed: boolean;
+  editsAllowedManuallySet: boolean;
+  analysisMetricId: string;
+  actionState?: string;
+};
 
 const initialState: CanvasState = {
   analysisViewEnabled: false,
@@ -14,7 +25,7 @@ const initialState: CanvasState = {
   analysisMetricId: "",
 };
 
-export const canvasStateR: Reducer<typeof initialState, AnyAction> = (
+export const canvasStateR: Reducer<CanvasState, AnyAction> = (
   state = initialState,
   action
 ) => {

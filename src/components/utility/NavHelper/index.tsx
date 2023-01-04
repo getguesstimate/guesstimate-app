@@ -1,44 +1,41 @@
-import { NextRouter, withRouter } from "next/router";
-import $ from "jquery";
 import localLinks from "local-links";
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import { useRouter } from "next/router";
+import React, { useCallback, useEffect } from "react";
 
-import * as modalActions from "gModules/modal/actions";
-import { AppDispatch } from "gModules/store";
+import { useAppDispatch } from "~/modules/hooks";
+import * as modalActions from "~/modules/modal/actions";
 
 type Props = {
-  dispatch: AppDispatch;
-  router: NextRouter;
   children: React.ReactNode;
 };
 
-class NavHelper extends Component<Props> {
-  onClick(event) {
+export const NavHelper: React.FC<Props> = ({ children }) => {
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+
+  const onClick = useCallback((event: React.MouseEvent) => {
     const pathname = localLinks.getLocalPathname(event);
 
     if (pathname) {
       event.preventDefault();
-      this.props.router.push(pathname);
-      this.props.dispatch(modalActions.close());
+      router.push(pathname);
+      dispatch(modalActions.close());
     }
-  }
+  }, []);
 
-  componentDidMount() {
-    $(document).on("keydown", (e) => {
-      if (e.which === 8 && $(e.target).is("body")) {
+  useEffect(() => {
+    const listener = (e: KeyboardEvent) => {
+      if (e.key === "Backspace" && e.target === document.body) {
         e.preventDefault();
       }
-    });
-  }
+    };
+    document.addEventListener("keydown", listener);
+    return () => document.removeEventListener("keydown", listener);
+  }, []);
 
-  render() {
-    return (
-      <div className="navHelper" onClick={this.onClick.bind(this)}>
-        {this.props.children}
-      </div>
-    );
-  }
-}
-
-export default connect()(withRouter(NavHelper));
+  return (
+    <div className="navHelper" onClick={onClick}>
+      {children}
+    </div>
+  );
+};

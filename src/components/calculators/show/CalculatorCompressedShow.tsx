@@ -1,10 +1,9 @@
 import React from "react";
-import { connect } from "react-redux";
 
 import { CalculatorShow } from "./CalculatorShow";
 
+import { useAppSelector } from "~/modules/hooks";
 import { calculatorSpaceSelector } from "./calculator-space-selector";
-import { useAppSelector } from "gModules/hooks";
 
 export const CalculatorCompressedShow: React.FC<{
   calculatorId?: string;

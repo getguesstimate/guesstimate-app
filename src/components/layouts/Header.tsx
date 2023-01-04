@@ -1,11 +1,13 @@
-import { useAppSelector } from "gModules/hooks";
 import React from "react";
 
-import Login from "../login";
+import { useAppSelector } from "~/modules/hooks";
+import { RootState } from "~/modules/store";
+
+import { HeaderRightMenu } from "./HeaderRightMenu";
 
 const logo = "/assets/new-logo-2.png";
 
-const loggedIn = (user) => {
+const loggedIn = (user: RootState["me"]) => {
   return !!(user && user.profile && user.profile.name);
 };
 
@@ -14,7 +16,7 @@ type Props = {
   isBare: boolean;
 };
 
-const Header: React.FC<Props> = ({ isFluid, isBare }) => {
+export const Header: React.FC<Props> = ({ isFluid, isBare }) => {
   const me = useAppSelector((state) => state.me);
   const organizations = useAppSelector((state) => state.organizations);
   const userOrganizationMemberships = useAppSelector(
@@ -27,7 +29,7 @@ const Header: React.FC<Props> = ({ isFluid, isBare }) => {
 
   const containerName = isFluid ? "container-fluid" : "wrap";
 
-  let navbarRef = isLoggedIn ? "/models" : "/";
+  const navbarRef = isLoggedIn ? "/models" : "/";
   return (
     <div className={className}>
       <div className={containerName}>
@@ -41,7 +43,7 @@ const Header: React.FC<Props> = ({ isFluid, isBare }) => {
             </div>
           )}
 
-          <Login
+          <HeaderRightMenu
             me={me}
             organizations={organizations}
             userOrganizationMemberships={userOrganizationMemberships}
@@ -52,5 +54,3 @@ const Header: React.FC<Props> = ({ isFluid, isBare }) => {
     </div>
   );
 };
-
-export default Header;

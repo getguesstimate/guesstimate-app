@@ -1,8 +1,8 @@
 import _ from "lodash";
 import React, { Component } from "react";
 
-import ToolTip from "gComponents/utility/tooltip/index";
-import { MarkdownViewer } from "gComponents/utility/markdown-viewer/index";
+import ToolTip from "~/components/utility/tooltip/index";
+import { MarkdownViewer } from "~/components/utility/markdown-viewer/index";
 
 export default class MetricToolTip extends Component<{ guesstimate: any }> {
   render() {

@@ -1,10 +1,10 @@
-import { useAppDispatch } from "gModules/hooks";
+import { useAppDispatch } from "~/modules/hooks";
 import {
   FormContainer,
   Props as FormContainerProps,
 } from "./shared/FormContainer";
 
-import { create } from "gModules/calculators/actions";
+import { create } from "~/modules/calculators/actions";
 
 type Props = Omit<FormContainerProps, "buttonText" | "onSubmit"> & {
   onCalculatorSave(): void;

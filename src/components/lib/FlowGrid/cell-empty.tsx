@@ -1,4 +1,4 @@
-import { Location } from "lib/locationUtils";
+import { Location } from "~/lib/locationUtils";
 import React, { Component } from "react";
 
 type Props = {

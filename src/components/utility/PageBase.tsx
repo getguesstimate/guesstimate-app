@@ -1,13 +1,13 @@
 import React from "react";
 import ReactMarkdown from "react-markdown";
 
-import Container from "gComponents/utility/container/Container";
+import Container from "~/components/utility/container/Container";
 
 type Props = {
   content: string;
 };
 
-const PageBase: React.FC<Props> = ({ content }) => {
+export const PageBase: React.FC<Props> = ({ content }) => {
   return (
     <Container>
       <div className="PageBase">
@@ -16,5 +16,3 @@ const PageBase: React.FC<Props> = ({ content }) => {
     </Container>
   );
 };
-
-export default PageBase;

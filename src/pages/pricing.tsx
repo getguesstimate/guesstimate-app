@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 
-import Layout from "../routes/layouts/application/index";
-import PlanIndex from "gComponents/plans/index/container";
+import { Layout } from "~/components/layouts";
+import PlanIndex from "~/components/plans/index/container";
 
 const PricingPage: NextPage = () => {
   return (

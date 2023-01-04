@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 
-import Icon from "gComponents/react-fa-patched";
-import { CardListSection } from "gComponents/utility/card/index";
+import Icon from "~/components/react-fa-patched";
+import { CardListSection } from "~/components/utility/card/index";
 
-import DropDown from "gComponents/utility/drop-down/index";
+import DropDown from "~/components/utility/drop-down/index";
 import { PrivacyToggle } from "./privacy-toggle/index";
 import { SpaceName } from "./spaceName";
 
-import * as e from "gEngine/engine";
+import * as e from "~/lib/engine/engine";
 
 const EnableShareableLinkOption = ({ onEnable }) => (
   <div>

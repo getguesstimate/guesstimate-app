@@ -2,9 +2,9 @@ import _ from "lodash";
 import React, { Component } from "react";
 
 import ReactMarkdown from "react-markdown";
-import Icon from "gComponents/react-fa-patched";
+import Icon from "~/components/react-fa-patched";
 
-import { Guesstimator } from "lib/guesstimator/index";
+import { Guesstimator } from "~/lib/guesstimator/index";
 
 import { EditorState, Editor, ContentState } from "draft-js";
 

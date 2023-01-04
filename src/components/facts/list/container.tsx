@@ -1,10 +1,10 @@
 import React from "react";
 
-import { orArr } from "gEngine/utils";
-import * as organizationActions from "gModules/organizations/actions";
+import { orArr } from "~/lib/engine/utils";
+import * as organizationActions from "~/modules/organizations/actions";
 
-import { Fact } from "gEngine/facts";
-import { useAppDispatch } from "gModules/hooks";
+import { Fact } from "~/lib/engine/facts";
+import { useAppDispatch } from "~/modules/hooks";
 import { FactList } from "./list";
 
 type Props = {

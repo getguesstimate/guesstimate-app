@@ -1,4 +1,4 @@
-import Icon from "gComponents/react-fa-patched";
+import Icon from "~/components/react-fa-patched";
 import React from "react";
 
 export const Button: React.FC<any> = ({ onClick, color, children }) => (

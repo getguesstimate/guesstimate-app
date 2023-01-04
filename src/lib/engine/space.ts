@@ -1,7 +1,7 @@
-import { RootState } from "gModules/store";
-import { BASE_URL } from "lib/constants";
-import { ApiSpace } from "lib/guesstimate_api/resources/Models";
-import { ApiUser } from "lib/guesstimate_api/resources/Users";
+import { RootState } from "~/modules/store";
+import { BASE_URL } from "~/lib/constants";
+import { ApiSpace } from "~/lib/guesstimate_api/resources/Models";
+import { ApiUser } from "~/lib/guesstimate_api/resources/Users";
 import _ from "lodash";
 import * as _collections from "./collections";
 import * as _facts from "./facts";

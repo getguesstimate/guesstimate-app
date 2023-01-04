@@ -1,7 +1,7 @@
 import _ from "lodash";
-import { DistributionSummary } from "gComponents/distributions/summary/index";
-import Histogram from "gComponents/simulations/histogram/index";
-import { cutoff, percentile } from "lib/dataAnalysis";
+import { DistributionSummary } from "~/components/distributions/summary/index";
+import Histogram from "~/components/simulations/histogram/index";
+import { cutoff, percentile } from "~/lib/dataAnalysis";
 import React, { Component } from "react";
 
 const MARGIN_LEFT = 10;

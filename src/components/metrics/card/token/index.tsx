@@ -1,6 +1,6 @@
 import React from "react";
 
-import Icon from "gComponents/react-fa-patched";
+import Icon from "~/components/react-fa-patched";
 
 export const MetricReadableId: React.FC<{ readableId: string }> = ({
   readableId,

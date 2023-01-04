@@ -1,8 +1,8 @@
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 
-import Layout from "../../routes/layouts/application/index";
-import { CalculatorExpandedShow } from "gComponents/calculators/show/CalculatorExpandedShow";
+import { Layout } from "~/components/layouts";
+import { CalculatorExpandedShow } from "~/components/calculators/show/CalculatorExpandedShow";
 
 const CalculatorPage: NextPage = () => {
   const router = useRouter();

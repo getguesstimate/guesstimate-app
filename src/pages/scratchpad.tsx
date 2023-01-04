@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 
-import Layout from "../routes/layouts/application/index";
-import SpaceShow from "gComponents/spaces/show";
+import { Layout } from "~/components/layouts";
+import SpaceShow from "~/components/spaces/show";
 
 const ScratchpadPage: NextPage = () => {
   return (

@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import PageBase from "../base/index";
+import React from "react";
+import { PageBase } from "../utility/PageBase";
 
 const content = `
 # Frequently Asked Questions
@@ -53,8 +53,6 @@ Monte Carlo simulations are far more general than analytical solutions, so apply
 
 `;
 
-export default class FAQ extends Component {
-  render() {
-    return <PageBase content={content} />;
-  }
-}
+export const FAQ: React.FC = () => {
+  return <PageBase content={content} />;
+};

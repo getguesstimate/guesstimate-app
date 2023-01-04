@@ -1,10 +1,10 @@
 import React from "react";
 
-import Icon from "gComponents/react-fa-patched";
+import Icon from "~/components/react-fa-patched";
 
-import { Guesstimator } from "lib/guesstimator/index";
+import { Guesstimator } from "~/lib/guesstimator/index";
 
-import * as elev from "servers/elev/index";
+import * as elev from "~/server/elev/index";
 
 type Props = {
   guesstimateType: string;

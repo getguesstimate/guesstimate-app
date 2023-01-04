@@ -1,4 +1,4 @@
-import { Location } from "lib/locationUtils";
+import { Location } from "~/lib/locationUtils";
 
 export function selectRegion(corner1: Location, corner2: Location) {
   const leftX = Math.min(corner1.row, corner2.row);

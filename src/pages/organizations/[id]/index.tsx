@@ -1,8 +1,8 @@
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 
-import Layout from "../../../routes/layouts/application/index";
-import OrganizationShow from "gComponents/organizations/show/index";
+import { Layout } from "~/components/layouts";
+import OrganizationShow from "~/components/organizations/show/index";
 
 const OrganizationPage: NextPage = () => {
   const router = useRouter();

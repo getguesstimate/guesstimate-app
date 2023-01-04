@@ -1,7 +1,7 @@
-import Layout from "../../routes/layouts/application/index";
+import { Layout } from "~/components/layouts";
 import { useRouter } from "next/router";
 
-import UserShow from "gComponents/users/show/index";
+import UserShow from "~/components/users/show/index";
 import { NextPage } from "next";
 
 const UserPage: NextPage = () => {

@@ -7,14 +7,17 @@ import {
   hasRequiredProperties,
   isExportedFromSpace,
   simulateFact,
-} from "gEngine/facts";
-import { FactCategory } from "gEngine/fact_category";
-import { addStats, hasErrors } from "gEngine/simulation";
-import { spaceUrlById } from "gEngine/space";
-import { orStr } from "gEngine/utils";
+} from "~/lib/engine/facts";
+import { FactCategory } from "~/lib/engine/fact_category";
+import { addStats, hasErrors } from "~/lib/engine/simulation";
+import { spaceUrlById } from "~/lib/engine/space";
+import { orStr } from "~/lib/engine/utils";
 
-import { withVariableName } from "lib/generateVariableNames/generateFactVariableName";
-import { formatData, isData } from "lib/guesstimator/formatter/formatters/Data";
+import { withVariableName } from "~/lib/generateVariableNames/generateFactVariableName";
+import {
+  formatData,
+  isData,
+} from "~/lib/guesstimator/formatter/formatters/Data";
 
 type Props = {
   categories: FactCategory[];

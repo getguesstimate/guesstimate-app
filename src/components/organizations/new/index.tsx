@@ -1,11 +1,11 @@
 import _ from "lodash";
 import React, { useEffect } from "react";
 
-import Container from "gComponents/utility/container/Container";
-import { useAppDispatch, useAppSelector } from "gModules/hooks";
+import Container from "~/components/utility/container/Container";
+import { useAppDispatch, useAppSelector } from "~/modules/hooks";
 import { CreateOrganizationForm } from "./form";
 import { LocalAddMembers } from "./members";
-import { Organization } from "gEngine/organization";
+import { Organization } from "~/lib/engine/organization";
 
 export const CreateOrganizationPageContainer: React.FC = () => {
   const newOrganization = useAppSelector((state) => state.newOrganization);

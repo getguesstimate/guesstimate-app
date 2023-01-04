@@ -2,11 +2,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "gComponents/*": ["./src/components/*"],
-      "gEngine/*": ["./src/lib/engine/*"],
-      "gModules/*": ["./src/modules/*"],
-      "lib/*": ["./src/lib/*"],
-      "servers/*": ["./src/server/*"]
+      "~/*": ["./src/*"]
     },
     "target": "es2015",
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -25,6 +21,6 @@
     "jsx": "preserve",
     "experimentalDecorators": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "jest.config.js"],
+  "include": ["next-env.d.ts", "src/**/*.ts", "src/**/*.tsx", "jest.config.js"],
   "exclude": ["node_modules"]
 }

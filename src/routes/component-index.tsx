@@ -1,7 +1,7 @@
-import React, { Component } from "react";
+import React from "react";
 
-import MetricCard from "gComponents/metrics/card";
-import ComponentEditor from "gComponents/utility/ComponentEditor/index";
+import MetricCard from "~/components/metrics/card";
+import ComponentEditor from "~/components/utility/ComponentEditor/index";
 
 const MetricCardProps = {
   metric: {
@@ -24,8 +24,10 @@ const MetricCardProps = {
         mean: 40,
         stdev: 5,
         length: 6,
+        adjustedConfidenceInterval: [20, 90],
       },
     },
+    edges: [],
   },
   canvasState: "scientific",
   location: { row: 3, column: 3 },
@@ -35,16 +37,14 @@ const MetricCardProps = {
   isSelected: true,
 };
 
-export default class ComponentIndex extends Component {
-  render() {
-    return (
-      <div className="container-fluid full-width">
-        <ComponentEditor
-          child={MetricCard}
-          childProps={MetricCardProps as any}
-          name="MetricCard"
-        />
-      </div>
-    );
-  }
-}
+export const ComponentIndex: React.FC = () => {
+  return (
+    <div className="container-fluid full-width">
+      <ComponentEditor
+        child={MetricCard}
+        childProps={MetricCardProps as any}
+        name="MetricCard"
+      />
+    </div>
+  );
+};

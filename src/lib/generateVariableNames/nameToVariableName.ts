@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { mutableCopy } from "gEngine/utils";
+import { mutableCopy } from "~/lib/engine/utils";
 
 const DIGIT_REGEX = /^\d+$/;
 const readableIdPartFromWord = (word) =>

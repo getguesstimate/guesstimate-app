@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { format, uniq } from "gEngine/guesstimate";
+import { format, uniq } from "~/lib/engine/guesstimate";
 import { AnyAction, Reducer } from "redux";
 
 type GuesstimatesState = any[];

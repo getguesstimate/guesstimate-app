@@ -1,12 +1,12 @@
 import { NextPage } from "next";
 
-import Layout from "../../routes/layouts/application/index";
-import OrganizationNewStyleGuide from "gComponents/organizations/new/StyleGuide";
+import { Layout } from "~/components/layouts";
+import { NewOrganizationStyleGuide } from "~/components/organizations/new/StyleGuide";
 
 const NewOrganizationStyleGuidePage: NextPage = () => {
   return (
     <Layout>
-      <OrganizationNewStyleGuide />
+      <NewOrganizationStyleGuide />
     </Layout>
   );
 };

@@ -1,4 +1,4 @@
-import { RootState } from "gModules/store";
+import { RootState } from "~/modules/store";
 import { createSelector } from "reselect";
 
 export const organizationSpaceSelector = createSelector(

@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { addStats } from "gEngine/simulation";
+import { addStats } from "~/lib/engine/simulation";
 import { AnyAction, Reducer } from "redux";
 
 type State = any[]; // FIXME

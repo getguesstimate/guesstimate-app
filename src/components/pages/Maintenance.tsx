@@ -1,6 +1,6 @@
-import React, { Component } from "react";
+import React from "react";
 
-const Maintenance: React.FC = () => {
+export const Maintenance: React.FC = () => {
   return (
     <div>
       <br />
@@ -16,5 +16,3 @@ const Maintenance: React.FC = () => {
     </div>
   );
 };
-
-export default Maintenance;

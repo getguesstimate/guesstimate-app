@@ -69,11 +69,21 @@ export default class Plan {
     return this.asHashes().map((e) => new that(e));
   }
 
-  static find(id) {
+  static find(id: string | undefined) {
     return this.all().filter((e) => e.id === id)[0];
   }
 
-  constructor({ id, monthly_cost, name, private_model_limit }) {
+  constructor({
+    id,
+    monthly_cost,
+    name,
+    private_model_limit,
+  }: {
+    id: string;
+    name: string;
+    monthly_cost: number;
+    private_model_limit: number;
+  }) {
     this.id = id;
     this.monthlyCost = monthly_cost;
     this.name = name;
@@ -85,7 +95,7 @@ export default class Plan {
   }
 
   number() {
-    return this.id === "personal_infinite" ? `∞` : this.privateModelLimit;
+    return this.id === "personal_infinite" ? "∞" : this.privateModelLimit;
   }
 
   formattedCost() {

@@ -1,12 +1,12 @@
 import _ from "lodash";
 import React, { Component } from "react";
 
-import Icon from "gComponents/react-fa-patched";
+import Icon from "~/components/react-fa-patched";
 import Modal from "react-modal";
 import ReactTooltip from "react-tooltip";
 
-import { CardListElement } from "gComponents/utility/card/index";
-import DropDown from "gComponents/utility/drop-down/index";
+import { CardListElement } from "~/components/utility/card/index";
+import DropDown from "~/components/utility/drop-down/index";
 import CanvasViewForm from "../canvasViewForm";
 import { ViewOptionToggle } from "../view-options/index";
 import { ImportFromSlurpForm } from "./import_from_slurp_form";

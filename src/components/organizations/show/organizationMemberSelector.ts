@@ -1,6 +1,6 @@
 import { createSelector } from "reselect";
-import * as e from "gEngine/engine";
-import { RootState } from "gModules/store";
+import * as e from "~/lib/engine/engine";
+import { RootState } from "~/modules/store";
 
 const userOrganizationMembershipSelector = (state: RootState) =>
   state.userOrganizationMemberships;

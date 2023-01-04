@@ -4,8 +4,8 @@ import React from "react";
 
 import { PlanIndex } from "./PlanIndex";
 
-import * as e from "gEngine/engine";
-import { useAppSelector } from "gModules/hooks";
+import * as e from "~/lib/engine/engine";
+import { useAppSelector } from "~/modules/hooks";
 
 const PlanIndexContainer: React.FC = () => {
   const router = useRouter();

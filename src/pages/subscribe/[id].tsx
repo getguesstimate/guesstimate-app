@@ -1,8 +1,8 @@
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 
-import Layout from "../../routes/layouts/application/index";
-import FirstSubscriptionPage from "gComponents/subscriptions/FirstSubscriptionPage/container";
+import { Layout } from "~/components/layouts";
+import FirstSubscriptionPage from "~/components/subscriptions/FirstSubscriptionPage/container";
 
 const SubscribePage: NextPage = () => {
   const router = useRouter();

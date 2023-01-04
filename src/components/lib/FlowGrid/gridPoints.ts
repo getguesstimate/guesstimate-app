@@ -1,4 +1,4 @@
-import { Location, Region } from "lib/locationUtils";
+import { Location, Region } from "~/lib/locationUtils";
 
 const upto = (n: number): number[] =>
   Array.apply(null, { length: n }).map(Number.call, Number);

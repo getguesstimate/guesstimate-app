@@ -2,9 +2,9 @@ import React, { Component, CSSProperties, useEffect } from "react";
 
 import { ConnectDragSource, useDrag, useDragLayer, XYCoord } from "react-dnd";
 
-import { Location } from "lib/locationUtils";
+import { Location } from "~/lib/locationUtils";
 
-import { getClassName } from "gEngine/utils";
+import { getClassName } from "~/lib/engine/utils";
 import { getEmptyImage } from "react-dnd-html5-backend";
 import { GridItem } from "./types";
 

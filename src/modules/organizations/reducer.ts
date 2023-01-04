@@ -1,7 +1,7 @@
 import _ from "lodash";
 import reduxCrud from "redux-crud";
 
-import { get } from "gEngine/collections";
+import { get } from "~/lib/engine/collections";
 import { AnyAction, Reducer } from "redux";
 
 const standardReducers = reduxCrud.reducersFor("organizations");

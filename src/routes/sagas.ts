@@ -3,7 +3,7 @@ import { fork } from "redux-saga/effects";
 import {
   runFormSimulation,
   runUndoSimulations,
-} from "gModules/simulations/actions";
+} from "~/modules/simulations/actions";
 
 export function* runSimulationsSaga() {
   yield takeLatest("RUN_FORM_SIMULATIONS", runFormSimulation as any);

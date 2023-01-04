@@ -1,5 +1,5 @@
 import _ from "lodash";
-import * as errorTypes from "lib/propagation/errors";
+import * as errorTypes from "~/lib/propagation/errors";
 import { Formatter } from "../types";
 
 const {

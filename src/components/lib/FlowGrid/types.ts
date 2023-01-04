@@ -1,4 +1,4 @@
-import { Location } from "lib/locationUtils";
+import { Location } from "~/lib/locationUtils";
 import React from "react";
 import { GridContext } from "./filled-cell";
 

@@ -1,9 +1,9 @@
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 
-import Layout from "../../../../routes/layouts/application/index";
-import SpaceShow from "gComponents/spaces/show";
-import { extractTokenFromUrl } from "gEngine/space";
+import { Layout } from "~/components/layouts";
+import SpaceShow from "~/components/spaces/show";
+import { extractTokenFromUrl } from "~/lib/engine/space";
 
 const ModelWithCalculatorIdPage: NextPage = () => {
   const router = useRouter();

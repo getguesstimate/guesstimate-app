@@ -1,14 +1,14 @@
 import _ from "lodash";
 import { Component } from "react";
 
-import DistributionEditor from "gComponents/distributions/editor/index";
-import { HistogramWithStats } from "gComponents/simulations/histogram_with_stats/index";
-import { ButtonClose } from "gComponents/utility/buttons/close";
-import DropDown from "gComponents/utility/drop-down/index";
-import { GeneralModal } from "gComponents/utility/modal/index";
+import DistributionEditor from "~/components/distributions/editor/index";
+import { HistogramWithStats } from "~/components/simulations/histogram_with_stats/index";
+import { ButtonClose } from "~/components/utility/buttons/close";
+import DropDown from "~/components/utility/drop-down/index";
+import { GeneralModal } from "~/components/utility/modal/index";
 import GuesstimateDescription from "./description";
 
-import { SAMPLE_FILTERED } from "lib/guesstimator/samplers/simulator-worker/simulator/filters/filters";
+import { SAMPLE_FILTERED } from "~/lib/guesstimator/samplers/simulator-worker/simulator/filters/filters";
 
 const SampleList = ({ samples }) => (
   <ul className="SampleList">

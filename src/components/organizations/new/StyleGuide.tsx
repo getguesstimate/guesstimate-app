@@ -1,10 +1,10 @@
-import React, { Component } from "react";
+import React from "react";
 
-import ComponentEditor from "gComponents/utility/ComponentEditor/index";
+import ComponentEditor from "~/components/utility/ComponentEditor/index";
 
 import { CreateOrganizationPage } from "./index";
 
-const PlanStyleGuide: React.FC = () => {
+export const NewOrganizationStyleGuide: React.FC = () => {
   return (
     <div>
       <ComponentEditor
@@ -27,4 +27,4 @@ const PlanStyleGuide: React.FC = () => {
   );
 };
 
-export default PlanStyleGuide;
+export default NewOrganizationStyleGuide;

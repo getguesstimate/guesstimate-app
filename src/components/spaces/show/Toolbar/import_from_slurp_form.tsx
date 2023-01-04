@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 
-import Icon from "gComponents/react-fa-patched";
+import Icon from "~/components/react-fa-patched";
 
-import * as elev from "servers/elev/index";
+import * as elev from "~/server/elev/index";
 
 export class ImportFromSlurpForm extends Component<any> {
   state = {

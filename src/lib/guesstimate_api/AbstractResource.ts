@@ -1,4 +1,4 @@
-import { captureApiError } from "lib/errors";
+import { captureApiError } from "~/lib/errors";
 import GuesstimateApi from ".";
 
 type RequestParams = {

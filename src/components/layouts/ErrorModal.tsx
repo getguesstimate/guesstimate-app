@@ -1,15 +1,15 @@
 import React, { useCallback } from "react";
 import Modal from "react-modal";
 
-import Icon from "gComponents/react-fa-patched";
-import * as displayErrorActions from "gModules/displayErrors/actions";
-import { useAppDispatch, useAppSelector } from "gModules/hooks";
+import Icon from "~/components/react-fa-patched";
+import * as displayErrorActions from "~/modules/displayErrors/actions";
+import { useAppDispatch, useAppSelector } from "~/modules/hooks";
 
-const ErrorModal: React.FC = () => {
+export const ErrorModal: React.FC = () => {
   const dispatch = useAppDispatch();
   const displayError = useAppSelector((state) => state.displayError);
 
-  const _closeModal = useCallback(() => {
+  const closeModal = useCallback(() => {
     dispatch(displayErrorActions.close());
   }, [dispatch]);
 
@@ -27,11 +27,11 @@ const ErrorModal: React.FC = () => {
       border: "none",
       padding: "0",
     },
-  };
+  } as const;
 
   const isOpen = displayError && displayError.length !== 0;
   return (
-    <Modal isOpen={isOpen} onRequestClose={_closeModal} style={customStyles}>
+    <Modal isOpen={isOpen} onRequestClose={closeModal} style={customStyles}>
       {isOpen && (
         <div className="ErrorModal ui standard modal transition visible active">
           <div className="header">
@@ -46,7 +46,7 @@ const ErrorModal: React.FC = () => {
             </div>
           </div>
           <div className="actions">
-            <div className="ui black deny button" onClick={_closeModal}>
+            <div className="ui black deny button" onClick={closeModal}>
               Close
             </div>
           </div>
@@ -55,5 +55,3 @@ const ErrorModal: React.FC = () => {
     </Modal>
   );
 };
-
-export default ErrorModal;

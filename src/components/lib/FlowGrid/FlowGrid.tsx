@@ -7,7 +7,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { BackgroundContainer } from "./background-container";
 import Cell from "./cell";
 
-import { SelectedCellState } from "gModules/selected_cell/reducer";
+import { SelectedCellState } from "~/modules/selected_cell/reducer";
 import {
   boundingRegion,
   getBounds,
@@ -16,10 +16,10 @@ import {
   isWithinRegion,
   Location,
   MaybeRegion,
-} from "lib/locationUtils";
+} from "~/lib/locationUtils";
 import { CanvasState, GridItem } from "./types";
 import { DirectionToLocation, keycodeToDirection } from "./utils";
-import { EdgeShape } from "gComponents/spaces/canvas";
+import { EdgeShape } from "~/components/spaces/canvas";
 
 const upto = (n: number): number[] =>
   Array.apply(null, { length: n }).map(Number.call, Number);

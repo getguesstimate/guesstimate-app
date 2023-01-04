@@ -1,6 +1,6 @@
-import * as e from "gEngine/engine";
-import { DSpace } from "gEngine/space";
-import { RootState } from "gModules/store";
+import * as e from "~/lib/engine/engine";
+import { DSpace } from "~/lib/engine/space";
+import { RootState } from "~/modules/store";
 import _ from "lodash";
 import { createSelector } from "reselect";
 

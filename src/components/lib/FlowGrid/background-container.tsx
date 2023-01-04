@@ -6,8 +6,8 @@ import $ from "jquery";
 import { Edges } from "./edges";
 import GridPoint from "./gridPoints";
 
-import { EdgeShape } from "gComponents/spaces/canvas";
-import { isRegion, MaybeRegion, Region } from "lib/locationUtils";
+import { EdgeShape } from "~/components/spaces/canvas";
+import { isRegion, MaybeRegion, Region } from "~/lib/locationUtils";
 
 const Region: React.FC<{
   rowHeights: number[];

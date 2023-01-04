@@ -1,4 +1,4 @@
-import { RootState } from "gModules/store";
+import { RootState } from "~/modules/store";
 import _ from "lodash";
 import * as _metric from "./metric";
 import { isPresent } from "./utils";

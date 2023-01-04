@@ -1,9 +1,9 @@
 import _ from "lodash";
 import React, { Component } from "react";
 
-import numberShow from "lib/numberShower/numberShower";
+import numberShow from "~/lib/numberShower/numberShower";
 
-import { hasErrors } from "gEngine/simulation";
+import { hasErrors } from "~/lib/engine/simulation";
 
 const PrecisionNumber: React.FC<any> = ({
   value,

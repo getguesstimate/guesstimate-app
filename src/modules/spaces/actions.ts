@@ -3,18 +3,18 @@ import { actionCreatorsFor } from "redux-crud";
 
 import cuid from "cuid";
 
-import * as calculatorActions from "gModules/calculators/actions";
-import { changeActionState } from "gModules/canvas_state/actions";
-import { initSpace, saveCheckpoint } from "gModules/checkpoints/actions";
-import * as organizationActions from "gModules/organizations/actions";
-import * as userActions from "gModules/users/actions";
+import * as calculatorActions from "~/modules/calculators/actions";
+import { changeActionState } from "~/modules/canvas_state/actions";
+import { initSpace, saveCheckpoint } from "~/modules/checkpoints/actions";
+import * as organizationActions from "~/modules/organizations/actions";
+import * as userActions from "~/modules/users/actions";
 
-import * as e from "gEngine/engine";
+import * as e from "~/lib/engine/engine";
 
-import { AppThunk, RootState } from "gModules/store";
-import { api } from "lib/guesstimate_api";
-import { ApiSpace } from "lib/guesstimate_api/resources/Models";
-import { ApiUser } from "lib/guesstimate_api/resources/Users";
+import { AppThunk, RootState } from "~/modules/store";
+import { api } from "~/lib/guesstimate_api";
+import { ApiSpace } from "~/lib/guesstimate_api/resources/Models";
+import { ApiUser } from "~/lib/guesstimate_api/resources/Users";
 import { NextRouter } from "next/router";
 
 const sActions = actionCreatorsFor("spaces");
@@ -143,13 +143,12 @@ export const fetch = (
 };
 
 export function create(
-  organizationId,
-  params: any = {},
+  organizationId: string | number | undefined,
   router: NextRouter
 ): AppThunk {
   return async (dispatch, getState) => {
     const cid = cuid();
-    let object = { ...params, id: cid };
+    let object: any = { id: cid };
     if (organizationId) {
       object.organization_id = organizationId;
     }

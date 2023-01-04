@@ -3,7 +3,12 @@ import { Component } from "react";
 
 import { CalculatorForm } from "./CalculatorForm";
 
-import { INPUT, INTERMEDIATE, OUTPUT, relationshipType } from "gEngine/graph";
+import {
+  INPUT,
+  INTERMEDIATE,
+  OUTPUT,
+  relationshipType,
+} from "~/lib/engine/graph";
 
 function isCalculatorAcceptableMetric(metric) {
   return (

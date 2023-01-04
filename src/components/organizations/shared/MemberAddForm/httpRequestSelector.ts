@@ -1,9 +1,10 @@
-import { RootState } from "gModules/store";
+import { RootState } from "~/modules/store";
 import _ from "lodash";
 import { createSelector } from "reselect";
 
 const specificHttpRequestSelector = (state: RootState) => state.httpRequests;
-const organizationIdSelector = (_, organizationId: string) => organizationId;
+const organizationIdSelector = (_: RootState, organizationId: string) =>
+  organizationId;
 
 function isExistingMember(request) {
   return !!_.get(request, "response.hasUser");

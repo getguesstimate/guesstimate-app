@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { Evaluate } from "./simulator/evaluator";
 
-import * as errorTypes from "lib/propagation/errors";
+import * as errorTypes from "~/lib/propagation/errors";
 
 const {
   ERROR_TYPES: { WORKER_ERROR },

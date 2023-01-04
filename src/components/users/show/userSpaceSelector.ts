@@ -1,5 +1,5 @@
 import { createSelector } from "@reduxjs/toolkit";
-import { RootState } from "gModules/store";
+import { RootState } from "~/modules/store";
 
 export const userSpaceSelector = createSelector(
   (state: RootState) => state.spaces,

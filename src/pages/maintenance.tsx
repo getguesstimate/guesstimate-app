@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 
-import Layout from "../routes/layouts/application/index";
-import Maintenance from "gComponents/pages/maintenance/index";
+import { Layout } from "~/components/layouts";
+import { Maintenance } from "~/components/pages/Maintenance";
 
 const MaintenancePage: NextPage = () => {
   return (

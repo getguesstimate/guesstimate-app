@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 
-import ClickToEdit from "gComponents/utility/click-to-edit/index";
-import { MarkdownViewer } from "gComponents/utility/markdown-viewer/index";
-import { ButtonCloseText } from "gComponents/utility/buttons/close";
+import ClickToEdit from "~/components/utility/click-to-edit/index";
+import { MarkdownViewer } from "~/components/utility/markdown-viewer/index";
+import { ButtonCloseText } from "~/components/utility/buttons/close";
 
 export class SpaceSidebar extends Component<any> {
   componentDidMount() {

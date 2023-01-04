@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { createSelector } from "reselect";
-import * as e from "gEngine/engine";
-import { RootState } from "gModules/store";
+import * as e from "~/lib/engine/engine";
+import { RootState } from "~/modules/store";
 
 const _sameId = (idA, idB) => idA.toString() === idB.toString();
 const spaceGraphSelector = (state: RootState) =>

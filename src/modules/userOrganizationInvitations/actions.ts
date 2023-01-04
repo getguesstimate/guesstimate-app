@@ -1,14 +1,14 @@
 import _ from "lodash";
 import { actionCreatorsFor } from "redux-crud";
 
-import * as displayErrorsActions from "gModules/displayErrors/actions";
-import * as membershipActions from "gModules/userOrganizationMemberships/actions";
-import * as userActions from "gModules/users/actions";
+import * as displayErrorsActions from "~/modules/displayErrors/actions";
+import * as membershipActions from "~/modules/userOrganizationMemberships/actions";
+import * as userActions from "~/modules/users/actions";
 
-import { captureApiError } from "lib/errors/index";
+import { captureApiError } from "~/lib/errors/index";
 
-import { AppThunk } from "gModules/store";
-import { api } from "lib/guesstimate_api";
+import { AppThunk } from "~/modules/store";
+import { api } from "~/lib/guesstimate_api";
 
 let sActions = actionCreatorsFor("userOrganizationInvitations");
 let relevantAttributes = ["id", "email", "organization_id"];

@@ -1,11 +1,11 @@
-import * as engine from "gEngine/engine";
+import * as engine from "~/lib/engine/engine";
 
-import { GuesstimateRecorder } from "lib/recorder";
-import { GuesstimateWorker } from "lib/window";
+import { GuesstimateRecorder } from "~/lib/recorder";
+import { GuesstimateWorker } from "~/lib/window";
 
 import Modal from "react-modal";
-import * as elev from "servers/elev/index";
-import * as sentry from "servers/sentry/index";
+import * as elev from "~/server/elev/index";
+import * as sentry from "~/server/sentry/index";
 
 if (typeof window !== "undefined") {
   const workers = new Array(2)
@@ -56,7 +56,10 @@ const init = () => {
     return;
   }
   window.recorder = new GuesstimateRecorder();
+
+  // might be a bad idea? https://github.com/reactjs/react-modal/issues/949
   Modal.setAppElement("#__next");
+
   window.intercomSettings = {
     app_id: "o0trb1v9",
   };

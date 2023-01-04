@@ -2,22 +2,22 @@ import cuid from "cuid";
 import _ from "lodash";
 import { actionCreatorsFor } from "redux-crud";
 
-import * as displayErrorsActions from "gModules/displayErrors/actions";
-import { factCategoryActions } from "gModules/factCategories/actions";
-import * as factActions from "gModules/facts/actions";
-import * as spaceActions from "gModules/spaces/actions";
-import * as userOrganizationInvitationActions from "gModules/userOrganizationInvitations/actions";
-import * as userOrganizationMembershipActions from "gModules/userOrganizationMemberships/actions";
+import * as displayErrorsActions from "~/modules/displayErrors/actions";
+import { factCategoryActions } from "~/modules/factCategories/actions";
+import * as factActions from "~/modules/facts/actions";
+import * as spaceActions from "~/modules/spaces/actions";
+import * as userOrganizationInvitationActions from "~/modules/userOrganizationInvitations/actions";
+import * as userOrganizationMembershipActions from "~/modules/userOrganizationMemberships/actions";
 
-import { withMissingStats } from "gEngine/facts";
-import { organizationReadableId } from "gEngine/organization";
-import { orArr } from "gEngine/utils";
+import { withMissingStats } from "~/lib/engine/facts";
+import { organizationReadableId } from "~/lib/engine/organization";
+import { orArr } from "~/lib/engine/utils";
 
-import { captureApiError } from "lib/errors/index";
-import { simulate } from "lib/propagation/wrapper";
+import { captureApiError } from "~/lib/errors/index";
+import { simulate } from "~/lib/propagation/wrapper";
 
-import { AppThunk } from "gModules/store";
-import { api } from "lib/guesstimate_api";
+import { AppThunk } from "~/modules/store";
+import { api } from "~/lib/guesstimate_api";
 
 let oActions = actionCreatorsFor("organizations");
 

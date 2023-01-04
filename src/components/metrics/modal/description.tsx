@@ -1,9 +1,9 @@
 import React from "react";
 
-import Icon from "gComponents/react-fa-patched";
+import Icon from "~/components/react-fa-patched";
 
-import ClickToEdit from "gComponents/utility/click-to-edit/index";
-import { MarkdownViewer } from "gComponents/utility/markdown-viewer/index";
+import ClickToEdit from "~/components/utility/click-to-edit/index";
+import { MarkdownViewer } from "~/components/utility/markdown-viewer/index";
 
 const GuesstimateDescription: React.FC<{
   value: string;

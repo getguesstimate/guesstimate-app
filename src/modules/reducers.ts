@@ -1,4 +1,4 @@
-import { __DEV__ } from "lib/constants";
+import { __DEV__ } from "~/lib/constants";
 import reduxCrud from "redux-crud";
 import SeamlessImmutable from "seamless-immutable";
 const SI = __DEV__ ? SeamlessImmutable : (a) => a;

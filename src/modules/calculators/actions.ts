@@ -2,14 +2,14 @@ import cuid from "cuid";
 import _ from "lodash";
 import { actionCreatorsFor } from "redux-crud";
 
-import { AppThunk } from "gModules/store";
+import { AppThunk } from "~/modules/store";
 
-import { initSpace } from "gModules/checkpoints/actions";
+import { initSpace } from "~/modules/checkpoints/actions";
 
-import * as displayErrorsActions from "gModules/displayErrors/actions";
-import { captureApiError } from "lib/errors/index";
+import * as displayErrorsActions from "~/modules/displayErrors/actions";
+import { captureApiError } from "~/lib/errors/index";
 
-import { api } from "lib/guesstimate_api";
+import { api } from "~/lib/guesstimate_api";
 
 export const sActions = actionCreatorsFor("calculators");
 

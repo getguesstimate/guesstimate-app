@@ -3,15 +3,15 @@ import { actionCreatorsFor } from "redux-crud";
 
 import cuid from "cuid";
 
-import * as displayErrorsActions from "gModules/displayErrors/actions";
-import * as httpRequestActions from "gModules/httpRequests/actions";
-import * as invitationActions from "gModules/userOrganizationInvitations/actions";
-import * as userActions from "gModules/users/actions";
+import * as displayErrorsActions from "~/modules/displayErrors/actions";
+import * as httpRequestActions from "~/modules/httpRequests/actions";
+import * as invitationActions from "~/modules/userOrganizationInvitations/actions";
+import * as userActions from "~/modules/users/actions";
 
-import { captureApiError } from "lib/errors/index";
-import { api } from "lib/guesstimate_api";
+import { captureApiError } from "~/lib/errors/index";
+import { api } from "~/lib/guesstimate_api";
 
-import { AppThunk } from "gModules/store";
+import { AppThunk } from "~/modules/store";
 
 const sActions = actionCreatorsFor("userOrganizationMemberships");
 const relevantAttributes = [

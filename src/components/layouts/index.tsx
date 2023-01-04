@@ -1,11 +1,11 @@
 import React from "react";
 
-import ErrorModal from "gComponents/application/errorModal/index";
-import Main from "gComponents/layouts/main/index";
-import NavHelper from "gComponents/utility/NavHelper/index";
-import ModalContainer from "gModules/modal/routes";
-import Footer from "../footer";
-import Header from "../header";
+import { ErrorModal } from "./ErrorModal";
+import { NavHelper } from "~/components/utility/NavHelper/index";
+import { ModalContainer } from "~/modules/modal/routes";
+import { Main } from "./Main";
+import { Footer } from "./Footer";
+import { Header } from "./Header";
 
 type Props = {
   isFluid?: boolean;
@@ -17,7 +17,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-const Layout: React.FC<Props> = ({
+export const Layout: React.FC<Props> = ({
   isFluid = false,
   simpleHeader = false,
   showFooter = true,
@@ -40,5 +40,3 @@ const Layout: React.FC<Props> = ({
     </NavHelper>
   );
 };
-
-export default Layout;

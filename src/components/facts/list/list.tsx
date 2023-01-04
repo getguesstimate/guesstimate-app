@@ -4,11 +4,11 @@ import React, { Component } from "react";
 import { FactForm } from "./form";
 import { FactItem } from "./item";
 
-import { utils } from "gEngine/engine";
-import { Fact, getVar } from "gEngine/facts";
+import { utils } from "~/lib/engine/engine";
+import { Fact, getVar } from "~/lib/engine/facts";
 
-import Icon from "gComponents/react-fa-patched";
-import { FactCategory } from "gEngine/fact_category";
+import Icon from "~/components/react-fa-patched";
+import { FactCategory } from "~/lib/engine/fact_category";
 
 type Props = {
   spaceId?: number;

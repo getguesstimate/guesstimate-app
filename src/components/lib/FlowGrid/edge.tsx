@@ -3,7 +3,7 @@ import { Component } from "react";
 
 import angleBetweenPoints from "angle-between-points";
 
-import { getClassName } from "gEngine/utils";
+import { getClassName } from "~/lib/engine/utils";
 import { RectangleShape } from "./gridPoints";
 
 class Rectangle {

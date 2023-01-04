@@ -1,7 +1,7 @@
 import _ from "lodash";
 import React from "react";
 
-import numberShow from "lib/numberShower/numberShower";
+import numberShow from "~/lib/numberShower/numberShower";
 
 const PrecisionNumber: React.FC<{
   value: number;

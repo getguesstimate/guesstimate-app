@@ -3,10 +3,10 @@ import _ from "lodash";
 import {
   runSimulations,
   deleteSimulations,
-} from "gModules/simulations/actions";
-import { registerGraphChange } from "gModules/spaces/actions";
+} from "~/modules/simulations/actions";
+import { registerGraphChange } from "~/modules/spaces/actions";
 
-import * as e from "gEngine/engine";
+import * as e from "~/lib/engine/engine";
 
 import {
   isAtLocation,
@@ -14,8 +14,8 @@ import {
   getBounds,
   move,
   translate,
-} from "lib/locationUtils";
-import { AppThunk } from "gModules/store";
+} from "~/lib/locationUtils";
+import { AppThunk } from "~/modules/store";
 
 const DYNAMIC_FILL_TYPE = "FUNCTION";
 

@@ -1,6 +1,6 @@
 import _ from "lodash";
-import { mutableCopy, typeSafeEq } from "gEngine/utils";
-import * as _collections from "gEngine/collections";
+import { mutableCopy, typeSafeEq } from "~/lib/engine/utils";
+import * as _collections from "~/lib/engine/collections";
 
 import CITIES from "./cities.json";
 import { AnyAction, Reducer } from "redux";

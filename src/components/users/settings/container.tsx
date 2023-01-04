@@ -1,8 +1,8 @@
 import _ from "lodash";
 import React, { useCallback } from "react";
 
-import { useAppDispatch, useAppSelector } from "gModules/hooks";
-import * as meActions from "gModules/me/actions";
+import { useAppDispatch, useAppSelector } from "~/modules/hooks";
+import * as meActions from "~/modules/me/actions";
 import Settings from "./Settings";
 
 type Props = {

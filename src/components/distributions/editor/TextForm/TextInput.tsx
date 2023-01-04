@@ -12,17 +12,20 @@ import {
 } from "draft-js";
 import $ from "jquery";
 
-import { clearSuggestion, getSuggestion } from "gModules/facts/actions";
+import { clearSuggestion, getSuggestion } from "~/modules/facts/actions";
 
 import {
   GLOBALS_ONLY_REGEX,
   HANDLE_REGEX,
   resolveToSelector,
-} from "gEngine/facts";
-import { getClassName, or } from "gEngine/utils";
+} from "~/lib/engine/facts";
+import { getClassName, or } from "~/lib/engine/utils";
 
-import { AppDispatch, RootState } from "gModules/store";
-import { formatData, isData } from "lib/guesstimator/formatter/formatters/Data";
+import { AppDispatch, RootState } from "~/modules/store";
+import {
+  formatData,
+  isData,
+} from "~/lib/guesstimator/formatter/formatters/Data";
 
 function findWithRegex(baseRegex, contentBlock, callback) {
   const text = contentBlock.getText();

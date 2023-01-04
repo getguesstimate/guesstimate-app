@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
-import ComponentEditor from "gComponents/utility/ComponentEditor/index";
-import { subStages } from "gModules/first_subscription/state_machine";
+import ComponentEditor from "~/components/utility/ComponentEditor/index";
+import { subStages } from "~/modules/first_subscription/state_machine";
 
 import FirstSubscription from "./FirstSubscription";
 

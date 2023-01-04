@@ -5,7 +5,7 @@ import { DistributionSelector } from "./DistributionSelector";
 import { GuesstimateTypeIcon } from "./GuesstimateTypeIcon";
 import { TextInput, UnconnectedTextInput } from "./TextInput";
 
-import { Guesstimator } from "lib/guesstimator/index";
+import { Guesstimator } from "~/lib/guesstimator/index";
 
 type Props = {
   guesstimate: any;

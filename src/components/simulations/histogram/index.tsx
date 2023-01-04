@@ -1,9 +1,9 @@
 import _ from "lodash";
 import { Component } from "react";
 
-import Histogram from "gComponents/lib/histogram";
+import Histogram from "~/components/lib/histogram";
 
-import Dimensions from "gComponents/utility/react-dimensions";
+import Dimensions from "~/components/utility/react-dimensions";
 
 type Props = {
   height: number;

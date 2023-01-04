@@ -1,7 +1,7 @@
 import _ from "lodash";
 import React, { Component } from "react";
 
-import Icon from "gComponents/react-fa-patched";
+import Icon from "~/components/react-fa-patched";
 import { sortable } from "react-sortable";
 
 const SortableListItem = sortable((props) => (

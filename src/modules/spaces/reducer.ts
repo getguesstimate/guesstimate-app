@@ -1,4 +1,4 @@
-import { ApiSpace } from "lib/guesstimate_api/resources/Models";
+import { ApiSpace } from "~/lib/guesstimate_api/resources/Models";
 import _ from "lodash";
 import { AnyAction, Reducer } from "redux";
 import reduxCrud from "redux-crud";

@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 
-import Icon from "gComponents/react-fa-patched";
+import Icon from "~/components/react-fa-patched";
 
-import { ButtonClose } from "gComponents/utility/buttons/close/index";
-import { capitalizeFirstLetter } from "lib/string";
+import { ButtonClose } from "~/components/utility/buttons/close/index";
+import { capitalizeFirstLetter } from "~/lib/string";
 
 export const CardListSection = ({ children }) => (
   <div className="CardListSection">{children}</div>

@@ -2,7 +2,7 @@ import _ from "lodash";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import Icon from "gComponents/react-fa-patched";
+import Icon from "~/components/react-fa-patched";
 import $ from "jquery";
 import ReactDOM from "react-dom";
 
@@ -11,31 +11,31 @@ import { hasMetricUpdated } from "./updated";
 
 import DistributionEditor, {
   UnwrappedDistributionEditor,
-} from "gComponents/distributions/editor/index";
-import { MetricModal } from "gComponents/metrics/modal/index";
-import ToolTip from "gComponents/utility/tooltip/index";
+} from "~/components/distributions/editor/index";
+import { MetricModal } from "~/components/metrics/modal/index";
+import ToolTip from "~/components/utility/tooltip/index";
 import { MetricCardViewSection } from "./MetricCardViewSection/index";
 import SensitivitySection from "./SensitivitySection/SensitivitySection";
 
-import { analyzeMetricId, endAnalysis } from "gModules/canvas_state/actions";
-import { createFactFromMetric } from "gModules/facts/actions";
-import { changeGuesstimate } from "gModules/guesstimates/actions";
-import { changeMetric, removeMetrics } from "gModules/metrics/actions";
+import { analyzeMetricId, endAnalysis } from "~/modules/canvas_state/actions";
+import { createFactFromMetric } from "~/modules/facts/actions";
+import { changeGuesstimate } from "~/modules/guesstimates/actions";
+import { changeMetric, removeMetrics } from "~/modules/metrics/actions";
 
-import { withReadableId } from "lib/generateVariableNames/generateMetricReadableId";
-import { shouldTransformName } from "lib/generateVariableNames/nameToVariableName";
+import { withReadableId } from "~/lib/generateVariableNames/generateMetricReadableId";
+import { shouldTransformName } from "~/lib/generateVariableNames/nameToVariableName";
 
-import { GridContext } from "gComponents/lib/FlowGrid/filled-cell";
-import { CanvasState } from "gComponents/lib/FlowGrid/types";
+import { GridContext } from "~/components/lib/FlowGrid/filled-cell";
+import { CanvasState } from "~/components/lib/FlowGrid/types";
 import {
   INPUT,
   INTERMEDIATE,
   NOEDGE,
   OUTPUT,
   relationshipType,
-} from "gEngine/graph";
-import { makeURLsMarkdown } from "gEngine/utils";
-import { AppDispatch } from "gModules/store";
+} from "~/lib/engine/graph";
+import { makeURLsMarkdown } from "~/lib/engine/utils";
+import { AppDispatch } from "~/modules/store";
 
 const relationshipClasses = {};
 relationshipClasses[INTERMEDIATE] = "intermediate";

@@ -6,21 +6,21 @@ import {
   withAncestralErrorFn,
 } from "./errors";
 
-import { getSubMatches } from "gEngine/utils";
-import { get, orFns } from "gEngine/collections";
+import { getSubMatches } from "~/lib/engine/utils";
+import { get, orFns } from "~/lib/engine/collections";
 
 import {
   getCycleSets,
   toCyclePseudoNode,
   separateIntoHeightSets,
-} from "lib/DAG/DAG";
+} from "~/lib/DAG/DAG";
 import {
   getNodeAncestors,
   containsDuplicates,
   getMissingInputs,
   isDescendedFromFn,
   withInputIndicesFn,
-} from "lib/DAG/nodeFns";
+} from "~/lib/DAG/nodeFns";
 
 const ID_REGEX = /\$\{([^\}]*)\}/g;
 

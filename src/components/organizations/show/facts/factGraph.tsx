@@ -1,21 +1,21 @@
 import _ from "lodash";
 import React, { Component } from "react";
 
-import { FactItem } from "gComponents/facts/list/item";
-import FlowGrid from "gComponents/lib/FlowGrid/FlowGrid";
-import { SpaceCard } from "gComponents/spaces/cards";
+import { FactItem } from "~/components/facts/list/item";
+import FlowGrid from "~/components/lib/FlowGrid/FlowGrid";
+import { SpaceCard } from "~/components/spaces/cards";
 
-import * as _collections from "gEngine/collections";
-import * as _utils from "gEngine/utils";
+import * as _collections from "~/lib/engine/collections";
+import * as _utils from "~/lib/engine/utils";
 
 import {
   separateIntoDisconnectedComponents,
   separateIntoHeightSets,
-} from "lib/DAG/DAG";
-import { getNodeAncestors } from "lib/DAG/nodeFns";
-import { Fact } from "gEngine/facts";
-import { GridItem } from "gComponents/lib/FlowGrid/types";
-import { ApiSpace } from "lib/guesstimate_api/resources/Models";
+} from "~/lib/DAG/DAG";
+import { getNodeAncestors } from "~/lib/DAG/nodeFns";
+import { Fact } from "~/lib/engine/facts";
+import { GridItem } from "~/components/lib/FlowGrid/types";
+import { ApiSpace } from "~/lib/guesstimate_api/resources/Models";
 
 const idToNodeId = (id: string | number, isFact: boolean) =>
   `${isFact ? "fact" : "space"}:${id}`;

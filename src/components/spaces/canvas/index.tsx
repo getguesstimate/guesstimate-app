@@ -2,41 +2,44 @@ import _ from "lodash";
 import { Component } from "react";
 import { connect } from "react-redux";
 
-import FlowGrid from "gComponents/lib/FlowGrid/FlowGrid";
-import Metric from "gComponents/metrics/card/index";
+import FlowGrid from "~/components/lib/FlowGrid/FlowGrid";
+import Metric from "~/components/metrics/card/index";
 
-import { fillRegion } from "gModules/auto_fill_region/actions";
-import * as canvasStateActions from "gModules/canvas_state/actions";
-import { redo, undo } from "gModules/checkpoints/actions";
+import { fillRegion } from "~/modules/auto_fill_region/actions";
+import * as canvasStateActions from "~/modules/canvas_state/actions";
+import { redo, undo } from "~/modules/checkpoints/actions";
 import {
   addMetric,
   changeMetric,
   removeMetrics,
-} from "gModules/metrics/actions";
-import { changeSelect, deSelect } from "gModules/selected_cell/actions";
-import { deSelectRegion, selectRegion } from "gModules/selected_region/actions";
+} from "~/modules/metrics/actions";
+import { changeSelect, deSelect } from "~/modules/selected_cell/actions";
+import {
+  deSelectRegion,
+  selectRegion,
+} from "~/modules/selected_region/actions";
 import {
   deleteSimulations,
   runSimulations,
-} from "gModules/simulations/actions";
+} from "~/modules/simulations/actions";
 
-import * as _collections from "gEngine/collections";
-import { hasErrors } from "gEngine/simulation";
-import { orArr } from "gEngine/utils";
+import * as _collections from "~/lib/engine/collections";
+import { hasErrors } from "~/lib/engine/simulation";
+import { orArr } from "~/lib/engine/utils";
 
-import { hasMetricUpdated } from "gComponents/metrics/card/updated";
+import { hasMetricUpdated } from "~/components/metrics/card/updated";
 
-import { GridItem } from "gComponents/lib/FlowGrid/types";
-import { DSpace } from "gEngine/space";
-import { SelectedCellState } from "gModules/selected_cell/reducer";
-import { AppDispatch, RootState } from "gModules/store";
+import { GridItem } from "~/components/lib/FlowGrid/types";
+import { DSpace } from "~/lib/engine/space";
+import { SelectedCellState } from "~/modules/selected_cell/reducer";
+import { AppDispatch, RootState } from "~/modules/store";
 import {
   existsAtLoc,
   isLocation,
   isWithinRegion,
   Location,
   MaybeRegion,
-} from "lib/locationUtils";
+} from "~/lib/locationUtils";
 import { ExtendedDSpace } from "../denormalized-space-selector";
 
 export type EdgeShape = {

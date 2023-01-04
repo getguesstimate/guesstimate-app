@@ -1,4 +1,4 @@
-import { MaybeRegion } from "lib/locationUtils";
+import { MaybeRegion } from "~/lib/locationUtils";
 import { AnyAction, Reducer } from "redux";
 
 export type SelectedRegionState = MaybeRegion;

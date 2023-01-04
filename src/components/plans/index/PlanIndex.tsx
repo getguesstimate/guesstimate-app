@@ -1,7 +1,7 @@
 import React from "react";
 
 import Plans from "./plans";
-import Container from "gComponents/utility/container/Container";
+import Container from "~/components/utility/container/Container";
 import PlanIndexQuestions from "./questions";
 
 const PortalMessage: React.FC<{ portalUrl: string }> = ({ portalUrl }) => (

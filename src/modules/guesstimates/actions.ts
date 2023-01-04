@@ -1,8 +1,8 @@
 import _ from "lodash";
-import * as spaceActions from "gModules/spaces/actions";
+import * as spaceActions from "~/modules/spaces/actions";
 
-import * as e from "gEngine/engine";
-import { AppThunk } from "gModules/store";
+import * as e from "~/lib/engine/engine";
+import { AppThunk } from "~/modules/store";
 
 // TODO(matthew): Doing fact/metric translations here means that systems that rely on guesstimate idenity comparisons
 // (e.g. action triggering qualifiers) will break.

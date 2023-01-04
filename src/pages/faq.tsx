@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 
-import Layout from "../routes/layouts/application/index";
-import FAQ from "gComponents/pages/faq/index";
+import { Layout } from "~/components/layouts";
+import { FAQ } from "~/components/pages/FAQ";
 
 const FAQPage: NextPage = () => {
   return (

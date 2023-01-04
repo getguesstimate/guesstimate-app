@@ -5,8 +5,8 @@ import { Calculators } from "./resources/Calculators";
 import Accounts from "./resources/Accounts";
 import Copies from "./resources/Copies";
 import UserOrganizationMemberships from "./resources/UserOrganizationMemberships";
-import { RootState } from "gModules/store";
-import { rootUrl } from "servers/guesstimate-api/constants";
+import { RootState } from "~/modules/store";
+import { rootUrl } from "~/server/guesstimate-api/constants";
 
 export default class GuesstimateApi {
   host: string;

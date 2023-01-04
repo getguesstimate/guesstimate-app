@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { FactCategory, isFactCategoryValid } from "gEngine/fact_category";
+import { FactCategory, isFactCategoryValid } from "~/lib/engine/fact_category";
 
 type Props = {
   startingCategory: FactCategory;

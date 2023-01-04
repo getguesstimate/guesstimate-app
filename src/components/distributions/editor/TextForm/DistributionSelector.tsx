@@ -2,11 +2,11 @@ import React, { Component } from "react";
 
 import ReactTooltip from "react-tooltip";
 
-import { Guesstimator } from "lib/guesstimator/index";
+import { Guesstimator } from "~/lib/guesstimator/index";
 
-import { getClassName } from "gEngine/utils";
+import { getClassName } from "~/lib/engine/utils";
 
-import * as elev from "servers/elev/index";
+import * as elev from "~/server/elev/index";
 
 type DistributionType = "LOGNORMAL" | "NORMAL" | "UNIFORM";
 

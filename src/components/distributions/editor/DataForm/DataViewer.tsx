@@ -1,9 +1,9 @@
 import _ from "lodash";
 import React, { Component } from "react";
 
-import Icon from "gComponents/react-fa-patched";
+import Icon from "~/components/react-fa-patched";
 
-import { ButtonClose } from "gComponents/utility/buttons/close";
+import { ButtonClose } from "~/components/utility/buttons/close";
 
 type Mode = "VIEW" | "EDIT";
 

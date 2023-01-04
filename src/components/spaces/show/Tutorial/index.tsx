@@ -1,8 +1,8 @@
 import React, { Component, useCallback, useState } from "react";
 
-import Icon from "gComponents/react-fa-patched";
+import Icon from "~/components/react-fa-patched";
 
-import { GeneralModal } from "gComponents/utility/modal/index";
+import { GeneralModal } from "~/components/utility/modal/index";
 import {
   TutorialFunctionPage,
   TutorialMetricActionsPage,

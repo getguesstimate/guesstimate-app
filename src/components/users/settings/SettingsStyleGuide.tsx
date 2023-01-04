@@ -1,10 +1,10 @@
 import React from "react";
 
-import ComponentEditor from "gComponents/utility/ComponentEditor/index";
-import Plan from "lib/config/plan";
+import ComponentEditor from "~/components/utility/ComponentEditor/index";
+import Plan from "~/lib/config/plan";
 import Settings from "./Settings";
 
-const SettingsStyleGuide: React.FC = () => {
+export const SettingsStyleGuide: React.FC = () => {
   const planIds = Plan.all().map((e) => e.id);
   return (
     <div className="full-width">
@@ -14,7 +14,7 @@ const SettingsStyleGuide: React.FC = () => {
             return (
               <ComponentEditor
                 child={Settings}
-                childProps={{ planId, onClose() {} }}
+                childProps={{ planId, onClose: () => {} }}
                 name="Settings"
                 key={planId}
               />
@@ -29,7 +29,7 @@ const SettingsStyleGuide: React.FC = () => {
                 childProps={{
                   planId,
                   portalUrl: "http://google.com",
-                  onClose() {},
+                  onClose: () => {},
                 }}
                 name="Settings"
                 key={planId}
@@ -41,5 +41,3 @@ const SettingsStyleGuide: React.FC = () => {
     </div>
   );
 };
-
-export default SettingsStyleGuide;

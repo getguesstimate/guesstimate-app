@@ -1,9 +1,9 @@
 import { getSubset } from "../wrapper";
 
-import * as _collections from "gEngine/collections";
-import { organizationReadableId } from "gEngine/organization";
-import { expressionSyntaxPad } from "gEngine/guesstimate";
-import { RootState } from "gModules/store";
+import * as _collections from "~/lib/engine/collections";
+import { organizationReadableId } from "~/lib/engine/organization";
+import { expressionSyntaxPad } from "~/lib/engine/guesstimate";
+import { RootState } from "~/modules/store";
 
 describe("getSubset", () => {
   const space1Metrics = [

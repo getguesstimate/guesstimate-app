@@ -1,11 +1,16 @@
 import { AnyAction, Reducer } from "redux";
 
-const emptyState = {
-  componentName: false,
+export type ModalState = {
+  componentName: string | undefined;
+  props: any; // FIXME
+};
+
+const emptyState: ModalState = {
+  componentName: undefined,
   props: {},
 };
 
-const modal: Reducer<typeof emptyState, AnyAction> = (
+const modal: Reducer<ModalState, AnyAction> = (
   state = emptyState,
   action: AnyAction
 ) => {

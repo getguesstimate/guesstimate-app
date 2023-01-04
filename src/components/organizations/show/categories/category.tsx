@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 
-import { FactListContainer } from "gComponents/facts/list/container";
+import { FactListContainer } from "~/components/facts/list/container";
 import { CategoryForm } from "./form";
-import { FactCategory } from "gEngine/fact_category";
-import { Fact } from "gEngine/facts";
+import { FactCategory } from "~/lib/engine/fact_category";
+import { Fact } from "~/lib/engine/facts";
 
 type HeaderProps = {
   category: FactCategory;

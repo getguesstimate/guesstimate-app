@@ -4,21 +4,21 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
 import ReactMarkdown from "react-markdown";
-import Icon from "gComponents/react-fa-patched";
+import Icon from "~/components/react-fa-patched";
 
 import { Input } from "./input";
 import { Output } from "./output";
-import { Button } from "gComponents/utility/buttons/button";
+import { Button } from "~/components/utility/buttons/button";
 
 import {
   deleteSimulations,
   runSimulations,
-} from "gModules/simulations/actions";
-import { changeGuesstimate } from "gModules/guesstimates/actions";
+} from "~/modules/simulations/actions";
+import { changeGuesstimate } from "~/modules/guesstimates/actions";
 
-import * as _simulation from "gEngine/simulation";
+import * as _simulation from "~/lib/engine/simulation";
 
-import { Guesstimator } from "lib/guesstimator/index";
+import { Guesstimator } from "~/lib/guesstimator/index";
 
 class UnconnectedCalculatorShow extends Component<any> {
   state = {
@@ -142,7 +142,7 @@ class UnconnectedCalculatorShow extends Component<any> {
 
   render() {
     const {
-      calculator: { content, title, space_id, share_image },
+      calculator: { content, title },
       startFilled,
       size,
       inputs,

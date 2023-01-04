@@ -1,13 +1,13 @@
 import _ from "lodash";
-import { addSimulation } from "gModules/simulations/actions";
-import { addSimulationToFact } from "gModules/facts/actions";
+import { addSimulation } from "~/modules/simulations/actions";
+import { addSimulationToFact } from "~/modules/facts/actions";
 
 import { NODE_TYPES } from "./constants";
 import { ERROR_TYPES } from "./errors";
 import { Simulator } from "./simulator";
 
-import * as e from "gEngine/engine";
-import { AppDispatch, RootState } from "gModules/store";
+import * as e from "~/lib/engine/engine";
+import { AppDispatch, RootState } from "~/modules/store";
 
 function getSpacesAndOrganization(state: RootState, graphFilters) {
   let spaces: any[] = [];

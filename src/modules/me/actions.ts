@@ -1,13 +1,13 @@
 import _ from "lodash";
 import auth0 from "auth0-js";
-import { BASE_URL } from "lib/constants";
+import { BASE_URL } from "~/lib/constants";
 
-import * as userActions from "gModules/users/actions";
-import * as auth0Constants from "servers/auth0/constants";
+import * as userActions from "~/modules/users/actions";
+import * as auth0Constants from "~/server/auth0/constants";
 
-import { generalError } from "lib/errors/index";
-import { me } from "gEngine/engine";
-import { AppDispatch, AppThunk } from "gModules/store";
+import { generalError } from "~/lib/errors/index";
+import { me } from "~/lib/engine/engine";
+import { AppDispatch, AppThunk } from "~/modules/store";
 
 class WebAuth {
   auth: auth0.WebAuth;

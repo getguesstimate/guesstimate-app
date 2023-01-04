@@ -1,7 +1,7 @@
 import React from "react";
 import { MemberAddForm } from "../shared/MemberAddForm/index";
 
-import { organization } from "gEngine/engine";
+import { organization } from "~/lib/engine/engine";
 
 export const LocalAddMembers: React.FC<{ organizationId: string }> = ({
   organizationId,

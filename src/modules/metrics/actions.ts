@@ -1,11 +1,11 @@
 import _ from "lodash";
-import * as spaceActions from "gModules/spaces/actions";
-import * as organizationActions from "gModules/organizations/actions";
+import * as spaceActions from "~/modules/spaces/actions";
+import * as organizationActions from "~/modules/organizations/actions";
 
-import * as e from "gEngine/engine";
+import * as e from "~/lib/engine/engine";
 
-import { isWithinRegion } from "lib/locationUtils";
-import { AppDispatch, AppThunk, RootState } from "gModules/store";
+import { isWithinRegion } from "~/lib/locationUtils";
+import { AppDispatch, AppThunk, RootState } from "~/modules/store";
 
 const findSpaceId = (getState: () => RootState, metricId) =>
   e.collections.gget(getState().metrics, metricId, "id", "space");

@@ -1,12 +1,12 @@
 import _ from "lodash";
-import * as e from "gEngine/engine";
-import * as metricActions from "gModules/metrics/actions";
-import { selectRegion } from "gModules/selected_region/actions";
-import { runSimulations } from "gModules/simulations/actions";
-import { registerGraphChange } from "gModules/spaces/actions";
+import * as e from "~/lib/engine/engine";
+import * as metricActions from "~/modules/metrics/actions";
+import { selectRegion } from "~/modules/selected_region/actions";
+import { runSimulations } from "~/modules/simulations/actions";
+import { registerGraphChange } from "~/modules/spaces/actions";
 
-import { isLocation, isWithinRegion, translate } from "lib/locationUtils";
-import { AppThunk } from "gModules/store";
+import { isLocation, isWithinRegion, translate } from "~/lib/locationUtils";
+import { AppThunk } from "~/modules/store";
 
 export function cut(spaceId): AppThunk {
   return (dispatch, getState) => {

@@ -8,9 +8,9 @@ import {
   LinkPricing,
   LinkPrivacy,
   LinkTerms,
-} from "gComponents/utility/links/index";
+} from "~/components/utility/links/index";
 
-const Footer: React.FC = () => {
+export const Footer: React.FC = () => {
   return (
     <footer className="gFooter">
       <div className="container-fluid wrap">
@@ -55,5 +55,3 @@ const Footer: React.FC = () => {
     </footer>
   );
 };
-
-export default Footer;

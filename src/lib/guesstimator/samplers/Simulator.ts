@@ -1,9 +1,9 @@
 import _ from "lodash";
-import { replaceByMap } from "gEngine/utils";
+import { replaceByMap } from "~/lib/engine/utils";
 
-import generateRandomReadableId from "gEngine/metric/generate_random_readable_id";
+import generateRandomReadableId from "~/lib/engine/metric/generate_random_readable_id";
 import { STOCHASTIC_FUNCTIONS } from "./simulator-worker/simulator/evaluator";
-import { GuesstimateWorker } from "lib/window";
+import { GuesstimateWorker } from "~/lib/window";
 
 const MIN_SAMPLES_PER_WINDOW = 100;
 

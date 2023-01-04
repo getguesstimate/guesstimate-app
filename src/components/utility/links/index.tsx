@@ -1,7 +1,5 @@
-import React, { Component } from "react";
-import IubendaPrivacyPolicy from "gComponents/lib/iubenda_privacy_policy";
-import * as modalActions from "gModules/modal/actions";
-import { connect } from "react-redux";
+import React from "react";
+import IubendaPrivacyPolicy from "~/components/lib/iubenda_privacy_policy";
 
 export const LinkFAQ: React.FC = () => <a href="/faq"> FAQ </a>;
 

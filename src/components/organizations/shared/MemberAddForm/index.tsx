@@ -1,11 +1,10 @@
 import _ from "lodash";
-import React, { Component, useEffect, useRef, useState } from "react";
-import { connect } from "react-redux";
+import React, { useEffect, useRef, useState } from "react";
 
 import { httpRequestSelector } from "./httpRequestSelector";
 
-import * as userOrganizationMembershipActions from "gModules/userOrganizationMemberships/actions";
-import { useAppDispatch, useAppSelector } from "gModules/hooks";
+import { useAppDispatch, useAppSelector } from "~/modules/hooks";
+import * as userOrganizationMembershipActions from "~/modules/userOrganizationMemberships/actions";
 
 function validateEmail(email: string) {
   const re =
@@ -31,17 +30,17 @@ export const MemberAddForm: React.FC<{ organizationId: string }> = ({
     return value.trim();
   };
 
-  const _onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
   };
 
-  const _onKeyDown = (e: React.KeyboardEvent) => {
+  const onKeyDown = (e: React.KeyboardEvent) => {
     if (e.keyCode === 13 && validateEmail(_email())) {
-      _submit();
+      submit();
     }
   };
 
-  const _submit = () => {
+  const submit = () => {
     dispatch(
       userOrganizationMembershipActions.createWithEmail(
         organizationId,
@@ -67,18 +66,18 @@ export const MemberAddForm: React.FC<{ organizationId: string }> = ({
           <label>Email Address</label>
           <input
             value={value}
-            onKeyDown={_onKeyDown}
+            onKeyDown={onKeyDown}
             type="text"
             placeholder="name@domain.com"
             ref={input}
-            onChange={_onChange}
+            onChange={onChange}
           />
         </div>
         <div
           className={`ui button primary ${buttonColor} ${
             isValid ? "" : "disabled"
           }`}
-          onClick={_submit}
+          onClick={submit}
         >
           Invite User
         </div>

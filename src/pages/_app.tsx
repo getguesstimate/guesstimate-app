@@ -15,7 +15,7 @@ import "../styles/FlowGrid.css";
 import "../styles/legacyStyles.css";
 import "../styles/theme.css";
 
-import * as meActions from "gModules/me/actions";
+import * as meActions from "~/modules/me/actions";
 import "../routes/app";
 import Script from "next/script";
 

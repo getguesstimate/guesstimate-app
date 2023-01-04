@@ -1,4 +1,4 @@
-import { ApiUser } from "lib/guesstimate_api/resources/Users";
+import { ApiUser } from "~/lib/guesstimate_api/resources/Users";
 import _ from "lodash";
 import { AnyAction, Reducer } from "redux";
 import reduxCrud from "redux-crud";

@@ -1,4 +1,4 @@
-import { __API_ENV__ } from "lib/constants";
+import { __API_ENV__ } from "~/lib/constants";
 // import { API_KEY } from "./constants";
 
 // TODO - fails due to SSR

@@ -7,9 +7,9 @@ import * as _organization from "./organization";
 import { NUM_SAMPLES } from "./simulation";
 import * as _utils from "./utils";
 
-import { sortDescending } from "lib/dataAnalysis";
-import { _matchingFormatter } from "lib/guesstimator/formatter/index";
-import { Guesstimator } from "lib/guesstimator/index";
+import { sortDescending } from "~/lib/dataAnalysis";
+import { _matchingFormatter } from "~/lib/guesstimator/formatter/index";
+import { Guesstimator } from "~/lib/guesstimator/index";
 
 export type Fact = {
   id: string;

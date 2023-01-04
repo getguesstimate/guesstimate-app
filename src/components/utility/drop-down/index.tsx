@@ -2,7 +2,7 @@ import _ from "lodash";
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 
-import Card from "gComponents/utility/card/index";
+import Card from "~/components/utility/card/index";
 
 type Props = {
   headerText?: string;

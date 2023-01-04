@@ -1,6 +1,6 @@
-import * as meActions from "gModules/me/actions";
-import { AppThunk } from "gModules/store";
-import { api } from "lib/guesstimate_api";
+import * as meActions from "~/modules/me/actions";
+import { AppThunk } from "~/modules/store";
+import { api } from "~/lib/guesstimate_api";
 
 function actionType(action, event) {
   return `${action}_${event}`;

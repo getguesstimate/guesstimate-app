@@ -1,7 +1,7 @@
 import { call } from "redux-saga/effects";
 
-import { simulate } from "lib/propagation/wrapper";
-import { AppThunk } from "gModules/store";
+import { simulate } from "~/lib/propagation/wrapper";
+import { AppThunk } from "~/modules/store";
 import { AnyAction } from "redux";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));

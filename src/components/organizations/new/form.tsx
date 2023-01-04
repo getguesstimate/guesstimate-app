@@ -1,8 +1,8 @@
 import _ from "lodash";
 import React, { useState } from "react";
 
-import { useAppDispatch } from "gModules/hooks";
-import { create } from "gModules/organizations/actions";
+import { useAppDispatch } from "~/modules/hooks";
+import { create } from "~/modules/organizations/actions";
 
 type Plan = "FREE" | "PREMIUM";
 
@@ -72,7 +72,7 @@ export const CreateOrganizationForm: React.FC = () => {
           <div className="field name">
             <label>Organization Name</label>
             <input
-              placeholder={"name"}
+              placeholder="name"
               value={value}
               onChange={(e) => {
                 setValue(e.target.value);

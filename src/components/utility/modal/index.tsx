@@ -19,9 +19,12 @@ const customStyles = {
     marginBottom: "2em",
     backround: "rgba(0,0,0,0)",
   },
-};
+} as const;
 
-export const GeneralModal = ({ onRequestClose, children }) => (
+export const GeneralModal: React.FC<{
+  onRequestClose(): void;
+  children: React.ReactNode;
+}> = ({ onRequestClose, children }) => (
   <Modal isOpen={true} onRequestClose={onRequestClose} style={customStyles}>
     {children}
   </Modal>

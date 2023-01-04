@@ -3,11 +3,11 @@ import { NextRouter, withRouter } from "next/router";
 import { Component } from "react";
 import { connect } from "react-redux";
 
-import * as firstSubscriptionActions from "gModules/first_subscription/actions";
-import { subStage } from "gModules/first_subscription/state_machine";
-import * as spaceActions from "gModules/spaces/actions";
+import * as firstSubscriptionActions from "~/modules/first_subscription/actions";
+import { subStage } from "~/modules/first_subscription/state_machine";
+import * as spaceActions from "~/modules/spaces/actions";
 
-import { AppDispatch, RootState } from "gModules/store";
+import { AppDispatch, RootState } from "~/modules/store";
 import FirstSubscription from "./FirstSubscription";
 
 function mapStateToProps(state: RootState) {
@@ -67,7 +67,7 @@ class FirstSubscriptionContainer extends Component<Props> {
   }
 
   _onNewModel() {
-    this.props.dispatch(spaceActions.create(undefined, {}, this.props.router));
+    this.props.dispatch(spaceActions.create(undefined, this.props.router));
   }
 
   render() {

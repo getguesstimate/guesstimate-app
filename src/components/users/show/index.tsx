@@ -2,15 +2,15 @@ import _ from "lodash";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 
-import { NewSpaceCard, SpaceCard } from "gComponents/spaces/cards";
-import Container from "gComponents/utility/container/Container";
+import { NewSpaceCard, SpaceCard } from "~/components/spaces/cards";
+import Container from "~/components/utility/container/Container";
 
 import { userSpaceSelector } from "./userSpaceSelector";
 
-import { useAppDispatch, useAppSelector } from "gModules/hooks";
-import * as spaceActions from "gModules/spaces/actions";
-import * as userActions from "gModules/users/actions";
-import { ApiUser } from "lib/guesstimate_api/resources/Users";
+import { useAppDispatch, useAppSelector } from "~/modules/hooks";
+import * as spaceActions from "~/modules/spaces/actions";
+import * as userActions from "~/modules/users/actions";
+import { ApiUser } from "~/lib/guesstimate_api/resources/Users";
 
 type Props = {
   userId: number;
@@ -31,7 +31,7 @@ const UserShow: React.FC<Props> = ({ userId }) => {
   }, [dispatch, userId]);
 
   const _newModel = () => {
-    dispatch(spaceActions.create(undefined, {}, router));
+    dispatch(spaceActions.create(undefined, router));
   };
 
   const spaces = _.orderBy(userSpaces, ["updated_at"], ["desc"]);

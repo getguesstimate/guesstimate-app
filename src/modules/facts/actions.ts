@@ -1,17 +1,17 @@
-import { editFact, addFact } from "gModules/organizations/actions";
-import { __DEV__ } from "lib/constants";
+import { editFact, addFact } from "~/modules/organizations/actions";
+import { __DEV__ } from "~/lib/constants";
 
-import { getVar, selectorSearch, withMissingStats } from "gEngine/facts";
-import * as _collections from "gEngine/collections";
-import { orArr } from "gEngine/utils";
+import { getVar, selectorSearch, withMissingStats } from "~/lib/engine/facts";
+import * as _collections from "~/lib/engine/collections";
+import { orArr } from "~/lib/engine/utils";
 import {
   organizationIdFromFactReadableId,
   organizationReadableId,
-} from "gEngine/organization";
-import { addStats } from "gEngine/simulation";
+} from "~/lib/engine/organization";
+import { addStats } from "~/lib/engine/simulation";
 
-import { withVariableName } from "lib/generateVariableNames/generateFactVariableName";
-import { AppThunk } from "gModules/store";
+import { withVariableName } from "~/lib/generateVariableNames/generateFactVariableName";
+import { AppThunk } from "~/modules/store";
 
 export function getSuggestion(selector): AppThunk {
   return (dispatch, getState) => {

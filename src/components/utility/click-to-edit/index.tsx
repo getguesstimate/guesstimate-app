@@ -2,7 +2,7 @@ import _ from "lodash";
 import React, { Component } from "react";
 
 import ReactDOM from "react-dom";
-import Icon from "gComponents/react-fa-patched";
+import Icon from "~/components/react-fa-patched";
 
 import { ButtonClose } from "../buttons/close/index";
 

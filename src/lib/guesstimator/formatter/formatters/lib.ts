@@ -1,7 +1,7 @@
 import _ from "lodash";
-import * as errorTypes from "lib/propagation/errors";
+import * as errorTypes from "~/lib/propagation/errors";
 
-import { or } from "gEngine/utils";
+import { or } from "~/lib/engine/utils";
 import { Formatter } from "../types";
 
 const {

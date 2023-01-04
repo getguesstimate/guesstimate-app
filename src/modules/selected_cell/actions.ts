@@ -1,4 +1,4 @@
-import { Location } from "lib/locationUtils";
+import { Location } from "~/lib/locationUtils";
 
 export function changeSelect(
   location: Location,

@@ -1,9 +1,9 @@
 import _ from "lodash";
 import React, { Component, useState } from "react";
 
-import Icon from "gComponents/react-fa-patched";
+import Icon from "~/components/react-fa-patched";
 
-import * as e from "gEngine/engine";
+import * as e from "~/lib/engine/engine";
 
 import { MemberAddForm } from "../shared/MemberAddForm/index";
 

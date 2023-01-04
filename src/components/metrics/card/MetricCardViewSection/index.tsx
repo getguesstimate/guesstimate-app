@@ -1,22 +1,22 @@
 import _ from "lodash";
 import React, { Component } from "react";
 
-import Icon from "gComponents/react-fa-patched";
+import Icon from "~/components/react-fa-patched";
 
-import { DistributionSummary } from "gComponents/distributions/summary/index";
-import MetricName from "gComponents/metrics/card/name/index";
-import SensitivitySection from "gComponents/metrics/card/SensitivitySection/SensitivitySection";
+import { DistributionSummary } from "~/components/distributions/summary/index";
+import MetricName from "~/components/metrics/card/name/index";
+import SensitivitySection from "~/components/metrics/card/SensitivitySection/SensitivitySection";
 import {
   MetricExportedIcon,
   MetricReadableId,
   MetricReasoningIcon,
   MetricSidebarToggle,
-} from "gComponents/metrics/card/token/index";
-import Histogram from "gComponents/simulations/histogram/index";
-import StatTable from "gComponents/simulations/stat_table/index";
+} from "~/components/metrics/card/token/index";
+import Histogram from "~/components/simulations/histogram/index";
+import StatTable from "~/components/simulations/stat_table/index";
 
-import { getMessage } from "lib/propagation/errors";
-import { metricIdToNodeId } from "lib/propagation/wrapper";
+import { getMessage } from "~/lib/propagation/errors";
+import { metricIdToNodeId } from "~/lib/propagation/wrapper";
 
 import {
   displayableError,
@@ -24,10 +24,10 @@ import {
   hasErrors,
   isBreak,
   isInfiniteLoop,
-} from "gEngine/simulation";
-import { getClassName, replaceByMap } from "gEngine/utils";
+} from "~/lib/engine/simulation";
+import { getClassName, replaceByMap } from "~/lib/engine/utils";
 import { ConnectDragSource } from "react-dnd";
-import { CanvasState } from "gModules/canvas_state/reducer";
+import { CanvasState } from "~/modules/canvas_state/reducer";
 
 // TODO(matthew): Refactor these components. E.g. it's weird that isBreak takes all errors, but you may only care about
 // the one...

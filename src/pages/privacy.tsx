@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 
-import Layout from "../routes/layouts/application/index";
-import PrivacyPolicy from "gComponents/pages/privacy_policy/index";
+import { Layout } from "~/components/layouts";
+import { PrivacyPolicy } from "~/components/pages/PrivacyPolicy";
 
 const PrivacyPolicyPage: NextPage = () => {
   return (

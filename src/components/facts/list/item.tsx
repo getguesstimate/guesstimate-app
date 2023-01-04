@@ -2,20 +2,20 @@ import _ from "lodash";
 import React from "react";
 import { useRouter } from "next/router";
 
-import Icon from "gComponents/react-fa-patched";
+import Icon from "~/components/react-fa-patched";
 
-import { DistributionSummary } from "gComponents/distributions/summary/index";
-import Histogram from "gComponents/simulations/histogram/index";
+import { DistributionSummary } from "~/components/distributions/summary/index";
+import Histogram from "~/components/simulations/histogram/index";
 import {
   adjustedConfidenceInterval,
   Fact,
   isExportedFromSpace,
   length,
   mean,
-} from "gEngine/facts";
-import { spaceUrlById } from "gEngine/space";
+} from "~/lib/engine/facts";
+import { spaceUrlById } from "~/lib/engine/space";
 
-import { allPropsPresent } from "gEngine/utils";
+import { allPropsPresent } from "~/lib/engine/utils";
 
 type Props = {
   fact: Fact;

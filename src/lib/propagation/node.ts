@@ -2,11 +2,11 @@ import _ from "lodash";
 import { NODE_TYPES } from "./constants";
 import * as errorTypes from "./errors";
 
-import { Guesstimator } from "lib/guesstimator/index";
-import { _matchingFormatter } from "lib/guesstimator/formatter/index";
+import { Guesstimator } from "~/lib/guesstimator/index";
+import { _matchingFormatter } from "~/lib/guesstimator/formatter/index";
 
-import * as _collections from "gEngine/collections";
-import * as _utils from "gEngine/utils";
+import * as _collections from "~/lib/engine/collections";
+import * as _utils from "~/lib/engine/utils";
 import { SimulationDAG } from "./DAG";
 
 const {

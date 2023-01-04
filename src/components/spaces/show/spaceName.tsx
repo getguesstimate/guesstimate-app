@@ -1,7 +1,7 @@
 import _ from "lodash";
 import React, { Component } from "react";
 
-import DropDown from "gComponents/utility/drop-down/index";
+import DropDown from "~/components/utility/drop-down/index";
 
 export class SpaceName extends Component<any> {
   focusForm() {

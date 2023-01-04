@@ -1,7 +1,7 @@
 import _ from "lodash";
 import React, { Component } from "react";
 
-import { subStages } from "gModules/first_subscription/state_machine";
+import { subStages } from "~/modules/first_subscription/state_machine";
 import NewOrder from "./NewOrder";
 
 export const SynchronizationSuccess: React.FC<{ onNewModel(): void }> = ({
