@@ -236,7 +236,7 @@ class Profile extends Component<Props> {
 
         {isLoggedIn && me.id && (
           <a className="item" href={`/users/${me.id}`}>
-            <i className={`ion-md-albums`} />
+            <i className="ion-md-albums" />
             <span className="text">My Models</span>
           </a>
         )}

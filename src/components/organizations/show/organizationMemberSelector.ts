@@ -1,12 +1,14 @@
 import { createSelector } from "reselect";
 import * as e from "gEngine/engine";
+import { RootState } from "gModules/store";
 
-const userOrganizationMembershipSelector = (state) =>
+const userOrganizationMembershipSelector = (state: RootState) =>
   state.userOrganizationMemberships;
-const userOrganizationInvitationSelector = (state) =>
+const userOrganizationInvitationSelector = (state: RootState) =>
   state.userOrganizationInvitations;
-const userSelector = (state) => state.users;
-const organizationIdSelector = (state, organizationId) => organizationId;
+const userSelector = (state: RootState) => state.users;
+const organizationIdSelector = (state: RootState, organizationId) =>
+  organizationId;
 
 export const organizationMemberSelector = createSelector(
   userOrganizationMembershipSelector,

@@ -5,10 +5,12 @@ import { Calculators } from "./resources/Calculators";
 import Accounts from "./resources/Accounts";
 import Copies from "./resources/Copies";
 import UserOrganizationMemberships from "./resources/UserOrganizationMemberships";
+import { RootState } from "gModules/store";
+import { rootUrl } from "servers/guesstimate-api/constants";
 
 export default class GuesstimateApi {
   host: string;
-  api_token: string;
+  api_token?: string;
   models: Models;
   users: Users;
   calculators: Calculators;
@@ -17,7 +19,7 @@ export default class GuesstimateApi {
   accounts: Accounts;
   userOrganizationMemberships: UserOrganizationMemberships;
 
-  constructor({ host, api_token }: { host: string; api_token: string }) {
+  constructor({ host, api_token }: { host: string; api_token?: string }) {
     this.api_token = api_token;
     this.host = host;
     this.models = new Models(this);
@@ -29,3 +31,10 @@ export default class GuesstimateApi {
     this.userOrganizationMemberships = new UserOrganizationMemberships(this);
   }
 }
+
+export const api = (state: RootState) => {
+  return new GuesstimateApi({
+    host: rootUrl,
+    api_token: state.me.token,
+  });
+};

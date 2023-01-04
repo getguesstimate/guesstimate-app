@@ -1,9 +1,27 @@
+import { ApiUser } from "lib/guesstimate_api/resources/Users";
 import { AnyAction, Reducer } from "redux";
+
+type MeProfileFields = {
+  needs_tutorial: boolean;
+  plan: {
+    id: string;
+    name: string;
+    private_model_limit?: number;
+  };
+  account: {
+    id: number;
+    _links: {
+      payment_portal: {
+        href: string;
+      };
+    };
+  };
+};
 
 type MeState = Partial<{
   token: string;
-  id: string;
-  profile: unknown;
+  id: number;
+  profile: ApiUser & MeProfileFields;
 }>;
 
 const me: Reducer<MeState, AnyAction> = function (state = {}, action) {
@@ -12,7 +30,7 @@ const me: Reducer<MeState, AnyAction> = function (state = {}, action) {
       return {
         token: action.token,
         profile: action.profile,
-        id: state.id || null,
+        id: state.id,
       };
     case "GUESSTIMATE_ME_LOADED":
       return {
@@ -23,8 +41,8 @@ const me: Reducer<MeState, AnyAction> = function (state = {}, action) {
     case "ALL_OF_ME_RELOADED":
       return {
         token: action.token,
-        id: action.id,
         profile: action.profile,
+        id: action.id,
       };
     case "DESTROY_ME":
       return {};

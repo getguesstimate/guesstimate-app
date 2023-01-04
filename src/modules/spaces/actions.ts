@@ -13,19 +13,12 @@ import * as e from "gEngine/engine";
 
 import { captureApiError } from "lib/errors/index";
 
-import { setupGuesstimateApi } from "servers/guesstimate-api/constants";
 import { AppThunk } from "gModules/store";
+import { api } from "lib/guesstimate_api";
 
 let sActions = actionCreatorsFor("spaces");
 
-function api(state) {
-  function getToken(state) {
-    return _.get(state, "me.token");
-  }
-  return setupGuesstimateApi(getToken(state));
-}
-
-export function fetchSuccess(spaces) {
+export function fetchSuccess(spaces): AppThunk {
   return (dispatch, getState) => {
     const users = spaces
       .map((s) => _.get(s, "_embedded.user"))
@@ -78,7 +71,7 @@ export function fetchSuccess(spaces) {
   };
 }
 
-export function destroy(object, router) {
+export function destroy(object, router): AppThunk {
   const id = object.id;
   return (dispatch, getState) => {
     const navigateTo = !!object.organization_id
@@ -119,7 +112,7 @@ const SPACE_INDEX_ATTRIBUTES = [
   "editors_by_time",
 ];
 
-export function fromSearch(data) {
+export function fromSearch(data): AppThunk {
   return (dispatch) => {
     const formatted = data.map((d) => _.pick(d, SPACE_INDEX_ATTRIBUTES));
     const action = sActions.fetchSuccess(formatted);
@@ -127,7 +120,10 @@ export function fromSearch(data) {
   };
 }
 
-export function fetchById(spaceId, shareableLinkToken: string | null = null) {
+export function fetchById(
+  spaceId,
+  shareableLinkToken: string | null = null
+): AppThunk {
   return (dispatch, getState) => {
     dispatch(sActions.fetchStart());
 
@@ -145,7 +141,7 @@ export function fetchById(spaceId, shareableLinkToken: string | null = null) {
 }
 
 export const fetch = (
-  args: { userId: string } | { organizationId: string }
+  args: { userId: number } | { organizationId: string }
 ): AppThunk => {
   return (dispatch, getState) => {
     dispatch(sActions.fetchStart());
@@ -169,7 +165,7 @@ export const fetch = (
   };
 };
 
-export function create(organizationId, params: any = {}, router) {
+export function create(organizationId, params: any = {}, router): AppThunk {
   return (dispatch, getState) => {
     const cid = cuid();
     let object = { ...params, id: cid };
@@ -196,7 +192,7 @@ export function create(organizationId, params: any = {}, router) {
   };
 }
 
-export function copy(spaceId, router) {
+export function copy(spaceId, router): AppThunk {
   return (dispatch, getState) => {
     dispatch(changeActionState("COPYING"));
 

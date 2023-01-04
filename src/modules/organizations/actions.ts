@@ -1,33 +1,25 @@
-import _ from "lodash";
 import cuid from "cuid";
+import _ from "lodash";
 import { actionCreatorsFor } from "redux-crud";
 
 import * as displayErrorsActions from "gModules/displayErrors/actions";
-import * as membershipActions from "gModules/userOrganizationMemberships/actions";
-import * as userOrganizationMembershipActions from "gModules/userOrganizationMemberships/actions";
-import * as userOrganizationInvitationActions from "gModules/userOrganizationInvitations/actions";
-import * as factActions from "gModules/facts/actions";
 import { factCategoryActions } from "gModules/factCategories/actions";
+import * as factActions from "gModules/facts/actions";
 import * as spaceActions from "gModules/spaces/actions";
+import * as userOrganizationInvitationActions from "gModules/userOrganizationInvitations/actions";
+import * as userOrganizationMembershipActions from "gModules/userOrganizationMemberships/actions";
 
-import { orArr } from "gEngine/utils";
-import { organizationReadableId } from "gEngine/organization";
 import { withMissingStats } from "gEngine/facts";
+import { organizationReadableId } from "gEngine/organization";
+import { orArr } from "gEngine/utils";
 
 import { captureApiError } from "lib/errors/index";
 import { simulate } from "lib/propagation/wrapper";
 
-import { setupGuesstimateApi } from "servers/guesstimate-api/constants";
 import { AppThunk } from "gModules/store";
+import { api } from "lib/guesstimate_api";
 
 let oActions = actionCreatorsFor("organizations");
-
-function api(state) {
-  function getToken(state) {
-    return _.get(state, "me.token");
-  }
-  return setupGuesstimateApi(getToken(state));
-}
 
 export function fetchById(organizationId): AppThunk {
   return (dispatch, getState) => {

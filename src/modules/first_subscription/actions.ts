@@ -1,14 +1,6 @@
-import _ from "lodash";
-import { setupGuesstimateApi } from "servers/guesstimate-api/constants";
 import * as meActions from "gModules/me/actions";
 import { AppThunk } from "gModules/store";
-
-function api(state) {
-  function getToken(state) {
-    return _.get(state, "me.token");
-  }
-  return setupGuesstimateApi(getToken(state));
-}
+import { api } from "lib/guesstimate_api";
 
 function actionType(action, event) {
   return `${action}_${event}`;
@@ -60,7 +52,7 @@ export function postSynchronization({ user_id }): AppThunk {
         dispatch(errorAction(action, err));
       } else if (value) {
         dispatch(successAction(action, value));
-        dispatch(meActions.guesstimateMeLoad());
+        dispatch(meActions.guesstimateMeReload());
       }
     });
   };

@@ -10,9 +10,10 @@ import { userSpaceSelector } from "./userSpaceSelector";
 import { useAppDispatch, useAppSelector } from "gModules/hooks";
 import * as spaceActions from "gModules/spaces/actions";
 import * as userActions from "gModules/users/actions";
+import { ApiUser } from "lib/guesstimate_api/resources/Users";
 
 type Props = {
-  userId: string;
+  userId: number;
 };
 
 const UserShow: React.FC<Props> = ({ userId }) => {
@@ -34,9 +35,9 @@ const UserShow: React.FC<Props> = ({ userId }) => {
   };
 
   const spaces = _.orderBy(userSpaces.asMutable(), ["updated_at"], ["desc"]);
-  const isMe = parseInt(me.id || "") === parseInt(userId);
+  const isMe = me.id === userId;
 
-  let user = null;
+  let user: ApiUser | undefined;
 
   if (users && users.length) {
     user = users.find((u) => u.id.toString() === userId.toString());
@@ -50,8 +51,8 @@ const UserShow: React.FC<Props> = ({ userId }) => {
           <div className="col-md-4 col-xs-12">
             {user && (
               <div className="main-user-tag">
-                <img src={(user as any).picture} />
-                {user && <h1>{(user as any).name}</h1>}
+                <img src={user.picture} />
+                {user && <h1>{user.name}</h1>}
               </div>
             )}
           </div>

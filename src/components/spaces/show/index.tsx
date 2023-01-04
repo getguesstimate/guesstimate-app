@@ -183,7 +183,7 @@ class SpacesShow extends Component<Props, State> {
     this.setState({ showTutorial: true });
   }
   closeTutorial() {
-    if (!!_.get(this, "props.me.profile.needs_tutorial")) {
+    if (this.props.me?.profile?.needs_tutorial) {
       this.props.dispatch(userActions.finishedTutorial(this.props.me.profile));
     }
     this.setState({ showTutorial: false });

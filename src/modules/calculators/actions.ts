@@ -1,5 +1,5 @@
-import _ from "lodash";
 import cuid from "cuid";
+import _ from "lodash";
 import { actionCreatorsFor } from "redux-crud";
 
 import { AppThunk } from "gModules/store";
@@ -9,11 +9,9 @@ import { initSpace } from "gModules/checkpoints/actions";
 import * as displayErrorsActions from "gModules/displayErrors/actions";
 import { captureApiError } from "lib/errors/index";
 
-import { setupGuesstimateApi } from "servers/guesstimate-api/constants";
+import { api } from "lib/guesstimate_api";
 
 export const sActions = actionCreatorsFor("calculators");
-
-const api = (state) => setupGuesstimateApi(_.get(state, "me.token"));
 
 export function fetchById(id: string): AppThunk {
   return (dispatch, getState) => {

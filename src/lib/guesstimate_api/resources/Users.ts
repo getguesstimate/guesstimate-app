@@ -1,33 +1,59 @@
 import AbstractResource, { Callback } from "../AbstractResource";
 
+import * as yup from "yup";
+
+const userSchema = yup.object({
+  id: yup.number().required(),
+  picture: yup.string(),
+  name: yup.string(),
+});
+
+const userListSchema = yup.object({
+  items: yup.array().of(userSchema).required(),
+});
+
+const userMembershipsSchema = yup.object({
+  items: yup.array().of(
+    yup.object({
+      id: yup.number(),
+      user_id: yup.number(),
+      organization_id: yup.number(),
+    })
+  ),
+});
+
+export type ApiUser = yup.InferType<typeof userSchema>;
+
+export type ApiUserList = yup.InferType<typeof userListSchema>;
+
+export type ApiUserMemberships = yup.InferType<typeof userMembershipsSchema>;
+
 export default class Users extends AbstractResource {
-  get({ userId }, callback: Callback) {
+  async get({ userId }): Promise<ApiUser> {
     const url = `users/${userId}`;
     const method = "GET";
 
-    this.guesstimateMethod({ url, method })(callback);
+    const response = await this.call({ url, method });
+    const result = await userSchema.validate(response);
+    return result;
   }
 
-  create(msg, callback: Callback) {
-    const url = `users/`;
-    const method = "POST";
-    const data = { user: msg };
-
-    this.guesstimateMethod({ url, method, data })(callback);
-  }
-
-  listWithAuth0Id(auth0_id, callback: Callback) {
+  async listWithAuth0Id(auth0_id: string): Promise<ApiUserList> {
     const url = `users?auth0_id=${auth0_id}`;
     const method = "GET";
 
-    this.guesstimateMethod({ url, method })(callback);
+    const response = await this.call({ url, method });
+    const result = await userListSchema.validate(response);
+    return result;
   }
 
-  getMemberships({ userId }, callback: Callback) {
-    const url = `users/${userId}/memberships`;
-    const method = "GET";
-
-    this.guesstimateMethod({ url, method })(callback);
+  async getMemberships({ userId }): Promise<ApiUserMemberships> {
+    const response = await this.call({
+      url: `users/${userId}/memberships`,
+      method: "GET",
+    });
+    const result = await userMembershipsSchema.validate(response);
+    return result;
   }
 
   finishedTutorial({ id }, callback: Callback) {

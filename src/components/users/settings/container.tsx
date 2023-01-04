@@ -13,8 +13,8 @@ const SettingsContainer: React.FC<Props> = ({ onClose }) => {
   const dispatch = useAppDispatch();
   const me = useAppSelector((state) => state.me);
 
-  const _refreshMe = useCallback(() => {
-    dispatch(meActions.guesstimateMeLoad());
+  const refreshMe = useCallback(() => {
+    dispatch(meActions.guesstimateMeReload());
   }, [dispatch]);
 
   const portalUrl = _.get(me, "profile.account._links.payment_portal.href");
@@ -24,7 +24,7 @@ const SettingsContainer: React.FC<Props> = ({ onClose }) => {
       planId={planId}
       portalUrl={portalUrl}
       onClose={onClose}
-      onRefresh={_refreshMe}
+      onRefresh={refreshMe}
     />
   );
 };

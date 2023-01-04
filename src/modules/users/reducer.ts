@@ -1,13 +1,13 @@
+import { ApiUser } from "lib/guesstimate_api/resources/Users";
 import _ from "lodash";
 import { AnyAction, Reducer } from "redux";
 import reduxCrud from "redux-crud";
-import SI from "seamless-immutable";
 
 const standardReducers = reduxCrud.reducersFor("users");
 
-type State = any; // FIXME
+type State = Readonly<ApiUser[]>;
 
-export const usersR: Reducer<State, AnyAction> = (state, action) => {
+export const usersR: Reducer<State, AnyAction> = (state = [], action) => {
   switch (action.type) {
     case "USER_ORGANIZATION_MEMBERSHIPS_FETCH_SUCCESS": {
       const users = _.get(action, "data.users");
@@ -19,10 +19,10 @@ export const usersR: Reducer<State, AnyAction> = (state, action) => {
         ...state.find((s) => s.id === u.id),
         ...u,
       }));
-      return SI([
+      return [
         ...state.filter((s) => !_.some(users, (u) => s.id === u.id)),
         ...updatedUsers,
-      ]);
+      ];
     }
     default:
       return standardReducers(state, action);

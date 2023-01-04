@@ -6,6 +6,6 @@ export const rootUrl =
     ? "http://localhost:4000/"
     : "https://guesstimate.herokuapp.com/";
 
-export function setupGuesstimateApi(api_token: string) {
+export function setupGuesstimateApi(api_token: string | undefined) {
   return new GuesstimateApi({ host: rootUrl, api_token });
 }

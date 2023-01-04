@@ -4,14 +4,14 @@ import { actionCreatorsFor } from "redux-crud";
 import cuid from "cuid";
 
 import * as displayErrorsActions from "gModules/displayErrors/actions";
-import * as userActions from "gModules/users/actions";
-import * as invitationActions from "gModules/userOrganizationInvitations/actions";
 import * as httpRequestActions from "gModules/httpRequests/actions";
+import * as invitationActions from "gModules/userOrganizationInvitations/actions";
+import * as userActions from "gModules/users/actions";
 
 import { captureApiError } from "lib/errors/index";
+import { api } from "lib/guesstimate_api";
 
-import { setupGuesstimateApi } from "servers/guesstimate-api/constants";
-import { AppThunk, RootState } from "gModules/store";
+import { AppThunk } from "gModules/store";
 
 const sActions = actionCreatorsFor("userOrganizationMemberships");
 const relevantAttributes = [
@@ -19,14 +19,7 @@ const relevantAttributes = [
   "user_id",
   "organization_id",
   "invitation_id",
-];
-
-function api(state: RootState) {
-  function getToken(state) {
-    return _.get(state, "me.token");
-  }
-  return setupGuesstimateApi(getToken(state));
-}
+] as const;
 
 export function fetchByOrganizationId(organizationId: string): AppThunk {
   return (dispatch, getState) => {
@@ -46,23 +39,24 @@ export function fetchByOrganizationId(organizationId: string): AppThunk {
   };
 }
 
-export function fetchByUserId(userId: string): AppThunk {
-  return (dispatch, getState) => {
-    api(getState()).users.getMemberships({ userId }, (err, memberships) => {
-      if (err) {
-        dispatch(displayErrorsActions.newError());
-        captureApiError("OrganizationsMemberFetch", err, {
-          url: "fetchMembers",
-        });
-      } else if (memberships) {
-        dispatch(fetchSuccess(memberships.items));
-      }
-    });
+export function fetchByUserId(userId: number): AppThunk {
+  return async (dispatch, getState) => {
+    try {
+      const memberships = await api(getState()).users.getMemberships({
+        userId,
+      });
+      dispatch(fetchSuccess(memberships.items));
+    } catch (err) {
+      dispatch(displayErrorsActions.newError());
+      captureApiError("OrganizationsMemberFetch", err, {
+        url: "fetchMembers",
+      });
+    }
   };
 }
 
 export function fetchSuccess(memberships): AppThunk {
-  return (dispatch, getState) => {
+  return (dispatch) => {
     const formatted = memberships.map((m) => _.pick(m, relevantAttributes));
     const users = memberships
       .map((m) => _.get(m, "_embedded.user"))

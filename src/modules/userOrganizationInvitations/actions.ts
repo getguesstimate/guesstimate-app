@@ -2,23 +2,16 @@ import _ from "lodash";
 import { actionCreatorsFor } from "redux-crud";
 
 import * as displayErrorsActions from "gModules/displayErrors/actions";
-import * as userActions from "gModules/users/actions";
 import * as membershipActions from "gModules/userOrganizationMemberships/actions";
+import * as userActions from "gModules/users/actions";
 
 import { captureApiError } from "lib/errors/index";
 
-import { setupGuesstimateApi } from "servers/guesstimate-api/constants";
 import { AppThunk } from "gModules/store";
+import { api } from "lib/guesstimate_api";
 
 let sActions = actionCreatorsFor("userOrganizationInvitations");
 let relevantAttributes = ["id", "email", "organization_id"];
-
-function api(state) {
-  function getToken(state) {
-    return _.get(state, "me.token");
-  }
-  return setupGuesstimateApi(getToken(state));
-}
 
 export function fetchByOrganizationId(organizationId: string): AppThunk {
   return (dispatch, getState) => {

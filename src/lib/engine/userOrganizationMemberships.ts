@@ -3,7 +3,7 @@ import { typeSafeEq } from "./utils";
 
 export const isMember = (
   organization_id: string,
-  user_id: string,
+  user_id: number,
   memberships
 ) =>
   _.some(

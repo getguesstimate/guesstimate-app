@@ -10,7 +10,7 @@ const UserPage: NextPage = () => {
   const { id } = router.query;
   return (
     <Layout backgroundColor="GREY">
-      {id === undefined ? null : <UserShow userId={id as string} />}
+      {id === undefined ? null : <UserShow userId={parseInt(id as string)} />}
     </Layout>
   );
 };

@@ -16,6 +16,26 @@ export default class AbstractResource {
     this.api = api;
   }
 
+  async call({ url, method, data, headers }: RequestParams): Promise<unknown> {
+    const response = await fetch(this.api.host + url, {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+        ...(this.api.api_token
+          ? {
+              Authorization: `Bearer ${this.api.api_token}`,
+            }
+          : undefined),
+        ...headers,
+      },
+      ...(data ? { body: JSON.stringify(data) } : {}),
+    });
+    if (response.status >= 400) {
+      throw new Error(`${response.status} ${response.statusText}`);
+    }
+    return await response.json();
+  }
+
   guesstimateMethod({ url, method, data, headers }: RequestParams) {
     return (callback: Callback) => {
       fetch(this.api.host + url, {

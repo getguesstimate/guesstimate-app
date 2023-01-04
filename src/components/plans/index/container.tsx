@@ -21,7 +21,7 @@ const PlanIndexContainer: React.FC = () => {
   const me = useAppSelector((state) => state.me);
 
   const portalUrl = _.get(me, "profile.account._links.payment_portal.href");
-  const userPlanId = (me?.profile as any).plan?.id;
+  const userPlanId = me?.profile?.plan?.id;
   const isLoggedIn = e.me.isLoggedIn(me);
 
   const props = {
