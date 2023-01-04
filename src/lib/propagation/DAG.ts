@@ -86,7 +86,7 @@ export class SimulationDAG {
     }
   }
 
-  find(id: string): SimulationNode | null {
+  find(id: string): SimulationNode | null | undefined {
     return get(this.nodes, id);
   }
   subsetFrom(idSet: string[]) {

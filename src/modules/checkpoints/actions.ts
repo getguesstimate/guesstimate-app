@@ -1,15 +1,15 @@
 import * as engine from "gEngine/engine";
-import { AppThunk } from "gModules/store";
+import { AppDispatch, AppThunk, RootState } from "gModules/store";
 import _ from "lodash";
 
 export function saveCheckpoint(spaceId, newGraph): AppThunk {
-  return (dispatch, getState) => {
+  return (dispatch) => {
     dispatch({ type: "SAVE_CHECKPOINT", checkpoint: newGraph, spaceId });
   };
 }
 
-export function initSpace(spaceId, graph): AppThunk {
-  return (dispatch, getState) => {
+export function initSpace(spaceId: number, graph): AppThunk {
+  return (dispatch) => {
     const { metrics, guesstimates } = graph;
     dispatch({
       type: "INITIALIZE",
@@ -23,12 +23,12 @@ export function initSpace(spaceId, graph): AppThunk {
 }
 
 function updateMetricsAndGuesstimates(
-  dispatch,
-  getState,
-  spaceId,
+  dispatch: AppDispatch,
+  getState: () => RootState,
+  spaceId: number,
   oldMetrics,
   newMetrics,
-  oldGuesstimates,
+  oldGuesstimates: any[],
   newGuesstimates
 ) {
   const metricsToAdd = newMetrics.filter(
@@ -99,7 +99,7 @@ function updateMetricsAndGuesstimates(
   });
 }
 
-export function undo(spaceId): AppThunk {
+export function undo(spaceId: number): AppThunk {
   return (dispatch, getState) => {
     const spaceCheckpoints = getState().checkpoints.find(
       (r) => r.spaceId === spaceId
@@ -132,7 +132,7 @@ export function undo(spaceId): AppThunk {
   };
 }
 
-export function redo(spaceId): AppThunk {
+export function redo(spaceId: number): AppThunk {
   return (dispatch, getState) => {
     const { head, checkpoints } = getState().checkpoints.find(
       (r) => r.spaceId === spaceId

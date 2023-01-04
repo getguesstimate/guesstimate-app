@@ -5,6 +5,7 @@ import * as _collections from "./collections";
 
 import generateRandomReadableId from "./metric/generate_random_readable_id";
 import { isAtLocation } from "lib/locationUtils";
+import { RootState } from "gModules/store";
 
 export function equals(l, r) {
   return (
@@ -21,7 +22,9 @@ export function create(metricNames) {
   };
 }
 
-export function denormalizeFn(graph) {
+export function denormalizeFn(
+  graph: Pick<RootState, "guesstimates" | "simulations">
+) {
   return (metric) => {
     const findWithMetricId = (collection) =>
       _collections.get(collection, metric.id, "metric");

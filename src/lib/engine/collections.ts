@@ -11,7 +11,7 @@ const nullFn = (x) => null;
 //     `collection` that has property `searchProp` equal to `id`.
 //   * `getFn(coll, getProp='id', inProp='id')` returns a function that takes an obect, and returns the element from
 //     `coll` that has property `getProp` equal in value to the property `inProp` of `e`.
-export const get = (collection, id, prop = "id") =>
+export const get = <T>(collection: readonly T[], id, prop = "id") =>
   allPresent(collection, id) ? collection.find(equalsProp(id, prop)) : null;
 export const gget = (collection, id, searchProp, getProp) =>
   _.get(get(collection, id, searchProp), getProp);

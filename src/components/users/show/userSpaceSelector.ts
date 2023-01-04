@@ -3,8 +3,8 @@ import { RootState } from "gModules/store";
 
 export const userSpaceSelector = createSelector(
   (state: RootState) => state.spaces,
-  (_, userId: number) => userId,
+  (_: RootState, userId: number) => userId,
   (spaces, userId) => {
-    return spaces.filter((s) => s.user_id.toString() === userId.toString());
+    return spaces.filter((s) => String(s.user_id) === String(userId));
   }
 );

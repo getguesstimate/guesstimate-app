@@ -1,67 +1,109 @@
-import AbstractResource, { Callback } from "../AbstractResource";
+import AbstractResource from "../AbstractResource";
+
+import * as yup from "yup";
+import { userSchema } from "./Users";
+
+const spaceSchema = yup.object({
+  id: yup.number().required(),
+  user_id: yup.number(),
+  organization_id: yup.number(),
+  graph: yup.object(),
+  shareable_link_enabled: yup.boolean().default(undefined), // only if current user can edit
+  shareable_link_token: yup.boolean().default(undefined), // only if current user can edit
+  _embedded: yup
+    .object({
+      organization: yup
+        .object({
+          id: yup.number().required(),
+          admin_id: yup.number(),
+          name: yup.string(),
+        })
+        .default(undefined),
+      user: userSchema.required(),
+    })
+    .default(undefined),
+});
+
+const spaceListSchema = yup.object({
+  items: yup.array().of(spaceSchema).required(),
+});
+
+export type ApiSpace = yup.InferType<typeof spaceSchema>;
+export type ApiSpaceList = yup.InferType<typeof spaceListSchema>;
 
 export default class Models extends AbstractResource {
-  list({ userId, organizationId }: any, callback: Callback) {
+  async list({ userId, organizationId }: any) {
     const url = userId
       ? `users/${userId}/spaces`
       : `organizations/${organizationId}/spaces`;
     const method = "GET";
 
-    this.guesstimateMethod({ url, method })(callback);
+    const response = await this.call({ url, method });
+    return await spaceListSchema.validate(response);
   }
 
-  get(spaceId: string, shareableLinkToken, callback: Callback) {
-    let url = `spaces/${spaceId}`;
+  async get(spaceId: number, shareableLinkToken: string | null) {
+    const url = `spaces/${spaceId}`;
     const method = "GET";
 
-    const headers = !!shareableLinkToken
+    const headers = shareableLinkToken
       ? { "Shareable-Link-Token": shareableLinkToken }
       : {};
 
-    this.guesstimateMethod({ url, method, headers })(callback);
+    const response = await this.call({ url, method, headers });
+    return await spaceSchema.validate(response);
   }
 
-  destroy(msg, callback: Callback) {
-    const url = `spaces/${msg.spaceId}`;
+  async destroy(spaceId: number) {
+    const url = `spaces/${spaceId}`;
     const method = "DELETE";
 
-    this.guesstimateMethod({ url, method })(callback);
+    await this.call({ url, method });
   }
 
-  update(spaceId: string, msg, callback: Callback) {
+  async update(spaceId: number, msg: ApiSpace) {
     const url = `spaces/${spaceId}`;
     const method = "PATCH";
     const data = { space: msg };
 
-    this.guesstimateMethod({ url, method, data })(callback);
+    return await this.call({ url, method, data });
   }
 
-  enableShareableLink(spaceId: string, callback: Callback) {
+  async enableShareableLink(spaceId: number) {
     const url = `spaces/${spaceId}/enable_shareable_link`;
     const method = "PATCH";
 
-    this.guesstimateMethod({ url, method })(callback);
+    return await this.call({ url, method });
   }
 
-  disableShareableLink(spaceId: string, callback: Callback) {
+  async disableShareableLink(spaceId: number) {
     const url = `spaces/${spaceId}/disable_shareable_link`;
     const method = "PATCH";
 
-    this.guesstimateMethod({ url, method })(callback);
+    return await this.call({ url, method });
   }
 
-  rotateShareableLink(spaceId: string, callback: Callback) {
+  async rotateShareableLink(spaceId: number) {
     const url = `spaces/${spaceId}/rotate_shareable_link`;
     const method = "PATCH";
 
-    this.guesstimateMethod({ url, method })(callback);
+    return await this.call({ url, method });
   }
 
-  create(msg, callback: Callback) {
+  async create(msg: ApiSpace) {
     const url = `spaces/`;
     const method = "POST";
     const data = { space: msg };
 
-    this.guesstimateMethod({ url, method, data })(callback);
+    const response = await this.call({ url, method, data });
+    return await spaceSchema.validate(response);
+  }
+
+  async copy(spaceId: number) {
+    const url = `spaces/${spaceId}/copies`;
+    const method = "POST";
+
+    const response = await this.call({ url, method });
+    return await spaceSchema.validate(response);
   }
 }

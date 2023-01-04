@@ -2,7 +2,7 @@ import AbstractResource, { Callback } from "../AbstractResource";
 
 import * as yup from "yup";
 
-const userSchema = yup.object({
+export const userSchema = yup.object({
   id: yup.number().required(),
   picture: yup.string(),
   name: yup.string(),

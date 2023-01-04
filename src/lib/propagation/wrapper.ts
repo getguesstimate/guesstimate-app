@@ -7,8 +7,9 @@ import { ERROR_TYPES } from "./errors";
 import { Simulator } from "./simulator";
 
 import * as e from "gEngine/engine";
+import { AppDispatch, RootState } from "gModules/store";
 
-function getSpacesAndOrganization(state, graphFilters) {
+function getSpacesAndOrganization(state: RootState, graphFilters) {
   let spaces: any[] = [];
   let organization = null;
 
@@ -16,7 +17,7 @@ function getSpacesAndOrganization(state, graphFilters) {
     const organizationFact = state.facts.organizationFacts.find(
       ({ children }) => e.collections.some(children, graphFilters.factId)
     );
-    const fact = e.collections.get(
+    const fact: any = e.collections.get(
       _.get(organizationFact, "children"),
       graphFilters.factId
     );
@@ -60,7 +61,7 @@ function getSpacesAndOrganization(state, graphFilters) {
 }
 
 // TODO(matthew): Find a way to test this through the public API.
-export function getSubset(state, graphFilters) {
+export function getSubset(state: RootState, graphFilters) {
   const { spaces, organization } = getSpacesAndOrganization(
     state,
     graphFilters
@@ -228,7 +229,7 @@ function translateOptions(graphFilters) {
   return {};
 }
 
-const getCurrPropId = (state) => (nodeId) => {
+const getCurrPropId = (state: RootState) => (nodeId) => {
   if (nodeIdIsMetric(nodeId)) {
     const metricId = nodeIdToMetricId(nodeId);
     return e.collections.gget(
@@ -248,7 +249,11 @@ const getCurrPropId = (state) => (nodeId) => {
   }
 };
 
-export function simulate(dispatch, getState, graphFilters) {
+export function simulate(
+  dispatch: AppDispatch,
+  getState: () => RootState,
+  graphFilters
+) {
   const state = getState();
   const shouldTriggerDownstreamFactSimulations = !graphFilters.factId;
 

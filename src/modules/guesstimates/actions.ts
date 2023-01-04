@@ -15,7 +15,7 @@ export function changeGuesstimate(
     const state = getState();
 
     const metric = e.collections.get(state.metrics, metricId);
-    const space = e.collections.get(state.spaces, _.get(metric, "space"));
+    const space: any = e.collections.get(state.spaces, _.get(metric, "space"));
 
     const possibleFacts = e.space.possibleFacts(
       space,

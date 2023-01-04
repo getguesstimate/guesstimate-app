@@ -15,7 +15,7 @@ type Props = {
   organization: unknown;
   categoryId?: string | null;
   canMakeNewFacts: boolean;
-  spaceId?: string;
+  spaceId?: number;
   imported_fact_ids?: string[];
 };
 

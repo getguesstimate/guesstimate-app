@@ -6,13 +6,15 @@ import { RootState } from "gModules/store";
 const _sameId = (idA, idB) => idA.toString() === idB.toString();
 const spaceGraphSelector = (state: RootState) =>
   _.pick(state, [
+    "me",
+    "users",
+    "organizations",
+    "userOrganizationMemberships",
     "spaces",
     "metrics",
     "guesstimates",
     "simulations",
-    "users",
-    "me",
-    "organizations",
+    "calculators",
   ]);
 
 const organizationFactsSelector = (state: RootState) =>

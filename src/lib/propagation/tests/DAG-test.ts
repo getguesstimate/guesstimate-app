@@ -42,7 +42,7 @@ describe("Simulation DAG", () => {
 
   describe("error assignment", () => {
     describe("assigns errors properly", () => {
-      const missingInputNode = _collections.get(DAG.nodes, "8");
+      const missingInputNode: any = _collections.get(DAG.nodes, "8");
       const infiniteLoopNodes = [
         _collections.get(DAG.nodes, "2"),
         _collections.get(DAG.nodes, "3"),
@@ -93,13 +93,13 @@ describe("Simulation DAG", () => {
       });
 
       test("Incoming errors are preserved through construction", () => {
-        expect(divZeroNode.errors).toEqual([
+        expect(divZeroNode?.errors).toEqual([
           { type: SAMPLING_ERROR, subType: DIVIDE_BY_ZERO_ERROR },
         ]);
       });
 
       test("Invalid ancestor errors for graph errors are annotated properly", () => {
-        expect(childOfLoopNode.errors).toEqual([
+        expect(childOfLoopNode?.errors).toEqual([
           {
             type: GRAPH_ERROR,
             subType: INVALID_ANCESTOR_ERROR,
@@ -109,7 +109,7 @@ describe("Simulation DAG", () => {
         ]);
       });
       test("Invalid ancestor errors for incoming errors are annotated properly", () => {
-        expect(childOfDivZeroNode.errors).toEqual([
+        expect(childOfDivZeroNode?.errors).toEqual([
           {
             type: GRAPH_ERROR,
             subType: INVALID_ANCESTOR_ERROR,
@@ -119,7 +119,7 @@ describe("Simulation DAG", () => {
         ]);
       });
       test("Invalid ancestor errors for distant relatives are annotated properly", () => {
-        expect(grandchildOfDivZeroNode.errors).toEqual([
+        expect(grandchildOfDivZeroNode?.errors).toEqual([
           {
             type: GRAPH_ERROR,
             subType: INVALID_ANCESTOR_ERROR,

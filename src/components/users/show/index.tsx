@@ -34,7 +34,7 @@ const UserShow: React.FC<Props> = ({ userId }) => {
     dispatch(spaceActions.create(undefined, {}, router));
   };
 
-  const spaces = _.orderBy(userSpaces.asMutable(), ["updated_at"], ["desc"]);
+  const spaces = _.orderBy(userSpaces, ["updated_at"], ["desc"]);
   const isMe = me.id === userId;
 
   let user: ApiUser | undefined;

@@ -1,3 +1,4 @@
+import { RootState } from "gModules/store";
 import _ from "lodash";
 import * as _collections from "./collections";
 import { HANDLE_REGEX } from "./facts";
@@ -12,7 +13,7 @@ export function equals(l, r) {
   );
 }
 
-export const getByMetricFn = (graph) =>
+export const getByMetricFn = (graph: Pick<RootState, "guesstimates">) =>
   _collections.getFn(_.get(graph, "guesstimates"), "metric");
 export const uniq = (guesstimates) => _collections.uniq(guesstimates, "metric");
 

@@ -1,16 +1,15 @@
 import _ from "lodash";
 import reduxCrud from "redux-crud";
-import SI from "seamless-immutable";
 
 import { get } from "gEngine/collections";
 import { AnyAction, Reducer } from "redux";
 
 const standardReducers = reduxCrud.reducersFor("organizations");
 
-type OrganizationsState = any;
+type OrganizationsState = any[];
 
 export const organizationsR: Reducer<OrganizationsState, AnyAction> = (
-  state,
+  state = [],
   action
 ) => {
   switch (action.type) {
@@ -25,10 +24,10 @@ export const organizationsR: Reducer<OrganizationsState, AnyAction> = (
         ...get(state, o.id),
         ...o,
       }));
-      return SI([
+      return [
         ...state.filter((s) => !_.some(organizations, (o) => s.id === o.id)),
         ...updatedOrgs,
-      ]);
+      ];
     }
     default:
       return standardReducers(state, action);

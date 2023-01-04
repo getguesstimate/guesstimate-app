@@ -11,18 +11,19 @@ import * as userActions from "gModules/users/actions";
 
 import * as e from "gEngine/engine";
 
-import { captureApiError } from "lib/errors/index";
-
-import { AppThunk } from "gModules/store";
+import { AppThunk, RootState } from "gModules/store";
 import { api } from "lib/guesstimate_api";
+import { ApiSpace } from "lib/guesstimate_api/resources/Models";
+import { ApiUser } from "lib/guesstimate_api/resources/Users";
+import { NextRouter } from "next/router";
 
-let sActions = actionCreatorsFor("spaces");
+const sActions = actionCreatorsFor("spaces");
 
-export function fetchSuccess(spaces): AppThunk {
+export function fetchSuccess(spaces: ApiSpace[]): AppThunk {
   return (dispatch, getState) => {
     const users = spaces
       .map((s) => _.get(s, "_embedded.user"))
-      .filter(e.utils.isPresent);
+      .filter((u): u is ApiUser => !!u);
     const organizations = spaces
       .map((s) => {
         const organization = _.get(s, "_embedded.organization");
@@ -71,26 +72,19 @@ export function fetchSuccess(spaces): AppThunk {
   };
 }
 
-export function destroy(object, router): AppThunk {
+export function destroy(object: ApiSpace, router: NextRouter): AppThunk {
   const id = object.id;
-  return (dispatch, getState) => {
+  return async (dispatch, getState) => {
     const navigateTo = !!object.organization_id
       ? e.organization.urlById(object.organization_id)
-      : e.user.urlById(object.user_id);
+      : e.user.urlById(object.user_id!);
 
     router.push(navigateTo);
 
     dispatch(sActions.deleteStart({ id }));
 
-    api(getState()).models.destroy({ spaceId: id }, (err, value) => {
-      if (err) {
-        captureApiError("SpacesDestroy", err, {
-          url: "spacesfetch",
-        });
-      } else {
-        dispatch(sActions.deleteSuccess({ id }));
-      }
-    });
+    await api(getState()).models.destroy(id);
+    dispatch(sActions.deleteSuccess({ id }));
   };
 }
 
@@ -121,52 +115,39 @@ export function fromSearch(data): AppThunk {
 }
 
 export function fetchById(
-  spaceId,
+  spaceId: number,
   shareableLinkToken: string | null = null
 ): AppThunk {
-  return (dispatch, getState) => {
+  return async (dispatch, getState) => {
     dispatch(sActions.fetchStart());
 
-    api(getState()).models.get(spaceId, shareableLinkToken, (err, value) => {
-      if (err) {
-        captureApiError("SpacesFetch", err, {
-          url: "spacesfetch",
-        });
-        return;
-      }
-
-      dispatch(fetchSuccess([value]));
-    });
+    const value = await api(getState()).models.get(spaceId, shareableLinkToken);
+    dispatch(fetchSuccess([value]));
   };
 }
 
 export const fetch = (
   args: { userId: number } | { organizationId: string }
 ): AppThunk => {
-  return (dispatch, getState) => {
+  return async (dispatch, getState) => {
     dispatch(sActions.fetchStart());
-    api(getState()).models.list(args, (err, value) => {
-      if (err) {
-        captureApiError("SpacesFetch", err, {
-          url: "fetch",
-        });
-      } else if (value) {
-        const formatted = value.items.map((d) =>
-          _.pick(d, SPACE_INDEX_ATTRIBUTES)
-        );
-        dispatch(sActions.fetchSuccess(formatted));
+    const value = await api(getState()).models.list(args);
+    const formatted = value.items.map((d) => _.pick(d, SPACE_INDEX_ATTRIBUTES));
+    dispatch(sActions.fetchSuccess(formatted));
 
-        const users = value.items
-          .map((d) => _.get(d, "user"))
-          .filter((u) => !!u);
-        dispatch(userActions.fetchSuccess(users));
-      }
-    });
+    const users = value.items
+      .map((d) => d._embedded?.user)
+      .filter((u): u is ApiUser => !!u);
+    dispatch(userActions.fetchSuccess(users));
   };
 };
 
-export function create(organizationId, params: any = {}, router): AppThunk {
-  return (dispatch, getState) => {
+export function create(
+  organizationId,
+  params: any = {},
+  router: NextRouter
+): AppThunk {
+  return async (dispatch, getState) => {
     const cid = cuid();
     let object = { ...params, id: cid };
     if (organizationId) {
@@ -174,58 +155,50 @@ export function create(organizationId, params: any = {}, router): AppThunk {
     }
 
     dispatch(changeActionState("CREATING"));
-    const action = sActions.createStart(object);
+    // const action = sActions.createStart(object);
 
-    api(getState()).models.create(object, (err, value) => {
-      if (err) {
-        dispatch(changeActionState("ERROR_CREATING"));
-        captureApiError("SpacesCreate", err, {
-          url: "SpacesCreate",
-        });
-      } else if (value) {
-        dispatch(changeActionState("CREATED"));
-        dispatch(sActions.createSuccess(value, cid));
-        dispatch(initSpace(value.id, { metrics: [], guesstimates: [] }));
-        router.push("/models/" + value.id);
-      }
-    });
+    try {
+      const value = await api(getState()).models.create(object);
+      dispatch(changeActionState("CREATED"));
+      dispatch(sActions.createSuccess(value, cid));
+      dispatch(initSpace(value.id, { metrics: [], guesstimates: [] }));
+      router.push(`/models/${value.id}`);
+    } catch (err) {
+      dispatch(changeActionState("ERROR_CREATING"));
+    }
   };
 }
 
-export function copy(spaceId, router): AppThunk {
-  return (dispatch, getState) => {
+export function copy(spaceId: number, router: NextRouter): AppThunk {
+  return async (dispatch, getState) => {
     dispatch(changeActionState("COPYING"));
 
     const cid = cuid();
-    const action = sActions.createStart({ id: cid });
+    // const action = sActions.createStart({ id: cid });
 
-    api(getState()).copies.create({ spaceId }, (err, value) => {
-      if (err) {
-        dispatch(changeActionState("ERROR_COPYING"));
-        captureApiError("SpacesCreate", err, {
-          url: "SpacesCreate",
-        });
-      } else if (value) {
-        dispatch(changeActionState("COPIED"));
-        // Signal the resource was created.
-        dispatch(sActions.createSuccess(value, cid));
-        // And that we've fetched new data from it. We have to do this in this case as the new resource is pre-populated
-        // with some data.
-        dispatch(fetchSuccess([value]));
+    try {
+      const value = await api(getState()).models.copy(spaceId);
+      dispatch(changeActionState("COPIED"));
+      // Signal the resource was created.
+      dispatch(sActions.createSuccess(value, cid));
+      // And that we've fetched new data from it. We have to do this in this case as the new resource is pre-populated
+      // with some data.
+      dispatch(fetchSuccess([value]));
 
-        router.push("/models/" + value.id);
-      }
-    });
+      router.push(`/models/${value.id}`);
+    } catch (err) {
+      dispatch(changeActionState("ERROR_COPYING"));
+    }
   };
 }
 
-function getSpace(getState, spaceId) {
-  let { spaces, metrics, guesstimates } = getState();
+function getSpace(getState: () => RootState, spaceId: number) {
+  const { spaces } = getState();
   return e.collections.get(spaces, spaceId);
 }
 
-export function generalUpdate(spaceId, params): AppThunk {
-  return (dispatch, getState) => {
+export function generalUpdate(spaceId: number, params): AppThunk {
+  return async (dispatch, getState) => {
     const space = { ...getSpace(getState, spaceId), ...params };
     const usesFacts =
       _.has(space, "graph.guesstimates") &&
@@ -245,27 +218,23 @@ export function generalUpdate(spaceId, params): AppThunk {
     dispatch(changeActionState("SAVING"));
 
     const updateMsg = { ...params, previous_updated_at: space.updated_at };
-    api(getState()).models.update(spaceId, updateMsg, (err, value) => {
-      if (err) {
-        if ((err as any) === "Conflict") {
-          // TODO - will never happen
-          dispatch(changeActionState("CONFLICT"));
-        } else {
-          captureApiError("SpacesUpdate", err, {
-            url: "SpacesUpdate",
-          });
-          dispatch(changeActionState("ERROR"));
-        }
-      } else if (value) {
-        dispatch(sActions.updateSuccess(value));
-        dispatch(changeActionState("SAVED"));
+    try {
+      const value = await api(getState()).models.update(spaceId, updateMsg);
+      dispatch(sActions.updateSuccess(value));
+      dispatch(changeActionState("SAVED"));
+    } catch (err) {
+      if ((err as any) === "Conflict") {
+        // TODO - will never happen?
+        dispatch(changeActionState("CONFLICT"));
+      } else {
+        dispatch(changeActionState("ERROR"));
       }
-    });
+    }
   };
 }
 
 //updates everything except graph
-export function update(spaceId, params = {}): AppThunk {
+export function update(spaceId: number, params = {}): AppThunk {
   return (dispatch, getState) => {
     let space = getSpace(getState, spaceId);
     space = Object.assign({}, space, params);
@@ -276,7 +245,7 @@ export function update(spaceId, params = {}): AppThunk {
 }
 
 //updates graph only
-export function updateGraph(spaceId, saveOnServer = true): AppThunk {
+export function updateGraph(spaceId: number, saveOnServer = true): AppThunk {
   return (dispatch, getState) => {
     let {
       spaces,
@@ -284,7 +253,7 @@ export function updateGraph(spaceId, saveOnServer = true): AppThunk {
       guesstimates,
       canvasState: { actionState },
     } = getState();
-    let space = e.collections.get(spaces, spaceId);
+    let space: any = e.collections.get(spaces, spaceId); // FIXME - can be undefined
     space = e.space.withGraph(space, { metrics, guesstimates });
     space.graph = _.omit(space.graph, "simulations");
     const updates = { graph: space.graph };
@@ -298,57 +267,38 @@ export function updateGraph(spaceId, saveOnServer = true): AppThunk {
   };
 }
 
-function meCanEdit(spaceId, state) {
+function meCanEdit(spaceId: number, state: RootState): boolean {
   const { spaces, me, userOrganizationMemberships, canvasState } = state;
   const space = e.collections.get(spaces, spaceId);
-  return e.space.canEdit(space, me, userOrganizationMemberships, canvasState);
+  return space
+    ? e.space.canEdit(space, me, userOrganizationMemberships, canvasState)
+    : false;
 }
 
-export function registerGraphChange(spaceId): AppThunk {
+export function registerGraphChange(spaceId: number): AppThunk {
   return (dispatch, getState) => {
     const canEdit = meCanEdit(spaceId, getState());
     dispatch(updateGraph(spaceId, canEdit));
   };
 }
 
-export function enableShareableLink(spaceId): AppThunk {
-  return (dispatch, getState) => {
-    api(getState()).models.enableShareableLink(spaceId, (err, value) => {
-      if (err) {
-        captureApiError("SpacesEnableShareableLink", err, {
-          url: "SpacesEnableShareableLink",
-        });
-      } else if (value) {
-        dispatch(sActions.updateSuccess(value));
-      }
-    });
+export function enableShareableLink(spaceId: number): AppThunk {
+  return async (dispatch, getState) => {
+    const value = await api(getState()).models.enableShareableLink(spaceId);
+    dispatch(sActions.updateSuccess(value));
   };
 }
 
-export function disableShareableLink(spaceId): AppThunk {
-  return (dispatch, getState) => {
-    api(getState()).models.disableShareableLink(spaceId, (err, value) => {
-      if (err) {
-        captureApiError("SpacesDisableShareableLink", err, {
-          url: "SpacesDisableShareableLink",
-        });
-      } else if (value) {
-        dispatch(sActions.updateSuccess(value));
-      }
-    });
+export function disableShareableLink(spaceId: number): AppThunk {
+  return async (dispatch, getState) => {
+    const value = await api(getState()).models.disableShareableLink(spaceId);
+    dispatch(sActions.updateSuccess(value));
   };
 }
 
-export function rotateShareableLink(spaceId): AppThunk {
-  return (dispatch, getState) => {
-    api(getState()).models.rotateShareableLink(spaceId, (err, value) => {
-      if (err) {
-        captureApiError("SpacesRotateShareableLink", err, {
-          url: "SpacesRotateShareableLink",
-        });
-      } else if (value) {
-        dispatch(sActions.updateSuccess(value));
-      }
-    });
+export function rotateShareableLink(spaceId: number): AppThunk {
+  return async (dispatch, getState) => {
+    const value = await api(getState()).models.rotateShareableLink(spaceId);
+    dispatch(sActions.updateSuccess(value));
   };
 }

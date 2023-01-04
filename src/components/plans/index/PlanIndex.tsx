@@ -16,7 +16,7 @@ const PortalMessage: React.FC<{ portalUrl: string }> = ({ portalUrl }) => (
 );
 
 export type Props = {
-  userPlanId: string; // TODO - stricter type?
+  userPlanId: string | undefined; // TODO - stricter type?
   portalUrl?: string;
   isLoggedIn: boolean;
   onChoose: (planId: string) => void;

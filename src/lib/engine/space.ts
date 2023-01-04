@@ -7,6 +7,9 @@ import * as _guesstimate from "./guesstimate";
 import * as _simulation from "./simulation";
 import * as _userOrganizationMemberships from "./userOrganizationMemberships";
 import { allPropsPresent, isPresent } from "./utils";
+import { RootState } from "gModules/store";
+import { Root } from "postcss";
+import { ApiSpace } from "lib/guesstimate_api/resources/Models";
 
 export type DSpace = any; // FIXME
 
@@ -23,16 +26,16 @@ export const spaceUrlById = (id, params = {}) => {
   return `/models/${id}${paramString}`;
 };
 
-export const url = ({ id }) => spaceUrlById(id);
+export const url = ({ id }: { id: number }) => spaceUrlById(id);
 
-export const urlWithToken = (s) =>
+export const urlWithToken = (s: ApiSpace) =>
   s.shareable_link_enabled
     ? `${BASE_URL}${url(s)}?token=${s.shareable_link_token}`
     : "";
 
 const TOKEN_REGEX = /token=([^&]+)/;
-export const extractTokenFromUrl = (url) =>
-  TOKEN_REGEX.test(url) ? url.match(TOKEN_REGEX)[1] : null;
+export const extractTokenFromUrl = (url: string) =>
+  TOKEN_REGEX.test(url) ? url.match(TOKEN_REGEX)?.[1] : null;
 
 export const withGraph = (space, graph) => ({
   ...space,
@@ -46,7 +49,10 @@ const requiredProps = (dSpace) =>
 export const prepared = (dSpace) =>
   allPropsPresent(dSpace, ...requiredProps(dSpace));
 
-export function subset(state, ...spaceIds) {
+export function subset(
+  state: Pick<RootState, "metrics" | "guesstimates">,
+  ...spaceIds: number[]
+) {
   const metrics = _collections.filterByInclusion(
     state.metrics,
     "space",
@@ -61,33 +67,36 @@ export function subset(state, ...spaceIds) {
   return { metrics, guesstimates, simulations };
 }
 
-export function expressionsToInputs(graph, facts) {
-  const expressionToInputFn = _guesstimate.expressionToInputFn(
-    graph.metrics,
-    facts
-  );
-  return {
-    ...graph,
-    guesstimates: graph.guesstimates.map(expressionToInputFn),
-  };
-}
-
 export function possibleFacts(
   { organization_id },
-  { organizations },
+  { organizations }: Pick<RootState, "organizations">,
   organizationFacts
 ) {
   const org = _collections.get(organizations, organization_id);
   return !!org ? _facts.getFactsForOrg(organizationFacts, org) : [];
 }
 
-export function toDSpace(spaceId, graph, organizationFacts): DSpace {
-  let space = _collections.get(graph.spaces, spaceId);
+export function toDSpace(
+  spaceId: number,
+  graph: Pick<
+    RootState,
+    | "me"
+    | "users"
+    | "organizations"
+    | "userOrganizationMemberships"
+    | "spaces"
+    | "metrics"
+    | "calculators"
+    | "guesstimates"
+  >,
+  organizationFacts
+): DSpace {
+  const space = _collections.get(graph.spaces, spaceId);
   if (!space) {
     return {};
   }
 
-  let dSpace = { ...space, ...toDgraph(space, graph) };
+  let dSpace: any = { ...space, ...toDgraph(space, graph) };
 
   const facts = possibleFacts(dSpace, graph, organizationFacts);
   const withInputFn = _guesstimate.expressionToInputFn(dSpace.metrics, facts);
@@ -104,23 +113,35 @@ export function toDSpace(spaceId, graph, organizationFacts): DSpace {
     )
   );
   dSpace.metrics = dSpace.metrics.map((s) => {
-    let edges: any = {};
-    edges.inputs = dSpace.edges
+    const inputs = dSpace.edges
       .filter((i) => i.output === s.id)
       .map((e) => e.input);
-    edges.outputs = dSpace.edges
+    const outputs = dSpace.edges
       .filter((i) => i.input === s.id)
       .map((e) => e.output);
-    edges.inputMetrics = edges.inputs.map((i) =>
+    const inputMetrics = inputs.map((i) =>
       dSpace.metrics.find((m) => m.id === i)
     );
+    const edges = { inputs, outputs, inputMetrics };
     return { ...s, guesstimate: withInputFn(s.guesstimate), edges };
   });
 
   return dSpace;
 }
 
-function toDgraph(space, graph) {
+function toDgraph(
+  space,
+  graph: Pick<
+    RootState,
+    | "users"
+    | "organizations"
+    | "calculators"
+    | "userOrganizationMemberships"
+    | "me"
+    | "metrics"
+    | "guesstimates"
+  >
+) {
   const { users, organizations, calculators, userOrganizationMemberships, me } =
     graph;
   const { user_id, organization_id, author_contributions } = space;

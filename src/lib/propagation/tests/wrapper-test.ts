@@ -3,6 +3,7 @@ import { getSubset } from "../wrapper";
 import * as _collections from "gEngine/collections";
 import { organizationReadableId } from "gEngine/organization";
 import { expressionSyntaxPad } from "gEngine/guesstimate";
+import { RootState } from "gModules/store";
 
 describe("getSubset", () => {
   const space1Metrics = [
@@ -65,115 +66,121 @@ describe("getSubset", () => {
   const space5Sims = [{ metric: 10, sample: { values: [], errors: [] } }];
   const space6Sims = [{ metric: 11, sample: { values: [], errors: [] } }];
 
-  const state = {
-    canvasState: {
-      editsAllowedManuallySet: false,
-    },
-    spaces: [
-      {
-        id: 1,
-        organization_id: 1,
-        imported_fact_ids: [1],
-        exported_facts_count: 1,
+  const state: any /* should be RootState, but doesn't include all fields from it */ =
+    {
+      canvasState: {
+        editsAllowedManuallySet: false,
       },
-      {
-        id: 2,
-        organization_id: 1,
-        imported_fact_ids: [1],
-        exported_facts_count: 1,
-      },
-      {
-        id: 3,
-        organization_id: 1,
-        imported_fact_ids: [7],
-        exported_facts_count: 0,
-      },
-      {
-        id: 5,
-        organization_id: 1,
-        imported_fact_ids: [],
-        exported_facts_count: 1,
-      },
-      {
-        id: 6,
-        organization_id: 1,
-        imported_fact_ids: [2],
-        exported_facts_count: 1,
-      },
-      {
-        id: 4,
-        organization_id: 2,
-        imported_fact_ids: [4],
-        exported_facts_count: 2,
-      },
-    ],
-    organizations: [{ id: 1 }, { id: 2 }],
-    facts: {
-      globalFacts: [
+      spaces: [
         {
-          variable_name: "Chicago",
-          children: [
-            {
-              variable_name: "population",
-              simulation: {
-                samples: [100],
-                errors: [],
+          id: 1,
+          organization_id: 1,
+          imported_fact_ids: [1],
+          exported_facts_count: 1,
+        },
+        {
+          id: 2,
+          organization_id: 1,
+          imported_fact_ids: [1],
+          exported_facts_count: 1,
+        },
+        {
+          id: 3,
+          organization_id: 1,
+          imported_fact_ids: [7],
+          exported_facts_count: 0,
+        },
+        {
+          id: 5,
+          organization_id: 1,
+          imported_fact_ids: [],
+          exported_facts_count: 1,
+        },
+        {
+          id: 6,
+          organization_id: 1,
+          imported_fact_ids: [2],
+          exported_facts_count: 1,
+        },
+        {
+          id: 4,
+          organization_id: 2,
+          imported_fact_ids: [4],
+          exported_facts_count: 2,
+        },
+      ],
+      organizations: [{ id: 1 }, { id: 2 }],
+      facts: {
+        currentSuggestion: "",
+        globalFacts: [
+          {
+            variable_name: "Chicago",
+            children: [
+              {
+                variable_name: "population",
+                simulation: {
+                  samples: [100],
+                  errors: [],
+                },
               },
-            },
-          ],
-        },
+            ],
+          },
+        ],
+        organizationFacts: [
+          {
+            variable_name: organizationReadableId({ id: 1 }),
+            children: [
+              {
+                id: 1,
+                expression: "3",
+                imported_to_intermediate_space_ids: [1, 2],
+              },
+              { id: 2, metric_id: 1, exported_from_id: 1 },
+              { id: 3, metric_id: 3, exported_from_id: 2 },
+              { id: 7, expression: "100" },
+              { id: 8, metric_id: 10, exported_from_id: 5 },
+              { id: 9, metric_id: 11, exported_from_id: 6 },
+            ],
+          },
+          {
+            variable_name: organizationReadableId({ id: 2 }),
+            children: [
+              {
+                id: 4,
+                expression: "3",
+                imported_to_intermediate_space_ids: [4],
+              },
+              { id: 5, metric_id: 8, exported_from_id: 4 },
+              { id: 6, metric_id: 9, exported_from_id: 4 },
+            ],
+          },
+        ],
+      },
+      metrics: [
+        ...space1Metrics,
+        ...space2Metrics,
+        ...space3Metrics,
+        ...space4Metrics,
+        ...space5Metrics,
+        ...space6Metrics,
       ],
-      organizationFacts: [
-        {
-          variable_name: organizationReadableId({ id: 1 }),
-          children: [
-            {
-              id: 1,
-              expression: "3",
-              imported_to_intermediate_space_ids: [1, 2],
-            },
-            { id: 2, metric_id: 1, exported_from_id: 1 },
-            { id: 3, metric_id: 3, exported_from_id: 2 },
-            { id: 7, expression: "100" },
-            { id: 8, metric_id: 10, exported_from_id: 5 },
-            { id: 9, metric_id: 11, exported_from_id: 6 },
-          ],
-        },
-        {
-          variable_name: organizationReadableId({ id: 2 }),
-          children: [
-            { id: 4, expression: "3", imported_to_intermediate_space_ids: [4] },
-            { id: 5, metric_id: 8, exported_from_id: 4 },
-            { id: 6, metric_id: 9, exported_from_id: 4 },
-          ],
-        },
+      guesstimates: [
+        ...space1Guesstimates,
+        ...space2Guesstimates,
+        ...space3Guesstimates,
+        ...space4Guesstimates,
+        ...space5Guesstimates,
+        ...space6Guesstimates,
       ],
-    },
-    metrics: [
-      ...space1Metrics,
-      ...space2Metrics,
-      ...space3Metrics,
-      ...space4Metrics,
-      ...space5Metrics,
-      ...space6Metrics,
-    ],
-    guesstimates: [
-      ...space1Guesstimates,
-      ...space2Guesstimates,
-      ...space3Guesstimates,
-      ...space4Guesstimates,
-      ...space5Guesstimates,
-      ...space6Guesstimates,
-    ],
-    simulations: [
-      ...space1Sims,
-      ...space2Sims,
-      ...space3Sims,
-      ...space4Sims,
-      ...space5Sims,
-      ...space6Sims,
-    ],
-  };
+      simulations: [
+        ...space1Sims,
+        ...space2Sims,
+        ...space3Sims,
+        ...space4Sims,
+        ...space5Sims,
+        ...space6Sims,
+      ],
+    };
 
   describe("getSubset should correctly extract a single space's subset, through metricId or spaceId", () => {
     const testCases = [

@@ -5,12 +5,12 @@ import * as organizationActions from "gModules/organizations/actions";
 import * as e from "gEngine/engine";
 
 import { isWithinRegion } from "lib/locationUtils";
-import { AppThunk } from "gModules/store";
+import { AppDispatch, AppThunk, RootState } from "gModules/store";
 
-const findSpaceId = (getState, metricId) =>
+const findSpaceId = (getState: () => RootState, metricId) =>
   e.collections.gget(getState().metrics, metricId, "id", "space");
 
-function registerGraphChange(dispatch, spaceId) {
+function registerGraphChange(dispatch: AppDispatch, spaceId: number) {
   spaceId && dispatch(spaceActions.registerGraphChange(spaceId));
 }
 
@@ -62,7 +62,7 @@ export function removeMetrics(ids): AppThunk {
   };
 }
 
-export function removeSelectedMetrics(spaceId): AppThunk {
+export function removeSelectedMetrics(spaceId: number): AppThunk {
   return (dispatch, getState) => {
     const state = getState();
     const region = state.selectedRegion;

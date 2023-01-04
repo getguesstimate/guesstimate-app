@@ -12,7 +12,7 @@ export const image = (o: Organization) =>
   _.isEmpty(_.get(o, "picture"))
     ? "/organization-default-image.png"
     : o.picture;
-export const urlById = (id: string) => `/organizations/${id}`;
+export const urlById = (id: string | number) => `/organizations/${id}`;
 export const hasPrivateAccess = (organization: Organization) =>
   _.get(organization, "plan.private_model_limit") !== 0;
 export const canMakeMorePrivateModels = hasPrivateAccess;

@@ -1,6 +1,8 @@
 import { call } from "redux-saga/effects";
 
 import { simulate } from "lib/propagation/wrapper";
+import { AppThunk } from "gModules/store";
+import { AnyAction } from "redux";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -27,19 +29,21 @@ export function* runDescendantSimulation({ getState, metricId, dispatch }) {
   yield simulate(dispatch, getState, { metricId, notHead: true });
 }
 
-export function deleteSimulations(metricIds) {
+export function deleteSimulations(metricIds): AnyAction {
   return { type: "DELETE_SIMULATIONS", metricIds };
 }
 
-export const runSimulations = (params) => (dispatch, getState) => {
-  simulate(dispatch, getState, params);
-};
+export const runSimulations =
+  (params): AppThunk =>
+  (dispatch, getState) => {
+    simulate(dispatch, getState, params);
+  };
 
-export function runFormSimulations(metricId) {
+export function runFormSimulations(metricId): AppThunk {
   return (dispatch, getState) =>
     dispatch({ type: "RUN_FORM_SIMULATIONS", getState, dispatch, metricId });
 }
 
-export function addSimulation(simulation) {
+export function addSimulation(simulation): AnyAction {
   return { type: "UPDATE_SIMULATION", simulation };
 }

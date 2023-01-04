@@ -1,3 +1,4 @@
+import { RootState } from "gModules/store";
 import _ from "lodash";
 import * as _metric from "./metric";
 import { isPresent } from "./utils";
@@ -20,6 +21,8 @@ export function relationshipType(edges) {
   return NOEDGE;
 }
 
-export const denormalize = (graph) => ({
+export const denormalize = (
+  graph: Pick<RootState, "metrics" | "guesstimates" | "simulations">
+) => ({
   metrics: graph.metrics.map(_metric.denormalizeFn(graph)).filter(isPresent),
 });

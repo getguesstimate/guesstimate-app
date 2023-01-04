@@ -11,7 +11,7 @@ import Icon from "gComponents/react-fa-patched";
 import { FactCategory } from "gEngine/fact_category";
 
 type Props = {
-  spaceId?: string;
+  spaceId?: number;
   categoryId?: string | null;
   facts: Fact[];
   categories: FactCategory[];
@@ -50,7 +50,8 @@ export class FactList extends Component<Props> {
 
   isExportedFromSelectedSpaceFn(fact: Fact): boolean {
     return Boolean(
-      this.props.spaceId && fact.exported_from_id === this.props.spaceId
+      this.props.spaceId &&
+        String(fact.exported_from_id) === String(this.props.spaceId)
     );
   }
   isImportedFromSelectedSpaceFn({ id }) {

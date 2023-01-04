@@ -1,10 +1,11 @@
 import _ from "lodash";
 import { createSelector } from "reselect";
 import * as e from "gEngine/engine";
+import { RootState } from "gModules/store";
 
 const NAME = "Denormalized Space Selector";
 
-function checkpointMetadata(id, checkpoints) {
+function checkpointMetadata(id, checkpoints: any[]) {
   let attributes = { head: 0, length: 1 };
   let spaceCheckpoints = e.collections.get(checkpoints, id, "spaceId");
   if (!_.isEmpty(spaceCheckpoints)) {
@@ -28,14 +29,15 @@ const SPACE_GRAPH_PARTS = [
   "me",
   "checkpoints",
   "facts",
-];
+] as const;
 
-const spaceGraphSelector = (state) => {
+const spaceGraphSelector = (state: RootState) => {
   window.recorder.recordSelectorStart(NAME);
   return _.pick(state, SPACE_GRAPH_PARTS);
 };
-const spaceIdSelector = (_, { spaceId }) => spaceId;
-const canvasStateSelector = (state) => state.canvasState;
+const spaceIdSelector = (_: RootState, { spaceId }: { spaceId: number }) =>
+  spaceId;
+const canvasStateSelector = (state: RootState) => state.canvasState;
 
 export const denormalizedSpaceSelector = createSelector(
   spaceGraphSelector,

@@ -112,7 +112,7 @@ export function addSimulationToFact(
     );
     const organization = _collections.get(state.organizations, orgId);
 
-    const oldFact = _collections.get(oldOrganizationFact.children, id);
+    const oldFact: any = _collections.get(oldOrganizationFact.children, id);
 
     addStats(simulation);
     const newFact = {

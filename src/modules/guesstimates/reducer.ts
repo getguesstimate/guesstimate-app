@@ -2,7 +2,7 @@ import _ from "lodash";
 import { format, uniq } from "gEngine/guesstimate";
 import { AnyAction, Reducer } from "redux";
 
-type GuesstimatesState = any;
+type GuesstimatesState = any[];
 
 export const guesstimatesR: Reducer<GuesstimatesState, AnyAction> = (
   state = [],

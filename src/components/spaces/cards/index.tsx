@@ -24,7 +24,12 @@ const SingleButton: React.FC<{ isPrivate: boolean }> = ({ isPrivate }) => (
   </div>
 );
 
-const ButtonArea = ({ owner, ownerUrl, isPrivate, showPrivacy }) => (
+const ButtonArea: React.FC<any> = ({
+  owner,
+  ownerUrl,
+  isPrivate,
+  showPrivacy,
+}) => (
   <div className="hover-row">
     {owner && (
       <a href={ownerUrl} className="owner-tag">
@@ -36,7 +41,7 @@ const ButtonArea = ({ owner, ownerUrl, isPrivate, showPrivacy }) => (
   </div>
 );
 
-export const NewSpaceCard = ({ onClick }) => (
+export const NewSpaceCard: React.FC<any> = ({ onClick }) => (
   <div className="col-xs-12 col-md-4 SpaceCard new" onClick={onClick}>
     <div className="SpaceCard--inner">
       <div className="section-middle">

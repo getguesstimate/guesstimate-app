@@ -11,7 +11,7 @@ const EmbedModelPage: NextPage = () => {
   return (
     <Layout isFluid showFooter={false} embed fullHeight>
       {id === undefined ? null : (
-        <SpaceShow spaceId={String(parseInt(id as string))} embed={true} />
+        <SpaceShow spaceId={parseInt(id as string)} embed={true} />
       )}
     </Layout>
   );

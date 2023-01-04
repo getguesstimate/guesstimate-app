@@ -105,7 +105,7 @@ const FactSidebarHeader = ({ onClose, organizationId }) => {
 };
 
 type Props = {
-  spaceId: string;
+  spaceId: number;
   showCalculatorId?: string;
   factsShown?: boolean;
   showCalculatorResults?: boolean;
@@ -330,7 +330,7 @@ class SpacesShow extends Component<Props, State> {
   }
 
   _id() {
-    return parseInt(this.props.spaceId);
+    return this.props.spaceId;
   }
 
   canUseOrganizationFacts() {
