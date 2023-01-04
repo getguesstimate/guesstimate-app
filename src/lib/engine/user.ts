@@ -1,9 +1,8 @@
 import { RootState } from "gModules/store";
-import { ApiUser } from "lib/guesstimate_api/resources/Users";
 import _ from "lodash";
 import * as _userOrganizationMemberships from "./userOrganizationMemberships";
 
-export const url = (u?: { id?: number }) => {
+export const url = (u: { id?: number } | null | undefined) => {
   return u?.id ? urlById(u.id) : "";
 };
 export const urlById = (id: number) => `/users/${id}`;

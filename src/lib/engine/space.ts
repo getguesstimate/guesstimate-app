@@ -1,5 +1,8 @@
-import _ from "lodash";
+import { RootState } from "gModules/store";
 import { BASE_URL } from "lib/constants";
+import { ApiSpace } from "lib/guesstimate_api/resources/Models";
+import { ApiUser } from "lib/guesstimate_api/resources/Users";
+import _ from "lodash";
 import * as _collections from "./collections";
 import * as _facts from "./facts";
 import * as _graph from "./graph";
@@ -7,13 +10,18 @@ import * as _guesstimate from "./guesstimate";
 import * as _simulation from "./simulation";
 import * as _userOrganizationMemberships from "./userOrganizationMemberships";
 import { allPropsPresent, isPresent } from "./utils";
-import { RootState } from "gModules/store";
-import { Root } from "postcss";
-import { ApiSpace } from "lib/guesstimate_api/resources/Models";
 
-export type DSpace = any; // FIXME
+export type DSpace = ApiSpace & {
+  metrics: any[];
+  edges: any[];
+  calculators: any[];
+  organization: any;
+  user: ApiUser | null | undefined;
+  users: any[];
+  editableByMe: boolean;
+};
 
-export const spaceUrlById = (id, params = {}) => {
+export const spaceUrlById = (id: number | null | undefined, params = {}) => {
   if (!id) {
     return "";
   }
@@ -93,44 +101,49 @@ export function toDSpace(
 ): DSpace {
   const space = _collections.get(graph.spaces, spaceId);
   if (!space) {
-    return {};
+    return {} as any;
   }
 
-  let dSpace: any = { ...space, ...toDgraph(space, graph) };
+  const dGraph = toDgraph(space, graph);
 
-  const facts = possibleFacts(dSpace, graph, organizationFacts);
-  const withInputFn = _guesstimate.expressionToInputFn(dSpace.metrics, facts);
+  const facts = possibleFacts(space, graph, organizationFacts);
+  const withInputFn = _guesstimate.expressionToInputFn(dGraph.metrics, facts);
 
   const extractReferencedMetricsFn = (m) => {
     const allIdsReferenced = _guesstimate.extractMetricIds(m.guesstimate);
     return allIdsReferenced.filter((id) =>
-      _collections.some(dSpace.metrics, id)
+      _collections.some(dGraph.metrics, id)
     );
   };
-  dSpace.edges = _.flatten(
-    dSpace.metrics.map((m) =>
+  const allEdges = _.flatten(
+    dGraph.metrics.map((m) =>
       extractReferencedMetricsFn(m).map((id) => ({ input: id, output: m.id }))
     )
   );
-  dSpace.metrics = dSpace.metrics.map((s) => {
-    const inputs = dSpace.edges
+  const dSpaceMetrics = dGraph.metrics.map((s) => {
+    const inputs = allEdges
       .filter((i) => i.output === s.id)
       .map((e) => e.input);
-    const outputs = dSpace.edges
+    const outputs = allEdges
       .filter((i) => i.input === s.id)
       .map((e) => e.output);
     const inputMetrics = inputs.map((i) =>
-      dSpace.metrics.find((m) => m.id === i)
+      dGraph.metrics.find((m) => m.id === i)
     );
     const edges = { inputs, outputs, inputMetrics };
     return { ...s, guesstimate: withInputFn(s.guesstimate), edges };
   });
 
-  return dSpace;
+  return {
+    ...space,
+    ...dGraph,
+    edges: allEdges,
+    metrics: dSpaceMetrics,
+  };
 }
 
 function toDgraph(
-  space,
+  space: ApiSpace,
   graph: Pick<
     RootState,
     | "users"

@@ -9,10 +9,6 @@ export type Distribution = {
   input?: string;
 };
 
-export type DGraph = {
-  metrics: any;
-};
-
 export type Graph = {
   metrics: any;
   simulations: any;

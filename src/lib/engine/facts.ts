@@ -17,7 +17,7 @@ export type Fact = {
   name: string;
   variable_name: string;
   expression: string;
-  exported_from_id?: string | null;
+  exported_from_id?: number | null;
   metric_id?: string | null;
   simulation: {
     sample: {
@@ -135,12 +135,6 @@ const toGuesstimate = (selector, { expression }) => ({
 const toSimulation = (selector, { simulation }) => ({
   ...simulation,
   metric: idFrom(selector),
-});
-
-const buildFullNode = (selector, fact, takenReadableIds) => ({
-  metric: toMetric(selector, takenReadableIds),
-  guesstimate: toGuesstimate(selector, fact),
-  simulation: toSimulation(selector, fact),
 });
 
 const globalSelector = (handle) => handle.slice(1).split(".");

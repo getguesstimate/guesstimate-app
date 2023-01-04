@@ -69,7 +69,7 @@ type Props = {
   onBlur(): void;
   onFocus(): void;
   canUseOrganizationFacts: boolean;
-  organizationId?: string;
+  organizationId?: string | number;
   width: "NARROW" | "WIDE";
 } & { dispatch: AppDispatch } & { suggestion: string };
 

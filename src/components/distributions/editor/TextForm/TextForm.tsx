@@ -15,7 +15,7 @@ type Props = {
   onAddData(data: number[]): void;
   onSave(): void;
   size: string;
-  organizationId?: string;
+  organizationId?: string | number;
   canUseOrganizationFacts: boolean;
   onAddDefaultData(): void;
   onChangeGuesstimateType(type: string): void;

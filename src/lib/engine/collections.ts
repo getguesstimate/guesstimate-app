@@ -18,7 +18,7 @@ export const gget = (collection, id, searchProp, getProp) =>
 export const getFn = (coll, getProp = "id", inProp = "id") =>
   !coll ? nullFn : (e) => get(coll, _.get(e, inProp), getProp);
 
-export const filter = (collection, id, prop = "id") =>
+export const filter = <T>(collection: readonly T[], id, prop = "id") =>
   allPresent(collection, id) ? collection.filter(equalsProp(id, prop)) : [];
 export const filterByInclusion = (collection, prop, ids) =>
   allPresent(collection, ids)
@@ -27,10 +27,6 @@ export const filterByInclusion = (collection, prop, ids) =>
 export const some = (collection: unknown[], id, prop = "id") =>
   allPresent(collection, id) ? _.some(collection, equalsProp(id, prop)) : false;
 
-export const andFns =
-  (...predFns) =>
-  (...x) =>
-    predFns.reduce((running, currFn) => running && !!currFn(...x), true);
 export const orFns =
   (...predFns) =>
   (...x) =>

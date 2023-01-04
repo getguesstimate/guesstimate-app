@@ -52,7 +52,7 @@ type Props = {
   onPasteMetrics: () => void;
   onDeleteMetrics: () => void;
   onCutMetrics: () => void;
-  isPrivate: boolean;
+  isPrivate: boolean | undefined;
   editableByMe: boolean;
   actionState: string; // TODO - union
   onUndo: () => void;

@@ -1,12 +1,11 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React from "react";
 
 import { orArr } from "gEngine/utils";
 import * as organizationActions from "gModules/organizations/actions";
 
-import { FactList } from "./list";
 import { Fact } from "gEngine/facts";
 import { useAppDispatch } from "gModules/hooks";
+import { FactList } from "./list";
 
 type Props = {
   facts: Fact[];

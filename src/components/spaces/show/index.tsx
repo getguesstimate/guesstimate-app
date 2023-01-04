@@ -23,7 +23,10 @@ import { SpaceSidebar } from "./sidebar";
 import { SpaceToolbar } from "./Toolbar/index";
 import { Tutorial } from "./Tutorial/index";
 
-import { denormalizedSpaceSelector } from "../denormalized-space-selector";
+import {
+  denormalizedSpaceSelector,
+  ExtendedDSpace,
+} from "../denormalized-space-selector";
 
 import * as calculatorActions from "gModules/calculators/actions";
 import {
@@ -45,6 +48,7 @@ import * as e from "gEngine/engine";
 import { Fact } from "gEngine/facts";
 import { AppDispatch, RootState } from "gModules/store";
 import * as elev from "servers/elev/index";
+import { DSpace } from "gEngine/space";
 
 function mapStateToProps(state: RootState) {
   return {
@@ -114,7 +118,7 @@ type Props = {
   router: NextRouter;
   // these come from redux selectors
   me: RootState["me"];
-  denormalizedSpace: any;
+  denormalizedSpace: ExtendedDSpace;
   exportedFacts: any;
   organizationFacts: Fact[];
   organizationHasFacts: boolean;
@@ -485,7 +489,7 @@ class SpacesShow extends Component<Props, State> {
   }
 
   render() {
-    const { exportedFacts, organizationHasFacts, me } = this.props;
+    const { exportedFacts } = this.props;
     const space = this.props.denormalizedSpace;
 
     if (!e.space.prepared(space)) {

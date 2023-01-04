@@ -37,6 +37,7 @@ import {
   Location,
   MaybeRegion,
 } from "lib/locationUtils";
+import { ExtendedDSpace } from "../denormalized-space-selector";
 
 export type EdgeShape = {
   input: Location;
@@ -54,7 +55,7 @@ function mapStateToProps(state: RootState) {
 }
 
 type Props = {
-  denormalizedSpace: DSpace;
+  denormalizedSpace: ExtendedDSpace;
   selectedCell: SelectedCellState;
   selectedRegion: MaybeRegion;
   screenshot: boolean;

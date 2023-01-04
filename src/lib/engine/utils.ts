@@ -19,9 +19,9 @@ export const orArr = (e) => e || [];
 export const isPresent = (e) =>
   (!!e && !_.isEmpty(e)) || typeof e === "number" || e === true;
 export const presentOrVal = (e, val) => (isPresent(e) ? e : val);
-export const allPresent = (...objs) =>
+export const allPresent = (...objs): boolean =>
   objs.reduce((running, curr) => running && isPresent(curr), true);
-export const allPropsPresent = (obj, ...props) =>
+export const allPropsPresent = (obj, ...props): boolean =>
   allPresent(...props.map((p) => _.get(obj, p)));
 
 export const notIn = (list) => (e) => !list.includes(e);
@@ -46,7 +46,7 @@ export function replaceByMap(str: string, replacementMap): string {
   return str.replace(regex, (match) => replacementMap[match]);
 }
 
-export function makeURLsMarkdown(text) {
+export function makeURLsMarkdown(text: string) {
   const fullRegex = new RegExp(`\\[.+\\]\\(${URL_REGEX.source}\\)`, "g");
   let transformedText = "";
   let prevIndex = 0;

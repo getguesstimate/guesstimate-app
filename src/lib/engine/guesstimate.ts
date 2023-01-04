@@ -49,7 +49,7 @@ export const expressionSyntaxPad = (id, isMetric = true) =>
 
 // Returns a function which takes a guesstimate and returns that guesstimate with an input based on its
 // expression.
-export function expressionToInputFn(metrics = [], facts = []) {
+export function expressionToInputFn(metrics: any[] = [], facts = []) {
   let idMap = {},
     reParts = [];
   metrics.forEach(({ id, readableId }) => {

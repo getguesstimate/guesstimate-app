@@ -7,9 +7,16 @@ const spaceSchema = yup.object({
   id: yup.number().required(),
   user_id: yup.number(),
   organization_id: yup.number(),
+  description: yup.string(),
+  name: yup.string(),
+  big_screenshot: yup.string(),
+  is_private: yup.boolean(),
   graph: yup.object(),
   shareable_link_enabled: yup.boolean().default(undefined), // only if current user can edit
-  shareable_link_token: yup.boolean().default(undefined), // only if current user can edit
+  shareable_link_token: yup.string().default(undefined), // only if current user can edit
+  exported_facts_count: yup.number().required(),
+  imported_fact_ids: yup.array().of(yup.number()).default(undefined),
+  author_contributions: yup.object().default(undefined),
   _embedded: yup
     .object({
       organization: yup

@@ -15,8 +15,9 @@ import {
 import { getNodeAncestors } from "lib/DAG/nodeFns";
 import { Fact } from "gEngine/facts";
 import { GridItem } from "gComponents/lib/FlowGrid/types";
+import { ApiSpace } from "lib/guesstimate_api/resources/Models";
 
-const idToNodeId = (id: string, isFact: boolean) =>
+const idToNodeId = (id: string | number, isFact: boolean) =>
   `${isFact ? "fact" : "space"}:${id}`;
 const spaceIdToNodeId = ({ id }) => idToNodeId(id, false);
 const factIdToNodeId = ({ id }) => idToNodeId(id, true);
@@ -117,7 +118,7 @@ const addLocationsToHeightOrderedComponents = (componentsHeightOrdered) => {
 type Props = {
   organization: any;
   facts: Fact[];
-  spaces: any[];
+  spaces: ApiSpace[];
 };
 
 export class FactGraph extends Component<Props> {

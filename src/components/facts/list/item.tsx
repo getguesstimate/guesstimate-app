@@ -81,7 +81,7 @@ export const FactItem: React.FC<Props> = ({
           </div>
         )}
 
-        {!!isExportedFromSpace(fact) && size !== "SMALL" && (
+        {isExportedFromSpace(fact) && size !== "SMALL" && (
           <div
             className="section-exported"
             onClick={() => {

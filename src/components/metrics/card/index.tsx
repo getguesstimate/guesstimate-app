@@ -54,7 +54,7 @@ type Props = {
   canvasState: CanvasState;
   isInScreenshot: boolean;
   metric: any; // FIXME
-  organizationId?: string;
+  organizationId?: string | number;
   canUseOrganizationFacts: boolean;
   exportedAsFact: boolean;
   idMap: object;
@@ -221,7 +221,7 @@ class MetricCard extends Component<Props, State> {
     this.props.dispatch(changeMetric(metric));
   }
 
-  onChangeGuesstimateDescription(rawDescription) {
+  onChangeGuesstimateDescription(rawDescription: string) {
     const description = makeURLsMarkdown(rawDescription);
     this.props.dispatch(
       changeGuesstimate(this._id(), {
@@ -239,7 +239,6 @@ class MetricCard extends Component<Props, State> {
   }
 
   _focusForm() {
-    console.log("focusForm");
     this.editorRef.current?.focus();
   }
 

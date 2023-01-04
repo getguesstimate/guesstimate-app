@@ -19,7 +19,7 @@ type Props = {
   onTab?(): void;
   jumpSection?(): void;
   canUseOrganizationFacts: boolean;
-  organizationId?: string;
+  organizationId?: string | number;
   inputMetrics: any;
 } & (
   | {

@@ -50,7 +50,7 @@ type State = {
   copied: ReturnType<typeof copiedR>;
   checkpoints: ReturnType<typeof checkpointsR>;
   httpRequests: ReturnType<typeof httpRequestsR>;
-  calculators: any; // TODO
+  calculators: any[]; // TODO
   facts: ReturnType<typeof factsR>;
   factCategories: any; // TODO
 };

@@ -1,7 +1,8 @@
+import * as e from "gEngine/engine";
+import { DSpace } from "gEngine/space";
+import { RootState } from "gModules/store";
 import _ from "lodash";
 import { createSelector } from "reselect";
-import * as e from "gEngine/engine";
-import { RootState } from "gModules/store";
 
 const NAME = "Denormalized Space Selector";
 
@@ -31,6 +32,11 @@ const SPACE_GRAPH_PARTS = [
   "facts",
 ] as const;
 
+export type ExtendedDSpace = DSpace & {
+  canvasState: any;
+  checkpointMetadata: any;
+};
+
 const spaceGraphSelector = (state: RootState) => {
   window.recorder.recordSelectorStart(NAME);
   return _.pick(state, SPACE_GRAPH_PARTS);
@@ -47,15 +53,19 @@ export const denormalizedSpaceSelector = createSelector(
     const {
       facts: { organizationFacts },
     } = graph;
-    let denormalizedSpace = e.space.toDSpace(spaceId, graph, organizationFacts);
+    const denormalizedSpace = e.space.toDSpace(
+      spaceId,
+      graph,
+      organizationFacts
+    );
 
-    if (denormalizedSpace) {
-      denormalizedSpace.canvasState = canvasState;
-      denormalizedSpace.checkpointMetadata = checkpointMetadata(
-        spaceId,
-        graph.checkpoints
-      );
-    }
+    const extendedDSpace = denormalizedSpace
+      ? {
+          ...denormalizedSpace,
+          canvasState,
+          checkpointMetadata: checkpointMetadata(spaceId, graph.checkpoints),
+        }
+      : (denormalizedSpace as any); /* FIXME - proper "not found" handling */
 
     const { organization_id } = denormalizedSpace;
     const facts = e.organization.findFacts(organization_id, organizationFacts);
@@ -68,7 +78,7 @@ export const denormalizedSpaceSelector = createSelector(
 
     window.recorder.recordSelectorStop(NAME, { denormalizedSpace });
     return {
-      denormalizedSpace,
+      denormalizedSpace: extendedDSpace,
       exportedFacts,
       organizationFacts: facts,
       organizationHasFacts: !_.isEmpty(facts),

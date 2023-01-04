@@ -100,7 +100,7 @@ const OrganizationTabButtons: React.FC<{
   </div>
 );
 
-const FactTab = ({
+const FactTab: React.FC<any> = ({
   organization,
   facts,
   factCategories,
@@ -111,7 +111,7 @@ const FactTab = ({
   const categorySets = [
     ..._.map(factCategories, (c) => ({
       category: c,
-      facts: e.collections.filter(facts, c.id, "category_id"),
+      facts: e.collections.filter(facts, c.id, "category_id") as any,
     })),
     {
       category: null,
