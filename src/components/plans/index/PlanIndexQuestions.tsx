@@ -52,7 +52,7 @@ const questions = [
   },
 ];
 
-const PlanIndexQuestions: React.FC = () => {
+export const PlanIndexQuestions: React.FC = () => {
   return (
     <div className="questions row">
       {questions.map((q) => (
@@ -64,5 +64,3 @@ const PlanIndexQuestions: React.FC = () => {
     </div>
   );
 };
-
-export default PlanIndexQuestions;

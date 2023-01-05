@@ -8,5 +8,3 @@ export type GridItem = {
   component: (context: GridContext) => React.ReactElement;
   props: any;
 };
-
-export type CanvasState = any; // FIXME

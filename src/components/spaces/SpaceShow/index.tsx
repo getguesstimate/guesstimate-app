@@ -8,7 +8,7 @@ import Head from "next/head";
 import { EditCalculatorForm } from "~/components/calculators/edit";
 import { NewCalculatorForm } from "~/components/calculators/new";
 import { CalculatorCompressedShow } from "~/components/calculators/show/CalculatorCompressedShow";
-import { FactListContainer } from "~/components/facts/list/container";
+import { FactListContainer } from "~/components/facts/list/FactListContainer";
 import { SpaceCanvas } from "~/components/spaces/SpaceCanvas";
 import {
   ButtonDeleteText,

@@ -10,12 +10,20 @@ export type RectangleShape = {
   bottom: number;
 };
 
-export default class GridPoint {
+export class GridPoint {
   rowHeights: number[];
   columnWidth: number;
   padding: number;
 
-  constructor({ rowHeights, columnWidth, padding }) {
+  constructor({
+    rowHeights,
+    columnWidth,
+    padding,
+  }: {
+    rowHeights: number[];
+    columnWidth: number;
+    padding: number;
+  }) {
     this.rowHeights = rowHeights;
     this.columnWidth = columnWidth;
     this.padding = padding;
@@ -32,7 +40,7 @@ export default class GridPoint {
     return { top, bottom };
   }
 
-  _columnX(column) {
+  _columnX(column: number) {
     const { columnWidth } = this;
     let left = column * columnWidth;
     let right = left + columnWidth;

@@ -1,28 +1,37 @@
-import { AnyAction, Reducer } from "redux";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export type ModalState = {
   componentName: string | undefined;
   props: any; // FIXME
 };
 
-const emptyState: ModalState = {
+const initialState: ModalState = {
   componentName: undefined,
   props: {},
 };
 
-const modal: Reducer<ModalState, AnyAction> = (
-  state = emptyState,
-  action: AnyAction
-) => {
-  switch (action.type) {
-    case "MODAL_CHANGE":
-      const { componentName, props } = action;
-      return { componentName, props };
-    case "MODAL_CLOSE":
-      return emptyState;
-    default:
-      return state;
-  }
-};
+export const modalSlice = createSlice({
+  name: "modal",
+  initialState,
+  reducers: {
+    openSettings() {
+      return { componentName: "settings", props: {} };
+    },
+    openFirstSubscription(_, action: PayloadAction<string>) {
+      return {
+        componentName: "firstSubscription",
+        props: { planId: action.payload },
+      };
+    },
+    openConfirmation(_, action: PayloadAction<any>) {
+      return { componentName: "confirmation", props: action.payload };
+    },
+    close() {
+      return initialState;
+    },
+  },
+});
 
-export default modal;
+const modal = modalSlice.reducer;
+
+export const modalR = modalSlice.reducer;

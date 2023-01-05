@@ -35,4 +35,4 @@ export const displayErrorSlice = createSlice({
   },
 });
 
-export default displayErrorSlice.reducer;
+export const displayErrorR = displayErrorSlice.reducer;

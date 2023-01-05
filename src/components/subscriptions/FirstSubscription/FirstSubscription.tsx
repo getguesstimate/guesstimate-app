@@ -2,7 +2,7 @@ import _ from "lodash";
 import React, { Component } from "react";
 
 import { subStages } from "~/modules/first_subscription/state_machine";
-import NewOrder from "./NewOrder";
+import { NewOrder } from "./NewOrder";
 
 export const SynchronizationSuccess: React.FC<{ onNewModel(): void }> = ({
   onNewModel,
@@ -23,67 +23,57 @@ type Props = {
   iframeWebsiteName: string;
   onPaymentCancel(): void;
   onPaymentSuccess(): void;
-  paymentAccountPortalUrl: string;
+  paymentAccountPortalUrl?: string;
   isTest?: boolean;
   onNewModel(): void;
 };
 
-export default class FirstSubscription extends Component<Props> {
-  static defaultProps = {
+export const FirstSubscription: React.FC<Props> = (originalProps) => {
+  const props = _.defaults(originalProps, {
     iframeUrl: "",
     iframeWebsiteName: "",
     paymentAccountPortalUrl: "",
     isTest: true,
-  };
+  });
 
-  _formSuccessProps() {
-    const neededProps = [
-      "iframeUrl",
-      "iframeWebsiteName",
-      "onPaymentCancel",
-      "onPaymentSuccess",
-    ] as const;
-    return _.pick(this.props, neededProps);
-  }
+  const { flowStage, onNewModel, isTest } = props;
+  const formSuccessProps = _.pick(props, [
+    "iframeUrl",
+    "iframeWebsiteName",
+    "onPaymentCancel",
+    "onPaymentSuccess",
+  ]);
 
-  _unnecessaryProps() {
-    const neededProps = ["paymentAccountPortalUrl"] as const;
-    return _.pick(this.props, neededProps);
-  }
+  const unnecessaryProps = _.pick(props, ["paymentAccountPortalUrl"]);
 
-  render() {
-    const { flowStage, isTest, onNewModel } = this.props;
-    return (
-      <div className="FirstSubscription">
-        {flowStage === "UNNECESSARY" && (
-          <Unnecessary {...this._unnecessaryProps()} />
-        )}
-        {flowStage === "CANCELLED" && <Cancelled />}
-        {flowStage === "START" && <FormStart />}
-        {flowStage === "FORM_START" && <FormStart />}
-        {flowStage === "FORM_FAILURE" && <FormFailure />}
-        {flowStage === "FORM_SUCCESS" && !isTest && (
-          <FormSuccess {...this._formSuccessProps()} />
-        )}
-        {flowStage === "FORM_SUCCESS" && isTest && (
-          <TestFormSuccess {...this._formSuccessProps()} />
-        )}
-        {flowStage === "SYNCHRONIZATION_START" && <SynchronizationStart />}
-        {flowStage === "SYNCHRONIZATION_SUCCESS" && (
-          <SynchronizationSuccess onNewModel={onNewModel} />
-        )}
-        {flowStage === "SYNCHRONIZATION_FAILURE" && <SynchronizationFailure />}
-      </div>
-    );
-  }
-}
+  return (
+    <div className="FirstSubscription">
+      {flowStage === "UNNECESSARY" && <Unnecessary {...unnecessaryProps} />}
+      {flowStage === "CANCELLED" && <Cancelled />}
+      {flowStage === "START" && <FormStart />}
+      {flowStage === "FORM_START" && <FormStart />}
+      {flowStage === "FORM_FAILURE" && <FormFailure />}
+      {flowStage === "FORM_SUCCESS" && !isTest && (
+        <FormSuccess {...formSuccessProps} />
+      )}
+      {flowStage === "FORM_SUCCESS" && isTest && (
+        <TestFormSuccess {...formSuccessProps} />
+      )}
+      {flowStage === "SYNCHRONIZATION_START" && <SynchronizationStart />}
+      {flowStage === "SYNCHRONIZATION_SUCCESS" && (
+        <SynchronizationSuccess onNewModel={onNewModel} />
+      )}
+      {flowStage === "SYNCHRONIZATION_FAILURE" && <SynchronizationFailure />}
+    </div>
+  );
+};
 
-export const TestFormSuccess = ({
-  iframeUrl,
-  iframeWebsiteName,
-  onPaymentCancel,
-  onPaymentSuccess,
-}) => (
+export const TestFormSuccess: React.FC<
+  Pick<
+    Props,
+    "iframeUrl" | "iframeWebsiteName" | "onPaymentCancel" | "onPaymentSuccess"
+  >
+> = ({ iframeUrl, iframeWebsiteName, onPaymentCancel, onPaymentSuccess }) => (
   <div>
     <h1>This is a test.</h1>
     <h2>Pretend strongly that there is a payment iframe here</h2>
@@ -91,21 +81,21 @@ export const TestFormSuccess = ({
     <h3>iframeWebsiteName: {iframeWebsiteName}</h3>
     <a className="ui button red" onClick={onPaymentCancel}>
       {" "}
-      {"Pretend to Cancel"}{" "}
+      Pretend to Cancel{" "}
     </a>
     <a className="ui button blue" onClick={onPaymentSuccess}>
       {" "}
-      {"Pretend to Pay"}{" "}
+      Pretend to Pay{" "}
     </a>
   </div>
 );
 
-export const FormSuccess = ({
-  iframeUrl,
-  iframeWebsiteName,
-  onPaymentCancel,
-  onPaymentSuccess,
-}) => (
+export const FormSuccess: React.FC<
+  Pick<
+    Props,
+    "iframeUrl" | "iframeWebsiteName" | "onPaymentCancel" | "onPaymentSuccess"
+  >
+> = ({ iframeUrl, iframeWebsiteName, onPaymentCancel, onPaymentSuccess }) => (
   <div>
     <NewOrder
       page={iframeUrl}
@@ -137,20 +127,22 @@ export const Message: React.FC<{
   </div>
 );
 
-export const Cancelled = () => (
+export const Cancelled: React.FC = () => (
   <Message>
     <h2>Payment Cancelled.</h2>
     <h3>Refresh to try again.</h3>
   </Message>
 );
 
-export const FormStart = () => <Message text="Loading..." />;
-export const FormFailure = () => (
+export const FormStart: React.FC = () => <Message text="Loading..." />;
+export const FormFailure: React.FC = () => (
   <Message text="The form failed loading.  Try again soon." />
 );
-export const SynchronizationStart = () => <Message text="Synchronizing..." />;
+export const SynchronizationStart: React.FC = () => (
+  <Message text="Synchronizing..." />
+);
 
-export const SynchronizationFailure = () => (
+export const SynchronizationFailure: React.FC = () => (
   <Message>
     <h2>Synchronization Failed</h2>
     <h3>Try refreshing the browser</h3>

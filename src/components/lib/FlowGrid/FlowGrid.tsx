@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
-import { BackgroundContainer } from "./background-container";
+import { BackgroundContainer } from "./BackgroundContainer";
 import Cell from "./cell";
 
 import { EdgeShape } from "~/components/spaces/SpaceCanvas";
@@ -18,9 +18,10 @@ import {
   MaybeRegion,
 } from "~/lib/locationUtils";
 import { SelectedCellState } from "~/modules/selected_cell/reducer";
-import { CanvasState, GridItem } from "./types";
+import { GridItem } from "./types";
 import { DirectionToLocation, keycodeToDirection } from "./utils";
 import clsx from "clsx";
+import { CanvasState } from "~/modules/canvas_state/slice";
 
 const upto = (n: number): number[] =>
   Array.apply(null, { length: n }).map(Number.call, Number);

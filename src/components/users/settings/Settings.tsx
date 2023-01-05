@@ -2,7 +2,7 @@ import Icon from "~/components/react-fa-patched";
 import _ from "lodash";
 import React from "react";
 
-import Card from "~/components/utility/card/index";
+import { Card } from "~/components/utility/Card";
 import Plan from "~/lib/config/plan";
 
 const PlanC: React.FC<{ planId: string | undefined }> = ({ planId }) => (

@@ -32,7 +32,7 @@ export type CanvasState = {
   actionState: CanvasActionState;
 };
 
-const initialState: CanvasState = {
+export const initialCanvasState: CanvasState = {
   analysisViewEnabled: false,
   expandedViewEnabled: false,
   scientificViewEnabled: false,
@@ -47,7 +47,7 @@ const initialState: CanvasState = {
 
 export const canvasStateSlice = createSlice({
   name: "canvasState",
-  initialState,
+  initialState: initialCanvasState,
   reducers: {
     change(state, action: PayloadAction<Partial<CanvasState>>) {
       return { ...state, ...action.payload };

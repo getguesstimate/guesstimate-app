@@ -1,8 +1,8 @@
 import _ from "lodash";
 import React, { Component } from "react";
 
-import { FactForm } from "./form";
-import { FactItem } from "./item";
+import { FactForm } from "./FactForm";
+import { FactItem } from "./FactItem";
 
 import { utils } from "~/lib/engine/engine";
 import { Fact, getVar } from "~/lib/engine/facts";
@@ -167,7 +167,7 @@ export class FactList extends Component<Props> {
   }
 }
 
-const NewButton = ({ onClick }) => (
+const NewButton: React.FC<{ onClick(): void }> = ({ onClick }) => (
   <div className="NewFactButton" onClick={onClick}>
     <Icon name="plus" />
     New Metric

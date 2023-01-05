@@ -5,7 +5,7 @@ import React, { useRef } from "react";
 import {
   CardListElement,
   CardListElementProps,
-} from "~/components/utility/card/index";
+} from "~/components/utility/Card";
 import { DropDown } from "~/components/utility/DropDown";
 
 import * as meActions from "~/modules/me/actions";

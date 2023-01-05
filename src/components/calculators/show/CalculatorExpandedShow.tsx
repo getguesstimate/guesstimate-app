@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import { generateShareIcon, ShareButtons } from "react-share";
 
-import Container from "~/components/utility/container/Container";
+import { Container } from "~/components/utility/Container";
 import { CalculatorShow } from "./CalculatorShow";
 
 import { ButtonCloseText } from "~/components/utility/buttons/close/index";

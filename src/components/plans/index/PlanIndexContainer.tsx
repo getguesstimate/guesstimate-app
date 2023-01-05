@@ -7,7 +7,7 @@ import { PlanIndex } from "./PlanIndex";
 import * as e from "~/lib/engine/engine";
 import { useAppSelector } from "~/modules/hooks";
 
-const PlanIndexContainer: React.FC = () => {
+export const PlanIndexContainer: React.FC = () => {
   const router = useRouter();
   const _onChoose = (planId: string) => {
     const plan = { personal_lite: "lite", personal_premium: "premium" }[planId];
@@ -34,5 +34,3 @@ const PlanIndexContainer: React.FC = () => {
 
   return <PlanIndex {...props} />;
 };
-
-export default PlanIndexContainer;

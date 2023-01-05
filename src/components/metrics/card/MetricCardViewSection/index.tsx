@@ -4,7 +4,7 @@ import React, { Component } from "react";
 import Icon from "~/components/react-fa-patched";
 
 import { DistributionSummary } from "~/components/distributions/summary/index";
-import MetricName from "~/components/metrics/card/name/index";
+import { MetricName } from "~/components/metrics/card/name/index";
 import { SensitivitySection } from "~/components/metrics/card/SensitivitySection/SensitivitySection";
 import {
   MetricExportedIcon,
@@ -12,8 +12,8 @@ import {
   MetricReasoningIcon,
   MetricSidebarToggle,
 } from "~/components/metrics/card/token/index";
-import Histogram from "~/components/simulations/histogram/index";
-import StatTable from "~/components/simulations/stat_table/index";
+import { SimulationHistogram } from "~/components/simulations/SimulationHistogram";
+import { MetricStatTable } from "~/components/simulations/MetricStatTable";
 
 import { getMessage } from "~/lib/propagation/errors";
 import { metricIdToNodeId } from "~/lib/propagation/wrapper";
@@ -218,7 +218,7 @@ export class MetricCardViewSection extends Component<Props> {
     return (
       <div className={mainClassName} onMouseDown={onMouseDown}>
         {showSimulation && (
-          <Histogram
+          <SimulationHistogram
             height={scientificViewEnabled ? 110 : 30}
             simulation={simulation}
             cutOffRatio={0.995}
@@ -263,7 +263,7 @@ export class MetricCardViewSection extends Component<Props> {
           )}
           {showSimulation && shouldShowStatistics && (
             <div className="StatsSectionTable">
-              <StatTable stats={metric.simulation.stats} />
+              <MetricStatTable stats={metric.simulation.stats} />
             </div>
           )}
 

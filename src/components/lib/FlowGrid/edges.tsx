@@ -1,9 +1,9 @@
-import { EdgeShape } from "~/components/spaces/SpaceCanvas";
+import React from "react";
 import _ from "lodash";
-import { Component } from "react";
 
-import Edge from "./edge";
-import GridPoint from "./gridPoints";
+import { EdgeShape } from "~/components/spaces/SpaceCanvas";
+import { Edge } from "./edge";
+import { GridPoint } from "./gridPoints";
 
 type Props = {
   columnWidth: number;
@@ -12,18 +12,17 @@ type Props = {
   rowHeights: number[];
 };
 
-export class Edges extends Component<Props> {
-  shouldComponentUpdate(nextProps: Props) {
-    return (
-      this.props.columnWidth !== nextProps.columnWidth ||
-      this.props.containerHeight !== nextProps.containerHeight ||
-      !_.isEqual(this.props.edges, nextProps.edges) ||
-      !_.isEqual(this.props.rowHeights, nextProps.rowHeights)
-    );
-  }
+const areEqual = (props: Props, nextProps: Props) => {
+  return (
+    props.columnWidth === nextProps.columnWidth &&
+    props.containerHeight === nextProps.containerHeight &&
+    _.isEqual(props.edges, nextProps.edges) &&
+    _.isEqual(props.rowHeights, nextProps.rowHeights)
+  );
+};
 
-  render() {
-    const { columnWidth, containerHeight, rowHeights, edges } = this.props;
+export const Edges: React.FC<Props> = React.memo(
+  ({ columnWidth, containerHeight, rowHeights, edges }) => {
     const gridPoint = new GridPoint({
       rowHeights,
       columnWidth,
@@ -128,5 +127,6 @@ export class Edges extends Component<Props> {
         </svg>
       </div>
     );
-  }
-}
+  },
+  areEqual
+);

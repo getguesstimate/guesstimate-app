@@ -1,6 +1,6 @@
 import React from "react";
 
-import ComponentEditor from "~/components/utility/ComponentEditor/index";
+import { ComponentEditor } from "~/components/utility/ComponentEditor";
 import { PlanIndex, Props } from "./PlanIndex";
 
 const options: {

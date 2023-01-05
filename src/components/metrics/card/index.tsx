@@ -2,11 +2,10 @@ import _ from "lodash";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import Icon from "~/components/react-fa-patched";
-import $ from "jquery";
 import ReactDOM from "react-dom";
+import Icon from "~/components/react-fa-patched";
 
-import { MetricToolTip } from "./tooltip";
+import { MetricToolTip } from "./MetricToolTip";
 import { hasMetricUpdated } from "./updated";
 
 import DistributionEditor, {
@@ -33,10 +32,10 @@ import {
   OUTPUT,
   relationshipType,
 } from "~/lib/engine/graph";
-import { makeURLsMarkdown } from "~/lib/engine/utils";
-import { AppDispatch } from "~/modules/store";
 import { FullDenormalizedMetric } from "~/lib/engine/space";
+import { makeURLsMarkdown } from "~/lib/engine/utils";
 import { CanvasState } from "~/modules/canvas_state/reducer";
+import { AppDispatch } from "~/modules/store";
 
 const relationshipClasses = {};
 relationshipClasses[INTERMEDIATE] = "intermediate";
@@ -247,7 +246,9 @@ class MetricCard extends Component<Props, State> {
 
   _handleMouseDown(e: React.MouseEvent) {
     if (this._isFunctionInputSelectable(e) && !e.shiftKey) {
-      $(window).trigger("functionMetricClicked", this.props.metric);
+      window.dispatchEvent(
+        new CustomEvent("functionMetricClicked", { detail: this.props.metric })
+      );
       // TODO(matthew): Why don't these stop the triggering of the flow grid cell?
       e.preventDefault();
       e.stopPropagation();

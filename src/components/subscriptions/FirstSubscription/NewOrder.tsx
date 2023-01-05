@@ -1,7 +1,6 @@
-import $ from "jquery";
-import { Component } from "react";
+import { useEffect, useRef } from "react";
 
-const newStyle = (height, hidden) => {
+const newStyle = (height: number, hidden: boolean) => {
   let style = `
     width: 400px;
     border: none;
@@ -13,33 +12,43 @@ const newStyle = (height, hidden) => {
   return style;
 };
 
-export default class NewOrder extends Component<any> {
-  componentDidMount() {
-    const iframeContainer = ".NewOrder";
-    const { page, name, onSuccess, onCancel } = this.props;
+export const NewOrder: React.FC<{
+  page: string;
+  name: string;
+  onSuccess(): void;
+  onCancel(): void;
+}> = ({ page, name, onSuccess, onCancel }) => {
+  const ref = useRef<HTMLDivElement | null>(null);
 
-    window.ChargeBee.embed(page, name).load({
-      addIframe(iframe) {
-        $(iframeContainer).append(iframe);
-      },
-      onLoad(iframe, _width, height) {
-        $(iframe).show();
-        iframe.setAttribute("style", newStyle(height, true));
-        $(iframe).fadeIn(500);
-      },
-      onResize(iframe, _width, height) {
-        iframe.setAttribute("style", newStyle(height, false));
-      },
-      onSuccess(iframe) {
-        onSuccess();
-      },
-      onCancel(iframe) {
-        onCancel();
-      },
-    });
-  }
+  useEffect(() => {
+    let timer: number | undefined;
+    const fn = () => {
+      // wait for ChargeBee to load
+      if (!window.ChargeBee) {
+        timer = window.setTimeout(fn, 300);
+        return;
+      }
+      window.ChargeBee.embed(page, name).load({
+        addIframe(iframe) {
+          ref.current?.append(iframe);
+        },
+        onLoad(iframe, _width: number, height: number) {
+          iframe.setAttribute("style", newStyle(height, false));
+        },
+        onResize(iframe, _width: number, height: number) {
+          iframe.setAttribute("style", newStyle(height, false));
+        },
+        onSuccess,
+        onCancel,
+      });
+    };
+    fn();
+    return () => {
+      if (timer) {
+        window.clearTimeout(timer);
+      }
+    };
+  }, []);
 
-  render() {
-    return <div className="NewOrder" />;
-  }
-}
+  return <div className="NewOrder" ref={ref} />;
+};

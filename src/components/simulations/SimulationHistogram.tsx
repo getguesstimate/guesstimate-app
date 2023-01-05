@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { Component } from "react";
 
-import Histogram from "~/components/lib/histogram";
+import { Histogram } from "~/components/lib/histogram";
 
 import Dimensions from "~/components/utility/react-dimensions";
 
@@ -22,7 +22,7 @@ type Props = {
   containerHeight?: number;
 };
 
-class SimulationHistogram extends Component<Props> {
+class SimulationHistogramWithDimentions extends Component<Props> {
   shouldComponentUpdate(nextProps: Props) {
     return (
       _.get(nextProps, "simulation.stats") !==
@@ -71,4 +71,6 @@ class SimulationHistogram extends Component<Props> {
   }
 }
 
-export default Dimensions()(SimulationHistogram);
+export const SimulationHistogram = Dimensions()(
+  SimulationHistogramWithDimentions
+);

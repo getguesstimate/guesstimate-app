@@ -8,27 +8,27 @@ type Props = {
   location: CanvasLocation;
 };
 
-export default class EmptyCell extends Component<Props> {
+export class EmptyCell extends Component<Props> {
   shouldComponentUpdate() {
-    return false;
-  }
-
-  _handleKeyDown(e: React.KeyboardEvent) {
-    if (e.key === "Enter" && this.props.inSelectedCell) {
-      this.props.onAddItem(this.props.location);
-      e.preventDefault();
-    }
-    if (e.key === "Backspace") {
-      e.preventDefault();
-    }
+    return false; // TODO - is this safe?
   }
 
   render() {
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+      if (e.key === "Enter" && this.props.inSelectedCell) {
+        this.props.onAddItem(this.props.location);
+        e.preventDefault();
+      }
+      if (e.key === "Backspace") {
+        e.preventDefault();
+      }
+    };
+
     return (
       <div
         className="FlowGridEmptyCell"
         onKeyPress={this.props.gridKeyPress}
-        onKeyDown={this._handleKeyDown.bind(this)}
+        onKeyDown={handleKeyDown}
         tabIndex={0}
       />
     );

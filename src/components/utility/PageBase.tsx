@@ -1,7 +1,7 @@
 import React from "react";
 import ReactMarkdown from "react-markdown";
 
-import Container from "~/components/utility/container/Container";
+import { Container } from "~/components/utility/Container";
 
 type Props = {
   content: string;

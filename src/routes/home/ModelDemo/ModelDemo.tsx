@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { MarkdownViewer } from "~/components/utility/markdown-viewer/index";
+import { MarkdownViewer } from "~/components/utility/MarkdownViewer";
 import React, { Component } from "react";
 import * as TreehouseExample from "./example_treehouse";
 

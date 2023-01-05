@@ -1,7 +1,7 @@
 import _ from "lodash";
 import React from "react";
 
-import { MarkdownViewer } from "~/components/utility/markdown-viewer/index";
+import { MarkdownViewer } from "~/components/utility/MarkdownViewer";
 import { ToolTip } from "~/components/utility/ToolTip";
 
 export const MetricToolTip: React.FC<{ guesstimate: any }> = ({

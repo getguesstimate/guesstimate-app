@@ -1,10 +1,10 @@
 import _ from "lodash";
 import React, { useEffect } from "react";
 
-import Container from "~/components/utility/container/Container";
+import { Container } from "~/components/utility/Container";
 import { useAppDispatch, useAppSelector } from "~/modules/hooks";
-import { CreateOrganizationForm } from "./form";
-import { LocalAddMembers } from "./members";
+import { CreateOrganizationForm } from "./CreateOrganizationForm";
+import { LocalAddMembers } from "./LocalAddMembers";
 import { Organization } from "~/lib/engine/organization";
 
 export const CreateOrganizationPageContainer: React.FC = () => {

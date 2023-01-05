@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { FactListContainer } from "~/components/facts/list/container";
+import { FactListContainer } from "~/components/facts/list/FactListContainer";
 import { CategoryForm } from "./form";
 import { FactCategory } from "~/lib/engine/fact_category";
 import { Fact } from "~/lib/engine/facts";

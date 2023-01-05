@@ -110,7 +110,7 @@ export const SpaceCard: React.FC<{
   );
 };
 
-const SpaceCards: React.FC<{
+export const SpaceCards: React.FC<{
   spaces: any[];
   showPrivacy: boolean;
 }> = ({ spaces, showPrivacy }) => (
@@ -120,5 +120,3 @@ const SpaceCards: React.FC<{
     ))}
   </div>
 );
-
-export default SpaceCards;

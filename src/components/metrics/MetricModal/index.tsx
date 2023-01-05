@@ -2,10 +2,10 @@ import _ from "lodash";
 import React from "react";
 
 import DistributionEditor from "~/components/distributions/editor/index";
-import { HistogramWithStats } from "~/components/simulations/histogram_with_stats/index";
+import { HistogramWithStats } from "~/components/simulations/HistogramWithStats";
 import { ButtonClose } from "~/components/utility/buttons/close";
 import { DropDown } from "~/components/utility/DropDown";
-import { GeneralModal } from "~/components/utility/modal/index";
+import { GeneralModal } from "~/components/utility/GeneralModal";
 import { GuesstimateDescription } from "./GuesstimateDescription";
 
 import { FullDenormalizedMetric } from "~/lib/engine/space";

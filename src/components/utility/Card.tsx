@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import React, { Component } from "react";
 
 import Icon from "~/components/react-fa-patched";
@@ -88,13 +89,11 @@ export class CardListElement extends Component<CardListElementProps> {
   }
 }
 
-const IconSection: React.FC<any> = ({
-  colCount,
-  icon,
-  ionicIcon,
-  image,
-  imageShape,
-}) => (
+const IconSection: React.FC<
+  Pick<CardListElementProps, "icon" | "ionicIcon" | "image" | "imageShape"> & {
+    colCount: string;
+  }
+> = ({ colCount, icon, ionicIcon, image, imageShape }) => (
   <div className={`col-xs-${colCount} icons`}>
     {icon && <Icon name={icon} />}
     {ionicIcon && <i className={`ion-${ionicIcon}`} />}
@@ -102,7 +101,11 @@ const IconSection: React.FC<any> = ({
   </div>
 );
 
-const ChildrenSection: React.FC<any> = ({ colCount, header, children }) => (
+const ChildrenSection: React.FC<{
+  colCount: string;
+  header: string;
+  children: React.ReactNode;
+}> = ({ colCount, header, children }) => (
   <div className={`col-xs-${colCount} info-section`}>
     {!!header && (
       <span className="header">{capitalizeFirstLetter(header)}</span>
@@ -120,37 +123,29 @@ type Props = {
   children: React.ReactNode;
 };
 
-export default class Card extends Component<Props> {
-  _cardClass() {
-    let klass = `Card ${this.props.width}`;
-    klass += this.props.shadow ? " shadow" : "";
-    return klass;
-  }
-
-  _bodyClass() {
-    let klass = "Card-body";
-    klass += this.props.hasPadding ? " padded" : "";
-    return klass;
-  }
-
-  render() {
-    const { headerText, onClose, width } = this.props;
-    return (
-      <div className={this._cardClass()}>
-        {headerText && (
-          <div className="Card-header">
-            <h3> {headerText} </h3>
-            <span className="Card-close">
-              <ButtonClose onClick={onClose} />
-            </span>
-          </div>
-        )}
-
-        <div className={this._bodyClass()}>
-          {headerText && <hr />}
-          {this.props.children}
+export const Card: React.FC<Props> = ({
+  headerText,
+  onClose,
+  width,
+  shadow,
+  hasPadding,
+  children,
+}) => {
+  return (
+    <div className={clsx("Card", width, shadow && "shadow")}>
+      {headerText && (
+        <div className="Card-header">
+          <h3>{headerText}</h3>
+          <span className="Card-close">
+            <ButtonClose onClick={onClose} />
+          </span>
         </div>
+      )}
+
+      <div className={clsx("Card-body", hasPadding && "padded")}>
+        {headerText && <hr />}
+        {children}
       </div>
-    );
-  }
-}
+    </div>
+  );
+};

@@ -3,7 +3,7 @@ import React from "react";
 import Icon from "~/components/react-fa-patched";
 
 import { ClickToEdit } from "~/components/utility/ClickToEdit";
-import { MarkdownViewer } from "~/components/utility/markdown-viewer/index";
+import { MarkdownViewer } from "~/components/utility/MarkdownViewer";
 
 export const GuesstimateDescription: React.FC<{
   value: string;

@@ -4,8 +4,8 @@ import React, { Component, useEffect, useState } from "react";
 
 import Icon from "~/components/react-fa-patched";
 
-import { NewSpaceCard, SpaceCard } from "~/components/spaces/cards";
-import Container from "~/components/utility/container/Container";
+import { NewSpaceCard, SpaceCard } from "~/components/spaces/SpaceCards";
+import { Container } from "~/components/utility/Container";
 import { Category } from "./categories/category";
 import { CategoryForm } from "./categories/form";
 import { FactGraph } from "./facts/factGraph";

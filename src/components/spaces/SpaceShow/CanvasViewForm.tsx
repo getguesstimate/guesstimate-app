@@ -1,7 +1,7 @@
 import {
   CardListElement,
   CardListElementProps,
-} from "~/components/utility/card/index";
+} from "~/components/utility/Card";
 import { DropDown } from "~/components/utility/DropDown";
 
 import * as canvasStateActions from "~/modules/canvas_state/actions";

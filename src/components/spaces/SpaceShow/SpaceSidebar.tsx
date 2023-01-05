@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 import { ClickToEdit } from "~/components/utility/ClickToEdit";
-import { MarkdownViewer } from "~/components/utility/markdown-viewer/index";
+import { MarkdownViewer } from "~/components/utility/MarkdownViewer";
 import { ButtonCloseText } from "~/components/utility/buttons/close";
 
 type Props = {

@@ -1,7 +1,7 @@
 import Modal from "react-modal";
 
 import FirstSubscriptionContainer from "~/components/subscriptions/FirstSubscription/container";
-import SettingsContainer from "~/components/users/settings/container";
+import { SettingsContainer } from "~/components/users/settings/SettingsContainer";
 import { NavHelper } from "~/components/utility/NavHelper/index";
 import { useAppDispatch, useAppSelector } from "~/modules/hooks";
 import * as modalActions from "~/modules/modal/actions";

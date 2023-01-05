@@ -1,6 +1,18 @@
 import _ from "lodash";
+import { FullDenormalizedMetric } from "~/lib/engine/space";
+import { CanvasState } from "~/modules/canvas_state/slice";
 
-export function hasMetricUpdated(oldProps, newProps) {
+type Props = Readonly<{
+  metric: FullDenormalizedMetric;
+  analyzedMetric: FullDenormalizedMetric | null;
+  existingReadableIds?: string[];
+  inSelectedCell: boolean;
+  canvasState: CanvasState;
+  hovered: boolean;
+  exportedAsFact: boolean;
+}>;
+
+export function hasMetricUpdated(oldProps: Props, newProps: Props) {
   return (
     _.get(oldProps, "analyzedMetric.id") !==
       _.get(newProps, "analyzedMetric.id") ||

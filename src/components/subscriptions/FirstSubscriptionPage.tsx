@@ -1,7 +1,7 @@
 import React from "react";
 
 import FirstSubscriptionContainer from "~/components/subscriptions/FirstSubscription/container";
-import Container from "~/components/utility/container/Container";
+import { Container } from "~/components/utility/Container";
 import * as displayErrorsActions from "~/modules/displayErrors/actions";
 import { useAppDispatch, useAppSelector } from "~/modules/hooks";
 import Plan from "~/lib/config/plan";
@@ -11,7 +11,7 @@ type Props = {
   planName: string;
 };
 
-const FirstSubscriptionPage: React.FC<Props> = ({ planName }) => {
+export const FirstSubscriptionPage: React.FC<Props> = ({ planName }) => {
   const me = useAppSelector((state) => state.me);
   const dispatch = useAppDispatch();
 
@@ -66,5 +66,3 @@ const FirstSubscriptionPage: React.FC<Props> = ({ planName }) => {
     </Container>
   );
 };
-
-export default FirstSubscriptionPage;

@@ -1,19 +1,4 @@
-export function openSettings() {
-  return { type: "MODAL_CHANGE", componentName: "settings", props: {} };
-}
+import { modalSlice } from "./reducer";
 
-export function openFirstSubscription(planId) {
-  return {
-    type: "MODAL_CHANGE",
-    componentName: "firstSubscription",
-    props: { planId },
-  };
-}
-
-export function openConfirmation(props) {
-  return { type: "MODAL_CHANGE", componentName: "confirmation", props };
-}
-
-export function close() {
-  return { type: "MODAL_CLOSE" };
-}
+export const { openSettings, openFirstSubscription, openConfirmation, close } =
+  modalSlice.actions;

@@ -1,6 +1,6 @@
 import React from "react";
 
-const MetricStatTable: React.FC<{ stats: any }> = ({ stats }) => (
+export const MetricStatTable: React.FC<{ stats: any }> = ({ stats }) => (
   <table className="MetricStatTable">
     <tbody>
       <tr>

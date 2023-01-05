@@ -3,12 +3,13 @@ import ReactDOM from "react-dom";
 
 import { ConnectDropTarget, useDrop } from "react-dnd";
 
-import EmptyCell from "./cell-empty";
+import { EmptyCell } from "./EmptyCell";
 import ItemCell, { InnerItemCell } from "./filled-cell";
 
 import { getClassName } from "~/lib/engine/utils";
-import { Direction, CanvasLocation } from "~/lib/locationUtils";
-import { CanvasState, GridItem } from "./types";
+import { CanvasLocation, Direction } from "~/lib/locationUtils";
+import { GridItem } from "./types";
+import { CanvasState } from "~/modules/canvas_state/slice";
 
 type CollectedProps = {
   connectDropTarget: ConnectDropTarget;

@@ -110,19 +110,6 @@ export class InnerItemCell extends Component<Props, State> {
     this.containerRef = React.createRef();
   }
 
-  componentDidMount() {
-    window.recorder.recordMountEvent(this);
-  }
-  componentWillUpdate() {
-    window.recorder.recordRenderStartEvent(this);
-  }
-  componentDidUpdate() {
-    window.recorder.recordRenderStopEvent(this);
-  }
-  componentWillUnmount() {
-    window.recorder.recordUnmountEvent(this);
-  }
-
   componentWillReceiveProps(newProps: Props) {
     const startedDragging = !this.props.isDragging && newProps.isDragging;
     const childItem =

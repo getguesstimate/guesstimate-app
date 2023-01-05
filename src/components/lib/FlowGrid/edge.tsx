@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { Component } from "react";
+import React from "react";
 
 import angleBetweenPoints from "angle-between-points";
 
@@ -100,6 +100,10 @@ class Rectangle {
   }
 }
 
+const isValidNode = ({ top, left, right, bottom }: RectangleShape) => {
+  return _.every([top, left, right, bottom], _.isFinite);
+};
+
 type Props = {
   input: RectangleShape;
   output: RectangleShape;
@@ -107,20 +111,12 @@ type Props = {
   pathStatus: string;
 };
 
-export default class Edge extends Component<Props> {
-  shouldComponentUpdate(nextProps: Props) {
-    return !_.isEqual(this.props, nextProps);
-  }
-
-  _isValidNode({ top, left, right, bottom }) {
-    return _.every([top, left, right, bottom], _.isFinite);
-  }
-
-  render() {
-    const { output, input, hasErrors, pathStatus } = this.props;
-    if (!this._isValidNode(input) || !this._isValidNode(output)) {
-      return false;
+export const Edge: React.FC<Props> = React.memo(
+  ({ output, input, hasErrors, pathStatus }) => {
+    if (!isValidNode(input) || !isValidNode(output)) {
+      return null;
     }
+
     const inputPoints = new Rectangle(input).showPosition(output);
     const outputPoints = new Rectangle(output).showPosition(input);
 
@@ -128,11 +124,12 @@ export default class Edge extends Component<Props> {
 
     return (
       <path
-        className={clsx("basic-arrow", pathStatus, hasErrors && " hasErrors")}
+        className={clsx("basic-arrow", pathStatus, hasErrors && "hasErrors")}
         d={points}
         markerEnd={`url(#MarkerArrow-${hasErrors ? "hasErrors" : pathStatus})`}
         fill="none"
       />
     );
-  }
-}
+  },
+  (props, nextProps) => _.isEqual(props, nextProps)
+);

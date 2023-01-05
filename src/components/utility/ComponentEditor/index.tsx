@@ -9,7 +9,7 @@ type Props<T> = {
   child: React.FC<T>;
 };
 
-export default function ComponentEditor<T>({
+export function ComponentEditor<T>({
   childProps,
   name,
   context,

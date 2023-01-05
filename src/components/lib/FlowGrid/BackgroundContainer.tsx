@@ -1,10 +1,7 @@
-import _ from "lodash";
-import React, { Component, useLayoutEffect, useState } from "react";
-
-import $ from "jquery";
+import React, { useLayoutEffect, useState } from "react";
 
 import { Edges } from "./edges";
-import GridPoint from "./gridPoints";
+import { GridPoint } from "./gridPoints";
 
 import { EdgeShape } from "~/components/spaces/SpaceCanvas";
 import { isRegion, MaybeRegion, Region } from "~/lib/locationUtils";
@@ -71,9 +68,8 @@ export const BackgroundContainer: React.FC<Props> = React.memo(
     };
 
     const getColumnWidth = () => {
-      return $(".FlowGridCell") && $(".FlowGridCell")[0]
-        ? $(".FlowGridCell")[0].offsetWidth
-        : null;
+      const item = document.getElementsByClassName("FlowGridCell").item(0);
+      return item ? (item as HTMLElement).offsetWidth : null;
     };
 
     const columnWidth = getColumnWidth();

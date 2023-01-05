@@ -1,6 +1,6 @@
 import React from "react";
 
-import ComponentEditor from "~/components/utility/ComponentEditor/index";
+import { ComponentEditor } from "~/components/utility/ComponentEditor";
 
 import { CreateOrganizationPage } from "./index";
 
@@ -26,5 +26,3 @@ export const NewOrganizationStyleGuide: React.FC = () => {
     </div>
   );
 };
-
-export default NewOrganizationStyleGuide;

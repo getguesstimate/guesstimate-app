@@ -5,7 +5,7 @@ import Icon from "~/components/react-fa-patched";
 import Modal from "react-modal";
 import ReactTooltip from "react-tooltip";
 
-import { CardListElement } from "~/components/utility/card/index";
+import { CardListElement } from "~/components/utility/Card";
 import { DropDown } from "~/components/utility/DropDown";
 import { CanvasViewForm } from "../CanvasViewForm";
 import { ViewOptionToggle } from "../ViewOptionToggle";

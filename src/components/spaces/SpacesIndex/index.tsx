@@ -2,8 +2,8 @@ import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import Icon from "~/components/react-fa-patched";
 
-import SpaceCards from "~/components/spaces/cards";
-import { CardListElement } from "~/components/utility/card/index";
+import { SpaceCards } from "~/components/spaces/SpaceCards";
+import { CardListElement } from "~/components/utility/Card";
 import { DropDown } from "~/components/utility/DropDown";
 
 import { useAppDispatch, useAppSelector } from "~/modules/hooks";

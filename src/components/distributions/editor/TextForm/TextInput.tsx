@@ -10,7 +10,6 @@ import {
   EditorState,
   Modifier,
 } from "draft-js";
-import $ from "jquery";
 
 import { clearSuggestion, getSuggestion } from "~/modules/facts/actions";
 
@@ -41,18 +40,24 @@ const FLASH_DURATION_MS = 400; // Adjust flash duration here. Should match varia
 
 //TODO: The passing in of all props in the span causes React to complain. See this issue:
 //https://github.com/facebook/draft-js/issues/675
-const stylizedSpan = (className) => (props) =>
-  (
-    <span {...props} className={className}>
-      {props.children}
-    </span>
-  );
+const stylizedSpan =
+  (className: string): React.FC<{ children: React.ReactNode }> =>
+  (props) =>
+    (
+      <span {...props} className={className}>
+        {props.children}
+      </span>
+    );
 const Fact = stylizedSpan("fact input");
 const Suggestion = stylizedSpan("suggestion");
 const ValidInput = stylizedSpan("valid input");
 const ErrorInput = stylizedSpan("error input");
 
-const positionDecorator = (start, end, component) => ({
+const positionDecorator = (
+  start: number,
+  end: number,
+  component: React.FC
+) => ({
   strategy: (contentBlock, callback) => {
     if (end <= contentBlock.text.length) {
       callback(start, end);
@@ -78,6 +83,7 @@ type Props = {
 
 export class UnconnectedTextInput extends Component<Props> {
   editorRef: React.RefObject<Editor>;
+  clickHandler: (e: CustomEvent) => void;
 
   state = {
     editorState: EditorState.createWithContent(
@@ -90,6 +96,9 @@ export class UnconnectedTextInput extends Component<Props> {
   constructor(props: Props) {
     super(props);
     this.editorRef = React.createRef();
+    this.clickHandler = (e: CustomEvent) => {
+      this.functionMetricClicked(e.detail.readableId);
+    };
   }
 
   factRegex() {
@@ -354,14 +363,12 @@ export class UnconnectedTextInput extends Component<Props> {
   }
 
   handleFocus() {
-    $(window).on("functionMetricClicked", (_, { readableId }) => {
-      this.functionMetricClicked(readableId);
-    });
+    window.addEventListener("functionMetricClicked", this.clickHandler);
     this.props.onFocus();
   }
 
   handleBlur() {
-    $(window).off("functionMetricClicked");
+    window.removeEventListener("functionMetricClicked", this.clickHandler);
     this.props.onBlur();
   }
 

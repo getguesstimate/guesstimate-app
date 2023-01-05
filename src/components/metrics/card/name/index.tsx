@@ -20,7 +20,7 @@ type State = {
   editorState: any;
 };
 
-export default class MetricName extends Component<Props, State> {
+export class MetricName extends Component<Props, State> {
   state = {
     editorState: this.plainTextEditorState(this.props.name),
   };

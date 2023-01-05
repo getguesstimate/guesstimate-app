@@ -8,7 +8,7 @@ import { subStage } from "~/modules/first_subscription/state_machine";
 import * as spaceActions from "~/modules/spaces/actions";
 
 import { AppDispatch, RootState } from "~/modules/store";
-import FirstSubscription from "./FirstSubscription";
+import { FirstSubscription } from "./FirstSubscription";
 
 function mapStateToProps(state: RootState) {
   return {

@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 
-import ComponentEditor from "~/components/utility/ComponentEditor/index";
+import { ComponentEditor } from "~/components/utility/ComponentEditor";
 import { subStages } from "~/modules/first_subscription/state_machine";
 
-import FirstSubscription from "./FirstSubscription";
+import { FirstSubscription } from "./FirstSubscription";
 
 const FirstSubscriptionBaseProps = {
   planId: "small",

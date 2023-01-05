@@ -73,7 +73,7 @@ type Props = {
   onNewOrganizationNavigation: () => void;
 };
 
-const Plans: React.FC<Props> = ({
+export const Plans: React.FC<Props> = ({
   showPersonalUpgradeButton,
   onChoose,
   isLoggedIn,

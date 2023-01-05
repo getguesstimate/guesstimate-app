@@ -1,8 +1,8 @@
 import React from "react";
 
-import Plans from "./plans";
-import Container from "~/components/utility/container/Container";
-import PlanIndexQuestions from "./questions";
+import { Plans } from "./Plans";
+import { Container } from "~/components/utility/Container";
+import { PlanIndexQuestions } from "./PlanIndexQuestions";
 
 const PortalMessage: React.FC<{ portalUrl: string }> = ({ portalUrl }) => (
   <div className="portal-message-container">

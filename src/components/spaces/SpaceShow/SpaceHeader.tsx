@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 import Icon from "~/components/react-fa-patched";
-import { CardListSection } from "~/components/utility/card/index";
+import { CardListSection } from "~/components/utility/Card";
 
 import { DropDown } from "~/components/utility/DropDown";
 import { PrivacyToggle } from "./PrivacyToggle";

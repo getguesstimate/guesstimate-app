@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import Icon from "~/components/react-fa-patched";
 
 import { DistributionSummary } from "~/components/distributions/summary/index";
-import Histogram from "~/components/simulations/histogram/index";
+import { SimulationHistogram } from "~/components/simulations/SimulationHistogram";
 import {
   adjustedConfidenceInterval,
   Fact,
@@ -54,7 +54,7 @@ export const FactItem: React.FC<Props> = ({
                 />
               </div>
               <div className="histogram">
-                <Histogram
+                <SimulationHistogram
                   height={15}
                   simulation={fact.simulation}
                   cutOffRatio={0.995}

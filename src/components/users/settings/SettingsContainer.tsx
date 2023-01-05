@@ -9,7 +9,7 @@ type Props = {
   onClose(): void;
 };
 
-const SettingsContainer: React.FC<Props> = ({ onClose }) => {
+export const SettingsContainer: React.FC<Props> = ({ onClose }) => {
   const dispatch = useAppDispatch();
   const me = useAppSelector((state) => state.me);
 
@@ -28,5 +28,3 @@ const SettingsContainer: React.FC<Props> = ({ onClose }) => {
     />
   );
 };
-
-export default SettingsContainer;

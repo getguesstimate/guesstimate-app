@@ -5,7 +5,7 @@ import * as organizationActions from "~/modules/organizations/actions";
 
 import { Fact } from "~/lib/engine/facts";
 import { useAppDispatch } from "~/modules/hooks";
-import { FactList } from "./list";
+import { FactList } from "./FactList";
 
 type Props = {
   facts: Fact[];

@@ -1,12 +1,12 @@
 import { NextPage } from "next";
 
 import { Layout } from "~/components/layouts";
-import Settings from "~/components/users/settings/container";
+import { SettingsContainer } from "~/components/users/settings/SettingsContainer";
 
 const SettingsPage: NextPage = () => {
   return (
     <Layout>
-      <Settings onClose={() => undefined} />
+      <SettingsContainer onClose={() => undefined} />
     </Layout>
   );
 };

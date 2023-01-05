@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { DistributionSummary } from "~/components/distributions/summary/index";
-import Histogram from "~/components/simulations/histogram/index";
+import { SimulationHistogram } from "~/components/simulations/SimulationHistogram";
 import { cutoff, percentile } from "~/lib/dataAnalysis";
 import React, { Component } from "react";
 
@@ -102,7 +102,7 @@ export class HistogramWithStats extends Component<Props> {
           </div>
         </div>
         <div className="histogram">
-          <Histogram
+          <SimulationHistogram
             height={150}
             top={0}
             bottom={0}

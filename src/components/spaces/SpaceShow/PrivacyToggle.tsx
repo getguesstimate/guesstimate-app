@@ -2,7 +2,7 @@ import React from "react";
 import { useRouter } from "next/router";
 
 import { DropDown } from "~/components/utility/DropDown";
-import { CardListElement } from "~/components/utility/card/index";
+import { CardListElement } from "~/components/utility/Card";
 
 const PublicOption = ({ isSelected, onClick }) => (
   <CardListElement

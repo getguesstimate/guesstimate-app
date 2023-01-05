@@ -1,9 +1,9 @@
 import _ from "lodash";
 import React, { Component } from "react";
 
-import { FactItem } from "~/components/facts/list/item";
+import { FactItem } from "~/components/facts/list/FactItem";
 import { FlowGrid } from "~/components/lib/FlowGrid/FlowGrid";
-import { SpaceCard } from "~/components/spaces/cards";
+import { SpaceCard } from "~/components/spaces/SpaceCards";
 
 import * as _collections from "~/lib/engine/collections";
 import * as _utils from "~/lib/engine/utils";
@@ -16,6 +16,7 @@ import { getNodeAncestors } from "~/lib/DAG/nodeFns";
 import { Fact } from "~/lib/engine/facts";
 import { GridItem } from "~/components/lib/FlowGrid/types";
 import { ApiSpace } from "~/lib/guesstimate_api/resources/Models";
+import { initialCanvasState } from "~/modules/canvas_state/slice";
 
 const idToNodeId = (id: string | number, isFact: boolean) =>
   `${isFact ? "fact" : "space"}:${id}`;
@@ -209,7 +210,7 @@ export class FactGraph extends Component<Props> {
   }
 
   render() {
-    let { items, edges } = this.itemsAndEdges();
+    const { items, edges } = this.itemsAndEdges();
 
     return (
       <div className="FactGraph">
@@ -235,7 +236,7 @@ export class FactGraph extends Component<Props> {
           onPaste={() => {}}
           onCut={() => {}}
           showGridLines={false}
-          canvasState={{}}
+          canvasState={initialCanvasState}
           isModelingCanvas={false}
         />
       </div>

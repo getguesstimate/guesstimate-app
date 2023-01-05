@@ -2,8 +2,8 @@ import _ from "lodash";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 
-import { NewSpaceCard, SpaceCard } from "~/components/spaces/cards";
-import Container from "~/components/utility/container/Container";
+import { NewSpaceCard, SpaceCard } from "~/components/spaces/SpaceCards";
+import { Container } from "~/components/utility/Container";
 
 import { userSpaceSelector } from "./userSpaceSelector";
 

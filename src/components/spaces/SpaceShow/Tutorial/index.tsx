@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import Icon from "~/components/react-fa-patched";
 
-import { GeneralModal } from "~/components/utility/modal/index";
+import { GeneralModal } from "~/components/utility/GeneralModal";
 import {
   TutorialFunctionPage,
   TutorialMetricActionsPage,

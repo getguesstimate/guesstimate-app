@@ -2,7 +2,7 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 
 import { Layout } from "~/components/layouts";
-import FirstSubscriptionPage from "~/components/subscriptions/FirstSubscriptionPage/container";
+import { FirstSubscriptionPage } from "~/components/subscriptions/FirstSubscriptionPage";
 
 const SubscribePage: NextPage = () => {
   const router = useRouter();

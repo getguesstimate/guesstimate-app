@@ -91,7 +91,7 @@ type Props = {
   allowHover?: boolean;
 };
 
-export default class Histogram extends Component<Props> {
+export class Histogram extends Component<Props> {
   static defaultProps = {
     top: 20,
     bottom: 30,
@@ -236,7 +236,7 @@ const XAxis: React.FC<{
   );
 };
 
-export const Bar: React.FC<{
+const Bar: React.FC<{
   data: any;
   xScale: any;
   yScale: any;
