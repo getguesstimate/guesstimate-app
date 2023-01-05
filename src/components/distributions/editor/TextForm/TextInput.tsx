@@ -348,7 +348,7 @@ export class UnconnectedTextInput extends Component<Props> {
     }, FLASH_DURATION_MS);
   }
 
-  functionMetricClicked(readableId) {
+  functionMetricClicked(readableId: string) {
     this.onChange(this.addText(readableId, false));
     this.flash();
   }

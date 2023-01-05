@@ -1,6 +1,6 @@
-import { Location } from "~/lib/locationUtils";
+import { CanvasLocation } from "~/lib/locationUtils";
 
-export function selectRegion(corner1: Location, corner2: Location) {
+export function selectRegion(corner1: CanvasLocation, corner2: CanvasLocation) {
   const leftX = Math.min(corner1.row, corner2.row);
   const topY = Math.max(corner1.column, corner2.column);
   const rightX = Math.max(corner1.row, corner2.row);

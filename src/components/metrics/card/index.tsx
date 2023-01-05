@@ -15,7 +15,7 @@ import DistributionEditor, {
 import { MetricModal } from "~/components/metrics/MetricModal";
 import { ToolTip } from "~/components/utility/ToolTip";
 import { MetricCardViewSection } from "./MetricCardViewSection";
-import SensitivitySection from "./SensitivitySection/SensitivitySection";
+import { SensitivitySection } from "./SensitivitySection/SensitivitySection";
 
 import { analyzeMetricId, endAnalysis } from "~/modules/canvas_state/actions";
 import { createFactFromMetric } from "~/modules/facts/actions";
@@ -44,22 +44,24 @@ relationshipClasses[OUTPUT] = "output";
 relationshipClasses[INPUT] = "input";
 relationshipClasses[NOEDGE] = "noedge";
 
-const ScatterTip = ({ yMetric, xMetric }) => (
+const ScatterTip: React.FC<{
+  xMetric: FullDenormalizedMetric;
+  yMetric: FullDenormalizedMetric | null;
+}> = ({ yMetric, xMetric }) => (
   <ToolTip size="LARGE">
-    {" "}
-    <SensitivitySection yMetric={yMetric} xMetric={xMetric} size="LARGE" />{" "}
+    <SensitivitySection yMetric={yMetric} xMetric={xMetric} size="LARGE" />
   </ToolTip>
 );
 
 type Props = {
   canvasState: CanvasState;
   isInScreenshot: boolean;
-  metric: FullDenormalizedMetric; // FIXME
+  metric: FullDenormalizedMetric;
   organizationId?: string | number;
   canUseOrganizationFacts: boolean;
   exportedAsFact: boolean;
   idMap: object;
-  analyzedMetric: any;
+  analyzedMetric: FullDenormalizedMetric | null;
 } & GridContext & { dispatch: AppDispatch };
 
 type State = {

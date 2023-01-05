@@ -1,3 +1,4 @@
+import { Metric } from "../metrics/reducer";
 import * as actions from "./actions";
 
 describe("Autofill Actions", () => {
@@ -9,10 +10,11 @@ describe("Autofill Actions", () => {
     //     return { metric, guesstimate }
     const inputID = 2;
     const startExpression = `=1 + \$\{metric:${inputID}}`;
-    const startMetric = {
+    const startMetric: Metric = {
       id: "1",
       readableId: "AA",
       location: { row: 1, column: 1 },
+      space: 1,
     };
     const startGuesstimate = {
       metric: "1",

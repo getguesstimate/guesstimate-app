@@ -1,4 +1,4 @@
-import { Location, Region } from "~/lib/locationUtils";
+import { CanvasLocation, Region } from "~/lib/locationUtils";
 
 const upto = (n: number): number[] =>
   Array.apply(null, { length: n }).map(Number.call, Number);
@@ -41,7 +41,7 @@ export default class GridPoint {
     return { left, right };
   }
 
-  rectangle({ row, column }: Location): RectangleShape {
+  rectangle({ row, column }: CanvasLocation): RectangleShape {
     return Object.assign(this._rowY(row), this._columnX(column));
   }
 

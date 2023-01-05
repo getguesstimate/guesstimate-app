@@ -1,11 +1,11 @@
-import { Location } from "~/lib/locationUtils";
+import { CanvasLocation } from "~/lib/locationUtils";
 import React, { Component } from "react";
 
 type Props = {
-  onAddItem(location: Location): void;
+  onAddItem(location: CanvasLocation): void;
   inSelectedCell: boolean;
   gridKeyPress(e: React.KeyboardEvent): void;
-  location: Location;
+  location: CanvasLocation;
 };
 
 export default class EmptyCell extends Component<Props> {

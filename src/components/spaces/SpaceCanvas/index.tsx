@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { useEffect, useRef } from "react";
 
-import FlowGrid from "~/components/lib/FlowGrid/FlowGrid";
+import { FlowGrid } from "~/components/lib/FlowGrid/FlowGrid";
 import Metric from "~/components/metrics/card/index";
 
 import { fillRegion } from "~/modules/auto_fill_region/actions";
@@ -32,15 +32,15 @@ import { FullDenormalizedMetric } from "~/lib/engine/space";
 import {
   existsAtLoc,
   isWithinRegion,
-  Location,
+  CanvasLocation,
   MaybeRegion,
 } from "~/lib/locationUtils";
 import { useAppDispatch, useAppSelector } from "~/modules/hooks";
 import { ExtendedDSpace } from "../denormalized-space-selector";
 
 export type EdgeShape = {
-  input: Location;
-  output: Location;
+  input: CanvasLocation;
+  output: CanvasLocation;
   pathStatus: string;
   hasErrors: boolean;
 };
@@ -283,12 +283,15 @@ export const SpaceCanvas: React.FC<Props> = ({
     dispatch(redo(denormalizedSpace.id));
   };
 
-  const handleSelect = (location: Location, selectedFrom = null) => {
+  const handleSelect = (location: CanvasLocation, selectedFrom = null) => {
     dispatch(changeSelect(location, selectedFrom));
     dispatch(selectRegion(location, location));
   };
 
-  const handleMultipleSelect = (corner1: Location, corner2: Location) => {
+  const handleMultipleSelect = (
+    corner1: CanvasLocation,
+    corner2: CanvasLocation
+  ) => {
     dispatch(selectRegion(corner1, corner2));
   };
 
@@ -297,11 +300,14 @@ export const SpaceCanvas: React.FC<Props> = ({
     dispatch(deSelectRegion());
   };
 
-  const onAutoFillRegion = (region) => {
+  const onAutoFillRegion = (region: {
+    start: CanvasLocation;
+    end: CanvasLocation;
+  }) => {
     dispatch(fillRegion(denormalizedSpace.id, region));
   };
 
-  const handleAddMetric = (location: Location) => {
+  const handleAddMetric = (location: CanvasLocation) => {
     dispatch(
       addMetric({
         space: denormalizedSpace.id,
@@ -314,8 +320,8 @@ export const SpaceCanvas: React.FC<Props> = ({
     prev,
     next,
   }: {
-    prev: Location;
-    next: Location;
+    prev: CanvasLocation;
+    next: CanvasLocation;
   }) => {
     if (_.some(denormalizedSpace.metrics, existsAtLoc(next))) {
       return;

@@ -5,7 +5,7 @@ import Icon from "~/components/react-fa-patched";
 
 import { DistributionSummary } from "~/components/distributions/summary/index";
 import MetricName from "~/components/metrics/card/name/index";
-import SensitivitySection from "~/components/metrics/card/SensitivitySection/SensitivitySection";
+import { SensitivitySection } from "~/components/metrics/card/SensitivitySection/SensitivitySection";
 import {
   MetricExportedIcon,
   MetricReadableId,
@@ -218,7 +218,7 @@ export class MetricCardViewSection extends Component<Props> {
       <div className={mainClassName} onMouseDown={onMouseDown}>
         {showSimulation && (
           <Histogram
-            height={!!scientificViewEnabled ? 110 : 30}
+            height={scientificViewEnabled ? 110 : 30}
             simulation={simulation}
             cutOffRatio={0.995}
           />

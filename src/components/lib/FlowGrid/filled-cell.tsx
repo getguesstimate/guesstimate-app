@@ -2,7 +2,7 @@ import React, { Component, CSSProperties, useEffect } from "react";
 
 import { ConnectDragSource, useDrag, useDragLayer, XYCoord } from "react-dnd";
 
-import { Location } from "~/lib/locationUtils";
+import { CanvasLocation } from "~/lib/locationUtils";
 
 import { getClassName } from "~/lib/engine/utils";
 import { getEmptyImage } from "react-dnd-html5-backend";
@@ -86,10 +86,10 @@ type OuterProps = {
   selectedFrom?: any;
   item: GridItem;
   getRowHeight(): number;
-  location: Location;
-  handleSelect(location: Location, direction?: any): void;
-  onMoveItem(arg: { prev: Location; next: Location }): void;
-  onEndDrag(location: Location): void;
+  location: CanvasLocation;
+  handleSelect(location: CanvasLocation, direction?: any): void;
+  onMoveItem(arg: { prev: CanvasLocation; next: CanvasLocation }): void;
+  onEndDrag(location: CanvasLocation): void;
 };
 
 type State = {
@@ -190,9 +190,9 @@ export class InnerItemCell extends Component<Props, State> {
 const DragItemCell = React.forwardRef<InnerItemCell, OuterProps>(
   (props, ref) => {
     const [collectedProps, drag, dragPreview] = useDrag<
-      { location: Location },
+      { location: CanvasLocation },
       {
-        location: Location;
+        location: CanvasLocation;
         item: GridItem;
       },
       { isDragging: boolean }

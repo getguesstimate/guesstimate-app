@@ -1,5 +1,4 @@
-import { SelectedCellState } from "~/modules/selected_cell/reducer";
-import { Location } from "~/lib/locationUtils";
+import { CanvasLocation } from "~/lib/locationUtils";
 
 export function keycodeToDirection(keyCode: number) {
   // up arrow
@@ -29,9 +28,12 @@ export class DirectionToLocation {
     rows: number;
     columns: number;
   };
-  location: Location;
+  location: CanvasLocation;
 
-  constructor(size, location: Location) {
+  constructor(
+    size: { rows: number; columns: number },
+    location: CanvasLocation
+  ) {
     this.size = Object.assign(size);
     this.location = Object.assign({}, location);
   }

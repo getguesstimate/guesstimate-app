@@ -14,14 +14,17 @@ import {
   getBounds,
   move,
   translate,
+  CanvasLocation,
+  DirectionVector,
 } from "~/lib/locationUtils";
 import { AppThunk } from "~/modules/store";
+import { Metric } from "../metrics/reducer";
 
 const DYNAMIC_FILL_TYPE = "FUNCTION";
 
 // TODO(matthew): Dry up code with this and copy and undo.
 
-function getDirAndLen(start, end) {
+function getDirAndLen(start: CanvasLocation, end: CanvasLocation) {
   return {
     direction: {
       row: Math.sign(end.row - start.row),
@@ -32,7 +35,7 @@ function getDirAndLen(start, end) {
   };
 }
 
-function buildNewMetric(startMetric, metrics, location) {
+function buildNewMetric(startMetric: Metric, metrics, location) {
   const metricId =
     metrics.find((m) => isAtLocation(m.location, location)) ||
     e.metric.create(metrics.map((m) => m.readableId));
@@ -52,9 +55,9 @@ function isNonConstant({ location, name }, direction, metrics) {
 }
 
 // TODO(matthew): Make this not exported (Test through the public API)
-export function fillDynamic(startMetric, startGuesstimate, direction) {
+export function fillDynamic(startMetric: Metric, startGuesstimate, direction) {
   const { expression } = startGuesstimate;
-  return (location, metrics) => {
+  return (location: CanvasLocation, metrics) => {
     const metric = buildNewMetric(startMetric, metrics, location);
 
     const nonConstantMetrics = metrics.filter((m) =>
@@ -119,7 +122,7 @@ export function fillDynamic(startMetric, startGuesstimate, direction) {
   };
 }
 
-function fillStatic(startMetric, startGuesstimate) {
+function fillStatic(startMetric: Metric, startGuesstimate) {
   return (location, metrics) => {
     const metric = buildNewMetric(startMetric, metrics, location);
     return { metric, guesstimate: { ...startGuesstimate, metric: metric.id } };
@@ -127,14 +130,14 @@ function fillStatic(startMetric, startGuesstimate) {
 }
 
 function buildNewMetrics(
-  startMetric,
+  startMetric: Metric,
   startGuesstimate,
-  { direction, length },
-  metrics
+  { direction, length }: { direction: DirectionVector; length: number },
+  metrics: Metric[]
 ) {
-  const { guesstimateType, input } = startGuesstimate;
+  const { guesstimateType } = startGuesstimate;
 
-  let newMetrics: any[] = []; // FIXME
+  let newMetrics: Metric[] = []; // FIXME
   let newGuesstimates: any[] = [];
 
   const isDynamic = guesstimateType === DYNAMIC_FILL_TYPE;
@@ -162,7 +165,10 @@ function buildNewMetrics(
   return { newMetrics, newGuesstimates };
 }
 
-export function fillRegion(spaceId, { start, end }): AppThunk {
+export function fillRegion(
+  spaceId: number,
+  { start, end }: { start: CanvasLocation; end: CanvasLocation }
+): AppThunk {
   return (dispatch, getState) => {
     const state = getState();
 

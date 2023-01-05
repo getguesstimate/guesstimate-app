@@ -1,11 +1,11 @@
 import _ from "lodash";
 import { AnyAction, Reducer } from "redux";
 import { uniq } from "~/lib/engine/collections";
-import { Location } from "~/lib/locationUtils";
+import { CanvasLocation } from "~/lib/locationUtils";
 
 export type Metric = {
   space: number;
-  location: Location;
+  location: CanvasLocation;
   id: string;
   readableId: string;
   name?: string;

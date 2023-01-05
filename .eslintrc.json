@@ -1,4 +1,5 @@
 {
+  "root": true,
   "env": {
     "browser": true,
     "es6": true
@@ -8,31 +9,27 @@
     "Atomics": "readonly",
     "SharedArrayBuffer": "readonly"
   },
-  "parserOptions": {
-    "ecmaFeatures": {
-      "jsx": true
-    },
-    "ecmaVersion": 2018,
-    "sourceType": "module"
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   },
-  "plugins": ["react", "import"],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["react", "import", "react-hooks", "@typescript-eslint"],
   "rules": {
-    "quotes": 0,
-    "no-unused-vars": 1,
-    "camelcase": 1,
+    "quotes": "off",
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": "warn",
+    "camelcase": "warn",
     "no-underscore-dangle": 0,
     "react/display-name": 0,
     "react/jsx-boolean-value": 1,
     "react/jsx-closing-bracket-location": 1,
     "react/jsx-curly-spacing": 1,
-    // "react/jsx-indent-props": 1,
-    // "react/jsx-max-props-per-line": 1,
     "react/jsx-no-duplicate-props": 1,
-    // "react/jsx-no-literals": 1,
     "react/jsx-no-undef": 1,
     "jsx-quotes": 1,
     "react/sort-prop-types": 1,
-    // "react/jsx-sort-props": 1,
     "react/jsx-uses-react": 1,
     "react/jsx-uses-vars": 1,
     "react/no-danger": 1,
@@ -42,10 +39,12 @@
     "react/no-set-state": 0,
     "react/no-unknown-property": 1,
     "react/prop-types": 1,
-    // "react/react-in-jsx-scope": 1,
     "import/extensions": 1,
     "react/self-closing-comp": 1,
-    "react/sort-comp": 1,
-    "react/jsx-wrap-multilines": 1
+    "react/sort-comp": "off",
+    "react/jsx-wrap-multilines": 1,
+    "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
+    "react-hooks/exhaustive-deps": "warn", // Checks effect dependencies
+    "no-redeclare": "warn"
   }
 }

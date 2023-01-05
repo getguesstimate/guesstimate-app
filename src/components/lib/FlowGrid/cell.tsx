@@ -7,7 +7,7 @@ import EmptyCell from "./cell-empty";
 import ItemCell, { InnerItemCell } from "./filled-cell";
 
 import { getClassName } from "~/lib/engine/utils";
-import { Location } from "~/lib/locationUtils";
+import { Direction, CanvasLocation } from "~/lib/locationUtils";
 import { CanvasState, GridItem } from "./types";
 
 type CollectedProps = {
@@ -21,14 +21,14 @@ type OwnProps = {
   inSelectedCell: boolean;
   isHovered: boolean;
   showAutoFillToken: boolean;
-  handleSelect(location: Location, direction?: any): void;
-  handleEndRangeSelect(location: Location): void;
+  handleSelect(location: CanvasLocation, direction?: any): void;
+  handleEndRangeSelect(location: CanvasLocation): void;
   item?: GridItem;
-  location: Location;
-  onAddItem(location: Location): void;
-  onMoveItem(arg: { prev: Location; next: Location }): void;
+  location: CanvasLocation;
+  onAddItem(location: CanvasLocation): void;
+  onMoveItem(arg: { prev: CanvasLocation; next: CanvasLocation }): void;
   hasItemUpdated(oldItem: GridItem, newItem: GridItem): boolean;
-  onEndDragCell(location: Location): void;
+  onEndDragCell(location: CanvasLocation): void;
   forceFlowGridUpdate(): void;
   onEmptyCellMouseDown(e: React.MouseEvent): void;
   onMouseEnter(e: React.MouseEvent): void;
@@ -37,7 +37,7 @@ type OwnProps = {
   onAutoFillTargetMouseDown(): void;
   onReturn(): void;
   onTab(): void;
-  selectedFrom?: "UP" | "DOWN" | "LEFT" | "RIGHT";
+  selectedFrom?: Direction;
   getRowHeight(): number;
 };
 type Props = OwnProps & CollectedProps;
@@ -50,22 +50,28 @@ class Cell extends Component<Props> {
     this.itemRef = React.createRef();
   }
 
-  shouldComponentUpdate(newProps: Props) {
-    const difProps =
-      newProps.isOver !== this.props.isOver ||
-      newProps.inSelectedRegion !== this.props.inSelectedRegion ||
-      newProps.inSelectedCell !== this.props.inSelectedCell ||
-      newProps.isHovered !== this.props.isHovered ||
-      newProps.showAutoFillToken !== this.props.showAutoFillToken;
-    const itemDifferent = !!newProps.item !== !!this.props.item;
+  // shouldComponentUpdate(newProps: Props) {
+  //   const difProps =
+  //     newProps.isOver !== this.props.isOver ||
+  //     newProps.inSelectedRegion !== this.props.inSelectedRegion ||
+  //     newProps.inSelectedCell !== this.props.inSelectedCell ||
+  //     newProps.isHovered !== this.props.isHovered ||
+  //     newProps.showAutoFillToken !== this.props.showAutoFillToken;
+  //   const itemDifferent = !!newProps.item !== !!this.props.item;
 
-    return (
-      difProps ||
-      itemDifferent ||
-      (!!newProps.item &&
-        !!this.props.item &&
-        this.props.hasItemUpdated(this.props.item, newProps.item))
-    );
+  //   return (
+  //     difProps ||
+  //     itemDifferent ||
+  //     (!!newProps.item &&
+  //       !!this.props.item &&
+  //       this.props.hasItemUpdated(this.props.item, newProps.item))
+  //   );
+  // }
+  componentDidMount() {
+    if (this.props.inSelectedCell) {
+      this._focus();
+    }
+    window.recorder.recordMountEvent(this);
   }
 
   componentWillUpdate() {
@@ -120,13 +126,6 @@ class Cell extends Component<Props> {
         this.props.handleSelect(location);
       }
     }
-  }
-
-  componentDidMount() {
-    if (this.props.inSelectedCell) {
-      this._focus();
-    }
-    window.recorder.recordMountEvent(this);
   }
 
   _focus() {

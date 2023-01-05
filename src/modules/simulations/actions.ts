@@ -29,7 +29,7 @@ export function* runDescendantSimulation({ getState, metricId, dispatch }) {
   yield simulate(dispatch, getState, { metricId, notHead: true });
 }
 
-export function deleteSimulations(metricIds): AnyAction {
+export function deleteSimulations(metricIds: string[]): AnyAction {
   return { type: "DELETE_SIMULATIONS", metricIds };
 }
 

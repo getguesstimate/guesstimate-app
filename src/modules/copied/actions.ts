@@ -5,10 +5,16 @@ import { selectRegion } from "~/modules/selected_region/actions";
 import { runSimulations } from "~/modules/simulations/actions";
 import { registerGraphChange } from "~/modules/spaces/actions";
 
-import { isLocation, isWithinRegion, translate } from "~/lib/locationUtils";
+import {
+  isLocation,
+  isWithinRegion,
+  Region,
+  translate,
+} from "~/lib/locationUtils";
 import { AppThunk } from "~/modules/store";
+import { Metric } from "../metrics/reducer";
 
-export function cut(spaceId): AppThunk {
+export function cut(spaceId: number): AppThunk {
   return (dispatch, getState) => {
     dispatch(copy(spaceId));
 
@@ -23,11 +29,15 @@ export function cut(spaceId): AppThunk {
   };
 }
 
-export function copy(spaceId): AppThunk {
+export function copy(spaceId: number): AppThunk {
   return (dispatch, getState) => {
     const state = getState();
 
     const region = state.selectedRegion;
+    if (!region.length) {
+      return; // can't copy empty region
+    }
+
     const metrics = state.metrics.filter(
       (m) => m.space === spaceId && isWithinRegion(m.location, region)
     );
@@ -39,7 +49,7 @@ export function copy(spaceId): AppThunk {
   };
 }
 
-export function paste(spaceId): AppThunk {
+export function paste(spaceId: number): AppThunk {
   return (dispatch, getState) => {
     const state = getState();
     if (
@@ -53,16 +63,16 @@ export function paste(spaceId): AppThunk {
 
     const translateFn = translate(region[0], location);
 
-    const pasteRegion = [location, translateFn(region[1])];
+    const pasteRegion: Region = [location, translateFn(region[1])];
 
     const spaceMetrics = state.metrics.filter((m) => m.space === spaceId);
     let existingReadableIds = spaceMetrics.map((m) => m.readableId);
     let existingIds = spaceMetrics.map((m) => m.id);
 
     let idsMap = {};
-    let metricsToSimulate: any[] = [];
+    let metricsToSimulate: Metric[] = [];
     const newMetrics = _.map(metrics, (metric) => {
-      let newMetric = {
+      let newMetric: Metric = {
         ...metric,
         space: spaceId,
         location: translateFn(metric.location),

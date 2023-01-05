@@ -593,9 +593,9 @@ class SpaceShow extends Component<Props, State> {
             onDestroy={this.destroy.bind(this)}
             onCopyModel={this._handleCopyModel.bind(this)}
             onCopyMetrics={this.onCopy.bind(this, false)}
-            onPasteMetrics={this.onPaste.bind(this, false)}
+            onPasteMetrics={this.onPaste.bind(this)}
             onDeleteMetrics={this.onDeleteMetrics.bind(this)}
-            onCutMetrics={this.onCut.bind(this, false)}
+            onCutMetrics={this.onCut.bind(this)}
             isPrivate={space.is_private}
             editableByMe={space.editableByMe}
             actionState={space.canvasState.actionState}

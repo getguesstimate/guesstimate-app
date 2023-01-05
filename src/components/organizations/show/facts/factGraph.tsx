@@ -2,7 +2,7 @@ import _ from "lodash";
 import React, { Component } from "react";
 
 import { FactItem } from "~/components/facts/list/item";
-import FlowGrid from "~/components/lib/FlowGrid/FlowGrid";
+import { FlowGrid } from "~/components/lib/FlowGrid/FlowGrid";
 import { SpaceCard } from "~/components/spaces/cards";
 
 import * as _collections from "~/lib/engine/collections";

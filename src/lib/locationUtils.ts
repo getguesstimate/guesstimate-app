@@ -1,15 +1,23 @@
 import _ from "lodash";
 
-export type Location = {
+// `Location` is a builtin type, so we use a longer name
+export type CanvasLocation = {
+  column: number;
+  row: number;
+};
+
+export type Direction = "UP" | "DOWN" | "LEFT" | "RIGHT";
+
+export type DirectionVector = {
   column: number;
   row: number;
 };
 
 // Regions are [top_left_location, bottom_right_location]
-export type Region = [Location, Location];
-export type MaybeRegion = [Location, Location] | [];
+export type Region = Readonly<[CanvasLocation, CanvasLocation]>;
+export type MaybeRegion = Region | [];
 
-export function isLocation(test): test is Location {
+export function isLocation(test): test is CanvasLocation {
   return !!test && test.hasOwnProperty("row") && test.hasOwnProperty("column");
 }
 
@@ -17,14 +25,17 @@ export function isRegion(test: MaybeRegion): test is Region {
   return test.length === 2;
 }
 
-export function isAtLocation(test: Location | {}, location: Location) {
+export function isAtLocation(
+  test: CanvasLocation | {},
+  location: CanvasLocation
+) {
   if (!("row" in test)) {
     return false;
   }
   return test.row === location.row && test.column === location.column;
 }
 
-export function isWithinRegion(test, region) {
+export function isWithinRegion(test: CanvasLocation, region?: MaybeRegion) {
   if (!test || !region || region.length !== 2) {
     return false;
   }
@@ -40,8 +51,8 @@ export function getBounds({
   start,
   end,
 }: {
-  start?: Location;
-  end?: Location;
+  start?: CanvasLocation;
+  end?: CanvasLocation;
 }): MaybeRegion {
   if (!start || !end) {
     return [];
@@ -49,15 +60,18 @@ export function getBounds({
   return boundingRegion([start, end]);
 }
 
-export const move = ({ row, column }, direction) => ({
+export const move = (
+  { row, column }: CanvasLocation,
+  direction: DirectionVector
+): CanvasLocation => ({
   row: row + direction.row,
   column: column + direction.column,
 });
 
 // Returns a function that translates all points of the form {row: X, column: Y} according to the translation that moves
 // start to end.
-export function translate(start, end) {
-  return (l) => ({
+export function translate(start: CanvasLocation, end: CanvasLocation) {
+  return (l: CanvasLocation) => ({
     row: l.row + (end.row - start.row),
     column: l.column + (end.column - start.column),
   });
@@ -69,7 +83,7 @@ export function existsAtLoc(seekLoc) {
   return (e) => isAtLocation(e.location, seekLoc);
 }
 
-export function boundingRegion(locations): Region {
+export function boundingRegion(locations: CanvasLocation[]): Region {
   if (_.isEmpty(locations)) {
     return [
       { row: 0, column: 0 },
