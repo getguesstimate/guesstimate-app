@@ -10,10 +10,11 @@ import { DropDown } from "~/components/utility/DropDown";
 import { CanvasViewForm } from "../CanvasViewForm";
 import { ViewOptionToggle } from "../ViewOptionToggle";
 import { ImportFromSlurpForm } from "./import_from_slurp_form";
+import { CanvasActionState } from "~/modules/canvas_state/reducer";
 
-const ProgressMessage: React.FC<{ actionState: string | undefined }> = ({
-  actionState,
-}) => (
+const ProgressMessage: React.FC<{
+  actionState: CanvasActionState | undefined;
+}> = ({ actionState }) => (
   <div className="saveMessage">
     {actionState == "SAVING" && "Saving..."}
     {actionState == "COPYING" && "Copying..."}
@@ -56,7 +57,7 @@ type Props = {
   onCutMetrics(): void;
   isPrivate: boolean | undefined;
   editableByMe: boolean;
-  actionState: string | undefined; // TODO - union
+  actionState: CanvasActionState | undefined; // TODO - union
   onUndo(): void;
   onRedo(): void;
   canUndo: boolean;

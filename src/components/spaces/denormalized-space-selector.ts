@@ -7,9 +7,9 @@ import { CanvasState } from "~/modules/canvas_state/reducer";
 
 const NAME = "Denormalized Space Selector";
 
-function checkpointMetadata(id, checkpoints: any[]) {
+function checkpointMetadata(id: number, checkpoints: any[]) {
   let attributes = { head: 0, length: 1 };
-  let spaceCheckpoints = e.collections.get(checkpoints, id, "spaceId");
+  const spaceCheckpoints = e.collections.get(checkpoints, id, "spaceId");
   if (!_.isEmpty(spaceCheckpoints)) {
     attributes = {
       head: spaceCheckpoints.head,
@@ -35,7 +35,10 @@ const SPACE_GRAPH_PARTS = [
 
 export type ExtendedDSpace = DSpace & {
   canvasState: CanvasState;
-  checkpointMetadata: any;
+  checkpointMetadata: {
+    head: number;
+    length: number;
+  };
 };
 
 const spaceGraphSelector = (state: RootState) => {

@@ -3,7 +3,7 @@ import { Component } from "react";
 
 import angleBetweenPoints from "angle-between-points";
 
-import { getClassName } from "~/lib/engine/utils";
+import clsx from "clsx";
 import { RectangleShape } from "./gridPoints";
 
 class Rectangle {
@@ -26,20 +26,20 @@ class Rectangle {
     return this.top + (this.bottom - this.top) / 2;
   }
 
-  topPoint(adjust) {
+  topPoint(adjust: number) {
     return { x: this._xMiddle() + adjust, y: this.top };
   }
-  bottomPoint(adjust) {
+  bottomPoint(adjust: number) {
     return { x: this._xMiddle() + adjust, y: this.bottom };
   }
-  leftPoint(adjust) {
+  leftPoint(adjust: number) {
     return { x: this.left, y: this._yMiddle() + adjust };
   }
-  rightPoint(adjust) {
+  rightPoint(adjust: number) {
     return { x: this.right, y: this._yMiddle() + adjust };
   }
 
-  angleTo(otherRectangle) {
+  angleTo(otherRectangle: RectangleShape) {
     const other = new Rectangle(otherRectangle);
     const points = [
       { x: this._xMiddle(), y: -1 * this._yMiddle() },
@@ -48,7 +48,7 @@ class Rectangle {
     return angleBetweenPoints(...points);
   }
 
-  positionFrom(otherRectangle) {
+  positionFrom(otherRectangle: RectangleShape) {
     const angle = this.angleTo(otherRectangle);
 
     const RECTANGLE_ANGLE = 30;
@@ -67,24 +67,24 @@ class Rectangle {
     }
   }
 
-  adjustment(otherRectangle) {
+  adjustment(otherRectangle: RectangleShape) {
     return this.shouldAdjust(otherRectangle)
       ? this.adjustmentAmount(otherRectangle)
       : 0;
   }
 
-  shouldAdjust(otherRectangle) {
+  shouldAdjust(otherRectangle: RectangleShape) {
     const angle = this.angleTo(otherRectangle);
     return angle % 90 < 4;
   }
 
   //this randomness really messes up with rendering, will stop for now
-  adjustmentAmount(otherRectangle) {
+  adjustmentAmount(otherRectangle: RectangleShape) {
     const ADJUSTMENT_RANGE = 20;
     return Math.random() * ADJUSTMENT_RANGE - ADJUSTMENT_RANGE / 2;
   }
 
-  showPosition(otherRectangle) {
+  showPosition(otherRectangle: RectangleShape) {
     const positionFrom = this.positionFrom(otherRectangle);
     const adjust = 0;
     switch (positionFrom) {
@@ -121,18 +121,14 @@ export default class Edge extends Component<Props> {
     if (!this._isValidNode(input) || !this._isValidNode(output)) {
       return false;
     }
-    let inputPoints = new Rectangle(input).showPosition(output);
-    let outputPoints = new Rectangle(output).showPosition(input);
+    const inputPoints = new Rectangle(input).showPosition(output);
+    const outputPoints = new Rectangle(output).showPosition(input);
 
-    let points = `M${inputPoints.x},${inputPoints.y} L${outputPoints.x} ,${outputPoints.y}`;
+    const points = `M${inputPoints.x},${inputPoints.y} L${outputPoints.x} ,${outputPoints.y}`;
 
     return (
       <path
-        className={getClassName(
-          "basic-arrow",
-          pathStatus,
-          hasErrors ? " hasErrors" : null
-        )}
+        className={clsx("basic-arrow", pathStatus, hasErrors && " hasErrors")}
         d={points}
         markerEnd={`url(#MarkerArrow-${hasErrors ? "hasErrors" : pathStatus})`}
         fill="none"

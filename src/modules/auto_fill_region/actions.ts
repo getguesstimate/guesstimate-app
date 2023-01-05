@@ -19,6 +19,7 @@ import {
 } from "~/lib/locationUtils";
 import { AppThunk } from "~/modules/store";
 import { Metric } from "../metrics/reducer";
+import { Guesstimate } from "../guesstimates/reducer";
 
 const DYNAMIC_FILL_TYPE = "FUNCTION";
 
@@ -46,7 +47,7 @@ function buildNewMetric(startMetric: Metric, metrics, location) {
   };
 }
 
-function isNonConstant({ location, name }, direction, metrics) {
+function isNonConstant({ location, name }: Metric, direction, metrics) {
   return (
     _.some(metrics, (m) =>
       isAtLocation(move(location, direction), m.location)
@@ -55,9 +56,13 @@ function isNonConstant({ location, name }, direction, metrics) {
 }
 
 // TODO(matthew): Make this not exported (Test through the public API)
-export function fillDynamic(startMetric: Metric, startGuesstimate, direction) {
+export function fillDynamic(
+  startMetric: Metric,
+  startGuesstimate: Guesstimate,
+  direction
+) {
   const { expression } = startGuesstimate;
-  return (location: CanvasLocation, metrics) => {
+  return (location: CanvasLocation, metrics: Metric[]) => {
     const metric = buildNewMetric(startMetric, metrics, location);
 
     const nonConstantMetrics = metrics.filter((m) =>
@@ -122,8 +127,8 @@ export function fillDynamic(startMetric: Metric, startGuesstimate, direction) {
   };
 }
 
-function fillStatic(startMetric: Metric, startGuesstimate) {
-  return (location, metrics) => {
+function fillStatic(startMetric: Metric, startGuesstimate: Guesstimate) {
+  return (location: CanvasLocation, metrics: Metric[]) => {
     const metric = buildNewMetric(startMetric, metrics, location);
     return { metric, guesstimate: { ...startGuesstimate, metric: metric.id } };
   };
@@ -131,14 +136,14 @@ function fillStatic(startMetric: Metric, startGuesstimate) {
 
 function buildNewMetrics(
   startMetric: Metric,
-  startGuesstimate,
+  startGuesstimate: Guesstimate,
   { direction, length }: { direction: DirectionVector; length: number },
   metrics: Metric[]
 ) {
   const { guesstimateType } = startGuesstimate;
 
   let newMetrics: Metric[] = []; // FIXME
-  let newGuesstimates: any[] = [];
+  let newGuesstimates: Guesstimate[] = [];
 
   const isDynamic = guesstimateType === DYNAMIC_FILL_TYPE;
   const translateFn = (isDynamic ? fillDynamic : fillStatic)(
@@ -195,6 +200,9 @@ export function fillRegion(
     const startGuesstimate = state.guesstimates.find(
       (g) => g.metric === startMetric.id
     );
+    if (!startGuesstimate) {
+      return;
+    }
 
     const { newMetrics, newGuesstimates } = buildNewMetrics(
       startMetric,

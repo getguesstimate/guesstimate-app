@@ -1,4 +1,4 @@
-import { guesstimatesR } from "./reducer";
+import { Guesstimate, guesstimatesR } from "./reducer";
 
 describe("guesstimatesReducer", () => {
   describe("#SPACES_FETCH_SUCCESS", () => {
@@ -26,9 +26,9 @@ describe("guesstimatesReducer", () => {
   });
 
   describe("#ADD_METRIC", () => {
-    const guesstimates = [
-      { metric: "1", guesstimateType: "NONE", input: "" },
-      { metric: "2", guesstimateType: "POINT", input: "3" },
+    const guesstimates: Guesstimate[] = [
+      { metric: "1", guesstimateType: "NONE", input: "", description: "" },
+      { metric: "2", guesstimateType: "POINT", input: "3", description: "" },
     ];
 
     it(`correctly adds new element`, () => {

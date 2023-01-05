@@ -13,6 +13,7 @@ import {
 } from "~/lib/locationUtils";
 import { AppThunk } from "~/modules/store";
 import { Metric } from "../metrics/reducer";
+import { copiedSlice } from "./reducer";
 
 export function cut(spaceId: number): AppThunk {
   return (dispatch, getState) => {
@@ -41,11 +42,11 @@ export function copy(spaceId: number): AppThunk {
     const metrics = state.metrics.filter(
       (m) => m.space === spaceId && isWithinRegion(m.location, region)
     );
-    const guesstimates = metrics.map((metric) =>
-      state.guesstimates.find((g) => g.metric === metric.id)
-    );
+    const guesstimates = metrics
+      .map((metric) => state.guesstimates.find((g) => g.metric === metric.id))
+      .filter((g): g is NonNullable<typeof g> => !!g);
 
-    dispatch({ type: "COPY", copied: { metrics, guesstimates, region } });
+    dispatch(copiedSlice.actions.copy({ metrics, guesstimates, region }));
   };
 }
 
@@ -71,7 +72,7 @@ export function paste(spaceId: number): AppThunk {
 
     let idsMap = {};
     let metricsToSimulate: Metric[] = [];
-    const newMetrics = _.map(metrics, (metric) => {
+    const newMetrics = metrics.map((metric) => {
       let newMetric: Metric = {
         ...metric,
         space: spaceId,
@@ -88,7 +89,7 @@ export function paste(spaceId: number): AppThunk {
       return newMetric;
     });
 
-    const newGuesstimates = _.map(guesstimates, (guesstimate, i) =>
+    const newGuesstimates = guesstimates.map((guesstimate, i) =>
       Object.assign(
         {},
         guesstimate,
@@ -111,7 +112,7 @@ export function paste(spaceId: number): AppThunk {
       });
     }
 
-    dispatch({ type: "PASTE" });
+    dispatch(copiedSlice.actions.paste());
     dispatch(
       runSimulations({
         spaceId,

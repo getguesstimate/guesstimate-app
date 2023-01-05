@@ -28,6 +28,7 @@ import {
 import { getClassName, replaceByMap } from "~/lib/engine/utils";
 import { ConnectDragSource } from "react-dnd";
 import { CanvasState } from "~/modules/canvas_state/reducer";
+import { FullDenormalizedMetric } from "~/lib/engine/space";
 
 // TODO(matthew): Refactor these components. E.g. it's weird that isBreak takes all errors, but you may only care about
 // the one...
@@ -46,12 +47,12 @@ const ErrorIcon: React.FC<{ errors: any }> = ({ errors }) => {
 
 // We have to display this section after it disappears
 // to ensure that the metric card gets selected after click.
-const ErrorSection: React.FC<any> = ({
-  errors,
-  padTop,
-  shouldShowErrorText,
-  messageToDisplay,
-}) => (
+const ErrorSection: React.FC<{
+  errors: any;
+  padTop: boolean;
+  shouldShowErrorText: boolean;
+  messageToDisplay: string | null;
+}> = ({ errors, padTop, shouldShowErrorText, messageToDisplay }) => (
   <div
     className={getClassName(
       "StatsSectionErrors",
@@ -69,7 +70,7 @@ const ErrorSection: React.FC<any> = ({
 type Props = {
   canvasState: CanvasState;
   isTitle: boolean;
-  metric: any;
+  metric: FullDenormalizedMetric;
   inSelectedCell: boolean;
   hovered: boolean;
   showSensitivitySection: boolean;

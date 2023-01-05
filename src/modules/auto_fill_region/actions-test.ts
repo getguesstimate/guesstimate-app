@@ -1,3 +1,4 @@
+import { Guesstimate } from "../guesstimates/reducer";
 import { Metric } from "../metrics/reducer";
 import * as actions from "./actions";
 
@@ -8,7 +9,7 @@ describe("Autofill Actions", () => {
     //   return (location, metrics) => {
     //     ...
     //     return { metric, guesstimate }
-    const inputID = 2;
+    const inputID = "2";
     const startExpression = `=1 + \$\{metric:${inputID}}`;
     const startMetric: Metric = {
       id: "1",
@@ -16,21 +17,24 @@ describe("Autofill Actions", () => {
       location: { row: 1, column: 1 },
       space: 1,
     };
-    const startGuesstimate = {
+    const startGuesstimate: Guesstimate = {
       metric: "1",
       expression: startExpression,
       guesstimateType: "FUNCTION",
+      input: null,
+      description: "",
     };
     const direction = { row: 0, column: 1 };
 
     it("fills constants properly", () => {
       const location = { row: 1, column: 2 };
-      const metrics = [
+      const metrics: Metric[] = [
         {
           name: "Constant.",
           id: inputID,
           readableId: "VL",
           location: { row: 0, column: 0 },
+          space: 1,
         },
       ];
       const fillFn = actions.fillDynamic(
@@ -38,19 +42,18 @@ describe("Autofill Actions", () => {
         startGuesstimate,
         direction
       );
-      const {
-        guesstimate: { expression },
-      } = fillFn(location, metrics);
-      expect(expression).toEqual(startExpression);
+      const { guesstimate } = fillFn(location, metrics);
+      expect(guesstimate?.expression).toEqual(startExpression);
     });
 
     it("fills properly with no translatable metrics, but some non-constant", () => {
       const location = { row: 1, column: 2 };
-      const metrics = [
+      const metrics: Metric[] = [
         {
           id: inputID,
           readableId: "VL",
           location: { row: 0, column: 0 },
+          space: 1,
         },
       ];
       const fillFn = actions.fillDynamic(

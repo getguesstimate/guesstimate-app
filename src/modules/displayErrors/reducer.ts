@@ -1,5 +1,4 @@
-import { Reducer } from "redux";
-import { DisplayErrorAction } from "./actions";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type DisplayErrorState = {
   error?: unknown;
@@ -10,20 +9,30 @@ const testExample: DisplayErrorState = [
   { error: "foo", message: "terrible thing!" },
 ];
 
-const initialState: DisplayErrorState = [];
-
-const displayError: Reducer<DisplayErrorState, DisplayErrorAction> = (
-  state = initialState,
-  action: DisplayErrorAction // FIXME - this is a lie, action can be something else
-) => {
-  switch (action.type) {
-    case "NEW_DISPLAY_ERROR":
-      return [...state, action.value];
-    case "CLOSE_DISPLAY_ERRORS":
+export const displayErrorSlice = createSlice({
+  name: "displayError",
+  initialState: [] as DisplayErrorState,
+  reducers: {
+    newError: {
+      prepare(error?: unknown, message?: string) {
+        return {
+          payload: {
+            error,
+            message,
+          },
+        };
+      },
+      reducer(
+        state,
+        action: PayloadAction<{ error?: unknown; message?: string }>
+      ) {
+        state.push(action.payload);
+      },
+    },
+    close() {
       return [];
-    default:
-      return state;
-  }
-};
+    },
+  },
+});
 
-export default displayError;
+export default displayErrorSlice.reducer;

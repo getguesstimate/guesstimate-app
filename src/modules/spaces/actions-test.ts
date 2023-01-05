@@ -7,7 +7,7 @@ import { expectToCallActions } from "~/modules/mockStore";
 enableFetchMocks();
 
 describe("async actions", () => {
-  it("creates CHANGE_CANVAS_STATE when saving fails", (done) => {
+  it("creates canvasState/changeActionState when saving fails", (done) => {
     fetch.mockResponseOnce(async (req) => {
       return {
         init: {
@@ -19,8 +19,8 @@ describe("async actions", () => {
 
     const expectedActions = [
       { type: "SPACES_UPDATE_START", record: { id: 1 }, data: undefined },
-      { type: "CHANGE_CANVAS_STATE", values: { actionState: "SAVING" } },
-      { type: "CHANGE_CANVAS_STATE", values: { actionState: "ERROR" } },
+      { type: "canvasState/changeActionState", payload: "SAVING" },
+      { type: "canvasState/changeActionState", payload: "ERROR" },
     ];
 
     expectToCallActions(generalUpdate(1, {}), expectedActions, done, {

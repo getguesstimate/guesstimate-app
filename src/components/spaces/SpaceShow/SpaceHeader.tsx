@@ -151,8 +151,8 @@ export class SpaceHeader extends Component<any> {
 
           <div className="col-md-4 col-xs-6">
             {ownerIsOrg &&
-              editors.map((editor) => (
-                <a href={e.user.url(editor)}>
+              editors.map((editor, i) => (
+                <a href={e.user.url(editor)} key={i}>
                   <img src={editor.picture} className="ui avatar image" />
                 </a>
               ))}

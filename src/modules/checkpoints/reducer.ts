@@ -1,6 +1,12 @@
 import { AnyAction, Reducer } from "redux";
 
-type CheckpointsState = any;
+type CheckpointEntry = {
+  spaceId: number;
+  head: number;
+  checkpoints: any[];
+};
+
+type CheckpointsState = CheckpointEntry[];
 
 export const checkpointsR: Reducer<CheckpointsState, AnyAction> = (
   state = [],
@@ -14,9 +20,12 @@ export const checkpointsR: Reducer<CheckpointsState, AnyAction> = (
         ...state,
       ];
     case "SAVE_CHECKPOINT": {
-      const { spaceId, head, checkpoints } = state.find(
-        (r) => r.spaceId === action.spaceId
-      );
+      const entry = state.find((r) => r.spaceId === action.spaceId);
+      if (!entry) {
+        console.warn(`Space ${action.spaceId} is uninitialized`);
+        return state;
+      }
+      const { spaceId, head, checkpoints } = entry;
       const newCheckpoints = [action.checkpoint, ...checkpoints.slice(head)];
       return [
         { spaceId, head: 0, checkpoints: newCheckpoints },

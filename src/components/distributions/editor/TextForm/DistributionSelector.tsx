@@ -61,45 +61,34 @@ const DistributionIcon: React.FC<{
   </div>
 );
 
-export class DistributionSelector extends Component<{
-  disabledTypes: DistributionType[];
+export const DistributionSelector: React.FC<{
   selected: string;
   onSubmit(type: DistributionType): void;
-}> {
-  static defaultProps = {
-    disabledTypes: [],
+  disabledTypes: DistributionType[];
+}> = ({ selected, onSubmit, disabledTypes = [] }) => {
+  const _handleShowMore = () => {
+    elev.open(elev.ADDITIONAL_DISTRIBUTIONS);
   };
 
-  _handleShowMore() {
-    elev.open(elev.ADDITIONAL_DISTRIBUTIONS);
-  }
-
-  render() {
-    const { selected, disabledTypes } = this.props;
-
-    const allTypes: DistributionType[] = ["LOGNORMAL", "NORMAL", "UNIFORM"];
-    return (
-      <div className="DistributionSelector">
-        <hr />
-        <a
-          className="more-distributions"
-          onClick={this._handleShowMore.bind(this)}
-        >
-          More
-        </a>
-        <div className="DistributionList">
-          {allTypes.map((type) => (
-            <DistributionIcon
-              type={type}
-              onSubmit={this.props.onSubmit}
-              isSelected={selected === type}
-              isDisabled={disabledTypes.includes(type)}
-              icon={Guesstimator.samplerTypes.find(type).icon}
-              key={type}
-            />
-          ))}
-        </div>
+  const allTypes: DistributionType[] = ["LOGNORMAL", "NORMAL", "UNIFORM"];
+  return (
+    <div className="DistributionSelector">
+      <hr />
+      <a className="more-distributions" onClick={_handleShowMore}>
+        More
+      </a>
+      <div className="DistributionList">
+        {allTypes.map((type) => (
+          <DistributionIcon
+            type={type}
+            onSubmit={onSubmit}
+            isSelected={selected === type}
+            isDisabled={disabledTypes.includes(type)}
+            icon={Guesstimator.samplerTypes.find(type).icon}
+            key={type}
+          />
+        ))}
       </div>
-    );
-  }
-}
+    </div>
+  );
+};

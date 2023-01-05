@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 
 import { FlowGrid } from "~/components/lib/FlowGrid/FlowGrid";
 import Metric from "~/components/metrics/card/index";
@@ -98,6 +98,7 @@ export const SpaceCanvas: React.FC<Props> = ({
       );
       dispatch(canvasStateActions.endAnalysis());
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const { metrics, canvasState } = denormalizedSpace;

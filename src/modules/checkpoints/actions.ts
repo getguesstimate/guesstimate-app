@@ -2,7 +2,7 @@ import * as engine from "~/lib/engine/engine";
 import { AppDispatch, AppThunk, RootState } from "~/modules/store";
 import _ from "lodash";
 
-export function saveCheckpoint(spaceId, newGraph): AppThunk {
+export function saveCheckpoint(spaceId: number, newGraph): AppThunk {
   return (dispatch) => {
     dispatch({ type: "SAVE_CHECKPOINT", checkpoint: newGraph, spaceId });
   };
@@ -134,9 +134,13 @@ export function undo(spaceId: number): AppThunk {
 
 export function redo(spaceId: number): AppThunk {
   return (dispatch, getState) => {
-    const { head, checkpoints } = getState().checkpoints.find(
+    const checkpointsEntry = getState().checkpoints.find(
       (r) => r.spaceId === spaceId
     );
+    if (!checkpointsEntry) {
+      throw new Error(`Space ${spaceId} is uninitialized`);
+    }
+    const { head, checkpoints } = checkpointsEntry;
     if (head === 0) {
       return;
     }

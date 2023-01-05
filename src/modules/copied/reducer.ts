@@ -1,3 +1,4 @@
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AnyAction, Reducer } from "redux";
 import { Region } from "~/lib/locationUtils";
 import { Guesstimate } from "../guesstimates/reducer";
@@ -8,18 +9,30 @@ type CopiedState = {
   guesstimates: Guesstimate[];
   pastedTimes: number;
   region: Region;
-} | null;
-
-export const copiedR: Reducer<CopiedState, AnyAction> = (
-  state = null,
-  action
-) => {
-  switch (action.type) {
-    case "COPY":
-      return { ...action.copied, pastedTimes: 0 };
-    case "PASTE":
-      return { ...state, pastedTimes: (state?.pastedTimes ?? 0) + 1 };
-    default:
-      return state;
-  }
 };
+
+export const copiedSlice = createSlice({
+  name: "copied",
+  initialState: null as CopiedState | null,
+  reducers: {
+    copy(
+      state,
+      action: PayloadAction<
+        Pick<CopiedState, "metrics" | "guesstimates" | "region">
+      >
+    ) {
+      return {
+        ...state,
+        ...action.payload,
+        pastedTimes: 0,
+      };
+    },
+    paste(state) {
+      if (state) {
+        state.pastedTimes = (state?.pastedTimes ?? 0) + 1;
+      }
+    },
+  },
+});
+
+export const copiedR = copiedSlice.reducer;

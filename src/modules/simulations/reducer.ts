@@ -18,7 +18,7 @@ const simulations: Reducer<SimulationsState, AnyAction> = (
     case "DELETE_SIMULATIONS":
       return state.filter((s) => !_.includes(action.metricIds, s.metric));
     case "UPDATE_SIMULATION":
-      let sim = action.simulation;
+      const sim = action.simulation;
       // We modify the sim in place, adding stats and sorted values, before saving.
       addStats(sim);
 

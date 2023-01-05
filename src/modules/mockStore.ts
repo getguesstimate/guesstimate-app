@@ -1,4 +1,4 @@
-import { applyMiddleware } from "redux";
+import { AnyAction, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import expect from "expect";
 
@@ -7,7 +7,7 @@ const middlewares = [thunk];
 /**
  * Creates a mock of Redux store with middleware.
  */
-function mockStore(getState, expectedActions, done) {
+function mockStore(getState, expectedActions: AnyAction[], done) {
   if (!Array.isArray(expectedActions)) {
     throw new Error("expectedActions should be an array of expected actions.");
   }

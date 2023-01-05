@@ -28,7 +28,7 @@ export const attributes = [
   "data",
 ];
 export function format(guesstimate /*: Guesstimate */) /*: Guesstimate */ {
-  let formatted = _.pick(guesstimate, attributes);
+  const formatted = _.pick(guesstimate, attributes);
   return formatted;
 }
 
@@ -66,7 +66,7 @@ export function expressionToInputFn(metrics: Metric[] = [], facts = []) {
   const translateRemainingInputsFn = (expression) =>
     expression.replace(/\$\{.*\}/, "??");
 
-  const translateInputsFn = ({ expression }) =>
+  const translateInputsFn = ({ expression }: Guesstimate) =>
     translateRemainingInputsFn(translateValidInputsFn(expression));
 
   return (g: Guesstimate) =>

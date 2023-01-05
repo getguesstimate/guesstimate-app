@@ -41,7 +41,7 @@ export function fetchById(id: number): AppThunk {
   };
 }
 
-export function destroy(id): AppThunk {
+export function destroy(id: number): AppThunk {
   return (dispatch, getState) => {
     dispatch(sActions.deleteStart({ id }));
     api(getState()).calculators.destroy(id, (err, value) => {
@@ -56,7 +56,7 @@ export function destroy(id): AppThunk {
   };
 }
 
-export function create(spaceId: string, calculator, callback): AppThunk {
+export function create(spaceId: number, calculator, callback): AppThunk {
   return (dispatch, getState) => {
     const record = { ...calculator, id: cuid() };
     dispatch(sActions.createStart(record));

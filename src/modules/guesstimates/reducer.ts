@@ -2,11 +2,14 @@ import _ from "lodash";
 import { format, uniq } from "~/lib/engine/guesstimate";
 import { AnyAction, Reducer } from "redux";
 
-export type Guesstimate = any;
-// export type Guesstimate = {
-//   input: string;
-//   metric: string;
-// };
+export type Guesstimate = {
+  metric: string;
+  input: string | null;
+  expression?: any;
+  guesstimateType?: string;
+  description: string;
+  data?: any;
+};
 
 type GuesstimatesState = Guesstimate[];
 
@@ -63,7 +66,7 @@ export const guesstimatesR: Reducer<GuesstimatesState, AnyAction> = (
       return state.filter(
         (y) => !_.some(action.item.ids, (id) => y.metric === id)
       );
-    case "CHANGE_GUESSTIMATE":
+    case "CHANGE_GUESSTIMATE": {
       const i = state.findIndex((y) => y.metric === action.values.metric);
       const newItem = format(action.values);
       if (i !== -1) {
@@ -72,7 +75,10 @@ export const guesstimatesR: Reducer<GuesstimatesState, AnyAction> = (
           newItem,
           ...state.slice(i + 1, state.length),
         ]);
+      } else {
+        return state;
       }
+    }
     default:
       return state;
   }

@@ -6,7 +6,7 @@ import { ContentState, Editor, EditorState } from "draft-js";
 import { typeSafeEq } from "~/lib/engine/utils";
 
 type Props = {
-  name: string;
+  name: string | undefined;
   inSelectedCell: boolean;
   onChange(text: string): void;
   heightHasChanged(): void;
@@ -106,7 +106,7 @@ export default class MetricName extends Component<Props, State> {
             handleReturn={this.onReturn.bind(this)}
             onTab={this.onTab.bind(this)}
             ref="editor"
-            placeholder={"name"}
+            placeholder="name"
           />
         </div>
       </span>

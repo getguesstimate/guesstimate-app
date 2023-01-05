@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { NextRouter, useRouter, withRouter } from "next/router";
-import { Component } from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import Head from "next/head";
@@ -498,7 +498,7 @@ class SpaceShow extends Component<Props, State> {
     const space = this.props.denormalizedSpace;
 
     if (!e.space.prepared(space)) {
-      return <div className="spaceShow"></div>;
+      return <div className="spaceShow" />;
     }
 
     const sidebarIsVisible =

@@ -10,6 +10,7 @@ import { GuesstimateDescription } from "./GuesstimateDescription";
 
 import { FullDenormalizedMetric } from "~/lib/engine/space";
 import { SAMPLE_FILTERED } from "~/lib/guesstimator/samplers/simulator-worker/simulator/filters/filters";
+import { MetricClickMode } from "~/modules/canvas_state/reducer";
 
 const SampleList: React.FC<{ samples: number[] | undefined }> = ({
   samples,
@@ -32,7 +33,7 @@ type Props = {
   closeModal(): void;
   organizationId: string | number | undefined;
   canUseOrganizationFacts: boolean;
-  metricClickMode: string; // TODO - union
+  metricClickMode: MetricClickMode;
   onChangeGuesstimateDescription(value: string): void;
 };
 

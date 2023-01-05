@@ -10,9 +10,10 @@ import { runFormSimulations } from "~/modules/simulations/actions";
 import { AppDispatch } from "~/modules/store";
 import { Guesstimator } from "~/lib/guesstimator/index";
 import { LargeDataViewer, SmallDataViewer } from "./DataForm/DataViewer";
+import { MetricClickMode } from "~/modules/canvas_state/reducer";
 
 type Props = {
-  metricClickMode: string;
+  metricClickMode: MetricClickMode;
   guesstimate: any;
   metricId: string;
   onReturn?(): void;
@@ -99,7 +100,7 @@ export class UnwrappedDistributionEditor extends Component<Props> {
   }
 
   // TODO(matthew): no magic strings.
-  _changeMetricClickMode(newMode = "DEFAULT") {
+  _changeMetricClickMode(newMode: MetricClickMode = "DEFAULT") {
     if (this.props.metricClickMode !== newMode) {
       this.props.dispatch(changeMetricClickMode(newMode));
     }

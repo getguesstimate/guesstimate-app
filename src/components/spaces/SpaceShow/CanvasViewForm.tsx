@@ -5,6 +5,7 @@ import {
 import { DropDown } from "~/components/utility/DropDown";
 
 import * as canvasStateActions from "~/modules/canvas_state/actions";
+import { EdgeViewMode } from "~/modules/canvas_state/reducer";
 import { useAppDispatch, useAppSelector } from "~/modules/hooks";
 
 const arrowsHiddenImage = "/assets/metric-icons/blue/arrows-hidden.png";
@@ -20,18 +21,18 @@ export const CanvasViewForm: React.FC = () => {
     dispatch(canvasStateActions.toggleView(e));
   };
 
-  const selectEdgeView = (e: string) => {
+  const selectEdgeView = (e: EdgeViewMode) => {
     dispatch(canvasStateActions.change({ edgeView: e }));
   };
 
-  type Option = {
-    name: CardListElementProps["header"];
+  type Option<T extends string> = {
+    name: T;
     image: CardListElementProps["image"];
     isSelected?: CardListElementProps["isSelected"];
     onClick?: CardListElementProps["onMouseDown"];
   };
 
-  let metricCardViewOptions: (Option & { key: string })[] = [
+  let metricCardViewOptions: (Option<string> & { key: string })[] = [
     {
       name: "scientific",
       image: scientificImage,
@@ -40,7 +41,7 @@ export const CanvasViewForm: React.FC = () => {
     { name: "expanded", image: debuggingImage, key: "expandedViewEnabled" },
   ];
 
-  let arrowViewOptions: Option[] = [
+  let arrowViewOptions: Option<EdgeViewMode>[] = [
     { name: "hidden", image: arrowsHiddenImage },
     { name: "visible", image: arrowsVisibleImage },
   ];
