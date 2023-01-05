@@ -4,7 +4,7 @@ import Icon from "~/components/react-fa-patched";
 
 import SpaceCards from "~/components/spaces/cards";
 import { CardListElement } from "~/components/utility/card/index";
-import DropDown from "~/components/utility/drop-down/index";
+import { DropDown } from "~/components/utility/DropDown";
 
 import { useAppDispatch, useAppSelector } from "~/modules/hooks";
 import * as search from "~/modules/search_spaces/actions";
@@ -74,7 +74,7 @@ const Filter: React.FC<{
   </DropDown>
 );
 
-const SpacesIndex: React.FC = () => {
+export const SpacesIndex: React.FC = () => {
   const dispatch = useAppDispatch();
   const searchSpaces = useAppSelector((state) => state.searchSpaces);
 
@@ -155,5 +155,3 @@ const SpacesIndex: React.FC = () => {
     </div>
   );
 };
-
-export default SpacesIndex;

@@ -35,7 +35,7 @@ class SimulationHistogram extends Component<Props> {
   }
 
   sortedValues(): number[] {
-    return _.get(this.props, "simulation.sample.sortedValues");
+    return _.get(this.props.simulation, "sample.sortedValues");
   }
 
   histogram() {

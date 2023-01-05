@@ -16,7 +16,7 @@ type Props = {
   userId: number;
 };
 
-const UserShow: React.FC<Props> = ({ userId }) => {
+export const UserShow: React.FC<Props> = ({ userId }) => {
   const dispatch = useAppDispatch();
   const users = useAppSelector((state) => state.users);
   const me = useAppSelector((state) => state.me);
@@ -30,7 +30,7 @@ const UserShow: React.FC<Props> = ({ userId }) => {
     dispatch(spaceActions.fetch({ userId }));
   }, [dispatch, userId]);
 
-  const _newModel = () => {
+  const newModel = () => {
     dispatch(spaceActions.create(undefined, router));
   };
 
@@ -59,7 +59,7 @@ const UserShow: React.FC<Props> = ({ userId }) => {
         </div>
         {spaces && (
           <div className="row">
-            {isMe && <NewSpaceCard onClick={_newModel} />}
+            {isMe && <NewSpaceCard onClick={newModel} />}
             {_.map(spaces, (s) => (
               <SpaceCard key={s.id} space={s} showPrivacy={isMe} />
             ))}
@@ -69,5 +69,3 @@ const UserShow: React.FC<Props> = ({ userId }) => {
     </Container>
   );
 };
-
-export default UserShow;

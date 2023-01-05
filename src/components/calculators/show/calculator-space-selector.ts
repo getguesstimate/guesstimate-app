@@ -22,7 +22,7 @@ const organizationFactsSelector = (state: RootState) =>
 
 const calculatorSelector = (
   state: RootState,
-  calculatorId: string | undefined
+  calculatorId: number | undefined
 ) => state.calculators.find((c) => _sameId(c.id, calculatorId));
 
 export const calculatorSpaceSelector = createSelector(

@@ -1,7 +1,7 @@
 import { Layout } from "~/components/layouts";
 import { useRouter } from "next/router";
 
-import UserShow from "~/components/users/show/index";
+import { UserShow } from "~/components/users/UserShow";
 import { NextPage } from "next";
 
 const UserPage: NextPage = () => {

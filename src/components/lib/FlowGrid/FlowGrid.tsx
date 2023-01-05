@@ -19,7 +19,7 @@ import {
 } from "~/lib/locationUtils";
 import { CanvasState, GridItem } from "./types";
 import { DirectionToLocation, keycodeToDirection } from "./utils";
-import { EdgeShape } from "~/components/spaces/canvas";
+import { EdgeShape } from "~/components/spaces/SpaceCanvas";
 
 const upto = (n: number): number[] =>
   Array.apply(null, { length: n }).map(Number.call, Number);
@@ -54,7 +54,7 @@ type Props = {
 };
 
 type State = {
-  hover?: Location;
+  hover: Location;
   dragSelecting?: boolean;
   ctrlPressed?: boolean;
 } & (

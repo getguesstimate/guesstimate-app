@@ -20,7 +20,9 @@ import * as _simulation from "~/lib/engine/simulation";
 
 import { Guesstimator } from "~/lib/guesstimator/index";
 
-class UnconnectedCalculatorShow extends Component<any> {
+type Props = any;
+
+class UnconnectedCalculatorShow extends Component<Props> {
   state = {
     resultComputing: false,
     showResult: this.props.startFilled && this.allOutputsHaveStats(),
@@ -28,7 +30,7 @@ class UnconnectedCalculatorShow extends Component<any> {
     readyToCalculate: false,
   };
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: Props) {
     if (this.state.resultComputing && this.allOutputsHaveStats(nextProps)) {
       this.setState({ resultComputing: false });
       this.showResult();

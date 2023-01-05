@@ -1,7 +1,7 @@
 import AbstractResource, { Callback } from "../AbstractResource";
 
 export class Calculators extends AbstractResource {
-  get(calculatorId: string, callback: Callback) {
+  get(calculatorId: number, callback: Callback) {
     const url = `calculators/${calculatorId}`;
     const method = "GET";
 

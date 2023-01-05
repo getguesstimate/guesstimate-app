@@ -10,9 +10,20 @@ import * as _guesstimate from "./guesstimate";
 import * as _simulation from "./simulation";
 import * as _userOrganizationMemberships from "./userOrganizationMemberships";
 import { allPropsPresent, isPresent } from "./utils";
+import { DenormalizedMetric } from "./metric";
+
+type MetricEdges = {
+  inputs: string[];
+  outputs: string[];
+  inputMetrics: DenormalizedMetric[];
+};
+
+export type FullDenormalizedMetric = DenormalizedMetric & {
+  edges: MetricEdges;
+};
 
 export type DSpace = ApiSpace & {
-  metrics: any[];
+  metrics: FullDenormalizedMetric[];
   edges: any[];
   calculators: any[];
   organization: any;
@@ -120,16 +131,17 @@ export function toDSpace(
       extractReferencedMetricsFn(m).map((id) => ({ input: id, output: m.id }))
     )
   );
-  const dSpaceMetrics = dGraph.metrics.map((s) => {
+  const dSpaceMetrics: FullDenormalizedMetric[] = dGraph.metrics.map((s) => {
     const inputs = allEdges
       .filter((i) => i.output === s.id)
       .map((e) => e.input);
     const outputs = allEdges
       .filter((i) => i.input === s.id)
       .map((e) => e.output);
-    const inputMetrics = inputs.map((i) =>
-      dGraph.metrics.find((m) => m.id === i)
-    );
+    const inputMetrics = inputs
+      .map((i) => dGraph.metrics.find((m) => m.id === i))
+      .filter((m): m is DenormalizedMetric => !!m);
+
     const edges = { inputs, outputs, inputMetrics };
     return { ...s, guesstimate: withInputFn(s.guesstimate), edges };
   });

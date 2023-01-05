@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { actionCreatorsFor } from "redux-crud";
+import reduxCrud from "redux-crud";
 
 import cuid from "cuid";
 
@@ -17,7 +17,7 @@ import { ApiSpace } from "~/lib/guesstimate_api/resources/Models";
 import { ApiUser } from "~/lib/guesstimate_api/resources/Users";
 import { NextRouter } from "next/router";
 
-const sActions = actionCreatorsFor("spaces");
+const sActions = reduxCrud.actionCreatorsFor("spaces");
 
 export function fetchSuccess(spaces: ApiSpace[]): AppThunk {
   return (dispatch, getState) => {

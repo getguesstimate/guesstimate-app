@@ -373,10 +373,9 @@ export class UnconnectedTextInput extends Component<Props> {
   }
 
   render() {
-    const {
-      props: { width },
-      state: { isFlashing, editorState },
-    } = this;
+    const { width } = this.props;
+    const { isFlashing, editorState } = this.state;
+
     const className = getClassName(
       "TextInput",
       width,

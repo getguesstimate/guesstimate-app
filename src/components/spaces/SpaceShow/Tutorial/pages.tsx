@@ -22,7 +22,7 @@ const TutorialPage: React.FC<PageProps> = ({ header, children }) => (
   </div>
 );
 
-const Image = ({ image }) => (
+const Image: React.FC<{ image: string }> = ({ image }) => (
   <div className="image">
     <img src={image} />
   </div>

@@ -1,8 +1,15 @@
 import _ from "lodash";
+import { AnyAction, Reducer } from "redux";
 import { uniq } from "~/lib/engine/collections";
+import { Location } from "~/lib/locationUtils";
 
-// TODO - better type
-type Metric = { [k: string]: unknown };
+export type Metric = {
+  space: number;
+  location: Location;
+  id: string;
+  readableId: string;
+  name?: string;
+};
 
 type MetricsState = Metric[];
 
@@ -13,7 +20,10 @@ function spaceToMetrics(space) {
     : metrics.map((m) => ({ ...m, space: space.id }));
 }
 
-export function metricsR(state: MetricsState = [], action) {
+export const metricsR: Reducer<MetricsState, AnyAction> = (
+  state = [],
+  action
+) => {
   switch (action.type) {
     case "CALCULATORS_FETCH_SUCCESS": {
       const newMetrics = spaceToMetrics(_.get(action, "data.space")) || [];
@@ -51,4 +61,4 @@ export function metricsR(state: MetricsState = [], action) {
     default:
       return state;
   }
-}
+};

@@ -3,7 +3,7 @@ import _ from "lodash";
 import { AnyAction, Reducer } from "redux";
 import reduxCrud from "redux-crud";
 
-const standardReducers = reduxCrud.reducersFor("users");
+const standardReducers = reduxCrud.List.reducersFor("users");
 
 type State = Readonly<ApiUser[]>;
 

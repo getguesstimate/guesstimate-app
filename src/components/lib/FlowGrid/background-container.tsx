@@ -6,7 +6,7 @@ import $ from "jquery";
 import { Edges } from "./edges";
 import GridPoint from "./gridPoints";
 
-import { EdgeShape } from "~/components/spaces/canvas";
+import { EdgeShape } from "~/components/spaces/SpaceCanvas";
 import { isRegion, MaybeRegion, Region } from "~/lib/locationUtils";
 
 const Region: React.FC<{

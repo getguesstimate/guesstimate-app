@@ -1036,10 +1036,10 @@ acorn@^8.1.0, acorn@^8.8.1:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.8.1.tgz#0a3f9cbecc4ec3bea6f0a80b66ae8dd2da250b73"
   integrity sha512-7zFpHzhnqYKrkYdUjF1HI1bzd0VygEGX8lFk4k5zVMqHEoES+P+7TKI+EvLO9WVMJ8eekdO0aDEK044xTXwPPA==
 
-action-names@^0.3.2:
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/action-names/-/action-names-0.3.2.tgz#533730b5d206ce56a6a1c7c507901b34ee18c865"
-  integrity sha512-mvj8CXMi+gp3bykqDZ1hmft2cvpj4ecf0GdUHzpe3Y+kT4NlHag41Qa9mWSXx6fRkXjHkGGHHDl4DGcKPQUIBQ==
+action-names@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/action-names/-/action-names-0.4.0.tgz#d8dbb58d24e281c379203e8f330b1f7321a416a2"
+  integrity sha512-74ztAsptvQmSnfd4r5XN8KR6S+2Ueu9p4/hFpmUodXtfeEOZMUmvU4+B5R5j9csDSCZW9OjKl42kzFFvn7tjPw==
   dependencies:
     lodash.snakecase "^3.0.1"
     lodash.trim "^3.0.1"
@@ -6310,7 +6310,7 @@ lodash.words@^3.0.0:
   dependencies:
     lodash._root "^3.0.0"
 
-lodash@^3.10.0, lodash@^3.10.1, lodash@^3.2.0, lodash@^3.9.3, lodash@~3.10.1:
+lodash@^3.10.0, lodash@^3.2.0, lodash@^3.9.3:
   version "3.10.1"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-3.10.1.tgz#5bf45e8e49ba4189e17d482789dfd15bd140b7b6"
   integrity sha512-9mDDwqVIma6OZX79ZlDACZl8sBm0TEnkf99zV3iMA4GzkIT/9hiqP5mY0HoT1iNLCrKc/R1HByV+yJfRWVJryQ==
@@ -6833,7 +6833,7 @@ node-releases@^2.0.6:
   resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-2.0.8.tgz#0f349cdc8fcfa39a92ac0be9bc48b7706292b9ae"
   integrity sha512-dFSmB8fFHEH/s81Xi+Y/15DQY6VHW81nXRj86EMSL3lmuTmK1e+aT4wrFCkTbm+gSwkw4KpX+rT/pMM2c1mF+A==
 
-node-uuid@^1.4.3, node-uuid@^1.4.8:
+node-uuid@^1.4.8:
   version "1.4.8"
   resolved "https://registry.yarnpkg.com/node-uuid/-/node-uuid-1.4.8.tgz#b040eb0923968afabf8d32fb1f17f1167fdab907"
   integrity sha512-TkCET/3rr9mUuRp+CpO7qfgT++aAxfDRaalQhwPFzI9BY/2rCDn6OfpZOVggi1AXfTPpfkTrg5f5WQx5G1uLxA==
@@ -7995,6 +7995,11 @@ railroad-diagrams@^1.0.0:
   resolved "https://registry.yarnpkg.com/railroad-diagrams/-/railroad-diagrams-1.0.0.tgz#eb7e6267548ddedfb899c1b90e57374559cddb7e"
   integrity sha512-cz93DjNeLY0idrCNOH6PviZGRN9GJhsdm9hpn1YCS879fj4W+x5IFJhhkRZcwVgMmFF7R82UA/7Oh+R8lLZg6A==
 
+ramda@^0.24.1:
+  version "0.24.1"
+  resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.24.1.tgz#c3b7755197f35b8dc3502228262c4c91ddb6b857"
+  integrity sha512-HEm619G8PaZMfkqCa23qiOe7r3R0brPu7ZgOsgKUsnvLhd0qhc/vTjkUovomgPWa5ECBa08fJZixth9LaoBo5w==
+
 randexp@0.4.6:
   version "0.4.6"
   resolved "https://registry.yarnpkg.com/randexp/-/randexp-0.4.6.tgz#e986ad5e5e31dae13ddd6f7b3019aa7c87f60ca3"
@@ -8381,16 +8386,14 @@ reduce@^1.0.1:
   dependencies:
     object-keys "^1.1.0"
 
-redux-crud@^0.10.1:
-  version "0.10.1"
-  resolved "https://registry.yarnpkg.com/redux-crud/-/redux-crud-0.10.1.tgz#92085f673a11b09c700e882af588f19571221fe7"
-  integrity sha512-H/ck3303P4N3+A7gHDPd6Cv4LiDPZf1/NMf6XUF5FyRkxcaDw9x1hAFszQCHVgpKrKqWBEqD3dsuyjRSApOXWA==
+redux-crud@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/redux-crud/-/redux-crud-3.3.0.tgz#26dfd656c6149fec8a07db48a5ce929d16750c3c"
+  integrity sha512-dMrOBUdQS6oh95QCQDSXkl1KI5Sr6IJLt4z0/g9SWpPO68a+h/1KEOipKlfTke24GJJv7P24WvRs8goGOUtQ0Q==
   dependencies:
-    action-names "^0.3.2"
+    action-names "^0.4.0"
     invariant "^2.1.0"
-    lodash "~3.10.1"
-    seamless-immutable "~3.0.0"
-    siu "^0.4.0"
+    ramda "^0.24.1"
 
 redux-saga@^0.16.0:
   version "0.16.2"
@@ -8822,11 +8825,6 @@ scheduler@^0.23.0:
   dependencies:
     loose-envify "^1.1.0"
 
-seamless-immutable@^3.0.0, seamless-immutable@~3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/seamless-immutable/-/seamless-immutable-3.0.0.tgz#3cd841e7e7a93530eaac64efdb1d4e6f3470fd66"
-  integrity sha512-oFrp5zACnxRJ67NxUaVrmqGWIDvesbeI+WQcDB4iYFzj4riftWUGaIpo38D1s1l+uNWN388mSkyOco1SkPT8dg==
-
 seamless-immutable@^7.1.4:
   version "7.1.4"
   resolved "https://registry.yarnpkg.com/seamless-immutable/-/seamless-immutable-7.1.4.tgz#6e9536def083ddc4dea0207d722e0e80d0f372f8"
@@ -8995,15 +8993,6 @@ sisteransi@^1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/sisteransi/-/sisteransi-1.0.5.tgz#134d681297756437cc05ca01370d3a7a571075ed"
   integrity sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==
-
-siu@^0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/siu/-/siu-0.4.0.tgz#9152270cdf9f478c8c8c0a01295cda490f9a0aa4"
-  integrity sha512-Qp3pKzQKv5rStOG0oS/8MjlpDTKliA4Z6mTcxF+o/G4yu/+w9j3i0vzmW0DXnHDfDqmCO6JMmyPzRNTPO3UdQQ==
-  dependencies:
-    lodash "^3.10.1"
-    node-uuid "^1.4.3"
-    seamless-immutable "^3.0.0"
 
 slash@^1.0.0:
   version "1.0.0"

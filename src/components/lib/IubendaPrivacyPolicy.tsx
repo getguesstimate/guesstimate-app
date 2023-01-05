@@ -1,10 +1,10 @@
-import React, { Component } from "react";
+import React, { useEffect } from "react";
 
-export default class IubendaPrivacyPolicy extends Component<{
+export const IubendaPrivacyPolicy: React.FC<{
   id: number;
   children: React.ReactNode;
-}> {
-  componentWillMount() {
+}> = ({ id, children }) => {
+  useEffect(() => {
     const loadIubenda = function (w, d) {
       const loader = () => {
         const s = d.createElement("script");
@@ -21,18 +21,16 @@ export default class IubendaPrivacyPolicy extends Component<{
       }
     };
     loadIubenda(window, document);
-  }
+  }, []);
 
-  render() {
-    const href = "//www.iubenda.com/privacy-policy/" + this.props.id;
-    return (
-      <a
-        href={href}
-        className="iubenda-nostyle no-brand iubenda-embed"
-        title="Privacy Policy"
-      >
-        {this.props.children}
-      </a>
-    );
-  }
-}
+  const href = `//www.iubenda.com/privacy-policy/${id}`;
+  return (
+    <a
+      href={href}
+      className="iubenda-nostyle no-brand iubenda-embed"
+      title="Privacy Policy"
+    >
+      {children}
+    </a>
+  );
+};

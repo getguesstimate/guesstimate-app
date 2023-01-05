@@ -1,5 +1,5 @@
 import React from "react";
-import IubendaPrivacyPolicy from "~/components/lib/iubenda_privacy_policy";
+import { IubendaPrivacyPolicy } from "~/components/lib/IubendaPrivacyPolicy";
 
 export const LinkFAQ: React.FC = () => <a href="/faq"> FAQ </a>;
 

@@ -19,12 +19,12 @@ type State = {
   isOpen: boolean;
 };
 
-export default class DropDown extends Component<Props, State> {
-  constructor(props) {
+export class DropDown extends Component<Props, State> {
+  constructor(props: Props) {
     super(props);
 
     this.state = {
-      isOpen: props.isOpen || false,
+      isOpen: false,
     };
 
     this.handleDocumentClick = this.handleDocumentClick.bind(this);
@@ -76,7 +76,7 @@ export default class DropDown extends Component<Props, State> {
     const width = this.props.width === "wide" ? "normal" : "narrow";
     return (
       <span className="dropDown-relative">
-        <span className={"dropDown-open"} onClick={this._toggle.bind(this)}>
+        <span className="dropDown-open" onClick={this._toggle.bind(this)}>
           {this.props.openLink}
         </span>
         {this.state.isOpen && (
@@ -99,12 +99,11 @@ export default class DropDown extends Component<Props, State> {
                           }}
                           key={i}
                         >
-                          {" "}
-                          {child}{" "}
+                          {child}
                         </div>
                       );
                     } else {
-                      return <div key={i}> {child} </div>;
+                      return <div key={i}>{child}</div>;
                     }
                   })}
                 </ul>

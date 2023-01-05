@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { actionCreatorsFor } from "redux-crud";
+import reduxCrud from "redux-crud";
 
 import * as displayErrorsActions from "~/modules/displayErrors/actions";
 import * as membershipActions from "~/modules/userOrganizationMemberships/actions";
@@ -10,8 +10,8 @@ import { captureApiError } from "~/lib/errors/index";
 import { AppThunk } from "~/modules/store";
 import { api } from "~/lib/guesstimate_api";
 
-let sActions = actionCreatorsFor("userOrganizationInvitations");
-let relevantAttributes = ["id", "email", "organization_id"];
+const sActions = reduxCrud.actionCreatorsFor("userOrganizationInvitations");
+const relevantAttributes = ["id", "email", "organization_id"];
 
 export function fetchByOrganizationId(organizationId: string): AppThunk {
   return (dispatch, getState) => {

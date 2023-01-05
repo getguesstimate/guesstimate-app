@@ -5,9 +5,9 @@ import Icon from "~/components/react-fa-patched";
 import { ButtonClose } from "~/components/utility/buttons/close/index";
 import { capitalizeFirstLetter } from "~/lib/string";
 
-export const CardListSection = ({ children }) => (
-  <div className="CardListSection">{children}</div>
-);
+export const CardListSection: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => <div className="CardListSection">{children}</div>;
 
 export type CardListElementProps = {
   isSelected?: boolean;

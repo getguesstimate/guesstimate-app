@@ -1,8 +1,3 @@
-export type Guesstimate = {
-  input: string;
-  metric: string;
-};
-
 export type Distribution = {
   mean?: number;
   stdev?: number;
@@ -14,23 +9,7 @@ export type Graph = {
   simulations: any;
 };
 
-export type Simulation = {
-  metric?: string;
-  sample?: Array<Sample>;
-};
-
 export type Sample = {
   values?: any;
   errors?: any;
-};
-
-export type GridLocation = {
-  row: number;
-  column: number;
-};
-
-export type Metric = {
-  id: string;
-  readableId?: string;
-  location?: GridLocation;
 };

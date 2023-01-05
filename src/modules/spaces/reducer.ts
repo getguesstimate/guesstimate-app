@@ -23,6 +23,6 @@ export const spacesR: Reducer<SpacesState, AnyAction> = (
       ];
     }
     default:
-      return reduxCrud.reducersFor("spaces")(state, action);
+      return reduxCrud.List.reducersFor("spaces")(state, action);
   }
 };

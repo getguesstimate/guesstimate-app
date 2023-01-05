@@ -1,29 +1,29 @@
 import _ from "lodash";
-import { Component } from "react";
+import React, { Component } from "react";
 
 import d3 from "d3";
 
 import numberShow from "~/lib/numberShower/numberShower";
 
-function getYScale(data, height) {
+function getYScale(data, height: number) {
   return d3.scale
     .linear()
     .domain([0, d3.max(data, (d) => d.y)])
     .range([height, 0]);
 }
 
-function getXScale(data, width) {
+function getXScale(data: number[], width: number) {
   return d3.scale.linear().domain(d3.extent(data)).range([0, width]).nice();
 }
 
 // Computes the average of an array of numbers. If the array is empty, returns 1.
-function avg(arr) {
+function avg(arr: number[]) {
   return arr.length > 0 ? arr.reduce((a, b) => a + b) / arr.length : 1;
 }
 
 // Computes (min(|a|,|b|)+100)/(max(|a|,|b|)+100). We add 100 to both numerator and denominator to ensure that small
 // numbers don't disproprortionately affect results.
-function shiftedRatio(a, b) {
+function shiftedRatio(a: number, b: number) {
   return (
     (Math.min(Math.abs(a), Math.abs(b)) + 100) /
     (Math.max(Math.abs(a), Math.abs(b)) + 100)
@@ -36,7 +36,7 @@ function shiftedRatio(a, b) {
 // The parameter 'cutOffRatio' controls how hight te point density must be for points to be kept; a cutOffRatio of 0
 // would keep everything, a cutOffratio of 1.0 would keep nothing.
 // Values that seem to have notable affects are typically > 0.95.
-function filterLowDensityPoints(inputData, cutOffRatio) {
+function filterLowDensityPoints(inputData: number[], cutOffRatio: number) {
   // We can't filter that intelligently for small sample sets, so we don't bother.
   if (inputData.length < 2000) {
     return inputData;
@@ -47,7 +47,7 @@ function filterLowDensityPoints(inputData, cutOffRatio) {
   // Filter Left
   // As long as the ratio of the magnitude of their averages is less than the cutOffRatio, we keep discarding the left
   // endpoint and iterating along the array.
-  let i;
+  let i: number = 0;
   for (i = 0; i < inputData.length; i++) {
     const left = inputData.slice(i * bucketSize, (i + 1) * bucketSize);
     const right = inputData.slice((i + 1) * bucketSize, (i + 2) * bucketSize);
@@ -108,38 +108,37 @@ export default class Histogram extends Component<Props> {
   };
 
   componentWillReceiveProps(nextProps: Props) {
-    let { bins, data, width, height, cutOffRatio, onChangeXScale } = nextProps;
-    width = width + 1;
+    const { bins, data, height, cutOffRatio = 0, onChangeXScale } = nextProps;
+    const width = nextProps.width + 1;
 
     const filtered_data = filterLowDensityPoints(data, cutOffRatio);
 
-    let xScale = getXScale(filtered_data, width);
-    let histogramDataFn = d3.layout.histogram().bins(xScale.ticks(bins));
-    let histogramData: any = histogramDataFn(filtered_data);
-    let yScale = getYScale(histogramData, height);
+    const xScale = getXScale(filtered_data, width);
+    const histogramDataFn = d3.layout.histogram().bins(xScale.ticks(bins));
+    const histogramData: any = histogramDataFn(filtered_data);
+    const yScale = getYScale(histogramData, height);
 
     onChangeXScale?.(xScale.invert);
     this.setState({ xScale, yScale, histogramData });
   }
 
   render() {
-    let {
+    const {
       // FIXME - copypasted from defaultProps because to typescript
       top = 20,
       right = 0,
       bottom = 30,
       left = 0,
-      width,
       height,
       hoveredXCoord,
       allowHover,
     } = this.props;
-    width = width + 1;
+    const width = this.props.width + 1;
 
     const { xScale, yScale, histogramData } = this.state;
     const barWidth = width / histogramData.length;
     if (!_.isFinite(width) || !_.isFinite(barWidth)) {
-      return false;
+      return null;
     }
 
     return (
@@ -171,107 +170,88 @@ export default class Histogram extends Component<Props> {
   }
 }
 
-class Hoverbar extends Component<{
+const Hoverbar: React.FC<{
   height: number;
   hoveredXCoord: number | undefined;
-}> {
-  render() {
-    const { height, hoveredXCoord } = this.props;
-    return (
-      <line
-        x1={hoveredXCoord}
-        x2={hoveredXCoord}
-        y1={0}
-        y2={height}
-        className="react-d3-histogram__hoverbar"
-      />
-    );
-  }
-}
+}> = ({ height, hoveredXCoord }) => {
+  return (
+    <line
+      x1={hoveredXCoord}
+      x2={hoveredXCoord}
+      y1={0}
+      y2={height}
+      className="react-d3-histogram__hoverbar"
+    />
+  );
+};
 
-class Path extends Component<{
-  scale: any;
-}> {
-  render() {
-    let [start, end] = this.props.scale.range();
-    let d = `M0${start},6V0H${end}V6`;
+const Path: React.FC<{ scale: any }> = ({ scale }) => {
+  const [start, end] = scale.range();
+  const d = `M0${start},6V0H${end}V6`;
 
-    return <path className="react-d3-histogram__domain" d={d} />;
-  }
-}
+  return <path className="react-d3-histogram__domain" d={d} />;
+};
 
-class Tick extends Component<{
+const Tick: React.FC<{
   value: number;
   scale: any;
-}> {
-  render() {
-    const { value, scale } = this.props;
-
-    const valueText = numberShow(value);
-    let text: any = _.isFinite(value) && valueText;
-    text = `${text.value}`;
-    text += valueText.symbol ? valueText.symbol : "";
-    text += valueText.power ? `e${valueText.power}` : "";
-    if (text === "0.0") {
-      text = "0";
-    }
-    return (
-      <g
-        className="react-d3-histogram__tick"
-        transform={"translate(" + scale(value) + ",0)"}
-      >
-        <line x2="0" y2="6"></line>
-        <text dy=".71em" y="-15" x="-6">
-          {text}
-        </text>
-      </g>
-    );
+}> = ({ value, scale }) => {
+  const valueText = numberShow(value);
+  let text: any = _.isFinite(value) && valueText;
+  text = `${text.value}`;
+  text += valueText.symbol ? valueText.symbol : "";
+  text += valueText.power ? `e${valueText.power}` : "";
+  if (text === "0.0") {
+    text = "0";
   }
-}
+  return (
+    <g
+      className="react-d3-histogram__tick"
+      transform={"translate(" + scale(value) + ",0)"}
+    >
+      <line x2="0" y2="6"></line>
+      <text dy=".71em" y="-15" x="-6">
+        {text}
+      </text>
+    </g>
+  );
+};
 
-export class XAxis extends Component<{
+const XAxis: React.FC<{
   height: number;
   scale: any;
-}> {
-  render() {
-    const { height, scale } = this.props;
+}> = ({ height, scale }) => {
+  const ticks = scale.ticks.apply(scale).map(function (tick, i) {
+    return <Tick value={tick} scale={scale} key={i} />;
+  });
 
-    const ticks = scale.ticks.apply(scale).map(function (tick, i) {
-      return <Tick value={tick} scale={scale} key={i} />;
-    });
+  return (
+    <g
+      className="react-d3-histogram__x-axis"
+      transform={"translate(0," + height + ")"}
+    >
+      <Path scale={scale} />
+      <g>{ticks}</g>
+    </g>
+  );
+};
 
-    return (
-      <g
-        className="react-d3-histogram__x-axis"
-        transform={"translate(0," + height + ")"}
-      >
-        <Path scale={scale} />
-        <g>{ticks}</g>
-      </g>
-    );
-  }
-}
-
-export class Bar extends Component<{
+export const Bar: React.FC<{
   data: any;
   xScale: any;
   yScale: any;
   height: number;
   barWidth: number;
-}> {
-  render() {
-    const { data, xScale, yScale, height, barWidth } = this.props;
+}> = ({ data, xScale, yScale, height, barWidth }) => {
+  const scaledX = xScale(data.x);
+  const scaledY = yScale(data.y);
 
-    const scaledX = xScale(data.x);
-    const scaledY = yScale(data.y);
-
-    return (
-      <g
-        className="react-d3-histogram__bar"
-        transform={"translate(" + scaledX + "," + scaledY + ")"}
-      >
-        <rect width={barWidth} height={height - scaledY} />
-      </g>
-    );
-  }
-}
+  return (
+    <g
+      className="react-d3-histogram__bar"
+      transform={"translate(" + scaledX + "," + scaledY + ")"}
+    >
+      <rect width={barWidth} height={height - scaledY} />
+    </g>
+  );
+};

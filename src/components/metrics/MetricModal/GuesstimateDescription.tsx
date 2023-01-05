@@ -2,10 +2,10 @@ import React from "react";
 
 import Icon from "~/components/react-fa-patched";
 
-import ClickToEdit from "~/components/utility/click-to-edit/index";
+import { ClickToEdit } from "~/components/utility/ClickToEdit";
 import { MarkdownViewer } from "~/components/utility/markdown-viewer/index";
 
-const GuesstimateDescription: React.FC<{
+export const GuesstimateDescription: React.FC<{
   value: string;
   onChange(value: string): void;
 }> = ({ value, onChange }) => (
@@ -18,12 +18,10 @@ const GuesstimateDescription: React.FC<{
           Describe your reasoning...
         </span>
       }
-      editingSaveText={"Save"}
+      editingSaveText="Save"
       onSubmit={onChange}
       value={value}
       canEdit={true}
     />
   </div>
 );
-
-export default GuesstimateDescription;

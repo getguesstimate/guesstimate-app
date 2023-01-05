@@ -1,4 +1,4 @@
-import React, { Component, useCallback, useState } from "react";
+import React, { useState } from "react";
 
 import Icon from "~/components/react-fa-patched";
 
@@ -11,7 +11,7 @@ import {
 } from "./pages";
 
 type Props = {
-  onClose: () => void;
+  onClose(): void;
 };
 
 const PAGES = [
@@ -37,7 +37,7 @@ export const Tutorial: React.FC<Props> = ({ onClose }) => {
       <div
         className="Tutorial"
         onKeyDown={(e) => {
-          if (e.keyCode === 13) {
+          if (e.key === "Escape") {
             onClose();
           }
         }}

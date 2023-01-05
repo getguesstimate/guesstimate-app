@@ -17,7 +17,7 @@ import * as Space from "~/lib/engine/space";
 import { useAppDispatch, useAppSelector } from "~/modules/hooks";
 
 type Props = {
-  calculatorId: string;
+  calculatorId: number;
 };
 
 export const CalculatorExpandedShow: React.FC<Props> = ({ calculatorId }) => {

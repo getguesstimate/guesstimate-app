@@ -1,6 +1,6 @@
 import cuid from "cuid";
 import _ from "lodash";
-import { actionCreatorsFor } from "redux-crud";
+import reduxCrud from "redux-crud";
 
 import * as displayErrorsActions from "~/modules/displayErrors/actions";
 import { factCategoryActions } from "~/modules/factCategories/actions";
@@ -19,7 +19,7 @@ import { simulate } from "~/lib/propagation/wrapper";
 import { AppThunk } from "~/modules/store";
 import { api } from "~/lib/guesstimate_api";
 
-let oActions = actionCreatorsFor("organizations");
+const oActions = reduxCrud.actionCreatorsFor("organizations");
 
 export function fetchById(organizationId): AppThunk {
   return (dispatch, getState) => {

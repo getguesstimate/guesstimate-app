@@ -41,7 +41,7 @@ const ButtonArea: React.FC<any> = ({
   </div>
 );
 
-export const NewSpaceCard: React.FC<any> = ({ onClick }) => (
+export const NewSpaceCard: React.FC<{ onClick(): void }> = ({ onClick }) => (
   <div className="col-xs-12 col-md-4 SpaceCard new" onClick={onClick}>
     <div className="SpaceCard--inner">
       <div className="section-middle">

@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { actionCreatorsFor } from "redux-crud";
+import reduxCrud from "redux-crud";
 
 import cuid from "cuid";
 
@@ -13,7 +13,7 @@ import { api } from "~/lib/guesstimate_api";
 
 import { AppThunk } from "~/modules/store";
 
-const sActions = actionCreatorsFor("userOrganizationMemberships");
+const sActions = reduxCrud.actionCreatorsFor("userOrganizationMemberships");
 const relevantAttributes = [
   "id",
   "user_id",

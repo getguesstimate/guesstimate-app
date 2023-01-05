@@ -2,7 +2,13 @@ import _ from "lodash";
 import { format, uniq } from "~/lib/engine/guesstimate";
 import { AnyAction, Reducer } from "redux";
 
-type GuesstimatesState = any[];
+export type Guesstimate = any;
+// export type Guesstimate = {
+//   input: string;
+//   metric: string;
+// };
+
+type GuesstimatesState = Guesstimate[];
 
 export const guesstimatesR: Reducer<GuesstimatesState, AnyAction> = (
   state = [],

@@ -34,7 +34,7 @@ import { CanvasState } from "~/modules/canvas_state/reducer";
 
 // We have to display this section after it disappears
 // to ensure that the metric card gets selected after click.
-const ErrorIcon = ({ errors }) => {
+const ErrorIcon: React.FC<{ errors: any }> = ({ errors }) => {
   if (isBreak(errors)) {
     return <Icon name="unlink" />;
   } else if (isInfiniteLoop(errors)) {

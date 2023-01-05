@@ -6,7 +6,7 @@ import {
   CardListElement,
   CardListElementProps,
 } from "~/components/utility/card/index";
-import DropDown from "~/components/utility/drop-down/index";
+import { DropDown } from "~/components/utility/DropDown";
 
 import * as meActions from "~/modules/me/actions";
 import * as modalActions from "~/modules/modal/actions";

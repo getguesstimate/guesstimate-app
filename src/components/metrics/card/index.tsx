@@ -6,15 +6,15 @@ import Icon from "~/components/react-fa-patched";
 import $ from "jquery";
 import ReactDOM from "react-dom";
 
-import MetricToolTip from "./tooltip";
+import { MetricToolTip } from "./tooltip";
 import { hasMetricUpdated } from "./updated";
 
 import DistributionEditor, {
   UnwrappedDistributionEditor,
 } from "~/components/distributions/editor/index";
-import { MetricModal } from "~/components/metrics/modal/index";
-import ToolTip from "~/components/utility/tooltip/index";
-import { MetricCardViewSection } from "./MetricCardViewSection/index";
+import { MetricModal } from "~/components/metrics/MetricModal";
+import { ToolTip } from "~/components/utility/ToolTip";
+import { MetricCardViewSection } from "./MetricCardViewSection";
 import SensitivitySection from "./SensitivitySection/SensitivitySection";
 
 import { analyzeMetricId, endAnalysis } from "~/modules/canvas_state/actions";
@@ -26,7 +26,6 @@ import { withReadableId } from "~/lib/generateVariableNames/generateMetricReadab
 import { shouldTransformName } from "~/lib/generateVariableNames/nameToVariableName";
 
 import { GridContext } from "~/components/lib/FlowGrid/filled-cell";
-import { CanvasState } from "~/components/lib/FlowGrid/types";
 import {
   INPUT,
   INTERMEDIATE,
@@ -36,6 +35,8 @@ import {
 } from "~/lib/engine/graph";
 import { makeURLsMarkdown } from "~/lib/engine/utils";
 import { AppDispatch } from "~/modules/store";
+import { FullDenormalizedMetric } from "~/lib/engine/space";
+import { CanvasState } from "~/modules/canvas_state/reducer";
 
 const relationshipClasses = {};
 relationshipClasses[INTERMEDIATE] = "intermediate";
@@ -53,7 +54,7 @@ const ScatterTip = ({ yMetric, xMetric }) => (
 type Props = {
   canvasState: CanvasState;
   isInScreenshot: boolean;
-  metric: any; // FIXME
+  metric: FullDenormalizedMetric; // FIXME
   organizationId?: string | number;
   canUseOrganizationFacts: boolean;
   exportedAsFact: boolean;
@@ -196,11 +197,11 @@ class MetricCard extends Component<Props, State> {
   }
 
   _hasDescription() {
-    return !!_.get(this.props.metric, "guesstimate.description");
+    return !!_.get(this.props.metric.guesstimate, "description");
   }
 
   _hasGuesstimate() {
-    const has = (item) => !!_.get(this.props.metric, `guesstimate.${item}`);
+    const has = (item: string) => !!_.get(this.props.metric.guesstimate, item);
     return has("input") || has("data");
   }
 
@@ -209,7 +210,7 @@ class MetricCard extends Component<Props, State> {
   }
 
   onChangeMetricName(name) {
-    if (name === _.get(this, "props.metric.name")) {
+    if (name === this.props.metric.name) {
       return;
     }
 
@@ -272,9 +273,6 @@ class MetricCard extends Component<Props, State> {
   _className() {
     const { inSelectedCell, hovered, isInScreenshot } = this.props;
     const relationshipClass = relationshipClasses[this._relationshipType()];
-    const {
-      canvasState: { metricCardView },
-    } = this.props;
 
     const titleView = !hovered && !inSelectedCell && this._isTitle();
     let className = inSelectedCell
@@ -283,7 +281,6 @@ class MetricCard extends Component<Props, State> {
     className += isInScreenshot ? " display" : "";
     className += titleView ? " titleView" : "";
     className += " " + relationshipClass;
-    className += " " + metricCardView;
     return className;
   }
 
@@ -321,7 +318,7 @@ class MetricCard extends Component<Props, State> {
   // If sidebar is expanded, we want to close it if anything else is clicked
   onMouseDown(e: React.MouseEvent) {
     const isSidebarElement =
-      _.get(e, "target.dataset.controlSidebar") === "true";
+      _.get(e.target, "dataset.controlSidebar") === "true";
     if (this.state.sidebarIsOpen && !isSidebarElement) {
       this._toggleSidebar();
     }
@@ -506,7 +503,7 @@ const MetricSidebar: React.FC<{
 
 const MetricSidebarItem: React.FC<{
   className?: string;
-  onClick: () => void;
+  onClick(): void;
   icon: React.ReactElement;
   name: string;
 }> = ({ className, onClick, icon, name }) => (

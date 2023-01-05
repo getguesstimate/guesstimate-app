@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { actionCreatorsFor } from "redux-crud";
+import reduxCrud from "redux-crud";
 
 import * as displayErrorsActions from "~/modules/displayErrors/actions";
 import * as meActions from "~/modules/me/actions";
@@ -10,7 +10,7 @@ import { captureApiError } from "~/lib/errors/index";
 import { ApiUser } from "~/lib/guesstimate_api/resources/Users";
 import { api } from "~/lib/guesstimate_api";
 
-let sActions = actionCreatorsFor("users");
+const sActions = reduxCrud.actionCreatorsFor("users");
 
 //fetches a specific user if auth0_id is passed in
 export function fetch({ auth0_id }): AppThunk {

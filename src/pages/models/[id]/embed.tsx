@@ -2,7 +2,7 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 
 import { Layout } from "~/components/layouts";
-import SpaceShow from "~/components/spaces/show";
+import SpaceShow from "~/components/spaces/SpaceShow";
 
 const EmbedModelPage: NextPage = () => {
   const router = useRouter();

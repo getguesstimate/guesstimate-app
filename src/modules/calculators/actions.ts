@@ -1,6 +1,6 @@
 import cuid from "cuid";
 import _ from "lodash";
-import { actionCreatorsFor } from "redux-crud";
+import reduxCrud from "redux-crud";
 
 import { AppThunk } from "~/modules/store";
 
@@ -11,9 +11,9 @@ import { captureApiError } from "~/lib/errors/index";
 
 import { api } from "~/lib/guesstimate_api";
 
-export const sActions = actionCreatorsFor("calculators");
+export const sActions = reduxCrud.actionCreatorsFor("calculators");
 
-export function fetchById(id: string): AppThunk {
+export function fetchById(id: number): AppThunk {
   return (dispatch, getState) => {
     dispatch(sActions.fetchStart());
 

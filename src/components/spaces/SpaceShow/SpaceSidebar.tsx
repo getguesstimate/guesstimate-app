@@ -1,10 +1,17 @@
 import React, { Component } from "react";
 
-import ClickToEdit from "~/components/utility/click-to-edit/index";
+import { ClickToEdit } from "~/components/utility/ClickToEdit";
 import { MarkdownViewer } from "~/components/utility/markdown-viewer/index";
 import { ButtonCloseText } from "~/components/utility/buttons/close";
 
-export class SpaceSidebar extends Component<any> {
+type Props = {
+  description: string;
+  canEdit: boolean;
+  onClose(): void;
+  onSaveDescription(): void;
+};
+
+export class SpaceSidebar extends Component<Props> {
   componentDidMount() {
     window.recorder.recordMountEvent(this);
   }
@@ -18,7 +25,7 @@ export class SpaceSidebar extends Component<any> {
     window.recorder.recordUnmountEvent(this);
   }
 
-  shouldComponentUpdate(nextProps) {
+  shouldComponentUpdate(nextProps: Props) {
     return (
       nextProps.canEdit !== this.props.canEdit ||
       this.props.description !== nextProps.description
@@ -31,8 +38,8 @@ export class SpaceSidebar extends Component<any> {
       <div className="SpaceSidebar">
         <div className="SpaceSidebar-inside">
           <div className="SpaceSidebar-header">
-            <div className={"closeSidebar"}>
-              {<ButtonCloseText onClick={onClose} />}
+            <div className="closeSidebar">
+              <ButtonCloseText onClick={onClose} />
             </div>
           </div>
           <div className="SpaceSidebar-body">

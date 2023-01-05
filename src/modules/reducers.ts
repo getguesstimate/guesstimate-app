@@ -1,7 +1,5 @@
 import { __DEV__ } from "~/lib/constants";
 import reduxCrud from "redux-crud";
-import SeamlessImmutable from "seamless-immutable";
-const SI = __DEV__ ? SeamlessImmutable : (a) => a;
 
 import { AnyAction, Reducer } from "redux";
 import { canvasStateR } from "./canvas_state/reducer";
@@ -24,10 +22,6 @@ import simulationsR from "./simulations/reducer";
 import { spacesR } from "./spaces/reducer";
 import { userOrganizationInvitationsR } from "./userOrganizationInvitations/reducer";
 import { usersR } from "./users/reducer";
-
-export function changeSelect(location) {
-  return { type: "CHANGE_SELECT", location };
-}
 
 type State = {
   displayError: ReturnType<typeof displayErrorR>;
@@ -59,48 +53,45 @@ const rootReducer: Reducer<State, AnyAction> = function app(
   state = {} as any,
   action
 ) {
-  if (typeof window !== "undefined" && (window as any).recorder) {
-    (window as any).recorder.recordReductionEvent(action);
+  if (typeof window !== "undefined" && window.recorder) {
+    window.recorder.recordReductionEvent(action);
   }
 
   return {
-    displayError: SI(displayErrorR(state.displayError, action)),
-    metrics: SI(metricsR(state.metrics, action)),
-    guesstimates: SI(guesstimatesR(state.guesstimates, action)),
-    selectedCell: SI(selectedCellR(state.selectedCell, action)),
-    selectedRegion: SI(selectedRegionR(state.selectedRegion, action)),
-    simulations: SI(simulationsR(state.simulations, action)),
-    spaces: SI(spacesR(state.spaces, action)),
-    users: SI(usersR(state.users, action)),
-    organizations: SI(organizationsR(state.organizations, action)),
-    newOrganization: SI(newOrganizationR(state.newOrganization, action)),
-    userOrganizationMemberships: SI(
-      reduxCrud.reducersFor("userOrganizationMemberships")(
-        state.userOrganizationMemberships,
-        action
-      )
+    displayError: displayErrorR(state.displayError, action),
+    metrics: metricsR(state.metrics, action),
+    guesstimates: guesstimatesR(state.guesstimates, action),
+    selectedCell: selectedCellR(state.selectedCell, action),
+    selectedRegion: selectedRegionR(state.selectedRegion, action),
+    simulations: simulationsR(state.simulations, action),
+    spaces: spacesR(state.spaces, action),
+    users: usersR(state.users, action),
+    organizations: organizationsR(state.organizations, action),
+    newOrganization: newOrganizationR(state.newOrganization, action),
+    userOrganizationMemberships: reduxCrud.List.reducersFor(
+      "userOrganizationMemberships"
+    )(state.userOrganizationMemberships, action),
+    userOrganizationInvitations: userOrganizationInvitationsR(
+      state.userOrganizationInvitations,
+      state.userOrganizationMemberships,
+      action
     ),
-    userOrganizationInvitations: SI(
-      userOrganizationInvitationsR(
-        state.userOrganizationInvitations,
-        state.userOrganizationMemberships,
-        action
-      )
+    me: meR(state.me, action),
+    canvasState: canvasStateR(state.canvasState, action),
+    searchSpaces: searchSpacesR(state.searchSpaces, action),
+    firstSubscription: firstSubscriptionsR(state.firstSubscription, action),
+    modal: modalR(state.modal, action),
+    copied: copiedR(state.copied, action),
+    checkpoints: checkpointsR(state.checkpoints, action),
+    httpRequests: httpRequestsR(state.httpRequests, action),
+    calculators: reduxCrud.List.reducersFor("calculators")(
+      state.calculators,
+      action
     ),
-    me: SI(meR(state.me, action)),
-    canvasState: SI(canvasStateR(state.canvasState, action)),
-    searchSpaces: SI(searchSpacesR(state.searchSpaces, action)),
-    firstSubscription: SI(firstSubscriptionsR(state.firstSubscription, action)),
-    modal: SI(modalR(state.modal, action)),
-    copied: SI(copiedR(state.copied, action)),
-    checkpoints: SI(checkpointsR(state.checkpoints, action)),
-    httpRequests: SI(httpRequestsR(state.httpRequests, action)),
-    calculators: SI(
-      reduxCrud.reducersFor("calculators")(state.calculators, action)
-    ),
-    facts: SI(factsR(state.facts, action)),
-    factCategories: SI(
-      reduxCrud.reducersFor("factCategories")(state.factCategories, action)
+    facts: factsR(state.facts, action),
+    factCategories: reduxCrud.List.reducersFor("factCategories")(
+      state.factCategories,
+      action
     ),
   };
 };

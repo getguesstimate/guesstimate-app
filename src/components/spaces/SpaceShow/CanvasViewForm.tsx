@@ -2,7 +2,7 @@ import {
   CardListElement,
   CardListElementProps,
 } from "~/components/utility/card/index";
-import DropDown from "~/components/utility/drop-down/index";
+import { DropDown } from "~/components/utility/DropDown";
 
 import * as canvasStateActions from "~/modules/canvas_state/actions";
 import { useAppDispatch, useAppSelector } from "~/modules/hooks";
@@ -12,7 +12,7 @@ const arrowsVisibleImage = "/assets/metric-icons/blue/arrows-visible.png";
 const debuggingImage = "/assets/metric-icons/blue/debugging.png";
 const scientificImage = "/assets/metric-icons/blue/scientific.png";
 
-const CanvasViewForm: React.FC = () => {
+export const CanvasViewForm: React.FC = () => {
   const dispatch = useAppDispatch();
   const canvasState = useAppSelector((state) => state.canvasState);
 

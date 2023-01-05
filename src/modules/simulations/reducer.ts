@@ -2,9 +2,18 @@ import _ from "lodash";
 import { addStats } from "~/lib/engine/simulation";
 import { AnyAction, Reducer } from "redux";
 
-type State = any[]; // FIXME
+export type Simulation = any; // FIXMe
+// export type Simulation = {
+//   metric?: string;
+//   sample?: Array<Sample>;
+// };
 
-const simulations: Reducer<State, AnyAction> = (state = [], action) => {
+type SimulationsState = Simulation[];
+
+const simulations: Reducer<SimulationsState, AnyAction> = (
+  state = [],
+  action
+) => {
   switch (action.type) {
     case "DELETE_SIMULATIONS":
       return state.filter((s) => !_.includes(action.metricIds, s.metric));

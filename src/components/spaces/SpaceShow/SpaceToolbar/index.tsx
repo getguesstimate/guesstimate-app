@@ -6,12 +6,14 @@ import Modal from "react-modal";
 import ReactTooltip from "react-tooltip";
 
 import { CardListElement } from "~/components/utility/card/index";
-import DropDown from "~/components/utility/drop-down/index";
-import CanvasViewForm from "../canvasViewForm";
-import { ViewOptionToggle } from "../view-options/index";
+import { DropDown } from "~/components/utility/DropDown";
+import { CanvasViewForm } from "../CanvasViewForm";
+import { ViewOptionToggle } from "../ViewOptionToggle";
 import { ImportFromSlurpForm } from "./import_from_slurp_form";
 
-const ProgressMessage = ({ actionState }) => (
+const ProgressMessage: React.FC<{ actionState: string | undefined }> = ({
+  actionState,
+}) => (
   <div className="saveMessage">
     {actionState == "SAVING" && "Saving..."}
     {actionState == "COPYING" && "Copying..."}
@@ -46,29 +48,37 @@ type Props = {
   onAllowEdits: () => void;
   onForbidEdits: () => void;
   isLoggedIn: boolean;
-  onDestroy: () => void;
-  onCopyModel: () => void;
-  onCopyMetrics: () => void;
-  onPasteMetrics: () => void;
-  onDeleteMetrics: () => void;
-  onCutMetrics: () => void;
+  onDestroy(): void;
+  onCopyModel(): void;
+  onCopyMetrics(): void;
+  onPasteMetrics(): void;
+  onDeleteMetrics(): void;
+  onCutMetrics(): void;
   isPrivate: boolean | undefined;
   editableByMe: boolean;
-  actionState: string; // TODO - union
-  onUndo: () => void;
-  onRedo: () => void;
+  actionState: string | undefined; // TODO - union
+  onUndo(): void;
+  onRedo(): void;
   canUndo: boolean;
   canRedo: boolean;
-  onImportSlurp: (slurp: unknown) => void;
+  onImportSlurp(slurp: unknown): void;
   calculators: any; // FIXME
-  makeNewCalculator: () => void;
-  showCalculator: (c: unknown) => void;
-  toggleFactSidebar: () => void;
+  makeNewCalculator(): void;
+  showCalculator(c: unknown): void;
+  toggleFactSidebar(): void;
   canShowFactSidebar: boolean;
-  onOpenTutorial: () => void;
+  onOpenTutorial(): void;
 };
 
-export class SpaceToolbar extends Component<Props> {
+type State = {
+  importModalOpen: boolean;
+};
+
+export class SpaceToolbar extends Component<Props, State> {
+  state: State = {
+    importModalOpen: false,
+  };
+
   componentDidMount() {
     window.recorder.recordMountEvent(this);
   }
@@ -82,7 +92,7 @@ export class SpaceToolbar extends Component<Props> {
     window.recorder.recordUnmountEvent(this);
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(nextProps: Props, nextState: State) {
     return (
       this.props.editableByMe !== nextProps.editableByMe ||
       this.props.actionState !== nextProps.actionState ||
@@ -94,10 +104,6 @@ export class SpaceToolbar extends Component<Props> {
       this.state.importModalOpen !== nextState.importModalOpen
     );
   }
-
-  state = {
-    importModalOpen: false,
-  };
 
   onImportSlurp(slurp) {
     this.setState({ importModalOpen: false });
@@ -127,7 +133,7 @@ export class SpaceToolbar extends Component<Props> {
       toggleFactSidebar,
       onOpenTutorial,
     } = this.props;
-    const ReactTooltipParams = {
+    const reactTooltipParams = {
       class: "header-action-tooltip",
       delayShow: 0,
       delayHide: 0,
@@ -135,18 +141,17 @@ export class SpaceToolbar extends Component<Props> {
       effect: "solid",
     };
 
-    let view_mode_header = (
-      <span>
-        <Icon name="eye" /> Viewing{" "}
-      </span>
-    );
-    if (editableByMe && editsAllowed) {
-      view_mode_header = (
+    let view_mode_header =
+      editableByMe && editsAllowed ? (
         <span>
-          <Icon name="pencil" /> Editing{" "}
+          <Icon name="pencil" /> Editing
+        </span>
+      ) : (
+        <span>
+          <Icon name="eye" /> Viewing
         </span>
       );
-    }
+
     const customStyles = {
       overlay: {
         backgroundColor: "rgba(55, 68, 76, 0.4)",
@@ -162,7 +167,8 @@ export class SpaceToolbar extends Component<Props> {
         border: "none",
         padding: "1em",
       },
-    };
+    } as const;
+
     return (
       <div className="SpaceShowToolbar container-fluid">
         <Modal
@@ -176,34 +182,34 @@ export class SpaceToolbar extends Component<Props> {
         </Modal>
         <div className="row">
           <div className="col-sm-10">
-            <ReactTooltip {...ReactTooltipParams} id="cut-button">
+            <ReactTooltip {...reactTooltipParams} id="cut-button">
               Cut Nodes (ctrl-x)
             </ReactTooltip>
-            <ReactTooltip {...ReactTooltipParams} id="copy-button">
+            <ReactTooltip {...reactTooltipParams} id="copy-button">
               Copy Nodes (ctrl-c)
             </ReactTooltip>
-            <ReactTooltip {...ReactTooltipParams} id="paste-button">
+            <ReactTooltip {...reactTooltipParams} id="paste-button">
               Paste Nodes (ctrl-v)
             </ReactTooltip>
-            <ReactTooltip {...ReactTooltipParams} id="delete-button">
+            <ReactTooltip {...reactTooltipParams} id="delete-button">
               Delete Nodes (del/bksp)
             </ReactTooltip>
-            <ReactTooltip {...ReactTooltipParams} id="undo-button">
+            <ReactTooltip {...reactTooltipParams} id="undo-button">
               Undo (ctrl-z)
             </ReactTooltip>
-            <ReactTooltip {...ReactTooltipParams} id="redo-button">
+            <ReactTooltip {...reactTooltipParams} id="redo-button">
               Redo (ctrl-shift-z)
             </ReactTooltip>
-            <ReactTooltip {...ReactTooltipParams} id="calculator">
+            <ReactTooltip {...reactTooltipParams} id="calculator">
               Calculators
             </ReactTooltip>
-            <ReactTooltip {...ReactTooltipParams} id="facts">
+            <ReactTooltip {...reactTooltipParams} id="facts">
               Metric Library
             </ReactTooltip>
 
             {isLoggedIn && (
               <DropDown
-                headerText={"Model Actions"}
+                headerText="Model Actions"
                 openLink={<a className="header-action">File</a>}
                 position="right"
               >
@@ -241,7 +247,7 @@ export class SpaceToolbar extends Component<Props> {
             <div className="header-action-border" />
             <a
               onClick={onCutMetrics}
-              className={`header-action`}
+              className="header-action"
               data-tip
               data-for="cut-button"
             >
@@ -249,7 +255,7 @@ export class SpaceToolbar extends Component<Props> {
             </a>
             <a
               onClick={onCopyMetrics}
-              className={`header-action`}
+              className="header-action"
               data-tip
               data-for="copy-button"
             >
@@ -257,7 +263,7 @@ export class SpaceToolbar extends Component<Props> {
             </a>
             <a
               onClick={onPasteMetrics}
-              className={`header-action`}
+              className="header-action"
               data-tip
               data-for="paste-button"
             >
@@ -265,7 +271,7 @@ export class SpaceToolbar extends Component<Props> {
             </a>
             <a
               onClick={onDeleteMetrics}
-              className={`header-action`}
+              className="header-action"
               data-tip
               data-for="delete-button"
             >
@@ -294,7 +300,7 @@ export class SpaceToolbar extends Component<Props> {
               <div>
                 <div className="header-action-border" />
                 <DropDown
-                  headerText={"Calculators"}
+                  headerText="Calculators"
                   openLink={
                     <a className="header-action" data-tip data-for="calculator">
                       <Icon name="calculator" />
@@ -303,7 +309,7 @@ export class SpaceToolbar extends Component<Props> {
                   position="right"
                 >
                   {[
-                    ..._.map(calculators, (c) => (
+                    ...calculators.map((c) => (
                       <CardListElement
                         key={c.id}
                         header={c.title}
@@ -316,11 +322,11 @@ export class SpaceToolbar extends Component<Props> {
                     )),
                     editableByMe && (
                       <CardListElement
-                        key={"new"}
-                        header={"New Calculator"}
+                        key="new"
+                        header="New Calculator"
                         onMouseDown={makeNewCalculator}
                         closeOnClick={true}
-                        icon={"plus"}
+                        icon="plus"
                       />
                     ),
                   ]}
@@ -331,7 +337,7 @@ export class SpaceToolbar extends Component<Props> {
             {this.props.canShowFactSidebar && (
               <a
                 onClick={toggleFactSidebar}
-                className={`header-action`}
+                className="header-action"
                 data-tip
                 data-for="facts"
               >
@@ -344,7 +350,7 @@ export class SpaceToolbar extends Component<Props> {
           <div className="col-sm-2">
             <div className="float-right">
               <ViewOptionToggle
-                headerText={"Saving Options"}
+                headerText="Saving Options"
                 openLink={
                   <a className="header-action button">{view_mode_header}</a>
                 }

@@ -3,25 +3,24 @@ import { NextRouter, useRouter, withRouter } from "next/router";
 import { Component } from "react";
 import { connect } from "react-redux";
 
-import $ from "jquery";
 import Head from "next/head";
 
 import { EditCalculatorForm } from "~/components/calculators/edit";
 import { NewCalculatorForm } from "~/components/calculators/new";
 import { CalculatorCompressedShow } from "~/components/calculators/show/CalculatorCompressedShow";
 import { FactListContainer } from "~/components/facts/list/container";
-import Canvas from "~/components/spaces/canvas";
+import { SpaceCanvas } from "~/components/spaces/SpaceCanvas";
 import {
   ButtonDeleteText,
   ButtonEditText,
   ButtonExpandText,
 } from "~/components/utility/buttons/button";
 import { ButtonCloseText } from "~/components/utility/buttons/close";
-import { ClosedSpaceSidebar } from "./closed_sidebar";
-import { SpaceHeader } from "./header";
-import { SpaceSidebar } from "./sidebar";
-import { SpaceToolbar } from "./Toolbar/index";
-import { Tutorial } from "./Tutorial/index";
+import { ClosedSpaceSidebar } from "./ClosedSpaceSidebar";
+import { SpaceHeader } from "./SpaceHeader";
+import { SpaceSidebar } from "./SpaceSidebar";
+import { SpaceToolbar } from "./SpaceToolbar";
+import { Tutorial } from "./Tutorial";
 
 import {
   denormalizedSpaceSelector,
@@ -48,7 +47,6 @@ import * as e from "~/lib/engine/engine";
 import { Fact } from "~/lib/engine/facts";
 import { AppDispatch, RootState } from "~/modules/store";
 import * as elev from "~/server/elev/index";
-import { DSpace } from "~/lib/engine/space";
 
 function mapStateToProps(state: RootState) {
   return {
@@ -56,7 +54,7 @@ function mapStateToProps(state: RootState) {
   };
 }
 
-const ShowCalculatorHeader = ({
+const ShowCalculatorHeader: React.FC<any> = ({
   id,
   editableByMe,
   onEdit,
@@ -64,6 +62,7 @@ const ShowCalculatorHeader = ({
   onClose,
 }) => {
   const router = useRouter();
+
   return (
     <div className="row">
       <div className="col-xs-12">
@@ -78,7 +77,10 @@ const ShowCalculatorHeader = ({
   );
 };
 
-const CalculatorFormHeader = ({ isNew, onClose }) => (
+const CalculatorFormHeader: React.FC<{
+  isNew: boolean;
+  onClose(): void;
+}> = ({ isNew, onClose }) => (
   <div className="row">
     <div className="col-xs-8">
       <h2>{`${isNew ? "New" : "Edit"} Calculator`}</h2>
@@ -89,12 +91,15 @@ const CalculatorFormHeader = ({ isNew, onClose }) => (
   </div>
 );
 
-const FactSidebarHeader = ({ onClose, organizationId }) => {
+const FactSidebarHeader: React.FC<{
+  onClose(): void;
+  organizationId: string | number;
+}> = ({ onClose, organizationId }) => {
   const router = useRouter();
   return (
     <div className="row">
       <div className="col-xs-6">
-        <h2> Metric Library </h2>
+        <h2>Metric Library</h2>
       </div>
       <div className="col-xs-6">
         <ButtonExpandText
@@ -110,7 +115,7 @@ const FactSidebarHeader = ({ onClose, organizationId }) => {
 
 type Props = {
   spaceId: number;
-  showCalculatorId?: string;
+  showCalculatorId?: number;
   factsShown?: boolean;
   showCalculatorResults?: boolean;
   embed?: boolean;
@@ -143,7 +148,7 @@ type RightSidebarState =
     }
   | {
       type: typeof SHOW_CALCULATOR;
-      showCalculatorId: string;
+      showCalculatorId: number;
       showCalculatorResults?: boolean;
     }
   | {
@@ -157,10 +162,10 @@ type State = {
   rightSidebar: RightSidebarState;
 };
 
-class SpacesShow extends Component<Props, State> {
+class SpaceShow extends Component<Props, State> {
   state: State = {
     showLeftSidebar: true,
-    showTutorial: !!_.get(this, "props.me.profile.needs_tutorial"),
+    showTutorial: !!_.get(this.props.me, "profile.needs_tutorial"),
     attemptedFetch: false,
     rightSidebar: this.props.showCalculatorId
       ? {
@@ -203,12 +208,12 @@ class SpacesShow extends Component<Props, State> {
 
   componentWillUpdate() {
     window.recorder.recordRenderStartEvent(this);
-    if (this.props.embed) {
-      $("#intercom-container").remove();
-    }
+    // if (this.props.embed) {
+    //   $("#intercom-container").remove();
+    // }
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps: Props) {
     window.recorder.recordRenderStopEvent(this);
 
     this.considerFetch(prevProps);
@@ -338,13 +343,13 @@ class SpacesShow extends Component<Props, State> {
   }
 
   canUseOrganizationFacts() {
-    const organization = _.get(this, "props.denormalizedSpace.organization");
+    const organization = this.props.denormalizedSpace.organization;
     if (!organization) {
       return false;
     }
 
     const orgHasPrivateAccess = e.organization.hasPrivateAccess(organization);
-    const isPrivate = _.get(this, "props.denormalizedSpace.is_private");
+    const isPrivate = this.props.denormalizedSpace.is_private;
     return !!isPrivate && orgHasPrivateAccess;
   }
 
@@ -362,7 +367,7 @@ class SpacesShow extends Component<Props, State> {
   editCalculator(id) {
     this.openRightSidebar({ type: EDIT_CALCULATOR_FORM, editCalculatorId: id });
   }
-  deleteCalculator(id) {
+  deleteCalculator(id: number) {
     this.props.dispatch(calculatorActions.destroy(id));
     this.closeRightSidebar();
   }
@@ -496,7 +501,7 @@ class SpacesShow extends Component<Props, State> {
       return <div className="spaceShow"></div>;
     }
 
-    const sidebarIsViseable =
+    const sidebarIsVisible =
       space.editableByMe || !_.isEmpty(space.description);
     const isLoggedIn = e.me.isLoggedIn(this.props.me);
     const shareableLinkUrl = e.space.urlWithToken(space);
@@ -504,7 +509,7 @@ class SpacesShow extends Component<Props, State> {
     if (this.props.embed) {
       return (
         <div className="spaceShow screenshot">
-          <Canvas
+          <SpaceCanvas
             denormalizedSpace={space}
             canUseOrganizationFacts={this.canUseOrganizationFacts()}
             exportedFacts={exportedFacts}
@@ -612,18 +617,18 @@ class SpacesShow extends Component<Props, State> {
         </div>
 
         <div className="content">
-          {sidebarIsViseable && this.state.showLeftSidebar && (
-            <SpaceSidebar
-              description={space.description}
-              canEdit={space.editableByMe}
-              onClose={this.hideLeftSidebar.bind(this)}
-              onSaveDescription={this.onSaveDescription.bind(this)}
-            />
-          )}
-          {sidebarIsViseable && !this.state.showLeftSidebar && (
-            <ClosedSpaceSidebar onOpen={this.openLeftSidebar.bind(this)} />
-          )}
-          <Canvas
+          {sidebarIsVisible &&
+            (this.state.showLeftSidebar ? (
+              <SpaceSidebar
+                description={space.description || ""}
+                canEdit={space.editableByMe}
+                onClose={this.hideLeftSidebar.bind(this)}
+                onSaveDescription={this.onSaveDescription.bind(this)}
+              />
+            ) : (
+              <ClosedSpaceSidebar onOpen={this.openLeftSidebar.bind(this)} />
+            ))}
+          <SpaceCanvas
             canUseOrganizationFacts={this.canUseOrganizationFacts()}
             exportedFacts={exportedFacts}
             denormalizedSpace={space}
@@ -639,5 +644,5 @@ class SpacesShow extends Component<Props, State> {
 }
 
 export default connect(mapStateToProps)(
-  connect(denormalizedSpaceSelector)(withRouter(SpacesShow))
+  connect(denormalizedSpaceSelector)(withRouter(SpaceShow))
 );

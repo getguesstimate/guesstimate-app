@@ -3,6 +3,7 @@ import { DSpace } from "~/lib/engine/space";
 import { RootState } from "~/modules/store";
 import _ from "lodash";
 import { createSelector } from "reselect";
+import { CanvasState } from "~/modules/canvas_state/reducer";
 
 const NAME = "Denormalized Space Selector";
 
@@ -33,7 +34,7 @@ const SPACE_GRAPH_PARTS = [
 ] as const;
 
 export type ExtendedDSpace = DSpace & {
-  canvasState: any;
+  canvasState: CanvasState;
   checkpointMetadata: any;
 };
 
@@ -59,13 +60,11 @@ export const denormalizedSpaceSelector = createSelector(
       organizationFacts
     );
 
-    const extendedDSpace = denormalizedSpace
-      ? {
-          ...denormalizedSpace,
-          canvasState,
-          checkpointMetadata: checkpointMetadata(spaceId, graph.checkpoints),
-        }
-      : (denormalizedSpace as any); /* FIXME - proper "not found" handling */
+    const extendedDSpace = {
+      ...denormalizedSpace,
+      canvasState,
+      checkpointMetadata: checkpointMetadata(spaceId, graph.checkpoints),
+    };
 
     const { organization_id } = denormalizedSpace;
     const facts = e.organization.findFacts(organization_id, organizationFacts);

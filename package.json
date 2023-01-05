@@ -130,7 +130,7 @@
     "react-sortable": "^2.0.0",
     "react-tooltip": "^3.6.1",
     "redux": "^4.0.0",
-    "redux-crud": "^0.10.1",
+    "redux-crud": "^3.3.0",
     "redux-saga": "^0.16.0",
     "redux-thunk": "^2.3.0",
     "remove-markdown": "^0.3.0",

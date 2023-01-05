@@ -17,7 +17,10 @@ export function isRegion(test: MaybeRegion): test is Region {
   return test.length === 2;
 }
 
-export function isAtLocation(test, location) {
+export function isAtLocation(test: Location | {}, location: Location) {
+  if (!("row" in test)) {
+    return false;
+  }
   return test.row === location.row && test.column === location.column;
 }
 

@@ -1,11 +1,21 @@
-import { metricsR } from "./reducer";
+import { Metric, metricsR } from "./reducer";
+
+function makeMetric(id: number, name: string): Metric {
+  return {
+    id: String(id),
+    name,
+    space: 1,
+    location: { column: id, row: id },
+    readableId: `M${id}`,
+  };
+}
 
 describe("metrics", () => {
   describe("#SPACES_FETCH_SUCCESS", () => {
-    const metrics = [
-      { id: "1", name: "foo1" },
-      { id: "2", name: "foo2" },
-      { id: "2", name: "foo3" },
+    const metrics: Metric[] = [
+      makeMetric(1, "foo1"),
+      makeMetric(2, "foo2"),
+      makeMetric(2, "foo3"),
     ];
 
     it(`removes redundant metrics`, () => {
@@ -19,10 +29,7 @@ describe("metrics", () => {
   });
 
   describe("#ADD_METRIC", () => {
-    const metrics = [
-      { id: "1", name: "foo1" },
-      { id: "2", name: "foo2" },
-    ];
+    const metrics = [makeMetric(1, "foo1"), makeMetric(2, "foo2")];
 
     it(`correctly adds new element`, () => {
       const newMetric = { id: "3", name: "foo3" };
@@ -47,9 +54,9 @@ describe("metrics", () => {
 
   describe("#CHANGE_METRIC", () => {
     const metrics = [
-      { id: "1", name: "foo1" },
-      { id: "2", name: "foo2" },
-      { id: "3", name: "foo3" },
+      makeMetric(1, "foo1"),
+      makeMetric(2, "foo2"),
+      makeMetric(3, "foo3"),
     ];
 
     it(`changes metric`, () => {

@@ -2,7 +2,7 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 
 import { Layout } from "~/components/layouts";
-import SpaceShow from "~/components/spaces/show";
+import SpaceShow from "~/components/spaces/SpaceShow";
 import { extractTokenFromUrl } from "~/lib/engine/space";
 
 const ModelWithCalculatorIdPage: NextPage = () => {
@@ -17,7 +17,7 @@ const ModelWithCalculatorIdPage: NextPage = () => {
       {id === undefined ? null : (
         <SpaceShow
           spaceId={intId}
-          showCalculatorId={String(intCalculatorId)}
+          showCalculatorId={intCalculatorId}
           showCalculatorResults={window.location.search.includes(
             "showResults=true"
           )}

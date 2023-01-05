@@ -1,6 +1,6 @@
 import React from "react";
 
-import DropDown from "~/components/utility/drop-down/index";
+import { DropDown } from "~/components/utility/DropDown";
 import { CardListElement } from "~/components/utility/card/index";
 
 const ViewingOption: React.FC<any> = ({ isSelected, onClick }) => (

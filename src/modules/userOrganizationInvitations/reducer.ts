@@ -2,7 +2,9 @@ import _ from "lodash";
 import { AnyAction } from "redux";
 import reduxCrud from "redux-crud";
 
-const standardReducers = reduxCrud.reducersFor("userOrganizationInvitations");
+const standardReducers = reduxCrud.List.reducersFor(
+  "userOrganizationInvitations"
+);
 
 export const userOrganizationInvitationsR = (
   state: any,

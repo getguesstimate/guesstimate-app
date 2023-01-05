@@ -1,4 +1,4 @@
-import { EdgeShape } from "~/components/spaces/canvas";
+import { EdgeShape } from "~/components/spaces/SpaceCanvas";
 import _ from "lodash";
 import { Component } from "react";
 

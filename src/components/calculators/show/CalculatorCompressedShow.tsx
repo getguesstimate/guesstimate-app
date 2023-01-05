@@ -6,7 +6,7 @@ import { useAppSelector } from "~/modules/hooks";
 import { calculatorSpaceSelector } from "./calculator-space-selector";
 
 export const CalculatorCompressedShow: React.FC<{
-  calculatorId?: string;
+  calculatorId?: number;
   startFilled?: boolean;
 }> = ({ calculatorId, startFilled }) => {
   const selectedProps = useAppSelector((state) =>

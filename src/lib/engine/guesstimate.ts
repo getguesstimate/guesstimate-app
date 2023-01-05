@@ -4,6 +4,8 @@ import * as _collections from "./collections";
 import { HANDLE_REGEX } from "./facts";
 import { FACT_ID_PREFIX, METRIC_ID_PREFIX } from "./simulation";
 import * as _utils from "./utils";
+import { Metric } from "~/modules/metrics/reducer";
+import { Guesstimate } from "~/modules/guesstimates/reducer";
 
 export function equals(l, r) {
   return (
@@ -49,9 +51,9 @@ export const expressionSyntaxPad = (id, isMetric = true) =>
 
 // Returns a function which takes a guesstimate and returns that guesstimate with an input based on its
 // expression.
-export function expressionToInputFn(metrics: any[] = [], facts = []) {
-  let idMap = {},
-    reParts = [];
+export function expressionToInputFn(metrics: Metric[] = [], facts = []) {
+  let idMap = {};
+
   metrics.forEach(({ id, readableId }) => {
     idMap[expressionSyntaxPad(id, true)] = readableId;
   });
@@ -67,7 +69,7 @@ export function expressionToInputFn(metrics: any[] = [], facts = []) {
   const translateInputsFn = ({ expression }) =>
     translateRemainingInputsFn(translateValidInputsFn(expression));
 
-  return (g) =>
+  return (g: Guesstimate) =>
     !_.isEmpty(g.input) || _.isEmpty(g.expression)
       ? g
       : { ...g, input: translateInputsFn(g) };

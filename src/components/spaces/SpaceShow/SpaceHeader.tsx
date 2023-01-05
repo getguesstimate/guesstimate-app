@@ -3,13 +3,15 @@ import React, { Component } from "react";
 import Icon from "~/components/react-fa-patched";
 import { CardListSection } from "~/components/utility/card/index";
 
-import DropDown from "~/components/utility/drop-down/index";
-import { PrivacyToggle } from "./privacy-toggle/index";
-import { SpaceName } from "./spaceName";
+import { DropDown } from "~/components/utility/DropDown";
+import { PrivacyToggle } from "./PrivacyToggle";
+import { SpaceName } from "./SpaceName";
 
 import * as e from "~/lib/engine/engine";
 
-const EnableShareableLinkOption = ({ onEnable }) => (
+const EnableShareableLinkOption: React.FC<{ onEnable(): void }> = ({
+  onEnable,
+}) => (
   <div>
     <p>Shareable link disabled.</p>
     <span
@@ -21,11 +23,11 @@ const EnableShareableLinkOption = ({ onEnable }) => (
   </div>
 );
 
-const DisableOrRotateShareableLinkOption = ({
-  shareableLinkUrl,
-  onDisable,
-  onRotate,
-}) => (
+const DisableOrRotateShareableLinkOption: React.FC<{
+  shareableLinkUrl: string;
+  onDisable(): void;
+  onRotate(): void;
+}> = ({ shareableLinkUrl, onDisable, onRotate }) => (
   <div>
     <div className="ui segment shareable-link">
       <span>{shareableLinkUrl}</span>
@@ -50,27 +52,28 @@ const DisableOrRotateShareableLinkOption = ({
   </div>
 );
 
-const ShareableLinkOption = ({
-  children,
-  shareableLinkUrl,
-  onEnable,
-  onDisable,
-  onRotate,
-}) => (
+const ShareableLinkOption: React.FC<{
+  children: React.ReactNode;
+  shareableLinkUrl?: string;
+  onEnable(): void;
+  onDisable(): void;
+  onRotate(): void;
+}> = ({ children, shareableLinkUrl, onEnable, onDisable, onRotate }) => (
   <DropDown
-    headerText={"Shareable Link"}
+    headerText="Shareable Link"
     openLink={children}
-    position={"left"}
-    width={"wide"}
+    position="left"
+    width="wide"
   >
     <CardListSection>
-      {!shareableLinkUrl && <EnableShareableLinkOption onEnable={onEnable} />}
-      {!!shareableLinkUrl && (
+      {shareableLinkUrl ? (
         <DisableOrRotateShareableLinkOption
           shareableLinkUrl={shareableLinkUrl}
           onDisable={onDisable}
           onRotate={onRotate}
         />
+      ) : (
+        <EnableShareableLinkOption onEnable={onEnable} />
       )}
     </CardListSection>
   </DropDown>
@@ -123,18 +126,15 @@ export class SpaceHeader extends Component<any> {
       onRotateShareableLink,
     } = this.props;
 
-    let privacy_header = (
+    const privacy_header = isPrivate ? (
+      <span>
+        <Icon name="lock" /> Private
+      </span>
+    ) : (
       <span>
         <Icon name="globe" /> Public
       </span>
     );
-    if (isPrivate) {
-      privacy_header = (
-        <span>
-          <Icon name="lock" /> Private
-        </span>
-      );
-    }
 
     return (
       <div className="container-fluid">

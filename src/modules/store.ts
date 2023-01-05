@@ -3,7 +3,7 @@ import createSagaMiddleware from "redux-saga";
 import { dispatchCatchSaga } from "../routes/sagas";
 
 import { configureStore as toolkitConfigureStore } from "@reduxjs/toolkit";
-import { ThunkAction } from "redux-thunk";
+import thunk, { ThunkAction } from "redux-thunk";
 import { AnyAction } from "redux";
 
 export default function configureStore() {
@@ -11,16 +11,20 @@ export default function configureStore() {
 
   const store = toolkitConfigureStore({
     reducer: rootReducer,
+    /* redux-toolkit middlewares are too slow; https://redux-toolkit.js.org/api/getDefaultMiddleware#development */
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(sagaMiddleware),
+      getDefaultMiddleware({
+        immutableCheck: false,
+        serializableCheck: false,
+      }).concat(sagaMiddleware),
   });
 
   sagaMiddleware.run(dispatchCatchSaga);
 
   if ((module as any).hot) {
     // Enable Webpack hot module replacement for reducers
-    (module as any).hot.accept("gModules/reducers", () => {
-      const nextReducer = require("gModules/reducers");
+    (module as any).hot.accept("~/modules/reducers", () => {
+      const nextReducer = require("~/modules/reducers");
       store.replaceReducer(nextReducer);
     });
   }
