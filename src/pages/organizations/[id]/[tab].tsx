@@ -12,7 +12,7 @@ const OrganizationTabPage: NextPage = () => {
     <Layout backgroundColor="GREY">
       {id === undefined ? null : (
         <OrganizationShow
-          organizationId={id as string}
+          organizationId={parseInt(id as string)}
           key={id as string}
           tab={tab as string}
         />

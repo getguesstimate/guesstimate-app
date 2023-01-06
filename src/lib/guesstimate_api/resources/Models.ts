@@ -3,7 +3,7 @@ import AbstractResource from "../AbstractResource";
 import * as yup from "yup";
 import { userSchema } from "./Users";
 
-const spaceSchema = yup.object({
+export const spaceSchema = yup.object({
   id: yup.number().required(),
   user_id: yup.number(),
   organization_id: yup.number(),

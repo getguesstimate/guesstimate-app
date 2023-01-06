@@ -12,7 +12,7 @@ function validateEmail(email: string) {
   return re.test(email);
 }
 
-export const MemberAddForm: React.FC<{ organizationId: string }> = ({
+export const MemberAddForm: React.FC<{ organizationId: number }> = ({
   organizationId,
 }) => {
   const [value, setValue] = useState("");

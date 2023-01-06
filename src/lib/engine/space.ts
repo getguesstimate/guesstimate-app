@@ -179,7 +179,11 @@ function toDgraph(
       edits: author_contributions[author_id],
     }));
   } else {
-    org_users = [_collections.get(users, user_id)];
+    const user = _collections.get(users, user_id);
+    // user can be unset if it's not in users cache
+    if (user) {
+      org_users = [user];
+    }
   }
   org_users = org_users.filter((o) => !!o.id);
 

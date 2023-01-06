@@ -127,7 +127,7 @@ export function fetchById(
 }
 
 export const fetch = (
-  args: { userId: number } | { organizationId: string }
+  args: { userId: number } | { organizationId: string | number }
 ): AppThunk => {
   return async (dispatch, getState) => {
     dispatch(sActions.fetchStart());

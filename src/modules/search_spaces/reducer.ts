@@ -3,7 +3,10 @@ import { Reducer } from "redux";
 
 type SearchSpacesState = any;
 
-const search_spaces: Reducer<SearchSpacesState> = (state = [], action) => {
+export const searchSpacesR: Reducer<SearchSpacesState> = (
+  state = [],
+  action
+) => {
   switch (action.type) {
     case "SEARCH_SPACES_GET":
       return action.response;
@@ -16,5 +19,3 @@ const search_spaces: Reducer<SearchSpacesState> = (state = [], action) => {
       return state;
   }
 };
-
-export default search_spaces;

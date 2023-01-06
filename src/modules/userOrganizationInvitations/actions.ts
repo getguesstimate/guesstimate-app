@@ -45,3 +45,5 @@ export function fetchSuccess(invitations) {
   const formatted = invitations.map((m) => _.pick(m, relevantAttributes));
   return sActions.fetchSuccess(formatted);
 }
+
+export const deleteSuccess = sActions.deleteSuccess;

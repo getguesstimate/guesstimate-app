@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { Component } from "react";
+import React, { Component } from "react";
 
 import { CalculatorForm } from "./CalculatorForm";
 
@@ -9,6 +9,10 @@ import {
   OUTPUT,
   relationshipType,
 } from "~/lib/engine/graph";
+import { Calculator } from "~/modules/calculators/reducer";
+import { Optional } from "~/lib/engine/types";
+import { ExtendedDSpace } from "~/components/spaces/denormalized-space-selector";
+import { FullDenormalizedMetric } from "~/lib/engine/space";
 
 function isCalculatorAcceptableMetric(metric) {
   return (
@@ -16,7 +20,7 @@ function isCalculatorAcceptableMetric(metric) {
   );
 }
 
-function addAtIndex(l, e, destIndex) {
+function addAtIndex(l: string[], e: string, destIndex: number) {
   const index = l.findIndex((el) => el === e);
   if (index >= destIndex) {
     return [
@@ -36,19 +40,36 @@ function addAtIndex(l, e, destIndex) {
 }
 
 export type Props = {
-  space: any; // FIXME
-  calculator?: any; // FIXME
+  space: ExtendedDSpace;
   buttonText: string;
-  onSubmit: (calculator: any) => void;
+} & (
+  | {
+      mode: "edit";
+      calculator: Calculator;
+      onSubmit: (calculator: Calculator) => void;
+    }
+  | {
+      mode: "new";
+      // if calculator is unset then onSubmit doesn't have to receive full calculator object
+      calculator?: undefined;
+      onSubmit: (calculator: Optional<Calculator, "id">) => void;
+    }
+);
+
+type State = {
+  validInputs: FullDenormalizedMetric[];
+  validOutputs: FullDenormalizedMetric[];
+  calculator: Optional<Calculator, "id">;
 };
 
-export class FormContainer extends Component<Props> {
-  state = {
+export class FormContainer extends Component<Props, State> {
+  state: State = {
     validInputs: [],
     validOutputs: [],
     calculator: {
-      title: null,
-      content: null,
+      space_id: 0, // will be configured in setup()
+      title: undefined,
+      content: undefined,
       input_ids: [],
       output_ids: [],
     },
@@ -76,7 +97,7 @@ export class FormContainer extends Component<Props> {
     this.setState({ calculator, validInputs, validOutputs });
   }
 
-  validMetrics(metrics) {
+  validMetrics(metrics: FullDenormalizedMetric[]) {
     const validMetrics = metrics.filter(isCalculatorAcceptableMetric);
     const validInputs = validMetrics.filter(
       (m) => relationshipType(m.edges) === INPUT
@@ -88,10 +109,11 @@ export class FormContainer extends Component<Props> {
   }
 
   _onCreate() {
-    this.props.onSubmit(this.state.calculator);
+    // this casting is a lie, necessary because it'd hard to sync props.mode and state.calculator
+    this.props.onSubmit(this.state.calculator as Calculator);
   }
 
-  _onMetricHide(id) {
+  _onMetricHide(id: string) {
     const { calculator } = this.state;
     this.setState({
       calculator: {
@@ -102,13 +124,13 @@ export class FormContainer extends Component<Props> {
     });
   }
 
-  _onMetricShow(id) {
+  _onMetricShow(id: string) {
     const { calculator } = this.state;
     const { input_ids, output_ids } = calculator;
 
     let changes: {
-      input_ids?: unknown[];
-      output_ids?: unknown[];
+      input_ids?: string[];
+      output_ids?: string[];
     } = {};
     if (this._isInput(id)) {
       changes.input_ids = [...input_ids, id];
@@ -119,15 +141,15 @@ export class FormContainer extends Component<Props> {
     this.setState({ calculator: { ...calculator, ...changes } });
   }
 
-  _isInput(id) {
+  _isInput(id: string) {
     return _.some(this.state.validInputs, (e: any) => e.id === id);
   }
 
-  _onMoveMetricTo(id, destIndex) {
+  _onMoveMetricTo(id: string, destIndex: number) {
     const {
       calculator: { input_ids, output_ids },
     } = this.state;
-    const addId = (l) => addAtIndex(l, id, destIndex);
+    const addId = (l: string[]) => addAtIndex(l, id, destIndex);
     this._changeCalculator(
       this._isInput(id)
         ? { input_ids: addId(input_ids) }
@@ -135,7 +157,7 @@ export class FormContainer extends Component<Props> {
     );
   }
 
-  _changeCalculator(fields) {
+  _changeCalculator(fields: Partial<Calculator>) {
     const { calculator } = this.state;
     this.setState({
       calculator: {
@@ -145,29 +167,32 @@ export class FormContainer extends Component<Props> {
     });
   }
 
-  _isVisible(metricId) {
+  _isVisible(metricId: string) {
     const {
       calculator: { input_ids, output_ids },
     } = this.state;
     return _.some([...input_ids, ...output_ids], (e) => metricId === e);
   }
 
-  _orderDisplayedMetrics(metric_ids, validMetrics) {
+  _orderDisplayedMetrics(
+    metric_ids: string[],
+    validMetrics: FullDenormalizedMetric[]
+  ) {
     return [
       ...metric_ids
         .map((i) => validMetrics.find((m) => m.id === i))
-        .filter((m) => !!m),
+        .filter((m): m is NonNullable<typeof m> => !!m),
       ...validMetrics.filter((i) => !this._isVisible(i.id)),
     ].map((e) => {
       return { metric: e, isVisible: this._isVisible(e.id) };
     });
   }
 
-  _onChangeName(e) {
+  _onChangeName(e: React.ChangeEvent<HTMLTextAreaElement>) {
     this._changeCalculator({ title: e.target.value });
   }
 
-  _onChangeContent(e) {
+  _onChangeContent(e: React.ChangeEvent<HTMLTextAreaElement>) {
     this._changeCalculator({ content: e.target.value });
   }
 

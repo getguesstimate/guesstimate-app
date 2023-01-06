@@ -3,7 +3,7 @@ import _ from "lodash";
 import { createSelector } from "reselect";
 
 const specificHttpRequestSelector = (state: RootState) => state.httpRequests;
-const organizationIdSelector = (_: RootState, organizationId: string) =>
+const organizationIdSelector = (_: RootState, organizationId: number) =>
   organizationId;
 
 function isExistingMember(request) {

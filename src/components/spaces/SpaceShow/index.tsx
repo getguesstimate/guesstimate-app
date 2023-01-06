@@ -47,6 +47,7 @@ import * as e from "~/lib/engine/engine";
 import { Fact } from "~/lib/engine/facts";
 import { AppDispatch, RootState } from "~/modules/store";
 import * as elev from "~/server/elev/index";
+import { Calculator } from "~/modules/calculators/reducer";
 
 function mapStateToProps(state: RootState) {
   return {
@@ -361,10 +362,10 @@ class SpaceShow extends Component<Props, State> {
     elev.hide();
     this.setState({ rightSidebar: rightSidebarState });
   }
-  showCalculator({ id }) {
+  showCalculator({ id }: Calculator) {
     this.openRightSidebar({ type: SHOW_CALCULATOR, showCalculatorId: id });
   }
-  editCalculator(id) {
+  editCalculator(id: number) {
     this.openRightSidebar({ type: EDIT_CALCULATOR_FORM, editCalculatorId: id });
   }
   deleteCalculator(id: number) {

@@ -24,7 +24,7 @@ type MeState = Partial<{
   profile: ApiUser & MeProfileFields;
 }>;
 
-const me: Reducer<MeState, AnyAction> = function (state = {}, action) {
+export const meR: Reducer<MeState, AnyAction> = function (state = {}, action) {
   switch (action.type) {
     case "AUTH0_ME_LOADED":
       return {
@@ -50,5 +50,3 @@ const me: Reducer<MeState, AnyAction> = function (state = {}, action) {
       return state;
   }
 };
-
-export default me;

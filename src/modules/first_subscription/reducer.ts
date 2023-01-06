@@ -54,7 +54,7 @@ const synchronization: Reducer<any> = (
   }
 };
 
-export default combineReducers({
+export const firstSubscriptionsR = combineReducers({
   flowStage,
   iframe,
   synchronization,

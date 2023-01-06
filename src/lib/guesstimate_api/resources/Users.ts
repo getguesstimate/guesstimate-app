@@ -30,19 +30,16 @@ export type ApiUserMemberships = yup.InferType<typeof userMembershipsSchema>;
 
 export default class Users extends AbstractResource {
   async get({ userId }): Promise<ApiUser> {
-    const url = `users/${userId}`;
-    const method = "GET";
-
-    const response = await this.call({ url, method });
+    const response = await this.call({ method: "GET", url: `users/${userId}` });
     const result = await userSchema.validate(response);
     return result;
   }
 
   async listWithAuth0Id(auth0_id: string): Promise<ApiUserList> {
-    const url = `users?auth0_id=${auth0_id}`;
-    const method = "GET";
-
-    const response = await this.call({ url, method });
+    const response = await this.call({
+      method: "GET",
+      url: `users?auth0_id=${auth0_id}`,
+    });
     const result = await userListSchema.validate(response);
     return result;
   }

@@ -35,7 +35,11 @@ export default class AbstractResource {
       if (response.status >= 400) {
         throw new Error(`${response.status} ${response.statusText}`);
       }
-      return await response.json();
+      if (method === "DELETE") {
+        return response;
+      } else {
+        return await response.json();
+      }
     } catch (err) {
       captureApiError(`${method} ${url}`, err, { url });
       throw err;
@@ -57,7 +61,11 @@ export default class AbstractResource {
           if (response.status >= 400) {
             throw new Error(`${response.status} ${response.statusText}`);
           }
-          return response.json();
+          if (method === "DELETE") {
+            return response;
+          } else {
+            return response.json();
+          }
         })
         .then((response) => callback(null, response))
         .catch((error) => callback(error, null));

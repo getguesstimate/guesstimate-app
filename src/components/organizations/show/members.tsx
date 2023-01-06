@@ -1,5 +1,5 @@
 import _ from "lodash";
-import React, { Component, useState } from "react";
+import React, { useState } from "react";
 
 import Icon from "~/components/react-fa-patched";
 
@@ -108,7 +108,7 @@ const Member: React.FC<{
 );
 
 const MembersAddSubTab: React.FC<{
-  organizationId: string;
+  organizationId: number;
   onChangeSubTab(): void;
 }> = ({ organizationId, onChangeSubTab }) => (
   <div className="row MembersAddSubTab">
@@ -129,7 +129,7 @@ const MembersAddSubTab: React.FC<{
 );
 
 type Props = {
-  organizationId: string;
+  organizationId: number;
   startOnIndexTab: boolean;
   members: any[];
   memberships: any[];

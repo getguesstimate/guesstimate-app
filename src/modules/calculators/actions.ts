@@ -7,93 +7,74 @@ import { AppThunk } from "~/modules/store";
 import { initSpace } from "~/modules/checkpoints/actions";
 
 import * as displayErrorsActions from "~/modules/displayErrors/actions";
-import { captureApiError } from "~/lib/errors/index";
 
 import { api } from "~/lib/guesstimate_api";
+import { Calculator } from "./reducer";
 
 export const sActions = reduxCrud.actionCreatorsFor("calculators");
 
 export function fetchById(id: number): AppThunk {
-  return (dispatch, getState) => {
+  return async (dispatch, getState) => {
     dispatch(sActions.fetchStart());
 
-    api(getState()).calculators.get(id, (err, calculator) => {
-      if (err) {
-        dispatch(displayErrorsActions.newError());
-        captureApiError("CalculatorsFetch", err, {
-          url: "calculatorsFetchError",
-        });
-      } else if (calculator) {
-        const space = _.get(calculator, "_embedded.space");
-        const formatted = _.pick(calculator, [
-          "id",
-          "space_id",
-          "title",
-          "input_ids",
-          "output_ids",
-          "content",
-          "share_image",
-        ]);
-        dispatch(initSpace(space.id, space.graph));
-        dispatch(sActions.fetchSuccess([formatted], { space }));
-      }
-    });
+    try {
+      const calculator = await api(getState()).calculators.get(id);
+      const space = calculator._embedded.space;
+      const formatted = _.pick(calculator, [
+        "id",
+        "space_id",
+        "title",
+        "content",
+        "share_image",
+        "input_ids",
+        "output_ids",
+        // omit _embedded
+      ]);
+      dispatch(initSpace(space.id, space.graph));
+      dispatch(sActions.fetchSuccess([formatted], { space }));
+    } catch (err) {
+      dispatch(displayErrorsActions.newError());
+    }
   };
 }
 
 export function destroy(id: number): AppThunk {
-  return (dispatch, getState) => {
+  return async (dispatch, getState) => {
     dispatch(sActions.deleteStart({ id }));
-    api(getState()).calculators.destroy(id, (err, value) => {
-      if (err) {
-        captureApiError("CalculatorsDestroy", err, {
-          url: "calculatorsDestroy",
-        });
-      } else {
-        dispatch(sActions.deleteSuccess({ id }));
-      }
-    });
+    await api(getState()).calculators.destroy(id);
+    dispatch(sActions.deleteSuccess({ id }));
   };
 }
 
-export function create(spaceId: number, calculator, callback): AppThunk {
-  return (dispatch, getState) => {
+export function create(
+  spaceId: number,
+  calculator: Omit<Calculator, "id" | "space_id">,
+  callback: (c: Calculator) => void
+): AppThunk {
+  return async (dispatch, getState) => {
     const record = { ...calculator, id: cuid() };
     dispatch(sActions.createStart(record));
 
-    api(getState()).calculators.create(
+    const created = await api(getState()).calculators.create(
       spaceId,
-      calculator,
-      (err, calculator) => {
-        if (err) {
-          captureApiError("CalculatorsCreate", err, {
-            url: "CalculatorsCreate",
-          });
-        } else if (calculator) {
-          dispatch(sActions.createSuccess(calculator, record.id));
-          callback(calculator);
-        }
-      }
+      calculator
     );
+    dispatch(sActions.createSuccess(created, record.id));
+    callback(created);
   };
 }
 
-export function update(calculator, callback): AppThunk {
-  return (dispatch, getState) => {
+export function update(
+  calculator: Calculator,
+  callback: (c: Calculator) => void
+): AppThunk {
+  return async (dispatch, getState) => {
     dispatch(sActions.updateStart(calculator));
-    api(getState()).calculators.update(
+    const updated = await api(getState()).calculators.update(
       calculator.id,
-      calculator,
-      (err, calculator) => {
-        if (err) {
-          captureApiError("CalculatorsCreate", err, {
-            url: "CalculatorsCreate",
-          });
-        } else if (calculator) {
-          dispatch(sActions.updateSuccess(calculator));
-          callback(calculator);
-        }
-      }
+      calculator
     );
+    dispatch(sActions.updateSuccess(updated));
+    callback(updated);
   };
 }

@@ -30,7 +30,7 @@ export const calculatorSpaceSelector = createSelector(
   organizationFactsSelector,
   calculatorSelector,
   (graph, organizationFacts, calculator) => {
-    if (!_.has(calculator, "space_id")) {
+    if (!calculator || !_.has(calculator, "space_id")) {
       return {};
     }
     const { metrics, is_private } = e.space.toDSpace(

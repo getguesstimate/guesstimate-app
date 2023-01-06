@@ -21,7 +21,7 @@ const relevantAttributes = [
   "invitation_id",
 ] as const;
 
-export function fetchByOrganizationId(organizationId: string): AppThunk {
+export function fetchByOrganizationId(organizationId: number): AppThunk {
   return (dispatch, getState) => {
     api(getState()).organizations.getMembers(
       { organizationId },
@@ -68,7 +68,7 @@ export function fetchSuccess(memberships): AppThunk {
   };
 }
 
-export function destroy(id: string): AppThunk {
+export function destroy(id: number): AppThunk {
   return (dispatch, getState) => {
     dispatch(sActions.deleteStart({ id }));
     api(getState()).userOrganizationMemberships.destroy(
@@ -79,6 +79,14 @@ export function destroy(id: string): AppThunk {
             url: "destroyOrganizationMember",
           });
         } else {
+          const membership = getState().userOrganizationMemberships.find(
+            (e) => e.id === id
+          );
+          if (membership) {
+            dispatch(
+              invitationActions.deleteSuccess({ id: membership.invitation_id })
+            );
+          }
           dispatch(sActions.deleteSuccess({ id }));
         }
       }
@@ -87,7 +95,7 @@ export function destroy(id: string): AppThunk {
 }
 
 export function createWithEmail(
-  organizationId: string,
+  organizationId: number,
   email: string
 ): AppThunk {
   return (dispatch, getState) => {

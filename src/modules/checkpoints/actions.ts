@@ -26,10 +26,10 @@ function updateMetricsAndGuesstimates(
   dispatch: AppDispatch,
   getState: () => RootState,
   spaceId: number,
-  oldMetrics,
-  newMetrics,
+  oldMetrics: any[],
+  newMetrics: any[],
   oldGuesstimates: any[],
-  newGuesstimates
+  newGuesstimates: any[]
 ) {
   const metricsToAdd = newMetrics.filter(
     (m) => !_.some(oldMetrics, (o) => o.id === m.id)

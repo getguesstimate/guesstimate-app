@@ -10,7 +10,7 @@ export type Simulation = any; // FIXMe
 
 type SimulationsState = Simulation[];
 
-const simulations: Reducer<SimulationsState, AnyAction> = (
+export const simulationsR: Reducer<SimulationsState, AnyAction> = (
   state = [],
   action
 ) => {
@@ -32,5 +32,3 @@ const simulations: Reducer<SimulationsState, AnyAction> = (
       return state;
   }
 };
-
-export default simulations;

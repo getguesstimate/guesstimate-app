@@ -2,11 +2,11 @@ import * as meActions from "~/modules/me/actions";
 import { AppThunk } from "~/modules/store";
 import { api } from "~/lib/guesstimate_api";
 
-function actionType(action, event) {
+function actionType(action: string, event: string) {
   return `${action}_${event}`;
 }
 
-function errorAction(action, error) {
+function errorAction(action: string, error) {
   return {
     type: actionType(action, "FAILURE"),
     error,

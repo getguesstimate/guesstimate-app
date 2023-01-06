@@ -21,7 +21,7 @@ import { api } from "~/lib/guesstimate_api";
 
 const oActions = reduxCrud.actionCreatorsFor("organizations");
 
-export function fetchById(organizationId): AppThunk {
+export function fetchById(organizationId: string | number): AppThunk {
   return (dispatch, getState) => {
     api(getState()).organizations.get(
       { organizationId },

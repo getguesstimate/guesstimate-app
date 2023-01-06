@@ -188,7 +188,7 @@ class NewCategorySection extends Component<{
 }
 
 const OrganizationShow: React.FC<{
-  organizationId: string;
+  organizationId: number;
   tab: null | string;
 }> = ({ organizationId, tab }) => {
   const [openTab, setOpenTab] = useState(
@@ -230,7 +230,7 @@ const OrganizationShow: React.FC<{
     dispatch(spaceActions.create(organizationId, router));
   };
 
-  const destroyMembership = (membershipId: string) => {
+  const destroyMembership = (membershipId: number) => {
     dispatch(userOrganizationMembershipActions.destroy(membershipId));
   };
 

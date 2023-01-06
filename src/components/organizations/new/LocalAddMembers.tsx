@@ -3,7 +3,7 @@ import { MemberAddForm } from "../shared/MemberAddForm/index";
 
 import { organization } from "~/lib/engine/engine";
 
-export const LocalAddMembers: React.FC<{ organizationId: string }> = ({
+export const LocalAddMembers: React.FC<{ organizationId: number }> = ({
   organizationId,
 }) => (
   <div className="row">
