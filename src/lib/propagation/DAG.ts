@@ -4,6 +4,7 @@ import {
   withInfiniteLoopErrorFn,
   withMissingInputErrorFn,
   withAncestralErrorFn,
+  PropagationError,
 } from "./errors";
 
 import { getSubMatches } from "~/lib/engine/utils";
@@ -13,6 +14,7 @@ import {
   getCycleSets,
   toCyclePseudoNode,
   separateIntoHeightSets,
+  CyclePseudoNode,
 } from "~/lib/DAG/DAG";
 import {
   getNodeAncestors,
@@ -21,16 +23,51 @@ import {
   isDescendedFromFn,
   withInputIndicesFn,
 } from "~/lib/DAG/nodeFns";
+import { SampleValue } from "../guesstimator/samplers/Simulator";
+
+export type SimulationNodeParams = {
+  id: string; // can be null for pseudo cycle nodes
+  isCycle?: boolean;
+  expression?: string;
+  guesstimateType?: string | null | undefined;
+  type?: number; // FIXME - enum?
+  samples?: SampleValue[];
+  errors?: PropagationError[];
+  skipSimulating?: boolean;
+  inputs?: string[];
+  outputs?: unknown[];
+  nodes?: SimulationNodeParamsWithInputs[]; // for pseudo cycle nodes
+};
+
+export type SimulationNodeParamsWithInputs = Omit<
+  SimulationNodeParams,
+  "inputs"
+> &
+  Required<Pick<SimulationNodeParams, "inputs">>;
+
+export type SimulationNodeParamsWithInputIndices =
+  SimulationNodeParamsWithInputs & {
+    inputIndices: number[];
+  };
+
+export type NodeAncestors = { [k: string]: string[] };
 
 const ID_REGEX = /\$\{([^\}]*)\}/g;
 
-function expandCyclesAndAddGraphErrors(component, nodeAncestors) {
+function expandCyclesAndAddGraphErrors(
+  component: (SimulationNodeParamsWithInputs | CyclePseudoNode)[][],
+  nodeAncestors: NodeAncestors
+) {
   const missingInputs = getMissingInputs(_.flatten(component));
 
   const withCyclesExpanded = component.map((heightSet) =>
     _.flatten(
       heightSet.map((n) =>
-        n.isCycle ? n.nodes.map(withInfiniteLoopErrorFn(n.nodes)) : n
+        n.isCycle
+          ? (n as CyclePseudoNode).nodes.map(
+              withInfiniteLoopErrorFn((n as CyclePseudoNode).nodes)
+            )
+          : (n as SimulationNodeParamsWithInputs)
       )
     )
   );
@@ -46,20 +83,18 @@ function expandCyclesAndAddGraphErrors(component, nodeAncestors) {
 }
 
 export class SimulationDAG {
-  nodeAncestors: any;
+  nodeAncestors: NodeAncestors;
   nodes: SimulationNode[];
 
-  constructor(nodes: any[]) {
-    if (!!_.get(window, "recorder")) {
-      window.recorder.recordSimulationDAGConstructionStart(this);
-    }
+  constructor(nodes: SimulationNodeParams[]) {
+    window.recorder?.recordSimulationDAGConstructionStart(this);
 
     if (containsDuplicates(nodes)) {
       console.warn("DUPLICATE IDs DETECTED");
       return;
     }
 
-    const withInputs = nodes.map((n) => ({
+    const withInputs: SimulationNodeParamsWithInputs[] = nodes.map((n) => ({
       ...n,
       inputs: _.uniq(getSubMatches(n.expression, ID_REGEX, 1)),
     }));
@@ -81,14 +116,13 @@ export class SimulationDAG {
     );
     this.nodes = withInputIndices.map((n, i) => new SimulationNode(n, this, i));
 
-    if (!!_.get(window, "recorder")) {
-      window.recorder.recordSimulationDAGConstructionStop(this);
-    }
+    window.recorder?.recordSimulationDAGConstructionStop(this);
   }
 
   find(id: string): SimulationNode | null | undefined {
     return get(this.nodes, id);
   }
+
   subsetFrom(idSet: string[]) {
     return this.nodes.filter(
       orFns(
@@ -97,6 +131,7 @@ export class SimulationDAG {
       )
     );
   }
+
   strictSubsetFrom(idSet: string[]) {
     return this.nodes.filter(isDescendedFromFn(idSet, this.nodeAncestors));
   }

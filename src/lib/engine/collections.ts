@@ -17,25 +17,37 @@ export const get = <T>(
   prop = "id"
 ) =>
   allPresent(collection, id) ? collection.find(equalsProp(id, prop)) : null;
-export const gget = (collection, id, searchProp, getProp) =>
-  _.get(get(collection, id, searchProp), getProp);
-export const getFn = (coll, getProp = "id", inProp = "id") =>
+
+export const gget = <T>(
+  collection: T[],
+  id: string | number,
+  searchProp: string,
+  getProp: string
+) => _.get(get(collection, id, searchProp), getProp);
+
+export const getFn = <T>(coll: T[], getProp = "id", inProp = "id") =>
   !coll ? nullFn : (e) => get(coll, _.get(e, inProp), getProp);
 
 export const filter = <T>(collection: readonly T[], id, prop = "id") =>
   allPresent(collection, id) ? collection.filter(equalsProp(id, prop)) : [];
-export const filterByInclusion = (collection, prop, ids) =>
+
+export const filterByInclusion = <T>(
+  collection: readonly T[],
+  prop,
+  ids
+): T[] =>
   allPresent(collection, ids)
     ? collection.filter((e) => ids.includes(_.get(e, prop)))
     : [];
+
 export const some = (collection: unknown[], id, prop = "id") =>
   allPresent(collection, id) ? _.some(collection, equalsProp(id, prop)) : false;
 
 export const orFns =
-  (...predFns) =>
-  (...x) =>
-    predFns.reduce((running, currFn) => running || !!currFn(...x), false);
+  <T>(...predFns: ((value: T) => boolean)[]) =>
+  (x: T) =>
+    predFns.reduce((running, currFn) => running || !!currFn(x), false);
 
 // TODO(matthew): (Re-)Figure out why the reverses are necessary, and eliminate that necessity.
-export const uniq = (collection, prop = "id") =>
+export const uniq = <T>(collection: T[], prop = "id") =>
   _.uniqBy(collection.slice().reverse(), prop).reverse();

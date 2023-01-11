@@ -8,7 +8,7 @@ export type Guesstimate = {
   expression?: any;
   guesstimateType?: string;
   description: string;
-  data?: any;
+  data?: number[] | null;
 };
 
 type GuesstimatesState = Guesstimate[];
@@ -24,7 +24,7 @@ export const guesstimatesR: Reducer<GuesstimatesState, AnyAction> = (
       return uniq([...state, ...newGuesstimates]);
     }
     case "SPACES_FETCH_SUCCESS": {
-      const newGuesstimates = _.flatten(
+      const newGuesstimates: any[] = _.flatten(
         action.records.map((e) => _.get(e, "graph.guesstimates"))
       ).filter((e) => e);
       return uniq([...state, ...newGuesstimates]);
@@ -68,7 +68,7 @@ export const guesstimatesR: Reducer<GuesstimatesState, AnyAction> = (
       );
     case "CHANGE_GUESSTIMATE": {
       const i = state.findIndex((y) => y.metric === action.values.metric);
-      const newItem = format(action.values);
+      const newItem: any = format(action.values);
       if (i !== -1) {
         return uniq([
           ...state.slice(0, i),

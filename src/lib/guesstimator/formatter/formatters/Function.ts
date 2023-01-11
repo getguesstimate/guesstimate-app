@@ -16,7 +16,7 @@ export const item: Formatter = {
   },
   error({ text }) {
     return !_.isEmpty((text as any).slice(1))
-      ? {}
+      ? undefined
       : { type: PARSER_ERROR, subType: MISSING_FUNCTION_BODY };
   },
   format({ text }) {

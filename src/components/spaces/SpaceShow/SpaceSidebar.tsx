@@ -8,7 +8,7 @@ type Props = {
   description: string;
   canEdit: boolean;
   onClose(): void;
-  onSaveDescription(): void;
+  onSaveDescription(s: string): void;
 };
 
 export class SpaceSidebar extends Component<Props> {

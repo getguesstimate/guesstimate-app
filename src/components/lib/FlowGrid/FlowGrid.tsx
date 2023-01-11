@@ -23,8 +23,7 @@ import { DirectionToLocation, keycodeToDirection } from "./utils";
 import clsx from "clsx";
 import { CanvasState } from "~/modules/canvas_state/slice";
 
-const upto = (n: number): number[] =>
-  Array.apply(null, { length: n }).map(Number.call, Number);
+const upto = (n: number): number[] => new Array(n).fill(0).map((_, i) => i);
 
 type Props = {
   canvasState: CanvasState;

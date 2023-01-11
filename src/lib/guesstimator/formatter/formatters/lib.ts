@@ -6,7 +6,9 @@ import { Formatter } from "../types";
 
 const {
   ERROR_TYPES: { PARSER_ERROR },
-  ERROR_SUBTYPES: { PARSER_ERROR_SUBTYPES: INVALID_RANGE_ORDERING },
+  ERROR_SUBTYPES: {
+    PARSER_ERROR_SUBTYPES: { INVALID_RANGE_ORDERING },
+  },
 } = errorTypes;
 
 const SUFFIXES = {
@@ -17,10 +19,10 @@ const SUFFIXES = {
   T: 12,
 };
 
-const spaceSep = (res) =>
+const spaceSep = (res: (RegExp | undefined)[]) =>
   new RegExp(
     res
-      .filter((re) => !!re)
+      .filter((re): re is NonNullable<typeof re> => !!re)
       .map((re) => `(?:${re.source})`)
       .join("\\s*")
   );
@@ -46,8 +48,10 @@ const getMult = (suffix) => Math.pow(10, SUFFIXES[suffix]);
 const parseNumber = (num, suffix) =>
   parseFloat(num.replace(",", "")) * (!!suffix ? getMult(suffix) : 1);
 
-const rangeErrorFn = ([low, high]) =>
-  low > high ? { type: PARSER_ERROR, subType: INVALID_RANGE_ORDERING } : {};
+const rangeErrorFn = ([low, high]): errorTypes.PropagationError | undefined =>
+  low > high
+    ? { type: PARSER_ERROR, subType: INVALID_RANGE_ORDERING }
+    : undefined;
 
 // We assume that if the user started at 0 or tried a negative number,
 // they intended for this to be normal.
@@ -65,7 +69,9 @@ function getGuesstimateType(guesstimateType, [low]) {
 export function regexBasedFormatter(
   re: RegExp,
   guesstimateTypeFn = getGuesstimateType,
-  errorFn: any = rangeErrorFn
+  errorFn: (
+    numbers: number[]
+  ) => errorTypes.PropagationError | undefined = rangeErrorFn
 ): Omit<Formatter, "formatterName"> {
   const _numbers = (text: string) => {
     return _.chunk(text.match(re)!.slice(1), 2).map(([num, suffix]) =>

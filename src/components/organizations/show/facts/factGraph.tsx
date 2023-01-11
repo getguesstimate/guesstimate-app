@@ -68,7 +68,7 @@ const addLocationsToHeightOrderedComponents = (componentsHeightOrdered) => {
   let withFinalLocations: any[] = [];
   let maxRowUsed = 0;
   componentsHeightOrdered.forEach((heightOrderedComponent) => {
-    let sortedHeightOrderedNodes: any[] = [];
+    let sortedHeightOrderedNodes: any[][] = [];
     let currColumn = 0;
     let maxRowUsedInComponent = maxRowUsed;
     heightOrderedComponent.forEach((heightSet) => {

@@ -1,12 +1,19 @@
 import _ from "lodash";
 import { addStats } from "~/lib/engine/simulation";
 import { AnyAction, Reducer } from "redux";
+import { SampleValue } from "~/lib/guesstimator/samplers/Simulator";
+import { PropagationError } from "~/lib/propagation/errors";
 
-export type Simulation = any; // FIXMe
-// export type Simulation = {
-//   metric?: string;
-//   sample?: Array<Sample>;
-// };
+export type Simulation = {
+  metric?: string;
+  stats?: any;
+  propagationId?: number;
+  sample: {
+    values?: SampleValue[];
+    sortedValues?: SampleValue[];
+    errors?: PropagationError[];
+  };
+};
 
 type SimulationsState = Simulation[];
 

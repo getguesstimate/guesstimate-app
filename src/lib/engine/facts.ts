@@ -10,6 +10,7 @@ import * as _utils from "./utils";
 import { sortDescending } from "~/lib/dataAnalysis";
 import { _matchingFormatter } from "~/lib/guesstimator/formatter/index";
 import { Guesstimator } from "~/lib/guesstimator/index";
+import { PropagationError } from "../propagation/errors";
 
 export type Fact = {
   id: string;
@@ -22,7 +23,7 @@ export type Fact = {
   simulation: {
     sample: {
       values: number[];
-      errors: unknown[];
+      errors: PropagationError[];
     };
     stats: {
       adjustedConfidenceInterval?: number[];
@@ -75,7 +76,7 @@ export function withMissingStats(rawFact: Fact) {
   );
 
   const length = _.get(fact, "simulation.stats.length");
-  const needsACI = _.isFinite(length) && length > 1;
+  const needsACI = length !== undefined && _.isFinite(length) && length > 1;
 
   // was broken; previously:
   // _.get("simulation.stats.adjustedConfidenceInterval.length");
@@ -145,7 +146,7 @@ const orgSelector = (orgId, handle) => [
 export const resolveToSelector = (orgId) => (handle) =>
   handle.startsWith("#") ? orgSelector(orgId, handle) : globalSelector(handle);
 
-export const getFactsForOrg = (facts, org) =>
+export const getFactsForOrg = (facts, org): any[] =>
   !org
     ? []
     : _utils.orArr(
@@ -160,7 +161,7 @@ export const getFactsForOrg = (facts, org) =>
 export function getRelevantFactsAndReformatGlobals(
   { metrics, guesstimates, simulations },
   globalFacts,
-  organizationFacts,
+  organizationFacts: any[],
   spaceIds
 ) {
   const rawOrganizationFactsDefined = _collections.filterByInclusion(

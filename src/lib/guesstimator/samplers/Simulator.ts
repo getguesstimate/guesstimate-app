@@ -4,6 +4,7 @@ import { replaceByMap } from "~/lib/engine/utils";
 import generateRandomReadableId from "~/lib/engine/metric/generate_random_readable_id";
 import { STOCHASTIC_FUNCTIONS } from "./simulator-worker/simulator/evaluator";
 import { GuesstimateWorker } from "~/lib/window";
+import { PropagationError } from "~/lib/propagation/errors";
 
 const MIN_SAMPLES_PER_WINDOW = 100;
 
@@ -15,7 +16,26 @@ function LCM(a: number, b: number) {
   return (a * b) / GCD(a, b);
 }
 
-export function simulate(expr: string, inputs, maxSamples: number) {
+export type SampleValue = number | { filtered: true };
+
+export type SimulateResult = {
+  values?: SampleValue[];
+  errors?: PropagationError[];
+};
+
+export type Sampler = {
+  sample(
+    parsedInput: any,
+    n: number,
+    inputs: { [k: string]: number[] }
+  ): Promise<SimulateResult>;
+};
+
+export function simulate(
+  expr: string,
+  inputs,
+  maxSamples: number
+): Promise<SimulateResult> {
   const overallNumSamples = neededSamples(expr, inputs, maxSamples);
 
   if (overallNumSamples < MIN_SAMPLES_PER_WINDOW * window.workers.length) {
@@ -50,8 +70,8 @@ export function simulate(expr: string, inputs, maxSamples: number) {
   ];
 
   return Promise.all(promises).then((results) => {
-    let finalResult = { values: [], errors: [] };
-    for (let result of results as any[]) {
+    let finalResult: Required<SimulateResult> = { values: [], errors: [] };
+    for (let result of results) {
       if (result.values) {
         finalResult.values = finalResult.values.concat(result.values);
       }
@@ -138,7 +158,10 @@ function buildSimulationParams(
   return { expr, numSamples, inputs: slicedInputs };
 }
 
-function simulateOnWorker(worker: GuesstimateWorker, data) {
+function simulateOnWorker(
+  worker: GuesstimateWorker,
+  data
+): Promise<SimulateResult> {
   return new Promise((resolve, reject) => {
     worker.push(data, ({ data }) => {
       resolve(JSON.parse(data));

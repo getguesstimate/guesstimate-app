@@ -98,7 +98,9 @@ export class MetricName extends Component<Props, State> {
         }`}
         onKeyDown={this.handleKeyDown.bind(this)}
       >
-        <div onClick={!anotherFunctionSelected && this.focus.bind(this)}>
+        <div
+          onClick={anotherFunctionSelected ? undefined : this.focus.bind(this)}
+        >
           <Editor
             editorState={editorState}
             onBlur={this.handleSubmit.bind(this)}

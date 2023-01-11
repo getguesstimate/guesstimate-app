@@ -10,7 +10,7 @@ import { FactList } from "./FactList";
 type Props = {
   facts: Fact[];
   existingVariableNames: string[];
-  categories?: unknown;
+  categories?: any[];
   organization: unknown;
   categoryId?: string | null;
   canMakeNewFacts: boolean;

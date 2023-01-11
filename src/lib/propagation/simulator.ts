@@ -1,4 +1,5 @@
 import { SimulationDAG } from "./DAG";
+import { SimulationNode } from "./node";
 
 function getNodesToSimulate(DAG: SimulationDAG, options) {
   if (!!options.simulateIds) {
@@ -14,10 +15,10 @@ function getNodesToSimulate(DAG: SimulationDAG, options) {
 
 export class Simulator {
   DAG: SimulationDAG;
-  nodesToSimulate: any;
+  nodesToSimulate: SimulationNode[];
   index: number;
   numSamples: number;
-  yieldSims: any;
+  yieldSims: (nodeId: string, sim: unknown) => void;
   getCurrPropId: any;
   propagationId: number;
 
@@ -26,7 +27,7 @@ export class Simulator {
     numSamples: number,
     options,
     propagationId: number,
-    yieldSims,
+    yieldSims: (nodeId: string, sim: unknown) => void,
     getCurrPropId
   ) {
     // First, we'll build the DAG from the passed nodes.

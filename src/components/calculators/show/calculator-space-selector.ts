@@ -44,12 +44,14 @@ export const calculatorSpaceSelector = createSelector(
     const inputs = calculator.input_ids
       .map(findById)
       .filter(
-        (m) => !!m && e.graph.relationshipType(m.edges) === e.graph.INPUT
+        (m): m is NonNullable<typeof m> =>
+          !!m && e.graph.relationshipType(m.edges) === e.graph.INPUT
       );
     const outputs = calculator.output_ids
       .map(findById)
       .filter(
-        (m) => !!m && e.graph.relationshipType(m.edges) !== e.graph.INPUT
+        (m): m is NonNullable<typeof m> =>
+          !!m && e.graph.relationshipType(m.edges) !== e.graph.INPUT
       );
 
     return {

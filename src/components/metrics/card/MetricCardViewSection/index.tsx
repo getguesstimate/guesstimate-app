@@ -97,7 +97,7 @@ export class MetricCardViewSection extends Component<Props> {
   }
 
   showSimulation() {
-    const stats = _.get(this.props, "metric.simulation.stats");
+    const stats = this.props.metric?.simulation?.stats;
     if (
       stats &&
       _.isFinite(stats.mean) &&
@@ -113,8 +113,7 @@ export class MetricCardViewSection extends Component<Props> {
   _shouldShowStatistics() {
     const isScientific = !!this.props.canvasState.scientificViewEnabled;
     const isAvailable =
-      this.showSimulation() &&
-      _.get(this.props, "metric.simulation.stats").length > 1;
+      this.showSimulation() && this.props.metric.simulation?.stats.length > 1;
     return isScientific && isAvailable;
   }
 
@@ -263,7 +262,7 @@ export class MetricCardViewSection extends Component<Props> {
           )}
           {showSimulation && shouldShowStatistics && (
             <div className="StatsSectionTable">
-              <MetricStatTable stats={metric.simulation.stats} />
+              <MetricStatTable stats={metric.simulation?.stats} />
             </div>
           )}
 

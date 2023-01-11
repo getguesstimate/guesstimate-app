@@ -1,16 +1,35 @@
 import _ from "lodash";
-import { addSimulation } from "~/modules/simulations/actions";
 import { addSimulationToFact } from "~/modules/facts/actions";
+import { addSimulation } from "~/modules/simulations/actions";
 
 import { NODE_TYPES } from "./constants";
 import { ERROR_TYPES } from "./errors";
 import { Simulator } from "./simulator";
 
 import * as e from "~/lib/engine/engine";
+import { Guesstimate } from "~/modules/guesstimates/reducer";
+import { Metric } from "~/modules/metrics/reducer";
+import { Simulation } from "~/modules/simulations/reducer";
 import { AppDispatch, RootState } from "~/modules/store";
+import { ApiSpace } from "../guesstimate_api/resources/Models";
+import { DenormalizedMetric } from "../engine/metric";
+import { SimulationNodeParams } from "./DAG";
 
-function getSpacesAndOrganization(state: RootState, graphFilters) {
-  let spaces: any[] = [];
+export type GraphFilters = {
+  factId?: number;
+  spaceId?: number;
+  metricId?: string;
+  onlyHead?: boolean;
+  notHead?: boolean;
+  simulateSubsetFrom?: string[];
+  simulateSubset?: string[];
+};
+
+function getSpacesAndOrganization(
+  state: RootState,
+  graphFilters: GraphFilters
+) {
+  let spaces: (ApiSpace | null | undefined)[] = [];
   let organization = null;
 
   if (!!graphFilters.factId) {
@@ -57,11 +76,14 @@ function getSpacesAndOrganization(state: RootState, graphFilters) {
     );
   }
 
-  return { spaces: spaces.filter((s) => !!s), organization };
+  return {
+    spaces: spaces.filter((s): s is NonNullable<typeof s> => !!s),
+    organization,
+  };
 }
 
 // TODO(matthew): Find a way to test this through the public API.
-export function getSubset(state: RootState, graphFilters) {
+export function getSubset(state: RootState, graphFilters: GraphFilters) {
   const { spaces, organization } = getSpacesAndOrganization(
     state,
     graphFilters
@@ -150,9 +172,12 @@ export function getSubset(state: RootState, graphFilters) {
   };
 }
 
-const nodeIdToMetricId = (id) => id.slice(e.simulation.METRIC_ID_PREFIX.length);
-const nodeIdToFactId = (id) => id.slice(e.simulation.FACT_ID_PREFIX.length);
-const nodeIdIsMetric = (id) => id.includes(e.simulation.METRIC_ID_PREFIX);
+const nodeIdToMetricId = (id: string) =>
+  id.slice(e.simulation.METRIC_ID_PREFIX.length);
+const nodeIdToFactId = (id: string) =>
+  id.slice(e.simulation.FACT_ID_PREFIX.length);
+const nodeIdIsMetric = (id: string) =>
+  id.includes(e.simulation.METRIC_ID_PREFIX);
 
 function guesstimateTypeToNodeType(guesstimateType) {
   switch (guesstimateType) {
@@ -166,15 +191,20 @@ function guesstimateTypeToNodeType(guesstimateType) {
 }
 
 const filterErrorsFn = (e) => e.type !== ERROR_TYPES.GRAPH_ERROR;
-export const metricIdToNodeId = (id) => `${e.simulation.METRIC_ID_PREFIX}${id}`;
-const metricToSimulationNodeFn = (m) => ({
+
+export const metricIdToNodeId = (id: string) =>
+  `${e.simulation.METRIC_ID_PREFIX}${id}`;
+
+const metricToSimulationNodeFn = (
+  m: DenormalizedMetric
+): SimulationNodeParams => ({
   id: metricIdToNodeId(m.id),
   type: guesstimateTypeToNodeType(m.guesstimate.guesstimateType),
   guesstimateType: m.guesstimate.guesstimateType,
   expression: m.guesstimate.expression,
   samples:
     m.guesstimate.guesstimateType === "DATA"
-      ? e.utils.orArr(_.get(m, "guesstimate.data"))
+      ? e.utils.orArr(m.guesstimate?.data)
       : e.simulation.values(m.simulation),
   errors: e.utils
     .mutableCopy(e.simulation.errors(m.simulation))
@@ -182,7 +212,7 @@ const metricToSimulationNodeFn = (m) => ({
 });
 
 const factIdToNodeId = (id) => `${e.simulation.FACT_ID_PREFIX}${id}`;
-const factToSimulationNodeFn = (f) => ({
+const factToSimulationNodeFn = (f): SimulationNodeParams => ({
   id: factIdToNodeId(f.id),
   expression: f.expression,
   type: NODE_TYPES.UNSET, // Facts are currently type-less.
@@ -194,42 +224,57 @@ const factToSimulationNodeFn = (f) => ({
   skipSimulating: !_.get(f, "shouldBeSimulated"),
 });
 
-function denormalize({ metrics, guesstimates, simulations }) {
-  return metrics.map((m) => ({
-    ...m,
-    guesstimate: e.collections.get(guesstimates, m.id, "metric"),
-    simulation: e.collections.get(simulations, m.id, "metric"),
-  }));
+function denormalize({
+  metrics,
+  guesstimates,
+  simulations,
+}: {
+  metrics: Metric[];
+  guesstimates: Guesstimate[];
+  simulations: Simulation[];
+}): DenormalizedMetric[] {
+  return metrics.map((m) => {
+    const guesstimate = e.collections.get(guesstimates, m.id, "metric");
+    if (!guesstimate) {
+      throw new Error(`Guesstimate not found for metric ${m.id}`);
+    }
+    return {
+      ...m,
+      guesstimate,
+      simulation: e.collections.get(simulations, m.id, "metric"),
+    };
+  });
 }
 
-const allPresent = (obj, ...props) =>
+const allPresent = (obj: unknown, ...props: string[]) =>
   props.map((p) => present(obj, p)).reduce((x, y) => x && y, true);
-const present = (obj, prop) =>
+const present = (obj: unknown, prop: string) =>
   _.has(obj, prop) && (!!_.get(obj, prop) || _.get(obj, prop) === 0);
-function translateOptions(graphFilters) {
+
+function translateOptions(graphFilters: GraphFilters) {
   if (allPresent(graphFilters, "factId")) {
     return { simulateStrictSubsetFrom: [factIdToNodeId(graphFilters.factId)] };
   }
-  if (allPresent(graphFilters, "metricId", "onlyHead")) {
+  if (graphFilters.metricId !== undefined && graphFilters.onlyHead) {
     return { simulateIds: [metricIdToNodeId(graphFilters.metricId)] };
   }
-  if (allPresent(graphFilters, "metricId", "notHead")) {
+  if (graphFilters.metricId !== undefined && graphFilters.notHead) {
     return {
       simulateStrictSubsetFrom: [metricIdToNodeId(graphFilters.metricId)],
     };
   }
-  if (allPresent(graphFilters, "simulateSubsetFrom")) {
+  if (graphFilters.simulateSubsetFrom) {
     return {
       simulateSubsetFrom: graphFilters.simulateSubsetFrom.map(metricIdToNodeId),
     };
   }
-  if (allPresent(graphFilters, "simulateSubset")) {
+  if (graphFilters.simulateSubset) {
     return { simulateIds: graphFilters.simulateSubset.map(metricIdToNodeId) };
   }
   return {};
 }
 
-const getCurrPropId = (state: RootState) => (nodeId) => {
+const getCurrPropId = (state: RootState) => (nodeId: string) => {
   if (nodeIdIsMetric(nodeId)) {
     const metricId = nodeIdToMetricId(nodeId);
     return e.collections.gget(
@@ -252,7 +297,7 @@ const getCurrPropId = (state: RootState) => (nodeId) => {
 export function simulate(
   dispatch: AppDispatch,
   getState: () => RootState,
-  graphFilters
+  graphFilters: GraphFilters
 ) {
   const state = getState();
   const shouldTriggerDownstreamFactSimulations = !graphFilters.factId;
@@ -265,26 +310,26 @@ export function simulate(
     ..._.map(relevantFacts, factToSimulationNodeFn),
   ];
 
-  if (_.isEmpty(nodes)) {
+  if (!nodes.length) {
     return;
   }
 
   const propagationId = new Date().getTime();
 
-  const yieldMetricSims = (nodeId, { samples, errors }) => {
+  const yieldMetricSims = (nodeId: string, { samples, errors }) => {
     const metric = nodeIdToMetricId(nodeId);
-    const newSimulation = {
+    const newSimulation: Simulation = {
       metric,
       propagationId,
       sample: {
         values: _.isEmpty(errors) ? samples : [],
-        errors: errors,
+        errors,
       },
     };
     dispatch(addSimulation(newSimulation));
   };
 
-  const yieldFactSims = (nodeId, { samples, errors }) => {
+  const yieldFactSims = (nodeId: string, { samples, errors }) => {
     // TODO(matthew): Proper error handling...
     if (!_.isEmpty(errors)) {
       return;
@@ -307,13 +352,13 @@ export function simulate(
     );
   };
 
-  const yieldSims = (nodeId, sim) => {
+  const yieldSims = (nodeId: string, sim) => {
     nodeIdIsMetric(nodeId)
       ? yieldMetricSims(nodeId, sim)
       : yieldFactSims(nodeId, sim);
   };
 
-  let simulator = new Simulator(
+  const simulator = new Simulator(
     nodes,
     e.simulation.NUM_SAMPLES,
     translateOptions(graphFilters),

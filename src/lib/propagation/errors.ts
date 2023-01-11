@@ -1,6 +1,17 @@
 import _ from "lodash";
 import { orArr } from "~/lib/engine/utils";
 import { gget } from "~/lib/engine/collections";
+import { NodeAncestors, SimulationNodeParamsWithInputs } from "./DAG";
+
+export type PropagationError = {
+  // TODO - enums
+  type: number;
+  subType?: number;
+  rawMessage?: unknown;
+  rawError?: unknown;
+  ancestors?: unknown[];
+  inputs?: unknown[];
+};
 
 export const ERROR_TYPES = {
   UNSET: 0, // For safety; should not be used.
@@ -9,6 +20,7 @@ export const ERROR_TYPES = {
   WORKER_ERROR: 3,
   SAMPLING_ERROR: 4,
 };
+
 export const ERROR_SUBTYPES = {
   GRAPH_ERROR_SUBTYPES: {
     UNSET: 0, // For safety; should not be used.
@@ -163,7 +175,14 @@ const {
   },
 } = ERROR_SUBTYPES;
 
-const addError = (n, error) => ({ ...n, errors: [...orArr(n.errors), error] });
+const addError = (
+  n: SimulationNodeParamsWithInputs,
+  error: PropagationError
+): SimulationNodeParamsWithInputs => ({
+  ...n,
+  errors: [...orArr(n.errors), error],
+});
+
 const newGraphError = (subType, data) => ({
   type: ERROR_TYPES.GRAPH_ERROR,
   subType,
@@ -171,26 +190,38 @@ const newGraphError = (subType, data) => ({
 });
 
 const newInfiniteLoopError = _.partial(newGraphError, IN_INFINITE_LOOP);
-export const withInfiniteLoopErrorFn = (cycle) => (n) =>
-  addError(n, newInfiniteLoopError({ cycleIds: cycle.map((c) => c.id) }));
+
+export const withInfiniteLoopErrorFn =
+  (cycle: SimulationNodeParamsWithInputs[]) =>
+  (n: SimulationNodeParamsWithInputs) =>
+    addError(n, newInfiniteLoopError({ cycleIds: cycle.map((c) => c.id) }));
 
 const newMissingInputError = _.partial(newGraphError, MISSING_INPUT_ERROR);
+
 const getMissingInputError = (n, missingInputs) =>
   newMissingInputError({
     missingInputs: _.intersection(missingInputs, n.inputs),
   });
+
 const addMissingInputError = (n, missingInputs) =>
   addError(n, getMissingInputError(n, missingInputs));
+
 const hasMissingInputError = (n, missingInputs) =>
   _.some(n.inputs, (p) => missingInputs.includes(p));
-export const withMissingInputErrorFn = (missingInputs) => (n) =>
-  hasMissingInputError(n, missingInputs)
-    ? addMissingInputError(n, missingInputs)
-    : n;
+
+export const withMissingInputErrorFn =
+  (missingInputs: string[]) => (n: SimulationNodeParamsWithInputs) =>
+    hasMissingInputError(n, missingInputs)
+      ? addMissingInputError(n, missingInputs)
+      : n;
 
 const newAncestralError = _.partial(newGraphError, INVALID_ANCESTOR_ERROR);
-export function withAncestralErrorFn(nodes, ancestors) {
-  return (n) => {
+
+export function withAncestralErrorFn(
+  nodes: SimulationNodeParamsWithInputs[],
+  ancestors: NodeAncestors
+) {
+  return (n: SimulationNodeParamsWithInputs) => {
     const isReportable = (e) =>
       e.subType !== INVALID_ANCESTOR_ERROR &&
       !(e.subType === IN_INFINITE_LOOP && e.cycleIds.includes(n.id));

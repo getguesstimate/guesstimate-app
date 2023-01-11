@@ -6,6 +6,6 @@ export const item: Formatter = {
   ...regexBasedFormatter(
     POINT_REGEX,
     () => "POINT",
-    () => {}
+    () => undefined
   ),
 };

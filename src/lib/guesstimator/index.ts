@@ -1,11 +1,13 @@
 import _ from "lodash";
+import { PropagationError } from "../propagation/errors";
 import { parse } from "./formatter/index";
+import { SimulateResult } from "./samplers/Simulator";
 import { samplerTypes } from "./types";
 
 //Guesstimator.parse({text: '3+123+FA'}]})
 //TODO(fix this class)
 export class Guesstimator {
-  parsedError: any;
+  parsedError: PropagationError | undefined;
   parsedInput: any;
 
   static parse(unparsedInput) {
@@ -16,13 +18,15 @@ export class Guesstimator {
 
   static samplerTypes = samplerTypes;
 
-  constructor({ parsedError, parsedInput }) {
-    this.parsedError = parsedError || {};
+  constructor({
+    parsedError,
+    parsedInput,
+  }: {
+    parsedError: PropagationError | undefined;
+    parsedInput: any;
+  }) {
+    this.parsedError = parsedError;
     this.parsedInput = parsedInput;
-  }
-
-  hasParsingErrors() {
-    return !_.isEmpty(this.parsedError);
   }
 
   samplerType() {
@@ -33,8 +37,11 @@ export class Guesstimator {
     return this.parsedInput.guesstimateType === "FUNCTION";
   }
 
-  sample(n: number, externalInputs: { [k: string]: number[] } = {}) {
-    if (!_.isEmpty(this.parsedError)) {
+  sample(
+    n: number,
+    externalInputs: { [k: string]: number[] } = {}
+  ): Promise<SimulateResult> {
+    if (this.parsedError) {
       return Promise.resolve({ errors: [this.parsedError], values: [] });
     }
 

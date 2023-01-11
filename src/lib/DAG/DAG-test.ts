@@ -94,7 +94,7 @@ describe("DAG library", () => {
       { id: "3", inputs: ["1"] },
       {
         id: null,
-        isCycle: true,
+        isCycle: true as const,
         inputs: ["3"],
         nodes: [
           { id: "4", inputs: ["3", "5"] },

@@ -6,6 +6,7 @@ import { item as DistributionPointText } from "./formatters/DistributionPointTex
 import { item as Data } from "./formatters/Data";
 import { item as Null } from "./formatters/Null";
 import { Formatter, FormatterInput } from "./types";
+import { PropagationError } from "~/lib/propagation/errors";
 
 export const formatters: Formatter[] = [
   Funct,
@@ -35,7 +36,7 @@ export function prepare(guesstimate): FormatterInput {
   };
 }
 
-export function parse(g) {
+export function parse(g): [PropagationError | undefined, any] {
   const i = prepare(g);
   const formatter = _matchingFormatter(i);
   return [formatter.error(i), formatter.format(i)];

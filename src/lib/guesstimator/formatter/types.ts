@@ -1,12 +1,9 @@
+import { PropagationError } from "~/lib/propagation/errors";
+
 export type FormatterInput = {
   text?: string;
   guesstimateType?: string | null;
   data?: any;
-};
-
-export type FormatterError = {
-  type: string;
-  subType: string;
 };
 
 export type Formatter = {
@@ -14,6 +11,6 @@ export type Formatter = {
   guesstimateType?: string;
   inputType?: "NONE";
   matches(input: FormatterInput): boolean;
-  error(input: FormatterInput): FormatterError | {} | undefined;
+  error(input: FormatterInput): PropagationError | undefined;
   format(input: FormatterInput): any;
 };

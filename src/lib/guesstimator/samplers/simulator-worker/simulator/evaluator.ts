@@ -8,6 +8,7 @@ import { Filters, SAMPLE_FILTERED } from "./filters/filters";
 import { ImpureConstructs } from "./constructs/constructs";
 
 import * as errorTypes from "~/lib/propagation/errors";
+import { SampleValue, SimulateResult } from "../../Simulator";
 
 const finance = new Finance();
 const {
@@ -56,7 +57,11 @@ export const STOCHASTIC_FUNCTIONS = ["pickRandom", "randomInt", "random"]
   .concat(Object.keys(Distributions))
   .concat(Object.keys(ImpureConstructs));
 
-export function Evaluate(text: string, sampleCount: number, inputs) {
+export function Evaluate(
+  text: string,
+  sampleCount: number,
+  inputs
+): SimulateResult {
   try {
     const compiled = math.compile(text);
     return evaluate(compiled, inputs, sampleCount, text);
@@ -85,9 +90,9 @@ function sampleInputs(inputs, i) {
   return sample;
 }
 
-function evaluate(compiled, inputs, n, text) {
-  let values: any[] = [];
-  let errors: any[] = [];
+function evaluate(compiled, inputs, n, text): SimulateResult {
+  let values: SampleValue[] = [];
+  let errors: errorTypes.PropagationError[] = [];
   let anyNotFiltered = false;
   for (let i = 0; i < n; i++) {
     const sampledInputs = sampleInputs(inputs, i);
@@ -95,7 +100,7 @@ function evaluate(compiled, inputs, n, text) {
       _.isEqual(val, SAMPLE_FILTERED)
     );
 
-    let newSample: any = NaN;
+    let newSample: SampleValue = NaN;
     try {
       newSample = someInputFiltered
         ? SAMPLE_FILTERED
@@ -119,7 +124,7 @@ function evaluate(compiled, inputs, n, text) {
       values.push(newSample);
     } else if (newSample === SAMPLE_FILTERED) {
       values.push(newSample);
-    } else if ([Infinity, -Infinity].includes(newSample)) {
+    } else if (([Infinity, -Infinity] as SampleValue[]).includes(newSample)) {
       errors.push({ type: SAMPLING_ERROR, subType: DIVIDE_BY_ZERO_ERROR });
       values.push(newSample);
     } else if (newSample.constructor.name === "Unit") {

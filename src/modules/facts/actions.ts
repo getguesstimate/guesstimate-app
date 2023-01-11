@@ -12,6 +12,7 @@ import { addStats } from "~/lib/engine/simulation";
 
 import { withVariableName } from "~/lib/generateVariableNames/generateFactVariableName";
 import { AppThunk } from "~/modules/store";
+import { Simulation } from "../simulations/reducer";
 
 export function getSuggestion(selector): AppThunk {
   return (dispatch, getState) => {
@@ -90,7 +91,7 @@ export function createFactFromMetric(organizationId, metric): AppThunk {
 }
 
 export function addSimulationToFact(
-  simulation,
+  simulation: Simulation,
   id,
   shouldTriggerDownstreamFactSimulations
 ): AppThunk {

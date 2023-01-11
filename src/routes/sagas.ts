@@ -1,12 +1,11 @@
-import { takeLatest } from "redux-saga";
-import { fork } from "redux-saga/effects";
+import { fork, takeLatest } from "redux-saga/effects";
 import {
   runFormSimulation,
   runUndoSimulations,
 } from "~/modules/simulations/actions";
 
 export function* runSimulationsSaga() {
-  yield takeLatest("RUN_FORM_SIMULATIONS", runFormSimulation as any);
+  yield takeLatest("RUN_FORM_SIMULATIONS", runFormSimulation);
 }
 
 export function* runUndoSimulationsSaga() {

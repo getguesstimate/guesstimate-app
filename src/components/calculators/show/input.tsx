@@ -1,5 +1,11 @@
 import _ from "lodash";
-import React, { Component } from "react";
+import React, {
+  Component,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 
 import ReactMarkdown from "react-markdown";
 import Icon from "~/components/react-fa-patched";
@@ -8,51 +14,79 @@ import { Guesstimator } from "~/lib/guesstimator/index";
 
 import { EditorState, Editor, ContentState } from "draft-js";
 
-export class Input extends Component<any> {
-  static defaultProps = {
-    errors: [],
-  };
+export type InputHandle = {
+  getContent(): string;
+  blur(): void;
+  hasValidContent: boolean;
+};
 
-  state = {
-    editorState: EditorState.createWithContent(
-      ContentState.createFromText(this.props.initialValue || "")
-    ),
-  };
+type Props = {
+  id: string;
+  initialValue: string;
+  name: string | undefined;
+  description: string | undefined;
+  isFirst: boolean;
+  onBlur(input: any): void;
+  onChange(input: any): void;
+  onEnter(id: string): void;
+  errors: any[];
+};
 
-  componentDidMount() {
-    if (this.props.isFirst) {
-      setTimeout(() => {
-        (this.refs.editor as any).focus();
-      }, 1);
-    }
-  }
-
-  blur() {
-    (this.refs.editor as any).blur();
-  }
-
-  onBlur() {
-    this.props.onBlur(
-      this.state.editorState.getCurrentContent().getPlainText("")
+export const Input = React.forwardRef<InputHandle, Props>(
+  (
+    {
+      id,
+      initialValue,
+      name,
+      description,
+      isFirst,
+      onEnter,
+      onBlur,
+      onChange,
+      errors = [],
+    },
+    ref
+  ) => {
+    const [editorState, setEditorState] = useState(
+      EditorState.createWithContent(
+        ContentState.createFromText(initialValue || "")
+      )
     );
-  }
 
-  onChange(editorState) {
-    this.props.onChange(editorState.getCurrentContent().getPlainText(""));
-    return this.setState({ editorState });
-  }
+    const getContent = () => editorState.getCurrentContent().getPlainText("");
 
-  getContent() {
-    return this.state.editorState.getCurrentContent().getPlainText("");
-  }
+    const input = getContent();
 
-  hasValidContent() {
-    const input = this.getContent();
-    return !_.isEmpty(input) && _.isEmpty(Guesstimator.parse({ input })[0]);
-  }
+    const hasValidContent =
+      !_.isEmpty(input) && _.isEmpty(Guesstimator.parse({ input })[0]);
 
-  render() {
-    const { name, description, errors, onEnter, id } = this.props;
+    const editorRef = useRef<Editor | null>(null);
+
+    useImperativeHandle(ref, () => ({
+      getContent,
+      blur() {
+        editorRef.current?.blur();
+      },
+      hasValidContent,
+    }));
+
+    useEffect(() => {
+      if (isFirst) {
+        setTimeout(() => {
+          editorRef.current?.focus();
+        }, 1);
+      }
+    }, []);
+
+    const handleChange = (editorState: any) => {
+      onChange(editorState.getCurrentContent().getPlainText(""));
+      return setEditorState(editorState);
+    };
+
+    const handleBlur = () => {
+      onBlur(editorState.getCurrentContent().getPlainText(""));
+    };
+
     return (
       <div className="input">
         <div className="row">
@@ -67,10 +101,10 @@ export class Input extends Component<any> {
           <div className="col-xs-12 col-sm-5">
             <div className="editor">
               <Editor
-                ref="editor"
-                editorState={this.state.editorState}
-                onChange={this.onChange.bind(this)}
-                onBlur={this.onBlur.bind(this)}
+                ref={editorRef}
+                editorState={editorState}
+                onChange={handleChange}
+                onBlur={handleBlur}
                 handleReturn={() => {
                   onEnter(id);
                   return true;
@@ -81,7 +115,7 @@ export class Input extends Component<any> {
                   <Icon name="close" />
                 </div>
               )}
-              {this.hasValidContent() && (
+              {hasValidContent && (
                 <div className="status success">
                   <Icon name="check" />
                 </div>
@@ -92,4 +126,4 @@ export class Input extends Component<any> {
       </div>
     );
   }
-}
+);

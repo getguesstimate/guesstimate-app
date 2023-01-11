@@ -1,7 +1,6 @@
 import { CanvasLocation, Region } from "~/lib/locationUtils";
 
-const upto = (n: number): number[] =>
-  Array.apply(null, { length: n }).map(Number.call, Number);
+const upto = (n: number): number[] => new Array(n).fill(0).map((_, i) => i);
 
 export type RectangleShape = {
   left: number;

@@ -17,7 +17,8 @@ export function equals(l, r) {
 
 export const getByMetricFn = (graph: Pick<RootState, "guesstimates">) =>
   _collections.getFn(_.get(graph, "guesstimates"), "metric");
-export const uniq = (guesstimates) => _collections.uniq(guesstimates, "metric");
+export const uniq = (guesstimates: Guesstimate[]) =>
+  _collections.uniq(guesstimates, "metric");
 
 export const attributes = [
   "metric",
@@ -51,7 +52,7 @@ export const expressionSyntaxPad = (id, isMetric = true) =>
 
 // Returns a function which takes a guesstimate and returns that guesstimate with an input based on its
 // expression.
-export function expressionToInputFn(metrics: Metric[] = [], facts = []) {
+export function expressionToInputFn(metrics: Metric[] = [], facts: any[] = []) {
   let idMap = {};
 
   metrics.forEach(({ id, readableId }) => {

@@ -1,12 +1,17 @@
 import { call } from "redux-saga/effects";
 
-import { simulate } from "~/lib/propagation/wrapper";
-import { AppThunk } from "~/modules/store";
+import { GraphFilters, simulate } from "~/lib/propagation/wrapper";
+import { AppDispatch, AppThunk, RootState } from "~/modules/store";
 import { AnyAction } from "redux";
+import { Simulation } from "./reducer";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-export function* runFormSimulation({ getState, metricId, dispatch }) {
+export function* runFormSimulation({
+  getState,
+  metricId,
+  dispatch,
+}: AnyAction) {
   yield simulate(dispatch, getState, { metricId, onlyHead: true });
   yield* runDescendantSimulation({ getState, metricId, dispatch });
 }
@@ -16,7 +21,7 @@ export function* runUndoSimulations({
   spaceId,
   dispatch,
   metricIds,
-}) {
+}: AnyAction) {
   yield call(delay, 350);
   yield simulate(dispatch, getState, {
     spaceId,
@@ -24,7 +29,15 @@ export function* runUndoSimulations({
   });
 }
 
-export function* runDescendantSimulation({ getState, metricId, dispatch }) {
+export function* runDescendantSimulation({
+  getState,
+  metricId,
+  dispatch,
+}: {
+  getState(): RootState;
+  metricId: string;
+  dispatch: AppDispatch;
+}) {
   yield call(delay, 200);
   yield simulate(dispatch, getState, { metricId, notHead: true });
 }
@@ -34,16 +47,16 @@ export function deleteSimulations(metricIds: string[]): AnyAction {
 }
 
 export const runSimulations =
-  (params): AppThunk =>
+  (params: GraphFilters): AppThunk =>
   (dispatch, getState) => {
     simulate(dispatch, getState, params);
   };
 
-export function runFormSimulations(metricId): AppThunk {
+export function runFormSimulations(metricId: string): AppThunk {
   return (dispatch, getState) =>
     dispatch({ type: "RUN_FORM_SIMULATIONS", getState, dispatch, metricId });
 }
 
-export function addSimulation(simulation): AnyAction {
+export function addSimulation(simulation: Simulation): AnyAction {
   return { type: "UPDATE_SIMULATION", simulation };
 }

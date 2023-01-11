@@ -1,5 +1,5 @@
 // We use an empty object here instead of a more meaningful object to play well with mathjs under the hood.
-export const SAMPLE_FILTERED = { filtered: true };
+export const SAMPLE_FILTERED = { filtered: true } as const;
 
 const filterLessThan = (val, min) => (val < min ? SAMPLE_FILTERED : val);
 const filterGreaterThan = (val, max) => (val > max ? SAMPLE_FILTERED : val);

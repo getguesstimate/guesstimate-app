@@ -7,7 +7,8 @@ import { _matchingFormatter } from "~/lib/guesstimator/formatter/index";
 
 import * as _collections from "~/lib/engine/collections";
 import * as _utils from "~/lib/engine/utils";
-import { SimulationDAG } from "./DAG";
+import { SimulationDAG, SimulationNodeParamsWithInputIndices } from "./DAG";
+import { SampleValue } from "../guesstimator/samplers/Simulator";
 
 const {
   ERROR_TYPES: { GRAPH_ERROR, PARSER_ERROR },
@@ -21,13 +22,13 @@ export class SimulationNode {
   expression: any;
   type: any;
   guesstimateType: any;
-  samples: number[];
-  errors: any[];
-  inputIndices: any[];
+  samples: SampleValue[];
+  errors: errorTypes.PropagationError[];
+  inputIndices: number[];
   DAG: SimulationDAG;
-  index: any;
-  skipSimulating: boolean;
-  inputs: any[];
+  index: number;
+  skipSimulating?: boolean;
+  inputs: string[];
 
   constructor(
     {
@@ -40,7 +41,7 @@ export class SimulationNode {
       inputs,
       inputIndices,
       skipSimulating,
-    },
+    }: SimulationNodeParamsWithInputIndices,
     DAG: SimulationDAG,
     index: number
   ) {
@@ -57,7 +58,7 @@ export class SimulationNode {
     this.inputs = _utils.orArr(inputs);
   }
 
-  simulate(numSamples: number) {
+  simulate(numSamples: number): Promise<any> {
     const startedWithErrors = this._hasErrors();
 
     const [parsedError, parsedInput] = this._parse();
@@ -103,7 +104,8 @@ export class SimulationNode {
   _data() {
     return this.type === NODE_TYPES.DATA ? this.samples : [];
   }
-  _parse() {
+
+  _parse(): [errorTypes.PropagationError | undefined, any] {
     const guesstimatorInput = {
       text: this.expression,
       guesstimateType: this.guesstimateType,
@@ -119,22 +121,22 @@ export class SimulationNode {
   _getDescendants() {
     return this.DAG.strictSubsetFrom([this.id]);
   }
+
   _addErrorToDescendants() {
     this._getDescendants().forEach((n) => {
       const dataProp = n.inputs.includes(this.id) ? "inputs" : "ancestors";
-      if (_collections.some(n.errors, INVALID_ANCESTOR_ERROR, "subType")) {
-        let ancestorError = _collections.get(
-          n.errors,
-          INVALID_ANCESTOR_ERROR,
-          "subType"
-        );
-        _.set(
-          ancestorError,
-          dataProp,
-          _.uniq([..._.get(ancestorError, dataProp), this.id])
-        );
+      let ancestorError = _collections.get(
+        n.errors,
+        INVALID_ANCESTOR_ERROR,
+        "subType"
+      );
+      if (ancestorError) {
+        ancestorError[dataProp] = _.uniq([
+          ...(ancestorError[dataProp] || []),
+          this.id,
+        ]);
       } else {
-        let error: any = {
+        let error: errorTypes.PropagationError = {
           type: GRAPH_ERROR,
           subType: INVALID_ANCESTOR_ERROR,
           inputs: [],
@@ -145,6 +147,7 @@ export class SimulationNode {
       }
     });
   }
+
   _clearErrorFromDescendants() {
     this._getDescendants().forEach((n) => {
       let ancestorError = _collections.get(
@@ -178,9 +181,7 @@ export class SimulationNode {
   }
 
   _getInputs() {
-    if (!!_.get(window, "recorder")) {
-      window.recorder.recordNodeGetInputsStart(this);
-    }
+    window.recorder?.recordNodeGetInputsStart(this);
     const inputNodes = this.inputIndices.map(
       (inputIdx) => this.DAG.nodes[inputIdx]
     );
@@ -191,9 +192,7 @@ export class SimulationNode {
       },
       {}
     );
-    if (!!_.get(window, "recorder")) {
-      window.recorder.recordNodeGetInputsStop(this, inputMap);
-    }
+    window.recorder?.recordNodeGetInputsStop(this, inputMap);
     return inputMap;
   }
 

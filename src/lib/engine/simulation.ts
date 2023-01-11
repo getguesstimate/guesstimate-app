@@ -11,6 +11,8 @@ import {
 } from "~/lib/dataAnalysis";
 import * as errorTypes from "~/lib/propagation/errors";
 import { SAMPLE_FILTERED } from "~/lib/guesstimator/samplers/simulator-worker/simulator/filters/filters";
+import { Simulation } from "~/modules/simulations/reducer";
+import { RootState } from "~/modules/store";
 
 const {
   ERROR_TYPES: { WORKER_ERROR },
@@ -47,14 +49,11 @@ export const displayableError = (errors) =>
     ? getBySubType(errors, INVALID_ANCESTOR_ERROR)
     : errors.find((e) => e.type !== WORKER_ERROR);
 
-export const getByMetricFn = (graph) =>
+export const getByMetricFn = (graph: Pick<RootState, "simulations">) =>
   _collections.getFn(_.get(graph, "simulations"), "metric", "metric");
 
-export function addStats(simulation) {
-  if (
-    !_.has(simulation, "sample.values.length") ||
-    simulation.sample.values.length === 0
-  ) {
+export function addStats(simulation: Simulation) {
+  if (!simulation.sample.values?.length) {
     return;
   }
 
@@ -110,6 +109,11 @@ export function addStats(simulation) {
   simulation.stats = stats;
 }
 
-export const hasErrors = (simulation) => errors(simulation).length > 0;
-export const errors = (simulation) => orArr(_.get(simulation, "sample.errors"));
-export const values = (simulation) => orArr(_.get(simulation, "sample.values"));
+export const hasErrors = (simulation: Simulation | null | undefined) =>
+  errors(simulation).length > 0;
+
+export const errors = (simulation: Simulation | null | undefined) =>
+  orArr(simulation?.sample.errors);
+
+export const values = (simulation: Simulation | null | undefined) =>
+  orArr(simulation?.sample.values);

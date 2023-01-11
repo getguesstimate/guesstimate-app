@@ -1,4 +1,6 @@
-export const Sampler = {
+import { Sampler } from "./Simulator";
+
+export const sampler: Sampler = {
   sample({ params: [value] }) {
     return Promise.resolve({ values: [value] });
   },

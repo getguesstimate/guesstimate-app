@@ -69,7 +69,7 @@ export const prepared = (dSpace) =>
   allPropsPresent(dSpace, ...requiredProps(dSpace));
 
 export function subset(
-  state: Pick<RootState, "metrics" | "guesstimates">,
+  state: Pick<RootState, "metrics" | "guesstimates" | "simulations">,
   ...spaceIds: number[]
 ) {
   const metrics = _collections.filterByInclusion(
@@ -107,6 +107,7 @@ export function toDSpace(
     | "metrics"
     | "calculators"
     | "guesstimates"
+    | "simulations"
   >,
   organizationFacts
 ): DSpace {
@@ -165,6 +166,7 @@ function toDgraph(
     | "me"
     | "metrics"
     | "guesstimates"
+    | "simulations"
   >
 ) {
   const { users, organizations, calculators, userOrganizationMemberships, me } =

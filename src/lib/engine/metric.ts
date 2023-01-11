@@ -11,7 +11,7 @@ import generateRandomReadableId from "./metric/generate_random_readable_id";
 
 export type DenormalizedMetric = Metric & {
   guesstimate: Guesstimate;
-  simulation: Simulation;
+  simulation: Simulation | null | undefined;
 };
 
 export function equals(l: Metric, r: Metric) {

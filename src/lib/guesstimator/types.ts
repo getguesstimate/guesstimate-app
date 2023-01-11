@@ -1,11 +1,12 @@
-import { Sampler as DataSampler } from "./samplers/Data";
-import { Sampler as DistributionBetaSampler } from "./samplers/DistributionBeta";
-import { Sampler as DistributionLognormalSampler } from "./samplers/DistributionLognormal";
-import { Sampler as DistributionNormalSampler } from "./samplers/DistributionNormal";
-import { Sampler as DistributionPointSampler } from "./samplers/DistributionPoint";
-import { Sampler as DistributionUniformSampler } from "./samplers/DistributionUniform";
-import { Sampler as FunctionSampler } from "./samplers/Function";
-import { Sampler as NoneSampler } from "./samplers/None";
+import { sampler as dataSampler } from "./samplers/Data";
+import { sampler as distributionBetaSampler } from "./samplers/DistributionBeta";
+import { sampler as distributionLognormalSampler } from "./samplers/DistributionLognormal";
+import { sampler as distributionNormalSampler } from "./samplers/DistributionNormal";
+import { sampler as distributionPointSampler } from "./samplers/DistributionPoint";
+import { sampler as distributionUniformSampler } from "./samplers/DistributionUniform";
+import { sampler as functionSampler } from "./samplers/Function";
+import { sampler as noneSampler } from "./samplers/None";
+import { Sampler } from "./samplers/Simulator";
 
 const FunctionIcon = "/assets/distribution-icons/function.png";
 const LogNormalIcon = "../assets/distribution-icons/lognormal.png";
@@ -17,7 +18,7 @@ type SamplerType = {
   referenceName: string;
   types: string[];
   displayName: string;
-  sampler: any; // FIXME
+  sampler: Sampler; // FIXME
   isRangeDistribution?: boolean;
   icon?: string;
 };
@@ -26,7 +27,7 @@ export const Funct: SamplerType = {
   referenceName: "FUNCTION",
   types: ["FUNCTION"],
   displayName: "Function",
-  sampler: FunctionSampler,
+  sampler: functionSampler,
   icon: FunctionIcon,
 };
 
@@ -34,7 +35,7 @@ export const DistributionNormal: SamplerType = {
   referenceName: "NORMAL",
   types: ["DISTRIBUTION", "NORMAL"],
   displayName: "Normal",
-  sampler: DistributionNormalSampler,
+  sampler: distributionNormalSampler,
   isRangeDistribution: true,
   icon: NormalIcon,
 };
@@ -43,7 +44,7 @@ export const DistributionPoint: SamplerType = {
   referenceName: "POINT",
   types: ["DISTRIBUTION", "POINT"],
   displayName: "Point",
-  sampler: DistributionPointSampler,
+  sampler: distributionPointSampler,
   icon: PointIcon,
 };
 
@@ -52,7 +53,7 @@ export const DistributionLognormal: SamplerType = {
   types: ["DISTRIBUTION", "LOGNORMAL"],
   displayName: "LogNormal",
   isRangeDistribution: true,
-  sampler: DistributionLognormalSampler,
+  sampler: distributionLognormalSampler,
   icon: LogNormalIcon,
 };
 
@@ -61,7 +62,7 @@ export const DistributionBeta: SamplerType = {
   types: ["DISTRIBUTION", "BETA"],
   displayName: "Beta",
   isRangeDistribution: false,
-  sampler: DistributionBetaSampler,
+  sampler: distributionBetaSampler,
   icon: LogNormalIcon, // Update
 };
 
@@ -70,7 +71,7 @@ export const DistributionUniform: SamplerType = {
   types: ["DISTRIBUTION", "UNIFORM"],
   displayName: "Uniform",
   isRangeDistribution: true,
-  sampler: DistributionUniformSampler,
+  sampler: distributionUniformSampler,
   icon: UniformIcon,
 };
 
@@ -79,7 +80,7 @@ export const Data: SamplerType = {
   types: ["DATA"],
   displayName: "Data",
   isRangeDistribution: false,
-  sampler: DataSampler,
+  sampler: dataSampler,
   icon: UniformIcon,
 };
 
@@ -88,7 +89,7 @@ export const None: SamplerType = {
   referenceName: "NONE",
   types: [],
   displayName: "NONE",
-  sampler: NoneSampler,
+  sampler: noneSampler,
 };
 
 const all: SamplerType[] = [
@@ -102,7 +103,7 @@ const all: SamplerType[] = [
   None,
 ];
 
-export function find(referenceName: string) {
+function find(referenceName: string) {
   const found = all.find((e) => e.referenceName === referenceName);
   return found || None;
 }

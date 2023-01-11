@@ -16,7 +16,7 @@ const {
 } = errorTypes;
 
 onmessage = ({ data }) => {
-  let errors: any[] = [];
+  let errors: errorTypes.PropagationError[] = [];
   if (!data) {
     errors.push({ type: WORKER_ERROR, subType: NO_DATA_PASSED_ERROR });
     postMessage(JSON.stringify({ errors }));

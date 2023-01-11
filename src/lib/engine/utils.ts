@@ -5,22 +5,23 @@ import * as _collections from "./collections";
 export const URL_REGEX =
   /(?:(?:https?|ftp):\/\/)?(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,}))\.?)(?::\d{2,5})?(?:[\/?#]\S*)?/i;
 
-const isImmutable = (e) =>
-  !!_.get(e, "__immutable_invariants_hold") && _.has(e, "asMutable");
-export const mutableCopy = (e, deep = false) =>
-  isImmutable(e) ? e.asMutable() : deep ? _.cloneDeep(e) : _.clone(e);
+export const mutableCopy = <T>(e: T, deep = false) =>
+  deep ? _.cloneDeep(e) : _.clone(e);
 
 export const typeSafeEq = (x, y) =>
   !x ? !y : !!y && x.toString() === y.toString();
 export const orStr = (e) => e || "";
 export const orZero = (e) => e || 0;
-export const orArr = (e) => e || [];
+export const orArr = <T>(e: T[] | null | undefined) => e || [];
 
-export const isPresent = (e) =>
+export const isPresent = <T>(e: T): e is NonNullable<T> =>
   (!!e && !_.isEmpty(e)) || typeof e === "number" || e === true;
+
 export const presentOrVal = (e, val) => (isPresent(e) ? e : val);
+
 export const allPresent = (...objs): boolean =>
   objs.reduce((running, curr) => running && isPresent(curr), true);
+
 export const allPropsPresent = (obj, ...props): boolean =>
   allPresent(...props.map((p) => _.get(obj, p)));
 
@@ -69,10 +70,16 @@ export function makeURLsMarkdown(text: string) {
   return transformedText;
 }
 
-export const indicesOf = (list, predFn) =>
-  list.map((e, i) => (predFn(e) ? i : null)).filter((e) => _.isFinite(e));
+export const indicesOf = <T>(list: T[], predFn: (value: T) => boolean) =>
+  list
+    .map((e, i) => (predFn(e) ? i : null))
+    .filter((e): e is NonNullable<typeof e> => _.isFinite(e));
 
-export function getSubMatches(str: string, regex: RegExp, matchIndex: number) {
+export function getSubMatches(
+  str: string | undefined,
+  regex: RegExp,
+  matchIndex: number
+) {
   if (!str) {
     return [];
   }

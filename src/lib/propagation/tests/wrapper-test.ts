@@ -7,64 +7,64 @@ import { RootState } from "~/modules/store";
 
 describe("getSubset", () => {
   const space1Metrics = [
-    { id: 1, space: 1 },
-    { id: 2, space: 1 },
+    { id: "1", space: 1 },
+    { id: "2", space: 1 },
   ];
   const space2Metrics = [
-    { id: 3, space: 2 },
-    { id: 4, space: 2 },
+    { id: "3", space: 2 },
+    { id: "4", space: 2 },
   ];
   const space3Metrics = [
-    { id: 5, space: 3 },
-    { id: 6, space: 3 },
+    { id: "5", space: 3 },
+    { id: "6", space: 3 },
   ];
   const space4Metrics = [
-    { id: 7, space: 4 },
-    { id: 8, space: 4 },
-    { id: 9, space: 4 },
+    { id: "7", space: 4 },
+    { id: "8", space: 4 },
+    { id: "9", space: 4 },
   ];
-  const space5Metrics = [{ id: 10, space: 5 }];
-  const space6Metrics = [{ id: 11, space: 6 }];
+  const space5Metrics = [{ id: "10", space: 5 }];
+  const space6Metrics = [{ id: "11", space: 6 }];
 
   const space1Guesstimates = [
-    { metric: 1, expression: "1" },
-    { metric: 2, expression: "=${fact:1}" },
+    { metric: "1", expression: "1" },
+    { metric: "2", expression: "=${fact:1}" },
   ];
   const space2Guesstimates = [
-    { metric: 3, expression: "=${metric:4}" },
-    { metric: 4, expression: "=${fact:1}" },
+    { metric: "3", expression: "=${metric:4}" },
+    { metric: "4", expression: "=${fact:1}" },
   ];
   const space3Guesstimates = [
-    { metric: 5, expression: "=100" },
-    { metric: 6, expression: "=@Chicago.population" },
+    { metric: "5", expression: "=100" },
+    { metric: "6", expression: "=@Chicago.population" },
   ];
   const space4Guesstimates = [
-    { metric: 7, expression: "=${fact:4}" },
-    { metric: 8, expression: "=100" },
-    { metric: 9, expression: "=@Chicago.population" },
+    { metric: "7", expression: "=${fact:4}" },
+    { metric: "8", expression: "=100" },
+    { metric: "9", expression: "=@Chicago.population" },
   ];
-  const space5Guesstimates = [{ metric: 10, expression: "6" }];
-  const space6Guesstimates = [{ metric: 11, expression: "=${fact:2}" }];
+  const space5Guesstimates = [{ metric: "10", expression: "6" }];
+  const space6Guesstimates = [{ metric: "11", expression: "=${fact:2}" }];
 
   const space1Sims = [
-    { metric: 1, sample: { values: [], errors: [] } },
-    { metric: 2, sample: { values: [], errors: [] } },
+    { metric: "1", sample: { values: [], errors: [] } },
+    { metric: "2", sample: { values: [], errors: [] } },
   ];
   const space2Sims = [
-    { metric: 3, sample: { values: [], errors: [] } },
-    { metric: 4, sample: { values: [], errors: [] } },
+    { metric: "3", sample: { values: [], errors: [] } },
+    { metric: "4", sample: { values: [], errors: [] } },
   ];
   const space3Sims = [
-    { metric: 5, sample: { values: [], errors: [] } },
-    { metric: 6, sample: { values: [], errors: [] } },
+    { metric: "5", sample: { values: [], errors: [] } },
+    { metric: "6", sample: { values: [], errors: [] } },
   ];
   const space4Sims = [
-    { metric: 7, sample: { values: [], errors: [] } },
-    { metric: 8, sample: { values: [], errors: [] } },
-    { metric: 9, sample: { values: [], errors: [] } },
+    { metric: "7", sample: { values: [], errors: [] } },
+    { metric: "8", sample: { values: [], errors: [] } },
+    { metric: "9", sample: { values: [], errors: [] } },
   ];
-  const space5Sims = [{ metric: 10, sample: { values: [], errors: [] } }];
-  const space6Sims = [{ metric: 11, sample: { values: [], errors: [] } }];
+  const space5Sims = [{ metric: "10", sample: { values: [], errors: [] } }];
+  const space6Sims = [{ metric: "11", sample: { values: [], errors: [] } }];
 
   const state: any /* should be RootState, but doesn't include all fields from it */ =
     {
@@ -135,11 +135,11 @@ describe("getSubset", () => {
                 expression: "3",
                 imported_to_intermediate_space_ids: [1, 2],
               },
-              { id: 2, metric_id: 1, exported_from_id: 1 },
-              { id: 3, metric_id: 3, exported_from_id: 2 },
+              { id: 2, metric_id: "1", exported_from_id: 1 },
+              { id: 3, metric_id: "3", exported_from_id: 2 },
               { id: 7, expression: "100" },
-              { id: 8, metric_id: 10, exported_from_id: 5 },
-              { id: 9, metric_id: 11, exported_from_id: 6 },
+              { id: 8, metric_id: "10", exported_from_id: 5 },
+              { id: 9, metric_id: "11", exported_from_id: 6 },
             ],
           },
           {
@@ -150,8 +150,8 @@ describe("getSubset", () => {
                 expression: "3",
                 imported_to_intermediate_space_ids: [4],
               },
-              { id: 5, metric_id: 8, exported_from_id: 4 },
-              { id: 6, metric_id: 9, exported_from_id: 4 },
+              { id: 5, metric_id: "8", exported_from_id: 4 },
+              { id: 6, metric_id: "9", exported_from_id: 4 },
             ],
           },
         ],
@@ -187,7 +187,7 @@ describe("getSubset", () => {
       {
         description:
           "Passing a single metricId should yield that metric's space's subset",
-        graphFilters: { metricId: 1 },
+        graphFilters: { metricId: "1" },
       },
       {
         description:
@@ -219,7 +219,7 @@ describe("getSubset", () => {
             },
             {
               id: 2,
-              metric_id: 1,
+              metric_id: "1",
               exported_from_id: 1,
               expression: `=${expressionSyntaxPad(1)}`,
               shouldBeSimulated: true,
@@ -235,7 +235,7 @@ describe("getSubset", () => {
       {
         description:
           "Passing a single metricId should yield that metric's space's subset",
-        graphFilters: { metricId: 1 },
+        graphFilters: { metricId: "1" },
       },
       {
         description:
@@ -278,7 +278,7 @@ describe("getSubset", () => {
             },
             {
               id: 2,
-              metric_id: 1,
+              metric_id: "1",
               exported_from_id: 1,
               expression: `=${expressionSyntaxPad(1)}`,
               shouldBeSimulated: false,
@@ -294,7 +294,7 @@ describe("getSubset", () => {
       {
         description:
           "Passing a single metricId should yield that metric's space's subset",
-        graphFilters: { metricId: 1 },
+        graphFilters: { metricId: "1" },
       },
       {
         description:
@@ -337,7 +337,7 @@ describe("getSubset", () => {
             },
             {
               id: 2,
-              metric_id: 1,
+              metric_id: "1",
               exported_from_id: 1,
               expression: `=${expressionSyntaxPad(1)}`,
               shouldBeSimulated: true,
@@ -384,21 +384,21 @@ describe("getSubset", () => {
         },
         {
           id: 2,
-          metric_id: 1,
+          metric_id: "1",
           exported_from_id: 1,
           expression: `=${expressionSyntaxPad(1)}`,
           shouldBeSimulated: true,
         },
         {
           id: 3,
-          metric_id: 3,
+          metric_id: "3",
           exported_from_id: 2,
           expression: `=${expressionSyntaxPad(3)}`,
           shouldBeSimulated: true,
         },
         {
           id: 9,
-          metric_id: 11,
+          metric_id: "11",
           exported_from_id: 6,
           expression: `=${expressionSyntaxPad(11)}`,
           shouldBeSimulated: true,
@@ -453,21 +453,21 @@ describe("getSubset", () => {
         },
         {
           id: 2,
-          metric_id: 1,
+          metric_id: "1",
           exported_from_id: 1,
           expression: `=${expressionSyntaxPad(1)}`,
           shouldBeSimulated: true,
         },
         {
           id: 3,
-          metric_id: 3,
+          metric_id: "3",
           exported_from_id: 2,
           expression: `=${expressionSyntaxPad(3)}`,
           shouldBeSimulated: true,
         },
         {
           id: 9,
-          metric_id: 11,
+          metric_id: "11",
           exported_from_id: 6,
           expression: `=${expressionSyntaxPad(11)}`,
           shouldBeSimulated: true,
@@ -480,7 +480,7 @@ describe("getSubset", () => {
     const testCases = [
       {
         description: "an invalid metricId should yield an empty subset",
-        graphFilters: { metricId: -1 },
+        graphFilters: { metricId: "-1" },
       },
       {
         description: "an invalid spaceId should yield an empty subset",

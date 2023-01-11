@@ -1,12 +1,12 @@
 import _ from "lodash";
 import { orFns } from "~/lib/engine/collections";
+import { indicesOf, notIn, orArr, typeSafeEq } from "~/lib/engine/utils";
 import {
-  typeSafeEq,
-  notIn,
-  indicesOf,
-  mutableCopy,
-  orArr,
-} from "~/lib/engine/utils";
+  NodeAncestors,
+  SimulationNodeParams,
+  SimulationNodeParamsWithInputs,
+} from "../propagation/DAG";
+import { CyclePseudoNode } from "./DAG";
 
 /*
  * These funtions below operate on objects referred to as `nodes`. A `node` is an object that has (at least) parameters
@@ -20,35 +20,49 @@ const matchesIdFn = (testId) => (n) =>
   !!n.isCycle
     ? _.some(n.nodes, ({ id }) => typeSafeEq(testId, id))
     : typeSafeEq(testId, n.id);
+
 const idMatchesSomeFn = (nodes) => (id) => _.some(nodes, matchesIdFn(id));
+
 const isRelatedToFn =
-  ({ id }, ancestors) =>
-  (n) =>
+  <T extends { id: string }>({ id }: T, ancestors: NodeAncestors) =>
+  (n: T) =>
     ancestors[id].includes(n.id) || ancestors[n.id].includes(id);
 
 export const allInputsWithinFn =
-  (nodes, ignoreSet: any[] = []) =>
+  (nodes, ignoreSet: string[] = []) =>
   (n) =>
     _.every(n.inputs.filter(notIn(ignoreSet)), idMatchesSomeFn(nodes));
-export const anyRelationsWithinFn = (nodes, ancestors) =>
-  orFns(...nodes.map((n) => isRelatedToFn(n, ancestors)));
+
+export const anyRelationsWithinFn = <T extends { id: string }>(
+  nodes: T[],
+  ancestors: NodeAncestors
+) => orFns(...nodes.map((n) => isRelatedToFn(n, ancestors)));
+
 export const inACycleWithNodeFn =
-  ({ id }, ancestors) =>
-  (n) =>
+  ({ id }: { id: string }, ancestors: NodeAncestors) =>
+  (n: SimulationNodeParamsWithInputs) =>
     ancestors[id].includes(n.id) && ancestors[n.id].includes(id);
 
-export const containsDuplicates = (nodes) =>
+export const containsDuplicates = (nodes: SimulationNodeParams[]) =>
   _.some(nodes, (n, i) => idMatchesSomeFn(nodes.slice(i + 1))(n.id));
-export const getMissingInputs = (nodes): any[] =>
+
+export const getMissingInputs = (
+  nodes: (SimulationNodeParamsWithInputs | CyclePseudoNode)[]
+) =>
   _.uniq(_.flatten(nodes.map((n) => n.inputs))).filter(
     _.negate(idMatchesSomeFn(nodes))
   );
-export const isDescendedFromFn = (ids: string[], ancestors) => (n) =>
-  _.some(ids, (id) => ancestors[n.id].includes(id));
-export const withInputIndicesFn = (nodes: any[]) => (n) => ({
-  ...n,
-  inputIndices: indicesOf(nodes, ({ id }) => n.inputs.includes(id)),
-});
+
+export const isDescendedFromFn =
+  (ids: string[], ancestors) => (n: SimulationNodeParamsWithInputs) =>
+    _.some(ids, (id) => ancestors[n.id].includes(id));
+
+export const withInputIndicesFn =
+  (nodes: SimulationNodeParamsWithInputs[]) =>
+  (n: SimulationNodeParamsWithInputs) => ({
+    ...n,
+    inputIndices: indicesOf(nodes, ({ id }) => n.inputs.includes(id)),
+  });
 
 // getNodeAncestors returns a hash of node Ids to all of it's ancestors within the set of passed nodes. See tests for
 // examples.
@@ -58,25 +72,27 @@ const nextLevelAncestors = (curr, total, key) =>
       (a) => !total[key].includes(a)
     )
   );
+
 const getNewAncestorsFn = (nodeAncestors) => (res, value, key) => {
   res[key] = nextLevelAncestors(value, nodeAncestors, key);
 };
-export function getNodeAncestors(nodes: any[]): any {
-  let unprocessedNodes = mutableCopy(nodes);
 
-  let newAncestors: any = _.transform(
+export function getNodeAncestors(
+  nodes: SimulationNodeParamsWithInputs[]
+): NodeAncestors {
+  let newAncestors = _.transform(
     nodes,
     (res, { id, inputs }) => {
       res[id] = inputs;
     },
-    {}
+    {} as NodeAncestors
   );
   let nodeAncestors = _.transform(
     nodes,
     (res, { id }) => {
       res[id] = [];
     },
-    {}
+    {} as NodeAncestors
   );
 
   while (!_.isEmpty(newAncestors)) {

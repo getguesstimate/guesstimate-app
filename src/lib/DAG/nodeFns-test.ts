@@ -91,11 +91,14 @@ describe("nodeFns", () => {
 
   describe("anyRelationsWithinFn", () => {
     it("correctory returns when the input list of nodes is empty", () => {
-      const testFn = anyRelationsWithinFn([], {
-        a: ["b", "c"],
-        b: [],
-        c: ["b"],
-      });
+      const testFn = anyRelationsWithinFn<{ id: string; inputs: string[] }>(
+        [],
+        {
+          a: ["b", "c"],
+          b: [],
+          c: ["b"],
+        }
+      );
       expect(testFn({ id: "b", inputs: [] })).toBe(false);
       expect(testFn({ id: "a", inputs: ["c"] })).toBe(false);
     });

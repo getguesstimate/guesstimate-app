@@ -18,6 +18,7 @@ import {
   formatData,
   isData,
 } from "~/lib/guesstimator/formatter/formatters/Data";
+import { Simulation } from "~/modules/simulations/reducer";
 
 type Props = {
   categories: FactCategory[];
@@ -129,7 +130,7 @@ class FactForm_ extends Component<Props, State> {
       this.setFactState({ simulation }, { currentExpressionSimulated: true });
     } else {
       simulateFact(this.state.runningFact).then((sample) => {
-        let simulation = { sample };
+        let simulation: Simulation = { sample };
         addStats(simulation);
         this.setFactState({ simulation }, { currentExpressionSimulated: true });
       });

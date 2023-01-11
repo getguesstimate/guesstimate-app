@@ -45,7 +45,7 @@ export function organizationUsers(organizationId: string, users, memberships) {
   });
 }
 
-export function findFacts(organizationId, organizationFacts) {
+export function findFacts(organizationId, organizationFacts: any[]) {
   const readableId = organizationReadableId({ id: organizationId });
   return orArr(
     _collections.gget(
@@ -53,6 +53,6 @@ export function findFacts(organizationId, organizationFacts) {
       readableId,
       "variable_name",
       "children"
-    )
+    ) as any[] | undefined
   );
 }

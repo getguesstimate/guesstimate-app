@@ -1,4 +1,5 @@
 import _ from "lodash";
+import { Formatter } from "../types";
 
 export function formatData(value: string): number[] {
   return value
@@ -13,10 +14,10 @@ export function formatData(value: string): number[] {
 export const isData = (input: string): boolean =>
   !input.includes("=") && (input.match(/[\n\s,]/g) || []).length > 3;
 
-export const item = {
+export const item: Formatter = {
   formatterName: "DATA",
-  error(g) {
-    return {};
+  error() {
+    return undefined;
   },
   matches(g) {
     return !_.isEmpty(g.data);

@@ -1,23 +1,41 @@
 import _ from "lodash";
 import { mutableCopy, orArr, notIn } from "~/lib/engine/utils";
 import {
+  NodeAncestors,
+  SimulationNodeParams,
+  SimulationNodeParamsWithInputs,
+} from "../propagation/DAG";
+import {
   allInputsWithinFn,
   anyRelationsWithinFn,
   inACycleWithNodeFn,
   getMissingInputs,
 } from "./nodeFns";
 
+export type CyclePseudoNode = {
+  id: null;
+  isCycle: true;
+  inputs: string[];
+  outputs?: unknown[];
+  nodes: SimulationNodeParamsWithInputs[];
+};
+
 // Ignores missing inputs.
-export function separateIntoHeightSets(nodes) {
+export function separateIntoHeightSets(
+  nodes: (SimulationNodeParamsWithInputs | CyclePseudoNode)[]
+) {
   const missingInputs = getMissingInputs(nodes);
-  let unprocessedNodes = mutableCopy(nodes);
-  let heightOrderedNodes: any[] = [];
-  while (!_.isEmpty(unprocessedNodes)) {
+  let unprocessedNodes = [...nodes];
+  let heightOrderedNodes: (
+    | SimulationNodeParamsWithInputs
+    | CyclePseudoNode
+  )[][] = [];
+  while (unprocessedNodes.length) {
     const nextLevelNodes = _.remove(
       unprocessedNodes,
       allInputsWithinFn(_.flatten(heightOrderedNodes), missingInputs)
     );
-    if (_.isEmpty(nextLevelNodes)) {
+    if (!nextLevelNodes.length) {
       console.warn("INFINITE LOOP DETECTED");
       break;
     }
@@ -26,13 +44,16 @@ export function separateIntoHeightSets(nodes) {
   return heightOrderedNodes;
 }
 
-export function separateIntoDisconnectedComponents(nodes, nodeAncestors) {
+export function separateIntoDisconnectedComponents<T extends { id: string }>(
+  nodes: T[],
+  nodeAncestors: NodeAncestors
+) {
   if (_.isEmpty(nodes)) {
     return [];
   }
   let unprocessedNodes = mutableCopy(nodes);
-  let components: any[] = [];
-  let currentComponent: any[] = [];
+  let components: T[][] = [];
+  let currentComponent: T[] = [];
   while (!_.isEmpty(unprocessedNodes)) {
     let newComponentNodes = _.pullAt(unprocessedNodes, [0]);
     do {
@@ -49,11 +70,14 @@ export function separateIntoDisconnectedComponents(nodes, nodeAncestors) {
   return components;
 }
 
-export function getCycleSets(nodes, nodeAncestors) {
-  let acyclicNodes = mutableCopy(nodes);
-  let cycleSets: any[] = [];
+export function getCycleSets(
+  nodes: SimulationNodeParamsWithInputs[],
+  nodeAncestors: NodeAncestors
+) {
+  let acyclicNodes = [...nodes];
+  let cycleSets: SimulationNodeParamsWithInputs[][] = [];
 
-  let cycleNodes: any[] = _.remove(acyclicNodes, ({ id }) =>
+  let cycleNodes = _.remove(acyclicNodes, ({ id }) =>
     nodeAncestors[id].includes(id)
   );
 
@@ -66,7 +90,9 @@ export function getCycleSets(nodes, nodeAncestors) {
   return { acyclicNodes, cycleSets };
 }
 
-export function toCyclePseudoNode(nodes) {
+export function toCyclePseudoNode(
+  nodes: SimulationNodeParamsWithInputs[]
+): CyclePseudoNode {
   const containedIds = nodes.map((n) => n.id);
   return {
     id: null,

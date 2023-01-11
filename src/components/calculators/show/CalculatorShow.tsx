@@ -1,246 +1,256 @@
 import _ from "lodash";
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
+import React, { useEffect, useRef, useState } from "react";
 
 import ReactMarkdown from "react-markdown";
 import Icon from "~/components/react-fa-patched";
 
-import { Input } from "./input";
-import { Output } from "./output";
 import { Button } from "~/components/utility/buttons/button";
+import { Input, InputHandle } from "./input";
+import { Output } from "./output";
 
+import { changeGuesstimate } from "~/modules/guesstimates/actions";
 import {
   deleteSimulations,
   runSimulations,
 } from "~/modules/simulations/actions";
-import { changeGuesstimate } from "~/modules/guesstimates/actions";
 
 import * as _simulation from "~/lib/engine/simulation";
 
+import { FullDenormalizedMetric } from "~/lib/engine/space";
+import { Optional } from "~/lib/engine/types";
 import { Guesstimator } from "~/lib/guesstimator/index";
+import { Calculator } from "~/modules/calculators/reducer";
+import { useAppDispatch } from "~/modules/hooks";
 
-type Props = any;
+type Props = {
+  calculator: Optional<Calculator, "id">;
+  startFilled?: boolean;
+  size?: string;
+  inputs: FullDenormalizedMetric[];
+  outputs: FullDenormalizedMetric[];
+  isPrivate?: boolean;
+  showHelp?(): void;
+  onShowResult?(): void;
+  classes: string[];
+};
 
-class UnconnectedCalculatorShow extends Component<Props> {
-  state = {
+export const CalculatorShow: React.FC<Props> = (props) => {
+  const [state, setState] = useState(() => ({
     resultComputing: false,
-    showResult: this.props.startFilled && this.allOutputsHaveStats(),
+    showResult: props.startFilled && allOutputsHaveStats(),
     hasSimulated: false,
     readyToCalculate: false,
+  }));
+
+  const dispatch = useAppDispatch();
+
+  const inputRefs = useRef<Map<string, InputHandle | null>>(
+    new Map<string, InputHandle>()
+  );
+
+  // previously: componentWillReceiveProps
+  useEffect(() => {
+    if (state.resultComputing && allOutputsHaveStats(props)) {
+      setState({ ...state, resultComputing: false });
+      showResult();
+    }
+  });
+
+  const allInputsHaveContent = (idsToExclude: string[] = []) => {
+    const includedInputs = props.inputs.filter(
+      (i) => !_.some(idsToExclude, (id) => i.id === id)
+    );
+    const inputComponents = includedInputs.map((metric) =>
+      inputRefs.current.get(metric.id)
+    );
+    return _.every(inputComponents, (i) => !!i && i.hasValidContent);
   };
 
-  componentWillReceiveProps(nextProps: Props) {
-    if (this.state.resultComputing && this.allOutputsHaveStats(nextProps)) {
-      this.setState({ resultComputing: false });
-      this.showResult();
-    }
-  }
-
-  changeGuesstimate({ id, guesstimate }, input) {
+  const doChangeGuesstimate = (
+    { id, guesstimate }: FullDenormalizedMetric,
+    input
+  ) => {
     const parsed = Guesstimator.parse({ ...guesstimate, input });
     const guesstimateType = parsed[1].samplerType().referenceName;
-    this.props.changeGuesstimate(
-      id,
-      { ...guesstimate, ...{ data: null, input, guesstimateType } },
-      false // saveOnServer
+    dispatch(
+      changeGuesstimate(
+        id,
+        { ...guesstimate, ...{ data: null, input, guesstimateType } },
+        false // saveOnServer
+      )
     );
-  }
+  };
 
-  readyToSimulate(metric, input) {
-    const [parseErrors] = Guesstimator.parse({ ...metric.guesstimate, input });
+  const readyToSimulate = (metric: FullDenormalizedMetric, input) => {
+    const [parseErrors] = Guesstimator.parse({
+      ...metric.guesstimate,
+      input,
+    });
     return (
       !_.isEmpty(input) &&
       _.isEmpty(parseErrors) &&
-      this.allInputsHaveContent([metric.id])
+      allInputsHaveContent([metric.id])
     );
-  }
+  };
 
-  onBlur(metric, input) {
+  const handleBlur = (metric: FullDenormalizedMetric, input) => {
     // We only want to simulate anything if all the inputs have simulatable content.
-    if (!this.state.hasSimulated && this.readyToSimulate(metric, input)) {
+    if (!state.hasSimulated && readyToSimulate(metric, input)) {
       _.defer(() => {
-        this.props.inputs.forEach((i) =>
-          this.changeGuesstimate(
+        props.inputs.forEach((i) =>
+          doChangeGuesstimate(
             i,
-            i.id === metric.id ? input : this.getInputContent(i)
+            i.id === metric.id ? input : getInputContent(i)
           )
         );
-        this.props.deleteSimulations([
-          ...this.props.inputs.map((i) => i.id),
-          ...this.props.outputs.map((o) => o.id),
-        ]);
-        this.props.runSimulations({
-          spaceId: this.props.calculator.space_id,
-          simulateSubsetFrom: this.props.inputs.map((i) => i.id),
-        });
+        dispatch(
+          deleteSimulations([
+            ...props.inputs.map((i) => i.id),
+            ...props.outputs.map((o) => o.id),
+          ])
+        );
+        dispatch(
+          runSimulations({
+            spaceId: props.calculator.space_id,
+            simulateSubsetFrom: props.inputs.map((i) => i.id),
+          })
+        );
       });
-      this.setState({ hasSimulated: true, resultComputing: true });
+      setState({ ...state, hasSimulated: true, resultComputing: true });
     }
-  }
+  };
 
-  onChange(metric, input) {
-    if (this.readyToSimulate(metric, input)) {
-      if (this.state.hasSimulated) {
-        this.changeGuesstimate(metric, input);
-        this.props.runSimulations({
-          spaceId: this.props.calculator.space_id,
-          simulateSubsetFrom: [metric.id],
-        });
+  const handleChange = (metric: FullDenormalizedMetric, input) => {
+    if (readyToSimulate(metric, input)) {
+      if (state.hasSimulated) {
+        doChangeGuesstimate(metric, input);
+        dispatch(
+          runSimulations({
+            spaceId: props.calculator.space_id,
+            simulateSubsetFrom: [metric.id],
+          })
+        );
       }
-      if (!this.state.readyToCalculate) {
-        this.setState({ readyToCalculate: true });
+      if (!state.readyToCalculate) {
+        setState({ ...state, readyToCalculate: true });
       }
     } else {
-      if (this.state.readyToCalculate) {
-        this.setState({ readyToCalculate: false });
+      if (state.readyToCalculate) {
+        setState({ ...state, readyToCalculate: false });
       }
     }
-  }
+  };
 
-  onEnter(id) {
-    (this.refs[`input-${id}`] as any).blur();
-    if (!this.state.readyToCalculate) {
+  const handleEnter = (id: string) => {
+    inputRefs.current.get(id)?.blur();
+    if (!state.readyToCalculate) {
       return;
     }
-    if (this.allOutputsHaveStats() && this.state.hasSimulated) {
-      this.showResult();
+    if (allOutputsHaveStats() && state.hasSimulated) {
+      showResult();
     } else {
-      if (!this.state.resultComputing) {
-        this.setState({ resultComputing: true });
+      if (!state.resultComputing) {
+        setState({ ...state, resultComputing: true });
       }
     }
-  }
+  };
 
-  getInputContent({ id }) {
-    return (this.refs[`input-${id}`] as any).getContent();
-  }
+  const getInputContent = ({ id }) => {
+    return inputRefs.current.get(id)?.getContent();
+  };
 
-  allInputsHaveContent(idsToExclude: string[] = []) {
-    const includedInputs = this.props.inputs.filter(
-      (i) => !_.some(idsToExclude, (id) => i.id === id)
-    );
-    const inputComponents = _.map(
-      includedInputs,
-      (metric) => this.refs[`input-${metric.id}`]
-    );
-    return _.every(inputComponents, (i) => !!i && (i as any).hasValidContent());
-  }
-
-  allOutputsHaveStats({ outputs } = this.props) {
+  const allOutputsHaveStats = ({ outputs } = props) => {
     return outputs
       .map((o) => !!o && _.has(o, "simulation.stats"))
       .reduce((x, y) => x && y, true);
-  }
+  };
 
-  showResult() {
-    if (_.has(this, "props.onShowResult")) {
-      this.props.onShowResult();
+  const showResult = () => {
+    props.onShowResult?.();
+    if (!state.showResult) {
+      setState({ ...state, showResult: true });
     }
-    if (!this.state.showResult) {
-      this.setState({ showResult: true });
-    }
-  }
+  };
 
-  render() {
-    const {
-      calculator: { content, title },
-      startFilled,
-      size,
-      inputs,
-      outputs,
-      isPrivate,
-      classes,
-    } = this.props;
-
-    return (
-      <div className={`${["calculator", ...classes].join(" ")}`}>
-        <div className="padded-section">
-          <div className="title-bar">
-            <div className="row">
-              <div className="col-xs-10">
-                <h1>{title}</h1>
-                {isPrivate && (
-                  <span className="privacy-icon">
-                    <Icon name="lock" />
-                    Private
-                  </span>
-                )}
-              </div>
-              {size === "wide" && (
-                <div className="col-xs-2 action-section">
-                  <Button onClick={this.props.showHelp}>
-                    <Icon name="question" />
-                    Help
-                  </Button>
-                </div>
+  return (
+    <div className={`${["calculator", ...props.classes].join(" ")}`}>
+      <div className="padded-section">
+        <div className="title-bar">
+          <div className="row">
+            <div className="col-xs-10">
+              <h1>{props.calculator.title}</h1>
+              {props.isPrivate && (
+                <span className="privacy-icon">
+                  <Icon name="lock" />
+                  Private
+                </span>
               )}
             </div>
-          </div>
-          <div className="description">
-            <ReactMarkdown source={content} />
-          </div>
-          <div className="inputs">
-            {inputs.map((metric, i) => (
-              <Input
-                ref={`input-${metric.id}`}
-                key={metric.id}
-                id={metric.id}
-                isFirst={i === 0}
-                name={metric.name}
-                description={_.get(metric, "guesstimate.description")}
-                errors={_simulation.errors(metric.simulation)}
-                onBlur={this.onBlur.bind(this, metric)}
-                onChange={this.onChange.bind(this, metric)}
-                onEnter={this.onEnter.bind(this)}
-                initialValue={
-                  (startFilled && _.get(metric, "guesstimate.input")) || ""
-                }
-              />
-            ))}
-          </div>
-          {this.state.showResult && (
-            <div>
-              <hr className="result-divider" />
-              <div className="outputs">
-                {_.map(outputs, (m) => (
-                  <Output key={m.id} metric={m} />
-                ))}
+            {props.size === "wide" && (
+              <div className="col-xs-2 action-section">
+                <Button onClick={props.showHelp}>
+                  <Icon name="question" />
+                  Help
+                </Button>
               </div>
-            </div>
-          )}
-          {!this.state.showResult && (
-            <div className="row">
-              <div className="col-xs-12 col-md-7" />
-              <div className="col-xs-12 col-md-5">
-                <div
-                  className={`ui button calculateButton${
-                    this.state.resultComputing
-                      ? " loading"
-                      : this.state.readyToCalculate
-                      ? ""
-                      : " disabled"
-                  }`}
-                  onClick={() => {
-                    this.allOutputsHaveStats()
-                      ? this.showResult()
-                      : this.setState({ resultComputing: true });
-                  }}
-                >
-                  Calculate
-                </div>
-              </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
+        <div className="description">
+          <ReactMarkdown source={props.calculator.content} />
+        </div>
+        <div className="inputs">
+          {props.inputs.map((metric, i) => (
+            <Input
+              ref={(ref) => inputRefs.current.set(metric.id, ref)}
+              key={metric.id}
+              id={metric.id}
+              isFirst={i === 0}
+              name={metric.name}
+              description={metric.guesstimate.description}
+              errors={_simulation.errors(metric.simulation)}
+              onBlur={(input) => handleBlur(metric, input)}
+              onChange={(input) => handleChange(metric, input)}
+              onEnter={handleEnter}
+              initialValue={
+                (props.startFilled && metric.guesstimate.input) || ""
+              }
+            />
+          ))}
+        </div>
+        {state.showResult ? (
+          <div>
+            <hr className="result-divider" />
+            <div className="outputs">
+              {props.outputs.map((m) => (
+                <Output key={m.id} metric={m} />
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div className="row">
+            <div className="col-xs-12 col-md-7" />
+            <div className="col-xs-12 col-md-5">
+              <div
+                className={`ui button calculateButton${
+                  state.resultComputing
+                    ? " loading"
+                    : state.readyToCalculate
+                    ? ""
+                    : " disabled"
+                }`}
+                onClick={() => {
+                  allOutputsHaveStats()
+                    ? showResult()
+                    : setState({ ...state, resultComputing: true });
+                }}
+              >
+                Calculate
+              </div>
+            </div>
+          </div>
+        )}
       </div>
-    );
-  }
-}
-
-export const CalculatorShow = connect(null, (dispatch) =>
-  bindActionCreators(
-    { changeGuesstimate, deleteSimulations, runSimulations },
-    dispatch
-  )
-)(UnconnectedCalculatorShow);
+    </div>
+  );
+};

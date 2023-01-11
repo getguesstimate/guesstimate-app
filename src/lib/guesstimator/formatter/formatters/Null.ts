@@ -21,7 +21,7 @@ export const item: Formatter = {
   },
   error({ text }) {
     return _.isEmpty(text)
-      ? {}
+      ? undefined
       : { type: PARSER_ERROR, subType: NULL_WITH_TEXT_ERROR };
   },
 };
