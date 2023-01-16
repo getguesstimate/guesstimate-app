@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import React, { Component } from "react";
+import React from "react";
 
 import Icon from "~/components/react-fa-patched";
 
@@ -24,70 +24,54 @@ export type CardListElementProps = {
   children?: React.ReactNode;
 };
 
-export class CardListElement extends Component<CardListElementProps> {
-  static defailtProps = {
-    imageShape: "square",
+export const CardListElement: React.FC<CardListElementProps> = ({
+  icon,
+  ionicIcon,
+  image,
+  imageShape,
+  header,
+  children,
+  url,
+  isSelected,
+  isDisabled,
+  onMouseDown,
+}) => {
+  const _onSelect = () => {
+    if (!isDisabled) {
+      onMouseDown();
+    }
   };
 
-  _onSelect() {
-    const { isSelected, isDisabled } = this.props;
-    if (!isDisabled) {
-      this.props.onMouseDown();
-    }
-  }
+  const className = clsx(
+    "action",
+    isSelected && "selected",
+    isDisabled && "disabled",
+    children && "hasChildren"
+  );
 
-  render() {
-    const {
-      icon,
-      ionicIcon,
-      image,
-      imageShape,
-      header,
-      children,
-      url,
-      isSelected,
-      isDisabled,
-    } = this.props;
+  const [small, large] = !!children ? ["2", "10"] : ["3", "9"];
 
-    let className = "action";
-    if (isSelected) {
-      className += " selected";
-    }
-    if (isDisabled) {
-      className += " disabled";
-    }
-    if (!!children) {
-      className += " hasChildren";
-    }
+  const hasImage = !!icon || !!ionicIcon || !!image;
 
-    let [small, large] = !!children ? ["2", "10"] : ["3", "9"];
-
-    const hasImage = !!icon || !!ionicIcon || !!image;
-
-    return (
-      <li>
-        <a
-          className={className}
-          href={url}
-          onMouseDown={this._onSelect.bind(this)}
-        >
-          <div className="row middle-xs">
-            {hasImage && (
-              <IconSection
-                {...{ icon, ionicIcon, image, imageShape }}
-                colCount={small}
-              />
-            )}
-            <ChildrenSection
-              {...{ header, children }}
-              colCount={hasImage ? large : "12"}
+  return (
+    <li>
+      <a className={className} href={url} onMouseDown={_onSelect}>
+        <div className="row middle-xs">
+          {hasImage && (
+            <IconSection
+              {...{ icon, ionicIcon, image, imageShape }}
+              colCount={small}
             />
-          </div>
-        </a>
-      </li>
-    );
-  }
-}
+          )}
+          <ChildrenSection
+            {...{ header, children }}
+            colCount={hasImage ? large : "12"}
+          />
+        </div>
+      </a>
+    </li>
+  );
+};
 
 const IconSection: React.FC<
   Pick<CardListElementProps, "icon" | "ionicIcon" | "image" | "imageShape"> & {
@@ -107,10 +91,8 @@ const ChildrenSection: React.FC<{
   children: React.ReactNode;
 }> = ({ colCount, header, children }) => (
   <div className={`col-xs-${colCount} info-section`}>
-    {!!header && (
-      <span className="header">{capitalizeFirstLetter(header)}</span>
-    )}
-    {!!children && <div className="content"> {children} </div>}
+    {header && <span className="header">{capitalizeFirstLetter(header)}</span>}
+    {!!children && <div className="content">{children}</div>}
   </div>
 );
 

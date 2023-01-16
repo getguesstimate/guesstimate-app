@@ -80,19 +80,6 @@ export class SpaceToolbar extends Component<Props, State> {
     importModalOpen: false,
   };
 
-  componentDidMount() {
-    window.recorder.recordMountEvent(this);
-  }
-  componentWillUpdate() {
-    window.recorder.recordRenderStartEvent(this);
-  }
-  componentDidUpdate() {
-    window.recorder.recordRenderStopEvent(this);
-  }
-  componentWillUnmount() {
-    window.recorder.recordUnmountEvent(this);
-  }
-
   shouldComponentUpdate(nextProps: Props, nextState: State) {
     return (
       this.props.editableByMe !== nextProps.editableByMe ||

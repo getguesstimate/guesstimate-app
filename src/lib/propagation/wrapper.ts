@@ -4,7 +4,7 @@ import { addSimulation } from "~/modules/simulations/actions";
 
 import { NODE_TYPES } from "./constants";
 import { ERROR_TYPES } from "./errors";
-import { Simulator } from "./simulator";
+import { Simulator, SimulatorOptions } from "./simulator";
 
 import * as e from "~/lib/engine/engine";
 import { Guesstimate } from "~/modules/guesstimates/reducer";
@@ -251,7 +251,7 @@ const allPresent = (obj: unknown, ...props: string[]) =>
 const present = (obj: unknown, prop: string) =>
   _.has(obj, prop) && (!!_.get(obj, prop) || _.get(obj, prop) === 0);
 
-function translateOptions(graphFilters: GraphFilters) {
+function translateOptions(graphFilters: GraphFilters): SimulatorOptions {
   if (allPresent(graphFilters, "factId")) {
     return { simulateStrictSubsetFrom: [factIdToNodeId(graphFilters.factId)] };
   }
@@ -274,25 +274,30 @@ function translateOptions(graphFilters: GraphFilters) {
   return {};
 }
 
-const getCurrPropId = (state: RootState) => (nodeId: string) => {
-  if (nodeIdIsMetric(nodeId)) {
-    const metricId = nodeIdToMetricId(nodeId);
-    return e.collections.gget(
-      state.simulations,
-      metricId,
-      "metric",
-      "propagationId"
-    );
-  } else {
-    const factId = nodeIdToFactId(nodeId);
+const getCurrPropId =
+  (state: RootState) =>
+  (nodeId: string): number => {
+    if (nodeIdIsMetric(nodeId)) {
+      const metricId = nodeIdToMetricId(nodeId);
+      return e.collections.gget(
+        state.simulations,
+        metricId,
+        "metric",
+        "propagationId"
+      );
+    } else {
+      const factId = nodeIdToFactId(nodeId);
 
-    const organizationFact = state.facts.organizationFacts.find(
-      ({ children }) => e.collections.some(children, factId)
-    );
-    const fact = e.collections.get(_.get(organizationFact, "children"), factId);
-    return e.utils.orZero(_.get(fact, "simulation.propagationId"));
-  }
-};
+      const organizationFact = state.facts.organizationFacts.find(
+        ({ children }) => e.collections.some(children, factId)
+      );
+      const fact = e.collections.get(
+        _.get(organizationFact, "children"),
+        factId
+      );
+      return e.utils.orZero(_.get(fact, "simulation.propagationId"));
+    }
+  };
 
 export function simulate(
   dispatch: AppDispatch,

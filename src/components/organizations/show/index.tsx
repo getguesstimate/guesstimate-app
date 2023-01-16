@@ -9,7 +9,7 @@ import { Container } from "~/components/utility/Container";
 import { Category } from "./categories/category";
 import { CategoryForm } from "./categories/form";
 import { FactGraph } from "./facts/factGraph";
-import { MembersTab } from "./members";
+import { MembersTab } from "./MembersTab";
 
 import { organizationMemberSelector } from "./organizationMemberSelector";
 import { organizationSpaceSelector } from "./organizationSpaceSelector";
@@ -51,7 +51,7 @@ const OrganizationHeader: React.FC<{ organization: any }> = ({
       <div className="col-sm-12">
         <div className="center-display">
           <img src={organization.picture} />
-          <h1> {organization.name} </h1>
+          <h1>{organization.name}</h1>
         </div>
       </div>
     </div>
@@ -68,7 +68,7 @@ const OrganizationTabButtons: React.FC<{
       <div className="ui secondary menu">
         {tabs.map((e) => {
           const className = `item ${openTab === e.key ? "active" : ""}`;
-          if (!!e.href) {
+          if (e.href) {
             return (
               <a
                 className="item"
@@ -89,8 +89,7 @@ const OrganizationTabButtons: React.FC<{
                   changeTab(e.key);
                 }}
               >
-                {" "}
-                {e.name}{" "}
+                {e.name}
               </a>
             );
           }
@@ -100,7 +99,14 @@ const OrganizationTabButtons: React.FC<{
   </div>
 );
 
-const FactTab: React.FC<any> = ({
+const FactTab: React.FC<{
+  organization: any;
+  facts: any[];
+  factCategories: any[];
+  onAddCategory(category: any): void;
+  onEditCategory(category: any): void;
+  onDeleteCategory(category: any): void;
+}> = ({
   organization,
   facts,
   factCategories,
@@ -153,41 +159,34 @@ const FactTab: React.FC<any> = ({
   );
 };
 
-class NewCategorySection extends Component<{
+const NewCategorySection: React.FC<{
   onSubmit(category: FactCategory): void;
   existingCategoryNames: string[];
-}> {
-  state = {
-    showForm: false,
+}> = (props) => {
+  const [showForm, setShowForm] = useState(false);
+
+  const handleSubmit = (category: FactCategory) => {
+    setShowForm(false);
+    props.onSubmit(category);
   };
 
-  onSubmit(name) {
-    this.setState({ showForm: false });
-    this.props.onSubmit(name);
+  if (showForm) {
+    return (
+      <CategoryForm
+        onSubmit={handleSubmit}
+        existingCategoryNames={props.existingCategoryNames}
+      />
+    );
+  } else {
+    return (
+      <div className="ui button green" onClick={() => setShowForm(true)}>
+        <Icon name="plus" /> New Category
+      </div>
+    );
   }
+};
 
-  render() {
-    if (this.state.showForm) {
-      return (
-        <CategoryForm
-          onSubmit={this.onSubmit.bind(this)}
-          existingCategoryNames={this.props.existingCategoryNames}
-        />
-      );
-    } else {
-      return (
-        <div
-          className="ui button green"
-          onClick={() => this.setState({ showForm: true })}
-        >
-          <Icon name="plus" /> New Category
-        </div>
-      );
-    }
-  }
-}
-
-const OrganizationShow: React.FC<{
+export const OrganizationShow: React.FC<{
   organizationId: number;
   tab: null | string;
 }> = ({ organizationId, tab }) => {
@@ -226,7 +225,7 @@ const OrganizationShow: React.FC<{
     setOpenTab(openTab);
   };
 
-  const _newModel = () => {
+  const newModel = () => {
     dispatch(spaceActions.create(organizationId, router));
   };
 
@@ -319,7 +318,7 @@ const OrganizationShow: React.FC<{
         <div className="main-section">
           {(openTab === MODEL_TAB || !meIsMember) && spaces && (
             <div className="row">
-              {meIsMember && <NewSpaceCard onClick={_newModel} />}
+              {meIsMember && <NewSpaceCard onClick={newModel} />}
               {_.map(spaces, (s) => (
                 <SpaceCard key={s.id} space={s} showPrivacy={true} />
               ))}
@@ -363,5 +362,3 @@ const OrganizationShow: React.FC<{
     </Container>
   );
 };
-
-export default OrganizationShow;

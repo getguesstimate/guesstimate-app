@@ -79,7 +79,9 @@ const ShareableLinkOption: React.FC<{
   </DropDown>
 );
 
-export class SpaceHeader extends Component<any> {
+type Props = any;
+
+export class SpaceHeader extends Component<Props> {
   componentDidMount() {
     window.recorder.recordMountEvent(this);
   }
@@ -93,7 +95,7 @@ export class SpaceHeader extends Component<any> {
     window.recorder.recordUnmountEvent(this);
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(nextProps: Props) {
     if (!nextProps.editableByMe) {
       return false;
     }

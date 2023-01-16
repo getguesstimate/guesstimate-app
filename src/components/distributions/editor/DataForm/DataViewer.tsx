@@ -1,5 +1,6 @@
+import clsx from "clsx";
 import _ from "lodash";
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 
 import Icon from "~/components/react-fa-patched";
 
@@ -43,68 +44,54 @@ const Header: React.FC<{
   </div>
 );
 
-class Editor extends Component<{
+const Editor: React.FC<{
   data: number[];
   onSave(data: number[]): void;
   onEditCancel(): void;
-}> {
-  state = {
-    value: this.props.data.join("\n"),
-    valid: true,
-  };
+}> = ({ data, onSave, onEditCancel }) => {
+  const [value, setValue] = useState(data.join("\n"));
 
-  handleChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
-    const value = event.target.value;
-    this.setState({
-      value,
-      valid: this._isValid(value),
-    });
-  }
-
-  _isValid(value: string) {
-    const numbers = this._convertToNumbers(value);
-    const allValid = _.every(numbers, (e) => _.isFinite(e));
-    return allValid;
-  }
-
-  _handleSave() {
-    const numbers = this._convertToNumbers(this.state.value)
-      .filter((e) => _.isFinite(e))
-      .slice(0, 10000);
-    this.props.onSave(numbers);
-  }
-
-  _convertToNumbers(values: string) {
+  const convertToNumbers = (values: string) => {
     return values
       .split(/[\s,]+/)
       .filter((s) => s !== "")
       .map(Number);
-  }
+  };
 
-  render() {
-    return (
-      <div>
-        <div className="ui form">
-          <div className="field">
-            <textarea
-              value={this.state.value}
-              onChange={this.handleChange.bind(this)}
-            />
-          </div>
-        </div>
-        <div
-          className="ui button primary tiny"
-          onClick={this._handleSave.bind(this)}
-        >
-          Save
-        </div>
-        <div className="ui button tiny" onClick={this.props.onEditCancel}>
-          Cancel
+  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const value = event.target.value;
+    setValue(value);
+  };
+
+  const _isValid = () => {
+    const numbers = convertToNumbers(value);
+    const allValid = _.every(numbers, (e) => _.isFinite(e));
+    return allValid;
+  };
+
+  const handleSave = () => {
+    const numbers = convertToNumbers(value)
+      .filter((e) => _.isFinite(e))
+      .slice(0, 10000);
+    onSave(numbers);
+  };
+
+  return (
+    <div>
+      <div className="ui form">
+        <div className="field">
+          <textarea value={value} onChange={handleChange} />
         </div>
       </div>
-    );
-  }
-}
+      <div className="ui button primary tiny" onClick={handleSave}>
+        Save
+      </div>
+      <div className="ui button tiny" onClick={onEditCancel}>
+        Cancel
+      </div>
+    </div>
+  );
+};
 
 const Viewer: React.FC<{ data: number[] }> = ({ data }) => (
   <ul>
@@ -126,54 +113,44 @@ type LargeDataViewerProps = {
   onSave(data: number[]): void;
 };
 
-type LargeDataViewerState = {
-  mode: Mode;
-};
+export const LargeDataViewer: React.FC<LargeDataViewerProps> = ({
+  data,
+  onDelete,
+  onSave,
+}) => {
+  const [mode, setMode] = useState<Mode>("VIEW");
 
-export class LargeDataViewer extends Component<
-  LargeDataViewerProps,
-  LargeDataViewerState
-> {
-  state: LargeDataViewerState = { mode: "VIEW" as const };
+  const bodyClass = clsx(
+    "ui segment DataViewer--body",
+    mode === "VIEW" ? "view" : "edit"
+  );
 
-  beginEditing() {
-    this.setState({ mode: "EDIT" });
-  }
+  const handleEdit = () => {
+    setMode("EDIT");
+  };
 
-  onSave(data: number[]) {
-    this.props.onSave(data);
-    this.setState({ mode: "VIEW" });
-  }
+  const handleSave = (data: number[]) => {
+    onSave(data);
+    setMode("VIEW");
+  };
 
-  render() {
-    let bodyClass = "ui segment DataViewer--body";
-    const viewMode = this.state.mode === "VIEW";
-
-    bodyClass += viewMode ? " view" : " edit";
-    return (
-      <div className="DataViewer ui segments">
-        <div className="ui segment DataViewer--header">
-          <Header
-            onDelete={this.props.onDelete}
-            onEdit={() => {
-              this.setState({ mode: "EDIT" });
-            }}
-            mode={this.state.mode}
-          />
-        </div>
-        <div className={bodyClass}>
-          {this.state.mode === "VIEW" && <Viewer data={this.props.data} />}
-          {this.state.mode === "EDIT" && (
-            <Editor
-              data={this.props.data}
-              onEditCancel={() => {
-                this.setState({ mode: "VIEW" });
-              }}
-              onSave={this.onSave.bind(this)}
-            />
-          )}
-        </div>
+  return (
+    <div className="DataViewer ui segments">
+      <div className="ui segment DataViewer--header">
+        <Header onDelete={onDelete} onEdit={handleEdit} mode={mode} />
       </div>
-    );
-  }
-}
+      <div className={bodyClass}>
+        {mode === "VIEW" && <Viewer data={data} />}
+        {mode === "EDIT" && (
+          <Editor
+            data={data}
+            onEditCancel={() => {
+              setMode("VIEW");
+            }}
+            onSave={handleSave}
+          />
+        )}
+      </div>
+    </div>
+  );
+};

@@ -12,7 +12,7 @@ import * as _userOrganizationMemberships from "./userOrganizationMemberships";
 import { allPropsPresent, isPresent } from "./utils";
 import { DenormalizedMetric } from "./metric";
 
-type MetricEdges = {
+export type MetricEdges = {
   inputs: string[];
   outputs: string[];
   inputMetrics: DenormalizedMetric[];

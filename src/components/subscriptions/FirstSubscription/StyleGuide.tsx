@@ -22,22 +22,20 @@ function FirstSubscriptionStage(stage) {
   return Object.assign({}, FirstSubscriptionBaseProps, { flowStage: stage });
 }
 
-export default class FirstSubscriptionStyleGuide extends Component {
-  render() {
-    const flowStage = "UNNECESSARY";
-    return (
-      <div className="container-fluid full-width">
-        {subStages.map((stage) => {
-          return (
-            <ComponentEditor
-              child={FirstSubscription as any}
-              childProps={FirstSubscriptionStage(stage)}
-              name={stage}
-              key={stage}
-            />
-          );
-        })}
-      </div>
-    );
-  }
-}
+export const FirstSubscriptionStyleGuide: React.FC = () => {
+  const flowStage = "UNNECESSARY";
+  return (
+    <div className="container-fluid full-width">
+      {subStages.map((stage) => {
+        return (
+          <ComponentEditor
+            child={FirstSubscription as any}
+            childProps={FirstSubscriptionStage(stage)}
+            name={stage}
+            key={stage}
+          />
+        );
+      })}
+    </div>
+  );
+};

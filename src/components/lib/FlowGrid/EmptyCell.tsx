@@ -1,5 +1,5 @@
+import React, { useImperativeHandle, useRef } from "react";
 import { CanvasLocation } from "~/lib/locationUtils";
-import React, { Component } from "react";
 
 type Props = {
   onAddItem(location: CanvasLocation): void;
@@ -8,15 +8,19 @@ type Props = {
   location: CanvasLocation;
 };
 
-export class EmptyCell extends Component<Props> {
-  shouldComponentUpdate() {
-    return false; // TODO - is this safe?
-  }
+export const EmptyCell = React.memo(
+  React.forwardRef<{ focus(): void }, Props>((props, ref) => {
+    const divRef = useRef<HTMLDivElement | null>(null);
 
-  render() {
+    useImperativeHandle(ref, () => ({
+      focus() {
+        divRef.current?.focus();
+      },
+    }));
+
     const handleKeyDown = (e: React.KeyboardEvent) => {
-      if (e.key === "Enter" && this.props.inSelectedCell) {
-        this.props.onAddItem(this.props.location);
+      if (e.key === "Enter" && props.inSelectedCell) {
+        props.onAddItem(props.location);
         e.preventDefault();
       }
       if (e.key === "Backspace") {
@@ -27,10 +31,12 @@ export class EmptyCell extends Component<Props> {
     return (
       <div
         className="FlowGridEmptyCell"
-        onKeyPress={this.props.gridKeyPress}
+        onKeyPress={props.gridKeyPress}
         onKeyDown={handleKeyDown}
         tabIndex={0}
+        ref={divRef}
       />
     );
-  }
-}
+  }),
+  () => true // never re-render; TODO - is this safe?
+);

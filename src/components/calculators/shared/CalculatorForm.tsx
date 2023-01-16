@@ -3,6 +3,9 @@ import React, { Component } from "react";
 
 import Icon from "~/components/react-fa-patched";
 import { sortable } from "react-sortable";
+import { FullDenormalizedMetric } from "~/lib/engine/space";
+import { Calculator } from "~/modules/calculators/reducer";
+import { Optional } from "~/lib/engine/types";
 
 const SortableListItem = sortable((props) => (
   <div {...props} className="list-item">
@@ -10,10 +13,24 @@ const SortableListItem = sortable((props) => (
   </div>
 ));
 
+type CalculatorParam = {
+  metric: FullDenormalizedMetric;
+  isVisible: boolean;
+};
+
+type ParamProps = {
+  name: string | undefined;
+  description: string | undefined;
+  isDropTarget: boolean;
+  isVisible: boolean;
+  onRemove(): void;
+  onAdd(): void;
+};
+
 type Props = {
-  calculator: any;
-  inputs: any;
-  outputs: any;
+  calculator: Optional<Calculator, "id">;
+  inputs: CalculatorParam[];
+  outputs: CalculatorParam[];
   onMetricHide(id: string): void;
   onMetricShow(id: string): void;
   onMoveMetricTo(id: string, destIndex: number): void;
@@ -40,11 +57,11 @@ export class CalculatorForm extends Component<Props, State> {
   };
 
   metricForm(
-    { metric: { name, id, guesstimate }, isVisible },
+    { metric: { name, id, guesstimate }, isVisible }: CalculatorParam,
     isInput: boolean,
     isDropTarget: boolean
   ) {
-    const props = {
+    const props: ParamProps = {
       name,
       isDropTarget,
       description: _.get(guesstimate, "description"),
@@ -59,7 +76,7 @@ export class CalculatorForm extends Component<Props, State> {
     }
   }
 
-  updateDragState(id, newState) {
+  updateDragState(id: string, newState) {
     if (!this.state.draggingMetricId) {
       this.setState({ ...newState, draggingMetricId: id, dropTargetId: id });
     } else if (_.isNull(newState.draggingIndex)) {
@@ -97,11 +114,14 @@ export class CalculatorForm extends Component<Props, State> {
       state: { draggingIndex, dropTargetId, hasAlreadySubmitted },
     } = this;
 
-    const generateComponents = (metrics: any[], isInput: boolean) =>
-      metrics.map((m, i) => [
-        this.metricForm(m, isInput, dropTargetId === m.metric.id),
-        m.metric.id,
-      ]);
+    const generateComponents = (metrics: CalculatorParam[], isInput: boolean) =>
+      metrics.map(
+        (m, i) =>
+          [
+            this.metricForm(m, isInput, dropTargetId === m.metric.id),
+            m.metric.id,
+          ] as const
+      );
 
     const visibleInputs = generateComponents(
       inputs.filter((i) => i.isVisible),
@@ -189,7 +209,7 @@ export class CalculatorForm extends Component<Props, State> {
 
             {hasHiddenOutputs && (
               <div>
-                <div className=" outputs">
+                <div className="outputs">
                   <h3>Hidden Outputs</h3>
                   {invisibleOutputs.map(([item, id], i) => item)}
                 </div>
@@ -217,7 +237,7 @@ export class CalculatorForm extends Component<Props, State> {
   }
 }
 
-const EditSection = ({ isVisible, onRemove, onAdd }) => (
+const EditSection: React.FC<ParamProps> = ({ isVisible, onRemove, onAdd }) => (
   <div className="nub">
     {isVisible && (
       <div>
@@ -237,7 +257,7 @@ const EditSection = ({ isVisible, onRemove, onAdd }) => (
   </div>
 );
 
-const InputForm = (props) => (
+const InputForm: React.FC<ParamProps> = (props) => (
   <div className={`input${props.isDropTarget ? " drop-target" : ""}`}>
     <div className="row">
       <div className="col-xs-12 col-sm-8">
@@ -253,7 +273,7 @@ const InputForm = (props) => (
   </div>
 );
 
-const OutputForm = (props) => (
+const OutputForm: React.FC<ParamProps> = (props) => (
   <div className={`output${props.isDropTarget ? " drop-target" : ""}`}>
     <div className="row">
       <div className="col-xs-12 col-sm-8">

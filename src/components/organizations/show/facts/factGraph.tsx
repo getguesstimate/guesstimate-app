@@ -1,5 +1,5 @@
 import _ from "lodash";
-import React, { Component } from "react";
+import React from "react";
 
 import { FactItem } from "~/components/facts/list/FactItem";
 import { FlowGrid } from "~/components/lib/FlowGrid/FlowGrid";
@@ -8,13 +8,13 @@ import { SpaceCard } from "~/components/spaces/SpaceCards";
 import * as _collections from "~/lib/engine/collections";
 import * as _utils from "~/lib/engine/utils";
 
+import { GridItem } from "~/components/lib/FlowGrid/types";
 import {
   separateIntoDisconnectedComponents,
   separateIntoHeightSets,
 } from "~/lib/DAG/DAG";
 import { getNodeAncestors } from "~/lib/DAG/nodeFns";
 import { Fact } from "~/lib/engine/facts";
-import { GridItem } from "~/components/lib/FlowGrid/types";
 import { ApiSpace } from "~/lib/guesstimate_api/resources/Models";
 import { initialCanvasState } from "~/modules/canvas_state/slice";
 
@@ -30,7 +30,7 @@ type FactGridItem = Omit<GridItem, "location"> & {
 };
 
 const makeFactNodeFn =
-  (spaces) =>
+  (spaces: ApiSpace[]) =>
   (fact: Fact): FactGridItem => ({
     key: factIdToNodeId(fact),
     id: factIdToNodeId(fact),
@@ -46,7 +46,7 @@ const makeFactNodeFn =
 
 const makeSpaceNodeFn =
   (facts: Fact[]) =>
-  (s): FactGridItem => ({
+  (s: ApiSpace): FactGridItem => ({
     key: spaceIdToNodeId(s),
     id: spaceIdToNodeId(s),
     inputs: s.imported_fact_ids.map((id) => idToNodeId(id, true)),
@@ -116,130 +116,126 @@ const addLocationsToHeightOrderedComponents = (componentsHeightOrdered) => {
   return { withFinalLocations, maxRowUsed };
 };
 
+const itemsAndEdges = (facts: Fact[], spaces: ApiSpace[]) => {
+  let factNodes = facts.map(makeFactNodeFn(spaces));
+
+  const spacesToDisplay = _.filter(
+    spaces,
+    (s) => s.exported_facts_count > 0 || !_.isEmpty(s.imported_fact_ids)
+  );
+  const spaceNodes = _.map(spacesToDisplay, makeSpaceNodeFn(facts));
+
+  // Here we remove some facts from the set of fact nodes, to display them separately, outside the rest of the graph.
+  // In particular, we remove facts that are isolated (i.e. have no inputs or outputs) and orphaned facts, which are
+  // facts that are missing inputs, due to missing deletions or other abnormal data setups. We don't want to
+  // render those facts within the main graph, as they have no sensible edges we could display, so we pull them out to
+  // render with the isolated nodes at the bottom of the graph.
+  const isolatedFactNodes = _.remove(
+    factNodes,
+    (n) => _.isEmpty(n.outputs) && _.isEmpty(n.inputs)
+  );
+
+  const nodes = [...factNodes, ...spaceNodes];
+  const nodeAncestors = getNodeAncestors(nodes);
+
+  const components = separateIntoDisconnectedComponents(nodes, nodeAncestors);
+  const componentsHeightOrdered = _.map(components, separateIntoHeightSets);
+
+  const { withFinalLocations, maxRowUsed } =
+    addLocationsToHeightOrderedComponents(componentsHeightOrdered);
+
+  // Now we add locations to the isolated facts.
+  const width = Math.floor(Math.sqrt(isolatedFactNodes.length));
+  const isolatedFactNodesWithLocations = _.map(isolatedFactNodes, (n, i) => ({
+    ...n,
+    location: {
+      row: maxRowUsed + 1 + Math.floor(i / width),
+      column: i % width,
+    },
+  }));
+
+  const items = [...isolatedFactNodesWithLocations, ...withFinalLocations];
+
+  const locationById = (id) => _collections.gget(items, id, "id", "location");
+
+  let edges: any[] = [];
+  const pathStatus = "default";
+  factNodes.forEach(({ id, outputs, inputs }) => {
+    edges.push(
+      ...outputs.map((c) => ({
+        input: locationById(id),
+        inputId: id,
+        output: locationById(c),
+        outputId: c,
+        pathStatus,
+      }))
+    );
+    edges.push(
+      ...inputs.map((p) => ({
+        input: locationById(p),
+        inputId: p,
+        output: locationById(id),
+        outputId: id,
+        pathStatus,
+      }))
+    );
+  });
+
+  const bad_edges = _.remove(
+    edges,
+    (edge) =>
+      !_utils.allPropsPresent(
+        edge,
+        "input.row",
+        "input.column",
+        "output.row",
+        "output.column"
+      )
+  );
+  if (!_.isEmpty(bad_edges)) {
+    console.warn(bad_edges.length, "BAD EDGES ENCOUNTERED!");
+    console.warn(bad_edges);
+  }
+
+  return { items, edges };
+};
+
 type Props = {
-  organization: any;
+  organization: any; // unused
   facts: Fact[];
   spaces: ApiSpace[];
 };
 
-export class FactGraph extends Component<Props> {
-  itemsAndEdges() {
-    const { facts, spaces } = this.props;
+export const FactGraph: React.FC<Props> = (props) => {
+  const { items, edges } = itemsAndEdges(props.facts, props.spaces);
 
-    let factNodes = _.map(facts, makeFactNodeFn(spaces));
-
-    const spacesToDisplay = _.filter(
-      spaces,
-      (s) => s.exported_facts_count > 0 || !_.isEmpty(s.imported_fact_ids)
-    );
-    const spaceNodes = _.map(spacesToDisplay, makeSpaceNodeFn(facts));
-
-    // Here we remove some facts from the set of fact nodes, to display them separately, outside the rest of the graph.
-    // In particular, we remove facts that are isolated (i.e. have no inputs or outputs) and orphaned facts, which are
-    // facts that are missing inputs, due to missing deletions or other abnormal data setups. We don't want to
-    // render those facts within the main graph, as they have no sensible edges we could display, so we pull them out to
-    // render with the isolated nodes at the bottom of the graph.
-    const isolatedFactNodes = _.remove(
-      factNodes,
-      (n) => _.isEmpty(n.outputs) && _.isEmpty(n.inputs)
-    );
-
-    const nodes = [...factNodes, ...spaceNodes];
-    const nodeAncestors = getNodeAncestors(nodes);
-
-    const components = separateIntoDisconnectedComponents(nodes, nodeAncestors);
-    const componentsHeightOrdered = _.map(components, separateIntoHeightSets);
-
-    const { withFinalLocations, maxRowUsed } =
-      addLocationsToHeightOrderedComponents(componentsHeightOrdered);
-
-    // Now we add locations to the isolated facts.
-    const width = Math.floor(Math.sqrt(isolatedFactNodes.length));
-    const isolatedFactNodesWithLocations = _.map(isolatedFactNodes, (n, i) => ({
-      ...n,
-      location: {
-        row: maxRowUsed + 1 + Math.floor(i / width),
-        column: i % width,
-      },
-    }));
-
-    const items = [...isolatedFactNodesWithLocations, ...withFinalLocations];
-
-    const locationById = (id) => _collections.gget(items, id, "id", "location");
-
-    let edges: any[] = [];
-    const pathStatus = "default";
-    factNodes.forEach(({ id, outputs, inputs }) => {
-      edges.push(
-        ...outputs.map((c) => ({
-          input: locationById(id),
-          inputId: id,
-          output: locationById(c),
-          outputId: c,
-          pathStatus,
-        }))
-      );
-      edges.push(
-        ...inputs.map((p) => ({
-          input: locationById(p),
-          inputId: p,
-          output: locationById(id),
-          outputId: id,
-          pathStatus,
-        }))
-      );
-    });
-
-    const bad_edges = _.remove(
-      edges,
-      (edge) =>
-        !_utils.allPropsPresent(
-          edge,
-          "input.row",
-          "input.column",
-          "output.row",
-          "output.column"
-        )
-    );
-    if (!_.isEmpty(bad_edges)) {
-      console.warn(bad_edges.length, "BAD EDGES ENCOUNTERED!");
-      console.warn(bad_edges);
-    }
-
-    return { items, edges };
-  }
-
-  render() {
-    const { items, edges } = this.itemsAndEdges();
-
-    return (
-      <div className="FactGraph">
-        <FlowGrid
-          items={items}
-          onMultipleSelect={() => {}}
-          hasItemUpdated={() => false}
-          isItemEmpty={() => false}
-          edges={edges}
-          selectedRegion={[]}
-          copiedRegion={[]}
-          selectedCell={{}}
-          analyzedRegion={[]}
-          onUndo={() => {}}
-          onRedo={() => {}}
-          onSelectItem={() => {}}
-          onDeSelectAll={() => {}}
-          onAutoFillRegion={() => {}}
-          onAddItem={() => {}}
-          onMoveItem={() => {}}
-          onRemoveItems={() => {}}
-          onCopy={() => {}}
-          onPaste={() => {}}
-          onCut={() => {}}
-          showGridLines={false}
-          canvasState={initialCanvasState}
-          isModelingCanvas={false}
-        />
-      </div>
-    );
-  }
-}
+  return (
+    <div className="FactGraph">
+      <FlowGrid
+        items={items}
+        onMultipleSelect={() => {}}
+        hasItemUpdated={() => false}
+        isItemEmpty={() => false}
+        edges={edges}
+        selectedRegion={[]}
+        copiedRegion={[]}
+        selectedCell={{}}
+        analyzedRegion={[]}
+        onUndo={() => {}}
+        onRedo={() => {}}
+        onSelectItem={() => {}}
+        onDeSelectAll={() => {}}
+        onAutoFillRegion={() => {}}
+        onAddItem={() => {}}
+        onMoveItem={() => {}}
+        onRemoveItems={() => {}}
+        onCopy={() => {}}
+        onPaste={() => {}}
+        onCut={() => {}}
+        showGridLines={false}
+        canvasState={initialCanvasState}
+        isModelingCanvas={false}
+      />
+    </div>
+  );
+};

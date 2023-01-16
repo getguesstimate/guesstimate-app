@@ -3,7 +3,9 @@ import { createSelector } from "reselect";
 import * as e from "~/lib/engine/engine";
 import { RootState } from "~/modules/store";
 
-const _sameId = (idA, idB) => idA.toString() === idB.toString();
+const _sameId = (idA: string | number, idB: string | number) =>
+  idA.toString() === idB.toString();
+
 const spaceGraphSelector = (state: RootState) =>
   _.pick(state, [
     "me",
@@ -18,12 +20,10 @@ const spaceGraphSelector = (state: RootState) =>
   ]);
 
 const organizationFactsSelector = (state: RootState) =>
-  _.get(state, "facts.organizationFacts");
+  state.facts.organizationFacts;
 
-const calculatorSelector = (
-  state: RootState,
-  calculatorId: number | undefined
-) => state.calculators.find((c) => _sameId(c.id, calculatorId));
+const calculatorSelector = (state: RootState, calculatorId: number) =>
+  state.calculators.find((c) => _sameId(c.id, calculatorId));
 
 export const calculatorSpaceSelector = createSelector(
   spaceGraphSelector,
@@ -39,7 +39,7 @@ export const calculatorSpaceSelector = createSelector(
       organizationFacts
     );
 
-    const findById = (id) => metrics.find((m) => _sameId(m.id, id));
+    const findById = (id: string) => metrics.find((m) => _sameId(m.id, id));
 
     const inputs = calculator.input_ids
       .map(findById)

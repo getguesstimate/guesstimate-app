@@ -1,6 +1,6 @@
 import { CanvasLocation } from "~/lib/locationUtils";
 import React from "react";
-import { GridContext } from "./filled-cell";
+import { GridContext } from "./FilledCell";
 
 export type GridItem = {
   key: string;

@@ -24,7 +24,7 @@ import { changeMetric, removeMetrics } from "~/modules/metrics/actions";
 import { withReadableId } from "~/lib/generateVariableNames/generateMetricReadableId";
 import { shouldTransformName } from "~/lib/generateVariableNames/nameToVariableName";
 
-import { GridContext } from "~/components/lib/FlowGrid/filled-cell";
+import { GridContext } from "~/components/lib/FlowGrid/FilledCell";
 import {
   INPUT,
   INTERMEDIATE,
@@ -270,7 +270,7 @@ class MetricCard extends Component<Props, State> {
   }
 
   _relationshipType() {
-    return relationshipType(_.get(this, "props.metric.edges"));
+    return relationshipType(this.props.metric.edges);
   }
 
   _className() {
@@ -287,8 +287,8 @@ class MetricCard extends Component<Props, State> {
     return className;
   }
 
-  _shouldShowSimulation(metric) {
-    const stats = _.get(metric, "simulation.stats");
+  _shouldShowSimulation(metric: FullDenormalizedMetric) {
+    const stats = metric.simulation?.stats;
     return Boolean(stats && _.isFinite(stats.stdev) && stats.length > 5);
   }
 

@@ -28,6 +28,7 @@ export const Edges: React.FC<Props> = React.memo(
       columnWidth,
       padding: 5,
     });
+
     return (
       <div className="FlowGrid--Arrows">
         <svg className="edge" height={containerHeight} width={"100%"}>

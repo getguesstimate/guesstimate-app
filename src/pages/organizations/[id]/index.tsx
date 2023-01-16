@@ -2,7 +2,7 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 
 import { Layout } from "~/components/layouts";
-import OrganizationShow from "~/components/organizations/show/index";
+import { OrganizationShow } from "~/components/organizations/show/index";
 
 const OrganizationPage: NextPage = () => {
   const router = useRouter();

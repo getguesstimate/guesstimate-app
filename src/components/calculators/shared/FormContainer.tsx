@@ -1,20 +1,20 @@
 import _ from "lodash";
-import React, { Component } from "react";
+import React, { useState } from "react";
 
 import { CalculatorForm } from "./CalculatorForm";
 
+import { ExtendedDSpace } from "~/components/spaces/denormalized-space-selector";
 import {
   INPUT,
   INTERMEDIATE,
   OUTPUT,
   relationshipType,
 } from "~/lib/engine/graph";
-import { Calculator } from "~/modules/calculators/reducer";
-import { Optional } from "~/lib/engine/types";
-import { ExtendedDSpace } from "~/components/spaces/denormalized-space-selector";
 import { FullDenormalizedMetric } from "~/lib/engine/space";
+import { Optional } from "~/lib/engine/types";
+import { Calculator } from "~/modules/calculators/reducer";
 
-function isCalculatorAcceptableMetric(metric) {
+function isCalculatorAcceptableMetric(metric: FullDenormalizedMetric) {
   return (
     !_.isEmpty(metric.name) && !_.isEmpty(_.get(metric, "guesstimate.input"))
   );
@@ -62,179 +62,156 @@ type State = {
   calculator: Optional<Calculator, "id">;
 };
 
-export class FormContainer extends Component<Props, State> {
-  state: State = {
-    validInputs: [],
-    validOutputs: [],
-    calculator: {
-      space_id: 0, // will be configured in setup()
-      title: undefined,
-      content: undefined,
-      input_ids: [],
-      output_ids: [],
-    },
-  };
-
-  componentWillMount() {
-    this.setup();
-  }
-
-  setup() {
-    const { space } = this.props;
+export const FormContainer: React.FC<Props> = (props) => {
+  const [state, setState] = useState<State>(() => {
+    const { space } = props;
     if (!space.id) {
-      return;
+      return {
+        validInputs: [],
+        validOutputs: [],
+        calculator: {
+          space_id: 0, // will be configured in setup()
+          title: undefined,
+          content: undefined,
+          input_ids: [],
+          output_ids: [],
+        },
+      };
     }
 
-    const { validInputs, validOutputs } = this.validMetrics(space.metrics);
-
-    const calculator = this.props.calculator || {
-      title: space.name || "",
-      space_id: space.id,
-      content: space.description || "",
-      input_ids: validInputs.map((e) => e.id),
-      output_ids: validOutputs.map((e) => e.id),
-    };
-    this.setState({ calculator, validInputs, validOutputs });
-  }
-
-  validMetrics(metrics: FullDenormalizedMetric[]) {
-    const validMetrics = metrics.filter(isCalculatorAcceptableMetric);
+    const validMetrics = space.metrics.filter(isCalculatorAcceptableMetric);
     const validInputs = validMetrics.filter(
       (m) => relationshipType(m.edges) === INPUT
     );
     const validOutputs = validMetrics.filter((m) =>
       [INTERMEDIATE, OUTPUT].includes(relationshipType(m.edges))
     );
-    return { validInputs, validOutputs };
-  }
 
-  _onCreate() {
-    // this casting is a lie, necessary because it'd hard to sync props.mode and state.calculator
-    this.props.onSubmit(this.state.calculator as Calculator);
-  }
+    const calculator = props.calculator || {
+      title: space.name || "",
+      space_id: space.id,
+      content: space.description || "",
+      input_ids: validInputs.map((e) => e.id),
+      output_ids: validOutputs.map((e) => e.id),
+    };
 
-  _onMetricHide(id: string) {
-    const { calculator } = this.state;
-    this.setState({
+    return { calculator, validInputs, validOutputs };
+  });
+
+  const _isVisible = (metricId: string) => {
+    return _.some(
+      [...state.calculator.input_ids, ...state.calculator.output_ids],
+      (e) => metricId === e
+    );
+  };
+
+  const changeCalculator = (fields: Partial<Calculator>) => {
+    const { calculator } = state;
+    setState({
+      ...state,
+      calculator: {
+        ...calculator,
+        ...fields,
+      },
+    });
+  };
+
+  const orderDisplayedMetrics = (
+    metric_ids: string[],
+    validMetrics: FullDenormalizedMetric[]
+  ) => {
+    return [
+      ...metric_ids
+        .map((i) => validMetrics.find((m) => m.id === i))
+        .filter((m): m is NonNullable<typeof m> => !!m),
+      ...validMetrics.filter((i) => !_isVisible(i.id)),
+    ].map((e) => {
+      return { metric: e, isVisible: _isVisible(e.id) };
+    });
+  };
+
+  const isValid = !(
+    _.isEmpty(state.calculator.title) ||
+    _.isEmpty(state.calculator.input_ids) ||
+    _.isEmpty(state.calculator.output_ids)
+  );
+
+  const isInput = (id: string) => {
+    return _.some(state.validInputs, (e) => e.id === id);
+  };
+
+  const handleChangeContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    changeCalculator({ content: e.target.value });
+  };
+
+  const handleChangeName = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    changeCalculator({ title: e.target.value });
+  };
+
+  const handleMoveMetricTo = (id: string, destIndex: number) => {
+    const addId = (l: string[]) => addAtIndex(l, id, destIndex);
+    changeCalculator(
+      isInput(id)
+        ? { input_ids: addId(state.calculator.input_ids) }
+        : { output_ids: addId(state.calculator.output_ids) }
+    );
+  };
+
+  const handleMetricHide = (id: string) => {
+    const { calculator } = state;
+    setState({
+      ...state,
       calculator: {
         ...calculator,
         input_ids: calculator.input_ids.filter((m) => m !== id),
         output_ids: calculator.output_ids.filter((m) => m !== id),
       },
     });
-  }
+  };
 
-  _onMetricShow(id: string) {
-    const { calculator } = this.state;
-    const { input_ids, output_ids } = calculator;
+  const handleMetricShow = (id: string) => {
+    const { calculator } = state;
 
     let changes: {
       input_ids?: string[];
       output_ids?: string[];
     } = {};
-    if (this._isInput(id)) {
-      changes.input_ids = [...input_ids, id];
+    if (isInput(id)) {
+      changes.input_ids = [...calculator.input_ids, id];
     } else {
-      changes.output_ids = [...output_ids, id];
+      changes.output_ids = [...calculator.output_ids, id];
     }
 
-    this.setState({ calculator: { ...calculator, ...changes } });
-  }
+    setState({ ...state, calculator: { ...calculator, ...changes } });
+  };
 
-  _isInput(id: string) {
-    return _.some(this.state.validInputs, (e: any) => e.id === id);
-  }
+  const handleCreate = () => {
+    // this casting is a lie, necessary because it'd hard to sync props.mode and state.calculator
+    props.onSubmit(state.calculator as Calculator);
+  };
 
-  _onMoveMetricTo(id: string, destIndex: number) {
-    const {
-      calculator: { input_ids, output_ids },
-    } = this.state;
-    const addId = (l: string[]) => addAtIndex(l, id, destIndex);
-    this._changeCalculator(
-      this._isInput(id)
-        ? { input_ids: addId(input_ids) }
-        : { output_ids: addId(output_ids) }
-    );
-  }
+  const inputs = orderDisplayedMetrics(
+    state.calculator.input_ids,
+    state.validInputs
+  );
+  const outputs = orderDisplayedMetrics(
+    state.calculator.output_ids,
+    state.validOutputs
+  );
 
-  _changeCalculator(fields: Partial<Calculator>) {
-    const { calculator } = this.state;
-    this.setState({
-      calculator: {
-        ...calculator,
-        ...fields,
-      },
-    });
-  }
-
-  _isVisible(metricId: string) {
-    const {
-      calculator: { input_ids, output_ids },
-    } = this.state;
-    return _.some([...input_ids, ...output_ids], (e) => metricId === e);
-  }
-
-  _orderDisplayedMetrics(
-    metric_ids: string[],
-    validMetrics: FullDenormalizedMetric[]
-  ) {
-    return [
-      ...metric_ids
-        .map((i) => validMetrics.find((m) => m.id === i))
-        .filter((m): m is NonNullable<typeof m> => !!m),
-      ...validMetrics.filter((i) => !this._isVisible(i.id)),
-    ].map((e) => {
-      return { metric: e, isVisible: this._isVisible(e.id) };
-    });
-  }
-
-  _onChangeName(e: React.ChangeEvent<HTMLTextAreaElement>) {
-    this._changeCalculator({ title: e.target.value });
-  }
-
-  _onChangeContent(e: React.ChangeEvent<HTMLTextAreaElement>) {
-    this._changeCalculator({ content: e.target.value });
-  }
-
-  _isValid() {
-    const {
-      calculator: { title, input_ids, output_ids },
-    } = this.state;
-    return !(_.isEmpty(title) || _.isEmpty(input_ids) || _.isEmpty(output_ids));
-  }
-
-  render() {
-    const {
-      props: { buttonText },
-      state: { validInputs, validOutputs, calculator },
-    } = this;
-    if (_.isEmpty(calculator)) {
-      return false;
-    }
-
-    const inputs = this._orderDisplayedMetrics(
-      calculator.input_ids,
-      validInputs
-    );
-    const outputs = this._orderDisplayedMetrics(
-      calculator.output_ids,
-      validOutputs
-    );
-
-    return (
-      <CalculatorForm
-        calculator={calculator}
-        inputs={inputs}
-        outputs={outputs}
-        onMetricHide={this._onMetricHide.bind(this)}
-        onMetricShow={this._onMetricShow.bind(this)}
-        onMoveMetricTo={this._onMoveMetricTo.bind(this)}
-        onChangeName={this._onChangeName.bind(this)}
-        onChangeContent={this._onChangeContent.bind(this)}
-        onSubmit={this._onCreate.bind(this)}
-        isValid={this._isValid()}
-        buttonText={buttonText}
-      />
-    );
-  }
-}
+  return (
+    <CalculatorForm
+      calculator={state.calculator}
+      inputs={inputs}
+      outputs={outputs}
+      onMetricHide={handleMetricHide}
+      onMetricShow={handleMetricShow}
+      onMoveMetricTo={handleMoveMetricTo}
+      onChangeName={handleChangeName}
+      onChangeContent={handleChangeContent}
+      onSubmit={handleCreate}
+      isValid={isValid}
+      buttonText={props.buttonText}
+    />
+  );
+};

@@ -40,8 +40,8 @@ export class DropDown extends Component<Props, State> {
     document.removeEventListener("click", this.handleDocumentClick, false);
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (!prevState.isOpen && this.state.isOpen && !!this.props.onOpen) {
+  componentDidUpdate(prevProps: Props, prevState: State) {
+    if (!prevState.isOpen && this.state.isOpen && this.props.onOpen) {
       this.props.onOpen();
     }
   }

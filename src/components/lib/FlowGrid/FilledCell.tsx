@@ -1,10 +1,15 @@
-import React, { Component, CSSProperties, useEffect } from "react";
+import React, {
+  CSSProperties,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+} from "react";
 
 import { ConnectDragSource, useDrag, useDragLayer, XYCoord } from "react-dnd";
 
 import { CanvasLocation } from "~/lib/locationUtils";
 
-import { getClassName } from "~/lib/engine/utils";
+import clsx from "clsx";
 import { getEmptyImage } from "react-dnd-html5-backend";
 import { GridItem } from "./types";
 
@@ -71,12 +76,7 @@ const DragPreview: React.FC<{ width: number; children: React.ReactNode }> = ({
   );
 };
 
-type CollectedProps = {
-  isDragging: boolean;
-  connectDragSource: ConnectDragSource;
-};
-
-type OuterProps = {
+type Props = {
   hover: boolean;
   gridKeyPress(e: React.SyntheticEvent): void;
   forceFlowGridUpdate(): void;
@@ -92,91 +92,9 @@ type OuterProps = {
   onEndDrag(location: CanvasLocation): void;
 };
 
-type State = {
-  width: number;
-};
-
-type Props = CollectedProps & OuterProps;
-
-export class InnerItemCell extends Component<Props, State> {
-  containerRef: React.RefObject<HTMLDivElement>;
-
-  state = {
-    width: 0,
-  };
-
-  constructor(props: Props) {
-    super(props);
-    this.containerRef = React.createRef();
-  }
-
-  componentWillReceiveProps(newProps: Props) {
-    const startedDragging = !this.props.isDragging && newProps.isDragging;
-    const childItem =
-      this.containerRef && this.containerRef.current!.children[0];
-
-    if (startedDragging && childItem) {
-      this.setState({ width: (childItem as any).offsetWidth });
-    }
-  }
-
-  onMouseUp(e: React.MouseEvent) {
-    if (
-      e.button === 0 &&
-      (e.target as any).className === "FlowGridFilledCell"
-    ) {
-      this.focus();
-    }
-  }
-
-  focus() {
-    this.containerRef.current?.focus();
-  }
-
-  render() {
-    const className = getClassName(
-      "FlowGridFilledCell",
-      this.props.isDragging ? "isDragging" : null
-    );
-
-    // This forces dragging cells to not change their row heights. A bit hacky, but gives a better user experience in my
-    // opinion and keeps background layer in sync with real row heights during drag (which skips normal rendering tree).
-    const styles = this.props.isDragging
-      ? { minHeight: `${this.props.getRowHeight() - 1}px` }
-      : {};
-
-    const item = this.props.item.component({
-      hovered: this.props.hover,
-      inSelectedCell: this.props.inSelectedCell,
-      selectedFrom: this.props.selectedFrom,
-      gridKeyPress: this.props.gridKeyPress,
-      connectDragSource: this.props.connectDragSource,
-      forceFlowGridUpdate: this.props.forceFlowGridUpdate,
-      onReturn: this.props.onReturn,
-      onTab: this.props.onTab,
-    });
-
-    return (
-      <div
-        className={className}
-        style={styles}
-        onMouseUp={this.onMouseUp.bind(this)}
-        ref={this.containerRef}
-        tabIndex={-1}
-      >
-        {this.props.isDragging ? (
-          <DragPreview width={this.state.width}>{item}</DragPreview>
-        ) : (
-          item
-        )}
-      </div>
-    );
-  }
-}
-
-const DragItemCell = React.forwardRef<InnerItemCell, OuterProps>(
+export const FilledCell = React.forwardRef<{ focus(): void }, Props>(
   (props, ref) => {
-    const [collectedProps, drag, dragPreview] = useDrag<
+    const [{ isDragging }, drag, dragPreview] = useDrag<
       { location: CanvasLocation },
       {
         location: CanvasLocation;
@@ -217,15 +135,64 @@ const DragItemCell = React.forwardRef<InnerItemCell, OuterProps>(
       dragPreview(getEmptyImage());
     }, []);
 
+    const widthRef = useRef<number>(0);
+    const containerRef = useRef<HTMLDivElement | null>(null);
+
+    const focus = () => {
+      containerRef.current?.focus();
+    };
+
+    useImperativeHandle(ref, () => ({
+      focus,
+    }));
+
+    const handleMouseUp = (e: React.MouseEvent) => {
+      if (
+        e.button === 0 &&
+        (e.target as any).className === "FlowGridFilledCell"
+      ) {
+        focus();
+      }
+    };
+
+    useEffect(() => {
+      const childItem = containerRef.current?.children[0];
+      if (!isDragging && childItem) {
+        widthRef.current = (childItem as any).offsetWidth;
+      }
+    });
+
+    // This forces dragging cells to not change their row heights. A bit hacky, but gives a better user experience in my
+    // opinion and keeps background layer in sync with real row heights during drag (which skips normal rendering tree).
+    const styles = isDragging
+      ? { minHeight: `${props.getRowHeight() - 1}px` }
+      : {};
+
+    const item = props.item.component({
+      hovered: props.hover,
+      inSelectedCell: props.inSelectedCell,
+      selectedFrom: props.selectedFrom,
+      gridKeyPress: props.gridKeyPress,
+      connectDragSource: drag,
+      forceFlowGridUpdate: props.forceFlowGridUpdate,
+      onReturn: props.onReturn,
+      onTab: props.onTab,
+    });
+
     return (
-      <InnerItemCell
-        {...props}
-        {...collectedProps}
-        ref={ref}
-        connectDragSource={drag}
-      />
+      <div
+        className={clsx("FlowGridFilledCell", isDragging && "isDragging")}
+        style={styles}
+        onMouseUp={handleMouseUp}
+        ref={containerRef}
+        tabIndex={-1}
+      >
+        {isDragging ? (
+          <DragPreview width={widthRef.current}>{item}</DragPreview>
+        ) : (
+          item
+        )}
+      </div>
     );
   }
 );
-
-export default DragItemCell;

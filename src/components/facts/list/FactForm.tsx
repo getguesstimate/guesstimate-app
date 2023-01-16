@@ -72,7 +72,7 @@ class FactForm_ extends Component<Props, State> {
     submissionPendingOnSimulation: false,
   };
 
-  componentDidUpdate(_, prevState) {
+  componentDidUpdate(_: Props, prevState: State) {
     if (
       this.state.currentExpressionSimulated &&
       prevState.submissionPendingOnSimulation

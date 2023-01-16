@@ -1,9 +1,16 @@
-import { SimulationDAG } from "./DAG";
+import { SimulationDAG, SimulationNodeParams } from "./DAG";
 import { SimulationNode } from "./node";
 
-function getNodesToSimulate(DAG: SimulationDAG, options) {
+export type SimulatorOptions = {
+  // mutually exclusive
+  simulateIds?: string[];
+  simulateStrictSubsetFrom?: string[];
+  simulateSubsetFrom?: string[];
+};
+
+function getNodesToSimulate(DAG: SimulationDAG, options: SimulatorOptions) {
   if (!!options.simulateIds) {
-    return DAG.nodes.filter(({ id }) => options.simulateIds.includes(id));
+    return DAG.nodes.filter(({ id }) => options.simulateIds!.includes(id));
   } else if (!!options.simulateStrictSubsetFrom) {
     return DAG.strictSubsetFrom(options.simulateStrictSubsetFrom);
   } else if (!!options.simulateSubsetFrom) {
@@ -19,16 +26,16 @@ export class Simulator {
   index: number;
   numSamples: number;
   yieldSims: (nodeId: string, sim: unknown) => void;
-  getCurrPropId: any;
+  getCurrPropId: (nodeId: string) => number;
   propagationId: number;
 
   constructor(
-    nodes,
+    nodes: SimulationNodeParams[],
     numSamples: number,
-    options,
+    options: SimulatorOptions,
     propagationId: number,
     yieldSims: (nodeId: string, sim: unknown) => void,
-    getCurrPropId
+    getCurrPropId: (nodeId: string) => number
   ) {
     // First, we'll build the DAG from the passed nodes.
     this.DAG = new SimulationDAG(nodes);

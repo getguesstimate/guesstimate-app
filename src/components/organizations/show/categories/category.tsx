@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 
 import { FactListContainer } from "~/components/facts/list/FactListContainer";
 import { CategoryForm } from "./form";
@@ -12,63 +12,54 @@ type HeaderProps = {
   onDelete(c: FactCategory): void;
 };
 
-class CategoryHeader extends Component<HeaderProps> {
-  state = {
-    editing: false,
-    hovering: false,
+const CategoryHeader: React.FC<HeaderProps> = (props) => {
+  const [editing, setEditing] = useState(false);
+  const [hovering, setHovering] = useState(false);
+
+  const handleEnter = () => {
+    setHovering(true);
+  };
+  const handleLeave = () => {
+    setHovering(false);
+  };
+  const handleStartEditing = () => {
+    setEditing(true);
+  };
+  const handleStopEditing = () => {
+    setEditing(false);
+  };
+  const handleSaveEdits = (editedCategory: FactCategory) => {
+    props.onEdit(editedCategory);
+    handleStopEditing();
+  };
+  const handleDelete = () => {
+    props.onDelete(props.category);
   };
 
-  onEnter() {
-    this.setState({ hovering: true });
-  }
-  onLeave() {
-    this.setState({ hovering: false });
-  }
-  onStartEditing() {
-    this.setState({ editing: true });
-  }
-  onStopEditing() {
-    this.setState({ editing: false });
-  }
-  onSaveEdits(editedCategory: FactCategory) {
-    this.props.onEdit(editedCategory);
-    this.onStopEditing();
-  }
-  onDelete() {
-    this.props.onDelete(this.props.category);
-  }
-
-  renderEditHeader() {
+  const renderEditHeader = () => {
     return (
       <CategoryForm
-        startingCategory={this.props.category}
-        onSubmit={this.onSaveEdits.bind(this)}
-        onCancel={this.onStopEditing.bind(this)}
-        existingCategoryNames={this.props.existingCategoryNames}
+        startingCategory={props.category}
+        onSubmit={handleSaveEdits}
+        onCancel={handleStopEditing}
+        existingCategoryNames={props.existingCategoryNames}
       />
     );
-  }
+  };
 
-  renderShowHeader() {
-    const { category } = this.props;
+  const renderShowHeader = () => {
     return (
       <div className="row">
         <div className="col-md-7">
-          <h3>{category.name}</h3>
+          <h3>{props.category.name}</h3>
         </div>
         <div className="col-md-5">
-          {!!this.state.hovering && (
+          {hovering && (
             <div className="category-actions">
-              <span
-                className="ui button tiny"
-                onClick={this.onStartEditing.bind(this)}
-              >
+              <span className="ui button tiny" onClick={handleStartEditing}>
                 Edit
               </span>
-              <span
-                className="ui button tiny"
-                onClick={this.onDelete.bind(this)}
-              >
+              <span className="ui button tiny" onClick={handleDelete}>
                 Delete
               </span>
             </div>
@@ -76,31 +67,27 @@ class CategoryHeader extends Component<HeaderProps> {
         </div>
       </div>
     );
-  }
+  };
 
-  render() {
-    return (
-      <div
-        className="category-header"
-        onMouseEnter={this.onEnter.bind(this)}
-        onMouseLeave={this.onLeave.bind(this)}
-      >
-        {!!this.state.editing
-          ? this.renderEditHeader()
-          : this.renderShowHeader()}
-      </div>
-    );
-  }
-}
+  return (
+    <div
+      className="category-header"
+      onMouseEnter={handleEnter}
+      onMouseLeave={handleLeave}
+    >
+      {editing ? renderEditHeader() : renderShowHeader()}
+    </div>
+  );
+};
 
-const NullCategoryHeader = ({}) => (
+const NullCategoryHeader: React.FC = () => (
   <div className="category-header">
     <h3>Uncategorized</h3>
   </div>
 );
 
 type Props = {
-  category: FactCategory;
+  category?: FactCategory;
   categories: FactCategory[];
   facts: Fact[];
   onEditCategory(c: FactCategory): void;
@@ -119,15 +106,16 @@ export const Category: React.FC<Props> = ({
   existingVariableNames,
 }) => (
   <div>
-    {!!category && (
+    {category ? (
       <CategoryHeader
         category={category}
         existingCategoryNames={categories.map((c) => c.name)}
         onEdit={onEditCategory}
         onDelete={onDeleteCategory}
       />
+    ) : (
+      <NullCategoryHeader />
     )}
-    {!category && <NullCategoryHeader />}
     <FactListContainer
       organization={organization}
       facts={facts}
