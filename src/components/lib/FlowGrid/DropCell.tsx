@@ -178,7 +178,7 @@ class Cell extends Component<Props> {
   }
 }
 
-const DropCell: React.FC<OwnProps> = (props) => {
+export const DropCell: React.FC<OwnProps> = (props) => {
   const [collectedProps, drop] = useDrop({
     accept: "card",
     collect(monitor) {
@@ -193,5 +193,3 @@ const DropCell: React.FC<OwnProps> = (props) => {
 
   return <Cell {...props} {...collectedProps} connectDropTarget={drop} />;
 };
-
-export default DropCell;

@@ -117,5 +117,3 @@ export const Plans: React.FC<Props> = ({
     </div>
   );
 };
-
-export default Plans;

@@ -1,4 +1,4 @@
-export default function numberShow(n: number, p = 2) {
+export function numberShow(n: number, p = 2) {
   const ns = new NumberShower(n, p);
   return ns.convert();
 }

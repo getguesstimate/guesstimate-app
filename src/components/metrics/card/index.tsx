@@ -8,7 +8,8 @@ import Icon from "~/components/react-fa-patched";
 import { MetricToolTip } from "./MetricToolTip";
 import { hasMetricUpdated } from "./updated";
 
-import DistributionEditor, {
+import {
+  DistributionEditor,
   UnwrappedDistributionEditor,
 } from "~/components/distributions/editor/index";
 import { MetricModal } from "~/components/metrics/MetricModal";
@@ -52,6 +53,79 @@ const ScatterTip: React.FC<{
   </ToolTip>
 );
 
+const MetricSidebar: React.FC<{
+  onOpenModal(): void;
+  onRemoveMetric(): void;
+  showAnalysis: boolean;
+  onBeginAnalysis(): void;
+  onEndAnalysis(): void;
+  canBeMadeFact: boolean;
+  exportedAsFact: boolean;
+  onMakeFact(): void;
+  isAnalyzedMetric: boolean;
+}> = ({
+  onOpenModal,
+  onBeginAnalysis,
+  onEndAnalysis,
+  canBeMadeFact,
+  exportedAsFact,
+  onMakeFact,
+  onRemoveMetric,
+  showAnalysis,
+  isAnalyzedMetric,
+}) => (
+  <div className="MetricSidebar">
+    <MetricSidebarItem
+      icon={<Icon name="expand" />}
+      name="Expand"
+      onClick={onOpenModal}
+    />
+    {showAnalysis && !isAnalyzedMetric && (
+      <MetricSidebarItem
+        icon={<Icon name="bar-chart" />}
+        name="Sensitivity"
+        onClick={onBeginAnalysis}
+      />
+    )}
+    {showAnalysis && isAnalyzedMetric && (
+      <MetricSidebarItem
+        className="analyzing"
+        icon={<Icon name="close" />}
+        name={"Sensitivity"}
+        onClick={onEndAnalysis}
+      />
+    )}
+    {canBeMadeFact && !exportedAsFact && (
+      <MetricSidebarItem
+        icon={<i className="ion-ios-redo" />}
+        name="Export"
+        onClick={onMakeFact}
+      />
+    )}
+    <MetricSidebarItem
+      icon={<Icon name="trash" />}
+      name="Delete"
+      onClick={onRemoveMetric}
+    />
+  </div>
+);
+
+const MetricSidebarItem: React.FC<{
+  className?: string;
+  onClick(): void;
+  icon: React.ReactElement;
+  name: string;
+}> = ({ className, onClick, icon, name }) => (
+  <a
+    href="#"
+    className={`MetricSidebarItem ${className && className}`}
+    onMouseDown={onClick}
+  >
+    <span className="MetricSidebarItem--icon">{icon}</span>
+    <span className="MetricSidebarItem--name">{name}</span>
+  </a>
+);
+
 type Props = {
   canvasState: CanvasState;
   isInScreenshot: boolean;
@@ -68,7 +142,7 @@ type State = {
   sidebarIsOpen: boolean;
 };
 
-class MetricCard extends Component<Props, State> {
+class UnconnectedMetricCard extends Component<Props, State> {
   state = {
     modalIsOpen: false,
     sidebarIsOpen: false,
@@ -445,77 +519,4 @@ class MetricCard extends Component<Props, State> {
   }
 }
 
-export default connect(null)(MetricCard);
-
-const MetricSidebar: React.FC<{
-  onOpenModal(): void;
-  onRemoveMetric(): void;
-  showAnalysis: boolean;
-  onBeginAnalysis(): void;
-  onEndAnalysis(): void;
-  canBeMadeFact: boolean;
-  exportedAsFact: boolean;
-  onMakeFact(): void;
-  isAnalyzedMetric: boolean;
-}> = ({
-  onOpenModal,
-  onBeginAnalysis,
-  onEndAnalysis,
-  canBeMadeFact,
-  exportedAsFact,
-  onMakeFact,
-  onRemoveMetric,
-  showAnalysis,
-  isAnalyzedMetric,
-}) => (
-  <div className="MetricSidebar">
-    <MetricSidebarItem
-      icon={<Icon name="expand" />}
-      name="Expand"
-      onClick={onOpenModal}
-    />
-    {showAnalysis && !isAnalyzedMetric && (
-      <MetricSidebarItem
-        icon={<Icon name="bar-chart" />}
-        name="Sensitivity"
-        onClick={onBeginAnalysis}
-      />
-    )}
-    {showAnalysis && isAnalyzedMetric && (
-      <MetricSidebarItem
-        className="analyzing"
-        icon={<Icon name="close" />}
-        name={"Sensitivity"}
-        onClick={onEndAnalysis}
-      />
-    )}
-    {canBeMadeFact && !exportedAsFact && (
-      <MetricSidebarItem
-        icon={<i className="ion-ios-redo" />}
-        name="Export"
-        onClick={onMakeFact}
-      />
-    )}
-    <MetricSidebarItem
-      icon={<Icon name="trash" />}
-      name="Delete"
-      onClick={onRemoveMetric}
-    />
-  </div>
-);
-
-const MetricSidebarItem: React.FC<{
-  className?: string;
-  onClick(): void;
-  icon: React.ReactElement;
-  name: string;
-}> = ({ className, onClick, icon, name }) => (
-  <a
-    href="#"
-    className={`MetricSidebarItem ${className && className}`}
-    onMouseDown={onClick}
-  >
-    <span className="MetricSidebarItem--icon">{icon}</span>
-    <span className="MetricSidebarItem--name">{name}</span>
-  </a>
-);
+export const MetricCard = connect(null)(UnconnectedMetricCard);

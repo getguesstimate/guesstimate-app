@@ -3,7 +3,7 @@ import React, { useCallback } from "react";
 
 import { useAppDispatch, useAppSelector } from "~/modules/hooks";
 import * as meActions from "~/modules/me/actions";
-import Settings from "./Settings";
+import { Settings } from "./Settings";
 
 type Props = {
   onClose(): void;

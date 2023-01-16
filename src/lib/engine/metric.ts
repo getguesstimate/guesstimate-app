@@ -7,7 +7,7 @@ import { Guesstimate } from "~/modules/guesstimates/reducer";
 import { Metric } from "~/modules/metrics/reducer";
 import { Simulation } from "~/modules/simulations/reducer";
 import { RootState } from "~/modules/store";
-import generateRandomReadableId from "./metric/generate_random_readable_id";
+import { generateRandomReadableId } from "./metric/generate_random_readable_id";
 
 export type DenormalizedMetric = Metric & {
   guesstimate: Guesstimate;

@@ -23,7 +23,7 @@ type Props = {
     typeof mapStateToProps
   >;
 
-class FirstSubscriptionContainer extends Component<Props> {
+class UnconnectedFirstSubscriptionContainer extends Component<Props> {
   componentDidMount() {
     firstSubscriptionActions.flowStageReset();
 
@@ -87,4 +87,6 @@ class FirstSubscriptionContainer extends Component<Props> {
   }
 }
 
-export default connect(mapStateToProps)(withRouter(FirstSubscriptionContainer));
+export const FirstSubscriptionContainer = connect(mapStateToProps)(
+  withRouter(UnconnectedFirstSubscriptionContainer)
+);

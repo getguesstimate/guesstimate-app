@@ -1,7 +1,7 @@
 import _ from "lodash";
 import React from "react";
 
-import DistributionEditor from "~/components/distributions/editor/index";
+import { DistributionEditor } from "~/components/distributions/editor/index";
 import { HistogramWithStats } from "~/components/simulations/HistogramWithStats";
 import { ButtonClose } from "~/components/utility/buttons/close";
 import { DropDown } from "~/components/utility/DropDown";

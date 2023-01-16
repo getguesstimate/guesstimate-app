@@ -1,4 +1,4 @@
-import numberShow from "./numberShower";
+import { numberShow } from "./numberShower";
 
 describe("NumberShow", () => {
   describe("#with two units of precision", () => {

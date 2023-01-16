@@ -2,7 +2,7 @@ import _ from "lodash";
 import React, { useEffect, useRef } from "react";
 
 import { FlowGrid } from "~/components/lib/FlowGrid/FlowGrid";
-import Metric from "~/components/metrics/card/index";
+import { MetricCard } from "~/components/metrics/card/index";
 
 import { fillRegion } from "~/modules/auto_fill_region/actions";
 import * as canvasStateActions from "~/modules/canvas_state/actions";
@@ -195,7 +195,7 @@ export const SpaceCanvas: React.FC<Props> = ({
     return {
       key: metric.id,
       location: metric.location,
-      component: (context) => <Metric {...props} {...context} />,
+      component: (context) => <MetricCard {...props} {...context} />,
       props,
     };
   };

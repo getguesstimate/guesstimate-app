@@ -24,7 +24,7 @@ import { userOrganizationInvitationsR } from "./userOrganizationInvitations/redu
 import { userOrganizationMembershipsR } from "./userOrganizationMemberships/reducer";
 import { usersR } from "./users/reducer";
 
-const rootReducer = combineReducers({
+export const rootReducer = combineReducers({
   displayError: displayErrorR,
   metrics: metricsR,
   guesstimates: guesstimatesR,
@@ -49,5 +49,3 @@ const rootReducer = combineReducers({
   facts: factsR,
   factCategories: factCategoriesR,
 });
-
-export default rootReducer;

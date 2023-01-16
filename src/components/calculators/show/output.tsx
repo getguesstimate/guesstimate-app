@@ -1,7 +1,7 @@
 import _ from "lodash";
-import React, { Component, useState } from "react";
+import React, { useState } from "react";
 
-import numberShow from "~/lib/numberShower/numberShower";
+import { numberShow } from "~/lib/numberShower/numberShower";
 
 import { hasErrors } from "~/lib/engine/simulation";
 import { FullDenormalizedMetric } from "~/lib/engine/space";

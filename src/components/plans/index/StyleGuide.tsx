@@ -41,7 +41,7 @@ const options: {
   },
 ];
 
-const PlanStyleGuide: React.FC = () => {
+export const PlanStyleGuide: React.FC = () => {
   const fakeCallbacks = {
     onChoose() {},
     onNewOrganizationNavigation() {},
@@ -63,5 +63,3 @@ const PlanStyleGuide: React.FC = () => {
     </div>
   );
 };
-
-export default PlanStyleGuide;

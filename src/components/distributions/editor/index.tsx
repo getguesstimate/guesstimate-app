@@ -189,6 +189,6 @@ export class UnwrappedDistributionEditor extends Component<Props> {
   }
 }
 
-export default connect(null, null, null, { forwardRef: true })(
-  UnwrappedDistributionEditor
-);
+export const DistributionEditor = connect(null, null, null, {
+  forwardRef: true,
+})(UnwrappedDistributionEditor);

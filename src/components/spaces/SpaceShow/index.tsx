@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 
 import Head from "next/head";
 
-import { EditCalculatorForm } from "~/components/calculators/edit";
+import { EditCalculatorForm } from "~/components/calculators/EditCalculatorForm";
 import { NewCalculatorForm } from "~/components/calculators/new";
 import { CalculatorCompressedShow } from "~/components/calculators/show/CalculatorCompressedShow";
 import { FactListContainer } from "~/components/facts/list/FactListContainer";
@@ -163,7 +163,7 @@ type State = {
   rightSidebar: RightSidebarState;
 };
 
-class SpaceShow extends Component<Props, State> {
+class UnconnectedSpaceShow extends Component<Props, State> {
   state: State = {
     showLeftSidebar: true,
     showTutorial: !!_.get(this.props.me, "profile.needs_tutorial"),
@@ -644,6 +644,6 @@ class SpaceShow extends Component<Props, State> {
   }
 }
 
-export default connect(mapStateToProps)(
-  connect(denormalizedSpaceSelector)(withRouter(SpaceShow))
+export const SpaceShow = connect(mapStateToProps)(
+  connect(denormalizedSpaceSelector)(withRouter(UnconnectedSpaceShow))
 );

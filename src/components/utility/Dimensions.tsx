@@ -14,7 +14,7 @@ function defaultGetHeight(element) {
   return element.clientHeight;
 }
 
-export default function Dimensions({
+export function Dimensions({
   getHeight = defaultGetHeight,
   getWidth = defaultGetWidth,
 } = {}) {

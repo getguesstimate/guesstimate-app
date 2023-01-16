@@ -1,4 +1,5 @@
-export default class InputToGuesstimate {
+// unused
+export class InputToGuesstimate {
   input: any;
 
   constructor(input) {

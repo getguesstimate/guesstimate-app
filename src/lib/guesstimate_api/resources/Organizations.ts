@@ -1,6 +1,6 @@
-import AbstractResource, { Callback } from "../AbstractResource";
+import { AbstractResource, Callback } from "../AbstractResource";
 
-export default class Organizations extends AbstractResource {
+export class Organizations extends AbstractResource {
   get({ organizationId }, callback: Callback) {
     const url = `organizations/${organizationId}`;
     const method = "GET";

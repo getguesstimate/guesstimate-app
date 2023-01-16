@@ -4,7 +4,7 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
 import { BackgroundContainer } from "./BackgroundContainer";
-import Cell from "./cell";
+import { DropCell } from "./DropCell";
 
 import { EdgeShape } from "~/components/spaces/SpaceCanvas";
 import {
@@ -389,7 +389,7 @@ export const FlowGrid: React.FC<Props> = ({
       !state.dragSelecting &&
       !selectedRegionNotOneByOne;
     return (
-      <Cell
+      <DropCell
         onMouseUp={() => {
           onCellMouseUp();
         }}

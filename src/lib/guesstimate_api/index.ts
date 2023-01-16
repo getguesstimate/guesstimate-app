@@ -1,14 +1,14 @@
-import Models from "./resources/Models";
-import Organizations from "./resources/Organizations";
-import Users from "./resources/Users";
+import { Models } from "./resources/Models";
+import { Organizations } from "./resources/Organizations";
+import { Users } from "./resources/Users";
 import { Calculators } from "./resources/Calculators";
-import Accounts from "./resources/Accounts";
-import Copies from "./resources/Copies";
-import UserOrganizationMemberships from "./resources/UserOrganizationMemberships";
+import { Accounts } from "./resources/Accounts";
+import { Copies } from "./resources/Copies";
+import { UserOrganizationMemberships } from "./resources/UserOrganizationMemberships";
 import { RootState } from "~/modules/store";
 import { rootUrl } from "~/server/guesstimate-api/constants";
 
-export default class GuesstimateApi {
+export class GuesstimateApi {
   host: string;
   api_token?: string;
   models: Models;

@@ -1,7 +1,7 @@
 //generateReadableId creates a readableId from the name of a metric.
 //It takes a param, otherNames, to ensure that there are no duplicates
 
-export default function generateRandomReadableId(existing: string[] = []) {
+export function generateRandomReadableId(existing: string[] = []) {
   let attempt = readableIdAttempt();
   if (!isDuplicate(attempt, existing)) {
     return attempt;

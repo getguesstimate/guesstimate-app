@@ -1,4 +1,4 @@
-import AbstractResource, { Callback } from "../AbstractResource";
+import { AbstractResource, Callback } from "../AbstractResource";
 
 import * as yup from "yup";
 
@@ -28,7 +28,7 @@ export type ApiUserList = yup.InferType<typeof userListSchema>;
 
 export type ApiUserMemberships = yup.InferType<typeof userMembershipsSchema>;
 
-export default class Users extends AbstractResource {
+export class Users extends AbstractResource {
   async get({ userId }): Promise<ApiUser> {
     const response = await this.call({ method: "GET", url: `users/${userId}` });
     const result = await userSchema.validate(response);

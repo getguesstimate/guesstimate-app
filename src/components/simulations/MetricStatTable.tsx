@@ -1,5 +1,6 @@
 import React from "react";
 
+// unused?
 export const MetricStatTable: React.FC<{ stats: any }> = ({ stats }) => (
   <table className="MetricStatTable">
     <tbody>
@@ -31,5 +32,3 @@ export const MetricStatTable: React.FC<{ stats: any }> = ({ stats }) => (
     </tbody>
   </table>
 );
-
-export default MetricStatTable;

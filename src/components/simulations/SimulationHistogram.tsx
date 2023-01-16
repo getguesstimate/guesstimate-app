@@ -3,7 +3,7 @@ import { Component } from "react";
 
 import { Histogram } from "~/components/lib/histogram";
 
-import Dimensions from "~/components/utility/react-dimensions";
+import { Dimensions } from "~/components/utility/Dimensions";
 
 type Props = {
   height: number;

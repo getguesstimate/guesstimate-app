@@ -3,7 +3,7 @@ import _ from "lodash";
 import React from "react";
 
 import { Card } from "~/components/utility/Card";
-import Plan from "~/lib/config/plan";
+import { Plan } from "~/lib/config/plan";
 
 const PlanC: React.FC<{ planId: string | undefined }> = ({ planId }) => (
   <div className="Plan">
@@ -64,7 +64,7 @@ type Props = {
   onRefresh?(): void;
 };
 
-const Settings: React.FC<Props> = ({
+export const Settings: React.FC<Props> = ({
   planId,
   onClose,
   portalUrl,
@@ -98,4 +98,3 @@ const Settings: React.FC<Props> = ({
     </div>
   );
 };
-export default Settings;

@@ -1,4 +1,4 @@
-import AbstractResource from "../AbstractResource";
+import { AbstractResource } from "../AbstractResource";
 
 import * as yup from "yup";
 import { userSchema } from "./Users";
@@ -38,7 +38,7 @@ const spaceListSchema = yup.object({
 export type ApiSpace = yup.InferType<typeof spaceSchema>;
 export type ApiSpaceList = yup.InferType<typeof spaceListSchema>;
 
-export default class Models extends AbstractResource {
+export class Models extends AbstractResource {
   async list({ userId, organizationId }: any) {
     const url = userId
       ? `users/${userId}/spaces`

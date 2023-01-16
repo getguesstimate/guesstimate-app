@@ -1,6 +1,6 @@
-import AbstractResource, { Callback } from "../AbstractResource";
+import { AbstractResource, Callback } from "../AbstractResource";
 
-export default class Copies extends AbstractResource {
+export class Copies extends AbstractResource {
   create(msg, callback: Callback) {
     const url = `spaces/${msg.spaceId}/copies`;
     const method = "POST";

@@ -1,8 +1,8 @@
 import React from "react";
 
 import { ComponentEditor } from "~/components/utility/ComponentEditor";
-import Plan from "~/lib/config/plan";
-import Settings from "./Settings";
+import { Plan } from "~/lib/config/plan";
+import { Settings } from "./Settings";
 
 export const SettingsStyleGuide: React.FC = () => {
   const planIds = Plan.all().map((e) => e.id);

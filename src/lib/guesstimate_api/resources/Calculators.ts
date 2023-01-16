@@ -1,4 +1,4 @@
-import AbstractResource, { Callback } from "../AbstractResource";
+import { AbstractResource } from "../AbstractResource";
 
 import * as yup from "yup";
 

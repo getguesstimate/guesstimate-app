@@ -2,7 +2,7 @@ import _ from "lodash";
 
 import * as _collections from "./collections";
 import * as _guesstimate from "./guesstimate";
-import generateRandomReadableId from "./metric/generate_random_readable_id";
+import { generateRandomReadableId } from "./metric/generate_random_readable_id";
 import * as _organization from "./organization";
 import { NUM_SAMPLES } from "./simulation";
 import * as _utils from "./utils";

@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { replaceByMap } from "~/lib/engine/utils";
 
-import generateRandomReadableId from "~/lib/engine/metric/generate_random_readable_id";
+import { generateRandomReadableId } from "~/lib/engine/metric/generate_random_readable_id";
 import { STOCHASTIC_FUNCTIONS } from "./simulator-worker/simulator/evaluator";
 import { GuesstimateWorker } from "~/lib/window";
 import { PropagationError } from "~/lib/propagation/errors";

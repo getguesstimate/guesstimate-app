@@ -3,7 +3,7 @@ import React from "react";
 
 import LogoWord from "../../../public/assets/logo-word-no-beta.png";
 
-const Home: React.FC = () => {
+export const Home: React.FC = () => {
   return (
     <div className="homePage">
       <div className="container-fluid full-width">
@@ -88,5 +88,3 @@ const Home: React.FC = () => {
     </div>
   );
 };
-
-export default Home;

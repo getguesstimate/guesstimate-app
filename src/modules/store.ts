@@ -1,12 +1,12 @@
-import rootReducer from "~/modules/reducers";
 import createSagaMiddleware from "redux-saga";
+import { rootReducer } from "~/modules/reducers";
 import { dispatchCatchSaga } from "../routes/sagas";
 
 import { configureStore as toolkitConfigureStore } from "@reduxjs/toolkit";
-import thunk, { ThunkAction } from "redux-thunk";
 import { AnyAction } from "redux";
+import { ThunkAction } from "redux-thunk";
 
-export default function configureStore() {
+export function configureStore() {
   const sagaMiddleware = createSagaMiddleware();
 
   const store = toolkitConfigureStore({

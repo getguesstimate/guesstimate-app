@@ -1,10 +1,10 @@
 import React from "react";
 
-import FirstSubscriptionContainer from "~/components/subscriptions/FirstSubscription/container";
+import { FirstSubscriptionContainer } from "~/components/subscriptions/FirstSubscription/container";
 import { Container } from "~/components/utility/Container";
 import * as displayErrorsActions from "~/modules/displayErrors/actions";
 import { useAppDispatch, useAppSelector } from "~/modules/hooks";
-import Plan from "~/lib/config/plan";
+import { Plan } from "~/lib/config/plan";
 import { capitalizeFirstLetter } from "~/lib/string";
 
 type Props = {
@@ -36,30 +36,28 @@ export const FirstSubscriptionPage: React.FC<Props> = ({ planName }) => {
         <div className="row">
           <div className="col-sm-5 col-sm-offset-1">
             <div className="FirstSubscriptionPage-header">
-              <h1> {`The ${capitalizeFirstLetter(planName)} Plan`}</h1>
+              <h1>The {capitalizeFirstLetter(planName)} Plan</h1>
               <h2>
-                {" "}
-                <span className="number"> {plan.number()} </span> private models{" "}
+                <span className="number">{plan.number()}</span> private models
               </h2>
             </div>
             <div className="FirstSubscriptionPage-sidebar">
-              <h3> Privacy </h3>
+              <h3>Privacy</h3>
               <p>
-                {" "}
                 We will not sell or distribute your contact information. Read
                 our Privacy Policy.
               </p>
 
-              <h3> Cancellations </h3>
-              <p> You cancel at any time with our payment portal. </p>
+              <h3>Cancellations</h3>
+              <p>You cancel at any time with our payment portal.</p>
             </div>
           </div>
           <div className="col-sm-5">
             {!!me.id && planId && (
               <FirstSubscriptionContainer planId={planId} />
             )}
-            {!!me.id && !planId && <h2> Plan Invalid </h2>}
-            {!me.id && <h2> Log in to view this page </h2>}
+            {!!me.id && !planId && <h2>Plan Invalid</h2>}
+            {!me.id && <h2>Log in to view this page</h2>}
           </div>
         </div>
       </div>

@@ -54,7 +54,7 @@ const planYaml: PlanShape[] = [
   },
 ];
 
-export default class Plan {
+export class Plan {
   id: string;
   name: string;
   monthlyCost: number;

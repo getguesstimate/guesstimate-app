@@ -3,7 +3,7 @@ import React, { Component } from "react";
 
 import d3 from "d3";
 
-import numberShow from "~/lib/numberShower/numberShower";
+import { numberShow } from "~/lib/numberShower/numberShower";
 
 function getYScale(data, height: number) {
   return d3.scale

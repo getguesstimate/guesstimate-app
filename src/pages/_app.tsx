@@ -3,7 +3,7 @@ import type { AppProps } from "next/app";
 import { useEffect, useState } from "react";
 
 import { Provider } from "react-redux";
-import configureStore from "../modules/store";
+import { configureStore } from "../modules/store";
 
 import "flexboxgrid/css/flexboxgrid.min.css";
 import "font-awesome/css/font-awesome.css";

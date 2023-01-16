@@ -125,5 +125,3 @@ export const CanvasViewForm: React.FC = () => {
     </DropDown>
   );
 };
-
-export default CanvasViewForm;

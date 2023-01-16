@@ -1,5 +1,5 @@
 import { captureApiError } from "~/lib/errors";
-import GuesstimateApi from ".";
+import { GuesstimateApi } from ".";
 
 type RequestParams = {
   url: string;
@@ -10,7 +10,7 @@ type RequestParams = {
 
 export type Callback = (error: unknown | null, response: any | null) => void;
 
-export default class AbstractResource {
+export class AbstractResource {
   api: GuesstimateApi;
 
   constructor(api: GuesstimateApi) {
