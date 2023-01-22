@@ -1,11 +1,5 @@
 @import "./variables.css";
 
-/* src/components/application/errorModal/style.css */
-.ui.modal.ErrorModal {
-  background-color: white;
-  top: 10%;
-}
-
 /* src/components/calculators/style.css */
 @media only screen and (max-width: 767px) {
   .calculator.calculator {
@@ -20,30 +14,7 @@
   }
 }
 
-.drop-target {
-  background-color: $grey-1;
-}
-
 .calculator {
-  .title-bar {
-    float: left;
-    width: 100%;
-    margin-bottom: 1em;
-
-    .action-section {
-      padding-top: 0.4em;
-    }
-
-    h1 {
-      font-size: 1.5em;
-      display: inline;
-    }
-
-    span.privacy-icon {
-      padding-left: 1em;
-    }
-  }
-
   .description {
     font-size: 0.9em;
     margin-top: 0.9em;
@@ -57,10 +28,6 @@
 
   table.ui.table {
     font-size: 0.7em;
-  }
-
-  .header-actions .button {
-    float: right;
   }
 
   .editor {
@@ -228,7 +195,6 @@
 
 .calculator.narrow {
   margin: 0;
-  margin-top: 2em;
   padding: 0;
   border: none;
   border-radius: 0;
@@ -283,7 +249,7 @@
   border-radius: 0.2em;
   background: white;
   margin: 1em;
-  padding: 2em 2em;
+  padding: 3em 3em;
   color: rgba(80, 80, 80, 1);
   font-size: 1.6em;
   line-height: 1.2em;
@@ -310,9 +276,6 @@
       font-size: 0.63em;
       margin-top: 0.8em;
     }
-  }
-  .padded-section {
-    padding: 1em 1em;
   }
 }
 
@@ -471,22 +434,6 @@ $flash-duration-sec: 0.4s;
   padding: 2px 4px;
 }
 
-.Guesstimate .TextInput {
-  float: left;
-}
-
-.Guesstimate.large .TextInput.NARROW {
-  width: 89%;
-}
-
-.Guesstimate .TextInput.NARROW {
-  width: 85%;
-}
-
-.Guesstimate .TextInput.WIDE {
-  width: 100%;
-}
-
 .Guesstimate .GuesstimateInputForm {
   display: flex;
   flex-direction: column;
@@ -500,23 +447,10 @@ $flash-duration-sec: 0.4s;
   width: 100%;
 }
 
-.DistributionSelector .DistributionList {
-  float: right;
-}
-
 .DistributionSelector hr {
   border: none;
   border-top: 1px solid $grey-1;
   margin: 4px 0;
-}
-
-.DistributionSelector .more-distributions {
-  float: left;
-  cursor: pointer;
-  padding-left: 2px;
-  padding-top: 9px;
-  font-size: 16px;
-  color: $grey-999;
 }
 
 .Guesstimate .DistributionIcon.DistributionIcon {
@@ -567,9 +501,6 @@ $flash-duration-sec: 0.4s;
 .Guesstimate.large a.custom-data {
   text-decoration: underline;
   color: #999;
-  margin-top: 5px;
-  float: left;
-  font-size: 1.2em;
   cursor: pointer;
 }
 
@@ -1336,20 +1267,12 @@ a.MetricSidebarItem:hover {
 }
 
 /* src/components/metrics/modal/style.css */
-$grey: #eee;
-
 .metricModal {
   background-color: rgba(240, 240, 240, 1);
   margin-bottom: 2em;
 }
 
-.metricModal > .top {
-  padding: 1.5em 1.5em 0;
-  position: relative;
-}
-
 .metricModal > .bottom {
-  background-color: white;
   padding: 4em 1.5em 1.5em;
 }
 
@@ -1381,71 +1304,17 @@ $grey: #eee;
   margin: 2em 0;
 }
 
-.metricModal .histogram {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -1.8em;
-}
-
-.metricModal .histogram .react-d3-histogram .react-d3-histogram__bar rect {
+.metricModal .react-d3-histogram .react-d3-histogram__bar rect {
   fill: rgb(146, 169, 184);
 }
 
-.metricModal .island {
-  background-color: white;
-  border: none;
-  border-radius: 3px;
-  width: 100%;
-}
-
-.metricModal .percentiles {
-  float: right;
-}
-
-.metricModal .ui.table tr td {
-  padding: 4px 4px 4px 6px;
-  color: #666;
-}
-
-.metricModal .distributionSection .island {
-  padding-top: 1em;
-  position: relative;
-}
-
-.metricModal .distributionSection .subsection {
-  z-index: 1;
-  padding: 0 1em;
-}
-
-.metricModal .distributionSection .mean.subsection .DistributionSummary {
+.metricModal .mean .DistributionSummary {
   color: #000;
   font-size: 2.3em;
-  margin-top: 1em;
-  margin-left: 0.3em;
-  float: left;
 }
 
-.metricModal .distributionSection .mean.subsection .DistributionSummary .stdev {
+.metricModal .mean .DistributionSummary .stdev {
   color: #666;
-}
-
-.metricModal .distributionSection .mean.subsection .hovered-value {
-  float: right;
-  background-color: rgba(240, 240, 240, 0.68);
-}
-
-.metricModal .distributionSection .mean.subsection .hovered-value h4 {
-  margin-top: 0.5em;
-  color: #888888;
-  font-weight: 200;
-}
-
-.metricModal .distributionSection .mean.subsection .hovered-value h3 {
-  margin-bottom: 0;
-  font-size: 2em;
-  color: #555555;
-  font-weight: 200;
 }
 
 .metricModal .section-small {
@@ -1462,30 +1331,7 @@ $grey: #eee;
 }
 
 .metricModal .Guesstimate.large input {
-  background-color: $grey;
-}
-
-.metricModal .editingInputSection {
-  margin-bottom: 3em;
-  margin-left: -4px;
-}
-
-.metricModal .guesstimateDescriptionSection {
-  color: #666;
-}
-
-.metricModal > .top .button-close {
-  float: right;
-  font-size: 2em;
-  color: #bbb;
-}
-
-.metricModal .SampleList {
-  max-height: 30em;
-  overflow: scroll;
-  padding: 0.5em;
-  background-color: #f0f0f0;
-  border-radius: 3px;
+  background-color: $grey-eee;
 }
 
 .metricModal .modal-action.button {
@@ -1497,10 +1343,6 @@ $grey: #eee;
   &:hover {
     background-color: #bbb;
   }
-}
-
-.metricModal--sample-container {
-  float: right;
 }
 
 /* src/components/organizations/new/style.css */
@@ -1884,7 +1726,7 @@ $main-grey: #4e4e4e;
 
 /* src/components/simulations/histogram/style.css */
 .react-d3-histogram {
-  bottom: -24px;
+  bottom: -20px;
 }
 
 .ReactModal__Overlay--after-open .react-d3-histogram__tick text {
@@ -1926,11 +1768,6 @@ $main-grey: #4e4e4e;
   stroke-dasharray: 8, 5;
 }
 
-/* src/components/simulations/histogram_with_stats/style.css */
-.HistogramWithStats {
-  position: relative;
-}
-
 /* src/components/simulations/stat_table/style.css */
 table.MetricStatTable {
   font-weight: 500;
@@ -1956,197 +1793,6 @@ table.MetricStatTable td {
 
 .canvas-space .inner-editor .header .save-message {
   color: #888;
-}
-
-/* src/components/spaces/cards/style.css */
-.SpaceCard {
-  display: flex;
-}
-
-.SpaceCard.new {
-  .SpaceCard--inner {
-    background-color: #cee4ce;
-    transition: background-color 0.1s;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid rgba(0, 0, 0, 0);
-    min-height: 12em;
-
-    &:hover {
-      border: 1px solid #61a761;
-    }
-
-    .section-middle {
-      text-align: center;
-
-      h3 {
-        font-size: 2em;
-        color: rgb(50, 64, 50);
-        margin-top: 0.5em;
-      }
-
-      .fa {
-        font-size: 4.5em;
-        color: #79b979;
-      }
-    }
-  }
-}
-
-.SpaceCard.SMALL {
-  width: 100%;
-
-  .image {
-    flex: 1;
-    min-height: 3em;
-    border-radius: 0 0 1px 1px;
-  }
-
-  .SpaceCard--inner {
-    margin: 0 0.8em;
-  }
-
-  .image .snapshot.blank img {
-    height: 85%;
-    opacity: 0.2;
-    margin-bottom: 0;
-    max-height: 4em;
-  }
-
-  .header h3 {
-    font-size: 1.2em;
-  }
-}
-
-.SpaceCard--inner {
-  margin: 1.5em 0.8em;
-  float: left;
-  cursor: pointer;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  border: 1px solid rgba(0, 0, 0, 0);
-  border-radius: 2px;
-}
-
-.SpaceCard--inner:hover {
-  border: 1px solid #c2cdd6;
-}
-
-.SpaceCard .header {
-  padding: 0.5em;
-  border-radius: 2px 2px 0 0;
-  background-color: white;
-  flex: 0 0 auto;
-}
-
-.SpaceCard .image {
-  min-height: 11em;
-  position: relative;
-  background-color: #d9dee2;
-  float: left;
-  flex: 0 0 auto;
-}
-
-.SpaceCard .image img {
-  width: 100%;
-  float: left;
-  position: relative;
-  z-index: 1;
-}
-
-.SpaceCard .image .snapshot.blank {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-}
-
-.SpaceCard .image .snapshot.blank img {
-  height: 67%;
-  width: auto;
-  opacity: 0.23;
-  margin-bottom: 1em;
-}
-
-.SpaceCard .header h3 {
-  font-size: 1.3em;
-  color: #4a6a88;
-  margin-bottom: 0;
-}
-
-.SpaceCard .header.default-name h3 {
-  color: #bbb;
-  font-style: italic;
-}
-
-.SpaceCard .header .changed-at {
-  color: #888;
-  font-size: 0.9em;
-}
-
-.SpaceCard .hover-row {
-  position: absolute;
-  left: 0.5em;
-  bottom: 0.5em;
-  z-index: 2;
-}
-
-.SpaceCard .hover-row .tag {
-  float: left;
-  font-size: 1.6em;
-  color: #6e7980;
-  padding: 0.12em 0 0;
-}
-
-.SpaceCard .hover-row .owner-tag {
-  margin-right: 0.5em;
-  float: left;
-  background: rgba(147, 159, 169, 0.7);
-  border-radius: 2px;
-  float: left;
-}
-
-.SpaceCard .hover-row .owner-tag:hover {
-  cursor: pointer;
-  background: rgba(88, 110, 127, 0.71);
-  transition: 0.2s background;
-}
-
-.SpaceCard .hover-row .owner-tag .avatar {
-  width: 1.8em;
-  height: 1.8em;
-  border-radius: 2px 0 0 2px;
-  float: left;
-}
-
-.SpaceCard .hover-row .owner-tag .name {
-  float: left;
-  padding: 0.3em 0.5em 0 0.5em;
-  color: white;
-  font-size: 1.1em;
-  font-weight: 800;
-}
-
-.SpaceCard .body {
-  border-radius: 0 0 2px 2px;
-  flex: 1;
-  background-color: white;
-  float: left;
-  width: 100%;
-  padding: 0.3em 0.5em 0.6em 0.5em;
-  overflow: hidden;
-}
-
-.SpaceCard .body p {
-  margin-top: 0.4em;
-  width: 100%;
-  color: #78838c;
-  float: left;
 }
 
 /* src/components/spaces/index/style.css */
@@ -2221,188 +1867,7 @@ table.MetricStatTable td {
   background-color: $grey-2;
 }
 
-/* src/components/spaces/list_item/style.css */
-.SpaceListItem {
-  border-radius: 4px;
-  margin-bottom: 2px;
-  float: left;
-  width: 100%;
-}
-
-.SpaceListItem a {
-  padding: 15px;
-  transition: background 0.2s;
-  float: left;
-  width: 100%;
-}
-
-.SpaceListItem a:hover {
-  background: $grey-1;
-  border-radius: 3px;
-}
-
-.SpaceListItem a h3 {
-  color: #333;
-  font-weight: 600;
-  font-family: Lato;
-  margin-bottom: 0.2em;
-  font-size: 1.45em;
-}
-
-.SpaceListItem .snapshot img {
-  max-width: 100%;
-  border-radius: 1px;
-}
-
-.SpaceListItem .snapshot.blank {
-  background-color: $grey-1;
-  height: 80px;
-  border-radius: 1px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.SpaceListItem .snapshot.blank img {
-  max-width: 40%;
-  opacity: 0.3;
-}
-
-.SpaceListItem .snapshot.blank .fa {
-  font-size: 2.5em;
-  color: $grey-2;
-  opacity: 0.3;
-}
-
-.SpaceListItem a h3.default-value {
-  color: #aaa;
-  font-style: italic;
-}
-
-.SpaceListItem .user-tag {
-  float: right;
-  color: $grey-2;
-}
-
-.SpaceListItem .user-tag .ui.avatar.image {
-  width: 1.5em;
-  height: 1.5em;
-  margin-right: 5px;
-  border-radius: 2px;
-}
-
-.SpaceListItem p {
-  color: $grey-2;
-}
-
-.SpaceListItem .description p {
-  color: #666;
-  font-size: 1.1em;
-  margin-top: 0.6em;
-}
-
-.SpaceListItem .metric-count p {
-  float: right;
-}
-
 /* src/components/spaces/show/Toolbar/style.css */
-.SpaceShowToolbar {
-  background: rgba(219, 221, 222, 0.69);
-  border-bottom: 1px solid rgba(37, 128, 167, 0.38);
-}
-
-.SpaceShowToolbar .saveMessage {
-  color: #09273a;
-  margin-left: 26px;
-  float: left;
-  margin-top: 8px;
-  font-size: 1.1em;
-}
-
-.SpaceShowToolbar .saveMessage .ui.label {
-  font-size: 1.2rem;
-  font-weight: 500;
-  border-radius: 2px;
-  padding: 0.25em 0.5em;
-  margin-top: -2px;
-}
-
-.SpaceShowToolbar .saveMessage .ui.label.grey {
-  background-color: #555 !important;
-}
-
-.SpaceShowToolbar .header-action {
-  cursor: pointer;
-  float: left;
-  padding: 0.3em 0.55em;
-  font-size: 1.1em;
-  color: rgb(18, 46, 64);
-  border-radius: 1px;
-  margin: 0.2em 0.2em;
-}
-
-.SpaceShowToolbar .header-action-border {
-  float: left;
-  width: 2px;
-  background: rgb(115, 168, 190);
-  height: 34px;
-  margin: 0 3px;
-}
-
-.SpaceShowToolbar .header-action:hover {
-  background-color: rgba(255, 255, 255, 0.3);
-}
-
-.SpaceShowToolbar .header-action:active {
-  background-color: rgba(255, 255, 255, 0.5);
-}
-
-.SpaceShowToolbar .header-action.disabled {
-  opacity: 0.4;
-}
-
-.SpaceShowToolbar .header-action.disabled:hover {
-  background-color: rgba(255, 255, 255, 0.2);
-}
-
-.SpaceShowToolbar .ui.buttons {
-  float: left;
-  margin-right: 8px;
-}
-
-.SpaceShowToolbar a.space-header-action {
-  color: white;
-  padding: 0.5em 0.95em;
-  border-radius: 3px;
-  font-weight: 300;
-  margin-right: 10px;
-  background-color: rgba(0, 0, 0, 0);
-  transition: background-color 0.3s;
-  font-size: 1.2em;
-  float: left;
-}
-
-.SpaceShowToolbar a.space-header-action:hover {
-  color: white;
-  background-color: rgba(0, 0, 0, 0.2);
-  cursor: pointer;
-}
-
-.SpaceShowToolbar .float-right {
-  float: right;
-}
-
-.SpaceShowToolbar .header-action.button {
-  background-color: rgba(255, 255, 255, 0.3);
-  padding: 0.23em 0.53em;
-  margin: 0.3em 0 0 0.2em;
-  border-radius: 2px;
-}
-
-.SpaceShowToolbar .header-action.button:hover {
-  background-color: rgba(255, 255, 255, 0.5);
-}
-
 .ImportFromSlurpForm h2 {
   display: inline;
 }
@@ -2412,20 +1877,6 @@ table.MetricStatTable td {
   font-size: 1.6em;
   color: $blue-4;
   cursor: pointer;
-}
-
-/* src/components/spaces/show/Tutorial/style.css */
-.Tutorial {
-  float: left;
-  background-color: rgba(240, 240, 240, 1);
-  text-align: center;
-  max-width: 42em;
-  padding: 2em 2em 1em;
-  border-radius: 0.2em;
-
-  h2 {
-    padding-bottom: 1em;
-  }
 }
 
 /* src/components/spaces/show/privacy-toggle/style.css */
@@ -2471,106 +1922,6 @@ table.MetricStatTable td {
 
 .canvas-space.overflow-hidden {
   overflow: hidden;
-}
-
-.hero-unit {
-  padding-top: 0.8em;
-  background: #2583a7;
-  background: linear-gradient(-90deg, #2577a7, #2583a7);
-  width: 100%;
-  box-sizing: initial;
-}
-
-.hero-unit .ui.image {
-  margin-top: 4px;
-  margin-left: 8px;
-  margin-bottom: 5px;
-  margin-right: 0;
-  font-size: 0.92em;
-  float: right;
-  &.label {
-    color: white;
-    background: rgba(255, 255, 255, 0.2);
-    img {
-      height: 2.1em !important;
-    }
-  }
-}
-
-@media only screen and (max-width: 767px) {
-  .hero-unit {
-    padding-top: 0.5em;
-  }
-
-  .SpaceShowToolbar {
-    display: none;
-  }
-
-  .hero-unit .header {
-    margin-right: 10px;
-  }
-
-  .hero-unit .ui.image.label {
-    margin-top: 0px;
-    font-size: 0.7em;
-    float: right;
-  }
-
-  .hero-unit .space-header-action {
-    margin-top: 0px;
-    font-size: 0.7em;
-  }
-}
-
-.hero-unit .ui.button.blue {
-  background-color: $grey-2;
-}
-
-.hero-unit {
-  color: white;
-}
-
-.hero-unit .text-editable:hover {
-  background-color: rgba(0, 0, 0, 0.2);
-}
-
-.hero-unit .text-editable.default-value {
-  color: #ccc;
-}
-
-.hero-unit h1 {
-  font-size: 1.7em;
-  padding: 0.05em 0.38em;
-  border-radius: 3px;
-  font-family: Lato;
-  font-weight: 500;
-  float: left;
-  margin: 0.1em 1em 0.3em 0;
-}
-
-.hero-unit .header-name {
-  max-width: 60%;
-  float: left;
-  p {
-    padding-top: 0;
-    margin-top: 0;
-    color: grey;
-  }
-}
-
-@media only screen and (max-width: 767px) {
-  .hero-unit h1 {
-    font-size: 1.2em;
-    padding: 0 0 0 0.4em;
-    margin-right: 0em;
-  }
-  .hero-unit .header-name {
-    max-width: 100%;
-  }
-}
-
-.hero-unit .dd-menu-left {
-  float: left;
 }
 
 .spaceShow > .content {
@@ -2690,59 +2041,6 @@ table.MetricStatTable td {
   }
 }
 
-.hero-unit .header .dropDown-relative {
-  float: right;
-}
-
-.header .dropDown-relative .space-header-action {
-  color: white;
-  float: right;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 0.3em 0.7em;
-  border-radius: 3px;
-  margin: 4px 0 6px 8px;
-}
-
-.header .dropDown-relative .space-header-action:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.header .dropDown-relative .space-header-action:active {
-  background: rgba(255, 255, 255, 0.3);
-}
-
-.SpaceRightSidebar {
-  width: 30em;
-  overflow-x: hidden;
-  overflow-y: auto;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 0;
-  border-left: 1px solid #ccc;
-
-  &.grey {
-    background: #f7f5f5;
-  }
-
-  h2 {
-    color: #476b82;
-  }
-
-  .SpaceRightSidebar--divider {
-    margin: 0;
-    border: none;
-    border-bottom: 2px dotted #e8e8e8;
-  }
-
-  .SpaceRightSidebar--padded-area {
-    padding: 1em 1em;
-    float: left;
-    width: 100%;
-    .button-close-text {
-      float: right;
-    }
-  }
-}
-
 /* src/components/subscriptions/FirstSubscription/style.css */
 .FirstSubscription {
   text-align: center;
@@ -2843,23 +2141,6 @@ table.MetricStatTable td {
   background-color: $grey-2;
 }
 
-/* src/components/users/show/style.css */
-.UserShow .main-user-tag {
-  text-align: center;
-  margin-bottom: 2em;
-}
-
-.UserShow .main-user-tag img {
-  width: 8em;
-  height: 8em;
-  border-radius: 8em;
-}
-
-.UserShow .main-user-tag h1 {
-  margin-bottom: 0;
-  margin-top: 0.5rem;
-}
-
 /* src/components/utility/ComponentEditor/style.css */
 .ComponentEditor > .reference {
   padding: 4em 10px;
@@ -2886,23 +2167,6 @@ table.MetricStatTable td {
 
 .button-close:hover {
   color: #666;
-}
-
-.ui.button.g-button {
-  padding: 0.5em 0.8em;
-  border-radius: 2px;
-  i {
-    margin-right: 0.3em;
-  }
-  .fa {
-    margin-right: 0.3em;
-  }
-  &.red {
-    background-color: #b74d4d;
-    &:hover {
-      background-color: #923f3f;
-    }
-  }
 }
 
 /* src/components/utility/card/style.css */
@@ -3071,90 +2335,6 @@ table.MetricStatTable td {
   background-color: $blue-2;
 }
 
-/* src/components/utility/click-to-edit/style.css */
-.ClickToEdit {
-  float: left;
-  width: 100%;
-  padding-left: 0.5em;
-}
-
-.ClickToEdit > .BlankMode {
-  padding: 0.5em;
-  border-radius: 3px;
-  color: #999;
-  text-decoration: underline;
-}
-
-.ClickToEdit > .BlankMode:hover {
-  background-color: rgba(0, 0, 0, 0.2);
-  color: #333;
-  cursor: pointer;
-}
-
-.ClickToEdit .EditingMode .submit-section {
-  margin-top: 10px;
-}
-
-.ClickToEdit .EditingMode .submit-section .button {
-  float: left;
-}
-
-a.markdown-help {
-  float: right;
-  font-size: 2.5em;
-  color: #aaa;
-  cursor: pointer;
-}
-
-a.markdown-help:hover {
-  color: #777;
-}
-
-.ClickToEdit .EditingMode .submit-section .submit-section-close {
-  float: left;
-  margin-top: 0.2em;
-}
-
-.ClickToEdit .EditingMode .submit-section .submit.button {
-  margin-right: 1em;
-}
-
-.ClickToEdit .EditingMode textarea:focus {
-  outline: none;
-}
-
-.ClickToEdit .EditingMode textarea {
-  background-color: white;
-  border: 2px solid $blue-1;
-  border-radius: 3px;
-  width: 100%;
-  min-height: 120px;
-  padding: 0.5em;
-}
-
-.ClickToEdit .ViewingMode .editLink {
-  color: #666;
-  text-decoration: underline;
-  cursor: pointer;
-  margin-left: 8px;
-  padding: 2px 4px;
-  border-radius: 2px;
-}
-
-.ClickToEdit .ViewingMode .editLink:hover {
-  color: #000;
-  background-color: #999;
-}
-
-.ClickToEdit .ViewingMode .header {
-  color: #666;
-  margin-bottom: 0.5em;
-}
-
-.ClickToEdit .ViewingMode .content {
-  color: #333;
-}
-
 /* src/components/utility/container/style.css */
 .GeneralContainer {
   margin-top: 4em;
@@ -3171,13 +2351,8 @@ a.markdown-help:hover {
 }
 
 /* src/components/utility/drop-down/style.css */
-.dropDown-open {
-  cursor: pointer;
-}
-
 .dropDown-relative {
   position: relative;
-  float: left;
 }
 
 .dropDown {
@@ -3200,377 +2375,7 @@ a.markdown-help:hover {
   max-width: 100%;
 }
 
-/* src/components/utility/tooltip/style.css */
-.ToolTip {
-  position: absolute;
-  top: 100%;
-  margin-top: 10px;
-  padding: 0.75em;
-  border-radius: 2px;
-  z-index: 100;
-  left: -3px;
-  color: #111;
-  min-height: 40px;
-  font-size: 1.15rem;
-  line-height: 1.5rem;
-  font-weight: 400;
-}
-
-.ToolTip.SMALL {
-  background-color: white;
-  width: 207%;
-  border: 1px solid $grey-2;
-}
-
-.ToolTip.LARGE {
-  border: none;
-  background-color: rgba(250, 250, 250, 0.99);
-}
-
-.ToolTip.LARGE .arrow-up {
-  left: 8%;
-}
-
-.ToolTip.SMALL .arrow-up {
-  left: 22%;
-}
-
-.ToolTip .arrow-up {
-  width: 0;
-  height: 0;
-  border-left: 8px solid transparent;
-  border-right: 8px solid transparent;
-  border-bottom: 8px solid $grey-2;
-  position: absolute;
-  top: -8px;
-}
-
-/* src/routes/home/ModelDemo/style.css */
-.ModelDemo .diagram {
-  display: inline-block;
-  position: relative;
-}
-
-.ModelDemo h2 {
-  color: #444;
-  font-weight: 400;
-  font-size: 2.3rem;
-  margin-bottom: 0.5em;
-  text-align: left;
-  text-align: left;
-}
-
-.ModelDemo p {
-  color: #7e89ab;
-  font-size: 1.5rem;
-  line-height: 2.5rem;
-  text-align: left;
-}
-
-.ModelDemo p strong {
-  color: #007bca;
-  font-weight: 400;
-}
-
-.ModelDemo .description {
-  margin-top: 1em;
-}
-
-.ModelDemo .finder {
-  position: absolute;
-  cursor: pointer;
-  padding: 15px;
-  border-radius: 5px;
-}
-
-.ModelDemo .finder .inner {
-  background-color: rgba(116, 210, 61, 0.37);
-  color: #359447;
-  width: 23px;
-  height: 23px;
-  border-radius: 50px;
-  line-height: 22px;
-  font-size: 21px;
-}
-
-.ModelDemo .finder:hover .inner {
-  background-color: rgba(116, 210, 61, 0.8);
-  color: #065815;
-  transition: 0.2s color ease, 0.2s background-color ease;
-}
-
-/* src/routes/layouts/application/style.css */
-.Layout {
-  display: flex;
-  min-height: 100vh;
-  flex-direction: column;
-}
-
-.Layout.fullHeight {
-  height: 100%;
-}
-
-.Layout main {
-  flex: 1;
-}
-
-/* src/routes/layouts/header/style.css */
-.PageHeader:not(.isBare) {
-  border-bottom: 1px solid $grey-1;
-}
-
-.navbar-brand {
-  float: left;
-  margin-top: 0.2em;
-  font-size: 1.8em;
-  border-radius: 0.3em;
-  padding: 0.25em;
-  font-family: Lato;
-  font-weight: 500;
-}
-
-.navbar-brand:hover {
-  background-color: $grey-1;
-}
-
-.navbar-brand .guesstimate-icon {
-  float: left;
-  margin-right: 0.3em;
-  height: 1.2em;
-  display: none;
-}
-
-.navbar-brand .guesstimate-name {
-  color: $grey-2;
-  margin-top: 0.1em;
-  float: left;
-}
-
-@media only screen and (max-width: 767px) {
-  .PageHeader {
-    padding: 0 1em;
-  }
-  .PageHeader .header-right-menu {
-    font-size: 0.9em;
-  }
-  .guesstimate-name {
-    display: none;
-  }
-  .navbar-brand .guesstimate-icon {
-    display: block;
-  }
-  .item.text.scratchpad {
-    display: none;
-  }
-  .item.new-model {
-    display: none;
-  }
-  .item.text.pricing {
-    display: none;
-  }
-}
-
-/* src/routes/layouts/login/style.css */
-.header-left-menu {
-  float: left;
-}
-
-.header-right-menu {
-  float: right;
-  height: 3.2em;
-  position: relative;
-}
-
-.header-right-menu .item {
-  float: left;
-  margin: 0.1em 0 0 2.5em;
-  color: $grey-2;
-  transition: color 5s;
-}
-
-@media only screen and (max-width: 767px) {
-  .header-right-menu .item {
-    margin-left: 1em;
-  }
-}
-
-.header-right-menu .item {
-  cursor: pointer;
-}
-
-.header-right-menu .item.text {
-  margin-top: 1em;
-}
-
-.isBare .header-right-menu .item.text {
-  color: #1487d0;
-  font-size: 1.1em;
-}
-
-.header-right-menu a.item {
-  transition: color 0.3s;
-}
-
-.header-right-menu a.item i {
-  transition: color 0.3s;
-}
-
-.header-right-menu a.item:hover {
-  color: $blue-1;
-}
-
-.header-right-menu a.item:hover i {
-  color: $blue-1;
-}
-
-.header-right-menu a.item > i {
-  font-size: 1.8em;
-  color: $grey-2;
-  margin: 0.3em 0.3em 0 0;
-  float: left;
-}
-
-.header-right-menu a.item > .text {
-  float: left;
-  font-size: 1.2em;
-  font-weight: 600;
-  font-family: Lato, Arial, sans-serif;
-  margin-top: 11px;
-}
-
-.header-right-menu .avatar {
-  width: 2.6em;
-  border-radius: 3em;
-  border: 0.3em solid rgba(0, 0, 0, 0);
-  margin-top: 3px;
-}
-
-.header-right-menu .avatar:hover {
-  border-color: $grey-1;
-}
-
-/* src/routes/layouts/footer/style.css */
-.gFooter {
-  background-color: $grey-5;
-
-  .container-fluid {
-    padding: 3em 0 2em;
-  }
-
-  strong {
-    margin-bottom: 3em;
-    color: $grey-2;
-  }
-
-  ul {
-    list-style: none;
-  }
-
-  li {
-    margin-bottom: 0.75em;
-    font-size: 1.1em;
-  }
-
-  li:first-child {
-    margin-bottom: 1em;
-  }
-
-  a {
-    color: $grey-2;
-    font-weight: 300;
-  }
-}
-
-/* src/components/layouts/main/style.css */
-main.fluid {
-  display: flex;
-  flex-direction: column;
-}
-
-main.blue {
-  background: linear-gradient(-140deg, #4dc7b7, #489acc);
-}
-
-main.grey {
-  background: #f7f5f5;
-}
-
 /* src/routes/home/style.css */
-.guesstimate-logo-outer {
-  width: 100%;
-  text-align: center;
-}
-
-.guesstimate-logo {
-  margin-top: 0.2em;
-  font-size: 5em;
-  border-radius: 0.3em;
-  padding: 0.25em;
-  font-family: Lato, Arial, sans-serif;
-  display: inline-block;
-}
-
-.guesstimate-logo .guesstimate-name {
-  color: $grey-2;
-  margin-top: 0.23em;
-  font-weight: 600;
-  float: left;
-}
-
-.homePage {
-  margin-top: 4em;
-  font-family: Lato, Arial, sans-serif;
-}
-
-.homePage img {
-  max-width: 100%;
-}
-
-.homePage .guesstimate-slogan h2 {
-  text-align: center;
-  color: #333;
-  font-weight: 400;
-  font-size: 3em;
-  margin-top: 0.5em;
-}
-
-.homePage .guesstimate-slogan .sideComment {
-  color: $grey-2;
-}
-
-.homePage hr {
-  border: 1px solid #eee;
-  border-bottom: none;
-  width: 100%;
-  max-width: 520px;
-  border-radius: 0;
-  margin-top: 5em;
-  margin-bottom: 2em;
-}
-
-.homePage .guesstimate-slogan p {
-  text-align: center;
-  font-size: 2em;
-  font-family: Lato, Arial, sans-serif;
-  color: $grey-2;
-  padding: 0 4em;
-  font-weight: 400;
-}
-
-.homePage {
-  text-align: center;
-}
-
-.homePage .cta {
-  margin-top: 5em;
-  text-align: center;
-}
-
-.homePage .descriptions {
-  margin-top: 5em;
-  text-align: center;
-}
-
 .wistia_responsive_padding {
   padding: 56.25% 0 0 0;
   position: relative;
@@ -3578,10 +2383,10 @@ main.grey {
 
 .wistia_responsive_wrapper {
   height: 100%;
-  left: 0;
-  position: absolute;
-  top: 0;
   width: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 
 .wistia_embed {
@@ -3591,40 +2396,9 @@ main.grey {
   margin-top: 5em;
 }
 
-.homePage > .sectionBenefits {
-  background-color: $grey-1;
-  padding-top: 3em;
-  padding-bottom: 3em;
-  margin-top: 3em;
-}
-
-.homePage > .sectionBenefits h2 {
-  color: #444;
-  font-weight: 400;
-  font-size: 2.3rem;
-}
-
-.homePage > .sectionBenefits p {
-  color: $grey-2;
-  font-size: 1.2rem;
-  line-height: 1.9rem;
-}
-
-.homePage > .sectionBenefits i {
-  font-size: 4.5em;
-  opacity: 0.2;
-}
-
-.homePage > .sectionExamples {
-  background-color: #dae3ed;
-  padding-top: 8em;
-  padding-bottom: 6em;
-}
-
 /* src/components/metrics/modal/description.css */
 .GuesstimateDescription {
   font-size: 1.2em;
-  float: left;
   width: 100%;
 }
 
@@ -3723,35 +2497,9 @@ main.grey {
   margin-bottom: 2em;
   min-height: 35em;
 
-  .header {
-    margin-bottom: 1em;
-    text-align: center;
-  }
-
-  h3 {
-    text-align: center;
-    color: #666;
-    margin: 0.8em auto;
-    font-size: 1.4em;
-  }
-
   p {
     font-size: 1.1em;
     text-align: justify;
-  }
-
-  .image {
-    width: 100%;
-    background-color: #dfe1e4;
-    border-radius: 3px;
-    margin-bottom: 2em;
-  }
-
-  img {
-    display: block;
-    max-height: 10em;
-    max-width: 100%;
-    margin: 0 auto;
   }
 
   table.ui {
@@ -3760,36 +2508,11 @@ main.grey {
     td {
       padding: 0.5em 1em;
       line-height: 1.3em;
-
-      .rowLabel {
-        text-align: center;
-        font-weight: bold;
-      }
-
-      .exampleFunction {
-        background: #eee;
-        border-radius: 0.2em;
-        padding: 0.15em 0.3em;
-        font-family: "Courier New", Courier, monospace;
-        font-size: 0.9em;
-      }
-
-      .exampleInput {
-        color: $green-3;
-        background-color: $green-4;
-        padding: 0 0.1em;
-        border-radius: 0.1em;
-      }
     }
   }
 }
 
 /* src/components/spaces/show/header.css */
-.copy-button {
-  cursor: pointer;
-  float: left;
-}
-
 .header .saveMessage {
   float: left;
   margin-top: 8px;
@@ -3803,13 +2526,6 @@ main.grey {
 }
 
 /* src/routes/main.css */
-.wrap {
-  max-width: 1200px;
-  margin: 0 auto;
-  box-sizing: border-box;
-  width: 100%;
-}
-
 .container-fluid.full-width {
   width: 100%;
 }
@@ -3848,4 +2564,13 @@ body.remove-elev #_elev_io {
   font-size: 1.6em;
   color: #333;
   line-height: 1.8em;
+}
+
+.public-DraftEditorPlaceholder-root {
+  margin: 0 0 -30px;
+  color: #a9a9a9;
+}
+
+.public-DraftEditor-content:focus {
+  color: $black-3;
 }

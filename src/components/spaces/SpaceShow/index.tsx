@@ -1,12 +1,12 @@
 import _ from "lodash";
-import { NextRouter, useRouter, withRouter } from "next/router";
+import { NextRouter, withRouter } from "next/router";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import Head from "next/head";
 
 import { EditCalculatorForm } from "~/components/calculators/EditCalculatorForm";
-import { NewCalculatorForm } from "~/components/calculators/new";
+import { NewCalculatorForm } from "~/components/calculators/NewCalculatorForm";
 import { CalculatorCompressedShow } from "~/components/calculators/show/CalculatorCompressedShow";
 import { FactListContainer } from "~/components/facts/list/FactListContainer";
 import { SpaceCanvas } from "~/components/spaces/SpaceCanvas";
@@ -45,15 +45,20 @@ import { parseSlurp } from "~/lib/slurpParser";
 import * as e from "~/lib/engine/engine";
 
 import { Fact } from "~/lib/engine/facts";
+import { Calculator } from "~/modules/calculators/reducer";
 import { AppDispatch, RootState } from "~/modules/store";
 import * as elev from "~/server/elev/index";
-import { Calculator } from "~/modules/calculators/reducer";
+import clsx from "clsx";
 
 function mapStateToProps(state: RootState) {
   return {
     me: state.me,
   };
 }
+
+const HeaderTitle: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <h2 className="text-[#476b82]">{children}</h2>
+);
 
 const ShowCalculatorHeader: React.FC<any> = ({
   id,
@@ -62,18 +67,12 @@ const ShowCalculatorHeader: React.FC<any> = ({
   onDelete,
   onClose,
 }) => {
-  const router = useRouter();
-
   return (
-    <div className="row">
-      <div className="col-xs-12">
-        <div className="button-close-text">
-          <ButtonExpandText onClick={() => router.push(`/calculators/${id}`)} />
-          {editableByMe && <ButtonEditText onClick={onEdit} />}
-          {editableByMe && <ButtonDeleteText onClick={onDelete} />}
-          <ButtonCloseText onClick={onClose} />
-        </div>
-      </div>
+    <div className="flex justify-end items-start flex-wrap">
+      <ButtonExpandText href={`/calculators/${id}`} />
+      {editableByMe && <ButtonEditText onClick={onEdit} />}
+      {editableByMe && <ButtonDeleteText onClick={onDelete} />}
+      <ButtonCloseText onClick={onClose} />
     </div>
   );
 };
@@ -82,13 +81,9 @@ const CalculatorFormHeader: React.FC<{
   isNew: boolean;
   onClose(): void;
 }> = ({ isNew, onClose }) => (
-  <div className="row">
-    <div className="col-xs-8">
-      <h2>{`${isNew ? "New" : "Edit"} Calculator`}</h2>
-    </div>
-    <div className="col-xs-4 button-close-text">
-      <ButtonCloseText onClick={onClose} />
-    </div>
+  <div className="flex justify-between items-start">
+    <HeaderTitle>{isNew ? "New" : "Edit"} Calculator</HeaderTitle>
+    <ButtonCloseText onClick={onClose} />
   </div>
 );
 
@@ -96,19 +91,12 @@ const FactSidebarHeader: React.FC<{
   onClose(): void;
   organizationId: string | number;
 }> = ({ onClose, organizationId }) => {
-  const router = useRouter();
   return (
-    <div className="row">
-      <div className="col-xs-6">
-        <h2>Metric Library</h2>
-      </div>
-      <div className="col-xs-6">
-        <ButtonExpandText
-          onClick={() => router.push(`/organizations/${organizationId}/facts`)}
-        />
-        <div className="button-close-text">
-          <ButtonCloseText onClick={onClose} />
-        </div>
+    <div className="flex justify-between items-start">
+      <HeaderTitle>Metric Library</HeaderTitle>
+      <div>
+        <ButtonExpandText href={`/organizations/${organizationId}/facts`} />
+        <ButtonCloseText onClick={onClose} />
       </div>
     </div>
   );
@@ -145,7 +133,7 @@ type RightSidebarState =
     }
   | {
       type: typeof EDIT_CALCULATOR_FORM;
-      editCalculatorId: string;
+      editCalculatorId: number;
     }
   | {
       type: typeof SHOW_CALCULATOR;
@@ -200,23 +188,18 @@ class UnconnectedSpaceShow extends Component<Props, State> {
   }
 
   componentWillUnmount() {
-    window.recorder.recordUnmountEvent(this);
-
     if (!this.props.embed) {
       elev.hide();
     }
   }
 
   componentWillUpdate() {
-    window.recorder.recordRenderStartEvent(this);
     // if (this.props.embed) {
     //   $("#intercom-container").remove();
     // }
   }
 
   componentDidUpdate(prevProps: Props) {
-    window.recorder.recordRenderStopEvent(this);
-
     this.considerFetch(prevProps);
   }
 
@@ -319,7 +302,7 @@ class UnconnectedSpaceShow extends Component<Props, State> {
     this.setState({ showLeftSidebar: true });
   }
 
-  _handleCopyModel() {
+  handleCopyModel() {
     this.props.dispatch(spaceActions.copy(this._id(), this.props.router));
   }
 
@@ -358,19 +341,12 @@ class UnconnectedSpaceShow extends Component<Props, State> {
     elev.show();
     this.setState({ rightSidebar: { type: CLOSED } });
   }
-  openRightSidebar(rightSidebarState) {
+  openRightSidebar(rightSidebarState: RightSidebarState) {
     elev.hide();
     this.setState({ rightSidebar: rightSidebarState });
   }
   showCalculator({ id }: Calculator) {
     this.openRightSidebar({ type: SHOW_CALCULATOR, showCalculatorId: id });
-  }
-  editCalculator(id: number) {
-    this.openRightSidebar({ type: EDIT_CALCULATOR_FORM, editCalculatorId: id });
-  }
-  deleteCalculator(id: number) {
-    this.props.dispatch(calculatorActions.destroy(id));
-    this.closeRightSidebar();
   }
   makeNewCalculator() {
     this.openRightSidebar({ type: NEW_CALCULATOR_FORM });
@@ -390,24 +366,32 @@ class UnconnectedSpaceShow extends Component<Props, State> {
     } = this;
     const { editableByMe, calculators, organization, imported_fact_ids } =
       denormalizedSpace;
+
     switch (rightSidebar.type) {
       case CLOSED:
         return;
-      case SHOW_CALCULATOR:
+      case SHOW_CALCULATOR: {
+        const editCalculator = () => {
+          this.openRightSidebar({
+            type: EDIT_CALCULATOR_FORM,
+            editCalculatorId: rightSidebar.showCalculatorId,
+          });
+        };
+        const deleteCalculator = () => {
+          this.props.dispatch(
+            calculatorActions.destroy(rightSidebar.showCalculatorId)
+          );
+          this.closeRightSidebar();
+        };
+
         return {
           classes: [],
           header: (
             <ShowCalculatorHeader
               editableByMe={editableByMe}
               id={rightSidebar.showCalculatorId}
-              onEdit={this.editCalculator.bind(
-                this,
-                rightSidebar.showCalculatorId
-              )}
-              onDelete={this.deleteCalculator.bind(
-                this,
-                rightSidebar.showCalculatorId
-              )}
+              onEdit={editCalculator}
+              onDelete={deleteCalculator}
               onClose={this.closeRightSidebar.bind(this)}
             />
           ),
@@ -418,6 +402,7 @@ class UnconnectedSpaceShow extends Component<Props, State> {
             />
           ),
         };
+      }
       case EDIT_CALCULATOR_FORM:
         return {
           classes: [],
@@ -455,7 +440,7 @@ class UnconnectedSpaceShow extends Component<Props, State> {
         };
       case FACT_SIDEBAR:
         return {
-          classes: ["grey"],
+          classes: ["bg-grey-6"],
           header: (
             <FactSidebarHeader
               onClose={this.closeRightSidebar.bind(this)}
@@ -463,16 +448,14 @@ class UnconnectedSpaceShow extends Component<Props, State> {
             />
           ),
           main: (
-            <div className="SpaceRightSidebar--padded-area">
-              <FactListContainer
-                existingVariableNames={organizationFacts.map(e.facts.getVar)}
-                facts={organizationFacts}
-                organization={organization}
-                canMakeNewFacts={true}
-                spaceId={spaceId}
-                imported_fact_ids={imported_fact_ids}
-              />
-            </div>
+            <FactListContainer
+              existingVariableNames={organizationFacts.map(e.facts.getVar)}
+              facts={organizationFacts}
+              organization={organization}
+              canMakeNewFacts={true}
+              spaceId={spaceId}
+              imported_fact_ids={imported_fact_ids}
+            />
           ),
         };
     }
@@ -486,10 +469,14 @@ class UnconnectedSpaceShow extends Component<Props, State> {
     const { classes, header, main } = rightSidebarBody;
 
     return (
-      <div className={["SpaceRightSidebar", ...classes].join(" ")}>
-        <div className="SpaceRightSidebar--padded-area">{header}</div>
-        <hr className="SpaceRightSidebar--divider" />
-        {main}
+      <div
+        className={clsx(
+          "w-[30em] bg-white p-4 overflow-x-hidden overflow-y-auto border border-[#ccc]",
+          ...classes
+        )}
+      >
+        <div className="pb-4">{header}</div>
+        <div>{main}</div>
       </div>
     );
   }
@@ -558,9 +545,9 @@ class UnconnectedSpaceShow extends Component<Props, State> {
           <Tutorial onClose={this.closeTutorial.bind(this)} />
         )}
 
-        <div className="hero-unit">
+        <div className="bg-gradient-to-r from-[#2583a7] to-[#2577a7]">
           <SpaceHeader
-            name={space.name}
+            name={space.name || ""}
             isPrivate={space.is_private}
             editableByMe={space.editableByMe}
             canBePrivate={canBePrivate}
@@ -592,7 +579,7 @@ class UnconnectedSpaceShow extends Component<Props, State> {
             }}
             isLoggedIn={isLoggedIn}
             onDestroy={this.destroy.bind(this)}
-            onCopyModel={this._handleCopyModel.bind(this)}
+            onCopyModel={this.handleCopyModel.bind(this)}
             onCopyMetrics={this.onCopy.bind(this, false)}
             onPasteMetrics={this.onPaste.bind(this)}
             onDeleteMetrics={this.onDeleteMetrics.bind(this)}

@@ -54,27 +54,6 @@ type Props = {
   isItemEmpty(id: string): boolean;
 };
 
-type State = {
-  hover: CanvasLocation;
-  dragSelecting?: boolean;
-  ctrlPressed?: boolean;
-} & (
-  | {
-      tracingAutoFillRegion: true;
-      autoFillRegion: {
-        start: CanvasLocation;
-        end?: CanvasLocation;
-      };
-    }
-  | {
-      tracingAutoFillRegion: false;
-      autoFillRegion: {
-        start?: CanvasLocation;
-        end?: CanvasLocation;
-      };
-    }
-);
-
 // via https://stackoverflow.com/a/53837442
 const useForceUpdate = () => {
   const [, setValue] = useState(0);
@@ -125,13 +104,12 @@ export const FlowGrid: React.FC<Props> = ({
   // We don't store this as state because we don't want this to cause renders.
   const lastMousePosition = useRef({ pageX: 0, pageY: 0 });
 
-  const [state, setState] = useState<State>({
-    hover: { row: -1, column: -1 }, // An impossible location means nothing hovered.
-    dragSelecting: false,
-    ctrlPressed: false,
-    tracingAutoFillRegion: false,
-    autoFillRegion: {},
-  });
+  const [hover, setHover] = useState<CanvasLocation | undefined>(undefined);
+  const [dragSelecting, setDragSelecting] = useState(false);
+  const [ctrlPressed, setCtrlPressed] = useState(false);
+  const [autoFillRegion, setAutoFillRegion] = useState<
+    { start: CanvasLocation; end?: CanvasLocation } | undefined
+  >(undefined);
 
   useCallOnUnmount(onDeSelectAll);
 
@@ -160,6 +138,36 @@ export const FlowGrid: React.FC<Props> = ({
     }
   }, [isModelingCanvas, items, selectedCell]);
 
+  const handleMouseLeave = () => {
+    setHover(undefined);
+    setDragSelecting(false);
+    setAutoFillRegion(undefined);
+  };
+
+  const handleMouseUp = (e: React.MouseEvent) => {
+    if (e.button === 0) {
+      setDragSelecting(false);
+    }
+  };
+
+  const handleEmptyCellMouseDown = (e: React.MouseEvent) => {
+    if (
+      e.button === 0 &&
+      !(e.target && (e.target as any).type === "textarea")
+    ) {
+      setDragSelecting(true);
+      lastMousePosition.current = { pageX: e.pageX, pageY: e.pageY };
+      e.preventDefault();
+    }
+  };
+
+  const mouseMoved = (e: React.MouseEvent) => {
+    const sameLocation =
+      e.pageX === lastMousePosition.current.pageX &&
+      e.pageY === lastMousePosition.current.pageY;
+    return !sameLocation;
+  };
+
   const newAutoFillRegion = (
     start: CanvasLocation,
     location: CanvasLocation
@@ -179,69 +187,39 @@ export const FlowGrid: React.FC<Props> = ({
     return { start, end };
   };
 
-  const handleMouseLeave = () => {
-    window.recorder.recordNamedEvent("FlowGrid set hover state");
-    setState({
-      ...state,
-      hover: { row: -1, column: -1 },
-      dragSelecting: false,
-      tracingAutoFillRegion: false,
-      autoFillRegion: {},
-    });
-  };
-
-  const handleMouseUp = (e: React.MouseEvent) => {
-    if (e.button === 0) {
-      window.recorder.recordNamedEvent("FlowGrid set left down state");
-      setState({ ...state, dragSelecting: false });
-    }
-  };
-
-  const handleEmptyCellMouseDown = (e: React.MouseEvent) => {
-    if (
-      e.button === 0 &&
-      !(e.target && (e.target as any).type === "textarea")
-    ) {
-      window.recorder.recordNamedEvent("FlowGrid set left down state");
-      setState({ ...state, dragSelecting: true });
-      lastMousePosition.current = { pageX: e.pageX, pageY: e.pageY };
-      e.preventDefault();
-    }
-  };
-
-  const mouseMoved = (e: React.MouseEvent) => {
-    const sameLocation =
-      e.pageX === lastMousePosition.current.pageX &&
-      e.pageY === lastMousePosition.current.pageY;
-    return !sameLocation;
-  };
-
   const handleCellMouseEnter = (
     location: CanvasLocation,
     e: React.MouseEvent
   ) => {
-    window.recorder.recordNamedEvent("FlowGrid set hover state");
     // If this mouse hasn't moved, or the user is neither tracing a fill region or dragging a selected region, just set
     // the hover state.
-    const userDraggingSelection =
-      state.tracingAutoFillRegion || state.dragSelecting;
+    const userDraggingSelection = Boolean(autoFillRegion || dragSelecting);
     if (!(mouseMoved(e) && userDraggingSelection)) {
-      setState({ ...state, hover: location });
+      setHover(location);
       return;
     }
-    const hover: CanvasLocation = { row: -1, column: -1 };
 
-    if (state.tracingAutoFillRegion) {
-      window.recorder.recordNamedEvent("FlowGrid set autoFillRegion state");
-      const autoFillRegion = newAutoFillRegion(
-        state.autoFillRegion.start,
-        location
-      );
-      setState({ ...state, autoFillRegion, hover });
-    } else if (state.dragSelecting) {
+    setHover(undefined);
+
+    if (autoFillRegion) {
+      setAutoFillRegion(newAutoFillRegion(autoFillRegion.start, location));
+    } else if (dragSelecting) {
       handleEndRangeSelect(location);
-      setState({ ...state, hover });
     }
+  };
+
+  const handleCellMouseUp = () => {
+    if (!autoFillRegion?.end) {
+      return; // huh?
+    }
+    onAutoFillRegion(
+      autoFillRegion as { start: CanvasLocation; end: CanvasLocation } // FIXME
+    );
+
+    // FIXME - there might be typing bugs here but this is how it worked pre-typescript
+    handleEndRangeSelect(autoFillRegion.end);
+
+    setAutoFillRegion(undefined);
   };
 
   const handleEndDragCell = (location: CanvasLocation) => {
@@ -251,8 +229,7 @@ export const FlowGrid: React.FC<Props> = ({
 
   const handleKeyUp = (e: React.KeyboardEvent) => {
     if (e.keyCode == 17 || e.keyCode == 224 || e.keyCode == 91) {
-      window.recorder.recordNamedEvent("FlowGrid set ctrl pressed state");
-      setState({ ...state, ctrlPressed: false });
+      setCtrlPressed(false);
     }
   };
 
@@ -289,9 +266,8 @@ export const FlowGrid: React.FC<Props> = ({
         e.keyCode == 93)
     ) {
       e.preventDefault();
-      window.recorder.recordNamedEvent("FlowGrid set ctrl pressed state");
-      setState({ ...state, ctrlPressed: true });
-    } else if (state.ctrlPressed) {
+      setCtrlPressed(true);
+    } else if (ctrlPressed) {
       if (e.keyCode == 86) {
         onPaste?.();
       } else if (e.keyCode == 67) {
@@ -344,34 +320,10 @@ export const FlowGrid: React.FC<Props> = ({
   };
 
   const handleAutoFillTargetMouseDown = (location: CanvasLocation) => {
-    window.recorder.recordNamedEvent("FlowGrid set autoFillRegion state");
-    setState({
-      ...state,
-      tracingAutoFillRegion: true,
-      autoFillRegion: { start: location },
-    });
+    setAutoFillRegion({ start: location });
   };
 
-  const onCellMouseUp = () => {
-    if (!state.tracingAutoFillRegion) {
-      return;
-    }
-    const { autoFillRegion } = state;
-    if (!autoFillRegion.end) {
-      return; // huh?
-    }
-    window.recorder.recordNamedEvent("FlowGrid set autoFillRegion state");
-    onAutoFillRegion(
-      autoFillRegion as { start: CanvasLocation; end: CanvasLocation } // FIXME
-    );
-
-    // FIXME - there might be typing bugs here but this is how it worked pre-typescript
-    handleEndRangeSelect(autoFillRegion.end);
-
-    setState({ ...state, tracingAutoFillRegion: false, autoFillRegion: {} });
-  };
-
-  const _getRowHeight = (rowI: number) => {
+  const getRowHeight = (rowI: number) => {
     return rowRefs.current[rowI]?.offsetHeight || 0;
   };
 
@@ -386,13 +338,11 @@ export const FlowGrid: React.FC<Props> = ({
     const showAutoFillToken =
       inSelectedCell &&
       hasNonEmptyItem &&
-      !state.dragSelecting &&
+      !dragSelecting &&
       !selectedRegionNotOneByOne;
     return (
       <DropCell
-        onMouseUp={() => {
-          onCellMouseUp();
-        }}
+        onMouseUp={handleCellMouseUp}
         onAutoFillTargetMouseDown={() => {
           handleAutoFillTargetMouseDown(location);
         }}
@@ -407,7 +357,7 @@ export const FlowGrid: React.FC<Props> = ({
         selectedFrom={
           "selectedFrom" in selectedCell ? selectedCell.selectedFrom : undefined
         }
-        isHovered={isAtLocation(state.hover, location)}
+        isHovered={Boolean(hover && isAtLocation(hover, location))}
         item={item}
         key={location.column}
         location={location}
@@ -426,17 +376,10 @@ export const FlowGrid: React.FC<Props> = ({
         onTab={(right = true) => {
           handleTab(location, right);
         }}
-        // ref={`cell-${location.row}-${location.column}`}
-        getRowHeight={() => _getRowHeight(location.row)}
+        getRowHeight={() => getRowHeight(location.row)}
         showAutoFillToken={showAutoFillToken}
       />
     );
-  };
-
-  const renderRow = (row: number) => {
-    return upto(columns).map((column) => {
-      return renderCell({ row, column });
-    });
   };
 
   const className = clsx(
@@ -463,7 +406,9 @@ export const FlowGrid: React.FC<Props> = ({
                   key={row}
                   ref={(el) => (rowRefs.current[row] = el)}
                 >
-                  {renderRow(row)}
+                  {upto(columns).map((column) => {
+                    return renderCell({ row, column });
+                  })}
                 </div>
               );
             })}
@@ -471,11 +416,11 @@ export const FlowGrid: React.FC<Props> = ({
           <BackgroundContainer
             edges={edges}
             rowCount={rows}
-            getRowHeight={_getRowHeight}
+            getRowHeight={getRowHeight}
             selectedRegion={selectedRegion}
             copiedRegion={copiedRegion}
             analyzedRegion={analyzedRegion}
-            autoFillRegion={getBounds(state.autoFillRegion)}
+            autoFillRegion={getBounds(autoFillRegion)}
           />
         </div>
       </div>

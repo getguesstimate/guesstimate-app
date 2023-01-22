@@ -44,7 +44,7 @@ export const hasInputError = _.partialRight(
   someOfSubType,
   INVALID_ANCESTOR_ERROR
 );
-export const displayableError = (errors) =>
+export const displayableError = (errors: errorTypes.PropagationError[]) =>
   hasInputError(errors)
     ? getBySubType(errors, INVALID_ANCESTOR_ERROR)
     : errors.find((e) => e.type !== WORKER_ERROR);
@@ -57,25 +57,27 @@ export function addStats(simulation: Simulation) {
     return;
   }
 
-  const possibleValues = simulation.sample.values.filter(
-    (v) => !_.isEqual(v, SAMPLE_FILTERED)
+  let possibleValues = simulation.sample.values.filter(
+    (v): v is number => !_.isEqual(v, SAMPLE_FILTERED)
   );
   const sortedValues = sortDescending(possibleValues.slice(0, 2000));
   if (sortedValues[sortedValues.length - 1] - sortedValues[0] < 1e-15) {
     // The number of distinct values should only be computed if the list has appropriately small span. We nest it
     // like this rather than use a simple && to emphasize that.
     if (numDistinctValues(sortedValues, 10) < 10) {
-      simulation.sample.values = simulation.sample.values.slice(0, 1);
+      // TODO - this doesn't seem correct to me -- @berekuk
+      simulation.sample.values = possibleValues.slice(0, 1);
+      possibleValues = possibleValues.slice(0, 1);
     }
   }
 
-  if (simulation.sample.values.length === 1) {
+  if (possibleValues.length === 1) {
     simulation.stats = {
-      mean: simulation.sample.values[0],
+      mean: possibleValues[0],
       stdev: 0,
       length: 1,
     };
-    simulation.sample.sortedValues = simulation.sample.values;
+    simulation.sample.sortedValues = possibleValues;
     return;
   }
 

@@ -1,36 +1,40 @@
 import _ from "lodash";
+import React, { useRef, useState } from "react";
 import { DistributionSummary } from "~/components/distributions/summary/index";
 import { SimulationHistogram } from "~/components/simulations/SimulationHistogram";
 import { cutoff, percentile } from "~/lib/dataAnalysis";
-import React, { Component } from "react";
+import { Simulation } from "~/modules/simulations/reducer";
 
 const MARGIN_LEFT = 10;
 
-const percentages = (values, perc) => {
+const percentages = (values: number[], perc: number[]) => {
   return perc.map((e) => {
     return { percentage: e, value: percentile(values, values.length, e) };
   });
 };
 
-const findPercentile = (values, value) => {
+const findPercentile = (values: number[], value: number) => {
   return cutoff(values, value) / values.length;
 };
 
-const PercentileTable = ({ values }) => (
-  <div className="percentiles">
-    <h3> Percentiles </h3>
-    <table className="ui very basic collapsing celled table">
+const PercentileTable: React.FC<{ values: any }> = ({ values }) => (
+  <div>
+    <h3>Percentiles</h3>
+    <table className="border-collapse">
       <tbody>
         {!_.isEmpty(values) &&
           percentages(values, [1, 5, 50, 95, 99]).map((e) => {
             return (
-              <tr key={e.percentage}>
-                <td>
-                  {" "}
-                  {e.percentage}
-                  {"%"}{" "}
+              <tr
+                key={e.percentage}
+                className="border-b border-black/10 last:border-none"
+              >
+                <td className="p-1 text-grey-666 border-r border-black/10">
+                  {e.percentage}%
                 </td>
-                <td> {e.value && e.value.toFixed(3)} </td>
+                <td className="p-1 text-grey-666">
+                  {e.value && e.value.toFixed(3)}
+                </td>
               </tr>
             );
           })}
@@ -40,83 +44,87 @@ const PercentileTable = ({ values }) => (
 );
 
 type Props = {
-  simulation: any;
+  simulation?: Simulation | null | undefined;
   stats: any;
-  sortedSampleValues: any;
+  sortedSampleValues: number[];
 };
 
-export class HistogramWithStats extends Component<Props> {
-  state = {
-    hoveredXCoord: 0,
-    xScale: (i) => i,
-    isHovering: false,
-  };
+export const HistogramWithStats: React.FC<Props> = ({
+  stats,
+  simulation,
+  sortedSampleValues,
+}) => {
+  const [hoveredXCoord, setHoveredXCoord] = useState(0);
+  const [isHovering, setIsHovering] = useState(false);
+  const [xScale, setXScale] = useState(() => (i) => i);
 
-  onMouseHover(event) {
-    const div: any = this.refs.div;
+  const divRef = useRef<HTMLDivElement | null>(null);
+
+  const onMouseHover = (event: React.MouseEvent) => {
+    const div = divRef.current;
+    if (!div) {
+      return; // shouldn't happen
+    }
     const bounds = div.getBoundingClientRect();
     const x = event.clientX - bounds.left - MARGIN_LEFT;
-    this.setState({ hoveredXCoord: x, isHovering: true });
-  }
+    setHoveredXCoord(x);
+    setIsHovering(true);
+  };
 
-  changeXScale(xScale) {
-    this.setState({ xScale });
-  }
+  const changeXScale = (xScale: (i: number) => number) => {
+    setXScale(() => xScale);
+  };
 
-  render() {
-    const { stats, simulation, sortedSampleValues } = this.props;
-    const { hoveredXCoord, isHovering } = this.state;
-    let hoveredValue, hoveredPercentile;
-    if (isHovering) {
-      hoveredValue = this.state.xScale(hoveredXCoord);
-      hoveredPercentile = findPercentile(sortedSampleValues, hoveredValue);
-    }
-    return (
-      <div
-        className="HistogramWithStats"
-        ref="div"
-        onMouseMove={this.onMouseHover.bind(this)}
-        onMouseEnter={() => this.setState({ isHovering: true })}
-        onMouseLeave={() => this.setState({ isHovering: false })}
-      >
-        <div className="distributionSection">
-          <div className="row">
-            <div className="col-sm-9 mean subsection">
-              <DistributionSummary
-                length={stats.length}
-                mean={stats.mean}
-                adjustedConfidenceInterval={stats.adjustedConfidenceInterval}
-              />
-              {isHovering && (
-                <div className="hovered-value">
-                  <h3>{hoveredValue.toFixed(2)}</h3>
-                  <h4>{`${(hoveredPercentile * 100).toFixed(
-                    2
-                  )}th percentile`}</h4>
-                </div>
-              )}
-            </div>
-            <div className="col-sm-3 subsection">
-              <PercentileTable values={sortedSampleValues} />
-            </div>
-          </div>
-        </div>
-        <div className="histogram">
-          <SimulationHistogram
-            height={150}
-            top={0}
-            bottom={0}
-            bins={100}
-            widthPercent={80}
-            cutOffRatio={0.98}
-            left={MARGIN_LEFT}
-            simulation={simulation}
-            allowHover={isHovering}
-            hoveredXCoord={hoveredXCoord}
-            onChangeXScale={this.changeXScale.bind(this)}
+  let hoveredValue: number | undefined, hoveredPercentile: number | undefined;
+  if (isHovering) {
+    hoveredValue = xScale(hoveredXCoord);
+    hoveredPercentile = findPercentile(sortedSampleValues, hoveredValue!);
+  }
+  return (
+    <div
+      className="relative"
+      ref={divRef}
+      onMouseMove={onMouseHover}
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
+    >
+      <div className="flex justify-between gap-8">
+        <div className="mean z-10 flex-1 flex justify-between gap-4">
+          <DistributionSummary
+            length={stats.length}
+            mean={stats.mean}
+            adjustedConfidenceInterval={stats.adjustedConfidenceInterval}
           />
+          {isHovering && (
+            <div>
+              <div className="text-grey-444 font-extralight text-3xl">
+                {hoveredValue!.toFixed(2)}
+              </div>
+              <div className="text-grey-888 font-extralight mt-2">
+                {(hoveredPercentile! * 100).toFixed(2)}th percentile
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="z-10">
+          <PercentileTable values={sortedSampleValues} />
         </div>
       </div>
-    );
-  }
-}
+      <div className="absolute left-0 right-0 bottom-[-20px]">
+        <SimulationHistogram
+          height={150}
+          top={0}
+          bottom={0}
+          bins={100}
+          widthPercent={80}
+          cutOffRatio={0.98}
+          left={MARGIN_LEFT}
+          simulation={simulation}
+          allowHover={isHovering}
+          hoveredXCoord={hoveredXCoord}
+          onChangeXScale={changeXScale}
+        />
+      </div>
+    </div>
+  );
+};

@@ -11,6 +11,7 @@ import { AppDispatch } from "~/modules/store";
 import { Guesstimator } from "~/lib/guesstimator/index";
 import { LargeDataViewer, SmallDataViewer } from "./DataForm/DataViewer";
 import { MetricClickMode } from "~/modules/canvas_state/reducer";
+import clsx from "clsx";
 
 type Props = {
   metricClickMode: MetricClickMode;
@@ -33,7 +34,7 @@ type Props = {
 ) & { dispatch: AppDispatch };
 
 export class UnwrappedDistributionEditor extends Component<Props> {
-  formRef: React.RefObject<TextForm>;
+  formRef: React.RefObject<{ focus(): void }>;
 
   constructor(props: Props) {
     super(props);
@@ -137,23 +138,19 @@ export class UnwrappedDistributionEditor extends Component<Props> {
     }
 
     const hasData = !!guesstimate.data;
-    const formClasses = `Guesstimate${size === "large" ? " large" : ""}`;
+    const formClasses = clsx("Guesstimate", size === "large" && "large");
 
     return (
       <div className={formClasses}>
         {hasData ? (
           size === "large" ? (
-            <div className="row">
-              <div className="col-sm-12">
-                <LargeDataViewer
-                  data={guesstimate.data}
-                  onDelete={() => {
-                    this.addDataAndSave(null);
-                  }}
-                  onSave={this.addDataAndSave.bind(this)}
-                />
-              </div>
-            </div>
+            <LargeDataViewer
+              data={guesstimate.data}
+              onDelete={() => {
+                this.addDataAndSave(null);
+              }}
+              onSave={this.addDataAndSave.bind(this)}
+            />
           ) : (
             <SmallDataViewer
               onDelete={() => {

@@ -36,12 +36,13 @@
 
 /* draggable by react-dnd */
 .FlowGridCell > div {
-  display: flex;
-  width: 100%;
+  display: grid;
+  place-items: stretch;
 }
 
 .FlowGridFilledCell {
-  display: flex;
+  display: grid;
+  place-items: stretch;
   width: 100%;
   padding: 3px;
   outline: none;

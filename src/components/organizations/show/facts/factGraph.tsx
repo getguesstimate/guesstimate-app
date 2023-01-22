@@ -119,11 +119,10 @@ const addLocationsToHeightOrderedComponents = (componentsHeightOrdered) => {
 const itemsAndEdges = (facts: Fact[], spaces: ApiSpace[]) => {
   let factNodes = facts.map(makeFactNodeFn(spaces));
 
-  const spacesToDisplay = _.filter(
-    spaces,
+  const spacesToDisplay = spaces.filter(
     (s) => s.exported_facts_count > 0 || !_.isEmpty(s.imported_fact_ids)
   );
-  const spaceNodes = _.map(spacesToDisplay, makeSpaceNodeFn(facts));
+  const spaceNodes = spacesToDisplay.map(makeSpaceNodeFn(facts));
 
   // Here we remove some facts from the set of fact nodes, to display them separately, outside the rest of the graph.
   // In particular, we remove facts that are isolated (i.e. have no inputs or outputs) and orphaned facts, which are
@@ -139,7 +138,7 @@ const itemsAndEdges = (facts: Fact[], spaces: ApiSpace[]) => {
   const nodeAncestors = getNodeAncestors(nodes);
 
   const components = separateIntoDisconnectedComponents(nodes, nodeAncestors);
-  const componentsHeightOrdered = _.map(components, separateIntoHeightSets);
+  const componentsHeightOrdered = components.map(separateIntoHeightSets);
 
   const { withFinalLocations, maxRowUsed } =
     addLocationsToHeightOrderedComponents(componentsHeightOrdered);
@@ -181,7 +180,7 @@ const itemsAndEdges = (facts: Fact[], spaces: ApiSpace[]) => {
     );
   });
 
-  const bad_edges = _.remove(
+  const badEdges = _.remove(
     edges,
     (edge) =>
       !_utils.allPropsPresent(
@@ -192,9 +191,9 @@ const itemsAndEdges = (facts: Fact[], spaces: ApiSpace[]) => {
         "output.column"
       )
   );
-  if (!_.isEmpty(bad_edges)) {
-    console.warn(bad_edges.length, "BAD EDGES ENCOUNTERED!");
-    console.warn(bad_edges);
+  if (!_.isEmpty(badEdges)) {
+    console.warn(badEdges.length, "BAD EDGES ENCOUNTERED!");
+    console.warn(badEdges);
   }
 
   return { items, edges };

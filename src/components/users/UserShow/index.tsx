@@ -2,7 +2,11 @@ import _ from "lodash";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 
-import { NewSpaceCard, SpaceCard } from "~/components/spaces/SpaceCards";
+import {
+  NewSpaceCard,
+  SpaceCard,
+  SpaceCardGrid,
+} from "~/components/spaces/SpaceCards";
 import { Container } from "~/components/utility/Container";
 
 import { userSpaceSelector } from "./userSpaceSelector";
@@ -45,27 +49,20 @@ export const UserShow: React.FC<Props> = ({ userId }) => {
 
   return (
     <Container>
-      <div className="UserShow">
-        <div className="row">
-          <div className="col-md-4" />
-          <div className="col-md-4 col-xs-12">
-            {user && (
-              <div className="main-user-tag">
-                <img src={user.picture} />
-                {user && <h1>{user.name}</h1>}
-              </div>
-            )}
-          </div>
+      {user && (
+        <div className="flex flex-col items-center mb-8">
+          <img className="w-32 h-32 rounded-full" src={user.picture} />
+          <h1 className="mt-3">{user.name}</h1>
         </div>
-        {spaces && (
-          <div className="row">
-            {isMe && <NewSpaceCard onClick={newModel} />}
-            {_.map(spaces, (s) => (
-              <SpaceCard key={s.id} space={s} showPrivacy={isMe} />
-            ))}
-          </div>
-        )}
-      </div>
+      )}
+      {spaces && (
+        <SpaceCardGrid>
+          {isMe && <NewSpaceCard onClick={newModel} />}
+          {spaces.map((s) => (
+            <SpaceCard key={s.id} space={s} showPrivacy={isMe} />
+          ))}
+        </SpaceCardGrid>
+      )}
     </Container>
   );
 };

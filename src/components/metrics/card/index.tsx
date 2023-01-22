@@ -44,15 +44,6 @@ relationshipClasses[OUTPUT] = "output";
 relationshipClasses[INPUT] = "input";
 relationshipClasses[NOEDGE] = "noedge";
 
-const ScatterTip: React.FC<{
-  xMetric: FullDenormalizedMetric;
-  yMetric: FullDenormalizedMetric | null;
-}> = ({ yMetric, xMetric }) => (
-  <ToolTip size="LARGE">
-    <SensitivitySection yMetric={yMetric} xMetric={xMetric} size="LARGE" />
-  </ToolTip>
-);
-
 const MetricSidebar: React.FC<{
   onOpenModal(): void;
   onRemoveMetric(): void;
@@ -429,92 +420,107 @@ class UnconnectedMetricCard extends Component<Props, State> {
       shouldTransformName(name) && isFunction && canUseOrganizationFacts;
 
     return (
-      <div
-        className="metricCard--Container"
-        onKeyPress={this._handleKeyPress.bind(this)}
-        onKeyDown={this._handleKeyDown.bind(this)}
-        tabIndex={0}
+      <ToolTip
+        disabled={
+          !hovered ||
+          inSelectedCell ||
+          (!shouldShowSensitivitySection && !guesstimate.description)
+        }
+        theme="light"
+        containerClassName="min-w-0"
+        render={() =>
+          shouldShowSensitivitySection ? (
+            <SensitivitySection
+              yMetric={analyzedMetric}
+              xMetric={metric}
+              size="LARGE"
+            />
+          ) : (
+            <MetricToolTip guesstimate={guesstimate} />
+          )
+        }
       >
         <div
-          className={this._className()}
-          onMouseDown={this.onMouseDown.bind(this)}
+          className="metricCard--Container h-full"
+          onKeyPress={this._handleKeyPress.bind(this)}
+          onKeyDown={this._handleKeyDown.bind(this)}
+          tabIndex={0}
         >
-          {this.state.modalIsOpen && (
-            <MetricModal
-              metric={metric}
-              organizationId={organizationId}
-              canUseOrganizationFacts={canUseOrganizationFacts}
-              metricClickMode={metricClickMode}
-              closeModal={this.closeModal.bind(this)}
-              onChangeGuesstimateDescription={this.onChangeGuesstimateDescription.bind(
-                this
-              )}
-            />
-          )}
-
-          <MetricCardViewSection
-            canvasState={canvasState}
-            metric={metric}
-            inSelectedCell={inSelectedCell}
-            onChangeName={this.onChangeMetricName.bind(this)}
-            onToggleSidebar={this._toggleSidebar.bind(this)}
-            jumpSection={this._focusForm.bind(this)}
-            onMouseDown={this._handleMouseDown.bind(this)}
-            ref={this.viewRef}
-            isTitle={this._isTitle()}
-            isInScreenshot={isInScreenshot}
-            connectDragSource={connectDragSource}
-            idMap={idMap}
-            analyzedMetric={analyzedMetric}
-            showSensitivitySection={shouldShowSensitivitySection}
-            heightHasChanged={forceFlowGridUpdate}
-            hovered={hovered}
-            onReturn={this.props.onReturn}
-            onTab={this.props.onTab}
-            exportedAsFact={exportedAsFact}
-          />
-
-          {shouldShowDistributionEditor && !this.state.modalIsOpen && (
-            <div className="section editing">
-              <DistributionEditor
-                guesstimate={metric.guesstimate}
-                inputMetrics={metric.edges.inputMetrics}
-                metricClickMode={metricClickMode}
-                metricId={metric.id}
+          <div
+            className={this._className()}
+            onMouseDown={this.onMouseDown.bind(this)}
+          >
+            {this.state.modalIsOpen && (
+              <MetricModal
+                metric={metric}
                 organizationId={organizationId}
                 canUseOrganizationFacts={canUseOrganizationFacts}
-                jumpSection={() => {
-                  this.viewRef.current?.focusName();
-                }}
-                onOpen={this.openModal.bind(this)}
-                ref={this.editorRef}
-                size="small"
-                onReturn={this.props.onReturn}
-                onTab={this.props.onTab}
+                metricClickMode={metricClickMode}
+                closeModal={this.closeModal.bind(this)}
+                onChangeGuesstimateDescription={this.onChangeGuesstimateDescription.bind(
+                  this
+                )}
               />
-            </div>
+            )}
+
+            <MetricCardViewSection
+              canvasState={canvasState}
+              metric={metric}
+              inSelectedCell={inSelectedCell}
+              onChangeName={this.onChangeMetricName.bind(this)}
+              onToggleSidebar={this._toggleSidebar.bind(this)}
+              jumpSection={this._focusForm.bind(this)}
+              onMouseDown={this._handleMouseDown.bind(this)}
+              ref={this.viewRef}
+              isTitle={this._isTitle()}
+              isInScreenshot={isInScreenshot}
+              connectDragSource={connectDragSource}
+              idMap={idMap}
+              analyzedMetric={analyzedMetric}
+              showSensitivitySection={shouldShowSensitivitySection}
+              heightHasChanged={forceFlowGridUpdate}
+              hovered={hovered}
+              onReturn={this.props.onReturn}
+              onTab={this.props.onTab}
+              exportedAsFact={exportedAsFact}
+            />
+
+            {shouldShowDistributionEditor && !this.state.modalIsOpen && (
+              <div className="section editing">
+                <DistributionEditor
+                  guesstimate={metric.guesstimate}
+                  inputMetrics={metric.edges.inputMetrics}
+                  metricClickMode={metricClickMode}
+                  metricId={metric.id}
+                  organizationId={organizationId}
+                  canUseOrganizationFacts={canUseOrganizationFacts}
+                  jumpSection={() => {
+                    this.viewRef.current?.focusName();
+                  }}
+                  onOpen={this.openModal.bind(this)}
+                  ref={this.editorRef}
+                  size="small"
+                  onReturn={this.props.onReturn}
+                  onTab={this.props.onTab}
+                />
+              </div>
+            )}
+          </div>
+          {inSelectedCell && this.state.sidebarIsOpen && (
+            <MetricSidebar
+              onOpenModal={this.openModal.bind(this)}
+              onRemoveMetric={this.handleRemoveMetric.bind(this)}
+              showAnalysis={this._canBeAnalyzed()}
+              onBeginAnalysis={this._beginAnalysis.bind(this)}
+              onEndAnalysis={this._endAnalysis.bind(this)}
+              canBeMadeFact={canBeMadeFact}
+              exportedAsFact={exportedAsFact}
+              onMakeFact={this._makeFact.bind(this)}
+              isAnalyzedMetric={isAnalyzedMetric}
+            />
           )}
         </div>
-        {hovered && !inSelectedCell && !shouldShowSensitivitySection && (
-          <MetricToolTip guesstimate={guesstimate} />
-        )}
-        {hovered && !inSelectedCell && shouldShowSensitivitySection && (
-          <ScatterTip yMetric={analyzedMetric} xMetric={metric} />
-        )}
-        {inSelectedCell && this.state.sidebarIsOpen && (
-          <MetricSidebar
-            onOpenModal={this.openModal.bind(this)}
-            onRemoveMetric={this.handleRemoveMetric.bind(this)}
-            showAnalysis={this._canBeAnalyzed()}
-            onBeginAnalysis={this._beginAnalysis.bind(this)}
-            onEndAnalysis={this._endAnalysis.bind(this)}
-            canBeMadeFact={canBeMadeFact}
-            exportedAsFact={exportedAsFact}
-            onMakeFact={this._makeFact.bind(this)}
-            isAnalyzedMetric={isAnalyzedMetric}
-          />
-        )}
-      </div>
+      </ToolTip>
     );
   }
 }

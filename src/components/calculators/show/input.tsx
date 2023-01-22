@@ -1,18 +1,12 @@
 import _ from "lodash";
-import React, {
-  Component,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from "react";
+import React, { useEffect, useImperativeHandle, useRef, useState } from "react";
 
 import ReactMarkdown from "react-markdown";
 import Icon from "~/components/react-fa-patched";
 
 import { Guesstimator } from "~/lib/guesstimator/index";
 
-import { EditorState, Editor, ContentState } from "draft-js";
+import { ContentState, Editor, EditorState } from "draft-js";
 
 export type InputHandle = {
   getContent(): string;

@@ -78,7 +78,6 @@ type Props = {
   onFocus(): void;
   canUseOrganizationFacts: boolean;
   organizationId?: string | number;
-  width: "NARROW" | "WIDE";
 } & { dispatch: AppDispatch } & { suggestion: string };
 
 export class UnconnectedTextInput extends Component<Props> {
@@ -380,17 +379,15 @@ export class UnconnectedTextInput extends Component<Props> {
   }
 
   render() {
-    const { width } = this.props;
     const { isFlashing, editorState } = this.state;
 
     const className = getClassName(
       "TextInput",
-      width,
       isFlashing ? "flashing" : null
       // hasErrors ? "hasErrors" : null
     );
     return (
-      <span
+      <div
         className={className}
         onClick={this.focus.bind(this)}
         onKeyDown={(e) => {
@@ -408,7 +405,7 @@ export class UnconnectedTextInput extends Component<Props> {
           ref={this.editorRef}
           placeholder="value"
         />
-      </span>
+      </div>
     );
   }
 }

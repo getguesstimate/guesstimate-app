@@ -79,40 +79,36 @@ export const CalculatorExpandedShow: React.FC<Props> = ({ calculatorId }) => {
           <meta {...tag} key={tag.name ?? tag.property} />
         ))}
       </Head>
-      <div className="row">
-        <div className="col-xs-0 col-md-2" />
-        <div className="col-xs-12 col-md-8">
-          {showHelp ? (
-            <CalculatorHelp onClose={() => setShowHelp(false)} />
-          ) : (
-            <CalculatorShow
-              {...selectedProps}
-              size="wide"
-              classes={["wide"]}
-              showHelp={() => setShowHelp(true)}
-              onShowResult={() => setResultBeenShown(true)}
-            />
-          )}
-          <div className="information-section">
-            <div className="row">
-              <div className="col-xs-12 col-sm-6">
-                <FacebookShareButton url={calculatorUrl} title={title}>
-                  <FacebookIcon size={42} />
-                </FacebookShareButton>
-                <TwitterShareButton url={calculatorUrl} title={title}>
-                  <TwitterIcon size={42} />
-                </TwitterShareButton>
-              </div>
-              <div className="col-sm-1" />
-              <div className="col-xs-12 col-sm-5 calculation-link-section">
-                <a href={spaceUrl} onClick={() => router.push(spaceUrl)}>
-                  <i className="ion-ios-redo" /> See calculations
-                </a>
-              </div>
+      <div className="max-w-4xl mx-auto">
+        {showHelp ? (
+          <CalculatorHelp onClose={() => setShowHelp(false)} />
+        ) : (
+          <CalculatorShow
+            {...selectedProps}
+            size="wide"
+            classes={["wide"]}
+            showHelp={() => setShowHelp(true)}
+            onShowResult={() => setResultBeenShown(true)}
+          />
+        )}
+        <div className="information-section">
+          <div className="row">
+            <div className="col-xs-12 col-sm-6">
+              <FacebookShareButton url={calculatorUrl} title={title}>
+                <FacebookIcon size={42} />
+              </FacebookShareButton>
+              <TwitterShareButton url={calculatorUrl} title={title}>
+                <TwitterIcon size={42} />
+              </TwitterShareButton>
+            </div>
+            <div className="col-sm-1" />
+            <div className="col-xs-12 col-sm-5 calculation-link-section">
+              <a href={spaceUrl}>
+                <i className="ion-ios-redo" /> See calculations
+              </a>
             </div>
           </div>
         </div>
-        <div className="col-md-3" />
       </div>
     </Container>
   );
@@ -120,91 +116,85 @@ export const CalculatorExpandedShow: React.FC<Props> = ({ calculatorId }) => {
 
 const CalculatorHelp: React.FC<{ onClose(): void }> = ({ onClose }) => {
   return (
-    <div className="calculator wide help">
-      <div className="padded-section">
-        <div className="row">
-          <div className="col-xs-9">
-            <h1> Useful Information </h1>
-          </div>
-          <div className="col-xs-3 header-actions">
-            <ButtonCloseText onClick={onClose} />
-          </div>
-        </div>
-        <hr className="result-divider" />
-
-        <h2> Input Types </h2>
-
-        <table className="ui celled table">
-          <thead>
-            <tr>
-              <th>Type</th>
-              <th>Example</th>
-              <th>Explanation</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Point</td>
-              <td>
-                <input className="editor" value="8" />
-              </td>
-              <td>You believe this value is 8.</td>
-            </tr>
-            <tr>
-              <td>Range</td>
-              <td>
-                <input className="editor" value="6 to 12" />
-              </td>{" "}
-              <td>
-                You believe this value is between 6 and 12. More specifically,
-                this indicates that you believe there's a 95% chance the value
-                is above 6, and a 95% chance the value is below 12.
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <hr className="result-divider" />
-        <h2> Units </h2>
-        <table className="ui celled table">
-          <thead>
-            <tr>
-              <th>Symbol</th>
-              <th>Multiplier</th>
-              <th>Example</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>K</td>
-              <td>Thousand</td>
-              <td>
-                <input className="editor" value="3K to 8K" />
-              </td>
-            </tr>
-            <tr>
-              <td>M</td>
-              <td>Million</td>
-              <td>
-                <input className="editor" value="3M to 8M" />
-              </td>
-            </tr>
-            <tr>
-              <td>B</td>
-              <td>Billion</td>
-              <td>
-                <input className="editor" value="3B to 8B" />
-              </td>
-            </tr>
-            <tr>
-              <td>T</td>
-              <td>Trillion</td>
-              <td>
-                <input className="editor" value="3T to 8T" />
-              </td>
-            </tr>
-          </tbody>
-        </table>
+    <div className="calculator wide">
+      <div className="flex justify-between items-start">
+        <h1 className="m-0">Useful Information</h1>
+        <ButtonCloseText onClick={onClose} />
       </div>
+      <hr className="result-divider" />
+
+      <h2>Input Types</h2>
+
+      <table className="ui celled table">
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Example</th>
+            <th>Explanation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Point</td>
+            <td>
+              <input className="editor" value="8" />
+            </td>
+            <td>You believe this value is 8.</td>
+          </tr>
+          <tr>
+            <td>Range</td>
+            <td>
+              <input className="editor" value="6 to 12" />
+            </td>{" "}
+            <td>
+              You believe this value is between 6 and 12. More specifically,
+              this indicates that you believe there's a 95% chance the value is
+              above 6, and a 95% chance the value is below 12.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <hr className="result-divider" />
+      <h2>Units</h2>
+      <table className="ui celled table">
+        <thead>
+          <tr>
+            <th>Symbol</th>
+            <th>Multiplier</th>
+            <th>Example</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>K</td>
+            <td>Thousand</td>
+            <td>
+              <input className="editor" value="3K to 8K" />
+            </td>
+          </tr>
+          <tr>
+            <td>M</td>
+            <td>Million</td>
+            <td>
+              <input className="editor" value="3M to 8M" />
+            </td>
+          </tr>
+          <tr>
+            <td>B</td>
+            <td>Billion</td>
+            <td>
+              <input className="editor" value="3B to 8B" />
+            </td>
+          </tr>
+          <tr>
+            <td>T</td>
+            <td>Trillion</td>
+            <td>
+              <input className="editor" value="3T to 8T" />
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   );
 };

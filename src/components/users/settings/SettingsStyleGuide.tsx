@@ -7,36 +7,34 @@ import { Settings } from "./Settings";
 export const SettingsStyleGuide: React.FC = () => {
   const planIds = Plan.all().map((e) => e.id);
   return (
-    <div className="full-width">
-      <div className="row">
-        <div className="col-sm-6">
-          {planIds.map((planId) => {
-            return (
-              <ComponentEditor
-                child={Settings}
-                childProps={{ planId, onClose: () => {} }}
-                name="Settings"
-                key={planId}
-              />
-            );
-          })}
-        </div>
-        <div className="col-sm-6">
-          {planIds.map((planId) => {
-            return (
-              <ComponentEditor
-                child={Settings}
-                childProps={{
-                  planId,
-                  portalUrl: "http://google.com",
-                  onClose: () => {},
-                }}
-                name="Settings"
-                key={planId}
-              />
-            );
-          })}
-        </div>
+    <div className="grid grid-cols-2">
+      <div>
+        {planIds.map((planId) => {
+          return (
+            <ComponentEditor
+              child={Settings}
+              childProps={{ planId, onClose: () => {} }}
+              name="Settings"
+              key={planId}
+            />
+          );
+        })}
+      </div>
+      <div>
+        {planIds.map((planId) => {
+          return (
+            <ComponentEditor
+              child={Settings}
+              childProps={{
+                planId,
+                portalUrl: "http://google.com",
+                onClose: () => {},
+              }}
+              name="Settings"
+              key={planId}
+            />
+          );
+        })}
       </div>
     </div>
   );

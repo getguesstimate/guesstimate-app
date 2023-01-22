@@ -11,22 +11,28 @@ type PageProps = {
 
 const TutorialPage: React.FC<PageProps> = ({ header, children }) => (
   <div className="tutorialPage">
-    <div className="row header">
-      <div className="col-md-12">
-        <h2>{header}</h2>
-      </div>
-    </div>
-    <div className="row">
-      <div className="col-md-12">{children}</div>
-    </div>
+    <h2 className="text-center pb-6">{header}</h2>
+    <div>{children}</div>
   </div>
 );
 
 const Image: React.FC<{ image: string }> = ({ image }) => (
-  <div className="image">
-    <img src={image} />
+  <div className="bg-grey-7">
+    <img src={image} className="max-h-40 max-w-full mx-auto" />
   </div>
 );
+
+const ExampleFunction: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => (
+  <span className="bg-grey-eee rounded px-2 py-1 font-mono text-sm">
+    {children}
+  </span>
+);
+
+const ExampleInput: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => <span className="text-green-3 bg-green-4 px-1 rounded">{children}</span>;
 
 export const TutorialMetricPage: React.FC = () => (
   <TutorialPage header="Metrics">
@@ -45,13 +51,13 @@ export const TutorialMetricPage: React.FC = () => (
       <tbody>
         <tr>
           <td>
-            <span className="exampleFunction">100</span>
+            <ExampleFunction>100</ExampleFunction>
           </td>
           <td>This value is exactly 100.</td>
         </tr>
         <tr>
           <td>
-            <span className="exampleFunction">300 to 700</span>
+            <ExampleFunction>300 to 700</ExampleFunction>
           </td>
           <td>This value is estimated to be between 300 and 700.</td>
         </tr>
@@ -69,13 +75,13 @@ export const TutorialMetricActionsPage: React.FC = () => (
       <tbody>
         <tr>
           <td>
-            <span className="rowLabel">Move</span>
+            <span className="text-center font-bold">Move</span>
           </td>
           <td>Click the metric center and drag it to another cell.</td>
         </tr>
         <tr>
           <td>
-            <span className="rowLabel">Delete</span>
+            <span className="text-center font-bold">Delete</span>
           </td>
           <td>
             Press <strong>delete</strong> or <strong>backspace</strong>, or
@@ -84,7 +90,7 @@ export const TutorialMetricActionsPage: React.FC = () => (
         </tr>
         <tr>
           <td>
-            <span className="rowLabel">Cut, Copy & Paste</span>
+            <span className="text-center font-bold">Cut, Copy & Paste</span>
           </td>
           <td>
             Press <strong>ctrl-x</strong>, <strong>ctrl-c</strong>, and{" "}
@@ -118,23 +124,23 @@ export const TutorialFunctionPage: React.FC = () => (
       <tbody>
         <tr>
           <td>
-            <span className="exampleFunction">
-              = <span className="exampleInput">FA</span> * 300
-            </span>
+            <ExampleFunction>
+              = <ExampleInput>FA</ExampleInput> * 300
+            </ExampleFunction>
           </td>
           <td>
-            <span className="exampleInput">FA</span> times 300.
+            <ExampleInput>FA</ExampleInput> times 300.
           </td>
         </tr>
         <tr>
           <td>
-            <span className="exampleFunction">
-              = <span className="exampleInput">FA</span> &gt; 5 ? 100 : 0
-            </span>
+            <ExampleFunction>
+              = <ExampleInput>FA</ExampleInput> &gt; 5 ? 100 : 0
+            </ExampleFunction>
           </td>
           <td>
-            If <span className="exampleInput">FA</span> is greater than 5, 100.
-            If it is less, 0.
+            If <ExampleInput>FA</ExampleInput> is greater than 5, 100. If it is
+            less, 0.
           </td>
         </tr>
       </tbody>
@@ -142,19 +148,23 @@ export const TutorialFunctionPage: React.FC = () => (
   </TutorialPage>
 );
 
+const Subheader: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <h3 className="text-center text-grey-666 text-2xl my-3">{children}</h3>
+);
+
 export const TutorialMoreFeaturesPage: React.FC = () => (
   <TutorialPage header="Advanced Features">
-    <h3>Custom Data Input</h3>
+    <Subheader>Custom Data Input</Subheader>
     <p>
       You can enter your own data into a metric. This will be randomly sampled
       from in functions.
     </p>
-    <h3>Sensitivity Analysis</h3>
+    <Subheader>Sensitivity Analysis</Subheader>
     <p>
       Open a metrics' sidebar and select <strong>sensitivity</strong> to show
       scatterplots of how that metric corresponds to each other one.
     </p>
-    <h3>Model Calculators</h3>
+    <Subheader>Model Calculators</Subheader>
     <p>
       Models can be turned into calculators with a subset of their inputs and
       outputs.

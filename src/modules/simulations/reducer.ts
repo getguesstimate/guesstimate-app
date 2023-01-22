@@ -10,7 +10,7 @@ export type Simulation = {
   propagationId?: number;
   sample: {
     values?: SampleValue[];
-    sortedValues?: SampleValue[];
+    sortedValues?: number[];
     errors?: PropagationError[];
   };
 };

@@ -11,17 +11,17 @@ import { GuesstimateDescription } from "./GuesstimateDescription";
 import { FullDenormalizedMetric } from "~/lib/engine/space";
 import { SAMPLE_FILTERED } from "~/lib/guesstimator/samplers/simulator-worker/simulator/filters/filters";
 import { MetricClickMode } from "~/modules/canvas_state/reducer";
+import { SampleValue } from "~/lib/guesstimator/samplers/Simulator";
 
-const SampleList: React.FC<{ samples: number[] | undefined }> = ({
+const SampleList: React.FC<{ samples: SampleValue[] | undefined }> = ({
   samples,
 }) => (
-  <ul className="SampleList">
-    {_.map(
-      samples,
+  <ul className="max-h-96 overflow-scroll !p-2 rounded bg-grey-eee">
+    {samples?.map(
       (element, index) =>
         !_.isEqual(element, SAMPLE_FILTERED) && (
           <li key={index}>
-            <div key={index}>{element}</div>
+            <div key={index}>{element as number}</div>
           </li>
         )
     )}
@@ -37,7 +37,7 @@ type Props = {
   onChangeGuesstimateDescription(value: string): void;
 };
 
-//Note: Controlled inputs don't pass through very well.  Try to keep them in child connects().
+// Note: Controlled inputs don't pass through very well. Try to keep them in child connects().
 export const MetricModal: React.FC<Props> = ({
   metric,
   closeModal,
@@ -62,34 +62,31 @@ export const MetricModal: React.FC<Props> = ({
 
   const showSimulation = getShowSimulation();
 
-  const sortedSampleValues = _.get(metric, "simulation.sample.sortedValues");
+  const sortedSampleValues = metric.simulation?.sample.sortedValues;
   const allSamples = _.get(metric, "simulation.sample.values");
   const stats = _.get(metric, "simulation.stats");
   const guesstimate = metric.guesstimate;
+
   return (
     <GeneralModal onRequestClose={closeModal}>
-      <div className="metricModal">
-        <div className="container top">
-          <div className="row">
-            <div className="col-sm-10">
-              <h1> {metric.name} </h1>
-            </div>
-            <div className="col-sm-2">
-              <ButtonClose onClick={closeModal} />
-            </div>
-          </div>
-          {showSimulation && (
+      <div className="metricModal w-80 sm:w-[600px] md:w-[700px] lg:w-[1000px]">
+        <div className="flex justify-between items-center px-6 py-4">
+          <h1 className="leading-none">{metric.name}</h1>
+          <ButtonClose onClick={closeModal} />
+        </div>
+
+        {showSimulation && sortedSampleValues && (
+          <div className="px-8">
             <HistogramWithStats
               simulation={metric.simulation}
               stats={stats}
               sortedSampleValues={sortedSampleValues}
             />
-          )}
-        </div>
-
-        <div className="container bottom">
-          <div className="row editingInputSection">
-            <div className="col-sm-10">
+          </div>
+        )}
+        <div className="bg-white pt-12">
+          <div className="px-8 flex justify-between items-center gap-8">
+            <div className="flex-1">
               <DistributionEditor
                 organizationId={organizationId}
                 canUseOrganizationFacts={canUseOrganizationFacts}
@@ -100,29 +97,23 @@ export const MetricModal: React.FC<Props> = ({
                 size="large"
               />
             </div>
-            <div className="col-sm-2">
-              <div className="metricModal--sample-container">
-                <DropDown
-                  headerText="Samples"
-                  openLink={<a className="modal-action button"> Samples </a>}
-                  position="right"
-                  hasPadding={true}
-                >
-                  <SampleList samples={allSamples} />
-                </DropDown>
-              </div>
-            </div>
+            <DropDown
+              headerText="Samples"
+              openLink={<a className="modal-action button block">Samples</a>}
+              position="right"
+              hasPadding={true}
+            >
+              <SampleList samples={allSamples} />
+            </DropDown>
           </div>
-          <div className="row guesstimateDescriptionSection">
-            <div className="col-xs-12">
-              {guesstimate && (
-                <GuesstimateDescription
-                  onChange={onChangeGuesstimateDescription}
-                  value={guesstimate.description}
-                />
-              )}
+          {guesstimate && (
+            <div className="px-8 pt-8">
+              <GuesstimateDescription
+                onChange={onChangeGuesstimateDescription}
+                value={guesstimate.description}
+              />
             </div>
-          </div>
+          )}
         </div>
       </div>
     </GeneralModal>

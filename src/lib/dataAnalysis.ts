@@ -39,8 +39,8 @@ export function numDistinctValues(sortedValues, cutoff = Infinity) {
 }
 
 // Returns a sorted (desc) copy of the samples.
-export function sortDescending(samples) {
-  return Object.assign([], samples).sort((a, b) => a - b);
+export function sortDescending(samples: number[]) {
+  return [...samples].sort((a, b) => a - b);
 }
 
 // Returns the sample standard deviation. If no samples are provided, returns 0. Sample can be unsorted.
@@ -68,7 +68,11 @@ export function sampleMeanAndStdev(samples) {
 
 // Returns the cutoff value of the specified percentile, considering the samples array to be 'length' long.
 // samples must be sorted.
-export function percentile(samples, length, percentage) {
+export function percentile(
+  samples: number[],
+  length: number,
+  percentage: number
+) {
   return samples[Math.floor(length * (percentage / 100))];
 }
 

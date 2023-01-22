@@ -1,8 +1,9 @@
+import clsx from "clsx";
 import React from "react";
 
 type Props = {
   isFluid?: boolean;
-  backgroundColor?: "BLUE" | "GREY";
+  backgroundColor?: "GREY";
   children: React.ReactNode;
 };
 
@@ -11,17 +12,18 @@ export const Main: React.FC<Props> = ({
   backgroundColor = "",
   children,
 }) => {
-  let className = "";
-  className += backgroundColor === "BLUE" ? " blue" : "";
-  className += backgroundColor === "GREY" ? " grey" : "";
-  className += isFluid ? " fluid" : "";
+  const className = clsx(
+    "flex-1",
+    backgroundColor === "GREY" && "bg-grey-6",
+    isFluid && "flex flex-col"
+  );
 
   if (isFluid) {
     return <main className={className}>{children}</main>;
   } else {
     return (
       <main className={className}>
-        <div className="wrap">{children}</div>
+        <div className="max-w-1200 w-full mx-auto">{children}</div>
       </main>
     );
   }

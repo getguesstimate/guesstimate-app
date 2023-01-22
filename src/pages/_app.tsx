@@ -1,5 +1,5 @@
-import Head from "next/head";
 import type { AppProps } from "next/app";
+import Head from "next/head";
 import { useEffect, useState } from "react";
 
 import { Provider } from "react-redux";
@@ -9,15 +9,18 @@ import "flexboxgrid/css/flexboxgrid.min.css";
 import "font-awesome/css/font-awesome.css";
 import "ionicons/dist/css/ionicons.css";
 import "react-dd-menu/dist/react-dd-menu.css";
+
+import "../styles/global.css";
+
 import "../../semantic/dist/semantic.css";
 //semantic js is dependent on jquery, which has trouble now
 import "../styles/FlowGrid.css";
 import "../styles/legacyStyles.css";
 import "../styles/theme.css";
 
+import Script from "next/script";
 import * as meActions from "~/modules/me/actions";
 import "../routes/app";
-import Script from "next/script";
 
 // hacky, consider https://github.com/kirill-konshin/next-redux-wrapper
 let store: ReturnType<typeof configureStore> | undefined = undefined;
@@ -47,6 +50,7 @@ const MyApp = ({ Component }: AppProps) => {
       <Script id="wistia" src="//fast.wistia.com/assets/external/E-v1.js" />
       <Script id="twitter">{`!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");`}</Script>
       <Script id="chargebee" src="https://js.chargebee.com/v1/chargebee.js" />
+      <Script id="iubenda" src="//cdn.iubenda.com/iubenda.js" />
       <Head>
         <title key="title">Guesstimate</title>
         <meta

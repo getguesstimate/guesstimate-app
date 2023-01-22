@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Button } from "../button";
+import { ButtonWithIcon } from "../button";
 
 export const ButtonClose: React.FC<{ onClick(): void }> = ({ onClick }) => (
   <a className="button-close" onClick={onClick}>
@@ -9,8 +9,9 @@ export const ButtonClose: React.FC<{ onClick(): void }> = ({ onClick }) => (
 );
 
 export const ButtonCloseText: React.FC<{ onClick(): void }> = ({ onClick }) => (
-  <Button onClick={onClick}>
-    <i className="ion-md-close" />
-    Close
-  </Button>
+  <ButtonWithIcon
+    onClick={onClick}
+    icon={<i className="ion-md-close" />}
+    text="Close"
+  />
 );

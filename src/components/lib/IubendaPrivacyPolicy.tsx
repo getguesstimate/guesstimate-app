@@ -1,32 +1,16 @@
 import React, { useEffect } from "react";
 
-export const IubendaPrivacyPolicy: React.FC<{
-  id: number;
-  children: React.ReactNode;
-}> = ({ id, children }) => {
-  useEffect(() => {
-    const loadIubenda = function (w, d) {
-      const loader = () => {
-        const s = d.createElement("script");
-        const tag = d.getElementsByTagName("script")[0];
-        s.src = "//cdn.iubenda.com/iubenda.js";
-        tag.parentNode.insertBefore(s, tag);
-      };
-      if (w.addEventListener) {
-        w.addEventListener("load", loader, false);
-      } else if (w.attachEvent) {
-        w.attachEvent("onload", loader);
-      } else {
-        w.onload = loader;
-      }
-    };
-    loadIubenda(window, document);
-  }, []);
+const id = 7790420; // TODO - move to constants
 
-  const href = `//www.iubenda.com/privacy-policy/${id}`;
+export const iubendaHref = `//www.iubenda.com/privacy-policy/${id}`;
+
+export const IubendaPrivacyPolicy: React.FC<{
+  children: React.ReactNode;
+  className?: string;
+}> = ({ children, className }) => {
   return (
     <a
-      href={href}
+      href={iubendaHref}
       className="iubenda-nostyle no-brand iubenda-embed"
       title="Privacy Policy"
     >

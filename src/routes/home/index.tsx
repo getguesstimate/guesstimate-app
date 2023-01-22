@@ -1,88 +1,73 @@
+import clsx from "clsx";
 import Image from "next/image";
 import React from "react";
 
 import LogoWord from "../../../public/assets/logo-word-no-beta.png";
 
+const Benefit: React.FC<{
+  iconClass: string;
+  title: string;
+  children: React.ReactNode;
+}> = ({ iconClass, title, children }) => {
+  return (
+    <div className="flex flex-col items-center">
+      <i className={clsx(iconClass, "opacity-20 text-7xl")} />
+      <h2 className="font-normal text-4xl text-grey-444">{title}</h2>
+      <p className="text-center text-grey-2 text-xl leading-normal font-lato">
+        {children}
+      </p>
+    </div>
+  );
+};
+
 export const Home: React.FC = () => {
   return (
-    <div className="homePage">
-      <div className="container-fluid full-width">
-        <div className="row">
-          <div className="col-md-2 col-xs-0"></div>
-          <div className="col-md-8 col-xs-12 main">
-            <div className="row">
-              <div className="col-xm-12 col-md-12">
-                <div className="guesstimate-logo-outer">
-                  <div className="guesstimate-logo">
-                    <Image src={LogoWord} alt="Guesstimate logo" width={490} />
-                  </div>
-                </div>
-              </div>
-
-              <div className="col-md-12 col-xm-12 guesstimate-slogan">
-                <h2>
-                  A spreadsheet for things
-                  <br />
-                  that aren&rsquo;t certain
-                </h2>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="row">
-          <div className="col-md-12 col-xs-12 cta">
-            <a href="/models" className="ui button huge primary">
-              Browse Public Models
-            </a>
-          </div>
-        </div>
-
-        <div className="row">
-          <div className="col-xs-12">
-            <span className="wistia_embed wistia_async_ua8kd9n06a popover=true popoverAnimateThumbnail=true videoFoam=true">
-              &nbsp;
-            </span>
-          </div>
-        </div>
+    <div className="flex flex-col items-center mt-24">
+      <Image
+        className="px-8"
+        src={LogoWord}
+        alt="Guesstimate logo"
+        width={540}
+      />
+      <div className="px-4 mt-12">
+        <h2 className="text-5xl text-center font-lato font-normal text-grey-333 leading-tight">
+          A spreadsheet for things
+          <br />
+          that aren&rsquo;t certain
+        </h2>
       </div>
-
-      <div className="container-fluid full-width sectionBenefits">
-        <div className="wrap">
-          <div className="row">
-            <div className="col-sm-4 col-xs-12">
-              <i className="ion-ios-egg" />
-              <h2> Simple </h2>
-              <p>
-                Make a great estimate in seconds.
-                <br />
-                If you think a number is between <strong>5</strong> and{" "}
-                <strong>9</strong>, <br />
-                simply write <strong>"5 to 9"</strong>.
-              </p>
-            </div>
-            <div className="col-sm-4 col-xs-12">
-              <i className="ion-md-flame" />
-              <h2> Powerful </h2>
-              <p>
-                Guesstimate uses Monte Carlo sampling to correctly estimate
-                uncertain results.
-              </p>
-            </div>
-            <div className="col-sm-4 col-xs-12">
-              <i className="ion-ios-rose" />
-              <h2> Free </h2>
-              <p>
-                Create unlimited public models for free.
-                <br />
-                Our code base is{" "}
-                <a href="https://github.com/getguesstimate/guesstimate-app">
-                  open source
-                </a>
-                .
-              </p>
-            </div>
-          </div>
+      <div className="px-4 mt-20">
+        <a href="/models" className="ui button huge primary">
+          Browse Public Models
+        </a>
+      </div>
+      <div className="px-4">
+        <span className="wistia_embed wistia_async_ua8kd9n06a popover=true popoverAnimateThumbnail=true videoFoam=true">
+          &nbsp;
+        </span>
+      </div>
+      <div className="mt-12 py-12 bg-grey-1 w-full px-8">
+        <div className="max-w-1200 mx-auto space-y-12 md:space-y-0 md:grid md:grid-cols-3 md:gap-8">
+          <Benefit iconClass="ion-ios-egg" title="Simple">
+            Make a great estimate in seconds.
+            <br />
+            If you think a number is between <strong>5</strong> and{" "}
+            <strong>9</strong>, <br />
+            simply write <strong>"5 to 9"</strong>.
+          </Benefit>
+          <Benefit iconClass="ion-md-flame" title="Powerful">
+            Guesstimate uses Monte Carlo sampling to correctly estimate
+            uncertain results.
+          </Benefit>
+          <Benefit iconClass="ion-ios-rose" title="Free">
+            Create unlimited public models for free.
+            <br />
+            Our code base is{" "}
+            <a href="https://github.com/getguesstimate/guesstimate-app">
+              open source
+            </a>
+            .
+          </Benefit>
         </div>
       </div>
     </div>

@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import React, { useCallback } from "react";
 import Modal from "react-modal";
 
@@ -33,7 +34,12 @@ export const ErrorModal: React.FC = () => {
   return (
     <Modal isOpen={isOpen} onRequestClose={closeModal} style={customStyles}>
       {isOpen && (
-        <div className="ErrorModal ui standard modal transition visible active">
+        <div
+          className={clsx(
+            "ui standard modal transition visible active",
+            "!top-20" // overrides react-modal defaults
+          )}
+        >
           <div className="header">
             <Icon name="warning" /> Website Error!
           </div>

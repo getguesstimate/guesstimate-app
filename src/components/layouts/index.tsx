@@ -6,6 +6,7 @@ import { ModalContainer } from "~/modules/modal/routes";
 import { Main } from "./Main";
 import { Footer } from "./Footer";
 import { Header } from "./Header";
+import clsx from "clsx";
 
 type Props = {
   isFluid?: boolean;
@@ -13,7 +14,7 @@ type Props = {
   showFooter?: boolean;
   embed?: boolean;
   fullHeight?: boolean;
-  backgroundColor?: "BLUE" | "GREY";
+  backgroundColor?: "GREY";
   children: React.ReactNode;
 };
 
@@ -29,7 +30,13 @@ export const Layout: React.FC<Props> = ({
   return (
     <NavHelper>
       <ErrorModal />
-      <div className={`Layout ${fullHeight ? "fullHeight" : ""}`}>
+      <div
+        className={clsx(
+          "Layout",
+          "flex flex-col min-h-screen",
+          fullHeight && "h-full"
+        )}
+      >
         <ModalContainer />
         {!embed && <Header isFluid={isFluid} isBare={simpleHeader} />}
         <Main isFluid={isFluid} backgroundColor={backgroundColor}>

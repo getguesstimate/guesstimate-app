@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import React from "react";
 
 import { useAppSelector } from "~/modules/hooks";
@@ -24,32 +25,36 @@ export const Header: React.FC<Props> = ({ isFluid, isBare }) => {
   );
 
   const isLoggedIn = loggedIn(me);
-  let className = "PageHeader";
-  className += isBare ? " isBare" : "";
-
-  const containerName = isFluid ? "container-fluid" : "wrap";
 
   const navbarRef = isLoggedIn ? "/models" : "/";
   return (
-    <div className={className}>
-      <div className={containerName}>
-        <div className="menu">
-          {!isBare && (
-            <div className="header-left-menu">
-              <a className="navbar-brand" href={navbarRef}>
-                <div className="guesstimate-name">Guesstimate</div>
-                <img className="guesstimate-icon" src={logo} />
-              </a>
+    <div
+      className={clsx(
+        isFluid ? "w-full px-12" : "max-w-1200 w-full mx-auto px-4",
+        !isBare && "border-b border-grey-1"
+      )}
+    >
+      <div
+        className={clsx(
+          "flex items-center h-12",
+          isBare ? "justify-end" : "justify-between"
+        )}
+      >
+        {!isBare && (
+          <a className="block p-1 hover:bg-grey-1 rounded-lg" href={navbarRef}>
+            <div className="font-lato text-2xl leading-none hidden md:block text-grey-2">
+              Guesstimate
             </div>
-          )}
+            <img className="md:hidden h-8" src={logo} />
+          </a>
+        )}
 
-          <HeaderRightMenu
-            me={me}
-            organizations={organizations}
-            userOrganizationMemberships={userOrganizationMemberships}
-            isLoggedIn={isLoggedIn}
-          />
-        </div>
+        <HeaderRightMenu
+          me={me}
+          organizations={organizations}
+          userOrganizationMemberships={userOrganizationMemberships}
+          isLoggedIn={isLoggedIn}
+        />
       </div>
     </div>
   );

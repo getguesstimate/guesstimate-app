@@ -26,7 +26,7 @@ const PointDisplay = ({ value, precision = 6 }) => (
   </div>
 );
 
-const DistributionDisplay = ({ mean, range: [low, high] }) => (
+const DistributionDisplay: React.FC<any> = ({ mean, range: [low, high] }) => (
   <div>
     <PointDisplay value={mean} precision={2} />
     <div className="UncertaintyRange">
@@ -37,7 +37,7 @@ const DistributionDisplay = ({ mean, range: [low, high] }) => (
 
 // TODO(matthew): Ostensibly I'd like to handle the defensivity upstream, but this is a good quick fix for the problem
 // exposed to customers presently.
-export const DistributionSummary = ({
+export const DistributionSummary: React.FC<any> = ({
   length,
   mean,
   adjustedConfidenceInterval,

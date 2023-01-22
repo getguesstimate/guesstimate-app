@@ -9,13 +9,13 @@ export const GuesstimateDescription: React.FC<{
   value: string;
   onChange(value: string): void;
 }> = ({ value, onChange }) => (
-  <div className="GuesstimateDescription">
+  <div className="text-xl">
     <ClickToEdit
       viewing={<MarkdownViewer source={value} />}
       emptyValue={
-        <span className="emptyValue">
+        <span className="flex items-center gap-2">
           <Icon name="align-left" />
-          Describe your reasoning...
+          <span>Describe your reasoning...</span>
         </span>
       }
       editingSaveText="Save"

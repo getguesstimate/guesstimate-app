@@ -4,7 +4,11 @@ import React, { Component, useEffect, useState } from "react";
 
 import Icon from "~/components/react-fa-patched";
 
-import { NewSpaceCard, SpaceCard } from "~/components/spaces/SpaceCards";
+import {
+  NewSpaceCard,
+  SpaceCard,
+  SpaceCardGrid,
+} from "~/components/spaces/SpaceCards";
 import { Container } from "~/components/utility/Container";
 import { Category } from "./categories/category";
 import { CategoryForm } from "./categories/form";
@@ -317,12 +321,12 @@ export const OrganizationShow: React.FC<{
 
         <div className="main-section">
           {(openTab === MODEL_TAB || !meIsMember) && spaces && (
-            <div className="row">
+            <SpaceCardGrid>
               {meIsMember && <NewSpaceCard onClick={newModel} />}
-              {_.map(spaces, (s) => (
+              {spaces.map((s) => (
                 <SpaceCard key={s.id} space={s} showPrivacy={true} />
               ))}
-            </div>
+            </SpaceCardGrid>
           )}
 
           {openTab === MEMBERS_TAB && meIsMember && members && organization && (

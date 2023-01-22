@@ -5,6 +5,7 @@ import { numberShow } from "~/lib/numberShower/numberShower";
 
 import { hasErrors } from "~/lib/engine/simulation";
 import { FullDenormalizedMetric } from "~/lib/engine/space";
+import clsx from "clsx";
 
 const PrecisionNumber: React.FC<any> = ({
   value,
@@ -74,9 +75,10 @@ export const Output: React.FC<{ metric: FullDenormalizedMetric }> = ({
         </div>
         <div className="col-xs-12 col-sm-5">
           <div
-            className={`result-section${
-              hasErrors(simulation) ? " has-errors" : ""
-            }`}
+            className={clsx(
+              "result-section",
+              hasErrors(simulation) && "has-errors"
+            )}
           >
             {simulation?.stats && <ResultSection {...simulation.stats} />}
 

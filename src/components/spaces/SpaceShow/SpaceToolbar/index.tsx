@@ -1,47 +1,66 @@
-import _ from "lodash";
-import React, { Component } from "react";
+import React, { useState } from "react";
 
-import Icon from "~/components/react-fa-patched";
 import Modal from "react-modal";
-import ReactTooltip from "react-tooltip";
+import Icon from "~/components/react-fa-patched";
 
 import { CardListElement } from "~/components/utility/Card";
 import { DropDown } from "~/components/utility/DropDown";
-import { CanvasViewForm } from "../CanvasViewForm";
-import { ViewOptionToggle } from "../ViewOptionToggle";
-import { ImportFromSlurpForm } from "./import_from_slurp_form";
 import { CanvasActionState } from "~/modules/canvas_state/reducer";
+import { CanvasViewForm } from "./CanvasViewForm";
+import { ViewOptionToggle } from "./ViewOptionToggle";
+import { ImportFromSlurpForm } from "./import_from_slurp_form";
+import { ToolbarIcon } from "./ToolbarIcon";
+import { ToolbarTextItem } from "./ToolbarTextItem";
+import clsx from "clsx";
+
+const MessageBox: React.FC<{ color: "GREY" | "RED"; children: string }> = ({
+  color,
+  children,
+}) => (
+  <div
+    className={clsx(
+      "text-white px-2 rounded",
+      color === "GREY" ? "bg-grey-666" : "bg-red-5"
+    )}
+  >
+    {children}
+  </div>
+);
 
 const ProgressMessage: React.FC<{
   actionState: CanvasActionState | undefined;
 }> = ({ actionState }) => (
-  <div className="saveMessage">
-    {actionState == "SAVING" && "Saving..."}
-    {actionState == "COPYING" && "Copying..."}
-    {actionState == "CREATING" && "Creating a new model..."}
-    {actionState == "UNALLOWED_ATTEMPT" && (
-      <div className="ui grey horizontal label">
+  <div className="text-[#09273a] text-lg">
+    {actionState === "SAVING" && "Saving..."}
+    {actionState === "COPYING" && "Copying..."}
+    {actionState === "CREATING" && "Creating a new model..."}
+    {actionState === "UNALLOWED_ATTEMPT" && (
+      <MessageBox color="GREY">
         Notice: Your changes will not save in viewing mode
-      </div>
+      </MessageBox>
     )}
-    {actionState == "ERROR" && (
-      <div className="ui red horizontal label">ERROR SAVING</div>
+    {actionState === "ERROR" && (
+      <MessageBox color="RED">ERROR SAVING</MessageBox>
     )}
-    {actionState == "ERROR_COPYING" && (
-      <div className="ui red horizontal label">ERROR COPYING</div>
+    {actionState === "ERROR_COPYING" && (
+      <MessageBox color="RED">ERROR COPYING</MessageBox>
     )}
-    {actionState == "ERROR_CREATING" && (
-      <div className="ui red horizontal label">ERROR CREATING NEW MODEL</div>
+    {actionState === "ERROR_CREATING" && (
+      <MessageBox color="RED">ERROR CREATING NEW MODEL</MessageBox>
     )}
-    {actionState == "SAVED" && "All changes saved"}
-    {actionState == "COPIED" && "Successfully copied"}
-    {actionState == "CREATED" && "New model created"}
-    {actionState == "CONFLICT" && (
-      <div className="ui red horizontal label">
-        {"Model has changed since your last save. Refresh and try again later."}
-      </div>
+    {actionState === "SAVED" && "All changes saved"}
+    {actionState === "COPIED" && "Successfully copied"}
+    {actionState === "CREATED" && "New model created"}
+    {actionState === "CONFLICT" && (
+      <MessageBox color="RED">
+        Model has changed since your last save. Refresh and try again later.
+      </MessageBox>
     )}
   </div>
+);
+
+const Divider: React.FC = () => (
+  <div className="w-0.5 bg-[rgb(115,168,190)] h-9 mx-1" />
 );
 
 type Props = {
@@ -71,65 +90,40 @@ type Props = {
   onOpenTutorial(): void;
 };
 
-type State = {
-  importModalOpen: boolean;
-};
+export const SpaceToolbar = React.memo<Props>(
+  ({
+    editableByMe,
+    actionState,
+    isLoggedIn,
+    onImportSlurp,
+    onCopyModel,
+    onCopyMetrics,
+    onPasteMetrics,
+    onDeleteMetrics,
+    onCutMetrics,
+    onDestroy,
+    onUndo,
+    canUndo,
+    onRedo,
+    canRedo,
+    editsAllowed,
+    onAllowEdits,
+    onForbidEdits,
+    calculators,
+    makeNewCalculator,
+    showCalculator,
+    canShowFactSidebar,
+    toggleFactSidebar,
+    onOpenTutorial,
+  }) => {
+    const [importModalOpen, setImportModalOpen] = useState(false);
 
-export class SpaceToolbar extends Component<Props, State> {
-  state: State = {
-    importModalOpen: false,
-  };
-
-  shouldComponentUpdate(nextProps: Props, nextState: State) {
-    return (
-      this.props.editableByMe !== nextProps.editableByMe ||
-      this.props.actionState !== nextProps.actionState ||
-      this.props.editsAllowed !== nextProps.editsAllowed ||
-      this.props.canUndo !== nextProps.canUndo ||
-      this.props.canRedo !== nextProps.canRedo ||
-      this.props.isLoggedIn !== nextProps.isLoggedIn ||
-      !_.isEqual(this.props.calculators, nextProps.calculators) ||
-      this.state.importModalOpen !== nextState.importModalOpen
-    );
-  }
-
-  onImportSlurp(slurp) {
-    this.setState({ importModalOpen: false });
-    this.props.onImportSlurp(slurp);
-  }
-
-  render() {
-    const {
-      editableByMe,
-      actionState,
-      isLoggedIn,
-      onCopyModel,
-      onCopyMetrics,
-      onPasteMetrics,
-      onDeleteMetrics,
-      onCutMetrics,
-      onDestroy,
-      onUndo,
-      canUndo,
-      onRedo,
-      canRedo,
-      editsAllowed,
-      onAllowEdits,
-      onForbidEdits,
-      calculators,
-      makeNewCalculator,
-      toggleFactSidebar,
-      onOpenTutorial,
-    } = this.props;
-    const reactTooltipParams = {
-      class: "header-action-tooltip",
-      delayShow: 0,
-      delayHide: 0,
-      place: "bottom",
-      effect: "solid",
+    const handleImportSlurp = (slurp) => {
+      setImportModalOpen(false);
+      onImportSlurp(slurp);
     };
 
-    let view_mode_header =
+    const viewModeHeader =
       editableByMe && editsAllowed ? (
         <span>
           <Icon name="pencil" /> Editing
@@ -158,47 +152,22 @@ export class SpaceToolbar extends Component<Props, State> {
     } as const;
 
     return (
-      <div className="SpaceShowToolbar container-fluid">
+      <div className="bg-[rgb(219,221,222)]/70 border-b border-[rgb(37,128,167)]/40 px-8 hidden md:block">
         <Modal
-          isOpen={this.state.importModalOpen}
+          isOpen={importModalOpen}
           onRequestClose={() => {
-            this.setState({ importModalOpen: false });
+            setImportModalOpen(false);
           }}
           style={customStyles}
         >
-          <ImportFromSlurpForm onSubmit={this.onImportSlurp.bind(this)} />
+          <ImportFromSlurpForm onSubmit={handleImportSlurp} />
         </Modal>
-        <div className="row">
-          <div className="col-sm-10">
-            <ReactTooltip {...reactTooltipParams} id="cut-button">
-              Cut Nodes (ctrl-x)
-            </ReactTooltip>
-            <ReactTooltip {...reactTooltipParams} id="copy-button">
-              Copy Nodes (ctrl-c)
-            </ReactTooltip>
-            <ReactTooltip {...reactTooltipParams} id="paste-button">
-              Paste Nodes (ctrl-v)
-            </ReactTooltip>
-            <ReactTooltip {...reactTooltipParams} id="delete-button">
-              Delete Nodes (del/bksp)
-            </ReactTooltip>
-            <ReactTooltip {...reactTooltipParams} id="undo-button">
-              Undo (ctrl-z)
-            </ReactTooltip>
-            <ReactTooltip {...reactTooltipParams} id="redo-button">
-              Redo (ctrl-shift-z)
-            </ReactTooltip>
-            <ReactTooltip {...reactTooltipParams} id="calculator">
-              Calculators
-            </ReactTooltip>
-            <ReactTooltip {...reactTooltipParams} id="facts">
-              Metric Library
-            </ReactTooltip>
-
+        <div className="flex justify-between items-center py-1">
+          <div className="flex items-center gap-2">
             {isLoggedIn && (
               <DropDown
                 headerText="Model Actions"
-                openLink={<a className="header-action">File</a>}
+                openLink={<ToolbarTextItem text="File" />}
                 position="right"
               >
                 <CardListElement
@@ -211,7 +180,7 @@ export class SpaceToolbar extends Component<Props, State> {
                     icon="download"
                     header="Import Slurp"
                     onMouseDown={() => {
-                      this.setState({ importModalOpen: true });
+                      setImportModalOpen(true);
                     }}
                     closeOnClick={true}
                   />
@@ -228,71 +197,61 @@ export class SpaceToolbar extends Component<Props, State> {
 
             <CanvasViewForm />
 
-            <a className="header-action" onClick={onOpenTutorial}>
-              Tutorial
-            </a>
+            <ToolbarTextItem onClick={onOpenTutorial} text="Tutorial" />
 
-            <div className="header-action-border" />
-            <a
+            <Divider />
+            <ToolbarIcon
+              tooltipId="cut-button"
+              tooltip="Cut Nodes (ctrl-x)"
               onClick={onCutMetrics}
-              className="header-action"
-              data-tip
-              data-for="cut-button"
-            >
-              <Icon name="cut" />
-            </a>
-            <a
+              iconName="cut"
+            />
+            <ToolbarIcon
+              tooltipId="copy-button"
+              tooltip="Copy Nodes (ctrl-c)"
               onClick={onCopyMetrics}
-              className="header-action"
-              data-tip
-              data-for="copy-button"
-            >
-              <Icon name="copy" />
-            </a>
-            <a
+              iconName="copy"
+            />
+            <ToolbarIcon
+              tooltipId="paste-button"
+              tooltip="Paste Nodes (ctrl-v)"
               onClick={onPasteMetrics}
-              className="header-action"
-              data-tip
-              data-for="paste-button"
-            >
-              <Icon name="paste" />
-            </a>
-            <a
+              iconName="paste"
+            />
+            <ToolbarIcon
+              tooltipId="delete-button"
+              tooltip="Delete Nodes (del/bksp)"
               onClick={onDeleteMetrics}
-              className="header-action"
-              data-tip
-              data-for="delete-button"
-            >
-              <Icon name="trash" />
-            </a>
+              iconName="trash"
+            />
 
-            <div className="header-action-border" />
-            <a
+            <Divider />
+            <ToolbarIcon
+              tooltipId="undo-button"
+              tooltip="Undo (ctrl-z)"
               onClick={onUndo}
-              className={`header-action ${canUndo ? "" : "disabled"}`}
-              data-tip
-              data-for="undo-button"
-            >
-              <Icon name="undo" />
-            </a>
-            <a
+              iconName="undo"
+              disabled={!canUndo}
+            />
+            <ToolbarIcon
+              tooltipId="redo-button"
+              tooltip="Redo (ctrl-shift-z)"
               onClick={onRedo}
-              className={`header-action ${canRedo ? "" : "disabled"}`}
-              data-tip
-              data-for="redo-button"
-            >
-              <Icon name="repeat" />
-            </a>
+              iconName="repeat"
+              disabled={!canRedo}
+            />
 
-            {(editableByMe || !_.isEmpty(calculators)) && (
-              <div>
-                <div className="header-action-border" />
+            {(editableByMe || calculators.length) && (
+              <>
+                <Divider />
                 <DropDown
                   headerText="Calculators"
                   openLink={
-                    <a className="header-action" data-tip data-for="calculator">
-                      <Icon name="calculator" />
-                    </a>
+                    <ToolbarIcon
+                      tooltipId="calculator"
+                      tooltip="Calculators"
+                      iconName="calculator"
+                    />
                   }
                   position="right"
                 >
@@ -302,10 +261,10 @@ export class SpaceToolbar extends Component<Props, State> {
                         key={c.id}
                         header={c.title}
                         onMouseDown={() => {
-                          this.props.showCalculator(c);
+                          showCalculator(c);
                         }}
                         closeOnClick={true}
-                        icon={"calculator"}
+                        icon="calculator"
                       />
                     )),
                     editableByMe && (
@@ -319,39 +278,30 @@ export class SpaceToolbar extends Component<Props, State> {
                     ),
                   ]}
                 </DropDown>
-              </div>
+              </>
             )}
 
-            {this.props.canShowFactSidebar && (
-              <a
+            {canShowFactSidebar && (
+              <ToolbarIcon
+                tooltipId="facts"
+                tooltip="Metric Library"
                 onClick={toggleFactSidebar}
-                className="header-action"
-                data-tip
-                data-for="facts"
-              >
-                <Icon name="bank" />
-              </a>
+                iconName="bank"
+              />
             )}
 
-            {<ProgressMessage actionState={actionState} />}
-          </div>
-          <div className="col-sm-2">
-            <div className="float-right">
-              <ViewOptionToggle
-                headerText="Saving Options"
-                openLink={
-                  <a className="header-action button">{view_mode_header}</a>
-                }
-                position="left"
-                isEditingInvalid={!editableByMe}
-                isEditing={editableByMe && editsAllowed}
-                onAllowEdits={onAllowEdits}
-                onForbidEdits={onForbidEdits}
-              />
+            <div className="pl-6">
+              <ProgressMessage actionState={actionState} />
             </div>
           </div>
+          <ViewOptionToggle
+            isEditingInvalid={!editableByMe}
+            isEditing={editableByMe && editsAllowed}
+            onAllowEdits={onAllowEdits}
+            onForbidEdits={onForbidEdits}
+          />
         </div>
       </div>
     );
   }
-}
+);

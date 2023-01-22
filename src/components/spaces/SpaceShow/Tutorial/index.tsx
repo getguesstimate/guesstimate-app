@@ -35,7 +35,7 @@ export const Tutorial: React.FC<Props> = ({ onClose }) => {
   return (
     <GeneralModal onRequestClose={onClose}>
       <div
-        className="Tutorial"
+        className="Tutorial pt-8 pb-4 px-8 rounded bg-[#f0f0f0] max-w-[42em]"
         onKeyDown={(e) => {
           if (e.key === "Escape") {
             onClose();
@@ -43,26 +43,24 @@ export const Tutorial: React.FC<Props> = ({ onClose }) => {
         }}
       >
         {PAGES[page]}
-        <div className="row">
-          <div className="col-md-12 actions">
-            <span
-              className={`ui button ${page === 0 ? "disabled" : ""}`}
-              onClick={previousPage}
-            >
-              <Icon name="arrow-left" /> Previous
-            </span>
-            <span
-              className={`ui button ${
-                page === PAGES.length - 1 ? "disabled" : ""
-              }`}
-              onClick={nextPage}
-            >
-              <Icon name="arrow-right" /> Next
-            </span>
-            <span className="ui button" onClick={onClose}>
-              Done
-            </span>
-          </div>
+        <div className="flex justify-center">
+          <span
+            className={`ui button ${page === 0 ? "disabled" : ""}`}
+            onClick={previousPage}
+          >
+            <Icon name="arrow-left" /> Previous
+          </span>
+          <span
+            className={`ui button ${
+              page === PAGES.length - 1 ? "disabled" : ""
+            }`}
+            onClick={nextPage}
+          >
+            <Icon name="arrow-right" /> Next
+          </span>
+          <span className="ui button" onClick={onClose}>
+            Done
+          </span>
         </div>
       </div>
     </GeneralModal>

@@ -7,6 +7,7 @@ import { DropDown } from "~/components/utility/DropDown";
 import * as canvasStateActions from "~/modules/canvas_state/actions";
 import { EdgeViewMode } from "~/modules/canvas_state/reducer";
 import { useAppDispatch, useAppSelector } from "~/modules/hooks";
+import { ToolbarTextItem } from "./ToolbarTextItem";
 
 const arrowsHiddenImage = "/assets/metric-icons/blue/arrows-hidden.png";
 const arrowsVisibleImage = "/assets/metric-icons/blue/arrows-visible.png";
@@ -71,7 +72,7 @@ export const CanvasViewForm: React.FC = () => {
   return (
     <DropDown
       headerText="View Options"
-      openLink={<a className="header-action">View</a>}
+      openLink={<ToolbarTextItem text="View" />}
       position="right"
     >
       <div className="section">

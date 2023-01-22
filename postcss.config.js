@@ -9,6 +9,7 @@ module.exports = {
     "postcss-simple-vars",
     "postcss-mixins",
     "postcss-nested",
+    "tailwindcss",
     "autoprefixer",
   ],
 };

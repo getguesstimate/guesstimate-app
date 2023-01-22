@@ -62,13 +62,4 @@ $editing-background: $grey-1;
   color: rgba(69, 98, 134, 0.83);
   font-weight: 300;
   line-height: 1.2em;
-
-  .public-DraftEditorPlaceholder-root {
-    margin: 0 0 -20px;
-    color: #a9a9a9;
-  }
-
-  .public-DraftEditor-content:focus {
-    color: $black-3;
-  }
 }

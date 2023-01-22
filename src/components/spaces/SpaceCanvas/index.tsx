@@ -37,6 +37,7 @@ import {
 } from "~/lib/locationUtils";
 import { useAppDispatch, useAppSelector } from "~/modules/hooks";
 import { ExtendedDSpace } from "../denormalized-space-selector";
+import clsx from "clsx";
 
 export type EdgeShape = {
   input: CanvasLocation;
@@ -254,11 +255,6 @@ export const SpaceCanvas: React.FC<Props> = ({
       .filter((e): e is NonNullable<typeof e> => !!e);
   };
 
-  const edges = buildEdges();
-  let className = "canvas-space";
-  className += showEdges ? " showEdges" : "";
-  className += screenshot ? " overflow-hidden" : "";
-
   const showGridLines = !screenshot;
 
   const copiedRegion =
@@ -335,6 +331,13 @@ export const SpaceCanvas: React.FC<Props> = ({
     dispatch(changeMetric({ id: metric.id, location: next }));
     dispatch(changeSelect(next));
   };
+
+  const edges = buildEdges();
+  const className = clsx(
+    "canvas-space",
+    showEdges && "showEdges",
+    screenshot && "overflow-hidden"
+  );
 
   return (
     <div className={className}>

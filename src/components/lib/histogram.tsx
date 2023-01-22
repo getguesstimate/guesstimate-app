@@ -94,7 +94,7 @@ type Props = {
 export class Histogram extends Component<Props> {
   static defaultProps = {
     top: 20,
-    bottom: 30,
+    bottom: 0,
     bins: 40,
     left: 0,
     right: 0,
@@ -102,8 +102,8 @@ export class Histogram extends Component<Props> {
   };
 
   state = {
-    xScale: (e) => e,
-    yScale: (e) => e,
+    xScale: (e: number) => e,
+    yScale: (e: number) => e,
     histogramData: [],
   };
 
@@ -124,10 +124,10 @@ export class Histogram extends Component<Props> {
 
   render() {
     const {
-      // FIXME - copypasted from defaultProps because to typescript
+      // FIXME - copypasted from defaultProps because of typescript
       top = 20,
       right = 0,
-      bottom = 30,
+      bottom = 0,
       left = 0,
       height,
       hoveredXCoord,

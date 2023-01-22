@@ -54,7 +54,7 @@ export class FactList extends Component<Props> {
         String(fact.exported_from_id) === String(this.props.spaceId)
     );
   }
-  isImportedFromSelectedSpaceFn({ id }) {
+  isImportedFromSelectedSpaceFn({ id }: Fact) {
     return this.props.imported_fact_ids?.includes(id);
   }
 
@@ -127,17 +127,17 @@ export class FactList extends Component<Props> {
 
     return (
       <div>
-        {!!exported.length && <h3> Model Output Metrics </h3>}
+        {!!exported.length && <h3>Model Output Metrics</h3>}
         {this.renderFactSublist(exported)}
-        {!!imported.length && <h3> Model Input Metrics </h3>}
+        {!!imported.length && <h3>Model Input Metrics</h3>}
         {this.renderFactSublist(imported)}
-        {!!filteredFacts.length && <h3> Other Library Metrics </h3>}
+        {!!filteredFacts.length && <h3>Other Library Metrics</h3>}
         {this.renderFactSublist(filteredFacts)}
       </div>
     );
   }
 
-  renderFactSublist(facts) {
+  renderFactSublist(facts: Fact[]) {
     const {
       state: { editingFactId },
     } = this;

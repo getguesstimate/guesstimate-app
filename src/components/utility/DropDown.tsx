@@ -1,6 +1,6 @@
+import clsx from "clsx";
 import _ from "lodash";
-import React, { Component } from "react";
-import ReactDOM from "react-dom";
+import React, { useEffect, useImperativeHandle, useRef, useState } from "react";
 
 import { Card } from "~/components/utility/Card";
 
@@ -15,104 +15,89 @@ type Props = {
   children?: React.ReactNode;
 };
 
-type State = {
-  isOpen: boolean;
+export type DropDownHandle = {
+  close(): void;
 };
 
-export class DropDown extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
+export const DropDown = React.forwardRef<DropDownHandle, Props>(
+  (props, ref) => {
+    const [isOpen, setIsOpen] = useState(false);
 
-    this.state = {
-      isOpen: false,
+    const containerRef = useRef<HTMLDivElement | null>(null);
+
+    useImperativeHandle(ref, () => ({ close }));
+
+    const width = props.width === "wide" ? "normal" : "narrow";
+
+    useEffect(() => {
+      if (!isOpen) {
+        return;
+      }
+
+      props.onOpen?.();
+      const handleDocumentClick = (event: MouseEvent) => {
+        if (!containerRef.current?.contains(event.target as any)) {
+          close();
+        }
+      };
+      document.addEventListener("click", handleDocumentClick, false);
+      return () => {
+        document.removeEventListener("click", handleDocumentClick, false);
+      };
+    }, [isOpen]);
+
+    const open = () => {
+      setIsOpen(true);
     };
 
-    this.handleDocumentClick = this.handleDocumentClick.bind(this);
-  }
+    const close = () => {
+      setIsOpen(false);
+      props.onClose?.();
+    };
 
-  handleDocumentClick(event) {
-    if (!ReactDOM.findDOMNode(this)?.contains(event.target)) {
-      this._close();
-    }
-  }
+    const toggle = () => {
+      isOpen ? close() : open();
+    };
 
-  componentWillUnmount() {
-    document.removeEventListener("click", this.handleDocumentClick, false);
-  }
-
-  componentDidUpdate(prevProps: Props, prevState: State) {
-    if (!prevState.isOpen && this.state.isOpen && this.props.onOpen) {
-      this.props.onOpen();
-    }
-  }
-
-  _open() {
-    this.setState({ isOpen: true });
-    document.addEventListener("click", this.handleDocumentClick, false);
-  }
-
-  _close() {
-    this.setState({ isOpen: false });
-    document.removeEventListener("click", this.handleDocumentClick, false);
-    if (this.props.onClose) {
-      this.props.onClose();
-    }
-  }
-
-  _toggle() {
-    this.state.isOpen ? this._close() : this._open();
-  }
-
-  _dropDownClass() {
-    let klass = "dropDown";
-    klass +=
-      this.props.position === "right" ? " position-right" : " position-left";
-    klass += this.props.width === "wide" ? " wide" : "";
-    return klass;
-  }
-
-  render() {
-    const { headerText } = this.props;
-    const width = this.props.width === "wide" ? "normal" : "narrow";
     return (
-      <span className="dropDown-relative">
-        <span className="dropDown-open" onClick={this._toggle.bind(this)}>
-          {this.props.openLink}
-        </span>
-        {this.state.isOpen && (
-          <div className={this._dropDownClass()}>
+      <div className="dropDown-relative" ref={containerRef}>
+        <div className="cursor-pointer" onClick={toggle}>
+          {props.openLink}
+        </div>
+        {isOpen && (
+          <div
+            className={clsx(
+              "dropDown",
+              props.position === "right" ? "position-right" : "position-left"
+            )}
+          >
             <Card
-              headerText={headerText}
-              onClose={this._close.bind(this)}
+              headerText={props.headerText}
+              onClose={close}
               width={width}
-              hasPadding={this.props.hasPadding}
+              hasPadding={props.hasPadding}
               shadow={true}
             >
-              {_.isArray(this.props.children) && (
+              {_.isArray(props.children) ? (
                 <ul>
-                  {_.map(this.props.children, (child, i) => {
-                    if (!!child && child.props.closeOnClick) {
-                      return (
-                        <div
-                          onMouseDown={() => {
-                            this._close();
-                          }}
-                          key={i}
-                        >
-                          {child}
-                        </div>
-                      );
-                    } else {
-                      return <div key={i}>{child}</div>;
-                    }
-                  })}
+                  {props.children.map((child, i) => (
+                    <div
+                      key={i}
+                      onMouseDown={
+                        child?.props.closeOnClick ? close : undefined
+                      }
+                    >
+                      {child}
+                    </div>
+                  ))}
                 </ul>
+              ) : (
+                props.children
               )}
-              {!_.isArray(this.props.children) && this.props.children}
             </Card>
           </div>
         )}
-      </span>
+      </div>
     );
   }
-}
+);

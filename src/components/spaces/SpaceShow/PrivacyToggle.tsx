@@ -1,8 +1,10 @@
 import React from "react";
 import { useRouter } from "next/router";
 
+import Icon from "~/components/react-fa-patched";
 import { DropDown } from "~/components/utility/DropDown";
 import { CardListElement } from "~/components/utility/Card";
+import { SpaceHeaderButton } from "./SpaceHeaderButton";
 
 const PublicOption = ({ isSelected, onClick }) => (
   <CardListElement
@@ -52,27 +54,35 @@ const PrivateOption: React.FC<any> = ({
 export const PrivacyToggle: React.FC<any> = ({
   editableByMe,
   isPrivateSelectionInvalid,
-  openLink,
   isPrivate,
   onPublicSelect,
   onPrivateSelect,
-}) => (
-  <DropDown
-    headerText="Privacy Options"
-    openLink={openLink}
-    position="left"
-    width="wide"
-  >
-    {(!isPrivate || editableByMe) && (
-      <PublicOption isSelected={!isPrivate} onClick={onPublicSelect} />
-    )}
-    {(isPrivate || editableByMe) && (
-      <PrivateOption
-        isSelected={isPrivate}
-        onClick={onPrivateSelect}
-        isPrivateSelectionInvalid={isPrivateSelectionInvalid}
-        hideErrorWhenUnselected={false}
-      />
-    )}
-  </DropDown>
-);
+}) => {
+  const privacyHeader = (
+    <SpaceHeaderButton
+      iconName={isPrivate ? "lock" : "globe"}
+      text={isPrivate ? "Private" : "Public"}
+    />
+  );
+
+  return (
+    <DropDown
+      headerText="Privacy Options"
+      openLink={privacyHeader}
+      position="left"
+      width="wide"
+    >
+      {(!isPrivate || editableByMe) && (
+        <PublicOption isSelected={!isPrivate} onClick={onPublicSelect} />
+      )}
+      {(isPrivate || editableByMe) && (
+        <PrivateOption
+          isSelected={isPrivate}
+          onClick={onPrivateSelect}
+          isPrivateSelectionInvalid={isPrivateSelectionInvalid}
+          hideErrorWhenUnselected={false}
+        />
+      )}
+    </DropDown>
+  );
+};

@@ -2,7 +2,7 @@ import _ from "lodash";
 import removeMd from "remove-markdown";
 import moment from "moment";
 
-export function formatDescription(description: string) {
+export function formatDescription(description: string): string {
   const maxLength = 300;
 
   if (_.isEmpty(description)) {

@@ -95,7 +95,7 @@ export const SpacesIndex: React.FC = () => {
     dispatch(search.fetch(searchValue, { sortBy, timeframe }));
   }, [searchValue, sortBy, timeframe]);
 
-  const spaces = searchSpaces.hits || [];
+  const spaces: any[] = searchSpaces.hits || [];
   const hasMorePages =
     _.isFinite(searchSpaces.page) &&
     searchSpaces.page < searchSpaces.nbPages - 1;
@@ -106,7 +106,7 @@ export const SpacesIndex: React.FC = () => {
         <div className="col-md-1" />
         <div className="col-xs-12 col-md-10">
           <div className="SpacesIndex--header">
-            <h1> Public Models </h1>
+            <h1>Public Models</h1>
             <div className="search-form">
               <div className="row">
                 <div className="col-sm-3" />
@@ -144,14 +144,13 @@ export const SpacesIndex: React.FC = () => {
         })}
       />
 
-      {!!spaces.length && hasMorePages && (
+      {spaces.length && hasMorePages ? (
         <div className="nextPage">
           <button className="ui button nextpage large" onClick={loadNextPage}>
-            {" "}
-            {"Load More"}{" "}
+            Load More
           </button>
         </div>
-      )}
+      ) : null}
     </div>
   );
 };

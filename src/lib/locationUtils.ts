@@ -47,17 +47,18 @@ export function isWithinRegion(test: CanvasLocation, region?: MaybeRegion) {
   );
 }
 
-export function getBounds({
-  start,
-  end,
-}: {
-  start?: CanvasLocation;
-  end?: CanvasLocation;
-}): MaybeRegion {
-  if (!start || !end) {
+export function getBounds(
+  region:
+    | {
+        start: CanvasLocation;
+        end?: CanvasLocation;
+      }
+    | undefined
+): MaybeRegion {
+  if (!region || !region.end) {
     return [];
   }
-  return boundingRegion([start, end]);
+  return boundingRegion([region.start, region.end]);
 }
 
 export const move = (

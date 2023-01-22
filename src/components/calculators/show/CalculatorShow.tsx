@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import Icon from "~/components/react-fa-patched";
 
-import { Button } from "~/components/utility/buttons/button";
+import { ButtonWithIcon } from "~/components/utility/buttons/button";
 import { Input, InputHandle } from "./input";
 import { Output } from "./output";
 
@@ -16,6 +16,7 @@ import {
 
 import * as _simulation from "~/lib/engine/simulation";
 
+import clsx from "clsx";
 import { FullDenormalizedMetric } from "~/lib/engine/space";
 import { Optional } from "~/lib/engine/types";
 import { Guesstimator } from "~/lib/guesstimator/index";
@@ -35,14 +36,14 @@ type Props = {
 };
 
 export const CalculatorShow: React.FC<Props> = (props) => {
+  const dispatch = useAppDispatch();
+
   const [state, setState] = useState(() => ({
     resultComputing: false,
     showResult: props.startFilled && allOutputsHaveStats(),
     hasSimulated: false,
     readyToCalculate: false,
   }));
-
-  const dispatch = useAppDispatch();
 
   const inputRefs = useRef<Map<string, InputHandle | null>>(
     new Map<string, InputHandle>()
@@ -173,84 +174,79 @@ export const CalculatorShow: React.FC<Props> = (props) => {
   };
 
   return (
-    <div className={`${["calculator", ...props.classes].join(" ")}`}>
-      <div className="padded-section">
-        <div className="title-bar">
-          <div className="row">
-            <div className="col-xs-10">
-              <h1>{props.calculator.title}</h1>
-              {props.isPrivate && (
-                <span className="privacy-icon">
-                  <Icon name="lock" />
-                  Private
-                </span>
-              )}
+    <div className={clsx("calculator", ...props.classes)}>
+      <div className="flex justify-between">
+        <div className="flex items-end">
+          <h1 className="leading-none m-0">{props.calculator.title}</h1>
+          {props.isPrivate && (
+            <div className="pl-6">
+              <Icon name="lock" /> Private
             </div>
-            {props.size === "wide" && (
-              <div className="col-xs-2 action-section">
-                <Button onClick={props.showHelp}>
-                  <Icon name="question" />
-                  Help
-                </Button>
-              </div>
-            )}
-          </div>
+          )}
         </div>
-        <div className="description">
-          <ReactMarkdown source={props.calculator.content} />
-        </div>
-        <div className="inputs">
-          {props.inputs.map((metric, i) => (
-            <Input
-              ref={(ref) => inputRefs.current.set(metric.id, ref)}
-              key={metric.id}
-              id={metric.id}
-              isFirst={i === 0}
-              name={metric.name}
-              description={metric.guesstimate.description}
-              errors={_simulation.errors(metric.simulation)}
-              onBlur={(input) => handleBlur(metric, input)}
-              onChange={(input) => handleChange(metric, input)}
-              onEnter={handleEnter}
-              initialValue={
-                (props.startFilled && metric.guesstimate.input) || ""
-              }
-            />
-          ))}
-        </div>
-        {state.showResult ? (
+        {props.showHelp && (
           <div>
-            <hr className="result-divider" />
-            <div className="outputs">
-              {props.outputs.map((m) => (
-                <Output key={m.id} metric={m} />
-              ))}
-            </div>
-          </div>
-        ) : (
-          <div className="row">
-            <div className="col-xs-12 col-md-7" />
-            <div className="col-xs-12 col-md-5">
-              <div
-                className={`ui button calculateButton${
-                  state.resultComputing
-                    ? " loading"
-                    : state.readyToCalculate
-                    ? ""
-                    : " disabled"
-                }`}
-                onClick={() => {
-                  allOutputsHaveStats()
-                    ? showResult()
-                    : setState({ ...state, resultComputing: true });
-                }}
-              >
-                Calculate
-              </div>
-            </div>
+            <ButtonWithIcon
+              onClick={props.showHelp}
+              icon={<Icon name="question" />}
+              text="Help"
+            />
           </div>
         )}
       </div>
+      <div className="description">
+        <ReactMarkdown source={props.calculator.content} />
+      </div>
+      <div className="inputs">
+        {props.inputs.map((metric, i) => (
+          <Input
+            ref={(ref) => inputRefs.current.set(metric.id, ref)}
+            key={metric.id}
+            id={metric.id}
+            isFirst={i === 0}
+            name={metric.name}
+            description={metric.guesstimate.description}
+            errors={_simulation.errors(metric.simulation)}
+            onBlur={(input) => handleBlur(metric, input)}
+            onChange={(input) => handleChange(metric, input)}
+            onEnter={handleEnter}
+            initialValue={(props.startFilled && metric.guesstimate.input) || ""}
+          />
+        ))}
+      </div>
+      {state.showResult ? (
+        <div>
+          <hr className="result-divider" />
+          <div className="outputs">
+            {props.outputs.map((m) => (
+              <Output key={m.id} metric={m} />
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div className="row">
+          <div className="col-xs-12 col-md-7" />
+          <div className="col-xs-12 col-md-5">
+            <div
+              className={clsx(
+                "ui button calculateButton",
+                state.resultComputing
+                  ? "loading"
+                  : state.readyToCalculate
+                  ? ""
+                  : "disabled"
+              )}
+              onClick={() => {
+                allOutputsHaveStats()
+                  ? showResult()
+                  : setState({ ...state, resultComputing: true });
+              }}
+            >
+              Calculate
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

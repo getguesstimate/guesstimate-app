@@ -1,24 +1,21 @@
-import _ from "lodash";
 import React from "react";
 
 import { MarkdownViewer } from "~/components/utility/MarkdownViewer";
-import { ToolTip } from "~/components/utility/ToolTip";
+import { Guesstimate } from "~/modules/guesstimates/reducer";
 
-export const MetricToolTip: React.FC<{ guesstimate: any }> = ({
+export const MetricToolTip: React.FC<{ guesstimate: Guesstimate }> = ({
   guesstimate,
 }) => {
-  if (_.isEmpty(guesstimate.description)) {
+  if (!guesstimate.description) {
     return null;
   }
   return (
-    <ToolTip>
-      <div
-        onMouseDown={(e) => {
-          e.stopPropagation();
-        }}
-      >
-        <MarkdownViewer source={guesstimate.description} />
-      </div>
-    </ToolTip>
+    <div
+      onMouseDown={(e) => {
+        e.stopPropagation();
+      }}
+    >
+      <MarkdownViewer source={guesstimate.description} />
+    </div>
   );
 };

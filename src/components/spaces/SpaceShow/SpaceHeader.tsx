@@ -8,6 +8,8 @@ import { PrivacyToggle } from "./PrivacyToggle";
 import { SpaceName } from "./SpaceName";
 
 import * as e from "~/lib/engine/engine";
+import { UserTag } from "~/components/UserTag";
+import { SpaceHeaderButton } from "./SpaceHeaderButton";
 
 const EnableShareableLinkOption: React.FC<{ onEnable(): void }> = ({
   onEnable,
@@ -53,144 +55,113 @@ const DisableOrRotateShareableLinkOption: React.FC<{
 );
 
 const ShareableLinkOption: React.FC<{
-  children: React.ReactNode;
   shareableLinkUrl?: string;
   onEnable(): void;
   onDisable(): void;
   onRotate(): void;
-}> = ({ children, shareableLinkUrl, onEnable, onDisable, onRotate }) => (
-  <DropDown
-    headerText="Shareable Link"
-    openLink={children}
-    position="left"
-    width="wide"
-  >
-    <CardListSection>
-      {shareableLinkUrl ? (
-        <DisableOrRotateShareableLinkOption
-          shareableLinkUrl={shareableLinkUrl}
-          onDisable={onDisable}
-          onRotate={onRotate}
+}> = ({ shareableLinkUrl, onEnable, onDisable, onRotate }) => {
+  return (
+    <DropDown
+      headerText="Shareable Link"
+      openLink={<SpaceHeaderButton iconName="link" text="Link" />}
+      position="left"
+      width="wide"
+    >
+      <CardListSection>
+        {shareableLinkUrl ? (
+          <DisableOrRotateShareableLinkOption
+            shareableLinkUrl={shareableLinkUrl}
+            onDisable={onDisable}
+            onRotate={onRotate}
+          />
+        ) : (
+          <EnableShareableLinkOption onEnable={onEnable} />
+        )}
+      </CardListSection>
+    </DropDown>
+  );
+};
+
+type Props = {
+  name: string;
+  isPrivate?: boolean;
+  editableByMe: boolean;
+  canBePrivate: boolean;
+  shareableLinkUrl: string;
+  ownerName: string;
+  ownerPicture?: string;
+  ownerUrl: string;
+  ownerIsOrg: boolean;
+  editors: any[];
+  onSaveName(name: string): void;
+  onPublicSelect(): void;
+  onPrivateSelect(): void;
+  onEnableShareableLink(): void;
+  onDisableShareableLink(): void;
+  onRotateShareableLink(): void;
+};
+
+export const SpaceHeader = React.memo<Props>(
+  ({
+    canBePrivate,
+    name,
+    ownerName,
+    ownerPicture,
+    ownerUrl,
+    ownerIsOrg,
+    isPrivate,
+    editableByMe,
+    editors,
+    shareableLinkUrl,
+    onSaveName,
+    onPublicSelect,
+    onPrivateSelect,
+    onEnableShareableLink,
+    onDisableShareableLink,
+    onRotateShareableLink,
+  }) => {
+    return (
+      <div className="flex justify-between px-8 py-2">
+        <SpaceName
+          name={name}
+          editableByMe={editableByMe}
+          onSave={onSaveName}
         />
-      ) : (
-        <EnableShareableLinkOption onEnable={onEnable} />
-      )}
-    </CardListSection>
-  </DropDown>
-);
 
-type Props = any;
-
-export class SpaceHeader extends Component<Props> {
-  componentDidMount() {
-    window.recorder.recordMountEvent(this);
-  }
-  componentWillUpdate() {
-    window.recorder.recordRenderStartEvent(this);
-  }
-  componentDidUpdate() {
-    window.recorder.recordRenderStopEvent(this);
-  }
-  componentWillUnmount() {
-    window.recorder.recordUnmountEvent(this);
-  }
-
-  shouldComponentUpdate(nextProps: Props) {
-    if (!nextProps.editableByMe) {
-      return false;
-    }
-
-    return (
-      this.props.name !== nextProps.name ||
-      this.props.isPrivate !== nextProps.isPrivate ||
-      this.props.editableByMe !== nextProps.editableByMe ||
-      this.props.shareableLinkUrl !== nextProps.shareableLinkUrl
-    );
-  }
-
-  render() {
-    const {
-      canBePrivate,
-      name,
-      ownerName,
-      ownerPicture,
-      ownerUrl,
-      ownerIsOrg,
-      isPrivate,
-      editableByMe,
-      editors,
-      shareableLinkUrl,
-      onPublicSelect,
-      onPrivateSelect,
-      onSaveName,
-      onEnableShareableLink,
-      onDisableShareableLink,
-      onRotateShareableLink,
-    } = this.props;
-
-    const privacy_header = isPrivate ? (
-      <span>
-        <Icon name="lock" /> Private
-      </span>
-    ) : (
-      <span>
-        <Icon name="globe" /> Public
-      </span>
-    );
-
-    return (
-      <div className="container-fluid">
-        <div className="row header">
-          <div className="col-md-8 col-xs-6">
-            <div className="header-name">
-              <SpaceName
-                name={name}
-                editableByMe={editableByMe}
-                onSave={onSaveName}
-              />
-            </div>
-          </div>
-
-          <div className="col-md-4 col-xs-6">
-            {ownerIsOrg &&
-              editors.map((editor, i) => (
-                <a href={e.user.url(editor)} key={i}>
-                  <img src={editor.picture} className="ui avatar image" />
-                </a>
-              ))}
-            {(ownerIsOrg || !editableByMe) && (
-              <a className="ui image label" href={ownerUrl}>
-                <img src={ownerPicture} />
-                {ownerName}
+        <div className="flex justify-end items-center flex-wrap md:flex-nowrap space-x-2">
+          {editableByMe && (
+            <PrivacyToggle
+              editableByMe={editableByMe}
+              isPrivateSelectionInvalid={!canBePrivate}
+              isPrivate={isPrivate}
+              onPublicSelect={onPublicSelect}
+              onPrivateSelect={onPrivateSelect}
+            />
+          )}
+          {isPrivate && editableByMe && (
+            <ShareableLinkOption
+              shareableLinkUrl={shareableLinkUrl}
+              onEnable={onEnableShareableLink}
+              onDisable={onDisableShareableLink}
+              onRotate={onRotateShareableLink}
+            />
+          )}
+          {(ownerIsOrg || !editableByMe) && (
+            <UserTag
+              url={ownerUrl}
+              picture={ownerPicture}
+              name={ownerName}
+              bg="WHITE"
+            />
+          )}
+          {ownerIsOrg &&
+            editors.map((editor, i) => (
+              <a href={e.user.url(editor)} key={i}>
+                <img src={editor.picture} className="h-8 w-8 rounded-full" />
               </a>
-            )}
-            {isPrivate && editableByMe && (
-              <ShareableLinkOption
-                shareableLinkUrl={shareableLinkUrl}
-                onEnable={onEnableShareableLink}
-                onDisable={onDisableShareableLink}
-                onRotate={onRotateShareableLink}
-              >
-                <div className="ui image label">
-                  <Icon name="link" /> Link
-                </div>
-              </ShareableLinkOption>
-            )}
-            {editableByMe && (
-              <PrivacyToggle
-                editableByMe={editableByMe}
-                openLink={
-                  <a className="space-header-action">{privacy_header}</a>
-                }
-                isPrivateSelectionInvalid={!canBePrivate}
-                isPrivate={isPrivate}
-                onPublicSelect={onPublicSelect}
-                onPrivateSelect={onPrivateSelect}
-              />
-            )}
-          </div>
+            ))}
         </div>
       </div>
     );
   }
-}
+);

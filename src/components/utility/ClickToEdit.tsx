@@ -20,24 +20,23 @@ const EditingMode: React.FC<{
   };
 
   return (
-    <div className="EditingMode">
+    <div>
       <textarea
+        className="w-full p-2 rounded outline-none border-2 border-solid border-blue-5 focus:border-blue-1 min-h-[120px]"
         defaultValue={value}
         ref={(ref) => {
           ref && (ReactDOM.findDOMNode(ref) as any).select();
           textInput.current = ref;
         }}
       />
-      <div className="submit-section">
-        <div className="submit ui button primary" onClick={submit}>
-          {editingSaveText}
-        </div>
-        <div className="submit-section-close">
+      <div className="mt-2 flex justify-between items-start">
+        <div className="flex gap-4">
+          <div className="submit ui button primary" onClick={submit}>
+            {editingSaveText}
+          </div>
           <ButtonClose onClick={onClose} />
         </div>
-        <a className="markdown-help">
-          <i className="ion-logo-markdown markdown-icon" />
-        </a>
+        <i className="ion-logo-markdown text-5xl leading-8 block cursor-pointer text-grey-4 hover:text-grey-888" />
       </div>
     </div>
   );
@@ -49,18 +48,19 @@ const ViewingMode: React.FC<{
   children: React.ReactNode;
 }> = ({ canEdit, onEdit, children }) => {
   return (
-    <div className="ViewingMode">
-      <div className="row">
-        {canEdit && (
-          <div className="col-sm-12 header">
-            Reasoning
-            <span className="editLink" onClick={onEdit}>
-              <Icon name="pencil" />
-            </span>
-          </div>
-        )}
-        <div className="col-sm-12 content">{children}</div>
-      </div>
+    <div>
+      {canEdit && (
+        <div className="flex gap-2 items-center mb-1">
+          <span className="text-grey-666">Reasoning</span>
+          <span
+            className="text-grey-666 cursor-pointer p-1 hover:text-black hover:bg-grey-999"
+            onClick={onEdit}
+          >
+            <Icon name="pencil" />
+          </span>
+        </div>
+      )}
+      <div className="text-grey-333">{children}</div>
     </div>
   );
 };
@@ -93,7 +93,7 @@ export const ClickToEdit: React.FC<Props> = ({
   }, []);
 
   return (
-    <span className="ClickToEdit">
+    <div className="ClickToEdit">
       {isEditing ? (
         <EditingMode
           value={value}
@@ -102,7 +102,10 @@ export const ClickToEdit: React.FC<Props> = ({
           onClose={close}
         />
       ) : value === "" ? (
-        <div className="BlankMode" onClick={open}>
+        <div
+          className="p-2 rounded text-grey-999 hover:text-grey-333 underline cursor-pointer hover:bg-black/20"
+          onClick={open}
+        >
           {emptyValue}
         </div>
       ) : (
@@ -110,6 +113,6 @@ export const ClickToEdit: React.FC<Props> = ({
           {viewing}
         </ViewingMode>
       )}
-    </span>
+    </div>
   );
 };

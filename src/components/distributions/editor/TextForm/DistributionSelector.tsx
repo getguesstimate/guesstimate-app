@@ -1,25 +1,13 @@
-import React, { Component } from "react";
-
-import ReactTooltip from "react-tooltip";
+import React from "react";
 
 import { Guesstimator } from "~/lib/guesstimator/index";
 
 import { getClassName } from "~/lib/engine/utils";
 
+import { ToolTip } from "~/components/utility/ToolTip";
 import * as elev from "~/server/elev/index";
 
 type DistributionType = "LOGNORMAL" | "NORMAL" | "UNIFORM";
-
-// We use onMouseUp to make sure that the onMouseUp
-// does not get called once another metric is underneath
-
-const ReactTooltipParams = {
-  class: "header-action-tooltip",
-  delayShow: 0,
-  delayHide: 0,
-  place: "top",
-  effect: "solid",
-};
 
 const Descriptions: { [k in DistributionType]: { name: string } } = {
   LOGNORMAL: {
@@ -40,25 +28,20 @@ const DistributionIcon: React.FC<{
   icon?: string;
   onSubmit(type: DistributionType): void;
 }> = ({ isSelected, isDisabled, type, icon, onSubmit }) => (
-  <div
-    className={getClassName(
-      "ui",
-      "button",
-      "tinyhover-toggle",
-      "DistributionIcon",
-      isSelected ? "selected" : null,
-      isDisabled ? "disabled" : null
-    )}
-    onClick={() => onSubmit(type)}
-    data-tip
-    data-for={type}
-  >
-    <ReactTooltip {...ReactTooltipParams} id={type}>
-      {" "}
-      {Descriptions[type].name}{" "}
-    </ReactTooltip>
-    {icon ? <img src={icon} /> : undefined}
-  </div>
+  <ToolTip id={type} text={Descriptions[type].name} withPortal={true}>
+    <div
+      className={getClassName(
+        "ui",
+        "button",
+        "DistributionIcon",
+        isSelected && "selected",
+        isDisabled && "disabled"
+      )}
+      onClick={() => onSubmit(type)}
+    >
+      {icon ? <img src={icon} /> : undefined}
+    </div>
+  </ToolTip>
 );
 
 export const DistributionSelector: React.FC<{
@@ -66,7 +49,7 @@ export const DistributionSelector: React.FC<{
   onSubmit(type: DistributionType): void;
   disabledTypes: DistributionType[];
 }> = ({ selected, onSubmit, disabledTypes = [] }) => {
-  const _handleShowMore = () => {
+  const handleShowMore = () => {
     elev.open(elev.ADDITIONAL_DISTRIBUTIONS);
   };
 
@@ -74,20 +57,26 @@ export const DistributionSelector: React.FC<{
   return (
     <div className="DistributionSelector">
       <hr />
-      <a className="more-distributions" onClick={_handleShowMore}>
-        More
-      </a>
-      <div className="DistributionList">
-        {allTypes.map((type) => (
-          <DistributionIcon
-            type={type}
-            onSubmit={onSubmit}
-            isSelected={selected === type}
-            isDisabled={disabledTypes.includes(type)}
-            icon={Guesstimator.samplerTypes.find(type).icon}
-            key={type}
-          />
-        ))}
+      <div className="flex justify-between">
+        <a
+          className="px-0.5 text-[16px] text-grey-999 hover:text-grey-666"
+          href=""
+          onClick={handleShowMore}
+        >
+          More
+        </a>
+        <div className="flex">
+          {allTypes.map((type) => (
+            <DistributionIcon
+              type={type}
+              onSubmit={onSubmit}
+              isSelected={selected === type}
+              isDisabled={disabledTypes.includes(type)}
+              icon={Guesstimator.samplerTypes.find(type).icon}
+              key={type}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
