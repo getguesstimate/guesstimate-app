@@ -8,12 +8,10 @@ import { configureStore } from "../modules/store";
 import "flexboxgrid/css/flexboxgrid.min.css";
 import "font-awesome/css/font-awesome.css";
 import "ionicons/dist/css/ionicons.css";
-import "react-dd-menu/dist/react-dd-menu.css";
 
 import "../styles/global.css";
 
 import "../../semantic/dist/semantic.css";
-//semantic js is dependent on jquery, which has trouble now
 import "../styles/FlowGrid.css";
 import "../styles/legacyStyles.css";
 import "../styles/theme.css";

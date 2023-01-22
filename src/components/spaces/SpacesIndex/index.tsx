@@ -101,34 +101,29 @@ export const SpacesIndex: React.FC = () => {
     searchSpaces.page < searchSpaces.nbPages - 1;
 
   return (
-    <div className="SpacesIndex">
-      <div className="row">
-        <div className="col-md-1" />
-        <div className="col-xs-12 col-md-10">
-          <div className="SpacesIndex--header">
-            <h1>Public Models</h1>
-            <div className="search-form">
-              <div className="row">
-                <div className="col-sm-3" />
-                <div className="col-sm-6">
-                  <div className="ui form">
-                    <input
-                      name="search"
-                      placeholder="Search"
-                      onChange={changeSearchValue}
-                    />
-                  </div>
-                </div>
-                <div className="col-sm-3">
-                  <Filters
-                    sortBy={sortBy}
-                    timeframe={timeframe}
-                    onChangeSortBy={setSortBy}
-                    onChangeTimeFrame={setTimeframe}
-                  />
-                </div>
-              </div>
+    <div className="SpacesIndex mb-8">
+      <div className="mt-16 mb-12">
+        <h1 className="text-grey-444 text-center text-3xl mb-6">
+          Public Models
+        </h1>
+        <div className="grid grid-cols-4 gap-4">
+          <div />
+          <div className="col-span-2">
+            <div className="ui form">
+              <input
+                name="search"
+                placeholder="Search"
+                onChange={changeSearchValue}
+              />
             </div>
+          </div>
+          <div>
+            <Filters
+              sortBy={sortBy}
+              timeframe={timeframe}
+              onChangeSortBy={setSortBy}
+              onChangeTimeFrame={setTimeframe}
+            />
           </div>
         </div>
       </div>
