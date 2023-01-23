@@ -50,5 +50,5 @@ export const NewOrder: React.FC<{
     };
   }, []);
 
-  return <div className="NewOrder" ref={ref} />;
+  return <div ref={ref} />;
 };

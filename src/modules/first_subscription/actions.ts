@@ -1,26 +1,32 @@
 import * as meActions from "~/modules/me/actions";
-import { AppThunk } from "~/modules/store";
+import { AppDispatch, AppThunk } from "~/modules/store";
 import { api } from "~/lib/guesstimate_api";
 
 function actionType(action: string, event: string) {
   return `${action}_${event}`;
 }
 
-function errorAction(action: string, error) {
+function errorAction(action: string, error: unknown) {
   return {
     type: actionType(action, "FAILURE"),
     error,
   };
 }
 
-function successAction(action, value) {
+function successAction(action: string, value: unknown) {
   return {
     type: actionType(action, "SUCCESS"),
     value,
   };
 }
 
-function simpleCallback({ dispatch, action }) {
+function simpleCallback({
+  dispatch,
+  action,
+}: {
+  dispatch: AppDispatch;
+  action: string;
+}) {
   return (err, value) => {
     if (err) {
       dispatch(errorAction(action, err));

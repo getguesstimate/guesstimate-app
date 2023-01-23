@@ -26,7 +26,7 @@ export const subStages = [
   "SYNCHRONIZATION_FAILURE",
 ] as const;
 
-export function newFlowState(state, type) {
+export function newFlowState(state: string, type: string) {
   if (type === actions.unnecessary) {
     return states.unnecessary;
   }
@@ -61,7 +61,15 @@ export function newFlowState(state, type) {
   return state;
 }
 
-export function subStage({ flowStage, iframe, synchronization }) {
+export function subStage({
+  flowStage,
+  iframe,
+  synchronization,
+}: {
+  flowStage: string;
+  iframe: any;
+  synchronization: any;
+}) {
   if (flowStage === states.form) {
     return `FORM_${iframe.request.status}`;
   } else if (flowStage === states.synchronization) {

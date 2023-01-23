@@ -7,7 +7,7 @@ import { PlanIndexQuestions } from "./PlanIndexQuestions";
 const PortalMessage: React.FC<{ portalUrl: string }> = ({ portalUrl }) => (
   <div className="portal-message-container">
     <div className="portal-message">
-      <h2>{"Go to the portal to change plans & payment"}</h2>
+      <h2>Go to the portal to change plans & payment</h2>
       <a className="ui button large primary" href={portalUrl} target="_blank">
         Go to Portal
       </a>
@@ -46,16 +46,14 @@ export const PlanIndex: React.FC<Props> = ({
 
         {!!portalUrl && <PortalMessage portalUrl={portalUrl} />}
 
-        <div className="cards">
-          <Plans
-            {...{
-              showPersonalUpgradeButton,
-              isLoggedIn,
-              onChoose,
-              onNewOrganizationNavigation,
-            }}
-          />
-        </div>
+        <Plans
+          {...{
+            showPersonalUpgradeButton,
+            isLoggedIn,
+            onChoose,
+            onNewOrganizationNavigation,
+          }}
+        />
         <PlanIndexQuestions />
       </div>
     </Container>

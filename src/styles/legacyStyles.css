@@ -405,10 +405,6 @@ $flash-duration-sec: 0.4s;
   margin-left: 0;
 }
 
-.DistributionSummary .PrecisionNumber {
-  float: left;
-}
-
 .sup {
   font-size: 0.6em;
   vertical-align: super;
@@ -1115,17 +1111,6 @@ $main-grey: #4e4e4e;
     }
   }
 
-  .Plans {
-    float: left;
-  }
-
-  .Plans--outer {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
   .portal-message-container {
     width: 100%;
     padding: 1em 18em;
@@ -1401,106 +1386,6 @@ table.MetricStatTable td {
   }
 }
 
-/* src/components/subscriptions/FirstSubscription/style.css */
-.FirstSubscription {
-  text-align: center;
-  width: 100%;
-  max-width: 600px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.FirstSubscription .large-icon {
-  font-size: 18em;
-  color: $grey-2;
-  opacity: 0.2;
-}
-
-.FirstSubscription .NewOrder {
-  float: left;
-  flex-direction: column;
-}
-
-.FirstSubscription .GeneralMessage {
-  background-color: $grey-5;
-  min-height: 12em;
-  width: 100%;
-  border-radius: 3px;
-  color: $grey-2;
-  padding: 3em 2em;
-  margin-top: 1em;
-}
-
-.FirstSubscription .GeneralMessage .button {
-  margin-top: 2em;
-}
-
-/* src/components/subscriptions/FirstSubscriptionPage/style.css */
-.FirstSubscriptionPage {
-  font-family: "Lato";
-  margin-top: 2em;
-}
-
-.FirstSubscriptionPage .FirstSubscriptionPage-header {
-  margin-bottom: 6em;
-}
-
-.FirstSubscriptionPage .FirstSubscriptionPage-header h1 {
-  font-size: 3em;
-  font-weight: 400;
-  color: $grey-2;
-}
-
-.FirstSubscriptionPage .FirstSubscriptionPage-header .number {
-  color: $blue-1;
-}
-
-.FirstSubscriptionPage h2 {
-  color: #666;
-  font-weight: 400;
-  margin-top: 0.5em;
-}
-
-.FirstSubscriptionPage .FirstSubscriptionPage-sidebar {
-  color: #666;
-  max-width: 300px;
-  background: $grey-5;
-  padding: 12px;
-  border-radius: 2px;
-}
-
-.FirstSubscriptionPage .FirstSubscriptionPage-sidebar h3 {
-  color: $grey-2;
-}
-
-/* src/components/users/settings/style.css */
-.Plan {
-  padding: 0.5em 2em;
-  background-color: $grey-1;
-  border-radius: 5px;
-  font-size: 1.1em;
-  color: $grey-2;
-}
-
-.Plan.Plan h2 {
-  margin-top: 0.25em;
-  color: $blue-1;
-}
-
-.Settings-Plan {
-  margin: 2em 0 2em;
-}
-
-.Settings-Upgrade {
-  text-align: center;
-  margin: 2em 0 2em;
-}
-
-.Card .ui.button.portal {
-  background-color: $grey-2;
-}
-
 /* src/components/utility/ComponentEditor/style.css */
 .ComponentEditor > .reference {
   padding: 4em 10px;
@@ -1710,31 +1595,6 @@ table.MetricStatTable td {
   }
 }
 
-/* src/components/utility/drop-down/style.css */
-.dropDown-relative {
-  position: relative;
-}
-
-.dropDown {
-  position: absolute;
-  top: 100%;
-  margin-top: 2px;
-  z-index: 10;
-}
-
-.dropDown.position-left {
-  right: 0%;
-}
-
-.dropDown.position-right {
-  left: 0%;
-}
-
-/* src/components/utility/markdown-viewer/style.css */
-.MarkdownViewer img {
-  max-width: 100%;
-}
-
 /* src/routes/home/style.css */
 .wistia_responsive_padding {
   padding: 56.25% 0 0 0;
@@ -1754,16 +1614,6 @@ table.MetricStatTable td {
   height: 240px;
   width: 415px;
   margin-top: 5em;
-}
-
-/* src/components/metrics/modal/description.css */
-.GuesstimateDescription {
-  font-size: 1.2em;
-  width: 100%;
-}
-
-.GuesstimateDescription .emptyValue .fa {
-  margin-right: 0.5em;
 }
 
 /* src/components/spaces/show/Tutorial/pageStyle.css */

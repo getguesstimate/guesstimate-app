@@ -95,7 +95,7 @@ export const ClickToEdit: React.FC<Props> = ({
   }, []);
 
   return (
-    <div className="ClickToEdit">
+    <div>
       {isEditing ? (
         <EditingMode
           value={value}

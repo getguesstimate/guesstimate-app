@@ -60,15 +60,15 @@ export const DropDown = React.forwardRef<DropDownHandle, Props>(
     };
 
     return (
-      <div className="dropDown-relative" ref={containerRef}>
+      <div className="relative" ref={containerRef}>
         <div className="cursor-pointer" onClick={toggle}>
           {props.openLink}
         </div>
         {isOpen && (
           <div
             className={clsx(
-              "dropDown",
-              props.position === "right" ? "position-right" : "position-left"
+              "absolute mt-0.5 z-10",
+              props.position === "right" ? "left-0" : "right-0"
             )}
           >
             <Card

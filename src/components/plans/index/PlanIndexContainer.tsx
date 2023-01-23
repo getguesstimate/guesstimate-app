@@ -9,12 +9,12 @@ import { useAppSelector } from "~/modules/hooks";
 
 export const PlanIndexContainer: React.FC = () => {
   const router = useRouter();
-  const _onChoose = (planId: string) => {
+  const onChoose = (planId: string) => {
     const plan = { personal_lite: "lite", personal_premium: "premium" }[planId];
     router.push(`subscribe/${plan}`);
   };
 
-  const _onNewOrganizationNavigation = () => {
+  const onNewOrganizationNavigation = () => {
     router.push(`organizations/new`);
   };
 
@@ -28,8 +28,8 @@ export const PlanIndexContainer: React.FC = () => {
     portalUrl,
     userPlanId,
     isLoggedIn,
-    onChoose: _onChoose,
-    onNewOrganizationNavigation: _onNewOrganizationNavigation,
+    onChoose,
+    onNewOrganizationNavigation,
   };
 
   return <PlanIndex {...props} />;

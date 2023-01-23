@@ -6,9 +6,9 @@ import { Card } from "~/components/utility/Card";
 import { Plan } from "~/lib/config/plan";
 
 const PlanC: React.FC<{ planId: string | undefined }> = ({ planId }) => (
-  <div className="Plan">
-    <h2> {Plan.find(planId).fullName()} </h2>
-    <p> {`${Plan.find(planId).number()} Private Models`}</p>
+  <div className="bg-grey-1 px-8 py-4 rounded">
+    <h2 className="text-blue-1">{Plan.find(planId).fullName()}</h2>
+    <p className="text-grey-2">{Plan.find(planId).number()} Private Models</p>
   </div>
 );
 
@@ -24,7 +24,7 @@ const PortalButton: React.FC<{
   onRefresh?(): void;
 }> = ({ url, onRefresh }) => (
   <a
-    className="ui button black portal"
+    className="ui button black !bg-grey-2"
     href={url}
     target="_blank"
     onMouseUp={onRefresh}
@@ -40,12 +40,12 @@ const PlanUpgradeSection: React.FC<{
 }> = ({ planId, portalUrl, onRefresh }) => {
   const hasPortalUrl = !!portalUrl;
   if (planId === "personal_infinite") {
-    return <div />;
+    return null;
   } else {
     return (
       <div>
         <hr />
-        <div className="Settings-Upgrade">
+        <div className="mt-8 flex flex-col items-center">
           {hasPortalUrl ? (
             <PortalButton url={portalUrl} onRefresh={onRefresh} />
           ) : (
@@ -73,7 +73,7 @@ export const Settings: React.FC<Props> = ({
   return (
     <div className="Settings">
       {!_.isEmpty(planId) && (
-        <div className="ModalMedium">
+        <div>
           <Card
             headerText="Account"
             onClose={onClose}
@@ -81,8 +81,8 @@ export const Settings: React.FC<Props> = ({
             hasPadding={true}
             shadow={true}
           >
-            <div>
-              <div className="Settings-Plan">
+            <div className="py-8 space-y-8">
+              <div>
                 <PlanC planId={planId} />
               </div>
 

@@ -47,19 +47,17 @@ const PlanCard: React.FC<PlanCardProps> = ({
 }) => {
   return (
     <div className="PlanCard">
-      <h2> {name} </h2>
+      <h2>{name}</h2>
       <Cost cost={price} unit={unit} />
       <ul>
         <li>
-          {" "}
-          <strong>{private_model_count}</strong> private models{" "}
+          <strong>{private_model_count}</strong> private models
         </li>
       </ul>
       {promotion_copy && <div className="promotion">{promotion_copy}</div>}
       {upgrade.show && (
         <a className="ui button large green" onMouseDown={upgrade.onClick}>
-          {" "}
-          {upgrade.text}{" "}
+          {upgrade.text}
         </a>
       )}
     </div>
@@ -80,40 +78,34 @@ export const Plans: React.FC<Props> = ({
   onNewOrganizationNavigation,
 }) => {
   return (
-    <div className="row">
-      <div className="col-sm-12">
-        <div className="Plans--outer">
-          <div className="Plans">
-            <PlanCard
-              name="Individuals"
-              price="5"
-              unit="per_month"
-              private_model_count="20"
-              upgrade={{
-                show: showPersonalUpgradeButton,
-                onClick: () => {
-                  onChoose("personal_lite");
-                },
-                text: "Upgrade",
-              }}
-            />
-            <PlanCard
-              name="Organizations"
-              price="12"
-              unit="per_user"
-              private_model_count="200"
-              promotion_copy="30-day free trial"
-              upgrade={{
-                show: isLoggedIn,
-                onClick: () => {
-                  onNewOrganizationNavigation();
-                },
-                text: "Begin Free Trial",
-              }}
-            />
-          </div>
-        </div>
-      </div>
+    <div className="flex justify-center items-start">
+      <PlanCard
+        name="Individuals"
+        price="5"
+        unit="per_month"
+        private_model_count="20"
+        upgrade={{
+          show: showPersonalUpgradeButton,
+          onClick: () => {
+            onChoose("personal_lite");
+          },
+          text: "Upgrade",
+        }}
+      />
+      <PlanCard
+        name="Organizations"
+        price="12"
+        unit="per_user"
+        private_model_count="200"
+        promotion_copy="30-day free trial"
+        upgrade={{
+          show: isLoggedIn,
+          onClick: () => {
+            onNewOrganizationNavigation();
+          },
+          text: "Begin Free Trial",
+        }}
+      />
     </div>
   );
 };
