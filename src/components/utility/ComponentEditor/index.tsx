@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import React from "react";
 import JSONTree from "react-json-tree";
 
@@ -16,9 +17,8 @@ export function ComponentEditor<T>({
   backgroundColor = "white",
   child: Child,
 }: Props<T>): React.ReactElement {
-  const className = `row ComponentEditor ${backgroundColor}`;
   return (
-    <div className={className}>
+    <div className={clsx("row ComponentEditor", backgroundColor)}>
       <div className="col-sm-2 reference">
         <h3>{name}</h3>
         <h4>{context}</h4>

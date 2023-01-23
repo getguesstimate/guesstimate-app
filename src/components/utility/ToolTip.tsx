@@ -5,6 +5,7 @@ import {
   flip,
   FloatingPortal,
   offset,
+  Placement,
   useFloating,
   useHover,
   useInteractions,
@@ -19,6 +20,7 @@ export const ToolTip: React.FC<
     theme?: "dark" | "light";
     withPortal?: boolean;
     containerClassName?: string;
+    placement?: Placement;
   } & (
     | {
         text: string;
@@ -33,6 +35,7 @@ export const ToolTip: React.FC<
   theme = "dark",
   withPortal = false,
   containerClassName = "",
+  placement: suggestedPlacement,
   text,
   render,
 }) => {
@@ -43,6 +46,7 @@ export const ToolTip: React.FC<
     useFloating({
       open: open && !disabled,
       onOpenChange: setOpen,
+      placement: suggestedPlacement,
       middleware: [offset(4), flip(), arrow({ element: arrowRef })],
     });
 

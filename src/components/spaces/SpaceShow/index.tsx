@@ -168,8 +168,6 @@ class UnconnectedSpaceShow extends Component<Props, State> {
   };
 
   componentWillMount() {
-    window.recorder.recordMountEvent(this);
-
     this.considerFetch(this.props);
     this.props.dispatch(clearEditsAllowed());
     if (!(this.props.embed || this.state.rightSidebar.type !== CLOSED)) {

@@ -280,24 +280,9 @@ class UnconnectedMetricCard extends Component<Props, State> {
     return Boolean(stats && _.isFinite(stats.stdev) && stats.length > 5);
   }
 
-  _shouldShowSensitivitySection() {
-    const { metric, analyzedMetric } = this.props;
-    return !!(
-      analyzedMetric &&
-      !this._isAnalyzedMetric() &&
-      this._shouldShowSimulation(metric) &&
-      this._shouldShowSimulation(analyzedMetric)
-    );
-  }
-
   _canBeAnalyzed() {
     const { metric } = this.props;
     return this._shouldShowSimulation(metric);
-  }
-
-  _isAnalyzedMetric() {
-    const { metric, analyzedMetric } = this.props;
-    return !!analyzedMetric && metric.id === analyzedMetric.id;
   }
 
   _makeFact() {
@@ -331,26 +316,36 @@ class UnconnectedMetricCard extends Component<Props, State> {
       exportedAsFact,
     } = this.props;
 
-    const { guesstimate, name } = metric;
     const { metricClickMode } = canvasState;
-    const shouldShowSensitivitySection = this._shouldShowSensitivitySection();
+
+    const isAnalyzedMetric =
+      !!analyzedMetric && metric.id === analyzedMetric.id;
+
+    const shouldShowSensitivitySection = !!(
+      analyzedMetric &&
+      !isAnalyzedMetric &&
+      this._shouldShowSimulation(metric) &&
+      this._shouldShowSimulation(analyzedMetric)
+    );
+
     const shouldShowDistributionEditor =
-      !!canvasState.expandedViewEnabled || inSelectedCell;
-    const isAnalyzedMetric = this._isAnalyzedMetric();
+      canvasState.expandedViewEnabled || inSelectedCell;
 
     const isFunction = metric.guesstimate.guesstimateType === "FUNCTION";
+
     const canBeMadeFact =
-      shouldTransformName(name) && isFunction && canUseOrganizationFacts;
+      shouldTransformName(metric.name) && isFunction && canUseOrganizationFacts;
 
     return (
       <ToolTip
         disabled={
           !hovered ||
           inSelectedCell ||
-          (!shouldShowSensitivitySection && !guesstimate.description)
+          (!shouldShowSensitivitySection && !metric.guesstimate.description)
         }
         theme="light"
         containerClassName="min-w-0"
+        placement="bottom-start"
         render={() =>
           shouldShowSensitivitySection ? (
             <SensitivitySection
@@ -359,7 +354,7 @@ class UnconnectedMetricCard extends Component<Props, State> {
               size="LARGE"
             />
           ) : (
-            <MetricToolTip guesstimate={guesstimate} />
+            <MetricToolTip guesstimate={metric.guesstimate} />
           )
         }
       >

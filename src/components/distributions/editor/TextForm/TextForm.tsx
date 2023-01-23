@@ -33,7 +33,7 @@ export const TextForm = React.forwardRef<{ focus(): void }, Props>(
 
     useImperativeHandle(ref, () => ({
       focus() {
-        this.inputRef.current?.focus();
+        inputRef.current?.focus();
       },
     }));
 

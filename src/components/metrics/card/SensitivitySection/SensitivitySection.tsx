@@ -1,11 +1,12 @@
 import _ from "lodash";
-import React from "react";
+import React, { PropsWithChildren } from "react";
 
 import everpolate from "everpolate";
 import { ScatterPlot } from "react-d3-components";
 import { FullDenormalizedMetric } from "~/lib/engine/space";
+import clsx from "clsx";
 
-function importance(r2) {
+function importance(r2: number) {
   if (r2 < 0.05) {
     return "low";
   } else if (r2 < 0.5) {
@@ -15,7 +16,13 @@ function importance(r2) {
   }
 }
 
-const Plot: React.FC<any> = ({ xSamples, ySamples, size, xLabel, yLabel }) => {
+const Plot: React.FC<{
+  xSamples: any;
+  ySamples: any;
+  size: string;
+  xLabel?: string;
+  yLabel?: string;
+}> = ({ xSamples, ySamples, size, xLabel, yLabel }) => {
   const customValues = _.zip(xSamples, ySamples).filter(
     ([x, y]) => _.isFinite(x) && _.isFinite(y)
   );
@@ -76,6 +83,10 @@ const Plot: React.FC<any> = ({ xSamples, ySamples, size, xLabel, yLabel }) => {
   );
 };
 
+const RegressionLabel: React.FC<PropsWithChildren> = ({ children }) => (
+  <span className="text-[#6f9a6f]">{children}</span>
+);
+
 const RegressionStats: React.FC<{
   xSamples: any;
   ySamples: any;
@@ -89,46 +100,57 @@ const RegressionStats: React.FC<{
   const sampleCount = xSamples && xSamples.length;
 
   const rSquared = regression.rSquared;
+  if (!_.isFinite(rSquared)) {
+    return null;
+  }
+
   const xIntercept =
     regression.intercept && -1 * (regression.intercept / regression.slope);
-  return (
-    <div className="regression">
-      {size === "SMALL" && _.isFinite(rSquared) && (
-        <div>
-          <span className="label"> {"r²"}</span>
-          <span className={`value ${importance(rSquared)}`}>
-            {" "}
-            {rSquared.toFixed(2)}
-          </span>
-        </div>
-      )}
-      {size !== "SMALL" && _.isFinite(rSquared) && (
-        <div>
-          <div>
-            <span className="label">
-              {" "}
-              r<sup>2</sup>
-            </span>
-            <span className="value"> {regression.rSquared.toFixed(2)}</span>
-          </div>
-          <div>
-            <span className="label"> slope</span>
-            <span className="value"> {regression.slope.toFixed(2)}</span>
-          </div>
-          <div>
-            <span className="label"> x intercept</span>
-            <span className="value"> {xIntercept.toFixed(2)}</span>
-          </div>
-          <div>
-            <span className="label"> y intercept</span>
-            <span className="value"> {regression.intercept.toFixed(2)}</span>
-          </div>
-          <div>
-            <span className="label"> sample count</span>
-            <span className="value"> {sampleCount}</span>
-          </div>
-        </div>
-      )}
+
+  const importanceClassNames = {
+    low: "font-light text-[#91a791]",
+    medium: "font-medium text-[#6f9a6f]",
+    high: "font-bold text-[#359235]",
+  } as const;
+
+  return size === "SMALL" ? (
+    <div className="absolute bottom-1 right-2">
+      <span className="text-grey-666 italic text-sm"> r²</span>
+      <span
+        className={clsx(
+          "italic text-xl",
+          importanceClassNames[importance(rSquared)]
+        )}
+      >
+        {" "}
+        {rSquared.toFixed(2)}
+      </span>
+    </div>
+  ) : (
+    <div className="absolute top-4 right-2 text-grey-444 text-sm">
+      <div>
+        <RegressionLabel>
+          {" "}
+          r<sup>2</sup>
+        </RegressionLabel>
+        <span> {regression.rSquared.toFixed(2)}</span>
+      </div>
+      <div>
+        <RegressionLabel> slope</RegressionLabel>
+        <span> {regression.slope.toFixed(2)}</span>
+      </div>
+      <div>
+        <RegressionLabel> x intercept</RegressionLabel>
+        <span> {xIntercept.toFixed(2)}</span>
+      </div>
+      <div>
+        <RegressionLabel> y intercept</RegressionLabel>
+        <span> {regression.intercept.toFixed(2)}</span>
+      </div>
+      <div>
+        <RegressionLabel> sample count</RegressionLabel>
+        <span> {sampleCount}</span>
+      </div>
     </div>
   );
 };
@@ -141,7 +163,7 @@ export const SensitivitySection: React.FC<{
   const sampleCount = size === "SMALL" ? 100 : 1000;
 
   const sampleValues = (metric: FullDenormalizedMetric | null) => {
-    const values: any = _.get(metric, "simulation.sample.values");
+    const values = metric?.simulation?.sample.values;
     return values && values.slice(0, sampleCount);
   };
 
@@ -153,7 +175,7 @@ export const SensitivitySection: React.FC<{
   }
 
   return (
-    <div className={`SensitivitySection ${size}`}>
+    <div className={clsx("SensitivitySection", size)}>
       <RegressionStats xSamples={xSamples} ySamples={ySamples} size={size} />
       <Plot
         xSamples={xSamples}

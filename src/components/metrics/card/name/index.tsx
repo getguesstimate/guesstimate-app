@@ -93,7 +93,7 @@ export class MetricName extends Component<Props, State> {
     } = this;
 
     return (
-      <span
+      <div
         className={clsx(
           "MetricName",
           !anotherFunctionSelected && "isClickable"
@@ -113,7 +113,7 @@ export class MetricName extends Component<Props, State> {
             placeholder="name"
           />
         </div>
-      </span>
+      </div>
     );
   }
 }

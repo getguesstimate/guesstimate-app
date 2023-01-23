@@ -1,14 +1,37 @@
 import clsx from "clsx";
-import React from "react";
+import React, { PropsWithChildren } from "react";
 
 import Icon from "~/components/react-fa-patched";
 
 import { ButtonClose } from "~/components/utility/buttons/close/index";
 import { capitalizeFirstLetter } from "~/lib/string";
 
-export const CardListSection: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => <div className="CardListSection">{children}</div>;
+export const CardListSection: React.FC<PropsWithChildren> = ({ children }) => (
+  <div className="CardListSection">{children}</div>
+);
+
+const IconSection: React.FC<
+  Pick<CardListElementProps, "icon" | "ionicIcon" | "image" | "imageShape"> & {
+    colCount: string;
+  }
+> = ({ colCount, icon, ionicIcon, image, imageShape }) => (
+  <div className={`col-xs-${colCount} icons`}>
+    {icon && <Icon name={icon} />}
+    {ionicIcon && <i className={`ion-${ionicIcon}`} />}
+    {image && <img src={image} className={imageShape} />}
+  </div>
+);
+
+const ChildrenSection: React.FC<{
+  colCount: string;
+  header: string;
+  children: React.ReactNode;
+}> = ({ colCount, header, children }) => (
+  <div className={`col-xs-${colCount} info-section`}>
+    {header && <span className="header">{capitalizeFirstLetter(header)}</span>}
+    {!!children && <div className="content">{children}</div>}
+  </div>
+);
 
 export type CardListElementProps = {
   isSelected?: boolean;
@@ -36,7 +59,7 @@ export const CardListElement: React.FC<CardListElementProps> = ({
   isDisabled,
   onMouseDown,
 }) => {
-  const _onSelect = () => {
+  const handleSelect = () => {
     if (!isDisabled) {
       onMouseDown();
     }
@@ -55,8 +78,8 @@ export const CardListElement: React.FC<CardListElementProps> = ({
 
   return (
     <li>
-      <a className={className} href={url} onMouseDown={_onSelect}>
-        <div className="row middle-xs">
+      <a className={className} href={url} onMouseDown={handleSelect}>
+        <div className="row">
           {hasImage && (
             <IconSection
               {...{ icon, ionicIcon, image, imageShape }}
@@ -72,29 +95,6 @@ export const CardListElement: React.FC<CardListElementProps> = ({
     </li>
   );
 };
-
-const IconSection: React.FC<
-  Pick<CardListElementProps, "icon" | "ionicIcon" | "image" | "imageShape"> & {
-    colCount: string;
-  }
-> = ({ colCount, icon, ionicIcon, image, imageShape }) => (
-  <div className={`col-xs-${colCount} icons`}>
-    {icon && <Icon name={icon} />}
-    {ionicIcon && <i className={`ion-${ionicIcon}`} />}
-    {image && <img src={image} className={imageShape} />}
-  </div>
-);
-
-const ChildrenSection: React.FC<{
-  colCount: string;
-  header: string;
-  children: React.ReactNode;
-}> = ({ colCount, header, children }) => (
-  <div className={`col-xs-${colCount} info-section`}>
-    {header && <span className="header">{capitalizeFirstLetter(header)}</span>}
-    {!!children && <div className="content">{children}</div>}
-  </div>
-);
 
 type Props = {
   headerText?: string;
