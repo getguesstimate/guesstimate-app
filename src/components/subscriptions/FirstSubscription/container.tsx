@@ -63,7 +63,6 @@ export const FirstSubscriptionContainer: React.FC<Props> = ({ planId }) => {
 
   return (
     <FirstSubscription
-      planId={planId}
       flowStage={flowStage}
       paymentAccountPortalUrl={paymentAccountPortalUrl}
       iframeUrl={iframeUrl}
