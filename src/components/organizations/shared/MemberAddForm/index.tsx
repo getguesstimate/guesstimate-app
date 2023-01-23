@@ -5,6 +5,7 @@ import { httpRequestSelector } from "./httpRequestSelector";
 
 import { useAppDispatch, useAppSelector } from "~/modules/hooks";
 import * as userOrganizationMembershipActions from "~/modules/userOrganizationMemberships/actions";
+import clsx from "clsx";
 
 function validateEmail(email: string) {
   const re =
@@ -26,31 +27,26 @@ export const MemberAddForm: React.FC<{ organizationId: number }> = ({
     input.current?.focus();
   }, []);
 
-  const _email = () => {
-    return value.trim();
-  };
+  const email = value.trim();
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
   };
 
   const onKeyDown = (e: React.KeyboardEvent) => {
-    if (e.keyCode === 13 && validateEmail(_email())) {
+    if (e.keyCode === 13 && validateEmail(email)) {
       submit();
     }
   };
 
   const submit = () => {
     dispatch(
-      userOrganizationMembershipActions.createWithEmail(
-        organizationId,
-        _email()
-      )
+      userOrganizationMembershipActions.createWithEmail(organizationId, email)
     );
     setValue("");
   };
 
-  const isValid = validateEmail(_email());
+  const isValid = validateEmail(email);
   const isEmpty = _.isEmpty(value);
   const buttonColor = isValid || isEmpty ? "green" : "blue";
 
@@ -60,7 +56,7 @@ export const MemberAddForm: React.FC<{ organizationId: number }> = ({
     ["desc"]
   );
   return (
-    <div className="MemberAddForm">
+    <div>
       <div className="ui form">
         <div className="field">
           <label>Email Address</label>
@@ -69,14 +65,17 @@ export const MemberAddForm: React.FC<{ organizationId: number }> = ({
             onKeyDown={onKeyDown}
             type="text"
             placeholder="name@domain.com"
+            className="max-w-3xl"
             ref={input}
             onChange={onChange}
           />
         </div>
         <div
-          className={`ui button primary ${buttonColor} ${
-            isValid ? "" : "disabled"
-          }`}
+          className={clsx(
+            "ui button primary",
+            buttonColor,
+            !isValid && "disabled"
+          )}
           onClick={submit}
         >
           Invite User
@@ -106,12 +105,10 @@ const InvitationHttpRequest: React.FC<{
   let status = httpStatus(busy, success);
 
   if (status === "sending") {
-    return (
-      <div className="InvitationHttpRequest ui ignored message">Sending...</div>
-    );
+    return <div className="ui ignored message">Sending...</div>;
   } else if (status === "failure") {
     return (
-      <div className="InvitationHttpRequest ui error message">
+      <div className="ui error message">
         Invitation to {email} failed. This could be because they are already
         part of the organization or because of a server problem. If it
         continues, please let us know.
@@ -119,13 +116,13 @@ const InvitationHttpRequest: React.FC<{
     );
   } else if (isExistingMember) {
     return (
-      <div className="InvitationHttpRequest ui success message">
+      <div className="ui success message">
         {email} was added to your organization.
       </div>
     );
   } else {
     return (
-      <div className="InvitationHttpRequest ui success message">
+      <div className="ui success message">
         {email} was sent an email invitation to join your organization.
       </div>
     );

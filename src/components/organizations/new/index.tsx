@@ -28,22 +28,17 @@ export const CreateOrganizationPage: React.FC<{
   return (
     <Container>
       <div className="CreateOrganization">
-        <div className="row">
-          <div className="col-md-2" />
-          <div className="col-md-8">
-            <div className="row Header">
-              <div className="col-xs-12">
-                {!newOrganizationCreated && (
-                  <h1> Step 1: Create an Organization </h1>
-                )}
-                {!!newOrganizationCreated && <h1> Step 2: Add Members </h1>}
-              </div>
-            </div>
-            {!newOrganizationCreated && <CreateOrganizationForm />}
-            {!!newOrganizationCreated && (
-              <LocalAddMembers organizationId={newOrganization.id} />
-            )}
-          </div>
+        <div className="max-w-[820px] mx-auto">
+          <h1 className="mt-4 mb-8 font-medium text-4xl">
+            {newOrganizationCreated
+              ? "Step 2: Add Members"
+              : "Step 1: Create an Organization"}
+          </h1>
+          {newOrganizationCreated ? (
+            <LocalAddMembers organizationId={newOrganization.id} />
+          ) : (
+            <CreateOrganizationForm />
+          )}
         </div>
       </div>
     </Container>

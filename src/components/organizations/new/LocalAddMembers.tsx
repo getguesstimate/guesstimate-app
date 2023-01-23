@@ -2,12 +2,13 @@ import React from "react";
 import { MemberAddForm } from "../shared/MemberAddForm/index";
 
 import { organization } from "~/lib/engine/engine";
+import { Message } from "./Message";
 
 export const LocalAddMembers: React.FC<{ organizationId: number }> = ({
   organizationId,
 }) => (
-  <div className="row">
-    <div className="col-sm-7">
+  <div className="grid grid-cols-12">
+    <div className="col-span-7">
       <MemberAddForm organizationId={organizationId} />
       <br />
       <br />
@@ -15,13 +16,11 @@ export const LocalAddMembers: React.FC<{ organizationId: number }> = ({
         className="ui button green"
         href={organization.url({ id: organizationId })}
       >
-        Finish Registration{" "}
+        Finish Registration
       </a>
     </div>
-    <div className="col-sm-1" />
-    <div className="col-sm-4">
-      <div className="ui message">
-        <h3> Organization Members </h3>
+    <div className="col-span-4 col-start-9">
+      <Message title="Organization Members">
         <p>
           Organization members will be able to see and edit all organization
           models.
@@ -30,7 +29,7 @@ export const LocalAddMembers: React.FC<{ organizationId: number }> = ({
           As an organization admin, you will be able to invite, add, and remove
           members in the future.
         </p>
-      </div>
+      </Message>
     </div>
   </div>
 );

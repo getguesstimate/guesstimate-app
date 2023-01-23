@@ -200,7 +200,6 @@ const itemsAndEdges = (facts: Fact[], spaces: ApiSpace[]) => {
 };
 
 type Props = {
-  organization: any; // unused
   facts: Fact[];
   spaces: ApiSpace[];
 };

@@ -6,39 +6,49 @@ import Icon from "~/components/react-fa-patched";
 
 import { ButtonClose } from "~/components/utility/buttons/close";
 
-type Mode = "VIEW" | "EDIT";
-
 export const SmallDataViewer: React.FC<{
   onDelete(): void;
   onOpen(): void;
 }> = ({ onDelete, onOpen }) => (
-  <div className="DataViewer DataViewer--card">
-    <a className="ui button primary small" onClick={onOpen}>
+  <div className="DataViewer DataViewer--card flex justify-between items-center pr-2">
+    <div
+      className="text-purple-2 bg-purple-3 cursor-pointer px-2 py-1 text-sm rounded-sm font-bold"
+      onClick={onOpen}
+    >
       <Icon name="bar-chart" /> Custom
-    </a>
+    </div>
     <ButtonClose onClick={onDelete} />
   </div>
+);
+
+const HeaderButton: React.FC<{
+  onClick(): void;
+  text: string;
+  icon: string;
+}> = ({ onClick, text, icon }) => (
+  <a
+    onClick={onClick}
+    className="flex gap-1 items-center text-white/70 hover:text-white"
+    href=""
+  >
+    <Icon name={icon} className="text-base" />
+    <span className="text-sm">{text}</span>
+  </a>
 );
 
 const Header: React.FC<{
   onDelete(): void;
   onEdit(): void;
-  mode: Mode;
-}> = ({ mode, onDelete, onEdit }) => (
-  <div className="row">
-    <div className="col-sm-6">
-      <h2>
-        <Icon name="bar-chart" /> Custom Data
-      </h2>
-    </div>
-    {mode === "VIEW" && (
-      <div className="col-sm-6">
-        <a onClick={onDelete} className="delete">
-          <Icon name="close" /> Delete
-        </a>
-        <a onClick={onEdit} className="edit">
-          <Icon name="pencil" /> Edit
-        </a>
+  editing: boolean;
+}> = ({ editing, onDelete, onEdit }) => (
+  <div className="flex items-center justify-between group">
+    <h2 className="m-0 text-white text-lg">
+      <Icon name="bar-chart" /> Custom Data
+    </h2>
+    {!editing && (
+      <div className="gap-4 hidden group-hover:flex">
+        <HeaderButton onClick={onEdit} icon="pencil" text="Edit" />
+        <HeaderButton onClick={onDelete} icon="close" text="Delete" />
       </div>
     )}
   </div>
@@ -77,30 +87,30 @@ const Editor: React.FC<{
   };
 
   return (
-    <div>
-      <div className="ui form">
-        <div className="field">
-          <textarea value={value} onChange={handleChange} />
+    <div className="flex flex-col gap-4">
+      <textarea
+        className="min-h-[8em] h-[16em] p-4"
+        value={value}
+        onChange={handleChange}
+      />
+      <div>
+        <div className="ui button primary tiny" onClick={handleSave}>
+          Save
         </div>
-      </div>
-      <div className="ui button primary tiny" onClick={handleSave}>
-        Save
-      </div>
-      <div className="ui button tiny" onClick={onEditCancel}>
-        Cancel
+        <div className="ui button tiny" onClick={onEditCancel}>
+          Cancel
+        </div>
       </div>
     </div>
   );
 };
 
 const Viewer: React.FC<{ data: number[] }> = ({ data }) => (
-  <ul>
+  <ul className="text-purple-2 pl-4">
     {data.map((element, index) => {
       return (
         <li key={index}>
-          <div className="DataPoint" key={index}>
-            {element}
-          </div>
+          <div key={index}>{element}</div>
         </li>
       );
     })}
@@ -118,37 +128,38 @@ export const LargeDataViewer: React.FC<LargeDataViewerProps> = ({
   onDelete,
   onSave,
 }) => {
-  const [mode, setMode] = useState<Mode>("VIEW");
-
-  const bodyClass = clsx(
-    "ui segment DataViewer--body",
-    mode === "VIEW" ? "view" : "edit"
-  );
+  const [editing, setEditing] = useState(false);
 
   const handleEdit = () => {
-    setMode("EDIT");
+    setEditing(true);
   };
 
   const handleSave = (data: number[]) => {
     onSave(data);
-    setMode("VIEW");
+    setEditing(false);
   };
 
   return (
-    <div className="DataViewer ui segments">
-      <div className="ui segment DataViewer--header">
-        <Header onDelete={onDelete} onEdit={handleEdit} mode={mode} />
+    <div className="DataViewer max-w-sm rounded">
+      <div className="px-4 py-2 bg-purple-2 rounded-t">
+        <Header onDelete={onDelete} onEdit={handleEdit} editing={editing} />
       </div>
-      <div className={bodyClass}>
-        {mode === "VIEW" && <Viewer data={data} />}
-        {mode === "EDIT" && (
+      <div
+        className={clsx(
+          "DataViewer--body bg-purple-3 rounded-b p-4 max-h-96 overflow-auto",
+          editing ? "edit" : "view"
+        )}
+      >
+        {editing ? (
           <Editor
             data={data}
             onEditCancel={() => {
-              setMode("VIEW");
+              setEditing(false);
             }}
             onSave={handleSave}
           />
+        ) : (
+          <Viewer data={data} />
         )}
       </div>
     </div>

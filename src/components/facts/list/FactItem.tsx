@@ -16,6 +16,7 @@ import {
 import { spaceUrlById } from "~/lib/engine/space";
 
 import { allPropsPresent } from "~/lib/engine/utils";
+import clsx from "clsx";
 
 type Props = {
   fact: Fact;
@@ -32,11 +33,11 @@ export const FactItem: React.FC<Props> = ({
 }) => {
   const router = useRouter();
 
-  const exported_from_url = spaceUrlById(_.get(fact, "exported_from_id"), {
+  const exported_from_url = spaceUrlById(fact.exported_from_id, {
     factsShown: "true",
   });
   return (
-    <div className={`Fact--outer ${size}`}>
+    <div className={clsx("Fact--outer", size)}>
       <div className="Fact">
         <div className="section-simulation simulation-sample">
           {allPropsPresent(

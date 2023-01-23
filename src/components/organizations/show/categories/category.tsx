@@ -4,6 +4,13 @@ import { FactListContainer } from "~/components/facts/list/FactListContainer";
 import { CategoryForm } from "./form";
 import { FactCategory } from "~/lib/engine/fact_category";
 import { Fact } from "~/lib/engine/facts";
+import { Button } from "~/components/utility/buttons/button";
+
+const HeaderText: React.FC<{ children: string }> = ({ children }) => (
+  <h3 className="!m-0 text-grey-888 text-xl italic font-extralight">
+    {children}
+  </h3>
+);
 
 type HeaderProps = {
   category: FactCategory;
@@ -49,42 +56,28 @@ const CategoryHeader: React.FC<HeaderProps> = (props) => {
 
   const renderShowHeader = () => {
     return (
-      <div className="row">
-        <div className="col-md-7">
-          <h3>{props.category.name}</h3>
-        </div>
-        <div className="col-md-5">
-          {hovering && (
-            <div className="category-actions">
-              <span className="ui button tiny" onClick={handleStartEditing}>
-                Edit
-              </span>
-              <span className="ui button tiny" onClick={handleDelete}>
-                Delete
-              </span>
-            </div>
-          )}
-        </div>
+      <div className="flex justify-between items-start">
+        <HeaderText>{props.category.name}</HeaderText>
+        {hovering && (
+          <div className="flex gap-1 items-center">
+            <Button onClick={handleStartEditing} size="small">
+              Edit
+            </Button>
+            <Button onClick={handleDelete} size="small">
+              Delete
+            </Button>
+          </div>
+        )}
       </div>
     );
   };
 
   return (
-    <div
-      className="category-header"
-      onMouseEnter={handleEnter}
-      onMouseLeave={handleLeave}
-    >
+    <div onMouseEnter={handleEnter} onMouseLeave={handleLeave}>
       {editing ? renderEditHeader() : renderShowHeader()}
     </div>
   );
 };
-
-const NullCategoryHeader: React.FC = () => (
-  <div className="category-header">
-    <h3>Uncategorized</h3>
-  </div>
-);
 
 type Props = {
   category?: FactCategory;
@@ -114,7 +107,7 @@ export const Category: React.FC<Props> = ({
         onDelete={onDeleteCategory}
       />
     ) : (
-      <NullCategoryHeader />
+      <HeaderText>Uncategorized</HeaderText>
     )}
     <FactListContainer
       organization={organization}

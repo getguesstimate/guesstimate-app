@@ -4,6 +4,7 @@ import React, { Component } from "react";
 import { ContentState, Editor, EditorState } from "draft-js";
 
 import { typeSafeEq } from "~/lib/engine/utils";
+import clsx from "clsx";
 
 type Props = {
   name: string | undefined;
@@ -93,9 +94,10 @@ export class MetricName extends Component<Props, State> {
 
     return (
       <span
-        className={`MetricName ${
-          !anotherFunctionSelected ? "isClickable" : ""
-        }`}
+        className={clsx(
+          "MetricName",
+          !anotherFunctionSelected && "isClickable"
+        )}
         onKeyDown={this.handleKeyDown.bind(this)}
       >
         <div

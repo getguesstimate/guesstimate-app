@@ -1,6 +1,8 @@
 import React, { useCallback, useRef, useState } from "react";
 
 import ReactDOM from "react-dom";
+import TextareaAutosize from "react-textarea-autosize";
+
 import Icon from "~/components/react-fa-patched";
 
 import { ButtonClose } from "./buttons/close/index";
@@ -21,7 +23,7 @@ const EditingMode: React.FC<{
 
   return (
     <div>
-      <textarea
+      <TextareaAutosize
         className="w-full p-2 rounded outline-none border-2 border-solid border-blue-5 focus:border-blue-1 min-h-[120px]"
         defaultValue={value}
         ref={(ref) => {

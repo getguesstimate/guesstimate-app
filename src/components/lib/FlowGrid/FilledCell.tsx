@@ -7,7 +7,7 @@ import React, {
 
 import { ConnectDragSource, useDrag, useDragLayer, XYCoord } from "react-dnd";
 
-import { CanvasLocation } from "~/lib/locationUtils";
+import { CanvasLocation, Direction } from "~/lib/locationUtils";
 
 import clsx from "clsx";
 import { getEmptyImage } from "react-dnd-html5-backend";
@@ -16,7 +16,7 @@ import { GridItem } from "./types";
 export type GridContext = {
   hovered: boolean;
   inSelectedCell: boolean;
-  selectedFrom?: any;
+  selectedFrom?: Direction;
   gridKeyPress(e: React.SyntheticEvent): void;
   connectDragSource: ConnectDragSource;
   forceFlowGridUpdate(): void;
@@ -83,7 +83,7 @@ type Props = {
   onTab(): void;
   onReturn(): void;
   inSelectedCell: boolean;
-  selectedFrom?: any;
+  selectedFrom?: Direction;
   item: GridItem;
   getRowHeight(): number;
   location: CanvasLocation;

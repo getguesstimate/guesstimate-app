@@ -16,104 +16,6 @@ import * as Calculator from "~/lib/engine/calculator";
 import * as Space from "~/lib/engine/space";
 import { useAppDispatch, useAppSelector } from "~/modules/hooks";
 
-type Props = {
-  calculatorId: number;
-};
-
-export const CalculatorExpandedShow: React.FC<Props> = ({ calculatorId }) => {
-  const [attemptedFetch, setAttemptedFetch] = useState(false);
-  const [showHelp, setShowHelp] = useState(false);
-  const [resultBeenShown, setResultBeenShown] = useState(false);
-
-  const dispatch = useAppDispatch();
-  const router = useRouter();
-
-  const selectedProps = useAppSelector((state) =>
-    calculatorSpaceSelector(state, calculatorId)
-  );
-
-  useEffect(() => {
-    if (!attemptedFetch) {
-      dispatch(fetchById(calculatorId));
-      setAttemptedFetch(true);
-    }
-  }, []);
-
-  if (!selectedProps.calculator) {
-    return null;
-  }
-
-  const {
-    calculator: { content, title, space_id, share_image, id },
-  } = selectedProps;
-
-  const spaceUrl =
-    Space.url({ id: space_id }) +
-    `/calculators/${id}${resultBeenShown ? "?showResults=true" : ""}`;
-  const calculatorUrl = Calculator.fullUrl(selectedProps.calculator);
-
-  const pageTitle = `${title} | Guesstimate`;
-
-  let metaTags = [
-    { name: "description", content },
-    { property: "og:description", content },
-    { property: "og:title", content: pageTitle },
-    { property: "og:site_name", content: "Guesstimate" },
-  ];
-  if (!!share_image) {
-    metaTags = metaTags.concat({
-      property: "og:image",
-      content: share_image,
-    });
-  }
-
-  const { FacebookShareButton, TwitterShareButton } = ShareButtons;
-  const FacebookIcon = generateShareIcon("facebook");
-  const TwitterIcon = generateShareIcon("twitter");
-
-  return (
-    <Container>
-      <Head>
-        <title key="title">{pageTitle}</title>
-        {metaTags.map((tag) => (
-          <meta {...tag} key={tag.name ?? tag.property} />
-        ))}
-      </Head>
-      <div className="max-w-4xl mx-auto">
-        {showHelp ? (
-          <CalculatorHelp onClose={() => setShowHelp(false)} />
-        ) : (
-          <CalculatorShow
-            {...selectedProps}
-            size="wide"
-            classes={["wide"]}
-            showHelp={() => setShowHelp(true)}
-            onShowResult={() => setResultBeenShown(true)}
-          />
-        )}
-        <div className="information-section">
-          <div className="row">
-            <div className="col-xs-12 col-sm-6">
-              <FacebookShareButton url={calculatorUrl} title={title}>
-                <FacebookIcon size={42} />
-              </FacebookShareButton>
-              <TwitterShareButton url={calculatorUrl} title={title}>
-                <TwitterIcon size={42} />
-              </TwitterShareButton>
-            </div>
-            <div className="col-sm-1" />
-            <div className="col-xs-12 col-sm-5 calculation-link-section">
-              <a href={spaceUrl}>
-                <i className="ion-ios-redo" /> See calculations
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </Container>
-  );
-};
-
 const CalculatorHelp: React.FC<{ onClose(): void }> = ({ onClose }) => {
   return (
     <div className="calculator wide">
@@ -196,5 +98,109 @@ const CalculatorHelp: React.FC<{ onClose(): void }> = ({ onClose }) => {
         </tbody>
       </table>
     </div>
+  );
+};
+
+type Props = {
+  calculatorId: number;
+};
+
+export const CalculatorExpandedShow: React.FC<Props> = ({ calculatorId }) => {
+  const [attemptedFetch, setAttemptedFetch] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
+  const [resultBeenShown, setResultBeenShown] = useState(false);
+
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+
+  const selectedProps = useAppSelector((state) =>
+    calculatorSpaceSelector(state, calculatorId)
+  );
+
+  useEffect(() => {
+    if (!attemptedFetch) {
+      dispatch(fetchById(calculatorId));
+      setAttemptedFetch(true);
+    }
+  }, []);
+
+  if (!selectedProps.calculator) {
+    return null;
+  }
+
+  const {
+    calculator: { content, title, space_id, share_image, id },
+  } = selectedProps;
+
+  const spaceUrl =
+    Space.url({ id: space_id }) +
+    `/calculators/${id}${resultBeenShown ? "?showResults=true" : ""}`;
+  const calculatorUrl = Calculator.fullUrl(selectedProps.calculator);
+
+  const pageTitle = `${title} | Guesstimate`;
+
+  let metaTags = [
+    { name: "description", content },
+    { property: "og:description", content },
+    { property: "og:title", content: pageTitle },
+    { property: "og:site_name", content: "Guesstimate" },
+  ];
+  if (!!share_image) {
+    metaTags = metaTags.concat({
+      property: "og:image",
+      content: share_image,
+    });
+  }
+
+  const { FacebookShareButton, TwitterShareButton } = ShareButtons;
+  const FacebookIcon = generateShareIcon("facebook");
+  const TwitterIcon = generateShareIcon("twitter");
+
+  return (
+    <Container>
+      <Head>
+        <title key="title">{pageTitle}</title>
+        {metaTags.map((tag) => (
+          <meta {...tag} key={tag.name ?? tag.property} />
+        ))}
+      </Head>
+      <div className="max-w-4xl mx-auto">
+        {showHelp ? (
+          <CalculatorHelp onClose={() => setShowHelp(false)} />
+        ) : (
+          <CalculatorShow
+            {...selectedProps}
+            size="wide"
+            classes={["wide"]}
+            showHelp={() => setShowHelp(true)}
+            onShowResult={() => setResultBeenShown(true)}
+          />
+        )}
+        <div className="flex justify-between items-center px-20 py-4">
+          <div className="flex gap-2">
+            <FacebookShareButton
+              url={calculatorUrl}
+              title={title}
+              className="opacity-50 hover:opacity-100 bg-[rgb(59,89,152)]"
+            >
+              <FacebookIcon size={42} />
+            </FacebookShareButton>
+            <TwitterShareButton
+              url={calculatorUrl}
+              title={title}
+              className="opacity-50 hover:opacity-100 bg-[rgb(0,172,237)]"
+            >
+              <TwitterIcon size={42} />
+            </TwitterShareButton>
+          </div>
+          <a
+            href={spaceUrl}
+            className="block text-lg text-grey-888 hover:text-grey-333"
+          >
+            <i className="ion-ios-redo" /> See calculations
+          </a>
+        </div>
+      </div>
+    </Container>
   );
 };

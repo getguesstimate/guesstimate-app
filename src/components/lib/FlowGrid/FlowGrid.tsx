@@ -391,7 +391,7 @@ export const FlowGrid: React.FC<Props> = ({
   return (
     <DndProvider backend={HTML5Backend}>
       <div
-        className="FlowGrid-Container"
+        className="FlowGrid-Container overflow-hidden"
         onMouseLeave={handleMouseLeave}
         onMouseUp={handleMouseUp}
         onKeyDown={handleKeyDown}

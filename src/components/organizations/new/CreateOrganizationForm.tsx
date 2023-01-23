@@ -1,8 +1,10 @@
+import clsx from "clsx";
 import _ from "lodash";
 import React, { useState } from "react";
 
 import { useAppDispatch } from "~/modules/hooks";
 import { create } from "~/modules/organizations/actions";
+import { Message } from "./Message";
 
 type Plan = "FREE" | "PREMIUM";
 
@@ -11,11 +13,20 @@ export const PlanElement: React.FC<{
   isSelected: boolean;
   children: React.ReactNode;
 }> = ({ onClick, isSelected, children }) => (
-  <div className={`PlanElement ${isSelected && "selected"}`} onClick={onClick}>
-    <div className="radio-section">
-      <input type="radio" checked={isSelected} readOnly={true} />
-    </div>
-    <div className="content-section">{children}</div>
+  <div
+    className={clsx(
+      "flex items-start px-6 py-6 gap-6 first:rounded-t last:rounded-b",
+      isSelected ? "bg-white" : "bg-grey-eee"
+    )}
+    onClick={onClick}
+  >
+    <input
+      type="radio"
+      className="block mt-[3px]"
+      checked={isSelected}
+      readOnly={true}
+    />
+    <div className="text-sm">{children}</div>
   </div>
 );
 
@@ -23,7 +34,7 @@ export const PlanList: React.FC<{
   onSelect(plan: Plan): void;
   plan: Plan;
 }> = ({ onSelect, plan }) => (
-  <div className="PlanList">
+  <div className="border border-grey-ccc rounded flex flex-col">
     <PlanElement
       onClick={() => {
         onSelect("FREE");
@@ -39,7 +50,7 @@ export const PlanList: React.FC<{
       isSelected={plan === "PREMIUM"}
     >
       Unlimited private models. $12/month per user.
-      <div className="free-trial">
+      <div className="text-[#1bb732] font-bold mt-1">
         Free 30-day trial, no credit card needed.
       </div>
     </PlanElement>
@@ -52,7 +63,7 @@ export const CreateOrganizationForm: React.FC = () => {
   const [value, setValue] = useState("");
   const dispatch = useAppDispatch();
 
-  const _onSubmit = () => {
+  const handleSubmit = () => {
     if (hasClicked) {
       return;
     }
@@ -66,13 +77,15 @@ export const CreateOrganizationForm: React.FC = () => {
 
   const canSubmit = _.isEmpty(value) && !hasClicked;
   return (
-    <div className="row">
-      <div className="col-sm-7">
-        <div className="ui form">
-          <div className="field name">
-            <label>Organization Name</label>
+    <div className="grid grid-cols-12">
+      <div className="col-span-7">
+        <div className="flex flex-col gap-8">
+          <div className="flex flex-col gap-2">
+            <label className="font-bold">Organization Name</label>
             <input
               placeholder="name"
+              // based on styles from semantic-ui
+              className="border border-grey-333/20 outline-none focus:border-[#85b7d9] transition rounded p-2"
               value={value}
               onChange={(e) => {
                 setValue(e.target.value);
@@ -80,8 +93,8 @@ export const CreateOrganizationForm: React.FC = () => {
             />
           </div>
 
-          <div className="field plan">
-            <label>Plan</label>
+          <div className="flex flex-col gap-2">
+            <label className="font-bold">Plan</label>
             <PlanList
               plan={plan}
               onSelect={(plan) => {
@@ -89,21 +102,25 @@ export const CreateOrganizationForm: React.FC = () => {
               }}
             />
           </div>
+        </div>
+
+        <div className="mt-4">
           <div
-            className={`ui button submit ${canSubmit ? "disabled" : "green"}`}
-            onClick={_onSubmit}
+            className={clsx(
+              "ui button submit",
+              canSubmit ? "disabled" : "green"
+            )}
+            onClick={handleSubmit}
           >
             Create Organization
           </div>
         </div>
       </div>
 
-      <div className="col-sm-1" />
-      <div className="col-sm-4">
-        <div className="ui message">
-          <h3> Organizations </h3>
+      <div className="col-span-4 col-start-9">
+        <Message title="Organizations">
           <p>Share & collaborate on models with a group you trust.</p>
-        </div>
+        </Message>
       </div>
     </div>
   );

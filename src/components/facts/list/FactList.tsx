@@ -10,6 +10,17 @@ import { Fact, getVar } from "~/lib/engine/facts";
 import Icon from "~/components/react-fa-patched";
 import { FactCategory } from "~/lib/engine/fact_category";
 
+const NewButton: React.FC<{ onClick(): void }> = ({ onClick }) => (
+  <div className="NewFactButton" onClick={onClick}>
+    <Icon name="plus" />
+    New Metric
+  </div>
+);
+
+const SublistHeader: React.FC<{ text: string }> = ({ text }) => (
+  <h3 className="text-grey-444">{text}</h3>
+);
+
 type Props = {
   spaceId?: number;
   categoryId?: string | null;
@@ -65,111 +76,117 @@ export class FactList extends Component<Props> {
     this.setState({ showNewForm: false });
   }
 
-  renderFactShow(fact: Fact) {
-    return (
-      <FactItem
-        key={fact.id}
-        fact={fact}
-        onEdit={this.showEditForm.bind(this, fact.id)}
-        isExportedFromSelectedSpace={this.isExportedFromSelectedSpaceFn(fact)}
-        size="LARGE"
-      />
-    );
-  }
+  render() {
+    const renderFactShow = (fact: Fact) => {
+      return (
+        <FactItem
+          key={fact.id}
+          fact={fact}
+          onEdit={this.showEditForm.bind(this, fact.id)}
+          isExportedFromSelectedSpace={this.isExportedFromSelectedSpaceFn(fact)}
+          size="LARGE"
+        />
+      );
+    };
 
-  renderEditForm(fact: Fact) {
-    const { existingVariableNames, categories, onEditFact } = this.props;
-    return (
-      <FactForm
-        startingFact={fact}
-        key={fact.id}
-        existingVariableNames={existingVariableNames.filter(
-          (v) => v !== getVar(fact)
-        )}
-        categories={categories}
-        buttonText={"Save"}
-        onSubmit={onEditFact}
-        onDelete={() => {
-          this.props.onDeleteFact(fact);
-        }}
-        onCancel={() => {
-          this.setState({ editingFactId: null });
-        }}
-      />
-    );
-  }
+    const renderEditForm = (fact: Fact) => {
+      const { existingVariableNames, categories, onEditFact } = this.props;
+      return (
+        <FactForm
+          startingFact={fact}
+          key={fact.id}
+          existingVariableNames={existingVariableNames.filter(
+            (v) => v !== getVar(fact)
+          )}
+          categories={categories}
+          buttonText="Save"
+          onSubmit={onEditFact}
+          onDelete={() => {
+            this.props.onDeleteFact(fact);
+          }}
+          onCancel={() => {
+            this.setState({ editingFactId: null });
+          }}
+        />
+      );
+    };
+    const renderFactSublist = (facts: Fact[]) => {
+      const {
+        state: { editingFactId },
+      } = this;
 
-  renderNewForm() {
-    const { existingVariableNames, categories, categoryId } = this.props;
-    return (
-      <FactForm
-        key={this.state.newFactKey.toString()}
-        categoryId={categoryId}
-        existingVariableNames={existingVariableNames}
-        categories={categories}
-        buttonText="Create"
-        onSubmit={this.onAddFact.bind(this)}
-        onCancel={this.hideNewForm.bind(this)}
-      />
-    );
-  }
+      return facts.map((e) => {
+        if (e.id === editingFactId) {
+          return renderEditForm(e);
+        } else {
+          return renderFactShow(e);
+        }
+      });
+    };
 
-  renderSpaceFacts() {
-    let filteredFacts = utils.mutableCopy(this.props.facts);
-    const exported = _.remove(
-      filteredFacts,
-      this.isExportedFromSelectedSpaceFn.bind(this)
-    );
-    const imported = _.remove(
-      filteredFacts,
-      this.isImportedFromSelectedSpaceFn.bind(this)
-    );
+    const renderSpaceFacts = () => {
+      let filteredFacts = utils.mutableCopy(this.props.facts);
+      const exported = _.remove(
+        filteredFacts,
+        this.isExportedFromSelectedSpaceFn.bind(this)
+      );
+      const imported = _.remove(
+        filteredFacts,
+        this.isImportedFromSelectedSpaceFn.bind(this)
+      );
+
+      return (
+        <div className="flex flex-col gap-4">
+          {exported.length ? (
+            <div>
+              <SublistHeader text="Model Output Metrics" />
+              {renderFactSublist(exported)}
+            </div>
+          ) : null}
+          {imported.length ? (
+            <div>
+              <SublistHeader text="Model Input Metrics" />
+              {renderFactSublist(imported)}
+            </div>
+          ) : null}
+          {filteredFacts.length ? (
+            <div>
+              <SublistHeader text="Other Library Metrics" />
+              {renderFactSublist(filteredFacts)}
+            </div>
+          ) : null}
+        </div>
+      );
+    };
+
+    const renderNewForm = () => {
+      const { existingVariableNames, categories, categoryId } = this.props;
+      return (
+        <FactForm
+          key={this.state.newFactKey.toString()}
+          categoryId={categoryId}
+          existingVariableNames={existingVariableNames}
+          categories={categories}
+          buttonText="Create"
+          onSubmit={this.onAddFact.bind(this)}
+          onCancel={this.hideNewForm.bind(this)}
+        />
+      );
+    };
 
     return (
       <div>
-        {!!exported.length && <h3>Model Output Metrics</h3>}
-        {this.renderFactSublist(exported)}
-        {!!imported.length && <h3>Model Input Metrics</h3>}
-        {this.renderFactSublist(imported)}
-        {!!filteredFacts.length && <h3>Other Library Metrics</h3>}
-        {this.renderFactSublist(filteredFacts)}
-      </div>
-    );
-  }
-
-  renderFactSublist(facts: Fact[]) {
-    const {
-      state: { editingFactId },
-    } = this;
-
-    return _.map(facts, (e) => {
-      if (e.id === editingFactId) {
-        return this.renderEditForm(e);
-      } else {
-        return this.renderFactShow(e);
-      }
-    });
-  }
-
-  render() {
-    return (
-      <div className="FactsTab">
-        {this.props.spaceId && this.renderSpaceFacts()}
-        {!this.props.spaceId && this.renderFactSublist(this.props.facts)}
-        {this.props.canMakeNewFacts &&
-          this.state.showNewForm &&
-          this.renderNewForm()}
-        {this.props.canMakeNewFacts && !this.state.showNewForm && (
-          <NewButton onClick={this.showNewForm.bind(this)} />
-        )}
+        {this.props.spaceId
+          ? renderSpaceFacts()
+          : renderFactSublist(this.props.facts)}
+        {this.props.canMakeNewFacts ? (
+          this.state.showNewForm ? (
+            renderNewForm()
+          ) : (
+            <NewButton onClick={this.showNewForm.bind(this)} />
+          )
+        ) : null}
       </div>
     );
   }
 }
-
-const NewButton: React.FC<{ onClick(): void }> = ({ onClick }) => (
-  <div className="NewFactButton" onClick={onClick}>
-    <Icon name="plus" />
-    New Metric
-  </div>
-);

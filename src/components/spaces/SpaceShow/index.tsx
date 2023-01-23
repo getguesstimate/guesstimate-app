@@ -68,7 +68,7 @@ const ShowCalculatorHeader: React.FC<any> = ({
   onClose,
 }) => {
   return (
-    <div className="flex justify-end items-start flex-wrap">
+    <div className="flex justify-end items-start flex-wrap gap-1">
       <ButtonExpandText href={`/calculators/${id}`} />
       {editableByMe && <ButtonEditText onClick={onEdit} />}
       {editableByMe && <ButtonDeleteText onClick={onDelete} />}
@@ -94,7 +94,7 @@ const FactSidebarHeader: React.FC<{
   return (
     <div className="flex justify-between items-start">
       <HeaderTitle>Metric Library</HeaderTitle>
-      <div>
+      <div className="flex gap-1">
         <ButtonExpandText href={`/organizations/${organizationId}/facts`} />
         <ButtonCloseText onClick={onClose} />
       </div>
@@ -359,7 +359,9 @@ class UnconnectedSpaceShow extends Component<Props, State> {
     }
   }
 
-  rightSidebarBody() {
+  rightSidebarBody():
+    | { bg?: "GREY"; header: JSX.Element; main: JSX.Element }
+    | undefined {
     const {
       props: { denormalizedSpace, spaceId, organizationFacts },
       state: { rightSidebar },
@@ -385,7 +387,6 @@ class UnconnectedSpaceShow extends Component<Props, State> {
         };
 
         return {
-          classes: [],
           header: (
             <ShowCalculatorHeader
               editableByMe={editableByMe}
@@ -405,7 +406,6 @@ class UnconnectedSpaceShow extends Component<Props, State> {
       }
       case EDIT_CALCULATOR_FORM:
         return {
-          classes: [],
           header: (
             <CalculatorFormHeader
               isNew={false}
@@ -424,7 +424,6 @@ class UnconnectedSpaceShow extends Component<Props, State> {
         };
       case NEW_CALCULATOR_FORM:
         return {
-          classes: [],
           header: (
             <CalculatorFormHeader
               isNew={true}
@@ -440,7 +439,7 @@ class UnconnectedSpaceShow extends Component<Props, State> {
         };
       case FACT_SIDEBAR:
         return {
-          classes: ["bg-grey-6"],
+          bg: "GREY",
           header: (
             <FactSidebarHeader
               onClose={this.closeRightSidebar.bind(this)}
@@ -466,13 +465,13 @@ class UnconnectedSpaceShow extends Component<Props, State> {
     if (!rightSidebarBody) {
       return null;
     }
-    const { classes, header, main } = rightSidebarBody;
+    const { bg, header, main } = rightSidebarBody;
 
     return (
       <div
         className={clsx(
-          "w-[30em] bg-white p-4 overflow-x-hidden overflow-y-auto border border-[#ccc]",
-          ...classes
+          "w-[30em] p-4 overflow-x-hidden overflow-y-auto border border-[#ccc]",
+          bg === "GREY" ? "bg-grey-6" : "bg-white"
         )}
       >
         <div className="pb-4">{header}</div>

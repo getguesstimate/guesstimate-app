@@ -16,10 +16,7 @@ const EnableShareableLinkOption: React.FC<{ onEnable(): void }> = ({
 }) => (
   <div>
     <p>Shareable link disabled.</p>
-    <span
-      className="ui button small shareable-link-button enable"
-      onClick={onEnable}
-    >
+    <span className="ui button small enable" onClick={onEnable}>
       Enable
     </span>
   </div>
@@ -30,27 +27,23 @@ const DisableOrRotateShareableLinkOption: React.FC<{
   onDisable(): void;
   onRotate(): void;
 }> = ({ shareableLinkUrl, onDisable, onRotate }) => (
-  <div>
-    <div className="ui segment shareable-link">
-      <span>{shareableLinkUrl}</span>
+  <div className="space-y-4">
+    <div className="border border-grey-ccc shadow-sm p-4 rounded overflow-scroll">
+      {shareableLinkUrl}
     </div>
-    <p>
+    <p className="text-sm">
       Anyone with the shareable link will be able to view this model. They will
       not be able to edit the model.
     </p>
 
-    <span
-      className="ui button small shareable-link-button disable"
-      onClick={onDisable}
-    >
-      Disable
-    </span>
-    <span
-      className="ui button small shareable-link-button rotate"
-      onClick={onRotate}
-    >
-      Reset Link
-    </span>
+    <div className="flex gap-1">
+      <div className="ui button small disable" onClick={onDisable}>
+        Disable
+      </div>
+      <div className="ui button small rotate" onClick={onRotate}>
+        Reset Link
+      </div>
+    </div>
   </div>
 );
 

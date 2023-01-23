@@ -11,51 +11,27 @@ type Props = {
   onSaveDescription(s: string): void;
 };
 
-export class SpaceSidebar extends Component<Props> {
-  componentDidMount() {
-    window.recorder.recordMountEvent(this);
-  }
-  componentWillUpdate() {
-    window.recorder.recordRenderStartEvent(this);
-  }
-  componentDidUpdate() {
-    window.recorder.recordRenderStopEvent(this);
-  }
-  componentWillUnmount() {
-    window.recorder.recordUnmountEvent(this);
-  }
-
-  shouldComponentUpdate(nextProps: Props) {
-    return (
-      nextProps.canEdit !== this.props.canEdit ||
-      this.props.description !== nextProps.description
-    );
-  }
-
-  render() {
-    const { description, canEdit, onClose, onSaveDescription } = this.props;
-    return (
-      <div className="SpaceSidebar">
-        <div className="SpaceSidebar-inside">
-          <div className="SpaceSidebar-header">
-            <div className="closeSidebar">
-              <ButtonCloseText onClick={onClose} />
-            </div>
-          </div>
-          <div className="SpaceSidebar-body">
-            <ClickToEdit
-              viewing={<MarkdownViewer source={description} />}
-              emptyValue={
-                <span className="emptyValue">Describe this model...</span>
-              }
-              editingSaveText="Save"
-              onSubmit={onSaveDescription}
-              canEdit={canEdit}
-              value={description}
-            />
-          </div>
-        </div>
+export const SpaceSidebar: React.FC<Props> = ({
+  description,
+  canEdit,
+  onClose,
+  onSaveDescription,
+}) => {
+  return (
+    <div className="SpaceSidebar mx-4 my-6 w-[22em] p-4 bg-white/80 rounded-sm overflow-auto">
+      <div className="flex justify-end">
+        <ButtonCloseText onClick={onClose} />
       </div>
-    );
-  }
-}
+      <div className="mt-2 break-words">
+        <ClickToEdit
+          viewing={<MarkdownViewer source={description} />}
+          emptyValue="Describe this model..."
+          editingSaveText="Save"
+          onSubmit={onSaveDescription}
+          canEdit={canEdit}
+          value={description}
+        />
+      </div>
+    </div>
+  );
+};

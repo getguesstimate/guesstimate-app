@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import React, { useState } from "react";
 
 import Icon from "~/components/react-fa-patched";
@@ -26,16 +27,18 @@ export const ImportFromSlurpForm: React.FC<Props> = ({ onSubmit }) => {
 
   return (
     <div className="ImportFromSlurpForm">
-      <h2>Import SLURP</h2>
-      <div
-        className="SlurpQuestionLink"
-        onClick={() => {
-          elev.open(elev.SIPS_AND_SLURPS);
-        }}
-      >
-        <Icon name="question-circle" />
+      <div className="flex justify-between items-center">
+        <h2 className="leading-none m-0">Import SLURP</h2>
+        <div
+          className="text-blue-4 text-2xl cursor-pointer"
+          onClick={() => {
+            elev.open(elev.SIPS_AND_SLURPS);
+          }}
+        >
+          <Icon name="question-circle" />
+        </div>
       </div>
-      <div className="ui form">
+      <div className="ui form mt-2">
         <div className="field">
           <textarea
             value={value}
@@ -43,11 +46,10 @@ export const ImportFromSlurpForm: React.FC<Props> = ({ onSubmit }) => {
               setValue(e.target.value);
             }}
             tabIndex={2}
-            ref="textarea"
           />
         </div>
         <div
-          className={`ui button submit ${isValid() ? "blue" : "disabled"}`}
+          className={clsx("ui button submit", isValid() ? "blue" : "disabled")}
           onClick={handleSubmit}
         >
           Import

@@ -37,85 +37,16 @@ import { FullDenormalizedMetric } from "~/lib/engine/space";
 import { makeURLsMarkdown } from "~/lib/engine/utils";
 import { CanvasState } from "~/modules/canvas_state/reducer";
 import { AppDispatch } from "~/modules/store";
+import clsx from "clsx";
+import { Direction } from "~/lib/locationUtils";
+import { MetricSidebar } from "./MetricSidebar";
 
-const relationshipClasses = {};
-relationshipClasses[INTERMEDIATE] = "intermediate";
-relationshipClasses[OUTPUT] = "output";
-relationshipClasses[INPUT] = "input";
-relationshipClasses[NOEDGE] = "noedge";
-
-const MetricSidebar: React.FC<{
-  onOpenModal(): void;
-  onRemoveMetric(): void;
-  showAnalysis: boolean;
-  onBeginAnalysis(): void;
-  onEndAnalysis(): void;
-  canBeMadeFact: boolean;
-  exportedAsFact: boolean;
-  onMakeFact(): void;
-  isAnalyzedMetric: boolean;
-}> = ({
-  onOpenModal,
-  onBeginAnalysis,
-  onEndAnalysis,
-  canBeMadeFact,
-  exportedAsFact,
-  onMakeFact,
-  onRemoveMetric,
-  showAnalysis,
-  isAnalyzedMetric,
-}) => (
-  <div className="MetricSidebar">
-    <MetricSidebarItem
-      icon={<Icon name="expand" />}
-      name="Expand"
-      onClick={onOpenModal}
-    />
-    {showAnalysis && !isAnalyzedMetric && (
-      <MetricSidebarItem
-        icon={<Icon name="bar-chart" />}
-        name="Sensitivity"
-        onClick={onBeginAnalysis}
-      />
-    )}
-    {showAnalysis && isAnalyzedMetric && (
-      <MetricSidebarItem
-        className="analyzing"
-        icon={<Icon name="close" />}
-        name={"Sensitivity"}
-        onClick={onEndAnalysis}
-      />
-    )}
-    {canBeMadeFact && !exportedAsFact && (
-      <MetricSidebarItem
-        icon={<i className="ion-ios-redo" />}
-        name="Export"
-        onClick={onMakeFact}
-      />
-    )}
-    <MetricSidebarItem
-      icon={<Icon name="trash" />}
-      name="Delete"
-      onClick={onRemoveMetric}
-    />
-  </div>
-);
-
-const MetricSidebarItem: React.FC<{
-  className?: string;
-  onClick(): void;
-  icon: React.ReactElement;
-  name: string;
-}> = ({ className, onClick, icon, name }) => (
-  <a
-    href="#"
-    className={`MetricSidebarItem ${className && className}`}
-    onMouseDown={onClick}
-  >
-    <span className="MetricSidebarItem--icon">{icon}</span>
-    <span className="MetricSidebarItem--name">{name}</span>
-  </a>
-);
+const relationshipClasses = {
+  [INTERMEDIATE]: "intermediate",
+  [OUTPUT]: "output",
+  [INPUT]: "input",
+  [NOEDGE]: "noedge",
+};
 
 type Props = {
   canvasState: CanvasState;
@@ -163,7 +94,7 @@ class UnconnectedMetricCard extends Component<Props, State> {
     this.props.dispatch(endAnalysis());
   }
 
-  focusFromDirection(dir) {
+  focusFromDirection(dir: Direction | undefined) {
     if (dir === "DOWN" || dir === "RIGHT") {
       this._focusForm();
     } else {
@@ -171,8 +102,7 @@ class UnconnectedMetricCard extends Component<Props, State> {
     }
   }
 
-  componentWillUpdate(nextProps) {
-    window.recorder.recordRenderStartEvent(this);
+  componentWillUpdate(nextProps: Props) {
     if (this.props.inSelectedCell && !nextProps.inSelectedCell) {
       this._closeSidebar();
     }
@@ -180,13 +110,8 @@ class UnconnectedMetricCard extends Component<Props, State> {
       this._closeSidebar();
     }
   }
-  componentWillUnmount() {
-    window.recorder.recordUnmountEvent(this);
-  }
 
   componentDidUpdate(prevProps: Props, prevState: State) {
-    window.recorder.recordRenderStopEvent(this);
-
     const hasContent = _.result(this.viewRef.current, "hasContent");
     const { inSelectedCell, selectedFrom } = this.props;
     if (
@@ -197,7 +122,7 @@ class UnconnectedMetricCard extends Component<Props, State> {
     ) {
       this.handleRemoveMetric();
     }
-    if (!prevProps.inSelectedCell && inSelectedCell && !!selectedFrom) {
+    if (!prevProps.inSelectedCell && inSelectedCell && selectedFrom) {
       this.focusFromDirection(selectedFrom);
     }
 
@@ -207,7 +132,6 @@ class UnconnectedMetricCard extends Component<Props, State> {
   }
 
   componentDidMount() {
-    window.recorder.recordMountEvent(this);
     if (this.props.inSelectedCell && this._isEmpty()) {
       this.focusFromDirection(this.props.selectedFrom);
     }
@@ -263,7 +187,7 @@ class UnconnectedMetricCard extends Component<Props, State> {
   }
 
   _hasDescription() {
-    return !!_.get(this.props.metric.guesstimate, "description");
+    return !!this.props.metric.guesstimate.description;
   }
 
   _hasGuesstimate() {
@@ -275,7 +199,7 @@ class UnconnectedMetricCard extends Component<Props, State> {
     return this._hasName() && !this._hasGuesstimate();
   }
 
-  onChangeMetricName(name) {
+  onChangeMetricName(name: string) {
     if (name === this.props.metric.name) {
       return;
     }
@@ -343,13 +267,12 @@ class UnconnectedMetricCard extends Component<Props, State> {
     const relationshipClass = relationshipClasses[this._relationshipType()];
 
     const titleView = !hovered && !inSelectedCell && this._isTitle();
-    let className = inSelectedCell
-      ? "metricCard grid-item-focus"
-      : "metricCard";
-    className += isInScreenshot ? " display" : "";
-    className += titleView ? " titleView" : "";
-    className += " " + relationshipClass;
-    return className;
+    return clsx(
+      "metricCard",
+      isInScreenshot && "display",
+      titleView && "titleView",
+      relationshipClass
+    );
   }
 
   _shouldShowSimulation(metric: FullDenormalizedMetric) {
@@ -407,6 +330,7 @@ class UnconnectedMetricCard extends Component<Props, State> {
       isInScreenshot,
       exportedAsFact,
     } = this.props;
+
     const { guesstimate, name } = metric;
     const { metricClickMode } = canvasState;
     const shouldShowSensitivitySection = this._shouldShowSensitivitySection();
@@ -414,8 +338,7 @@ class UnconnectedMetricCard extends Component<Props, State> {
       !!canvasState.expandedViewEnabled || inSelectedCell;
     const isAnalyzedMetric = this._isAnalyzedMetric();
 
-    const isFunction =
-      _.get(metric, "guesstimate.guesstimateType") === "FUNCTION";
+    const isFunction = metric.guesstimate.guesstimateType === "FUNCTION";
     const canBeMadeFact =
       shouldTransformName(name) && isFunction && canUseOrganizationFacts;
 
@@ -441,7 +364,7 @@ class UnconnectedMetricCard extends Component<Props, State> {
         }
       >
         <div
-          className="metricCard--Container h-full"
+          className="h-full w-full relative flex focus:outline-none"
           onKeyPress={this._handleKeyPress.bind(this)}
           onKeyDown={this._handleKeyDown.bind(this)}
           tabIndex={0}

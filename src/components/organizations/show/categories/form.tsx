@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import React, { Component } from "react";
 
 import { FactCategory, isFactCategoryValid } from "~/lib/engine/fact_category";
@@ -50,29 +51,26 @@ export class CategoryForm extends Component<Props> {
 
   render() {
     return (
-      <div className="row">
-        <div className="col-md-10">
-          <div className={`field${!this.isValid() ? " error" : ""}`}>
-            <h3>
-              <input
-                name="name"
-                placeholder="New Category"
-                value={this.state.runningCategory.name}
-                onChange={this.onChangeName.bind(this)}
-              />
-            </h3>
-          </div>
+      <div className="flex justify-between">
+        <div className={clsx("field", this.isValid() || "error")}>
+          <h3>
+            <input
+              name="name"
+              placeholder="New Category"
+              value={this.state.runningCategory.name}
+              onChange={this.onChangeName.bind(this)}
+            />
+          </h3>
         </div>
-        <div className="col-md-2">
-          <span
-            className={`ui button primary tiny${
-              !this.isValid() ? " disabled" : ""
-            }`}
-            onClick={this.onSubmit.bind(this)}
-          >
-            Save
-          </span>
-        </div>
+        <span
+          className={clsx(
+            "ui button primary tiny",
+            this.isValid() || "disabled"
+          )}
+          onClick={this.onSubmit.bind(this)}
+        >
+          Save
+        </span>
       </div>
     );
   }

@@ -126,73 +126,6 @@
   }
 }
 
-.information-section {
-  padding: 1em 2em;
-  margin: 0 1em;
-  font-size: 1.6em;
-
-  .calculation-link-section {
-    padding-top: 0.4em;
-    a {
-      color: #777;
-    }
-
-    a:hover {
-      color: #333;
-    }
-  }
-
-  .SocialMediaShareButton {
-    width: 45%;
-    position: relative;
-    float: left;
-    border-radius: 0.1em;
-    margin-left: 10%;
-    cursor: pointer;
-    opacity: 0.45;
-  }
-  .SocialMediaShareButton:hover {
-    opacity: 1;
-  }
-
-  .SocialMediaShareButton:first-child {
-    margin-left: 0;
-  }
-
-  .SocialMediaShareButton--facebook {
-    background-color: rgb(59, 89, 152);
-    svg {
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: 0;
-      bottom: 0;
-      margin: auto;
-    }
-  }
-  .SocialMediaShareButton--twitter {
-    background-color: rgb(0, 172, 237);
-    svg {
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: 0;
-      bottom: 0;
-      margin: auto;
-    }
-  }
-
-  .model-link {
-    width: 100%;
-    font-size: 0.8em;
-    margin-top: 1.5em;
-
-    a {
-      cursor: pointer;
-    }
-  }
-}
-
 .calculator.narrow {
   margin: 0;
   padding: 0;
@@ -280,96 +213,13 @@
 }
 
 /* src/components/distributions/editor/DataForm/style.css */
-.metricModal .DataViewer h2 {
-  font-weight: 400;
-  color: white;
-  margin-top: 3px;
-  font-size: 1.3em;
-}
-
-.metricModal .DataViewer {
-  max-width: 27em;
-  border: none;
-  box-shadow: none;
-  margin-bottom: 1.5em;
-}
-
-.DataViewer--card .button.ui.primary {
-  padding: 3px 7px;
-  margin: 8px 10px 5px 3px;
-  float: left;
-  color: $purple-2;
-  background-color: $purple-3;
-  border-radius: 2px;
-  font-size: 0.9em;
-}
-
 .DataViewer--card .button-close {
   font-size: 1.1em;
-  float: right;
-  margin-top: 9px;
   color: #ccc;
-  margin-right: 7px;
 }
 
-.DataViewer .DataViewer--header {
-  background-color: $purple-2;
-  padding: 0.5em 1em;
-  border-top: none;
-}
-
-.DataViewer .DataViewer--body {
-  background-color: $purple-3;
-  color: $purple-2;
-  overflow: auto;
-  max-height: 25em;
-}
-
-.DataViewer .DataViewer--body.edit .button {
-  margin-right: 10px;
-}
-
-.DataViewer .DataViewer--body.edit .button:not(.primary) {
+.DataViewer--body.edit .button:not(.primary) {
   background: #c6c6c6;
-}
-
-.DataViewer .DataViewer--body .ui.form {
-  margin-bottom: 10px;
-  display: inline-block;
-  width: 100%;
-}
-
-.DataViewer--header a {
-  margin-top: 2px;
-  color: rgba(255, 255, 255, 0.75);
-  float: right;
-  padding: 2px 5px 0px 5px;
-  cursor: pointer;
-  margin: 2px 5px 0;
-  font-size: 1em;
-  display: none;
-}
-
-.DataViewer--header a .fa {
-  font-size: 1.3em;
-}
-
-.DataViewer:hover .DataViewer--header a {
-  display: block;
-}
-
-.DataViewer--header a:hover {
-  color: white;
-}
-
-.metricModal .DataViewer ul {
-  float: none;
-  list-style: none;
-  padding-left: 1em;
-}
-
-.metricModal .DataViewer textarea {
-  font-size: 1.1em;
 }
 
 /* src/components/distributions/editor/style.css */
@@ -569,18 +419,10 @@ $grey-a1: rgb(231, 234, 236);
 $grey-a2: #607580;
 $blue-a1: #4a6a88;
 
-.FactsTab {
-  h3 {
-    color: #555;
-    float: left;
-  }
-}
-
 .NewFactButton {
   background-color: $grey-a1;
   border-radius: 2px;
   width: 100%;
-  float: left;
   padding: 0.4em 0.7em;
   transition: all 0.15s;
   color: #767575;
@@ -601,10 +443,7 @@ $blue-a1: #4a6a88;
 
 .Fact--outer {
   border: 1px solid rgba(0, 0, 0, 0);
-  float: left;
-  width: 100%;
   margin: 0.1em 0;
-  display: flex;
 
   &:hover {
     border-color: #d9dee2;
@@ -622,8 +461,6 @@ $blue-a1: #4a6a88;
 
 .Fact {
   background-color: white;
-  float: left;
-  width: 100%;
   border-radius: 1px;
   display: flex;
   flex-direction: row;
@@ -1084,12 +921,6 @@ $blue-a1: #4a6a88;
 }
 
 /* src/components/metrics/card/style.css */
-.metricCard--Container {
-  position: relative;
-  display: flex;
-  width: 100%;
-}
-
 .metricCard {
   border-radius: 1px;
   max-width: 30em;
@@ -1143,60 +974,12 @@ $blue-a1: #4a6a88;
   flex: 0 0 auto;
 }
 
-.metricCard--Container:focus {
-  outline: none;
-}
-
 .ReactModal__Overlay--after-open {
   z-index: 5;
 }
 
 .ReactModal__Overlay--after-open {
   overflow: auto;
-}
-
-.MetricSidebar {
-  position: absolute;
-  top: 4px;
-  right: -10.2em;
-  z-index: 3;
-}
-
-a.MetricSidebarItem {
-  clear: both;
-  display: block;
-  float: left;
-  width: 10em;
-  padding: 0.4em 0.7em;
-  color: white;
-  background: #52646f;
-  border-bottom: 1px solid #40525c;
-}
-
-a.MetricSidebarItem.analyzing {
-  background: #3d9268;
-}
-
-a.MetricSidebarItem.analyzing:hover {
-  background: #2a8558;
-}
-
-a.MetricSidebarItem:first-child {
-  border-radius: 0 2px 0 0;
-}
-
-a.MetricSidebarItem:last-child {
-  border-radius: 0 0 2px 0;
-  border-bottom: none;
-}
-
-a.MetricSidebarItem:hover {
-  background: #40525c;
-}
-
-.MetricSidebarItem--icon {
-  float: left;
-  width: 1.5em;
 }
 
 /* src/components/metrics/card/token/style.css */
@@ -1272,10 +1055,6 @@ a.MetricSidebarItem:hover {
   margin-bottom: 2em;
 }
 
-.metricModal > .bottom {
-  padding: 4em 1.5em 1.5em;
-}
-
 .metricModal hr {
   border: none;
   border-top: 1px solid #ddd;
@@ -1286,11 +1065,6 @@ a.MetricSidebarItem:hover {
   color: #444;
   font-weight: 600;
   font-size: 2.2em;
-}
-
-.metricModal h2 {
-  color: #333;
-  font-size: 1.4em;
 }
 
 .metricModal h3 {
@@ -1345,112 +1119,6 @@ a.MetricSidebarItem:hover {
   }
 }
 
-/* src/components/organizations/new/style.css */
-.CreateOrganization {
-  ul {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 0.25 0;
-    float: left;
-    width: 100%;
-  }
-  .Header {
-    h1 {
-      margin-top: 0.5rem;
-      font-size: 3em;
-      font-weight: 500;
-      margin-bottom: 1em;
-    }
-
-    .center-display {
-      text-align: center;
-      margin-right: 0.5em;
-      margin-top: 0.25em;
-    }
-  }
-
-  .Steps {
-    .ui.menu {
-      float: right;
-      margin-top: 0;
-    }
-
-    .ui.menu .item {
-      font-weight: 800;
-      color: #444;
-    }
-  }
-
-  .ui.form {
-    label {
-      font-weight: bold;
-    }
-
-    .field {
-      font-size: 1.1em;
-    }
-
-    .field.name {
-      margin-bottom: 1em;
-
-      input {
-        margin: 0.6em 0 0.6em 0;
-      }
-    }
-  }
-}
-
-.PlanList {
-  border-radius: 3px;
-  border: 1px solid #ccc;
-  display: flex;
-  flex-direction: column;
-}
-
-.PlanElement {
-  padding: 1.5em 0;
-  background-color: rgba(150, 150, 150, 0.12);
-  font-size: 0.9em;
-
-  input {
-    margin: 0;
-  }
-
-  .center-text {
-    text-align: center;
-  }
-
-  &.selected {
-    background-color: white;
-  }
-
-  &:first-child {
-    border-radius: 3px 3px 0 0;
-  }
-
-  &:last-child {
-    border-radius: 0 0 3px 3px;
-  }
-
-  .radio-section {
-    width: 8%;
-    text-align: right;
-    float: left;
-  }
-
-  .content-section {
-    width: 90%;
-    padding-left: 20px;
-    float: left;
-  }
-
-  .free-trial {
-    color: #1bb732;
-    font-weight: 700;
-    margin-top: 5px;
-  }
-}
-
 /* src/components/organizations/show/facts/style.css */
 .FactGraph {
   font-size: 0.8em;
@@ -1458,24 +1126,6 @@ a.MetricSidebarItem:hover {
   flex-align: center;
   justify-content: center;
 }
-
-.spaceNode {
-  padding: 1em;
-  color: #435870;
-  font-size: 1.3em;
-  text-align: center;
-  background-color: white;
-  margin: 4px;
-  width: 100%;
-  background-color: #acbfcf;
-  border-radius: 1px;
-  transition: background-color 0.5s;
-  &:hover {
-    background-color: #82a1bb;
-    color: #283b50;
-  }
-}
-
 .FactGraph .FlowGridCell.FlowGridCell {
   width: 150px;
   min-width: 150px;
@@ -1483,81 +1133,6 @@ a.MetricSidebarItem:hover {
 
 .FactGraph .FlowGridCell.hovered .FlowGridEmptyCell {
   background-color: none;
-}
-
-/* src/components/organizations/show/style.css */
-.OrganizationShow {
-  .main-section {
-    margin-top: 2em;
-  }
-
-  .ui.menu .item.active {
-    background: #cacaca;
-  }
-
-  .ui.tabular.menu.reversed .active.item {
-    background: none #f7f5f5;
-    border-radius: 0.15rem 0.15rem 0 0 !important;
-  }
-
-  .OrganizationHeader {
-    h1 {
-      margin-bottom: 0;
-      margin-top: 0.5rem;
-    }
-
-    .center-display {
-      text-align: center;
-      margin-right: 0.5em;
-      margin-top: 0.25em;
-    }
-
-    img {
-      max-width: 4em;
-      max-height: 5em;
-      border-radius: 0.5em;
-      margin-bottom: 2px;
-    }
-  }
-
-  .OrganizationTabButtons {
-    .ui.menu {
-      float: right;
-      margin-top: 0;
-    }
-
-    .ui.menu .item {
-      font-weight: 800;
-      font-size: 1.2em;
-      color: #444;
-    }
-  }
-
-  .FactTab {
-    margin-top: 4em;
-
-    .FactTab--factList {
-      float: right;
-    }
-
-    p {
-      font-size: 1.1em;
-      color: #666;
-    }
-
-    .Category {
-      margin-bottom: 3em;
-
-      h3 {
-        color: #888;
-        font-size: 1.4em;
-        font-style: italic;
-        font-weight: 200;
-        margin-bottom: 0.3em;
-        margin-top: 0.5em;
-      }
-    }
-  }
 }
 
 /* src/components/pages/base/style.css */
@@ -1667,9 +1242,6 @@ $main-grey: #4e4e4e;
     margin-bottom: 1.5em;
     font-weight: 500;
     font-size: 1.5em;
-  }
-
-  h2 {
   }
 
   li {
@@ -1820,70 +1392,6 @@ table.MetricStatTable td {
   }
 }
 
-/* src/components/spaces/list/style.css */
-.SpaceList {
-  border-left: 1px solid $grey-1;
-  padding-left: 10px;
-  float: left;
-  width: 100%;
-}
-
-.SpaceList .privacy-tag {
-  float: right;
-  margin-top: 10px;
-  color: $grey-2;
-}
-
-.SpaceList .privacy-tag .fa {
-  margin-right: 3px;
-}
-
-.SpaceList > .nextPage {
-  text-align: center;
-  width: 100%;
-  margin-top: 2em;
-  margin-bottom: 2em;
-}
-
-.SpaceList > .nextPage .ui.button {
-  background-color: $grey-1;
-}
-
-.SpaceList > .nextPage .ui.button:hover {
-  background-color: $grey-2;
-}
-
-/* src/components/spaces/show/Toolbar/style.css */
-.ImportFromSlurpForm h2 {
-  display: inline;
-}
-
-.ImportFromSlurpForm .SlurpQuestionLink {
-  float: right;
-  font-size: 1.6em;
-  color: $blue-4;
-  cursor: pointer;
-}
-
-/* src/components/spaces/show/privacy-toggle/style.css */
-.shareable-link {
-  overflow: scroll;
-  cursor: auto;
-
-  span {
-    cursor: text;
-  }
-}
-
-.PrivacyToggle li .info-section .warning {
-  color: $black-1;
-}
-
-.PrivacyToggle li .info-section .warning .upgrade {
-  cursor: pointer;
-  color: $blue-6;
-}
-
 /* src/components/spaces/show/style.css */
 .spaceShow {
   flex: 2;
@@ -1912,89 +1420,9 @@ table.MetricStatTable td {
 
 .spaceShow > .content {
   display: flex;
-  flex-direction: row;
   max-height: 100%;
+  align-items: start;
   flex: 1;
-}
-
-.SpaceSidebar {
-  max-height: 100%;
-  min-width: 22em;
-  width: 22em;
-  z-index: 2;
-  margin: 24px 15px 14px 14px;
-  overflow: auto;
-  background: rgba(223, 225, 228, 0.1);
-
-  .closeSidebar {
-    float: right;
-  }
-}
-
-.SpaceSidebar-inside {
-  padding: 1em 1em 0.5em 1em;
-  background-color: rgba(255, 255, 255, 0.8);
-  border-radius: 2px;
-  float: left;
-  width: 100%;
-}
-
-.ClosedSpaceSidebar {
-  background-color: #dfe1e4;
-  padding-top: 0.5em;
-  padding-left: 3px;
-}
-
-.ClosedSpaceSidebar .open.open {
-  background-color: $blue-1;
-  padding: 7px 7px;
-}
-
-.SpaceSidebar .SpaceSidebar-header {
-  width: 100%;
-  text-align: center;
-  position: relative;
-  color: #777;
-  min-height: 2em;
-}
-
-.SpaceSidebar .SpaceSidebar-header .description-icon.fa {
-  float: left;
-  font-size: 1.8em;
-  margin-top: 8px;
-}
-
-.SpaceSidebar .SpaceSidebar-header .fa {
-  font-size: 1.25em;
-}
-
-.SpaceSidebar .SpaceSidebar-header .button-close {
-  float: right;
-}
-
-.SpaceSidebar:not(:hover) .SpaceSidebar-header .button-close {
-  display: none;
-}
-
-.SpaceSidebar .SpaceSidebar-header .button-close:not(:hover) {
-  color: #bbb;
-}
-
-.SpaceSidebar .SpaceSidebar-body {
-  float: left;
-  width: 100%;
-  margin-top: 0.5em;
-  margin-bottom: 1em;
-  font-size: 1.1em;
-  word-wrap: break-word;
-}
-
-.SpaceSidebar .SpaceSidebar-body .ClickToEdit {
-  padding: 0;
-}
-
-.SpaceSidebar .SpaceSidebar-body .ClickToEdit .EditingMode textarea {
-  min-height: 30em;
 }
 
 .header-action-tooltip.header-action-tooltip.header-action-tooltip {
@@ -2390,92 +1818,6 @@ table.MetricStatTable td {
 
 .GuesstimateDescription .emptyValue .fa {
   margin-right: 0.5em;
-}
-
-/* src/components/organizations/show/members.css */
-.MembersAddSubTab .ui.form {
-  font-size: 1.2em;
-  margin-top: 4em;
-  margin-bottom: 4em;
-}
-
-.MembersAddSubTab p {
-  color: #666;
-  font-size: 1.2em;
-  line-height: 1.7em;
-}
-
-.MembersTab {
-  margin-top: 7em;
-
-  .ui.button.green {
-    background-color: $green-2;
-  }
-
-  .members {
-    width: 100%;
-    background-color: white;
-    border-radius: 3px;
-    padding: 0 1em;
-  }
-
-  .Member {
-    padding: 1em 0.2em;
-    border-bottom: 1px solid #eee;
-
-    .role {
-      margin-top: 0.6em;
-      color: $grey-2;
-      font-weight: bold;
-      font-size: 1.2em;
-    }
-
-    .button.remove {
-      margin-top: 0.2em;
-      float: right;
-      font-size: 1.2em !important;
-      padding: 7px 10px !important;
-    }
-
-    .button.remove i {
-      margin: 0 !important;
-    }
-
-    .name {
-      float: left;
-      font-size: 1.3em;
-      font-weight: 800;
-      color: $black-3;
-      margin-top: 0.5em;
-    }
-
-    .invitation-status {
-      font-size: 1.2em;
-      color: #666;
-      margin-top: 0.6em;
-    }
-
-    .avatar {
-      float: left;
-      width: 40px;
-      border-radius: 3px;
-      margin-right: 1em;
-      font-size: 2.9em;
-      margin-left: 0.3em;
-      color: $blue-5;
-      text-align: center;
-    }
-
-    .avatar .fa {
-      font-size: 0.6em;
-      margin-top: 5px;
-      opacity: 0.7;
-    }
-
-    &:last-child {
-      border-bottom: none;
-    }
-  }
 }
 
 /* src/components/spaces/show/Tutorial/pageStyle.css */

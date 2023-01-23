@@ -26,6 +26,7 @@ import * as userOrganizationMembershipActions from "~/modules/userOrganizationMe
 import * as e from "~/lib/engine/engine";
 import { FactCategory } from "~/lib/engine/fact_category";
 import { useAppDispatch, useAppSelector } from "~/modules/hooks";
+import clsx from "clsx";
 
 const MODEL_TAB = "models";
 const MEMBERS_TAB = "members";
@@ -49,16 +50,9 @@ const isValidTabString = (tabStr: string | null): tabStr is string => {
 const OrganizationHeader: React.FC<{ organization: any }> = ({
   organization,
 }) => (
-  <div className="row OrganizationHeader">
-    <div className="col-md-4" />
-    <div className="col-md-4 col-xs-12">
-      <div className="col-sm-12">
-        <div className="center-display">
-          <img src={organization.picture} />
-          <h1>{organization.name}</h1>
-        </div>
-      </div>
-    </div>
+  <div className="flex flex-col items-center">
+    <img className="max-w-[4em] max-h-20 rounded" src={organization.picture} />
+    <h1>{organization.name}</h1>
   </div>
 );
 
@@ -67,39 +61,26 @@ const OrganizationTabButtons: React.FC<{
   openTab: string;
   changeTab(key: string): void;
 }> = ({ tabs, openTab, changeTab }) => (
-  <div className="row OrganizationTabButtons">
-    <div className="col-xs-12">
-      <div className="ui secondary menu">
-        {tabs.map((e) => {
-          const className = `item ${openTab === e.key ? "active" : ""}`;
-          if (e.href) {
-            return (
-              <a
-                className="item"
-                key={e.key}
-                href={e.href}
-                target="_blank"
-                onMouseUp={e.onMouseUp ? e.onMouseUp : () => {}}
-              >
-                {e.name}
-              </a>
-            );
-          } else {
-            return (
-              <a
-                className={className}
-                key={e.key}
-                onClick={() => {
-                  changeTab(e.key);
-                }}
-              >
-                {e.name}
-              </a>
-            );
-          }
-        })}
-      </div>
-    </div>
+  <div className="flex justify-end gap-2">
+    {tabs.map((e) => {
+      return (
+        <a
+          className={clsx(
+            "px-4 py-2 cursor-pointer text-grey-444 hover:text-grey-444 hover:bg-black/5 font-bold rounded",
+            openTab === e.key && "bg-black/10"
+          )}
+          key={e.key}
+          href={e.href}
+          target={e.href ? undefined : "_blank"}
+          onClick={() => {
+            e.onMouseUp?.();
+            changeTab(e.key);
+          }}
+        >
+          {e.name}
+        </a>
+      );
+    })}
   </div>
 );
 
@@ -119,7 +100,7 @@ const FactTab: React.FC<{
   onDeleteCategory,
 }) => {
   const categorySets = [
-    ..._.map(factCategories, (c) => ({
+    ...factCategories.map((c) => ({
       category: c,
       facts: e.collections.filter(facts, c.id, "category_id") as any,
     })),
@@ -129,35 +110,29 @@ const FactTab: React.FC<{
     },
   ];
   const existingVariableNames = facts.map(e.facts.getVar);
-  const existingCategoryNames = _.map(factCategories, (c) => c.name);
+  const existingCategoryNames = factCategories.map((c) => c.name);
 
   return (
-    <div className="FactTab">
-      <div className="row">
+    <div>
+      <div className="grid grid-cols-2 gap-x-4 gap-y-12">
         {categorySets.map(({ category, facts }) => (
-          <div
-            className="col-md-6 Category"
+          <Category
             key={!!category ? category.name : "uncategorized"}
-          >
-            <Category
-              category={category}
-              categories={factCategories}
-              onEditCategory={onEditCategory}
-              onDeleteCategory={onDeleteCategory}
-              facts={facts}
-              existingVariableNames={existingVariableNames}
-              organization={organization}
-            />
-          </div>
+            category={category}
+            categories={factCategories}
+            onEditCategory={onEditCategory}
+            onDeleteCategory={onDeleteCategory}
+            facts={facts}
+            existingVariableNames={existingVariableNames}
+            organization={organization}
+          />
         ))}
       </div>
-      <div className="row">
-        <div className="col-md-6">
-          <NewCategorySection
-            onSubmit={onAddCategory}
-            existingCategoryNames={existingCategoryNames}
-          />
-        </div>
+      <div className="mt-12 grid grid-cols-2">
+        <NewCategorySection
+          onSubmit={onAddCategory}
+          existingCategoryNames={existingCategoryNames}
+        />
       </div>
     </div>
   );
@@ -312,14 +287,16 @@ export const OrganizationShow: React.FC<{
         <OrganizationHeader organization={organization} />
 
         {meIsMember && (
-          <OrganizationTabButtons
-            tabs={tabs}
-            openTab={openTab}
-            changeTab={changeTab}
-          />
+          <div className="mt-4">
+            <OrganizationTabButtons
+              tabs={tabs}
+              openTab={openTab}
+              changeTab={changeTab}
+            />
+          </div>
         )}
 
-        <div className="main-section">
+        <div className="mt-12">
           {(openTab === MODEL_TAB || !meIsMember) && spaces && (
             <SpaceCardGrid>
               {meIsMember && <NewSpaceCard onClick={newModel} />}
@@ -355,11 +332,7 @@ export const OrganizationShow: React.FC<{
           )}
 
           {openTab === FACT_GRAPH_TAB && meIsMember && !!facts && (
-            <FactGraph
-              organization={organization}
-              facts={facts}
-              spaces={spaces}
-            />
+            <FactGraph facts={facts} spaces={spaces} />
           )}
         </div>
       </div>

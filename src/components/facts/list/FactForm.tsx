@@ -63,10 +63,10 @@ class FactForm_ extends Component<Props, State> {
     runningFact: {
       ...this.props.startingFact!,
       category_id:
-        _.get(this, "props.startingFact.category_id") || this.props.categoryId,
+        _.get(this.props.startingFact, "category_id") || this.props.categoryId,
     },
     variableNameManuallySet: !_.isEmpty(
-      _.get(this.props, "startingFact.variable_name")
+      _.get(this.props.startingFact, "variable_name")
     ),
     currentExpressionSimulated: true,
     submissionPendingOnSimulation: false,
@@ -202,7 +202,7 @@ class FactForm_ extends Component<Props, State> {
       props: { buttonText, onCancel, onDelete, categories },
       state: {
         submissionPendingOnSimulation,
-        runningFact: { expression, name, variable_name, category_id },
+        runningFact: { name, variable_name, category_id },
       },
     } = this;
 
@@ -252,11 +252,11 @@ class FactForm_ extends Component<Props, State> {
               <div className="field">
                 <div className="category-select">
                   <select
-                    value={`${orStr(category_id)}`}
+                    value={orStr(category_id)}
                     onChange={this.onSelectCategory.bind(this)}
                   >
-                    <option value={""}>Uncategorized</option>
-                    {_.map(categories, ({ id, name }) => (
+                    <option value="">Uncategorized</option>
+                    {categories.map(({ id, name }) => (
                       <option value={id} key={id}>
                         {name}
                       </option>
