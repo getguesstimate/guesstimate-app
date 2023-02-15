@@ -24,9 +24,10 @@ export const MetricSidebarToggle: React.FC<{ onToggleSidebar(): void }> = ({
 );
 
 export const MetricExportedIcon: React.FC = () => (
-  <div className="MetricToken--Corner">
-    <div className="MetricToken--Corner-Triangle"></div>
-    <div className="MetricToken--Corner-Item">
+  <div>
+    {/* triangle */}
+    <div className="absolute top-0 right-0 w-0 h-0 border-t-[36px] border-t-[#9fabb3] border-l-[36px] border-l-transparent" />
+    <div className="text-white absolute top-0 right-1 text-xl leading-none">
       <i className="ion-ios-redo" />
     </div>
   </div>

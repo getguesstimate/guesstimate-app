@@ -1,77 +1,68 @@
 import clsx from "clsx";
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 
 import { FactCategory, isFactCategoryValid } from "~/lib/engine/fact_category";
+import { Optional } from "~/lib/engine/types";
 
 type Props = {
-  startingCategory: FactCategory;
-  onSubmit(category: FactCategory): void;
+  startingCategory?: Optional<FactCategory, "id">;
+  onSubmit(category: Optional<FactCategory, "id">): void;
   onCancel?(): void;
   existingCategoryNames: string[];
 };
 
-export class CategoryForm extends Component<Props> {
+export const CategoryForm: React.FC<Props> = ({
+  startingCategory = { name: "" },
+  onSubmit,
   // TODO(matthew): We have wiring (via props) for onCancel, but no button. Either strip that code or add cancellation buttons.
-  static defaultProps = {
-    startingCategory: {
-      name: "",
-    },
-  };
+  onCancel,
+  existingCategoryNames,
+}) => {
+  const [runningCategory, setRunningCategory] = useState(startingCategory);
 
-  state = {
-    runningCategory: this.props.startingCategory,
-  };
+  const isValid = isFactCategoryValid(
+    runningCategory,
+    existingCategoryNames.filter((n) => n !== startingCategory.name)
+  );
 
-  setCategoryState(newCategoryState) {
-    this.setState({
-      runningCategory: { ...this.state.runningCategory, ...newCategoryState },
+  const setCategoryState = (newCategoryState: Partial<FactCategory>) => {
+    setRunningCategory({
+      ...runningCategory,
+      ...newCategoryState,
     });
-  }
-  onChangeName(e: React.ChangeEvent<HTMLInputElement>) {
-    this.setCategoryState({ name: e.target.value });
-  }
-  isValid() {
-    const {
-      props: { existingCategoryNames, startingCategory },
-      state: { runningCategory },
-    } = this;
-    return isFactCategoryValid(
-      runningCategory,
-      existingCategoryNames.filter((n) => n !== startingCategory.name)
-    );
-  }
-  onSubmit() {
-    if (!this.isValid()) {
+  };
+
+  const handleSubmit = () => {
+    if (!isValid) {
       return;
     }
 
-    this.props.onSubmit(this.state.runningCategory);
-    this.setCategoryState(this.props.startingCategory);
-  }
+    onSubmit(runningCategory);
+    setCategoryState(startingCategory);
+  };
 
-  render() {
-    return (
-      <div className="flex justify-between">
-        <div className={clsx("field", this.isValid() || "error")}>
-          <h3>
-            <input
-              name="name"
-              placeholder="New Category"
-              value={this.state.runningCategory.name}
-              onChange={this.onChangeName.bind(this)}
-            />
-          </h3>
-        </div>
-        <span
-          className={clsx(
-            "ui button primary tiny",
-            this.isValid() || "disabled"
-          )}
-          onClick={this.onSubmit.bind(this)}
-        >
-          Save
-        </span>
+  const handleChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCategoryState({ name: e.target.value });
+  };
+
+  return (
+    <div className="flex justify-between">
+      <div className={clsx("field", isValid || "error")}>
+        <h3>
+          <input
+            name="name"
+            placeholder="New Category"
+            value={runningCategory.name}
+            onChange={handleChangeName}
+          />
+        </h3>
       </div>
-    );
-  }
-}
+      <span
+        className={clsx("ui button primary tiny", isValid || "disabled")}
+        onClick={handleSubmit}
+      >
+        Save
+      </span>
+    </div>
+  );
+};

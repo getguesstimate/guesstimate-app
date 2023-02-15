@@ -65,7 +65,7 @@ export const ToolTip: React.FC<
     <div
       ref={refs.setFloating}
       className={clsx(
-        "rounded-sm px-3 py-2 z-10",
+        "rounded-sm px-3 py-2 z-10 shadow",
         text !== undefined && "text-sm",
         theme === "dark" ? "bg-dark-2 text-white" : "bg-white"
       )}
@@ -93,22 +93,20 @@ export const ToolTip: React.FC<
   );
 
   return (
-    <>
-      <div
-        ref={refs.setReference}
-        {...getReferenceProps()}
-        className={containerClassName}
-        aria-describedBy={id}
-      >
-        {children}
-        {open &&
-          !disabled &&
-          (withPortal ? (
-            <FloatingPortal>{renderTooltip()}</FloatingPortal>
-          ) : (
-            renderTooltip()
-          ))}
-      </div>
-    </>
+    <div
+      ref={refs.setReference}
+      {...getReferenceProps()}
+      className={containerClassName}
+      aria-describedBy={id}
+    >
+      {children}
+      {open &&
+        !disabled &&
+        (withPortal ? (
+          <FloatingPortal>{renderTooltip()}</FloatingPortal>
+        ) : (
+          renderTooltip()
+        ))}
+    </div>
   );
 };

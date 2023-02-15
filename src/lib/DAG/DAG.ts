@@ -21,6 +21,7 @@ export type CyclePseudoNode = {
 };
 
 // Ignores missing inputs.
+// TODO - should be generic over node type
 export function separateIntoHeightSets(
   nodes: (SimulationNodeParamsWithInputs | CyclePseudoNode)[]
 ) {

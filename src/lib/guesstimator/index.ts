@@ -37,7 +37,7 @@ export class Guesstimator {
     return this.parsedInput.guesstimateType === "FUNCTION";
   }
 
-  sample(
+  async sample(
     n: number,
     externalInputs: { [k: string]: number[] } = {}
   ): Promise<SimulateResult> {

@@ -3,28 +3,40 @@ import React, { useState } from "react";
 
 import { numberShow } from "~/lib/numberShower/numberShower";
 
-import { hasErrors } from "~/lib/engine/simulation";
 import { FullDenormalizedMetric } from "~/lib/engine/space";
-import clsx from "clsx";
 
-const PrecisionNumber: React.FC<any> = ({
-  value,
-  precision,
-  number = numberShow(value, precision),
+const ToggleIcon: React.FC<{ isOpen: boolean; open(): void }> = ({
+  isOpen,
+  open,
 }) => (
-  <span className="result-value">
-    {number.value}
-    {number.symbol}
-    {number.power && (
-      <span>
-        {`\u00b710`}
-        <sup>{number.power}</sup>
-      </span>
-    )}
-  </span>
+  <div
+    className="absolute right-1 -top-1 bg-grey-ccc hover:bg-grey-bbb rounded-full w-6 h-6 text-center color-666 text-sm cursor-pointer grid place-items-center"
+    onClick={open}
+  >
+    {isOpen ? <i className="ion-md-close" /> : "?"}
+  </div>
 );
 
-const RangeDisplay: React.FC<{ range: [unknown, unknown] }> = ({
+const PrecisionNumber: React.FC<{ value: number; precision?: number }> = ({
+  value,
+  precision,
+}) => {
+  const number = numberShow(value, precision);
+  return (
+    <span className="text-grey-444 font-bold text-xl leading-none">
+      {number.value}
+      {number.symbol}
+      {number.power && (
+        <span>
+          {`\u00b710`}
+          <sup>{number.power}</sup>
+        </span>
+      )}
+    </span>
+  );
+};
+
+const RangeDisplay: React.FC<{ range: [number, number] }> = ({
   range: [low, high],
 }) => (
   <div>
@@ -44,17 +56,12 @@ const ResultSection: React.FC<any> = ({
   );
 
 const AnalyticsSection: React.FC<any> = (stats) => (
-  <div className="stats-summary">
-    {`According to the model, this value has a 90% chance of being between `}
-    <PrecisionNumber value={stats.adjustedConfidenceInterval[0]} />
-    {` and `}
-    <PrecisionNumber value={stats.adjustedConfidenceInterval[1]} />
-    {"."}
-    {` The mean value is `}
-    <PrecisionNumber value={stats.mean} />
-    {` and the median is `}
-    <PrecisionNumber value={stats.percentiles[50]} />
-    {`.`}
+  <div className="text-sm leading-relaxed">
+    According to the model, this value has a 90% chance of being between{" "}
+    <PrecisionNumber value={stats.adjustedConfidenceInterval[0]} /> and{" "}
+    <PrecisionNumber value={stats.adjustedConfidenceInterval[1]} />. The mean
+    value is <PrecisionNumber value={stats.mean} /> and the median is{" "}
+    <PrecisionNumber value={stats.percentiles[50]} />.
   </div>
 );
 
@@ -68,38 +75,20 @@ export const Output: React.FC<{ metric: FullDenormalizedMetric }> = ({
   };
 
   return (
-    <div className="output">
-      <div className="row">
-        <div className="col-xs-12 col-sm-7">
-          <div className="name">{name}</div>
-        </div>
-        <div className="col-xs-12 col-sm-5">
-          <div
-            className={clsx(
-              "result-section",
-              hasErrors(simulation) && "has-errors"
-            )}
-          >
-            {simulation?.stats && <ResultSection {...simulation.stats} />}
+    <div className="md:grid md:grid-cols-12">
+      <div className="md:col-span-7 font-bold">{name}</div>
+      <div className="md:col-span-5">
+        <div className="relative">
+          {simulation?.stats && <ResultSection {...simulation.stats} />}
 
-            {/* this part doesn't show up because of broken CSS */}
-            {!showAnalysis && _.has(simulation, "stats.percentiles.5") && (
-              <div className="icon" onClick={toggleAnalysis}>
-                {" "}
-                ?{" "}
-              </div>
-            )}
-            {showAnalysis && (
-              <div className="icon" onClick={toggleAnalysis}>
-                {" "}
-                <i className="ion-md-close" />
-              </div>
-            )}
+          {/* this part doesn't show up because of broken CSS */}
+          {_.has(simulation, "stats.percentiles.5") && (
+            <ToggleIcon isOpen={showAnalysis} open={toggleAnalysis} />
+          )}
 
-            {showAnalysis && _.has(simulation, "stats.percentiles.5") && (
-              <AnalyticsSection {...simulation?.stats} />
-            )}
-          </div>
+          {showAnalysis && _.has(simulation, "stats.percentiles.5") && (
+            <AnalyticsSection {...simulation?.stats} />
+          )}
         </div>
       </div>
     </div>

@@ -1,23 +1,23 @@
 import clsx from "clsx";
 import _ from "lodash";
-import React, { Component, useState } from "react";
+import React, { useState } from "react";
 
 import Icon from "~/components/react-fa-patched";
 
-import { ButtonClose } from "~/components/utility/buttons/close";
+import { SmallButtonClose } from "~/components/utility/buttons/close";
 
 export const SmallDataViewer: React.FC<{
   onDelete(): void;
   onOpen(): void;
 }> = ({ onDelete, onOpen }) => (
-  <div className="DataViewer DataViewer--card flex justify-between items-center pr-2">
+  <div className="flex justify-between items-center pr-2">
     <div
       className="text-purple-2 bg-purple-3 cursor-pointer px-2 py-1 text-sm rounded-sm font-bold"
       onClick={onOpen}
     >
       <Icon name="bar-chart" /> Custom
     </div>
-    <ButtonClose onClick={onDelete} />
+    <SmallButtonClose onClick={onDelete} />
   </div>
 );
 
@@ -97,7 +97,7 @@ const Editor: React.FC<{
         <div className="ui button primary tiny" onClick={handleSave}>
           Save
         </div>
-        <div className="ui button tiny" onClick={onEditCancel}>
+        <div className="ui button tiny !bg-[#c6c6c6]" onClick={onEditCancel}>
           Cancel
         </div>
       </div>
@@ -140,13 +140,13 @@ export const LargeDataViewer: React.FC<LargeDataViewerProps> = ({
   };
 
   return (
-    <div className="DataViewer max-w-sm rounded">
+    <div className="max-w-sm rounded">
       <div className="px-4 py-2 bg-purple-2 rounded-t">
         <Header onDelete={onDelete} onEdit={handleEdit} editing={editing} />
       </div>
       <div
         className={clsx(
-          "DataViewer--body bg-purple-3 rounded-b p-4 max-h-96 overflow-auto",
+          "bg-purple-3 rounded-b p-4 max-h-96 overflow-auto",
           editing ? "edit" : "view"
         )}
       >

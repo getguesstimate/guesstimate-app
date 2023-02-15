@@ -1,14 +1,21 @@
-import _ from "lodash";
-import React, { Component } from "react";
+import React, {
+  ChangeEvent,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 
-import { ContentState, Editor, EditorState } from "draft-js";
+import clsx from "clsx";
+import _ from "lodash";
+import TextareaAutosize from "react-textarea-autosize";
 
 import { typeSafeEq } from "~/lib/engine/utils";
-import clsx from "clsx";
 
 type Props = {
   name: string | undefined;
   inSelectedCell: boolean;
+  titleView: boolean;
   onChange(text: string): void;
   heightHasChanged(): void;
   anotherFunctionSelected: boolean;
@@ -17,103 +24,105 @@ type Props = {
   onTab(): void;
 };
 
-type State = {
-  editorState: any;
-};
+export type MetricNameHandle = { focus(): void; hasContent(): boolean };
 
-export class MetricName extends Component<Props, State> {
-  state = {
-    editorState: this.plainTextEditorState(this.props.name),
-  };
+export const MetricName = React.forwardRef<MetricNameHandle, Props>(
+  function MetricName(props, ref) {
+    const [value, setValue] = useState(props.name || "");
 
-  componentWillReceiveProps(nextProps: Props) {
-    if (this.props.name !== nextProps.name && nextProps.name !== this.value()) {
-      this.changePlainText(nextProps.name);
-    }
-  }
+    const valueRef = useRef(value);
+    useEffect(() => {
+      valueRef.current = value;
+    }, []);
 
-  componentWillUnmount() {
-    this.handleSubmit();
-  }
-  handleSubmit() {
-    if (this.hasChanged()) {
-      this.props.onChange(this.value());
-    }
-  }
-  hasChanged() {
-    return !typeSafeEq(this.value(), this.props.name || "");
-  }
-  hasContent() {
-    return !_.isEmpty(this.value());
-  }
-  value() {
-    return this.state.editorState.getCurrentContent().getPlainText("");
-  }
-  handleKeyDown(e: React.KeyboardEvent) {
-    e.stopPropagation();
-    this.props.heightHasChanged();
-  }
-  focus() {
-    window.setTimeout(() => {
-      (this.refs.editor as any).focus();
-    }, 1);
-  }
-  plainTextEditorState(value) {
-    return EditorState.createWithContent(
-      ContentState.createFromText(value || "")
-    );
-  }
-  changePlainText(value) {
-    this.setState({ editorState: this.plainTextEditorState(value) });
-  }
+    const editorRef = useRef<HTMLTextAreaElement | null>(null);
 
-  onReturn(e: React.KeyboardEvent) {
-    if (e.shiftKey) {
-      this.props.onReturn();
-    } else {
-      this.props.jumpSection();
-    }
-    return true;
-  }
+    useEffect(() => {
+      // save on unmount
+      return () => {
+        if (
+          valueRef.current !== undefined &&
+          valueRef.current !== (props.name || "")
+        ) {
+          props.onChange(valueRef.current);
+        }
+      };
+    }, []);
 
-  onTab(e: React.KeyboardEvent) {
-    if (e.shiftKey) {
-      this.props.onTab();
-    } else {
-      this.props.jumpSection();
-    }
-    e.preventDefault();
-    return true;
-  }
+    useEffect(() => {
+      setValue(props.name || "");
+    }, [props.name]);
 
-  render() {
-    const {
-      props: { anotherFunctionSelected },
-      state: { editorState },
-    } = this;
+    const hasContent = () => {
+      return !_.isEmpty(value);
+    };
+
+    const focus = () => {
+      window.setTimeout(() => {
+        editorRef.current?.focus();
+      }, 1);
+    };
+
+    useImperativeHandle(ref, () => ({
+      focus,
+      hasContent,
+    }));
+
+    const handleSubmit = () => {
+      if (hasChanged()) {
+        props.onChange(value);
+      }
+    };
+
+    const hasChanged = () => {
+      return !typeSafeEq(value, props.name || "");
+    };
+
+    const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+      setValue(e.target.value);
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+      props.heightHasChanged();
+
+      if (e.code === "Tab") {
+        if (e.shiftKey) {
+          props.onTab();
+        } else {
+          props.jumpSection();
+        }
+        e.stopPropagation();
+        e.preventDefault();
+      }
+
+      if (e.code === "Enter") {
+        if (e.shiftKey) {
+          props.onReturn();
+        } else {
+          props.jumpSection();
+        }
+        e.stopPropagation();
+        e.preventDefault();
+      }
+    };
 
     return (
-      <div
+      <TextareaAutosize
+        value={value}
+        onClick={props.anotherFunctionSelected ? undefined : focus}
+        onBlur={handleSubmit}
+        onChange={handleChange}
+        placeholder="name"
+        onKeyDown={handleKeyDown}
+        ref={editorRef}
         className={clsx(
-          "MetricName",
-          !anotherFunctionSelected && "isClickable"
+          "block p-1 w-full overflow-hidden outline-none resize-none text-lg leading-[1.2em] bg-transparent focus:text-dark-3",
+          props.anotherFunctionSelected && "cursor-pointer",
+          props.titleView
+            ? "text-[#3c4f67] font-semibold"
+            : "text-[rgb(69,98,134)]/80 font-light"
         )}
-        onKeyDown={this.handleKeyDown.bind(this)}
-      >
-        <div
-          onClick={anotherFunctionSelected ? undefined : this.focus.bind(this)}
-        >
-          <Editor
-            editorState={editorState}
-            onBlur={this.handleSubmit.bind(this)}
-            onChange={(editorState) => this.setState({ editorState })}
-            handleReturn={this.onReturn.bind(this)}
-            onTab={this.onTab.bind(this)}
-            ref="editor"
-            placeholder="name"
-          />
-        </div>
-      </div>
+      />
     );
   }
-}
+);

@@ -1,10 +1,13 @@
 import _ from "lodash";
-import React, { Component } from "react";
+import React, { Component, useImperativeHandle, useRef } from "react";
 
 import Icon from "~/components/react-fa-patched";
 
 import { DistributionSummary } from "~/components/distributions/summary/index";
-import { MetricName } from "~/components/metrics/card/name/index";
+import {
+  MetricName,
+  MetricNameHandle,
+} from "~/components/metrics/card/name/index";
 import { SensitivitySection } from "~/components/metrics/card/SensitivitySection/SensitivitySection";
 import {
   MetricExportedIcon,
@@ -15,7 +18,7 @@ import {
 import { SimulationHistogram } from "~/components/simulations/SimulationHistogram";
 import { MetricStatTable } from "~/components/simulations/MetricStatTable";
 
-import { getMessage } from "~/lib/propagation/errors";
+import { getMessage, PropagationError } from "~/lib/propagation/errors";
 import { metricIdToNodeId } from "~/lib/propagation/wrapper";
 
 import {
@@ -29,13 +32,14 @@ import { getClassName, replaceByMap } from "~/lib/engine/utils";
 import { ConnectDragSource } from "react-dnd";
 import { CanvasState } from "~/modules/canvas_state/reducer";
 import { FullDenormalizedMetric } from "~/lib/engine/space";
+import clsx from "clsx";
 
 // TODO(matthew): Refactor these components. E.g. it's weird that isBreak takes all errors, but you may only care about
 // the one...
 
 // We have to display this section after it disappears
 // to ensure that the metric card gets selected after click.
-const ErrorIcon: React.FC<{ errors: any }> = ({ errors }) => {
+const ErrorIcon: React.FC<{ errors: PropagationError[] }> = ({ errors }) => {
   if (isBreak(errors)) {
     return <Icon name="unlink" />;
   } else if (isInfiniteLoop(errors)) {
@@ -48,20 +52,20 @@ const ErrorIcon: React.FC<{ errors: any }> = ({ errors }) => {
 // We have to display this section after it disappears
 // to ensure that the metric card gets selected after click.
 const ErrorSection: React.FC<{
-  errors: any;
+  errors: PropagationError[];
   padTop: boolean;
   shouldShowErrorText: boolean;
   messageToDisplay: string | null;
 }> = ({ errors, padTop, shouldShowErrorText, messageToDisplay }) => (
   <div
-    className={getClassName(
+    className={clsx(
       "StatsSectionErrors",
       isBreak(errors) ? "minor" : "serious",
-      padTop ? "padTop" : null
+      padTop && "padTop"
     )}
   >
     {shouldShowErrorText && (
-      <div className={"error-message"}>{messageToDisplay}</div>
+      <div className="error-message">{messageToDisplay}</div>
     )}
     {!shouldShowErrorText && <ErrorIcon errors={errors} />}
   </div>
@@ -70,12 +74,12 @@ const ErrorSection: React.FC<{
 type Props = {
   canvasState: CanvasState;
   isTitle: boolean;
+  titleView: boolean;
   metric: FullDenormalizedMetric;
   inSelectedCell: boolean;
   hovered: boolean;
   showSensitivitySection: boolean;
   exportedAsFact: boolean;
-  isInScreenshot: boolean;
   onToggleSidebar(): void;
   onChangeName(name: string): void;
   jumpSection(): void;
@@ -88,16 +92,37 @@ type Props = {
   analyzedMetric: any;
 };
 
-export class MetricCardViewSection extends Component<Props> {
-  hasContent() {
-    return _.result(this.refs, "name.hasContent");
-  }
-  focusName() {
-    _.result(this.refs, "name.focus");
-  }
+export const MetricCardViewSection = React.forwardRef<
+  { hasContent(): boolean; focusName(): void },
+  Props
+>(function MetricCardViewSection(props, ref) {
+  const {
+    canvasState: {
+      scientificViewEnabled,
+      expandedViewEnabled,
+      metricClickMode,
+    },
+    metric,
+    inSelectedCell,
+    onChangeName,
+    jumpSection,
+    onMouseDown,
+    showSensitivitySection,
+  } = props;
 
-  showSimulation() {
-    const stats = this.props.metric?.simulation?.stats;
+  const nameRef = useRef<MetricNameHandle | null>(null);
+
+  const hasContent = () => {
+    return nameRef.current?.hasContent() || false;
+  };
+
+  useImperativeHandle(ref, () => ({
+    hasContent,
+    focusName: () => nameRef.current?.focus(),
+  }));
+
+  const getShowSimulation = () => {
+    const stats = metric?.simulation?.stats;
     if (
       stats &&
       _.isFinite(stats.mean) &&
@@ -108,69 +133,49 @@ export class MetricCardViewSection extends Component<Props> {
     } else {
       return false;
     }
-  }
+  };
+  const showSimulation = getShowSimulation();
 
-  _shouldShowStatistics() {
-    const isScientific = !!this.props.canvasState.scientificViewEnabled;
-    const isAvailable =
-      this.showSimulation() && this.props.metric.simulation?.stats.length > 1;
-    return isScientific && isAvailable;
-  }
+  const shouldShowStatistics =
+    scientificViewEnabled &&
+    showSimulation &&
+    metric.simulation?.stats.length > 1;
 
-  _hasErrors() {
-    return !this.props.isTitle && hasErrors(this.props.metric.simulation);
-  }
-  _errors() {
-    return this._hasErrors() ? errors(this.props.metric.simulation) : [];
-  }
+  const _hasErrors = () => {
+    return !props.isTitle && hasErrors(metric.simulation);
+  };
+  const _errors = () => {
+    return _hasErrors() ? errors(metric.simulation) : [];
+  };
 
-  renderToken() {
-    const {
-      canvasState: { expandedViewEnabled, metricClickMode },
-      metric: {
-        guesstimate: { description },
-        readableId,
-      },
-      inSelectedCell,
-      hovered,
-      exportedAsFact,
-      onToggleSidebar,
-    } = this.props;
+  const renderToken = () => {
     const anotherFunctionSelected =
       metricClickMode === "FUNCTION_INPUT_SELECT" && !inSelectedCell;
-    const shouldShowReadableId =
-      !!expandedViewEnabled || anotherFunctionSelected;
+    const shouldShowReadableId = expandedViewEnabled || anotherFunctionSelected;
 
     if (shouldShowReadableId) {
-      return <MetricReadableId readableId={readableId} />;
-    } else if (hovered) {
-      return <MetricSidebarToggle onToggleSidebar={onToggleSidebar} />;
-    } else if (exportedAsFact) {
+      return <MetricReadableId readableId={metric.readableId} />;
+    } else if (props.hovered) {
+      return <MetricSidebarToggle onToggleSidebar={props.onToggleSidebar} />;
+    } else if (props.exportedAsFact) {
       return <MetricExportedIcon />;
-    } else if (!_.isEmpty(description)) {
+    } else if (!_.isEmpty(metric.guesstimate.description)) {
       return <MetricReasoningIcon />;
     } else {
       return null;
     }
-  }
+  };
 
-  renderErrorSection() {
-    const {
-      metric: { name },
-      idMap,
-      inSelectedCell,
-      hovered,
-    } = this.props;
-
-    const shouldShowErrorSection = this._hasErrors() && !inSelectedCell;
+  const renderErrorSection = () => {
+    const shouldShowErrorSection = _hasErrors() && !inSelectedCell;
     if (!shouldShowErrorSection) {
-      return false;
+      return null;
     }
 
-    const errorToDisplay = displayableError(this._errors());
+    const errorToDisplay = displayableError(_errors());
 
     const nodeIdMap = _.transform(
-      idMap,
+      props.idMap,
       (runningMap, value, key) => {
         runningMap[metricIdToNodeId(key)] = value;
       },
@@ -182,93 +187,87 @@ export class MetricCardViewSection extends Component<Props> {
 
     return (
       <ErrorSection
-        errors={this._errors()}
+        errors={_errors()}
         messageToDisplay={messageToDisplay}
-        padTop={!_.isEmpty(name) && !inSelectedCell}
-        shouldShowErrorText={!!messageToDisplay && hovered}
+        padTop={!_.isEmpty(metric.name) && !inSelectedCell}
+        shouldShowErrorText={!!messageToDisplay && props.hovered}
       />
     );
-  }
+  };
 
-  render() {
-    const {
-      canvasState: { scientificViewEnabled, metricClickMode },
-      metric,
-      inSelectedCell,
-      onChangeName,
-      jumpSection,
-      onMouseDown,
-      showSensitivitySection,
-      isInScreenshot,
-    } = this.props;
+  const stats = metric.simulation?.stats;
+  const anotherFunctionSelected =
+    metricClickMode === "FUNCTION_INPUT_SELECT" && !inSelectedCell;
 
-    const { simulation } = metric;
-    const stats = _.get(simulation, "stats");
-    const showSimulation = this.showSimulation();
-    const shouldShowStatistics = this._shouldShowStatistics();
-    const anotherFunctionSelected =
-      metricClickMode === "FUNCTION_INPUT_SELECT" && !inSelectedCell;
-
-    const mainClassName = getClassName(
-      "MetricCardViewSection",
-      anotherFunctionSelected ? "anotherFunctionSelected" : null,
-      this._hasErrors() && !inSelectedCell ? "hasErrors" : null
-    );
-    return (
-      <div className={mainClassName} onMouseDown={onMouseDown}>
-        {showSimulation && (
+  const mainClassName = clsx(
+    "MetricCardViewSection",
+    _hasErrors() && !inSelectedCell && "hasErrors"
+  );
+  return (
+    <div className={mainClassName} onMouseDown={onMouseDown}>
+      {showSimulation && (
+        <div
+          className={clsx(
+            "absolute bottom-0 left-0 right-0 -z-10",
+            scientificViewEnabled ? "h-[110px]" : "h-[30px]"
+          )}
+        >
           <SimulationHistogram
-            height={scientificViewEnabled ? 110 : 30}
-            simulation={simulation}
+            simulation={metric.simulation}
             cutOffRatio={0.995}
+            theme="normal"
           />
-        )}
-
-        <div className="MetricTokenSection">
-          <div className="MetricToken">{this.renderToken()}</div>
         </div>
+      )}
 
-        {!_.isEmpty(metric.name) || inSelectedCell || this.hasContent() ? (
-          <div className="NameSection">
-            <MetricName
-              anotherFunctionSelected={anotherFunctionSelected}
-              inSelectedCell={inSelectedCell}
-              name={metric.name}
-              onChange={onChangeName}
-              jumpSection={jumpSection}
-              ref="name"
-              heightHasChanged={this.props.heightHasChanged}
-              onReturn={this.props.onReturn}
-              onTab={this.props.onTab}
+      <div className="absolute top-0 right-0">
+        <div className="MetricToken">{renderToken()}</div>
+      </div>
+
+      {!_.isEmpty(metric.name) || inSelectedCell || hasContent() ? (
+        <div className="flex-none pr-8 pl-1 pt-1">
+          <MetricName
+            anotherFunctionSelected={anotherFunctionSelected}
+            inSelectedCell={inSelectedCell}
+            titleView={props.titleView}
+            name={metric.name}
+            onChange={onChangeName}
+            jumpSection={jumpSection}
+            ref={nameRef}
+            heightHasChanged={props.heightHasChanged}
+            onReturn={props.onReturn}
+            onTab={props.onTab}
+          />
+        </div>
+      ) : null}
+
+      <div
+        className={clsx(
+          "StatsSection",
+          anotherFunctionSelected ? "cursor-pointer" : "cursor-move"
+        )}
+        ref={props.connectDragSource}
+      >
+        {showSensitivitySection && (
+          <SensitivitySection yMetric={props.analyzedMetric} xMetric={metric} />
+        )}
+        {showSimulation && (
+          <div className="StatsSectionBody">
+            <DistributionSummary
+              length={stats.length}
+              mean={stats.mean}
+              adjustedConfidenceInterval={stats.adjustedConfidenceInterval}
             />
           </div>
-        ) : null}
+        )}
+        {showSimulation && shouldShowStatistics && (
+          <div className="StatsSectionTable">
+            <MetricStatTable stats={metric.simulation?.stats} />
+          </div>
+        )}
 
-        <div className="StatsSection" ref={this.props.connectDragSource}>
-          {showSensitivitySection && (
-            <SensitivitySection
-              yMetric={this.props.analyzedMetric}
-              xMetric={metric}
-            />
-          )}
-          {showSimulation && (
-            <div className="StatsSectionBody">
-              <DistributionSummary
-                length={stats.length}
-                mean={stats.mean}
-                adjustedConfidenceInterval={stats.adjustedConfidenceInterval}
-              />
-            </div>
-          )}
-          {showSimulation && shouldShowStatistics && (
-            <div className="StatsSectionTable">
-              <MetricStatTable stats={metric.simulation?.stats} />
-            </div>
-          )}
-
-          {this.renderErrorSection()}
-        </div>
+        {renderErrorSection()}
       </div>
-    );
-  }
-}
+    </div>
+  );
+});

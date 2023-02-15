@@ -7,7 +7,7 @@ import * as meActions from "~/modules/me/actions";
 import { PageBase } from "../utility/PageBase";
 
 const content = `
-# Redirection 
+# Redirection
 
 ## You are being redirected.
 `;

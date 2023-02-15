@@ -1,17 +1,11 @@
 import _ from "lodash";
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { useEffect, useImperativeHandle, useRef, useState } from "react";
 
 import ReactDOM from "react-dom";
-import Icon from "~/components/react-fa-patched";
 
 import { MetricToolTip } from "./MetricToolTip";
-import { hasMetricUpdated } from "./updated";
 
-import {
-  DistributionEditor,
-  UnwrappedDistributionEditor,
-} from "~/components/distributions/editor/index";
+import { DistributionEditor } from "~/components/distributions/editor/index";
 import { MetricModal } from "~/components/metrics/MetricModal";
 import { ToolTip } from "~/components/utility/ToolTip";
 import { MetricCardViewSection } from "./MetricCardViewSection";
@@ -25,6 +19,7 @@ import { changeMetric, removeMetrics } from "~/modules/metrics/actions";
 import { withReadableId } from "~/lib/generateVariableNames/generateMetricReadableId";
 import { shouldTransformName } from "~/lib/generateVariableNames/nameToVariableName";
 
+import clsx from "clsx";
 import { GridContext } from "~/components/lib/FlowGrid/FilledCell";
 import {
   INPUT,
@@ -35,10 +30,9 @@ import {
 } from "~/lib/engine/graph";
 import { FullDenormalizedMetric } from "~/lib/engine/space";
 import { makeURLsMarkdown } from "~/lib/engine/utils";
-import { CanvasState } from "~/modules/canvas_state/reducer";
-import { AppDispatch } from "~/modules/store";
-import clsx from "clsx";
 import { Direction } from "~/lib/locationUtils";
+import { CanvasState } from "~/modules/canvas_state/reducer";
+import { useAppDispatch } from "~/modules/hooks";
 import { MetricSidebar } from "./MetricSidebar";
 
 const relationshipClasses = {
@@ -48,259 +42,23 @@ const relationshipClasses = {
   [NOEDGE]: "noedge",
 };
 
+const shouldShowSimulation = (metric: FullDenormalizedMetric) => {
+  const stats = metric.simulation?.stats;
+  return Boolean(stats && _.isFinite(stats.stdev) && stats.length > 5);
+};
+
 type Props = {
   canvasState: CanvasState;
-  isInScreenshot: boolean;
   metric: FullDenormalizedMetric;
   organizationId?: string | number;
   canUseOrganizationFacts: boolean;
   exportedAsFact: boolean;
   idMap: object;
   analyzedMetric: FullDenormalizedMetric | null;
-} & GridContext & { dispatch: AppDispatch };
+} & GridContext;
 
-type State = {
-  modalIsOpen: boolean;
-  sidebarIsOpen: boolean;
-};
-
-class UnconnectedMetricCard extends Component<Props, State> {
-  state = {
-    modalIsOpen: false,
-    sidebarIsOpen: false,
-  };
-
-  viewRef: React.RefObject<MetricCardViewSection>;
-  editorRef: React.RefObject<UnwrappedDistributionEditor>;
-
-  constructor(props: Props) {
-    super(props);
-    this.viewRef = React.createRef();
-    this.editorRef = React.createRef();
-  }
-
-  shouldComponentUpdate(nextProps: Props, nextState: State) {
-    return (
-      hasMetricUpdated(this.props, nextProps) ||
-      this.state.modalIsOpen !== nextState.modalIsOpen ||
-      this.state.sidebarIsOpen !== nextState.sidebarIsOpen
-    );
-  }
-
-  _beginAnalysis() {
-    this.props.dispatch(analyzeMetricId(this._id()));
-  }
-  _endAnalysis() {
-    this.props.dispatch(endAnalysis());
-  }
-
-  focusFromDirection(dir: Direction | undefined) {
-    if (dir === "DOWN" || dir === "RIGHT") {
-      this._focusForm();
-    } else {
-      this.viewRef.current?.focusName();
-    }
-  }
-
-  componentWillUpdate(nextProps: Props) {
-    if (this.props.inSelectedCell && !nextProps.inSelectedCell) {
-      this._closeSidebar();
-    }
-    if (this.props.hovered && !nextProps.hovered) {
-      this._closeSidebar();
-    }
-  }
-
-  componentDidUpdate(prevProps: Props, prevState: State) {
-    const hasContent = _.result(this.viewRef.current, "hasContent");
-    const { inSelectedCell, selectedFrom } = this.props;
-    if (
-      !inSelectedCell &&
-      this._isEmpty() &&
-      !hasContent &&
-      !this.state.modalIsOpen
-    ) {
-      this.handleRemoveMetric();
-    }
-    if (!prevProps.inSelectedCell && inSelectedCell && selectedFrom) {
-      this.focusFromDirection(selectedFrom);
-    }
-
-    if (this.state.modalIsOpen !== prevState.modalIsOpen) {
-      this.props.forceFlowGridUpdate();
-    }
-  }
-
-  componentDidMount() {
-    if (this.props.inSelectedCell && this._isEmpty()) {
-      this.focusFromDirection(this.props.selectedFrom);
-    }
-  }
-
-  openModal() {
-    this.setState({ modalIsOpen: true, sidebarIsOpen: false });
-  }
-  closeModal() {
-    this.setState({ modalIsOpen: false });
-  }
-  _toggleSidebar() {
-    this.setState({
-      sidebarIsOpen: !this.state.sidebarIsOpen,
-      modalIsOpen: false,
-    });
-  }
-
-  _closeSidebar() {
-    if (this.state.sidebarIsOpen) {
-      this.setState({ sidebarIsOpen: false });
-    }
-  }
-
-  _handleKeyDown(e: React.KeyboardEvent) {
-    if (e.target === ReactDOM.findDOMNode(this)) {
-      if (e.keyCode === 13 && this.props.inSelectedCell) {
-        e.preventDefault();
-        e.stopPropagation();
-        this.openModal();
-      }
-    }
-  }
-
-  _handleKeyPress(e: React.KeyboardEvent) {
-    if (e.target === ReactDOM.findDOMNode(this)) {
-      this.props.gridKeyPress(e);
-    }
-    e.stopPropagation();
-  }
-
-  // TODO(matthew): Maybe use allPropsPresent
-  _isEmpty() {
-    return !(
-      this._hasGuesstimate() ||
-      this._hasName() ||
-      this._hasDescription()
-    );
-  }
-
-  _hasName() {
-    return !!this.props.metric.name;
-  }
-
-  _hasDescription() {
-    return !!this.props.metric.guesstimate.description;
-  }
-
-  _hasGuesstimate() {
-    const has = (item: string) => !!_.get(this.props.metric.guesstimate, item);
-    return has("input") || has("data");
-  }
-
-  _isTitle() {
-    return this._hasName() && !this._hasGuesstimate();
-  }
-
-  onChangeMetricName(name: string) {
-    if (name === this.props.metric.name) {
-      return;
-    }
-
-    const metric = withReadableId(
-      { id: this._id(), name },
-      _.values(this.props.idMap)
-    );
-
-    this.props.dispatch(changeMetric(metric));
-  }
-
-  onChangeGuesstimateDescription(rawDescription: string) {
-    const description = makeURLsMarkdown(rawDescription);
-    this.props.dispatch(
-      changeGuesstimate(this._id(), {
-        ...this.props.metric.guesstimate,
-        description,
-      })
-    );
-  }
-
-  handleRemoveMetric() {
-    this.props.dispatch(removeMetrics([this._id()]));
-  }
-  _id() {
-    return this.props.metric.id;
-  }
-
-  _focusForm() {
-    this.editorRef.current?.focus();
-  }
-
-  _handleMouseDown(e: React.MouseEvent) {
-    if (this._isFunctionInputSelectable(e) && !e.shiftKey) {
-      window.dispatchEvent(
-        new CustomEvent("functionMetricClicked", { detail: this.props.metric })
-      );
-      // TODO(matthew): Why don't these stop the triggering of the flow grid cell?
-      e.preventDefault();
-      e.stopPropagation();
-    }
-  }
-
-  _isSelectable(e: React.MouseEvent) {
-    const selectableEl =
-      (e.target as any).parentElement.getAttribute("data-select") !== "false";
-    const notYetSelected = !this.props.inSelectedCell;
-    return selectableEl && notYetSelected;
-  }
-
-  _isFunctionInputSelectable(e: React.MouseEvent) {
-    return (
-      this._isSelectable(e) &&
-      this.props.canvasState.metricClickMode === "FUNCTION_INPUT_SELECT"
-    );
-  }
-
-  _relationshipType() {
-    return relationshipType(this.props.metric.edges);
-  }
-
-  _className() {
-    const { inSelectedCell, hovered, isInScreenshot } = this.props;
-    const relationshipClass = relationshipClasses[this._relationshipType()];
-
-    const titleView = !hovered && !inSelectedCell && this._isTitle();
-    return clsx(
-      "metricCard",
-      isInScreenshot && "display",
-      titleView && "titleView",
-      relationshipClass
-    );
-  }
-
-  _shouldShowSimulation(metric: FullDenormalizedMetric) {
-    const stats = metric.simulation?.stats;
-    return Boolean(stats && _.isFinite(stats.stdev) && stats.length > 5);
-  }
-
-  _canBeAnalyzed() {
-    const { metric } = this.props;
-    return this._shouldShowSimulation(metric);
-  }
-
-  _makeFact() {
-    this.props.dispatch(
-      createFactFromMetric(this.props.organizationId, this.props.metric)
-    );
-  }
-
-  // If sidebar is expanded, we want to close it if anything else is clicked
-  onMouseDown(e: React.MouseEvent) {
-    const isSidebarElement =
-      _.get(e.target, "dataset.controlSidebar") === "true";
-    if (this.state.sidebarIsOpen && !isSidebarElement) {
-      this._toggleSidebar();
-    }
-  }
-
-  render() {
+export const MetricCard = React.forwardRef<{ focus(): void }, Props>(
+  function MetricCard(props, ref) {
     const {
       inSelectedCell,
       metric,
@@ -312,9 +70,18 @@ class UnconnectedMetricCard extends Component<Props, State> {
       connectDragSource,
       analyzedMetric,
       forceFlowGridUpdate,
-      isInScreenshot,
       exportedAsFact,
-    } = this.props;
+      gridKeyPress,
+    } = props;
+
+    const dispatch = useAppDispatch();
+
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
+
+    const viewRef = useRef<{ hasContent(): boolean; focusName(): void }>(null);
+    const editorRef = useRef<{ focus(): void }>(null);
+    const divRef = useRef<HTMLDivElement>(null);
 
     const { metricClickMode } = canvasState;
 
@@ -324,8 +91,8 @@ class UnconnectedMetricCard extends Component<Props, State> {
     const shouldShowSensitivitySection = !!(
       analyzedMetric &&
       !isAnalyzedMetric &&
-      this._shouldShowSimulation(metric) &&
-      this._shouldShowSimulation(analyzedMetric)
+      shouldShowSimulation(metric) &&
+      shouldShowSimulation(analyzedMetric)
     );
 
     const shouldShowDistributionEditor =
@@ -335,6 +102,191 @@ class UnconnectedMetricCard extends Component<Props, State> {
 
     const canBeMadeFact =
       shouldTransformName(metric.name) && isFunction && canUseOrganizationFacts;
+
+    const canBeAnalyzed = shouldShowSimulation(metric);
+
+    const hasGuesstimate = !!(
+      metric.guesstimate.input || metric.guesstimate.data
+    );
+
+    const isTitle = !!metric.name && !hasGuesstimate;
+
+    const isTitleView = !hovered && !inSelectedCell && isTitle;
+
+    const isMetricEmpty = !(
+      hasGuesstimate ||
+      !!metric.name ||
+      !!metric.guesstimate.description
+    );
+
+    useEffect(() => {
+      if (!hovered || !inSelectedCell) {
+        closeSidebar();
+      }
+    }, [hovered, inSelectedCell]);
+
+    const focusFromDirection = (dir: Direction | undefined) => {
+      if (dir === "DOWN" || dir === "RIGHT") {
+        focusForm();
+      } else {
+        viewRef.current?.focusName();
+      }
+    };
+
+    const prevData = useRef<{
+      inSelectedCell: boolean;
+      modalIsOpen: boolean;
+    }>();
+
+    useEffect(() => {
+      if (prevData.current) {
+        // not first render
+        const hasContent = viewRef.current?.hasContent();
+
+        if (!inSelectedCell && isMetricEmpty && !hasContent && !modalIsOpen) {
+          handleRemoveMetric();
+        }
+
+        if (
+          !prevData.current.inSelectedCell &&
+          inSelectedCell &&
+          props.selectedFrom
+        ) {
+          focusFromDirection(props.selectedFrom);
+        }
+
+        if (modalIsOpen !== prevData.current.modalIsOpen) {
+          props.forceFlowGridUpdate();
+        }
+      }
+      prevData.current = {
+        inSelectedCell,
+        modalIsOpen,
+      };
+    });
+
+    useEffect(() => {
+      if (inSelectedCell && isMetricEmpty) {
+        focusFromDirection(props.selectedFrom);
+      }
+    }, []);
+
+    useImperativeHandle(ref, () => ({
+      focus() {
+        divRef.current?.focus();
+      },
+    }));
+
+    const toggleSidebar = () => {
+      setSidebarIsOpen(!sidebarIsOpen);
+      setModalIsOpen(false);
+    };
+    const closeSidebar = () => {
+      setSidebarIsOpen(false);
+    };
+
+    const handleRemoveMetric = () => {
+      dispatch(removeMetrics([metric.id]));
+    };
+
+    const focusForm = () => {
+      editorRef.current?.focus();
+    };
+
+    const openModal = () => {
+      setModalIsOpen(true);
+      setSidebarIsOpen(false);
+    };
+    const closeModal = () => {
+      setModalIsOpen(false);
+    };
+
+    const isSelectable = (e: React.MouseEvent) => {
+      const selectableEl =
+        (e.target as any).parentElement.getAttribute("data-select") !== "false";
+      const notYetSelected = !inSelectedCell;
+      return selectableEl && notYetSelected;
+    };
+
+    const isFunctionInputSelectable = (e: React.MouseEvent) => {
+      return (
+        isSelectable(e) &&
+        canvasState.metricClickMode === "FUNCTION_INPUT_SELECT"
+      );
+    };
+
+    const handleInnerMouseDown = (e: React.MouseEvent) => {
+      if (isFunctionInputSelectable(e) && !e.shiftKey) {
+        window.dispatchEvent(
+          new CustomEvent("functionMetricClicked", {
+            detail: metric,
+          })
+        );
+        // TODO(matthew): Why don't these stop the triggering of the flow grid cell?
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    };
+
+    // If sidebar is expanded, we want to close it if anything else is clicked
+    const handleOuterMouseDown = (e: React.MouseEvent) => {
+      const isSidebarElement =
+        _.get(e.target, "dataset.controlSidebar") === "true";
+      if (sidebarIsOpen && !isSidebarElement) {
+        toggleSidebar();
+      }
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+      if (e.target === ReactDOM.findDOMNode(divRef.current)) {
+        if (e.keyCode === 13 && inSelectedCell) {
+          e.preventDefault();
+          e.stopPropagation();
+          openModal();
+        }
+      }
+    };
+
+    const handleKeyPress = (e: React.KeyboardEvent) => {
+      if (e.target === ReactDOM.findDOMNode(this)) {
+        gridKeyPress(e);
+      }
+      e.stopPropagation();
+    };
+
+    const onChangeMetricName = (name: string) => {
+      if (name === metric.name) {
+        return;
+      }
+
+      const newMetric = withReadableId(
+        { id: metric.id, name },
+        _.values(idMap)
+      );
+
+      dispatch(changeMetric(newMetric));
+    };
+
+    const onChangeGuesstimateDescription = (rawDescription: string) => {
+      const description = makeURLsMarkdown(rawDescription);
+      dispatch(
+        changeGuesstimate(metric.id, {
+          ...metric.guesstimate,
+          description,
+        })
+      );
+    };
+
+    const handleMakeFact = () => {
+      dispatch(createFactFromMetric(organizationId, metric));
+    };
+
+    const handleBeginAnalysis = () => {
+      dispatch(analyzeMetricId(metric.id));
+    };
+    const handleEndAnalysis = () => {
+      dispatch(endAnalysis());
+    };
 
     return (
       <ToolTip
@@ -346,6 +298,7 @@ class UnconnectedMetricCard extends Component<Props, State> {
         theme="light"
         containerClassName="min-w-0"
         placement="bottom-start"
+        withPortal
         render={() =>
           shouldShowSensitivitySection ? (
             <SensitivitySection
@@ -360,24 +313,28 @@ class UnconnectedMetricCard extends Component<Props, State> {
       >
         <div
           className="h-full w-full relative flex focus:outline-none"
-          onKeyPress={this._handleKeyPress.bind(this)}
-          onKeyDown={this._handleKeyDown.bind(this)}
+          onKeyPress={handleKeyPress}
+          onKeyDown={handleKeyDown}
           tabIndex={0}
+          ref={divRef}
         >
           <div
-            className={this._className()}
-            onMouseDown={this.onMouseDown.bind(this)}
+            className={clsx(
+              "metricCard",
+              "relative rounded-xs w-full flex flex-col",
+              isTitleView && "titleView",
+              relationshipClasses[relationshipType(metric.edges)]
+            )}
+            onMouseDown={handleOuterMouseDown}
           >
-            {this.state.modalIsOpen && (
+            {modalIsOpen && (
               <MetricModal
                 metric={metric}
                 organizationId={organizationId}
                 canUseOrganizationFacts={canUseOrganizationFacts}
                 metricClickMode={metricClickMode}
-                closeModal={this.closeModal.bind(this)}
-                onChangeGuesstimateDescription={this.onChangeGuesstimateDescription.bind(
-                  this
-                )}
+                closeModal={closeModal}
+                onChangeGuesstimateDescription={onChangeGuesstimateDescription}
               />
             )}
 
@@ -385,25 +342,25 @@ class UnconnectedMetricCard extends Component<Props, State> {
               canvasState={canvasState}
               metric={metric}
               inSelectedCell={inSelectedCell}
-              onChangeName={this.onChangeMetricName.bind(this)}
-              onToggleSidebar={this._toggleSidebar.bind(this)}
-              jumpSection={this._focusForm.bind(this)}
-              onMouseDown={this._handleMouseDown.bind(this)}
-              ref={this.viewRef}
-              isTitle={this._isTitle()}
-              isInScreenshot={isInScreenshot}
+              onChangeName={onChangeMetricName}
+              onToggleSidebar={toggleSidebar}
+              jumpSection={focusForm}
+              onMouseDown={handleInnerMouseDown}
+              ref={viewRef}
+              isTitle={isTitle}
+              titleView={isTitleView}
               connectDragSource={connectDragSource}
               idMap={idMap}
               analyzedMetric={analyzedMetric}
               showSensitivitySection={shouldShowSensitivitySection}
               heightHasChanged={forceFlowGridUpdate}
               hovered={hovered}
-              onReturn={this.props.onReturn}
-              onTab={this.props.onTab}
+              onReturn={props.onReturn}
+              onTab={props.onTab}
               exportedAsFact={exportedAsFact}
             />
 
-            {shouldShowDistributionEditor && !this.state.modalIsOpen && (
+            {shouldShowDistributionEditor && !modalIsOpen && (
               <div className="section editing">
                 <DistributionEditor
                   guesstimate={metric.guesstimate}
@@ -413,34 +370,34 @@ class UnconnectedMetricCard extends Component<Props, State> {
                   organizationId={organizationId}
                   canUseOrganizationFacts={canUseOrganizationFacts}
                   jumpSection={() => {
-                    this.viewRef.current?.focusName();
+                    viewRef.current?.focusName();
                   }}
-                  onOpen={this.openModal.bind(this)}
-                  ref={this.editorRef}
+                  onOpen={openModal}
+                  ref={editorRef}
                   size="small"
-                  onReturn={this.props.onReturn}
-                  onTab={this.props.onTab}
+                  onReturn={props.onReturn}
+                  onTab={props.onTab}
                 />
               </div>
             )}
           </div>
-          {inSelectedCell && this.state.sidebarIsOpen && (
-            <MetricSidebar
-              onOpenModal={this.openModal.bind(this)}
-              onRemoveMetric={this.handleRemoveMetric.bind(this)}
-              showAnalysis={this._canBeAnalyzed()}
-              onBeginAnalysis={this._beginAnalysis.bind(this)}
-              onEndAnalysis={this._endAnalysis.bind(this)}
-              canBeMadeFact={canBeMadeFact}
-              exportedAsFact={exportedAsFact}
-              onMakeFact={this._makeFact.bind(this)}
-              isAnalyzedMetric={isAnalyzedMetric}
-            />
+          {inSelectedCell && sidebarIsOpen && (
+            <div className="absolute top-1 -right-[163px] w-[160px] z-10">
+              <MetricSidebar
+                onOpenModal={openModal}
+                onRemoveMetric={handleRemoveMetric}
+                showAnalysis={canBeAnalyzed}
+                onBeginAnalysis={handleBeginAnalysis}
+                onEndAnalysis={handleEndAnalysis}
+                canBeMadeFact={canBeMadeFact}
+                exportedAsFact={exportedAsFact}
+                onMakeFact={handleMakeFact}
+                isAnalyzedMetric={isAnalyzedMetric}
+              />
+            </div>
           )}
         </div>
       </ToolTip>
     );
   }
-}
-
-export const MetricCard = connect(null)(UnconnectedMetricCard);
+);

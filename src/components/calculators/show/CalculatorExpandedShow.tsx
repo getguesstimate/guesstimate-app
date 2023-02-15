@@ -1,5 +1,4 @@
-import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { PropsWithChildren, useEffect, useState } from "react";
 
 import Head from "next/head";
 import { generateShareIcon, ShareButtons } from "react-share";
@@ -15,15 +14,22 @@ import { fetchById } from "~/modules/calculators/actions";
 import * as Calculator from "~/lib/engine/calculator";
 import * as Space from "~/lib/engine/space";
 import { useAppDispatch, useAppSelector } from "~/modules/hooks";
+import { DottedHR } from "./DottedHR";
+
+const CalculatorContainer: React.FC<PropsWithChildren> = ({ children }) => (
+  <div className="border border-grey-ccc rounded p-12 m-4 bg-white text-grey-444 leading-7">
+    {children}
+  </div>
+);
 
 const CalculatorHelp: React.FC<{ onClose(): void }> = ({ onClose }) => {
   return (
-    <div className="calculator wide">
+    <div>
       <div className="flex justify-between items-start">
         <h1 className="m-0">Useful Information</h1>
         <ButtonCloseText onClick={onClose} />
       </div>
-      <hr className="result-divider" />
+      <DottedHR />
 
       <h2>Input Types</h2>
 
@@ -56,7 +62,7 @@ const CalculatorHelp: React.FC<{ onClose(): void }> = ({ onClose }) => {
           </tr>
         </tbody>
       </table>
-      <hr className="result-divider" />
+      <DottedHR />
       <h2>Units</h2>
       <table className="ui celled table">
         <thead>
@@ -106,22 +112,17 @@ type Props = {
 };
 
 export const CalculatorExpandedShow: React.FC<Props> = ({ calculatorId }) => {
-  const [attemptedFetch, setAttemptedFetch] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
   const [resultBeenShown, setResultBeenShown] = useState(false);
 
   const dispatch = useAppDispatch();
-  const router = useRouter();
 
   const selectedProps = useAppSelector((state) =>
     calculatorSpaceSelector(state, calculatorId)
   );
 
   useEffect(() => {
-    if (!attemptedFetch) {
-      dispatch(fetchById(calculatorId));
-      setAttemptedFetch(true);
-    }
+    dispatch(fetchById(calculatorId));
   }, []);
 
   if (!selectedProps.calculator) {
@@ -164,18 +165,18 @@ export const CalculatorExpandedShow: React.FC<Props> = ({ calculatorId }) => {
           <meta {...tag} key={tag.name ?? tag.property} />
         ))}
       </Head>
-      <div className="max-w-4xl mx-auto">
-        {showHelp ? (
-          <CalculatorHelp onClose={() => setShowHelp(false)} />
-        ) : (
-          <CalculatorShow
-            {...selectedProps}
-            size="wide"
-            classes={["wide"]}
-            showHelp={() => setShowHelp(true)}
-            onShowResult={() => setResultBeenShown(true)}
-          />
-        )}
+      <div className="max-w-3xl mx-auto">
+        <CalculatorContainer>
+          {showHelp ? (
+            <CalculatorHelp onClose={() => setShowHelp(false)} />
+          ) : (
+            <CalculatorShow
+              {...selectedProps}
+              showHelp={() => setShowHelp(true)}
+              onShowResult={() => setResultBeenShown(true)}
+            />
+          )}
+        </CalculatorContainer>
         <div className="flex justify-between items-center px-20 py-4">
           <div className="flex gap-2">
             <FacebookShareButton

@@ -22,27 +22,32 @@ import { Optional } from "~/lib/engine/types";
 import { Guesstimator } from "~/lib/guesstimator/index";
 import { Calculator } from "~/modules/calculators/reducer";
 import { useAppDispatch } from "~/modules/hooks";
+import { DottedHR } from "./DottedHR";
 
 type Props = {
   calculator: Optional<Calculator, "id">;
   startFilled?: boolean;
-  size?: string;
   inputs: FullDenormalizedMetric[];
   outputs: FullDenormalizedMetric[];
   isPrivate?: boolean;
   showHelp?(): void;
   onShowResult?(): void;
-  classes: string[];
 };
 
 export const CalculatorShow: React.FC<Props> = (props) => {
   const dispatch = useAppDispatch();
 
+  const allOutputsHaveStats = ({ outputs } = props) => {
+    return outputs
+      .map((o) => !!o && _.has(o, "simulation.stats"))
+      .reduce((x, y) => x && y, true);
+  };
+
+  const [readyToCalculate, setReadyToCalculate] = useState(false);
   const [state, setState] = useState(() => ({
     resultComputing: false,
     showResult: props.startFilled && allOutputsHaveStats(),
     hasSimulated: false,
-    readyToCalculate: false,
   }));
 
   const inputRefs = useRef<Map<string, InputHandle | null>>(
@@ -69,7 +74,7 @@ export const CalculatorShow: React.FC<Props> = (props) => {
 
   const doChangeGuesstimate = (
     { id, guesstimate }: FullDenormalizedMetric,
-    input
+    input: string
   ) => {
     const parsed = Guesstimator.parse({ ...guesstimate, input });
     const guesstimateType = parsed[1].samplerType().referenceName;
@@ -82,7 +87,7 @@ export const CalculatorShow: React.FC<Props> = (props) => {
     );
   };
 
-  const readyToSimulate = (metric: FullDenormalizedMetric, input) => {
+  const readyToSimulate = (metric: FullDenormalizedMetric, input: string) => {
     const [parseErrors] = Guesstimator.parse({
       ...metric.guesstimate,
       input,
@@ -94,14 +99,14 @@ export const CalculatorShow: React.FC<Props> = (props) => {
     );
   };
 
-  const handleBlur = (metric: FullDenormalizedMetric, input) => {
+  const handleBlur = (metric: FullDenormalizedMetric, input: string) => {
     // We only want to simulate anything if all the inputs have simulatable content.
     if (!state.hasSimulated && readyToSimulate(metric, input)) {
       _.defer(() => {
         props.inputs.forEach((i) =>
           doChangeGuesstimate(
             i,
-            i.id === metric.id ? input : getInputContent(i)
+            i.id === metric.id ? input : getInputContent(i) || ""
           )
         );
         dispatch(
@@ -121,7 +126,7 @@ export const CalculatorShow: React.FC<Props> = (props) => {
     }
   };
 
-  const handleChange = (metric: FullDenormalizedMetric, input) => {
+  const handleChange = (metric: FullDenormalizedMetric, input: string) => {
     if (readyToSimulate(metric, input)) {
       if (state.hasSimulated) {
         doChangeGuesstimate(metric, input);
@@ -132,19 +137,15 @@ export const CalculatorShow: React.FC<Props> = (props) => {
           })
         );
       }
-      if (!state.readyToCalculate) {
-        setState({ ...state, readyToCalculate: true });
-      }
+      setReadyToCalculate(true);
     } else {
-      if (state.readyToCalculate) {
-        setState({ ...state, readyToCalculate: false });
-      }
+      setReadyToCalculate(false);
     }
   };
 
   const handleEnter = (id: string) => {
     inputRefs.current.get(id)?.blur();
-    if (!state.readyToCalculate) {
+    if (!readyToCalculate) {
       return;
     }
     if (allOutputsHaveStats() && state.hasSimulated) {
@@ -156,14 +157,8 @@ export const CalculatorShow: React.FC<Props> = (props) => {
     }
   };
 
-  const getInputContent = ({ id }) => {
+  const getInputContent = ({ id }: FullDenormalizedMetric) => {
     return inputRefs.current.get(id)?.getContent();
-  };
-
-  const allOutputsHaveStats = ({ outputs } = props) => {
-    return outputs
-      .map((o) => !!o && _.has(o, "simulation.stats"))
-      .reduce((x, y) => x && y, true);
   };
 
   const showResult = () => {
@@ -174,7 +169,7 @@ export const CalculatorShow: React.FC<Props> = (props) => {
   };
 
   return (
-    <div className={clsx("calculator", ...props.classes)}>
+    <div className="calculator">
       <div className="flex justify-between">
         <div className="flex items-end">
           <h1 className="leading-none m-0">{props.calculator.title}</h1>
@@ -194,14 +189,14 @@ export const CalculatorShow: React.FC<Props> = (props) => {
           </div>
         )}
       </div>
-      <div className="description">
+      <div className="text-grey-666 my-4 text-sm">
         <ReactMarkdown source={props.calculator.content} />
       </div>
-      <div className="inputs">
+      <div className="space-y-2">
         {props.inputs.map((metric, i) => (
           <Input
-            ref={(ref) => inputRefs.current.set(metric.id, ref)}
             key={metric.id}
+            ref={(ref) => inputRefs.current.set(metric.id, ref)}
             id={metric.id}
             isFirst={i === 0}
             name={metric.name}
@@ -216,34 +211,33 @@ export const CalculatorShow: React.FC<Props> = (props) => {
       </div>
       {state.showResult ? (
         <div>
-          <hr className="result-divider" />
-          <div className="outputs">
+          <div className="my-4">
+            <DottedHR />
+          </div>
+          <div className="space-y-2">
             {props.outputs.map((m) => (
               <Output key={m.id} metric={m} />
             ))}
           </div>
         </div>
       ) : (
-        <div className="row">
-          <div className="col-xs-12 col-md-7" />
-          <div className="col-xs-12 col-md-5">
-            <div
-              className={clsx(
-                "ui button calculateButton",
-                state.resultComputing
-                  ? "loading"
-                  : state.readyToCalculate
-                  ? ""
-                  : "disabled"
-              )}
-              onClick={() => {
-                allOutputsHaveStats()
-                  ? showResult()
-                  : setState({ ...state, resultComputing: true });
-              }}
-            >
-              Calculate
-            </div>
+        <div className="mt-8 flex justify-end">
+          <div
+            className={clsx(
+              "ui button green large",
+              state.resultComputing
+                ? "loading"
+                : readyToCalculate
+                ? ""
+                : "disabled"
+            )}
+            onClick={() => {
+              allOutputsHaveStats()
+                ? showResult()
+                : setState({ ...state, resultComputing: true });
+            }}
+          >
+            Calculate
           </div>
         </div>
       )}

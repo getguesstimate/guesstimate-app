@@ -10,6 +10,7 @@ module.exports = {
         4: "#5a9dc1",
         5: "rgb(140, 166, 195)",
         6: "#002ebd",
+        7: "#1678c2",
       },
       // previously called "black"
       dark: {
@@ -26,12 +27,14 @@ module.exports = {
         7: "#dfe1e4",
         333: "#333",
         444: "#444",
+        main: "#4e4e4e",
         666: "#666",
         888: "#888",
         999: "#999",
         bbb: "#bbb",
         ccc: "#ccc",
         eee: "#eee",
+        a1: "rgb(231, 234, 236)",
       },
       green: {
         1: "#25b530",
@@ -45,6 +48,8 @@ module.exports = {
         3: "#ede4f9",
       },
       red: {
+        1: "#e0b4b4",
+        2: "#fff6f6",
         5: "#db2828",
       },
       white: "white",
@@ -52,6 +57,9 @@ module.exports = {
       transparent: "transparent",
     },
     extend: {
+      borderRadius: {
+        xs: "1px",
+      },
       fontFamily: {
         lato: "'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif",
         mono: '"Courier New", Courier, monospace',

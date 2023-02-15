@@ -3,7 +3,7 @@ import React, { PropsWithChildren } from "react";
 
 import Icon from "~/components/react-fa-patched";
 
-import { ButtonClose } from "~/components/utility/buttons/close/index";
+import { ButtonClose } from "~/components/utility/buttons/close";
 import { capitalizeFirstLetter } from "~/lib/string";
 
 export const CardListSection: React.FC<PropsWithChildren> = ({ children }) => (

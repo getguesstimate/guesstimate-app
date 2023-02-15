@@ -1,9 +1,5 @@
-import React from "react";
+import React, { PropsWithChildren } from "react";
 
-type Props = {
-  children: React.ReactNode;
-};
-
-export const Container: React.FC<Props> = ({ children }) => {
-  return <div className="GeneralContainer">{children}</div>;
+export const Container: React.FC<PropsWithChildren> = ({ children }) => {
+  return <div className="mt-8 mb-4 md:mt-16 md:mb-8">{children}</div>;
 };

@@ -39,6 +39,7 @@ type OwnProps = {
   onTab(): void;
   selectedFrom?: Direction;
   getRowHeight(): number;
+  size?: "small" | "normal";
 };
 type Props = OwnProps & CollectedProps;
 
@@ -142,6 +143,7 @@ class Cell extends Component<Props> {
         onEndDrag={this.props.onEndDragCell}
         forceFlowGridUpdate={this.props.forceFlowGridUpdate}
         hover={this.props.isHovered}
+        focusCell={this._focus.bind(this)}
         ref={this.itemRef}
       />
     ) : (
@@ -150,6 +152,9 @@ class Cell extends Component<Props> {
 
     const className = clsx(
       "FlowGridCell",
+      this.props.size === "small"
+        ? "w-[150px] max-w-[150px]"
+        : "w-[210px] max-w-[210px]",
       inSelectedRegion ? "selected" : "nonSelected",
       item && "hasItem",
       isOver && "IsOver",

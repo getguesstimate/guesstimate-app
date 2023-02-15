@@ -9,10 +9,10 @@ import { sampler as noneSampler } from "./samplers/None";
 import { Sampler } from "./samplers/Simulator";
 
 const FunctionIcon = "/assets/distribution-icons/function.png";
-const LogNormalIcon = "../assets/distribution-icons/lognormal.png";
-const NormalIcon = "../assets/distribution-icons/normal.png";
-const PointIcon = "../assets/distribution-icons/point.png";
-const UniformIcon = "../assets/distribution-icons/uniform.png";
+const LogNormalIcon = "/assets/distribution-icons/lognormal.png";
+const NormalIcon = "/assets/distribution-icons/normal.png";
+const PointIcon = "/assets/distribution-icons/point.png";
+const UniformIcon = "/assets/distribution-icons/uniform.png";
 
 type SamplerType = {
   referenceName: string;

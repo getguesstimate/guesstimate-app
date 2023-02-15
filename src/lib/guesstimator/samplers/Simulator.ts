@@ -31,7 +31,7 @@ export type Sampler = {
   ): Promise<SimulateResult>;
 };
 
-export function simulate(
+export async function simulate(
   expr: string,
   inputs,
   maxSamples: number

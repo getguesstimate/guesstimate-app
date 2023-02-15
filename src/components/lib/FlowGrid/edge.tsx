@@ -107,7 +107,7 @@ const isValidNode = ({ top, left, right, bottom }: RectangleShape) => {
 type Props = {
   input: RectangleShape;
   output: RectangleShape;
-  hasErrors: boolean;
+  hasErrors?: boolean;
   pathStatus: string;
 };
 

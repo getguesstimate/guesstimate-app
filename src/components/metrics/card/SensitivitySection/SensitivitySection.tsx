@@ -5,6 +5,8 @@ import everpolate from "everpolate";
 import { ScatterPlot } from "react-d3-components";
 import { FullDenormalizedMetric } from "~/lib/engine/space";
 import clsx from "clsx";
+import { SampleValue } from "~/lib/guesstimator/samplers/Simulator";
+import { number } from "yup";
 
 function importance(r2: number) {
   if (r2 < 0.05) {
@@ -17,14 +19,15 @@ function importance(r2: number) {
 }
 
 const Plot: React.FC<{
-  xSamples: any;
-  ySamples: any;
+  xSamples: SampleValue[];
+  ySamples: SampleValue[];
   size: string;
   xLabel?: string;
   yLabel?: string;
 }> = ({ xSamples, ySamples, size, xLabel, yLabel }) => {
   const customValues = _.zip(xSamples, ySamples).filter(
-    ([x, y]) => _.isFinite(x) && _.isFinite(y)
+    (pair): pair is [number, number] =>
+      _.isFinite(pair[0]) && _.isFinite(pair[1])
   );
   const data = [{ customValues }];
   const valuesAccessor = (s) => s.customValues;
@@ -88,8 +91,8 @@ const RegressionLabel: React.FC<PropsWithChildren> = ({ children }) => (
 );
 
 const RegressionStats: React.FC<{
-  xSamples: any;
-  ySamples: any;
+  xSamples: SampleValue[];
+  ySamples: SampleValue[];
   size: string;
 }> = ({ xSamples, ySamples, size }) => {
   if (_.isEmpty(xSamples) || _.isEmpty(ySamples)) {
@@ -115,7 +118,7 @@ const RegressionStats: React.FC<{
 
   return size === "SMALL" ? (
     <div className="absolute bottom-1 right-2">
-      <span className="text-grey-666 italic text-sm"> r²</span>
+      <span className="text-grey-666 italic text-sm">r²</span>
       <span
         className={clsx(
           "italic text-xl",
@@ -130,21 +133,20 @@ const RegressionStats: React.FC<{
     <div className="absolute top-4 right-2 text-grey-444 text-sm">
       <div>
         <RegressionLabel>
-          {" "}
           r<sup>2</sup>
         </RegressionLabel>
         <span> {regression.rSquared.toFixed(2)}</span>
       </div>
       <div>
-        <RegressionLabel> slope</RegressionLabel>
+        <RegressionLabel>slope</RegressionLabel>
         <span> {regression.slope.toFixed(2)}</span>
       </div>
       <div>
-        <RegressionLabel> x intercept</RegressionLabel>
+        <RegressionLabel>x intercept</RegressionLabel>
         <span> {xIntercept.toFixed(2)}</span>
       </div>
       <div>
-        <RegressionLabel> y intercept</RegressionLabel>
+        <RegressionLabel>y intercept</RegressionLabel>
         <span> {regression.intercept.toFixed(2)}</span>
       </div>
       <div>
@@ -158,7 +160,7 @@ const RegressionStats: React.FC<{
 export const SensitivitySection: React.FC<{
   xMetric: FullDenormalizedMetric;
   yMetric: FullDenormalizedMetric | null;
-  size?: string;
+  size?: "SMALL" | "LARGE";
 }> = ({ xMetric, yMetric, size = "SMALL" }) => {
   const sampleCount = size === "SMALL" ? 100 : 1000;
 

@@ -12,6 +12,7 @@ import { FullDenormalizedMetric } from "~/lib/engine/space";
 import { SAMPLE_FILTERED } from "~/lib/guesstimator/samplers/simulator-worker/simulator/filters/filters";
 import { MetricClickMode } from "~/modules/canvas_state/reducer";
 import { SampleValue } from "~/lib/guesstimator/samplers/Simulator";
+import { Button } from "~/components/utility/buttons/button";
 
 const SampleList: React.FC<{ samples: SampleValue[] | undefined }> = ({
   samples,
@@ -69,9 +70,11 @@ export const MetricModal: React.FC<Props> = ({
 
   return (
     <GeneralModal onRequestClose={closeModal}>
-      <div className="metricModal w-80 sm:w-[600px] md:w-[700px] lg:w-[1000px]">
+      <div className="metricModal bg-grey-eee w-80 mb-8 sm:w-[600px] md:w-[700px] lg:w-[1000px]">
         <div className="flex justify-between items-center px-6 py-4">
-          <h1 className="leading-none">{metric.name}</h1>
+          <h1 className="leading-none m-0 text-4xl text-grey-444">
+            {metric.name}
+          </h1>
           <ButtonClose onClick={closeModal} />
         </div>
 
@@ -99,7 +102,7 @@ export const MetricModal: React.FC<Props> = ({
             </div>
             <DropDown
               headerText="Samples"
-              openLink={<a className="modal-action button block">Samples</a>}
+              openLink={<Button onClick={() => {}}>Samples</Button>}
               position="right"
               hasPadding={true}
             >

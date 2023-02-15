@@ -43,7 +43,7 @@ export type EdgeShape = {
   input: CanvasLocation;
   output: CanvasLocation;
   pathStatus: string;
-  hasErrors: boolean;
+  hasErrors?: boolean;
 };
 
 type Props = {
@@ -182,7 +182,6 @@ export const SpaceCanvas: React.FC<Props> = ({
     );
 
     const props = {
-      isInScreenshot: screenshot,
       canvasState,
       key: metric.id,
       metric,
@@ -333,14 +332,15 @@ export const SpaceCanvas: React.FC<Props> = ({
   };
 
   const edges = buildEdges();
-  const className = clsx(
-    "canvas-space",
-    showEdges && "showEdges",
-    screenshot && "overflow-hidden"
-  );
 
   return (
-    <div className={className}>
+    <div
+      className={clsx(
+        "canvas-space",
+        showEdges && "showEdges",
+        screenshot && "overflow-hidden"
+      )}
+    >
       <FlowGrid
         items={metrics.map((m) => makeItem(m))}
         onMultipleSelect={handleMultipleSelect}

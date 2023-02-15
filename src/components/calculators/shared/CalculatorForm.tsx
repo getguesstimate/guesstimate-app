@@ -1,21 +1,34 @@
 import _ from "lodash";
-import React, { Component, useState } from "react";
+import React, { PropsWithChildren, useState } from "react";
 
-import Icon from "~/components/react-fa-patched";
-import { sortable } from "react-sortable";
-import { FullDenormalizedMetric } from "~/lib/engine/space";
-import { Calculator } from "~/modules/calculators/reducer";
-import { Optional } from "~/lib/engine/types";
 import clsx from "clsx";
+import { sortable } from "react-sortable";
+import Icon from "~/components/react-fa-patched";
+import { FullDenormalizedMetric } from "~/lib/engine/space";
+import { Optional } from "~/lib/engine/types";
+import { Calculator } from "~/modules/calculators/reducer";
 
-const SortableListItem = sortable((props) => (
-  <div {...props}>{props.children}</div>
-));
+const Header: React.FC<PropsWithChildren> = ({ children }) => (
+  <h3 className="border-b-2 border-[#aaa] pb-1 !mt-10 text-bold text-lg">
+    {children}
+  </h3>
+);
 
-type CalculatorParam = {
-  metric: FullDenormalizedMetric;
-  isVisible: boolean;
-};
+const List: React.FC<PropsWithChildren> = ({ children }) => (
+  <div className="space-y-1">{children}</div>
+);
+
+const EditButton: React.FC<PropsWithChildren<{ onMouseDown(): void }>> = ({
+  children,
+  onMouseDown,
+}) => (
+  <div
+    onMouseDown={onMouseDown}
+    className="bg-grey-7 text-lato text-grey-666 px-2 py-1 rounded text-xs font-bold cursor-pointer"
+  >
+    {children}
+  </div>
+);
 
 type ParamProps = {
   name: string | undefined;
@@ -24,6 +37,61 @@ type ParamProps = {
   isVisible: boolean;
   onRemove(): void;
   onAdd(): void;
+};
+
+const EditSection: React.FC<ParamProps> = ({ isVisible, onRemove, onAdd }) => (
+  <div>
+    {isVisible ? (
+      <div className="flex gap-1">
+        <EditButton onMouseDown={onRemove}>hide</EditButton>
+        <EditButton onMouseDown={() => {}}>
+          <Icon name="bars" />
+        </EditButton>
+      </div>
+    ) : (
+      <EditButton onMouseDown={onAdd}>show</EditButton>
+    )}
+  </div>
+);
+
+const InputForm: React.FC<ParamProps> = (props) => (
+  <div className={clsx(props.isDropTarget && "bg-grey-1")}>
+    <div className="flex justify-between">
+      <div>
+        <div className="name">{props.name}</div>
+        {props.description && (
+          <div className="text-xs mt-4 mb-8 text-grey-666">
+            {props.description}
+          </div>
+        )}
+      </div>
+      <div>
+        <EditSection {...props} />
+      </div>
+    </div>
+  </div>
+);
+
+const OutputForm: React.FC<ParamProps> = (props) => (
+  <div className={clsx(props.isDropTarget && "bg-grey-1")}>
+    <div className="flex justify-between">
+      <div>
+        <div className="name">{props.name}</div>
+      </div>
+      <div>
+        <EditSection {...props} />
+      </div>
+    </div>
+  </div>
+);
+
+const SortableListItem = sortable((props) => (
+  <div {...props}>{props.children}</div>
+));
+
+type CalculatorParam = {
+  metric: FullDenormalizedMetric;
+  isVisible: boolean;
 };
 
 type Props = {
@@ -165,122 +233,72 @@ export const CalculatorForm: React.FC<Props> = (props) => {
         />
       </div>
 
-      <div className="inputs">
-        <h3>{hasHiddenInputs ? "Visible " : ""}Inputs</h3>
-        {visibleInputs.map(([item, id], i) => (
-          <SortableListItem
-            key={i}
-            sortId={i}
-            draggingIndex={draggingIndex}
-            updateState={(s) => updateDragState(id, s)}
-            outline="list"
-            items={visibleInputs}
-            onSortItems={() => undefined} // broken
-          >
-            {item}
-          </SortableListItem>
-        ))}
+      {/* inputs */}
+      <div>
+        <Header>{hasHiddenInputs ? "Visible " : ""}Inputs</Header>
+        <List>
+          {visibleInputs.map(([item, id], i) => (
+            <SortableListItem
+              key={i}
+              sortId={i}
+              draggingIndex={draggingIndex}
+              updateState={(s) => updateDragState(id, s)}
+              outline="list"
+              items={visibleInputs}
+              onSortItems={() => undefined} // broken
+            >
+              {item}
+            </SortableListItem>
+          ))}
+        </List>
       </div>
 
       {hasHiddenInputs && (
         <div>
-          <div className="inputs">
-            <h3>Hidden Inputs</h3>
-            {invisibleInputs.map(([item]) => item)}
-          </div>
+          <Header>Hidden Inputs</Header>
+          <List>{invisibleInputs.map(([item]) => item)}</List>
         </div>
       )}
 
-      <div className="outputs">
-        <h3>{hasHiddenOutputs ? "Visible " : ""}Outputs</h3>
-        {visibleOutputs.map(([item, id], i) => (
-          <SortableListItem
-            key={i}
-            sortId={i}
-            draggingIndex={draggingIndex}
-            updateState={(s) => updateDragState(id, s)}
-            outline="list"
-            items={visibleOutputs}
-            onSortItems={() => undefined} // broken
-          >
-            {item}
-          </SortableListItem>
-        ))}
-
-        {hasHiddenOutputs && (
-          <div>
-            <div className="outputs">
-              <h3>Hidden Outputs</h3>
-              {invisibleOutputs.map(([item]) => item)}
-            </div>
-          </div>
-        )}
-      </div>
-      <div className="create-button-section">
-        <div className="row">
-          <div className="col-md-5">
-            <div
-              className={clsx(
-                "ui button green large",
-                hasAlreadySubmitted && "loading",
-                (!isValid || hasAlreadySubmitted) && "disabled"
-              )}
-              onClick={handleSubmit}
+      {/* outputs */}
+      <div>
+        <Header>{hasHiddenOutputs ? "Visible " : ""}Outputs</Header>
+        <List>
+          {visibleOutputs.map(([item, id], i) => (
+            <SortableListItem
+              key={i}
+              sortId={i}
+              draggingIndex={draggingIndex}
+              updateState={(s) => updateDragState(id, s)}
+              outline="list"
+              items={visibleOutputs}
+              onSortItems={() => undefined} // broken
             >
-              {buttonText}
-            </div>
-          </div>
-          <div className="col-md-7" />
+              {item}
+            </SortableListItem>
+          ))}
+        </List>
+      </div>
+
+      {hasHiddenOutputs && (
+        <div>
+          <Header>Hidden Outputs</Header>
+          <List>{invisibleOutputs.map(([item]) => item)}</List>
+        </div>
+      )}
+
+      <div className="flex justify-end mt-4">
+        <div
+          className={clsx(
+            "ui button green large",
+            hasAlreadySubmitted && "loading",
+            (!isValid || hasAlreadySubmitted) && "disabled"
+          )}
+          onClick={handleSubmit}
+        >
+          {buttonText}
         </div>
       </div>
     </div>
   );
 };
-
-const EditSection: React.FC<ParamProps> = ({ isVisible, onRemove, onAdd }) => (
-  <div className="nub">
-    {isVisible ? (
-      <div>
-        <a onMouseDown={onRemove} className="ui button">
-          hide
-        </a>
-        <a className="ui button">
-          <Icon name="bars" />
-        </a>
-      </div>
-    ) : (
-      <a onMouseDown={onAdd} className="ui button">
-        show
-      </a>
-    )}
-  </div>
-);
-
-const InputForm: React.FC<ParamProps> = (props) => (
-  <div className={clsx("input", props.isDropTarget && "bg-grey-1")}>
-    <div className="row">
-      <div className="col-xs-12 col-sm-8">
-        <div className="name">{props.name}</div>
-        {props.description && (
-          <div className="description">{props.description}</div>
-        )}
-      </div>
-      <div className="col-xs-12 col-sm-4">
-        <EditSection {...props} />
-      </div>
-    </div>
-  </div>
-);
-
-const OutputForm: React.FC<ParamProps> = (props) => (
-  <div className={clsx("output", props.isDropTarget && "bg-grey-1")}>
-    <div className="row">
-      <div className="col-xs-12 col-sm-8">
-        <div className="name">{props.name}</div>
-      </div>
-      <div className="col-xs-12 col-sm-4">
-        <EditSection {...props} />
-      </div>
-    </div>
-  </div>
-);

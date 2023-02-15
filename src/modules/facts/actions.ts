@@ -118,7 +118,7 @@ export function addSimulationToFact(
     addStats(simulation);
     const newFact = {
       ...oldFact,
-      simulation: simulation,
+      simulation,
     };
 
     dispatch(

@@ -43,7 +43,6 @@ export const metricsR: Reducer<MetricsState, AnyAction> = (
       return uniq([...state, ...newMetrics]);
     }
     case "ADD_METRIC":
-      // TODO(matthew): Eliminate this (route everything through the multiple mode below).
       return uniq([...state, action.item]);
     case "ADD_METRICS":
       return uniq([...state, ...action.items]);

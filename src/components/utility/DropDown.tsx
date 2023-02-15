@@ -20,7 +20,7 @@ export type DropDownHandle = {
 };
 
 export const DropDown = React.forwardRef<DropDownHandle, Props>(
-  (props, ref) => {
+  function DropDown(props, ref) {
     const [isOpen, setIsOpen] = useState(false);
 
     const containerRef = useRef<HTMLDivElement | null>(null);

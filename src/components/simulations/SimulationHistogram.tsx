@@ -1,76 +1,28 @@
 import _ from "lodash";
-import { Component } from "react";
+import React from "react";
 
-import { Histogram } from "~/components/lib/histogram";
-
-import { Dimensions } from "~/components/utility/Dimensions";
+import { Histogram, HistogramTheme } from "~/components/lib/histogram";
+import { Simulation } from "~/modules/simulations/reducer";
 
 type Props = {
-  height: number;
-  simulation: any;
+  simulation: Simulation | null | undefined;
   cutOffRatio: number;
   hoveredXCoord?: number;
   allowHover?: boolean;
-  widthPercent?: number;
   bins?: number;
-  top?: number;
-  bottom?: number;
-  left?: number;
-  onChangeXScale?(arg: any): void;
-} & {
-  containerWidth?: number;
-  containerHeight?: number;
+  showTicks?: boolean;
+  theme?: HistogramTheme;
 };
 
-class SimulationHistogramWithDimentions extends Component<Props> {
-  shouldComponentUpdate(nextProps: Props) {
-    return (
-      _.get(nextProps, "simulation.stats") !==
-        _.get(this.props, "simulation.stats") ||
-      nextProps.containerWidth !== this.props.containerWidth ||
-      nextProps.height !== this.props.height ||
-      nextProps.hoveredXCoord !== this.props.hoveredXCoord ||
-      nextProps.allowHover !== this.props.allowHover
-    );
-  }
+export const SimulationHistogram = React.forwardRef<{ xScale: any }, Props>(
+  function SimulationHistogram({ simulation, ...histogramProps }, ref) {
+    const sortedValues = _.get(simulation, "sample.sortedValues") || [];
 
-  sortedValues(): number[] {
-    return _.get(this.props.simulation, "sample.sortedValues");
-  }
-
-  histogram() {
-    const props = _.pick(this.props, [
-      "height",
-      "left",
-      "cutOffRatio",
-      "hoveredXCoord",
-      "onChangeXScale",
-      "allowHover",
-    ]);
-    const { widthPercent = 100, bins = 40 } = this.props;
-
-    return (
-      <Histogram
-        data={this.sortedValues()}
-        width={((this.props.containerWidth || 0) * widthPercent) / 100}
-        bottom={20}
-        bins={bins}
-        {...props}
-      />
-    );
-  }
-
-  render() {
-    const sortedValues = this.sortedValues();
     const hasValues = sortedValues && sortedValues.length > 1;
-    if (hasValues) {
-      return this.histogram();
-    } else {
-      return false;
+    if (!hasValues) {
+      return null;
     }
-  }
-}
 
-export const SimulationHistogram = Dimensions()(
-  SimulationHistogramWithDimentions
+    return <Histogram data={sortedValues} {...histogramProps} ref={ref} />;
+  }
 );

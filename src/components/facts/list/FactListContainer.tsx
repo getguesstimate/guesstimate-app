@@ -15,7 +15,7 @@ type Props = {
   categoryId?: string | null;
   canMakeNewFacts: boolean;
   spaceId?: number;
-  imported_fact_ids?: string[];
+  imported_fact_ids?: number[];
 };
 
 export const FactListContainer: React.FC<Props> = ({

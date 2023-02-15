@@ -34,7 +34,7 @@ export const NavHelper: React.FC<Props> = ({ children }) => {
   }, []);
 
   return (
-    <div className="navHelper" onClick={onClick}>
+    <div className="h-full" onClick={onClick}>
       {children}
     </div>
   );

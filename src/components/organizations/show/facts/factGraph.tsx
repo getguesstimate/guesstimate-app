@@ -1,7 +1,7 @@
 import _ from "lodash";
-import React from "react";
+import React, { PropsWithChildren } from "react";
 
-import { FactItem } from "~/components/facts/list/FactItem";
+import { SmallFactItem } from "~/components/facts/list/FactItem";
 import { FlowGrid } from "~/components/lib/FlowGrid/FlowGrid";
 import { SpaceCard } from "~/components/spaces/SpaceCards";
 
@@ -9,25 +9,32 @@ import * as _collections from "~/lib/engine/collections";
 import * as _utils from "~/lib/engine/utils";
 
 import { GridItem } from "~/components/lib/FlowGrid/types";
+import { EdgeShape } from "~/components/spaces/SpaceCanvas";
 import {
+  CyclePseudoNode,
   separateIntoDisconnectedComponents,
   separateIntoHeightSets,
 } from "~/lib/DAG/DAG";
 import { getNodeAncestors } from "~/lib/DAG/nodeFns";
 import { Fact } from "~/lib/engine/facts";
 import { ApiSpace } from "~/lib/guesstimate_api/resources/Models";
+import { SimulationNodeParamsWithInputs } from "~/lib/propagation/DAG";
 import { initialCanvasState } from "~/modules/canvas_state/slice";
 
 const idToNodeId = (id: string | number, isFact: boolean) =>
   `${isFact ? "fact" : "space"}:${id}`;
-const spaceIdToNodeId = ({ id }) => idToNodeId(id, false);
-const factIdToNodeId = ({ id }) => idToNodeId(id, true);
+const spaceIdToNodeId = ({ id }: { id: number }) => idToNodeId(id, false);
+const factIdToNodeId = ({ id }: { id: number }) => idToNodeId(id, true);
 
 type FactGridItem = Omit<GridItem, "location"> & {
   id: string;
-  inputs: any[];
-  outputs: any[];
+  inputs: string[];
+  outputs: string[];
 };
+
+const Box: React.FC<PropsWithChildren> = ({ children }) => (
+  <div className="m-2 grid">{children}</div>
+);
 
 const makeFactNodeFn =
   (spaces: ApiSpace[]) =>
@@ -41,7 +48,11 @@ const makeFactNodeFn =
       ? [idToNodeId(fact.exported_from_id, false)]
       : [],
     props: {},
-    component: () => <FactItem fact={fact} size="SMALL" />,
+    component: () => (
+      <Box>
+        <SmallFactItem fact={fact} />
+      </Box>
+    ),
   });
 
 const makeSpaceNodeFn =
@@ -55,45 +66,55 @@ const makeSpaceNodeFn =
       .map(factIdToNodeId),
     props: {},
     component: () => (
-      <SpaceCard
-        size="SMALL"
-        key={s.id}
-        space={s}
-        urlParams={{ factsShown: "true" }}
-      />
+      <Box>
+        <SpaceCard
+          size="SMALL"
+          key={s.id}
+          space={s}
+          urlParams={{ factsShown: "true" }}
+        />
+      </Box>
     ),
   });
 
-const addLocationsToHeightOrderedComponents = (componentsHeightOrdered) => {
-  let withFinalLocations: any[] = [];
+const addLocationsToHeightOrderedComponents = (
+  componentsHeightOrdered: (
+    | SimulationNodeParamsWithInputs
+    | CyclePseudoNode
+  )[][][]
+) => {
+  const withFinalLocations: GridItem[] = [];
   let maxRowUsed = 0;
   componentsHeightOrdered.forEach((heightOrderedComponent) => {
-    let sortedHeightOrderedNodes: any[][] = [];
+    const sortedHeightOrderedNodes: any[][] = [];
     let currColumn = 0;
     let maxRowUsedInComponent = maxRowUsed;
     heightOrderedComponent.forEach((heightSet) => {
       const prevLayer = _utils.orArr(_.last(sortedHeightOrderedNodes));
       let newLayer = _utils.mutableCopy(heightSet);
-      let newLayerOrdered: any[] = [];
+      let newLayerOrdered: typeof newLayer = [];
       prevLayer
         .filter((n) => !_.isEmpty(n.outputs))
         .forEach((n) => {
-          const outputs: any[] = _.remove(newLayer, ({ id }) =>
+          const outputs = _.remove(newLayer, ({ id }) =>
             n.outputs.includes(id)
           );
-          const outputsSorted = _.sortBy(outputs, (c) => -c.outputs.length);
+          const outputsSorted = _.sortBy(
+            outputs,
+            (c) => -(c.outputs?.length ?? 0)
+          );
           newLayerOrdered.push(...outputsSorted);
         });
-      const restSorted = _.sortBy(newLayer, (n) => -n.outputs.length);
+      const restSorted = _.sortBy(newLayer, (n) => -(n.outputs?.length ?? 0));
       newLayerOrdered.push(...restSorted);
 
       let currRow = maxRowUsed;
-      const withLocations = _.map(newLayerOrdered, (node) => {
+      const withLocations = newLayerOrdered.map((node) => {
         const withLocation = {
           ...node,
           location: { row: currRow, column: currColumn },
         };
-        if (node.outputs.length > 3) {
+        if ((node.outputs?.length ?? 0) > 3) {
           currRow += 2;
         } else {
           currRow += 1;
@@ -145,7 +166,7 @@ const itemsAndEdges = (facts: Fact[], spaces: ApiSpace[]) => {
 
   // Now we add locations to the isolated facts.
   const width = Math.floor(Math.sqrt(isolatedFactNodes.length));
-  const isolatedFactNodesWithLocations = _.map(isolatedFactNodes, (n, i) => ({
+  const isolatedFactNodesWithLocations = isolatedFactNodes.map((n, i) => ({
     ...n,
     location: {
       row: maxRowUsed + 1 + Math.floor(i / width),
@@ -153,11 +174,15 @@ const itemsAndEdges = (facts: Fact[], spaces: ApiSpace[]) => {
     },
   }));
 
-  const items = [...isolatedFactNodesWithLocations, ...withFinalLocations];
+  const items: GridItem[] = [
+    ...isolatedFactNodesWithLocations,
+    ...withFinalLocations,
+  ];
 
-  const locationById = (id) => _collections.gget(items, id, "id", "location");
+  const locationById = (id: string) =>
+    _collections.gget(items, id, "id", "location");
 
-  let edges: any[] = [];
+  const edges: EdgeShape[] = [];
   const pathStatus = "default";
   factNodes.forEach(({ id, outputs, inputs }) => {
     edges.push(
@@ -208,7 +233,7 @@ export const FactGraph: React.FC<Props> = (props) => {
   const { items, edges } = itemsAndEdges(props.facts, props.spaces);
 
   return (
-    <div className="FactGraph">
+    <div className="flex justify-center">
       <FlowGrid
         items={items}
         onMultipleSelect={() => {}}
@@ -233,6 +258,7 @@ export const FactGraph: React.FC<Props> = (props) => {
         showGridLines={false}
         canvasState={initialCanvasState}
         isModelingCanvas={false}
+        size="small"
       />
     </div>
   );

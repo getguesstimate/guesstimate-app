@@ -57,7 +57,9 @@
   },
   "dependencies": {
     "@floating-ui/react": "^0.18.0",
+    "@react-hook/size": "^2.1.2",
     "@reduxjs/toolkit": "^1.9.1",
+    "@types/draft-js": "^0.11.10",
     "algoliasearch": "^3.32.1",
     "angle-between-points": "^1.0.0",
     "auth0-js": "^9.20.0",
@@ -67,7 +69,7 @@
     "cuid": "^2.1.6",
     "d3": "^3.5.17",
     "discrete-sampling": "^1.0.3",
-    "draft-js": "^0.10.5",
+    "draft-js": "^0.11.7",
     "everpolate": "^0.0.3",
     "financejs": "^4.1.0",
     "find-root": "^1.1.0",

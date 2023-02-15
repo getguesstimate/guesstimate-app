@@ -14,6 +14,7 @@ export const MetricToolTip: React.FC<{ guesstimate: Guesstimate }> = ({
       onMouseDown={(e) => {
         e.stopPropagation();
       }}
+      className="max-w-sm"
     >
       <MarkdownViewer source={guesstimate.description} />
     </div>

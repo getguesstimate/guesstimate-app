@@ -201,7 +201,7 @@ class UnconnectedSpaceShow extends Component<Props, State> {
     this.considerFetch(prevProps);
   }
 
-  considerFetch({ denormalizedSpace: space }) {
+  considerFetch({ denormalizedSpace: space }: Props) {
     if (this.state.attemptedFetch) {
       return;
     }
@@ -468,7 +468,7 @@ class UnconnectedSpaceShow extends Component<Props, State> {
     return (
       <div
         className={clsx(
-          "w-[30em] p-4 overflow-x-hidden overflow-y-auto border border-[#ccc]",
+          "w-[30em] h-full p-4 overflow-x-hidden overflow-y-auto border-l border-[#ccc]",
           bg === "GREY" ? "bg-grey-6" : "bg-white"
         )}
       >

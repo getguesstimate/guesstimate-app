@@ -283,58 +283,56 @@ export const OrganizationShow: React.FC<{
 
   return (
     <Container>
-      <div className="OrganizationShow">
-        <OrganizationHeader organization={organization} />
+      <OrganizationHeader organization={organization} />
 
-        {meIsMember && (
-          <div className="mt-4">
-            <OrganizationTabButtons
-              tabs={tabs}
-              openTab={openTab}
-              changeTab={changeTab}
-            />
-          </div>
+      {meIsMember && (
+        <div className="mt-4">
+          <OrganizationTabButtons
+            tabs={tabs}
+            openTab={openTab}
+            changeTab={changeTab}
+          />
+        </div>
+      )}
+
+      <div className="mt-12">
+        {(openTab === MODEL_TAB || !meIsMember) && spaces && (
+          <SpaceCardGrid>
+            {meIsMember && <NewSpaceCard onClick={newModel} />}
+            {spaces.map((s) => (
+              <SpaceCard key={s.id} space={s} showPrivacy={true} />
+            ))}
+          </SpaceCardGrid>
         )}
 
-        <div className="mt-12">
-          {(openTab === MODEL_TAB || !meIsMember) && spaces && (
-            <SpaceCardGrid>
-              {meIsMember && <NewSpaceCard onClick={newModel} />}
-              {spaces.map((s) => (
-                <SpaceCard key={s.id} space={s} showPrivacy={true} />
-              ))}
-            </SpaceCardGrid>
-          )}
+        {openTab === MEMBERS_TAB && meIsMember && members && organization && (
+          <MembersTab
+            organizationId={organizationId}
+            startOnIndexTab={true}
+            members={members}
+            memberships={memberships}
+            invitations={invitations}
+            admin_id={organization.admin_id}
+            onRemove={onRemove}
+            // httpRequests={httpRequests}
+            meIsAdmin={meIsAdmin}
+          />
+        )}
 
-          {openTab === MEMBERS_TAB && meIsMember && members && organization && (
-            <MembersTab
-              organizationId={organizationId}
-              startOnIndexTab={true}
-              members={members}
-              memberships={memberships}
-              invitations={invitations}
-              admin_id={organization.admin_id}
-              onRemove={onRemove}
-              // httpRequests={httpRequests}
-              meIsAdmin={meIsAdmin}
-            />
-          )}
+        {openTab === FACT_BOOK_TAB && meIsMember && !!facts && (
+          <FactTab
+            organization={organization}
+            facts={facts}
+            factCategories={factCategories}
+            onAddCategory={onAddCategory}
+            onEditCategory={onEditCategory}
+            onDeleteCategory={onDeleteCategory}
+          />
+        )}
 
-          {openTab === FACT_BOOK_TAB && meIsMember && !!facts && (
-            <FactTab
-              organization={organization}
-              facts={facts}
-              factCategories={factCategories}
-              onAddCategory={onAddCategory}
-              onEditCategory={onEditCategory}
-              onDeleteCategory={onDeleteCategory}
-            />
-          )}
-
-          {openTab === FACT_GRAPH_TAB && meIsMember && !!facts && (
-            <FactGraph facts={facts} spaces={spaces} />
-          )}
-        </div>
+        {openTab === FACT_GRAPH_TAB && meIsMember && !!facts && (
+          <FactGraph facts={facts} spaces={spaces} />
+        )}
       </div>
     </Container>
   );

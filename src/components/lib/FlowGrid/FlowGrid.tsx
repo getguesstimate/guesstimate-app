@@ -52,6 +52,7 @@ type Props = {
   onCopy?(): void;
   onPaste?(): void;
   isItemEmpty(id: string): boolean;
+  size?: "small" | "normal";
 };
 
 // via https://stackoverflow.com/a/53837442
@@ -98,6 +99,7 @@ export const FlowGrid: React.FC<Props> = ({
   isItemEmpty,
   canvasState,
   hasItemUpdated,
+  size,
 }) => {
   const forceUpdate = useForceUpdate();
 
@@ -378,6 +380,7 @@ export const FlowGrid: React.FC<Props> = ({
         }}
         getRowHeight={() => getRowHeight(location.row)}
         showAutoFillToken={showAutoFillToken}
+        size={size}
       />
     );
   };

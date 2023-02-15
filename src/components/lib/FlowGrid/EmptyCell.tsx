@@ -9,7 +9,7 @@ type Props = {
 };
 
 export const EmptyCell = React.memo(
-  React.forwardRef<{ focus(): void }, Props>((props, ref) => {
+  React.forwardRef<{ focus(): void }, Props>(function EmptyCell(props, ref) {
     const divRef = useRef<HTMLDivElement | null>(null);
 
     useImperativeHandle(ref, () => ({

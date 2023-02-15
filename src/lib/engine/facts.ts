@@ -13,20 +13,21 @@ import { Guesstimator } from "~/lib/guesstimator/index";
 import { PropagationError } from "../propagation/errors";
 
 export type Fact = {
-  id: string;
+  id: number;
   category_id?: string | null;
   name: string;
   variable_name: string;
   expression: string;
   exported_from_id?: number | null;
   metric_id?: string | null;
+  // FIXME - should use `Simulation` type
   simulation: {
     sample: {
       values: number[];
       errors: PropagationError[];
     };
     stats: {
-      adjustedConfidenceInterval?: number[];
+      adjustedConfidenceInterval?: [number, number];
       mean?: number;
       stdev?: number;
       length?: number;
@@ -50,9 +51,6 @@ export const isExportedFromSpace = (f: Fact) =>
   _utils.allPropsPresent(f, "exported_from_id");
 
 export const length = (f: Fact) => _.get(f, "simulation.sample.values.length");
-export const mean = (f: Fact) => _.get(f, "simulation.stats.mean");
-export const adjustedConfidenceInterval = (f: Fact) =>
-  _.get(f, "simulation.stats.adjustedConfidenceInterval");
 
 export function hasRequiredProperties(f: Fact) {
   let requiredProperties = ["variable_name", "name"];
@@ -207,7 +205,7 @@ export function getRelevantFactsAndReformatGlobals(
   };
 }
 
-export function simulateFact(fact: Fact) {
+export async function simulateFact(fact: Fact) {
   const guesstimatorInput = { text: fact.expression, guesstimateType: null };
   const formatter = _matchingFormatter(guesstimatorInput);
   const guesstimator = new Guesstimator({

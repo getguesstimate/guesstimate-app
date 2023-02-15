@@ -1,235 +1,33 @@
 @import "./variables.css";
 
-/* src/components/calculators/style.css */
-@media only screen and (max-width: 767px) {
-  .calculator.calculator {
-    border-right: none;
-    border-left: none;
-    border: none;
-    font-size: 1.1em;
-    line-height: 1em;
-    padding: 1em;
-    margin: 0;
-    border-radius: 0;
-  }
-}
-
-.calculator {
-  .description {
-    font-size: 0.9em;
-    margin-top: 0.9em;
-    margin-bottom: 2em;
-    color: #666;
-
-    img {
-      max-width: 100%;
-    }
-  }
-
-  table.ui.table {
-    font-size: 0.7em;
-  }
-
-  .editor {
-    padding: 0.4rem 0.8rem;
-    background-color: $grey-6;
-    border: 1px solid #d4d4d4;
-    border-radius: 1px;
-    position: relative;
-  }
-
-  .inputs {
-    width: 100%;
-
-    .input {
-      .name {
-        margin-top: 0.3em;
-      }
-
-      .description {
-        font-size: 0.75em;
-        color: #666;
-      }
-
-      .status {
-        position: absolute;
-        right: 0.5em;
-        bottom: 0;
-        top: 0;
-        height: 1em;
-        margin: auto;
-
-        &.error {
-          color: rgb(206, 132, 132);
-        }
-
-        &.success {
-          color: #a9a8a8;
-        }
-      }
-    }
-  }
-
-  .calculateButton {
-    border-radius: 0.1em;
-    width: 100%;
-    font-size: 1.1em;
-    padding: 0.7em;
-    color: #444 !important;
-    background-color: #82e69d !important;
-  }
-
-  .result-divider {
-    border: none;
-    border-bottom: 2px dotted #e8e8e8;
-  }
-
-  .outputs {
-    .output:last-child {
-      padding-bottom: 0em;
-    }
-
-    .name {
-      font-weight: 800;
-    }
-
-    .result-section {
-      color: #666;
-      margin-left: 0.5rem;
-      font-size: 1.3em;
-      position: relative;
-
-      .result-value {
-        color: rgba(80, 80, 80, 1);
-        font-weight: 800;
-      }
-
-      .icon {
-        position: absolute;
-        right: -41px;
-        top: -4px;
-        background-color: #e0e8ea;
-        width: 26px;
-        height: 26px;
-        text-align: center;
-        padding-top: 1px;
-        border-radius: 1em;
-        font-size: 0.8em;
-        color: #88919c;
-        cursor: pointer;
-        &:hover {
-          background-color: #b9c7d0;
-          color: #5d6c7b;
-        }
-      }
-    }
-  }
-}
-
-.calculator.narrow {
-  margin: 0;
-  padding: 0;
-  border: none;
-  border-radius: 0;
-  font-size: 1em;
-
-  &.medium-font-size {
-    font-size: 1.1em;
-  }
-
-  .result-divider {
-    margin: 1em 0;
-  }
-
-  .calculateButton {
-    margin-top: 2em;
-  }
-
-  .inputs .input {
-    padding: 0.3em 0 0.3em 0;
-  }
-  .padded-section {
-    padding: 1em 1em;
-  }
-  .create-button-section {
-    margin-top: 2em;
-  }
-
-  .input,
-  .output {
-    a.ui.button {
-      padding: 0.3em 0.4em;
-      border-radius: 3px;
-    }
-  }
-
-  .outputs .output {
-    padding: 0.3em 0 0.3em 0;
-  }
-
-  .inputs h3,
-  .outputs h3 {
-    border-bottom: 2px solid #aaa;
-    padding-bottom: 0.5em;
-    margin-top: 2.5em;
-    font-weight: 800;
-    font-size: 1.2em;
-  }
-}
-
-.calculator.wide {
-  border: 1px solid rgba(200, 200, 200, 0.7);
-  border-radius: 0.2em;
-  background: white;
-  margin: 1em;
-  padding: 3em 3em;
-  color: rgba(80, 80, 80, 1);
-  font-size: 1.6em;
-  line-height: 1.2em;
-  .result-divider {
-    border-top: none;
-    margin: 0;
-  }
-  .inputs {
-    padding-bottom: 1em;
-    margin-top: 2em;
-  }
-  .outputs {
-    margin-top: 2em;
-    font-size: 1em;
-    margin-bottom: 1em;
-  }
-  .inputs .input {
-    padding: 0.8em 0 0.8em 0;
-  }
-  .outputs .output {
-    padding-bottom: 1.5em;
-
-    .stats-summary {
-      font-size: 0.63em;
-      margin-top: 0.8em;
-    }
-  }
-}
-
-/* src/components/distributions/editor/DataForm/style.css */
-.DataViewer--card .button-close {
-  font-size: 1.1em;
-  color: #ccc;
-}
-
-.DataViewer--body.edit .button:not(.primary) {
-  background: #c6c6c6;
-}
-
 /* src/components/distributions/editor/style.css */
 $flash-duration-sec: 0.4s;
 
-.Guesstimate .TextInput {
-  @mixin small-input;
+.TextInput {
+  background-color: rgba(0, 0, 0, 0);
+  box-shadow: none;
+  border: none;
+  border-radius: 1px;
+  outline: none;
+  resize: none;
+  transition: background-color 0.3s;
+  padding: 0.2em;
+  max-width: 100%;
+  &:focus {
+    outline: none;
+    box-shadow: none;
+    color: $black-3;
+  }
+
+  float: left;
+  width: 100%;
+  padding: 2px;
+  color: rgba(69, 98, 134, 0.83);
+  font-weight: 300;
+  line-height: 1.2em;
 }
 
-.Guesstimate .TextInput {
+.TextInput {
   line-height: 1.3em;
   font-size: 0.95em;
   border-radius: 2px;
@@ -269,10 +67,6 @@ $flash-duration-sec: 0.4s;
     border: 2px solid #0fb963;
     background-color: #c9e8c0;
   }
-}
-
-.Guesstimate .TextInput.default-value {
-  color: #a9a9a9;
 }
 
 .Guesstimate.large .TextInput {
@@ -387,267 +181,9 @@ $flash-duration-sec: 0.4s;
 }
 
 /* src/components/distributions/summary/style.css */
-.DistributionSummary {
-  font-size: 1.6em;
-}
-
-.DistributionSummary .mean {
-  float: left;
-  width: 100%;
-  line-height: 0.9em;
-}
-
-.DistributionSummary .UncertaintyRange {
-  font-size: 0.58em;
-  color: #555;
-  float: left;
-  margin-top: 2px;
-  margin-left: 0;
-}
-
 .sup {
   font-size: 0.6em;
   vertical-align: super;
-}
-
-/* src/components/facts/list/style.css */
-$grey-a1: rgb(231, 234, 236);
-$grey-a2: #607580;
-$blue-a1: #4a6a88;
-
-.NewFactButton {
-  background-color: $grey-a1;
-  border-radius: 2px;
-  width: 100%;
-  padding: 0.4em 0.7em;
-  transition: all 0.15s;
-  color: #767575;
-  font-size: 1.2em;
-  margin-top: 0.3em;
-  cursor: pointer;
-
-  .fa {
-    margin-right: 0.5em;
-  }
-
-  &:hover {
-    color: #1a5a2c;
-    background-color: rgba(89, 168, 114, 0.54);
-    transition: all 0.3s;
-  }
-}
-
-.Fact--outer {
-  border: 1px solid rgba(0, 0, 0, 0);
-  margin: 0.1em 0;
-
-  &:hover {
-    border-color: #d9dee2;
-  }
-
-  &.SMALL {
-    margin: 0.1em 0.6em;
-
-    .Fact {
-      flex: 1;
-      flex-direction: column-reverse;
-    }
-  }
-}
-
-.Fact {
-  background-color: white;
-  border-radius: 1px;
-  display: flex;
-  flex-direction: row;
-
-  &:not(:hover):not(.form) .ui.small.button {
-    display: none;
-  }
-
-  &:not(:hover):not(.form) .variable-name.variable-token {
-    background-color: rgba(0, 0, 0, 0);
-    color: #999;
-    transition: all 0.05s ease 0.05s;
-  }
-
-  &:hover:not(.form) .variable-name.variable-token {
-    background-color: #f3e5fc;
-    color: #603566;
-    transition: all 0.05s ease 0.05s;
-  }
-
-  .ui.small.button {
-    padding: 0.55em 1.1em;
-    border-radius: 2px;
-    margin-bottom: 3px;
-    margin-right: 0.5em;
-
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
-}
-
-.Fact.new.ui.form {
-  input,
-  textarea {
-    padding: 0.3em 0.4em;
-    border-radius: 2px;
-  }
-}
-
-.Fact .section-simulation {
-  min-width: 6em;
-  flex: 1.4;
-  position: relative;
-  padding: 0.3em 0 0.2em 0.4em;
-
-  .histogram {
-    left: 10%;
-    height: 35px;
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    z-index: 0;
-    .react-d3-histogram__bar rect {
-      fill: $grey-a1;
-    }
-  }
-
-  .simulation-summary {
-    float: left;
-    margin-top: 2px;
-    position: relative;
-    z-index: 1;
-    font-size: 0.88em;
-
-    .DistributionSummary .mean {
-      color: $grey-a2;
-    }
-    .DistributionSummary .UncertaintyRange {
-      color: $grey-999;
-    }
-  }
-}
-
-.Fact.form .section-simulation {
-  padding-right: 0.8em;
-  min-width: 10em;
-  flex: 2;
-}
-
-.Fact > .section-name {
-  float: left;
-  flex: 6;
-  margin-top: 0.05em;
-  padding: 0.3em 0.4em 0;
-  word-wrap: break-word;
-
-  .fact-name {
-    font-size: 1.2em;
-    color: #333;
-    float: left;
-    width: 100%;
-  }
-
-  .variable-name {
-    float: left;
-    line-height: 1.2em;
-    margin-top: 0.2em;
-
-    &.variable-token {
-      padding: 0 3px;
-    }
-
-    .prefix {
-      margin-right: 1px;
-      float: left;
-    }
-
-    .name {
-      float: left;
-    }
-  }
-}
-
-.Fact.form > .section-name {
-  .variable-name {
-    width: 100%;
-
-    .field {
-      position: relative;
-
-      .prefix {
-        color: $grey-999;
-        position: absolute;
-        left: 0.4em;
-        top: 0.4em;
-      }
-
-      input {
-        padding-left: 1.1em;
-      }
-    }
-  }
-
-  .description {
-    width: 100%;
-
-    textarea {
-      margin-top: 0.3em;
-      font-size: 0.9rem;
-    }
-  }
-
-  .category-select {
-    margin-top: 0.5em;
-    float: left;
-    width: 100%;
-
-    select {
-      width: 50%;
-    }
-  }
-
-  .actions {
-    margin-top: 1em;
-    margin-bottom: 0.3em;
-    float: left;
-  }
-}
-
-.Fact > .section-help {
-  float: left;
-  min-width: 5em;
-  padding: 0.4em 0;
-  flex: 1;
-
-  .button {
-    float: right;
-  }
-}
-
-.Fact > .section-exported {
-  padding: 0.4em 0.4em 0 0.4em;
-  flex: 0.3;
-  background-color: #e0e3e6;
-  float: left;
-  cursor: pointer;
-}
-
-.Fact > .section-exported .fa {
-  color: #a2acbb;
-  font-size: 1.1em;
-  margin-top: 0.1em;
-}
-
-.Fact > .section-exported:hover {
-  transition: all 0.15s;
-  background-color: #bac5cf;
-  .fa {
-    color: #73849c;
-  }
 }
 
 /* src/components/metrics/card/MetricCardViewSection/style.css */
@@ -656,12 +192,6 @@ $blue-a1: #4a6a88;
   display: flex;
   flex-direction: column;
   flex: 1;
-}
-
-.MetricCardViewSection .MetricTokenSection {
-  position: absolute;
-  right: 0;
-  top: 0;
 }
 
 .metricCard .MetricCardViewSection.hasErrors .error-message {
@@ -696,11 +226,6 @@ $blue-a1: #4a6a88;
   margin-top: 4px;
 }
 
-.metricCard .MetricCardViewSection .react-d3-histogram {
-  position: absolute;
-  z-index: -1;
-}
-
 .metricCard.input .MetricCardViewSection .DistributionSummary {
   color: #222;
 }
@@ -710,13 +235,6 @@ $blue-a1: #4a6a88;
   color: #111;
 }
 
-.MetricCardViewSection > .NameSection {
-  width: 100%;
-  padding: 5px 30px 0px 5px;
-  float: left;
-  flex: 0 0 auto;
-}
-
 .MetricCardViewSection > .StatsSection {
   width: 100%;
   float: left;
@@ -724,14 +242,6 @@ $blue-a1: #4a6a88;
   flex: 5;
   display: flex;
   flex-direction: column;
-}
-
-.MetricCardViewSection.anotherFunctionSelected > .StatsSection {
-  cursor: pointer;
-}
-
-.MetricCardViewSection:not(.anotherFunctionSelected) > .StatsSection {
-  cursor: move;
 }
 
 .MetricCardViewSection > .StatsSection .StatsSectionBody {
@@ -815,65 +325,14 @@ $blue-a1: #4a6a88;
   font-weight: 700;
 }
 
-/* src/components/metrics/card/name/style.css */
-.MetricName {
-  @mixin small-input;
-}
-
-.MetricName:not(.isClickable):hover {
-  background-color: $transparent-background;
-}
-
-.MetricName:not(.isClickable) {
-  cursor: pointer;
-}
-
-.output .MetricName {
-  font-weight: 500;
-}
-
-.titleView .MetricName {
-  color: #3c4f67;
-  font-weight: 600;
-}
-
-.MetricCardViewSection.display .MetricName {
-  overflow: hidden;
-}
-
-.metricCard.display .titleView .MetricName {
-  color: #3c3f44;
-}
-
-.output .MetricName .static {
-  font-weight: 500;
-}
-
-.titleView .MetricName .static {
-  color: #3c4f67;
-  font-weight: 600;
-}
-
-.MetricCardViewSection.display .MetricName .static {
-  overflow: hidden;
-}
-
-.metricCard.display .titleView .MetricName .static {
-  color: #3c3f44;
-}
-
 /* src/components/metrics/card/style.css */
 .metricCard {
-  border-radius: 1px;
   max-width: 30em;
   white-space: normal;
   z-index: 0;
   font-size: 1.25em;
   position: relative;
   font-weight: 300;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
   overflow: hidden;
 }
 
@@ -973,108 +432,9 @@ $blue-a1: #4a6a88;
   display: block;
 }
 
-.MetricToken--Corner-Triangle {
-  height: 0;
-  width: 0;
-  border-top: 36px solid #9fabb3;
-  border-left: 36px solid transparent;
-  position: absolute;
-  top: 0;
-  right: 0;
-}
-
-.MetricToken--Corner-Item {
-  position: absolute;
-  top: 1px;
-  right: 3px;
-  color: white;
-  font-size: 1.1em;
-}
-
 /* src/components/metrics/modal/style.css */
-.metricModal {
-  background-color: rgba(240, 240, 240, 1);
-  margin-bottom: 2em;
-}
-
-.metricModal hr {
-  border: none;
-  border-top: 1px solid #ddd;
-}
-
-.metricModal h1 {
-  margin: 0;
-  color: #444;
-  font-weight: 600;
-  font-size: 2.2em;
-}
-
-.metricModal h3 {
-  color: #999;
-  font-size: 1.4em;
-  font-weight: 400;
-}
-
-.metricModal .section {
-  padding: 2em 1em 0;
-  margin: 2em 0;
-}
-
-.metricModal .react-d3-histogram .react-d3-histogram__bar rect {
-  fill: rgb(146, 169, 184);
-}
-
-.metricModal .mean .DistributionSummary {
-  color: #000;
-  font-size: 2.3em;
-}
-
-.metricModal .mean .DistributionSummary .stdev {
-  color: #666;
-}
-
-.metricModal .section-small {
-  background-color: white;
-  border-radius: 3px;
-  padding: 0.5em;
-  margin: 1em 0;
-}
-
-.metricModal .distributionSection {
-  margin: 0.5em 0 0em;
-  min-height: 10em;
-  position: relative;
-}
-
 .metricModal .Guesstimate.large input {
   background-color: $grey-eee;
-}
-
-.metricModal .modal-action.button {
-  background-color: #ddd;
-  border-radius: 0.3px;
-  padding: 0.25em 0.7em;
-  color: #555;
-  font-size: 1.1em;
-  &:hover {
-    background-color: #bbb;
-  }
-}
-
-/* src/components/organizations/show/facts/style.css */
-.FactGraph {
-  font-size: 0.8em;
-  display: flex;
-  flex-align: center;
-  justify-content: center;
-}
-.FactGraph .FlowGridCell.FlowGridCell {
-  width: 150px;
-  min-width: 150px;
-}
-
-.FactGraph .FlowGridCell.hovered .FlowGridEmptyCell {
-  background-color: none;
 }
 
 /* src/components/pages/base/style.css */
@@ -1089,186 +449,6 @@ $blue-a1: #4a6a88;
 
 .PageBase h1 {
   color: $blue-1;
-}
-
-/* src/components/plans/index/style.css */
-$main-grey: #4e4e4e;
-
-.PlanIndex {
-  color: $main-grey;
-  font-family: "Lato";
-
-  .header {
-    width: 100%;
-    text-align: center;
-    margin-bottom: 3em;
-    h1 {
-      font-size: 2.5em;
-      font-weight: 500;
-    }
-    h2 {
-      font-weight: 300;
-    }
-  }
-
-  .portal-message-container {
-    width: 100%;
-    padding: 1em 18em;
-  }
-
-  .portal-message {
-    background-color: rgba(255, 255, 255, 0.8);
-    width: 100%;
-    padding: 1em;
-    color: $main-grey;
-    border-radius: 3px;
-    text-align: center;
-
-    h2 {
-      font-weight: 500;
-      margin-bottom: 1em;
-    }
-  }
-
-  .questions {
-    margin-top: 8em;
-    color: $main-grey;
-
-    .question {
-      margin-bottom: 5em;
-      padding: 0 3rem;
-
-      h3 {
-        font-size: 1.5em;
-      }
-
-      p {
-        font-size: 1.15em;
-      }
-    }
-  }
-}
-
-.PlanCard {
-  background-color: white;
-  border-radius: 0.3em;
-  border: 1px solid #d8d8d8;
-  text-align: center;
-  padding: 1.5em 0;
-  margin: 3em 0;
-  font-family: "Lato";
-  color: #888;
-  font-size: 1.5em;
-  font-weight: 300;
-  width: 15em;
-  margin-right: 3em;
-  float: left;
-  &:last-child {
-    margin-right: 0;
-  }
-
-  h2 {
-    margin-bottom: 2em;
-    color: $main-grey;
-    margin-bottom: 1.5em;
-    font-weight: 500;
-    font-size: 1.5em;
-  }
-
-  li {
-    margin-bottom: 1em;
-  }
-
-  li strong {
-    color: $blue-1;
-  }
-
-  ul {
-    margin-bottom: 3em;
-    list-style: none;
-    padding: 0;
-    width: 100%;
-  }
-
-  .promotion {
-    color: #1bb732;
-    font-weight: 500;
-    margin-bottom: 1em;
-  }
-
-  .PlanCard-Cost {
-    padding-bottom: 1em;
-    min-height: 5.5em;
-
-    sup {
-      top: -0.7em;
-      font-size: 1.2em;
-      font-weight: 800;
-      color: $main-grey;
-    }
-
-    .number {
-      font-size: 2.5em;
-      color: $main-grey;
-      font-weight: 800;
-    }
-
-    .per-month {
-      font-weight: 500;
-      margin-top: 0.75em;
-      font-size: 1em;
-      line-height: 1.3em;
-    }
-
-    .dollar-sign {
-      font-size: 0.8em;
-      margin-top: -5em;
-    }
-  }
-}
-
-/* src/components/simulations/histogram/style.css */
-.react-d3-histogram {
-  bottom: -20px;
-}
-
-.ReactModal__Overlay--after-open .react-d3-histogram__tick text {
-  fill: #666;
-  font-size: 13px;
-  font-weight: 600;
-}
-
-.react-d3-histogram svg {
-  width: 100%;
-}
-
-.react-d3-histogram__bar rect {
-  fill: rgb(197, 224, 243);
-  shape-rendering: crispEdges;
-}
-
-.react-d3-histogram__bar text {
-  fill: none;
-}
-
-.react-d3-histogram__tick text {
-  font-size: 8px;
-  fill: none;
-}
-
-.metric:hover .react-d3-histogram__tick text {
-  fill: #aaa;
-}
-
-.react-d3-histogram__x-axis path,
-.react-d3-histogram__x-axis line {
-  fill: none;
-  shape-rendering: crispEdges;
-}
-
-.react-d3-histogram__hoverbar {
-  stroke: rgba(14, 44, 64, 0.46);
-  stroke-dasharray: 8, 5;
 }
 
 /* src/components/simulations/stat_table/style.css */
@@ -1401,17 +581,6 @@ table.MetricStatTable td {
 
 .ComponentEditor .Component {
   padding: 5px;
-}
-
-/* src/components/utility/buttons/style.css */
-.button-close {
-  color: #888;
-  cursor: pointer;
-  font-size: 1.9em;
-}
-
-.button-close:hover {
-  color: #666;
 }
 
 /* src/components/utility/card/style.css */
@@ -1580,21 +749,6 @@ table.MetricStatTable td {
   background-color: $blue-2;
 }
 
-/* src/components/utility/container/style.css */
-.GeneralContainer {
-  margin-top: 4em;
-  margin-bottom: 2em;
-  display: inline-block;
-  width: 100%;
-}
-
-@media only screen and (max-width: 767px) {
-  .GeneralContainer {
-    margin-top: 2em;
-    margin-bottom: 1em;
-  }
-}
-
 /* src/routes/home/style.css */
 .wistia_responsive_padding {
   padding: 56.25% 0 0 0;
@@ -1636,19 +790,6 @@ table.MetricStatTable td {
   }
 }
 
-/* src/components/spaces/show/header.css */
-.header .saveMessage {
-  float: left;
-  margin-top: 8px;
-  color: $grey-1;
-  padding: 0 15px;
-  min-width: 100px;
-}
-
-.header .saveMessage .label {
-  margin-top: -10px;
-}
-
 /* src/routes/main.css */
 .container-fluid.full-width {
   width: 100%;
@@ -1659,10 +800,6 @@ body {
 }
 
 #__next {
-  height: 100%;
-}
-
-.navHelper {
   height: 100%;
 }
 
@@ -1697,4 +834,225 @@ body.remove-elev #_elev_io {
 
 .public-DraftEditor-content:focus {
   color: $black-3;
+}
+
+/* FlowGrid.css */
+.FlowGrid {
+  position: relative;
+  margin-left: 1em;
+  margin-top: 1em;
+
+  .canvas {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.FlowGridRow {
+  display: flex;
+  align-items: stretch;
+  flex-direction: row;
+}
+
+.FlowGridCell {
+  display: flex;
+  flex: 1;
+  min-height: 60px;
+}
+
+.FlowGrid.withLines .FlowGridCell {
+  border-right: 1px dashed rgba(0, 25, 95, 0.09);
+  border-bottom: 1px dashed rgba(0, 25, 95, 0.09);
+}
+
+/* draggable by react-dnd */
+.FlowGridCell > div {
+  display: grid;
+  place-items: stretch;
+}
+
+.FlowGridFilledCell {
+  display: grid;
+  place-items: stretch;
+  width: 100%;
+  padding: 3px;
+  outline: none;
+}
+
+.showEdges .FlowGridFilledCell {
+  padding: 8px;
+}
+
+.FlowGridEmptyCell {
+  width: 100%;
+  display: flex;
+  width: 100%;
+}
+
+.FlowGrid.isSelectable {
+  .FlowGridEmptyCell {
+    cursor: pointer;
+  }
+
+  .FlowGridCell.hovered .FlowGridEmptyCell {
+    background-color: rgba(79, 152, 197, 0.25);
+  }
+
+  .FlowGridCell.hovered.hasItem .FlowGridFilledCell {
+    background-color: rgba(75, 138, 177, 0.3);
+    border-radius: 1px;
+  }
+}
+
+.FlowGridEmptyCell:focus {
+  outline: none;
+}
+
+.IsOver .FlowGridEmptyCell,
+.IsOver .isDragging {
+  transition: background-color 0.2s ease;
+  background-color: rgba(127, 149, 160, 0.81);
+}
+
+svg.edge {
+  position: absolute;
+  top: 0;
+  z-index: 0;
+}
+
+svg.edge path.basic-arrow {
+  stroke-linecap: "round";
+  stroke-linejoin: "round";
+  stroke-dasharray: "5,5";
+  stroke-width: 3px;
+}
+
+.arrow {
+  stroke-width: 0;
+}
+
+$default: #899eb6;
+$unconnected: rgba(77, 121, 175, 0.06);
+$unconnected-head: rgba(77, 121, 175, 0.06);
+$ancestor: rgb(149, 182, 178);
+$ancestor-1-degree: rgb(67, 121, 107);
+$descendant: rgb(158, 172, 188);
+$descendant-1-degree: rgb(86, 104, 125);
+$errors: #b59893;
+$screenshot: rgb(128, 154, 185);
+
+svg.edge path.basic-arrow.unconnected {
+  stroke: $unconnected;
+}
+.arrow.unconnected {
+  fill: $unconnected-head;
+}
+
+svg.edge path.basic-arrow.default {
+  stroke: $default;
+}
+.arrow.default {
+  fill: $default;
+}
+
+.screenshot svg.edge path.basic-arrow.default {
+  stroke: $screenshot;
+}
+.screenshot .arrow.default {
+  fill: $screenshot;
+}
+
+svg.edge path.basic-arrow.hasErrors.hasErrors {
+  stroke: $errors;
+}
+.arrow.hasErrors.hasErrors {
+  fill: $errors;
+}
+
+svg.edge path.basic-arrow.ancestor {
+  stroke: $ancestor;
+}
+.arrow.ancestor {
+  fill: $ancestor;
+}
+
+svg.edge path.basic-arrow.ancestor-1-degree {
+  stroke: $ancestor-1-degree;
+}
+.arrow.ancestor-1-degree {
+  fill: $ancestor-1-degree;
+}
+
+svg.edge path.basic-arrow.descendant {
+  stroke: $descendant;
+}
+.arrow.descendant {
+  fill: $descendant;
+}
+
+svg.edge path.basic-arrow.descendant-1-degree {
+  stroke: $descendant-1-degree;
+}
+.arrow.descendant-1-degree {
+  fill: $descendant-1-degree;
+}
+
+.FlowGrid-Container {
+  float: left;
+}
+
+.FlowGrid .Region {
+  position: absolute;
+  border-radius: 3px;
+}
+
+.FlowGrid .Region.selected {
+  background: rgba(153, 186, 208, 0.87);
+}
+
+.FlowGrid .Region.fill {
+  border: 1px dashed rgba(0, 0, 0, 0.4);
+}
+
+.FlowGrid .Region.copied {
+  border: 2px dashed rgba(7, 115, 167, 0.75);
+  background: rgba(153, 186, 208, 0.17);
+}
+
+.FlowGrid .Region.analyzed {
+  background: linear-gradient(
+    45deg,
+    rgba(72, 187, 90, 0.66),
+    rgba(120, 203, 149, 0.65)
+  );
+  border-radius: 0;
+}
+
+.FlowGridCell {
+  position: relative;
+}
+
+.FlowGridCell .AutoFillToken--outer {
+  position: absolute;
+  right: -1.25em;
+  bottom: -1.25em;
+  z-index: 2;
+  border-radius: 0.5em;
+  padding: 0.9em;
+  width: 2.5em;
+  height: 2.5em;
+  transition: padding 0.05s;
+}
+
+.FlowGridCell .AutoFillToken--outer:hover {
+  padding: 0.5em;
+  transition: padding 0.05s;
+}
+
+.FlowGridCell .AutoFillToken {
+  cursor: crosshair;
+  height: 100%;
+  width: 100%;
+  border-radius: 0.1em;
+  background: rgb(90, 141, 177);
 }

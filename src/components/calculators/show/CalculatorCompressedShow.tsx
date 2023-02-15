@@ -14,13 +14,7 @@ export const CalculatorCompressedShow: React.FC<{
   );
 
   if (selectedProps.calculator) {
-    return (
-      <CalculatorShow
-        {...selectedProps}
-        startFilled={startFilled}
-        classes={["narrow", "medium-font-size"]}
-      />
-    );
+    return <CalculatorShow {...selectedProps} startFilled={startFilled} />;
   } else {
     return null;
   }

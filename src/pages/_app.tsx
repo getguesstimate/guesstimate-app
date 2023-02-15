@@ -12,7 +12,6 @@ import "ionicons/dist/css/ionicons.css";
 import "../styles/global.css";
 
 import "../../semantic/dist/semantic.css";
-import "../styles/FlowGrid.css";
 import "../styles/legacyStyles.css";
 import "../styles/theme.css";
 

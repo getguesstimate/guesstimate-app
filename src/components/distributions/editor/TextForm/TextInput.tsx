@@ -6,8 +6,11 @@ import { connect } from "react-redux";
 import {
   CompositeDecorator,
   ContentState,
+  DraftDecorator,
+  DraftHandleValue,
   Editor,
   EditorState,
+  getDefaultKeyBinding,
   Modifier,
 } from "draft-js";
 
@@ -18,18 +21,19 @@ import {
   HANDLE_REGEX,
   resolveToSelector,
 } from "~/lib/engine/facts";
-import { getClassName, or } from "~/lib/engine/utils";
+import { or } from "~/lib/engine/utils";
 
-import { AppDispatch, RootState } from "~/modules/store";
+import clsx from "clsx";
 import {
   formatData,
   isData,
 } from "~/lib/guesstimator/formatter/formatters/Data";
+import { AppDispatch, RootState } from "~/modules/store";
 
-function findWithRegex(baseRegex, contentBlock, callback) {
+function findWithRegex(baseRegex: RegExp, contentBlock, callback) {
   const text = contentBlock.getText();
   const regex = new RegExp(baseRegex.source, "g");
-  let matchArr, start;
+  let matchArr: ReturnType<typeof regex.exec>, start: number | undefined;
   while ((matchArr = regex.exec(text)) !== null) {
     start = matchArr.index;
     callback(start, start + matchArr[0].length);
@@ -48,6 +52,7 @@ const stylizedSpan =
         {props.children}
       </span>
     );
+
 const Fact = stylizedSpan("fact input");
 const Suggestion = stylizedSpan("suggestion");
 const ValidInput = stylizedSpan("valid input");
@@ -68,8 +73,8 @@ const positionDecorator = (
 
 type Props = {
   value: string;
-  validInputs: any;
-  errorInputs: any;
+  validInputs: string[];
+  errorInputs: string[];
   onChangeData(data: number[]): void;
   onChange(text: string): void;
   onTab(shifted: boolean): void;
@@ -80,11 +85,16 @@ type Props = {
   organizationId?: string | number;
 } & { dispatch: AppDispatch } & { suggestion: string };
 
-export class UnconnectedTextInput extends Component<Props> {
+type State = {
+  editorState: EditorState;
+  isFlashing: boolean;
+};
+
+export class UnconnectedTextInput extends Component<Props, State> {
   editorRef: React.RefObject<Editor>;
   clickHandler: (e: CustomEvent) => void;
 
-  state = {
+  state: State = {
     editorState: EditorState.createWithContent(
       ContentState.createFromText(this.props.value || ""),
       new CompositeDecorator(this.decoratorList())
@@ -100,6 +110,34 @@ export class UnconnectedTextInput extends Component<Props> {
     };
   }
 
+  componentDidUpdate(prevProps: Props, prevState: State) {
+    if (
+      this.props.suggestion !== prevProps.suggestion &&
+      this.nextWord() === prevProps.suggestion
+    ) {
+      if (_.isEmpty(this.props.suggestion)) {
+        this.deleteOldSuggestion(prevProps.suggestion);
+      } else {
+        this.addSuggestion();
+      }
+    } else if (
+      !_.isEqual(prevProps.validInputs, this.props.validInputs) ||
+      !_.isEqual(prevProps.errorInputs, this.props.errorInputs) ||
+      !_.isEqual(prevState.isFlashing, this.state.isFlashing)
+    ) {
+      setTimeout(() => {
+        this.updateDecorators();
+      }, 1);
+    }
+  }
+
+  componentWillUnmount() {
+    const selection = this.state.editorState.getSelection();
+    if (selection && selection.getHasFocus()) {
+      this.handleBlur();
+    }
+  }
+
   factRegex() {
     const baseRegex = this.props.canUseOrganizationFacts
       ? HANDLE_REGEX
@@ -107,11 +145,11 @@ export class UnconnectedTextInput extends Component<Props> {
     return new RegExp(baseRegex, "g"); // We always want a fresh, global regex.
   }
 
-  decoratorList(extraDecorators = []) {
+  decoratorList(extraDecorators: DraftDecorator[] = []) {
     const { validInputs, errorInputs } = this.props;
 
     const fact_regex = this.factRegex();
-    const fact_decorators = [
+    const fact_decorators: DraftDecorator[] = [
       {
         strategy: (contentBlock, callback) => {
           findWithRegex(fact_regex, contentBlock, callback);
@@ -144,14 +182,14 @@ export class UnconnectedTextInput extends Component<Props> {
   }
 
   focus() {
-    this.editorRef.current.focus();
+    this.editorRef.current?.focus();
   }
 
-  addText(text, maintainCursorPosition = true, replaceLength = 0) {
+  addText(text: string, maintainCursorPosition = true, replaceLength = 0) {
     const selection = this.state.editorState.getSelection();
     const content = this.state.editorState.getCurrentContent();
 
-    let baseEditorState;
+    let baseEditorState: EditorState;
     if (replaceLength > 0) {
       const replaceSelection = selection.merge({
         anchorOffset: this.cursorPosition(),
@@ -160,13 +198,13 @@ export class UnconnectedTextInput extends Component<Props> {
       baseEditorState = EditorState.push(
         this.state.editorState,
         Modifier.replaceText(content, replaceSelection, text),
-        "paste"
+        "insert-characters" // TODO - is this correct?
       );
     } else {
       baseEditorState = EditorState.push(
         this.state.editorState,
         Modifier.insertText(content, selection, text),
-        "paste"
+        "insert-characters" // TODO - is this correct?
       );
     }
 
@@ -179,21 +217,26 @@ export class UnconnectedTextInput extends Component<Props> {
     return EditorState.forceSelection(baseEditorState, newSelectionState);
   }
 
-  stripExtraDecorators(editorState) {
+  stripExtraDecorators(editorState: EditorState) {
     return this.withExtraDecorators(editorState, []);
   }
-  withExtraDecorators(editorState, extraDecorators) {
+
+  withExtraDecorators(
+    editorState: EditorState,
+    extraDecorators: DraftDecorator[]
+  ) {
     return EditorState.set(editorState, {
       decorator: new CompositeDecorator(this.decoratorList(extraDecorators)),
     });
   }
+
   updateDecorators() {
     this.setState({
       editorState: this.withExtraDecorators(this.state.editorState, []),
     });
   }
 
-  deleteOldSuggestion(oldSuggestion) {
+  deleteOldSuggestion(oldSuggestion: string) {
     const freshEditorState = this.addText("", true, oldSuggestion.length);
     this.setState({ editorState: this.stripExtraDecorators(freshEditorState) });
 
@@ -232,34 +275,6 @@ export class UnconnectedTextInput extends Component<Props> {
     });
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (
-      this.props.suggestion !== prevProps.suggestion &&
-      this.nextWord() === prevProps.suggestion
-    ) {
-      if (_.isEmpty(this.props.suggestion)) {
-        this.deleteOldSuggestion(prevProps.suggestion);
-      } else {
-        this.addSuggestion();
-      }
-    } else if (
-      !_.isEqual(prevProps.validInputs, this.props.validInputs) ||
-      !_.isEqual(prevProps.errorInputs, this.props.errorInputs) ||
-      !_.isEqual(prevState.isFlashing, this.state.isFlashing)
-    ) {
-      setTimeout(() => {
-        this.updateDecorators();
-      }, 1);
-    }
-  }
-
-  componentWillUnmount() {
-    const selection = this.state.editorState.getSelection();
-    if (selection && selection.getHasFocus()) {
-      this.handleBlur();
-    }
-  }
-
   cursorPosition(editorState = this.state.editorState) {
     return editorState.getSelection().getFocusOffset();
   }
@@ -275,10 +290,10 @@ export class UnconnectedTextInput extends Component<Props> {
     return this.text(editorState)
       .slice(0, this.cursorPosition(editorState))
       .split(/[^\w@#\.]/)
-      .pop();
+      .pop() as string; // split always returns a non-empty array
   }
 
-  fetchSuggestion(editorState) {
+  fetchSuggestion(editorState: EditorState) {
     const prevWord = this.prevWord(editorState);
     if (
       editorState.getSelection().isCollapsed() &&
@@ -294,20 +309,11 @@ export class UnconnectedTextInput extends Component<Props> {
     }
   }
 
-  changeData(text) {
+  changeData(text: string) {
     this.props.onChangeData(formatData(text));
   }
 
-  handlePastedText(text) {
-    if (text === this.props.value || !isData(text)) {
-      return false;
-    }
-
-    this.changeData(text);
-    return true;
-  }
-
-  onChange(editorState) {
+  handleChange(editorState: EditorState) {
     this.fetchSuggestion(editorState);
     this.setState({ editorState });
 
@@ -315,38 +321,6 @@ export class UnconnectedTextInput extends Component<Props> {
     if (text !== this.props.value) {
       isData(text) ? this.changeData(text) : this.props.onChange(text);
     }
-  }
-
-  acceptSuggestionIfAppropriate() {
-    if (
-      !_.isEmpty(this.props.suggestion) &&
-      this.nextWord() === this.props.suggestion
-    ) {
-      this.acceptSuggestion();
-      return true;
-    }
-    return false;
-  }
-
-  handleTab(e: React.KeyboardEvent) {
-    if (!this.acceptSuggestionIfAppropriate()) {
-      this.props.onTab(e.shiftKey);
-    }
-    e.preventDefault();
-  }
-
-  acceptSuggestion() {
-    const suffix =
-      this.prevWord().startsWith("@") && !this.prevWord().includes(".")
-        ? "."
-        : "";
-    const cursorPosition = this.cursorPosition();
-    const addedEditorState = this.addText(
-      `${this.props.suggestion}${suffix}`,
-      false,
-      this.props.suggestion.length
-    );
-    this.onChange(this.stripExtraDecorators(addedEditorState));
   }
 
   flash() {
@@ -357,13 +331,8 @@ export class UnconnectedTextInput extends Component<Props> {
   }
 
   functionMetricClicked(readableId: string) {
-    this.onChange(this.addText(readableId, false));
+    this.handleChange(this.addText(readableId, false));
     this.flash();
-  }
-
-  handleFocus() {
-    window.addEventListener("functionMetricClicked", this.clickHandler);
-    this.props.onFocus();
   }
 
   handleBlur() {
@@ -371,37 +340,96 @@ export class UnconnectedTextInput extends Component<Props> {
     this.props.onBlur();
   }
 
-  handleReturn(e: React.KeyboardEvent) {
-    if (!this.acceptSuggestionIfAppropriate()) {
-      this.props.onReturn(e.shiftKey);
-    }
-    return "handled";
-  }
-
   render() {
     const { isFlashing, editorState } = this.state;
 
-    const className = getClassName(
-      "TextInput",
-      isFlashing ? "flashing" : null
-      // hasErrors ? "hasErrors" : null
-    );
+    const acceptSuggestionIfAppropriate = () => {
+      if (
+        !_.isEmpty(this.props.suggestion) &&
+        this.nextWord() === this.props.suggestion
+      ) {
+        acceptSuggestion();
+        return true;
+      }
+      return false;
+    };
+
+    const acceptSuggestion = () => {
+      const suffix =
+        this.prevWord().startsWith("@") && !this.prevWord().includes(".")
+          ? "."
+          : "";
+      const cursorPosition = this.cursorPosition();
+      const addedEditorState = this.addText(
+        `${this.props.suggestion}${suffix}`,
+        false,
+        this.props.suggestion.length
+      );
+      this.handleChange(this.stripExtraDecorators(addedEditorState));
+    };
+
+    const handleReturn = (e: React.KeyboardEvent): DraftHandleValue => {
+      if (!acceptSuggestionIfAppropriate()) {
+        this.props.onReturn(e.shiftKey);
+      }
+      return "handled";
+    };
+
+    const keyBindingFn = (e: React.KeyboardEvent): string | null => {
+      if (e.key === "Tab") {
+        return e.shiftKey ? "guesstimate-shifted-tab" : "guesstimate-tab";
+      }
+      return getDefaultKeyBinding(e);
+    };
+
+    const handleKeyCommand = (command: string): DraftHandleValue => {
+      if (
+        command === "guesstimate-tab" ||
+        command === "guesstimate-shifted-tab"
+      ) {
+        if (!acceptSuggestionIfAppropriate()) {
+          this.props.onTab(command === "guesstimate-shifted-tab");
+        }
+        return "handled";
+      }
+      return "not-handled";
+    };
+
+    const handleFocus = () => {
+      window.addEventListener("functionMetricClicked", this.clickHandler);
+      this.props.onFocus();
+    };
+
+    const handlePastedText = (text: string): DraftHandleValue => {
+      if (text === this.props.value || !isData(text)) {
+        return "not-handled";
+      }
+
+      this.changeData(text);
+      return "handled";
+    };
+
     return (
       <div
-        className={className}
+        className={clsx(
+          "TextInput",
+          isFlashing && "flashing"
+          // hasErrors && "hasErrors",
+        )}
         onClick={this.focus.bind(this)}
         onKeyDown={(e) => {
           e.stopPropagation();
         }}
       >
         <Editor
-          onFocus={this.handleFocus.bind(this)}
+          onFocus={handleFocus}
           editorState={editorState}
-          handleReturn={this.handleReturn.bind(this)}
-          handlePastedText={this.handlePastedText.bind(this)}
-          onTab={this.handleTab.bind(this)}
+          handleReturn={handleReturn}
+          handlePastedText={handlePastedText}
+          keyBindingFn={keyBindingFn}
+          handleKeyCommand={handleKeyCommand}
           onBlur={this.handleBlur.bind(this)}
-          onChange={this.onChange.bind(this)}
+          onChange={this.handleChange.bind(this)}
           ref={this.editorRef}
           placeholder="value"
         />

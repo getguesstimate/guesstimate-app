@@ -20,7 +20,10 @@ export function addMetric(item): AppThunk {
       (m) => m.space === item.space
     );
     const existingReadableIds = spaceMetrics.map((m) => m.readableId);
-    let newItem = Object.assign({}, item, e.metric.create(existingReadableIds));
+    const newItem = {
+      ...item,
+      ...e.metric.create(existingReadableIds),
+    };
 
     dispatch({ type: "ADD_METRIC", item: newItem });
   };
@@ -74,6 +77,7 @@ export function removeSelectedMetrics(spaceId: number): AppThunk {
 }
 
 export function changeMetric(item): AppThunk {
+  console.log({ change: item });
   return (dispatch, getState) => {
     dispatch({ type: "CHANGE_METRIC", item });
     registerGraphChange(dispatch, findSpaceId(getState, item.id));

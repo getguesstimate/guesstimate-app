@@ -49,7 +49,7 @@ export const MetricSidebar: React.FC<Props> = ({
   showAnalysis,
   isAnalyzedMetric,
 }) => (
-  <div className="absolute top-1 -right-[163px] w-[160px] z-10">
+  <div>
     <MetricSidebarItem
       icon={<Icon name="expand" />}
       name="Expand"

@@ -54,11 +54,11 @@ const questions = [
 
 export const PlanIndexQuestions: React.FC = () => {
   return (
-    <div className="questions row">
+    <div className="grid grid-cols-3 gap-x-20 gap-y-16">
       {questions.map((q) => (
-        <div className="col-sm-4 question" key={q.header}>
-          <h3>{q.header}</h3>
-          {q.body}
+        <div className="text-grey-main" key={q.header}>
+          <h3 className="text-xl">{q.header}</h3>
+          <div>{q.body}</div>
         </div>
       ))}
     </div>

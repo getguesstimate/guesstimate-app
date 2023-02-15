@@ -5,31 +5,34 @@ import { DistributionSelector } from "./DistributionSelector";
 import { GuesstimateTypeIcon } from "./GuesstimateTypeIcon";
 import { TextInput, UnconnectedTextInput } from "./TextInput";
 
+import { DenormalizedMetric } from "~/lib/engine/metric";
 import { Guesstimator } from "~/lib/guesstimator/index";
+import { changeMetricClickMode } from "~/modules/canvas_state/actions";
+import { useAppDispatch } from "~/modules/hooks";
+import { Guesstimate } from "~/modules/guesstimates/reducer";
 
 type Props = {
-  guesstimate: any;
-  inputMetrics: any;
+  guesstimate: Guesstimate;
+  inputMetrics: DenormalizedMetric[];
   onChangeInput(text: string): void;
-  onChangeClickMode(mode?: string): void; // TODO - enum?
   onAddData(data: number[]): void;
   onSave(): void;
-  size: string;
+  size: "large" | "small";
   organizationId?: string | number;
   canUseOrganizationFacts: boolean;
   onAddDefaultData(): void;
   onChangeGuesstimateType(type: string): void;
   onTab(shifted: boolean): void;
   onReturn(shifted: boolean): void;
-  //   onChangeClickMode: PropTypes.func,
-  //   onFocus: PropTypes.func,
 };
 
 export const TextForm = React.forwardRef<{ focus(): void }, Props>(
-  (props, ref) => {
+  function TextForm(props, ref) {
     const inputRef = useRef<UnconnectedTextInput | null>(null);
     const [showDistributionSelector, setShowDistributionSelector] =
       useState(false);
+
+    const dispatch = useAppDispatch();
 
     useImperativeHandle(ref, () => ({
       focus() {
@@ -43,7 +46,7 @@ export const TextForm = React.forwardRef<{ focus(): void }, Props>(
     } = props;
 
     const handleBlur = () => {
-      props.onChangeClickMode();
+      dispatch(changeMetricClickMode("DEFAULT"));
       props.onSave();
     };
 
@@ -54,7 +57,7 @@ export const TextForm = React.forwardRef<{ focus(): void }, Props>(
 
     const flagMetricAsClicked = () => {
       if (props.guesstimate.guesstimateType === "FUNCTION") {
-        props.onChangeClickMode("FUNCTION_INPUT_SELECT");
+        dispatch(changeMetricClickMode("FUNCTION_INPUT_SELECT"));
       }
     };
 
@@ -102,7 +105,7 @@ export const TextForm = React.forwardRef<{ focus(): void }, Props>(
         <div>
           <div className="flex gap-4 items-center">
             <TextInput
-              value={input}
+              value={input || ""}
               validInputs={validInputReadableIds}
               errorInputs={errorInputReadableIds}
               onReturn={onReturn}
@@ -118,7 +121,7 @@ export const TextForm = React.forwardRef<{ focus(): void }, Props>(
 
             {shouldDisplayType && (
               <GuesstimateTypeIcon
-                guesstimateType={guesstimateType}
+                guesstimateType={guesstimateType || ""}
                 toggleDistributionSelector={() =>
                   setShowDistributionSelector(!showDistributionSelector)
                 }
@@ -131,7 +134,7 @@ export const TextForm = React.forwardRef<{ focus(): void }, Props>(
               <DistributionSelector
                 disabledTypes={isLognormalValid ? [] : ["LOGNORMAL"]}
                 onSubmit={onChangeGuesstimateType}
-                selected={guesstimateType}
+                selected={guesstimateType || ""}
               />
             </div>
           )}

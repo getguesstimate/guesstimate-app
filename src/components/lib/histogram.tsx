@@ -1,8 +1,9 @@
 import _ from "lodash";
-import React, { Component } from "react";
+import React, { useImperativeHandle, useMemo, useRef } from "react";
 
 import d3 from "d3";
 
+import useSize from "@react-hook/size";
 import { numberShow } from "~/lib/numberShower/numberShower";
 
 function getYScale(data, height: number) {
@@ -75,112 +76,94 @@ function filterLowDensityPoints(inputData: number[], cutOffRatio: number) {
     : inputData.slice(leftIndex, rightIndex);
 }
 
+export type HistogramTheme = "dark" | "normal" | "light";
+
 // data prop must be sorted.
 type Props = {
-  top?: number;
-  right?: number;
-  bottom?: number;
-  left?: number;
-  cutOffRatio?: number;
-  width: number;
-  height: number;
   bins?: number;
   data: number[];
-  onChangeXScale?(arg: any): void;
   hoveredXCoord?: number;
   allowHover?: boolean;
+  cutOffRatio?: number;
+  showTicks?: boolean;
+  theme?: HistogramTheme;
 };
 
-export class Histogram extends Component<Props> {
-  static defaultProps = {
-    top: 20,
-    bottom: 0,
-    bins: 40,
-    left: 0,
-    right: 0,
-    cutOffRatio: 0, // By default cut off nothing.
-  };
-
-  state = {
-    xScale: (e: number) => e,
-    yScale: (e: number) => e,
-    histogramData: [],
-  };
-
-  componentWillReceiveProps(nextProps: Props) {
-    const { bins, data, height, cutOffRatio = 0, onChangeXScale } = nextProps;
-    const width = nextProps.width + 1;
-
-    const filtered_data = filterLowDensityPoints(data, cutOffRatio);
-
-    const xScale = getXScale(filtered_data, width);
-    const histogramDataFn = d3.layout.histogram().bins(xScale.ticks(bins));
-    const histogramData: any = histogramDataFn(filtered_data);
-    const yScale = getYScale(histogramData, height);
-
-    onChangeXScale?.(xScale.invert);
-    this.setState({ xScale, yScale, histogramData });
-  }
-
-  render() {
-    const {
-      // FIXME - copypasted from defaultProps because of typescript
-      top = 20,
-      right = 0,
-      bottom = 0,
-      left = 0,
-      height,
+export const Histogram = React.forwardRef<{ xScale: any }, Props>(
+  function Histogram(
+    {
+      bins = 50,
+      cutOffRatio = 0, // By default cut off nothing
+      data,
       hoveredXCoord,
       allowHover,
-    } = this.props;
-    const width = this.props.width + 1;
+      showTicks,
+      theme = "normal",
+    },
+    ref
+  ) {
+    const containerRef = useRef<HTMLDivElement | null>(null);
+    const [width, height] = useSize(containerRef);
 
-    const { xScale, yScale, histogramData } = this.state;
+    const { xScale, yScale, histogramData } = useMemo(() => {
+      const filteredData = filterLowDensityPoints(data, cutOffRatio);
+
+      const xScale = getXScale(filteredData, width);
+      const histogramDataFn = d3.layout.histogram().bins(xScale.ticks(bins));
+      const histogramData = histogramDataFn(filteredData);
+      const yScale = getYScale(histogramData, height);
+
+      return { xScale, yScale, histogramData };
+    }, [bins, data, cutOffRatio, width, height]);
+
+    useImperativeHandle(ref, () => ({
+      xScale,
+    }));
+
     const barWidth = width / histogramData.length;
-    if (!_.isFinite(width) || !_.isFinite(barWidth)) {
+    if (!_.isFinite(barWidth)) {
       return null;
     }
 
     return (
-      <div className="react-d3-histogram">
-        {top && bottom && width && height && (
-          <svg width={width + left + right} height={height + top + bottom}>
-            <g transform={"translate(" + left + "," + top + ")"}>
-              {histogramData.map((d, i) => (
-                <Bar
-                  data={d}
-                  xScale={xScale}
-                  yScale={yScale}
-                  height={height}
-                  barWidth={barWidth}
-                  key={i}
-                />
-              ))}
-
-              {allowHover && (
-                <Hoverbar height={height} hoveredXCoord={hoveredXCoord} />
-              )}
-
-              <XAxis height={height} scale={xScale} />
+      <div ref={containerRef} className="h-full">
+        <svg className="w-full h-full">
+          <g>
+            {histogramData.map((d, i) => (
+              <Bar
+                key={i}
+                data={d}
+                xScale={xScale}
+                yScale={yScale}
+                barWidth={barWidth}
+                height={height}
+                theme={theme}
+              />
+            ))}
+          </g>
+          {allowHover && <Hoverbar hoveredXCoord={hoveredXCoord} />}
+          {showTicks && (
+            <g>
+              <XAxis scale={xScale} height={height} />
             </g>
-          </svg>
-        )}
+          )}
+        </svg>
       </div>
     );
   }
-}
+);
 
 const Hoverbar: React.FC<{
-  height: number;
   hoveredXCoord: number | undefined;
-}> = ({ height, hoveredXCoord }) => {
+}> = ({ hoveredXCoord }) => {
   return (
     <line
       x1={hoveredXCoord}
       x2={hoveredXCoord}
       y1={0}
-      y2={height}
-      className="react-d3-histogram__hoverbar"
+      y2="100%"
+      className="stroke-[#0e2c40]/50"
+      style={{ strokeDasharray: "8, 5" }}
     />
   );
 };
@@ -189,7 +172,13 @@ const Path: React.FC<{ scale: any }> = ({ scale }) => {
   const [start, end] = scale.range();
   const d = `M0${start},6V0H${end}V6`;
 
-  return <path className="react-d3-histogram__domain" d={d} />;
+  return (
+    <path
+      className="fill-none"
+      style={{ shapeRendering: "crispEdges" }}
+      d={d}
+    />
+  );
 };
 
 const Tick: React.FC<{
@@ -205,12 +194,13 @@ const Tick: React.FC<{
     text = "0";
   }
   return (
-    <g
-      className="react-d3-histogram__tick"
-      transform={"translate(" + scale(value) + ",0)"}
-    >
-      <line x2="0" y2="6"></line>
-      <text dy=".71em" y="-15" x="-6">
+    <g transform={`translate(${scale(value)},0)`}>
+      <text
+        dy=".71em"
+        y="-15"
+        x="-6"
+        className="text-[13px] fill-grey-666 font-semibold"
+      >
         {text}
       </text>
     </g>
@@ -218,18 +208,15 @@ const Tick: React.FC<{
 };
 
 const XAxis: React.FC<{
-  height: number;
   scale: any;
-}> = ({ height, scale }) => {
-  const ticks = scale.ticks.apply(scale).map(function (tick, i) {
-    return <Tick value={tick} scale={scale} key={i} />;
-  });
+  height: number;
+}> = ({ scale, height }) => {
+  const ticks = scale.ticks
+    .apply(scale)
+    .map((tick, i) => <Tick value={tick} scale={scale} key={i} />);
 
   return (
-    <g
-      className="react-d3-histogram__x-axis"
-      transform={"translate(0," + height + ")"}
-    >
+    <g transform={`translate(0,${height})`}>
       <Path scale={scale} />
       <g>{ticks}</g>
     </g>
@@ -240,16 +227,23 @@ const Bar: React.FC<{
   data: any;
   xScale: any;
   yScale: any;
-  height: number;
   barWidth: number;
-}> = ({ data, xScale, yScale, height, barWidth }) => {
+  height: number;
+  theme: HistogramTheme;
+}> = ({ data, xScale, yScale, barWidth, height, theme }) => {
   const scaledX = xScale(data.x);
   const scaledY = yScale(data.y);
 
+  const themeToColor: { [t in HistogramTheme]: string } = {
+    dark: "fill-[#92a9b8]",
+    normal: "fill-[#c5e0f3]",
+    light: "fill-grey-a1",
+  };
+
   return (
     <g
-      className="react-d3-histogram__bar"
-      transform={"translate(" + scaledX + "," + scaledY + ")"}
+      className={themeToColor[theme]}
+      transform={`translate(${scaledX},${scaledY})`}
     >
       <rect width={barWidth} height={height - scaledY} />
     </g>

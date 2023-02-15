@@ -1,5 +1,4 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { useEffect, useImperativeHandle, useRef } from "react";
 
 import { TextForm } from "./TextForm/TextForm";
 
@@ -7,22 +6,24 @@ import { changeMetricClickMode } from "~/modules/canvas_state/actions";
 import { changeGuesstimate } from "~/modules/guesstimates/actions";
 import { runFormSimulations } from "~/modules/simulations/actions";
 
-import { AppDispatch } from "~/modules/store";
-import { Guesstimator } from "~/lib/guesstimator/index";
-import { LargeDataViewer, SmallDataViewer } from "./DataForm/DataViewer";
-import { MetricClickMode } from "~/modules/canvas_state/reducer";
 import clsx from "clsx";
+import { Guesstimator } from "~/lib/guesstimator/index";
+import { MetricClickMode } from "~/modules/canvas_state/reducer";
+import { Guesstimate } from "~/modules/guesstimates/reducer";
+import { useAppDispatch } from "~/modules/hooks";
+import { LargeDataViewer, SmallDataViewer } from "./DataForm/DataViewer";
+import { DenormalizedMetric } from "~/lib/engine/metric";
 
 type Props = {
   metricClickMode: MetricClickMode;
-  guesstimate: any;
+  guesstimate: Guesstimate;
   metricId: string;
   onReturn?(): void;
   onTab?(): void;
   jumpSection?(): void;
   canUseOrganizationFacts: boolean;
   organizationId?: string | number;
-  inputMetrics: any;
+  inputMetrics: DenormalizedMetric[];
 } & (
   | {
       size: "large";
@@ -31,161 +32,148 @@ type Props = {
       size: "small";
       onOpen(): void;
     }
-) & { dispatch: AppDispatch };
+);
 
-export class UnwrappedDistributionEditor extends Component<Props> {
-  formRef: React.RefObject<{ focus(): void }>;
+export const DistributionEditor = React.forwardRef<{ focus(): void }, Props>(
+  function DistributionEditor(props, ref) {
+    const formRef = useRef<{ focus(): void } | null>(null);
+    const dispatch = useAppDispatch();
 
-  constructor(props: Props) {
-    super(props);
-    this.formRef = React.createRef();
-  }
+    const prevPropsRef = useRef<Props | undefined>();
 
-  componentDidUpdate(prevProps: Props) {
+    useEffect(() => {
+      const prevProps = prevPropsRef.current;
+      if (
+        prevProps &&
+        props.guesstimate.input !== prevProps.guesstimate.input &&
+        props.guesstimate.guesstimateType !== "FUNCTION" &&
+        prevProps.guesstimate.guesstimateType === "FUNCTION"
+      ) {
+        dispatch(changeMetricClickMode("DEFAULT"));
+      }
+    }, [props.guesstimate]);
+
+    useEffect(() => {
+      prevPropsRef.current = props;
+    });
+
+    useImperativeHandle(ref, () => ({
+      focus() {
+        formRef.current?.focus();
+      },
+    }));
+
     const {
-      guesstimate: { input, guesstimateType },
-    } = this.props;
-    const sameInput = input === prevProps.guesstimate.input;
-    if (
-      !sameInput &&
-      prevProps.guesstimate.guesstimateType === "FUNCTION" &&
-      guesstimateType !== "FUNCTION"
-    ) {
-      this._changeMetricClickMode();
-    }
-  }
-
-  focus() {
-    this.formRef.current?.focus();
-  }
-
-  _guesstimateType(changes) {
-    return Guesstimator.parse({
-      ...this.props.guesstimate,
-      ...changes,
-    })[1].samplerType().referenceName;
-  }
-
-  changeGuesstimate(changes, runFormSims, saveToServer) {
-    this.props.dispatch(
-      changeGuesstimate(
-        this.props.metricId,
-        { ...this.props.guesstimate, ...changes },
-        saveToServer
-      )
-    );
-    if (runFormSims) {
-      this.props.dispatch(runFormSimulations(this.props.metricId));
-    }
-  }
-
-  changeInput(input) {
-    const guesstimateType = this._guesstimateType({ input });
-    this.changeGuesstimate({ data: null, input, guesstimateType }, true, false);
-    if (guesstimateType === "FUNCTION") {
-      this._changeMetricClickMode("FUNCTION_INPUT_SELECT");
-    }
-  }
-  changeGuesstimateTypeAndSave(guesstimateType) {
-    this.changeGuesstimate({ guesstimateType }, true, true);
-  }
-  addDataAndSave(data: number[] | null) {
-    this.changeGuesstimate(
-      { guesstimateType: "DATA", data, input: null },
-      true,
-      true
-    );
-  }
-  saveToServer() {
-    this.changeGuesstimate({}, false, true);
-  }
-
-  // TODO(matthew): no magic strings.
-  _changeMetricClickMode(newMode: MetricClickMode = "DEFAULT") {
-    if (this.props.metricClickMode !== newMode) {
-      this.props.dispatch(changeMetricClickMode(newMode));
-    }
-  }
-
-  handleReturn(shifted: boolean) {
-    if (shifted) {
-      this.props.jumpSection?.();
-    } else {
-      this.props.onReturn?.();
-    }
-    return true;
-  }
-
-  handleTab(shifted: boolean) {
-    if (shifted) {
-      this.props.jumpSection?.();
-    } else {
-      this.props.onTab?.();
-    }
-    return true;
-  }
-
-  render() {
-    const {
-      size,
       guesstimate,
       inputMetrics,
       organizationId,
       canUseOrganizationFacts,
-    } = this.props;
-    if (guesstimate.metric !== this.props.metricId) {
-      return false;
+    } = props;
+
+    if (guesstimate.metric !== props.metricId) {
+      return null;
     }
 
-    const hasData = !!guesstimate.data;
-    const formClasses = clsx("Guesstimate", size === "large" && "large");
+    const dispatchChanges = (
+      changes: Partial<Guesstimate>,
+      runFormSims: boolean,
+      saveToServer: boolean
+    ) => {
+      dispatch(
+        changeGuesstimate(
+          props.metricId,
+          { ...props.guesstimate, ...changes },
+          saveToServer
+        )
+      );
+      if (runFormSims) {
+        dispatch(runFormSimulations(props.metricId));
+      }
+    };
+
+    const handleTab = (shifted: boolean) => {
+      if (shifted) {
+        props.jumpSection?.();
+      } else {
+        props.onTab?.();
+      }
+    };
+
+    const handleReturn = (shifted: boolean) => {
+      if (shifted) {
+        props.jumpSection?.();
+      } else {
+        props.onReturn?.();
+      }
+    };
+
+    const handleChangeInput = (input: string) => {
+      const guesstimateType = Guesstimator.parse({
+        ...props.guesstimate,
+        input,
+      })[1].samplerType().referenceName;
+
+      dispatchChanges({ data: null, input, guesstimateType }, true, false);
+      if (guesstimateType === "FUNCTION") {
+        dispatch(changeMetricClickMode("FUNCTION_INPUT_SELECT"));
+      }
+    };
+
+    const handleSave = () => {
+      dispatchChanges({}, false, true);
+    };
+
+    const handleChangeGuesstimateType = (guesstimateType) => {
+      dispatchChanges({ guesstimateType }, true, true);
+    };
+
+    const addDataAndSave = (data: number[] | null) => {
+      dispatchChanges(
+        { guesstimateType: "DATA", data, input: null },
+        true,
+        true
+      );
+    };
+
+    const deleteDataAndSave = () => {
+      addDataAndSave(null);
+    };
 
     return (
-      <div className={formClasses}>
-        {hasData ? (
-          size === "large" ? (
+      <div className={clsx("Guesstimate", props.size === "large" && "large")}>
+        {guesstimate.data ? (
+          props.size === "large" ? (
             <LargeDataViewer
               data={guesstimate.data}
-              onDelete={() => {
-                this.addDataAndSave(null);
-              }}
-              onSave={this.addDataAndSave.bind(this)}
+              onDelete={deleteDataAndSave}
+              onSave={addDataAndSave}
             />
           ) : (
             <SmallDataViewer
-              onDelete={() => {
-                this.addDataAndSave(null);
-              }}
-              onOpen={this.props.onOpen}
+              onDelete={deleteDataAndSave}
+              onOpen={props.onOpen}
             />
           )
         ) : (
           <TextForm
             guesstimate={guesstimate}
             inputMetrics={inputMetrics}
-            onAddData={this.addDataAndSave.bind(this)}
-            onChangeInput={this.changeInput.bind(this)}
-            onChangeGuesstimateType={this.changeGuesstimateTypeAndSave.bind(
-              this
-            )}
-            onSave={this.saveToServer.bind(this)}
-            onChangeClickMode={this._changeMetricClickMode.bind(this)}
+            onAddData={addDataAndSave}
+            onChangeInput={handleChangeInput}
+            onChangeGuesstimateType={handleChangeGuesstimateType}
+            onSave={handleSave}
             onAddDefaultData={() => {
-              this.addDataAndSave([1, 2, 3]);
+              addDataAndSave([1, 2, 3]);
             }}
-            onReturn={this.handleReturn.bind(this)}
-            onTab={this.handleTab.bind(this)}
-            size={size}
+            onReturn={handleReturn}
+            onTab={handleTab}
+            size={props.size}
             organizationId={organizationId}
             canUseOrganizationFacts={canUseOrganizationFacts}
-            ref={this.formRef}
+            ref={formRef}
           />
         )}
       </div>
     );
   }
-}
-
-export const DistributionEditor = connect(null, null, null, {
-  forwardRef: true,
-})(UnwrappedDistributionEditor);
+);

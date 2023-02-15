@@ -5,28 +5,30 @@ import { iubendaHref } from "~/components/lib/IubendaPrivacyPolicy";
 const LinkGithubStar: React.FC = () => (
   <iframe
     src="https://ghbtns.com/github-btn.html?user=getguesstimate&repo=guesstimate-app&type=star&count=true"
-    frameBorder="0"
-    scrolling="0"
+    className="border-0 overflow-hidden"
     width={160}
     height={30}
   ></iframe>
 );
 
 const Header: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <li className="mb-4 text-lg text-grey-2">
+  <li className="mb-4 text-grey-2">
     <strong>{children}</strong>
   </li>
 );
 
 const LinkItem: React.FC<{
   href: string;
-  className?: string;
+  iubenda?: boolean;
   children: React.ReactNode;
-}> = ({ href, children, className }) => (
+}> = ({ href, children, iubenda }) => (
   <li className="mb-3">
     <a
       href={href}
-      className={clsx("text-grey-2 text-lg font-light", className)}
+      className={clsx(
+        "text-grey-2 font-light",
+        iubenda && "iubenda-nostyle no-brand iubenda-embed"
+      )}
     >
       {children}
     </a>
@@ -48,10 +50,7 @@ export const Footer: React.FC = () => {
       <ul>
         <Header>Legal</Header>
         <LinkItem href="/terms">Terms of Service</LinkItem>
-        <LinkItem
-          href={iubendaHref}
-          className="iubenda-nostyle no-brand iubenda-embed"
-        >
+        <LinkItem href={iubendaHref} iubenda>
           Privacy Policy
         </LinkItem>
       </ul>

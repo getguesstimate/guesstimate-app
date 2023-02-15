@@ -51,21 +51,18 @@ const SpaceCardBox: React.FC<{
   children: React.ReactNode;
   onClick?(): void;
   isNew?: boolean;
-  isSmall?: boolean;
-}> = ({ children, onClick, isSmall, isNew }) => {
+}> = ({ children, onClick, isNew }) => {
   return (
-    <div className={clsx("SpaceCard", isSmall && "SMALL")}>
-      <div
-        className={clsx(
-          "h-full flex flex-col cursor-pointer",
-          "border border-transparent",
-          "rounded-sm",
-          isNew ? "hover:border-[#61a761]" : "hover:border-[#c2cdd6]"
-        )}
-        onClick={onClick}
-      >
-        {children}
-      </div>
+    <div
+      className={clsx(
+        "h-full flex flex-col",
+        "border border-transparent cursor-pointer rounded-sm",
+        isNew ? "hover:border-[#61a761]" : "hover:border-[#c2cdd6]",
+        isNew && "min-h-[12em]"
+      )}
+      onClick={onClick}
+    >
+      {children}
     </div>
   );
 };
@@ -95,13 +92,18 @@ export const SpaceCard: React.FC<{
   const spaceUrl = Space.spaceUrlById(space.id, urlParams);
 
   return (
-    <SpaceCardBox isSmall={size === "SMALL"}>
+    <SpaceCardBox>
       <a href={spaceUrl}>
-        <header className="p-2 rounded-t-sm bg-white">
+        <header
+          className={clsx(
+            "rounded-t-sm bg-white",
+            size === "SMALL" ? "p-1" : "p-2"
+          )}
+        >
           <h3
             className={clsx(
               "m-0",
-              size === "SMALL" ? "text-sm" : "text-xl",
+              size === "SMALL" ? "text-xs" : "text-xl",
               space.name ? "text-[#4a6a88]" : "text-grey-bbb italic"
             )}
           >
@@ -118,7 +120,7 @@ export const SpaceCard: React.FC<{
       <div
         className={clsx(
           "relative bg-[#d9dee2]",
-          size === "SMALL" ? "min-h-[3em]" : "min-h-[11em]",
+          size === "SMALL" ? "min-h-[32px]" : "min-h-[11em]",
           size === "SMALL" && "rounded-b-sm"
         )}
       >
@@ -140,7 +142,7 @@ export const SpaceCard: React.FC<{
       </div>
       {size !== "SMALL" && (
         <a href={spaceUrl} className="p-2 rounded-b-sm bg-white flex-1">
-          <p className="text-[#78838c]">
+          <p className="text-[#78838c] break-words">
             {formatDescription(space.description)}
           </p>
         </a>

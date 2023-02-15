@@ -44,7 +44,7 @@ export function sortDescending(samples: number[]) {
 }
 
 // Returns the sample standard deviation. If no samples are provided, returns 0. Sample can be unsorted.
-export function sampleMeanAndStdev(samples) {
+export function sampleMeanAndStdev(samples: number[]) {
   if (samples.length === 0) {
     return 0;
   }

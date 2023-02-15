@@ -22,6 +22,7 @@ export type GridContext = {
   forceFlowGridUpdate(): void;
   onReturn(): void;
   onTab(): void;
+  ref?: { current: { focus(): void } | null };
 };
 
 const layerStyles: CSSProperties = {
@@ -90,10 +91,11 @@ type Props = {
   handleSelect(location: CanvasLocation, direction?: any): void;
   onMoveItem(arg: { prev: CanvasLocation; next: CanvasLocation }): void;
   onEndDrag(location: CanvasLocation): void;
+  focusCell(): void;
 };
 
 export const FilledCell = React.forwardRef<{ focus(): void }, Props>(
-  (props, ref) => {
+  function FilledCell(props, ref) {
     const [{ isDragging }, drag, dragPreview] = useDrag<
       { location: CanvasLocation },
       {
@@ -130,6 +132,8 @@ export const FilledCell = React.forwardRef<{ focus(): void }, Props>(
       [props.location]
     );
 
+    const itemRef = useRef<{ focus(): void } | null>(null);
+
     // hide default drag preview, we use useDragLayer instead
     useEffect(() => {
       dragPreview(getEmptyImage());
@@ -139,14 +143,14 @@ export const FilledCell = React.forwardRef<{ focus(): void }, Props>(
     const containerRef = useRef<HTMLDivElement | null>(null);
 
     const focus = () => {
-      containerRef.current?.focus();
+      itemRef.current?.focus();
     };
 
     useImperativeHandle(ref, () => ({
       focus,
     }));
 
-    const handleMouseUp = (e: React.MouseEvent) => {
+    const handleMouseUp = (e: React.MouseEvent<HTMLDivElement>) => {
       if (
         e.button === 0 &&
         (e.target as any).className === "FlowGridFilledCell"
@@ -177,6 +181,7 @@ export const FilledCell = React.forwardRef<{ focus(): void }, Props>(
       forceFlowGridUpdate: props.forceFlowGridUpdate,
       onReturn: props.onReturn,
       onTab: props.onTab,
+      ref: itemRef,
     });
 
     return (
