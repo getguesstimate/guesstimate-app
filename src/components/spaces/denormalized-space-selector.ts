@@ -4,10 +4,11 @@ import { RootState } from "~/modules/store";
 import _ from "lodash";
 import { createSelector } from "reselect";
 import { CanvasState } from "~/modules/canvas_state/reducer";
+import { CheckpointsState } from "~/modules/checkpoints/reducer";
 
 const NAME = "Denormalized Space Selector";
 
-function checkpointMetadata(id: number, checkpoints: any[]) {
+function checkpointMetadata(id: number, checkpoints: CheckpointsState) {
   let attributes = { head: 0, length: 1 };
   const spaceCheckpoints = e.collections.get(checkpoints, id, "spaceId");
   if (!_.isEmpty(spaceCheckpoints)) {

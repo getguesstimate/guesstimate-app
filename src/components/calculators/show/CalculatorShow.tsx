@@ -81,7 +81,7 @@ export const CalculatorShow: React.FC<Props> = (props) => {
     dispatch(
       changeGuesstimate(
         id,
-        { ...guesstimate, ...{ data: null, input, guesstimateType } },
+        { data: null, input, guesstimateType },
         false // saveOnServer
       )
     );

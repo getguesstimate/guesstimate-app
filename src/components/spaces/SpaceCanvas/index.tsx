@@ -254,8 +254,6 @@ export const SpaceCanvas: React.FC<Props> = ({
       .filter((e): e is NonNullable<typeof e> => !!e);
   };
 
-  const showGridLines = !screenshot;
-
   const copiedRegion =
     (copied && copied.pastedTimes < 1 && copied.region) || [];
   const analyzedRegion: MaybeRegion = analyzedMetric
@@ -366,7 +364,7 @@ export const SpaceCanvas: React.FC<Props> = ({
         onCopy={onCopy}
         onPaste={onPaste}
         onCut={onCut}
-        showGridLines={showGridLines}
+        showGridLines={!screenshot}
         canvasState={canvasState}
       />
     </div>

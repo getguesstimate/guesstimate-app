@@ -97,7 +97,7 @@ export const ToolTip: React.FC<
       ref={refs.setReference}
       {...getReferenceProps()}
       className={containerClassName}
-      aria-describedBy={id}
+      aria-describedby={id}
     >
       {children}
       {open &&

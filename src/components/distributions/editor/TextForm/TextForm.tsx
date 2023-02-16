@@ -42,8 +42,16 @@ export const TextForm = React.forwardRef<{ focus(): void }, Props>(
 
     const {
       size,
-      guesstimate: { input },
+      guesstimate,
+      inputMetrics,
+      onAddData,
+      onReturn,
+      onTab,
+      onChangeGuesstimateType,
+      canUseOrganizationFacts,
+      organizationId,
     } = props;
+    const { guesstimateType } = guesstimate;
 
     const handleBlur = () => {
       dispatch(changeMetricClickMode("DEFAULT"));
@@ -62,17 +70,6 @@ export const TextForm = React.forwardRef<{ focus(): void }, Props>(
     };
 
     const textInput = () => {
-      const {
-        guesstimate: { input, guesstimateType },
-        inputMetrics,
-        organizationId,
-        canUseOrganizationFacts,
-        onAddData,
-        onChangeGuesstimateType,
-        onReturn,
-        onTab,
-      } = props;
-
       const shouldDisplayType = !(
         guesstimateType === "POINT" || guesstimateType === "FUNCTION"
       );
@@ -95,7 +92,7 @@ export const TextForm = React.forwardRef<{ focus(): void }, Props>(
       // guesstimateType manually set to 'LOGNORMAL', and see if the parser corrects that type to something else. This
       // approach is a bit hacky, but it gets the job done.
       const [_1, parsed] = Guesstimator.parse({
-        input,
+        input: guesstimate.input,
         guesstimateType: "LOGNORMAL",
       });
       const parsedType = parsed.parsedInput?.guesstimateType;
@@ -105,7 +102,7 @@ export const TextForm = React.forwardRef<{ focus(): void }, Props>(
         <div>
           <div className="flex gap-4 items-center">
             <TextInput
-              value={input || ""}
+              value={guesstimate.input || ""}
               validInputs={validInputReadableIds}
               errorInputs={errorInputReadableIds}
               onReturn={onReturn}
@@ -149,9 +146,13 @@ export const TextForm = React.forwardRef<{ focus(): void }, Props>(
     return (
       <div className="flex gap-4 items-center">
         <div className="flex-1">{textInput()}</div>
-        {_.isEmpty(input) && (
+        {_.isEmpty(guesstimate.input) && (
           <div>
-            <a className="custom-data" onClick={props.onAddDefaultData}>
+            <a
+              href=""
+              className="underline text-grey-999 hover:text-grey-999"
+              onClick={props.onAddDefaultData}
+            >
               Add Custom Data
             </a>
           </div>

@@ -142,12 +142,6 @@ $flash-duration-sec: 0.4s;
   margin-top: 0;
 }
 
-.Guesstimate.large a.custom-data {
-  text-decoration: underline;
-  color: #999;
-  cursor: pointer;
-}
-
 .GuesstimateTypeQuestion:hover {
   opacity: 1;
   cursor: pointer;

@@ -36,6 +36,13 @@ type Props = {
 
 export const DistributionEditor = React.forwardRef<{ focus(): void }, Props>(
   function DistributionEditor(props, ref) {
+    const {
+      guesstimate,
+      inputMetrics,
+      organizationId,
+      canUseOrganizationFacts,
+    } = props;
+
     const formRef = useRef<{ focus(): void } | null>(null);
     const dispatch = useAppDispatch();
 
@@ -63,13 +70,6 @@ export const DistributionEditor = React.forwardRef<{ focus(): void }, Props>(
       },
     }));
 
-    const {
-      guesstimate,
-      inputMetrics,
-      organizationId,
-      canUseOrganizationFacts,
-    } = props;
-
     if (guesstimate.metric !== props.metricId) {
       return null;
     }
@@ -79,13 +79,7 @@ export const DistributionEditor = React.forwardRef<{ focus(): void }, Props>(
       runFormSims: boolean,
       saveToServer: boolean
     ) => {
-      dispatch(
-        changeGuesstimate(
-          props.metricId,
-          { ...props.guesstimate, ...changes },
-          saveToServer
-        )
-      );
+      dispatch(changeGuesstimate(props.metricId, changes, saveToServer));
       if (runFormSims) {
         dispatch(runFormSimulations(props.metricId));
       }

@@ -77,7 +77,6 @@ export function removeSelectedMetrics(spaceId: number): AppThunk {
 }
 
 export function changeMetric(item): AppThunk {
-  console.log({ change: item });
   return (dispatch, getState) => {
     dispatch({ type: "CHANGE_METRIC", item });
     registerGraphChange(dispatch, findSpaceId(getState, item.id));

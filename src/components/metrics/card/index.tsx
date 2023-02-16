@@ -73,6 +73,7 @@ export const MetricCard = React.forwardRef<{ focus(): void }, Props>(
       exportedAsFact,
       gridKeyPress,
     } = props;
+    const { metricClickMode } = canvasState;
 
     const dispatch = useAppDispatch();
 
@@ -82,8 +83,6 @@ export const MetricCard = React.forwardRef<{ focus(): void }, Props>(
     const viewRef = useRef<{ hasContent(): boolean; focusName(): void }>(null);
     const editorRef = useRef<{ focus(): void }>(null);
     const divRef = useRef<HTMLDivElement>(null);
-
-    const { metricClickMode } = canvasState;
 
     const isAnalyzedMetric =
       !!analyzedMetric && metric.id === analyzedMetric.id;
@@ -96,7 +95,7 @@ export const MetricCard = React.forwardRef<{ focus(): void }, Props>(
     );
 
     const shouldShowDistributionEditor =
-      canvasState.expandedViewEnabled || inSelectedCell;
+      (canvasState.expandedViewEnabled || inSelectedCell) && !modalIsOpen;
 
     const isFunction = metric.guesstimate.guesstimateType === "FUNCTION";
 
@@ -209,10 +208,7 @@ export const MetricCard = React.forwardRef<{ focus(): void }, Props>(
     };
 
     const isFunctionInputSelectable = (e: React.MouseEvent) => {
-      return (
-        isSelectable(e) &&
-        canvasState.metricClickMode === "FUNCTION_INPUT_SELECT"
-      );
+      return isSelectable(e) && metricClickMode === "FUNCTION_INPUT_SELECT";
     };
 
     const handleInnerMouseDown = (e: React.MouseEvent) => {
@@ -269,12 +265,7 @@ export const MetricCard = React.forwardRef<{ focus(): void }, Props>(
 
     const onChangeGuesstimateDescription = (rawDescription: string) => {
       const description = makeURLsMarkdown(rawDescription);
-      dispatch(
-        changeGuesstimate(metric.id, {
-          ...metric.guesstimate,
-          description,
-        })
-      );
+      dispatch(changeGuesstimate(metric.id, { description }));
     };
 
     const handleMakeFact = () => {
@@ -360,9 +351,11 @@ export const MetricCard = React.forwardRef<{ focus(): void }, Props>(
               exportedAsFact={exportedAsFact}
             />
 
-            {shouldShowDistributionEditor && !modalIsOpen && (
+            {shouldShowDistributionEditor && (
               <div className="section editing">
                 <DistributionEditor
+                  size="small"
+                  ref={editorRef}
                   guesstimate={metric.guesstimate}
                   inputMetrics={metric.edges.inputMetrics}
                   metricClickMode={metricClickMode}
@@ -373,8 +366,6 @@ export const MetricCard = React.forwardRef<{ focus(): void }, Props>(
                     viewRef.current?.focusName();
                   }}
                   onOpen={openModal}
-                  ref={editorRef}
-                  size="small"
                   onReturn={props.onReturn}
                   onTab={props.onTab}
                 />

@@ -9,11 +9,20 @@ import { Guesstimate } from "./reducer";
 // (e.g. action triggering qualifiers) will break.
 export function changeGuesstimate(
   metricId: string,
-  newGuesstimate: Guesstimate,
+  patch: Partial<Guesstimate>,
   shouldRegisterGraphChange = true
 ): AppThunk {
   return (dispatch, getState) => {
     const state = getState();
+
+    const oldGuesstimate = state.guesstimates.find(
+      (guesstimate) => guesstimate.metric === metricId
+    );
+
+    const newGuesstimate = {
+      ...oldGuesstimate,
+      ...patch,
+    };
 
     const metric = state.metrics.find((m) => m.id === metricId);
     if (!metric) {
@@ -53,7 +62,7 @@ export function changeGuesstimate(
       type: "CHANGE_GUESSTIMATE",
       metricId,
       values: {
-        // description: "",
+        description: "",
         ...newGuesstimate,
         input: null,
         expression,

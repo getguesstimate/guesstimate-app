@@ -94,67 +94,61 @@ type Props = {
   onRotateShareableLink(): void;
 };
 
-export const SpaceHeader = React.memo<Props>(
-  ({
-    canBePrivate,
-    name,
-    ownerName,
-    ownerPicture,
-    ownerUrl,
-    ownerIsOrg,
-    isPrivate,
-    editableByMe,
-    editors,
-    shareableLinkUrl,
-    onSaveName,
-    onPublicSelect,
-    onPrivateSelect,
-    onEnableShareableLink,
-    onDisableShareableLink,
-    onRotateShareableLink,
-  }) => {
-    return (
-      <div className="flex justify-between px-8 py-2">
-        <SpaceName
-          name={name}
-          editableByMe={editableByMe}
-          onSave={onSaveName}
-        />
+export const SpaceHeader = React.memo<Props>(function SpaceHeader({
+  canBePrivate,
+  name,
+  ownerName,
+  ownerPicture,
+  ownerUrl,
+  ownerIsOrg,
+  isPrivate,
+  editableByMe,
+  editors,
+  shareableLinkUrl,
+  onSaveName,
+  onPublicSelect,
+  onPrivateSelect,
+  onEnableShareableLink,
+  onDisableShareableLink,
+  onRotateShareableLink,
+}) {
+  return (
+    <div className="flex justify-between px-8 py-2">
+      <SpaceName name={name} editableByMe={editableByMe} onSave={onSaveName} />
 
-        <div className="flex justify-end items-center flex-wrap md:flex-nowrap space-x-2">
-          {editableByMe && (
-            <PrivacyToggle
-              editableByMe={editableByMe}
-              isPrivateSelectionInvalid={!canBePrivate}
-              isPrivate={isPrivate}
-              onPublicSelect={onPublicSelect}
-              onPrivateSelect={onPrivateSelect}
-            />
-          )}
-          {isPrivate && editableByMe && (
-            <ShareableLinkOption
-              shareableLinkUrl={shareableLinkUrl}
-              onEnable={onEnableShareableLink}
-              onDisable={onDisableShareableLink}
-              onRotate={onRotateShareableLink}
-            />
-          )}
-          {(ownerIsOrg || !editableByMe) && (
-            <UserTag
-              url={ownerUrl}
-              picture={ownerPicture}
-              name={ownerName}
-              bg="WHITE"
-            />
-          )}
-          {ownerIsOrg &&
-            editors.map((editor, i) => (
-              <a href={e.user.url(editor)} key={i}>
-                <img src={editor.picture} className="h-8 w-8 rounded-full" />
-              </a>
-            ))}
-        </div>
+      <div className="flex justify-end items-center flex-wrap md:flex-nowrap space-x-2">
+        {editableByMe && (
+          <PrivacyToggle
+            editableByMe={editableByMe}
+            isPrivateSelectionInvalid={!canBePrivate}
+            isPrivate={isPrivate}
+            onPublicSelect={onPublicSelect}
+            onPrivateSelect={onPrivateSelect}
+          />
+        )}
+        {isPrivate && editableByMe && (
+          <ShareableLinkOption
+            shareableLinkUrl={shareableLinkUrl}
+            onEnable={onEnableShareableLink}
+            onDisable={onDisableShareableLink}
+            onRotate={onRotateShareableLink}
+          />
+        )}
+        {(ownerIsOrg || !editableByMe) && (
+          <UserTag
+            url={ownerUrl}
+            picture={ownerPicture}
+            name={ownerName}
+            bg="WHITE"
+          />
+        )}
+        {ownerIsOrg &&
+          editors.map((editor, i) => (
+            <a href={e.user.url(editor)} key={i}>
+              <img src={editor.picture} className="h-8 w-8 rounded-full" />
+            </a>
+          ))}
       </div>
-    );
-  }
-);
+    </div>
+  );
+});

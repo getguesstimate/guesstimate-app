@@ -1,10 +1,11 @@
 import _ from "lodash";
-import React, { Component } from "react";
+import React, { Component, PropsWithChildren } from "react";
 
 import { connect } from "react-redux";
 
 import {
   CompositeDecorator,
+  ContentBlock,
   ContentState,
   DraftDecorator,
   DraftHandleValue,
@@ -30,7 +31,11 @@ import {
 } from "~/lib/guesstimator/formatter/formatters/Data";
 import { AppDispatch, RootState } from "~/modules/store";
 
-function findWithRegex(baseRegex: RegExp, contentBlock, callback) {
+function findWithRegex(
+  baseRegex: RegExp,
+  contentBlock: ContentBlock,
+  callback: (start: number, end: number) => void
+) {
   const text = contentBlock.getText();
   const regex = new RegExp(baseRegex.source, "g");
   let matchArr: ReturnType<typeof regex.exec>, start: number | undefined;
@@ -45,7 +50,7 @@ const FLASH_DURATION_MS = 400; // Adjust flash duration here. Should match varia
 //TODO: The passing in of all props in the span causes React to complain. See this issue:
 //https://github.com/facebook/draft-js/issues/675
 const stylizedSpan =
-  (className: string): React.FC<{ children: React.ReactNode }> =>
+  (className: string): React.FC<PropsWithChildren> =>
   (props) =>
     (
       <span {...props} className={className}>
@@ -62,8 +67,8 @@ const positionDecorator = (
   start: number,
   end: number,
   component: React.FC
-) => ({
-  strategy: (contentBlock, callback) => {
+): DraftDecorator => ({
+  strategy: (contentBlock: any, callback) => {
     if (end <= contentBlock.text.length) {
       callback(start, end);
     }
@@ -149,7 +154,7 @@ export class UnconnectedTextInput extends Component<Props, State> {
     const { validInputs, errorInputs } = this.props;
 
     const fact_regex = this.factRegex();
-    const fact_decorators: DraftDecorator[] = [
+    const factDecorators: DraftDecorator[] = [
       {
         strategy: (contentBlock, callback) => {
           findWithRegex(fact_regex, contentBlock, callback);
@@ -158,7 +163,7 @@ export class UnconnectedTextInput extends Component<Props, State> {
       },
     ];
 
-    let decorators = [...extraDecorators, ...fact_decorators];
+    let decorators = [...extraDecorators, ...factDecorators];
 
     if (!_.isEmpty(validInputs)) {
       const validInputsRegex = or(validInputs);
@@ -247,10 +252,6 @@ export class UnconnectedTextInput extends Component<Props, State> {
   }
 
   addSuggestion() {
-    const partial = resolveToSelector(this.props.organizationId)(
-      this.prevWord()
-    ).pop();
-
     const extraDecorators = [
       positionDecorator(
         this.cursorPosition() - this.prevWord().length,
@@ -359,7 +360,6 @@ export class UnconnectedTextInput extends Component<Props, State> {
         this.prevWord().startsWith("@") && !this.prevWord().includes(".")
           ? "."
           : "";
-      const cursorPosition = this.cursorPosition();
       const addedEditorState = this.addText(
         `${this.props.suggestion}${suffix}`,
         false,

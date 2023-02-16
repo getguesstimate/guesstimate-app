@@ -6,7 +6,7 @@ type CheckpointEntry = {
   checkpoints: any[];
 };
 
-type CheckpointsState = CheckpointEntry[];
+export type CheckpointsState = CheckpointEntry[];
 
 export const checkpointsR: Reducer<CheckpointsState, AnyAction> = (
   state = [],

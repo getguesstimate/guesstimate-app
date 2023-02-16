@@ -1,5 +1,5 @@
 import _ from "lodash";
-import React, { Component, useImperativeHandle, useRef } from "react";
+import React, { useImperativeHandle, useRef } from "react";
 
 import Icon from "~/components/react-fa-patched";
 
@@ -15,12 +15,14 @@ import {
   MetricReasoningIcon,
   MetricSidebarToggle,
 } from "~/components/metrics/card/token/index";
-import { SimulationHistogram } from "~/components/simulations/SimulationHistogram";
 import { MetricStatTable } from "~/components/simulations/MetricStatTable";
+import { SimulationHistogram } from "~/components/simulations/SimulationHistogram";
 
 import { getMessage, PropagationError } from "~/lib/propagation/errors";
 import { metricIdToNodeId } from "~/lib/propagation/wrapper";
 
+import clsx from "clsx";
+import { ConnectDragSource } from "react-dnd";
 import {
   displayableError,
   errors,
@@ -28,11 +30,9 @@ import {
   isBreak,
   isInfiniteLoop,
 } from "~/lib/engine/simulation";
-import { getClassName, replaceByMap } from "~/lib/engine/utils";
-import { ConnectDragSource } from "react-dnd";
-import { CanvasState } from "~/modules/canvas_state/reducer";
 import { FullDenormalizedMetric } from "~/lib/engine/space";
-import clsx from "clsx";
+import { replaceByMap } from "~/lib/engine/utils";
+import { CanvasState } from "~/modules/canvas_state/reducer";
 
 // TODO(matthew): Refactor these components. E.g. it's weird that isBreak takes all errors, but you may only care about
 // the one...
@@ -64,10 +64,11 @@ const ErrorSection: React.FC<{
       padTop && "padTop"
     )}
   >
-    {shouldShowErrorText && (
+    {shouldShowErrorText ? (
       <div className="error-message">{messageToDisplay}</div>
+    ) : (
+      <ErrorIcon errors={errors} />
     )}
-    {!shouldShowErrorText && <ErrorIcon errors={errors} />}
   </div>
 );
 
@@ -199,12 +200,14 @@ export const MetricCardViewSection = React.forwardRef<
   const anotherFunctionSelected =
     metricClickMode === "FUNCTION_INPUT_SELECT" && !inSelectedCell;
 
-  const mainClassName = clsx(
-    "MetricCardViewSection",
-    _hasErrors() && !inSelectedCell && "hasErrors"
-  );
   return (
-    <div className={mainClassName} onMouseDown={onMouseDown}>
+    <div
+      className={clsx(
+        "MetricCardViewSection",
+        _hasErrors() && !inSelectedCell && "hasErrors"
+      )}
+      onMouseDown={onMouseDown}
+    >
       {showSimulation && (
         <div
           className={clsx(

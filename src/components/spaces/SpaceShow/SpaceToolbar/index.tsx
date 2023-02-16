@@ -90,218 +90,216 @@ type Props = {
   onOpenTutorial(): void;
 };
 
-export const SpaceToolbar = React.memo<Props>(
-  ({
-    editableByMe,
-    actionState,
-    isLoggedIn,
-    onImportSlurp,
-    onCopyModel,
-    onCopyMetrics,
-    onPasteMetrics,
-    onDeleteMetrics,
-    onCutMetrics,
-    onDestroy,
-    onUndo,
-    canUndo,
-    onRedo,
-    canRedo,
-    editsAllowed,
-    onAllowEdits,
-    onForbidEdits,
-    calculators,
-    makeNewCalculator,
-    showCalculator,
-    canShowFactSidebar,
-    toggleFactSidebar,
-    onOpenTutorial,
-  }) => {
-    const [importModalOpen, setImportModalOpen] = useState(false);
+export const SpaceToolbar = React.memo<Props>(function SpaceToolbar({
+  editableByMe,
+  actionState,
+  isLoggedIn,
+  onImportSlurp,
+  onCopyModel,
+  onCopyMetrics,
+  onPasteMetrics,
+  onDeleteMetrics,
+  onCutMetrics,
+  onDestroy,
+  onUndo,
+  canUndo,
+  onRedo,
+  canRedo,
+  editsAllowed,
+  onAllowEdits,
+  onForbidEdits,
+  calculators,
+  makeNewCalculator,
+  showCalculator,
+  canShowFactSidebar,
+  toggleFactSidebar,
+  onOpenTutorial,
+}) {
+  const [importModalOpen, setImportModalOpen] = useState(false);
 
-    const handleImportSlurp = (slurp) => {
-      setImportModalOpen(false);
-      onImportSlurp(slurp);
-    };
+  const handleImportSlurp = (slurp) => {
+    setImportModalOpen(false);
+    onImportSlurp(slurp);
+  };
 
-    const viewModeHeader =
-      editableByMe && editsAllowed ? (
-        <span>
-          <Icon name="pencil" /> Editing
-        </span>
-      ) : (
-        <span>
-          <Icon name="eye" /> Viewing
-        </span>
-      );
+  const viewModeHeader =
+    editableByMe && editsAllowed ? (
+      <span>
+        <Icon name="pencil" /> Editing
+      </span>
+    ) : (
+      <span>
+        <Icon name="eye" /> Viewing
+      </span>
+    );
 
-    const customStyles = {
-      overlay: {
-        backgroundColor: "rgba(55, 68, 76, 0.4)",
-      },
-      content: {
-        top: "30%",
-        left: "30%",
-        width: "40%",
-        right: "auto",
-        bottom: "auto",
-        marginRight: "-50%",
-        backgroundColor: "#F0F0F0",
-        border: "none",
-        padding: "1em",
-      },
-    } as const;
+  const customStyles = {
+    overlay: {
+      backgroundColor: "rgba(55, 68, 76, 0.4)",
+    },
+    content: {
+      top: "30%",
+      left: "30%",
+      width: "40%",
+      right: "auto",
+      bottom: "auto",
+      marginRight: "-50%",
+      backgroundColor: "#F0F0F0",
+      border: "none",
+      padding: "1em",
+    },
+  } as const;
 
-    return (
-      <div className="bg-[rgb(219,221,222)]/70 border-b border-[rgb(37,128,167)]/40 px-8 hidden md:block">
-        <Modal
-          isOpen={importModalOpen}
-          onRequestClose={() => {
-            setImportModalOpen(false);
-          }}
-          style={customStyles}
-        >
-          <ImportFromSlurpForm onSubmit={handleImportSlurp} />
-        </Modal>
-        <div className="flex justify-between items-center py-1">
-          <div className="flex items-center gap-2">
-            {isLoggedIn && (
+  return (
+    <div className="bg-[rgb(219,221,222)]/70 border-b border-[rgb(37,128,167)]/40 px-8 hidden md:block">
+      <Modal
+        isOpen={importModalOpen}
+        onRequestClose={() => {
+          setImportModalOpen(false);
+        }}
+        style={customStyles}
+      >
+        <ImportFromSlurpForm onSubmit={handleImportSlurp} />
+      </Modal>
+      <div className="flex justify-between items-center py-1">
+        <div className="flex items-center gap-2">
+          {isLoggedIn && (
+            <DropDown
+              headerText="Model Actions"
+              openLink={<ToolbarTextItem text="File" />}
+              position="right"
+            >
+              <CardListElement
+                icon="copy"
+                header="Copy Model"
+                onMouseDown={onCopyModel}
+              />
+              {editableByMe && (
+                <CardListElement
+                  icon="download"
+                  header="Import Slurp"
+                  onMouseDown={() => {
+                    setImportModalOpen(true);
+                  }}
+                  closeOnClick={true}
+                />
+              )}
+              {editableByMe && (
+                <CardListElement
+                  icon="warning"
+                  header="Delete Model"
+                  onMouseDown={onDestroy}
+                />
+              )}
+            </DropDown>
+          )}
+
+          <CanvasViewForm />
+
+          <ToolbarTextItem onClick={onOpenTutorial} text="Tutorial" />
+
+          <Divider />
+          <ToolbarIcon
+            tooltipId="cut-button"
+            tooltip="Cut Nodes (ctrl-x)"
+            onClick={onCutMetrics}
+            iconName="cut"
+          />
+          <ToolbarIcon
+            tooltipId="copy-button"
+            tooltip="Copy Nodes (ctrl-c)"
+            onClick={onCopyMetrics}
+            iconName="copy"
+          />
+          <ToolbarIcon
+            tooltipId="paste-button"
+            tooltip="Paste Nodes (ctrl-v)"
+            onClick={onPasteMetrics}
+            iconName="paste"
+          />
+          <ToolbarIcon
+            tooltipId="delete-button"
+            tooltip="Delete Nodes (del/bksp)"
+            onClick={onDeleteMetrics}
+            iconName="trash"
+          />
+
+          <Divider />
+          <ToolbarIcon
+            tooltipId="undo-button"
+            tooltip="Undo (ctrl-z)"
+            onClick={onUndo}
+            iconName="undo"
+            disabled={!canUndo}
+          />
+          <ToolbarIcon
+            tooltipId="redo-button"
+            tooltip="Redo (ctrl-shift-z)"
+            onClick={onRedo}
+            iconName="repeat"
+            disabled={!canRedo}
+          />
+
+          {(editableByMe || calculators.length) && (
+            <>
+              <Divider />
               <DropDown
-                headerText="Model Actions"
-                openLink={<ToolbarTextItem text="File" />}
+                headerText="Calculators"
+                openLink={
+                  <ToolbarIcon
+                    tooltipId="calculator"
+                    tooltip="Calculators"
+                    iconName="calculator"
+                  />
+                }
                 position="right"
               >
-                <CardListElement
-                  icon="copy"
-                  header="Copy Model"
-                  onMouseDown={onCopyModel}
-                />
-                {editableByMe && (
-                  <CardListElement
-                    icon="download"
-                    header="Import Slurp"
-                    onMouseDown={() => {
-                      setImportModalOpen(true);
-                    }}
-                    closeOnClick={true}
-                  />
-                )}
-                {editableByMe && (
-                  <CardListElement
-                    icon="warning"
-                    header="Delete Model"
-                    onMouseDown={onDestroy}
-                  />
-                )}
-              </DropDown>
-            )}
-
-            <CanvasViewForm />
-
-            <ToolbarTextItem onClick={onOpenTutorial} text="Tutorial" />
-
-            <Divider />
-            <ToolbarIcon
-              tooltipId="cut-button"
-              tooltip="Cut Nodes (ctrl-x)"
-              onClick={onCutMetrics}
-              iconName="cut"
-            />
-            <ToolbarIcon
-              tooltipId="copy-button"
-              tooltip="Copy Nodes (ctrl-c)"
-              onClick={onCopyMetrics}
-              iconName="copy"
-            />
-            <ToolbarIcon
-              tooltipId="paste-button"
-              tooltip="Paste Nodes (ctrl-v)"
-              onClick={onPasteMetrics}
-              iconName="paste"
-            />
-            <ToolbarIcon
-              tooltipId="delete-button"
-              tooltip="Delete Nodes (del/bksp)"
-              onClick={onDeleteMetrics}
-              iconName="trash"
-            />
-
-            <Divider />
-            <ToolbarIcon
-              tooltipId="undo-button"
-              tooltip="Undo (ctrl-z)"
-              onClick={onUndo}
-              iconName="undo"
-              disabled={!canUndo}
-            />
-            <ToolbarIcon
-              tooltipId="redo-button"
-              tooltip="Redo (ctrl-shift-z)"
-              onClick={onRedo}
-              iconName="repeat"
-              disabled={!canRedo}
-            />
-
-            {(editableByMe || calculators.length) && (
-              <>
-                <Divider />
-                <DropDown
-                  headerText="Calculators"
-                  openLink={
-                    <ToolbarIcon
-                      tooltipId="calculator"
-                      tooltip="Calculators"
-                      iconName="calculator"
+                {[
+                  ...calculators.map((c) => (
+                    <CardListElement
+                      key={c.id}
+                      header={c.title}
+                      onMouseDown={() => {
+                        showCalculator(c);
+                      }}
+                      closeOnClick={true}
+                      icon="calculator"
                     />
-                  }
-                  position="right"
-                >
-                  {[
-                    ...calculators.map((c) => (
-                      <CardListElement
-                        key={c.id}
-                        header={c.title}
-                        onMouseDown={() => {
-                          showCalculator(c);
-                        }}
-                        closeOnClick={true}
-                        icon="calculator"
-                      />
-                    )),
-                    editableByMe && (
-                      <CardListElement
-                        key="new"
-                        header="New Calculator"
-                        onMouseDown={makeNewCalculator}
-                        closeOnClick={true}
-                        icon="plus"
-                      />
-                    ),
-                  ]}
-                </DropDown>
-              </>
-            )}
+                  )),
+                  editableByMe && (
+                    <CardListElement
+                      key="new"
+                      header="New Calculator"
+                      onMouseDown={makeNewCalculator}
+                      closeOnClick={true}
+                      icon="plus"
+                    />
+                  ),
+                ]}
+              </DropDown>
+            </>
+          )}
 
-            {canShowFactSidebar && (
-              <ToolbarIcon
-                tooltipId="facts"
-                tooltip="Metric Library"
-                onClick={toggleFactSidebar}
-                iconName="bank"
-              />
-            )}
+          {canShowFactSidebar && (
+            <ToolbarIcon
+              tooltipId="facts"
+              tooltip="Metric Library"
+              onClick={toggleFactSidebar}
+              iconName="bank"
+            />
+          )}
 
-            <div className="pl-6">
-              <ProgressMessage actionState={actionState} />
-            </div>
+          <div className="pl-6">
+            <ProgressMessage actionState={actionState} />
           </div>
-          <ViewOptionToggle
-            isEditingInvalid={!editableByMe}
-            isEditing={editableByMe && editsAllowed}
-            onAllowEdits={onAllowEdits}
-            onForbidEdits={onForbidEdits}
-          />
         </div>
+        <ViewOptionToggle
+          isEditingInvalid={!editableByMe}
+          isEditing={editableByMe && editsAllowed}
+          onAllowEdits={onAllowEdits}
+          onForbidEdits={onForbidEdits}
+        />
       </div>
-    );
-  }
-);
+    </div>
+  );
+});

@@ -121,8 +121,10 @@ export function toDSpace(
   const facts = possibleFacts(space, graph, organizationFacts);
   const withInputFn = _guesstimate.expressionToInputFn(dGraph.metrics, facts);
 
-  const extractReferencedMetricsFn = (m) => {
-    const allIdsReferenced = _guesstimate.extractMetricIds(m.guesstimate);
+  const extractReferencedMetricsFn = (m: NonNullable<DenormalizedMetric>) => {
+    const allIdsReferenced = _guesstimate.extractMetricIds(
+      m.guesstimate as any
+    );
     return allIdsReferenced.filter((id) =>
       _collections.some(dGraph.metrics, id)
     );
