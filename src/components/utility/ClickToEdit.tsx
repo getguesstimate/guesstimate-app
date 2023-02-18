@@ -4,6 +4,7 @@ import ReactDOM from "react-dom";
 import TextareaAutosize from "react-textarea-autosize";
 
 import Icon from "~/components/react-fa-patched";
+import { Button } from "./buttons/button";
 
 import { ButtonClose } from "./buttons/close/index";
 
@@ -53,13 +54,13 @@ const ViewingMode: React.FC<{
     <div>
       {canEdit && (
         <div className="flex gap-2 items-center mb-1">
-          <span className="text-grey-666">Reasoning</span>
-          <span
-            className="text-grey-666 cursor-pointer p-1 hover:text-black hover:bg-grey-999"
+          <div className="text-grey-666">Reasoning</div>
+          <div
+            className="text-grey-666 cursor-pointer px-1 hover:text-black hover:bg-grey-ccc rounded-sm"
             onClick={onEdit}
           >
-            <Icon name="pencil" />
-          </span>
+            <Icon name="pencil" className="text-lg leading-none" />
+          </div>
         </div>
       )}
       <div className="text-grey-333">{children}</div>

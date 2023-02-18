@@ -18,7 +18,7 @@ export const SpaceSidebar: React.FC<Props> = ({
   onSaveDescription,
 }) => {
   return (
-    <div className="SpaceSidebar mx-4 my-6 w-[22em] p-4 bg-white/80 rounded-sm overflow-auto">
+    <div className="mx-4 my-6 w-[20em] p-4 bg-white/80 rounded-sm overflow-auto">
       <div className="flex justify-end">
         <ButtonCloseText onClick={onClose} />
       </div>

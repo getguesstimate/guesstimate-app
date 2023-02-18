@@ -1,15 +1,17 @@
-import React from "react";
 import { useRouter } from "next/router";
+import React from "react";
 
-import Icon from "~/components/react-fa-patched";
-import { DropDown } from "~/components/utility/DropDown";
 import { CardListElement } from "~/components/utility/Card";
+import { DropDown } from "~/components/utility/DropDown";
 import { SpaceHeaderButton } from "./SpaceHeaderButton";
 
-const PublicOption = ({ isSelected, onClick }) => (
+const PublicOption: React.FC<{ isSelected: boolean; onClick(): void }> = ({
+  isSelected,
+  onClick,
+}) => (
   <CardListElement
     isSelected={isSelected}
-    onMouseDown={!isSelected && onClick}
+    onMouseDown={isSelected ? () => {} : onClick}
     icon="globe"
     header="Public"
     closeOnClick={!isSelected}

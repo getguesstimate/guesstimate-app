@@ -240,7 +240,7 @@ export const SpaceToolbar = React.memo<Props>(function SpaceToolbar({
             disabled={!canRedo}
           />
 
-          {(editableByMe || calculators.length) && (
+          {editableByMe || calculators.length ? (
             <>
               <Divider />
               <DropDown
@@ -278,7 +278,7 @@ export const SpaceToolbar = React.memo<Props>(function SpaceToolbar({
                 ]}
               </DropDown>
             </>
-          )}
+          ) : null}
 
           {canShowFactSidebar && (
             <ToolbarIcon

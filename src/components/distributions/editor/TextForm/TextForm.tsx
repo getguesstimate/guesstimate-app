@@ -103,40 +103,45 @@ export const TextForm = React.forwardRef<{ focus(): void }, Props>(
 
       return (
         <div>
-          <div className="flex gap-4 items-center">
-            <TextInput
-              value={guesstimate.input || ""}
-              validInputs={validInputReadableIds}
-              errorInputs={errorInputReadableIds}
-              onReturn={onReturn}
-              onTab={onTab}
-              onChange={handleChangeInput}
-              onFocus={flagMetricAsClicked}
-              onBlur={handleBlur}
-              onChangeData={onAddData}
-              ref={inputRef}
-              organizationId={organizationId}
-              canUseOrganizationFacts={canUseOrganizationFacts}
-            />
+          <div className="flex gap-4 items-center w-full">
+            {/* min-w-0 helps with overflows, see https://makandracards.com/makandra/66994-css-flex-and-min-width and https://github.com/tailwindlabs/tailwindcss/issues/10004#issuecomment-1337464731 */}
+            <div className="flex-1 min-w-0">
+              <TextInput
+                value={guesstimate.input || ""}
+                validInputs={validInputReadableIds}
+                errorInputs={errorInputReadableIds}
+                onReturn={onReturn}
+                onTab={onTab}
+                onChange={handleChangeInput}
+                onFocus={flagMetricAsClicked}
+                onBlur={handleBlur}
+                onChangeData={onAddData}
+                ref={inputRef}
+                organizationId={organizationId}
+                canUseOrganizationFacts={canUseOrganizationFacts}
+                size={size}
+              />
+            </div>
 
             {shouldDisplayType && (
-              <GuesstimateTypeIcon
-                guesstimateType={guesstimateType || ""}
-                toggleDistributionSelector={() =>
-                  setShowDistributionSelector(!showDistributionSelector)
-                }
-              />
+              <div className="shrink-0">
+                <GuesstimateTypeIcon
+                  guesstimateType={guesstimateType || ""}
+                  toggleDistributionSelector={() =>
+                    setShowDistributionSelector(!showDistributionSelector)
+                  }
+                />
+              </div>
             )}
           </div>
 
           {showDistributionSelector && (
-            <div>
-              <DistributionSelector
-                disabledTypes={isLognormalValid ? [] : ["LOGNORMAL"]}
-                onSubmit={onChangeGuesstimateType}
-                selected={guesstimateType || ""}
-              />
-            </div>
+            <DistributionSelector
+              disabledTypes={isLognormalValid ? [] : ["LOGNORMAL"]}
+              onSubmit={onChangeGuesstimateType}
+              selected={guesstimateType || ""}
+              size={size}
+            />
           )}
         </div>
       );

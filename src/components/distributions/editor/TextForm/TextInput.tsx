@@ -24,31 +24,6 @@ import {
 } from "~/lib/engine/facts";
 import { or } from "~/lib/engine/utils";
 
-var UserAgent = require("fbjs/lib/UserAgent");
-
-var isOSX = UserAgent.isPlatform("Mac OS X");
-var KeyBindingUtil = {
-  /**
-   * Check whether the ctrlKey modifier is *not* being used in conjunction with
-   * the altKey modifier. If they are combined, the result is an `altGraph`
-   * key modifier, which should not be handled by this set of key bindings.
-   */
-  isCtrlKeyCommand: function isCtrlKeyCommand(e) {
-    return !!e.ctrlKey && !e.altKey;
-  },
-  isOptionKeyCommand: function isOptionKeyCommand(e) {
-    return isOSX && e.altKey;
-  },
-  usesMacOSHeuristics: function usesMacOSHeuristics() {
-    return isOSX;
-  },
-  hasCommandModifier: function hasCommandModifier(e) {
-    return isOSX
-      ? !!e.metaKey && !e.altKey
-      : KeyBindingUtil.isCtrlKeyCommand(e);
-  },
-};
-
 import clsx from "clsx";
 import {
   formatData,
@@ -83,10 +58,15 @@ const stylizedSpan =
       </span>
     );
 
-const Fact = stylizedSpan("fact input");
-const Suggestion = stylizedSpan("suggestion");
-const ValidInput = stylizedSpan("valid input");
-const ErrorInput = stylizedSpan("error input");
+const inputClassName = "font-medium rounded-xs px-0.5 mx-0.5 inline-block";
+const factClassName = "text-[#483567] bg-[#e5dbf7]";
+const validClassName = "text-green-3 bg-green-4";
+const errorClassName = "text-[#560606] bg-[#ff9e9e]";
+
+const Fact = stylizedSpan(clsx(inputClassName, factClassName));
+const ValidInput = stylizedSpan(clsx(inputClassName, validClassName));
+const ErrorInput = stylizedSpan(clsx(inputClassName, errorClassName));
+const Suggestion = stylizedSpan("bg-[#b5ddff]");
 
 const positionDecorator = (
   start: number,
@@ -113,6 +93,7 @@ type Props = {
   onFocus(): void;
   canUseOrganizationFacts: boolean;
   organizationId?: string | number;
+  size?: "small" | "large";
 } & { dispatch: AppDispatch } & { suggestion: string };
 
 type State = {
@@ -168,6 +149,11 @@ export class UnconnectedTextInput extends Component<Props, State> {
     }
   }
 
+  // componentDidCatch() {
+  //   // hack from https://github.com/facebookarchive/draft-js/issues/1320
+  //   this.forceUpdate();
+  // }
+
   factRegex() {
     const baseRegex = this.props.canUseOrganizationFacts
       ? HANDLE_REGEX
@@ -188,7 +174,7 @@ export class UnconnectedTextInput extends Component<Props, State> {
       },
     ];
 
-    let decorators = [...extraDecorators, ...factDecorators];
+    let decorators: DraftDecorator[] = [...extraDecorators, ...factDecorators];
 
     if (!_.isEmpty(validInputs)) {
       const validInputsRegex = or(validInputs);
@@ -444,9 +430,21 @@ export class UnconnectedTextInput extends Component<Props, State> {
     return (
       <div
         className={clsx(
-          "TextInput",
-          isFlashing && "flashing"
-          // hasErrors && "hasErrors",
+          "border-2 rounded-sm",
+          "leading-tight break-words",
+          "transition-colors duration-300",
+          this.props.size === "small" && [
+            "font-light",
+            "text-[#456286]/80 focus:text-black-3",
+          ],
+          this.props.size === "large" && [
+            "text-2xl font-thin",
+            "text-grey-666 bg-grey-eee",
+            "p-1",
+          ],
+          isFlashing
+            ? "bg-[#c9e8c0] border-[#0fb963]"
+            : "bg-white border-transparent"
         )}
         onClick={this.focus.bind(this)}
         onKeyDown={(e) => {

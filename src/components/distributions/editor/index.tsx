@@ -78,7 +78,7 @@ export const DistributionEditor = React.forwardRef<{ focus(): void }, Props>(
     }
 
     const dispatchChanges = (
-      changes: Partial<Omit<Guesstimate, "input">> & { input?: string },
+      changes: Partial<Guesstimate> & { input?: string },
       runFormSims: boolean,
       saveToServer: boolean
     ) => {

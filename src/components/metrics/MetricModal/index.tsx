@@ -88,7 +88,7 @@ export const MetricModal: React.FC<Props> = ({
           </div>
         )}
         <div className="bg-white pt-12">
-          <div className="px-8 flex justify-between items-center gap-8">
+          <div className="px-8 flex justify-between items-start gap-8">
             <div className="flex-1">
               <DistributionEditor
                 organizationId={organizationId}

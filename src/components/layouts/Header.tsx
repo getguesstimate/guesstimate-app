@@ -30,7 +30,7 @@ export const Header: React.FC<Props> = ({ isFluid, isBare }) => {
   return (
     <div
       className={clsx(
-        isFluid ? "w-full px-12" : "max-w-1200 w-full mx-auto px-4",
+        isFluid ? "w-full px-8" : "max-w-1200 w-full mx-auto px-4",
         !isBare && "border-b border-grey-1"
       )}
     >
@@ -41,7 +41,7 @@ export const Header: React.FC<Props> = ({ isFluid, isBare }) => {
         )}
       >
         {!isBare && (
-          <a className="block p-1 hover:bg-grey-1 rounded-lg" href={navbarRef}>
+          <a className="block p-2 hover:bg-grey-1 rounded-lg" href={navbarRef}>
             <div className="font-lato text-2xl leading-none hidden md:block text-grey-2">
               Guesstimate
             </div>
