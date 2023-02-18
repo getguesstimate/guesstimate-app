@@ -140,7 +140,7 @@ export const TextForm = React.forwardRef<{ focus(): void }, Props>(
               disabledTypes={isLognormalValid ? [] : ["LOGNORMAL"]}
               onSubmit={onChangeGuesstimateType}
               selected={guesstimateType || ""}
-              size={size}
+              // size={size}
             />
           )}
         </div>
