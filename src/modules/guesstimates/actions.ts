@@ -3,13 +3,13 @@ import * as spaceActions from "~/modules/spaces/actions";
 
 import * as e from "~/lib/engine/engine";
 import { AppThunk } from "~/modules/store";
-import { Guesstimate } from "./reducer";
+import { Guesstimate, GuesstimateWithInput } from "./reducer";
 
 // TODO(matthew): Doing fact/metric translations here means that systems that rely on guesstimate idenity comparisons
 // (e.g. action triggering qualifiers) will break.
 export function changeGuesstimate(
   metricId: string,
-  patch: Partial<Guesstimate>,
+  { input, ...patch }: Partial<GuesstimateWithInput>,
   shouldRegisterGraphChange = true
 ): AppThunk {
   return (dispatch, getState) => {
@@ -19,8 +19,12 @@ export function changeGuesstimate(
       (guesstimate) => guesstimate.metric === metricId
     );
 
-    const newGuesstimate = {
-      ...oldGuesstimate,
+    const newGuesstimate: Guesstimate = {
+      ...(oldGuesstimate || {
+        metric: metricId,
+        description: "",
+        expression: "",
+      }),
       ...patch,
     };
 
@@ -34,40 +38,39 @@ export function changeGuesstimate(
       throw new Error(`Space ${metric.space} not found`);
     }
 
-    const possibleFacts = e.space.possibleFacts(
-      space,
-      state,
-      state.facts.organizationFacts
-    );
-    const factIdsMap = possibleFacts.reduce(
-      (map, curr) =>
-        _.set(map, `#${curr.variable_name}`, { id: curr.id, isMetric: false }),
-      {}
-    );
+    if (input !== undefined) {
+      const possibleFacts = e.space.possibleFacts(
+        space,
+        state,
+        state.facts.organizationFacts
+      );
+      const factIdsMap = possibleFacts.reduce(
+        (map, curr) =>
+          _.set(map, `#${curr.variable_name}`, {
+            id: curr.id,
+            isMetric: false,
+          }),
+        {}
+      );
 
-    const metrics = state.metrics.filter((m) => m.space === space.id);
-    const metricIdsMap = metrics.reduce(
-      (map, curr) =>
-        _.set(map, curr.readableId, { id: curr.id, isMetric: true }),
-      {}
-    );
+      const metrics = state.metrics.filter((m) => m.space === space.id);
+      const metricIdsMap = metrics.reduce(
+        (map, curr) =>
+          _.set(map, curr.readableId, { id: curr.id, isMetric: true }),
+        {}
+      );
 
-    const readableIdsMap = { ...metricIdsMap, ...factIdsMap };
-    const expression = e.guesstimate.inputToExpression(
-      newGuesstimate.input,
-      readableIdsMap
-    );
+      const readableIdsMap = { ...metricIdsMap, ...factIdsMap };
+      newGuesstimate.expression = e.guesstimate.inputToExpression(
+        input,
+        readableIdsMap
+      );
+    }
 
     dispatch({
       type: "CHANGE_GUESSTIMATE",
       metricId,
-      values: {
-        description: "",
-        ...newGuesstimate,
-        input: null,
-        expression,
-        metric: metricId,
-      } satisfies Guesstimate,
+      values: newGuesstimate,
     });
 
     if (shouldRegisterGraphChange) {

@@ -4,12 +4,13 @@ import { AnyAction, Reducer } from "redux";
 
 export type Guesstimate = {
   metric: string;
-  input: string | null;
-  expression?: any;
+  expression: string;
   guesstimateType?: string;
   description: string;
   data?: number[] | null;
 };
+
+export type GuesstimateWithInput = Guesstimate & { input: string };
 
 type GuesstimatesState = Guesstimate[];
 
@@ -43,7 +44,7 @@ export const guesstimatesR: Reducer<GuesstimatesState, AnyAction> = (
         ...state,
         {
           metric: action.item.id,
-          input: "",
+          expression: "",
           guesstimateType: "NONE",
           description: "",
         },
@@ -55,7 +56,6 @@ export const guesstimatesR: Reducer<GuesstimatesState, AnyAction> = (
         // Build new guesstimates if not provided
         const newGuesstimates = action.items.map((item) => ({
           metric: item.id,
-          input: "",
           guesstimateType: "NONE",
           description: "",
         }));

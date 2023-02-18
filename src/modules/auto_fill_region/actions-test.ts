@@ -21,7 +21,6 @@ describe("Autofill Actions", () => {
       metric: "1",
       expression: startExpression,
       guesstimateType: "FUNCTION",
-      input: null,
       description: "",
     };
     const direction = { row: 0, column: 1 };

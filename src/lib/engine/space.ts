@@ -11,6 +11,7 @@ import * as _simulation from "./simulation";
 import * as _userOrganizationMemberships from "./userOrganizationMemberships";
 import { allPropsPresent, isPresent } from "./utils";
 import { DenormalizedMetric } from "./metric";
+import { GuesstimateWithInput } from "~/modules/guesstimates/reducer";
 
 export type MetricEdges = {
   inputs: string[];
@@ -20,6 +21,8 @@ export type MetricEdges = {
 
 export type FullDenormalizedMetric = DenormalizedMetric & {
   edges: MetricEdges;
+} & {
+  guesstimate: GuesstimateWithInput;
 };
 
 export type DSpace = ApiSpace & {

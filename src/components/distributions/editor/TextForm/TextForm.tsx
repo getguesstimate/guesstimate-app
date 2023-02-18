@@ -9,10 +9,13 @@ import { DenormalizedMetric } from "~/lib/engine/metric";
 import { Guesstimator } from "~/lib/guesstimator/index";
 import { changeMetricClickMode } from "~/modules/canvas_state/actions";
 import { useAppDispatch } from "~/modules/hooks";
-import { Guesstimate } from "~/modules/guesstimates/reducer";
+import {
+  Guesstimate,
+  GuesstimateWithInput,
+} from "~/modules/guesstimates/reducer";
 
 type Props = {
-  guesstimate: Guesstimate;
+  guesstimate: GuesstimateWithInput;
   inputMetrics: DenormalizedMetric[];
   onChangeInput(text: string): void;
   onAddData(data: number[]): void;

@@ -24,6 +24,31 @@ import {
 } from "~/lib/engine/facts";
 import { or } from "~/lib/engine/utils";
 
+var UserAgent = require("fbjs/lib/UserAgent");
+
+var isOSX = UserAgent.isPlatform("Mac OS X");
+var KeyBindingUtil = {
+  /**
+   * Check whether the ctrlKey modifier is *not* being used in conjunction with
+   * the altKey modifier. If they are combined, the result is an `altGraph`
+   * key modifier, which should not be handled by this set of key bindings.
+   */
+  isCtrlKeyCommand: function isCtrlKeyCommand(e) {
+    return !!e.ctrlKey && !e.altKey;
+  },
+  isOptionKeyCommand: function isOptionKeyCommand(e) {
+    return isOSX && e.altKey;
+  },
+  usesMacOSHeuristics: function usesMacOSHeuristics() {
+    return isOSX;
+  },
+  hasCommandModifier: function hasCommandModifier(e) {
+    return isOSX
+      ? !!e.metaKey && !e.altKey
+      : KeyBindingUtil.isCtrlKeyCommand(e);
+  },
+};
+
 import clsx from "clsx";
 import {
   formatData,
@@ -320,7 +345,13 @@ export class UnconnectedTextInput extends Component<Props, State> {
 
     const text = this.text(editorState);
     if (text !== this.props.value) {
-      isData(text) ? this.changeData(text) : this.props.onChange(text);
+      setTimeout(() => {
+        if (isData(text)) {
+          this.changeData(text);
+        } else {
+          this.props.onChange(text);
+        }
+      }, 0);
     }
   }
 
@@ -392,6 +423,7 @@ export class UnconnectedTextInput extends Component<Props, State> {
         }
         return "handled";
       }
+
       return "not-handled";
     };
 

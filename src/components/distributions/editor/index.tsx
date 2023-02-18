@@ -9,14 +9,17 @@ import { runFormSimulations } from "~/modules/simulations/actions";
 import clsx from "clsx";
 import { Guesstimator } from "~/lib/guesstimator/index";
 import { MetricClickMode } from "~/modules/canvas_state/reducer";
-import { Guesstimate } from "~/modules/guesstimates/reducer";
+import {
+  Guesstimate,
+  GuesstimateWithInput,
+} from "~/modules/guesstimates/reducer";
 import { useAppDispatch } from "~/modules/hooks";
 import { LargeDataViewer, SmallDataViewer } from "./DataForm/DataViewer";
 import { DenormalizedMetric } from "~/lib/engine/metric";
 
 type Props = {
   metricClickMode: MetricClickMode;
-  guesstimate: Guesstimate;
+  guesstimate: GuesstimateWithInput;
   metricId: string;
   onReturn?(): void;
   onTab?(): void;
@@ -75,7 +78,7 @@ export const DistributionEditor = React.forwardRef<{ focus(): void }, Props>(
     }
 
     const dispatchChanges = (
-      changes: Partial<Guesstimate>,
+      changes: Partial<Omit<Guesstimate, "input">> & { input?: string },
       runFormSims: boolean,
       saveToServer: boolean
     ) => {
@@ -122,11 +125,7 @@ export const DistributionEditor = React.forwardRef<{ focus(): void }, Props>(
     };
 
     const addDataAndSave = (data: number[] | null) => {
-      dispatchChanges(
-        { guesstimateType: "DATA", data, input: null },
-        true,
-        true
-      );
+      dispatchChanges({ guesstimateType: "DATA", data }, true, true);
     };
 
     const deleteDataAndSave = () => {

@@ -9,7 +9,7 @@ describe("guesstimatesReducer", () => {
           guesstimates: [
             { metric: "1", guesstimateType: "NONE", input: "" },
             { metric: "2", guesstimateType: "NONE", input: "" },
-            { metric: "2", guesstimateType: "POINT", input: "3" },
+            { metric: "2", guesstimateType: "POINT", expression: "3" },
           ],
         },
       },
@@ -21,14 +21,24 @@ describe("guesstimatesReducer", () => {
         records: spaces,
       });
       expect(newGuesstimates.length).toEqual(2);
-      expect(newGuesstimates[1].input).toEqual("3");
+      expect(newGuesstimates[1].expression).toEqual("3");
     });
   });
 
   describe("#ADD_METRIC", () => {
     const guesstimates: Guesstimate[] = [
-      { metric: "1", guesstimateType: "NONE", input: "", description: "" },
-      { metric: "2", guesstimateType: "POINT", input: "3", description: "" },
+      {
+        metric: "1",
+        guesstimateType: "NONE",
+        expression: "",
+        description: "",
+      },
+      {
+        metric: "2",
+        guesstimateType: "POINT",
+        expression: "3",
+        description: "",
+      },
     ];
 
     it(`correctly adds new element`, () => {
@@ -46,7 +56,7 @@ describe("guesstimatesReducer", () => {
         item: { id: "2" },
       });
       expect(newGuesstimates.length).toEqual(2);
-      expect(newGuesstimates[1].input).toEqual("");
+      expect(newGuesstimates[1].expression).toEqual("");
     });
   });
 });

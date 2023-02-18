@@ -62,18 +62,22 @@ export function expressionToInputFn(metrics: Metric[] = [], facts: any[] = []) {
     idMap[expressionSyntaxPad(id, false)] = `#${variable_name}`;
   });
 
-  const translateValidInputsFn = (expression) =>
+  const translateValidInputsFn = (expression: string) =>
     _utils.replaceByMap(expression, idMap);
-  const translateRemainingInputsFn = (expression) =>
+  const translateRemainingInputsFn = (expression: string) =>
     expression.replace(/\$\{.*\}/, "??");
 
   const translateInputsFn = ({ expression }: Guesstimate) =>
     translateRemainingInputsFn(translateValidInputsFn(expression));
 
-  return (g: Guesstimate) =>
-    !_.isEmpty(g.input) || _.isEmpty(g.expression)
-      ? g
-      : { ...g, input: translateInputsFn(g) };
+  return (g: Guesstimate) => ({
+    ...g,
+    // It's important that we don't translate expression to `input` when expression is empty,
+    // because some old spaces store `input` instead of `expression`.
+    ...(_.isEmpty(g.expression)
+      ? { input: (g as any).input || "" }
+      : { input: translateInputsFn(g) }),
+  });
 }
 
 // Returns an expression based on the passed input and idMap.
