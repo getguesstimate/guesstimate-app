@@ -14,6 +14,8 @@ const NormalIcon = "/assets/distribution-icons/normal.png";
 const PointIcon = "/assets/distribution-icons/point.png";
 const UniformIcon = "/assets/distribution-icons/uniform.png";
 
+export type DistributionType = string; // TODO - enum
+
 type SamplerType = {
   referenceName: string;
   types: string[];
@@ -51,7 +53,7 @@ export const DistributionPoint: SamplerType = {
 export const DistributionLognormal: SamplerType = {
   referenceName: "LOGNORMAL",
   types: ["DISTRIBUTION", "LOGNORMAL"],
-  displayName: "LogNormal",
+  displayName: "Lognormal",
   isRangeDistribution: true,
   sampler: distributionLognormalSampler,
   icon: LogNormalIcon,

@@ -27,8 +27,6 @@ export const allPropsPresent = (obj, ...props): boolean =>
 
 export const notIn = (list) => (e) => !list.includes(e);
 
-export const getClassName = (...classes) => classes.filter(isPresent).join(" ");
-
 const escSpecialChars = (str) => str.replace(/\$|\{|\}|\_/g, (e) => `\\${e}`);
 const toSource = (re) =>
   re instanceof RegExp ? re.source : escSpecialChars(re);

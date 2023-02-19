@@ -3,16 +3,12 @@ import React from "react";
 
 import Icon from "~/components/react-fa-patched";
 
-import {
-  DistributionSummary,
-  PrecisionNumber,
-} from "~/components/distributions/summary/index";
+import { PrecisionNumber } from "~/components/distributions/DistributionSummary/index";
 import { SimulationHistogram } from "~/components/simulations/SimulationHistogram";
-import { Fact, isExportedFromSpace, length } from "~/lib/engine/facts";
+import { Fact, isExportedFromSpace } from "~/lib/engine/facts";
 import { spaceUrlById } from "~/lib/engine/space";
 
 import { Button } from "~/components/utility/buttons/button";
-import { allPropsPresent } from "~/lib/engine/utils";
 
 type Props = {
   fact: Fact;

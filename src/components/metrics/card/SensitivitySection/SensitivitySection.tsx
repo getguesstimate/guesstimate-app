@@ -1,12 +1,11 @@
 import _ from "lodash";
 import React, { PropsWithChildren } from "react";
 
+import clsx from "clsx";
 import everpolate from "everpolate";
 import { ScatterPlot } from "react-d3-components";
 import { FullDenormalizedMetric } from "~/lib/engine/space";
-import clsx from "clsx";
 import { SampleValue } from "~/lib/guesstimator/samplers/Simulator";
-import { number } from "yup";
 
 function importance(r2: number) {
   if (r2 < 0.05) {
@@ -150,7 +149,7 @@ const RegressionStats: React.FC<{
         <span> {regression.intercept.toFixed(2)}</span>
       </div>
       <div>
-        <RegressionLabel> sample count</RegressionLabel>
+        <RegressionLabel>sample count</RegressionLabel>
         <span> {sampleCount}</span>
       </div>
     </div>

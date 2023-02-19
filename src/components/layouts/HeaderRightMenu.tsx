@@ -43,7 +43,7 @@ const MenuLink: React.FC<{
       onClick={handleClick}
     >
       {icon ? <div className="text-xl md:text-2xl">{icon}</div> : null}
-      <span className="font-semibold font-lato whitespace-nowrap">{text}</span>
+      <span className="font-semibold whitespace-nowrap">{text}</span>
     </a>
   );
 };

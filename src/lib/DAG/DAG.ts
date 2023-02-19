@@ -1,15 +1,14 @@
 import _ from "lodash";
-import { mutableCopy, orArr, notIn } from "~/lib/engine/utils";
+import { mutableCopy, notIn, orArr } from "~/lib/engine/utils";
 import {
   NodeAncestors,
-  SimulationNodeParams,
   SimulationNodeParamsWithInputs,
 } from "../propagation/DAG";
 import {
   allInputsWithinFn,
   anyRelationsWithinFn,
-  inACycleWithNodeFn,
   getMissingInputs,
+  inACycleWithNodeFn,
 } from "./nodeFns";
 
 export type CyclePseudoNode = {

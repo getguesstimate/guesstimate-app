@@ -34,7 +34,7 @@ export const FirstSubscriptionPage: React.FC<Props> = ({ planName }) => {
   const plan = Plan.find(planId);
   return (
     <Container>
-      <div className="font-lato mt-8 mb-16">
+      <div className="mt-8 mb-16">
         <div className="md:flex gap-18 mx-auto max-w-4xl">
           <div className="flex-1">
             <div className="mb-24">

@@ -25,7 +25,7 @@ export const Button: React.FC<{
       size === "small" ? "px-3 py-2 text-xs" : "px-3 py-2 text-base",
       wide ? "flex w-full" : "inline-flex",
       "items-center",
-      "rounded font-lato",
+      "rounded",
       color === "red"
         ? "text-white bg-[#b74d4d] hover:bg-[#923f3f]"
         : color === "blue"

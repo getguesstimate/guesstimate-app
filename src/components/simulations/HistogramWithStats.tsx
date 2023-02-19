@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import _ from "lodash";
 import React, { useRef, useState } from "react";
-import { DistributionSummary } from "~/components/distributions/summary/index";
+import { DistributionSummary } from "~/components/distributions/DistributionSummary/index";
 import { SimulationHistogram } from "~/components/simulations/SimulationHistogram";
 import { cutoff, percentile } from "~/lib/dataAnalysis";
 import { Simulation } from "~/modules/simulations/reducer";

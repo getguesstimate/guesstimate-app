@@ -13,7 +13,7 @@ const Benefit: React.FC<{
     <div className="flex flex-col items-center">
       <i className={clsx(iconClass, "opacity-20 text-7xl")} />
       <h2 className="font-normal text-4xl text-grey-444">{title}</h2>
-      <p className="text-center text-grey-2 text-xl leading-normal font-lato">
+      <p className="text-center text-grey-2 text-xl leading-normal">
         {children}
       </p>
     </div>
@@ -30,7 +30,7 @@ export const Home: React.FC = () => {
         width={540}
       />
       <div className="px-4 mt-12">
-        <h2 className="text-5xl text-center font-lato font-normal text-grey-333 leading-tight">
+        <h2 className="text-5xl text-center font-normal text-grey-333 leading-tight">
           A spreadsheet for things
           <br />
           that aren&rsquo;t certain

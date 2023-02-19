@@ -3,7 +3,7 @@ import React, { useImperativeHandle, useRef } from "react";
 
 import Icon from "~/components/react-fa-patched";
 
-import { DistributionSummary } from "~/components/distributions/summary/index";
+import { DistributionSummary } from "~/components/distributions/DistributionSummary/index";
 import {
   MetricName,
   MetricNameHandle,
@@ -41,11 +41,11 @@ import { CanvasState } from "~/modules/canvas_state/reducer";
 // to ensure that the metric card gets selected after click.
 const ErrorIcon: React.FC<{ errors: PropagationError[] }> = ({ errors }) => {
   if (isBreak(errors)) {
-    return <Icon name="unlink" />;
+    return <Icon name="unlink" className="text-[1.4em] text-red-8" />;
   } else if (isInfiniteLoop(errors)) {
-    return <i className="ion-ios-infinite" />;
+    return <i className="ion-ios-infinite text-[1.8em] text-red-4" />;
   } else {
-    return <Icon name="warning" />;
+    return <Icon name="warning" className="text-[1.5em] text-red-4" />;
   }
 };
 
@@ -53,24 +53,28 @@ const ErrorIcon: React.FC<{ errors: PropagationError[] }> = ({ errors }) => {
 // to ensure that the metric card gets selected after click.
 const ErrorSection: React.FC<{
   errors: PropagationError[];
-  padTop: boolean;
   shouldShowErrorText: boolean;
   messageToDisplay: string | null;
-}> = ({ errors, padTop, shouldShowErrorText, messageToDisplay }) => (
-  <div
-    className={clsx(
-      "StatsSectionErrors",
-      isBreak(errors) ? "minor" : "serious",
-      padTop && "padTop"
-    )}
-  >
-    {shouldShowErrorText ? (
-      <div className="error-message">{messageToDisplay}</div>
-    ) : (
-      <ErrorIcon errors={errors} />
-    )}
-  </div>
-);
+}> = ({ errors, shouldShowErrorText, messageToDisplay }) => {
+  const theme = isBreak(errors) ? "minor" : "serious";
+
+  return (
+    <div
+      className={clsx(
+        "h-full grid place-items-center min-h-[40px]",
+        theme === "serious" ? "bg-red-6" : "bg-red-7"
+      )}
+    >
+      {shouldShowErrorText ? (
+        <div className="text-sm text-red-3 font-medium leading-[1.1em] px-2 py-0.5">
+          {messageToDisplay}
+        </div>
+      ) : (
+        <ErrorIcon errors={errors} />
+      )}
+    </div>
+  );
+};
 
 type Props = {
   canvasState: CanvasState;
@@ -167,12 +171,9 @@ export const MetricCardViewSection = React.forwardRef<
     }
   };
 
-  const renderErrorSection = () => {
-    const shouldShowErrorSection = _hasErrors() && !inSelectedCell;
-    if (!shouldShowErrorSection) {
-      return null;
-    }
+  const shouldShowErrorSection = _hasErrors() && !inSelectedCell;
 
+  const renderErrorSection = () => {
     const errorToDisplay = displayableError(_errors());
 
     const nodeIdMap = _.transform(
@@ -190,7 +191,6 @@ export const MetricCardViewSection = React.forwardRef<
       <ErrorSection
         errors={_errors()}
         messageToDisplay={messageToDisplay}
-        padTop={!_.isEmpty(metric.name) && !inSelectedCell}
         shouldShowErrorText={!!messageToDisplay && props.hovered}
       />
     );
@@ -201,13 +201,7 @@ export const MetricCardViewSection = React.forwardRef<
     metricClickMode === "FUNCTION_INPUT_SELECT" && !inSelectedCell;
 
   return (
-    <div
-      className={clsx(
-        "MetricCardViewSection",
-        _hasErrors() && !inSelectedCell && "hasErrors"
-      )}
-      onMouseDown={onMouseDown}
-    >
+    <div className="flex-1 relative flex flex-col" onMouseDown={onMouseDown}>
       {showSimulation && (
         <div
           className={clsx(
@@ -227,8 +221,8 @@ export const MetricCardViewSection = React.forwardRef<
         <div className="MetricToken">{renderToken()}</div>
       </div>
 
-      {!_.isEmpty(metric.name) || inSelectedCell || hasContent() ? (
-        <div className="flex-none pr-8 pl-1 pt-1">
+      {(!_.isEmpty(metric.name) || inSelectedCell || hasContent()) && (
+        <div className="flex-none pr-7 pl-1.5 pt-1">
           <MetricName
             anotherFunctionSelected={anotherFunctionSelected}
             inSelectedCell={inSelectedCell}
@@ -242,11 +236,11 @@ export const MetricCardViewSection = React.forwardRef<
             onTab={props.onTab}
           />
         </div>
-      ) : null}
+      )}
 
       <div
         className={clsx(
-          "StatsSection",
+          "flex-1 min-h-[10px] flex flex-col",
           anotherFunctionSelected ? "cursor-pointer" : "cursor-move"
         )}
         ref={props.connectDragSource}
@@ -255,7 +249,7 @@ export const MetricCardViewSection = React.forwardRef<
           <SensitivitySection yMetric={props.analyzedMetric} xMetric={metric} />
         )}
         {showSimulation && (
-          <div className="StatsSectionBody">
+          <div className="px-2 pt-2 pb-1 flex-1">
             <DistributionSummary
               length={stats.length}
               mean={stats.mean}
@@ -264,12 +258,21 @@ export const MetricCardViewSection = React.forwardRef<
           </div>
         )}
         {showSimulation && shouldShowStatistics && (
-          <div className="StatsSectionTable">
+          <div className="mt-2.5 bg-white/30 px-2">
             <MetricStatTable stats={metric.simulation?.stats} />
           </div>
         )}
 
-        {renderErrorSection()}
+        {shouldShowErrorSection && (
+          <div
+            className={clsx(
+              "flex-1",
+              !_.isEmpty(metric.name) && !inSelectedCell && "mt-1"
+            )}
+          >
+            {renderErrorSection()}
+          </div>
+        )}
       </div>
     </div>
   );

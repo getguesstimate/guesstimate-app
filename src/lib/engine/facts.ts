@@ -11,6 +11,7 @@ import { sortDescending } from "~/lib/dataAnalysis";
 import { _matchingFormatter } from "~/lib/guesstimator/formatter/index";
 import { Guesstimator } from "~/lib/guesstimator/index";
 import { PropagationError } from "../propagation/errors";
+import { Guesstimate } from "~/modules/guesstimates/reducer";
 
 export type Fact = {
   id: number;
@@ -157,7 +158,7 @@ export const getFactsForOrg = (facts, org): any[] =>
       );
 
 export function getRelevantFactsAndReformatGlobals(
-  { metrics, guesstimates, simulations },
+  { guesstimates }: { guesstimates: Guesstimate[] },
   globalFacts,
   organizationFacts: any[],
   spaceIds

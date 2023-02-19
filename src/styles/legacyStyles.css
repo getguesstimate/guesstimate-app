@@ -1,275 +1,18 @@
 @import "./variables.css";
 
-/* src/components/distributions/editor/style.css */
-$flash-duration-sec: 0.4s;
-
-.TextInput {
-  background-color: rgba(0, 0, 0, 0);
-  box-shadow: none;
-  border: none;
-  border-radius: 1px;
-  outline: none;
-  resize: none;
-  transition: background-color 0.3s;
-  padding: 0.2em;
-  max-width: 100%;
-  &:focus {
-    outline: none;
-    box-shadow: none;
-    color: $black-3;
-  }
-
-  float: left;
-  width: 100%;
-  padding: 2px;
-  color: rgba(69, 98, 134, 0.83);
-  font-weight: 300;
-  line-height: 1.2em;
-}
-
-.TextInput {
-  line-height: 1.3em;
-  font-size: 0.95em;
-  border-radius: 2px;
-  padding: 0;
-  border: 2px solid transparent;
-  transition: border-color $flash-duration-sec ease,
-    background-color $flash-duration-sec ease;
-
-  .fact {
-    color: #483567;
-    background-color: #e5dbf7;
-  }
-
-  .suggestion {
-    background-color: #b5ddff;
-  }
-
-  .input {
-    border-radius: 0.05em;
-    font-size: 0.94em;
-    padding: 0.05em 0.1em 0 0.1em;
-    margin: auto 0.07em auto 0.07em;
-    font-weight: 500;
-
-    &.valid {
-      color: $green-3;
-      background-color: $green-4;
-    }
-
-    &.error {
-      color: #560606;
-      background-color: #ff9e9e;
-    }
-  }
-
-  &.flashing {
-    border: 2px solid #0fb963;
-    background-color: #c9e8c0;
-  }
-}
-
-.Guesstimate.large .TextInput {
-  font-size: 1.5em;
-  border-radius: 2px;
-  font-weight: 100;
-  color: #666;
-  background: #eee;
-  padding: 2px 4px;
-}
-
-.Guesstimate .GuesstimateInputForm {
-  display: flex;
-  flex-direction: column;
-}
-
-.Guesstimate .GuesstimateInputForm--row {
-  flex: 1;
-}
-
-.DistributionSelector {
-  width: 100%;
-}
-
-.DistributionSelector hr {
-  border: none;
-  border-top: 1px solid $grey-1;
-  margin: 4px 0;
-}
-
-.Guesstimate .DistributionIcon.DistributionIcon {
-  font-size: 1em;
-  padding-top: 2px;
-  padding-left: 2px;
-  padding-right: 2px;
-  position: relative;
-  height: 24px;
-  width: 24px;
-  padding-top: 0;
-  margin: 0 0 0 3px;
-}
-
-.Guesstimate.large .DistributionIcon.DistributionIcon {
-  height: 34px;
-  width: 34px;
-}
-
-.DistributionIcon.button.selected {
-  background-color: $blue-2;
-}
-
-.DistributionIcon img {
-  width: 24px;
-  opacity: 1;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 4px;
-  bottom: 0;
-}
-
-.GuesstimateTypeQuestion {
-  float: right;
-  margin-right: 4px;
-  font-size: 1.2em;
-  color: $grey-2;
-  opacity: 0.6;
-  margin-top: 3px;
-}
-
-.Guesstimate.large .GuesstimateTypeQuestion {
-  font-size: 2em;
-  margin-top: 0;
-}
-
-.GuesstimateTypeQuestion:hover {
-  opacity: 1;
-  cursor: pointer;
-}
-
-.Guesstimate.large .DistributionIcon img {
-  width: 34px;
-}
-
-.DistributionIcon.DistributionSelectorToggle {
-  display: inline-block;
-  color: #999;
-  float: right;
-}
-
-.DistributionIcon.DistributionSelectorToggle {
-  opacity: 0.6;
-}
-
-.button.DistributionIcon.DistributionSelectorToggle {
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-.button.DistributionIcon.DistributionSelectorToggle:hover {
-  opacity: 1;
-}
-
-.button.DistributionIcon.DistributionSelectorToggle:hover {
-  background-color: $grey-1;
-}
-
-/* src/components/distributions/summary/style.css */
-.sup {
-  font-size: 0.6em;
-  vertical-align: super;
-}
-
 /* src/components/metrics/card/MetricCardViewSection/style.css */
-.MetricCardViewSection {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-
-.metricCard .MetricCardViewSection.hasErrors .error-message {
-  color: #5f0909;
-  font-size: 0.8em;
-  font-weight: 500;
-  line-height: 1.1em;
-  padding: 2px 9px;
-}
-
-.metricCard .MetricCardViewSection.hasErrors .StatsSectionErrors.minor {
-  background-color: rgb(236, 202, 199);
-}
-
-.metricCard .MetricCardViewSection.hasErrors .StatsSectionErrors.serious {
-  background-color: #e48585;
-}
-
-.MetricCardViewSection > .StatsSection .StatsSectionErrors.serious .fa {
-  color: #a74b4b;
-  font-size: 1.5em;
-}
-
-.MetricCardViewSection > .StatsSection .StatsSectionErrors.serious i {
-  color: #a74b4b;
-  font-size: 1.8em;
-}
-
-.MetricCardViewSection > .StatsSection .StatsSectionErrors.minor .fa {
-  font-size: 1.4em;
-  color: #d48a8a;
-  margin-top: 4px;
-}
-
-.metricCard.input .MetricCardViewSection .DistributionSummary {
+.metricCard.input .DistributionSummary {
   color: #222;
 }
 
-.metricCard.output .MetricCardViewSection .DistributionSummary {
+.metricCard.output .DistributionSummary {
   font-weight: 700;
   color: #111;
 }
 
-.MetricCardViewSection > .StatsSection {
-  width: 100%;
-  float: left;
-  min-height: 10px;
-  flex: 5;
-  display: flex;
-  flex-direction: column;
-}
-
-.MetricCardViewSection > .StatsSection .StatsSectionBody {
-  padding: 8px 6px 4px 7px;
-  flex: 5;
-}
-
-.MetricCardViewSection > .StatsSection .StatsSectionErrors {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 40px;
-}
-
-.MetricCardViewSection > .StatsSection .StatsSectionErrors.isHidden {
-  display: none;
-}
-
-.MetricCardViewSection > .StatsSection .StatsSectionErrors.padTop {
-  margin-top: 5px;
-}
-
 .metricCard .DistributionSummary {
   font-weight: 300;
-  font-family: Lato, Arial, sans-serif;
   color: #444;
-}
-
-.MetricCardViewSection .StatsSectionTable {
-  padding: 0 7px;
-  background-color: rgba(255, 255, 255, 0.3);
-  margin-top: 10px;
-  flex: 1;
 }
 
 /* src/components/metrics/card/SensitivitySection/style.css */
@@ -324,7 +67,6 @@ $flash-duration-sec: 0.4s;
   max-width: 30em;
   white-space: normal;
   z-index: 0;
-  font-size: 1.25em;
   position: relative;
   font-weight: 300;
   overflow: hidden;
@@ -426,11 +168,6 @@ $flash-duration-sec: 0.4s;
   display: block;
 }
 
-/* src/components/metrics/modal/style.css */
-.metricModal .Guesstimate.large input {
-  background-color: $grey-eee;
-}
-
 /* src/components/pages/base/style.css */
 .PageBase {
   font-size: 1.1em;
@@ -445,31 +182,9 @@ $flash-duration-sec: 0.4s;
   color: $blue-1;
 }
 
-/* src/components/simulations/stat_table/style.css */
-table.MetricStatTable {
-  font-weight: 500;
-  font-size: 11px;
-  color: #666;
-  width: 100%;
-}
-
-table.MetricStatTable td {
-  text-align: left;
-  padding: 0;
-  line-height: 1.5em;
-}
-
 /* src/components/spaces/canvas/style.css */
 .canvas-space::selection {
   background-color: none;
-}
-
-.canvas-space .inner-editor input {
-  text-align: left;
-}
-
-.canvas-space .inner-editor .header .save-message {
-  color: #888;
 }
 
 /* src/components/spaces/index/style.css */
@@ -822,8 +537,12 @@ body.remove-elev #_elev_io {
 }
 
 .public-DraftEditorPlaceholder-root {
-  margin: 0 0 -30px;
   color: #a9a9a9;
+
+  /* via https://github.com/facebookarchive/draft-js/issues/2486 */
+  user-select: none;
+  position: absolute;
+  pointer-events: none;
 }
 
 .public-DraftEditor-content:focus {

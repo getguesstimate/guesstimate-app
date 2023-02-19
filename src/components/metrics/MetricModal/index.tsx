@@ -1,7 +1,7 @@
 import _ from "lodash";
 import React from "react";
 
-import { DistributionEditor } from "~/components/distributions/editor/index";
+import { DistributionEditor } from "~/components/distributions/DistributionEditor/index";
 import { HistogramWithStats } from "~/components/simulations/HistogramWithStats";
 import { ButtonClose } from "~/components/utility/buttons/close";
 import { DropDown } from "~/components/utility/DropDown";
@@ -70,7 +70,7 @@ export const MetricModal: React.FC<Props> = ({
 
   return (
     <GeneralModal onRequestClose={closeModal}>
-      <div className="metricModal bg-grey-eee w-80 mb-8 sm:w-[600px] md:w-[700px] lg:w-[1000px]">
+      <div className="bg-grey-eee w-80 mb-8 sm:w-[600px] md:w-[700px] lg:w-[1000px]">
         <div className="flex justify-between items-center px-6 py-4">
           <h1 className="leading-none m-0 text-4xl text-grey-444">
             {metric.name}

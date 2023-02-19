@@ -42,7 +42,7 @@ export const Header: React.FC<Props> = ({ isFluid, isBare }) => {
       >
         {!isBare && (
           <a className="block p-2 hover:bg-grey-1 rounded-lg" href={navbarRef}>
-            <div className="font-lato text-2xl leading-none hidden md:block text-grey-2">
+            <div className="text-2xl leading-none hidden md:block text-grey-2">
               Guesstimate
             </div>
             <img className="md:hidden h-8" src={logo} />

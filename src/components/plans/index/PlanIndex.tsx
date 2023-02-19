@@ -36,7 +36,7 @@ export const PlanIndex: React.FC<Props> = ({
     userPlanId === "personal_free" && !portalUrl;
   return (
     <Container>
-      <div className="PlanIndex font-lato text-grey-main flex flex-col items-center">
+      <div className="PlanIndex text-grey-main flex flex-col items-center">
         <div className="text-center">
           <h1 className="text-4xl font-medium">Plans & Pricing</h1>
           <h2 className="font-light">

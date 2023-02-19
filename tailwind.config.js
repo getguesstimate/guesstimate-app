@@ -50,7 +50,12 @@ module.exports = {
       red: {
         1: "#e0b4b4",
         2: "#fff6f6",
+        3: "#5f0909",
+        4: "#a74b4b",
         5: "#db2828",
+        6: "#e48585",
+        7: "#eccac7",
+        8: "#d48a8a",
       },
       white: "white",
       black: "black",
@@ -66,6 +71,9 @@ module.exports = {
       },
       maxWidth: {
         1200: "1200px",
+      },
+      fontSize: {
+        "2xs": "11px",
       },
     },
   },

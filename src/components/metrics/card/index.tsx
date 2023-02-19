@@ -5,7 +5,7 @@ import ReactDOM from "react-dom";
 
 import { MetricToolTip } from "./MetricToolTip";
 
-import { DistributionEditor } from "~/components/distributions/editor/index";
+import { DistributionEditor } from "~/components/distributions/DistributionEditor/index";
 import { MetricModal } from "~/components/metrics/MetricModal";
 import { ToolTip } from "~/components/utility/ToolTip";
 import { MetricCardViewSection } from "./MetricCardViewSection";

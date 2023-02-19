@@ -10,3 +10,4 @@ tags
 /.next
 /tsconfig.tsbuildinfo
 /.vscode
+/yarn-error.log

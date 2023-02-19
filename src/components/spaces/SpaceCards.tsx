@@ -110,7 +110,7 @@ export const SpaceCard: React.FC<{
             {space.name || "Untitled Model"}
           </h3>
           {size !== "SMALL" && (
-            <div className="text-sm text-grey-888">
+            <div className="text-xs text-grey-888">
               Updated {formatDate(space.updated_at)}
             </div>
           )}
@@ -142,7 +142,7 @@ export const SpaceCard: React.FC<{
       </div>
       {size !== "SMALL" && (
         <a href={spaceUrl} className="p-2 rounded-b-sm bg-white flex-1">
-          <p className="text-[#78838c] break-words">
+          <p className="text-sm text-[#78838c] break-words">
             {formatDescription(space.description)}
           </p>
         </a>
