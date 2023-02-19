@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 
 import { Layout } from "~/components/layouts";
-import { ComponentIndex } from "../routes/component-index";
+import { ComponentIndex } from "~/components/style_guide/ComponentIndex";
 
 const StyleGuidePage: NextPage = () => {
   return (

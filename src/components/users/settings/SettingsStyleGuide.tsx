@@ -1,6 +1,6 @@
 import React from "react";
 
-import { ComponentEditor } from "~/components/utility/ComponentEditor";
+import { ComponentEditor } from "~/components/style_guide/ComponentEditor";
 import { Plan } from "~/lib/config/plan";
 import { Settings } from "./Settings";
 

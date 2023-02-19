@@ -7,7 +7,7 @@ import { DistributionSummary } from "~/components/distributions/DistributionSumm
 import {
   MetricName,
   MetricNameHandle,
-} from "~/components/metrics/card/name/index";
+} from "~/components/metrics/card/MetricName";
 import { SensitivitySection } from "~/components/metrics/card/SensitivitySection/SensitivitySection";
 import {
   MetricExportedIcon,

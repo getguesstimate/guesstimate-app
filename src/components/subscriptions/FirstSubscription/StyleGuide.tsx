@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { ComponentEditor } from "~/components/utility/ComponentEditor";
+import { ComponentEditor } from "~/components/style_guide/ComponentEditor";
 import { subStages } from "~/modules/first_subscription/state_machine";
 
 import { FirstSubscription } from "./FirstSubscription";

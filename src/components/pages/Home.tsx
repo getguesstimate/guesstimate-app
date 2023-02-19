@@ -1,6 +1,6 @@
-import clsx from "clsx";
-import Image from "next/image";
 import React from "react";
+import Image from "next/image";
+import clsx from "clsx";
 
 import LogoWord from "../../../public/assets/logo-word-no-beta.png";
 
@@ -13,7 +13,7 @@ const Benefit: React.FC<{
     <div className="flex flex-col items-center">
       <i className={clsx(iconClass, "opacity-20 text-7xl")} />
       <h2 className="font-normal text-4xl text-grey-444">{title}</h2>
-      <p className="text-center text-grey-2 text-xl leading-normal">
+      <p className="text-center text-grey-2 text-lg leading-normal">
         {children}
       </p>
     </div>

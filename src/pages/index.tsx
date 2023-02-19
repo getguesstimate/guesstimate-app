@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 
 import { Layout } from "~/components/layouts";
-import { Home } from "../routes/home/index";
+import { Home } from "~/components/pages/Home";
 
 const IndexPage: NextPage = () => {
   return (
