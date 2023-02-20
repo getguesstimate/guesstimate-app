@@ -600,18 +600,21 @@ class UnconnectedSpaceShow extends Component<Props, State> {
           />
         </div>
 
-        <div className="content">
-          {sidebarIsVisible &&
-            (this.state.showLeftSidebar ? (
-              <SpaceSidebar
-                description={space.description || ""}
-                canEdit={space.editableByMe}
-                onClose={this.hideLeftSidebar.bind(this)}
-                onSaveDescription={this.onSaveDescription.bind(this)}
-              />
-            ) : (
-              <ClosedSpaceSidebar onOpen={this.openLeftSidebar.bind(this)} />
-            ))}
+        <div className="max-h-full flex-1 flex">
+          {sidebarIsVisible && (
+            <div className="self-start">
+              {this.state.showLeftSidebar ? (
+                <SpaceSidebar
+                  description={space.description || ""}
+                  canEdit={space.editableByMe}
+                  onClose={this.hideLeftSidebar.bind(this)}
+                  onSaveDescription={this.onSaveDescription.bind(this)}
+                />
+              ) : (
+                <ClosedSpaceSidebar onOpen={this.openLeftSidebar.bind(this)} />
+              )}
+            </div>
+          )}
           <SpaceCanvas
             canUseOrganizationFacts={this.canUseOrganizationFacts()}
             exportedFacts={exportedFacts}

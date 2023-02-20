@@ -15,6 +15,11 @@ body.remove-elev #_elev_io {
   height: 100%;
 }
 
+.ReactModal__Overlay--after-open {
+  z-index: 5;
+  overflow: auto;
+}
+
 .public-DraftEditorPlaceholder-root {
   color: #a9a9a9;
 

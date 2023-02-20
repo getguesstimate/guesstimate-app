@@ -6,7 +6,6 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { BackgroundContainer } from "./BackgroundContainer";
 import { DropCell } from "./DropCell";
 
-import { EdgeShape } from "~/components/spaces/SpaceCanvas";
 import {
   boundingRegion,
   Direction,
@@ -22,6 +21,7 @@ import { GridItem } from "./types";
 import { DirectionToLocation, keycodeToDirection } from "./utils";
 import clsx from "clsx";
 import { CanvasState } from "~/modules/canvas_state/slice";
+import { EdgeShape } from "./Edges";
 
 const upto = (n: number): number[] => new Array(n).fill(0).map((_, i) => i);
 

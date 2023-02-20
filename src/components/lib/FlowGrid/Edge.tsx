@@ -3,7 +3,7 @@ import React from "react";
 
 import angleBetweenPoints from "angle-between-points";
 
-import clsx from "clsx";
+import { edgeColors, PathStatus } from "./Edges";
 import { RectangleShape } from "./gridPoints";
 
 class Rectangle {
@@ -108,7 +108,7 @@ type Props = {
   input: RectangleShape;
   output: RectangleShape;
   hasErrors?: boolean;
-  pathStatus: string;
+  pathStatus: PathStatus;
 };
 
 export const Edge: React.FC<Props> = React.memo(
@@ -124,7 +124,8 @@ export const Edge: React.FC<Props> = React.memo(
 
     return (
       <path
-        className={clsx("basic-arrow", pathStatus, hasErrors && "hasErrors")}
+        stroke={edgeColors[hasErrors ? "hasErrors" : pathStatus]}
+        strokeWidth={3}
         d={points}
         markerEnd={`url(#MarkerArrow-${hasErrors ? "hasErrors" : pathStatus})`}
         fill="none"

@@ -38,13 +38,7 @@ import {
 import { useAppDispatch, useAppSelector } from "~/modules/hooks";
 import { ExtendedDSpace } from "../denormalized-space-selector";
 import clsx from "clsx";
-
-export type EdgeShape = {
-  input: CanvasLocation;
-  output: CanvasLocation;
-  pathStatus: string;
-  hasErrors?: boolean;
-};
+import { EdgeShape, PathStatus } from "~/components/lib/FlowGrid/Edges";
 
 type Props = {
   denormalizedSpace: ExtendedDSpace;
@@ -212,7 +206,11 @@ export const SpaceCanvas: React.FC<Props> = ({
 
     const hasSelectedMetrics = selectedMetrics.length > 0;
 
-    const unconnectedStatus = hasSelectedMetrics ? "unconnected" : "default";
+    const unconnectedStatus: PathStatus = hasSelectedMetrics
+      ? "unconnected"
+      : screenshot
+      ? "screenshot"
+      : "default";
 
     const { ancestors, descendants } = getSelectedLineage(selectedRegion);
 
@@ -233,15 +231,16 @@ export const SpaceCanvas: React.FC<Props> = ({
           _collections.some(selectedMetrics, outputId) &&
           _collections.some(selectedMetrics, inputId);
 
-        let pathStatus = unconnectedStatus;
+        let pathStatus: PathStatus = unconnectedStatus;
         if (!withinSelectedRegion && (outputIsAncestor || inputIsDescendant)) {
           const isDegreeOne = _.some(selectedMetrics, ({ id }) =>
             [inputId, outputId].includes(id)
           );
 
-          pathStatus = outputIsAncestor ? "ancestor" : "descendant";
-          if (isDegreeOne) {
-            pathStatus += "-1-degree";
+          if (outputIsAncestor) {
+            pathStatus = isDegreeOne ? "ancestor-1-degree" : "ancestor";
+          } else {
+            pathStatus = isDegreeOne ? "descendant-1-degree" : "descendant";
           }
         }
 
@@ -337,7 +336,7 @@ export const SpaceCanvas: React.FC<Props> = ({
       className={clsx(
         "canvas-space",
         showEdges && "showEdges",
-        screenshot && "overflow-hidden"
+        screenshot ? "overflow-hidden" : "overflow-auto" // why?
       )}
     >
       <FlowGrid

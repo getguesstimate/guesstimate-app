@@ -1,9 +1,8 @@
 import React, { useLayoutEffect, useState } from "react";
 
-import { Edges } from "./Edges";
+import { Edges, EdgeShape } from "./Edges";
 import { GridPoint } from "./gridPoints";
 
-import { EdgeShape } from "~/components/spaces/SpaceCanvas";
 import { isRegion, MaybeRegion, Region } from "~/lib/locationUtils";
 import clsx from "clsx";
 

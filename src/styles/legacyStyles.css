@@ -28,11 +28,11 @@
   stroke: none;
 }
 
-.metricCard.intermediate .SensitivitySection.LARGE svg path.dot {
+.intermediate .SensitivitySection.LARGE svg path.dot {
   fill: rgba(90, 113, 89, 0.12);
 }
 
-.metricCard.intermediate .SensitivitySection.SMALL svg path.dot {
+.intermediate .SensitivitySection.SMALL svg path.dot {
   fill: rgba(90, 113, 89, 0.18);
 }
 
@@ -45,29 +45,6 @@
   fill: #3c4448;
   font-size: 1em;
   font-weight: 700;
-}
-
-/* src/components/metrics/card/style.css */
-.metricCard {
-  max-width: 30em;
-  white-space: normal;
-  z-index: 0;
-  position: relative;
-  font-weight: 300;
-  overflow: hidden;
-}
-
-.ReactModal__Overlay--after-open {
-  z-index: 5;
-}
-
-.ReactModal__Overlay--after-open {
-  overflow: auto;
-}
-
-/* src/components/spaces/canvas/style.css */
-.canvas-space::selection {
-  background-color: none;
 }
 
 /* src/components/spaces/show/style.css */
@@ -86,21 +63,6 @@
 .canvas-space {
   flex: 1;
   max-height: 100%;
-}
-
-.canvas-space:not(.overflow-hidden) {
-  overflow: auto;
-}
-
-.canvas-space.overflow-hidden {
-  overflow: hidden;
-}
-
-.spaceShow > .content {
-  display: flex;
-  max-height: 100%;
-  align-items: start;
-  flex: 1;
 }
 
 /* FlowGrid.css */
@@ -178,89 +140,6 @@
 .IsOver .isDragging {
   transition: background-color 0.2s ease;
   background-color: rgba(127, 149, 160, 0.81);
-}
-
-svg.edge {
-  position: absolute;
-  top: 0;
-  z-index: 0;
-}
-
-svg.edge path.basic-arrow {
-  stroke-linecap: "round";
-  stroke-linejoin: "round";
-  stroke-dasharray: "5,5";
-  stroke-width: 3px;
-}
-
-.arrow {
-  stroke-width: 0;
-}
-
-$default: #899eb6;
-$unconnected: rgba(77, 121, 175, 0.06);
-$unconnected-head: rgba(77, 121, 175, 0.06);
-$ancestor: rgb(149, 182, 178);
-$ancestor-1-degree: rgb(67, 121, 107);
-$descendant: rgb(158, 172, 188);
-$descendant-1-degree: rgb(86, 104, 125);
-$errors: #b59893;
-$screenshot: rgb(128, 154, 185);
-
-svg.edge path.basic-arrow.unconnected {
-  stroke: $unconnected;
-}
-.arrow.unconnected {
-  fill: $unconnected-head;
-}
-
-svg.edge path.basic-arrow.default {
-  stroke: $default;
-}
-.arrow.default {
-  fill: $default;
-}
-
-.screenshot svg.edge path.basic-arrow.default {
-  stroke: $screenshot;
-}
-.screenshot .arrow.default {
-  fill: $screenshot;
-}
-
-svg.edge path.basic-arrow.hasErrors.hasErrors {
-  stroke: $errors;
-}
-.arrow.hasErrors.hasErrors {
-  fill: $errors;
-}
-
-svg.edge path.basic-arrow.ancestor {
-  stroke: $ancestor;
-}
-.arrow.ancestor {
-  fill: $ancestor;
-}
-
-svg.edge path.basic-arrow.ancestor-1-degree {
-  stroke: $ancestor-1-degree;
-}
-.arrow.ancestor-1-degree {
-  fill: $ancestor-1-degree;
-}
-
-svg.edge path.basic-arrow.descendant {
-  stroke: $descendant;
-}
-.arrow.descendant {
-  fill: $descendant;
-}
-
-svg.edge path.basic-arrow.descendant-1-degree {
-  stroke: $descendant-1-degree;
-}
-.arrow.descendant-1-degree {
-  fill: $descendant-1-degree;
 }
 
 .FlowGrid-Container {

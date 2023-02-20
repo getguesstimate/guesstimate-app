@@ -9,7 +9,6 @@ import * as _collections from "~/lib/engine/collections";
 import * as _utils from "~/lib/engine/utils";
 
 import { GridItem } from "~/components/lib/FlowGrid/types";
-import { EdgeShape } from "~/components/spaces/SpaceCanvas";
 import {
   CyclePseudoNode,
   separateIntoDisconnectedComponents,
@@ -20,6 +19,7 @@ import { Fact } from "~/lib/engine/facts";
 import { ApiSpace } from "~/lib/guesstimate_api/resources/Models";
 import { SimulationNodeParamsWithInputs } from "~/lib/propagation/DAG";
 import { initialCanvasState } from "~/modules/canvas_state/slice";
+import { EdgeShape, PathStatus } from "~/components/lib/FlowGrid/Edges";
 
 const idToNodeId = (id: string | number, isFact: boolean) =>
   `${isFact ? "fact" : "space"}:${id}`;
@@ -183,7 +183,7 @@ const itemsAndEdges = (facts: Fact[], spaces: ApiSpace[]) => {
     _collections.gget(items, id, "id", "location");
 
   const edges: EdgeShape[] = [];
-  const pathStatus = "default";
+  const pathStatus: PathStatus = "default";
   factNodes.forEach(({ id, outputs, inputs }) => {
     edges.push(
       ...outputs.map((c) => ({
