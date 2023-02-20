@@ -5,7 +5,7 @@ import Icon from "~/components/react-fa-patched";
 
 export const Button: React.FC<{
   onClick(): void;
-  color?: "red" | "blue";
+  color?: "grey" | "dark-grey" | "red" | "blue"; // dark-grey is for colored background, e.g. "Cancel" in DataViewer editor
   size?: "normal" | "small" | "large";
   children: React.ReactNode;
   wide?: boolean;
@@ -13,7 +13,7 @@ export const Button: React.FC<{
   disabled?: boolean;
 }> = ({
   onClick,
-  color,
+  color = "grey",
   size = "normal",
   wide,
   loading,
@@ -23,16 +23,16 @@ export const Button: React.FC<{
   <button
     className={clsx(
       size === "small" && "px-3 py-2 text-xs",
-      size === "normal" && "px-3 py-2 text-base",
+      size === "normal" && "px-4 py-2 text-sm",
       size === "large" && "px-6 py-3 text-lg",
       wide ? "flex w-full" : "inline-flex",
       "items-center",
       "rounded",
-      color === "red"
-        ? "text-white bg-[#b74d4d] hover:bg-[#923f3f]"
-        : color === "blue"
-        ? "text-white bg-blue-1 hover:bg-blue-7"
-        : "bg-[#E0E1E2] hover:bg-[#cacbcd] text-[rgb(0,0,0)]/60 hover:text-[rgb(0,0,0)]/80",
+      color === "red" && "text-white bg-[#b74d4d] hover:bg-[#923f3f]",
+      color === "blue" && "text-white bg-blue-1 hover:bg-blue-7",
+      color === "grey" &&
+        "bg-[#E0E1E2] hover:bg-[#cacbcd] text-[rgb(0,0,0)]/60 hover:text-[rgb(0,0,0)]/80",
+      color === "dark-grey" && "bg-grey-ccc hover:bg-grey-bbb",
       disabled && "opacity-70",
       "select-none font-bold outline-none leading-none transition duration-100",
       loading && "cursor-pointer"

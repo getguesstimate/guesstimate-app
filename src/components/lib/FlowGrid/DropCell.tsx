@@ -152,6 +152,7 @@ class Cell extends Component<Props> {
 
     const className = clsx(
       "FlowGridCell",
+      "group/gridcell",
       this.props.size === "small"
         ? "w-[150px] max-w-[150px]"
         : "w-[210px] max-w-[210px]",

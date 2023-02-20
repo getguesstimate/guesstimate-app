@@ -5,6 +5,7 @@ import { GridPoint } from "./gridPoints";
 
 import { EdgeShape } from "~/components/spaces/SpaceCanvas";
 import { isRegion, MaybeRegion, Region } from "~/lib/locationUtils";
+import clsx from "clsx";
 
 const Region: React.FC<{
   rowHeights: number[];
@@ -14,7 +15,7 @@ const Region: React.FC<{
 }> = ({ rowHeights, columnWidth, selectedRegion, type }) => {
   const gridPoint = new GridPoint({ rowHeights, columnWidth, padding: 0 });
   const region = gridPoint.region(selectedRegion);
-  return <div className={`Region ${type}`} style={region} />;
+  return <div className={clsx("Region", type)} style={region} />;
 };
 
 type Props = {

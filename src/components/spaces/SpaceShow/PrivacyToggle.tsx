@@ -20,17 +20,17 @@ const PublicOption: React.FC<{ isSelected: boolean; onClick(): void }> = ({
   </CardListElement>
 );
 
-const PrivateOption: React.FC<any> = ({
-  onClick,
-  isSelected,
-  isPrivateSelectionInvalid,
-  editableByMe,
-}) => {
+const PrivateOption: React.FC<{
+  onClick(): void;
+  isSelected: boolean;
+  isPrivateSelectionInvalid: boolean;
+  editableByMe: boolean;
+}> = ({ onClick, isSelected, isPrivateSelectionInvalid, editableByMe }) => {
   const router = useRouter();
   return (
     <CardListElement
       isSelected={isSelected}
-      onMouseDown={!isSelected && onClick}
+      onMouseDown={isSelected ? () => {} : onClick}
       icon="lock"
       header="Private"
       isDisabled={isPrivateSelectionInvalid}
@@ -50,7 +50,13 @@ const PrivateOption: React.FC<any> = ({
   );
 };
 
-export const PrivacyToggle: React.FC<any> = ({
+export const PrivacyToggle: React.FC<{
+  editableByMe: boolean;
+  isPrivateSelectionInvalid: boolean;
+  isPrivate: boolean;
+  onPublicSelect(): void;
+  onPrivateSelect(): void;
+}> = ({
   editableByMe,
   isPrivateSelectionInvalid,
   isPrivate,
@@ -79,7 +85,6 @@ export const PrivacyToggle: React.FC<any> = ({
           isSelected={isPrivate}
           onClick={onPrivateSelect}
           isPrivateSelectionInvalid={isPrivateSelectionInvalid}
-          hideErrorWhenUnselected={false}
           editableByMe={editableByMe}
         />
       )}

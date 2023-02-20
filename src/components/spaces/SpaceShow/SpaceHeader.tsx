@@ -7,15 +7,14 @@ import { SpaceName } from "./SpaceName";
 import { UserTag } from "~/components/UserTag";
 import * as e from "~/lib/engine/engine";
 import { SpaceHeaderButton } from "./SpaceHeaderButton";
+import { Button } from "~/components/utility/buttons/button";
 
 const EnableShareableLinkOption: React.FC<{ onEnable(): void }> = ({
   onEnable,
 }) => (
   <div>
     <p>Shareable link disabled.</p>
-    <span className="ui button small enable" onClick={onEnable}>
-      Enable
-    </span>
+    <Button onClick={onEnable}>Enable</Button>
   </div>
 );
 
@@ -34,12 +33,8 @@ const DisableOrRotateShareableLinkOption: React.FC<{
     </p>
 
     <div className="flex gap-1">
-      <div className="ui button small disable" onClick={onDisable}>
-        Disable
-      </div>
-      <div className="ui button small rotate" onClick={onRotate}>
-        Reset Link
-      </div>
+      <Button onClick={onDisable}>Disable</Button>
+      <Button onClick={onRotate}>Reset Link</Button>
     </div>
   </div>
 );
@@ -98,7 +93,7 @@ export const SpaceHeader = React.memo<Props>(function SpaceHeader({
   ownerPicture,
   ownerUrl,
   ownerIsOrg,
-  isPrivate,
+  isPrivate = false, // TODO - make isPrivate always set on spaces
   editableByMe,
   editors,
   shareableLinkUrl,

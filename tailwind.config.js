@@ -75,6 +75,9 @@ module.exports = {
       fontSize: {
         "2xs": "11px",
       },
+      opacity: {
+        95: ".95",
+      },
     },
   },
   plugins: [],

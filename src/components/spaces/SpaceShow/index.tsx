@@ -60,13 +60,13 @@ const HeaderTitle: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <h2 className="text-[#476b82]">{children}</h2>
 );
 
-const ShowCalculatorHeader: React.FC<any> = ({
-  id,
-  editableByMe,
-  onEdit,
-  onDelete,
-  onClose,
-}) => {
+const ShowCalculatorHeader: React.FC<{
+  id: number;
+  editableByMe: boolean;
+  onEdit(): void;
+  onDelete(): void;
+  onClose(): void;
+}> = ({ id, editableByMe, onEdit, onDelete, onClose }) => {
   return (
     <div className="flex justify-end items-start flex-wrap gap-1">
       <ButtonExpandText href={`/calculators/${id}`} />
@@ -479,8 +479,7 @@ class UnconnectedSpaceShow extends Component<Props, State> {
   }
 
   render() {
-    const { exportedFacts } = this.props;
-    const space = this.props.denormalizedSpace;
+    const { exportedFacts, denormalizedSpace: space } = this.props;
 
     if (!e.space.prepared(space)) {
       return <div className="spaceShow" />;

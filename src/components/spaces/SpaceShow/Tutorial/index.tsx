@@ -36,7 +36,7 @@ export const Tutorial: React.FC<Props> = ({ onClose }) => {
   return (
     <GeneralModal onRequestClose={onClose}>
       <div
-        className="pt-8 pb-4 px-8 rounded bg-[#f0f0f0] max-w-[42em]"
+        className="pt-8 pb-4 px-8 rounded bg-[#f0f0f0] max-w-[40em]"
         onKeyDown={(e) => {
           if (e.key === "Escape") {
             onClose();

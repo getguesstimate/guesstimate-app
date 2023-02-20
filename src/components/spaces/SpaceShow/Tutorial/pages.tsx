@@ -1,8 +1,26 @@
-import React from "react";
+import React, { PropsWithChildren } from "react";
 
 const MakeAMetric = "/assets/tutorial/MakeAMetric.gif";
 const InteractWithACell = "/assets/tutorial/InteractWithACell.gif";
 const MakeAFunction = "/assets/tutorial/MakeAFunction.gif";
+
+const TH: React.FC<PropsWithChildren> = ({ children }) => (
+  <th className="px-4 py-4 leading-tight border-t border-b border-[#ddd] bg-[#f8f8f8]">
+    {children}
+  </th>
+);
+
+const TD: React.FC<PropsWithChildren> = ({ children }) => (
+  <td className="px-4 py-3 leading-tight border-t border-b border-[#ddd]">
+    {children}
+  </td>
+);
+
+const Table: React.FC<PropsWithChildren> = ({ children }) => (
+  <table className="mt-6 bg-white border border-[#ddd] rounded text-sm text-left w-full">
+    {children}
+  </table>
+);
 
 type PageProps = {
   header: string;
@@ -10,9 +28,9 @@ type PageProps = {
 };
 
 const TutorialPage: React.FC<PageProps> = ({ header, children }) => (
-  <div className="tutorialPage">
+  <div className="tutorialPage mb-8 min-h-[34em] font-open">
     <h2 className="text-center pb-6">{header}</h2>
-    <div>{children}</div>
+    <div className="text-justify">{children}</div>
   </div>
 );
 
@@ -22,17 +40,15 @@ const Image: React.FC<{ image: string }> = ({ image }) => (
   </div>
 );
 
-const ExampleFunction: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => (
+const ExampleFunction: React.FC<PropsWithChildren> = ({ children }) => (
   <span className="bg-grey-eee rounded px-2 py-1 font-mono text-sm">
     {children}
   </span>
 );
 
-const ExampleInput: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => <span className="text-green-3 bg-green-4 px-1 rounded">{children}</span>;
+const ExampleInput: React.FC<PropsWithChildren> = ({ children }) => (
+  <span className="text-green-3 bg-green-4 px-1 rounded">{children}</span>
+);
 
 export const TutorialMetricPage: React.FC = () => (
   <TutorialPage header="Metrics">
@@ -41,28 +57,28 @@ export const TutorialMetricPage: React.FC = () => (
       name and a value.
     </p>
     <Image image={MakeAMetric} />
-    <table className="semantic ui table">
+    <Table>
       <thead>
         <tr>
-          <th>Example Value</th>
-          <th>Explanation</th>
+          <TH>Example Value</TH>
+          <TH>Explanation</TH>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>
+          <TD>
             <ExampleFunction>100</ExampleFunction>
-          </td>
-          <td>This value is exactly 100.</td>
+          </TD>
+          <TD>This value is exactly 100.</TD>
         </tr>
         <tr>
-          <td>
+          <TD>
             <ExampleFunction>300 to 700</ExampleFunction>
-          </td>
-          <td>This value is estimated to be between 300 and 700.</td>
+          </TD>
+          <TD>This value is estimated to be between 300 and 700.</TD>
         </tr>
       </tbody>
-    </table>
+    </Table>
   </TutorialPage>
 );
 
@@ -71,34 +87,34 @@ export const TutorialMetricActionsPage: React.FC = () => (
     <p>Click a metric once to select it, then you can perform actions on it.</p>
 
     <Image image={InteractWithACell} />
-    <table className="semantic ui table">
+    <Table>
       <tbody>
         <tr>
-          <td>
+          <TD>
             <span className="text-center font-bold">Move</span>
-          </td>
-          <td>Click the metric center and drag it to another cell.</td>
+          </TD>
+          <TD>Click the metric center and drag it to another cell.</TD>
         </tr>
         <tr>
-          <td>
+          <TD>
             <span className="text-center font-bold">Delete</span>
-          </td>
-          <td>
+          </TD>
+          <TD>
             Press <strong>delete</strong> or <strong>backspace</strong>, or
             click the <strong>trash</strong> icon in the toolbar.
-          </td>
+          </TD>
         </tr>
         <tr>
-          <td>
+          <TD>
             <span className="text-center font-bold">Cut, Copy & Paste</span>
-          </td>
-          <td>
+          </TD>
+          <TD>
             Press <strong>ctrl-x</strong>, <strong>ctrl-c</strong>, and{" "}
             <strong>ctrl-v</strong>.
-          </td>
+          </TD>
         </tr>
       </tbody>
-    </table>
+    </Table>
   </TutorialPage>
 );
 
@@ -114,41 +130,41 @@ export const TutorialFunctionPage: React.FC = () => (
     </p>
 
     <Image image={MakeAFunction} />
-    <table className="semantic ui table">
+    <Table>
       <thead>
         <tr>
-          <th>Example Function</th>
-          <th>Explanation</th>
+          <TH>Example Function</TH>
+          <TH>Explanation</TH>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>
+          <TD>
             <ExampleFunction>
               = <ExampleInput>FA</ExampleInput> * 300
             </ExampleFunction>
-          </td>
-          <td>
+          </TD>
+          <TD>
             <ExampleInput>FA</ExampleInput> times 300.
-          </td>
+          </TD>
         </tr>
         <tr>
-          <td>
+          <TD>
             <ExampleFunction>
               = <ExampleInput>FA</ExampleInput> &gt; 5 ? 100 : 0
             </ExampleFunction>
-          </td>
-          <td>
+          </TD>
+          <TD>
             If <ExampleInput>FA</ExampleInput> is greater than 5, 100. If it is
             less, 0.
-          </td>
+          </TD>
         </tr>
       </tbody>
-    </table>
+    </Table>
   </TutorialPage>
 );
 
-const Subheader: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+const Subheader: React.FC<PropsWithChildren> = ({ children }) => (
   <h3 className="text-center text-grey-666 text-2xl my-3">{children}</h3>
 );
 

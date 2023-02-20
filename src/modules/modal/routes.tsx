@@ -2,6 +2,7 @@ import Modal from "react-modal";
 
 import { FirstSubscriptionContainer } from "~/components/subscriptions/FirstSubscription/container";
 import { SettingsContainer } from "~/components/users/settings/SettingsContainer";
+import { Button } from "~/components/utility/buttons/button";
 import { NavHelper } from "~/components/utility/NavHelper/index";
 import { useAppDispatch, useAppSelector } from "~/modules/hooks";
 import * as modalActions from "~/modules/modal/actions";
@@ -13,14 +14,18 @@ const Confirmation: React.FC<{
   onClose(): void;
 }> = ({ message, onConfirm, onClose }) => {
   return (
-    <div className="MainConfirmation">
-      <h1>{message}</h1>
-      <button className="ui button primary large" onClick={onConfirm}>
-        Confirm
-      </button>
-      <button className="ui button grey large" onClick={onClose}>
-        Cancel
-      </button>
+    <div className="bg-white px-16 py-12 max-w-xl">
+      <h1 className="mb-8 text-center text-2xl text-grey-333 leading-relaxed">
+        {message}
+      </h1>
+      <div className="flex gap-4 justify-center">
+        <Button size="large" color="blue" onClick={onConfirm}>
+          Confirm
+        </Button>
+        <Button size="large" onClick={onClose}>
+          Cancel
+        </Button>
+      </div>
     </div>
   );
 };

@@ -10,7 +10,7 @@ type Props = {
 export const PageBase: React.FC<Props> = ({ content }) => {
   return (
     <Container>
-      <div className="PageBase">
+      <div className="PageBase font-open">
         <ReactMarkdown source={content} />
       </div>
     </Container>

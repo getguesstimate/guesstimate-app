@@ -47,7 +47,7 @@ export const PlanStyleGuide: React.FC = () => {
     onNewOrganizationNavigation() {},
   };
   return (
-    <div className="full-width">
+    <div>
       {options.map((option) => {
         return (
           <ComponentEditor

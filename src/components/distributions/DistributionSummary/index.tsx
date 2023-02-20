@@ -4,7 +4,7 @@ import React from "react";
 
 import { numberShow } from "~/lib/numberShower/numberShower";
 
-type Theme = "normal" | "large";
+type Theme = "normal" | "normal-input" | "normal-output" | "large";
 
 export const PrecisionNumber: React.FC<{
   value: number;
@@ -54,7 +54,9 @@ export const DistributionSummary: React.FC<{
     <div className="DistributionSummary">
       <div
         className={clsx(
-          theme === "normal" && "text-2xl",
+          theme === "normal" && "text-2xl font-light text-grey-444",
+          theme === "normal-input" && "text-2xl font-light text-grey-[#222]",
+          theme === "normal-output" && "text-2xl font-bold text-grey-[#111]",
           theme === "large" && "text-4xl",
           "leading-none"
         )}

@@ -39,12 +39,10 @@ const MetricCardProps = {
 
 export const ComponentIndex: React.FC = () => {
   return (
-    <div className="container-fluid full-width">
-      <ComponentEditor
-        child={MetricCard}
-        childProps={MetricCardProps as any}
-        name="MetricCard"
-      />
-    </div>
+    <ComponentEditor
+      child={MetricCard}
+      childProps={MetricCardProps as any}
+      name="MetricCard"
+    />
   );
 };

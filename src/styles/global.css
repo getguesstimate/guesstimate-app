@@ -1,3 +1,60 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  height: 100%;
+}
+
+/* see src/server/elev/index.ts */
+body.remove-elev #_elev_io {
+  display: none !important;
+}
+
+#__next {
+  height: 100%;
+}
+
+.public-DraftEditorPlaceholder-root {
+  color: #a9a9a9;
+
+  /* via https://github.com/facebookarchive/draft-js/issues/2486 */
+  user-select: none;
+  position: absolute;
+  pointer-events: none;
+}
+
+.public-DraftEditor-content {
+  /* text-dark-3; doesn't work with @apply, probably because classname is not mentioned in our codebase */
+  color: #2d3137;
+}
+
+.wistia_responsive_padding {
+  padding: 56.25% 0 0 0;
+  position: relative;
+}
+
+.wistia_responsive_wrapper {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.wistia_embed {
+  display: inline-block;
+  height: 240px;
+  width: 415px;
+  margin-top: 5em;
+}
+
+@layer components {
+  .PageBase h2 {
+    @apply text-xl mb-1.5;
+  }
+
+  .PageBase h1 {
+    @apply text-blue-1;
+  }
+}

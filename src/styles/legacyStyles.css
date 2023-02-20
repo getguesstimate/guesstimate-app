@@ -1,20 +1,5 @@
 @import "./variables.css";
 
-/* src/components/metrics/card/MetricCardViewSection/style.css */
-.metricCard.input .DistributionSummary {
-  color: #222;
-}
-
-.metricCard.output .DistributionSummary {
-  font-weight: 700;
-  color: #111;
-}
-
-.metricCard .DistributionSummary {
-  font-weight: 300;
-  color: #444;
-}
-
 /* src/components/metrics/card/SensitivitySection/style.css */
 .SensitivitySection.SMALL {
   height: 70px;
@@ -72,114 +57,12 @@
   overflow: hidden;
 }
 
-.metricCard input {
-  transition: background-color 0.2s;
-}
-
-.metricCard:not(.titleView) {
-  background-color: rgba(255, 255, 255, 0.975);
-}
-
-.metricCard.intermediate:not(.titleView) {
-  background-color: rgba(242, 244, 247, 0.94);
-}
-
-.metricCard.noedge:not(.titleView) {
-  background-color: rgba(240, 242, 245, 0.88);
-}
-
-.selected .metricCard:not(.titleView) {
-  background-color: rgba(255, 255, 255, 0.975);
-}
-
-.hovered.selected .metricCard {
-  background-color: white;
-}
-
-.hovered .metricCard {
-  background-color: #f4f4f4;
-}
-
-.metricCard > .section {
-  position: relative;
-  padding: 0.2em 0.2em 0.2em 0.2em;
-}
-
-.metricCard .section.editing {
-  border-top: 1px solid #ddd;
-  border-radius: 0 0 2px 2px;
-  flex: 0 0 auto;
-}
-
 .ReactModal__Overlay--after-open {
   z-index: 5;
 }
 
 .ReactModal__Overlay--after-open {
   overflow: auto;
-}
-
-/* src/components/metrics/card/token/style.css */
-.MetricToken {
-  margin-top: 5px;
-  margin-right: 3px;
-}
-
-.MetricToken .ui.tiny.label {
-  font-size: 0.85rem;
-  background-color: $green-1 !important;
-  border-radius: 2px;
-  padding: 0.4em 0.45em 0.35em;
-  margin-top: 2px;
-}
-
-.MetricToken .hover-icon {
-  float: right;
-  padding: 2px 6px;
-  color: $blue-5;
-  border-radius: 2px;
-  font-size: 1em;
-}
-
-.screenshot .MetricToken .hover-icon {
-  display: none;
-}
-
-.MetricToken .hover-hide {
-  opacity: 0.6;
-  padding: 0 6px 2px;
-}
-
-.hovered .MetricToken .hover-hide {
-  display: none;
-}
-
-.MetricToken .hover-toggle {
-  cursor: pointer;
-  display: none;
-}
-
-.MetricToken .hover-toggle:hover {
-  color: white;
-  background-color: $grey-2;
-}
-
-.hovered .MetricToken .hover-toggle {
-  display: block;
-}
-
-/* src/components/pages/base/style.css */
-.PageBase {
-  font-size: 1.1em;
-}
-
-.PageBase h2 {
-  font-size: 1.25em;
-  margin-bottom: 6px;
-}
-
-.PageBase h1 {
-  color: $blue-1;
 }
 
 /* src/components/spaces/canvas/style.css */
@@ -218,144 +101,6 @@
   max-height: 100%;
   align-items: start;
   flex: 1;
-}
-
-.header-action-tooltip.header-action-tooltip.header-action-tooltip {
-  background: rgba(60, 64, 68, 0.95);
-  opacity: 1;
-  padding: 4px 13px;
-  border-radius: 2px;
-  transition: none;
-
-  &.place-top:after {
-    border-top: 6px solid rgba(60, 64, 68, 0.95);
-    border-left: 6px solid transparent;
-    border-right: 6px solid transparent;
-  }
-
-  &.place-top {
-    margin-top: 0px;
-  }
-
-  &.place-bottom {
-    margin-top: 2px;
-  }
-
-  &.place-bottom:after {
-    border-bottom: 6px solid rgba(60, 64, 68, 0.95);
-    border-left: 6px solid transparent;
-    border-right: 6px solid transparent;
-    top: -6px;
-    margin-left: -6px;
-  }
-}
-
-/* src/components/utility/ComponentEditor/style.css */
-.ComponentEditor > .reference {
-  padding: 4em 10px;
-}
-
-.ComponentEditor.grey .Component {
-  background: #f7f5f5;
-}
-
-.ComponentEditor.blue .Component {
-  background: linear-gradient(-140deg, #4dc7b7, #489acc);
-}
-
-.ComponentEditor .Component {
-  padding: 5px;
-}
-
-/* src/routes/home/style.css */
-.wistia_responsive_padding {
-  padding: 56.25% 0 0 0;
-  position: relative;
-}
-
-.wistia_responsive_wrapper {
-  height: 100%;
-  width: 100%;
-  position: absolute;
-  left: 0;
-  top: 0;
-}
-
-.wistia_embed {
-  display: inline-block;
-  height: 240px;
-  width: 415px;
-  margin-top: 5em;
-}
-
-/* src/components/spaces/show/Tutorial/pageStyle.css */
-.tutorialPage {
-  margin-bottom: 2em;
-  min-height: 35em;
-
-  p {
-    font-size: 1.1em;
-    text-align: justify;
-  }
-
-  table.ui {
-    margin-top: 1.5em;
-
-    td {
-      padding: 0.5em 1em;
-      line-height: 1.3em;
-    }
-  }
-}
-
-/* src/routes/main.css */
-.container-fluid.full-width {
-  width: 100%;
-}
-
-body {
-  height: 100%;
-}
-
-#__next {
-  height: 100%;
-}
-
-body.remove-elev #_elev_io {
-  display: none !important;
-}
-
-.MainConfirmation {
-  background: white;
-  padding: 3em 4em;
-  border-radius: 2px;
-  text-align: center;
-  min-width: 12em;
-  max-width: 600px;
-}
-
-.MainConfirmation .ui.button {
-  margin-right: 1em;
-}
-
-.MainConfirmation h1 {
-  margin-bottom: 2em;
-  font-size: 1.6em;
-  color: #333;
-  line-height: 1.8em;
-}
-
-.public-DraftEditorPlaceholder-root {
-  color: #a9a9a9;
-
-  /* via https://github.com/facebookarchive/draft-js/issues/2486 */
-  user-select: none;
-  position: absolute;
-  pointer-events: none;
-}
-
-.public-DraftEditor-content:focus {
-  color: $black-3;
 }
 
 /* FlowGrid.css */
@@ -408,7 +153,6 @@ body.remove-elev #_elev_io {
 .FlowGridEmptyCell {
   width: 100%;
   display: flex;
-  width: 100%;
 }
 
 .FlowGrid.isSelectable {

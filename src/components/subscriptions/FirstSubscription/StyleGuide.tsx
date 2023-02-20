@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 
 import { ComponentEditor } from "~/components/style_guide/ComponentEditor";
 import { subStages } from "~/modules/first_subscription/state_machine";
@@ -25,7 +25,7 @@ function FirstSubscriptionStage(stage) {
 export const FirstSubscriptionStyleGuide: React.FC = () => {
   const flowStage = "UNNECESSARY";
   return (
-    <div className="container-fluid full-width">
+    <div>
       {subStages.map((stage) => {
         return (
           <ComponentEditor

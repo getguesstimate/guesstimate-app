@@ -3,6 +3,7 @@ import _ from "lodash";
 import React, { useState } from "react";
 
 import Icon from "~/components/react-fa-patched";
+import { Button } from "~/components/utility/buttons/button";
 
 import { SmallButtonClose } from "~/components/utility/buttons/close";
 
@@ -93,13 +94,13 @@ const Editor: React.FC<{
         value={value}
         onChange={handleChange}
       />
-      <div>
-        <div className="ui button primary tiny" onClick={handleSave}>
+      <div className="flex gap-2 text-sm">
+        <Button size="small" color="blue" onClick={handleSave}>
           Save
-        </div>
-        <div className="ui button tiny !bg-[#c6c6c6]" onClick={onEditCancel}>
+        </Button>
+        <Button size="small" color="dark-grey" onClick={onEditCancel}>
           Cancel
-        </div>
+        </Button>
       </div>
     </div>
   );

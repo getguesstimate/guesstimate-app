@@ -190,6 +190,7 @@ export const SpaceCanvas: React.FC<Props> = ({
       canUseOrganizationFacts,
       exportedAsFact,
       analyzedMetric: passAnalyzed ? analyzedMetric : null,
+      screenshot,
     };
 
     return {

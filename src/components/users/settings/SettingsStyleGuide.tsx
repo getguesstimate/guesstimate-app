@@ -7,22 +7,16 @@ import { Settings } from "./Settings";
 export const SettingsStyleGuide: React.FC = () => {
   const planIds = Plan.all().map((e) => e.id);
   return (
-    <div className="grid grid-cols-2">
-      <div>
-        {planIds.map((planId) => {
-          return (
+    <div className="grid grid-cols-2 place-items-center px-4">
+      {planIds.map((planId) => {
+        return (
+          <>
             <ComponentEditor
               child={Settings}
               childProps={{ planId, onClose: () => {} }}
               name="Settings"
               key={planId}
             />
-          );
-        })}
-      </div>
-      <div>
-        {planIds.map((planId) => {
-          return (
             <ComponentEditor
               child={Settings}
               childProps={{
@@ -33,9 +27,9 @@ export const SettingsStyleGuide: React.FC = () => {
               name="Settings"
               key={planId}
             />
-          );
-        })}
-      </div>
+          </>
+        );
+      })}
     </div>
   );
 };

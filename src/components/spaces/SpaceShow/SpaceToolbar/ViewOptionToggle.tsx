@@ -4,10 +4,13 @@ import Icon from "~/components/react-fa-patched";
 import { DropDown } from "~/components/utility/DropDown";
 import { CardListElement } from "~/components/utility/Card";
 
-const ViewingOption: React.FC<any> = ({ isSelected, onClick }) => (
+const ViewingOption: React.FC<{
+  isSelected: boolean;
+  onClick(): void;
+}> = ({ isSelected, onClick }) => (
   <CardListElement
     isSelected={isSelected}
-    onMouseDown={!isSelected && onClick}
+    onMouseDown={isSelected ? () => {} : onClick}
     icon="eye"
     header="Viewing"
   >
@@ -15,14 +18,14 @@ const ViewingOption: React.FC<any> = ({ isSelected, onClick }) => (
   </CardListElement>
 );
 
-const EditingOption: React.FC<any> = ({
-  onClick,
-  isSelected,
-  isEditingInvalid,
-}) => (
+const EditingOption: React.FC<{
+  isSelected: boolean;
+  isEditingInvalid: boolean;
+  onClick(): void;
+}> = ({ onClick, isSelected, isEditingInvalid }) => (
   <CardListElement
     isSelected={isSelected}
-    onMouseDown={!isSelected && onClick}
+    onMouseDown={isSelected ? () => {} : onClick}
     icon="pencil"
     header="Editing"
     isDisabled={isEditingInvalid}
@@ -61,17 +64,11 @@ export const ViewOptionToggle: React.FC<{
       position="left"
       width="wide"
     >
-      <ViewingOption
-        isSelected={!isEditing}
-        onClick={onForbidEdits}
-        closeOnClick={true}
-      />
+      <ViewingOption isSelected={!isEditing} onClick={onForbidEdits} />
       <EditingOption
         isSelected={isEditing}
         onClick={onAllowEdits}
         isEditingInvalid={isEditingInvalid}
-        hideErrorWhenUnselected={false}
-        closeOnClick={!isEditingInvalid}
       />
     </DropDown>
   );

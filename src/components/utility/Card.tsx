@@ -19,7 +19,7 @@ const IconSection: React.FC<
         className={clsx(size === "large" ? "text-4xl" : "text-xl")}
       />
     )}
-    {ionicIcon && <i className={`text-3xl ion-${ionicIcon}`} />}
+    {ionicIcon && <i className={`text-2xl ion-${ionicIcon}`} />}
     {image && (
       <img
         src={image}
@@ -76,7 +76,7 @@ export const CardListElement: React.FC<CardListElementProps> = ({
   };
 
   const className = clsx(
-    "grid grid-cols-12 py-2 px-4 gap-4 items-center",
+    "grid grid-cols-12 py-2 px-4 gap-2 items-center",
     isSelected && "bg-grey-1",
     isDisabled ? "cursor-not-allowed" : "hover:bg-blue-2",
     children && "pt-4 pb-2"
@@ -128,7 +128,7 @@ export const Card: React.FC<Props> = ({
   return (
     <div
       className={clsx(
-        width === "narrow" ? "w-[18em]" : "w-[30em]",
+        width === "narrow" ? "w-64" : "w-96",
         "bg-white rounded shadow drop-shadow",
         "py-1",
         hasPadding && "px-4"

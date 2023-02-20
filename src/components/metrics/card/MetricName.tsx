@@ -16,6 +16,7 @@ type Props = {
   name: string | undefined;
   inSelectedCell: boolean;
   titleView: boolean;
+  isOutput: boolean;
   onChange(text: string): void;
   heightHasChanged(): void;
   anotherFunctionSelected: boolean;
@@ -120,7 +121,10 @@ export const MetricName = React.forwardRef<MetricNameHandle, Props>(
           props.anotherFunctionSelected && "cursor-pointer",
           props.titleView
             ? "text-[#3c4f67] font-semibold"
-            : "text-[rgb(69,98,134)]/80 font-light"
+            : [
+                "text-[rgb(69,98,134)]/80",
+                props.isOutput ? "font-medium" : "font-light",
+              ]
         )}
       />
     );

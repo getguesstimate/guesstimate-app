@@ -33,6 +33,7 @@ import {
 import { FullDenormalizedMetric } from "~/lib/engine/space";
 import { replaceByMap } from "~/lib/engine/utils";
 import { CanvasState } from "~/modules/canvas_state/reducer";
+import { INPUT, OUTPUT, relationshipType } from "~/lib/engine/graph";
 
 // TODO(matthew): Refactor these components. E.g. it's weird that isBreak takes all errors, but you may only care about
 // the one...
@@ -82,6 +83,7 @@ type Props = {
   titleView: boolean;
   metric: FullDenormalizedMetric;
   inSelectedCell: boolean;
+  screenshot: boolean;
   hovered: boolean;
   showSensitivitySection: boolean;
   exportedAsFact: boolean;
@@ -109,6 +111,7 @@ export const MetricCardViewSection = React.forwardRef<
     },
     metric,
     inSelectedCell,
+    screenshot,
     onChangeName,
     jumpSection,
     onMouseDown,
@@ -164,7 +167,7 @@ export const MetricCardViewSection = React.forwardRef<
       return <MetricSidebarToggle onToggleSidebar={props.onToggleSidebar} />;
     } else if (props.exportedAsFact) {
       return <MetricExportedIcon />;
-    } else if (!_.isEmpty(metric.guesstimate.description)) {
+    } else if (!_.isEmpty(metric.guesstimate.description) && !screenshot) {
       return <MetricReasoningIcon />;
     } else {
       return null;
@@ -200,6 +203,25 @@ export const MetricCardViewSection = React.forwardRef<
   const anotherFunctionSelected =
     metricClickMode === "FUNCTION_INPUT_SELECT" && !inSelectedCell;
 
+  const relType = relationshipType(metric.edges);
+  const renderDistributionSummary = () => {
+    const summaryTheme =
+      relType === INPUT
+        ? "normal-input"
+        : relType === OUTPUT
+        ? "normal-output"
+        : "normal";
+
+    return (
+      <DistributionSummary
+        length={stats.length}
+        mean={stats.mean}
+        adjustedConfidenceInterval={stats.adjustedConfidenceInterval}
+        theme={summaryTheme}
+      />
+    );
+  };
+
   return (
     <div className="flex-1 relative flex flex-col" onMouseDown={onMouseDown}>
       {showSimulation && (
@@ -218,7 +240,7 @@ export const MetricCardViewSection = React.forwardRef<
       )}
 
       <div className="absolute top-0 right-0">
-        <div className="MetricToken">{renderToken()}</div>
+        <div className="mt-1 mr-1">{renderToken()}</div>
       </div>
 
       {(!_.isEmpty(metric.name) || inSelectedCell || hasContent()) && (
@@ -227,6 +249,7 @@ export const MetricCardViewSection = React.forwardRef<
             anotherFunctionSelected={anotherFunctionSelected}
             inSelectedCell={inSelectedCell}
             titleView={props.titleView}
+            isOutput={relType === OUTPUT}
             name={metric.name}
             onChange={onChangeName}
             jumpSection={jumpSection}
@@ -250,11 +273,7 @@ export const MetricCardViewSection = React.forwardRef<
         )}
         {showSimulation && (
           <div className="px-2 pt-2 pb-1 flex-1">
-            <DistributionSummary
-              length={stats.length}
-              mean={stats.mean}
-              adjustedConfidenceInterval={stats.adjustedConfidenceInterval}
-            />
+            {renderDistributionSummary()}
           </div>
         )}
         {showSimulation && shouldShowStatistics && (

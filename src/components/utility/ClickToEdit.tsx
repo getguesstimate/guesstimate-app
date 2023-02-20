@@ -33,13 +33,13 @@ const EditingMode: React.FC<{
         }}
       />
       <div className="mt-2 flex justify-between items-start">
-        <div className="flex gap-4">
-          <div className="submit ui button primary" onClick={submit}>
+        <div className="flex gap-4 items-center">
+          <Button color="blue" onClick={submit}>
             {editingSaveText}
-          </div>
+          </Button>
           <ButtonClose onClick={onClose} />
         </div>
-        <i className="ion-logo-markdown text-5xl leading-8 block cursor-pointer text-grey-4 hover:text-grey-888" />
+        <i className="ion-logo-markdown text-4xl cursor-pointer text-grey-4 hover:text-grey-888" />
       </div>
     </div>
   );

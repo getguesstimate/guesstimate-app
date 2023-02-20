@@ -53,6 +53,7 @@ type Props = {
   organizationId?: string | number;
   canUseOrganizationFacts: boolean;
   exportedAsFact: boolean;
+  screenshot: boolean;
   idMap: object;
   analyzedMetric: FullDenormalizedMetric | null;
 } & GridContext;
@@ -61,6 +62,7 @@ export const MetricCard = React.forwardRef<{ focus(): void }, Props>(
   function MetricCard(props, ref) {
     const {
       inSelectedCell,
+      screenshot,
       metric,
       organizationId,
       canUseOrganizationFacts,
@@ -279,6 +281,8 @@ export const MetricCard = React.forwardRef<{ focus(): void }, Props>(
       dispatch(endAnalysis());
     };
 
+    const relType = relationshipType(metric.edges);
+
     return (
       <ToolTip
         disabled={
@@ -313,8 +317,17 @@ export const MetricCard = React.forwardRef<{ focus(): void }, Props>(
             className={clsx(
               "metricCard",
               "relative rounded-xs w-full flex flex-col",
-              isTitleView && "titleView",
-              relationshipClasses[relationshipType(metric.edges)]
+              !isTitleView &&
+                (inSelectedCell
+                  ? "bg-[#fefefe] hover:bg-white" // these values are almost identical, simplify?
+                  : [
+                      relType === NOEDGE
+                        ? "bg-[#edeff3]"
+                        : relType === INTERMEDIATE
+                        ? "bg-[#f0f2f5]"
+                        : "bg-[#fefefe] hover:bg-[#f4f4f4]",
+                    ]),
+              relationshipClasses[relType] // used by SensitivitySection
             )}
             onMouseDown={handleOuterMouseDown}
           >
@@ -333,6 +346,7 @@ export const MetricCard = React.forwardRef<{ focus(): void }, Props>(
               canvasState={canvasState}
               metric={metric}
               inSelectedCell={inSelectedCell}
+              screenshot={screenshot}
               onChangeName={onChangeMetricName}
               onToggleSidebar={toggleSidebar}
               jumpSection={focusForm}
@@ -352,7 +366,7 @@ export const MetricCard = React.forwardRef<{ focus(): void }, Props>(
             />
 
             {shouldShowDistributionEditor && (
-              <div className="section editing">
+              <div className="flex-none border-t border-[#ddd] p-1">
                 <DistributionEditor
                   size="small"
                   ref={editorRef}

@@ -6,7 +6,7 @@ type Props<T> = {
   childProps: T;
   name: string;
   context?: string;
-  backgroundColor?: string;
+  backgroundColor?: "white" | "grey";
   child: React.FC<T>;
 };
 
@@ -18,13 +18,18 @@ export function ComponentEditor<T>({
   child: Child,
 }: Props<T>): React.ReactElement {
   return (
-    <div className={clsx("row ComponentEditor", backgroundColor)}>
-      <div className="col-sm-2 reference">
+    <div
+      className={clsx(
+        "grid grid-cols-6 gap-8 mt-8", // TODO - move mt-8 to outer layout component
+        backgroundColor === "grey" && "bg-[#f7f5f5]"
+      )}
+    >
+      <div>
         <h3>{name}</h3>
         <h4>{context}</h4>
         <JSONTree data={childProps} />
       </div>
-      <div className="col-sm-10 Component">
+      <div className="col-span-5">
         {
           <Child
             {
