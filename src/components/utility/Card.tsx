@@ -5,35 +5,46 @@ import Icon from "~/components/react-fa-patched";
 
 import { ButtonClose } from "~/components/utility/buttons/close";
 import { capitalizeFirstLetter } from "~/lib/string";
-
-export const CardListSection: React.FC<PropsWithChildren> = ({ children }) => (
-  <div className="CardListSection">{children}</div>
-);
+import { HR } from "./HR";
 
 const IconSection: React.FC<
   Pick<CardListElementProps, "icon" | "ionicIcon" | "image" | "imageShape"> & {
-    colCount: string;
+    size: "normal" | "large";
   }
-> = ({ colCount, icon, ionicIcon, image, imageShape }) => (
-  <div className={`col-xs-${colCount} icons`}>
-    {icon && <Icon name={icon} />}
-    {ionicIcon && <i className={`ion-${ionicIcon}`} />}
-    {image && <img src={image} className={imageShape} />}
+> = ({ icon, ionicIcon, image, imageShape, size }) => (
+  <div className="text-grey-2 text-center">
+    {icon && (
+      <Icon
+        name={icon}
+        className={clsx(size === "large" ? "text-4xl" : "text-xl")}
+      />
+    )}
+    {ionicIcon && <i className={`text-3xl ion-${ionicIcon}`} />}
+    {image && (
+      <img
+        src={image}
+        className={clsx(imageShape === "circle" && "rounded-full", "w-9")}
+      />
+    )}
   </div>
 );
 
-const ChildrenSection: React.FC<{
-  colCount: string;
-  header: string;
-  children: React.ReactNode;
-}> = ({ colCount, header, children }) => (
-  <div className={`col-xs-${colCount} info-section`}>
-    {header && <span className="header">{capitalizeFirstLetter(header)}</span>}
-    {!!children && <div className="content">{children}</div>}
+const ChildrenSection: React.FC<
+  PropsWithChildren<{
+    header: string;
+  }>
+> = ({ header, children }) => (
+  <div className="text-[#555]">
+    {header && (
+      <div className="font-bold text-xl leading-none">
+        {capitalizeFirstLetter(header)}
+      </div>
+    )}
+    {children && <div className="py-2">{children}</div>}
   </div>
 );
 
-export type CardListElementProps = {
+export type CardListElementProps = PropsWithChildren<{
   isSelected?: boolean;
   isDisabled?: boolean;
   closeOnClick?: boolean; // used by <Dropdown />
@@ -44,8 +55,7 @@ export type CardListElementProps = {
   url?: string;
   header: string;
   image?: string;
-  children?: React.ReactNode;
-};
+}>;
 
 export const CardListElement: React.FC<CardListElementProps> = ({
   icon,
@@ -54,7 +64,7 @@ export const CardListElement: React.FC<CardListElementProps> = ({
   imageShape,
   header,
   children,
-  url,
+  url = "",
   isSelected,
   isDisabled,
   onMouseDown,
@@ -66,66 +76,80 @@ export const CardListElement: React.FC<CardListElementProps> = ({
   };
 
   const className = clsx(
-    "action",
-    isSelected && "selected",
-    isDisabled && "disabled",
-    children && "hasChildren"
+    "grid grid-cols-12 py-2 px-4 gap-4 items-center",
+    isSelected && "bg-grey-1",
+    isDisabled ? "cursor-not-allowed" : "hover:bg-blue-2",
+    children && "pt-4 pb-2"
   );
 
-  const [small, large] = !!children ? ["2", "10"] : ["3", "9"];
+  const [leftCol, rightCol] = children
+    ? ["col-span-2", "col-span-10"]
+    : ["col-span-3", "col-span-9"];
 
   const hasImage = !!icon || !!ionicIcon || !!image;
 
   return (
     <li>
       <a className={className} href={url} onMouseDown={handleSelect}>
-        <div className="row">
-          {hasImage && (
+        {hasImage && (
+          <div className={leftCol}>
             <IconSection
               {...{ icon, ionicIcon, image, imageShape }}
-              colCount={small}
+              size={children ? "large" : "normal"}
             />
-          )}
-          <ChildrenSection
-            {...{ header, children }}
-            colCount={hasImage ? large : "12"}
-          />
+          </div>
+        )}
+        <div className={clsx(hasImage ? rightCol : "col-span-12")}>
+          <ChildrenSection header={header}>{children}</ChildrenSection>
         </div>
       </a>
     </li>
   );
 };
 
-type Props = {
+export const CardHeader: React.FC<PropsWithChildren> = ({ children }) => (
+  <h3 className="text-grey-888 font-extralight m-0">{children}</h3>
+);
+
+type Props = PropsWithChildren<{
   headerText?: string;
-  width: string;
+  width: "normal" | "narrow";
   onClose(): void;
-  shadow: boolean;
   hasPadding?: boolean;
-  children: React.ReactNode;
-};
+}>;
 
 export const Card: React.FC<Props> = ({
   headerText,
   onClose,
   width,
-  shadow,
   hasPadding,
   children,
 }) => {
   return (
-    <div className={clsx("Card", width, shadow && "shadow")}>
+    <div
+      className={clsx(
+        width === "narrow" ? "w-[18em]" : "w-[30em]",
+        "bg-white rounded shadow drop-shadow",
+        "py-1",
+        hasPadding && "px-4"
+      )}
+    >
       {headerText && (
-        <div className="Card-header">
-          <h3>{headerText}</h3>
-          <span className="Card-close">
+        <div className="text-center mt-2 mb-2 relative">
+          <CardHeader>{headerText}</CardHeader>
+          <div
+            className={clsx(
+              "absolute inset-y-0 grid place-items-center",
+              hasPadding ? "right-0" : "right-3"
+            )}
+          >
             <ButtonClose onClick={onClose} />
-          </span>
+          </div>
         </div>
       )}
 
-      <div className={clsx("Card-body", hasPadding && "padded")}>
-        {headerText && <hr />}
+      <div>
+        {headerText && <HR />}
         {children}
       </div>
     </div>

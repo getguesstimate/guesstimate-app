@@ -31,7 +31,7 @@ const PrivateOption: React.FC<any> = ({
     <CardListElement
       isSelected={isSelected}
       onMouseDown={!isSelected && onClick}
-      icon={"lock"}
+      icon="lock"
       header="Private"
       isDisabled={isPrivateSelectionInvalid}
       closeOnClick={!isSelected}
@@ -42,11 +42,8 @@ const PrivateOption: React.FC<any> = ({
           : "You have been given view access to this model."}
       </div>
       {isPrivateSelectionInvalid && (
-        <div className="warning">
-          <span className="upgrade" onClick={() => router.push("/pricing")}>
-            Upgrade
-          </span>
-          {" for more private models."}
+        <div className="mt-2">
+          <a href="/pricing">Upgrade</a> for more private models.
         </div>
       )}
     </CardListElement>
@@ -83,6 +80,7 @@ export const PrivacyToggle: React.FC<any> = ({
           onClick={onPrivateSelect}
           isPrivateSelectionInvalid={isPrivateSelectionInvalid}
           hideErrorWhenUnselected={false}
+          editableByMe={editableByMe}
         />
       )}
     </DropDown>

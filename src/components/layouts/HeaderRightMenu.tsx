@@ -182,8 +182,8 @@ const NewModelDropdown: React.FC<{
         }}
         noMobile
         text="New Model"
+        icon={<i className="ion-md-add" />}
       />
-      // <i className="ion-md-add" />
     );
   }
 

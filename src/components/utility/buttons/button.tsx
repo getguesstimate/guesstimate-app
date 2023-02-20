@@ -6,7 +6,7 @@ import Icon from "~/components/react-fa-patched";
 export const Button: React.FC<{
   onClick(): void;
   color?: "red" | "blue";
-  size?: "normal" | "small";
+  size?: "normal" | "small" | "large";
   children: React.ReactNode;
   wide?: boolean;
   loading?: boolean;
@@ -22,7 +22,9 @@ export const Button: React.FC<{
 }) => (
   <button
     className={clsx(
-      size === "small" ? "px-3 py-2 text-xs" : "px-3 py-2 text-base",
+      size === "small" && "px-3 py-2 text-xs",
+      size === "normal" && "px-3 py-2 text-base",
+      size === "large" && "px-6 py-3 text-lg",
       wide ? "flex w-full" : "inline-flex",
       "items-center",
       "rounded",

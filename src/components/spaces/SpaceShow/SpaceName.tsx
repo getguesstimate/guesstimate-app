@@ -1,8 +1,10 @@
 import clsx from "clsx";
 import _ from "lodash";
 import React, { useRef } from "react";
+import { Button } from "~/components/utility/buttons/button";
 
 import { DropDown, DropDownHandle } from "~/components/utility/DropDown";
+import { Textarea } from "~/components/utility/forms";
 
 type Props = {
   name: string;
@@ -46,17 +48,25 @@ export const SpaceName: React.FC<Props> = ({ onSave, name, editableByMe }) => {
       onOpen={focusForm}
       ref={dropDownRef}
     >
-      <div className="ui form">
-        <textarea defaultValue={name} rows={2} ref={nameRef} />
-        {!hasName && (
-          <p>
-            What are you trying to estimate? Be specific, so others can
-            understand. Example: 'The time it will take George to walk home.'
-          </p>
-        )}
-        <div className="ui button primary large" onClick={onClickSave}>
-          {hasName ? "Rename Model" : "Name Model"}
+      <div className="my-2">
+        <div className="mb-4">
+          <Textarea
+            defaultValue={name}
+            rows={2}
+            ref={nameRef}
+            theme="large"
+            className="w-full"
+          />
+          {!hasName && (
+            <p className="text-grey-888 text-sm">
+              What are you trying to estimate? Be specific, so others can
+              understand. Example: 'The time it will take George to walk home.'
+            </p>
+          )}
         </div>
+        <Button color="blue" size="large" onClick={onClickSave}>
+          {hasName ? "Rename Model" : "Name Model"}
+        </Button>
       </div>
     </DropDown>
   ) : (

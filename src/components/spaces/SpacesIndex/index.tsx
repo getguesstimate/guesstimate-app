@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Icon from "~/components/react-fa-patched";
 
 import { SpaceCards } from "~/components/spaces/SpaceCards";
+import { Button } from "~/components/utility/buttons/button";
 import { CardListElement } from "~/components/utility/Card";
 import { DropDown } from "~/components/utility/DropDown";
 
@@ -19,8 +20,8 @@ const sortNames: { [k in SortBy]: string } = {
 };
 
 const timeframeNames: { [k in Timeframe]: string } = {
-  ALL_TIME: "All Time",
   MONTHLY: "Monthly",
+  ALL_TIME: "All Time",
 };
 
 const Filters: React.FC<{
@@ -30,7 +31,7 @@ const Filters: React.FC<{
   onChangeTimeFrame(timeframe: Timeframe): void;
 }> = ({ sortBy, timeframe, onChangeSortBy, onChangeTimeFrame }) => {
   return (
-    <div>
+    <div className="flex gap-4">
       <Filter selected={sortBy} names={sortNames} onChange={onChangeSortBy} />
       {sortBy === "POPULAR" && (
         <Filter
@@ -51,10 +52,10 @@ const Filter: React.FC<{
 }> = ({ selected, names, onChange }) => (
   <DropDown
     openLink={
-      <a className="header-action">
-        {names[selected]}
-        <Icon name="chevron-down" />
-      </a>
+      <div className="flex items-center gap-1 px-2 py-1 text-grey-666 hover:bg-[#e3e8ec] rounded-sm">
+        <div>{names[selected]}</div>
+        <Icon name="chevron-down" className="text-sm" />
+      </div>
     }
     position="right"
   >
@@ -101,14 +102,13 @@ export const SpacesIndex: React.FC = () => {
     searchSpaces.page < searchSpaces.nbPages - 1;
 
   return (
-    <div className="SpacesIndex mb-8">
+    <div className="SpacesIndex mb-12">
       <div className="mt-16 mb-12">
         <h1 className="text-grey-444 text-center text-3xl mb-6">
           Public Models
         </h1>
-        <div className="grid grid-cols-4 gap-4">
-          <div />
-          <div className="col-span-2">
+        <div className="grid grid-cols-4 gap-8 items-center">
+          <div className="col-span-2 col-start-2">
             <div className="ui form">
               <input
                 name="search"
@@ -140,10 +140,10 @@ export const SpacesIndex: React.FC = () => {
       />
 
       {spaces.length && hasMorePages ? (
-        <div className="nextPage">
-          <button className="ui button nextpage large" onClick={loadNextPage}>
+        <div className="mt-8 text-center">
+          <Button size="large" onClick={loadNextPage}>
             Load More
-          </button>
+          </Button>
         </div>
       ) : null}
     </div>

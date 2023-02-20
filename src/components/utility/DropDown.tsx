@@ -67,7 +67,7 @@ export const DropDown = React.forwardRef<DropDownHandle, Props>(
         {isOpen && (
           <div
             className={clsx(
-              "absolute mt-0.5 z-10",
+              "absolute mt-1 z-10",
               props.position === "right" ? "left-0" : "right-0"
             )}
           >
@@ -76,7 +76,6 @@ export const DropDown = React.forwardRef<DropDownHandle, Props>(
               onClose={close}
               width={width}
               hasPadding={props.hasPadding}
-              shadow={true}
             >
               {_.isArray(props.children) ? (
                 <ul>

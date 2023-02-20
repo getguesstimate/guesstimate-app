@@ -6,6 +6,7 @@ import { ToolTip } from "~/components/utility/ToolTip";
 import * as elev from "~/server/elev/index";
 import clsx from "clsx";
 import { DistributionType } from "~/lib/guesstimator/types";
+import { HR } from "~/components/utility/HR";
 
 export const DistributionIcon: React.FC<{
   type: DistributionType;
@@ -53,9 +54,9 @@ export const DistributionSelector: React.FC<{
 
   const allTypes: DistributionType[] = ["LOGNORMAL", "NORMAL", "UNIFORM"];
   return (
-    <div>
-      <hr className="border-0 border-t-[1px] border-grey-1 my-1" />
-      <div className="flex justify-between">
+    <div className="mt-1">
+      <HR />
+      <div className="mt-1 flex justify-between">
         <a
           className="px-0.5 text-[16px] text-grey-999 hover:text-grey-666"
           href=""

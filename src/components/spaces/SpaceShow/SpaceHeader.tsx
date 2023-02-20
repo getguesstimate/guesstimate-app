@@ -1,14 +1,11 @@
-import React, { Component } from "react";
-
-import Icon from "~/components/react-fa-patched";
-import { CardListSection } from "~/components/utility/Card";
+import React from "react";
 
 import { DropDown } from "~/components/utility/DropDown";
 import { PrivacyToggle } from "./PrivacyToggle";
 import { SpaceName } from "./SpaceName";
 
-import * as e from "~/lib/engine/engine";
 import { UserTag } from "~/components/UserTag";
+import * as e from "~/lib/engine/engine";
 import { SpaceHeaderButton } from "./SpaceHeaderButton";
 
 const EnableShareableLinkOption: React.FC<{ onEnable(): void }> = ({
@@ -60,7 +57,7 @@ const ShareableLinkOption: React.FC<{
       position="left"
       width="wide"
     >
-      <CardListSection>
+      <div className="p-4 text-grey-666">
         {shareableLinkUrl ? (
           <DisableOrRotateShareableLinkOption
             shareableLinkUrl={shareableLinkUrl}
@@ -70,7 +67,7 @@ const ShareableLinkOption: React.FC<{
         ) : (
           <EnableShareableLinkOption onEnable={onEnable} />
         )}
-      </CardListSection>
+      </div>
     </DropDown>
   );
 };

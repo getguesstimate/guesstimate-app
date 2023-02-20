@@ -66,7 +66,7 @@ module.exports = {
         xs: "1px",
       },
       fontFamily: {
-        lato: "'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif",
+        open: "Open Sans,Helvetica,Arial,sans-serif",
         mono: '"Courier New", Courier, monospace',
       },
       maxWidth: {

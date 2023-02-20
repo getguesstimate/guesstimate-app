@@ -15,7 +15,7 @@ export const SmallButtonClose: React.FC<{ onClick(): void }> = ({
 
 export const ButtonClose: React.FC<{ onClick(): void }> = ({ onClick }) => (
   <a
-    className="cursor-pointer text-grey-bbb hover:text-grey-888 text-3xl"
+    className="cursor-pointer text-grey-bbb hover:text-grey-888 text-2xl leading-none"
     onClick={onClick}
   >
     <i className="ion-md-close" />

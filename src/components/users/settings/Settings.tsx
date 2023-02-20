@@ -4,6 +4,7 @@ import React from "react";
 
 import { Card } from "~/components/utility/Card";
 import { Plan } from "~/lib/config/plan";
+import { HR } from "~/components/utility/HR";
 
 const PlanC: React.FC<{ planId: string | undefined }> = ({ planId }) => (
   <div className="bg-grey-1 px-8 py-4 rounded">
@@ -44,7 +45,7 @@ const PlanUpgradeSection: React.FC<{
   } else {
     return (
       <div>
-        <hr />
+        <HR />
         <div className="mt-8 flex flex-col items-center">
           {hasPortalUrl ? (
             <PortalButton url={portalUrl} onRefresh={onRefresh} />
@@ -79,7 +80,6 @@ export const Settings: React.FC<Props> = ({
             onClose={onClose}
             width="normal"
             hasPadding={true}
-            shadow={true}
           >
             <div className="py-8 space-y-8">
               <div>

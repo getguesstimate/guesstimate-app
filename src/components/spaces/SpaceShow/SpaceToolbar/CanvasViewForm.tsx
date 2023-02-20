@@ -1,8 +1,11 @@
+import { PropsWithChildren } from "react";
 import {
+  CardHeader,
   CardListElement,
   CardListElementProps,
 } from "~/components/utility/Card";
 import { DropDown } from "~/components/utility/DropDown";
+import { HR } from "~/components/utility/HR";
 
 import * as canvasStateActions from "~/modules/canvas_state/actions";
 import { EdgeViewMode } from "~/modules/canvas_state/reducer";
@@ -13,6 +16,18 @@ const arrowsHiddenImage = "/assets/metric-icons/blue/arrows-hidden.png";
 const arrowsVisibleImage = "/assets/metric-icons/blue/arrows-visible.png";
 const debuggingImage = "/assets/metric-icons/blue/debugging.png";
 const scientificImage = "/assets/metric-icons/blue/scientific.png";
+
+const Section: React.FC<PropsWithChildren<{ headerText: string }>> = ({
+  headerText,
+  children,
+}) => (
+  <div className="my-4">
+    <div className="py-2 pl-4">
+      <CardHeader>{headerText}</CardHeader>
+    </div>
+    {children}
+  </div>
+);
 
 export const CanvasViewForm: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -75,54 +90,33 @@ export const CanvasViewForm: React.FC = () => {
       openLink={<ToolbarTextItem text="View" />}
       position="right"
     >
-      <div className="section">
-        <div
-          className="header-divider"
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
-        >
-          <h3>Metric Style</h3>
-        </div>
+      <Section headerText="Metric Style">
         <ul>
-          {metricCardViewOptions.map((o) => {
-            return (
-              <CardListElement
-                key={o.name}
-                header={o.name}
-                isSelected={o.isSelected}
-                onMouseDown={o.onClick!}
-                image={o.image}
-              />
-            );
-          })}
+          {metricCardViewOptions.map((o) => (
+            <CardListElement
+              key={o.name}
+              header={o.name}
+              isSelected={o.isSelected}
+              onMouseDown={o.onClick!}
+              image={o.image}
+            />
+          ))}
         </ul>
-      </div>
-      <hr />
-
-      <div className="section">
-        <div
-          className="header-divider"
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
-        >
-          <h3>Arrows</h3>
-        </div>
+      </Section>
+      <HR />
+      <Section headerText="Arrows">
         <ul>
-          {arrowViewOptions.map((o) => {
-            return (
-              <CardListElement
-                key={o.name}
-                header={o.name}
-                isSelected={o.isSelected}
-                onMouseDown={o.onClick!}
-                image={o.image}
-              />
-            );
-          })}
+          {arrowViewOptions.map((o) => (
+            <CardListElement
+              key={o.name}
+              header={o.name}
+              isSelected={o.isSelected}
+              onMouseDown={o.onClick!}
+              image={o.image}
+            />
+          ))}
         </ul>
-      </div>
+      </Section>
     </DropDown>
   );
 };
