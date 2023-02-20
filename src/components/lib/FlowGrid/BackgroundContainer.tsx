@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useState } from "react";
 
-import { Edges } from "./edges";
+import { Edges } from "./Edges";
 import { GridPoint } from "./gridPoints";
 
 import { EdgeShape } from "~/components/spaces/SpaceCanvas";

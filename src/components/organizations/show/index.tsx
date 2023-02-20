@@ -10,9 +10,9 @@ import {
   SpaceCardGrid,
 } from "~/components/spaces/SpaceCards";
 import { Container } from "~/components/utility/Container";
-import { Category } from "./categories/category";
-import { CategoryForm } from "./categories/form";
-import { FactGraph } from "./facts/factGraph";
+import { Category } from "./categories/Category";
+import { CategoryForm } from "./categories/CategoryForm";
+import { FactGraph } from "./facts/FactGraph";
 import { MembersTab } from "./MembersTab";
 
 import { organizationMemberSelector } from "./organizationMemberSelector";

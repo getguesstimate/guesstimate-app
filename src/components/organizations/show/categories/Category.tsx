@@ -1,10 +1,10 @@
-import React, { Component, useState } from "react";
+import React, { useState } from "react";
 
 import { FactListContainer } from "~/components/facts/list/FactListContainer";
-import { CategoryForm } from "./form";
-import { FactCategory } from "~/lib/engine/fact_category";
-import { Fact } from "~/lib/engine/facts";
 import { Button } from "~/components/utility/buttons/button";
+import { Fact } from "~/lib/engine/facts";
+import { FactCategory } from "~/lib/engine/fact_category";
+import { CategoryForm } from "./CategoryForm";
 
 const HeaderText: React.FC<{ children: string }> = ({ children }) => (
   <h3 className="!m-0 text-grey-888 text-xl italic font-extralight">

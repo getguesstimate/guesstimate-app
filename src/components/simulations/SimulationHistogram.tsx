@@ -1,7 +1,7 @@
 import _ from "lodash";
 import React from "react";
 
-import { Histogram, HistogramTheme } from "~/components/lib/histogram";
+import { Histogram, HistogramTheme } from "~/components/lib/Histogram";
 import { Simulation } from "~/modules/simulations/reducer";
 
 type Props = {

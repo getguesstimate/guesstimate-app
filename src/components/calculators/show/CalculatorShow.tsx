@@ -5,8 +5,8 @@ import ReactMarkdown from "react-markdown";
 import Icon from "~/components/react-fa-patched";
 
 import { ButtonWithIcon } from "~/components/utility/buttons/button";
-import { Input, InputHandle } from "./input";
-import { Output } from "./output";
+import { Input, InputHandle } from "./Input";
+import { Output } from "./Output";
 
 import { changeGuesstimate } from "~/modules/guesstimates/actions";
 import {
