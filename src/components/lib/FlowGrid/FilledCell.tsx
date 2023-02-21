@@ -1,5 +1,6 @@
 import React, {
   CSSProperties,
+  useContext,
   useEffect,
   useImperativeHandle,
   useRef,
@@ -12,6 +13,7 @@ import { CanvasLocation, Direction } from "~/lib/locationUtils";
 import clsx from "clsx";
 import { getEmptyImage } from "react-dnd-html5-backend";
 import { GridItem } from "./types";
+import { FlowGridContext } from "./FlowGrid";
 
 export type GridContext = {
   hovered: boolean;
@@ -78,7 +80,7 @@ const DragPreview: React.FC<{ width: number; children: React.ReactNode }> = ({
 };
 
 type Props = {
-  hover: boolean;
+  isHovered: boolean;
   gridKeyPress(e: React.SyntheticEvent): void;
   forceFlowGridUpdate(): void;
   onTab(): void;
@@ -96,6 +98,8 @@ type Props = {
 
 export const FilledCell = React.forwardRef<{ focus(): void }, Props>(
   function FilledCell(props, ref) {
+    const { isModelingCanvas } = useContext(FlowGridContext);
+
     const [{ isDragging }, drag, dragPreview] = useDrag<
       { location: CanvasLocation },
       {
@@ -131,6 +135,8 @@ export const FilledCell = React.forwardRef<{ focus(): void }, Props>(
       }),
       [props.location]
     );
+
+    const { showEdges } = useContext(FlowGridContext);
 
     const itemRef = useRef<{ focus(): void } | null>(null);
 
@@ -173,7 +179,7 @@ export const FilledCell = React.forwardRef<{ focus(): void }, Props>(
       : {};
 
     const item = props.item.component({
-      hovered: props.hover,
+      hovered: props.isHovered,
       inSelectedCell: props.inSelectedCell,
       selectedFrom: props.selectedFrom,
       gridKeyPress: props.gridKeyPress,
@@ -186,7 +192,11 @@ export const FilledCell = React.forwardRef<{ focus(): void }, Props>(
 
     return (
       <div
-        className={clsx("FlowGridFilledCell", isDragging && "isDragging")}
+        className={clsx(
+          isModelingCanvas && props.isHovered && "bg-[rgba(75,138,177)]/[0.3]",
+          "grid place-items-stretch rounded-xs",
+          showEdges ? "p-2" : "p-[3px]"
+        )}
         style={styles}
         onMouseUp={handleMouseUp}
         ref={containerRef}

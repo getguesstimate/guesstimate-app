@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useContext, useEffect, useRef } from "react";
 
 import { ConnectDropTarget, useDrop } from "react-dnd";
 
@@ -9,13 +9,9 @@ import clsx from "clsx";
 import { CanvasLocation, Direction } from "~/lib/locationUtils";
 import { CanvasState } from "~/modules/canvas_state/slice";
 import { GridItem } from "./types";
+import { FlowGridContext } from "./FlowGrid";
 
-type CollectedProps = {
-  connectDropTarget: ConnectDropTarget;
-  isOver: boolean;
-};
-
-type OwnProps = {
+type Props = {
   canvasState: CanvasState;
   inSelectedRegion: boolean;
   inSelectedCell: boolean;
@@ -41,7 +37,6 @@ type OwnProps = {
   getRowHeight(): number;
   size?: "small" | "normal";
 };
-type Props = OwnProps & CollectedProps;
 
 // shouldComponentUpdate(newProps: Props) {
 //   const difProps =
@@ -61,131 +56,12 @@ type Props = OwnProps & CollectedProps;
 //   );
 // }
 
-class Cell extends Component<Props> {
-  itemRef: React.RefObject<{ focus(): void }>;
+export const DropCell: React.FC<Props> = (props) => {
+  const itemRef = useRef<{ focus(): void }>(null);
 
-  constructor(props: Props) {
-    super(props);
-    this.itemRef = React.createRef();
-  }
+  const { showGridLines } = useContext(FlowGridContext);
 
-  componentDidMount() {
-    if (this.props.inSelectedCell) {
-      this._focus();
-    }
-  }
-
-  componentDidUpdate(prevProps: Props) {
-    if (
-      (!!prevProps.item !== !!this.props.item ||
-        !!prevProps.inSelectedCell !== !!this.props.inSelectedCell) &&
-      this.props.inSelectedCell
-    ) {
-      this._focus();
-    }
-  }
-
-  _focus() {
-    this.itemRef.current?.focus();
-  }
-
-  render() {
-    const { inSelectedRegion, item, isOver, isHovered } = this.props;
-
-    const handleAutoFillTargetMouseDown = (e: React.MouseEvent) => {
-      if (e.button === 0) {
-        this.props.onAutoFillTargetMouseDown();
-        e.preventDefault();
-      }
-    };
-
-    const handleMouseDown = (e: React.MouseEvent) => {
-      // TODO(matthew): I think we can refactor this and get rid of the window trigger system for doing this input, but it
-      // will be a bigger refactor, so I'm inclined to leave this for now, even though it couples the flow grid and the
-      // space more tightly than they've been integrated so far.
-      const isFunctionSelect =
-        this.props.canvasState.metricClickMode === "FUNCTION_INPUT_SELECT";
-      const { inSelectedCell, item, location } = this.props;
-      const leftClick = e.button === 0;
-
-      if (!leftClick) {
-        return;
-      }
-
-      if (!item) {
-        this.props.onEmptyCellMouseDown(e);
-      }
-
-      if (inSelectedCell) {
-        if (!item) {
-          this.props.onAddItem(location);
-        }
-        this.props.handleSelect(location);
-      }
-
-      if (!inSelectedCell) {
-        if (e.shiftKey) {
-          this.props.handleEndRangeSelect(this.props.location);
-          return;
-        } else if (isFunctionSelect && item) {
-          return;
-        } else {
-          this.props.handleSelect(location);
-        }
-      }
-    };
-
-    const cellElement = this.props.item ? (
-      // Then endDrag fixes a bug where the original dragging position is hovered.
-      <FilledCell
-        {...this.props}
-        item={this.props.item} // typescript fix
-        onEndDrag={this.props.onEndDragCell}
-        forceFlowGridUpdate={this.props.forceFlowGridUpdate}
-        hover={this.props.isHovered}
-        focusCell={this._focus.bind(this)}
-        ref={this.itemRef}
-      />
-    ) : (
-      <EmptyCell {...this.props} ref={this.itemRef} />
-    );
-
-    const className = clsx(
-      "FlowGridCell",
-      "group/gridcell",
-      this.props.size === "small"
-        ? "w-[150px] max-w-[150px]"
-        : "w-[210px] max-w-[210px]",
-      inSelectedRegion ? "selected" : "nonSelected",
-      item && "hasItem",
-      isOver && "IsOver",
-      isHovered && "hovered"
-    );
-
-    return (
-      <div
-        ref={this.props.connectDropTarget}
-        className={className}
-        onMouseEnter={this.props.onMouseEnter}
-        onMouseDown={handleMouseDown}
-        onMouseUp={this.props.onMouseUp}
-      >
-        {cellElement}
-        {this.props.showAutoFillToken && (
-          <div className="AutoFillToken--outer">
-            <div
-              className="AutoFillToken"
-              onMouseDown={handleAutoFillTargetMouseDown}
-            />
-          </div>
-        )}
-      </div>
-    );
-  }
-}
-
-export const DropCell: React.FC<OwnProps> = (props) => {
-  const [collectedProps, drop] = useDrop({
+  const [{ isOver }, connectDropTarget] = useDrop({
     accept: "card",
     collect(monitor) {
       return {
@@ -197,5 +73,105 @@ export const DropCell: React.FC<OwnProps> = (props) => {
     },
   });
 
-  return <Cell {...props} {...collectedProps} connectDropTarget={drop} />;
+  useEffect(() => {
+    if (props.inSelectedCell) {
+      itemRef.current?.focus();
+    }
+  }, []);
+
+  useEffect(() => {
+    if (props.inSelectedCell) {
+      itemRef.current?.focus();
+    }
+  }, [props.inSelectedCell]);
+
+  const { inSelectedRegion, item, isHovered } = props;
+
+  const handleAutoFillTargetMouseDown = (e: React.MouseEvent) => {
+    if (e.button === 0) {
+      props.onAutoFillTargetMouseDown();
+      e.preventDefault();
+    }
+  };
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    // TODO(matthew): I think we can refactor this and get rid of the window trigger system for doing this input, but it
+    // will be a bigger refactor, so I'm inclined to leave this for now, even though it couples the flow grid and the
+    // space more tightly than they've been integrated so far.
+    const isFunctionSelect =
+      props.canvasState.metricClickMode === "FUNCTION_INPUT_SELECT";
+    const { inSelectedCell, item, location } = props;
+    const leftClick = e.button === 0;
+
+    if (!leftClick) {
+      return;
+    }
+
+    if (!item) {
+      props.onEmptyCellMouseDown(e);
+    }
+
+    if (inSelectedCell) {
+      if (!item) {
+        props.onAddItem(location);
+      }
+      props.handleSelect(location);
+    }
+
+    if (!inSelectedCell) {
+      if (e.shiftKey) {
+        props.handleEndRangeSelect(props.location);
+        return;
+      } else if (isFunctionSelect && item) {
+        return;
+      } else {
+        props.handleSelect(location);
+      }
+    }
+  };
+
+  const cellElement = item ? (
+    // Then endDrag fixes a bug where the original dragging position is hovered.
+    <FilledCell
+      {...props}
+      item={item} // typescript fix
+      onEndDrag={props.onEndDragCell}
+      forceFlowGridUpdate={props.forceFlowGridUpdate}
+      focusCell={() => itemRef.current?.focus()}
+      ref={itemRef}
+    />
+  ) : (
+    <EmptyCell {...props} ref={itemRef} isOver={isOver} />
+  );
+
+  const className = clsx(
+    "group/gridcell",
+    "flex-none min-h-[60px] relative grid place-items-stretch",
+    showGridLines &&
+      "border-r border-b border-[rgb(0,25,95)]/[0.09] border-dashed",
+    props.size === "small"
+      ? "w-[150px] max-w-[150px]"
+      : "w-[210px] max-w-[210px]",
+    isHovered && "hovered"
+  );
+
+  return (
+    <div
+      ref={connectDropTarget}
+      className={className}
+      onMouseEnter={props.onMouseEnter}
+      onMouseDown={handleMouseDown}
+      onMouseUp={props.onMouseUp}
+    >
+      {cellElement}
+      {props.showAutoFillToken && (
+        <div className="absolute -right-5 -bottom-5 w-9 h-9 z-10 transition-[padding] duration-[50ms] p-[0.8em] hover:p-2">
+          <div
+            className="cursor-crosshair w-full h-full rounded-sm bg-[rgb(90,141,177)]"
+            onMouseDown={handleAutoFillTargetMouseDown}
+          />
+        </div>
+      )}
+    </div>
+  );
 };

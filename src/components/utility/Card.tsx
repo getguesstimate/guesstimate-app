@@ -64,13 +64,15 @@ export const CardListElement: React.FC<CardListElementProps> = ({
   imageShape,
   header,
   children,
-  url = "",
+  url,
   isSelected,
   isDisabled,
   onMouseDown,
 }) => {
-  const handleSelect = () => {
-    if (!isDisabled) {
+  const handleSelect = (e: React.MouseEvent) => {
+    if (!isDisabled && onMouseDown) {
+      console.log("prevented");
+      e.preventDefault();
       onMouseDown();
     }
   };
@@ -78,7 +80,7 @@ export const CardListElement: React.FC<CardListElementProps> = ({
   const className = clsx(
     "grid grid-cols-12 py-2 px-4 gap-2 items-center",
     isSelected && "bg-grey-1",
-    isDisabled ? "cursor-not-allowed" : "hover:bg-blue-2",
+    isDisabled ? "cursor-not-allowed" : "hover:bg-blue-2 cursor-pointer",
     children && "pt-4 pb-2"
   );
 

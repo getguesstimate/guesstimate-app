@@ -30,7 +30,7 @@ type Props = {
   onUndo(): void;
   onRedo(): void;
   items: GridItem[];
-  edges: EdgeShape[];
+  edges?: EdgeShape[]; // if not defined, cells won't have additional padding, so [] and `undefined` are different
   selectedCell: SelectedCellState;
   selectedRegion: MaybeRegion;
   copiedRegion: MaybeRegion;
@@ -74,6 +74,20 @@ const useCallOnUnmount = (fn: () => void) => {
     };
   }, []);
 };
+
+type FlowGridContextShape = {
+  size?: "small" | "normal";
+  showGridLines: boolean;
+  showEdges: boolean;
+  isModelingCanvas: boolean;
+};
+
+export const FlowGridContext = React.createContext<FlowGridContextShape>({
+  size: "normal",
+  showGridLines: true,
+  showEdges: true,
+  isModelingCanvas: true,
+});
 
 export const FlowGrid: React.FC<Props> = ({
   items,
@@ -385,27 +399,28 @@ export const FlowGrid: React.FC<Props> = ({
     );
   };
 
-  const className = clsx(
-    "FlowGrid",
-    showGridLines && "withLines",
-    isModelingCanvas && "isSelectable"
-  );
-
   return (
     <DndProvider backend={HTML5Backend}>
-      <div
-        className="FlowGrid-Container overflow-hidden"
-        onMouseLeave={handleMouseLeave}
-        onMouseUp={handleMouseUp}
-        onKeyDown={handleKeyDown}
-        onKeyUp={handleKeyUp}
+      <FlowGridContext.Provider
+        value={{
+          size,
+          showGridLines,
+          showEdges: edges !== undefined,
+          isModelingCanvas,
+        }}
       >
-        <div className={className}>
-          <div className="canvas">
+        <div
+          className={clsx("relative z-0", isModelingCanvas && "isSelectable")}
+          onMouseLeave={handleMouseLeave}
+          onMouseUp={handleMouseUp}
+          onKeyDown={handleKeyDown}
+          onKeyUp={handleKeyUp}
+        >
+          <div className="relative z-10">
             {upto(rows).map((row) => {
               return (
                 <div
-                  className="FlowGridRow"
+                  className="flex"
                   key={row}
                   ref={(el) => (rowRefs.current[row] = el)}
                 >
@@ -417,7 +432,7 @@ export const FlowGrid: React.FC<Props> = ({
             })}
           </div>
           <BackgroundContainer
-            edges={edges}
+            edges={edges || []}
             rowCount={rows}
             getRowHeight={getRowHeight}
             selectedRegion={selectedRegion}
@@ -426,7 +441,7 @@ export const FlowGrid: React.FC<Props> = ({
             autoFillRegion={getBounds(autoFillRegion)}
           />
         </div>
-      </div>
+      </FlowGridContext.Provider>
     </DndProvider>
   );
 };

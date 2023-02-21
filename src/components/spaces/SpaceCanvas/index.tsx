@@ -195,9 +195,9 @@ export const SpaceCanvas: React.FC<Props> = ({
     };
   };
 
-  const buildEdges = (): EdgeShape[] => {
+  const buildEdges = (): EdgeShape[] | undefined => {
     if (!showEdges) {
-      return [];
+      return;
     }
 
     const selectedMetrics = metrics.filter((m) =>
@@ -334,8 +334,7 @@ export const SpaceCanvas: React.FC<Props> = ({
   return (
     <div
       className={clsx(
-        "canvas-space",
-        showEdges && "showEdges",
+        "flex-1 max-h-full",
         screenshot ? "overflow-hidden" : "overflow-auto" // why?
       )}
     >

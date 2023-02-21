@@ -482,7 +482,7 @@ class UnconnectedSpaceShow extends Component<Props, State> {
     const { exportedFacts, denormalizedSpace: space } = this.props;
 
     if (!e.space.prepared(space)) {
-      return <div className="spaceShow" />;
+      return null;
     }
 
     const sidebarIsVisible =
@@ -492,7 +492,7 @@ class UnconnectedSpaceShow extends Component<Props, State> {
 
     if (this.props.embed) {
       return (
-        <div className="spaceShow screenshot">
+        <div className="bg-[#c2cdd6]">
           <SpaceCanvas
             denormalizedSpace={space}
             canUseOrganizationFacts={this.canUseOrganizationFacts()}
@@ -522,7 +522,7 @@ class UnconnectedSpaceShow extends Component<Props, State> {
     const pageTitle = `${space.name} | Guesstimate`;
 
     return (
-      <div className="spaceShow">
+      <div className="flex-1 flex flex-col h-full bg-[#dfe1e4]">
         <Head>
           {space.name && <title key="title">{pageTitle}</title>}
           {[
@@ -615,14 +615,16 @@ class UnconnectedSpaceShow extends Component<Props, State> {
               )}
             </div>
           )}
-          <SpaceCanvas
-            canUseOrganizationFacts={this.canUseOrganizationFacts()}
-            exportedFacts={exportedFacts}
-            denormalizedSpace={space}
-            onCopy={this.onCopy.bind(this, true)}
-            onPaste={this.onPaste.bind(this, true)}
-            onCut={this.onCut.bind(this, true)}
-          />
+          <div className="pt-4 pl-4 overflow-auto">
+            <SpaceCanvas
+              canUseOrganizationFacts={this.canUseOrganizationFacts()}
+              exportedFacts={exportedFacts}
+              denormalizedSpace={space}
+              onCopy={this.onCopy.bind(this, true)}
+              onPaste={this.onPaste.bind(this, true)}
+              onCut={this.onCut.bind(this, true)}
+            />
+          </div>
           {this.rightSidebar()}
         </div>
       </div>

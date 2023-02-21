@@ -35,7 +35,7 @@ export const GuesstimateTypeIcon: React.FC<Props> = ({
     return (
       <div
         className={clsx(
-          "cursor-pointer text-grey-2 opacity-60 hover:opacity-100",
+          "cursor-pointer text-grey-2 opacity-60 hover:opacity-100 mr-1.5",
           size === "large" ? "text-3xl" : "text-xl"
         )}
         onMouseDown={() => {
