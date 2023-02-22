@@ -1,17 +1,34 @@
+import _ from "lodash";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 
+import clsx from "clsx";
 import Modal from "react-modal";
-import Icon from "~/components/react-fa-patched";
+
+import * as e from "~/lib/engine/engine";
+import { parseSlurp } from "~/lib/slurpParser";
+
+import { allowEdits, forbidEdits } from "~/modules/canvas_state/actions";
+import { CanvasActionState } from "~/modules/canvas_state/reducer";
+import { useAppDispatch, useAppSelector } from "~/modules/hooks";
+import { ExtendedDSpace } from "../../denormalized-space-selector";
+
+import * as copiedActions from "~/modules/copied/actions";
+import { removeSelectedMetrics } from "~/modules/metrics/actions";
+import * as simulationActions from "~/modules/simulations/actions";
+import * as spaceActions from "~/modules/spaces/actions";
+import * as userActions from "~/modules/users/actions";
 
 import { CardListElement } from "~/components/utility/Card";
 import { DropDown } from "~/components/utility/DropDown";
-import { CanvasActionState } from "~/modules/canvas_state/reducer";
+import { canUseOrganizationFacts } from "~/lib/engine/space";
+import { redo, undo } from "~/modules/checkpoints/actions";
 import { CanvasViewForm } from "./CanvasViewForm";
-import { ViewOptionToggle } from "./ViewOptionToggle";
 import { ImportFromSlurpForm } from "./import_from_slurp_form";
 import { ToolbarIcon } from "./ToolbarIcon";
 import { ToolbarTextItem } from "./ToolbarTextItem";
-import clsx from "clsx";
+import { ViewOptionToggle } from "./ViewOptionToggle";
+import { Tutorial } from "../Tutorial";
 
 const MessageBox: React.FC<{ color: "GREY" | "RED"; children: string }> = ({
   color,
@@ -64,63 +81,120 @@ const Divider: React.FC = () => (
 );
 
 type Props = {
-  editsAllowed: boolean;
-  onAllowEdits: () => void;
-  onForbidEdits: () => void;
-  isLoggedIn: boolean;
-  onDestroy(): void;
-  onCopyModel(): void;
-  onCopyMetrics(): void;
-  onPasteMetrics(): void;
-  onDeleteMetrics(): void;
-  onCutMetrics(): void;
-  isPrivate: boolean | undefined;
-  editableByMe: boolean;
-  actionState: CanvasActionState | undefined; // TODO - union
-  onUndo(): void;
-  onRedo(): void;
-  canUndo: boolean;
-  canRedo: boolean;
-  onImportSlurp(slurp: unknown): void;
-  calculators: any; // FIXME
+  space: ExtendedDSpace;
   makeNewCalculator(): void;
   showCalculator(c: unknown): void;
   toggleFactSidebar(): void;
-  canShowFactSidebar: boolean;
-  onOpenTutorial(): void;
 };
 
 export const SpaceToolbar = React.memo<Props>(function SpaceToolbar({
-  editableByMe,
-  actionState,
-  isLoggedIn,
-  onImportSlurp,
-  onCopyModel,
-  onCopyMetrics,
-  onPasteMetrics,
-  onDeleteMetrics,
-  onCutMetrics,
-  onDestroy,
-  onUndo,
-  canUndo,
-  onRedo,
-  canRedo,
-  editsAllowed,
-  onAllowEdits,
-  onForbidEdits,
-  calculators,
+  space,
   makeNewCalculator,
   showCalculator,
-  canShowFactSidebar,
   toggleFactSidebar,
-  onOpenTutorial,
 }) {
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+
+  const me = useAppSelector((state) => state.me);
+  const isLoggedIn = e.me.isLoggedIn(me);
+  const [showTutorial, setShowTutorial] = useState(
+    () => !!_.get(me, "profile.needs_tutorial")
+  );
+
+  const openTutorial = () => {
+    setShowTutorial(true);
+  };
+  const closeTutorial = () => {
+    if (me?.profile?.needs_tutorial) {
+      dispatch(userActions.finishedTutorial(me.profile));
+    }
+    setShowTutorial(false);
+  };
+
   const [importModalOpen, setImportModalOpen] = useState(false);
+
+  const { editableByMe, calculators } = space;
+  const actionState = space.canvasState.actionState;
+
+  const editsAllowed = space.canvasState.editsAllowedManuallySet
+    ? space.canvasState.editsAllowed
+    : editableByMe;
+
+  const canShowFactSidebar = canUseOrganizationFacts(space);
+
+  const onAllowEdits = () => {
+    dispatch(allowEdits());
+  };
+  const onForbidEdits = () => {
+    dispatch(forbidEdits());
+  };
+
+  const onDestroy = () => {
+    dispatch(spaceActions.destroy(space, router));
+  };
 
   const handleImportSlurp = (slurp) => {
     setImportModalOpen(false);
-    onImportSlurp(slurp);
+
+    const spaceUpdates = parseSlurp(slurp, space);
+    if (!space.name || !space.description) {
+      let nonGraphUpdates: any = {};
+      if (!space.name) {
+        nonGraphUpdates.name = spaceUpdates.name;
+      }
+      if (!space.description) {
+        nonGraphUpdates.description = spaceUpdates.description;
+      }
+      dispatch(spaceActions.update(space.id, nonGraphUpdates));
+    }
+
+    if (!_.isEmpty(spaceUpdates.newMetrics)) {
+      dispatch({
+        type: "ADD_METRICS",
+        items: spaceUpdates.newMetrics,
+        newGuesstimates: spaceUpdates.newGuesstimates,
+      });
+      dispatch(spaceActions.updateGraph(space.id));
+      dispatch(
+        simulationActions.runSimulations({
+          spaceId: space.id,
+          simulateSubset: spaceUpdates.newMetrics.map((m) => m.id),
+        })
+      );
+    }
   };
+
+  const onCopyModel = () => {
+    dispatch(spaceActions.copy(space.id, router));
+  };
+
+  const onCopyMetrics = () => {
+    dispatch(copiedActions.copy(space.id));
+  };
+
+  const onPasteMetrics = () => {
+    dispatch(copiedActions.paste(space.id));
+  };
+
+  const onDeleteMetrics = () => {
+    dispatch(removeSelectedMetrics(space.id));
+  };
+
+  const onCutMetrics = () => {
+    dispatch(copiedActions.cut(space.id));
+  };
+
+  const onUndo = () => {
+    dispatch(undo(space.id));
+  };
+  const onRedo = () => {
+    dispatch(redo(space.id));
+  };
+
+  const canUndo =
+    space.checkpointMetadata.head !== space.checkpointMetadata.length - 1;
+  const canRedo = space.checkpointMetadata.head !== 0;
 
   const customStyles = {
     overlay: {
@@ -141,6 +215,7 @@ export const SpaceToolbar = React.memo<Props>(function SpaceToolbar({
 
   return (
     <div className="bg-[rgb(219,221,222)]/70 border-b border-[rgb(37,128,167)]/40 px-8 hidden md:block">
+      {showTutorial && <Tutorial onClose={closeTutorial} />}
       <Modal
         isOpen={importModalOpen}
         onRequestClose={() => {
@@ -185,7 +260,7 @@ export const SpaceToolbar = React.memo<Props>(function SpaceToolbar({
 
           <CanvasViewForm />
 
-          <ToolbarTextItem onClick={onOpenTutorial} text="Tutorial" />
+          <ToolbarTextItem onClick={openTutorial} text="Tutorial" />
 
           <Divider />
           <ToolbarIcon

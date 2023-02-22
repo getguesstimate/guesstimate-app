@@ -6,6 +6,8 @@ import { MetricCard } from "~/components/metrics/card/index";
 
 import { fillRegion } from "~/modules/auto_fill_region/actions";
 import * as canvasStateActions from "~/modules/canvas_state/actions";
+import * as copiedActions from "~/modules/copied/actions";
+
 import { redo, undo } from "~/modules/checkpoints/actions";
 import {
   addMetric,
@@ -45,18 +47,12 @@ type Props = {
   screenshot?: boolean;
   exportedFacts: any;
   canUseOrganizationFacts: boolean;
-  onCut?(): void;
-  onCopy?(): void;
-  onPaste?(): void;
 };
 
 export const SpaceCanvas: React.FC<Props> = ({
   screenshot = false,
   denormalizedSpace,
   canUseOrganizationFacts,
-  onCopy,
-  onPaste,
-  onCut,
   exportedFacts,
 }) => {
   const dispatch = useAppDispatch();
@@ -64,10 +60,31 @@ export const SpaceCanvas: React.FC<Props> = ({
   const selectedCell = useAppSelector((state) => state.selectedCell);
   const selectedRegion = useAppSelector((state) => state.selectedRegion);
 
+  const onCopy = () => {
+    if (screenshot) {
+      return; // background regions don't work in embeds; TODO - should we enable these actions anyway?
+    }
+    dispatch(copiedActions.copy(denormalizedSpace.id));
+  };
+
+  const onPaste = () => {
+    if (screenshot) {
+      return;
+    }
+    dispatch(copiedActions.paste(denormalizedSpace.id));
+  };
+
+  const onCut = () => {
+    if (screenshot) {
+      return;
+    }
+    dispatch(copiedActions.cut(denormalizedSpace.id));
+  };
+
   // for simulating componentWillUnmount and componentDidUpdate
   const denormalizedSpaceRef = useRef<ExtendedDSpace>(denormalizedSpace);
   useEffect(() => {
-    const metrics = denormalizedSpace.metrics;
+    const { metrics } = denormalizedSpace;
     const oldMetrics = denormalizedSpaceRef.current.metrics;
 
     if (oldMetrics.length === 0 && metrics.length > 0) {
@@ -86,6 +103,7 @@ export const SpaceCanvas: React.FC<Props> = ({
     }
     dispatch(runSimulations({ spaceId: denormalizedSpace.id }));
 
+    // on unmount
     return () => {
       // uses the latest denormalizedSpace through ref
       dispatch(

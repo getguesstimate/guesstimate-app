@@ -8,6 +8,7 @@ import * as _facts from "./facts";
 import * as _graph from "./graph";
 import * as _guesstimate from "./guesstimate";
 import * as _simulation from "./simulation";
+import * as _organization from "./organization";
 import * as _userOrganizationMemberships from "./userOrganizationMemberships";
 import { allPropsPresent, isPresent } from "./utils";
 import { DenormalizedMetric } from "./metric";
@@ -229,4 +230,19 @@ export function canEdit(
   } else {
     return user_id === meId;
   }
+}
+
+export function getOwner(space: DSpace) {
+  const hasOrg = space.organization?.name;
+  return hasOrg ? space.organization : space.user;
+}
+
+export function canUseOrganizationFacts(space: DSpace) {
+  if (!space.organization) {
+    return false;
+  }
+
+  return (
+    !!space.is_private && _organization.hasPrivateAccess(space.organization)
+  );
 }

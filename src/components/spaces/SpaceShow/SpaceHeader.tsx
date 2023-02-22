@@ -6,8 +6,12 @@ import { SpaceName } from "./SpaceName";
 
 import { UserTag } from "~/components/UserTag";
 import * as e from "~/lib/engine/engine";
-import { SpaceHeaderButton } from "./SpaceHeaderButton";
+import * as spaceActions from "~/modules/spaces/actions";
+
 import { Button } from "~/components/utility/buttons/button";
+import { DSpace, getOwner } from "~/lib/engine/space";
+import { useAppDispatch, useAppSelector } from "~/modules/hooks";
+import { SpaceHeaderButton } from "./SpaceHeaderButton";
 
 const EnableShareableLinkOption: React.FC<{ onEnable(): void }> = ({
   onEnable,
@@ -68,42 +72,52 @@ const ShareableLinkOption: React.FC<{
 };
 
 type Props = {
-  name: string;
-  isPrivate?: boolean;
-  editableByMe: boolean;
-  canBePrivate: boolean;
-  shareableLinkUrl: string;
-  ownerName: string;
-  ownerPicture?: string;
-  ownerUrl: string;
-  ownerIsOrg: boolean;
-  editors: any[];
-  onSaveName(name: string): void;
-  onPublicSelect(): void;
-  onPrivateSelect(): void;
-  onEnableShareableLink(): void;
-  onDisableShareableLink(): void;
-  onRotateShareableLink(): void;
+  space: DSpace;
 };
 
-export const SpaceHeader = React.memo<Props>(function SpaceHeader({
-  canBePrivate,
-  name,
-  ownerName,
-  ownerPicture,
-  ownerUrl,
-  ownerIsOrg,
-  isPrivate = false, // TODO - make isPrivate always set on spaces
-  editableByMe,
-  editors,
-  shareableLinkUrl,
-  onSaveName,
-  onPublicSelect,
-  onPrivateSelect,
-  onEnableShareableLink,
-  onDisableShareableLink,
-  onRotateShareableLink,
-}) {
+export const SpaceHeader = React.memo<Props>(function SpaceHeader({ space }) {
+  const dispatch = useAppDispatch();
+  const me = useAppSelector((state) => state.me);
+
+  const name = space.name || "";
+  const shareableLinkUrl = e.space.urlWithToken(space);
+  const isPrivate = space.is_private || false; // TODO - make isPrivate always set on spaces
+  const editableByMe = space.editableByMe;
+  const editors = space.users;
+  const owner = getOwner(space);
+
+  const ownerIsOrg = space.organization?.name;
+  const ownerName = owner.name;
+  const ownerPicture = owner.picture;
+  const ownerUrl = ownerIsOrg
+    ? e.organization.url(space.organization)
+    : e.user.url(space.user);
+
+  const canBePrivate = ownerIsOrg
+    ? e.organization.canMakeMorePrivateModels(space.organization)
+    : e.me.canMakeMorePrivateModels(me);
+
+  const onEnableShareableLink = () => {
+    dispatch(spaceActions.enableShareableLink(space.id));
+  };
+  const onDisableShareableLink = () => {
+    dispatch(spaceActions.disableShareableLink(space.id));
+  };
+  const onRotateShareableLink = () => {
+    dispatch(spaceActions.rotateShareableLink(space.id));
+  };
+
+  const onPublicSelect = () => {
+    dispatch(spaceActions.generalUpdate(space.id, { is_private: false }));
+  };
+  const onPrivateSelect = () => {
+    dispatch(spaceActions.generalUpdate(space.id, { is_private: true }));
+  };
+
+  const onSaveName = (name: string) => {
+    dispatch(spaceActions.update(space.id, { name }));
+  };
+
   return (
     <div className="flex justify-between px-8 py-2">
       <SpaceName name={name} editableByMe={editableByMe} onSave={onSaveName} />

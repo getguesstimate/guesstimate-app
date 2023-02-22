@@ -85,7 +85,6 @@ export const denormalizedSpaceSelector = createSelector(
       denormalizedSpace: extendedDSpace,
       exportedFacts,
       organizationFacts: facts,
-      organizationHasFacts: !_.isEmpty(facts),
     };
   }
 );
