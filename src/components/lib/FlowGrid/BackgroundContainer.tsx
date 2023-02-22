@@ -1,10 +1,11 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useContext, useLayoutEffect, useState } from "react";
 
 import { Edges, EdgeShape } from "./Edges";
 import { GridPoint } from "./gridPoints";
 
 import { isRegion, MaybeRegion, Region } from "~/lib/locationUtils";
 import clsx from "clsx";
+import { cellSizeInfo, FlowGridContext } from "./FlowGrid";
 
 type RegionType = "selected" | "analyzed" | "copied" | "fill";
 
@@ -41,7 +42,7 @@ type Props = {
 };
 
 export const BackgroundContainer: React.FC<Props> = React.memo(
-  ({
+  function BackgroundContainer({
     rowCount,
     getRowHeight,
     edges,
@@ -49,8 +50,10 @@ export const BackgroundContainer: React.FC<Props> = React.memo(
     copiedRegion,
     autoFillRegion,
     analyzedRegion,
-  }) => {
+  }) {
     const [rowHeights, setRowHeights] = useState<number[]>([]);
+
+    const { size } = useContext(FlowGridContext);
 
     useLayoutEffect(() => {
       const newRowHeights = Array(rowCount)
@@ -59,6 +62,10 @@ export const BackgroundContainer: React.FC<Props> = React.memo(
 
       setRowHeights(newRowHeights);
     }, [rowCount, getRowHeight]);
+
+    if (!rowHeights.length) {
+      return null;
+    }
 
     const renderRegion = (
       locations: MaybeRegion,
@@ -80,16 +87,7 @@ export const BackgroundContainer: React.FC<Props> = React.memo(
       }
     };
 
-    const getColumnWidth = () => {
-      const item = document.getElementsByClassName("FlowGridCell").item(0);
-      return item ? (item as HTMLElement).offsetWidth : null;
-    };
-
-    const columnWidth = getColumnWidth();
-    if (!columnWidth || !rowHeights.length) {
-      return null;
-    }
-
+    const columnWidth = cellSizeInfo[size].width;
     const containerHeight = rowHeights.reduce((a, b) => a + b);
 
     const backgroundRegions: [MaybeRegion, RegionType][] = [

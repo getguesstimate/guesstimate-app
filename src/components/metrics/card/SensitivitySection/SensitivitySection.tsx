@@ -33,46 +33,44 @@ const Plot: React.FC<{
   const xAccessor = (e) => e[0];
   const yAccessor = (e) => e[1];
 
-  let customProps = {};
-  if (size === "SMALL") {
-    customProps = {
-      width: 180,
-      height: 68,
-      margin: { top: 5, bottom: 9, left: 5, right: 3 },
-      xAxis: {
-        tickArguments: [0],
-        innerTickSize: 1,
-        outerTickSize: 1,
-        tickPadding: 1,
-      },
-      yAxis: {
-        tickArguments: [0],
-        innerTickSize: 0,
-        outerTickSize: 0,
-        tickPadding: 0,
-      },
-    };
-  } else {
-    customProps = {
-      width: 500,
-      height: 300,
-      margin: { top: 10, bottom: 40, left: 60, right: 20 },
-      xAxis: {
-        tickArguments: [6],
-        innerTickSize: 5,
-        outerTickSize: 2,
-        tickPadding: 3,
-        label: xLabel,
-      },
-      yAxis: {
-        tickArguments: [6],
-        innerTickSize: 5,
-        outerTickSize: 2,
-        tickPadding: 3,
-        label: yLabel,
-      },
-    };
-  }
+  const customProps =
+    size === "SMALL"
+      ? {
+          width: 180,
+          height: 68,
+          margin: { top: 5, bottom: 9, left: 5, right: 3 },
+          xAxis: {
+            tickArguments: [0],
+            innerTickSize: 1,
+            outerTickSize: 1,
+            tickPadding: 1,
+          },
+          yAxis: {
+            tickArguments: [0],
+            innerTickSize: 0,
+            outerTickSize: 0,
+            tickPadding: 0,
+          },
+        }
+      : {
+          width: 500,
+          height: 300,
+          margin: { top: 10, bottom: 40, left: 60, right: 20 },
+          xAxis: {
+            tickArguments: [6],
+            innerTickSize: 5,
+            outerTickSize: 2,
+            tickPadding: 3,
+            label: xLabel,
+          },
+          yAxis: {
+            tickArguments: [6],
+            innerTickSize: 5,
+            outerTickSize: 2,
+            tickPadding: 3,
+            label: yLabel,
+          },
+        };
 
   return (
     <ScatterPlot

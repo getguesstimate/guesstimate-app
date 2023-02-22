@@ -9,7 +9,7 @@ import clsx from "clsx";
 import { CanvasLocation, Direction } from "~/lib/locationUtils";
 import { CanvasState } from "~/modules/canvas_state/slice";
 import { GridItem } from "./types";
-import { FlowGridContext } from "./FlowGrid";
+import { cellSizeInfo, FlowGridContext } from "./FlowGrid";
 
 type Props = {
   canvasState: CanvasState;
@@ -35,7 +35,6 @@ type Props = {
   onTab(): void;
   selectedFrom?: Direction;
   getRowHeight(): number;
-  size?: "small" | "normal";
 };
 
 // shouldComponentUpdate(newProps: Props) {
@@ -58,6 +57,8 @@ type Props = {
 
 export const DropCell: React.FC<Props> = (props) => {
   const itemRef = useRef<{ focus(): void }>(null);
+
+  const { size } = useContext(FlowGridContext);
 
   const { showGridLines } = useContext(FlowGridContext);
 
@@ -149,10 +150,7 @@ export const DropCell: React.FC<Props> = (props) => {
     "flex-none min-h-[60px] relative grid place-items-stretch",
     showGridLines &&
       "border-r border-b border-[rgb(0,25,95)]/[0.09] border-dashed",
-    props.size === "small"
-      ? "w-[150px] max-w-[150px]"
-      : "w-[210px] max-w-[210px]",
-    isHovered && "hovered"
+    cellSizeInfo[size].classNames
   );
 
   return (

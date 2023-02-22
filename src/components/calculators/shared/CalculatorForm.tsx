@@ -213,7 +213,7 @@ export const CalculatorForm: React.FC<Props> = (props) => {
   const hasHiddenOutputs = invisibleOutputs.length > 0;
 
   return (
-    <div className="calculator narrow p-4">
+    <div>
       <div className="ui form">
         <h3>
           <textarea

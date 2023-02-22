@@ -1,33 +1,19 @@
 import _ from "lodash";
-import { NextRouter, withRouter } from "next/router";
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import { useRouter } from "next/router";
+import React, { useEffect, useReducer, useState } from "react";
 
 import Head from "next/head";
 
-import { EditCalculatorForm } from "~/components/calculators/EditCalculatorForm";
-import { NewCalculatorForm } from "~/components/calculators/NewCalculatorForm";
-import { CalculatorCompressedShow } from "~/components/calculators/show/CalculatorCompressedShow";
-import { FactListContainer } from "~/components/facts/list/FactListContainer";
 import { SpaceCanvas } from "~/components/spaces/SpaceCanvas";
-import {
-  ButtonDeleteText,
-  ButtonEditText,
-  ButtonExpandText,
-} from "~/components/utility/buttons/button";
-import { ButtonCloseText } from "~/components/utility/buttons/close";
-import { ClosedSpaceSidebar } from "./ClosedSpaceSidebar";
 import { SpaceHeader } from "./SpaceHeader";
-import { SpaceSidebar } from "./SpaceSidebar";
+
+import { LeftSidebar } from "./LeftSidebar";
+
 import { SpaceToolbar } from "./SpaceToolbar";
 import { Tutorial } from "./Tutorial";
 
-import {
-  denormalizedSpaceSelector,
-  ExtendedDSpace,
-} from "../denormalized-space-selector";
+import { denormalizedSpaceSelector } from "../denormalized-space-selector";
 
-import * as calculatorActions from "~/modules/calculators/actions";
 import {
   allowEdits,
   clearEditsAllowed,
@@ -44,63 +30,14 @@ import { parseSlurp } from "~/lib/slurpParser";
 
 import * as e from "~/lib/engine/engine";
 
-import { Fact } from "~/lib/engine/facts";
 import { Calculator } from "~/modules/calculators/reducer";
-import { AppDispatch, RootState } from "~/modules/store";
+import { useAppDispatch, useAppSelector } from "~/modules/hooks";
 import * as elev from "~/server/elev/index";
-import clsx from "clsx";
-
-function mapStateToProps(state: RootState) {
-  return {
-    me: state.me,
-  };
-}
-
-const HeaderTitle: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <h2 className="text-[#476b82]">{children}</h2>
-);
-
-const ShowCalculatorHeader: React.FC<{
-  id: number;
-  editableByMe: boolean;
-  onEdit(): void;
-  onDelete(): void;
-  onClose(): void;
-}> = ({ id, editableByMe, onEdit, onDelete, onClose }) => {
-  return (
-    <div className="flex justify-end items-start flex-wrap gap-1">
-      <ButtonExpandText href={`/calculators/${id}`} />
-      {editableByMe && <ButtonEditText onClick={onEdit} />}
-      {editableByMe && <ButtonDeleteText onClick={onDelete} />}
-      <ButtonCloseText onClick={onClose} />
-    </div>
-  );
-};
-
-const CalculatorFormHeader: React.FC<{
-  isNew: boolean;
-  onClose(): void;
-}> = ({ isNew, onClose }) => (
-  <div className="flex justify-between items-start">
-    <HeaderTitle>{isNew ? "New" : "Edit"} Calculator</HeaderTitle>
-    <ButtonCloseText onClick={onClose} />
-  </div>
-);
-
-const FactSidebarHeader: React.FC<{
-  onClose(): void;
-  organizationId: string | number;
-}> = ({ onClose, organizationId }) => {
-  return (
-    <div className="flex justify-between items-start">
-      <HeaderTitle>Metric Library</HeaderTitle>
-      <div className="flex gap-1">
-        <ButtonExpandText href={`/organizations/${organizationId}/facts`} />
-        <ButtonCloseText onClick={onClose} />
-      </div>
-    </div>
-  );
-};
+import {
+  RightSidebar,
+  rightSidebarReducer,
+  RightSidebarState,
+} from "./RightSidebar";
 
 type Props = {
   spaceId: number;
@@ -109,135 +46,87 @@ type Props = {
   showCalculatorResults?: boolean;
   embed?: boolean;
   shareableLinkToken?: string | null;
-  router: NextRouter;
-  // these come from redux selectors
-  me: RootState["me"];
-  denormalizedSpace: ExtendedDSpace;
-  exportedFacts: any;
-  organizationFacts: Fact[];
-  organizationHasFacts: boolean;
-} & { dispatch: AppDispatch };
-
-const CLOSED = 0;
-const NEW_CALCULATOR_FORM = 1;
-const EDIT_CALCULATOR_FORM = 2;
-const SHOW_CALCULATOR = 3;
-const FACT_SIDEBAR = 4;
-
-type RightSidebarState =
-  | {
-      type: typeof CLOSED;
-    }
-  | {
-      type: typeof NEW_CALCULATOR_FORM;
-    }
-  | {
-      type: typeof EDIT_CALCULATOR_FORM;
-      editCalculatorId: number;
-    }
-  | {
-      type: typeof SHOW_CALCULATOR;
-      showCalculatorId: number;
-      showCalculatorResults?: boolean;
-    }
-  | {
-      type: typeof FACT_SIDEBAR;
-    };
-
-type State = {
-  showLeftSidebar: boolean;
-  showTutorial: boolean;
-  attemptedFetch: boolean;
-  rightSidebar: RightSidebarState;
 };
 
-class UnconnectedSpaceShow extends Component<Props, State> {
-  state: State = {
-    showLeftSidebar: true,
-    showTutorial: !!_.get(this.props.me, "profile.needs_tutorial"),
-    attemptedFetch: false,
-    rightSidebar: this.props.showCalculatorId
-      ? {
-          type: SHOW_CALCULATOR,
-          showCalculatorResults: this.props.showCalculatorResults,
-          showCalculatorId: this.props.showCalculatorId,
-        }
-      : this.props.factsShown
-      ? { type: FACT_SIDEBAR }
-      : { type: CLOSED },
-  };
+export const SpaceShow: React.FC<Props> = (props) => {
+  const router = useRouter();
+  const dispatch = useAppDispatch();
 
-  componentWillMount() {
-    this.considerFetch(this.props);
-    this.props.dispatch(clearEditsAllowed());
-    if (!(this.props.embed || this.state.rightSidebar.type !== CLOSED)) {
-      elev.show();
-    }
-  }
+  const me = useAppSelector((state) => state.me);
+  const {
+    denormalizedSpace: space,
+    exportedFacts,
+    organizationFacts,
+    organizationHasFacts,
+  } = useAppSelector((state) =>
+    denormalizedSpaceSelector(state, { spaceId: props.spaceId })
+  );
 
-  openTutorial() {
-    this.setState({ showTutorial: true });
-  }
-  closeTutorial() {
-    if (this.props.me?.profile?.needs_tutorial) {
-      this.props.dispatch(userActions.finishedTutorial(this.props.me.profile));
-    }
-    this.setState({ showTutorial: false });
-  }
+  const [showTutorial, setShowTutorial] = useState(
+    () => !!_.get(me, "profile.needs_tutorial")
+  );
+  const [rightSidebar, rightSidebarDispatch] = useReducer(
+    rightSidebarReducer,
+    null,
+    (): RightSidebarState =>
+      props.showCalculatorId
+        ? {
+            type: "SHOW_CALCULATOR",
+            showCalculatorResults: props.showCalculatorResults,
+            showCalculatorId: props.showCalculatorId,
+          }
+        : props.factsShown
+        ? { type: "FACT_SIDEBAR" }
+        : { type: "CLOSED" }
+  );
 
-  componentWillUnmount() {
-    if (!this.props.embed) {
-      elev.hide();
-    }
-  }
-
-  componentWillUpdate() {
-    // if (this.props.embed) {
-    //   $("#intercom-container").remove();
-    // }
-  }
-
-  componentDidUpdate(prevProps: Props) {
-    this.considerFetch(prevProps);
-  }
-
-  considerFetch({ denormalizedSpace: space }: Props) {
-    if (this.state.attemptedFetch) {
-      return;
-    }
-
+  useEffect(() => {
     const hasGraph = _.has(space, "graph");
     const hasData = hasGraph && e.space.prepared(space);
 
     if (!hasData) {
-      this.props.dispatch(
-        spaceActions.fetchById(this._id(), this.props.shareableLinkToken)
-      );
-      this.setState({ attemptedFetch: true });
+      dispatch(spaceActions.fetchById(props.spaceId, props.shareableLinkToken));
     }
-  }
 
-  onSave() {
-    this.props.dispatch(spaceActions.update(this._id()));
-  }
+    dispatch(clearEditsAllowed());
+  }, []);
 
-  onRedo() {
-    this.props.dispatch(redo(this._id()));
-  }
+  useEffect(() => {
+    if (props.embed) {
+      return;
+    }
 
-  onUndo() {
-    this.props.dispatch(undo(this._id()));
-  }
+    if (rightSidebar.type === "CLOSED") {
+      elev.show();
+    }
+    return () => {
+      elev.hide();
+    };
+  }, []);
 
-  destroy() {
-    this.props.dispatch(
-      spaceActions.destroy(this.props.denormalizedSpace, this.props.router)
-    );
-  }
+  const openTutorial = () => {
+    setShowTutorial(true);
+  };
+  const closeTutorial = () => {
+    if (me?.profile?.needs_tutorial) {
+      dispatch(userActions.finishedTutorial(me.profile));
+    }
+    setShowTutorial(false);
+  };
 
-  onImportSlurp(slurpObj) {
-    const space = this.props.denormalizedSpace;
+  const onRedo = () => {
+    dispatch(redo(space.id));
+  };
 
+  const onUndo = () => {
+    dispatch(undo(space.id));
+  };
+
+  const destroy = () => {
+    dispatch(spaceActions.destroy(space, router));
+  };
+
+  const onImportSlurp = (slurpObj) => {
     const spaceUpdates = parseSlurp(slurpObj, space);
     if (!space.name || !space.description) {
       let nonGraphUpdates: any = {};
@@ -247,391 +136,221 @@ class UnconnectedSpaceShow extends Component<Props, State> {
       if (!space.description) {
         nonGraphUpdates.description = spaceUpdates.description;
       }
-      this.props.dispatch(spaceActions.update(this._id(), nonGraphUpdates));
+      dispatch(spaceActions.update(space.id, nonGraphUpdates));
     }
     if (!_.isEmpty(spaceUpdates.newMetrics)) {
-      this.props.dispatch({
+      dispatch({
         type: "ADD_METRICS",
         items: spaceUpdates.newMetrics,
         newGuesstimates: spaceUpdates.newGuesstimates,
       });
-      this.props.dispatch(spaceActions.updateGraph(this._id()));
-      this.props.dispatch(
+      dispatch(spaceActions.updateGraph(space.id));
+      dispatch(
         simulationActions.runSimulations({
-          spaceId: this._id(),
+          spaceId: space.id,
           simulateSubset: spaceUpdates.newMetrics.map((m) => m.id),
         })
       );
     }
-  }
+  };
 
-  onPublicSelect() {
-    this.props.dispatch(
-      spaceActions.generalUpdate(this._id(), { is_private: false })
-    );
-  }
-  onPrivateSelect() {
-    this.props.dispatch(
-      spaceActions.generalUpdate(this._id(), { is_private: true })
-    );
-  }
+  const handleCopyModel = () => {
+    dispatch(spaceActions.copy(space.id, router));
+  };
 
-  onEnableShareableLink() {
-    this.props.dispatch(spaceActions.enableShareableLink(this._id()));
-  }
-  onDisableShareableLink() {
-    this.props.dispatch(spaceActions.disableShareableLink(this._id()));
-  }
-  onRotateShareableLink() {
-    this.props.dispatch(spaceActions.rotateShareableLink(this._id()));
-  }
+  const onPublicSelect = () => {
+    dispatch(spaceActions.generalUpdate(space.id, { is_private: false }));
+  };
+  const onPrivateSelect = () => {
+    dispatch(spaceActions.generalUpdate(space.id, { is_private: true }));
+  };
 
-  onSaveName(name) {
-    this.props.dispatch(spaceActions.update(this._id(), { name }));
-  }
-  onSaveDescription(description) {
-    this.props.dispatch(spaceActions.update(this._id(), { description }));
-  }
+  const onEnableShareableLink = () => {
+    dispatch(spaceActions.enableShareableLink(space.id));
+  };
+  const onDisableShareableLink = () => {
+    dispatch(spaceActions.disableShareableLink(space.id));
+  };
+  const onRotateShareableLink = () => {
+    dispatch(spaceActions.rotateShareableLink(space.id));
+  };
 
-  hideLeftSidebar() {
-    this.setState({ showLeftSidebar: false });
-  }
-  openLeftSidebar() {
-    this.setState({ showLeftSidebar: true });
-  }
+  const onSaveName = (name: string) => {
+    dispatch(spaceActions.update(space.id, { name }));
+  };
+  const onCopy = () => {
+    dispatch(copiedActions.copy(space.id));
+  };
 
-  handleCopyModel() {
-    this.props.dispatch(spaceActions.copy(this._id(), this.props.router));
-  }
+  const onPaste = () => {
+    dispatch(copiedActions.paste(space.id));
+  };
 
-  onCopy() {
-    this.props.dispatch(copiedActions.copy(this._id()));
-  }
+  const onDeleteMetrics = () => {
+    dispatch(removeSelectedMetrics(space.id));
+  };
 
-  onPaste() {
-    this.props.dispatch(copiedActions.paste(this._id()));
-  }
+  const onCut = () => {
+    dispatch(copiedActions.cut(space.id));
+  };
 
-  onDeleteMetrics() {
-    this.props.dispatch(removeSelectedMetrics(this.props.spaceId));
-  }
-
-  onCut() {
-    this.props.dispatch(copiedActions.cut(this._id()));
-  }
-
-  _id() {
-    return this.props.spaceId;
-  }
-
-  canUseOrganizationFacts() {
-    const organization = this.props.denormalizedSpace.organization;
+  const canUseOrganizationFacts = () => {
+    const organization = space.organization;
     if (!organization) {
       return false;
     }
 
     const orgHasPrivateAccess = e.organization.hasPrivateAccess(organization);
-    const isPrivate = this.props.denormalizedSpace.is_private;
+    const isPrivate = space.is_private;
     return !!isPrivate && orgHasPrivateAccess;
+  };
+
+  if (!e.space.prepared(space)) {
+    return null;
   }
 
-  closeRightSidebar() {
-    elev.show();
-    this.setState({ rightSidebar: { type: CLOSED } });
-  }
-  openRightSidebar(rightSidebarState: RightSidebarState) {
-    elev.hide();
-    this.setState({ rightSidebar: rightSidebarState });
-  }
-  showCalculator({ id }: Calculator) {
-    this.openRightSidebar({ type: SHOW_CALCULATOR, showCalculatorId: id });
-  }
-  makeNewCalculator() {
-    this.openRightSidebar({ type: NEW_CALCULATOR_FORM });
-  }
-  toggleFactSidebar() {
-    if (this.state.rightSidebar.type !== FACT_SIDEBAR) {
-      this.openRightSidebar({ type: FACT_SIDEBAR });
-    } else {
-      this.closeRightSidebar();
-    }
-  }
+  const sidebarIsVisible = space.editableByMe || !_.isEmpty(space.description);
+  const isLoggedIn = e.me.isLoggedIn(me);
+  const shareableLinkUrl = e.space.urlWithToken(space);
 
-  rightSidebarBody():
-    | { bg?: "GREY"; header: JSX.Element; main: JSX.Element }
-    | undefined {
-    const {
-      props: { denormalizedSpace, spaceId, organizationFacts },
-      state: { rightSidebar },
-    } = this;
-    const { editableByMe, calculators, organization, imported_fact_ids } =
-      denormalizedSpace;
-
-    switch (rightSidebar.type) {
-      case CLOSED:
-        return;
-      case SHOW_CALCULATOR: {
-        const editCalculator = () => {
-          this.openRightSidebar({
-            type: EDIT_CALCULATOR_FORM,
-            editCalculatorId: rightSidebar.showCalculatorId,
-          });
-        };
-        const deleteCalculator = () => {
-          this.props.dispatch(
-            calculatorActions.destroy(rightSidebar.showCalculatorId)
-          );
-          this.closeRightSidebar();
-        };
-
-        return {
-          header: (
-            <ShowCalculatorHeader
-              editableByMe={editableByMe}
-              id={rightSidebar.showCalculatorId}
-              onEdit={editCalculator}
-              onDelete={deleteCalculator}
-              onClose={this.closeRightSidebar.bind(this)}
-            />
-          ),
-          main: (
-            <CalculatorCompressedShow
-              calculatorId={rightSidebar.showCalculatorId}
-              startFilled={rightSidebar.showCalculatorResults}
-            />
-          ),
-        };
-      }
-      case EDIT_CALCULATOR_FORM:
-        return {
-          header: (
-            <CalculatorFormHeader
-              isNew={false}
-              onClose={this.closeRightSidebar.bind(this)}
-            />
-          ),
-          main: (
-            <EditCalculatorForm
-              space={denormalizedSpace}
-              calculator={calculators.find(
-                (c) => c.id === rightSidebar.editCalculatorId
-              )}
-              onCalculatorSave={this.showCalculator.bind(this)}
-            />
-          ),
-        };
-      case NEW_CALCULATOR_FORM:
-        return {
-          header: (
-            <CalculatorFormHeader
-              isNew={true}
-              onClose={this.closeRightSidebar.bind(this)}
-            />
-          ),
-          main: (
-            <NewCalculatorForm
-              space={denormalizedSpace}
-              onCalculatorSave={this.showCalculator.bind(this)}
-            />
-          ),
-        };
-      case FACT_SIDEBAR:
-        return {
-          bg: "GREY",
-          header: (
-            <FactSidebarHeader
-              onClose={this.closeRightSidebar.bind(this)}
-              organizationId={organization.id}
-            />
-          ),
-          main: (
-            <FactListContainer
-              existingVariableNames={organizationFacts.map(e.facts.getVar)}
-              facts={organizationFacts}
-              organization={organization}
-              canMakeNewFacts={true}
-              spaceId={spaceId}
-              imported_fact_ids={imported_fact_ids}
-            />
-          ),
-        };
-    }
-  }
-
-  rightSidebar() {
-    const rightSidebarBody = this.rightSidebarBody();
-    if (!rightSidebarBody) {
-      return null;
-    }
-    const { bg, header, main } = rightSidebarBody;
-
+  if (props.embed) {
     return (
-      <div
-        className={clsx(
-          "w-[30em] h-full p-4 overflow-x-hidden overflow-y-auto border-l border-[#ccc]",
-          bg === "GREY" ? "bg-grey-6" : "bg-white"
-        )}
-      >
-        <div className="pb-4">{header}</div>
-        <div>{main}</div>
+      <div className="bg-[#c2cdd6]">
+        <SpaceCanvas
+          denormalizedSpace={space}
+          canUseOrganizationFacts={canUseOrganizationFacts()}
+          exportedFacts={exportedFacts}
+          screenshot={true}
+        />
       </div>
     );
   }
 
-  render() {
-    const { exportedFacts, denormalizedSpace: space } = this.props;
+  const hasOrg = space.organization?.name;
+  const owner = hasOrg ? space.organization : space.user;
+  const { users } = space;
+  const ownerUrl = hasOrg
+    ? e.organization.url(space.organization)
+    : e.user.url(space.user);
 
-    if (!e.space.prepared(space)) {
-      return null;
-    }
+  const canBePrivate = hasOrg
+    ? e.organization.canMakeMorePrivateModels(space.organization)
+    : e.me.canMakeMorePrivateModels(me);
 
-    const sidebarIsVisible =
-      space.editableByMe || !_.isEmpty(space.description);
-    const isLoggedIn = e.me.isLoggedIn(this.props.me);
-    const shareableLinkUrl = e.space.urlWithToken(space);
+  const authorCallout = `Made by ${owner.name}`;
+  const tagDescription = _.isEmpty(space.description)
+    ? authorCallout
+    : `${authorCallout}: ${space.description}`;
 
-    if (this.props.embed) {
-      return (
-        <div className="bg-[#c2cdd6]">
-          <SpaceCanvas
-            denormalizedSpace={space}
-            canUseOrganizationFacts={this.canUseOrganizationFacts()}
-            exportedFacts={exportedFacts}
-            screenshot={true}
-          />
-        </div>
-      );
-    }
+  const pageTitle = `${space.name} | Guesstimate`;
 
-    const hasOrg = _.has(space, "organization.name");
-    const owner = hasOrg ? space.organization : space.user;
-    const { users } = space;
-    const ownerUrl = hasOrg
-      ? e.organization.url(space.organization)
-      : e.user.url(space.user);
+  return (
+    <div className="flex-1 flex flex-col h-full bg-[#dfe1e4]">
+      <Head>
+        {space.name && <title key="title">{pageTitle}</title>}
+        {[
+          { name: "description", content: tagDescription },
+          ...(space.name ? [{ property: "og:title", content: pageTitle }] : []),
+          { property: "og:description", content: tagDescription },
+          { property: "og:site_name", content: "Guesstimate" },
+          { property: "og:image", content: space.big_screenshot },
+        ].map((tag) => (
+          <meta {...tag} key={tag.name || tag.property} />
+        ))}
+      </Head>
+      {showTutorial && <Tutorial onClose={closeTutorial} />}
 
-    const canBePrivate = hasOrg
-      ? e.organization.canMakeMorePrivateModels(space.organization)
-      : e.me.canMakeMorePrivateModels(this.props.me);
+      <div className="bg-gradient-to-r from-[#2583a7] to-[#2577a7]">
+        <SpaceHeader
+          name={space.name || ""}
+          isPrivate={space.is_private}
+          editableByMe={space.editableByMe}
+          canBePrivate={canBePrivate}
+          shareableLinkUrl={shareableLinkUrl}
+          ownerName={owner.name}
+          ownerPicture={owner.picture}
+          ownerUrl={ownerUrl}
+          ownerIsOrg={hasOrg}
+          editors={users}
+          onSaveName={onSaveName}
+          onPublicSelect={onPublicSelect}
+          onPrivateSelect={onPrivateSelect}
+          onEnableShareableLink={onEnableShareableLink}
+          onDisableShareableLink={onDisableShareableLink}
+          onRotateShareableLink={onRotateShareableLink}
+        />
 
-    const authorCallout = `Made by ${owner.name}`;
-    const tagDescription = _.isEmpty(space.description)
-      ? authorCallout
-      : `${authorCallout}: ${space.description}`;
+        <SpaceToolbar
+          editsAllowed={
+            space.canvasState.editsAllowedManuallySet
+              ? space.canvasState.editsAllowed
+              : space.editableByMe
+          }
+          onAllowEdits={() => {
+            dispatch(allowEdits());
+          }}
+          onForbidEdits={() => {
+            dispatch(forbidEdits());
+          }}
+          isLoggedIn={isLoggedIn}
+          onDestroy={destroy}
+          onCopyModel={handleCopyModel}
+          onCopyMetrics={onCopy}
+          onPasteMetrics={onPaste}
+          onDeleteMetrics={onDeleteMetrics}
+          onCutMetrics={onCut}
+          isPrivate={space.is_private}
+          editableByMe={space.editableByMe}
+          actionState={space.canvasState.actionState}
+          onUndo={onUndo}
+          onRedo={onRedo}
+          canUndo={
+            space.checkpointMetadata.head !==
+            space.checkpointMetadata.length - 1
+          }
+          canRedo={space.checkpointMetadata.head !== 0}
+          onImportSlurp={onImportSlurp}
+          calculators={space.calculators}
+          makeNewCalculator={() =>
+            rightSidebarDispatch({ type: "MAKE_NEW_CALCULATOR" })
+          }
+          showCalculator={(calculator: Calculator) =>
+            rightSidebarDispatch({
+              type: "SHOW_CALCULATOR",
+              payload: calculator,
+            })
+          }
+          toggleFactSidebar={() =>
+            rightSidebarDispatch({ type: "TOGGLE_FACTS" })
+          }
+          canShowFactSidebar={canUseOrganizationFacts()}
+          onOpenTutorial={openTutorial}
+        />
+      </div>
 
-    const pageTitle = `${space.name} | Guesstimate`;
-
-    return (
-      <div className="flex-1 flex flex-col h-full bg-[#dfe1e4]">
-        <Head>
-          {space.name && <title key="title">{pageTitle}</title>}
-          {[
-            { name: "description", content: tagDescription },
-            ...(space.name
-              ? [{ property: "og:title", content: pageTitle }]
-              : []),
-            { property: "og:description", content: tagDescription },
-            { property: "og:site_name", content: "Guesstimate" },
-            { property: "og:image", content: space.big_screenshot },
-          ].map((tag) => (
-            <meta {...tag} key={tag.name || tag.property} />
-          ))}
-        </Head>
-        {this.state.showTutorial && (
-          <Tutorial onClose={this.closeTutorial.bind(this)} />
-        )}
-
-        <div className="bg-gradient-to-r from-[#2583a7] to-[#2577a7]">
-          <SpaceHeader
-            name={space.name || ""}
-            isPrivate={space.is_private}
-            editableByMe={space.editableByMe}
-            canBePrivate={canBePrivate}
-            shareableLinkUrl={shareableLinkUrl}
-            ownerName={owner.name}
-            ownerPicture={owner.picture}
-            ownerUrl={ownerUrl}
-            ownerIsOrg={hasOrg}
-            editors={users}
-            onSaveName={this.onSaveName.bind(this)}
-            onPublicSelect={this.onPublicSelect.bind(this)}
-            onPrivateSelect={this.onPrivateSelect.bind(this)}
-            onEnableShareableLink={this.onEnableShareableLink.bind(this)}
-            onDisableShareableLink={this.onDisableShareableLink.bind(this)}
-            onRotateShareableLink={this.onRotateShareableLink.bind(this)}
-          />
-
-          <SpaceToolbar
-            editsAllowed={
-              space.canvasState.editsAllowedManuallySet
-                ? space.canvasState.editsAllowed
-                : space.editableByMe
-            }
-            onAllowEdits={() => {
-              this.props.dispatch(allowEdits());
-            }}
-            onForbidEdits={() => {
-              this.props.dispatch(forbidEdits());
-            }}
-            isLoggedIn={isLoggedIn}
-            onDestroy={this.destroy.bind(this)}
-            onCopyModel={this.handleCopyModel.bind(this)}
-            onCopyMetrics={this.onCopy.bind(this, false)}
-            onPasteMetrics={this.onPaste.bind(this)}
-            onDeleteMetrics={this.onDeleteMetrics.bind(this)}
-            onCutMetrics={this.onCut.bind(this)}
-            isPrivate={space.is_private}
-            editableByMe={space.editableByMe}
-            actionState={space.canvasState.actionState}
-            onUndo={this.onUndo.bind(this)}
-            onRedo={this.onRedo.bind(this)}
-            canUndo={
-              space.checkpointMetadata.head !==
-              space.checkpointMetadata.length - 1
-            }
-            canRedo={space.checkpointMetadata.head !== 0}
-            onImportSlurp={this.onImportSlurp.bind(this)}
-            calculators={space.calculators}
-            makeNewCalculator={this.makeNewCalculator.bind(this)}
-            showCalculator={this.showCalculator.bind(this)}
-            toggleFactSidebar={this.toggleFactSidebar.bind(this)}
-            canShowFactSidebar={this.canUseOrganizationFacts()}
-            onOpenTutorial={this.openTutorial.bind(this)}
-          />
-        </div>
-
-        <div className="max-h-full flex-1 flex">
-          {sidebarIsVisible && (
-            <div className="self-start">
-              {this.state.showLeftSidebar ? (
-                <SpaceSidebar
-                  description={space.description || ""}
-                  canEdit={space.editableByMe}
-                  onClose={this.hideLeftSidebar.bind(this)}
-                  onSaveDescription={this.onSaveDescription.bind(this)}
-                />
-              ) : (
-                <ClosedSpaceSidebar onOpen={this.openLeftSidebar.bind(this)} />
-              )}
-            </div>
-          )}
-          <div className="pt-4 pl-4 overflow-auto">
-            <SpaceCanvas
-              canUseOrganizationFacts={this.canUseOrganizationFacts()}
-              exportedFacts={exportedFacts}
-              denormalizedSpace={space}
-              onCopy={this.onCopy.bind(this, true)}
-              onPaste={this.onPaste.bind(this, true)}
-              onCut={this.onCut.bind(this, true)}
-            />
+      <div className="max-h-full flex-1 flex">
+        {sidebarIsVisible && (
+          <div className="self-start">
+            <LeftSidebar space={space} />
           </div>
-          {this.rightSidebar()}
+        )}
+        <div className="pt-4 pl-4 overflow-auto">
+          <SpaceCanvas
+            canUseOrganizationFacts={canUseOrganizationFacts()}
+            exportedFacts={exportedFacts}
+            denormalizedSpace={space}
+            onCopy={onCopy}
+            onPaste={onPaste}
+            onCut={onCut}
+          />
         </div>
+        <RightSidebar
+          space={space}
+          rightSidebarDispatch={rightSidebarDispatch}
+          organizationFacts={organizationFacts}
+          state={rightSidebar}
+        />
       </div>
-    );
-  }
-}
-
-export const SpaceShow = connect(mapStateToProps)(
-  connect(denormalizedSpaceSelector)(withRouter(UnconnectedSpaceShow))
-);
+    </div>
+  );
+};

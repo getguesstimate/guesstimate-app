@@ -22,8 +22,25 @@ import { DirectionToLocation, keycodeToDirection } from "./utils";
 import clsx from "clsx";
 import { CanvasState } from "~/modules/canvas_state/slice";
 import { EdgeShape } from "./Edges";
+import { useCallOnUnmount, useForceUpdate } from "~/components/utility/hooks";
 
 const upto = (n: number): number[] => new Array(n).fill(0).map((_, i) => i);
+
+type FlowGridSize = "small" | "normal";
+
+export const cellSizeInfo: Record<
+  FlowGridSize,
+  { classNames: string; width: number }
+> = {
+  small: {
+    classNames: "w-[150px] max-w-[150px]", // must be spelled out because of tailwind JIT
+    width: 150,
+  },
+  normal: {
+    classNames: "w-[210px] max-w-[210px]",
+    width: 210,
+  },
+};
 
 type Props = {
   canvasState: CanvasState;
@@ -52,31 +69,11 @@ type Props = {
   onCopy?(): void;
   onPaste?(): void;
   isItemEmpty(id: string): boolean;
-  size?: "small" | "normal";
-};
-
-// via https://stackoverflow.com/a/53837442
-const useForceUpdate = () => {
-  const [, setValue] = useState(0);
-  return () => setValue((value) => value + 1);
-};
-
-const useCallOnUnmount = (fn: () => void) => {
-  const ref = useRef<() => void>(fn);
-  useEffect(() => {
-    ref.current = fn;
-  }, [fn]);
-
-  useEffect(() => {
-    // on unmount
-    return () => {
-      ref.current();
-    };
-  }, []);
+  size?: FlowGridSize;
 };
 
 type FlowGridContextShape = {
-  size?: "small" | "normal";
+  size: FlowGridSize;
   showGridLines: boolean;
   showEdges: boolean;
   isModelingCanvas: boolean;
@@ -113,7 +110,7 @@ export const FlowGrid: React.FC<Props> = ({
   isItemEmpty,
   canvasState,
   hasItemUpdated,
-  size,
+  size = "normal",
 }) => {
   const forceUpdate = useForceUpdate();
 
@@ -394,7 +391,6 @@ export const FlowGrid: React.FC<Props> = ({
         }}
         getRowHeight={() => getRowHeight(location.row)}
         showAutoFillToken={showAutoFillToken}
-        size={size}
       />
     );
   };

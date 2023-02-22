@@ -122,17 +122,6 @@ export const SpaceToolbar = React.memo<Props>(function SpaceToolbar({
     onImportSlurp(slurp);
   };
 
-  const viewModeHeader =
-    editableByMe && editsAllowed ? (
-      <span>
-        <Icon name="pencil" /> Editing
-      </span>
-    ) : (
-      <span>
-        <Icon name="eye" /> Viewing
-      </span>
-    );
-
   const customStyles = {
     overlay: {
       backgroundColor: "rgba(55, 68, 76, 0.4)",
