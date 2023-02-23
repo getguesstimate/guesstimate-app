@@ -7,15 +7,27 @@ import Icon from "~/components/react-fa-patched";
 import { FullDenormalizedMetric } from "~/lib/engine/space";
 import { Optional } from "~/lib/engine/types";
 import { Calculator } from "~/modules/calculators/reducer";
+import { Button } from "~/components/utility/buttons/button";
+import { Textarea } from "~/components/utility/forms";
 
 const Header: React.FC<PropsWithChildren> = ({ children }) => (
-  <h3 className="border-b-2 border-[#aaa] pb-1 !mt-10 text-bold text-lg">
+  <header className="border-b-2 border-[#aaa] pb-1 mb-2 font-bold text-lg">
     {children}
-  </h3>
+  </header>
 );
 
 const List: React.FC<PropsWithChildren> = ({ children }) => (
   <div className="space-y-1">{children}</div>
+);
+
+const Section: React.FC<PropsWithChildren<{ title: string }>> = ({
+  title,
+  children,
+}) => (
+  <section className="mt-10">
+    <Header>{title}</Header>
+    {children}
+  </section>
 );
 
 const EditButton: React.FC<PropsWithChildren<{ onMouseDown(): void }>> = ({
@@ -58,7 +70,7 @@ const InputForm: React.FC<ParamProps> = (props) => (
   <div className={clsx(props.isDropTarget && "bg-grey-1")}>
     <div className="flex justify-between">
       <div>
-        <div className="name">{props.name}</div>
+        <div>{props.name}</div>
         {props.description && (
           <div className="text-xs mt-4 mb-8 text-grey-666">
             {props.description}
@@ -75,9 +87,7 @@ const InputForm: React.FC<ParamProps> = (props) => (
 const OutputForm: React.FC<ParamProps> = (props) => (
   <div className={clsx(props.isDropTarget && "bg-grey-1")}>
     <div className="flex justify-between">
-      <div>
-        <div className="name">{props.name}</div>
-      </div>
+      <div>{props.name}</div>
       <div>
         <EditSection {...props} />
       </div>
@@ -214,28 +224,26 @@ export const CalculatorForm: React.FC<Props> = (props) => {
 
   return (
     <div>
-      <div className="ui form">
-        <h3>
-          <textarea
-            rows={1}
-            placeholder="Calculator Name"
-            value={title}
-            onChange={props.onChangeName}
-            className="field"
-          />
-        </h3>
-        <textarea
+      <div className="flex flex-col space-y-1">
+        <Textarea
+          rows={1}
+          placeholder="Calculator Name"
+          value={title}
+          onChange={props.onChangeName}
+          theme="large"
+          className="font-bold"
+        />
+        <Textarea
           rows={3}
           placeholder="Explanation (Markdown)"
           value={content}
           onChange={props.onChangeContent}
-          className="field"
+          theme="large"
         />
       </div>
 
       {/* inputs */}
-      <div>
-        <Header>{hasHiddenInputs ? "Visible " : ""}Inputs</Header>
+      <Section title={`${hasHiddenInputs ? "Visible " : ""}Inputs`}>
         <List>
           {visibleInputs.map(([item, id], i) => (
             <SortableListItem
@@ -251,18 +259,16 @@ export const CalculatorForm: React.FC<Props> = (props) => {
             </SortableListItem>
           ))}
         </List>
-      </div>
+      </Section>
 
       {hasHiddenInputs && (
-        <div>
-          <Header>Hidden Inputs</Header>
+        <Section title="Hidden Inputs">
           <List>{invisibleInputs.map(([item]) => item)}</List>
-        </div>
+        </Section>
       )}
 
       {/* outputs */}
-      <div>
-        <Header>{hasHiddenOutputs ? "Visible " : ""}Outputs</Header>
+      <Section title={`${hasHiddenOutputs ? "Visible " : ""}Outputs`}>
         <List>
           {visibleOutputs.map(([item, id], i) => (
             <SortableListItem
@@ -278,26 +284,24 @@ export const CalculatorForm: React.FC<Props> = (props) => {
             </SortableListItem>
           ))}
         </List>
-      </div>
+      </Section>
 
       {hasHiddenOutputs && (
-        <div>
-          <Header>Hidden Outputs</Header>
+        <Section title="Hidden Outputs">
           <List>{invisibleOutputs.map(([item]) => item)}</List>
-        </div>
+        </Section>
       )}
 
       <div className="flex justify-end mt-4">
-        <div
-          className={clsx(
-            "ui button green large",
-            hasAlreadySubmitted && "loading",
-            (!isValid || hasAlreadySubmitted) && "disabled"
-          )}
+        <Button
+          color="green"
+          size="large"
+          loading={hasAlreadySubmitted}
+          disabled={!isValid || hasAlreadySubmitted}
           onClick={handleSubmit}
         >
           {buttonText}
-        </div>
+        </Button>
       </div>
     </div>
   );

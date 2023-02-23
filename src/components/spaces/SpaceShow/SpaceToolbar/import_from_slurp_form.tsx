@@ -2,6 +2,7 @@ import clsx from "clsx";
 import React, { useState } from "react";
 
 import Icon from "~/components/react-fa-patched";
+import { Button } from "~/components/utility/buttons/button";
 
 import * as elev from "~/server/elev/index";
 
@@ -28,7 +29,7 @@ export const ImportFromSlurpForm: React.FC<Props> = ({ onSubmit }) => {
   return (
     <div className="ImportFromSlurpForm">
       <div className="flex justify-between items-center">
-        <h2 className="leading-none m-0">Import SLURP</h2>
+        <h2 className="font-bold text-xl leading-none">Import SLURP</h2>
         <div
           className="text-blue-4 text-2xl cursor-pointer"
           onClick={() => {
@@ -48,12 +49,14 @@ export const ImportFromSlurpForm: React.FC<Props> = ({ onSubmit }) => {
             tabIndex={2}
           />
         </div>
-        <div
-          className={clsx("ui button submit", isValid() ? "blue" : "disabled")}
+        <Button
+          color="blue"
+          size="large"
+          disabled={!isValid()}
           onClick={handleSubmit}
         >
           Import
-        </div>
+        </Button>
       </div>
     </div>
   );

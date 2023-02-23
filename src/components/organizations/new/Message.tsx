@@ -5,7 +5,7 @@ export const Message: React.FC<{
   children: React.ReactNode;
 }> = ({ title, children }) => (
   <div className="border border-grey-ccc rounded px-6 py-4 bg-white">
-    <h3>{title}</h3>
+    <header className="font-bold text-lg mb-2">{title}</header>
     <div className="text-sm">{children}</div>
   </div>
 );

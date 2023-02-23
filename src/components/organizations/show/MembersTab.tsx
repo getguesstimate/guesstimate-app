@@ -144,7 +144,7 @@ const MembersAddSubTab: React.FC<{
       </div>
     </div>
     <div>
-      <h1>Invite New Members</h1>
+      <header className="text-3xl font-bold mb-4">Invite New Members</header>
       <p className="text-grey-666 leading-6 mb-12">
         Members have viewing & editing access to all organization models. <br />
         If you are on a plan, your pricing will be adjusted within 24 hours.

@@ -269,7 +269,12 @@ export const MetricCardViewSection = React.forwardRef<
         ref={props.connectDragSource}
       >
         {showSensitivitySection && (
-          <SensitivitySection yMetric={props.analyzedMetric} xMetric={metric} />
+          <div className="flex-none">
+            <SensitivitySection
+              yMetric={props.analyzedMetric}
+              xMetric={metric}
+            />
+          </div>
         )}
         {showSimulation && (
           <div className="px-2 pt-2 pb-1 flex-1">

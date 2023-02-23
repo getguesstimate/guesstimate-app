@@ -3,15 +3,18 @@ import React from "react";
 import { Plans } from "./Plans";
 import { Container } from "~/components/utility/Container";
 import { PlanIndexQuestions } from "./PlanIndexQuestions";
+import { Button } from "~/components/utility/buttons/button";
 
 const PortalMessage: React.FC<{ portalUrl: string }> = ({ portalUrl }) => (
-  <div className="max-w-2xl">
-    <div className="bg-white p-4 rounded flex flex-col items-center">
-      <h2 className="font-medium mb-4 text-grey-main">
+  <div className="max-w-2xl mx-auto">
+    <div className="w-full bg-white p-4 rounded flex flex-col items-center">
+      <header className="text-2xl font-medium mb-4 text-grey-main">
         Go to the portal to change plans & payment
-      </h2>
-      <a className="ui button large primary" href={portalUrl} target="_blank">
-        Go to Portal
+      </header>
+      <a href={portalUrl} target="_blank">
+        <Button size="large" color="blue" onClick={() => {}}>
+          Go to Portal
+        </Button>
       </a>
     </div>
   </div>
@@ -36,10 +39,10 @@ export const PlanIndex: React.FC<Props> = ({
     userPlanId === "personal_free" && !portalUrl;
   return (
     <Container>
-      <div className="PlanIndex text-grey-main flex flex-col items-center">
+      <div className="text-grey-main flex flex-col">
         <div className="text-center">
-          <h1 className="text-4xl font-medium">Plans & Pricing</h1>
-          <h2 className="font-light">
+          <h1 className="text-4xl font-medium mb-8">Plans & Pricing</h1>
+          <h2 className="text-2xl font-light">
             Guesstimate offers unlimited free public models.
             <br />
             Create more private models with a paid plan.
@@ -47,7 +50,7 @@ export const PlanIndex: React.FC<Props> = ({
         </div>
 
         {!!portalUrl && (
-          <div className="mt-8">
+          <div className="mt-16">
             <PortalMessage portalUrl={portalUrl} />
           </div>
         )}

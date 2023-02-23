@@ -22,15 +22,16 @@ const Table: React.FC<PropsWithChildren> = ({ children }) => (
   </table>
 );
 
-type PageProps = {
+type PageProps = PropsWithChildren<{
   header: string;
-  children: React.ReactNode;
-};
+}>;
 
 const TutorialPage: React.FC<PageProps> = ({ header, children }) => (
-  <div className="tutorialPage mb-8 min-h-[34em] font-open">
-    <h2 className="text-center pb-6">{header}</h2>
-    <div className="text-justify">{children}</div>
+  <div className="tutorialPage mb-8 min-h-[34em]">
+    <header className="text-center font-bold text-2xl leading-none pb-12">
+      {header}
+    </header>
+    <div className="text-justify font-open">{children}</div>
   </div>
 );
 
@@ -165,7 +166,9 @@ export const TutorialFunctionPage: React.FC = () => (
 );
 
 const Subheader: React.FC<PropsWithChildren> = ({ children }) => (
-  <h3 className="text-center text-grey-666 text-2xl my-3">{children}</h3>
+  <header className="text-center text-grey-666 text-lg font-bold my-3">
+    {children}
+  </header>
 );
 
 export const TutorialMoreFeaturesPage: React.FC = () => (

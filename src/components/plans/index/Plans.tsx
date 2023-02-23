@@ -40,7 +40,9 @@ const PlanCard: React.FC<PlanCardProps> = ({
 }) => {
   return (
     <div className="bg-white rounded-lg border border-[#d8d8d8] flex flex-col items-center px-12 py-8 w-80">
-      <h2 className="mb-6 text-grey-main font-medium text-3xl">{name}</h2>
+      <header className="mb-6 text-grey-main font-medium text-3xl">
+        {name}
+      </header>
       <div className="mb-8">
         <Cost cost={price} unit={unit} />
       </div>

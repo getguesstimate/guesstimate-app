@@ -43,7 +43,7 @@ const Header: React.FC<{
   editing: boolean;
 }> = ({ editing, onDelete, onEdit }) => (
   <div className="flex items-center justify-between group">
-    <h2 className="m-0 text-white text-lg">
+    <h2 className="text-white text-lg">
       <Icon name="bar-chart" /> Custom Data
     </h2>
     {!editing && (

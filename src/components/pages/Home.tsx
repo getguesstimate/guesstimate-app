@@ -3,6 +3,7 @@ import Image from "next/image";
 import clsx from "clsx";
 
 import LogoWord from "../../../public/assets/logo-word-no-beta.png";
+import { Button } from "../utility/buttons/button";
 
 const Benefit: React.FC<{
   iconClass: string;
@@ -11,8 +12,10 @@ const Benefit: React.FC<{
 }> = ({ iconClass, title, children }) => {
   return (
     <div className="flex flex-col items-center">
-      <i className={clsx(iconClass, "opacity-20 text-7xl")} />
-      <h2 className="font-normal text-4xl text-grey-444">{title}</h2>
+      <i className={clsx(iconClass, "opacity-20 text-6xl")} />
+      <header className="font-normal text-3xl text-grey-444 mt-6 mb-4">
+        {title}
+      </header>
       <p className="text-center text-grey-2 text-lg leading-normal">
         {children}
       </p>
@@ -30,15 +33,17 @@ export const Home: React.FC = () => {
         width={540}
       />
       <div className="px-4 mt-12">
-        <h2 className="text-5xl text-center font-normal text-grey-333 leading-tight">
+        <header className="text-3xl md:text-5xl text-center font-normal text-grey-333 leading-tight">
           A spreadsheet for things
           <br />
           that aren&rsquo;t certain
-        </h2>
+        </header>
       </div>
       <div className="px-4 mt-20">
-        <a href="/models" className="ui button huge primary">
-          Browse Public Models
+        <a href="/models">
+          <Button size="huge" color="blue" onClick={() => {}}>
+            Browse Public Models
+          </Button>
         </a>
       </div>
       <div className="px-4">

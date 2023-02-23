@@ -1,5 +1,6 @@
 import _ from "lodash";
-import React from "react";
+import React, { PropsWithChildren } from "react";
+import { Button } from "~/components/utility/buttons/button";
 
 import { H2 } from "./H2";
 import { NewOrder } from "./NewOrder";
@@ -15,13 +16,14 @@ type Props = {
   onNewModel(): void;
 };
 
-export const Message: React.FC<{
-  text?: string;
-  children?: React.ReactNode;
-}> = ({ text, children }) => (
+export const Message: React.FC<
+  PropsWithChildren<{
+    text?: string;
+  }>
+> = ({ text, children }) => (
   <div className="bg-grey-5 w-full min-h-[12em] text-grey-2 px-12 py-8 rounded">
     {text && <H2>{text}</H2>}
-    {children && children}
+    {children}
   </div>
 );
 
@@ -39,7 +41,7 @@ export const Unnecessary: React.FC<{ paymentAccountPortalUrl: string }> = ({
 export const Cancelled: React.FC = () => (
   <Message>
     <H2>Payment Cancelled.</H2>
-    <h3>Refresh to try again.</h3>
+    <div className="text-xl mt-4">Refresh to try again.</div>
   </Message>
 );
 
@@ -67,18 +69,16 @@ export const TestFormSuccess: React.FC<
   >
 > = ({ iframeUrl, iframeWebsiteName, onPaymentCancel, onPaymentSuccess }) => (
   <div>
-    <h1>This is a test.</h1>
+    <h1 className="text-3xl">This is a test.</h1>
     <H2>Pretend strongly that there is a payment iframe here</H2>
-    <h3>iframeUrl: {iframeUrl}</h3>
-    <h3>iframeWebsiteName: {iframeWebsiteName}</h3>
-    <a className="ui button red" onClick={onPaymentCancel}>
-      {" "}
-      Pretend to Cancel{" "}
-    </a>
-    <a className="ui button blue" onClick={onPaymentSuccess}>
-      {" "}
-      Pretend to Pay{" "}
-    </a>
+    <div>iframeUrl: {iframeUrl}</div>
+    <div>iframeWebsiteName: {iframeWebsiteName}</div>
+    <Button color="red" onClick={onPaymentCancel}>
+      Pretend to Cancel
+    </Button>
+    <Button color="blue" onClick={onPaymentSuccess}>
+      Pretend to Pay
+    </Button>
   </div>
 );
 
@@ -88,18 +88,20 @@ export const SynchronizationStart: React.FC = () => (
 export const SynchronizationFailure: React.FC = () => (
   <Message>
     <H2>Synchronization Failed</H2>
-    <h3>Try refreshing the browser</h3>
+    <div className="text-xl mt-4">Try refreshing the browser.</div>
   </Message>
 );
 export const SynchronizationSuccess: React.FC<{ onNewModel(): void }> = ({
   onNewModel,
 }) => (
   <Message>
-    <i className="ion-ios-planet text-[18em] text-grey-2/20" />
+    <i className="ion-ios-planet text-[16em] text-grey-2/20" />
     <H2>You now have access to private models!</H2>
-    <a className="ui button blue huge !mt-8 block" onClick={onNewModel}>
-      Create A Private Model
-    </a>
+    <div className="mt-4">
+      <Button size="huge" color="blue" onClick={onNewModel}>
+        Create A Private Model
+      </Button>
+    </div>
   </Message>
 );
 

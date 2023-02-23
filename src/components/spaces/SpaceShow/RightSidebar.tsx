@@ -24,7 +24,7 @@ import clsx from "clsx";
 import { Calculator } from "~/modules/calculators/reducer";
 
 const HeaderTitle: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <h2 className="text-[#476b82]">{children}</h2>
+  <header className="text-[#476b82] font-bold text-2xl">{children}</header>
 );
 
 const ShowCalculatorHeader: React.FC<{
@@ -78,7 +78,7 @@ const RightSidebarContainer: React.FC<
       grey ? "bg-grey-6" : "bg-white"
     )}
   >
-    <div className="pb-4">{header}</div>
+    <div className="pb-6">{header}</div>
     <div>{children}</div>
   </div>
 );

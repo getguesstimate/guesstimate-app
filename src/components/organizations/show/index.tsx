@@ -52,7 +52,7 @@ const OrganizationHeader: React.FC<{ organization: any }> = ({
 }) => (
   <div className="flex flex-col items-center">
     <img className="max-w-[4em] max-h-20 rounded" src={organization.picture} />
-    <h1>{organization.name}</h1>
+    <h1 className="font-bold text-3xl">{organization.name}</h1>
   </div>
 );
 

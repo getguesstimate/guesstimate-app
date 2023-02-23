@@ -30,7 +30,7 @@ export const SpaceName: React.FC<Props> = ({ onSave, name, editableByMe }) => {
   const hasName = !_.isEmpty(name);
   const showName = hasName ? name : "Untitled Model";
   const className = clsx(
-    "text-xl md:text-3xl font-medium px-2 py-1 m-0",
+    "text-xl md:text-2xl font-medium px-2 py-1",
     hasName ? "text-white" : "text-grey-ccc"
   );
 
@@ -70,6 +70,6 @@ export const SpaceName: React.FC<Props> = ({ onSave, name, editableByMe }) => {
       </div>
     </DropDown>
   ) : (
-    <h1 className={clsx(className)}>{name}</h1>
+    <h1 className={className}>{name}</h1>
   );
 };

@@ -15,9 +15,9 @@ const Confirmation: React.FC<{
 }> = ({ message, onConfirm, onClose }) => {
   return (
     <div className="bg-white px-16 py-12 max-w-xl">
-      <h1 className="mb-8 text-center text-2xl text-grey-333 leading-relaxed">
+      <header className="mb-8 text-center text-2xl text-grey-333 leading-relaxed">
         {message}
-      </h1>
+      </header>
       <div className="flex gap-4 justify-center">
         <Button size="large" color="blue" onClick={onConfirm}>
           Confirm

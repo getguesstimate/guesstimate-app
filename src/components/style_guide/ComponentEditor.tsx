@@ -25,8 +25,8 @@ export function ComponentEditor<T>({
       )}
     >
       <div>
-        <h3>{name}</h3>
-        <h4>{context}</h4>
+        <header className="text-xl font-bold mb-2">{name}</header>
+        <div className="mb-4 font-bold">{context}</div>
         <JSONTree data={childProps} />
       </div>
       <div className="col-span-5">

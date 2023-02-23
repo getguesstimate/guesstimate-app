@@ -6,6 +6,7 @@ import { httpRequestSelector } from "./httpRequestSelector";
 import { useAppDispatch, useAppSelector } from "~/modules/hooks";
 import * as userOrganizationMembershipActions from "~/modules/userOrganizationMemberships/actions";
 import clsx from "clsx";
+import { Button } from "~/components/utility/buttons/button";
 
 function validateEmail(email: string) {
   const re =
@@ -47,8 +48,6 @@ export const MemberAddForm: React.FC<{ organizationId: number }> = ({
   };
 
   const isValid = validateEmail(email);
-  const isEmpty = _.isEmpty(value);
-  const buttonColor = isValid || isEmpty ? "green" : "blue";
 
   const requests = _.orderBy(
     _.cloneDeep(httpRequests),
@@ -70,16 +69,9 @@ export const MemberAddForm: React.FC<{ organizationId: number }> = ({
             onChange={onChange}
           />
         </div>
-        <div
-          className={clsx(
-            "ui button primary",
-            buttonColor,
-            !isValid && "disabled"
-          )}
-          onClick={submit}
-        >
+        <Button size="large" color="green" disabled={!isValid} onClick={submit}>
           Invite User
-        </div>
+        </Button>
       </div>
       {requests.map((request) => {
         return (

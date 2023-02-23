@@ -1,13 +1,24 @@
 import React, { PropsWithChildren } from "react";
 
-import { FirstSubscriptionContainer } from "~/components/subscriptions/FirstSubscription/container";
-import { Container } from "~/components/utility/Container";
-import * as displayErrorsActions from "~/modules/displayErrors/actions";
-import { useAppDispatch, useAppSelector } from "~/modules/hooks";
 import { Plan } from "~/lib/config/plan";
 import { capitalizeFirstLetter } from "~/lib/string";
+import * as displayErrorsActions from "~/modules/displayErrors/actions";
+import { useAppDispatch, useAppSelector } from "~/modules/hooks";
 import * as meActions from "~/modules/me/actions";
+
+import { FirstSubscriptionContainer } from "~/components/subscriptions/FirstSubscription/container";
+import { Container } from "~/components/utility/Container";
 import { H2 } from "./FirstSubscription/H2";
+
+const Note: React.FC<PropsWithChildren<{ title: string }>> = ({
+  title,
+  children,
+}) => (
+  <div>
+    <header className="text-grey-2 font-bold text-lg mb-2">{title}</header>
+    <p className="text-sm">{children}</p>
+  </div>
+);
 
 type Props = {
   planName: string;
@@ -46,15 +57,15 @@ export const FirstSubscriptionPage: React.FC<Props> = ({ planName }) => {
                 models
               </H2>
             </div>
-            <div className=" max-w-xs p-4 rounded-sm text-grey-666 bg-grey-5">
-              <h3 className="text-grey-2">Privacy</h3>
-              <p>
+            <div className="max-w-xs p-4 rounded-sm text-grey-666 bg-grey-5 space-y-4">
+              <Note title="Privacy">
                 We will not sell or distribute your contact information. Read
                 our Privacy Policy.
-              </p>
+              </Note>
 
-              <h3 className="text-grey-2">Cancellations</h3>
-              <p>You cancel at any time with our payment portal.</p>
+              <Note title="Cancellations">
+                You cancel at any time with our payment portal.
+              </Note>
             </div>
           </div>
           <div className="flex-1">

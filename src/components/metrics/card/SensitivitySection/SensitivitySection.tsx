@@ -1,9 +1,9 @@
 import _ from "lodash";
-import React, { PropsWithChildren } from "react";
+import React, { PropsWithChildren, useEffect, useRef } from "react";
 
+import * as d3 from "d3";
 import clsx from "clsx";
 import everpolate from "everpolate";
-import { ScatterPlot } from "react-d3-components";
 import { FullDenormalizedMetric } from "~/lib/engine/space";
 import { SampleValue } from "~/lib/guesstimator/samplers/Simulator";
 
@@ -24,62 +24,97 @@ const Plot: React.FC<{
   xLabel?: string;
   yLabel?: string;
 }> = ({ xSamples, ySamples, size, xLabel, yLabel }) => {
-  const customValues = _.zip(xSamples, ySamples).filter(
+  const ref = useRef<SVGGElement>(null);
+
+  const data = _.zip(xSamples, ySamples).filter(
     (pair): pair is [number, number] =>
       _.isFinite(pair[0]) && _.isFinite(pair[1])
   );
-  const data = [{ customValues }];
-  const valuesAccessor = (s) => s.customValues;
-  const xAccessor = (e) => e[0];
-  const yAccessor = (e) => e[1];
 
-  const customProps =
-    size === "SMALL"
-      ? {
-          width: 180,
-          height: 68,
-          margin: { top: 5, bottom: 9, left: 5, right: 3 },
-          xAxis: {
-            tickArguments: [0],
-            innerTickSize: 1,
-            outerTickSize: 1,
-            tickPadding: 1,
-          },
-          yAxis: {
-            tickArguments: [0],
-            innerTickSize: 0,
-            outerTickSize: 0,
-            tickPadding: 0,
-          },
-        }
-      : {
-          width: 500,
-          height: 300,
-          margin: { top: 10, bottom: 40, left: 60, right: 20 },
-          xAxis: {
-            tickArguments: [6],
-            innerTickSize: 5,
-            outerTickSize: 2,
-            tickPadding: 3,
-            label: xLabel,
-          },
-          yAxis: {
-            tickArguments: [6],
-            innerTickSize: 5,
-            outerTickSize: 2,
-            tickPadding: 3,
-            label: yLabel,
-          },
-        };
+  const isSmall = size === "SMALL";
+
+  const width = isSmall ? 172 : 420;
+  const height = isSmall ? 54 : 250;
+  const margin = isSmall
+    ? { top: 5, bottom: 9, left: 5, right: 3 }
+    : { top: 10, bottom: 40, left: 60, right: 20 };
+
+  useEffect(() => {
+    if (!ref.current) {
+      return;
+    }
+
+    const g = d3.select(ref.current);
+    g.selectAll("*").remove();
+
+    const x = d3
+      .scaleLinear()
+      .domain(d3.extent(data, (d) => d[0]) as number[])
+      .range([0, width]);
+    const y = d3
+      .scaleLinear()
+      .domain(d3.extent(data, (d) => d[1]) as number[])
+      .range([height, 0]);
+
+    if (!isSmall) {
+      const xAxis = g
+        .append("g")
+        .attr("transform", `translate(0,${height})`)
+        .call(d3.axisBottom(x).ticks(6, ".9~s"));
+      const yAxis = g.append("g").call(d3.axisLeft(y).ticks(6, ".9~s"));
+
+      const styleAxis = (axis: typeof xAxis) => {
+        axis
+          .selectAll(".domain")
+          .attr("stroke", "#e2efe9")
+          .attr("stroke-width", 2);
+        axis.selectAll(".tick line").attr("stroke", "#ced6dc");
+        axis.selectAll(".tick text").attr("fill", "#7a909a");
+      };
+      styleAxis(xAxis);
+      styleAxis(yAxis);
+
+      if (xLabel) {
+        g.append("text")
+          .attr("text-anchor", "end")
+          .attr("x", width)
+          .attr("y", height - 5)
+          .attr("class", "font-bold fill-[#3c4448]")
+          .text(xLabel);
+      }
+
+      if (yLabel) {
+        g.append("text")
+          .attr("text-anchor", "end")
+          .attr("transform", "rotate(-90)")
+          .attr("x", 0)
+          .attr("y", 15)
+          .attr("class", "font-bold fill-[#3c4448]")
+          .text(yLabel);
+      }
+    }
+
+    g.append("g")
+      .selectAll("dot")
+      .data(data)
+      .enter()
+      .append("circle")
+      .attr("cx", (d) => x(d[0]))
+      .attr("cy", (d) => y(d[1]))
+      .attr("r", 4.5)
+      .style(
+        "fill",
+        isSmall ? "rgba(88, 173, 109, 0.18)" : "rgba(88, 173, 109, 0.12)"
+      );
+  }, [ref.current, data]);
 
   return (
-    <ScatterPlot
-      data={data}
-      x={xAccessor}
-      y={yAccessor}
-      values={valuesAccessor}
-      {...customProps}
-    />
+    <svg
+      width={width + margin.left + margin.right}
+      height={height + margin.top + margin.bottom}
+    >
+      <g transform={`translate(${margin.left},${margin.top})`} ref={ref} />
+    </svg>
   );
 };
 
@@ -174,7 +209,12 @@ export const SensitivitySection: React.FC<{
   }
 
   return (
-    <div className={clsx("SensitivitySection", size)}>
+    <div
+      className={clsx(
+        "relative",
+        size === "SMALL" && "h-[70px] px-1 bg-[rgb(189,189,189)]/[0.14]"
+      )}
+    >
       <RegressionStats xSamples={xSamples} ySamples={ySamples} size={size} />
       <Plot
         xSamples={xSamples}

@@ -22,16 +22,30 @@ const CalculatorContainer: React.FC<PropsWithChildren> = ({ children }) => (
   </div>
 );
 
+const HelpHeader: React.FC<PropsWithChildren> = ({ children }) => (
+  <div>
+    <DottedHR />
+    <header className="text-2xl font-bold mt-8">{children}</header>
+  </div>
+);
+
+const HelpInput: React.FC<{ value: string }> = ({ value }) => (
+  <input
+    type="text"
+    value={value}
+    className="bg-grey-6 px-2 py-1 border border-[#d4d4d4]"
+  />
+);
+
 const CalculatorHelp: React.FC<{ onClose(): void }> = ({ onClose }) => {
   return (
     <div>
       <div className="flex justify-between items-start">
-        <h1 className="m-0">Useful Information</h1>
+        <header className="text-3xl font-bold">Useful Information</header>
         <ButtonCloseText onClick={onClose} />
       </div>
-      <DottedHR />
 
-      <h2>Input Types</h2>
+      <HelpHeader>Input Types</HelpHeader>
 
       <table className="ui celled table">
         <thead>
@@ -45,15 +59,15 @@ const CalculatorHelp: React.FC<{ onClose(): void }> = ({ onClose }) => {
           <tr>
             <td>Point</td>
             <td>
-              <input className="editor" value="8" />
+              <HelpInput value="8" />
             </td>
             <td>You believe this value is 8.</td>
           </tr>
           <tr>
             <td>Range</td>
             <td>
-              <input className="editor" value="6 to 12" />
-            </td>{" "}
+              <HelpInput value="6 to 12" />
+            </td>
             <td>
               You believe this value is between 6 and 12. More specifically,
               this indicates that you believe there's a 95% chance the value is
@@ -62,8 +76,9 @@ const CalculatorHelp: React.FC<{ onClose(): void }> = ({ onClose }) => {
           </tr>
         </tbody>
       </table>
-      <DottedHR />
-      <h2>Units</h2>
+
+      <HelpHeader>Units</HelpHeader>
+
       <table className="ui celled table">
         <thead>
           <tr>
@@ -77,28 +92,28 @@ const CalculatorHelp: React.FC<{ onClose(): void }> = ({ onClose }) => {
             <td>K</td>
             <td>Thousand</td>
             <td>
-              <input className="editor" value="3K to 8K" />
+              <HelpInput value="3K to 8K" />
             </td>
           </tr>
           <tr>
             <td>M</td>
             <td>Million</td>
             <td>
-              <input className="editor" value="3M to 8M" />
+              <HelpInput value="3M to 8M" />
             </td>
           </tr>
           <tr>
             <td>B</td>
             <td>Billion</td>
             <td>
-              <input className="editor" value="3B to 8B" />
+              <HelpInput value="3B to 8B" />
             </td>
           </tr>
           <tr>
             <td>T</td>
             <td>Trillion</td>
             <td>
-              <input className="editor" value="3T to 8T" />
+              <HelpInput value="3T to 8T" />
             </td>
           </tr>
         </tbody>

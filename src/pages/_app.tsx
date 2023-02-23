@@ -9,11 +9,8 @@ import "flexboxgrid/css/flexboxgrid.min.css";
 import "font-awesome/css/font-awesome.css";
 import "ionicons/dist/css/ionicons.css";
 
-import "../styles/global.css";
-
 import "../../semantic/dist/semantic.css";
-import "../styles/legacyStyles.css";
-import "../styles/theme.css";
+import "../styles/global.css";
 
 import Script from "next/script";
 import * as meActions from "~/modules/me/actions";

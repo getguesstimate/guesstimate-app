@@ -27,19 +27,17 @@ export const CreateOrganizationPage: React.FC<{
   const newOrganizationCreated = _.has(newOrganization, "id");
   return (
     <Container>
-      <div className="CreateOrganization">
-        <div className="max-w-[820px] mx-auto">
-          <h1 className="mt-4 mb-8 font-medium text-4xl">
-            {newOrganizationCreated
-              ? "Step 2: Add Members"
-              : "Step 1: Create an Organization"}
-          </h1>
-          {newOrganizationCreated ? (
-            <LocalAddMembers organizationId={newOrganization.id} />
-          ) : (
-            <CreateOrganizationForm />
-          )}
-        </div>
+      <div className="max-w-[820px] mx-auto">
+        <h1 className="mt-4 mb-8 font-medium text-4xl">
+          {newOrganizationCreated
+            ? "Step 2: Add Members"
+            : "Step 1: Create an Organization"}
+        </h1>
+        {newOrganizationCreated ? (
+          <LocalAddMembers organizationId={newOrganization.id} />
+        ) : (
+          <CreateOrganizationForm />
+        )}
       </div>
     </Container>
   );

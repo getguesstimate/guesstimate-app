@@ -1,6 +1,8 @@
 import clsx from "clsx";
 import _ from "lodash";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { Button } from "~/components/utility/buttons/button";
+import { Input } from "~/components/utility/forms";
 
 import { useAppDispatch } from "~/modules/hooks";
 import { create } from "~/modules/organizations/actions";
@@ -15,7 +17,7 @@ export const PlanElement: React.FC<{
 }> = ({ onClick, isSelected, children }) => (
   <div
     className={clsx(
-      "flex items-start px-6 py-6 gap-6 first:rounded-t last:rounded-b",
+      "flex items-start px-6 py-6 gap-6 first:rounded-t last:rounded-b cursor-pointer",
       isSelected ? "bg-white" : "bg-grey-eee"
     )}
     onClick={onClick}
@@ -63,6 +65,12 @@ export const CreateOrganizationForm: React.FC = () => {
   const [value, setValue] = useState("");
   const dispatch = useAppDispatch();
 
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, [inputRef.current]);
+
   const handleSubmit = () => {
     if (hasClicked) {
       return;
@@ -75,21 +83,21 @@ export const CreateOrganizationForm: React.FC = () => {
     setHasClicked(true);
   };
 
-  const canSubmit = _.isEmpty(value) && !hasClicked;
+  const canSubmit = !_.isEmpty(value) && !hasClicked;
   return (
     <div className="grid grid-cols-12">
       <div className="col-span-7">
         <div className="flex flex-col gap-8">
           <div className="flex flex-col gap-2">
             <label className="font-bold">Organization Name</label>
-            <input
+            <Input
               placeholder="name"
-              // based on styles from semantic-ui
-              className="border border-grey-333/20 outline-none focus:border-[#85b7d9] transition rounded p-2"
               value={value}
               onChange={(e) => {
                 setValue(e.target.value);
               }}
+              theme="large"
+              ref={inputRef}
             />
           </div>
 
@@ -105,15 +113,15 @@ export const CreateOrganizationForm: React.FC = () => {
         </div>
 
         <div className="mt-4">
-          <div
-            className={clsx(
-              "ui button submit",
-              canSubmit ? "disabled" : "green"
-            )}
+          <Button
+            color="green"
+            size="large"
+            disabled={!canSubmit}
+            loading={hasClicked}
             onClick={handleSubmit}
           >
             Create Organization
-          </div>
+          </Button>
         </div>
       </div>
 

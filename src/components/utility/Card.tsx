@@ -110,7 +110,7 @@ export const CardListElement: React.FC<CardListElementProps> = ({
 };
 
 export const CardHeader: React.FC<PropsWithChildren> = ({ children }) => (
-  <h3 className="text-grey-888 font-extralight m-0">{children}</h3>
+  <header className="text-lg text-grey-888 font-light">{children}</header>
 );
 
 type Props = PropsWithChildren<{

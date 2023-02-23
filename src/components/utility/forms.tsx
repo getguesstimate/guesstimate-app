@@ -3,7 +3,7 @@ import React from "react";
 
 type ExtraProps = {
   error?: boolean;
-  theme?: "normal" | "large";
+  theme?: "normal" | "large" | "padded";
 };
 
 function buildProps<T extends ExtraProps & { className?: string }>(props: T) {
@@ -13,6 +13,7 @@ function buildProps<T extends ExtraProps & { className?: string }>(props: T) {
       "border outline-none transition-colors",
       theme === "normal" && "py-1 px-2 rounded-sm",
       theme === "large" && "p-4 rounded text-lg",
+      theme === "padded" && "px-4 py-2 rounded",
       error
         ? "bg-red-2 border-red-1"
         : "bg-white border-grey-ccc focus:border-blue-1",

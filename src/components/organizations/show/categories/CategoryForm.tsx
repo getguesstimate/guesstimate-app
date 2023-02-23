@@ -1,5 +1,7 @@
 import clsx from "clsx";
-import React, { Component, useState } from "react";
+import React, { useState } from "react";
+import { Button } from "~/components/utility/buttons/button";
+import { Input } from "~/components/utility/forms";
 
 import { FactCategory, isFactCategoryValid } from "~/lib/engine/fact_category";
 import { Optional } from "~/lib/engine/types";
@@ -47,22 +49,23 @@ export const CategoryForm: React.FC<Props> = ({
 
   return (
     <div className="flex justify-between">
-      <div className={clsx("field", isValid || "error")}>
-        <h3>
-          <input
-            name="name"
-            placeholder="New Category"
-            value={runningCategory.name}
-            onChange={handleChangeName}
-          />
-        </h3>
+      <div className={clsx(!isValid && "error")}>
+        <Input
+          name="name"
+          placeholder="New Category"
+          error={!isValid}
+          value={runningCategory.name}
+          onChange={handleChangeName}
+        />
       </div>
-      <span
-        className={clsx("ui button primary tiny", isValid || "disabled")}
+      <Button
+        size="small"
+        color="blue"
+        disabled={!isValid}
         onClick={handleSubmit}
       >
         Save
-      </span>
+      </Button>
     </div>
   );
 };

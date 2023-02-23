@@ -315,7 +315,6 @@ export const MetricCard = React.forwardRef<{ focus(): void }, Props>(
         >
           <div
             className={clsx(
-              "metricCard",
               "relative rounded-xs w-full flex flex-col overflow-hidden",
               "max-w-[30em]",
               "z-0", // is this necessary?

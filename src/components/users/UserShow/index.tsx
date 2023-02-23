@@ -50,9 +50,9 @@ export const UserShow: React.FC<Props> = ({ userId }) => {
   return (
     <Container>
       {user && (
-        <div className="flex flex-col items-center mb-8">
-          <img className="w-32 h-32 rounded-full" src={user.picture} />
-          <h1 className="mt-3">{user.name}</h1>
+        <div className="flex flex-col items-center mb-12">
+          <img className="w-28 h-28 rounded-full" src={user.picture} />
+          <h1 className="mt-3 text-3xl font-bold">{user.name}</h1>
         </div>
       )}
       {spaces && (

@@ -71,7 +71,9 @@ export const NewSpaceCard: React.FC<{ onClick(): void }> = ({ onClick }) => (
   <SpaceCardBox onClick={onClick} isNew>
     <div className="bg-[#cee4ce] h-full flex flex-col justify-center items-center rounded-sm">
       <Icon name="plus" className="text-[4.5em] text-[#79b979]" />
-      <h3 className="text-[2em] text-[#32403c] mt-4">New Model</h3>
+      <header className="text-3xl text-[#32403c] font-bold mt-4">
+        New Model
+      </header>
     </div>
   </SpaceCardBox>
 );
@@ -100,15 +102,15 @@ export const SpaceCard: React.FC<{
             size === "SMALL" ? "p-1" : "p-2"
           )}
         >
-          <h3
+          <header
             className={clsx(
-              "m-0",
-              size === "SMALL" ? "text-xs" : "text-xl",
+              "font-bold",
+              size === "SMALL" ? "text-xs" : "text-lg",
               space.name ? "text-[#4a6a88]" : "text-grey-bbb italic"
             )}
           >
             {space.name || "Untitled Model"}
-          </h3>
+          </header>
           {size !== "SMALL" && (
             <div className="text-xs text-grey-888">
               Updated {formatDate(space.updated_at)}

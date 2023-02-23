@@ -1,20 +1,24 @@
 import _ from "lodash";
 import React, { useImperativeHandle, useMemo, useRef } from "react";
 
-import d3 from "d3";
+import * as d3 from "d3";
 
 import useSize from "@react-hook/size";
 import { numberShow } from "~/lib/numberShower/numberShower";
 
-function getYScale(data, height: number) {
-  return d3.scale
-    .linear()
-    .domain([0, d3.max(data, (d) => d.y)])
+function getYScale(data: d3.Bin<number, number>[], height: number) {
+  return d3
+    .scaleLinear()
+    .domain([0, d3.max(data, (d) => d.length) as number])
     .range([height, 0]);
 }
 
 function getXScale(data: number[], width: number) {
-  return d3.scale.linear().domain(d3.extent(data)).range([0, width]).nice();
+  return d3
+    .scaleLinear()
+    .domain(d3.extent(data) as number[])
+    .range([0, width])
+    .nice();
 }
 
 // Computes the average of an array of numbers. If the array is empty, returns 1.
@@ -78,10 +82,9 @@ function filterLowDensityPoints(inputData: number[], cutOffRatio: number) {
 
 export type HistogramTheme = "dark" | "normal" | "light";
 
-// data prop must be sorted.
 type Props = {
   bins?: number;
-  data: number[];
+  data: number[]; // must be sorted
   hoveredXCoord?: number;
   allowHover?: boolean;
   cutOffRatio?: number;
@@ -109,7 +112,10 @@ export const Histogram = React.forwardRef<{ xScale: any }, Props>(
       const filteredData = filterLowDensityPoints(data, cutOffRatio);
 
       const xScale = getXScale(filteredData, width);
-      const histogramDataFn = d3.layout.histogram().bins(xScale.ticks(bins));
+      const histogramDataFn = d3
+        .bin()
+        .domain(xScale.domain() as [number, number])
+        .thresholds(bins);
       const histogramData = histogramDataFn(filteredData);
       const yScale = getYScale(histogramData, height);
 
@@ -168,7 +174,9 @@ const Hoverbar: React.FC<{
   );
 };
 
-const Path: React.FC<{ scale: any }> = ({ scale }) => {
+const Path: React.FC<{ scale: d3.ScaleLinear<number, number> }> = ({
+  scale,
+}) => {
   const [start, end] = scale.range();
   const d = `M0${start},6V0H${end}V6`;
 
@@ -183,7 +191,7 @@ const Path: React.FC<{ scale: any }> = ({ scale }) => {
 
 const Tick: React.FC<{
   value: number;
-  scale: any;
+  scale: d3.ScaleLinear<number, number>;
 }> = ({ value, scale }) => {
   const valueText = numberShow(value);
   let text: any = _.isFinite(value) && valueText;
@@ -208,7 +216,7 @@ const Tick: React.FC<{
 };
 
 const XAxis: React.FC<{
-  scale: any;
+  scale: d3.ScaleLinear<number, number>;
   height: number;
 }> = ({ scale, height }) => {
   const ticks = scale.ticks
@@ -224,15 +232,15 @@ const XAxis: React.FC<{
 };
 
 const Bar: React.FC<{
-  data: any;
-  xScale: any;
-  yScale: any;
+  data: d3.Bin<number, number>;
+  xScale: d3.ScaleLinear<number, number>;
+  yScale: d3.ScaleLinear<number, number>;
   barWidth: number;
   height: number;
   theme: HistogramTheme;
 }> = ({ data, xScale, yScale, barWidth, height, theme }) => {
-  const scaledX = xScale(data.x);
-  const scaledY = yScale(data.y);
+  const scaledX = xScale(data.x0!);
+  const scaledY = yScale(data.length);
 
   const themeToColor: { [t in HistogramTheme]: string } = {
     dark: "fill-[#92a9b8]",

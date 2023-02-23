@@ -15,7 +15,7 @@ export const PlanIndexContainer: React.FC = () => {
   };
 
   const onNewOrganizationNavigation = () => {
-    router.push(`organizations/new`);
+    router.push("organizations/new");
   };
 
   const me = useAppSelector((state) => state.me);

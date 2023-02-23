@@ -4,6 +4,20 @@
 
 body {
   height: 100%;
+  font-family: "Lato", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 16px;
+}
+
+a {
+  color: #1e70bf;
+}
+
+p {
+  margin-bottom: 1em;
+}
+
+p:last-child {
+  margin-bottom: 0;
 }
 
 /* see src/server/elev/index.ts */
@@ -62,4 +76,27 @@ body.remove-elev #_elev_io {
   .PageBase h1 {
     @apply text-blue-1;
   }
+}
+
+::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb:horizontal {
+  background-color: #7089a9; /* grey-2 */
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:vertical {
+  background-color: #7089a9; /* grey-2 */
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-track:corner {
+  background-color: black;
 }

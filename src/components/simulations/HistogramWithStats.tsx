@@ -18,7 +18,9 @@ const findPercentile = (values: number[], value: number) => {
 
 const PercentileTable: React.FC<{ values: any }> = ({ values }) => (
   <div>
-    <h3 className="text-grey-999 font-normal text-xl">Percentiles</h3>
+    <header className="text-grey-999 font-normal text-xl mb-4">
+      Percentiles
+    </header>
     <table className="border-collapse">
       <tbody>
         {!_.isEmpty(values) &&

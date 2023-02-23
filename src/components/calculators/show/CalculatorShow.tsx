@@ -171,11 +171,14 @@ export const CalculatorShow: React.FC<Props> = (props) => {
   return (
     <div className="calculator">
       <div className="flex justify-between">
-        <div className="flex items-end">
-          <h1 className="leading-none m-0">{props.calculator.title}</h1>
+        <div className="flex items-end gap-6">
+          <h1 className="leading-none text-3xl font-bold">
+            {props.calculator.title}
+          </h1>
           {props.isPrivate && (
-            <div className="pl-6">
-              <Icon name="lock" /> Private
+            <div className="flex items-end gap-1">
+              <Icon name="lock" />
+              <div className="leading-none">Private</div>
             </div>
           )}
         </div>

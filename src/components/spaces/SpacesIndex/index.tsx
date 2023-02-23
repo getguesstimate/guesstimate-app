@@ -1,11 +1,12 @@
 import _ from "lodash";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Icon from "~/components/react-fa-patched";
 
 import { SpaceCards } from "~/components/spaces/SpaceCards";
 import { Button } from "~/components/utility/buttons/button";
 import { CardListElement } from "~/components/utility/Card";
 import { DropDown } from "~/components/utility/DropDown";
+import { Input } from "~/components/utility/forms";
 
 import { useAppDispatch, useAppSelector } from "~/modules/hooks";
 import * as search from "~/modules/search_spaces/actions";
@@ -83,6 +84,11 @@ export const SpacesIndex: React.FC = () => {
   const [timeframe, setTimeframe] = useState<Timeframe>("ALL_TIME");
   const [searchValue, setSearchValue] = useState("");
 
+  const inputRef = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, [inputRef.current]);
+
   const loadNextPage = () => {
     dispatch(search.fetchNextPage());
   };
@@ -104,18 +110,18 @@ export const SpacesIndex: React.FC = () => {
   return (
     <div className="SpacesIndex mb-12">
       <div className="mt-16 mb-12">
-        <h1 className="text-grey-444 text-center text-3xl mb-6">
+        <h1 className="text-grey-444 text-center text-3xl font-bold mb-6">
           Public Models
         </h1>
         <div className="grid grid-cols-4 gap-8 items-center">
-          <div className="col-span-2 col-start-2">
-            <div className="ui form">
-              <input
-                name="search"
-                placeholder="Search"
-                onChange={changeSearchValue}
-              />
-            </div>
+          <div className="col-span-2 col-start-2 grid items-stretch">
+            <Input
+              name="search"
+              placeholder="Search"
+              theme="padded"
+              ref={inputRef}
+              onChange={changeSearchValue}
+            />
           </div>
           <div>
             <Filters

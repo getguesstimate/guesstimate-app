@@ -65,6 +65,7 @@ export const Edges: React.FC<Props> = React.memo(
         <defs>
           {allPathStatuses.map((pathStatus) => (
             <marker
+              key={pathStatus}
               id={`MarkerArrow-${pathStatus}`}
               markerWidth="3"
               markerHeight="3"

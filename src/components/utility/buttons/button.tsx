@@ -3,15 +3,17 @@ import { useRouter } from "next/router";
 import React from "react";
 import Icon from "~/components/react-fa-patched";
 
-export const Button: React.FC<{
+type ButtonProps = {
   onClick(): void;
-  color?: "grey" | "dark-grey" | "red" | "blue"; // dark-grey is for colored background, e.g. "Cancel" in DataViewer editor
-  size?: "normal" | "small" | "large";
+  color?: "grey" | "dark-grey" | "red" | "blue" | "green"; // dark-grey is for colored background, e.g. "Cancel" in DataViewer editor
+  size?: "normal" | "small" | "large" | "huge";
   children: React.ReactNode;
   wide?: boolean;
   loading?: boolean;
   disabled?: boolean;
-}> = ({
+};
+
+export const Button: React.FC<ButtonProps> = ({
   onClick,
   color = "grey",
   size = "normal",
@@ -25,14 +27,30 @@ export const Button: React.FC<{
       size === "small" && "px-3 py-2 text-xs",
       size === "normal" && "px-4 py-2 text-sm",
       size === "large" && "px-6 py-3 text-lg",
+      size === "huge" && "px-8 py-4 text-xl",
       wide ? "flex w-full" : "inline-flex",
       "items-center",
       "rounded",
-      color === "red" && "text-white bg-[#b74d4d] hover:bg-[#923f3f]",
-      color === "blue" && "text-white bg-blue-1 hover:bg-blue-7",
-      color === "grey" &&
-        "bg-[#E0E1E2] hover:bg-[#cacbcd] text-[rgb(0,0,0)]/60 hover:text-[rgb(0,0,0)]/80",
-      color === "dark-grey" && "bg-grey-ccc hover:bg-grey-bbb",
+      color === "red" && [
+        "text-white bg-[#b74d4d]",
+        !disabled && "hover:bg-[#923f3f]",
+      ],
+      color === "blue" && [
+        "text-white bg-blue-1",
+        !disabled && "hover:bg-blue-7",
+      ],
+      color === "grey" && [
+        "bg-[#E0E1E2] text-[rgb(0,0,0)]/60",
+        !disabled && "hover:bg-[#cacbcd] hover:text-[rgb(0,0,0)]/80",
+      ],
+      color === "dark-grey" && [
+        "bg-grey-ccc",
+        !disabled && "hover:bg-grey-bbb",
+      ],
+      color === "green" && [
+        "text-white bg-green-2",
+        !disabled && "hover:bg-green-5",
+      ],
       disabled && "opacity-70",
       "select-none font-bold outline-none leading-none transition duration-100",
       loading && "cursor-pointer"

@@ -8,8 +8,12 @@ import { HR } from "~/components/utility/HR";
 
 const PlanC: React.FC<{ planId: string | undefined }> = ({ planId }) => (
   <div className="bg-grey-1 px-8 py-4 rounded">
-    <h2 className="text-blue-1">{Plan.find(planId).fullName()}</h2>
-    <p className="text-grey-2">{Plan.find(planId).number()} Private Models</p>
+    <header className="text-blue-1 text-2xl font-bold">
+      {Plan.find(planId).fullName()}
+    </header>
+    <div className="text-grey-2 mt-2">
+      {Plan.find(planId).number()} Private Models
+    </div>
   </div>
 );
 
