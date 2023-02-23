@@ -163,9 +163,9 @@ export const DropCell: React.FC<Props> = (props) => {
     >
       {cellElement}
       {props.showAutoFillToken && (
-        <div className="absolute -right-5 -bottom-5 w-9 h-9 z-10 transition-[padding] duration-[50ms] p-[0.8em] hover:p-2">
+        <div className="absolute -right-5 -bottom-5 z-10 h-9 w-9 p-[0.8em] transition-[padding] duration-[50ms] hover:p-2">
           <div
-            className="cursor-crosshair w-full h-full rounded-sm bg-[rgb(90,141,177)]"
+            className="h-full w-full cursor-crosshair rounded-sm bg-[rgb(90,141,177)]"
             onMouseDown={handleAutoFillTargetMouseDown}
           />
         </div>

@@ -25,14 +25,14 @@ export const DistributionIcon: React.FC<{
     <ToolTip id={type} text={samplerType.displayName} withPortal={true}>
       <div
         className={clsx(
-          "cursor-pointer rounded grid place-items-center",
-          size === "small" && "w-6 h-6",
-          size === "large" && "w-9 h-9",
+          "grid cursor-pointer place-items-center rounded",
+          size === "small" && "h-6 w-6",
+          size === "large" && "h-9 w-9",
           theme === "current" &&
-            "opacity-60 hover:opacity-100 hover:bg-grey-ccc",
+            "opacity-60 hover:bg-grey-ccc hover:opacity-100",
           theme === "choice" && "bg-grey-1",
           theme === "choice-selected" && "bg-blue-2",
-          isDisabled && "cursor-default pointer-events-none opacity-50"
+          isDisabled && "pointer-events-none cursor-default opacity-50"
         )}
         onClick={onClick}
       >

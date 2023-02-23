@@ -133,7 +133,7 @@ export const Histogram = React.forwardRef<{ xScale: any }, Props>(
 
     return (
       <div ref={containerRef} className="h-full">
-        <svg className="w-full h-full">
+        <svg className="h-full w-full">
           <g>
             {histogramData.map((d, i) => (
               <Bar
@@ -207,7 +207,7 @@ const Tick: React.FC<{
         dy=".71em"
         y="-15"
         x="-6"
-        className="text-[13px] fill-grey-666 font-semibold"
+        className="fill-grey-666 text-[13px] font-semibold"
       >
         {text}
       </text>

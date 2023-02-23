@@ -117,10 +117,10 @@ export const MetricName = React.forwardRef<MetricNameHandle, Props>(
         onKeyDown={handleKeyDown}
         ref={editorRef}
         className={clsx(
-          "block p-0.5 w-full overflow-hidden outline-none resize-none text-lg leading-[1.2em] bg-transparent focus:text-dark-3",
+          "block w-full resize-none overflow-hidden bg-transparent p-0.5 text-lg leading-[1.2em] outline-none focus:text-dark-3",
           props.anotherFunctionSelected && "cursor-pointer",
           props.titleView
-            ? "text-[#3c4f67] font-semibold"
+            ? "font-semibold text-[#3c4f67]"
             : [
                 "text-[rgb(69,98,134)]/80",
                 props.isOutput ? "font-medium" : "font-light",

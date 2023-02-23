@@ -307,7 +307,7 @@ export const MetricCard = React.forwardRef<{ focus(): void }, Props>(
         }
       >
         <div
-          className="h-full w-full relative flex focus:outline-none"
+          className="relative flex h-full w-full focus:outline-none"
           onKeyPress={handleKeyPress}
           onKeyDown={handleKeyDown}
           tabIndex={0}
@@ -315,7 +315,7 @@ export const MetricCard = React.forwardRef<{ focus(): void }, Props>(
         >
           <div
             className={clsx(
-              "relative rounded-xs w-full flex flex-col overflow-hidden",
+              "relative flex w-full flex-col overflow-hidden rounded-xs",
               "max-w-[30em]",
               "z-0", // is this necessary?
               "whitespace-normal", // is this necessary?
@@ -390,7 +390,7 @@ export const MetricCard = React.forwardRef<{ focus(): void }, Props>(
             )}
           </div>
           {inSelectedCell && sidebarIsOpen && (
-            <div className="absolute top-1 -right-[163px] w-[160px] z-10">
+            <div className="absolute top-1 -right-[163px] z-10 w-[160px]">
               <MetricSidebar
                 onOpenModal={openModal}
                 onRemoveMetric={handleRemoveMetric}

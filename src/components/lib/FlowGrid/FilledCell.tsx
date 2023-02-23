@@ -156,15 +156,6 @@ export const FilledCell = React.forwardRef<{ focus(): void }, Props>(
       focus,
     }));
 
-    const handleMouseUp = (e: React.MouseEvent<HTMLDivElement>) => {
-      if (
-        e.button === 0 &&
-        (e.target as any).className === "FlowGridFilledCell"
-      ) {
-        focus();
-      }
-    };
-
     useEffect(() => {
       const childItem = containerRef.current?.children[0];
       if (!isDragging && childItem) {
@@ -198,7 +189,6 @@ export const FilledCell = React.forwardRef<{ focus(): void }, Props>(
           showEdges ? "p-2" : "p-[3px]"
         )}
         style={styles}
-        onMouseUp={handleMouseUp}
         ref={containerRef}
         tabIndex={-1}
       >

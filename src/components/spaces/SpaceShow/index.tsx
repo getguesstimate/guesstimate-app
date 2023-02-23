@@ -115,7 +115,7 @@ export const SpaceShow: React.FC<Props> = (props) => {
   const pageTitle = `${space.name} | Guesstimate`;
 
   return (
-    <div className="flex-1 flex flex-col h-full bg-[#dfe1e4]">
+    <div className="flex h-full flex-1 flex-col bg-[#dfe1e4]">
       <Head>
         {space.name && <title key="title">{pageTitle}</title>}
         {[
@@ -149,13 +149,13 @@ export const SpaceShow: React.FC<Props> = (props) => {
         />
       </div>
 
-      <div className="max-h-full flex-1 flex">
+      <div className="flex max-h-full flex-1">
         {leftSidebarIsVisible && (
           <div className="self-start">
             <LeftSidebar space={space} />
           </div>
         )}
-        <div className="pt-4 pl-4 overflow-auto">
+        <div className="overflow-auto pt-4 pl-4">
           <SpaceCanvas
             canUseOrganizationFacts={e.space.canUseOrganizationFacts(space)}
             exportedFacts={exportedFacts}

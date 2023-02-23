@@ -37,13 +37,13 @@ const MenuLink: React.FC<{
       className={clsx(
         "text-grey-2 hover:text-blue-1",
         noMobile ? "hidden md:flex" : "flex",
-        "space-x-1 md:space-x-2 items-center"
+        "items-center space-x-1 md:space-x-2"
       )}
       href={href || ""}
       onClick={handleClick}
     >
       {icon ? <div className="text-xl md:text-2xl">{icon}</div> : null}
-      <span className="font-semibold whitespace-nowrap">{text}</span>
+      <span className="whitespace-nowrap font-semibold">{text}</span>
     </a>
   );
 };

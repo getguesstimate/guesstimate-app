@@ -67,7 +67,7 @@ export const DropDown = React.forwardRef<DropDownHandle, Props>(
         {isOpen && (
           <div
             className={clsx(
-              "absolute mt-1 z-10",
+              "absolute z-10 mt-1",
               props.position === "right" ? "left-0" : "right-0"
             )}
           >

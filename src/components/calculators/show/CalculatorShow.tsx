@@ -169,10 +169,10 @@ export const CalculatorShow: React.FC<Props> = (props) => {
   };
 
   return (
-    <div className="calculator">
+    <div>
       <div className="flex justify-between">
         <div className="flex items-end gap-6">
-          <h1 className="leading-none text-3xl font-bold">
+          <h1 className="text-3xl font-bold leading-none">
             {props.calculator.title}
           </h1>
           {props.isPrivate && (
@@ -192,7 +192,7 @@ export const CalculatorShow: React.FC<Props> = (props) => {
           </div>
         )}
       </div>
-      <div className="text-grey-666 my-4 text-sm">
+      <div className="my-4 text-sm text-grey-666">
         <ReactMarkdown source={props.calculator.content} />
       </div>
       <div className="space-y-2">

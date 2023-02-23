@@ -62,12 +62,12 @@ const ErrorSection: React.FC<{
   return (
     <div
       className={clsx(
-        "h-full grid place-items-center min-h-[40px]",
+        "grid h-full min-h-[40px] place-items-center",
         theme === "serious" ? "bg-red-6" : "bg-red-7"
       )}
     >
       {shouldShowErrorText ? (
-        <div className="text-sm text-red-3 font-medium leading-[1.1em] px-2 py-0.5">
+        <div className="px-2 py-0.5 text-sm font-medium leading-[1.1em] text-red-3">
           {messageToDisplay}
         </div>
       ) : (
@@ -223,7 +223,7 @@ export const MetricCardViewSection = React.forwardRef<
   };
 
   return (
-    <div className="flex-1 relative flex flex-col" onMouseDown={onMouseDown}>
+    <div className="relative flex flex-1 flex-col" onMouseDown={onMouseDown}>
       {showSimulation && (
         <div
           className={clsx(
@@ -263,7 +263,7 @@ export const MetricCardViewSection = React.forwardRef<
 
       <div
         className={clsx(
-          "flex-1 min-h-[10px] flex flex-col",
+          "flex min-h-[10px] flex-1 flex-col",
           anotherFunctionSelected ? "cursor-pointer" : "cursor-move"
         )}
         ref={props.connectDragSource}
@@ -277,7 +277,7 @@ export const MetricCardViewSection = React.forwardRef<
           </div>
         )}
         {showSimulation && (
-          <div className="px-2 pt-2 pb-1 flex-1">
+          <div className="flex-1 px-2 pt-2 pb-1">
             {renderDistributionSummary()}
           </div>
         )}

@@ -8,7 +8,7 @@ export const ToolbarActionBox: React.FC<{
 }> = ({ children, onClick, disabled }) => (
   <div
     className={clsx(
-      "text-dark-3 cursor-pointer px-2 py-1 rounded-sm select-none",
+      "cursor-pointer select-none rounded-sm px-2 py-1 text-dark-3",
       disabled
         ? "opacity-40 hover:bg-white/20"
         : "hover:bg-white/30 active:bg-white/50"

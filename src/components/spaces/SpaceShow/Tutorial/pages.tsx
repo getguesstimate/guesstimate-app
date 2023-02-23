@@ -5,19 +5,19 @@ const InteractWithACell = "/assets/tutorial/InteractWithACell.gif";
 const MakeAFunction = "/assets/tutorial/MakeAFunction.gif";
 
 const TH: React.FC<PropsWithChildren> = ({ children }) => (
-  <th className="px-4 py-4 leading-tight border-t border-b border-[#ddd] bg-[#f8f8f8]">
+  <th className="border-t border-b border-[#ddd] bg-[#f8f8f8] px-4 py-4 leading-tight">
     {children}
   </th>
 );
 
 const TD: React.FC<PropsWithChildren> = ({ children }) => (
-  <td className="px-4 py-3 leading-tight border-t border-b border-[#ddd]">
+  <td className="border-t border-b border-[#ddd] px-4 py-3 leading-tight">
     {children}
   </td>
 );
 
 const Table: React.FC<PropsWithChildren> = ({ children }) => (
-  <table className="mt-6 bg-white border border-[#ddd] rounded text-sm text-left w-full">
+  <table className="mt-6 w-full rounded border border-[#ddd] bg-white text-left text-sm">
     {children}
   </table>
 );
@@ -27,8 +27,8 @@ type PageProps = PropsWithChildren<{
 }>;
 
 const TutorialPage: React.FC<PageProps> = ({ header, children }) => (
-  <div className="tutorialPage mb-8 min-h-[34em]">
-    <header className="text-center font-bold text-2xl leading-none pb-12">
+  <div className="mb-8 min-h-[34em]">
+    <header className="pb-12 text-center text-2xl font-bold leading-none">
       {header}
     </header>
     <div className="text-justify font-open">{children}</div>
@@ -37,18 +37,18 @@ const TutorialPage: React.FC<PageProps> = ({ header, children }) => (
 
 const Image: React.FC<{ image: string }> = ({ image }) => (
   <div className="bg-grey-7">
-    <img src={image} className="max-h-40 max-w-full mx-auto" />
+    <img src={image} className="mx-auto max-h-40 max-w-full" />
   </div>
 );
 
 const ExampleFunction: React.FC<PropsWithChildren> = ({ children }) => (
-  <span className="bg-grey-eee rounded px-2 py-1 font-mono text-sm">
+  <span className="rounded bg-grey-eee px-2 py-1 font-mono text-sm">
     {children}
   </span>
 );
 
 const ExampleInput: React.FC<PropsWithChildren> = ({ children }) => (
-  <span className="text-green-3 bg-green-4 px-1 rounded">{children}</span>
+  <span className="rounded bg-green-4 px-1 text-green-3">{children}</span>
 );
 
 export const TutorialMetricPage: React.FC = () => (
@@ -166,7 +166,7 @@ export const TutorialFunctionPage: React.FC = () => (
 );
 
 const Subheader: React.FC<PropsWithChildren> = ({ children }) => (
-  <header className="text-center text-grey-666 text-lg font-bold my-3">
+  <header className="my-3 text-center text-lg font-bold text-grey-666">
     {children}
   </header>
 );

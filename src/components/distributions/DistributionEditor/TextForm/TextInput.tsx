@@ -430,21 +430,21 @@ export class UnconnectedTextInput extends Component<Props, State> {
     return (
       <div
         className={clsx(
-          "border-2 rounded-sm",
-          "leading-tight break-words",
+          "rounded-sm border-2",
+          "break-words leading-tight",
           "transition-colors duration-300",
           this.props.size === "small" && [
             "font-light",
-            "text-[#456286]/80 focus:text-black-3",
+            "focus:text-black-3 text-[#456286]/80",
           ],
           this.props.size === "large" && [
             "text-2xl font-thin",
-            "text-grey-666 bg-grey-eee",
+            "bg-grey-eee text-grey-666",
             "p-1",
           ],
           isFlashing
-            ? "bg-[#c9e8c0] border-[#0fb963]"
-            : "bg-white border-transparent"
+            ? "border-[#0fb963] bg-[#c9e8c0]"
+            : "border-transparent bg-white"
         )}
         onClick={this.focus.bind(this)}
         onKeyDown={(e) => {

@@ -24,7 +24,7 @@ import clsx from "clsx";
 import { Calculator } from "~/modules/calculators/reducer";
 
 const HeaderTitle: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <header className="text-[#476b82] font-bold text-2xl">{children}</header>
+  <header className="text-2xl font-bold text-[#476b82]">{children}</header>
 );
 
 const ShowCalculatorHeader: React.FC<{
@@ -35,7 +35,7 @@ const ShowCalculatorHeader: React.FC<{
   onClose(): void;
 }> = ({ id, editableByMe, onEdit, onDelete, onClose }) => {
   return (
-    <div className="flex justify-end items-start flex-wrap gap-1">
+    <div className="flex flex-wrap items-start justify-end gap-1">
       <ButtonExpandText href={`/calculators/${id}`} />
       {editableByMe && <ButtonEditText onClick={onEdit} />}
       {editableByMe && <ButtonDeleteText onClick={onDelete} />}
@@ -48,7 +48,7 @@ const CalculatorFormHeader: React.FC<{
   isNew: boolean;
   onClose(): void;
 }> = ({ isNew, onClose }) => (
-  <div className="flex justify-between items-start">
+  <div className="flex items-start justify-between">
     <HeaderTitle>{isNew ? "New" : "Edit"} Calculator</HeaderTitle>
     <ButtonCloseText onClick={onClose} />
   </div>
@@ -59,7 +59,7 @@ const FactSidebarHeader: React.FC<{
   organizationId: string | number;
 }> = ({ onClose, organizationId }) => {
   return (
-    <div className="flex justify-between items-start">
+    <div className="flex items-start justify-between">
       <HeaderTitle>Metric Library</HeaderTitle>
       <div className="flex gap-1">
         <ButtonExpandText href={`/organizations/${organizationId}/facts`} />
@@ -74,7 +74,7 @@ const RightSidebarContainer: React.FC<
 > = ({ grey, header, children }) => (
   <div
     className={clsx(
-      "w-96 flex-none h-full p-4 overflow-x-hidden overflow-y-auto border-l border-[#ccc]",
+      "h-full w-96 flex-none overflow-y-auto overflow-x-hidden border-l border-[#ccc] p-4",
       grey ? "bg-grey-6" : "bg-white"
     )}
   >

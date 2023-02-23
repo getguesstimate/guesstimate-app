@@ -70,7 +70,7 @@ body.remove-elev #_elev_io {
 
 @layer components {
   .PageBase h2 {
-    @apply text-xl mb-1.5;
+    @apply mb-1.5 text-xl;
   }
 
   .PageBase h1 {

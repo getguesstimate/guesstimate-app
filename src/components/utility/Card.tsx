@@ -12,7 +12,7 @@ const IconSection: React.FC<
     size: "normal" | "large";
   }
 > = ({ icon, ionicIcon, image, imageShape, size }) => (
-  <div className="text-grey-2 text-center">
+  <div className="text-center text-grey-2">
     {icon && (
       <Icon
         name={icon}
@@ -36,7 +36,7 @@ const ChildrenSection: React.FC<
 > = ({ header, children }) => (
   <div className="text-[#555]">
     {header && (
-      <div className="font-bold text-xl leading-none">
+      <div className="text-xl font-bold leading-none">
         {capitalizeFirstLetter(header)}
       </div>
     )}
@@ -110,7 +110,7 @@ export const CardListElement: React.FC<CardListElementProps> = ({
 };
 
 export const CardHeader: React.FC<PropsWithChildren> = ({ children }) => (
-  <header className="text-lg text-grey-888 font-light">{children}</header>
+  <header className="text-lg font-light text-grey-888">{children}</header>
 );
 
 type Props = PropsWithChildren<{
@@ -131,13 +131,13 @@ export const Card: React.FC<Props> = ({
     <div
       className={clsx(
         width === "narrow" ? "w-64" : "w-96",
-        "bg-white rounded shadow drop-shadow",
+        "rounded bg-white shadow drop-shadow",
         "py-1",
         hasPadding && "px-4"
       )}
     >
       {headerText && (
-        <div className="text-center mt-2 mb-2 relative">
+        <div className="relative mt-2 mb-2 text-center">
           <CardHeader>{headerText}</CardHeader>
           <div
             className={clsx(

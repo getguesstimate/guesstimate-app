@@ -11,9 +11,9 @@ export const SmallDataViewer: React.FC<{
   onDelete(): void;
   onOpen(): void;
 }> = ({ onDelete, onOpen }) => (
-  <div className="flex justify-between items-center pr-2">
+  <div className="flex items-center justify-between pr-2">
     <div
-      className="text-purple-2 bg-purple-3 cursor-pointer px-2 py-1 text-sm rounded-sm font-bold"
+      className="cursor-pointer rounded-sm bg-purple-3 px-2 py-1 text-sm font-bold text-purple-2"
       onClick={onOpen}
     >
       <Icon name="bar-chart" /> Custom
@@ -29,7 +29,7 @@ const HeaderButton: React.FC<{
 }> = ({ onClick, text, icon }) => (
   <a
     onClick={onClick}
-    className="flex gap-1 items-center text-white/70 hover:text-white"
+    className="flex items-center gap-1 text-white/70 hover:text-white"
     href=""
   >
     <Icon name={icon} className="text-base" />
@@ -42,12 +42,12 @@ const Header: React.FC<{
   onEdit(): void;
   editing: boolean;
 }> = ({ editing, onDelete, onEdit }) => (
-  <div className="flex items-center justify-between group">
-    <h2 className="text-white text-lg">
+  <div className="group flex items-center justify-between">
+    <h2 className="text-lg text-white">
       <Icon name="bar-chart" /> Custom Data
     </h2>
     {!editing && (
-      <div className="gap-4 hidden group-hover:flex">
+      <div className="hidden gap-4 group-hover:flex">
         <HeaderButton onClick={onEdit} icon="pencil" text="Edit" />
         <HeaderButton onClick={onDelete} icon="close" text="Delete" />
       </div>
@@ -90,7 +90,7 @@ const Editor: React.FC<{
   return (
     <div className="flex flex-col gap-4">
       <textarea
-        className="min-h-[8em] h-[16em] p-4"
+        className="h-[16em] min-h-[8em] p-4"
         value={value}
         onChange={handleChange}
       />
@@ -107,7 +107,7 @@ const Editor: React.FC<{
 };
 
 const Viewer: React.FC<{ data: number[] }> = ({ data }) => (
-  <ul className="text-purple-2 pl-4">
+  <ul className="pl-4 text-purple-2">
     {data.map((element, index) => {
       return (
         <li key={index}>
@@ -142,12 +142,12 @@ export const LargeDataViewer: React.FC<LargeDataViewerProps> = ({
 
   return (
     <div className="max-w-sm rounded">
-      <div className="px-4 py-2 bg-purple-2 rounded-t">
+      <div className="rounded-t bg-purple-2 px-4 py-2">
         <Header onDelete={onDelete} onEdit={handleEdit} editing={editing} />
       </div>
       <div
         className={clsx(
-          "bg-purple-3 rounded-b p-4 max-h-96 overflow-auto",
+          "max-h-96 overflow-auto rounded-b bg-purple-3 p-4",
           editing ? "edit" : "view"
         )}
       >

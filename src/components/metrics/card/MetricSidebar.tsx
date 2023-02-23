@@ -12,8 +12,8 @@ const MetricSidebarItem: React.FC<{
   <div
     className={clsx(
       "px-3 py-1.5",
-      "border-b border-[#40525c] last:border-0 first:rounded-tr-sm last:rounded-br-sm",
-      "cursor-pointer text-white select-none",
+      "border-b border-[#40525c] first:rounded-tr-sm last:rounded-br-sm last:border-0",
+      "cursor-pointer select-none text-white",
       highlight
         ? "bg-[#3d9268] hover:bg-[#2a8558]"
         : "bg-[#52646f] hover:bg-[#40525c]",

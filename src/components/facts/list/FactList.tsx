@@ -21,7 +21,7 @@ const NewButton: React.FC<{ onClick(): void }> = ({ onClick }) => (
 );
 
 const SublistHeader: React.FC<{ text: string }> = ({ text }) => (
-  <h3 className="text-grey-main font-bold text-lg mb-2 mt-4">{text}</h3>
+  <h3 className="mb-2 mt-4 text-lg font-bold text-grey-main">{text}</h3>
 );
 
 type Props = {

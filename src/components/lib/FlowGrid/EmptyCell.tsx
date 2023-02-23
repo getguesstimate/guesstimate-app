@@ -39,7 +39,7 @@ export const EmptyCell = React.memo(
           isModelingCanvas && "cursor-pointer",
           isModelingCanvas && props.isHovered && "bg-[rgb(79,152,197)]/[0.25]",
           "focus:outline-none",
-          props.isOver && "transition-colors bg-[rgb(127,149,160)]/[0.81]"
+          props.isOver && "bg-[rgb(127,149,160)]/[0.81] transition-colors"
         )}
         onKeyPress={props.gridKeyPress}
         onKeyDown={handleKeyDown}

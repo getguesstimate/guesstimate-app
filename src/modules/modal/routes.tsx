@@ -14,11 +14,11 @@ const Confirmation: React.FC<{
   onClose(): void;
 }> = ({ message, onConfirm, onClose }) => {
   return (
-    <div className="bg-white px-16 py-12 max-w-xl">
-      <header className="mb-8 text-center text-2xl text-grey-333 leading-relaxed">
+    <div className="max-w-xl bg-white px-16 py-12">
+      <header className="mb-8 text-center text-2xl leading-relaxed text-grey-333">
         {message}
       </header>
-      <div className="flex gap-4 justify-center">
+      <div className="flex justify-center gap-4">
         <Button size="large" color="blue" onClick={onConfirm}>
           Confirm
         </Button>

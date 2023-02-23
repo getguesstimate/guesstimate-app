@@ -7,11 +7,11 @@ import { Plan } from "~/lib/config/plan";
 import { HR } from "~/components/utility/HR";
 
 const PlanC: React.FC<{ planId: string | undefined }> = ({ planId }) => (
-  <div className="bg-grey-1 px-8 py-4 rounded">
-    <header className="text-blue-1 text-2xl font-bold">
+  <div className="rounded bg-grey-1 px-8 py-4">
+    <header className="text-2xl font-bold text-blue-1">
       {Plan.find(planId).fullName()}
     </header>
-    <div className="text-grey-2 mt-2">
+    <div className="mt-2 text-grey-2">
       {Plan.find(planId).number()} Private Models
     </div>
   </div>
@@ -85,7 +85,7 @@ export const Settings: React.FC<Props> = ({
             width="normal"
             hasPadding={true}
           >
-            <div className="py-8 space-y-8">
+            <div className="space-y-8 py-8">
               <div>
                 <PlanC planId={planId} />
               </div>

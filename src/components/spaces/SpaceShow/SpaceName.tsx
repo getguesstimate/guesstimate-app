@@ -58,7 +58,7 @@ export const SpaceName: React.FC<Props> = ({ onSave, name, editableByMe }) => {
             className="w-full"
           />
           {!hasName && (
-            <p className="text-grey-888 text-sm">
+            <p className="text-sm text-grey-888">
               What are you trying to estimate? Be specific, so others can
               understand. Example: 'The time it will take George to walk home.'
             </p>

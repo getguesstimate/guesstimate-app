@@ -15,7 +15,7 @@ const Note: React.FC<PropsWithChildren<{ title: string }>> = ({
   children,
 }) => (
   <div>
-    <header className="text-grey-2 font-bold text-lg mb-2">{title}</header>
+    <header className="mb-2 text-lg font-bold text-grey-2">{title}</header>
     <p className="text-sm">{children}</p>
   </div>
 );
@@ -46,7 +46,7 @@ export const FirstSubscriptionPage: React.FC<Props> = ({ planName }) => {
   return (
     <Container>
       <div className="mt-8 mb-16">
-        <div className="md:flex gap-18 mx-auto max-w-4xl">
+        <div className="gap-18 mx-auto max-w-4xl md:flex">
           <div className="flex-1">
             <div className="mb-24">
               <h1 className="text-5xl font-normal text-grey-2">
@@ -57,7 +57,7 @@ export const FirstSubscriptionPage: React.FC<Props> = ({ planName }) => {
                 models
               </H2>
             </div>
-            <div className="max-w-xs p-4 rounded-sm text-grey-666 bg-grey-5 space-y-4">
+            <div className="max-w-xs space-y-4 rounded-sm bg-grey-5 p-4 text-grey-666">
               <Note title="Privacy">
                 We will not sell or distribute your contact information. Read
                 our Privacy Policy.

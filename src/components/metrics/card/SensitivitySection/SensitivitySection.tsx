@@ -150,10 +150,10 @@ const RegressionStats: React.FC<{
 
   return size === "SMALL" ? (
     <div className="absolute bottom-1 right-2">
-      <span className="text-grey-666 italic text-sm">r²</span>
+      <span className="text-sm italic text-grey-666">r²</span>
       <span
         className={clsx(
-          "italic text-xl",
+          "text-xl italic",
           importanceClassNames[importance(rSquared)]
         )}
       >
@@ -162,7 +162,7 @@ const RegressionStats: React.FC<{
       </span>
     </div>
   ) : (
-    <div className="absolute top-4 right-2 text-grey-444 text-sm">
+    <div className="absolute top-4 right-2 text-sm text-grey-444">
       <div>
         <RegressionLabel>
           r<sup>2</sup>
@@ -212,7 +212,7 @@ export const SensitivitySection: React.FC<{
     <div
       className={clsx(
         "relative",
-        size === "SMALL" && "h-[70px] px-1 bg-[rgb(189,189,189)]/[0.14]"
+        size === "SMALL" && "h-[70px] bg-[rgb(189,189,189)]/[0.14] px-1"
       )}
     >
       <RegressionStats xSamples={xSamples} ySamples={ySamples} size={size} />

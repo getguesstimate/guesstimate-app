@@ -19,15 +19,15 @@ type Props = {
 export const SmallFactItem: React.FC<{ fact: Fact }> = ({ fact }) => {
   return (
     <div className="border border-transparent hover:border-[#d9dee2]">
-      <div className="bg-white h-full relative">
-        <div className="z-10 p-1 h-full flex flex-col justify-between gap-2">
+      <div className="relative h-full bg-white">
+        <div className="z-10 flex h-full flex-col justify-between gap-2 p-1">
           <div className="break-words">
-            <div className="text-grey-333 leading-none text-sm">
+            <div className="text-sm leading-none text-grey-333">
               {fact.name}
             </div>
           </div>
           {fact.simulation.stats.mean !== undefined && (
-            <div className="text-[#607580] leading-none">
+            <div className="leading-none text-[#607580]">
               <PrecisionNumber
                 value={fact.simulation.stats.mean}
                 precision={4}
@@ -58,11 +58,11 @@ export const FactItem: React.FC<Props> = ({
     factsShown: "true",
   });
   return (
-    <div className="flex group">
+    <div className="group flex">
       <div className="relative min-w-[6em]">
-        <div className="simulation-summary mt-1 ml-1 relative z-10">
+        <div className="simulation-summary relative z-10 mt-1 ml-1">
           {fact.simulation.stats.mean !== undefined && (
-            <div className="text-xl text-[#607580] leading-none">
+            <div className="text-xl leading-none text-[#607580]">
               <PrecisionNumber
                 value={fact.simulation.stats.mean}
                 precision={4}
@@ -78,16 +78,16 @@ export const FactItem: React.FC<Props> = ({
           />
         </div>
       </div>
-      <div className="break-words mt-1 flex-1">
-        <div className="text-grey-333 leading-none">{fact.name}</div>
-        <div className="text-grey-999 group-hover:text-grey-444 transition-colors ml-0.5 text-sm">
+      <div className="mt-1 flex-1 break-words">
+        <div className="leading-none text-grey-333">{fact.name}</div>
+        <div className="ml-0.5 text-sm text-grey-999 transition-colors group-hover:text-grey-444">
           <span className="mr-[1px]">#</span>
           {fact.variable_name}
         </div>
       </div>
 
       <div className="flex">
-        <div className="self-center hidden group-hover:block mr-2">
+        <div className="mr-2 hidden self-center group-hover:block">
           <Button size="small" onClick={onEdit || (() => {})}>
             Edit
           </Button>
@@ -95,7 +95,7 @@ export const FactItem: React.FC<Props> = ({
 
         {isExportedFromSpace(fact) && (
           <div
-            className="group/icon self-stretch px-2 grid place-items-center cursor-pointer bg-grey-eee hover:bg-grey-ccc transition-colors"
+            className="group/icon grid cursor-pointer place-items-center self-stretch bg-grey-eee px-2 transition-colors hover:bg-grey-ccc"
             onClick={() => {
               !isExportedFromSelectedSpace && router.push(exported_from_url);
             }}

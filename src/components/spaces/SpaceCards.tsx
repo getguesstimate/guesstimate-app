@@ -16,11 +16,11 @@ const arrowsVisibleImage = "/assets/metric-icons/blue/arrows-visible.png";
 type Size = "SMALL"; // default is undefined
 
 const BlankScreenshot: React.FC<{ size?: Size }> = ({ size }) => (
-  <div className="grid place-items-center h-full">
+  <div className="grid h-full place-items-center">
     <img
       className={clsx(
-        "opacity-[0.25] w-auto",
-        size === "SMALL" ? "max-h-8" : "max-h-32 mb-4"
+        "w-auto opacity-[0.25]",
+        size === "SMALL" ? "max-h-8" : "mb-4 max-h-32"
       )}
       src={arrowsVisibleImage}
     />
@@ -28,7 +28,7 @@ const BlankScreenshot: React.FC<{ size?: Size }> = ({ size }) => (
 );
 
 const SingleButton: React.FC<{ isPrivate: boolean }> = ({ isPrivate }) => (
-  <div className="text-[1.6em] text-[#6e7980] pl-0.5">
+  <div className="pl-0.5 text-[1.6em] text-[#6e7980]">
     <Icon name={isPrivate ? "lock" : "globe"} />
   </div>
 );
@@ -55,8 +55,8 @@ const SpaceCardBox: React.FC<{
   return (
     <div
       className={clsx(
-        "h-full flex flex-col",
-        "border border-transparent cursor-pointer rounded-sm",
+        "flex h-full flex-col",
+        "cursor-pointer rounded-sm border border-transparent",
         isNew ? "hover:border-[#61a761]" : "hover:border-[#c2cdd6]",
         isNew && "min-h-[12em]"
       )}
@@ -69,9 +69,9 @@ const SpaceCardBox: React.FC<{
 
 export const NewSpaceCard: React.FC<{ onClick(): void }> = ({ onClick }) => (
   <SpaceCardBox onClick={onClick} isNew>
-    <div className="bg-[#cee4ce] h-full flex flex-col justify-center items-center rounded-sm">
+    <div className="flex h-full flex-col items-center justify-center rounded-sm bg-[#cee4ce]">
       <Icon name="plus" className="text-[4.5em] text-[#79b979]" />
-      <header className="text-3xl text-[#32403c] font-bold mt-4">
+      <header className="mt-4 text-3xl font-bold text-[#32403c]">
         New Model
       </header>
     </div>
@@ -106,7 +106,7 @@ export const SpaceCard: React.FC<{
             className={clsx(
               "font-bold",
               size === "SMALL" ? "text-xs" : "text-lg",
-              space.name ? "text-[#4a6a88]" : "text-grey-bbb italic"
+              space.name ? "text-[#4a6a88]" : "italic text-grey-bbb"
             )}
           >
             {space.name || "Untitled Model"}
@@ -143,8 +143,8 @@ export const SpaceCard: React.FC<{
         </div>
       </div>
       {size !== "SMALL" && (
-        <a href={spaceUrl} className="p-2 rounded-b-sm bg-white flex-1">
-          <p className="text-sm text-[#78838c] break-words">
+        <a href={spaceUrl} className="flex-1 rounded-b-sm bg-white p-2">
+          <p className="break-words text-sm text-[#78838c]">
             {formatDescription(space.description)}
           </p>
         </a>
@@ -157,7 +157,7 @@ export const SpaceCardGrid: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   return (
-    <div className="grid lg:grid-cols-3 place-items-stretch gap-12 px-4">
+    <div className="grid place-items-stretch gap-12 px-4 lg:grid-cols-3">
       {children}
     </div>
   );

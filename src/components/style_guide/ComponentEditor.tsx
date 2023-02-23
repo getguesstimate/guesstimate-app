@@ -20,12 +20,12 @@ export function ComponentEditor<T>({
   return (
     <div
       className={clsx(
-        "grid grid-cols-6 gap-8 mt-8", // TODO - move mt-8 to outer layout component
+        "mt-8 grid grid-cols-6 gap-8", // TODO - move mt-8 to outer layout component
         backgroundColor === "grey" && "bg-[#f7f5f5]"
       )}
     >
       <div>
-        <header className="text-xl font-bold mb-2">{name}</header>
+        <header className="mb-2 text-xl font-bold">{name}</header>
         <div className="mb-4 font-bold">{context}</div>
         <JSONTree data={childProps} />
       </div>

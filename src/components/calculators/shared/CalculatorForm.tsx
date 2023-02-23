@@ -11,7 +11,7 @@ import { Button } from "~/components/utility/buttons/button";
 import { Textarea } from "~/components/utility/forms";
 
 const Header: React.FC<PropsWithChildren> = ({ children }) => (
-  <header className="border-b-2 border-[#aaa] pb-1 mb-2 font-bold text-lg">
+  <header className="mb-2 border-b-2 border-[#aaa] pb-1 text-lg font-bold">
     {children}
   </header>
 );
@@ -36,7 +36,7 @@ const EditButton: React.FC<PropsWithChildren<{ onMouseDown(): void }>> = ({
 }) => (
   <div
     onMouseDown={onMouseDown}
-    className="bg-grey-7 text-lato text-grey-666 px-2 py-1 rounded text-xs font-bold cursor-pointer"
+    className="text-lato cursor-pointer rounded bg-grey-7 px-2 py-1 text-xs font-bold text-grey-666"
   >
     {children}
   </div>
@@ -72,7 +72,7 @@ const InputForm: React.FC<ParamProps> = (props) => (
       <div>
         <div>{props.name}</div>
         {props.description && (
-          <div className="text-xs mt-4 mb-8 text-grey-666">
+          <div className="mt-4 mb-8 text-xs text-grey-666">
             {props.description}
           </div>
         )}
@@ -292,7 +292,7 @@ export const CalculatorForm: React.FC<Props> = (props) => {
         </Section>
       )}
 
-      <div className="flex justify-end mt-4">
+      <div className="mt-4 flex justify-end">
         <Button
           color="green"
           size="large"

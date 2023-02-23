@@ -57,7 +57,7 @@ export const PlanIndexQuestions: React.FC = () => {
     <div className="grid grid-cols-3 gap-x-20 gap-y-16">
       {questions.map((q) => (
         <div className="text-grey-main" key={q.header}>
-          <header className="text-xl font-bold mb-4">{q.header}</header>
+          <header className="mb-4 text-xl font-bold">{q.header}</header>
           <div>{q.body}</div>
         </div>
       ))}

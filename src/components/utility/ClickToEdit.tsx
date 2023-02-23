@@ -25,21 +25,21 @@ const EditingMode: React.FC<{
   return (
     <div>
       <TextareaAutosize
-        className="w-full p-2 rounded outline-none border-2 border-solid border-blue-5 focus:border-blue-1 min-h-[120px]"
+        className="min-h-[120px] w-full rounded border-2 border-solid border-blue-5 p-2 outline-none focus:border-blue-1"
         defaultValue={value}
         ref={(ref) => {
           ref && (ReactDOM.findDOMNode(ref) as any).select();
           textInput.current = ref;
         }}
       />
-      <div className="mt-2 flex justify-between items-start">
-        <div className="flex gap-4 items-center">
+      <div className="mt-2 flex items-start justify-between">
+        <div className="flex items-center gap-4">
           <Button color="blue" onClick={submit}>
             {editingSaveText}
           </Button>
           <ButtonClose onClick={onClose} />
         </div>
-        <i className="ion-logo-markdown text-4xl cursor-pointer text-grey-4 hover:text-grey-888" />
+        <i className="ion-logo-markdown cursor-pointer text-4xl text-grey-4 hover:text-grey-888" />
       </div>
     </div>
   );
@@ -53,10 +53,10 @@ const ViewingMode: React.FC<{
   return (
     <div>
       {canEdit && (
-        <div className="flex gap-2 items-center mb-1">
+        <div className="mb-1 flex items-center gap-2">
           <div className="text-grey-666">Reasoning</div>
           <div
-            className="text-grey-666 cursor-pointer px-1 hover:text-black hover:bg-grey-ccc rounded-sm"
+            className="cursor-pointer rounded-sm px-1 text-grey-666 hover:bg-grey-ccc hover:text-black"
             onClick={onEdit}
           >
             <Icon name="pencil" className="text-lg leading-none" />
@@ -106,7 +106,7 @@ export const ClickToEdit: React.FC<Props> = ({
         />
       ) : value === "" ? (
         <div
-          className="p-2 rounded text-grey-999 hover:text-grey-333 underline cursor-pointer hover:bg-black/20"
+          className="cursor-pointer rounded p-2 text-grey-999 underline hover:bg-black/20 hover:text-grey-333"
           onClick={open}
         >
           {emptyValue}

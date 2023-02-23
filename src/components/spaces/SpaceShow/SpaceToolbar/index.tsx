@@ -36,7 +36,7 @@ const MessageBox: React.FC<{ color: "GREY" | "RED"; children: string }> = ({
 }) => (
   <div
     className={clsx(
-      "text-white px-2 rounded",
+      "rounded px-2 text-white",
       color === "GREY" ? "bg-grey-666" : "bg-red-5"
     )}
   >
@@ -47,7 +47,7 @@ const MessageBox: React.FC<{ color: "GREY" | "RED"; children: string }> = ({
 const ProgressMessage: React.FC<{
   actionState: CanvasActionState | undefined;
 }> = ({ actionState }) => (
-  <div className="text-[#09273a] text-lg">
+  <div className="text-lg text-[#09273a]">
     {actionState === "SAVING" && "Saving..."}
     {actionState === "COPYING" && "Copying..."}
     {actionState === "CREATING" && "Creating a new model..."}
@@ -77,7 +77,7 @@ const ProgressMessage: React.FC<{
 );
 
 const Divider: React.FC = () => (
-  <div className="w-0.5 bg-[rgb(115,168,190)] h-9 mx-1" />
+  <div className="mx-1 h-9 w-0.5 bg-[rgb(115,168,190)]" />
 );
 
 type Props = {
@@ -214,7 +214,7 @@ export const SpaceToolbar = React.memo<Props>(function SpaceToolbar({
   } as const;
 
   return (
-    <div className="bg-[rgb(219,221,222)]/70 border-b border-[rgb(37,128,167)]/40 px-8 hidden md:block">
+    <div className="hidden border-b border-[rgb(37,128,167)]/40 bg-[rgb(219,221,222)]/70 px-8 md:block">
       {showTutorial && <Tutorial onClose={closeTutorial} />}
       <Modal
         isOpen={importModalOpen}
@@ -225,7 +225,7 @@ export const SpaceToolbar = React.memo<Props>(function SpaceToolbar({
       >
         <ImportFromSlurpForm onSubmit={handleImportSlurp} />
       </Modal>
-      <div className="flex justify-between items-center py-1">
+      <div className="flex items-center justify-between py-1">
         <div className="flex items-center gap-2">
           {isLoggedIn && (
             <DropDown

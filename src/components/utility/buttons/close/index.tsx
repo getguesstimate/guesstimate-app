@@ -6,7 +6,7 @@ export const SmallButtonClose: React.FC<{ onClick(): void }> = ({
   onClick,
 }) => (
   <a
-    className="cursor-pointer text-grey-ccc hover:text-grey-888 text-xl"
+    className="cursor-pointer text-xl text-grey-ccc hover:text-grey-888"
     onClick={onClick}
   >
     <i className="ion-md-close" />
@@ -15,7 +15,7 @@ export const SmallButtonClose: React.FC<{ onClick(): void }> = ({
 
 export const ButtonClose: React.FC<{ onClick(): void }> = ({ onClick }) => (
   <a
-    className="cursor-pointer text-grey-bbb hover:text-grey-888 text-2xl leading-none"
+    className="cursor-pointer text-2xl leading-none text-grey-bbb hover:text-grey-888"
     onClick={onClick}
   >
     <i className="ion-md-close" />

@@ -36,7 +36,7 @@ export const ErrorModal: React.FC = () => {
       {isOpen && (
         <div
           className={clsx(
-            "ui standard modal transition visible active",
+            "ui standard modal active visible transition",
             "!top-20" // overrides react-modal defaults
           )}
         >

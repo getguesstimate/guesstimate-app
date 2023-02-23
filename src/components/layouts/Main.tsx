@@ -23,7 +23,7 @@ export const Main: React.FC<Props> = ({
   } else {
     return (
       <main className={className}>
-        <div className="max-w-1200 w-full mx-auto">{children}</div>
+        <div className="mx-auto w-full max-w-1200">{children}</div>
       </main>
     );
   }

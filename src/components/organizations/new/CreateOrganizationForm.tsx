@@ -17,14 +17,14 @@ export const PlanElement: React.FC<{
 }> = ({ onClick, isSelected, children }) => (
   <div
     className={clsx(
-      "flex items-start px-6 py-6 gap-6 first:rounded-t last:rounded-b cursor-pointer",
+      "flex cursor-pointer items-start gap-6 px-6 py-6 first:rounded-t last:rounded-b",
       isSelected ? "bg-white" : "bg-grey-eee"
     )}
     onClick={onClick}
   >
     <input
       type="radio"
-      className="block mt-[3px]"
+      className="mt-[3px] block"
       checked={isSelected}
       readOnly={true}
     />
@@ -36,7 +36,7 @@ export const PlanList: React.FC<{
   onSelect(plan: Plan): void;
   plan: Plan;
 }> = ({ onSelect, plan }) => (
-  <div className="border border-grey-ccc rounded flex flex-col">
+  <div className="flex flex-col rounded border border-grey-ccc">
     <PlanElement
       onClick={() => {
         onSelect("FREE");
@@ -52,7 +52,7 @@ export const PlanList: React.FC<{
       isSelected={plan === "PREMIUM"}
     >
       Unlimited private models. $12/month per user.
-      <div className="text-[#1bb732] font-bold mt-1">
+      <div className="mt-1 font-bold text-[#1bb732]">
         Free 30-day trial, no credit card needed.
       </div>
     </PlanElement>

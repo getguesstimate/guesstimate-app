@@ -2,6 +2,7 @@ import clsx from "clsx";
 import React, { useState } from "react";
 
 import Icon from "~/components/react-fa-patched";
+import { Button, ButtonWithIcon } from "~/components/utility/buttons/button";
 
 import { GeneralModal } from "~/components/utility/GeneralModal";
 import {
@@ -36,7 +37,7 @@ export const Tutorial: React.FC<Props> = ({ onClose }) => {
   return (
     <GeneralModal onRequestClose={onClose}>
       <div
-        className="pt-8 pb-4 px-8 rounded bg-[#f0f0f0] max-w-[40em]"
+        className="max-w-[40em] rounded bg-[#f0f0f0] px-8 pt-8 pb-4"
         onKeyDown={(e) => {
           if (e.key === "Escape") {
             onClose();
@@ -44,25 +45,24 @@ export const Tutorial: React.FC<Props> = ({ onClose }) => {
         }}
       >
         {PAGES[page]}
-        <div className="flex justify-center">
-          <span
-            className={clsx("ui button", page === 0 && "disabled")}
+        <div className="flex justify-center gap-1">
+          <ButtonWithIcon
+            size="padded"
+            disabled={page === 0}
             onClick={previousPage}
-          >
-            <Icon name="arrow-left" /> Previous
-          </span>
-          <span
-            className={clsx(
-              "ui button",
-              page === PAGES.length - 1 && "disabled"
-            )}
+            icon={<Icon name="arrow-left" />}
+            text="Previous"
+          />
+          <ButtonWithIcon
+            size="padded"
+            disabled={page === PAGES.length - 1}
             onClick={nextPage}
-          >
-            <Icon name="arrow-right" /> Next
-          </span>
-          <span className="ui button" onClick={onClose}>
+            icon={<Icon name="arrow-right" />}
+            text="Next"
+          />
+          <Button size="padded" onClick={onClose}>
             Done
-          </span>
+          </Button>
         </div>
       </div>
     </GeneralModal>

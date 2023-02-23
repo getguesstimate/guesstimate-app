@@ -51,8 +51,8 @@ const OrganizationHeader: React.FC<{ organization: any }> = ({
   organization,
 }) => (
   <div className="flex flex-col items-center">
-    <img className="max-w-[4em] max-h-20 rounded" src={organization.picture} />
-    <h1 className="font-bold text-3xl">{organization.name}</h1>
+    <img className="max-h-20 max-w-[4em] rounded" src={organization.picture} />
+    <h1 className="text-3xl font-bold">{organization.name}</h1>
   </div>
 );
 
@@ -66,7 +66,7 @@ const OrganizationTabButtons: React.FC<{
       return (
         <a
           className={clsx(
-            "px-4 py-2 cursor-pointer text-grey-444 hover:text-grey-444 hover:bg-black/5 font-bold rounded",
+            "cursor-pointer rounded px-4 py-2 font-bold text-grey-444 hover:bg-black/5 hover:text-grey-444",
             openTab === e.key && "bg-black/10"
           )}
           key={e.key}

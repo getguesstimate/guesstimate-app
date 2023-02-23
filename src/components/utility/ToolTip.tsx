@@ -65,7 +65,7 @@ export const ToolTip: React.FC<
     <div
       ref={refs.setFloating}
       className={clsx(
-        "rounded-sm px-3 py-2 z-10 shadow",
+        "z-10 rounded-sm px-3 py-2 shadow",
         text !== undefined && "text-sm",
         theme === "dark" ? "bg-dark-2 text-white" : "bg-white"
       )}
@@ -85,7 +85,7 @@ export const ToolTip: React.FC<
           [staticSide!]: "-0.25rem",
         }}
         className={clsx(
-          "absolute w-2 h-2 rotate-45",
+          "absolute h-2 w-2 rotate-45",
           theme === "dark" ? "bg-dark-2" : "bg-white"
         )}
       />

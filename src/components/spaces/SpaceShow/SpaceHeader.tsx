@@ -28,7 +28,7 @@ const DisableOrRotateShareableLinkOption: React.FC<{
   onRotate(): void;
 }> = ({ shareableLinkUrl, onDisable, onRotate }) => (
   <div className="space-y-4">
-    <div className="border border-grey-ccc shadow-sm p-4 rounded overflow-scroll">
+    <div className="overflow-scroll rounded border border-grey-ccc p-4 shadow-sm">
       {shareableLinkUrl}
     </div>
     <p className="text-sm">
@@ -122,7 +122,7 @@ export const SpaceHeader = React.memo<Props>(function SpaceHeader({ space }) {
     <div className="flex justify-between px-8 py-2">
       <SpaceName name={name} editableByMe={editableByMe} onSave={onSaveName} />
 
-      <div className="flex justify-end items-center flex-wrap md:flex-nowrap space-x-2">
+      <div className="flex flex-wrap items-center justify-end space-x-2 md:flex-nowrap">
         {editableByMe && (
           <PrivacyToggle
             editableByMe={editableByMe}

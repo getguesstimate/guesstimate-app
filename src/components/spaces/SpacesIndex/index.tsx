@@ -53,7 +53,7 @@ const Filter: React.FC<{
 }> = ({ selected, names, onChange }) => (
   <DropDown
     openLink={
-      <div className="flex items-center gap-1 px-2 py-1 text-grey-666 hover:bg-[#e3e8ec] rounded-sm">
+      <div className="flex items-center gap-1 rounded-sm px-2 py-1 text-grey-666 hover:bg-[#e3e8ec]">
         <div>{names[selected]}</div>
         <Icon name="chevron-down" className="text-sm" />
       </div>
@@ -108,12 +108,12 @@ export const SpacesIndex: React.FC = () => {
     searchSpaces.page < searchSpaces.nbPages - 1;
 
   return (
-    <div className="SpacesIndex mb-12">
+    <div className="mb-12">
       <div className="mt-16 mb-12">
-        <h1 className="text-grey-444 text-center text-3xl font-bold mb-6">
+        <h1 className="mb-6 text-center text-3xl font-bold text-grey-444">
           Public Models
         </h1>
-        <div className="grid grid-cols-4 gap-8 items-center">
+        <div className="grid grid-cols-4 items-center gap-8">
           <div className="col-span-2 col-start-2 grid items-stretch">
             <Input
               name="search"

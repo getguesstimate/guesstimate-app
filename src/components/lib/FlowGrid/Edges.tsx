@@ -61,7 +61,7 @@ export const Edges: React.FC<Props> = React.memo(
     });
 
     return (
-      <svg className="z-0 absolute top-0 w-full" height={containerHeight}>
+      <svg className="absolute top-0 z-0 w-full" height={containerHeight}>
         <defs>
           {allPathStatuses.map((pathStatus) => (
             <marker

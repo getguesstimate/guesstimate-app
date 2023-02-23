@@ -31,11 +31,7 @@ export const Layout: React.FC<Props> = ({
     <NavHelper>
       <ErrorModal />
       <div
-        className={clsx(
-          "Layout",
-          "flex flex-col min-h-screen",
-          fullHeight && "h-full"
-        )}
+        className={clsx("flex min-h-screen flex-col", fullHeight && "h-full")}
       >
         <ModalContainer />
         {!embed && <Header isFluid={isFluid} isBare={simpleHeader} />}

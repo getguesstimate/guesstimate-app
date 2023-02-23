@@ -21,7 +21,7 @@ export const Message: React.FC<
     text?: string;
   }>
 > = ({ text, children }) => (
-  <div className="bg-grey-5 w-full min-h-[12em] text-grey-2 px-12 py-8 rounded">
+  <div className="min-h-[12em] w-full rounded bg-grey-5 px-12 py-8 text-grey-2">
     {text && <H2>{text}</H2>}
     {children}
   </div>
@@ -41,7 +41,7 @@ export const Unnecessary: React.FC<{ paymentAccountPortalUrl: string }> = ({
 export const Cancelled: React.FC = () => (
   <Message>
     <H2>Payment Cancelled.</H2>
-    <div className="text-xl mt-4">Refresh to try again.</div>
+    <div className="mt-4 text-xl">Refresh to try again.</div>
   </Message>
 );
 
@@ -88,7 +88,7 @@ export const SynchronizationStart: React.FC = () => (
 export const SynchronizationFailure: React.FC = () => (
   <Message>
     <H2>Synchronization Failed</H2>
-    <div className="text-xl mt-4">Try refreshing the browser.</div>
+    <div className="mt-4 text-xl">Try refreshing the browser.</div>
   </Message>
 );
 export const SynchronizationSuccess: React.FC<{ onNewModel(): void }> = ({
@@ -131,7 +131,7 @@ export const FirstSubscription: React.FC<Props> = (originalProps) => {
   };
 
   return (
-    <div className="grid place-items-center text-center max-w-xl">
+    <div className="grid max-w-xl place-items-center text-center">
       {flowStage === "UNNECESSARY" && (
         <Unnecessary {...{ paymentAccountPortalUrl }} />
       )}

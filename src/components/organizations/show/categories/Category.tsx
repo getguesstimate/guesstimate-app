@@ -7,7 +7,7 @@ import { FactCategory } from "~/lib/engine/fact_category";
 import { CategoryForm } from "./CategoryForm";
 
 const HeaderText: React.FC<{ children: string }> = ({ children }) => (
-  <header className="text-grey-888 text-xl italic font-extralight">
+  <header className="text-xl font-extralight italic text-grey-888">
     {children}
   </header>
 );
@@ -56,10 +56,10 @@ const CategoryHeader: React.FC<HeaderProps> = (props) => {
 
   const renderShowHeader = () => {
     return (
-      <div className="flex justify-between items-start">
+      <div className="flex items-start justify-between">
         <HeaderText>{props.category.name}</HeaderText>
         {hovering && (
-          <div className="flex gap-1 items-center">
+          <div className="flex items-center gap-1">
             <Button onClick={handleStartEditing} size="small">
               Edit
             </Button>

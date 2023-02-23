@@ -18,7 +18,7 @@ const findPercentile = (values: number[], value: number) => {
 
 const PercentileTable: React.FC<{ values: any }> = ({ values }) => (
   <div>
-    <header className="text-grey-999 font-normal text-xl mb-4">
+    <header className="mb-4 text-xl font-normal text-grey-999">
       Percentiles
     </header>
     <table className="border-collapse">
@@ -30,10 +30,10 @@ const PercentileTable: React.FC<{ values: any }> = ({ values }) => (
                 key={e.percentage}
                 className="border-b border-black/10 last:border-none"
               >
-                <td className="p-1 pl-0 text-grey-666 text-sm border-r border-black/10">
+                <td className="border-r border-black/10 p-1 pl-0 text-sm text-grey-666">
                   {e.percentage}%
                 </td>
-                <td className="p-1 text-grey-666 text-sm">
+                <td className="p-1 text-sm text-grey-666">
                   {e.value && e.value.toFixed(3)}
                 </td>
               </tr>
@@ -49,10 +49,10 @@ const HoverInfo: React.FC<{ value: number; percentile: number }> = ({
   percentile,
 }) => (
   <div>
-    <div className="text-grey-444 font-extralight text-3xl">
+    <div className="text-3xl font-extralight text-grey-444">
       {value.toFixed(2)}
     </div>
-    <div className="text-grey-888 font-extralight text-sm mt-1">
+    <div className="mt-1 text-sm font-extralight text-grey-888">
       {(percentile * 100).toFixed(2)}th percentile
     </div>
   </div>
@@ -105,7 +105,7 @@ export const HistogramWithStats: React.FC<Props> = ({
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
       >
-        <div className={clsx(`absolute left-0 right-0 bottom-0 h-[150px]`)}>
+        <div className="absolute left-0 right-0 bottom-0 h-[150px]">
           <SimulationHistogram
             bins={100}
             cutOffRatio={0.98}
@@ -117,7 +117,7 @@ export const HistogramWithStats: React.FC<Props> = ({
             ref={histogramRef}
           />
         </div>
-        <div className="z-10 flex justify-between gap-4 relative">
+        <div className="relative z-10 flex justify-between gap-4">
           <DistributionSummary
             length={stats.length}
             mean={stats.mean}

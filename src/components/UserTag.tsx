@@ -10,14 +10,14 @@ export const UserTag: React.FC<{
     <a
       href={url}
       className={clsx(
-        "flex items-center cursor-pointer rounded-sm transition-colors h-8",
+        "flex h-8 cursor-pointer items-center rounded-sm transition-colors",
         bg === "GREY"
           ? "bg-[rgb(147,159,169)]/70 hover:bg-[rgb(88,110,127)]/70"
           : "bg-white/20"
       )}
     >
-      {picture && <img className="rounded-l-sm w-8 h-8" src={picture} />}
-      <div className="text-white text-lg font-extrabold leading-none px-2">
+      {picture && <img className="h-8 w-8 rounded-l-sm" src={picture} />}
+      <div className="px-2 text-lg font-extrabold leading-none text-white">
         {name}
       </div>
     </a>

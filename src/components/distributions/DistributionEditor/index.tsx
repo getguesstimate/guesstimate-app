@@ -132,41 +132,36 @@ export const DistributionEditor = React.forwardRef<{ focus(): void }, Props>(
       addDataAndSave(null);
     };
 
+    if (guesstimate.data) {
+      return props.size === "large" ? (
+        <LargeDataViewer
+          data={guesstimate.data}
+          onDelete={deleteDataAndSave}
+          onSave={addDataAndSave}
+        />
+      ) : (
+        <SmallDataViewer onDelete={deleteDataAndSave} onOpen={props.onOpen} />
+      );
+    }
+
     return (
-      <div className={clsx("Guesstimate", props.size === "large" && "large")}>
-        {guesstimate.data ? (
-          props.size === "large" ? (
-            <LargeDataViewer
-              data={guesstimate.data}
-              onDelete={deleteDataAndSave}
-              onSave={addDataAndSave}
-            />
-          ) : (
-            <SmallDataViewer
-              onDelete={deleteDataAndSave}
-              onOpen={props.onOpen}
-            />
-          )
-        ) : (
-          <TextForm
-            guesstimate={guesstimate}
-            inputMetrics={inputMetrics}
-            onAddData={addDataAndSave}
-            onChangeInput={handleChangeInput}
-            onChangeGuesstimateType={handleChangeGuesstimateType}
-            onSave={handleSave}
-            onAddDefaultData={() => {
-              addDataAndSave([1, 2, 3]);
-            }}
-            onReturn={handleReturn}
-            onTab={handleTab}
-            size={props.size}
-            organizationId={organizationId}
-            canUseOrganizationFacts={canUseOrganizationFacts}
-            ref={formRef}
-          />
-        )}
-      </div>
+      <TextForm
+        guesstimate={guesstimate}
+        inputMetrics={inputMetrics}
+        onAddData={addDataAndSave}
+        onChangeInput={handleChangeInput}
+        onChangeGuesstimateType={handleChangeGuesstimateType}
+        onSave={handleSave}
+        onAddDefaultData={() => {
+          addDataAndSave([1, 2, 3]);
+        }}
+        onReturn={handleReturn}
+        onTab={handleTab}
+        size={props.size}
+        organizationId={organizationId}
+        canUseOrganizationFacts={canUseOrganizationFacts}
+        ref={formRef}
+      />
     );
   }
 );

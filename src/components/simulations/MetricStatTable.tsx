@@ -2,7 +2,7 @@ import React from "react";
 
 // unused?
 export const MetricStatTable: React.FC<{ stats: any }> = ({ stats }) => (
-  <table className="w-full leading-normal font-medium text-grey-666 text-2xs">
+  <table className="w-full text-2xs font-medium leading-normal text-grey-666">
     <tbody>
       <tr>
         <td>mean</td>

@@ -104,9 +104,9 @@ export const TextForm = React.forwardRef<{ focus(): void }, Props>(
 
     const textInput = (
       <div>
-        <div className="flex gap-4 items-center w-full">
+        <div className="flex w-full items-center gap-4">
           {/* min-w-0 helps with overflows, see https://makandracards.com/makandra/66994-css-flex-and-min-width and https://github.com/tailwindlabs/tailwindcss/issues/10004#issuecomment-1337464731 */}
-          <div className="flex-1 min-w-0">
+          <div className="min-w-0 flex-1">
             <TextInput
               value={guesstimate.input || ""}
               validInputs={validInputReadableIds}
@@ -147,13 +147,13 @@ export const TextForm = React.forwardRef<{ focus(): void }, Props>(
     );
 
     return size === "large" ? (
-      <div className="flex gap-4 items-center">
+      <div className="flex items-center gap-4">
         <div className="flex-1">{textInput}</div>
         {_.isEmpty(guesstimate.input) && (
           <div>
             <a
               href=""
-              className="underline text-grey-999 hover:text-grey-999"
+              className="text-grey-999 underline hover:text-grey-999"
               onClick={onAddDefaultData}
             >
               Add Custom Data

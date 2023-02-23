@@ -15,7 +15,7 @@ const ClosedLeftSidebar: React.FC<{ onOpen(): void }> = React.memo(
     return (
       <div className="pl-1 pt-2">
         <div
-          className="!p-2 !bg-blue-1 ui button blue small open"
+          className="ui button blue small open !bg-blue-1 !p-2"
           onClick={onOpen}
         >
           <Icon name="chevron-right" />
@@ -32,7 +32,7 @@ const OpenLeftSidebar: React.FC<{
   onSaveDescription(s: string): void;
 }> = ({ description, canEdit, onClose, onSaveDescription }) => {
   return (
-    <div className="mx-4 my-6 w-[20em] p-4 bg-white/80 rounded-sm overflow-auto">
+    <div className="mx-4 my-6 w-[20em] overflow-auto rounded-sm bg-white/80 p-4">
       <div className="flex justify-end">
         <ButtonCloseText onClick={onClose} />
       </div>

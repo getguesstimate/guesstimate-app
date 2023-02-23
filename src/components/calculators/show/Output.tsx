@@ -10,7 +10,7 @@ const ToggleIcon: React.FC<{ isOpen: boolean; open(): void }> = ({
   open,
 }) => (
   <div
-    className="absolute right-1 -top-1 bg-grey-ccc hover:bg-grey-bbb rounded-full w-6 h-6 text-center color-666 text-sm cursor-pointer grid place-items-center"
+    className="color-666 absolute right-1 -top-1 grid h-6 w-6 cursor-pointer place-items-center rounded-full bg-grey-ccc text-center text-sm hover:bg-grey-bbb"
     onClick={open}
   >
     {isOpen ? <i className="ion-md-close" /> : "?"}
@@ -23,7 +23,7 @@ const PrecisionNumber: React.FC<{ value: number; precision?: number }> = ({
 }) => {
   const number = numberShow(value, precision);
   return (
-    <span className="text-grey-444 font-bold text-xl leading-none">
+    <span className="text-xl font-bold leading-none text-grey-444">
       {number.value}
       {number.symbol}
       {number.power && (
@@ -76,7 +76,7 @@ export const Output: React.FC<{ metric: FullDenormalizedMetric }> = ({
 
   return (
     <div className="md:grid md:grid-cols-12">
-      <div className="md:col-span-7 font-bold">{name}</div>
+      <div className="font-bold md:col-span-7">{name}</div>
       <div className="md:col-span-5">
         <div className="relative">
           {simulation?.stats && <ResultSection {...simulation.stats} />}

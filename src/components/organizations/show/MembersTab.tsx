@@ -11,7 +11,7 @@ import { MemberAddForm } from "../shared/MemberAddForm/index";
 const Layout: React.FC<{
   children: [JSX.Element | null, JSX.Element];
 }> = ({ children: [left, right] }) => (
-  <div className="px-4 md:px-0 space-y-4 md:space-y-0 md:grid md:grid-cols-12 md:gap-4">
+  <div className="space-y-4 px-4 md:grid md:grid-cols-12 md:gap-4 md:space-y-0 md:px-0">
     <div className="md:col-span-2">{left}</div>
     <div
       className={clsx("col-start-3", left ? "md:col-span-10" : "md:col-span-8")}
@@ -46,7 +46,7 @@ const MembersIndexSubTab: React.FC<{
       </div>
     ) : null}
     <div>
-      <div className="bg-white rounded px-6">
+      <div className="rounded bg-white px-6">
         {members.map((m) => (
           <Member
             key={m.id}
@@ -72,7 +72,7 @@ const InvitationStatus: React.FC<{ status: string }> = ({ status }) => (
 const InviteeOrMemberBox: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => (
-  <div className="grid grid-cols-12 gap-4 items-center py-4 border-b border-grey-eee last:border-b-0">
+  <div className="grid grid-cols-12 items-center gap-4 border-b border-grey-eee py-4 last:border-b-0">
     {children}
   </div>
 );
@@ -80,10 +80,10 @@ const InviteeOrMemberBox: React.FC<{ children: React.ReactNode }> = ({
 const Invitee: React.FC<{ email: string }> = ({ email }) => (
   <InviteeOrMemberBox>
     <div className="col-span-7 flex items-center">
-      <div className="text-blue-5/70 text-2xl w-10 mr-8 text-center">
+      <div className="mr-8 w-10 text-center text-2xl text-blue-5/70">
         <Icon name="envelope" />
       </div>
-      <div className="font-bold text-xl text-dark-3">{email}</div>
+      <div className="text-xl font-bold text-dark-3">{email}</div>
     </div>
     <div className="col-span-2 col-start-10">
       <InvitationStatus status="invited" />
@@ -100,11 +100,11 @@ const Member: React.FC<{
   <InviteeOrMemberBox>
     <div className="col-span-7 flex items-center">
       <a href={e.user.url(user)}>
-        <img className="w-10 h-10 rounded mr-8" src={user.picture} />
+        <img className="mr-8 h-10 w-10 rounded" src={user.picture} />
       </a>
       <a
         href={e.user.url(user)}
-        className="font-bold text-xl text-dark-3 hover:text-black"
+        className="text-xl font-bold text-dark-3 hover:text-black"
       >
         {user.name}
       </a>
@@ -121,7 +121,7 @@ const Member: React.FC<{
         <div>
           {user.membershipId && !isAdmin && (
             <button
-              className="p-1 w-8 h-8 rounded-full bg-grey-eee hover:bg-grey-ccc active:bg-grey-bbb"
+              className="h-8 w-8 rounded-full bg-grey-eee p-1 hover:bg-grey-ccc active:bg-grey-bbb"
               onClick={onRemove}
             >
               <i className="ion-md-close" />
@@ -144,8 +144,8 @@ const MembersAddSubTab: React.FC<{
       </div>
     </div>
     <div>
-      <header className="text-3xl font-bold mb-4">Invite New Members</header>
-      <p className="text-grey-666 leading-6 mb-12">
+      <header className="mb-4 text-3xl font-bold">Invite New Members</header>
+      <p className="mb-12 leading-6 text-grey-666">
         Members have viewing & editing access to all organization models. <br />
         If you are on a plan, your pricing will be adjusted within 24 hours.
       </p>

@@ -12,11 +12,11 @@ const Benefit: React.FC<{
 }> = ({ iconClass, title, children }) => {
   return (
     <div className="flex flex-col items-center">
-      <i className={clsx(iconClass, "opacity-20 text-6xl")} />
-      <header className="font-normal text-3xl text-grey-444 mt-6 mb-4">
+      <i className={clsx(iconClass, "text-6xl opacity-20")} />
+      <header className="mt-6 mb-4 text-3xl font-normal text-grey-444">
         {title}
       </header>
-      <p className="text-center text-grey-2 text-lg leading-normal">
+      <p className="text-center text-lg leading-normal text-grey-2">
         {children}
       </p>
     </div>
@@ -25,21 +25,21 @@ const Benefit: React.FC<{
 
 export const Home: React.FC = () => {
   return (
-    <div className="flex flex-col items-center mt-24">
+    <div className="mt-24 flex flex-col items-center">
       <Image
         className="px-8"
         src={LogoWord}
         alt="Guesstimate logo"
         width={540}
       />
-      <div className="px-4 mt-12">
-        <header className="text-3xl md:text-5xl text-center font-normal text-grey-333 leading-tight">
+      <div className="mt-12 px-4">
+        <header className="text-center text-3xl font-normal leading-tight text-grey-333 md:text-5xl">
           A spreadsheet for things
           <br />
           that aren&rsquo;t certain
         </header>
       </div>
-      <div className="px-4 mt-20">
+      <div className="mt-20 px-4">
         <a href="/models">
           <Button size="huge" color="blue" onClick={() => {}}>
             Browse Public Models
@@ -51,8 +51,8 @@ export const Home: React.FC = () => {
           &nbsp;
         </span>
       </div>
-      <div className="mt-12 py-12 bg-grey-1 w-full px-8">
-        <div className="max-w-1200 mx-auto space-y-12 md:space-y-0 md:grid md:grid-cols-3 md:gap-8">
+      <div className="mt-12 w-full bg-grey-1 py-12 px-8">
+        <div className="mx-auto max-w-1200 space-y-12 md:grid md:grid-cols-3 md:gap-8 md:space-y-0">
           <Benefit iconClass="ion-ios-egg" title="Simple">
             Make a great estimate in seconds.
             <br />

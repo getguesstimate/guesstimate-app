@@ -3,11 +3,12 @@ import React from "react";
 
 type ExtraProps = {
   error?: boolean;
+  wide?: boolean;
   theme?: "normal" | "large" | "padded";
 };
 
 function buildProps<T extends ExtraProps & { className?: string }>(props: T) {
-  const { className, error, theme = "normal", ...rest } = props;
+  const { className, error, theme = "normal", wide, ...rest } = props;
   return {
     className: clsx(
       "border outline-none transition-colors",
@@ -17,6 +18,7 @@ function buildProps<T extends ExtraProps & { className?: string }>(props: T) {
       error
         ? "bg-red-2 border-red-1"
         : "bg-white border-grey-ccc focus:border-blue-1",
+      wide && "w-full",
       className
     ),
     ...rest,

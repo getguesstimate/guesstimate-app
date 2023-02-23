@@ -174,7 +174,7 @@ export const FactForm: React.FC<Props> = (props) => {
   return (
     <div className="flex gap-4 p-2">
       <div>{renderEditExpressionSection()}</div>
-      <div className="flex-1 flex flex-col items-stretch gap-1">
+      <div className="flex flex-1 flex-col items-stretch gap-1">
         <Textarea
           rows={1}
           placeholder="name"
@@ -188,7 +188,7 @@ export const FactForm: React.FC<Props> = (props) => {
         <div className="relative">
           <span className="absolute left-2 top-1 text-grey-999">#</span>
           <Input
-            className="pl-5 w-full" /* to fit # prefix */
+            className="w-full pl-5" /* to fit # prefix */
             type="text"
             placeholder="hashtag"
             value={runningFact.variable_name}
@@ -210,7 +210,7 @@ export const FactForm: React.FC<Props> = (props) => {
             ))}
           </Select>
         )}
-        <div className="flex gap-1 items-center">
+        <div className="flex items-center gap-1">
           <Button
             color="blue"
             size="small"

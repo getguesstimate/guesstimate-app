@@ -17,7 +17,7 @@ import { useAppDispatch, useAppSelector } from "~/modules/hooks";
 import { DottedHR } from "./DottedHR";
 
 const CalculatorContainer: React.FC<PropsWithChildren> = ({ children }) => (
-  <div className="border border-grey-ccc rounded p-12 m-4 bg-white text-grey-444 leading-7">
+  <div className="m-4 rounded border border-grey-ccc bg-white p-12 leading-7 text-grey-444">
     {children}
   </div>
 );
@@ -25,7 +25,7 @@ const CalculatorContainer: React.FC<PropsWithChildren> = ({ children }) => (
 const HelpHeader: React.FC<PropsWithChildren> = ({ children }) => (
   <div>
     <DottedHR />
-    <header className="text-2xl font-bold mt-8">{children}</header>
+    <header className="mt-8 text-2xl font-bold">{children}</header>
   </div>
 );
 
@@ -33,14 +33,14 @@ const HelpInput: React.FC<{ value: string }> = ({ value }) => (
   <input
     type="text"
     value={value}
-    className="bg-grey-6 px-2 py-1 border border-[#d4d4d4]"
+    className="border border-[#d4d4d4] bg-grey-6 px-2 py-1"
   />
 );
 
 const CalculatorHelp: React.FC<{ onClose(): void }> = ({ onClose }) => {
   return (
     <div>
-      <div className="flex justify-between items-start">
+      <div className="flex items-start justify-between">
         <header className="text-3xl font-bold">Useful Information</header>
         <ButtonCloseText onClick={onClose} />
       </div>
@@ -180,7 +180,7 @@ export const CalculatorExpandedShow: React.FC<Props> = ({ calculatorId }) => {
           <meta {...tag} key={tag.name ?? tag.property} />
         ))}
       </Head>
-      <div className="max-w-3xl mx-auto">
+      <div className="mx-auto max-w-3xl">
         <CalculatorContainer>
           {showHelp ? (
             <CalculatorHelp onClose={() => setShowHelp(false)} />
@@ -192,19 +192,19 @@ export const CalculatorExpandedShow: React.FC<Props> = ({ calculatorId }) => {
             />
           )}
         </CalculatorContainer>
-        <div className="flex justify-between items-center px-20 py-4">
+        <div className="flex items-center justify-between px-20 py-4">
           <div className="flex gap-2">
             <FacebookShareButton
               url={calculatorUrl}
               title={title}
-              className="opacity-50 hover:opacity-100 bg-[rgb(59,89,152)]"
+              className="bg-[rgb(59,89,152)] opacity-50 hover:opacity-100"
             >
               <FacebookIcon size={42} />
             </FacebookShareButton>
             <TwitterShareButton
               url={calculatorUrl}
               title={title}
-              className="opacity-50 hover:opacity-100 bg-[rgb(0,172,237)]"
+              className="bg-[rgb(0,172,237)] opacity-50 hover:opacity-100"
             >
               <TwitterIcon size={42} />
             </TwitterShareButton>

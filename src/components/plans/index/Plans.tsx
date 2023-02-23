@@ -1,12 +1,12 @@
 import React from "react";
 
 const Cost: React.FC<{ cost: string; unit: string }> = ({ cost, unit }) => (
-  <div className="flex flex-col items-center h-32">
+  <div className="flex h-32 flex-col items-center">
     <div>
       <sup className="-top-4 text-2xl font-extrabold text-grey-main">$</sup>
       <span className="text-5xl font-extrabold text-grey-main">{cost}</span>
     </div>
-    <div className="font-medium mt-4 text-center text-grey-888 text-xl leading-tight">
+    <div className="mt-4 text-center text-xl font-medium leading-tight text-grey-888">
       {unit === "per_user" && (
         <>
           per user <br />
@@ -39,21 +39,21 @@ const PlanCard: React.FC<PlanCardProps> = ({
   upgrade,
 }) => {
   return (
-    <div className="bg-white rounded-lg border border-[#d8d8d8] flex flex-col items-center px-12 py-8 w-80">
-      <header className="mb-6 text-grey-main font-medium text-3xl">
+    <div className="flex w-80 flex-col items-center rounded-lg border border-[#d8d8d8] bg-white px-12 py-8">
+      <header className="mb-6 text-3xl font-medium text-grey-main">
         {name}
       </header>
       <div className="mb-8">
         <Cost cost={price} unit={unit} />
       </div>
       <ul className="mb-12">
-        <li className="font-light text-xl text-grey-888">
+        <li className="text-xl font-light text-grey-888">
           <strong className="text-blue-1">{private_model_count}</strong> private
           models
         </li>
       </ul>
       {promotion_copy && (
-        <div className="text-[#1bb732] font-medium text-xl mb-4">
+        <div className="mb-4 text-xl font-medium text-[#1bb732]">
           {promotion_copy}
         </div>
       )}
@@ -80,7 +80,7 @@ export const Plans: React.FC<Props> = ({
   onNewOrganizationNavigation,
 }) => {
   return (
-    <div className="flex justify-center space-x-16 items-start">
+    <div className="flex items-start justify-center space-x-16">
       <PlanCard
         name="Individuals"
         price="5"

@@ -16,7 +16,7 @@ import { ContentState, Editor, EditorState } from "draft-js";
 import { PropagationError } from "~/lib/propagation/errors";
 
 const Status: React.FC<PropsWithChildren> = ({ children }) => (
-  <div className="absolute h-4 right-2 top-2">{children}</div>
+  <div className="absolute right-2 top-2 h-4">{children}</div>
 );
 
 export type InputHandle = {
@@ -95,7 +95,7 @@ export const Input = React.forwardRef<InputHandle, Props>(function Input(
     <div className="md:grid md:grid-cols-12">
       <div className="md:col-span-7">{name}</div>
       <div className="md:col-span-5">
-        <div className="px-4 py-2 bg-grey-6 border border-grey-ccc rounded-sm relative">
+        <div className="relative rounded-sm border border-grey-ccc bg-grey-6 px-4 py-2">
           <Editor
             ref={editorRef}
             editorState={editorState}
@@ -119,7 +119,7 @@ export const Input = React.forwardRef<InputHandle, Props>(function Input(
         </div>
       </div>
       {description && (
-        <div className="md:col-span-7 text-xs mb-8 text-grey-666">
+        <div className="mb-8 text-xs text-grey-666 md:col-span-7">
           <ReactMarkdown source={description} />
         </div>
       )}

@@ -50,8 +50,8 @@ export const UserShow: React.FC<Props> = ({ userId }) => {
   return (
     <Container>
       {user && (
-        <div className="flex flex-col items-center mb-12">
-          <img className="w-28 h-28 rounded-full" src={user.picture} />
+        <div className="mb-12 flex flex-col items-center">
+          <img className="h-28 w-28 rounded-full" src={user.picture} />
           <h1 className="mt-3 text-3xl font-bold">{user.name}</h1>
         </div>
       )}

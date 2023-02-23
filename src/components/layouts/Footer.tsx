@@ -5,7 +5,7 @@ import { iubendaHref } from "~/components/lib/IubendaPrivacyPolicy";
 const LinkGithubStar: React.FC = () => (
   <iframe
     src="https://ghbtns.com/github-btn.html?user=getguesstimate&repo=guesstimate-app&type=star&count=true"
-    className="border-0 overflow-hidden"
+    className="overflow-hidden border-0"
     width={160}
     height={30}
   ></iframe>
@@ -26,7 +26,7 @@ const LinkItem: React.FC<{
     <a
       href={href}
       className={clsx(
-        "text-grey-2 font-light",
+        "font-light text-grey-2",
         iubenda && "iubenda-nostyle no-brand iubenda-embed"
       )}
     >
@@ -37,7 +37,7 @@ const LinkItem: React.FC<{
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="flex p-12 flex-col space-y-8 sm:flex-row sm:space-x-24 sm:space-y-0 bg-grey-5 justify-center">
+    <footer className="flex flex-col justify-center space-y-8 bg-grey-5 p-12 sm:flex-row sm:space-x-24 sm:space-y-0">
       <ul>
         <Header>Guesstimate</Header>
         <LinkItem href="/pricing">Pricing</LinkItem>

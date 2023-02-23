@@ -6,9 +6,9 @@ import { PlanIndexQuestions } from "./PlanIndexQuestions";
 import { Button } from "~/components/utility/buttons/button";
 
 const PortalMessage: React.FC<{ portalUrl: string }> = ({ portalUrl }) => (
-  <div className="max-w-2xl mx-auto">
-    <div className="w-full bg-white p-4 rounded flex flex-col items-center">
-      <header className="text-2xl font-medium mb-4 text-grey-main">
+  <div className="mx-auto max-w-2xl">
+    <div className="flex w-full flex-col items-center rounded bg-white p-4">
+      <header className="mb-4 text-2xl font-medium text-grey-main">
         Go to the portal to change plans & payment
       </header>
       <a href={portalUrl} target="_blank">
@@ -39,9 +39,9 @@ export const PlanIndex: React.FC<Props> = ({
     userPlanId === "personal_free" && !portalUrl;
   return (
     <Container>
-      <div className="text-grey-main flex flex-col">
+      <div className="flex flex-col text-grey-main">
         <div className="text-center">
-          <h1 className="text-4xl font-medium mb-8">Plans & Pricing</h1>
+          <h1 className="mb-8 text-4xl font-medium">Plans & Pricing</h1>
           <h2 className="text-2xl font-light">
             Guesstimate offers unlimited free public models.
             <br />

@@ -352,7 +352,7 @@ export const SpaceCanvas: React.FC<Props> = ({
   return (
     <div
       className={clsx(
-        "flex-1 max-h-full",
+        "max-h-full flex-1",
         screenshot ? "overflow-hidden" : "overflow-auto" // why?
       )}
     >

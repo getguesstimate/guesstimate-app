@@ -44,7 +44,7 @@ export const ViewOptionToggle: React.FC<{
   onForbidEdits(): void;
 }> = ({ isEditingInvalid, onForbidEdits, onAllowEdits, isEditing }) => {
   const openLink = (
-    <div className="flex items-center space-x-1 px-2 py-1 rounded bg-white/30 hover:bg-white/50 text-bold">
+    <div className="text-bold flex items-center space-x-1 rounded bg-white/30 px-2 py-1 hover:bg-white/50">
       {isEditing ? (
         <span>
           <Icon name="pencil" /> Editing
