@@ -122,7 +122,7 @@ export const SpaceHeader = React.memo<Props>(function SpaceHeader({ space }) {
     <div className="flex justify-between px-8 py-2">
       <SpaceName name={name} editableByMe={editableByMe} onSave={onSaveName} />
 
-      <div className="flex flex-wrap items-center justify-end space-x-2 md:flex-nowrap">
+      <div className="flex flex-wrap items-center justify-end gap-2 md:flex-shrink-0 md:flex-nowrap">
         {editableByMe && (
           <PrivacyToggle
             editableByMe={editableByMe}

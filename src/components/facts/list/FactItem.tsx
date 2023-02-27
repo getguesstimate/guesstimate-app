@@ -20,7 +20,7 @@ export const SmallFactItem: React.FC<{ fact: Fact }> = ({ fact }) => {
   return (
     <div className="border border-transparent hover:border-[#d9dee2]">
       <div className="relative h-full bg-white">
-        <div className="z-10 flex h-full flex-col justify-between gap-2 p-1">
+        <div className="relative z-10 flex h-full flex-col justify-between gap-2 p-1">
           <div className="break-words">
             <div className="text-sm leading-none text-grey-333">
               {fact.name}
