@@ -155,7 +155,7 @@ export const SpaceShow: React.FC<Props> = (props) => {
             <LeftSidebar space={space} />
           </div>
         )}
-        <div className="overflow-auto pt-4 pl-4">
+        <div className="grid place-items-stretch pt-4 pl-4">
           <SpaceCanvas
             canUseOrganizationFacts={e.space.canUseOrganizationFacts(space)}
             exportedFacts={exportedFacts}

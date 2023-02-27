@@ -3,6 +3,7 @@ import _ from "lodash";
 import React, { useState } from "react";
 
 import Icon from "~/components/react-fa-patched";
+import { Button, ButtonWithIcon } from "~/components/utility/buttons/button";
 
 import * as e from "~/lib/engine/engine";
 
@@ -38,12 +39,9 @@ const MembersIndexSubTab: React.FC<{
 }) => (
   <Layout>
     {meIsAdmin ? (
-      <div
-        className="ui button large green !bg-green-2"
-        onClick={onChangeSubTab}
-      >
+      <Button size="padded" color="green" onClick={onChangeSubTab}>
         Add Members
-      </div>
+      </Button>
     ) : null}
     <div>
       <div className="rounded bg-white px-6">
@@ -138,11 +136,12 @@ const MembersAddSubTab: React.FC<{
   onChangeSubTab(): void;
 }> = ({ organizationId, onChangeSubTab }) => (
   <Layout>
-    <div>
-      <div className="ui button large" onClick={onChangeSubTab}>
-        <Icon name="chevron-left" /> Member List
-      </div>
-    </div>
+    <ButtonWithIcon
+      size="padded"
+      onClick={onChangeSubTab}
+      icon={<Icon name="chevron-left" />}
+      text="Member List"
+    />
     <div>
       <header className="mb-4 text-3xl font-bold">Invite New Members</header>
       <p className="mb-12 leading-6 text-grey-666">
@@ -185,7 +184,7 @@ export const MembersTab: React.FC<Props> = ({
   };
 
   return (
-    <div className="MembersTab mb-16">
+    <div className="mb-16">
       {indexTabOpen ? (
         <MembersIndexSubTab
           {...{

@@ -42,6 +42,9 @@ module.exports = {
         3: "#084e14",
         4: "#c9e8c0",
         5: "#16ab39",
+        6: "#2c662d",
+        7: "#fcfff5",
+        8: "#a3c293",
       },
       purple: {
         1: "#7970a9",
@@ -67,6 +70,7 @@ module.exports = {
         xs: "1px",
       },
       fontFamily: {
+        lato: '"Lato", "Helvetica Neue", Arial, Helvetica, sans-serif',
         open: "Open Sans,Helvetica,Arial,sans-serif",
         mono: '"Courier New", Courier, monospace',
       },

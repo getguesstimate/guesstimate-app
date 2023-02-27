@@ -15,6 +15,7 @@ import * as Calculator from "~/lib/engine/calculator";
 import * as Space from "~/lib/engine/space";
 import { useAppDispatch, useAppSelector } from "~/modules/hooks";
 import { DottedHR } from "./DottedHR";
+import { Table, TBody, TD, TH, THead, TR } from "~/components/utility/Table";
 
 const CalculatorContainer: React.FC<PropsWithChildren> = ({ children }) => (
   <div className="m-4 rounded border border-grey-ccc bg-white p-12 leading-7 text-grey-444">
@@ -25,7 +26,7 @@ const CalculatorContainer: React.FC<PropsWithChildren> = ({ children }) => (
 const HelpHeader: React.FC<PropsWithChildren> = ({ children }) => (
   <div>
     <DottedHR />
-    <header className="mt-8 text-2xl font-bold">{children}</header>
+    <header className="mt-8 mb-4 text-2xl font-bold">{children}</header>
   </div>
 );
 
@@ -47,77 +48,77 @@ const CalculatorHelp: React.FC<{ onClose(): void }> = ({ onClose }) => {
 
       <HelpHeader>Input Types</HelpHeader>
 
-      <table className="ui celled table">
-        <thead>
-          <tr>
-            <th>Type</th>
-            <th>Example</th>
-            <th>Explanation</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Point</td>
-            <td>
+      <Table>
+        <THead>
+          <TR>
+            <TH>Type</TH>
+            <TH>Example</TH>
+            <TH>Explanation</TH>
+          </TR>
+        </THead>
+        <TBody>
+          <TR>
+            <TD>Point</TD>
+            <TD>
               <HelpInput value="8" />
-            </td>
-            <td>You believe this value is 8.</td>
-          </tr>
-          <tr>
-            <td>Range</td>
-            <td>
+            </TD>
+            <TD>You believe this value is 8.</TD>
+          </TR>
+          <TR>
+            <TD>Range</TD>
+            <TD>
               <HelpInput value="6 to 12" />
-            </td>
-            <td>
+            </TD>
+            <TD>
               You believe this value is between 6 and 12. More specifically,
               this indicates that you believe there's a 95% chance the value is
               above 6, and a 95% chance the value is below 12.
-            </td>
-          </tr>
-        </tbody>
-      </table>
+            </TD>
+          </TR>
+        </TBody>
+      </Table>
 
       <HelpHeader>Units</HelpHeader>
 
-      <table className="ui celled table">
-        <thead>
-          <tr>
-            <th>Symbol</th>
-            <th>Multiplier</th>
-            <th>Example</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>K</td>
-            <td>Thousand</td>
-            <td>
+      <Table>
+        <THead>
+          <TR>
+            <TH>Symbol</TH>
+            <TH>Multiplier</TH>
+            <TH>Example</TH>
+          </TR>
+        </THead>
+        <TBody>
+          <TR>
+            <TD>K</TD>
+            <TD>Thousand</TD>
+            <TD>
               <HelpInput value="3K to 8K" />
-            </td>
-          </tr>
-          <tr>
-            <td>M</td>
-            <td>Million</td>
-            <td>
+            </TD>
+          </TR>
+          <TR>
+            <TD>M</TD>
+            <TD>Million</TD>
+            <TD>
               <HelpInput value="3M to 8M" />
-            </td>
-          </tr>
-          <tr>
-            <td>B</td>
-            <td>Billion</td>
-            <td>
+            </TD>
+          </TR>
+          <TR>
+            <TD>B</TD>
+            <TD>Billion</TD>
+            <TD>
               <HelpInput value="3B to 8B" />
-            </td>
-          </tr>
-          <tr>
-            <td>T</td>
-            <td>Trillion</td>
-            <td>
+            </TD>
+          </TR>
+          <TR>
+            <TD>T</TD>
+            <TD>Trillion</TD>
+            <TD>
               <HelpInput value="3T to 8T" />
-            </td>
-          </tr>
-        </tbody>
-      </table>
+            </TD>
+          </TR>
+        </TBody>
+      </Table>
     </div>
   );
 };

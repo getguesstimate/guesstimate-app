@@ -32,8 +32,10 @@ export const Unnecessary: React.FC<{ paymentAccountPortalUrl: string }> = ({
 }) => (
   <Message>
     <H2>Go to your portal to edit your plan</H2>
-    <a href={paymentAccountPortalUrl} className="ui button blue huge mt-8">
-      Portal
+    <a href={paymentAccountPortalUrl} className="mt-8 block">
+      <Button color="blue" size="huge" onClick={() => {}}>
+        Portal
+      </Button>
     </a>
   </Message>
 );
@@ -105,24 +107,16 @@ export const SynchronizationSuccess: React.FC<{ onNewModel(): void }> = ({
   </Message>
 );
 
-export const FirstSubscription: React.FC<Props> = (originalProps) => {
-  const props = _.defaults(originalProps, {
-    iframeUrl: "",
-    iframeWebsiteName: "",
-    paymentAccountPortalUrl: "",
-    isTest: true,
-  });
-  const {
-    flowStage,
-    onNewModel,
-    isTest,
-    iframeUrl,
-    iframeWebsiteName,
-    onPaymentCancel,
-    onPaymentSuccess,
-    paymentAccountPortalUrl,
-  } = props;
-
+export const FirstSubscription: React.FC<Props> = ({
+  flowStage,
+  onNewModel,
+  isTest = true, // TODO - default to false?
+  iframeUrl = "",
+  iframeWebsiteName = "",
+  onPaymentCancel,
+  onPaymentSuccess,
+  paymentAccountPortalUrl = "",
+}) => {
   const formSuccessProps = {
     iframeUrl,
     iframeWebsiteName,

@@ -105,14 +105,14 @@ export const SpaceCard: React.FC<{
           <header
             className={clsx(
               "font-bold",
-              size === "SMALL" ? "text-xs" : "text-lg",
+              size === "SMALL" ? "text-xs" : "text-lg leading-tight",
               space.name ? "text-[#4a6a88]" : "italic text-grey-bbb"
             )}
           >
             {space.name || "Untitled Model"}
           </header>
           {size !== "SMALL" && (
-            <div className="text-xs text-grey-888">
+            <div className="mt-0.5 text-xs text-grey-888">
               Updated {formatDate(space.updated_at)}
             </div>
           )}

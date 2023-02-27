@@ -5,7 +5,8 @@ import Icon from "~/components/react-fa-patched";
 
 type ButtonProps = {
   onClick(): void;
-  color?: "grey" | "dark-grey" | "red" | "blue" | "green"; // dark-grey is for colored background, e.g. "Cancel" in DataViewer editor
+  // dark-grey is for colored background, e.g. "Cancel" in DataViewer editor
+  color?: "grey" | "dark-grey" | "red" | "blue" | "green" | "dark";
   size?: "small" | "normal" | "padded" | "large" | "huge";
   children: React.ReactNode;
   wide?: boolean;
@@ -47,6 +48,10 @@ export const Button: React.FC<ButtonProps> = ({
       color === "dark-grey" && [
         "bg-grey-ccc",
         !disabled && "hover:bg-grey-bbb",
+      ],
+      color === "dark" && [
+        "bg-grey-2 text-white",
+        !disabled && "hover:bg-[#27292a]",
       ],
       color === "green" && [
         "bg-green-2 text-white",

@@ -1,4 +1,5 @@
 import React from "react";
+import { Button } from "~/components/utility/buttons/button";
 
 const Cost: React.FC<{ cost: string; unit: string }> = ({ cost, unit }) => (
   <div className="flex h-32 flex-col items-center">
@@ -40,16 +41,18 @@ const PlanCard: React.FC<PlanCardProps> = ({
 }) => {
   return (
     <div className="flex w-80 flex-col items-center rounded-lg border border-[#d8d8d8] bg-white px-12 py-8">
-      <header className="mb-6 text-3xl font-medium text-grey-main">
+      <header className="mb-8 text-3xl font-medium text-grey-main">
         {name}
       </header>
-      <div className="mb-8">
+      <div className="mb-6">
         <Cost cost={price} unit={unit} />
       </div>
       <ul className="mb-12">
         <li className="text-xl font-light text-grey-888">
-          <strong className="text-blue-1">{private_model_count}</strong> private
-          models
+          <strong className="font-bold text-blue-1">
+            {private_model_count}
+          </strong>{" "}
+          private models
         </li>
       </ul>
       {promotion_copy && (
@@ -58,9 +61,9 @@ const PlanCard: React.FC<PlanCardProps> = ({
         </div>
       )}
       {upgrade.show && (
-        <a className="ui button green" onMouseDown={upgrade.onClick}>
+        <Button color="green" size="large" onClick={upgrade.onClick}>
           {upgrade.text}
-        </a>
+        </Button>
       )}
     </div>
   );

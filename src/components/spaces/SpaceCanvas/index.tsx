@@ -350,12 +350,7 @@ export const SpaceCanvas: React.FC<Props> = ({
   const edges = buildEdges();
 
   return (
-    <div
-      className={clsx(
-        "max-h-full flex-1",
-        screenshot ? "overflow-hidden" : "overflow-auto" // why?
-      )}
-    >
+    <div className="overflow-auto">
       <FlowGrid
         items={metrics.map((m) => makeItem(m))}
         onMultipleSelect={handleMultipleSelect}

@@ -5,11 +5,9 @@ import { useEffect, useState } from "react";
 import { Provider } from "react-redux";
 import { configureStore } from "../modules/store";
 
-import "flexboxgrid/css/flexboxgrid.min.css";
 import "font-awesome/css/font-awesome.css";
 import "ionicons/dist/css/ionicons.css";
 
-import "../../semantic/dist/semantic.css";
 import "../styles/global.css";
 
 import Script from "next/script";

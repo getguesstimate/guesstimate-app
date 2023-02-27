@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import Icon from "~/components/react-fa-patched";
 
-import { ButtonWithIcon } from "~/components/utility/buttons/button";
+import { Button, ButtonWithIcon } from "~/components/utility/buttons/button";
 import { Input, InputHandle } from "./Input";
 import { Output } from "./Output";
 
@@ -16,7 +16,6 @@ import {
 
 import * as _simulation from "~/lib/engine/simulation";
 
-import clsx from "clsx";
 import { FullDenormalizedMetric } from "~/lib/engine/space";
 import { Optional } from "~/lib/engine/types";
 import { Guesstimator } from "~/lib/guesstimator/index";
@@ -225,15 +224,11 @@ export const CalculatorShow: React.FC<Props> = (props) => {
         </div>
       ) : (
         <div className="mt-8 flex justify-end">
-          <div
-            className={clsx(
-              "ui button green large",
-              state.resultComputing
-                ? "loading"
-                : readyToCalculate
-                ? ""
-                : "disabled"
-            )}
+          <Button
+            color="green"
+            size="large"
+            loading={state.resultComputing}
+            disabled={!state.resultComputing && !readyToCalculate}
             onClick={() => {
               allOutputsHaveStats()
                 ? showResult()
@@ -241,7 +236,7 @@ export const CalculatorShow: React.FC<Props> = (props) => {
             }}
           >
             Calculate
-          </div>
+          </Button>
         </div>
       )}
     </div>

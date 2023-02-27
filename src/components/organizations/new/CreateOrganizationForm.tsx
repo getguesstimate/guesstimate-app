@@ -3,10 +3,11 @@ import _ from "lodash";
 import React, { useEffect, useRef, useState } from "react";
 import { Button } from "~/components/utility/buttons/button";
 import { Input } from "~/components/utility/forms";
+import { Labeled } from "~/components/utility/Labeled";
+import { Message } from "~/components/utility/Message";
 
 import { useAppDispatch } from "~/modules/hooks";
 import { create } from "~/modules/organizations/actions";
-import { Message } from "./Message";
 
 type Plan = "FREE" | "PREMIUM";
 
@@ -88,8 +89,7 @@ export const CreateOrganizationForm: React.FC = () => {
     <div className="grid grid-cols-12">
       <div className="col-span-7">
         <div className="flex flex-col gap-8">
-          <div className="flex flex-col gap-2">
-            <label className="font-bold">Organization Name</label>
+          <Labeled label="Organization Name">
             <Input
               placeholder="name"
               value={value}
@@ -99,20 +99,19 @@ export const CreateOrganizationForm: React.FC = () => {
               theme="large"
               ref={inputRef}
             />
-          </div>
+          </Labeled>
 
-          <div className="flex flex-col gap-2">
-            <label className="font-bold">Plan</label>
+          <Labeled label="Plan">
             <PlanList
               plan={plan}
               onSelect={(plan) => {
                 setPlan(plan);
               }}
             />
-          </div>
+          </Labeled>
         </div>
 
-        <div className="mt-4">
+        <div className="mt-8">
           <Button
             color="green"
             size="large"

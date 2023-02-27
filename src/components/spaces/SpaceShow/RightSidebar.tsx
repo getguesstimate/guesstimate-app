@@ -74,7 +74,7 @@ const RightSidebarContainer: React.FC<
 > = ({ grey, header, children }) => (
   <div
     className={clsx(
-      "h-full w-96 flex-none overflow-y-auto overflow-x-hidden border-l border-[#ccc] p-4",
+      "w-96 flex-none overflow-y-auto overflow-x-hidden border-l border-[#ccc] p-4",
       grey ? "bg-grey-6" : "bg-white"
     )}
   >

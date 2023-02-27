@@ -1,13 +1,13 @@
 import React from "react";
+import { Message } from "../utility/Message";
 
 export const Maintenance: React.FC = () => {
   return (
-    <div className="mx-auto mt-16 max-w-3xl rounded border border-grey-ccc bg-grey-6 p-4">
-      <header className="mb-4 text-3xl font-bold">Maintenance Mode</header>
-      <p>
+    <div className="mt-16 flex flex-col items-center">
+      <Message title="Maintenance Mode">
         Guesstimate has gone down for maintenance. We'll be back in 10 to 30
         minutes with 90% confidence.
-      </p>
+      </Message>
     </div>
   );
 };

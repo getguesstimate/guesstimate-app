@@ -1,26 +1,9 @@
 import React, { PropsWithChildren } from "react";
+import { Table, TD, TH } from "~/components/utility/Table";
 
 const MakeAMetric = "/assets/tutorial/MakeAMetric.gif";
 const InteractWithACell = "/assets/tutorial/InteractWithACell.gif";
 const MakeAFunction = "/assets/tutorial/MakeAFunction.gif";
-
-const TH: React.FC<PropsWithChildren> = ({ children }) => (
-  <th className="border-t border-b border-[#ddd] bg-[#f8f8f8] px-4 py-4 leading-tight">
-    {children}
-  </th>
-);
-
-const TD: React.FC<PropsWithChildren> = ({ children }) => (
-  <td className="border-t border-b border-[#ddd] px-4 py-3 leading-tight">
-    {children}
-  </td>
-);
-
-const Table: React.FC<PropsWithChildren> = ({ children }) => (
-  <table className="mt-6 w-full rounded border border-[#ddd] bg-white text-left text-sm">
-    {children}
-  </table>
-);
 
 type PageProps = PropsWithChildren<{
   header: string;
@@ -37,7 +20,7 @@ const TutorialPage: React.FC<PageProps> = ({ header, children }) => (
 
 const Image: React.FC<{ image: string }> = ({ image }) => (
   <div className="bg-grey-7">
-    <img src={image} className="mx-auto max-h-40 max-w-full" />
+    <img src={image} className="mx-auto mb-6 max-h-40 max-w-full" />
   </div>
 );
 
@@ -58,7 +41,7 @@ export const TutorialMetricPage: React.FC = () => (
       name and a value.
     </p>
     <Image image={MakeAMetric} />
-    <Table>
+    <Table size="small">
       <thead>
         <tr>
           <TH>Example Value</TH>
@@ -88,7 +71,7 @@ export const TutorialMetricActionsPage: React.FC = () => (
     <p>Click a metric once to select it, then you can perform actions on it.</p>
 
     <Image image={InteractWithACell} />
-    <Table>
+    <Table size="small">
       <tbody>
         <tr>
           <TD>
@@ -131,7 +114,7 @@ export const TutorialFunctionPage: React.FC = () => (
     </p>
 
     <Image image={MakeAFunction} />
-    <Table>
+    <Table size="small">
       <thead>
         <tr>
           <TH>Example Function</TH>

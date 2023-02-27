@@ -9,6 +9,9 @@ body {
 }
 
 a {
+  color: #4183c4;
+}
+a:hover {
   color: #1e70bf;
 }
 
@@ -69,12 +72,44 @@ body.remove-elev #_elev_io {
 }
 
 @layer components {
-  .PageBase h2 {
-    @apply mb-1.5 text-xl;
+  .PageBase {
+    @apply font-open;
   }
 
   .PageBase h1 {
-    @apply text-blue-1;
+    @apply mt-6 font-lato text-3xl font-bold text-blue-1;
+  }
+
+  .PageBase h2 {
+    @apply mb-1.5 mt-6 font-lato text-xl font-bold;
+  }
+
+  .MarkdownViewer {
+    @apply font-open;
+  }
+
+  .MarkdownViewer h1 {
+    @apply mt-4 font-lato text-3xl font-bold;
+  }
+
+  .MarkdownViewer h2 {
+    @apply mb-1.5 mt-4 font-lato text-xl font-bold;
+  }
+
+  .MarkdownViewer h3 {
+    @apply mb-1.5 mt-4 font-lato text-lg font-bold;
+  }
+
+  .MarkdownViewer h4 {
+    @apply mt-4 font-lato font-bold;
+  }
+
+  .MarkdownViewer h5 {
+    @apply mt-4 font-lato text-sm font-bold;
+  }
+
+  .MarkdownViewer h6 {
+    @apply mt-2 font-lato text-sm font-medium;
   }
 }
 

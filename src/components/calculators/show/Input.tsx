@@ -95,7 +95,7 @@ export const Input = React.forwardRef<InputHandle, Props>(function Input(
     <div className="md:grid md:grid-cols-12">
       <div className="md:col-span-7">{name}</div>
       <div className="md:col-span-5">
-        <div className="relative rounded-sm border border-grey-ccc bg-grey-6 px-4 py-2">
+        <div className="relative rounded-sm border border-grey-ccc bg-grey-6 px-3 py-2">
           <Editor
             ref={editorRef}
             editorState={editorState}

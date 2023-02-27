@@ -9,13 +9,14 @@ import { ClickToEdit } from "~/components/utility/ClickToEdit";
 import { MarkdownViewer } from "~/components/utility/MarkdownViewer";
 import { ExtendedDSpace } from "../denormalized-space-selector";
 import { useAppDispatch } from "~/modules/hooks";
+import { Button } from "~/components/utility/buttons/button";
 
 const ClosedLeftSidebar: React.FC<{ onOpen(): void }> = React.memo(
   ({ onOpen }) => {
     return (
       <div className="pl-1 pt-2">
         <div
-          className="ui button blue small open !bg-blue-1 !p-2"
+          className="cursor-pointer rounded bg-blue-1 px-1.5 py-0.5 text-white transition-colors hover:bg-blue-7"
           onClick={onOpen}
         >
           <Icon name="chevron-right" />

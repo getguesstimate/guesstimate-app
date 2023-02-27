@@ -27,6 +27,7 @@ import * as e from "~/lib/engine/engine";
 import { FactCategory } from "~/lib/engine/fact_category";
 import { useAppDispatch, useAppSelector } from "~/modules/hooks";
 import clsx from "clsx";
+import { Button, ButtonWithIcon } from "~/components/utility/buttons/button";
 
 const MODEL_TAB = "models";
 const MEMBERS_TAB = "members";
@@ -128,7 +129,7 @@ const FactTab: React.FC<{
           />
         ))}
       </div>
-      <div className="mt-12 grid grid-cols-2">
+      <div className="mt-8 grid grid-cols-2 place-items-start">
         <NewCategorySection
           onSubmit={onAddCategory}
           existingCategoryNames={existingCategoryNames}
@@ -158,9 +159,13 @@ const NewCategorySection: React.FC<{
     );
   } else {
     return (
-      <div className="ui button green" onClick={() => setShowForm(true)}>
-        <Icon name="plus" /> New Category
-      </div>
+      <ButtonWithIcon
+        color="green"
+        size="padded"
+        onClick={() => setShowForm(true)}
+        icon={<Icon name="plus" />}
+        text="New Category"
+      />
     );
   }
 };

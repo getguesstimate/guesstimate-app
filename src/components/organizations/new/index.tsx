@@ -28,7 +28,7 @@ export const CreateOrganizationPage: React.FC<{
   return (
     <Container>
       <div className="mx-auto max-w-[820px]">
-        <h1 className="mt-4 mb-8 text-4xl font-medium">
+        <h1 className="mt-4 mb-12 text-4xl font-medium">
           {newOrganizationCreated
             ? "Step 2: Add Members"
             : "Step 1: Create an Organization"}

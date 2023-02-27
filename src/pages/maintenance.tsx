@@ -5,7 +5,7 @@ import { Maintenance } from "~/components/pages/Maintenance";
 
 const MaintenancePage: NextPage = () => {
   return (
-    <Layout>
+    <Layout backgroundColor="GREY">
       <Maintenance />
     </Layout>
   );

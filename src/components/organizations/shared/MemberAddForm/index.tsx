@@ -3,10 +3,11 @@ import React, { useEffect, useRef, useState } from "react";
 
 import { httpRequestSelector } from "./httpRequestSelector";
 
+import { Button } from "~/components/utility/buttons/button";
+import { Input } from "~/components/utility/forms";
+import { Message } from "~/components/utility/Message";
 import { useAppDispatch, useAppSelector } from "~/modules/hooks";
 import * as userOrganizationMembershipActions from "~/modules/userOrganizationMemberships/actions";
-import clsx from "clsx";
-import { Button } from "~/components/utility/buttons/button";
 
 function validateEmail(email: string) {
   const re =
@@ -35,7 +36,7 @@ export const MemberAddForm: React.FC<{ organizationId: number }> = ({
   };
 
   const onKeyDown = (e: React.KeyboardEvent) => {
-    if (e.keyCode === 13 && validateEmail(email)) {
+    if (e.key === "Enter" && validateEmail(email)) {
       submit();
     }
   };
@@ -56,25 +57,25 @@ export const MemberAddForm: React.FC<{ organizationId: number }> = ({
   );
   return (
     <div>
-      <div className="ui form">
-        <div className="field">
-          <label>Email Address</label>
-          <input
+      <div>
+        <div className="mb-4 flex max-w-3xl flex-col gap-1">
+          <label className="text-sm font-bold">Email Address</label>
+          <Input
             value={value}
             onKeyDown={onKeyDown}
             type="text"
             placeholder="name@domain.com"
-            className="max-w-3xl"
+            theme="padded"
             ref={input}
             onChange={onChange}
           />
         </div>
-        <Button size="large" color="green" disabled={!isValid} onClick={submit}>
+        <Button size="padded" color="blue" disabled={!isValid} onClick={submit}>
           Invite User
         </Button>
       </div>
-      {requests.map((request) => {
-        return (
+      <div className="mt-8 space-y-2">
+        {requests.map((request) => (
           <InvitationHttpRequest
             key={request.id}
             busy={request.busy}
@@ -82,8 +83,8 @@ export const MemberAddForm: React.FC<{ organizationId: number }> = ({
             email={request.email}
             isExistingMember={request.isExistingMember}
           />
-        );
-      })}
+        ))}
+      </div>
     </div>
   );
 };
@@ -94,39 +95,25 @@ const InvitationHttpRequest: React.FC<{
   email: string;
   isExistingMember: boolean;
 }> = ({ busy, success, email, isExistingMember }) => {
-  let status = httpStatus(busy, success);
-
-  if (status === "sending") {
-    return <div className="ui ignored message">Sending...</div>;
-  } else if (status === "failure") {
+  if (busy) {
+    return <Message>Sending...</Message>;
+  } else if (!success) {
     return (
-      <div className="ui error message">
+      <Message theme="error">
         Invitation to {email} failed. This could be because they are already
         part of the organization or because of a server problem. If it
         continues, please let us know.
-      </div>
+      </Message>
     );
   } else if (isExistingMember) {
     return (
-      <div className="ui success message">
-        {email} was added to your organization.
-      </div>
+      <Message theme="success">{email} was added to your organization.</Message>
     );
   } else {
     return (
-      <div className="ui success message">
+      <Message theme="success">
         {email} was sent an email invitation to join your organization.
-      </div>
+      </Message>
     );
   }
 };
-
-function httpStatus(busy: boolean, success: boolean) {
-  if (busy) {
-    return "sending";
-  } else if (success) {
-    return "success";
-  } else {
-    return "failure";
-  }
-}

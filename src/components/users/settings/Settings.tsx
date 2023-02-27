@@ -5,6 +5,7 @@ import React from "react";
 import { Card } from "~/components/utility/Card";
 import { Plan } from "~/lib/config/plan";
 import { HR } from "~/components/utility/HR";
+import { Button, ButtonWithIcon } from "~/components/utility/buttons/button";
 
 const PlanC: React.FC<{ planId: string | undefined }> = ({ planId }) => (
   <div className="rounded bg-grey-1 px-8 py-4">
@@ -18,23 +19,26 @@ const PlanC: React.FC<{ planId: string | undefined }> = ({ planId }) => (
 );
 
 const PlanUpgradeButton: React.FC = () => (
-  <a className="ui button green large" href="/subscribe/lite">
-    <Icon name="rocket" /> Upgrade
+  <a href="/subscribe/lite">
+    <ButtonWithIcon
+      size="large"
+      color="green"
+      icon={<Icon name="rocket" />}
+      text="Upgrade"
+      onClick={() => {}}
+    />
   </a>
 );
 
-// The portal url only can be clicked once.  Then,we need a new one.
+// The portal url only can be clicked once. Then, we need a new one.
 const PortalButton: React.FC<{
   url: string;
   onRefresh?(): void;
 }> = ({ url, onRefresh }) => (
-  <a
-    className="ui button black !bg-grey-2"
-    href={url}
-    target="_blank"
-    onMouseUp={onRefresh}
-  >
-    Edit Plan & Payment Details
+  <a href={url} target="_blank" onMouseUp={onRefresh}>
+    <Button color="dark" size="padded" onClick={() => {}}>
+      Edit Plan & Payment Details
+    </Button>
   </a>
 );
 
@@ -76,28 +80,26 @@ export const Settings: React.FC<Props> = ({
   onRefresh,
 }) => {
   return (
-    <div className="Settings">
+    <div>
       {!_.isEmpty(planId) && (
-        <div>
-          <Card
-            headerText="Account"
-            onClose={onClose}
-            width="normal"
-            hasPadding={true}
-          >
-            <div className="space-y-8 py-8">
-              <div>
-                <PlanC planId={planId} />
-              </div>
-
-              <PlanUpgradeSection
-                planId={planId}
-                portalUrl={portalUrl}
-                onRefresh={onRefresh}
-              />
+        <Card
+          headerText="Account"
+          onClose={onClose}
+          width="normal"
+          hasPadding={true}
+        >
+          <div className="space-y-8 py-8">
+            <div>
+              <PlanC planId={planId} />
             </div>
-          </Card>
-        </div>
+
+            <PlanUpgradeSection
+              planId={planId}
+              portalUrl={portalUrl}
+              onRefresh={onRefresh}
+            />
+          </div>
+        </Card>
       )}
     </div>
   );

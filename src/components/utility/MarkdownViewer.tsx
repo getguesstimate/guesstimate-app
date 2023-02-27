@@ -4,7 +4,7 @@ import ReactMarkdown from "react-markdown";
 
 export const MarkdownViewer: React.FC<{ source: string }> = ({ source }) => {
   return (
-    <div className="MarkdownViewer font-open">
+    <div className="MarkdownViewer">
       <ReactMarkdown skipHtml={true} source={source} />
     </div>
   );

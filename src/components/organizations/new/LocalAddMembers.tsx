@@ -2,7 +2,8 @@ import React from "react";
 import { MemberAddForm } from "../shared/MemberAddForm/index";
 
 import { organization } from "~/lib/engine/engine";
-import { Message } from "./Message";
+import { Button } from "~/components/utility/buttons/button";
+import { Message } from "~/components/utility/Message";
 
 export const LocalAddMembers: React.FC<{ organizationId: number }> = ({
   organizationId,
@@ -12,11 +13,10 @@ export const LocalAddMembers: React.FC<{ organizationId: number }> = ({
       <MemberAddForm organizationId={organizationId} />
       <br />
       <br />
-      <a
-        className="ui button green"
-        href={organization.url({ id: organizationId })}
-      >
-        Finish Registration
+      <a href={organization.url({ id: organizationId })}>
+        <Button color="green" size="large" onClick={() => {}}>
+          Finish Registration
+        </Button>
       </a>
     </div>
     <div className="col-span-4 col-start-9">
