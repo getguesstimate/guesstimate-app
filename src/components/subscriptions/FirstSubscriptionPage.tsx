@@ -69,7 +69,7 @@ export const FirstSubscriptionPage: React.FC<Props> = ({ planName }) => {
             </div>
           </div>
           <div className="flex-1">
-            {me.id ? (
+            {me.profile ? (
               planId ? (
                 <FirstSubscriptionContainer planId={planId} />
               ) : (

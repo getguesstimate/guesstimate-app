@@ -23,17 +23,17 @@ export const FirstSubscriptionContainer: React.FC<Props> = ({ planId }) => {
   useEffect(() => {
     dispatch(firstSubscriptionActions.flowStageReset());
 
-    if (!_.get(me, "profile.has_payment_account")) {
+    if (me.profile?.has_payment_account) {
       dispatch(
         firstSubscriptionActions.fetchIframe({
-          user_id: me.id,
+          user_id: me.profile.id,
           plan_id: planId,
         })
       );
     }
   }, []);
 
-  if (!me.id) {
+  if (!me.profile) {
     return null; // shouldn't happen, FirstSubscriptionPage won't render this component if user is not signed in
   }
 
@@ -48,7 +48,7 @@ export const FirstSubscriptionContainer: React.FC<Props> = ({ planId }) => {
   const handlePaymentSuccess = () => {
     dispatch(
       firstSubscriptionActions.postSynchronization({
-        user_id: me.id,
+        user_id: me.profile?.id,
       })
     );
   };

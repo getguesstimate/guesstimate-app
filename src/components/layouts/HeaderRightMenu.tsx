@@ -278,9 +278,9 @@ export const HeaderRightMenu: React.FC<Props> = (props) => {
       {isLoggedIn ? (
         <>
           <NewModelDropdown me={me} organizations={organizations} />
-          {me.id && (
+          {me.profile && (
             <MenuLink
-              href={`/users/${me.id}`}
+              href={`/users/${me.profile.id}`}
               icon={<i className="ion-md-albums" />}
               text="My Models"
             />

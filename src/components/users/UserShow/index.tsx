@@ -39,7 +39,7 @@ export const UserShow: React.FC<Props> = ({ userId }) => {
   };
 
   const spaces = _.orderBy(userSpaces, ["updated_at"], ["desc"]);
-  const isMe = me.id === userId;
+  const isMe = me.profile?.id === userId;
 
   let user: ApiUser | undefined;
 

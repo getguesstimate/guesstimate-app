@@ -17,20 +17,16 @@ export const AuthRedirect: React.FC = () => {
 
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(meActions.logIn());
+    dispatch(meActions.logInWithHash(location.hash));
   }, []);
 
   const me = useAppSelector((state) => state.me);
 
   useEffect(() => {
-    if (me && me.id) {
-      router.push(user.urlById(me.id));
+    if (me.profile) {
+      router.push(user.urlById(me.profile.id));
     }
   }, [me, router]);
 
-  return (
-    <div>
-      <PageBase content={content} />
-    </div>
-  );
+  return <PageBase content={content} />;
 };

@@ -255,8 +255,9 @@ export const OrganizationShow: React.FC<{
   const spaces = _.orderBy(organizationSpaces, ["updated_at"], ["desc"]);
   const hasPrivateAccess = e.organization.hasPrivateAccess(organization);
   const facts = e.organization.findFacts(organizationId, organizationFacts);
-  const meIsAdmin = !!organization && organization.admin_id === me.id;
-  const meIsMember = meIsAdmin || !!members.find((m) => m.id === me.id);
+  const meIsAdmin = !!organization && organization.admin_id === me.profile?.id;
+  const meIsMember =
+    meIsAdmin || !!members.find((m) => m.id === me.profile?.id);
 
   if (!organization) {
     return null;

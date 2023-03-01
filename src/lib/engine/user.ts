@@ -12,7 +12,7 @@ export function usersOrganizations(
   memberships,
   organizations
 ) {
-  const id = user.id;
+  const id = user.profile?.id;
   if (!id) {
     return [];
   }

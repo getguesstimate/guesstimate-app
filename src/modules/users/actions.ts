@@ -12,8 +12,8 @@ import { api } from "~/lib/guesstimate_api";
 
 const sActions = reduxCrud.actionCreatorsFor("users");
 
-//fetches a specific user if auth0_id is passed in
-export function fetch({ auth0_id }): AppThunk {
+//fetches current user by auth0_id
+export function fetchMe(auth0_id: string): AppThunk {
   return async (dispatch, getState) => {
     dispatch(sActions.fetchStart());
 
@@ -36,7 +36,7 @@ export function fetchById(userId: number): AppThunk {
     try {
       const user = await api(getState()).users.get({ userId });
       dispatch(fetchSuccess([user]));
-      if (getState().me.id === user.id) {
+      if (getState().me.profile?.id === user.id) {
         dispatch(meActions.guesstimateMeLoaded(user));
       }
       dispatch(userOrganizationMembershipActions.fetchByUserId(userId));
