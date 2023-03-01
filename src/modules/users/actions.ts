@@ -20,7 +20,7 @@ export function fetchMe(auth0_id: string): AppThunk {
     try {
       const data = await api(getState()).users.listWithAuth0Id(auth0_id);
       const me = data.items[0];
-      dispatch(meActions.guesstimateMeLoaded(me));
+      dispatch(meActions.guesstimateMeLoaded(me as any)); // FIXME - casting lies
       dispatch(fetchById(me.id));
     } catch (err) {
       dispatch(displayErrorsActions.newError(err));
@@ -37,7 +37,7 @@ export function fetchById(userId: number): AppThunk {
       const user = await api(getState()).users.get({ userId });
       dispatch(fetchSuccess([user]));
       if (getState().me.profile?.id === user.id) {
-        dispatch(meActions.guesstimateMeLoaded(user));
+        dispatch(meActions.guesstimateMeLoaded(user as any)); // FIXME - casting lies
       }
       dispatch(userOrganizationMembershipActions.fetchByUserId(userId));
     } catch (err) {

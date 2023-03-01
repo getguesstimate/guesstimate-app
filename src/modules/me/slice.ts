@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ApiUser } from "~/lib/guesstimate_api/resources/Users";
 
-type MeProfileFields = {
+export type MeProfile = ApiUser & {
   needs_tutorial: boolean;
   has_payment_account?: boolean;
   plan: {
@@ -19,29 +19,52 @@ type MeProfileFields = {
   };
 };
 
-type MeState = Partial<{
-  token: string;
-  profile: ApiUser & MeProfileFields;
-}>;
+type MeState =
+  | {
+      tag: "SIGNED_OUT";
+      profile: undefined;
+    }
+  | {
+      tag: "SIGNED_IN_LOADING_PROFILE";
+      token: string;
+      auth0_id: string;
+      profile: undefined;
+    }
+  | {
+      tag: "SIGNED_IN";
+      token: string;
+      auth0_id: string;
+      profile: MeProfile;
+    };
 
 export const meSlice = createSlice({
   name: "me",
-  initialState: {} as MeState,
+  initialState: { tag: "SIGNED_OUT", profile: undefined } as MeState,
   reducers: {
-    setToken(state, action: PayloadAction<{ token: string }>) {
-      state.token = action.payload.token;
+    setAuth0(_, action: PayloadAction<{ token: string; auth0_id: string }>) {
+      return {
+        tag: "SIGNED_IN_LOADING_PROFILE",
+        profile: undefined,
+        ...action.payload,
+      };
     },
-    setProfile(
-      state,
-      action: PayloadAction<{ profile: any }> // FIXME
-    ) {
-      state.profile = action.payload.profile;
-    },
-    init(_, action: PayloadAction<{ token: string; profile: any }>) {
-      return action.payload;
+    setProfile(state, action: PayloadAction<{ profile: MeProfile }>) {
+      if (state.tag === "SIGNED_OUT") {
+        return state;
+      }
+      const { profile } = action.payload;
+      // FIXME - profile doesn't always contain auth0_id
+      //   if (state.auth0_id !== profile.auth0_id) {
+      //     return state; // throw error?
+      //   }
+      return {
+        ...state,
+        tag: "SIGNED_IN",
+        profile,
+      };
     },
     destroy() {
-      return {};
+      return { tag: "SIGNED_OUT", profile: undefined };
     },
   },
 });

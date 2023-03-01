@@ -6,9 +6,8 @@ import * as auth0Constants from "~/server/auth0/constants";
 
 import { me } from "~/lib/engine/engine";
 import { generalError } from "~/lib/errors/index";
-import { ApiUser } from "~/lib/guesstimate_api/resources/Users";
 import { AppThunk } from "~/modules/store";
-import { meSlice } from "./slice";
+import { MeProfile, meSlice } from "./slice";
 
 const webAuth = new auth0.WebAuth({
   domain: auth0Constants.variables.AUTH0_DOMAIN,
@@ -28,7 +27,7 @@ export function signUp() {
 }
 
 export function logInWithHash(hash: string): AppThunk {
-  return (dispatch, getState) => {
+  return (dispatch) => {
     if (!/access_token|id_token|error/.test(hash)) {
       return;
     }
@@ -39,54 +38,50 @@ export function logInWithHash(hash: string): AppThunk {
       }
 
       // should we use bits of auth0 profile here until we load the user from guesstimate?
-      dispatch(
-        meSlice.actions.setToken({
-          token: authResult.idToken,
-        })
-      );
-      me.localStorage.set({ ...getState().me });
+      const authInfo = {
+        token: authResult.idToken,
+        auth0_id: authResult.idTokenPayload.sub,
+      };
+      dispatch(meSlice.actions.setAuth0(authInfo));
+      me.localStorage.set(authInfo);
 
       dispatch(userActions.fetchMe(authResult.idTokenPayload.sub));
     });
   };
 }
 
-export function logOut() {
-  me.localStorage.clear();
-  return meSlice.actions.destroy();
+export function logOut(): AppThunk {
+  return (dispatch) => {
+    me.localStorage.clear();
+    dispatch(meSlice.actions.destroy());
+  };
 }
 
+// Should be called once on page load.
+// Loads profile and auth token from localStorage and refetches the user data.
 export function init(): AppThunk {
   return (dispatch) => {
-    const storage = me.localStorage.get();
-    if (storage) {
-      const { profile, token } = storage;
-
-      // TODO - is this always true? i.e. can we have data in storage but no token?
-      if (token) {
-        dispatch(meSlice.actions.init({ profile, token }));
-        dispatch(userActions.fetchMe(profile.auth0_id));
-      }
+    const authInfo = me.localStorage.get();
+    if (authInfo) {
+      dispatch(meSlice.actions.setAuth0(authInfo));
+      dispatch(userActions.fetchMe(authInfo.auth0_id));
     }
   };
 }
 
 export function guesstimateMeReload(): AppThunk {
   return (dispatch, getState) => {
-    const user_id = getState().me.profile?.id;
-    if (user_id) {
-      dispatch(userActions.fetchById(user_id));
+    const state = getState().me;
+    if (state.tag === "SIGNED_OUT") {
+      return;
     }
+    dispatch(userActions.fetchMe(state.auth0_id));
   };
 }
 
 // called from users actions when current user is fetched
-export function guesstimateMeLoaded(object: ApiUser): AppThunk {
-  return (dispatch, getState) => {
-    dispatch(meSlice.actions.setProfile({ profile: object }));
-
-    me.localStorage.set({
-      ...getState().me,
-    });
+export function guesstimateMeLoaded(profile: MeProfile): AppThunk {
+  return (dispatch) => {
+    dispatch(meSlice.actions.setProfile({ profile }));
   };
 }

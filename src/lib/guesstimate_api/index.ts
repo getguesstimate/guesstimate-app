@@ -35,6 +35,6 @@ export class GuesstimateApi {
 export const api = (state: RootState) => {
   return new GuesstimateApi({
     host: rootUrl,
-    api_token: state.me.token,
+    api_token: state.me.tag === "SIGNED_OUT" ? undefined : state.me.token,
   });
 };

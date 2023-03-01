@@ -17,6 +17,7 @@ import { organization, user } from "~/lib/engine/engine";
 import { useAppDispatch } from "~/modules/hooks";
 import { RootState } from "~/modules/store";
 import clsx from "clsx";
+import { MeProfile } from "~/modules/me/slice";
 
 const MenuLink: React.FC<{
   href?: string;
@@ -49,9 +50,8 @@ const MenuLink: React.FC<{
 };
 
 const ProfileDropdown: React.FC<{
-  me: RootState["me"];
-}> = ({ me }) => {
-  const profile: any = me.profile;
+  profile: MeProfile;
+}> = ({ profile }) => {
   const portalUrl = _.get(profile, "account._links.payment_portal.href");
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -129,14 +129,14 @@ const ProfileDropdown: React.FC<{
 };
 
 const NewModelDropdown: React.FC<{
-  me: RootState["me"];
+  profile: MeProfile;
   organizations: any;
-}> = ({ me, organizations }) => {
+}> = ({ profile, organizations }) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const ref = useRef<DropDownHandle | null>(null);
-  const userPic = me.profile?.picture;
-  const userName = me.profile?.name;
+  const userPic = profile.picture;
+  const userName = profile.name;
 
   const createModel = (organizationId: number | undefined) => {
     dispatch(spaceActions.create(organizationId, router));
@@ -264,7 +264,7 @@ export const HeaderRightMenu: React.FC<Props> = (props) => {
     meActions.signIn();
   };
 
-  const { me, isLoggedIn } = props;
+  const { me } = props;
 
   const organizations = user.usersOrganizations(
     props.me,
@@ -273,22 +273,27 @@ export const HeaderRightMenu: React.FC<Props> = (props) => {
   );
   const hasOrganizations = organizations.length > 0;
 
+  if (me.tag === "SIGNED_IN_LOADING_PROFILE") {
+    return null; // waiting for data to avoid a flash of unsigned state
+  }
+
   return (
     <div className="flex space-x-4 md:space-x-6">
-      {isLoggedIn ? (
+      {me.tag === "SIGNED_IN" ? (
         <>
-          <NewModelDropdown me={me} organizations={organizations} />
-          {me.profile && (
-            <MenuLink
-              href={`/users/${me.profile.id}`}
-              icon={<i className="ion-md-albums" />}
-              text="My Models"
-            />
-          )}
+          <NewModelDropdown
+            profile={me.profile}
+            organizations={organizations}
+          />
+          <MenuLink
+            href={`/users/${me.profile.id}`}
+            icon={<i className="ion-md-albums" />}
+            text="My Models"
+          />
           {hasOrganizations && (
             <OrganizationsDropdown organizations={organizations} />
           )}
-          <ProfileDropdown me={props.me} />
+          <ProfileDropdown profile={me.profile} />
         </>
       ) : (
         <>

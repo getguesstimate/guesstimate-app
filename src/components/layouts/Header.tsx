@@ -9,7 +9,7 @@ import { HeaderRightMenu } from "./HeaderRightMenu";
 const logo = "/assets/new-logo-2.png";
 
 const loggedIn = (user: RootState["me"]) => {
-  return !!(user && user.profile && user.profile.name);
+  return user.tag === "SIGNED_IN";
 };
 
 type Props = {
