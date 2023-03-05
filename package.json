@@ -59,6 +59,7 @@
     "typescript": "4.9.4"
   },
   "dependencies": {
+    "@auth0/auth0-react": "^2.0.1",
     "@floating-ui/react": "^0.18.0",
     "@react-hook/size": "^2.1.2",
     "@reduxjs/toolkit": "^1.9.1",

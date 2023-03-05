@@ -1,3 +1,4 @@
+import { useAuth0 } from "@auth0/auth0-react";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 
@@ -16,9 +17,23 @@ export const AuthRedirect: React.FC = () => {
   const router = useRouter();
 
   const dispatch = useAppDispatch();
+
+  const { isAuthenticated, getIdTokenClaims, getAccessTokenSilently } =
+    useAuth0();
   useEffect(() => {
-    dispatch(meActions.logInWithHash(location.hash));
-  }, []);
+    if (isAuthenticated) {
+      (async () => {
+        const token = await getIdTokenClaims();
+        // TODO: should use access token instead:
+        // const token = await getAccessTokenSilently();
+        if (!token) {
+          // generalError("parseHash Error", { err }); // TODO - dispatch redux error?
+          return;
+        }
+        dispatch(meActions.logInWithIdToken(token));
+      })();
+    }
+  }, [isAuthenticated, getIdTokenClaims]);
 
   const me = useAppSelector((state) => state.me);
 

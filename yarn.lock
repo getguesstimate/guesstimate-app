@@ -10,6 +10,18 @@
     "@jridgewell/gen-mapping" "^0.1.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
+"@auth0/auth0-react@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@auth0/auth0-react/-/auth0-react-2.0.1.tgz#581d3d1481fabe6f5b6821a08254344345f1a77c"
+  integrity sha512-7Rla3del7inUloaWMsECs0JvBpDEj9lgfy+BQE/Z75zs9tveNvxab+xFdfrBC0GPN0eoiq1PeHcc++YjLnti+g==
+  dependencies:
+    "@auth0/auth0-spa-js" "^2.0.4"
+
+"@auth0/auth0-spa-js@^2.0.4":
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/@auth0/auth0-spa-js/-/auth0-spa-js-2.0.4.tgz#81f6b5d9f72617ed30ee53cdf27dcd7a216bf2da"
+  integrity sha512-NgD6Fkm5Xnbned1VjhEW8irm1/Y8AWtdSLexgLXNwwBVgfnYicCVBu8w75m2t+4QljXkTcI7IXVEFhVmxMuxaA==
+
 "@babel/code-frame@7.0.0-beta.44":
   version "7.0.0-beta.44"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.0.0-beta.44.tgz#2a02643368de80916162be70865c97774f3adbd9"

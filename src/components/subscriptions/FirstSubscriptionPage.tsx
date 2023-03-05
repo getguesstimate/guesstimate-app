@@ -1,5 +1,7 @@
 import React, { PropsWithChildren } from "react";
 
+import { useAuth0 } from "@auth0/auth0-react";
+
 import { Plan } from "~/lib/config/plan";
 import { capitalizeFirstLetter } from "~/lib/string";
 import * as displayErrorsActions from "~/modules/displayErrors/actions";
@@ -25,6 +27,7 @@ type Props = {
 };
 
 export const FirstSubscriptionPage: React.FC<Props> = ({ planName }) => {
+  const { loginWithRedirect } = useAuth0();
   const me = useAppSelector((state) => state.me);
   const dispatch = useAppDispatch();
 
@@ -77,7 +80,7 @@ export const FirstSubscriptionPage: React.FC<Props> = ({ planName }) => {
               )
             ) : (
               <H2>
-                <a href="" onClick={() => meActions.signIn()}>
+                <a href="" onClick={() => loginWithRedirect()}>
                   Log in
                 </a>{" "}
                 to view this page

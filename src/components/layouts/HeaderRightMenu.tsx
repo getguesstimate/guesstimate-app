@@ -18,6 +18,7 @@ import { useAppDispatch } from "~/modules/hooks";
 import { RootState } from "~/modules/store";
 import clsx from "clsx";
 import { MeProfile } from "~/modules/me/slice";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const MenuLink: React.FC<{
   href?: string;
@@ -256,12 +257,14 @@ type Props = {
 };
 
 export const HeaderRightMenu: React.FC<Props> = (props) => {
+  const { loginWithRedirect } = useAuth0();
+
   const signUp = () => {
-    meActions.signUp();
+    loginWithRedirect();
   };
 
   const signIn = () => {
-    meActions.signIn();
+    loginWithRedirect();
   };
 
   const { me } = props;

@@ -8,6 +8,7 @@ import { me } from "~/lib/engine/engine";
 import { generalError } from "~/lib/errors/index";
 import { AppThunk } from "~/modules/store";
 import { MeProfile, meSlice } from "./slice";
+import { IdToken } from "@auth0/auth0-react";
 
 const webAuth = new auth0.WebAuth({
   domain: auth0Constants.variables.AUTH0_DOMAIN,
@@ -26,27 +27,17 @@ export function signUp() {
   webAuth.authorize({ mode: "signUp" });
 }
 
-export function logInWithHash(hash: string): AppThunk {
+export function logInWithIdToken(token: IdToken): AppThunk {
   return (dispatch) => {
-    if (!/access_token|id_token|error/.test(hash)) {
-      return;
-    }
-    webAuth.parseHash({ hash }, (err, authResult) => {
-      if (err || !authResult?.idToken) {
-        generalError("parseHash Error", { err }); // TODO - dispatch redux error?
-        return;
-      }
+    // should we use bits of auth0 profile here until we load the user from guesstimate?
+    const authInfo = {
+      token: token.__raw,
+      auth0_id: token.sub,
+    };
+    dispatch(meSlice.actions.setAuth0(authInfo));
+    me.localStorage.set(authInfo);
 
-      // should we use bits of auth0 profile here until we load the user from guesstimate?
-      const authInfo = {
-        token: authResult.idToken,
-        auth0_id: authResult.idTokenPayload.sub,
-      };
-      dispatch(meSlice.actions.setAuth0(authInfo));
-      me.localStorage.set(authInfo);
-
-      dispatch(userActions.fetchMe(authResult.idTokenPayload.sub));
-    });
+    dispatch(userActions.fetchMe(token.sub));
   };
 }
 
