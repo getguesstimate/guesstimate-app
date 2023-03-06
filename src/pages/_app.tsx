@@ -57,10 +57,8 @@ const MyApp = ({ Component }: AppProps) => {
         domain={auth0Constants.variables.AUTH0_DOMAIN}
         clientId={auth0Constants.variables.AUTH0_CLIENT_ID}
         authorizationParams={{
-          redirectUri: `${BASE_URL}/auth-redirect`,
+          redirect_uri: `${BASE_URL}/auth-redirect`,
           audience: `https://${auth0Constants.variables.AUTH0_DOMAIN}/userinfo`,
-          // responseType: "token id_token",
-          // scope: "openid", // default
         }}
       >
         <Provider store={store}>{isClient ? <Component /> : null}</Provider>
