@@ -322,7 +322,7 @@ export const MetricCard = React.forwardRef<{ focus(): void }, Props>(
               "font-light", // TODO - remove, move styling to children
               !isTitleView &&
                 (inSelectedCell
-                  ? "bg-[#fefefe] hover:bg-white" // these values are almost identical, simplify?
+                  ? "bg-[#fefefe] hover:bg-white"
                   : [
                       relType === NOEDGE
                         ? "bg-[#edeff3]"

@@ -257,7 +257,8 @@ type Props = {
 };
 
 export const HeaderRightMenu: React.FC<Props> = (props) => {
-  const { loginWithRedirect } = useAuth0();
+  const { loginWithRedirect, isLoading, isAuthenticated } = useAuth0();
+  const dispatch = useAppDispatch();
 
   const signUp = () => {
     loginWithRedirect();
@@ -276,8 +277,19 @@ export const HeaderRightMenu: React.FC<Props> = (props) => {
   );
   const hasOrganizations = organizations.length > 0;
 
+  if (isLoading) {
+    return null;
+  }
+
+  console.log({ isLoading, isAuthenticated });
+
   if (me.tag === "SIGNED_IN_LOADING_PROFILE") {
     return null; // waiting for data to avoid a flash of unsigned state
+  }
+
+  if (!isAuthenticated && me.tag === "SIGNED_IN") {
+    dispatch(meActions.logOut());
+    return null;
   }
 
   return (

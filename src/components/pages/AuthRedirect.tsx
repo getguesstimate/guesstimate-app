@@ -18,14 +18,12 @@ export const AuthRedirect: React.FC = () => {
 
   const dispatch = useAppDispatch();
 
-  const { isAuthenticated, getIdTokenClaims, getAccessTokenSilently } =
-    useAuth0();
+  const { isAuthenticated, getIdTokenClaims } = useAuth0();
   useEffect(() => {
     if (isAuthenticated) {
       (async () => {
         const token = await getIdTokenClaims();
-        // TODO: should use access token instead:
-        // const token = await getAccessTokenSilently();
+        // TODO: should use access token instead
         if (!token) {
           // generalError("parseHash Error", { err }); // TODO - dispatch redux error?
           return;

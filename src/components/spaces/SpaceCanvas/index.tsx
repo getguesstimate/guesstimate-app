@@ -29,18 +29,17 @@ import { hasErrors } from "~/lib/engine/simulation";
 
 import { hasMetricUpdated } from "~/components/metrics/card/updated";
 
+import { EdgeShape, PathStatus } from "~/components/lib/FlowGrid/Edges";
 import { GridItem } from "~/components/lib/FlowGrid/types";
 import { FullDenormalizedMetric } from "~/lib/engine/space";
 import {
+  CanvasLocation,
   existsAtLoc,
   isWithinRegion,
-  CanvasLocation,
   MaybeRegion,
 } from "~/lib/locationUtils";
 import { useAppDispatch, useAppSelector } from "~/modules/hooks";
 import { ExtendedDSpace } from "../denormalized-space-selector";
-import clsx from "clsx";
-import { EdgeShape, PathStatus } from "~/components/lib/FlowGrid/Edges";
 
 type Props = {
   denormalizedSpace: ExtendedDSpace;
@@ -81,7 +80,7 @@ export const SpaceCanvas: React.FC<Props> = ({
     dispatch(copiedActions.cut(denormalizedSpace.id));
   };
 
-  // for simulating componentWillUnmount and componentDidUpdate
+  // previously: componentDidUpdate
   const denormalizedSpaceRef = useRef<ExtendedDSpace>(denormalizedSpace);
   useEffect(() => {
     const { metrics } = denormalizedSpace;

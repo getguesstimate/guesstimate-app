@@ -16,9 +16,9 @@ export const urlById = (id: string | number) => `/organizations/${id}`;
 export const hasPrivateAccess = (organization: Organization) =>
   _.get(organization, "plan.private_model_limit") !== 0;
 export const canMakeMorePrivateModels = hasPrivateAccess;
-export const organizationMemberships = (id: string, memberships) =>
+export const organizationMemberships = (id: number, memberships) =>
   _collections.filter(memberships, id, "organization_id");
-export const organizationInvitations = (id: string, invitations) =>
+export const organizationInvitations = (id: number, invitations) =>
   _collections.filter(invitations, id, "organization_id");
 
 const ORG_FACT_READABLE_ID_PREFIX = "organization_";
@@ -27,7 +27,7 @@ export const organizationReadableId = (o: Organization) =>
 export const organizationIdFromFactReadableId = (str) =>
   str.slice(ORG_FACT_READABLE_ID_PREFIX.length);
 
-export function organizationUsers(organizationId: string, users, memberships) {
+export function organizationUsers(organizationId: number, users, memberships) {
   const filteredMemberships = organizationMemberships(
     organizationId,
     memberships

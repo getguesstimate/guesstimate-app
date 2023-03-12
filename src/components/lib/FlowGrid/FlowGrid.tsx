@@ -126,6 +126,8 @@ export const FlowGrid: React.FC<Props> = ({
 
   useCallOnUnmount(onDeSelectAll);
 
+  console.log("render FlowGrid");
+
   const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const { rows, columns } = useMemo(() => {

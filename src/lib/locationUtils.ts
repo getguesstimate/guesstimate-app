@@ -80,7 +80,7 @@ export function translate(start: CanvasLocation, end: CanvasLocation) {
 
 // Returns a function that can be used to search a list of objects of the form {location: ..., ... } for a value at the
 // passed location.
-export function existsAtLoc(seekLoc) {
+export function existsAtLoc(seekLoc: CanvasLocation) {
   return (e) => isAtLocation(e.location, seekLoc);
 }
 

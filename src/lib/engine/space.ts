@@ -13,6 +13,7 @@ import * as _userOrganizationMemberships from "./userOrganizationMemberships";
 import { allPropsPresent, isPresent } from "./utils";
 import { DenormalizedMetric } from "./metric";
 import { GuesstimateWithInput } from "~/modules/guesstimates/reducer";
+import { CanvasState } from "~/modules/canvas_state/slice";
 
 export type MetricEdges = {
   inputs: string[];
@@ -206,10 +207,10 @@ function toDgraph(
 }
 
 export function canEdit(
-  { user_id, organization_id },
-  me,
-  userOrganizationMemberships,
-  canvasState
+  { user_id, organization_id }: ApiSpace,
+  me: RootState["me"],
+  userOrganizationMemberships: any,
+  canvasState: CanvasState | undefined
 ) {
   // TODO(matthew): This first check is hacky. Refactor later.
   if (
@@ -220,8 +221,8 @@ export function canEdit(
     return false;
   }
 
-  const meId = _.get(me, "id");
-  if (!!organization_id) {
+  const meId = me.profile?.id;
+  if (meId && organization_id) {
     return _userOrganizationMemberships.isMember(
       organization_id,
       meId,
