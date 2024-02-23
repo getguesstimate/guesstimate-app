@@ -1,24 +1,24 @@
-import React from "react";
+import React, { FC, PropsWithChildren } from "react";
 
-import { ErrorModal } from "./ErrorModal";
+import clsx from "clsx";
 import { NavHelper } from "~/components/utility/NavHelper/index";
 import { ModalContainer } from "~/modules/modal/routes";
-import { Main } from "./Main";
+
+import { ErrorModal } from "./ErrorModal";
 import { Footer } from "./Footer";
 import { Header } from "./Header";
-import clsx from "clsx";
+import { Main } from "./Main";
 
-type Props = {
+type Props = PropsWithChildren<{
   isFluid?: boolean;
   simpleHeader?: boolean;
   showFooter?: boolean;
   embed?: boolean;
   fullHeight?: boolean;
   backgroundColor?: "GREY";
-  children: React.ReactNode;
-};
+}>;
 
-export const Layout: React.FC<Props> = ({
+export const Layout: FC<Props> = ({
   isFluid = false,
   simpleHeader = false,
   showFooter = true,

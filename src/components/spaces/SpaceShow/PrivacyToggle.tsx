@@ -1,8 +1,8 @@
-import { useRouter } from "next/router";
 import React from "react";
 
 import { CardListElement } from "~/components/utility/Card";
 import { DropDown } from "~/components/utility/DropDown";
+
 import { SpaceHeaderButton } from "./SpaceHeaderButton";
 
 const PublicOption: React.FC<{ isSelected: boolean; onClick(): void }> = ({
@@ -26,7 +26,6 @@ const PrivateOption: React.FC<{
   isPrivateSelectionInvalid: boolean;
   editableByMe: boolean;
 }> = ({ onClick, isSelected, isPrivateSelectionInvalid, editableByMe }) => {
-  const router = useRouter();
   return (
     <CardListElement
       isSelected={isSelected}

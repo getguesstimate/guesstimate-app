@@ -1,26 +1,25 @@
+import React, { FC, useEffect, useRef } from "react";
+
+import clsx from "clsx";
 import _ from "lodash";
 import { useRouter } from "next/router";
-import React, { useRef } from "react";
-
 import {
   CardListElement,
   CardListElementProps,
 } from "~/components/utility/Card";
 import { DropDown, DropDownHandle } from "~/components/utility/DropDown";
-
+import { organization, user } from "~/lib/engine/engine";
+import { useAppDispatch } from "~/modules/hooks";
 import * as meActions from "~/modules/me/actions";
+import { MeProfile } from "~/modules/me/slice";
 import * as modalActions from "~/modules/modal/actions";
 import * as navigationActions from "~/modules/navigation/actions";
 import * as spaceActions from "~/modules/spaces/actions";
-
-import { organization, user } from "~/lib/engine/engine";
-import { useAppDispatch } from "~/modules/hooks";
 import { RootState } from "~/modules/store";
-import clsx from "clsx";
-import { MeProfile } from "~/modules/me/slice";
+
 import { useAuth0 } from "@auth0/auth0-react";
 
-const MenuLink: React.FC<{
+const MenuLink: FC<{
   href?: string;
   onClick?(): void;
   icon?: React.ReactNode;
@@ -41,7 +40,7 @@ const MenuLink: React.FC<{
         noMobile ? "hidden md:flex" : "flex",
         "items-center space-x-1 md:space-x-2"
       )}
-      href={href || ""}
+      href={href ?? ""}
       onClick={handleClick}
     >
       {icon ? <div className="text-xl md:text-2xl">{icon}</div> : null}
@@ -50,7 +49,7 @@ const MenuLink: React.FC<{
   );
 };
 
-const ProfileDropdown: React.FC<{
+const ProfileDropdown: FC<{
   profile: MeProfile;
 }> = ({ profile }) => {
   const portalUrl = _.get(profile, "account._links.payment_portal.href");
@@ -129,7 +128,7 @@ const ProfileDropdown: React.FC<{
   );
 };
 
-const NewModelDropdown: React.FC<{
+const NewModelDropdown: FC<{
   profile: MeProfile;
   organizations: any;
 }> = ({ profile, organizations }) => {
@@ -145,7 +144,7 @@ const NewModelDropdown: React.FC<{
 
   const personalModel: CardListElementProps = {
     header: userName!,
-    imageShape: "circle" as const,
+    imageShape: "circle",
     onMouseDown: () => {
       createModel(undefined);
       ref.current?.close();
@@ -178,9 +177,7 @@ const NewModelDropdown: React.FC<{
   if (!organizations?.length) {
     return (
       <MenuLink
-        onClick={() => {
-          createModel(undefined);
-        }}
+        onClick={() => createModel(undefined)}
         noMobile
         text="New Model"
         icon={<i className="ion-md-add" />}
@@ -207,7 +204,7 @@ const NewModelDropdown: React.FC<{
   );
 };
 
-const OrganizationsDropdown: React.FC<{
+const OrganizationsDropdown: FC<{
   organizations: any[];
 }> = ({ organizations }) => {
   const router = useRouter();
@@ -251,22 +248,18 @@ const OrganizationsDropdown: React.FC<{
 
 type Props = {
   me: RootState["me"];
-  isLoggedIn: boolean;
   userOrganizationMemberships: any;
   organizations: any;
 };
 
-export const HeaderRightMenu: React.FC<Props> = (props) => {
-  const { loginWithRedirect, isLoading, isAuthenticated } = useAuth0();
+export const HeaderRightMenu: FC<Props> = (props) => {
+  const auth0 = useAuth0();
+  console.log(auth0);
+  const { loginWithRedirect, isLoading, isAuthenticated } = auth0;
   const dispatch = useAppDispatch();
 
-  const signUp = () => {
-    loginWithRedirect();
-  };
-
-  const signIn = () => {
-    loginWithRedirect();
-  };
+  const signUp = () => loginWithRedirect();
+  const signIn = () => loginWithRedirect();
 
   const { me } = props;
 
@@ -277,19 +270,18 @@ export const HeaderRightMenu: React.FC<Props> = (props) => {
   );
   const hasOrganizations = organizations.length > 0;
 
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated && me.tag === "SIGNED_IN") {
+      dispatch(meActions.logOut());
+    }
+  }, [isLoading, isAuthenticated, me]);
+
   if (isLoading) {
     return null;
   }
 
-  console.log({ isLoading, isAuthenticated });
-
   if (me.tag === "SIGNED_IN_LOADING_PROFILE") {
     return null; // waiting for data to avoid a flash of unsigned state
-  }
-
-  if (!isAuthenticated && me.tag === "SIGNED_IN") {
-    dispatch(meActions.logOut());
-    return null;
   }
 
   return (

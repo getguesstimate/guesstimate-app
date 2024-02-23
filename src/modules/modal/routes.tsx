@@ -1,11 +1,11 @@
 import Modal from "react-modal";
-
 import { FirstSubscriptionContainer } from "~/components/subscriptions/FirstSubscription/container";
 import { SettingsContainer } from "~/components/users/settings/SettingsContainer";
 import { Button } from "~/components/utility/buttons/button";
 import { NavHelper } from "~/components/utility/NavHelper/index";
 import { useAppDispatch, useAppSelector } from "~/modules/hooks";
 import * as modalActions from "~/modules/modal/actions";
+
 import { ModalState } from "./reducer";
 
 const Confirmation: React.FC<{

@@ -1,13 +1,13 @@
+import React, { FC, PropsWithChildren } from "react";
+
 import clsx from "clsx";
-import React, { PropsWithChildren } from "react";
-
 import Icon from "~/components/react-fa-patched";
-
 import { ButtonClose } from "~/components/utility/buttons/close";
 import { capitalizeFirstLetter } from "~/lib/string";
+
 import { HR } from "./HR";
 
-const IconSection: React.FC<
+const IconSection: FC<
   Pick<CardListElementProps, "icon" | "ionicIcon" | "image" | "imageShape"> & {
     size: "normal" | "large";
   }
@@ -16,7 +16,10 @@ const IconSection: React.FC<
     {icon && (
       <Icon
         name={icon}
-        className={clsx(size === "large" ? "text-4xl" : "text-xl")}
+        className={clsx(
+          "leading-none",
+          size === "large" ? "text-4xl" : "text-lg"
+        )}
       />
     )}
     {ionicIcon && <i className={`text-2xl ion-${ionicIcon}`} />}
@@ -29,14 +32,14 @@ const IconSection: React.FC<
   </div>
 );
 
-const ChildrenSection: React.FC<
+const ChildrenSection: FC<
   PropsWithChildren<{
     header: string;
   }>
 > = ({ header, children }) => (
   <div className="text-[#555]">
     {header && (
-      <div className="text-xl font-bold leading-none">
+      <div className="text-lg font-bold leading-none">
         {capitalizeFirstLetter(header)}
       </div>
     )}
@@ -57,7 +60,7 @@ export type CardListElementProps = PropsWithChildren<{
   image?: string;
 }>;
 
-export const CardListElement: React.FC<CardListElementProps> = ({
+export const CardListElement: FC<CardListElementProps> = ({
   icon,
   ionicIcon,
   image,
@@ -71,17 +74,16 @@ export const CardListElement: React.FC<CardListElementProps> = ({
 }) => {
   const handleSelect = (e: React.MouseEvent) => {
     if (!isDisabled && onMouseDown) {
-      console.log("prevented");
       e.preventDefault();
       onMouseDown();
     }
   };
 
   const className = clsx(
-    "grid grid-cols-12 py-2 px-4 gap-2 items-center",
+    "grid grid-cols-12 px-4 gap-2 items-center",
     isSelected && "bg-grey-1",
     isDisabled ? "cursor-not-allowed" : "hover:bg-blue-2 cursor-pointer",
-    children && "pt-4 pb-2"
+    children ? "pt-4 pb-2" : "py-2"
   );
 
   const [leftCol, rightCol] = children
@@ -109,7 +111,7 @@ export const CardListElement: React.FC<CardListElementProps> = ({
   );
 };
 
-export const CardHeader: React.FC<PropsWithChildren> = ({ children }) => (
+export const CardHeader: FC<PropsWithChildren> = ({ children }) => (
   <header className="text-lg font-light text-grey-888">{children}</header>
 );
 
@@ -120,7 +122,7 @@ type Props = PropsWithChildren<{
   hasPadding?: boolean;
 }>;
 
-export const Card: React.FC<Props> = ({
+export const Card: FC<Props> = ({
   headerText,
   onClose,
   width,
@@ -137,7 +139,7 @@ export const Card: React.FC<Props> = ({
       )}
     >
       {headerText && (
-        <div className="relative mt-2 mb-2 text-center">
+        <div className="relative mt-1 mb-2 text-center">
           <CardHeader>{headerText}</CardHeader>
           <div
             className={clsx(
@@ -151,7 +153,11 @@ export const Card: React.FC<Props> = ({
       )}
 
       <div>
-        {headerText && <HR />}
+        {headerText && (
+          <div className="mb-1">
+            <HR />
+          </div>
+        )}
         {children}
       </div>
     </div>

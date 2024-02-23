@@ -1,30 +1,23 @@
-import _ from "lodash";
 import React, { useEffect, useReducer } from "react";
 
+import _ from "lodash";
 import Head from "next/head";
-
 import { SpaceCanvas } from "~/components/spaces/SpaceCanvas";
-import { SpaceHeader } from "./SpaceHeader";
-
-import { LeftSidebar } from "./LeftSidebar";
-
-import { SpaceToolbar } from "./SpaceToolbar";
+import * as e from "~/lib/engine/engine";
+import { clearEditsAllowed } from "~/modules/canvas_state/actions";
+import { useAppDispatch, useAppSelector } from "~/modules/hooks";
+import * as spaceActions from "~/modules/spaces/actions";
+import * as elev from "~/server/elev/index";
 
 import { denormalizedSpaceSelector } from "../denormalized-space-selector";
-
-import { clearEditsAllowed } from "~/modules/canvas_state/actions";
-import * as spaceActions from "~/modules/spaces/actions";
-
-import * as e from "~/lib/engine/engine";
-
-import { Calculator } from "~/modules/calculators/reducer";
-import { useAppDispatch, useAppSelector } from "~/modules/hooks";
-import * as elev from "~/server/elev/index";
+import { LeftSidebar } from "./LeftSidebar";
 import {
   RightSidebar,
   rightSidebarReducer,
   RightSidebarState,
 } from "./RightSidebar";
+import { SpaceHeader } from "./SpaceHeader";
+import { SpaceToolbar } from "./SpaceToolbar";
 
 type Props = {
   spaceId: number;
@@ -35,28 +28,33 @@ type Props = {
   shareableLinkToken?: string | null;
 };
 
-export const SpaceShow: React.FC<Props> = (props) => {
+export const SpaceShow: React.FC<Props> = ({
+  spaceId,
+  showCalculatorId,
+  factsShown,
+  showCalculatorResults,
+  embed,
+  shareableLinkToken,
+}) => {
   const dispatch = useAppDispatch();
 
   const {
     denormalizedSpace: space,
     exportedFacts,
     organizationFacts,
-  } = useAppSelector((state) =>
-    denormalizedSpaceSelector(state, { spaceId: props.spaceId })
-  );
+  } = useAppSelector((state) => denormalizedSpaceSelector(state, { spaceId }));
 
   const [rightSidebar, rightSidebarDispatch] = useReducer(
     rightSidebarReducer,
     null,
     (): RightSidebarState =>
-      props.showCalculatorId
+      showCalculatorId
         ? {
             type: "SHOW_CALCULATOR",
-            showCalculatorResults: props.showCalculatorResults,
-            showCalculatorId: props.showCalculatorId,
+            showCalculatorResults,
+            showCalculatorId,
           }
-        : props.factsShown
+        : factsShown
         ? { type: "FACT_SIDEBAR" }
         : { type: "CLOSED" }
   );
@@ -66,33 +64,28 @@ export const SpaceShow: React.FC<Props> = (props) => {
     const hasData = hasGraph && e.space.prepared(space);
 
     if (!hasData) {
-      dispatch(spaceActions.fetchById(props.spaceId, props.shareableLinkToken));
+      dispatch(spaceActions.fetchById(spaceId, shareableLinkToken));
     }
 
     dispatch(clearEditsAllowed());
   }, []);
 
   useEffect(() => {
-    if (props.embed) {
+    if (embed) {
       return;
     }
 
     if (rightSidebar.type === "CLOSED") {
       elev.show();
     }
-    return () => {
-      elev.hide();
-    };
+    return () => elev.hide();
   }, []);
 
   if (!e.space.prepared(space)) {
     return null;
   }
 
-  const leftSidebarIsVisible =
-    space.editableByMe || !_.isEmpty(space.description);
-
-  if (props.embed) {
+  if (embed) {
     return (
       <div className="bg-[#c2cdd6]">
         <SpaceCanvas
@@ -113,6 +106,9 @@ export const SpaceShow: React.FC<Props> = (props) => {
     : `${authorCallout}: ${space.description}`;
 
   const pageTitle = `${space.name} | Guesstimate`;
+
+  const leftSidebarIsVisible =
+    space.editableByMe || !_.isEmpty(space.description);
 
   return (
     <div className="flex h-full flex-1 flex-col bg-[#dfe1e4]">
@@ -137,7 +133,7 @@ export const SpaceShow: React.FC<Props> = (props) => {
           makeNewCalculator={() =>
             rightSidebarDispatch({ type: "MAKE_NEW_CALCULATOR" })
           }
-          showCalculator={(calculator: Calculator) =>
+          showCalculator={(calculator) =>
             rightSidebarDispatch({
               type: "SHOW_CALCULATOR",
               payload: calculator,

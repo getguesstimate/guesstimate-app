@@ -1,34 +1,32 @@
-import _ from "lodash";
-import { useRouter } from "next/router";
 import React, { useState } from "react";
 
 import clsx from "clsx";
+import _ from "lodash";
+import { useRouter } from "next/router";
 import Modal from "react-modal";
-
+import { CardListElement } from "~/components/utility/Card";
+import { DropDown } from "~/components/utility/DropDown";
 import * as e from "~/lib/engine/engine";
+import { canUseOrganizationFacts } from "~/lib/engine/space";
 import { parseSlurp } from "~/lib/slurpParser";
-
+import { Calculator } from "~/modules/calculators/reducer";
 import { allowEdits, forbidEdits } from "~/modules/canvas_state/actions";
 import { CanvasActionState } from "~/modules/canvas_state/reducer";
-import { useAppDispatch, useAppSelector } from "~/modules/hooks";
-import { ExtendedDSpace } from "../../denormalized-space-selector";
-
+import { redo, undo } from "~/modules/checkpoints/actions";
 import * as copiedActions from "~/modules/copied/actions";
+import { useAppDispatch, useAppSelector } from "~/modules/hooks";
 import { removeSelectedMetrics } from "~/modules/metrics/actions";
 import * as simulationActions from "~/modules/simulations/actions";
 import * as spaceActions from "~/modules/spaces/actions";
 import * as userActions from "~/modules/users/actions";
 
-import { CardListElement } from "~/components/utility/Card";
-import { DropDown } from "~/components/utility/DropDown";
-import { canUseOrganizationFacts } from "~/lib/engine/space";
-import { redo, undo } from "~/modules/checkpoints/actions";
+import { ExtendedDSpace } from "../../denormalized-space-selector";
+import { Tutorial } from "../Tutorial";
 import { CanvasViewForm } from "./CanvasViewForm";
 import { ImportFromSlurpForm } from "./import_from_slurp_form";
 import { ToolbarIcon } from "./ToolbarIcon";
 import { ToolbarTextItem } from "./ToolbarTextItem";
 import { ViewOptionToggle } from "./ViewOptionToggle";
-import { Tutorial } from "../Tutorial";
 
 const MessageBox: React.FC<{ color: "GREY" | "RED"; children: string }> = ({
   color,
@@ -83,7 +81,7 @@ const Divider: React.FC = () => (
 type Props = {
   space: ExtendedDSpace;
   makeNewCalculator(): void;
-  showCalculator(c: unknown): void;
+  showCalculator(c: Calculator): void;
   toggleFactSidebar(): void;
 };
 

@@ -1,10 +1,8 @@
-import React from "react";
+import { FC } from "react";
 
 import { ButtonWithIcon } from "../button";
 
-export const SmallButtonClose: React.FC<{ onClick(): void }> = ({
-  onClick,
-}) => (
+export const SmallButtonClose: FC<{ onClick(): void }> = ({ onClick }) => (
   <a
     className="cursor-pointer text-xl text-grey-ccc hover:text-grey-888"
     onClick={onClick}
@@ -13,7 +11,7 @@ export const SmallButtonClose: React.FC<{ onClick(): void }> = ({
   </a>
 );
 
-export const ButtonClose: React.FC<{ onClick(): void }> = ({ onClick }) => (
+export const ButtonClose: FC<{ onClick(): void }> = ({ onClick }) => (
   <a
     className="cursor-pointer text-2xl leading-none text-grey-bbb hover:text-grey-888"
     onClick={onClick}
@@ -22,7 +20,7 @@ export const ButtonClose: React.FC<{ onClick(): void }> = ({ onClick }) => (
   </a>
 );
 
-export const ButtonCloseText: React.FC<{ onClick(): void }> = ({ onClick }) => (
+export const ButtonCloseText: FC<{ onClick(): void }> = ({ onClick }) => (
   <ButtonWithIcon
     onClick={onClick}
     icon={<i className="ion-md-close" />}

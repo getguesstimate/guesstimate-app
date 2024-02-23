@@ -1,30 +1,25 @@
-import clsx from "clsx";
-import React from "react";
+import { FC } from "react";
 
+import clsx from "clsx";
 import { useAppSelector } from "~/modules/hooks";
-import { RootState } from "~/modules/store";
 
 import { HeaderRightMenu } from "./HeaderRightMenu";
 
-const logo = "/assets/new-logo-2.png";
-
-const loggedIn = (user: RootState["me"]) => {
-  return user.tag === "SIGNED_IN";
-};
+const LOGO = "/assets/new-logo-2.png";
 
 type Props = {
   isFluid: boolean;
   isBare: boolean;
 };
 
-export const Header: React.FC<Props> = ({ isFluid, isBare }) => {
+export const Header: FC<Props> = ({ isFluid, isBare }) => {
   const me = useAppSelector((state) => state.me);
   const organizations = useAppSelector((state) => state.organizations);
   const userOrganizationMemberships = useAppSelector(
     (state) => state.userOrganizationMemberships
   );
 
-  const isLoggedIn = loggedIn(me);
+  const isLoggedIn = me.tag === "SIGNED_IN";
 
   const navbarRef = isLoggedIn ? "/models" : "/";
   return (
@@ -45,7 +40,7 @@ export const Header: React.FC<Props> = ({ isFluid, isBare }) => {
             <div className="hidden text-2xl leading-none text-grey-2 md:block">
               Guesstimate
             </div>
-            <img className="h-8 md:hidden" src={logo} />
+            <img className="h-8 md:hidden" src={LOGO} />
           </a>
         )}
 
@@ -53,7 +48,6 @@ export const Header: React.FC<Props> = ({ isFluid, isBare }) => {
           me={me}
           organizations={organizations}
           userOrganizationMemberships={userOrganizationMemberships}
-          isLoggedIn={isLoggedIn}
         />
       </div>
     </div>

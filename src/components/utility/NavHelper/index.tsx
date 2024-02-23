@@ -1,15 +1,11 @@
+import React, { FC, PropsWithChildren, useCallback, useEffect } from "react";
+
 import localLinks from "local-links";
 import { useRouter } from "next/router";
-import React, { useCallback, useEffect } from "react";
-
 import { useAppDispatch } from "~/modules/hooks";
 import * as modalActions from "~/modules/modal/actions";
 
-type Props = {
-  children: React.ReactNode;
-};
-
-export const NavHelper: React.FC<Props> = ({ children }) => {
+export const NavHelper: FC<PropsWithChildren> = ({ children }) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
 

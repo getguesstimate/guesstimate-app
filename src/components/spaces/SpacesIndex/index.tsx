@@ -1,13 +1,12 @@
-import _ from "lodash";
 import React, { useEffect, useRef, useState } from "react";
-import Icon from "~/components/react-fa-patched";
 
+import _ from "lodash";
+import Icon from "~/components/react-fa-patched";
 import { SpaceCards } from "~/components/spaces/SpaceCards";
 import { Button } from "~/components/utility/buttons/button";
 import { CardListElement } from "~/components/utility/Card";
 import { DropDown } from "~/components/utility/DropDown";
 import { Input } from "~/components/utility/forms";
-
 import { useAppDispatch, useAppSelector } from "~/modules/hooks";
 import * as search from "~/modules/search_spaces/actions";
 
@@ -63,12 +62,12 @@ const Filter: React.FC<{
     {Object.keys(names).map((key) => {
       return (
         <CardListElement
+          key={key}
           header={names[key]}
           isSelected={selected === key}
           onMouseDown={() => {
             onChange(key);
           }}
-          key={key}
           closeOnClick={true}
         />
       );

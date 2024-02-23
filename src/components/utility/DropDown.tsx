@@ -1,19 +1,23 @@
+import React, {
+  PropsWithChildren,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
+
 import clsx from "clsx";
 import _ from "lodash";
-import React, { useEffect, useImperativeHandle, useRef, useState } from "react";
-
 import { Card } from "~/components/utility/Card";
 
-type Props = {
+type Props = PropsWithChildren<{
   headerText?: string;
   onOpen?(): void;
-  onClose?(): void;
   position?: "right" | "left";
   width?: "wide";
   openLink?: React.ReactNode;
   hasPadding?: boolean;
-  children?: React.ReactNode;
-};
+}>;
 
 export type DropDownHandle = {
   close(): void;
@@ -46,18 +50,9 @@ export const DropDown = React.forwardRef<DropDownHandle, Props>(
       };
     }, [isOpen]);
 
-    const open = () => {
-      setIsOpen(true);
-    };
-
-    const close = () => {
-      setIsOpen(false);
-      props.onClose?.();
-    };
-
-    const toggle = () => {
-      isOpen ? close() : open();
-    };
+    const open = () => setIsOpen(true);
+    const close = () => setIsOpen(false);
+    const toggle = () => (isOpen ? close() : open());
 
     return (
       <div className="relative" ref={containerRef}>
@@ -83,7 +78,7 @@ export const DropDown = React.forwardRef<DropDownHandle, Props>(
                     <div
                       key={i}
                       onMouseDown={
-                        child?.props.closeOnClick ? close : undefined
+                        child?.props?.closeOnClick ? close : undefined
                       }
                     >
                       {child}

@@ -1,33 +1,30 @@
-import { Fact } from "~/lib/engine/facts";
-import { ExtendedDSpace } from "../denormalized-space-selector";
+import { FC, PropsWithChildren, ReactNode, Reducer } from "react";
 
-import * as calculatorActions from "~/modules/calculators/actions";
-
-import { useAppDispatch } from "~/modules/hooks";
-
-import * as elev from "~/server/elev/index";
-import * as e from "~/lib/engine/engine";
-
+import clsx from "clsx";
+import { EditCalculatorForm } from "~/components/calculators/EditCalculatorForm";
+import { NewCalculatorForm } from "~/components/calculators/NewCalculatorForm";
+import { CalculatorCompressedShow } from "~/components/calculators/show/CalculatorCompressedShow";
+import { FactListContainer } from "~/components/facts/list/FactListContainer";
 import {
   ButtonDeleteText,
   ButtonEditText,
   ButtonExpandText,
 } from "~/components/utility/buttons/button";
 import { ButtonCloseText } from "~/components/utility/buttons/close";
-
-import { EditCalculatorForm } from "~/components/calculators/EditCalculatorForm";
-import { NewCalculatorForm } from "~/components/calculators/NewCalculatorForm";
-import { CalculatorCompressedShow } from "~/components/calculators/show/CalculatorCompressedShow";
-import { FactListContainer } from "~/components/facts/list/FactListContainer";
-import { PropsWithChildren } from "react";
-import clsx from "clsx";
+import * as e from "~/lib/engine/engine";
+import { Fact } from "~/lib/engine/facts";
+import * as calculatorActions from "~/modules/calculators/actions";
 import { Calculator } from "~/modules/calculators/reducer";
+import { useAppDispatch } from "~/modules/hooks";
+import * as elev from "~/server/elev/index";
 
-const HeaderTitle: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+import { ExtendedDSpace } from "../denormalized-space-selector";
+
+const HeaderTitle: FC<PropsWithChildren> = ({ children }) => (
   <header className="text-2xl font-bold text-[#476b82]">{children}</header>
 );
 
-const ShowCalculatorHeader: React.FC<{
+const ShowCalculatorHeader: FC<{
   id: number;
   editableByMe: boolean;
   onEdit(): void;
@@ -44,7 +41,7 @@ const ShowCalculatorHeader: React.FC<{
   );
 };
 
-const CalculatorFormHeader: React.FC<{
+const CalculatorFormHeader: FC<{
   isNew: boolean;
   onClose(): void;
 }> = ({ isNew, onClose }) => (
@@ -54,7 +51,7 @@ const CalculatorFormHeader: React.FC<{
   </div>
 );
 
-const FactSidebarHeader: React.FC<{
+const FactSidebarHeader: FC<{
   onClose(): void;
   organizationId: string | number;
 }> = ({ onClose, organizationId }) => {
@@ -69,8 +66,8 @@ const FactSidebarHeader: React.FC<{
   );
 };
 
-const RightSidebarContainer: React.FC<
-  PropsWithChildren<{ grey?: boolean; header: React.ReactNode }>
+const RightSidebarContainer: FC<
+  PropsWithChildren<{ grey?: boolean; header: ReactNode }>
 > = ({ grey, header, children }) => (
   <div
     className={clsx(
@@ -122,10 +119,10 @@ type Action =
       type: "TOGGLE_FACTS";
     };
 
-export const rightSidebarReducer = (
-  state: RightSidebarState,
-  action: Action
-): RightSidebarState => {
+export const rightSidebarReducer: Reducer<RightSidebarState, Action> = (
+  state,
+  action
+) => {
   const close = () => {
     elev.show();
     return { type: "CLOSED" } as const;
@@ -158,7 +155,7 @@ export const rightSidebarReducer = (
   }
 };
 
-export const RightSidebar: React.FC<{
+export const RightSidebar: FC<{
   state: RightSidebarState;
   rightSidebarDispatch(action: Action): void;
   organizationFacts: Fact[];

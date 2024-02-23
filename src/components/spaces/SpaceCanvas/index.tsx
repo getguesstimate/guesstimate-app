@@ -1,14 +1,25 @@
+import { FC, useEffect, useRef } from "react";
+
 import _ from "lodash";
-import React, { useEffect, useRef } from "react";
-
+import { EdgeShape, PathStatus } from "~/components/lib/FlowGrid/Edges";
 import { FlowGrid } from "~/components/lib/FlowGrid/FlowGrid";
+import { GridItem } from "~/components/lib/FlowGrid/types";
 import { MetricCard } from "~/components/metrics/card/index";
-
+import { hasMetricUpdated } from "~/components/metrics/card/updated";
+import * as _collections from "~/lib/engine/collections";
+import { hasErrors } from "~/lib/engine/simulation";
+import { FullDenormalizedMetric } from "~/lib/engine/space";
+import {
+  CanvasLocation,
+  existsAtLoc,
+  isWithinRegion,
+  MaybeRegion,
+} from "~/lib/locationUtils";
 import { fillRegion } from "~/modules/auto_fill_region/actions";
 import * as canvasStateActions from "~/modules/canvas_state/actions";
-import * as copiedActions from "~/modules/copied/actions";
-
 import { redo, undo } from "~/modules/checkpoints/actions";
+import * as copiedActions from "~/modules/copied/actions";
+import { useAppDispatch, useAppSelector } from "~/modules/hooks";
 import {
   addMetric,
   changeMetric,
@@ -24,21 +35,6 @@ import {
   runSimulations,
 } from "~/modules/simulations/actions";
 
-import * as _collections from "~/lib/engine/collections";
-import { hasErrors } from "~/lib/engine/simulation";
-
-import { hasMetricUpdated } from "~/components/metrics/card/updated";
-
-import { EdgeShape, PathStatus } from "~/components/lib/FlowGrid/Edges";
-import { GridItem } from "~/components/lib/FlowGrid/types";
-import { FullDenormalizedMetric } from "~/lib/engine/space";
-import {
-  CanvasLocation,
-  existsAtLoc,
-  isWithinRegion,
-  MaybeRegion,
-} from "~/lib/locationUtils";
-import { useAppDispatch, useAppSelector } from "~/modules/hooks";
 import { ExtendedDSpace } from "../denormalized-space-selector";
 
 type Props = {
@@ -48,7 +44,7 @@ type Props = {
   canUseOrganizationFacts: boolean;
 };
 
-export const SpaceCanvas: React.FC<Props> = ({
+export const SpaceCanvas: FC<Props> = ({
   screenshot = false,
   denormalizedSpace,
   canUseOrganizationFacts,

@@ -1,15 +1,14 @@
-import React, { Component, useContext, useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 
-import { ConnectDropTarget, useDrop } from "react-dnd";
+import clsx from "clsx";
+import { useDrop } from "react-dnd";
+import { CanvasLocation, Direction } from "~/lib/locationUtils";
+import { CanvasState } from "~/modules/canvas_state/slice";
 
 import { EmptyCell } from "./EmptyCell";
 import { FilledCell } from "./FilledCell";
-
-import clsx from "clsx";
-import { CanvasLocation, Direction } from "~/lib/locationUtils";
-import { CanvasState } from "~/modules/canvas_state/slice";
-import { GridItem } from "./types";
 import { cellSizeInfo, FlowGridContext } from "./FlowGrid";
+import { GridItem } from "./types";
 
 type Props = {
   canvasState: CanvasState;

@@ -1,28 +1,27 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { createContext, FC, useMemo, useRef, useState } from "react";
 
+import clsx from "clsx";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-
-import { BackgroundContainer } from "./BackgroundContainer";
-import { DropCell } from "./DropCell";
-
+import { useCallOnUnmount, useForceUpdate } from "~/components/utility/hooks";
 import {
   boundingRegion,
+  CanvasLocation,
   Direction,
   getBounds,
   isAtLocation,
   isLocation,
   isWithinRegion,
-  CanvasLocation,
   MaybeRegion,
 } from "~/lib/locationUtils";
+import { CanvasState } from "~/modules/canvas_state/slice";
 import { SelectedCellState } from "~/modules/selected_cell/reducer";
+
+import { BackgroundContainer } from "./BackgroundContainer";
+import { DropCell } from "./DropCell";
+import { EdgeShape } from "./Edges";
 import { GridItem } from "./types";
 import { DirectionToLocation, keycodeToDirection } from "./utils";
-import clsx from "clsx";
-import { CanvasState } from "~/modules/canvas_state/slice";
-import { EdgeShape } from "./Edges";
-import { useCallOnUnmount, useForceUpdate } from "~/components/utility/hooks";
 
 const upto = (n: number): number[] => new Array(n).fill(0).map((_, i) => i);
 
@@ -41,6 +40,22 @@ export const cellSizeInfo: Record<
     width: 210,
   },
 };
+
+function newAutoFillRegion(start: CanvasLocation, location: CanvasLocation) {
+  // The fill region should fill either the width of the rectangle between start & location or the height, whichever
+  // is larger.
+  const width = Math.abs(location.column - start.column);
+  const height = Math.abs(location.row - start.row);
+
+  // If the width is larger, the new end will span to the column of the end location, within the starting row.
+  // Otherwise, it will span to the row of the final location, within the starting column.
+  const end =
+    width > height
+      ? { row: start.row, column: location.column }
+      : { row: location.row, column: start.column };
+
+  return { start, end };
+}
 
 type Props = {
   canvasState: CanvasState;
@@ -79,14 +94,14 @@ type FlowGridContextShape = {
   isModelingCanvas: boolean;
 };
 
-export const FlowGridContext = React.createContext<FlowGridContextShape>({
+export const FlowGridContext = createContext<FlowGridContextShape>({
   size: "normal",
   showGridLines: true,
   showEdges: true,
   isModelingCanvas: true,
 });
 
-export const FlowGrid: React.FC<Props> = ({
+export const FlowGrid: FC<Props> = ({
   items,
   edges,
   showGridLines = true,
@@ -125,8 +140,6 @@ export const FlowGrid: React.FC<Props> = ({
   >(undefined);
 
   useCallOnUnmount(onDeSelectAll);
-
-  console.log("render FlowGrid");
 
   const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -181,25 +194,6 @@ export const FlowGrid: React.FC<Props> = ({
       e.pageX === lastMousePosition.current.pageX &&
       e.pageY === lastMousePosition.current.pageY;
     return !sameLocation;
-  };
-
-  const newAutoFillRegion = (
-    start: CanvasLocation,
-    location: CanvasLocation
-  ) => {
-    // The fill region should fill either the width of the rectangle between start & location or the height, whichever
-    // is larger.
-    const width = Math.abs(location.column - start.column);
-    const height = Math.abs(location.row - start.row);
-
-    // If the width is larger, the new end will span to the column of the end location, within the starting row.
-    // Otherwise, it will span to the row of the final location, within the starting column.
-    const end =
-      width > height
-        ? { row: start.row, column: location.column }
-        : { row: location.row, column: start.column };
-
-    return { start, end };
   };
 
   const handleCellMouseEnter = (
@@ -357,6 +351,9 @@ export const FlowGrid: React.FC<Props> = ({
       !selectedRegionNotOneByOne;
     return (
       <DropCell
+        key={location.column}
+        location={location}
+        item={item}
         onMouseUp={handleCellMouseUp}
         onAutoFillTargetMouseDown={() => {
           handleAutoFillTargetMouseDown(location);
@@ -373,9 +370,6 @@ export const FlowGrid: React.FC<Props> = ({
           "selectedFrom" in selectedCell ? selectedCell.selectedFrom : undefined
         }
         isHovered={Boolean(hover && isAtLocation(hover, location))}
-        item={item}
-        key={location.column}
-        location={location}
         onAddItem={onAddItem}
         onMoveItem={onMoveItem}
         onMouseEnter={(e: React.MouseEvent) => {
@@ -418,9 +412,9 @@ export const FlowGrid: React.FC<Props> = ({
             {upto(rows).map((row) => {
               return (
                 <div
-                  className="flex"
                   key={row}
                   ref={(el) => (rowRefs.current[row] = el)}
+                  className="flex"
                 >
                   {upto(columns).map((column) => {
                     return renderCell({ row, column });
