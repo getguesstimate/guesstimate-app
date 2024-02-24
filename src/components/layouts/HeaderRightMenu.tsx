@@ -1,13 +1,15 @@
-import React, { FC, useEffect, useRef } from "react";
+import React, { FC, ReactNode, useEffect, useRef } from "react";
 
 import clsx from "clsx";
 import _ from "lodash";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import {
   CardListElement,
   CardListElementProps,
 } from "~/components/utility/Card";
 import { DropDown, DropDownHandle } from "~/components/utility/DropDown";
+import { signIn } from "~/lib/auth";
 import { organization, user } from "~/lib/engine/engine";
 import { useAppDispatch } from "~/modules/hooks";
 import * as meActions from "~/modules/me/actions";
@@ -17,12 +19,10 @@ import * as navigationActions from "~/modules/navigation/actions";
 import * as spaceActions from "~/modules/spaces/actions";
 import { RootState } from "~/modules/store";
 
-import { useAuth0 } from "@auth0/auth0-react";
-
 const MenuLink: FC<{
   href?: string;
   onClick?(): void;
-  icon?: React.ReactNode;
+  icon?: ReactNode;
   text: string;
   noMobile?: boolean;
 }> = ({ href, onClick, noMobile, icon, text }) => {
@@ -253,13 +253,8 @@ type Props = {
 };
 
 export const HeaderRightMenu: FC<Props> = (props) => {
-  const auth0 = useAuth0();
-  console.log(auth0);
-  const { loginWithRedirect, isLoading, isAuthenticated } = auth0;
+  const { status: sessionStatus, data: session } = useSession();
   const dispatch = useAppDispatch();
-
-  const signUp = () => loginWithRedirect();
-  const signIn = () => loginWithRedirect();
 
   const { me } = props;
 
@@ -271,12 +266,12 @@ export const HeaderRightMenu: FC<Props> = (props) => {
   const hasOrganizations = organizations.length > 0;
 
   useEffect(() => {
-    if (!isLoading && !isAuthenticated && me.tag === "SIGNED_IN") {
+    if (sessionStatus === "unauthenticated" && me.tag === "SIGNED_IN") {
       dispatch(meActions.logOut());
     }
-  }, [isLoading, isAuthenticated, me]);
+  }, [sessionStatus]);
 
-  if (isLoading) {
+  if (sessionStatus === "loading") {
     return null;
   }
 
@@ -312,7 +307,7 @@ export const HeaderRightMenu: FC<Props> = (props) => {
             text="Documentation"
           />
           <MenuLink onClick={signIn} text="Sign In" />
-          <MenuLink onClick={signUp} text="Sign Up" />
+          <MenuLink onClick={signIn} text="Sign Up" />
         </>
       )}
     </div>

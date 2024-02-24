@@ -59,7 +59,7 @@ There are many things that will be improved. Some of the more important limitati
 
 Guesstimate is a [Single Page Application](https://en.wikipedia.org/wiki/Single-page_application). Everything in this repo is the client side, which is one reason why this is called 'guesstimate-app'.
 
-There are two important third party systems. Authentication is done with [Auth0](https://auth0.com/), and search/indexing is done with [Algolia](https://www.algolia.com/). This means that running it yourself involves some setup, but on the other hand it's pretty easy set up compared to what you may need in comparable systems. Both of these are free for moderate use. I recommend both, though should note that the way I set up Algolia was a bit hacky (not sure how to do it right).
+There are two important third party systems. Authentication is done with [Auth0](https://auth0.com/), through [next-auth](https://next-auth.js.org/), and search/indexing is done with [Algolia](https://www.algolia.com/). This means that running it yourself involves some setup, but on the other hand it's pretty easy set up compared to what you may need in comparable systems. Both of these are free for moderate use. I recommend both, though should note that the way I set up Algolia was a bit hacky (not sure how to do it right).
 
 There is also a small server in Rails, which is not yet on Github. I'd like to work on security a bit more before putting it on here (if select people want to work on it I'd be happy to share in a small group). However, this is quite tiny; just 2 models (users, spaces).
 

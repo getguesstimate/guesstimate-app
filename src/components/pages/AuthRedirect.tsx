@@ -1,10 +1,11 @@
-import { useAuth0 } from "@auth0/auth0-react";
-import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import React, { FC, useEffect } from "react";
 
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 import { user } from "~/lib/engine/engine";
 import { useAppDispatch, useAppSelector } from "~/modules/hooks";
 import * as meActions from "~/modules/me/actions";
+
 import { PageBase } from "../utility/PageBase";
 
 const content = `
@@ -13,25 +14,30 @@ const content = `
 ## You are being redirected.
 `;
 
-export const AuthRedirect: React.FC = () => {
+export const AuthRedirect: FC = () => {
   const router = useRouter();
 
   const dispatch = useAppDispatch();
 
-  const { isAuthenticated, getIdTokenClaims } = useAuth0();
+  const { data: session } = useSession();
+
   useEffect(() => {
-    if (isAuthenticated) {
+    console.log(session);
+    if (session) {
       (async () => {
-        const token = await getIdTokenClaims();
-        // TODO: should use access token instead
-        if (!token) {
+        if (!session.auth0_id_token || !session.auth0_id) {
           // generalError("parseHash Error", { err }); // TODO - dispatch redux error?
           return;
         }
-        dispatch(meActions.logInWithIdToken(token));
+        dispatch(
+          meActions.logInWithIdToken({
+            sub: session.auth0_id,
+            id_token: session.auth0_id_token,
+          })
+        );
       })();
     }
-  }, [isAuthenticated, getIdTokenClaims]);
+  }, [session]);
 
   const me = useAppSelector((state) => state.me);
 

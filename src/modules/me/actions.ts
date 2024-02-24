@@ -1,43 +1,26 @@
-import auth0 from "auth0-js";
-import { BASE_URL } from "~/lib/constants";
-
-import * as userActions from "~/modules/users/actions";
-import * as auth0Constants from "~/server/auth0/constants";
-
 import { me } from "~/lib/engine/engine";
-import { generalError } from "~/lib/errors/index";
 import { AppThunk } from "~/modules/store";
+import * as userActions from "~/modules/users/actions";
+
 import { MeProfile, meSlice } from "./slice";
-import { IdToken } from "@auth0/auth0-react";
 
-const webAuth = new auth0.WebAuth({
-  domain: auth0Constants.variables.AUTH0_DOMAIN,
-  clientID: auth0Constants.variables.AUTH0_CLIENT_ID,
-  redirectUri: `${BASE_URL}/auth-redirect`,
-  audience: `https://${auth0Constants.variables.AUTH0_DOMAIN}/userinfo`,
-  responseType: "token id_token",
-  scope: "openid",
-});
-
-export function signIn() {
-  webAuth.authorize({ mode: "login" });
-}
-
-export function signUp() {
-  webAuth.authorize({ mode: "signUp" });
-}
-
-export function logInWithIdToken(token: IdToken): AppThunk {
+export function logInWithIdToken({
+  sub,
+  id_token,
+}: {
+  sub: string;
+  id_token: string;
+}): AppThunk {
   return (dispatch) => {
     // should we use bits of auth0 profile here until we load the user from guesstimate?
     const authInfo = {
-      token: token.__raw,
-      auth0_id: token.sub,
+      token: id_token,
+      auth0_id: sub,
     };
     dispatch(meSlice.actions.setAuth0(authInfo));
     me.localStorage.set(authInfo);
 
-    dispatch(userActions.fetchMe(token.sub));
+    dispatch(userActions.fetchMe(sub));
   };
 }
 

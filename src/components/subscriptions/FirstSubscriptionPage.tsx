@@ -1,15 +1,13 @@
 import React, { PropsWithChildren } from "react";
 
-import { useAuth0 } from "@auth0/auth0-react";
-
+import { FirstSubscriptionContainer } from "~/components/subscriptions/FirstSubscription/container";
+import { Container } from "~/components/utility/Container";
+import { signIn } from "~/lib/auth";
 import { Plan } from "~/lib/config/plan";
 import { capitalizeFirstLetter } from "~/lib/string";
 import * as displayErrorsActions from "~/modules/displayErrors/actions";
 import { useAppDispatch, useAppSelector } from "~/modules/hooks";
-import * as meActions from "~/modules/me/actions";
 
-import { FirstSubscriptionContainer } from "~/components/subscriptions/FirstSubscription/container";
-import { Container } from "~/components/utility/Container";
 import { H2 } from "./FirstSubscription/H2";
 
 const Note: React.FC<PropsWithChildren<{ title: string }>> = ({
@@ -80,7 +78,7 @@ export const FirstSubscriptionPage: React.FC<Props> = ({ planName }) => {
               )
             ) : (
               <H2>
-                <a href="" onClick={() => loginWithRedirect()}>
+                <a href="" onClick={signIn}>
                   Log in
                 </a>{" "}
                 to view this page
