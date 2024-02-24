@@ -22,7 +22,6 @@ export const AuthRedirect: FC = () => {
   const { data: session } = useSession();
 
   useEffect(() => {
-    console.log(session);
     if (session) {
       (async () => {
         if (!session.auth0_id_token || !session.auth0_id) {

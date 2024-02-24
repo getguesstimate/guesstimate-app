@@ -1,8 +1,6 @@
-import _ from "lodash";
-import React, { Component, PropsWithChildren } from "react";
+import React, { Component, FC, PropsWithChildren } from "react";
 
-import { connect } from "react-redux";
-
+import clsx from "clsx";
 import {
   CompositeDecorator,
   ContentBlock,
@@ -14,21 +12,19 @@ import {
   getDefaultKeyBinding,
   Modifier,
 } from "draft-js";
-
-import { clearSuggestion, getSuggestion } from "~/modules/facts/actions";
-
+import _ from "lodash";
+import { connect } from "react-redux";
 import {
   GLOBALS_ONLY_REGEX,
   HANDLE_REGEX,
   resolveToSelector,
 } from "~/lib/engine/facts";
 import { or } from "~/lib/engine/utils";
-
-import clsx from "clsx";
 import {
   formatData,
   isData,
 } from "~/lib/guesstimator/formatter/formatters/Data";
+import { clearSuggestion, getSuggestion } from "~/modules/facts/actions";
 import { AppDispatch, RootState } from "~/modules/store";
 
 function findWithRegex(
@@ -47,16 +43,27 @@ function findWithRegex(
 
 const FLASH_DURATION_MS = 400; // Adjust flash duration here. Should match variable in ../../style.css as well.
 
-//TODO: The passing in of all props in the span causes React to complain. See this issue:
-//https://github.com/facebook/draft-js/issues/675
 const stylizedSpan =
-  (className: string): React.FC<PropsWithChildren> =>
-  (props) =>
-    (
-      <span {...props} className={className}>
+  (className: string): FC<PropsWithChildren> =>
+  (props) => {
+    const propsCopy = { ...props };
+    // The passing in of all props in the span causes React to complain. See this issue:
+    // https://github.com/facebook/draft-js/issues/675
+    for (const key of [
+      "contentState",
+      "blockKey",
+      "entityKey",
+      "offsetKey",
+      "decoratedText",
+    ]) {
+      delete propsCopy[key];
+    }
+    return (
+      <span {...propsCopy} className={className}>
         {props.children}
       </span>
     );
+  };
 
 const inputClassName = "font-medium rounded-xs px-0.5 mx-0.5 inline-block";
 const factClassName = "text-[#483567] bg-[#e5dbf7]";
@@ -71,7 +78,7 @@ const Suggestion = stylizedSpan("bg-[#b5ddff]");
 const positionDecorator = (
   start: number,
   end: number,
-  component: React.FC
+  component: FC
 ): DraftDecorator => ({
   strategy: (contentBlock: any, callback) => {
     if (end <= contentBlock.text.length) {
