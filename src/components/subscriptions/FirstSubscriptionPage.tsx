@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from "react";
+import React, { FC, PropsWithChildren } from "react";
 
 import { FirstSubscriptionContainer } from "~/components/subscriptions/FirstSubscription/container";
 import { Container } from "~/components/utility/Container";
@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from "~/modules/hooks";
 
 import { H2 } from "./FirstSubscription/H2";
 
-const Note: React.FC<PropsWithChildren<{ title: string }>> = ({
+const Note: FC<PropsWithChildren<{ title: string }>> = ({
   title,
   children,
 }) => (
@@ -24,8 +24,7 @@ type Props = {
   planName: string;
 };
 
-export const FirstSubscriptionPage: React.FC<Props> = ({ planName }) => {
-  const { loginWithRedirect } = useAuth0();
+export const FirstSubscriptionPage: FC<Props> = ({ planName }) => {
   const me = useAppSelector((state) => state.me);
   const dispatch = useAppDispatch();
 

@@ -1,28 +1,24 @@
-import _ from "lodash";
 import React, { useImperativeHandle, useRef } from "react";
 
-import Icon from "~/components/react-fa-patched";
-
+import clsx from "clsx";
+import _ from "lodash";
+import { ConnectDragSource } from "react-dnd";
 import { DistributionSummary } from "~/components/distributions/DistributionSummary/index";
 import {
   MetricName,
   MetricNameHandle,
-} from "~/components/metrics/card/MetricName";
-import { SensitivitySection } from "~/components/metrics/card/SensitivitySection/SensitivitySection";
+} from "~/components/metrics/MetricCard/MetricName";
+import { SensitivitySection } from "~/components/metrics/MetricCard/SensitivitySection/SensitivitySection";
 import {
   MetricExportedIcon,
   MetricReadableId,
   MetricReasoningIcon,
   MetricSidebarToggle,
-} from "~/components/metrics/card/token/index";
+} from "~/components/metrics/MetricCard/token/index";
+import Icon from "~/components/react-fa-patched";
 import { MetricStatTable } from "~/components/simulations/MetricStatTable";
 import { SimulationHistogram } from "~/components/simulations/SimulationHistogram";
-
-import { getMessage, PropagationError } from "~/lib/propagation/errors";
-import { metricIdToNodeId } from "~/lib/propagation/wrapper";
-
-import clsx from "clsx";
-import { ConnectDragSource } from "react-dnd";
+import { INPUT, OUTPUT, relationshipType } from "~/lib/engine/graph";
 import {
   displayableError,
   errors,
@@ -32,8 +28,9 @@ import {
 } from "~/lib/engine/simulation";
 import { FullDenormalizedMetric } from "~/lib/engine/space";
 import { replaceByMap } from "~/lib/engine/utils";
+import { getMessage, PropagationError } from "~/lib/propagation/errors";
+import { metricIdToNodeId } from "~/lib/propagation/wrapper";
 import { CanvasState } from "~/modules/canvas_state/reducer";
-import { INPUT, OUTPUT, relationshipType } from "~/lib/engine/graph";
 
 // TODO(matthew): Refactor these components. E.g. it's weird that isBreak takes all errors, but you may only care about
 // the one...

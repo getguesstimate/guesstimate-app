@@ -1,17 +1,16 @@
 import _ from "lodash";
+import { sortDescending } from "~/lib/dataAnalysis";
+import { _matchingFormatter } from "~/lib/guesstimator/formatter/index";
+import { Guesstimator } from "~/lib/guesstimator/index";
+import { Guesstimate } from "~/modules/guesstimates/reducer";
 
+import { PropagationError } from "../propagation/errors";
 import * as _collections from "./collections";
 import * as _guesstimate from "./guesstimate";
 import { generateRandomReadableId } from "./metric/generate_random_readable_id";
 import * as _organization from "./organization";
 import { NUM_SAMPLES } from "./simulation";
 import * as _utils from "./utils";
-
-import { sortDescending } from "~/lib/dataAnalysis";
-import { _matchingFormatter } from "~/lib/guesstimator/formatter/index";
-import { Guesstimator } from "~/lib/guesstimator/index";
-import { PropagationError } from "../propagation/errors";
-import { Guesstimate } from "~/modules/guesstimates/reducer";
 
 export type Fact = {
   id: number;
@@ -108,7 +107,7 @@ export function selectorSearch(selector, facts) {
   return { partial, suggestion };
 }
 
-function findBySelector(facts, selector, currFact = {}) {
+function findBySelector(facts, selector, currFact = {}): any {
   if (_.isEmpty(selector)) {
     return currFact;
   }

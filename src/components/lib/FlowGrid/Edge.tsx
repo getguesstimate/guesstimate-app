@@ -1,7 +1,7 @@
-import _ from "lodash";
-import React from "react";
+import React, { FC, memo } from "react";
 
 import angleBetweenPoints from "angle-between-points";
+import _ from "lodash";
 
 import { edgeColors, PathStatus } from "./Edges";
 import { RectangleShape } from "./gridPoints";
@@ -111,7 +111,7 @@ type Props = {
   pathStatus: PathStatus;
 };
 
-export const Edge: React.FC<Props> = React.memo(
+export const Edge: FC<Props> = memo(
   ({ output, input, hasErrors, pathStatus }) => {
     if (!isValidNode(input) || !isValidNode(output)) {
       return null;

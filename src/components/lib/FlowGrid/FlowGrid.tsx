@@ -4,6 +4,7 @@ import clsx from "clsx";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { useCallOnUnmount, useForceUpdate } from "~/components/utility/hooks";
+import { isMac } from "~/components/utility/isMac";
 import {
   boundingRegion,
   CanvasLocation,
@@ -15,7 +16,7 @@ import {
   MaybeRegion,
 } from "~/lib/locationUtils";
 import { CanvasState } from "~/modules/canvas_state/slice";
-import { SelectedCellState } from "~/modules/selected_cell/reducer";
+import { SelectedCell } from "~/modules/selected_cell/reducer";
 
 import { BackgroundContainer } from "./BackgroundContainer";
 import { DropCell } from "./DropCell";
@@ -63,7 +64,7 @@ type Props = {
   onRedo(): void;
   items: GridItem[];
   edges?: EdgeShape[]; // if not defined, cells won't have additional padding, so [] and `undefined` are different
-  selectedCell: SelectedCellState;
+  selectedCell: SelectedCell;
   selectedRegion: MaybeRegion;
   copiedRegion: MaybeRegion;
   analyzedRegion: MaybeRegion;
@@ -134,7 +135,6 @@ export const FlowGrid: FC<Props> = ({
 
   const [hover, setHover] = useState<CanvasLocation | undefined>(undefined);
   const [dragSelecting, setDragSelecting] = useState(false);
-  const [ctrlPressed, setCtrlPressed] = useState(false);
   const [autoFillRegion, setAutoFillRegion] = useState<
     { start: CanvasLocation; end?: CanvasLocation } | undefined
   >(undefined);
@@ -144,9 +144,9 @@ export const FlowGrid: FC<Props> = ({
   const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const { rows, columns } = useMemo(() => {
-    const [, { row: largestRow, column: largestColumn }] = boundingRegion(
+    const { row: largestRow, column: largestColumn } = boundingRegion(
       items.map((e) => e.location)
-    );
+    )[1];
     let [selectedRow, selectedColumn] = [0, 0];
     if (isLocation(selectedCell)) {
       selectedRow = selectedCell.row;
@@ -236,25 +236,21 @@ export const FlowGrid: FC<Props> = ({
     onSelectItem(location);
   };
 
-  const handleKeyUp = (e: React.KeyboardEvent) => {
-    if (e.keyCode == 17 || e.keyCode == 224 || e.keyCode == 91) {
-      setCtrlPressed(false);
-    }
-  };
-
   const selectedItems = useMemo(() => {
-    return items.filter((i) => isWithinRegion(i.location, selectedRegion));
+    return items.filter((item) =>
+      isWithinRegion(item.location, selectedRegion)
+    );
   }, [items, selectedRegion]);
 
   const handleRemoveSelectedItems = () => {
-    onRemoveItems(selectedItems.map((i) => i.key));
+    onRemoveItems(selectedItems.map((item) => item.key));
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.target && (e.target as any).type === "textarea") {
       return;
     }
-    if (e.keyCode === 8 || e.keyCode === 46) {
+    if (e.key === "Backspace" || e.key === "Delete") {
       handleRemoveSelectedItems();
       e.preventDefault();
     }
@@ -267,16 +263,7 @@ export const FlowGrid: FC<Props> = ({
         selectedCell
       )[direction]();
       onSelectItem(newLocation);
-    } else if (
-      !e.shiftKey &&
-      (e.keyCode == 17 ||
-        e.keyCode == 224 ||
-        e.keyCode == 91 ||
-        e.keyCode == 93)
-    ) {
-      e.preventDefault();
-      setCtrlPressed(true);
-    } else if (ctrlPressed) {
+    } else if (e.ctrlKey || (isMac() && e.metaKey)) {
       if (e.keyCode == 86) {
         onPaste?.();
       } else if (e.keyCode == 67) {
@@ -308,7 +295,7 @@ export const FlowGrid: FC<Props> = ({
     location: CanvasLocation,
     direction: Direction
   ) => {
-    if (!items.find((i) => isAtLocation(i.location, location))) {
+    if (!items.find((item) => isAtLocation(item.location, location))) {
       onAddItem(location);
     }
     onSelectItem(location, direction);
@@ -349,6 +336,7 @@ export const FlowGrid: FC<Props> = ({
       hasNonEmptyItem &&
       !dragSelecting &&
       !selectedRegionNotOneByOne;
+
     return (
       <DropCell
         key={location.column}
@@ -402,26 +390,24 @@ export const FlowGrid: FC<Props> = ({
         }}
       >
         <div
-          className={clsx("relative z-0", isModelingCanvas && "isSelectable")}
+          className={clsx(
+            "relative z-0",
+            "ml-px" // fit copied borders
+          )}
           onMouseLeave={handleMouseLeave}
           onMouseUp={handleMouseUp}
           onKeyDown={handleKeyDown}
-          onKeyUp={handleKeyUp}
         >
           <div className="relative z-10">
-            {upto(rows).map((row) => {
-              return (
-                <div
-                  key={row}
-                  ref={(el) => (rowRefs.current[row] = el)}
-                  className="flex"
-                >
-                  {upto(columns).map((column) => {
-                    return renderCell({ row, column });
-                  })}
-                </div>
-              );
-            })}
+            {upto(rows).map((row) => (
+              <div
+                key={row}
+                ref={(el) => (rowRefs.current[row] = el)}
+                className="flex"
+              >
+                {upto(columns).map((column) => renderCell({ row, column }))}
+              </div>
+            ))}
           </div>
           <BackgroundContainer
             edges={edges || []}

@@ -1,7 +1,8 @@
-import _ from "lodash";
-import React from "react";
+import React, { FC, memo } from "react";
 
+import _ from "lodash";
 import { CanvasLocation } from "~/lib/locationUtils";
+
 import { Edge } from "./Edge";
 import { GridPoint } from "./gridPoints";
 
@@ -52,7 +53,7 @@ const areEqual = (props: Props, nextProps: Props) => {
   );
 };
 
-export const Edges: React.FC<Props> = React.memo(
+export const Edges: FC<Props> = memo(
   ({ columnWidth, containerHeight, rowHeights, edges }) => {
     const gridPoint = new GridPoint({
       rowHeights,

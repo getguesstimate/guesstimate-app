@@ -1,9 +1,7 @@
-import { MaybeRegion } from "~/lib/locationUtils";
 import { AnyAction, Reducer } from "redux";
+import { MaybeRegion } from "~/lib/locationUtils";
 
-export type SelectedRegionState = MaybeRegion;
-
-export const selectedRegionR: Reducer<SelectedRegionState, AnyAction> = (
+export const selectedRegionR: Reducer<MaybeRegion, AnyAction> = (
   state = [],
   action
 ) => {

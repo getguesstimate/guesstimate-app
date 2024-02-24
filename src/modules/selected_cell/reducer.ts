@@ -1,6 +1,6 @@
 import { AnyAction, Reducer } from "redux";
 
-export type SelectedCellState =
+export type SelectedCell =
   | {}
   | {
       row: number;
@@ -8,7 +8,7 @@ export type SelectedCellState =
       selectedFrom?: "UP" | "DOWN" | "LEFT" | "RIGHT";
     };
 
-export const selectedCellR: Reducer<SelectedCellState, AnyAction> = (
+export const selectedCellR: Reducer<SelectedCell, AnyAction> = (
   state = {},
   action
 ) => {

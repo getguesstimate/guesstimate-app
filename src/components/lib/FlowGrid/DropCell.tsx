@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from "react";
+import React, { FC, useContext, useEffect, useRef } from "react";
 
 import clsx from "clsx";
 import { useDrop } from "react-dnd";
@@ -36,30 +36,10 @@ type Props = {
   getRowHeight(): number;
 };
 
-// shouldComponentUpdate(newProps: Props) {
-//   const difProps =
-//     newProps.isOver !== this.props.isOver ||
-//     newProps.inSelectedRegion !== this.props.inSelectedRegion ||
-//     newProps.inSelectedCell !== this.props.inSelectedCell ||
-//     newProps.isHovered !== this.props.isHovered ||
-//     newProps.showAutoFillToken !== this.props.showAutoFillToken;
-//   const itemDifferent = !!newProps.item !== !!this.props.item;
-
-//   return (
-//     difProps ||
-//     itemDifferent ||
-//     (!!newProps.item &&
-//       !!this.props.item &&
-//       this.props.hasItemUpdated(this.props.item, newProps.item))
-//   );
-// }
-
-export const DropCell: React.FC<Props> = (props) => {
+export const DropCell: FC<Props> = (props) => {
   const itemRef = useRef<{ focus(): void }>(null);
 
-  const { size } = useContext(FlowGridContext);
-
-  const { showGridLines } = useContext(FlowGridContext);
+  const { size, showGridLines } = useContext(FlowGridContext);
 
   const [{ isOver }, connectDropTarget] = useDrop({
     accept: "card",
@@ -73,19 +53,12 @@ export const DropCell: React.FC<Props> = (props) => {
     },
   });
 
-  useEffect(() => {
-    if (props.inSelectedCell) {
-      itemRef.current?.focus();
-    }
-  }, []);
-
+  // Self-focus on render; TODO - is there a better solution?
   useEffect(() => {
     if (props.inSelectedCell) {
       itemRef.current?.focus();
     }
   }, [props.inSelectedCell]);
-
-  const { inSelectedRegion, item, isHovered } = props;
 
   const handleAutoFillTargetMouseDown = (e: React.MouseEvent) => {
     if (e.button === 0) {
@@ -101,8 +74,8 @@ export const DropCell: React.FC<Props> = (props) => {
     const isFunctionSelect =
       props.canvasState.metricClickMode === "FUNCTION_INPUT_SELECT";
     const { inSelectedCell, item, location } = props;
-    const leftClick = e.button === 0;
 
+    const leftClick = e.button === 0;
     if (!leftClick) {
       return;
     }
@@ -116,9 +89,7 @@ export const DropCell: React.FC<Props> = (props) => {
         props.onAddItem(location);
       }
       props.handleSelect(location);
-    }
-
-    if (!inSelectedCell) {
+    } else {
       if (e.shiftKey) {
         props.handleEndRangeSelect(props.location);
         return;
@@ -130,11 +101,11 @@ export const DropCell: React.FC<Props> = (props) => {
     }
   };
 
-  const cellElement = item ? (
+  const cellElement = props.item ? (
     // Then endDrag fixes a bug where the original dragging position is hovered.
     <FilledCell
       {...props}
-      item={item} // typescript fix
+      item={props.item} // typescript fix
       onEndDrag={props.onEndDragCell}
       forceFlowGridUpdate={props.forceFlowGridUpdate}
       focusCell={() => itemRef.current?.focus()}
@@ -144,18 +115,16 @@ export const DropCell: React.FC<Props> = (props) => {
     <EmptyCell {...props} ref={itemRef} isOver={isOver} />
   );
 
-  const className = clsx(
-    "group/gridcell",
-    "flex-none min-h-[60px] relative grid place-items-stretch",
-    showGridLines &&
-      "border-r border-b border-[rgb(0,25,95)]/[0.09] border-dashed",
-    cellSizeInfo[size].classNames
-  );
-
   return (
     <div
       ref={connectDropTarget}
-      className={className}
+      className={clsx(
+        "group/gridcell",
+        "relative grid min-h-[60px] flex-none place-items-stretch",
+        showGridLines &&
+          "border-r border-b border-dashed border-[rgb(0,25,95)]/[0.09]",
+        cellSizeInfo[size].classNames
+      )}
       onMouseEnter={props.onMouseEnter}
       onMouseDown={handleMouseDown}
       onMouseUp={props.onMouseUp}

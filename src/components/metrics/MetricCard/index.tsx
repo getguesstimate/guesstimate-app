@@ -1,26 +1,18 @@
-import _ from "lodash";
-import React, { useEffect, useImperativeHandle, useRef, useState } from "react";
-
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import ReactDOM from "react-dom";
 
-import { MetricToolTip } from "./MetricToolTip";
-
+import clsx from "clsx";
+import _ from "lodash";
 import { DistributionEditor } from "~/components/distributions/DistributionEditor/index";
+import { GridContext } from "~/components/lib/FlowGrid/FilledCell";
 import { MetricModal } from "~/components/metrics/MetricModal";
 import { ToolTip } from "~/components/utility/ToolTip";
-import { MetricCardViewSection } from "./MetricCardViewSection";
-import { SensitivitySection } from "./SensitivitySection/SensitivitySection";
-
-import { analyzeMetricId, endAnalysis } from "~/modules/canvas_state/actions";
-import { createFactFromMetric } from "~/modules/facts/actions";
-import { changeGuesstimate } from "~/modules/guesstimates/actions";
-import { changeMetric, removeMetrics } from "~/modules/metrics/actions";
-
-import { withReadableId } from "~/lib/generateVariableNames/generateMetricReadableId";
-import { shouldTransformName } from "~/lib/generateVariableNames/nameToVariableName";
-
-import clsx from "clsx";
-import { GridContext } from "~/components/lib/FlowGrid/FilledCell";
 import {
   INPUT,
   INTERMEDIATE,
@@ -30,10 +22,20 @@ import {
 } from "~/lib/engine/graph";
 import { FullDenormalizedMetric } from "~/lib/engine/space";
 import { makeURLsMarkdown } from "~/lib/engine/utils";
+import { withReadableId } from "~/lib/generateVariableNames/generateMetricReadableId";
+import { shouldTransformName } from "~/lib/generateVariableNames/nameToVariableName";
 import { Direction } from "~/lib/locationUtils";
+import { analyzeMetricId, endAnalysis } from "~/modules/canvas_state/actions";
 import { CanvasState } from "~/modules/canvas_state/reducer";
+import { createFactFromMetric } from "~/modules/facts/actions";
+import { changeGuesstimate } from "~/modules/guesstimates/actions";
 import { useAppDispatch } from "~/modules/hooks";
+import { changeMetric, removeMetrics } from "~/modules/metrics/actions";
+
+import { MetricCardViewSection } from "./MetricCardViewSection";
 import { MetricSidebar } from "./MetricSidebar";
+import { MetricToolTip } from "./MetricToolTip";
+import { SensitivitySection } from "./SensitivitySection/SensitivitySection";
 
 const relationshipClasses = {
   [INTERMEDIATE]: "intermediate",
@@ -58,7 +60,7 @@ type Props = {
   analyzedMetric: FullDenormalizedMetric | null;
 } & GridContext;
 
-export const MetricCard = React.forwardRef<{ focus(): void }, Props>(
+export const MetricCard = forwardRef<{ focus(): void }, Props>(
   function MetricCard(props, ref) {
     const {
       inSelectedCell,
@@ -198,9 +200,7 @@ export const MetricCard = React.forwardRef<{ focus(): void }, Props>(
       setModalIsOpen(true);
       setSidebarIsOpen(false);
     };
-    const closeModal = () => {
-      setModalIsOpen(false);
-    };
+    const closeModal = () => setModalIsOpen(false);
 
     const isSelectable = (e: React.MouseEvent) => {
       const selectableEl =

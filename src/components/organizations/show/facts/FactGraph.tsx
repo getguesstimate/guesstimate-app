@@ -1,25 +1,23 @@
-import _ from "lodash";
 import React, { PropsWithChildren } from "react";
 
+import _ from "lodash";
 import { SmallFactItem } from "~/components/facts/list/FactItem";
+import { EdgeShape, PathStatus } from "~/components/lib/FlowGrid/Edges";
 import { FlowGrid } from "~/components/lib/FlowGrid/FlowGrid";
-import { SpaceCard } from "~/components/spaces/SpaceCards";
-
-import * as _collections from "~/lib/engine/collections";
-import * as _utils from "~/lib/engine/utils";
-
 import { GridItem } from "~/components/lib/FlowGrid/types";
+import { SpaceCard } from "~/components/spaces/SpaceCards";
 import {
   CyclePseudoNode,
   separateIntoDisconnectedComponents,
   separateIntoHeightSets,
 } from "~/lib/DAG/DAG";
 import { getNodeAncestors } from "~/lib/DAG/nodeFns";
+import * as _collections from "~/lib/engine/collections";
 import { Fact } from "~/lib/engine/facts";
+import * as _utils from "~/lib/engine/utils";
 import { ApiSpace } from "~/lib/guesstimate_api/resources/Models";
 import { SimulationNodeParamsWithInputs } from "~/lib/propagation/DAG";
 import { initialCanvasState } from "~/modules/canvas_state/slice";
-import { EdgeShape, PathStatus } from "~/components/lib/FlowGrid/Edges";
 
 const idToNodeId = (id: string | number, isFact: boolean) =>
   `${isFact ? "fact" : "space"}:${id}`;
@@ -252,9 +250,6 @@ export const FactGraph: React.FC<Props> = (props) => {
         onAddItem={() => {}}
         onMoveItem={() => {}}
         onRemoveItems={() => {}}
-        onCopy={() => {}}
-        onPaste={() => {}}
-        onCut={() => {}}
         showGridLines={false}
         canvasState={initialCanvasState}
         isModelingCanvas={false}

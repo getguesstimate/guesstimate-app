@@ -1,6 +1,6 @@
 import React from "react";
 
-import { MetricCard } from "~/components/metrics/card";
+import { MetricCard } from "~/components/metrics/MetricCard";
 import { ComponentEditor } from "~/components/style_guide/ComponentEditor";
 
 const MetricCardProps = {

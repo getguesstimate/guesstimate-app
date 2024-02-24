@@ -1,6 +1,14 @@
+import React, {
+  forwardRef,
+  memo,
+  useContext,
+  useImperativeHandle,
+  useRef,
+} from "react";
+
 import clsx from "clsx";
-import React, { useImperativeHandle, useRef } from "react";
 import { CanvasLocation } from "~/lib/locationUtils";
+
 import { FlowGridContext } from "./FlowGrid";
 
 type Props = {
@@ -12,9 +20,9 @@ type Props = {
   isHovered: boolean;
 };
 
-export const EmptyCell = React.memo(
-  React.forwardRef<{ focus(): void }, Props>(function EmptyCell(props, ref) {
-    const { isModelingCanvas } = React.useContext(FlowGridContext);
+export const EmptyCell = memo(
+  forwardRef<{ focus(): void }, Props>(function EmptyCell(props, ref) {
+    const { isModelingCanvas } = useContext(FlowGridContext);
     const divRef = useRef<HTMLDivElement | null>(null);
 
     useImperativeHandle(ref, () => ({
@@ -47,11 +55,5 @@ export const EmptyCell = React.memo(
         ref={divRef}
       />
     );
-  }),
-  (prevProps, props) => {
-    return (
-      prevProps.isOver === props.isOver &&
-      prevProps.isHovered === props.isHovered
-    ); // TODO - is this safe?
-  }
+  })
 );

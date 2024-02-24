@@ -1,19 +1,19 @@
 import React, {
   CSSProperties,
+  forwardRef,
   useContext,
   useEffect,
   useImperativeHandle,
   useRef,
 } from "react";
 
+import clsx from "clsx";
 import { ConnectDragSource, useDrag, useDragLayer, XYCoord } from "react-dnd";
-
+import { getEmptyImage } from "react-dnd-html5-backend";
 import { CanvasLocation, Direction } from "~/lib/locationUtils";
 
-import clsx from "clsx";
-import { getEmptyImage } from "react-dnd-html5-backend";
-import { GridItem } from "./types";
 import { FlowGridContext } from "./FlowGrid";
+import { GridItem } from "./types";
 
 export type GridContext = {
   hovered: boolean;
@@ -96,7 +96,7 @@ type Props = {
   focusCell(): void;
 };
 
-export const FilledCell = React.forwardRef<{ focus(): void }, Props>(
+export const FilledCell = forwardRef<{ focus(): void }, Props>(
   function FilledCell(props, ref) {
     const { isModelingCanvas } = useContext(FlowGridContext);
 

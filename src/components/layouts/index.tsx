@@ -1,4 +1,4 @@
-import React, { FC, PropsWithChildren } from "react";
+import { FC, PropsWithChildren } from "react";
 
 import clsx from "clsx";
 import { NavHelper } from "~/components/utility/NavHelper/index";

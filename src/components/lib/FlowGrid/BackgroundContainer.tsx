@@ -1,11 +1,11 @@
-import React, { useContext, useLayoutEffect, useState } from "react";
+import React, { FC, memo, useContext, useLayoutEffect, useState } from "react";
+
+import clsx from "clsx";
+import { isRegion, MaybeRegion, Region } from "~/lib/locationUtils";
 
 import { Edges, EdgeShape } from "./Edges";
-import { GridPoint } from "./gridPoints";
-
-import { isRegion, MaybeRegion, Region } from "~/lib/locationUtils";
-import clsx from "clsx";
 import { cellSizeInfo, FlowGridContext } from "./FlowGrid";
+import { GridPoint } from "./gridPoints";
 
 type RegionType = "selected" | "analyzed" | "copied" | "fill";
 
@@ -18,7 +18,7 @@ const regionTypeToClass = {
     "bg-gradient-to-br from-[rgb(72,187,90)]/[0.66] to-[rgb(120,203,149)]/[0.65]",
 };
 
-const Region: React.FC<{
+const Region: FC<{
   rowHeights: number[];
   columnWidth: number;
   selectedRegion: Region;
@@ -41,7 +41,7 @@ type Props = {
   getRowHeight(row: number): number;
 };
 
-export const BackgroundContainer: React.FC<Props> = React.memo(
+export const BackgroundContainer: FC<Props> = memo(
   function BackgroundContainer({
     rowCount,
     getRowHeight,
@@ -75,11 +75,11 @@ export const BackgroundContainer: React.FC<Props> = React.memo(
       if (isRegion(locations)) {
         return (
           <Region
+            key={type}
             rowHeights={rowHeights}
             columnWidth={columnWidth}
             selectedRegion={locations}
             type={type}
-            key={type}
           />
         );
       } else {
