@@ -14,7 +14,6 @@ import { FlowGridContext } from "./FlowGrid";
 type Props = {
   onAddItem(location: CanvasLocation): void;
   inSelectedCell: boolean;
-  gridKeyPress(e: React.KeyboardEvent): void;
   location: CanvasLocation;
   isOver?: boolean;
   isHovered: boolean;
@@ -62,7 +61,6 @@ export const EmptyCell = memo(
           "focus:outline-none",
           props.isOver && "bg-[rgb(127,149,160)]/[0.81] transition-colors"
         )}
-        onKeyPress={props.gridKeyPress}
         onKeyDown={handleKeyDown}
         onMouseDown={handleMouseDown}
         onClick={handleClick}

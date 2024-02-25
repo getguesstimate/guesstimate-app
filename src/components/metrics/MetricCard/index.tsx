@@ -5,13 +5,11 @@ import {
   useRef,
   useState,
 } from "react";
-import ReactDOM from "react-dom";
 
-import clsx from "clsx";
+import { clsx } from "clsx";
 import _ from "lodash";
-import { DistributionEditor } from "~/components/distributions/DistributionEditor/index";
+import { DistributionEditor } from "~/components/distributions/DistributionEditor";
 import { GridContext } from "~/components/lib/FlowGrid/FilledCell";
-import { MetricModal } from "~/components/metrics/MetricModal";
 import { ToolTip } from "~/components/utility/ToolTip";
 import {
   INPUT,
@@ -32,6 +30,7 @@ import { changeGuesstimate } from "~/modules/guesstimates/actions";
 import { useAppDispatch } from "~/modules/hooks";
 import { changeMetric, removeMetrics } from "~/modules/metrics/actions";
 
+import { MetricModal } from "../MetricModal";
 import { MetricCardViewSection } from "./MetricCardViewSection";
 import { MetricSidebar } from "./MetricSidebar";
 import { MetricToolTip } from "./MetricToolTip";
@@ -75,7 +74,6 @@ export const MetricCard = forwardRef<{ focus(): void }, Props>(
       analyzedMetric,
       forceFlowGridUpdate,
       exportedAsFact,
-      gridKeyPress,
     } = props;
     const { metricClickMode } = canvasState;
 
@@ -86,6 +84,8 @@ export const MetricCard = forwardRef<{ focus(): void }, Props>(
 
     const viewRef = useRef<{ hasContent(): boolean; focusName(): void }>(null);
     const editorRef = useRef<{ focus(): void }>(null);
+
+    // container element that gets focus when the item is selected
     const divRef = useRef<HTMLDivElement>(null);
 
     const isAnalyzedMetric =
@@ -175,9 +175,7 @@ export const MetricCard = forwardRef<{ focus(): void }, Props>(
     }, []);
 
     useImperativeHandle(ref, () => ({
-      focus() {
-        divRef.current?.focus();
-      },
+      focus: () => divRef.current?.focus(),
     }));
 
     const toggleSidebar = () => {
@@ -209,18 +207,17 @@ export const MetricCard = forwardRef<{ focus(): void }, Props>(
       return selectableEl && notYetSelected;
     };
 
-    const isFunctionInputSelectable = (e: React.MouseEvent) => {
-      return isSelectable(e) && metricClickMode === "FUNCTION_INPUT_SELECT";
-    };
-
     const handleInnerMouseDown = (e: React.MouseEvent) => {
-      if (isFunctionInputSelectable(e) && !e.shiftKey) {
+      if (
+        metricClickMode === "FUNCTION_INPUT_SELECT" &&
+        isSelectable(e) &&
+        !e.shiftKey
+      ) {
         window.dispatchEvent(
           new CustomEvent("functionMetricClicked", {
             detail: metric,
           })
         );
-        // TODO(matthew): Why don't these stop the triggering of the flow grid cell?
         e.preventDefault();
         e.stopPropagation();
       }
@@ -236,20 +233,11 @@ export const MetricCard = forwardRef<{ focus(): void }, Props>(
     };
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
-      if (e.target === ReactDOM.findDOMNode(divRef.current)) {
-        if (e.keyCode === 13 && inSelectedCell) {
-          e.preventDefault();
-          e.stopPropagation();
-          openModal();
-        }
+      if (e.target === divRef.current && e.key === "Enter" && inSelectedCell) {
+        e.preventDefault();
+        e.stopPropagation();
+        openModal();
       }
-    };
-
-    const handleKeyPress = (e: React.KeyboardEvent) => {
-      if (e.target === ReactDOM.findDOMNode(this)) {
-        gridKeyPress(e);
-      }
-      e.stopPropagation();
     };
 
     const onChangeMetricName = (name: string) => {
@@ -307,11 +295,10 @@ export const MetricCard = forwardRef<{ focus(): void }, Props>(
         }
       >
         <div
+          ref={divRef}
           className="relative flex h-full w-full focus:outline-none"
-          onKeyPress={handleKeyPress}
           onKeyDown={handleKeyDown}
           tabIndex={0}
-          ref={divRef}
         >
           <div
             className={clsx(
@@ -332,6 +319,10 @@ export const MetricCard = forwardRef<{ focus(): void }, Props>(
                     ]),
               relationshipClasses[relType] // used by SensitivitySection
             )}
+            onKeyDown={
+              // key presses on inner fields shouldn't affect FlowGrid
+              (e) => e.stopPropagation()
+            }
             onMouseDown={handleOuterMouseDown}
           >
             {modalIsOpen && (

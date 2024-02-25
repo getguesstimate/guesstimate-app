@@ -15,7 +15,6 @@ import {
   isWithinRegion,
   MaybeRegion,
 } from "~/lib/locationUtils";
-import { CanvasState } from "~/modules/canvas_state/slice";
 import { SelectedCell } from "~/modules/selected_cell/reducer";
 
 import { BackgroundContainer } from "./BackgroundContainer";
@@ -60,7 +59,6 @@ function newAutoFillRegion(start: CanvasLocation, location: CanvasLocation) {
 
 type Props = {
   // main props
-  canvasState: CanvasState;
   items: GridItem[];
   edges?: EdgeShape[]; // if not defined, cells won't have additional padding, so [] and `undefined` are different
   // other controlled state - managed in Redux (but shoudn't)
@@ -105,7 +103,6 @@ export const FlowGridContext = createContext<FlowGridContextShape>({
 });
 
 export const FlowGrid: FC<Props> = ({
-  canvasState,
   items,
   edges,
   selectedCell,
@@ -233,9 +230,6 @@ export const FlowGrid: FC<Props> = ({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.target && (e.target as any).type === "textarea") {
-      return;
-    }
     if (e.key === "Backspace" || e.key === "Delete") {
       handleRemoveSelectedItems();
       e.preventDefault();
@@ -335,9 +329,7 @@ export const FlowGrid: FC<Props> = ({
         onAutoFillTargetMouseDown={() =>
           handleAutoFillTargetMouseDown(location)
         }
-        canvasState={canvasState}
         forceFlowGridUpdate={forceUpdate}
-        gridKeyPress={handleKeyDown}
         handleSelect={onSelectItem}
         handleEndRangeSelect={handleEndRangeSelect}
         inSelectedCell={inSelectedCell}

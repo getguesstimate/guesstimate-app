@@ -1,5 +1,6 @@
 import React, {
   ChangeEvent,
+  forwardRef,
   useEffect,
   useImperativeHandle,
   useRef,
@@ -26,7 +27,7 @@ type Props = {
 
 export type MetricNameHandle = { focus(): void; hasContent(): boolean };
 
-export const MetricName = React.forwardRef<MetricNameHandle, Props>(
+export const MetricName = forwardRef<MetricNameHandle, Props>(
   function MetricName(props, ref) {
     const [value, setValue] = useState(props.name || "");
 
@@ -116,10 +117,10 @@ export const MetricName = React.forwardRef<MetricNameHandle, Props>(
         onKeyDown={handleKeyDown}
         ref={editorRef}
         className={clsx(
-          "block w-full resize-none overflow-hidden bg-transparent p-0.5 text-lg leading-[1.2em] outline-none focus:text-dark-3",
+          "leading-[1.2em] block w-full resize-none overflow-hidden bg-transparent p-0.5 text-lg outline-none focus:text-dark-3",
           props.anotherFunctionSelected && "cursor-pointer",
           props.titleView
-            ? "font-semibold text-[#3c4f67]"
+            ? "text-[#3c4f67] font-semibold"
             : [
                 "text-[rgb(69,98,134)]/80",
                 props.isOutput ? "font-medium" : "font-light",

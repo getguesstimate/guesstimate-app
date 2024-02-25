@@ -3,7 +3,6 @@ import React, { FC, useContext, useEffect, useRef } from "react";
 import clsx from "clsx";
 import { useDrop } from "react-dnd";
 import { CanvasLocation, Direction } from "~/lib/locationUtils";
-import { CanvasState } from "~/modules/canvas_state/slice";
 
 import { EmptyCell } from "./EmptyCell";
 import { FilledCell } from "./FilledCell";
@@ -11,7 +10,6 @@ import { cellSizeInfo, FlowGridContext } from "./FlowGrid";
 import { GridItem } from "./types";
 
 type Props = {
-  canvasState: CanvasState;
   inSelectedCell: boolean;
   isHovered: boolean;
   showAutoFillToken: boolean;
@@ -26,7 +24,6 @@ type Props = {
   onEmptyCellMouseDown(e: React.MouseEvent): void;
   onMouseEnter(e: React.MouseEvent): void;
   onMouseUp(e: React.MouseEvent): void;
-  gridKeyPress(e: React.KeyboardEvent): void;
   onAutoFillTargetMouseDown(): void;
   onReturn(): void;
   onTab(): void;
@@ -72,6 +69,7 @@ export const DropCell: FC<Props> = (props) => {
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
+    console.log("dropcell", e);
     const { inSelectedCell, item, location } = props;
 
     const leftClick = e.button === 0;
@@ -83,17 +81,11 @@ export const DropCell: FC<Props> = (props) => {
       props.onEmptyCellMouseDown(e);
     }
 
-    // If editing a function (`=...`), clicks on other cells insert cell ids instead of normal select/drag actions.
-    const isFunctionSelect =
-      props.canvasState.metricClickMode === "FUNCTION_INPUT_SELECT";
-
     if (inSelectedCell) {
       props.handleSelect(location);
     } else {
       if (e.shiftKey) {
         props.handleEndRangeSelect(props.location);
-        return;
-      } else if (isFunctionSelect && item) {
         return;
       } else {
         props.handleSelect(location);

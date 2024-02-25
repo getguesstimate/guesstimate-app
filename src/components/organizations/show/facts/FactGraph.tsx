@@ -17,7 +17,6 @@ import { Fact } from "~/lib/engine/facts";
 import * as _utils from "~/lib/engine/utils";
 import { ApiSpace } from "~/lib/guesstimate_api/resources/Models";
 import { SimulationNodeParamsWithInputs } from "~/lib/propagation/DAG";
-import { initialCanvasState } from "~/modules/canvas_state/slice";
 
 const idToNodeId = (id: string | number, isFact: boolean) =>
   `${isFact ? "fact" : "space"}:${id}`;
@@ -247,7 +246,6 @@ export const FactGraph: React.FC<Props> = (props) => {
         onMoveItem={() => {}}
         onRemoveItems={() => {}}
         showGridLines={false}
-        canvasState={initialCanvasState}
         isModelingCanvas={false}
         size="small"
       />

@@ -21,7 +21,6 @@ export type GridContext = {
   hovered: boolean;
   inSelectedCell: boolean;
   selectedFrom?: Direction;
-  gridKeyPress(e: React.SyntheticEvent): void;
   connectDragSource: ConnectDragSource;
   forceFlowGridUpdate(): void;
   onReturn(): void;
@@ -83,7 +82,6 @@ const DragPreview: FC<{ width: number; children: ReactNode }> = ({
 
 type Props = {
   isHovered: boolean;
-  gridKeyPress(e: React.SyntheticEvent): void;
   forceFlowGridUpdate(): void;
   onTab(): void;
   onReturn(): void;
@@ -171,7 +169,6 @@ export const FilledCell = forwardRef<{ focus(): void }, Props>(
       hovered: props.isHovered,
       inSelectedCell: props.inSelectedCell,
       selectedFrom: props.selectedFrom,
-      gridKeyPress: props.gridKeyPress,
       connectDragSource: drag,
       forceFlowGridUpdate: props.forceFlowGridUpdate,
       onReturn: props.onReturn,
