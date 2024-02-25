@@ -1,12 +1,11 @@
 import { AnyAction, Reducer } from "redux";
+import { CanvasLocation } from "~/lib/locationUtils";
 
 export type SelectedCell =
   | {}
-  | {
-      row: number;
-      column: number;
+  | (CanvasLocation & {
       selectedFrom?: "UP" | "DOWN" | "LEFT" | "RIGHT";
-    };
+    });
 
 export const selectedCellR: Reducer<SelectedCell, AnyAction> = (
   state = {},

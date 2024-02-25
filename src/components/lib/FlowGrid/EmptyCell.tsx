@@ -1,4 +1,4 @@
-import React, {
+import {
   forwardRef,
   memo,
   useContext,
@@ -13,6 +13,7 @@ import { FlowGridContext } from "./FlowGrid";
 
 type Props = {
   onAddItem(location: CanvasLocation): void;
+  onSelect(location: CanvasLocation): void;
   inSelectedCell: boolean;
   gridKeyPress(e: React.KeyboardEvent): void;
   location: CanvasLocation;
@@ -41,6 +42,19 @@ export const EmptyCell = memo(
       }
     };
 
+    const wasSelectedWhenClickStarted = useRef(false);
+
+    const handleMouseDown = () => {
+      wasSelectedWhenClickStarted.current = props.inSelectedCell;
+      props.onSelect(props.location);
+    };
+
+    const handleClick = () => {
+      if (wasSelectedWhenClickStarted.current) {
+        props.onAddItem(props.location);
+      }
+    };
+
     return (
       <div
         className={clsx(
@@ -51,6 +65,8 @@ export const EmptyCell = memo(
         )}
         onKeyPress={props.gridKeyPress}
         onKeyDown={handleKeyDown}
+        onMouseDown={handleMouseDown}
+        onClick={handleClick}
         tabIndex={0}
         ref={divRef}
       />

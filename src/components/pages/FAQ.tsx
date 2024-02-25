@@ -1,4 +1,5 @@
-import React from "react";
+import React, { FC } from "react";
+
 import { PageBase } from "../utility/PageBase";
 
 const content = `
@@ -53,6 +54,6 @@ Monte Carlo simulations are far more general than analytical solutions, so apply
 
 `;
 
-export const FAQ: React.FC = () => {
+export const FAQ: FC = () => {
   return <PageBase content={content} />;
 };

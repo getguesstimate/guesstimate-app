@@ -1,4 +1,4 @@
-import React, { useImperativeHandle, useRef } from "react";
+import { FC, forwardRef, useImperativeHandle, useRef } from "react";
 
 import clsx from "clsx";
 import _ from "lodash";
@@ -37,7 +37,7 @@ import { CanvasState } from "~/modules/canvas_state/reducer";
 
 // We have to display this section after it disappears
 // to ensure that the metric card gets selected after click.
-const ErrorIcon: React.FC<{ errors: PropagationError[] }> = ({ errors }) => {
+const ErrorIcon: FC<{ errors: PropagationError[] }> = ({ errors }) => {
   if (isBreak(errors)) {
     return <Icon name="unlink" className="text-[1.4em] text-red-8" />;
   } else if (isInfiniteLoop(errors)) {
@@ -49,7 +49,7 @@ const ErrorIcon: React.FC<{ errors: PropagationError[] }> = ({ errors }) => {
 
 // We have to display this section after it disappears
 // to ensure that the metric card gets selected after click.
-const ErrorSection: React.FC<{
+const ErrorSection: FC<{
   errors: PropagationError[];
   shouldShowErrorText: boolean;
   messageToDisplay: string | null;
@@ -96,7 +96,7 @@ type Props = {
   analyzedMetric: any;
 };
 
-export const MetricCardViewSection = React.forwardRef<
+export const MetricCardViewSection = forwardRef<
   { hasContent(): boolean; focusName(): void },
   Props
 >(function MetricCardViewSection(props, ref) {

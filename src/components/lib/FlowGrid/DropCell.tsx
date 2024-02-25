@@ -85,9 +85,6 @@ export const DropCell: FC<Props> = (props) => {
     }
 
     if (inSelectedCell) {
-      if (!item) {
-        props.onAddItem(location);
-      }
       props.handleSelect(location);
     } else {
       if (e.shiftKey) {
@@ -112,7 +109,12 @@ export const DropCell: FC<Props> = (props) => {
       ref={itemRef}
     />
   ) : (
-    <EmptyCell {...props} ref={itemRef} isOver={isOver} />
+    <EmptyCell
+      {...props}
+      ref={itemRef}
+      isOver={isOver}
+      onSelect={props.handleSelect}
+    />
   );
 
   return (

@@ -65,7 +65,7 @@ const Filter: React.FC<{
           key={key}
           header={names[key]}
           isSelected={selected === key}
-          onMouseDown={() => {
+          onClick={() => {
             onChange(key);
           }}
           closeOnClick={true}

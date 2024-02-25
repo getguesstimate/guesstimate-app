@@ -234,13 +234,13 @@ export const SpaceToolbar = React.memo<Props>(function SpaceToolbar({
               <CardListElement
                 icon="copy"
                 header="Copy Model"
-                onMouseDown={onCopyModel}
+                onClick={onCopyModel}
               />
               {editableByMe && (
                 <CardListElement
                   icon="download"
                   header="Import Slurp"
-                  onMouseDown={() => {
+                  onClick={() => {
                     setImportModalOpen(true);
                   }}
                   closeOnClick={true}
@@ -250,7 +250,7 @@ export const SpaceToolbar = React.memo<Props>(function SpaceToolbar({
                 <CardListElement
                   icon="warning"
                   header="Delete Model"
-                  onMouseDown={onDestroy}
+                  onClick={onDestroy}
                 />
               )}
             </DropDown>
@@ -321,7 +321,7 @@ export const SpaceToolbar = React.memo<Props>(function SpaceToolbar({
                     <CardListElement
                       key={c.id}
                       header={c.title}
-                      onMouseDown={() => {
+                      onClick={() => {
                         showCalculator(c);
                       }}
                       closeOnClick={true}
@@ -332,7 +332,7 @@ export const SpaceToolbar = React.memo<Props>(function SpaceToolbar({
                     <CardListElement
                       key="new"
                       header="New Calculator"
-                      onMouseDown={makeNewCalculator}
+                      onClick={makeNewCalculator}
                       closeOnClick={true}
                       icon="plus"
                     />

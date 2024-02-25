@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FC } from "react";
 
 import { PageBase } from "../utility/PageBase";
 
@@ -94,6 +94,6 @@ By continuing to access or use our Service after any revisions become effective,
 If you have any questions about these Terms, please contact us.
 `;
 
-export const TermsAndConditions: React.FC = () => {
+export const TermsAndConditions: FC = () => {
   return <PageBase content={content} />;
 };

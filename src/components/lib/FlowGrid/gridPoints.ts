@@ -29,7 +29,7 @@ export class GridPoint {
   }
 
   _rowY(row: number) {
-    let rowHeights = [0, ...this.rowHeights];
+    const rowHeights = [0, ...this.rowHeights];
     let top = upto(row + 1)
       .map((r) => rowHeights[r])
       .reduce((a, b) => a + b);

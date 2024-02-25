@@ -1,12 +1,12 @@
-import React from "react";
-import clsx from "clsx";
+import React, { FC, ReactElement } from "react";
 
+import clsx from "clsx";
 import Icon from "~/components/react-fa-patched";
 
-const MetricSidebarItem: React.FC<{
+const MetricSidebarItem: FC<{
   highlight?: boolean;
   onClick(): void;
-  icon: React.ReactElement;
+  icon: ReactElement;
   name: string;
 }> = ({ highlight, onClick, icon, name }) => (
   <div
@@ -19,7 +19,7 @@ const MetricSidebarItem: React.FC<{
         : "bg-[#52646f] hover:bg-[#40525c]",
       "flex items-center"
     )}
-    onMouseDown={onClick}
+    onMouseUp={onClick}
   >
     <div className="w-6">{icon}</div>
     <div>{name}</div>
@@ -38,7 +38,7 @@ type Props = {
   isAnalyzedMetric: boolean;
 };
 
-export const MetricSidebar: React.FC<Props> = ({
+export const MetricSidebar: FC<Props> = ({
   onOpenModal,
   onBeginAnalysis,
   onEndAnalysis,
@@ -55,14 +55,14 @@ export const MetricSidebar: React.FC<Props> = ({
       name="Expand"
       onClick={onOpenModal}
     />
-    {showAnalysis ? (
+    {showAnalysis && (
       <MetricSidebarItem
         highlight={isAnalyzedMetric}
         icon={<Icon name={isAnalyzedMetric ? "close" : "bar-chart"} />}
         name="Sensitivity"
         onClick={isAnalyzedMetric ? onEndAnalysis : onBeginAnalysis}
       />
-    ) : null}
+    )}
     {canBeMadeFact && !exportedAsFact && (
       <MetricSidebarItem
         icon={<i className="ion-ios-redo" />}

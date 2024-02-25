@@ -1,19 +1,18 @@
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
+
 import _ from "lodash";
 import { useRouter } from "next/router";
-import React, { useEffect, useRef, useState } from "react";
 import { Button } from "~/components/utility/buttons/button";
 import { Input, Select, Textarea } from "~/components/utility/forms";
-
+import { FactCategory } from "~/lib/engine/fact_category";
 import {
   Fact,
   hasRequiredProperties,
   isExportedFromSpace,
   simulateFact,
 } from "~/lib/engine/facts";
-import { FactCategory } from "~/lib/engine/fact_category";
 import { addStats, hasErrors } from "~/lib/engine/simulation";
 import { spaceUrlById } from "~/lib/engine/space";
-
 import { withVariableName } from "~/lib/generateVariableNames/generateFactVariableName";
 import {
   formatData,
@@ -121,7 +120,7 @@ export const FactForm: React.FC<Props> = (props) => {
     }
   };
 
-  const handleChangeName = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleChangeName = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const name = e.currentTarget.value;
     setFactState(
       variableNameManuallySet
@@ -132,7 +131,7 @@ export const FactForm: React.FC<Props> = (props) => {
           )
     );
   };
-  const handleSelectCategory = (c: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleSelectCategory = (c: ChangeEvent<HTMLSelectElement>) => {
     setFactState({ category_id: c.target.value });
   };
   const handleChangeVariableName = (

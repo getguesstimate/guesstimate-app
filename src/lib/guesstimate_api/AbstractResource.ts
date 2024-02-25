@@ -1,5 +1,6 @@
 import { captureApiError } from "~/lib/errors";
-import { GuesstimateApi } from ".";
+
+import { GuesstimateApi } from "./";
 
 type RequestParams = {
   url: string;
@@ -19,7 +20,7 @@ export class AbstractResource {
 
   async call({ url, method, data, headers }: RequestParams): Promise<unknown> {
     try {
-      const response = await fetch(this.api.host + url, {
+      const response = await fetch(this.api.host + "/" + url, {
         method,
         headers: {
           "Content-Type": "application/json",
@@ -48,7 +49,7 @@ export class AbstractResource {
 
   guesstimateMethod({ url, method, data, headers }: RequestParams) {
     return (callback: Callback) => {
-      fetch(this.api.host + url, {
+      fetch(this.api.host + "/" + url, {
         method,
         headers: {
           "Content-Type": "application/json",

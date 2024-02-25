@@ -130,9 +130,6 @@ export const FlowGrid: FC<Props> = ({
 }) => {
   const forceUpdate = useForceUpdate();
 
-  // We don't store this as state because we don't want this to cause renders.
-  const lastMousePosition = useRef({ pageX: 0, pageY: 0 });
-
   const [hover, setHover] = useState<CanvasLocation | undefined>(undefined);
   const [dragSelecting, setDragSelecting] = useState(false);
   const [autoFillRegion, setAutoFillRegion] = useState<
@@ -179,31 +176,20 @@ export const FlowGrid: FC<Props> = ({
   };
 
   const handleEmptyCellMouseDown = (e: React.MouseEvent) => {
-    if (
-      e.button === 0 &&
-      !(e.target && (e.target as any).type === "textarea")
-    ) {
+    if (e.button === 0) {
       setDragSelecting(true);
-      lastMousePosition.current = { pageX: e.pageX, pageY: e.pageY };
       e.preventDefault();
     }
-  };
-
-  const mouseMoved = (e: React.MouseEvent) => {
-    const sameLocation =
-      e.pageX === lastMousePosition.current.pageX &&
-      e.pageY === lastMousePosition.current.pageY;
-    return !sameLocation;
   };
 
   const handleCellMouseEnter = (
     location: CanvasLocation,
     e: React.MouseEvent
   ) => {
-    // If this mouse hasn't moved, or the user is neither tracing a fill region or dragging a selected region, just set
+    // If this the user is neither tracing a fill region nor dragging a selected region, just set
     // the hover state.
     const userDraggingSelection = Boolean(autoFillRegion || dragSelecting);
-    if (!(mouseMoved(e) && userDraggingSelection)) {
+    if (!userDraggingSelection) {
       setHover(location);
       return;
     }
@@ -302,16 +288,18 @@ export const FlowGrid: FC<Props> = ({
   };
 
   const handleReturn = (location: CanvasLocation, isDown: boolean) => {
-    const { row, column } = location;
-    const newRow = isDown ? row + 1 : (row || 1) - 1;
-    const newLocation = { row: newRow, column };
+    const newLocation: CanvasLocation = {
+      row: isDown ? location.row + 1 : (location.row || 1) - 1,
+      column: location.column,
+    };
     addIfNeededAndSelect(newLocation, isDown ? "UP" : "DOWN");
   };
 
   const handleTab = (location: CanvasLocation, isRight: boolean) => {
-    const { row, column } = location;
-    const newCol = isRight ? column + 1 : (column || 1) - 1;
-    const newLocation = { row, column: newCol };
+    const newLocation: CanvasLocation = {
+      row: location.row,
+      column: isRight ? location.column + 1 : (location.column || 1) - 1,
+    };
     addIfNeededAndSelect(newLocation, isRight ? "LEFT" : "RIGHT");
   };
 
@@ -320,12 +308,13 @@ export const FlowGrid: FC<Props> = ({
   };
 
   const getRowHeight = (rowI: number) => {
-    return rowRefs.current[rowI]?.offsetHeight || 0;
+    // note: offsetHeight won't be as precise, it's rounded to integer value
+    return rowRefs.current[rowI]?.getBoundingClientRect().height || 0;
   };
 
   // TODO(matthew): Look into necessity of 'inSelectedRegion' passed to cell below.
   const renderCell = (location: CanvasLocation) => {
-    const item = items.find((i) => isAtLocation(i.location, location));
+    const item = items.find((item) => isAtLocation(item.location, location));
     const inSelectedCell = isAtLocation(selectedCell, location);
     const selectedRegionNotOneByOne =
       selectedRegion.length === 2 &&
@@ -363,16 +352,10 @@ export const FlowGrid: FC<Props> = ({
         onMouseEnter={(e: React.MouseEvent) => {
           handleCellMouseEnter(location, e);
         }}
-        onEndDragCell={(newLocation: CanvasLocation) => {
-          handleEndDragCell(newLocation);
-        }}
+        onEndDragCell={handleEndDragCell}
         onEmptyCellMouseDown={handleEmptyCellMouseDown}
-        onReturn={(down = true) => {
-          handleReturn(location, down);
-        }}
-        onTab={(right = true) => {
-          handleTab(location, right);
-        }}
+        onReturn={(down = true) => handleReturn(location, down)}
+        onTab={(right = true) => handleTab(location, right)}
         getRowHeight={() => getRowHeight(location.row)}
         showAutoFillToken={showAutoFillToken}
       />

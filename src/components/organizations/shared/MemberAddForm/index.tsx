@@ -1,13 +1,13 @@
-import _ from "lodash";
 import React, { useEffect, useRef, useState } from "react";
 
-import { httpRequestSelector } from "./httpRequestSelector";
-
+import _ from "lodash";
 import { Button } from "~/components/utility/buttons/button";
 import { Input } from "~/components/utility/forms";
 import { Message } from "~/components/utility/Message";
 import { useAppDispatch, useAppSelector } from "~/modules/hooks";
 import * as userOrganizationMembershipActions from "~/modules/userOrganizationMemberships/actions";
+
+import { httpRequestSelector } from "./httpRequestSelector";
 
 function validateEmail(email: string) {
   const re =

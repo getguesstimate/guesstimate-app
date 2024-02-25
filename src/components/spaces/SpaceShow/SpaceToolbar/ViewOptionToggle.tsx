@@ -1,8 +1,8 @@
 import React from "react";
 
 import Icon from "~/components/react-fa-patched";
-import { DropDown } from "~/components/utility/DropDown";
 import { CardListElement } from "~/components/utility/Card";
+import { DropDown } from "~/components/utility/DropDown";
 
 const ViewingOption: React.FC<{
   isSelected: boolean;
@@ -10,7 +10,7 @@ const ViewingOption: React.FC<{
 }> = ({ isSelected, onClick }) => (
   <CardListElement
     isSelected={isSelected}
-    onMouseDown={isSelected ? () => {} : onClick}
+    onClick={isSelected ? () => {} : onClick}
     icon="eye"
     header="Viewing"
   >
@@ -25,7 +25,7 @@ const EditingOption: React.FC<{
 }> = ({ onClick, isSelected, isEditingInvalid }) => (
   <CardListElement
     isSelected={isSelected}
-    onMouseDown={isSelected ? () => {} : onClick}
+    onClick={isSelected ? () => {} : onClick}
     icon="pencil"
     header="Editing"
     isDisabled={isEditingInvalid}

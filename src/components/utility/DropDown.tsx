@@ -77,9 +77,7 @@ export const DropDown = React.forwardRef<DropDownHandle, Props>(
                   {props.children.map((child, i) => (
                     <div
                       key={i}
-                      onMouseDown={
-                        child?.props?.closeOnClick ? close : undefined
-                      }
+                      onClick={child?.props?.closeOnClick ? close : undefined}
                     >
                       {child}
                     </div>

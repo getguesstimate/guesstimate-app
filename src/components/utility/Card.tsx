@@ -51,7 +51,7 @@ export type CardListElementProps = PropsWithChildren<{
   isSelected?: boolean;
   isDisabled?: boolean;
   closeOnClick?: boolean; // used by <Dropdown />
-  onMouseDown(): void;
+  onClick(): void;
   icon?: string;
   ionicIcon?: string;
   imageShape?: "circle" | "square";
@@ -70,12 +70,12 @@ export const CardListElement: FC<CardListElementProps> = ({
   url,
   isSelected,
   isDisabled,
-  onMouseDown,
+  onClick,
 }) => {
   const handleSelect = (e: React.MouseEvent) => {
-    if (!isDisabled && onMouseDown) {
+    if (!isDisabled && onClick) {
       e.preventDefault();
-      onMouseDown();
+      onClick();
     }
   };
 
@@ -94,7 +94,7 @@ export const CardListElement: FC<CardListElementProps> = ({
 
   return (
     <li>
-      <a className={className} href={url} onMouseDown={handleSelect}>
+      <a className={className} href={url} onClick={handleSelect}>
         {hasImage && (
           <div className={leftCol}>
             <IconSection

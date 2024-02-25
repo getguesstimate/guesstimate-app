@@ -1,15 +1,17 @@
-import React from "react";
-import Image from "next/image";
+import React, { FC, PropsWithChildren } from "react";
+
 import clsx from "clsx";
+import Image from "next/image";
 
 import LogoWord from "../../../public/assets/logo-word-no-beta.png";
 import { Button } from "../utility/buttons/button";
 
-const Benefit: React.FC<{
-  iconClass: string;
-  title: string;
-  children: React.ReactNode;
-}> = ({ iconClass, title, children }) => {
+const Benefit: FC<
+  PropsWithChildren<{
+    iconClass: string;
+    title: string;
+  }>
+> = ({ iconClass, title, children }) => {
   return (
     <div className="flex flex-col items-center">
       <i className={clsx(iconClass, "text-6xl opacity-20")} />
@@ -23,7 +25,7 @@ const Benefit: React.FC<{
   );
 };
 
-export const Home: React.FC = () => {
+export const Home: FC = () => {
   return (
     <div className="mt-24 flex flex-col items-center">
       <Image

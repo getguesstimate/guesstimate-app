@@ -1,8 +1,8 @@
-import React, { FC, ReactNode, useEffect, useRef } from "react";
+import React, { FC, ReactNode, useCallback, useEffect, useRef } from "react";
 
 import clsx from "clsx";
 import _ from "lodash";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import {
   CardListElement,
@@ -10,6 +10,7 @@ import {
 } from "~/components/utility/Card";
 import { DropDown, DropDownHandle } from "~/components/utility/DropDown";
 import { signIn } from "~/lib/auth";
+import { ACCESS_TOKEN_LIFETIME } from "~/lib/constants";
 import { organization, user } from "~/lib/engine/engine";
 import { useAppDispatch } from "~/modules/hooks";
 import * as meActions from "~/modules/me/actions";
@@ -60,41 +61,42 @@ const ProfileDropdown: FC<{
     dispatch(modalActions.openSettings());
   };
 
-  const logOut = () => {
+  const logOut = async () => {
     dispatch(meActions.logOut());
+    await signOut();
   };
 
-  let listElements = [
+  let listElements: CardListElementProps[] = [
     {
       ionicIcon: "md-person",
       header: "account",
-      onMouseDown: openModal,
+      onClick: openModal,
     },
     {
       icon: "rocket",
       header: "upgrade",
-      onMouseDown: () => {
+      onClick: () => {
         router.push("/subscribe/lite");
       },
     },
     {
       ionicIcon: "ios-people",
       header: "New Organization",
-      onMouseDown: () => {
+      onClick: () => {
         router.push("/organizations/new");
       },
     },
     {
       ionicIcon: "md-help",
       header: "Documentation",
-      onMouseDown: () => {
+      onClick: () => {
         navigationActions.externalNavigate("http://docs.getguesstimate.com/");
       },
     },
     {
       ionicIcon: "ios-chatbubbles",
       header: "Feedback",
-      onMouseDown: () => {
+      onClick: () => {
         navigationActions.externalNavigate(
           "https://productpains.com/product/guesstimate"
         );
@@ -103,7 +105,7 @@ const ProfileDropdown: FC<{
     {
       ionicIcon: "md-log-out",
       header: "Sign Out",
-      onMouseDown: logOut,
+      onClick: logOut,
     },
   ];
 
@@ -122,7 +124,7 @@ const ProfileDropdown: FC<{
       }
     >
       {listElements.map((props) => (
-        <CardListElement {...props} key={props.header} closeOnClick={true} />
+        <CardListElement {...props} key={props.header} closeOnClick />
       ))}
     </DropDown>
   );
@@ -145,7 +147,7 @@ const NewModelDropdown: FC<{
   const personalModel: CardListElementProps = {
     header: userName!,
     imageShape: "circle",
-    onMouseDown: () => {
+    onClick: () => {
       createModel(undefined);
       ref.current?.close();
     },
@@ -164,7 +166,7 @@ const NewModelDropdown: FC<{
           header: o.name,
           imageShape: "circle" as const,
           image: o.picture,
-          onMouseDown: () => {
+          onClick: () => {
             createModel(o.id);
             ref.current?.close();
           },
@@ -219,7 +221,7 @@ const OrganizationsDropdown: FC<{
         header: String(o.name),
         imageShape: "circle",
         image: organization.image(o),
-        onMouseDown: () => {
+        onClick: () => {
           router.push(organization.url(o));
           ref.current?.close();
         },
@@ -253,10 +255,41 @@ type Props = {
 };
 
 export const HeaderRightMenu: FC<Props> = (props) => {
-  const { status: sessionStatus, data: session } = useSession();
+  const { status: sessionStatus, data: session, update } = useSession();
   const dispatch = useAppDispatch();
 
   const { me } = props;
+
+  const updateSessionInRedux = useCallback(() => {
+    if (sessionStatus === "loading") {
+      return;
+    }
+
+    if (!session) {
+      return;
+    }
+    if (!session.access_token || !session.auth0_id) {
+      // generalError("parseHash Error", { err }); // TODO - dispatch redux error?
+      return;
+    }
+    dispatch(
+      meActions.logInWithAccessToken({
+        sub: session.auth0_id,
+        id_token: session.access_token,
+      })
+    );
+  }, [session, sessionStatus]);
+
+  useEffect(() => {
+    updateSessionInRedux();
+
+    const timeoutId = setTimeout(async () => {
+      await update();
+      updateSessionInRedux();
+    }, (1000 * ACCESS_TOKEN_LIFETIME) / 2);
+
+    return () => clearTimeout(timeoutId);
+  }, [updateSessionInRedux, update]);
 
   const organizations = user.usersOrganizations(
     props.me,

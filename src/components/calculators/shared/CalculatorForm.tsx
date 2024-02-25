@@ -1,26 +1,26 @@
-import _ from "lodash";
-import React, { PropsWithChildren, useState } from "react";
+import { ChangeEvent, FC, PropsWithChildren, useState } from "react";
 
 import clsx from "clsx";
+import _ from "lodash";
 import { sortable } from "react-sortable";
 import Icon from "~/components/react-fa-patched";
+import { Button } from "~/components/utility/buttons/button";
+import { Textarea } from "~/components/utility/forms";
 import { FullDenormalizedMetric } from "~/lib/engine/space";
 import { Optional } from "~/lib/engine/types";
 import { Calculator } from "~/modules/calculators/reducer";
-import { Button } from "~/components/utility/buttons/button";
-import { Textarea } from "~/components/utility/forms";
 
-const Header: React.FC<PropsWithChildren> = ({ children }) => (
+const Header: FC<PropsWithChildren> = ({ children }) => (
   <header className="mb-2 border-b-2 border-[#aaa] pb-1 text-lg font-bold">
     {children}
   </header>
 );
 
-const List: React.FC<PropsWithChildren> = ({ children }) => (
+const List: FC<PropsWithChildren> = ({ children }) => (
   <div className="space-y-1">{children}</div>
 );
 
-const Section: React.FC<PropsWithChildren<{ title: string }>> = ({
+const Section: FC<PropsWithChildren<{ title: string }>> = ({
   title,
   children,
 }) => (
@@ -30,12 +30,12 @@ const Section: React.FC<PropsWithChildren<{ title: string }>> = ({
   </section>
 );
 
-const EditButton: React.FC<PropsWithChildren<{ onMouseDown(): void }>> = ({
+const EditButton: FC<PropsWithChildren<{ onClick(): void }>> = ({
   children,
-  onMouseDown,
+  onClick,
 }) => (
   <div
-    onMouseDown={onMouseDown}
+    onClick={onClick}
     className="text-lato cursor-pointer rounded bg-grey-7 px-2 py-1 text-xs font-bold text-grey-666"
   >
     {children}
@@ -51,22 +51,22 @@ type ParamProps = {
   onAdd(): void;
 };
 
-const EditSection: React.FC<ParamProps> = ({ isVisible, onRemove, onAdd }) => (
+const EditSection: FC<ParamProps> = ({ isVisible, onRemove, onAdd }) => (
   <div>
     {isVisible ? (
       <div className="flex gap-1">
-        <EditButton onMouseDown={onRemove}>hide</EditButton>
-        <EditButton onMouseDown={() => {}}>
+        <EditButton onClick={onRemove}>hide</EditButton>
+        <EditButton onClick={() => {}}>
           <Icon name="bars" />
         </EditButton>
       </div>
     ) : (
-      <EditButton onMouseDown={onAdd}>show</EditButton>
+      <EditButton onClick={onAdd}>show</EditButton>
     )}
   </div>
 );
 
-const InputForm: React.FC<ParamProps> = (props) => (
+const InputForm: FC<ParamProps> = (props) => (
   <div className={clsx(props.isDropTarget && "bg-grey-1")}>
     <div className="flex justify-between">
       <div>
@@ -84,7 +84,7 @@ const InputForm: React.FC<ParamProps> = (props) => (
   </div>
 );
 
-const OutputForm: React.FC<ParamProps> = (props) => (
+const OutputForm: FC<ParamProps> = (props) => (
   <div className={clsx(props.isDropTarget && "bg-grey-1")}>
     <div className="flex justify-between">
       <div>{props.name}</div>
@@ -111,8 +111,8 @@ type Props = {
   onMetricHide(id: string): void;
   onMetricShow(id: string): void;
   onMoveMetricTo(id: string, destIndex: number): void;
-  onChangeName(e: React.ChangeEvent): void;
-  onChangeContent(e: React.ChangeEvent): void;
+  onChangeName(e: ChangeEvent): void;
+  onChangeContent(e: ChangeEvent): void;
   onSubmit(): void;
   isValid: boolean;
   buttonText: string;
@@ -124,7 +124,7 @@ type State = {
   dropTargetId: string | null;
 };
 
-export const CalculatorForm: React.FC<Props> = (props) => {
+export const CalculatorForm: FC<Props> = (props) => {
   const [hasAlreadySubmitted, setHasAlreadySubmitted] = useState(false);
   const [state, setState] = useState<State>({
     draggingIndex: null,

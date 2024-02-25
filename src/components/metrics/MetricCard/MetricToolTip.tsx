@@ -1,9 +1,9 @@
-import React from "react";
+import { FC } from "react";
 
 import { MarkdownViewer } from "~/components/utility/MarkdownViewer";
 import { Guesstimate } from "~/modules/guesstimates/reducer";
 
-export const MetricToolTip: React.FC<{ guesstimate: Guesstimate }> = ({
+export const MetricToolTip: FC<{ guesstimate: Guesstimate }> = ({
   guesstimate,
 }) => {
   if (!guesstimate.description) {

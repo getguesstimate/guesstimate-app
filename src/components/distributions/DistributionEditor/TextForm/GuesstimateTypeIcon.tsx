@@ -1,12 +1,11 @@
-import clsx from "clsx";
 import React from "react";
 
+import clsx from "clsx";
 import Icon from "~/components/react-fa-patched";
-
 import { Guesstimator } from "~/lib/guesstimator/index";
 import { DistributionType } from "~/lib/guesstimator/types";
-
 import * as elev from "~/server/elev/index";
+
 import { DistributionIcon } from "./DistributionSelector";
 
 type Props = {
@@ -38,7 +37,7 @@ export const GuesstimateTypeIcon: React.FC<Props> = ({
           "mr-1.5 cursor-pointer text-grey-2 opacity-60 hover:opacity-100",
           size === "large" ? "text-3xl" : "text-xl"
         )}
-        onMouseDown={() => {
+        onClick={() => {
           elev.open(elev.GUESSTIMATE_TYPES);
         }}
       >

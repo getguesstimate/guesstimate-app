@@ -11,7 +11,7 @@ const PublicOption: React.FC<{ isSelected: boolean; onClick(): void }> = ({
 }) => (
   <CardListElement
     isSelected={isSelected}
-    onMouseDown={isSelected ? () => {} : onClick}
+    onClick={isSelected ? () => {} : onClick}
     icon="globe"
     header="Public"
     closeOnClick={!isSelected}
@@ -29,7 +29,7 @@ const PrivateOption: React.FC<{
   return (
     <CardListElement
       isSelected={isSelected}
-      onMouseDown={isSelected ? () => {} : onClick}
+      onClick={isSelected ? () => {} : onClick}
       icon="lock"
       header="Private"
       isDisabled={isPrivateSelectionInvalid}

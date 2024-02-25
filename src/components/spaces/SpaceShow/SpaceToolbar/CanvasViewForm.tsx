@@ -1,4 +1,5 @@
 import { PropsWithChildren } from "react";
+
 import {
   CardHeader,
   CardListElement,
@@ -6,10 +7,10 @@ import {
 } from "~/components/utility/Card";
 import { DropDown } from "~/components/utility/DropDown";
 import { HR } from "~/components/utility/HR";
-
 import * as canvasStateActions from "~/modules/canvas_state/actions";
 import { EdgeViewMode } from "~/modules/canvas_state/reducer";
 import { useAppDispatch, useAppSelector } from "~/modules/hooks";
+
 import { ToolbarTextItem } from "./ToolbarTextItem";
 
 const arrowsHiddenImage = "/assets/metric-icons/blue/arrows-hidden.png";
@@ -45,7 +46,7 @@ export const CanvasViewForm: React.FC = () => {
     name: T;
     image: CardListElementProps["image"];
     isSelected?: CardListElementProps["isSelected"];
-    onClick?: CardListElementProps["onMouseDown"];
+    onClick?: CardListElementProps["onClick"];
   };
 
   let metricCardViewOptions: (Option<string> & { key: string })[] = [
@@ -97,7 +98,7 @@ export const CanvasViewForm: React.FC = () => {
               key={o.name}
               header={o.name}
               isSelected={o.isSelected}
-              onMouseDown={o.onClick!}
+              onClick={o.onClick!}
               image={o.image}
             />
           ))}
@@ -111,7 +112,7 @@ export const CanvasViewForm: React.FC = () => {
               key={o.name}
               header={o.name}
               isSelected={o.isSelected}
-              onMouseDown={o.onClick!}
+              onClick={o.onClick!}
               image={o.image}
             />
           ))}

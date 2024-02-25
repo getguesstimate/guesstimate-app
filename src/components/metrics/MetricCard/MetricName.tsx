@@ -9,7 +9,6 @@ import React, {
 import clsx from "clsx";
 import _ from "lodash";
 import TextareaAutosize from "react-textarea-autosize";
-
 import { typeSafeEq } from "~/lib/engine/utils";
 
 type Props = {

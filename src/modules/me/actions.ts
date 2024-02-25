@@ -4,7 +4,7 @@ import * as userActions from "~/modules/users/actions";
 
 import { MeProfile, meSlice } from "./slice";
 
-export function logInWithIdToken({
+export function logInWithAccessToken({
   sub,
   id_token,
 }: {

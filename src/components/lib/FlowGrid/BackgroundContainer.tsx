@@ -9,7 +9,7 @@ import { GridPoint } from "./gridPoints";
 
 type RegionType = "selected" | "analyzed" | "copied" | "fill";
 
-const regionTypeToClass = {
+const regionTypeToClass: Record<RegionType, string> = {
   selected: "rounded-[3px] bg-[rgb(153,186,208)]/[0.87]",
   fill: "rounded-[3px] border border-dashed border-black/40",
   copied:
@@ -64,28 +64,8 @@ export const BackgroundContainer: FC<Props> = memo(
     }, [rowCount, getRowHeight]);
 
     if (!rowHeights.length) {
-      return null;
+      return null; // not initialized yet
     }
-
-    const renderRegion = (
-      locations: MaybeRegion,
-      type: RegionType,
-      columnWidth: number
-    ) => {
-      if (isRegion(locations)) {
-        return (
-          <Region
-            key={type}
-            rowHeights={rowHeights}
-            columnWidth={columnWidth}
-            selectedRegion={locations}
-            type={type}
-          />
-        );
-      } else {
-        return null;
-      }
-    };
 
     const columnWidth = cellSizeInfo[size].width;
     const containerHeight = rowHeights.reduce((a, b) => a + b);
@@ -99,8 +79,16 @@ export const BackgroundContainer: FC<Props> = memo(
 
     return (
       <div>
-        {backgroundRegions.map((region) =>
-          renderRegion(region[0], region[1], columnWidth)
+        {backgroundRegions.map(([region, type]) =>
+          isRegion(region) ? (
+            <Region
+              key={type}
+              rowHeights={rowHeights}
+              columnWidth={columnWidth}
+              selectedRegion={region}
+              type={type}
+            />
+          ) : null
         )}
 
         {edges.length > 0 && (
