@@ -12,7 +12,6 @@ import { GridItem } from "./types";
 
 type Props = {
   canvasState: CanvasState;
-  inSelectedRegion: boolean;
   inSelectedCell: boolean;
   isHovered: boolean;
   showAutoFillToken: boolean;
@@ -35,6 +34,7 @@ type Props = {
   getRowHeight(): number;
 };
 
+// Provides drag&drop capabilities and renders either FilledCell or EmtpyCell as a child.
 export const DropCell: FC<Props> = (props) => {
   const itemRef = useRef<{ focus(): void }>(null);
 

@@ -308,19 +308,18 @@ export const FlowGrid: FC<Props> = ({
     return rowRefs.current[rowI]?.getBoundingClientRect().height || 0;
   };
 
-  // TODO(matthew): Look into necessity of 'inSelectedRegion' passed to cell below.
   const renderCell = (location: CanvasLocation) => {
     const item = items.find((item) => isAtLocation(item.location, location));
     const inSelectedCell = isAtLocation(selectedCell, location);
-    const selectedRegionNotOneByOne =
+    const singleCellSelected =
       selectedRegion.length === 2 &&
-      !isAtLocation(selectedRegion[0], selectedRegion[1]);
+      isAtLocation(selectedRegion[0], selectedRegion[1]);
     const showAutoFillToken =
-      inSelectedCell &&
-      item &&
+      !!item &&
       !item.isEmpty &&
       !dragSelecting &&
-      !selectedRegionNotOneByOne;
+      inSelectedCell &&
+      singleCellSelected;
 
     return (
       <DropCell
@@ -328,15 +327,14 @@ export const FlowGrid: FC<Props> = ({
         location={location}
         item={item}
         onMouseUp={handleCellMouseUp}
-        onAutoFillTargetMouseDown={() => {
-          handleAutoFillTargetMouseDown(location);
-        }}
+        onAutoFillTargetMouseDown={() =>
+          handleAutoFillTargetMouseDown(location)
+        }
         canvasState={canvasState}
         forceFlowGridUpdate={forceUpdate}
         gridKeyPress={handleKeyDown}
         handleSelect={onSelectItem}
         handleEndRangeSelect={handleEndRangeSelect}
-        inSelectedRegion={isWithinRegion(location, selectedRegion)}
         inSelectedCell={inSelectedCell}
         selectedFrom={
           "selectedFrom" in selectedCell ? selectedCell.selectedFrom : undefined
