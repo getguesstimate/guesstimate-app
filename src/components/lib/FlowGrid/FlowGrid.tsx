@@ -83,7 +83,6 @@ type Props = {
   onCut?(): void;
   onCopy?(): void;
   onPaste?(): void;
-  isItemEmpty(id: string): boolean;
   size?: FlowGridSize;
 };
 
@@ -122,7 +121,6 @@ export const FlowGrid: FC<Props> = ({
   onAddItem,
   onMoveItem,
   onAutoFillRegion,
-  isItemEmpty,
   canvasState,
   size = "normal",
 }) => {
@@ -317,10 +315,10 @@ export const FlowGrid: FC<Props> = ({
     const selectedRegionNotOneByOne =
       selectedRegion.length === 2 &&
       !isAtLocation(selectedRegion[0], selectedRegion[1]);
-    const hasNonEmptyItem = !!item && !isItemEmpty(item.key);
     const showAutoFillToken =
       inSelectedCell &&
-      hasNonEmptyItem &&
+      item &&
+      !item.isEmpty &&
       !dragSelecting &&
       !selectedRegionNotOneByOne;
 

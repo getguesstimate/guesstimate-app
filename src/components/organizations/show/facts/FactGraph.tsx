@@ -233,7 +233,6 @@ export const FactGraph: React.FC<Props> = (props) => {
       <FlowGrid
         items={items}
         onMultipleSelect={() => {}}
-        isItemEmpty={() => false}
         edges={edges}
         selectedRegion={[]}
         copiedRegion={[]}

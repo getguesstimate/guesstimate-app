@@ -8,4 +8,5 @@ export type GridItem = {
   key: string;
   location: CanvasLocation;
   render: (context: GridContext) => ReactElement;
+  isEmpty?: boolean; // controls whether autofill token is displayed
 };

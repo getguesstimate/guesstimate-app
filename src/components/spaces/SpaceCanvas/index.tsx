@@ -204,6 +204,10 @@ export const SpaceCanvas: FC<Props> = ({
       key: metric.id,
       location: metric.location,
       render: (context) => <MetricCard {...props} {...context} />,
+      isEmpty:
+        _.isEmpty(metric.name) &&
+        _.isEmpty(metric.guesstimate.input) &&
+        _.isEmpty(metric.guesstimate.data),
     };
   };
 
@@ -272,15 +276,6 @@ export const SpaceCanvas: FC<Props> = ({
     ? [analyzedMetric.location, analyzedMetric.location]
     : [];
 
-  const isMetricEmpty = (id: string) => {
-    const metric = metrics.find((m) => m.id === id);
-    if (!metric) {
-      return false; // shouldn't happen
-    }
-    const { input, data } = metric.guesstimate;
-    return _.isEmpty(metric.name) && _.isEmpty(input) && _.isEmpty(data);
-  };
-
   const handleUndo = () => {
     dispatch(undo(denormalizedSpace.id));
   };
@@ -348,7 +343,6 @@ export const SpaceCanvas: FC<Props> = ({
       <FlowGrid
         items={metrics.map((m) => makeItem(m))}
         onMultipleSelect={handleMultipleSelect}
-        isItemEmpty={isMetricEmpty}
         edges={edges}
         selectedRegion={selectedRegion}
         copiedRegion={copiedRegion}
