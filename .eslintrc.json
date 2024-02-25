@@ -16,8 +16,25 @@
     }
   },
   "parser": "@typescript-eslint/parser",
-  "plugins": ["import", "react-hooks", "@typescript-eslint"],
+  "plugins": [
+    "import",
+    "@typescript-eslint",
+    "@wogns3623/better-exhaustive-deps"
+  ],
   "rules": {
+    // Replace exhaustive-deps hook with a better fork
+    // Context: https://github.com/facebook/react/issues/16873
+    "react-hooks/exhaustive-deps": "off",
+    "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
+    "@wogns3623/better-exhaustive-deps/exhaustive-deps": [
+      "warn",
+      {
+        "checkMemoizedVariableIsStatic": true,
+        "staticHooks": {
+          "useAppDispatch": true
+        }
+      }
+    ],
     "quotes": "off",
     "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": "warn",
@@ -45,8 +62,6 @@
     "react/self-closing-comp": 1,
     "react/sort-comp": "off",
     "react/jsx-wrap-multilines": 1,
-    "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
-    "react-hooks/exhaustive-deps": "warn", // Checks effect dependencies
     "no-redeclare": "warn"
   }
 }

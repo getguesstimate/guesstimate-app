@@ -1,8 +1,8 @@
+import { AnyAction } from "redux";
 import { call } from "redux-saga/effects";
-
 import { GraphFilters, simulate } from "~/lib/propagation/wrapper";
 import { AppDispatch, AppThunk, RootState } from "~/modules/store";
-import { AnyAction } from "redux";
+
 import { Simulation } from "./reducer";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));

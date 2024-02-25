@@ -1,3 +1,5 @@
+import { FC } from "react";
+
 import Modal from "react-modal";
 import { FirstSubscriptionContainer } from "~/components/subscriptions/FirstSubscription/container";
 import { SettingsContainer } from "~/components/users/settings/SettingsContainer";

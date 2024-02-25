@@ -45,6 +45,7 @@
     "@types/react-modal": "^3.13.1",
     "@typescript-eslint/eslint-plugin": "^7.0.2",
     "@typescript-eslint/parser": "^7.0.2",
+    "@wogns3623/eslint-plugin-better-exhaustive-deps": "^1.1.0",
     "babel-eslint": "^8.2.5",
     "eslint": "^8.57.0",
     "eslint-plugin-import": "^2.16.0",

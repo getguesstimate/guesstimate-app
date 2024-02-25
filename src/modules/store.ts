@@ -41,6 +41,6 @@ export type AppDispatch = ReturnType<typeof configureStore>["dispatch"];
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
   RootState,
-  unknown,
+  undefined,
   AnyAction
 >;
