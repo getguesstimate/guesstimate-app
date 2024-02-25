@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from "react";
+import React, { FC, PropsWithChildren } from "react";
 
 import _ from "lodash";
 import { SmallFactItem } from "~/components/facts/list/FactItem";
@@ -30,7 +30,7 @@ type FactGridItem = Omit<GridItem, "location"> & {
   outputs: string[];
 };
 
-const Box: React.FC<PropsWithChildren> = ({ children }) => (
+const Box: FC<PropsWithChildren> = ({ children }) => (
   <div className="m-2 grid">{children}</div>
 );
 
@@ -45,8 +45,7 @@ const makeFactNodeFn =
     inputs: !!fact.exported_from_id
       ? [idToNodeId(fact.exported_from_id, false)]
       : [],
-    props: {},
-    component: () => (
+    render: () => (
       <Box>
         <SmallFactItem fact={fact} />
       </Box>
@@ -62,8 +61,7 @@ const makeSpaceNodeFn =
     outputs: _collections
       .filter(facts, s.id, "exported_from_id")
       .map(factIdToNodeId),
-    props: {},
-    component: () => (
+    render: () => (
       <Box>
         <SpaceCard
           size="SMALL"
@@ -136,7 +134,7 @@ const addLocationsToHeightOrderedComponents = (
 };
 
 const itemsAndEdges = (facts: Fact[], spaces: ApiSpace[]) => {
-  let factNodes = facts.map(makeFactNodeFn(spaces));
+  const factNodes = facts.map(makeFactNodeFn(spaces));
 
   const spacesToDisplay = spaces.filter(
     (s) => s.exported_facts_count > 0 || !_.isEmpty(s.imported_fact_ids)
@@ -235,7 +233,6 @@ export const FactGraph: React.FC<Props> = (props) => {
       <FlowGrid
         items={items}
         onMultipleSelect={() => {}}
-        hasItemUpdated={() => false}
         isItemEmpty={() => false}
         edges={edges}
         selectedRegion={[]}

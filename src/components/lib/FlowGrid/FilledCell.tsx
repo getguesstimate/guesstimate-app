@@ -1,6 +1,8 @@
 import React, {
   CSSProperties,
+  FC,
   forwardRef,
+  ReactNode,
   useContext,
   useEffect,
   useImperativeHandle,
@@ -48,7 +50,7 @@ function getItemStyles(currentOffset: XYCoord | null) {
   return { transform: transform, WebkitTransform: transform };
 }
 
-const DragPreview: React.FC<{ width: number; children: React.ReactNode }> = ({
+const DragPreview: FC<{ width: number; children: ReactNode }> = ({
   width,
   children,
 }) => {
@@ -110,10 +112,8 @@ export const FilledCell = forwardRef<{ focus(): void }, Props>(
     >(
       () => ({
         type: "card",
-        item() {
-          return { location: props.location };
-        },
-        end(_, monitor) {
+        item: () => ({ location: props.location }),
+        end: (_, monitor) => {
           if (!monitor.didDrop()) {
             return;
           }
@@ -127,7 +127,7 @@ export const FilledCell = forwardRef<{ focus(): void }, Props>(
           props.onMoveItem({ prev: startLocation, next: dropLocation });
           props.onEndDrag(dropLocation);
         },
-        collect(monitor) {
+        collect: (monitor) => {
           return {
             isDragging: monitor.isDragging(),
           };
@@ -169,7 +169,7 @@ export const FilledCell = forwardRef<{ focus(): void }, Props>(
       ? { minHeight: `${props.getRowHeight() - 1}px` }
       : {};
 
-    const item = props.item.component({
+    const item = props.item.render({
       hovered: props.isHovered,
       inSelectedCell: props.inSelectedCell,
       selectedFrom: props.selectedFrom,

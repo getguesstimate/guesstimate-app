@@ -68,7 +68,7 @@ type Props = {
   selectedRegion: MaybeRegion;
   copiedRegion: MaybeRegion;
   analyzedRegion: MaybeRegion;
-  onSelectItem(location: CanvasLocation, direction?: any): void;
+  onSelectItem(location: CanvasLocation, direction?: Direction): void;
   onMultipleSelect(corner1: CanvasLocation, corner2: CanvasLocation): void;
   onAutoFillRegion(autoFillRegion: {
     start: CanvasLocation;
@@ -77,7 +77,6 @@ type Props = {
   onDeSelectAll(): void;
   onAddItem(location: CanvasLocation): void;
   onMoveItem(arg: { prev: CanvasLocation; next: CanvasLocation }): void;
-  hasItemUpdated(oldItem: GridItem, newItem: GridItem): boolean;
   showGridLines: boolean;
   isModelingCanvas?: boolean;
   onRemoveItems(ids: string[]): void;
@@ -125,7 +124,6 @@ export const FlowGrid: FC<Props> = ({
   onAutoFillRegion,
   isItemEmpty,
   canvasState,
-  hasItemUpdated,
   size = "normal",
 }) => {
   const forceUpdate = useForceUpdate();
@@ -338,7 +336,6 @@ export const FlowGrid: FC<Props> = ({
         canvasState={canvasState}
         forceFlowGridUpdate={forceUpdate}
         gridKeyPress={handleKeyDown}
-        hasItemUpdated={hasItemUpdated}
         handleSelect={onSelectItem}
         handleEndRangeSelect={handleEndRangeSelect}
         inSelectedRegion={isWithinRegion(location, selectedRegion)}

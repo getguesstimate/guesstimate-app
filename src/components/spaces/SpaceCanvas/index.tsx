@@ -5,12 +5,12 @@ import { EdgeShape, PathStatus } from "~/components/lib/FlowGrid/Edges";
 import { FlowGrid } from "~/components/lib/FlowGrid/FlowGrid";
 import { GridItem } from "~/components/lib/FlowGrid/types";
 import { MetricCard } from "~/components/metrics/MetricCard/index";
-import { hasMetricUpdated } from "~/components/spaces/SpaceCanvas/updated";
 import * as _collections from "~/lib/engine/collections";
 import { hasErrors } from "~/lib/engine/simulation";
 import { FullDenormalizedMetric } from "~/lib/engine/space";
 import {
   CanvasLocation,
+  Direction,
   existsAtLoc,
   isWithinRegion,
   MaybeRegion,
@@ -203,8 +203,7 @@ export const SpaceCanvas: FC<Props> = ({
     return {
       key: metric.id,
       location: metric.location,
-      component: (context) => <MetricCard {...props} {...context} />,
-      props,
+      render: (context) => <MetricCard {...props} {...context} />,
     };
   };
 
@@ -290,7 +289,7 @@ export const SpaceCanvas: FC<Props> = ({
     dispatch(redo(denormalizedSpace.id));
   };
 
-  const handleSelect = (location: CanvasLocation, selectedFrom = null) => {
+  const handleSelect = (location: CanvasLocation, selectedFrom?: Direction) => {
     dispatch(changeSelect(location, selectedFrom));
     dispatch(selectRegion(location, location));
   };
@@ -349,9 +348,6 @@ export const SpaceCanvas: FC<Props> = ({
       <FlowGrid
         items={metrics.map((m) => makeItem(m))}
         onMultipleSelect={handleMultipleSelect}
-        hasItemUpdated={(oldItem, newItem) =>
-          hasMetricUpdated(oldItem.props, newItem.props)
-        }
         isItemEmpty={isMetricEmpty}
         edges={edges}
         selectedRegion={selectedRegion}

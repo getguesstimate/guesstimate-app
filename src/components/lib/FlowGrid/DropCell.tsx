@@ -22,7 +22,6 @@ type Props = {
   location: CanvasLocation;
   onAddItem(location: CanvasLocation): void;
   onMoveItem(arg: { prev: CanvasLocation; next: CanvasLocation }): void;
-  hasItemUpdated(oldItem: GridItem, newItem: GridItem): boolean;
   onEndDragCell(location: CanvasLocation): void;
   forceFlowGridUpdate(): void;
   onEmptyCellMouseDown(e: React.MouseEvent): void;
@@ -101,17 +100,17 @@ export const DropCell: FC<Props> = (props) => {
   const cellElement = props.item ? (
     // Then endDrag fixes a bug where the original dragging position is hovered.
     <FilledCell
+      ref={itemRef}
       {...props}
       item={props.item} // typescript fix
       onEndDrag={props.onEndDragCell}
       forceFlowGridUpdate={props.forceFlowGridUpdate}
       focusCell={() => itemRef.current?.focus()}
-      ref={itemRef}
     />
   ) : (
     <EmptyCell
-      {...props}
       ref={itemRef}
+      {...props}
       isOver={isOver}
       onSelect={props.handleSelect}
     />
@@ -122,9 +121,9 @@ export const DropCell: FC<Props> = (props) => {
       ref={connectDropTarget}
       className={clsx(
         "group/gridcell",
-        "relative grid min-h-[60px] flex-none place-items-stretch",
+        "min-h-[60px] relative grid flex-none place-items-stretch",
         showGridLines &&
-          "border-r border-b border-dashed border-[rgb(0,25,95)]/[0.09]",
+          "border-[rgb(0,25,95)]/[0.09] border-r border-b border-dashed",
         cellSizeInfo[size].classNames
       )}
       onMouseEnter={props.onMouseEnter}
@@ -133,9 +132,9 @@ export const DropCell: FC<Props> = (props) => {
     >
       {cellElement}
       {props.showAutoFillToken && (
-        <div className="absolute -right-5 -bottom-5 z-10 h-9 w-9 p-[0.8em] transition-[padding] duration-[50ms] hover:p-2">
+        <div className="p-[0.8em] transition-[padding] duration-[50ms] absolute -right-5 -bottom-5 z-10 h-9 w-9 hover:p-2">
           <div
-            className="h-full w-full cursor-crosshair rounded-sm bg-[rgb(90,141,177)]"
+            className="bg-[rgb(90,141,177)] h-full w-full cursor-crosshair rounded-sm"
             onMouseDown={handleAutoFillTargetMouseDown}
           />
         </div>
