@@ -57,7 +57,12 @@ export const DropCell: FC<Props> = (props) => {
     if (props.inSelectedCell) {
       itemRef.current?.focus();
     }
-  }, [props.inSelectedCell]);
+  }, [
+    props.inSelectedCell,
+    // When item is pasted or deleted, `itemRef` changes, so we have to call its
+    // `focus()` again, even if `inSelectedCell` hasn't changed.
+    !!props.item,
+  ]);
 
   const handleAutoFillTargetMouseDown = (e: React.MouseEvent) => {
     if (e.button === 0) {
@@ -78,7 +83,7 @@ export const DropCell: FC<Props> = (props) => {
       props.onEmptyCellMouseDown(e);
     }
 
-    // If editing a function (`=...`), clicks on cells insert cell ids instead of normal select/drag actions.
+    // If editing a function (`=...`), clicks on other cells insert cell ids instead of normal select/drag actions.
     const isFunctionSelect =
       props.canvasState.metricClickMode === "FUNCTION_INPUT_SELECT";
 
@@ -97,22 +102,15 @@ export const DropCell: FC<Props> = (props) => {
   };
 
   const cellElement = props.item ? (
-    // Then endDrag fixes a bug where the original dragging position is hovered.
     <FilledCell
       ref={itemRef}
       {...props}
       item={props.item} // typescript fix
-      onEndDrag={props.onEndDragCell}
+      onEndDrag={props.onEndDragCell} // Then endDrag fixes a bug where the original dragging position is hovered.
       forceFlowGridUpdate={props.forceFlowGridUpdate}
-      focusCell={() => itemRef.current?.focus()}
     />
   ) : (
-    <EmptyCell
-      ref={itemRef}
-      {...props}
-      isOver={isOver}
-      onSelect={props.handleSelect}
-    />
+    <EmptyCell ref={itemRef} {...props} isOver={isOver} />
   );
 
   return (

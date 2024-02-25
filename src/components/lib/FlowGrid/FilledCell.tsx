@@ -95,7 +95,6 @@ type Props = {
   handleSelect(location: CanvasLocation, direction?: any): void;
   onMoveItem(arg: { prev: CanvasLocation; next: CanvasLocation }): void;
   onEndDrag(location: CanvasLocation): void;
-  focusCell(): void;
 };
 
 export const FilledCell = forwardRef<{ focus(): void }, Props>(
@@ -138,8 +137,6 @@ export const FilledCell = forwardRef<{ focus(): void }, Props>(
 
     const { showEdges } = useContext(FlowGridContext);
 
-    const itemRef = useRef<{ focus(): void } | null>(null);
-
     // hide default drag preview, we use useDragLayer instead
     useEffect(() => {
       dragPreview(getEmptyImage());
@@ -148,10 +145,11 @@ export const FilledCell = forwardRef<{ focus(): void }, Props>(
     const widthRef = useRef<number>(0);
     const containerRef = useRef<HTMLDivElement | null>(null);
 
+    // proxy focus() method upwards
+    const itemRef = useRef<{ focus(): void } | null>(null);
     const focus = () => {
       itemRef.current?.focus();
     };
-
     useImperativeHandle(ref, () => ({
       focus,
     }));

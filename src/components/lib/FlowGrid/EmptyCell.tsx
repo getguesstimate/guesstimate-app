@@ -13,7 +13,6 @@ import { FlowGridContext } from "./FlowGrid";
 
 type Props = {
   onAddItem(location: CanvasLocation): void;
-  onSelect(location: CanvasLocation): void;
   inSelectedCell: boolean;
   gridKeyPress(e: React.KeyboardEvent): void;
   location: CanvasLocation;
@@ -46,7 +45,6 @@ export const EmptyCell = memo(
 
     const handleMouseDown = () => {
       wasSelectedWhenClickStarted.current = props.inSelectedCell;
-      props.onSelect(props.location);
     };
 
     const handleClick = () => {
@@ -57,6 +55,7 @@ export const EmptyCell = memo(
 
     return (
       <div
+        ref={divRef}
         className={clsx(
           isModelingCanvas && "cursor-pointer",
           isModelingCanvas && props.isHovered && "bg-[rgb(79,152,197)]/[0.25]",
@@ -68,7 +67,6 @@ export const EmptyCell = memo(
         onMouseDown={handleMouseDown}
         onClick={handleClick}
         tabIndex={0}
-        ref={divRef}
       />
     );
   })
