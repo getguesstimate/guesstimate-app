@@ -59,15 +59,22 @@ function newAutoFillRegion(start: CanvasLocation, location: CanvasLocation) {
 }
 
 type Props = {
+  // main props
   canvasState: CanvasState;
-  onUndo(): void;
-  onRedo(): void;
   items: GridItem[];
   edges?: EdgeShape[]; // if not defined, cells won't have additional padding, so [] and `undefined` are different
+  // other controlled state - managed in Redux (but shoudn't)
   selectedCell: SelectedCell;
   selectedRegion: MaybeRegion;
   copiedRegion: MaybeRegion;
   analyzedRegion: MaybeRegion;
+  // customize visual styles
+  size?: FlowGridSize;
+  showGridLines: boolean;
+  isModelingCanvas?: boolean;
+  // actions that act on props
+  onUndo(): void;
+  onRedo(): void;
   onSelectItem(location: CanvasLocation, direction?: Direction): void;
   onMultipleSelect(corner1: CanvasLocation, corner2: CanvasLocation): void;
   onAutoFillRegion(autoFillRegion: {
@@ -77,39 +84,38 @@ type Props = {
   onDeSelectAll(): void;
   onAddItem(location: CanvasLocation): void;
   onMoveItem(arg: { prev: CanvasLocation; next: CanvasLocation }): void;
-  showGridLines: boolean;
-  isModelingCanvas?: boolean;
   onRemoveItems(ids: string[]): void;
   onCut?(): void;
   onCopy?(): void;
   onPaste?(): void;
-  size?: FlowGridSize;
 };
 
 type FlowGridContextShape = {
   size: FlowGridSize;
   showGridLines: boolean;
-  showEdges: boolean;
   isModelingCanvas: boolean;
+  showEdges: boolean;
 };
 
 export const FlowGridContext = createContext<FlowGridContextShape>({
   size: "normal",
   showGridLines: true,
-  showEdges: true,
   isModelingCanvas: true,
+  showEdges: true,
 });
 
 export const FlowGrid: FC<Props> = ({
+  canvasState,
   items,
   edges,
-  showGridLines = true,
-  isModelingCanvas = true,
-  onDeSelectAll,
   selectedCell,
   selectedRegion,
   analyzedRegion,
   copiedRegion,
+  size = "normal",
+  showGridLines = true,
+  isModelingCanvas = true,
+  onDeSelectAll,
   onPaste,
   onCopy,
   onCut,
@@ -121,8 +127,6 @@ export const FlowGrid: FC<Props> = ({
   onAddItem,
   onMoveItem,
   onAutoFillRegion,
-  canvasState,
-  size = "normal",
 }) => {
   const forceUpdate = useForceUpdate();
 
@@ -311,6 +315,7 @@ export const FlowGrid: FC<Props> = ({
   const renderCell = (location: CanvasLocation) => {
     const item = items.find((item) => isAtLocation(item.location, location));
     const inSelectedCell = isAtLocation(selectedCell, location);
+
     const singleCellSelected =
       selectedRegion.length === 2 &&
       isAtLocation(selectedRegion[0], selectedRegion[1]);
@@ -361,8 +366,8 @@ export const FlowGrid: FC<Props> = ({
         value={{
           size,
           showGridLines,
-          showEdges: edges !== undefined,
           isModelingCanvas,
+          showEdges: edges !== undefined,
         }}
       >
         <div

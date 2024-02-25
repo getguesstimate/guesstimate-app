@@ -369,7 +369,7 @@ export const MetricCard = forwardRef<{ focus(): void }, Props>(
             />
 
             {shouldShowDistributionEditor && (
-              <div className="flex-none border-t border-[#ddd] p-1">
+              <div className="border-[#ddd] flex-none border-t p-1">
                 <DistributionEditor
                   size="small"
                   ref={editorRef}
@@ -390,7 +390,7 @@ export const MetricCard = forwardRef<{ focus(): void }, Props>(
             )}
           </div>
           {inSelectedCell && sidebarIsOpen && (
-            <div className="absolute top-1 -right-[163px] z-10 w-[160px]">
+            <div className="w-[160px] absolute top-1 -right-[163px] z-20">
               <MetricSidebar
                 onOpenModal={openModal}
                 onRemoveMetric={handleRemoveMetric}

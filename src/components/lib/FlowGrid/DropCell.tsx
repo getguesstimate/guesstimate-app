@@ -67,11 +67,6 @@ export const DropCell: FC<Props> = (props) => {
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    // TODO(matthew): I think we can refactor this and get rid of the window trigger system for doing this input, but it
-    // will be a bigger refactor, so I'm inclined to leave this for now, even though it couples the flow grid and the
-    // space more tightly than they've been integrated so far.
-    const isFunctionSelect =
-      props.canvasState.metricClickMode === "FUNCTION_INPUT_SELECT";
     const { inSelectedCell, item, location } = props;
 
     const leftClick = e.button === 0;
@@ -82,6 +77,10 @@ export const DropCell: FC<Props> = (props) => {
     if (!item) {
       props.onEmptyCellMouseDown(e);
     }
+
+    // If editing a function (`=...`), clicks on cells insert cell ids instead of normal select/drag actions.
+    const isFunctionSelect =
+      props.canvasState.metricClickMode === "FUNCTION_INPUT_SELECT";
 
     if (inSelectedCell) {
       props.handleSelect(location);
