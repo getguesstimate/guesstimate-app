@@ -1,9 +1,8 @@
+import Modal from "react-modal";
+/* eslint-disable no-var */
 import * as engine from "~/lib/engine/engine";
-
 import { GuesstimateRecorder } from "~/lib/recorder";
 import { GuesstimateWorker } from "~/lib/window";
-
-import Modal from "react-modal";
 import * as elev from "~/server/elev/index";
 import * as sentry from "~/server/sentry/index";
 
@@ -74,6 +73,7 @@ const init = () => {
     } else {
       var d = document;
       var i: any = function () {
+        // eslint-disable-next-line prefer-rest-params
         i.c(arguments);
       };
       i.q = [];

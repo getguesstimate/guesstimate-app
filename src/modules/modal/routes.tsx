@@ -8,7 +8,7 @@ import * as modalActions from "~/modules/modal/actions";
 
 import { ModalState } from "./reducer";
 
-const Confirmation: React.FC<{
+const Confirmation: FC<{
   message: string;
   onConfirm(): void;
   onClose(): void;

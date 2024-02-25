@@ -1,21 +1,17 @@
-import _ from "lodash";
-import reduxCrud from "redux-crud";
-
 import cuid from "cuid";
-
+import _ from "lodash";
+import { NextRouter } from "next/router";
+import reduxCrud from "redux-crud";
+import * as e from "~/lib/engine/engine";
+import { api } from "~/lib/guesstimate_api";
+import { ApiSpace } from "~/lib/guesstimate_api/resources/Models";
+import { ApiUser } from "~/lib/guesstimate_api/resources/Users";
 import * as calculatorActions from "~/modules/calculators/actions";
 import { changeActionState } from "~/modules/canvas_state/actions";
 import { initSpace, saveCheckpoint } from "~/modules/checkpoints/actions";
 import * as organizationActions from "~/modules/organizations/actions";
-import * as userActions from "~/modules/users/actions";
-
-import * as e from "~/lib/engine/engine";
-
 import { AppThunk, RootState } from "~/modules/store";
-import { api } from "~/lib/guesstimate_api";
-import { ApiSpace } from "~/lib/guesstimate_api/resources/Models";
-import { ApiUser } from "~/lib/guesstimate_api/resources/Users";
-import { NextRouter } from "next/router";
+import * as userActions from "~/modules/users/actions";
 
 const sActions = reduxCrud.actionCreatorsFor("spaces");
 
@@ -75,7 +71,7 @@ export function fetchSuccess(spaces: ApiSpace[]): AppThunk {
 export function destroy(object: ApiSpace, router: NextRouter): AppThunk {
   const id = object.id;
   return async (dispatch, getState) => {
-    const navigateTo = !!object.organization_id
+    const navigateTo = object.organization_id
       ? e.organization.urlById(object.organization_id)
       : e.user.urlById(object.user_id!);
 
@@ -148,7 +144,7 @@ export function create(
 ): AppThunk {
   return async (dispatch, getState) => {
     const cid = cuid();
-    let object: any = { id: cid };
+    const object: any = { id: cid };
     if (organizationId) {
       object.organization_id = organizationId;
     }
@@ -246,7 +242,7 @@ export function update(spaceId: number, params = {}): AppThunk {
 //updates graph only
 export function updateGraph(spaceId: number, saveOnServer = true): AppThunk {
   return (dispatch, getState) => {
-    let {
+    const {
       spaces,
       metrics,
       guesstimates,

@@ -1,4 +1,5 @@
 import _ from "lodash";
+
 import { states, subStage } from "./state_machine";
 
 const defaultStage = {
@@ -28,20 +29,20 @@ describe("FirstSubscriptionStateMachine", () => {
     });
 
     it(`in cancelled state`, () => {
-      let newStage = _.clone(defaultStage);
+      const newStage = _.clone(defaultStage);
       newStage.flowStage = states.cancelled;
       expect(subStage(newStage)).toEqual("CANCELLED");
     });
 
     it(`in form fetching state`, () => {
-      let newStage = _.clone(defaultStage);
+      const newStage = _.clone(defaultStage);
       newStage.flowStage = "FORM";
       newStage.iframe.request = { waiting: true, error: null, status: "START" };
       expect(subStage(newStage)).toEqual("FORM_START");
     });
 
     it(`in form success state`, () => {
-      let newStage = _.clone(defaultStage);
+      const newStage = _.clone(defaultStage);
       newStage.flowStage = "FORM";
       newStage.iframe.request = {
         waiting: false,
@@ -52,7 +53,7 @@ describe("FirstSubscriptionStateMachine", () => {
     });
 
     it(`in synchronization start state`, () => {
-      let newStage = _.clone(defaultStage);
+      const newStage = _.clone(defaultStage);
       newStage.flowStage = "SYNCHRONIZATION";
       newStage.synchronization.request = {
         waiting: true,
@@ -63,7 +64,7 @@ describe("FirstSubscriptionStateMachine", () => {
     });
 
     it(`in synchronization success state`, () => {
-      let newStage = _.clone(defaultStage);
+      const newStage = _.clone(defaultStage);
       newStage.flowStage = "SYNCHRONIZATION";
       newStage.synchronization.request = {
         waiting: true,
@@ -74,7 +75,7 @@ describe("FirstSubscriptionStateMachine", () => {
     });
 
     it(`in unnecessary state`, () => {
-      let newStage = _.clone(defaultStage);
+      const newStage = _.clone(defaultStage);
       newStage.synchronization.request = {
         waiting: true,
         error: null,

@@ -32,6 +32,4 @@ export const modalSlice = createSlice({
   },
 });
 
-const modal = modalSlice.reducer;
-
 export const modalR = modalSlice.reducer;

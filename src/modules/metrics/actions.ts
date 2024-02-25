@@ -1,10 +1,8 @@
 import _ from "lodash";
-import * as spaceActions from "~/modules/spaces/actions";
-import * as organizationActions from "~/modules/organizations/actions";
-
 import * as e from "~/lib/engine/engine";
-
 import { isWithinRegion } from "~/lib/locationUtils";
+import * as organizationActions from "~/modules/organizations/actions";
+import * as spaceActions from "~/modules/spaces/actions";
 import { AppDispatch, AppThunk, RootState } from "~/modules/store";
 
 const findSpaceId = (getState: () => RootState, metricId) =>
@@ -48,7 +46,7 @@ export function removeMetrics(ids): AppThunk {
       "id",
       "organization_id"
     );
-    if (!!organizationId) {
+    if (organizationId) {
       const organization = e.collections.get(organizations, organizationId);
       const facts = e.organization.findFacts(organizationId, organizationFacts);
       const factsToDelete = _.filter(

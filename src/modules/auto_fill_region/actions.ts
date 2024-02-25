@@ -1,25 +1,23 @@
 import _ from "lodash";
-
-import {
-  runSimulations,
-  deleteSimulations,
-} from "~/modules/simulations/actions";
-import { registerGraphChange } from "~/modules/spaces/actions";
-
 import * as e from "~/lib/engine/engine";
-
 import {
-  isAtLocation,
-  isWithinRegion,
-  getBounds,
-  move,
-  translate,
   CanvasLocation,
   DirectionVector,
+  getBounds,
+  isAtLocation,
+  isWithinRegion,
+  move,
+  translate,
 } from "~/lib/locationUtils";
+import {
+  deleteSimulations,
+  runSimulations,
+} from "~/modules/simulations/actions";
+import { registerGraphChange } from "~/modules/spaces/actions";
 import { AppThunk } from "~/modules/store";
-import { Metric } from "../metrics/reducer";
+
 import { Guesstimate } from "../guesstimates/reducer";
+import { Metric } from "../metrics/reducer";
 
 const DYNAMIC_FILL_TYPE = "FUNCTION";
 
@@ -85,12 +83,12 @@ export function fillDynamic(
     ).length;
 
     const translateFn = translate(startMetric.location, location);
-    let idMap = {};
+    const idMap = {};
     nonConstantMetrics.forEach((m) => {
       const matchedMetric = metrics.find((m2) =>
         isAtLocation(translateFn(m.location), m2.location)
       );
-      if (!!matchedMetric) {
+      if (matchedMetric) {
         idMap[e.guesstimate.expressionSyntaxPad(m.id, true)] =
           e.guesstimate.expressionSyntaxPad(matchedMetric.id, true);
       }
@@ -142,8 +140,8 @@ function buildNewMetrics(
 ) {
   const { guesstimateType } = startGuesstimate;
 
-  let newMetrics: Metric[] = []; // FIXME
-  let newGuesstimates: Guesstimate[] = [];
+  const newMetrics: Metric[] = []; // FIXME
+  const newGuesstimates: Guesstimate[] = [];
 
   const isDynamic = guesstimateType === DYNAMIC_FILL_TYPE;
   const translateFn = (isDynamic ? fillDynamic : fillStatic)(
@@ -158,10 +156,10 @@ function buildNewMetrics(
       currLocation,
       metrics.concat(newMetrics)
     );
-    if (!!metric) {
+    if (metric) {
       newMetrics.push(metric);
     }
-    if (!!guesstimate) {
+    if (guesstimate) {
       newGuesstimates.push(guesstimate);
     }
     currLocation = move(currLocation, direction);

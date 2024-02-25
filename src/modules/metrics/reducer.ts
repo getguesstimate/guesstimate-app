@@ -14,7 +14,7 @@ export type Metric = {
 type MetricsState = Metric[];
 
 function spaceToMetrics(space) {
-  let metrics = _.get(space, "graph.metrics");
+  const metrics = _.get(space, "graph.metrics");
   return _.isEmpty(metrics)
     ? []
     : metrics.map((m) => ({ ...m, space: space.id }));
@@ -48,7 +48,7 @@ export const metricsR: Reducer<MetricsState, AnyAction> = (
       return uniq([...state, ...action.items]);
     case "REMOVE_METRICS":
       return state.filter((y) => !_.some(action.item.ids, (id) => y.id === id));
-    case "CHANGE_METRIC":
+    case "CHANGE_METRIC": {
       const i = state.findIndex((y) => y.id === action.item.id);
       if (i !== -1) {
         return [
@@ -56,7 +56,10 @@ export const metricsR: Reducer<MetricsState, AnyAction> = (
           { ...state[i], ...action.item },
           ...state.slice(i + 1, state.length),
         ];
+      } else {
+        return state;
       }
+    }
     default:
       return state;
   }

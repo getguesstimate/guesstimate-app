@@ -45,7 +45,7 @@ const MessageBox: React.FC<{ color: "GREY" | "RED"; children: string }> = ({
 const ProgressMessage: React.FC<{
   actionState: CanvasActionState | undefined;
 }> = ({ actionState }) => (
-  <div className="text-lg text-[#09273a]">
+  <div className="text-[#09273a]">
     {actionState === "SAVING" && "Saving..."}
     {actionState === "COPYING" && "Copying..."}
     {actionState === "CREATING" && "Creating a new model..."}
@@ -75,7 +75,7 @@ const ProgressMessage: React.FC<{
 );
 
 const Divider: React.FC = () => (
-  <div className="mx-1 h-9 w-0.5 bg-[rgb(115,168,190)]" />
+  <div className="bg-[rgb(115,168,190)] mx-1 h-9 w-0.5" />
 );
 
 type Props = {

@@ -4,22 +4,24 @@
     "browser": true,
     "es6": true
   },
-  "extends": "eslint:recommended",
-  "globals": {
-    "Atomics": "readonly",
-    "SharedArrayBuffer": "readonly"
-  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
   "settings": {
     "react": {
       "version": "detect"
     }
   },
   "parser": "@typescript-eslint/parser",
-  "plugins": ["react", "import", "react-hooks", "@typescript-eslint"],
+  "plugins": ["import", "react-hooks", "@typescript-eslint"],
   "rules": {
     "quotes": "off",
     "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": "warn",
+    "@typescript-eslint/no-explicit-any": "off", // not viable yet
     "camelcase": "off",
     "no-underscore-dangle": 0,
     "react/display-name": 0,
@@ -28,8 +30,8 @@
     "react/jsx-curly-spacing": 1,
     "react/jsx-no-duplicate-props": 1,
     "react/jsx-no-undef": 1,
+    "react/react-in-jsx-scope": "off",
     "jsx-quotes": 1,
-    "react/sort-prop-types": 1,
     "react/jsx-uses-react": 1,
     "react/jsx-uses-vars": 1,
     "react/no-danger": 1,
@@ -38,7 +40,7 @@
     "react/no-multi-comp": 0,
     "react/no-set-state": 0,
     "react/no-unknown-property": 1,
-    "react/prop-types": 1,
+    "react/prop-types": "off",
     "import/extensions": 1,
     "react/self-closing-comp": 1,
     "react/sort-comp": "off",

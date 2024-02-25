@@ -1,11 +1,13 @@
-import clsx from "clsx";
-import React from "react";
+import { FC, PropsWithChildren } from "react";
 
-export const ToolbarActionBox: React.FC<{
-  children: React.ReactNode;
-  onClick?(): void;
-  disabled?: boolean;
-}> = ({ children, onClick, disabled }) => (
+import clsx from "clsx";
+
+export const ToolbarActionBox: FC<
+  PropsWithChildren<{
+    onClick?(): void;
+    disabled?: boolean;
+  }>
+> = ({ children, onClick, disabled }) => (
   <div
     className={clsx(
       "cursor-pointer select-none rounded-sm px-2 py-1 text-dark-3",

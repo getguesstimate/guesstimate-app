@@ -1,17 +1,16 @@
-import { editFact, addFact } from "~/modules/organizations/actions";
 import { __DEV__ } from "~/lib/constants";
-
-import { getVar, selectorSearch, withMissingStats } from "~/lib/engine/facts";
 import * as _collections from "~/lib/engine/collections";
-import { orArr } from "~/lib/engine/utils";
+import { getVar, selectorSearch, withMissingStats } from "~/lib/engine/facts";
 import {
   organizationIdFromFactReadableId,
   organizationReadableId,
 } from "~/lib/engine/organization";
 import { addStats } from "~/lib/engine/simulation";
-
+import { orArr } from "~/lib/engine/utils";
 import { withVariableName } from "~/lib/generateVariableNames/generateFactVariableName";
+import { addFact, editFact } from "~/modules/organizations/actions";
 import { AppThunk } from "~/modules/store";
+
 import { Simulation } from "../simulations/reducer";
 
 export function getSuggestion(selector): AppThunk {
@@ -34,7 +33,7 @@ export function clearSuggestion() {
 // TODO(matthew): Clean up this interface; right now facts is an array of org containers which are glorified arrays of
 // facts.
 export function loadByOrg(facts): AppThunk {
-  return (dispatch, getState) => {
+  return (dispatch) => {
     dispatch({ type: "LOAD_FACTS_BY_ORG", facts });
   };
 }

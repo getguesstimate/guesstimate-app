@@ -1,4 +1,4 @@
-import { PropsWithChildren } from "react";
+import { FC, PropsWithChildren } from "react";
 
 import {
   CardHeader,
@@ -18,7 +18,7 @@ const arrowsVisibleImage = "/assets/metric-icons/blue/arrows-visible.png";
 const debuggingImage = "/assets/metric-icons/blue/debugging.png";
 const scientificImage = "/assets/metric-icons/blue/scientific.png";
 
-const Section: React.FC<PropsWithChildren<{ headerText: string }>> = ({
+const Section: FC<PropsWithChildren<{ headerText: string }>> = ({
   headerText,
   children,
 }) => (
@@ -30,7 +30,7 @@ const Section: React.FC<PropsWithChildren<{ headerText: string }>> = ({
   </div>
 );
 
-export const CanvasViewForm: React.FC = () => {
+export const CanvasViewForm: FC = () => {
   const dispatch = useAppDispatch();
   const canvasState = useAppSelector((state) => state.canvasState);
 

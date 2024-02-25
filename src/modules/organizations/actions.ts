@@ -1,23 +1,19 @@
 import cuid from "cuid";
 import _ from "lodash";
 import reduxCrud from "redux-crud";
-
+import { withMissingStats } from "~/lib/engine/facts";
+import { organizationReadableId } from "~/lib/engine/organization";
+import { orArr } from "~/lib/engine/utils";
+import { captureApiError } from "~/lib/errors/index";
+import { api } from "~/lib/guesstimate_api";
+import { simulate } from "~/lib/propagation/wrapper";
 import * as displayErrorsActions from "~/modules/displayErrors/actions";
 import { factCategoryActions } from "~/modules/factCategories/actions";
 import * as factActions from "~/modules/facts/actions";
 import * as spaceActions from "~/modules/spaces/actions";
+import { AppThunk } from "~/modules/store";
 import * as userOrganizationInvitationActions from "~/modules/userOrganizationInvitations/actions";
 import * as userOrganizationMembershipActions from "~/modules/userOrganizationMemberships/actions";
-
-import { withMissingStats } from "~/lib/engine/facts";
-import { organizationReadableId } from "~/lib/engine/organization";
-import { orArr } from "~/lib/engine/utils";
-
-import { captureApiError } from "~/lib/errors/index";
-import { simulate } from "~/lib/propagation/wrapper";
-
-import { AppThunk } from "~/modules/store";
-import { api } from "~/lib/guesstimate_api";
 
 const oActions = reduxCrud.actionCreatorsFor("organizations");
 
@@ -96,7 +92,7 @@ export function fetchSuccess(organizations): AppThunk {
 export function create({ name, plan }): AppThunk {
   return (dispatch, getState) => {
     const cid = cuid();
-    let object = { id: cid, organization: { name, plan } };
+    const object = { id: cid, organization: { name, plan } };
 
     const action = oActions.createStart(object);
 
@@ -122,14 +118,14 @@ export function create({ name, plan }): AppThunk {
 // addFact adds the passed fact, with sortedValues overwritten to null, to the organization and saves it on the server.
 export function addFact(organization, rawFact): AppThunk {
   return (dispatch, getState) => {
-    let fact = Object.assign({}, rawFact);
+    const fact = Object.assign({}, rawFact);
     _.set(fact, "simulation.sample.sortedValues", null);
 
     api(getState()).organizations.addFact(
       organization,
       fact,
       (err, serverFact) => {
-        if (!!serverFact) {
+        if (serverFact) {
           dispatch(
             factActions.addToOrg(
               organizationReadableId(organization),
@@ -149,14 +145,14 @@ export function editFact(
   simulateDependentFacts = false
 ): AppThunk {
   return (dispatch, getState) => {
-    let fact = Object.assign({}, rawFact);
+    const fact = Object.assign({}, rawFact);
     _.set(fact, "simulation.sample.sortedValues", null);
 
     api(getState()).organizations.editFact(
       organization,
       fact,
       (err, serverFact) => {
-        if (!!serverFact) {
+        if (serverFact) {
           dispatch(
             factActions.updateWithinOrg(
               organizationReadableId(organization),
@@ -175,24 +171,17 @@ export function editFact(
 
 export function deleteFact(organization, fact): AppThunk {
   return (dispatch, getState) => {
-    api(getState()).organizations.deleteFact(
-      organization,
-      fact,
-      (err, serverFact) => {
-        if (err) {
-          captureApiError("OrganizationsFactDestroy", err, {
-            url: "destroyOrganizationMember",
-          });
-        } else {
-          dispatch(
-            factActions.deleteFromOrg(
-              organizationReadableId(organization),
-              fact
-            )
-          );
-        }
+    api(getState()).organizations.deleteFact(organization, fact, (err) => {
+      if (err) {
+        captureApiError("OrganizationsFactDestroy", err, {
+          url: "destroyOrganizationMember",
+        });
+      } else {
+        dispatch(
+          factActions.deleteFromOrg(organizationReadableId(organization), fact)
+        );
       }
-    );
+    });
   };
 }
 
@@ -203,7 +192,7 @@ export function addFactCategory(organization, factCategory): AppThunk {
       organization,
       factCategory,
       (err, serverFactCategory) => {
-        if (!!serverFactCategory) {
+        if (serverFactCategory) {
           dispatch(factCategoryActions.createSuccess(serverFactCategory, cid));
         }
       }
@@ -218,7 +207,7 @@ export function editFactCategory(organization, factCategory): AppThunk {
       organization,
       factCategory,
       (err, serverFactCategory) => {
-        if (!!serverFactCategory) {
+        if (serverFactCategory) {
           dispatch(factCategoryActions.updateSuccess(serverFactCategory));
         }
       }

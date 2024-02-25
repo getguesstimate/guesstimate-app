@@ -1,14 +1,12 @@
 import _ from "lodash";
+import { searchError } from "~/lib/errors/index";
 import * as spaceActions from "~/modules/spaces/actions";
 import { AppThunk } from "~/modules/store";
 import * as userActions from "~/modules/users/actions";
-
-import { searchError } from "~/lib/errors/index";
-
 import { searchSpaceIndex } from "~/server/algolia/index";
 
 export function fetch(query = "", options: any = {}): AppThunk {
-  let filters: any = { hitsPerPage: 21 };
+  const filters: any = { hitsPerPage: 21 };
   filters.page = options.page || 0;
   const { sortBy } = options;
 

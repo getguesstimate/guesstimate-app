@@ -1,14 +1,13 @@
 import fetch, { enableFetchMocks } from "jest-fetch-mock";
+import { expectToCallActions } from "~/modules/mockStore";
 
 import { generalUpdate } from "./actions";
-
-import { expectToCallActions } from "~/modules/mockStore";
 
 enableFetchMocks();
 
 describe("async actions", () => {
   it("creates canvasState/changeActionState when saving fails", (done) => {
-    fetch.mockResponseOnce(async (req) => {
+    fetch.mockResponseOnce(async () => {
       return {
         init: {
           status: 422,

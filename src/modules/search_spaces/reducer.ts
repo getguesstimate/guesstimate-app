@@ -10,11 +10,12 @@ export const searchSpacesR: Reducer<SearchSpacesState> = (
   switch (action.type) {
     case "SEARCH_SPACES_GET":
       return action.response;
-    case "SEARCH_SPACES_NEXT_PAGE":
-      let newState = _.clone(state);
+    case "SEARCH_SPACES_NEXT_PAGE": {
+      const newState = _.clone(state);
       newState.page = action.response.page;
       newState.hits = newState.hits.concat(action.response.hits);
       return newState;
+    }
     default:
       return state;
   }

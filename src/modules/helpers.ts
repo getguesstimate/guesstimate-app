@@ -6,7 +6,7 @@ export const initialRequestState = {
   status: "NOT_SENT",
 };
 
-export function requestReducer(state, type, action = null) {
+function requestReducer(state, type, action = null) {
   switch (type) {
     case "START":
       return {
@@ -28,16 +28,6 @@ export function requestReducer(state, type, action = null) {
       };
     default:
       return state;
-  }
-}
-
-export function requestSubstate(state) {
-  if ((state.success = "true")) {
-    return "SUCCESS";
-  } else if ((state.waiting = "true")) {
-    return "BEGIN";
-  } else if (state.error === null) {
-    return "BEGIN";
   }
 }
 
