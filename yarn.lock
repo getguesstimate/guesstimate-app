@@ -1395,6 +1395,11 @@
   resolved "https://registry.yarnpkg.com/@ungap/structured-clone/-/structured-clone-1.2.0.tgz#756641adb587851b5ccb3e095daf27ae581c8406"
   integrity sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==
 
+"@wogns3623/eslint-plugin-better-exhaustive-deps@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@wogns3623/eslint-plugin-better-exhaustive-deps/-/eslint-plugin-better-exhaustive-deps-1.1.0.tgz#e6ea085a75d210895c78aaa93607d30cd6c69bdb"
+  integrity sha512-AkQzn7bSngpml8nqkJmXMTHfoO1sviqTfc6jaNaQKX1Rj6jHqRmm4hzn1ahN3oH4b7sTjMnzXfGjN/16XcFKxw==
+
 abab@^2.0.6:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/abab/-/abab-2.0.6.tgz#41b80f2c871d19686216b82309231cfd3cb3d291"
