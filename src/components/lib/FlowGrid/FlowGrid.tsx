@@ -4,7 +4,6 @@ import clsx from "clsx";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { useCallOnUnmount, useForceUpdate } from "~/components/utility/hooks";
-import { isMac } from "~/components/utility/isMac";
 import {
   boundingRegion,
   CanvasLocation,
@@ -71,21 +70,16 @@ type Props = {
   showGridLines: boolean;
   isModelingCanvas?: boolean;
   // actions that act on props
-  onUndo(): void;
-  onRedo(): void;
   onSelectItem(location: CanvasLocation, direction?: Direction): void;
   onMultipleSelect(corner1: CanvasLocation, corner2: CanvasLocation): void;
+  onDeSelectAll(): void;
   onAutoFillRegion(autoFillRegion: {
     start: CanvasLocation;
     end: CanvasLocation;
   }): void;
-  onDeSelectAll(): void;
   onAddItem(location: CanvasLocation): void;
   onMoveItem(arg: { prev: CanvasLocation; next: CanvasLocation }): void;
   onRemoveItems(ids: string[]): void;
-  onCut?(): void;
-  onCopy?(): void;
-  onPaste?(): void;
 };
 
 type FlowGridContextShape = {
@@ -113,11 +107,6 @@ export const FlowGrid: FC<Props> = ({
   showGridLines = true,
   isModelingCanvas = true,
   onDeSelectAll,
-  onPaste,
-  onCopy,
-  onCut,
-  onUndo,
-  onRedo,
   onSelectItem,
   onRemoveItems,
   onMultipleSelect,
@@ -179,24 +168,17 @@ export const FlowGrid: FC<Props> = ({
     }
   };
 
-  const handleCellMouseEnter = (
-    location: CanvasLocation,
-    e: React.MouseEvent
-  ) => {
-    // If this the user is neither tracing a fill region nor dragging a selected region, just set
-    // the hover state.
-    const userDraggingSelection = Boolean(autoFillRegion || dragSelecting);
-    if (!userDraggingSelection) {
-      setHover(location);
-      return;
-    }
-
-    setHover(undefined);
-
+  const handleCellMouseEnter = (location: CanvasLocation) => {
     if (autoFillRegion) {
+      setHover(undefined);
       setAutoFillRegion(newAutoFillRegion(autoFillRegion.start, location));
     } else if (dragSelecting) {
+      setHover(undefined);
       handleEndRangeSelect(location);
+    } else {
+      // If this the user is neither tracing a fill region nor dragging a selected region, just set
+      // the hover state.
+      setHover(location);
     }
   };
 
@@ -243,20 +225,6 @@ export const FlowGrid: FC<Props> = ({
         selectedCell
       )[direction]();
       onSelectItem(newLocation);
-    } else if (e.ctrlKey || (isMac() && e.metaKey)) {
-      if (e.keyCode == 86) {
-        onPaste?.();
-      } else if (e.keyCode == 67) {
-        onCopy?.();
-      } else if (e.keyCode == 88) {
-        onCut?.();
-      } else if (e.keyCode == 90 && !e.shiftKey) {
-        onUndo();
-        e.preventDefault();
-      } else if (e.keyCode == 89 || (e.keyCode == 90 && e.shiftKey)) {
-        onRedo();
-        e.preventDefault();
-      }
     }
   };
 
@@ -339,9 +307,7 @@ export const FlowGrid: FC<Props> = ({
         isHovered={Boolean(hover && isAtLocation(hover, location))}
         onAddItem={onAddItem}
         onMoveItem={onMoveItem}
-        onMouseEnter={(e: React.MouseEvent) => {
-          handleCellMouseEnter(location, e);
-        }}
+        onMouseEnter={() => handleCellMouseEnter(location)}
         onEndDragCell={handleEndDragCell}
         onEmptyCellMouseDown={handleEmptyCellMouseDown}
         onReturn={(down = true) => handleReturn(location, down)}

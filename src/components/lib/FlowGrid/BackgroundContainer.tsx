@@ -18,7 +18,7 @@ const regionTypeToClass: Record<RegionType, string> = {
     "bg-gradient-to-br from-[rgb(72,187,90)]/[0.66] to-[rgb(120,203,149)]/[0.65]",
 };
 
-const Region: FC<{
+const RegionBox: FC<{
   rowHeights: number[];
   columnWidth: number;
   selectedRegion: Region;
@@ -81,7 +81,7 @@ export const BackgroundContainer: FC<Props> = memo(
       <div>
         {backgroundRegions.map(([region, type]) =>
           isRegion(region) ? (
-            <Region
+            <RegionBox
               key={type}
               rowHeights={rowHeights}
               columnWidth={columnWidth}

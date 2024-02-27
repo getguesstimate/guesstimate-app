@@ -1,10 +1,11 @@
-import { FC, useEffect, useRef } from "react";
+import { FC, useCallback, useEffect, useRef } from "react";
 
 import _ from "lodash";
 import { EdgeShape, PathStatus } from "~/components/lib/FlowGrid/Edges";
 import { FlowGrid } from "~/components/lib/FlowGrid/FlowGrid";
 import { GridItem } from "~/components/lib/FlowGrid/types";
 import { MetricCard } from "~/components/metrics/MetricCard/index";
+import { isMac } from "~/components/utility/isMac";
 import * as _collections from "~/lib/engine/collections";
 import { hasErrors } from "~/lib/engine/simulation";
 import { FullDenormalizedMetric } from "~/lib/engine/space";
@@ -54,27 +55,6 @@ export const SpaceCanvas: FC<Props> = ({
   const copied = useAppSelector((state) => state.copied);
   const selectedCell = useAppSelector((state) => state.selectedCell);
   const selectedRegion = useAppSelector((state) => state.selectedRegion);
-
-  const onCopy = () => {
-    if (screenshot) {
-      return; // background regions don't work in embeds; TODO - should we enable these actions anyway?
-    }
-    dispatch(copiedActions.copy(denormalizedSpace.id));
-  };
-
-  const onPaste = () => {
-    if (screenshot) {
-      return;
-    }
-    dispatch(copiedActions.paste(denormalizedSpace.id));
-  };
-
-  const onCut = () => {
-    if (screenshot) {
-      return;
-    }
-    dispatch(copiedActions.cut(denormalizedSpace.id));
-  };
 
   // previously: componentDidUpdate
   const denormalizedSpaceRef = useRef<ExtendedDSpace>(denormalizedSpace);
@@ -276,13 +256,69 @@ export const SpaceCanvas: FC<Props> = ({
     ? [analyzedMetric.location, analyzedMetric.location]
     : [];
 
-  const handleUndo = () => {
-    dispatch(undo(denormalizedSpace.id));
-  };
+  const handleUndo = useCallback(
+    () => dispatch(undo(denormalizedSpace.id)),
+    [denormalizedSpace.id]
+  );
+  const handleRedo = useCallback(
+    () => dispatch(redo(denormalizedSpace.id)),
+    [denormalizedSpace.id]
+  );
 
-  const handleRedo = () => {
-    dispatch(redo(denormalizedSpace.id));
-  };
+  const handleCopy = useCallback(() => {
+    if (screenshot) {
+      return; // background regions don't work in embeds; TODO - should we enable these actions anyway?
+    }
+    dispatch(copiedActions.copy(denormalizedSpace.id));
+  }, [screenshot, denormalizedSpace.id]);
+
+  const handlePaste = useCallback(() => {
+    if (screenshot) {
+      return;
+    }
+    dispatch(copiedActions.paste(denormalizedSpace.id));
+  }, [screenshot, denormalizedSpace.id]);
+
+  const handleCut = useCallback(() => {
+    if (screenshot) {
+      return;
+    }
+    dispatch(copiedActions.cut(denormalizedSpace.id));
+  }, [screenshot, denormalizedSpace.id]);
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (
+        e.target instanceof Element &&
+        ["INPUT", "TEXTAREA"].includes(e.target.tagName)
+      ) {
+        return;
+      }
+
+      if (e.ctrlKey || (isMac() && e.metaKey)) {
+        if (e.keyCode == 86) {
+          // ctrl+v
+          handlePaste();
+        } else if (e.keyCode == 67) {
+          // ctrl+c
+          handleCopy();
+        } else if (e.keyCode == 88) {
+          // ctrl+x
+          handleCut();
+        } else if (e.keyCode == 90 && !e.shiftKey) {
+          // ctrl+z
+          handleUndo();
+          e.preventDefault();
+        } else if (e.keyCode == 89 || (e.keyCode == 90 && e.shiftKey)) {
+          // ctrl+y or ctrl+shift+z
+          handleRedo();
+          e.preventDefault();
+        }
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("down", handler);
+  }, [handleUndo, handleRedo, handlePaste, handleCopy, handleCut]);
 
   const handleSelect = (location: CanvasLocation, selectedFrom?: Direction) => {
     dispatch(changeSelect(location, selectedFrom));
@@ -342,15 +378,14 @@ export const SpaceCanvas: FC<Props> = ({
     <div className="overflow-auto">
       <FlowGrid
         items={metrics.map((m) => makeItem(m))}
-        onMultipleSelect={handleMultipleSelect}
         edges={edges}
+        selectedCell={selectedCell}
         selectedRegion={selectedRegion}
         copiedRegion={copiedRegion}
-        selectedCell={selectedCell}
         analyzedRegion={analyzedRegion}
-        onUndo={handleUndo}
-        onRedo={handleRedo}
+        showGridLines={!screenshot}
         onSelectItem={handleSelect}
+        onMultipleSelect={handleMultipleSelect}
         onDeSelectAll={handleDeSelectAll}
         onAutoFillRegion={onAutoFillRegion}
         onAddItem={handleAddMetric}
@@ -358,11 +393,6 @@ export const SpaceCanvas: FC<Props> = ({
         onRemoveItems={(ids) => {
           dispatch(removeMetrics(ids));
         }}
-        onCopy={onCopy}
-        onPaste={onPaste}
-        onCut={onCut}
-        showGridLines={!screenshot}
-        canvasState={canvasState}
       />
     </div>
   );
