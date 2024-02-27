@@ -1,7 +1,6 @@
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-
-import { Layout } from "~/components/layouts";
+import { AppLayout } from "~/components/layout";
 import { SpaceShow } from "~/components/spaces/SpaceShow";
 import { extractTokenFromUrl } from "~/lib/engine/space";
 
@@ -13,7 +12,7 @@ const ModelWithCalculatorIdPage: NextPage = () => {
   const intCalculatorId = parseInt(calculatorId as string);
 
   return (
-    <Layout isFluid showFooter={false} fullHeight>
+    <AppLayout isFluid showFooter={false} fullHeight>
       {id === undefined ? null : (
         <SpaceShow
           spaceId={intId}
@@ -26,7 +25,7 @@ const ModelWithCalculatorIdPage: NextPage = () => {
           key={intId}
         />
       )}
-    </Layout>
+    </AppLayout>
   );
 };
 

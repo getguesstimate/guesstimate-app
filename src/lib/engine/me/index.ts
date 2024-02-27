@@ -1,5 +1,4 @@
 import _ from "lodash";
-export * as localStorage from "./localStorage";
 
 export function spaces(me, graph) {
   const id = guesstimateId(me);

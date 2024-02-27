@@ -1,13 +1,12 @@
 import { NextPage } from "next";
-
-import { Layout } from "~/components/layouts";
+import { AppLayout } from "~/components/layout";
 import { FirstSubscriptionStyleGuide } from "~/components/subscriptions/FirstSubscription/StyleGuide";
 
 const FirstSubscriptionStyleGuidePage: NextPage = () => {
   return (
-    <Layout>
+    <AppLayout>
       <FirstSubscriptionStyleGuide />
-    </Layout>
+    </AppLayout>
   );
 };
 

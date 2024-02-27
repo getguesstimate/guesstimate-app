@@ -1,13 +1,12 @@
 import { NextPage } from "next";
-
-import { Layout } from "~/components/layouts";
+import { AppLayout } from "~/components/layout";
 import { TermsAndConditions } from "~/components/pages/TermsAndConditions";
 
 const TermsPage: NextPage = () => {
   return (
-    <Layout>
+    <AppLayout>
       <TermsAndConditions />
-    </Layout>
+    </AppLayout>
   );
 };
 

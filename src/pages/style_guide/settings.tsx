@@ -1,13 +1,12 @@
 import { NextPage } from "next";
-
-import { Layout } from "~/components/layouts";
+import { AppLayout } from "~/components/layout";
 import { SettingsStyleGuide } from "~/components/users/settings/SettingsStyleGuide";
 
 const SettingsStyleGuidePage: NextPage = () => {
   return (
-    <Layout isFluid showFooter={false}>
+    <AppLayout isFluid showFooter={false}>
       <SettingsStyleGuide />
-    </Layout>
+    </AppLayout>
   );
 };
 

@@ -1,44 +1,22 @@
-import { me } from "~/lib/engine/engine";
+import { Session } from "next-auth";
 import { AppThunk } from "~/modules/store";
 import * as userActions from "~/modules/users/actions";
 
 import { MeProfile, meSlice } from "./slice";
 
-export function logInWithAccessToken({
-  sub,
-  id_token,
-}: {
-  sub: string;
-  id_token: string;
-}): AppThunk {
-  return (dispatch) => {
+// Should be called once on session changes and on initial page load.
+export function setSession(session: Session | null): AppThunk {
+  return (dispatch, getState) => {
     // should we use bits of auth0 profile here until we load the user from guesstimate?
-    const authInfo = {
-      token: id_token,
-      auth0_id: sub,
-    };
-    dispatch(meSlice.actions.setAuth0(authInfo));
-    me.localStorage.set(authInfo);
+    if (session && session.auth0_id) {
+      dispatch(meSlice.actions.setSession(session));
 
-    dispatch(userActions.fetchMe(sub));
-  };
-}
-
-export function logOut(): AppThunk {
-  return (dispatch) => {
-    me.localStorage.clear();
-    dispatch(meSlice.actions.destroy());
-  };
-}
-
-// Should be called once on page load.
-// Loads profile and auth token from localStorage and refetches the user data.
-export function init(): AppThunk {
-  return (dispatch) => {
-    const authInfo = me.localStorage.get();
-    if (authInfo) {
-      dispatch(meSlice.actions.setAuth0(authInfo));
-      dispatch(userActions.fetchMe(authInfo.auth0_id));
+      // next-auth refreshes the session, so we call `fetchMe` only if profile is not loaded yet
+      if (!getState().me.profile) {
+        dispatch(userActions.fetchMe(session.auth0_id));
+      }
+    } else {
+      dispatch(meSlice.actions.destroy());
     }
   };
 }
@@ -46,10 +24,10 @@ export function init(): AppThunk {
 export function guesstimateMeReload(): AppThunk {
   return (dispatch, getState) => {
     const state = getState().me;
-    if (state.tag === "SIGNED_OUT") {
+    if (!state.session?.auth0_id) {
       return;
     }
-    dispatch(userActions.fetchMe(state.auth0_id));
+    dispatch(userActions.fetchMe(state.session.auth0_id));
   };
 }
 

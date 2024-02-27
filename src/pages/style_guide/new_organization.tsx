@@ -1,13 +1,12 @@
 import { NextPage } from "next";
-
-import { Layout } from "~/components/layouts";
+import { AppLayout } from "~/components/layout";
 import { NewOrganizationStyleGuide } from "~/components/organizations/new/NewOrganizationStyleGuide";
 
 const NewOrganizationStyleGuidePage: NextPage = () => {
   return (
-    <Layout>
+    <AppLayout>
       <NewOrganizationStyleGuide />
-    </Layout>
+    </AppLayout>
   );
 };
 

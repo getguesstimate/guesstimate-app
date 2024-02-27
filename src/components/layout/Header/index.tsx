@@ -1,6 +1,7 @@
 import { FC } from "react";
 
 import clsx from "clsx";
+import { useSession } from "next-auth/react";
 import { useAppSelector } from "~/modules/hooks";
 
 import { HeaderRightMenu } from "./HeaderRightMenu";
@@ -13,13 +14,13 @@ type Props = {
 };
 
 export const Header: FC<Props> = ({ isFluid, isBare }) => {
-  const me = useAppSelector((state) => state.me);
   const organizations = useAppSelector((state) => state.organizations);
   const userOrganizationMemberships = useAppSelector(
     (state) => state.userOrganizationMemberships
   );
 
-  const isLoggedIn = me.tag === "SIGNED_IN";
+  const { data: session } = useSession();
+  const isLoggedIn = !!session;
 
   const navbarRef = isLoggedIn ? "/models" : "/";
   return (
@@ -45,7 +46,6 @@ export const Header: FC<Props> = ({ isFluid, isBare }) => {
         )}
 
         <HeaderRightMenu
-          me={me}
           organizations={organizations}
           userOrganizationMemberships={userOrganizationMemberships}
         />

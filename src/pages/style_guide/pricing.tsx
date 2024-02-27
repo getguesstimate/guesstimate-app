@@ -1,13 +1,12 @@
 import { NextPage } from "next";
-
+import { AppLayout } from "~/components/layout";
 import { PlanStyleGuide } from "~/components/plans/index/StyleGuide";
-import { Layout } from "~/components/layouts";
 
 const PricingStyleGuidePage: NextPage = () => {
   return (
-    <Layout>
+    <AppLayout>
       <PlanStyleGuide />
-    </Layout>
+    </AppLayout>
   );
 };
 

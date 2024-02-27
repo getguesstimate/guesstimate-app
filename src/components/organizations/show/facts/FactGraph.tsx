@@ -237,8 +237,6 @@ export const FactGraph: React.FC<Props> = (props) => {
         copiedRegion={[]}
         selectedCell={{}}
         analyzedRegion={[]}
-        onUndo={() => {}}
-        onRedo={() => {}}
         onSelectItem={() => {}}
         onDeSelectAll={() => {}}
         onAutoFillRegion={() => {}}

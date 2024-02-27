@@ -1,12 +1,13 @@
-import { Models } from "./resources/Models";
-import { Organizations } from "./resources/Organizations";
-import { Users } from "./resources/Users";
-import { Calculators } from "./resources/Calculators";
-import { Accounts } from "./resources/Accounts";
-import { Copies } from "./resources/Copies";
-import { UserOrganizationMemberships } from "./resources/UserOrganizationMemberships";
 import { RootState } from "~/modules/store";
 import { rootUrl } from "~/server/guesstimate-api/constants";
+
+import { Accounts } from "./resources/Accounts";
+import { Calculators } from "./resources/Calculators";
+import { Copies } from "./resources/Copies";
+import { Models } from "./resources/Models";
+import { Organizations } from "./resources/Organizations";
+import { UserOrganizationMemberships } from "./resources/UserOrganizationMemberships";
+import { Users } from "./resources/Users";
 
 export class GuesstimateApi {
   host: string;
@@ -35,6 +36,6 @@ export class GuesstimateApi {
 export const api = (state: RootState) => {
   return new GuesstimateApi({
     host: rootUrl,
-    api_token: state.me.tag === "SIGNED_OUT" ? undefined : state.me.token,
+    api_token: state.me.session?.access_token,
   });
 };

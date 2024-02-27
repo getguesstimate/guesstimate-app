@@ -1,13 +1,12 @@
 import { NextPage } from "next";
-
-import { Layout } from "~/components/layouts";
+import { AppLayout } from "~/components/layout";
 import { PlanIndexContainer } from "~/components/plans/index/PlanIndexContainer";
 
 const PricingPage: NextPage = () => {
   return (
-    <Layout backgroundColor="GREY">
+    <AppLayout backgroundColor="GREY">
       <PlanIndexContainer />
-    </Layout>
+    </AppLayout>
   );
 };
 

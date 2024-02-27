@@ -1,13 +1,12 @@
 import { NextPage } from "next";
-
-import { Layout } from "~/components/layouts";
+import { AppLayout } from "~/components/layout";
 import { SpacesIndex } from "~/components/spaces/SpacesIndex";
 
 const ModelsPage: NextPage = () => {
   return (
-    <Layout backgroundColor="GREY">
+    <AppLayout backgroundColor="GREY">
       <SpacesIndex />
-    </Layout>
+    </AppLayout>
   );
 };
 

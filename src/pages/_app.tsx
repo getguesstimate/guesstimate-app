@@ -10,27 +10,23 @@ import type { AppProps } from "next/app";
 import Head from "next/head";
 import Script from "next/script";
 import { Provider } from "react-redux";
-import * as meActions from "~/modules/me/actions";
+import { AuthProvider } from "~/components/layout/AuthProvider";
 
 import { configureStore } from "../modules/store";
 
 // hacky, consider https://github.com/kirill-konshin/next-redux-wrapper
 let store: ReturnType<typeof configureStore> | undefined = undefined;
 
-const MyApp = ({ Component, pageProps: { session } }: AppProps) => {
+const MyApp = ({ Component }: AppProps) => {
+  // disable SSR entirely
   const [isClient, setIsClient] = useState(false);
   useEffect(() => {
     setIsClient(true);
   }, []);
+
   if (!store) {
     store = configureStore();
   }
-
-  // this must be at the top level because we don't want it to fire too often
-  useEffect(() => {
-    if (!store) return; // should never happen, but satisfies typescript
-    store.dispatch(meActions.init());
-  }, [store.dispatch]);
 
   // titleTemplate="%s | Guesstimate"
 
@@ -50,12 +46,14 @@ const MyApp = ({ Component, pageProps: { session } }: AppProps) => {
           content="width=device-width, initial-scale=1, user-scalable=no"
         />
       </Head>
-      <SessionProvider session={session}>
-        <Provider store={store}>{isClient ? <Component /> : null}</Provider>
+      {/* no session here - it's loaded on client side */}
+      <SessionProvider>
+        <Provider store={store}>
+          <AuthProvider>{isClient ? <Component /> : null}</AuthProvider>
+        </Provider>
       </SessionProvider>
     </>
   );
 };
 
-// https://stackoverflow.com/a/64509306
 export default MyApp;

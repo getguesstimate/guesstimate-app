@@ -1,6 +1,5 @@
 import { NextPage } from "next";
-
-import { Layout } from "~/components/layouts";
+import { AppLayout } from "~/components/layout";
 import { AuthRedirect } from "~/components/pages/AuthRedirect";
 
 const AuthRedirectPage: NextPage = () => {
@@ -8,9 +7,9 @@ const AuthRedirectPage: NextPage = () => {
     return null;
   }
   return (
-    <Layout>
+    <AppLayout>
       <AuthRedirect />
-    </Layout>
+    </AppLayout>
   );
 };
 

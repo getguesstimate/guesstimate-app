@@ -18,7 +18,7 @@ type Props = PropsWithChildren<{
   backgroundColor?: "GREY";
 }>;
 
-export const Layout: FC<Props> = ({
+export const AppLayout: FC<Props> = ({
   isFluid = false,
   simpleHeader = false,
   showFooter = true,

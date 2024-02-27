@@ -5,10 +5,6 @@ type DisplayErrorState = {
   message?: string;
 }[];
 
-const testExample: DisplayErrorState = [
-  { error: "foo", message: "terrible thing!" },
-];
-
 export const displayErrorSlice = createSlice({
   name: "displayError",
   initialState: [] as DisplayErrorState,

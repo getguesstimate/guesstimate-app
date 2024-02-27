@@ -1,13 +1,13 @@
-import clsx from "clsx";
-import React from "react";
+import React, { FC, PropsWithChildren } from "react";
 
-type Props = {
+import clsx from "clsx";
+
+type Props = PropsWithChildren<{
   isFluid?: boolean;
   backgroundColor?: "GREY";
-  children: React.ReactNode;
-};
+}>;
 
-export const Main: React.FC<Props> = ({
+export const Main: FC<Props> = ({
   isFluid = false,
   backgroundColor = "",
   children,

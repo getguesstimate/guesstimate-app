@@ -1,6 +1,4 @@
 import Modal from "react-modal";
-/* eslint-disable no-var */
-import * as engine from "~/lib/engine/engine";
 import { GuesstimateRecorder } from "~/lib/recorder";
 import { GuesstimateWorker } from "~/lib/window";
 import * as elev from "~/server/elev/index";
@@ -98,9 +96,6 @@ const init = () => {
   })();
   elev.hide();
   sentry.initialize();
-
-  //This just exists to help people get their api tokens
-  window.get_profile = engine.me.localStorage.get;
 };
 
 init();

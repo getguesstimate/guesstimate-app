@@ -1,13 +1,12 @@
 import { NextPage } from "next";
-
-import { Layout } from "~/components/layouts";
+import { AppLayout } from "~/components/layout";
 import { SpaceShow } from "~/components/spaces/SpaceShow";
 
 const ScratchpadPage: NextPage = () => {
   return (
-    <Layout isFluid showFooter={false}>
+    <AppLayout isFluid showFooter={false}>
       <SpaceShow spaceId={5170} />
-    </Layout>
+    </AppLayout>
   );
 };
 

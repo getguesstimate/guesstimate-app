@@ -1,13 +1,12 @@
 import { NextPage } from "next";
-
-import { Layout } from "~/components/layouts";
+import { AppLayout } from "~/components/layout";
 import { ComponentIndex } from "~/components/style_guide/ComponentIndex";
 
 const StyleGuidePage: NextPage = () => {
   return (
-    <Layout>
+    <AppLayout>
       <ComponentIndex />
-    </Layout>
+    </AppLayout>
   );
 };
 

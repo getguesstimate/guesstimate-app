@@ -1,13 +1,12 @@
 import { NextPage } from "next";
-
-import { Layout } from "~/components/layouts";
+import { AppLayout } from "~/components/layout";
 import { FAQ } from "~/components/pages/FAQ";
 
 const FAQPage: NextPage = () => {
   return (
-    <Layout>
+    <AppLayout>
       <FAQ />
-    </Layout>
+    </AppLayout>
   );
 };
 

@@ -7,6 +7,7 @@ declare module "next-auth" {
   interface Session {
     auth0_id?: string;
     access_token?: string;
+    token_expires_at?: number;
   }
 }
 
@@ -14,6 +15,7 @@ declare module "next-auth/jwt" {
   interface JWT {
     auth0_id?: string;
     access_token?: string;
+    token_expires_at?: number;
   }
 }
 
@@ -52,16 +54,26 @@ function getAuthOptions(): AuthOptions {
 
   return {
     providers: [auth0Provider],
+    debug: true,
     callbacks: {
       async session({ session, token }) {
-        session.auth0_id = token.auth0_id;
-        session.access_token = token.access_token;
+        // TODO - support refresh tokens
+        if (
+          token.access_token &&
+          token.token_expires_at &&
+          token.token_expires_at > new Date().getTime() / 1000
+        ) {
+          session.auth0_id = token.auth0_id;
+          session.access_token = token.access_token;
+          session.token_expires_at = token.token_expires_at;
+        }
         return session;
       },
       async jwt({ token, account }) {
         if (account) {
           token.auth0_id = account.providerAccountId;
           token.access_token = account.access_token;
+          token.token_expires_at = account.expires_at;
         }
         return token;
       },

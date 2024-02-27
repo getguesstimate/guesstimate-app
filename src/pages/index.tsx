@@ -1,13 +1,12 @@
 import { NextPage } from "next";
-
-import { Layout } from "~/components/layouts";
+import { AppLayout } from "~/components/layout";
 import { Home } from "~/components/pages/Home";
 
 const IndexPage: NextPage = () => {
   return (
-    <Layout isFluid simpleHeader>
+    <AppLayout isFluid simpleHeader>
       <Home />
-    </Layout>
+    </AppLayout>
   );
 };
 

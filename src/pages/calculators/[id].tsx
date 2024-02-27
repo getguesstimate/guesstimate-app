@@ -1,8 +1,7 @@
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-
-import { Layout } from "~/components/layouts";
 import { CalculatorExpandedShow } from "~/components/calculators/show/CalculatorExpandedShow";
+import { AppLayout } from "~/components/layout";
 
 const CalculatorPage: NextPage = () => {
   const router = useRouter();
@@ -11,11 +10,11 @@ const CalculatorPage: NextPage = () => {
   const intId = parseInt(id as string);
 
   return (
-    <Layout showFooter={false} backgroundColor="GREY">
+    <AppLayout showFooter={false} backgroundColor="GREY">
       {id === undefined ? null : (
         <CalculatorExpandedShow calculatorId={intId} key={intId} />
       )}
-    </Layout>
+    </AppLayout>
   );
 };
 

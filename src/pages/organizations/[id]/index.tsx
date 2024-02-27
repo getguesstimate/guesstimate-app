@@ -1,7 +1,6 @@
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-
-import { Layout } from "~/components/layouts";
+import { AppLayout } from "~/components/layout";
 import { OrganizationShow } from "~/components/organizations/show/index";
 
 const OrganizationPage: NextPage = () => {
@@ -9,7 +8,7 @@ const OrganizationPage: NextPage = () => {
 
   const { id } = router.query;
   return (
-    <Layout backgroundColor="GREY">
+    <AppLayout backgroundColor="GREY">
       {id === undefined ? null : (
         <OrganizationShow
           organizationId={parseInt(id as string)}
@@ -17,7 +16,7 @@ const OrganizationPage: NextPage = () => {
           tab={null}
         />
       )}
-    </Layout>
+    </AppLayout>
   );
 };
 

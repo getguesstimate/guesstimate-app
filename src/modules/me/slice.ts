@@ -1,5 +1,7 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Session } from "next-auth";
 import { ApiUser } from "~/lib/guesstimate_api/resources/Users";
+
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export type MeProfile = ApiUser & {
   needs_tutorial: boolean;
@@ -22,49 +24,54 @@ export type MeProfile = ApiUser & {
 type MeState =
   | {
       tag: "SIGNED_OUT";
+      session: null;
       profile: undefined;
     }
   | {
       tag: "SIGNED_IN_LOADING_PROFILE";
-      token: string;
-      auth0_id: string;
+      session: Session;
       profile: undefined;
     }
   | {
       tag: "SIGNED_IN";
-      token: string;
-      auth0_id: string;
+      session: Session;
       profile: MeProfile;
     };
 
 export const meSlice = createSlice({
   name: "me",
-  initialState: { tag: "SIGNED_OUT", profile: undefined } as MeState,
+  initialState: {
+    tag: "SIGNED_OUT",
+    profile: undefined,
+    session: null,
+  } as MeState,
   reducers: {
-    setAuth0(_, action: PayloadAction<{ token: string; auth0_id: string }>) {
-      return {
-        tag: "SIGNED_IN_LOADING_PROFILE",
-        profile: undefined,
-        ...action.payload,
-      };
+    setSession(state, action: PayloadAction<Session>) {
+      // TODO - this could be simplified.
+      return state.profile
+        ? {
+            tag: "SIGNED_IN",
+            profile: state.profile,
+            session: action.payload,
+          }
+        : {
+            tag: "SIGNED_IN_LOADING_PROFILE", // setSession action has fired fetchMe
+            profile: state.profile,
+            session: action.payload,
+          };
     },
     setProfile(state, action: PayloadAction<{ profile: MeProfile }>) {
       if (state.tag === "SIGNED_OUT") {
         return state;
       }
-      const { profile } = action.payload;
-      // FIXME - profile doesn't always contain auth0_id
-      //   if (state.auth0_id !== profile.auth0_id) {
-      //     return state; // throw error?
-      //   }
       return {
         ...state,
         tag: "SIGNED_IN",
-        profile,
+        profile: action.payload.profile,
       };
     },
     destroy() {
-      return { tag: "SIGNED_OUT", profile: undefined };
+      return { tag: "SIGNED_OUT", profile: undefined, session: null };
     },
   },
 });

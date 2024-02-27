@@ -1,7 +1,6 @@
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-
-import { Layout } from "~/components/layouts";
+import { AppLayout } from "~/components/layout";
 import { FirstSubscriptionPage } from "~/components/subscriptions/FirstSubscriptionPage";
 
 const SubscribePage: NextPage = () => {
@@ -9,11 +8,11 @@ const SubscribePage: NextPage = () => {
 
   const { id } = router.query;
   return (
-    <Layout>
+    <AppLayout>
       {id === undefined ? null : (
         <FirstSubscriptionPage planName={id as string} />
       )}
-    </Layout>
+    </AppLayout>
   );
 };
 

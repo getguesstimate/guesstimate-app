@@ -1,13 +1,12 @@
 import { NextPage } from "next";
-
-import { Layout } from "~/components/layouts";
+import { AppLayout } from "~/components/layout";
 import { PrivacyPolicy } from "~/components/pages/PrivacyPolicy";
 
 const PrivacyPolicyPage: NextPage = () => {
   return (
-    <Layout>
+    <AppLayout>
       <PrivacyPolicy />
-    </Layout>
+    </AppLayout>
   );
 };
 
