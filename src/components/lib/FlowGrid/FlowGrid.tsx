@@ -1,4 +1,11 @@
-import React, { createContext, FC, useMemo, useRef, useState } from "react";
+import React, {
+  createContext,
+  FC,
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 import clsx from "clsx";
 import { DndProvider } from "react-dnd";
@@ -124,8 +131,6 @@ export const FlowGrid: FC<Props> = ({
 
   useCallOnUnmount(onDeSelectAll);
 
-  const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
-
   const { rows, columns } = useMemo(() => {
     const { row: largestRow, column: largestColumn } = boundingRegion(
       items.map((e) => e.location)
@@ -159,47 +164,33 @@ export const FlowGrid: FC<Props> = ({
     if (e.button === 0) {
       setDragSelecting(false);
     }
+
+    if (autoFillRegion?.end) {
+      onAutoFillRegion(
+        autoFillRegion as { start: CanvasLocation; end: CanvasLocation } // FIXME
+      );
+
+      // FIXME - there might be typing bugs here but this is how it worked pre-typescript
+      handleEndRangeSelect(autoFillRegion.end);
+
+      setAutoFillRegion(undefined);
+    }
   };
 
-  const handleEmptyCellMouseDown = (e: React.MouseEvent) => {
+  const handleEmptyCellMouseDown = useCallback((e: React.MouseEvent) => {
     if (e.button === 0) {
       setDragSelecting(true);
       e.preventDefault();
     }
-  };
+  }, []);
 
-  const handleCellMouseEnter = (location: CanvasLocation) => {
-    if (autoFillRegion) {
-      setHover(undefined);
-      setAutoFillRegion(newAutoFillRegion(autoFillRegion.start, location));
-    } else if (dragSelecting) {
-      setHover(undefined);
-      handleEndRangeSelect(location);
-    } else {
-      // If the user is neither tracing a fill region nor dragging a selected
-      // region, just set the hover state.
-      setHover(location);
-    }
-  };
-
-  const handleCellMouseUp = () => {
-    if (!autoFillRegion?.end) {
-      return; // huh?
-    }
-    onAutoFillRegion(
-      autoFillRegion as { start: CanvasLocation; end: CanvasLocation } // FIXME
-    );
-
-    // FIXME - there might be typing bugs here but this is how it worked pre-typescript
-    handleEndRangeSelect(autoFillRegion.end);
-
-    setAutoFillRegion(undefined);
-  };
-
-  const handleEndDragCell = (location: CanvasLocation) => {
-    handleMouseLeave();
-    onSelectItem(location);
-  };
+  const handleEndDragCell = useCallback(
+    (location: CanvasLocation) => {
+      handleMouseLeave();
+      onSelectItem(location);
+    },
+    [onSelectItem]
+  );
 
   const selectedItems = useMemo(() => {
     return items.filter((item) =>
@@ -228,47 +219,83 @@ export const FlowGrid: FC<Props> = ({
     }
   };
 
-  const handleEndRangeSelect = (corner1: CanvasLocation) => {
-    const corner2 = selectedCell;
+  const handleEndRangeSelect = useCallback(
+    (corner1: CanvasLocation) => {
+      const corner2 = selectedCell;
 
-    if (!isLocation(corner2)) {
-      onSelectItem(corner1);
-      return;
-    }
+      if (!isLocation(corner2)) {
+        onSelectItem(corner1);
+        return;
+      }
 
-    onMultipleSelect(corner1, corner2);
-  };
+      onMultipleSelect(corner1, corner2);
+    },
+    [
+      onMultipleSelect,
+      onSelectItem,
+      selectedCell, // FIXME - this will cause all `<DropCell>` to re-render on selection changes
+    ]
+  );
 
-  const addIfNeededAndSelect = (
-    location: CanvasLocation,
-    direction: Direction
-  ) => {
-    if (!items.find((item) => isAtLocation(item.location, location))) {
-      onAddItem(location);
-    }
-    onSelectItem(location, direction);
-  };
+  const handleCellMouseEnter = useCallback(
+    (location: CanvasLocation) => {
+      if (autoFillRegion) {
+        setHover(undefined);
+        setAutoFillRegion(newAutoFillRegion(autoFillRegion.start, location));
+      } else if (dragSelecting) {
+        setHover(undefined);
+        handleEndRangeSelect(location);
+      } else {
+        // If the user is neither tracing a fill region nor dragging a selected
+        // region, just set the hover state.
+        setHover(location);
+      }
+    },
+    [autoFillRegion, dragSelecting, handleEndRangeSelect]
+  );
 
-  const handleReturn = (location: CanvasLocation, isDown: boolean) => {
-    const newLocation: CanvasLocation = {
-      row: isDown ? location.row + 1 : (location.row || 1) - 1,
-      column: location.column,
-    };
-    addIfNeededAndSelect(newLocation, isDown ? "UP" : "DOWN");
-  };
+  const addIfNeededAndSelect = useCallback(
+    (location: CanvasLocation, direction: Direction) => {
+      if (!items.find((item) => isAtLocation(item.location, location))) {
+        onAddItem(location);
+      }
+      onSelectItem(location, direction);
+    },
+    [items, onAddItem, onSelectItem]
+  );
 
-  const handleTab = (location: CanvasLocation, isRight: boolean) => {
-    const newLocation: CanvasLocation = {
-      row: location.row,
-      column: isRight ? location.column + 1 : (location.column || 1) - 1,
-    };
-    addIfNeededAndSelect(newLocation, isRight ? "LEFT" : "RIGHT");
-  };
+  const handleReturn = useCallback(
+    (location: CanvasLocation, isDown: boolean) => {
+      const newLocation: CanvasLocation = {
+        row: isDown ? location.row + 1 : (location.row || 1) - 1,
+        column: location.column,
+      };
+      addIfNeededAndSelect(newLocation, isDown ? "UP" : "DOWN");
+    },
+    [addIfNeededAndSelect]
+  );
 
-  const handleAutoFillTargetMouseDown = (location: CanvasLocation) => {
-    setAutoFillRegion({ start: location });
-  };
+  const handleTab = useCallback(
+    (location: CanvasLocation, isRight: boolean) => {
+      const newLocation: CanvasLocation = {
+        row: location.row,
+        column: isRight ? location.column + 1 : (location.column || 1) - 1,
+      };
+      addIfNeededAndSelect(newLocation, isRight ? "LEFT" : "RIGHT");
+    },
+    [addIfNeededAndSelect]
+  );
 
+  const handleAutoFillTargetMouseDown = useCallback(
+    (location: CanvasLocation) => {
+      setAutoFillRegion({ start: location });
+    },
+    []
+  );
+
+  const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  // TODO - useCallback
   const getRowHeight = (rowI: number) => {
     // note: offsetHeight won't be as precise, it's rounded to integer value
     return rowRefs.current[rowI]?.getBoundingClientRect().height || 0;
@@ -291,7 +318,8 @@ export const FlowGrid: FC<Props> = ({
     return (
       <DropCell
         key={location.column}
-        location={location}
+        row={location.row}
+        column={location.column}
         item={item}
         isHovered={Boolean(hover && isAtLocation(hover, location))}
         inSelectedCell={inSelectedCell}
@@ -305,7 +333,6 @@ export const FlowGrid: FC<Props> = ({
         onEndRangeSelect={handleEndRangeSelect}
         onEndDragCell={handleEndDragCell}
         onMouseEnter={handleCellMouseEnter}
-        onMouseUp={handleCellMouseUp}
         onEmptyCellMouseDown={handleEmptyCellMouseDown}
         onAutoFillTargetMouseDown={handleAutoFillTargetMouseDown}
         onReturn={handleReturn}
@@ -316,16 +343,23 @@ export const FlowGrid: FC<Props> = ({
     );
   };
 
+  const contextValue = useMemo(() => {
+    return {
+      size,
+      showGridLines,
+      isModelingCanvas,
+      showEdges: edges !== undefined,
+    };
+  }, [edges, isModelingCanvas, showGridLines, size]);
+
+  const autofillRegionAsRegion = useMemo(
+    () => getBounds(autoFillRegion),
+    [autoFillRegion]
+  );
+
   return (
     <DndProvider backend={HTML5Backend}>
-      <FlowGridContext.Provider
-        value={{
-          size,
-          showGridLines,
-          isModelingCanvas,
-          showEdges: edges !== undefined,
-        }}
-      >
+      <FlowGridContext.Provider value={contextValue}>
         <div
           className={clsx(
             "relative z-0",
@@ -353,7 +387,7 @@ export const FlowGrid: FC<Props> = ({
             selectedRegion={selectedRegion}
             copiedRegion={copiedRegion}
             analyzedRegion={analyzedRegion}
-            autoFillRegion={getBounds(autoFillRegion)}
+            autoFillRegion={autofillRegionAsRegion}
           />
         </div>
       </FlowGridContext.Provider>

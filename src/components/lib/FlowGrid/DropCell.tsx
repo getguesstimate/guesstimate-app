@@ -1,4 +1,12 @@
-import React, { FC, useCallback, useContext, useEffect, useRef } from "react";
+import React, {
+  FC,
+  memo,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+} from "react";
 
 import clsx from "clsx";
 import { useDrop } from "react-dnd";
@@ -10,7 +18,9 @@ import { cellSizeInfo, FlowGridContext } from "./FlowGrid";
 import { GridItem } from "./types";
 
 type Props = {
-  location: CanvasLocation;
+  // we're passing `row` and `column` instead of `location` to use the default `memo()` equality check
+  row: number;
+  column: number;
   item?: GridItem;
   isHovered: boolean;
   inSelectedCell: boolean;
@@ -22,7 +32,6 @@ type Props = {
   onEndRangeSelect(location: CanvasLocation): void;
   onEndDragCell(location: CanvasLocation): void;
   onMouseEnter(location: CanvasLocation): void;
-  onMouseUp(): void;
   onEmptyCellMouseDown(e: React.MouseEvent): void;
   onAutoFillTargetMouseDown(location: CanvasLocation): void;
   onReturn(location: CanvasLocation, down?: boolean): void;
@@ -32,8 +41,15 @@ type Props = {
 };
 
 // Provides drag&drop capabilities and renders either FilledCell or EmtpyCell as a child.
-export const DropCell: FC<Props> = (props) => {
-  const { location } = props;
+export const DropCell: FC<Props> = memo(function DropCell(props) {
+  const location = useMemo<CanvasLocation>(
+    () => ({
+      row: props.row,
+      column: props.column,
+    }),
+    [props.row, props.column]
+  );
+
   const itemRef = useRef<{ focus(): void }>(null);
 
   const { size, showGridLines } = useContext(FlowGridContext);
@@ -134,7 +150,7 @@ export const DropCell: FC<Props> = (props) => {
   ) : (
     <EmptyCell
       ref={itemRef}
-      location={props.location}
+      location={location}
       isHovered={props.isHovered}
       inSelectedCell={props.inSelectedCell}
       isOver={isOver}
@@ -154,7 +170,6 @@ export const DropCell: FC<Props> = (props) => {
       )}
       onMouseEnter={handleMouseEnter}
       onMouseDown={handleMouseDown}
-      onMouseUp={props.onMouseUp}
     >
       {cellElement}
       {props.showAutoFillToken && (
@@ -167,4 +182,4 @@ export const DropCell: FC<Props> = (props) => {
       )}
     </div>
   );
-};
+});
