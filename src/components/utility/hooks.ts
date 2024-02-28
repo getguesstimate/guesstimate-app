@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 // via https://stackoverflow.com/a/53837442
-export const useForceUpdate = () => {
+export function useForceUpdate() {
   const [, setValue] = useState(0);
   return useCallback(() => setValue((value) => value + 1), []);
-};
+}
 
-export const useCallOnUnmount = (fn: () => void) => {
+export function useCallOnUnmount(fn: () => void) {
   const ref = useRef<() => void>(fn);
   useEffect(() => {
     ref.current = fn;
@@ -18,4 +18,4 @@ export const useCallOnUnmount = (fn: () => void) => {
       ref.current();
     };
   }, []);
-};
+}

@@ -1,4 +1,4 @@
-import React, {
+import {
   CSSProperties,
   FC,
   forwardRef,
@@ -81,18 +81,17 @@ const DragPreview: FC<{ width: number; children: ReactNode }> = ({
 };
 
 type Props = {
+  item: GridItem;
+  location: CanvasLocation;
   isHovered: boolean;
-  forceFlowGridUpdate(): void;
-  onTab(): void;
-  onReturn(): void;
   inSelectedCell: boolean;
   selectedFrom?: Direction;
-  item: GridItem;
-  getRowHeight(): number;
-  location: CanvasLocation;
-  handleSelect(location: CanvasLocation, direction?: any): void;
   onMoveItem(arg: { prev: CanvasLocation; next: CanvasLocation }): void;
   onEndDrag(location: CanvasLocation): void;
+  onReturn(): void;
+  onTab(): void;
+  forceFlowGridUpdate(): void;
+  getRowHeight(): number;
 };
 
 export const FilledCell = forwardRef<{ focus(): void }, Props>(

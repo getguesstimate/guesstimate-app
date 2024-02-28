@@ -320,57 +320,64 @@ export const SpaceCanvas: FC<Props> = ({
     return () => window.removeEventListener("down", handler);
   }, [handleUndo, handleRedo, handlePaste, handleCopy, handleCut]);
 
-  const handleSelect = (location: CanvasLocation, selectedFrom?: Direction) => {
-    dispatch(changeSelect(location, selectedFrom));
-    dispatch(selectRegion(location, location));
-  };
+  const handleSelect = useCallback(
+    (location: CanvasLocation, selectedFrom?: Direction) => {
+      dispatch(changeSelect(location, selectedFrom));
+      dispatch(selectRegion(location, location));
+    },
+    []
+  );
 
-  const handleMultipleSelect = (
-    corner1: CanvasLocation,
-    corner2: CanvasLocation
-  ) => {
-    dispatch(selectRegion(corner1, corner2));
-  };
+  const handleMultipleSelect = useCallback(
+    (corner1: CanvasLocation, corner2: CanvasLocation) => {
+      dispatch(selectRegion(corner1, corner2));
+    },
+    []
+  );
 
-  const handleDeSelectAll = () => {
+  const handleDeSelectAll = useCallback(() => {
     dispatch(deSelect());
     dispatch(deSelectRegion());
-  };
+  }, []);
 
-  const onAutoFillRegion = (region: {
-    start: CanvasLocation;
-    end: CanvasLocation;
-  }) => {
-    dispatch(fillRegion(denormalizedSpace.id, region));
-  };
+  const onAutoFillRegion = useCallback(
+    (region: { start: CanvasLocation; end: CanvasLocation }) => {
+      dispatch(fillRegion(denormalizedSpace.id, region));
+    },
+    [denormalizedSpace.id]
+  );
 
-  const handleAddMetric = (location: CanvasLocation) => {
-    dispatch(
-      addMetric({
-        space: denormalizedSpace.id,
-        location,
-      })
-    );
-  };
+  const handleAddMetric = useCallback(
+    (location: CanvasLocation) => {
+      dispatch(
+        addMetric({
+          space: denormalizedSpace.id,
+          location,
+        })
+      );
+    },
+    [denormalizedSpace.id]
+  );
 
-  const handleMoveMetric = ({
-    prev,
-    next,
-  }: {
-    prev: CanvasLocation;
-    next: CanvasLocation;
-  }) => {
-    if (_.some(denormalizedSpace.metrics, existsAtLoc(next))) {
-      return;
-    }
+  const handleMoveMetric = useCallback(
+    ({ prev, next }: { prev: CanvasLocation; next: CanvasLocation }) => {
+      if (_.some(denormalizedSpace.metrics, existsAtLoc(next))) {
+        return;
+      }
 
-    const metric = denormalizedSpace.metrics.find(existsAtLoc(prev));
-    if (!metric) {
-      return;
-    }
-    dispatch(changeMetric({ id: metric.id, location: next }));
-    dispatch(changeSelect(next));
-  };
+      const metric = denormalizedSpace.metrics.find(existsAtLoc(prev));
+      if (!metric) {
+        return;
+      }
+      dispatch(changeMetric({ id: metric.id, location: next }));
+      dispatch(changeSelect(next));
+    },
+    [denormalizedSpace.metrics]
+  );
+
+  const handleRemoveItems = useCallback((ids) => {
+    dispatch(removeMetrics(ids));
+  }, []);
 
   const edges = buildEdges();
 
@@ -384,15 +391,14 @@ export const SpaceCanvas: FC<Props> = ({
         copiedRegion={copiedRegion}
         analyzedRegion={analyzedRegion}
         showGridLines={!screenshot}
+        // the identity of these action should be mostly stable; handleMoveMetric is an exception though
         onSelectItem={handleSelect}
         onMultipleSelect={handleMultipleSelect}
         onDeSelectAll={handleDeSelectAll}
         onAutoFillRegion={onAutoFillRegion}
         onAddItem={handleAddMetric}
         onMoveItem={handleMoveMetric}
-        onRemoveItems={(ids) => {
-          dispatch(removeMetrics(ids));
-        }}
+        onRemoveItems={handleRemoveItems}
       />
     </div>
   );

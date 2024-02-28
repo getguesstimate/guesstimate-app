@@ -183,7 +183,7 @@ export const MetricCardViewSection = forwardRef<
       },
       {}
     );
-    const messageToDisplay = !!errorToDisplay
+    const messageToDisplay = errorToDisplay
       ? replaceByMap(getMessage(errorToDisplay), nodeIdMap)
       : null;
 

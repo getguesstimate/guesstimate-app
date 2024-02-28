@@ -176,8 +176,8 @@ export const FlowGrid: FC<Props> = ({
       setHover(undefined);
       handleEndRangeSelect(location);
     } else {
-      // If this the user is neither tracing a fill region nor dragging a selected region, just set
-      // the hover state.
+      // If the user is neither tracing a fill region nor dragging a selected
+      // region, just set the hover state.
       setHover(location);
     }
   };
@@ -293,27 +293,25 @@ export const FlowGrid: FC<Props> = ({
         key={location.column}
         location={location}
         item={item}
-        onMouseUp={handleCellMouseUp}
-        onAutoFillTargetMouseDown={() =>
-          handleAutoFillTargetMouseDown(location)
-        }
-        forceFlowGridUpdate={forceUpdate}
-        handleSelect={onSelectItem}
-        handleEndRangeSelect={handleEndRangeSelect}
+        isHovered={Boolean(hover && isAtLocation(hover, location))}
         inSelectedCell={inSelectedCell}
         selectedFrom={
           "selectedFrom" in selectedCell ? selectedCell.selectedFrom : undefined
         }
-        isHovered={Boolean(hover && isAtLocation(hover, location))}
+        showAutoFillToken={showAutoFillToken}
         onAddItem={onAddItem}
         onMoveItem={onMoveItem}
-        onMouseEnter={() => handleCellMouseEnter(location)}
+        onSelect={onSelectItem}
+        onEndRangeSelect={handleEndRangeSelect}
         onEndDragCell={handleEndDragCell}
+        onMouseEnter={handleCellMouseEnter}
+        onMouseUp={handleCellMouseUp}
         onEmptyCellMouseDown={handleEmptyCellMouseDown}
-        onReturn={(down = true) => handleReturn(location, down)}
-        onTab={(right = true) => handleTab(location, right)}
-        getRowHeight={() => getRowHeight(location.row)}
-        showAutoFillToken={showAutoFillToken}
+        onAutoFillTargetMouseDown={handleAutoFillTargetMouseDown}
+        onReturn={handleReturn}
+        onTab={handleTab}
+        forceFlowGridUpdate={forceUpdate}
+        getRowHeight={getRowHeight}
       />
     );
   };

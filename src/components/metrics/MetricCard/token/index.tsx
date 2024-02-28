@@ -1,8 +1,8 @@
-import React from "react";
+import { FC } from "react";
 
 import Icon from "~/components/react-fa-patched";
 
-export const MetricReadableId: React.FC<{ readableId: string }> = ({
+export const MetricReadableId: FC<{ readableId: string }> = ({
   readableId,
 }) => (
   <div className="rounded-sm bg-green-1 px-1 py-0.5 text-xs font-semibold text-white">
@@ -10,12 +10,12 @@ export const MetricReadableId: React.FC<{ readableId: string }> = ({
   </div>
 );
 
-export const MetricReasoningIcon: React.FC = () => (
+export const MetricReasoningIcon: FC = () => (
   <div className="mr-1 rounded-sm text-blue-5 opacity-60">
     <Icon name="comment" />
   </div>
 );
-export const MetricSidebarToggle: React.FC<{ onToggleSidebar(): void }> = ({
+export const MetricSidebarToggle: FC<{ onToggleSidebar(): void }> = ({
   onToggleSidebar,
 }) => (
   <div
@@ -27,7 +27,7 @@ export const MetricSidebarToggle: React.FC<{ onToggleSidebar(): void }> = ({
   </div>
 );
 
-export const MetricExportedIcon: React.FC = () => (
+export const MetricExportedIcon: FC = () => (
   <div>
     {/* triangle */}
     <div className="absolute top-0 right-0 h-0 w-0 border-t-[36px] border-l-[36px] border-t-[#9fabb3] border-l-transparent" />

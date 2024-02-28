@@ -12,11 +12,11 @@ import { CanvasLocation } from "~/lib/locationUtils";
 import { FlowGridContext } from "./FlowGrid";
 
 type Props = {
-  onAddItem(location: CanvasLocation): void;
-  inSelectedCell: boolean;
   location: CanvasLocation;
-  isOver?: boolean;
   isHovered: boolean;
+  inSelectedCell: boolean;
+  isOver: boolean;
+  onAddItem(location: CanvasLocation): void;
 };
 
 export const EmptyCell = memo(
