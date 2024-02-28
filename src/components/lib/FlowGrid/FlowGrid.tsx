@@ -14,7 +14,7 @@ import {
   isWithinRegion,
   MaybeRegion,
 } from "~/lib/locationUtils";
-import { SelectedCell } from "~/modules/selected_cell/reducer";
+import { SelectedCell } from "~/modules/selectedCell/reducer";
 
 import { BackgroundContainer } from "./BackgroundContainer";
 import { DropCell } from "./DropCell";

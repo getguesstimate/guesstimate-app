@@ -26,11 +26,8 @@ import {
   changeMetric,
   removeMetrics,
 } from "~/modules/metrics/actions";
-import { changeSelect, deSelect } from "~/modules/selected_cell/actions";
-import {
-  deSelectRegion,
-  selectRegion,
-} from "~/modules/selected_region/actions";
+import { changeSelect, deSelect } from "~/modules/selectedCell/actions";
+import { deSelectRegion, selectRegion } from "~/modules/selectedRegion/actions";
 import {
   deleteSimulations,
   runSimulations,
@@ -375,7 +372,7 @@ export const SpaceCanvas: FC<Props> = ({
     [denormalizedSpace.metrics]
   );
 
-  const handleRemoveItems = useCallback((ids) => {
+  const handleRemoveItems = useCallback((ids: string[]) => {
     dispatch(removeMetrics(ids));
   }, []);
 

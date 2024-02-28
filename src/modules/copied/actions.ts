@@ -1,17 +1,17 @@
 import _ from "lodash";
 import * as e from "~/lib/engine/engine";
-import * as metricActions from "~/modules/metrics/actions";
-import { selectRegion } from "~/modules/selected_region/actions";
-import { runSimulations } from "~/modules/simulations/actions";
-import { registerGraphChange } from "~/modules/spaces/actions";
-
 import {
   isLocation,
   isWithinRegion,
   Region,
   translate,
 } from "~/lib/locationUtils";
+import * as metricActions from "~/modules/metrics/actions";
+import { selectRegion } from "~/modules/selectedRegion/actions";
+import { runSimulations } from "~/modules/simulations/actions";
+import { registerGraphChange } from "~/modules/spaces/actions";
 import { AppThunk } from "~/modules/store";
+
 import { Metric } from "../metrics/reducer";
 import { copiedSlice } from "./reducer";
 
