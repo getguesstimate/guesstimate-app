@@ -295,13 +295,6 @@ export const FlowGrid: FC<Props> = ({
 
   const { getObserveProps, getObserveRef, rowHeights } = useRowHeightObserver();
 
-  const getRowHeight = useCallback(
-    (i: number) => {
-      return rowHeights[i] || 0;
-    },
-    [rowHeights]
-  );
-
   const renderCell = (location: CanvasLocation) => {
     const item = items.find((item) => isAtLocation(item.location, location));
     const inSelectedCell = isAtLocation(selectedCell, location);
@@ -339,7 +332,6 @@ export const FlowGrid: FC<Props> = ({
         onReturn={handleReturn}
         onTab={handleTab}
         forceFlowGridUpdate={forceUpdate}
-        getRowHeight={getRowHeight}
       />
     );
   };

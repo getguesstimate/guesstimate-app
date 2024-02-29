@@ -2,7 +2,7 @@ import {
   CSSProperties,
   FC,
   forwardRef,
-  ReactNode,
+  PropsWithChildren,
   useContext,
   useEffect,
   useImperativeHandle,
@@ -45,11 +45,10 @@ function getItemStyles(currentOffset: XYCoord | null) {
 
   const x = currentOffset.x;
   const y = currentOffset.y;
-  const transform = `translate(${x}px, ${y}px)`;
-  return { transform: transform, WebkitTransform: transform };
+  return { transform: `translate(${x}px, ${y}px)` };
 }
 
-const DragPreview: FC<{ width: number; children: ReactNode }> = ({
+const DragPreview: FC<PropsWithChildren<{ width: number }>> = ({
   width,
   children,
 }) => {
@@ -91,7 +90,6 @@ type Props = {
   onReturn(): void;
   onTab(): void;
   forceFlowGridUpdate(): void;
-  getRowHeight(): number;
 };
 
 export const FilledCell = forwardRef<{ focus(): void }, Props>(
@@ -139,7 +137,7 @@ export const FilledCell = forwardRef<{ focus(): void }, Props>(
       dragPreview(getEmptyImage());
     }, []);
 
-    const widthRef = useRef<number>(0);
+    const sizeRef = useRef<[number, number]>([0, 0]);
     const containerRef = useRef<HTMLDivElement | null>(null);
 
     // proxy focus() method upwards
@@ -152,16 +150,17 @@ export const FilledCell = forwardRef<{ focus(): void }, Props>(
     }));
 
     useEffect(() => {
-      const childItem = containerRef.current?.children[0];
-      if (!isDragging && childItem) {
-        widthRef.current = (childItem as any).offsetWidth;
+      const el = containerRef.current;
+      if (!isDragging && el) {
+        sizeRef.current = [(el as any).offsetWidth, (el as any).offsetHeight];
       }
     });
 
-    // This forces dragging cells to not change their row heights. A bit hacky, but gives a better user experience in my
-    // opinion and keeps background layer in sync with real row heights during drag (which skips normal rendering tree).
+    // This forces the original cell's row not to change its height. It gives a
+    // better user experience and keeps background layer in sync with real row
+    // heights during drag (which skips normal rendering tree).
     const styles = isDragging
-      ? { minHeight: `${props.getRowHeight() - 1}px` }
+      ? { width: sizeRef.current[0], height: sizeRef.current[1] }
       : {};
 
     const item = props.item.render({
@@ -187,7 +186,7 @@ export const FilledCell = forwardRef<{ focus(): void }, Props>(
         tabIndex={-1}
       >
         {isDragging ? (
-          <DragPreview width={widthRef.current}>{item}</DragPreview>
+          <DragPreview width={sizeRef.current[0]}>{item}</DragPreview>
         ) : (
           item
         )}

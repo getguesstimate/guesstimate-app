@@ -37,7 +37,6 @@ type Props = {
   onReturn(location: CanvasLocation, down?: boolean): void;
   onTab(location: CanvasLocation, right?: boolean): void;
   forceFlowGridUpdate(): void;
-  getRowHeight(rowI: number): number;
 };
 
 // Provides drag&drop capabilities and renders either FilledCell or EmtpyCell as a child.
@@ -127,11 +126,6 @@ export const DropCell: FC<Props> = memo(function DropCell(props) {
     [location, props.onTab]
   );
 
-  const getRowHeight = useCallback(
-    () => props.getRowHeight(location.row),
-    [props.getRowHeight, location.row]
-  );
-
   const cellElement = props.item ? (
     <FilledCell
       ref={itemRef}
@@ -145,7 +139,6 @@ export const DropCell: FC<Props> = memo(function DropCell(props) {
       onReturn={handleReturn}
       onTab={handleTab}
       forceFlowGridUpdate={props.forceFlowGridUpdate}
-      getRowHeight={getRowHeight}
     />
   ) : (
     <EmptyCell
