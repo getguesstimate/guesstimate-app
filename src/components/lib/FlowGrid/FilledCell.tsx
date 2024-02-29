@@ -2,6 +2,7 @@ import {
   CSSProperties,
   FC,
   forwardRef,
+  memo,
   PropsWithChildren,
   useContext,
   useEffect,
@@ -92,9 +93,9 @@ type Props = {
   forceFlowGridUpdate(): void;
 };
 
-export const FilledCell = forwardRef<{ focus(): void }, Props>(
-  function FilledCell(props, ref) {
-    const { isModelingCanvas } = useContext(FlowGridContext);
+export const FilledCell = memo(
+  forwardRef<{ focus(): void }, Props>(function FilledCell(props, ref) {
+    const { isModelingCanvas, showEdges } = useContext(FlowGridContext);
 
     const [{ isDragging }, drag, dragPreview] = useDrag<
       { location: CanvasLocation },
@@ -129,8 +130,6 @@ export const FilledCell = forwardRef<{ focus(): void }, Props>(
       }),
       [props.location]
     );
-
-    const { showEdges } = useContext(FlowGridContext);
 
     // hide default drag preview, we use useDragLayer instead
     useEffect(() => {
@@ -192,5 +191,5 @@ export const FilledCell = forwardRef<{ focus(): void }, Props>(
         )}
       </div>
     );
-  }
+  })
 );

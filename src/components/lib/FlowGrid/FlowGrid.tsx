@@ -336,14 +336,15 @@ export const FlowGrid: FC<Props> = ({
     );
   };
 
+  const showEdges = edges !== undefined;
   const contextValue = useMemo(() => {
     return {
       size,
       showGridLines,
       isModelingCanvas,
-      showEdges: edges !== undefined,
+      showEdges,
     };
-  }, [edges, isModelingCanvas, showGridLines, size]);
+  }, [showEdges, isModelingCanvas, showGridLines, size]);
 
   const autofillRegionAsRegion = useMemo(
     () => getBounds(autoFillRegion),

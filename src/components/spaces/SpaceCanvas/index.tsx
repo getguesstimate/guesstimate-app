@@ -206,7 +206,7 @@ export const SpaceCanvas: FC<Props> = ({
     ]
   );
 
-  const buildEdges = (): EdgeShape[] | undefined => {
+  const edges = useMemo<EdgeShape[] | undefined>(() => {
     if (!showEdges) {
       return;
     }
@@ -263,7 +263,15 @@ export const SpaceCanvas: FC<Props> = ({
         };
       })
       .filter((e): e is NonNullable<typeof e> => !!e);
-  };
+  }, [
+    denormalizedSpace.edges,
+    findMetric,
+    getSelectedLineage,
+    metrics,
+    screenshot,
+    selectedRegion,
+    showEdges,
+  ]);
 
   const copiedRegion =
     (copied && copied.pastedTimes < 1 && copied.region) || [];
@@ -393,8 +401,6 @@ export const SpaceCanvas: FC<Props> = ({
   const handleRemoveItems = useCallback((ids: string[]) => {
     dispatch(removeMetrics(ids));
   }, []);
-
-  const edges = buildEdges();
 
   const items = useMemo(
     () => metrics.map((m) => makeItem(m)),
