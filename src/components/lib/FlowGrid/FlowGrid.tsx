@@ -3,7 +3,6 @@ import React, {
   FC,
   useCallback,
   useMemo,
-  useRef,
   useState,
 } from "react";
 
@@ -27,6 +26,7 @@ import { BackgroundContainer } from "./BackgroundContainer";
 import { DropCell } from "./DropCell";
 import { EdgeShape } from "./Edges";
 import { GridItem } from "./types";
+import { useRowHeightObserver } from "./useRowHeightObserver";
 import { DirectionToLocation, keycodeToDirection } from "./utils";
 
 const upto = (n: number): number[] => new Array(n).fill(0).map((_, i) => i);
@@ -293,13 +293,14 @@ export const FlowGrid: FC<Props> = ({
     []
   );
 
-  const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const { getObserveProps, getObserveRef, rowHeights } = useRowHeightObserver();
 
-  // TODO - useCallback
-  const getRowHeight = (rowI: number) => {
-    // note: offsetHeight won't be as precise, it's rounded to integer value
-    return rowRefs.current[rowI]?.getBoundingClientRect().height || 0;
-  };
+  const getRowHeight = useCallback(
+    (i: number) => {
+      return rowHeights[i] || 0;
+    },
+    [rowHeights]
+  );
 
   const renderCell = (location: CanvasLocation) => {
     const item = items.find((item) => isAtLocation(item.location, location));
@@ -373,7 +374,8 @@ export const FlowGrid: FC<Props> = ({
             {upto(rows).map((row) => (
               <div
                 key={row}
-                ref={(el) => (rowRefs.current[row] = el)}
+                ref={getObserveRef(row)}
+                {...getObserveProps(row)}
                 className="flex"
               >
                 {upto(columns).map((column) => renderCell({ row, column }))}
@@ -382,8 +384,7 @@ export const FlowGrid: FC<Props> = ({
           </div>
           <BackgroundContainer
             edges={edges || []}
-            rowCount={rows}
-            getRowHeight={getRowHeight}
+            rowHeights={rowHeights}
             selectedRegion={selectedRegion}
             copiedRegion={copiedRegion}
             analyzedRegion={analyzedRegion}

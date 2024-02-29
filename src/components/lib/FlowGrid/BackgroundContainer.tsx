@@ -1,4 +1,4 @@
-import React, { FC, memo, useContext, useLayoutEffect, useState } from "react";
+import React, { FC, memo, useContext } from "react";
 
 import clsx from "clsx";
 import { isRegion, MaybeRegion, Region } from "~/lib/locationUtils";
@@ -32,36 +32,24 @@ const RegionBox: FC<{
 };
 
 type Props = {
-  rowCount: number;
+  rowHeights: number[];
   edges: EdgeShape[];
   selectedRegion: MaybeRegion;
   copiedRegion: MaybeRegion;
   analyzedRegion: MaybeRegion;
   autoFillRegion: MaybeRegion;
-  getRowHeight(row: number): number;
 };
 
 export const BackgroundContainer: FC<Props> = memo(
   function BackgroundContainer({
-    rowCount,
-    getRowHeight,
+    rowHeights,
     edges,
     selectedRegion,
     copiedRegion,
     autoFillRegion,
     analyzedRegion,
   }) {
-    const [rowHeights, setRowHeights] = useState<number[]>([]);
-
     const { size } = useContext(FlowGridContext);
-
-    useLayoutEffect(() => {
-      const newRowHeights = Array(rowCount)
-        .fill(null)
-        .map((_, i) => getRowHeight(i));
-
-      setRowHeights(newRowHeights);
-    }, [rowCount, getRowHeight]);
 
     if (!rowHeights.length) {
       return null; // not initialized yet
