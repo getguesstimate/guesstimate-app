@@ -1,10 +1,10 @@
+import _ from "lodash";
+import { createSelector, createStructuredSelector } from "reselect";
 import * as e from "~/lib/engine/engine";
 import { DSpace } from "~/lib/engine/space";
-import { RootState } from "~/modules/store";
-import _ from "lodash";
-import { createSelector } from "reselect";
 import { CanvasState } from "~/modules/canvas_state/reducer";
 import { CheckpointsState } from "~/modules/checkpoints/reducer";
+import { RootState } from "~/modules/store";
 
 const NAME = "Denormalized Space Selector";
 
@@ -20,6 +20,14 @@ function checkpointMetadata(id: number, checkpoints: CheckpointsState) {
   return attributes;
 }
 
+export type ExtendedDSpace = DSpace & {
+  canvasState: CanvasState;
+  checkpointMetadata: {
+    head: number;
+    length: number;
+  };
+};
+
 const SPACE_GRAPH_PARTS = [
   "spaces",
   "calculators",
@@ -34,18 +42,15 @@ const SPACE_GRAPH_PARTS = [
   "facts",
 ] as const;
 
-export type ExtendedDSpace = DSpace & {
-  canvasState: CanvasState;
-  checkpointMetadata: {
-    head: number;
-    length: number;
-  };
-};
+const spaceGraphSelector = createStructuredSelector<
+  RootState,
+  { [k in (typeof SPACE_GRAPH_PARTS)[number]]: RootState[k] }
+>(
+  Object.fromEntries(
+    SPACE_GRAPH_PARTS.map((part) => [part, (state: RootState) => state[part]])
+  ) as any
+);
 
-const spaceGraphSelector = (state: RootState) => {
-  window.recorder.recordSelectorStart(NAME);
-  return _.pick(state, SPACE_GRAPH_PARTS);
-};
 const spaceIdSelector = (_: RootState, { spaceId }: { spaceId: number }) =>
   spaceId;
 const canvasStateSelector = (state: RootState) => state.canvasState;

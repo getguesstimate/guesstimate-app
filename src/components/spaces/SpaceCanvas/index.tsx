@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useRef } from "react";
+import { FC, useCallback, useEffect, useMemo, useRef } from "react";
 
 import _ from "lodash";
 import { EdgeShape, PathStatus } from "~/components/lib/FlowGrid/Edges";
@@ -93,100 +93,118 @@ export const SpaceCanvas: FC<Props> = ({
 
   const showEdges = canvasState.edgeView === "visible";
 
-  const findMetric = (metricId: string) => {
-    return metrics.find((m) => m.id === metricId);
-  };
+  const findMetric = useCallback(
+    (metricId: string) => {
+      return metrics.find((m) => m.id === metricId);
+    },
+    [metrics]
+  );
 
-  const getSelectedLineage = (selectedRegion: MaybeRegion) => {
-    const selectedMetrics = metrics.filter((m) =>
-      isWithinRegion(m.location, selectedRegion)
-    );
+  const getSelectedLineage = useCallback(
+    (selectedRegion: MaybeRegion) => {
+      const selectedMetrics = metrics.filter((m) =>
+        isWithinRegion(m.location, selectedRegion)
+      );
 
-    let ancestors = [...selectedMetrics],
-      descendants = [...selectedMetrics];
-    const getAncestors = (metrics: FullDenormalizedMetric[]) =>
-      _.uniq(_.flatten(metrics.map((m) => m.edges.inputs)))
-        .filter((id) => !_.some(ancestors, (a) => a.id === id))
-        .map((id) => findMetric(id))
-        .filter((m): m is NonNullable<typeof m> => !!m);
+      let ancestors = [...selectedMetrics],
+        descendants = [...selectedMetrics];
+      const getAncestors = (metrics: FullDenormalizedMetric[]) =>
+        _.uniq(_.flatten(metrics.map((m) => m.edges.inputs)))
+          .filter((id) => !_.some(ancestors, (a) => a.id === id))
+          .map((id) => findMetric(id))
+          .filter((m): m is NonNullable<typeof m> => !!m);
 
-    const getDescendants = (metrics: FullDenormalizedMetric[]) =>
-      _.uniq(_.flatten(metrics.map((m) => m.edges.outputs)))
-        .filter((id) => !_.some(descendants, (d) => d.id === id))
-        .map((id) => findMetric(id))
-        .filter((m): m is NonNullable<typeof m> => !!m);
+      const getDescendants = (metrics: FullDenormalizedMetric[]) =>
+        _.uniq(_.flatten(metrics.map((m) => m.edges.outputs)))
+          .filter((id) => !_.some(descendants, (d) => d.id === id))
+          .map((id) => findMetric(id))
+          .filter((m): m is NonNullable<typeof m> => !!m);
 
-    let nextAncestors = getAncestors(ancestors);
-    let nextDescendants = getDescendants(descendants);
+      let nextAncestors = getAncestors(ancestors);
+      let nextDescendants = getDescendants(descendants);
 
-    while (nextAncestors.length > 0 || nextDescendants.length > 0) {
-      ancestors = [...ancestors, ...nextAncestors];
-      descendants = [...descendants, ...nextDescendants];
+      while (nextAncestors.length > 0 || nextDescendants.length > 0) {
+        ancestors = [...ancestors, ...nextAncestors];
+        descendants = [...descendants, ...nextDescendants];
 
-      nextAncestors = getAncestors(nextAncestors);
-      nextDescendants = getDescendants(nextDescendants);
-    }
+        nextAncestors = getAncestors(nextAncestors);
+        nextDescendants = getDescendants(nextDescendants);
+      }
 
-    return { ancestors, descendants };
-  };
+      return { ancestors, descendants };
+    },
+    [findMetric, metrics]
+  );
 
-  const makeItem = (metric: FullDenormalizedMetric): GridItem => {
-    const analyzedSamples = _.get(analyzedMetric, "simulation.sample.values");
-    const hasAnalyzed =
-      analyzedMetric &&
-      metric &&
-      analyzedSamples &&
-      !_.isEmpty(analyzedSamples);
+  const makeItem = useCallback(
+    (metric: FullDenormalizedMetric): GridItem => {
+      const analyzedSamples = _.get(analyzedMetric, "simulation.sample.values");
+      const hasAnalyzed =
+        analyzedMetric &&
+        metric &&
+        analyzedSamples &&
+        !_.isEmpty(analyzedSamples);
 
-    const analyzedRegion: MaybeRegion = analyzedMetric
-      ? [analyzedMetric.location, analyzedMetric.location]
-      : [];
-    const { ancestors, descendants } = getSelectedLineage(analyzedRegion); // FIXME - can be called just once
-    const isRelatedToAnalyzed = _.some(
-      [...ancestors, ...descendants],
-      (relative) => relative.id === metric.id
-    );
+      const analyzedRegion: MaybeRegion = analyzedMetric
+        ? [analyzedMetric.location, analyzedMetric.location]
+        : [];
+      const { ancestors, descendants } = getSelectedLineage(analyzedRegion); // FIXME - can be called just once
+      const isRelatedToAnalyzed = _.some(
+        [...ancestors, ...descendants],
+        (relative) => relative.id === metric.id
+      );
 
-    const passAnalyzed = hasAnalyzed && isRelatedToAnalyzed;
+      const passAnalyzed = hasAnalyzed && isRelatedToAnalyzed;
 
-    const organizationId = denormalizedSpace.organization_id;
+      const organizationId = denormalizedSpace.organization_id;
 
-    const idMap = _.transform(
-      metrics || [],
-      (res, curr) => {
-        res[curr.id] = curr.readableId;
-      },
-      {}
-    );
+      const idMap = _.transform(
+        metrics || [],
+        (res, curr) => {
+          res[curr.id] = curr.readableId;
+        },
+        {}
+      );
 
-    const exportedAsFact = _collections.some(
-      exportedFacts,
-      metric.id,
-      "metric_id"
-    );
+      const exportedAsFact = _collections.some(
+        exportedFacts,
+        metric.id,
+        "metric_id"
+      );
 
-    const props = {
-      canvasState,
-      key: metric.id,
-      metric,
-      idMap,
-      organizationId,
+      const props = {
+        canvasState,
+        key: metric.id,
+        metric,
+        idMap,
+        organizationId,
+        canUseOrganizationFacts,
+        exportedAsFact,
+        analyzedMetric: passAnalyzed ? analyzedMetric : null,
+        screenshot,
+      };
+
+      return {
+        key: metric.id,
+        location: metric.location,
+        render: (context) => <MetricCard {...props} {...context} />,
+        isEmpty:
+          _.isEmpty(metric.name) &&
+          _.isEmpty(metric.guesstimate.input) &&
+          _.isEmpty(metric.guesstimate.data),
+      };
+    },
+    [
+      analyzedMetric,
       canUseOrganizationFacts,
-      exportedAsFact,
-      analyzedMetric: passAnalyzed ? analyzedMetric : null,
+      canvasState,
+      denormalizedSpace.organization_id,
+      exportedFacts,
+      getSelectedLineage,
+      metrics,
       screenshot,
-    };
-
-    return {
-      key: metric.id,
-      location: metric.location,
-      render: (context) => <MetricCard {...props} {...context} />,
-      isEmpty:
-        _.isEmpty(metric.name) &&
-        _.isEmpty(metric.guesstimate.input) &&
-        _.isEmpty(metric.guesstimate.data),
-    };
-  };
+    ]
+  );
 
   const buildEdges = (): EdgeShape[] | undefined => {
     if (!showEdges) {
@@ -378,10 +396,15 @@ export const SpaceCanvas: FC<Props> = ({
 
   const edges = buildEdges();
 
+  const items = useMemo(
+    () => metrics.map((m) => makeItem(m)),
+    [metrics, makeItem]
+  );
+
   return (
     <div className="overflow-auto">
       <FlowGrid
-        items={metrics.map((m) => makeItem(m))}
+        items={items}
         edges={edges}
         selectedCell={selectedCell}
         selectedRegion={selectedRegion}
