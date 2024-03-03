@@ -54,7 +54,6 @@ function getAuthOptions(): AuthOptions {
 
   return {
     providers: [auth0Provider],
-    debug: true,
     callbacks: {
       async session({ session, token }) {
         // TODO - support refresh tokens
