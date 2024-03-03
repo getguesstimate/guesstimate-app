@@ -20,7 +20,7 @@ declare module "next-auth/jwt" {
 }
 
 const developmentCreds = {
-  AUTH0_CLIENT_ID: "hNPSROXtn9Ohg4Pa9ijLxAbvbIEJjFJN",
+  AUTH0_CLIENT_ID: "9UwzFayrqvJerFA3BQQKYluCRJ5ani0g",
   AUTH0_DOMAIN: "https://guesstimate-development.auth0.com",
   AUTH0_BACKEND_AUDIENCE: rootUrl,
 };
