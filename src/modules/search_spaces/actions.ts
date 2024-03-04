@@ -29,7 +29,6 @@ export function fetch(query = "", options: any = {}): AppThunk {
 
   return (dispatch) => {
     searchSpaceIndex(spaceIndex).search(query, filters, (error, results) => {
-      searchError("TestError", error);
       if (error) {
         searchError("AlgoliaFetch", error);
       } else {

@@ -94,7 +94,6 @@ const init = () => {
     }
   })();
   elev.hide();
-  // sentry.initialize();
 };
 
 init();

@@ -1,5 +1,3 @@
-import { __API_ENV__ } from "~/lib/constants";
-
 import * as Sentry from "@sentry/nextjs";
 
 export function captureException(

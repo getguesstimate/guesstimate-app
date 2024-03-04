@@ -12,7 +12,4 @@ tags
 /.vscode
 /yarn-error.log
 
-# Sentry Config File
-.sentryclirc
-
 /.env.local
