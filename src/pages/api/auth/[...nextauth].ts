@@ -18,13 +18,14 @@ declare module "next-auth/jwt" {
   }
 }
 
+// TODO - these should be in env files
 const developmentCreds = {
   AUTH0_CLIENT_ID: "9UwzFayrqvJerFA3BQQKYluCRJ5ani0g",
   AUTH0_DOMAIN: "https://guesstimate-development.auth0.com",
 };
 
 const productionCreds = {
-  AUTH0_CLIENT_ID: "1kdjZNIalU4m0AO2Uqn9JsNyf7l3AzQT",
+  AUTH0_CLIENT_ID: "d3v3ZWblDkYTAYaYsGPQidFA0eEOwCEm",
   AUTH0_DOMAIN: "https://guesstimate.auth0.com",
 };
 

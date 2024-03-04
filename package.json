@@ -1,24 +1,14 @@
 {
   "name": "guesstimate",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Make, share, and evaluate estimates of things",
   "main": "index.js",
   "scripts": {
     "dev": "next dev",
-    "_copy_assets": "mkdir -p public && cp src/_redirects public/_redirects && cp src/static/* public/",
-    "predeploy": "yarn && BUILD_DEV=0 API_ENV=production webpack && yarn _copy_assets",
-    "_stage": "surge -p public -d stage.getguesstimate.com",
+    "start": "next start",
     "ci:test": "yarn test",
     "lint": "eslint . --quiet",
-    "start": "yarn _copy_assets && BUILD_DEV=1 NODE_ENV=development API_ENV=development webpack-dev-server",
-    "start-production": "BUILD_DEV=1 NODE_ENV=development API_ENV=production webpack-dev-server",
-    "stage": "yarn predeploy && yarn _stage",
-    "stage-master": "yarn predeploy && surge -p public -d master.getguesstimate.com",
-    "stage-ozzie": "yarn predeploy && surge -p public -d ozzie.getguesstimate.com",
-    "stage-matthew": "yarn predeploy && surge -p public -d matthew.getguesstimate.com",
-    "stage-factbank": "yarn predeploy && surge -p public -d factbank.getguesstimate.com",
-    "test": "jest",
-    "deploy": "yarn predeploy && netlify deploy -e production"
+    "test": "jest"
   },
   "repository": {
     "type": "git",

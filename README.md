@@ -2,7 +2,7 @@ Guesstimate is a tool for performing estimates using [monte carlo experiments](h
 
 # Using Guesstimate
 
-See [GetGuesstimate.com](http://alpha.getguesstimate.com/) to use.
+See [GetGuesstimate.com](http://www.getguesstimate.com/) to use.
 
 ## Create a Collection
 
@@ -57,7 +57,7 @@ There are many things that will be improved. Some of the more important limitati
 
 # Technical Information
 
-Guesstimate is a [Single Page Application](https://en.wikipedia.org/wiki/Single-page_application). Everything in this repo is the client side, which is one reason why this is called 'guesstimate-app'.
+Guesstimate frontend is a [Next.js] Application.
 
 There are two important third party systems. Authentication is done with [Auth0](https://auth0.com/), through [next-auth](https://next-auth.js.org/), and search/indexing is done with [Algolia](https://www.algolia.com/). This means that running it yourself involves some setup, but on the other hand it's pretty easy set up compared to what you may need in comparable systems. Both of these are free for moderate use. I recommend both, though should note that the way I set up Algolia was a bit hacky (not sure how to do it right).
 
@@ -65,11 +65,9 @@ There is also a small server in Rails, which is not yet on Github. I'd like to w
 
 All models are stored and saved as 'spaces'. The spreadsheet content is all stored as json in Postgres. You can see the full requests if you look at the network tab in chrome.
 
-However, while there are a few third party systems, everything will still work with just guesstimate-app, as long as you don't try to log in or save. In practice this means that you can do quite a bit of development, as you can edit any model on the site (just can't save them). It also makes much development quite simple when it's just on the website (not the server). The line that controls this is here:
+However, while there are a few third party systems, everything will still work with just guesstimate-app, as long as you don't try to log in or save. In practice this means that you can do quite a bit of development, as you can edit any model on the site (just can't save them). It also makes much development quite simple when it's just on the website (not the server).
 
-`"start": "BUILD_DEV=0 NODE_ENV=development API_ENV=production webpack-dev-server"`
-
-API_ENV=production (as opposed to development) means that it will use the production APIs.
+You can point your local instance to production APIs by adding `API_ENV=production`: `API_ENV=production yarn dev`.
 
 ## How to run
 
@@ -79,15 +77,15 @@ First, make sure that git and node are installed.
 
 `cd guesstimate-app`
 
-`npm install`
+`yarn install`
 
-`npm start`
+`yarn dev`
 
 There are often errors with specific things, but it depends on what is already installed on the computer. Later we could put it in a docker container or something.
 
 ## Performance Testing \& Optimization
 
-When running in development mode (`npm start`), Guesstimate records performance statistics about a subset of its react
+When running in development mode (`yarn dev`), Guesstimate records performance statistics about a subset of its react
 renders, actions, and selectors. These statistics are recorded and accessible through a Javascript object embedded in
 the window, called `recorder`, with the following API:
 
