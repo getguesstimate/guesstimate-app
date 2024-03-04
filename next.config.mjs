@@ -9,21 +9,18 @@ let config = {
   },
 };
 
-if (
-  process.env.NEXT_PUBLIC_SENTRY_DSN &&
-  process.env.SENTRY_ORG &&
-  process.env.SENTRY_PROJECT
-) {
+if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
   config = withSentryConfig(
-    config,
+    onfig,
     {
       // For all available options, see:
-      // https://github.com/getsentry/sentry-webpack-plugin#options
-
-      // Suppresses source map uploading logs during build
-      silent: true,
+      // https://www.npmjs.com/package/@sentry/webpack-plugin
       org: process.env.SENTRY_ORG,
       project: process.env.SENTRY_PROJECT,
+      // This is necessary for uploadin source maps.  Technically, Sentry should
+      // grab this from env itself, and maybe it does, but I had trouble with
+      // this for `dsn` in `sentry.*.config.ts`, so it's better to be explicit.
+      authToken: process.env.SENTRY_AUTH_TOKEN,
     },
     {
       // For all available options, see:
