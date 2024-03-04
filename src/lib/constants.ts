@@ -5,8 +5,4 @@ export const __DEV__ =
 export const __API_ENV__ =
   process.env.API_ENV || process.env.NEXT_PUBLIC_VERCEL_ENV || "development";
 
-export const BASE_URL =
-  process.env.NEXT_PUBLIC_BASE_URL ||
-  (process.env.NEXT_PUBLIC_VERCEL_URL
-    ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
-    : "http://localhost:3000");
+export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;

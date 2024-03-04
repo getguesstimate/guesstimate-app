@@ -1,6 +1,6 @@
 import NextAuth, { AuthOptions } from "next-auth";
 import Auth0Provider from "next-auth/providers/auth0";
-import { __API_ENV__ } from "~/lib/constants";
+import { Provider } from "next-auth/providers/index";
 
 declare module "next-auth" {
   interface Session {
@@ -18,41 +18,32 @@ declare module "next-auth/jwt" {
   }
 }
 
-// TODO - these should be in env files
-const developmentCreds = {
-  AUTH0_CLIENT_ID: "9UwzFayrqvJerFA3BQQKYluCRJ5ani0g",
-  AUTH0_DOMAIN: "https://guesstimate-development.auth0.com",
-};
-
-const productionCreds = {
-  AUTH0_CLIENT_ID: "d3v3ZWblDkYTAYaYsGPQidFA0eEOwCEm",
-  AUTH0_DOMAIN: "https://guesstimate.auth0.com",
-};
-
 const audience = "guesstimate-api";
 
-export const variables =
-  __API_ENV__ === "development" ? developmentCreds : productionCreds;
+export const variables = {};
 
 function getAuthOptions(): AuthOptions {
+  const providers: Provider[] = [];
+
+  const AUTH0_DOMAIN = process.env.AUTH0_DOMAIN;
+  const AUTH0_CLIENT_ID = process.env.AUTH0_CLIENT_ID;
   const AUTH0_CLIENT_SECRET = process.env.AUTH0_CLIENT_SECRET;
 
-  if (!AUTH0_CLIENT_SECRET) {
-    throw new Error("AUTH0_CLIENT_SECRET must be configured");
+  if (AUTH0_CLIENT_ID && AUTH0_CLIENT_SECRET && AUTH0_DOMAIN) {
+    const auth0Provider = Auth0Provider({
+      clientId: AUTH0_CLIENT_ID,
+      clientSecret: AUTH0_CLIENT_SECRET,
+      issuer: AUTH0_DOMAIN,
+    });
+    (auth0Provider.authorization as any).params.audience = audience;
+    auth0Provider.token = {
+      params: { audience },
+    };
+    providers.push(auth0Provider);
   }
 
-  const auth0Provider = Auth0Provider({
-    clientId: variables.AUTH0_CLIENT_ID,
-    clientSecret: AUTH0_CLIENT_SECRET,
-    issuer: variables.AUTH0_DOMAIN,
-  });
-  (auth0Provider.authorization as any).params.audience = audience;
-  auth0Provider.token = {
-    params: { audience },
-  };
-
   return {
-    providers: [auth0Provider],
+    providers,
     debug: true,
     callbacks: {
       async session({ session, token }) {
