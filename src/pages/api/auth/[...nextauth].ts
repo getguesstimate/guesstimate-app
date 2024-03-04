@@ -1,7 +1,6 @@
 import NextAuth, { AuthOptions } from "next-auth";
 import Auth0Provider from "next-auth/providers/auth0";
 import { __API_ENV__ } from "~/lib/constants";
-import { rootUrl } from "~/server/guesstimate-api/constants";
 
 declare module "next-auth" {
   interface Session {
@@ -22,14 +21,14 @@ declare module "next-auth/jwt" {
 const developmentCreds = {
   AUTH0_CLIENT_ID: "9UwzFayrqvJerFA3BQQKYluCRJ5ani0g",
   AUTH0_DOMAIN: "https://guesstimate-development.auth0.com",
-  AUTH0_BACKEND_AUDIENCE: rootUrl,
 };
 
 const productionCreds = {
   AUTH0_CLIENT_ID: "1kdjZNIalU4m0AO2Uqn9JsNyf7l3AzQT",
   AUTH0_DOMAIN: "https://guesstimate.auth0.com",
-  AUTH0_BACKEND_AUDIENCE: rootUrl,
 };
+
+const audience = "guesstimate-api";
 
 export const variables =
   __API_ENV__ === "development" ? developmentCreds : productionCreds;
@@ -46,10 +45,9 @@ function getAuthOptions(): AuthOptions {
     clientSecret: AUTH0_CLIENT_SECRET,
     issuer: variables.AUTH0_DOMAIN,
   });
-  (auth0Provider.authorization as any).params.audience =
-    variables.AUTH0_BACKEND_AUDIENCE;
+  (auth0Provider.authorization as any).params.audience = audience;
   auth0Provider.token = {
-    params: { audience: variables.AUTH0_BACKEND_AUDIENCE },
+    params: { audience },
   };
 
   return {
