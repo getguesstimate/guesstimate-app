@@ -11,7 +11,7 @@ let config = {
 
 if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
   config = withSentryConfig(
-    onfig,
+    config,
     {
       // For all available options, see:
       // https://www.npmjs.com/package/@sentry/webpack-plugin
