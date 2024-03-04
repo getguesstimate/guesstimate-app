@@ -14,5 +14,5 @@ export function captureApiError(
 }
 
 export function searchError(name: string, e: unknown) {
-  sentry.captureException(e, { tags: name });
+  sentry.captureException(e, { tags: { name } });
 }
