@@ -2,7 +2,6 @@ import Modal from "react-modal";
 import { GuesstimateRecorder } from "~/lib/recorder";
 import { GuesstimateWorker } from "~/lib/window";
 import * as elev from "~/server/elev/index";
-import * as sentry from "~/server/sentry/index";
 
 if (typeof window !== "undefined") {
   const workers = new Array(2)
@@ -95,7 +94,7 @@ const init = () => {
     }
   })();
   elev.hide();
-  sentry.initialize();
+  // sentry.initialize();
 };
 
 init();

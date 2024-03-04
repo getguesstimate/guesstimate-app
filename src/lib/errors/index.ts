@@ -13,10 +13,6 @@ export function captureApiError(
   sentry.captureMessage(`AJAX Error - ${locationName}`, errorParams);
 }
 
-export function searchError(name: string, e) {
+export function searchError(name: string, e: unknown) {
   sentry.captureException(e, name);
-}
-
-export function generalError(name: string, params) {
-  sentry.captureMessage(name, params);
 }
