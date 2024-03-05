@@ -121,7 +121,7 @@ export const SpaceCard: FC<{
 
       <div
         className={clsx(
-          "relative bg-[#d9dee2]",
+          "relative z-0 bg-[#d9dee2]",
           size === "SMALL" ? "min-h-[32px]" : "min-h-[11em]",
           size === "SMALL" && "rounded-b-sm"
         )}
