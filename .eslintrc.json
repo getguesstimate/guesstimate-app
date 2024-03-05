@@ -1,54 +1,67 @@
 {
-    "env": {
-        "browser": true,
-        "es6": true
-    },
-    "extends": "eslint:recommended",
-    "globals": {
-        "Atomics": "readonly",
-        "SharedArrayBuffer": "readonly"
-    },
-    "parserOptions": {
-        "ecmaFeatures": {
-            "jsx": true
-        },
-        "ecmaVersion": 2018,
-        "sourceType": "module"
-    },
-    "plugins": [
-        "react",
-        "import"
-    ],
-    "rules": {
-        "quotes": 0,
-        "no-unused-vars": 1,
-        "camelcase": 1,
-        "no-underscore-dangle": 0,
-        "react/display-name": 0,
-        "react/jsx-boolean-value": 1,
-        "react/jsx-closing-bracket-location": 1,
-        "react/jsx-curly-spacing": 1,
-        "react/jsx-indent-props": 1,
-        "react/jsx-max-props-per-line": 1,
-        "react/jsx-no-duplicate-props": 1,
-        "react/jsx-no-literals": 1,
-        "react/jsx-no-undef": 1,
-        "jsx-quotes": 1,
-        "react/sort-prop-types": 1,
-        "react/jsx-sort-props": 1,
-        "react/jsx-uses-react": 1,
-        "react/jsx-uses-vars": 1,
-        "react/no-danger": 1,
-        "react/no-did-mount-set-state": 1,
-        "react/no-did-update-set-state": 1,
-        "react/no-multi-comp": 0,
-        "react/no-set-state": 0,
-        "react/no-unknown-property": 1,
-        "react/prop-types": 1,
-        "react/react-in-jsx-scope": 1,
-        "import/extensions": 1,
-        "react/self-closing-comp": 1,
-        "react/sort-comp": 1,
-        "react/jsx-wrap-multilines": 1
+  "root": true,
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "settings": {
+    "react": {
+      "version": "detect"
     }
+  },
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "import",
+    "@typescript-eslint",
+    "@wogns3623/better-exhaustive-deps"
+  ],
+  "rules": {
+    // Replace exhaustive-deps hook with a better fork
+    // Context: https://github.com/facebook/react/issues/16873
+    "react-hooks/exhaustive-deps": "off",
+    "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
+    "@wogns3623/better-exhaustive-deps/exhaustive-deps": [
+      "warn",
+      {
+        "checkMemoizedVariableIsStatic": true,
+        "staticHooks": {
+          "useAppDispatch": true
+        }
+      }
+    ],
+    "quotes": "off",
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": "warn",
+    "@typescript-eslint/no-explicit-any": "off", // not viable yet
+    "camelcase": "off",
+    "no-underscore-dangle": 0,
+    "react/display-name": 0,
+    "react/jsx-boolean-value": "off",
+    "react/jsx-closing-bracket-location": 1,
+    "react/jsx-curly-spacing": 1,
+    "react/jsx-no-duplicate-props": 1,
+    "react/jsx-no-undef": 1,
+    "react/react-in-jsx-scope": "off",
+    "jsx-quotes": 1,
+    "react/jsx-uses-react": 1,
+    "react/jsx-uses-vars": 1,
+    "react/no-danger": 1,
+    "react/no-did-mount-set-state": 1,
+    "react/no-did-update-set-state": 1,
+    "react/no-multi-comp": 0,
+    "react/no-set-state": 0,
+    "react/no-unknown-property": 1,
+    "react/prop-types": "off",
+    "import/extensions": 1,
+    "react/self-closing-comp": 1,
+    "react/sort-comp": "off",
+    "react/jsx-wrap-multilines": 1,
+    "no-redeclare": "warn"
+  }
 }

@@ -1,0 +1,137 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  height: 100%;
+  font-family: "Lato", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 16px;
+}
+
+a {
+  color: #4183c4;
+}
+a:hover {
+  color: #1e70bf;
+}
+
+p {
+  margin-bottom: 1em;
+}
+
+p:last-child {
+  margin-bottom: 0;
+}
+
+/* see src/server/elev/index.ts */
+body.remove-elev #_elev_io {
+  display: none !important;
+}
+
+#__next {
+  height: 100%;
+}
+
+.ReactModal__Overlay--after-open {
+  z-index: 5;
+  overflow: auto;
+}
+
+.public-DraftEditorPlaceholder-root {
+  color: #a9a9a9;
+
+  /* via https://github.com/facebookarchive/draft-js/issues/2486 */
+  user-select: none;
+  position: absolute;
+  pointer-events: none;
+}
+
+.public-DraftEditor-content {
+  /* text-dark-3; doesn't work with @apply, probably because classname is not mentioned in our codebase */
+  color: #2d3137;
+}
+
+.wistia_responsive_padding {
+  padding: 56.25% 0 0 0;
+  position: relative;
+}
+
+.wistia_responsive_wrapper {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.wistia_embed {
+  display: inline-block;
+  height: 240px;
+  width: 415px;
+  margin-top: 5em;
+}
+
+@layer components {
+  .PageBase {
+    @apply font-open;
+  }
+
+  .PageBase h1 {
+    @apply mt-6 font-lato text-3xl font-bold text-blue-1;
+  }
+
+  .PageBase h2 {
+    @apply mb-1.5 mt-6 font-lato text-xl font-bold;
+  }
+
+  .MarkdownViewer {
+    @apply font-open;
+  }
+
+  .MarkdownViewer h1 {
+    @apply mt-4 font-lato text-3xl font-bold;
+  }
+
+  .MarkdownViewer h2 {
+    @apply mb-1.5 mt-4 font-lato text-xl font-bold;
+  }
+
+  .MarkdownViewer h3 {
+    @apply mb-1.5 mt-4 font-lato text-lg font-bold;
+  }
+
+  .MarkdownViewer h4 {
+    @apply mt-4 font-lato font-bold;
+  }
+
+  .MarkdownViewer h5 {
+    @apply mt-4 font-lato text-sm font-bold;
+  }
+
+  .MarkdownViewer h6 {
+    @apply mt-2 font-lato text-sm font-medium;
+  }
+}
+
+::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb:horizontal {
+  background-color: #7089a9; /* grey-2 */
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:vertical {
+  background-color: #7089a9; /* grey-2 */
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-track:corner {
+  background-color: black;
+}
