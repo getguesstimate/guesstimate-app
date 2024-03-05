@@ -1,6 +1,6 @@
 import { RootState } from "~/modules/store";
-import { rootUrl } from "~/server/guesstimate-api/constants";
 
+import { API_BASE_URL } from "../constants";
 import { Accounts } from "./resources/Accounts";
 import { Calculators } from "./resources/Calculators";
 import { Copies } from "./resources/Copies";
@@ -35,7 +35,7 @@ export class GuesstimateApi {
 
 export const api = (state: RootState) => {
   return new GuesstimateApi({
-    host: rootUrl,
+    host: API_BASE_URL,
     api_token: state.me.session?.access_token,
   });
 };
