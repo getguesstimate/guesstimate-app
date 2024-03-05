@@ -101,7 +101,6 @@
     "redux-thunk": "^2.3.0",
     "remove-markdown": "^0.3.0",
     "reselect": "^3.0.0",
-    "surge": "^0.20.3",
     "tailwindcss": "^3.2.4",
     "yup": "^0.32.11"
   }
