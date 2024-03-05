@@ -1,6 +1,8 @@
+import { FC } from "react";
+
 import clsx from "clsx";
 
-export const UserTag: React.FC<{
+export const UserTag: FC<{
   url: string;
   picture?: string;
   name: string;

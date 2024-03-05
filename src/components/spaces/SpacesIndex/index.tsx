@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 
 import _ from "lodash";
 import Icon from "~/components/react-fa-patched";
@@ -9,26 +9,24 @@ import { DropDown } from "~/components/utility/DropDown";
 import { Input } from "~/components/utility/forms";
 import { useAppDispatch, useAppSelector } from "~/modules/hooks";
 import * as search from "~/modules/search_spaces/actions";
+import { SearchSortBy, SearchTimeframe } from "~/modules/search_spaces/actions";
 
-type Timeframe = "ALL_TIME" | "MONTHLY";
-type SortBy = "POPULAR" | "RECENT" | "RECOMMENDED";
-
-const sortNames: { [k in SortBy]: string } = {
+const sortNames: { [k in SearchSortBy]: string } = {
   RECOMMENDED: "Recommended",
   RECENT: "Recent",
   POPULAR: "Popular",
 };
 
-const timeframeNames: { [k in Timeframe]: string } = {
+const timeframeNames: { [k in SearchTimeframe]: string } = {
   MONTHLY: "Monthly",
   ALL_TIME: "All Time",
 };
 
-const Filters: React.FC<{
-  sortBy: SortBy;
-  timeframe: Timeframe;
-  onChangeSortBy(sortBy: SortBy): void;
-  onChangeTimeFrame(timeframe: Timeframe): void;
+const Filters: FC<{
+  sortBy: SearchSortBy;
+  timeframe: SearchTimeframe;
+  onChangeSortBy(sortBy: SearchSortBy): void;
+  onChangeTimeFrame(timeframe: SearchTimeframe): void;
 }> = ({ sortBy, timeframe, onChangeSortBy, onChangeTimeFrame }) => {
   return (
     <div className="flex gap-4">
@@ -44,8 +42,8 @@ const Filters: React.FC<{
   );
 };
 
-const Filter: React.FC<{
-  // TODO - generic over SortBy/Timeframe
+const Filter: FC<{
+  // TODO - generic over SearchSortBy/SearchTimeframe?
   selected: string;
   names: { [k: string]: string };
   onChange(value: string): void;
@@ -75,12 +73,12 @@ const Filter: React.FC<{
   </DropDown>
 );
 
-export const SpacesIndex: React.FC = () => {
+export const SpacesIndex: FC = () => {
   const dispatch = useAppDispatch();
   const searchSpaces = useAppSelector((state) => state.searchSpaces);
 
-  const [sortBy, setSortBy] = useState<SortBy>("RECOMMENDED");
-  const [timeframe, setTimeframe] = useState<Timeframe>("ALL_TIME");
+  const [sortBy, setSortBy] = useState<SearchSortBy>("RECOMMENDED");
+  const [timeframe, setTimeframe] = useState<SearchTimeframe>("ALL_TIME");
   const [searchValue, setSearchValue] = useState("");
 
   const inputRef = useRef<HTMLInputElement>(null);

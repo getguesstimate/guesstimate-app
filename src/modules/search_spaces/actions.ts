@@ -5,7 +5,13 @@ import { AppThunk } from "~/modules/store";
 import * as userActions from "~/modules/users/actions";
 import { searchSpaceIndex } from "~/server/algolia/index";
 
-export function fetch(query = "", options: any = {}): AppThunk {
+export type SearchTimeframe = "ALL_TIME" | "MONTHLY";
+export type SearchSortBy = "POPULAR" | "RECENT" | "RECOMMENDED";
+
+export function fetch(
+  query = "",
+  options: { sortBy: SearchSortBy; timeframe: SearchTimeframe; page?: number }
+): AppThunk {
   const filters: any = { hitsPerPage: 21 };
   filters.page = options.page || 0;
   const { sortBy } = options;
@@ -21,11 +27,13 @@ export function fetch(query = "", options: any = {}): AppThunk {
     filters.facetFilters = ["is_recommended: true"];
   }
 
-  const spaceIndex = {
-    RECENT: "RECENT",
-    POPULAR: "POPULAR",
-    RECOMMENDED: "POPULAR",
-  }[sortBy];
+  const spaceIndex = (
+    {
+      RECENT: "RECENT",
+      POPULAR: "POPULAR",
+      RECOMMENDED: "POPULAR",
+    } as const
+  )[sortBy];
 
   return (dispatch) => {
     searchSpaceIndex(spaceIndex).search(query, filters, (error, results) => {
