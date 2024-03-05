@@ -1,11 +1,11 @@
-import React from "react";
+import { FC } from "react";
 
 import { CardListElement } from "~/components/utility/Card";
 import { DropDown } from "~/components/utility/DropDown";
 
 import { SpaceHeaderButton } from "./SpaceHeaderButton";
 
-const PublicOption: React.FC<{ isSelected: boolean; onClick(): void }> = ({
+const PublicOption: FC<{ isSelected: boolean; onClick(): void }> = ({
   isSelected,
   onClick,
 }) => (
@@ -20,7 +20,7 @@ const PublicOption: React.FC<{ isSelected: boolean; onClick(): void }> = ({
   </CardListElement>
 );
 
-const PrivateOption: React.FC<{
+const PrivateOption: FC<{
   onClick(): void;
   isSelected: boolean;
   isPrivateSelectionInvalid: boolean;
@@ -49,7 +49,7 @@ const PrivateOption: React.FC<{
   );
 };
 
-export const PrivacyToggle: React.FC<{
+export const PrivacyToggle: FC<{
   editableByMe: boolean;
   isPrivateSelectionInvalid: boolean;
   isPrivate: boolean;

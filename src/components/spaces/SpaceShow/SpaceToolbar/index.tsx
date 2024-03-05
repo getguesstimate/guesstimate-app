@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { FC, memo, useState } from "react";
 
 import clsx from "clsx";
 import _ from "lodash";
@@ -28,7 +28,7 @@ import { ToolbarIcon } from "./ToolbarIcon";
 import { ToolbarTextItem } from "./ToolbarTextItem";
 import { ViewOptionToggle } from "./ViewOptionToggle";
 
-const MessageBox: React.FC<{ color: "GREY" | "RED"; children: string }> = ({
+const MessageBox: FC<{ color: "GREY" | "RED"; children: string }> = ({
   color,
   children,
 }) => (
@@ -42,7 +42,7 @@ const MessageBox: React.FC<{ color: "GREY" | "RED"; children: string }> = ({
   </div>
 );
 
-const ProgressMessage: React.FC<{
+const ProgressMessage: FC<{
   actionState: CanvasActionState | undefined;
 }> = ({ actionState }) => (
   <div className="text-[#09273a]">
@@ -75,7 +75,7 @@ const ProgressMessage: React.FC<{
 );
 
 const Divider: React.FC = () => (
-  <div className="bg-[rgb(115,168,190)] mx-1 h-9 w-0.5" />
+  <div className="mx-1 h-9 w-0.5 bg-[rgb(115,168,190)]" />
 );
 
 type Props = {
@@ -85,7 +85,7 @@ type Props = {
   toggleFactSidebar(): void;
 };
 
-export const SpaceToolbar = React.memo<Props>(function SpaceToolbar({
+export const SpaceToolbar = memo<Props>(function SpaceToolbar({
   space,
   makeNewCalculator,
   showCalculator,
@@ -121,23 +121,18 @@ export const SpaceToolbar = React.memo<Props>(function SpaceToolbar({
 
   const canShowFactSidebar = canUseOrganizationFacts(space);
 
-  const onAllowEdits = () => {
-    dispatch(allowEdits());
-  };
-  const onForbidEdits = () => {
-    dispatch(forbidEdits());
-  };
+  const onAllowEdits = () => dispatch(allowEdits());
 
-  const onDestroy = () => {
-    dispatch(spaceActions.destroy(space, router));
-  };
+  const onForbidEdits = () => dispatch(forbidEdits());
+
+  const onDestroy = () => dispatch(spaceActions.destroy(space, router));
 
   const handleImportSlurp = (slurp) => {
     setImportModalOpen(false);
 
     const spaceUpdates = parseSlurp(slurp, space);
     if (!space.name || !space.description) {
-      let nonGraphUpdates: any = {};
+      const nonGraphUpdates: any = {};
       if (!space.name) {
         nonGraphUpdates.name = spaceUpdates.name;
       }
@@ -163,32 +158,19 @@ export const SpaceToolbar = React.memo<Props>(function SpaceToolbar({
     }
   };
 
-  const onCopyModel = () => {
-    dispatch(spaceActions.copy(space.id, router));
-  };
+  const onCopyModel = () => dispatch(spaceActions.copy(space.id, router));
 
-  const onCopyMetrics = () => {
-    dispatch(copiedActions.copy(space.id));
-  };
+  const onCopyMetrics = () => dispatch(copiedActions.copy(space.id));
 
-  const onPasteMetrics = () => {
-    dispatch(copiedActions.paste(space.id));
-  };
+  const onPasteMetrics = () => dispatch(copiedActions.paste(space.id));
 
-  const onDeleteMetrics = () => {
-    dispatch(removeSelectedMetrics(space.id));
-  };
+  const onDeleteMetrics = () => dispatch(removeSelectedMetrics(space.id));
 
-  const onCutMetrics = () => {
-    dispatch(copiedActions.cut(space.id));
-  };
+  const onCutMetrics = () => dispatch(copiedActions.cut(space.id));
 
-  const onUndo = () => {
-    dispatch(undo(space.id));
-  };
-  const onRedo = () => {
-    dispatch(redo(space.id));
-  };
+  const onUndo = () => dispatch(undo(space.id));
+
+  const onRedo = () => dispatch(redo(space.id));
 
   const canUndo =
     space.checkpointMetadata.head !== space.checkpointMetadata.length - 1;

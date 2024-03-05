@@ -1,15 +1,13 @@
 import React, { useState } from "react";
 
 import Icon from "~/components/react-fa-patched";
-
-import * as spaceActions from "~/modules/spaces/actions";
-
 import { ButtonCloseText } from "~/components/utility/buttons/close";
 import { ClickToEdit } from "~/components/utility/ClickToEdit";
 import { MarkdownViewer } from "~/components/utility/MarkdownViewer";
-import { ExtendedDSpace } from "../denormalized-space-selector";
 import { useAppDispatch } from "~/modules/hooks";
-import { Button } from "~/components/utility/buttons/button";
+import * as spaceActions from "~/modules/spaces/actions";
+
+import { ExtendedDSpace } from "../denormalized-space-selector";
 
 const ClosedLeftSidebar: React.FC<{ onOpen(): void }> = React.memo(
   ({ onOpen }) => {

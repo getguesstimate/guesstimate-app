@@ -32,7 +32,9 @@ const EditingOption: React.FC<{
   >
     <div>All changes will be saved.</div>
     {isEditingInvalid && (
-      <div className="warning">You don't have access to save this model.</div>
+      <div className="warning">
+        {"You don't have access to save this model."}
+      </div>
     )}
   </CardListElement>
 );
