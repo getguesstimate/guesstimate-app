@@ -67,7 +67,7 @@ All models are stored and saved as 'spaces'. The spreadsheet content is all stor
 
 However, while there are a few third party systems, everything will still work with just guesstimate-app, as long as you don't try to log in or save. In practice this means that you can do quite a bit of development, as you can edit any model on the site (just can't save them). It also makes much development quite simple when it's just on the website (not the server).
 
-You can point your local instance to production APIs by setting `NEXT_PUBLIC_API_ENV`: `NEXT_PUBLIC_API_ENV=production yarn dev`.
+You can point your local instance to production APIs by setting `NEXT_PUBLIC_API_ENV`: `NEXT_PUBLIC_API_ENV=production pnpm dev`.
 
 ## How to run
 
@@ -77,8 +77,8 @@ First, make sure that git and node are installed.
 
 `cd guesstimate-app`
 
-`yarn install`
+`pnpm install`
 
-`yarn dev`
+`pnpm dev`
 
 There are often errors with specific things, but it depends on what is already installed on the computer. Later we could put it in a docker container or something.

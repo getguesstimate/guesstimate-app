@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next dev",
     "start": "next start",
-    "ci:test": "yarn test",
+    "ci:test": "pnpm test",
     "lint": "eslint . --quiet",
     "test": "jest"
   },
