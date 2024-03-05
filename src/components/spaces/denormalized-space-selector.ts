@@ -84,8 +84,6 @@ export const denormalizedSpaceSelector = createSelector(
       "exported_from_id"
     );
 
-    window.recorder.recordSelectorStop(NAME, { denormalizedSpace });
-
     return {
       denormalizedSpace: extendedDSpace,
       exportedFacts,

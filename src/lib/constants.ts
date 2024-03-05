@@ -3,6 +3,6 @@ export const __DEV__ =
   process.env.NEXT_PUBLIC_VERCEL_ENV === "development";
 
 export const __API_ENV__ =
-  process.env.API_ENV || process.env.NEXT_PUBLIC_VERCEL_ENV || "development";
+  process.env.NEXT_PUBLIC_API_ENV || "https://api.getguesstimate.com";
 
 export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;

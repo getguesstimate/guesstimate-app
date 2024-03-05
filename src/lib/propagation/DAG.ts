@@ -1,29 +1,28 @@
 import _ from "lodash";
-import { SimulationNode } from "./node";
 import {
-  withInfiniteLoopErrorFn,
-  withMissingInputErrorFn,
-  withAncestralErrorFn,
-  PropagationError,
-} from "./errors";
-
-import { getSubMatches } from "~/lib/engine/utils";
-import { get, orFns } from "~/lib/engine/collections";
-
-import {
-  getCycleSets,
-  toCyclePseudoNode,
-  separateIntoHeightSets,
   CyclePseudoNode,
+  getCycleSets,
+  separateIntoHeightSets,
+  toCyclePseudoNode,
 } from "~/lib/DAG/DAG";
 import {
-  getNodeAncestors,
   containsDuplicates,
   getMissingInputs,
+  getNodeAncestors,
   isDescendedFromFn,
   withInputIndicesFn,
 } from "~/lib/DAG/nodeFns";
+import { get, orFns } from "~/lib/engine/collections";
+import { getSubMatches } from "~/lib/engine/utils";
+
 import { SampleValue } from "../guesstimator/samplers/Simulator";
+import {
+  PropagationError,
+  withAncestralErrorFn,
+  withInfiniteLoopErrorFn,
+  withMissingInputErrorFn,
+} from "./errors";
+import { SimulationNode } from "./node";
 
 export type SimulationNodeParams = {
   id: string; // can be null for pseudo cycle nodes
@@ -87,8 +86,6 @@ export class SimulationDAG {
   nodes: SimulationNode[];
 
   constructor(nodes: SimulationNodeParams[]) {
-    window.recorder?.recordSimulationDAGConstructionStart(this);
-
     if (containsDuplicates(nodes)) {
       console.warn("DUPLICATE IDs DETECTED");
       return;
@@ -115,8 +112,6 @@ export class SimulationDAG {
       withInputIndicesFn(processedHeightSets)
     );
     this.nodes = withInputIndices.map((n, i) => new SimulationNode(n, this, i));
-
-    window.recorder?.recordSimulationDAGConstructionStop(this);
   }
 
   find(id: string): SimulationNode | null | undefined {

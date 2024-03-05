@@ -1,5 +1,4 @@
 import Modal from "react-modal";
-import { GuesstimateRecorder } from "~/lib/recorder";
 import { GuesstimateWorker } from "~/lib/window";
 import * as elev from "~/server/elev/index";
 
@@ -51,7 +50,6 @@ const init = () => {
   if (typeof window === "undefined") {
     return;
   }
-  window.recorder = new GuesstimateRecorder();
 
   // might be a bad idea? https://github.com/reactjs/react-modal/issues/949
   Modal.setAppElement("#__next");

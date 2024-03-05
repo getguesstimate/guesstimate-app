@@ -50,22 +50,18 @@ export class Simulator {
   }
 
   run() {
-    window.recorder.recordPropagationStart(this);
     this._step();
   }
 
   _step() {
     if (this.index >= this.nodesToSimulate.length) {
-      window.recorder.recordPropagationStop(this);
       return;
     }
     const node = this.nodesToSimulate[this.index];
     if (this.propagationId < this.getCurrPropId(node.id)) {
       return;
     } // Break early if we've been pre-empted.
-    window.recorder.recordNodeSimulationStart(this, node);
     node.simulate(this.numSamples).then((sim) => {
-      window.recorder.recordNodeSimulationStop(node);
       this.yieldSims(node.id, sim);
       this.index++;
       this._step();

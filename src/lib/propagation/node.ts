@@ -75,17 +75,10 @@ export class SimulationNode {
 
     const inputs = this._getInputs();
 
-    if (_.get(window, "recorder")) {
-      window.recorder.recordNodeSampleStart(this);
-    }
     const guesstimator = new Guesstimator({ parsedError, parsedInput });
     return guesstimator
       .sample(numSamples, inputs)
       .then(({ values, errors }) => {
-        if (_.get(window, "recorder")) {
-          window.recorder.recordNodeSampleStop(this);
-        }
-
         this.samples = _utils.orArr(values);
         this.errors = _utils.orArr(errors);
 
@@ -180,7 +173,6 @@ export class SimulationNode {
   }
 
   _getInputs() {
-    window.recorder?.recordNodeGetInputsStart(this);
     const inputNodes = this.inputIndices.map(
       (inputIdx) => this.DAG.nodes[inputIdx]
     );
@@ -191,7 +183,6 @@ export class SimulationNode {
       },
       {}
     );
-    window.recorder?.recordNodeGetInputsStop(this, inputMap);
     return inputMap;
   }
 

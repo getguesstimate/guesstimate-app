@@ -67,7 +67,7 @@ All models are stored and saved as 'spaces'. The spreadsheet content is all stor
 
 However, while there are a few third party systems, everything will still work with just guesstimate-app, as long as you don't try to log in or save. In practice this means that you can do quite a bit of development, as you can edit any model on the site (just can't save them). It also makes much development quite simple when it's just on the website (not the server).
 
-You can point your local instance to production APIs by adding `API_ENV=production`: `API_ENV=production yarn dev`.
+You can point your local instance to production APIs by setting `NEXT_PUBLIC_API_ENV`: `NEXT_PUBLIC_API_ENV=production yarn dev`.
 
 ## How to run
 
@@ -82,35 +82,3 @@ First, make sure that git and node are installed.
 `yarn dev`
 
 There are often errors with specific things, but it depends on what is already installed on the computer. Later we could put it in a docker container or something.
-
-## Performance Testing \& Optimization
-
-When running in development mode (`yarn dev`), Guesstimate records performance statistics about a subset of its react
-renders, actions, and selectors. These statistics are recorded and accessible through a Javascript object embedded in
-the window, called `recorder`, with the following API:
-
-- `recorder.nestedTimeline` prints a heirarchical view of all events the recorder has tracked so far, appropriately
-  nested. For example, if the recorder tracks renders on component `A` and component `B`, with `B` a child of `A`, the
-  nested timeline view will show information about the rendering of `B` nested within the entry for the rendering of
-  `A`.
-- `recorder.timeline` prints a timeseries of all events the recorder has tracked so far.
-- `recorder.renderTimings` is an object that stores how long each component has taken to render (inclusive).
-- `recorder.selectorTimings` is an object that stores how long each selector has taken to run (inclusive).
-- `recorder.actionCounts` is an object that stores how many times each action type has been dispatched.
-- `recorder.renderCounts` is an object that stores how many times each tracked component has been rendered.
-- `recorder.selectorCounts` is an object that stores how many times each tracked selector was run.
-
-To track additional components or selectors, simply add the appropriate recorder methods into the lifecycle. In
-particular, for a component, insert the following:
-
-- `window.recorder.recordMountEvent(this)` within `componentWillMount`
-- `window.recorder.recordUnmountEvent(this)` within `componentWillUnmount`
-- `window.recorder.recordRenderStartEvent(this)` within `componentWillUpdate`
-- `window.recorder.recordRenderStopEvent(this)` within `componentDidUpdate`
-
-Within a selector, insert the following:
-
-- `window.recorder.recordSelectorStart([NAME])` at the start of the selector's execution (or the start of the first
-  selector within the selector chain).
-- `window.recorder.recordSelectorStop([NAME], [DATA])` just before the selector returns, with data being any data
-  you'd like to track in the timeline with that selector event (the return value is typical).

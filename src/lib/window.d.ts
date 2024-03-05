@@ -1,5 +1,3 @@
-import { GuesstimateRecorder } from "./recorder";
-
 export type GuesstimateWorker = Worker & {
   queue: { data: unknown; callback(e: MessageEvent): void }[];
   push(data: unknown, callback: (e: MessageEvent) => void): void;
@@ -9,7 +7,6 @@ export type GuesstimateWorker = Worker & {
 
 declare global {
   interface Window {
-    recorder: GuesstimateRecorder;
     workers: GuesstimateWorker[];
     ChargeBee: any;
     get_profile: () => any;
