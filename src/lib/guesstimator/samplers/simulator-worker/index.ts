@@ -1,7 +1,7 @@
 import _ from "lodash";
-import { Evaluate } from "./simulator/evaluator";
-
 import * as errorTypes from "~/lib/propagation/errors";
+
+import { Evaluate } from "./simulator/evaluator";
 
 const {
   ERROR_TYPES: { WORKER_ERROR },
@@ -16,7 +16,7 @@ const {
 } = errorTypes;
 
 onmessage = ({ data }) => {
-  let errors: errorTypes.PropagationError[] = [];
+  const errors: errorTypes.PropagationError[] = [];
   if (!data) {
     errors.push({ type: WORKER_ERROR, subType: NO_DATA_PASSED_ERROR });
     postMessage(JSON.stringify({ errors }));

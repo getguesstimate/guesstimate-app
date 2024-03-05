@@ -1,19 +1,18 @@
 import _ from "lodash";
-import { addSimulationToFact } from "~/modules/facts/actions";
-import { addSimulation } from "~/modules/simulations/actions";
-
-import { NODE_TYPES } from "./constants";
-import { ERROR_TYPES } from "./errors";
-import { Simulator, SimulatorOptions } from "./simulator";
-
 import * as e from "~/lib/engine/engine";
+import { addSimulationToFact } from "~/modules/facts/actions";
 import { Guesstimate } from "~/modules/guesstimates/reducer";
 import { Metric } from "~/modules/metrics/reducer";
+import { addSimulation } from "~/modules/simulations/actions";
 import { Simulation } from "~/modules/simulations/reducer";
 import { AppDispatch, RootState } from "~/modules/store";
-import { ApiSpace } from "../guesstimate_api/resources/Models";
+
 import { DenormalizedMetric } from "../engine/metric";
+import { ApiSpace } from "../guesstimate_api/resources/Models";
+import { NODE_TYPES } from "./constants";
 import { SimulationNodeParams } from "./DAG";
+import { ERROR_TYPES } from "./errors";
+import { Simulator, SimulatorOptions } from "./simulator";
 
 export type GraphFilters = {
   factId?: number;
@@ -29,10 +28,10 @@ function getSpacesAndOrganization(
   state: RootState,
   graphFilters: GraphFilters
 ) {
-  let spaces: (ApiSpace | null | undefined)[] = [];
+  const spaces: (ApiSpace | null | undefined)[] = [];
   let organization = null;
 
-  if (!!graphFilters.factId) {
+  if (graphFilters.factId) {
     const organizationFact = state.facts.organizationFacts.find(
       ({ children }) => e.collections.some(children, graphFilters.factId)
     );
@@ -56,13 +55,13 @@ function getSpacesAndOrganization(
         )
       );
     }
-  } else if (!!graphFilters.spaceId) {
+  } else if (graphFilters.spaceId) {
     spaces.push(e.collections.get(state.spaces, graphFilters.spaceId));
     organization = e.collections.get(
       state.organizations,
       _.get(spaces[0], "organization_id")
     );
-  } else if (!!graphFilters.metricId) {
+  } else if (graphFilters.metricId) {
     const spaceId = e.collections.gget(
       state.metrics,
       graphFilters.metricId,
@@ -97,7 +96,7 @@ export function getSubset(state: RootState, graphFilters: GraphFilters) {
   }
   const spaceIds = spaces.map((s) => s.id);
 
-  let subset = e.space.subset(state, ...spaceIds);
+  const subset = e.space.subset(state, ...spaceIds);
   const organizationFacts = e.facts.getFactsForOrg(
     state.facts.organizationFacts,
     organization

@@ -1,5 +1,7 @@
-import _ from "lodash";
 import React from "react";
+
+import _ from "lodash";
+
 import { __DEV__ } from "./constants";
 
 const incrementOrOne = (val) => {
@@ -15,7 +17,7 @@ const getParentComponent = (comp) =>
 function getComponentTree(component) {
   let ancestor = getParentComponent(component);
   let componentTree: any[] = [];
-  while (!!ancestor) {
+  while (ancestor) {
     componentTree = [ancestor, ...componentTree];
     ancestor = getParentComponent(ancestor);
   }
@@ -24,7 +26,7 @@ function getComponentTree(component) {
 // val of the form
 // { name, data, start, end, duration, children: [] }
 function appendAtPosition(position, list, val, c) {
-  let container = _.isEmpty(position)
+  const container = _.isEmpty(position)
     ? list
     : (getAtPosition as any)(position, list, c).children;
   container.push(val);
@@ -44,11 +46,11 @@ function getAtPosition(position, list) {
 const gatherParentIndices = (component) =>
   gatherIndicesFromRoot(getParentComponent(component));
 function gatherIndicesFromRoot(component) {
-  let indices = !!_.get(component, "__recorder_index__")
+  let indices = _.get(component, "__recorder_index__")
     ? [component["__recorder_index__"]]
     : [];
   let ancestor = getParentComponent(component);
-  while (!!ancestor) {
+  while (ancestor) {
     if (_.isFinite(_.get(ancestor, "__recorder_index__"))) {
       indices = [ancestor["__recorder_index__"], ...indices];
     }
@@ -134,7 +136,7 @@ export class GuesstimateRecorder {
       data,
     };
     this.nestedTimeline.push(element);
-    if (!!counters) {
+    if (counters) {
       incrementOrOne(counters[name]);
     }
   }
@@ -154,7 +156,7 @@ export class GuesstimateRecorder {
     if (!this.recording()) {
       return;
     }
-    let element = this.nestedTimeline[DAG["__recorderIndex__"]];
+    const element = this.nestedTimeline[DAG["__recorderIndex__"]];
     element.end = this.time();
     element.duration = element.end - element.start;
     element.data = Object.assign({}, DAG);
@@ -175,7 +177,7 @@ export class GuesstimateRecorder {
     if (!this.recording()) {
       return;
     }
-    let element = this.nestedTimeline[simulator["__recorderIndex__"]];
+    const element = this.nestedTimeline[simulator["__recorderIndex__"]];
     element.end = this.time();
     element.duration = element.end - element.start;
     element.data = Object.assign({}, simulator);
@@ -185,7 +187,7 @@ export class GuesstimateRecorder {
     if (!this.recording()) {
       return;
     }
-    let parentElement = this.nestedTimeline[simulator["__recorderIndex__"]];
+    const parentElement = this.nestedTimeline[simulator["__recorderIndex__"]];
     const newElement = {
       name: `Simulating Node ${node.id}`,
       start: this.time(),
@@ -200,7 +202,7 @@ export class GuesstimateRecorder {
     if (!this.recording()) {
       return;
     }
-    let element = getAtPosition(
+    const element = getAtPosition(
       node["__recordingIndices__"],
       this.nestedTimeline
     );
@@ -212,7 +214,7 @@ export class GuesstimateRecorder {
     if (!this.recording()) {
       return;
     }
-    let parentElement = getAtPosition(
+    const parentElement = getAtPosition(
       node["__recordingIndices__"],
       this.nestedTimeline
     );
@@ -228,7 +230,7 @@ export class GuesstimateRecorder {
     if (!this.recording()) {
       return;
     }
-    let element = getAtPosition(
+    const element = getAtPosition(
       [...node["__recordingIndices__"], node["__getInputsRecorderIndex__"]],
       this.nestedTimeline
     );
@@ -240,7 +242,7 @@ export class GuesstimateRecorder {
     if (!this.recording()) {
       return;
     }
-    let parentElement = getAtPosition(
+    const parentElement = getAtPosition(
       node["__recordingIndices__"],
       this.nestedTimeline
     );
@@ -252,7 +254,7 @@ export class GuesstimateRecorder {
     if (!this.recording()) {
       return;
     }
-    let element = getAtPosition(
+    const element = getAtPosition(
       [...node["__recordingIndices__"], node["__sampleRecorderIndex__"]],
       this.nestedTimeline
     );
@@ -274,7 +276,7 @@ export class GuesstimateRecorder {
     if (!this.recording()) {
       return;
     }
-    let start = this.nestedTimeline.find((e) => e.name === name && !e.end);
+    const start = this.nestedTimeline.find((e) => e.name === name && !e.end);
     if (!start) {
       this.warn("Selector start/stop unbalanced (missing start)", {
         name,
@@ -305,7 +307,7 @@ export class GuesstimateRecorder {
     if (!this.recording()) {
       return;
     }
-    if (!!_.get(component, "__recorder_index__")) {
+    if (_.get(component, "__recorder_index__")) {
       this.warn("render starting before render chain terminated", {
         component,
       });
@@ -337,7 +339,7 @@ export class GuesstimateRecorder {
     }
 
     const indices = gatherIndicesFromRoot(component);
-    let element = (getAtPosition as any)(
+    const element = (getAtPosition as any)(
       indices,
       this.nestedTimeline,
       component

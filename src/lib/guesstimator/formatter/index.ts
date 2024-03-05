@@ -1,12 +1,13 @@
-import { item as Funct } from "./formatters/Function";
+import { PropagationError } from "~/lib/propagation/errors";
+
+import { item as Data } from "./formatters/Data";
+import { item as DistributionPointText } from "./formatters/DistributionPointText";
+import { item as DistributionTextProportion } from "./formatters/DistributionTextProportion";
 import { item as DistributionTextUpTo } from "./formatters/DistributionTextUpTo";
 import { item as DistributionTextUpToAlternate } from "./formatters/DistributionTextUpToAlternate";
-import { item as DistributionTextProportion } from "./formatters/DistributionTextProportion";
-import { item as DistributionPointText } from "./formatters/DistributionPointText";
-import { item as Data } from "./formatters/Data";
+import { item as Funct } from "./formatters/Function";
 import { item as Null } from "./formatters/Null";
 import { Formatter, FormatterInput } from "./types";
-import { PropagationError } from "~/lib/propagation/errors";
 
 export const formatters: Formatter[] = [
   Funct,
@@ -18,7 +19,7 @@ export const formatters: Formatter[] = [
 ];
 
 export function _matchingFormatter(g: FormatterInput): Formatter {
-  for (let formatter of formatters) {
+  for (const formatter of formatters) {
     if (formatter.matches(g)) {
       return formatter;
     }

@@ -16,7 +16,7 @@ export function parseSlurp(
       .map((m) => m.location.row)
       .reduce((x, y) => Math.max(x, y), 0) + 1;
 
-  let existingReadableIds = space.metrics.map((m) => m.readableId);
+  const existingReadableIds = space.metrics.map((m) => m.readableId);
   const newMetrics = slurp.sips.map((s, i) => {
     const metric = {
       ...e.metric.create(existingReadableIds),
@@ -27,7 +27,7 @@ export function parseSlurp(
       name: s.name,
       space: space.id,
     };
-    existingReadableIds.concat(metric.readableId);
+    existingReadableIds.concat(metric.readableId); // TODO - should this be .push()?
     return metric;
   });
   const newGuesstimates = _.map(slurp.sips, (s, i) => ({

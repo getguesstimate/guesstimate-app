@@ -53,7 +53,7 @@ export const isExportedFromSpace = (f: Fact) =>
 export const length = (f: Fact) => _.get(f, "simulation.sample.values.length");
 
 export function hasRequiredProperties(f: Fact) {
-  let requiredProperties = ["variable_name", "name"];
+  const requiredProperties = ["variable_name", "name"];
   if (!isExportedFromSpace(f)) {
     requiredProperties.push(
       "expression",
@@ -66,7 +66,7 @@ export function hasRequiredProperties(f: Fact) {
 }
 
 export function withMissingStats(rawFact: Fact) {
-  let fact = _utils.mutableCopy(rawFact);
+  const fact = _utils.mutableCopy(rawFact);
   _.set(
     fact,
     "simulation.sample.sortedValues",

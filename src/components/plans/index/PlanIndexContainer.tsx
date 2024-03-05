@@ -1,13 +1,13 @@
+import React, { FC } from "react";
+
 import _ from "lodash";
 import { useRouter } from "next/router";
-import React from "react";
-
-import { PlanIndex } from "./PlanIndex";
-
 import * as e from "~/lib/engine/engine";
 import { useAppSelector } from "~/modules/hooks";
 
-export const PlanIndexContainer: React.FC = () => {
+import { PlanIndex } from "./PlanIndex";
+
+export const PlanIndexContainer: FC = () => {
   const router = useRouter();
   const onChoose = (planId: string) => {
     const plan = { personal_lite: "lite", personal_premium: "premium" }[planId];

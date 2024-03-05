@@ -1,10 +1,10 @@
 import _ from "lodash";
-import { replaceByMap } from "~/lib/engine/utils";
-
 import { generateRandomReadableId } from "~/lib/engine/metric/generate_random_readable_id";
-import { STOCHASTIC_FUNCTIONS } from "./simulator-worker/simulator/evaluator";
-import { GuesstimateWorker } from "~/lib/window";
+import { replaceByMap } from "~/lib/engine/utils";
 import { PropagationError } from "~/lib/propagation/errors";
+import { GuesstimateWorker } from "~/lib/window";
+
+import { STOCHASTIC_FUNCTIONS } from "./simulator-worker/simulator/evaluator";
 
 const MIN_SAMPLES_PER_WINDOW = 100;
 
@@ -70,8 +70,8 @@ export async function simulate(
   ];
 
   return Promise.all(promises).then((results) => {
-    let finalResult: Required<SimulateResult> = { values: [], errors: [] };
-    for (let result of results) {
+    const finalResult: Required<SimulateResult> = { values: [], errors: [] };
+    for (const result of results) {
       if (result.values) {
         finalResult.values = finalResult.values.concat(result.values);
       }
@@ -135,17 +135,17 @@ function buildSimulationParams(
   numSamples: number,
   inputs
 ) {
-  let idMap = {};
-  let takenReadableIds: string[] = [];
-  let slicedInputs = {};
+  const idMap = {};
+  const takenReadableIds: string[] = [];
+  const slicedInputs = {};
 
-  for (let key of Object.keys(inputs)) {
+  for (const key of Object.keys(inputs)) {
     if (!inputs[key]) {
       console.warn("empty input key passed to buildSimulationParams:", key);
       continue;
     }
     const readableId = generateRandomReadableId(takenReadableIds);
-    idMap[`\$\{${key}\}`] = readableId;
+    idMap[`$\{${key}}`] = readableId;
     takenReadableIds.push(readableId);
     slicedInputs[readableId] = modularSlice(
       inputs[key],

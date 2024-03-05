@@ -70,10 +70,10 @@ export function paste(spaceId: number): AppThunk {
     let existingReadableIds = spaceMetrics.map((m) => m.readableId);
     let existingIds = spaceMetrics.map((m) => m.id);
 
-    let idsMap = {};
-    let metricsToSimulate: Metric[] = [];
+    const idsMap = {};
+    const metricsToSimulate: Metric[] = [];
     const newMetrics = metrics.map((metric) => {
-      let newMetric: Metric = {
+      const newMetric: Metric = {
         ...metric,
         space: spaceId,
         location: translateFn(metric.location),

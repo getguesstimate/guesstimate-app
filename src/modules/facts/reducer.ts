@@ -1,9 +1,9 @@
 import _ from "lodash";
-import { mutableCopy, typeSafeEq } from "~/lib/engine/utils";
+import { AnyAction, Reducer } from "redux";
 import * as _collections from "~/lib/engine/collections";
+import { mutableCopy, typeSafeEq } from "~/lib/engine/utils";
 
 import CITIES from "./cities.json";
-import { AnyAction, Reducer } from "redux";
 
 type State = {
   currentSuggestion: string;
@@ -96,7 +96,7 @@ export const factsR: Reducer<State, AnyAction> = (
       const organizationFact = state.organizationFacts.find(
         (e) => e.variable_name === action.organizationVariableName
       );
-      const children = !!organizationFact
+      const children = organizationFact
         ? organizationFact.children.filter((c) => c.id !== action.id)
         : [];
       return {
@@ -124,14 +124,14 @@ export const factsR: Reducer<State, AnyAction> = (
       };
     case "FACT_CATEGORIES_DELETE_SUCCESS": {
       const categoryId = _.get(action, "record.id");
-      let copiedState = mutableCopy(state.organizationFacts);
+      const copiedState = mutableCopy(state.organizationFacts);
       const organizationContainersToModify = _.remove<any>(copiedState, (o) =>
         _collections.some(o.children, categoryId, "category_id")
       );
       const modifiedOrganizationContainers = _.map(
         organizationContainersToModify,
         (o) => {
-          let copiedChildren = mutableCopy(o.children);
+          const copiedChildren = mutableCopy(o.children);
           const childrenToModify = _.remove<any>(copiedChildren, (f) =>
             typeSafeEq(_.get(f, "category_id"), categoryId)
           );
@@ -151,7 +151,7 @@ export const factsR: Reducer<State, AnyAction> = (
     }
     case "SPACES_DELETE_SUCCESS": {
       const spaceId = _.get(action, "record.id");
-      let copiedState = mutableCopy(state.organizationFacts);
+      const copiedState = mutableCopy(state.organizationFacts);
       const organizationContainersToModify = _.remove<any>(copiedState, (o) =>
         _collections.some(o.children, spaceId, "exported_from_id")
       );

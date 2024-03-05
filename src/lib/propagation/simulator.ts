@@ -9,11 +9,11 @@ export type SimulatorOptions = {
 };
 
 function getNodesToSimulate(DAG: SimulationDAG, options: SimulatorOptions) {
-  if (!!options.simulateIds) {
+  if (options.simulateIds) {
     return DAG.nodes.filter(({ id }) => options.simulateIds!.includes(id));
-  } else if (!!options.simulateStrictSubsetFrom) {
+  } else if (options.simulateStrictSubsetFrom) {
     return DAG.strictSubsetFrom(options.simulateStrictSubsetFrom);
-  } else if (!!options.simulateSubsetFrom) {
+  } else if (options.simulateSubsetFrom) {
     return DAG.subsetFrom(options.simulateSubsetFrom);
   } else {
     return DAG.nodes;
@@ -59,7 +59,7 @@ export class Simulator {
       window.recorder.recordPropagationStop(this);
       return;
     }
-    let node = this.nodesToSimulate[this.index];
+    const node = this.nodesToSimulate[this.index];
     if (this.propagationId < this.getCurrPropId(node.id)) {
       return;
     } // Break early if we've been pre-empted.

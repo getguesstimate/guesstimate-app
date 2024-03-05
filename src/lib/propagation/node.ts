@@ -1,14 +1,13 @@
 import _ from "lodash";
-import { NODE_TYPES } from "./constants";
-import * as errorTypes from "./errors";
-
-import { Guesstimator } from "~/lib/guesstimator/index";
-import { _matchingFormatter } from "~/lib/guesstimator/formatter/index";
-
 import * as _collections from "~/lib/engine/collections";
 import * as _utils from "~/lib/engine/utils";
-import { SimulationDAG, SimulationNodeParamsWithInputIndices } from "./DAG";
+import { _matchingFormatter } from "~/lib/guesstimator/formatter/index";
+import { Guesstimator } from "~/lib/guesstimator/index";
+
 import { SampleValue } from "../guesstimator/samplers/Simulator";
+import { NODE_TYPES } from "./constants";
+import { SimulationDAG, SimulationNodeParamsWithInputIndices } from "./DAG";
+import * as errorTypes from "./errors";
 
 const {
   ERROR_TYPES: { GRAPH_ERROR, PARSER_ERROR },
@@ -76,14 +75,14 @@ export class SimulationNode {
 
     const inputs = this._getInputs();
 
-    if (!!_.get(window, "recorder")) {
+    if (_.get(window, "recorder")) {
       window.recorder.recordNodeSampleStart(this);
     }
     const guesstimator = new Guesstimator({ parsedError, parsedInput });
     return guesstimator
       .sample(numSamples, inputs)
       .then(({ values, errors }) => {
-        if (!!_.get(window, "recorder")) {
+        if (_.get(window, "recorder")) {
           window.recorder.recordNodeSampleStop(this);
         }
 
@@ -125,7 +124,7 @@ export class SimulationNode {
   _addErrorToDescendants() {
     this._getDescendants().forEach((n) => {
       const dataProp = n.inputs.includes(this.id) ? "inputs" : "ancestors";
-      let ancestorError = _collections.get(
+      const ancestorError = _collections.get(
         n.errors,
         INVALID_ANCESTOR_ERROR,
         "subType"
@@ -136,7 +135,7 @@ export class SimulationNode {
           this.id,
         ]);
       } else {
-        let error: errorTypes.PropagationError = {
+        const error: errorTypes.PropagationError = {
           type: GRAPH_ERROR,
           subType: INVALID_ANCESTOR_ERROR,
           inputs: [],
@@ -150,7 +149,7 @@ export class SimulationNode {
 
   _clearErrorFromDescendants() {
     this._getDescendants().forEach((n) => {
-      let ancestorError = _collections.get(
+      const ancestorError = _collections.get(
         n.errors,
         INVALID_ANCESTOR_ERROR,
         "subType"

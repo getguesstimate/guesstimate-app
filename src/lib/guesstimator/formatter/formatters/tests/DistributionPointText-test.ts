@@ -7,14 +7,13 @@ describe("DistributionPointText", () => {
       [{ value: "3" }, false],
     ] as const;
 
-    const itExamples = examples
+    examples
       .map((e) => () => {
         it(`works for guesstimate ${JSON.stringify(e[0])}`, () => {
-          const foo = formatter;
           expect(formatter.matches(e[0] as any)).toEqual(e[1]);
         });
       })
-      .map((e) => e());
+      .forEach((e) => e());
   });
 
   describe("#format", () => {
@@ -23,12 +22,12 @@ describe("DistributionPointText", () => {
       [{ text: "3K" }, { guesstimateType: "POINT", params: [3000] }],
     ];
 
-    const itExamples = examples
+    examples
       .map((e) => () => {
         it(`works for guesstimate ${JSON.stringify(e[0])}`, () => {
           expect(formatter.format(e[0])).toEqual(e[1]);
         });
       })
-      .map((e) => e());
+      .forEach((e) => e());
   });
 });
