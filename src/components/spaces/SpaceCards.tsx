@@ -1,4 +1,4 @@
-import React from "react";
+import { FC, PropsWithChildren } from "react";
 
 import clsx from "clsx";
 import _ from "lodash";
@@ -14,8 +14,8 @@ const arrowsVisibleImage = "/assets/metric-icons/blue/arrows-visible.png";
 
 type Size = "SMALL"; // default is undefined
 
-const BlankScreenshot: React.FC<{ size?: Size }> = ({ size }) => (
-  <div className="grid h-full place-items-center">
+const BlankScreenshot: FC<{ size?: Size }> = ({ size }) => (
+  <div className="absolute inset-0 grid h-full place-items-center">
     <img
       className={clsx(
         "w-auto opacity-[0.25]",
@@ -26,13 +26,13 @@ const BlankScreenshot: React.FC<{ size?: Size }> = ({ size }) => (
   </div>
 );
 
-const SingleButton: React.FC<{ isPrivate: boolean }> = ({ isPrivate }) => (
+const SingleButton: FC<{ isPrivate: boolean }> = ({ isPrivate }) => (
   <div className="pl-0.5 text-[1.6em] text-[#6e7980]">
     <Icon name={isPrivate ? "lock" : "globe"} />
   </div>
 );
 
-const ButtonArea: React.FC<{
+const ButtonArea: FC<{
   owner: any;
   ownerUrl: string;
   isPrivate: boolean;
@@ -46,11 +46,12 @@ const ButtonArea: React.FC<{
   </div>
 );
 
-const SpaceCardBox: React.FC<{
-  children: React.ReactNode;
-  onClick?(): void;
-  isNew?: boolean;
-}> = ({ children, onClick, isNew }) => {
+const SpaceCardBox: FC<
+  PropsWithChildren<{
+    onClick?(): void;
+    isNew?: boolean;
+  }>
+> = ({ children, onClick, isNew }) => {
   return (
     <div
       className={clsx(
@@ -66,7 +67,7 @@ const SpaceCardBox: React.FC<{
   );
 };
 
-export const NewSpaceCard: React.FC<{ onClick(): void }> = ({ onClick }) => (
+export const NewSpaceCard: FC<{ onClick(): void }> = ({ onClick }) => (
   <SpaceCardBox onClick={onClick} isNew>
     <div className="flex h-full flex-col items-center justify-center rounded-sm bg-[#cee4ce]">
       <Icon name="plus" className="text-[4.5em] text-[#79b979]" />
@@ -77,7 +78,7 @@ export const NewSpaceCard: React.FC<{ onClick(): void }> = ({ onClick }) => (
   </SpaceCardBox>
 );
 
-export const SpaceCard: React.FC<{
+export const SpaceCard: FC<{
   space: any;
   showPrivacy?: boolean;
   size?: Size;
@@ -127,7 +128,9 @@ export const SpaceCard: React.FC<{
       >
         <a href={spaceUrl}>
           <BlankScreenshot size={size} />
-          {space.big_screenshot && <img src={space.big_screenshot} />}
+          {space.big_screenshot && (
+            <img src={space.big_screenshot} className="relative z-10" />
+          )}
         </a>
         <div className="absolute bottom-2 left-2 z-10">
           <ButtonArea
@@ -149,9 +152,7 @@ export const SpaceCard: React.FC<{
   );
 };
 
-export const SpaceCardGrid: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+export const SpaceCardGrid: FC<PropsWithChildren> = ({ children }) => {
   return (
     <div className="grid place-items-stretch gap-12 px-4 lg:grid-cols-3">
       {children}
@@ -159,7 +160,7 @@ export const SpaceCardGrid: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
-export const SpaceCards: React.FC<{
+export const SpaceCards: FC<{
   spaces: any[];
   showPrivacy: boolean;
 }> = ({ spaces, showPrivacy }) => (
