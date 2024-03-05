@@ -99,7 +99,7 @@ export const SpacesIndex: FC = () => {
     dispatch(search.fetch(searchValue, { sortBy, timeframe }));
   }, [searchValue, sortBy, timeframe]);
 
-  const spaces: any[] = searchSpaces.hits || [];
+  const spaces = searchSpaces.hits || [];
   const hasMorePages =
     _.isFinite(searchSpaces.page) &&
     searchSpaces.page < searchSpaces.nbPages - 1;

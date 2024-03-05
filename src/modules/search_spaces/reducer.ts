@@ -1,10 +1,33 @@
 import _ from "lodash";
 import { Reducer } from "redux";
 
-type SearchSpacesState = any;
+// `algoliasearch` package doesn't expose this type, so we have to use this internal package directly
+import { type SearchResponse } from "@algolia/client-search";
+
+import { SearchSortBy } from "./actions";
+
+type TObject = {
+  // TODO: there are other fields here
+  user_info: unknown;
+  organization_info: unknown;
+};
+
+export type SearchFilters = {
+  hitsPerPage: number;
+  page: number;
+  numericFilters?: string;
+  facetFilters?: string[];
+};
+
+type SearchSpacesState =
+  | (SearchResponse<TObject> & {
+      filters: SearchFilters;
+      sortBy: SearchSortBy;
+    })
+  | Record<string, never>;
 
 export const searchSpacesR: Reducer<SearchSpacesState> = (
-  state = [],
+  state = {},
   action
 ) => {
   switch (action.type) {

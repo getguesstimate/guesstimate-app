@@ -5,6 +5,8 @@ import { AppThunk } from "~/modules/store";
 import * as userActions from "~/modules/users/actions";
 import { searchSpaceIndex } from "~/server/algolia/index";
 
+import { SearchFilters } from "./reducer";
+
 export type SearchTimeframe = "ALL_TIME" | "MONTHLY";
 export type SearchSortBy = "POPULAR" | "RECENT" | "RECOMMENDED";
 
@@ -12,8 +14,7 @@ export function fetch(
   query = "",
   options: { sortBy: SearchSortBy; timeframe: SearchTimeframe; page?: number }
 ): AppThunk {
-  const filters: any = { hitsPerPage: 21 };
-  filters.page = options.page || 0;
+  const filters: SearchFilters = { hitsPerPage: 21, page: options.page || 0 };
   const { sortBy } = options;
 
   const secondsAtNow = new Date().getTime() / 1000;
@@ -27,45 +28,39 @@ export function fetch(
     filters.facetFilters = ["is_recommended: true"];
   }
 
-  const spaceIndex = (
-    {
-      RECENT: "RECENT",
-      POPULAR: "POPULAR",
-      RECOMMENDED: "POPULAR",
-    } as const
-  )[sortBy];
-
-  return (dispatch) => {
-    searchSpaceIndex(spaceIndex).search(query, filters, (error, results) => {
-      if (error) {
-        searchError("AlgoliaFetch", error);
-      } else {
-        results.filters = filters;
-        results.sortBy = sortBy;
-        dispatch({ type: "SEARCH_SPACES_GET", response: results });
-        dispatch(spaceActions.fromSearch(results.hits));
-        dispatch(userActions.fromSearch(results.hits));
-      }
-    });
+  return async (dispatch) => {
+    try {
+      const results = await searchSpaceIndex().search(query, filters);
+      dispatch({
+        type: "SEARCH_SPACES_GET",
+        response: {
+          ...results,
+          filters,
+          sortBy,
+        },
+      });
+      dispatch(spaceActions.fromSearch(results.hits));
+      dispatch(userActions.fromSearch(results.hits));
+    } catch (error) {
+      searchError("AlgoliaFetch", error);
+    }
   };
 }
 
 export function fetchNextPage(): AppThunk {
-  return (dispatch, getState) => {
+  return async (dispatch, getState) => {
     const searchSpaces = getState().searchSpaces;
 
-    searchSpaceIndex(searchSpaces.sortBy).search(
-      searchSpaces.query,
-      { ...searchSpaces.filters, page: searchSpaces.page + 1 },
-      (error, results) => {
-        if (error) {
-          searchError("AlgoliaFetchNextPage", error);
-        } else {
-          dispatch({ type: "SEARCH_SPACES_NEXT_PAGE", response: results });
-          dispatch(spaceActions.fromSearch(results.hits));
-          dispatch(userActions.fromSearch(results.hits));
-        }
-      }
-    );
+    try {
+      const results = await searchSpaceIndex().search(searchSpaces.query, {
+        ...searchSpaces.filters,
+        page: searchSpaces.page + 1,
+      });
+      dispatch({ type: "SEARCH_SPACES_NEXT_PAGE", response: results });
+      dispatch(spaceActions.fromSearch(results.hits));
+      dispatch(userActions.fromSearch(results.hits));
+    } catch (error) {
+      searchError("AlgoliaFetchNextPage", error);
+    }
   };
 }
