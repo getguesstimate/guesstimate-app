@@ -1,14 +1,13 @@
-import _ from "lodash";
 import React from "react";
 
+import clsx from "clsx";
+import _ from "lodash";
 import Icon from "~/components/react-fa-patched";
-
+import { formatDate, formatDescription } from "~/components/spaces/shared";
 import * as Organization from "~/lib/engine/organization";
 import * as Space from "~/lib/engine/space";
 import * as User from "~/lib/engine/user";
 
-import clsx from "clsx";
-import { formatDate, formatDescription } from "~/components/spaces/shared";
 import { UserTag } from "../UserTag";
 
 const arrowsVisibleImage = "/assets/metric-icons/blue/arrows-visible.png";
@@ -127,11 +126,8 @@ export const SpaceCard: React.FC<{
         )}
       >
         <a href={spaceUrl}>
-          {space.big_screenshot ? (
-            <img src={space.big_screenshot} />
-          ) : (
-            <BlankScreenshot size={size} />
-          )}
+          <BlankScreenshot size={size} />
+          {space.big_screenshot && <img src={space.big_screenshot} />}
         </a>
         <div className="absolute bottom-2 left-2 z-10">
           <ButtonArea
