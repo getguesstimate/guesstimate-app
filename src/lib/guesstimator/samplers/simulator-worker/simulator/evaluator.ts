@@ -1,14 +1,14 @@
 import _ from "lodash";
-const Finance = require("financejs");
 import math from "mathjs";
+import { DEBUG } from "~/lib/constants";
+import * as errorTypes from "~/lib/propagation/errors";
 
-import { __DEV__ } from "~/lib/constants";
+import { SampleValue, SimulateResult } from "../../Simulator";
+import { ImpureConstructs } from "./constructs/constructs";
 import { Distributions } from "./distributions/distributions";
 import { Filters, SAMPLE_FILTERED } from "./filters/filters";
-import { ImpureConstructs } from "./constructs/constructs";
 
-import * as errorTypes from "~/lib/propagation/errors";
-import { SampleValue, SimulateResult } from "../../Simulator";
+const Finance = require("financejs");
 
 const finance = new Finance();
 const {
@@ -140,7 +140,7 @@ function evaluate(compiled, inputs, n, text): SimulateResult {
         errors: [{ type: PARSER_ERROR, subType: INCOMPLETE_FUNCTION_ERROR }],
       };
     } else {
-      if (__DEV__) {
+      if (DEBUG) {
         console.warn("Unidentified sample detected: ", newSample);
       }
       return { values: [], errors: [{ type: SAMPLING_ERROR }] };

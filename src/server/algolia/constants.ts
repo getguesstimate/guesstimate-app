@@ -1,10 +1,7 @@
-import { __API_ENV__ } from "~/lib/constants";
+export const ID = process.env.NEXT_PUBLIC_ALGOLIA_APP_ID;
+export const API_KEY = process.env.NEXT_PUBLIC_ALGOLIA_API_KEY;
 
-export const ID = "M629R9UGSG";
-export const API_KEY = "4e893740a2bd467a96c8bfcf95b2809c";
 export const SPACE_BY_DATE_INDEX =
-  __API_ENV__ === "development" ? "Space_development" : "Space_production";
+  process.env.NEXT_PUBLIC_ALGOLIA_SPACE_BY_DATE_INDEX;
 export const SPACE_BY_VIEWCOUNT_INDEX =
-  __API_ENV__ === "development"
-    ? "Space_development"
-    : "Space_production_by_viewcount";
+  process.env.NEXT_PUBLIC_ALGOLIA_SPACE_BY_VIEWCOUNT_INDEX;

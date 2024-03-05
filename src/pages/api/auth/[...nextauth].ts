@@ -1,6 +1,7 @@
 import NextAuth, { AuthOptions } from "next-auth";
 import Auth0Provider from "next-auth/providers/auth0";
 import { Provider } from "next-auth/providers/index";
+import { DEBUG } from "~/lib/constants";
 
 declare module "next-auth" {
   interface Session {
@@ -44,7 +45,7 @@ function getAuthOptions(): AuthOptions {
 
   return {
     providers,
-    debug: true,
+    debug: DEBUG,
     callbacks: {
       async session({ session, token }) {
         // TODO - support refresh tokens

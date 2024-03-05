@@ -1,4 +1,4 @@
-import { __DEV__ } from "~/lib/constants";
+import { DEBUG } from "~/lib/constants";
 import * as _collections from "~/lib/engine/collections";
 import { getVar, selectorSearch, withMissingStats } from "~/lib/engine/facts";
 import {
@@ -101,7 +101,7 @@ export function addSimulationToFact(
       _collections.some(e.children, id)
     );
     if (!oldOrganizationFact) {
-      if (__DEV__) {
+      if (DEBUG) {
         console.warn("Tried to add simulations to non-existent fact!", id);
       }
       return;
