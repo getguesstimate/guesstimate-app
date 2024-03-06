@@ -9,82 +9,55 @@ import { DropDown } from "~/components/utility/DropDown";
 import { Input } from "~/components/utility/forms";
 import { useAppDispatch, useAppSelector } from "~/modules/hooks";
 import * as search from "~/modules/search_spaces/actions";
-import { SearchSortBy, SearchTimeframe } from "~/modules/search_spaces/actions";
+import { SearchSortBy } from "~/modules/search_spaces/actions";
 
-const sortNames: { [k in SearchSortBy]: string } = {
-  RECOMMENDED: "Recommended",
-  RECENT: "Recent",
-  POPULAR: "Popular",
-};
-
-const timeframeNames: { [k in SearchTimeframe]: string } = {
-  MONTHLY: "Monthly",
-  ALL_TIME: "All Time",
-};
-
-const Filters: FC<{
-  sortBy: SearchSortBy;
-  timeframe: SearchTimeframe;
-  onChangeSortBy(sortBy: SearchSortBy): void;
-  onChangeTimeFrame(timeframe: SearchTimeframe): void;
-}> = ({ sortBy, timeframe, onChangeSortBy, onChangeTimeFrame }) => {
+// Previously we had more than just filter, and we might have more again, so
+// this code is more generic than necessary.
+function Filter<T extends string>({
+  selected,
+  names,
+  onChange,
+}: {
+  selected: T;
+  names: { [k in T]: string };
+  onChange(value: T): void;
+}) {
   return (
-    <div className="flex gap-4">
-      <Filter selected={sortBy} names={sortNames} onChange={onChangeSortBy} />
-      {sortBy === "POPULAR" && (
-        <Filter
-          selected={timeframe}
-          names={timeframeNames}
-          onChange={onChangeTimeFrame}
-        />
-      )}
-    </div>
+    <DropDown
+      openLink={
+        <div className="flex items-center gap-1 rounded-sm px-2 py-1 text-grey-666 hover:bg-[#e3e8ec]">
+          <div>{names[selected]}</div>
+          <Icon name="chevron-down" className="text-sm" />
+        </div>
+      }
+      position="right"
+    >
+      {Object.keys(names).map((key: T) => {
+        return (
+          <CardListElement
+            key={key}
+            header={names[key]}
+            isSelected={selected === key}
+            onClick={() => onChange(key)}
+            closeOnClick={true}
+          />
+        );
+      })}
+    </DropDown>
   );
-};
-
-const Filter: FC<{
-  // TODO - generic over SearchSortBy/SearchTimeframe?
-  selected: string;
-  names: { [k: string]: string };
-  onChange(value: string): void;
-}> = ({ selected, names, onChange }) => (
-  <DropDown
-    openLink={
-      <div className="flex items-center gap-1 rounded-sm px-2 py-1 text-grey-666 hover:bg-[#e3e8ec]">
-        <div>{names[selected]}</div>
-        <Icon name="chevron-down" className="text-sm" />
-      </div>
-    }
-    position="right"
-  >
-    {Object.keys(names).map((key) => {
-      return (
-        <CardListElement
-          key={key}
-          header={names[key]}
-          isSelected={selected === key}
-          onClick={() => {
-            onChange(key);
-          }}
-          closeOnClick={true}
-        />
-      );
-    })}
-  </DropDown>
-);
+}
 
 export const SpacesIndex: FC = () => {
   const dispatch = useAppDispatch();
   const searchSpaces = useAppSelector((state) => state.searchSpaces);
 
   const [sortBy, setSortBy] = useState<SearchSortBy>("RECOMMENDED");
-  const [timeframe, setTimeframe] = useState<SearchTimeframe>("ALL_TIME");
   const [searchValue, setSearchValue] = useState("");
 
   const inputRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     inputRef.current?.focus();
-  }, [inputRef.current]);
+  }, []);
 
   const loadNextPage = () => {
     dispatch(search.fetchNextPage());
@@ -92,14 +65,13 @@ export const SpacesIndex: FC = () => {
 
   const changeSearchValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
-    setTimeframe("ALL_TIME");
   };
 
   useEffect(() => {
-    dispatch(search.fetch(searchValue, { sortBy, timeframe }));
-  }, [searchValue, sortBy, timeframe]);
+    dispatch(search.fetch(searchValue, { sortBy }));
+  }, [searchValue, sortBy]);
 
-  const spaces: any[] = searchSpaces.hits || [];
+  const spaces = searchSpaces.hits || [];
   const hasMorePages =
     _.isFinite(searchSpaces.page) &&
     searchSpaces.page < searchSpaces.nbPages - 1;
@@ -120,12 +92,14 @@ export const SpacesIndex: FC = () => {
               onChange={changeSearchValue}
             />
           </div>
-          <div>
-            <Filters
-              sortBy={sortBy}
-              timeframe={timeframe}
-              onChangeSortBy={setSortBy}
-              onChangeTimeFrame={setTimeframe}
+          <div className="flex">
+            <Filter<SearchSortBy>
+              selected={sortBy}
+              onChange={setSortBy}
+              names={{
+                RECOMMENDED: "Recommended",
+                RECENT: "Recent",
+              }}
             />
           </div>
         </div>

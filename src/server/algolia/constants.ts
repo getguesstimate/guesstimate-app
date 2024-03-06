@@ -1,7 +1,3 @@
-export const ID = process.env.NEXT_PUBLIC_ALGOLIA_APP_ID;
-export const API_KEY = process.env.NEXT_PUBLIC_ALGOLIA_API_KEY;
-
-export const SPACE_BY_DATE_INDEX =
-  process.env.NEXT_PUBLIC_ALGOLIA_SPACE_BY_DATE_INDEX;
-export const SPACE_BY_VIEWCOUNT_INDEX =
-  process.env.NEXT_PUBLIC_ALGOLIA_SPACE_BY_VIEWCOUNT_INDEX;
+export const ID = process.env.NEXT_PUBLIC_ALGOLIA_APP_ID ?? "";
+export const API_KEY = process.env.NEXT_PUBLIC_ALGOLIA_API_KEY ?? "";
+export const ALGOLIA_INDEX = process.env.NEXT_PUBLIC_ALGOLIA_INDEX ?? "";
