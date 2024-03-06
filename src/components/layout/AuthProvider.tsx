@@ -14,11 +14,13 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
       return;
     }
 
-    // Force sign out when `session.access_token` is about to expire.
+    // Force sign out when `session.access_token` is expired.
+    // Normally, this should never happen, because we refresh the token in `jwt`
+    // callback in next-auth config. But it's a precaution against using stale
+    // tokens with the backend, which would result in a confusing UI state.
     if (
       session?.token_expires_at &&
-      // next-auth reloads the session every 5 minutes, so 10 minute window should be enough.
-      session.token_expires_at < new Date().getTime() / 1000 + 600
+      session.token_expires_at > new Date().getTime() / 1000
     ) {
       signOut();
       return;
