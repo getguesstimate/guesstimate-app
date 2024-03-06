@@ -1,7 +1,7 @@
-import _ from "lodash";
-import { useRouter } from "next/router";
 import { useEffect } from "react";
 
+import _ from "lodash";
+import { useRouter } from "next/router";
 import * as firstSubscriptionActions from "~/modules/first_subscription/actions";
 import { subStage } from "~/modules/first_subscription/state_machine";
 import { useAppDispatch, useAppSelector } from "~/modules/hooks";
@@ -23,7 +23,7 @@ export const FirstSubscriptionContainer: React.FC<Props> = ({ planId }) => {
   useEffect(() => {
     dispatch(firstSubscriptionActions.flowStageReset());
 
-    if (me.profile?.has_payment_account) {
+    if (me.profile && !me.profile?.has_payment_account) {
       dispatch(
         firstSubscriptionActions.fetchIframe({
           user_id: me.profile.id,
@@ -53,13 +53,10 @@ export const FirstSubscriptionContainer: React.FC<Props> = ({ planId }) => {
     );
   };
 
-  const handlePaymentCancel = () => {
+  const handlePaymentCancel = () =>
     dispatch(firstSubscriptionActions.flowStageCancel());
-  };
 
-  const handleNewModel = () => {
-    dispatch(spaceActions.create(undefined, router));
-  };
+  const handleNewModel = () => dispatch(spaceActions.create(undefined, router));
 
   return (
     <FirstSubscription
