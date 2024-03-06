@@ -7,22 +7,14 @@ import { searchSpaceIndex } from "~/server/algolia/index";
 
 import { SearchFilters } from "./reducer";
 
-export type SearchTimeframe = "ALL_TIME" | "MONTHLY";
-export type SearchSortBy = "POPULAR" | "RECENT" | "RECOMMENDED";
+export type SearchSortBy = "RECENT" | "RECOMMENDED";
 
 export function fetch(
   query = "",
-  options: { sortBy: SearchSortBy; timeframe: SearchTimeframe; page?: number }
+  options: { sortBy: SearchSortBy; page?: number }
 ): AppThunk {
   const filters: SearchFilters = { hitsPerPage: 21, page: options.page || 0 };
   const { sortBy } = options;
-
-  const secondsAtNow = new Date().getTime() / 1000;
-  const secondsInMonth = 60 * 60 * 24 * 30;
-
-  if (sortBy === "POPULAR" && _.get(options, "timeframe") === "MONTHLY") {
-    filters.numericFilters = `created_at_i>${secondsAtNow - secondsInMonth}`;
-  }
 
   if (sortBy === "RECOMMENDED") {
     filters.facetFilters = ["is_recommended: true"];
@@ -54,7 +46,7 @@ export function fetchNextPage(): AppThunk {
     try {
       const results = await searchSpaceIndex().search(searchSpaces.query, {
         ...searchSpaces.filters,
-        page: searchSpaces.page + 1,
+        page: (searchSpaces.page ?? 0) + 1,
       });
       dispatch({ type: "SEARCH_SPACES_NEXT_PAGE", response: results });
       dispatch(spaceActions.fromSearch(results.hits));
