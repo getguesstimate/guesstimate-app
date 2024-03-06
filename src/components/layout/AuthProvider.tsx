@@ -20,7 +20,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     // tokens with the backend, which would result in a confusing UI state.
     if (
       session?.token_expires_at &&
-      session.token_expires_at > new Date().getTime() / 1000
+      session.token_expires_at < new Date().getTime() / 1000
     ) {
       signOut();
       return;
