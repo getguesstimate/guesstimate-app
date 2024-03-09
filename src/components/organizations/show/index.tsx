@@ -1,33 +1,30 @@
+import React, { useEffect, useState } from "react";
+
+import clsx from "clsx";
 import _ from "lodash";
 import { useRouter } from "next/router";
-import React, { Component, useEffect, useState } from "react";
-
 import Icon from "~/components/react-fa-patched";
-
 import {
   NewSpaceCard,
   SpaceCard,
   SpaceCardGrid,
 } from "~/components/spaces/SpaceCards";
+import { ButtonWithIcon } from "~/components/utility/buttons/button";
 import { Container } from "~/components/utility/Container";
-import { Category } from "./categories/Category";
-import { CategoryForm } from "./categories/CategoryForm";
-import { FactGraph } from "./facts/FactGraph";
-import { MembersTab } from "./MembersTab";
-
-import { organizationMemberSelector } from "./organizationMemberSelector";
-import { organizationSpaceSelector } from "./organizationSpaceSelector";
-
+import * as e from "~/lib/engine/engine";
+import { FactCategory } from "~/lib/engine/fact_category";
+import { useAppDispatch, useAppSelector } from "~/modules/hooks";
 import * as modalActions from "~/modules/modal/actions";
 import * as organizationActions from "~/modules/organizations/actions";
 import * as spaceActions from "~/modules/spaces/actions";
 import * as userOrganizationMembershipActions from "~/modules/userOrganizationMemberships/actions";
 
-import * as e from "~/lib/engine/engine";
-import { FactCategory } from "~/lib/engine/fact_category";
-import { useAppDispatch, useAppSelector } from "~/modules/hooks";
-import clsx from "clsx";
-import { Button, ButtonWithIcon } from "~/components/utility/buttons/button";
+import { Category } from "./categories/Category";
+import { CategoryForm } from "./categories/CategoryForm";
+import { FactGraph } from "./facts/FactGraph";
+import { MembersTab } from "./MembersTab";
+import { organizationMemberSelector } from "./organizationMemberSelector";
+import { organizationSpaceSelector } from "./organizationSpaceSelector";
 
 const MODEL_TAB = "models";
 const MEMBERS_TAB = "members";
@@ -73,10 +70,14 @@ const OrganizationTabButtons: React.FC<{
           key={e.key}
           href={e.href}
           target={e.href ? undefined : "_blank"}
-          onClick={() => {
-            e.onMouseUp?.();
-            changeTab(e.key);
-          }}
+          onClick={
+            e.href
+              ? undefined
+              : () => {
+                  e.onMouseUp?.();
+                  changeTab(e.key);
+                }
+          }
         >
           {e.name}
         </a>
