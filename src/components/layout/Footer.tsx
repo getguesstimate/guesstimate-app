@@ -1,5 +1,6 @@
-import clsx from "clsx";
 import React from "react";
+
+import clsx from "clsx";
 import { iubendaHref } from "~/components/lib/IubendaPrivacyPolicy";
 
 const LinkGithubStar: React.FC = () => (
@@ -41,11 +42,13 @@ export const Footer: React.FC = () => {
       <ul>
         <Header>Guesstimate</Header>
         <LinkItem href="/pricing">Pricing</LinkItem>
-        <LinkItem href="/faq">FAQ</LinkItem>
+        <LinkItem href="https://docs.getguesstimate.com/docs/FAQ">FAQ</LinkItem>
         <LinkItem href="http://docs.getguesstimate.com/">
           Documentation
         </LinkItem>
-        <LinkItem href="https://medium.com/guesstimate-blog">Blog</LinkItem>
+        <LinkItem href="https://quantifieduncertainty.org">Blog</LinkItem>
+        <LinkItem href="https://quantifieduncertainty.org">QURI</LinkItem>
+        <LinkItem href="https://discord.gg/nsTnQTgtG6">Discord</LinkItem>
       </ul>
       <ul>
         <Header>Legal</Header>
