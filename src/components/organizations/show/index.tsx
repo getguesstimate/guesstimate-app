@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 
 import clsx from "clsx";
 import _ from "lodash";
@@ -45,16 +45,14 @@ const isValidTabString = (tabStr: string | null): tabStr is string => {
   );
 };
 
-const OrganizationHeader: React.FC<{ organization: any }> = ({
-  organization,
-}) => (
+const OrganizationHeader: FC<{ organization: any }> = ({ organization }) => (
   <div className="flex flex-col items-center">
     <img className="max-h-20 max-w-[4em] rounded" src={organization.picture} />
     <h1 className="text-3xl font-bold">{organization.name}</h1>
   </div>
 );
 
-const OrganizationTabButtons: React.FC<{
+const OrganizationTabButtons: FC<{
   tabs: Tab[];
   openTab: string;
   changeTab(key: string): void;
@@ -70,6 +68,7 @@ const OrganizationTabButtons: React.FC<{
           key={e.key}
           href={e.href}
           target={e.href ? undefined : "_blank"}
+          rel="noreferrer"
           onClick={
             e.href
               ? undefined
@@ -86,7 +85,7 @@ const OrganizationTabButtons: React.FC<{
   </div>
 );
 
-const FactTab: React.FC<{
+const FactTab: FC<{
   organization: any;
   facts: any[];
   factCategories: any[];
@@ -119,7 +118,7 @@ const FactTab: React.FC<{
       <div className="grid grid-cols-2 gap-x-4 gap-y-12">
         {categorySets.map(({ category, facts }) => (
           <Category
-            key={!!category ? category.name : "uncategorized"}
+            key={category ? category.name : "uncategorized"}
             category={category}
             categories={factCategories}
             onEditCategory={onEditCategory}
@@ -140,7 +139,7 @@ const FactTab: React.FC<{
   );
 };
 
-const NewCategorySection: React.FC<{
+const NewCategorySection: FC<{
   onSubmit(category: FactCategory): void;
   existingCategoryNames: string[];
 }> = (props) => {
@@ -171,7 +170,7 @@ const NewCategorySection: React.FC<{
   }
 };
 
-export const OrganizationShow: React.FC<{
+export const OrganizationShow: FC<{
   organizationId: number;
   tab: null | string;
 }> = ({ organizationId, tab }) => {
@@ -276,7 +275,7 @@ export const OrganizationShow: React.FC<{
     ];
   }
   const portalUrl = _.get(organization, "account._links.payment_portal.href");
-  if (!!portalUrl) {
+  if (portalUrl) {
     tabs = [
       ...tabs,
       {
