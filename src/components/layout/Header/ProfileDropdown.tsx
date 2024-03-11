@@ -53,10 +53,17 @@ export const ProfileDropdown: FC<{
     },
     {
       ionicIcon: "ios-chatbubbles",
-      header: "Feedback",
+      header: "Discord",
+      onClick: () => {
+        navigationActions.externalNavigate("https://discord.gg/nsTnQTgtG6");
+      },
+    },
+    {
+      ionicIcon: "ios-send",
+      header: "Email Us",
       onClick: () => {
         navigationActions.externalNavigate(
-          "https://productpains.com/product/guesstimate"
+          "mailto:support@quantifieduncertainty.org"
         );
       },
     },
