@@ -5,9 +5,9 @@ import { PageBase } from "../utility/PageBase";
 const content = `
 # Terms and Conditions ("Terms")
 
-Last updated: February 05, 2016
+Last updated: March 11, 2024
 
-Please read these Terms and Conditions ("Terms", "Terms and Conditions") carefully before using the http://www.getguesstimate.com/ website (the "Service") operated by Guesstimate Inc. ("us", "we", or "our").
+Please read these Terms and Conditions ("Terms", "Terms and Conditions") carefully before using the http://www.getguesstimate.com/ website (the "Service") operated by Quantified Uncertainty Research Institute ("us", "we", or "our").
 
 Your access to and use of the Service is conditioned upon your acceptance of and compliance with these Terms. These Terms apply to all visitors, users and others who wish to access or use the Service.
 
@@ -21,23 +21,23 @@ By creating an Account on our service, you agree to subscribe to newsletters, ma
 
 Some parts of the Service are billed on a subscription basis ("Subscription(s)"). You will be billed in advance on a recurring and periodic basis ("Billing Cycle"). Billing cycles are set either on a monthly or annual basis, depending on the type of subscription plan you select when purchasing a Subscription.
 
-At the end of each Billing Cycle, your Subscription will automatically renew under the exact same conditions unless you cancel it or Guesstimate Inc. cancels it. You may cancel your Subscription renewal either through your online account management page or by contacting Guesstimate Inc. customer support team.
+At the end of each Billing Cycle, your Subscription will automatically renew under the exact same conditions unless you cancel it or Quantified Uncertainty Research Institute cancels it. You may cancel your Subscription renewal either through your online account management page or by contacting Quantified Uncertainty Research Institute customer support team.
 
-A valid payment method, including credit card or PayPal, is required to process the payment for your Subscription. You shall provide Guesstimate Inc. with accurate and complete billing information including full name, address, state, zip code, telephone number, and a valid payment method information. By submitting such payment information, you automatically authorize Guesstimate Inc. to charge all Subscription fees incurred through your account to any such payment instruments.
+A valid payment method, including credit card or PayPal, is required to process the payment for your Subscription. You shall provide Quantified Uncertainty Research Institute with accurate and complete billing information including full name, address, state, zip code, telephone number, and a valid payment method information. By submitting such payment information, you automatically authorize Quantified Uncertainty Research Institute to charge all Subscription fees incurred through your account to any such payment instruments.
 
-Should automatic billing fail to occur for any reason, Guesstimate Inc. will issue an electronic invoice indicating that you must proceed manually, within a certain deadline date, with the full payment corresponding to the billing period as indicated on the invoice.
+Should automatic billing fail to occur for any reason, Quantified Uncertainty Research Institute will issue an electronic invoice indicating that you must proceed manually, within a certain deadline date, with the full payment corresponding to the billing period as indicated on the invoice.
 
 **Fee Changes**
 
-Guesstimate Inc., in its sole discretion and at any time, may modify the Subscription fees for the Subscriptions. Any Subscription fee change will become effective at the end of the then-current Billing Cycle.
+Quantified Uncertainty Research Institute, in its sole discretion and at any time, may modify the Subscription fees for the Subscriptions. Any Subscription fee change will become effective at the end of the then-current Billing Cycle.
 
-Guesstimate Inc. will provide you with a reasonable prior notice of any change in Subscription fees to give you an opportunity to terminate your Subscription before such change becomes effective.
+Quantified Uncertainty Research Institute will provide you with a reasonable prior notice of any change in Subscription fees to give you an opportunity to terminate your Subscription before such change becomes effective.
 
 Your continued use of the Service after the Subscription fee change comes into effect constitutes your agreement to pay the modified Subscription fee amount.
 
 **Refunds**
 
-Certain refund requests for Subscriptions may be considered by Guesstimate Inc. on a case-by-case basis and granted in sole discretion of Guesstimate Inc..
+Certain refund requests for Subscriptions may be considered by Quantified Uncertainty Research Institute on a case-by-case basis and granted in sole discretion of Quantified Uncertainty Research Institute.
 
 **Content**
 
@@ -47,9 +47,9 @@ By posting Content on or through the Service, You represent and warrant that: (i
 
 You retain any and all of your rights to any Content you submit, post or display on or through the Service and you are responsible for protecting those rights. We take no responsibility and assume no liability for Content you or any third party posts on or through the Service. However, by posting Content using the Service you grant us the right and license to use, modify, publicly perform, publicly display, reproduce, and distribute such Content on and through the Service. You agree that this license includes the right for us to make your Content available to other users of the Service, who may also use your Content subject to these Terms.
 
-Guesstimate Inc. has the right but not the obligation to monitor and edit all Content provided by users.
+Quantified Uncertainty Research Institute has the right but not the obligation to monitor and edit all Content provided by users.
 
-In addition, Content found on or through this Service are the property of Guesstimate Inc. or used with permission. You may not distribute, modify, transmit, reuse, download, repost, copy, or use said Content, whether in whole or in part, for commercial purposes or for personal gain, without express advance written permission from us.
+In addition, Content found on or through this Service are the property of Quantified Uncertainty Research Institute or used with permission. You may not distribute, modify, transmit, reuse, download, repost, copy, or use said Content, whether in whole or in part, for commercial purposes or for personal gain, without express advance written permission from us.
 
 **Accounts**
 
@@ -61,11 +61,11 @@ You may not use as a username the name of another person or entity or that is no
 
 **Links To Other Web Sites**
 
-Our Service may contain links to third party web sites or services that are not owned or controlled by Guesstimate Inc..
+Our Service may contain links to third party web sites or services that are not owned or controlled by Quantified Uncertainty Research Institute.
 
-Guesstimate Inc. has no control over, and assumes no responsibility for the content, privacy policies, or practices of any third party web sites or services. We do not warrant the offerings of any of these entities/individuals or their websites.
+Quantified Uncertainty Research Institute has no control over, and assumes no responsibility for the content, privacy policies, or practices of any third party web sites or services. We do not warrant the offerings of any of these entities/individuals or their websites.
 
-You acknowledge and agree that Guesstimate Inc. shall not be responsible or liable, directly or indirectly, for any damage or loss caused or alleged to be caused by or in connection with use of or reliance on any such content, goods or services available on or through any such third party web sites or services.
+You acknowledge and agree that Quantified Uncertainty Research Institute shall not be responsible or liable, directly or indirectly, for any damage or loss caused or alleged to be caused by or in connection with use of or reliance on any such content, goods or services available on or through any such third party web sites or services.
 
 We strongly advise you to read the terms and conditions and privacy policies of any third party web sites or services that you visit.
 
