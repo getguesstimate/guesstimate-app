@@ -28,8 +28,6 @@ const MyApp = ({ Component }: AppProps) => {
     store = configureStore();
   }
 
-  // titleTemplate="%s | Guesstimate"
-
   return (
     <>
       <Script id="elev">{`var _elev = window._elev || {};(function() {
