@@ -48,7 +48,7 @@ export const ProfileDropdown: FC<{
       ionicIcon: "md-help",
       header: "Documentation",
       onClick: () => {
-        navigationActions.externalNavigate("http://docs.getguesstimate.com/");
+        navigationActions.externalNavigate("http://docs.getguesstimate.com/docs/Introduction");
       },
     },
     {
