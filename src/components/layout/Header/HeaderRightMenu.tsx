@@ -56,7 +56,7 @@ export const HeaderRightMenu: FC<Props> = (props) => {
           <MenuLink href="/scratchpad" noMobile text="Scratchpad" />
           <MenuLink href="/pricing" noMobile text="Plans" />
           <MenuLink
-            href="http://docs.getguesstimate.com/"
+            href="http://docs.getguesstimate.com/docs/Introduction"
             noMobile
             text="Documentation"
           />
