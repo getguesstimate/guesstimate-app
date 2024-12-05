@@ -43,7 +43,7 @@ export const Footer: React.FC = () => {
         <Header>Guesstimate</Header>
         <LinkItem href="/pricing">Pricing</LinkItem>
         <LinkItem href="https://docs.getguesstimate.com/docs/FAQ">FAQ</LinkItem>
-        <LinkItem href="http://docs.getguesstimate.com/">
+        <LinkItem href="http://docs.getguesstimate.com/docs/Introduction">
           Documentation
         </LinkItem>
         <LinkItem href="https://quantifieduncertainty.org">Blog</LinkItem>
