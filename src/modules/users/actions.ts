@@ -20,6 +20,13 @@ export function fetchMe(auth0_id: string): AppThunk {
     try {
       const data = await api(getState()).users.listWithAuth0Id(auth0_id);
       const me = data.items[0];
+      if (!me) {
+        // Authenticated, but the backend has no user for this identity.
+        // Usually an unconfirmed email signup that was never provisioned.
+        // Don't fake a signed-in profile — that crashes the UI.
+        dispatch(meActions.guesstimateMeNoProfile());
+        return;
+      }
       dispatch(meActions.guesstimateMeLoaded(me as any)); // FIXME - casting lies
       dispatch(fetchById(me.id));
     } catch (err) {
