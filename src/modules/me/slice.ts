@@ -36,6 +36,14 @@ type MeState =
       tag: "SIGNED_IN";
       session: Session;
       profile: MeProfile;
+    }
+  | {
+      // Authenticated with Auth0, but the backend has no matching user.
+      // Happens e.g. when someone signs up with email/password and hasn't
+      // confirmed their email yet, so the account was never provisioned.
+      tag: "SIGNED_IN_NO_PROFILE";
+      session: Session;
+      profile: undefined;
     };
 
 export const meSlice = createSlice({
@@ -70,7 +78,17 @@ export const meSlice = createSlice({
         profile: action.payload.profile,
       };
     },
-    destroy() {
+    setNoProfile(state) {
+      if (state.tag === "SIGNED_OUT") {
+        return state;
+      }
+      return {
+        tag: "SIGNED_IN_NO_PROFILE",
+        session: state.session,
+        profile: undefined,
+      };
+    },
+    destroy(): MeState {
       return { tag: "SIGNED_OUT", profile: undefined, session: null };
     },
   },

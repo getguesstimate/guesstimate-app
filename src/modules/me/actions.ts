@@ -37,3 +37,11 @@ export function guesstimateMeLoaded(profile: MeProfile): AppThunk {
     dispatch(meSlice.actions.setProfile({ profile }));
   };
 }
+
+// called when the user is authenticated but the backend has no matching
+// account (e.g. unconfirmed email signup that was never provisioned).
+export function guesstimateMeNoProfile(): AppThunk {
+  return (dispatch) => {
+    dispatch(meSlice.actions.setNoProfile());
+  };
+}

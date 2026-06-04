@@ -12,6 +12,16 @@ const content = `
 ## You are being redirected.
 `;
 
+const verifyEmailContent = `
+# Please confirm your email
+
+## We sent you a confirmation link.
+
+Check your inbox and click the link to verify your email address, then
+sign in again. If you signed up with the same email as a Google or GitHub
+login, your accounts will be linked automatically once confirmed.
+`;
+
 export const AuthRedirect: FC = () => {
   const router = useRouter();
 
@@ -22,6 +32,10 @@ export const AuthRedirect: FC = () => {
       router.push(user.urlById(me.profile.id));
     }
   }, [me, router]);
+
+  if (me.tag === "SIGNED_IN_NO_PROFILE") {
+    return <PageBase content={verifyEmailContent} />;
+  }
 
   return <PageBase content={content} />;
 };
