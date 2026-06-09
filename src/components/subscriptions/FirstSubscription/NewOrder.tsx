@@ -1,16 +1,4 @@
-import { useEffect, useRef } from "react";
-
-const newStyle = (height: number, hidden: boolean) => {
-  let style = `
-    width: 400px;
-    border: none;
-    border-radius: 5px;
-    overflow: hidden;
-  `;
-  style += "height:" + (height + 10) + "px;";
-  hidden && (style += "display:none;");
-  return style;
-};
+import { useEffect } from "react";
 
 export const NewOrder: React.FC<{
   page: string;
@@ -18,28 +6,26 @@ export const NewOrder: React.FC<{
   onSuccess(): void;
   onCancel(): void;
 }> = ({ page, name, onSuccess, onCancel }) => {
-  const ref = useRef<HTMLDivElement | null>(null);
-
   useEffect(() => {
     let timer: number | undefined;
+    let opened = false;
     const fn = () => {
-      // wait for ChargeBee to load
-      if (!window.ChargeBee) {
+      // wait for Chargebee.js (v2) to load
+      if (!window.Chargebee) {
         timer = window.setTimeout(fn, 300);
         return;
       }
-      window.ChargeBee.embed(page, name).load({
-        addIframe(iframe) {
-          ref.current?.append(iframe);
-        },
-        onLoad(iframe, _width: number, height: number) {
-          iframe.setAttribute("style", newStyle(height, false));
-        },
-        onResize(iframe, _width: number, height: number) {
-          iframe.setAttribute("style", newStyle(height, false));
-        },
-        onSuccess,
-        onCancel,
+      let cbInstance: any;
+      try {
+        cbInstance = window.Chargebee.getInstance();
+      } catch {
+        cbInstance = window.Chargebee.init({ site: name });
+      }
+      opened = true;
+      cbInstance.openCheckout({
+        hostedPageUrl: page,
+        success: onSuccess,
+        close: onCancel,
       });
     };
     fn();
@@ -47,8 +33,16 @@ export const NewOrder: React.FC<{
       if (timer) {
         window.clearTimeout(timer);
       }
+      if (opened) {
+        try {
+          window.Chargebee?.getInstance()?.closeAll();
+        } catch {
+          // instance not ready / already closed
+        }
+      }
     };
   }, []);
 
-  return <div ref={ref} />;
+  // v2 renders the checkout in its own modal overlay, so nothing inline here.
+  return null;
 };

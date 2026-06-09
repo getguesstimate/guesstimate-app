@@ -8,7 +8,7 @@ export type GuesstimateWorker = Worker & {
 declare global {
   interface Window {
     workers: GuesstimateWorker[];
-    ChargeBee: any;
+    Chargebee: any;
     get_profile: () => any;
     _elev: any;
   }

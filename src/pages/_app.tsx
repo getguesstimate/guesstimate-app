@@ -35,7 +35,7 @@ const MyApp = ({ Component }: AppProps) => {
       _elev.account_id = '565e550e67ffc'`}</Script>
       <Script id="wistia" src="//fast.wistia.com/assets/external/E-v1.js" />
       <Script id="twitter">{`!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");`}</Script>
-      <Script id="chargebee" src="https://js.chargebee.com/v1/chargebee.js" />
+      <Script id="chargebee" src="https://js.chargebee.com/v2/chargebee.js" />
       <Script id="iubenda" src="//cdn.iubenda.com/iubenda.js" />
       <Head>
         <title key="title">Guesstimate</title>
