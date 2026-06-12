@@ -16,7 +16,6 @@ import * as navigationActions from "~/modules/navigation/actions";
 export const ProfileDropdown: FC<{
   profile: MeProfile;
 }> = ({ profile }) => {
-  const portalUrl = _.get(profile, "account._links.payment_portal.href");
   const router = useRouter();
   const dispatch = useAppDispatch();
 
@@ -74,7 +73,8 @@ export const ProfileDropdown: FC<{
     },
   ];
 
-  if (!!portalUrl) {
+  const planId = _.get(profile, "plan.id");
+  if (planId && planId !== "personal_free") {
     listElements = listElements.filter((e) => e.header !== "upgrade");
   }
 

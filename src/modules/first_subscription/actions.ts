@@ -68,6 +68,10 @@ export function flowStageReset() {
   return { type: "FIRST_SUBSCRIPTION_FLOW_RESET" };
 }
 
+export function flowStageUnnecessary() {
+  return { type: "FIRST_SUBSCRIPTION_FLOW_UNNECESSARY" };
+}
+
 export function flowStageCancel() {
   return { type: "FIRST_SUBSCRIPTION_FLOW_CANCEL" };
 }

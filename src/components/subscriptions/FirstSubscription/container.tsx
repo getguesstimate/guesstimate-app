@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 import _ from "lodash";
 import { useRouter } from "next/router";
@@ -20,10 +20,23 @@ export const FirstSubscriptionContainer: React.FC<Props> = ({ planId }) => {
   const me = useAppSelector((state) => state.me);
   const firstSubscription = useAppSelector((state) => state.firstSubscription);
 
-  useEffect(() => {
-    dispatch(firstSubscriptionActions.flowStageReset());
+  // The profile arrives in two steps; only the second (authenticated) fetch
+  // includes plan.id. Wait for it, then decide once.
+  const profilePlanId = _.get(me, "profile.plan.id");
+  const initialized = useRef(false);
 
-    if (me.profile && !me.profile?.has_payment_account) {
+  useEffect(() => {
+    if (initialized.current || !profilePlanId || !me.profile) {
+      return;
+    }
+    initialized.current = true;
+
+    dispatch(firstSubscriptionActions.flowStageReset());
+    if (profilePlanId !== "personal_free") {
+      // Already on a paid plan: point to the portal instead of fetching a
+      // checkout the backend would refuse.
+      dispatch(firstSubscriptionActions.flowStageUnnecessary());
+    } else {
       dispatch(
         firstSubscriptionActions.fetchIframe({
           user_id: me.profile.id,
@@ -31,7 +44,7 @@ export const FirstSubscriptionContainer: React.FC<Props> = ({ planId }) => {
         })
       );
     }
-  }, []);
+  }, [profilePlanId]);
 
   if (!me.profile) {
     return null; // shouldn't happen, FirstSubscriptionPage won't render this component if user is not signed in
@@ -43,7 +56,10 @@ export const FirstSubscriptionContainer: React.FC<Props> = ({ planId }) => {
 
   const flowStage = subStage(firstSubscription);
 
-  const paymentAccountPortalUrl = _.get(me, "profile.account._links.account");
+  const paymentAccountPortalUrl = _.get(
+    me,
+    "profile.account._links.payment_portal.href"
+  );
 
   const handlePaymentSuccess = () => {
     dispatch(

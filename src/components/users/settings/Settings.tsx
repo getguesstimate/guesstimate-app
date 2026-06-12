@@ -48,18 +48,21 @@ const PlanUpgradeSection: React.FC<{
   onRefresh?(): void;
 }> = ({ planId, portalUrl, onRefresh }) => {
   const hasPortalUrl = !!portalUrl;
+  // Free-plan users always get an upgrade button, even when they have a
+  // payment account from an earlier (cancelled) subscription.
+  const canUpgrade = planId === "personal_free";
   if (planId === "personal_infinite") {
     return null;
   } else {
     return (
       <div>
         <HR />
-        <div className="mt-8 flex flex-col items-center">
-          {hasPortalUrl ? (
+        <div className="mt-8 flex flex-col items-center space-y-4">
+          {canUpgrade && <PlanUpgradeButton />}
+          {hasPortalUrl && (
             <PortalButton url={portalUrl} onRefresh={onRefresh} />
-          ) : (
-            <PlanUpgradeButton />
           )}
+          {!canUpgrade && !hasPortalUrl && <PlanUpgradeButton />}
         </div>
       </div>
     );
