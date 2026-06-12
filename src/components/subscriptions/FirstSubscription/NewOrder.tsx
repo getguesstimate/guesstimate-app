@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 
 export const NewOrder: React.FC<{
-  page: string;
+  hostedPage: any;
   name: string;
   onSuccess(): void;
   onCancel(): void;
-}> = ({ page, name, onSuccess, onCancel }) => {
+}> = ({ hostedPage, name, onSuccess, onCancel }) => {
   useEffect(() => {
     let timer: number | undefined;
     let opened = false;
@@ -22,8 +22,11 @@ export const NewOrder: React.FC<{
         cbInstance = window.Chargebee.init({ site: name });
       }
       opened = true;
+      // Pass the full hosted page object (not just its url) so the checkout
+      // runs in-context and fires `success` here, instead of redirecting away
+      // and losing the post-payment account sync.
       cbInstance.openCheckout({
-        hostedPageUrl: page,
+        hostedPage: () => Promise.resolve(hostedPage),
         success: onSuccess,
         close: onCancel,
       });

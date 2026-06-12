@@ -37,7 +37,7 @@ export const FirstSubscriptionContainer: React.FC<Props> = ({ planId }) => {
     return null; // shouldn't happen, FirstSubscriptionPage won't render this component if user is not signed in
   }
 
-  const iframeUrl = firstSubscription.iframe?.href || "";
+  const hostedPage = firstSubscription.iframe?.hosted_page;
 
   const iframeWebsiteName = firstSubscription.iframe?.website_name || "";
 
@@ -62,7 +62,7 @@ export const FirstSubscriptionContainer: React.FC<Props> = ({ planId }) => {
     <FirstSubscription
       flowStage={flowStage}
       paymentAccountPortalUrl={paymentAccountPortalUrl}
-      iframeUrl={iframeUrl}
+      hostedPage={hostedPage}
       iframeWebsiteName={iframeWebsiteName}
       onPaymentSuccess={handlePaymentSuccess}
       onPaymentCancel={handlePaymentCancel}

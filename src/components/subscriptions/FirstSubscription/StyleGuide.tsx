@@ -8,7 +8,7 @@ import { FirstSubscription } from "./FirstSubscription";
 const FirstSubscriptionBaseProps = {
   planId: "small",
   paymentAccountPortalUrl: "http://foobar.com",
-  iframeUrl: "http://foobar.com",
+  hostedPage: { url: "http://foobar.com" },
   iframeWebsiteName: "good-stuff",
   onPaymentCancel: function (g) {
     console.log(g);
