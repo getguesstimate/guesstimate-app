@@ -7,7 +7,7 @@ import { NewOrder } from "./NewOrder";
 
 type Props = {
   flowStage: string;
-  iframeUrl: string;
+  hostedPage: any;
   iframeWebsiteName: string;
   onPaymentCancel(): void;
   onPaymentSuccess(): void;
@@ -54,11 +54,11 @@ export const FormFailure: React.FC = () => (
 export const FormSuccess: React.FC<
   Pick<
     Props,
-    "iframeUrl" | "iframeWebsiteName" | "onPaymentCancel" | "onPaymentSuccess"
+    "hostedPage" | "iframeWebsiteName" | "onPaymentCancel" | "onPaymentSuccess"
   >
-> = ({ iframeUrl, iframeWebsiteName, onPaymentCancel, onPaymentSuccess }) => (
+> = ({ hostedPage, iframeWebsiteName, onPaymentCancel, onPaymentSuccess }) => (
   <NewOrder
-    page={iframeUrl}
+    hostedPage={hostedPage}
     name={iframeWebsiteName}
     onSuccess={onPaymentSuccess}
     onCancel={onPaymentCancel}
@@ -67,13 +67,13 @@ export const FormSuccess: React.FC<
 export const TestFormSuccess: React.FC<
   Pick<
     Props,
-    "iframeUrl" | "iframeWebsiteName" | "onPaymentCancel" | "onPaymentSuccess"
+    "hostedPage" | "iframeWebsiteName" | "onPaymentCancel" | "onPaymentSuccess"
   >
-> = ({ iframeUrl, iframeWebsiteName, onPaymentCancel, onPaymentSuccess }) => (
+> = ({ hostedPage, iframeWebsiteName, onPaymentCancel, onPaymentSuccess }) => (
   <div>
     <h1 className="text-3xl">This is a test.</h1>
     <H2>Pretend strongly that there is a payment iframe here</H2>
-    <div>iframeUrl: {iframeUrl}</div>
+    <div>hostedPage: {JSON.stringify(hostedPage)}</div>
     <div>iframeWebsiteName: {iframeWebsiteName}</div>
     <Button color="red" onClick={onPaymentCancel}>
       Pretend to Cancel
@@ -111,14 +111,14 @@ export const FirstSubscription: React.FC<Props> = ({
   flowStage,
   onNewModel,
   isTest = true, // TODO - default to false?
-  iframeUrl = "",
+  hostedPage,
   iframeWebsiteName = "",
   onPaymentCancel,
   onPaymentSuccess,
   paymentAccountPortalUrl = "",
 }) => {
   const formSuccessProps = {
-    iframeUrl,
+    hostedPage,
     iframeWebsiteName,
     onPaymentCancel,
     onPaymentSuccess,

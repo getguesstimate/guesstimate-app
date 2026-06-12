@@ -6,7 +6,7 @@ import { newFlowState } from "./state_machine";
 export const initialState = {
   flowStage: "START",
   iframe: {
-    href: null,
+    hosted_page: null,
     website_name: null,
     request: initialRequestState,
   },
@@ -28,11 +28,11 @@ const iframe: Reducer<any> = (
 ) => {
   switch (action.type) {
     case "FIRST_SUBSCRIPTION_IFRAME_FETCH_START":
-      return singleEntity(state, action, "START", ["href", "website_name"]);
+      return singleEntity(state, action, "START", ["hosted_page", "website_name"]);
     case "FIRST_SUBSCRIPTION_IFRAME_FETCH_SUCCESS":
-      return singleEntity(state, action, "SUCCESS", ["href", "website_name"]);
+      return singleEntity(state, action, "SUCCESS", ["hosted_page", "website_name"]);
     case "FIRST_SUBSCRIPTION_IFRAME_FETCH_FAILURE":
-      return singleEntity(state, action, "FAILURE", ["href", "website_name"]);
+      return singleEntity(state, action, "FAILURE", ["hosted_page", "website_name"]);
     default:
       return state;
   }
