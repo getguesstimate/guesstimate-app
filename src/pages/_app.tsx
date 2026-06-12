@@ -11,6 +11,7 @@ import Head from "next/head";
 import Script from "next/script";
 import { Provider } from "react-redux";
 import { AuthProvider } from "~/components/layout/AuthProvider";
+import { CheckoutRedirectSync } from "~/components/layout/CheckoutRedirectSync";
 
 import { configureStore } from "../modules/store";
 
@@ -47,7 +48,14 @@ const MyApp = ({ Component }: AppProps) => {
       {/* no session here - it's loaded on client side */}
       <SessionProvider>
         <Provider store={store}>
-          <AuthProvider>{isClient ? <Component /> : null}</AuthProvider>
+          <AuthProvider>
+            {isClient ? (
+              <>
+                <CheckoutRedirectSync />
+                <Component />
+              </>
+            ) : null}
+          </AuthProvider>
         </Provider>
       </SessionProvider>
     </>
