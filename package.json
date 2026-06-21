@@ -14,7 +14,7 @@
     "type": "git",
     "url": "https://github.com/getguesstimate/guesstimate-app.git"
   },
-  "packageManager": "pnpm@11.5.0",
+  "packageManager": "pnpm@9.15.9",
   "keywords": [
     "Monte Carlo",
     "Estimate",
@@ -105,5 +105,14 @@
     "reselect": "^3.0.0",
     "tailwindcss": "^3.2.4",
     "yup": "^0.32.11"
+  },
+  "pnpm": {
+    "overrides": {
+      "immutable": "3.8.3",
+      "trim": ">=1.0.1",
+      "js-yaml": ">=4.1.2",
+      "postcss": ">=8.5.15",
+      "uuid": "^11.1.1"
+    }
   }
 }
