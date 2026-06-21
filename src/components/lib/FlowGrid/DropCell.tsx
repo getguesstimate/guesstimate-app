@@ -153,7 +153,9 @@ export const DropCell: FC<Props> = memo(function DropCell(props) {
 
   return (
     <div
-      ref={connectDropTarget}
+      ref={(node) => {
+        connectDropTarget(node);
+      }}
       className={clsx(
         "group/gridcell",
         "relative grid min-h-[60px] flex-none place-items-stretch",

@@ -49,7 +49,7 @@ export const DistributionEditor = React.forwardRef<{ focus(): void }, Props>(
     const formRef = useRef<{ focus(): void } | null>(null);
     const dispatch = useAppDispatch();
 
-    const prevPropsRef = useRef<Props | undefined>();
+    const prevPropsRef = useRef<Props | undefined>(undefined);
 
     useEffect(() => {
       const prevProps = prevPropsRef.current;

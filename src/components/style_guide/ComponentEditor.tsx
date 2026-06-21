@@ -34,7 +34,7 @@ export function ComponentEditor<T>({
           <Child
             {
               ...(childProps as T &
-                JSX.IntrinsicAttributes) /* weird lie, should investigate */
+                React.JSX.IntrinsicAttributes) /* weird lie, should investigate */
             }
           />
         }

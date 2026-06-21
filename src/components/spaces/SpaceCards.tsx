@@ -84,7 +84,7 @@ export const SpaceCard: FC<{
   size?: Size;
   urlParams?: any;
 }> = ({ space, showPrivacy, size = undefined, urlParams = {} }) => {
-  const hasOrg = _.has(space, "organization.name");
+  const hasOrg = _.has(space as any, "organization.name");
 
   const owner = hasOrg ? space.organization : space.user;
   const ownerUrl = hasOrg

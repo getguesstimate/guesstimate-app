@@ -1,6 +1,5 @@
 import React, { useCallback, useRef, useState } from "react";
 
-import ReactDOM from "react-dom";
 import TextareaAutosize from "react-textarea-autosize";
 
 import Icon from "~/components/react-fa-patched";
@@ -28,7 +27,7 @@ const EditingMode: React.FC<{
         className="min-h-[120px] w-full rounded border-2 border-solid border-blue-5 p-2 outline-none focus:border-blue-1"
         defaultValue={value}
         ref={(ref) => {
-          ref && (ReactDOM.findDOMNode(ref) as any).select();
+          ref && ref.select();
           textInput.current = ref;
         }}
       />

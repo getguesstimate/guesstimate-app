@@ -1,4 +1,4 @@
-import uuid from "node-uuid";
+import { v1 as uuidv1 } from "uuid";
 
 import * as _collections from "./collections";
 
@@ -24,7 +24,7 @@ export function equals(l: Metric, r: Metric) {
 
 export function create(metricNames: string[]) {
   return {
-    id: uuid.v1() as string,
+    id: uuidv1() as string,
     readableId: generateRandomReadableId(metricNames),
   };
 }

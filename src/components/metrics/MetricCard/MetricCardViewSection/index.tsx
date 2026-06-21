@@ -263,7 +263,9 @@ export const MetricCardViewSection = forwardRef<
           "flex min-h-[10px] flex-1 flex-col",
           anotherFunctionSelected ? "cursor-pointer" : "cursor-move"
         )}
-        ref={props.connectDragSource}
+        ref={(node) => {
+          props.connectDragSource(node);
+        }}
       >
         {showSensitivitySection && (
           <div className="flex-none">

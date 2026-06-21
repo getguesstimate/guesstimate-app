@@ -139,7 +139,7 @@ export const MetricCard = forwardRef<{ focus(): void }, Props>(
     const prevData = useRef<{
       inSelectedCell: boolean;
       modalIsOpen: boolean;
-    }>();
+    }>(undefined);
 
     useEffect(() => {
       if (prevData.current) {

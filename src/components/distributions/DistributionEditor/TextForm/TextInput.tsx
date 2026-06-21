@@ -78,7 +78,7 @@ const Suggestion = stylizedSpan("bg-[#b5ddff]");
 const positionDecorator = (
   start: number,
   end: number,
-  component: FC
+  component: any
 ): DraftDecorator => ({
   strategy: (contentBlock: any, callback) => {
     if (end <= contentBlock.text.length) {
@@ -109,7 +109,7 @@ type State = {
 };
 
 export class UnconnectedTextInput extends Component<Props, State> {
-  editorRef: React.RefObject<Editor>;
+  editorRef: React.RefObject<Editor | null>;
   clickHandler: (e: CustomEvent) => void;
 
   state: State = {
@@ -177,7 +177,7 @@ export class UnconnectedTextInput extends Component<Props, State> {
         strategy: (contentBlock, callback) => {
           findWithRegex(fact_regex, contentBlock, callback);
         },
-        component: Fact,
+        component: Fact as any,
       },
     ];
 
@@ -189,7 +189,7 @@ export class UnconnectedTextInput extends Component<Props, State> {
         strategy: (contentBlock, callback) => {
           findWithRegex(validInputsRegex, contentBlock, callback);
         },
-        component: ValidInput,
+        component: ValidInput as any,
       });
     }
     if (!_.isEmpty(errorInputs)) {
@@ -198,7 +198,7 @@ export class UnconnectedTextInput extends Component<Props, State> {
         strategy: (contentBlock, callback) => {
           findWithRegex(errorInputsRegex, contentBlock, callback);
         },
-        component: ErrorInput,
+        component: ErrorInput as any,
       });
     }
     return decorators;
