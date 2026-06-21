@@ -97,4 +97,20 @@ describe("URL transformation", () => {
       expect(makeURLsMarkdown(fullText)).toEqual(fullTextTransformed);
     });
   });
+
+  describe("URL_REGEX is not vulnerable to ReDoS", () => {
+    // The previous host pattern had a nested quantifier that backtracked
+    // exponentially. This input (a string starting with "0." followed by many
+    // "00." groups, then a non-matching char) hung the old regex for seconds
+    // and grew exponentially with length. It must now complete near-instantly.
+    it("matches adversarial input quickly", () => {
+      const evil = "0." + "00.".repeat(200) + "!";
+      const start = Date.now();
+      // Exercise both the global form and an anchored form.
+      URL_REGEX.test(evil);
+      new RegExp(`^${URL_REGEX.source}$`, "i").test(evil);
+      makeURLsMarkdown(evil);
+      expect(Date.now() - start).toBeLessThan(1000);
+    });
+  });
 });
