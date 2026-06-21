@@ -22,7 +22,7 @@ export function configureStore() {
 
   sagaMiddleware.run(dispatchCatchSaga);
 
-  const hot = (module as any).hot;
+  const hot = typeof module !== "undefined" ? (module as any).hot : undefined;
   if (hot && typeof hot.accept === "function") {
     // Enable hot module replacement for reducers (webpack only; Turbopack has
     // its own Fast Refresh and a different `module.hot.accept` signature).
