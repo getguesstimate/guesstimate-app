@@ -10,7 +10,7 @@ import * as e from "~/lib/engine/engine";
 import { MemberAddForm } from "../shared/MemberAddForm/index";
 
 const Layout: React.FC<{
-  children: [JSX.Element | null, JSX.Element];
+  children: [React.JSX.Element | null, React.JSX.Element];
 }> = ({ children: [left, right] }) => (
   <div className="space-y-4 px-4 md:grid md:grid-cols-12 md:gap-4 md:space-y-0 md:px-0">
     <div className="md:col-span-2">{left}</div>

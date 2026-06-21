@@ -3,11 +3,7 @@ import { withSentryConfig } from "@sentry/nextjs";
 /**
  * @type {import('next').NextConfig}
  */
-let config = {
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-};
+let config = {};
 
 if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
   config = withSentryConfig(

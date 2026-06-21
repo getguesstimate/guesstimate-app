@@ -1,5 +1,7 @@
 import _ from "lodash";
-import math from "mathjs";
+import { all, create } from "mathjs";
+
+const math = create(all);
 import { DEBUG } from "~/lib/constants";
 import * as errorTypes from "~/lib/propagation/errors";
 
@@ -104,7 +106,7 @@ function evaluate(compiled, inputs, n, text): SimulateResult {
     try {
       newSample = someInputFiltered
         ? SAMPLE_FILTERED
-        : compiled.eval(sampledInputs);
+        : compiled.evaluate(sampledInputs);
     } catch (rawError) {
       const isUnexpectedTypeError = rawError.message.includes(
         "Unexpected type of argument in function"

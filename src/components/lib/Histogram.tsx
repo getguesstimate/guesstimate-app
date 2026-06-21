@@ -106,7 +106,9 @@ export const Histogram = React.forwardRef<{ xScale: any }, Props>(
     ref
   ) {
     const containerRef = useRef<HTMLDivElement | null>(null);
-    const [width, height] = useSize(containerRef);
+    const [width, height] = useSize(
+      containerRef as React.RefObject<HTMLElement>
+    );
 
     const { xScale, yScale, histogramData } = useMemo(() => {
       const filteredData = filterLowDensityPoints(data, cutOffRatio);

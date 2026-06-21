@@ -132,6 +132,6 @@ body.remove-elev #_elev_io {
   border-radius: 10px;
 }
 
-::-webkit-scrollbar-track:corner {
+::-webkit-scrollbar-corner {
   background-color: black;
 }

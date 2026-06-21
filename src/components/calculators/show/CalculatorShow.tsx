@@ -198,7 +198,9 @@ export const CalculatorShow: React.FC<Props> = (props) => {
         {props.inputs.map((metric, i) => (
           <Input
             key={metric.id}
-            ref={(ref) => inputRefs.current.set(metric.id, ref)}
+            ref={(ref) => {
+              inputRefs.current.set(metric.id, ref);
+            }}
             id={metric.id}
             isFirst={i === 0}
             name={metric.name}
