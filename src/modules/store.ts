@@ -22,12 +22,18 @@ export function configureStore() {
 
   sagaMiddleware.run(dispatchCatchSaga);
 
-  if ((module as any).hot) {
-    // Enable Webpack hot module replacement for reducers
-    (module as any).hot.accept("~/modules/reducers", () => {
-      const nextReducer = require("~/modules/reducers");
-      store.replaceReducer(nextReducer);
-    });
+  const hot = (module as any).hot;
+  if (hot && typeof hot.accept === "function") {
+    // Enable hot module replacement for reducers (webpack only; Turbopack has
+    // its own Fast Refresh and a different `module.hot.accept` signature).
+    try {
+      hot.accept("~/modules/reducers", () => {
+        const { rootReducer: nextReducer } = require("~/modules/reducers");
+        store.replaceReducer(nextReducer);
+      });
+    } catch {
+      // ignore — HMR not supported by the current bundler
+    }
   }
 
   return store;
