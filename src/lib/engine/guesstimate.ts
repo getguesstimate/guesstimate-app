@@ -41,7 +41,7 @@ export const translateFactHandleFn = (idMap) => (g) => ({
 });
 
 // TODO(matthew): No global regex constants...
-const METRIC_ID_REGEX = new RegExp(`\\$\\{${METRIC_ID_PREFIX}([^\}]*)\\}`, "g");
+const METRIC_ID_REGEX = new RegExp(`\\$\\{${METRIC_ID_PREFIX}([^}]*)\\}`, "g");
 export const extractMetricIds = ({ expression }) =>
   _.uniq(_utils.getSubMatches(expression, METRIC_ID_REGEX, 1));
 
