@@ -79,7 +79,7 @@
     "next-auth": "^4.24.14",
     "uuid": "^11.1.1",
     "numeral": "~2.0.6",
-    "postcss": "^8.4.20",
+    "postcss": "^8.5.23",
     "postcss-import": "12",
     "postcss-mixins": "^9.0.4",
     "postcss-nested": "3.0",
