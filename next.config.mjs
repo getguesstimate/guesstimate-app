@@ -16,6 +16,16 @@ let config = {
     return {
       // Public information pages do not need the application or its session.
       beforeFiles: publicPageRewrites(),
+      // Local HTTPS previews are not included in the production API's CORS origins.
+      afterFiles:
+        process.env.GUESSTIMATE_PREVIEW_API_PROXY === "true"
+          ? [
+              {
+                source: "/api/guesstimate/:path*",
+                destination: "https://api.getguesstimate.com/:path*",
+              },
+            ]
+          : [],
     };
   },
 };
