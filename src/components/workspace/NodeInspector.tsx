@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { DistributionEditor } from "~/components/distributions/DistributionEditor";
 import { SimulationHistogram } from "~/components/simulations/SimulationHistogram";
 import { FullDenormalizedMetric } from "~/lib/engine/space";
@@ -23,6 +23,8 @@ export function NodeInspector({
   onSelect,
   onDelete,
   resizeHandle,
+  onAdvance,
+  focusFormula = false,
 }: {
   metric: FullDenormalizedMetric;
   metrics: FullDenormalizedMetric[];
@@ -30,13 +32,23 @@ export function NodeInspector({
   onSelect(id: string): void;
   onDelete(): void;
   resizeHandle: ReactNode;
+  onAdvance?(direction: "down" | "right"): void;
+  focusFormula?: boolean;
 }) {
+  const formulaRef = useRef<{ focus(): void } | null>(null);
+  useEffect(() => {
+    if (focusFormula) formulaRef.current?.focus();
+  }, [focusFormula]);
   const dispatch = useAppDispatch();
   const clickMode = useAppSelector(
     (state) => state.canvasState.metricClickMode
   );
   const [name, setName] = useState(metric.name || "");
   useEffect(() => setName(metric.name || ""), [metric.name]);
+  const advance = (direction: "down" | "right") => {
+    dispatch(changeGuesstimate(metric.id, {}));
+    onAdvance?.(direction);
+  };
   const stats = metric.simulation?.stats;
   const referenceExamples = metrics
     .filter((candidate) => candidate.id !== metric.id)
@@ -119,6 +131,9 @@ export function NodeInspector({
             </FieldHelp>
           </div>
           <DistributionEditor
+            ref={formulaRef}
+            onReturn={onAdvance ? () => advance("down") : undefined}
+            onTab={onAdvance ? () => advance("right") : undefined}
             size="large"
             metricId={metric.id}
             guesstimate={metric.guesstimate}

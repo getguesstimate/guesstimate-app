@@ -70,6 +70,7 @@ export function ScratchpadWorkspace() {
   const metrics = space.metrics || [];
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [formulaFocusId, setFormulaFocusId] = useState<string | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [canvasSelection, setCanvasSelection] = useState<string[]>([]);
   const [areaMode, setAreaMode] = useState(false);
@@ -305,9 +306,11 @@ export function ScratchpadWorkspace() {
       return;
     }
     setCanvasSelection([]);
+    setFormulaFocusId(null);
     setSelectedId(id);
   };
   const closeDetails = () => {
+    setFormulaFocusId(null);
     setSelectedId(null);
     dispatch(changeMetricClickMode("DEFAULT"));
   };
@@ -322,6 +325,24 @@ export function ScratchpadWorkspace() {
         })
       );
     } else dispatch(changeMetric({ id, canvasPosition: point }));
+  };
+  const duplicateSelection = () => {
+    if (!canvasActionIds.length) return;
+    const copies = dispatch(duplicateScratchpadCanvasNodes(canvasActionIds));
+    closeDetails();
+    setCanvasSelection(copies.map((m) => m.id));
+    requestAnimationFrame(() => {
+      const box = viewport.current;
+      if (box && copies.length)
+        setView(
+          fitNodes(
+            copies.map((m) => m.canvasPosition!),
+            box.clientWidth,
+            box.clientHeight
+          )
+        );
+      viewport.current?.focus();
+    });
   };
   const remove = () => {
     if (viewMode === "canvas" && activeSelection.length) {
@@ -362,7 +383,9 @@ export function ScratchpadWorkspace() {
       })
     )
       position = { x: position.x + 40, y: position.y + 40 };
-    setSelectedId(dispatch(addScratchpadNode(position)));
+    const id = dispatch(addScratchpadNode(position));
+    setSelectedId(id);
+    setFormulaFocusId(id);
   };
   const addSheetNode = (location: CanvasLocation) => {
     if (
@@ -385,7 +408,28 @@ export function ScratchpadWorkspace() {
       })
     )
       position = { x: position.x + 40, y: position.y + 40 };
-    setSelectedId(dispatch(addScratchpadNode(position, location)));
+    const id = dispatch(addScratchpadNode(position, location));
+    setSelectedId(id);
+    setFormulaFocusId(id);
+    return id;
+  };
+  const advanceSheetInput = (direction: "down" | "right") => {
+    if (!selected) return;
+    const location = {
+      row: selected.location.row + (direction === "down" ? 1 : 0),
+      column: selected.location.column + (direction === "right" ? 1 : 0),
+    };
+    const existing = metrics.find(
+      (m) =>
+        m.location.row === location.row && m.location.column === location.column
+    );
+    const id = existing?.id || addSheetNode(location);
+    if (id) {
+      setCanvasSelection([]);
+      setSelectedId(id);
+      setFormulaFocusId(id);
+      dispatch(changeMetricClickMode("DEFAULT"));
+    }
   };
   const zoom = (factor: number) => {
     const box = viewport.current;
@@ -465,13 +509,32 @@ export function ScratchpadWorkspace() {
         event.preventDefault();
         dispatch(redo(SCRATCHPAD_ID));
       }
-      if (event.target !== viewport.current) return;
+      if (
+        viewMode === "canvas" &&
+        viewport.current?.contains(event.target as Node) &&
+        (event.ctrlKey || event.metaKey) &&
+        !event.altKey &&
+        event.key.toLowerCase() === "d"
+      ) {
+        event.preventDefault();
+        if (!event.repeat) duplicateSelection();
+        return;
+      }
+      if (
+        event.target !== viewport.current ||
+        event.ctrlKey ||
+        event.metaKey ||
+        event.altKey
+      )
+        return;
       if (event.key === "Delete" || event.key === "Backspace") {
         event.preventDefault();
         remove();
       }
-      if (event.key.toLowerCase() === "n" && !event.ctrlKey && !event.metaKey)
-        add();
+      if (event.key.toLowerCase() === "n") {
+        event.preventDefault();
+        if (!event.repeat) add();
+      }
       if (event.key.toLowerCase() === "f") fit();
       if (event.key === "+" || event.key === "=") {
         event.preventDefault();
@@ -877,25 +940,7 @@ export function ScratchpadWorkspace() {
                 className={styles.iconButton}
                 aria-label="Duplicate selected nodes"
                 title="Duplicate"
-                onClick={() => {
-                  const copies = dispatch(
-                    duplicateScratchpadCanvasNodes(canvasActionIds)
-                  );
-                  closeDetails();
-                  setCanvasSelection(copies.map((m) => m.id));
-                  requestAnimationFrame(() => {
-                    const box = viewport.current;
-                    if (box && copies.length)
-                      setView(
-                        fitNodes(
-                          copies.map((m) => m.canvasPosition!),
-                          box.clientWidth,
-                          box.clientHeight
-                        )
-                      );
-                    viewport.current?.focus();
-                  });
-                }}
+                onClick={duplicateSelection}
               >
                 <Icon name="duplicate" />
               </button>
@@ -1078,7 +1123,7 @@ export function ScratchpadWorkspace() {
                     </li>
                     <li>
                       With the canvas focused: N adds a node, F fits the model,
-                      and + / − zoom.
+                      and + / − zoom. Ctrl/⌘ D duplicates selected nodes.
                     </li>
                   </ul>
                   <button
@@ -1176,6 +1221,8 @@ export function ScratchpadWorkspace() {
             key={selected.id}
             metric={selected}
             resizeHandle={resizeHandle}
+            focusFormula={formulaFocusId === selected.id}
+            onAdvance={viewMode === "sheet" ? advanceSheetInput : undefined}
             metrics={metrics}
             onClose={closeDetails}
             onSelect={setSelectedId}

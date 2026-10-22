@@ -104,6 +104,18 @@ export function SheetView(props: Props) {
     y: number;
   } | null>(null);
   const suppressClick = useRef(false);
+  const emptyPress = useRef<{
+    pointerId: number;
+    location: CanvasLocation;
+    x: number;
+    y: number;
+  } | null>(null);
+  const lastEmptyTap = useRef<{
+    location: CanvasLocation;
+    time: number;
+    x: number;
+    y: number;
+  } | null>(null);
   const handActive = hand || spaceHeld;
   const zoomTo = (value: number, x?: number, y?: number) => {
     const box = scroll.current;
@@ -313,6 +325,24 @@ export function SheetView(props: Props) {
     setCell(target);
     props.onAdd(target);
   };
+  const duplicateSelection = () => {
+    const locations = props.onDuplicateNodes(rangeNodes.map((m) => m.id));
+    if (!locations.length) return;
+    const start = {
+      row: Math.min(...locations.map((l) => l.row)),
+      column: Math.min(...locations.map((l) => l.column)),
+    };
+    const end = {
+      row: Math.max(...locations.map((l) => l.row)),
+      column: Math.max(...locations.map((l) => l.column)),
+    };
+    selectRange(start, end);
+    requestAnimationFrame(() => {
+      reveal(start);
+      scroll.current?.focus({ preventScroll: true });
+    });
+    setMessage(`Duplicated ${locations.length} nodes.`);
+  };
   const finishDrag = () => {
     const current = dragRef.current;
     if (current) move(current.id, current.target);
@@ -324,6 +354,23 @@ export function SheetView(props: Props) {
       className={styles.sheetView}
       hidden={!active}
       aria-label="Sheet workspace"
+      onKeyDown={(event) => {
+        if (
+          (event.target as Element).closest(
+            'input, textarea, [contenteditable="true"], [role="dialog"]'
+          )
+        )
+          return;
+        if (
+          (event.ctrlKey || event.metaKey) &&
+          !event.altKey &&
+          event.key.toLowerCase() === "d"
+        ) {
+          event.preventDefault();
+          event.stopPropagation();
+          if (!event.repeat) duplicateSelection();
+        }
+      }}
     >
       <div
         className={styles.sheetToolbar}
@@ -402,14 +449,18 @@ export function SheetView(props: Props) {
         </span>
         <FieldHelp label="Sheet help">
           <p>
-            Select an empty cell and press Enter to add a node. Use arrow keys
-            to move between cells. Drag across cells to select a range, or use
-            Shift-click and Shift-arrow keys. Delete removes the selected nodes;
-            Undo restores them. Drag a selected header to move the whole group.
-            Drag a node’s header to move it to an empty cell. Use the hand tool
-            or hold Space to drag the sheet. Swipe to pan on touch screens;
-            pinch to zoom. The mouse wheel scrolls in Select mode and zooms in
-            Hand mode. Formulas use the reference IDs on nodes.
+            Double-click or double-tap an empty cell to add a node, or select it
+            and press Enter. N adds a node at the selected cell or the next
+            empty cell below. Use arrow keys to move between cells. Drag across
+            cells to select a range, or use Shift-click and Shift-arrow keys.
+            Delete removes the selected nodes; Undo restores them. Drag a
+            selected header to move the whole group. Drag a node’s header to
+            move it to an empty cell. Use the hand tool or hold Space to drag
+            the sheet. Swipe to pan on touch screens; pinch to zoom. The mouse
+            wheel scrolls in Select mode and zooms in Hand mode. Ctrl/⌘ D
+            duplicates selected nodes. While editing a value, Enter moves down
+            and Tab moves right, creating a node if the next cell is empty.
+            Formulas use the reference IDs on nodes.
           </p>
         </FieldHelp>
         <button
@@ -454,6 +505,12 @@ export function SheetView(props: Props) {
             )
           )
             return;
+          if (event.ctrlKey || event.metaKey || event.altKey) return;
+          if (event.key.toLowerCase() === "n") {
+            event.preventDefault();
+            if (!event.repeat) add();
+            return;
+          }
           if (event.code === "Space") {
             event.preventDefault();
             setSpaceHeld(true);
@@ -506,23 +563,55 @@ export function SheetView(props: Props) {
           }
         }}
         onBlur={(event) => {
-            if (event.target === event.currentTarget)
-              delete event.currentTarget.dataset.pointerFocus;
-          }}
-          onKeyDownCapture={(event) => {
-            if (event.key === "Tab")
-              delete event.currentTarget.dataset.pointerFocus;
-          }}
-          onPointerDownCapture={(event) => {
-            event.currentTarget.dataset.pointerFocus = "true";
+          if (event.target === event.currentTarget)
+            delete event.currentTarget.dataset.pointerFocus;
+        }}
+        onKeyDownCapture={(event) => {
+          if (event.key === "Tab")
+            delete event.currentTarget.dataset.pointerFocus;
+        }}
+        onPointerDownCapture={(event) => {
+          event.currentTarget.dataset.pointerFocus = "true";
           if (event.button !== 0 && event.button !== 1) return;
           suppressClick.current = false;
+          const target = event.target as Element;
+          const cellElement = target.closest("[data-sheet-cell]");
+          emptyPress.current = null;
+          if (
+            event.button === 0 &&
+            !handActive &&
+            cellElement &&
+            !target.closest("[data-sheet-node]") &&
+            stage.current
+          ) {
+            const rect = stage.current.getBoundingClientRect();
+            emptyPress.current = {
+              pointerId: event.pointerId,
+              location: cellAtPoint(
+                (event.clientX - rect.left) / zoomRef.current,
+                (event.clientY - rect.top) / zoomRef.current
+              ),
+              x: event.clientX,
+              y: event.clientY,
+            };
+            const previous = lastEmptyTap.current;
+            if (
+              previous &&
+              sameCell(previous.location, emptyPress.current.location) &&
+              event.timeStamp - previous.time < 450
+            ) {
+              // The second tap must not focus the new card via a compatibility mouse event.
+              event.preventDefault();
+            }
+          } else lastEmptyTap.current = null;
           const box = event.currentTarget;
           pointers.current.set(event.pointerId, {
             x: event.clientX,
             y: event.clientY,
           });
           if (pointers.current.size === 2) {
+            emptyPress.current = null;
+            lastEmptyTap.current = null;
             const [a, b] = [...pointers.current.values()];
             const rect = box.getBoundingClientRect();
             pinch.current = {
@@ -618,6 +707,16 @@ export function SheetView(props: Props) {
           setDrag(dragRef.current);
         }}
         onPointerMove={(event) => {
+          if (
+            emptyPress.current &&
+            Math.hypot(
+              event.clientX - emptyPress.current.x,
+              event.clientY - emptyPress.current.y
+            ) > 6
+          ) {
+            emptyPress.current = null;
+            lastEmptyTap.current = null;
+          }
           if (!pointers.current.has(event.pointerId)) return;
           pointers.current.set(event.pointerId, {
             x: event.clientX,
@@ -684,6 +783,7 @@ export function SheetView(props: Props) {
             return;
           }
           if (!dragRef.current || !stage.current) return;
+          suppressClick.current = true;
           const rect = stage.current.getBoundingClientRect();
           const target = cellAtPoint(
             (event.clientX - rect.left) / zoomRef.current,
@@ -697,11 +797,42 @@ export function SheetView(props: Props) {
           }));
         }}
         onPointerUp={(event) => {
+          const press = emptyPress.current;
+          emptyPress.current = null;
+          let created = false;
+          if (
+            press &&
+            press.pointerId === event.pointerId &&
+            !pinch.current &&
+            !at(press.location) &&
+            !props.loading &&
+            !props.error
+          ) {
+            const previous = lastEmptyTap.current;
+            if (
+              previous &&
+              sameCell(previous.location, press.location) &&
+              event.timeStamp - previous.time < 450 &&
+              Math.hypot(press.x - previous.x, press.y - previous.y) < 24
+            ) {
+              lastEmptyTap.current = null;
+              setRangeEnd(null);
+              setCell(press.location);
+              props.onAdd(press.location);
+              suppressClick.current = true;
+              created = true;
+            } else lastEmptyTap.current = { ...press, time: event.timeStamp };
+          }
           if (pan.current?.empty && !suppressClick.current && !pinch.current) {
             setRangeEnd(null);
             props.onClear();
           }
-          if (areaMode && rangeDrag.current && !rangeDrag.current.moved) {
+          if (
+            !created &&
+            areaMode &&
+            rangeDrag.current &&
+            !rangeDrag.current.moved
+          ) {
             if (at(rangeDrag.current.start))
               selectRange(rangeDrag.current.start, rangeDrag.current.start);
             else selectCell(rangeDrag.current.start);
@@ -723,6 +854,8 @@ export function SheetView(props: Props) {
             event.currentTarget.releasePointerCapture(event.pointerId);
         }}
         onPointerCancel={() => {
+          emptyPress.current = null;
+          lastEmptyTap.current = null;
           if (rangeDrag.current) {
             setCell(rangeDrag.current.previousCell);
             setRangeEnd(rangeDrag.current.previousEnd);
@@ -845,7 +978,6 @@ export function SheetView(props: Props) {
                         aria-label={`Empty cell ${cellName(location)}`}
                         disabled={props.loading || props.error}
                         onClick={() => selectCell(location)}
-                        onDoubleClick={() => props.onAdd(location)}
                         onKeyDown={(event) => {
                           if (event.key === "Enter") {
                             event.preventDefault();
@@ -935,26 +1067,7 @@ export function SheetView(props: Props) {
             aria-label="Duplicate selected nodes"
             title="Duplicate"
             disabled={!rangeNodes.length}
-            onClick={() => {
-              const locations = props.onDuplicateNodes(
-                rangeNodes.map((m) => m.id)
-              );
-              if (!locations.length) return;
-              const start = {
-                row: Math.min(...locations.map((l) => l.row)),
-                column: Math.min(...locations.map((l) => l.column)),
-              };
-              const end = {
-                row: Math.max(...locations.map((l) => l.row)),
-                column: Math.max(...locations.map((l) => l.column)),
-              };
-              selectRange(start, end);
-              requestAnimationFrame(() => {
-                reveal(start);
-                scroll.current?.focus({ preventScroll: true });
-              });
-              setMessage(`Duplicated ${locations.length} nodes.`);
-            }}
+            onClick={duplicateSelection}
           >
             <Icon name="duplicate" />
           </button>
