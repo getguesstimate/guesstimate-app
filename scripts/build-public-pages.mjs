@@ -19,6 +19,8 @@ const planData = JSON.parse(read("src/public-pages/plan-data.json"));
 const pages = [
   { name: "index", route: "/" },
   { name: "pricing", route: "/pricing" },
+  { name: "terms", route: "/terms", englishOnly: true },
+  { name: "privacy", route: "/privacy", englishOnly: true },
 ];
 const escapeHtml = (value) =>
   String(value).replace(

@@ -163,3 +163,41 @@ test("language menu sorts by translated names while displaying native names only
     }
   }
 });
+
+test("legal pages are English-only public HTML with the shared navigation", () => {
+  const legal = allPages.filter((page) =>
+    ["terms", "privacy"].includes(page.name)
+  );
+  assert.deepEqual(
+    legal.map((page) => page.route),
+    ["/terms", "/privacy"]
+  );
+  const headerOf = (html) =>
+    html
+      .match(/<header class="site-header">[\s\S]*?<\/header>/)[0]
+      .replace(/<details class="language-menu">[\s\S]*?<\/details>/, "")
+      .replace(/\s+/g, " ");
+  const home = pages.find(
+    (page) => page.locale === "en" && page.name === "index"
+  );
+  for (const page of legal) {
+    assert.equal(page.locale, "en");
+    assert(!page.html.includes('class="language-menu"'));
+    assert(!page.html.includes("hreflang="));
+    assert(!page.html.includes("/api/auth"));
+    assert.equal(headerOf(page.html), headerOf(home.html));
+    assert.equal(footerOf(page.html), footerOf(home.html));
+    assert(page.html.includes('href="/privacy"'));
+    assert(page.html.includes('href="/terms"'));
+  }
+  assert(
+    legal
+      .find((page) => page.name === "privacy")
+      .html.includes('href="https://www.iubenda.com/privacy-policy/7790420"')
+  );
+  assert(
+    legal
+      .find((page) => page.name === "terms")
+      .html.includes("Last updated: March 11, 2024")
+  );
+});
