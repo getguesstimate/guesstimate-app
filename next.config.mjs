@@ -3,7 +3,14 @@ import { withSentryConfig } from "@sentry/nextjs";
 /**
  * @type {import('next').NextConfig}
  */
-let config = {};
+let config = {
+  async rewrites() {
+    return {
+      // Serve the public homepage before Next.js renders any application code.
+      beforeFiles: [{ source: "/", destination: "/index.html" }],
+    };
+  },
+};
 
 if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
   config = withSentryConfig(
