@@ -88,7 +88,7 @@
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^19.2.0",
-    "react-fa": "^4.0.0",
+    "react-fa": "^5.0.0",
     "react-json-tree": "^0.11.0",
     "react-markdown": "^3.3.4",
     "react-modal": "^3.16.1",

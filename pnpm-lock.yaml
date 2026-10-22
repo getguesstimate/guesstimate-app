@@ -131,8 +131,8 @@ importers:
         specifier: ^19.2.0
         version: 19.2.7(react@19.2.7)
       react-fa:
-        specifier: ^4.0.0
-        version: 4.2.0(react@19.2.7)
+        specifier: ^5.0.0
+        version: 5.0.0(react@19.2.7)
       react-json-tree:
         specifier: ^0.11.0
         version: 0.11.2(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -2429,8 +2429,8 @@ packages:
   fast-levenshtein@2.0.6:
     resolution: {integrity: sha512-DCXu6Ifhqcks7TZKY3Hxp3y6qphY5SJZmrWMDrKcERSOXWQdMhU9Ig/PYrzyw/ul9jOIyh0N4M0tbC5hodg8dw==}
 
-  fast-uri@3.1.8:
-    resolution: {integrity: sha512-GZMtZUTNRpOVIECoXwLNZS5xUGE+mVNbTB8h/7Rwh2TFWcBQiPzTgyZi05BF9UMZKkLJv8XBRJTlU7zg8+ZfMg==}
+  fast-uri@3.1.9:
+    resolution: {integrity: sha512-hS/0Wt3Ya043oKXs0sIxrMpKQITXhMLIrVAKKXi4gozGC9v7YRWVnXIZzjNPTO02M9BdxLCWqK1yRXgNziVyJQ==}
 
   fastq@1.20.1:
     resolution: {integrity: sha512-GGToxJ/w1x32s/D2EKND7kTil4n8OVk/9mycTc4VDza13lOvpUZTGX3mFSCtV9ksdGBVzvsyAVLM6mHFThxXxw==}
@@ -3755,11 +3755,11 @@ packages:
     peerDependencies:
       react: ^19.2.7
 
-  react-fa@4.2.0:
-    resolution: {integrity: sha512-d39MjTRsqwvRKriyjZ6Rtv49W/b/zjbR+Lm9ffIh0VnTYjwHr5h3gx6CTagVE/i19wk4SoKjgUl0f0cQdfDXhg==}
+  react-fa@5.0.0:
+    resolution: {integrity: sha512-pBEJigNkDJPAP/P9mQXT55VbJbbtwqi4ayieXuFvGpd+gl3aZ9IbjjVKJihdhdysJP0XRgrSa3sT3yOmkQi8wQ==}
     deprecated: Use https://github.com/FortAwesome/react-fontawesome instead
     peerDependencies:
-      react: '>= 0.13.0 <16.0.0'
+      react: '>= 0.13.0 <17.0.0'
 
   react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
@@ -3972,9 +3972,15 @@ packages:
   scheduler@0.27.0:
     resolution: {integrity: sha512-eNv+WrVbKu1f3vbYJT/xtiF5syA5HPIMtf9IgY/nKg0sWqzAUEvqY/xm7OcZc/qafLx/iO9FgOmeSAp4v5ti/Q==}
 
-  schema-utils@4.5.0:
-    resolution: {integrity: sha512-zJlMCZ0cAR5p/Y4oVpRoqioDMJcGxaXRrQ/4rP4WyR84vc5z/DolXdbvXeDpTwbtocDFr2rhPqHPErDCUtz2kA==}
+  schema-utils@4.8.1:
+    resolution: {integrity: sha512-x39pYlJPyH7Uge5QO64B9XGP9zLDc9WNmiQZc+CE3IzZPvMu3lHOuAMGpYNoPixEL7MSWlGhYTg5UlLSL8G6iw==}
     engines: {node: '>= 10.13.0'}
+    hasBin: true
+    peerDependencies:
+      webpack: ^5.112.0
+    peerDependenciesMeta:
+      webpack:
+        optional: true
 
   seedrandom@3.0.5:
     resolution: {integrity: sha512-8OwmbklUNzwezjGInmZ+2clQmExQPvomqjL7LFqOYqtmuxRgQYqOD3mHaU+MvZn5FLUeVxVfQjwLZW/n/JFuqg==}
@@ -4491,8 +4497,8 @@ packages:
   warning@4.0.3:
     resolution: {integrity: sha512-rpJyN222KWIvHJ/F53XSZv0Zl/accqHR8et1kpaMTD/fLCRxtV8iX8czMzY7sVZupTI3zcUTg8eycS2kNF9l6w==}
 
-  watchpack@2.5.2:
-    resolution: {integrity: sha512-6i/00NBjP4yGPs+caKSyRfpTF/8Torsu0MOW3mMzIbhgISFder8i7xbqgHlLMwJrdiN8ndBV3UA1/AfzPSr+jg==}
+  watchpack@2.6.3:
+    resolution: {integrity: sha512-s3NZy0QpTY9qGqzc0wtz4qI28z3+5qKbbAec4MV4G9N3CfgZ9wgvQRr0cl2jh/tqkWG1NWHkmVMHZpCamev5Wg==}
     engines: {node: '>=10.13.0'}
 
   webidl-conversions@3.0.1:
@@ -6122,7 +6128,7 @@ snapshots:
   ajv@8.20.0:
     dependencies:
       fast-deep-equal: 3.1.3
-      fast-uri: 3.1.8
+      fast-uri: 3.1.9
       json-schema-traverse: 1.0.0
       require-from-string: 2.0.2
 
@@ -7149,7 +7155,7 @@ snapshots:
 
   fast-levenshtein@2.0.6: {}
 
-  fast-uri@3.1.8: {}
+  fast-uri@3.1.9: {}
 
   fastq@1.20.1:
     dependencies:
@@ -8622,7 +8628,7 @@ snapshots:
       react: 19.2.7
       scheduler: 0.27.0
 
-  react-fa@4.2.0(react@19.2.7):
+  react-fa@5.0.0(react@19.2.7):
     dependencies:
       font-awesome: 4.7.0
       prop-types: 15.8.1
@@ -8898,12 +8904,14 @@ snapshots:
 
   scheduler@0.27.0: {}
 
-  schema-utils@4.5.0:
+  schema-utils@4.8.1(webpack@5.107.2(postcss@8.5.30)):
     dependencies:
       '@types/json-schema': 7.0.15
       ajv: 8.20.0
       ajv-formats: 3.0.1(ajv@8.20.0)
       ajv-keywords: 5.1.0(ajv@8.20.0)
+    optionalDependencies:
+      webpack: 5.107.2(postcss@8.5.30)
 
   seedrandom@3.0.5: {}
 
@@ -9175,7 +9183,7 @@ snapshots:
     dependencies:
       '@jridgewell/trace-mapping': 0.3.31
       jest-worker: 27.5.1
-      schema-utils: 4.5.0
+      schema-utils: 4.8.1(webpack@5.107.2(postcss@8.5.30))
       terser: 5.51.2
       webpack: 5.107.2(postcss@8.5.30)
     optionalDependencies:
@@ -9452,7 +9460,7 @@ snapshots:
     dependencies:
       loose-envify: 1.4.0
 
-  watchpack@2.5.2:
+  watchpack@2.6.3:
     dependencies:
       graceful-fs: 4.2.11
 
@@ -9482,10 +9490,10 @@ snapshots:
       loader-runner: 4.3.2
       mime-db: 1.54.0
       neo-async: 2.6.2
-      schema-utils: 4.5.0
+      schema-utils: 4.8.1(webpack@5.107.2(postcss@8.5.30))
       tapable: 2.3.3
       terser-webpack-plugin: 5.6.1(postcss@8.5.30)(webpack@5.107.2(postcss@8.5.30))
-      watchpack: 2.5.2
+      watchpack: 2.6.3
       webpack-sources: 3.6.0
     transitivePeerDependencies:
       - '@minify-html/node'
