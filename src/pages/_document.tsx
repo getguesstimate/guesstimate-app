@@ -5,7 +5,7 @@ export default function Document() {
     "Plan finances, make strategic decisions, and do risk assessment.  Guesstimate uses stochastic models, Monte Carlo simulations, and sensitivity analyses.";
 
   return (
-    <Html>
+    <Html lang="en">
       <Head>
         <link rel="icon" type="image/png" href="/favicon.png" />
         <link

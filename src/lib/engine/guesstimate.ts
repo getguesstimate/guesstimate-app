@@ -11,7 +11,8 @@ export function equals(l, r) {
   return (
     l.description === r.description &&
     l.guesstimateType === r.guesstimateType &&
-    l.expression === r.expression
+    l.expression === r.expression &&
+    _.isEqual(l.data, r.data)
   );
 }
 

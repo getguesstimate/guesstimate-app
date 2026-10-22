@@ -77,6 +77,7 @@ export const TextForm = React.forwardRef<{ focus(): void }, Props>(
     const shouldDisplayType = !(
       guesstimateType === "POINT" || guesstimateType === "FUNCTION"
     );
+    const samplerType = Guesstimator.samplerTypes.find(guesstimateType || "");
     const validInputReadableIds = inputMetrics
       .filter(
         (m) =>
@@ -95,7 +96,7 @@ export const TextForm = React.forwardRef<{ focus(): void }, Props>(
     // To see if this guesstimate is a valid choice for a lognormal distribution, we'll try to parse it with
     // guesstimateType manually set to 'LOGNORMAL', and see if the parser corrects that type to something else. This
     // approach is a bit hacky, but it gets the job done.
-    const [_1, parsed] = Guesstimator.parse({
+    const [, parsed] = Guesstimator.parse({
       input: guesstimate.input,
       guesstimateType: "LOGNORMAL",
     });
@@ -124,7 +125,7 @@ export const TextForm = React.forwardRef<{ focus(): void }, Props>(
             />
           </div>
 
-          {shouldDisplayType && (
+          {size === "small" && shouldDisplayType && (
             <GuesstimateTypeIcon
               guesstimateType={guesstimateType || ""}
               toggleDistributionSelector={() =>
@@ -134,6 +135,20 @@ export const TextForm = React.forwardRef<{ focus(): void }, Props>(
             />
           )}
         </div>
+
+        {size === "large" && samplerType?.isRangeDistribution && (
+          <button
+            type="button"
+            className="mt-2 rounded px-2 py-1 text-xs text-[#526d83] hover:bg-[#eaf2f8] focus-visible:outline focus-visible:outline-2"
+            aria-label={`Change distribution (${samplerType.displayName})`}
+            aria-expanded={showDistributionSelector}
+            onClick={() =>
+              setShowDistributionSelector(!showDistributionSelector)
+            }
+          >
+            Distribution: {samplerType.displayName}
+          </button>
+        )}
 
         {showDistributionSelector && (
           <DistributionSelector
@@ -147,17 +162,17 @@ export const TextForm = React.forwardRef<{ focus(): void }, Props>(
     );
 
     return size === "large" ? (
-      <div className="flex items-center gap-4">
-        <div className="flex-1">{textInput}</div>
-        {_.isEmpty(guesstimate.input) && (
-          <div>
-            <a
-              href=""
-              className="text-grey-999 underline hover:text-grey-999"
+      <div className="w-full min-w-0">
+        {textInput}
+        {_.isEmpty(guesstimate.input) && !guesstimate.data && (
+          <div className="mt-2">
+            <button
+              type="button"
+              className="rounded px-2 py-1 text-xs font-medium text-[#526d83] hover:bg-[#eaf2f8] focus-visible:outline focus-visible:outline-2"
               onClick={onAddDefaultData}
             >
-              Add Custom Data
-            </a>
+              Add data
+            </button>
           </div>
         )}
       </div>

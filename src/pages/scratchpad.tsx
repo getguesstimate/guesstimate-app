@@ -1,13 +1,5 @@
-import { NextPage } from "next";
-import { AppLayout } from "~/components/layout";
-import { SpaceShow } from "~/components/spaces/SpaceShow";
+import { ScratchpadWorkspace } from "~/components/workspace/ScratchpadWorkspace";
 
-const ScratchpadPage: NextPage = () => {
-  return (
-    <AppLayout isFluid showFooter={false}>
-      <SpaceShow spaceId={5170} />
-    </AppLayout>
-  );
-};
-
-export default ScratchpadPage;
+export default function ScratchpadPage() {
+  return <ScratchpadWorkspace />;
+}

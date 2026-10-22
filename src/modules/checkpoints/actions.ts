@@ -64,7 +64,8 @@ function updateMetricsAndGuesstimates(
       );
       return (
         oldGuesstimate.expression !== newGuesstimate.expression ||
-        oldGuesstimate.guesstimateType !== newGuesstimate.guesstimateType
+        oldGuesstimate.guesstimateType !== newGuesstimate.guesstimateType ||
+        !_.isEqual(oldGuesstimate.data, newGuesstimate.data)
       );
     }
   );
@@ -113,7 +114,7 @@ export function undo(spaceId: number): AppThunk {
       return;
     }
     const newGraph = checkpoints[head + 1];
-    const { metrics, guesstimates } = getState();
+    const { metrics, guesstimates } = engine.space.subset(getState(), spaceId);
     updateMetricsAndGuesstimates(
       dispatch,
       getState,
@@ -145,7 +146,7 @@ export function redo(spaceId: number): AppThunk {
       return;
     }
     const newGraph = checkpoints[head - 1];
-    const { metrics, guesstimates } = getState();
+    const { metrics, guesstimates } = engine.space.subset(getState(), spaceId);
     updateMetricsAndGuesstimates(
       dispatch,
       getState,

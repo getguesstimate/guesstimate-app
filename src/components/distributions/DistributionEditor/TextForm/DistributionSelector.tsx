@@ -23,7 +23,17 @@ export const DistributionIcon: React.FC<{
 
   return (
     <ToolTip id={type} text={samplerType.displayName} withPortal={true}>
-      <div
+      <button
+        type="button"
+        aria-label={
+          theme === "current"
+            ? `Change distribution (${samplerType.displayName})`
+            : samplerType.displayName
+        }
+        aria-pressed={
+          theme === "current" ? undefined : theme === "choice-selected"
+        }
+        disabled={isDisabled}
         className={clsx(
           "grid cursor-pointer place-items-center rounded",
           size === "small" && "h-6 w-6",
@@ -36,8 +46,8 @@ export const DistributionIcon: React.FC<{
         )}
         onClick={onClick}
       >
-        {icon ? <img src={icon} /> : undefined}
-      </div>
+        {icon ? <img src={icon} alt="" /> : undefined}
+      </button>
     </ToolTip>
   );
 };
@@ -57,13 +67,13 @@ export const DistributionSelector: React.FC<{
     <div className="mt-1">
       <HR />
       <div className="mt-1 flex justify-between">
-        <a
+        <button
+          type="button"
           className="px-0.5 text-[16px] text-grey-999 hover:text-grey-666"
-          href=""
           onClick={handleShowMore}
         >
           More
-        </a>
+        </button>
         <div className="flex gap-1">
           {allTypes.map((type) => (
             <DistributionIcon

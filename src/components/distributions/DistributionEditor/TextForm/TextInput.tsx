@@ -181,7 +181,10 @@ export class UnconnectedTextInput extends Component<Props, State> {
       },
     ];
 
-    let decorators: DraftDecorator[] = [...extraDecorators, ...factDecorators];
+    const decorators: DraftDecorator[] = [
+      ...extraDecorators,
+      ...factDecorators,
+    ];
 
     if (!_.isEmpty(validInputs)) {
       const validInputsRegex = or(validInputs);
@@ -308,7 +311,7 @@ export class UnconnectedTextInput extends Component<Props, State> {
   prevWord(editorState = this.state.editorState) {
     return this.text(editorState)
       .slice(0, this.cursorPosition(editorState))
-      .split(/[^\w@#\.]/)
+      .split(/[^\w@#.]/)
       .pop() as string; // split always returns a non-empty array
   }
 
@@ -459,6 +462,7 @@ export class UnconnectedTextInput extends Component<Props, State> {
         }}
       >
         <Editor
+          ariaLabel="Value or formula"
           onFocus={handleFocus}
           editorState={editorState}
           handleReturn={handleReturn}

@@ -27,14 +27,14 @@ const HeaderButton: React.FC<{
   text: string;
   icon: string;
 }> = ({ onClick, text, icon }) => (
-  <a
+  <button
+    type="button"
     onClick={onClick}
     className="flex items-center gap-1 text-white/70 hover:text-white"
-    href=""
   >
     <Icon name={icon} className="text-base" />
     <span className="text-sm">{text}</span>
-  </a>
+  </button>
 );
 
 const Header: React.FC<{
@@ -43,11 +43,11 @@ const Header: React.FC<{
   editing: boolean;
 }> = ({ editing, onDelete, onEdit }) => (
   <div className="group flex items-center justify-between">
-    <h2 className="text-lg text-white">
-      <Icon name="bar-chart" /> Custom Data
+    <h2 className="flex items-center gap-1 whitespace-nowrap text-sm font-medium text-white">
+      <Icon name="bar-chart" /> Data
     </h2>
     {!editing && (
-      <div className="hidden gap-4 group-hover:flex">
+      <div className="flex gap-4">
         <HeaderButton onClick={onEdit} icon="pencil" text="Edit" />
         <HeaderButton onClick={onDelete} icon="close" text="Delete" />
       </div>
@@ -141,7 +141,7 @@ export const LargeDataViewer: React.FC<LargeDataViewerProps> = ({
   };
 
   return (
-    <div className="max-w-sm rounded">
+    <div className="w-full min-w-0 rounded">
       <div className="rounded-t bg-purple-2 px-4 py-2">
         <Header onDelete={onDelete} onEdit={handleEdit} editing={editing} />
       </div>

@@ -254,9 +254,9 @@ export function updateGraph(spaceId: number, saveOnServer = true): AppThunk {
     const updates = { graph: space.graph };
 
     dispatch(saveCheckpoint(spaceId, space.graph));
-    if (saveOnServer) {
+    if (saveOnServer && spaceId > 0) {
       dispatch(generalUpdate(spaceId, updates));
-    } else if (actionState !== "UNALLOWED_ATTEMPT") {
+    } else if (spaceId > 0 && actionState !== "UNALLOWED_ATTEMPT") {
       dispatch(changeActionState("UNALLOWED_ATTEMPT"));
     }
   };

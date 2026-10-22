@@ -6,6 +6,7 @@ import { CanvasLocation } from "~/lib/locationUtils";
 export type Metric = {
   space: number;
   location: CanvasLocation;
+  canvasPosition?: { x: number; y: number };
   id: string;
   readableId: string;
   name?: string;

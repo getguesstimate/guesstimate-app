@@ -37,6 +37,10 @@ body.remove-elev #_elev_io {
   overflow: auto;
 }
 
+.DraftEditor-root {
+  position: relative;
+}
+
 .public-DraftEditorPlaceholder-root {
   color: #a9a9a9;
 
@@ -47,6 +51,8 @@ body.remove-elev #_elev_io {
 }
 
 .public-DraftEditor-content {
+  overflow-wrap: anywhere;
+  word-break: break-word;
   /* text-dark-3; doesn't work with @apply, probably because classname is not mentioned in our codebase */
   color: #2d3137;
 }
