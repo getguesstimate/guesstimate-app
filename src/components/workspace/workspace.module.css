@@ -1145,3 +1145,316 @@
     cursor: row-resize !important;
   }
 }
+
+.viewSwitch {
+  display: inline-flex;
+  flex-shrink: 0;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid #dce5ed;
+  border-radius: 7px;
+  background: #f3f6f8;
+}
+.viewSwitch button {
+  padding: 5px 12px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #657e90;
+  font-size: 12px;
+  font-weight: 500;
+}
+.viewSwitch button[aria-pressed="true"] {
+  color: #2d607f;
+  background: white;
+  box-shadow: 0 1px 3px #29475b1a;
+}
+.canvas[hidden],
+.sheetView[hidden] {
+  display: none;
+}
+.sheetView {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  background: #f6f8fa;
+}
+.sheetToolbar {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 5px;
+  height: 54px;
+  padding: 8px 12px;
+  border-bottom: 1px solid #dae4eb;
+  background: white;
+  z-index: 6;
+}
+.sheetCellAddress {
+  margin-left: auto;
+  padding: 4px 8px;
+  color: #5d7588;
+  font: 11px ui-monospace, monospace;
+}
+.sheetScroll {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  touch-action: none;
+}
+.sheetStage {
+  position: relative;
+  min-height: 100%;
+}
+.sheetColumnHeadings,
+.sheetRow {
+  display: flex;
+}
+.sheetColumnHeadings {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  height: 30px;
+}
+.sheetColumnHeadings > div {
+  flex: 0 0 284px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #edf2f6;
+  border-right: 1px solid #dbe4eb;
+  border-bottom: 1px solid #dbe4eb;
+  color: #647c8f;
+  font-size: 11px;
+  font-weight: 500;
+}
+.sheetColumnHeadings > .sheetCorner {
+  flex-basis: 36px;
+  position: sticky;
+  left: 0;
+  z-index: 6;
+}
+.sheetRowHeading {
+  position: sticky;
+  left: 0;
+  z-index: 4;
+  flex: 0 0 36px;
+  display: flex;
+  justify-content: center;
+  padding-top: 18px;
+  background: #edf2f6;
+  color: #647c8f;
+  border-right: 1px solid #dbe4eb;
+  border-bottom: 1px solid #dbe4eb;
+  font-size: 11px;
+}
+.sheetCell {
+  position: relative;
+  width: 284px;
+  height: 208px;
+  flex-shrink: 0;
+  border-right: 1px solid #e1e8ee;
+  border-bottom: 1px solid #e1e8ee;
+}
+.sheetCell[aria-selected="true"] {
+  background: #eaf3fa;
+}
+.sheetDropTarget {
+  background: #e0eff9 !important;
+  box-shadow: inset 0 0 0 2px #5791b6;
+}
+.sheetDropBlocked {
+  background: #f8e9e7 !important;
+  box-shadow: inset 0 0 0 2px #b77c71;
+}
+.emptySheetCell {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: transparent;
+  color: #7392a7;
+}
+.emptySheetCell span {
+  width: 22px;
+  opacity: 0;
+}
+.emptySheetCell:hover {
+  background: #eaf2f766;
+}
+.emptySheetCell:hover span,
+.emptySheetCell:focus-visible span {
+  opacity: 1;
+}
+.sheetConnections {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  overflow: visible;
+  pointer-events: none;
+}
+.sheetConnections path {
+  fill: none;
+  stroke: #88abc1;
+  stroke-width: 1.5;
+}
+.sheetConnections .selectedEdge {
+  stroke: #4380a6;
+  stroke-width: 2;
+}
+.sheetExtend {
+  display: flex;
+  gap: 12px;
+  padding: 14px 52px;
+}
+.sheetExtend button {
+  border: 1px solid #d6e2eb;
+  border-radius: 5px;
+  padding: 6px 10px;
+  font-size: 12px;
+  color: #56748a;
+  background: white;
+}
+@media (max-width: 650px) {
+  .header .documentTitle {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  .viewSwitch button {
+    padding: 5px 10px;
+  }
+  .main:has(.inspector) .sheetView {
+    height: calc(100% - var(--inspector-height, 48%));
+    flex: 0 0 100%;
+  }
+  .sheetToolbar {
+    height: 48px;
+    padding: 6px 8px;
+    gap: 2px;
+  }
+  .sheetToolbar .iconButton {
+    width: 30px;
+  }
+  .sheetCellAddress {
+    padding: 4px;
+  }
+}
+.sheetCell .node { z-index: 2; }
+.sheetCell .selectedNode { z-index: 3; }
+
+.sheetHand, .sheetHand * { cursor: grab !important; }
+.sheetHand:active, .sheetHand:active * { cursor: grabbing !important; }
+.sheetZoom {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px;
+  background: white;
+  border: 1px solid #d9e3eb;
+  border-radius: 8px;
+  box-shadow: 0 3px 12px #263b4d09;
+  z-index: 7;
+}
+.sheetZoomLevel { min-width: 48px; padding: 4px; font-size: 12px; color: #526d83; background: transparent; border: 0; }
+.sheetScroll { padding-bottom: 60px; }
+@media (max-width: 400px) {
+  .sheetCellAddress { display: none; }
+  .sheetToolbar > .divider { display: none; }
+  .sheetToolbar > button[aria-label="Download JSON"] { margin-left: auto; }
+}
+
+.sheetRangeCell { background: #e5f0fa; box-shadow: inset 0 0 0 1px #a2c4df; }
+.sheetSelection {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 6px 4px 12px;
+  border: 1px solid #b9cedf;
+  border-radius: 8px;
+  background: white;
+  box-shadow: 0 3px 12px #263b4d09;
+  color: #46657c;
+  font-size: 12px;
+  z-index: 7;
+}
+.sheetScroll { user-select: none; }
+
+.selectionBox { position: absolute; pointer-events: none; background: #448dd426; border: 1px solid #4287bf; z-index: 4; }
+.areaMode, .areaMode .node, .areaMode button { cursor: crosshair; }
+.touchSelectionTool { display: none; }
+@media (any-pointer: coarse) { .touchSelectionTool { display: inline-flex; } }
+
+
+@media (any-pointer: coarse) { .sheetHandTool { display: none; } }
+
+@media (max-width: 650px) and (any-pointer: coarse) {
+  .sheetToolbar {
+    height: auto;
+    min-height: 56px;
+    flex-wrap: wrap;
+    padding: 8px;
+    gap: 4px;
+  }
+  .sheetToolbar > button,
+  .sheetToolbar > button.iconButton {
+    min-width: 40px;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+  }
+  .sheetToolbar > .addButton { width: auto; }
+  .sheetToolbar .divider,
+  .sheetToolbar .sheetCellAddress { display: none; }
+}
+
+@media (max-width: 359px) and (any-pointer: coarse) {
+  .sheetToolbar > button,
+  .sheetToolbar > button.iconButton { width: 36px; min-width: 36px; height: 36px; }
+  .sheetToolbar > .addButton { width: auto; }
+}
+
+.canvas > .sheetSelection { left: 20px; bottom: 18px; }
+.canvasBottomWithSelection .helpArea { transform: translateY(-58px); }
+
+@media (max-width: 650px) {
+  .canvas > .sheetSelection { left: 12px; bottom: 12px; }
+}
+
+@media (max-width: 480px) {
+  .sheetSelection { padding: 4px; gap: 2px; }
+  .sheetSelection > span { padding: 0 3px; }
+  .selectionCountLabel { display: none; }
+  .sheetSelection .iconButton,
+  .sheetZoom .iconButton,
+  .zoomControls .iconButton { width: 32px; height: 36px; }
+  .sheetZoom, .zoomControls { padding: 4px; }
+  .sheetZoomLevel, .zoomLabel { min-width: 38px; }
+}
+
+/* Pointer gestures focus the surface for shortcuts, without outlining it. */
+.sheetScroll { outline: none; }
+.sheetScroll:focus-visible {
+  outline: 2px solid #287fae;
+  outline-offset: -3px;
+}
+.canvas[data-pointer-focus]:focus,
+.sheetScroll[data-pointer-focus]:focus { outline: none; }

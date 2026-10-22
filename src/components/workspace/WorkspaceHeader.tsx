@@ -5,7 +5,13 @@ import { useAppSelector } from "~/modules/hooks";
 import { Icon } from "./Icon";
 import styles from "./workspace.module.css";
 
-export function WorkspaceHeader() {
+export function WorkspaceHeader({
+  view,
+  onViewChange,
+}: {
+  view: "canvas" | "sheet";
+  onViewChange(view: "canvas" | "sheet"): void;
+}) {
   const me = useAppSelector((state) => state.me);
   const { data: session } = useSession();
   const [open, setOpen] = useState(false);
@@ -38,6 +44,22 @@ export function WorkspaceHeader() {
       <div className={styles.documentTitle}>
         <h1>Scratchpad</h1>
         <span className={styles.temporary}>Not saved</span>
+      </div>
+      <div
+        className={styles.viewSwitch}
+        role="group"
+        aria-label="Workspace view"
+      >
+        {(["canvas", "sheet"] as const).map((mode) => (
+          <button
+            key={mode}
+            type="button"
+            aria-pressed={view === mode}
+            onClick={() => onViewChange(mode)}
+          >
+            {mode === "canvas" ? "Canvas" : "Sheet"}
+          </button>
+        ))}
       </div>
       <div
         className={styles.account}

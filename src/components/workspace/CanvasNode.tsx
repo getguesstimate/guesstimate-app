@@ -12,6 +12,7 @@ export function CanvasNode({
   referenceMode,
   onSelect,
   onMove,
+  surface = "canvas",
 }: {
   metric: FullDenormalizedMetric;
   position: Point;
@@ -19,6 +20,7 @@ export function CanvasNode({
   referenceMode: boolean;
   onSelect(): void;
   onMove(position: Point): void;
+  surface?: "canvas" | "sheet";
 }) {
   const stats = metric.simulation?.stats;
   const error = !!metric.simulation?.sample.errors?.length;
@@ -34,7 +36,8 @@ export function CanvasNode({
         formula ? styles.formulaNode : ""
       }`}
       style={{ transform: `translate(${position.x}px, ${position.y}px)` }}
-      data-node={metric.id}
+      data-node={surface === "canvas" ? metric.id : undefined}
+      data-sheet-node={surface === "sheet" ? metric.id : undefined}
       aria-label={metric.name || `Node ${metric.readableId}`}
     >
       <div

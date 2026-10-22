@@ -16,7 +16,13 @@ import {
 import { Icon } from "./Icon";
 import styles from "./workspace.module.css";
 
-export function FieldHelp({ children }: { children: ReactNode }) {
+export function FieldHelp({
+  children,
+  label = "Help with values and formulas",
+}: {
+  children: ReactNode;
+  label?: string;
+}) {
   const [open, setOpen] = useState(false);
   const id = useId();
   const { x, y, strategy, refs, context } = useFloating({
@@ -47,7 +53,7 @@ export function FieldHelp({ children }: { children: ReactNode }) {
         ref={refs.setReference}
         type="button"
         className={styles.fieldHelpButton}
-        aria-label="Help with values and formulas"
+        aria-label={label}
         aria-expanded={open}
         aria-describedby={open ? id : undefined}
         {...getReferenceProps({

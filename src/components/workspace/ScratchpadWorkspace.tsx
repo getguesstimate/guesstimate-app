@@ -7,6 +7,10 @@ import { denormalizedSpaceSelector } from "~/components/spaces/denormalized-spac
 import {
   loadScratchpad,
   addScratchpadNode,
+  duplicateScratchpadNodes,
+  moveScratchpadNodes,
+  moveScratchpadCanvasNodes,
+  duplicateScratchpadCanvasNodes,
 } from "~/modules/scratchpad/actions";
 import { SCRATCHPAD_ID } from "~/modules/scratchpad/model";
 import { changeMetric, removeMetrics } from "~/modules/metrics/actions";
@@ -15,6 +19,8 @@ import { changeMetricClickMode } from "~/modules/canvas_state/actions";
 import { CanvasNode } from "./CanvasNode";
 import { NodeInspector } from "./NodeInspector";
 import { usePanelResize } from "./usePanelResize";
+import { SheetView } from "./SheetView";
+import { CanvasLocation } from "~/lib/locationUtils";
 import { WorkspaceHeader } from "./WorkspaceHeader";
 import { Icon } from "./Icon";
 import {
@@ -29,14 +35,33 @@ import {
 } from "./geometry";
 import styles from "./workspace.module.css";
 
+const VIEW_PREFERENCE_KEY = "guesstimate.workspace.view";
+
 type Gesture =
-  | { kind: "pan" | "node"; start: Point; origin: Point; id?: string }
+  | { kind: "select"; start: Point }
+  | {
+      kind: "pan" | "node";
+      start: Point;
+      origin: Point;
+      id?: string;
+      deselectOnClick?: boolean;
+      moved?: boolean;
+    }
   | { kind: "pinch"; distance: number; midpoint: Point; view: Viewport };
 const isField = (target: EventTarget | null) =>
   target instanceof Element &&
   !!target.closest('input, textarea, select, [contenteditable="true"]');
 
 export function ScratchpadWorkspace() {
+  const [viewMode, setViewMode] = useState<"canvas" | "sheet">("canvas");
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(VIEW_PREFERENCE_KEY);
+      if (saved === "canvas" || saved === "sheet") setViewMode(saved);
+    } catch {
+      // The workspace remains usable when browser storage is unavailable.
+    }
+  }, []);
   const { mainRef, panelStyle, resizeHandle, resizing } = usePanelResize();
   const dispatch = useAppDispatch();
   const { denormalizedSpace: space } = useAppSelector((state) =>
@@ -46,8 +71,24 @@ export function ScratchpadWorkspace() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [canvasSelection, setCanvasSelection] = useState<string[]>([]);
+  const [areaMode, setAreaMode] = useState(false);
+  const [selectionBox, setSelectionBox] = useState<{
+    start: Point;
+    end: Point;
+  } | null>(null);
+  const selectionBeforeGesture = useRef<string[]>([]);
+  const suppressCanvasClick = useRef(false);
+  const activeSelection = canvasSelection.filter((id) =>
+    metrics.some((m) => m.id === id)
+  );
+  const canvasActionIds = activeSelection.length
+    ? activeSelection
+    : metrics.some((m) => m.id === selectedId)
+    ? [selectedId!]
+    : [];
   const [help, setHelp] = useState(false);
-  const [hand, setHand] = useState(false);
+  const [canvasHeight, setCanvasHeight] = useState(0);
   const [spaceHeld, setSpaceHeld] = useState(false);
   const [view, setViewState] = useState<Viewport>({ x: 80, y: 100, zoom: 1 });
   const viewRef = useRef(view);
@@ -67,6 +108,64 @@ export function ScratchpadWorkspace() {
   const selected = metrics.find((m) => m.id === selectedId);
   const metricsRef = useRef(metrics);
   metricsRef.current = metrics;
+  const selectionPointer = useRef<Point | null>(null);
+  const selectingArea = selectionBox !== null;
+  const updateAreaSelection = (start: Point, end: Point) => {
+    setSelectionBox({ start, end });
+    setCanvasSelection(
+      metricsRef.current
+        .filter((m) => {
+          const p = m.canvasPosition || {
+            x: m.location.column * 350,
+            y: m.location.row * 230,
+          };
+          return (
+            p.x + NODE_WIDTH >= Math.min(start.x, end.x) &&
+            p.x <= Math.max(start.x, end.x) &&
+            p.y + NODE_HEIGHT >= Math.min(start.y, end.y) &&
+            p.y <= Math.max(start.y, end.y)
+          );
+        })
+        .map((m) => m.id)
+    );
+  };
+  useEffect(() => {
+    if (!selectingArea) return;
+    let frame = 0;
+    let lastTime = performance.now();
+    const tick = (time: number) => {
+      const current = gesture.current;
+      const point = selectionPointer.current;
+      const box = viewport.current;
+      if (!box || !point || current?.kind !== "select") return;
+      const elapsed = Math.min(32, time - lastTime);
+      lastTime = time;
+      const speed = (coordinate: number, size: number) => {
+        const edge = 36;
+        const direction =
+          coordinate < edge
+            ? (edge - coordinate) / edge
+            : coordinate > size - edge
+            ? (size - edge - coordinate) / edge
+            : 0;
+        return Math.max(-1, Math.min(1, direction)) * elapsed * 0.7;
+      };
+      const dx = speed(point.x, box.clientWidth),
+        dy = speed(point.y, box.clientHeight);
+      if (dx || dy) {
+        const next = {
+          ...viewRef.current,
+          x: viewRef.current.x + dx,
+          y: viewRef.current.y + dy,
+        };
+        setView(next);
+        updateAreaSelection(current.start, toWorld(point, next));
+      }
+      frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [selectingArea]);
 
   const load = useCallback(() => {
     setLoading(true);
@@ -91,13 +190,30 @@ export function ScratchpadWorkspace() {
     };
   }, [dispatch]);
 
-  const positionOf = (metric: (typeof metrics)[number]): Point =>
-    dragPosition?.id === metric.id
-      ? dragPosition.point
-      : metric.canvasPosition || {
-          x: metric.location.column * 350,
-          y: metric.location.row * 230,
+  const basePosition = (metric: (typeof metrics)[number]): Point =>
+    metric.canvasPosition || {
+      x: metric.location.column * 350,
+      y: metric.location.row * 230,
+    };
+  const positionOf = (metric: (typeof metrics)[number]): Point => {
+    if (!dragPosition) return basePosition(metric);
+    if (dragPosition.id === metric.id) return dragPosition.point;
+    if (
+      activeSelection.includes(dragPosition.id) &&
+      activeSelection.includes(metric.id)
+    ) {
+      const anchor = metrics.find((m) => m.id === dragPosition.id);
+      if (anchor) {
+        const start = basePosition(anchor),
+          point = basePosition(metric);
+        return {
+          x: point.x + dragPosition.point.x - start.x,
+          y: point.y + dragPosition.point.y - start.y,
         };
+      }
+    }
+    return basePosition(metric);
+  };
   const fit = useCallback(() => {
     const box = viewport.current;
     if (!box) return;
@@ -116,7 +232,13 @@ export function ScratchpadWorkspace() {
     );
   }, []);
   useEffect(() => {
-    if (!loading && !error && metrics.length && !fitted.current) {
+    if (
+      viewMode === "canvas" &&
+      !loading &&
+      !error &&
+      metrics.length &&
+      !fitted.current
+    ) {
       fitted.current = true;
       const box = viewport.current;
       const first = metricsRef.current[0];
@@ -129,7 +251,7 @@ export function ScratchpadWorkspace() {
         });
       } else fit();
     }
-  }, [loading, error, metrics.length, fit]);
+  }, [loading, error, metrics.length, fit, viewMode]);
 
   const selectedRef = useRef(selectedId);
   selectedRef.current = selectedId;
@@ -137,6 +259,8 @@ export function ScratchpadWorkspace() {
     const box = viewport.current;
     if (!box) return;
     const keepVisible = () => {
+      if (!box.clientWidth || !box.clientHeight) return;
+      setCanvasHeight(box.clientHeight);
       const metric = metricsRef.current.find(
         (m) => m.id === selectedRef.current
       );
@@ -169,7 +293,7 @@ export function ScratchpadWorkspace() {
       observer.disconnect();
       cancelAnimationFrame(frame);
     };
-  }, [selectedId]);
+  }, [selectedId, viewMode]);
 
   const select = (id: string) => {
     if (space.canvasState.metricClickMode === "FUNCTION_INPUT_SELECT") {
@@ -180,15 +304,33 @@ export function ScratchpadWorkspace() {
       );
       return;
     }
+    setCanvasSelection([]);
     setSelectedId(id);
   };
   const closeDetails = () => {
     setSelectedId(null);
     dispatch(changeMetricClickMode("DEFAULT"));
   };
-  const move = (id: string, point: Point) =>
-    dispatch(changeMetric({ id, canvasPosition: point }));
+  const move = (id: string, point: Point) => {
+    const metric = metrics.find((m) => m.id === id);
+    if (metric && activeSelection.includes(id) && activeSelection.length > 1) {
+      const start = basePosition(metric);
+      dispatch(
+        moveScratchpadCanvasNodes(activeSelection, {
+          x: point.x - start.x,
+          y: point.y - start.y,
+        })
+      );
+    } else dispatch(changeMetric({ id, canvasPosition: point }));
+  };
   const remove = () => {
+    if (viewMode === "canvas" && activeSelection.length) {
+      dispatch(removeMetrics(activeSelection));
+      setCanvasSelection([]);
+      closeDetails();
+      viewport.current?.focus();
+      return;
+    }
     if (selectedId) {
       dispatch(removeMetrics([selectedId]));
       closeDetails();
@@ -196,6 +338,8 @@ export function ScratchpadWorkspace() {
     }
   };
   const add = (point?: Point) => {
+    setCanvasSelection([]);
+    setAreaMode(false);
     const box = viewport.current;
     if (!box) return;
     const center =
@@ -219,7 +363,29 @@ export function ScratchpadWorkspace() {
     )
       position = { x: position.x + 40, y: position.y + 40 };
     setSelectedId(dispatch(addScratchpadNode(position)));
-    setHand(false);
+  };
+  const addSheetNode = (location: CanvasLocation) => {
+    if (
+      loading ||
+      error ||
+      metrics.some(
+        (m) =>
+          m.location.row === location.row &&
+          m.location.column === location.column
+      )
+    )
+      return;
+    let position = { x: location.column * 350, y: location.row * 230 };
+    while (
+      metrics.some((m) => {
+        const p = positionOf(m);
+        return (
+          Math.abs(p.x - position.x) < 40 && Math.abs(p.y - position.y) < 40
+        );
+      })
+    )
+      position = { x: position.x + 40, y: position.y + 40 };
+    setSelectedId(dispatch(addScratchpadNode(position, location)));
   };
   const zoom = (factor: number) => {
     const box = viewport.current;
@@ -284,6 +450,12 @@ export function ScratchpadWorkspace() {
         closeDetails();
         setHelp(false);
         setSpaceHeld(false);
+        setCanvasSelection([]);
+        setSelectionBox(null);
+        setAreaMode(false);
+        gesture.current = null;
+        dragRef.current = null;
+        setDragPosition(null);
       }
       if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "z") {
         event.preventDefault();
@@ -359,25 +531,63 @@ export function ScratchpadWorkspace() {
     }
   };
   const startPointer = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (event.button !== 0 && event.button !== 1) return;
+    if (event.defaultPrevented || (event.button !== 0 && event.button !== 1))
+      return;
     const target = event.target as Element;
     if (target.closest("[data-canvas-control]")) return;
+    suppressCanvasClick.current = false;
     const point = localPoint(event);
     pointers.current.set(event.pointerId, point);
     if (pointers.current.size === 2) {
+      if (gesture.current?.kind === "select") {
+        setSelectionBox(null);
+        setCanvasSelection(selectionBeforeGesture.current);
+        suppressCanvasClick.current = true;
+      }
       commitDrag();
       gesture.current = {
         kind: "pinch",
         ...pinchData(),
         view: viewRef.current,
       };
+      event.preventDefault();
+      event.stopPropagation();
+      event.currentTarget.setPointerCapture(event.pointerId);
+      return;
+    }
+    const selectedHeader = target
+      .closest("[data-drag-node]")
+      ?.getAttribute("data-drag-node");
+    const moveSelectedHeader =
+      areaMode &&
+      !event.shiftKey &&
+      selectedHeader &&
+      activeSelection.includes(selectedHeader);
+    if (
+      (event.shiftKey || areaMode) &&
+      !moveSelectedHeader &&
+      !spaceHeld &&
+      event.button === 0
+    ) {
+      selectionBeforeGesture.current = activeSelection;
+      const start = toWorld(point, viewRef.current);
+      selectionPointer.current = point;
+      gesture.current = { kind: "select", start };
+      setSelectionBox({ start, end: start });
+      setCanvasSelection([]);
+      closeDetails();
+      suppressCanvasClick.current = true;
+      event.currentTarget.focus({ preventScroll: true });
+      event.preventDefault();
+      event.stopPropagation();
       event.currentTarget.setPointerCapture(event.pointerId);
       return;
     }
     const dragId = target
       .closest("[data-drag-node]")
       ?.getAttribute("data-drag-node");
-    if (dragId && !hand && !spaceHeld && event.button === 0) {
+    if (dragId && !spaceHeld && event.button === 0) {
+      if (!activeSelection.includes(dragId)) setCanvasSelection([]);
       const metric = metrics.find((m) => m.id === dragId)!;
       gesture.current = {
         kind: "node",
@@ -387,11 +597,15 @@ export function ScratchpadWorkspace() {
       };
     } else if (
       !target.closest("[data-node]") ||
-      hand ||
       spaceHeld ||
       event.button === 1
     ) {
-      gesture.current = { kind: "pan", start: point, origin: viewRef.current };
+      gesture.current = {
+        kind: "pan",
+        start: point,
+        origin: viewRef.current,
+        deselectOnClick: !target.closest("[data-node]"),
+      };
       event.currentTarget.focus();
     } else return;
     event.preventDefault();
@@ -403,7 +617,10 @@ export function ScratchpadWorkspace() {
     pointers.current.set(event.pointerId, point);
     const current = gesture.current;
     if (!current) return;
-    if (current.kind === "pinch" && pointers.current.size >= 2) {
+    if (current.kind === "select") {
+      selectionPointer.current = point;
+      updateAreaSelection(current.start, toWorld(point, viewRef.current));
+    } else if (current.kind === "pinch" && pointers.current.size >= 2) {
       const pinch = pinchData();
       const next = zoomAt(
         current.view,
@@ -415,13 +632,15 @@ export function ScratchpadWorkspace() {
         x: next.x + pinch.midpoint.x - current.midpoint.x,
         y: next.y + pinch.midpoint.y - current.midpoint.y,
       });
-    } else if (current.kind === "pan")
+    } else if (current.kind === "pan") {
+      if (Math.hypot(point.x - current.start.x, point.y - current.start.y) > 4)
+        current.moved = true;
       setView({
         ...viewRef.current,
         x: current.origin.x + point.x - current.start.x,
         y: current.origin.y + point.y - current.start.y,
       });
-    else if (current.kind === "node") {
+    } else if (current.kind === "node") {
       const pointNow = {
         x:
           current.origin.x + (point.x - current.start.x) / viewRef.current.zoom,
@@ -434,7 +653,13 @@ export function ScratchpadWorkspace() {
     }
   };
   const endPointer = (event: React.PointerEvent<HTMLDivElement>) => {
+    const current = gesture.current;
+    if (current?.kind === "pan" && current.deselectOnClick && !current.moved) {
+      setCanvasSelection([]);
+      closeDetails();
+    }
     pointers.current.delete(event.pointerId);
+    if (gesture.current?.kind === "select") setSelectionBox(null);
     commitDrag();
     gesture.current = null;
     if (event.currentTarget.hasPointerCapture(event.pointerId))
@@ -483,7 +708,20 @@ export function ScratchpadWorkspace() {
       </Head>
       <ErrorModal />
       <ModalContainer />
-      <WorkspaceHeader />
+      <WorkspaceHeader
+        view={viewMode}
+        onViewChange={(mode) => {
+          dispatch(changeMetricClickMode("DEFAULT"));
+          setSpaceHeld(false);
+          setHelp(false);
+          setViewMode(mode);
+          try {
+            localStorage.setItem(VIEW_PREFERENCE_KEY, mode);
+          } catch {
+            // Changing views does not depend on persistence being available.
+          }
+        }}
+      />
       <main
         ref={mainRef}
         style={panelStyle}
@@ -491,8 +729,13 @@ export function ScratchpadWorkspace() {
       >
         <div
           ref={viewport}
+          hidden={viewMode !== "canvas"}
           className={`${styles.canvas} ${
-            hand || spaceHeld ? styles.panMode : ""
+            areaMode && !spaceHeld
+              ? styles.areaMode
+              : spaceHeld
+              ? styles.panMode
+              : ""
           }`}
           role="region"
           aria-label="Model canvas"
@@ -501,12 +744,46 @@ export function ScratchpadWorkspace() {
             backgroundSize: `${24 * view.zoom}px ${24 * view.zoom}px`,
             backgroundPosition: `${view.x}px ${view.y}px`,
           }}
+          onBlur={(event) => {
+            if (event.target === event.currentTarget)
+              delete event.currentTarget.dataset.pointerFocus;
+          }}
+          onKeyDownCapture={(event) => {
+            if (event.key === "Tab")
+              delete event.currentTarget.dataset.pointerFocus;
+          }}
+          onPointerDownCapture={(event) => {
+            event.currentTarget.dataset.pointerFocus = "true";
+            if ((event.shiftKey || areaMode) && !spaceHeld) startPointer(event);
+          }}
+          onClickCapture={(event) => {
+            if (
+              suppressCanvasClick.current &&
+              !(event.target as Element).closest("[data-canvas-control]")
+            ) {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+          }}
           onPointerDown={startPointer}
           onPointerMove={movePointer}
           onPointerUp={endPointer}
-          onPointerCancel={endPointer}
+          onPointerCancel={(event) => {
+            if (gesture.current?.kind === "select")
+              setCanvasSelection(selectionBeforeGesture.current);
+            setSelectionBox(null);
+            dragRef.current = null;
+            setDragPosition(null);
+            gesture.current = null;
+            pointers.current.clear();
+            if (event.currentTarget.hasPointerCapture(event.pointerId))
+              event.currentTarget.releasePointerCapture(event.pointerId);
+          }}
           onDoubleClick={(event) => {
             if (
+              !areaMode &&
+              !event.shiftKey &&
+              !suppressCanvasClick.current &&
               !(event.target as Element).closest(
                 "[data-node], [data-canvas-control]"
               )
@@ -556,7 +833,10 @@ export function ScratchpadWorkspace() {
               <CanvasNode
                 key={metric.id}
                 metric={metric}
-                selected={selectedId === metric.id}
+                selected={
+                  selectedId === metric.id ||
+                  activeSelection.includes(metric.id)
+                }
                 referenceMode={
                   space.canvasState.metricClickMode === "FUNCTION_INPUT_SELECT"
                 }
@@ -565,7 +845,81 @@ export function ScratchpadWorkspace() {
                 onMove={(point) => move(metric.id, point)}
               />
             ))}
+            {selectionBox && (
+              <div
+                data-selection-box
+                className={styles.selectionBox}
+                aria-hidden="true"
+                style={{
+                  left: Math.min(selectionBox.start.x, selectionBox.end.x),
+                  top: Math.min(selectionBox.start.y, selectionBox.end.y),
+                  width: Math.abs(selectionBox.end.x - selectionBox.start.x),
+                  height: Math.abs(selectionBox.end.y - selectionBox.start.y),
+                }}
+              />
+            )}
           </div>
+          {canvasActionIds.length > 0 && (
+            <div
+              data-canvas-control
+              className={styles.sheetSelection}
+              role="group"
+              aria-label="Canvas selection"
+            >
+              <span aria-label={`${canvasActionIds.length} selected nodes`}>
+                {canvasActionIds.length}{" "}
+                <span className={styles.selectionCountLabel}>
+                  {canvasActionIds.length === 1 ? "node" : "nodes"}
+                </span>
+              </span>
+              <button
+                type="button"
+                className={styles.iconButton}
+                aria-label="Duplicate selected nodes"
+                title="Duplicate"
+                onClick={() => {
+                  const copies = dispatch(
+                    duplicateScratchpadCanvasNodes(canvasActionIds)
+                  );
+                  closeDetails();
+                  setCanvasSelection(copies.map((m) => m.id));
+                  requestAnimationFrame(() => {
+                    const box = viewport.current;
+                    if (box && copies.length)
+                      setView(
+                        fitNodes(
+                          copies.map((m) => m.canvasPosition!),
+                          box.clientWidth,
+                          box.clientHeight
+                        )
+                      );
+                    viewport.current?.focus();
+                  });
+                }}
+              >
+                <Icon name="duplicate" />
+              </button>
+              <button
+                type="button"
+                className={styles.iconButton}
+                aria-label="Delete selected nodes"
+                onClick={remove}
+              >
+                <Icon name="trash" />
+              </button>
+              <button
+                type="button"
+                className={styles.iconButton}
+                aria-label="Clear selection"
+                onClick={() => {
+                  setCanvasSelection([]);
+                  closeDetails();
+                }}
+              >
+                <Icon name="close" />
+              </button>
+            </div>
+          )}
           <div
             data-canvas-control
             className={styles.toolbar}
@@ -586,8 +940,10 @@ export function ScratchpadWorkspace() {
               type="button"
               className={styles.iconButton}
               aria-label="Select nodes"
-              aria-pressed={!hand}
-              onClick={() => setHand(false)}
+              aria-pressed={!areaMode}
+              onClick={() => {
+                setAreaMode(false);
+              }}
               title="Select nodes"
             >
               <Icon name="cursor" />
@@ -595,12 +951,14 @@ export function ScratchpadWorkspace() {
             <button
               type="button"
               className={styles.iconButton}
-              aria-label="Pan canvas"
-              aria-pressed={hand}
-              onClick={() => setHand(true)}
-              title="Pan canvas"
+              aria-label="Select an area"
+              title="Select an area"
+              aria-pressed={areaMode}
+              onClick={() => {
+                setAreaMode(!areaMode);
+              }}
             >
-              <Icon name="hand" />
+              <Icon name="selection" />
             </button>
             <span className={styles.divider} />
             <button
@@ -653,7 +1011,12 @@ export function ScratchpadWorkspace() {
               <p>Add a node to start a calculation.</p>
             </div>
           )}
-          <div data-canvas-control className={styles.canvasBottom}>
+          <div
+            data-canvas-control
+            className={`${styles.canvasBottom} ${
+              canvasActionIds.length ? styles.canvasBottomWithSelection : ""
+            }`}
+          >
             <div className={styles.helpArea}>
               <button
                 type="button"
@@ -670,6 +1033,15 @@ export function ScratchpadWorkspace() {
               {help && (
                 <section
                   className={styles.helpPopover}
+                  style={{
+                    maxHeight: Math.min(
+                      520,
+                      Math.max(
+                        40,
+                        canvasHeight - (canvasActionIds.length ? 250 : 150)
+                      )
+                    ),
+                  }}
                   aria-label="Canvas help"
                 >
                   <div className={styles.panelHeading}>
@@ -689,14 +1061,21 @@ export function ScratchpadWorkspace() {
                   </p>
                   <ul>
                     <li>
-                      Drag the background to pan. Scroll to zoom, or pinch on
-                      touch screens.
+                      Drag the background to pan. Use the mouse wheel or pinch
+                      on touch screens to zoom.
                     </li>
                     <li>
                       Drag a node’s header to move it. Use arrow keys on a
                       focused grip for precise movement.
                     </li>
                     <li>Select a node to edit its value, formula, or notes.</li>
+                    <li>
+                      Hold Shift and drag to select an area. Hold near an edge
+                      to move farther across the canvas. On touch screens, use
+                      Select an area. Drag a selected header to move the group;
+                      use Duplicate or Delete on the selection. Escape clears
+                      it.
+                    </li>
                     <li>
                       With the canvas focused: N adds a node, F fits the model,
                       and + / − zoom.
@@ -762,6 +1141,36 @@ export function ScratchpadWorkspace() {
             </div>
           </div>
         </div>
+        <SheetView
+          active={viewMode === "sheet"}
+          metrics={metrics}
+          edges={space.edges || []}
+          selectedId={selectedId}
+          referenceMode={
+            space.canvasState.metricClickMode === "FUNCTION_INPUT_SELECT"
+          }
+          loading={loading}
+          error={error}
+          canUndo={canUndo}
+          canRedo={canRedo}
+          onSelect={select}
+          onClear={closeDetails}
+          onAdd={addSheetNode}
+          onMove={(id, location) => dispatch(changeMetric({ id, location }))}
+          onDelete={remove}
+          onMoveNodes={(ids, delta) =>
+            dispatch(moveScratchpadNodes(ids, delta))
+          }
+          onDuplicateNodes={(ids) => dispatch(duplicateScratchpadNodes(ids))}
+          onDeleteNodes={(ids) => {
+            dispatch(removeMetrics(ids));
+            closeDetails();
+          }}
+          onUndo={() => dispatch(undo(SCRATCHPAD_ID))}
+          onRedo={() => dispatch(redo(SCRATCHPAD_ID))}
+          onRetry={load}
+          onDownload={download}
+        />
         {selected && (
           <NodeInspector
             key={selected.id}
