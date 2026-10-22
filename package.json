@@ -8,7 +8,10 @@
     "start": "next start",
     "ci:test": "pnpm test",
     "lint": "eslint . --quiet",
-    "test": "jest"
+    "test": "jest",
+    "public:build": "node scripts/build-public-pages.mjs",
+    "build": "next build --webpack",
+    "test:public": "node --test scripts/build-public-pages.test.mjs"
   },
   "repository": {
     "type": "git",

@@ -1,4 +1,12 @@
 import { withSentryConfig } from "@sentry/nextjs";
+import {
+  PHASE_DEVELOPMENT_SERVER,
+  PHASE_PRODUCTION_BUILD,
+} from "next/constants.js";
+import {
+  buildPublicPages,
+  publicPageRewrites,
+} from "./scripts/build-public-pages.mjs";
 
 /**
  * @type {import('next').NextConfig}
@@ -6,8 +14,8 @@ import { withSentryConfig } from "@sentry/nextjs";
 let config = {
   async rewrites() {
     return {
-      // Serve the public homepage before Next.js renders any application code.
-      beforeFiles: [{ source: "/", destination: "/index.html" }],
+      // Public information pages do not need the application or its session.
+      beforeFiles: publicPageRewrites(),
     };
   },
 };
@@ -50,4 +58,9 @@ if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
   );
 }
 
-export default config;
+export default (phase) => {
+  if (phase === PHASE_DEVELOPMENT_SERVER || phase === PHASE_PRODUCTION_BUILD) {
+    buildPublicPages();
+  }
+  return config;
+};

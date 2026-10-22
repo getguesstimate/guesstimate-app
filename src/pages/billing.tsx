@@ -2,7 +2,7 @@ import { NextPage } from "next";
 import { AppLayout } from "~/components/layout";
 import { PlanIndexContainer } from "~/components/plans/index/PlanIndexContainer";
 
-const PricingPage: NextPage = () => {
+const BillingPage: NextPage = () => {
   return (
     <AppLayout backgroundColor="GREY">
       <PlanIndexContainer />
@@ -10,4 +10,4 @@ const PricingPage: NextPage = () => {
   );
 };
 
-export default PricingPage;
+export default BillingPage;

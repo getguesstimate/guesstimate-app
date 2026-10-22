@@ -1,32 +1,26 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1" name="viewport" />
     <title>Guesstimate — Estimates with uncertainty</title>
-    <meta
-      content="Guesstimate is a spreadsheet for estimates with uncertainty. Enter numbers or ranges, connect them with formulas, and calculate a distribution of results."
-      name="description"
-    />
+    <meta content="Guesstimate is a spreadsheet for estimates with uncertainty. Enter numbers or ranges, connect them with formulas, and calculate a distribution of results." name="description" />
     <link href="https://www.getguesstimate.com/" rel="canonical" />
+    <link rel="alternate" hreflang="en" href="https://www.getguesstimate.com/" />
+<link rel="alternate" hreflang="x-default" href="https://www.getguesstimate.com/" />
     <meta content="website" property="og:type" />
-    <meta
-      content="Guesstimate — Estimates with uncertainty"
-      property="og:title"
-    />
-    <meta
-      content="Enter numbers or ranges, connect them with formulas, and calculate a distribution of results."
-      property="og:description"
-    />
+    <meta content="Guesstimate — Estimates with uncertainty" property="og:title" />
+    <meta content="Enter numbers or ranges, connect them with formulas, and calculate a distribution of results." property="og:description" />
     <meta content="https://www.getguesstimate.com/" property="og:url" />
     <meta content="#ffffff" name="theme-color" />
-    <link href="assets/favicon-2.png" rel="icon" type="image/png" />
-    <link href="landing.css" rel="stylesheet" />
+    <link href="/assets/favicon-2.png" rel="icon" type="image/png" />
+    <link href="/landing.css" rel="stylesheet" />
+    <link href="/plans.css" rel="stylesheet" />
     <link
       as="font"
       crossorigin="anonymous"
-      href="fonts/inter-regular.ttf"
+      href="/fonts/inter-regular.ttf"
       rel="preload"
       type="font/ttf"
     />
@@ -34,190 +28,160 @@
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>
     <header class="site-header">
-      <div class="header-inner container">
-        <a aria-label="Guesstimate home" class="brand" href="/">
-          <img alt="" height="24" src="assets/new-logo-2.png" width="24" />
-          <span>Guesstimate</span>
-        </a>
-        <nav aria-label="Main navigation" class="desktop-navigation">
-          <a href="/scratchpad"
-            ><svg
-              class="nav-icon"
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.6"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-            >
-              <rect x="4" y="4" width="16" height="16" rx="2" />
-              <path d="M4 10h16M10 4v16" /></svg
-            ><span>Scratchpad</span></a
+  <div class="header-inner container">
+    <a aria-label="Guesstimate home" class="brand" href="/">
+      <img alt="" height="24" src="/assets/new-logo-2.png" width="24" />
+      <span>Guesstimate</span>
+    </a>
+    <nav aria-label="Main navigation" class="desktop-navigation">
+      <a href="/models"
+        ><svg
+          class="nav-icon"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <rect x="3" y="3" width="7" height="7" rx="1" />
+          <rect x="14" y="3" width="7" height="7" rx="1" />
+          <rect x="3" y="14" width="7" height="7" rx="1" />
+          <rect x="14" y="14" width="7" height="7" rx="1" /></svg
+        ><span>Public models</span></a
+      >
+      <a href="https://docs.getguesstimate.com/docs/Introduction"
+        ><svg
+          class="nav-icon"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path
+            d="M12 5v15M12 5C8 3 5 3 3 4v15c3-1 6-1 9 1 3-2 6-2 9-1V4c-2-1-5-1-9 1Z"
+          /></svg
+        ><span>Documentation</span></a
+      >
+      <a href="/pricing"
+        ><svg
+          class="nav-icon"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <rect x="3" y="5" width="18" height="14" rx="2" />
+          <path d="M3 10h18M7 15h4" /></svg
+        ><span>Plans</span></a
+      >
+    </nav>
+    <details class="language-menu">
+        <summary aria-label="Language"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/></svg><span lang="en">English</span></summary>
+        <nav aria-label="Language"><a href="/" lang="en" hreflang="en" aria-current="true"><bdi dir="auto">English</bdi></a></nav>
+      </details>
+    <details class="mobile-menu">
+      <summary aria-label="Navigation menu">
+        <svg
+          class="menu-open-icon"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M4 6h16M4 12h16M4 18h16" /></svg
+        ><svg
+          class="menu-close-icon"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="m6 6 12 12M6 18 18 6" />
+        </svg>
+      </summary>
+      <nav aria-label="Mobile navigation" class="mobile-navigation">
+        <a href="/models"
+          ><svg
+            class="nav-icon"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
           >
-          <a href="/models"
-            ><svg
-              class="nav-icon"
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.6"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-            >
-              <rect x="3" y="3" width="7" height="7" rx="1" />
-              <rect x="14" y="3" width="7" height="7" rx="1" />
-              <rect x="3" y="14" width="7" height="7" rx="1" />
-              <rect x="14" y="14" width="7" height="7" rx="1" /></svg
-            ><span>Public models</span></a
+            <rect x="3" y="3" width="7" height="7" rx="1" />
+            <rect x="14" y="3" width="7" height="7" rx="1" />
+            <rect x="3" y="14" width="7" height="7" rx="1" />
+            <rect x="14" y="14" width="7" height="7" rx="1" /></svg
+          ><span>Public models</span></a
+        >
+        <a href="https://docs.getguesstimate.com/docs/Introduction"
+          ><svg
+            class="nav-icon"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
           >
-          <a href="https://docs.getguesstimate.com/docs/Introduction"
-            ><svg
-              class="nav-icon"
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.6"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-            >
-              <path
-                d="M12 5v15M12 5C8 3 5 3 3 4v15c3-1 6-1 9 1 3-2 6-2 9-1V4c-2-1-5-1-9 1Z"
-              /></svg
-            ><span>Documentation</span></a
+            <path
+              d="M12 5v15M12 5C8 3 5 3 3 4v15c3-1 6-1 9 1 3-2 6-2 9-1V4c-2-1-5-1-9 1Z"
+            /></svg
+          ><span>Documentation</span></a
+        >
+        <a href="/pricing"
+          ><svg
+            class="nav-icon"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
           >
-          <a href="/pricing"
-            ><svg
-              class="nav-icon"
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.6"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-            >
-              <rect x="3" y="5" width="18" height="14" rx="2" />
-              <path d="M3 10h18M7 15h4" /></svg
-            ><span>Plans</span></a
-          >
-        </nav>
-        <details class="mobile-menu">
-          <summary aria-label="Navigation menu">
-            <svg
-              class="menu-open-icon"
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.6"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M4 6h16M4 12h16M4 18h16" /></svg
-            ><svg
-              class="menu-close-icon"
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.6"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-            >
-              <path d="m6 6 12 12M6 18 18 6" />
-            </svg>
-          </summary>
-          <nav aria-label="Mobile navigation" class="mobile-navigation">
-            <a href="/scratchpad"
-              ><svg
-                class="nav-icon"
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.6"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-              >
-                <rect x="4" y="4" width="16" height="16" rx="2" />
-                <path d="M4 10h16M10 4v16" /></svg
-              ><span>Scratchpad</span></a
-            >
-            <a href="/models"
-              ><svg
-                class="nav-icon"
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.6"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-              >
-                <rect x="3" y="3" width="7" height="7" rx="1" />
-                <rect x="14" y="3" width="7" height="7" rx="1" />
-                <rect x="3" y="14" width="7" height="7" rx="1" />
-                <rect x="14" y="14" width="7" height="7" rx="1" /></svg
-              ><span>Public models</span></a
-            >
-            <a href="https://docs.getguesstimate.com/docs/Introduction"
-              ><svg
-                class="nav-icon"
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.6"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-              >
-                <path
-                  d="M12 5v15M12 5C8 3 5 3 3 4v15c3-1 6-1 9 1 3-2 6-2 9-1V4c-2-1-5-1-9 1Z"
-                /></svg
-              ><span>Documentation</span></a
-            >
-            <a href="/pricing"
-              ><svg
-                class="nav-icon"
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.6"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-              >
-                <rect x="3" y="5" width="18" height="14" rx="2" />
-                <path d="M3 10h18M7 15h4" /></svg
-              ><span>Plans</span></a
-            >
-          </nav>
-        </details>
-      </div>
-    </header>
+            <rect x="3" y="5" width="18" height="14" rx="2" />
+            <path d="M3 10h18M7 15h4" /></svg
+          ><span>Plans</span></a
+        >
+      </nav>
+    </details>
+  </div>
+</header>
     <main class="container" id="main-content" tabindex="-1">
       <div class="overview">
         <section aria-labelledby="page-heading" class="introduction">
@@ -231,14 +195,9 @@
               >Browse public models</a
             >
           </div>
-          <p class="note">
-            No account needed to try. Scratchpad changes aren’t saved.
-          </p>
+          <p class="note">No account needed to try. Scratchpad changes aren’t saved.</p>
         </section>
-        <section
-          aria-label="Guesstimate video introduction"
-          class="video-section"
-        >
+        <section aria-label="Guesstimate video introduction" class="video-section">
           <div class="video-frame">
             <iframe
               allow="autoplay; fullscreen; picture-in-picture"
@@ -248,24 +207,25 @@
               title="Guesstimate video introduction"
             ></iframe>
           </div>
+
         </section>
       </div>
       <section aria-labelledby="example-heading" class="example-section">
         <div class="example-explanation">
           <h2 id="example-heading">Example: project cost</h2>
-          <p>
-            A project takes 40 to 60 hours at a fixed rate of $80 per hour.
-            Multiply the inputs to estimate the total cost.
-          </p>
+          <p>You expect a project to take 40 to 60 hours, at $80 an hour. Guesstimate uses those numbers to work out a likely range for the total cost.</p>
         </div>
         <figure aria-labelledby="model-caption" class="model-preview">
           <div class="model-inputs">
             <div class="model-node">
               <div class="node-label">
-                <span>Hours of work</span><span class="variable">A</span>
+                <span>Hours of work</span
+                ><span class="variable" dir="ltr">A</span>
               </div>
-              <p class="node-value">40 <span>to</span> 60</p>
-              <p class="node-note">90% interval</p>
+              <p class="node-value" dir="ltr">
+                40 <span>to</span> 60
+              </p>
+              <p class="node-note">90% likely to fall in this range</p>
               <svg
                 aria-hidden="true"
                 class="mini-chart"
@@ -279,10 +239,11 @@
             </div>
             <div class="model-node">
               <div class="node-label">
-                <span>Hourly rate</span><span class="variable">B</span>
+                <span>Hourly rate</span
+                ><span class="variable" dir="ltr">B</span>
               </div>
-              <p class="node-value">$80</p>
-              <p class="node-note">Fixed value</p>
+              <p class="node-value" dir="ltr">$80</p>
+              <p class="node-note">Known hourly rate</p>
               <div aria-hidden="true" class="known-input-line"></div>
             </div>
           </div>
@@ -298,10 +259,12 @@
           </svg>
           <div class="model-result">
             <div class="result-heading">
-              <span>Project cost</span><code>= A * B</code>
+              <span>Project cost</span><code dir="ltr">= A * B</code>
             </div>
-            <p class="result-value">$3,200 <span>to</span> $4,800</p>
-            <p class="node-note">90% interval</p>
+            <p class="result-value" dir="ltr">
+              $3,200 <span>to</span> $4,800
+            </p>
+            <p class="node-note">90% likely to fall in this range</p>
             <svg
               aria-hidden="true"
               class="result-chart"
@@ -318,119 +281,115 @@
               ></path>
               <path class="chart-axis" d="M0 77h440M220 8v69"></path>
             </svg>
-            <p class="chart-label">Mean: $4,000</p>
+            <p class="chart-label">Average: <bdi dir="ltr">$4,000</bdi></p>
           </div>
-          <figcaption id="model-caption">
-            Illustrative model. Hours use a normal distribution with a 90%
-            interval of 40 to 60.
-          </figcaption>
+          <figcaption id="model-caption">This example assumes the work will take around 50 hours, with shorter and longer times less likely. The ranges shown cover 90% of the possibilities in this estimate; the actual time and cost could fall outside them.</figcaption>
         </figure>
       </section>
+
       <section aria-labelledby="usage-heading" class="usage-section">
-        <h2 class="visually-hidden" id="usage-heading">
-          Working with estimates
-        </h2>
+        <h2 class="visually-hidden" id="usage-heading">Working with estimates</h2>
         <div class="usage-notes">
           <div>
             <img
               alt=""
               class="feature-icon"
               height="32"
-              src="assets/distribution-icons/normal.png"
+              src="/assets/distribution-icons/normal.png"
               width="32"
             />
             <h3>Ranges</h3>
-            <p>
-              Enter a value such as <code>80</code> or a range such as
-              <code>40 to 60</code>. Choose a distribution for each uncertain
-              input.
-            </p>
+            <p>Enter a number when you know it. When you’re unsure, enter a range such as <code dir="ltr">40 to 60</code>. You don’t have to settle on one number before you can start.</p>
           </div>
           <div>
             <img
               alt=""
               class="feature-icon"
               height="32"
-              src="assets/distribution-icons/function.png"
+              src="/assets/distribution-icons/function.png"
               width="32"
             />
             <h3>Formulas</h3>
-            <p>
-              Refer to other cells in a formula, such as <code>= A * B</code>.
-              Guesstimate carries their uncertainty through the calculation.
-            </p>
+            <p>Connect cells as you would in a spreadsheet. For example, multiply hours by an hourly rate to estimate a cost. Change either number and the result updates.</p>
           </div>
           <div>
             <img
               alt=""
               class="feature-icon"
               height="32"
-              src="assets/metric-icons/blue/scientific.png"
+              src="/assets/metric-icons/blue/scientific.png"
               width="32"
             />
             <h3>Results</h3>
-            <p>
-              Monte Carlo sampling produces a distribution of results. Inspect
-              the mean, percentiles, and range for each cell.
-            </p>
+            <p>See a range of possible answers and which are more likely, based on your estimates. The chart helps you see how much the result could vary.</p>
           </div>
         </div>
       </section>
-      <section aria-labelledby="access-heading" class="access-section">
-        <h2 id="access-heading">Saving and sharing</h2>
-        <div class="access-content">
-          <p>
-            Create an account in the app to save your own models. Public models
-            are free; private models require a paid plan.
-          </p>
-          <nav class="access-actions" aria-label="Saving and sharing resources">
-            <a href="/pricing">View plans <span aria-hidden="true">→</span></a>
-            <a href="https://docs.getguesstimate.com/docs/Introduction"
-              >Read documentation <span aria-hidden="true">→</span></a
-            >
-          </nav>
+      <section aria-labelledby="access-heading" class="landing-plans">
+        <div class="landing-plans-intro">
+          <h2 id="access-heading">Saving and sharing</h2>
+          <p>Create an account to save your work and share it with others. Public models are free. Paid plans let you keep models private, on your own or with a team.</p>
         </div>
+        <div class="plan-comparison">
+          <article
+            class="plan plan-free plan-summary"
+            aria-labelledby="summary-free"
+          >
+            <h3 id="summary-free">Free</h3>
+            <p class="plan-price">
+              <bdi dir="ltr">$0</bdi> <span>per month</span>
+            </p>
+            <p>Unlimited public models.</p>
+          </article>
+          <article
+            class="plan plan-individual plan-summary"
+            aria-labelledby="summary-individual"
+          >
+            <h3 id="summary-individual">Individuals</h3>
+            <p class="plan-price">
+              <bdi dir="ltr">$5</bdi> <span>per month</span>
+            </p>
+            <p><bdi dir="ltr">20</bdi> private models, visible only to you.</p>
+          </article>
+          <article
+            class="plan plan-organization plan-summary"
+            aria-labelledby="summary-organization"
+          >
+            <h3 id="summary-organization">Organizations</h3>
+            <p class="plan-price">
+              <bdi dir="ltr">$12</bdi> <span>per user, per month</span>
+            </p>
+            <p><bdi dir="ltr">200</bdi> private models, shared with your team.</p>
+          </article>
+        </div>
+        <a class="text-action" href="/pricing"
+          >Compare plans and details<span aria-hidden="true">→</span></a
+        >
       </section>
     </main>
     <footer class="site-footer">
-      <div class="footer-inner container">
-        <div class="footer-about">
-          <p class="footer-name">Guesstimate</p>
-          <p>
-            A project by <a href="https://quantifieduncertainty.org">QURI</a>.
-          </p>
-        </div>
-        <nav aria-label="Resources">
-          <p class="footer-label">Resources</p>
-          <a href="https://docs.getguesstimate.com/docs/Introduction"
-            >Documentation</a
-          ><a href="https://github.com/getguesstimate/guesstimate-app"
-            >Source code</a
-          ><a href="https://discord.gg/nsTnQTgtG6">Community</a>
-        </nav>
-        <nav aria-label="Legal and plans">
-          <p class="footer-label">Guesstimate</p>
-          <a href="/pricing">Plans</a><a href="/terms">Terms of service</a
-          ><a href="https://www.iubenda.com/privacy-policy/7790420"
-            >Privacy policy</a
-          >
-        </nav>
-      </div>
-    </footer>
-    <script>
-      const menu = document.querySelector(".mobile-menu");
-      document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape" && menu.open) {
-          menu.open = false;
-          menu.querySelector("summary").focus();
-        }
-      });
-      document.addEventListener("click", (event) => {
-        if (!menu.contains(event.target)) menu.open = false;
-      });
-      matchMedia("(min-width: 761px)").addEventListener("change", (event) => {
-        if (event.matches) menu.open = false;
-      });
-    </script>
+  <div class="footer-inner container">
+    <div class="footer-about">
+      <p class="footer-name">Guesstimate</p>
+      <p>A project by <a href="https://quantifieduncertainty.org" dir="ltr">QURI</a>.</p>
+
+    </div>
+    <nav aria-label="Resources">
+      <p class="footer-label">Resources</p>
+      <a href="https://docs.getguesstimate.com/docs/Introduction"
+        >Documentation</a
+      ><a href="https://github.com/getguesstimate/guesstimate-app"
+        >Source code</a
+      ><a href="https://discord.gg/nsTnQTgtG6">Community</a>
+    </nav>
+    <nav aria-label="Legal and plans">
+      <p class="footer-label">Guesstimate</p>
+      <a href="/pricing">Plans</a
+      ><a href="/terms">Terms of service</a
+      ><a href="https://www.iubenda.com/privacy-policy/7790420">Privacy policy</a>
+    </nav>
+  </div>
+</footer>
+    <script src="/site.js" defer></script>
   </body>
 </html>

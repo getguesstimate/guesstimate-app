@@ -1,0 +1,9 @@
+{
+  "freePrice": 0,
+  "individualPrice": 5,
+  "organizationPrice": 12,
+  "individualLimit": 20,
+  "organizationLimit": 200,
+  "trialDays": 30,
+  "average": 4000
+}

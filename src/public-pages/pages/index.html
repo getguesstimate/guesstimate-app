@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+
+<html lang="{{lang}}" dir="{{dir}}">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <title>{{t:home.meta.title}}</title>
+    <meta content="{{t:home.meta.description}}" name="description" />
+    <link href="{{canonical}}" rel="canonical" />
+    {{alternates}}
+    <meta content="website" property="og:type" />
+    <meta content="{{t:home.meta.title}}" property="og:title" />
+    <meta content="{{t:home.meta.social}}" property="og:description" />
+    <meta content="{{canonical}}" property="og:url" />
+    <meta content="#ffffff" name="theme-color" />
+    <link href="/assets/favicon-2.png" rel="icon" type="image/png" />
+    <link href="/landing.css" rel="stylesheet" />
+    <link href="/plans.css" rel="stylesheet" />
+    <link
+      as="font"
+      crossorigin="anonymous"
+      href="/fonts/inter-regular.ttf"
+      rel="preload"
+      type="font/ttf"
+    />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">{{t:skip}}</a>
+    {{header}}
+    <main class="container" id="main-content" tabindex="-1">
+      <div class="overview">
+        <section aria-labelledby="page-heading" class="introduction">
+          <h1 id="page-heading">{{t:brand}}</h1>
+          <p class="subtitle">{{t:home.subtitle}}</p>
+          <div class="intro-links">
+            <a class="button button-primary" href="/scratchpad"
+              >{{t:home.open}}</a
+            >
+            <a class="button button-secondary" href="/models"
+              >{{t:home.browse}}</a
+            >
+          </div>
+          <p class="note">{{t:home.note}}</p>
+        </section>
+        <section aria-label="{{t:home.video}}" class="video-section">
+          <div class="video-frame">
+            <iframe
+              allow="autoplay; fullscreen; picture-in-picture"
+              allowfullscreen=""
+              loading="lazy"
+              src="https://fast.wistia.net/embed/iframe/ua8kd9n06a?videoFoam=true"
+              title="{{t:home.video}}"
+            ></iframe>
+          </div>
+          {{videoLanguageNotice}}
+        </section>
+      </div>
+      <section aria-labelledby="example-heading" class="example-section">
+        <div class="example-explanation">
+          <h2 id="example-heading">{{t:example.title}}</h2>
+          <p>{{t:example.text}}</p>
+        </div>
+        <figure aria-labelledby="model-caption" class="model-preview">
+          <div class="model-inputs">
+            <div class="model-node">
+              <div class="node-label">
+                <span>{{t:example.hours}}</span
+                ><span class="variable" dir="ltr">A</span>
+              </div>
+              <p class="node-value" dir="ltr">
+                40 <span>{{t:example.to}}</span> 60
+              </p>
+              <p class="node-note">{{t:example.interval}}</p>
+              <svg
+                aria-hidden="true"
+                class="mini-chart"
+                preserveaspectratio="none"
+                viewbox="0 0 200 34"
+              >
+                <path
+                  d="M0 34C40 34 43 32 62 24S82 2 100 2s22 14 38 22 22 10 62 10Z"
+                ></path>
+              </svg>
+            </div>
+            <div class="model-node">
+              <div class="node-label">
+                <span>{{t:example.rate}}</span
+                ><span class="variable" dir="ltr">B</span>
+              </div>
+              <p class="node-value" dir="ltr">$80</p>
+              <p class="node-note">{{t:example.known}}</p>
+              <div aria-hidden="true" class="known-input-line"></div>
+            </div>
+          </div>
+          <svg
+            aria-hidden="true"
+            class="model-connections"
+            fill="none"
+            preserveaspectratio="none"
+            viewbox="0 0 440 40"
+          >
+            <path d="M105 0v18h115v18M335 0v18H220"></path>
+            <path d="m215 31 5 5 5-5"></path>
+          </svg>
+          <div class="model-result">
+            <div class="result-heading">
+              <span>{{t:example.cost}}</span><code dir="ltr">= A * B</code>
+            </div>
+            <p class="result-value" dir="ltr">
+              $3,200 <span>{{t:example.to}}</span> $4,800
+            </p>
+            <p class="node-note">{{t:example.interval}}</p>
+            <svg
+              aria-hidden="true"
+              class="result-chart"
+              preserveaspectratio="none"
+              viewbox="0 0 440 88"
+            >
+              <path
+                class="chart-area"
+                d="M0 76C75 76 85 72 120 58S170 6 220 6s65 38 100 52 45 18 120 18Z"
+              ></path>
+              <path
+                class="chart-curve"
+                d="M0 76C75 76 85 72 120 58S170 6 220 6s65 38 100 52 45 18 120 18"
+              ></path>
+              <path class="chart-axis" d="M0 77h440M220 8v69"></path>
+            </svg>
+            <p class="chart-label">{{t:example.average}}</p>
+          </div>
+          <figcaption id="model-caption">{{t:example.caption}}</figcaption>
+        </figure>
+      </section>
+
+      <section aria-labelledby="usage-heading" class="usage-section">
+        <h2 class="visually-hidden" id="usage-heading">{{t:home.features}}</h2>
+        <div class="usage-notes">
+          <div>
+            <img
+              alt=""
+              class="feature-icon"
+              height="32"
+              src="/assets/distribution-icons/normal.png"
+              width="32"
+            />
+            <h3>{{t:home.ranges}}</h3>
+            <p>{{t:home.ranges.text}}</p>
+          </div>
+          <div>
+            <img
+              alt=""
+              class="feature-icon"
+              height="32"
+              src="/assets/distribution-icons/function.png"
+              width="32"
+            />
+            <h3>{{t:home.formulas}}</h3>
+            <p>{{t:home.formulas.text}}</p>
+          </div>
+          <div>
+            <img
+              alt=""
+              class="feature-icon"
+              height="32"
+              src="/assets/metric-icons/blue/scientific.png"
+              width="32"
+            />
+            <h3>{{t:home.results}}</h3>
+            <p>{{t:home.results.text}}</p>
+          </div>
+        </div>
+      </section>
+      <section aria-labelledby="access-heading" class="landing-plans">
+        <div class="landing-plans-intro">
+          <h2 id="access-heading">{{t:home.saving}}</h2>
+          <p>{{t:home.saving.text}}</p>
+        </div>
+        <div class="plan-comparison">
+          <article
+            class="plan plan-free plan-summary"
+            aria-labelledby="summary-free"
+          >
+            <h3 id="summary-free">{{t:plan.free}}</h3>
+            <p class="plan-price">
+              {{data:freePrice}} <span>{{t:plan.month}}</span>
+            </p>
+            <p>{{t:plan.public.short}}</p>
+          </article>
+          <article
+            class="plan plan-individual plan-summary"
+            aria-labelledby="summary-individual"
+          >
+            <h3 id="summary-individual">{{t:plan.individual}}</h3>
+            <p class="plan-price">
+              {{data:individualPrice}} <span>{{t:plan.month}}</span>
+            </p>
+            <p>{{t:plan.individual.short}}</p>
+          </article>
+          <article
+            class="plan plan-organization plan-summary"
+            aria-labelledby="summary-organization"
+          >
+            <h3 id="summary-organization">{{t:plan.organization}}</h3>
+            <p class="plan-price">
+              {{data:organizationPrice}} <span>{{t:plan.userMonth}}</span>
+            </p>
+            <p>{{t:plan.organization.short}}</p>
+          </article>
+        </div>
+        <a class="text-action" href="{{pricingUrl}}"
+          >{{t:home.compare}}<span aria-hidden="true">→</span></a
+        >
+      </section>
+    </main>
+    {{footer}}
+    <script src="/site.js" defer></script>
+  </body>
+</html>

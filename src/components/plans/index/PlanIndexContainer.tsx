@@ -11,11 +11,11 @@ export const PlanIndexContainer: FC = () => {
   const router = useRouter();
   const onChoose = (planId: string) => {
     const plan = { personal_lite: "lite", personal_premium: "premium" }[planId];
-    router.push(`subscribe/${plan}`);
+    router.push(`/subscribe/${plan}`);
   };
 
   const onNewOrganizationNavigation = () => {
-    router.push("organizations/new");
+    router.push("/organizations/new");
   };
 
   const me = useAppSelector((state) => state.me);

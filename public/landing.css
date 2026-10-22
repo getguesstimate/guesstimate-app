@@ -64,7 +64,7 @@ code {
 .skip-link {
   position: absolute;
   top: 8px;
-  left: 8px;
+  inset-inline-start: 8px;
   z-index: 30;
   padding: 8px 14px;
   background: #fff;
@@ -164,7 +164,7 @@ code {
   text-decoration: none;
   border-radius: 5px;
   padding-inline: 8px;
-  margin-left: -8px;
+  margin-inline-start: -8px;
 }
 .footer-inner a:hover {
   color: #125f91;
@@ -179,7 +179,7 @@ code {
   padding-block: 64px;
 }
 .introduction {
-  text-align: left;
+  text-align: start;
 }
 h1 {
   color: #263b4d;
@@ -266,13 +266,15 @@ h1 {
   border: 0;
 }
 .example-section {
+  min-width: 0;
   padding-block: 40px;
   border-top: 1px solid #cbd7e1;
 }
 .example-explanation {
   max-width: 640px;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
+
 .example-section > .model-preview {
   max-width: 800px;
   margin-inline: auto;
@@ -440,11 +442,11 @@ h2 {
 }
 .usage-notes > div {
   min-width: 0;
-  text-align: left;
+  text-align: start;
 }
 .usage-notes > div + div {
-  border-left: 1px solid var(--line);
-  padding-left: 32px;
+  border-inline-start: 1px solid var(--line);
+  padding-inline-start: 32px;
 }
 
 .feature-icon {
@@ -542,6 +544,7 @@ h2 {
   }
   .video-section {
     max-width: 620px;
+    width: 100%;
     margin-inline: auto;
   }
   .usage-notes {
@@ -566,6 +569,28 @@ h2 {
   }
 }
 @media (max-width: 760px) {
+  html {
+    scroll-padding-top: 64px;
+  }
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 25;
+    background: rgb(255 255 255 / 90%);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 2px 8px #263b4d08;
+    transition: transform 180ms ease;
+  }
+  .site-header.header-hidden {
+    transform: translateY(calc(-100% - 8px));
+  }
+  .mobile-navigation {
+    max-height: calc(100vh - 72px);
+    max-height: calc(100dvh - 72px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
   .desktop-navigation {
     display: none;
   }
@@ -603,7 +628,7 @@ h2 {
   .mobile-navigation {
     position: absolute;
     top: calc(100% + 8px);
-    right: 0;
+    inset-inline-end: 0;
     width: min(280px, 100%);
     z-index: 20;
     display: grid;
@@ -716,8 +741,8 @@ h2 {
     padding-block: 32px;
   }
   .usage-notes > div + div {
-    border-left: 0;
-    padding-left: 0;
+    border-inline-start: 0;
+    padding-inline-start: 0;
     border-top: 1px solid var(--line);
     padding-top: 24px;
   }
@@ -763,4 +788,182 @@ h2 {
   .footer-inner a {
     min-height: 44px;
   }
+}
+
+.desktop-navigation a[aria-current="page"],
+.mobile-navigation a[aria-current="page"] {
+  color: #125f91;
+  font-weight: 600;
+}
+.text-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 32px;
+  color: #126fa8;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.text-action:hover {
+  color: #0e527c;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-header {
+    transition: none;
+  }
+}
+
+.header-inner {
+  gap: 16px;
+}
+.brand {
+  margin-inline-end: auto;
+}
+.language-menu {
+  position: relative;
+  flex-shrink: 0;
+}
+.language-menu summary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding-inline: 4px;
+  font-size: 12px;
+  color: #415b72;
+  cursor: pointer;
+  list-style: none;
+}
+.language-menu summary::-webkit-details-marker {
+  display: none;
+}
+.language-menu nav {
+  position: absolute;
+  inset-inline-end: 0;
+  top: calc(100% + 6px);
+  z-index: 30;
+  width: 176px;
+  max-height: min(480px, calc(100vh - 76px));
+  max-height: min(480px, calc(100dvh - 76px));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  padding: 6px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 6px 20px #263b4d14;
+}
+.language-menu nav a {
+  display: block;
+  padding: 10px 12px;
+  min-height: 44px;
+  color: #354f67;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 14px;
+}
+.language-menu nav a:hover,
+.language-menu nav a[aria-current] {
+  background: #edf3f8;
+}
+.language-notice {
+  max-width: 280px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.video-language-note {
+  margin-top: 8px;
+}
+[dir="rtl"] .text-action > span[aria-hidden],
+[dir="rtl"] .access-actions > a > span[aria-hidden] {
+  transform: scaleX(-1);
+}
+[dir="rtl"] {
+  font-family: Arial, "Helvetica Neue", sans-serif;
+}
+[dir="rtl"] h1,
+[dir="rtl"] h2,
+[dir="rtl"] h3,
+[dir="rtl"] .subtitle {
+  letter-spacing: normal;
+}
+.model-inputs {
+  direction: ltr;
+}
+[dir="rtl"] .node-label,
+[dir="rtl"] .node-note {
+  direction: rtl;
+}
+.node-value,
+.result-value,
+code {
+  unicode-bidi: isolate;
+}
+@media (max-width: 560px) {
+  .header-inner {
+    gap: 8px;
+  }
+  .language-menu summary {
+    font-size: 11px;
+    gap: 4px;
+  }
+}
+
+.node-value span,
+.result-value span {
+  unicode-bidi: isolate;
+}
+
+/* Translated ranges use a dash or wave separator instead of a word. */
+html:not([lang="en"]) .node-value span,
+html:not([lang="en"]) .result-value span {
+  color: inherit;
+  font-size: inherit;
+  padding-inline: 0;
+}
+
+/* Use local fonts suited to each script, including names in the language menu. */
+[lang="hi"] {
+  font-family: "Noto Sans Devanagari", "Nirmala UI", "Kohinoor Devanagari",
+    sans-serif;
+}
+[lang="ar"] {
+  font-family: "Noto Sans Arabic", "Geeza Pro", Arial, sans-serif;
+}
+[lang="ja"] {
+  font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans CJK JP",
+    sans-serif;
+}
+[lang="zh-Hans"] {
+  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+}
+[lang="ko"] {
+  font-family: "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans CJK KR",
+    sans-serif;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+:lang(hi),
+:lang(ar),
+:lang(ja),
+:lang(zh),
+:lang(ko) {
+  letter-spacing: normal;
+}
+
+/* Longer translated words must fit narrow cards and footer columns. */
+.node-label,
+.node-note,
+.usage-notes p,
+.footer-inner {
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+.footer-inner > * {
+  min-width: 0;
 }

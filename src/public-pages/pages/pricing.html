@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+
+<html lang="{{lang}}" dir="{{dir}}">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <title>{{t:plans.meta.title}}</title>
+    <meta content="{{t:plans.meta.description}}" name="description" />
+    <link href="{{canonical}}" rel="canonical" />
+    {{alternates}}
+    <meta content="website" property="og:type" />
+    <meta content="{{t:plans.meta.title}}" property="og:title" />
+    <meta content="{{t:plans.meta.social}}" property="og:description" />
+    <meta content="{{canonical}}" property="og:url" />
+    <meta content="#ffffff" name="theme-color" />
+    <link href="/assets/favicon-2.png" rel="icon" type="image/png" />
+    <link href="/landing.css" rel="stylesheet" />
+    <link href="/plans.css" rel="stylesheet" />
+    <link
+      as="font"
+      crossorigin="anonymous"
+      href="/fonts/inter-regular.ttf"
+      rel="preload"
+      type="font/ttf"
+    />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">{{t:skip}}</a>
+    {{header}}
+    <main class="plans-page container" id="main-content" tabindex="-1">
+      <section class="plans-intro" aria-labelledby="plans-heading">
+        <h1 id="plans-heading">{{t:nav.plans}}</h1>
+        <p>{{t:plans.intro}}</p>
+      </section>
+      <section class="plan-comparison" aria-label="{{t:plans.compare}}">
+        <article class="plan plan-free" aria-labelledby="free-heading">
+          <h2 id="free-heading">{{t:plan.free}}</h2>
+          <p class="plan-description">{{t:plan.free.description}}</p>
+          <p class="plan-price">
+            {{data:freePrice}} <span>{{t:plan.month}}</span>
+          </p>
+          <ul>
+            <li>{{t:plan.public}}</li>
+            <li>{{t:plan.save}}</li>
+            <li>{{t:plan.noPrivate}}</li>
+          </ul>
+        </article>
+        <article
+          class="plan plan-individual"
+          aria-labelledby="individual-heading"
+        >
+          <h2 id="individual-heading">{{t:plan.individual}}</h2>
+          <p class="plan-description">{{t:plan.individual.description}}</p>
+          <p class="plan-price">
+            {{data:individualPrice}} <span>{{t:plan.month}}</span>
+          </p>
+          <ul>
+            <li>{{t:plan.individual.limit}}</li>
+            <li>{{t:plan.private}}</li>
+            <li>{{t:plan.public}}</li>
+          </ul>
+        </article>
+        <article
+          class="plan plan-organization"
+          aria-labelledby="organization-heading"
+        >
+          <h2 id="organization-heading">{{t:plan.organization}}</h2>
+          <p class="plan-description">{{t:plan.organization.description}}</p>
+          <p class="plan-price">
+            {{data:organizationPrice}} <span>{{t:plan.userMonth}}</span>
+          </p>
+          <ul>
+            <li>{{t:plan.organization.limit}}</li>
+            <li>{{t:plan.members}}</li>
+            <li>{{t:plan.public}}</li>
+            <li>{{t:plan.trial}}</li>
+          </ul>
+        </article>
+      </section>
+      <div class="plan-next-step">
+        <p>{{t:plans.signin}}</p>
+        <a class="text-action" href="/billing"
+          >{{t:plans.manage}}<span aria-hidden="true">→</span></a
+        >
+      </div>
+      <section class="plan-questions" aria-labelledby="questions-heading">
+        <h2 id="questions-heading">{{t:faq.title}}</h2>
+        <div class="questions-grid">
+          <div>
+            <h3>{{t:faq.model}}</h3>
+            <p>{{t:faq.model.text}}</p>
+          </div>
+          <div>
+            <h3>{{t:faq.access}}</h3>
+            <p>{{t:faq.access.text}}</p>
+          </div>
+          <div>
+            <h3>{{t:faq.cancel}}</h3>
+            <p>{{t:faq.cancel.text}}</p>
+          </div>
+          <div>
+            <h3>{{t:faq.after}}</h3>
+            <p>{{t:faq.after.text}}</p>
+          </div>
+          <div>
+            <h3>{{t:faq.payment}}</h3>
+            <p>{{t:faq.payment.text}}</p>
+          </div>
+          <div>
+            <h3>{{t:faq.discount}}</h3>
+            <p>{{t:faq.discount.text}}</p>
+          </div>
+        </div>
+      </section>
+    </main>
+    {{footer}}
+    <script src="/site.js" defer></script>
+  </body>
+</html>

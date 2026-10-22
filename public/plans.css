@@ -1,0 +1,246 @@
+.plans-intro {
+  padding-block: 48px 32px;
+  max-width: 640px;
+}
+.plans-intro p {
+  margin-top: 16px;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.65;
+}
+.plan-comparison {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+.plan {
+  min-width: 0;
+  padding: 28px;
+  border: 1px solid #d8e1e8;
+  border-radius: 12px;
+  background: #f6f8fa;
+  box-shadow: 0 2px 4px #23394d05;
+}
+.plan-individual {
+  background: #eff5fb;
+  border-color: #c7d9e9;
+}
+.plan-organization {
+  background: #eff6f4;
+  border-color: #cddfd9;
+}
+.plan h2,
+.plan h3 {
+  color: #263b4d;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+.plan-description {
+  min-height: 48px;
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 14px;
+}
+.plan-price {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-block: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #263b4d1a;
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.04em;
+}
+.plan-price span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.plan ul {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.plan li {
+  position: relative;
+  padding-inline-start: 14px;
+}
+.plan li::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  top: 9px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #7492aa;
+}
+.plan-next-step {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  padding-block: 24px;
+  border-bottom: 1px solid #cbd7e1;
+}
+.plan-next-step p {
+  color: var(--muted);
+  font-size: 14px;
+}
+.plan-questions {
+  padding-block: 40px 48px;
+}
+.questions-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+.questions-grid > div {
+  padding: 24px;
+  border: 1px solid #e0e6ec;
+  border-radius: 10px;
+  background: #f8fafc;
+}
+.questions-grid h3::before {
+  content: "";
+  display: block;
+  width: 24px;
+  height: 2px;
+  margin-bottom: 14px;
+  border-radius: 1px;
+  background: #91afc5;
+}
+.questions-grid h3 {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+.questions-grid p {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.75;
+}
+.questions-grid a {
+  text-decoration-color: #a5bccd;
+  text-underline-offset: 3px;
+}
+.questions-grid a:hover {
+  text-decoration-color: currentColor;
+}
+@media (max-width: 760px) {
+  .plan {
+    padding: 20px;
+  }
+  .plan-comparison {
+    gap: 12px;
+  }
+  .plan-price {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .plan-description {
+    min-height: 72px;
+  }
+  .questions-grid {
+    gap: 16px;
+  }
+}
+@media (max-width: 760px) {
+  .plans-intro {
+    padding-block: 32px 24px;
+  }
+  .plans-intro p {
+    font-size: 16px;
+  }
+  .plan-comparison {
+    grid-template-columns: 1fr;
+    padding-block: 0;
+  }
+  .plan {
+    padding: 24px;
+  }
+  .plan-description {
+    min-height: 0;
+  }
+  .plan-price {
+    flex-direction: row;
+    align-items: baseline;
+    margin-block: 16px;
+  }
+  .plan ul {
+    gap: 8px;
+  }
+  .plan-next-step {
+    margin-top: 8px;
+    padding-block: 20px;
+    gap: 8px;
+  }
+  .plan-questions {
+    padding-block: 32px;
+  }
+  .questions-grid {
+    grid-template-columns: 1fr;
+    margin-top: 24px;
+    gap: 12px;
+  }
+  .questions-grid > div {
+    padding: 20px;
+  }
+}
+
+.landing-plans {
+  padding-block: 40px;
+  border-top: 1px solid #cbd7e1;
+}
+.landing-plans-intro {
+  max-width: 620px;
+  margin-bottom: 24px;
+}
+.landing-plans-intro p {
+  margin-top: 12px;
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--muted);
+}
+.plan-summary {
+  padding: 24px;
+}
+.plan-summary h3 {
+  font-size: 18px;
+}
+.plan-summary .plan-price {
+  margin-block: 16px;
+  font-size: 28px;
+}
+.plan-summary > p:last-child {
+  font-size: 14px;
+  color: #455b6d;
+  line-height: 1.6;
+}
+.landing-plans > .text-action {
+  margin-top: 20px;
+}
+@media (max-width: 760px) {
+  .plan-summary {
+    padding: 20px;
+  }
+}
+@media (max-width: 560px) {
+  .landing-plans {
+    padding-block: 32px;
+  }
+}
