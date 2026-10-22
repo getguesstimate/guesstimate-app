@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import { test } from "node:test";
 import {
   locales,
+  menuLocalesFor,
   renderPublicPages,
   publicPageRewrites,
   validateTranslations,
@@ -102,6 +103,63 @@ test("complete HTML has no unresolved translations or app hydration, and formula
     if (name === "index") {
       assert(html.includes('<code dir="ltr">= A * B</code>'));
       assert(html.includes("ua8kd9n06a"));
+    }
+  }
+});
+
+test("locale identifiers and paths are unique, with simple language labels", () => {
+  assert.equal(new Set(locales.map((l) => l.code)).size, locales.length);
+  assert.equal(new Set(locales.map((l) => l.prefix)).size, locales.length);
+  assert.equal(locales.find((l) => l.code === "pt-BR").name, "Português");
+  assert.equal(locales.find((l) => l.code === "zh-Hans").name, "中文");
+  for (const locale of locales) {
+    assert.doesNotThrow(() => new Intl.Locale(locale.code));
+    assert(["ltr", "rtl"].includes(locale.dir));
+  }
+});
+
+test("language menu sorts by translated names while displaying native names only", () => {
+  assert.deepEqual(
+    menuLocalesFor("en").map((locale) => locale.code),
+    [
+      "ar",
+      "zh-Hans",
+      "en",
+      "fr",
+      "de",
+      "el",
+      "he",
+      "hi",
+      "it",
+      "ja",
+      "ko",
+      "pt-BR",
+      "ru",
+      "es",
+    ]
+  );
+  assert.notDeepEqual(menuLocalesFor("he"), menuLocalesFor("en"));
+  for (const { html, locale } of pages) {
+    const menu = html.match(
+      /<details class="language-menu">[\s\S]*?<\/details>/
+    )[0];
+    const links = [
+      ...menu.matchAll(/<a [^>]*hreflang="([^"]+)"[^>]*>(.*?)<\/a>/g),
+    ];
+    const names = new Intl.DisplayNames([locale], { type: "language" });
+    const collator = new Intl.Collator(locale, { sensitivity: "base" });
+    const translated = links.map(([, code]) =>
+      names.of(new Intl.Locale(code).language)
+    );
+    assert.deepEqual(translated, [...translated].sort(collator.compare));
+    assert.equal(links.length, locales.length);
+    for (const [, code, content] of links) {
+      assert.equal(
+        content,
+        `<bdi dir="auto">${
+          locales.find((item) => item.code === code).name
+        }</bdi>`
+      );
     }
   }
 });

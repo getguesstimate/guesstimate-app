@@ -4,5 +4,83 @@
     "name": "English",
     "dir": "ltr",
     "prefix": ""
+  },
+  {
+    "code": "he",
+    "name": "עברית",
+    "dir": "rtl",
+    "prefix": "/he"
+  },
+  {
+    "code": "es",
+    "name": "Español",
+    "dir": "ltr",
+    "prefix": "/es"
+  },
+  {
+    "code": "fr",
+    "name": "Français",
+    "dir": "ltr",
+    "prefix": "/fr"
+  },
+  {
+    "code": "de",
+    "name": "Deutsch",
+    "dir": "ltr",
+    "prefix": "/de"
+  },
+  {
+    "code": "it",
+    "name": "Italiano",
+    "dir": "ltr",
+    "prefix": "/it"
+  },
+  {
+    "code": "pt-BR",
+    "name": "Português",
+    "dir": "ltr",
+    "prefix": "/pt"
+  },
+  {
+    "code": "ar",
+    "name": "العربية",
+    "dir": "rtl",
+    "prefix": "/ar"
+  },
+  {
+    "code": "ja",
+    "name": "日本語",
+    "dir": "ltr",
+    "prefix": "/ja"
+  },
+  {
+    "code": "zh-Hans",
+    "name": "中文",
+    "dir": "ltr",
+    "prefix": "/zh"
+  },
+  {
+    "code": "ru",
+    "name": "Русский",
+    "dir": "ltr",
+    "prefix": "/ru"
+  },
+  {
+    "code": "hi",
+    "name": "हिन्दी",
+    "dir": "ltr",
+    "prefix": "/hi"
+  },
+  {
+    "code": "ko",
+    "name": "한국어",
+    "dir": "ltr",
+    "prefix": "/ko"
+  },
+  {
+    "code": "el",
+    "name": "Ελληνικά",
+    "dir": "ltr",
+    "prefix": "/el"
   }
 ]

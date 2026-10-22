@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+
+<html lang="el" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <title>Guesstimate — Εκτιμήσεις με αβεβαιότητα</title>
+    <meta content="Το Guesstimate είναι ένα υπολογιστικό φύλλο για εκτιμήσεις με αβεβαιότητα. Εισαγάγετε αριθμούς ή εύρη, συνδέστε τα με τύπους και υπολογίστε την κατανομή των αποτελεσμάτων." name="description" />
+    <link href="https://www.getguesstimate.com/el" rel="canonical" />
+    <link rel="alternate" hreflang="en" href="https://www.getguesstimate.com/" />
+<link rel="alternate" hreflang="he" href="https://www.getguesstimate.com/he" />
+<link rel="alternate" hreflang="es" href="https://www.getguesstimate.com/es" />
+<link rel="alternate" hreflang="fr" href="https://www.getguesstimate.com/fr" />
+<link rel="alternate" hreflang="de" href="https://www.getguesstimate.com/de" />
+<link rel="alternate" hreflang="it" href="https://www.getguesstimate.com/it" />
+<link rel="alternate" hreflang="pt-BR" href="https://www.getguesstimate.com/pt" />
+<link rel="alternate" hreflang="ar" href="https://www.getguesstimate.com/ar" />
+<link rel="alternate" hreflang="ja" href="https://www.getguesstimate.com/ja" />
+<link rel="alternate" hreflang="zh-Hans" href="https://www.getguesstimate.com/zh" />
+<link rel="alternate" hreflang="ru" href="https://www.getguesstimate.com/ru" />
+<link rel="alternate" hreflang="hi" href="https://www.getguesstimate.com/hi" />
+<link rel="alternate" hreflang="ko" href="https://www.getguesstimate.com/ko" />
+<link rel="alternate" hreflang="el" href="https://www.getguesstimate.com/el" />
+<link rel="alternate" hreflang="x-default" href="https://www.getguesstimate.com/" />
+    <meta content="website" property="og:type" />
+    <meta content="Guesstimate — Εκτιμήσεις με αβεβαιότητα" property="og:title" />
+    <meta content="Εισαγάγετε αριθμούς ή εύρη, συνδέστε τα με τύπους και υπολογίστε την κατανομή των αποτελεσμάτων." property="og:description" />
+    <meta content="https://www.getguesstimate.com/el" property="og:url" />
+    <meta content="#ffffff" name="theme-color" />
+    <link href="/assets/favicon-2.png" rel="icon" type="image/png" />
+    <link href="/landing.css" rel="stylesheet" />
+    <link href="/plans.css" rel="stylesheet" />
+    <link
+      as="font"
+      crossorigin="anonymous"
+      href="/fonts/inter-regular.ttf"
+      rel="preload"
+      type="font/ttf"
+    />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Μετάβαση στο περιεχόμενο</a>
+    <header class="site-header">
+  <div class="header-inner container">
+    <a aria-label="Αρχική σελίδα Guesstimate" class="brand" href="/el">
+      <img alt="" height="24" src="/assets/new-logo-2.png" width="24" />
+      <span>Guesstimate</span>
+    </a>
+    <nav aria-label="Κύρια πλοήγηση" class="desktop-navigation">
+      <a href="/models"
+        ><svg
+          class="nav-icon"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <rect x="3" y="3" width="7" height="7" rx="1" />
+          <rect x="14" y="3" width="7" height="7" rx="1" />
+          <rect x="3" y="14" width="7" height="7" rx="1" />
+          <rect x="14" y="14" width="7" height="7" rx="1" /></svg
+        ><span>Δημόσια μοντέλα</span></a
+      >
+      <a href="https://docs.getguesstimate.com/docs/Introduction"
+        ><svg
+          class="nav-icon"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path
+            d="M12 5v15M12 5C8 3 5 3 3 4v15c3-1 6-1 9 1 3-2 6-2 9-1V4c-2-1-5-1-9 1Z"
+          /></svg
+        ><span>Τεκμηρίωση</span></a
+      >
+      <a href="/el/pricing"
+        ><svg
+          class="nav-icon"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <rect x="3" y="5" width="18" height="14" rx="2" />
+          <path d="M3 10h18M7 15h4" /></svg
+        ><span>Προγράμματα</span></a
+      >
+    </nav>
+    <details class="language-menu">
+        <summary aria-label="Γλώσσα"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/></svg><span lang="el">Ελληνικά</span></summary>
+        <nav aria-label="Γλώσσα"><a href="/" lang="en" hreflang="en"><bdi dir="auto">English</bdi></a><a href="/ar" lang="ar" hreflang="ar"><bdi dir="auto">العربية</bdi></a><a href="/fr" lang="fr" hreflang="fr"><bdi dir="auto">Français</bdi></a><a href="/de" lang="de" hreflang="de"><bdi dir="auto">Deutsch</bdi></a><a href="/he" lang="he" hreflang="he"><bdi dir="auto">עברית</bdi></a><a href="/el" lang="el" hreflang="el" aria-current="true"><bdi dir="auto">Ελληνικά</bdi></a><a href="/ja" lang="ja" hreflang="ja"><bdi dir="auto">日本語</bdi></a><a href="/es" lang="es" hreflang="es"><bdi dir="auto">Español</bdi></a><a href="/it" lang="it" hreflang="it"><bdi dir="auto">Italiano</bdi></a><a href="/zh" lang="zh-Hans" hreflang="zh-Hans"><bdi dir="auto">中文</bdi></a><a href="/ko" lang="ko" hreflang="ko"><bdi dir="auto">한국어</bdi></a><a href="/pt" lang="pt-BR" hreflang="pt-BR"><bdi dir="auto">Português</bdi></a><a href="/ru" lang="ru" hreflang="ru"><bdi dir="auto">Русский</bdi></a><a href="/hi" lang="hi" hreflang="hi"><bdi dir="auto">हिन्दी</bdi></a></nav>
+      </details>
+    <details class="mobile-menu">
+      <summary aria-label="Μενού πλοήγησης">
+        <svg
+          class="menu-open-icon"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M4 6h16M4 12h16M4 18h16" /></svg
+        ><svg
+          class="menu-close-icon"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="m6 6 12 12M6 18 18 6" />
+        </svg>
+      </summary>
+      <nav aria-label="Πλοήγηση για κινητά" class="mobile-navigation">
+        <a href="/models"
+          ><svg
+            class="nav-icon"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <rect x="3" y="3" width="7" height="7" rx="1" />
+            <rect x="14" y="3" width="7" height="7" rx="1" />
+            <rect x="3" y="14" width="7" height="7" rx="1" />
+            <rect x="14" y="14" width="7" height="7" rx="1" /></svg
+          ><span>Δημόσια μοντέλα</span></a
+        >
+        <a href="https://docs.getguesstimate.com/docs/Introduction"
+          ><svg
+            class="nav-icon"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path
+              d="M12 5v15M12 5C8 3 5 3 3 4v15c3-1 6-1 9 1 3-2 6-2 9-1V4c-2-1-5-1-9 1Z"
+            /></svg
+          ><span>Τεκμηρίωση</span></a
+        >
+        <a href="/el/pricing"
+          ><svg
+            class="nav-icon"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <rect x="3" y="5" width="18" height="14" rx="2" />
+            <path d="M3 10h18M7 15h4" /></svg
+          ><span>Προγράμματα</span></a
+        >
+      </nav>
+    </details>
+  </div>
+</header>
+    <main class="container" id="main-content" tabindex="-1">
+      <div class="overview">
+        <section aria-labelledby="page-heading" class="introduction">
+          <h1 id="page-heading">Guesstimate</h1>
+          <p class="subtitle">Ένα υπολογιστικό φύλλο για όσα δεν είναι βέβαια.</p>
+          <div class="intro-links">
+            <a class="button button-primary" href="/scratchpad"
+              >Άνοιγμα πρόχειρου</a
+            >
+            <a class="button button-secondary" href="/models"
+              >Περιήγηση στα δημόσια μοντέλα</a
+            >
+          </div>
+          <p class="note">Δεν χρειάζεται λογαριασμός για δοκιμή. Οι αλλαγές στο πρόχειρο δεν αποθηκεύονται.</p>
+        </section>
+        <section aria-label="Βίντεο παρουσίασης του Guesstimate" class="video-section">
+          <div class="video-frame">
+            <iframe
+              allow="autoplay; fullscreen; picture-in-picture"
+              allowfullscreen=""
+              loading="lazy"
+              src="https://fast.wistia.net/embed/iframe/ua8kd9n06a?videoFoam=true"
+              title="Βίντεο παρουσίασης του Guesstimate"
+            ></iframe>
+          </div>
+          <p class="note video-language-note">Βίντεο στα αγγλικά</p>
+        </section>
+      </div>
+      <section aria-labelledby="example-heading" class="example-section">
+        <div class="example-explanation">
+          <h2 id="example-heading">Παράδειγμα: κόστος έργου</h2>
+          <p>Υπολογίζετε ότι ένα έργο θα χρειαστεί 40 έως 60 ώρες, με 80 δολάρια την ώρα. Το Guesstimate χρησιμοποιεί αυτούς τους αριθμούς για να εκτιμήσει ένα πιθανό εύρος για το συνολικό κόστος.</p>
+        </div>
+        <figure aria-labelledby="model-caption" class="model-preview">
+          <div class="model-inputs">
+            <div class="model-node">
+              <div class="node-label">
+                <span>Ώρες εργασίας</span
+                ><span class="variable" dir="ltr">A</span>
+              </div>
+              <p class="node-value" dir="ltr">
+                40 <span>–</span> 60
+              </p>
+              <p class="node-note">90% πιθανότητα να βρίσκεται σε αυτό το εύρος</p>
+              <svg
+                aria-hidden="true"
+                class="mini-chart"
+                preserveaspectratio="none"
+                viewbox="0 0 200 34"
+              >
+                <path
+                  d="M0 34C40 34 43 32 62 24S82 2 100 2s22 14 38 22 22 10 62 10Z"
+                ></path>
+              </svg>
+            </div>
+            <div class="model-node">
+              <div class="node-label">
+                <span>Ωριαία αμοιβή</span
+                ><span class="variable" dir="ltr">B</span>
+              </div>
+              <p class="node-value" dir="ltr">$80</p>
+              <p class="node-note">Γνωστή ωριαία αμοιβή</p>
+              <div aria-hidden="true" class="known-input-line"></div>
+            </div>
+          </div>
+          <svg
+            aria-hidden="true"
+            class="model-connections"
+            fill="none"
+            preserveaspectratio="none"
+            viewbox="0 0 440 40"
+          >
+            <path d="M105 0v18h115v18M335 0v18H220"></path>
+            <path d="m215 31 5 5 5-5"></path>
+          </svg>
+          <div class="model-result">
+            <div class="result-heading">
+              <span>Κόστος έργου</span><code dir="ltr">= A * B</code>
+            </div>
+            <p class="result-value" dir="ltr">
+              $3,200 <span>–</span> $4,800
+            </p>
+            <p class="node-note">90% πιθανότητα να βρίσκεται σε αυτό το εύρος</p>
+            <svg
+              aria-hidden="true"
+              class="result-chart"
+              preserveaspectratio="none"
+              viewbox="0 0 440 88"
+            >
+              <path
+                class="chart-area"
+                d="M0 76C75 76 85 72 120 58S170 6 220 6s65 38 100 52 45 18 120 18Z"
+              ></path>
+              <path
+                class="chart-curve"
+                d="M0 76C75 76 85 72 120 58S170 6 220 6s65 38 100 52 45 18 120 18"
+              ></path>
+              <path class="chart-axis" d="M0 77h440M220 8v69"></path>
+            </svg>
+            <p class="chart-label">Μέσος όρος: <bdi dir="ltr">4.000 $</bdi></p>
+          </div>
+          <figcaption id="model-caption">Το παράδειγμα υποθέτει περίπου 50 ώρες εργασίας, με μικρότερη ή μεγαλύτερη διάρκεια λιγότερο πιθανή. Τα εύρη καλύπτουν το 90% των δυνατών περιπτώσεων αυτής της εκτίμησης· ο πραγματικός χρόνος και το κόστος μπορεί να βρίσκονται εκτός αυτών.</figcaption>
+        </figure>
+      </section>
+
+      <section aria-labelledby="usage-heading" class="usage-section">
+        <h2 class="visually-hidden" id="usage-heading">Υπολογισμοί με εκτιμήσεις</h2>
+        <div class="usage-notes">
+          <div>
+            <img
+              alt=""
+              class="feature-icon"
+              height="32"
+              src="/assets/distribution-icons/normal.png"
+              width="32"
+            />
+            <h3>Εύρη</h3>
+            <p>Εισαγάγετε έναν αριθμό όταν τον γνωρίζετε. Όταν δεν είστε βέβαιοι, εισαγάγετε ένα εύρος όπως <code dir="ltr">40 to 60</code>. Δεν χρειάζεται να επιλέξετε έναν μόνο αριθμό πριν ξεκινήσετε.</p>
+          </div>
+          <div>
+            <img
+              alt=""
+              class="feature-icon"
+              height="32"
+              src="/assets/distribution-icons/function.png"
+              width="32"
+            />
+            <h3>Τύποι</h3>
+            <p>Συνδέστε κελιά όπως σε ένα υπολογιστικό φύλλο. Για παράδειγμα, πολλαπλασιάστε τις ώρες με την ωριαία αμοιβή για να εκτιμήσετε το κόστος. Αλλάξτε έναν αριθμό και το αποτέλεσμα ενημερώνεται.</p>
+          </div>
+          <div>
+            <img
+              alt=""
+              class="feature-icon"
+              height="32"
+              src="/assets/metric-icons/blue/scientific.png"
+              width="32"
+            />
+            <h3>Αποτελέσματα</h3>
+            <p>Δείτε ποια αποτελέσματα είναι δυνατά και ποια είναι πιθανότερα με βάση τις εκτιμήσεις σας. Το γράφημα βοηθά να δείτε πόσο μπορεί να μεταβληθεί το αποτέλεσμα.</p>
+          </div>
+        </div>
+      </section>
+      <section aria-labelledby="access-heading" class="landing-plans">
+        <div class="landing-plans-intro">
+          <h2 id="access-heading">Αποθήκευση και κοινή χρήση</h2>
+          <p>Δημιουργήστε λογαριασμό για να αποθηκεύετε και να μοιράζεστε την εργασία σας. Τα δημόσια μοντέλα είναι δωρεάν. Τα προγράμματα επί πληρωμή επιτρέπουν ιδιωτικά μοντέλα, για εσάς ή την ομάδα σας.</p>
+        </div>
+        <div class="plan-comparison">
+          <article
+            class="plan plan-free plan-summary"
+            aria-labelledby="summary-free"
+          >
+            <h3 id="summary-free">Δωρεάν</h3>
+            <p class="plan-price">
+              <bdi dir="ltr">0 $</bdi> <span>τον μήνα</span>
+            </p>
+            <p>Απεριόριστα δημόσια μοντέλα.</p>
+          </article>
+          <article
+            class="plan plan-individual plan-summary"
+            aria-labelledby="summary-individual"
+          >
+            <h3 id="summary-individual">Ατομικό</h3>
+            <p class="plan-price">
+              <bdi dir="ltr">5 $</bdi> <span>τον μήνα</span>
+            </p>
+            <p><bdi dir="ltr">20</bdi> ιδιωτικά μοντέλα, ορατά μόνο σε εσάς.</p>
+          </article>
+          <article
+            class="plan plan-organization plan-summary"
+            aria-labelledby="summary-organization"
+          >
+            <h3 id="summary-organization">Οργανισμοί</h3>
+            <p class="plan-price">
+              <bdi dir="ltr">12 $</bdi> <span>ανά χρήστη, τον μήνα</span>
+            </p>
+            <p><bdi dir="ltr">200</bdi> ιδιωτικά μοντέλα, κοινόχρηστα με την ομάδα σας.</p>
+          </article>
+        </div>
+        <a class="text-action" href="/el/pricing"
+          >Σύγκριση προγραμμάτων και λεπτομερειών<span aria-hidden="true">→</span></a
+        >
+      </section>
+    </main>
+    <footer class="site-footer">
+  <div class="footer-inner container">
+    <div class="footer-about">
+      <p class="footer-name">Guesstimate</p>
+      <p>Ένα έργο του <a href="https://quantifieduncertainty.org" dir="ltr">QURI</a>.</p>
+      <p class="language-notice">Η εφαρμογή και η τεκμηρίωση είναι προς το παρόν στα αγγλικά.</p>
+    </div>
+    <nav aria-label="Πόροι">
+      <p class="footer-label">Πόροι</p>
+      <a href="https://docs.getguesstimate.com/docs/Introduction"
+        >Τεκμηρίωση</a
+      ><a href="https://github.com/getguesstimate/guesstimate-app"
+        >Πηγαίος κώδικας</a
+      ><a href="https://discord.gg/nsTnQTgtG6">Κοινότητα</a>
+    </nav>
+    <nav aria-label="Νομικά και προγράμματα">
+      <p class="footer-label">Guesstimate</p>
+      <a href="/el/pricing">Προγράμματα</a
+      ><a href="/terms">Όροι χρήσης</a
+      ><a href="https://www.iubenda.com/privacy-policy/7790420">Πολιτική απορρήτου</a>
+    </nav>
+  </div>
+</footer>
+    <script src="/site.js" defer></script>
+  </body>
+</html>

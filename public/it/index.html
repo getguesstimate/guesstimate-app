@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+
+<html lang="it" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <title>Guesstimate — Stime con margini di incertezza</title>
+    <meta content="Guesstimate è un foglio di calcolo per stime con margini di incertezza. Inserisci numeri o intervalli, collegali con formule e calcola una distribuzione dei risultati." name="description" />
+    <link href="https://www.getguesstimate.com/it" rel="canonical" />
+    <link rel="alternate" hreflang="en" href="https://www.getguesstimate.com/" />
+<link rel="alternate" hreflang="he" href="https://www.getguesstimate.com/he" />
+<link rel="alternate" hreflang="es" href="https://www.getguesstimate.com/es" />
+<link rel="alternate" hreflang="fr" href="https://www.getguesstimate.com/fr" />
+<link rel="alternate" hreflang="de" href="https://www.getguesstimate.com/de" />
+<link rel="alternate" hreflang="it" href="https://www.getguesstimate.com/it" />
+<link rel="alternate" hreflang="pt-BR" href="https://www.getguesstimate.com/pt" />
+<link rel="alternate" hreflang="ar" href="https://www.getguesstimate.com/ar" />
+<link rel="alternate" hreflang="ja" href="https://www.getguesstimate.com/ja" />
+<link rel="alternate" hreflang="zh-Hans" href="https://www.getguesstimate.com/zh" />
+<link rel="alternate" hreflang="ru" href="https://www.getguesstimate.com/ru" />
+<link rel="alternate" hreflang="hi" href="https://www.getguesstimate.com/hi" />
+<link rel="alternate" hreflang="ko" href="https://www.getguesstimate.com/ko" />
+<link rel="alternate" hreflang="el" href="https://www.getguesstimate.com/el" />
+<link rel="alternate" hreflang="x-default" href="https://www.getguesstimate.com/" />
+    <meta content="website" property="og:type" />
+    <meta content="Guesstimate — Stime con margini di incertezza" property="og:title" />
+    <meta content="Inserisci numeri o intervalli, collegali con formule e calcola una distribuzione dei risultati." property="og:description" />
+    <meta content="https://www.getguesstimate.com/it" property="og:url" />
+    <meta content="#ffffff" name="theme-color" />
+    <link href="/assets/favicon-2.png" rel="icon" type="image/png" />
+    <link href="/landing.css" rel="stylesheet" />
+    <link href="/plans.css" rel="stylesheet" />
+    <link
+      as="font"
+      crossorigin="anonymous"
+      href="/fonts/inter-regular.ttf"
+      rel="preload"
+      type="font/ttf"
+    />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Vai al contenuto</a>
+    <header class="site-header">
+  <div class="header-inner container">
+    <a aria-label="Pagina iniziale di Guesstimate" class="brand" href="/it">
+      <img alt="" height="24" src="/assets/new-logo-2.png" width="24" />
+      <span>Guesstimate</span>
+    </a>
+    <nav aria-label="Navigazione principale" class="desktop-navigation">
+      <a href="/models"
+        ><svg
+          class="nav-icon"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <rect x="3" y="3" width="7" height="7" rx="1" />
+          <rect x="14" y="3" width="7" height="7" rx="1" />
+          <rect x="3" y="14" width="7" height="7" rx="1" />
+          <rect x="14" y="14" width="7" height="7" rx="1" /></svg
+        ><span>Modelli pubblici</span></a
+      >
+      <a href="https://docs.getguesstimate.com/docs/Introduction"
+        ><svg
+          class="nav-icon"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path
+            d="M12 5v15M12 5C8 3 5 3 3 4v15c3-1 6-1 9 1 3-2 6-2 9-1V4c-2-1-5-1-9 1Z"
+          /></svg
+        ><span>Documentazione</span></a
+      >
+      <a href="/it/pricing"
+        ><svg
+          class="nav-icon"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <rect x="3" y="5" width="18" height="14" rx="2" />
+          <path d="M3 10h18M7 15h4" /></svg
+        ><span>Piani</span></a
+      >
+    </nav>
+    <details class="language-menu">
+        <summary aria-label="Lingua"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/></svg><span lang="it">Italiano</span></summary>
+        <nav aria-label="Lingua"><a href="/ar" lang="ar" hreflang="ar"><bdi dir="auto">العربية</bdi></a><a href="/zh" lang="zh-Hans" hreflang="zh-Hans"><bdi dir="auto">中文</bdi></a><a href="/ko" lang="ko" hreflang="ko"><bdi dir="auto">한국어</bdi></a><a href="/he" lang="he" hreflang="he"><bdi dir="auto">עברית</bdi></a><a href="/fr" lang="fr" hreflang="fr"><bdi dir="auto">Français</bdi></a><a href="/ja" lang="ja" hreflang="ja"><bdi dir="auto">日本語</bdi></a><a href="/el" lang="el" hreflang="el"><bdi dir="auto">Ελληνικά</bdi></a><a href="/hi" lang="hi" hreflang="hi"><bdi dir="auto">हिन्दी</bdi></a><a href="/" lang="en" hreflang="en"><bdi dir="auto">English</bdi></a><a href="/it" lang="it" hreflang="it" aria-current="true"><bdi dir="auto">Italiano</bdi></a><a href="/pt" lang="pt-BR" hreflang="pt-BR"><bdi dir="auto">Português</bdi></a><a href="/ru" lang="ru" hreflang="ru"><bdi dir="auto">Русский</bdi></a><a href="/es" lang="es" hreflang="es"><bdi dir="auto">Español</bdi></a><a href="/de" lang="de" hreflang="de"><bdi dir="auto">Deutsch</bdi></a></nav>
+      </details>
+    <details class="mobile-menu">
+      <summary aria-label="Menu di navigazione">
+        <svg
+          class="menu-open-icon"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M4 6h16M4 12h16M4 18h16" /></svg
+        ><svg
+          class="menu-close-icon"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="m6 6 12 12M6 18 18 6" />
+        </svg>
+      </summary>
+      <nav aria-label="Navigazione mobile" class="mobile-navigation">
+        <a href="/models"
+          ><svg
+            class="nav-icon"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <rect x="3" y="3" width="7" height="7" rx="1" />
+            <rect x="14" y="3" width="7" height="7" rx="1" />
+            <rect x="3" y="14" width="7" height="7" rx="1" />
+            <rect x="14" y="14" width="7" height="7" rx="1" /></svg
+          ><span>Modelli pubblici</span></a
+        >
+        <a href="https://docs.getguesstimate.com/docs/Introduction"
+          ><svg
+            class="nav-icon"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path
+              d="M12 5v15M12 5C8 3 5 3 3 4v15c3-1 6-1 9 1 3-2 6-2 9-1V4c-2-1-5-1-9 1Z"
+            /></svg
+          ><span>Documentazione</span></a
+        >
+        <a href="/it/pricing"
+          ><svg
+            class="nav-icon"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <rect x="3" y="5" width="18" height="14" rx="2" />
+            <path d="M3 10h18M7 15h4" /></svg
+          ><span>Piani</span></a
+        >
+      </nav>
+    </details>
+  </div>
+</header>
+    <main class="container" id="main-content" tabindex="-1">
+      <div class="overview">
+        <section aria-labelledby="page-heading" class="introduction">
+          <h1 id="page-heading">Guesstimate</h1>
+          <p class="subtitle">Un foglio di calcolo per ciò che non è certo.</p>
+          <div class="intro-links">
+            <a class="button button-primary" href="/scratchpad"
+              >Apri il foglio di prova</a
+            >
+            <a class="button button-secondary" href="/models"
+              >Esplora i modelli pubblici</a
+            >
+          </div>
+          <p class="note">Per provare non serve un account. Le modifiche al foglio di prova non vengono salvate.</p>
+        </section>
+        <section aria-label="Video introduttivo a Guesstimate" class="video-section">
+          <div class="video-frame">
+            <iframe
+              allow="autoplay; fullscreen; picture-in-picture"
+              allowfullscreen=""
+              loading="lazy"
+              src="https://fast.wistia.net/embed/iframe/ua8kd9n06a?videoFoam=true"
+              title="Video introduttivo a Guesstimate"
+            ></iframe>
+          </div>
+          <p class="note video-language-note">Video in inglese</p>
+        </section>
+      </div>
+      <section aria-labelledby="example-heading" class="example-section">
+        <div class="example-explanation">
+          <h2 id="example-heading">Esempio: costo di un progetto</h2>
+          <p>Prevedi che un progetto richieda da 40 a 60 ore, a 80 dollari l&#39;ora. Guesstimate usa questi numeri per stimare un intervallo probabile per il costo totale.</p>
+        </div>
+        <figure aria-labelledby="model-caption" class="model-preview">
+          <div class="model-inputs">
+            <div class="model-node">
+              <div class="node-label">
+                <span>Ore di lavoro</span
+                ><span class="variable" dir="ltr">A</span>
+              </div>
+              <p class="node-value" dir="ltr">
+                40 <span>–</span> 60
+              </p>
+              <p class="node-note">90% di probabilità di rientrare nell&#39;intervallo</p>
+              <svg
+                aria-hidden="true"
+                class="mini-chart"
+                preserveaspectratio="none"
+                viewbox="0 0 200 34"
+              >
+                <path
+                  d="M0 34C40 34 43 32 62 24S82 2 100 2s22 14 38 22 22 10 62 10Z"
+                ></path>
+              </svg>
+            </div>
+            <div class="model-node">
+              <div class="node-label">
+                <span>Tariffa oraria</span
+                ><span class="variable" dir="ltr">B</span>
+              </div>
+              <p class="node-value" dir="ltr">$80</p>
+              <p class="node-note">Tariffa oraria nota</p>
+              <div aria-hidden="true" class="known-input-line"></div>
+            </div>
+          </div>
+          <svg
+            aria-hidden="true"
+            class="model-connections"
+            fill="none"
+            preserveaspectratio="none"
+            viewbox="0 0 440 40"
+          >
+            <path d="M105 0v18h115v18M335 0v18H220"></path>
+            <path d="m215 31 5 5 5-5"></path>
+          </svg>
+          <div class="model-result">
+            <div class="result-heading">
+              <span>Costo del progetto</span><code dir="ltr">= A * B</code>
+            </div>
+            <p class="result-value" dir="ltr">
+              $3,200 <span>–</span> $4,800
+            </p>
+            <p class="node-note">90% di probabilità di rientrare nell&#39;intervallo</p>
+            <svg
+              aria-hidden="true"
+              class="result-chart"
+              preserveaspectratio="none"
+              viewbox="0 0 440 88"
+            >
+              <path
+                class="chart-area"
+                d="M0 76C75 76 85 72 120 58S170 6 220 6s65 38 100 52 45 18 120 18Z"
+              ></path>
+              <path
+                class="chart-curve"
+                d="M0 76C75 76 85 72 120 58S170 6 220 6s65 38 100 52 45 18 120 18"
+              ></path>
+              <path class="chart-axis" d="M0 77h440M220 8v69"></path>
+            </svg>
+            <p class="chart-label">Media: <bdi dir="ltr">4000 USD</bdi></p>
+          </div>
+          <figcaption id="model-caption">Questo esempio presuppone circa 50 ore di lavoro, con tempi più brevi o più lunghi meno probabili. Gli intervalli mostrati coprono il 90% delle possibilità considerate nella stima; il tempo e il costo effettivi potrebbero essere al di fuori di questi intervalli.</figcaption>
+        </figure>
+      </section>
+
+      <section aria-labelledby="usage-heading" class="usage-section">
+        <h2 class="visually-hidden" id="usage-heading">Lavorare con le stime</h2>
+        <div class="usage-notes">
+          <div>
+            <img
+              alt=""
+              class="feature-icon"
+              height="32"
+              src="/assets/distribution-icons/normal.png"
+              width="32"
+            />
+            <h3>Intervalli</h3>
+            <p>Inserisci un numero quando lo conosci. Se non sei sicuro, inserisci un intervallo come <code dir="ltr">40 to 60</code>. Non devi scegliere un solo numero prima di iniziare.</p>
+          </div>
+          <div>
+            <img
+              alt=""
+              class="feature-icon"
+              height="32"
+              src="/assets/distribution-icons/function.png"
+              width="32"
+            />
+            <h3>Formule</h3>
+            <p>Collega le celle come in un foglio di calcolo. Ad esempio, moltiplica le ore per una tariffa oraria per stimare un costo. Modifica uno dei due numeri e il risultato si aggiorna.</p>
+          </div>
+          <div>
+            <img
+              alt=""
+              class="feature-icon"
+              height="32"
+              src="/assets/metric-icons/blue/scientific.png"
+              width="32"
+            />
+            <h3>Risultati</h3>
+            <p>Vedi quali risultati sono possibili e quali sono più probabili in base alle tue stime. Il grafico ti aiuta a capire quanto potrebbe variare il risultato.</p>
+          </div>
+        </div>
+      </section>
+      <section aria-labelledby="access-heading" class="landing-plans">
+        <div class="landing-plans-intro">
+          <h2 id="access-heading">Salvare e condividere</h2>
+          <p>Crea un account per salvare il tuo lavoro e condividerlo. I modelli pubblici sono gratuiti. I piani a pagamento permettono di mantenere privati i modelli, per te o per il tuo gruppo.</p>
+        </div>
+        <div class="plan-comparison">
+          <article
+            class="plan plan-free plan-summary"
+            aria-labelledby="summary-free"
+          >
+            <h3 id="summary-free">Gratuito</h3>
+            <p class="plan-price">
+              <bdi dir="ltr">0 USD</bdi> <span>al mese</span>
+            </p>
+            <p>Modelli pubblici illimitati.</p>
+          </article>
+          <article
+            class="plan plan-individual plan-summary"
+            aria-labelledby="summary-individual"
+          >
+            <h3 id="summary-individual">Individuale</h3>
+            <p class="plan-price">
+              <bdi dir="ltr">5 USD</bdi> <span>al mese</span>
+            </p>
+            <p><bdi dir="ltr">20</bdi> modelli privati, visibili solo a te.</p>
+          </article>
+          <article
+            class="plan plan-organization plan-summary"
+            aria-labelledby="summary-organization"
+          >
+            <h3 id="summary-organization">Organizzazioni</h3>
+            <p class="plan-price">
+              <bdi dir="ltr">12 USD</bdi> <span>per utente al mese</span>
+            </p>
+            <p><bdi dir="ltr">200</bdi> modelli privati, condivisi con il tuo gruppo.</p>
+          </article>
+        </div>
+        <a class="text-action" href="/it/pricing"
+          >Confronta piani e dettagli<span aria-hidden="true">→</span></a
+        >
+      </section>
+    </main>
+    <footer class="site-footer">
+  <div class="footer-inner container">
+    <div class="footer-about">
+      <p class="footer-name">Guesstimate</p>
+      <p>Un progetto di <a href="https://quantifieduncertainty.org" dir="ltr">QURI</a>.</p>
+      <p class="language-notice">L&#39;app e la documentazione sono attualmente in inglese.</p>
+    </div>
+    <nav aria-label="Risorse">
+      <p class="footer-label">Risorse</p>
+      <a href="https://docs.getguesstimate.com/docs/Introduction"
+        >Documentazione</a
+      ><a href="https://github.com/getguesstimate/guesstimate-app"
+        >Codice sorgente</a
+      ><a href="https://discord.gg/nsTnQTgtG6">Comunità</a>
+    </nav>
+    <nav aria-label="Informazioni legali e piani">
+      <p class="footer-label">Guesstimate</p>
+      <a href="/it/pricing">Piani</a
+      ><a href="/terms">Termini di servizio</a
+      ><a href="https://www.iubenda.com/privacy-policy/7790420">Informativa sulla privacy</a>
+    </nav>
+  </div>
+</footer>
+    <script src="/site.js" defer></script>
+  </body>
+</html>
