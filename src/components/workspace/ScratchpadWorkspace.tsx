@@ -14,6 +14,7 @@ import {
 } from "~/modules/scratchpad/actions";
 import { SCRATCHPAD_ID } from "~/modules/scratchpad/model";
 import { changeMetric, removeMetrics } from "~/modules/metrics/actions";
+import { updateGraph } from "~/modules/spaces/actions";
 import { undo, redo } from "~/modules/checkpoints/actions";
 import { changeMetricClickMode } from "~/modules/canvas_state/actions";
 import { CanvasNode } from "./CanvasNode";
@@ -80,9 +81,59 @@ export function ScratchpadWorkspace() {
   } | null>(null);
   const selectionBeforeGesture = useRef<string[]>([]);
   const suppressCanvasClick = useRef(false);
+  const canvasPointerStartedOnNode = useRef(false);
   const activeSelection = canvasSelection.filter((id) =>
     metrics.some((m) => m.id === id)
   );
+  const selectionRef = useRef(activeSelection);
+  selectionRef.current = activeSelection;
+  const [spacingPositions, setSpacingPositions] = useState<
+    Record<string, Point>
+  >({});
+  const spacingGesture = useRef<{
+    originals: Record<string, Point>;
+    positions: Record<string, Point>;
+    center: Point;
+    factor: number;
+  } | null>(null);
+  const spacingTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const commitSpacing = useCallback(() => {
+    if (spacingTimer.current) clearTimeout(spacingTimer.current);
+    spacingTimer.current = null;
+    const pending = spacingGesture.current;
+    if (!pending) return;
+    spacingGesture.current = null;
+    if (
+      Object.entries(pending.positions).some(
+        ([id, p]) =>
+          Math.abs(p.x - pending.originals[id].x) > 0.001 ||
+          Math.abs(p.y - pending.originals[id].y) > 0.001
+      )
+    ) {
+      for (const [id, canvasPosition] of Object.entries(pending.positions)) {
+        dispatch({ type: "CHANGE_METRIC", item: { id, canvasPosition } });
+      }
+      dispatch(updateGraph(SCRATCHPAD_ID, false));
+    }
+    setSpacingPositions({});
+  }, [dispatch]);
+  useEffect(() => {
+    const keyUp = (event: KeyboardEvent) => {
+      if (event.key === "Shift") commitSpacing();
+    };
+    // Commit before selection changes, edits, or Undo can start another action.
+    window.addEventListener("pointerdown", commitSpacing, true);
+    window.addEventListener("keydown", commitSpacing, true);
+    window.addEventListener("keyup", keyUp);
+    window.addEventListener("blur", commitSpacing);
+    return () => {
+      window.removeEventListener("pointerdown", commitSpacing, true);
+      window.removeEventListener("keydown", commitSpacing, true);
+      window.removeEventListener("keyup", keyUp);
+      window.removeEventListener("blur", commitSpacing);
+      commitSpacing();
+    };
+  }, [commitSpacing]);
   const canvasActionIds = activeSelection.length
     ? activeSelection
     : metrics.some((m) => m.id === selectedId)
@@ -197,6 +248,7 @@ export function ScratchpadWorkspace() {
       y: metric.location.row * 230,
     };
   const positionOf = (metric: (typeof metrics)[number]): Point => {
+    if (spacingPositions[metric.id]) return spacingPositions[metric.id];
     if (!dragPosition) return basePosition(metric);
     if (dragPosition.id === metric.id) return dragPosition.point;
     if (
@@ -467,6 +519,57 @@ export function ScratchpadWorkspace() {
           : event.deltaMode === 2
           ? box.clientHeight
           : 1;
+      const selected = metricsRef.current.filter((m) =>
+        selectionRef.current.includes(m.id)
+      );
+      if (event.shiftKey && selected.length > 1 && !gesture.current) {
+        // Some browsers convert Shift + vertical wheel to horizontal deltas.
+        const delta = (event.deltaY || event.deltaX) * scale;
+        if (!delta) return;
+        if (!spacingGesture.current) {
+          const originals = Object.fromEntries(
+            selected.map((m) => [
+              m.id,
+              m.canvasPosition || {
+                x: m.location.column * 350,
+                y: m.location.row * 230,
+              },
+            ])
+          );
+          const points = Object.values(originals);
+          spacingGesture.current = {
+            originals,
+            positions: originals,
+            center: {
+              x: points.reduce((sum, p) => sum + p.x, 0) / points.length,
+              y: points.reduce((sum, p) => sum + p.y, 0) / points.length,
+            },
+            factor: 1,
+          };
+        }
+        const pending = spacingGesture.current;
+        pending.factor = Math.max(
+          0.1,
+          Math.min(
+            10,
+            pending.factor * Math.exp(Math.max(-1, Math.min(1, delta * 0.002)))
+          )
+        );
+        pending.positions = Object.fromEntries(
+          Object.entries(pending.originals).map(([id, p]) => [
+            id,
+            {
+              x: pending.center.x + (p.x - pending.center.x) * pending.factor,
+              y: pending.center.y + (p.y - pending.center.y) * pending.factor,
+            },
+          ])
+        );
+        setSpacingPositions(pending.positions);
+        if (spacingTimer.current) clearTimeout(spacingTimer.current);
+        spacingTimer.current = setTimeout(commitSpacing, 300);
+        return;
+      }
+      commitSpacing();
       const rect = box.getBoundingClientRect();
       // Trackpad pinch events use Ctrl and much smaller wheel deltas.
       const sensitivity = event.ctrlKey ? 0.01 : 0.002;
@@ -474,13 +577,14 @@ export function ScratchpadWorkspace() {
         zoomAt(
           v,
           { x: event.clientX - rect.left, y: event.clientY - rect.top },
-          v.zoom * Math.exp(-event.deltaY * scale * sensitivity)
+          v.zoom *
+            Math.exp(-(event.deltaY || event.deltaX) * scale * sensitivity)
         )
       );
     };
     box.addEventListener("wheel", wheel, { passive: false });
     return () => box.removeEventListener("wheel", wheel);
-  }, []);
+  }, [commitSpacing]);
 
   useEffect(() => {
     const keyDown = (event: KeyboardEvent) => {
@@ -804,7 +908,7 @@ export function ScratchpadWorkspace() {
           aria-label="Model canvas"
           tabIndex={0}
           style={{
-            backgroundSize: `${24 * view.zoom}px ${24 * view.zoom}px`,
+            backgroundSize: "24px 24px",
             backgroundPosition: `${view.x}px ${view.y}px`,
           }}
           onBlur={(event) => {
@@ -816,6 +920,11 @@ export function ScratchpadWorkspace() {
               delete event.currentTarget.dataset.pointerFocus;
           }}
           onPointerDownCapture={(event) => {
+            // Dragging captures the pointer on the canvas, which can also
+            // retarget dblclick. Preserve the original hit before capture.
+            canvasPointerStartedOnNode.current = !!(
+              event.target as Element
+            ).closest("[data-node]");
             event.currentTarget.dataset.pointerFocus = "true";
             if ((event.shiftKey || areaMode) && !spaceHeld) startPointer(event);
           }}
@@ -847,6 +956,7 @@ export function ScratchpadWorkspace() {
               !areaMode &&
               !event.shiftKey &&
               !suppressCanvasClick.current &&
+              !canvasPointerStartedOnNode.current &&
               !(event.target as Element).closest(
                 "[data-node], [data-canvas-control]"
               )
@@ -1120,6 +1230,11 @@ export function ScratchpadWorkspace() {
                       Select an area. Drag a selected header to move the group;
                       use Duplicate or Delete on the selection. Escape clears
                       it.
+                    </li>
+                    <li>
+                      With multiple nodes selected, Shift + scroll down spreads
+                      them apart; scroll up brings them closer. Undo reverses
+                      the adjustment.
                     </li>
                     <li>
                       With the canvas focused: N adds a node, F fits the model,
