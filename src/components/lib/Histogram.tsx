@@ -89,6 +89,7 @@ type Props = {
   allowHover?: boolean;
   cutOffRatio?: number;
   showTicks?: boolean;
+  tickCount?: number;
   theme?: HistogramTheme;
 };
 
@@ -101,6 +102,7 @@ export const Histogram = React.forwardRef<{ xScale: any }, Props>(
       hoveredXCoord,
       allowHover,
       showTicks,
+      tickCount,
       theme = "normal",
     },
     ref
@@ -152,7 +154,7 @@ export const Histogram = React.forwardRef<{ xScale: any }, Props>(
           {allowHover && <Hoverbar hoveredXCoord={hoveredXCoord} />}
           {showTicks && (
             <g>
-              <XAxis scale={xScale} height={height} />
+              <XAxis scale={xScale} height={height} tickCount={tickCount} />
             </g>
           )}
         </svg>
@@ -195,6 +197,8 @@ const Tick: React.FC<{
   value: number;
   scale: d3.ScaleLinear<number, number>;
 }> = ({ value, scale }) => {
+  const x = scale(value);
+  const [left, right] = scale.range();
   const valueText = numberShow(value);
   let text: any = _.isFinite(value) && valueText;
   text = `${text.value}`;
@@ -208,7 +212,8 @@ const Tick: React.FC<{
       <text
         dy=".71em"
         y="-15"
-        x="-6"
+        x="0"
+        textAnchor={x - left < 25 ? "start" : right - x < 25 ? "end" : "middle"}
         className="fill-grey-666 text-[13px] font-semibold"
       >
         {text}
@@ -220,9 +225,10 @@ const Tick: React.FC<{
 const XAxis: React.FC<{
   scale: d3.ScaleLinear<number, number>;
   height: number;
-}> = ({ scale, height }) => {
-  const ticks = scale.ticks
-    .apply(scale)
+  tickCount?: number;
+}> = ({ scale, height, tickCount }) => {
+  const ticks = scale
+    .ticks(tickCount)
     .map((tick, i) => <Tick value={tick} scale={scale} key={i} />);
 
   return (

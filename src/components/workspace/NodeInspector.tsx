@@ -9,6 +9,7 @@ import { changeGuesstimate } from "~/modules/guesstimates/actions";
 import { Icon } from "./Icon";
 import { FieldHelp } from "./FieldHelp";
 import { NodeNotes } from "./NodeNotes";
+import { ResultDetails } from "./ResultDetails";
 import styles from "./workspace.module.css";
 
 export const formatNumber = (n: number) =>
@@ -147,7 +148,17 @@ export function NodeInspector({
             className={styles.resultSection}
             aria-label="Calculated result"
           >
-            <h3>Result</h3>
+            <div className={styles.notesHeading}>
+              <h3>Result</h3>
+              {metric.simulation && stats.length > 1 && (
+                <ResultDetails
+                  key={metric.id}
+                  name={metric.name || metric.readableId}
+                  simulation={metric.simulation}
+                  formatValue={formatNumber}
+                />
+              )}
+            </div>
             <p className={styles.inspectorResult}>{formatNumber(stats.mean)}</p>
             {stats.length > 1 && (
               <>

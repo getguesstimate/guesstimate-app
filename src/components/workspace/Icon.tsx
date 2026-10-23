@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 
 const paths: Record<string, ReactNode> = {
+  expand: <path d="M8 3H3v5m0-5 6 6m7-6h5v5m0-5-6 6M3 16v5h5m-5 0 6-6m12 1v5h-5m5 0-6-6" />,
   duplicate: <><rect x="8" y="8" width="12" height="12" rx="2" /><path d="M16 8V4H4v12h4" /></>,
   selection: <rect x="3" y="3" width="18" height="18" rx="2" strokeDasharray="3 3" />,
   plus: <path d="M12 5v14M5 12h14" />,

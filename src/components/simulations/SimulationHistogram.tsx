@@ -11,6 +11,7 @@ type Props = {
   allowHover?: boolean;
   bins?: number;
   showTicks?: boolean;
+  tickCount?: number;
   theme?: HistogramTheme;
 };
 
