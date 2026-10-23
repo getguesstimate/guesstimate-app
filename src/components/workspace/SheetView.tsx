@@ -19,6 +19,11 @@ import {
 } from "./sheetGeometry";
 import styles from "./workspace.module.css";
 
+// Sheet percentages are relative to this scale; geometry uses the actual scale.
+const SHEET_BASE_SCALE = 0.8;
+const MIN_SHEET_SCALE = SHEET_BASE_SCALE * 0.25;
+const MAX_SHEET_SCALE = SHEET_BASE_SCALE * 2;
+
 type Props = {
   active: boolean;
   metrics: FullDenormalizedMetric[];
@@ -86,8 +91,8 @@ export function SheetView(props: Props) {
   const [hand, setHand] = useState(false);
   const [areaMode, setAreaMode] = useState(false);
   const [spaceHeld, setSpaceHeld] = useState(false);
-  const [zoom, setZoom] = useState(1);
-  const zoomRef = useRef(1);
+  const [zoom, setZoom] = useState(SHEET_BASE_SCALE);
+  const zoomRef = useRef(SHEET_BASE_SCALE);
   const pendingScroll = useRef<{ x: number; y: number } | null>(null);
   const pointers = useRef(new Map<number, { x: number; y: number }>());
   const pan = useRef<{
@@ -120,7 +125,7 @@ export function SheetView(props: Props) {
   const zoomTo = (value: number, x?: number, y?: number) => {
     const box = scroll.current;
     if (!box) return;
-    const next = Math.max(0.25, Math.min(2, value));
+    const next = Math.max(MIN_SHEET_SCALE, Math.min(MAX_SHEET_SCALE, value));
     const anchorX = x ?? box.clientWidth / 2;
     const anchorY = y ?? box.clientHeight / 2;
     pendingScroll.current = {
@@ -194,7 +199,7 @@ export function SheetView(props: Props) {
       Math.min(
         (box.clientWidth - 24) / width,
         (box.clientHeight - 24) / height,
-        1
+        SHEET_BASE_SCALE
       )
     );
     pendingScroll.current = {
@@ -1098,7 +1103,7 @@ export function SheetView(props: Props) {
           type="button"
           className={styles.iconButton}
           aria-label="Zoom out"
-          disabled={zoom <= 0.25}
+          disabled={zoom <= MIN_SHEET_SCALE}
           onClick={() => zoomTo(zoom / 1.2)}
         >
           <Icon name="minus" />
@@ -1107,15 +1112,15 @@ export function SheetView(props: Props) {
           type="button"
           className={styles.sheetZoomLevel}
           aria-label="Reset zoom"
-          onClick={() => zoomTo(1)}
+          onClick={() => zoomTo(SHEET_BASE_SCALE)}
         >
-          {Math.round(zoom * 100)}%
+          {Math.round((zoom / SHEET_BASE_SCALE) * 100)}%
         </button>
         <button
           type="button"
           className={styles.iconButton}
           aria-label="Zoom in"
-          disabled={zoom >= 2}
+          disabled={zoom >= MAX_SHEET_SCALE}
           onClick={() => zoomTo(zoom * 1.2)}
         >
           <Icon name="plus" />
