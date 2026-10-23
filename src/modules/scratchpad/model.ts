@@ -39,6 +39,7 @@ export function createScratchpad(template: ApiSpace): ApiSpace {
       ...m,
       id: ids.get(m.id),
       space: SCRATCHPAD_ID,
+      location: { row, column },
       canvasPosition: { x: column * 350, y: row * 230 },
     };
   });

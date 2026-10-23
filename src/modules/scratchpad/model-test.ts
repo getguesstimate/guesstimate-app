@@ -27,6 +27,9 @@ it("isolates the scratchpad from its shared source and remaps formula dependenci
   expect(graph.metrics[1].canvasPosition.x).toBeGreaterThan(
     graph.metrics[0].canvasPosition.x
   );
+  expect(graph.metrics[0].location).toEqual({ row: 0, column: 0 });
+  expect(graph.metrics[1].location).toEqual({ row: 0, column: 1 });
+  expect(template.graph.metrics[1].location).toEqual({ row: 1, column: 0 });
   expect(template.graph.metrics[0]).not.toHaveProperty("canvasPosition");
   expect(template.graph.guesstimates[1].expression).toBe(
     "${metric:input} * 80"
