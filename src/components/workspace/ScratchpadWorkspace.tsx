@@ -54,7 +54,7 @@ const isField = (target: EventTarget | null) =>
   !!target.closest('input, textarea, select, [contenteditable="true"]');
 
 export function ScratchpadWorkspace() {
-  const [viewMode, setViewMode] = useState<"canvas" | "sheet">("canvas");
+  const [viewMode, setViewMode] = useState<"canvas" | "sheet">("sheet");
   useEffect(() => {
     try {
       const saved = localStorage.getItem(VIEW_PREFERENCE_KEY);

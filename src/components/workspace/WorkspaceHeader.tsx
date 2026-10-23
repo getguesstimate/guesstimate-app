@@ -50,7 +50,7 @@ export function WorkspaceHeader({
         role="group"
         aria-label="Workspace view"
       >
-        {(["canvas", "sheet"] as const).map((mode) => (
+        {(["sheet", "canvas"] as const).map((mode) => (
           <button
             key={mode}
             type="button"
