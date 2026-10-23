@@ -370,6 +370,41 @@
   color: #8797a4;
   margin-top: 12px;
 }
+.headingNode {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+.headingNode:hover {
+  box-shadow: none;
+}
+.headingNode .nodeTop {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 1;
+  background: transparent;
+  border-bottom-color: transparent;
+}
+.headingNode .nodeContent {
+  height: 100%;
+  justify-content: center;
+  padding: 34px 15px;
+  text-align: center;
+}
+.headingNode:not(:hover):not(:focus-within):not(.selectedNode) .nodeTop > * {
+  opacity: 0;
+}
+.headingNode .nodeName {
+  font-size: 22px;
+  font-weight: 650;
+  line-height: 1.3;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  margin: 0;
+}
 .notePreview {
   font-size: 12px;
   line-height: 1.65;
@@ -536,6 +571,7 @@
 }
 .canvasMessage {
   position: absolute;
+  z-index: 6;
   inset: 0;
   display: flex;
   align-items: center;
@@ -1502,4 +1538,64 @@
   .resultDetailsGrid { grid-template-columns: minmax(0, 1fr); gap: 20px; }
   .resultPlot { height: 190px; }
   .resultReadout strong { font-size: 21px; }
+}
+
+.modelHeader .documentTitle { flex: 1; flex-direction: column; align-items: flex-start; gap: 1px; }
+.modelHeader .documentTitle h1 { max-width: 100%; }
+.modelTitleButton { display: flex; align-items: center; gap: 8px; max-width: 100%; padding: 0; border: 0; background: transparent; color: inherit; font-weight: 600 !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.modelTitleButton span { flex-shrink: 0; }
+.modelMode { display: flex; align-items: center; gap: 4px; }
+.modelMode select, .modelDialog select { font: inherit; border: 1px solid #d6e0e8; border-radius: 6px; padding: 6px 8px; background: #fff; color: #354d60; }
+.modelDialog { width: min(620px, calc(100vw - 24px)); height: auto; max-height: min(760px, 85dvh); padding: 0; gap: 0; font-family: WorkspaceInter, sans-serif; font-size: 14px; }
+.modelDialogBody { padding: 20px; overflow-y: auto; min-height: 0; max-height: calc(85dvh - 70px); }
+.modelSectionHeading { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.modelSectionHeading h3 { font-size: 18px; overflow-wrap: anywhere; }
+.modelMetadata { display: flex; flex-wrap: wrap; gap: 16px; font-size: 12px; color: #657584; margin: 8px 0 18px; }
+.modelMetadata a { color: #287fae; }
+.modelSection { border-top: 1px solid #e3eaf0; margin-top: 20px; padding-top: 16px; }
+.modelSection h3 { font-size: 13px; margin: 0 0 8px; }
+.modelActions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.modelInline { display: flex; align-items: center; gap: 8px; }
+.modelDescriptionInput { width: 100%; min-height: 180px; resize: vertical; padding: 10px; border: 1px solid #d6e0e8; border-radius: 6px; font: inherit; color: #354d60; }
+.modelDelete { font: inherit; border: 0; background: transparent; padding: 6px 0; color: #a44538; cursor: pointer; }
+.modelTool > div { width: 100%; border: 0; padding: 16px 0 0; }
+.modelDialog > .noteDialogHeading { padding: 16px 20px; border-bottom: 1px solid #e3eaf0; flex-shrink: 0; }
+.modelDialog button, .modelDialog input, .modelDialog textarea { font: inherit; }
+.modelDialog button { cursor: pointer; }
+.modelDialog button:disabled { cursor: default; opacity: .5; }
+.modelDialog :focus-visible { outline: 2px solid #287fae; outline-offset: 2px; }
+.modelDialog .field { margin-bottom: 16px; }
+.modelDialog .noteMarkdown { overflow-wrap: anywhere; }
+.modelDialog .noteMarkdown img { max-width: 100%; }
+.modelSectionHeading .noteAction { flex-shrink: 0; }
+.modelTitleButton > span:first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; flex: 1; }
+.mobileViewSwitch { display: none; }
+@media (max-width: 650px) {
+  .modelHeader { display: flex; flex-wrap: nowrap; height: 54px; min-height: 54px; gap: 6px; padding: 0 8px; }
+  .modelHeader .brand img { width: 20px; height: 20px; }
+  .modelHeader .documentTitle { display: flex; flex: 1; max-width: none; position: static; width: auto; height: auto; overflow: hidden; clip-path: none; }
+  .modelHeader .documentTitle h1 { width: 100%; }
+  .modelHeader .modelTitleButton { width: 100%; gap: 2px; font-size: 12px !important; }
+  .modelHeader .temporary { display: block; width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .modelHeader .temporary::before { display: none; }
+  .modelHeader .account { margin-left: 0; }
+  .modelHeader .viewSwitch { display: none; }
+  .modelHeader .mobileViewSwitch { display: block; width: 70px; flex-shrink: 0; font: inherit; font-size: 11px; padding: 6px 2px; border: 1px solid #d6e0e8; border-radius: 6px; background: #f5f8fb; color: #354d60; }
+  .modelHeader .modelMode { gap: 2px; flex-shrink: 0; }
+  .modelHeader .modelMode select { width: 72px; font-size: 11px; padding: 6px 2px; }
+  .modelHeader .modelMode button { width: 18px; min-width: 18px; }
+  .modelHeader .signIn { width: 30px; min-width: 30px; padding: 4px; gap: 0; }
+  .modelHeader .signIn span { display: none; }
+  .modelDialogBody { padding: 14px; }
+}
+
+.notesDisplaySetting { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 14px 0; font-size: 12px; color: #526d81; }
+.notesDisplaySwitch { display: inline-flex; align-items: center; flex-shrink: 0; width: 36px; height: 22px; padding: 3px; border: 0; border-radius: 12px; background: #acbac6; }
+.notesDisplaySwitch > span { width: 16px; height: 16px; border-radius: 50%; background: white; box-shadow: 0 1px 3px #29475b33; }
+.notesDisplaySwitch[aria-checked="true"] { background: #2d83b0; }
+.notesDisplaySwitch[aria-checked="true"] > span { transform: translateX(14px); }
+.mobileModeStatus { display: none; }
+@media (max-width: 650px) {
+  .modelHeader .viewOnlyMode select { display: none; }
+  .mobileModeStatus { display: inline; font-size: 11px; color: #657584; }
 }

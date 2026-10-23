@@ -26,6 +26,7 @@ export function NodeInspector({
   resizeHandle,
   onAdvance,
   focusFormula = false,
+  canUseOrganizationFacts = false,
 }: {
   metric: FullDenormalizedMetric;
   metrics: FullDenormalizedMetric[];
@@ -35,6 +36,7 @@ export function NodeInspector({
   resizeHandle: ReactNode;
   onAdvance?(direction: "down" | "right"): void;
   focusFormula?: boolean;
+  canUseOrganizationFacts?: boolean;
 }) {
   const formulaRef = useRef<{ focus(): void } | null>(null);
   useEffect(() => {
@@ -140,7 +142,7 @@ export function NodeInspector({
             guesstimate={metric.guesstimate}
             metricClickMode={clickMode}
             inputMetrics={metric.edges.inputMetrics}
-            canUseOrganizationFacts={false}
+            canUseOrganizationFacts={canUseOrganizationFacts}
           />
         </section>
         {stats && (
@@ -211,6 +213,31 @@ export function NodeInspector({
             dispatch(changeGuesstimate(metric.id, { description }))
           }
         />
+        {!!metric.name?.trim() &&
+          !metric.guesstimate.input?.trim() &&
+          !metric.guesstimate.data?.length &&
+          !!metric.guesstimate.description?.trim() && (
+            <div className={styles.notesDisplaySetting}>
+              <span>Show notes on node</span>
+              <button
+                type="button"
+                role="switch"
+                aria-label="Show notes on node"
+                aria-checked={metric.showNotesOnNode !== false}
+                className={styles.notesDisplaySwitch}
+                onClick={() =>
+                  dispatch(
+                    changeMetric({
+                      id: metric.id,
+                      showNotesOnNode: metric.showNotesOnNode === false,
+                    })
+                  )
+                }
+              >
+                <span aria-hidden="true" />
+              </button>
+            </div>
+          )}
         <button
           className={styles.deleteButton}
           type="button"

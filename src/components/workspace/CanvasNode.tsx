@@ -25,15 +25,25 @@ export function CanvasNode({
   const stats = metric.simulation?.stats;
   const error = !!metric.simulation?.sample.errors?.length;
   const formula = metric.guesstimate.guesstimateType === "FUNCTION";
-  const note =
-    !metric.guesstimate.input &&
-    !metric.guesstimate.data?.length &&
-    !!metric.name;
-  const kind = note ? "Note" : formula ? "Formula" : "Input";
+  const name = metric.name?.trim();
+  const description = metric.guesstimate.description?.trim();
+  const hasValue =
+    !!metric.guesstimate.input?.trim() || !!metric.guesstimate.data?.length;
+  const empty = !name && !description && !hasValue;
+  const note = !hasValue && !!(name || description);
+  const heading =
+    note && !!name && (!description || metric.showNotesOnNode === false);
+  const kind = heading
+    ? "Heading"
+    : note
+    ? "Note"
+    : formula
+    ? "Formula"
+    : "Input";
   return (
     <article
       className={`${styles.node} ${selected ? styles.selectedNode : ""} ${
-        formula ? styles.formulaNode : ""
+        heading ? styles.headingNode : formula ? styles.formulaNode : ""
       }`}
       style={{ transform: `translate(${position.x}px, ${position.y}px)` }}
       data-node={surface === "canvas" ? metric.id : undefined}
@@ -90,10 +100,10 @@ export function CanvasNode({
         }}
         aria-label={`Edit ${metric.name || metric.readableId}`}
       >
-        <span className={styles.nodeName}>
-          {metric.name || "Untitled node"}
-        </span>
-        {note ? (
+        {(name || empty) && (
+          <span className={styles.nodeName}>{name || "Untitled node"}</span>
+        )}
+        {heading ? null : note ? (
           <span className={styles.notePreview}>
             {metric.guesstimate.description ||
               "Select to add a value or write a note."}

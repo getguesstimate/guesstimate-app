@@ -46,7 +46,18 @@ export function removeMetrics(ids): AppThunk {
       "id",
       "organization_id"
     );
-    if (organizationId) {
+    const state = getState();
+    const space = spaces.find((s) => s.id === spaceId);
+    if (
+      organizationId &&
+      space &&
+      e.space.canEdit(
+        space,
+        state.me,
+        state.userOrganizationMemberships,
+        state.canvasState
+      )
+    ) {
       const organization = e.collections.get(organizations, organizationId);
       const facts = e.organization.findFacts(organizationId, organizationFacts);
       const factsToDelete = _.filter(

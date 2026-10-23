@@ -1,6 +1,8 @@
 import { ReactNode } from "react";
 
 const paths: Record<string, ReactNode> = {
+  search: <><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 5 5" /></>,
+  model: <><rect x="2" y="3" width="7" height="5" rx="1" /><rect x="2" y="16" width="7" height="5" rx="1" /><rect x="15" y="9" width="7" height="6" rx="1" /><path d="M9 5.5h3V12h3M9 18.5h3V12" /></>,
   expand: <path d="M8 3H3v5m0-5 6 6m7-6h5v5m0-5-6 6M3 16v5h5m-5 0 6-6m12 1v5h-5m5 0-6-6" />,
   duplicate: <><rect x="8" y="8" width="12" height="12" rx="2" /><path d="M16 8V4H4v12h4" /></>,
   selection: <rect x="3" y="3" width="18" height="18" rx="2" strokeDasharray="3 3" />,

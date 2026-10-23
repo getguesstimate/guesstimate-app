@@ -56,7 +56,7 @@ export function duplicateNodes(
       ...g,
       metric: remap.get(m.id)!,
       data: g.data ? [...g.data] : g.data,
-      expression: g.expression.replace(
+      expression: (g.expression || "").replace(
         /\$\{metric:([^}]+)\}/g,
         (token, id: string) =>
           remap.has(id) ? `\${metric:${remap.get(id)}}` : token

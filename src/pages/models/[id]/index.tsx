@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { AppLayout } from "~/components/layout";
-import { SpaceShow } from "~/components/spaces/SpaceShow";
+import { ScratchpadWorkspace } from "~/components/workspace/ScratchpadWorkspace";
+import { NavHelper } from "~/components/utility/NavHelper";
 import { extractTokenFromUrl } from "~/lib/engine/space";
 
 const ModelPage: NextPage = () => {
@@ -10,23 +10,15 @@ const ModelPage: NextPage = () => {
   const { id } = router.query;
   const intId = parseInt(id as string);
 
-  return (
-    <AppLayout isFluid showFooter={false} fullHeight>
-      {
-        // `id` is not available in SSR
-        id === undefined ? null : (
-          <SpaceShow
-            spaceId={intId}
-            showCalculatorResults={window.location.search.includes(
-              "showResults=true"
-            )}
-            factsShown={window.location.search.includes("factsShown=true")}
-            shareableLinkToken={extractTokenFromUrl(window.location.search)}
-            key={intId}
-          />
-        )
-      }
-    </AppLayout>
+  return !router.isReady || !Number.isFinite(intId) ? null : (
+    <NavHelper>
+      <ScratchpadWorkspace
+        key={intId}
+        spaceId={intId}
+        factsShown={router.query.factsShown === "true"}
+        shareableLinkToken={extractTokenFromUrl(window.location.search)}
+      />
+    </NavHelper>
   );
 };
 

@@ -75,12 +75,10 @@ export function destroy(object: ApiSpace, router: NextRouter): AppThunk {
       ? e.organization.urlById(object.organization_id)
       : e.user.urlById(object.user_id!);
 
-    router.push(navigateTo);
-
-    dispatch(sActions.deleteStart({ id }));
-
     await api(getState()).models.destroy(id);
+    dispatch(sActions.deleteStart({ id }));
     dispatch(sActions.deleteSuccess({ id }));
+    router.push(navigateTo);
   };
 }
 

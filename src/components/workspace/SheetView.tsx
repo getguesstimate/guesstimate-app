@@ -1141,7 +1141,7 @@ export function SheetView(props: Props) {
         >
           {props.error ? (
             <>
-              <p>Couldn’t load the example.</p>
+              <p>Couldn’t load the model.</p>
               <button
                 type="button"
                 className={styles.signIn}
@@ -1151,7 +1151,7 @@ export function SheetView(props: Props) {
               </button>
             </>
           ) : (
-            <p>Loading scratchpad…</p>
+            <p>Loading model…</p>
           )}
         </div>
       )}

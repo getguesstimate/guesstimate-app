@@ -1,109 +1,12 @@
-import { ChangeEvent, FC, PropsWithChildren, useState } from "react";
-
-import clsx from "clsx";
-import _ from "lodash";
-import { sortable } from "react-sortable";
-import Icon from "~/components/react-fa-patched";
+import { ChangeEvent, FC, useState } from "react";
+import ReactMarkdown from "react-markdown";
 import { Button } from "~/components/utility/buttons/button";
 import { Textarea } from "~/components/utility/forms";
 import { FullDenormalizedMetric } from "~/lib/engine/space";
 import { Optional } from "~/lib/engine/types";
 import { Calculator } from "~/modules/calculators/reducer";
 
-const Header: FC<PropsWithChildren> = ({ children }) => (
-  <header className="mb-2 border-b-2 border-[#aaa] pb-1 text-lg font-bold">
-    {children}
-  </header>
-);
-
-const List: FC<PropsWithChildren> = ({ children }) => (
-  <div className="space-y-1">{children}</div>
-);
-
-const Section: FC<PropsWithChildren<{ title: string }>> = ({
-  title,
-  children,
-}) => (
-  <section className="mt-10">
-    <Header>{title}</Header>
-    {children}
-  </section>
-);
-
-const EditButton: FC<PropsWithChildren<{ onClick(): void }>> = ({
-  children,
-  onClick,
-}) => (
-  <div
-    onClick={onClick}
-    className="text-lato cursor-pointer rounded bg-grey-7 px-2 py-1 text-xs font-bold text-grey-666"
-  >
-    {children}
-  </div>
-);
-
-type ParamProps = {
-  name: string | undefined;
-  description: string | undefined;
-  isDropTarget: boolean;
-  isVisible: boolean;
-  onRemove(): void;
-  onAdd(): void;
-};
-
-const EditSection: FC<ParamProps> = ({ isVisible, onRemove, onAdd }) => (
-  <div>
-    {isVisible ? (
-      <div className="flex gap-1">
-        <EditButton onClick={onRemove}>hide</EditButton>
-        <EditButton onClick={() => {}}>
-          <Icon name="bars" />
-        </EditButton>
-      </div>
-    ) : (
-      <EditButton onClick={onAdd}>show</EditButton>
-    )}
-  </div>
-);
-
-const InputForm: FC<ParamProps> = (props) => (
-  <div className={clsx(props.isDropTarget && "bg-grey-1")}>
-    <div className="flex justify-between">
-      <div>
-        <div>{props.name}</div>
-        {props.description && (
-          <div className="mt-4 mb-8 text-xs text-grey-666">
-            {props.description}
-          </div>
-        )}
-      </div>
-      <div>
-        <EditSection {...props} />
-      </div>
-    </div>
-  </div>
-);
-
-const OutputForm: FC<ParamProps> = (props) => (
-  <div className={clsx(props.isDropTarget && "bg-grey-1")}>
-    <div className="flex justify-between">
-      <div>{props.name}</div>
-      <div>
-        <EditSection {...props} />
-      </div>
-    </div>
-  </div>
-);
-
-const SortableListItem = sortable((props) => (
-  <div {...props}>{props.children}</div>
-));
-
-type CalculatorParam = {
-  metric: FullDenormalizedMetric;
-  isVisible: boolean;
-};
-
+type CalculatorParam = { metric: FullDenormalizedMetric; isVisible: boolean };
 type Props = {
   calculator: Optional<Calculator, "id">;
   inputs: CalculatorParam[];
@@ -118,189 +21,123 @@ type Props = {
   buttonText: string;
 };
 
-type State = {
-  draggingIndex: number | null;
-  draggingMetricId: string | null;
-  dropTargetId: string | null;
-};
-
 export const CalculatorForm: FC<Props> = (props) => {
   const [hasAlreadySubmitted, setHasAlreadySubmitted] = useState(false);
-  const [state, setState] = useState<State>({
-    draggingIndex: null,
-    draggingMetricId: null,
-    dropTargetId: null,
-  });
-
-  const {
-    calculator: { title, content },
-    inputs,
-    outputs,
-    buttonText,
-    isValid,
-  } = props;
-  const { draggingIndex, dropTargetId } = state;
-
-  const updateDragState = (id: string, newState) => {
-    if (!state.draggingMetricId) {
-      setState({
-        ...state,
-        ...newState,
-        draggingMetricId: id,
-        dropTargetId: id,
-      });
-    } else if (_.isNull(newState.draggingIndex)) {
-      props.onMoveMetricTo(
-        state.draggingMetricId,
-        state.draggingIndex as any // bad casting, but sorting is broken anyway
-      );
-      setState({
-        ...state,
-        ...newState,
-        draggingMetricId: null,
-        dropTargetId: null,
-      });
-    } else {
-      setState({ ...state, ...newState, dropTargetId: id });
-    }
-  };
-
-  const handleSubmit = () => {
-    if (hasAlreadySubmitted) {
-      return;
-    }
-    setHasAlreadySubmitted(true);
-    props.onSubmit();
-  };
-
-  const metricForm = (
-    { metric: { name, id, guesstimate }, isVisible }: CalculatorParam,
-    isInput: boolean,
-    isDropTarget: boolean
-  ) => {
-    const formProps: ParamProps = {
-      name,
-      isDropTarget,
-      description: guesstimate.description,
-      isVisible,
-      onRemove: props.onMetricHide.bind(this, id),
-      onAdd: props.onMetricShow.bind(this, id),
-    };
-    if (isInput) {
-      return <InputForm {...formProps} />;
-    } else {
-      return <OutputForm {...formProps} />;
-    }
-  };
-
-  const generateComponents = (metrics: CalculatorParam[], isInput: boolean) =>
-    metrics.map(
-      (m, i) =>
-        [
-          metricForm(m, isInput, dropTargetId === m.metric.id),
-          m.metric.id,
-        ] as const
+  const renderParams = (label: string, params: CalculatorParam[]) => {
+    const visible = params.filter((p) => p.isVisible);
+    return (
+      <section
+        className="mt-6"
+        aria-label={`Calculator ${label.toLowerCase()}`}
+      >
+        <h3 className="mb-2 border-b border-grey-ccc pb-1 font-bold">
+          {label}
+        </h3>
+        <div className="space-y-2">
+          {params.map(({ metric, isVisible }) => {
+            const index = visible.findIndex((p) => p.metric.id === metric.id);
+            const name = metric.name || metric.readableId;
+            return (
+              <div
+                key={metric.id}
+                className="flex items-center justify-between gap-2 rounded border border-grey-eee p-2"
+              >
+                <div className="min-w-0 break-words">
+                  <span>{name}</span>
+                  {label === "Inputs" && metric.guesstimate.description && (
+                    <details className="mt-1 text-xs text-grey-666">
+                      <summary className="cursor-pointer">Notes</summary>
+                      <ReactMarkdown
+                        source={metric.guesstimate.description}
+                        skipHtml
+                      />
+                    </details>
+                  )}
+                </div>
+                <div className="flex shrink-0 items-center gap-1">
+                  {isVisible && (
+                    <>
+                      <button
+                        type="button"
+                        className="rounded px-2 py-1 disabled:opacity-30"
+                        aria-label={`Move ${name} up`}
+                        disabled={index === 0}
+                        onClick={() =>
+                          props.onMoveMetricTo(metric.id, index - 1)
+                        }
+                      >
+                        ↑
+                      </button>
+                      <button
+                        type="button"
+                        className="rounded px-2 py-1 disabled:opacity-30"
+                        aria-label={`Move ${name} down`}
+                        disabled={index === visible.length - 1}
+                        onClick={() =>
+                          props.onMoveMetricTo(metric.id, index + 1)
+                        }
+                      >
+                        ↓
+                      </button>
+                    </>
+                  )}
+                  <button
+                    type="button"
+                    className="rounded bg-grey-eee px-2 py-1 text-xs"
+                    aria-label={`${isVisible ? "Hide" : "Show"} ${name}`}
+                    onClick={() =>
+                      isVisible
+                        ? props.onMetricHide(metric.id)
+                        : props.onMetricShow(metric.id)
+                    }
+                  >
+                    {isVisible ? "Hide" : "Show"}
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
     );
-
-  const visibleInputs = generateComponents(
-    inputs.filter((i) => i.isVisible),
-    true
-  );
-  const invisibleInputs = generateComponents(
-    inputs.filter((i) => !i.isVisible),
-    true
-  );
-  const hasHiddenInputs = !_.isEmpty(invisibleInputs);
-
-  const visibleOutputs = generateComponents(
-    outputs.filter((o) => o.isVisible),
-    false
-  );
-  const invisibleOutputs = generateComponents(
-    outputs.filter((o) => !o.isVisible),
-    false
-  );
-  const hasHiddenOutputs = invisibleOutputs.length > 0;
-
+  };
   return (
     <div>
-      <div className="flex flex-col space-y-1">
+      <div className="flex flex-col gap-2">
         <Textarea
           rows={1}
+          aria-label="Calculator name"
           placeholder="Calculator Name"
-          value={title}
+          value={props.calculator.title}
           onChange={props.onChangeName}
           theme="large"
           className="font-bold"
         />
         <Textarea
           rows={3}
+          aria-label="Calculator description"
           placeholder="Explanation (Markdown)"
-          value={content}
+          value={props.calculator.content}
           onChange={props.onChangeContent}
           theme="large"
         />
       </div>
-
-      {/* inputs */}
-      <Section title={`${hasHiddenInputs ? "Visible " : ""}Inputs`}>
-        <List>
-          {visibleInputs.map(([item, id], i) => (
-            <SortableListItem
-              key={i}
-              sortId={i}
-              draggingIndex={draggingIndex}
-              updateState={(s) => updateDragState(id, s)}
-              outline="list"
-              items={visibleInputs}
-              onSortItems={() => undefined} // broken
-            >
-              {item}
-            </SortableListItem>
-          ))}
-        </List>
-      </Section>
-
-      {hasHiddenInputs && (
-        <Section title="Hidden Inputs">
-          <List>{invisibleInputs.map(([item]) => item)}</List>
-        </Section>
-      )}
-
-      {/* outputs */}
-      <Section title={`${hasHiddenOutputs ? "Visible " : ""}Outputs`}>
-        <List>
-          {visibleOutputs.map(([item, id], i) => (
-            <SortableListItem
-              key={i}
-              sortId={i}
-              draggingIndex={draggingIndex}
-              updateState={(s) => updateDragState(id, s)}
-              outline="list"
-              items={visibleOutputs}
-              onSortItems={() => undefined} // broken
-            >
-              {item}
-            </SortableListItem>
-          ))}
-        </List>
-      </Section>
-
-      {hasHiddenOutputs && (
-        <Section title="Hidden Outputs">
-          <List>{invisibleOutputs.map(([item]) => item)}</List>
-        </Section>
-      )}
-
+      {renderParams("Inputs", props.inputs)}
+      {renderParams("Outputs", props.outputs)}
       <div className="mt-4 flex justify-end">
         <Button
           color="green"
           size="large"
           loading={hasAlreadySubmitted}
-          disabled={!isValid || hasAlreadySubmitted}
-          onClick={handleSubmit}
+          disabled={!props.isValid || hasAlreadySubmitted}
+          onClick={() => {
+            if (!hasAlreadySubmitted) {
+              setHasAlreadySubmitted(true);
+              props.onSubmit();
+            }
+          }}
         >
-          {buttonText}
+          {props.buttonText}
         </Button>
       </div>
     </div>

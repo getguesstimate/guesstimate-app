@@ -4,7 +4,7 @@ import { api } from "~/lib/guesstimate_api";
 import { create as createMetric } from "~/lib/engine/metric";
 import { AppThunk } from "~/modules/store";
 import { CanvasLocation } from "~/lib/locationUtils";
-import { fetchSuccess, updateGraph } from "~/modules/spaces/actions";
+import { fetchSuccess, registerGraphChange } from "~/modules/spaces/actions";
 import { runSimulations } from "~/modules/simulations/actions";
 import {
   createScratchpad,
@@ -26,13 +26,14 @@ export const loadScratchpad =
 export const addScratchpadNode =
   (
     position: { x: number; y: number },
-    location?: CanvasLocation
+    location?: CanvasLocation,
+    spaceId = SCRATCHPAD_ID
   ): AppThunk<string> =>
   (dispatch, getState) => {
-    const metrics = getState().metrics.filter((m) => m.space === SCRATCHPAD_ID);
+    const metrics = getState().metrics.filter((m) => m.space === spaceId);
     const metric = {
       ...createMetric(metrics.map((m) => m.readableId)),
-      space: SCRATCHPAD_ID,
+      space: spaceId,
       location: location || {
         column: 0,
         row: Math.max(-1, ...metrics.map((m) => m.location.row)) + 1,
@@ -41,16 +42,16 @@ export const addScratchpadNode =
       name: "",
     };
     dispatch({ type: "ADD_METRIC", item: metric });
-    dispatch(updateGraph(SCRATCHPAD_ID, false));
+    dispatch(registerGraphChange(spaceId));
     return metric.id;
   };
 
 export const duplicateScratchpadCanvasNodes =
-  (ids: string[]): AppThunk<Metric[]> =>
+  (ids: string[], spaceId = SCRATCHPAD_ID): AppThunk<Metric[]> =>
   (dispatch, getState) => {
     const state = getState();
     const copied = duplicateNodes(
-      state.metrics.filter((m) => m.space === SCRATCHPAD_ID),
+      state.metrics.filter((m) => m.space === spaceId),
       state.guesstimates,
       ids
     );
@@ -60,10 +61,10 @@ export const duplicateScratchpadCanvasNodes =
       items: copied.metrics,
       newGuesstimates: copied.guesstimates,
     });
-    dispatch(updateGraph(SCRATCHPAD_ID, false));
+    dispatch(registerGraphChange(spaceId));
     dispatch(
       runSimulations({
-        spaceId: SCRATCHPAD_ID,
+        spaceId,
         simulateSubset: copied.metrics.map((m) => m.id),
       })
     );
@@ -71,9 +72,13 @@ export const duplicateScratchpadCanvasNodes =
   };
 
 export const moveScratchpadNodes =
-  (ids: string[], delta: CanvasLocation): AppThunk<boolean> =>
+  (
+    ids: string[],
+    delta: CanvasLocation,
+    spaceId = SCRATCHPAD_ID
+  ): AppThunk<boolean> =>
   (dispatch, getState) => {
-    const metrics = getState().metrics.filter((m) => m.space === SCRATCHPAD_ID);
+    const metrics = getState().metrics.filter((m) => m.space === spaceId);
     const selected = metrics.filter((m) => ids.includes(m.id));
     if (!selected.length) return false;
     const updates = selected.map((m) => ({
@@ -98,20 +103,26 @@ export const moveScratchpadNodes =
     )
       return false;
     for (const item of updates) dispatch({ type: "CHANGE_METRIC", item });
-    dispatch(updateGraph(SCRATCHPAD_ID, false));
+    dispatch(registerGraphChange(spaceId));
     return true;
   };
 
 export const duplicateScratchpadNodes =
-  (ids: string[]): AppThunk<CanvasLocation[]> =>
+  (ids: string[], spaceId = SCRATCHPAD_ID): AppThunk<CanvasLocation[]> =>
   (dispatch) =>
-    dispatch(duplicateScratchpadCanvasNodes(ids)).map((m) => m.location);
+    dispatch(duplicateScratchpadCanvasNodes(ids, spaceId)).map(
+      (m) => m.location
+    );
 
 export const moveScratchpadCanvasNodes =
-  (ids: string[], delta: { x: number; y: number }): AppThunk =>
+  (
+    ids: string[],
+    delta: { x: number; y: number },
+    spaceId = SCRATCHPAD_ID
+  ): AppThunk =>
   (dispatch, getState) => {
     const selected = getState().metrics.filter(
-      (m) => m.space === SCRATCHPAD_ID && ids.includes(m.id)
+      (m) => m.space === spaceId && ids.includes(m.id)
     );
     if (!selected.length || (!delta.x && !delta.y)) return;
     for (const m of selected) {
@@ -127,5 +138,5 @@ export const moveScratchpadCanvasNodes =
         },
       });
     }
-    dispatch(updateGraph(SCRATCHPAD_ID, false));
+    dispatch(registerGraphChange(spaceId));
   };

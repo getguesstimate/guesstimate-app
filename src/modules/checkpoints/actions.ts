@@ -80,7 +80,10 @@ function updateMetricsAndGuesstimates(
     item: { ids: metricsToDelete.map((m) => m.id) },
   });
   metricsToModify.forEach((m) => {
-    dispatch({ type: "CHANGE_METRIC", item: m });
+    dispatch({
+      type: "CHANGE_METRIC",
+      item: { ...m, showNotesOnNode: m.showNotesOnNode },
+    });
   });
   guesstimatesToModify.forEach((g) => {
     const formatted = engine.guesstimate.format(g);

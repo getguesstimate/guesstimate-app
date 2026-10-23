@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { AppLayout } from "~/components/layout";
-import { SpaceShow } from "~/components/spaces/SpaceShow";
+import { NavHelper } from "~/components/utility/NavHelper";
+import { ScratchpadWorkspace } from "~/components/workspace/ScratchpadWorkspace";
 import { extractTokenFromUrl } from "~/lib/engine/space";
 
 const ModelWithCalculatorIdPage: NextPage = () => {
@@ -12,11 +12,13 @@ const ModelWithCalculatorIdPage: NextPage = () => {
   const intCalculatorId = parseInt(calculatorId as string);
 
   return (
-    <AppLayout isFluid showFooter={false} fullHeight>
-      {id === undefined ? null : (
-        <SpaceShow
+    <NavHelper>
+      {!router.isReady ||
+      !Number.isFinite(intId) ||
+      !Number.isFinite(intCalculatorId) ? null : (
+        <ScratchpadWorkspace
           spaceId={intId}
-          showCalculatorId={intCalculatorId}
+          initialCalculatorId={intCalculatorId}
           showCalculatorResults={window.location.search.includes(
             "showResults=true"
           )}
@@ -25,7 +27,7 @@ const ModelWithCalculatorIdPage: NextPage = () => {
           key={intId}
         />
       )}
-    </AppLayout>
+    </NavHelper>
   );
 };
 

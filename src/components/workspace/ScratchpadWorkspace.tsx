@@ -12,16 +12,21 @@ import {
   moveScratchpadCanvasNodes,
   duplicateScratchpadCanvasNodes,
 } from "~/modules/scratchpad/actions";
+import { canUseOrganizationFacts } from "~/lib/engine/space";
 import { SCRATCHPAD_ID } from "~/modules/scratchpad/model";
 import { changeMetric, removeMetrics } from "~/modules/metrics/actions";
-import { updateGraph } from "~/modules/spaces/actions";
-import { undo, redo } from "~/modules/checkpoints/actions";
-import { changeMetricClickMode } from "~/modules/canvas_state/actions";
+import { registerGraphChange } from "~/modules/spaces/actions";
+import { loadWorkspaceModel, changeWorkspaceHistory } from "./modelActions";
+import {
+  clearEditsAllowed,
+  changeMetricClickMode,
+} from "~/modules/canvas_state/actions";
 import { CanvasNode } from "./CanvasNode";
 import { NodeInspector } from "./NodeInspector";
 import { usePanelResize } from "./usePanelResize";
 import { SheetView } from "./SheetView";
 import { CanvasLocation } from "~/lib/locationUtils";
+import { ModelDetails } from "./ModelDetails";
 import { WorkspaceHeader } from "./WorkspaceHeader";
 import { Icon } from "./Icon";
 import {
@@ -53,7 +58,23 @@ const isField = (target: EventTarget | null) =>
   target instanceof Element &&
   !!target.closest('input, textarea, select, [contenteditable="true"]');
 
-export function ScratchpadWorkspace() {
+export function ScratchpadWorkspace({
+  spaceId = SCRATCHPAD_ID,
+  shareableLinkToken = null,
+  initialCalculatorId,
+  factsShown = false,
+  showCalculatorResults = false,
+}: {
+  spaceId?: number;
+  shareableLinkToken?: string | null;
+  initialCalculatorId?: number;
+  factsShown?: boolean;
+  showCalculatorResults?: boolean;
+}) {
+  const isScratchpad = spaceId === SCRATCHPAD_ID;
+  const [detailsOpen, setDetailsOpen] = useState(
+    !!initialCalculatorId || factsShown
+  );
   const [viewMode, setViewMode] = useState<"canvas" | "sheet">("sheet");
   useEffect(() => {
     try {
@@ -66,7 +87,7 @@ export function ScratchpadWorkspace() {
   const { mainRef, panelStyle, resizeHandle, resizing } = usePanelResize();
   const dispatch = useAppDispatch();
   const { denormalizedSpace: space } = useAppSelector((state) =>
-    denormalizedSpaceSelector(state, { spaceId: SCRATCHPAD_ID })
+    denormalizedSpaceSelector(state, { spaceId })
   );
   const metrics = space.metrics || [];
   const [loading, setLoading] = useState(true);
@@ -113,10 +134,10 @@ export function ScratchpadWorkspace() {
       for (const [id, canvasPosition] of Object.entries(pending.positions)) {
         dispatch({ type: "CHANGE_METRIC", item: { id, canvasPosition } });
       }
-      dispatch(updateGraph(SCRATCHPAD_ID, false));
+      dispatch(registerGraphChange(spaceId));
     }
     setSpacingPositions({});
-  }, [dispatch]);
+  }, [dispatch, spaceId]);
   useEffect(() => {
     const keyUp = (event: KeyboardEvent) => {
       if (event.key === "Shift") commitSpacing();
@@ -222,13 +243,22 @@ export function ScratchpadWorkspace() {
   const load = useCallback(() => {
     setLoading(true);
     setError(false);
-    dispatch(loadScratchpad())
+    Promise.resolve(
+      dispatch(
+        isScratchpad
+          ? loadScratchpad()
+          : loadWorkspaceModel(spaceId, shareableLinkToken)
+      )
+    )
       .then(() => setLoading(false))
       .catch(() => {
         setLoading(false);
         setError(true);
       });
-  }, [dispatch]);
+  }, [dispatch, isScratchpad, spaceId, shareableLinkToken]);
+  useEffect(() => {
+    dispatch(clearEditsAllowed());
+  }, [dispatch, spaceId]);
   useEffect(load, [load]);
   useEffect(() => {
     const oldOverflow = document.body.style.overflow;
@@ -371,16 +401,22 @@ export function ScratchpadWorkspace() {
     if (metric && activeSelection.includes(id) && activeSelection.length > 1) {
       const start = basePosition(metric);
       dispatch(
-        moveScratchpadCanvasNodes(activeSelection, {
-          x: point.x - start.x,
-          y: point.y - start.y,
-        })
+        moveScratchpadCanvasNodes(
+          activeSelection,
+          {
+            x: point.x - start.x,
+            y: point.y - start.y,
+          },
+          spaceId
+        )
       );
     } else dispatch(changeMetric({ id, canvasPosition: point }));
   };
   const duplicateSelection = () => {
     if (!canvasActionIds.length) return;
-    const copies = dispatch(duplicateScratchpadCanvasNodes(canvasActionIds));
+    const copies = dispatch(
+      duplicateScratchpadCanvasNodes(canvasActionIds, spaceId)
+    );
     closeDetails();
     setCanvasSelection(copies.map((m) => m.id));
     requestAnimationFrame(() => {
@@ -435,7 +471,7 @@ export function ScratchpadWorkspace() {
       })
     )
       position = { x: position.x + 40, y: position.y + 40 };
-    const id = dispatch(addScratchpadNode(position));
+    const id = dispatch(addScratchpadNode(position, undefined, spaceId));
     setSelectedId(id);
     setFormulaFocusId(id);
   };
@@ -460,7 +496,7 @@ export function ScratchpadWorkspace() {
       })
     )
       position = { x: position.x + 40, y: position.y + 40 };
-    const id = dispatch(addScratchpadNode(position, location));
+    const id = dispatch(addScratchpadNode(position, location, spaceId));
     setSelectedId(id);
     setFormulaFocusId(id);
     return id;
@@ -607,11 +643,15 @@ export function ScratchpadWorkspace() {
       }
       if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "z") {
         event.preventDefault();
-        dispatch(event.shiftKey ? redo(SCRATCHPAD_ID) : undo(SCRATCHPAD_ID));
+        dispatch(
+          event.shiftKey
+            ? changeWorkspaceHistory(spaceId, true)
+            : changeWorkspaceHistory(spaceId, false)
+        );
       }
       if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "y") {
         event.preventDefault();
-        dispatch(redo(SCRATCHPAD_ID));
+        dispatch(changeWorkspaceHistory(spaceId, true));
       }
       if (
         viewMode === "canvas" &&
@@ -839,14 +879,16 @@ export function ScratchpadWorkspace() {
 
   const download = () => {
     const graph = {
-      name: "Scratchpad",
+      name: isScratchpad ? "Scratchpad" : space.name,
+      description: space.description,
       metrics: metrics.map(
-        ({ id, name, readableId, location, canvasPosition }) => ({
+        ({ id, name, readableId, location, canvasPosition, showNotesOnNode }) => ({
           id,
           name,
           readableId,
           location,
           canvasPosition,
+          showNotesOnNode,
         })
       ),
       guesstimates: metrics.map((m) => m.guesstimate),
@@ -856,7 +898,7 @@ export function ScratchpadWorkspace() {
     );
     const a = document.createElement("a");
     a.href = url;
-    a.download = "scratchpad.json";
+    a.download = isScratchpad ? "scratchpad.json" : `model-${spaceId}.json`;
     a.click();
     setTimeout(() => URL.revokeObjectURL(url), 0);
   };
@@ -866,7 +908,9 @@ export function ScratchpadWorkspace() {
   return (
     <div className={styles.workspace}>
       <Head>
-        <title key="title">Scratchpad — Guesstimate</title>
+        <title key="title">
+          {isScratchpad ? "Scratchpad" : space.name || "Model"} — Guesstimate
+        </title>
         <meta
           key="viewport"
           name="viewport"
@@ -876,6 +920,8 @@ export function ScratchpadWorkspace() {
       <ErrorModal />
       <ModalContainer />
       <WorkspaceHeader
+        model={isScratchpad ? undefined : space}
+        onDetails={() => setDetailsOpen(true)}
         view={viewMode}
         onViewChange={(mode) => {
           dispatch(changeMetricClickMode("DEFAULT"));
@@ -889,6 +935,16 @@ export function ScratchpadWorkspace() {
           }
         }}
       />
+      {!isScratchpad && !loading && !error && (
+        <ModelDetails
+          space={space}
+          initialCalculatorId={initialCalculatorId}
+          factsShown={factsShown}
+          showCalculatorResults={showCalculatorResults}
+          open={detailsOpen}
+          onClose={() => setDetailsOpen(false)}
+        />
+      )}
       <main
         ref={mainRef}
         style={panelStyle}
@@ -1122,7 +1178,7 @@ export function ScratchpadWorkspace() {
               disabled={!canUndo}
               aria-label="Undo"
               title="Undo (Ctrl/⌘ Z)"
-              onClick={() => dispatch(undo(SCRATCHPAD_ID))}
+              onClick={() => dispatch(changeWorkspaceHistory(spaceId, false))}
             >
               <Icon name="undo" />
             </button>
@@ -1132,7 +1188,7 @@ export function ScratchpadWorkspace() {
               disabled={!canRedo}
               aria-label="Redo"
               title="Redo (Ctrl/⌘ Shift Z)"
-              onClick={() => dispatch(redo(SCRATCHPAD_ID))}
+              onClick={() => dispatch(changeWorkspaceHistory(spaceId, true))}
             >
               <Icon name="redo" />
             </button>
@@ -1144,7 +1200,7 @@ export function ScratchpadWorkspace() {
               role={error ? "alert" : "status"}
             >
               {loading ? (
-                <p>Loading scratchpad…</p>
+                <p>Loading model…</p>
               ) : (
                 <>
                   <h2>Couldn’t load the example</h2>
@@ -1200,7 +1256,7 @@ export function ScratchpadWorkspace() {
                   aria-label="Canvas help"
                 >
                   <div className={styles.panelHeading}>
-                    <h2>Working in the scratchpad</h2>
+                    <h2>Workspace help</h2>
                     <button
                       type="button"
                       className={styles.iconButton}
@@ -1210,10 +1266,12 @@ export function ScratchpadWorkspace() {
                       <Icon name="close" />
                     </button>
                   </div>
-                  <p>
-                    Changes stay here until you reload. Download a copy before
-                    leaving if you want to keep your work.
-                  </p>
+                  {isScratchpad && (
+                    <p>
+                      Changes stay here until you reload. Download a copy before
+                      leaving if you want to keep your work.
+                    </p>
+                  )}
                   <ul>
                     <li>
                       Drag the background to pan. Use the mouse wheel or pinch
@@ -1319,15 +1377,17 @@ export function ScratchpadWorkspace() {
           onMove={(id, location) => dispatch(changeMetric({ id, location }))}
           onDelete={remove}
           onMoveNodes={(ids, delta) =>
-            dispatch(moveScratchpadNodes(ids, delta))
+            dispatch(moveScratchpadNodes(ids, delta, spaceId))
           }
-          onDuplicateNodes={(ids) => dispatch(duplicateScratchpadNodes(ids))}
+          onDuplicateNodes={(ids) =>
+            dispatch(duplicateScratchpadNodes(ids, spaceId))
+          }
           onDeleteNodes={(ids) => {
             dispatch(removeMetrics(ids));
             closeDetails();
           }}
-          onUndo={() => dispatch(undo(SCRATCHPAD_ID))}
-          onRedo={() => dispatch(redo(SCRATCHPAD_ID))}
+          onUndo={() => dispatch(changeWorkspaceHistory(spaceId, false))}
+          onRedo={() => dispatch(changeWorkspaceHistory(spaceId, true))}
           onRetry={load}
           onDownload={download}
         />
@@ -1341,6 +1401,7 @@ export function ScratchpadWorkspace() {
             metrics={metrics}
             onClose={closeDetails}
             onSelect={setSelectedId}
+            canUseOrganizationFacts={canUseOrganizationFacts(space)}
             onDelete={remove}
           />
         )}

@@ -1,49 +1,77 @@
-import { useEffect, useRef, useState } from "react";
-import { signOut, useSession } from "next-auth/react";
-import { signIn } from "~/lib/auth";
-import { useAppSelector } from "~/modules/hooks";
-import { Icon } from "./Icon";
+import { ExtendedDSpace } from "~/components/spaces/denormalized-space-selector";
+import { allowEdits, forbidEdits } from "~/modules/canvas_state/actions";
+import { useAppDispatch } from "~/modules/hooks";
+import { AccountMenu } from "./AccountMenu";
+import { FieldHelp } from "./FieldHelp";
 import styles from "./workspace.module.css";
 
 export function WorkspaceHeader({
   view,
   onViewChange,
+  model,
+  onDetails,
 }: {
   view: "canvas" | "sheet";
   onViewChange(view: "canvas" | "sheet"): void;
+  model?: ExtendedDSpace;
+  onDetails?(): void;
 }) {
-  const me = useAppSelector((state) => state.me);
-  const { data: session } = useSession();
-  const [open, setOpen] = useState(false);
-  const menu = useRef<HTMLDivElement>(null);
-  const trigger = useRef<HTMLButtonElement>(null);
-  useEffect(() => {
-    if (!open) return;
-    const outside = (event: PointerEvent) => {
-      if (!menu.current?.contains(event.target as Node)) setOpen(false);
-    };
-    const key = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setOpen(false);
-        trigger.current?.focus();
-      }
-    };
-    document.addEventListener("pointerdown", outside);
-    document.addEventListener("keydown", key);
-    return () => {
-      document.removeEventListener("pointerdown", outside);
-      document.removeEventListener("keydown", key);
-    };
-  }, [open]);
+  const dispatch = useAppDispatch();
+  const editing =
+    !!model?.editableByMe &&
+    (!model.canvasState.editsAllowedManuallySet ||
+      model.canvasState.editsAllowed);
+  const action = model?.canvasState.actionState;
+  const status = !model
+    ? "Not saved"
+    : action === "SAVING"
+    ? "Saving…"
+    : action === "ERROR"
+    ? "Couldn’t save"
+    : action === "CONFLICT"
+    ? "Save conflict — reload required"
+    : action === "COPYING"
+    ? "Copying…"
+    : action === "ERROR_COPYING"
+    ? "Couldn’t copy"
+    : !editing
+    ? action === "UNALLOWED_ATTEMPT"
+      ? "Local changes · not saved"
+      : "Changes won’t save"
+    : action === "SAVED"
+    ? "Saved"
+    : "Autosave on";
   return (
-    <header className={styles.header}>
+    <header className={`${styles.header} ${model ? styles.modelHeader : ""}`}>
       <a href="/" className={styles.brand} aria-label="Guesstimate home">
         <img src="/assets/new-logo-2.png" alt="" width="26" height="26" />
         <span>Guesstimate</span>
       </a>
       <div className={styles.documentTitle}>
-        <h1>Scratchpad</h1>
-        <span className={styles.temporary}>Not saved</span>
+        <h1>
+          {model ? (
+            <button
+              type="button"
+              className={styles.modelTitleButton}
+              onClick={onDetails}
+              aria-label="Open model details"
+              title={model.name || "Untitled model"}
+            >
+              <span>{model.name || "Untitled model"}</span>
+              <span aria-hidden="true">⌄</span>
+            </button>
+          ) : (
+            "Scratchpad"
+          )}
+        </h1>
+        <span
+          className={styles.temporary}
+          role="status"
+          aria-live="polite"
+          title={status}
+        >
+          {status}
+        </span>
       </div>
       <div
         className={styles.viewSwitch}
@@ -61,58 +89,65 @@ export function WorkspaceHeader({
           </button>
         ))}
       </div>
-      <div
-        className={styles.account}
-        ref={menu}
-        onBlur={(event) => {
-          if (!event.currentTarget.contains(event.relatedTarget))
-            setOpen(false);
-        }}
-      >
-        {session ? (
-          <>
-            <button
-              ref={trigger}
-              type="button"
-              className={styles.iconButton}
-              aria-label="Account"
-              aria-expanded={open}
-              aria-controls="workspace-account"
-              onClick={() => setOpen(!open)}
+      {model && (
+        <select
+          className={styles.mobileViewSwitch}
+          aria-label="Workspace view"
+          value={view}
+          onChange={(event) =>
+            onViewChange(event.target.value as "sheet" | "canvas")
+          }
+        >
+          <option value="sheet">Sheet</option>
+          <option value="canvas">Canvas</option>
+        </select>
+      )}
+      {model && (
+        <div
+          className={`${styles.modelMode} ${
+            !model.editableByMe ? styles.viewOnlyMode : ""
+          }`}
+        >
+          {!model.editableByMe && (
+            <span
+              className={styles.mobileModeStatus}
+              aria-label="Model mode: Viewing"
             >
-              <Icon name="user" />
-            </button>
-            {open && (
-              <nav
-                id="workspace-account"
-                aria-label="Account"
-                className={styles.accountMenu}
-              >
-                <p>
-                  {me.tag === "SIGNED_IN" ? me.profile.name : "Your account"}
-                </p>
-                {me.tag === "SIGNED_IN" && (
-                  <a href={`/users/${me.profile.id}`}>My models</a>
-                )}
-                <a href="/settings">Account settings</a>
-                <a href="/billing">Billing</a>
-                <a href="/organizations/new">New organization</a>
-                <button
-                  type="button"
-                  onClick={() => signOut({ callbackUrl: "/scratchpad" })}
-                >
-                  Sign out
-                </button>
-              </nav>
+              Viewing
+            </span>
+          )}
+          <select
+            aria-label="Model mode"
+            value={editing ? "editing" : "viewing"}
+            onChange={(event) =>
+              dispatch(
+                event.target.value === "editing" ? allowEdits() : forbidEdits()
+              )
+            }
+          >
+            <option value="viewing">Viewing</option>
+            <option value="editing" disabled={!model.editableByMe}>
+              Editing
+            </option>
+          </select>
+          <FieldHelp label="Help with model modes">
+            <p>
+              Viewing lets you experiment without saving changes to this model.
+              Editing saves your changes, including any local changes when you
+              next edit.
+            </p>
+            {!model.editableByMe && (
+              <p>
+                You don’t have access to save this model. Make a copy to keep
+                your own version.
+              </p>
             )}
-          </>
-        ) : (
-          <button type="button" className={styles.signIn} onClick={signIn}>
-            <Icon name="user" />
-            Sign in
-          </button>
-        )}
-      </div>
+          </FieldHelp>
+        </div>
+      )}
+      <AccountMenu
+        callbackUrl={model ? `/models/${model.id}` : "/scratchpad"}
+      />
     </header>
   );
 }

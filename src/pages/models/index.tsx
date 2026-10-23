@@ -1,13 +1,11 @@
 import { NextPage } from "next";
-import { AppLayout } from "~/components/layout";
+import { NavHelper } from "~/components/utility/NavHelper";
 import { SpacesIndex } from "~/components/spaces/SpacesIndex";
 
-const ModelsPage: NextPage = () => {
-  return (
-    <AppLayout backgroundColor="GREY">
-      <SpacesIndex />
-    </AppLayout>
-  );
-};
+const ModelsPage: NextPage = () => (
+  <NavHelper>
+    <SpacesIndex />
+  </NavHelper>
+);
 
 export default ModelsPage;
