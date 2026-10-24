@@ -84,10 +84,15 @@ export const DistributionEditor = React.forwardRef<{ focus(): void }, Props>(
       runFormSims: boolean,
       saveToServer: boolean
     ) => {
-      dispatch(changeGuesstimate(props.metricId, changes, saveToServer));
-      if (runFormSims) {
-        dispatch(runFormSimulations(props.metricId));
-      }
+      dispatch((dispatch, getState) => {
+        // Blur/unmount and deferred input callbacks can follow node deletion.
+        if (!getState().metrics.some((metric) => metric.id === props.metricId))
+          return;
+        dispatch(changeGuesstimate(props.metricId, changes, saveToServer));
+        if (runFormSims) {
+          dispatch(runFormSimulations(props.metricId));
+        }
+      });
     };
 
     const handleTab = (shifted: boolean) => {
