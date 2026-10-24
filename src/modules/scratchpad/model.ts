@@ -1,3 +1,4 @@
+import { canvasGridPosition } from "~/components/workspace/geometry";
 import { Metric } from "~/modules/metrics/reducer";
 import { Guesstimate } from "~/modules/guesstimates/reducer";
 import { ApiSpace } from "~/lib/guesstimate_api/resources/Models";
@@ -40,7 +41,7 @@ export function createScratchpad(template: ApiSpace): ApiSpace {
       id: ids.get(m.id),
       space: SCRATCHPAD_ID,
       location: { row, column },
-      canvasPosition: { x: column * 350, y: row * 230 },
+      canvasPosition: canvasGridPosition({ column, row }),
     };
   });
   const guesstimates = graph.guesstimates.map((g) => {

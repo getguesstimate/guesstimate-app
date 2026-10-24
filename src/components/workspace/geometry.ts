@@ -2,6 +2,18 @@ export type Point = { x: number; y: number };
 export type Viewport = Point & { zoom: number };
 export const NODE_WIDTH = 252;
 export const NODE_HEIGHT = 184;
+export const CANVAS_COLUMN_STEP = NODE_WIDTH + 46;
+export const CANVAS_ROW_STEP = NODE_HEIGHT + 46;
+export const canvasGridPosition = ({
+  column,
+  row,
+}: {
+  column: number;
+  row: number;
+}): Point => ({
+  x: column * CANVAS_COLUMN_STEP,
+  y: row * CANVAS_ROW_STEP,
+});
 export const MIN_ZOOM = 0.25;
 export const MAX_ZOOM = 2;
 

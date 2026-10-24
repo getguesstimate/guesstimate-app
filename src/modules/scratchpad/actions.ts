@@ -1,3 +1,4 @@
+import { canvasGridPosition } from "~/components/workspace/geometry";
 import { Metric } from "~/modules/metrics/reducer";
 import { duplicateNodes } from "./duplicate";
 import { api } from "~/lib/guesstimate_api";
@@ -126,10 +127,7 @@ export const moveScratchpadCanvasNodes =
     );
     if (!selected.length || (!delta.x && !delta.y)) return;
     for (const m of selected) {
-      const point = m.canvasPosition || {
-        x: m.location.column * 350,
-        y: m.location.row * 230,
-      };
+      const point = m.canvasPosition || canvasGridPosition(m.location);
       dispatch({
         type: "CHANGE_METRIC",
         item: {

@@ -36,10 +36,12 @@ import {
   zoomAt,
   toWorld,
   connectionPath,
+  canvasGridPosition,
   NODE_WIDTH,
   NODE_HEIGHT,
 } from "./geometry";
 import styles from "./workspace.module.css";
+import { useSimplifiedNodes } from "./useNodeAppearance";
 
 const VIEW_PREFERENCE_KEY = "guesstimate.workspace.view";
 
@@ -71,6 +73,7 @@ export function ScratchpadWorkspace({
   factsShown?: boolean;
   showCalculatorResults?: boolean;
 }) {
+  const simplified = useSimplifiedNodes();
   const isScratchpad = spaceId === SCRATCHPAD_ID;
   const [detailsOpen, setDetailsOpen] = useState(
     !!initialCalculatorId || factsShown
@@ -197,10 +200,7 @@ export function ScratchpadWorkspace({
     setCanvasSelection(
       metricsRef.current
         .filter((m) => {
-          const p = m.canvasPosition || {
-            x: m.location.column * 350,
-            y: m.location.row * 230,
-          };
+          const p = m.canvasPosition || canvasGridPosition(m.location);
           return (
             p.x + NODE_WIDTH >= Math.min(start.x, end.x) &&
             p.x <= Math.max(start.x, end.x) &&
@@ -282,10 +282,7 @@ export function ScratchpadWorkspace({
   }, [dispatch]);
 
   const basePosition = (metric: (typeof metrics)[number]): Point =>
-    metric.canvasPosition || {
-      x: metric.location.column * 350,
-      y: metric.location.row * 230,
-    };
+    metric.canvasPosition || canvasGridPosition(metric.location);
   const positionOf = (metric: (typeof metrics)[number]): Point => {
     if (spacingPositions[metric.id]) return spacingPositions[metric.id];
     if (!dragPosition) return basePosition(metric);
@@ -312,11 +309,7 @@ export function ScratchpadWorkspace({
     setView(
       fitNodes(
         metricsRef.current.map(
-          (m) =>
-            m.canvasPosition || {
-              x: m.location.column * 350,
-              y: m.location.row * 230,
-            }
+          (m) => m.canvasPosition || canvasGridPosition(m.location)
         ),
         box.clientWidth,
         box.clientHeight
@@ -357,10 +350,8 @@ export function ScratchpadWorkspace({
         (m) => m.id === selectedRef.current
       );
       if (!metric) return;
-      const position = metric.canvasPosition || {
-        x: metric.location.column * 350,
-        y: metric.location.row * 230,
-      };
+      const position =
+        metric.canvasPosition || canvasGridPosition(metric.location);
       const v = viewRef.current;
       const x = position.x * v.zoom + v.x,
         y = position.y * v.zoom + v.y;
@@ -495,7 +486,7 @@ export function ScratchpadWorkspace({
       )
     )
       return;
-    let position = { x: location.column * 350, y: location.row * 230 };
+    let position = canvasGridPosition(location);
     while (
       metrics.some((m) => {
         const p = positionOf(m);
@@ -575,10 +566,7 @@ export function ScratchpadWorkspace({
           const originals = Object.fromEntries(
             selected.map((m) => [
               m.id,
-              m.canvasPosition || {
-                x: m.location.column * 350,
-                y: m.location.row * 230,
-              },
+              m.canvasPosition || canvasGridPosition(m.location),
             ])
           );
           const points = Object.values(originals);
@@ -674,16 +662,24 @@ export function ScratchpadWorkspace({
         return;
       }
       if (
+        viewMode === "canvas" &&
+        viewport.current?.contains(event.target as Node) &&
+        !event.ctrlKey &&
+        !event.metaKey &&
+        !event.altKey &&
+        (event.key === "Delete" || event.key === "Backspace")
+      ) {
+        event.preventDefault();
+        remove();
+        return;
+      }
+      if (
         event.target !== viewport.current ||
         event.ctrlKey ||
         event.metaKey ||
         event.altKey
       )
         return;
-      if (event.key === "Delete" || event.key === "Backspace") {
-        event.preventDefault();
-        remove();
-      }
       if (event.key.toLowerCase() === "n") {
         event.preventDefault();
         if (!event.repeat) add();
@@ -1149,6 +1145,7 @@ export function ScratchpadWorkspace({
             </svg>
             {metrics.map((metric) => (
               <CanvasNode
+                simplified={simplified}
                 key={metric.id}
                 metric={metric}
                 selected={
@@ -1385,14 +1382,19 @@ export function ScratchpadWorkspace({
                       on touch screens to zoom.
                     </li>
                     <li>
-                      Drag a node’s header to move it. Use arrow keys on a
-                      focused grip for precise movement.
+                      {simplified
+                        ? "Drag a node’s top-right corner to move it."
+                        : "Drag a node’s header to move it."}{" "}
+                      Use arrow keys on a focused grip for precise movement.
                     </li>
                     <li>Select a node to edit its value, formula, or notes.</li>
                     <li>
                       Hold Shift and drag to select an area. Hold near an edge
                       to move farther across the canvas. On touch screens, use
-                      Select an area. Drag a selected header to move the group;
+                      Select an area.{" "}
+                      {simplified
+                        ? "Drag the top-right corner of a selected node to move the group;"
+                        : "Drag a selected header to move the group;"}{" "}
                       use Duplicate or Delete on the selection. Escape clears
                       it.
                     </li>

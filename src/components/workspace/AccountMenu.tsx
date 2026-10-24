@@ -126,7 +126,7 @@ export function AccountMenu({
                   setSettingsOpen(true);
                 }}
               >
-                Account settings
+                Settings
               </button>
               <a href="/billing">Billing</a>
               <a href="/organizations">Organizations</a>

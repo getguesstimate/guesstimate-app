@@ -177,8 +177,8 @@
   flex: 1;
   min-width: 0;
   overflow: hidden;
-  background-color: #f3f6f8;
-  background-image: radial-gradient(#c6d3dd 0.8px, transparent 0.8px);
+  background-color: #e4eaef;
+  background-image: radial-gradient(#b8c6d1 0.8px, transparent 0.8px);
   touch-action: none;
   outline: none;
   overscroll-behavior: none;
@@ -278,6 +278,14 @@
   background: #f0f6fa;
   color: #4f7790;
   border-color: #e3edf4;
+}
+.calculatedNode {
+  background: linear-gradient(180deg, #fff 0%, #f8fcff 55%, #edf7fd 100%);
+}
+.calculatedNode .nodeTop {
+  background: #f8fcff;
+  color: #4f7790;
+  border-color: #dce8f0;
 }
 .dragHandle {
   display: flex;
@@ -391,8 +399,8 @@
 }
 .headingNode .nodeContent {
   height: 100%;
-  justify-content: center;
-  padding: 34px 15px;
+  justify-content: flex-end;
+  padding: 12px 15px;
   text-align: center;
 }
 .headingNode:not(:hover):not(:focus-within):not(.selectedNode) .nodeTop > * {
@@ -1222,7 +1230,7 @@
   flex: 1;
   min-width: 0;
   min-height: 0;
-  background: #f6f8fa;
+  background: #e4eaef;
 }
 .sheetToolbar {
   display: flex;
@@ -1299,8 +1307,8 @@
   width: 284px;
   height: 208px;
   flex-shrink: 0;
-  border-right: 1px solid #e1e8ee;
-  border-bottom: 1px solid #e1e8ee;
+  border-right: 1px solid #d1dce5;
+  border-bottom: 1px solid #d1dce5;
 }
 .sheetCell[aria-selected="true"] {
   background: #eaf3fa;
@@ -1727,4 +1735,83 @@
 .mobileSelectionToggle[aria-pressed="true"], .mobileSelectionToggle:hover:not(:disabled) {
   color: #5a7489;
   background: transparent;
+}
+
+
+.simplifiedNode {
+  isolation: isolate;
+  border-radius: 12px;
+}
+.simplifiedNode .nodeTop {
+  position: absolute;
+  left: auto;
+  top: 0;
+  right: 0;
+  z-index: 3;
+  height: 32px;
+  padding: 0 4px;
+  gap: 4px;
+  border: 0;
+  background: transparent;
+}
+.simplifiedNode .nodeTop > span { display: none; }
+.simplifiedNode .nodeTop > code { font-size: 11px; color: #718898; }
+.simplifiedNode .nodeContent {
+  height: 100%;
+  padding: 10px 12px;
+  gap: 5px;
+  justify-content: flex-start;
+}
+.simplifiedNode .nodeName {
+  padding-right: 52px;
+  font-size: 17px;
+  line-height: 1.4;
+  margin: 0;
+  flex-shrink: 0;
+}
+.simplifiedNode .nodeExpression {
+  font-size: 12px;
+  margin: 0;
+  flex-shrink: 0;
+}
+.simplifiedNode .nodeContent > .nodeExpression:first-child { padding-right: 52px; }
+.simplifiedNode .nodeResult {
+  position: relative;
+  z-index: 1;
+  font-size: 28px;
+  line-height: 1.2;
+  margin-top: auto;
+  margin-bottom: 0;
+}
+.simplifiedNode .nodeChart {
+  opacity: 1;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
+  margin: 0;
+  pointer-events: none;
+}
+.simplifiedNode .notePreview {
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-line-clamp: 4;
+}
+.simplifiedNode .notePreview:first-child { padding-right: 20px; }
+.simplifiedNode.headingNode .nodeName {
+  font-size: 23px;
+  padding-right: 20px;
+  -webkit-line-clamp: 4;
+}
+.simplifiedNode.headingNode .nodeContent { justify-content: flex-end; padding: 12px 15px; }
+.simplifiedNode.headingNode:not(:hover):not(:focus-within):not(.selectedNode) .nodeTop > * {
+  visibility: visible;
+}
+.simplifiedNode .dragHandle svg { width: 14px; height: 14px; opacity: 0; }
+.simplifiedNode:hover .dragHandle svg,
+.simplifiedNode:focus-within .dragHandle svg { opacity: 1; }
+@media (hover: none), (pointer: coarse) {
+  .simplifiedNode .dragHandle svg { opacity: 1; }
+  .simplifiedNode.headingNode .dragHandle svg { opacity: 0; }
 }

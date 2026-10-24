@@ -18,6 +18,7 @@ import {
   SHEET_INSET,
 } from "./sheetGeometry";
 import styles from "./workspace.module.css";
+import { useSimplifiedNodes } from "./useNodeAppearance";
 
 // Sheet percentages are relative to this scale; geometry uses the actual scale.
 const SHEET_BASE_SCALE = 0.8;
@@ -50,6 +51,7 @@ type Props = {
 
 export function SheetView(props: Props) {
   const { active, metrics, selectedId, referenceMode } = props;
+  const simplified = useSimplifiedNodes();
   const [cell, setCell] = useState<CanvasLocation>({ row: 0, column: 0 });
   const [rangeEnd, setRangeEnd] = useState<CanvasLocation | null>(null);
   const rangeDrag = useRef<{
@@ -485,15 +487,16 @@ export function SheetView(props: Props) {
             and press Enter. N adds a node at the selected cell or the next
             empty cell below. Use arrow keys to move between cells. Drag across
             cells to select a range, or use Shift-click and Shift-arrow keys.
-            Delete removes the selected nodes; Undo restores them. Drag a
-            selected header to move the whole group. Drag a node’s header to
-            move it to an empty cell. Use the hand tool or hold Space to drag
-            the sheet. Swipe to pan on touch screens; pinch to zoom. The mouse
-            wheel scrolls in Select mode and zooms in Hand mode. Ctrl + scroll
-            zooms around the pointer in either mode. Ctrl/⌘ D duplicates
-            selected nodes. While editing a value, Enter moves down and Tab
-            moves right, creating a node if the next cell is empty. Formulas use
-            the reference IDs on nodes.
+            Delete removes the selected nodes; Undo restores them.{" "}
+            {simplified
+              ? "Drag a node’s top-right corner to move it to an empty cell. Drag the corner of a selected node to move the whole group."
+              : "Drag a node’s header to move it to an empty cell. Drag a selected header to move the whole group."}{" "}
+            Use the hand tool or hold Space to drag the sheet. Swipe to pan on
+            touch screens; pinch to zoom. The mouse wheel scrolls in Select mode
+            and zooms in Hand mode. Ctrl + scroll zooms around the pointer in
+            either mode. Ctrl/⌘ D duplicates selected nodes. While editing a
+            value, Enter moves down and Tab moves right, creating a node if the
+            next cell is empty. Formulas use the reference IDs on nodes.
           </p>
         </FieldHelp>
         <button
@@ -986,6 +989,7 @@ export function SheetView(props: Props) {
                   >
                     {metric ? (
                       <CanvasNode
+                        simplified={simplified}
                         metric={metric}
                         surface="sheet"
                         position={SHEET_INSET}

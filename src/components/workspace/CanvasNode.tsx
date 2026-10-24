@@ -13,6 +13,7 @@ export function CanvasNode({
   onSelect,
   onMove,
   surface = "canvas",
+  simplified = false,
 }: {
   metric: FullDenormalizedMetric;
   position: Point;
@@ -21,6 +22,7 @@ export function CanvasNode({
   onSelect(): void;
   onMove(position: Point): void;
   surface?: "canvas" | "sheet";
+  simplified?: boolean;
 }) {
   const stats = metric.simulation?.stats;
   const error = !!metric.simulation?.sample.errors?.length;
@@ -42,7 +44,10 @@ export function CanvasNode({
     : "Input";
   return (
     <article
-      className={`${styles.node} ${selected ? styles.selectedNode : ""} ${
+      data-node-appearance={simplified ? "simplified" : "standard"}
+      className={`${styles.node} ${simplified ? styles.simplifiedNode : ""} ${
+        metric.edges.inputs.length ? styles.calculatedNode : ""
+      } ${selected ? styles.selectedNode : ""} ${
         heading ? styles.headingNode : formula ? styles.formulaNode : ""
       }`}
       style={{ transform: `translate(${position.x}px, ${position.y}px)` }}
@@ -53,15 +58,21 @@ export function CanvasNode({
       <div
         className={styles.nodeTop}
         data-drag-node={metric.id}
-        title="Drag header to move"
+        title={
+          simplified ? "Drag top-right corner to move" : "Drag header to move"
+        }
       >
         <span>{kind}</span>
-        <code>{metric.readableId}</code>
+        {(!simplified || hasValue) && <code>{metric.readableId}</code>}
         <button
           type="button"
           className={styles.dragHandle}
           aria-label={`Move ${metric.name || metric.readableId}`}
-          title="Drag to move · Arrow keys to nudge"
+          title={
+            surface === "sheet"
+              ? "Drag to move · Arrow keys to move one cell"
+              : "Drag to move · Arrow keys to nudge"
+          }
           onKeyDown={(event) => {
             const directions: Record<string, Point> = {
               ArrowLeft: { x: -1, y: 0 },
@@ -110,18 +121,23 @@ export function CanvasNode({
           </span>
         ) : (
           <>
-            <code className={styles.nodeExpression}>
-              {metric.guesstimate.input ||
-                (metric.guesstimate.data?.length
-                  ? `${metric.guesstimate.data.length} data points`
-                  : "Add a value or formula")}
-            </code>
+            {(!simplified ||
+              metric.guesstimate.guesstimateType !== "POINT") && (
+              <code className={styles.nodeExpression}>
+                {metric.guesstimate.input ||
+                  (metric.guesstimate.data?.length
+                    ? `${metric.guesstimate.data.length} data points`
+                    : "Add a value or formula")}
+              </code>
+            )}
             {error ? (
               <span className={styles.nodeError}>Check this expression</span>
             ) : stats ? (
               <span className={styles.nodeResult}>
                 {formatNumber(stats.mean)}
-                <small>{stats.length > 1 ? "mean" : "value"}</small>
+                <small>
+                  {stats.length > 1 ? "mean" : simplified ? "" : "value"}
+                </small>
               </span>
             ) : (
               <span className={styles.nodeEmpty}>

@@ -1,3 +1,7 @@
+import {
+  canvasGridPosition,
+  CANVAS_COLUMN_STEP,
+} from "~/components/workspace/geometry";
 import { create as createMetric } from "~/lib/engine/metric";
 import { Metric } from "~/modules/metrics/reducer";
 import { Guesstimate } from "~/modules/guesstimates/reducer";
@@ -26,11 +30,11 @@ export function duplicateNodes(
   )
     offset++;
   const position = (m: Metric) =>
-    m.canvasPosition || { x: m.location.column * 350, y: m.location.row * 230 };
+    m.canvasPosition || canvasGridPosition(m.location);
   const canvasOffset =
     Math.max(...metrics.map((m) => position(m).x)) -
     Math.min(...selected.map((m) => position(m).x)) +
-    350;
+    CANVAS_COLUMN_STEP;
   const used = metrics.map((m) => m.readableId);
   const remap = new Map<string, string>();
   const copies = selected.map((m) => {

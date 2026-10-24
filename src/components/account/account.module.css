@@ -85,3 +85,75 @@
 @media(max-width:650px) { .pageHeading { flex-wrap: wrap; gap: 12px; } .headingActions { margin-left: 0; } }
 .confirmTitle { margin: 0 0 12px; font-size: 18px; font-weight: 600; }
 .confirmMessage { margin: 0 0 24px; font-size: 14px; line-height: 1.7; }
+
+.appearanceSettings { margin-bottom: 24px; padding-bottom: 22px; border-bottom: 1px solid #e5ebf0; }
+.preferenceRow, .preferenceLabel { display: flex; align-items: center; gap: 8px; }
+.preferenceRow { justify-content: space-between; gap: 20px; }
+.preferenceLabel { min-width: 0; }
+.preferenceSwitch { width: 40px; height: 24px; flex-shrink: 0; padding: 3px; border: 1px solid #acbecb; border-radius: 20px; background: #d5dfe6; }
+.preferenceSwitch span { display: block; width: 16px; height: 16px; border-radius: 50%; background: white; box-shadow: 0 1px 2px #29475b30; }
+.preferenceSwitch[aria-checked="true"] { background: #397ba3; border-color: #397ba3; }
+.preferenceSwitch[aria-checked="true"] span { transform: translateX(16px); }
+
+.settingsPlan { display: flex; align-items: center; gap: 10px; padding: 8px 0; color: #62788a; font-size: 13px; }
+.settingsPlan strong { margin-left: auto; color: #365b75; font-weight: 500; }
+.settingsPlan svg { flex-shrink: 0; width: 14px; height: 14px; }
+.settingsPlan:hover strong { text-decoration: underline; }
+
+.settingsPlan .settingsPlanBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 0;
+  padding: 5px 10px;
+  border: 1px solid #cbdfee;
+  border-radius: 7px;
+  background: linear-gradient(120deg, #f4fbff 0%, #e2f2fc 45%, #cce5f7 100%);
+  box-shadow: inset 0 1px 0 #ffffffb3;
+  color: #356b91;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.5;
+  text-align: center;
+}
+.settingsPlan [data-plan-tier="premium"] {
+  position: relative;
+  border-color: #ddd5ee;
+  background: linear-gradient(120deg, #faf6ff 0%, #ede4fb 45%, #ded0f5 100%);
+  color: #705593;
+  box-shadow: inset 0 1px 0 #ffffffd9, 0 0 12px #b893e640;
+}
+.planSparkles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.planSparkles i {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  background: #a475d5;
+  clip-path: polygon(50% 0%, 64% 36%, 100% 50%, 64% 64%, 50% 100%, 36% 64%, 0% 50%, 36% 36%);
+  animation: planSparkDrift 3.2s ease-out infinite;
+  opacity: 0;
+}
+.planSparkles i:nth-child(1) { left: 12%; top: 0; --spark-x: -7px; --spark-y: -14px; animation-delay: -0.3s; }
+.planSparkles i:nth-child(2) { left: 46%; top: 0; --spark-x: 4px; --spark-y: -16px; animation-delay: -1.9s; }
+.planSparkles i:nth-child(3) { right: 10%; top: 0; --spark-x: 8px; --spark-y: -12px; animation-delay: -1s; }
+.planSparkles i:nth-child(4) { right: -2px; top: 45%; --spark-x: 10px; --spark-y: -5px; animation-delay: -2.5s; }
+.planSparkles i:nth-child(5) { right: 18%; bottom: 0; --spark-x: 6px; --spark-y: 12px; animation-delay: -0.6s; }
+.planSparkles i:nth-child(6) { left: 45%; bottom: 0; --spark-x: -3px; --spark-y: 13px; animation-delay: -2.2s; }
+.planSparkles i:nth-child(7) { left: 9%; bottom: 0; --spark-x: -8px; --spark-y: 11px; animation-delay: -1.4s; }
+.planSparkles i:nth-child(8) { left: -3px; top: 35%; --spark-x: -12px; --spark-y: -7px; animation-delay: -2.9s; }
+.planSparkles i:nth-child(3n) { width: 5px; height: 5px; background: #c59c54; }
+@keyframes planSparkDrift {
+  0% { opacity: 0; transform: translate(0, 0) scale(.3) rotate(0deg); }
+  20% { opacity: .95; }
+  65% { opacity: .75; }
+  100% { opacity: 0; transform: translate(var(--spark-x), var(--spark-y)) scale(.5) rotate(70deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .planSparkles i { animation: none; opacity: .65; transform: translate(calc(var(--spark-x) * .5), calc(var(--spark-y) * .5)) scale(.7); }
+  .planSparkles i:nth-child(even) { display: none; }
+}
