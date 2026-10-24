@@ -1,13 +1,13 @@
-import { NextPage } from "next";
-import { AppLayout } from "~/components/layout";
-import { PlanIndexContainer } from "~/components/plans/index/PlanIndexContainer";
-
-const BillingPage: NextPage = () => {
+import { AccountShell } from "~/components/account/AccountShell";
+import { Billing } from "~/components/account/Billing";
+export default function BillingPage() {
   return (
-    <AppLayout backgroundColor="GREY">
-      <PlanIndexContainer />
-    </AppLayout>
+    <AccountShell
+      wide
+      title="Billing"
+      description="Your plan and payment details."
+    >
+      <Billing />
+    </AccountShell>
   );
-};
-
-export default BillingPage;
+}

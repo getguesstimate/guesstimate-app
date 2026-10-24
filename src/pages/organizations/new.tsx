@@ -1,13 +1,12 @@
-import { NextPage } from "next";
-import { AppLayout } from "~/components/layout";
-import { CreateOrganizationPageContainer } from "~/components/organizations/new/index";
-
-const CreateOrganizationPage: NextPage = () => {
+import { AccountShell } from "~/components/account/AccountShell";
+import { NewOrganization } from "~/components/account/NewOrganization";
+export default function NewOrganizationPage() {
   return (
-    <AppLayout backgroundColor="GREY">
-      <CreateOrganizationPageContainer />
-    </AppLayout>
+    <AccountShell
+      title="New organization"
+      description="A shared place for your team’s models."
+    >
+      <NewOrganization />
+    </AccountShell>
   );
-};
-
-export default CreateOrganizationPage;
+}

@@ -1,0 +1,87 @@
+.page, .dialog { font-family: WorkspaceInter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #31495d; font-size: 14px; line-height: 1.5; }
+.page { min-height: 100dvh; background: #f6f8fa; }
+.page *, .dialog * { box-sizing: border-box; }
+.page a, .dialog a { text-decoration: none; }
+.page button, .dialog button, .page input { font: inherit; }
+.page button, .dialog button { cursor: pointer; }
+.page button:disabled { cursor: wait; opacity: .6; }
+.page a:focus-visible, .page button:focus-visible, .page input:focus-visible, .dialog a:focus-visible, .dialog button:focus-visible { outline: 2px solid #287fae; outline-offset: 3px; }
+.header { height: 58px; display: flex; align-items: center; gap: 24px; padding: 0 24px; background: #fff; border-bottom: 1px solid #dce4eb; position: relative; z-index: 30; }
+.header > :last-child { margin-left: auto; }
+.browseLink { margin-left: auto; font-size: 13px; color: #4b6478; white-space: nowrap; }
+.main { width: min(900px, 100%); margin: auto; padding: 36px 24px 48px; }
+.pageHeading { margin-bottom: 28px; }
+.pageHeading h1 { margin: 0 0 6px; font-size: 25px; font-weight: 600; letter-spacing: -.04em; line-height: 1.3; }
+.pageHeading p, .muted { color: #62788a; font-size: 13px; }
+.pageHeading p { margin: 0; }
+.stack { display: grid; gap: 20px; }
+.card { padding: 24px; border: 1px solid #dce5ec; border-radius: 10px; background: #fff; }
+.card h2, .planSummary h2 { font-size: 17px; font-weight: 600; margin: 0 0 8px; }
+.card p { margin: 0 0 16px; }
+.cardHeading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.eyebrow { display: block; font-size: 12px; color: #62788a; margin-bottom: 6px; }
+.primary, .secondary { display: inline-flex; justify-content: center; align-items: center; min-height: 40px; padding: 8px 14px; border-radius: 7px; border: 1px solid #bfd1df; font-size: 13px !important; font-weight: 600; text-align: center; }
+.primary { background: #315f7d; border-color: #315f7d; color: #fff; }
+.primary:hover:not(:disabled) { background: #264c66; }
+.secondary { background: #fff; color: #315c77; }
+.secondary:hover:not(:disabled) { background: #edf4f9; }
+.actions { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+.planGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.price { font-size: 28px; font-weight: 600; color: #315c77; }
+.price span { font-size: 12px; color: #62788a; font-weight: 400; }
+.badge { display: inline-flex; padding: 6px 10px; border-radius: 6px; background: #edf4f9; color: #315c77; font-size: 12px; }
+.helpLinks { display: flex; flex-wrap: wrap; gap: 20px; font-size: 12px; }
+.helpLinks a, .muted a, .textButton { color: #315c77; }
+.textButton { border: 0; padding: 0; background: none; text-decoration: underline; }
+.modalOpen { overflow: hidden; }
+.overlay { position: fixed; inset: 0; background: #1e34494d; z-index: 1100; display: grid; place-items: center; padding: 20px; }
+.dialog { width: min(460px, 100%); max-height: calc(100dvh - 40px); overflow-y: auto; padding: 22px; border-radius: 12px; background: #fff; outline: none; box-shadow: 0 12px 40px #28475e25; }
+.dialogHeading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 22px; }
+.dialogHeading h2 { margin: 0; font-size: 18px; font-weight: 600; }
+.close { display: grid; place-items: center; flex-shrink: 0; width: 36px; height: 36px; border: 0; border-radius: 6px; background: transparent; color: #62788a; }
+.close:hover { background: #edf4f9; }
+.settingsContent { display: grid; gap: 22px; }
+.accountName { margin: 0; font-size: 16px; font-weight: 500; overflow-wrap: anywhere; }
+.planSummary { padding: 18px; border: 1px solid #dce5ec; border-radius: 8px; background: #f6f8fa; }
+.planSummary p { margin: 0; color: #62788a; font-size: 13px; }
+.signInPrompt { display: grid; justify-items: start; gap: 12px; }
+.signInPrompt p { margin: 0; }
+.organizationCard { max-width: 620px; }
+.steps { list-style: none; display: flex; gap: 24px; margin: 0 0 24px; padding: 0 0 16px; border-bottom: 1px solid #e5ebf0; color: #71899b; font-size: 12px; }
+.steps [aria-current="step"] { color: #315c77; font-weight: 600; }
+.form { display: grid; gap: 20px; }
+.form > button { justify-self: start; }
+.field { display: grid; gap: 7px; font-size: 13px; font-weight: 500; }
+.field input { min-width: 0; width: 100%; height: 42px; padding: 8px 12px; border: 1px solid #cbd8e3; border-radius: 7px; background: #fff; color: #31495d; font-weight: 400; }
+.plans { display: grid; gap: 10px; border: 0; margin: 0; padding: 0; min-width: 0; }
+.plans legend { margin-bottom: 8px; font-size: 13px; font-weight: 500; }
+.planOption { display: flex; align-items: flex-start; gap: 10px; padding: 15px; border: 1px solid #dce5ec; border-radius: 8px; cursor: pointer; }
+.planOption:has(input:checked) { background: #f0f6fa; border-color: #9abbd1; }
+.planOption input { margin-top: 4px; accent-color: #315f7d; }
+.planOption > span { display: grid; gap: 4px; font-size: 12px; color: #62788a; }
+.planOption strong { font-size: 13px; color: #31495d; font-weight: 600; }
+.error { color: #a0443c; font-size: 13px; }
+.invitationList { display: grid; gap: 8px; font-size: 12px; color: #346d56; overflow-wrap: anywhere; }
+.invitationList:empty { display: none; }
+.invitationList p { margin: 0; }
+@media (max-width: 650px) {
+  .header { padding: 0 14px; gap: 16px; height: 54px; }
+  .header > a:first-child span { display: none; }
+  .main { padding: 26px 16px 32px; }
+  .pageHeading h1 { font-size: 22px; }
+  .planGrid { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .card { padding: 18px; }
+  .field input { font-size: 16px; }
+  .dialog { padding: 18px; }
+  .overlay { padding: 12px; }
+  .dialog { max-height: calc(100dvh - 24px); }
+}
+.wide { width: min(1180px, 100%); }
+.pageHeading { display: flex; align-items: center; gap: 16px; }
+.headingText { min-width: 0; }
+.headingText h1 { overflow-wrap: anywhere; }
+.headingActions { margin-left: auto; flex-shrink: 0; }
+.headingActions button { gap: 7px; }
+@media(max-width:650px) { .pageHeading { flex-wrap: wrap; gap: 12px; } .headingActions { margin-left: 0; } }
+.confirmTitle { margin: 0 0 12px; font-size: 18px; font-weight: 600; }
+.confirmMessage { margin: 0 0 24px; font-size: 14px; line-height: 1.7; }

@@ -1,7 +1,7 @@
 import { ExtendedDSpace } from "~/components/spaces/denormalized-space-selector";
 import { allowEdits, forbidEdits } from "~/modules/canvas_state/actions";
 import { useAppDispatch } from "~/modules/hooks";
-import { AccountMenu } from "./AccountMenu";
+import { HeaderActions } from "./HeaderActions";
 import { FieldHelp } from "./FieldHelp";
 import styles from "./workspace.module.css";
 
@@ -43,7 +43,7 @@ export function WorkspaceHeader({
     : "Autosave on";
   return (
     <header className={`${styles.header} ${model ? styles.modelHeader : ""}`}>
-      <a href="/" className={styles.brand} aria-label="Guesstimate home">
+      <a href="/models" className={styles.brand} aria-label="Browse models">
         <img src="/assets/new-logo-2.png" alt="" width="26" height="26" />
         <span>Guesstimate</span>
       </a>
@@ -145,7 +145,7 @@ export function WorkspaceHeader({
           </FieldHelp>
         </div>
       )}
-      <AccountMenu
+      <HeaderActions workspace
         callbackUrl={model ? `/models/${model.id}` : "/scratchpad"}
       />
     </header>

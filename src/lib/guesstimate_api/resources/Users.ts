@@ -18,6 +18,20 @@ const userMembershipsSchema = yup.object({
       id: yup.number(),
       user_id: yup.number(),
       organization_id: yup.number(),
+      _embedded: yup
+        .object({
+          organization: yup
+            .object({
+              id: yup.number().required(),
+              name: yup
+                .string()
+                .transform((value) => value ?? "")
+                .default(""),
+              picture: yup.string().transform((value) => value ?? undefined),
+            })
+            .default(undefined),
+        })
+        .default(undefined),
     })
   ),
 });

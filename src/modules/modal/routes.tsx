@@ -3,7 +3,8 @@ import { FC } from "react";
 import Modal from "react-modal";
 import { FirstSubscriptionContainer } from "~/components/subscriptions/FirstSubscription/container";
 import { SettingsContainer } from "~/components/users/settings/SettingsContainer";
-import { Button } from "~/components/utility/buttons/button";
+import { AccountSettingsDialog } from "~/components/account/AccountSettings";
+import styles from "../../components/account/account.module.css";
 import { NavHelper } from "~/components/utility/NavHelper/index";
 import { useAppDispatch, useAppSelector } from "~/modules/hooks";
 import * as modalActions from "~/modules/modal/actions";
@@ -16,17 +17,16 @@ const Confirmation: FC<{
   onClose(): void;
 }> = ({ message, onConfirm, onClose }) => {
   return (
-    <div className="max-w-xl bg-white px-16 py-12">
-      <header className="mb-8 text-center text-2xl leading-relaxed text-grey-333">
-        {message}
-      </header>
-      <div className="flex justify-center gap-4">
-        <Button size="large" color="blue" onClick={onConfirm}>
-          Confirm
-        </Button>
-        <Button size="large" onClick={onClose}>
+    <div>
+      <h2 className={styles.confirmTitle}>Confirm action</h2>
+      <p className={styles.confirmMessage}>{message}</p>
+      <div className={styles.actions}>
+        <button type="button" className={styles.secondary} onClick={onClose}>
           Cancel
-        </Button>
+        </button>
+        <button type="button" className={styles.primary} onClick={onConfirm}>
+          Confirm
+        </button>
       </div>
     </div>
   );
@@ -50,6 +50,29 @@ const ModalRouter: React.FC<ModalState & { onClose(): void }> = ({
 }) => {
   if (!componentName) {
     return null;
+  }
+  if (componentName === "settings") {
+    return <AccountSettingsDialog open onClose={onClose} />;
+  }
+
+  if (componentName === "confirmation") {
+    return (
+      <Modal
+        isOpen
+        onRequestClose={onClose}
+        contentLabel="Confirm action"
+        className={styles.dialog}
+        overlayClassName={styles.overlay}
+        bodyOpenClassName={styles.modalOpen}
+        appElement={
+          typeof document !== "undefined"
+            ? document.getElementById("__next") || undefined
+            : undefined
+        }
+      >
+        <Confirmation {...props} onClose={onClose} />
+      </Modal>
+    );
   }
 
   const FoundComponent = getComponent(componentName);

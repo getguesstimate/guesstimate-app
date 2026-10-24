@@ -1,13 +1,12 @@
-import { NextPage } from "next";
-import { AppLayout } from "~/components/layout";
-import { SettingsContainer } from "~/components/users/settings/SettingsContainer";
-
-const SettingsPage: NextPage = () => {
+import { AccountShell } from "~/components/account/AccountShell";
+import { AccountSettingsContent } from "~/components/account/AccountSettings";
+import styles from "../components/account/account.module.css";
+export default function SettingsPage() {
   return (
-    <AppLayout>
-      <SettingsContainer onClose={() => undefined} />
-    </AppLayout>
+    <AccountShell title="Account settings">
+      <section className={`${styles.card} ${styles.organizationCard}`}>
+        <AccountSettingsContent />
+      </section>
+    </AccountShell>
   );
-};
-
-export default SettingsPage;
+}

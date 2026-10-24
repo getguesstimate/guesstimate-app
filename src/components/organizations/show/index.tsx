@@ -1,22 +1,21 @@
 import { FC, useEffect, useState } from "react";
 
-import clsx from "clsx";
 import _ from "lodash";
-import { useRouter } from "next/router";
 import Icon from "~/components/react-fa-patched";
+import { AccountShell } from "~/components/account/AccountShell";
 import {
-  NewSpaceCard,
-  SpaceCard,
-  SpaceCardGrid,
-} from "~/components/spaces/SpaceCards";
+  CollectionAvatar,
+  ModelCollection,
+} from "~/components/collections/ModelCollection";
+import { loadOrganizationCollection } from "~/components/collections/actions";
+import styles from "../../collections/collections.module.css";
+import account from "../../account/account.module.css";
 import { ButtonWithIcon } from "~/components/utility/buttons/button";
-import { Container } from "~/components/utility/Container";
 import * as e from "~/lib/engine/engine";
 import { FactCategory } from "~/lib/engine/fact_category";
 import { useAppDispatch, useAppSelector } from "~/modules/hooks";
 import * as modalActions from "~/modules/modal/actions";
 import * as organizationActions from "~/modules/organizations/actions";
-import * as spaceActions from "~/modules/spaces/actions";
 import * as userOrganizationMembershipActions from "~/modules/userOrganizationMemberships/actions";
 
 import { Category } from "./categories/Category";
@@ -44,46 +43,6 @@ const isValidTabString = (tabStr: string | null): tabStr is string => {
       [MODEL_TAB, MEMBERS_TAB, FACT_BOOK_TAB, FACT_GRAPH_TAB].includes(tabStr)
   );
 };
-
-const OrganizationHeader: FC<{ organization: any }> = ({ organization }) => (
-  <div className="flex flex-col items-center">
-    <img className="max-h-20 max-w-[4em] rounded" src={organization.picture} />
-    <h1 className="text-3xl font-bold">{organization.name}</h1>
-  </div>
-);
-
-const OrganizationTabButtons: FC<{
-  tabs: Tab[];
-  openTab: string;
-  changeTab(key: string): void;
-}> = ({ tabs, openTab, changeTab }) => (
-  <div className="flex justify-end gap-2">
-    {tabs.map((e) => {
-      return (
-        <a
-          className={clsx(
-            "cursor-pointer rounded px-4 py-2 font-bold text-grey-444 hover:bg-black/5 hover:text-grey-444",
-            openTab === e.key && "bg-black/10"
-          )}
-          key={e.key}
-          href={e.href}
-          target={e.href ? undefined : "_blank"}
-          rel="noreferrer"
-          onClick={
-            e.href
-              ? undefined
-              : () => {
-                  e.onMouseUp?.();
-                  changeTab(e.key);
-                }
-          }
-        >
-          {e.name}
-        </a>
-      );
-    })}
-  </div>
-);
 
 const FactTab: FC<{
   organization: any;
@@ -115,21 +74,26 @@ const FactTab: FC<{
 
   return (
     <div>
-      <div className="grid grid-cols-2 gap-x-4 gap-y-12">
+      <div className={styles.factGrid}>
         {categorySets.map(({ category, facts }) => (
-          <Category
+          <div
+            className={styles.libraryPanel}
             key={category ? category.name : "uncategorized"}
-            category={category}
-            categories={factCategories}
-            onEditCategory={onEditCategory}
-            onDeleteCategory={onDeleteCategory}
-            facts={facts}
-            existingVariableNames={existingVariableNames}
-            organization={organization}
-          />
+          >
+            <Category
+              key={category ? category.name : "uncategorized"}
+              category={category}
+              categories={factCategories}
+              onEditCategory={onEditCategory}
+              onDeleteCategory={onDeleteCategory}
+              facts={facts}
+              existingVariableNames={existingVariableNames}
+              organization={organization}
+            />
+          </div>
         ))}
       </div>
-      <div className="mt-8 grid grid-cols-2 place-items-start">
+      <div className="mt-6">
         <NewCategorySection
           onSubmit={onAddCategory}
           existingCategoryNames={existingCategoryNames}
@@ -178,16 +142,31 @@ export const OrganizationShow: FC<{
     isValidTabString(tab) ? tab : MODEL_TAB
   );
   const dispatch = useAppDispatch();
-  const router = useRouter();
 
-  const refreshData = () => {
-    dispatch(organizationActions.fetchById(organizationId));
-    dispatch(spaceActions.fetch({ organizationId }));
-  };
-
-  useEffect(refreshData, []);
-
+  const [loadState, setLoadState] = useState<"loading" | "ready" | "error">(
+    "loading"
+  );
+  const [reload, setReload] = useState(0);
+  const refreshData = () => setReload((value) => value + 1);
   const me = useAppSelector((state) => state.me);
+  useEffect(() => {
+    if (me.tag === "SIGNED_IN_LOADING_PROFILE") return;
+    let active = true;
+    setLoadState("loading");
+    dispatch(loadOrganizationCollection(organizationId))
+      .then(() => {
+        if (active) setLoadState("ready");
+      })
+      .catch(() => {
+        if (active) setLoadState("error");
+      });
+    return () => {
+      active = false;
+    };
+  }, [dispatch, organizationId, me.tag, me.profile?.id, reload]);
+  useEffect(() => {
+    setOpenTab(isValidTabString(tab) ? tab : MODEL_TAB);
+  }, [tab]);
   const organizations = useAppSelector((state) => state.organizations);
   const organizationFacts = useAppSelector(
     (state) => state.facts.organizationFacts
@@ -201,17 +180,6 @@ export const OrganizationShow: FC<{
   );
 
   const organization = e.collections.get(organizations, organizationId);
-
-  const changeTab = (openTab: string) => {
-    router.push(`${e.organization.url(organization)}/${openTab}`, undefined, {
-      shallow: true,
-    });
-    setOpenTab(openTab);
-  };
-
-  const newModel = () => {
-    dispatch(spaceActions.create(organizationId, router));
-  };
 
   const destroyMembership = (membershipId: number) => {
     dispatch(userOrganizationMembershipActions.destroy(membershipId));
@@ -234,7 +202,7 @@ export const OrganizationShow: FC<{
     confirmRemove(member);
   };
 
-  const confirmRemove = ({ email, name, membershipId }) => {
+  const confirmRemove = ({ name, membershipId }) => {
     const removeCallback = () => {
       destroyMembership(membershipId);
       dispatch(modalActions.close());
@@ -259,8 +227,21 @@ export const OrganizationShow: FC<{
   const meIsMember =
     meIsAdmin || !!members.find((m) => m.id === me.profile?.id);
 
-  if (!organization) {
-    return null;
+  if (loadState !== "ready" || !organization) {
+    return (
+      <AccountShell wide title="Organization">
+        {loadState === "error" ? (
+          <section className={account.card} role="alert">
+            <h2>Organization couldn’t be loaded</h2>
+            <button className={account.secondary} onClick={refreshData}>
+              Retry
+            </button>
+          </section>
+        ) : (
+          <p role="status">Loading organization…</p>
+        )}
+      </AccountShell>
+    );
   }
   let tabs: Tab[] = [
     { name: "Models", key: MODEL_TAB },
@@ -288,27 +269,55 @@ export const OrganizationShow: FC<{
   }
 
   return (
-    <Container>
-      <OrganizationHeader organization={organization} />
-
+    <AccountShell
+      wide
+      title={organization.name}
+      description="Models, members, and shared metrics."
+      avatar={
+        <CollectionAvatar
+          name={organization.name}
+          picture={organization.picture}
+        />
+      }
+      newModelOrganizationId={meIsMember ? organizationId : undefined}
+    >
       {meIsMember && (
-        <div className="mt-4">
-          <OrganizationTabButtons
-            tabs={tabs}
-            openTab={openTab}
-            changeTab={changeTab}
-          />
-        </div>
+        <nav className={styles.tabs} aria-label="Organization sections">
+          {tabs.map((item) => (
+            <a
+              key={item.key}
+              href={item.href || `/organizations/${organizationId}/${item.key}`}
+              aria-current={openTab === item.key ? "page" : undefined}
+              target={item.href ? "_blank" : undefined}
+              rel={item.href ? "noopener noreferrer" : undefined}
+              onClick={
+                item.href
+                  ? () => {
+                      window.setTimeout(refreshData, 0);
+                    }
+                  : undefined
+              }
+            >
+              {item.name}
+            </a>
+          ))}
+        </nav>
       )}
-
-      <div className="mt-12">
-        {(openTab === MODEL_TAB || !meIsMember) && spaces && (
-          <SpaceCardGrid>
-            {meIsMember && <NewSpaceCard onClick={newModel} />}
-            {spaces.map((s) => (
-              <SpaceCard key={s.id} space={s} showPrivacy={true} />
-            ))}
-          </SpaceCardGrid>
+      <div>
+        {(openTab === MODEL_TAB || !meIsMember) && (
+          <ModelCollection
+            showPrivacy={meIsMember}
+            models={spaces.map((model) => ({
+              ...model,
+              objectID: String(model.id),
+              organization_info: organization,
+            }))}
+            emptyDescription={
+              meIsMember
+                ? "Create your team’s first model to get started."
+                : "This organization hasn’t shared any public models yet."
+            }
+          />
         )}
 
         {openTab === MEMBERS_TAB && meIsMember && members && organization && (
@@ -337,9 +346,11 @@ export const OrganizationShow: FC<{
         )}
 
         {openTab === FACT_GRAPH_TAB && meIsMember && !!facts && (
-          <FactGraph facts={facts} spaces={spaces} />
+          <div className={styles.graphPanel}>
+            <FactGraph facts={facts} spaces={spaces} />
+          </div>
         )}
       </div>
-    </Container>
+    </AccountShell>
   );
 };

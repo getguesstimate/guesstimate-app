@@ -1,80 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 import Head from "next/head";
+import Modal from "react-modal";
 import { useRouter } from "next/router";
-import { AccountMenu } from "~/components/workspace/AccountMenu";
+import { HeaderActions } from "~/components/workspace/HeaderActions";
 import { Icon } from "~/components/workspace/Icon";
 import { ErrorModal } from "~/components/layout/ErrorModal";
 import { ModalContainer } from "~/modules/modal/routes";
 import { useAppDispatch, useAppSelector } from "~/modules/hooks";
 import * as search from "~/modules/search_spaces/actions";
 import { SearchSortBy } from "~/modules/search_spaces/actions";
-import { ModelSearchHit } from "~/modules/search_spaces/reducer";
-import { create } from "~/modules/spaces/actions";
+import { ModelCard } from "../ModelCard";
 import { usersOrganizations } from "~/lib/engine/user";
-import { formatDescription } from "~/components/spaces/shared";
 import workspace from "../../workspace/workspace.module.css";
 import styles from "./browse.module.css";
-
-function ModelCard({ model }: { model: ModelSearchHit }) {
-  const [imageFailed, setImageFailed] = useState(false);
-  const hasOrganization = !!model.organization_info?.id;
-  const owner = hasOrganization ? model.organization_info : model.user_info;
-  const ownerPath = hasOrganization ? "organizations" : "users";
-  const date = model.updated_at ? new Date(model.updated_at) : null;
-  const validDate = date && Number.isFinite(date.getTime()) ? date : null;
-  return (
-    <article className={styles.card}>
-      <a href={`/models/${model.id}`} className={styles.modelLink}>
-        <div className={styles.preview}>
-          {model.big_screenshot && !imageFailed ? (
-            <img
-              src={model.big_screenshot}
-              alt=""
-              loading="lazy"
-              onError={() => setImageFailed(true)}
-            />
-          ) : (
-            <div className={styles.previewFallback} aria-hidden="true">
-              <Icon name="model" />
-              <span>Model preview</span>
-            </div>
-          )}
-        </div>
-        <div className={styles.cardText}>
-          <h2>{model.name?.trim() || "Untitled model"}</h2>
-          <p>
-            {formatDescription(model.description || "") ||
-              "No description added."}
-          </p>
-        </div>
-      </a>
-      <div className={styles.cardMeta}>
-        {owner?.id ? (
-          <a className={styles.owner} href={`/${ownerPath}/${owner.id}`}>
-            <Icon name="user" />
-            <span>{owner.name || "View author"}</span>
-          </a>
-        ) : (
-          <span>Public model</span>
-        )}
-        {validDate && (
-          <time
-            dateTime={validDate.toISOString()}
-            title={`Updated ${validDate.toLocaleDateString("en", {
-              dateStyle: "long",
-            })}`}
-          >
-            {validDate.toLocaleDateString("en", {
-              month: "short",
-              day: "numeric",
-              year: "numeric",
-            })}
-          </time>
-        )}
-      </div>
-    </article>
-  );
-}
 
 export function SpacesIndex() {
   const dispatch = useAppDispatch();
@@ -85,11 +23,11 @@ export function SpacesIndex() {
     (state) => state.userOrganizationMemberships
   );
   const allOrganizations = useAppSelector((state) => state.organizations);
-  const creating = useAppSelector((state) => state.canvasState.actionState);
   const organizations = usersOrganizations(me, memberships, allOrganizations);
   const [sortBy, setSortBy] = useState<SearchSortBy>(results.sortBy);
   const [query, setQuery] = useState(results.query);
-  const [owner, setOwner] = useState("");
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const selectedFilter = useRef<HTMLButtonElement>(null);
   const input = useRef<HTMLInputElement>(null);
   const loadMoreTarget = useRef<HTMLDivElement>(null);
   const resultsRef = useRef(results);
@@ -105,6 +43,15 @@ export function SpacesIndex() {
     results.query !== query.trim() ||
     results.sortBy !== sortBy;
   const more = results.page < results.nbPages - 1;
+
+  useEffect(() => {
+    const desktop = window.matchMedia("(min-width: 651px)");
+    const closeOnDesktop = () => {
+      if (desktop.matches) setFiltersOpen(false);
+    };
+    desktop.addEventListener("change", closeOnDesktop);
+    return () => desktop.removeEventListener("change", closeOnDesktop);
+  }, []);
 
   useEffect(() => {
     const cached = resultsRef.current;
@@ -210,11 +157,15 @@ export function SpacesIndex() {
       <ErrorModal />
       <ModalContainer />
       <header className={styles.header}>
-        <a href="/" className={workspace.brand} aria-label="Guesstimate home">
+        <a
+          href="/models"
+          className={`${workspace.brand} ${styles.brand}`}
+          aria-label="Browse models"
+        >
           <img src="/assets/new-logo-2.png" alt="" width="26" height="26" />
           <span>Guesstimate</span>
         </a>
-        <AccountMenu callbackUrl="/models" />
+        <HeaderActions />
       </header>
       <main className={styles.main}>
         <div className={styles.pageHeading}>
@@ -222,35 +173,6 @@ export function SpacesIndex() {
             <h1>Browse models</h1>
             <p>Public models shared by the community.</p>
           </div>
-          {signedIn && (
-            <div className={styles.createArea}>
-              {!!organizations.length && (
-                <label className={styles.ownerSelect}>
-                  <span className={styles.srOnly}>New model owner</span>
-                  <select
-                    value={owner}
-                    onChange={(event) => setOwner(event.target.value)}
-                  >
-                    <option value="">Personal model</option>
-                    {organizations.map((organization) => (
-                      <option key={organization.id} value={organization.id}>
-                        {organization.name}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-              )}
-              <button
-                type="button"
-                className={styles.action}
-                disabled={creating === "CREATING"}
-                onClick={() => dispatch(create(owner || undefined, router))}
-              >
-                <Icon name="plus" />
-                {creating === "CREATING" ? "Creating…" : "New model"}
-              </button>
-            </div>
-          )}
         </div>
         {signedIn && organizations.length > 0 && (
           <nav
@@ -268,11 +190,6 @@ export function SpacesIndex() {
             ))}
           </nav>
         )}
-        {creating === "ERROR_CREATING" && (
-          <p role="alert" className={styles.inlineError}>
-            Couldn’t create the model. Please try again.
-          </p>
-        )}
         <form
           className={styles.searchRow}
           role="search"
@@ -281,32 +198,34 @@ export function SpacesIndex() {
             retry();
           }}
         >
-          <div className={styles.searchInput}>
-            <Icon name="search" />
-            <label className={styles.srOnly} htmlFor="model-search">
-              Search public models
+          <div className={styles.searchField}>
+            <label htmlFor="model-search">
+              Search<span className={styles.srOnly}> public models</span>
             </label>
-            <input
-              id="model-search"
-              ref={input}
-              type="search"
-              placeholder="Search public models"
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              autoComplete="off"
-            />
-            {query && (
-              <button
-                type="button"
-                aria-label="Clear search"
-                onClick={() => {
-                  setQuery("");
-                  input.current?.focus();
-                }}
-              >
-                <Icon name="close" />
-              </button>
-            )}
+            <div className={styles.searchInput}>
+              <Icon name="search" />
+              <input
+                id="model-search"
+                ref={input}
+                type="search"
+                placeholder="Search models"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                autoComplete="off"
+              />
+              {query && (
+                <button
+                  type="button"
+                  aria-label="Clear search"
+                  onClick={() => {
+                    setQuery("");
+                    input.current?.focus();
+                  }}
+                >
+                  <Icon name="close" />
+                </button>
+              )}
+            </div>
           </div>
           <label className={styles.filter}>
             <span>Filter</span>
@@ -321,7 +240,70 @@ export function SpacesIndex() {
               <option value="RECENT">Recent</option>
             </select>
           </label>
+          <button
+            type="button"
+            className={styles.filterTrigger}
+            aria-label={`Filter models: ${
+              sortBy === "RECENT" ? "Recent" : "Recommended"
+            }`}
+            aria-haspopup="dialog"
+            aria-expanded={filtersOpen}
+            onClick={() => setFiltersOpen(true)}
+          >
+            <Icon name="filter" />
+            {sortBy === "RECENT" && (
+              <span className={styles.filterDot} aria-hidden="true" />
+            )}
+          </button>
         </form>
+        <Modal
+          isOpen={filtersOpen}
+          onRequestClose={() => setFiltersOpen(false)}
+          onAfterOpen={() => selectedFilter.current?.focus()}
+          appElement={
+            typeof document !== "undefined"
+              ? document.getElementById("__next") || undefined
+              : undefined
+          }
+          contentLabel="Filter models"
+          className={styles.filterSheet}
+          overlayClassName={styles.filterOverlay}
+          bodyOpenClassName={styles.filterOpen}
+        >
+          <div className={styles.filterSheetHeading}>
+            <h2>Filter models</h2>
+            <button
+              type="button"
+              aria-label="Close filters"
+              onClick={() => setFiltersOpen(false)}
+            >
+              <Icon name="close" />
+            </button>
+          </div>
+          <div
+            role="group"
+            aria-label="Models to show"
+            className={styles.filterOptions}
+          >
+            {(["RECOMMENDED", "RECENT"] as const).map((value) => (
+              <button
+                type="button"
+                key={value}
+                ref={sortBy === value ? selectedFilter : undefined}
+                aria-pressed={sortBy === value}
+                onClick={() => {
+                  setSortBy(value);
+                  setFiltersOpen(false);
+                }}
+              >
+                <span>
+                  {value === "RECOMMENDED" ? "Recommended" : "Recent"}
+                </span>
+                {sortBy === value && <Icon name="check" />}
+              </button>
+            ))}
+          </div>
+        </Modal>
         <div className={styles.resultsHeading} role="status" aria-live="polite">
           {busy
             ? "Loading models…"

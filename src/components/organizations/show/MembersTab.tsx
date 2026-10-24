@@ -1,157 +1,10 @@
-import clsx from "clsx";
-import _ from "lodash";
-import React, { useState } from "react";
-
-import Icon from "~/components/react-fa-patched";
-import { Button, ButtonWithIcon } from "~/components/utility/buttons/button";
-
-import * as e from "~/lib/engine/engine";
-
-import { MemberAddForm } from "../shared/MemberAddForm/index";
-
-const Layout: React.FC<{
-  children: [React.JSX.Element | null, React.JSX.Element];
-}> = ({ children: [left, right] }) => (
-  <div className="space-y-4 px-4 md:grid md:grid-cols-12 md:gap-4 md:space-y-0 md:px-0">
-    <div className="md:col-span-2">{left}</div>
-    <div
-      className={clsx("col-start-3", left ? "md:col-span-10" : "md:col-span-8")}
-    >
-      {right}
-    </div>
-  </div>
-);
-
-const MembersIndexSubTab: React.FC<{
-  members: any[];
-  invitations: any[];
-  admin_id: string;
-  onChangeSubTab(): void;
-  onRemove(member: any): void;
-  meIsAdmin: boolean;
-}> = ({
-  members,
-  invitations,
-  admin_id,
-  onChangeSubTab,
-  onRemove,
-  meIsAdmin,
-}) => (
-  <Layout>
-    {meIsAdmin ? (
-      <Button size="padded" color="green" onClick={onChangeSubTab}>
-        Add Members
-      </Button>
-    ) : null}
-    <div>
-      <div className="rounded bg-white px-6">
-        {members.map((m) => (
-          <Member
-            key={m.id}
-            user={m}
-            isAdmin={admin_id === m.id}
-            onRemove={() => {
-              onRemove(m);
-            }}
-            meIsAdmin={meIsAdmin}
-          />
-        ))}
-        {meIsAdmin &&
-          invitations.map((i) => <Invitee key={i.id} email={i.email} />)}
-      </div>
-    </div>
-  </Layout>
-);
-
-const InvitationStatus: React.FC<{ status: string }> = ({ status }) => (
-  <div className="text-lg text-grey-666">{status}</div>
-);
-
-const InviteeOrMemberBox: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => (
-  <div className="grid grid-cols-12 items-center gap-4 border-b border-grey-eee py-4 last:border-b-0">
-    {children}
-  </div>
-);
-
-const Invitee: React.FC<{ email: string }> = ({ email }) => (
-  <InviteeOrMemberBox>
-    <div className="col-span-7 flex items-center">
-      <div className="mr-8 w-10 text-center text-2xl text-blue-5/70">
-        <Icon name="envelope" />
-      </div>
-      <div className="text-xl font-bold text-dark-3">{email}</div>
-    </div>
-    <div className="col-span-2 col-start-10">
-      <InvitationStatus status="invited" />
-    </div>
-  </InviteeOrMemberBox>
-);
-
-const Member: React.FC<{
-  user: any;
-  isAdmin: boolean;
-  onRemove(): void;
-  meIsAdmin: boolean;
-}> = ({ user, isAdmin, onRemove, meIsAdmin }) => (
-  <InviteeOrMemberBox>
-    <div className="col-span-7 flex items-center">
-      <a href={e.user.url(user)}>
-        <img className="mr-8 h-10 w-10 rounded" src={user.picture} />
-      </a>
-      <a
-        href={e.user.url(user)}
-        className="text-xl font-bold text-dark-3 hover:text-black"
-      >
-        {user.name}
-      </a>
-    </div>
-
-    {meIsAdmin && (
-      <>
-        <div className="col-span-2 text-lg font-bold text-grey-2">
-          {isAdmin ? "Admin" : "Editor"}
-        </div>
-        <div className="col-span-2">
-          <InvitationStatus status="joined" />
-        </div>
-        <div>
-          {user.membershipId && !isAdmin && (
-            <button
-              className="h-8 w-8 rounded-full bg-grey-eee p-1 hover:bg-grey-ccc active:bg-grey-bbb"
-              onClick={onRemove}
-            >
-              <i className="ion-md-close" />
-            </button>
-          )}
-        </div>
-      </>
-    )}
-  </InviteeOrMemberBox>
-);
-
-const MembersAddSubTab: React.FC<{
-  organizationId: number;
-  onChangeSubTab(): void;
-}> = ({ organizationId, onChangeSubTab }) => (
-  <Layout>
-    <ButtonWithIcon
-      size="padded"
-      onClick={onChangeSubTab}
-      icon={<Icon name="chevron-left" />}
-      text="Member List"
-    />
-    <div>
-      <header className="mb-4 text-3xl font-bold">Invite New Members</header>
-      <p className="mb-12 leading-6 text-grey-666">
-        Members have viewing & editing access to all organization models. <br />
-        If you are on a plan, your pricing will be adjusted within 24 hours.
-      </p>
-      <MemberAddForm organizationId={organizationId} />
-    </div>
-  </Layout>
-);
+import { useState } from "react";
+import { CollectionAvatar } from "~/components/collections/ModelCollection";
+import { Icon } from "~/components/workspace/Icon";
+import { FieldHelp } from "~/components/workspace/FieldHelp";
+import { MemberAddForm } from "../shared/MemberAddForm";
+import styles from "../../collections/collections.module.css";
+import account from "../../account/account.module.css";
 
 type Props = {
   organizationId: number;
@@ -159,46 +12,90 @@ type Props = {
   members: any[];
   memberships: any[];
   invitations: any[];
-  admin_id: string;
+  admin_id: string | number;
   onRemove(member: any): void;
   meIsAdmin: boolean;
 };
-
-export const MembersTab: React.FC<Props> = ({
+export function MembersTab({
+  organizationId,
+  startOnIndexTab,
   members,
   memberships,
   invitations,
   admin_id,
   onRemove,
   meIsAdmin,
-  organizationId,
-  startOnIndexTab,
-}) => {
-  const [indexTabOpen, setIndexTabOpen] = useState(startOnIndexTab);
-
-  const unjoinedInvitees = invitations.filter(
-    (i) => !_.some(memberships, (m) => m.invitation_id === i.id)
+}: Props) {
+  const [adding, setAdding] = useState(!startOnIndexTab);
+  const pending = invitations.filter(
+    (invitation) =>
+      !memberships.some(
+        (membership) => membership.invitation_id === invitation.id
+      )
   );
-  const onChangeSubTab = () => {
-    setIndexTabOpen(!indexTabOpen);
-  };
-
   return (
-    <div className="mb-16">
-      {indexTabOpen ? (
-        <MembersIndexSubTab
-          {...{
-            members,
-            invitations: unjoinedInvitees,
-            admin_id,
-            onRemove,
-            onChangeSubTab,
-            meIsAdmin,
-          }}
-        />
+    <section>
+      <div className={styles.memberToolbar}>
+        <h2>{adding ? "Invite members" : `Members · ${members.length}`}</h2>
+        {meIsAdmin && (
+          <button
+            className={account.secondary}
+            onClick={() => setAdding((value) => !value)}
+          >
+            {adding ? "Back to members" : "Invite members"}
+          </button>
+        )}
+      </div>
+      {adding && meIsAdmin ? (
+        <div className={`${account.card} ${account.organizationCard}`}>
+          <div className={account.cardHeading}>
+            <h2>Add someone to your team</h2>
+            <FieldHelp label="About member access">
+              <p>
+                Members can view and edit the organization’s models. For a paid
+                organization, adding members affects your bill.
+              </p>
+            </FieldHelp>
+          </div>
+          <MemberAddForm organizationId={organizationId} />
+        </div>
       ) : (
-        <MembersAddSubTab {...{ organizationId, onChangeSubTab }} />
+        <div className={styles.memberList}>
+          {members.map((member) => (
+            <div className={styles.memberRow} key={member.id}>
+              <CollectionAvatar name={member.name} picture={member.picture} />
+              <a className={styles.memberName} href={`/users/${member.id}`}>
+                {member.name || "Member"}
+              </a>
+              <span className={styles.memberRole}>
+                {String(member.id) === String(admin_id) ? "Admin" : "Member"}
+              </span>
+              {meIsAdmin &&
+                member.membershipId &&
+                String(member.id) !== String(admin_id) && (
+                  <button
+                    className={styles.removeMember}
+                    aria-label={`Remove ${member.name || "member"}`}
+                    onClick={() => onRemove(member)}
+                  >
+                    <Icon name="close" />
+                  </button>
+                )}
+            </div>
+          ))}
+          {meIsAdmin &&
+            pending.map((invitation) => (
+              <div className={styles.memberRow} key={invitation.id}>
+                <Icon name="mail" />
+                <span className={styles.memberName}>{invitation.email}</span>
+                <span className={styles.memberRole}>Invited</span>
+              </div>
+            ))}
+          {!members.length && (
+            <p className={account.muted}>No members to show.</p>
+          )}
+        </div>
       )}
-    </div>
+    </section>
   );
-};
+}

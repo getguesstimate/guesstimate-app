@@ -5,6 +5,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export type MeProfile = ApiUser & {
   needs_tutorial: boolean;
+  private_model_count?: number;
   has_payment_account?: boolean;
   plan: {
     id: string;

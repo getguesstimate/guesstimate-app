@@ -128,7 +128,9 @@
   position: absolute;
   top: calc(100% + 10px);
   right: 0;
-  width: 220px;
+  width: max-content;
+  min-width: 168px;
+  max-width: min(220px, calc(100vw - 20px));
   padding: 6px;
   border: 1px solid #d8e2eb;
   background: #fff;
@@ -138,7 +140,8 @@
 .accountMenu p {
   font-size: 12px;
   color: #64798b;
-  padding: 10px 12px;
+  padding: 7px 10px;
+  line-height: 18px;
   border-bottom: 1px solid #e5ebf0;
   margin-bottom: 4px;
   overflow-wrap: anywhere;
@@ -147,7 +150,8 @@
 .accountMenu button {
   display: block;
   width: 100%;
-  padding: 10px 12px;
+  padding: 8px 10px;
+  line-height: 18px;
   text-align: left;
   background: none;
   border: 0;
@@ -908,6 +912,7 @@
   margin: 0;
 }
 .fieldHelpButton {
+  flex-shrink: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -920,6 +925,7 @@
   color: #698297;
   cursor: pointer;
 }
+.fieldHelpButton svg { width: 18px; height: 18px; flex-shrink: 0; }
 .fieldHelpButton:hover,
 .fieldHelpButton[aria-expanded="true"] {
   color: #346e93;
@@ -930,7 +936,7 @@
   outline-offset: 2px;
 }
 .fieldHelpPopover {
-  z-index: 1000;
+  z-index: 1200;
   width: 280px;
   max-width: calc(100vw - 24px);
   padding: 14px 16px;
@@ -1446,9 +1452,9 @@
   .sheetToolbar {
     height: auto;
     min-height: 56px;
-    flex-wrap: wrap;
-    padding: 8px;
-    gap: 4px;
+    flex-wrap: nowrap;
+    padding: 8px 6px;
+    gap: 2px;
   }
   .sheetToolbar > button,
   .sheetToolbar > button.iconButton {
@@ -1463,9 +1469,10 @@
 }
 
 @media (max-width: 359px) and (any-pointer: coarse) {
+  .sheetToolbar { padding-inline: 4px; }
   .sheetToolbar > button,
   .sheetToolbar > button.iconButton { width: 36px; min-width: 36px; height: 36px; }
-  .sheetToolbar > .addButton { width: auto; }
+  .sheetToolbar > .addButton { width: auto; padding-inline: 4px; gap: 4px; }
 }
 
 .canvas > .sheetSelection { left: 20px; bottom: 18px; }
@@ -1542,7 +1549,7 @@
 
 .modelHeader .documentTitle { flex: 1; flex-direction: column; align-items: flex-start; gap: 1px; }
 .modelHeader .documentTitle h1 { max-width: 100%; }
-.modelTitleButton { display: flex; align-items: center; gap: 8px; max-width: 100%; padding: 0; border: 0; background: transparent; color: inherit; font-weight: 600 !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.modelTitleButton { display: flex; text-align: left; align-items: center; gap: 8px; max-width: 100%; padding: 0; border: 0; background: transparent; color: inherit; font-weight: 600 !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .modelTitleButton span { flex-shrink: 0; }
 .modelMode { display: flex; align-items: center; gap: 4px; }
 .modelMode select, .modelDialog select { font: inherit; border: 1px solid #d6e0e8; border-radius: 6px; padding: 6px 8px; background: #fff; color: #354d60; }
@@ -1567,15 +1574,16 @@
 .modelDialog .field { margin-bottom: 16px; }
 .modelDialog .noteMarkdown { overflow-wrap: anywhere; }
 .modelDialog .noteMarkdown img { max-width: 100%; }
-.modelSectionHeading .noteAction { flex-shrink: 0; }
-.modelTitleButton > span:first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; flex: 1; }
+.modelSectionHeading .noteAction { flex-shrink: 0; display: inline-flex; align-items: center; gap: 6px; }
+.modelSectionHeading .noteAction svg { width: 15px; height: 15px; }
+.modelTitleButton > span:first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; flex: 0 1 auto; }
 .mobileViewSwitch { display: none; }
 @media (max-width: 650px) {
   .modelHeader { display: flex; flex-wrap: nowrap; height: 54px; min-height: 54px; gap: 6px; padding: 0 8px; }
   .modelHeader .brand img { width: 20px; height: 20px; }
   .modelHeader .documentTitle { display: flex; flex: 1; max-width: none; position: static; width: auto; height: auto; overflow: hidden; clip-path: none; }
   .modelHeader .documentTitle h1 { width: 100%; }
-  .modelHeader .modelTitleButton { width: 100%; gap: 2px; font-size: 12px !important; }
+  .modelHeader .modelTitleButton { width: fit-content; gap: 4px; font-size: 12px !important; }
   .modelHeader .temporary { display: block; width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .modelHeader .temporary::before { display: none; }
   .modelHeader .account { margin-left: 0; }
@@ -1583,7 +1591,6 @@
   .modelHeader .mobileViewSwitch { display: block; width: 70px; flex-shrink: 0; font: inherit; font-size: 11px; padding: 6px 2px; border: 1px solid #d6e0e8; border-radius: 6px; background: #f5f8fb; color: #354d60; }
   .modelHeader .modelMode { gap: 2px; flex-shrink: 0; }
   .modelHeader .modelMode select { width: 72px; font-size: 11px; padding: 6px 2px; }
-  .modelHeader .modelMode button { width: 18px; min-width: 18px; }
   .modelHeader .signIn { width: 30px; min-width: 30px; padding: 4px; gap: 0; }
   .modelHeader .signIn span { display: none; }
   .modelDialogBody { padding: 14px; }
@@ -1598,4 +1605,126 @@
 @media (max-width: 650px) {
   .modelHeader .viewOnlyMode select { display: none; }
   .mobileModeStatus { display: inline; font-size: 11px; color: #657584; }
+}
+
+.accountTrigger {
+  border-radius: 50%;
+  padding: 3px;
+}
+.accountAvatar,
+.accountInitials {
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  min-height: 28px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.accountAvatar {
+  object-fit: cover;
+}
+.accountInitials {
+  display: grid;
+  place-items: center;
+  background: #e8f0f6;
+  color: #395e79;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.accountMenu .mobileMyModels,
+.accountMenu .mobileNewModel {
+  display: none;
+}
+@media (max-width: 650px) {
+  .accountMenu .mobileMyModels,
+  .accountMenu .mobileNewModel {
+    display: block;
+  }
+}
+
+.accountSupport {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border-top: 1px solid #e3eaf0;
+  margin-top: 6px;
+  padding-top: 6px;
+}
+.accountSupport a {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+}
+.accountSupport svg {
+  width: 19px;
+  height: 19px;
+}
+.accountMenu {
+  max-height: calc(100dvh - 76px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+@media (pointer: coarse) {
+  .accountMenu > a, .accountMenu > button { min-height: 40px; display: flex; align-items: center; }
+  .accountMenu > .mobileMyModels { display: none; }
+}
+@media (pointer: coarse) and (max-width: 650px) {
+  .accountMenu > .mobileMyModels { display: flex; }
+}
+
+.accountMenu > a, .accountMenu > button { margin-bottom: 2px; white-space: nowrap; }
+
+.modelModalOpen { overflow: hidden; }
+.modelDialog > .noteDialogHeading h2 { flex: 1; min-width: 0; overflow-wrap: anywhere; font-size: 17px; line-height: 1.4; }
+.modelDialog > .noteDialogHeading { gap: 8px; }
+.modelDialogBody { overscroll-behavior: contain; }
+.modelTool > div { padding: 0; }
+.modelSections { display: flex; gap: 4px; padding: 0 0 14px; margin-bottom: 20px; border-bottom: 1px solid #e3eaf0; }
+.modelSections button { border: 0; border-radius: 6px; background: transparent; color: #62788a; padding: 8px 10px; font-size: 12px !important; }
+.modelSections button[aria-current] { background: #edf4f9; color: #315c77; font-weight: 600; }
+.modelToolList { display: grid; gap: 8px; }
+.modelToolList > button { display: flex; align-items: center; text-align: left; border: 1px solid #dce5ec; border-radius: 8px; padding: 12px; background: #fff; }
+.modelToolList > button:hover { background: #f5f8fb; }
+.modelToolList > button::after { content: ''; width: 6px; height: 6px; margin-left: auto; border-top: 1px solid #71899b; border-right: 1px solid #71899b; transform: rotate(45deg); flex-shrink: 0; }
+.modelToolList > .modelDelete { margin-top: 16px; border-color: #e3cbc8; }
+.modelFeedback { color: #346d56; font-size: 12px; margin: 8px 0; }
+.modelFormFooter { justify-content: flex-end; border-top: 1px solid #e3eaf0; padding-top: 16px; margin-top: 20px; }
+.modelDialogBody > .modelSection, .modelSections + .modelSection { border-top: 0; margin-top: 0; padding-top: 0; }
+.newCalculator { display: inline-flex; align-items: center; gap: 7px; min-height: 36px; margin: 4px 0 16px; padding: 7px 11px; border: 1px solid #bfd1df; border-radius: 7px; background: #edf4f9; color: #315c77; font-size: 13px !important; font-weight: 600 !important; }
+.newCalculator:hover { background: #e1edf5; border-color: #97b7cb; }
+.newCalculator svg { width: 16px; height: 16px; }
+.privacyNotice { width: min(420px, calc(100vw - 24px)); }
+.privacyExplanation { margin: 0 0 24px; color: #526d81; font-size: 14px; line-height: 1.6; }
+.privacyActions { display: flex; justify-content: flex-end; align-items: center; gap: 10px; }
+.privacyActions a { display: inline-flex; align-items: center; min-height: 36px; text-decoration: none; }
+
+.modelToolSections > .modelSection:first-child { border-top: 0; margin-top: 0; padding-top: 0; }
+
+.mobileSelectionToggle { display: none; }
+@media (max-width: 650px) {
+  .desktopSelectionTool { display: none; }
+  .mobileSelectionToggle { display: inline-flex; }
+}
+
+@media (max-width: 650px) {
+  .addNodeWord { display: none; }
+}
+@media (max-width: 360px) {
+  .addLabel { display: none; }
+  .toolbar > .addButton, .sheetToolbar > .addButton { min-width: 36px; width: 36px; justify-content: center; padding: 0; gap: 0; }
+}
+
+@media (max-width: 650px) {
+  .sheetToolbar > .fieldHelpButton { margin-left: auto; }
+  .sheetToolbar > button[aria-label="Download JSON"] { margin-left: 0; }
+}
+
+.mobileSelectionToggle[aria-pressed="true"], .mobileSelectionToggle:hover:not(:disabled) {
+  color: #5a7489;
+  background: transparent;
 }

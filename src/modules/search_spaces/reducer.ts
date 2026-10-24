@@ -4,6 +4,7 @@ import { SearchSortBy } from "./actions";
 export type ModelSearchHit = {
   id: number;
   objectID: string;
+  is_private?: boolean;
   name?: string;
   description?: string;
   big_screenshot?: string;

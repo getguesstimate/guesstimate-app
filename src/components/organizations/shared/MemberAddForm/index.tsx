@@ -1,119 +1,65 @@
-import React, { useEffect, useRef, useState } from "react";
+import { FormEvent, useRef, useState } from "react";
+import { useAppDispatch } from "~/modules/hooks";
+import { inviteMember } from "~/components/account/organizationActions";
+import styles from "../../../account/account.module.css";
 
-import _ from "lodash";
-import { Button } from "~/components/utility/buttons/button";
-import { Input } from "~/components/utility/forms";
-import { Message } from "~/components/utility/Message";
-import { useAppDispatch, useAppSelector } from "~/modules/hooks";
-import * as userOrganizationMembershipActions from "~/modules/userOrganizationMemberships/actions";
-
-import { httpRequestSelector } from "./httpRequestSelector";
-
-function validateEmail(email: string) {
-  const re =
-    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(email);
-}
-
-export const MemberAddForm: React.FC<{ organizationId: number }> = ({
-  organizationId,
-}) => {
-  const [value, setValue] = useState("");
-  const input = useRef<HTMLInputElement | null>(null);
+export function MemberAddForm({ organizationId }: { organizationId: number }) {
   const dispatch = useAppDispatch();
-  const { httpRequests } = useAppSelector((state) =>
-    httpRequestSelector(state, organizationId)
-  );
-
-  useEffect(() => {
-    input.current?.focus();
-  }, []);
-
-  const email = value.trim();
-
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
-  };
-
-  const onKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && validateEmail(email)) {
-      submit();
+  const [email, setEmail] = useState("");
+  const [busy, setBusy] = useState(false);
+  const inFlight = useRef(false);
+  const [error, setError] = useState("");
+  const [sent, setSent] = useState<{ email: string; added: boolean }[]>([]);
+  const submit = async (event: FormEvent) => {
+    event.preventDefault();
+    if (inFlight.current || !email.trim()) return;
+    const address = email.trim();
+    inFlight.current = true;
+    setBusy(true);
+    setError("");
+    try {
+      const added = await dispatch(inviteMember(organizationId, address));
+      setSent((previous) => [{ email: address, added }, ...previous]);
+      setEmail("");
+    } catch {
+      setError(
+        "Couldn’t invite this member. Check the email address and try again."
+      );
+    } finally {
+      inFlight.current = false;
+      setBusy(false);
     }
   };
-
-  const submit = () => {
-    dispatch(
-      userOrganizationMembershipActions.createWithEmail(organizationId, email)
-    );
-    setValue("");
-  };
-
-  const isValid = validateEmail(email);
-
-  const requests = _.orderBy(
-    _.cloneDeep(httpRequests),
-    ["created_at"],
-    ["desc"]
-  );
   return (
-    <div>
-      <div>
-        <div className="mb-4 flex max-w-3xl flex-col gap-1">
-          <label className="text-sm font-bold">Email Address</label>
-          <Input
-            value={value}
-            onKeyDown={onKeyDown}
-            type="text"
-            placeholder="name@domain.com"
-            theme="padded"
-            ref={input}
-            onChange={onChange}
+    <div className={styles.form}>
+      <form onSubmit={submit} className={styles.form}>
+        <label className={styles.field}>
+          Member email
+          <input
+            type="email"
+            required
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            placeholder="name@example.com"
+            disabled={busy}
           />
-        </div>
-        <Button size="padded" color="blue" disabled={!isValid} onClick={submit}>
-          Invite User
-        </Button>
-      </div>
-      <div className="mt-8 space-y-2">
-        {requests.map((request) => (
-          <InvitationHttpRequest
-            key={request.id}
-            busy={request.busy}
-            success={request.success}
-            email={request.email}
-            isExistingMember={request.isExistingMember}
-          />
+        </label>
+        {error && (
+          <p role="alert" className={styles.error}>
+            {error}
+          </p>
+        )}
+        <button className={styles.primary} disabled={busy || !email.trim()}>
+          {busy ? "Inviting…" : "Invite member"}
+        </button>
+      </form>
+      <div className={styles.invitationList} aria-live="polite">
+        {sent.map((item, index) => (
+          <p key={`${item.email}-${index}`}>
+            {item.added ? "Added" : "Invitation sent to"} {item.email}
+          </p>
         ))}
       </div>
     </div>
   );
-};
-
-const InvitationHttpRequest: React.FC<{
-  busy: boolean;
-  success: boolean;
-  email: string;
-  isExistingMember: boolean;
-}> = ({ busy, success, email, isExistingMember }) => {
-  if (busy) {
-    return <Message>Sending...</Message>;
-  } else if (!success) {
-    return (
-      <Message theme="error">
-        Invitation to {email} failed. This could be because they are already
-        part of the organization or because of a server problem. If it
-        continues, please let us know.
-      </Message>
-    );
-  } else if (isExistingMember) {
-    return (
-      <Message theme="success">{email} was added to your organization.</Message>
-    );
-  } else {
-    return (
-      <Message theme="success">
-        {email} was sent an email invitation to join your organization.
-      </Message>
-    );
-  }
-};
+}

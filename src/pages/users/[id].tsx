@@ -1,6 +1,5 @@
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { AppLayout } from "~/components/layout";
 import { UserShow } from "~/components/users/UserShow";
 
 const UserPage: NextPage = () => {
@@ -8,9 +7,11 @@ const UserPage: NextPage = () => {
 
   const { id } = router.query;
   return (
-    <AppLayout backgroundColor="GREY">
-      {id === undefined ? null : <UserShow userId={parseInt(id as string)} />}
-    </AppLayout>
+    <>
+      {id === undefined ? null : (
+        <UserShow key={id as string} userId={parseInt(id as string)} />
+      )}
+    </>
   );
 };
 

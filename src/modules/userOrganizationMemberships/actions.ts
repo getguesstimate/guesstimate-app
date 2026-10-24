@@ -78,7 +78,7 @@ export function destroy(id: number): AppThunk {
           const membership = getState().userOrganizationMemberships.find(
             (e) => e.id === id
           );
-          if (membership) {
+          if (membership?.invitation_id != null) {
             dispatch(
               invitationActions.deleteSuccess({ id: membership.invitation_id })
             );
