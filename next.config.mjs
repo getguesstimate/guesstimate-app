@@ -22,7 +22,10 @@ let config = {
           ? [
               {
                 source: "/api/guesstimate/:path*",
-                destination: "https://api.getguesstimate.com/:path*",
+                destination: `${
+                  process.env.GUESSTIMATE_PREVIEW_API_TARGET ||
+                  "https://api.getguesstimate.com"
+                }/:path*`,
               },
             ]
           : [],
