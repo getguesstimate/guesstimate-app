@@ -7,21 +7,12 @@ import { FactItem } from "./FactItem";
 import { utils } from "~/lib/engine/engine";
 import { Fact, getVar } from "~/lib/engine/facts";
 
-import Icon from "~/components/react-fa-patched";
-import { ButtonWithIcon } from "~/components/utility/buttons/button";
+import { Icon } from "~/components/workspace/Icon";
 import { FactCategory } from "~/lib/engine/fact_category";
-
-const NewButton: React.FC<{ onClick(): void }> = ({ onClick }) => (
-  <ButtonWithIcon
-    onClick={onClick}
-    icon={<Icon name="plus" />}
-    text="New Metric"
-    wide
-  />
-);
+import styles from "./metrics.module.css";
 
 const SublistHeader: React.FC<{ text: string }> = ({ text }) => (
-  <h3 className="mb-2 mt-4 text-lg font-bold text-grey-main">{text}</h3>
+  <h3 className={styles.sectionTitle}>{text}</h3>
 );
 
 type Props = {
@@ -44,8 +35,8 @@ export class FactList extends Component<Props> {
     showNewForm: false,
   };
 
-  componentWillUpdate(newProps: Props) {
-    if (!_.isEqual(this.props.facts, newProps.facts)) {
+  componentDidUpdate(previousProps: Props) {
+    if (!_.isEqual(this.props.facts, previousProps.facts)) {
       this.setState({ editingFactId: null });
     }
   }
@@ -79,10 +70,10 @@ export class FactList extends Component<Props> {
 
     const renderFactSublist = (facts: Fact[]) => {
       return (
-        <div className="space-y-1">
+        <div className={styles.list}>
           {facts.map((fact) => (
-            <div className="border border-transparent hover:border-grey-ccc">
-              <div className="bg-white">
+            <div key={fact.id} className={styles.listItem}>
+              <div>
                 {fact.id === this.state.editingFactId ? (
                   <FactForm
                     startingFact={fact}
@@ -118,7 +109,7 @@ export class FactList extends Component<Props> {
     };
 
     const renderSpaceFacts = () => {
-      let filteredFacts = utils.mutableCopy(this.props.facts);
+      const filteredFacts = utils.mutableCopy(this.props.facts);
       const exported = _.remove(filteredFacts, isExportedFromSelectedSpaceFn);
       const imported = _.remove(filteredFacts, isImportedFromSelectedSpaceFn);
 
@@ -126,19 +117,19 @@ export class FactList extends Component<Props> {
         <div className="flex flex-col gap-4">
           {exported.length ? (
             <div>
-              <SublistHeader text="Model Output Metrics" />
+              <SublistHeader text="Model outputs" />
               {renderFactSublist(exported)}
             </div>
           ) : null}
           {imported.length ? (
             <div>
-              <SublistHeader text="Model Input Metrics" />
+              <SublistHeader text="Model inputs" />
               {renderFactSublist(imported)}
             </div>
           ) : null}
           {filteredFacts.length ? (
             <div>
-              <SublistHeader text="Other Library Metrics" />
+              <SublistHeader text="Other metrics" />
               {renderFactSublist(filteredFacts)}
             </div>
           ) : null}
@@ -147,26 +138,36 @@ export class FactList extends Component<Props> {
     };
 
     return (
-      <div>
-        {this.props.spaceId
-          ? renderSpaceFacts()
-          : renderFactSublist(this.props.facts)}
-        {this.props.canMakeNewFacts && (
-          <div className="mt-2">
-            {this.state.showNewForm ? (
-              <FactForm
-                key={this.state.newFactKey.toString()}
-                categoryId={this.props.categoryId}
-                existingVariableNames={this.props.existingVariableNames}
-                categories={this.props.categories}
-                buttonText="Create"
-                onSubmit={handleAddFact}
-                onCancel={hideNewForm}
-              />
-            ) : (
-              <NewButton onClick={showNewForm} />
-            )}
+      <div className={styles.library}>
+        {this.props.canMakeNewFacts && !this.state.showNewForm && (
+          <div className={styles.toolbar}>
+            <button
+              type="button"
+              className={styles.newButton}
+              onClick={showNewForm}
+            >
+              <Icon name="plus" />
+              New metric
+            </button>
           </div>
+        )}
+        {this.props.canMakeNewFacts && this.state.showNewForm && (
+          <FactForm
+            key={this.state.newFactKey.toString()}
+            categoryId={this.props.categoryId}
+            existingVariableNames={this.props.existingVariableNames}
+            categories={this.props.categories}
+            buttonText="Create"
+            onSubmit={handleAddFact}
+            onCancel={hideNewForm}
+          />
+        )}
+        {!this.props.facts.length ? (
+          <p className={styles.empty}>No metrics yet.</p>
+        ) : this.props.spaceId ? (
+          renderSpaceFacts()
+        ) : (
+          renderFactSublist(this.props.facts)
         )}
       </div>
     );

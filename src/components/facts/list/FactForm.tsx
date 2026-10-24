@@ -1,9 +1,10 @@
-import React, { ChangeEvent, useEffect, useRef, useState } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState, useId } from "react";
 
 import _ from "lodash";
-import { useRouter } from "next/router";
-import { Button } from "~/components/utility/buttons/button";
-import { Input, Select, Textarea } from "~/components/utility/forms";
+
+import { FieldHelp } from "~/components/workspace/FieldHelp";
+import styles from "./metrics.module.css";
+
 import { FactCategory } from "~/lib/engine/fact_category";
 import {
   Fact,
@@ -31,11 +32,11 @@ type Props = {
 };
 
 export const FactForm: React.FC<Props> = (props) => {
-  const router = useRouter();
+  const fieldId = useId();
 
-  const nameRef = useRef<HTMLTextAreaElement | null>(null);
+  const nameRef = useRef<HTMLInputElement | null>(null);
 
-  const { buttonText, onCancel, onDelete, categories = [] } = props;
+  const { buttonText, onCancel, onDelete, onSubmit, categories = [] } = props;
 
   const [runningFact, setRunningFact] = useState(() => ({
     ...(props.startingFact || {
@@ -69,12 +70,6 @@ export const FactForm: React.FC<Props> = (props) => {
     nameRef.current?.focus();
   }, []);
 
-  useEffect(() => {
-    if (currentExpressionSimulated && submissionPendingOnSimulation) {
-      handleSubmit();
-    }
-  }, [currentExpressionSimulated, submissionPendingOnSimulation]);
-
   const hasNoErrors = !hasErrors(runningFact.simulation);
 
   const isVariableNameUnique = !_.some(
@@ -84,6 +79,19 @@ export const FactForm: React.FC<Props> = (props) => {
 
   const isValid =
     hasRequiredProperties(runningFact) && hasNoErrors && isVariableNameUnique;
+
+  useEffect(() => {
+    if (currentExpressionSimulated && submissionPendingOnSimulation) {
+      setSubmissionPendingOnSimulation(false);
+      if (isValid) onSubmit(runningFact);
+    }
+  }, [
+    currentExpressionSimulated,
+    submissionPendingOnSimulation,
+    isValid,
+    onSubmit,
+    runningFact,
+  ]);
 
   const setFactState = (newFactState: Partial<Fact>) => {
     setRunningFact({
@@ -108,19 +116,14 @@ export const FactForm: React.FC<Props> = (props) => {
 
   const handleSubmit = () => {
     if (currentExpressionSimulated) {
-      props.onSubmit(runningFact);
+      if (isValid) onSubmit(runningFact);
     } else {
       setSubmissionPendingOnSimulation(true);
+      void simulateCurrentExpression();
     }
   };
 
-  const submitIfEnter = (e: React.KeyboardEvent) => {
-    if (e.code === "Enter" && isValid) {
-      handleSubmit();
-    }
-  };
-
-  const handleChangeName = (e: ChangeEvent<HTMLTextAreaElement>) => {
+  const handleChangeName = (e: ChangeEvent<HTMLInputElement>) => {
     const name = e.currentTarget.value;
     setFactState(
       variableNameManuallySet
@@ -145,90 +148,136 @@ export const FactForm: React.FC<Props> = (props) => {
     setCurrentExpressionSimulated(false);
   };
 
-  const renderEditExpressionSection = () => {
-    if (isExportedFromSpace(runningFact)) {
-      const exported_from_url = `${spaceUrlById(
-        runningFact.exported_from_id
-      )}?factsShown=true`;
-      return (
-        <Button size="small" onClick={() => router.push(exported_from_url)}>
-          Edit Model
-        </Button>
-      );
-    } else {
-      return (
-        <Input
-          type="text"
-          placeholder="value"
-          value={runningFact.expression}
-          onChange={handleChangeExpression}
-          onBlur={simulateCurrentExpression}
-          onKeyDown={submitIfEnter}
-          error={!hasNoErrors}
-        />
-      );
-    }
-  };
-
   return (
-    <div className="flex gap-4 p-2">
-      <div>{renderEditExpressionSection()}</div>
-      <div className="flex flex-1 flex-col items-stretch gap-1">
-        <Textarea
-          rows={1}
-          placeholder="name"
-          value={runningFact.name}
-          onChange={handleChangeName}
-          onKeyDown={submitIfEnter}
-          className="w-full"
-          ref={nameRef}
-          error={!isVariableNameUnique}
-        />
-        <div className="relative">
-          <span className="absolute left-2 top-1 text-grey-999">#</span>
-          <Input
-            className="w-full pl-5" /* to fit # prefix */
-            type="text"
-            placeholder="hashtag"
-            value={runningFact.variable_name}
-            onChange={handleChangeVariableName}
-            onKeyDown={submitIfEnter}
+    <form
+      className={styles.form}
+      onSubmit={(event) => {
+        event.preventDefault();
+        handleSubmit();
+      }}
+    >
+      <div className={styles.fields}>
+        <div className={styles.field}>
+          <label htmlFor={`${fieldId}-name`}>Name</label>
+          <input
+            id={`${fieldId}-name`}
+            ref={nameRef}
+            value={runningFact.name}
+            onChange={handleChangeName}
           />
         </div>
-        {!_.isEmpty(categories) && (
-          <Select
-            className="w-48"
-            value={runningFact.category_id || ""}
-            onChange={handleSelectCategory}
-          >
-            <option value="">Uncategorized</option>
-            {categories.map(({ id, name }) => (
-              <option value={id} key={id}>
-                {name}
-              </option>
-            ))}
-          </Select>
-        )}
-        <div className="flex items-center gap-1">
-          <Button
-            color="blue"
-            size="small"
-            onClick={handleSubmit}
-            loading={submissionPendingOnSimulation}
-            disabled={submissionPendingOnSimulation || !isValid}
-          >
-            {buttonText}
-          </Button>
-          <Button size="small" onClick={onCancel}>
-            Cancel
-          </Button>
-          {onDelete && (
-            <Button size="small" onClick={onDelete}>
-              Delete
-            </Button>
+        <div className={styles.field}>
+          <div className={styles.fieldHeading}>
+            <label htmlFor={`${fieldId}-variable`}>Variable</label>
+            <FieldHelp label="Help with metric variables">
+              <p>Use this variable to reference the metric in formulas.</p>
+            </FieldHelp>
+          </div>
+          <div className={styles.variableInput}>
+            <span aria-hidden="true">#</span>
+            <input
+              id={`${fieldId}-variable`}
+              value={runningFact.variable_name}
+              onChange={handleChangeVariableName}
+              aria-invalid={!isVariableNameUnique}
+              aria-describedby={
+                !isVariableNameUnique ? `${fieldId}-variable-error` : undefined
+              }
+            />
+          </div>
+          {!isVariableNameUnique && (
+            <p
+              id={`${fieldId}-variable-error`}
+              className={styles.error}
+              role="alert"
+            >
+              This variable is already in use.
+            </p>
           )}
         </div>
+        <div className={styles.field}>
+          {isExportedFromSpace(runningFact) ? (
+            <>
+              <span className={styles.label}>Value</span>
+              <a
+                className={styles.secondary}
+                href={`${spaceUrlById(
+                  runningFact.exported_from_id
+                )}?factsShown=true`}
+              >
+                Edit source model
+              </a>
+            </>
+          ) : (
+            <>
+              <div className={styles.fieldHeading}>
+                <label htmlFor={`${fieldId}-value`}>Value</label>
+                <FieldHelp label="Help with metric values">
+                  <p>Enter a number, a range such as 10 to 20, or data.</p>
+                </FieldHelp>
+              </div>
+              <input
+                id={`${fieldId}-value`}
+                value={runningFact.expression}
+                onChange={handleChangeExpression}
+                onBlur={simulateCurrentExpression}
+                aria-invalid={!hasNoErrors}
+                aria-describedby={
+                  !hasNoErrors ? `${fieldId}-value-error` : undefined
+                }
+              />
+              {!hasNoErrors && (
+                <p
+                  id={`${fieldId}-value-error`}
+                  className={styles.error}
+                  role="alert"
+                >
+                  Enter a valid value or range.
+                </p>
+              )}
+            </>
+          )}
+        </div>
+        {!!categories.length && (
+          <div className={styles.field}>
+            <label htmlFor={`${fieldId}-category`}>Category</label>
+            <select
+              id={`${fieldId}-category`}
+              value={runningFact.category_id || ""}
+              onChange={handleSelectCategory}
+            >
+              <option value="">Uncategorized</option>
+              {categories.map(({ id, name }) => (
+                <option value={id} key={id}>
+                  {name}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
       </div>
-    </div>
+      <div className={styles.formActions}>
+        <button
+          type="submit"
+          className={styles.primary}
+          disabled={
+            submissionPendingOnSimulation ||
+            !hasRequiredProperties(runningFact) ||
+            !isVariableNameUnique ||
+            (currentExpressionSimulated && !hasNoErrors)
+          }
+        >
+          {submissionPendingOnSimulation ? "Checking…" : buttonText}
+        </button>
+        <button type="button" className={styles.secondary} onClick={onCancel}>
+          Cancel
+        </button>
+        {onDelete && (
+          <button type="button" className={styles.danger} onClick={onDelete}>
+            Delete
+          </button>
+        )}
+      </div>
+    </form>
   );
 };
