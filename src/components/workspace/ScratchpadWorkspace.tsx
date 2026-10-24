@@ -177,6 +177,15 @@ export function ScratchpadWorkspace({
   const viewport = useRef<HTMLDivElement>(null);
   const gesture = useRef<Gesture | null>(null);
   const pointers = useRef(new Map<number, Point>());
+  const touchTap = useRef<{ id: number; point: Point; time: number } | null>(
+    null
+  );
+  const previousTouchTap = useRef<{ point: Point; time: number } | null>(null);
+  const lastTouchTime = useRef(0);
+  useEffect(() => {
+    touchTap.current = null;
+    previousTouchTap.current = null;
+  }, [viewMode, areaMode, spaceHeld]);
   const fitted = useRef(false);
   const selected = metrics.find((m) => m.id === selectedId);
   const metricsRef = useRef(metrics);
@@ -819,6 +828,15 @@ export function ScratchpadWorkspace({
     event.currentTarget.setPointerCapture(event.pointerId);
   };
   const movePointer = (event: React.PointerEvent<HTMLDivElement>) => {
+    const tap = touchTap.current;
+    if (
+      tap &&
+      tap.id === event.pointerId &&
+      Math.hypot(event.clientX - tap.point.x, event.clientY - tap.point.y) > 8
+    ) {
+      touchTap.current = null;
+      previousTouchTap.current = null;
+    }
     if (!pointers.current.has(event.pointerId)) return;
     const point = localPoint(event);
     pointers.current.set(event.pointerId, point);
@@ -861,6 +879,44 @@ export function ScratchpadWorkspace({
   };
   const endPointer = (event: React.PointerEvent<HTMLDivElement>) => {
     const current = gesture.current;
+    let createAt: Point | undefined;
+    if (event.pointerType === "touch") {
+      const now = Date.now();
+      lastTouchTime.current = now;
+      const tap = touchTap.current;
+      touchTap.current = null;
+      if (
+        tap?.id === event.pointerId &&
+        now - tap.time <= 300 &&
+        Math.hypot(event.clientX - tap.point.x, event.clientY - tap.point.y) <=
+          8 &&
+        current?.kind === "pan" &&
+        !current.moved &&
+        !areaMode &&
+        !spaceHeld &&
+        pointers.current.size === 1
+      ) {
+        const previous = previousTouchTap.current;
+        if (
+          previous &&
+          now - previous.time <= 350 &&
+          Math.hypot(
+            event.clientX - previous.point.x,
+            event.clientY - previous.point.y
+          ) <= 24
+        ) {
+          createAt = toWorld(localPoint(event), viewRef.current);
+          previousTouchTap.current = null;
+        } else {
+          previousTouchTap.current = {
+            point: { x: event.clientX, y: event.clientY },
+            time: now,
+          };
+        }
+      } else {
+        previousTouchTap.current = null;
+      }
+    }
     if (current?.kind === "pan" && current.deselectOnClick && !current.moved) {
       setCanvasSelection([]);
       closeDetails();
@@ -875,6 +931,7 @@ export function ScratchpadWorkspace({
       const point = [...pointers.current.values()][0];
       gesture.current = { kind: "pan", start: point, origin: viewRef.current };
     }
+    if (createAt) add(createAt);
   };
 
   const download = () => {
@@ -882,7 +939,14 @@ export function ScratchpadWorkspace({
       name: isScratchpad ? "Scratchpad" : space.name,
       description: space.description,
       metrics: metrics.map(
-        ({ id, name, readableId, location, canvasPosition, showNotesOnNode }) => ({
+        ({
+          id,
+          name,
+          readableId,
+          location,
+          canvasPosition,
+          showNotesOnNode,
+        }) => ({
           id,
           name,
           readableId,
@@ -976,6 +1040,27 @@ export function ScratchpadWorkspace({
               delete event.currentTarget.dataset.pointerFocus;
           }}
           onPointerDownCapture={(event) => {
+            if (event.pointerType === "touch") {
+              lastTouchTime.current = Date.now();
+              if (
+                pointers.current.size === 0 &&
+                !areaMode &&
+                !spaceHeld &&
+                !event.shiftKey &&
+                !(event.target as Element).closest(
+                  "[data-node], [data-canvas-control]"
+                )
+              ) {
+                touchTap.current = {
+                  id: event.pointerId,
+                  point: { x: event.clientX, y: event.clientY },
+                  time: Date.now(),
+                };
+              } else {
+                touchTap.current = null;
+                previousTouchTap.current = null;
+              }
+            }
             // Dragging captures the pointer on the canvas, which can also
             // retarget dblclick. Preserve the original hit before capture.
             canvasPointerStartedOnNode.current = !!(
@@ -997,6 +1082,8 @@ export function ScratchpadWorkspace({
           onPointerMove={movePointer}
           onPointerUp={endPointer}
           onPointerCancel={(event) => {
+            touchTap.current = null;
+            previousTouchTap.current = null;
             if (gesture.current?.kind === "select")
               setCanvasSelection(selectionBeforeGesture.current);
             setSelectionBox(null);
@@ -1008,6 +1095,8 @@ export function ScratchpadWorkspace({
               event.currentTarget.releasePointerCapture(event.pointerId);
           }}
           onDoubleClick={(event) => {
+            // Touch taps are handled above; ignore compatibility mouse events.
+            if (Date.now() - lastTouchTime.current < 700) return;
             if (
               !areaMode &&
               !event.shiftKey &&
@@ -1140,16 +1229,20 @@ export function ScratchpadWorkspace({
             <button
               type="button"
               className={styles.addButton}
+              aria-label="Add node"
+              title="Add node"
               onClick={() => add()}
               disabled={loading || error}
             >
               <Icon name="plus" />
-              <span>Add node</span>
+              <span className={styles.addLabel}>
+                Add<span className={styles.addNodeWord}> node</span>
+              </span>
             </button>
             <span className={styles.divider} />
             <button
               type="button"
-              className={styles.iconButton}
+              className={`${styles.iconButton} ${styles.desktopSelectionTool}`}
               aria-label="Select nodes"
               aria-pressed={!areaMode}
               onClick={() => {
@@ -1161,7 +1254,7 @@ export function ScratchpadWorkspace({
             </button>
             <button
               type="button"
-              className={styles.iconButton}
+              className={`${styles.iconButton} ${styles.desktopSelectionTool}`}
               aria-label="Select an area"
               title="Select an area"
               aria-pressed={areaMode}
@@ -1170,6 +1263,20 @@ export function ScratchpadWorkspace({
               }}
             >
               <Icon name="selection" />
+            </button>
+            <button
+              type="button"
+              className={`${styles.iconButton} ${styles.mobileSelectionToggle}`}
+              aria-label="Area selection"
+              aria-pressed={areaMode}
+              title={
+                areaMode
+                  ? "Switch to normal selection"
+                  : "Switch to area selection"
+              }
+              onClick={() => setAreaMode(!areaMode)}
+            >
+              <Icon name={areaMode ? "selection" : "cursor"} />
             </button>
             <span className={styles.divider} />
             <button

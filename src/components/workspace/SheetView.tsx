@@ -128,9 +128,15 @@ export function SheetView(props: Props) {
     const next = Math.max(MIN_SHEET_SCALE, Math.min(MAX_SHEET_SCALE, value));
     const anchorX = x ?? box.clientWidth / 2;
     const anchorY = y ?? box.clientHeight / 2;
+    if (next === zoomRef.current) return;
+    // Wheel events can arrive before React applies the preceding zoom.
+    const currentScroll = pendingScroll.current ?? {
+      x: box.scrollLeft,
+      y: box.scrollTop,
+    };
     pendingScroll.current = {
-      x: ((box.scrollLeft + anchorX) * next) / zoomRef.current - anchorX,
-      y: ((box.scrollTop + anchorY) * next) / zoomRef.current - anchorY,
+      x: ((currentScroll.x + anchorX) * next) / zoomRef.current - anchorX,
+      y: ((currentScroll.y + anchorY) * next) / zoomRef.current - anchorY,
     };
     zoomRef.current = next;
     setZoom(next);
@@ -162,9 +168,13 @@ export function SheetView(props: Props) {
           : event.deltaMode === 2
           ? box.clientHeight
           : 1;
+      const delta = event.deltaY * unit;
+      // Keep Ctrl+wheel predictable across pixel-, line- and page-based mice.
+      const exponent = event.ctrlKey
+        ? Math.max(-0.12, Math.min(0.12, -delta * 0.001))
+        : -delta * 0.002;
       zoomTo(
-        zoomRef.current *
-          Math.exp(-event.deltaY * unit * (event.ctrlKey ? 0.01 : 0.002)),
+        zoomRef.current * Math.exp(exponent),
         event.clientX - rect.left,
         event.clientY - rect.top
       );
@@ -391,12 +401,14 @@ export function SheetView(props: Props) {
           onClick={add}
         >
           <Icon name="plus" />
-          <span className={styles.sheetAddLabel}>Add node</span>
+          <span className={styles.addLabel}>
+            Add<span className={styles.addNodeWord}> node</span>
+          </span>
         </button>
         <span className={styles.divider} />
         <button
           type="button"
-          className={`${styles.iconButton} ${styles.sheetSelectTool}`}
+          className={`${styles.iconButton} ${styles.desktopSelectionTool} ${styles.sheetSelectTool}`}
           aria-label="Select tool"
           aria-pressed={!hand && !areaMode}
           onClick={() => {
@@ -420,7 +432,7 @@ export function SheetView(props: Props) {
         </button>
         <button
           type="button"
-          className={`${styles.iconButton} ${styles.touchSelectionTool}`}
+          className={`${styles.iconButton} ${styles.desktopSelectionTool} ${styles.touchSelectionTool}`}
           aria-label="Select an area"
           title="Select an area"
           aria-pressed={areaMode}
@@ -430,6 +442,21 @@ export function SheetView(props: Props) {
           }}
         >
           <Icon name="selection" />
+        </button>
+        <button
+          type="button"
+          className={`${styles.iconButton} ${styles.mobileSelectionToggle}`}
+          aria-label="Area selection"
+          aria-pressed={areaMode}
+          title={
+            areaMode ? "Switch to normal selection" : "Switch to area selection"
+          }
+          onClick={() => {
+            setAreaMode(!areaMode);
+            setHand(false);
+          }}
+        >
+          <Icon name={areaMode ? "selection" : "cursor"} />
         </button>
         <button
           type="button"
@@ -462,10 +489,11 @@ export function SheetView(props: Props) {
             selected header to move the whole group. Drag a node’s header to
             move it to an empty cell. Use the hand tool or hold Space to drag
             the sheet. Swipe to pan on touch screens; pinch to zoom. The mouse
-            wheel scrolls in Select mode and zooms in Hand mode. Ctrl/⌘ D
-            duplicates selected nodes. While editing a value, Enter moves down
-            and Tab moves right, creating a node if the next cell is empty.
-            Formulas use the reference IDs on nodes.
+            wheel scrolls in Select mode and zooms in Hand mode. Ctrl + scroll
+            zooms around the pointer in either mode. Ctrl/⌘ D duplicates
+            selected nodes. While editing a value, Enter moves down and Tab
+            moves right, creating a node if the next cell is empty. Formulas use
+            the reference IDs on nodes.
           </p>
         </FieldHelp>
         <button
