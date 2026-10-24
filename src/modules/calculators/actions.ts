@@ -13,7 +13,7 @@ import { Calculator } from "./reducer";
 
 export const sActions = reduxCrud.actionCreatorsFor("calculators");
 
-export function fetchById(id: number): AppThunk {
+export function fetchById(id: number): AppThunk<Promise<void>> {
   return async (dispatch, getState) => {
     dispatch(sActions.fetchStart());
 
@@ -38,11 +38,16 @@ export function fetchById(id: number): AppThunk {
   };
 }
 
-export function destroy(id: number): AppThunk {
+export function destroy(id: number): AppThunk<Promise<void>> {
   return async (dispatch, getState) => {
     dispatch(sActions.deleteStart({ id }));
-    await api(getState()).calculators.destroy(id);
-    dispatch(sActions.deleteSuccess({ id }));
+    try {
+      await api(getState()).calculators.destroy(id);
+      dispatch(sActions.deleteSuccess({ id }));
+    } catch (error) {
+      dispatch(sActions.deleteError(error, { id }));
+      throw error;
+    }
   };
 }
 
@@ -50,31 +55,43 @@ export function create(
   spaceId: number,
   calculator: Omit<Calculator, "id" | "space_id">,
   callback: (c: Calculator) => void
-): AppThunk {
+): AppThunk<Promise<void>> {
   return async (dispatch, getState) => {
     const record = { ...calculator, id: cuid() };
     dispatch(sActions.createStart(record));
 
-    const created = await api(getState()).calculators.create(
-      spaceId,
-      calculator
-    );
-    dispatch(sActions.createSuccess(created, record.id));
-    callback(created);
+    try {
+      const created = await api(getState()).calculators.create(
+        spaceId,
+        calculator
+      );
+      dispatch(sActions.createSuccess(created, record.id));
+      callback(created);
+    } catch (error) {
+      dispatch(sActions.createError(error, record));
+      throw error;
+    }
   };
 }
 
 export function update(
   calculator: Calculator,
   callback: (c: Calculator) => void
-): AppThunk {
+): AppThunk<Promise<void>> {
   return async (dispatch, getState) => {
+    const previous = getState().calculators.find((c) => c.id === calculator.id);
     dispatch(sActions.updateStart(calculator));
-    const updated = await api(getState()).calculators.update(
-      calculator.id,
-      calculator
-    );
-    dispatch(sActions.updateSuccess(updated));
-    callback(updated);
+    try {
+      const updated = await api(getState()).calculators.update(
+        calculator.id,
+        calculator
+      );
+      dispatch(sActions.updateSuccess(updated));
+      callback(updated);
+    } catch (error) {
+      dispatch(sActions.updateError(error, calculator));
+      if (previous) dispatch(sActions.updateSuccess(previous));
+      throw error;
+    }
   };
 }

@@ -46,13 +46,13 @@ export type Props = {
   | {
       mode: "edit";
       calculator: Calculator;
-      onSubmit: (calculator: Calculator) => void;
+      onSubmit: (calculator: Calculator) => Promise<void>;
     }
   | {
       mode: "new";
       // if calculator is unset then onSubmit doesn't have to receive full calculator object
       calculator?: undefined;
-      onSubmit: (calculator: Optional<Calculator, "id">) => void;
+      onSubmit: (calculator: Optional<Calculator, "id">) => Promise<void>;
     }
 );
 
@@ -131,7 +131,7 @@ export const FormContainer: React.FC<Props> = (props) => {
   };
 
   const isValid = !(
-    _.isEmpty(state.calculator.title) ||
+    _.isEmpty(state.calculator.title?.trim()) ||
     _.isEmpty(state.calculator.input_ids) ||
     _.isEmpty(state.calculator.output_ids)
   );
@@ -172,7 +172,7 @@ export const FormContainer: React.FC<Props> = (props) => {
   const handleMetricShow = (id: string) => {
     const { calculator } = state;
 
-    let changes: {
+    const changes: {
       input_ids?: string[];
       output_ids?: string[];
     } = {};
@@ -187,7 +187,7 @@ export const FormContainer: React.FC<Props> = (props) => {
 
   const handleCreate = () => {
     // this casting is a lie, necessary because it'd hard to sync props.mode and state.calculator
-    props.onSubmit(state.calculator as Calculator);
+    return props.onSubmit(state.calculator as Calculator);
   };
 
   const inputs = orderDisplayedMetrics(

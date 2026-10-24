@@ -22,9 +22,9 @@ export const EditCalculatorForm: React.FC<Props> = (props) => {
     <FormContainer
       {...props}
       mode="edit"
-      buttonText="Update"
+      buttonText="Save changes"
       onSubmit={(calc: Calculator) => {
-        dispatch(update(calc, props.onCalculatorSave));
+        return dispatch(update(calc, props.onCalculatorSave));
       }}
     />
   );

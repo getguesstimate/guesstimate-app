@@ -1,4 +1,6 @@
 import _ from "lodash";
+import styles from "../calculator.module.css";
+import { FieldHelp } from "~/components/workspace/FieldHelp";
 import React, {
   PropsWithChildren,
   useEffect,
@@ -76,11 +78,12 @@ export const Input = React.forwardRef<InputHandle, Props>(function Input(
 
   useEffect(() => {
     if (isFirst) {
-      setTimeout(() => {
+      const timer = setTimeout(() => {
         editorRef.current?.focus();
       }, 1);
+      return () => clearTimeout(timer);
     }
-  }, []);
+  }, [isFirst]);
 
   const handleChange = (editorState: any) => {
     onChange(editorState.getCurrentContent().getPlainText(""));
@@ -92,12 +95,22 @@ export const Input = React.forwardRef<InputHandle, Props>(function Input(
   };
 
   return (
-    <div className="md:grid md:grid-cols-12">
-      <div className="md:col-span-7">{name}</div>
-      <div className="md:col-span-5">
-        <div className="relative rounded-sm border border-grey-ccc bg-grey-6 px-3 py-2">
+    <div className={styles.inputRow}>
+      <div className={styles.sectionHeading}>
+        <span id={`calculator-input-${id}`} className={styles.inputName}>
+          {name}
+        </span>
+        {description && (
+          <FieldHelp label={`Notes for ${name}`}>
+            <ReactMarkdown source={description} skipHtml />
+          </FieldHelp>
+        )}
+      </div>
+      <div>
+        <div className={styles.inputBox}>
           <Editor
             ref={editorRef}
+            ariaLabel={name || "Calculator input"}
             editorState={editorState}
             onChange={handleChange}
             onBlur={handleBlur}
@@ -118,11 +131,6 @@ export const Input = React.forwardRef<InputHandle, Props>(function Input(
           )}
         </div>
       </div>
-      {description && (
-        <div className="mb-8 text-xs text-grey-666 md:col-span-7">
-          <ReactMarkdown source={description} />
-        </div>
-      )}
     </div>
   );
 });

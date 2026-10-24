@@ -20,10 +20,10 @@ export const NewCalculatorForm: React.FC<Props> = (props) => {
   return (
     <FormContainer
       {...props}
-      buttonText="Create"
+      buttonText="Create calculator"
       mode="new"
       onSubmit={(calc: Omit<Calculator, "id">) => {
-        dispatch(create(calc.space_id, calc, props.onCalculatorSave));
+        return dispatch(create(calc.space_id, calc, props.onCalculatorSave));
       }}
     />
   );

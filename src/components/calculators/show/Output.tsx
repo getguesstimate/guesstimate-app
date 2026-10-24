@@ -1,21 +1,11 @@
 import _ from "lodash";
-import React, { useState } from "react";
+import React from "react";
+import { FieldHelp } from "~/components/workspace/FieldHelp";
+import styles from "../calculator.module.css";
 
 import { numberShow } from "~/lib/numberShower/numberShower";
 
 import { FullDenormalizedMetric } from "~/lib/engine/space";
-
-const ToggleIcon: React.FC<{ isOpen: boolean; open(): void }> = ({
-  isOpen,
-  open,
-}) => (
-  <div
-    className="color-666 absolute right-1 -top-1 grid h-6 w-6 cursor-pointer place-items-center rounded-full bg-grey-ccc text-center text-sm hover:bg-grey-bbb"
-    onClick={open}
-  >
-    {isOpen ? <i className="ion-md-close" /> : "?"}
-  </div>
-);
 
 const PrecisionNumber: React.FC<{ value: number; precision?: number }> = ({
   value,
@@ -23,7 +13,7 @@ const PrecisionNumber: React.FC<{ value: number; precision?: number }> = ({
 }) => {
   const number = numberShow(value, precision);
   return (
-    <span className="text-xl font-bold leading-none text-grey-444">
+    <span className={styles.value}>
       {number.value}
       {number.symbol}
       {number.power && (
@@ -68,29 +58,21 @@ const AnalyticsSection: React.FC<any> = (stats) => (
 export const Output: React.FC<{ metric: FullDenormalizedMetric }> = ({
   metric: { name, simulation },
 }) => {
-  const [showAnalysis, setShowAnalysis] = useState(false);
-
-  const toggleAnalysis = () => {
-    setShowAnalysis(!showAnalysis);
-  };
-
   return (
-    <div className="md:grid md:grid-cols-12">
-      <div className="font-bold md:col-span-7">{name}</div>
-      <div className="md:col-span-5">
-        <div className="relative">
-          {simulation?.stats && <ResultSection {...simulation.stats} />}
-
-          {/* this part doesn't show up because of broken CSS */}
-          {_.has(simulation, "stats.percentiles.5") && (
-            <ToggleIcon isOpen={showAnalysis} open={toggleAnalysis} />
-          )}
-
-          {showAnalysis && _.has(simulation, "stats.percentiles.5") && (
+    <div className={styles.output}>
+      <div className={styles.outputHeading}>
+        <span>{name}</span>
+        {_.has(simulation, "stats.percentiles.5") && (
+          <FieldHelp label={`Result details for ${name}`}>
             <AnalyticsSection {...simulation?.stats} />
-          )}
-        </div>
+          </FieldHelp>
+        )}
       </div>
+      {simulation?.stats ? (
+        <ResultSection {...simulation.stats} />
+      ) : (
+        <span className={styles.hint}>No result yet</span>
+      )}
     </div>
   );
 };

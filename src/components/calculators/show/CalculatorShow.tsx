@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import Icon from "~/components/react-fa-patched";
 
-import { Button, ButtonWithIcon } from "~/components/utility/buttons/button";
+import { ButtonWithIcon } from "~/components/utility/buttons/button";
 import { Input, InputHandle } from "./Input";
 import { Output } from "./Output";
 
@@ -21,11 +21,13 @@ import { Optional } from "~/lib/engine/types";
 import { Guesstimator } from "~/lib/guesstimator/index";
 import { Calculator } from "~/modules/calculators/reducer";
 import { useAppDispatch } from "~/modules/hooks";
-import { DottedHR } from "./DottedHR";
+import styles from "../calculator.module.css";
+import { FieldHelp } from "~/components/workspace/FieldHelp";
 
 type Props = {
   calculator: Optional<Calculator, "id">;
   startFilled?: boolean;
+  hideTitle?: boolean;
   inputs: FullDenormalizedMetric[];
   outputs: FullDenormalizedMetric[];
   isPrivate?: boolean;
@@ -53,13 +55,18 @@ export const CalculatorShow: React.FC<Props> = (props) => {
     new Map<string, InputHandle>()
   );
 
-  // previously: componentWillReceiveProps
+  const outputsReady = allOutputsHaveStats();
+  const { onShowResult } = props;
   useEffect(() => {
-    if (state.resultComputing && allOutputsHaveStats(props)) {
-      setState({ ...state, resultComputing: false });
-      showResult();
+    if (state.resultComputing && outputsReady) {
+      setState((previous) => ({
+        ...previous,
+        resultComputing: false,
+        showResult: true,
+      }));
+      onShowResult?.();
     }
-  });
+  }, [state.resultComputing, outputsReady, onShowResult]);
 
   const allInputsHaveContent = (idsToExclude: string[] = []) => {
     const includedInputs = props.inputs.filter(
@@ -168,33 +175,43 @@ export const CalculatorShow: React.FC<Props> = (props) => {
   };
 
   return (
-    <div>
-      <div className="flex justify-between">
-        <div className="flex items-end gap-6">
-          <h1 className="text-3xl font-bold leading-none">
-            {props.calculator.title}
-          </h1>
-          {props.isPrivate && (
-            <div className="flex items-end gap-1">
-              <Icon name="lock" />
-              <div className="leading-none">Private</div>
+    <div className={styles.surface}>
+      {!props.hideTitle && (
+        <div className="flex justify-between">
+          <div className="flex items-end gap-6">
+            <h1 className={styles.title}>{props.calculator.title}</h1>
+            {props.isPrivate && (
+              <div className="flex items-end gap-1">
+                <Icon name="lock" />
+                <div className="leading-none">Private</div>
+              </div>
+            )}
+          </div>
+          {props.showHelp && (
+            <div>
+              <ButtonWithIcon
+                onClick={props.showHelp}
+                icon={<Icon name="question" />}
+                text="Help"
+              />
             </div>
           )}
         </div>
-        {props.showHelp && (
-          <div>
-            <ButtonWithIcon
-              onClick={props.showHelp}
-              icon={<Icon name="question" />}
-              text="Help"
-            />
-          </div>
-        )}
+      )}
+      <div className={styles.description}>
+        <ReactMarkdown source={props.calculator.content} skipHtml />
       </div>
-      <div className="my-4 text-sm text-grey-666">
-        <ReactMarkdown source={props.calculator.content} />
+      <div className={styles.sectionHeading}>
+        <h3>Inputs</h3>
+        <FieldHelp label="Help with calculator values">
+          <p>
+            Enter a number, such as 8, or an uncertain range, such as 6 to 12.
+            These values are used for this calculation without saving changes to
+            the model.
+          </p>
+        </FieldHelp>
       </div>
-      <div className="space-y-2">
+      <div className={styles.inputs}>
         {props.inputs.map((metric, i) => (
           <Input
             key={metric.id}
@@ -214,22 +231,22 @@ export const CalculatorShow: React.FC<Props> = (props) => {
         ))}
       </div>
       {state.showResult ? (
-        <div>
-          <div className="my-4">
-            <DottedHR />
+        <div className={styles.results}>
+          <div className={styles.sectionHeading}>
+            <h3>Results</h3>
           </div>
-          <div className="space-y-2">
+          <div className={styles.inputs}>
             {props.outputs.map((m) => (
               <Output key={m.id} metric={m} />
             ))}
           </div>
         </div>
       ) : (
-        <div className="mt-8 flex justify-end">
-          <Button
-            color="green"
-            size="large"
-            loading={state.resultComputing}
+        <div className={styles.footer} style={{ marginTop: 20 }}>
+          <button
+            type="button"
+            className={styles.primary}
+            aria-busy={state.resultComputing}
             disabled={!state.resultComputing && !readyToCalculate}
             onClick={() => {
               allOutputsHaveStats()
@@ -237,8 +254,8 @@ export const CalculatorShow: React.FC<Props> = (props) => {
                 : setState({ ...state, resultComputing: true });
             }}
           >
-            Calculate
-          </Button>
+            {state.resultComputing ? "Calculating…" : "Calculate"}
+          </button>
         </div>
       )}
     </div>

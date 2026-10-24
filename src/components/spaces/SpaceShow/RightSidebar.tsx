@@ -67,15 +67,16 @@ const FactSidebarHeader: FC<{
 };
 
 const RightSidebarContainer: FC<
-  PropsWithChildren<{ grey?: boolean; header: ReactNode }>
-> = ({ grey, header, children }) => (
+  PropsWithChildren<{ grey?: boolean; header: ReactNode; embedded?: boolean }>
+> = ({ grey, header, children, embedded }) => (
   <div
     className={clsx(
-      "w-96 flex-none overflow-y-auto overflow-x-hidden border-l border-[#ccc] p-4",
+      !embedded &&
+        "w-96 flex-none overflow-y-auto overflow-x-hidden border-l border-[#ccc] p-4",
       grey ? "bg-grey-6" : "bg-white"
     )}
   >
-    <div className="pb-6">{header}</div>
+    {!embedded && <div className="pb-6">{header}</div>}
     <div>{children}</div>
   </div>
 );
@@ -160,7 +161,14 @@ export const RightSidebar: FC<{
   rightSidebarDispatch(action: Action): void;
   organizationFacts: Fact[];
   space: ExtendedDSpace;
-}> = ({ state, rightSidebarDispatch, space, organizationFacts }) => {
+  embedded?: boolean;
+}> = ({
+  state,
+  rightSidebarDispatch,
+  space,
+  organizationFacts,
+  embedded = false,
+}) => {
   const { editableByMe, calculators, organization, imported_fact_ids } = space;
 
   const dispatch = useAppDispatch();
@@ -195,6 +203,7 @@ export const RightSidebar: FC<{
 
       return (
         <RightSidebarContainer
+          embedded={embedded}
           header={
             <ShowCalculatorHeader
               editableByMe={editableByMe}
@@ -206,6 +215,7 @@ export const RightSidebar: FC<{
           }
         >
           <CalculatorCompressedShow
+            hideTitle={embedded}
             calculatorId={state.showCalculatorId}
             startFilled={state.showCalculatorResults}
           />
@@ -215,6 +225,7 @@ export const RightSidebar: FC<{
     case "EDIT_CALCULATOR_FORM":
       return (
         <RightSidebarContainer
+          embedded={embedded}
           header={<CalculatorFormHeader isNew={false} onClose={close} />}
         >
           <EditCalculatorForm
@@ -229,6 +240,7 @@ export const RightSidebar: FC<{
     case "NEW_CALCULATOR_FORM":
       return (
         <RightSidebarContainer
+          embedded={embedded}
           header={<CalculatorFormHeader isNew={true} onClose={close} />}
         >
           <NewCalculatorForm space={space} onCalculatorSave={showCalculator} />
@@ -237,7 +249,8 @@ export const RightSidebar: FC<{
     case "FACT_SIDEBAR":
       return (
         <RightSidebarContainer
-          grey
+          embedded={embedded}
+          grey={!embedded}
           header={
             <FactSidebarHeader
               onClose={close}

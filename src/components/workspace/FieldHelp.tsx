@@ -68,7 +68,13 @@ export function FieldHelp({
         <Icon name="help" />
       </button>
       {open && (
-        <FloatingPortal>
+        <FloatingPortal
+          root={
+            refs.domReference.current?.closest<HTMLElement>(
+              '[role="dialog"]'
+            ) || undefined
+          }
+        >
           <div
             ref={refs.setFloating}
             id={id}
