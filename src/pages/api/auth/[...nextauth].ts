@@ -56,12 +56,14 @@ function getAuthOptions(): AuthOptions {
       const refreshedTokens: {
         access_token: string;
         expires_in: number;
+        refresh_token?: string;
       } = await response.json();
 
       return {
         ...token,
         access_token: refreshedTokens.access_token,
-        expires_at: Date.now() / 1000 + refreshedTokens.expires_in,
+        token_expires_at: Date.now() / 1000 + refreshedTokens.expires_in,
+        refresh_token: refreshedTokens.refresh_token ?? token.refresh_token,
       };
     } catch (error) {
       console.log(error);
@@ -94,7 +96,6 @@ function getAuthOptions(): AuthOptions {
     debug: DEBUG,
     callbacks: {
       async session({ session, token }) {
-        // TODO - support refresh tokens
         if (
           token.access_token &&
           token.token_expires_at &&
