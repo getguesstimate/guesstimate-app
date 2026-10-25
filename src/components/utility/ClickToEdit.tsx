@@ -55,7 +55,7 @@ const ViewingMode: React.FC<{
         <div className="mb-1 flex items-center gap-2">
           <div className="text-grey-666">Reasoning</div>
           <div
-            className="cursor-pointer rounded-sm px-1 text-grey-666 hover:bg-grey-ccc hover:text-black"
+            className="cursor-pointer rounded-sm px-1 text-grey-666 hover:bg-surface-hover hover:text-black"
             onClick={onEdit}
           >
             <Icon name="pencil" className="text-lg leading-none" />
@@ -105,7 +105,7 @@ export const ClickToEdit: React.FC<Props> = ({
         />
       ) : value === "" ? (
         <div
-          className="cursor-pointer rounded p-2 text-grey-999 underline hover:bg-black/20 hover:text-grey-333"
+          className="cursor-pointer rounded p-2 text-grey-999 underline hover:bg-inverse-surface/20 hover:text-grey-333"
           onClick={open}
         >
           {emptyValue}

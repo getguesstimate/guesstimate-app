@@ -121,12 +121,12 @@ export const Input = React.forwardRef<InputHandle, Props>(function Input(
           />
           {!_.isEmpty(errors) && (
             <Status>
-              <Icon name="close" className="text-[rgb(206,132,132)]" />
+              <Icon name="close" className="text-danger" />
             </Status>
           )}
           {hasValidContent && (
             <Status>
-              <Icon name="check" className="text-[#a9a8a8]" />
+              <Icon name="check" className="text-ink-subtle" />
             </Status>
           )}
         </div>

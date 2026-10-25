@@ -176,7 +176,7 @@ export const FilledCell = memo(
     return (
       <div
         className={clsx(
-          isModelingCanvas && props.isHovered && "bg-[rgba(75,138,177)]/[0.3]",
+          isModelingCanvas && props.isHovered && "bg-accent-solid/[0.3]",
           "grid place-items-stretch rounded-xs",
           showEdges ? "p-2" : "p-[3px]"
         )}

@@ -87,7 +87,7 @@ export const SpaceShow: React.FC<Props> = ({
 
   if (embed) {
     return (
-      <div className="bg-[#c2cdd6]">
+      <div className="bg-border-strong">
         <SpaceCanvas
           denormalizedSpace={space}
           canUseOrganizationFacts={e.space.canUseOrganizationFacts(space)}
@@ -111,7 +111,7 @@ export const SpaceShow: React.FC<Props> = ({
     space.editableByMe || !_.isEmpty(space.description);
 
   return (
-    <div className="flex h-full flex-1 flex-col bg-[#dfe1e4]">
+    <div className="flex h-full flex-1 flex-col bg-border">
       <Head>
         {space.name && <title key="title">{pageTitle}</title>}
         {[
@@ -125,7 +125,7 @@ export const SpaceShow: React.FC<Props> = ({
         ))}
       </Head>
 
-      <div className="bg-gradient-to-r from-[#2583a7] to-[#2577a7]">
+      <div className="bg-gradient-to-r from-accent-solid to-accent-solid">
         <SpaceHeader space={space} />
 
         <SpaceToolbar

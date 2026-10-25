@@ -54,8 +54,8 @@ export const DistributionSummary: React.FC<{
     <div
       className={clsx(
         theme === "normal" && "text-2xl font-light text-grey-444",
-        theme === "normal-input" && "text-grey-[#222] text-2xl font-light",
-        theme === "normal-output" && "text-grey-[#111] text-2xl font-bold",
+        theme === "normal-input" && "text-ink text-2xl font-light",
+        theme === "normal-output" && "text-ink-strong text-2xl font-bold",
         theme === "large" && "text-4xl",
         "leading-none"
       )}
@@ -65,7 +65,7 @@ export const DistributionSummary: React.FC<{
         precision={showConfidenceInterval ? 2 : precision}
       />
       {showConfidenceInterval && (
-        <div className="mt-0.5 text-[0.6em] text-[#555]">
+        <div className="mt-0.5 text-[0.6em] text-ink">
           <PrecisionNumber value={adjustedConfidenceInterval[0]} /> to{" "}
           <PrecisionNumber value={adjustedConfidenceInterval[1]} />
         </div>

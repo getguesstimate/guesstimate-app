@@ -86,5 +86,8 @@
   "language.notice": "L'app e la documentazione sono attualmente in inglese.",
   "video.notice": "Video in inglese",
   "link.scratchpad": "foglio di prova",
-  "link.contact": "Contattaci"
+  "link.contact": "Contattaci",
+  "theme.system": "Tema: sistema. Passa al tema chiaro.",
+  "theme.light": "Tema: chiaro. Passa al tema scuro.",
+  "theme.dark": "Tema: scuro. Segui il sistema."
 }

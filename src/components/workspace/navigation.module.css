@@ -6,14 +6,14 @@
   flex-shrink: 0;
 }
 .myModels {
-  color: #4b6478;
+  color: var(--accent-ink);
   font-size: 13px;
   font-weight: 500;
   white-space: nowrap;
   text-decoration: none;
 }
 .myModels:hover {
-  color: #235d82;
+  color: var(--accent-hover);
 }
 .newModel {
   position: relative;
@@ -25,10 +25,10 @@
   gap: 7px;
   min-height: 36px;
   padding: 7px 11px;
-  border: 1px solid #cbd9e4;
+  border: 1px solid var(--border);
   border-radius: 7px;
-  background: #fff;
-  color: #315c77;
+  background: var(--surface);
+  color: var(--accent-ink);
   font-size: 13px !important;
   font-weight: 600 !important;
   white-space: nowrap;
@@ -40,8 +40,8 @@
   display: none;
 }
 .createButton:hover:not(:disabled) {
-  background: #edf4f9;
-  border-color: #97b7cb;
+  background: var(--surface-hover);
+  border-color: var(--accent-border);
 }
 .createButton:disabled {
   opacity: 0.6;
@@ -50,7 +50,7 @@
 .actions a:focus-visible,
 .newModel button:focus-visible,
 .newModel summary:focus-visible {
-  outline: 2px solid #287fae;
+  outline: 2px solid var(--accent);
   outline-offset: 3px;
 }
 .ownerMenu {
@@ -63,10 +63,10 @@
   max-height: 65dvh;
   overflow-y: auto;
   padding: 6px;
-  border: 1px solid #dce4eb;
+  border: 1px solid var(--border-subtle);
   border-radius: 9px;
-  background: #fff;
-  box-shadow: 0 8px 24px #28475e18;
+  background: var(--surface);
+  box-shadow: 0 8px 24px var(--shadow-soft);
 }
 .ownerMenu button {
   display: block;
@@ -75,14 +75,14 @@
   border: 0;
   border-radius: 5px;
   background: transparent;
-  color: #39586e;
+  color: var(--accent-ink);
   text-align: left;
   overflow-wrap: anywhere;
   font-size: 13px;
   cursor: pointer;
 }
 .ownerMenu button:hover:not(:disabled) {
-  background: #edf4f9;
+  background: var(--surface-hover);
 }
 .error {
   position: absolute;
@@ -92,13 +92,13 @@
   width: 220px;
   max-width: calc(100vw - 60px);
   padding: 12px;
-  border: 1px solid #e3cbc8;
+  border: 1px solid var(--border);
   border-radius: 7px;
-  background: #fff;
-  color: #914b44;
+  background: var(--surface);
+  color: var(--danger);
   font-size: 12px;
   white-space: normal;
-  box-shadow: 0 6px 18px #28475e18;
+  box-shadow: 0 6px 18px var(--shadow-soft);
 }
 .inMenu .createButton {
   display: flex;
@@ -131,7 +131,7 @@
     display: none;
   }
 }
-.ownerChoice { display: block; width: 100%; padding: 12px; margin-bottom: 8px; border: 1px solid #dce5ec; border-radius: 7px; background: #fff; color: #315c77; text-align: left; overflow-wrap: anywhere; }
-.ownerChoice:hover:not(:disabled) { background: #edf4f9; }
+.ownerChoice { display: block; width: 100%; padding: 12px; margin-bottom: 8px; border: 1px solid var(--border-subtle); border-radius: 7px; background: var(--surface); color: var(--accent-ink); text-align: left; overflow-wrap: anywhere; }
+.ownerChoice:hover:not(:disabled) { background: var(--surface-hover); }
 .ownerChoice:disabled { opacity: .6; cursor: wait; }
 .ownerResults { margin-top: 12px; max-height: 40dvh; overflow-y: auto; padding: 3px; }

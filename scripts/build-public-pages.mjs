@@ -2,6 +2,7 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { resolve, dirname } from "node:path";
 import process from "node:process";
+import { buildThemes } from "./build-themes.mjs";
 
 const projectRoot = fileURLToPath(new URL("../", import.meta.url));
 const read = (path) => readFileSync(resolve(projectRoot, path), "utf8");
@@ -159,10 +160,7 @@ export function renderPublicPages() {
                     page
                   )}" />`
               ),
-              `<link rel="alternate" hreflang="x-default" href="https://www.getguesstimate.com${urlFor(
-                locales[0],
-                page
-              )}" />`,
+              `<link rel="alternate" hreflang="x-default" href="https://www.getguesstimate.com${urlFor(locales[0], page)}" />`,
             ].join("\n"),
         languageMenu,
         languageNotice:
@@ -205,7 +203,9 @@ export function renderPublicPages() {
       // Expand content before inserting shared partials, so translated braces are never re-evaluated.
       slots.header = header;
       slots.footer = replaceTokens(partial("footer"));
-      const html = replaceTokens(template).replace(/[ \t]+$/gm, "");
+      const html = replaceTokens(template)
+        .replace("<head>", '<head>\n    <script src="/theme.js"></script>\n    <link rel="stylesheet" href="/themes.css" />')
+        .replace(/[ \t]+$/gm, "");
       return {
         name: page.name,
         locale: locale.code,
@@ -220,6 +220,7 @@ export function renderPublicPages() {
 }
 
 export function buildPublicPages() {
+  buildThemes();
   for (const { output, html } of renderPublicPages()) {
     const path = resolve(projectRoot, "public", output);
     mkdirSync(dirname(path), { recursive: true });

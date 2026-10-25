@@ -2,6 +2,8 @@
 
 <html lang="ar" dir="rtl">
   <head>
+    <script src="/theme.js"></script>
+    <link rel="stylesheet" href="/themes.css" />
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1" name="viewport" />
     <title>الخطط — Guesstimate</title>
@@ -106,6 +108,29 @@
         <summary aria-label="اللغة"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/></svg><span lang="ar">العربية</span></summary>
         <nav aria-label="اللغة"><a href="/es/pricing" lang="es" hreflang="es"><bdi dir="auto">Español</bdi></a><a href="/de/pricing" lang="de" hreflang="de"><bdi dir="auto">Deutsch</bdi></a><a href="/pricing" lang="en" hreflang="en"><bdi dir="auto">English</bdi></a><a href="/it/pricing" lang="it" hreflang="it"><bdi dir="auto">Italiano</bdi></a><a href="/pt/pricing" lang="pt-BR" hreflang="pt-BR"><bdi dir="auto">Português</bdi></a><a href="/ru/pricing" lang="ru" hreflang="ru"><bdi dir="auto">Русский</bdi></a><a href="/zh/pricing" lang="zh-Hans" hreflang="zh-Hans"><bdi dir="auto">中文</bdi></a><a href="/he/pricing" lang="he" hreflang="he"><bdi dir="auto">עברית</bdi></a><a href="/ar/pricing" lang="ar" hreflang="ar" aria-current="true"><bdi dir="auto">العربية</bdi></a><a href="/fr/pricing" lang="fr" hreflang="fr"><bdi dir="auto">Français</bdi></a><a href="/ko/pricing" lang="ko" hreflang="ko"><bdi dir="auto">한국어</bdi></a><a href="/hi/pricing" lang="hi" hreflang="hi"><bdi dir="auto">हिन्दी</bdi></a><a href="/ja/pricing" lang="ja" hreflang="ja"><bdi dir="auto">日本語</bdi></a><a href="/el/pricing" lang="el" hreflang="el"><bdi dir="auto">Ελληνικά</bdi></a></nav>
       </details>
+    <button
+      class="theme-toggle"
+      type="button"
+      hidden
+      aria-label="المظهر: النظام. التبديل إلى الفاتح."
+      data-label-system="المظهر: النظام. التبديل إلى الفاتح."
+      data-label-light="المظهر: فاتح. التبديل إلى الداكن."
+      data-label-dark="المظهر: داكن. استخدام إعداد النظام."
+    >
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <g data-theme-icon="system">
+          <circle cx="12" cy="12" r="8" />
+          <path d="M12 4a8 8 0 0 0 0 16Z" fill="currentColor" stroke="none" />
+        </g>
+        <g data-theme-icon="light">
+          <circle cx="12" cy="12" r="4" />
+          <path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M5 19l1.5-1.5M17.5 6.5 19 5" />
+        </g>
+        <g data-theme-icon="dark">
+          <path d="M20.8 13.3A9 9 0 0 1 10.7 3.2 9 9 0 1 0 20.8 13.3Z" />
+        </g>
+      </svg>
+    </button>
     <details class="mobile-menu">
       <summary aria-label="قائمة التنقل">
         <svg

@@ -21,7 +21,7 @@ export function ComponentEditor<T>({
     <div
       className={clsx(
         "mt-8 grid grid-cols-6 gap-8", // TODO - move mt-8 to outer layout component
-        backgroundColor === "grey" && "bg-[#f7f5f5]"
+        backgroundColor === "grey" && "bg-page"
       )}
     >
       <div>

@@ -120,9 +120,9 @@ export const MetricName = forwardRef<MetricNameHandle, Props>(
           "leading-[1.2em] block w-full resize-none overflow-hidden bg-transparent p-0.5 text-lg outline-none focus:text-dark-3",
           props.anotherFunctionSelected && "cursor-pointer",
           props.titleView
-            ? "text-[#3c4f67] font-semibold"
+            ? "text-ink font-semibold"
             : [
-                "text-[rgb(69,98,134)]/80",
+                "text-accent-ink/80",
                 props.isOutput ? "font-medium" : "font-light",
               ]
         )}

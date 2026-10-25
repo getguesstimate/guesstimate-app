@@ -14,7 +14,7 @@ const ClosedLeftSidebar: React.FC<{ onOpen(): void }> = React.memo(
     return (
       <div className="pl-1 pt-2">
         <div
-          className="cursor-pointer rounded bg-blue-1 px-1.5 py-0.5 text-white transition-colors hover:bg-blue-7"
+          className="cursor-pointer rounded bg-accent-solid px-1.5 py-0.5 text-on-accent transition-colors hover:bg-accent-solid-hover"
           onClick={onOpen}
         >
           <Icon name="chevron-right" />

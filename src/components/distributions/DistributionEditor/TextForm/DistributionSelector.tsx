@@ -39,7 +39,7 @@ export const DistributionIcon: React.FC<{
           size === "small" && "h-6 w-6",
           size === "large" && "h-9 w-9",
           theme === "current" &&
-            "opacity-60 hover:bg-grey-ccc hover:opacity-100",
+            "opacity-60 hover:bg-surface-hover hover:opacity-100",
           theme === "choice" && "bg-grey-1",
           theme === "choice-selected" && "bg-blue-2",
           isDisabled && "pointer-events-none cursor-default opacity-50"

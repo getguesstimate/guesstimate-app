@@ -86,5 +86,8 @@
   "language.notice": "L'application et la documentation sont actuellement en anglais.",
   "video.notice": "Vidéo en anglais",
   "link.scratchpad": "brouillon",
-  "link.contact": "Contactez-nous"
+  "link.contact": "Contactez-nous",
+  "theme.system": "Thème : système. Passer au thème clair.",
+  "theme.light": "Thème : clair. Passer au thème sombre.",
+  "theme.dark": "Thème : sombre. Suivre le système."
 }

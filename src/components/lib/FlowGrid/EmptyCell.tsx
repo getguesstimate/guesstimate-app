@@ -57,9 +57,9 @@ export const EmptyCell = memo(
         ref={divRef}
         className={clsx(
           isModelingCanvas && "cursor-pointer",
-          isModelingCanvas && props.isHovered && "bg-[rgb(79,152,197)]/[0.25]",
+          isModelingCanvas && props.isHovered && "bg-accent-solid/[0.25]",
           "focus:outline-none",
-          props.isOver && "bg-[rgb(127,149,160)]/[0.81] transition-colors"
+          props.isOver && "bg-accent-solid/[0.81] transition-colors"
         )}
         onKeyDown={handleKeyDown}
         onMouseDown={handleMouseDown}

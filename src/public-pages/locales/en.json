@@ -86,5 +86,8 @@
   "language.notice": "The app and documentation are currently in English.",
   "video.notice": "Video in English",
   "link.scratchpad": "scratchpad",
-  "link.contact": "Contact us"
+  "link.contact": "Contact us",
+  "theme.system": "Theme: System. Switch to Light.",
+  "theme.light": "Theme: Light. Switch to Dark.",
+  "theme.dark": "Theme: Dark. Switch to System."
 }

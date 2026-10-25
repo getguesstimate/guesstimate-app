@@ -86,5 +86,8 @@
   "language.notice": "アプリとドキュメントは現在、英語で提供しています。",
   "video.notice": "英語の動画",
   "link.scratchpad": "試用シート",
-  "link.contact": "お問い合わせください"
+  "link.contact": "お問い合わせください",
+  "theme.system": "テーマ：システム。ライトに切り替え。",
+  "theme.light": "テーマ：ライト。ダークに切り替え。",
+  "theme.dark": "テーマ：ダーク。システム設定に切り替え。"
 }

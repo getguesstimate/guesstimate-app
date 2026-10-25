@@ -2,17 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+html { background: var(--page); color: var(--ink); }
+
 body {
+  background: var(--page);
+  color: var(--ink);
   height: 100%;
   font-family: "Lato", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 16px;
 }
 
 a {
-  color: #4183c4;
+  color: var(--link);
 }
 a:hover {
-  color: #1e70bf;
+  color: var(--link-hover);
 }
 
 p {
@@ -42,7 +46,7 @@ body.remove-elev #_elev_io {
 }
 
 .public-DraftEditorPlaceholder-root {
-  color: #a9a9a9;
+  color: var(--ink-subtle);
 
   /* via https://github.com/facebookarchive/draft-js/issues/2486 */
   user-select: none;
@@ -54,7 +58,7 @@ body.remove-elev #_elev_io {
   overflow-wrap: anywhere;
   word-break: break-word;
   /* text-dark-3; doesn't work with @apply, probably because classname is not mentioned in our codebase */
-  color: #2d3137;
+  color: var(--ink-strong);
 }
 
 .wistia_responsive_padding {
@@ -125,12 +129,12 @@ body.remove-elev #_elev_io {
 }
 
 ::-webkit-scrollbar-thumb:horizontal {
-  background-color: #7089a9; /* grey-2 */
+  background-color: var(--scrollbar); /* grey-2 */
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:vertical {
-  background-color: #7089a9; /* grey-2 */
+  background-color: var(--scrollbar); /* grey-2 */
   border-radius: 3px;
 }
 
@@ -139,5 +143,5 @@ body.remove-elev #_elev_io {
 }
 
 ::-webkit-scrollbar-corner {
-  background-color: black;
+  background-color: var(--inverse-surface);
 }

@@ -86,5 +86,8 @@
   "language.notice": "앱과 문서는 현재 영어로 제공됩니다.",
   "video.notice": "영어 영상",
   "link.scratchpad": "연습장",
-  "link.contact": "문의해 주세요"
+  "link.contact": "문의해 주세요",
+  "theme.system": "테마: 시스템. 라이트로 전환.",
+  "theme.light": "테마: 라이트. 다크로 전환.",
+  "theme.dark": "테마: 다크. 시스템 설정 사용."
 }

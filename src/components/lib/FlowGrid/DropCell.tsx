@@ -160,7 +160,7 @@ export const DropCell: FC<Props> = memo(function DropCell(props) {
         "group/gridcell",
         "relative grid min-h-[60px] flex-none place-items-stretch",
         showGridLines &&
-          "border-r border-b border-dashed border-[rgb(0,25,95)]/[0.09]",
+          "border-r border-b border-dashed border-accent/[0.09]",
         cellSizeInfo[size].classNames
       )}
       onMouseEnter={handleMouseEnter}
@@ -170,7 +170,7 @@ export const DropCell: FC<Props> = memo(function DropCell(props) {
       {props.showAutoFillToken && (
         <div className="absolute -right-5 -bottom-5 z-10 h-9 w-9 p-[0.8em] transition-[padding] duration-[50ms] hover:p-2">
           <div
-            className="h-full w-full cursor-crosshair rounded-sm bg-[rgb(90,141,177)]"
+            className="h-full w-full cursor-crosshair rounded-sm bg-accent-solid"
             onMouseDown={handleAutoFillTargetMouseDown}
           />
         </div>

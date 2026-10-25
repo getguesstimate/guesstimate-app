@@ -36,7 +36,7 @@ export const AppLayout: FC<Props> = ({
         <ModalContainer />
         {!embed && <Header isFluid={isFluid} isBare={simpleHeader} />}
         {process.env.NEXT_PUBLIC_PLANNED_MAINTENANCE && (
-          <div className="bg-purple-2 p-2 text-sm text-white">
+          <div className="bg-purple-solid p-2 text-sm text-on-accent">
             <div className="container mx-auto">
               Guesstimate will be down for maintenance in the next few hours.
               <br />

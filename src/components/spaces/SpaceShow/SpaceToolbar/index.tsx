@@ -34,8 +34,8 @@ const MessageBox: FC<{ color: "GREY" | "RED"; children: string }> = ({
 }) => (
   <div
     className={clsx(
-      "rounded px-2 text-white",
-      color === "GREY" ? "bg-grey-666" : "bg-red-5"
+      "rounded px-2 text-on-accent",
+      color === "GREY" ? "bg-inverse-surface" : "bg-danger-solid"
     )}
   >
     {children}
@@ -45,7 +45,7 @@ const MessageBox: FC<{ color: "GREY" | "RED"; children: string }> = ({
 const ProgressMessage: FC<{
   actionState: CanvasActionState | undefined;
 }> = ({ actionState }) => (
-  <div className="text-[#09273a]">
+  <div className="text-ink-strong">
     {actionState === "SAVING" && "Saving..."}
     {actionState === "COPYING" && "Copying..."}
     {actionState === "CREATING" && "Creating a new model..."}
@@ -75,7 +75,7 @@ const ProgressMessage: FC<{
 );
 
 const Divider: React.FC = () => (
-  <div className="mx-1 h-9 w-0.5 bg-[rgb(115,168,190)]" />
+  <div className="mx-1 h-9 w-0.5 bg-border-strong" />
 );
 
 type Props = {
@@ -178,7 +178,7 @@ export const SpaceToolbar = memo<Props>(function SpaceToolbar({
 
   const customStyles = {
     overlay: {
-      backgroundColor: "rgba(55, 68, 76, 0.4)",
+      backgroundColor: "var(--overlay)",
     },
     content: {
       top: "30%",
@@ -187,14 +187,14 @@ export const SpaceToolbar = memo<Props>(function SpaceToolbar({
       right: "auto",
       bottom: "auto",
       marginRight: "-50%",
-      backgroundColor: "#F0F0F0",
+      backgroundColor: "var(--surface-muted)",
       border: "none",
       padding: "1em",
     },
   } as const;
 
   return (
-    <div className="hidden border-b border-[rgb(37,128,167)]/40 bg-[rgb(219,221,222)]/70 px-8 md:block">
+    <div className="hidden border-b border-accent/40 bg-switch-track/70 px-8 md:block">
       {showTutorial && <Tutorial onClose={closeTutorial} />}
       <Modal
         isOpen={importModalOpen}

@@ -31,14 +31,14 @@ export const SpaceName: React.FC<Props> = ({ onSave, name, editableByMe }) => {
   const showName = hasName ? name : "Untitled Model";
   const className = clsx(
     "text-xl md:text-2xl font-medium px-2 py-1",
-    hasName ? "text-white" : "text-grey-ccc"
+    hasName ? "text-on-accent" : "text-grey-ccc"
   );
 
   return editableByMe ? (
     <DropDown
       headerText={hasName ? "Rename Model" : "Name Model"}
       openLink={
-        <h1 className={clsx("rounded hover:bg-black/20", className)}>
+        <h1 className={clsx("rounded hover:bg-inverse-surface/20", className)}>
           {showName}
         </h1>
       }

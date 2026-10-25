@@ -21,7 +21,7 @@ import * as elev from "~/server/elev/index";
 import { ExtendedDSpace } from "../denormalized-space-selector";
 
 const HeaderTitle: FC<PropsWithChildren> = ({ children }) => (
-  <header className="text-2xl font-bold text-[#476b82]">{children}</header>
+  <header className="text-2xl font-bold text-accent-ink">{children}</header>
 );
 
 const ShowCalculatorHeader: FC<{
@@ -72,7 +72,7 @@ const RightSidebarContainer: FC<
   <div
     className={clsx(
       !embedded &&
-        "w-96 flex-none overflow-y-auto overflow-x-hidden border-l border-[#ccc] p-4",
+        "w-96 flex-none overflow-y-auto overflow-x-hidden border-l border-border p-4",
       grey ? "bg-grey-6" : "bg-white"
     )}
   >

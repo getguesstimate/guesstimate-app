@@ -20,14 +20,14 @@ const allPathStatuses = [
 export type PathStatus = typeof allPathStatuses[number];
 
 export const edgeColors: { [k in PathStatus]: string } = {
-  default: "#899eb6",
-  screenshot: "#809ab9",
-  unconnected: "rgba(77, 121, 175, 0.06)",
-  ancestor: "#95b6b2",
-  "ancestor-1-degree": "#43796b",
-  descendant: "#9eacbc",
-  "descendant-1-degree": "#56687d",
-  hasErrors: "#b59893",
+  default: "var(--edge)",
+  screenshot: "var(--edge)",
+  unconnected: "rgb(var(--edge-rgb) / 0.06)",
+  ancestor: "var(--success-border)",
+  "ancestor-1-degree": "var(--success)",
+  descendant: "var(--edge)",
+  "descendant-1-degree": "var(--accent)",
+  hasErrors: "var(--danger)",
 };
 
 export type EdgeShape = {

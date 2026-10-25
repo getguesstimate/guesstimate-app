@@ -86,5 +86,8 @@
   "language.notice": "Die App und die Dokumentation sind derzeit auf Englisch.",
   "video.notice": "Video auf Englisch",
   "link.scratchpad": "Entwurf",
-  "link.contact": "Kontaktiere uns"
+  "link.contact": "Kontaktiere uns",
+  "theme.system": "Design: System. Zu Hell wechseln.",
+  "theme.light": "Design: Hell. Zu Dunkel wechseln.",
+  "theme.dark": "Design: Dunkel. Systemeinstellung verwenden."
 }

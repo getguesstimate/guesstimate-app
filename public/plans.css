@@ -16,22 +16,22 @@
 .plan {
   min-width: 0;
   padding: 28px;
-  border: 1px solid #d8e1e8;
+  border: 1px solid var(--border);
   border-radius: 12px;
-  background: #f6f8fa;
-  box-shadow: 0 2px 4px #23394d05;
+  background: var(--page);
+  box-shadow: 0 2px 4px var(--shadow-soft);
 }
 .plan-individual {
-  background: #eff5fb;
-  border-color: #c7d9e9;
+  background: var(--surface-hover);
+  border-color: var(--border);
 }
 .plan-organization {
-  background: #eff6f4;
-  border-color: #cddfd9;
+  background: var(--surface-muted);
+  border-color: var(--border);
 }
 .plan h2,
 .plan h3 {
-  color: #263b4d;
+  color: var(--ink-strong);
   font-size: 20px;
   font-weight: 600;
   letter-spacing: -0.025em;
@@ -49,7 +49,7 @@
   gap: 8px;
   margin-block: 20px;
   padding-bottom: 20px;
-  border-bottom: 1px solid #263b4d1a;
+  border-bottom: 1px solid var(--selection);
   font-size: 32px;
   font-weight: 600;
   line-height: 1.2;
@@ -83,7 +83,7 @@
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #7492aa;
+  background: var(--accent-solid);
 }
 .plan-next-step {
   margin-top: 8px;
@@ -93,7 +93,7 @@
   flex-wrap: wrap;
   gap: 12px 24px;
   padding-block: 24px;
-  border-bottom: 1px solid #cbd7e1;
+  border-bottom: 1px solid var(--border);
 }
 .plan-next-step p {
   color: var(--muted);
@@ -110,9 +110,9 @@
 }
 .questions-grid > div {
   padding: 24px;
-  border: 1px solid #e0e6ec;
+  border: 1px solid var(--border-subtle);
   border-radius: 10px;
-  background: #f8fafc;
+  background: var(--surface-subtle);
 }
 .questions-grid h3::before {
   content: "";
@@ -121,7 +121,7 @@
   height: 2px;
   margin-bottom: 14px;
   border-radius: 1px;
-  background: #91afc5;
+  background: var(--border-strong);
 }
 .questions-grid h3 {
   font-size: 15px;
@@ -135,7 +135,7 @@
   line-height: 1.75;
 }
 .questions-grid a {
-  text-decoration-color: #a5bccd;
+  text-decoration-color: var(--border-strong);
   text-underline-offset: 3px;
 }
 .questions-grid a:hover {
@@ -204,7 +204,7 @@
 
 .landing-plans {
   padding-block: 40px;
-  border-top: 1px solid #cbd7e1;
+  border-top: 1px solid var(--border);
 }
 .landing-plans-intro {
   max-width: 620px;
@@ -228,7 +228,7 @@
 }
 .plan-summary > p:last-child {
   font-size: 14px;
-  color: #455b6d;
+  color: var(--accent-ink);
   line-height: 1.6;
 }
 .landing-plans > .text-action {

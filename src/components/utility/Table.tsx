@@ -22,7 +22,7 @@ export const TH: React.FC<PropsWithChildren> = ({ children }) => {
   return (
     <th
       className={clsx(
-        "border-t border-b border-[#ddd] bg-[#f8f8f8] px-4 py-4",
+        "border-t border-b border-border bg-page px-4 py-4",
         size === "small" && "leading-tight"
       )}
     >
@@ -36,7 +36,7 @@ export const TD: React.FC<PropsWithChildren> = ({ children }) => {
   return (
     <td
       className={clsx(
-        "border-t border-b border-[#ddd] px-4 py-3",
+        "border-t border-b border-border px-4 py-3",
         size === "small" && "leading-tight"
       )}
     >
@@ -57,7 +57,7 @@ export const Table: React.FC<
     <TableContext.Provider value={{ size }}>
       <table
         className={clsx(
-          "w-full rounded border border-[#ddd] bg-white text-left",
+          "w-full rounded border border-border bg-white text-left",
           size === "small" && "text-sm"
         )}
       >

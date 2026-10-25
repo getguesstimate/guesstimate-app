@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
+    <script src="/theme.js"></script>
+    <link rel="stylesheet" href="/themes.css" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Privacy Policy — Guesstimate</title>
@@ -75,6 +77,29 @@
       >
     </nav>
 
+    <button
+      class="theme-toggle"
+      type="button"
+      hidden
+      aria-label="Theme: System. Switch to Light."
+      data-label-system="Theme: System. Switch to Light."
+      data-label-light="Theme: Light. Switch to Dark."
+      data-label-dark="Theme: Dark. Switch to System."
+    >
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <g data-theme-icon="system">
+          <circle cx="12" cy="12" r="8" />
+          <path d="M12 4a8 8 0 0 0 0 16Z" fill="currentColor" stroke="none" />
+        </g>
+        <g data-theme-icon="light">
+          <circle cx="12" cy="12" r="4" />
+          <path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M5 19l1.5-1.5M17.5 6.5 19 5" />
+        </g>
+        <g data-theme-icon="dark">
+          <path d="M20.8 13.3A9 9 0 0 1 10.7 3.2 9 9 0 1 0 20.8 13.3Z" />
+        </g>
+      </svg>
+    </button>
     <details class="mobile-menu">
       <summary aria-label="Navigation menu">
         <svg

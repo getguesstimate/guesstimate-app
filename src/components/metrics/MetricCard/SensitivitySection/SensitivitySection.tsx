@@ -66,10 +66,10 @@ const Plot: React.FC<{
       const styleAxis = (axis: typeof xAxis) => {
         axis
           .selectAll(".domain")
-          .attr("stroke", "#e2efe9")
+          .attr("stroke", "var(--success-surface)")
           .attr("stroke-width", 2);
-        axis.selectAll(".tick line").attr("stroke", "#ced6dc");
-        axis.selectAll(".tick text").attr("fill", "#7a909a");
+        axis.selectAll(".tick line").attr("stroke", "var(--border)");
+        axis.selectAll(".tick text").attr("fill", "var(--ink-muted)");
       };
       styleAxis(xAxis);
       styleAxis(yAxis);
@@ -79,7 +79,7 @@ const Plot: React.FC<{
           .attr("text-anchor", "end")
           .attr("x", width)
           .attr("y", height - 5)
-          .attr("class", "font-bold fill-[#3c4448]")
+          .attr("class", "font-bold fill-ink")
           .text(xLabel);
       }
 
@@ -89,7 +89,7 @@ const Plot: React.FC<{
           .attr("transform", "rotate(-90)")
           .attr("x", 0)
           .attr("y", 15)
-          .attr("class", "font-bold fill-[#3c4448]")
+          .attr("class", "font-bold fill-ink")
           .text(yLabel);
       }
     }
@@ -104,7 +104,7 @@ const Plot: React.FC<{
       .attr("r", 4.5)
       .style(
         "fill",
-        isSmall ? "rgba(88, 173, 109, 0.18)" : "rgba(88, 173, 109, 0.12)"
+        isSmall ? "rgb(var(--success-rgb) / 0.18)" : "rgb(var(--success-rgb) / 0.12)"
       );
   }, [ref.current, data]);
 
@@ -119,7 +119,7 @@ const Plot: React.FC<{
 };
 
 const RegressionLabel: React.FC<PropsWithChildren> = ({ children }) => (
-  <span className="text-[#6f9a6f]">{children}</span>
+  <span className="text-success">{children}</span>
 );
 
 const RegressionStats: React.FC<{
@@ -143,9 +143,9 @@ const RegressionStats: React.FC<{
     regression.intercept && -1 * (regression.intercept / regression.slope);
 
   const importanceClassNames = {
-    low: "font-light text-[#91a791]",
-    medium: "font-medium text-[#6f9a6f]",
-    high: "font-bold text-[#359235]",
+    low: "font-light text-success",
+    medium: "font-medium text-success",
+    high: "font-bold text-success",
   } as const;
 
   return size === "SMALL" ? (
@@ -212,7 +212,7 @@ export const SensitivitySection: React.FC<{
     <div
       className={clsx(
         "relative",
-        size === "SMALL" && "h-[70px] bg-[rgb(189,189,189)]/[0.14] px-1"
+        size === "SMALL" && "h-[70px] bg-border-strong/[0.14] px-1"
       )}
     >
       <RegressionStats xSamples={xSamples} ySamples={ySamples} size={size} />

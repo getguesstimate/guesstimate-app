@@ -172,7 +172,7 @@ const Hoverbar: React.FC<{
       x2={hoveredXCoord}
       y1={0}
       y2="100%"
-      className="stroke-[#0e2c40]/50"
+      className="stroke-chart-axis"
       style={{ strokeDasharray: "8, 5" }}
     />
   );
@@ -251,9 +251,9 @@ const Bar: React.FC<{
   const scaledY = yScale(data.length);
 
   const themeToColor: { [t in HistogramTheme]: string } = {
-    dark: "fill-[#92a9b8]",
-    normal: "fill-[#c5e0f3]",
-    light: "fill-grey-a1",
+    dark: "fill-chart-strong",
+    normal: "fill-chart",
+    light: "fill-chart",
   };
 
   return (

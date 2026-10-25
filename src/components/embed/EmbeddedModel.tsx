@@ -217,7 +217,7 @@ export function EmbeddedModel({
                     markerHeight="6"
                     orient="auto"
                   >
-                    <path d="M1 1L7 4L1 7" fill="none" stroke="#91aabb" />
+                    <path d="M1 1L7 4L1 7" fill="none" stroke="var(--edge)" />
                   </marker>
                 </defs>
                 {(space.edges || []).map((edge) => {

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import Modal from "react-modal";
 import { useSession } from "next-auth/react";
 import { signIn } from "~/lib/auth";
@@ -7,6 +7,7 @@ import { useAppSelector } from "~/modules/hooks";
 import { Icon } from "~/components/workspace/Icon";
 import styles from "./account.module.css";
 import { FieldHelp } from "~/components/workspace/FieldHelp";
+import { useTheme, setTheme, themeOptions } from "~/themes/useTheme";
 import {
   useSimplifiedNodes,
   setSimplifiedNodes,
@@ -40,11 +41,43 @@ export function AccountAccess({ children }: { children: React.ReactNode }) {
 }
 
 function AppearanceSettings() {
+  const theme = useTheme();
+  const themeGroup = useId();
   const simplified = useSimplifiedNodes();
   const [storageError, setStorageError] = useState(false);
   return (
     <section className={styles.appearanceSettings} aria-label="Appearance">
       <span className={styles.eyebrow}>Appearance</span>
+      <fieldset className={styles.themePreference}>
+        <legend>Theme</legend>
+        <div className={styles.themeChoices}>
+          {themeOptions.map((option) => (
+            <label key={option.value} className={styles.themeOption}>
+              <input
+                type="radio"
+                name={themeGroup}
+                value={option.value}
+                checked={theme === option.value}
+                onChange={() => setStorageError(!setTheme(option.value))}
+              />
+              <span>
+                <Icon
+                  name={
+                    option.value === "system"
+                      ? "monitor"
+                      : option.value === "light"
+                      ? "sun"
+                      : option.value === "dark"
+                      ? "moon"
+                      : "globe"
+                  }
+                />
+                {option.label}
+              </span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
       <div className={styles.preferenceRow}>
         <div className={styles.preferenceLabel}>
           <span id="simplified-nodes-label">Simplified nodes</span>
@@ -78,7 +111,8 @@ export function AccountSettingsContent() {
   const [previewPlan, setPreviewPlan] = useState<string>();
   useEffect(() => {
     // Local visual previews must never change the account or its permissions.
-    if (!["localhost", "127.0.0.1", "[::1]"].includes(location.hostname)) return;
+    if (!["localhost", "127.0.0.1", "[::1]"].includes(location.hostname))
+      return;
     const requested = new URLSearchParams(location.search).get("previewPlan");
     if (requested && Plan.find(requested)) setPreviewPlan(requested);
   }, []);

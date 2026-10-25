@@ -10,12 +10,12 @@ import { GridPoint } from "./gridPoints";
 type RegionType = "selected" | "analyzed" | "copied" | "fill";
 
 const regionTypeToClass: Record<RegionType, string> = {
-  selected: "rounded-[3px] bg-[rgb(153,186,208)]/[0.87]",
+  selected: "rounded-[3px] bg-border-strong/[0.87]",
   fill: "rounded-[3px] border border-dashed border-black/40",
   copied:
-    "rounded-[3px] border-2 border-dashed border-[rgb(7,115,167)]/[0.75] bg-[rgb(153,186,208)]/[0.17]",
+    "rounded-[3px] border-2 border-dashed border-accent/[0.75] bg-border-strong/[0.17]",
   analyzed:
-    "bg-gradient-to-br from-[rgb(72,187,90)]/[0.66] to-[rgb(120,203,149)]/[0.65]",
+    "bg-gradient-to-br from-success/[0.66] to-success/[0.65]",
 };
 
 const RegionBox: FC<{

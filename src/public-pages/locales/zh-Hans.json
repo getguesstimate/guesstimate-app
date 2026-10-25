@@ -86,5 +86,8 @@
   "language.notice": "应用和文档目前仅提供英文版本。",
   "video.notice": "英文视频",
   "link.scratchpad": "草稿表",
-  "link.contact": "联系我们"
+  "link.contact": "联系我们",
+  "theme.system": "主题：跟随系统。切换为浅色。",
+  "theme.light": "主题：浅色。切换为深色。",
+  "theme.dark": "主题：深色。切换为跟随系统。"
 }

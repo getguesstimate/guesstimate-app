@@ -67,7 +67,7 @@ export const ToolTip: React.FC<
       className={clsx(
         "z-10 rounded-sm px-3 py-2 shadow",
         text !== undefined && "text-sm",
-        theme === "dark" ? "bg-dark-2 text-white" : "bg-white"
+        theme === "dark" ? "bg-inverse-surface text-on-accent" : "bg-white"
       )}
       style={{
         position: strategy,
@@ -86,7 +86,7 @@ export const ToolTip: React.FC<
         }}
         className={clsx(
           "absolute h-2 w-2 rotate-45",
-          theme === "dark" ? "bg-dark-2" : "bg-white"
+          theme === "dark" ? "bg-inverse-surface" : "bg-white"
         )}
       />
     </div>

@@ -37,7 +37,7 @@ const ChildrenSection: FC<
     header: string;
   }>
 > = ({ header, children }) => (
-  <div className="text-[#555]">
+  <div className="text-ink">
     {header && (
       <div className="text-lg font-bold leading-none">
         {capitalizeFirstLetter(header)}

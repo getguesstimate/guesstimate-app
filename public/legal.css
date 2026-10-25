@@ -5,13 +5,13 @@
 .legal-document {
   max-width: 720px;
   margin-inline: auto;
-  color: #52677c;
+  color: var(--ink-muted);
   font-size: 16px;
   line-height: 1.8;
   overflow-wrap: break-word;
 }
 .legal-document h1 {
-  color: #263b4d;
+  color: var(--ink-strong);
   font-size: clamp(26px, 4vw, 34px);
   line-height: 1.25;
   margin-bottom: 20px;
@@ -29,7 +29,7 @@
   font-size: 13px;
 }
 .legal-document strong {
-  color: #354f67;
+  color: var(--ink);
   font-weight: 600;
 }
 @media (max-width: 560px) {

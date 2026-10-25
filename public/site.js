@@ -1,5 +1,24 @@
 const menu = document.querySelector(".mobile-menu");
 const headerMenus = [...document.querySelectorAll(".site-header details")];
+const themeToggle = document.querySelector(".theme-toggle");
+if (themeToggle && window.guesstimateTheme) {
+  const modes = ["system", "light", "dark"];
+  const updateThemeButton = () => {
+    const preference = document.documentElement.dataset.themePreference;
+    const mode = modes.includes(preference) ? preference : document.documentElement.dataset.theme;
+    const label = themeToggle.getAttribute(`data-label-${mode}`);
+    themeToggle.dataset.mode = mode;
+    themeToggle.setAttribute("aria-label", label);
+    themeToggle.title = label;
+  };
+  themeToggle.addEventListener("click", () => {
+    const current = modes.indexOf(document.documentElement.dataset.themePreference);
+    window.guesstimateTheme.setPreference(modes[(current + 1) % modes.length]);
+  });
+  window.addEventListener("guesstimate:theme-change", updateThemeButton);
+  updateThemeButton();
+  themeToggle.hidden = false;
+}
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") {
     for (const item of headerMenus) {

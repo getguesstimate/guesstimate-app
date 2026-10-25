@@ -66,14 +66,14 @@ const stylizedSpan =
   };
 
 const inputClassName = "font-medium rounded-xs px-0.5 mx-0.5 inline-block";
-const factClassName = "text-[#483567] bg-[#e5dbf7]";
+const factClassName = "text-purple bg-purple-surface";
 const validClassName = "text-green-3 bg-green-4";
-const errorClassName = "text-[#560606] bg-[#ff9e9e]";
+const errorClassName = "text-danger bg-danger-surface";
 
 const Fact = stylizedSpan(clsx(inputClassName, factClassName));
 const ValidInput = stylizedSpan(clsx(inputClassName, validClassName));
 const ErrorInput = stylizedSpan(clsx(inputClassName, errorClassName));
-const Suggestion = stylizedSpan("bg-[#b5ddff]");
+const Suggestion = stylizedSpan("bg-border-strong");
 
 const positionDecorator = (
   start: number,
@@ -445,7 +445,7 @@ export class UnconnectedTextInput extends Component<Props, State> {
           "transition-colors duration-300",
           this.props.size === "small" && [
             "font-light",
-            "focus:text-black-3 text-[#456286]/80",
+            "focus:text-black-3 text-accent-ink/80",
           ],
           this.props.size === "large" && [
             "text-2xl font-thin",
@@ -453,7 +453,7 @@ export class UnconnectedTextInput extends Component<Props, State> {
             "p-1",
           ],
           isFlashing
-            ? "border-[#0fb963] bg-[#c9e8c0]"
+            ? "border-accent bg-success-surface"
             : "border-transparent bg-white"
         )}
         onClick={this.focus.bind(this)}

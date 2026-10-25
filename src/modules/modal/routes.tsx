@@ -82,7 +82,7 @@ const ModalRouter: React.FC<ModalState & { onClose(): void }> = ({
 
   const customStyles = {
     overlay: {
-      backgroundColor: "rgba(55, 68, 76, 0.6)",
+      backgroundColor: "var(--overlay)",
       display: "flex",
     },
     content: {

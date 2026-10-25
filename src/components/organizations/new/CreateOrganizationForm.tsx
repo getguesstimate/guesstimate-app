@@ -53,7 +53,7 @@ export const PlanList: React.FC<{
       isSelected={plan === "PREMIUM"}
     >
       200 private models. $12/month per user.
-      <div className="mt-1 font-bold text-[#1bb732]">
+      <div className="mt-1 font-bold text-success">
         Free 30-day trial, no credit card needed.
       </div>
     </PlanElement>

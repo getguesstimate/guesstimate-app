@@ -7,6 +7,9 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
+        {/* Apply the saved theme before any page content can paint. */}
+        <script src="/theme.js" />
+        <link rel="stylesheet" href="/themes.css" />
         <link rel="icon" type="image/png" href="/favicon.png" />
         <link
           href="https://fonts.googleapis.com/css?family=Lato:400,700,300"

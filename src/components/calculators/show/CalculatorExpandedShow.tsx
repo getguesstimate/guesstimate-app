@@ -34,7 +34,7 @@ const HelpInput: React.FC<{ value: string }> = ({ value }) => (
   <input
     type="text"
     value={value}
-    className="border border-[#d4d4d4] bg-grey-6 px-2 py-1"
+    className="border border-border bg-grey-6 px-2 py-1"
   />
 );
 
@@ -198,14 +198,14 @@ export const CalculatorExpandedShow: React.FC<Props> = ({ calculatorId }) => {
             <FacebookShareButton
               url={calculatorUrl}
               title={title}
-              className="bg-[rgb(59,89,152)] opacity-50 hover:opacity-100"
+              className="bg-accent-solid opacity-50 hover:opacity-100"
             >
               <FacebookIcon size={42} />
             </FacebookShareButton>
             <TwitterShareButton
               url={calculatorUrl}
               title={title}
-              className="bg-[rgb(0,172,237)] opacity-50 hover:opacity-100"
+              className="bg-accent-solid opacity-50 hover:opacity-100"
             >
               <TwitterIcon size={42} />
             </TwitterShareButton>

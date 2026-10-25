@@ -309,13 +309,13 @@ export const MetricCard = forwardRef<{ focus(): void }, Props>(
               "font-light", // TODO - remove, move styling to children
               !isTitleView &&
                 (inSelectedCell
-                  ? "bg-[#fefefe] hover:bg-white"
+                  ? "bg-surface hover:bg-white"
                   : [
                       relType === NOEDGE
-                        ? "bg-[#edeff3]"
+                        ? "bg-surface-muted"
                         : relType === INTERMEDIATE
-                        ? "bg-[#f0f2f5]"
-                        : "bg-[#fefefe] hover:bg-[#f4f4f4]",
+                        ? "bg-surface-muted"
+                        : "bg-surface hover:bg-page",
                     ]),
               relationshipClasses[relType] // used by SensitivitySection
             )}
@@ -360,7 +360,7 @@ export const MetricCard = forwardRef<{ focus(): void }, Props>(
             />
 
             {shouldShowDistributionEditor && (
-              <div className="border-[#ddd] flex-none border-t p-1">
+              <div className="border-border flex-none border-t p-1">
                 <DistributionEditor
                   size="small"
                   ref={editorRef}

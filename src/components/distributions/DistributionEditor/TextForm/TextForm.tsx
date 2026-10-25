@@ -139,7 +139,7 @@ export const TextForm = React.forwardRef<{ focus(): void }, Props>(
         {size === "large" && samplerType?.isRangeDistribution && (
           <button
             type="button"
-            className="mt-2 rounded px-2 py-1 text-xs text-[#526d83] hover:bg-[#eaf2f8] focus-visible:outline focus-visible:outline-2"
+            className="mt-2 rounded px-2 py-1 text-xs text-ink-muted hover:bg-accent-surface focus-visible:outline focus-visible:outline-2"
             aria-label={`Change distribution (${samplerType.displayName})`}
             aria-expanded={showDistributionSelector}
             onClick={() =>
@@ -168,7 +168,7 @@ export const TextForm = React.forwardRef<{ focus(): void }, Props>(
           <div className="mt-2">
             <button
               type="button"
-              className="rounded px-2 py-1 text-xs font-medium text-[#526d83] hover:bg-[#eaf2f8] focus-visible:outline focus-visible:outline-2"
+              className="rounded px-2 py-1 text-xs font-medium text-ink-muted hover:bg-accent-surface focus-visible:outline focus-visible:outline-2"
               onClick={onAddDefaultData}
             >
               Add data

@@ -16,7 +16,7 @@ type Props = {
 
 export const SmallFactItem: React.FC<{ fact: Fact }> = ({ fact }) => {
   return (
-    <div className="border border-transparent hover:border-[#d9dee2]">
+    <div className="border border-transparent hover:border-border">
       <div className="relative h-full bg-white">
         <div className="relative z-10 flex h-full flex-col justify-between gap-2 p-1">
           <div className="break-words">
@@ -25,7 +25,7 @@ export const SmallFactItem: React.FC<{ fact: Fact }> = ({ fact }) => {
             </div>
           </div>
           {fact.simulation.stats.mean !== undefined && (
-            <div className="leading-none text-[#607580]">
+            <div className="leading-none text-ink-muted">
               <PrecisionNumber
                 value={fact.simulation.stats.mean}
                 precision={4}

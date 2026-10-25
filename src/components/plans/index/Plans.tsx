@@ -40,7 +40,7 @@ const PlanCard: React.FC<PlanCardProps> = ({
   upgrade,
 }) => {
   return (
-    <div className="flex w-80 flex-col items-center rounded-lg border border-[#d8d8d8] bg-white px-12 py-8">
+    <div className="flex w-80 flex-col items-center rounded-lg border border-border bg-white px-12 py-8">
       <header className="mb-8 text-3xl font-medium text-grey-main">
         {name}
       </header>
@@ -56,7 +56,7 @@ const PlanCard: React.FC<PlanCardProps> = ({
         </li>
       </ul>
       {promotion_copy && (
-        <div className="mb-4 text-xl font-medium text-[#1bb732]">
+        <div className="mb-4 text-xl font-medium text-success">
           {promotion_copy}
         </div>
       )}

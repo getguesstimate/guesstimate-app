@@ -27,7 +27,7 @@ const BlankScreenshot: FC<{ size?: Size }> = ({ size }) => (
 );
 
 const SingleButton: FC<{ isPrivate: boolean }> = ({ isPrivate }) => (
-  <div className="pl-0.5 text-[1.6em] text-[#6e7980]">
+  <div className="pl-0.5 text-[1.6em] text-ink-muted">
     <Icon name={isPrivate ? "lock" : "globe"} />
   </div>
 );
@@ -57,7 +57,7 @@ const SpaceCardBox: FC<
       className={clsx(
         "flex h-full flex-col",
         "cursor-pointer rounded-sm border border-transparent",
-        isNew ? "hover:border-[#61a761]" : "hover:border-[#c2cdd6]",
+        isNew ? "hover:border-accent" : "hover:border-border",
         isNew && "min-h-[12em]"
       )}
       onClick={onClick}
@@ -69,9 +69,9 @@ const SpaceCardBox: FC<
 
 export const NewSpaceCard: FC<{ onClick(): void }> = ({ onClick }) => (
   <SpaceCardBox onClick={onClick} isNew>
-    <div className="flex h-full flex-col items-center justify-center rounded-sm bg-[#cee4ce]">
-      <Icon name="plus" className="text-[4.5em] text-[#79b979]" />
-      <header className="mt-4 text-3xl font-bold text-[#32403c]">
+    <div className="flex h-full flex-col items-center justify-center rounded-sm bg-success-surface">
+      <Icon name="plus" className="text-[4.5em] text-success" />
+      <header className="mt-4 text-3xl font-bold text-success">
         New Model
       </header>
     </div>
@@ -106,7 +106,7 @@ export const SpaceCard: FC<{
             className={clsx(
               "font-bold",
               size === "SMALL" ? "text-xs" : "text-lg leading-tight",
-              space.name ? "text-[#4a6a88]" : "italic text-grey-bbb"
+              space.name ? "text-ink-muted" : "italic text-grey-bbb"
             )}
           >
             {space.name || "Untitled Model"}
@@ -121,7 +121,7 @@ export const SpaceCard: FC<{
 
       <div
         className={clsx(
-          "relative z-0 bg-[#d9dee2]",
+          "relative z-0 bg-switch-track",
           size === "SMALL" ? "min-h-[32px]" : "min-h-[11em]",
           size === "SMALL" && "rounded-b-sm"
         )}
@@ -143,7 +143,7 @@ export const SpaceCard: FC<{
       </div>
       {size !== "SMALL" && (
         <a href={spaceUrl} className="flex-1 rounded-b-sm bg-white p-2">
-          <p className="break-words text-sm text-[#78838c]">
+          <p className="break-words text-sm text-ink-subtle">
             {formatDescription(space.description)}
           </p>
         </a>
