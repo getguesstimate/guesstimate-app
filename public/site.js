@@ -1,3 +1,12 @@
+// Remember only deliberate language choices; visiting a shared link is not a preference.
+for (const link of document.querySelectorAll(".language-menu a[hreflang]")) {
+  link.addEventListener("click", () => {
+    const language = link.getAttribute("hreflang");
+    const secure = location.protocol === "https:" ? "; Secure" : "";
+    document.cookie = `guesstimate.language=${encodeURIComponent(language)}; Path=/; Max-Age=31536000; SameSite=Lax${secure}`;
+  });
+}
+
 const menu = document.querySelector(".mobile-menu");
 const headerMenus = [...document.querySelectorAll(".site-header details")];
 const themeToggle = document.querySelector(".theme-toggle");

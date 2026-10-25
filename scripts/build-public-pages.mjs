@@ -36,8 +36,7 @@ const escapeHtml = (value) =>
       }[character])
   );
 const urlFor = (locale, page) =>
-  locale.prefix +
-  (page.route === "/" ? (locale.prefix ? "" : "/") : page.route);
+  page.route === "/" ? locale.prefix || "/en" : locale.prefix + page.route;
 
 const pagesFor = (locale) =>
   pages.filter((page) => !page.englishOnly || locale.code === "en");
@@ -160,7 +159,7 @@ export function renderPublicPages() {
                     page
                   )}" />`
               ),
-              `<link rel="alternate" hreflang="x-default" href="https://www.getguesstimate.com${urlFor(locales[0], page)}" />`,
+              `<link rel="alternate" hreflang="x-default" href="https://www.getguesstimate.com${page.route === "/" ? "/" : urlFor(locales[0], page)}" />`,
             ].join("\n"),
         languageMenu,
         languageNotice:

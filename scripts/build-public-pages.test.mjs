@@ -24,7 +24,7 @@ const footerOf = (html) =>
 test("generates both pages for every locale with correct routes and direction", () => {
   assert.deepEqual(
     pages.map((p) => p.route),
-    locales.flatMap(({ prefix }) => [prefix || "/", `${prefix}/pricing`])
+    locales.flatMap(({ prefix }) => [prefix || "/en", `${prefix}/pricing`])
   );
   assert.deepEqual(
     publicPageRewrites().map((r) => r.source),
@@ -55,7 +55,7 @@ test("language links keep the visitor on the equivalent page", () => {
     for (const locale of locales) {
       assert(
         menu.includes(
-          `href="${locale.prefix + suffix || "/"}" lang="${locale.code}"`
+          `href="${locale.prefix + suffix || "/en"}" lang="${locale.code}"`
         )
       );
       assert(menu.includes(`<bdi dir="auto">${locale.name}</bdi>`));
