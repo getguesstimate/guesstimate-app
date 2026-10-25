@@ -1,10 +1,9 @@
 import { ReactNode } from "react";
 import Head from "next/head";
-import { HeaderActions } from "~/components/workspace/HeaderActions";
+import { PageHeader } from "~/components/workspace/PageHeader";
 import { NavHelper } from "~/components/utility/NavHelper";
 import { ErrorModal } from "~/components/layout/ErrorModal";
 import { ModalContainer } from "~/modules/modal/routes";
-import workspace from "../workspace/workspace.module.css";
 import styles from "./account.module.css";
 
 export function AccountShell({
@@ -37,17 +36,10 @@ export function AccountShell({
         </Head>
         <ErrorModal />
         <ModalContainer />
-        <header className={styles.header}>
-          <a
-            href="/models"
-            className={workspace.brand}
-            aria-label="Browse models"
-          >
-            <img src="/assets/new-logo-2.png" alt="" width="26" height="26" />
-            <span>Guesstimate</span>
-          </a>
-          <HeaderActions organizationId={newModelOrganizationId} />
-        </header>
+        <PageHeader
+          className={styles.header}
+          organizationId={newModelOrganizationId}
+        />
         <main className={`${styles.main} ${wide ? styles.wide : ""}`}>
           <div className={styles.pageHeading}>
             {avatar}

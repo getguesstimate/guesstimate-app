@@ -1,0 +1,17 @@
+.header.header {
+  position: sticky;
+  top: 0;
+  flex-shrink: 0;
+  transition: transform 180ms ease-out;
+}
+.header.hidden {
+  transform: translateY(-100%);
+}
+.header:focus-within {
+  transition: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .header.header {
+    transition: none;
+  }
+}

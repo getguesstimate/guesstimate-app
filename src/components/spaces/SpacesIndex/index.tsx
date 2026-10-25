@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Head from "next/head";
 import Modal from "react-modal";
 import { useRouter } from "next/router";
-import { HeaderActions } from "~/components/workspace/HeaderActions";
+import { PageHeader } from "~/components/workspace/PageHeader";
 import { Icon } from "~/components/workspace/Icon";
 import { ErrorModal } from "~/components/layout/ErrorModal";
 import { ModalContainer } from "~/modules/modal/routes";
@@ -11,7 +11,6 @@ import * as search from "~/modules/search_spaces/actions";
 import { SearchSortBy } from "~/modules/search_spaces/actions";
 import { ModelCard } from "../ModelCard";
 import { usersOrganizations } from "~/lib/engine/user";
-import workspace from "../../workspace/workspace.module.css";
 import styles from "./browse.module.css";
 
 export function SpacesIndex() {
@@ -156,17 +155,7 @@ export function SpacesIndex() {
       </Head>
       <ErrorModal />
       <ModalContainer />
-      <header className={styles.header}>
-        <a
-          href="/models"
-          className={`${workspace.brand} ${styles.brand}`}
-          aria-label="Browse models"
-        >
-          <img src="/assets/new-logo-2.png" alt="" width="26" height="26" />
-          <span>Guesstimate</span>
-        </a>
-        <HeaderActions />
-      </header>
+      <PageHeader className={styles.header} brandClassName={styles.brand} />
       <main className={styles.main}>
         <div className={styles.pageHeading}>
           <div>
