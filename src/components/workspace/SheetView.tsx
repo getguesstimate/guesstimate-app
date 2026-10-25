@@ -142,20 +142,18 @@ export function SheetView(props: Props) {
     };
     zoomRef.current = next;
     setZoom(next);
-    requestAnimationFrame(() => {
-      if (pendingScroll.current && scroll.current) {
-        scroll.current.scrollLeft = pendingScroll.current.x;
-        scroll.current.scrollTop = pendingScroll.current.y;
-        pendingScroll.current = null;
-      }
-    });
   };
-  useLayoutEffect(() => {
-    if (pendingScroll.current && scroll.current) {
+  const applyPendingScroll = () => {
+    // Only scroll once React has committed the matching scale. An animation
+    // frame can run before that commit and visibly pan the still-unscaled sheet.
+    if (zoom === zoomRef.current && pendingScroll.current && scroll.current) {
       scroll.current.scrollLeft = pendingScroll.current.x;
       scroll.current.scrollTop = pendingScroll.current.y;
       pendingScroll.current = null;
     }
+  };
+  useLayoutEffect(() => {
+    applyPendingScroll();
   });
   useEffect(() => {
     const box = scroll.current;
@@ -218,6 +216,7 @@ export function SheetView(props: Props) {
       x: left * zoomRef.current,
       y: top * zoomRef.current,
     };
+    applyPendingScroll();
   };
   const rowCount = Math.max(
     extent.rows,
@@ -774,6 +773,7 @@ export function SheetView(props: Props) {
                 pinch.current.y * zoomRef.current -
                 ((a.y + b.y) / 2 - rect.top),
             };
+            applyPendingScroll();
             suppressClick.current = true;
             return;
           }
