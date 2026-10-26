@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Head from "next/head";
 import { ErrorModal } from "~/components/layout/ErrorModal";
 import { ModalContainer } from "~/modules/modal/routes";
@@ -92,7 +92,11 @@ export function ScratchpadWorkspace({
   const { denormalizedSpace: space } = useAppSelector((state) =>
     denormalizedSpaceSelector(state, { spaceId })
   );
-  const metrics = space.metrics || [];
+  const metrics = useMemo(() => space.metrics || [], [space.metrics]);
+  const metricsById = useMemo(
+    () => new Map(metrics.map((metric) => [metric.id, metric])),
+    [metrics]
+  );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [formulaFocusId, setFormulaFocusId] = useState<string | null>(null);
@@ -165,6 +169,7 @@ export function ScratchpadWorkspace({
     : [];
   const [help, setHelp] = useState(false);
   const [canvasHeight, setCanvasHeight] = useState(0);
+  const [canvasWidth, setCanvasWidth] = useState(0);
   const [spaceHeld, setSpaceHeld] = useState(false);
   const [view, setViewState] = useState<Viewport>({ x: 80, y: 100, zoom: 1 });
   const viewRef = useRef(view);
@@ -346,6 +351,7 @@ export function ScratchpadWorkspace({
     const keepVisible = () => {
       if (!box.clientWidth || !box.clientHeight) return;
       setCanvasHeight(box.clientHeight);
+      setCanvasWidth(box.clientWidth);
       const metric = metricsRef.current.find(
         (m) => m.id === selectedRef.current
       );
@@ -1111,55 +1117,81 @@ export function ScratchpadWorkspace({
               transform: `translate(${view.x}px, ${view.y}px) scale(${view.zoom})`,
             }}
           >
-            <svg className={styles.connections} aria-hidden="true">
-              <defs>
-                <marker
-                  id="workspace-arrow"
-                  markerWidth="8"
-                  markerHeight="8"
-                  refX="7"
-                  refY="4"
-                  orient="auto"
-                >
-                  <path d="M 1 1 L 7 4 L 1 7" />
-                </marker>
-              </defs>
-              {(space.edges || []).map((edge) => {
-                const from = metrics.find((m) => m.id === edge.input),
-                  to = metrics.find((m) => m.id === edge.output);
-                if (!from || !to) return null;
-                return (
-                  <path
-                    key={`${edge.input}-${edge.output}`}
-                    data-edge={`${edge.input}-${edge.output}`}
-                    className={
-                      selectedId === edge.input || selectedId === edge.output
-                        ? styles.selectedEdge
-                        : undefined
-                    }
-                    d={connectionPath(positionOf(from), positionOf(to))}
-                    markerEnd="url(#workspace-arrow)"
-                  />
-                );
-              })}
-            </svg>
-            {metrics.map((metric) => (
-              <CanvasNode
-                simplified={simplified}
-                key={metric.id}
-                metric={metric}
-                selected={
-                  selectedId === metric.id ||
-                  activeSelection.includes(metric.id)
-                }
-                referenceMode={
-                  space.canvasState.metricClickMode === "FUNCTION_INPUT_SELECT"
-                }
-                position={positionOf(metric)}
-                onSelect={() => select(metric.id)}
-                onMove={(point) => move(metric.id, point)}
-              />
-            ))}
+            {viewMode === "canvas" && (
+              <>
+                <svg className={styles.connections} aria-hidden="true">
+                  <defs>
+                    <marker
+                      id="workspace-arrow"
+                      markerWidth="8"
+                      markerHeight="8"
+                      refX="7"
+                      refY="4"
+                      orient="auto"
+                    >
+                      <path d="M 1 1 L 7 4 L 1 7" />
+                    </marker>
+                  </defs>
+                  {(space.edges || []).map((edge) => {
+                    const from = metricsById.get(edge.input),
+                      to = metricsById.get(edge.output);
+                    if (!from || !to) return null;
+                    return (
+                      <path
+                        key={`${edge.input}-${edge.output}`}
+                        data-edge={`${edge.input}-${edge.output}`}
+                        className={
+                          selectedId === edge.input ||
+                          selectedId === edge.output
+                            ? styles.selectedEdge
+                            : undefined
+                        }
+                        d={connectionPath(positionOf(from), positionOf(to))}
+                        markerEnd="url(#workspace-arrow)"
+                      />
+                    );
+                  })}
+                </svg>
+                {metrics
+                  .filter((metric) => {
+                    if (
+                      !canvasWidth ||
+                      !canvasHeight ||
+                      metric.id === selectedId ||
+                      metric.id === dragPosition?.id
+                    )
+                      return true;
+                    const point = positionOf(metric);
+                    const x = point.x * view.zoom + view.x;
+                    const y = point.y * view.zoom + view.y;
+                    const overscan = 160;
+                    return (
+                      x + NODE_WIDTH * view.zoom >= -overscan &&
+                      y + NODE_HEIGHT * view.zoom >= -overscan &&
+                      x <= canvasWidth + overscan &&
+                      y <= canvasHeight + overscan
+                    );
+                  })
+                  .map((metric) => (
+                    <CanvasNode
+                      simplified={simplified}
+                      key={metric.id}
+                      metric={metric}
+                      selected={
+                        selectedId === metric.id ||
+                        activeSelection.includes(metric.id)
+                      }
+                      referenceMode={
+                        space.canvasState.metricClickMode ===
+                        "FUNCTION_INPUT_SELECT"
+                      }
+                      position={positionOf(metric)}
+                      onSelect={() => select(metric.id)}
+                      onMove={(point) => move(metric.id, point)}
+                    />
+                  ))}
+              </>
+            )}
             {selectionBox && (
               <div
                 data-selection-box

@@ -12,10 +12,12 @@ import { NodeNotes } from "./NodeNotes";
 import { ResultDetails } from "./ResultDetails";
 import styles from "./workspace.module.css";
 
+const resultFormatter = new Intl.NumberFormat("en", {
+  maximumSignificantDigits: 4,
+});
+
 export const formatNumber = (n: number) =>
-  Number.isFinite(n)
-    ? new Intl.NumberFormat("en", { maximumSignificantDigits: 4 }).format(n)
-    : "—";
+  Number.isFinite(n) ? resultFormatter.format(n) : "—";
 
 export function NodeInspector({
   metric,

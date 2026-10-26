@@ -1,9 +1,14 @@
 import _ from "lodash";
-import React, { useImperativeHandle, useMemo, useRef } from "react";
+import React, {
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 import * as d3 from "d3";
 
-import useSize from "@react-hook/size";
 import { numberShow } from "~/lib/numberShower/numberShower";
 
 function getYScale(data: d3.Bin<number, number>[], height: number) {
@@ -108,9 +113,25 @@ export const Histogram = React.forwardRef<{ xScale: any }, Props>(
     ref
   ) {
     const containerRef = useRef<HTMLDivElement | null>(null);
-    const [width, height] = useSize(
-      containerRef as React.RefObject<HTMLElement>
-    );
+    const [size, setSize] = useState({ width: 0, height: 0 });
+    const { width, height } = size;
+    useEffect(() => {
+      const container = containerRef.current;
+      if (!container) return;
+      const observer = new ResizeObserver(([entry]) => {
+        // Observer measurements don't force layout. Zoom can notify every chart
+        // without changing its local size, so retain state when it is unchanged.
+        const width = Math.round(entry.contentRect.width);
+        const height = Math.round(entry.contentRect.height);
+        setSize((previous) =>
+          previous.width === width && previous.height === height
+            ? previous
+            : { width, height }
+        );
+      });
+      observer.observe(container);
+      return () => observer.disconnect();
+    }, []);
 
     const { xScale, yScale, histogramData } = useMemo(() => {
       const filteredData = filterLowDensityPoints(data, cutOffRatio);
@@ -139,17 +160,16 @@ export const Histogram = React.forwardRef<{ xScale: any }, Props>(
       <div ref={containerRef} className="h-full">
         <svg className="h-full w-full">
           <g>
-            {histogramData.map((d, i) => (
-              <Bar
-                key={i}
-                data={d}
-                xScale={xScale}
-                yScale={yScale}
-                barWidth={barWidth}
-                height={height}
-                theme={theme}
-              />
-            ))}
+            <path
+              className={theme === "dark" ? "fill-chart-strong" : "fill-chart"}
+              d={histogramData
+                .map((bin) => {
+                  const x = xScale(bin.x0!);
+                  const y = yScale(bin.length);
+                  return `M${x},${y}h${barWidth}v${height - y}h${-barWidth}Z`;
+                })
+                .join("")}
+            />
           </g>
           {allowHover && <Hoverbar hoveredXCoord={hoveredXCoord} />}
           {showTicks && (
@@ -235,33 +255,6 @@ const XAxis: React.FC<{
     <g transform={`translate(0,${height})`}>
       <Path scale={scale} />
       <g>{ticks}</g>
-    </g>
-  );
-};
-
-const Bar: React.FC<{
-  data: d3.Bin<number, number>;
-  xScale: d3.ScaleLinear<number, number>;
-  yScale: d3.ScaleLinear<number, number>;
-  barWidth: number;
-  height: number;
-  theme: HistogramTheme;
-}> = ({ data, xScale, yScale, barWidth, height, theme }) => {
-  const scaledX = xScale(data.x0!);
-  const scaledY = yScale(data.length);
-
-  const themeToColor: { [t in HistogramTheme]: string } = {
-    dark: "fill-chart-strong",
-    normal: "fill-chart",
-    light: "fill-chart",
-  };
-
-  return (
-    <g
-      className={themeToColor[theme]}
-      transform={`translate(${scaledX},${scaledY})`}
-    >
-      <rect width={barWidth} height={height - scaledY} />
     </g>
   );
 };

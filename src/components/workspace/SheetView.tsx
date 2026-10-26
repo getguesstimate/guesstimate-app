@@ -1,4 +1,11 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import {
+  memo,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { FullDenormalizedMetric } from "~/lib/engine/space";
 import { CanvasLocation } from "~/lib/locationUtils";
 import { CanvasNode } from "./CanvasNode";
@@ -49,7 +56,7 @@ type Props = {
   onDownload(): void;
 };
 
-export function SheetView(props: Props) {
+function SheetViewComponent(props: Props) {
   const { active, metrics, selectedId, referenceMode } = props;
   const simplified = useSimplifiedNodes();
   const [cell, setCell] = useState<CanvasLocation>({ row: 0, column: 0 });
@@ -96,6 +103,63 @@ export function SheetView(props: Props) {
   const [zoom, setZoom] = useState(SHEET_BASE_SCALE);
   const zoomRef = useRef(SHEET_BASE_SCALE);
   const pendingScroll = useRef<{ x: number; y: number } | null>(null);
+  const [visibleCells, setVisibleCells] = useState({
+    firstRow: 0,
+    lastRow: 8,
+    firstColumn: 0,
+    lastColumn: 8,
+  });
+  const updateVisibleCells = () => {
+    const box = scroll.current;
+    if (!box || !box.clientWidth || !box.clientHeight) return;
+    const scale = zoomRef.current;
+    const next = {
+      firstRow: Math.max(
+        0,
+        Math.floor((box.scrollTop / scale - SHEET_HEADING) / SHEET_ROW) - 1
+      ),
+      lastRow:
+        Math.ceil(
+          ((box.scrollTop + box.clientHeight) / scale - SHEET_HEADING) /
+            SHEET_ROW
+        ) + 1,
+      firstColumn: Math.max(
+        0,
+        Math.floor((box.scrollLeft / scale - SHEET_GUTTER) / SHEET_COLUMN) - 1
+      ),
+      lastColumn:
+        Math.ceil(
+          ((box.scrollLeft + box.clientWidth) / scale - SHEET_GUTTER) /
+            SHEET_COLUMN
+        ) + 1,
+    };
+    setVisibleCells((previous) =>
+      Object.keys(next).every((key) => next[key] === previous[key])
+        ? previous
+        : next
+    );
+  };
+  useEffect(() => {
+    const box = scroll.current;
+    if (!box) return;
+    let frame = 0;
+    const schedule = () => {
+      if (!frame)
+        frame = requestAnimationFrame(() => {
+          frame = 0;
+          updateVisibleCells();
+        });
+    };
+    const observer = new ResizeObserver(schedule);
+    observer.observe(box);
+    box.addEventListener("scroll", schedule, { passive: true });
+    schedule();
+    return () => {
+      observer.disconnect();
+      box.removeEventListener("scroll", schedule);
+      cancelAnimationFrame(frame);
+    };
+  }, []);
   const pointers = useRef(new Map<number, { x: number; y: number }>());
   const pan = useRef<{
     x: number;
@@ -154,6 +218,7 @@ export function SheetView(props: Props) {
   };
   useLayoutEffect(() => {
     applyPendingScroll();
+    updateVisibleCells();
   });
   useEffect(() => {
     const box = scroll.current;
@@ -228,8 +293,50 @@ export function SheetView(props: Props) {
     ...metrics.map((m) => m.location.column + 3),
     cell.column + 2
   );
+  // Keep the focused/selected cells mounted so keyboard navigation can cross
+  // the visible window without losing its focus target.
+  const visibleIndices = (
+    first: number,
+    last: number,
+    count: number,
+    pinned: number[]
+  ) =>
+    [
+      ...new Set([
+        ...Array.from(
+          { length: Math.max(0, Math.min(count - 1, last) - first + 1) },
+          (_, index) => first + index
+        ),
+        ...pinned.filter((index) => index >= 0 && index < count),
+      ]),
+    ].sort((a, b) => a - b);
+  const selectedMetric = metrics.find((metric) => metric.id === selectedId);
+  const rows = visibleIndices(
+    visibleCells.firstRow,
+    visibleCells.lastRow,
+    rowCount,
+    [cell.row, selectedMetric?.location.row ?? -1]
+  );
+  const columns = visibleIndices(
+    visibleCells.firstColumn,
+    visibleCells.lastColumn,
+    columnCount,
+    [cell.column, selectedMetric?.location.column ?? -1]
+  );
+  const metricsByCell = useMemo(() => {
+    const cells = new Map<string, FullDenormalizedMetric>();
+    for (const metric of metrics) {
+      const key = `${metric.location.row}:${metric.location.column}`;
+      if (!cells.has(key)) cells.set(key, metric);
+    }
+    return cells;
+  }, [metrics]);
+  const metricsById = useMemo(
+    () => new Map(metrics.map((metric) => [metric.id, metric])),
+    [metrics]
+  );
   const at = (location: CanvasLocation) =>
-    metrics.find((m) => sameCell(m.location, location));
+    metricsByCell.get(`${location.row}:${location.column}`);
   const selectedLocation = metrics.find((m) => m.id === selectedId)?.location;
   const reveal = (location: CanvasLocation) => {
     const box = scroll.current;
@@ -266,24 +373,32 @@ export function SheetView(props: Props) {
     observer.observe(box);
     return () => observer.disconnect();
   }, [active, selectedId, selectedLocation?.row, selectedLocation?.column]);
+  const focusCell = useRef<CanvasLocation | null>(null);
+  useLayoutEffect(() => {
+    const location = focusCell.current;
+    if (!location) return;
+    const element = stage.current?.querySelector(
+      `[data-sheet-cell="${cellName(location)}"]`
+    );
+    const button =
+      element?.querySelector<HTMLButtonElement>("button[aria-pressed]") ||
+      element?.querySelector<HTMLButtonElement>("button");
+    if (button) {
+      focusCell.current = null;
+      button.focus({ preventScroll: true });
+    }
+  });
   const selectCell = (location: CanvasLocation, focus = false) => {
     setRangeEnd(null);
     setCell(location);
     const metric = at(location);
     if (metric) props.onSelect(metric.id);
     else props.onClear();
-    if (focus)
-      requestAnimationFrame(() => {
-        reveal(location);
-        const cellElement = stage.current?.querySelector(
-          `[data-sheet-cell="${cellName(location)}"]`
-        );
-        const button =
-          cellElement?.querySelector<HTMLButtonElement>(
-            "button[aria-pressed]"
-          ) || cellElement?.querySelector<HTMLButtonElement>("button");
-        button?.focus({ preventScroll: true });
-      });
+    if (focus) {
+      focusCell.current = location;
+      reveal(location);
+      updateVisibleCells();
+    }
   };
   const move = (id: string, location: CanvasLocation) => {
     const moving = metrics.find((m) => m.id === id);
@@ -929,12 +1044,20 @@ export function SheetView(props: Props) {
               </div>
             ))}
           </div>
-          {Array.from({ length: rowCount }, (_, row) => (
-            <div className={styles.sheetRow} role="row" key={row}>
+          {rows.map((row, index) => (
+            <div
+              className={styles.sheetRow}
+              role="row"
+              aria-rowindex={row + 2}
+              key={row}
+              style={{
+                marginTop: (row - (rows[index - 1] ?? -1) - 1) * SHEET_ROW,
+              }}
+            >
               <div className={styles.sheetRowHeading} role="rowheader">
                 {row + 1}
               </div>
-              {Array.from({ length: columnCount }, (_, column) => {
+              {columns.map((column, index) => {
                 const location = { row, column },
                   metric = at(location);
                 const dragged = drag && metrics.find((m) => m.id === drag.id);
@@ -967,6 +1090,12 @@ export function SheetView(props: Props) {
                   <div
                     key={column}
                     role="gridcell"
+                    aria-colindex={column + 2}
+                    style={{
+                      marginLeft:
+                        (column - (columns[index - 1] ?? -1) - 1) *
+                        SHEET_COLUMN,
+                    }}
                     aria-label={cellName(location)}
                     aria-selected={
                       rangeEnd ? inRange(location) : sameCell(cell, location)
@@ -988,25 +1117,34 @@ export function SheetView(props: Props) {
                     }`}
                   >
                     {metric ? (
-                      <CanvasNode
-                        simplified={simplified}
-                        metric={metric}
-                        surface="sheet"
-                        position={SHEET_INSET}
-                        selected={selectedId === metric.id || inRange(location)}
-                        referenceMode={referenceMode}
-                        onSelect={() => {
-                          setRangeEnd(null);
-                          setCell(location);
-                          props.onSelect(metric.id);
-                        }}
-                        onMove={(point) =>
-                          move(metric.id, {
-                            row: row + Math.sign(point.y - SHEET_INSET.y),
-                            column: column + Math.sign(point.x - SHEET_INSET.x),
-                          })
-                        }
-                      />
+                      (metric.id === selectedId ||
+                        (row >= visibleCells.firstRow &&
+                          row <= visibleCells.lastRow &&
+                          column >= visibleCells.firstColumn &&
+                          column <= visibleCells.lastColumn)) && (
+                        <CanvasNode
+                          simplified={simplified}
+                          metric={metric}
+                          surface="sheet"
+                          position={SHEET_INSET}
+                          selected={
+                            selectedId === metric.id || inRange(location)
+                          }
+                          referenceMode={referenceMode}
+                          onSelect={() => {
+                            setRangeEnd(null);
+                            setCell(location);
+                            props.onSelect(metric.id);
+                          }}
+                          onMove={(point) =>
+                            move(metric.id, {
+                              row: row + Math.sign(point.y - SHEET_INSET.y),
+                              column:
+                                column + Math.sign(point.x - SHEET_INSET.x),
+                            })
+                          }
+                        />
+                      )
                     ) : (
                       <button
                         type="button"
@@ -1032,6 +1170,13 @@ export function SheetView(props: Props) {
               })}
             </div>
           ))}
+          <div
+            aria-hidden="true"
+            style={{
+              height:
+                (rowCount - (rows[rows.length - 1] ?? -1) - 1) * SHEET_ROW,
+            }}
+          />
           <svg className={styles.sheetConnections} aria-hidden="true">
             <defs>
               <marker
@@ -1046,8 +1191,8 @@ export function SheetView(props: Props) {
               </marker>
             </defs>
             {props.edges.map((edge) => {
-              const from = metrics.find((m) => m.id === edge.input),
-                to = metrics.find((m) => m.id === edge.output);
+              const from = metricsById.get(edge.input),
+                to = metricsById.get(edge.output);
               return from && to ? (
                 <path
                   key={`${edge.input}-${edge.output}`}
@@ -1193,3 +1338,10 @@ export function SheetView(props: Props) {
     </section>
   );
 }
+
+// Keep the sheet mounted to preserve its scroll, zoom and selection, but don't
+// reconcile its entire grid during gestures in the other view.
+export const SheetView = memo(
+  SheetViewComponent,
+  (previous, next) => !previous.active && !next.active
+);

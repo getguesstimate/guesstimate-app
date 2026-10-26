@@ -1250,6 +1250,7 @@
   font: 11px ui-monospace, monospace;
 }
 .sheetScroll {
+  overflow-anchor: none;
   flex: 1;
   min-height: 0;
   overflow: auto;

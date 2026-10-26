@@ -15,8 +15,11 @@ type Props = {
   theme?: HistogramTheme;
 };
 
-export const SimulationHistogram = React.forwardRef<{ xScale: any }, Props>(
-  function SimulationHistogram({ simulation, ...histogramProps }, ref) {
+export const SimulationHistogram = React.memo(
+  React.forwardRef<{ xScale: any }, Props>(function SimulationHistogram(
+    { simulation, ...histogramProps },
+    ref
+  ) {
     const sortedValues = _.get(simulation, "sample.sortedValues") || [];
 
     const hasValues = sortedValues && sortedValues.length > 1;
@@ -25,5 +28,5 @@ export const SimulationHistogram = React.forwardRef<{ xScale: any }, Props>(
     }
 
     return <Histogram data={sortedValues} {...histogramProps} ref={ref} />;
-  }
+  })
 );

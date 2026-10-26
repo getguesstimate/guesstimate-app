@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { SimulationHistogram } from "~/components/simulations/SimulationHistogram";
 import { FullDenormalizedMetric } from "~/lib/engine/space";
 import { Point } from "./geometry";
@@ -24,14 +25,11 @@ export function CanvasNode({
   surface?: "canvas" | "sheet";
   simplified?: boolean;
 }) {
-  const stats = metric.simulation?.stats;
-  const error = !!metric.simulation?.sample.errors?.length;
   const formula = metric.guesstimate.guesstimateType === "FUNCTION";
   const name = metric.name?.trim();
   const description = metric.guesstimate.description?.trim();
   const hasValue =
     !!metric.guesstimate.input?.trim() || !!metric.guesstimate.data?.length;
-  const empty = !name && !description && !hasValue;
   const note = !hasValue && !!(name || description);
   const heading =
     note && !!name && (!description || metric.showNotesOnNode === false);
@@ -111,51 +109,75 @@ export function CanvasNode({
         }}
         aria-label={`Edit ${metric.name || metric.readableId}`}
       >
-        {(name || empty) && (
-          <span className={styles.nodeName}>{name || "Untitled node"}</span>
-        )}
-        {heading ? null : note ? (
-          <span className={styles.notePreview}>
-            {metric.guesstimate.description ||
-              "Select to add a value or write a note."}
-          </span>
-        ) : (
-          <>
-            {(!simplified ||
-              metric.guesstimate.guesstimateType !== "POINT") && (
-              <code className={styles.nodeExpression}>
-                {metric.guesstimate.input ||
-                  (metric.guesstimate.data?.length
-                    ? `${metric.guesstimate.data.length} data points`
-                    : "Add a value or formula")}
-              </code>
-            )}
-            {error ? (
-              <span className={styles.nodeError}>Check this expression</span>
-            ) : stats ? (
-              <span className={styles.nodeResult}>
-                {formatNumber(stats.mean)}
-                <small>
-                  {stats.length > 1 ? "mean" : simplified ? "" : "value"}
-                </small>
-              </span>
-            ) : (
-              <span className={styles.nodeEmpty}>
-                {metric.guesstimate.input ? "Calculating…" : "No value yet"}
-              </span>
-            )}
-            {stats?.length > 1 && (
-              <div className={styles.nodeChart}>
-                <SimulationHistogram
-                  simulation={metric.simulation}
-                  cutOffRatio={0.05}
-                  bins={22}
-                />
-              </div>
-            )}
-          </>
-        )}
+        <NodeContents metric={metric} simplified={simplified} />
       </button>
     </article>
   );
 }
+
+const NodeContents = memo(function NodeContents({
+  metric,
+  simplified,
+}: {
+  metric: FullDenormalizedMetric;
+  simplified: boolean;
+}) {
+  const stats = metric.simulation?.stats;
+  const error = !!metric.simulation?.sample.errors?.length;
+  const name = metric.name?.trim();
+  const description = metric.guesstimate.description?.trim();
+  const hasValue =
+    !!metric.guesstimate.input?.trim() || !!metric.guesstimate.data?.length;
+  const empty = !name && !description && !hasValue;
+  const note = !hasValue && !!(name || description);
+  const heading =
+    note && !!name && (!description || metric.showNotesOnNode === false);
+
+  return (
+    <>
+      {(name || empty) && (
+        <span className={styles.nodeName}>{name || "Untitled node"}</span>
+      )}
+      {heading ? null : note ? (
+        <span className={styles.notePreview}>
+          {metric.guesstimate.description ||
+            "Select to add a value or write a note."}
+        </span>
+      ) : (
+        <>
+          {(!simplified || metric.guesstimate.guesstimateType !== "POINT") && (
+            <code className={styles.nodeExpression}>
+              {metric.guesstimate.input ||
+                (metric.guesstimate.data?.length
+                  ? `${metric.guesstimate.data.length} data points`
+                  : "Add a value or formula")}
+            </code>
+          )}
+          {error ? (
+            <span className={styles.nodeError}>Check this expression</span>
+          ) : stats ? (
+            <span className={styles.nodeResult}>
+              {formatNumber(stats.mean)}
+              <small>
+                {stats.length > 1 ? "mean" : simplified ? "" : "value"}
+              </small>
+            </span>
+          ) : (
+            <span className={styles.nodeEmpty}>
+              {metric.guesstimate.input ? "Calculating…" : "No value yet"}
+            </span>
+          )}
+          {stats?.length > 1 && (
+            <div className={styles.nodeChart}>
+              <SimulationHistogram
+                simulation={metric.simulation}
+                cutOffRatio={0.05}
+                bins={22}
+              />
+            </div>
+          )}
+        </>
+      )}
+    </>
+  );
+});
