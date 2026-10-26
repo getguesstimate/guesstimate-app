@@ -63,8 +63,13 @@ export function expressionToInputFn(metrics: Metric[] = [], facts: any[] = []) {
     idMap[expressionSyntaxPad(id, false)] = `#${variable_name}`;
   });
 
+  // All expressions in this graph use the same identifiers.
+  const ids = Object.keys(idMap);
+  const identifierPattern = ids.length ? _utils.or(ids) : null;
   const translateValidInputsFn = (expression: string) =>
-    _utils.replaceByMap(expression, idMap);
+    identifierPattern
+      ? expression.replace(identifierPattern, (match) => idMap[match])
+      : expression;
   const translateRemainingInputsFn = (expression: string) =>
     expression.replace(/\$\{.*\}/, "??");
 
