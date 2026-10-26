@@ -1294,7 +1294,25 @@
   left: 0;
   z-index: 6;
 }
+.sheetRow { padding-left: 36px; }
+.sheetRowHeadings {
+  position: absolute;
+  left: 0;
+  top: 30px;
+  width: 36px;
+  z-index: 4;
+  pointer-events: none;
+}
+.sheetSemanticRowHeading {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
 .sheetRowHeading {
+  height: 208px;
   position: relative;
   left: 0;
   z-index: 4;
