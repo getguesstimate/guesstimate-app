@@ -130,6 +130,26 @@ function SheetViewComponent(props: Props) {
     x: number;
     y: number;
   } | null>(null);
+  const columnHeadings = useRef<HTMLDivElement>(null);
+  const rowHeadings = useRef<HTMLElement[]>([]);
+  const corner = useRef<HTMLDivElement>(null);
+  const pinnedOffset = useRef({ x: NaN, y: NaN });
+  const updatePinnedHeaders = () => {
+    const box = scroll.current;
+    if (!box) return;
+    // Header positions are in unscaled sheet coordinates. Write transforms only;
+    // no grid layout or React update is needed when the scroll position changes.
+    const x = box.scrollLeft / zoom;
+    const y = box.scrollTop / zoom;
+    if (x !== pinnedOffset.current.x) {
+      for (const heading of rowHeadings.current)
+        heading.style.transform = `translateX(${x}px)`;
+      if (corner.current) corner.current.style.transform = `translateX(${x}px)`;
+    }
+    if (y !== pinnedOffset.current.y && columnHeadings.current)
+      columnHeadings.current.style.transform = `translateY(${y}px)`;
+    pinnedOffset.current = { x, y };
+  };
   const handActive = hand || spaceHeld;
   const zoomTo = (value: number, x?: number, y?: number) => {
     const box = scroll.current;
@@ -159,9 +179,6 @@ function SheetViewComponent(props: Props) {
       pendingScroll.current = null;
     }
   };
-  useLayoutEffect(() => {
-    applyPendingScroll();
-  });
   useEffect(() => {
     const box = scroll.current;
     if (!box) return;
@@ -235,6 +252,17 @@ function SheetViewComponent(props: Props) {
     ...metrics.map((m) => m.location.column + 3),
     cell.column + 2
   );
+  useLayoutEffect(() => {
+    rowHeadings.current = Array.from(
+      stage.current?.querySelectorAll<HTMLElement>('[role="rowheader"]') || []
+    );
+    pinnedOffset.current = { x: NaN, y: NaN };
+  }, [rowCount]);
+  useLayoutEffect(() => {
+    applyPendingScroll();
+    updatePinnedHeaders();
+  });
+
   const metricsByCell = useMemo(() => {
     const cells = new Map<string, FullDenormalizedMetric>();
     for (const metric of metrics) {
@@ -528,6 +556,7 @@ function SheetViewComponent(props: Props) {
         </button>
       </div>
       <div
+        onScroll={updatePinnedHeaders}
         className={`${styles.sheetScroll} ${
           handActive ? styles.sheetHand : areaMode ? styles.areaMode : ""
         }`}
@@ -924,167 +953,184 @@ function SheetViewComponent(props: Props) {
         }}
       >
         <div
-          ref={stage}
-          className={styles.sheetStage}
-          role="grid"
-          aria-label="Model sheet"
-          aria-multiselectable="true"
-          aria-rowcount={rowCount + 1}
-          aria-colcount={columnCount + 1}
+          className={styles.sheetScaleBounds}
           style={{
-            width: SHEET_GUTTER + columnCount * SHEET_COLUMN,
-            ...{ zoom },
+            width: (SHEET_GUTTER + columnCount * SHEET_COLUMN) * zoom,
+            height: (SHEET_HEADING + rowCount * SHEET_ROW) * zoom,
           }}
         >
-          <div className={styles.sheetColumnHeadings} role="row">
+          <div
+            ref={stage}
+            className={styles.sheetStage}
+            role="grid"
+            aria-label="Model sheet"
+            aria-multiselectable="true"
+            aria-rowcount={rowCount + 1}
+            aria-colcount={columnCount + 1}
+            style={{
+              width: SHEET_GUTTER + columnCount * SHEET_COLUMN,
+              height: SHEET_HEADING + rowCount * SHEET_ROW,
+              transform: `scale(${zoom})`,
+            }}
+          >
             <div
-              className={styles.sheetCorner}
-              role="columnheader"
-              aria-label="Row"
-            />
-            {Array.from({ length: columnCount }, (_, column) => (
-              <div role="columnheader" key={column}>
-                {columnName(column)}
+              ref={columnHeadings}
+              className={styles.sheetColumnHeadings}
+              role="row"
+            >
+              <div
+                ref={corner}
+                className={styles.sheetCorner}
+                role="columnheader"
+                aria-label="Row"
+              />
+              {Array.from({ length: columnCount }, (_, column) => (
+                <div role="columnheader" key={column}>
+                  {columnName(column)}
+                </div>
+              ))}
+            </div>
+            {Array.from({ length: rowCount }, (_, row) => (
+              <div className={styles.sheetRow} role="row" key={row}>
+                <div className={styles.sheetRowHeading} role="rowheader">
+                  {row + 1}
+                </div>
+                {Array.from({ length: columnCount }, (_, column) => {
+                  const location = { row, column },
+                    metric = at(location);
+                  const dragged = drag && metrics.find((m) => m.id === drag.id);
+                  const movingGroup = !!(
+                    dragged &&
+                    rangeEnd &&
+                    inRange(dragged.location) &&
+                    rangeNodes.length > 1
+                  );
+                  const target =
+                    drag &&
+                    (movingGroup
+                      ? rangeNodes.some((m) =>
+                          sameCell(
+                            {
+                              row:
+                                m.location.row +
+                                drag.target.row -
+                                dragged!.location.row,
+                              column:
+                                m.location.column +
+                                drag.target.column -
+                                dragged!.location.column,
+                            },
+                            location
+                          )
+                        )
+                      : sameCell(drag.target, location));
+                  return (
+                    <div
+                      key={column}
+                      role="gridcell"
+                      aria-label={cellName(location)}
+                      aria-selected={
+                        rangeEnd ? inRange(location) : sameCell(cell, location)
+                      }
+                      data-sheet-cell={cellName(location)}
+                      className={`${styles.sheetCell} ${
+                        inRange(location) ? styles.sheetRangeCell : ""
+                      } ${
+                        target
+                          ? metric &&
+                            metric.id !== drag.id &&
+                            !(
+                              movingGroup &&
+                              rangeNodes.some((m) => m.id === metric.id)
+                            )
+                            ? styles.sheetDropBlocked
+                            : styles.sheetDropTarget
+                          : ""
+                      }`}
+                    >
+                      {metric ? (
+                        <CanvasNode
+                          simplified={simplified}
+                          metric={metric}
+                          surface="sheet"
+                          position={SHEET_INSET}
+                          selected={
+                            selectedId === metric.id || inRange(location)
+                          }
+                          referenceMode={referenceMode}
+                          onSelect={() => {
+                            setRangeEnd(null);
+                            setCell(location);
+                            props.onSelect(metric.id);
+                          }}
+                          onMove={(point) =>
+                            move(metric.id, {
+                              row: row + Math.sign(point.y - SHEET_INSET.y),
+                              column:
+                                column + Math.sign(point.x - SHEET_INSET.x),
+                            })
+                          }
+                        />
+                      ) : (
+                        <button
+                          type="button"
+                          className={styles.emptySheetCell}
+                          tabIndex={sameCell(cell, location) ? 0 : -1}
+                          aria-label={`Empty cell ${cellName(location)}`}
+                          disabled={props.loading || props.error}
+                          onClick={() => selectCell(location)}
+                          onKeyDown={(event) => {
+                            if (event.key === "Enter") {
+                              event.preventDefault();
+                              props.onAdd(location);
+                            }
+                          }}
+                        >
+                          <span>
+                            <Icon name="plus" />
+                          </span>
+                        </button>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             ))}
-          </div>
-          {Array.from({ length: rowCount }, (_, row) => (
-            <div className={styles.sheetRow} role="row" key={row}>
-              <div className={styles.sheetRowHeading} role="rowheader">
-                {row + 1}
-              </div>
-              {Array.from({ length: columnCount }, (_, column) => {
-                const location = { row, column },
-                  metric = at(location);
-                const dragged = drag && metrics.find((m) => m.id === drag.id);
-                const movingGroup = !!(
-                  dragged &&
-                  rangeEnd &&
-                  inRange(dragged.location) &&
-                  rangeNodes.length > 1
-                );
-                const target =
-                  drag &&
-                  (movingGroup
-                    ? rangeNodes.some((m) =>
-                        sameCell(
-                          {
-                            row:
-                              m.location.row +
-                              drag.target.row -
-                              dragged!.location.row,
-                            column:
-                              m.location.column +
-                              drag.target.column -
-                              dragged!.location.column,
-                          },
-                          location
-                        )
-                      )
-                    : sameCell(drag.target, location));
-                return (
-                  <div
-                    key={column}
-                    role="gridcell"
-                    aria-label={cellName(location)}
-                    aria-selected={
-                      rangeEnd ? inRange(location) : sameCell(cell, location)
-                    }
-                    data-sheet-cell={cellName(location)}
-                    className={`${styles.sheetCell} ${
-                      inRange(location) ? styles.sheetRangeCell : ""
-                    } ${
-                      target
-                        ? metric &&
-                          metric.id !== drag.id &&
-                          !(
-                            movingGroup &&
-                            rangeNodes.some((m) => m.id === metric.id)
-                          )
-                          ? styles.sheetDropBlocked
-                          : styles.sheetDropTarget
-                        : ""
-                    }`}
-                  >
-                    {metric ? (
-                      <CanvasNode
-                        simplified={simplified}
-                        metric={metric}
-                        surface="sheet"
-                        position={SHEET_INSET}
-                        selected={selectedId === metric.id || inRange(location)}
-                        referenceMode={referenceMode}
-                        onSelect={() => {
-                          setRangeEnd(null);
-                          setCell(location);
-                          props.onSelect(metric.id);
-                        }}
-                        onMove={(point) =>
-                          move(metric.id, {
-                            row: row + Math.sign(point.y - SHEET_INSET.y),
-                            column: column + Math.sign(point.x - SHEET_INSET.x),
-                          })
-                        }
-                      />
-                    ) : (
-                      <button
-                        type="button"
-                        className={styles.emptySheetCell}
-                        tabIndex={sameCell(cell, location) ? 0 : -1}
-                        aria-label={`Empty cell ${cellName(location)}`}
-                        disabled={props.loading || props.error}
-                        onClick={() => selectCell(location)}
-                        onKeyDown={(event) => {
-                          if (event.key === "Enter") {
-                            event.preventDefault();
-                            props.onAdd(location);
-                          }
-                        }}
-                      >
-                        <span>
-                          <Icon name="plus" />
-                        </span>
-                      </button>
+            <svg className={styles.sheetConnections} aria-hidden="true">
+              <defs>
+                <marker
+                  id="sheet-arrow"
+                  markerWidth="8"
+                  markerHeight="8"
+                  refX="7"
+                  refY="4"
+                  orient="auto"
+                >
+                  <path d="M 1 1 L 7 4 L 1 7" />
+                </marker>
+              </defs>
+              {props.edges.map((edge) => {
+                const from = metricsById.get(edge.input),
+                  to = metricsById.get(edge.output);
+                return from && to ? (
+                  <path
+                    key={`${edge.input}-${edge.output}`}
+                    data-sheet-edge
+                    d={connectionPath(
+                      sheetPoint(from.location),
+                      sheetPoint(to.location)
                     )}
-                  </div>
-                );
+                    markerEnd="url(#sheet-arrow)"
+                    className={
+                      selectedId === from.id || selectedId === to.id
+                        ? styles.selectedEdge
+                        : undefined
+                    }
+                  />
+                ) : null;
               })}
-            </div>
-          ))}
-          <svg className={styles.sheetConnections} aria-hidden="true">
-            <defs>
-              <marker
-                id="sheet-arrow"
-                markerWidth="8"
-                markerHeight="8"
-                refX="7"
-                refY="4"
-                orient="auto"
-              >
-                <path d="M 1 1 L 7 4 L 1 7" />
-              </marker>
-            </defs>
-            {props.edges.map((edge) => {
-              const from = metricsById.get(edge.input),
-                to = metricsById.get(edge.output);
-              return from && to ? (
-                <path
-                  key={`${edge.input}-${edge.output}`}
-                  data-sheet-edge
-                  d={connectionPath(
-                    sheetPoint(from.location),
-                    sheetPoint(to.location)
-                  )}
-                  markerEnd="url(#sheet-arrow)"
-                  className={
-                    selectedId === from.id || selectedId === to.id
-                      ? styles.selectedEdge
-                      : undefined
-                  }
-                />
-              ) : null;
-            })}
-          </svg>
+            </svg>
+          </div>
         </div>
         <div className={styles.sheetExtend}>
           <button

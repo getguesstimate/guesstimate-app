@@ -1249,22 +1249,29 @@
   font: 11px ui-monospace, monospace;
 }
 .sheetScroll {
+  overflow-anchor: none;
   flex: 1;
   min-height: 0;
   overflow: auto;
   overscroll-behavior: contain;
   touch-action: none;
 }
-.sheetStage {
+.sheetScaleBounds {
   position: relative;
-  min-height: 100%;
+  overflow: clip;
+}
+.sheetStage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
 }
 .sheetColumnHeadings,
 .sheetRow {
   display: flex;
 }
 .sheetColumnHeadings {
-  position: sticky;
+  position: relative;
   top: 0;
   z-index: 5;
   height: 30px;
@@ -1283,12 +1290,12 @@
 }
 .sheetColumnHeadings > .sheetCorner {
   flex-basis: 36px;
-  position: sticky;
+  position: relative;
   left: 0;
   z-index: 6;
 }
 .sheetRowHeading {
-  position: sticky;
+  position: relative;
   left: 0;
   z-index: 4;
   flex: 0 0 36px;
