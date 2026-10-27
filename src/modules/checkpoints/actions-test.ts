@@ -27,7 +27,8 @@ it("undo restores inherited sheet positions and redo restores explicit canvas po
       },
     ],
   } as unknown as RootState;
-  const dispatch = jest.fn((action: AnyAction) => {
+  const dispatch = jest.fn();
+  dispatch.mockImplementation((action: AnyAction) => {
     state = {
       ...state,
       metrics: metricsR(state.metrics, action),
