@@ -60,6 +60,11 @@ export function FieldHelp({
           onKeyDown(event) {
             if (event.key === "Escape" && open) {
               event.stopPropagation();
+              // Cancel delayed hover/focus work as well as closing the popover.
+              context.events.emit("dismiss", {
+                type: "escapeKey",
+                data: { returnFocus: false },
+              });
               setOpen(false);
             }
           },
