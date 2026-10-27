@@ -84,6 +84,7 @@ function updateMetricsAndGuesstimates(
       type: "CHANGE_METRIC",
       item: {
         ...m,
+        canvasPosition: m.canvasPosition,
         showNotesOnNode: m.showNotesOnNode,
         titleAlignment: m.titleAlignment,
       },
