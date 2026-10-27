@@ -1,6 +1,6 @@
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { ScratchpadWorkspace } from "~/components/workspace/ScratchpadWorkspace";
+import { ModelWorkspace } from "~/components/workspace/ModelWorkspace";
 import { NavHelper } from "~/components/utility/NavHelper";
 import { extractTokenFromUrl } from "~/lib/engine/space";
 
@@ -12,7 +12,7 @@ const ModelPage: NextPage = () => {
 
   return !router.isReady || !Number.isFinite(intId) ? null : (
     <NavHelper>
-      <ScratchpadWorkspace
+      <ModelWorkspace
         key={intId}
         spaceId={intId}
         factsShown={router.query.factsShown === "true"}

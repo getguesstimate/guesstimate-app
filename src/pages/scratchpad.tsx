@@ -1,5 +1,5 @@
-import { ScratchpadWorkspace } from "~/components/workspace/ScratchpadWorkspace";
+import { ModelWorkspace } from "~/components/workspace/ModelWorkspace";
 
 export default function ScratchpadPage() {
-  return <ScratchpadWorkspace />;
+  return <ModelWorkspace />;
 }

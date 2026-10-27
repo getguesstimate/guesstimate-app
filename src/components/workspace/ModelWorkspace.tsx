@@ -12,13 +12,13 @@ import { ModalContainer } from "~/modules/modal/routes";
 import { useAppDispatch, useAppSelector } from "~/modules/hooks";
 import { denormalizedSpaceSelector } from "~/components/spaces/denormalized-space-selector";
 import {
-  loadScratchpad,
-  addScratchpadNode,
-  duplicateScratchpadNodes,
-  moveScratchpadNodes,
-  moveScratchpadCanvasNodes,
-  duplicateScratchpadCanvasNodes,
-} from "~/modules/scratchpad/actions";
+  addWorkspaceNode,
+  duplicateWorkspaceNodes,
+  moveWorkspaceNodes,
+  moveWorkspaceCanvasNodes,
+  duplicateWorkspaceCanvasNodes,
+} from "~/modules/workspace/nodeActions";
+import { loadScratchpad } from "~/modules/scratchpad/actions";
 import { canUseOrganizationFacts } from "~/lib/engine/space";
 import { SCRATCHPAD_ID } from "~/modules/scratchpad/model";
 import { changeMetric, removeMetrics } from "~/modules/metrics/actions";
@@ -68,7 +68,7 @@ const isField = (target: EventTarget | null) =>
   target instanceof Element &&
   !!target.closest('input, textarea, select, [contenteditable="true"]');
 
-export function ScratchpadWorkspace({
+export function ModelWorkspace({
   spaceId = SCRATCHPAD_ID,
   shareableLinkToken = null,
   initialCalculatorId,
@@ -437,7 +437,7 @@ export function ScratchpadWorkspace({
     if (metric && activeSelection.includes(id) && activeSelection.length > 1) {
       const start = basePosition(metric);
       dispatch(
-        moveScratchpadCanvasNodes(
+        moveWorkspaceCanvasNodes(
           activeSelection,
           {
             x: point.x - start.x,
@@ -451,7 +451,7 @@ export function ScratchpadWorkspace({
   const duplicateSelection = () => {
     if (!canvasActionIds.length) return;
     const copies = dispatch(
-      duplicateScratchpadCanvasNodes(canvasActionIds, spaceId)
+      duplicateWorkspaceCanvasNodes(canvasActionIds, spaceId)
     );
     closeDetails();
     setCanvasSelection(copies.map((m) => m.id));
@@ -507,7 +507,7 @@ export function ScratchpadWorkspace({
       })
     )
       position = { x: position.x + 40, y: position.y + 40 };
-    const id = dispatch(addScratchpadNode(position, undefined, spaceId));
+    const id = dispatch(addWorkspaceNode(position, undefined, spaceId));
     setSelectedId(id);
     setFormulaFocusId(id);
   };
@@ -532,7 +532,7 @@ export function ScratchpadWorkspace({
       })
     )
       position = { x: position.x + 40, y: position.y + 40 };
-    const id = dispatch(addScratchpadNode(position, location, spaceId));
+    const id = dispatch(addWorkspaceNode(position, location, spaceId));
     setSelectedId(id);
     setFormulaFocusId(id);
     return id;
@@ -1537,10 +1537,10 @@ export function ScratchpadWorkspace({
             onMove={(id, location) => dispatch(changeMetric({ id, location }))}
             onDelete={remove}
             onMoveNodes={(ids, delta) =>
-              dispatch(moveScratchpadNodes(ids, delta, spaceId))
+              dispatch(moveWorkspaceNodes(ids, delta, spaceId))
             }
             onDuplicateNodes={(ids) =>
-              dispatch(duplicateScratchpadNodes(ids, spaceId))
+              dispatch(duplicateWorkspaceNodes(ids, spaceId))
             }
             onDeleteNodes={(ids) => {
               dispatch(removeMetrics(ids));

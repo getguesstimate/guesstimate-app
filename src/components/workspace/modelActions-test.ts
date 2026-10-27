@@ -3,10 +3,10 @@ import { fetchSuccess } from "~/modules/spaces/actions";
 import { allowEdits, forbidEdits } from "~/modules/canvas_state/actions";
 import { meSlice } from "~/modules/me/slice";
 import {
-  addScratchpadNode,
-  duplicateScratchpadCanvasNodes,
-  moveScratchpadNodes,
-} from "~/modules/scratchpad/actions";
+  addWorkspaceNode,
+  duplicateWorkspaceCanvasNodes,
+  moveWorkspaceNodes,
+} from "~/modules/workspace/nodeActions";
 import { changeWorkspaceHistory } from "./modelActions";
 import { ApiSpace } from "~/lib/guesstimate_api/resources/Models";
 import { changeMetric } from "~/modules/metrics/actions";
@@ -45,10 +45,10 @@ it("keeps Viewing changes local, including add, duplicate, move, undo and redo",
   const { store, update } = setup();
   store.dispatch(forbidEdits());
   const id = store.dispatch(
-    addScratchpadNode({ x: 1, y: 2 }, { row: 0, column: 0 }, 12)
+    addWorkspaceNode({ x: 1, y: 2 }, { row: 0, column: 0 }, 12)
   );
-  store.dispatch(duplicateScratchpadCanvasNodes([id], 12));
-  store.dispatch(moveScratchpadNodes([id], { row: 1, column: 0 }, 12));
+  store.dispatch(duplicateWorkspaceCanvasNodes([id], 12));
+  store.dispatch(moveWorkspaceNodes([id], { row: 1, column: 0 }, 12));
   store.dispatch(changeWorkspaceHistory(12, false));
   store.dispatch(changeWorkspaceHistory(12, true));
   expect(store.getState().metrics.filter((m) => m.space === 12)).toHaveLength(
@@ -66,7 +66,7 @@ it("keeps Viewing changes local, including add, duplicate, move, undo and redo",
 it("saves additions and undo/redo to the selected model without losing redo", async () => {
   const { store, update } = setup();
   store.dispatch(allowEdits());
-  store.dispatch(addScratchpadNode({ x: 1, y: 2 }, undefined, 12));
+  store.dispatch(addWorkspaceNode({ x: 1, y: 2 }, undefined, 12));
   await Promise.resolve();
   expect(update).toHaveBeenLastCalledWith(
     12,
@@ -87,8 +87,8 @@ it("saves additions and undo/redo to the selected model without losing redo", as
 it("does not save another person’s model or the scratchpad even if editing is requested", () => {
   const { store, update } = setup(false);
   store.dispatch(allowEdits());
-  store.dispatch(addScratchpadNode({ x: 0, y: 0 }, undefined, 12));
-  store.dispatch(addScratchpadNode({ x: 0, y: 0 }));
+  store.dispatch(addWorkspaceNode({ x: 0, y: 0 }, undefined, 12));
+  store.dispatch(addWorkspaceNode({ x: 0, y: 0 }));
   store.dispatch(changeWorkspaceHistory(12, false));
   expect(update).not.toHaveBeenCalled();
 });
@@ -97,7 +97,7 @@ it("does not save another person’s model or the scratchpad even if editing is 
 it("saves note display preferences, preserves them when duplicated, and restores the legacy default on undo", async () => {
   const { store, update } = setup();
   store.dispatch(allowEdits());
-  const id = store.dispatch(addScratchpadNode({ x: 0, y: 0 }, undefined, 12));
+  const id = store.dispatch(addWorkspaceNode({ x: 0, y: 0 }, undefined, 12));
   await Promise.resolve();
   store.dispatch(changeMetric({ id, showNotesOnNode: false }));
   await Promise.resolve();
@@ -106,14 +106,14 @@ it("saves note display preferences, preserves them when duplicated, and restores
   expect(store.getState().metrics.find((m) => m.id === id)!.showNotesOnNode).toBeUndefined();
   store.dispatch(changeWorkspaceHistory(12, true));
   expect(store.getState().metrics.find((m) => m.id === id)!.showNotesOnNode).toBe(false);
-  const copies = store.dispatch(duplicateScratchpadCanvasNodes([id], 12));
+  const copies = store.dispatch(duplicateWorkspaceCanvasNodes([id], 12));
   expect(copies[0].showNotesOnNode).toBe(false);
 });
 
 it("saves independent title alignments and restores auto through undo", async () => {
   const { store, update } = setup();
   store.dispatch(allowEdits());
-  const id = store.dispatch(addScratchpadNode({ x: 0, y: 0 }, undefined, 12));
+  const id = store.dispatch(addWorkspaceNode({ x: 0, y: 0 }, undefined, 12));
   await Promise.resolve();
   const titleAlignment = { sheet: "bottom-right", canvas: "top-left" } as const;
   store.dispatch(changeMetric({ id, titleAlignment }));
@@ -123,6 +123,6 @@ it("saves independent title alignments and restores auto through undo", async ()
   expect(store.getState().metrics.find((m) => m.id === id)!.titleAlignment).toBeUndefined();
   store.dispatch(changeWorkspaceHistory(12, true));
   expect(store.getState().metrics.find((m) => m.id === id)!.titleAlignment).toEqual(titleAlignment);
-  const copies = store.dispatch(duplicateScratchpadCanvasNodes([id], 12));
+  const copies = store.dispatch(duplicateWorkspaceCanvasNodes([id], 12));
   expect(copies[0].titleAlignment).toEqual(titleAlignment);
 });
