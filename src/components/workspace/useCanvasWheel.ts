@@ -156,7 +156,15 @@ export function useCanvasWheel({
     };
     box.addEventListener("wheel", wheel, { passive: false });
     return () => box.removeEventListener("wheel", wheel);
-  }, [commitSpacing, gesture, metricsRef, selectionRef, setView, viewRef, viewport]);
+  }, [
+    commitSpacing,
+    gesture,
+    metricsRef,
+    selectionRef,
+    setView,
+    viewRef,
+    viewport,
+  ]);
 
   return { spacingPositions, commitSpacing };
 }

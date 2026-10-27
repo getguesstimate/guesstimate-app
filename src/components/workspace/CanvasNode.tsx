@@ -28,7 +28,7 @@ export function CanvasNode({
   simplified?: boolean;
   automaticAlignment?: TitleAlignment;
 }) {
-  const { name, hasValue, heading, note, formula } = nodeDisplay(metric);
+  const { hasValue, heading, note, formula } = nodeDisplay(metric);
   const kind = heading
     ? "Heading"
     : note
