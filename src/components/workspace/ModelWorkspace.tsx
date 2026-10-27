@@ -1,3 +1,4 @@
+import { downloadWorkspace } from "./downloadWorkspace";
 import { hasNodeValue } from "~/lib/nodeDisplay";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Head from "next/head";
@@ -36,7 +37,7 @@ import { SheetView } from "./SheetView";
 import { CanvasLocation } from "~/lib/locationUtils";
 import { ModelDetails } from "./ModelDetails";
 import { WorkspaceHeader } from "./WorkspaceHeader";
-import { Icon } from "./Icon";
+import { CanvasControls } from "./CanvasControls";
 import {
   Point,
   Viewport,
@@ -966,40 +967,7 @@ export function ModelWorkspace({
     if (createAt) add(createAt);
   };
 
-  const download = () => {
-    const graph = {
-      name: isScratchpad ? "Scratchpad" : space.name,
-      description: space.description,
-      metrics: metrics.map(
-        ({
-          id,
-          name,
-          readableId,
-          location,
-          canvasPosition,
-          showNotesOnNode,
-          titleAlignment,
-        }) => ({
-          id,
-          name,
-          readableId,
-          location,
-          canvasPosition,
-          showNotesOnNode,
-          titleAlignment,
-        })
-      ),
-      guesstimates: metrics.map((m) => m.guesstimate),
-    };
-    const url = URL.createObjectURL(
-      new Blob([JSON.stringify(graph, null, 2)], { type: "application/json" })
-    );
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = isScratchpad ? "scratchpad.json" : `model-${spaceId}.json`;
-    a.click();
-    setTimeout(() => URL.revokeObjectURL(url), 0);
-  };
+  const download = () => downloadWorkspace(space, metrics, isScratchpad);
   const canUndo =
     space.checkpointMetadata.head < space.checkpointMetadata.length - 1;
   const canRedo = space.checkpointMetadata.head > 0;
@@ -1222,302 +1190,36 @@ export function ModelWorkspace({
                 />
               )}
             </div>
-            {canvasActionIds.length > 0 && (
-              <div
-                data-canvas-control
-                className={styles.sheetSelection}
-                role="group"
-                aria-label="Canvas selection"
-              >
-                <span aria-label={`${canvasActionIds.length} selected nodes`}>
-                  {canvasActionIds.length}{" "}
-                  <span className={styles.selectionCountLabel}>
-                    {canvasActionIds.length === 1 ? "node" : "nodes"}
-                  </span>
-                </span>
-                <button
-                  type="button"
-                  className={styles.iconButton}
-                  aria-label="Duplicate selected nodes"
-                  title="Duplicate"
-                  onClick={duplicateSelection}
-                >
-                  <Icon name="duplicate" />
-                </button>
-                <button
-                  type="button"
-                  className={styles.iconButton}
-                  aria-label="Delete selected nodes"
-                  onClick={remove}
-                >
-                  <Icon name="trash" />
-                </button>
-                <button
-                  type="button"
-                  className={styles.iconButton}
-                  aria-label="Clear selection"
-                  onClick={() => {
-                    setCanvasSelection([]);
-                    closeDetails();
-                  }}
-                >
-                  <Icon name="close" />
-                </button>
-              </div>
-            )}
-            <div
-              data-canvas-control
-              className={styles.toolbar}
-              role="toolbar"
-              aria-label="Canvas tools"
-            >
-              <button
-                type="button"
-                className={styles.addButton}
-                aria-label="Add node"
-                title="Add node"
-                onClick={() => add()}
-                disabled={loading || error}
-              >
-                <Icon name="plus" />
-                <span className={styles.addLabel}>
-                  Add<span className={styles.addNodeWord}> node</span>
-                </span>
-              </button>
-              <span className={styles.divider} />
-              <button
-                type="button"
-                className={`${styles.iconButton} ${styles.desktopSelectionTool}`}
-                aria-label="Select nodes"
-                aria-pressed={!areaMode}
-                onClick={() => {
-                  setAreaMode(false);
-                }}
-                title="Select nodes"
-              >
-                <Icon name="cursor" />
-              </button>
-              <button
-                type="button"
-                className={`${styles.iconButton} ${styles.desktopSelectionTool}`}
-                aria-label="Select an area"
-                title="Select an area"
-                aria-pressed={areaMode}
-                onClick={() => {
-                  setAreaMode(!areaMode);
-                }}
-              >
-                <Icon name="selection" />
-              </button>
-              <button
-                type="button"
-                className={`${styles.iconButton} ${styles.mobileSelectionToggle}`}
-                aria-label="Area selection"
-                aria-pressed={areaMode}
-                title={
-                  areaMode
-                    ? "Switch to normal selection"
-                    : "Switch to area selection"
-                }
-                onClick={() => setAreaMode(!areaMode)}
-              >
-                <Icon name={areaMode ? "selection" : "cursor"} />
-              </button>
-              <span className={styles.divider} />
-              <button
-                type="button"
-                className={styles.iconButton}
-                disabled={!canUndo}
-                aria-label="Undo"
-                title="Undo (Ctrl/⌘ Z)"
-                onClick={() => dispatch(changeWorkspaceHistory(spaceId, false))}
-              >
-                <Icon name="undo" />
-              </button>
-              <button
-                type="button"
-                className={styles.iconButton}
-                disabled={!canRedo}
-                aria-label="Redo"
-                title="Redo (Ctrl/⌘ Shift Z)"
-                onClick={() => dispatch(changeWorkspaceHistory(spaceId, true))}
-              >
-                <Icon name="redo" />
-              </button>
-            </div>
-            {(loading || error) && (
-              <div
-                data-canvas-control
-                className={styles.canvasMessage}
-                role={error ? "alert" : "status"}
-              >
-                {loading ? (
-                  <p>Loading model…</p>
-                ) : (
-                  <>
-                    <h2>Couldn’t load the example</h2>
-                    <p>Check your connection and try again.</p>
-                    <button
-                      className={styles.signIn}
-                      type="button"
-                      onClick={load}
-                    >
-                      Try again
-                    </button>
-                  </>
-                )}
-              </div>
-            )}
-            {!loading && !error && !metrics.length && (
-              <div className={styles.canvasMessage}>
-                <h2>Your canvas is empty</h2>
-                <p>Add a node to start a calculation.</p>
-              </div>
-            )}
-            <div
-              data-canvas-control
-              className={`${styles.canvasBottom} ${
-                canvasActionIds.length ? styles.canvasBottomWithSelection : ""
-              }`}
-            >
-              <div className={styles.helpArea}>
-                <button
-                  type="button"
-                  className={styles.iconButton}
-                  aria-label="Canvas help"
-                  aria-expanded={help}
-                  onClick={() => setHelp(!help)}
-                >
-                  <Icon name="help" />
-                </button>
-                <span className={styles.canvasHint}>
-                  Drag to pan · Scroll to zoom
-                </span>
-                {help && (
-                  <section
-                    className={styles.helpPopover}
-                    style={{
-                      maxHeight: Math.min(
-                        520,
-                        Math.max(
-                          40,
-                          canvasHeight - (canvasActionIds.length ? 250 : 150)
-                        )
-                      ),
-                    }}
-                    aria-label="Canvas help"
-                  >
-                    <div className={styles.panelHeading}>
-                      <h2>Workspace help</h2>
-                      <button
-                        type="button"
-                        className={styles.iconButton}
-                        aria-label="Close help"
-                        onClick={() => setHelp(false)}
-                      >
-                        <Icon name="close" />
-                      </button>
-                    </div>
-                    {isScratchpad && (
-                      <p>
-                        Changes stay here until you reload. Download a copy
-                        before leaving if you want to keep your work.
-                      </p>
-                    )}
-                    <ul>
-                      <li>
-                        Drag the background to pan. Use the mouse wheel or pinch
-                        on touch screens to zoom.
-                      </li>
-                      <li>
-                        {simplified
-                          ? "Drag a node’s top-right corner to move it."
-                          : "Drag a node’s header to move it."}{" "}
-                        Use arrow keys on a focused grip for precise movement.
-                      </li>
-                      <li>
-                        Select a node to edit its value, formula, or notes.
-                      </li>
-                      <li>
-                        Hold Shift and drag to select an area. Hold near an edge
-                        to move farther across the canvas. On touch screens, use
-                        Select an area.{" "}
-                        {simplified
-                          ? "Drag the top-right corner of a selected node to move the group;"
-                          : "Drag a selected header to move the group;"}{" "}
-                        use Duplicate or Delete on the selection. Escape clears
-                        it.
-                      </li>
-                      <li>
-                        With multiple nodes selected, Shift + scroll down
-                        spreads them apart; scroll up brings them closer. Undo
-                        reverses the adjustment.
-                      </li>
-                      <li>
-                        With the canvas focused: N adds a node, F fits the
-                        model, and + / − zoom. Ctrl/⌘ D duplicates selected
-                        nodes.
-                      </li>
-                    </ul>
-                    <button
-                      type="button"
-                      className={styles.downloadButton}
-                      onClick={download}
-                      disabled={loading || error}
-                    >
-                      <Icon name="download" />
-                      Download JSON
-                    </button>
-                    <a
-                      href="https://docs.getguesstimate.com/docs/Introduction"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      Open documentation ↗
-                    </a>
-                  </section>
-                )}
-              </div>
-              <div
-                className={styles.zoomControls}
-                role="group"
-                aria-label="Zoom controls"
-              >
-                <button
-                  type="button"
-                  className={styles.iconButton}
-                  aria-label="Zoom out"
-                  onClick={() => zoom(1 / 1.2)}
-                >
-                  <Icon name="minus" />
-                </button>
-                <button
-                  type="button"
-                  className={styles.zoomLabel}
-                  aria-label="Reset zoom to 100 percent"
-                  onClick={resetZoom}
-                >
-                  {Math.round(view.zoom * 100)}%
-                </button>
-                <button
-                  type="button"
-                  className={styles.iconButton}
-                  aria-label="Zoom in"
-                  onClick={() => zoom(1.2)}
-                >
-                  <Icon name="plus" />
-                </button>
-                <span className={styles.divider} />
-                <button
-                  type="button"
-                  className={styles.iconButton}
-                  aria-label="Fit model to view"
-                  onClick={fit}
-                >
-                  <Icon name="fit" />
-                </button>
-              </div>
-            </div>
+            <CanvasControls
+              selectionCount={canvasActionIds.length}
+              nodeCount={metrics.length}
+              loading={loading}
+              error={error}
+              areaMode={areaMode}
+              setAreaMode={setAreaMode}
+              help={help}
+              setHelp={setHelp}
+              canvasHeight={canvasHeight}
+              isScratchpad={isScratchpad}
+              simplified={simplified}
+              zoomLevel={view.zoom}
+              canUndo={canUndo}
+              canRedo={canRedo}
+              onUndo={() => dispatch(changeWorkspaceHistory(spaceId, false))}
+              onRedo={() => dispatch(changeWorkspaceHistory(spaceId, true))}
+              onClear={() => {
+                setCanvasSelection([]);
+                closeDetails();
+              }}
+              add={add}
+              duplicateSelection={duplicateSelection}
+              remove={remove}
+              load={load}
+              download={download}
+              zoom={zoom}
+              resetZoom={resetZoom}
+              fit={fit}
+            />
           </div>
           <SheetView
             active={viewMode === "sheet"}

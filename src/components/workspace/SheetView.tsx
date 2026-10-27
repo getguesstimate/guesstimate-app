@@ -1,4 +1,10 @@
 import {
+  useSheetViewport,
+  SHEET_BASE_SCALE,
+  MIN_SHEET_SCALE,
+  MAX_SHEET_SCALE,
+} from "./useSheetViewport";
+import {
   memo,
   useCallback,
   useEffect,
@@ -10,7 +16,7 @@ import {
 import { FullDenormalizedMetric } from "~/lib/engine/space";
 import { CanvasLocation } from "~/lib/locationUtils";
 import { SheetGrid } from "./SheetGrid";
-import { FieldHelp } from "./FieldHelp";
+import { SheetToolbar } from "./SheetToolbar";
 import { Icon } from "./Icon";
 import {
   cellAtPoint,
@@ -24,11 +30,6 @@ import {
 } from "./sheetGeometry";
 import styles from "./workspace.module.css";
 import { useSimplifiedNodes } from "./useNodeAppearance";
-
-// Sheet percentages are relative to this scale; geometry uses the actual scale.
-const SHEET_BASE_SCALE = 0.8;
-const MIN_SHEET_SCALE = SHEET_BASE_SCALE * 0.25;
-const MAX_SHEET_SCALE = SHEET_BASE_SCALE * 2;
 
 type Props = {
   active: boolean;
@@ -93,14 +94,10 @@ function SheetViewComponent(props: Props) {
   } | null>(null);
   const dragRef = useRef<typeof drag>(null);
   const [message, setMessage] = useState("");
-  const scroll = useRef<HTMLDivElement>(null);
   const stage = useRef<HTMLDivElement>(null);
   const [hand, setHand] = useState(false);
   const [areaMode, setAreaMode] = useState(false);
   const [spaceHeld, setSpaceHeld] = useState(false);
-  const [zoom, setZoom] = useState(SHEET_BASE_SCALE);
-  const zoomRef = useRef(SHEET_BASE_SCALE);
-  const pendingScroll = useRef<{ x: number; y: number } | null>(null);
   const pointers = useRef(new Map<number, { x: number; y: number }>());
   const pan = useRef<{
     x: number;
@@ -128,82 +125,6 @@ function SheetViewComponent(props: Props) {
     x: number;
     y: number;
   } | null>(null);
-  const columnHeadings = useRef<HTMLDivElement>(null);
-  const rowHeadings = useRef<HTMLDivElement>(null);
-  const corner = useRef<HTMLDivElement>(null);
-  const pinnedOffset = useRef({ x: NaN, y: NaN });
-  const updatePinnedHeaders = () => {
-    const box = scroll.current;
-    if (!box) return;
-    // Only the two header strips and corner move when scrolling; grid content
-    // remains unchanged. Coordinates are in unscaled sheet units.
-    const x = box.scrollLeft / zoom;
-    const y = box.scrollTop / zoom;
-    if (x !== pinnedOffset.current.x) {
-      if (rowHeadings.current)
-        rowHeadings.current.style.transform = `translateX(${x}px)`;
-      if (corner.current) corner.current.style.transform = `translateX(${x}px)`;
-    }
-    if (y !== pinnedOffset.current.y && columnHeadings.current)
-      columnHeadings.current.style.transform = `translateY(${y}px)`;
-    pinnedOffset.current = { x, y };
-  };
-  const handActive = hand || spaceHeld;
-  const zoomTo = (value: number, x?: number, y?: number) => {
-    const box = scroll.current;
-    if (!box) return;
-    const next = Math.max(MIN_SHEET_SCALE, Math.min(MAX_SHEET_SCALE, value));
-    const anchorX = x ?? box.clientWidth / 2;
-    const anchorY = y ?? box.clientHeight / 2;
-    if (next === zoomRef.current) return;
-    // Wheel events can arrive before React applies the preceding zoom.
-    const currentScroll = pendingScroll.current ?? {
-      x: box.scrollLeft,
-      y: box.scrollTop,
-    };
-    pendingScroll.current = {
-      x: ((currentScroll.x + anchorX) * next) / zoomRef.current - anchorX,
-      y: ((currentScroll.y + anchorY) * next) / zoomRef.current - anchorY,
-    };
-    zoomRef.current = next;
-    setZoom(next);
-  };
-  const applyPendingScroll = () => {
-    // Only scroll once React has committed the matching scale. An animation
-    // frame can run before that commit and visibly pan the still-unscaled sheet.
-    if (zoom === zoomRef.current && pendingScroll.current && scroll.current) {
-      scroll.current.scrollLeft = pendingScroll.current.x;
-      scroll.current.scrollTop = pendingScroll.current.y;
-      pendingScroll.current = null;
-    }
-  };
-  useEffect(() => {
-    const box = scroll.current;
-    if (!box) return;
-    const wheel = (event: WheelEvent) => {
-      if (!handActive && !event.ctrlKey) return;
-      event.preventDefault();
-      const rect = box.getBoundingClientRect();
-      const unit =
-        event.deltaMode === 1
-          ? 16
-          : event.deltaMode === 2
-          ? box.clientHeight
-          : 1;
-      const delta = event.deltaY * unit;
-      // Keep Ctrl+wheel predictable across pixel-, line- and page-based mice.
-      const exponent = event.ctrlKey
-        ? Math.max(-0.12, Math.min(0.12, -delta * 0.001))
-        : -delta * 0.002;
-      zoomTo(
-        zoomRef.current * Math.exp(exponent),
-        event.clientX - rect.left,
-        event.clientY - rect.top
-      );
-    };
-    box.addEventListener("wheel", wheel, { passive: false });
-    return () => box.removeEventListener("wheel", wheel);
-  }, [handActive]);
   useEffect(() => {
     const release = () => setSpaceHeld(false);
     window.addEventListener("keyup", release);
@@ -213,33 +134,6 @@ function SheetViewComponent(props: Props) {
       window.removeEventListener("blur", release);
     };
   }, []);
-  const fit = () => {
-    const box = scroll.current;
-    if (!box || !metrics.length) return;
-    const left =
-      Math.min(...metrics.map((m) => m.location.column)) * SHEET_COLUMN;
-    const top = Math.min(...metrics.map((m) => m.location.row)) * SHEET_ROW;
-    const width =
-      (Math.max(...metrics.map((m) => m.location.column)) + 1) * SHEET_COLUMN -
-      left +
-      SHEET_GUTTER;
-    const height =
-      (Math.max(...metrics.map((m) => m.location.row)) + 1) * SHEET_ROW -
-      top +
-      SHEET_HEADING;
-    zoomTo(
-      Math.min(
-        (box.clientWidth - 24) / width,
-        (box.clientHeight - 24) / height,
-        SHEET_BASE_SCALE
-      )
-    );
-    pendingScroll.current = {
-      x: left * zoomRef.current,
-      y: top * zoomRef.current,
-    };
-    applyPendingScroll();
-  };
   const rowCount = Math.max(
     extent.rows,
     ...metrics.map((m) => m.location.row + 3),
@@ -250,13 +144,20 @@ function SheetViewComponent(props: Props) {
     ...metrics.map((m) => m.location.column + 3),
     cell.column + 2
   );
-  useLayoutEffect(() => {
-    pinnedOffset.current = { x: NaN, y: NaN };
-  }, [rowCount]);
-  useLayoutEffect(() => {
-    applyPendingScroll();
-    updatePinnedHeaders();
-  });
+  const handActive = hand || spaceHeld;
+  const {
+    scroll,
+    zoom,
+    zoomRef,
+    zoomTo,
+    pendingScroll,
+    applyPendingScroll,
+    columnHeadings,
+    rowHeadings,
+    corner,
+    updatePinnedHeaders,
+    fit,
+  } = useSheetViewport(metrics, rowCount, handActive);
 
   const metricsByCell = useMemo(() => {
     const cells = new Map<string, FullDenormalizedMetric>();
@@ -439,126 +340,21 @@ function SheetViewComponent(props: Props) {
         }
       }}
     >
-      <div
-        className={styles.sheetToolbar}
-        role="toolbar"
-        aria-label="Sheet tools"
-      >
-        <button
-          type="button"
-          className={styles.addButton}
-          aria-label="Add node"
-          title="Add node"
-          disabled={props.loading || props.error}
-          onClick={add}
-        >
-          <Icon name="plus" />
-          <span className={styles.addLabel}>
-            Add<span className={styles.addNodeWord}> node</span>
-          </span>
-        </button>
-        <span className={styles.divider} />
-        <button
-          type="button"
-          className={`${styles.iconButton} ${styles.desktopSelectionTool} ${styles.sheetSelectTool}`}
-          aria-label="Select tool"
-          aria-pressed={!hand && !areaMode}
-          onClick={() => {
-            setHand(false);
-            setAreaMode(false);
-          }}
-        >
-          <Icon name="cursor" />
-        </button>
-        <button
-          type="button"
-          className={`${styles.iconButton} ${styles.sheetHandTool}`}
-          aria-label="Hand tool"
-          aria-pressed={hand}
-          onClick={() => {
-            setHand(true);
-            setAreaMode(false);
-          }}
-        >
-          <Icon name="hand" />
-        </button>
-        <button
-          type="button"
-          className={`${styles.iconButton} ${styles.desktopSelectionTool} ${styles.touchSelectionTool}`}
-          aria-label="Select an area"
-          title="Select an area"
-          aria-pressed={areaMode}
-          onClick={() => {
-            setAreaMode(!areaMode);
-            setHand(false);
-          }}
-        >
-          <Icon name="selection" />
-        </button>
-        <button
-          type="button"
-          className={`${styles.iconButton} ${styles.mobileSelectionToggle}`}
-          aria-label="Area selection"
-          aria-pressed={areaMode}
-          title={
-            areaMode ? "Switch to normal selection" : "Switch to area selection"
-          }
-          onClick={() => {
-            setAreaMode(!areaMode);
-            setHand(false);
-          }}
-        >
-          <Icon name={areaMode ? "selection" : "cursor"} />
-        </button>
-        <button
-          type="button"
-          className={styles.iconButton}
-          aria-label="Undo"
-          disabled={!props.canUndo}
-          onClick={props.onUndo}
-        >
-          <Icon name="undo" />
-        </button>
-        <button
-          type="button"
-          className={styles.iconButton}
-          aria-label="Redo"
-          disabled={!props.canRedo}
-          onClick={props.onRedo}
-        >
-          <Icon name="redo" />
-        </button>
-        <span className={styles.sheetCellAddress} aria-label="Selected cell">
-          {cellName(cell)}
-        </span>
-        <FieldHelp label="Sheet help">
-          <p>
-            Double-click or double-tap an empty cell to add a node, or select it
-            and press Enter. N adds a node at the selected cell or the next
-            empty cell below. Use arrow keys to move between cells. Drag across
-            cells to select a range, or use Shift-click and Shift-arrow keys.
-            Delete removes the selected nodes; Undo restores them.{" "}
-            {simplified
-              ? "Drag a node’s top-right corner to move it to an empty cell. Drag the corner of a selected node to move the whole group."
-              : "Drag a node’s header to move it to an empty cell. Drag a selected header to move the whole group."}{" "}
-            Use the hand tool or hold Space to drag the sheet. Swipe to pan on
-            touch screens; pinch to zoom. The mouse wheel scrolls in Select mode
-            and zooms in Hand mode. Ctrl + scroll zooms around the pointer in
-            either mode. Ctrl/⌘ D duplicates selected nodes. While editing a
-            value, Enter moves down and Tab moves right, creating a node if the
-            next cell is empty. Formulas use the reference IDs on nodes.
-          </p>
-        </FieldHelp>
-        <button
-          type="button"
-          className={styles.iconButton}
-          aria-label="Download JSON"
-          disabled={props.loading || props.error}
-          onClick={props.onDownload}
-        >
-          <Icon name="download" />
-        </button>
-      </div>
+      <SheetToolbar
+        add={add}
+        hand={hand}
+        setHand={setHand}
+        areaMode={areaMode}
+        setAreaMode={setAreaMode}
+        canUndo={props.canUndo}
+        canRedo={props.canRedo}
+        onUndo={props.onUndo}
+        onRedo={props.onRedo}
+        cell={cell}
+        simplified={simplified}
+        disabled={props.loading || props.error}
+        onDownload={props.onDownload}
+      />
       <div
         onScroll={updatePinnedHeaders}
         className={`${styles.sheetScroll} ${
