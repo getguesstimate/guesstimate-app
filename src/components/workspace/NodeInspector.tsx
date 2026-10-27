@@ -1,3 +1,4 @@
+import { formatResult, nodeDisplay } from "~/lib/nodeDisplay";
 import { TitleAlignment } from "~/modules/metrics/reducer";
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { DistributionEditor } from "~/components/distributions/DistributionEditor";
@@ -12,13 +13,6 @@ import { FieldHelp } from "./FieldHelp";
 import { NodeNotes } from "./NodeNotes";
 import { ResultDetails } from "./ResultDetails";
 import styles from "./workspace.module.css";
-
-const resultFormatter = new Intl.NumberFormat("en", {
-  maximumSignificantDigits: 4,
-});
-
-export const formatNumber = (n: number) =>
-  Number.isFinite(n) ? resultFormatter.format(n) : "—";
 
 export function NodeInspector({
   metric,
@@ -58,6 +52,7 @@ export function NodeInspector({
     onAdvance?.(direction);
   };
   const stats = metric.simulation?.stats;
+  const { heading } = nodeDisplay(metric);
   const referenceExamples = metrics
     .filter((candidate) => candidate.id !== metric.id)
     .slice(0, 2)
@@ -162,11 +157,11 @@ export function NodeInspector({
                   key={metric.id}
                   name={metric.name || metric.readableId}
                   simulation={metric.simulation}
-                  formatValue={formatNumber}
+                  formatValue={formatResult}
                 />
               )}
             </div>
-            <p className={styles.inspectorResult}>{formatNumber(stats.mean)}</p>
+            <p className={styles.inspectorResult}>{formatResult(stats.mean)}</p>
             {stats.length > 1 && (
               <>
                 <div className={styles.detailChart}>
@@ -185,11 +180,11 @@ export function NodeInspector({
               <dl className={styles.statistics}>
                 <div>
                   <dt>5th percentile</dt>
-                  <dd>{formatNumber(stats.percentiles[5])}</dd>
+                  <dd>{formatResult(stats.percentiles[5])}</dd>
                 </div>
                 <div>
                   <dt>95th percentile</dt>
-                  <dd>{formatNumber(stats.percentiles[95])}</dd>
+                  <dd>{formatResult(stats.percentiles[95])}</dd>
                 </div>
               </dl>
             )}
@@ -243,90 +238,84 @@ export function NodeInspector({
               </button>
             </div>
           )}
-        {!!metric.name?.trim() &&
-          !metric.guesstimate.input?.trim() &&
-          !metric.guesstimate.data?.length &&
-          (!metric.guesstimate.description?.trim() ||
-            metric.showNotesOnNode === false) && (
-            <section
-              className={styles.titleAlignmentSetting}
-              aria-label="Title alignment"
-            >
-              <div className={styles.titleAlignmentHeading}>
-                <span>Title alignment</span>
-                <FieldHelp label="Title alignment">
-                  {surface === "sheet"
-                    ? "Auto aligns toward nodes in adjacent cells. Manual alignment applies to sheet only."
-                    : "Auto follows sheet alignment until the title is moved in canvas, then centers it. Manual alignment applies to canvas only."}
-                </FieldHelp>
-                <button
-                  type="button"
-                  aria-pressed={!metric.titleAlignment?.[surface]}
-                  onClick={() =>
-                    dispatch(
-                      changeMetric({
-                        id: metric.id,
-                        titleAlignment: {
-                          ...metric.titleAlignment,
-                          [surface]: undefined,
-                        },
-                      })
-                    )
-                  }
-                >
-                  Auto
-                </button>
-              </div>
-              <div className={styles.titleAlignmentPicker}>
-                {(["top", "center", "bottom"] as const).flatMap((vertical) =>
-                  (["left", "center", "right"] as const).map((horizontal) => {
-                    const value = `${vertical}-${horizontal}` as TitleAlignment;
-                    return (
-                      <button
-                        key={value}
-                        type="button"
-                        aria-label={
-                          value === "center-center"
-                            ? "Align center"
-                            : `Align ${vertical} ${horizontal}`
-                        }
-                        aria-pressed={
-                          metric.titleAlignment?.[surface] === value
-                        }
-                        onClick={() =>
-                          dispatch(
-                            changeMetric({
-                              id: metric.id,
-                              titleAlignment: {
-                                ...metric.titleAlignment,
-                                [surface]: value,
-                              },
-                            })
-                          )
-                        }
-                        style={{
-                          alignItems:
-                            vertical === "top"
-                              ? "flex-start"
-                              : vertical === "bottom"
-                              ? "flex-end"
-                              : "center",
-                          justifyContent:
-                            horizontal === "left"
-                              ? "flex-start"
-                              : horizontal === "right"
-                              ? "flex-end"
-                              : "center",
-                        }}
-                      >
-                        <span aria-hidden="true" />
-                      </button>
-                    );
-                  })
-                )}
-              </div>
-            </section>
-          )}
+        {heading && (
+          <section
+            className={styles.titleAlignmentSetting}
+            aria-label="Title alignment"
+          >
+            <div className={styles.titleAlignmentHeading}>
+              <span>Title alignment</span>
+              <FieldHelp label="Title alignment">
+                {surface === "sheet"
+                  ? "Auto aligns toward nodes in adjacent cells. Manual alignment applies to sheet only."
+                  : "Auto follows sheet alignment until the title is moved in canvas, then centers it. Manual alignment applies to canvas only."}
+              </FieldHelp>
+              <button
+                type="button"
+                aria-pressed={!metric.titleAlignment?.[surface]}
+                onClick={() =>
+                  dispatch(
+                    changeMetric({
+                      id: metric.id,
+                      titleAlignment: {
+                        ...metric.titleAlignment,
+                        [surface]: undefined,
+                      },
+                    })
+                  )
+                }
+              >
+                Auto
+              </button>
+            </div>
+            <div className={styles.titleAlignmentPicker}>
+              {(["top", "center", "bottom"] as const).flatMap((vertical) =>
+                (["left", "center", "right"] as const).map((horizontal) => {
+                  const value = `${vertical}-${horizontal}` as TitleAlignment;
+                  return (
+                    <button
+                      key={value}
+                      type="button"
+                      aria-label={
+                        value === "center-center"
+                          ? "Align center"
+                          : `Align ${vertical} ${horizontal}`
+                      }
+                      aria-pressed={metric.titleAlignment?.[surface] === value}
+                      onClick={() =>
+                        dispatch(
+                          changeMetric({
+                            id: metric.id,
+                            titleAlignment: {
+                              ...metric.titleAlignment,
+                              [surface]: value,
+                            },
+                          })
+                        )
+                      }
+                      style={{
+                        alignItems:
+                          vertical === "top"
+                            ? "flex-start"
+                            : vertical === "bottom"
+                            ? "flex-end"
+                            : "center",
+                        justifyContent:
+                          horizontal === "left"
+                            ? "flex-start"
+                            : horizontal === "right"
+                            ? "flex-end"
+                            : "center",
+                      }}
+                    >
+                      <span aria-hidden="true" />
+                    </button>
+                  );
+                })
+              )}
+            </div>
+          </section>
+        )}
         <button
           className={styles.deleteButton}
           type="button"

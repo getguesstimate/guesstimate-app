@@ -4,7 +4,7 @@ import { SimulationHistogram } from "~/components/simulations/SimulationHistogra
 import { FullDenormalizedMetric } from "~/lib/engine/space";
 import { Point } from "./geometry";
 import { Icon } from "./Icon";
-import { formatNumber } from "./NodeInspector";
+import { formatResult, nodeDisplay } from "~/lib/nodeDisplay";
 import styles from "./workspace.module.css";
 
 export function CanvasNode({
@@ -28,14 +28,7 @@ export function CanvasNode({
   simplified?: boolean;
   automaticAlignment?: TitleAlignment;
 }) {
-  const formula = metric.guesstimate.guesstimateType === "FUNCTION";
-  const name = metric.name?.trim();
-  const description = metric.guesstimate.description?.trim();
-  const hasValue =
-    !!metric.guesstimate.input?.trim() || !!metric.guesstimate.data?.length;
-  const note = !hasValue && !!(name || description);
-  const heading =
-    note && !!name && (!description || metric.showNotesOnNode === false);
+  const { name, hasValue, heading, note, formula } = nodeDisplay(metric);
   const kind = heading
     ? "Heading"
     : note
@@ -142,14 +135,7 @@ const NodeContents = memo(function NodeContents({
 }) {
   const stats = metric.simulation?.stats;
   const error = !!metric.simulation?.sample.errors?.length;
-  const name = metric.name?.trim();
-  const description = metric.guesstimate.description?.trim();
-  const hasValue =
-    !!metric.guesstimate.input?.trim() || !!metric.guesstimate.data?.length;
-  const empty = !name && !description && !hasValue;
-  const note = !hasValue && !!(name || description);
-  const heading =
-    note && !!name && (!description || metric.showNotesOnNode === false);
+  const { name, empty, note, heading } = nodeDisplay(metric);
 
   return (
     <>
@@ -175,7 +161,7 @@ const NodeContents = memo(function NodeContents({
             <span className={styles.nodeError}>Check this expression</span>
           ) : stats ? (
             <span className={styles.nodeResult}>
-              {formatNumber(stats.mean)}
+              {formatResult(stats.mean)}
               <small>
                 {stats.length > 1 ? "mean" : simplified ? "" : "value"}
               </small>

@@ -1,3 +1,4 @@
+import { hasNodeValue } from "~/lib/nodeDisplay";
 import { memo, useMemo } from "react";
 import { FullDenormalizedMetric } from "~/lib/engine/space";
 import { CanvasLocation } from "~/lib/locationUtils";
@@ -131,12 +132,7 @@ export const SheetGrid = memo(function SheetGrid(props: Props) {
                     surface="sheet"
                     automaticAlignment={automaticTitleAlignment(
                       location,
-                      (cell) => {
-                        const neighbor = at(cell)?.guesstimate;
-                        return (
-                          !!neighbor?.input?.trim() || !!neighbor?.data?.length
-                        );
-                      }
+                      (cell) => hasNodeValue(at(cell)?.guesstimate)
                     )}
                     position={SHEET_INSET}
                     selected={selectedId === metric.id || inRange(location)}

@@ -1,3 +1,4 @@
+import { hasNodeValue } from "~/lib/nodeDisplay";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Head from "next/head";
 import dynamic from "next/dynamic";
@@ -113,9 +114,7 @@ export function ScratchpadWorkspace({
   const canvasTitleAlignments = useMemo(() => {
     const occupied = new Set(
       metrics
-        .filter(
-          (m) => !!m.guesstimate.input?.trim() || !!m.guesstimate.data?.length
-        )
+        .filter((m) => hasNodeValue(m.guesstimate))
         .map((m) => `${m.location.row}:${m.location.column}`)
     );
     return new Map(

@@ -1,3 +1,4 @@
+import { formatResult as number, nodeDisplay } from "~/lib/nodeDisplay";
 import {
   useCallback,
   useEffect,
@@ -21,13 +22,6 @@ import {
 } from "./layout";
 import styles from "./embed.module.css";
 import { useEmbedSelection } from "./useEmbedSelection";
-
-const number = (value: number | undefined) =>
-  value === undefined || !Number.isFinite(value)
-    ? "—"
-    : new Intl.NumberFormat("en", { maximumSignificantDigits: 4 }).format(
-        value
-      );
 
 export function EmbeddedModel({
   spaceId,
@@ -234,15 +228,12 @@ export function EmbeddedModel({
               </svg>
               {metrics.map((metric) => {
                 const position = positions.get(metric.id)!;
-                const name = metric.name?.trim();
-                const notes = metric.guesstimate.description?.trim();
-                const hasValue =
-                  !!metric.guesstimate.input?.trim() ||
-                  !!metric.guesstimate.data?.length;
-                const heading =
-                  !hasValue &&
-                  !!name &&
-                  (!notes || metric.showNotesOnNode === false);
+                const {
+                  name,
+                  description: notes,
+                  hasValue,
+                  heading,
+                } = nodeDisplay(metric);
                 const stats = metric.simulation?.stats;
                 const error = !!metric.simulation?.sample.errors?.length;
                 return (
