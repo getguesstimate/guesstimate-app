@@ -1,6 +1,8 @@
+import { ModelDetailsForm } from "./model-details/ModelDetailsForm";
+import { ModelTools } from "./model-details/ModelTools";
+import { ModelOverview } from "./model-details/ModelOverview";
 import { useEffect, useReducer, useRef, useState } from "react";
 import Modal from "react-modal";
-import ReactMarkdown from "react-markdown";
 import { useRouter } from "next/router";
 import * as engine from "~/lib/engine/engine";
 import { parseSlurp } from "~/lib/slurpParser";
@@ -19,7 +21,6 @@ import * as calculatorActions from "~/modules/calculators/actions";
 import { CalculatorActions } from "~/components/calculators/CalculatorActions";
 import calculatorStyles from "../calculators/calculator.module.css";
 import { runSimulations } from "~/modules/simulations/actions";
-import { FieldHelp } from "./FieldHelp";
 import { Icon } from "./Icon";
 import styles from "./workspace.module.css";
 
@@ -127,12 +128,6 @@ export function ModelDetails({
   useEffect(() => {
     if (deleteCalculator) cancelCalculatorDelete.current?.focus();
   }, [deleteCalculator]);
-  const owner = engine.space.getOwner(space);
-  const ownerUrl = space.organization?.name
-    ? `/organizations/${space.organization.id}`
-    : space.user?.id
-    ? `/users/${space.user.id}`
-    : undefined;
   const canBePrivate =
     space.is_private ||
     (space.organization?.name
@@ -149,7 +144,6 @@ export function ModelDetails({
     typeof privateModelCount === "number";
   const privateLimitReached =
     !canBePrivate && hasPrivateUsage && privateModelCount >= privateModelLimit;
-  const link = engine.space.urlWithToken(space);
   const beginEdit = () => {
     setName(space.name || "");
     setDescription(space.description || "");
@@ -477,274 +471,40 @@ export function ModelDetails({
               </nav>
             )}
             {editing ? (
-              <form
-                onSubmit={(event) => {
-                  event.preventDefault();
-                  void save();
-                }}
-              >
-                <label className={styles.field}>
-                  Title
-                  <input
-                    autoFocus
-                    value={name}
-                    onChange={(event) => setName(event.target.value)}
-                    disabled={busy}
-                  />
-                </label>
-                <label className={styles.field}>
-                  Description
-                  <textarea
-                    className={styles.modelDescriptionInput}
-                    value={description}
-                    onChange={(event) => setDescription(event.target.value)}
-                    disabled={busy}
-                  />
-                </label>
-                <div className={styles.modelInline}>
-                  <label className={styles.field}>
-                    Visibility
-                    <select
-                      ref={visibilityRef}
-                      value={privateModel ? "private" : "public"}
-                      disabled={busy}
-                      onChange={(event) => {
-                        const wantsPrivate = event.target.value === "private";
-                        if (wantsPrivate && !canBePrivate) {
-                          if (privateLimitReached) setPrivacyNotice(true);
-                          else void router.push("/billing");
-                          return;
-                        }
-                        setPrivateModel(wantsPrivate);
-                      }}
-                    >
-                      <option value="public">Public</option>
-                      <option value="private">
-                        {!canBePrivate && !privateLimitReached
-                          ? "Private — upgrade plan"
-                          : "Private"}
-                      </option>
-                    </select>
-                  </label>
-                  <FieldHelp label="Help with model visibility">
-                    <p>
-                      Public models can be viewed by anyone. Private models are
-                      available to their owner, organization members, and people
-                      with an enabled shareable link. Only people with edit
-                      access can save changes.
-                    </p>
-                    {hasPrivateUsage && (
-                      <p>
-                        {privateModelCount} of {privateModelLimit} private
-                        models used.
-                      </p>
-                    )}
-                    {!canBePrivate && (
-                      <p>
-                        {privateLimitReached
-                          ? "Your private-model limit has been reached."
-                          : "Your plan doesn’t support another private model."}{" "}
-                        Choosing Private shows your plan options.
-                      </p>
-                    )}
-                  </FieldHelp>
-                </div>
-                {error && (
-                  <p role="alert" className={styles.nodeError}>
-                    {error}
-                  </p>
-                )}
-                <div
-                  className={`${styles.modelActions} ${styles.modelFormFooter}`}
-                >
-                  <button
-                    type="submit"
-                    className={styles.noteSave}
-                    disabled={busy}
-                  >
-                    {busy ? "Saving…" : "Save details"}
-                  </button>
-                </div>
-              </form>
+              <ModelDetailsForm
+                name={name}
+                description={description}
+                privateModel={privateModel}
+                busy={busy}
+                error={error}
+                setName={setName}
+                setDescription={setDescription}
+                setPrivateModel={setPrivateModel}
+                canBePrivate={canBePrivate}
+                privateLimitReached={privateLimitReached}
+                hasPrivateUsage={hasPrivateUsage}
+                privateModelCount={privateModelCount}
+                privateModelLimit={privateModelLimit}
+                visibilityRef={visibilityRef}
+                setPrivacyNotice={setPrivacyNotice}
+                save={save}
+              />
             ) : (
               <>
                 {section === "details" && (
                   <>
-                    <div className={styles.modelSectionHeading}>
-                      <h3>{space.name || "Untitled model"}</h3>
-                      {space.editableByMe && (
-                        <button
-                          type="button"
-                          className={styles.noteAction}
-                          onClick={beginEdit}
-                        >
-                          <Icon name="edit" />
-                          Edit details
-                        </button>
-                      )}
-                    </div>
-                    {message === "Details saved." && (
-                      <p role="status" className={styles.modelFeedback}>
-                        {message}
-                      </p>
-                    )}
-                    <div className={styles.modelMetadata}>
-                      {owner?.name && (
-                        <span>
-                          By{" "}
-                          {ownerUrl ? (
-                            <a href={ownerUrl}>{owner.name}</a>
-                          ) : (
-                            owner.name
-                          )}
-                        </span>
-                      )}
-                      <span>{space.is_private ? "Private" : "Public"}</span>
-                    </div>
-                    {space.description ? (
-                      <div className={styles.noteMarkdown}>
-                        <ReactMarkdown source={space.description} skipHtml />
-                      </div>
-                    ) : (
-                      <p className={styles.fieldHint}>No description.</p>
-                    )}
-                    {space.is_private && space.editableByMe && (
-                      <section className={styles.modelSection}>
-                        <div className={styles.fieldHeading}>
-                          <h3>Shareable link</h3>
-                          <FieldHelp label="Help with shareable links">
-                            <p>
-                              Anyone with this link can view the model and
-                              experiment locally. They can’t save changes to the
-                              original. Resetting the link disables the previous
-                              link.
-                            </p>
-                          </FieldHelp>
-                        </div>
-                        {message && message !== "Details saved." && (
-                          <p role="status" className={styles.modelFeedback}>
-                            {message}
-                          </p>
-                        )}
-                        {error && (
-                          <p role="alert" className={styles.nodeError}>
-                            {error}
-                          </p>
-                        )}
-                        {link ? (
-                          <>
-                            <label className={styles.field}>
-                              Link
-                              <input
-                                readOnly
-                                value={link}
-                                onFocus={(event) => event.target.select()}
-                              />
-                            </label>
-                            <div className={styles.modelActions}>
-                              <button
-                                type="button"
-                                className={styles.noteAction}
-                                disabled={busy}
-                                onClick={() => shareAction("reset")}
-                              >
-                                Reset link
-                              </button>
-                              <button
-                                type="button"
-                                className={styles.noteAction}
-                                disabled={busy}
-                                onClick={() => shareAction("disable")}
-                              >
-                                Disable link
-                              </button>
-                            </div>
-                          </>
-                        ) : (
-                          <button
-                            type="button"
-                            className={styles.noteAction}
-                            disabled={busy}
-                            onClick={() => shareAction("enable")}
-                          >
-                            Enable link
-                          </button>
-                        )}
-                      </section>
-                    )}
+                    <ModelOverview
+                      space={space}
+                      message={message}
+                      error={error}
+                      busy={busy}
+                      beginEdit={beginEdit}
+                      shareAction={shareAction}
+                    />
                   </>
                 )}
                 {section === "tools" && (
-                  <div className={styles.modelToolSections}>
-                    <section
-                      className={styles.modelSection}
-                      aria-labelledby="model-calculators-heading"
-                    >
-                      <div className={styles.fieldHeading}>
-                        <h3 id="model-calculators-heading">Calculators</h3>
-                        <FieldHelp label="Help with calculators">
-                          <p>
-                            A calculator presents selected model inputs and
-                            results as a form. The model must contain named
-                            values and formulas connected to each other.
-                          </p>
-                        </FieldHelp>
-                      </div>
-                      {space.editableByMe && (
-                        <button
-                          type="button"
-                          className={styles.newCalculator}
-                          onClick={() =>
-                            toolDispatch({ type: "MAKE_NEW_CALCULATOR" })
-                          }
-                        >
-                          <Icon name="plus" />
-                          New calculator
-                        </button>
-                      )}
-                      <div className={styles.modelToolList}>
-                        {space.calculators?.map((calculator) => (
-                          <button
-                            type="button"
-                            key={calculator.id}
-                            className={styles.noteAction}
-                            onClick={() =>
-                              toolDispatch({
-                                type: "SHOW_CALCULATOR",
-                                payload: calculator,
-                              })
-                            }
-                          >
-                            {calculator.title || "Calculator"}
-                          </button>
-                        ))}
-                      </div>
-                      {!space.calculators?.length && !space.editableByMe && (
-                        <p className={styles.fieldHint}>
-                          No calculators available for this model.
-                        </p>
-                      )}
-                    </section>
-                    {engine.space.canUseOrganizationFacts(space) && (
-                      <section
-                        className={styles.modelSection}
-                        aria-labelledby="model-metrics-heading"
-                      >
-                        <h3 id="model-metrics-heading">Metrics</h3>
-                        <div className={styles.modelToolList}>
-                          <button
-                            type="button"
-                            className={styles.noteAction}
-                            onClick={() =>
-                              toolDispatch({ type: "TOGGLE_FACTS" })
-                            }
-                          >
-                            Metric Library
-                          </button>
-                        </div>
-                      </section>
-                    )}
-                  </div>
+                  <ModelTools space={space} toolDispatch={toolDispatch} />
                 )}
                 {section === "more" && (
                   <section className={styles.modelSection}>
