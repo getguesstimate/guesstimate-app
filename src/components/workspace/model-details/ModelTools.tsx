@@ -2,12 +2,11 @@ import type { ExtendedDSpace } from "~/components/spaces/denormalized-space-sele
 import { FieldHelp } from "../FieldHelp";
 import { Icon } from "../Icon";
 import styles from "../workspace.module.css";
-import type { ComponentProps } from "react";
-import type { RightSidebar } from "~/components/spaces/SpaceShow/RightSidebar";
+import type { ModelToolAction } from "./modelToolState";
 import * as engine from "~/lib/engine/engine";
 type Props = {
   space: ExtendedDSpace;
-  toolDispatch: ComponentProps<typeof RightSidebar>["rightSidebarDispatch"];
+  toolDispatch(action: ModelToolAction): void;
 };
 export function ModelTools({ space, toolDispatch }: Props) {
   return (

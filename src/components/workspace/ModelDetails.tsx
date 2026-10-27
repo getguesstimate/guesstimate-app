@@ -10,11 +10,11 @@ import {
   ExtendedDSpace,
   denormalizedSpaceSelector,
 } from "~/components/spaces/denormalized-space-selector";
+import { ModelToolContent } from "./model-details/ModelToolContent";
 import {
-  RightSidebar,
-  rightSidebarReducer,
-  RightSidebarState,
-} from "~/components/spaces/SpaceShow/RightSidebar";
+  modelToolReducer,
+  ModelToolState,
+} from "./model-details/modelToolState";
 import { useAppDispatch, useAppSelector } from "~/modules/hooks";
 import * as actions from "~/modules/spaces/actions";
 import * as calculatorActions from "~/modules/calculators/actions";
@@ -68,13 +68,13 @@ export function ModelDetails({
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [importing, setImporting] = useState(false);
   const [slurp, setSlurp] = useState("");
-  const [tool, toolDispatch] = useReducer(rightSidebarReducer, {
+  const [tool, toolDispatch] = useReducer(modelToolReducer, {
     type: "CLOSED",
-  } as RightSidebarState);
+  } as ModelToolState);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const focusHeading = () =>
     requestAnimationFrame(() => headingRef.current?.focus());
-  const initialTool = useRef<RightSidebarState | null>(
+  const initialTool = useRef<ModelToolState | null>(
     initialCalculatorId
       ? {
           type: "SHOW_CALCULATOR",
@@ -432,12 +432,11 @@ export function ModelDetails({
               </div>
             )}
             <div className={styles.modelTool}>
-              <RightSidebar
-                embedded
+              <ModelToolContent
                 space={space}
                 organizationFacts={organizationFacts}
                 state={tool}
-                rightSidebarDispatch={toolDispatch}
+                toolDispatch={toolDispatch}
               />
             </div>
           </>
