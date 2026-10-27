@@ -73,8 +73,17 @@ export function validateTranslations(messages, english, language) {
 // Complete HTML is generated for each locale; the browser never loads translations.
 export function renderPublicPages() {
   const english = JSON.parse(read("src/public-pages/locales/en.json"));
-  const partial = (name) =>
-    read(`src/public-pages/partials/${name}.html`).trimEnd();
+  const partials = Object.fromEntries(["header", "footer"].map((name) => [
+    name, read(`src/public-pages/partials/${name}.html`).trimEnd(),
+  ]));
+  const templates = Object.fromEntries(pages.map((page) => {
+    const template = read(`src/public-pages/pages/${page.name}.html`);
+    for (const slot of ["header", "footer"]) {
+      if (template.split(`{{${slot}}}`).length !== 2)
+        throw new Error(`${page.name}.html must contain exactly one {{${slot}}} slot`);
+    }
+    return [page.name, template];
+  }));
   return locales.flatMap((locale) => {
     const messages = JSON.parse(
       read(`src/public-pages/locales/${locale.code}.json`)
@@ -185,23 +194,17 @@ export function renderPublicPages() {
           return slots[key];
         });
       const header = replaceTokens(
-        partial("header").replaceAll(
+        partials.header.replaceAll(
           'href="{{pricingUrl}}"',
           page.name === "pricing"
             ? 'href="{{pricingUrl}}" aria-current="page"'
             : 'href="{{pricingUrl}}"'
         )
       );
-      const template = read(`src/public-pages/pages/${page.name}.html`);
-      for (const slot of ["header", "footer"]) {
-        if (template.split(`{{${slot}}}`).length !== 2)
-          throw new Error(
-            `${page.name}.html must contain exactly one {{${slot}}} slot`
-          );
-      }
+      const template = templates[page.name];
       // Expand content before inserting shared partials, so translated braces are never re-evaluated.
       slots.header = header;
-      slots.footer = replaceTokens(partial("footer"));
+      slots.footer = replaceTokens(partials.footer);
       const html = replaceTokens(template)
         .replace("<head>", '<head>\n    <script src="/theme.js"></script>\n    <link rel="stylesheet" href="/themes.css" />')
         .replace(/[ \t]+$/gm, "");
