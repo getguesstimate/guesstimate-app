@@ -82,7 +82,11 @@ function updateMetricsAndGuesstimates(
   metricsToModify.forEach((m) => {
     dispatch({
       type: "CHANGE_METRIC",
-      item: { ...m, showNotesOnNode: m.showNotesOnNode },
+      item: {
+        ...m,
+        showNotesOnNode: m.showNotesOnNode,
+        titleAlignment: m.titleAlignment,
+      },
     });
   });
   guesstimatesToModify.forEach((g) => {

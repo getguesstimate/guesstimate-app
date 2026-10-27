@@ -2,6 +2,7 @@ import { memo, useMemo } from "react";
 import { FullDenormalizedMetric } from "~/lib/engine/space";
 import { CanvasLocation } from "~/lib/locationUtils";
 import { CanvasNode } from "./CanvasNode";
+import { automaticTitleAlignment } from "./titleAlignment";
 import { Icon } from "./Icon";
 import { connectionPath } from "./geometry";
 import { cellName, sameCell, sheetPoint, SHEET_INSET } from "./sheetGeometry";
@@ -128,6 +129,15 @@ export const SheetGrid = memo(function SheetGrid(props: Props) {
                     simplified={simplified}
                     metric={metric}
                     surface="sheet"
+                    automaticAlignment={automaticTitleAlignment(
+                      location,
+                      (cell) => {
+                        const neighbor = at(cell)?.guesstimate;
+                        return (
+                          !!neighbor?.input?.trim() || !!neighbor?.data?.length
+                        );
+                      }
+                    )}
                     position={SHEET_INSET}
                     selected={selectedId === metric.id || inRange(location)}
                     referenceMode={referenceMode}

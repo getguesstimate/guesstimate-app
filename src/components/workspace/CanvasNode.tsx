@@ -1,3 +1,4 @@
+import { TitleAlignment } from "~/modules/metrics/reducer";
 import { memo } from "react";
 import { SimulationHistogram } from "~/components/simulations/SimulationHistogram";
 import { FullDenormalizedMetric } from "~/lib/engine/space";
@@ -15,6 +16,7 @@ export function CanvasNode({
   onMove,
   surface = "canvas",
   simplified = false,
+  automaticAlignment = "center-center",
 }: {
   metric: FullDenormalizedMetric;
   position: Point;
@@ -24,6 +26,7 @@ export function CanvasNode({
   onMove(position: Point): void;
   surface?: "canvas" | "sheet";
   simplified?: boolean;
+  automaticAlignment?: TitleAlignment;
 }) {
   const formula = metric.guesstimate.guesstimateType === "FUNCTION";
   const name = metric.name?.trim();
@@ -40,6 +43,8 @@ export function CanvasNode({
     : formula
     ? "Formula"
     : "Input";
+  const alignment = metric.titleAlignment?.[surface] || automaticAlignment;
+  const [vertical, horizontal] = alignment.split("-");
   return (
     <article
       data-node-appearance={simplified ? "simplified" : "standard"}
@@ -96,6 +101,19 @@ export function CanvasNode({
       <button
         type="button"
         className={styles.nodeContent}
+        style={
+          heading
+            ? {
+                justifyContent:
+                  vertical === "top"
+                    ? "flex-start"
+                    : vertical === "bottom"
+                    ? "flex-end"
+                    : "center",
+                textAlign: horizontal as "left" | "center" | "right",
+              }
+            : undefined
+        }
         aria-pressed={selected}
         onPointerDown={(event) => {
           if (referenceMode) {

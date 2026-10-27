@@ -19,6 +19,8 @@ export function equals(l: Metric, r: Metric) {
     l.name === r.name &&
     l.readableId === r.readableId &&
     (l.showNotesOnNode !== false) === (r.showNotesOnNode !== false) &&
+    l.titleAlignment?.sheet === r.titleAlignment?.sheet &&
+    l.titleAlignment?.canvas === r.titleAlignment?.canvas &&
     isAtLocation(l.location, r.location) &&
     l.canvasPosition?.x === r.canvasPosition?.x &&
     l.canvasPosition?.y === r.canvasPosition?.y

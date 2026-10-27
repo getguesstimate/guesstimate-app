@@ -1825,7 +1825,7 @@
 .simplifiedNode .notePreview:first-child { padding-right: 20px; }
 .simplifiedNode.headingNode .nodeName {
   font-size: 23px;
-  padding-right: 20px;
+  padding-right: 0;
   -webkit-line-clamp: 4;
 }
 .simplifiedNode.headingNode .nodeContent { justify-content: flex-end; padding: 12px 15px; }
@@ -1839,3 +1839,12 @@
   .simplifiedNode .dragHandle svg { opacity: 1; }
   .simplifiedNode.headingNode .dragHandle svg { opacity: 0; }
 }
+
+.titleAlignmentSetting { margin: 16px 0; }
+.titleAlignmentHeading { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.titleAlignmentHeading > button:last-child { margin-left: auto; padding: 5px 10px; border-radius: 6px; }
+.titleAlignmentPicker { display: grid; grid-template-columns: repeat(3, 36px); gap: 4px; }
+.titleAlignmentPicker button { display: flex; width: 36px; height: 32px; padding: 6px; border-radius: 5px; }
+.titleAlignmentPicker button, .titleAlignmentHeading > button:last-child { border: 1px solid var(--border); background: var(--surface); color: var(--ink); }
+.titleAlignmentPicker button[aria-pressed="true"], .titleAlignmentHeading > button:last-child[aria-pressed="true"] { background: var(--accent-surface); border-color: var(--accent); }
+.titleAlignmentPicker button span { width: 12px; height: 3px; border-radius: 1px; background: currentColor; }

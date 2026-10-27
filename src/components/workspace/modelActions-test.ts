@@ -109,3 +109,20 @@ it("saves note display preferences, preserves them when duplicated, and restores
   const copies = store.dispatch(duplicateScratchpadCanvasNodes([id], 12));
   expect(copies[0].showNotesOnNode).toBe(false);
 });
+
+it("saves independent title alignments and restores auto through undo", async () => {
+  const { store, update } = setup();
+  store.dispatch(allowEdits());
+  const id = store.dispatch(addScratchpadNode({ x: 0, y: 0 }, undefined, 12));
+  await Promise.resolve();
+  const titleAlignment = { sheet: "bottom-right", canvas: "top-left" } as const;
+  store.dispatch(changeMetric({ id, titleAlignment }));
+  await Promise.resolve();
+  expect(update.mock.calls.at(-1)![1].graph.metrics[0].titleAlignment).toEqual(titleAlignment);
+  store.dispatch(changeWorkspaceHistory(12, false));
+  expect(store.getState().metrics.find((m) => m.id === id)!.titleAlignment).toBeUndefined();
+  store.dispatch(changeWorkspaceHistory(12, true));
+  expect(store.getState().metrics.find((m) => m.id === id)!.titleAlignment).toEqual(titleAlignment);
+  const copies = store.dispatch(duplicateScratchpadCanvasNodes([id], 12));
+  expect(copies[0].titleAlignment).toEqual(titleAlignment);
+});

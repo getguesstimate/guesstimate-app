@@ -3,11 +3,23 @@ import { AnyAction, Reducer } from "redux";
 import { uniq } from "~/lib/engine/collections";
 import { CanvasLocation } from "~/lib/locationUtils";
 
+export type TitleAlignment =
+  | "top-left"
+  | "top-center"
+  | "top-right"
+  | "center-left"
+  | "center-center"
+  | "center-right"
+  | "bottom-left"
+  | "bottom-center"
+  | "bottom-right";
+
 export type Metric = {
   space: number;
   location: CanvasLocation;
   canvasPosition?: { x: number; y: number };
   showNotesOnNode?: boolean;
+  titleAlignment?: { sheet?: TitleAlignment; canvas?: TitleAlignment };
   id: string;
   readableId: string;
   name?: string;

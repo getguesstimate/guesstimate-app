@@ -1,3 +1,4 @@
+import { TitleAlignment } from "~/modules/metrics/reducer";
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { DistributionEditor } from "~/components/distributions/DistributionEditor";
 import { SimulationHistogram } from "~/components/simulations/SimulationHistogram";
@@ -21,6 +22,7 @@ export const formatNumber = (n: number) =>
 
 export function NodeInspector({
   metric,
+  surface = "canvas",
   metrics,
   onClose,
   onSelect,
@@ -31,6 +33,7 @@ export function NodeInspector({
   canUseOrganizationFacts = false,
 }: {
   metric: FullDenormalizedMetric;
+  surface?: "sheet" | "canvas";
   metrics: FullDenormalizedMetric[];
   onClose(): void;
   onSelect(id: string): void;
@@ -239,6 +242,90 @@ export function NodeInspector({
                 <span aria-hidden="true" />
               </button>
             </div>
+          )}
+        {!!metric.name?.trim() &&
+          !metric.guesstimate.input?.trim() &&
+          !metric.guesstimate.data?.length &&
+          (!metric.guesstimate.description?.trim() ||
+            metric.showNotesOnNode === false) && (
+            <section
+              className={styles.titleAlignmentSetting}
+              aria-label="Title alignment"
+            >
+              <div className={styles.titleAlignmentHeading}>
+                <span>Title alignment</span>
+                <FieldHelp label="Title alignment">
+                  {surface === "sheet"
+                    ? "Auto aligns toward nodes in adjacent cells. Manual alignment applies to sheet only."
+                    : "Auto follows sheet alignment until the title is moved in canvas, then centers it. Manual alignment applies to canvas only."}
+                </FieldHelp>
+                <button
+                  type="button"
+                  aria-pressed={!metric.titleAlignment?.[surface]}
+                  onClick={() =>
+                    dispatch(
+                      changeMetric({
+                        id: metric.id,
+                        titleAlignment: {
+                          ...metric.titleAlignment,
+                          [surface]: undefined,
+                        },
+                      })
+                    )
+                  }
+                >
+                  Auto
+                </button>
+              </div>
+              <div className={styles.titleAlignmentPicker}>
+                {(["top", "center", "bottom"] as const).flatMap((vertical) =>
+                  (["left", "center", "right"] as const).map((horizontal) => {
+                    const value = `${vertical}-${horizontal}` as TitleAlignment;
+                    return (
+                      <button
+                        key={value}
+                        type="button"
+                        aria-label={
+                          value === "center-center"
+                            ? "Align center"
+                            : `Align ${vertical} ${horizontal}`
+                        }
+                        aria-pressed={
+                          metric.titleAlignment?.[surface] === value
+                        }
+                        onClick={() =>
+                          dispatch(
+                            changeMetric({
+                              id: metric.id,
+                              titleAlignment: {
+                                ...metric.titleAlignment,
+                                [surface]: value,
+                              },
+                            })
+                          )
+                        }
+                        style={{
+                          alignItems:
+                            vertical === "top"
+                              ? "flex-start"
+                              : vertical === "bottom"
+                              ? "flex-end"
+                              : "center",
+                          justifyContent:
+                            horizontal === "left"
+                              ? "flex-start"
+                              : horizontal === "right"
+                              ? "flex-end"
+                              : "center",
+                        }}
+                      >
+                        <span aria-hidden="true" />
+                      </button>
+                    );
+                  })
+                )}
+              </div>
+            </section>
           )}
         <button
           className={styles.deleteButton}

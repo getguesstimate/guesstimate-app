@@ -28,6 +28,7 @@ import {
   changeMetricClickMode,
 } from "~/modules/canvas_state/actions";
 import { CanvasNode } from "./CanvasNode";
+import { automaticTitleAlignment } from "./titleAlignment";
 import { NodeInspector } from "./NodeInspector";
 import { usePanelResize } from "./usePanelResize";
 import { SheetView } from "./SheetView";
@@ -109,6 +110,26 @@ export function ScratchpadWorkspace({
     () => new Map(metrics.map((metric) => [metric.id, metric])),
     [metrics]
   );
+  const canvasTitleAlignments = useMemo(() => {
+    const occupied = new Set(
+      metrics
+        .filter(
+          (m) => !!m.guesstimate.input?.trim() || !!m.guesstimate.data?.length
+        )
+        .map((m) => `${m.location.row}:${m.location.column}`)
+    );
+    return new Map(
+      metrics.map((m) => [
+        m.id,
+        m.canvasPosition
+          ? ("center-center" as const)
+          : m.titleAlignment?.sheet ||
+            automaticTitleAlignment(m.location, (cell) =>
+              occupied.has(`${cell.row}:${cell.column}`)
+            ),
+      ])
+    );
+  }, [metrics]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [formulaFocusId, setFormulaFocusId] = useState<string | null>(null);
@@ -958,6 +979,7 @@ export function ScratchpadWorkspace({
           location,
           canvasPosition,
           showNotesOnNode,
+          titleAlignment,
         }) => ({
           id,
           name,
@@ -965,6 +987,7 @@ export function ScratchpadWorkspace({
           location,
           canvasPosition,
           showNotesOnNode,
+          titleAlignment,
         })
       ),
       guesstimates: metrics.map((m) => m.guesstimate),
@@ -1170,6 +1193,7 @@ export function ScratchpadWorkspace({
                       simplified={simplified}
                       key={metric.id}
                       metric={metric}
+                      automaticAlignment={canvasTitleAlignments.get(metric.id)}
                       selected={
                         selectedId === metric.id ||
                         activeSelection.includes(metric.id)
@@ -1532,6 +1556,7 @@ export function ScratchpadWorkspace({
             <NodeInspector
               key={selected.id}
               metric={selected}
+              surface={viewMode}
               resizeHandle={resizeHandle}
               focusFormula={formulaFocusId === selected.id}
               onAdvance={viewMode === "sheet" ? advanceSheetInput : undefined}
