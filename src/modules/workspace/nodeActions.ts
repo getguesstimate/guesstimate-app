@@ -31,8 +31,8 @@ export const addWorkspaceNode =
     return metric.id;
   };
 
-export const duplicateWorkspaceCanvasNodes =
-  (ids: string[], spaceId = SCRATCHPAD_ID): AppThunk<Metric[]> =>
+const duplicateWorkspaceSelection =
+  (ids: string[], spaceId: number): AppThunk<Metric[]> =>
   (dispatch, getState) => {
     const state = getState();
     const copied = duplicateNodes(
@@ -55,6 +55,11 @@ export const duplicateWorkspaceCanvasNodes =
     );
     return copied.metrics;
   };
+
+export const duplicateWorkspaceCanvasNodes = (
+  ids: string[],
+  spaceId = SCRATCHPAD_ID
+): AppThunk<Metric[]> => duplicateWorkspaceSelection(ids, spaceId);
 
 export const moveWorkspaceNodes =
   (
@@ -96,9 +101,7 @@ export const moveWorkspaceNodes =
 export const duplicateWorkspaceNodes =
   (ids: string[], spaceId = SCRATCHPAD_ID): AppThunk<CanvasLocation[]> =>
   (dispatch) =>
-    dispatch(duplicateWorkspaceCanvasNodes(ids, spaceId)).map(
-      (m) => m.location
-    );
+    dispatch(duplicateWorkspaceSelection(ids, spaceId)).map((m) => m.location);
 
 export const moveWorkspaceCanvasNodes =
   (

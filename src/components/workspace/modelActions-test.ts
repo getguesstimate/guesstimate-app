@@ -5,6 +5,7 @@ import { meSlice } from "~/modules/me/slice";
 import {
   addWorkspaceNode,
   duplicateWorkspaceCanvasNodes,
+  duplicateWorkspaceNodes,
   moveWorkspaceNodes,
 } from "~/modules/workspace/nodeActions";
 import { changeWorkspaceHistory } from "./modelActions";
@@ -140,3 +141,48 @@ it("moves a sheet group through its own cells and rejects occupied or negative d
   expect(store.dispatch(moveWorkspaceNodes([first, second], {row: -2, column: 0}, 12))).toBe(false);
   expect(store.getState().metrics).toBe(before);
 });
+
+it("duplicates a wide sheet group below it as one undoable local action", () => {
+  const { store, update } = setup();
+  store.dispatch(forbidEdits());
+  const ids = [0, 1, 2].map((column) =>
+    store.dispatch(addWorkspaceNode({ x: column * 300, y: 0 }, { row: 0, column }, 12))
+  );
+  expect(store.dispatch(duplicateWorkspaceNodes(ids, 12))).toEqual([
+    { row: 1, column: 0 },
+    { row: 1, column: 1 },
+    { row: 1, column: 2 },
+  ]);
+  store.dispatch(changeWorkspaceHistory(12, false));
+  expect(store.getState().metrics.map((m) => m.id)).toEqual(ids);
+  store.dispatch(changeWorkspaceHistory(12, true));
+  expect(store.getState().metrics).toHaveLength(6);
+  expect(update).not.toHaveBeenCalled();
+});
+
+it.each(["sheet", "canvas"])(
+  "duplicates from %s with independent sheet and canvas positions",
+  (surface) => {
+    const { store, update } = setup();
+    store.dispatch(forbidEdits());
+    // A row in sheet, but a column in canvas.
+    const ids = [0, 1].map((column) =>
+      store.dispatch(addWorkspaceNode({ x: 0, y: column * 230 }, { row: 0, column }, 12))
+    );
+    if (surface === "sheet") store.dispatch(duplicateWorkspaceNodes(ids, 12));
+    else store.dispatch(duplicateWorkspaceCanvasNodes(ids, 12));
+    const readCopies = () => store.getState().metrics
+      .filter((m) => !ids.includes(m.id))
+      .map(({ location, canvasPosition }) => ({ location, canvasPosition }));
+    const expected = [
+      { location: { row: 1, column: 0 }, canvasPosition: { x: 298, y: 0 } },
+      { location: { row: 1, column: 1 }, canvasPosition: { x: 298, y: 230 } },
+    ];
+    expect(readCopies()).toEqual(expected);
+    store.dispatch(changeWorkspaceHistory(12, false));
+    expect(readCopies()).toEqual([]);
+    store.dispatch(changeWorkspaceHistory(12, true));
+    expect(readCopies()).toEqual(expected);
+    expect(update).not.toHaveBeenCalled();
+  }
+);
