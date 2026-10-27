@@ -126,3 +126,17 @@ it("saves independent title alignments and restores auto through undo", async ()
   const copies = store.dispatch(duplicateWorkspaceCanvasNodes([id], 12));
   expect(copies[0].titleAlignment).toEqual(titleAlignment);
 });
+
+it("moves a sheet group through its own cells and rejects occupied or negative destinations atomically", () => {
+  const { store } = setup();
+  store.dispatch(forbidEdits());
+  const add = (row: number) => store.dispatch(addWorkspaceNode({x: 0, y: 0}, {row, column: 0}, 12));
+  const first = add(0), second = add(1);
+  add(3);
+  expect(store.dispatch(moveWorkspaceNodes([first, second], {row: 1, column: 0}, 12))).toBe(true);
+  const before = store.getState().metrics;
+  expect(store.dispatch(moveWorkspaceNodes([first, second], {row: 1, column: 0}, 12))).toBe(false);
+  expect(store.getState().metrics).toBe(before);
+  expect(store.dispatch(moveWorkspaceNodes([first, second], {row: -2, column: 0}, 12))).toBe(false);
+  expect(store.getState().metrics).toBe(before);
+});

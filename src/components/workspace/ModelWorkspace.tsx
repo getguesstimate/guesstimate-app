@@ -144,7 +144,7 @@ export function ModelWorkspace({
   const suppressCanvasClick = useRef(false);
   const canvasPointerStartedOnNode = useRef(false);
   const activeSelection = canvasSelection.filter((id) =>
-    metrics.some((m) => m.id === id)
+    metricsById.has(id)
   );
   const selectionRef = useRef(activeSelection);
   selectionRef.current = activeSelection;
@@ -227,7 +227,7 @@ export function ModelWorkspace({
     previousTouchTap.current = null;
   }, [viewMode, areaMode, spaceHeld]);
   const fitted = useRef(false);
-  const selected = metrics.find((m) => m.id === selectedId);
+  const selected = selectedId ? metricsById.get(selectedId) : undefined;
   const metricsRef = useRef(metrics);
   metricsRef.current = metrics;
   const selectionPointer = useRef<Point | null>(null);
@@ -328,7 +328,7 @@ export function ModelWorkspace({
       activeSelection.includes(dragPosition.id) &&
       activeSelection.includes(metric.id)
     ) {
-      const anchor = metrics.find((m) => m.id === dragPosition.id);
+      const anchor = metricsById.get(dragPosition.id);
       if (anchor) {
         const start = basePosition(anchor),
           point = basePosition(metric);

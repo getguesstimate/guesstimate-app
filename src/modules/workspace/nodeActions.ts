@@ -64,7 +64,13 @@ export const moveWorkspaceNodes =
   ): AppThunk<boolean> =>
   (dispatch, getState) => {
     const metrics = getState().metrics.filter((m) => m.space === spaceId);
-    const selected = metrics.filter((m) => ids.includes(m.id));
+    const selectedIds = new Set(ids);
+    const selected = metrics.filter((m) => selectedIds.has(m.id));
+    const occupied = new Set(
+      metrics
+        .filter((m) => !selectedIds.has(m.id))
+        .map((m) => `${m.location.row}:${m.location.column}`)
+    );
     if (!selected.length) return false;
     const updates = selected.map((m) => ({
       id: m.id,
@@ -78,12 +84,7 @@ export const moveWorkspaceNodes =
         ({ location }) =>
           location.row < 0 ||
           location.column < 0 ||
-          metrics.some(
-            (m) =>
-              !ids.includes(m.id) &&
-              m.location.row === location.row &&
-              m.location.column === location.column
-          )
+          occupied.has(`${location.row}:${location.column}`)
       )
     )
       return false;

@@ -65,6 +65,26 @@ export const SheetGrid = memo(function SheetGrid(props: Props) {
   const rangeNodes = metrics.filter((m) =>
     rangeEnd ? inRange(m.location) : m.id === selectedId
   );
+  const dragged = drag ? metricsById.get(drag.id) : undefined;
+  const movingGroup = !!(
+    dragged &&
+    rangeEnd &&
+    inRange(dragged.location) &&
+    rangeNodes.length > 1
+  );
+  const rangeIds = new Set(rangeNodes.map((m) => m.id));
+  const dropCells = new Set<string>();
+  if (drag) {
+    if (movingGroup && dragged) {
+      for (const metric of rangeNodes) {
+        const row =
+          metric.location.row + drag.target.row - dragged.location.row;
+        const column =
+          metric.location.column + drag.target.column - dragged.location.column;
+        dropCells.add(`${row}:${column}`);
+      }
+    } else dropCells.add(`${drag.target.row}:${drag.target.column}`);
+  }
   return (
     <>
       {Array.from({ length: rowCount }, (_, row) => (
@@ -75,32 +95,7 @@ export const SheetGrid = memo(function SheetGrid(props: Props) {
           {Array.from({ length: columnCount }, (_, column) => {
             const location = { row, column },
               metric = at(location);
-            const dragged = drag && metrics.find((m) => m.id === drag.id);
-            const movingGroup = !!(
-              dragged &&
-              rangeEnd &&
-              inRange(dragged.location) &&
-              rangeNodes.length > 1
-            );
-            const target =
-              drag &&
-              (movingGroup
-                ? rangeNodes.some((m) =>
-                    sameCell(
-                      {
-                        row:
-                          m.location.row +
-                          drag.target.row -
-                          dragged!.location.row,
-                        column:
-                          m.location.column +
-                          drag.target.column -
-                          dragged!.location.column,
-                      },
-                      location
-                    )
-                  )
-                : sameCell(drag.target, location));
+            const target = drag && dropCells.has(`${row}:${column}`);
             return (
               <div
                 key={column}
@@ -116,10 +111,7 @@ export const SheetGrid = memo(function SheetGrid(props: Props) {
                   target
                     ? metric &&
                       metric.id !== drag.id &&
-                      !(
-                        movingGroup &&
-                        rangeNodes.some((m) => m.id === metric.id)
-                      )
+                      !(movingGroup && rangeIds.has(metric.id))
                       ? styles.sheetDropBlocked
                       : styles.sheetDropTarget
                     : ""
