@@ -1,0 +1,110 @@
+@media (max-width: 1000px) {
+  .brand span {
+    display: none;
+  }
+  .header {
+    gap: 16px;
+  }
+  .documentTitle {
+    padding-left: 16px;
+  }
+  .canvasHint {
+    display: none;
+  }
+}
+@media (max-width: 650px) {
+  .header {
+    height: 54px;
+    padding: 0 12px;
+    gap: 12px;
+  }
+  .documentTitle {
+    border: 0;
+    padding: 0;
+    gap: 6px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .documentTitle h1 {
+    font-size: 13px;
+  }
+  .temporary {
+    font-size: 9px;
+  }
+  .signIn {
+    min-height: 34px;
+    padding: 5px 9px;
+  }
+  .toolbar {
+    top: 12px;
+    left: 12px;
+    padding: 4px;
+    gap: 0;
+  }
+  .toolbar .iconButton {
+    width: 33px;
+    height: 36px;
+  }
+  .addButton {
+    padding: 0 8px;
+    font-size: 11px !important;
+  }
+  .divider {
+    margin: 0 4px;
+  }
+  .canvasBottom {
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+  }
+  .inspector {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: var(--inspector-height, 48%);
+    border-left: 0;
+    border-top: 1px solid var(--border);
+    border-radius: 14px 14px 0 0;
+    box-shadow: 0 -4px 18px var(--shadow-soft);
+  }
+  .main:has(.inspector) .canvas {
+    height: calc(100% - var(--inspector-height, 48%));
+  }
+  .panelBody {
+    padding: 16px 18px;
+  }
+  .inspector > .panelHeading {
+    height: 48px;
+  }
+  .helpPopover {
+    width: min(330px, calc(100vw - 24px));
+    padding: 14px;
+  }
+  .helpPopover .panelHeading h2 {
+    font-size: 12px;
+  }
+  .iconButton {
+    width: 36px;
+    height: 36px;
+  }
+  .zoomControls {
+    padding: 2px;
+  }
+  .zoomControls .iconButton {
+    width: 32px;
+    height: 34px;
+  }
+  .zoomLabel {
+    min-width: 38px;
+  }
+  .accountMenu {
+    right: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .node {
+    transition: none;
+  }
+}
+

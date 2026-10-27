@@ -1,0 +1,339 @@
+.viewSwitch {
+  display: inline-flex;
+  flex-shrink: 0;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 7px;
+  background: var(--page);
+}
+.viewSwitch button {
+  padding: 5px 12px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--ink-muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+.viewSwitch button[aria-pressed="true"] {
+  color: var(--accent-ink);
+  background: var(--surface);
+  box-shadow: 0 1px 3px var(--shadow-soft);
+}
+.canvas[hidden],
+.sheetView[hidden] {
+  display: none;
+}
+.sheetView {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  background: var(--workspace);
+}
+.sheetToolbar {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 5px;
+  height: 54px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--surface);
+  z-index: 6;
+}
+.sheetCellAddress {
+  margin-left: auto;
+  padding: 4px 8px;
+  color: var(--ink-muted);
+  font: 11px ui-monospace, monospace;
+}
+.sheetScroll {
+  overflow-anchor: none;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  touch-action: none;
+}
+.sheetScaleBounds {
+  position: relative;
+  overflow: clip;
+}
+.sheetStage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+}
+.sheetColumnHeadings,
+.sheetRow {
+  display: flex;
+}
+.sheetColumnHeadings {
+  position: relative;
+  top: 0;
+  z-index: 5;
+  height: 30px;
+}
+.sheetColumnHeadings > div {
+  flex: 0 0 284px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-muted);
+  border-right: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--ink-muted);
+  font-size: 11px;
+  font-weight: 500;
+}
+.sheetColumnHeadings > .sheetCorner {
+  flex-basis: 36px;
+  position: relative;
+  left: 0;
+  z-index: 6;
+}
+.sheetRow { padding-left: 36px; }
+.sheetRowHeadings {
+  position: absolute;
+  left: 0;
+  top: 30px;
+  width: 36px;
+  z-index: 4;
+  pointer-events: none;
+}
+.sheetSemanticRowHeading {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.sheetRowHeading {
+  height: 208px;
+  position: relative;
+  left: 0;
+  z-index: 4;
+  flex: 0 0 36px;
+  display: flex;
+  justify-content: center;
+  padding-top: 18px;
+  background: var(--surface-muted);
+  color: var(--ink-muted);
+  border-right: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: 11px;
+}
+.sheetCell {
+  position: relative;
+  width: 284px;
+  height: 208px;
+  flex-shrink: 0;
+  border-right: 1px solid var(--grid);
+  border-bottom: 1px solid var(--grid);
+}
+.sheetCell[aria-selected="true"] {
+  background: var(--accent-surface);
+}
+.sheetDropTarget {
+  background: var(--accent-surface) !important;
+  box-shadow: inset 0 0 0 2px var(--accent);
+}
+.sheetDropBlocked {
+  background: var(--danger-surface) !important;
+  box-shadow: inset 0 0 0 2px var(--danger);
+}
+.emptySheetCell {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: transparent;
+  color: var(--ink-subtle);
+}
+.emptySheetCell span {
+  width: 22px;
+  opacity: 0;
+}
+.emptySheetCell:hover {
+  background: var(--surface-hover);
+}
+.emptySheetCell:hover span,
+.emptySheetCell:focus-visible span {
+  opacity: 1;
+}
+.sheetConnections {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  overflow: visible;
+  pointer-events: none;
+}
+.sheetConnections path {
+  fill: none;
+  stroke: var(--edge);
+  stroke-width: 1.5;
+}
+.sheetConnections .selectedEdge {
+  stroke: var(--accent);
+  stroke-width: 2;
+}
+.sheetExtend {
+  display: flex;
+  gap: 12px;
+  padding: 14px 52px;
+}
+.sheetExtend button {
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 6px 10px;
+  font-size: 12px;
+  color: var(--ink-muted);
+  background: var(--surface);
+}
+@media (max-width: 650px) {
+  .header .documentTitle {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  .viewSwitch button {
+    padding: 5px 10px;
+  }
+  .main:has(.inspector) .sheetView {
+    height: calc(100% - var(--inspector-height, 48%));
+    flex: 0 0 100%;
+  }
+  .sheetToolbar {
+    height: 48px;
+    padding: 6px 8px;
+    gap: 2px;
+  }
+  .sheetToolbar .iconButton {
+    width: 30px;
+  }
+  .sheetCellAddress {
+    padding: 4px;
+  }
+}
+.sheetCell .node { z-index: 2; }
+.sheetCell .selectedNode { z-index: 3; }
+
+.sheetHand, .sheetHand * { cursor: grab !important; }
+.sheetHand:active, .sheetHand:active * { cursor: grabbing !important; }
+.sheetZoom {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px;
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  box-shadow: 0 3px 12px var(--shadow-soft);
+  z-index: 7;
+}
+.sheetZoomLevel { min-width: 48px; padding: 4px; font-size: 12px; color: var(--ink-muted); background: transparent; border: 0; }
+.sheetScroll { padding-bottom: 60px; }
+@media (max-width: 400px) {
+  .sheetCellAddress { display: none; }
+  .sheetToolbar > .divider { display: none; }
+  .sheetToolbar > button[aria-label="Download JSON"] { margin-left: auto; }
+}
+
+.sheetRangeCell { background: var(--accent-surface); box-shadow: inset 0 0 0 1px var(--accent-border); }
+.sheetSelection {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 6px 4px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: 0 3px 12px var(--shadow-soft);
+  color: var(--accent-ink);
+  font-size: 12px;
+  z-index: 7;
+}
+.sheetScroll { user-select: none; }
+
+.selectionBox { position: absolute; pointer-events: none; background: var(--selection); border: 1px solid var(--accent); z-index: 4; }
+.areaMode, .areaMode .node, .areaMode button { cursor: crosshair; }
+.touchSelectionTool { display: none; }
+@media (any-pointer: coarse) { .touchSelectionTool { display: inline-flex; } }
+
+
+@media (any-pointer: coarse) { .sheetHandTool { display: none; } }
+
+@media (max-width: 650px) and (any-pointer: coarse) {
+  .sheetToolbar {
+    height: auto;
+    min-height: 56px;
+    flex-wrap: nowrap;
+    padding: 8px 6px;
+    gap: 2px;
+  }
+  .sheetToolbar > button,
+  .sheetToolbar > button.iconButton {
+    min-width: 40px;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+  }
+  .sheetToolbar > .addButton { width: auto; }
+  .sheetToolbar .divider,
+  .sheetToolbar .sheetCellAddress { display: none; }
+}
+
+@media (max-width: 359px) and (any-pointer: coarse) {
+  .sheetToolbar { padding-inline: 4px; }
+  .sheetToolbar > button,
+  .sheetToolbar > button.iconButton { width: 36px; min-width: 36px; height: 36px; }
+  .sheetToolbar > .addButton { width: auto; padding-inline: 4px; gap: 4px; }
+}
+
+.canvas > .sheetSelection { left: 20px; bottom: 18px; }
+.canvasBottomWithSelection .helpArea { transform: translateY(-58px); }
+
+@media (max-width: 650px) {
+  .canvas > .sheetSelection { left: 12px; bottom: 12px; }
+}
+
+@media (max-width: 480px) {
+  .sheetSelection { padding: 4px; gap: 2px; }
+  .sheetSelection > span { padding: 0 3px; }
+  .selectionCountLabel { display: none; }
+  .sheetSelection .iconButton,
+  .sheetZoom .iconButton,
+  .zoomControls .iconButton { width: 32px; height: 36px; }
+  .sheetZoom, .zoomControls { padding: 4px; }
+  .sheetZoomLevel, .zoomLabel { min-width: 38px; }
+}
+
+/* Pointer gestures focus the surface for shortcuts, without outlining it. */
+.sheetScroll { outline: none; }
+.sheetScroll:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -3px;
+}
+.canvas[data-pointer-focus]:focus,
+.sheetScroll[data-pointer-focus]:focus { outline: none; }
+

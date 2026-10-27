@@ -1,0 +1,297 @@
+.editorSection > div:last-child {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px;
+  background: var(--surface-subtle);
+}
+.editorSection > div:last-child:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--selection);
+}
+
+.fieldHeading {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.fieldHeading h3 {
+  margin: 0;
+}
+.fieldHelpButton {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 5px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink-subtle);
+  cursor: pointer;
+}
+.fieldHelpButton svg { width: 18px; height: 18px; flex-shrink: 0; }
+.fieldHelpButton:hover,
+.fieldHelpButton[aria-expanded="true"] {
+  color: var(--accent-hover);
+  background: var(--accent-surface);
+}
+.fieldHelpButton:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.fieldHelpPopover {
+  z-index: 1200;
+  width: 280px;
+  max-width: calc(100vw - 24px);
+  padding: 14px 16px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--accent-ink);
+  box-shadow: 0 6px 24px var(--shadow);
+  font-family: Inter, sans-serif;
+  font-size: 12px;
+  line-height: 1.65;
+}
+.fieldHelpPopover p {
+  margin: 0;
+}
+.fieldHelpPopover p + p {
+  margin-top: 8px;
+}
+.fieldHelpPopover code {
+  padding: 1px 3px;
+  border-radius: 3px;
+  background: var(--surface-hover);
+  color: var(--accent-ink);
+  font-size: 11px;
+}
+
+.notesSection {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border-subtle);
+}
+.notesHeading,
+.noteDialogHeading,
+.noteDialogActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.notesHeading h3 {
+  margin: 0;
+}
+.noteAction,
+.noteSave {
+  padding: 7px 10px;
+  border: 0;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.noteAction {
+  color: var(--accent-ink);
+  background: transparent;
+}
+.noteAction:hover {
+  background: var(--accent-surface);
+}
+.noteSave {
+  padding-inline: 18px;
+  color: var(--on-accent);
+  background: var(--accent-solid);
+}
+.noteSave:hover {
+  background: var(--accent-solid);
+}
+.noteAction:focus-visible,
+.noteSave:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.noteMarkdown {
+  margin-top: 10px;
+  color: var(--accent-ink);
+  font-size: 13px;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+.noteMarkdown > :first-child {
+  margin-top: 0;
+}
+.noteMarkdown > :last-child {
+  margin-bottom: 0;
+}
+.noteMarkdown p,
+.noteMarkdown ul,
+.noteMarkdown ol,
+.noteMarkdown pre,
+.noteMarkdown blockquote {
+  margin: 10px 0;
+}
+.noteMarkdown ul {
+  list-style: disc;
+  padding-left: 20px;
+}
+.noteMarkdown ol {
+  list-style: decimal;
+  padding-left: 20px;
+}
+.noteMarkdown h1,
+.noteMarkdown h2,
+.noteMarkdown h3,
+.noteMarkdown h4 {
+  margin: 16px 0 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.noteMarkdown a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.noteMarkdown blockquote {
+  border-left: 3px solid var(--border);
+  padding-left: 12px;
+}
+.noteMarkdown code {
+  font-size: 12px;
+  background: var(--surface-hover);
+  border-radius: 3px;
+  padding: 1px 3px;
+}
+.noteMarkdown pre {
+  max-width: 100%;
+  overflow-x: auto;
+  padding: 10px;
+  background: var(--surface-hover);
+  border-radius: 6px;
+}
+.noteMarkdown img {
+  max-width: 100%;
+  height: auto;
+}
+.noteOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: var(--overlay);
+}
+.noteDialog {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 560px;
+  max-width: 100%;
+  height: min(480px, 80dvh);
+  max-height: calc(100dvh - 32px);
+  padding: 20px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--accent-ink);
+  box-shadow: 0 16px 60px var(--shadow);
+  font-family: Inter, sans-serif;
+  outline: none;
+}
+.noteDialogHeading h2 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+.noteTextarea {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  resize: none;
+  overflow: auto;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--ink);
+  background: var(--surface-subtle);
+  font-size: 14px;
+  line-height: 1.6;
+}
+.noteTextarea:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+.noteDialogActions {
+  justify-content: flex-end;
+}
+@media (max-width: 650px) {
+  .noteDialog {
+    padding: 16px;
+  }
+  .noteTextarea {
+    font-size: 16px;
+  }
+}
+
+.panelResizeHandle {
+  position: absolute;
+  z-index: 20;
+  top: 0;
+  bottom: 0;
+  left: -6px;
+  width: 12px;
+  cursor: col-resize;
+  touch-action: none;
+}
+.panelResizeHandle::after {
+  content: "";
+  position: absolute;
+  top: calc(50% - 22px);
+  left: 4px;
+  width: 3px;
+  height: 44px;
+  border-radius: 3px;
+  background: var(--border-strong);
+}
+.panelResizeHandle:hover::after,
+.panelResizeHandle:focus-visible::after,
+.panelResizing .panelResizeHandle::after {
+  background: var(--accent-solid);
+}
+.panelResizeHandle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -3px;
+}
+.panelResizing,
+.panelResizing * {
+  cursor: col-resize !important;
+  user-select: none !important;
+}
+@media (max-width: 650px) {
+  .panelResizeHandle {
+    top: -10px;
+    bottom: auto;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 24px;
+    cursor: row-resize;
+  }
+  .panelResizeHandle::after {
+    top: 11px;
+    left: calc(50% - 22px);
+    width: 44px;
+    height: 3px;
+  }
+  .panelResizing,
+  .panelResizing * {
+    cursor: row-resize !important;
+  }
+}
+

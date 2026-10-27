@@ -1,0 +1,86 @@
+.simplifiedNode {
+  isolation: isolate;
+  border-radius: 12px;
+}
+.simplifiedNode .nodeTop {
+  position: absolute;
+  left: auto;
+  top: 0;
+  right: 0;
+  z-index: 3;
+  height: 32px;
+  padding: 0 4px;
+  gap: 4px;
+  border: 0;
+  background: transparent;
+}
+.simplifiedNode .nodeTop > span { display: none; }
+.simplifiedNode .nodeTop > code { font-size: 11px; color: var(--ink-subtle); }
+.simplifiedNode .nodeContent {
+  height: 100%;
+  padding: 10px 12px;
+  gap: 5px;
+  justify-content: flex-start;
+}
+.simplifiedNode .nodeName {
+  padding-right: 52px;
+  font-size: 17px;
+  line-height: 1.4;
+  margin: 0;
+  flex-shrink: 0;
+}
+.simplifiedNode .nodeExpression {
+  font-size: 12px;
+  margin: 0;
+  flex-shrink: 0;
+}
+.simplifiedNode .nodeContent > .nodeExpression:first-child { padding-right: 52px; }
+.simplifiedNode .nodeResult {
+  position: relative;
+  z-index: 1;
+  font-size: 28px;
+  line-height: 1.2;
+  margin-top: auto;
+  margin-bottom: 0;
+}
+.simplifiedNode .nodeChart {
+  opacity: 1;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
+  margin: 0;
+  pointer-events: none;
+}
+.simplifiedNode .notePreview {
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-line-clamp: 4;
+}
+.simplifiedNode .notePreview:first-child { padding-right: 20px; }
+.simplifiedNode.headingNode .nodeName {
+  font-size: 23px;
+  padding-right: 0;
+  -webkit-line-clamp: 4;
+}
+.simplifiedNode.headingNode .nodeContent { justify-content: flex-end; padding: 12px 15px; }
+.simplifiedNode.headingNode:not(:hover):not(:focus-within):not(.selectedNode) .nodeTop > * {
+  visibility: visible;
+}
+.simplifiedNode .dragHandle svg { width: 14px; height: 14px; opacity: 0; }
+.simplifiedNode:hover .dragHandle svg,
+.simplifiedNode:focus-within .dragHandle svg { opacity: 1; }
+@media (hover: none), (pointer: coarse) {
+  .simplifiedNode .dragHandle svg { opacity: 1; }
+  .simplifiedNode.headingNode .dragHandle svg { opacity: 0; }
+}
+
+.titleAlignmentSetting { margin: 16px 0; }
+.titleAlignmentHeading { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.titleAlignmentHeading > button:last-child { margin-left: auto; padding: 5px 10px; border-radius: 6px; }
+.titleAlignmentPicker { display: grid; grid-template-columns: repeat(3, 36px); gap: 4px; }
+.titleAlignmentPicker button { display: flex; width: 36px; height: 32px; padding: 6px; border-radius: 5px; }
+.titleAlignmentPicker button, .titleAlignmentHeading > button:last-child { border: 1px solid var(--border); background: var(--surface); color: var(--ink); }
+.titleAlignmentPicker button[aria-pressed="true"], .titleAlignmentHeading > button:last-child[aria-pressed="true"] { background: var(--accent-surface); border-color: var(--accent); }
+.titleAlignmentPicker button span { width: 12px; height: 3px; border-radius: 1px; background: currentColor; }

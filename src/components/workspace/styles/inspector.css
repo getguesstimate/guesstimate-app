@@ -1,0 +1,187 @@
+.inspector {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 var(--inspector-width, 320px);
+  min-width: 0;
+  background: var(--surface);
+  border-left: 1px solid var(--border-subtle);
+  z-index: 10;
+  min-height: 0;
+  box-shadow: -3px 0 12px var(--shadow-soft);
+}
+.panelHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.inspector > .panelHeading {
+  height: 58px;
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 0 18px;
+}
+.panelHeading h2 {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0;
+  color: var(--accent-ink);
+  margin: 0;
+}
+.panelBody {
+  padding: 22px 20px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  min-height: 0;
+  flex: 1;
+  touch-action: pan-y;
+}
+.panelBody h3 {
+  color: var(--ink-muted);
+  font-size: 12px;
+  font-weight: 600;
+  margin: 0 0 10px;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-muted);
+}
+.field input,
+.field textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 9px 10px;
+  background: var(--surface-subtle);
+  color: var(--ink);
+  outline: none;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.6;
+  resize: vertical;
+}
+.field input:focus,
+.field textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--selection);
+}
+.variableLine {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--ink-subtle);
+  margin-top: 10px;
+}
+.variableLine code,
+.dependencies code {
+  padding: 2px 5px;
+  background: var(--surface-hover);
+  color: var(--ink-muted);
+  border-radius: 3px;
+  font-size: 11px;
+  font-family: ui-monospace, SFMono-Regular, monospace;
+}
+.editorSection,
+.resultSection,
+.dependencies {
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 20px;
+  margin-top: 22px;
+  margin-bottom: 22px;
+}
+.fieldHint {
+  font-size: 11px;
+  line-height: 1.7;
+  color: var(--ink-subtle);
+  margin: 0 0 12px;
+}
+.fieldHint code {
+  font-size: 10px;
+  color: var(--ink-muted);
+}
+.editorSection :global(.DraftEditor-root) {
+  font-size: 14px;
+  min-height: 38px;
+}
+.editorSection :global(.DraftEditor-editorContainer) {
+  min-height: 38px;
+}
+.inspectorResult {
+  overflow-wrap: anywhere;
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--accent-ink);
+  letter-spacing: -0.04em;
+  margin: 0;
+}
+.detailChart {
+  height: 110px;
+  margin: 15px 0;
+}
+.statistics {
+  margin-top: 12px;
+}
+.statistics > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  padding: 6px 0;
+  color: var(--ink-subtle);
+}
+.statistics dd {
+  color: var(--accent-ink);
+  font-variant-numeric: tabular-nums;
+  margin: 0;
+}
+.dependencies button {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 9px 0;
+  gap: 8px;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  color: var(--ink-muted);
+  font-size: 12px;
+}
+.dependencies button > span {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.dependencies button:hover {
+  color: var(--accent);
+}
+.deleteButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 24px;
+  padding: 8px 0;
+  background: none;
+  border: 0;
+  color: var(--danger);
+  font-size: 12px !important;
+}
+.deleteButton:hover {
+  color: var(--danger);
+}
+.liveStatus {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

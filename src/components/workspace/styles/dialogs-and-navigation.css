@@ -1,0 +1,228 @@
+.resultDialog {
+  width: 860px;
+  height: auto;
+  overflow-y: auto;
+}
+.resultNodeName {
+  margin: 4px 0 0;
+  color: var(--ink-muted);
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+.resultDetailsGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 210px;
+  gap: 28px;
+}
+.resultPlotSection { min-width: 0; }
+.resultReadout {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 60px;
+  font-variant-numeric: tabular-nums;
+}
+.resultReadout span { display: block; color: var(--ink-muted); font-size: 12px; }
+.resultReadout strong { font-size: 24px; font-weight: 600; overflow-wrap: anywhere; }
+.resultPlot { height: 250px; margin: 16px 0; touch-action: pan-y; }
+.percentileSlider { display: block; font-size: 12px; color: var(--ink-muted); }
+.percentileSlider span { display: flex; justify-content: space-between; }
+.percentileSlider input { display: block; width: 100%; height: 32px; accent-color: var(--accent-solid); }
+.percentileSection { min-width: 0; }
+.percentileSection h3 { font-size: 13px; font-weight: 600; margin: 0; }
+.percentileTable { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 12px; font-variant-numeric: tabular-nums; }
+.percentileTable th, .percentileTable td { padding: 10px 0; text-align: left; border-bottom: 1px solid var(--border-subtle); font-weight: 400; }
+.percentileTable thead th { color: var(--ink-muted); font-size: 11px; }
+.percentileTable td, .percentileTable th:last-child { text-align: right; overflow-wrap: anywhere; }
+.percentileTable button { border: 0; background: transparent; color: var(--accent-hover); padding: 4px 0; cursor: pointer; }
+.percentileTable button:hover { color: var(--ink-strong); text-decoration: underline; }
+.percentileTable button:focus-visible, .percentileSlider input:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+@media (max-width: 650px) {
+  .resultDetailsGrid { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .resultPlot { height: 190px; }
+  .resultReadout strong { font-size: 21px; }
+}
+
+.modelHeader .documentTitle { flex: 1; flex-direction: column; align-items: flex-start; gap: 1px; }
+.modelHeader .documentTitle h1 { max-width: 100%; }
+.modelTitleButton { display: flex; text-align: left; align-items: center; gap: 8px; max-width: 100%; padding: 0; border: 0; background: transparent; color: inherit; font-weight: 600 !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.modelTitleButton span { flex-shrink: 0; }
+.modelMode { display: flex; align-items: center; gap: 4px; }
+.modelMode select, .modelDialog select { font: inherit; border: 1px solid var(--border); border-radius: 6px; padding: 6px 8px; background: var(--surface); color: var(--ink); }
+.modelDialog { width: min(620px, calc(100vw - 24px)); height: auto; max-height: min(760px, 85dvh); padding: 0; gap: 0; font-family: WorkspaceInter, sans-serif; font-size: 14px; }
+.modelDialogBody { padding: 20px; overflow-y: auto; min-height: 0; max-height: calc(85dvh - 70px); }
+.modelSectionHeading { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.modelSectionHeading h3 { font-size: 18px; overflow-wrap: anywhere; }
+.modelMetadata { display: flex; flex-wrap: wrap; gap: 16px; font-size: 12px; color: var(--ink-muted); margin: 8px 0 18px; }
+.modelMetadata a { color: var(--accent); }
+.modelSection { border-top: 1px solid var(--border-subtle); margin-top: 20px; padding-top: 16px; }
+.modelSection h3 { font-size: 13px; margin: 0 0 8px; }
+.modelActions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.modelInline { display: flex; align-items: center; gap: 8px; }
+.modelDescriptionInput { width: 100%; min-height: 180px; resize: vertical; padding: 10px; border: 1px solid var(--border); border-radius: 6px; font: inherit; color: var(--ink); }
+.modelDelete { font: inherit; border: 0; background: transparent; padding: 6px 0; color: var(--danger); cursor: pointer; }
+.modelTool > div { width: 100%; border: 0; padding: 16px 0 0; }
+.modelDialog > .noteDialogHeading { padding: 16px 20px; border-bottom: 1px solid var(--border-subtle); flex-shrink: 0; }
+.modelDialog button, .modelDialog input, .modelDialog textarea { font: inherit; }
+.modelDialog button { cursor: pointer; }
+.modelDialog button:disabled { cursor: default; opacity: .5; }
+.modelDialog :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.modelDialog .field { margin-bottom: 16px; }
+.modelDialog .noteMarkdown { overflow-wrap: anywhere; }
+.modelDialog .noteMarkdown img { max-width: 100%; }
+.modelSectionHeading .noteAction { flex-shrink: 0; display: inline-flex; align-items: center; gap: 6px; }
+.modelSectionHeading .noteAction svg { width: 15px; height: 15px; }
+.modelTitleButton > span:first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; flex: 0 1 auto; }
+.mobileViewSwitch { display: none; }
+@media (max-width: 650px) {
+  .modelHeader { display: flex; flex-wrap: nowrap; height: 54px; min-height: 54px; gap: 6px; padding: 0 8px; }
+  .modelHeader .brand img { width: 20px; height: 20px; }
+  .modelHeader .documentTitle { display: flex; flex: 1; max-width: none; position: static; width: auto; height: auto; overflow: hidden; clip-path: none; }
+  .modelHeader .documentTitle h1 { width: 100%; }
+  .modelHeader .modelTitleButton { width: fit-content; gap: 4px; font-size: 12px !important; }
+  .modelHeader .temporary { display: block; width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .modelHeader .temporary::before { display: none; }
+  .modelHeader .account { margin-left: 0; }
+  .modelHeader .viewSwitch { display: none; }
+  .modelHeader .mobileViewSwitch { display: block; width: 70px; flex-shrink: 0; font: inherit; font-size: 11px; padding: 6px 2px; border: 1px solid var(--border); border-radius: 6px; background: var(--page); color: var(--ink); }
+  .modelHeader .modelMode { gap: 2px; flex-shrink: 0; }
+  .modelHeader .modelMode select { width: 72px; font-size: 11px; padding: 6px 2px; }
+  .modelHeader .signIn { width: 30px; min-width: 30px; padding: 4px; gap: 0; }
+  .modelHeader .signIn span { display: none; }
+  .modelDialogBody { padding: 14px; }
+}
+
+.notesDisplaySetting { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 14px 0; font-size: 12px; color: var(--ink-muted); }
+.notesDisplaySwitch { display: inline-flex; align-items: center; flex-shrink: 0; width: 36px; height: 22px; padding: 3px; border: 0; border-radius: 12px; background: var(--border-strong); }
+.notesDisplaySwitch > span { width: 16px; height: 16px; border-radius: 50%; background: var(--switch-thumb); box-shadow: 0 1px 3px var(--shadow); }
+.notesDisplaySwitch[aria-checked="true"] { background: var(--accent-solid); }
+.notesDisplaySwitch[aria-checked="true"] > span { transform: translateX(14px); }
+.mobileModeStatus { display: none; }
+@media (max-width: 650px) {
+  .modelHeader .viewOnlyMode select { display: none; }
+  .mobileModeStatus { display: inline; font-size: 11px; color: var(--ink-muted); }
+}
+
+.accountTrigger {
+  border-radius: 50%;
+  padding: 3px;
+}
+.accountAvatar,
+.accountInitials {
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  min-height: 28px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.accountAvatar {
+  object-fit: cover;
+}
+.accountInitials {
+  display: grid;
+  place-items: center;
+  background: var(--accent-surface);
+  color: var(--accent-ink);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.accountMenu .mobileMyModels,
+.accountMenu .mobileNewModel {
+  display: none;
+}
+@media (max-width: 650px) {
+  .accountMenu .mobileMyModels,
+  .accountMenu .mobileNewModel {
+    display: block;
+  }
+}
+
+.accountSupport {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border-top: 1px solid var(--border-subtle);
+  margin-top: 6px;
+  padding-top: 6px;
+}
+.accountSupport a {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+}
+.accountSupport svg {
+  width: 19px;
+  height: 19px;
+}
+.accountMenu {
+  max-height: calc(100dvh - 76px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+@media (pointer: coarse) {
+  .accountMenu > a, .accountMenu > button { min-height: 40px; display: flex; align-items: center; }
+  .accountMenu > .mobileMyModels { display: none; }
+}
+@media (pointer: coarse) and (max-width: 650px) {
+  .accountMenu > .mobileMyModels { display: flex; }
+}
+
+.accountMenu > a, .accountMenu > button { margin-bottom: 2px; white-space: nowrap; }
+
+.modelModalOpen { overflow: hidden; }
+.modelDialog > .noteDialogHeading h2 { flex: 1; min-width: 0; overflow-wrap: anywhere; font-size: 17px; line-height: 1.4; }
+.modelDialog > .noteDialogHeading { gap: 8px; }
+.modelDialogBody { overscroll-behavior: contain; }
+.modelTool > div { padding: 0; }
+.modelSections { display: flex; gap: 4px; padding: 0 0 14px; margin-bottom: 20px; border-bottom: 1px solid var(--border-subtle); }
+.modelSections button { border: 0; border-radius: 6px; background: transparent; color: var(--ink-muted); padding: 8px 10px; font-size: 12px !important; }
+.modelSections button[aria-current] { background: var(--surface-hover); color: var(--accent-ink); font-weight: 600; }
+.modelToolList { display: grid; gap: 8px; }
+.modelToolList > button { display: flex; align-items: center; text-align: left; border: 1px solid var(--border-subtle); border-radius: 8px; padding: 12px; background: var(--surface); }
+.modelToolList > button:hover { background: var(--page); }
+.modelToolList > button::after { content: ''; width: 6px; height: 6px; margin-left: auto; border-top: 1px solid var(--accent); border-right: 1px solid var(--accent); transform: rotate(45deg); flex-shrink: 0; }
+.modelToolList > .modelDelete { margin-top: 16px; border-color: var(--border); }
+.modelFeedback { color: var(--success); font-size: 12px; margin: 8px 0; }
+.modelFormFooter { justify-content: flex-end; border-top: 1px solid var(--border-subtle); padding-top: 16px; margin-top: 20px; }
+.modelDialogBody > .modelSection, .modelSections + .modelSection { border-top: 0; margin-top: 0; padding-top: 0; }
+.newCalculator { display: inline-flex; align-items: center; gap: 7px; min-height: 36px; margin: 4px 0 16px; padding: 7px 11px; border: 1px solid var(--border); border-radius: 7px; background: var(--surface-hover); color: var(--accent-ink); font-size: 13px !important; font-weight: 600 !important; }
+.newCalculator:hover { background: var(--accent-surface); border-color: var(--accent-border); }
+.newCalculator svg { width: 16px; height: 16px; }
+.privacyNotice { width: min(420px, calc(100vw - 24px)); }
+.privacyExplanation { margin: 0 0 24px; color: var(--ink-muted); font-size: 14px; line-height: 1.6; }
+.privacyActions { display: flex; justify-content: flex-end; align-items: center; gap: 10px; }
+.privacyActions a { display: inline-flex; align-items: center; min-height: 36px; text-decoration: none; }
+
+.modelToolSections > .modelSection:first-child { border-top: 0; margin-top: 0; padding-top: 0; }
+
+.mobileSelectionToggle { display: none; }
+@media (max-width: 650px) {
+  .desktopSelectionTool { display: none; }
+  .mobileSelectionToggle { display: inline-flex; }
+}
+
+@media (max-width: 650px) {
+  .addNodeWord { display: none; }
+}
+@media (max-width: 360px) {
+  .addLabel { display: none; }
+  .toolbar > .addButton, .sheetToolbar > .addButton { min-width: 36px; width: 36px; justify-content: center; padding: 0; gap: 0; }
+}
+
+@media (max-width: 650px) {
+  .sheetToolbar > .fieldHelpButton { margin-left: auto; }
+  .sheetToolbar > button[aria-label="Download JSON"] { margin-left: 0; }
+}
+
+.mobileSelectionToggle[aria-pressed="true"], .mobileSelectionToggle:hover:not(:disabled) {
+  color: var(--ink-muted);
+  background: transparent;
+}
+
+

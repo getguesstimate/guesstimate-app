@@ -1,0 +1,176 @@
+.toolbar {
+  position: absolute;
+  top: 18px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 5px;
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 9px;
+  box-shadow: 0 3px 12px var(--shadow-soft);
+  z-index: 5;
+  touch-action: manipulation;
+}
+.iconButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 5px;
+  color: var(--ink-muted);
+}
+.iconButton:hover:not(:disabled) {
+  background: var(--surface-hover);
+  color: var(--accent-hover);
+}
+.iconButton[aria-pressed="true"] {
+  color: var(--accent);
+  background: var(--accent-surface);
+}
+.addButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 5px;
+  background: var(--accent-surface);
+  color: var(--accent-hover);
+  font-weight: 600 !important;
+  font-size: 12px !important;
+}
+.addButton:hover {
+  background: var(--border);
+}
+.divider {
+  width: 1px;
+  height: 20px;
+  background: var(--border);
+  margin: 0 5px;
+  flex-shrink: 0;
+}
+.canvasBottom {
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  bottom: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  pointer-events: none;
+  z-index: 5;
+}
+.helpArea {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+  pointer-events: auto;
+}
+.helpArea > .iconButton {
+  border: 1px solid var(--border-subtle);
+  background: var(--surface);
+}
+.canvasHint {
+  font-size: 11px;
+  color: var(--ink-subtle);
+  user-select: none;
+}
+.zoomControls {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  border: 1px solid var(--border-subtle);
+  background: var(--surface);
+  border-radius: 8px;
+  padding: 4px;
+  box-shadow: 0 2px 8px var(--shadow-soft);
+  pointer-events: auto;
+  touch-action: manipulation;
+}
+.zoomLabel {
+  border: 0;
+  background: transparent;
+  color: var(--ink-muted);
+  font-size: 11px !important;
+  min-width: 42px;
+  height: 32px;
+  border-radius: 4px;
+  font-variant-numeric: tabular-nums;
+}
+.zoomLabel:hover {
+  background: var(--surface-hover);
+}
+.helpPopover {
+  position: absolute;
+  bottom: 48px;
+  left: 0;
+  width: 330px;
+  max-height: min(520px, calc(100dvh - 160px));
+  overflow: auto;
+  background: var(--surface);
+  padding: 18px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  box-shadow: 0 6px 30px var(--shadow-soft);
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--ink-muted);
+  touch-action: pan-y;
+  overscroll-behavior: contain;
+}
+.helpPopover ul {
+  padding-left: 17px;
+  margin: 14px 0;
+  list-style: disc;
+}
+.helpPopover li + li {
+  margin-top: 7px;
+}
+.helpPopover a {
+  display: block;
+  font-size: 12px;
+  margin-top: 14px;
+  color: var(--accent);
+}
+.downloadButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface-subtle);
+  padding: 8px 12px;
+  border-radius: 6px;
+  color: var(--accent-ink);
+  font-size: 12px !important;
+}
+.canvasMessage {
+  position: absolute;
+  z-index: 6;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+  color: var(--ink-subtle);
+  pointer-events: none;
+  font-size: 13px;
+}
+.canvasMessage button {
+  pointer-events: auto;
+}
+.canvasMessage h2 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--accent-ink);
+}
