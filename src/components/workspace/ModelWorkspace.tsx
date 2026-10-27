@@ -1,5 +1,7 @@
+import { useWorkspaceModel } from "./useWorkspaceModel";
+import { useCanvasWheel } from "./useCanvasWheel";
+import type { CanvasGesture } from "./canvasTypes";
 import { downloadWorkspace } from "./downloadWorkspace";
-import { hasNodeValue } from "~/lib/nodeDisplay";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Head from "next/head";
 import dynamic from "next/dynamic";
@@ -19,18 +21,13 @@ import {
   moveWorkspaceCanvasNodes,
   duplicateWorkspaceCanvasNodes,
 } from "~/modules/workspace/nodeActions";
-import { loadScratchpad } from "~/modules/scratchpad/actions";
 import { canUseOrganizationFacts } from "~/lib/engine/space";
 import { SCRATCHPAD_ID } from "~/modules/scratchpad/model";
 import { changeMetric, removeMetrics } from "~/modules/metrics/actions";
 import { registerGraphChange } from "~/modules/spaces/actions";
-import { loadWorkspaceModel, changeWorkspaceHistory } from "./modelActions";
-import {
-  clearEditsAllowed,
-  changeMetricClickMode,
-} from "~/modules/canvas_state/actions";
-import { CanvasNode } from "./CanvasNode";
-import { automaticTitleAlignment } from "./titleAlignment";
+import { changeWorkspaceHistory } from "./modelActions";
+import { changeMetricClickMode } from "~/modules/canvas_state/actions";
+import { CanvasScene } from "./CanvasScene";
 import { NodeInspector } from "./NodeInspector";
 import { usePanelResize } from "./usePanelResize";
 import { SheetView } from "./SheetView";
@@ -44,7 +41,6 @@ import {
   fitNodes,
   zoomAt,
   toWorld,
-  connectionPath,
   canvasGridPosition,
   NODE_WIDTH,
   NODE_HEIGHT,
@@ -54,17 +50,6 @@ import { useSimplifiedNodes } from "./useNodeAppearance";
 
 const VIEW_PREFERENCE_KEY = "guesstimate.workspace.view";
 
-type Gesture =
-  | { kind: "select"; start: Point }
-  | {
-      kind: "pan" | "node";
-      start: Point;
-      origin: Point;
-      id?: string;
-      deselectOnClick?: boolean;
-      moved?: boolean;
-    }
-  | { kind: "pinch"; distance: number; midpoint: Point; view: Viewport };
 const isField = (target: EventTarget | null) =>
   target instanceof Element &&
   !!target.closest('input, textarea, select, [contenteditable="true"]');
@@ -112,26 +97,10 @@ export function ModelWorkspace({
     () => new Map(metrics.map((metric) => [metric.id, metric])),
     [metrics]
   );
-  const canvasTitleAlignments = useMemo(() => {
-    const occupied = new Set(
-      metrics
-        .filter((m) => hasNodeValue(m.guesstimate))
-        .map((m) => `${m.location.row}:${m.location.column}`)
-    );
-    return new Map(
-      metrics.map((m) => [
-        m.id,
-        m.canvasPosition
-          ? ("center-center" as const)
-          : m.titleAlignment?.sheet ||
-            automaticTitleAlignment(m.location, (cell) =>
-              occupied.has(`${cell.row}:${cell.column}`)
-            ),
-      ])
-    );
-  }, [metrics]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const { loading, error, load } = useWorkspaceModel(
+    spaceId,
+    shareableLinkToken
+  );
   const [formulaFocusId, setFormulaFocusId] = useState<string | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [canvasSelection, setCanvasSelection] = useState<string[]>([]);
@@ -143,58 +112,9 @@ export function ModelWorkspace({
   const selectionBeforeGesture = useRef<string[]>([]);
   const suppressCanvasClick = useRef(false);
   const canvasPointerStartedOnNode = useRef(false);
-  const activeSelection = canvasSelection.filter((id) =>
-    metricsById.has(id)
-  );
+  const activeSelection = canvasSelection.filter((id) => metricsById.has(id));
   const selectionRef = useRef(activeSelection);
   selectionRef.current = activeSelection;
-  const [spacingPositions, setSpacingPositions] = useState<
-    Record<string, Point>
-  >({});
-  const spacingGesture = useRef<{
-    originals: Record<string, Point>;
-    positions: Record<string, Point>;
-    center: Point;
-    factor: number;
-  } | null>(null);
-  const spacingTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const commitSpacing = useCallback(() => {
-    if (spacingTimer.current) clearTimeout(spacingTimer.current);
-    spacingTimer.current = null;
-    const pending = spacingGesture.current;
-    if (!pending) return;
-    spacingGesture.current = null;
-    if (
-      Object.entries(pending.positions).some(
-        ([id, p]) =>
-          Math.abs(p.x - pending.originals[id].x) > 0.001 ||
-          Math.abs(p.y - pending.originals[id].y) > 0.001
-      )
-    ) {
-      for (const [id, canvasPosition] of Object.entries(pending.positions)) {
-        dispatch({ type: "CHANGE_METRIC", item: { id, canvasPosition } });
-      }
-      dispatch(registerGraphChange(spaceId));
-    }
-    setSpacingPositions({});
-  }, [dispatch, spaceId]);
-  useEffect(() => {
-    const keyUp = (event: KeyboardEvent) => {
-      if (event.key === "Shift") commitSpacing();
-    };
-    // Commit before selection changes, edits, or Undo can start another action.
-    window.addEventListener("pointerdown", commitSpacing, true);
-    window.addEventListener("keydown", commitSpacing, true);
-    window.addEventListener("keyup", keyUp);
-    window.addEventListener("blur", commitSpacing);
-    return () => {
-      window.removeEventListener("pointerdown", commitSpacing, true);
-      window.removeEventListener("keydown", commitSpacing, true);
-      window.removeEventListener("keyup", keyUp);
-      window.removeEventListener("blur", commitSpacing);
-      commitSpacing();
-    };
-  }, [commitSpacing]);
   const canvasActionIds = activeSelection.length
     ? activeSelection
     : metrics.some((m) => m.id === selectedId)
@@ -205,17 +125,17 @@ export function ModelWorkspace({
   const [spaceHeld, setSpaceHeld] = useState(false);
   const [view, setViewState] = useState<Viewport>({ x: 80, y: 100, zoom: 1 });
   const viewRef = useRef(view);
-  const setView = (next: Viewport) => {
+  const setView = useCallback((next: Viewport) => {
     viewRef.current = next;
     setViewState(next);
-  };
+  }, []);
   const [dragPosition, setDragPosition] = useState<{
     id: string;
     point: Point;
   } | null>(null);
   const dragRef = useRef<typeof dragPosition>(null);
   const viewport = useRef<HTMLDivElement>(null);
-  const gesture = useRef<Gesture | null>(null);
+  const gesture = useRef<CanvasGesture | null>(null);
   const pointers = useRef(new Map<number, Point>());
   const touchTap = useRef<{ id: number; point: Point; time: number } | null>(
     null
@@ -230,6 +150,15 @@ export function ModelWorkspace({
   const selected = selectedId ? metricsById.get(selectedId) : undefined;
   const metricsRef = useRef(metrics);
   metricsRef.current = metrics;
+  const { spacingPositions, commitSpacing } = useCanvasWheel({
+    spaceId,
+    viewport,
+    metricsRef,
+    selectionRef,
+    gesture,
+    viewRef,
+    setView,
+  });
   const selectionPointer = useRef<Point | null>(null);
   const selectingArea = selectionBox !== null;
   const updateAreaSelection = (start: Point, end: Point) => {
@@ -285,38 +214,6 @@ export function ModelWorkspace({
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
   }, [selectingArea]);
-
-  const load = useCallback(() => {
-    setLoading(true);
-    setError(false);
-    Promise.resolve(
-      dispatch(
-        isScratchpad
-          ? loadScratchpad()
-          : loadWorkspaceModel(spaceId, shareableLinkToken)
-      )
-    )
-      .then(() => setLoading(false))
-      .catch(() => {
-        setLoading(false);
-        setError(true);
-      });
-  }, [dispatch, isScratchpad, spaceId, shareableLinkToken]);
-  useEffect(() => {
-    dispatch(clearEditsAllowed());
-  }, [dispatch, spaceId]);
-  useEffect(load, [load]);
-  useEffect(() => {
-    const oldOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    const wasHidden = document.body.classList.contains("remove-elev");
-    document.body.classList.add("remove-elev");
-    return () => {
-      document.body.style.overflow = oldOverflow;
-      if (!wasHidden) document.body.classList.remove("remove-elev");
-      dispatch(changeMetricClickMode("DEFAULT"));
-    };
-  }, [dispatch]);
 
   const basePosition = (metric: (typeof metrics)[number]): Point =>
     metric.canvasPosition || canvasGridPosition(metric.location);
@@ -578,83 +475,6 @@ export function ModelWorkspace({
         )
       );
   };
-
-  useEffect(() => {
-    const box = viewport.current;
-    if (!box) return;
-    const wheel = (event: WheelEvent) => {
-      if ((event.target as Element).closest("[data-canvas-control]")) return;
-      event.preventDefault();
-      const v = viewRef.current;
-      const scale =
-        event.deltaMode === 1
-          ? 16
-          : event.deltaMode === 2
-          ? box.clientHeight
-          : 1;
-      const selected = metricsRef.current.filter((m) =>
-        selectionRef.current.includes(m.id)
-      );
-      if (event.shiftKey && selected.length > 1 && !gesture.current) {
-        // Some browsers convert Shift + vertical wheel to horizontal deltas.
-        const delta = (event.deltaY || event.deltaX) * scale;
-        if (!delta) return;
-        if (!spacingGesture.current) {
-          const originals = Object.fromEntries(
-            selected.map((m) => [
-              m.id,
-              m.canvasPosition || canvasGridPosition(m.location),
-            ])
-          );
-          const points = Object.values(originals);
-          spacingGesture.current = {
-            originals,
-            positions: originals,
-            center: {
-              x: points.reduce((sum, p) => sum + p.x, 0) / points.length,
-              y: points.reduce((sum, p) => sum + p.y, 0) / points.length,
-            },
-            factor: 1,
-          };
-        }
-        const pending = spacingGesture.current;
-        pending.factor = Math.max(
-          0.1,
-          Math.min(
-            10,
-            pending.factor * Math.exp(Math.max(-1, Math.min(1, delta * 0.002)))
-          )
-        );
-        pending.positions = Object.fromEntries(
-          Object.entries(pending.originals).map(([id, p]) => [
-            id,
-            {
-              x: pending.center.x + (p.x - pending.center.x) * pending.factor,
-              y: pending.center.y + (p.y - pending.center.y) * pending.factor,
-            },
-          ])
-        );
-        setSpacingPositions(pending.positions);
-        if (spacingTimer.current) clearTimeout(spacingTimer.current);
-        spacingTimer.current = setTimeout(commitSpacing, 300);
-        return;
-      }
-      commitSpacing();
-      const rect = box.getBoundingClientRect();
-      // Trackpad pinch events use Ctrl and much smaller wheel deltas.
-      const sensitivity = event.ctrlKey ? 0.01 : 0.002;
-      setView(
-        zoomAt(
-          v,
-          { x: event.clientX - rect.left, y: event.clientY - rect.top },
-          v.zoom *
-            Math.exp(-(event.deltaY || event.deltaX) * scale * sensitivity)
-        )
-      );
-    };
-    box.addEventListener("wheel", wheel, { passive: false });
-    return () => box.removeEventListener("wheel", wheel);
-  }, [commitSpacing]);
 
   useEffect(() => {
     const keyDown = (event: KeyboardEvent) => {
@@ -1121,60 +941,20 @@ export function ModelWorkspace({
               }}
             >
               {viewMode === "canvas" && (
-                <>
-                  <svg className={styles.connections} aria-hidden="true">
-                    <defs>
-                      <marker
-                        id="workspace-arrow"
-                        markerWidth="8"
-                        markerHeight="8"
-                        refX="7"
-                        refY="4"
-                        orient="auto"
-                      >
-                        <path d="M 1 1 L 7 4 L 1 7" />
-                      </marker>
-                    </defs>
-                    {(space.edges || []).map((edge) => {
-                      const from = metricsById.get(edge.input),
-                        to = metricsById.get(edge.output);
-                      if (!from || !to) return null;
-                      return (
-                        <path
-                          key={`${edge.input}-${edge.output}`}
-                          data-edge={`${edge.input}-${edge.output}`}
-                          className={
-                            selectedId === edge.input ||
-                            selectedId === edge.output
-                              ? styles.selectedEdge
-                              : undefined
-                          }
-                          d={connectionPath(positionOf(from), positionOf(to))}
-                          markerEnd="url(#workspace-arrow)"
-                        />
-                      );
-                    })}
-                  </svg>
-                  {metrics.map((metric) => (
-                    <CanvasNode
-                      simplified={simplified}
-                      key={metric.id}
-                      metric={metric}
-                      automaticAlignment={canvasTitleAlignments.get(metric.id)}
-                      selected={
-                        selectedId === metric.id ||
-                        activeSelection.includes(metric.id)
-                      }
-                      referenceMode={
-                        space.canvasState.metricClickMode ===
-                        "FUNCTION_INPUT_SELECT"
-                      }
-                      position={positionOf(metric)}
-                      onSelect={() => select(metric.id)}
-                      onMove={(point) => move(metric.id, point)}
-                    />
-                  ))}
-                </>
+                <CanvasScene
+                  metrics={metrics}
+                  edges={space.edges || []}
+                  selectedId={selectedId}
+                  activeSelection={activeSelection}
+                  simplified={simplified}
+                  referenceMode={
+                    space.canvasState.metricClickMode ===
+                    "FUNCTION_INPUT_SELECT"
+                  }
+                  positionOf={positionOf}
+                  onSelect={select}
+                  onMove={move}
+                />
               )}
               {selectionBox && (
                 <div
