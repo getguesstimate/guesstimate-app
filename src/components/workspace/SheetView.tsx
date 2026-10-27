@@ -1,3 +1,4 @@
+import { SelectionActions } from "./SelectionActions";
 import {
   useSheetViewport,
   SHEET_BASE_SCALE,
@@ -170,41 +171,48 @@ function SheetViewComponent(props: Props) {
   const at = (location: CanvasLocation) =>
     metricsByCell.get(`${location.row}:${location.column}`);
   const selectedLocation = metrics.find((m) => m.id === selectedId)?.location;
-  const reveal = (location: CanvasLocation) => {
-    const box = scroll.current;
-    if (!box) return;
-    const z = zoomRef.current;
-    const left = (SHEET_GUTTER + location.column * SHEET_COLUMN) * z,
-      top = (SHEET_HEADING + location.row * SHEET_ROW) * z;
-    if (left < box.scrollLeft + SHEET_GUTTER * z)
-      box.scrollLeft = left - SHEET_GUTTER * z;
-    else if (left + SHEET_COLUMN * z > box.scrollLeft + box.clientWidth)
-      box.scrollLeft = Math.max(0, left + SHEET_COLUMN * z - box.clientWidth);
-    if (top < box.scrollTop + SHEET_HEADING * z)
-      box.scrollTop = top - SHEET_HEADING * z;
-    else if (top + SHEET_ROW * z > box.scrollTop + box.clientHeight)
-      box.scrollTop = Math.max(0, top + SHEET_ROW * z - box.clientHeight);
-  };
+  const selectedRow = selectedLocation?.row;
+  const selectedColumn = selectedLocation?.column;
+  const reveal = useCallback(
+    (location: CanvasLocation) => {
+      const box = scroll.current;
+      if (!box) return;
+      const z = zoomRef.current;
+      const left = (SHEET_GUTTER + location.column * SHEET_COLUMN) * z,
+        top = (SHEET_HEADING + location.row * SHEET_ROW) * z;
+      if (left < box.scrollLeft + SHEET_GUTTER * z)
+        box.scrollLeft = left - SHEET_GUTTER * z;
+      else if (left + SHEET_COLUMN * z > box.scrollLeft + box.clientWidth)
+        box.scrollLeft = Math.max(0, left + SHEET_COLUMN * z - box.clientWidth);
+      if (top < box.scrollTop + SHEET_HEADING * z)
+        box.scrollTop = top - SHEET_HEADING * z;
+      else if (top + SHEET_ROW * z > box.scrollTop + box.clientHeight)
+        box.scrollTop = Math.max(0, top + SHEET_ROW * z - box.clientHeight);
+    },
+    [scroll, zoomRef]
+  );
   useEffect(() => {
-    if (!active) return;
-    const metric = metrics.find((m) => m.id === selectedId);
-    if (metric) {
-      setCell(metric.location);
-      reveal(metric.location);
-    }
-  }, [active, selectedId, selectedLocation?.row, selectedLocation?.column]);
+    if (!active || selectedRow === undefined || selectedColumn === undefined)
+      return;
+    const location = { row: selectedRow, column: selectedColumn };
+    setCell(location);
+    reveal(location);
+  }, [active, selectedId, selectedRow, selectedColumn, reveal]);
   useEffect(() => {
     const box = scroll.current;
     if (!box) return;
     const observer = new ResizeObserver(() => {
-      if (active && selectedId) {
-        const metric = metrics.find((m) => m.id === selectedId);
-        if (metric) reveal(metric.location);
-      }
+      if (
+        active &&
+        selectedId &&
+        selectedRow !== undefined &&
+        selectedColumn !== undefined
+      )
+        reveal({ row: selectedRow, column: selectedColumn });
     });
     observer.observe(box);
     return () => observer.disconnect();
-  }, [active, selectedId, selectedLocation?.row, selectedLocation?.column]);
+  }, [active, selectedId, selectedRow, selectedColumn, reveal, scroll]);
   const selectCell = (location: CanvasLocation, focus = false) => {
     setRangeEnd(null);
     setCell(location);
@@ -844,48 +852,16 @@ function SheetViewComponent(props: Props) {
         </div>
       </div>
       {(rangeEnd || selectedId) && (
-        <div
-          className={styles.sheetSelection}
-          role="group"
-          aria-label="Selected range"
-        >
-          <span aria-label={`${rangeNodes.length} selected nodes`}>
-            {rangeNodes.length}{" "}
-            <span className={styles.selectionCountLabel}>
-              {rangeNodes.length === 1 ? "node" : "nodes"}
-            </span>
-          </span>
-          <button
-            type="button"
-            className={styles.iconButton}
-            aria-label="Duplicate selected nodes"
-            title="Duplicate"
-            disabled={!rangeNodes.length}
-            onClick={duplicateSelection}
-          >
-            <Icon name="duplicate" />
-          </button>
-          <button
-            type="button"
-            className={styles.iconButton}
-            aria-label="Delete selected nodes"
-            disabled={!rangeNodes.length}
-            onClick={deleteRange}
-          >
-            <Icon name="trash" />
-          </button>
-          <button
-            type="button"
-            className={styles.iconButton}
-            aria-label="Clear selection"
-            onClick={() => {
-              setRangeEnd(null);
-              props.onClear();
-            }}
-          >
-            <Icon name="close" />
-          </button>
-        </div>
+        <SelectionActions
+          surface="sheet"
+          count={rangeNodes.length}
+          onDuplicate={duplicateSelection}
+          onDelete={deleteRange}
+          onClear={() => {
+            setRangeEnd(null);
+            props.onClear();
+          }}
+        />
       )}
       <div className={styles.sheetZoom} role="group" aria-label="Sheet zoom">
         <button

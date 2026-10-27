@@ -1,3 +1,4 @@
+import { SelectionActions } from "./SelectionActions";
 import { Icon } from "./Icon";
 import styles from "./workspace.module.css";
 type Props = {
@@ -58,44 +59,13 @@ export function CanvasControls({
   return (
     <>
       {selectionCount > 0 && (
-        <div
-          data-canvas-control
-          className={styles.sheetSelection}
-          role="group"
-          aria-label="Canvas selection"
-        >
-          <span aria-label={`${selectionCount} selected nodes`}>
-            {selectionCount}{" "}
-            <span className={styles.selectionCountLabel}>
-              {selectionCount === 1 ? "node" : "nodes"}
-            </span>
-          </span>
-          <button
-            type="button"
-            className={styles.iconButton}
-            aria-label="Duplicate selected nodes"
-            title="Duplicate"
-            onClick={duplicateSelection}
-          >
-            <Icon name="duplicate" />
-          </button>
-          <button
-            type="button"
-            className={styles.iconButton}
-            aria-label="Delete selected nodes"
-            onClick={remove}
-          >
-            <Icon name="trash" />
-          </button>
-          <button
-            type="button"
-            className={styles.iconButton}
-            aria-label="Clear selection"
-            onClick={onClear}
-          >
-            <Icon name="close" />
-          </button>
-        </div>
+        <SelectionActions
+          surface="canvas"
+          count={selectionCount}
+          onDuplicate={duplicateSelection}
+          onDelete={remove}
+          onClear={onClear}
+        />
       )}
       <div
         data-canvas-control
